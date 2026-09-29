@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Settings;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
@@ -93,20 +92,27 @@ class SettingsCourseManager extends SettingsManager
             }
         }
 
-        $repo = $this->manager->getRepository(SettingsCurrent::class);
+        $simpleCategoryName = str_replace('chamilo_course.settings.', '', $namespace);
+        $repo = $this->manager->getRepository(CCourseSetting::class);
 
         /** @var CCourseSetting[] $persistedParameters */
         $persistedParameters = $repo->findBy([
-            'category' => $namespace,
+            'cId' => (int) $this->getCourse()->getId(),
+            'category' => $simpleCategoryName,
         ]);
 
         $persistedParametersMap = [];
         foreach ($persistedParameters as $parameter) {
-            $persistedParametersMap[$parameter->getTitle()] = $parameter;
+            $persistedParametersMap[$parameter->getVariable()] = $parameter;
         }
 
-        $simpleCategoryName = str_replace('chamilo_course.settings.', '', $namespace);
         foreach ($parameters as $name => $value) {
+            $value = match (true) {
+                \is_bool($value) => $value ? 'true' : 'false',
+                null === $value => '',
+                default => (string) $value,
+            };
+
             if (isset($persistedParametersMap[$name])) {
                 $persistedParametersMap[$name]->setValue($value);
             } else {
@@ -143,10 +149,11 @@ class SettingsCourseManager extends SettingsManager
         $repo = $this->manager->getRepository(CCourseSetting::class);
         $list = [];
         $parameters = $repo->findBy([
+            'cId' => (int) $this->getCourse()->getId(),
             'category' => $namespace,
         ]);
         foreach ($parameters as $parameter) {
-            $list[$parameter->getTitle()] = $parameter->getValue();
+            $list[$parameter->getVariable()] = $parameter->getValue();
         }
 
         return $list;

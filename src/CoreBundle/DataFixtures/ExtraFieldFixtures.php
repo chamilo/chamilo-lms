@@ -194,6 +194,12 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             ],
             [
+                'variable' => 'manual_completion',
+                'display_text' => 'Manual completion',
+                'item_type' => ExtraField::LP_VIEW_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+            ],
+            [
                 'variable' => 'start_date',
                 'display_text' => 'Start date',
                 'item_type' => ExtraField::LP_ITEM_FIELD_TYPE,
@@ -213,7 +219,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'send_to_coaches',
-                'display_text' => 'Send to coaches',
+                'display_text' => 'Send to tutors',
                 'item_type' => ExtraField::SCHEDULED_ANNOUNCEMENT,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             ],
@@ -445,6 +451,18 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
             [
+                'variable' => 'lab_title',
+                'display_text' => 'Lab title',
+                'item_type' => ExtraField::LP_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            ],
+            [
+                'variable' => 'lab_week',
+                'display_text' => 'Lab week',
+                'item_type' => ExtraField::LP_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            ],
+            [
                 'variable' => 'oauth2_id',
                 'display_text' => 'OAuth2 ID',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
@@ -538,7 +556,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'terms_villedustage',
-                'display_text' => "City of internship's terms",
+                'display_text' => 'City of internship',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => \defined(ExtraField::class.'::FIELD_TYPE_GEOLOCALIZATION')
                     ? ExtraField::FIELD_TYPE_GEOLOCALIZATION
@@ -571,7 +589,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'terms_ville',
-                'display_text' => "City's terms",
+                'display_text' => 'City',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => \defined(ExtraField::class.'::FIELD_TYPE_GEOLOCALIZATION')
                     ? ExtraField::FIELD_TYPE_GEOLOCALIZATION

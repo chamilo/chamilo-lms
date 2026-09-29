@@ -15,7 +15,13 @@ const isProd = Encore.isProduction()
 Encore.setOutputPath("public/build/")
   .setManifestKeyPrefix("public/build/")
   .setPublicPath("/build")
-  .enableBuildNotifications()
+
+// Desktop build notifications are optional. Keep them disabled by default
+// because webpack-notifier pulls node-notifier, which is not compatible with
+// the ESM-only uuid package on newer Node.js versions and breaks the build.
+if (process.env.CHAMILO_WEBPACK_NOTIFICATIONS === "1") {
+  Encore.enableBuildNotifications()
+}
 
 // Clean output only in production to speed up development builds.
 if (isProd) {
@@ -33,6 +39,7 @@ Encore.addEntry("legacy_app", "./assets/js/legacy/app.js")
   .addEntry("vue_installer", "./assets/vue/main_installer.js")
   .addEntry("translatehtml", "./assets/js/translatehtml.js")
   .addEntry("glossary_auto", "./assets/js/glossary-auto.js")
+  .addEntry("mathjax_render", "./assets/js/mathjax-render.js")
 
   .addStyleEntry("app", "./assets/css/app.scss")
   .addStyleEntry("css/chat", "./assets/css/chat.scss")
@@ -138,10 +145,36 @@ Encore.copyFiles({
   from: "./node_modules/mediaelement-plugins/dist",
   to: "libs/mediaelement/plugins/[path][name].[ext]",
 })
-/*Encore.copyFiles({
-  from: "./node_modules/mathjax/config",
-  to: "libs/mathjax/config/[path][name].[ext]",
-})*/
+// MathJax: only the SVG output bundle is served, plus its font package.
+// MathJax 4 ships fonts separately and falls back to cdn.jsdelivr.net, so the
+// font has to be copied too and pointed at from assets/js/mathjax-render.js.
+// includeSubdirectories is off on the two single-file rules to keep
+// require.context from walking the whole 50MB font package.
+Encore.copyFiles({
+  from: "./node_modules/mathjax",
+  pattern: /tex-svg\.js$/,
+  to: "libs/mathjax/[name].[ext]",
+  includeSubdirectories: false,
+})
+// Speech Rule Engine worker: MathJax spawns it on every typeset to build the
+// accessible description of a formula, and resolves it against its own
+// directory. Without this the browser logs a failed importScripts on each run.
+Encore.copyFiles({
+  from: "./node_modules/mathjax/sre",
+  pattern: /\.(js|json)$/,
+  to: "libs/mathjax/sre/[path][name].[ext]",
+})
+Encore.copyFiles({
+  from: "./node_modules/@mathjax/mathjax-newcm-font",
+  pattern: /svg\.js$/,
+  to: "libs/mathjax-fonts/mathjax-newcm-font/[name].[ext]",
+  includeSubdirectories: false,
+})
+Encore.copyFiles({
+  from: "./node_modules/@mathjax/mathjax-newcm-font/svg",
+  pattern: /\.js$/,
+  to: "libs/mathjax-fonts/mathjax-newcm-font/svg/[path][name].[ext]",
+})
 Encore.copyFiles({
   from: "node_modules/moment/locale",
   to: "libs/locale/[path][name].[ext]",
@@ -158,6 +191,13 @@ Encore.copyFiles({
 class CopyUnhashedAssetsPlugin {
   apply(compiler) {
     compiler.hooks.afterEmit.tap("CopyUnhashedAssetsPlugin", () => {
+      // Only production builds emit content hashes. Development builds already write
+      // the unhashed filenames, so copying a hashed file left over by an earlier
+      // production build would silently overwrite them with stale content.
+      if (!isProd) {
+        return
+      }
+
       const buildPath = path.resolve(__dirname, "public/build")
       const cssPath = path.join(buildPath, "css")
       const qtipDistPath = path.join(buildPath, "libs/qtip2/dist")
@@ -166,67 +206,48 @@ class CopyUnhashedAssetsPlugin {
         return
       }
 
-      // Copy legacy_document.js without hash.
-      const legacyDocumentFile = fs.readdirSync(buildPath).find((f) => f.match(/^legacy_document\.[a-f0-9]+\.js$/))
-      if (legacyDocumentFile) {
-        fs.copyFileSync(path.join(buildPath, legacyDocumentFile), path.join(buildPath, "legacy_document.js"))
+      // Read each directory once and reuse the listing for every lookup below,
+      // instead of re-scanning the (large) build directory on every match.
+      const buildFiles = fs.readdirSync(buildPath)
+
+      // Copy the first file matching `pattern` in `dir` to `target`, dropping the content hash.
+      const copyUnhashed = (dir, files, pattern, target) => {
+        const match = files.find((f) => f.match(pattern))
+        if (match) {
+          fs.copyFileSync(path.join(dir, match), path.join(dir, target))
+        }
       }
 
+      // Copy legacy_document.js without hash.
+      copyUnhashed(buildPath, buildFiles, /^legacy_document\.[a-f0-9]+\.js$/, "legacy_document.js")
+
       // Copy legacy_exercise.js without hash.
-      const legacyExerciseFile = fs.readdirSync(buildPath).find((f) => f.match(/^legacy_exercise\.[a-f0-9]+\.js$/))
-      if (legacyExerciseFile) {
-        fs.copyFileSync(path.join(buildPath, legacyExerciseFile), path.join(buildPath, "legacy_exercise.js"))
-      }
+      copyUnhashed(buildPath, buildFiles, /^legacy_exercise\.[a-f0-9]+\.js$/, "legacy_exercise.js")
 
       // Do not copy runtime.js without hash.
       // A non-versioned runtime file can be cached and become desynchronized
       // from hashed chunks, causing ChunkLoadError ("missing") at runtime.
 
-      // Copy document.css without hash.
+      // Copy document.css and editor_content.css without hash.
       if (fs.existsSync(cssPath)) {
-        const documentCssFile = fs.readdirSync(cssPath).find((f) => f.match(/^document\.[a-f0-9]+\.css$/))
-        if (documentCssFile) {
-          fs.copyFileSync(path.join(cssPath, documentCssFile), path.join(cssPath, "document.css"))
-        }
-
-        const editorContentCssFile = fs.readdirSync(cssPath).find((f) => f.match(/^editor_content\.[a-f0-9]+\.css$/))
-        if (editorContentCssFile) {
-          fs.copyFileSync(path.join(cssPath, editorContentCssFile), path.join(cssPath, "editor_content.css"))
-        }
+        const cssFiles = fs.readdirSync(cssPath)
+        copyUnhashed(cssPath, cssFiles, /^document\.[a-f0-9]+\.css$/, "document.css")
+        copyUnhashed(cssPath, cssFiles, /^editor_content\.[a-f0-9]+\.css$/, "editor_content.css")
       }
 
-      // Copy legacy_framereadyloader.js without hash.
-      const frameReadyFile = fs.readdirSync(buildPath).find((f) => f.match(/^legacy_framereadyloader\.[a-f0-9]+\.js$/))
-      if (frameReadyFile) {
-        fs.copyFileSync(path.join(buildPath, frameReadyFile), path.join(buildPath, "legacy_framereadyloader.js"))
-      }
-
-      // Copy legacy_framereadyloader.css without hash.
-      const frameReadyCssFile = fs
-        .readdirSync(buildPath)
-        .find((f) => f.match(/^legacy_framereadyloader\.[a-f0-9]+\.css$/))
-      if (frameReadyCssFile) {
-        fs.copyFileSync(path.join(buildPath, frameReadyCssFile), path.join(buildPath, "legacy_framereadyloader.css"))
-      }
+      // Copy legacy_framereadyloader.js and .css without hash.
+      copyUnhashed(buildPath, buildFiles, /^legacy_framereadyloader\.[a-f0-9]+\.js$/, "legacy_framereadyloader.js")
+      copyUnhashed(buildPath, buildFiles, /^legacy_framereadyloader\.[a-f0-9]+\.css$/, "legacy_framereadyloader.css")
 
       // Keep unhashed qTip assets for legacy direct references.
       if (fs.existsSync(qtipDistPath)) {
-        const qtipFile = fs.readdirSync(qtipDistPath).find((f) => f.match(/^jquery\.qtip\.js$/))
-        if (qtipFile) {
-          fs.copyFileSync(path.join(qtipDistPath, qtipFile), path.join(qtipDistPath, "jquery.qtip.js"))
-        }
-
-        const qtipCssFile = fs.readdirSync(qtipDistPath).find((f) => f.match(/^jquery\.qtip\.css$/))
-        if (qtipCssFile) {
-          fs.copyFileSync(path.join(qtipDistPath, qtipCssFile), path.join(qtipDistPath, "jquery.qtip.css"))
-        }
+        const qtipFiles = fs.readdirSync(qtipDistPath)
+        copyUnhashed(qtipDistPath, qtipFiles, /^jquery\.qtip\.js$/, "jquery.qtip.js")
+        copyUnhashed(qtipDistPath, qtipFiles, /^jquery\.qtip\.css$/, "jquery.qtip.css")
       }
 
       // Copy glossary_auto.js without hash.
-      const glossaryFile = fs.readdirSync(buildPath).find((f) => f.match(/^glossary_auto\.[a-f0-9]+\.js$/))
-      if (glossaryFile) {
-        fs.copyFileSync(path.join(buildPath, glossaryFile), path.join(buildPath, "glossary_auto.js"))
-      }
+      copyUnhashed(buildPath, buildFiles, /^glossary_auto\.[a-f0-9]+\.js$/, "glossary_auto.js")
     })
   }
 }
@@ -244,6 +265,13 @@ config.output.chunkLoadingGlobal = "webpackChunkChamilo"
 // Enable persistent filesystem cache to speed up rebuilds.
 config.cache = {
   type: "filesystem",
+}
+
+// Use a lightweight source map in development to lower the build's memory peak.
+// The default ("inline-source-map") inlines full per-module maps and is the main
+// driver of "JavaScript heap out of memory" failures on smaller servers.
+if (!isProd) {
+  config.devtool = "eval-cheap-module-source-map"
 }
 
 module.exports = config

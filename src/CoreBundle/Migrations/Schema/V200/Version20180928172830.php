@@ -22,8 +22,11 @@ class Version20180928172830 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE c_tool SET title = "blog" WHERE title = "blog_management" ');
         $this->addSql('UPDATE c_tool SET title = "agenda" WHERE title = "calendar_event" ');
-        $this->addSql('UPDATE c_tool SET title = "member" WHERE link = "user/user.php" ');
-        $this->addSql('UPDATE c_tool SET title = "course_description/index.php" WHERE link = "course_description/" ');
+
+        if ($table->hasColumn('link')) {
+            $this->addSql('UPDATE c_tool SET title = "member" WHERE link = "user/user.php" ');
+            $this->addSql('UPDATE c_tool SET title = "course_description/index.php" WHERE link = "course_description/" ');
+        }
 
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_tool DROP id');
@@ -94,8 +97,8 @@ class Version20180928172830 extends AbstractMigrationChamilo
         }
 
         // Delete c_tool not registered in tool. @todo migrate BBB/LP/mobidico plugins
-        $this->addSql('DELETE FROM c_tool WHERE title NOT IN (SELECT title FROM tool)');
-        $this->addSql('UPDATE c_tool SET tool_id = (SELECT id FROM tool WHERE title = c_tool.title) WHERE tool_id IS NOT NULL');
+        $this->addSql('DELETE FROM c_tool WHERE title COLLATE utf8mb3_unicode_ci NOT IN (SELECT title COLLATE utf8mb3_unicode_ci FROM tool)');
+        $this->addSql('UPDATE c_tool SET tool_id = (SELECT id FROM tool WHERE title COLLATE utf8mb3_unicode_ci = c_tool.title COLLATE utf8mb3_unicode_ci) WHERE tool_id IS NOT NULL');
 
         // @todo remove/move LP/Link shortcuts.
         $this->addSql('DELETE FROM c_tool WHERE tool_id = 0 OR tool_id IS NULL');

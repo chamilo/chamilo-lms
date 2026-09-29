@@ -20,7 +20,7 @@ use const JSON_ERROR_NONE;
 
 abstract class AbstractScimController extends AbstractController
 {
-    public const SCIM_CONTENT_TYPE = 'application/scim+json';
+    public const string SCIM_CONTENT_TYPE = 'application/scim+json';
 
     protected array $scimConfig;
 
@@ -76,7 +76,7 @@ abstract class AbstractScimController extends AbstractController
 
         $providedToken = $matches[1];
 
-        if (!hash_equals($this->getParameter('scim_token'), $providedToken)) {
+        if (!hash_equals((string) $this->getParameter('scim_token'), $providedToken)) {
             throw $invalidTokenException;
         }
     }

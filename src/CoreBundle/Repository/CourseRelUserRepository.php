@@ -6,11 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 class CourseRelUserRepository extends ServiceEntityRepository
@@ -18,6 +21,86 @@ class CourseRelUserRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CourseRelUser::class);
+    }
+
+    /**
+     * Returns courses managed by the user as a teacher in the given access URL.
+     *
+     * @return list<array{
+     *     id: int,
+     *     title: string,
+     *     code: string,
+     *     visualCode: string|null,
+     *     visibility: int
+     * }>
+     */
+    public function findTeacherCoursesForUserAndAccessUrl(User $user, AccessUrl $accessUrl): array
+    {
+        /** @var list<array{id: int, title: string, code: string, visualCode: string|null, visibility: int}> $courses */
+        return $this->createQueryBuilder('cru')
+            ->select(
+                'DISTINCT course.id AS id, course.title AS title, course.code AS code, '
+                .'course.visualCode AS visualCode, course.visibility AS visibility'
+            )
+            ->innerJoin('cru.course', 'course')
+            ->innerJoin('course.urls', 'urlRelation')
+            ->andWhere('cru.user = :user')
+            ->andWhere('cru.status = :teacherStatus')
+            ->andWhere('urlRelation.url = :accessUrl')
+            ->setParameter('user', $user)
+            ->setParameter('teacherStatus', CourseRelUser::TEACHER)
+            ->setParameter('accessUrl', $accessUrl)
+            ->orderBy('course.title', 'ASC')
+            ->addOrderBy('course.id', 'ASC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+    }
+
+    /**
+     * Returns a course only when the user manages it as a teacher in the given access URL.
+     */
+    public function findTeacherCourseForUserAndAccessUrl(
+        User $user,
+        AccessUrl $accessUrl,
+        int $courseId,
+    ): ?Course {
+        /** @var CourseRelUser|null $relation */
+        $relation = $this->createQueryBuilder('cru')
+            ->addSelect('course')
+            ->innerJoin('cru.course', 'course')
+            ->innerJoin('course.urls', 'urlRelation')
+            ->andWhere('cru.user = :user')
+            ->andWhere('cru.status = :teacherStatus')
+            ->andWhere('course.id = :courseId')
+            ->andWhere('urlRelation.url = :accessUrl')
+            ->setParameter('user', $user)
+            ->setParameter('teacherStatus', CourseRelUser::TEACHER)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('accessUrl', $accessUrl)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $relation?->getCourse();
+    }
+
+    /**
+     * Counts users directly registered as students in the base course.
+     */
+    public function countDirectStudentsForCourse(Course $course): int
+    {
+        return (int) $this->createQueryBuilder('cru')
+            ->select('COUNT(DISTINCT student.id)')
+            ->innerJoin('cru.user', 'student')
+            ->andWhere('cru.course = :course')
+            ->andWhere('cru.status = :studentStatus')
+            ->setParameter('course', $course)
+            ->setParameter('studentStatus', CourseRelUser::STUDENT)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -29,8 +112,8 @@ class CourseRelUserRepository extends ServiceEntityRepository
             ->select('u.id AS userId, c.title AS courseTitle, lp.iid AS lpId, COALESCE(lpv.progress, 0) AS progress')
             ->innerJoin('cu.user', 'u')
             ->innerJoin('cu.course', 'c')
-            ->leftJoin(CLpView::class, 'lpv', 'WITH', 'lpv.user = u.id AND lpv.course = cu.course AND lpv.lp IN (:lpIds)')
-            ->leftJoin(CLp::class, 'lp', 'WITH', 'lp.iid IN (:lpIds)')
+            ->leftJoin(CLpView::class, 'lpv', Join::ON, 'lpv.user = u.id AND lpv.course = cu.course AND lpv.lp IN (:lpIds)')
+            ->leftJoin(CLp::class, 'lp', Join::ON, 'lp.iid IN (:lpIds)')
             ->innerJoin('lp.resourceNode', 'rn')
             ->where('cu.course = :courseId')
             ->andWhere('rn.parent = c.resourceNode')

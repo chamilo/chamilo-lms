@@ -25,7 +25,7 @@ class Tracking extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/tracking/courseLog.php';
+        return '/resources/course-reporting/';
     }
 
     public function getCategory(): string

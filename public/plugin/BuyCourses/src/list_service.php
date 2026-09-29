@@ -16,6 +16,11 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 $plugin = BuyCoursesPlugin::create();
 $httpRequest = Container::getRequest();
 
+$copyServiceTokenKey = 'buycourses_copy_service_token';
+if (empty($_SESSION[$copyServiceTokenKey])) {
+    $_SESSION[$copyServiceTokenKey] = bin2hex(random_bytes(32));
+}
+
 $includeSession = 'true' === $plugin->get('include_sessions');
 $includeServices = 'true' === $plugin->get('include_services');
 
@@ -26,6 +31,40 @@ if (!$includeServices) {
 $taxEnable = 'true' === $plugin->get('tax_enable');
 
 api_protect_admin_script(true);
+
+if ('POST' === $httpRequest->getMethod() && 'copy_service' === $httpRequest->request->get('action')) {
+    $serviceId = $httpRequest->request->getInt('id');
+    $postedToken = (string) $httpRequest->request->get('copy_service_token', '');
+    $sessionToken = (string) ($_SESSION[$copyServiceTokenKey] ?? '');
+
+    if ('' === $sessionToken || !hash_equals($sessionToken, $postedToken)) {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('ServiceCopyInvalidSecurityToken'), 'warning')
+        );
+
+        header('Location: list_service.php');
+        exit;
+    }
+
+    $_SESSION[$copyServiceTokenKey] = bin2hex(random_bytes(32));
+
+    $copiedServiceId = $plugin->copyService($serviceId);
+    if (false === $copiedServiceId) {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('ServiceCopyFailed'), 'error')
+        );
+
+        header('Location: list_service.php');
+        exit;
+    }
+
+    Display::addFlash(
+        Display::return_message($plugin->get_lang('ServiceCopied'), 'success')
+    );
+
+    header('Location: services_edit.php?id='.(int) $copiedServiceId);
+    exit;
+}
 
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
 $currentPage = max(1, $httpRequest->query->getInt('page', 1));
@@ -72,6 +111,7 @@ $tpl->assign('tax_enable', $taxEnable);
 $tpl->assign('courses', []);
 $tpl->assign('sessions', []);
 $tpl->assign('services', $services);
+$tpl->assign('copy_service_token', (string) ($_SESSION[$copyServiceTokenKey] ?? ''));
 
 $tpl->assign('course_pagination', '');
 $tpl->assign('session_pagination', '');

@@ -689,6 +689,11 @@ $allowed_tags_student['small']['xml:lang'] = [];
 // span
 $allowed_tags_student['span'] = [];
 $allowed_tags_student['span']['class'] = [];
+// Holds the LaTeX source of a formula written with the "mathjax" editor plugin.
+// Plain text: it is only read back through getAttribute() and written with
+// textContent, never innerHTML. Security::remove_XSS() also has to declare it
+// on the HTMLPurifier definition, or the attribute is unknown and still dropped.
+$allowed_tags_student['span']['data-latex'] = [];
 $allowed_tags_student['span']['dir'] = [];
 $allowed_tags_student['span']['id'] = [];
 $allowed_tags_student['span']['lang'] = [];

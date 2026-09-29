@@ -1,0 +1,113 @@
+mcp:
+    app: 'Chamilo'
+    version: '2.1.0'
+    description: 'Chamilo LMS MCP server'
+    pagination_limit: 50
+    instructions: |
+        This server exposes Chamilo LMS capabilities to authenticated users.
+        Every capability must respect the permissions of the authenticated Chamilo user.
+
+        Treat the current tools/list response as the source of truth for what Chamilo can do.
+        Do not deny a capability that has a matching tool. Do not claim that a resource was
+        created or updated until the corresponding tool returns a successful final result
+        containing the persisted resource ID. Surface every tool error to the user instead
+        of silently waiting or pretending the operation succeeded.
+
+        Some AI-assisted operations take time and emit progress notifications. Keep waiting
+        for the final tools/call result while progress is being reported. Never automatically
+        repeat a create operation after a timeout or error, because a retry can create a
+        duplicate. First use list/read/status tools to verify whether the resource exists.
+
+        Documents can be filtered by title with list_documents and then read or edited by title.
+        create_course_document automatically assigns a unique title when an exact title already
+        exists. For iterative translation of HTML documents, call read_course_document with
+        mode=source (or inventory), then upsert_course_document_language with one language's
+        INNER HTML at a time — do not resend the full multi-language body via edit_course_document.
+        Use update_course_settings to change safe course properties and
+        update_course_test_settings to edit test configuration. New MCP-created tests randomize
+        answer order by default.
+        To create an AI image, use create_course_illustration. To place an image in a specific
+        document section, first create or locate the image, then call
+        illustrate_document_paragraph with the target document title and a paragraph number
+        or distinctive paragraph text.
+
+        Learning paths can be created in one call with create_course_learning_path, or built
+        conversationally with create_empty_learning_path followed by add_learning_path_page,
+        add_learning_path_document, add_learning_path_test and add_learning_path_survey. A
+        survey is added as its own native step (the same TOOL_SURVEY item type the legacy
+        learning path builder uses) — never append it as a closing paragraph inside the last
+        document. The survey must already have at least one question. After each change, use
+        get_learning_path_structure and only report success when the persisted structure
+        contains the expected items. Use move_learning_path_item, remove_learning_path_item,
+        update_learning_path_item and update_learning_path for later corrections.
+
+        create_course_assignment is idempotent by exact title inside a course and supports a real
+        dueAt or dueInDays deadline. A returned created=false value means the existing assignment
+        was reused, not that the call failed. A survey or learning path is successful only when its
+        result reports verified_in_course=true.
+
+        For the "Course Description" tool, call get_course_description_template first: it returns
+        the 7 standard sections (Description, Objectives, Topics, Methodology, Course material,
+        Resources, Assessment) with a guiding question for each and whether it already has content
+        (title/word count only — not the HTML body). Use read_course_description to load content
+        (all sections, or one by descriptionId / descriptionType). Prefer mode=inventory (languages
+        present / sizes / content_sha256, no body) or mode=source (source_html only + inventory)
+        before translating, so the growing multi-language HTML is not reloaded on every pass.
+        Ask the user the guiding question for each section they want to write, then call
+        create_course_description with the matching descriptionType. Calling it again with the same
+        descriptionType (1-7) updates that section in place instead of duplicating it; descriptionType
+        8 always adds a new custom "Other" item. Use edit_course_description only to replace the
+        whole document, title, or resource language. For iterative translation into additional
+        languages, use upsert_course_description_language with the INNER HTML for one language at a
+        time (server wraps mce-translatehtml blocks and merges/replaces by lang — do not resend
+        other languages). There is no delete tool for course descriptions yet. Write HTML with the
+        same style conventions as create_course_document.
+
+        get_course_tests, get_course_test_questions and get_course_test_question_answers support
+        modes full/inventory/source on HTML fields (test description, question description,
+        answer text, and the answer's feedback comment shown after answering — a separate field
+        from the answer text, prefixed feedback_* in inventory/source modes). Use them to review
+        structure, then translate with upsert_course_test_description_language,
+        upsert_course_test_question_description_language,
+        upsert_course_test_answer_description_language (answer text) and
+        upsert_course_test_answer_feedback_language (feedback comment) — one language INNER HTML
+        per call. Locate a test by testId or exact testTitle, and a question by questionId from
+        get_course_test_questions. Unlike the other course tools, the three read tools are also
+        available platform-wide (not only for the test's own course) to users with a question
+        manager or administrator role; the upsert_* write tools require the course teacher.
+
+        Full-document rewrites without renaming titles remain available via
+        edit_course_test_question_description, edit_course_test_answer_description and
+        edit_course_test_answer_feedback, but prefer the upsert_*_language tools for
+        multi-language translation. edit_course_test_answer_description requires non-empty
+        content; the question description and answer feedback may be cleared with an empty
+        string.
+
+        For surveys, get_course_surveys and get_course_survey_questions support the same
+        full/inventory/source modes. Prefer upsert_course_survey_description_language,
+        upsert_course_survey_question_description_language and
+        upsert_course_survey_answer_description_language for iterative translation. Full replace
+        tools (edit_course_survey_*_description) remain for non-translation edits. Survey write
+        tools require the course teacher.
+    client_transports:
+        stdio: true
+        http: true
+    http:
+        path: /mcp
+        # false (not omitted) explicitly disables the SDK's DNS-rebinding-protection
+        # middleware. Omitting this key instead falls back to the SDK default of
+        # localhost-only, which would block every real request on a public server.
+        # This is the bundle's own sanctioned way to "expose a public MCP server"
+        # (see Symfony\AI\McpBundle\Http\MiddlewareFactory) — Chamilo doesn't need
+        # that check on top: /mcp already requires a Bearer credential (personal API
+        # key, JWT, or OAuth access token) via McpBearerAuthenticator regardless of
+        # the request's Host/Origin header, so DNS rebinding (which relies on
+        # ambient/cookie-style auth riding along with a spoofed Host) isn't
+        # exploitable here — a rebinding page cannot forge a bearer token it doesn't
+        # already have. A multi-AccessUrl platform reachable under many hostnames
+        # also makes a static per-host allowlist a poor fit operationally.
+        allowed_hosts: false
+        session:
+            store: file
+            directory: '%kernel.cache_dir%/mcp-sessions'
+            ttl: 3600

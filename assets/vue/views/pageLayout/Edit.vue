@@ -52,7 +52,7 @@
             v-if="loadingTemplates"
             class="text-gray-600"
           >
-            {{ t("Loading templates...") }}
+            {{ t("Loading templates") }}
           </div>
 
           <div v-else>
@@ -132,7 +132,7 @@ onMounted(async () => {
     const parsedTemplates = templates.map((tpl) => {
       const parsed = safeParse(tpl.layout)
       return {
-        label: parsed?.page?.title || `Template #${tpl.id}`,
+        label: tpl.title || parsed?.page?.title || `Template #${tpl.id}`,
         value: tpl["@id"],
         data: parsed,
       }

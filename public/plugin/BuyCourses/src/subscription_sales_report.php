@@ -481,7 +481,7 @@ $template->assign('back_url', $backUrl);
 
 $template->assign(
     'export_report_url',
-    api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/export_subscription_report.php'
+    api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/export_report.php?source=subscription'
 );
 $template->assign(
     'paypal_payout_url',

@@ -16,6 +16,13 @@ header('Content-type: text/javascript');
 
 error_reporting(0);
 
+require_once __DIR__.'/../../0_dal/dal.vdatabase.php';
+$VDB = new VirtualDatabase();
+
+require_once __DIR__.'/../../ajax/inc/functions.php';
+
+require_once __DIR__.'/../../0_dal/dal.save.php';
+
 $idPage = -1;
 if (isset($_POST['id'])) {
     $idPage = (int) $_POST['id'];
@@ -24,29 +31,30 @@ if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
 }
 
-$pluginFileSystem = Container::getPluginsFileSystem();
-$cacheFileRel = 'CStudio/editor/img_cache/tmp/imgextras_'.$idPage.'.json';
-if ($pluginFileSystem->fileExists($cacheFileRel)) {
-    $cacheContent = $pluginFileSystem->read($cacheFileRel);
-    $lastModified = $pluginFileSystem->lastModified($cacheFileRel);
-    if ((time() - $lastModified) < 300) {
-        echo $cacheContent;
-
-        exit;
-    }
-}
-
-require_once __DIR__.'/../../0_dal/dal.vdatabase.php';
-$VDB = new VirtualDatabase();
-
-require_once __DIR__.'/../../ajax/inc/functions.php';
-
-require_once __DIR__.'/../../0_dal/dal.save.php';
-
-if ($VDB->w_api_is_anonymous()) {
+// Checked before the cache read below: a fresh cache hit used to be served
+// unconditionally, bypassing even the anonymous check that follows it.
+if ($VDB->w_api_is_anonymous() || !oel_ctr_rights($idPage)) {
     echo 'var baseMyCollImgs = [];';
 
     exit;
+}
+
+$pluginFileSystem = Container::getPluginsFileSystem();
+$cacheFileRel = 'CStudio/editor/img_cache/tmp/imgextras_'.$idPage.'.json';
+
+try {
+    if ($pluginFileSystem->fileExists($cacheFileRel)) {
+        $cacheContent = $pluginFileSystem->read($cacheFileRel);
+        $lastModified = $pluginFileSystem->lastModified($cacheFileRel);
+
+        if ((time() - $lastModified) < 300) {
+            echo $cacheContent;
+
+            exit;
+        }
+    }
+} catch (\Throwable $exception) {
+    error_log('CStudio getextras cache read failed: '.$exception->getMessage());
 }
 
 if (isset($_POST['id']) || isset($_GET['id'])) {
@@ -97,6 +105,15 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
     $finalJson .= '];';
     echo $finalJson;
 
-    $pluginFileSystem->createDirectory('CStudio/editor/img_cache/tmp');
-    $pluginFileSystem->write($cacheFileRel, $finalJson);
+    try {
+        $cacheDirRel = 'CStudio/editor/img_cache/tmp';
+
+        if (!$pluginFileSystem->directoryExists($cacheDirRel)) {
+            $pluginFileSystem->createDirectory($cacheDirRel);
+        }
+
+        $pluginFileSystem->write($cacheFileRel, $finalJson);
+    } catch (\Throwable $exception) {
+        error_log('CStudio getextras cache write failed: '.$exception->getMessage());
+    }
 }

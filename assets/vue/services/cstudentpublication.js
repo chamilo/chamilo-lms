@@ -21,7 +21,7 @@ function extractId(idOrIri) {
 async function updatePublication(idOrIri, payload) {
   const id = extractId(idOrIri)
 
-  return baseService.put(`/api/c_student_publications/${id}`, payload, { params: buildCidParams() })
+  return baseService.patch(`/api/c_student_publications/${id}`, payload, { params: buildCidParams() })
 }
 
 async function findStudentAssignments() {
@@ -171,7 +171,7 @@ async function uploadCorrectionsPackage(assignmentId, file) {
 }
 
 async function updateScore(iid, qualification) {
-  return baseService.put(`/api/c_student_publications/${iid}`, { qualification }, { params: buildCidParams() })
+  return baseService.patch(`/api/c_student_publications/${iid}`, { qualification }, { params: buildCidParams() })
 }
 
 async function aiGradeSubmission(submissionId, payload = {}) {

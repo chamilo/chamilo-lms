@@ -27,7 +27,7 @@ trait UserCreatorTrait
         return $this->resourceNode->getCreator();
     }
 
-    public function setCreator(User $user)
+    public function setCreator(User $user): static
     {
         $this->resourceNodeCreator = $user;
 

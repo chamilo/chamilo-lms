@@ -4,6 +4,7 @@ import api from "../config/api"
 import { computed, reactive, ref, unref, watch } from "vue"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
+import { useRoute } from "vue-router"
 
 // ─── Shared reactive cache ────────────────────────────────────────────────────
 // Keyed by buildCacheKey(); invalidated when student view is toggled.
@@ -78,13 +79,25 @@ export function useIsAllowedToEdit({
 } = {}) {
   const cidReqStore = useCidReqStore()
   const platformConfigStore = usePlatformConfig()
+  const route = useRoute()
   const { course, session } = storeToRefs(cidReqStore)
+
+  const isEmbeddedStudentView = computed(() => {
+    const truthyValues = ["1", "true", "yes", "on"]
+    const origin = String(route.query.origin || "").toLowerCase()
+    const embedded = truthyValues.includes(String(route.query.embedded || "").toLowerCase())
+    const studentView = truthyValues.includes(String(route.query.isStudentView || "").toLowerCase())
+
+    return origin === "learnpath" && embedded && studentView
+  })
 
   const key = computed(() =>
     buildCacheKey(tutor, coach, sessionCoach, checkStudentView, course.value?.id, session.value?.id),
   )
 
-  const isAllowedToEdit = computed(() => permissionCache.get(key.value) ?? false)
+  const isAllowedToEdit = computed(() =>
+    isEmbeddedStudentView.value ? false : (permissionCache.get(key.value) ?? false),
+  )
 
   // Trigger initial fetch (no-op if a result is already cached or pending)
   void fetchPermission(tutor, coach, sessionCoach, checkStudentView, course.value?.id, session.value?.id)

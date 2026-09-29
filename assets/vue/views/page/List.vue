@@ -225,6 +225,20 @@
       <p class="text-xs text-gray-500 italic">{{ t("Select the link above and press Ctrl+C to copy it") }}</p>
     </div>
   </Dialog>
+
+  <Message
+    v-if="securityStore.isAdmin"
+    :closable="false"
+    class="mt-5"
+    icon="mdi mdi-information"
+    severity="info"
+  >
+    {{
+      t(
+        "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately.",
+      )
+    }}
+  </Message>
 </template>
 
 <script setup>
@@ -232,13 +246,14 @@ import { useStore } from "vuex"
 import { useDatatableList } from "../../composables/datatableList"
 import { computed, inject, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
+import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
 import { useRouter } from "vue-router"
 import { useLocale } from "../../composables/locale"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import FloatLabel from "primevue/floatlabel"
+import Message from "primevue/message"
 
 const router = useRouter()
 const store = useStore()
@@ -263,7 +278,7 @@ function ensureLanguageName(iso) {
   return langMap[iso]
 }
 
-const toast = useToast()
+const { showSuccessNotification } = useNotification()
 
 const layoutMenuItems = inject("layoutMenuItems")
 
@@ -321,11 +336,7 @@ const deleteMultipleItems = () => {
     deleteMultipleDialog.value = false
     selectedItems.value = []
 
-    toast.add({
-      severity: "success",
-      detail: t("Pages deleted"),
-      life: 3500,
-    })
+    showSuccessNotification(t("Pages deleted"))
   })
 
   onUpdateOptions(options.value)

@@ -87,7 +87,7 @@ class UserManager
      * @param string $officialCode Any official code (optional)
      * @param string $language User language    (optional)
      * @param string $phone Phone number    (optional)
-     * @param string $pictureUri Picture URI        (optional)
+     * @param string|null $pictureUri Picture URI        (optional, unused)
      * @param ?array $authSources Authentication source (defaults to 'platform', dependind on constant)
      * @param string $expirationDate Account expiration date (optional, defaults to null)
      * @param int    $active Whether the account is enabled or disabled by default
@@ -242,7 +242,10 @@ class UserManager
         // Checking the user language
         $languages = api_get_languages();
         if (!in_array($language, array_keys($languages), true)) {
-            $language = 'en_US'; // default
+            $language = api_get_platform_default_isocode();
+            if (empty($language) || !in_array($language, array_keys($languages), true)) {
+                $language = 'en_US'; // last resort default
+            }
         }
 
         $now = new DateTime();
@@ -1063,12 +1066,12 @@ class UserManager
      * @param string $lastname        The user's lastname
      * @param string $username        The user's username (login)
      * @param string $password        The user's password
-     * @param string $auth_sources     The authentication source (default: "platform")
+     * @param array  $auth_sources    The authentication sources (default: "platform")
      * @param string $email           The user's e-mail address
      * @param int    $status          The user's status
      * @param string $official_code   The user's official code (usually just an internal institutional code)
      * @param string $phone           The user's phone number
-     * @param string $picture_uri     The user's picture URL (internal to the Chamilo directory)
+     * @param string|null $picture_uri The user's picture URL (internal to the Chamilo directory, unused)
      * @param string $expiration_date The date at which this user will be automatically disabled
      * @param int    $active          Whether this account needs to be enabled (1) or disabled (0)
      * @param int    $creator_id      The user ID of the person who registered this user (optional, defaults to null)
@@ -1873,7 +1876,7 @@ class UserManager
     /**
      * Gets the current user image.
      *
-     * @param string $userId
+     * @param int    $userId
      * @param int    $size        it can be USER_IMAGE_SIZE_SMALL,
      *                            USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
      * @param bool   $addRandomId
@@ -2698,16 +2701,16 @@ class UserManager
         // the results afterwards in PHP takes about 1/1000th of the time
         // (0.1s + 0.0s) for the same set of data, so we do it this way...
         $dqlStudent = "SELECT $dqlSelect
-            FROM ChamiloCoreBundle:Session AS s
-            LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
-            INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
-            LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
+            FROM Chamilo\CoreBundle\Entity\Session AS s
+            LEFT JOIN Chamilo\CoreBundle\Entity\SessionRelCourseRelUser AS scu WITH scu.session = s
+            INNER JOIN Chamilo\CoreBundle\Entity\AccessUrlRelSession AS url WITH url.session = s.id
+            LEFT JOIN Chamilo\CoreBundle\Entity\SessionCategory AS sc WITH s.category = sc
             WHERE scu.user = :user AND url.url = :url ";
         $dqlCoach = "SELECT $dqlSelect
-            FROM ChamiloCoreBundle:Session AS s
-            INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s.id
-            LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-            INNER JOIN ChamiloCoreBundle:SessionRelUser AS su WITH su.session = s
+            FROM Chamilo\CoreBundle\Entity\Session AS s
+            INNER JOIN Chamilo\CoreBundle\Entity\AccessUrlRelSession AS url WITH url.session = s.id
+            LEFT JOIN Chamilo\CoreBundle\Entity\SessionCategory AS sc WITH s.category = sc
+            INNER JOIN Chamilo\CoreBundle\Entity\SessionRelUser AS su WITH su.session = s
             WHERE (su.user = :user AND su.relationType = ".SessionEntity::GENERAL_COACH.") AND url.url = :url ";
 
         // Default order
@@ -3657,15 +3660,14 @@ class UserManager
      */
     public static function is_admin($user_id)
     {
-        $user_id = (int) $user_id;
-        if (empty($user_id)) {
+        $userId = (int) $user_id;
+        if (empty($userId)) {
             return false;
         }
-        $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
-        $res = Database::query($sql);
 
-        return 1 === Database::num_rows($res);
+        $user = api_get_user_entity($userId);
+
+        return $user instanceof User && ($user->isAdmin() || $user->isSuperAdmin());
     }
 
     /**
@@ -4054,25 +4056,24 @@ class UserManager
      */
     public static function get_all_administrators()
     {
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $access_url_id = api_get_current_access_url_id();
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlId = api_get_current_access_url_id();
+        $adminRoleCondition = "(u.roles LIKE '%ROLE_ADMIN%' OR u.roles LIKE '%ROLE_GLOBAL_ADMIN%')";
+
         if (api_get_multiple_access_url()) {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active, locale
-                    FROM $tbl_url_rel_user as url
-                    INNER JOIN $table_admin as admin
-                    ON (admin.user_id=url.user_id)
-                    INNER JOIN $table_user u
-                    ON (u.id=admin.user_id)
-                    WHERE access_url_id ='".$access_url_id."'";
+            $sql = "SELECT u.id AS user_id, username, firstname, lastname, email, active, locale
+                    FROM $tableAccessUrlRelUser url
+                    INNER JOIN $tableUser u
+                    ON (u.id = url.user_id)
+                    WHERE url.access_url_id = '$accessUrlId'
+                      AND $adminRoleCondition";
         } else {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active, locale
-                    FROM $table_admin as admin
-                    INNER JOIN $table_user u
-                    ON (u.id=admin.user_id)";
+            $sql = "SELECT u.id AS user_id, username, firstname, lastname, email, active, locale
+                    FROM $tableUser u
+                    WHERE $adminRoleCondition";
         }
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
+        $sql .= ' AND u.active <> '.USER_SOFT_DELETED;
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
@@ -4532,8 +4533,8 @@ class UserManager
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND (
             u.last_login IS NULL OR
-            u.last_login = '0000-00-00 00:00:00' OR
-            u.last_login = '0000-00-00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00 00:00:00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00' OR
             u.last_login <= '$lastConnectionDate'
         ) ";
         }
@@ -4748,7 +4749,7 @@ class UserManager
         $users = implode(', ', $usersId);
         Database::getManager()
             ->createQuery('
-                DELETE FROM ChamiloCoreBundle:UserRelUser uru
+                DELETE FROM Chamilo\CoreBundle\Entity\UserRelUser uru
                 WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type AND uru.userId IN (:users_ids)
             ')
             ->execute(['hrm_id' => $hrmId, 'relation_type' => UserRelUser::USER_RELATION_TYPE_HRM_REQUEST, 'users_ids' => $users]);
@@ -5077,28 +5078,14 @@ class UserManager
 
     public static function addUserAsAdmin(User $user)
     {
-        $userId = $user->getId();
-
-        if (!self::is_admin($userId)) {
-            $table = Database::get_main_table(TABLE_MAIN_ADMIN);
-            $sql = "INSERT INTO $table SET user_id = $userId";
-            Database::query($sql);
-        }
-
-        $user->addRole('ROLE_ADMIN');
+        $user->addUserAsAdmin();
         Container::getUserRepository()->updateUser($user, true);
     }
 
     public static function removeUserAdmin(User $user)
     {
-        $userId = (int) $user->getId();
-        if (self::is_admin($userId)) {
-            $table = Database::get_main_table(TABLE_MAIN_ADMIN);
-            $sql = "DELETE FROM $table WHERE user_id = $userId";
-            Database::query($sql);
-            $user->removeRole('ROLE_ADMIN');
-            Container::getUserRepository()->updateUser($user, true);
-        }
+        $user->removeUserAsAdmin();
+        Container::getUserRepository()->updateUser($user, true);
     }
 
     /**
@@ -5216,7 +5203,7 @@ class UserManager
                 if ($insertId) {
                     if ($sendNotification) {
                         $name = $studentInfo['complete_name'];
-                        $url = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$studentId;
+                        $url = api_get_path(WEB_PATH).'reporting/learners/'.$studentId;
                         $url = Display::url($url, $url);
                         $subject = sprintf(get_lang('You have been assigned the learner %s', $bossLanguage), $name);
                         $message = sprintf(get_lang('You have been assigned the learner %s with url %s', $bossLanguage), $name, $url);
@@ -5703,7 +5690,7 @@ SQL;
      */
     public static function sendUserConfirmationMail(User $user)
     {
-        $uniqueId = api_get_unique_id();
+        $uniqueId = api_generate_secure_token();
         $user->setConfirmationToken($uniqueId);
 
         Database::getManager()->persist($user);
@@ -6411,7 +6398,7 @@ SQL;
         if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
             1 === (int) $askPassword['ask_new_password']
         ) {
-            $uniqueId = api_get_unique_id();
+            $uniqueId = api_generate_secure_token();
             $userObj = api_get_user_entity($userId);
             $userObj->setConfirmationToken($uniqueId);
             $userObj->setPasswordRequestedAt(new \DateTime());
@@ -6487,9 +6474,18 @@ SQL;
         ];
 
         $filtered = [];
+        // Only a global admin registered in the topmost access URL of a tree may grant
+        // ROLE_GLOBAL_ADMIN -- for anyone else the option is left off the form entirely,
+        // not merely rejected on submit (areRolesAllowedInUserForm() re-checks this too).
+        $canGrantGlobalAdmin = api_can_grant_global_admin_role();
 
         foreach ($roleOptions as $roleCode => $label) {
             $normalizedRole = api_normalize_role_code((string) $roleCode);
+
+            if ('ROLE_GLOBAL_ADMIN' === $normalizedRole && !$canGrantGlobalAdmin) {
+                continue;
+            }
+
             $mappedStatus = (int) api_status_from_roles([$normalizedRole]);
 
             if (in_array($mappedStatus, $knownStatuses, true)) {
@@ -6537,7 +6533,7 @@ SQL;
             return $decoded;
         }
 
-        $unserialized = @unserialize($value);
+        $unserialized = @unserialize($value, ['allowed_classes' => false]);
         if (is_array($unserialized)) {
             return $unserialized;
         }

@@ -22,6 +22,7 @@
 
         <div class="flex flex-wrap items-center gap-2">
           <BaseButton
+            v-if="!isLearningPathContext"
             :label="t('Back to survey list')"
             :route="buildListRoute()"
             icon="back"
@@ -40,14 +41,20 @@
 
     <div
       v-if="errorMessage"
-      class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+      ref="errorAlertRef"
+      class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700"
+      role="alert"
+      tabindex="-1"
     >
       {{ errorMessage }}
     </div>
 
     <div
       v-if="successMessage"
-      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
+      ref="successAlertRef"
+      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm font-semibold text-green-700"
+      role="status"
+      tabindex="-1"
     >
       {{ successMessage }}
     </div>
@@ -87,32 +94,32 @@
             :disabled="isEditMode"
             :form-submitted="formSubmitted"
             :help-text="isEditMode ? t('The survey code cannot be changed after creation.') : ''"
-            :is-invalid="formSubmitted && !isEditMode && !form.code.trim()"
-            :label="t('Code')"
+            :is-invalid="isCodeInvalid"
+            :label="isEditMode ? t('Code') : requiredLabel(t('Code'))"
             :required="!isEditMode"
-            error-text="Required field"
+            :error-text="t('Required field')"
+            aria-required="true"
             maxlength="40"
             name="survey_code"
-          />
-
-          <BaseSelect
-            id="resource_language"
-            v-model="form.resourceLanguage"
-            :allow-clear="true"
-            :label="t('Language')"
-            :options="languageOptions"
-            name="language"
           />
         </div>
 
         <div class="mt-6 grid gap-6">
-          <BaseTinyEditor
-            editor-id="survey_title"
-            v-model="form.title"
-            :editor-config="smallEditorConfig"
-            :full-page="false"
-            :title="t('Survey title')"
-          />
+          <div>
+            <BaseTinyEditor
+              editor-id="survey_title"
+              v-model="form.title"
+              :editor-config="smallEditorConfig"
+              :full-page="false"
+              :title="requiredLabel(t('Survey title'))"
+            />
+            <p
+              v-if="isTitleInvalid"
+              class="mt-1 text-sm text-danger"
+            >
+              {{ t("Required field") }}
+            </p>
+          </div>
 
           <BaseTinyEditor
             editor-id="survey_subtitle"
@@ -138,8 +145,8 @@
             id="available_from"
             v-model="form.availableFrom"
             :error-text="t('Invalid date')"
-            :is-invalid="formSubmitted && !form.availableFrom"
-            :label="t('Start Date')"
+            :is-invalid="isAvailableFromInvalid"
+            :label="requiredLabel(t('Start Date'))"
             :show-time="true"
           />
 
@@ -147,8 +154,8 @@
             id="available_until"
             v-model="form.availableUntil"
             :error-text="t('Invalid date')"
-            :is-invalid="formSubmitted && !form.availableUntil"
-            :label="t('End Date')"
+            :is-invalid="isAvailableUntilInvalid"
+            :label="requiredLabel(t('End date'))"
             :show-time="true"
           />
         </div>
@@ -242,6 +249,15 @@
 
       <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
         <div class="grid gap-6 md:grid-cols-2">
+          <ResourceLanguageSelector
+            v-if="resourceLanguageEnabled && languageOptions.length > 2"
+            id="resource_language"
+            v-model="form.resourceLanguage"
+            :options="languageOptions"
+            name="language"
+            :hide-when-single-language="false"
+          />
+
           <BaseSelect
             v-if="!isEditMode"
             id="parent_id"
@@ -250,6 +266,49 @@
             :options="parentSurveyOptions"
             name="parent_id"
           />
+
+          <div
+            v-if="gradebookCategoryOptions.length > 0"
+            class="rounded-xl border border-gray-20 bg-white p-4 md:col-span-2"
+          >
+            <div class="mb-4 flex items-center gap-3">
+              <BaseIcon
+                icon="gradebook"
+                size="small"
+              />
+              <h2 class="text-lg font-semibold text-gray-90">{{ t("Gradebook") }}</h2>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-3">
+              <BaseCheckbox
+                id="survey_qualify_gradebook"
+                v-model="form.gradebookEnabled"
+                :label="t('Grade in the assessment tool')"
+                name="survey_qualify_gradebook"
+              />
+
+              <BaseSelect
+                v-if="gradebookCategoryOptions.length > 1"
+                id="category_id"
+                v-model="form.gradebookCategoryId"
+                :disabled="!form.gradebookEnabled"
+                :is-invalid="isGradebookCategoryInvalid"
+                :label="t('Select assessment')"
+                :options="gradebookCategoryOptions"
+                name="category_id"
+              />
+
+              <BaseInputNumber
+                id="survey_weight"
+                v-model="form.gradebookWeight"
+                :disabled="!form.gradebookEnabled"
+                :label="t('Weight in Report')"
+                :min="0"
+                :step="0.1"
+                name="survey_weight"
+              />
+            </div>
+          </div>
 
           <div
             v-if="isEditMode && !form.anonymous && settings.showProfileFormSupported"
@@ -300,68 +359,21 @@
           >
             {{ t("Profile field selection is available only for non-anonymous surveys.") }}
           </div>
-
-          <div
-            v-if="!settings.skillsSupported"
-            class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700"
-          >
-            {{ t("Skill linkage will be migrated in a dedicated batch.") }}
-          </div>
-
-          <div
-            v-if="settings.personalityUnsupportedReason"
-            class="rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm text-orange-700"
-          >
-            {{ t(settings.personalityUnsupportedReason) }}
-          </div>
         </div>
       </BaseAdvancedSettingsButton>
-
-      <div
-        v-if="gradebookCategoryOptions.length > 0"
-        class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm"
-      >
-        <div class="mb-6 flex items-center gap-3">
-          <BaseIcon
-            icon="gradebook"
-            size="small"
-          />
-          <h2 class="text-lg font-semibold text-gray-90">{{ t("Gradebook") }}</h2>
-        </div>
-
-        <div class="grid gap-6 md:grid-cols-3">
-          <BaseCheckbox
-            id="survey_qualify_gradebook"
-            v-model="form.gradebookEnabled"
-            :label="t('Grade in the assessment tool')"
-            name="survey_qualify_gradebook"
-          />
-
-          <BaseSelect
-            id="category_id"
-            v-model="form.gradebookCategoryId"
-            :disabled="!form.gradebookEnabled"
-            :label="t('Select assessment')"
-            :options="gradebookCategoryOptions"
-            name="category_id"
-          />
-
-          <BaseInputNumber
-            id="survey_weight"
-            v-model="form.gradebookWeight"
-            :disabled="!form.gradebookEnabled"
-            :label="t('Weight in Report')"
-            :min="0"
-            :step="0.1"
-            name="survey_weight"
-          />
-        </div>
-      </div>
 
       <div
         class="flex flex-col-reverse gap-3 rounded-2xl border border-gray-20 bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-end"
       >
         <BaseButton
+          v-if="isLearningPathContext"
+          :label="t('Cancel')"
+          icon="close"
+          type="black"
+          @click="goToLearningPathAddItem"
+        />
+        <BaseButton
+          v-else
           :label="t('Cancel')"
           :route="buildListRoute()"
           icon="close"
@@ -380,7 +392,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, nextTick, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
@@ -392,32 +404,44 @@ import BaseInputNumber from "../../components/basecomponents/BaseInputNumber.vue
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 
 const isLoading = ref(false)
 const isSaving = ref(false)
 const formSubmitted = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
+const errorAlertRef = ref(null)
+const successAlertRef = ref(null)
+const firstInvalidFieldId = ref("")
 const questionUrl = ref("")
 const settings = ref({})
 const options = ref({})
-const csrfToken = ref("")
 const showAdvancedSettings = ref(false)
 
 const form = ref(createEmptyForm())
 
 const isEditMode = computed(() => Number(route.params.surveyId || 0) > 0)
 const surveyId = computed(() => Number(route.params.surveyId || 0))
+const isCodeInvalid = computed(() => formSubmitted.value && !isEditMode.value && !form.value.code.trim())
+const isTitleInvalid = computed(() => formSubmitted.value && !stripHtml(form.value.title).trim())
+const isAvailableFromInvalid = computed(() => formSubmitted.value && !form.value.availableFrom)
+const isAvailableUntilInvalid = computed(() => formSubmitted.value && !form.value.availableUntil)
+const isGradebookCategoryInvalid = computed(
+  () => formSubmitted.value && form.value.gradebookEnabled && !form.value.gradebookCategoryId,
+)
 
 const visibleResultOptions = computed(() => translateOptions(options.value.visibleResults || []))
 const languageOptions = computed(() => translateOptions(options.value.languages || []))
-const parentSurveyOptions = computed(() => translateOptions(options.value.parentSurveys || []))
-const gradebookCategoryOptions = computed(() => translateOptions(options.value.gradebookCategories || []))
+const parentSurveyOptions = computed(() => normalizeOptions(options.value.parentSurveys || []))
+const gradebookCategoryOptions = computed(() => normalizeOptions(options.value.gradebookCategories || []))
 const profileFieldOptions = computed(() => translateOptions(options.value.profileFields || []))
 
 const durationValue = computed({
@@ -467,14 +491,81 @@ function createEmptyForm() {
   }
 }
 
-function getContextParams() {
+function getContextParams(extra = {}) {
+  return cleanQueryParams({
+    cid: getQueryValue(route.query.cid),
+    sid: getQueryValue(route.query.sid),
+    gid: getQueryValue(route.query.gid),
+    origin: getQueryValue(route.query.origin),
+    lp_id: getQueryValue(route.query.lp_id),
+    lpItemId: getQueryValue(route.query.lpItemId || route.query.lp_item_id),
+    type: getQueryValue(route.query.type),
+    returnToLp: getQueryValue(route.query.returnToLp),
+    parent: getQueryValue(route.query.parent),
+    node: getQueryValue(route.query.node),
+    gradebook: getQueryValue(route.query.gradebook),
+    lpTool: getQueryValue(route.query.lpTool),
+    ...extra,
+  })
+}
+
+function getQueryValue(value) {
+  if (Array.isArray(value)) {
+    return value[0] || ""
+  }
+
+  return value || ""
+}
+
+function cleanQueryParams(params = {}) {
+  const cleanParams = {}
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null && String(value) !== "") {
+      cleanParams[key] = value
+    }
+  }
+
+  return cleanParams
+}
+
+const learningPathId = computed(() => Number(getQueryValue(route.query.lp_id) || 0))
+
+const isLearningPathContext = computed(() => {
+  return getQueryValue(route.query.origin) === "learnpath" && learningPathId.value > 0
+})
+
+function buildLearningPathBuilderRoute() {
+  const query = getContextParams()
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.lpItemId
+
   return {
-    cid: route.query.cid,
-    sid: route.query.sid,
-    gid: route.query.gid,
+    name: "LpBuilder",
+    params: {
+      node: Number(getQueryValue(route.query.node) || route.params.node || 0),
+      lpId: learningPathId.value,
+    },
+    query,
   }
 }
 
+function buildLearningPathQuestionsRoute(surveyId) {
+  return {
+    name: "SurveyQuestions",
+    params: {
+      node: route.params.node,
+      surveyId,
+    },
+    query: getContextParams({ lpItemId: undefined }),
+  }
+}
+
+function goToLearningPathAddItem() {
+  return router.push(buildLearningPathBuilderRoute())
+}
 
 function buildQuestionsRoute() {
   return {
@@ -500,6 +591,35 @@ function translateOptions(items) {
     ...item,
     label: item.label ? t(item.label) : "",
   }))
+}
+
+function normalizeOptions(items) {
+  return items.map((item) => ({
+    ...item,
+    label: stripHtml(item.label || "").trim(),
+  }))
+}
+
+function requiredLabel(label) {
+  return `${label} *`
+}
+
+function getApiErrorMessage(error, fallbackMessage) {
+  const data = error?.response?.data
+
+  if (typeof data?.error === "string" && data.error.trim()) {
+    return data.error
+  }
+
+  if (typeof data?.detail === "string" && data.detail.trim()) {
+    return data.detail
+  }
+
+  if (typeof data?.message === "string" && data.message.trim()) {
+    return data.message
+  }
+
+  return fallbackMessage
 }
 
 function toDate(value) {
@@ -562,7 +682,9 @@ function normalizeForm(data) {
 
   settings.value = data.settings || {}
   options.value = data.options || {}
-  csrfToken.value = data.csrfToken || ""
+  if (!form.value.gradebookCategoryId && gradebookCategoryOptions.value.length) {
+    form.value.gradebookCategoryId = gradebookCategoryOptions.value[0].value
+  }
   questionUrl.value = data.questionUrl || ""
 }
 
@@ -571,43 +693,61 @@ async function loadConfiguration() {
   errorMessage.value = ""
 
   try {
-    const data = await surveyService.getSurveyConfiguration(getContextParams(), isEditMode.value ? surveyId.value : null)
+    const data = await surveyService.getSurveyConfiguration(
+      getContextParams(),
+      isEditMode.value ? surveyId.value : null,
+    )
     normalizeForm(data)
   } catch (error) {
     console.error("Error loading survey configuration", error)
-    errorMessage.value = error?.response?.data?.detail || t("Could not load survey configuration")
+    errorMessage.value = getApiErrorMessage(error, t("Could not load survey configuration"))
   } finally {
     isLoading.value = false
   }
 }
 
 function validateForm() {
+  firstInvalidFieldId.value = ""
+
   if (!isEditMode.value && !form.value.code.trim()) {
     errorMessage.value = t("The survey code is required.")
+    firstInvalidFieldId.value = "survey_code"
 
     return false
   }
 
   if (!stripHtml(form.value.title).trim()) {
     errorMessage.value = t("The survey title is required.")
+    firstInvalidFieldId.value = "survey_title"
 
     return false
   }
 
-  if (!form.value.availableFrom || !form.value.availableUntil) {
+  if (!form.value.availableFrom) {
     errorMessage.value = t("Invalid date")
+    firstInvalidFieldId.value = "available_from"
+
+    return false
+  }
+
+  if (!form.value.availableUntil) {
+    errorMessage.value = t("Invalid date")
+    firstInvalidFieldId.value = "available_until"
 
     return false
   }
 
   if (form.value.availableFrom > form.value.availableUntil) {
     errorMessage.value = t("The first date should be before the end date")
+    firstInvalidFieldId.value = "available_from"
 
     return false
   }
 
   if (form.value.gradebookEnabled && !form.value.gradebookCategoryId) {
     errorMessage.value = t("Select assessment")
+    firstInvalidFieldId.value = "category_id"
+    showAdvancedSettings.value = true
 
     return false
   }
@@ -621,7 +761,6 @@ function buildPayload() {
     duration: durationValue.value > 0 ? durationValue.value : null,
     availableFrom: toPayloadDate(form.value.availableFrom),
     availableUntil: toPayloadDate(form.value.availableUntil),
-    csrfToken: csrfToken.value,
   }
 
   if (payload.anonymous || !payload.showFormProfile) {
@@ -632,12 +771,35 @@ function buildPayload() {
   return payload
 }
 
+async function scrollToFeedback(target = "error") {
+  await nextTick()
+
+  const alert = "success" === target ? successAlertRef.value : errorAlertRef.value
+  if (alert?.scrollIntoView) {
+    alert.scrollIntoView({ behavior: "smooth", block: "center" })
+    alert.focus?.({ preventScroll: true })
+  }
+}
+
+async function focusFirstInvalidField() {
+  await nextTick()
+
+  const selector = firstInvalidFieldId.value ? `#${firstInvalidFieldId.value}` : "[aria-invalid='true']"
+  const element = document.querySelector(selector)
+  const focusTarget = element?.querySelector?.("input, textarea, select, button, [contenteditable='true']") || element
+
+  focusTarget?.focus?.({ preventScroll: true })
+}
+
 async function submitForm() {
   formSubmitted.value = true
   errorMessage.value = ""
   successMessage.value = ""
 
   if (!validateForm()) {
+    await scrollToFeedback()
+    await focusFirstInvalidField()
+
     return
   }
 
@@ -651,9 +813,20 @@ async function submitForm() {
     )
 
     questionUrl.value = saved.questionUrl || questionUrl.value
-    csrfToken.value = saved.csrfToken || csrfToken.value
+
+    if (isEditMode.value && isLearningPathContext.value) {
+      await router.push(buildLearningPathBuilderRoute())
+
+      return
+    }
 
     if (!isEditMode.value && saved.surveyId) {
+      if (isLearningPathContext.value) {
+        await router.push(buildLearningPathQuestionsRoute(saved.surveyId))
+
+        return
+      }
+
       await router.push({
         name: "SurveyQuestions",
         params: {
@@ -667,10 +840,11 @@ async function submitForm() {
     }
 
     successMessage.value = t("The survey has been saved successfully")
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    await scrollToFeedback("success")
   } catch (error) {
     console.error("Error saving survey configuration", error)
-    errorMessage.value = error?.response?.data?.detail || t("Could not save survey configuration")
+    errorMessage.value = getApiErrorMessage(error, t("Could not save survey configuration"))
+    await scrollToFeedback()
   } finally {
     isSaving.value = false
   }

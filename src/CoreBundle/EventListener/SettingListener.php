@@ -15,7 +15,7 @@ class SettingListener
     public function __invoke(SettingsEvent $event): void
     {
         /*$urlId = $this->container->get('request')->getSession()->get('access_url_id');
-        $url = $this->container->get('doctrine')->getRepository('ChamiloCoreBundle:AccessUrl')->find($urlId);
+        $url = $this->container->get('doctrine')->getRepository('Chamilo\CoreBundle\Entity\AccessUrl')->find($urlId);
         $settings = $event->getSettings();*/
 
         // $settings->setUrl($url);

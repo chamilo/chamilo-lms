@@ -22,6 +22,7 @@ use const JSON_UNESCAPED_UNICODE;
 #[Route('/legal')]
 class LegalController
 {
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/save', name: 'chamilo_core_legal_save', methods: ['POST'])]
     public function saveLegal(
         Request $request,

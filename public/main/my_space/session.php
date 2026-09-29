@@ -297,7 +297,7 @@ switch ($action) {
         exit;
         break;
 }
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
 Display::display_header(get_lang('Course sessions'));
 
 if (api_is_platform_admin(true, true)) {
@@ -419,7 +419,7 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
     $keyword = Security::remove_XSS($form->getSubmitValue('keyword'));
     $extraField = new ExtraField('session');
-    $extraFields = $extraField->get_all(null, 'option_order');
+    $extraFields = $extraField->get_all([], 'option_order');
     $extraFields = array_column($extraFields, 'variable');
     $filter = new stdClass();
 

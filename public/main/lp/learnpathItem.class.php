@@ -4098,7 +4098,7 @@ class learnpathItem
             $params = [
                 'interaction_id' => $interaction[0],
                 'interaction_type' => $interaction[1],
-                'weighting' => $interaction[3],
+                'weighting' => '' !== (string) $interaction[3] ? (float) $interaction[3] : 0.0,
                 'completion_time' => $interaction[2],
                 'correct_responses' => $correctResp,
                 'student_response' => $interaction[5],
@@ -4119,11 +4119,7 @@ class learnpathItem
                     ['c_id' => $courseId, 'order_id' => $index, 'lp_iv_id' => $lpIvId],
                     $params
                 );
-                $insertId = Database::insert($ivaTable, $params);
-                if ($insertId) {
-                    $sql = "UPDATE $ivaTable SET id = iid WHERE iid = $insertId";
-                    Database::query($sql);
-                }
+                Database::insert($ivaTable, $params);
             }
         }
     }

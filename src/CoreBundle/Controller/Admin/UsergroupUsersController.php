@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
@@ -25,7 +24,6 @@ class UsergroupUsersController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
@@ -66,18 +64,12 @@ class UsergroupUsersController extends AbstractController
             'groupId' => $id,
             'groupTitle' => $usergroup->getTitle(),
             'users' => $users,
-            'csrfToken' => $this->csrfTokenManager->getToken('usergroup_users')->getValue(),
         ]);
     }
 
     #[Route('/{id}/user/{userId}', name: 'admin_usergroup_users_remove', requirements: ['id' => '\d+', 'userId' => '\d+'], methods: ['DELETE'])]
     public function remove(Request $request, int $id, int $userId): JsonResponse
     {
-        $token = (string) $request->headers->get('X-CSRF-Token', '');
-        if (!$this->isCsrfTokenValid('usergroup_users', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
-        }
-
         $usergroup = $this->em->find(Usergroup::class, $id);
         if (null === $usergroup) {
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);

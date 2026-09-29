@@ -2140,7 +2140,7 @@ class Agenda
                 get_lang('Add one more file').'</a>
                  </span>&nbsp;('.sprintf(
                     get_lang('Maximun file size: %s'),
-                    format_file_size(
+                    \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize(
                         api_get_setting('message_max_upload_filesize')
                     )
                 ).')'

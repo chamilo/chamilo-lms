@@ -61,10 +61,10 @@ $my_group_list = [];
 if (is_array($results) && count($results) > 0) {
     foreach ($results as $result) {
         $id = $result['id'];
-        $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
+        $result['title'] = Security::remove_XSS($result['title'], STUDENT, true);
         $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
         $my_group_list[] = $id;
-        $name = cut($result['name'], GROUP_TITLE_LENGTH, true);
+        $name = cut($result['title'], GROUP_TITLE_LENGTH, true);
 
         if (GROUP_USER_PERMISSION_ADMIN == $result['relation_type']) {
             $name .= ' '.Display::getMdiIcon(
@@ -139,10 +139,10 @@ $results = $usergroup->get_groups_by_age(4, false);
 
 $grid_newest_groups = [];
 foreach ($results as $result) {
-    $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
+    $result['title'] = Security::remove_XSS($result['title'], STUDENT, true);
     $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
     $id = $result['id'];
-    $name = cut($result['name'], GROUP_TITLE_LENGTH, true);
+    $name = cut($result['title'], GROUP_TITLE_LENGTH, true);
 
     $count_users_group = count(
         $usergroup->get_users_by_group(
@@ -196,10 +196,10 @@ $grid_pop_groups = [];
 
 if (is_array($results) && count($results) > 0) {
     foreach ($results as $result) {
-        $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
+        $result['title'] = Security::remove_XSS($result['title'], STUDENT, true);
         $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
         $id = $result['id'];
-        $name = cut($result['name'], GROUP_TITLE_LENGTH, true);
+        $name = cut($result['title'], GROUP_TITLE_LENGTH, true);
 
         $count_users_group = count(
             $usergroup->get_users_by_group(

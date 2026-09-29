@@ -10,12 +10,13 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
-use Chamilo\CoreBundle\State\SurveyQuestionProcessor;
-use Chamilo\CoreBundle\State\SurveyQuestionProvider;
+use Chamilo\CoreBundle\State\Survey\SurveyQuestionProcessor;
+use Chamilo\CoreBundle\State\Survey\SurveyQuestionProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
@@ -23,107 +24,155 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/survey/questions/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Survey questions for edition',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'get_survey_questions',
             provider: SurveyQuestionProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/survey/questions/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Create a survey question',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_survey_question',
             processor: SurveyQuestionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/survey/questions/{surveyId}/{questionId}',
-            requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'],
+            requirements: ['surveyId' => '\d+', 'questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Update a survey question',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'questionId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
-            read: false,
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            read: false,
             name: 'put_survey_question',
             processor: SurveyQuestionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Delete(
             uriTemplate: '/survey/questions/{surveyId}/{questionId}',
-            requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'],
+            requirements: ['surveyId' => '\d+', 'questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Delete a survey question',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'questionId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
-            read: false,
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            read: false,
             name: 'delete_survey_question',
             processor: SurveyQuestionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/survey/questions/{surveyId}/{questionId}/move',
-            requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'],
+            requirements: ['surveyId' => '\d+', 'questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Move a survey question',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'questionId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
-            read: false,
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            read: false,
             name: 'post_survey_question_move',
             processor: SurveyQuestionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/survey/questions/{surveyId}/{questionId}/copy',
-            requirements: ['surveyId' => '\\d+', 'questionId' => '\\d+'],
+            requirements: ['surveyId' => '\d+', 'questionId' => '\d+'],
             openapi: new Operation(
                 summary: 'Copy a survey question',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
                     new Parameter(name: 'questionId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
-            read: false,
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            read: false,
             name: 'post_survey_question_copy',
             processor: SurveyQuestionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['survey_question:read']],
@@ -165,9 +214,6 @@ final class SurveyQuestion
 
     #[Groups(['survey_question:read', 'survey_question:write'])]
     public string $direction = '';
-
-    #[Groups(['survey_question:read', 'survey_question:write'])]
-    public string $csrfToken = '';
 
     /**
      * @var array<int, array<string, mixed>>

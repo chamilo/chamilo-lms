@@ -94,18 +94,6 @@ class SkillRelItem
         return $this;
     }
 
-    public function getItemId(): int
-    {
-        return $this->itemId;
-    }
-
-    public function setItemId(int $itemId): static
-    {
-        $this->itemId = $itemId;
-
-        return $this;
-    }
-
     public function getObtainConditions(): ?string
     {
         return $this->obtainConditions;
@@ -190,18 +178,6 @@ class SkillRelItem
         return $this;
     }
 
-    public function getItemType(): int
-    {
-        return $this->itemType;
-    }
-
-    public function setItemType(int $itemType): self
-    {
-        $this->itemType = $itemType;
-
-        return $this;
-    }
-
     public function getCourseId(): ?int
     {
         return $this->courseId;
@@ -237,6 +213,18 @@ class SkillRelItem
         };
     }
 
+    public function getItemType(): int
+    {
+        return $this->itemType;
+    }
+
+    public function setItemType(int $itemType): self
+    {
+        $this->itemType = $itemType;
+
+        return $this;
+    }
+
     public function getItemResultList(string $cidReq): string
     {
         $url = '';
@@ -246,5 +234,17 @@ class SkillRelItem
             ITEM_TYPE_STUDENT_PUBLICATION => 'work/work_list_all.php?'.$cidReq.'&id='.$this->getItemId(),
             default => $url,
         };
+    }
+
+    public function getItemId(): int
+    {
+        return $this->itemId;
+    }
+
+    public function setItemId(int $itemId): static
+    {
+        $this->itemId = $itemId;
+
+        return $this;
     }
 }

@@ -27,10 +27,12 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testGetDocuments(): void
     {
-        // Test as admin.
+        // Listing documents is course-scoped: without cid there is no course to
+        // authorize against, so the request is rejected on the contract, before
+        // security -- an admin included.
         $token = $this->getUserToken([]);
         $this->createClientWithCredentials($token)->request('GET', '/api/documents');
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(422);
 
         $course = $this->createCourse('test');
         $response = $this->createClientWithCredentials($token)->request(
@@ -51,7 +53,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         // Asserts that the returned JSON is a superset of this one
         $this->assertJsonContains([
-            '@context' => '/api/contexts/Documents',
+            '@context' => '/api/contexts/Document',
             '@id' => '/api/documents',
             '@type' => 'hydra:Collection',
             'hydra:totalItems' => 0,
@@ -78,7 +80,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $token = $this->getUserToken([]);
         $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/documents',
+            '/api/documents?cid='.$courseId,
             [
                 'json' => [
                     'title' => $folderName,
@@ -93,8 +95,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains([
-            '@context' => '/api/contexts/Documents',
-            '@type' => 'Documents',
+            '@context' => '/api/contexts/Document',
+            '@type' => 'Document',
             'title' => $folderName,
             'parentResourceNode' => $course->getResourceNode()->getId(),
         ]);
@@ -117,7 +119,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $token = $this->getUserToken([]);
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/documents',
+            '/api/documents?cid='.$courseId,
             [
                 'json' => [
                     'title' => $folderName,
@@ -146,8 +148,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(200);
         $this->assertJsonContains([
-            '@context' => '/api/contexts/Documents',
-            '@type' => 'Documents',
+            '@context' => '/api/contexts/Document',
+            '@type' => 'Document',
             'title' => 'edited',
         ]);
     }
@@ -169,7 +171,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $token = $this->getUserToken([]);
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/documents',
+            '/api/documents?cid='.$courseId,
             [
                 'json' => [
                     'title' => $folderName,
@@ -221,7 +223,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $token = $this->getUserToken([]);
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/documents',
+            '/api/documents?cid='.$courseId,
             [
                 'json' => [
                     'title' => $folderName,
@@ -269,7 +271,10 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(403);
+        // A course context that resolves to nothing leaves the document out of the
+        // query the item is read from, so it reads as missing rather than
+        // forbidden -- the folder's existence is not disclosed.
+        $this->assertResponseStatusCodeSame(404);
 
         $this->createClientWithCredentials($studentToken)->request(
             'GET',
@@ -282,17 +287,18 @@ class CDocumentRepositoryTest extends AbstractApiTest
         );
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
-            '@context' => '/api/contexts/Documents',
-            '@type' => 'Documents',
+            '@context' => '/api/contexts/Document',
+            '@type' => 'Document',
             'title' => 'folder1',
         ]);
 
         // Change visibility to draft.
         $this->createClientWithCredentials($token)->request(
-            'PUT',
+            'PATCH',
             "$iri/toggle_visibility",
             [
                 'query' => ['cid' => $courseId],
+                'headers' => ['content-type' => ['application/merge-patch+json']],
             ]
         );
 
@@ -367,7 +373,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         // Upload file.
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/documents',
+            '/api/documents?cid='.$courseId,
             [
                 'headers' => [
                     'Content-Type' => 'multipart/form-data',
@@ -391,8 +397,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains([
-            '@context' => '/api/contexts/Documents',
-            '@type' => 'Documents',
+            '@context' => '/api/contexts/Document',
+            '@type' => 'Document',
             'title' => $file->getFilename(),
             'filetype' => 'file',
             'parentResourceNode' => $course->getResourceNode()->getId(),
@@ -416,8 +422,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains(
             [
-                '@context' => '/api/contexts/Documents',
-                '@type' => 'Documents',
+                '@context' => '/api/contexts/Document',
+                '@type' => 'Document',
                 'title' => $file->getFilename(),
                 'filetype' => 'file',
                 'resourceLinkListFromEntity' => [
@@ -538,10 +544,11 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         // Change visibility of the document to DRAFT
         $this->createClientWithCredentials($token)->request(
-            'PUT',
+            'PATCH',
             "/api/documents/$documentId/toggle_visibility",
             [
                 'query' => ['cid' => $courseId],
+                'headers' => ['content-type' => ['application/merge-patch+json']],
             ]
         );
 
@@ -579,7 +586,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         // Upload file.
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/documents',
+            '/api/documents?cid='.$courseId,
             [
                 'headers' => [
                     'Content-Type' => 'multipart/form-data',
@@ -620,8 +627,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains(
             [
-                '@context' => '/api/contexts/Documents',
-                '@type' => 'Documents',
+                '@context' => '/api/contexts/Document',
+                '@type' => 'Document',
                 'title' => $file->getFilename(),
                 'filetype' => 'file',
                 'resourceLinkListFromEntity' => [
@@ -654,7 +661,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $folderName = 'myfolder';
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/documents',
+            '/api/documents?cid='.$course->getId(),
             [
                 'json' => [
                     'title' => $folderName,
@@ -676,7 +683,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $token = $this->getUserToken([]);
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/documents',
+            '/api/documents?cid='.$course->getId(),
             [
                 'headers' => [
                     'Content-Type' => 'multipart/form-data',
@@ -699,8 +706,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains([
-            '@context' => '/api/contexts/Documents',
-            '@type' => 'Documents',
+            '@context' => '/api/contexts/Document',
+            '@type' => 'Document',
             'title' => $file->getFilename(),
             'filetype' => 'file',
         ]);
@@ -721,6 +728,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
     public function testAddFileFromString(): void
     {
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $documentCountBefore = $documentRepo->count([]);
         $course = $this->createCourse('Test');
         $admin = $this->getUser('admin');
 
@@ -743,7 +751,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertFalse($document->getReadonly());
 
         $this->assertSame($document->getIid(), $document->getResourceIdentifier());
-        $this->assertSame(1, $documentRepo->count([]));
+        $this->assertSame($documentCountBefore + 1, $documentRepo->count([]));
 
         $documentRepo->addFileFromString($document, 'test', 'text/html', 'my file', true);
 
@@ -756,6 +764,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
     {
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $documentCountBefore = $documentRepo->count([]);
         $admin = $this->getUser('admin');
 
         $document = (new CDocument())
@@ -768,7 +777,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $documentRepo->create($document);
 
-        $this->assertSame(1, $documentRepo->count([]));
+        $this->assertSame($documentCountBefore + 1, $documentRepo->count([]));
 
         $path = $this->getUploadedFile()->getRealPath();
         $resourceFile = $documentRepo->addFileFromPath($document, 'logo.png', $path, true);
@@ -784,6 +793,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
     {
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $documentCountBefore = $documentRepo->count([]);
         $admin = $this->getUser('admin');
 
         $document = (new CDocument())
@@ -796,7 +806,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $documentRepo->create($document);
 
-        $this->assertSame(1, $documentRepo->count([]));
+        $this->assertSame($documentCountBefore + 1, $documentRepo->count([]));
 
         $file = $this->getUploadedFileArray();
 
@@ -816,6 +826,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
     {
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $documentCountBefore = $documentRepo->count([]);
         $admin = $this->getUser('admin');
         $em = $this->getEntityManager();
 
@@ -833,7 +844,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $documentRepo->hardDelete($document);
 
-        $this->assertSame(0, $documentRepo->count([]));
+        $this->assertSame($documentCountBefore, $documentRepo->count([]));
     }
 
     public function testCreateDocumentWithLinks(): void
@@ -1055,6 +1066,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $documentCountBefore = $documentRepo->count([]);
         $total = $documentRepo->getTotalSpaceByCourse($course);
         $this->assertSame(0, $total);
 
@@ -1074,7 +1086,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $documentRepo->delete($document);
 
-        $this->assertSame(0, $documentRepo->count([]));
+        $this->assertSame($documentCountBefore, $documentRepo->count([]));
     }
 
     public function testToggleVisibility(): void
@@ -1101,22 +1113,22 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $url = '/api/documents/'.$documentId.'/toggle_visibility?cid='.$course->getId();
 
         // Not logged in.
-        $client->request('PUT', $url);
+        $client->request('PATCH', $url, ['headers' => ['content-type' => ['application/merge-patch+json']]]);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
         // Another user.
         $this->createUser('another');
         $client = $this->getClientWithGuiCredentials('another', 'another');
-        $client->request('PUT', $url);
+        $client->request('PATCH', $url, ['headers' => ['content-type' => ['application/merge-patch+json']]]);
 
         // Admin.
         $token = $this->getUserToken([]);
         $this->createClientWithCredentials($token)->request(
-            'PUT',
+            'PATCH',
             $url,
             [
                 'headers' => [
-                    'Content-Type' => 'application/json',
+                    'content-type' => ['application/merge-patch+json'],
                 ],
             ]
         );

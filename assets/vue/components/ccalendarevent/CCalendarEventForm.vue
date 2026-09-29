@@ -115,11 +115,13 @@ import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsBu
 import CalendarInvitations from "./CalendarInvitations.vue"
 import CalendarRemindersEditor from "./CalendarRemindersEditor.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
+import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import roomService from "../../services/roomService"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 const route = useRoute()
+const { resourceLanguageEnabled } = useResourceLanguageVisibility()
 
 const roomOptions = ref([])
 const showAdvancedSettings = ref(false)
@@ -147,7 +149,7 @@ function isResourceLanguageActive(language) {
 const showResourceLanguageAdvancedSettings = computed(() => {
   const languages = Array.isArray(window.languages) ? window.languages : []
 
-  return languages.filter(isResourceLanguageActive).length > 1
+  return resourceLanguageEnabled.value && languages.filter(isResourceLanguageActive).length > 1
 })
 
 const props = defineProps({

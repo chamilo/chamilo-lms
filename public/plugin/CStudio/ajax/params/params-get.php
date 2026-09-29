@@ -156,40 +156,50 @@ function cstudio_resolve_project_thumbnail_file(string $imageValue): ?array
     $candidatePaths = [];
 
     if (str_starts_with($rawPath, 'editor/img_cache/')) {
-        $candidatePaths[] = 'CStudio/'.$rawPath;
+        $candidatePaths[] = substr($rawPath, strlen('editor/'));
     }
 
     if (str_starts_with($rawPath, 'img_cache/')) {
-        $candidatePaths[] = 'CStudio/editor/'.$rawPath;
-        $candidatePaths[] = 'CStudio/editor/img_cache/'.substr($rawPath, strlen('img_cache/'));
+        $candidatePaths[] = $rawPath;
+        $candidatePaths[] = 'img_cache/'.substr($rawPath, strlen('img_cache/'));
     }
 
-    $candidatePaths[] = 'CStudio/editor/img_cache/'.$rawPath;
+    if (str_starts_with($rawPath, 'editor/img/')) {
+        $candidatePaths[] = substr($rawPath, strlen('editor/'));
+    }
+
+    if (str_starts_with($rawPath, 'img/')) {
+        $candidatePaths[] = $rawPath;
+    }
+
+    $candidatePaths[] = 'img_cache/'.$rawPath;
 
     foreach (array_unique($candidatePaths) as $candidatePath) {
-        $normalizedPath = cstudio_normalize_plugin_thumbnail_path($candidatePath);
-        if ('' === $normalizedPath) {
+        $relativePath = cstudio_normalize_editor_thumbnail_path($candidatePath);
+        if ('' === $relativePath) {
             continue;
         }
 
-        $extension = strtolower(pathinfo($normalizedPath, PATHINFO_EXTENSION));
+        $absolutePath = cstudio_get_editor_thumbnail_absolute_path($relativePath);
+        if ('' === $absolutePath) {
+            continue;
+        }
+
+        $extension = strtolower(pathinfo($absolutePath, PATHINFO_EXTENSION));
         $mimeType = cstudio_allowed_thumbnail_mime_type($extension);
         if ('' === $mimeType) {
             continue;
         }
 
-        $pluginFileSystem = Container::getPluginsFileSystem();
-        if (!$pluginFileSystem->fileExists($normalizedPath)) {
-            continue;
-        }
-
         return [
-            'path' => $normalizedPath,
-            'filename' => basename($normalizedPath),
+            'path' => $absolutePath,
+            'filename' => basename($absolutePath),
             'extension' => $extension,
             'mime_type' => $mimeType,
         ];
     }
+
+    error_log('CStudio thumbnail file not found for value: '.$imageValue);
 
     return null;
 }
@@ -213,11 +223,11 @@ function cstudio_extract_project_thumbnail_path(string $imageValue): string
     return $imageValue;
 }
 
-function cstudio_normalize_plugin_thumbnail_path(string $path): string
+function cstudio_normalize_editor_thumbnail_path(string $path): string
 {
     $path = ltrim(str_replace('\\', '/', $path), '/');
 
-    if (!str_starts_with($path, 'CStudio/editor/img_cache/')) {
+    if (!str_starts_with($path, 'img_cache/') && !str_starts_with($path, 'img/')) {
         return '';
     }
 
@@ -231,6 +241,25 @@ function cstudio_normalize_plugin_thumbnail_path(string $path): string
     return $path;
 }
 
+function cstudio_get_editor_thumbnail_absolute_path(string $relativePath): string
+{
+    $editorRoot = realpath(__DIR__.'/../../editor');
+    if (false === $editorRoot) {
+        return '';
+    }
+
+    $absolutePath = realpath($editorRoot.'/'.$relativePath);
+    if (false === $absolutePath || !is_file($absolutePath)) {
+        return '';
+    }
+
+    if (!str_starts_with($absolutePath, $editorRoot.DIRECTORY_SEPARATOR)) {
+        return '';
+    }
+
+    return $absolutePath;
+}
+
 function cstudio_allowed_thumbnail_mime_type(string $extension): string
 {
     return match ($extension) {
@@ -242,10 +271,9 @@ function cstudio_allowed_thumbnail_mime_type(string $extension): string
     };
 }
 
-function cstudio_create_temp_file_from_plugin_resource(string $pluginPath, string $extension): string
+function cstudio_create_temp_file_from_plugin_resource(string $sourcePath, string $extension): string
 {
-    $pluginFileSystem = Container::getPluginsFileSystem();
-    if (!$pluginFileSystem->fileExists($pluginPath)) {
+    if (!is_file($sourcePath) || !is_readable($sourcePath)) {
         return '';
     }
 
@@ -256,37 +284,17 @@ function cstudio_create_temp_file_from_plugin_resource(string $pluginPath, strin
 
     $tmpFileWithExtension = $tmpFile.'.'.$extension;
 
-    try {
-        $stream = $pluginFileSystem->readStream($pluginPath);
-        $target = fopen($tmpFileWithExtension, 'wb');
-
-        if (!is_resource($stream) || !is_resource($target)) {
-            if (is_resource($stream)) {
-                fclose($stream);
-            }
-            if (is_resource($target)) {
-                fclose($target);
-            }
-
-            @unlink($tmpFile);
-            @unlink($tmpFileWithExtension);
-
-            return '';
-        }
-
-        stream_copy_to_stream($stream, $target);
-        fclose($stream);
-        fclose($target);
-        @unlink($tmpFile);
-
-        return $tmpFileWithExtension;
-    } catch (Throwable $exception) {
+    if (!copy($sourcePath, $tmpFileWithExtension)) {
         @unlink($tmpFile);
         @unlink($tmpFileWithExtension);
-        error_log('CStudio thumbnail temporary file creation failed: '.$exception->getMessage());
+        error_log('CStudio thumbnail temporary file creation failed for: '.$sourcePath);
 
         return '';
     }
+
+    @unlink($tmpFile);
+
+    return $tmpFileWithExtension;
 }
 
 function cstudio_remove_lp_resource_files(object $resourceNode): void

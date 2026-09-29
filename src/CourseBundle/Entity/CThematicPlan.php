@@ -23,7 +23,7 @@ class CThematicPlan implements Stringable // extends AbstractResource implements
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\ManyToOne(targetEntity: CThematic::class, inversedBy: 'plans')]

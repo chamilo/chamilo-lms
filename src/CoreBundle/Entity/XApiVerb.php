@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Repository\XApiVerbRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Index(name: 'idx_xapi_verb_id', columns: ['id'])]
 #[ORM\Entity(repositoryClass: XApiVerbRepository::class)]
 class XApiVerb
 {

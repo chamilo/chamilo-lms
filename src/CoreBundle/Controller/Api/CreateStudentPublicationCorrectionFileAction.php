@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
@@ -29,9 +30,10 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
         EntityManager $em,
         KernelInterface $kernel,
         TranslatorInterface $translator,
+        CidReqHelper $cidReqHelper,
         Security $security
     ): CStudentPublicationCorrection {
-        $submissionId = (int) $request->get('submissionId');
+        $submissionId = (int) $request->request->get('submissionId');
 
         if (!$submissionId) {
             throw new NotFoundHttpException('submissionId is required');
@@ -50,7 +52,7 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
             throw new AccessDeniedHttpException('Not allowed to grade this submission.');
         }
 
-        $fileExistsOption = $request->get('fileExistsOption', 'rename');
+        $fileExistsOption = $request->request->get('fileExistsOption', 'rename');
 
         $correction = new CStudentPublicationCorrection();
 
@@ -59,6 +61,7 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
             $correctionRepo,
             $request,
             $em,
+            $cidReqHelper,
             $fileExistsOption,
             $translator
         );

@@ -331,7 +331,10 @@
             />
             <BaseButton
               :label="t('Reporting')"
-              :to-url="`/main/tracking/courseLog.php?cid=${data.id}`"
+              :route="{
+                name: 'CourseReportingLearners',
+                query: { cid: data.id, sid: 0, gid: 0 },
+              }"
               icon="tracking"
               only-icon
               size="small"
@@ -347,7 +350,7 @@
             />
             <BaseButton
               :label="t('Create a backup')"
-              :to-url="`/main/course_copy/create_backup.php?cid=${data.id}`"
+              :route="{ name: 'CMCreateBackup', params: { node: data.resourceNodeId }, query: { cid: data.id } }"
               icon="folder-backup"
               only-icon
               size="small"
@@ -442,8 +445,6 @@ const advancedFilters = reactive({
   course_teacher_input: "",
 })
 
-const csrfToken = ref("")
-
 function visibilityIcon(visibility) {
   const map = {
     0: "mdi mdi-eye-off-outline ch-tool-icon",
@@ -481,9 +482,6 @@ async function load() {
     const data = await baseService.get(`/admin/course-list-data?${params.toString()}`)
     items.value = data.items
     total.value = data.total
-    if (data.csrfToken) {
-      csrfToken.value = data.csrfToken
-    }
   } catch (e) {
     console.error(e)
   } finally {
@@ -529,7 +527,7 @@ function confirmDelete(data) {
       form.method = "POST"
       form.action = "/admin/course-list-action"
 
-      const fields = { action: "delete_course", course_id: data.id, _token: csrfToken.value }
+      const fields = { action: "delete_course", course_id: data.id }
       for (const [k, v] of Object.entries(fields)) {
         const input = document.createElement("input")
         input.type = "hidden"
@@ -550,12 +548,6 @@ function confirmBulkDelete() {
       const form = document.createElement("form")
       form.method = "POST"
       form.action = "/admin/course-list-action"
-
-      const tokenInput = document.createElement("input")
-      tokenInput.type = "hidden"
-      tokenInput.name = "_token"
-      tokenInput.value = csrfToken.value
-      form.appendChild(tokenInput)
 
       const actionInput = document.createElement("input")
       actionInput.type = "hidden"
@@ -582,7 +574,6 @@ async function toggleCatalogue(data) {
     const formData = new URLSearchParams()
     formData.append("action", "toggle_catalogue")
     formData.append("course_id", String(data.id))
-    formData.append("_token", csrfToken.value)
 
     // URLSearchParams body makes axios send application/x-www-form-urlencoded.
     const result = await baseService.post("/admin/course-list-action", formData)

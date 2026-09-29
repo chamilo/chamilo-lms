@@ -102,6 +102,25 @@ function getSrcForSave($srcFlx)
     return preg_replace('#<div\b[^>]+\bclass\s*=\s*[\'\"]editRapidIcon[\'\"][^>]*>([\s\S]*?)</div>#', ' ', $srcFlx);
 }
 
+/**
+ * Rewrites this plugin's own img-cache.php proxy URL -- saved as an absolute,
+ * server-specific link -- into a plain relative "img_cache/..." reference, in
+ * the HTML/CSS about to be written into an exported static page (SCORM, xAPI,
+ * web page). pagePrepareFileCopy() already copies the referenced file next to
+ * that page under the same relative path, so this keeps the exported package
+ * self-contained instead of pointing back at the original Chamilo server.
+ */
+function rewriteImgCacheProxyUrlsToRelative($srcFlx)
+{
+    $rewritten = preg_replace_callback(
+        '~https?://[^\s"\'<>)]+/plugin/CStudio/img-cache\.php\?path=([^\s"\'<>&)]+)~i',
+        static fn (array $matches): string => 'img_cache/'.rawurldecode($matches[1]),
+        (string) $srcFlx
+    );
+
+    return $rewritten ?? $srcFlx;
+}
+
 function getSrcForPrint($srcFlx)
 {
     $srcFlx = preg_replace('#<div class="editRapidIcon">(.*?)</div>#is', '', $srcFlx);

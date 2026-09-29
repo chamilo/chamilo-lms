@@ -25,7 +25,7 @@ $courseDirectory = api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/docum
 
 $documents = $em
     ->createQuery(
-        'SELECT d FROM ChamiloCourseBundle:CDocument d
+        'SELECT d FROM Chamilo\CourseBundle\Entity\CDocument d
         WHERE d.cId = :cid AND d.path LIKE :path AND d.sessionId = 0'
     )
     ->setParameters(['cid' => (int) $cId, 'path' => $path])
@@ -37,7 +37,7 @@ header('Content-Type: text/plain');
 foreach ($documents as $document) {
     $properties = $em
         ->createQuery(
-            'SELECT i FROM ChamiloCourseBundle:CItemProperty i
+            'SELECT i FROM Chamilo\CourseBundle\Entity\CItemProperty i
             WHERE i.course = :course AND i.session IS NULL AND i.ref = :ref'
         )
         ->setParameters(['course' => $course, 'ref' => $document->getIid()])

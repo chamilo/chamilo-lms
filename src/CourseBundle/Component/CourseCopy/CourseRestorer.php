@@ -13,6 +13,8 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\GradeModel;
+use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -29,6 +31,7 @@ use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -59,10 +62,13 @@ use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Entity\CWiki;
+use Chamilo\CourseBundle\Entity\CWikiCategory;
 use Chamilo\CourseBundle\Entity\CWikiConf;
+use Chamilo\CourseBundle\Entity\CWikiDiscuss;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
+use Chamilo\CourseBundle\Repository\CWikiCategoryRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use CourseManager;
 use Database;
@@ -149,6 +155,8 @@ class CourseRestorer
         'learnpaths',
         'scorm_documents',
         'tool_intro',
+        'course_tools',
+        'course_illustration',
         'thematic',
         'wiki',
         'gradebook',
@@ -399,7 +407,7 @@ class CourseRestorer
     }
 
     /**
-     * Restore only harmless course settings (Chamilo 2 entity-safe).
+     * Restore course-level metadata and per-course settings when explicitly requested.
      */
     public function restore_course_settings(string $destination_course_code = ''): void
     {
@@ -456,9 +464,112 @@ class CourseRestorer
 
         $em = Database::getManager();
         $em->persist($courseEntity);
+        $restoredRows = $this->restoreCourseSettingRows($courseEntity, $em);
         $em->flush();
 
-        $this->dlog('Course settings restored');
+        $this->dlog('Course settings restored', ['course_setting_rows' => $restoredRows]);
+    }
+
+    private function restoreCourseSettingRows(CourseEntity $courseEntity, EntityManagerInterface $em): int
+    {
+        $bag = $this->course->resources['course_settings'] ?? null;
+        if (!\is_array($bag) || empty($bag)) {
+            return 0;
+        }
+
+        $repo = $em->getRepository(CCourseSetting::class);
+        $restored = 0;
+
+        foreach ($bag as $wrap) {
+            if (!\is_object($wrap)) {
+                continue;
+            }
+
+            $raw = isset($wrap->obj) && \is_object($wrap->obj) ? $wrap->obj : $wrap;
+            $variable = trim((string) ($raw->variable ?? ''));
+            if ('' === $variable || !preg_match('/^[A-Za-z0-9_.:-]{1,255}$/D', $variable)) {
+                continue;
+            }
+
+            $value = $raw->value ?? null;
+            if (null !== $value && !\is_scalar($value)) {
+                continue;
+            }
+            $value = null === $value ? '' : $this->truncateCourseSettingValue((string) $value);
+
+            /** @var CCourseSetting[] $existing */
+            $existing = $repo->findBy([
+                'cId' => (int) $courseEntity->getId(),
+                'variable' => $variable,
+            ], ['iid' => 'ASC']);
+
+            $category = $this->courseSettingMetaValue($raw, 'category');
+            if ([] !== $existing) {
+                foreach ($existing as $setting) {
+                    if (!$setting instanceof CCourseSetting) {
+                        continue;
+                    }
+                    $setting->setValue($value);
+                    if ('' !== $category && (null === $setting->getCategory() || '' === $setting->getCategory())) {
+                        $setting->setCategory($category);
+                    }
+                    $em->persist($setting);
+                }
+                $restored++;
+
+                continue;
+            }
+
+            $setting = (new CCourseSetting())
+                ->setCId((int) $courseEntity->getId())
+                ->setVariable($variable)
+                ->setTitle($this->courseSettingMetaValue($raw, 'title') ?: $variable)
+                ->setValue($value)
+            ;
+
+            if ('' !== $category) {
+                $setting->setCategory($category);
+            }
+
+            $subkey = $this->courseSettingMetaValue($raw, 'subkey');
+            if ('' !== $subkey) {
+                $setting->setSubkey($subkey);
+            }
+            $type = $this->courseSettingMetaValue($raw, 'type');
+            if ('' !== $type) {
+                $setting->setType($type);
+            }
+            $comment = $this->courseSettingMetaValue($raw, 'comment');
+            if ('' !== $comment) {
+                $setting->setComment($comment);
+            }
+            $subkeytext = $this->courseSettingMetaValue($raw, 'subkeytext');
+            if ('' !== $subkeytext) {
+                $setting->setSubkeytext($subkeytext);
+            }
+
+            $em->persist($setting);
+            $restored++;
+        }
+
+        return $restored;
+    }
+
+    private function courseSettingMetaValue(object $raw, string $property): string
+    {
+        $value = $raw->{$property} ?? null;
+        if (null === $value || !\is_scalar($value)) {
+            return '';
+        }
+
+        $value = trim((string) $value);
+
+        return \function_exists('mb_substr') ? \mb_substr($value, 0, 255) : substr($value, 0, 255);
+    }
+
+    private function truncateCourseSettingValue(string $value): string
+    {
+        return \function_exists('mb_substr') ? \mb_substr($value, 0, 65535) : substr($value, 0, 65535);
     }
 
     /**
@@ -776,8 +887,40 @@ class CourseRestorer
             return $rel;
         };
 
+        // Read optional ResourceLink visibility from a document bag item (0/1/2).
+        $resolveItemVisibility = static function ($item): ?int {
+            if (!\is_object($item)) {
+                return null;
+            }
+            $raw = null;
+            if (isset($item->visibility) && '' !== $item->visibility && null !== $item->visibility) {
+                $raw = $item->visibility;
+            } elseif (isset($item->obj) && \is_object($item->obj)
+                && isset($item->obj->visibility) && '' !== $item->obj->visibility && null !== $item->obj->visibility
+            ) {
+                $raw = $item->obj->visibility;
+            }
+            if (null === $raw) {
+                return null;
+            }
+            if (\is_bool($raw)) {
+                return $raw ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
+            }
+            $value = (int) $raw;
+
+            return \in_array(
+                $value,
+                [
+                    ResourceLink::VISIBILITY_DRAFT,
+                    ResourceLink::VISIBILITY_PENDING,
+                    ResourceLink::VISIBILITY_PUBLISHED,
+                ],
+                true
+            ) ? $value : null;
+        };
+
         // Ensure a folder chain exists under Documents (skipping "document" as root)
-        $ensureFolder = function (string $relPath) use ($docRepo, $courseEntity, $courseInfo, $session_id, $session, $groupCtx, $DBG, $syncContextLinkParent) {
+        $ensureFolder = function (string $relPath, ?int $leafVisibility = null) use ($docRepo, $courseEntity, $courseInfo, $session_id, $session, $groupCtx, $DBG, $syncContextLinkParent) {
             $rel = '/'.ltrim($relPath, '/');
             if ('/' === $rel || '' === $rel) {
                 return 0;
@@ -791,6 +934,7 @@ class CourseRestorer
 
             $accum    = '';
             $parentId = 0;
+            $lastIndex = \count($parts) - 1;
 
             for ($i = $start; $i < \count($parts); $i++) {
                 $seg   = $parts[$i];
@@ -809,10 +953,21 @@ class CourseRestorer
 
                 if ($existing) {
                     $parentId = method_exists($existing, 'getIid') ? $existing->getIid() : 0;
+                    // Apply leaf visibility when restoring an existing folder that was draft.
+                    if ($i === $lastIndex && null !== $leafVisibility && $parentId > 0) {
+                        $this->applyDocumentResourceLinkVisibility(
+                            (int) $parentId,
+                            $leafVisibility,
+                            $courseEntity,
+                            $session,
+                            $groupCtx
+                        );
+                    }
                     continue;
                 }
 
                 $oldParentId = $parentId;
+                $visibility = ($i === $lastIndex) ? $leafVisibility : null;
 
                 $entity = DocumentManager::addDocument(
                     ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
@@ -822,7 +977,7 @@ class CourseRestorer
                     $title,
                     null,
                     0,
-                    null,
+                    $visibility,
                     0,
                     (int) $session_id,
                     0,
@@ -837,7 +992,7 @@ class CourseRestorer
                     $syncContextLinkParent((int) $parentId, (int) $oldParentId);
                 }
 
-                $DBG('ensureFolder:create', ['accum' => $accum, 'iid' => $parentId]);
+                $DBG('ensureFolder:create', ['accum' => $accum, 'iid' => $parentId, 'visibility' => $visibility]);
             }
 
             return $parentId;
@@ -851,20 +1006,31 @@ class CourseRestorer
                 return true;
             }
 
-            $peek = (string) @file_get_contents($filePath, false, null, 0, 2048);
+            // Inspect enough of the actual payload to classify extensionless Chamilo
+            // documents. Some HTML pages contain a large preamble, so a 2 KiB sample
+            // is not sufficient and finfo can legitimately report text/plain.
+            $peek = (string) @file_get_contents($filePath, false, null, 0, 65536);
             if ($peek === '') {
                 return false;
             }
 
-            $s = strtolower($peek);
-            if (str_contains($s, '<html') || str_contains($s, '<!doctype html')) {
+            $normalized = ltrim($peek, "\xEF\xBB\xBF \t\r\n");
+            $lower = strtolower($normalized);
+            if (str_contains($lower, '<html') || str_contains($lower, '<!doctype html')) {
+                return true;
+            }
+
+            // Chamilo HTML documents can be stored as fragments without an extension,
+            // <html> or <!doctype>. Detect normal structural/content tags before
+            // falling back to finfo.
+            if (preg_match('/<\s*\/?\s*(?:body|div|p|span|section|article|header|footer|main|nav|h[1-6]|ul|ol|li|table|thead|tbody|tfoot|tr|td|th|a|img|strong|em|b|i|br|hr)\b/i', $normalized)) {
                 return true;
             }
 
             if (\function_exists('finfo_open')) {
                 $fi = finfo_open(FILEINFO_MIME_TYPE);
                 if ($fi) {
-                    $mt = @finfo_buffer($fi, $peek) ?: '';
+                    $mt = @finfo_buffer($fi, $normalized) ?: '';
                     finfo_close($fi);
                     if (str_starts_with($mt, 'text/html')) {
                         return true;
@@ -911,19 +1077,30 @@ class CourseRestorer
             $parts    = array_values(array_filter(explode('/', $rel)));
             $accum    = '';
             $parentId = 0;
+            $leafVisibility = $resolveItemVisibility($item);
+            $lastIndex = \count($parts) - 1;
 
             foreach ($parts as $i => $seg) {
                 $accum .= '/'.$seg;
 
                 if (isset($folders[$accum])) {
                     $parentId = $folders[$accum];
+                    if ($i === $lastIndex && null !== $leafVisibility && $parentId > 0) {
+                        $this->applyDocumentResourceLinkVisibility(
+                            (int) $parentId,
+                            $leafVisibility,
+                            $courseEntity,
+                            $session,
+                            $groupCtx
+                        );
+                    }
                     continue;
                 }
 
                 $parentResource = $parentId ? $docRepo->find($parentId) : $courseEntity;
                 $title = $seg;
 
-                if ($i === \count($parts) - 1 && !empty($item->title)) {
+                if ($i === $lastIndex && !empty($item->title)) {
                     $itemTitle = (string) $item->title;
                     if (0 === strcasecmp($itemTitle, $seg)) {
                         $title = $itemTitle;
@@ -940,8 +1117,18 @@ class CourseRestorer
 
                 if ($existing) {
                     $iid = method_exists($existing, 'getIid') ? $existing->getIid() : 0;
+                    if ($i === $lastIndex && null !== $leafVisibility && $iid > 0) {
+                        $this->applyDocumentResourceLinkVisibility(
+                            (int) $iid,
+                            $leafVisibility,
+                            $courseEntity,
+                            $session,
+                            $groupCtx
+                        );
+                    }
                 } else {
                     $oldParentId = $parentId;
+                    $visibility = ($i === $lastIndex) ? $leafVisibility : null;
                     $entity = DocumentManager::addDocument(
                         ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
                         $accum,
@@ -950,7 +1137,7 @@ class CourseRestorer
                         $title,
                         null,
                         0,
-                        null,
+                        $visibility,
                         0,
                         (int) $session_id,
                         0,
@@ -967,7 +1154,7 @@ class CourseRestorer
                 }
 
                 $folders[$accum] = $iid;
-                if ($i === \count($parts) - 1) {
+                if ($i === $lastIndex) {
                     $docResources[$k]->destination_id = $iid;
                 }
                 $parentId = $iid;
@@ -982,9 +1169,16 @@ class CourseRestorer
         //    Pass B: HTML files (rewrite using URL maps)
         $urlMapByRel  = [];
         $urlMapByBase = [];
+        // old ResourceNode UUID → new resource file URL (modern /r/document/files/{uuid}/view embeds)
+        $urlMapByUuid = [];
 
-        $addToMaps = function (string $srcRelKey, int $iid) use (&$urlMapByRel, &$urlMapByBase, $docRepo): void {
-            if ($srcRelKey === '' || $iid <= 0) {
+        $addToMaps = function (string $srcRelKey, int $iid, ?string $srcUuid = null) use (
+            &$urlMapByRel,
+            &$urlMapByBase,
+            &$urlMapByUuid,
+            $docRepo
+        ): void {
+            if ($iid <= 0) {
                 return;
             }
 
@@ -998,14 +1192,71 @@ class CourseRestorer
                 return;
             }
 
-            if (!isset($urlMapByRel[$srcRelKey])) {
+            if ('' !== $srcRelKey && !isset($urlMapByRel[$srcRelKey])) {
                 $urlMapByRel[$srcRelKey] = $url;
             }
 
-            $base = basename($srcRelKey);
-            if ($base !== '' && (!isset($urlMapByBase[$base]) || !$urlMapByBase[$base])) {
-                $urlMapByBase[$base] = $url;
+            // Also index common path variants used in HTML embeds.
+            if ('' !== $srcRelKey) {
+                $variants = [
+                    $srcRelKey,
+                    ltrim($srcRelKey, '/'),
+                    'document/'.ltrim(preg_replace('#^/?document/#i', '', $srcRelKey) ?: '', '/'),
+                    '/document/'.ltrim(preg_replace('#^/?document/#i', '', $srcRelKey) ?: '', '/'),
+                ];
+                foreach ($variants as $variant) {
+                    $variant = (string) $variant;
+                    if ('' === $variant) {
+                        continue;
+                    }
+                    if (!isset($urlMapByRel[$variant])) {
+                        $urlMapByRel[$variant] = $url;
+                    }
+                }
+
+                $base = basename(str_replace('\\', '/', $srcRelKey));
+                if ('' !== $base && (!isset($urlMapByBase[$base]) || !$urlMapByBase[$base])) {
+                    $urlMapByBase[$base] = $url;
+                }
             }
+
+            $uuid = strtolower(trim((string) $srcUuid));
+            if ('' !== $uuid && preg_match('/^[0-9a-f-]{16,64}$/', $uuid)) {
+                $urlMapByUuid[$uuid] = $url;
+            }
+        };
+
+        /**
+         * Resolve the source ResourceNode UUID for a bag item (export sidecar or copy-mode source).
+         */
+        $resolveSourceUuid = function ($item) use ($copyMode, $docRepo): ?string {
+            if (!\is_object($item)) {
+                return null;
+            }
+            $candidates = [
+                $item->resource_node_uuid ?? null,
+                (isset($item->obj) && \is_object($item->obj)) ? ($item->obj->resource_node_uuid ?? null) : null,
+            ];
+            foreach ($candidates as $c) {
+                $u = strtolower(trim((string) $c));
+                if ('' !== $u && preg_match('/^[0-9a-f-]{16,64}$/', $u)) {
+                    return $u;
+                }
+            }
+
+            // Course copy within the same portal: read UUID from the source CDocument.
+            if ($copyMode && !empty($item->source_id)) {
+                try {
+                    $srcDoc = $docRepo->find((int) $item->source_id);
+                    if ($srcDoc instanceof CDocument && $srcDoc->getResourceNode()?->getUuid()) {
+                        return strtolower((string) $srcDoc->getResourceNode()->getUuid());
+                    }
+                } catch (Throwable $e) {
+                    // ignore
+                }
+            }
+
+            return null;
         };
 
         $resolveSrcPath = function ($item) use ($copyMode, $srcRoot, $docRepo): ?string {
@@ -1076,10 +1327,13 @@ class CourseRestorer
             $isHtmlFile,
             &$urlMapByRel,
             &$urlMapByBase,
+            &$urlMapByUuid,
             $addToMaps,
             $resolveSrcPath,
+            $resolveSourceUuid,
             $DBG,
             $syncContextLinkParent,
+            $resolveItemVisibility,
             &$docResources
         ): void {
             if (DOCUMENT !== $item->file_type) {
@@ -1087,11 +1341,12 @@ class CourseRestorer
             }
 
             $srcRelKey = (string) ($item->path ?? '');
+            $srcUuid = $resolveSourceUuid($item);
 
             if (!empty($item->destination_id)) {
                 $existing = $docRepo->find((int) $item->destination_id);
                 if ($existing) {
-                    $addToMaps($srcRelKey, (int) $item->destination_id);
+                    $addToMaps($srcRelKey, (int) $item->destination_id, $srcUuid);
 
                     return;
                 }
@@ -1151,7 +1406,7 @@ class CourseRestorer
             if ($existsIid) {
                 if (\defined('FILE_SKIP') && FILE_SKIP === (int) $this->file_option) {
                     $docResources[$k]->destination_id = (int) $existsIid;
-                    $addToMaps($srcRelKey, (int) $existsIid);
+                    $addToMaps($srcRelKey, (int) $existsIid, $srcUuid);
 
                     return;
                 }
@@ -1188,7 +1443,8 @@ class CourseRestorer
                     $raw,
                     $courseDir,
                     $urlMapByRel,
-                    $urlMapByBase
+                    $urlMapByBase,
+                    $urlMapByUuid
                 );
 
                 $content = $rew['html'];
@@ -1197,10 +1453,13 @@ class CourseRestorer
                     'file'     => $finalTitle,
                     'replaced' => (int) ($rew['replaced'] ?? 0),
                     'misses'   => (int) ($rew['misses'] ?? 0),
+                    'uuidMap'  => \count($urlMapByUuid),
                 ]);
             } else {
                 $realPath = $srcPath;
             }
+
+            $visibility = $resolveItemVisibility($item);
 
             $entity = DocumentManager::addDocument(
                 ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
@@ -1210,7 +1469,7 @@ class CourseRestorer
                 $finalTitle,
                 $item->comment ?? '',
                 0,
-                null,
+                $visibility,
                 0,
                 (int) $session_id,
                 0,
@@ -1222,20 +1481,44 @@ class CourseRestorer
 
             $iid = method_exists($entity, 'getIid') ? (int) $entity->getIid() : 0;
 
+            // ResourceFile MIME detection can still classify extensionless HTML as
+            // text/plain. We already classified the source payload as HTML, so keep
+            // persisted metadata aligned with the actual content.
+            if ($isHtml && $entity instanceof CDocument) {
+                $resourceFile = $entity->getResourceNode()?->getFirstResourceFile();
+                if ($resourceFile instanceof ResourceFile) {
+                    $resourceFile->setMimeType('text/html');
+                    Database::getManager()->persist($resourceFile);
+                    Database::getManager()->flush();
+                }
+            }
+
+            // When addDocument returns an existing document (same title), still enforce
+            // the source visibility so a re-import does not leave hidden files published.
+            if ($iid > 0 && null !== $visibility) {
+                $this->applyDocumentResourceLinkVisibility(
+                    $iid,
+                    $visibility,
+                    $courseEntity,
+                    $session,
+                    $groupCtx
+                );
+            }
+
             $docResources[$k]->destination_id = $iid;
-            $addToMaps($srcRelKey, $iid);
+            $addToMaps($srcRelKey, $iid, $srcUuid);
 
             if ($iid > 0) {
                 $syncContextLinkParent((int) $iid, (int) $parentId);
             }
         };
 
-        // Pass A: non-HTML
+        // Pass A: non-HTML (images, PDFs, …) — build path + UUID URL maps first.
         foreach ($docResources as $k => $item) {
             $processOne((int) $k, $item, false);
         }
 
-        // Pass B: HTML
+        // Pass B: HTML — rewrite embeds (legacy /courses/... and modern /r/document/files/{uuid}/...).
         foreach ($docResources as $k => $item) {
             $processOne((int) $k, $item, true);
         }
@@ -1244,9 +1527,92 @@ class CourseRestorer
             'bucket'     => $docBucketKey,
             'mapByRel'   => \count($urlMapByRel),
             'mapByBase'  => \count($urlMapByBase),
+            'mapByUuid'  => \count($urlMapByUuid),
         ]);
 
         $this->documentsRestored = true;
+    }
+
+    /**
+     * Apply ResourceLink visibility for a restored document in the current context.
+     *
+     * Used both for newly created documents and for re-imports where addDocument
+     * returns an existing entity without changing its link visibility.
+     */
+    private function applyDocumentResourceLinkVisibility(
+        int $docIid,
+        int $visibility,
+        CourseEntity $courseEntity,
+        $session,
+        $groupCtx
+    ): void {
+        if ($docIid <= 0) {
+            return;
+        }
+        if (!\in_array(
+            $visibility,
+            [
+                ResourceLink::VISIBILITY_DRAFT,
+                ResourceLink::VISIBILITY_PENDING,
+                ResourceLink::VISIBILITY_PUBLISHED,
+            ],
+            true
+        )) {
+            return;
+        }
+
+        try {
+            $docRepo = Container::getDocumentRepository();
+            $doc = $docRepo->find($docIid);
+            if (!$doc instanceof CDocument || null === $doc->getResourceNode()) {
+                return;
+            }
+
+            $em = Database::getManager();
+            /** @var \Chamilo\CoreBundle\Repository\ResourceLinkRepository $linkRepo */
+            $linkRepo = $em->getRepository(ResourceLink::class);
+            $link = $linkRepo->findLinkForResourceInContext(
+                $doc,
+                $courseEntity,
+                $session,
+                $groupCtx,
+                null,
+                null
+            );
+            if (null === $link) {
+                // Fallback: first matching course(+session) link on the node.
+                foreach ($doc->getResourceNode()->getResourceLinks() as $candidate) {
+                    if ($candidate->getCourse()?->getId() !== $courseEntity->getId()) {
+                        continue;
+                    }
+                    $candSessionId = $candidate->getSession()?->getId();
+                    $wantSessionId = \is_object($session) && method_exists($session, 'getId')
+                        ? $session->getId()
+                        : null;
+                    if ($candSessionId !== $wantSessionId && !(null === $candSessionId && null === $wantSessionId)) {
+                        continue;
+                    }
+                    $link = $candidate;
+                    break;
+                }
+            }
+
+            if (null === $link) {
+                return;
+            }
+            if ((int) $link->getVisibility() === $visibility) {
+                return;
+            }
+            $link->setVisibility($visibility);
+            $em->persist($link);
+            $em->flush();
+        } catch (Throwable $e) {
+            $this->dlog('applyDocumentResourceLinkVisibility failed', [
+                'iid' => $docIid,
+                'visibility' => $visibility,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -2620,6 +2986,218 @@ class CourseRestorer
     }
 
     /**
+     * Restore base-course tool visibility from a Moodle-path sidecar bag.
+     *
+     * No-op when resources['course_tools'] is absent (native zip backups).
+     */
+    public function restore_course_tools(int $sessionId = 0): void
+    {
+        $resources = $this->course->resources ?? [];
+        $bag = $resources['course_tools'] ?? null;
+        if (!\is_array($bag) || empty($bag)) {
+            $this->dlog('restore_course_tools: no bag, skipping');
+
+            return;
+        }
+
+        // Base-course visibility only (export intentionally omits session tools).
+        $sessionId = 0;
+        $course = $this->destination_course_entity ?: api_get_course_entity($this->destination_course_id);
+        if (!$course instanceof CourseEntity) {
+            $this->dlog('restore_course_tools: destination course missing');
+
+            return;
+        }
+
+        $em = Database::getManager();
+        $toolRepo = $em->getRepository(Tool::class);
+        $cToolRepo = $em->getRepository(CTool::class);
+
+        $applied = 0;
+        foreach ($bag as $rawId => $wrap) {
+            if (!\is_object($wrap)) {
+                continue;
+            }
+
+            $title = trim((string) ($wrap->title ?? $wrap->obj->title ?? $rawId));
+            if ('' === $title || '0' === $title) {
+                continue;
+            }
+
+            $visibility = true;
+            if (property_exists($wrap, 'visibility')) {
+                $visibility = (bool) $wrap->visibility;
+            } elseif (isset($wrap->obj) && \is_object($wrap->obj) && property_exists($wrap->obj, 'visibility')) {
+                $visibility = (bool) $wrap->obj->visibility;
+            }
+
+            $toolEntity = $toolRepo->findOneBy(['title' => $title])
+                ?: $toolRepo->findOneBy(['title' => strtolower($title)])
+                ?: $toolRepo->findOneBy(['title' => ucfirst(strtolower($title))]);
+
+            if (!$toolEntity) {
+                $this->dlog('restore_course_tools: unknown Tool entity', ['title' => $title]);
+                continue;
+            }
+
+            $cTool = $cToolRepo->findOneBy([
+                'course' => $course,
+                'session' => null,
+                'title' => $title,
+            ]);
+
+            if (!$cTool instanceof CTool) {
+                // Try alternate title casing used by some exports.
+                $cTool = $cToolRepo->findOneBy([
+                    'course' => $course,
+                    'session' => null,
+                    'tool' => $toolEntity,
+                ]);
+            }
+
+            if (!$cTool instanceof CTool) {
+                $position = 1;
+                if (isset($wrap->position)) {
+                    $position = (int) $wrap->position;
+                } elseif (isset($wrap->obj) && \is_object($wrap->obj) && isset($wrap->obj->position)) {
+                    $position = (int) $wrap->obj->position;
+                }
+
+                $cTool = (new CTool())
+                    ->setTool($toolEntity)
+                    ->setTitle($title)
+                    ->setCourse($course)
+                    ->setSession(null)
+                    ->setPosition($position)
+                    ->setParent($course)
+                    ->addCourseLink($course, null);
+                $em->persist($cTool);
+                $em->flush();
+            }
+
+            $cTool->setVisibility($visibility);
+            // Ensure a resource link exists so setVisibility can stick.
+            if (null === $cTool->getResourceNode() || $cTool->getResourceNode()->getResourceLinks()->isEmpty()) {
+                $cTool->setParent($course);
+                $cTool->addCourseLink($course, null);
+                $cTool->setVisibility($visibility);
+            }
+
+            $em->persist($cTool);
+            $applied++;
+        }
+
+        if ($applied > 0) {
+            $em->flush();
+        }
+
+        $this->dlog('restore_course_tools: end', ['applied' => $applied]);
+    }
+
+    /**
+     * Restore course illustration (cover image) from a Moodle-path bag.
+     *
+     * Expects resources['course_illustration'] with contenthash/filename pointing
+     * at backup_path/files/<hh>/<contenthash>. No-op when bag is empty.
+     */
+    public function restore_course_illustration(int $sessionId = 0): void
+    {
+        $resources = $this->course->resources ?? [];
+        $bag = $resources['course_illustration'] ?? null;
+        if (!\is_array($bag) || empty($bag)) {
+            $this->dlog('restore_course_illustration: no bag, skipping');
+
+            return;
+        }
+
+        $course = $this->destination_course_entity ?: api_get_course_entity($this->destination_course_id);
+        if (!$course instanceof CourseEntity) {
+            $this->dlog('restore_course_illustration: destination course missing');
+
+            return;
+        }
+
+        $wrap = null;
+        foreach ($bag as $item) {
+            if (\is_object($item)) {
+                $wrap = $item;
+                break;
+            }
+        }
+        if (null === $wrap) {
+            return;
+        }
+
+        $contentHash = trim((string) ($wrap->contenthash ?? $wrap->obj->contenthash ?? ''));
+        $filename = basename(str_replace('\\', '/', (string) ($wrap->filename ?? $wrap->obj->filename ?? 'course_image.jpg')));
+        $mimetype = trim((string) ($wrap->mimetype ?? $wrap->obj->mimetype ?? 'application/octet-stream'));
+
+        if ('' === $contentHash || !preg_match('/^[a-f0-9]{40}$/i', $contentHash)) {
+            $this->dlog('restore_course_illustration: invalid contenthash', ['hash' => $contentHash]);
+
+            return;
+        }
+        if ('' === $filename || '.' === $filename) {
+            $filename = 'course_image.jpg';
+        }
+
+        $backupPath = rtrim((string) ($this->course->backup_path ?? ''), '/');
+        if ('' === $backupPath) {
+            $this->dlog('restore_course_illustration: backup_path missing');
+
+            return;
+        }
+
+        $abs = $backupPath.'/files/'.strtolower(substr($contentHash, 0, 2)).'/'.strtolower($contentHash);
+        if (!is_file($abs) || !is_readable($abs)) {
+            // Some archives may store the hash file without the two-letter subdir.
+            $fallback = $backupPath.'/files/'.strtolower($contentHash);
+            if (is_file($fallback) && is_readable($fallback)) {
+                $abs = $fallback;
+            } else {
+                $this->dlog('restore_course_illustration: blob missing', ['path' => $abs]);
+
+                return;
+            }
+        }
+
+        $userId = (int) ($this->first_teacher_id ?: api_get_user_id());
+        $user = api_get_user_entity($userId);
+        if (null === $user) {
+            $this->dlog('restore_course_illustration: creator user missing', ['user_id' => $userId]);
+
+            return;
+        }
+
+        try {
+            $illRepo = Container::getIllustrationRepository();
+            if ($illRepo->hasIllustration($course)) {
+                if (\defined('FILE_SKIP') && FILE_SKIP === (int) $this->file_option) {
+                    $this->dlog('restore_course_illustration: existing illustration kept (SKIP)');
+
+                    return;
+                }
+                $illRepo->deleteIllustration($course);
+            }
+
+            $upload = new UploadedFile(
+                $abs,
+                $filename,
+                $mimetype ?: null,
+                null,
+                true
+            );
+            $illRepo->addIllustration($course, $user, $upload);
+            $this->dlog('restore_course_illustration: applied', [
+                'filename' => $filename,
+                'hash' => strtolower($contentHash),
+            ]);
+        } catch (Throwable $e) {
+            $this->dlog('restore_course_illustration: failed', ['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
      * Restore calendar events.
      */
     public function restore_events(int $sessionId = 0): void
@@ -2855,7 +3433,11 @@ class CourseRestorer
     ): void {
         // Helper to actually persist + move file
         $persistAttachmentFromFile = function (string $src, string $filename, ?string $comment) use ($entity, $attachRepo, $em): void {
-            if (!is_file($src) || !is_readable($src)) {
+            // Security: the attachment path comes from the backup, so confine it to the
+            // extracted backup. Otherwise a tampered archive reads an arbitrary file of the
+            // server and publishes it as a downloadable attachment.
+            $resolvedSrc = $this->resolveFileInsideBackup($src);
+            if (null === $resolvedSrc) {
                 $this->dlog('restore_events: attachment source not readable', ['src' => $src]);
 
                 return;
@@ -2886,12 +3468,12 @@ class CourseRestorer
             $em->flush();
 
             if (method_exists($attachRepo, 'addFileFromLocalPath')) {
-                $attachRepo->addFileFromLocalPath($attachment, $src);
+                $attachRepo->addFileFromLocalPath($attachment, $resolvedSrc);
             } else {
                 $dstDir = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/calendar/';
                 @mkdir($dstDir, 0775, true);
                 $newName = uniqid('calendar_', true);
-                @copy($src, $dstDir.$newName);
+                @copy($resolvedSrc, $dstDir.$newName);
             }
 
             $this->dlog('restore_events: attachment created', [
@@ -3024,6 +3606,7 @@ class CourseRestorer
 
         // Preload existing by type in SAME scope (session vs base)
         $existingByType = [];
+        $existingCustomByTitle = [];
         $existingTitles = [];
 
         try {
@@ -3048,11 +3631,16 @@ class CourseRestorer
                     $t = CCourseDescription::TYPE_DESCRIPTION;
                 }
 
-                if (!isset($existingByType[$t])) {
+                $ttl = trim((string) $e->getTitle());
+
+                if (CCourseDescription::TYPE_CUSTOM === $t) {
+                    if ('' !== $ttl && !isset($existingCustomByTitle[$ttl])) {
+                        $existingCustomByTitle[$ttl] = $e;
+                    }
+                } elseif (!isset($existingByType[$t])) {
                     $existingByType[$t] = $e;
                 }
 
-                $ttl = trim((string) $e->getTitle());
                 if ('' !== $ttl) {
                     $existingTitles[$ttl] = true;
                 }
@@ -3062,6 +3650,7 @@ class CourseRestorer
                 'error' => $e->getMessage(),
             ]);
             $existingByType = [];
+            $existingCustomByTitle = [];
             $existingTitles = [];
         }
 
@@ -3107,7 +3696,9 @@ class CourseRestorer
                 $progress = 0;
             }
 
-            $existing = $existingByType[$type] ?? null;
+            $existing = CCourseDescription::TYPE_CUSTOM === $type
+                ? ($existingCustomByTitle[$title] ?? null)
+                : ($existingByType[$type] ?? null);
 
             if ($existing instanceof CCourseDescription) {
                 if (1 === $policy) { // SKIP
@@ -3139,6 +3730,7 @@ class CourseRestorer
                     $existing->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
 
                     $em->persist($existing);
+                    $this->applyCourseDescriptionLanguage($existing, $cd, $em);
                     $em->flush();
 
                     $destIid = (int) $existing->getIid();
@@ -3204,10 +3796,18 @@ class CourseRestorer
             $em->persist($entity);
             $em->flush();
 
+            if ($this->applyCourseDescriptionLanguage($entity, $cd, $em)) {
+                $em->flush();
+            }
+
             $destIid = (int) $entity->getIid();
             $this->course->resources[RESOURCE_COURSEDESCRIPTION][$oldId]->destination_id = $destIid;
 
-            $existingByType[$type] = $entity;
+            if (CCourseDescription::TYPE_CUSTOM === $type) {
+                $existingCustomByTitle[$title] = $entity;
+            } else {
+                $existingByType[$type] = $entity;
+            }
 
             $this->dlog('restore_course_descriptions: created', [
                 'src_id' => $oldId,
@@ -3227,6 +3827,45 @@ class CourseRestorer
             'policy' => $policy,
             'session_id' => $sessionId,
         ]);
+    }
+
+    private function applyCourseDescriptionLanguage(
+        CCourseDescription $description,
+        object $source,
+        EntityManagerInterface $em
+    ): bool {
+        if (!property_exists($source, 'language')) {
+            return false;
+        }
+
+        $resourceNode = $description->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
+
+        $languageCode = trim((string) ($source->language ?? ''));
+        $language = null;
+
+        if ('' !== $languageCode) {
+            $language = $em->getRepository(Language::class)->findOneBy([
+                'isocode' => $languageCode,
+                'available' => true,
+            ]);
+
+            if (!$language instanceof Language) {
+                $this->dlog('restore_course_descriptions: language not found, keeping current value', [
+                    'src_id' => (int) ($source->source_id ?? 0),
+                    'language' => $languageCode,
+                ]);
+
+                return false;
+            }
+        }
+
+        $resourceNode->setLanguage($language);
+        $em->persist($resourceNode);
+
+        return true;
     }
 
     /**
@@ -4329,11 +4968,31 @@ class CourseRestorer
                     ':survey.title'
                 );
 
+                // Flattens to plain text, but keeps mce-translatehtml language blocks
+                // intact (protected via placeholder) so multilingual markers survive
+                // restore/copy instead of being destroyed by the bare strip_tags() below.
                 $normalizeSurveyText = static function (?string $value): string {
-                    $text = html_entity_decode(strip_tags((string) $value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                    $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+                    $value = (string) $value;
 
-                    return trim($text);
+                    $protectedBlocks = [];
+                    $value = preg_replace_callback(
+                        '#<(div|span)\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bmce-translatehtml\b[^"\']*\2[^>]*>.*?</\1>#is',
+                        static function (array $matches) use (&$protectedBlocks): string {
+                            // U+E000 (Private Use Area) survives strip_tags()/html_entity_decode()/\s+
+                            // collapsing untouched, unlike NUL bytes which strip_tags() silently drops.
+                            $token = "\u{E000}MCE_TRANSLATEHTML_".\count($protectedBlocks)."\u{E000}";
+                            $protectedBlocks[$token] = $matches[0];
+
+                            return $token;
+                        },
+                        $value
+                    ) ?? $value;
+
+                    $text = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+                    $text = trim($text);
+
+                    return [] === $protectedBlocks ? $text : strtr($text, $protectedBlocks);
                 };
 
                 $title = $normalizeSurveyText($rawTitleHtml);
@@ -5070,15 +5729,42 @@ class CourseRestorer
             }
         }
 
-        // Build minimal bags from the snapshot using ONLY needed IDs
+        // Build minimal bags from the snapshot using ONLY needed IDs.
+        // Match bag key OR source_id fields so Moodle-imported sequential keys still resolve.
         $filterBag = static function (array $sourceBag, array $idSet): array {
             if (empty($idSet)) {
                 return [];
             }
             $out = [];
             foreach ($idSet as $legacyId => $_) {
+                $legacyId = (int) $legacyId;
+                if ($legacyId <= 0) {
+                    continue;
+                }
                 if (isset($sourceBag[$legacyId])) {
                     $out[$legacyId] = $sourceBag[$legacyId];
+                    continue;
+                }
+                foreach ($sourceBag as $key => $wrap) {
+                    if (!\is_object($wrap)) {
+                        continue;
+                    }
+                    $candidates = [
+                        (int) $key,
+                        (int) ($wrap->source_id ?? 0),
+                        (int) ($wrap->id ?? 0),
+                        (int) ($wrap->iid ?? 0),
+                    ];
+                    if (isset($wrap->obj) && \is_object($wrap->obj)) {
+                        $candidates[] = (int) ($wrap->obj->source_id ?? 0);
+                        $candidates[] = (int) ($wrap->obj->id ?? 0);
+                        $candidates[] = (int) ($wrap->obj->iid ?? 0);
+                        $candidates[] = (int) ($wrap->obj->source_moduleid ?? 0);
+                    }
+                    if (\in_array($legacyId, $candidates, true)) {
+                        $out[$key] = $wrap;
+                        break;
+                    }
                 }
             }
 
@@ -5182,10 +5868,111 @@ class CourseRestorer
         $surveyRepo = method_exists(Container::class, 'getSurveyRepository') ? Container::getSurveyRepository() : null;
         $workRepo  = method_exists(Container::class, 'getStudentPublicationRepository') ? Container::getStudentPublicationRepository() : null;
 
+        /**
+         * Resolve source/backup resource id → destination iid after restore.
+         *
+         * Bags are often keyed by sequential import ids while LP items still
+         * reference the original source iid in path/identifierref. Match by:
+         *  1) bag key
+         *  2) wrap.source_id / wrap.id / obj.source_id / obj.iid / obj.id
+         * across the bag and common aliases (quiz/quizzes, survey/surveys, …).
+         */
         $getDst = function (string $bag, $legacyId): int {
-            $wrap = $this->course->resources[$bag][$legacyId] ?? null;
+            $legacyId = (int) $legacyId;
+            if ($legacyId <= 0) {
+                return 0;
+            }
 
-            return ($wrap && isset($wrap->destination_id)) ? (int) $wrap->destination_id : 0;
+            $bagsToSearch = [$bag];
+            // Include known aliases so MoodleImport 'surveys'/'quizzes' keys still resolve.
+            $aliasMap = [
+                RESOURCE_QUIZ => [RESOURCE_QUIZ, 'quiz', 'quizzes'],
+                'quiz' => [RESOURCE_QUIZ, 'quiz', 'quizzes'],
+                'quizzes' => [RESOURCE_QUIZ, 'quiz', 'quizzes'],
+                RESOURCE_SURVEY => [RESOURCE_SURVEY, 'survey', 'surveys'],
+                'survey' => [RESOURCE_SURVEY, 'survey', 'surveys'],
+                'surveys' => [RESOURCE_SURVEY, 'survey', 'surveys'],
+                RESOURCE_DOCUMENT => [RESOURCE_DOCUMENT, 'document', 'documents'],
+                'document' => [RESOURCE_DOCUMENT, 'document', 'documents'],
+                RESOURCE_LINK => [RESOURCE_LINK, 'link', 'links'],
+                'link' => [RESOURCE_LINK, 'link', 'links'],
+                RESOURCE_WORK => [RESOURCE_WORK, 'works', 'work', 'student_publication'],
+                'works' => [RESOURCE_WORK, 'works', 'work', 'student_publication'],
+                'forum' => ['forum', 'forums'],
+            ];
+            if (isset($aliasMap[$bag])) {
+                $bagsToSearch = $aliasMap[$bag];
+            }
+
+            $readDest = static function ($wrap): int {
+                if (!\is_object($wrap)) {
+                    return 0;
+                }
+                $dest = (int) ($wrap->destination_id ?? 0);
+                if ($dest > 0) {
+                    return $dest;
+                }
+                if (isset($wrap->obj) && \is_object($wrap->obj)) {
+                    return (int) ($wrap->obj->destination_id ?? 0);
+                }
+
+                return 0;
+            };
+
+            $matchesSource = static function ($wrap, int $want): bool {
+                if (!\is_object($wrap)) {
+                    return false;
+                }
+                $candidates = [
+                    (int) ($wrap->source_id ?? 0),
+                    (int) ($wrap->id ?? 0),
+                    (int) ($wrap->iid ?? 0),
+                ];
+                if (isset($wrap->obj) && \is_object($wrap->obj)) {
+                    $candidates[] = (int) ($wrap->obj->source_id ?? 0);
+                    $candidates[] = (int) ($wrap->obj->id ?? 0);
+                    $candidates[] = (int) ($wrap->obj->iid ?? 0);
+                    $candidates[] = (int) ($wrap->obj->source_moduleid ?? 0);
+                    $candidates[] = (int) ($wrap->obj->source_activity_id ?? 0);
+                }
+                $candidates[] = (int) ($wrap->source_moduleid ?? 0);
+                $candidates[] = (int) ($wrap->source_activity_id ?? 0);
+
+                return \in_array($want, $candidates, true);
+            };
+
+            foreach ($bagsToSearch as $bagName) {
+                $bucket = $this->course->resources[$bagName] ?? null;
+                if (!\is_array($bucket) || empty($bucket)) {
+                    continue;
+                }
+
+                // Fast path: bag keyed by the legacy/source id.
+                if (isset($bucket[$legacyId])) {
+                    $dest = $readDest($bucket[$legacyId]);
+                    if ($dest > 0) {
+                        return $dest;
+                    }
+                }
+
+                // Slow path: scan for matching source_id (Moodle sequential bag keys).
+                foreach ($bucket as $key => $wrap) {
+                    if ((int) $key === $legacyId) {
+                        $dest = $readDest($wrap);
+                        if ($dest > 0) {
+                            return $dest;
+                        }
+                    }
+                    if ($matchesSource($wrap, $legacyId)) {
+                        $dest = $readDest($wrap);
+                        if ($dest > 0) {
+                            return $dest;
+                        }
+                    }
+                }
+            }
+
+            return 0;
         };
 
         $findDocIidByTitle = function (string $title) use ($docRepo, $courseEnt, $sessionEnt): int {
@@ -5529,6 +6316,12 @@ class CourseRestorer
                     if (isset($it['prerequisite'])) {
                         $item->setPrerequisite((string) $it['prerequisite']);
                     }
+                    if (array_key_exists('prerequisite_min_score', $it) && null !== $it['prerequisite_min_score']) {
+                        $item->setPrerequisiteMinScore((float) $it['prerequisite_min_score']);
+                    }
+                    if (array_key_exists('prerequisite_max_score', $it) && null !== $it['prerequisite_max_score']) {
+                        $item->setPrerequisiteMaxScore((float) $it['prerequisite_max_score']);
+                    }
                     if (isset($it['launch_data'])) {
                         $item->setLaunchData((string) $it['launch_data']);
                     }
@@ -5630,6 +6423,12 @@ class CourseRestorer
                         if (isset($it['prerequisite'])) {
                             $item->setPrerequisite((string) $it['prerequisite']);
                         }
+                        if (array_key_exists('prerequisite_min_score', $it) && null !== $it['prerequisite_min_score']) {
+                            $item->setPrerequisiteMinScore((float) $it['prerequisite_min_score']);
+                        }
+                        if (array_key_exists('prerequisite_max_score', $it) && null !== $it['prerequisite_max_score']) {
+                            $item->setPrerequisiteMaxScore((float) $it['prerequisite_max_score']);
+                        }
                         if (isset($it['launch_data'])) {
                             $item->setLaunchData((string) $it['launch_data']);
                         }
@@ -5668,6 +6467,28 @@ class CourseRestorer
                 }
 
                 $createdCount = \count($createdMap);
+
+                $em->flush();
+
+                // LP prerequisites reference source item IDs. After all destination
+                // items have their IIDs, remap numeric prerequisites to those new IIDs.
+                foreach ($createdMap as $legacyItemId => $createdItem) {
+                    $rawPrerequisite = trim((string) ($byId[$legacyItemId]['prerequisite'] ?? ''));
+                    if ($rawPrerequisite === '' || !ctype_digit($rawPrerequisite)) {
+                        continue;
+                    }
+
+                    $legacyPrerequisiteId = (int) $rawPrerequisite;
+                    $destinationPrerequisite = $createdMap[$legacyPrerequisiteId] ?? null;
+                    if (!$destinationPrerequisite instanceof CLpItem) {
+                        continue;
+                    }
+
+                    $destinationPrerequisiteId = (int) ($destinationPrerequisite->getIid() ?? 0);
+                    if ($destinationPrerequisiteId > 0) {
+                        $createdItem->setPrerequisite((string) $destinationPrerequisiteId);
+                    }
+                }
 
                 $em->flush();
             }
@@ -5970,6 +6791,12 @@ class CourseRestorer
         /** @var ObjectRepository $confRepo */
         $confRepo = $em->getRepository(CWikiConf::class);
 
+        /** @var CWikiCategoryRepository $categoryRepo */
+        $categoryRepo = $em->getRepository(CWikiCategory::class);
+
+        /** @var ObjectRepository $discussionRepo */
+        $discussionRepo = $em->getRepository(CWikiDiscuss::class);
+
         /** @var CourseEntity|null $courseEntity */
         $courseEntity = api_get_course_entity($this->destination_course_id);
         if (!$courseEntity instanceof CourseEntity) {
@@ -5989,6 +6816,11 @@ class CourseRestorer
         $logicalPageIdMap = [];
         $basePageIdCache = [];
         $confCreatedForPage = [];
+        $startedSourcePages = [];
+        $destinationReflinks = [];
+        $skippedSourcePages = [];
+        $categoryPathCache = [];
+        $discussionsRestoredForPage = [];
 
         $this->dlog('restore_wiki: begin', [
             'count' => count($bag),
@@ -6024,6 +6856,69 @@ class CourseRestorer
             $basePageIdCache[$key] = $basePid;
 
             return $basePid;
+        };
+
+        $findOrCreateCategory = function (array $path) use (
+            $categoryRepo,
+            $courseEntity,
+            $sessionEntity,
+            $em,
+            $sid,
+            &$categoryPathCache,
+        ): ?CWikiCategory {
+            $parent = null;
+            foreach ($path as $node) {
+                $node = \is_object($node) ? (array) $node : $node;
+                if (!\is_array($node)) {
+                    continue;
+                }
+
+                $title = trim((string) ($node['title'] ?? ''));
+                if ('' === $title) {
+                    continue;
+                }
+
+                $parentId = (int) ($parent?->getId() ?? 0);
+                $cacheKey = $sid.'|'.$parentId.'|'.mb_strtolower($title);
+                if (isset($categoryPathCache[$cacheKey])) {
+                    $parent = $categoryPathCache[$cacheKey];
+                    continue;
+                }
+
+                $qb = $categoryRepo->createQueryBuilder('category')
+                    ->andWhere('category.course = :course')
+                    ->andWhere('category.title = :title')
+                    ->setParameter('course', $courseEntity)
+                    ->setParameter('title', $title)
+                    ->setMaxResults(1);
+                if ($sessionEntity instanceof SessionEntity) {
+                    $qb->andWhere('category.session = :session')->setParameter('session', $sessionEntity);
+                } else {
+                    $qb->andWhere('category.session IS NULL');
+                }
+                if ($parent instanceof CWikiCategory) {
+                    $qb->andWhere('category.parent = :parent')->setParameter('parent', $parent);
+                } else {
+                    $qb->andWhere('category.parent IS NULL');
+                }
+
+                /** @var CWikiCategory|null $category */
+                $category = $qb->getQuery()->getOneOrNullResult();
+                if (!$category instanceof CWikiCategory) {
+                    $category = new CWikiCategory();
+                    $category->setCourse($courseEntity);
+                    $category->setSession($sessionEntity);
+                    $category->setTitle($title);
+                    $category->setParent($parent);
+                    $em->persist($category);
+                    $em->flush();
+                }
+
+                $categoryPathCache[$cacheKey] = $category;
+                $parent = $category;
+            }
+
+            return $parent;
         };
 
         foreach ($bag as $legacyId => $res) {
@@ -6090,6 +6985,13 @@ class CourseRestorer
                     $reflink = $titleSlug;
                 }
 
+                $sourceLogicalKey = $srcPageId.'|'.$groupId;
+                if (isset($destinationReflinks[$sourceLogicalKey])) {
+                    $reflink = $destinationReflinks[$sourceLogicalKey];
+                }
+                if (isset($skippedSourcePages[$sourceLogicalKey])) {
+                    continue;
+                }
                 $logicalKey = $reflink.'|'.$groupId;
 
                 $qbExists = $repo->createQueryBuilder('w')
@@ -6106,9 +7008,10 @@ class CourseRestorer
 
                 $exists = (bool) $qbExists->getQuery()->getOneOrNullResult();
 
-                if ($exists) {
+                if ($exists && !isset($startedSourcePages[$sourceLogicalKey])) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
+                            $skippedSourcePages[$sourceLogicalKey] = true;
                             $qbLast = $repo->createQueryBuilder('w')
                                 ->andWhere('w.cId = :cid')->setParameter('cid', $cid)
                                 ->andWhere('w.reflink = :r')->setParameter('r', $reflink)
@@ -6173,6 +7076,7 @@ class CourseRestorer
                             $rawTitle = $baseTitle.' ('.$i.')';
                             $logicalKey = $reflink.'|'.$groupId;
 
+                            $destinationReflinks[$sourceLogicalKey] = $reflink;
                             $this->dlog('restore_wiki: renamed', [
                                 'reflink' => $reflink,
                                 'title' => $rawTitle,
@@ -6192,8 +7096,23 @@ class CourseRestorer
                                 $qbAll->andWhere('COALESCE(w.sessionId,0) = 0');
                             }
 
-                            foreach ($qbAll->getQuery()->getResult() as $old) {
-                                $em->remove($old);
+                            /** @var CWiki[] $oldVersions */
+                            $oldVersions = $qbAll->getQuery()->getResult();
+                            $oldPageIds = [];
+                            foreach ($oldVersions as $oldVersion) {
+                                $oldPageId = (int) ($oldVersion->getPageId() ?? 0);
+                                if ($oldPageId > 0) {
+                                    $oldPageIds[$oldPageId] = $oldPageId;
+                                }
+                                $em->remove($oldVersion);
+                            }
+                            foreach ($oldPageIds as $oldPageId) {
+                                foreach ($confRepo->findBy(['cId' => $cid, 'pageId' => $oldPageId]) as $oldConf) {
+                                    $em->remove($oldConf);
+                                }
+                                foreach ($discussionRepo->findBy(['cId' => $cid, 'publicationId' => $oldPageId]) as $oldDiscussion) {
+                                    $em->remove($oldDiscussion);
+                                }
                             }
                             $em->flush();
 
@@ -6281,6 +7200,19 @@ class CourseRestorer
                 }
 
                 $wiki->setPageId($destPageId);
+                $categoryPaths = $src->category_paths ?? $res->category_paths ?? [];
+                if (\is_array($categoryPaths)) {
+                    foreach ($categoryPaths as $categoryPath) {
+                        $categoryPath = \is_object($categoryPath) ? (array) $categoryPath : $categoryPath;
+                        if (!\is_array($categoryPath)) {
+                            continue;
+                        }
+                        $category = $findOrCreateCategory($categoryPath);
+                        if ($category instanceof CWikiCategory) {
+                            $wiki->addCategory($category);
+                        }
+                    }
+                }
                 $em->flush();
 
                 if (!isset($confCreatedForPage[$destPageId])) {
@@ -6328,6 +7260,33 @@ class CourseRestorer
                     $confCreatedForPage[$destPageId] = true;
                 }
 
+                $discussions = $src->discussions ?? $res->discussions ?? [];
+                if (!isset($discussionsRestoredForPage[$sourceLogicalKey]) && \is_array($discussions)) {
+                    foreach ($discussions as $discussionData) {
+                        $discussionData = \is_object($discussionData) ? (array) $discussionData : $discussionData;
+                        if (!\is_array($discussionData)) {
+                            continue;
+                        }
+
+                        $discussion = new CWikiDiscuss();
+                        $discussion->setCId($cid);
+                        $discussion->setPublicationId($destPageId);
+                        $discussion->setUsercId((int) ($discussionData['user_id'] ?? api_get_user_id()));
+                        $discussion->setComment((string) ($discussionData['comment'] ?? ''));
+                        $discussion->setPScore((string) ($discussionData['score'] ?? '-'));
+                        try {
+                            $discussion->setDtime(new DateTime((string) ($discussionData['dtime'] ?? 'now')));
+                        } catch (Throwable) {
+                            $discussion->setDtime(new DateTime('now', new DateTimeZone('UTC')));
+                        }
+                        $em->persist($discussion);
+                    }
+                    $em->flush();
+                    $discussionsRestoredForPage[$sourceLogicalKey] = true;
+                }
+
+                $startedSourcePages[$sourceLogicalKey] = true;
+                $destinationReflinks[$sourceLogicalKey] = $reflink;
                 $destWikiIid = (int) ($wiki->getIid() ?? 0);
 
                 $this->course->resources[$bucketKey][$legacyId] ??= new stdClass();
@@ -7349,26 +8308,31 @@ class CourseRestorer
             $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
             foreach ($resources[RESOURCE_ASSET] as $asset) {
-                // Security: confine the backup-supplied asset path to prevent a tampered
-                // backup from escaping the course directory (-> arbitrary file write -> RCE).
-                if (!$this->isSafeBackupPath((string) $asset->path)) {
+                // Security: the asset path comes from the backup, so a tampered archive
+                // controls it. Confine the destination to the sub-trees the exporter fills
+                // and neutralize an executable extension, to prevent an arbitrary file
+                // write. The source keeps the real name of the archive entry.
+                $destination = $this->getSafeAssetPath((string) $asset->path);
+                if (null === $destination) {
                     continue;
                 }
 
-                if (is_file($this->course->backup_path.'/'.$asset->path)
-                    && is_readable($this->course->backup_path.'/'.$asset->path)
-                    && is_dir(\dirname($path.$asset->path))
-                    && is_writable(\dirname($path.$asset->path))
+                $source = $this->resolveFileInsideBackup(
+                    $this->course->backup_path.'/'.$asset->path
+                );
+                if (null === $source) {
+                    continue;
+                }
+
+                if (is_dir(\dirname($path.$destination))
+                    && is_writable(\dirname($path.$destination))
                 ) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
                             break;
 
                         case FILE_OVERWRITE:
-                            copy(
-                                $this->course->backup_path.'/'.$asset->path,
-                                $path.$asset->path
-                            );
+                            copy($source, $path.$destination);
 
                             break;
                     }
@@ -7566,6 +8530,20 @@ class CourseRestorer
             return $parentId;
         };
 
+        // Prefer UUID rewrite from already-restored document bag (old → new resource URLs).
+        $urlMapByUuid = $this->buildRestoredDocumentUuidUrlMap($docRepo);
+        if (!empty($urlMapByUuid) && str_contains($html, '/r/document/files/')) {
+            $modern = ChamiloHelper::rewriteModernResourceUrlsWithMap($html, $urlMapByUuid);
+            if ((int) ($modern['replaced'] ?? 0) > 0) {
+                $html = (string) ($modern['html'] ?? $html);
+                $DBG('html.rewrite.uuid', [
+                    'replaced' => (int) $modern['replaced'],
+                    'misses' => (int) ($modern['misses'] ?? 0),
+                    'mapSize' => \count($urlMapByUuid),
+                ]);
+            }
+        }
+
         // Once documents are already restored, avoid the helper path that can recreate dependencies.
         if ($this->documentsRestored) {
             $fallback = $this->rewriteHtmlDocumentUrlsFallback(
@@ -7582,9 +8560,7 @@ class CourseRestorer
                 $DBG
             );
 
-            $fallbackHtml = (string) ($fallback['html'] ?? $html);
-
-            return $fallbackHtml;
+            return (string) ($fallback['html'] ?? $html);
         }
 
         try {
@@ -7609,9 +8585,16 @@ class CourseRestorer
             $DBG('html.rewrite.map', [
                 'byRel' => is_array($byRel) ? count($byRel) : 0,
                 'byBase' => is_array($byBase) ? count($byBase) : 0,
+                'byUuid' => \count($urlMapByUuid),
             ]);
 
-            $result = ChamiloHelper::rewriteLegacyCourseUrlsWithMap($html, $courseDir, $byRel, $byBase);
+            $result = ChamiloHelper::rewriteLegacyCourseUrlsWithMap(
+                $html,
+                $courseDir,
+                $byRel,
+                $byBase,
+                $urlMapByUuid
+            );
 
             $DBG('html.rewrite.result', [
                 'replaced' => (int) ($result['replaced'] ?? 0),
@@ -7655,6 +8638,74 @@ class CourseRestorer
         return $html;
     }
 
+    /**
+     * Build old ResourceNode UUID → new resource file URL from the document bag
+     * after documents have been restored (destination_id populated).
+     *
+     * @return array<string,string>
+     */
+    private function buildRestoredDocumentUuidUrlMap($docRepo): array
+    {
+        $map = [];
+        $bag = null;
+        foreach ([RESOURCE_DOCUMENT, 'document', 'documents'] as $key) {
+            if (!empty($this->course->resources[$key]) && \is_array($this->course->resources[$key])) {
+                $bag = $this->course->resources[$key];
+                break;
+            }
+        }
+        if (null === $bag) {
+            return [];
+        }
+
+        foreach ($bag as $wrap) {
+            if (!\is_object($wrap)) {
+                continue;
+            }
+            $destId = (int) ($wrap->destination_id ?? 0);
+            if ($destId <= 0) {
+                continue;
+            }
+            $uuid = strtolower(trim((string) (
+                $wrap->resource_node_uuid
+                ?? ((isset($wrap->obj) && \is_object($wrap->obj)) ? ($wrap->obj->resource_node_uuid ?? '') : '')
+                ?? ''
+            )));
+            if ('' === $uuid || !preg_match('/^[0-9a-f-]{16,64}$/', $uuid)) {
+                // Copy mode: resolve from source document.
+                $srcId = (int) ($wrap->source_id ?? 0);
+                if ($srcId > 0) {
+                    try {
+                        $srcDoc = $docRepo->find($srcId);
+                        if ($srcDoc instanceof CDocument && $srcDoc->getResourceNode()?->getUuid()) {
+                            $uuid = strtolower((string) $srcDoc->getResourceNode()->getUuid());
+                        }
+                    } catch (Throwable $e) {
+                        $uuid = '';
+                    }
+                }
+            }
+            if ('' === $uuid || !preg_match('/^[0-9a-f-]{16,64}$/', $uuid)) {
+                continue;
+            }
+
+            try {
+                $dstDoc = $docRepo->find($destId);
+                if (!$dstDoc instanceof CDocument) {
+                    continue;
+                }
+                $url = (string) $docRepo->getResourceFileUrl($dstDoc);
+                if ('' !== $url) {
+                    $map[$uuid] = $url;
+                }
+            } catch (Throwable $e) {
+                // skip
+            }
+        }
+
+        return $map;
+    }
+
     private function getImportBackupZipPath(): string
     {
         $metaZip = (string) ($this->course->resources['__meta']['backup_zip_path'] ?? '');
@@ -7695,6 +8746,119 @@ class CourseRestorer
         }
 
         return true;
+    }
+
+    /**
+     * Same as isSafeBackupPath(), but also rejects an absolute path and a remote URL,
+     * so the value can only ever address a file inside the extracted backup.
+     */
+    private function isSafeRelativeBackupPath(string $path): bool
+    {
+        if ('' === $path || !$this->isSafeBackupPath($path)) {
+            return false;
+        }
+
+        if (str_contains($path, '://')) {
+            return false;
+        }
+
+        $normalized = str_replace('\\', '/', $path);
+
+        return !str_starts_with($normalized, '/') && 1 !== preg_match('#^[a-z]:#i', $normalized);
+    }
+
+    /**
+     * Returns the directories the current backup was extracted to, as real paths with a
+     * trailing slash.
+     *
+     * @return string[]
+     */
+    private function getBackupRoots(): array
+    {
+        $roots = [];
+
+        $candidates = [
+            (string) ($this->course->resources['__meta']['archiver_root'] ?? ''),
+            (string) ($this->course->backup_path ?? ''),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if ('' === $candidate) {
+                continue;
+            }
+
+            $real = realpath(rtrim($candidate, '/'));
+            if (false !== $real) {
+                $roots[] = rtrim($real, '/').'/';
+            }
+        }
+
+        return array_values(array_unique($roots));
+    }
+
+    /**
+     * Resolves a candidate path and keeps it only when it stays inside the extracted
+     * backup. Every path a backup carries is controlled by the user who uploads it, so a
+     * candidate that escapes those roots would reach a file the importer must never read.
+     */
+    private function resolveInsideBackup(string $candidate): ?string
+    {
+        if ('' === $candidate || str_contains($candidate, "\0")) {
+            return null;
+        }
+
+        $real = realpath($candidate);
+        if (false === $real) {
+            return null;
+        }
+
+        foreach ($this->getBackupRoots() as $root) {
+            if (str_starts_with(rtrim($real, '/').'/', $root)) {
+                return $real;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Same as resolveInsideBackup(), but only accepts a readable file.
+     */
+    private function resolveFileInsideBackup(string $candidate): ?string
+    {
+        $real = $this->resolveInsideBackup($candidate);
+
+        if (null === $real || !is_file($real) || !is_readable($real)) {
+            return null;
+        }
+
+        return $real;
+    }
+
+    /**
+     * Confines the destination name of a backup-supplied asset to the sub-trees the course
+     * exporter really fills, and neutralizes an executable extension on that name.
+     */
+    private function getSafeAssetPath(string $path): ?string
+    {
+        if (!$this->isSafeRelativeBackupPath($path)) {
+            return null;
+        }
+
+        $relative = ltrim(str_replace('\\', '/', $path), '/');
+        if ('' === $relative || str_ends_with($relative, '/')) {
+            return null;
+        }
+
+        $allowed = !str_contains($relative, '/')
+            || str_starts_with($relative, 'document/')
+            || str_starts_with($relative, 'upload/learning_path/images/');
+
+        if (!$allowed) {
+            return null;
+        }
+
+        return disable_dangerous_file($relative);
     }
 
     private function extractSingleDocumentEntryFromBackupZip(
@@ -8623,12 +9787,20 @@ class CourseRestorer
                     }
 
                     foreach ($candidates as $abs) {
-                        if (is_file($abs) && is_readable($abs)) {
-                            return ['zip' => $abs, 'temp' => false];
+                        // Security: zip and path come from the backup. Confine the package to
+                        // the extracted backup, so a tampered archive cannot zip an arbitrary
+                        // directory of the server and import it as a lesson.
+                        $resolved = $this->resolveInsideBackup($abs);
+                        if (null === $resolved) {
+                            continue;
                         }
 
-                        if (is_dir($abs) && is_readable($abs)) {
-                            $tmp = $this->zipScormFolder($abs);
+                        if (is_file($resolved) && is_readable($resolved)) {
+                            return ['zip' => $resolved, 'temp' => false];
+                        }
+
+                        if (is_dir($resolved) && is_readable($resolved)) {
+                            $tmp = $this->zipScormFolder($resolved);
                             if ($tmp) {
                                 return ['zip' => $tmp, 'temp' => true];
                             }
@@ -9091,13 +10263,12 @@ class CourseRestorer
         // 1) Strongest source: explicit sidecar zip path (e.g. files/95/<contenthash>)
         $rawZip = trim(str_replace('\\', '/', (string) ($sc->zip ?? '')));
         if ('' !== $rawZip) {
-            $zipCandidates = [];
-
-            if (is_file($rawZip)) {
-                $zipCandidates[] = $rawZip;
-            }
-
-            $zipCandidates[] = $backupPath.'/'.ltrim($rawZip, '/');
+            // Security: zip comes from the backup. Both candidates go through the same
+            // confinement below, so an absolute path of the server is never accepted.
+            $zipCandidates = [
+                $rawZip,
+                $backupPath.'/'.ltrim($rawZip, '/'),
+            ];
 
             $seenZip = [];
             foreach ($zipCandidates as $absZip) {
@@ -9107,8 +10278,9 @@ class CourseRestorer
                 }
                 $seenZip[$absZip] = true;
 
-                if (is_file($absZip) && is_readable($absZip) && filesize($absZip) > 0) {
-                    return ['zip' => $absZip, 'temp' => false];
+                $resolvedZip = $this->resolveFileInsideBackup($absZip);
+                if (null !== $resolvedZip && filesize($resolvedZip) > 0) {
+                    return ['zip' => $resolvedZip, 'temp' => false];
                 }
             }
         }
@@ -9161,17 +10333,23 @@ class CourseRestorer
             }
             $seen[$abs] = true;
 
-            if (is_file($abs) && is_readable($abs) && filesize($abs) > 0) {
-                return ['zip' => $abs, 'temp' => false];
+            // Security: path and name come from the backup. Confine every candidate to the
+            // extracted backup, so a tampered archive cannot zip an arbitrary directory of
+            // the server and import it as a lesson.
+            $resolved = $this->resolveInsideBackup($abs);
+            $resolvedZip = $this->resolveFileInsideBackup($abs.'.zip');
+
+            if (null !== $resolved && is_file($resolved) && is_readable($resolved) && filesize($resolved) > 0) {
+                return ['zip' => $resolved, 'temp' => false];
             }
 
-            if (is_file($abs.'.zip') && is_readable($abs.'.zip') && filesize($abs.'.zip') > 0) {
-                return ['zip' => $abs.'.zip', 'temp' => false];
+            if (null !== $resolvedZip && filesize($resolvedZip) > 0) {
+                return ['zip' => $resolvedZip, 'temp' => false];
             }
 
-            if (is_dir($abs)) {
+            if (null !== $resolved && is_dir($resolved)) {
                 return $this->zipDirectoryToTemp(
-                    $abs,
+                    $resolved,
                     'scorm_'.preg_replace('#[^A-Za-z0-9_\-]#', '_', $normalizedFolder ?: 'package')
                 );
             }
@@ -9347,8 +10525,12 @@ class CourseRestorer
                 $candidate = rtrim($candidate, '/').'/'.$filename;
             }
 
-            if (is_file($candidate) && is_readable($candidate)) {
-                return $candidate;
+            // Security: path, filename and asset_relpath all come from the backup. Confine
+            // the candidate to the extracted backup, so a tampered archive cannot publish an
+            // arbitrary file of the server as an announcement attachment.
+            $resolved = $this->resolveFileInsideBackup($candidate);
+            if (null !== $resolved) {
+                return $resolved;
             }
         }
 

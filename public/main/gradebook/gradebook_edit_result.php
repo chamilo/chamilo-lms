@@ -6,12 +6,15 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
-$select_eval = (int) $_GET['selecteval'];
+$select_eval = isset($_GET['selecteval']) ? (int) $_GET['selecteval'] : 0;
 if (empty($select_eval)) {
     api_not_allowed();
 }
 $resultedit = Result::load(null, null, $select_eval);
 $evaluation = Evaluation::load($select_eval);
+if (empty($evaluation)) {
+    api_not_allowed(true);
+}
 $evaluation[0]->check_lock_permissions();
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
@@ -27,13 +30,24 @@ $edit_result_form = new EvalForm(
 if ($edit_result_form->validate()) {
     $values = $edit_result_form->exportValues();
     $scores = $values['score'];
+    // Only the results rendered by the form (the ones linked to this evaluation) can be edited.
+    $allowedResultIds = [];
+    foreach ($resultedit as $formResult) {
+        $allowedResultIds[] = (int) $formResult->get_id();
+    }
     $bestResult = 0;
     $scoreFinalList = [];
-    foreach ($scores as $userId => $score) {
-        /** @var array $resultedit */
-        $resultedit = Result::load($userId);
+    foreach ($scores as $resultId => $score) {
+        $resultId = (int) $resultId;
+        if (!in_array($resultId, $allowedResultIds, true)) {
+            continue;
+        }
+        $resultList = Result::load($resultId);
+        if (empty($resultList)) {
+            continue;
+        }
         /** @var Result $result */
-        $result = $resultedit[0];
+        $result = $resultList[0];
 
         if (empty($score)) {
             $score = 0;

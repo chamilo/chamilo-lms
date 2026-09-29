@@ -24,6 +24,7 @@ class Version20180927172830 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasForeignKey('FK_B5BEF559E2904019')) {
+            $this->addSql('ALTER TABLE c_forum_post CHANGE thread_id thread_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_forum_post ADD CONSTRAINT FK_B5BEF559E2904019 FOREIGN KEY (thread_id) REFERENCES c_forum_thread (iid)'
             );
@@ -53,6 +54,7 @@ class Version20180927172830 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_forum_forum');
         if (!$table->hasForeignKey('FK_47A9C9921BF9426')) {
+            $this->addSql('ALTER TABLE c_forum_forum CHANGE forum_category forum_category INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C9921BF9426 FOREIGN KEY (forum_category) REFERENCES c_forum_category (iid) ON DELETE SET NULL'
             );
@@ -75,6 +77,8 @@ class Version20180927172830 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasForeignKey('FK_47A9C99F2E82C87')) {
+            $this->addSql('ALTER TABLE c_forum_forum CHANGE forum_last_post forum_last_post INT DEFAULT NULL');
+            $this->addSql('UPDATE c_forum_forum SET forum_last_post = NULL WHERE forum_last_post NOT IN (SELECT iid FROM c_forum_post)');
             $this->addSql('ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C99F2E82C87 FOREIGN KEY (forum_last_post) REFERENCES c_forum_post (iid)');
             $this->addSql('CREATE INDEX IDX_47A9C99F2E82C87 ON c_forum_forum (forum_last_post);');
         }
@@ -91,6 +95,7 @@ class Version20180927172830 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM c_forum_post WHERE thread_id NOT IN (SELECT iid from c_forum_thread)');
 
         if (false === $table->hasForeignKey('FK_5DA7884C29CCBAD0')) {
+            $this->addSql('ALTER TABLE c_forum_thread CHANGE forum_id forum_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C29CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid) ON DELETE SET NULL;');
         }
 
@@ -109,6 +114,7 @@ class Version20180927172830 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_forum_thread SET thread_poster_id = NULL WHERE thread_poster_id NOT IN (SELECT id from user)');
 
         if (false === $table->hasForeignKey('FK_5DA7884C43CB876D')) {
+            $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_last_post thread_last_post INT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C43CB876D FOREIGN KEY (thread_last_post) REFERENCES c_forum_post (iid) ON DELETE SET NULL;');
             $this->addSql('CREATE INDEX IDX_5DA7884C43CB876D ON c_forum_thread (thread_last_post);');
         }

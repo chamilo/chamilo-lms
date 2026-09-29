@@ -38,6 +38,16 @@ class UserCourseCategory
     protected ?bool $isCollapsed = null;
 
     /**
+     * Get title.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
      * Set title.
      *
      * @return UserCourseCategory
@@ -50,13 +60,13 @@ class UserCourseCategory
     }
 
     /**
-     * Get title.
+     * Get sort.
      *
-     * @return string
+     * @return int
      */
-    public function getTitle()
+    public function getSort()
     {
-        return $this->title;
+        return $this->sort;
     }
 
     /**
@@ -69,16 +79,6 @@ class UserCourseCategory
         $this->sort = $sort;
 
         return $this;
-    }
-
-    /**
-     * Get sort.
-     *
-     * @return int
-     */
-    public function getSort()
-    {
-        return $this->sort;
     }
 
     /**

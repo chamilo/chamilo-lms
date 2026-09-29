@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول بېلګه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول نمونه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -1575,8 +1575,8 @@ msgstr "آیا تاسو ډاډه یاست چې دا ګامونه غواړئ پا
 msgid "Authoring tool"
 msgstr "لیکلو وسیلې"
 
-msgid "SCORM or AICC file to upload"
-msgstr "د بار پورته کولو لپاره SCORM یا AICC فایل"
+msgid "SCORM file to upload"
+msgstr "د بار پورته کولو لپاره SCORM فایل"
 
 msgid "Course location"
 msgstr "د کورس ځای"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:کاپي راټ,, no:کاپي راټ نشته"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:فولډر,, application\/msword:MsWord,, application\/octet-stream:اکټیټ سټریم,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:مشق,,      simulation:سيموليشن,,      questionnaire: پوښتنليک,,      diagram: ډايګرام,,      figure: انځور,,      graph:ګراف,,      index:اشاره,,      slide:سلایډ,,      table:جدول,,      narrative text:روايتي متن,,      exam: امتحان,,      experiment: تجربې,,      problem statement: ستونزې بيان,,      self assessment: ځان ارزونه,,      lecture: درس"
@@ -4636,7 +4636,7 @@ msgid "Invalid end date was given."
 msgstr "ناسم پای نېټه ورکړل شوې."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(d\/m\/y h:m)"
 
 msgid "Homepage-files are not writable!"
 msgstr "د کور پاڼې فایلونه لیکل کېدی نشي!"
@@ -7713,6 +7713,54 @@ msgstr "د ازموینې پوښتنو لړليک"
 msgid "Recycle existing questions"
 msgstr "موجوده پوښتنې بیا کارول"
 
+msgid "Add this question to the test: %s"
+msgstr "دا پوښتنه ازموینې ته اضافه کړئ: %s"
+
+msgid "Edit question: %s"
+msgstr "پوښتنه سمول: %s"
+
+msgid "Add a question: %s"
+msgstr "یوه پوښتنه اضافه کړئ: %s"
+
+msgid "Detected blanks: %s"
+msgstr "موندل شوي تشې: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s پوښتنې، د ټولو پوښتنو لپاره ټولیزه نمره %s."
+
+msgid "Unique answer"
+msgstr "یوازینۍ ځواب"
+
+msgid "Multiple answer true/false"
+msgstr "څو ځوابه سم/غلط"
+
+msgid "Multiple answer combination true/false"
+msgstr "د څو ځوابونو ترکیب سم/غلط"
+
+msgid "Unique answer with images"
+msgstr "یوازینۍ ځواب د انځورونو سره"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "څو ځوابه سم/غلط د ډاډ درجې سره"
+
+msgid "Answer in Office document"
+msgstr "ځواب په آفس سند کې"
+
+msgid "Matching draggable"
+msgstr "مطابقت وړ کشیدونکی"
+
+msgid "Matching draggable combination"
+msgstr "د مطابقت وړ کشیدونکي ترکیب"
+
+msgid "Fill in blanks combination"
+msgstr "د تشو ډکولو ترکیب"
+
+msgid "Multiple answer dropdown combination"
+msgstr "د څو ځوابه ښکته غورځېدونکي ترکیب"
+
+msgid "Matching combination"
+msgstr "د مطابقت ترکیب"
+
 msgid "Correct test"
 msgstr "سم ازموینه"
 
@@ -8547,6 +8595,9 @@ msgstr "شرکت"
 msgid "Reporting"
 msgstr "رپورټینګ"
 
+msgid "Analytics"
+msgstr "تحلیلونه"
+
 msgid "Update"
 msgstr "اپډېټ"
 
@@ -8724,11 +8775,23 @@ msgstr "ښکاره کول"
 msgid "My courses"
 msgstr "زما درسونه"
 
+msgid "Shop"
+msgstr "دکان"
+
+msgid "Invoice"
+msgstr "رسید"
+
+msgid "Request invoice"
+msgstr "د رسید غوښتنه"
+
 msgid "View my progress"
 msgstr "زما پرمختګ وګورئ"
 
 msgid "Personal agenda"
 msgstr "شخصي برنامه"
+
+msgid "Group agenda"
+msgstr "د ډلې اجنډا"
 
 msgid "Switch to teacher view"
 msgstr "د ښوونکي لید ته بدلون"
@@ -9251,6 +9314,15 @@ msgstr "د %s د غونډې وخت راپور"
 
 msgid "Error"
 msgstr "خطا"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "کارن جوړ شو، خو یوه له اضافي پروفایل ساحو نه شوه خوندي کېدای."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "کارن تازه شو، خو یوه له اضافي پروفایل ساحو نه شوه خوندي کېدای."
+
+msgid "One or more fields contain invalid values."
+msgstr "یوه یا څو ساحې ناسم ارزښتونه لري."
 
 msgid "Anonymous"
 msgstr "ناسم نوم"
@@ -14394,6 +14466,9 @@ msgstr "مه واپس مرحلې ۱ ته لاړ شئ"
 msgid "has not been found in that directory"
 msgstr "د هغه پوش کې نه موندل شوی"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "نصب کوونکی خپل ننوتل نه لري، نو لوړول باید په سرور کې اجازه ورکړل شي. په د پروژې ریښه کې د %s په نوم یو تش فایل جوړ کړئ، د .env تر څنګ، بیا دوام ورکړئ."
+
 msgid "Old version's root path"
 msgstr "د پخوانۍ نسخې ریښتینې لاره"
 
@@ -15290,6 +15365,30 @@ msgstr "تېره اونې تېر شوی وخت"
 
 msgid "System status"
 msgstr "سيستم حالت"
+
+msgid "Courses space"
+msgstr "د کورسونو ځای"
+
+msgid "Database server configuration and metadata"
+msgstr "د ډیټابیس سرور تنظیمات او میټاډاټا"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "د هر کورس د ډیسک کارونه د ډیسک سهم په مقابل کې"
+
+msgid "Information about your webserver configuration"
+msgstr "ستاسو د ویب‌سرور د تنظیماتو په اړه معلومات"
+
+msgid "Paths"
+msgstr "لارې"
+
+msgid "State of Chamilo requirements"
+msgstr "د چامیلو د اړتیاوو حالت"
+
+msgid "State of PHP settings on the server"
+msgstr "په سرور کې د PHP تنظیماتو حالت"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "په دې پورټل کې حل شوي api_get_path() ثابتونه"
 
 msgid "Is writable"
 msgstr "ليکلو وړ دی"
@@ -20466,6 +20565,9 @@ msgstr "والد ژبه: %s"
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "د زیری ژبې %s لپاره نوي اصطلاحات تعریف کړئ په دې ډول چې ځینې اصطلاح لټون وکړئ، بیا هره ژباړه د خوندي تڼۍ کلیک کولو له لارې خوندي کړئ. نو به خپل کاروونکي ژبه بدله کړئ ترڅو نوي اصطلاحات ښکاره شي."
 
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "یوه اصطلاح چې دلته خوندي شي سمدلاسه په هغه انٹرفیس کې ښکاري چې لا دمخه مهاجرت شوی دی. هغه پاڼې چې لا نه دي مهاجرت شوي یو تالیف شوی کتلاګ لوستل کوي، نو دوی زوړ متن ساتي تر څو تاسو کیش د php bin/console cache:clear سره پاک کړئ. دا یو ځل وکړئ کله چې سمون پای ته ورسوئ، نه د هرې اصطلاح وروسته."
+
 msgid "See sequences"
 msgstr "تسلسلات وګورئ"
 
@@ -20493,8 +20595,8 @@ msgstr " لینک پای ته رسېدلی، مهرباني وکړئ بیا هڅ
 msgid "Instructions for the password change procedure"
 msgstr "د پاسورډ بدلولو د پروسیجر لارښوونې"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "تاسو دا پیغام ترلاسه کوئ ځکه چې تاسو (یا څوک بل چې ستاسو ګڼل کېږي) د خپل لپاره نوي پاسورډ تولیدولو غوښتنه کړې ده.<br/>"
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "دا پیغام تاسو ته ځکه لیږل شوی چې تاسو (یا څوک چې ستاسو په نوم ځان ښيي) غوښتنه کړې چې ستاسو حساب لپاره نوی پټنوم جوړ شي.<br/>د خپل نوي پټنوم تنظیمولو لپاره، مهرباني وکړئ دا لینک تعقیب کړئ:<br/>%s<br/>که تاسو دا غوښتنه نه وي کړې، کولی شئ دا پیغام له پامه وغورځوئ. که دا پیغامونه دوام ومومي، مهرباني وکړئ د پورټل مدیر سره اړیکه ونیسئ."
 
 msgid "Remind Course Expiration cron"
 msgstr "د کورس پای ته رسېدو یادونه cron"
@@ -20657,6 +20759,9 @@ msgstr "په مهارتونو چرخ کې، کله چې لنډ کوډ ولري �
 
 msgid "Created by"
 msgstr "جوړ کړی شوی له"
+
+msgid "Created by %s on %s"
+msgstr "د %s لخوا په %s جوړ شوی"
 
 msgid "Hide general coach in dropbox"
 msgstr "په ډراپ باکس کې عمومي مدرس پټ کړئ"
@@ -23963,6 +24068,18 @@ msgstr "د زده‌کوونکي پایله ښکاره کړئ: نمره، د ز�
 
 msgid "Signed in as"
 msgstr "د نوم لیکنې په توګه"
+
+msgid "Authorize application"
+msgstr "غوښتنلیک ته اجازه ورکول"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "غواړي ستاسو د چامیلو حساب سره وصل شي."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "دا غوښتنلیک به وکولی شي په چامیلو کې دقیقاً هغه ډول عمل وکړي لکه تاسو — د ستاسو د موجوده حساب اجازو په کارولو سره او نور هیڅ نه. دا به هیڅکله هغه لاسرسی ترلاسه نه کړي چې تاسو یې نه لرئ."
+
+msgid "Allow"
+msgstr "اجازه ورکړئ"
 
 msgid "Remember me"
 msgstr "ما ته یاد کړئ"
@@ -31329,6 +31446,9 @@ msgstr "د کاروونکي ویش صفحې ته بیرته"
 msgid "Authentication sources assigned successfully"
 msgstr "د تصدیق سرچینې په بريارۍ سره وویشل شوې"
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "هیڅ د تصدیق طریقه نه ده ټاکل شوې. دا د دې URL لپاره د ټاکل شوي کارن(انو) هره د تصدیق طریقه لرې کوي، چې ممکن دوی ته د ننوتلو مخه ونیسي. دوام ورکړئ؟"
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "لارښوونه: «— یوازې اپلوډ کړئ —» غوره کړئ چې پرته له دې چې چا ته واستوئ یې ذخیره کړئ."
 
@@ -31860,6 +31980,9 @@ msgstr "څه لیکلي %s ته"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "غوره: SVG. د PNG وړاندیز شوی عرض: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "د PNG وړاندیز شوې پلنوالی: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "PNG لوګو د بریښنالیکو لپاره اپلوډ کړئ (~%spx عرض)"
 
@@ -31895,6 +32018,9 @@ msgstr "د داخل کولو لپاره کلیک وکړئ"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "غوره: SVG. PNG اعظمي اندازې: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "د PNG اعظمي اندازه: %spx."
 
 msgid "View badge"
 msgstr "د نښې لیدل"
@@ -36476,4 +36602,4966 @@ msgstr "منظم شوی"
 
 msgid "View threads"
 msgstr "تارونه وګورئ"
+
+msgid "No auth source"
+msgstr "د تصدیق سرچینه نشته"
+
+msgid "You must add at least one question"
+msgstr "تاسو باید لږ تر لږه یوه پوښتنه اضافه کړئ"
+
+msgid "Advanced actions"
+msgstr "پرمختللي کړنې"
+
+msgid "Application path"
+msgstr "د غوښتنلیک لاره"
+
+msgid "Apply files details"
+msgstr "د فایلونو تفصیلات پلي کړئ"
+
+msgid "Apply plan details"
+msgstr "د پلان تفصیلات پلي کړئ"
+
+msgid "Apply plan failed"
+msgstr "د پلان پلي کول ناکام شول"
+
+msgid "Apply plan ready"
+msgstr "د پلان پلي کول چمتو دي"
+
+msgid "Apply preparation"
+msgstr "چمتو کول پلي کړئ"
+
+msgid "Apply staged files"
+msgstr "مرحله شوي فایلونه پلي کړئ"
+
+msgid "Applying files..."
+msgstr "فایلونه پلي کیږي..."
+
+msgid "Audit file"
+msgstr "د فایل پلټنه"
+
+msgid "Backup directory"
+msgstr "د بیک اپ لارښود"
+
+msgid "Baseline clean"
+msgstr "بیس لاین پاک"
+
+msgid "Baseline warnings"
+msgstr "بیس لاین خبرداریونه"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "د مرحلې شوي بسته څخه یو خوندي پلي کولو پلان جوړ کړئ. دا یوازې فایلونه، اجازې، د بیک اپ لاره او د قفل حالت ګوري. دا فایلونه نه بدلوي."
+
+msgid "Build production frontend assets."
+msgstr "د تولید فرنټ اینډ شتمنۍ جوړ کړئ."
+
+msgid "Building plan..."
+msgstr "پلان جوړول..."
+
+msgid "Channel"
+msgstr "چینل"
+
+msgid "Check"
+msgstr "چېک"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "د چمیلیو موجوده تازه کړنې وګورئ، بسته ګانې تایید کړئ، فایلونه مرحله کړئ او کنټرول شوي وروسته له تازه کولو ګامونه اجرا کړئ."
+
+msgid "Check manifest"
+msgstr "مانیفېسټ وګورئ"
+
+msgid "Checking post-apply actions..."
+msgstr "د پلي کولو وروسته کړنې ګوري..."
+
+msgid "Checking..."
+msgstr "ګوري..."
+
+msgid "Composer install"
+msgstr "کمپوزر انسټال"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "کمپوزر، یارن او ډیټابیس مهاجرت کړنې کولی شي انحصارونه، تولید شوي شتمنۍ یا ډیټابیس بدل کړي. یوازې هغه وخت غوره کړئ چې بیک اپ او اجازې تایید شوي وي."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "په سرور کې CHAMILO_UPDATE_MANIFEST_URL تنظیم کړئ یا یو HTTPS مانیفېسټ URL ورکړئ."
+
+msgid "Configured"
+msgstr "ترتیب شوی"
+
+msgid "Current migration"
+msgstr "اوسنی مهاجرت"
+
+msgid "Database baseline"
+msgstr "ډیټابیس بیس لاین"
+
+msgid "Database migration safety review"
+msgstr "د ډیټابیس مهاجرت خوندیتوب بیاکتنه"
+
+msgid "Database migrations"
+msgstr "ډیټابیس مهاجرتونه"
+
+msgid "Development mode"
+msgstr "د پرمختګ حالت"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "دا مه فعالوئ تر هغه چې د تازه کولو بیک اپ او سرور اجازې بیاکتل شوي نه وي."
+
+msgid "Doctrine dry-run command"
+msgstr "ډاکټرین وچ چلولو کمانډ"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "ډاکټرین د تاریخي بیس لاین خبرداریونه راپور کړل. تازه کوونکی به لاهم یوازې مرحله شوي V210 مهاجرتونه د واضح تایید وروسته اجرا کړي."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "ډاکټرین به یوازې مرحله شوي V210 مهاجرتونه د خوندیتوب بیاکتنې له پاس کولو وروسته په واضح ډول اجرا کړي."
+
+msgid "Dry-run exit code"
+msgstr "وچ چلولو وتلو کوډ"
+
+msgid "Executed unavailable migrations"
+msgstr "ناموجود مهاجرتونه اجرا شوي"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "د تایید شوي تازه کولو بسته یو سټېجینګ لارښود ته استخراج کړئ ترڅو معاینه شي. دا فایلونه نه بدلوي، مهاجرتونه نه چلوي او ډیټابیس نه بدلوي."
+
+msgid "File apply available"
+msgstr "د فایل پلي کول شتون لري"
+
+msgid "Files to replace"
+msgstr "د بدلولو فایلونه"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "زه تاییدوم چې د ډیټابیس بیک اپ شتون لري او د مهاجرتونو د چلولو دمخه تایید شوی دی."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "زه پوهېږم چې پرمختللي کړنې کولی شي انحصارونه، تولید شوي شتمنۍ یا ډیټابیس بدل کړي."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "زه پوهېږم چې دا به د چمیلیو په نصب کې فایلونه بدل کړي."
+
+msgid "I understand this will run update commands on the server."
+msgstr "زه پوهېږم چې دا به په سرور کې د تازه کولو کمانډونه چلوي."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "د شتمنیو د بیا جوړولو دمخه د فرنټ اینډ انحصارونه نصب کړئ."
+
+msgid "Installed version"
+msgstr "نصب شوی نسخه"
+
+msgid "Latest migration"
+msgstr "وروستی مهاجرت"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "د بسته او لاسلیک لارې خالي پریږدئ ترڅو له تایید شوي مانیفېسټ URLs څخه ډاونلوډ شي. محلي لارې یوازې د پراختیا ازموینو لپاره شتون لري."
+
+msgid "Live command log"
+msgstr "ژوندۍ کمانډ لاګ"
+
+msgid "Live update log"
+msgstr "ژوندۍ تازه کولو لاګ"
+
+msgid "Local test options"
+msgstr "محلي ازموینې اختیارونه"
+
+msgid "Local test update notice link"
+msgstr "محلي ازموینې تازه کولو خبرتیا لینک"
+
+msgid "Local update notice simulation"
+msgstr "محلي تازه کولو خبرتیا سمولیشن"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "محلي تازه کولو خبرتیا سمولیشن یوازې په پراختیا حالت کې شتون لري."
+
+msgid "Manifest"
+msgstr "مانیفېسټ"
+
+msgid "Manifest source"
+msgstr "مانیفېسټ سرچینه"
+
+msgid "Migration safety details"
+msgstr "مهاجرت خوندیتوب تفصیلات"
+
+msgid "Migration safety review failed"
+msgstr "مهاجرت خوندیتوب بیاکتنه ناکامه شوه"
+
+msgid "Migration safety review ready"
+msgstr "مهاجرت خوندیتوب بیاکتنه چمتو ده"
+
+msgid "Migration target"
+msgstr "مهاجرت هدف"
+
+msgid "New files"
+msgstr "نوي فایلونه"
+
+msgid "New migrations reported by Doctrine"
+msgstr "د ډاکټرین لخوا راپور شوي نوي مهاجرتونه"
+
+msgid "Next migration"
+msgstr "بل مهاجرت"
+
+msgid "No executed unavailable migration was reported."
+msgstr "هیڅ اجرا شوی غیر شتون مهاجرت راپور نه شو."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "تر اوسه هیڅ رسمي مانیفېسټ URL تنظیم شوی نه دی. د پراختیا ازموینو لپاره HTTPS URL یا محلي لاره وکاروئ."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "د سټېج شوي تازه کولو هدف دمخه هیڅ معلق مهاجرت ونه موندل شو."
+
+msgid "Not configured"
+msgstr "نه تنظیم شوی"
+
+msgid "Not detected"
+msgstr "نه موندل شوی"
+
+msgid "Official Chamilo update channel"
+msgstr "رسمي چمیلیو تازه کولو چینل"
+
+msgid "Package SHA-256"
+msgstr "بسته SHA-256"
+
+msgid "Package URL"
+msgstr "بسته URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "بسته او لاسلیک فایلونه به له مانیفېسټ څخه ډاونلوډ شي. په دې چاپیریال کې محلي لارې غیر فعال دي."
+
+msgid "Package path"
+msgstr "بسته لاره"
+
+msgid "Package staged successfully"
+msgstr "بسته په بریالیتوب سره سټېج شوه"
+
+msgid "Package staging failed"
+msgstr "بسته سټېج کول ناکامه شول"
+
+msgid "Package verification"
+msgstr "بسته تایید"
+
+msgid "Package verification failed"
+msgstr "بسته تایید ناکامه شو"
+
+msgid "Package verified successfully"
+msgstr "بسته په بریالیتوب سره تایید شوه"
+
+msgid "Pending migrations before this update"
+msgstr "د دې تازه کولو دمخه معلق مهاجرتونه"
+
+msgid "Planned backup path"
+msgstr "پلان شوې بیک اپ لاره"
+
+msgid "Post-apply actions completed"
+msgstr "د پلي کولو وروسته کړنې بشپړې شوې"
+
+msgid "Post-apply actions failed"
+msgstr "د پلي کولو وروسته کړنې ناکامه شوې"
+
+msgid "Post-apply actions ready"
+msgstr "د پلي کولو وروسته کړنې چمتو دي"
+
+msgid "Post-apply checks"
+msgstr "د پلي کولو وروسته چکونه"
+
+msgid "Post-apply checks failed"
+msgstr "د پلي کولو وروسته چکونه ناکامه شول"
+
+msgid "Post-apply details"
+msgstr "د پلي کولو وروسته تفصیلات"
+
+msgid "Post-apply run details"
+msgstr "د پلي کولو وروسته چلولو تفصیلات"
+
+msgid "Preflight checks"
+msgstr "مخکېنۍ چکونه"
+
+msgid "Preflight checks completed"
+msgstr "مخکېنۍ چکونه بشپړ شول"
+
+msgid "Preflight checks failed"
+msgstr "مخکېنۍ چکونه ناکام شول"
+
+msgid "Preflight details"
+msgstr "مخکېنۍ جزیات"
+
+msgid "Prepare staging"
+msgstr "سټېجینګ چمتو کول"
+
+msgid "Preparing staging..."
+msgstr "سټېجینګ چمتو کېږي..."
+
+msgid "Production mode"
+msgstr "تولیدي حالت"
+
+msgid "Released at"
+msgstr "خپور شوی په"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "د سټېج شوي بسته څخه د Chamilo فایلونه د بیاکتنې شوي پلي کولو پلان په کارولو سره بدل کړئ. دا د ډیټابیس مایګریشنونه، Composer، Yarn یا کیش کمانډونه نه چلوي."
+
+msgid "Review apply plan"
+msgstr "د پلي کولو پلان بیاکتنه"
+
+msgid "Review database migrations"
+msgstr "د ډیټابیس مایګریشنونو بیاکتنه"
+
+msgid "Review post-apply actions"
+msgstr "د پلي کولو وروسته کړنو بیاکتنه"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "د اپډیټ فایلونو پلي کولو وروسته وړاندیز شوي لاسي کمانډونه بیاکتنه وکړئ. دا ګام Composer، Yarn، مایګریشنونه یا کیش کمانډونه نه چلوي."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "د سټېج شوي Doctrine مایګریشنونه او وچ-چل محصول د ډیټابیس مایګریشنونو د چلولو دمخه بیاکتنه وکړئ."
+
+msgid "Reviewing database migrations..."
+msgstr "د ډیټابیس مایګریشنونو بیاکتنه کېږي..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "د ډیټابیس مایګریشنونو د اجرا کولو دمخه د مایګریشن خوندیتوب بیاکتنه چل او پاس کړئ."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "د هر راتلونکي اپډیټ پلي کولو ګام دمخه چاپیریال چکونه چل کړئ. دا فایلونه یا ډیټابیس نه بدلوي."
+
+msgid "Run post-apply actions"
+msgstr "د پلي کولو وروسته کړنې چلول"
+
+msgid "Run preflight checks"
+msgstr "مخکېنۍ چکونه چلول"
+
+msgid "Run selected post-apply actions"
+msgstr "ټاکل شوې د پلي کولو وروسته کړنې چلول"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "د کنټرول شوي اجازې لیست په کارولو سره له سرور څخه ټاکل شوې د پلي کولو وروسته کمانډونه چل کړئ. هیڅ ډول دودیز شیل کمانډونه نه منل کېږي."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "د فایل اپډیټ پایلې او بیک اپونو تصدیق کولو وروسته دا کمانډونه په لاسي ډول له سرور څخه چل کړئ."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "په تولیدي حالت کې د UI څخه د پلي کولو وروسته کړنو چلول غیر فعال دي."
+
+msgid "Running post-apply actions..."
+msgstr "د پلي کولو وروسته کړنې چلېږي..."
+
+msgid "Safe actions"
+msgstr "خوندي کړنې"
+
+msgid "Signature path"
+msgstr "لاسلیک لاره"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "په دې چاپیریال کې د لاسلیک تصدیق نه شي پریښودل کېدای."
+
+msgid "Skip signature verification for local development tests"
+msgstr "د محلي پرمختیا ازموینو لپاره د لاسلیک تصدیق پریښودل"
+
+msgid "Staged file application failed"
+msgstr "سټېج شوي فایل پلي کول ناکام شول"
+
+msgid "Staged files applied successfully"
+msgstr "سټېج شوي فایلونه په بریالیتوب سره پلي شول"
+
+msgid "Staging details"
+msgstr "سټېجینګ جزیات"
+
+msgid "Staging directory"
+msgstr "سټېجینګ لارښود"
+
+msgid "Staging extraction"
+msgstr "سټېجینګ استخراج"
+
+msgid "Symfony cache clear"
+msgstr "Symfony کیش پاکول"
+
+msgid "System update"
+msgstr "سیسټم اپډیټ"
+
+msgid "Target version"
+msgstr "هدف نسخه"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "ترتیب شوې رسمي منشور URL مخکې ډکه شوې ده. که اړتیا وي تاسو کولی شئ دا بل HTTPS منشور ته بدله کړئ."
+
+msgid "The database migration baseline is clean."
+msgstr "د ډیټابیس مایګریشن اساسي کرښه پاکه ده."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "د عملیاتو بشپړیدو وروسته وروستۍ HTTP ځواب ناکام شو. دا معمولا د چلولو وخت کیش اجازو یا د غوښتنې پرمهال د ویب سرور بیا پیل کیدو له امله رامنځته کېږي."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "د عملیاتو لاګ راپور ورکوي چې د پلي کولو وروسته کړنې په بریالیتوب سره بشپړې شوې."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "ټاکل شوي د پلي کولو وروسته کمانډونه په بریالیتوب سره بشپړ شول، خو وروستۍ HTTP ځواب ناکام شو. پاڼه تازه کړئ او که پاڼه سمه نه بارېږي د چلولو وخت کیش اجازې تصدیق کړئ."
+
+msgid "The updater does not create or restore database backups."
+msgstr "اپډیټر ډیټابیس بیک اپونه نه جوړوي یا بېرته نه راولي."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "دا کړنې د اپډیټ پایلې بیاکتنې وروسته له UI څخه چلول خوندي دي."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "دا کمانډونه کولی شي انحصارونه، تولید شوي شتمنۍ، کیش یا ډیټابیس بدل کړي. دوام ورکولو دمخه بیک اپونه تصدیق کړئ."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "دا کړنه د Chamilo نصب کې فایلونه بدلوي. دوام ورکولو دمخه ډاډ ترلاسه کړئ چې پلي کولو پلان بیاکتل شوی او بیک اپونه فعال شوي دي."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "دا پرمختیا ننوتنه د محلي ازموینې بسته لارو په کارولو سره راتلونکی Chamilo.org اپډیټ خبرتیا سمبولیک کوي."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "دا سکرین د رسمي اپډیټ خبرتیا څخه پرانستل شوی، خو تر اوسه رسمي منشور سرچینه نه ده ترتیب شوې."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "دا سکرین د اپډیټ خبرتیا څخه پرانستل شوی. یوازې منشور چک په اتوماتيک ډول پیل کېږي."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "دا ګام یوازې بیاکتنه چمتو کوي. د فایل بدلول وروسته د سټېج شوي فایلونو پلي کولو ګام کې کیږي، د قفل، بیک اپ او بیرته راګرځولو محافظت سره."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "دا اپډیټر ډیټابیس بیک اپ نه جوړوي. د مایګریشنونو د چلولو دمخه بیک اپ جوړ او تصدیق کړئ."
+
+msgid "Trusted public key"
+msgstr "د باور وړ عامه کیلي"
+
+msgid "Trusted signing key"
+msgstr "د باور وړ لاسلیک کیلي"
+
+msgid "Unknown update notice source."
+msgstr "د تازه کولو خبر سرچینه نامعلومه ده."
+
+msgid "Update availability"
+msgstr "د تازه کولو شتون"
+
+msgid "Update directory"
+msgstr "د تازه کولو لارښود"
+
+msgid "Update lock path"
+msgstr "د تازه کولو قفل لاره"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "د مخکیني ګام لخوا جوړ شوي سټېجینګ لارښود وکاروئ. بیک اینډ یوازې د var/update/staging دننه لارښودونه مني."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "د پرمختیا ازموینو پر مهال د راتلونکي Chamilo.org تازه کولو خبر سمولو لپاره دا لینک وکاروئ."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "دا یوازې د محلي پرمختیا ازموینو لپاره وکاروئ. د تولید تازه کول باید د سرور تنظیم شوې کیلي وکاروي."
+
+msgid "Verification details"
+msgstr "د تصدیق تفصیلات"
+
+msgid "Verify package"
+msgstr "بسته تصدیق کړئ"
+
+msgid "Verifying..."
+msgstr "تصدیق روان دی..."
+
+msgid "Waiting for command progress events..."
+msgstr "د کمانډ پرمختګ پیښو ته انتظار..."
+
+msgid "Waiting for update progress events..."
+msgstr "د تازه کولو پرمختګ پیښو ته انتظار..."
+
+msgid "Yarn build"
+msgstr "Yarn جوړونه"
+
+msgid "Yarn install"
+msgstr "Yarn نصب"
+
+msgid "A comment is required"
+msgstr "یو تبصره اړینه ده"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "د ورته نوم سره یو ډیټابیس لا دمخه شتون لري. که دا جدولونه ولري، نو حذف به شي؛ که خالي وي، نو بیا به وکارول شي."
+
+msgid "AI generated"
+msgstr "AI تولید شوی"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "د زده کړې لارې ته د بیرته تګ دمخه لږترلږه یوه پوښتنه اضافه کړئ."
+
+msgid "Add attachments"
+msgstr "ضمیمې اضافه کړئ"
+
+msgid "Additional fields"
+msgstr "اضافي ساحې"
+
+msgid "Allow comments"
+msgstr "تبصرې ته اجازه ورکړئ"
+
+msgid "Allow new pages"
+msgstr "نوي پاڼو ته اجازه ورکړئ"
+
+msgid "Allow ratings"
+msgstr "ارزونو ته اجازه ورکړئ"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "آیا تاسو ډاډه یاست چې ټول توکي حذف کول غواړئ؟"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "آیا تاسو ډاډه یاست چې اتوماتیک نوي کول بیا فعالول غواړئ؟"
+
+msgid "Attachment has been deleted"
+msgstr "ضمیمه حذف شوه"
+
+msgid "Backup file"
+msgstr "بیک اپ فایل"
+
+msgid "Block comments"
+msgstr "تبصرې بندې کړئ"
+
+msgid "Block new pages"
+msgstr "نوي پاڼې بندې کړئ"
+
+msgid "Block ratings"
+msgstr "ارزونې بندې کړئ"
+
+msgid "Cancel renewal"
+msgstr "نوي کول لغوه کړئ"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "د %s ويکي پاڼو څخه به د کټګورۍ لینکونه لرې شي."
+
+msgid "Change"
+msgstr "بدلون"
+
+msgid "Clear group"
+msgstr "ګروپ پاک کړئ"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "د ټګ په کلیک کولو سره یې په ایډیټر کې داخل کړئ. دا ځای ساتونکي به د سند جوړولو پر مهال بدل شي."
+
+msgid "Comment added"
+msgstr "تبصره اضافه شوه"
+
+msgid "Comment is required"
+msgstr "تبصره اړینه ده"
+
+msgid "Comment score"
+msgstr "د تبصرې نمرې"
+
+msgid "Compare selected versions line by line"
+msgstr "ټاکل شوې نسخې کرښه په کرښه پرتله کړئ"
+
+msgid "Compare selected versions word by word"
+msgstr "ټاکل شوې نسخې کلمه په کلمه پرتله کړئ"
+
+msgid "Compare versions"
+msgstr "نسخې پرتله کړئ"
+
+msgid "Copy completed"
+msgstr "کاپي بشپړه شوه"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "د زده کونکو لپاره انفرادي ويکي کاري پاڼې جوړې کړئ"
+
+msgid "Current view mode"
+msgstr "اوسنی لید حالت"
+
+msgid "Delete Wiki"
+msgstr "ويکي حذف کړئ"
+
+msgid "Delete page"
+msgstr "پاڼه ړنګول"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "د ويکي کورپاڼې ړنګول سپارښتنه نه کېږي. تاسې وروسته بیا جوړولی شئ."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "د ويکي بلاکونو غیرفعال کول عادي ويکي پاڼې او کړنې بندوي. دا ترتیباتو پاڼه د کورس ښوونکو لپاره شتون لري."
+
+msgid "Discussion"
+msgstr "خبرې اترې"
+
+msgid "Edit Comment"
+msgstr "تبصره سمول"
+
+msgid "Edit page"
+msgstr "پاڼه سمول"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "د پای نیټه باید د ختمېدو له نیټې وروسته یا مساوي وي"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "د ويکي پاڼو موندلو لپاره د لټون اصطلاح دننه کړئ"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "د ختمېدو نیټه باید د پای له نیټې مخکې یا مساوي وي"
+
+msgid "Failed email recipients"
+msgstr "ناکام شوي برېښنالیک ترلاسه کوونکي"
+
+msgid "Finish and return to learning path"
+msgstr "بشپړول او زده کړې لارې ته بیرته تلل"
+
+msgid "Forum image"
+msgstr "د فورم انځور"
+
+msgid "Hide discussion"
+msgstr "خبرې اترې پټول"
+
+msgid "Hide page"
+msgstr "پاڼه پټول"
+
+msgid "I changed my mind"
+msgstr "زه خپل نظر بدل کړ"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "که نښه نه وي، دا فایلونه به د پلیټ فارم مدیر ته د 'فایل معلومات' وسیلې له لارې شتون ولري."
+
+msgid "Internal message failures"
+msgstr "داخلي پیغام ناکامۍ"
+
+msgid "Internal messages available"
+msgstr "داخلي پیغامونه شتون لري"
+
+msgid "Internal messages created now"
+msgstr "داخلي پیغامونه اوس جوړ شوي"
+
+msgid "Item score"
+msgstr "د توکي نمرې"
+
+msgid "Last post"
+msgstr "وروستی پوسټ"
+
+msgid "Lock page"
+msgstr "پاڼه قفلول"
+
+msgid "Manage categories"
+msgstr "کټګورۍ اداره کول"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "دا سند د AI مرستې په توګه نښه کوي. کله چې مینځپانګه د AI وسیلو په مرسته جوړه شوې یا د پام وړ بدلون موندلی وي نو وکاروئ."
+
+msgid "Maximum score is required"
+msgstr "اعظمي نمرې اړینې دي"
+
+msgid "Metric"
+msgstr "میټریک"
+
+msgid "New comments are blocked in this discussion"
+msgstr "په دې خبرې اترو کې نوي تبصرې بندې شوې دي"
+
+msgid "No Wiki categories are available yet."
+msgstr "تر اوسه هیڅ ويکي کټګورۍ شتون نلري."
+
+msgid "No categories found"
+msgstr "هیڅ کټګورۍ ونه موندل شوې"
+
+msgid "No content"
+msgstr "هیڅ منځپانګه نشته"
+
+msgid "No parent category"
+msgstr "هیڅ مورنۍ کټګوري نشته"
+
+msgid "Number of comments scored"
+msgstr "د نمرې شويو تبصرو شمېر"
+
+msgid "Old version"
+msgstr "زوړه نسخه"
+
+msgid "Only image files are allowed."
+msgstr "یوازې د انځور فایلونه اجازه لري."
+
+msgid "Please fill all required fields"
+msgstr "مهرباني وکړئ ټول اړین ډګرونه ډک کړئ"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "هغه پوښتنې چې د ټولګي یا زده کوونکي ځای ناستي لري د کورس ټولګیو یا ډلو لپاره به جوړې شي: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "په دې خبرې اترو کې درجه بندي بندې شوې دي"
+
+msgid "Remove image"
+msgstr "انځور لرې کول"
+
+msgid "Restore renewal"
+msgstr "نوي کول بېرته راګرځول"
+
+msgid "Restore version"
+msgstr "نسخه بېرته راګرځول"
+
+msgid "Search in"
+msgstr "لټون په"
+
+msgid "Select group"
+msgstr "ډله غوره کول"
+
+msgid "Select image"
+msgstr "انځور غوره کول"
+
+msgid "Selected image"
+msgstr "غوره شوی انځور"
+
+msgid "Show discussion"
+msgstr "خبرې اترې ښودل"
+
+msgid "Show page"
+msgstr "پاڼه ښودل"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "ځینې فایلونه یا فولډرونه د لیکلو اجازه نلري. د چامیلیو نصبولو لپاره لومړی باید د دوی اجازه بدله کړئ (د CHMOD په کارولو سره). مهرباني وکړئ ولولئ"
+
+msgid "Subcategories"
+msgstr "فرعي کټګورۍ"
+
+msgid "Tap on the left or right to navigate"
+msgstr "د نیویګیشن لپاره چپ یا ښي خوا ته ټپ کړئ"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "د ويکي دندې وروستۍ نیټه تېره شوې، خو ځنډول شوې سپارنه اجازه لري."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "د ويکي دندې وروستۍ نېټه تېره شوې ده."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "د ويکي دنده لا پيل شوې نه ده."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "د ويکي مخ د سمون قفل خوندي کولو دمخه اړين دی."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "اعلان خوندي شو، خو يو ضميمه نه شو پورته کولای."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "اعلان خوندي شو، خو برېښناليک لېږد ناکام شو."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "اعلان خوندي شو، خو هېڅ برېښناليک نه شو لېږلای."
+
+msgid "The category has been created"
+msgstr "کټګوري جوړه شوه"
+
+msgid "The category has been deleted"
+msgstr "کټګوري ړنګه شوه"
+
+msgid "The category has been updated"
+msgstr "کټګوري تازه شوه"
+
+msgid "The end date is invalid"
+msgstr "د پای نېټه ناسمه ده"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "د نسخو اعظمي شمېر بايد غير منفي عدد وي"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "د ويو اعظمي شمېر بايد غير منفي عدد وي"
+
+msgid "The print window could not be opened"
+msgstr "د چاپ کړکۍ نه شو پرانيستلای"
+
+msgid "The start date is invalid"
+msgstr "د پيل نېټه ناسمه ده"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "دا ترتيبات د ټول کورس، په شمول د هغې سېشنونو او ډلو، لپاره پلي کېږي."
+
+msgid "This announcement has already been sent by email."
+msgstr "دا اعلان لا دمخه برېښناليک له لارې لېږل شوی دی."
+
+msgid "This discussion is hidden from learners"
+msgstr "دا بحث له زده کوونکو پټ دی"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "دا جنراتيو AI اوزار تاسو ته اجازه درکوي چې د خپل کورس د روښانه کولو لپاره انځورونه او لنډ ويډيوګانې جوړ کړئ. د متن په واسطه د هغه څه تشریح کولو سره چې تاسو غواړئ، تاسو به د AI ماډل ته اړين عناصر ورکړئ ترڅو انځور يا ويډيو جوړ کړي. مهرباني وکړئ صبر وکړئ. AI ماډل به څه وخت ونيسي او يو نتيجه به توليد کړي، چې تاسو به يې غواړئ د رسنيو په اسنادو فولډر کې خوندي کولو سره وساتئ، او بيا يې په HTML اسنادو کې ځای پر ځای کړئ. ټول AI ماډلونه د سرعت يا کيفيت له مخې برابر نه دي. AI ماډل ممکن تاسو ته يو بدل شوی پرامپټ هم درکړي، چې ستاسو د غوښتنې يوه تفصيلي تعبير دی. بيا تاسو کولی شئ دا بدل شوی پرامپټ وکاروئ ترڅو خپله غوښتنه ښه کړئ. مهرباني وکړئ پوه شئ چې دا اوزار، په ځانګړې توګه د ويډيوګانو لپاره، ممکن ستاسو سازمان ته د پام وړ لګښتونه رامنځته کړي، حتى که تاسو پرېکړه وکړئ چې توليد شوي رسنۍ خوندي نه کړئ. مهرباني وکړئ دا اوزار په مناسب ډول وکاروئ. که تاسو د هغه څه په ترلاسه کولو کې ستونزې لرئ چې غواړئ، مهرباني وکړئ د خپل AI ماډل لپاره د پرامپټينګ چلندونو په اړه په انټرنېټ کې څېړنه وکړئ."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "دا تاريخ د بنسټيز کورس پورې اړه لري. بيارغونه د سېشن نسخې جوړولو وروسته شتون لري."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "دا انځور د فورم د سرليک تر څنګ ښودل شوي اصلي فورم آيکون ځای نيسي."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "دا مخ د بنسټيز کورس څخه راځي. خوندي کول به يې د اوسني سېشن لپاره يوه نسخه جوړه کړي."
+
+msgid "This will also delete %s subcategories."
+msgstr "دا به %s فرعي کټګورۍ هم ړنګې کړي."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "دا به د %s زده کوونکو لپاره انفرادي کاري مخونه جوړ کړي."
+
+msgid "Thread history"
+msgstr "د تار تاريخ"
+
+msgid "Title and content"
+msgstr "سرليک او منځپانګه"
+
+msgid "Unable to cancel renewal right now."
+msgstr "اوس د نوي کولو حق لغوه کولای نه شو."
+
+msgid "Unable to restore renewal right now."
+msgstr "اوس د نوي کولو حق بيارغولای نه شو."
+
+msgid "Unlock page"
+msgstr "مخ خلاصول"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "د داخلي ويکي لينکونو جوړولو لپاره [[مخ]] يا [[مخ|څرګند متن]] وکاروئ."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "د نيويګېټ کولو لپاره سپیس بار يا غشي کليدونه وکاروئ"
+
+msgid "View version"
+msgstr "نسخه ليدل"
+
+msgid "Visible only to teachers"
+msgstr "يوازې ښوونکو ته ښکاره"
+
+msgid "Weight is required"
+msgstr "وزن اړين دی"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "د ويکي کټګورۍ د دې کورس لپاره غير فعال دي."
+
+msgid "Wiki categories enabled"
+msgstr "د ويکي کټګورۍ فعالې شوې"
+
+msgid "Wiki html strict filtering"
+msgstr "ويکي html سخت فلټر کول"
+
+msgid "Wiki settings"
+msgstr "ويکي ترتيبات"
+
+msgid "Wiki settings updated"
+msgstr "ويکي ترتيبات تازه شول"
+
+msgid "You are viewing a historical version of this page"
+msgstr "تاسو د دې مخ يوه تاريخي نسخه ګورئ"
+
+msgid "You can attach one or more files to this reply."
+msgstr "تاسو کولی شئ يو يا څو دوتنې دې ځواب سره ضميمه کړئ."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "تاسو کولی شئ دا دندې مخ سم کړئ، خو د زده کوونکو کاري مخونه به نه بدلېږي."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "تاسو کولی شئ په پوښتنه کې {{class_name}} او {{student_full_name}} ټاګونه وکاروئ."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "تاسو ۲۰ دقيقې وخت لرئ چې دا مخ سم کړئ مخکې له دې چې د سمون قفل پای ته ورسي."
+
+msgid "by"
+msgstr "له خوا"
+
+msgid "required"
+msgstr "اړين"
+
+msgid "Incorrect password."
+msgstr "ناسم پټنوم."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "د فایل بشپړتیا خبرتیا د ۱ ساعت لپاره ودرول شوه."
+
+msgid "New baseline established: %s files."
+msgstr "نوی اساسي کرښه جوړه شوه: %s فایلونه."
+
+msgid "Scan complete: changes were detected."
+msgstr "سکین بشپړ شو: بدلونونه وموندل شول."
+
+msgid "Scan complete: no changes were detected."
+msgstr "سکین بشپړ شو: هیڅ بدلون ونه موندل شو."
+
+msgid "File integrity"
+msgstr "د فایل بشپړتیا"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "دا راپور نصب شوي فایلونه (هرڅه پرته له var/ او .git/، که څه هم .git/config لاهم د لرې کنټرول لپاره څارل کیږي) د یو باوري اساسي کرښې سره پرتله کوي، ترڅو غیر متوقع اضافه، بدلونونه یا حذفونه وموندل شي."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "تاسو کولی شئ لاندې وروستی راپور وګورئ. د سکین چلول، خبرتیا ودرول، یا نوې اساسي کرښه جوړول د نړیوال مدیر ته اړتیا لري."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "خبرتیا اوس د ساتنې لپاره ودرول شوې ده. دا به په اتوماتيک ډول په %date% بیا پیل شي."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "تر اوسه هیڅ سکین نه دی چلول شوی. له دلته یو چل کړئ، یا د کمانډ لاین سره app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "وروستی سکین"
+
+msgid "Files scanned"
+msgstr "سکین شوي فایلونه"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "تر اوسه هیڅ اساسي کرښه نه وه: دا سکین یوه جوړه کړه. بدلونونه به له راتلونکي سکین څخه راپور شي."
+
+msgid "No changes detected since the baseline."
+msgstr "له اساسي کرښې راهیسې هیڅ بدلون ونه موندل شو."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "د Git لرې ترتیب (.git/config) بدل شوی دی. تصدیق کړئ چې دا متوقع و."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "سکین ژر ودرېد ځکه چې یو فرعي لارښود نه شو لوستل کېدای (د فایل اجازې وګورئ). لاندې پایلې ممکن نيمګړې وي."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "د بشپړ لیست کولو لپاره ډیر بدلونونه؛ یوازې د هرې کټګورۍ لومړني داخلونه لاندې ښودل شوي. د بشپړ لیست لپاره CEF لاګ وګورئ."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% فایل(ونه) نه شو لوستل کېدای (اجازې) او پریښودل شول."
+
+msgid "Run a scan now"
+msgstr "اوس یو سکین چل کړئ"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "د ۱ ساعت لپاره خبرتیا ودرول (د ساتنې لپاره)"
+
+msgid "Pause for 1 hour"
+msgstr "د ۱ ساعت لپاره ودرول"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "د اوسني فایل ونې باور کول د نوې اساسي کرښې په توګه"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "دا به هر اوسنی فایل د سم په توګه باور کړي، په شمول هر غیر بیاکتل شوی بدلون. دوام ورکړئ؟"
+
+msgid "Establish new baseline"
+msgstr "نوې اساسي کرښه جوړول"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "د سکین مهالویش له یوې سیسټم crontab څخه، د بېلګې په توګه"
+
+msgid "File integrity alert on %platform%"
+msgstr "د فایل بشپړتیا خبرتیا په %platform% کې"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "د فایل بشپړتیا سکین په پلیټ فارم کې بدلونونه وموندل:"
+
+msgid "Added files"
+msgstr "اضافه شوي فایلونه"
+
+msgid "Modified files"
+msgstr "بدل شوي فایلونه"
+
+msgid "Deleted files"
+msgstr "حذف شوي فایلونه"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "د ادارې > امنیت > د فایل بشپړتیا څخه بشپړ راپور بیاکتنه وکړئ."
+
+msgid "Password to confirm pausing alerts"
+msgstr "د خبرتیاوو ودرولو لپاره د تصدیق پټنوم"
+
+msgid "Password to confirm the new baseline"
+msgstr "د نوې اساسي کرښې لپاره د تصدیق پټنوم"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "یو سکین لا دمخه روان دی. مهرباني وکړئ د بل پیلولو دمخه د هغې بشپړېدو ته انتظار وکړئ."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "اوس یو سکین روان دی (په %date% پیل شوی). یو بشپړ سکین څو دقیقې وخت نیسي؛ دا پاڼه په خوندي ډول بیا بارېدای شي ترڅو پرمختګ وګورئ."
+
+msgid "Currently processing"
+msgstr "اوس پروسس کېدی شي"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "یو پخوانی سکین (په %date% پیل شوی) د بشپړېدو دمخه ودرول شو — پروسه نوره نه چلیږي. تاسو په خوندي ډول یو نوی پیل کولی شئ."
+
+msgid "files"
+msgstr "فایلونه"
+
+msgid "Permissions changed"
+msgstr "اجازې بدلې شوې"
+
+msgid "Files with changed permissions"
+msgstr "هغه فایلونه چې اجازې یې بدلې شوې"
+
+msgid "Alert history"
+msgstr "خبرتیا تاریخچه"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "هر سکین چې یو څه وموندل، حتی وروسته له دې چې انحراف حل شي یا نوې اساسي کرښه جوړه شي — د پورته راپور برعکس، یو پاک سکین یا بیا اساسي کول هیڅکله دا نه پاکوي."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "دا ننوتنه د نیولو په وخت کې ټوټه شوې وه؛ د بشپړ لیست لپاره CEF لاګ وګورئ."
+
+msgid "No alert has been recorded yet."
+msgstr "تر اوسه هیڅ خبرتیا ثبت شوې نه ده."
+
+msgid "Git remote changed"
+msgstr "Git ریموټ بدل شو"
+
+msgid "Press enter to select"
+msgstr "د انتخاب لپاره انټر فشار ورکړئ"
+
+msgid "Press enter to remove"
+msgstr "د لرې کولو لپاره انټر فشار ورکړئ"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "هیڅ عناصر ونه موندل شول. د لټون پوښتنې بدلولو ته پام وکړئ."
+
+msgid "List is empty."
+msgstr "لیست خالي دی."
+
+msgid "Your session has expired. Please try again."
+msgstr "ستاسو ناسته پای ته ورسېده. مهرباني وکړئ بیا هڅه وکړئ."
+
+msgid "Generate with AI"
+msgstr "د AI سره جوړول"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "د دې کورس موضوع استازیتوب کوونکی عصري او ښه راغلاست انځور، په پاک فلیټ ډیزاین سټایل کې، زما پلیټ فارم رنګونه د ټینګار په توګه کارول."
+
+msgid "Back to account"
+msgstr "حساب ته بیرته"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "ستاسو نظر به موږ سره مرسته وکړي چې راتلونکي روزنیزې غونډې ښه کړو."
+
+msgid "Thank you for sharing your feedback."
+msgstr "له تاسو څخه مننه چې خپل نظر شریک کړ."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "د روزنې له ټول کیفیت څخه څومره راضي یاست؟"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "د منځپانګې له اړوندوالي څخه څومره راضي یاست؟"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "د تشریحاتو له روڼتیا څخه څومره راضي یاست؟"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "د روزنې له تنظیم او سرعت څخه څومره راضي یاست؟"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "د هغه څه له عملي ګټورتوب څخه چې زده مو کړل څومره راضي یاست؟"
+
+msgid "Would you recommend this training to other people?"
+msgstr "آیا تاسو دا روزنه نورو خلکو ته وړاندیز کوئ؟"
+
+msgid "What should we improve in future editions?"
+msgstr "په راتلونکو نسخو کې څه ته اړتیا لرو چې ښه کړو؟"
+
+msgid "Very satisfied"
+msgstr "ډېر راضي"
+
+msgid "Satisfied"
+msgstr "راضي"
+
+msgid "Neutral"
+msgstr "بې طرفه"
+
+msgid "Dissatisfied"
+msgstr "ناراضي"
+
+msgid "Very dissatisfied"
+msgstr "ډېر ناراضي"
+
+msgid "Add destination"
+msgstr "د منزل اضافه کول"
+
+msgid "Add this test to the assessment tool"
+msgstr "دا ازموینه د ارزونې وسیلې ته اضافه کړئ"
+
+msgid "Attempts and timing"
+msgstr "هڅې او وخت"
+
+msgid "Available questions"
+msgstr "شته پوښتنې"
+
+msgid "Cancel and return to learning path"
+msgstr "لغوه کول او د زده کړې لارې ته بیرته راستنېدل"
+
+msgid "Category destinations"
+msgstr "د کټګورۍ منزلونه"
+
+msgid "Classification"
+msgstr "طبقه بندي"
+
+msgid "Context"
+msgstr "متن"
+
+msgid "Could not load exercise configuration"
+msgstr "د تمرین تنظیمات نه شي پورته کولای"
+
+msgid "Could not save exercise"
+msgstr "تمرین نه شي خوندي کولای"
+
+msgid "Display and learning path"
+msgstr "ښودنه او د زده کړې لاره"
+
+msgid "Edit test"
+msgstr "ازموینه سمول"
+
+msgid "Exercise settings saved."
+msgstr "د تمرین تنظیمات خوندي شول."
+
+msgid "Extra settings"
+msgstr "اضافي تنظیمات"
+
+msgid "Feedback and results"
+msgstr "غبرګون او پایلې"
+
+msgid "Finish exercise"
+msgstr "تمرین بشپړول"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "د دې تمرین ژبه د سرچینې میټاډاټا په توګه پېژني. دا پخپله د لټون شاخص جوړولو وړتیا نه فعالوي."
+
+msgid "Maximum score (%)"
+msgstr "اعظمي نمرې (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "میټاډاټا مهارتونه او اضافي ساحې لري چې د تمرینونو لپاره تنظیم شوي. دا اختیاري ده او تر هغه پورې پټه پاتې کېږي چې نه وي پرانستل شوې."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "د دې تمرین لپاره تر اوسه هیڅ پوښتنې کټګورۍ شتون نلري."
+
+msgid "Question categories matrix"
+msgstr "د پوښتنو کټګوریو مټریکس"
+
+msgid "Questions behavior"
+msgstr "د پوښتنو چلند"
+
+msgid "Random by category"
+msgstr "د کټګورۍ له مخې تصادفي"
+
+msgid "Remove destination"
+msgstr "د منزل لرې کول"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "قواعد د نمرې سلنې له مخې په زیاتېدونکي ترتیب سره ارزول کېږي. د ازموینې د پای ته رسولو لپاره بشپړ تمرین غوره کړئ."
+
+msgid "Score and final messages"
+msgstr "نمرې او وروستنۍ پیغامونه"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "ځینې اختیارونه د تمرین له جوړېدو وروسته تړل شوي دي."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "دا ارزښت په ټولیز وخت (دقیقو) کې ساتل کېږي."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "د ټولو شته پوښتنو ساتلو لپاره 0 وکاروئ. -1 وکاروئ چیرته چې ټولې شته پوښتنې اجازه لري."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "دا ساحې وکاروئ ترڅو تمرین له خپلو ښودنې اختیارونو څخه خپلواکه طبقه بندي کړئ."
+
+msgid "Invite by email"
+msgstr "د برېښنالیک له لارې بلنه"
+
+msgid "Invitation has been sent"
+msgstr "بلنه استول شوې ده"
+
+msgid "Sent on"
+msgstr "استول شوې په"
+
+msgid "Accepted on"
+msgstr "منل شوې په"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "دا کورس په یوه سیشن کې پرانيستل شوی دی. دلته بلنه استول به ترلاسه کوونکی د ټول سیشن %s لپاره نوم لیکنه وکړي، نه یوازې د دې کورس لپاره."
+
+msgid "Revoke"
+msgstr "لغوه کول"
+
+msgid "Revoked"
+msgstr "لغوه شوی"
+
+msgid "Invitation has been revoked"
+msgstr "بلنه لغوه شوې ده"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "آیا تاسې ډاډه یاست چې د %s ته استول شوې بلنه لغوه کول غواړئ؟"
+
+msgid "No default room"
+msgstr "هیڅ ډیفالټ خونه نشته"
+
+msgid "Floor"
+msgstr "پوړ"
+
+msgid "Capacity"
+msgstr "ظرفیت"
+
+msgid "Use attendance default room"
+msgstr "د حاضرۍ ډیفالټ خونه وکاروئ"
+
+msgid "Floor number"
+msgstr "د پوړ شمېره"
+
+msgid "Copy to students"
+msgstr "زده کوونکو ته کاپي کول"
+
+msgid "Generate a quick test on this topic"
+msgstr "په دې موضوع باندې یو چټک ازموینه جوړول"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "ذخیره شوي سند منځپانګه به د پروسس لپاره AI ماډل ته واستول شي."
+
+msgid "MCP API key"
+msgstr "MCP API کیلي"
+
+msgid "Authorized applications"
+msgstr "مجاز غوښتنلیکونه"
+
+msgid "Your session is about to expire"
+msgstr "ستاسې سیشن نږدې پای ته رسېږي"
+
+msgid "Do you want to continue your session?"
+msgstr "آیا غواړئ خپل سیشن ته دوام ورکړئ؟"
+
+msgid "Your session details have been lost, please login again."
+msgstr "ستاسو د ناستې جزئیات له لاسه تللي، مهرباني وکړئ بیا ننوتل وکړئ."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "دې سرچینې ته لاسرسی رد شوی. داسې ښکاري چې تاسو اړینې اجازې نلرئ."
+
+msgid "Stay connected"
+msgstr "نښلېدل پاتې شئ"
+
+msgid "You will be signed out in %s seconds."
+msgstr "تاسې به په %s ثانیو کې وتل شئ."
+
+msgid "No descriptions available yet."
+msgstr "تر اوسه هیڅ تشریحات شتون نلري."
+
+msgid "%s users selected"
+msgstr "%s کاروونکي غوره شوي"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "غوره شوي کاروونکي کورس ته نوم لیکنه شوي دي"
+
+msgid "Import teachers"
+msgstr "ښوونکي واردول"
+
+msgid "Import learners"
+msgstr "زده کوونکي واردول"
+
+msgid "Select CSV file"
+msgstr "CSV فایل غوره کړئ"
+
+msgid "Some users could not be subscribed"
+msgstr "ځینې کاروونکي نشي نوم لیکنه کېدای"
+
+msgid "Browse available classes"
+msgstr "شته ټولګي وګورئ"
+
+msgid "Back to linked classes"
+msgstr "شریکو ټولګیو ته بیرته"
+
+msgid "No classes are currently linked to this course."
+msgstr "اوس مهال د دې کورس سره هیڅ ټولګي شریک شوي نه دي."
+
+msgid "No available classes were found for this course."
+msgstr "د دې کورس لپاره هیڅ شته ټولګي ونه موندل شول."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "آیا تاسې ډاډه یاست چې غوره شوي کاروونکي نوم لیکنه لغوه کول غواړئ؟"
+
+msgid "Learning path access"
+msgstr "د زده کړې لارې لاسرسی"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "یوازې غوره شوي کاروونکي او ډلې کولی شي دې زده کړې لارې ته لاسرسی ولري. د خوندي کولو وروسته یې اداره کړئ."
+
+msgid "All current and future course users can access this learning path."
+msgstr "ټول اوسني او راتلونکي کورس کاروونکي کولی شي دې زده کړې لارې ته لاسرسی ولري."
+
+msgid "All course users"
+msgstr "ټول کورس کاروونکي"
+
+msgid "Selected users and groups"
+msgstr "ټاکل شوي کاروونکي او ډلې"
+
+msgid "No access"
+msgstr "لاسرسی نشته"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "یوازې هغه کاروونکي او ډلې چې دلته اضافه شوي دي کولی شي دې زده کړې لارې ته لاسرسی ولري."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "د پوښتنو شمېر تر %s پورې محدود دی"
+
+msgid "Open exercise player"
+msgstr "د تمرین پلیر پرانيستل"
+
+msgid "The score is hidden for this exercise."
+msgstr "د دې تمرین لپاره نمرې پټې دي."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "اصلاحات د تمرین د پایلو ترتیباتو له مخې پټ شوي دي."
+
+msgid "Progressive adaptive result"
+msgstr "تدریجي تطابقي پایله"
+
+msgid "Achieved level"
+msgstr "ترلاسه شوی کچه"
+
+msgid "Correction history"
+msgstr "د اصلاح تاریخ"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "د دې هڅې لپاره د لاسي اصلاحاتو تاریخ."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "دا تمرین د رادار/سپایډر ویب پایلې حالت کاروي. چارټ په دې پاڼه کې شتون نلري."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "د پوښتنو جزیات د تمرین د پایلو ترتیباتو له مخې پټ شوي دي."
+
+msgid "Media question"
+msgstr "رسنیزه پوښتنه"
+
+msgid "Pending correction"
+msgstr "اصلاح ته انتظار"
+
+msgid "No answer"
+msgstr "ځواب نشته"
+
+msgid "Blank %s"
+msgstr "تشه %s"
+
+msgid "Your order"
+msgstr "ستاسو ترتیب"
+
+msgid "Correct order"
+msgstr "سم ترتیب"
+
+msgid "Delineation review"
+msgstr "د خطاطۍ بیاکتنه"
+
+msgid "Learner clicks"
+msgstr "د زده کوونکي کلیکونه"
+
+msgid "Question image"
+msgstr "د پوښتنې انځور"
+
+msgid "No hotspot image available"
+msgstr "د هټ سپاټ انځور شتون نلري"
+
+msgid "Learner delineation"
+msgstr "د زده کوونکي خطاطي"
+
+msgid "Expected delineation"
+msgstr "تمه شوې خطاطي"
+
+msgid "Expected zones"
+msgstr "تمه شوې زونونه"
+
+msgid "Zone"
+msgstr "زون"
+
+msgid "Learner annotation"
+msgstr "د زده کوونکي تشریح"
+
+msgid "No annotation image available"
+msgstr "د تشریح انځور شتون نلري"
+
+msgid "This answer is pending teacher correction."
+msgstr "دا ځواب د ښوونکي اصلاح ته انتظار دی."
+
+msgid "Teacher comment"
+msgstr "د ښوونکي تبصره"
+
+msgid "Teacher correction"
+msgstr "د ښوونکي اصلاح"
+
+msgid "Save correction"
+msgstr "اصلاح خوندي کول"
+
+msgid "Learner audio"
+msgstr "د زده کوونکي غږ"
+
+msgid "Download audio"
+msgstr "غږ ډاونلوډ کول"
+
+msgid "No uploaded audio"
+msgstr "اپلوډ شوی غږ نشته"
+
+msgid "Learner Office document"
+msgstr "د زده کوونکي دفتري سند"
+
+msgid "Learner file"
+msgstr "د زده کوونکي دوتنه"
+
+msgid "Download Office document"
+msgstr "دفتري سند ډاونلوډ کول"
+
+msgid "No submitted document"
+msgstr "سپارل شوی سند نشته"
+
+msgid "No uploaded file"
+msgstr "اپلوډ شوې دوتنه نشته"
+
+msgid "Content item"
+msgstr "منځپانګه توکی"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "د دې پوښتنې ډول په دې پاڼه کې نشي بیاکتل کېدای."
+
+msgid "Exercise completed"
+msgstr "تمرین بشپړ شو"
+
+msgid "Could not start the attempt"
+msgstr "هڅه پیل نشوه"
+
+msgid "Invalid exercise attempt"
+msgstr "ناسمه تمرین هڅه"
+
+msgid "Could not load exercise result"
+msgstr "د تمرین پایله نه شوه بارېدای"
+
+msgid "Could not load AI providers"
+msgstr "AI چمتوونکي نه شول بارېدای"
+
+msgid "Could not generate AI suggestion"
+msgstr "د AI وړاندیز جوړول ممکن نه و"
+
+msgid "Correction saved"
+msgstr "اصلاح خوندي شوه"
+
+msgid "Could not save correction"
+msgstr "اصلاح خوندي کول ممکن نه و"
+
+msgid "Create exercise"
+msgstr "تمرین جوړول"
+
+msgid "Exercise categories"
+msgstr "د تمرین کټګورۍ"
+
+msgid "Question categories"
+msgstr "د پوښتنو کټګورۍ"
+
+msgid "Search by exercise title or description."
+msgstr "د تمرین د سرلیک یا تشریح له مخې لټول."
+
+msgid "Search exercises"
+msgstr "تمرینونه لټول"
+
+msgid "No exercises found"
+msgstr "هیڅ تمرین ونه موندل شو"
+
+msgid "Open exercise"
+msgstr "تمرین پرانيستل"
+
+msgid "Disable autolaunch"
+msgstr "اتومات پیل غیرفعال کول"
+
+msgid "Enable autolaunch"
+msgstr "اتومات پیل فعال کول"
+
+msgid "Export QTI2"
+msgstr "QTI2 صادرول"
+
+msgid "Bulk actions"
+msgstr "ډله ییزې کړنې"
+
+msgid "Selected exercises"
+msgstr "ټاکل شوي تمرینونه"
+
+msgid "No exercises selected"
+msgstr "هیڅ تمرین نه دی ټاکل شوی"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "ایا تاسو ډاډه یاست چې دا کړنه په ټاکل شویو تمرینونو باندې پلي کول غواړئ؟"
+
+msgid "Bulk action completed"
+msgstr "ډله ییزه کړنه بشپړه شوه"
+
+msgid "Could not update exercises"
+msgstr "تمرینونه تازه کول ممکن نه و"
+
+msgid "Could not update exercise"
+msgstr "تمرین تازه کول ممکن نه و"
+
+msgid "Copy exercise"
+msgstr "تمرین کاپي کول"
+
+msgid "Delete exercise"
+msgstr "تمرین ړنګول"
+
+msgid "Could not load exercises"
+msgstr "تمرینونه بارول ممکن نه و"
+
+msgid "No limit"
+msgstr "هیڅ حد نه"
+
+msgid "Add selected questions to the test"
+msgstr "ټاکل شوې پوښتنې ازموینې ته اضافه کول"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "دا پوښتنه په فعاله ازموینه کې کارول شوې او دلته نه شي سمون کیدای."
+
+msgid "This question cannot be edited here."
+msgstr "دا پوښتنه دلته نه شي سمون کیدای."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "دا پوښتنه په فعاله ازموینه کې کارول شوې او دلته نه شي ړنګ کیدای."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "دا پوښتنه نه شي ړنګ کیدای ځکه چې ستاسو لاسرسی د پلیټ فارم ترتیباتو له مخې محدود دی."
+
+msgid "Already in test"
+msgstr "دمخه په ازموینه کې"
+
+msgid "Select at least one question."
+msgstr "لږ تر لږه یوه پوښتنه وټاکئ."
+
+msgid "Question bank updated"
+msgstr "د پوښتنو بانک تازه شو"
+
+msgid "Could not update the question bank"
+msgstr "د پوښتنو بانک تازه کول ممکن نه و"
+
+msgid "Could not load the question bank"
+msgstr "د پوښتنو بانک بارول ممکن نه و"
+
+msgid "Total score"
+msgstr "ټوله نمره"
+
+msgid "Starting"
+msgstr "پیل کول"
+
+msgid "Attempt history"
+msgstr "د هڅې تاریخ"
+
+msgid "No attempts yet"
+msgstr "تر اوسه هیڅ هڅه نه ده شوې"
+
+msgid "Invalid exercise"
+msgstr "ناسم تمرین"
+
+msgid "Could not load exercise overview"
+msgstr "د تمرین عمومي کتنه بارول ممکن نه و"
+
+msgid "Open test"
+msgstr "ازموینه پرانيستل"
+
+msgid "Random answers"
+msgstr "تصادفي ځوابونه"
+
+msgid "Prevent moving backwards"
+msgstr "شاته تګ مخنیوی"
+
+msgid "Previous button hidden"
+msgstr "مخکینۍ تڼۍ پټه"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "دا تمرین داسې انتخابونه کاروي چې مختلف ازموینې پلیر ته اړتیا لري."
+
+msgid "Continue test"
+msgstr "ازموینه دوام ورکول"
+
+msgid "Attempt started"
+msgstr "هڅه پیل شوه"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "د ښوونکي مخکتنه تعقیب شوې هڅه نه جوړوي."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "د تمرین هڅه پیل یا بیا پیل کړئ. مسوده ځوابونه د وروستي سپارلو دمخه خوندي کیدای شي."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "وخت حد ته ورسید. هڅه پای ته رسول."
+
+msgid "Question time reached. Saving your answer."
+msgstr "د پوښتنې وخت پای ته ورسید. ځواب مو خوندي کیږي."
+
+msgid "Finishing"
+msgstr "پای ته رسول"
+
+msgid "Draft saved"
+msgstr "مسوده خوندي شوه"
+
+msgid "Save as draft"
+msgstr "د مسودې په توګه خوندي کړئ"
+
+msgid "Statement"
+msgstr "بیان"
+
+msgid "Drop each option on the matching answer"
+msgstr "هر اختیار د سمون ځواب باندې واچوئ"
+
+msgid "Clear match"
+msgstr "سمون پاک کړئ"
+
+msgid "Click to place the selected option here"
+msgstr "دلته د ټاکل شوي اختیار ځای پر ځای کولو لپاره کلیک وکړئ"
+
+msgid "Select an option, then click here"
+msgstr "یو اختیار وټاکئ، بیا دلته کلیک وکړئ"
+
+msgid "Already matched"
+msgstr "دمخه سمون شوی"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "تاسو کولی شئ یو اختیار یو ځواب ته کش کړئ، یا یو اختیار وټاکئ او بیا یو هدف بکس کلیک کړئ."
+
+msgid "Put the items in the correct order."
+msgstr "توکي په سمه ترتیب کې واچوئ."
+
+msgid "Move left"
+msgstr "چپ ته خوځول"
+
+msgid "Move right"
+msgstr "ښي ته خوځول"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "تاسو کولی شئ توکي چپ یا ښي ته کش کړئ، یا د خوځولو تڼۍ وکاروئ ترڅو ترتیب بدل کړئ."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "تاسو کولی شئ توکي کش کړئ یا د خوځولو تڼۍ وکاروئ ترڅو ترتیب بدل کړئ."
+
+msgid "Or upload an audio file"
+msgstr "یا یو آډیو فایل اپلوډ کړئ"
+
+msgid "Selected audio"
+msgstr "ټاکل شوی آډیو"
+
+msgid "Uploaded audio"
+msgstr "اپلوډ شوی آډیو"
+
+msgid "Office document"
+msgstr "دفتري سند"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "سند په لاندې ایډیټر کې بشپړ کړئ. فایل به د ښوونکي اصلاح لپاره دې هڅې سره ضمیمه شي."
+
+msgid "Reload Office editor"
+msgstr "د دفتر ایډیټر بیا بارول"
+
+msgid "Prepare Office document"
+msgstr "دفتري سند چمتو کړئ"
+
+msgid "Open in new tab"
+msgstr "په نوې ټب کې پرانيستل"
+
+msgid "Preparing Office document"
+msgstr "دفتري سند چمتو کول"
+
+msgid "Submitted document"
+msgstr "سپارل شوی سند"
+
+msgid "Annotation tools"
+msgstr "تشریحي وسایل"
+
+msgid "Text to place"
+msgstr "د ځای پر ځای کولو متن"
+
+msgid "Click the image to place the text annotation."
+msgstr "د متن تشریح ځای پر ځای کولو لپاره انځور کلیک کړئ."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "د لارې ټکي اضافه کولو لپاره انځور کلیک کړئ. لارې جلا کولو لپاره نوې لاره پیل کړئ."
+
+msgid "Start new path"
+msgstr "نوې لاره پیل کړئ"
+
+msgid "Current annotations"
+msgstr "اوسنۍ تشریحات"
+
+msgid "Remove point"
+msgstr "ټکی لرې کړئ"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "د حد پولیګون رسمولو لپاره انځور کلیک کړئ."
+
+msgid "Click a marker to remove it."
+msgstr "د لرې کولو لپاره یو مارکر کلیک کړئ."
+
+msgid "Placed"
+msgstr "ځای پر ځای شوی"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "یو ځواب وټاکئ، بیا د نښه کولو لپاره انځور کلیک کړئ."
+
+msgid "Reading speed"
+msgstr "د لوستلو سرعت"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "دا د پوښتنې ډول په دې پلیر کې نه ښودل کیدی شي."
+
+msgid "Save draft"
+msgstr "مسوده خوندي کړئ"
+
+msgid "I confirm that my answers were saved."
+msgstr "زه تاییدوم چې زما ځوابونه خوندي شوي دي."
+
+msgid "Finish test"
+msgstr "ازموینه پای ته ورسوئ"
+
+msgid "Attempt finished"
+msgstr "هڅه پای ته ورسیده"
+
+msgid "Question category"
+msgstr "د پوښتنې کټګوري"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "تاسو د دې پوښتنې کټګورۍ پورې اړوند پوښتنې پای ته ورسولې، دا ستاسو وروستۍ چانس دی چې بیرته لاړ شئ او هغه پوښتنې بیاکتنه وکړئ."
+
+msgid "Question time left"
+msgstr "د پوښتنې پاتې وخت"
+
+msgid "Time left"
+msgstr "پاتې وخت"
+
+msgid "Current attempt"
+msgstr "اوسنۍ هڅه"
+
+msgid "Could not save draft answer"
+msgstr "مسوده ځواب نه شو خوندي کولای"
+
+msgid "Could not load exercise"
+msgstr "تمرین نه شو بارولای"
+
+msgid "Draft answer saved"
+msgstr "مسوده ځواب خوندي شو"
+
+msgid "Could not finish the attempt"
+msgstr "هڅه بشپړه نشوه"
+
+msgid "Could not prepare Office document"
+msgstr "د آفيس سند چمتو نشو"
+
+msgid "Back to learner score"
+msgstr "د زده کوونکي نمرې ته بېرته"
+
+msgid "Disable auto refresh"
+msgstr "خودکار تازه کول غیرفعال کړئ"
+
+msgid "Enable auto refresh"
+msgstr "خودکار تازه کول فعال کړئ"
+
+msgid "Live window"
+msgstr "ژوندۍ کړکۍ"
+
+msgid "Ongoing attempts"
+msgstr "جاري هڅې"
+
+msgid "Completed attempts"
+msgstr "بشپړې شوې هڅې"
+
+msgid "Started"
+msgstr "پيل شوې"
+
+msgid "Last activity"
+msgstr "وروستۍ فعاليت"
+
+msgid "Could not load live results"
+msgstr "ژوندۍ پايلې نه شي بارېدلی"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "دا تمرین يوازې د لوستلو لپاره دی ځکه چې دا په يوې زده کړې لار کې شامل دی."
+
+msgid "Select a question type to create a question."
+msgstr "د پوښتنې جوړولو لپاره د پوښتنې ډول وټاکئ."
+
+msgid "Click to preview"
+msgstr "د مخکتنې لپاره کلیک وکړئ"
+
+msgid "Hide preview"
+msgstr "مخکتنه پټه کړئ"
+
+msgid "Shape"
+msgstr "شکل"
+
+msgid "Coordinates"
+msgstr "همغږۍ"
+
+msgid "Blanks"
+msgstr "تشې"
+
+msgid "Switchable blanks"
+msgstr "بدلېدونکې تشې"
+
+msgid "Blank"
+msgstr "تشه"
+
+msgid "Input width"
+msgstr "د ننوتلو پلنوالی"
+
+msgid "Orientation"
+msgstr "لورى"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "د اوسني تمرین د غبرګون حالت سره شتون نلري"
+
+msgid "Not available in the learning path creation flow"
+msgstr "د زده کړې لارې جوړولو بهير کې شتون نلري"
+
+msgid "Delete question"
+msgstr "پوښتنه ړنګول"
+
+msgid "Could not update exercise questions"
+msgstr "د تمرین پوښتنې نه شي تازه کولى"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "تمرین د زده کړې لارې ته نه شي اضافه کولى"
+
+msgid "A valid exercise id is required."
+msgstr "يو معتبر تمرین پېژندنې ته اړتيا ده."
+
+msgid "Could not load exercise questions"
+msgstr "د تمرین پوښتنې نه شي بارېدلی"
+
+msgid "Delete selected attempts"
+msgstr "ټاکل شوې هڅې ړنګول"
+
+msgid "Before date"
+msgstr "د نېټې مخکې"
+
+msgid "Pending corrections"
+msgstr "پاتې اصلاحات"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "دا تمرین د نمرې کتاب لخوا تړل شوی دی. د هڅې پاکولو کړنې غیرفعال دي."
+
+msgid "No attempts found"
+msgstr "هېڅ هڅه ونه موندل شوه"
+
+msgid "Review"
+msgstr "بيا کتنه"
+
+msgid "Print/PDF"
+msgstr "چاپ/PDF"
+
+msgid "Could not load exercise report"
+msgstr "د تمرین راپور نه شي بارېدلی"
+
+msgid "Select at least one attempt"
+msgstr "لږ تر لږه يوه هڅه وټاکئ"
+
+msgid "Delete selected attempts?"
+msgstr "ټاکل شوې هڅې ړنګول؟"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "د بيا کتل شوې هڅې پايلې برېښناليکونه ولېږل شي؟"
+
+msgid "Could not send emails"
+msgstr "برېښناليکونه نه شي لېږل کىدلى"
+
+msgid "Exercise result emails sent"
+msgstr "د تمرین پايلې برېښناليکونه ولېږل شول"
+
+msgid "Skipped"
+msgstr "پرېښودل شوې"
+
+msgid "Close attempt?"
+msgstr "هڅه وتړل شي؟"
+
+msgid "Attempt closed"
+msgstr "هڅه وتړل شوه"
+
+msgid "Could not close attempt"
+msgstr "هڅه نه شي تړل کىدلى"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "د دې هڅې پايله د زده کوونکي ته برېښناليک له لارې ولېږل شي؟"
+
+msgid "Email sent"
+msgstr "برېښناليک ولېږل شو"
+
+msgid "Could not send email"
+msgstr "برېښناليک نه شي لېږل کىدلى"
+
+msgid "Attempt deleted"
+msgstr "هڅه ړنګه شوه"
+
+msgid "Could not delete attempt"
+msgstr "هڅه نشو ړنګولای"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "د سرلیک او تشریح ستنو لرونکی CSV فایل وټاکئ."
+
+msgid "Manage categories used to classify questions."
+msgstr "هغه کټګورۍ وسموئ چې د پوښتنو د طبقه‌بندۍ لپاره کارول کېږي."
+
+msgid "Manage categories used to classify exercises."
+msgstr "هغه کټګورۍ وسموئ چې د تمرینونو د طبقه‌بندۍ لپاره کارول کېږي."
+
+msgid "Could not load categories"
+msgstr "کټګورۍ نه‌شو پورته کولای"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "وارد شوې کټګورۍ: %s. پاتې شوې قطارونه: %s."
+
+msgid "Imported categories: %s."
+msgstr "وارد شوې کټګورۍ: %s."
+
+msgid "Could not import categories"
+msgstr "کټګورۍ نه‌شو واردولای"
+
+msgid "Could not save category"
+msgstr "کټګوري نه‌شو خوندي کولای"
+
+msgid "Answer distribution"
+msgstr "د ځوابونو وېش"
+
+msgid "Configured answers"
+msgstr "ترتیب شوي ځوابونه"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "د ځینو پوښتنو ډولونو لپاره تفصیلي ځواب شمېرنه په مهاجرت شوي راپور کې تر اوسه شتون نه لري."
+
+msgid "No report by question data found"
+msgstr "د پوښتنې له مخې راپور معلومات ونه موندل شول"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "د دې پوښتنې ډول لپاره تفصیلي ځواب شمېرنه په مهاجرت شوي راپور کې تر اوسه شتون نه لري."
+
+msgid "No answer distribution found"
+msgstr "د ځواب وېش ونه موندل شو"
+
+msgid "Could not load report by question"
+msgstr "د پوښتنې له مخې راپور نه‌شو پورته کولای"
+
+msgid "Question settings"
+msgstr "د پوښتنې امستنې"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "د وخت د حد نه شتون لپاره تش یا ۰ پریږدئ."
+
+msgid "Time limit in seconds"
+msgstr "د وخت حد په ثانیو کې"
+
+msgid "Attached questions"
+msgstr "نښلول شوې پوښتنې"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "دلته یوازې هغه پوښتنې لیست شوي چې د اوسني تمرین دننه د دې رسنیزې پوښتنې سره نښلول شوي دي."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "په اوسني تمرین کې د دې رسنیزې پوښتنې سره هیڅ پوښتنه نښلول شوې نه ده."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "د دفتري سند ټیمپلیټ پورته کړئ چې زده‌کوونکي به یې له OnlyOffice سره سم کړي."
+
+msgid "Replace Office document"
+msgstr "دفتري سند بدلول"
+
+msgid "Current Office document"
+msgstr "اوسنی دفتري سند"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "دا پوښتنه له دې وروسته چې زده‌کوونکی سم شوی سند وسپاري، په لاسي ډول سمېږي."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "ټوله نمره د هټسپټ نمرو د جمعې په توګه محاسبه کېږي."
+
+msgid "Global score"
+msgstr "نړیواله نمره"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "د هټسپټ یو قطار وټاکئ، بڼه یې غوره کړئ، بیا د انځور پر سر رسم کړئ. د څو ضلعي (پولیګون) لپاره هر ټکی کلیک کړئ او پولیګون بشپړ کړئ، یا د بشپړولو لپاره دوه ځله کلیک کړئ."
+
+msgid "Finish polygon"
+msgstr "پولیګون بشپړول"
+
+msgid "Calculated answer"
+msgstr "محاسبه شوی ځواب"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "مهرباني وکړئ خپل متن لاندې ولیکئ او د تشو ځایونو د تعریف لپاره له مربع قوسونو [...] څخه کار واخلئ."
+
+msgid "Lowest value"
+msgstr "ټیټه ارزښت"
+
+msgid "Highest value"
+msgstr "لوړه ارزښت"
+
+msgid "Fill in blanks"
+msgstr "تشې ډکول"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "د تشو د تعریف لپاره ټاکل شوي نښه‌ګانې وکاروئ. بېلګه: د پیرو پلازمینه [لیما] ده."
+
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "د خالي ځای د ښکته غورځېدونکي مینو په توګه بدلولو لپاره، انتخابونه د یوه | سره جلا کړئ، لومړی یې سم ځواب دی. بېلګه: د پیرو پلازمینه [Lima|Paris|Bogota] ده."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "د څو سم ځوابونو اجازه ورکولو لپاره، هغوی د || سره جلا کړئ. بېلګه: 1||one||uno."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "د ډراپ‌ډاون انتخابونه دننه کړئ، هر ځواب په یوه کرښه کې. بیا لاندې متوقع ځوابونه په نښه کړئ، لکه د زاړه اوزار په څېر."
+
+msgid "Refresh answers"
+msgstr "ځوابونه تازه کول"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "دا ډراپ‌ډاون ترکیبي پوښتنه یوه نړیواله نمره کاروي، لکه زاړه."
+
+msgid "Please enter at least two dropdown options."
+msgstr "مهرباني وکړئ لږ تر لږه دوه ډراپ‌ډاون انتخابونه دننه کړئ."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "لومړی د منزل انتخابونه جوړ کړئ، بیا هر توکی له سم انتخاب سره ونښلوئ."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "دا سموني ترکیبي پوښتنه یوه نړیواله نمره کاروي، لکه زاړه."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "ګامونه جوړ کړئ او د هر یو لپاره متوقع موقعیت غوره کړئ، لکه زاړه درېګېبل."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "زده‌کوونکي به ریښتینی یا غلط غوره کړي او بیا به د هڅې پر مهال د خپل باور درجه وټاکي. ایډیټر هماغه سم/غلط نمرې او د باور کچې لکه زاړه خوندي کوي."
+
+msgid "Hotspot combination"
+msgstr "هټسپټ ترکیب"
+
+msgid "Add delineation"
+msgstr "تحدید اضافه کول"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "دا دفتري سند پوښتنه هیڅ ځواب انتخابونه نه لري. نمره یې د سمولو/پایلې بیاکتنې پر مهال ټاکل کېږي."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "دا اپلوډ پوښتنه هیڅ ځواب انتخابونه نه لري. نمره یې د سمولو/پایلې بیاکتنې پر مهال ټاکل کېږي."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "دا شفاهي بیان پوښتنه هیڅ ځواب انتخابونه نه لري. نمره یې د سمولو/پایلې بیاکتنې پر مهال ټاکل کېږي."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "دا خلاصه پوښتنه هیڅ ځواب انتخابونه نه لري. نمره یې د سمولو/پایلې بیاکتنې پر مهال ټاکل کېږي."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "د سکرول سرعت تنظیماتو سره د لوستلو متن اضافه کړئ."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "د نمرې اضافه کولو پرته منځپانګه، رسنۍ یا لوستلو شرایط اضافه کړئ."
+
+msgid "Insert a page break without adding score."
+msgstr "د نمرې اضافه کولو پرته د مخ ماتونه داخل کړئ."
+
+msgid "Could not save question"
+msgstr "پوښتنه نه شوه خوندي کولای"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "یوازې DOC، DOCX، XLS یا XLSX اسناد اجازه لري."
+
+msgid "Please select an Office document."
+msgstr "مهرباني وکړئ یو آفس سند وټاکئ."
+
+msgid "Please draw at least one hotspot."
+msgstr "مهرباني وکړئ لږترلږه یو هټ سپاټ رسم کړئ."
+
+msgid "Please draw at least one delineation."
+msgstr "مهرباني وکړئ لږترلږه یو حد رسم کړئ."
+
+msgid "The fill in blanks text is required."
+msgstr "د تشو ډکولو متن اړین دی."
+
+msgid "At least one expected answer is required."
+msgstr "لږترلږه یو متوقع ځواب اړین دی."
+
+msgid "At least two draggable items are required."
+msgstr "لږترلږه دوه کش کولو وړ توکي اړین دي."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "هر کش کولو وړ توکی باید یو معتبر هدف ځای سره ونښلول شي."
+
+msgid "At least two matching options are required."
+msgstr "لږترلږه دوه سمون اختیارونه اړین دي."
+
+msgid "At least two matching pairs are required."
+msgstr "لږترلږه دوه سمون جوړې اړین دي."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "هره سمون جوړه باید یو معتبر اختیار سره ونښلول شي."
+
+msgid "At least two answers are required."
+msgstr "لږترلږه دوه ځوابونه اړین دي."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "هر ریښتیا/غلط ځواب باید ریښتیا یا غلط وټاکل شي."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "یوه ځانګړی ځواب پوښتنه باید دقیقاً یو سم ځواب ولري."
+
+msgid "At least one correct answer is required."
+msgstr "لږترلږه یو سم ځواب اړین دی."
+
+msgid "Could not load question"
+msgstr "پوښتنه نه شوه بار کولای"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "یو کورس وټاکئ او د نړیوال تمرین پایلو راپور د CSV په توګه صادر کړئ."
+
+msgid "Back to reports catalog"
+msgstr "راپورونو کتلاګ ته بیرته"
+
+msgid "Could not load exercise global report"
+msgstr "د تمرین نړیوال راپور نه شوه بار کولای"
+
+msgid "Imported questions"
+msgstr "وارد شوې پوښتنې"
+
+msgid "Aiken content"
+msgstr "Aiken منځپانګه"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken جنراتور نه شوه بار کولای"
+
+msgid "Could not generate Aiken content"
+msgstr "Aiken منځپانګه نه شوه جوړولای"
+
+msgid "Could not import generated Aiken content"
+msgstr "جوړ شوې Aiken منځپانګه نه شوه واردولای"
+
+msgid "Back to my courses"
+msgstr "زما کورسونو ته بیرته"
+
+msgid "Open report"
+msgstr "راپور خلاص کړئ"
+
+msgid "Questions with no automatic correction"
+msgstr "پوښتنې بې له اتوماتیک اصلاح"
+
+msgid "Could not load pending attempts"
+msgstr "پاتې هڅې نه شوه بار کولای"
+
+msgid "Skipped questions"
+msgstr "پریښودل شوې پوښتنې"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken واردول دا ټول وزن د وارد شوو پوښتنو ترمنځ ویشي پرته له دې چې یوه پوښتنه SCORE تعریف کړي."
+
+msgid "Import warnings"
+msgstr "واردولو خبرداریونه"
+
+msgid "Could not import questions"
+msgstr "پوښتنې نه شوه واردولای"
+
+msgid "No question statistics found"
+msgstr "هیڅ پوښتنې احصایې ونه موندل شوې"
+
+msgid "Could not load question statistics"
+msgstr "د پوښتنو احصایې نه شوه بار کولای"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "تاسو کولی شئ یو MCP کلاینټ مستقیماً د لاندې پای ټکی ته په اشاره کولو سره ونښلوئ:"
+
+msgid "No applications are currently connected to your account."
+msgstr "اوس مهال ستاسو حساب سره هیڅ غوښتنلیکونه وصل نه دي."
+
+msgid "Connected on"
+msgstr "وصل شوی په"
+
+msgid "Last used"
+msgstr "وروستی کارول شوی"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s به نور ستاسو Chamilo حساب ته لاسرسی ونلري. دوام ورکړئ؟"
+
+msgid "Application revoked"
+msgstr "غوښتنلیک لغوه شو"
+
+msgid "Copied to clipboard"
+msgstr "کلپبورډ ته کاپي شو"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP پای ټکی نه شوه کاپي کولای"
+
+msgid "MCP endpoint"
+msgstr "MCP پای ټکی"
+
+msgid "API key"
+msgstr "API کیلي"
+
+msgid "Last used at"
+msgstr "وروستی کارول شوی په"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "دا کیلي اوس کاپي کړئ. دا به بیا ونه ښودل شي."
+
+msgid "Rotate API key"
+msgstr "API کیلي څرخول"
+
+msgid "Revoke API key"
+msgstr "API کیلي لغوه کول"
+
+msgid "Remote MCP connection"
+msgstr "لرې MCP اړیکه"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "خپل MCP کلاینټ د لاندې ارزښتونو سره تنظیم کړئ:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "اوسنۍ کیلي به سمدلاسه کار ودروي. دوام ورکړئ؟"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "یوه نوې شخصي MCP API کیلي به جوړه شي. دوام ورکړئ؟"
+
+msgid "MCP API key generated"
+msgstr "MCP API کیلي جوړه شوه"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "د دې کیلي کاروونکي MCP کلاینټونه به سمدلاسه کار ودروي. دوام ورکړئ؟"
+
+msgid "MCP API key revoked"
+msgstr "MCP API کیلي لغوه شوه"
+
+msgid "Could not copy the API key"
+msgstr "د API کیلي کاپي نه شو کړای"
+
+msgid "Project"
+msgstr "پروژه"
+
+msgid "Close old tickets"
+msgstr "زړې ټکټونه تړل"
+
+msgid "Close tickets older than seven days?"
+msgstr "له اوو ورځو څخه زړې ټکټونه تړل شي؟"
+
+msgid "Assignment history"
+msgstr "د دندې تاریخ"
+
+msgid "Translate with AI"
+msgstr "د AI سره ژباړل"
+
+msgid "Target language"
+msgstr "هدف ژبه"
+
+msgid "Please select a provider"
+msgstr "مهرباني وکړئ یو چمتوونکی وټاکئ"
+
+msgid "Generate translation"
+msgstr "ژباړه جوړول"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "لږ تر لږه یوه د شرایطو او احکامو برخه باید متن ولري."
+
+msgid "No active target languages are available."
+msgstr "هیڅ فعال هدف ژبې شتون نلري."
+
+msgid "Tutor"
+msgstr "ښوونکی"
+
+msgid "Access dates"
+msgstr "د لاسرسي نیټې"
+
+msgid "Coach access dates"
+msgstr "د روزونکي د لاسرسي نیټې"
+
+msgid "No sessions found"
+msgstr "هیڅ سیشنونه ونه موندل شول"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "هغه کورسونه وټاکئ چې دا کاروونکی په دې سیشن کې لاسرسی نه شي کولی."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "کاروونکی له سیشن کې له هر کورس څخه نشي بندېدای. پرځای یې کاروونکی لغوه کړئ."
+
+msgid "Users subscribed to this session"
+msgstr "د دې سیشن لپاره ثبت شوي کاروونکي"
+
+msgid "No available users found"
+msgstr "هیڅ شته کاروونکي ونه موندل شول"
+
+msgid "Subscribe this user to the session?"
+msgstr "دا کاروونکی سیشن ته ثبت کړئ؟"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "ټاکل شوي کاروونکي سیشن ته ثبت کړئ؟"
+
+msgid "General tutor planning"
+msgstr "عمومي ښوونکي پلان جوړونه"
+
+msgid "User is already registered by another tutor."
+msgstr "کاروونکی د بل ښوونکي لخوا ثبت شوی دی."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "تاسو یوه کاپي ترلاسه کوئ ځکه چې تاسو د کورس ښوونکی یاست"
+
+msgid "General tutor"
+msgstr "عمومي ښوونکی"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "کورسونه، ښوونکي، تخنیکي مرسته، ښوونکي، او/یا موجود مواد په پام کې ونیسئ."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "ښوونکي په کورس %s کې د ښوونکو په توګه اضافه شوي"
+
+msgid "Tutor name"
+msgstr "د ښوونکي نوم"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "د سیشن ښوونکي د سیشن همغږي کوونکي دي او د سیشن په هر کورس کې د ښوونکو په توګه عمل کولی شي. یوازې هغه کاروونکي چې د ښوونکي رول لري د سیشن ښوونکو په توګه ټاکل کیدی شي."
+
+msgid "Access start date for tutors"
+msgstr "د ښوونکو لپاره د لاسرسي پیل نیټه"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "هغه نیټه چې سیشن د ښوونکو لپاره شتون لري، ترڅو دوی د زده کوونکو له وصلیدو مخکې چمتووالی ونیسي"
+
+msgid "Access end date for tutors"
+msgstr "د ښوونکو لپاره د لاسرسي پای نیټه"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "هغه نیټه چې سیشن د ښوونکو لپاره تړل کیږي. اضافي ځنډ به دوی ته اجازه ورکړي چې ټول اړوند تعقیب معلومات صادر کړي"
+
+msgid "Tutor and student"
+msgstr "ښوونکی او زده کوونکی"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "دا راپور د ټاکل شوې نیټې په حد کې د عمومي ښوونکي لخوا د سیشنونو اونيز ویش ښیي."
+
+msgid "User is general tutor in some sessions"
+msgstr "کاروونکی په ځینو سیشنونو کې عمومي ښوونکی دی"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "ښوونکي به په ټولو کورس سیشنونو کې د ښوونکو په توګه اضافه شي."
+
+msgid "Delete failed: invalid question id."
+msgstr "ړنګول ناکام شول: ناسم پوښتنې ID."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "د عمومي سیشن ښوونکي لخوا د سیشنونو اوسط شمیر"
+
+msgid "No room"
+msgstr "هیڅ خونه نشته"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "د کورس ښوونکي د سیشن په کورس ښوونکو کې وارد کړئ"
+
+msgid "Clean and update course tutors"
+msgstr "کورس ټیوټران پاک او تازه کړئ"
+
+msgid "Add me as tutor"
+msgstr "زه د ټیوټر په توګه اضافه کړئ"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "د زده کړې لارې ته سروې اضافه کول ممکن نه دي"
+
+msgid "Access dates for tutors"
+msgstr "ټیوټرانو ته د لاسرسي نیټې"
+
+msgid "Tutor and group member"
+msgstr "ټیوټر او ډله غړی"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "ستاسو ورځنۍ AI ټوکن حد ته رسیدلی. مهرباني وکړئ سبا بیا هڅه وکړئ."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "ستاسو میاشتنی AI ټوکن حد ته رسیدلی. مهرباني وکړئ راتلونکې میاشت بیا هڅه وکړئ."
+
+msgid "This course code already exists, please choose another code."
+msgstr "دا کورس کوډ لا دمخه شتون لري، مهرباني وکړئ بل کوډ غوره کړئ."
+
+msgid "This course title already exists, please choose another title."
+msgstr "دا کورس سرلیک لا دمخه شتون لري، مهرباني وکړئ بل سرلیک غوره کړئ."
+
+msgid "This tool visibility cannot be changed"
+msgstr "د دې وسیلې لیدل کیدای نشي بدل شي"
+
+msgid "Invalid visibility"
+msgstr "ناسم لید"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "تاسو یوه کاپي ترلاسه کوئ ځکه چې تاسو د کورس ټیوټرانو څخه یو یاست"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "تاسو یوه کاپي ترلاسه کوئ ځکه چې تاسو د کورس ټیوټر یاست"
+
+msgid "Manual completion"
+msgstr "لاسي بشپړتیا"
+
+msgid "Send to tutors"
+msgstr "ټیوټرانو ته واستوئ"
+
+msgid "Lab title"
+msgstr "لابراتوار سرلیک"
+
+msgid "Lab week"
+msgstr "لابراتوار اونۍ"
+
+msgid "Final exam access rule"
+msgstr "وروستۍ ازموینې لاسرسي قاعده"
+
+msgid "Course completion rule"
+msgstr "کورس بشپړتیا قاعده"
+
+msgid "You have been invited to join a course"
+msgstr "تاسو ته د کورس سره یوځای کیدو بلنه شوې"
+
+msgid "No user has been found"
+msgstr "هیڅ کارن ونه موندل شو"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "ټاکل شوی کارن په دې شرایطو کې نشي شامل کیدای"
+
+msgid "No change has been made"
+msgstr "هیڅ بدلون نه دی راغلی"
+
+msgid "Back to group list"
+msgstr "د ډلې لیست ته بیرته"
+
+msgid "Remove class link"
+msgstr "د ټولګي لینک لرې کړئ"
+
+msgid "Group settings"
+msgstr "د ډلې ترتیبات"
+
+msgid "Self-registration allowed"
+msgstr "خپله ثبت اجازه لري"
+
+msgid "Self-unregistration allowed"
+msgstr "خپله غیر ثبت اجازه لري"
+
+msgid "This group is linked to the class"
+msgstr "دا ډله د ټولګي سره تړلې ده"
+
+msgid "Create one or more empty course groups"
+msgstr "یو یا څو خالي کورس ډلې جوړ کړئ"
+
+msgid "Number of places"
+msgstr "د ځایونو شمیر"
+
+msgid "Base group"
+msgstr "اساسي ډله"
+
+msgid "Share"
+msgstr "شریکول"
+
+msgid "Collaboration"
+msgstr "همکاري"
+
+msgid "The group title is required."
+msgstr "د ډلې سرلیک اړین دی."
+
+msgid "Back to group area"
+msgstr "د ډلې ساحې ته بیرته"
+
+msgid "Members are managed by the linked class"
+msgstr "غړي د تړل شوي ټولګي لخوا اداره کیږي"
+
+msgid "%s groups selected"
+msgstr "%s ډلې غوره شوې"
+
+msgid "Fill selected groups"
+msgstr "غوره شوې ډلې ډک کړئ"
+
+msgid "Empty selected groups"
+msgstr "غوره شوې ډلې خالي کړئ"
+
+msgid "Fill group"
+msgstr "ډله ډکه کړئ"
+
+msgid "Empty group"
+msgstr "ډله خالي کړئ"
+
+msgid "Groups per user"
+msgstr "د هر کارن ډلې"
+
+msgid "No tutors"
+msgstr "هیڅ ټیوټران نشته"
+
+msgid "No users"
+msgstr "هیڅ کارنان نشته"
+
+msgid "Calculation mode"
+msgstr "د محاسبې حالت"
+
+msgid "Weighted average"
+msgstr "وزني اوسط"
+
+msgid "Points sum"
+msgstr "د ټکو مجموعه"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "وزني اوسط د وزنونو د مجموعې له مخې نورمالايز کوي؛ د ټکو مجموعه هر وزن د اعظمي ټکو په توګه ګڼي او بې له نورمالايز کولو يې جمع کوي."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "د هر توکي وزن د هغه د اعظمي ټکو په توګه ګڼل کېږي؛ درجه د ټکو مجموعه ده، نه نورمالايز شوې."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "درجه د توکو وزني اوسط دی چې د وزنونو د مجموعې له مخې نورمالايز شوی دی."
+
+msgid "Forum participation"
+msgstr "د فورم غونډال"
+
+msgid "Forum thread"
+msgstr "د فورم تار"
+
+msgid "Points for one message"
+msgstr "د يو پيغام ټکي"
+
+msgid "Points for two or more messages"
+msgstr "د دوو يا زياتو پيغامونو ټکي"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "ټکي هغه وخت ورکول کېږي چې زده کوونکي په تار کې يوازې يو پيغام خپور کړی وي."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "ټکي هغه وخت ورکول کېږي چې زده کوونکي په تار کې دوه يا زيات پيغامونه خپور کړي وي."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "اختياري. که تش پرېښودل شي، يو يا زيات پيغامونه د يو پيغام ټکي ورکوي."
+
+msgid "Current password is required to change your password."
+msgstr "د خپل پټنوم بدلولو لپاره اوسني پټنوم اړين دی."
+
+msgid "The 2FA code is required."
+msgstr "د 2FA کوډ اړين دی."
+
+msgid "Invalid 2FA configuration."
+msgstr "ناسم 2FA ترتيب."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "د 2FA کوډ ناسم يا ختم شوی دی."
+
+msgid "Database load"
+msgstr "د ډېټابېس بار"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "ژوندي MySQL او MariaDB سرور بار ميټريکس"
+
+msgid "Click to show database server load metrics"
+msgstr "د ډېټابېس سرور بار ميټريکس ښودلو لپاره کليک وکړئ"
+
+msgid "Threads connected"
+msgstr "نښلېدلي تارونه"
+
+msgid "Temporary tables on disk"
+msgstr "لنډمهالي جدولونه په ډسک کې"
+
+msgid "Privilege scope"
+msgstr "د امتياز ساحه"
+
+msgid "Not measurable with the current database user"
+msgstr "د اوسني ډېټابېس کاروونکي سره نه اندازه کېدونکي"
+
+msgid "Uptime"
+msgstr "فعال وخت"
+
+msgid "Queries per second"
+msgstr "پوښتنې په ثانيه کې"
+
+msgid "Slow queries"
+msgstr "ورو پوښتنې"
+
+msgid "Slow query time limit"
+msgstr "د ورو پوښتنې وخت حد"
+
+msgid "Slow query log"
+msgstr "د ورو پوښتنې لاګ"
+
+msgid "Slow queries per second"
+msgstr "ورو پوښتنې په ثانيه کې"
+
+msgid "Threads running"
+msgstr "چلېدونکي تارونه"
+
+msgid "Threads cached"
+msgstr "زېرمه شوي تارونه"
+
+msgid "Table lock waits"
+msgstr "د جدول قفل انتظارونه"
+
+msgid "Row lock waits"
+msgstr "د قطار قفل انتظارونه"
+
+msgid "Aborted connections"
+msgstr "پرېښودل شوي نښلونې"
+
+msgid "Opened tables"
+msgstr "پرانيستل شوي جدولونه"
+
+msgid "Query cache"
+msgstr "د پوښتنې زېرمه"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "د ډیټابیس بار میټریکونه یوازې د MySQL او MariaDB لپاره شتون لري."
+
+msgid "Inserts"
+msgstr "داخلونه"
+
+msgid "Hit rate"
+msgstr "د برید کچه"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "هر ۵ ثانیو کې اتومات تازه کول"
+
+msgid "Web server load"
+msgstr "د ویب سرور بار"
+
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "د Apache، Nginx یا FrankenPHP ژوندي وضعیت معیارونه"
+
+msgid "Click to show web server load metrics"
+msgstr "د ویب سرور بار میټریکونو ښودلو لپاره کلیک وکړئ"
+
+msgid "Requires a local web server status module"
+msgstr "د ځایی ویب سرور حالت ماډل ته اړتیا لري"
+
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "د ویب سرور بار یوازې له localhost څخه د Apache mod_status، Nginx stub_status، یا FrankenPHP/Caddy معیارونو پای ټکي څخه لوستل کیږي. د وضعیت پاڼه باید د 127.0.0.1 (یا ::1) غوښتنې ته اجازه ورکړي."
+
+msgid "Paths scanned"
+msgstr "سکین شوي لارې"
+
+msgid "Detected"
+msgstr "کشف شوي"
+
+msgid "Status path"
+msgstr "د حالت لاره"
+
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "د ویب سرور بار معیارونه یوازې د Apache، Nginx او FrankenPHP لپاره شته دي."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "د سکین شوي حالت لارو څخه هیڅ یوه په localhost کې ځواب نه دی ورکړی."
+
+msgid "Busy workers"
+msgstr "مصروف کارګران"
+
+msgid "Idle workers"
+msgstr "بې کاره کارګران"
+
+msgid "Graceful workers"
+msgstr "د ښه والي کارګران"
+
+msgid "Server MPM"
+msgstr "سرور MPM"
+
+msgid "Requests per second (live)"
+msgstr "غوښتنې په ثانیه کې (ژوندي)"
+
+msgid "Requests per second (since start)"
+msgstr "غوښتنې په ثانیه کې (له پیل څخه)"
+
+msgid "Bytes per second (live)"
+msgstr "بایټونه په ثانیه کې (ژوندي)"
+
+msgid "Bytes per second (since start)"
+msgstr "بایټونه په ثانیه کې (له پیل څخه)"
+
+msgid "Bytes per request"
+msgstr "بایټونه په هره غوښتنه کې"
+
+msgid "Total accesses"
+msgstr "ټول لاسرسي"
+
+msgid "Total traffic"
+msgstr "ټول ترافیک"
+
+msgid "CPU load"
+msgstr "د CPU بار"
+
+msgid "Load average (1 min)"
+msgstr "د بار اوسط (۱ دقیقه)"
+
+msgid "Load average (5 min)"
+msgstr "د بار اوسط (۵ دقیقې)"
+
+msgid "Load average (15 min)"
+msgstr "د بار اوسط (۱۵ دقیقې)"
+
+msgid "Scoreboard sending"
+msgstr "سکوربورډ لیږل"
+
+msgid "Scoreboard reading"
+msgstr "سکوربورډ لوستل"
+
+msgid "Scoreboard keepalive"
+msgstr "سکوربورډ ساتل"
+
+msgid "Scoreboard waiting"
+msgstr "سکوربورډ انتظار"
+
+msgid "Scoreboard open slots"
+msgstr "سکوربورډ خلاصې ځایونه"
+
+msgid "Active connections"
+msgstr "فعال اړیکې"
+
+msgid "Reading"
+msgstr "لوستل"
+
+msgid "Writing"
+msgstr "لیکل"
+
+msgid "Total requests"
+msgstr "ټولې غوښتنې"
+
+msgid "Accepts"
+msgstr "منل"
+
+msgid "Handled"
+msgstr "سمبال شوي"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status فعال کړئ (ExtendedStatus On) او localhost ته /server-status ته اجازه ورکړئ. Nginx: په یوازې localhost موقعیت لکه /nginx_status یا /stub_status کې stub_status فعال کړئ. FrankenPHP: په Caddyfile کې نړیوال \"metrics\" اختیار اضافه کړئ، چې په ډیفالټ د Caddy د اډمین API (127.0.0.1:2019/metrics) کې Prometheus معیارونه ښيي."
+
+msgid "Total threads"
+msgstr "ټول تارونه"
+
+msgid "Busy threads"
+msgstr "بوخت تارونه"
+
+msgid "Queue depth"
+msgstr "د کتار ژوروالی"
+
+msgid "Worker"
+msgstr "کارکوونکی"
+
+msgid "Average request time"
+msgstr "د غوښتنې اوسط وخت"
+
+msgid "Grade percentage distribution"
+msgstr "د نمرې سلنې ویش"
+
+msgid "Top learners"
+msgstr "غوره زده‌کوونکي"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "دا پرمختګ د زده‌کړې لارې پرمختګ او د زده‌کوونکي د تمرین اوسط پایله سره یوځای کوي"
+
+msgid "Additional profile fields"
+msgstr "اضافي پروفایل ساحې"
+
+msgid "Visible columns"
+msgstr "ښکاره کالمونه"
+
+msgid "Learning path completion"
+msgstr "د زده‌کړې لارې بشپړتیا"
+
+msgid "Number of certificates"
+msgstr "د سندونو شمېر"
+
+msgid "Could not export the report"
+msgstr "راپور صادر نه شو"
+
+msgid "Second learner"
+msgstr "دوهم زده‌کوونکی"
+
+msgid "Results by learner"
+msgstr "پایلې د زده‌کوونکي له مخې"
+
+msgid "Use filters to narrow down questions."
+msgstr "د پوښتنو محدودولو لپاره فلټرونه وکاروئ."
+
+msgid "Try adjusting your filters and search again."
+msgstr "خپل فلټرونه تنظیم کړئ او بیا لټون وکړئ."
+
+msgid "Results per page"
+msgstr "پایلې په هره پاڼه کې"
+
+msgid "No answers"
+msgstr "ځوابونه نشته"
+
+msgid "Tests using this question"
+msgstr "ازموینې چې دا پوښتنه کاروي"
+
+msgid "Delete failed"
+msgstr "ړنګول ناکام شو"
+
+msgid "PHP cache"
+msgstr "PHP کیش"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "د ژوندي OPcache او APCu تشخیصونه"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "د OPcache او APCu تشخیصونو ښودلو لپاره کلیک وکړئ"
+
+msgid "Memory used"
+msgstr "کارول شوې حافظه"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache نصب دی خو فعال نه دی."
+
+msgid "OPcache extension is not available on this server."
+msgstr "د OPcache پراختیا په دې سرور کې شتون نلري."
+
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache ناسازګاره د حافظې احصایې راپوروي (په ځینو تار لرونکو PHP چلولو کې پېژندل شوې ستونزه، لکه FrankenPHP)."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu نصب دی خو فعال نه دی."
+
+msgid "APCu extension is not available on this server."
+msgstr "د APCu پراختیا په دې سرور کې شتون نلري."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu ناسازګاره د حافظې احصایې راپوروي (په ځینو تار لرونکو PHP چلولو کې پېژندل شوې ستونزه)."
+
+msgid "Constant"
+msgstr "ثابت"
+
+msgid "Space used on disk (MB)"
+msgstr "په ډیسک کارول شوې فضا (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "د کورس اعظمي فضا وټاکئ (MB)"
+
+msgid "Memory free"
+msgstr "ازاده حافظه"
+
+msgid "Memory wasted"
+msgstr "ضایع شوې حافظه"
+
+msgid "Memory used %"
+msgstr "کارېدلې حافظه %"
+
+msgid "Cached scripts"
+msgstr "کیش شوي سکریپټونه"
+
+msgid "Cached keys"
+msgstr "کیش شوې کیلي"
+
+msgid "Misses"
+msgstr "له لاسه تللې"
+
+msgid "Cache full"
+msgstr "کیش ډک دی"
+
+msgid "OOM restarts"
+msgstr "د حافظې د نشتوالي بیا پیلونه"
+
+msgid "Hash restarts"
+msgstr "هش بیا پیلونه"
+
+msgid "Manual restarts"
+msgstr "لاسي بیا پیلونه"
+
+msgid "Interned strings used"
+msgstr "استعمال شوي داخلي تارونه"
+
+msgid "Interned strings free"
+msgstr "آزاد داخلي تارونه"
+
+msgid "Interned strings count"
+msgstr "د داخلي تارونو شمېر"
+
+msgid "Memory available"
+msgstr "شته حافظه"
+
+msgid "Memory size"
+msgstr "د حافظې اندازه"
+
+msgid "Entries"
+msgstr "ننوتنې"
+
+msgid "Slots"
+msgstr "خانې"
+
+msgid "Expunges"
+msgstr "لرې کول"
+
+msgid "Cache start time"
+msgstr "د کیش پیل وخت"
+
+msgid "Time zone"
+msgstr "وخت زون"
+
+msgid "Not registered"
+msgstr "ثبت شوی نه دی"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "د سیشن، کورس، نیټې یا زده‌کوونکي له مخې د زده‌کوونکو سندونه فلټر او لیست کړئ، بیا یې کله اړتیا وي صادر کړئ."
+
+msgid "Filter by session and course"
+msgstr "د سیشن او کورس له مخې فلټر کول"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "د جوړ شوي سندونو د لیست کولو لپاره یو سیشن، کورس او اختیاري نیټه وټاکئ."
+
+msgid "Filter by learner"
+msgstr "د زده‌کوونکي له مخې فلټر کول"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "په ټولو سیشنونو او کورسونو کې د یوه ځانګړي زده‌کوونکي سندونه ومومئ."
+
+msgid "Certificates found"
+msgstr "موندل شوي سندونه"
+
+msgid "Open certificate"
+msgstr "سند پرانيستل"
+
+msgid "Certificate file not available"
+msgstr "د سند دوتنه شتون نلري"
+
+msgid "Export to CSV"
+msgstr "CSV ته صادرول"
+
+msgid "Acquired skills"
+msgstr "ترلاسه شوي مهارتونه"
+
+msgid "No acquired skill"
+msgstr "هیڅ مهارت نه دی ترلاسه شوی"
+
+msgid "Absences"
+msgstr "غیرحاضرۍ"
+
+msgid "No courses"
+msgstr "هیڅ کورس نشته"
+
+msgid "No session matched"
+msgstr "هیڅ سیشن سمون نه لري"
+
+msgid "Unable to load the report"
+msgstr "راپور نه شي پورته کولای"
+
+msgid "Please select a profile"
+msgstr "مهرباني وکړئ یو پروفایل وټاکئ"
+
+msgid "Please select a session"
+msgstr "مهرباني وکړئ یو سیشن وټاکئ"
+
+msgid "Please select a user"
+msgstr "مهرباني وکړئ یو کارن وټاکئ"
+
+msgid "Unable to export the report"
+msgstr "راپور صادرول نه شي"
+
+msgid "Accepted on web"
+msgstr "په ویب کې منل شوی"
+
+msgid "Accepted by e-mail"
+msgstr "د برېښنالیک له لارې منل شوی"
+
+msgid "The course title is required"
+msgstr "د کورس سرلیک اړین دی"
+
+msgid "Unexpected error"
+msgstr "ناڅاپي تېروتنه"
+
+msgid "Separate tags with commas"
+msgstr "ټاګونه د کامو په واسطه جلا کړئ"
+
+msgid "Open link"
+msgstr "لینک پرانيستل"
+
+msgid "Describe the course picture to generate"
+msgstr "د جوړولو لپاره د کورس انځور تشریح کړئ"
+
+msgid "Generate picture"
+msgstr "انځور جوړول"
+
+msgid "PDF watermark"
+msgstr "د PDF واټرمارک"
+
+msgid "No watermark image"
+msgstr "هیڅ واټرمارک انځور نشته"
+
+msgid "Upload watermark"
+msgstr "واټرمارک اپلوډ کول"
+
+msgid "Delete watermark"
+msgstr "واټرمارک ړنګول"
+
+msgid "Course legal agreement file"
+msgstr "د کورس قانوني تړون دوتنه"
+
+msgid "Upload agreement file"
+msgstr "د تړون دوتنه اپلوډ کول"
+
+msgid "Download agreement file"
+msgstr "د تړون دوتنه ډاونلوډ کول"
+
+msgid "Delete agreement file"
+msgstr "د تړون دوتنه ړنګول"
+
+msgid "Custom certificate images"
+msgstr "دودیز سند انځورونه"
+
+msgid "Course picture updated"
+msgstr "د کورس انځور تازه شو"
+
+msgid "The course picture could not be uploaded"
+msgstr "د کورس انځور پورته نه شو"
+
+msgid "Course picture deleted"
+msgstr "د کورس انځور ړنګ شو"
+
+msgid "Enter a description for the image"
+msgstr "د انځور لپاره تشریح ولیکئ"
+
+msgid "The image generator returned an empty response"
+msgstr "د انځور جنراتور تش ځواب واستاوه"
+
+msgid "Course picture generated"
+msgstr "د کورس انځور جوړ شو"
+
+msgid "Watermark updated"
+msgstr "واټرمارک تازه شو"
+
+msgid "Watermark deleted"
+msgstr "واټرمارک ړنګ شو"
+
+msgid "Agreement file updated"
+msgstr "د موافقې دوتنه تازه شوه"
+
+msgid "Agreement file deleted"
+msgstr "د موافقې دوتنه ړنګ شوه"
+
+msgid "Certificate image updated"
+msgstr "د سند انځور تازه شو"
+
+msgid "Certificate image deleted"
+msgstr "د سند انځور ړنګ شو"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "د کورس انځور پورته کولو دمخه د انځور ایډیټر وکاروئ ترڅو پرې کړئ، وګرځوئ یا اندازه بدله کړئ."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "دا بلنه لینک ناسم دی یا ختم شوی دی."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "دا بلنه یو بل کاروونکي ته استول شوې وه. مهرباني وکړئ د بلنې شوي حساب سره لاګ ان شئ."
+
+msgid "The invitation could not be accepted."
+msgstr "بلنه ونه منل شوه."
+
+msgid "You have been subscribed successfully."
+msgstr "تاسو په بریالیتوب سره ثبت شوئ."
+
+msgid "This email address cannot be invited."
+msgstr "دا برېښنالیک پته نه شي بلل کېدای."
+
+msgid "This user is already subscribed to the session."
+msgstr "دا کاروونکی دمخکې له سیشن سره ثبت شوی دی."
+
+msgid "This user is already subscribed to the course."
+msgstr "دا کاروونکی دمخکې له کورس سره ثبت شوی دی."
+
+msgid "Multi URLs"
+msgstr "څو URLs"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "هستۍ لکه کارنان او کورسونه په ورته وخت کې په له یو څخه زیات URL کې فعالې کېدای شي، نو د لاندې ارزښتونو مجموعه به له ټولیز سره سمون ونه لري."
+
+msgid "User directory"
+msgstr "د کارن لارښود"
+
+msgid "Course directory"
+msgstr "د کورس لارښود"
+
+msgid "URLs"
+msgstr "URLs"
+
+msgid "User details"
+msgstr "د کارن جزئیات"
+
+msgid "Course details"
+msgstr "د کورس جزئیات"
+
+msgid "View details"
+msgstr "جزئیات وګورئ"
+
+msgid "Average progress"
+msgstr "اوسط پرمختګ"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "مستقیم نوم‌لیکنه ټول کورس ته اړه لري، نه یوه ځانګړي URL ته، نو ورته «مستقیم» ارقام لاندې د هر هغه URL لپاره تکرارېږي چې دا کورس ورسره تړلی دی. غونډې هغه لاره ده چې کورس په URLs کې شریک شي او معیارونه په حقیقت کې د هر URL لپاره توپیر ولري."
+
+msgid "Logins (all URLs combined)"
+msgstr "ننوتنې (ټول URLs یوځای)"
+
+msgid "Unique logins"
+msgstr "ځانګړې ننوتنې"
+
+msgid "Parent URL"
+msgstr "اصلي URL"
+
+msgid "Logins (your URLs)"
+msgstr "ننوتنې (ستاسو URLs)"
+
+msgid "The picture could not be uploaded"
+msgstr "انځور پورته نه شو"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "دا ډول ساحه لا بشپړه نه ده ملاتړ شوې — یوازې خام ارزښت."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "دا کورس د کارن ګډون حد ته نږدې دی (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "ځای ستاسو د کورس ځانګړتیاوو له لارې محدود دی. د حد زیاتولو لپاره، ترلاسه کړئ"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "د کارنانو ګډون ستاسو د کورس ځانګړتیاوو له لارې محدود دی. د حد زیاتولو لپاره، ترلاسه کړئ"
+
+msgid "pro plan"
+msgstr "مسلکي پلان"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "او د دې کورس بیک‌اپ د کورس ساتنې له لارې خپل نوي تادیه شوي کورس ته وارد کړئ، یا یو ټکټ پرانیزئ ترڅو ستاسو کورس په مسلکي کورس بدل شي کله چې دا پلان ترلاسه کړئ."
+
+msgid "Tired of writing questions?"
+msgstr "د پوښتنو لیکلو څخه ستړی یاست؟"
+
+msgid "Upgrade your plan"
+msgstr "خپل پلان لوړ کړئ"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "مسلکي پلان ته ترڅو د AI مرسته ترلاسه کړئ چې تاسو ته د کیفیت پوښتنې تولید کړي."
+
+msgid "Student Success AI Coach"
+msgstr "د زده‌کوونکي بریالیتوب AI روزونکی"
+
+msgid "No AI text provider is configured."
+msgstr "د AI متن چمتو کوونکی نه دی تنظیم شوی."
+
+msgid "Additional instructions for the AI coach"
+msgstr "د AI روزونکي لپاره اضافي لارښوونې"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "بېلګه: دا زده‌کوونکی د پام ساتلو کې ستونزه لري. لنډ فعالیتونه او د پوهې ډېرې پرله‌پسې ارزونې وړاندیز کړئ."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "دا کړکۍ پرانستې وساتئ ترڅو چې چامیلو سپارښتنه چمتو کوي."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "سپارښتنه ستاسو د چامیلو اینباکس کې هم خوندي شوه."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "سپارښتنه د دې زده‌کوونکي لپاره تولید او خوندي شوه، خو د اینباکس کاپي جوړه نه شوه."
+
+msgid "Student success recommendation"
+msgstr "د زده‌کوونکي بریالیتوب سپارښتنه"
+
+msgid "Generated"
+msgstr "تولید شوی"
+
+msgid "Priority actions"
+msgstr "لومړیتوب لرونکي اقدامات"
+
+msgid "Evidence"
+msgstr "شواهد"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "دا ځانګړتیا به د دې کورس محتوا تحلیل کړي او د زده‌کړې چلند معلومات به تنظیم شوي AI ماډل ته ولېږي. که څه هم مستقیم پېژندونکي شخصي معلومات AI ماډل ته نه لېږل کېږي، ځینې لېږل شوي معلومات ممکن په غیرمستقیم ډول د کارن په اړه پېژندونکي معلومات ورکړي. که شک لرئ، تل د دې ځانګړتیا کارولو دمخه له خپل AI مرجع کس سره وګورئ."
+
+msgid "Additional activities"
+msgstr "اضافي فعالیتونه"
+
+msgid "Rhythm"
+msgstr "ریتم"
+
+msgid "Learning methodologies"
+msgstr "د زده‌کړې میتودونه"
+
+msgid "Other recommendations"
+msgstr "نورې سپارښتنې"
+
+msgid "Analyzing course..."
+msgstr "کورس تحلیل کېږي..."
+
+msgid "Analyzing student's learning..."
+msgstr "د زده‌کوونکي زده‌کړه تحلیل کېږي..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "د دې بلنې په منلو سره به تاسو د غوښتونکي کارن سره په داسې ډول وتړل شئ چې ستاسو د پروفایل ځینې یا ټول معلومات د هغه لوستلو لپاره شته شي. مهرباني وکړئ ډاډ ترلاسه کړئ چې ډېر معلومات نه شریکوي، د هغو کارنانو سره چې ورته باور لرئ خپل پروفایل وګورئ."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "د مایکروفون کارولو اجازه فعاله نه ده، مهرباني وکړئ په خپل براوزر کې یې فعال کړئ ترڅو غږ ثبت کړئ"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "د چامیلو دا نسخه له یو (یا څو) مخکې نصب شوي څوژبني کورس(ونو) سره راځي. په کورسونو لړلیک کې یې وګورئ او پریکړه وکړئ چې عامه وي که نه."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "تاسو اوس مهال هیڅ URL ته لاسرسی نلرئ. له مدیر څخه وغواړئ چې تاسو ته د هغه URL لاسرسی درکړي چې تاسو ورپورې اړه لرئ."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "که ټاکل شوی AI چمتوکوونکی خپلواک خدمت نه وي، د ټاکل شوي سند منځپانګه ممکن بهرني خدمت ته واستول شي. پرته له دې چې ستاسو سازمان اجازه ورکړي، د محرم معلوماتو سره دوام مه کوئ."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "په هغه حساب باندې Unify کلیک وکړئ چې پاتې کېږي. سیسټم به د ورته نقل ډلې نور ټول حسابونه په دې کې یوځای کړي. یوځای شوي حسابونه به د تل لپاره حذف شي او له دې راپور څخه به ورک شي. دا عمل بیرته نشي اخیستل کېدای."
+
+msgid "Permanent deletion"
+msgstr "د تل لپاره حذف"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify لا دمخه یوځای شوي حسابونه د تل لپاره حذف کوي. د کاروونکو لړلیک یوازې هغه وخت وکاروئ چې غواړئ نور حسابونه په لاسي ډول حذف کړئ."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "تاسو د ډیفالټ لیدیزې موضوع «chamilo» لوګوګانې بدلوی. د ډیفالټونو له بدلولو څخه د مخنیوي لپاره د دودیزې لیدیزې موضوع جوړول/کارول په پام کې ونیسئ."
+
+msgid "This exercise has no questions."
+msgstr "دا تمرین هیڅ پوښتنې نلري."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "د هرې پوښتنې لپاره فیډبک/تبصره څنګه وښیو؟ دا اختیار ټاکي چې زده‌کوونکي ته د ازموینې په وخت کې څنګه ښکاره شي."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "دا غوښتنلیکونه کولی شي د تاسو په توګه چامیلو ته لاسرسی وکړي، یوازې ستاسو د موجوده حساب اجازو سره. هغه لغوه کړئ چې نور یې نه کاروئ یا نه پېژنئ."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "مهرباني وکړئ تشریح کړئ چې ولې د خپل قانوني رضایت د بیرته اخیستلو غوښتنه کوئ، ترڅو موږ ستاسو غوښتنه په سمه توګه پروسس کړو"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "دا شخصي کیلي وکاروئ ترڅو لرې MCP پیرودونکی له چامیلو سره ستاسو د حساب او اجازو سره وصل کړئ."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "بشپړه کیلي یوازې یو ځل ښکاره کېږي. په خوندي ډول یې وساتئ. د نوې کیلي جوړول سمدستي پخوانۍ باطلوي."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "کیلي پیرودونکی ستاسو د چامیلو حساب په توګه تصدیقوي. هغه اجازې نه ورکوي چې ستاسو حساب لا دمخه نلري."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "په ثبت پاڼه کې د شرایطو او مقرراتو بیان وښایئ، لیدونکی باید د ثبت لپاره T&C ومني"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "د شرایطو او مقرراتو منځپانګه به AI ژبني ماډل ته واستول شي. وړاندیز شوې ژباړه د خوندي کولو دمخه وګورئ."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "د هدف ژبې لپاره خوندي شوې نسخه لا دمخه شته. د دې وړاندیز خوندي کول به نوې نسخه جوړه کړي."
+
+msgid "Acquired"
+msgstr "ترلاسه شوی"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "د کورس وړاندیز شوې انځور: ۱۶۰۰ × ۹۰۰ px (۱۶:۹). په لویو یا لوړ کثافت سکرینونو کې د تیز ښودلو لپاره لږترلږه ۱۲۸۰ × ۷۲۰ px وکاروئ."
+
+msgid "Courses of the selected URL"
+msgstr "د ټاکل شوي URL کورسونه"
+
+msgid "Course categories in selected URL"
+msgstr "په ټاکل شوي URL کې د کورسونو کټګورۍ"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "ستاسو حساب فعال دی، اوس کولی شئ ننوځئ او خپل کورسونه وګورئ."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "لومړی باید سمونې <a href='%s'> دلته </a> ډاونلوډ کړئ.\nوروسته هغه فایل خلاص کړئ او فایلونه د خپلې خوښې سره سمبدل کړئ پرته له دې چې د فایل نومونه بدل کړئ.\nبیا له هغو بدل شویو فایلونو څخه یو zip فایل جوړ کړئ او په دې فورم کې یې پورته کړئ."
+
+msgid "Adding students from session %s to session %s"
+msgstr "له سیشن %s څخه سیشن %s ته د زده‌کوونکو اضافه کول"
+
+msgid "Show all attempts by exercise"
+msgstr "د هر تمرین ټولې هڅې وښایئ"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "دا عملیات به د ټاکل شوي کورس لپاره د اجازه ورکړل شوي کاروونکو حد څخه زیات شي."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "ځینې ګډونونه نشي ترسره کېدای ځکه چې د اغېزمن کورس لپاره د کاروونکو حد ته رسېدلي دي. اغېزمن کاروونکي/کورسونه: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "دا ثبت پېژندل شوې راپور پاڼې، د هغوی کټګوري، معیاري URL، پخوانی URL او تمه شوې رول لیدونکي لیست کوي. معیاري URLونه اوسني راپور پلي کولو ته لارښوونه کوي او د راپور رول میټریکس پلي کوي."
+
+msgid "E-mail notification subscription"
+msgstr "د برېښنالیک خبرتیا ګډون"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "دا عملیات به د مدیرانو لخوا د هر کورس لپاره د %s کاروونکو حد څخه زیات شي. ګډون لغوه شوی دی."
+
+msgid "Language the document is in"
+msgstr "هغه ژبه چې سند په کې دی"
+
+msgid "There is no session still"
+msgstr "تر اوسه هیڅ سیشن نشته"
+
+msgid "Origin courses from session"
+msgstr "د سیشن اصلي کورسونه"
+
+msgid "Destination courses from session"
+msgstr "د سیشن منزل کورسونه"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "عامه لاسرسی (لاسرسی د کورس هر غړي ته اجازه شوې)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "د '%s' په اړه د کورس لپاره %d د لغت اصطلاحات جوړ کړئ، هره اصطلاح په یوه کرښه، تعریف یې په راتلونکې کرښه او د هرې اصطلاح ترمنځ یوه تشه کرښه. د سرلیک یا تعریف لپاره نور بڼه مه اضافه کوئ."
+
+msgid "This is a short description of the course '%s'."
+msgstr "دا د کورس '%s' لنډه تشریح ده."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "تاسو چامیلو په وینډوز پلیټفارم کاروئ. د سند بدلولو مرستندویان د بشپړ متن شاخص لپاره شتون نلري."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "د ازموینې اتومات پیل تنظیم فعال دی. زده‌کوونکي به د ازموینو لړلیک ته واستول شي."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "د ازموینې اتومات پیل تنظیم فعال دی. زده‌کوونکي به ځانګړې ازموینې ته واستول شي."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "د دې کورس د ګډون حد ته رسېدلی دی (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "د ژبې له مخې د کورسونو شمېر"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "هغه کاروونکي چې وروستی لاسرسی یې د ټاکل شوې نېټې څخه زوړ دی."
+
+msgid "Your certificate is about to expire"
+msgstr "ستاسو سند نږدې پای ته رسېږي"
+
+msgid "Your certificate has expired"
+msgstr "ستاسو سند پای ته رسېدلی دی"
+
+msgid "Your certificate is about to expire:"
+msgstr "ستاسو سند نږدې پای ته رسېږي:"
+
+msgid "Your certificate has expired:"
+msgstr "ستاسو سند پای ته رسېدلی دی:"
+
+msgid "Expiry date"
+msgstr "د پای نېټه"
+
+msgid "%s days remaining"
+msgstr "%s ورځې پاتې دي"
+
+msgid "Hello, %s"
+msgstr "سلام، %s"
+
+msgid "Edit expiry date"
+msgstr "د پای نیټې سمون"
+
+msgid "Certificate validity (days)"
+msgstr "د سند اعتبار (ورځې)"
+
+msgid "Expiring certificates"
+msgstr "پای ته رسېدونکي سندونه"
+
+msgid "Expiring soon"
+msgstr "ژر پای ته رسېدونکی"
+
+msgid "Expired notice"
+msgstr "د پای ته رسېدلي خبرتیا"
+
+msgid "Expiring notice"
+msgstr "د پای ته رسېدو خبرتیا"
+
+msgid "outdated"
+msgstr "له وخته تېر"
+
+msgid "Last reminder sent"
+msgstr "وروستۍ یادونه لېږل شوې"
+
+msgid "Days ahead"
+msgstr "مخکې ورځې"
+
+msgid "Send notification"
+msgstr "خبرتیا ولېږئ"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "آیا تاسو ډاډه یاست چې دا خبرتیا ولېږئ؟"
+
+msgid "Expired: %s"
+msgstr "پای ته رسېدلی: %s"
+
+msgid "Expiring soon: %s"
+msgstr "ژر پای ته رسېدونکی: %s"
+
+msgid "Expired notice: %s"
+msgstr "د پای ته رسېدلي خبرتیا: %s"
+
+msgid "Expiring notice: %s"
+msgstr "د پای ته رسېدو خبرتیا: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "خبرتیاوې کاروونکو ته په خپله تنظیم شوې ژبه لیږل کیږي."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "پاڼې په ډیفالټ کې د ۶۰ ثانیو لپاره HTTP-کیش کیږي، لکه څنګه چې په Page موجودیت کې تعریف شوي، نو بدلونونه ممکن سمدستي نه ښکاري."
+
+msgid "Activate legal notice"
+msgstr "قانوني خبرتیا فعال کړئ"
+
+msgid "Agreement content"
+msgstr "د تړون منځپانګه"
+
+msgid "Allow learners to delete their own publication"
+msgstr "زده‌کوونکو ته اجازه ورکړئ چې خپل خپرونه ړنګ کړي"
+
+msgid "Allow learners to edit agenda"
+msgstr "زده‌کوونکو ته اجازه ورکړئ چې اجنډا سمه کړي"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "زده‌کوونکو ته اجازه ورکړئ چې خپل حاضري تایید کړي"
+
+msgid "Allow learners to view users list"
+msgstr "زده‌کوونکو ته اجازه ورکړئ چې د کاروونکو لیست وګوري"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "کاروونکي په اتومات ډول د فورم خبرتیاوو ته ګډون کړئ"
+
+msgid "Certificate mode"
+msgstr "د سند حالت"
+
+msgid "Configure external tools"
+msgstr "بهرنۍ وسیلې تنظیم کړئ"
+
+msgid "Contents"
+msgstr "منځپانګې"
+
+msgid "Contents to show"
+msgstr "ښودلو لپاره منځپانګې"
+
+msgid "Course certificate"
+msgstr "د کورس سند"
+
+msgid "Course delivery dates"
+msgstr "د کورس د وړاندې کولو نېټې"
+
+msgid "Course duration in hours"
+msgstr "د کورس موده په ساعتونو کې"
+
+msgid "Course legal agreement"
+msgstr "د کورس قانوني تړون"
+
+msgid "Custom"
+msgstr "دودیز"
+
+msgid "Custom certificate"
+msgstr "دودیز سند"
+
+msgid "Default visibility for new documents"
+msgstr "د نوي اسنادو لپاره ډیفالټ لیدل‌کېدنه"
+
+msgid "Direct invitation link"
+msgstr "مستقیم بلنې لینک"
+
+msgid "Do not notify"
+msgstr "خبر مه ورکوئ"
+
+msgid "Documents list"
+msgstr "د اسنادو لیست"
+
+msgid "E-mail learner on manual subscription"
+msgstr "په لاسي ګډون کې زده‌کوونکي ته برېښنالیک"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "د زده‌کوونکي د خپرونې په نوې فیډبک کې ښوونکو ته برېښنالیک"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "د ډراپ‌باکس د فایل په ترلاسه کولو کې کاروونکو ته برېښنالیک"
+
+msgid "Enable course home notification"
+msgstr "د کورس د کور پاڼې خبرتیا فعال کړئ"
+
+msgid "Enable course themes in learning paths"
+msgstr "په زده‌کړیزو لارو کې د کورس موضوعات فعال کړئ"
+
+msgid "Exercises invisible in session"
+msgstr "په سیشن کې تمرینونه پټ"
+
+msgid "Expiration link"
+msgstr "د پای ته رسېدو لینک"
+
+msgid "Forums list"
+msgstr "د فورمونو لیست"
+
+msgid "Issue date type"
+msgstr "د صادرولو د نېټې ډول"
+
+msgid "Learning path index"
+msgstr "د زده‌کړیزې لارې فهرست"
+
+msgid "Learning paths list"
+msgstr "د زده‌کړیزو لارو لیست"
+
+msgid "Left margin"
+msgstr "کیڼ حاشیه"
+
+msgid "Legal notice"
+msgstr "قانوني خبرتیا"
+
+msgid "Maximum subscribed students"
+msgstr "د ګډون کوونکو زده‌کوونکو اعظمي شمېر"
+
+msgid "Notify in course home"
+msgstr "په د کورس کور پاڼه کې خبر ورکړئ"
+
+msgid "Notify learners"
+msgstr "زده‌کوونکو ته خبر ورکړئ"
+
+msgid "Notify with agreement file"
+msgstr "د تړون فایل سره خبر ورکړئ"
+
+msgid "Notify without attachment"
+msgstr "پرته له ضمیمې خبر ورکړئ"
+
+msgid "Open chat in a new window"
+msgstr "چټ په نوې کړکۍ کې پرانیزئ"
+
+msgid "Open to the platform"
+msgstr "پلیټفارم ته پرانستل"
+
+msgid "Place"
+msgstr "ځای"
+
+msgid "Platform default"
+msgstr "د پلیټفارم ډیفالټ"
+
+msgid "Registration password"
+msgstr "د ثبت پټنوم"
+
+msgid "Remove previous agreements"
+msgstr "پخواني تړونونه لرې کړئ"
+
+msgid "Right margin"
+msgstr "ښي حاشیه"
+
+msgid "Selected learning path"
+msgstr "ټاکل شوې زده‌کړې لاره"
+
+msgid "Selected test"
+msgstr "ټاکل شوې ازموینه"
+
+msgid "Show learner picture in forums"
+msgstr "په فورم کې د زده‌کوونکي انځور وښایئ"
+
+msgid "Show system folders"
+msgstr "د سیسټم فولډرونه وښایئ"
+
+msgid "Signature text 1"
+msgstr "د لاسلیک متن ۱"
+
+msgid "Signature text 2"
+msgstr "د لاسلیک متن ۲"
+
+msgid "Signature text 3"
+msgstr "د لاسلیک متن ۳"
+
+msgid "Signature text 4"
+msgstr "د لاسلیک متن ۴"
+
+msgid "Student and course information"
+msgstr "د زده‌کوونکي او کورس معلومات"
+
+msgid "Subscription allowed"
+msgstr "ګډون اجازه لري"
+
+msgid "Tests list"
+msgstr "د ازموینو لیست"
+
+msgid "Unsubscription allowed"
+msgstr "د ګډون لغوه کول اجازه لري"
+
+msgid "Use certificate download date"
+msgstr "د سند د ډاونلوډ نېټه وکاروئ"
+
+msgid "Use certificate generation date"
+msgstr "د سند د جوړولو نېټه وکاروئ"
+
+msgid "Use session access dates"
+msgstr "د غونډې د لاسرسي نېټې وکاروئ"
+
+msgid "Use session access end date"
+msgstr "د غونډې د لاسرسي پای نېټه وکاروئ"
+
+msgid "Group report"
+msgstr "د ډلې راپور"
+
+msgid "Student follow-up"
+msgstr "د زده‌کوونکي تعقیب"
+
+msgid "Use system default certificate"
+msgstr "د سیسټم ډیفالټ سند وکاروئ"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "ضمیمه شوی سند شتون نلري. د سیسټم ډیفالټ سند به وکارول شي."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "د ضمیمه شوي سند پر ځای د سیسټم ډیفالټ سند وکاروئ؟"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "اختیاري محلي پراختیایي اووررایډ. د تولید تازه معلومات د چامیلو رسمي باوري کیلي کاروي."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "د مرحلې شوي بسته څخه یو خوندي پلي کولو پلان جوړ کړئ. دا د بدلولو، اضافه کولو یا لرې کولو فایلونه، اجازې، بیک‌اپ لاره او لاک حالت چک کوي. دا نصب نه بدلوي."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "دا ګام یوازې بیاکتنه چمتو کوي. د فایل بدلول او د بسته اعلان شوي پاکول وروسته په د پلي کولو مرحلې فایلونو کې د لاک، بیک‌اپ او رول‌بیک ساتنې سره پیښیږي."
+
+msgid "Files to remove"
+msgstr "د لرې کولو فایلونه"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "د مرحلې شوي بسته څخه د چامیلو فایلونه بدل کړئ او هغه زوړ فایلونه لرې کړئ چې د لاسلیک شوي بسته میټاډاټا لخوا په ښکاره توګه اعلان شوي. دا د ډیټابیس مهاجرتونه، Composer، Yarn یا کیش کمانډونه نه چلوي."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "دا عمل په چامیلو نصب کې فایلونه بدلوي او کولی شي لرې کړي. ډاډ ترلاسه کړئ چې د پلي کولو پلان بیاکتنه شوې او بیک‌اپ فعال دي مخکې له دوام."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "زه پوهیږم چې دا به په چامیلو نصب کې فایلونه بدل کړي او د بسته اعلان شوي زوړ فایلونه لرې کړي."
+
+msgid "Type the exact text below to confirm"
+msgstr "د تایید لپاره لاندې دقیق متن ولیکئ"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine به یوازې مرحلې شوي V300 مهاجرتونه په ښکاره توګه د خوندیتوب بیاکتنې تیریدو وروسته اجرا کړي."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine تاریخي بنسټ خبرداری راپور کړ. تازه کوونکی به لاهم یوازې مرحلې شوي V300 مهاجرتونه د ښکاره تایید وروسته اجرا کړي."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "یوازې د منشور لاره بدلیدلی شي. د HTTPS پروتوکول او رسمي تازه ډومین ثابت دي."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "د پراختیا حالت د HTTPS منشور URL یا محلي منشور لاره اجازه ورکوي."
+
+msgid "The official update manifest is configured by the server."
+msgstr "رسمي تازه منشور د سرور لخوا تنظیم شوی."
+
+msgid "What feedback do you want about this course?"
+msgstr "تاسو د دې کورس په اړه کوم نظر غواړئ؟"
+
+msgid "Analysis summary"
+msgstr "د تحلیل لنډیز"
+
+msgid "Lessons included"
+msgstr "شامل درسونه"
+
+msgid "Standalone documents included"
+msgstr "شامل خپلواک اسناد"
+
+msgid "Standalone exercises included"
+msgstr "شامل خپلواک تمرینونه"
+
+msgid "General feedback"
+msgstr "عمومي نظر"
+
+msgid "Strengths"
+msgstr "ځواکونه"
+
+msgid "Risks"
+msgstr "خطرونه"
+
+msgid "Recommendations"
+msgstr "سپارښتنې"
+
+msgid "Lesson feedback"
+msgstr "د درس نظر"
+
+msgid "Standalone document feedback"
+msgstr "د خپلواک سند نظر"
+
+msgid "Standalone exercise feedback"
+msgstr "د خپلواک تمرین نظر"
+
+msgid "AI response"
+msgstr "د AI ځواب"
+
+msgid "Sequence feedback"
+msgstr "د سلسلې نظر"
+
+msgid "Purpose"
+msgstr "موخه"
+
+msgid "You"
+msgstr "تاسو"
+
+msgid "City of internship"
+msgstr "د انټرنشپ ښار"
+
+msgid "City"
+msgstr "ښار"
+
+msgid "Update workflow restored after page refresh"
+msgstr "د پاڼې له تازه کېدو وروسته د تازه کولو کاري بهیر بېرته ورغول شو"
+
+msgid "Last completed step"
+msgstr "وروستی بشپړ شوی ګام"
+
+msgid "Stage package"
+msgstr "د بستې چمتووالی"
+
+msgid "Package staging"
+msgstr "د بستې چمتو کول"
+
+msgid "Apply plan"
+msgstr "پلان پلي کول"
+
+msgid "Update workflow completed"
+msgstr "د تازه کولو کاري بهیر بشپړ شو"
+
+msgid "Update directory exists and is writable."
+msgstr "د تازه کولو لارښود شته او د لیکلو وړ دی."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "د تازه کولو لارښود شته خو د لیکلو وړ نه دی: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "د تازه کولو لارښود لا نه شته، خو د هغه اصلي لارښود د لیکلو وړ دی."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "د تازه کولو لارښود لا نه شته، خو د var/ لاندې جوړېدای شي."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "د تازه کولو لارښود نه شته او د اوسنیو اجازو سره جوړېدای نشي."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "د تازه کولو د مخکې ازموینې لپاره ازاد ډیسک ځای نه شي ټاکل کېدای."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "د خوندي تازه کولو د چمتووالي عملیاتو لپاره کافي ازاد ډیسک ځای نشته."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "د دې د تایید پړاو تازه کولو بهیر لپاره ازاد ډیسک ځای کافي دی."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "د تازه کولو منشور د PHP نسخې اړتیا نه ټاکي."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "د PHP اړتیا په بشپړ ډول نه شي ارزول کېدای: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "اوسنۍ PHP نسخه د تازه کولو اړتیا نه پوره کوي: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "اوسنۍ PHP نسخه د تازه کولو اړتیا پوره کوي."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "د سیمه‌ییزې بستې لار نه ده ورکړل شوې. ډاونلوډ شوې بستې یوازې د ډاونلوډ وروسته چک کېدای شي."
+
+msgid "Local update package is not readable: %s"
+msgstr "سیمه‌ییزه تازه کولو بسته د لوستلو وړ نه ده: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "سیمه‌ییزه تازه کولو بسته باید ZIP آرشیف وي."
+
+msgid "Local update package is readable."
+msgstr "سیمه‌ییزه تازه کولو بسته د لوستلو وړ ده."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "د نصب شوې چامیلو نسخه په اتومات ډول نه شوه موندل کېدای. د نسخې لوری نه شي چک کېدای."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "نصب شوې یا هدفي نسخه د پرتله کېدونکې معنايي نسخې بڼه نه لري."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "هدفي نسخه د نصب شوې نسخې څخه ټیټه ده. ښکته کول په ډیفالټ نه دي اجازه ورکړل شوي."
+
+msgid "Target version matches the installed version."
+msgstr "هدفي نسخه د نصب شوې نسخې سره سمون لري."
+
+msgid "Target version is newer than the installed version."
+msgstr "هدفي نسخه د نصب شوې نسخې څخه نوې ده."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "پروژه د Git چک‌آوټ نه ده یا .git شتون نلري."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "دا تازه کولو سیسټم د هغو نصبونو لپاره دی چې د Git ملاتړ نلري. موږ موندلي چې سیمه‌ییز سیسټم Git کاروي. د تازه کولو دوام ممکن د Git تاریخچه خراب کړي. د Git ملاتړ لرونکو سیسټمونو لپاره، موږ د ویب ریښې په CONTRIBUTING.md کې د Git پروسیجر کارول سپارښتنه کوو."
+
+msgid "Local Git changes were also detected."
+msgstr "سیمه‌ییز Git بدلونونه هم وموندل شول."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "د پروژې ځینې میټاډاټا فایلونه ورک دي. وروستي تازه کولو پړاوونه ممکن لاسي د تړاوونو چک ته اړتیا ولري."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "د Composer او Yarn میټاډاټا فایلونه شته دي."
+
+msgid "Starting staged file application."
+msgstr "د چمتو شویو فایلونو پلي کول پیلېږي."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "د چمتو شویو فایلونو پلي کولو لپاره څرګند تایید اړین دی."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "د چمتو شویو تازه کولو فایلونو پلي کول څرګند تایید ته اړتیا لري."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "د چمتووالي لارښود د چامیلو د تازه کولو د چمتووالي لارښود دننه دی."
+
+msgid "Staging directory was validated."
+msgstr "د چمتووالي لارښود تایید شو."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "د پلي کولو پلان میټاډاټا په بریالیتوب سره ولوستل شو."
+
+msgid "Staged application path is valid."
+msgstr "د چمتو شوي پلي کولو لار باوري ده."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "د لاسلیک شوې بستې د پاکولو میټاډاټا د بیاکتنه شوي پلي کولو پلان سره سمون لري."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "د لاسلیک شوې بستې د پاکولو میټاډاټا تایید شو."
+
+msgid "Update lock was acquired."
+msgstr "د تازه کولو قفل ترلاسه شو."
+
+msgid "Update backup directory was created."
+msgstr "د تازه کولو د بیک‌اپ لارښود جوړ شو."
+
+msgid "Update file operations were collected."
+msgstr "د تازه کولو د فایل عملیات راټول شول."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "هغه موجود فایلونه چې د بدلولو یا لرې کولو پلان لري بیک‌اپ شول."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "چمتو شوي تازه کولو فایلونه د چامیلو نصب ته کاپي شول."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "د کڅوړې له خوا اعلان شوي زوړ فایلونه د چامیلو نصب څخه لرې شول."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "د کڅوړې له خوا اعلان شوي زوړ فایلونه لرې شول."
+
+msgid "Update apply audit metadata was written."
+msgstr "د تازه کولو پلي کولو د پلټنې میټاډاټا ولیکل شوه."
+
+msgid "Staged files applied successfully."
+msgstr "مرحله شوي فایلونه په بریالیتوب سره پلي شول."
+
+msgid "Unable to restore removed files: %s"
+msgstr "د لرې شویو فایلونو بیا رغول ناشوني دي: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "د کاپي شویو فایلونو بیرته راګرځول ناشوني دي: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "د تازه کولو پلي کولو ناکامۍ وروسته د فایل بیرته راګرځول ترسره شو."
+
+msgid "Rollback failed: %s"
+msgstr "بیرته راګرځول ناکام شو: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "د تازه کولو پلي کولو د پلټنې میټاډاټا لیکل ناشوني دي: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "د ناکامۍ وروسته د تازه کولو قفل خوشې کول ناشوني دي: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "د تازه کولو فایلونو پلي کولو لپاره د مرحلې لاره اړینه ده."
+
+msgid "Staging directory does not exist: %s"
+msgstr "د مرحلې لارښود شتون نلري: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "د چامیلو تازه کولو د مرحلې بنسټیز لارښود شتون نلري."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "د مرحلې لارښود باید د var/update/staging دننه وي."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "د مرحلې لارښود APPLY-PLAN.json نلري."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "د تازه کولو پلي کولو پلان میټاډاټا لوستل ناشوني دي: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "د تازه کولو پلي کولو پلان میټاډاټا باوري JSON نه دی: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "د تازه کولو پلي کولو پلان میټاډاټا باید د JSON څیز وي."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "د تازه کولو پلي کولو پلان د application_path ساحه نلري."
+
+msgid "Staged application path is not readable: %s"
+msgstr "مرحله شوې د غوښتنلیک لاره د لوستلو وړ نه ده: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "مرحله شوې د غوښتنلیک لاره باید د مرحلې لارښود دننه وي."
+
+msgid "Staged application path is missing composer.json."
+msgstr "مرحله شوې د غوښتنلیک لاره composer.json نلري."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "د تازه کولو کڅوړه %s نلري. یوه تایید شوې کڅوړه د لاسلیک شوې پاکولو میټاډاټا سره بیا مرحله کړئ."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "د تازه کولو پلي کولو پلان د بیاکتنه شوې کڅوړې پاکولو میټاډاټا نلري."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "د تازه کولو کڅوړې پاکولو میټاډاټا د پلي کولو پلان جوړولو وروسته بدل شو. د دوام دمخه پلي کولو پلان بیا جوړ کړئ."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "د تازه کولو پلي کولو پلان ناباوره د کڅوړې لرې کولو لیست لري."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "د تازه کولو کڅوړې پاکولو لارې د پلي کولو پلان جوړولو وروسته بدلې شوې. د دوام دمخه پلي کولو پلان بیا جوړ کړئ."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "د تازه کولو پلي کولو پلان د بیاکتنه شوې لرې کولو لارو لیست نلري."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "د تازه کولو پلي کولو پلان د لرې کولو لارې د لاسلیک شوې کڅوړې پاکولو میټاډاټا سره سمون نه خوري."
+
+msgid "Update lock path must be inside var/update."
+msgstr "د تازه کولو قفل لاره باید د var/update دننه وي."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "د تازه کولو پلي کولو پلان د backup_path ساحه نلري."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "د تازه کولو بیک اپ لاره ناامنه لارې برخې لري."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "د تازه کولو بیک اپ لاره باید د var/update/backups دننه وي."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "د تازه کولو قفل ترلاسه کول ناشوني دي. بل تازه کول ممکن روان وي."
+
+msgid "Unable to release update lock: %s"
+msgstr "د تازه کولو قفل خوشې کول ناشوني دي: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "د تازه کولو بیک اپ لارښود له مخکې شتون لري: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "هدف لارښود نشي جوړېدلی: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "پلان شوی تازه کول به موجود سمبولیک لینک له سره ولیکي: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "هدف فایل د لیکلو وړ نه دی: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "هدف فایل نشي جوړېدلی: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "د زوړ فایلونو لرې کولو دمخه د چامیلو پروژې لارښود حل کول ناشوني دي."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "د تازه کولو پاکول خوندي لاره نشي لرې کولی: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "پلان شوی تازه کول به موجود سمبولیک لینک لرې کړي: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "د تازه کولو پاکول یوازې فایلونه ملاتړ کوي، نه لارښودونه: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "زوړ هدف فایل د بیک اپ لپاره د لوستلو وړ نه دی: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "زوړ هدف فایل د اوسنیو لارښود اجازو سره نشي لرې کېدلی: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "زوړ هدف فایل د چامیلو پروژې لارښود څخه بهر حل کېږي: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "د هدف فایل بیک اپ ناشونی دی: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "د تازه کولو بیک اپ میټاډاټا لیکل ناشوني دي."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "مرحله شوی تازه کولو فایل کاپي کول ناشوني دي: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "د %d له %d مرحله شویو فایلونو څخه کاپي شول."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "د بسته له خوا اعلان شوی زوړ فایل نشي لرې کېدای: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "د بسته له خوا اعلان شوي %d له %d زړو فایلونو څخه لرې شول."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "د بیک‌اپ شوی فایل بیا رغول نشي کېدای: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "د رول‌بیک پر مهال نوی کاپي شوی فایل نشي لرې کېدای: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "لرې شوی فایل نشي بیا رغول کېدای ځکه یې بیک‌اپ نشته: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "لرې شوی فایل له بیک‌اپ څخه نشي بیا رغول کېدای: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "د تازه معلوماتو پلي کولو د پلټنې میټاډاټا نشي لیکل کېدای."
+
+msgid "Unable to write global update apply log."
+msgstr "د نړیوال تازه معلوماتو پلي کولو لاګ نشي لیکل کېدای."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "ناخوندي مرحله شوی نسبي لار وموندل شو: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "ډایرکټري د لیکلو وړ نه ده: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "ډایرکټري نشي جوړېدای: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "د مرحلې میټاډاټا په بریالیتوب سره ولوستل شوه."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "د پلي کولو پلان میټاډاټا د مرحلې ډایرکټرۍ ته ولیکل شوه."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "هدف فایلونه او ډایرکټرۍ د پلان شوي تازه معلوماتو او پاکولو لپاره د لیکلو وړ ښکاري."
+
+msgid "Update apply plan check failed."
+msgstr "د تازه معلوماتو د پلي کولو پلان چک ناکام شو."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "ځینې هدف فایلونه یا ډایرکټرۍ نشي لیکل یا لرې کېدای."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "د دې د حل لپاره، د ټولې چامیلو ډایرکټرۍ مالک په موقتي ډول %s (د ویب سرور کارن) ته بدل کړئ، تازه معلومات پلي کړئ، وروسته مالک بیا %s ته بدل کړئ، بیا د var/ (او د هغې محتویاتو) مالک %s ته وټاکئ ترڅو غوښتنلیک ورته لیکل ته دوام ورکړي."
+
+msgid "Update package verification failed."
+msgstr "د تازه معلوماتو د بستې تایید ناکام شو."
+
+msgid "Update preflight checks failed."
+msgstr "د تازه معلوماتو مخکیني چکونه ناکام شول."
+
+msgid "Unable to stage update package."
+msgstr "د تازه معلوماتو بسته نشي مرحله کېدای."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "په دې سرور کې له UI څخه د پلي کولو وروسته قوماندې چلول غیر فعال دي."
+
+msgid "Missing required field: %s"
+msgstr "اړین ډګر نشته: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "د تازه معلوماتو د مانیفیسټ هیڅ سرچینه نه ده ورکړل شوې او هیڅ ډیفالټ د تازه معلوماتو مانیفیسټ URL نه دی تنظیم شوی."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "د تازه معلوماتو د مانیفیسټ URL باید رسمي د تازه معلوماتو اصل %s وکاروي. یوازې د مانیفیسټ لار بدلېدای شي."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "ځایي د تازه معلوماتو د مانیفیسټ لارې غیر فعالې دي. د HTTPS مانیفیسټ URL وکاروئ یا د ځایي ازموینو لپاره په سرور چاپېریال کې CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 وټاکئ."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "د HTTP %s لار مه ورکوئ. دا ډګر تش پرېږدئ ترڅو له د تازه معلوماتو مانیفیسټ څخه ډاونلوډ شي."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "په دې چاپېریال کې ځایي د تازه معلوماتو %s لارې غیر فعالې دي."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "په دې چاپېریال کې باید په سرور کې د باور وړ د تازه معلوماتو عامه کیلي تنظیم شي."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "په دې چاپېریال کې د تازه معلوماتو د لاسلیک تایید تېرول غیر فعال دي."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "د پلي کولو وروسته د تازه معلوماتو کړنې چلول د تایید متن \"%s\" ته اړتیا لري."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "د مرحله شویو تازه معلوماتو فایلونو پلي کول د تایید متن \"%s\" ته اړتیا لري."
+
+msgid "Unable to resolve project directory."
+msgstr "د پروژې ډایرکټري نشي حل کېدای."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "د ډیټابیس بیک‌اپ د دې تازه کوونکي له خوا نه اداره کېږي. د مهاجرتونو له چلولو مخکې د ډیټابیس بیک‌اپ جوړ او تایید کړئ."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "د Doctrine د مهاجرت down() میتودونه د ړنګ شوي یا بدل شوي معلوماتو بیا رغونه تضمین نه کوي."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "د پلي کولو وروسته میټاډاټا د ډیټابیس مهاجرت بیاکتنه وړاندیز کوي."
+
+msgid "No migration files were found in the staged package."
+msgstr "په مرحله شوې بسته کې د مهاجرت هیڅ فایل ونه موندل شو."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "مرحله شوي Doctrine د مهاجرت فایلونه وموندل شول."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "د Doctrine د مهاجرت هدف له مرحله شوې بستې څخه حل شو."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "د Doctrine د مهاجرت بنسټ د مرحله شویو مهاجرتونو لپاره خنډونکي ستونزې لري."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine د تاریخي مهاجرت بنسټ خبرداری ورکوي، خو یوازې مرحله شوي %s مهاجرتونه به په څرګند ډول بیاکتنه او اجرا شي."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine د تاریخي مهاجرت بنسټ خبرداری ورکوي. تازه کوونکی به یوازې مرحله شوي %s د مهاجرت ټولګي د څرګند تایید وروسته اجرا کړي."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "د Doctrine بنسټ د مرحله شویو %s مهاجرتونو لپاره هیڅ خنډونکې ستونزه نلري."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "د Doctrine مهاجرت وچ چلول لږ تر لږه د یوه مرحله شوي مهاجرت لپاره ناکام شو. تر هغه چې دا حل نشي، د ډیټابیس مهاجرتونه مه چلوئ."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "د Doctrine وچ چلول د هر مرحله شوي د مهاجرت ټولګي لپاره په بریالیتوب سره بشپړ شو."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "د مهاجرتونو له چلولو مخکې باید د ډیټابیس بیک‌اپ د دې تازه کوونکي څخه بهر جوړ شي."
+
+msgid "Staging path is required to review database migrations."
+msgstr "د ډیټابیس مهاجرتونو بیاکتنې لپاره د مرحلې لار اړینه ده."
+
+msgid "Unable to read update %s: %s"
+msgstr "د تازه معلوماتو %s نشي لوستل کېدای: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "د تازه معلوماتو %s JSON ناباوره دی: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "د تازه معلوماتو %s JSON باید یو آبجکټ وي."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "د پلي کولو وروسته د چکونو میټاډاټا د اعتبار وړ کړنو لست نه لري."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "د دې مرحلې شوي تازه کولو لپاره د ډیټابیس مهاجرتونه سپارښتنه نه شول."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "د تازه کولو میټاډاټا کې د مرحلې شوي پلي کولو لاره نشته."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "پلان شوی مرحلې شوی مهاجرت فایل ونه موندل شو: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "د مرحلې شوي مهاجرت فایل لوستل ناشوني دي: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "له getDescription() څخه هیڅ تشریح نه شو استخراج کېدای."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "د تازه کولو چلونکی یوازې %s مرحلې شوي مهاجرتونه ملاتړ کوي: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "د مهاجرت د خوندیتوب میټاډاټا لیکل ناشوني دي: %s"
+
+msgid "Migration safety check failed."
+msgstr "د مهاجرت د خوندیتوب چک ناکام شو."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "ناخوندی مرحلې شوی نسبي مهاجرت لاره وموندل شوه: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "د نصب شوي چامیلو نسخه په اتومات ډول ونه موندل شوه. یوازې وروسته له دې چې تایید کړئ دا تازه کول مطابقت لري، دوام ورکړئ."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "نصب شوې یا هدف نسخه د پرتله کېدونکي سیمانټیک نسخې بڼه کې نه ده. یوازې وروسته له لاسي تایید څخه دوام ورکړئ."
+
+msgid "An update is available."
+msgstr "یو تازه کول شتون لري."
+
+msgid "The installed version already matches the manifest version."
+msgstr "نصب شوې نسخه دمخه د مانیفیسټ نسخې سره سمون لري."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "د مانیفیسټ نسخه د نصب شوې نسخې څخه زړه ده. ښکته کول په ډیفالټ بند دي."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "مرحلې شوي فایلونه په بریالیتوب سره پلي نه شول. د پلي کولو وروسته چکونه نشي دوام کولای."
+
+msgid "Apply result metadata was read successfully."
+msgstr "د پلي کولو پایلې میټاډاټا په بریالیتوب سره ولوستل شوه."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "د پلي کولو وروسته د کړنو سپارښتنې جوړې شوې."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "په مرحلې شوي بسته کې د ډیټابیس مهاجرتونه وموندل شول. یوازې وروسته له دې چې تایید کړئ د فایل تازه کول سم دي او د ډیټابیس بیک اپ شتون لري، یې چل کړئ."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "د پلي کولو وروسته چکونو چلولو لپاره د مرحلې لاره اړینه ده."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "تازه کول %s د اعتبار وړ JSON نه دی: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "تازه کول %s باید د JSON آبجیکټ وي."
+
+msgid "Composer dependencies"
+msgstr "د کمپوزر تړاوونه"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "د کمپوزر میټاډاټا په مرحلې شوي بسته کې شامله وه. د تازه کولو بشپړ ګڼلو دمخه له د اپلیکیشن ریښې څخه Composer install چل کړئ."
+
+msgid "Frontend assets"
+msgstr "د مخکینۍ برخې شتمنۍ"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "د مخکینۍ برخې اړوند فایلونه په مرحلې شوي بسته کې شامل وو. د تړاوونو نصبولو وروسته د تولید شتمنۍ بیا جوړې کړئ."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "په مرحلې شوي بسته کې د ډاکټرین مهاجرت فایلونه وموندل شول. د مهاجرتونو چلولو دمخه تایید کړئ چې د ډیټابیس بیک اپ شتون لري."
+
+msgid "Symfony cache"
+msgstr "د سیمفوني کیش"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "د تازه کولو فایلونو پلي کولو او اړینو قوماندو چلولو وروسته د سیمفوني کیش پاک کړئ."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "د پلي کولو وروسته د چکونو میټاډاټا لیکل ناشوني دي."
+
+msgid "Post-apply check failed."
+msgstr "د پلي کولو وروسته چک ناکام شو."
+
+msgid "Update package is not readable: %s"
+msgstr "د تازه کولو بسته لوستل کېدونکې نه ده: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "د تازه کولو بسته د اعتبار وړ ZIP آرشیف نه دی."
+
+msgid "Update package ZIP archive is empty."
+msgstr "د تازه کولو بستې ZIP آرشیف تش دی."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "د تازه کولو بسته یو نه لوستل کېدونکی ZIP ننوت لري."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "د تازه کولو بسته یوه ناخوندی مطلقه لاره لري: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "د تازه کولو بسته د لارې تېرېدو ننوت لري: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "د تازه کولو بسته یو سمبولیک لینک لري: %s"
+
+msgid "Starting post-apply actions."
+msgstr "د پلي کولو وروسته کړنې پیلېږي."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "د پلي کولو وروسته د قوماندې اجرا صریح تایید ته اړتیا لري."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "د پلي کولو وروسته د سپارښتنې میټاډاټا په بریالیتوب سره ولوستل شوه."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "د پلي کولو وروسته کړنې د سپارښتنې راپور په وړاندې تایید شوې."
+
+msgid "Post-apply actions were selected."
+msgstr "د پلي کولو وروسته کړنې وټاکل شوې."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "پرمختللې د پلي کولو وروسته کړنې صریح پرمختللي تایید ته اړتیا لري."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "پرمختللې د پلي کولو وروسته کړنې په صریح ډول تایید شوې."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "ټاکل شوې د پلي کولو وروسته قوماندې په بریالیتوب سره بشپړې شوې."
+
+msgid "Post-apply command run metadata was written."
+msgstr "د پلي کولو وروسته د قوماندې چلولو میټاډاټا ولیکل شوه."
+
+msgid "Post-apply actions completed successfully."
+msgstr "د پلي کولو وروسته کړنې په بریالیتوب سره بشپړې شوې."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "په یاد ولرئ چې د فایل او ډایرکټرۍ اجازې د دې تازه کولو دمخه حالت ته بیرته راوګرځوئ. د ویب سرور ته د چامیلو کوډ ته د لیکلو لاسرسي پریښودل هر راتلونکی زیانمنتیا په داسې لاره بدلوي چې ستاسو د پلیټفارم فایلونه بدل کړي."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "د تازه کولو د پلي کولو وروسته د قوماندې ناسم تعریف: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "د پلي کولو وروسته کړنه چلیږي: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "د %s لپاره امر %d د %d څخه پرمخ روان دی."
+
+msgid "Post-apply action failed: %s"
+msgstr "د پلي کولو وروسته عمل ناکام شو: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "د پلي کولو وروسته عمل \"%s\" د وتلو کوډ %d سره ناکام شو."
+
+msgid "Post-apply action completed: %s"
+msgstr "د پلي کولو وروسته عمل بشپړ شو: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "د پلي کولو وروسته عملونو د چلولو لپاره د سټېجينګ لاره اړینه ده."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "د چلولو لپاره هیڅ وړاندیز شوي پلي کولو وروسته عملونه نشته."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "د چلولو لپاره هیڅ اجازه ورکړل شوي پلي کولو وروسته عملونه نشته."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "د دې تازه کولو لپاره د پلي کولو وروسته عمل اجازه نه لري: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "د ډیټابیس مهاجرتونه د اجرا کولو دمخه د مهاجرت خوندیتوب بیاکتنې ته اړتیا لري."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "د ډیټابیس مهاجرتونه نشي چلېدلی ځکه چې د مهاجرت خوندیتوب بیاکتنه نه ده تېره شوې."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "د ډیټابیس مهاجرتونه نشي چلېدلی ځکه چې د مهاجرت خوندیتوب بیاکتنې سټېج شوي مهاجرتونه نه دي لیست کړي."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "د ډیټابیس مهاجرتونه نشي چلېدلی ځکه چې د مهاجرت خوندیتوب بیاکتنه یو ناسم مهاجرت داخلول لري."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "یوازې سټېج شوي %s مهاجرتونه د تازه کولو چلونکي لخوا اجرا کېدای شي."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "د ډیټابیس مهاجرتونه نشي چلېدلی ځکه چې د سټېج شوي مهاجرت خوندیتوب بیاکتنې بندونکي تېروتنې راپور کړې."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine د مهاجرت بنسټ خبرداری راپوروي. یوازې سټېج شوي %s مهاجرت ټولګي به په څرګند ډول اجرا شي."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "د ډیټابیس مهاجرتونه د تایید ته اړتیا لري چې د ډیټابیس بیک اپ شتون لري."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "د ډیټابیس مهاجرتونه د تایید متن \"RUN DATABASE MIGRATIONS\" ته اړتیا لري."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "د ډیټابیس مهاجرت خوندیتوب بیاکتنه د اجرا کولو دمخه بشپړه شوې وه."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "د ډیټابیس بیک اپ شتون په څرګند ډول تایید شو."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "د ډیټابیس مهاجرت خوندیتوب بیاکتنه او د بیک اپ تایید وړاندې شول."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "د ډیټابیس مهاجرتونه د ډیټابیس بیک اپ څرګند تایید وروسته اجرا شول. تازه کوونکي د ډیټابیس بیک اپ نه دی جوړ کړی."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "د پلي کولو وروسته اړین د اجرا وړ اجازې نورمالې شوې."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "د ډیټابیس مهاجرتونه نشي چلولی ځکه چې bin/console ونه موندل شو."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "ټاکل شوي د پلي کولو وروسته امرونه اړین د لیکلو وړ لارې لري."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "د پلي کولو وروسته امر د لیکلو وړ لارې تایید شوې."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "پرمختللي د پلي کولو وروسته عملونه کولی شي انحصارونه، جوړ شوي شتمنۍ یا ډیټابیس بدل کړي. د دوام دمخه بیک اپونه بیا وګورئ."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "کمپوزر له ویب تازه کوونکي څخه په خوندي ډول نشي چلېدلی ځکه چې د کمپوزر لخوا جوړ شوی فایل \"%s\" د UID %d ملکیت دی پداسې حال کې چې PHP رنټایم UID %d کاروي. کمپوزر په لاسي ډول د ځای پرځای کولو مالک په توګه چل کړئ، بیا پاتې د پلي کولو وروسته عملونو سره دوام ورکړئ."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "د پلي کولو وروسته عمل \"%s\" لخوا اړینه لاره د لیکلو وړ نه ده: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "د پلي کولو وروسته عمل \"%s\" لخوا اړین اصلي فولډر د لیکلو وړ نه دی: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "د اړین د پلي کولو وروسته اجرا وړ لپاره اجازې نشي لوستلی: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "اړین د پلي کولو وروسته اجرا وړ د اجرا وړ په توګه نشي نښه کولی: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "اړین د پلي کولو وروسته اجرا وړ د chmod وروسته لا هم اجرا وړ نه دی: %s"
+
+msgid "Executable permission was normalized."
+msgstr "د اجرا وړ اجازه نورمال شوې."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "د پلي کولو وروسته امرونو لپاره جلا Git تنظیمات نشي لیکلی."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "بل تازه کولو عملیات روان ښکاري. var/update/update.lock یوازې هغه وخت لرې کړئ چې هیڅ تازه کول فعال نه وي."
+
+msgid "Unable to create update lock: %s"
+msgstr "د تازه کولو لاک نشي جوړولی: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "د پلي کولو وروسته امر د چلولو میټاډاټا نشي لیکلی: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "د تازه کولو منشور د کڅوړې بلاک نلري."
+
+msgid "Update manifest signature block must be an object."
+msgstr "د تازه کولو منشور د لاسلیک بلاک باید یو څیز وي."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "د تازه کولو منشور د اړتیاوو بلاک باید یو څیز وي."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "د تازه کولو کڅوړه sha256 باید ۶۴ توري لرونکی هیکساډیسیمل تار وي."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "د تازه کولو منشور اړین تار ساحه \"%s\" نلري."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "د تازه کولو منشور ساحه \"%s\" باید تار وي."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "د تازه کولو منشور باوري JSON نه دی: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "د تازه کولو منشور JSON باید یو څیز وي."
+
+msgid "Manifest source cannot be empty."
+msgstr "د منشور سرچینه نشي خالي کېدای."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "د تازه کولو منشور URL باید رسمي تازه کولو اصل %s وکاروي."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "د تازه کولو منشور نشي ډاونلوډ کولی. HTTP حالت: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "د منشور فایل د لوستلو وړ نه دی: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "د منشور فایل نشي لوستلی: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "د تازه کولو منشور URL باید HTTPS وکاروي."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "د تازه کولو کڅوړې میټاډاټا د لوستلو وړ نه ده: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "د تازه کولو کڅوړې میټاډاټا لوستل نشو کولی: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "د تازه کولو کڅوړې میټاډاټا باوري JSON نه ده: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "د تازه کولو کڅوړې میټاډاټا باید د JSON څیز وي."
+
+msgid "Update package metadata format must be %d."
+msgstr "د تازه کولو کڅوړې میټاډاټا بڼه باید %d وي."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "د تازه کولو کڅوړې میټاډاټا ساحه \"remove\" باید یو آرایه وي."
+
+msgid "Update package removal paths must be strings."
+msgstr "د تازه کولو کڅوړې د لرې کولو لارې باید تارونه وي."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "د تازه کولو کڅوړې میټاډاټا خوندي لاره نشو لرې کولی: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "د تازه کولو کڅوړه نشي کولی ورته لاره شامل او لرې کړي: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "د تازه کولو کڅوړې میټاډاټا sha256 محاسبه نشو کولی."
+
+msgid "Update package removal path cannot be empty."
+msgstr "د تازه کولو کڅوړې د لرې کولو لاره نشي خالي کېدای."
+
+msgid "Update package removal path contains a null byte."
+msgstr "د تازه کولو کڅوړې د لرې کولو لاره یو null بایټ لري."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "د تازه کولو کڅوړې د لرې کولو لاره باید نسبي وي: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "د تازه کولو کڅوړې د لرې کولو لاره یو ناامنه برخه لري: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "د تازه کولو پلي کولو پلان جوړولو لپاره د سټېجینګ لاره اړینه ده."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "د سټېجینګ فولډر STAGING-INFO.json نلري."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "د سټېجینګ میټاډاټا لوستل نشو کولی: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "د سټېجینګ میټاډاټا باوري JSON نه ده: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "د سټېجینګ میټاډاټا باید د JSON څیز وي."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "د سټېجینګ میټاډاټا کې د application_path ساحه نشته."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "د تازه کولو کڅوړه %s نلري. د فایلونو پلي کولو دمخه لاسلیک شوې پاکولو میټاډاټا اړینه ده."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "د سټېجینګ میټاډاټا د استخراج پر مهال ثبت شوې لاسلیک شوې کڅوړې پاکولو میټاډاټا نلري."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "د تازه کولو کڅوړې پاکولو میټاډاټا د سټېجینګ وروسته بدله شوې. د دوام دمخه تایید شوې کڅوړه بیا سټېج کړئ."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "د سټېجینګ میټاډاټا باوري د کڅوړې لرې کولو لیست نلري."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "د تازه کولو کڅوړې پاکولو لارې د سټېجینګ وروسته بدلې شوې. د دوام دمخه تایید شوې کڅوړه بیا سټېج کړئ."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "لاسلیک شوې کڅوړې پاکولو میټاډاټا د سټېجینګ راهیسې نه ده بدله شوې."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "د تازه کولو لاک فایل دمخه شته. بل تازه کول ممکن روان وي."
+
+msgid "Update lock directory is not writable."
+msgstr "د تازه کولو لاک فولډر د لیکلو وړ نه دی."
+
+msgid "No update lock is currently active."
+msgstr "اوس مهال هیڅ د تازه کولو لاک فعال نه دی."
+
+msgid "Update backup directory is not writable."
+msgstr "د تازه کولو بیک اپ فولډر د لیکلو وړ نه دی."
+
+msgid "Update backup directory is writable."
+msgstr "د تازه کولو بیک اپ فولډر د لیکلو وړ دی."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "د تازه کولو بیک اپ فولډر د اوسني پروسې لخوا نشي جوړېدای."
+
+msgid "Update backup directory can be created."
+msgstr "د تازه کولو بیک اپ فولډر جوړېدای شي."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "ځینې د تازه کولو کاري فولډرونه د لیکلو وړ نه دي یا د اوسني پروسې لخوا نشي جوړېدای."
+
+msgid "Update working directories are writable or can be created."
+msgstr "د تازه کولو کاري فولډرونه د لیکلو وړ دي یا جوړېدای شي."
+
+msgid "Update apply file plan was generated."
+msgstr "د تازه کولو پلي کولو فایل پلان جوړ شو."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "د کڅوړې پاکولو میټاډاټا هغه لارې لري چې په خوندي ډول نشي لرې کېدای."
+
+msgid "Package-declared removal targets are safe."
+msgstr "د کڅوړې اعلان شوي لرې کولو هدفونه خوندي دي."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "ځینې د کڅوړې اعلان شوي زوړ فایلونه د دې نصب څخه دمخه نشته."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "پلان شوی تازه کول به موجود سمبولیک لینکونه له سره ولیکي یا لرې کړي."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "پلان شوی تازه کول موجود سمبولیک لینکونه له سره نه لیکي او نه لرې کوي."
+
+msgid "New update migration files must be placed under %s."
+msgstr "د تازه کولو نوي مهاجرت فایلونه باید د %s لاندې کېښودل شي."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "نوي %s Doctrine مهاجرت فایلونه وموندل شول. د فایلونو پلي کولو وروسته به د ډیټابیس مهاجرت خوندیتوب بیاکتنې ته اړتیا ولري."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "د تازه کولو پلي کولو پلان ځینې فایل لیستونه په JSON ځواب کې لنډ شوي وو."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "د تازه کولو پلي کولو پلان میټاډاټا لیکل نشو کولی."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "د تازه کولو کڅوړه ډاونلوډ نشو کولی. HTTP حالت: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "د تازه کولو کڅوړې هدف فایل پرانیستل نشو کولی: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "د تازه کولو ډاونلوډونه باید رسمي تازه کولو سرچینه %s وکاروي."
+
+msgid "The update package URL must use HTTPS."
+msgstr "د تازه کولو کڅوړې URL باید HTTPS وکاروي."
+
+msgid "Update package archive safety checks passed."
+msgstr "د تازه کولو د بستې د آرشیف د خوندیتوب چکونه بریالي شول."
+
+msgid "Update package was extracted to staging."
+msgstr "د تازه کولو بسته سټېجینګ ته استخراج شوه."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "د لاسلیک شوې بستې د پاکولو میټاډاټا بار شوه."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "د تازه کولو بسته %s نه لري. د فایل پلي کول به بند پاتې شي تر څو لاسلیک شوې د پاکولو میټاډاټا وړاندې شي."
+
+msgid "Staged package dry-run report was generated."
+msgstr "د سټېج شوې بستې د ازمایښتي چلولو راپور جوړ شو."
+
+msgid "Staging metadata was written."
+msgstr "د سټېجینګ میټاډاټا ولیکل شوه."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "د تازه کولو بسته سټېجینګ فولډر ته استخراج نشوه."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "په سټېج شوې بسته کې د چامیلو د غوښتنلیک ریښه ونه موندل شوه."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "سټېج شوې بسته د چامیلو اړین ننوت نه لري: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "سټېج شوې بسته د چامیلو تمه شوې جوړښت لري."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "سټېج شوې بسته composer.lock نه لري."
+
+msgid "Staged package contains composer.lock."
+msgstr "سټېج شوې بسته composer.lock لري."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "سټېج شوې بسته yarn.lock نه لري."
+
+msgid "Staged package contains yarn.lock."
+msgstr "سټېج شوې بسته yarn.lock لري."
+
+msgid "Unable to encode staging metadata."
+msgstr "د سټېجینګ میټاډاټا کوډ کول ناشوني دي."
+
+msgid "Unable to write staging metadata."
+msgstr "د سټېجینګ میټاډاټا لیکل ناشوني دي."
+
+msgid "Update operation log created."
+msgstr "د تازه کولو د عملیاتو لاګ جوړ شو."
+
+msgid "Unable to write update operation log."
+msgstr "د تازه کولو د عملیاتو لاګ لیکل ناشوني دي."
+
+msgid "Invalid update operation id."
+msgstr "د تازه کولو د عملیاتو ناسم پېژند."
+
+msgid "AI study helper"
+msgstr "د مصنوعي هوښیارۍ د زده‌کړې مرستندوی"
+
+msgid "Selected text"
+msgstr "ټاکل شوی متن"
+
+msgid "Learning technique"
+msgstr "د زده‌کړې تخنیک"
+
+msgid "AI response"
+msgstr "د AI ځواب"
+
+msgid "AI request failed."
+msgstr "د مصنوعي هوښیارۍ غوښتنه ناکامه شوه."
+
+msgid "Mind mapping"
+msgstr "ذهني نقشه جوړول"
+
+msgid "Feynman Technique"
+msgstr "د فاینمن تخنیک"
+
+msgid "Elaborative interrogation"
+msgstr "تشریحي پوښتنې"
+
+msgid "Spaced repetition"
+msgstr "فاصله‌دار تکرار"
+
+msgid "SQ3R Method"
+msgstr "د SQ3R میتود"
+
+msgid "Analogies and metaphors"
+msgstr "ورته‌والی او استعارې"
+
+msgid "Dual coding"
+msgstr "دوه ګونی کوډینګ"
+
+msgid "Storytelling"
+msgstr "کیسې ویل"
+
+msgid "Thematic connections"
+msgstr "موضوعي اړیکې"
+
+msgid "Interleaved learning"
+msgstr "ګډه زده‌کړه"
+
+msgid "Memory palaces"
+msgstr "د حافظې ماڼۍ"
+
+msgid "Logins (Month)"
+msgstr "ننوتنې (میاشت)"
+
+msgid "Logins (Day)"
+msgstr "ننوتنې (ورځ)"
+
+msgid "Logins (Hour)"
+msgstr "ننوتنې (ساعت)"
+
+msgid "Number of users (Picture)"
+msgstr "د کارنانو شمېر (انځور)"
+
+msgid "Allow tutors to register users"
+msgstr "ښوونکو ته اجازه ورکړئ چې کارنان ثبت کړي"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "ښوونکو ته اجازه ورکړئ چې د کورس غونډو دننه سمون وکړي"
+
+msgid "Extend rights for tutors"
+msgstr "د ښوونکو لپاره حقونه پراخ کړئ"
+
+msgid "Show session tutor"
+msgstr "د غونډې ښوونکی وښایئ"
+
+msgid "Default tutor access days after session"
+msgstr "د غونډې وروسته د ښوونکي د لاسرسي ډیفالټ ورځې"
+
+msgid "Default tutor access days before session"
+msgstr "د غونډې مخکې د ښوونکي د لاسرسي ډیفالټ ورځې"
+
+msgid "Dropbox: hide course tutor"
+msgstr "ډراپ باکس: د کورس ښوونکی پټ کړئ"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "په ډراپ باکس کې عمومي ښوونکی پټ کړئ"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "په سروېګانو کې د ښوونکو لپاره حقونه پراخ کړئ"
+
+msgid "Maximum courses per user"
+msgstr "د هر کارن لپاره اعظمي کورسونه"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "ښوونکو ته اجازه ورکړئ چې د تمرینونو بیاکتنې پر مهال تبصره وکړي"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "په صادر شوي کوئز پایلې PDF د فایل نوم کې رسمي کوډ شامل کړئ"
+
+msgid "Certificate expiry reminder cron"
+msgstr "د سند د ختمیدو یادونه کرون"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "د سند د ختمیدو د یادونې کړکۍ (ورځې)"
+
+msgid "Allow certificates search"
+msgstr "د سندونو لټون ته اجازه ورکړئ"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "ښوونکو ته اجازه ورکړئ چې تل اعلانونه سمون کړي"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "په حاضري پاڼو کې د زده‌کوونکو رسمي کوډ وښایئ"
+
+msgid "Restrict course chat to tutors"
+msgstr "د کورس چټ یوازې ښوونکو ته محدود کړئ"
+
+msgid "Language by resource"
+msgstr "د سرچینې له مخې ژبه"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "کله چې حالت نیمګړی پاتې شي، د وتلو پر مهال SCO بشپړ کړئ"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "د کټګورۍ منزل له مخې پرمختللي تطبیقي ازموینې فعال کړئ"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "عمومي ښوونکي ته د ازموینې خبرتیاوو لیږل بند کړئ"
+
+msgid "Enable session expiration warning"
+msgstr "د غونډې د ختمیدو خبرداری فعال کړئ"
+
+msgid "Session expiration warning time"
+msgstr "د غونډې د ختمیدو د خبرداری وخت"
+
+msgid "Check password requirements"
+msgstr "د پټنوم اړتیاوې وګورئ"
+
+msgid "File integrity check notification recipients"
+msgstr "د فایل بشپړتیا د چک خبرتیا ترلاسه کوونکي"
+
+msgid "Enable the OAuth authorization server"
+msgstr "د OAuth اجازه ورکولو سرور فعال کړئ"
+
+msgid "Enable MCP server"
+msgstr "MCP سرور فعال کړئ"
+
+msgid "Allow MCP by roles"
+msgstr "د رولونو له مخې MCP ته اجازه ورکړئ"
+
+msgid "Enable external API keys"
+msgstr "بهرني API کیلي فعال کړئ"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "د مودې له مخې غونډې تل ښوونکو ته شتون لري"
+
+msgid "Allow registration via course invitation links"
+msgstr "د کورس د بلنې لینکونو له لارې ثبت ته اجازه ورکړئ"
+
+msgid "Add student fullname in file download name"
+msgstr "د فایل د ډاونلوډ نوم کې د زده‌کوونکي بشپړ نوم اضافه کړئ"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "په WYSIWYG ایډیټرونو کې ټولو فعالو ژبو ته د AI ژباړې اجازه ورکړئ"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "د کورس ښوونکو د سمون وړتیا غیر فعال کړئ"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "کله چې غونډې کارول کیږي، ډیفالټ چلند دا دی چې د بنسټیز کورس کې تعریف شوي د وسیلې لیدلوری وکارول شي. دا تنظیم هغه بدلوي ترڅو د غونډې کورسونو کې ښوونکو ته اجازه ورکړي چې د وسیلو لیدلوري خپلو اړتیاوو سره سمون ورکړي."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "ښوونکي ممکن په پلیټفارم کې کارنان جوړ کړي او کارنان یوې غونډې ته ثبت کړي."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "دا اختیار فعال کړئ ترڅو ښوونکو ته د لیکوالۍ وسیلو کې د روزونکو ورته اجازې ورکړئ"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "په کورس لیست کې د غونډې د سرلیک بکس کې د عمومي غونډې ښوونکي نوم وښایئ"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "کله چې فعال وي، په غونډو کې د کورس ښوونکي کولی شي نوي کارنان خپلې غونډې ته ثبت کړي. دا اختیار بل ډول یوازې مدیرانو او د غونډې مدیرانو ته شتون لري."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "د رسمي غونډې د پای نیټې وروسته د ورځو ډیفالټ شمېر چې ښوونکی غونډې ته لاسرسی لري"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "د رسمي غونډې د پیل نیټې مخکې د ورځو ډیفالټ شمېر چې ښوونکی غونډې ته لاسرسی لري"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "د ریاضي فورمولونو د لیدلو لپاره د MathJax کتابتون فعال کړئ. دا په ایډیټر توولبار کې د فورمول تڼۍ اضافه کوي، چې فورمولونه په LaTeX کې لیکل کېږي."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "د کورس کوډونه چې د \"|\" سره جلا شوي دي. کله چې د بشري سرچینو رییس ننوځي، کارن په اوتومات ډول په دې کورسونو کې نوملیکنه کېږي. بېلګه: COURSE001|COURSE002. دا د کارن رول نه بدلوي."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "د کورس کوډونه چې د \"|\" سره جلا شوي دي. کله چې د غونډې مدیر ننوځي، کارن په اوتومات ډول په دې کورسونو کې نوملیکنه کېږي. بېلګه: COURSE001|COURSE002. دا د کارن رول نه بدلوي."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "د کورس کوډونه چې د \"|\" سره جلا شوي دي. کله چې زده‌کوونکی ننوځي، کارن په اوتومات ډول په دې کورسونو کې نوملیکنه کېږي. بېلګه: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "د کورس کوډونه چې د \"|\" سره جلا شوي دي. کله چې ښوونکی ننوځي، کارن په اوتومات ډول په دې کورسونو کې نوملیکنه کېږي. بېلګه: COURSE001|COURSE002. دا د کورس ښوونکي اجازه نه ورکوي."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "په ډراپ‌باکس کې د غونډې د کورس ښوونکی پټ کړئ کله چې سند د ښوونکي لخوا زده‌کوونکو ته لیږل کېږي"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "په ډراپ‌باکس وسیله کې د عمومي ښوونکي نوم پټ کړئ کله چې فایل د عمومي ښوونکي لخوا پورته شوی وي"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "دا اختیار فعال کړئ ترڅو ښوونکو ته د سروې جوړولو او سمولو اجازه ورکړئ"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "ایا د سروې بلنې باید د ښوونکي برېښنالیک پته وکاروي که هغه no-reply پته چې په اصلي تنظیماتو برخه کې تعریف شوې؟"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "د کورسونو اعظمي شمېر چې ښوونکی/روزنکی یې جوړولی شي. د محدودیت غیر فعالولو لپاره 0 وټاکئ. د BuyCourses خدمت پیرود له لارې د هر کارن لپاره بدلېدلی شي."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "ښوونکو ته اجازه ورکړئ چې د تمرینونو بیاکتنې پر مهال فیډبیک سم کړي"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "ایا د کوئز پایلې PDF ته صادرولو پر مهال د زده‌کوونکي رسمي کوډ د فایل په نوم کې شامل شي"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "پرته له محدودیت ټولو شخصي فایلونو ته لاسرسی اجازه ورکوي"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "د app:send-certificate-expiry-reminders کرون فعال کړئ، چې هغو زده‌کوونکو ته یادونه کوي چې سندونه یې پای ته رسېدلي یا نږدې پای ته رسېږي."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "د هغو سندونو لپاره د ورځو ډیفالټ شمېر چې نږدې پای ته رسېږي، پرته له دې چې کرون د --days-ahead سره چلول شي."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "کارنانو او لیدونکو ته اجازه ورکړئ چې له پورتنۍ پټۍ مینو څخه جوړ شوي سندونه ولټوي."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "ښوونکو ته اجازه ورکړئ چې په فعالو یا تېرو غونډو کې اعلانونه تل سم کړي."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "ایا په حاضري پاڼو او لیستونو کې د زده‌کوونکو رسمي کوډ د دوی د نوم تر څنګ ښکاره شي."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "د انفرادي سرچینو لپاره د ځانګړې ژبې ټاکلو اجازه ورکړئ."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "ځینې SCORM کڅوړې یوازې یو ځل LMSSetValue(cmi.core.lesson_status, 'incomplete') غږوي او هیڅکله ریښتینی پای حالت یا معنی‌لرونکی LMSFinish() نه لیږي. دا فعال کړئ ترڅو چامیلو هغه پاتې 'incomplete' د هیڅ حالت په څېر وګڼي او کله چې زده‌کوونکی SCO پرېږدي بشپړتیا حل کړي."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "که د زده‌کړې لاره پټه ټاکل شوې وي خو ښوونکي یا ټیوټر پریکړه کړې چې له کورس کورپاڼې څخه شتون ولري، دا اختیار چامیلو ته اجازه نه ورکوي چې په کورس کورپاڼه کې لینک پټ کړي."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "پرمختللي تطبیقي ازموینې فعال کړئ چې د هرې پوښتنې کټګورۍ کولی شي زده‌کوونکي د دوی د نمرې له مخې بلې کټګورۍ ته واستوي."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "کله چې زده‌کوونکي ازموینه بشپړه کړي، خبرتیاوې معمولاً ښوونکو ته لیږل کېږي، په شمول د عمومي غونډې ښوونکي. دا اختیار فعال کړئ ترڅو عمومي ښوونکی له دې خبرتیاوو څخه لرې شي."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "په پاتې ازموینو راپور کې د هغو کارنانو د ازموینې هڅې وښایئ چې عمومي ښوونکی په ټولو غونډو کې لاسرسی لري."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "تصدیق شویو کارنانو ته د سرور اړخ غونډې د پای ته رسېدو مخکې خبرداری وښایئ."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "د غونډې د پای ته رسېدو مخکې د ثانیو شمېر کله چې خبرداری ښکاره کېږي. ډیفالټ ۱۸۰ ثانیې دي."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "د کارن پټنوم لپاره اړین جوړښت تعریفوي. بېلګه: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. د ځانګړو تورو غوښتنې لپاره \"specials\" (جمع) وکاروئ."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "د پټنوم جوړولو یا تازه کولو پر مهال د پورته تعریف شویو پټنوم اړتیاوو اعتبارسنجونه فعال کړئ."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "د برېښنالیک پتو کاما جلا لیست چې کله د فایل بشپړتیا سکین بدلون ومومي خبر شي. د هر نړیوال مدیر خبرولو لپاره تش پرېږدئ."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "بهرنیو غوښتنلیکونو (لکه د Claude.ai MCP نښلوونکی) ته اجازه ورکوي چې د OAuth 2.1 Dynamic Client Registration له لارې ثبت شي او د هر کارن د خپل چامیلو حساب او اجازو سره وصل شي. په ډیفالټ غیر فعال: کشف، ثبت، اجازه او ټوکن پایټونه ټول ۴۰۴ راګرځوي تر څو دا فعال نشي."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "د چامیلو MCP پایټ او شخصي MCP API کیلي انټرفیس فعالوي. کله چې غیر فعال وي، موجود API کیلي، OAuth لاسرسي ټوکنونه او JWT اعتبارنامې په /mcp کې نه کارېدلی شي."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "د چامیلو کارن رولونو JSON نقشه چې MCP کارولو ته اجازه لري. کارن باید لږ تر لږه یو فعال رول سره سمون ولري. دا محدودیت پخوا جوړو شویو API کیليو او موجودو OAuth اړیکو ته هم پلي کېږي."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "باوري سرور-تر-سرور ادغامونو (لکه د WordPress پلورنځي پلگ‌این) ته اجازه ورکوي چې د عمومي /api پایټ په وړاندې د هر کارن بهرنۍ API کیلي سره تصدیق شي، چې د \"chamilo:security:generate-external-api-key\" کنسول امر له لارې جوړېږي. په ډیفالټ غیر فعال: موجودې کیلي نه کارېدلی شي تر څو دا فعال نشي."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "په غونډو لیست کې د غونډې فرعي سرلیک ته ښوونکی او نیټې اضافه کړئ."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "که نه، د غونډې ښوونکي یوازې د فعالې مودې پر مهال د مودې له مخې غونډو ته لاسرسی لري."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "کله چې فعال وي، ښوونکی/مدیر کولی شي د کورس د کارنانو وسیلې څخه یو ځلي بلنې لینک واستوي چې ناثبت کس ته د ثبت فورم ته رسېدنه ورکوي او حتی کله چې عمومي ځان‌نوملیکنه (allow_registration) غیر فعاله وي هم ثبت شي."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "د انفرادي سپارښتنو یا د دندې کڅوړو ډاونلوډ پر مهال د دندې فایل نومونو ته د زده‌کوونکي بشپړ نوم اضافه کړئ."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "ښوونکو ته اجازه ورکوي چې په یوه WYSIWYG عمل کې د پلیټفارم ټولو فعالو ژبو لپاره ژباړې جوړې کړي. دا ممکن د AI ټوکنونو لویه شمېره مصرف کړي."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "کله چې غیر فعال وي، مدیران په کورس سمون پاڼه کې د غونډې کورسونو ته د ښوونکو چټک ټاکلو لینک نه لري."
+
+msgid "Show courses & sessions"
+msgstr "کورسونه او غونډې وښایئ"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "اختیاري JSON. بېلګه: {\"speed\": true}"
+
+msgid "Table"
+msgstr "جدول"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "تېم"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "د کورس ټیوټر د برېښنالیک لیږونکی"
+
+msgid "Card (visual blocks)"
+msgstr "کارت (لیدیز بلاکونه)"
+
+msgid "List (classic)"
+msgstr "لیست (کلاسیک)"
+
+msgid "Limit identical emails"
+msgstr "ورته برېښنالیکونه محدود کړئ"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "د کورسونو اعظمي شمېر چې یو ښوونکی یا روزونکی یې جوړولی شي. د محدودیت غیر فعالولو لپاره ۰ وټاکئ."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "د ورته برېښنالیک سره د حسابونو اعظمي شمېر. د محدودیت غیر فعالولو لپاره ۰ وټاکئ."
+
+msgid "Validation"
+msgstr "تایید"
+
+msgid "Test/Development"
+msgstr "ازموینه/پراختیا"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "د کارن اضافي ساحې کیلي چې د /admin-dashboard/register څخه د ناستو لټون او نومولو پر مهال کارول کیږي."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "د لټون د مخکیني فلټر ساحو لپاره JSON ترتیب."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "دا هر مهاجرت چې د دې نسخه لخوا لیږل شوی دمخه اجرا شوی په توګه نښه کوي. یوازې دا په هغه پلیټ فارم کې وکړئ چې تازه دی او هیڅکله یې خپل تاریخ ثبت نه کړی."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s مهاجرتونه ثبت شول. ستاسو پلیټ فارم اوس په نورمال ډول تازه کیدی شي."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "د مهاجرت تاریخ نشته: د سمولو لپاره کلیک وکړئ (یا تازه معلومات ممکن مات شي)"
+
+msgid "Migration history is recorded"
+msgstr "د مهاجرت تاریخ ثبت شوی دی"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s د پروژې په ریښه کې شتون لري: د لوړولو پای ټکي بندولو لپاره یې حذف کړئ"
 

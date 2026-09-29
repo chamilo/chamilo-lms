@@ -27,8 +27,8 @@ use Throwable;
 )]
 final class MigrateAttendancesFastCommand extends Command
 {
-    public const RESOURCE_TYPE_ID_ATTENDANCE = 10;
-    public const RESOURCE_TYPE_GROUP_ATTENDANCE = 10;
+    public const int RESOURCE_TYPE_ID_ATTENDANCE = 10;
+    public const int RESOURCE_TYPE_GROUP_ATTENDANCE = 10;
 
     public function __construct(
         private readonly EntityManagerInterface $em,

@@ -15,6 +15,9 @@ use Exception;
 
 final class Version20240924120200 extends AbstractMigrationChamilo
 {
+    private const int CONTENT_BATCH_SIZE = 500;
+    private const int DOCUMENT_BATCH_SIZE = 250;
+
     public function getDescription(): string
     {
         return 'Update HTML content blocks to replace old CKEditor image paths with new ones and convert .gif references to .png, including HTML files in the document repository';
@@ -52,61 +55,136 @@ final class Version20240924120200 extends AbstractMigrationChamilo
         $fields = isset($config['field']) ? [$config['field']] : $config['fields'] ?? [];
 
         foreach ($fields as $field) {
-            $sql = "SELECT iid, {$field} FROM {$config['table']}";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
+            $lastIid = 0;
 
-            foreach ($items as $item) {
-                $originalText = $item[$field];
-                if (\is_string($originalText) && '' !== trim($originalText)) {
-                    $updatedText = $this->replaceGifWithPng($originalText);
-                    if ($originalText !== $updatedText) {
-                        $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
-                        $this->connection->executeQuery($updateSql, ['newText' => $updatedText, 'id' => $item['iid']]);
-                    }
+            while (true) {
+                $sql = \sprintf(
+                    'SELECT iid, %s
+                       FROM %s
+                      WHERE iid > :lastIid
+                      ORDER BY iid
+                      LIMIT %d',
+                    $field,
+                    $config['table'],
+                    self::CONTENT_BATCH_SIZE
+                );
+
+                $items = $this->connection->fetchAllAssociative(
+                    $sql,
+                    ['lastIid' => $lastIid]
+                );
+
+                if ([] === $items) {
+                    break;
                 }
+
+                foreach ($items as $item) {
+                    $iid = (int) $item['iid'];
+                    $lastIid = $iid;
+
+                    $originalText = $item[$field];
+
+                    if (!\is_string($originalText) || '' === trim($originalText)) {
+                        continue;
+                    }
+
+                    $updatedText = $this->replaceGifWithPng($originalText);
+
+                    if ($originalText === $updatedText) {
+                        continue;
+                    }
+
+                    $updateSql = \sprintf(
+                        'UPDATE %s SET %s = :newText WHERE iid = :id',
+                        $config['table'],
+                        $field
+                    );
+
+                    $this->connection->executeStatement(
+                        $updateSql,
+                        [
+                            'newText' => $updatedText,
+                            'id' => $iid,
+                        ]
+                    );
+                }
+
+                unset($items);
             }
         }
     }
 
     private function updateHtmlFiles(): void
     {
-        $sql = "SELECT iid, resource_node_id FROM c_document WHERE filetype = 'file'";
-        $result = $this->connection->executeQuery($sql);
-        $items = $result->fetchAllAssociative();
-
         $documentRepo = $this->container->get(CDocumentRepository::class);
         $resourceNodeRepo = $this->container->get(ResourceNodeRepository::class);
 
-        foreach ($items as $item) {
-            /** @var CDocument $document */
-            $document = $documentRepo->find($item['iid']);
-            if (!$document) {
-                continue;
+        $lastIid = 0;
+
+        while (true) {
+            $items = $this->connection->fetchAllAssociative(
+                \sprintf(
+                    "SELECT iid
+                       FROM c_document
+                      WHERE filetype = 'file'
+                        AND iid > :lastIid
+                      ORDER BY iid
+                      LIMIT %d",
+                    self::DOCUMENT_BATCH_SIZE
+                ),
+                ['lastIid' => $lastIid]
+            );
+
+            if ([] === $items) {
+                break;
             }
 
-            $resourceNode = $document->getResourceNode();
-            if (!$resourceNode || !$resourceNode->hasResourceFile()) {
-                continue;
-            }
+            foreach ($items as $item) {
+                $iid = (int) $item['iid'];
+                $lastIid = $iid;
 
-            $resourceFile = $resourceNode->getResourceFiles()->first();
-            if (!$resourceFile || 'text/html' !== $resourceFile->getMimeType()) {
-                continue;
-            }
-
-            try {
-                $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
-                if (\is_string($content) && '' !== trim($content)) {
-                    $updatedContent = $this->replaceGifWithPng($content);
-                    if ($content !== $updatedContent) {
-                        $documentRepo->updateResourceFileContent($document, $updatedContent);
-                        $documentRepo->update($document);
-                    }
+                /** @var CDocument|null $document */
+                $document = $documentRepo->find($iid);
+                if (!$document) {
+                    continue;
                 }
-            } catch (Exception $e) {
-                // error_log("Error processing file for document ID {$item['iid']}: " . $e->getMessage());
+
+                $resourceNode = $document->getResourceNode();
+                if (!$resourceNode || !$resourceNode->hasResourceFile()) {
+                    continue;
+                }
+
+                $resourceFile = $resourceNode->getResourceFiles()->first();
+                if (!$resourceFile || 'text/html' !== $resourceFile->getMimeType()) {
+                    continue;
+                }
+
+                try {
+                    $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
+
+                    if (!\is_string($content) || '' === trim($content)) {
+                        continue;
+                    }
+
+                    $updatedContent = $this->replaceGifWithPng($content);
+
+                    if ($content === $updatedContent) {
+                        continue;
+                    }
+
+                    $documentRepo->updateResourceFileContent($document, $updatedContent);
+                    $documentRepo->update($document);
+                } catch (Exception $e) {
+                    // Keep the migration tolerant of unreadable legacy files.
+                }
             }
+
+            unset($items);
+
+            // Document processing uses ORM repositories and resource graphs.
+            // Release managed entities after every bounded batch.
+            $this->entityManager->clear();
+            gc_collect_cycles();
         }
     }
 

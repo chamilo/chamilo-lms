@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
@@ -21,11 +22,11 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class ResourceVoter extends Voter
 {
-    public const VIEW = 'VIEW';
-    public const CREATE = 'CREATE';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
-    public const EXPORT = 'EXPORT';
+    public const string VIEW = 'VIEW';
+    public const string CREATE = 'CREATE';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
+    public const string EXPORT = 'EXPORT';
 
     public function __construct(
         private readonly AccessDecisionManagerInterface $accessDecisionManager,
@@ -81,7 +82,7 @@ class ResourceVoter extends Voter
         return $subject instanceof AbstractResource;
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         // Delegate the decision to the resource node ACL (ResourceNodeVoter),
         // which performs the real course/session/group/owner scoping. Failing

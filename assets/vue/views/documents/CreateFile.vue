@@ -16,7 +16,7 @@
       <DocumentsForm
         ref="createForm"
         :errors="errors"
-        :search-enabled="searchEnabled"
+        :search-enabled="searchEnabled && !isCertificateDocument"
         :values="item"
         @submit="onSendFormData"
       />
@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
@@ -102,12 +102,16 @@ const item = ref({
   filetype,
   parentResourceNodeId: null,
   resourceLinkList: null,
-  indexDocumentContent: searchEnabled,
+  indexDocumentContent: "certificate" === filetype ? false : searchEnabled,
   searchFieldValues: {},
   ai_assisted: 0,
   ai_assisted_raw: 0,
   language: "",
 })
+
+const isCertificateDocument = computed(
+  () => "certificate" === String(item.value?.filetype || filetype).trim().toLowerCase(),
+)
 
 const { certificateTags, insertCertificateTag, copyAllCertificateTags } = useCertificateTags(item)
 const { templates, fetchTemplates, addTemplateToEditor } = useDocumentTemplates(item, createForm)
@@ -203,6 +207,11 @@ function resetForm() {
 }
 
 async function onSendFormData() {
+  if (isCertificateDocument.value) {
+    item.value.indexDocumentContent = false
+    item.value.searchFieldValues = {}
+  }
+
   normalizeAiAssistedState()
   await dispatchCreate(createForm.value)
 }

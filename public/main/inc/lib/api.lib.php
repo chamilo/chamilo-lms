@@ -19,8 +19,9 @@ use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -40,10 +41,10 @@ use Symfony\Component\HttpFoundation\Response;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '8.2');
-define('REQUIRED_MIN_MEMORY_LIMIT', '128');
-define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
-define('REQUIRED_MIN_POST_MAX_SIZE', '10');
+define('REQUIRED_PHP_VERSION', '8.3');
+define('REQUIRED_MIN_MEMORY_LIMIT', '256');
+define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '100');
+define('REQUIRED_MIN_POST_MAX_SIZE', '100');
 
 // USER STATUS CONSTANTS
 /** global status of a user: student */
@@ -254,6 +255,7 @@ define('LOG_EXERCISE_ATTEMPT_DELETE', 'exe_attempt_deleted');
 define('LOG_LP_ATTEMPT_DELETE', 'lp_attempt_deleted');
 define('LOG_QUESTION_RESULT_DELETE', 'qst_attempt_deleted');
 define('LOG_QUESTION_SCORE_UPDATE', 'score_attempt_updated');
+define('LOG_CERTIFICATE_EXPIRY_UPDATE', 'certificate_expiry_date_updated');
 
 define('LOG_MY_FOLDER_CREATE', 'my_folder_created');
 define('LOG_MY_FOLDER_CHANGE', 'my_folder_changed');
@@ -279,11 +281,14 @@ define('LOG_PLATFORM_LANGUAGE', 'default_platform_language');
 define('LOG_PLUGIN_UPLOAD', 'plugin_upload');
 define('LOG_PLUGIN_ENABLE', 'plugin_enable');
 define('LOG_PLUGIN_SETTINGS_CHANGE', 'plugin_settings_change');
+define('LOG_SECURITY_FILE_INTEGRITY_SCAN', 'security_file_integrity_scan');
+define('LOG_SECURITY_FILE_INTEGRITY_SCAN_RESULT', 'security_file_integrity_scan_result_array');
 define('LOG_CAREER_ID', 'career_id');
 define('LOG_PROMOTION_ID', 'promotion_id');
 define('LOG_GRADEBOOK_LOCKED', 'gradebook_locked');
 define('LOG_GRADEBOOK_UNLOCKED', 'gradebook_unlocked');
 define('LOG_GRADEBOOK_ID', 'gradebook_id');
+define('LOG_CERTIFICATE_ID', 'certificate_id');
 //define('LOG_WIKI_PAGE_ID', 'wiki_page_id');
 define('LOG_EXERCISE_ID', 'exercise_id');
 define('LOG_EXERCISE_AND_USER_ID', 'exercise_and_user_id');
@@ -389,6 +394,7 @@ define('LINK_ATTENDANCE', 7);
 define('LINK_SURVEY', 8);
 define('LINK_HOTPOTATOES', 9);
 define('LINK_PORTFOLIO', 10);
+define('LINK_FORUM_PARTICIPATION', 11);
 
 // Score display types constants
 define('SCORE_DIV', 1); // X / Y
@@ -1659,12 +1665,8 @@ function api_get_user_info_from_entity(
     $result['firstName'] = $result['firstname'];
     $result['lastName'] = $result['lastname'];
 
-    $attributes = [
-        'picture_uri',
-        'last_login',
-        'user_is_online',
-    ];
-
+    $result['picture_uri'] = $user->getPictureUri();
+    $result['profile_completed'] = $user->isProfileCompleted();
     $result['phone'] = $user->getPhone();
     $result['address'] = $user->getAddress();
     $result['official_code'] = $user->getOfficialCode();
@@ -1672,7 +1674,8 @@ function api_get_user_info_from_entity(
     $result['auth_sources'] = $user->getAuthSourcesAuthentications(
         Container::getAccessUrlUtil()->getCurrent()
     );
-    $result['language'] = $user->getLocale();
+    $result['language'] = $result['locale'] = $user->getLocale();
+    $result['theme'] = $user->getTheme();
     $result['creator_id'] = $user->getCreatorId();
     $result['created_at'] = $user->getCreatedAt()->format('Y-m-d H:i:s');
     $result['hr_dept_id'] = $user->getHrDeptId();
@@ -1749,17 +1752,10 @@ function api_get_user_info_from_entity(
     if (isset($result['user_is_online'])) {
         $result['user_is_online'] = true == $result['user_is_online'] ? 1 : 0;
     }
-    if (isset($result['user_is_online_in_chat'])) {
-        $result['user_is_online_in_chat'] = $result['user_is_online_in_chat'];
-    }
 
     $result['password'] = '';
     if ($showPassword) {
         $result['password'] = $user->getPassword();
-    }
-
-    if (isset($result['profile_completed'])) {
-        $result['profile_completed'] = $result['profile_completed'];
     }
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
@@ -1771,10 +1767,6 @@ function api_get_user_info_from_entity(
         $sendMessage,
         ['class' => 'ajax']
     );
-
-    if (isset($result['extra'])) {
-        $result['extra'] = $result['extra'];
-    }
 
     return $result;
 }
@@ -2261,7 +2253,7 @@ function api_get_course_info_by_id(?int $id = 0)
  *
  * @todo eradicate the false "id"=code field of the $_course array and use the int id
  */
-function api_format_course_array(Course $course = null)
+function api_format_course_array(?Course $course = null)
 {
     if (empty($course)) {
         return [];
@@ -3010,7 +3002,7 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
 }
 
 /**
- * Checks whether the user given as user id is in the admin table.
+ * Checks whether the user given as user id has platform administrator rights.
  *
  * @param int $user_id If none provided, will use current user
  * @param int $url     URL ID. If provided, also check if the user is active on given URL
@@ -3025,7 +3017,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
         return false;
     }
 
-    $is_admin = $user->isAdmin();
+    $is_admin = $user->isAdmin() || $user->isSuperAdmin();
 
     if (!$is_admin || !isset($url)) {
         return $is_admin;
@@ -3728,7 +3720,7 @@ function api_is_anonymous()
  */
 function api_not_allowed(
     bool $printHeaders = false,
-    string $message = null,
+    ?string $message = null,
     int $responseCode = 0,
     string $severity = 'warning'
 ): never {
@@ -4000,12 +3992,12 @@ function api_get_visual_theme(): string
 }
 
 /**
- * Returns a list of CSS themes currently available in the CSS folder
+ * Returns a list of themes currently available in the themes filesystem.
  * The folder must have a default.css file.
  *
  * @param bool $getOnlyThemeFromVirtualInstance Used by the vchamilo plugin
  *
- * @return array list of themes directories from the css folder
+ * @return array list of theme directories from the themes filesystem
  *               Note: Directory names (names of themes) in the file system should contain ASCII-characters only
  */
 function api_get_themes($getOnlyThemeFromVirtualInstance = false)
@@ -4013,32 +4005,40 @@ function api_get_themes($getOnlyThemeFromVirtualInstance = false)
     // This configuration value is set by the vchamilo plugin
     $virtualTheme = api_get_configuration_value('virtual_css_theme_folder');
 
-    $readCssFolder = function ($dir) use ($virtualTheme) {
-        $finder = new Finder();
-        $themes = $finder->directories()->in($dir)->depth(0)->sortByName();
+    /** @var FilesystemOperator $filesystem */
+    $filesystem = Container::$container->get('oneup_flysystem.themes_filesystem');
+
+    $readCssFolder = function ($dir) use ($filesystem, $virtualTheme) {
         $list = [];
-        /** @var Symfony\Component\Finder\SplFileInfo $theme */
-        foreach ($themes as $theme) {
-            $folder = $theme->getFilename();
-            // A theme folder is consider if there's a default.css file
-            if (!file_exists($theme->getPathname().'/default.css')) {
-                continue;
+
+        try {
+            foreach ($filesystem->listContents($dir, false) as $item) {
+                if (!$item->isDir()) {
+                    continue;
+                }
+                $folder = basename($item->path());
+                // A theme folder is consider if there's a default.css file
+                if (!$filesystem->fileExists($item->path().'/default.css')) {
+                    continue;
+                }
+                if ($folder == $virtualTheme) {
+                    continue;
+                }
+                $list[$folder] = ucwords(str_replace('_', ' ', $folder));
             }
-            $name = ucwords(str_replace('_', ' ', $folder));
-            if ($folder == $virtualTheme) {
-                continue;
-            }
-            $list[$folder] = $name;
+        } catch (FilesystemException) {
+            return [];
         }
+
+        ksort($list);
 
         return $list;
     };
 
-    $dir = Container::getProjectDir().'var/themes/';
-    $list = $readCssFolder($dir);
+    $list = $readCssFolder('');
 
     if (!empty($virtualTheme)) {
-        $newList = $readCssFolder($dir.'/'.$virtualTheme);
+        $newList = $readCssFolder($virtualTheme);
         if ($getOnlyThemeFromVirtualInstance) {
             return $newList;
         }
@@ -5665,9 +5665,10 @@ function api_get_tool_information_by_name($name)
 {
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
     $course_id = api_get_course_int_id();
+    $courseToolName = TOOL_USER === $name ? 'member' : $name;
 
     $sql = "SELECT id FROM tool
-            WHERE title = '".Database::escape_string($name)."' ";
+            WHERE title = '".Database::escape_string($courseToolName)."' ";
     $rs = Database::query($sql);
     $data = Database::fetch_array($rs);
     if ($data) {
@@ -5685,10 +5686,7 @@ function api_get_tool_information_by_name($name)
 /**
  * Function used to protect a "global" admin script.
  * The function blocks access when the user has no global platform admin rights.
- * Global admins are the admins that are registered in the main.admin table
- * AND the users who have access to the "principal" portal.
- * That means that there is a record in the main.access_url_rel_user table
- * with his user id and the access_url_id=1.
+ * Global admins are users with ROLE_GLOBAL_ADMIN.
  *
  * @author Julio Montoya
  *
@@ -5726,19 +5724,22 @@ function api_global_admin_can_edit_admin(
     $iam_a_global_admin = api_is_global_platform_admin($userId);
     $user_is_global_admin = api_is_global_platform_admin($admin_id_to_check);
 
+    // A global admin who is not registered in the topmost URL of a tree (i.e. scoped to a
+    // subtree) must not be able to edit ANOTHER global admin -- that would let them, for
+    // example, change the password of an unrestricted admin and take over that account.
+    // Editing their own profile is unaffected either way.
+    if ($iam_a_global_admin && $user_is_global_admin && (int) $admin_id_to_check !== (int) $userId) {
+        $currentUser = api_get_user_entity($userId);
+
+        return null !== $currentUser && Container::getAccessUrlScopeHelper()->isUnrestricted($currentUser);
+    }
+
     if ($iam_a_global_admin) {
-        // Global admin can edit everything
+        // Global admin can edit everything else.
         return true;
     }
 
-    // Primary check: legacy admin table (TABLE_MAIN_ADMIN)
     $is_platform_admin = api_is_platform_admin_by_id($userId);
-    if (!$is_platform_admin) {
-        $userEntity = api_get_user_entity($userId);
-        if ($userEntity !== null && ($userEntity->isAdmin() || $userEntity->isSuperAdmin())) {
-            $is_platform_admin = true;
-        }
-    }
 
     if ($allow_session_admin && !$is_platform_admin) {
         $user = api_get_user_entity($userId);
@@ -5788,6 +5789,28 @@ function api_protect_global_admin_script()
     }
 
     return true;
+}
+
+/**
+ * Whether the given user (the current user, by default) may grant ROLE_GLOBAL_ADMIN to
+ * someone else, or to themselves: only a global admin registered in the topmost access URL
+ * of a tree may do this -- one scoped to a subtree may not, even though they hold the role
+ * themselves.
+ *
+ * @param int $userId
+ *
+ * @return bool
+ */
+function api_can_grant_global_admin_role($userId = 0)
+{
+    $userId = empty($userId) ? api_get_user_id() : (int) $userId;
+    $user = api_get_user_entity($userId);
+
+    if (null === $user) {
+        return false;
+    }
+
+    return Container::getAccessUrlScopeHelper()->canGrantGlobalAdminRole($user);
 }
 
 /**
@@ -6036,11 +6059,32 @@ function api_is_multiple_url_enabled(): bool
 /**
  * Returns a md5 unique id.
  *
+ * The value is derived from the current time and is therefore predictable, so
+ * it must not be used as a secret. For security tokens (password reset, e-mail
+ * confirmation, ...) use api_generate_secure_token() instead.
+ *
  * @todo add more parameters
  */
 function api_get_unique_id()
 {
     return md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());
+}
+
+/**
+ * Generates a cryptographically secure, unpredictable random token, suitable
+ * for use as a secret (password reset links, e-mail confirmation links, ...).
+ *
+ * Unlike api_get_unique_id(), the returned value is not derived from the clock.
+ *
+ * @param int $bytes Number of random bytes to read (a floor of 16 is enforced)
+ *
+ * @return string
+ */
+function api_generate_secure_token($bytes = 32)
+{
+    $bytes = max(16, (int) $bytes);
+
+    return bin2hex(random_bytes($bytes));
 }
 
 /**
@@ -7284,7 +7328,7 @@ function api_mail_html(
     $data_file = [],
     $embeddedImage = false,
     $additionalParameters = [],
-    string $sendErrorTo = null
+    ?string $sendErrorTo = null
 ) {
     /* @var MailHelper $mailHelper */
     $mailHelper = Container::$container->get(MailHelper::class);

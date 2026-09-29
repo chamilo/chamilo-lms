@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20250927022200 extends AbstractMigrationChamilo
@@ -30,14 +30,14 @@ final class Version20250927022200 extends AbstractMigrationChamilo
         $this->addSql(
             'DELETE FROM settings_value_template WHERE variable IN (?)',
             [$vars],
-            [Connection::PARAM_STR_ARRAY]
+            [ArrayParameterType::STRING]
         );
 
         // Remove catalog definitions
         $this->addSql(
             'DELETE FROM settings WHERE variable IN (?)',
             [$vars],
-            [Connection::PARAM_STR_ARRAY]
+            [ArrayParameterType::STRING]
         );
     }
 }

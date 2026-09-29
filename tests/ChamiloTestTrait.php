@@ -187,7 +187,7 @@ trait ChamiloTestTrait
     public function getUploadedFile(): UploadedFile
     {
         $path = $this->getContainer()->get('kernel')->getProjectDir();
-        $filePath = $path.'/tests/fixtures/logo.png';
+        $filePath = $path.'/tests/CoreBundle/fixtures/logo.png';
         $fileName = basename($filePath);
 
         return new UploadedFile(
@@ -200,7 +200,7 @@ trait ChamiloTestTrait
     public function getUploadedZipFile(): UploadedFile
     {
         $path = $this->getContainer()->get('kernel')->getProjectDir();
-        $filePath = $path.'/tests/fixtures/logo.zip';
+        $filePath = $path.'/tests/CoreBundle/fixtures/logo.zip';
         $fileName = basename($filePath);
 
         return new UploadedFile(

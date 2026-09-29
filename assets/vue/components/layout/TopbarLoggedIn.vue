@@ -37,8 +37,8 @@
       </button>
       <BaseAppLink
         v-if="!isAnonymous && showTicketLink"
-        :title="t('Ticket')"
-        :url="ticketUrl"
+        :title="t('Tickets')"
+        :to="ticketRoute"
         class="item-button"
       >
         <BaseIcon
@@ -125,7 +125,7 @@ const {
   showTicketLink,
   isAnonymous,
   messagingEnabled,
-  ticketUrl,
+  ticketRoute,
   btnInboxBadge,
   userSubmenuItems,
   toggleUserMenu,

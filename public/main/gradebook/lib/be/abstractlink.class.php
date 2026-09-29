@@ -34,6 +34,9 @@ abstract class AbstractLink implements GradebookItem
 
     protected ?float $min_score = null;
 
+    protected ?float $points_one = null;
+    protected ?float $points_many = null;
+
     /**
      * Constructor.
      */
@@ -51,6 +54,26 @@ abstract class AbstractLink implements GradebookItem
     {
         // Keep it consistent with Chamilo float helpers
         $this->min_score = ($minScore === null) ? null : api_float_val($minScore);
+    }
+
+    public function get_points_one(): ?float
+    {
+        return $this->points_one;
+    }
+
+    public function set_points_one(?float $pointsOne): void
+    {
+        $this->points_one = ($pointsOne === null) ? null : api_float_val($pointsOne);
+    }
+
+    public function get_points_many(): ?float
+    {
+        return $this->points_many;
+    }
+
+    public function set_points_many(?float $pointsMany): void
+    {
+        $this->points_many = ($pointsMany === null) ? null : api_float_val($pointsMany);
     }
 
     /**
@@ -429,6 +452,8 @@ abstract class AbstractLink implements GradebookItem
                     ->setCategory($category)
                     ->setCourse(api_get_course_entity($this->course_id))
                     ->setMinScore($this->get_min_score())
+                    ->setPointsOne(null !== $this->get_points_one() ? (string) $this->get_points_one() : null)
+                    ->setPointsMany(null !== $this->get_points_many() ? (string) $this->get_points_many() : null)
                 ;
                 $em->persist($link);
                 $em->flush();
@@ -480,6 +505,8 @@ abstract class AbstractLink implements GradebookItem
             ->setWeight($this->get_weight())
             ->setVisible($this->is_visible())
             ->setMinScore($this->get_min_score())
+            ->setPointsOne(null !== $this->get_points_one() ? (string) $this->get_points_one() : null)
+            ->setPointsMany(null !== $this->get_points_many() ? (string) $this->get_points_many() : null)
         ;
 
         $em->persist($link);
@@ -809,6 +836,12 @@ abstract class AbstractLink implements GradebookItem
             $link->set_locked($data['locked']);
             if (array_key_exists('min_score', $data)) {
                 $link->set_min_score($data['min_score'] !== null ? (float) $data['min_score'] : null);
+            }
+            if (array_key_exists('points_one', $data)) {
+                $link->set_points_one($data['points_one'] !== null ? (float) $data['points_one'] : null);
+            }
+            if (array_key_exists('points_many', $data)) {
+                $link->set_points_many($data['points_many'] !== null ? (float) $data['points_many'] : null);
             }
 
             //session id should depend on the category --> $data['category_id']

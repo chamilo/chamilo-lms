@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
@@ -24,10 +25,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('PUBLIC_ACCESS')"),
+        new Get(security: "is_granted('PUBLIC_ACCESS')", cacheHeaders: ['max_age' => 60, 'shared_max_age' => 60]),
         new Put(security: 'is_granted(\'ROLE_ADMIN\')'),
-        new Delete(security: 'is_granted(\'ROLE_ADMIN\')'),
-        new GetCollection(security: "is_granted('PUBLIC_ACCESS')"),
+        new Patch(security: 'is_granted(\'ROLE_ADMIN\')'), new Delete(security: 'is_granted(\'ROLE_ADMIN\')'),
+        new GetCollection(security: "is_granted('PUBLIC_ACCESS')", cacheHeaders: ['max_age' => 60, 'shared_max_age' => 60]),
         new Post(security: 'is_granted(\'ROLE_ADMIN\')'),
     ],
     normalizationContext: [
@@ -168,6 +169,7 @@ class Page
     {
         return $this->locale;
     }
+
     public function setLocale(string $locale): self
     {
         $this->locale = $locale;

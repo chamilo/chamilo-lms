@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Repository\MessageTagRepository;
@@ -28,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
         new Put(security: "is_granted('EDIT', object)"),
-        new Delete(security: "is_granted('DELETE', object)"),
+        new Patch(security: "is_granted('EDIT', object)"), new Delete(security: "is_granted('DELETE', object)"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
     ],
@@ -71,7 +72,9 @@ class MessageTag
     protected User $user;
 
     #[Assert\NotBlank]
-    #[Groups(['message_tag:read', 'message_tag:write', 'message:read', 'message_rel_user:read', 'message_rel_user:write'])]
+    #[Groups([
+        'message_tag:read', 'message_tag:write', 'message:read', 'message_rel_user:read', 'message_rel_user:write',
+    ])]
     #[ORM\Column(name: 'tag', type: 'string', nullable: false)]
     protected string $tag;
 

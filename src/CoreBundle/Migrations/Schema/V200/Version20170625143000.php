@@ -136,6 +136,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_link SET category_id = NULL WHERE category_id NOT IN (SELECT iid FROM c_link_category)');
 
         if (false === $table->hasForeignKey('FK_9209C2A012469DE2')) {
+            $this->addSql('ALTER TABLE c_link CHANGE category_id category_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A012469DE2 FOREIGN KEY (category_id) REFERENCES c_link_category (iid) ON DELETE SET NULL'
             );

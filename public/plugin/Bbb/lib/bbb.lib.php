@@ -527,6 +527,7 @@ class Bbb
             'voiceBridge'     => $meeting->getVoiceBridge(),
             'webVoice'        => '',
             'logoutUrl'       => $this->logoutUrl . '&action=logout&remote_id=' . $meeting->getRemoteId(),
+            'endCallbackUrl'  => $this->buildMeetingEndedCallbackUrl((string) $meeting->getRemoteId()),
             'maxParticipants' => $max,
             'record'          => $record,
             'duration'        => $duration,
@@ -853,6 +854,35 @@ class Bbb
 
 
     /**
+     * Check BBB directly before reusing a local open meeting.
+     *
+     * Returns null when the remote state cannot be determined, so a temporary
+     * BBB/network failure does not incorrectly close the local meeting.
+     */
+    public function isMeetingRunning(string $meetingId): ?bool
+    {
+        if ('' === $meetingId || !$this->ensureApi()) {
+            return null;
+        }
+
+        try {
+            $result = $this->api->isMeetingRunningWithXmlResponseArray($meetingId);
+            if ('SUCCESS' !== (string) ($result['returncode'] ?? '')) {
+                return null;
+            }
+
+            return (bool) ($result['running'] ?? false);
+        } catch (\Throwable $e) {
+            if ($this->debug) {
+                error_log('[BBB] isMeetingRunning error: '.$e->getMessage());
+            }
+
+            return null;
+        }
+    }
+
+
+    /**
      * Returns per-participant aggregates for a given meeting (durations + metrics).
      * - Sums all closed intervals (inAt..outAt) plus any open interval up to "now".
      * - Merges JSON metrics across rows:
@@ -1043,8 +1073,26 @@ class Bbb
     public function meetingExists($meetingName)
     {
         $meetingData = $this->getMeetingByName($meetingName);
+        if (empty($meetingData)) {
+            return false;
+        }
 
-        return !empty($meetingData);
+        $meetingId = (int) ($meetingData['id'] ?? 0);
+        $remoteId = (string) ($meetingData['remote_id'] ?? '');
+
+        if ($meetingId <= 0 || '' === $remoteId) {
+            return true;
+        }
+
+        $isRunning = $this->isMeetingRunning($remoteId);
+        if (false === $isRunning) {
+            $this->closeMeetingLocally($meetingId);
+            error_log('[BBB] Closed stale local meeting '.$meetingId.' because BBB reports meeting '.$remoteId.' is not running.');
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -1600,6 +1648,31 @@ class Bbb
             'group_id' => $meeting->getGroup()?->getIid() ?? 0,
             'user_id' => $meeting->getUser()?->getId() ?? 0,
         ];
+    }
+
+    /**
+     * Close a local meeting from a signed BBB callback.
+     */
+    public function closeMeetingLocallyByRemoteId(string $remoteId, int $accessUrlId): bool
+    {
+        if ('' === $remoteId || $accessUrlId <= 0) {
+            return false;
+        }
+
+        $em = Database::getManager();
+
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
+        $meeting = $repo->findOneBy([
+            'remoteId' => $remoteId,
+            'accessUrl' => api_get_url_entity($accessUrlId),
+        ]);
+
+        if (!$meeting instanceof ConferenceMeeting || !$meeting->getId()) {
+            return false;
+        }
+
+        return $this->closeMeetingLocally((int) $meeting->getId());
     }
 
     /**
@@ -2526,6 +2599,28 @@ class Bbb
         }
 
         return false;
+    }
+
+    /**
+     * Build a stable, signed callback URL used by BBB when a meeting ends.
+     *
+     * The signature is intentionally not time-limited because meetings can run
+     * for many hours. Closing an already closed meeting is idempotent.
+     */
+    private function buildMeetingEndedCallbackUrl(string $meetingId): string
+    {
+        $base = rtrim(api_get_path(WEB_PLUGIN_PATH), '/').'/Bbb/webhook.php';
+        $accessUrlId = (int) $this->accessUrl;
+        $algo = $this->plugin->webhooksHashAlgo();
+        $payload = $accessUrlId.'|'.$meetingId.'|meeting_end';
+        $signature = hash_hmac($algo, $payload, (string) $this->salt);
+
+        return $base.'?'.http_build_query([
+            'au' => $accessUrlId,
+            'mid' => $meetingId,
+            'callback' => 'meeting_end',
+            'sig' => $signature,
+        ]);
     }
 
     /**

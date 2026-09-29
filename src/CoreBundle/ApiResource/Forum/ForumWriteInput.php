@@ -32,9 +32,13 @@ final class ForumWriteInput
 
     public ?bool $locked = null;
 
+    public ?string $language = null;
+
     public ?int $parentResourceNodeId = null;
 
-    public ?string $csrfToken = null;
+    public ?int $lpId = null;
+
+    public ?int $lpParentId = null;
 
     public ?int $groupForum = null;
 

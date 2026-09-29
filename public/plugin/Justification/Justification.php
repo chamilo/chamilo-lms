@@ -38,7 +38,13 @@ class Justification extends Plugin
         $sql = 'SELECT * FROM '.self::TABLE_DOCUMENT.' WHERE id = '.$id;
         $query = Database::query($sql);
 
-        return Database::fetch_assoc($query);
+        $document = Database::fetch_assoc($query);
+        if ($document) {
+            // Keep the legacy array key until all external plugin templates are updated.
+            $document['name'] = $document['title'];
+        }
+
+        return $document;
     }
 
     public function getUserJustificationList($userId)
@@ -63,10 +69,17 @@ class Justification extends Plugin
 
     public function getList()
     {
-        $sql = 'SELECT * FROM '.self::TABLE_DOCUMENT.' ORDER BY name ';
+        $sql = 'SELECT * FROM '.self::TABLE_DOCUMENT.' ORDER BY title ';
         $query = Database::query($sql);
+        $documents = Database::store_result($query, 'ASSOC');
 
-        return Database::store_result($query, 'ASSOC');
+        foreach ($documents as &$document) {
+            // Keep the legacy array key until all external plugin templates are updated.
+            $document['name'] = $document['title'];
+        }
+        unset($document);
+
+        return $documents;
     }
 
     public function canSessionAdminsManageUsers()
@@ -290,7 +303,7 @@ class Justification extends Plugin
         $sql = "CREATE TABLE IF NOT EXISTS ".self::TABLE_DOCUMENT." (
             id INT unsigned NOT NULL auto_increment PRIMARY KEY,
             code TEXT NULL,
-            name TEXT NULL,
+            title TEXT NULL,
             validity_duration INT,
             comment TEXT NULL,
             date_manual_on INT

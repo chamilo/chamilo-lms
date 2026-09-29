@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataFixtures;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\BranchSync;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -19,7 +20,7 @@ class BranchFixtures extends Fixture
         // INSERT INTO branch_sync (access_url_id, branch_name, unique_id, ssl_pub_key)
         // VALUES (1, 'localhost', SHA1(UUID()), SHA1(UUID()));
 
-        $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE);
+        $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE, AccessUrl::class);
 
         $branch = (new BranchSync())
             ->setTitle('localhost')

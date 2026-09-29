@@ -56,6 +56,30 @@ if (!$lpEntity || CLp::SCORM_TYPE !== (int) $lpEntity->getLpType()) {
     api_not_allowed(true);
 }
 
+if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET')) {
+    $course = api_get_course_entity();
+    $nodeId = 0;
+    if ($course && $course->getResourceNode()) {
+        $nodeId = (int) $course->getResourceNode()->getId();
+    }
+    $query = ['cid' => api_get_course_int_id()];
+    $sessionId = api_get_session_id();
+    if ($sessionId > 0) {
+        $query['sid'] = $sessionId;
+    }
+    $groupId = api_get_group_id();
+    if ($groupId > 0) {
+        $query['gid'] = $groupId;
+    }
+
+    if ($nodeId > 0) {
+        $target = api_get_path(WEB_PATH)
+            .'resources/lp/'.$nodeId.'/'.$lpId.'/update-scorm?'.http_build_query($query);
+        header('Location: '.$target);
+        exit;
+    }
+}
+
 // Breadcrumbs.
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
@@ -86,7 +110,7 @@ $form->addHtml(
 
 $form->addLabel(null, Display::return_icon('scorm_logo.jpg', null, ['style' => 'width:230px;height:100px']));
 $form->addElement('hidden', 'curdirpath', '');
-$form->addElement('file', 'user_file', get_lang('SCORM or AICC file to upload'));
+$form->addElement('file', 'user_file', get_lang('Upload').' SCORM (.zip)');
 $form->addRule('user_file', get_lang('Required field'), 'required');
 $form->addButtonUpload(get_lang('Upload'));
 

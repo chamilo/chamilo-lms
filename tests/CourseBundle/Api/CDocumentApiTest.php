@@ -160,10 +160,11 @@ final class CDocumentApiTest extends AbstractApiTest
             '/api/documents?itemsPerPage=5000',
         );
 
-        // No cid context → API Platform rejects the request because `cid` is
-        // declared as a required QueryParameter on the GetCollection. The
-        // validator returns 422 Unprocessable Entity.
-        $this->assertResponseStatusCodeSame(422);
+        // No cid context, so no ROLE_CURRENT_COURSE_* role: the operation's
+        // security expression denies the request before API Platform gets to
+        // validate the required `cid` parameter, which is what an admin would
+        // hit instead (422).
+        $this->assertResponseStatusCodeSame(403);
     }
 
     // -------------------------------------------------------------------------

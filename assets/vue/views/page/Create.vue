@@ -17,14 +17,14 @@ import PageForm from "../../components/page/Form.vue"
 import Loading from "../../components/Loading.vue"
 
 import { useDatatableCreate } from "../../composables/datatableCreate"
-import { useToast } from "primevue/usetoast"
+import { useNotification } from "../../composables/notification"
 
 const store = useStore()
 const securityStore = useSecurityStore()
 
 const { createItem, onCreated } = useDatatableCreate("Page")
 
-const toast = useToast()
+const { showErrorNotification } = useNotification()
 
 const error = computed(() => store.state["page"].error)
 const isLoading = computed(() => store.state["page"].isLoading)
@@ -49,10 +49,6 @@ watch(error, (newError) => {
     return
   }
 
-  toast.add({
-    severity: "error",
-    detail: newError,
-    life: 3500,
-  })
+  showErrorNotification(newError)
 })
 </script>

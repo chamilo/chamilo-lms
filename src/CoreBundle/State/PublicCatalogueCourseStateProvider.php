@@ -22,15 +22,21 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use const COURSEMANAGERLOWSECURITY;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
+use const STUDENT;
 
 /**
  * @implements ProviderInterface<Course>
  */
 readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 {
-    public const DEFAULT_PAGE_SIZE = 12;
+    public const int DEFAULT_PAGE_SIZE = 12;
 
     public function __construct(
         private FilterExtension $filterExtension,
@@ -55,6 +61,13 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             throw new AccessDeniedHttpException($this->translator->trans('Not allowed'));
         }
 
+        // Catalogue cards then fire extra-field and vote requests from the same
+        // browser. Holding the session lock here serializes those follow-ups
+        // and can leave the Vue page on "Loading courses. Please wait."
+        if (\function_exists('session_write_close')) {
+            session_write_close();
+        }
+
         $queryBuilder = $this->createQueryBuilder();
         $queryNameGenerator = new QueryNameGenerator();
 
@@ -65,6 +78,15 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             $operation,
             $context
         );
+
+        $filters = $context['filters'] ?? [];
+        $titleFilter = $filters['title'] ?? null;
+        if (\is_string($titleFilter) && '' !== $titleFilter) {
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->like('c.title', ':catalogueTitle'))
+                ->setParameter('catalogueTitle', '%'.$titleFilter.'%')
+            ;
+        }
 
         $this->paginationExtension->applyToCollection(
             $queryBuilder,
@@ -91,7 +113,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 
             /** @var CCourseDescription $description */
             foreach ($descriptions as $description) {
-                $title = trim((string) $description->getTitle());
+                $title = $this->sanitizeHtmlTitle((string) $description->getTitle());
                 $content = $this->normalizeHtmlContent((string) $description->getContent());
 
                 if ('' === $title && '' === $content) {
@@ -135,6 +157,15 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         return $qb;
     }
 
+    private function sanitizeHtmlTitle(string $title): string
+    {
+        if (class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
+            return (string) Security::remove_XSS($title, COURSEMANAGERLOWSECURITY);
+        }
+
+        return htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
     private function normalizeHtmlContent(string $content): string
     {
         $content = trim($content);
@@ -149,6 +180,18 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             $content = $matches[1];
         }
 
-        return trim($content);
+        $content = trim($content);
+
+        if ('' === $content) {
+            return '';
+        }
+
+        if (class_exists('Security')) {
+            $userStatus = \defined('STUDENT') ? STUDENT : null;
+
+            return (string) Security::remove_XSS($content, $userStatus);
+        }
+
+        return $content;
     }
 }

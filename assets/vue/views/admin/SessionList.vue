@@ -311,7 +311,6 @@ const keyword = ref("")
 const categoryFilter = ref("")
 const selectedItems = ref([])
 const categories = ref([])
-const csrfToken = ref("")
 const showCountUsers = ref(false)
 const hideSearch = ref(false)
 const allowCopyWithContent = ref(false)
@@ -407,7 +406,6 @@ async function load() {
 
     items.value = data.items
     total.value = data.total
-    csrfToken.value = data.csrfToken || ""
     showCountUsers.value = data.showCountUsers || false
     hideSearch.value = data.hideSearch || false
     allowCopyWithContent.value = data.allowCopyWithContent || false
@@ -455,7 +453,6 @@ async function onRowReorder(event) {
   try {
     const formData = new URLSearchParams()
     formData.set("action", "reorder")
-    formData.set("_token", csrfToken.value)
     orderData.forEach((entry, i) => {
       formData.append(`order[${i}][id]`, String(entry.id))
       formData.append(`order[${i}][position]`, String(entry.position))
@@ -479,9 +476,7 @@ async function onSearch() {
 }
 
 function defaultSortForTab(tab) {
-  return tab === "custom"
-    ? { field: "displayStartDate", order: -1 }
-    : { field: "title", order: 1 }
+  return tab === "custom" ? { field: "displayStartDate", order: -1 } : { field: "title", order: 1 }
 }
 
 async function switchTab(tab) {
@@ -509,7 +504,6 @@ function confirmDelete(ids) {
       try {
         const formData = new URLSearchParams()
         formData.set("action", "delete")
-        formData.set("_token", csrfToken.value)
         ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 
         // URLSearchParams body makes axios send application/x-www-form-urlencoded.
@@ -540,7 +534,6 @@ async function performCopy(ids, action = "copy") {
   try {
     const formData = new URLSearchParams()
     formData.set("action", action)
-    formData.set("_token", csrfToken.value)
     ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 
     // URLSearchParams body makes axios send application/x-www-form-urlencoded.
@@ -565,7 +558,6 @@ async function submitExportForm(ids, action) {
   try {
     const formData = new URLSearchParams()
     formData.set("action", action)
-    formData.set("_token", csrfToken.value)
     ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 
     // URLSearchParams body makes axios send application/x-www-form-urlencoded.
@@ -615,7 +607,6 @@ async function handleLegacyAction() {
     return false
   }
 
-  // Wait for first load so we have a CSRF token
   await load()
 
   const ids = String(idChecked)
@@ -640,7 +631,6 @@ async function confirmDeleteDirect(ids) {
   try {
     const formData = new URLSearchParams()
     formData.set("action", "delete")
-    formData.set("_token", csrfToken.value)
     ids.forEach((id) => formData.append("sessionIds[]", String(id)))
 
     // URLSearchParams body makes axios send application/x-www-form-urlencoded.

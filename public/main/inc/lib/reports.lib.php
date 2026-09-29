@@ -108,7 +108,7 @@ class ReportRegistry
                 'title' => get_lang('Global statistics'),
                 'description' => get_lang('Main platform statistics dashboard.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php',
+                'url' => '/admin/statistics',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -117,7 +117,7 @@ class ReportRegistry
                 'title' => get_lang('Courses'),
                 'description' => get_lang('Number of courses and course distribution report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=courses',
+                'url' => '/admin/statistics?report=courses',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -126,7 +126,7 @@ class ReportRegistry
                 'title' => get_lang('Tools access'),
                 'description' => get_lang('Platform-wide access to course tools.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=tools',
+                'url' => '/admin/statistics?report=tools',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -135,7 +135,7 @@ class ReportRegistry
                 'title' => get_lang('Tool-based resource count'),
                 'description' => get_lang('Number of resources per tool.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=tool_usage',
+                'url' => '/admin/statistics?report=tool_usage',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -144,7 +144,7 @@ class ReportRegistry
                 'title' => get_lang('Latest access'),
                 'description' => get_lang('Latest access to courses.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=courselastvisit',
+                'url' => '/admin/statistics?report=courselastvisit',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -153,7 +153,7 @@ class ReportRegistry
                 'title' => get_lang('Number of courses by language'),
                 'description' => get_lang('Course distribution by language.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=coursebylanguage',
+                'url' => '/admin/statistics?report=coursebylanguage',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -162,7 +162,7 @@ class ReportRegistry
                 'title' => get_lang('Courses usage'),
                 'description' => get_lang('Course usage report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=courses_usage',
+                'url' => '/admin/statistics?report=courses_usage',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -171,7 +171,7 @@ class ReportRegistry
                 'title' => get_lang('Number of users'),
                 'description' => get_lang('Platform user count report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=users',
+                'url' => '/admin/statistics?report=users',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -180,7 +180,7 @@ class ReportRegistry
                 'title' => get_lang('Logins'),
                 'description' => get_lang('Recent logins chart.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=recentlogins',
+                'url' => '/admin/statistics?report=recentlogins',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -189,7 +189,7 @@ class ReportRegistry
                 'title' => get_lang('Logins').' ('.get_lang('Month').')',
                 'description' => get_lang('Login distribution by month.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=logins&type=month',
+                'url' => '/admin/statistics?report=logins&type=month',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -198,7 +198,7 @@ class ReportRegistry
                 'title' => get_lang('Logins').' ('.get_lang('Day').')',
                 'description' => get_lang('Login distribution by day.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=logins&type=day',
+                'url' => '/admin/statistics?report=logins&type=day',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -207,7 +207,7 @@ class ReportRegistry
                 'title' => get_lang('Logins').' ('.get_lang('Hour').')',
                 'description' => get_lang('Login distribution by hour.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=logins&type=hour',
+                'url' => '/admin/statistics?report=logins&type=hour',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -216,7 +216,7 @@ class ReportRegistry
                 'title' => get_lang('Number of users').' ('.get_lang('Picture').')',
                 'description' => get_lang('Users with profile picture.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=pictures',
+                'url' => '/admin/statistics?report=pictures',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -225,7 +225,7 @@ class ReportRegistry
                 'title' => get_lang('Logins by date'),
                 'description' => get_lang('Login report filtered by date.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=logins_by_date',
+                'url' => '/admin/statistics?report=logins_by_date',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -234,7 +234,7 @@ class ReportRegistry
                 'title' => get_lang('Not logged in for some time'),
                 'description' => get_lang('Users who have not logged in recently.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=no_login_users',
+                'url' => '/admin/statistics?report=no_login_users',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -243,7 +243,7 @@ class ReportRegistry
                 'title' => get_lang('Zombies'),
                 'description' => get_lang('Inactive or suspicious user accounts report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=zombies',
+                'url' => '/admin/statistics?report=zombies',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -252,7 +252,7 @@ class ReportRegistry
                 'title' => get_lang('Users statistics'),
                 'description' => get_lang('Users activity statistics.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=users_active',
+                'url' => '/admin/statistics?report=users_active',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -261,7 +261,7 @@ class ReportRegistry
                 'title' => get_lang('Users online'),
                 'description' => get_lang('Currently online users report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=users_online',
+                'url' => '/admin/statistics?report=users_online',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -270,7 +270,7 @@ class ReportRegistry
                 'title' => get_lang('New users registrations'),
                 'description' => get_lang('New user registrations over time.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=new_user_registrations',
+                'url' => '/admin/statistics?report=new_user_registrations',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -279,7 +279,7 @@ class ReportRegistry
                 'title' => get_lang('Course/Session subscriptions by day'),
                 'description' => get_lang('Course and session subscriptions over time.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=subscription_by_day',
+                'url' => '/admin/statistics?report=subscription_by_day',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -288,7 +288,7 @@ class ReportRegistry
                 'title' => get_lang('Duplicate users'),
                 'description' => get_lang('Duplicate user detection and maintenance report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=duplicated_users',
+                'url' => '/admin/statistics?report=duplicated_users',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -297,7 +297,7 @@ class ReportRegistry
                 'title' => get_lang('Portal user session stats'),
                 'description' => get_lang('Platform user/session statistics.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=user_session',
+                'url' => '/admin/statistics?report=user_session',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -306,7 +306,7 @@ class ReportRegistry
                 'title' => get_lang('Quarterly report'),
                 'description' => get_lang('Quarterly platform report.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=quarterly_report',
+                'url' => '/admin/statistics?report=quarterly_report',
                 'roles' => $adminSession,
                 'permission' => 'reports.platform',
             ],
@@ -324,7 +324,7 @@ class ReportRegistry
                 'title' => get_lang('Number of messages received'),
                 'description' => get_lang('Social messages received report.'),
                 'category' => self::CATEGORY_SOCIAL,
-                'url' => '/main/admin/statistics/index.php?report=messagereceived',
+                'url' => '/admin/statistics?report=messagereceived',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -333,7 +333,7 @@ class ReportRegistry
                 'title' => get_lang('Number of messages sent'),
                 'description' => get_lang('Social messages sent report.'),
                 'category' => self::CATEGORY_SOCIAL,
-                'url' => '/main/admin/statistics/index.php?report=messagesent',
+                'url' => '/admin/statistics?report=messagesent',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -342,7 +342,7 @@ class ReportRegistry
                 'title' => get_lang('Contacts count'),
                 'description' => get_lang('Social contacts count report.'),
                 'category' => self::CATEGORY_SOCIAL,
-                'url' => '/main/admin/statistics/index.php?report=friends',
+                'url' => '/admin/statistics?report=friends',
                 'roles' => $admin,
                 'permission' => 'reports.platform',
             ],
@@ -351,7 +351,7 @@ class ReportRegistry
                 'title' => get_lang('Sessions by date'),
                 'description' => get_lang('Sessions created over time.'),
                 'category' => self::CATEGORY_PLATFORM,
-                'url' => '/main/admin/statistics/index.php?report=session_by_date',
+                'url' => '/admin/statistics?report=session_by_date',
                 'roles' => $adminSession,
                 'permission' => 'reports.platform',
             ],
@@ -360,7 +360,7 @@ class ReportRegistry
                 'title' => get_lang('Learning analytics'),
                 'description' => get_lang('Learning analytics dashboard.'),
                 'category' => self::CATEGORY_LEARNING_ANALYTICS,
-                'url' => '/main/my_space/index.php',
+                'url' => '/reporting',
                 'roles' => $learningFollowUp,
                 'permission' => 'reports.learning_analytics',
             ],
@@ -387,7 +387,7 @@ class ReportRegistry
                 'title' => get_lang('Corporate report'),
                 'description' => get_lang('Corporate learning analytics report.'),
                 'category' => self::CATEGORY_LEARNING_ANALYTICS,
-                'url' => '/main/my_space/company_reports.php',
+                'url' => '/reporting/company',
                 'roles' => ['ROLE_ADMIN', 'ROLE_HR', 'ROLE_STUDENT_BOSS'],
                 'permission' => 'reports.learning_analytics',
             ],
@@ -399,6 +399,8 @@ class ReportRegistry
                 'url' => '/main/tracking/courseLog.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/',
             ],
             [
                 'id' => 'course_activity_statistics',
@@ -408,6 +410,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_activity_statistics.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/activity',
             ],
             [
                 'id' => 'course_learner_tracking_details',
@@ -417,31 +421,38 @@ class ReportRegistry
                 'url' => '/main/tracking/course_user_details.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'context_requirements' => ['user'],
+                'entry_url' => '/resources/course-reporting/learners/{user_id}',
             ],
             [
                 'id' => 'gradebook_overview',
                 'title' => get_lang('Gradebook'),
                 'description' => get_lang('Course gradebook overview.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/index.php',
+                'url' => '/gradebook/redirect?view=overview',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
             ],
             [
                 'id' => 'gradebook_statistics',
                 'title' => get_lang('Gradebook statistics'),
                 'description' => get_lang('Gradebook statistics report.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/gradebook_statistics.php',
+                'url' => '/gradebook/redirect?view=graph',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/gradebook_flatview.php?sid={session_id}&gid=0&gradebook=1&origin=&selectcat={gradebook_category_id}',
+                'fallback_entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_certificate_report',
                 'title' => get_lang('Certificate report'),
                 'description' => get_lang('Certificate report for course gradebook.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/certificate_report.php',
+                'url' => '/reporting/certificates',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
             ],
@@ -450,18 +461,25 @@ class ReportRegistry
                 'title' => get_lang('User statistics'),
                 'description' => get_lang('Course gradebook statistics for a user.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/user_stats.php',
+                'url' => '/gradebook/redirect?view=learner',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'context_requirements' => ['user'],
+                'entry_url' => '/main/gradebook/user_stats.php?sid={session_id}&gid=0&selectcat={gradebook_category_id}&userid={user_id}',
+                'fallback_entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_personal_stats',
                 'title' => get_lang('Personal statistics'),
                 'description' => get_lang('Personal gradebook statistics.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/personal_stats.php',
+                'url' => '/gradebook/redirect?view=personal',
                 'roles' => ['ROLE_STUDENT', 'ROLE_CURRENT_COURSE_STUDENT', 'ROLE_TEACHER', 'ROLE_CURRENT_COURSE_TEACHER'],
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
+                'fallback_entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'reports_catalog',
@@ -480,6 +498,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_log_events.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/audit',
             ],
             [
                 'id' => 'course_log_tools',
@@ -489,6 +509,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_log_tools.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/course',
             ],
             [
                 'id' => 'course_log_resources',
@@ -498,6 +520,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_log_resources.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/resources',
             ],
             [
                 'id' => 'course_log_groups',
@@ -507,6 +531,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_log_groups.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/groups',
             ],
             [
                 'id' => 'course_session_report',
@@ -516,6 +542,8 @@ class ReportRegistry
                 'url' => '/main/tracking/course_session_report.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/session',
             ],
             [
                 'id' => 'course_learning_path_report',
@@ -525,6 +553,8 @@ class ReportRegistry
                 'url' => '/main/tracking/lp_report.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/learning-paths?mode=paths',
             ],
             [
                 'id' => 'course_learning_path_results_by_user',
@@ -534,13 +564,15 @@ class ReportRegistry
                 'url' => '/main/tracking/lp_results_by_user.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/learning-paths?mode=users',
             ],
             [
                 'id' => 'course_exams_tracking',
                 'title' => get_lang('Exercises report'),
                 'description' => get_lang('Course exercises and exams tracking report.'),
                 'category' => self::CATEGORY_LEARNING_ANALYTICS,
-                'url' => '/main/tracking/exams.php',
+                'url' => '/reporting/exams',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
             ],
@@ -552,6 +584,8 @@ class ReportRegistry
                 'url' => '/main/tracking/question_course_report.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/learning-paths?mode=questions',
             ],
             [
                 'id' => 'course_messages_tracking',
@@ -561,6 +595,8 @@ class ReportRegistry
                 'url' => '/main/tracking/messages.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/messages',
             ],
             [
                 'id' => 'course_total_time',
@@ -570,58 +606,72 @@ class ReportRegistry
                 'url' => '/main/tracking/total_time.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/course-reporting/total-time',
             ],
             [
                 'id' => 'gradebook_display_summary',
                 'title' => get_lang('Gradebook summary'),
                 'description' => get_lang('Summary view of gradebook results.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/gradebook_display_summary.php',
+                'url' => '/gradebook/redirect?view=students',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/gradebook_display_summary.php?sid={session_id}&gid=0&selectcat={gradebook_category_id}',
+                'fallback_entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_flat_view',
                 'title' => get_lang('Flat view'),
                 'description' => get_lang('Flat gradebook results view.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/gradebook_flatview.php',
+                'url' => '/gradebook/redirect?view=flat',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/gradebook_flatview.php?sid={session_id}&gid=0&gradebook=1&origin=&selectcat={gradebook_category_id}',
+                'fallback_entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_evaluation_log',
                 'title' => get_lang('Evaluation log'),
                 'description' => get_lang('Change log for gradebook evaluations.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/gradebook_showlog_eval.php',
+                'url' => '/gradebook/redirect?view=overview',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_link_log',
                 'title' => get_lang('Link log'),
                 'description' => get_lang('Change log for gradebook links.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/gradebook_showlog_link.php',
+                'url' => '/gradebook/redirect?view=overview',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_result_detail',
                 'title' => get_lang('Result details'),
                 'description' => get_lang('Detailed view of a gradebook result.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/gradebook_view_result.php',
+                'url' => '/gradebook/redirect?view=overview',
                 'roles' => $courseManagers,
                 'permission' => 'reports.gradebook',
+                'requires_course_context' => true,
+                'entry_url' => '/main/gradebook/index.php',
             ],
             [
                 'id' => 'gradebook_my_certificates',
                 'title' => get_lang('My certificates'),
                 'description' => get_lang('Personal certificates report.'),
                 'category' => self::CATEGORY_GRADEBOOK,
-                'url' => '/main/gradebook/my_certificates.php',
+                'url' => '/my-certificates',
                 'roles' => ['ROLE_STUDENT', 'ROLE_CURRENT_COURSE_STUDENT', 'ROLE_TEACHER', 'ROLE_CURRENT_COURSE_TEACHER'],
                 'permission' => 'reports.gradebook',
             ],
@@ -679,6 +729,8 @@ class ReportRegistry
                 'url' => '/main/survey/reporting.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/survey/{course_resource_node_id}/',
             ],
             [
                 'id' => 'course_attendance_report',
@@ -688,15 +740,18 @@ class ReportRegistry
                 'url' => '/main/attendance/index.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.course',
+                'requires_course_context' => true,
+                'entry_url' => '/resources/attendance/{course_resource_node_id}/',
             ],
             [
                 'id' => 'course_exercise_global_report',
                 'title' => get_lang('Exercises global report'),
                 'description' => get_lang('Global exercise results report for the course.'),
                 'category' => self::CATEGORY_LEARNING_ANALYTICS,
-                'url' => '/main/exercise/exercise_global_report.php',
+                'url' => '/courses/exercise/global-report',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => false,
             ],
             [
                 'id' => 'course_exercise_report',
@@ -706,6 +761,9 @@ class ReportRegistry
                 'url' => '/main/exercise/exercise_report.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'context_requirements' => ['exercise'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/report',
             ],
             [
                 'id' => 'course_exercise_history',
@@ -715,6 +773,9 @@ class ReportRegistry
                 'url' => '/main/exercise/exercise_history.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'context_requirements' => ['exercise', 'attempt'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/result/{attempt_id}',
             ],
             [
                 'id' => 'course_exercise_results',
@@ -724,6 +785,9 @@ class ReportRegistry
                 'url' => '/main/exercise/result.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'context_requirements' => ['exercise', 'attempt'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/result/{attempt_id}',
             ],
             [
                 'id' => 'course_exercise_question_stats',
@@ -733,6 +797,9 @@ class ReportRegistry
                 'url' => '/main/exercise/question_stats.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'context_requirements' => ['exercise'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/question-stats',
             ],
             [
                 'id' => 'course_exercise_stats',
@@ -742,6 +809,9 @@ class ReportRegistry
                 'url' => '/main/exercise/stats.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'context_requirements' => ['exercise'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/report-by-question',
             ],
             [
                 'id' => 'course_exercise_live_stats',
@@ -751,6 +821,9 @@ class ReportRegistry
                 'url' => '/main/exercise/live_stats.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'context_requirements' => ['exercise'],
+                'entry_url' => '/resources/exercise/{course_resource_node_id}/{exercise_id}/live-results',
             ],
             [
                 'id' => 'course_lp_stats',
@@ -760,6 +833,9 @@ class ReportRegistry
                 'url' => '/main/lp/lp_stats.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'context_requirements' => ['learning_path'],
+                'entry_url' => '/resources/lp/{course_resource_node_id}/{learning_path_id}/reporting',
             ],
             [
                 'id' => 'course_lp_report_legacy',
@@ -769,6 +845,9 @@ class ReportRegistry
                 'url' => '/main/lp/lp_report.php',
                 'roles' => $courseManagers,
                 'permission' => 'reports.learning_analytics',
+                'requires_course_context' => true,
+                'context_requirements' => ['learning_path'],
+                'entry_url' => '/resources/lp/{course_resource_node_id}/{learning_path_id}/reporting',
             ],
             [
                 'id' => 'social_skills_report',
@@ -778,15 +857,6 @@ class ReportRegistry
                 'url' => '/main/social/my_skills_report.php',
                 'roles' => $learningFollowUp,
                 'permission' => 'reports.learning_analytics',
-            ],
-            [
-                'id' => 'export_periodic_export',
-                'title' => get_lang('Periodic export'),
-                'description' => get_lang('Scheduled or periodic export configuration.'),
-                'category' => self::CATEGORY_EXPORT,
-                'url' => '/main/admin/periodic_export.php',
-                'roles' => $admin,
-                'permission' => 'reports.export',
             ],
             [
                 'id' => 'export_user_export',
@@ -827,6 +897,39 @@ class ReportRegistry
         return (string) ($report['url'] ?? '#');
     }
 
+    public static function requiresCourseContext(array $report): bool
+    {
+        return true === ($report['requires_course_context'] ?? false);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function getContextRequirements(array $report): array
+    {
+        $requirements = $report['context_requirements'] ?? [];
+
+        if (!is_array($requirements)) {
+            return [];
+        }
+
+        $allowed = ['user', 'exercise', 'attempt', 'learning_path'];
+
+        return array_values(array_filter(
+            array_map('strval', $requirements),
+            static fn (string $requirement): bool => in_array($requirement, $allowed, true)
+        ));
+    }
+
+    public static function getEntryUrl(array $report): string
+    {
+        if (!empty($report['entry_url'])) {
+            return (string) $report['entry_url'];
+        }
+
+        return self::getLegacyUrl($report);
+    }
+
     public static function getFriendlyUrl(array $report): string
     {
         if (!empty($report['friendly_url'])) {
@@ -840,17 +943,89 @@ class ReportRegistry
         return api_get_path(WEB_CODE_PATH).'admin/report.php?'.http_build_query(['id' => $report['id']]);
     }
 
-    public static function getCanonicalUrl(string $reportId, array $extraQuery = []): string
+    /**
+     * Return the current user's selectable course/session contexts.
+     *
+     * Platform administrators get all courses from the current access URL.
+     * Other users get only courses already related to them, including session
+     * courses. The canonical report endpoint validates the selected context
+     * again before redirecting.
+     */
+    public static function getSelectableCourseContexts(): array
     {
-        $report = self::findReport($reportId);
-
-        if (null === $report) {
-            return api_get_path(WEB_CODE_PATH).'admin/reports_catalog.php';
+        $userId = api_get_user_id();
+        if ($userId <= 0) {
+            return [];
         }
 
-        $query = array_merge(['id' => $reportId], $extraQuery);
+        $courses = CourseManager::get_courses_list_by_user_id(
+            $userId,
+            true,
+            true,
+            false,
+            [],
+            false,
+            !api_is_platform_admin()
+        );
 
-        return api_get_path(WEB_CODE_PATH).'admin/report.php?'.http_build_query($query);
+        $courseIds = array_values(array_unique(array_filter(array_map(
+            static fn (array $course): int => (int) ($course['real_id'] ?? 0),
+            $courses
+        ))));
+        $courseNodeIds = [];
+
+        if (!empty($courseIds)) {
+            $courseEntities = Database::getManager()
+                ->getRepository(\Chamilo\CoreBundle\Entity\Course::class)
+                ->findBy(['id' => $courseIds]);
+
+            foreach ($courseEntities as $courseEntity) {
+                $courseNodeIds[(int) $courseEntity->getId()] = (int) ($courseEntity->getResourceNode()?->getId() ?? 0);
+            }
+        }
+
+        $contexts = [];
+
+        foreach ($courses as $course) {
+            $courseId = (int) ($course['real_id'] ?? 0);
+            if ($courseId <= 0) {
+                continue;
+            }
+
+            $sessionId = (int) ($course['session_id'] ?? 0);
+            $courseInfo = [];
+
+            if (empty($course['title'])) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                if (!is_array($courseInfo)) {
+                    $courseInfo = [];
+                }
+            }
+
+            $title = (string) ($course['title'] ?? $courseInfo['title'] ?? $course['code'] ?? $courseId);
+            $sessionName = (string) ($course['session_name'] ?? '');
+
+            $key = $courseId.':'.$sessionId;
+            $contexts[$key] = [
+                'course_id' => $courseId,
+                'session_id' => $sessionId,
+                'resource_node_id' => (int) ($courseNodeIds[$courseId] ?? 0),
+                'title' => $title,
+                'session_name' => $sessionName,
+            ];
+        }
+
+        uasort(
+            $contexts,
+            static function (array $left, array $right): int {
+                $leftLabel = $left['title'].' '.$left['session_name'];
+                $rightLabel = $right['title'].' '.$right['session_name'];
+
+                return strcasecmp($leftLabel, $rightLabel);
+            }
+        );
+
+        return $contexts;
     }
 
     public static function getCurrentUserRoles(): array

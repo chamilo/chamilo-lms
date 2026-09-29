@@ -80,7 +80,7 @@ export default {
     {
       name: "SurveyAnswer",
       path: ":surveyId/answer",
-      meta: { breadcrumb: "Answer survey" },
+      meta: { breadcrumb: "Answer survey", allowAnonymousAccess: true },
       component: () => import("../views/survey/SurveyAnswerView.vue"),
     },
   ],

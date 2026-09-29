@@ -20,7 +20,7 @@ require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $options = getopt('', ['url:']);
 $baseUrl = isset($options['url']) ? rtrim($options['url'], '/') : null;
-$senderId = api_get_setting('platform.disable_user_conditions_sender_id');
+$senderId = api_get_setting('workflows.disable_user_conditions_sender_id');
 
 if (empty($senderId)) {
     exit;

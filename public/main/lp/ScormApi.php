@@ -156,12 +156,28 @@ class ScormApi
 
             $statusIsSet = false;
             $currentScoStatus = (string) $myLPI->get_status(false);
+
+            // A SCO that never calls LMSSetValue(cmi.core.lesson_status) leaves $status
+            // empty/'undefined'. Some real-world packages only ever report 'incomplete'
+            // once and never send a real terminal status or call LMSFinish() meaningfully -
+            // this opt-in platform setting treats that the same way, so the LMS can still
+            // resolve completion on leave (see the "no status reported" branch below),
+            // without changing the behaviour for every other SCO.
+            $scoCompleteOnLeaveWhenIncomplete = 'sco' === $myLPI->get_type()
+                && 'true' === api_get_setting('lp.scorm_complete_on_leave_when_incomplete');
+            $scoReportedNoStatus = (
+                empty($status)
+                || 'undefined' === $status
+                || ('incomplete' === $status && $scoCompleteOnLeaveWhenIncomplete)
+            );
+
             $lmsCanUpdateScoStatus = 'true' === api_get_setting('lp.scorm_lms_update_sco_status_all_time')
                 || '' === $currentScoStatus
-                || 'not attempted' === $currentScoStatus;
+                || 'not attempted' === $currentScoStatus
+                || ('incomplete' === $currentScoStatus && $scoCompleteOnLeaveWhenIncomplete);
 
             // Default behaviour.
-            if (isset($status) && '' != $status && 'undefined' !== $status) {
+            if (isset($status) && !$scoReportedNoStatus) {
                 if (self::canApplyScoLessonStatus($myLPI, $status)) {
                     if ($debug > 1) {
                         error_log('Calling set_status('.$status.')');
@@ -316,7 +332,7 @@ class ScormApi
                  * cmi.core.lesson_status.  There is some additional requirements
                  * that must be adhered to successfully handle these cases:.
                  */
-                if ($lmsCanUpdateScoStatus && !$statusIsSet && empty($status) && !$statusSignalReceived) {
+                if ($lmsCanUpdateScoStatus && !$statusIsSet && $scoReportedNoStatus && !$statusSignalReceived) {
                     /**
                      * Upon initial launch the LMS should set the
                      * cmi.core.lesson_status to "not attempted".
@@ -370,7 +386,7 @@ class ScormApi
             // generic behaviour
             if ($lmsCanUpdateScoStatus && !$statusIsSet && !$statusSignalReceived) {
                 // Default behaviour
-                if (isset($status) && '' != $status && 'undefined' !== $status) {
+                if (isset($status) && !$scoReportedNoStatus) {
                     if (self::canApplyScoLessonStatus($myLPI, $status)) {
                         if ($debug > 1) {
                             error_log('Calling set_status('.$status.')');

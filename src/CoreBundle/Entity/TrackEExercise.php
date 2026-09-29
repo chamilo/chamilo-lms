@@ -354,6 +354,18 @@ class TrackEExercise
         return $this;
     }
 
+    public function getBlockedCategories(): ?string
+    {
+        return $this->blockedCategories;
+    }
+
+    public function setBlockedCategories(?string $blockedCategories): self
+    {
+        $this->blockedCategories = $blockedCategories;
+
+        return $this;
+    }
+
     public function getExeId(): int
     {
         return $this->exeId;
@@ -493,6 +505,12 @@ class TrackEExercise
     #[Groups(['track_e_exercise:read'])]
     public function isRevised(): bool
     {
-        return $this->revisedAttempts->count() > 0;
+        foreach ($this->revisedAttempts as $revisedAttempt) {
+            if ($revisedAttempt->getAuthor() > 0 && $revisedAttempt->isFinal()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

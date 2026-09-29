@@ -143,6 +143,18 @@ class TinyEditor extends Editor
                 // 3) Defer editor initialization until all legacy scripts are ready
                 window.chEditors = window.chEditors || [];
                 window.chEditors.push({$javascript});
+
+                // 4) Notify any consumer that a config was just queued. App.vue's
+                //    watchEffect (assets/vue/App.vue) normally drains this queue
+                //    when it moves the legacy page's content into its container,
+                //    but that only runs once, keyed off its own Vue ref — if this
+                //    DOMContentLoaded handler fires AFTER that watchEffect already
+                //    ran (a real race, worse under slower/cold loads), the config
+                //    pushed here would sit in the queue forever and the editor
+                //    would silently never initialize. This event lets the
+                //    consumer drain the queue again whenever something new lands
+                //    in it, regardless of which side runs first.
+                window.dispatchEvent(new CustomEvent('chamilo:editor-queued'));
             });
         </script>";
     }

@@ -20,7 +20,7 @@ $tpl = new Template($tool);
 $fields = [];
 
 $form = new FormValidator('add', 'post', api_get_self().'?id='.$id);
-$form->addText('name', get_lang('Name'));
+$form->addText('title', get_lang('Title'));
 $form->addText('code', $plugin->get_lang('JustificationCode'));
 $form->addNumeric('validity_duration', $plugin->get_lang('ValidityDuration'));
 $form->addCheckBox('date_manual_on', $plugin->get_lang('DateManualOn'));
@@ -40,7 +40,7 @@ if ($form->validate()) {
     $message = Display::return_message(get_lang('This code already exists'), 'warning');
     if (empty($data)) {
         $params = [
-            'name' => $values['name'],
+            'title' => $values['title'],
             'code' => $cleanedCode,
             'validity_duration' => $values['validity_duration'],
             'date_manual_on' => (int) $values['date_manual_on'],

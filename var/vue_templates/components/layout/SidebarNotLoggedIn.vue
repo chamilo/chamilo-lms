@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import PanelMenu from "primevue/panelmenu"
@@ -27,7 +27,7 @@ const languageItems = languageList.map((language) => ({
 }))
 
 const platformConfigStore = usePlatformConfig()
-const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration")) 
+const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration"))
 
 const categoryMenuLinks = ref([])
 const categoryPublicMenuLinks = ref([])
@@ -63,8 +63,7 @@ async function loadLinksForCategory(category) {
   try {
     const currentLocale = (locale.value || "").toString()
     const url =
-      `/pages/_category-links?category=${encodeURIComponent(category)}` +
-      `&locale=${encodeURIComponent(currentLocale)}`
+      `/pages/_category-links?category=${encodeURIComponent(category)}` + `&locale=${encodeURIComponent(currentLocale)}`
 
     const response = await fetch(url, { headers: { Accept: "application/json" } })
 
@@ -87,7 +86,14 @@ async function loadAllCategoryLinks() {
   ])
 }
 
-onMounted(loadAllCategoryLinks)
+onMounted(() => {
+  window.addEventListener("resize", handleViewportResize)
+  loadAllCategoryLinks()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", handleViewportResize)
+})
 
 watch(
   () => locale.value,
@@ -143,14 +149,47 @@ const menuItems = computed(() => {
   return items
 })
 
-const sidebarIsOpen = ref(true)
+const MOBILE_BREAKPOINT = 640
+
+const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT
+
+const sidebarIsOpen = ref(!isMobile())
+const wasMobileViewport = ref(isMobile())
+
+function closeSidebarOnMobile() {
+  if (isMobile()) {
+    sidebarIsOpen.value = false
+  }
+}
+
+function handleViewportResize() {
+  const mobile = isMobile()
+
+  if (mobile && !wasMobileViewport.value) {
+    sidebarIsOpen.value = false
+  }
+
+  if (!mobile && wasMobileViewport.value) {
+    sidebarIsOpen.value = true
+  }
+
+  wasMobileViewport.value = mobile
+}
+
+function handlePanelClick(event) {
+  if (event.target.closest("a[href]")) {
+    closeSidebarOnMobile()
+  }
+}
 
 watch(
   sidebarIsOpen,
   (newValue) => {
     const appEl = document.querySelector("#app")
 
-    appEl.classList.toggle("app--sidebar-inactive", !newValue)
+    if (appEl) {
+      appEl.classList.toggle("app--sidebar-inactive", !newValue)
+    }
   },
   {
     immediate: true,
@@ -165,7 +204,10 @@ watch(
         {{ t("Menu") }}
       </h3>
 
-      <div class="app-sidebar__panel flex flex-col">
+      <div
+        class="app-sidebar__panel flex flex-col"
+        @click="handlePanelClick"
+      >
         <div class="px-6 my-4">
           <Select
             v-model="selectedCity"

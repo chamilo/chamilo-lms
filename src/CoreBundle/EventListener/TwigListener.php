@@ -19,6 +19,9 @@ use Twig\Environment;
  */
 class TwigListener
 {
+    // Same value LanguageHelper::getWcagIso() falls back to.
+    private const string FALLBACK_WCAG_LOCALE = 'en-US';
+
     public function __construct(
         private readonly Environment $twig,
         private readonly SerializerInterface $serializer,
@@ -30,6 +33,16 @@ class TwigListener
 
     public function __invoke(ControllerEvent $event): void
     {
+        // Error pages are rendered through a sub-request. Querying the database
+        // here would throw again — precisely when the database is what failed —
+        // and the error page would never render. Publish neutral values instead:
+        // some templates read these globals without a default.
+        if (!$event->isMainRequest()) {
+            $this->addFallbackGlobals();
+
+            return;
+        }
+
         $currentAccessUrl = $this->accessUrlHelper->getCurrent();
         $user = $this->userHelper->getCurrent();
 
@@ -44,6 +57,14 @@ class TwigListener
 
         $languages = $this->languageRepository->getAllAvailable()->getQuery()->getArrayResult();
 
+        // Merge in each sub-language's parent isocode (e.g. 'fr_69' => 'fr_FR') so the
+        // Vue i18n fallback chain can fall back to the real parent instead of English.
+        $parentIsocodes = $this->languageRepository->getParentIsocodesByChildIsocode();
+        foreach ($languages as &$language) {
+            $language['parentIsocode'] = $parentIsocodes[$language['isocode']] ?? null;
+        }
+        unset($language);
+
         // $this->twig->addGlobal('text_direction', api_get_text_direction());
         $this->twig->addGlobal('is_authenticated', json_encode($isAuth));
         $this->twig->addGlobal('user_json', $data ?? json_encode([]));
@@ -57,5 +78,15 @@ class TwigListener
         }
         $this->twig->addGlobal('languages_json', json_encode($languages));
         $this->twig->addGlobal('wcag_locale', $this->languageHelper->getWcagIso());
+    }
+
+    private function addFallbackGlobals(): void
+    {
+        $this->twig->addGlobal('is_authenticated', json_encode(false));
+        $this->twig->addGlobal('user_json', json_encode([]));
+        $this->twig->addGlobal('is_login_url', 0);
+        $this->twig->addGlobal('access_url_id', 1);
+        $this->twig->addGlobal('languages_json', json_encode([]));
+        $this->twig->addGlobal('wcag_locale', self::FALLBACK_WCAG_LOCALE);
     }
 }

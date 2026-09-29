@@ -104,9 +104,7 @@ class OnlyofficeTools
         }
 
         $isAllowToEdit = api_is_allowed_to_edit(true, true);
-        $isMyDir = DocumentManager::is_my_shared_folder($userId, $docInfo['absolute_parent_path'], $sessionId);
-
-        $accessRights = $isAllowToEdit || $isMyDir || $isGroupAccess;
+        $accessRights = $isAllowToEdit || $isGroupAccess;
 
         $urlToEdit = $urlToEdit.'docId='.$documentId;
 
@@ -194,8 +192,7 @@ class OnlyofficeTools
                 $urlToEdit .= '?'.api_get_cidreq().'&';
             }
 
-            $isMyDir = DocumentManager::is_my_shared_folder($userId, $docInfo['absolute_parent_path'], $sessionId);
-            $accessRights = $isMyDir || $isGroupAccess;
+            $accessRights = $isGroupAccess;
 
             $urlToEdit .= 'docId='.$documentId;
             if (false === $showHeaders) {

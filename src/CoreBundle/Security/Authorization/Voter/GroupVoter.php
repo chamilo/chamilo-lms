@@ -13,9 +13,10 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\ORM\EntityManager;
 use GroupManager;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -24,11 +25,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class GroupVoter extends Voter
 {
-    public const VIEW = 'VIEW';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
+    public const string VIEW = 'VIEW';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
 
-    private Security $security;
+    private AccessDecisionManagerInterface $accessDecisionManager;
     private RequestStack $requestStack;
 
     public function __construct(
@@ -36,12 +37,12 @@ class GroupVoter extends Voter
         // CourseRepository $courseManager,
         // CGroupRepository $groupManager,
         RequestStack $requestStack,
-        Security $security
+        AccessDecisionManagerInterface $accessDecisionManager
     ) {
         // $this->entityManager = $entityManager;
         // $this->courseManager = $courseManager;
         // $this->groupManager = $groupManager;
-        $this->security = $security;
+        $this->accessDecisionManager = $accessDecisionManager;
         $this->requestStack = $requestStack;
     }
 
@@ -56,7 +57,7 @@ class GroupVoter extends Voter
         return $subject instanceof CGroup && \in_array($attribute, $options, true);
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -71,7 +72,7 @@ class GroupVoter extends Voter
         }
 
         // Admins have access to everything.
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 
@@ -119,12 +120,24 @@ class GroupVoter extends Voter
                     $requestUri = $request->getRequestUri();
                 }
 
+                // Every tool needs BOTH of its paths listed: the legacy page and the Vue
+                // route it was migrated to. $toolStatus below defaults to TOOL_PUBLIC, so a
+                // path that matches nothing grants access — a tool listed only under /main/
+                // stops being checked at all once its callers move to /resources/. The wiki
+                // was the only one carrying both; the other five were added here for the
+                // same reason.
                 $tools = [
                     '/main/forum/' => $group->getForumState(),
+                    '/resources/forum/' => $group->getForumState(),
                     '/documents/' => $group->getDocState(),
+                    '/resources/document/' => $group->getDocState(),
                     '/main/calendar/' => $group->getCalendarState(),
+                    '/resources/ccalendarevent' => $group->getCalendarState(),
                     '/main/announcements/' => $group->getAnnouncementsState(),
+                    '/resources/announcement/' => $group->getAnnouncementsState(),
                     '/main/work/' => $group->getWorkState(),
+                    '/resources/assignment/' => $group->getWorkState(),
+                    '/resources/wiki/' => $group->getWikiState(),
                     '/main/wiki/' => $group->getWikiState(),
                     /*'/main/group/group_space' => GroupManager::TOOL_PUBLIC,
                     '/main/inc/ajax/model.ajax.php' => GroupManager::TOOL_PUBLIC,

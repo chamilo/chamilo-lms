@@ -20,6 +20,8 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Service\Html\TranslateHtmlLanguageService;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -28,7 +30,6 @@ use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
-use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -46,17 +47,23 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
 use const JSON_HEX_AMP;
 use const JSON_HEX_APOS;
 use const JSON_HEX_QUOT;
 use const JSON_HEX_TAG;
+use const PATHINFO_EXTENSION;
 use const PHP_EOL;
+use const PHP_QUERY_RFC3986;
+use const PHP_URL_QUERY;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>.
@@ -73,13 +80,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
         private readonly UserHelper $userHelper,
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly ResourceFileRepository $resourceFileRepository,
-        private readonly CourseToolAccessTracker $courseToolAccessTracker
+        private readonly CourseToolAccessTracker $courseToolAccessTracker,
+        private readonly TranslateHtmlLanguageService $translateHtmlLanguageService
     ) {}
 
     #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
     public function diskSpace(Request $request): Response
     {
-        $nodeId = $request->get('id');
+        $nodeId = $request->attributes->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         /** @var ResourceNode $resourceNode */
@@ -156,18 +164,32 @@ class ResourceController extends AbstractResourceController implements CourseCon
         TrackEDownloadsRepository $trackEDownloadsRepository,
         ResourceFileHelper $resourceFileHelper,
     ): Response {
-        $id = $request->get('id');
-        $resourceFileId = $request->get('resourceFileId');
-        $filter = (string) $request->get('filter');
+        $id = $request->attributes->get('id');
+        $resourceFileId = $request->query->get('resourceFileId');
+        $filter = (string) $request->query->get('filter');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
 
         if (null === $resourceNode) {
             throw new FileNotFoundException($this->trans('Resource not found'));
         }
 
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
         $resourceFile = null;
         if ($resourceFileId) {
             $resourceFile = $this->resourceFileRepository->find($resourceFileId);
+
+            // The selected file must belong to the resource node in the path; otherwise the
+            // resourceFileId parameter is an IDOR oracle for arbitrary resource files.
+            if ($resourceFile instanceof ResourceFile
+                && $resourceFile->getResourceNode()?->getId() !== $resourceNode->getId()
+            ) {
+                throw new FileNotFoundException($this->trans('Resource file not found for the given resource node'));
+            }
         }
 
         $resourceFile ??= $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
@@ -212,9 +234,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         CLinkRepository $cLinkRepository,
         EntityManagerInterface $entityManager
     ): RedirectResponse {
-        $tool = (string) $request->get('tool');
-        $type = (string) $request->get('type');
-        $id = (int) $request->get('id');
+        $tool = (string) $request->attributes->get('tool');
+        $type = (string) $request->attributes->get('type');
+        $id = (int) $request->attributes->get('id');
 
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
@@ -280,7 +302,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         ResourceFileHelper $resourceFileHelper,
         ResourceNodeRepository $resourceNodeRepository,
     ): Response {
-        $id = $request->get('id');
+        $id = $request->attributes->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
 
         if (null === $resourceNode) {
@@ -380,56 +402,63 @@ class ResourceController extends AbstractResourceController implements CourseCon
     #[Route('/{tool}/{type}/{id}/change_visibility', name: 'chamilo_core_resource_change_visibility', methods: ['POST'])]
     public function changeVisibility(
         Request $request,
+        CToolRepository $toolRepository,
+        ToolChain $toolChain,
+        SettingsManager $settingsManager,
         EntityManagerInterface $entityManager,
         SerializerInterface $serializer,
         Security $security,
     ): Response {
         /** @var User $user */
         $user = $security->getUser();
-        $isAdmin = ($user->isSuperAdmin() || $user->isAdmin());
-        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
+        $isAdmin = $user->isSuperAdmin() || $user->isAdmin();
+        $isCourseTeacher = $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+            || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
 
-        if (!($isCourseTeacher || $isAdmin)) {
+        if (!$isCourseTeacher && !$isAdmin) {
             throw new AccessDeniedHttpException();
         }
 
-        $session = null;
-        if ($this->getSession()) {
-            $sessionId = $this->getSession()->getId();
-            $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        $course = $this->getCourse();
+        if (null === $course) {
+            throw new NotFoundHttpException($this->trans('Course not found'));
         }
-        $courseId = $this->getCourse()->getId();
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
+
+        $session = $this->getSession();
         $id = $request->attributes->getInt('id');
-        $resourceNode = $this->getResourceNodeRepository()->findOneBy(['id' => $id]);
+        $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
             throw new NotFoundHttpException($this->trans('Resource not found'));
         }
 
-        $link = null;
-        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
-            if ($resourceLink->getSession() === $session) {
-                $link = $resourceLink;
+        $courseTool = $toolRepository->findOneBy([
+            'resourceNode' => $resourceNode,
+            'course' => $course,
+        ]);
 
-                break;
-            }
+        if (!$courseTool instanceof CTool) {
+            throw new AccessDeniedHttpException($this->trans('Unauthorised access to resource'));
         }
 
+        if ($this->isUserToolVisibilityLocked($course, $courseTool, $toolChain, $settingsManager)) {
+            throw new AccessDeniedHttpException($this->trans('This tool visibility cannot be changed'));
+        }
+
+        $link = $this->findCourseToolResourceLink($resourceNode, $course, $session);
+
         if (null === $link) {
-            $link = new ResourceLink();
-            $link->setResourceNode($resourceNode)
+            $link = (new ResourceLink())
+                ->setResourceNode($resourceNode)
                 ->setSession($session)
                 ->setCourse($course)
                 ->setVisibility(ResourceLink::VISIBILITY_DRAFT)
             ;
             $entityManager->persist($link);
+        } elseif (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
+            $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
         } else {
-            if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
-                $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
-            } else {
-                $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
-            }
+            $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
         }
 
         $entityManager->flush();
@@ -453,69 +482,91 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function changeVisibilityAll(
         Request $request,
         CToolRepository $toolRepository,
-        CShortcutRepository $shortcutRepository,
         ToolChain $toolChain,
+        SettingsManager $settingsManager,
         EntityManagerInterface $entityManager,
         Security $security
     ): Response {
         /** @var User $user */
         $user = $security->getUser();
-        $isAdmin = ($user->isSuperAdmin() || $user->isAdmin());
-        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
+        $isAdmin = $user->isSuperAdmin() || $user->isAdmin();
+        $isCourseTeacher = $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+            || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
 
-        if (!($isCourseTeacher || $isAdmin)) {
+        if (!$isCourseTeacher && !$isAdmin) {
             throw new AccessDeniedHttpException();
         }
 
-        $visibility = $request->attributes->get('visibility');
-
-        $session = null;
-        if ($this->getSession()) {
-            $sessionId = $this->getSession()->getId();
-            $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        $visibility = (string) $request->attributes->get('visibility');
+        if (!\in_array($visibility, ['show', 'hide'], true)) {
+            throw new BadRequestHttpException($this->trans('Invalid visibility'));
         }
-        $courseId = $this->getCourse()->getId();
-        $course = $entityManager->getRepository(Course::class)->find($courseId);
 
-        $result = $toolRepository->getResourcesByCourse($course, $session)
+        $course = $this->getCourse();
+        if (null === $course) {
+            throw new NotFoundHttpException($this->trans('Course not found'));
+        }
+
+        $session = $this->getSession();
+
+        /** @var CTool[] $courseTools */
+        $courseTools = $toolRepository->getResourcesByCourse($course, $session)
             ->addSelect('tool')
             ->innerJoin('resource.tool', 'tool')
             ->getQuery()
             ->getResult()
         ;
 
-        $skipTools = ['course_tool',
-            // 'chat',
-            // 'notebook',
-            // 'wiki'
-        ];
+        $canonicalRows = [];
+        foreach ($courseTools as $courseTool) {
+            $storedName = strtolower(trim($courseTool->getTool()->getTitle()));
+            $canonicalName = strtolower($toolChain->normalizeCourseToolName($storedName));
 
-        /** @var CTool $item */
-        foreach ($result as $item) {
-            if (\in_array($item->getTitle(), $skipTools, true)) {
+            if ($storedName === $canonicalName) {
+                $canonicalRows[$canonicalName] = true;
+            }
+        }
+
+        $skipTools = ['course_tool'];
+        $processedTools = [];
+
+        foreach ($courseTools as $courseTool) {
+            $storedName = strtolower(trim($courseTool->getTool()->getTitle()));
+            $canonicalName = strtolower($toolChain->normalizeCourseToolName($storedName));
+
+            if ($storedName !== $canonicalName && isset($canonicalRows[$canonicalName])) {
                 continue;
             }
-            $toolModel = $toolChain->getToolFromName($item->getTool()->getTitle());
 
+            if (isset($processedTools[$canonicalName])) {
+                continue;
+            }
+
+            if (\in_array($canonicalName, $skipTools, true)) {
+                continue;
+            }
+
+            $toolModel = $toolChain->getCourseToolFromName($storedName);
             if (!\in_array($toolModel->getCategory(), ['authoring', 'interaction'], true)) {
                 continue;
             }
 
-            $resourceNode = $item->getResourceNode();
+            if ($this->isUserToolVisibilityLocked($course, $courseTool, $toolChain, $settingsManager)) {
+                $processedTools[$canonicalName] = true;
 
-            /** @var ResourceLink $link */
-            $link = null;
-            foreach ($resourceNode->getResourceLinks() as $resourceLink) {
-                if ($resourceLink->getSession() === $session) {
-                    $link = $resourceLink;
-
-                    break;
-                }
+                continue;
             }
 
+            $resourceNode = $courseTool->getResourceNode();
+            if (null === $resourceNode) {
+                continue;
+            }
+
+            $link = $this->findCourseToolResourceLink($resourceNode, $course, $session);
+
             if (null === $link) {
-                $link = new ResourceLink();
-                $link->setResourceNode($resourceNode)
+                $link = (new ResourceLink())
+                    ->setResourceNode($resourceNode)
                     ->setSession($session)
                     ->setCourse($course)
                     ->setVisibility(ResourceLink::VISIBILITY_DRAFT)
@@ -523,16 +574,75 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $entityManager->persist($link);
             }
 
-            if ('show' === $visibility) {
-                $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
-            } elseif ('hide' === $visibility) {
-                $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
-            }
+            $link->setVisibility(
+                'show' === $visibility
+                    ? ResourceLink::VISIBILITY_PUBLISHED
+                    : ResourceLink::VISIBILITY_DRAFT
+            );
+            $processedTools[$canonicalName] = true;
         }
 
         $entityManager->flush();
 
         return new Response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    private function findCourseToolResourceLink(
+        ResourceNode $resourceNode,
+        Course $course,
+        ?Session $session
+    ): ?ResourceLink {
+        $courseId = $course->getId();
+        $sessionId = $session?->getId();
+
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            if ($resourceLink->getCourse()?->getId() !== $courseId) {
+                continue;
+            }
+
+            if ($resourceLink->getSession()?->getId() !== $sessionId) {
+                continue;
+            }
+
+            if (
+                null !== $resourceLink->getGroup()
+                || null !== $resourceLink->getUserGroup()
+                || null !== $resourceLink->getUser()
+            ) {
+                continue;
+            }
+
+            return $resourceLink;
+        }
+
+        return null;
+    }
+
+    private function isUserToolVisibilityLocked(
+        Course $course,
+        CTool $courseTool,
+        ToolChain $toolChain,
+        SettingsManager $settingsManager
+    ): bool {
+        $courseToolName = strtolower(
+            $toolChain->normalizeCourseToolName($courseTool->getTool()->getTitle())
+        );
+
+        if ('member' !== $courseToolName || !$course->isPublic()) {
+            return false;
+        }
+
+        return $this->isSettingEnabled(
+            $settingsManager->getSetting('privacy.disable_change_user_visibility_for_public_courses')
+        );
+    }
+
+    private function isSettingEnabled(mixed $value): bool
+    {
+        return true === $value
+            || 1 === $value
+            || '1' === $value
+            || 'true' === strtolower(trim((string) $value));
     }
 
     #[Route('/resource_files/{resourceNodeId}/variants', name: 'chamilo_core_resource_files_variants', methods: ['GET'])]
@@ -575,6 +685,23 @@ class ResourceController extends AbstractResourceController implements CourseCon
             return $this->json(['error' => 'Variant not found'], Response::HTTP_NOT_FOUND);
         }
 
+        $resourceNode = $variant->getResourceNode();
+        if (null === $resourceNode) {
+            throw new NotFoundHttpException();
+        }
+
+        // Require edit permission on the owning resource node (admins pass via ROLE_ADMIN).
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::EDIT,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        // Only genuine access-URL variants may be removed here, never a primary resource file.
+        if (null === $variant->getAccessUrl()) {
+            throw new NotFoundHttpException();
+        }
+
         $em->remove($variant);
         $em->flush();
 
@@ -592,7 +719,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $fileName = $resourceFile->getOriginalName();
         $fileSize = $resourceFile->getSize();
         $mimeType = $resourceFile->getMimeType() ?: '';
-        [$start, $end, $length] = $this->getRange($request, $fileSize);
+        [$start, $end, $length, $isPartialContent] = $this->resolveFileRange($request, $fileSize);
         $resourceNodeRepo = $this->getResourceNodeRepository();
 
         // Convert the file name to ASCII using iconv
@@ -606,9 +733,21 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         }
 
+        // Restored legacy/MBZ resources can carry a generic text/plain or octet-stream
+        // MIME even when the original filename clearly identifies an image. Normalize only
+        // image extensions here so /view can use the image pipeline without changing stored data.
+        $mimeType = $this->normalizeImageMimeType($mimeType, (string) $fileName);
+
         // Defense-in-depth: social post attachments must never render HTML inline (XSS mitigation).
         // This covers files uploaded before the MIME-type allowlist was introduced.
         $isSocialAttachment = 'social_post_attachments' === (string) $request->attributes->get('type');
+
+        // Such files are always delivered as a neutral download, so the browser can never
+        // execute them in the Chamilo origin, whatever the requested mode is.
+        $forceSocialHtmlDownload = $isSocialAttachment && str_contains($mimeType, 'html');
+        if ($forceSocialHtmlDownload) {
+            $mimeType = 'application/octet-stream';
+        }
 
         // SVG: sanitize before serving in any mode (view or download).
         // Glide is raster-only and cannot process SVG; sanitization strips embedded scripts regardless of how the file was stored.
@@ -640,7 +779,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             case 'show':
             default:
-                $forceDownload = false;
+                $forceDownload = $forceSocialHtmlDownload;
 
                 // If it's an image then send it to Glide.
                 if (str_contains($mimeType, 'image')) {
@@ -684,6 +823,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     }
 
                     $content = $this->injectGlossaryJs($request, $content, $resourceNode);
+                    $content = $this->appendLearningPathContextToEmbeddedDocumentUrls($content, $request);
+                    $content = $this->injectMathJaxRenderer($content);
 
                     $response = new Response();
                     $disposition = $response->headers->makeDisposition(
@@ -693,12 +834,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $response->headers->set('Content-Disposition', $disposition);
                     $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
 
-                    // Translate HTML: show only spans matching the user language.
+                    // Translate HTML: show only spans matching the viewer's language, falling
+                    // back to the course language, then the platform default language, then
+                    // whichever language is present, so the document is never rendered blank.
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
-                        $user = $this->userHelper->getCurrent();
+                        $locale = $this->resolveTranslateHtmlLocale($content);
 
-                        if (null !== $user) {
-                            $locale = (string) $user->getLocale();
+                        if (null !== $locale) {
                             $localeJson = json_encode(
                                 $locale,
                                 JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
@@ -828,14 +970,257 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+
+        if ($forceSocialHtmlDownload) {
+            $response->headers->set('X-Content-Type-Options', 'nosniff');
+        }
+
         $response->headers->set('Content-Length', (string) $length);
         $response->headers->set('Accept-Ranges', 'bytes');
-        $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
-        $response->setStatusCode(
-            $start > 0 || $end < $fileSize - 1 ? Response::HTTP_PARTIAL_CONTENT : Response::HTTP_OK
-        );
+
+        if ($isPartialContent) {
+            $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
+            $response->setStatusCode(Response::HTTP_PARTIAL_CONTENT);
+        } else {
+            $response->setStatusCode(Response::HTTP_OK);
+        }
 
         return $response;
+    }
+
+    /**
+     * Resolve one HTTP byte range for streamed resources.
+     *
+     * Malformed, unsupported multi-range, or out-of-bounds requests are intentionally ignored
+     * and fall back to the complete representation. This keeps the endpoint compatible with
+     * clients that retry media requests while still returning a correct 206 response for valid
+     * single ranges such as "bytes=0-", "bytes=1000-" and suffix ranges.
+     *
+     * @return array{0: int, 1: int, 2: int, 3: bool}
+     */
+    private function resolveFileRange(Request $request, int $fileSize): array
+    {
+        if ($fileSize <= 0) {
+            return [0, 0, 0, false];
+        }
+
+        $fullRange = [0, $fileSize - 1, $fileSize, false];
+        $rangeHeader = trim((string) $request->headers->get('Range', ''));
+
+        if ('' === $rangeHeader
+            || 1 !== preg_match('/^bytes=(\d*)-(\d*)$/', $rangeHeader, $matches)
+        ) {
+            return $fullRange;
+        }
+
+        $startValue = $matches[1];
+        $endValue = $matches[2];
+
+        if ('' === $startValue && '' === $endValue) {
+            return $fullRange;
+        }
+
+        if ('' === $startValue) {
+            $suffixLength = (int) $endValue;
+            if ($suffixLength <= 0) {
+                return $fullRange;
+            }
+
+            $length = min($suffixLength, $fileSize);
+            $start = $fileSize - $length;
+
+            return [$start, $fileSize - 1, $length, true];
+        }
+
+        $start = (int) $startValue;
+        if ($start >= $fileSize) {
+            return $fullRange;
+        }
+
+        $end = '' === $endValue
+            ? $fileSize - 1
+            : min((int) $endValue, $fileSize - 1);
+
+        if ($end < $start) {
+            return $fullRange;
+        }
+
+        return [$start, $end, $end - $start + 1, true];
+    }
+
+    /**
+     * Recover a usable image MIME from the original filename when persisted metadata is generic.
+     *
+     * This is intentionally restricted to image/* candidates. It fixes restored images that were
+     * persisted as text/plain/application/octet-stream without changing how arbitrary files render.
+     */
+    private function normalizeImageMimeType(string $mimeType, string $fileName): string
+    {
+        $baseMimeType = strtolower(trim((string) strtok($mimeType, ';')));
+        if (!\in_array($baseMimeType, ['', 'text/plain', 'application/octet-stream'], true)) {
+            return $mimeType;
+        }
+
+        $extension = strtolower((string) pathinfo($fileName, PATHINFO_EXTENSION));
+        if ('' === $extension) {
+            return $mimeType;
+        }
+
+        foreach (MimeTypes::getDefault()->getMimeTypes($extension) as $candidate) {
+            if (str_starts_with($candidate, 'image/')) {
+                return $candidate;
+            }
+        }
+
+        return $mimeType;
+    }
+
+    /**
+     * Loads the MathJax renderer for HTML documents containing a stored formula.
+     *
+     * /r/document/files/{uuid}/view serves the document's stored HTML directly as a Response —
+     * it never renders head.html.twig, so the <script> that loads the renderer there (which is
+     * what turns a saved <span class="math-latex" data-latex="..."> back into a rendered
+     * formula) is never present on this route. Inject it here instead, the same way
+     * injectGlossaryJs() and the translate_html block above inject their own <script> tags.
+     * Skipped when MathJax is off platform-wide, and when the document has no formula, so
+     * plain documents pay nothing extra.
+     */
+    private function injectMathJaxRenderer(string $content): string
+    {
+        if ('true' !== $this->getSettingsManager()->getSetting('editor.enabled_mathjax')) {
+            return $content;
+        }
+
+        if (false === stripos($content, 'class="math-latex"')) {
+            return $content;
+        }
+
+        $script = $this->renderView('@ChamiloCore/MathJax/mathjax_render.html.twig');
+
+        if (false !== stripos($content, '</head>')) {
+            return str_ireplace('</head>', $script.'</head>', $content);
+        }
+
+        if (false !== stripos($content, '</body>')) {
+            return str_ireplace('</body>', $script.'</body>', $content);
+        }
+
+        return $content.$script;
+    }
+
+    /**
+     * Propagate LP context to embedded document-file URLs while rendering an LP HTML document.
+     *
+     * The LP runtime already opens the main document with cid/lp_id/item_id query parameters.
+     * Embedded images use their own /r/document/files/{uuid}/view requests, so they do not inherit
+     * that query string. Hidden documents used only inside a learning path therefore fail the
+     * ResourceNodeVoter check for real students. Rewriting only the response HTML keeps the stored
+     * document untouched while giving embedded resources the same verified course/LP context.
+     */
+    private function appendLearningPathContextToEmbeddedDocumentUrls(string $html, Request $request): string
+    {
+        if ('' === $html) {
+            return $html;
+        }
+
+        $lpId = $request->query->getInt('lp_id');
+        $lpItemId = $request->query->getInt('lp_item_id');
+        if ($lpItemId <= 0) {
+            $lpItemId = $request->query->getInt('item_id');
+        }
+        $origin = strtolower(trim((string) $request->query->get('origin', '')));
+
+        if ($lpId <= 0 && $lpItemId <= 0 && 'learnpath' !== $origin) {
+            return $html;
+        }
+
+        $context = ['origin' => 'learnpath'];
+        foreach (['cid', 'sid', 'gid'] as $key) {
+            $value = $request->query->getInt($key);
+            if ($value > 0) {
+                $context[$key] = $value;
+            }
+        }
+        if ($lpId > 0) {
+            $context['lp_id'] = $lpId;
+        }
+        if ($lpItemId > 0) {
+            $context['lp_item_id'] = $lpItemId;
+        }
+
+        $pattern = '#(?P<prefix>(?:src|href)\s*=\s*["\\\'])(?P<url>(?:(?:https?:)?//[^"\\\']+)?/r/document/files/[0-9a-fA-F-]{36}/view(?:\?[^"\\\']*)?)(?P<suffix>["\\\'])#i';
+
+        return preg_replace_callback(
+            $pattern,
+            static function (array $matches) use ($context): string {
+                $url = html_entity_decode((string) ($matches['url'] ?? ''), ENT_QUOTES | ENT_HTML5);
+                if ('' === $url) {
+                    return $matches[0];
+                }
+
+                $fragment = '';
+                $fragmentPos = strpos($url, '#');
+                if (false !== $fragmentPos) {
+                    $fragment = substr($url, $fragmentPos);
+                    $url = substr($url, 0, $fragmentPos);
+                }
+
+                $query = (string) (parse_url($url, PHP_URL_QUERY) ?? '');
+                $existing = [];
+                if ('' !== $query) {
+                    parse_str($query, $existing);
+                }
+
+                $missing = array_diff_key($context, $existing);
+                if ([] === $missing) {
+                    return $matches[0];
+                }
+
+                $separator = str_contains($url, '?') ? '&' : '?';
+                $url .= $separator.http_build_query($missing, '', '&', PHP_QUERY_RFC3986).$fragment;
+
+                return (string) ($matches['prefix'] ?? '')
+                    .htmlspecialchars($url, ENT_QUOTES | ENT_HTML5)
+                    .(string) ($matches['suffix'] ?? '');
+            },
+            $html
+        ) ?? $html;
+    }
+
+    /**
+     * Resolves which language translate_html should show for this document:
+     * the viewer's own locale, else the course language, else the platform
+     * default language, else whichever language is actually present in the
+     * document — so the caller can always inject a locale that matches at
+     * least one block, and the document is never rendered blank.
+     */
+    private function resolveTranslateHtmlLocale(string $content): ?string
+    {
+        $presentLanguages = $this->translateHtmlLanguageService->inspect($content)['presentLanguages'];
+
+        if ([] === $presentLanguages) {
+            return null;
+        }
+
+        $user = $this->userHelper->getCurrent();
+        $course = $this->getCourse();
+
+        $candidates = [
+            $user?->getLocale(),
+            $course?->getCourseLanguage(),
+            (string) $this->getSettingsManager()->getSetting('language.platform_language'),
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (null !== $candidate && '' !== $candidate
+                && $this->translateHtmlLanguageService->containsMatchingLanguage($presentLanguages, $candidate)
+            ) {
+                return $candidate;
+            }
+        }
+
+        return $presentLanguages[0];
     }
 
     private function injectGlossaryJs(

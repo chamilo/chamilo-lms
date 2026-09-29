@@ -1,8 +1,16 @@
 <template>
   <SectionHeader
     v-if="securityStore.isAuthenticated"
-    :title="t('Documents')"
+    :title="isCertificateMode ? t('Certificate') : t('Documents')"
   >
+    <BaseButton
+      v-if="isCertificateMode"
+      :label="t('Back')"
+      :route="gradebookReturnRoute"
+      icon="back"
+      only-icon
+      type="primary-text"
+    />
     <BaseButton
       v-if="showNewCertificateButton"
       :label="t('Create certificate')"
@@ -18,6 +26,15 @@
       only-icon
       type="black"
       @click="goToUploadFile"
+    />
+    <BaseButton
+      v-if="showUseSystemDefaultCertificateButton"
+      :disabled="isSettingDefaultCertificate"
+      :label="t('Use system default certificate')"
+      icon="restore"
+      only-icon
+      type="secondary-text"
+      @click="confirmUseSystemDefaultCertificate"
     />
 
     <BaseButton
@@ -35,6 +52,14 @@
       only-icon
       type="success"
       @click="goToNewDocument"
+    />
+    <BaseButton
+      v-if="showOnlyofficeCreateButton"
+      :label="`${t('New document')} (ONLYOFFICE)`"
+      icon="onlyoffice"
+      only-icon
+      type="success"
+      @click="goToNewOnlyofficeDocument"
     />
     <BaseButton
       v-if="showUploadButton"
@@ -55,7 +80,7 @@
     <BaseButton
       v-if="showNewDrawingButton"
       :label="t('New drawing')"
-      icon="drawing"
+      icon="shape"
       only-icon
       type="success"
       @click="goToNewDrawing"
@@ -110,6 +135,22 @@
       @click="goToGenerateMedia"
     />
   </SectionHeader>
+
+  <div
+    v-if="isCertificateMode"
+    class="mb-4 rounded-xl border border-gray-20 bg-white px-4 py-3 text-sm shadow-sm"
+  >
+    <span class="font-semibold">{{ t("Default certificate") }}:</span>
+    <span class="ml-1">{{ defaultCertificateTitle || t("No data available") }}</span>
+    <div
+      v-if="certificateTemplateFallback"
+      class="mt-1 text-yellow-700"
+      role="status"
+    >
+      <span class="font-semibold">{{ t("Warning") }}:</span>
+      {{ t("The attached certificate is unavailable. The system default certificate will be used.") }}
+    </div>
+  </div>
 
   <BaseTable
     :key="tableRenderKey"
@@ -291,7 +332,12 @@
             v-if="isCertificateMode && canEdit(slotProps.data)"
             :class="{ selected: slotProps.data.iid === defaultCertificateId }"
             :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
-            :title="t('Set as default certificate')"
+            :disabled="isSettingDefaultCertificate"
+            :title="
+              slotProps.data.iid === defaultCertificateId
+                ? t('Default certificate')
+                : t('Set as default certificate')
+            "
             size="small"
             type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
             @click="selectAsDefaultCertificate(slotProps.data)"
@@ -467,6 +513,24 @@
           {{ usageQuotaSummary.availablePercentLabel }}
         </div>
       </div>
+
+      <p
+        v-if="usageQuotaSummary.showUpgradeCta"
+        class="mt-3 rounded border border-yellow-200 bg-yellow-50 p-3 text-xs text-yellow-900"
+      >
+        {{ t("Space is limited through your course properties. To increase your limit, get a") }}
+        <a
+          class="font-semibold text-primary underline"
+          href="/resources/courses/new"
+        >
+          {{ t("pro plan") }}
+        </a>
+        {{
+          t(
+            "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan.",
+          )
+        }}
+      </p>
     </div>
 
     <BaseChart :data="usageData" />
@@ -673,6 +737,7 @@ import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseChart from "../../components/basecomponents/BaseChart.vue"
 import DocumentAudioRecorder from "../../components/documents/DocumentAudioRecorder.vue"
 import { useNotification } from "../../composables/notification"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { useSecurityStore } from "../../store/securityStore"
 import prettyBytes from "pretty-bytes"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
@@ -694,6 +759,7 @@ const courseSettingsStore = useCourseSettings()
 const platformConfigStore = usePlatformConfig()
 const { t, locale } = useI18n()
 const notification = useNotification()
+const { requireConfirmation } = useConfirmation()
 
 const isDownloadingAll = ref(false)
 
@@ -865,9 +931,46 @@ const isCertificateMode = computed(() => {
   return route.query.filetype === "certificate"
 })
 
+const gradebookReturnRoute = computed(() => {
+  const requestedRouteName = String(route.query.returnTo || "")
+  const routeName = ["GradebookList", "GradebookCertificates"].includes(requestedRouteName)
+    ? requestedRouteName
+    : "GradebookList"
+  const query = {
+    cid: unref(cid),
+    sid: unref(sid),
+    gid: Number(route.query.returnGid ?? unref(gid) ?? 0),
+  }
+  const categoryId = Number(route.query.categoryId || 0)
+  if (categoryId > 0) {
+    query.categoryId = categoryId
+  }
+
+  return {
+    name: routeName,
+    params: { node: route.params.node },
+    query,
+  }
+})
+
 const defaultCertificateId = ref(null)
+const defaultCertificateTitle = ref("")
+const certificateAttachedDocumentId = ref(null)
+const certificateTemplateFallback = ref(false)
+const certificateCategoryId = ref(null)
+const certificateCsrfToken = ref("")
+const isSettingDefaultCertificate = ref(false)
 
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher && !platformConfigStore.isStudentViewActive)
+const showUseSystemDefaultCertificateButton = computed(() => {
+  return (
+    isCertificateMode.value &&
+    isCurrentTeacher.value &&
+    Number(certificateAttachedDocumentId.value || 0) > 0 &&
+    Boolean(certificateCategoryId.value) &&
+    Boolean(certificateCsrfToken.value)
+  )
+})
 
 const onlyofficePluginEnabled = computed(() => {
   return platformConfigStore.plugins?.onlyoffice?.enabled === true
@@ -875,6 +978,10 @@ const onlyofficePluginEnabled = computed(() => {
 
 const onlyofficeEditorPath = computed(() => {
   return String(platformConfigStore.plugins?.onlyoffice?.editorPath || "/plugin/Onlyoffice/editor.php")
+})
+
+const showOnlyofficeCreateButton = computed(() => {
+  return securityStore.isAuthenticated && onlyofficePluginEnabled.value && Boolean(unref(showNewDocumentButton))
 })
 
 const onlyofficeSupportedExtensions = new Set([
@@ -974,6 +1081,22 @@ function openWithOnlyoffice(doc) {
   window.open(url, "_blank", "noopener,noreferrer")
 }
 
+function goToNewOnlyofficeDocument() {
+  const sp = new URLSearchParams({
+    cid: String(unref(cid) || 0),
+    sid: String(unref(sid) || 0),
+    gid: String(unref(gid) || 0),
+    returnUrl: window.location.href,
+  })
+
+  const parentResourceNodeId = Number(route.params.node || route.query.node || 0)
+  if (Number.isInteger(parentResourceNodeId) && parentResourceNodeId > 0) {
+    sp.set("parentResourceNodeId", String(parentResourceNodeId))
+  }
+
+  window.location.href = `/plugin/Onlyoffice/create.php?${sp.toString()}`
+}
+
 /**
  * Local loading flag to show the table spinner immediately.
  * This prevents the "empty table" impression while the store is still preparing the request.
@@ -1001,6 +1124,11 @@ function resetTableStateForFolderChange() {
     ...options.value,
     page: 1,
   }
+
+  store.commit("documents/updateField", {
+    path: "resetList",
+    value: true,
+  })
 
   unselectAll()
 }
@@ -1066,20 +1194,34 @@ const aiDocProcessProviders = ref([])
 
 onMounted(async () => {
   tableLoading.value = true
-  filters.value.loadNode = 1
-  filters.value.filetype = ["file", "folder", "video"]
+
+  if (isCertificateMode.value) {
+    // Certificate templates are intentionally stored outside the normal visible
+    // Documents hierarchy. Gradebook mode must list every certificate document
+    // in the current course/session context instead of only direct children.
+    filters.value.loadNode = 0
+    filters.value.filetype = "certificate"
+    filters.value.gradebook = 1
+  } else {
+    filters.value.loadNode = 1
+    filters.value.filetype = ["file", "folder", "video"]
+  }
 
   let nodeId = route.params.node
   if (isEmpty(nodeId)) {
     nodeId = route.query.node
   }
 
-  await store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}` })
+  await store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}`, cid, sid, gid })
 
   options.value.itemsPerPage = resolveDefaultRows(0)
   options.value.page = 1
   triggerTableLoad()
-  void loadDefaultCertificate()
+
+  if (isCertificateMode.value) {
+    void loadCertificateManagement()
+  }
+
   // loadAllFolders() is intentionally deferred: it recursively fetches all
   // course folders and is only needed when the move dialog is opened.
   // openMoveDialog() calls it on demand.
@@ -1114,7 +1256,7 @@ watch(totalItems, (n) => {
 
 watch(
   () => [route.name, route.params.node, route.query.node, unref(cid), unref(sid), unref(gid)],
-  ([routeName]) => {
+  async ([routeName]) => {
     let nodeId = route.params.node
     if (isEmpty(nodeId)) {
       nodeId = route.query.node
@@ -1127,8 +1269,7 @@ watch(
     resetTableStateForFolderChange()
 
     const finderParams = { id: `/api/resource_nodes/${nodeId}`, cid, sid, gid }
-    store.dispatch("resourcenode/findResourceNode", finderParams)
-
+    await store.dispatch("resourcenode/findResourceNode", finderParams)
     if ("DocumentsList" === routeName) {
       triggerTableLoad()
     }
@@ -1249,7 +1390,7 @@ async function forceDeleteItem() {
     triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error deleting documents forcibly:", error)
-    notification.showErrorNotification(t("Error deleting document(s)."))
+    notification.showErrorNotification(t("Error deleting document(s)"))
   }
 }
 
@@ -1392,9 +1533,18 @@ function goToNewDocument() {
 }
 
 function goToUploadFile() {
+  const query = { ...route.query }
+
+  // In certificate-manager mode, returnTo belongs to the manager's Back button.
+  // Do not pass it to the generic upload page, which would otherwise leave the
+  // manager immediately after uploading and before a template can be selected.
+  if (isCertificateMode.value) {
+    delete query.returnTo
+  }
+
   router.push({
     name: "DocumentsUploadFile",
-    query: route.query,
+    query,
   })
 }
 
@@ -1441,14 +1591,76 @@ function btnChangeVisibilityOnClick(item) {
   const folderParams = route.query
   folderParams.id = item["@id"]
 
-  baseService.put(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {}).then((data) => {
+  baseService.patch(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {}).then((data) => {
     item.resourceLinkListFromEntity = data.resourceLinkListFromEntity
   })
 }
 
+function isEditableTextDocument(item) {
+  const filetype = String(item?.filetype || "")
+    .trim()
+    .toLowerCase()
+
+  if (["certificate", "html"].includes(filetype)) {
+    return true
+  }
+
+  if ("file" !== filetype) {
+    return false
+  }
+
+  const resourceFile = item?.resourceNode?.firstResourceFile
+  if (!resourceFile) {
+    return false
+  }
+
+  const mime = String(resourceFile.mimeType || "")
+    .split(";")[0]
+    .trim()
+    .toLowerCase()
+  const extension = getDocumentExtension(item)
+  const binaryExtensions = new Set([
+    "avif",
+    "bmp",
+    "gif",
+    "ico",
+    "jpeg",
+    "jpg",
+    "png",
+    "webp",
+    "mp3",
+    "ogg",
+    "wav",
+    "m4a",
+    "mp4",
+    "m4v",
+    "mov",
+    "webm",
+    "avi",
+    "pdf",
+  ])
+
+  if (
+    isImage(item) ||
+    resourceFile.video ||
+    resourceFile.audio ||
+    mime.startsWith("image/") ||
+    mime.startsWith("video/") ||
+    mime.startsWith("audio/") ||
+    "application/pdf" === mime ||
+    binaryExtensions.has(extension)
+  ) {
+    return false
+  }
+
+  return Boolean(resourceFile.text) || isHtml(item) || mime.startsWith("text/")
+}
+
 function btnEditOnClick(item) {
-  const folderParams = route.query
-  folderParams.id = item["@id"]
+  const folderParams = {
+    ...route.query,
+    id: item["@id"],
+  }
 
   if ("folder" === item.filetype || isEmpty(item.filetype)) {
     router.push({
@@ -1463,18 +1675,28 @@ function btnEditOnClick(item) {
     router.push({
       name: "DocumentsSvgEditor",
       params: { node: route.params.node },
+      query: folderParams,
+    })
+    return
+  }
+
+  if (isEditableTextDocument(item)) {
+    router.push({
+      name: "DocumentsUpdateFile",
+      params: { id: item["@id"] },
       query: {
         ...folderParams,
-        id: item["@id"],
+        getFile: true,
       },
     })
     return
   }
 
-  if ("file" === item.filetype || "certificate" === item.filetype || "html" === item.filetype) {
-    folderParams.getFile = true
-    router.push({ name: "DocumentsUpdateFile", params: { id: item["@id"] }, query: folderParams })
-  }
+  router.push({
+    name: "DocumentsUpdate",
+    params: { id: item["@id"] },
+    query: folderParams,
+  })
 }
 
 function showSlideShowWithFirstImage() {
@@ -1709,28 +1931,112 @@ async function replaceDocument() {
  * CERTIFICATES
  * -----------------------------------------
  */
-async function selectAsDefaultCertificate(certificate) {
+function getGradebookCertificateContextParams() {
+  const params = {
+    cid: Number(unref(cid) || 0),
+    sid: Number(unref(sid) || 0),
+    gid: Number(unref(gid) || 0),
+    node: Number(route.params.node || route.query.node || 0),
+  }
+  const requestedCategoryId = Number(route.query.categoryId || 0)
+  if (requestedCategoryId > 0) {
+    params.categoryId = requestedCategoryId
+  }
+
+  return params
+}
+
+async function loadCertificateManagement() {
   try {
-    await gradebookService.setDefaultCertificate(cid, certificate.iid)
-    loadDefaultCertificate()
-    triggerTableLoad()
-    notification.showSuccessNotification(t("Certificate set as default successfully"))
-  } catch {
-    notification.showErrorNotification(t("Error setting certificate as default"))
+    const data = await gradebookService.getCertificates(getGradebookCertificateContextParams())
+    const template = data?.category?.certificateTemplate || null
+
+    certificateCategoryId.value = Number(data?.category?.id || 0) || null
+    certificateCsrfToken.value = String(data?.csrfToken || "")
+    defaultCertificateId.value = Number(template?.id || 0) || null
+    defaultCertificateTitle.value = String(template?.title || "")
+    certificateAttachedDocumentId.value = Number(template?.attachedDocumentId || 0) || null
+    certificateTemplateFallback.value = Boolean(template?.fallback)
+  } catch (error) {
+    console.error("[Documents] Error loading Gradebook certificate settings:", error)
+    certificateCategoryId.value = null
+    certificateCsrfToken.value = ""
+    defaultCertificateId.value = null
+    defaultCertificateTitle.value = ""
+    certificateAttachedDocumentId.value = null
+    certificateTemplateFallback.value = false
   }
 }
 
-async function loadDefaultCertificate() {
+async function selectAsDefaultCertificate(certificate) {
+  if (
+    !isCertificateMode.value ||
+    isSettingDefaultCertificate.value ||
+    !certificate?.iid ||
+    !certificateCategoryId.value ||
+    !certificateCsrfToken.value
+  ) {
+    return
+  }
+
+  isSettingDefaultCertificate.value = true
+
   try {
-    const data = await gradebookService.getDefaultCertificate(cid)
-    defaultCertificateId.value = data.certificateId
+    await gradebookService.runCertificateAction(
+      {
+        action: "set_template",
+        categoryId: Number(certificateCategoryId.value),
+        documentId: Number(certificate.iid),
+        submittedCsrfToken: certificateCsrfToken.value,
+      },
+      getGradebookCertificateContextParams(),
+    )
+    await loadCertificateManagement()
+    triggerTableLoad()
+    notification.showSuccessNotification(t("Certificate set as default successfully"))
   } catch (error) {
-    if (error.response?.status === 404) {
-      console.error("[Documents] Default certificate not found.")
-      defaultCertificateId.value = null
-    } else {
-      console.error("[Documents] Error loading the certificate:", error)
-    }
+    console.error("[Documents] Error setting Gradebook certificate template:", error)
+    notification.showErrorNotification(t("Error setting certificate as default"))
+  } finally {
+    isSettingDefaultCertificate.value = false
+  }
+}
+
+function confirmUseSystemDefaultCertificate() {
+  if (!showUseSystemDefaultCertificateButton.value) {
+    return
+  }
+
+  requireConfirmation({
+    message: t("Use the system default certificate instead of the attached certificate?"),
+    accept: useSystemDefaultCertificate,
+  })
+}
+
+async function useSystemDefaultCertificate() {
+  if (!showUseSystemDefaultCertificateButton.value || isSettingDefaultCertificate.value) {
+    return
+  }
+
+  isSettingDefaultCertificate.value = true
+
+  try {
+    await gradebookService.runCertificateAction(
+      {
+        action: "use_system_template",
+        categoryId: Number(certificateCategoryId.value),
+        submittedCsrfToken: certificateCsrfToken.value,
+      },
+      getGradebookCertificateContextParams(),
+    )
+    await loadCertificateManagement()
+    triggerTableLoad()
+    notification.showSuccessNotification(t("Success"))
+  } catch (error) {
+    console.error("[Documents] Error restoring the system Gradebook certificate template:", error)
+    notification.showErrorNotification(t("An error occurred"))
+  } finally {
+    isSettingDefaultCertificate.value = false
   }
 }
 
@@ -1762,10 +2068,10 @@ const deleteDocumentTemplate = async (documentId) => {
   try {
     await documentsService.deleteDocumentTemplate(documentId)
     triggerTableLoad()
-    notification.showSuccessNotification(t("Template successfully deleted."))
+    notification.showSuccessNotification(t("Template successfully deleted"))
   } catch (error) {
     console.error("[Documents] Error deleting template:", error)
-    notification.showErrorNotification(t("Error deleting the template."))
+    notification.showErrorNotification(t("Error deleting the template"))
   }
 }
 
@@ -1790,7 +2096,7 @@ const submitTemplateForm = async () => {
   submitted.value = true
 
   if (!templateFormData.value.title || !selectedFile.value) {
-    notification.showErrorNotification(t("The title and thumbnail are required."))
+    notification.showErrorNotification(t("The title and thumbnail are required"))
     return
   }
 
@@ -1803,14 +2109,14 @@ const submitTemplateForm = async () => {
 
     await documentsService.createDocumentTemplate(formData)
 
-    notification.showSuccessNotification(t("Template created successfully."))
+    notification.showSuccessNotification(t("Template created successfully"))
     templateFormData.value.title = ""
     selectedFile.value = null
     showTemplateFormModal.value = false
     triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error submitting template form:", error)
-    notification.showErrorNotification(t("Error submitting the form."))
+    notification.showErrorNotification(t("Error submitting the form"))
   }
 }
 
@@ -2213,7 +2519,9 @@ const usageQuotaSummary = computed(() => {
       return `${rounded} MB`
     }
 
-    return `${String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")} MB`
+    return `${String(rounded)
+      .replace(/\.0+$/, "")
+      .replace(/(\.\d*?)0+$/, "$1")} MB`
   }
 
   function formatPercent(value) {
@@ -2229,7 +2537,9 @@ const usageQuotaSummary = computed(() => {
       return `${rounded}%`
     }
 
-    return `${String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")}%`
+    return `${String(rounded)
+      .replace(/\.0+$/, "")
+      .replace(/(\.\d*?)0+$/, "$1")}%`
   }
 
   const usedBytes = Number(q.usedBytes ?? 0)
@@ -2240,9 +2550,9 @@ const usageQuotaSummary = computed(() => {
     usedLabel: formatBytesAsMb(usedBytes),
     availableLabel: formatBytesAsMb(availableBytes),
     availablePercentLabel: formatPercent(q.availablePercent),
+    showUpgradeCta: Boolean(q.showUpgradeCta),
   }
 })
-
 
 function consumeAiSavedToast() {
   if (String(route.query.ai_saved || "") !== "1") {

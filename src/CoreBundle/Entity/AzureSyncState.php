@@ -16,10 +16,10 @@ class AzureSyncState
 {
     use TimestampableEntity;
 
-    public const USERS_DATALINK = 'users_datalink';
-    public const USERGROUPS_DATALINK = 'usergroups_datalink';
+    public const string USERS_DATALINK = 'users_datalink';
+    public const string USERGROUPS_DATALINK = 'usergroups_datalink';
 
-    public const API_PAGE_SIZE = 999;
+    public const int API_PAGE_SIZE = 999;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

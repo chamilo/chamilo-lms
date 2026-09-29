@@ -44,14 +44,26 @@ class GradebookResultLog
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * Set createdAt.
-     *
-     * @return GradebookResultLog
-     */
-    public function setCreatedAt(DateTime $createdAt)
+    public function getResult(): GradebookResult
     {
-        $this->createdAt = $createdAt;
+        return $this->result;
+    }
+
+    public function setResult(GradebookResult $result): self
+    {
+        $this->result = $result;
+
+        return $this;
+    }
+
+    public function getEvaluation(): GradebookEvaluation
+    {
+        return $this->evaluation;
+    }
+
+    public function setEvaluation(GradebookEvaluation $evaluation): self
+    {
+        $this->evaluation = $evaluation;
 
         return $this;
     }
@@ -67,13 +79,13 @@ class GradebookResultLog
     }
 
     /**
-     * Set score.
+     * Set createdAt.
      *
      * @return GradebookResultLog
      */
-    public function setScore(float $score)
+    public function setCreatedAt(DateTime $createdAt)
     {
-        $this->score = $score;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -86,6 +98,18 @@ class GradebookResultLog
     public function getScore()
     {
         return $this->score;
+    }
+
+    /**
+     * Set score.
+     *
+     * @return GradebookResultLog
+     */
+    public function setScore(float $score)
+    {
+        $this->score = $score;
+
+        return $this;
     }
 
     /**

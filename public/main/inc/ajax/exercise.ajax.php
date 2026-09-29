@@ -1201,7 +1201,10 @@ switch ($action) {
                 $tmpPath = $file['tmp_name'];
 
                 if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
-                    $tmpPath = api_get_path(SYS_ARCHIVE_PATH).($file['name'] ?? $originalName);
+                    // Same sanitization as the "send" phase, so the path stays inside the
+                    // archive directory and still matches the chunk written there.
+                    $chunkName = disable_dangerous_file(api_replace_dangerous_char($file['name'] ?? $originalName));
+                    $tmpPath = api_get_path(SYS_ARCHIVE_PATH).$chunkName;
                 }
 
                 $uploadedFile = new UploadedFile(
@@ -1246,7 +1249,7 @@ switch ($action) {
                     'name'     => api_htmlentities($originalName),
                     'asset_id' => (string) $node->getId(),
                     'url'      => $url,
-                    'size'     => isset($file['size']) ? format_file_size((int) $file['size']) : '',
+                    'size'     => isset($file['size']) ? \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize((int) $file['size']) : '',
                     'type'     => api_htmlentities($file['type'] ?? ''),
                     'result'   => Display::return_icon('accept.png', get_lang('Uploaded')),
                 ];

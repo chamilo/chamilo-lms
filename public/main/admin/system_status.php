@@ -1,18 +1,22 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * @author Julio Montoya <gugli100@gmail.com>
+ * Legacy entry point — redirects to the Vue SPA page.
+ * Kept as a deprecation stub so bookmarks and external links keep working.
  */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$this_section = SECTION_PLATFORM_ADMIN;
-// User permissions
 api_protect_admin_script();
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-Display::display_header(get_lang('System status'));
-$diag = new Diagnoser();
-$diag->show_html();
-Display:: display_footer();
+
+$section = isset($_GET['section']) ? trim((string) $_GET['section']) : '';
+$target = '/admin/system-status';
+if ('' !== $section) {
+    $target .= '?section='.urlencode($section);
+}
+
+header('Location: '.$target);
+exit;

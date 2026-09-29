@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
@@ -18,7 +17,6 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\TrackELogin;
-use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
@@ -42,7 +40,6 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Throwable;
 
 use const MB_CASE_LOWER;
 
@@ -53,10 +50,10 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 {
     protected ?UserPasswordHasherInterface $hasher = null;
 
-    public const USER_IMAGE_SIZE_SMALL = 1;
-    public const USER_IMAGE_SIZE_MEDIUM = 2;
-    public const USER_IMAGE_SIZE_BIG = 3;
-    public const USER_IMAGE_SIZE_ORIGINAL = 4;
+    public const int USER_IMAGE_SIZE_SMALL = 1;
+    public const int USER_IMAGE_SIZE_MEDIUM = 2;
+    public const int USER_IMAGE_SIZE_BIG = 3;
+    public const int USER_IMAGE_SIZE_ORIGINAL = 4;
 
     public function __construct(
         ManagerRegistry $registry,
@@ -295,7 +292,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     {
         return [
             ['table' => 'access_url_rel_user', 'field' => 'user_id', 'action' => 'delete'],
-            ['table' => 'admin', 'field' => 'user_id', 'action' => 'delete'],
             ['table' => 'attempt_feedback', 'field' => 'user_id', 'action' => 'update'],
             ['table' => 'chat', 'field' => 'to_user', 'action' => 'update'],
             ['table' => 'chat_video', 'field' => 'to_user', 'action' => 'update'],
@@ -687,7 +683,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->innerJoin(
                 SessionRelCourseRelUser::class,
                 'scu',
-                Join::WITH,
+                Join::ON,
                 'scu.user = u'
             )
             ->where(
@@ -715,13 +711,13 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->innerJoin(
                 SessionRelUser::class,
                 'su',
-                Join::WITH,
+                Join::ON,
                 'u = su.user'
             )
             ->innerJoin(
                 SessionRelCourseRelUser::class,
                 'scu',
-                Join::WITH,
+                Join::ON,
                 'su.session = scu.session'
             )
             ->where(
@@ -736,6 +732,50 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     }
 
     /**
+     * Whether $targetUserId is followed by the HR manager $drhId through the UserRelUser
+     * RRHH relation. Native replacement for UserManager::is_user_followed_by_drh().
+     */
+    public function isUserFollowedByDrh(int $targetUserId, int $drhId): bool
+    {
+        $count = (int) $this->getEntityManager()->createQueryBuilder()
+            ->select('COUNT(uru.id)')
+            ->from(UserRelUser::class, 'uru')
+            ->where('uru.user = :target')
+            ->andWhere('uru.friend = :drh')
+            ->andWhere('uru.relationType = :relationType')
+            ->setParameter('target', $targetUserId)
+            ->setParameter('drh', $drhId)
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_RRHH)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
+     * Whether $bossUserId is a student boss of $targetUserId through the UserRelUser BOSS
+     * relation. Native replacement for UserManager::userIsBossOfStudent().
+     */
+    public function isUserBossOfStudent(int $targetUserId, int $bossUserId): bool
+    {
+        $count = (int) $this->getEntityManager()->createQueryBuilder()
+            ->select('COUNT(uru.id)')
+            ->from(UserRelUser::class, 'uru')
+            ->where('uru.user = :target')
+            ->andWhere('uru.friend = :boss')
+            ->andWhere('uru.relationType = :relationType')
+            ->setParameter('target', $targetUserId)
+            ->setParameter('boss', $bossUserId)
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_BOSS)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
      * Get number of users in URL.
      *
      * @return int
@@ -746,9 +786,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->select('COUNT(u)')
             ->innerJoin('u.portals', 'p')
             ->where('p.url = :url')
-            ->setParameters([
-                'url' => $url,
-            ])
+            ->setParameter('url', $url)
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -767,9 +805,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->select('COUNT(u)')
             ->innerJoin('u.portals', 'p')
             ->where('p.url = :url')
-            ->setParameters([
-                'url' => $url,
-            ])
+            ->setParameter('url', $url)
         ;
 
         $this->addRoleListQueryBuilder(['ROLE_TEACHER'], $qb);
@@ -808,8 +844,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             if ('true' === $allowSendMessageToAllUsers || api_is_platform_admin()) {
                 $this->addNotCurrentUserQueryBuilder($currentUserId, $qb);
             /*$dql = "SELECT DISTINCT U
-                    FROM ChamiloCoreBundle:User U
-                    LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
+                    FROM Chamilo\CoreBundle\Entity\User U
+                    LEFT JOIN Chamilo\CoreBundle\Entity\AccessUrlRelUser R
                     WITH U = R.user
                     WHERE
                         U.active = 1 AND
@@ -819,8 +855,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             } else {
                 $this->addOnlyMyFriendsQueryBuilder($currentUserId, $qb);
                 /*$dql = 'SELECT DISTINCT U
-                        FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
-                        INNER JOIN ChamiloCoreBundle:User AS U
+                        FROM Chamilo\CoreBundle\Entity\AccessUrlRelUser R, Chamilo\CoreBundle\Entity\UserRelUser UF
+                        INNER JOIN Chamilo\CoreBundle\Entity\User AS U
                         WITH UF.friendUserId = U
                         WHERE
                             U.active = 1 AND
@@ -843,9 +879,9 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 $online_time = time() - ($time_limit * 60);
                 $limit_date = api_get_utc_datetime($online_time);
                 $dql = "SELECT DISTINCT U
-                        FROM ChamiloCoreBundle:User U
-                        INNER JOIN ChamiloCoreBundle:TrackEOnline T
-                        WITH U.id = T.loginUserId
+                        FROM Chamilo\CoreBundle\Entity\User U
+                        INNER JOIN Chamilo\CoreBundle\Entity\TrackEOnline T
+                        ON U.id = T.loginUserId
                         WHERE
                           U.active = 1 AND
                           T.loginDate >= '".$limit_date."'";
@@ -1045,7 +1081,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         // Start building the query
         $qb->select('ef.id', 'ef.variable as fvar', 'ef.valueType as type', 'efv.fieldValue as fval', 'ef.defaultValue as fval_df')
             ->from(ExtraField::class, 'ef')
-            ->leftJoin(ExtraFieldValues::class, 'efv', Join::WITH, 'efv.field = ef.id AND efv.itemId = :userId')
+            ->leftJoin(ExtraFieldValues::class, 'efv', Join::ON, 'efv.field = ef.id AND efv.itemId = :userId')
             ->where('ef.itemType = :itemType')
             ->setParameter('userId', $userId)
             ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
@@ -1105,11 +1141,9 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->where('v.itemId = :userId')
             ->andWhere('e.variable = :fieldVariable')
             ->andWhere('e.itemType = :itemType')
-            ->setParameters([
-                'userId' => $userId,
-                'fieldVariable' => $fieldVariable,
-                'itemType' => ExtraField::USER_FIELD_TYPE,
-            ])
+            ->setParameter('userId', $userId)
+            ->setParameter('fieldVariable', $fieldVariable)
+            ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
         ;
 
         if (!$allVisibility) {
@@ -1150,8 +1184,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         }
 
         $qb->innerJoin('u.portals', 'urlRelUser')
-            ->leftJoin(UserRelTag::class, 'uv', 'WITH', 'u = uv.user')
-            ->leftJoin(Tag::class, 'ut', 'WITH', 'uv.tag = ut')
+            ->leftJoin(UserRelTag::class, 'uv', Join::ON, 'u = uv.user')
+            ->leftJoin(Tag::class, 'ut', Join::ON, 'uv.tag = ut')
         ;
 
         if (0 !== $fieldId) {
@@ -1332,13 +1366,13 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
     public function findUsersByContext(int $courseId, ?int $sessionId = null, ?int $groupId = null): array
     {
-        $course = $this->_em->getRepository(Course::class)->find($courseId);
+        $course = $this->getEntityManager()->getRepository(Course::class)->find($courseId);
         if (!$course) {
             throw new InvalidArgumentException('Course not found.');
         }
 
         if (null !== $sessionId) {
-            $session = $this->_em->getRepository(Session::class)->find($sessionId);
+            $session = $this->getEntityManager()->getRepository(Session::class)->find($sessionId);
             if (!$session) {
                 throw new InvalidArgumentException('Session not found.');
             }
@@ -1356,16 +1390,14 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         }
 
         if (null !== $groupId) {
-            $qb = $this->_em->createQueryBuilder();
+            $qb = $this->getEntityManager()->createQueryBuilder();
             $qb->select('u')
                 ->from(CGroupRelUser::class, 'cgru')
                 ->innerJoin('cgru.user', 'u')
                 ->where('cgru.cId = :courseId')
                 ->andWhere('cgru.group = :groupId')
-                ->setParameters([
-                    'courseId' => $courseId,
-                    'groupId' => $groupId,
-                ])
+                ->setParameter('courseId', $courseId)
+                ->setParameter('groupId', $groupId)
                 ->orderBy('u.lastname', 'ASC')
                 ->addOrderBy('u.firstname', 'ASC')
             ;
@@ -1373,7 +1405,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             return $qb->getQuery()->getResult();
         }
 
-        $queryBuilder = $this->_em->getRepository(Course::class)->getSubscribedStudents($course);
+        $queryBuilder = $this->getEntityManager()->getRepository(Course::class)->getSubscribedStudents($course);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -1473,10 +1505,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->where(
                 $qb->expr()->in('u.id', ':ids')
             )
-            ->setParameters([
-                'active' => false,
-                'ids' => $ids,
-            ])
+            ->setParameter('active', false)
+            ->setParameter('ids', $ids)
         ;
     }
 
@@ -1494,7 +1524,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $qb->expr()->like('u.roles', ':super'),
             $qb->expr()->like('u.roles', ':admin')
         ))
-            ->setParameter('super', '%ROLE_SUPER_ADMIN%')
+            ->setParameter('super', '%ROLE_GLOBAL_ADMIN%')
             ->setParameter('admin', '%ROLE_ADMIN%')
             ->orderBy('u.id', 'ASC')
             ->setMaxResults(1)
@@ -1505,32 +1535,10 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
     /**
      * Returns the "package" {id, username, email} to autocomplete the export.
-     * Try: Admin::class -> roles -> current user -> fallback "1/admin/admin@example.com".
+     * Try: role-based platform admin -> current user -> fallback "1/admin/admin@example.com".
      */
     public function getDefaultAdminForExport(): array
     {
-        $em = $this->getEntityManager();
-
-        try {
-            $adminEntity = $em->getRepository(Admin::class)
-                ->createQueryBuilder('a')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult()
-            ;
-
-            if ($adminEntity && $adminEntity->getUser()) {
-                $u = $adminEntity->getUser();
-
-                return [
-                    'id' => (string) $u->getId(),
-                    'username' => (string) $u->getUsername(),
-                    'email' => (string) ($u->getEmail() ?? ''),
-                ];
-            }
-        } catch (Throwable $e) {
-        }
-
         $u = $this->findOnePlatformAdmin();
         if ($u instanceof User) {
             return [

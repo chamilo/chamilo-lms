@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 
 class LoginTokenAuthenticator extends AbstractAuthenticator
 {
-    public const SOURCE = 'login_token_check';
+    public const string SOURCE = 'login_token_check';
 
     public function __construct(
         protected readonly UserRepository $userRepository,

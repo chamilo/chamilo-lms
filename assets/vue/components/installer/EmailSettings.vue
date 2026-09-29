@@ -12,8 +12,8 @@
         t(
           'The DSN fully includes all parameters needed to connect to the mail service. You can learn more at {0}. The default value is null://null and will disable e-mail sending. Use native://default to use the default PHP configuration on your server. Here are a few examples of supported DSN syntaxes: {1}.',
           [
-            'https://symfony.com/doc/6.4/mailer.html#using-built-in-transports',
-            'https://symfony.com/doc/6.4/mailer.html#using-a-3rd-party-transport',
+            'https://symfony.com/doc/7.4/mailer.html#using-built-in-transports',
+            'https://symfony.com/doc/7.4/mailer.html#using-a-3rd-party-transport',
           ],
         )
       "

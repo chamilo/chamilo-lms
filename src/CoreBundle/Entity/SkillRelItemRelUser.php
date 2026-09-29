@@ -49,18 +49,6 @@ class SkillRelItemRelUser
         return $this->id;
     }
 
-    public function getSkillRelItem(): SkillRelItem
-    {
-        return $this->skillRelItem;
-    }
-
-    public function setSkillRelItem(SkillRelItem $skillRelItem): static
-    {
-        $this->skillRelItem = $skillRelItem;
-
-        return $this;
-    }
-
     public function getCreatedBy(): int
     {
         return $this->createdBy;
@@ -85,6 +73,13 @@ class SkillRelItemRelUser
         return $this;
     }
 
+    public function getUserItemResultUrl(string $cidReq): string
+    {
+        $resultId = $this->getResultId();
+
+        return $this->getSkillRelItem()->getItemResultUrl($cidReq).'&id='.$resultId;
+    }
+
     public function getResultId(): int
     {
         return $this->resultId;
@@ -97,10 +92,15 @@ class SkillRelItemRelUser
         return $this;
     }
 
-    public function getUserItemResultUrl(string $cidReq): string
+    public function getSkillRelItem(): SkillRelItem
     {
-        $resultId = $this->getResultId();
+        return $this->skillRelItem;
+    }
 
-        return $this->getSkillRelItem()->getItemResultUrl($cidReq).'&id='.$resultId;
+    public function setSkillRelItem(SkillRelItem $skillRelItem): static
+    {
+        $this->skillRelItem = $skillRelItem;
+
+        return $this;
     }
 }

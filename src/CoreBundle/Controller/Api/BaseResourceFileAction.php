@@ -16,8 +16,10 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
+use Chamilo\CoreBundle\Mcp\Dto\ResourceFileInput;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
@@ -34,6 +36,7 @@ use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -171,45 +174,27 @@ class BaseResourceFileAction
      * visibility. This closes the IDOR where the body could target a foreign
      * course regardless of the gated context.
      *
+     * $course is for in-process callers only — the MCP tools and the AI media
+     * storage service, which build a synthetic Request and never pass through
+     * CidReqListener, so there is no session context to read. They already hold
+     * the course as a first-class argument and their own authorization gates it.
+     * A real HTTP request must never reach this parameter: leave it null and the
+     * session stays the single source of truth. Session and group are not part of
+     * the override, since those callers only ever create base-course content.
+     *
      * @param array<int, mixed> $bodyResourceLinkList resource link entries parsed from the request body
      *
      * @return array<int, array<string, int>> a single link bound to the current course context
      */
     protected function buildResourceLinkListFromContext(
-        Request $request,
+        CidReqHelper $cidReqHelper,
         array $bodyResourceLinkList,
-        int $defaultVisibility = ResourceLink::VISIBILITY_PUBLISHED
+        int $defaultVisibility = ResourceLink::VISIBILITY_PUBLISHED,
+        ?Course $course = null
     ): array {
-        $cid = 0;
-        $sid = 0;
-        $gid = 0;
-
-        if ($request->hasSession()) {
-            $session = $request->getSession();
-
-            $course = $session->get('course');
-            if ($course instanceof Course) {
-                $cid = (int) $course->getId();
-            }
-
-            $courseSession = $session->get('session');
-            if ($courseSession instanceof Session) {
-                $sid = (int) $courseSession->getId();
-            }
-
-            $group = $session->get('group');
-            if ($group instanceof CGroup) {
-                $gid = (int) $group->getIid();
-            }
-        }
-
-        // Fallback to the query parameters (kept in sync with the session by
-        // CidReqListener) in the unlikely case the session context is missing.
-        if ($cid <= 0) {
-            $cid = $request->query->getInt('cid');
-            $sid = $request->query->getInt('sid');
-            $gid = $request->query->getInt('gid');
-        }
+        $cid = (int) ($course ?? $cidReqHelper->getCourseEntity())?->getId();
+        $sid = null === $course ? (int) $cidReqHelper->getSessionEntity()?->getId() : 0;
+        $gid = null === $course ? (int) $cidReqHelper->getGroupEntity()?->getIid() : 0;
 
         // Visibility is the only field still honored from the body.
         $visibility = $defaultVisibility;
@@ -233,10 +218,53 @@ class BaseResourceFileAction
     }
 
     /**
+     * The body picks where inside the current course the new node lands; it must never point
+     * the parent at another course's tree. buildResourceLinkListFromContext() already forces
+     * the link binding, so without this a teacher could nest a node under a foreign course
+     * while its link stayed in their own — the node ends up in someone else's path, quota and
+     * subtree. Callers without a course context (personal files, ...) are left untouched.
+     *
+     * $course carries the same in-process-only meaning as in
+     * buildResourceLinkListFromContext(): it lets a caller with no session context
+     * still get the parent checked instead of skipping the guard.
+     */
+    protected function assertParentNodeIsInCurrentCourse(
+        CidReqHelper $cidReqHelper,
+        int $parentResourceNodeId,
+        EntityManagerInterface $em,
+        ?Course $course = null
+    ): void {
+        $courseNode = ($course ?? $cidReqHelper->getCourseEntity())?->getResourceNode();
+        if (null === $courseNode) {
+            return;
+        }
+
+        $parentNode = $em->getRepository(ResourceNode::class)->find($parentResourceNodeId);
+        if (null === $parentNode) {
+            throw new AccessDeniedHttpException('The parent resource node does not exist.');
+        }
+
+        if ((int) $parentNode->getId() === (int) $courseNode->getId()) {
+            return;
+        }
+
+        // Materialized paths end each segment with "-<id>/", so the prefix cannot match a
+        // different course by accident.
+        if (!str_starts_with((string) $parentNode->getPath(), (string) $courseNode->getPath())) {
+            throw new AccessDeniedHttpException('The parent resource node does not belong to the current course.');
+        }
+    }
+
+    /**
      * @todo use this function inside handleCreateFileRequest
      */
-    protected function handleCreateRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request): array
-    {
+    protected function handleCreateRequest(
+        AbstractResource $resource,
+        ResourceRepository $resourceRepository,
+        Request $request,
+        CidReqHelper $cidReqHelper,
+        EntityManagerInterface $em
+    ): array {
         $contentData = $request->getContent();
 
         if (!empty($contentData)) {
@@ -250,10 +278,10 @@ class BaseResourceFileAction
             }
         } else {
             $contentData = $request->request->all();
-            $title = $request->get('title');
-            $rawParent = $request->get('parentResourceNodeId');
+            $title = $request->request->get('title');
+            $rawParent = $request->request->get('parentResourceNodeId');
             $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
-            $resourceLinkList = $request->get('resourceLinkList', []);
+            $resourceLinkList = ($request->request->get('resourceLinkList') ?? []);
             if (!empty($resourceLinkList)) {
                 $resourceLinkList = !str_contains($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
                 if (empty($resourceLinkList)) {
@@ -267,6 +295,8 @@ class BaseResourceFileAction
         if (0 === $parentResourceNodeId) {
             throw new Exception('Parameter parentResourceNodeId int value is needed');
         }
+
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em);
 
         $resource->setParentResourceNode($parentResourceNodeId);
 
@@ -289,13 +319,14 @@ class BaseResourceFileAction
         ResourceRepository $resourceRepository,
         Request $request,
         EntityManager $em,
+        CidReqHelper $cidReqHelper,
         string $fileExistsOption = '',
         ?TranslatorInterface $translator = null
     ): array {
-        $title = $request->get('comment', '');
-        $rawParent = $request->get('parentResourceNodeId');
+        $title = $request->request->get('comment', '');
+        $rawParent = $request->request->get('parentResourceNodeId');
         $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
-        $fileType = $request->get('filetype');
+        $fileType = $request->request->get('filetype');
         $uploadedFile = null;
 
         if (empty($fileType)) {
@@ -305,6 +336,8 @@ class BaseResourceFileAction
         if (0 === $parentResourceNodeId) {
             throw new Exception('parentResourceNodeId int value needed');
         }
+
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em);
 
         $resource->setParentResourceNode($parentResourceNodeId);
 
@@ -321,17 +354,59 @@ class BaseResourceFileAction
         ];
     }
 
+    /**
+     * @template TResource of object
+     *
+     * @param ResourceRepository<TResource> $resourceRepository
+     *
+     * @return array<string, mixed>
+     */
+    /**
+     * The request-shaped face of handleCreateFile(), for the API actions.
+     *
+     * @template TResource of object
+     *
+     * @param ResourceRepository<TResource> $resourceRepository
+     * @param ?array<int, mixed>            $resourceLinkListOverride the link bindings the controller forces from the gated context
+     *
+     * @return array<string, mixed>
+     */
     public function handleCreateFileRequest(
         AbstractResource $resource,
         ResourceRepository $resourceRepository,
         Request $request,
         EntityManager $em,
+        CidReqHelper $cidReqHelper,
         string $fileExistsOption = '',
         ?TranslatorInterface $translator = null,
         ?CourseRepository $courseRepository = null,
         ?CourseHelper $courseHelper = null,
-        ?array $resourceLinkListOverride = null
+        ?array $resourceLinkListOverride = null,
+        ?Course $course = null
     ): array {
+        return $this->handleCreateFile(
+            $resource,
+            $resourceRepository,
+            $this->resourceFileInputFromRequest($request, $resourceLinkListOverride),
+            $em,
+            $cidReqHelper,
+            $fileExistsOption,
+            $translator,
+            $courseRepository,
+            $courseHelper,
+            $course
+        );
+    }
+
+    /**
+     * Reads a create-file request into the typed input handleCreateFile() takes.
+     *
+     * @param ?array<int, mixed> $resourceLinkListOverride
+     */
+    protected function resourceFileInputFromRequest(
+        Request $request,
+        ?array $resourceLinkListOverride = null
+    ): ResourceFileInput {
         $contentData = $request->getContent();
 
         if (!empty($contentData)) {
@@ -342,13 +417,16 @@ class BaseResourceFileAction
             $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
             $fileType = $contentData['filetype'] ?? '';
             $resourceLinkList = $contentData['resourceLinkList'] ?? [];
+            $language = \array_key_exists('language', (array) $contentData)
+                ? (string) $contentData['language']
+                : null;
         } else {
-            $title = $request->get('title');
-            $comment = $request->get('comment');
-            $rawParent = $request->get('parentResourceNodeId');
+            $title = $request->request->get('title');
+            $comment = $request->request->get('comment');
+            $rawParent = $request->request->get('parentResourceNodeId');
             $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
-            $fileType = $request->get('filetype');
-            $resourceLinkList = $request->get('resourceLinkList', []);
+            $fileType = $request->request->get('filetype');
+            $resourceLinkList = ($request->request->get('resourceLinkList') ?? []);
             if (!empty($resourceLinkList)) {
                 $resourceLinkList = !str_contains($resourceLinkList, '[')
                     ? json_decode('['.$resourceLinkList.']', true)
@@ -360,6 +438,9 @@ class BaseResourceFileAction
                     throw new InvalidArgumentException($message);
                 }
             }
+            $language = $request->request->has('language')
+                ? (string) $request->request->get('language')
+                : null;
         }
 
         // The controller may force the link context (cid/sid/gid) from the
@@ -367,6 +448,56 @@ class BaseResourceFileAction
         if (null !== $resourceLinkListOverride) {
             $resourceLinkList = $resourceLinkListOverride;
         }
+
+        $uploadFile = null;
+        if ($request->files->count() > 0) {
+            if (!$request->files->has('uploadFile')) {
+                throw new BadRequestHttpException('"uploadFile" is required');
+            }
+
+            $uploadFile = $request->files->get('uploadFile');
+        }
+
+        return new ResourceFileInput(
+            filetype: (string) $fileType,
+            parentResourceNodeId: $parentResourceNodeId,
+            title: null === $title ? null : (string) $title,
+            comment: (string) $comment,
+            resourceLinkList: \is_array($resourceLinkList) ? $resourceLinkList : [],
+            uploadFile: $uploadFile instanceof UploadedFile ? $uploadFile : null,
+            contentFile: $request->request->has('contentFile')
+                ? (string) $request->request->get('contentFile')
+                : null,
+            contentFileExtension: strtolower(trim((string) $request->request->get('contentFileExtension', 'html'))),
+            contentFileMimeType: strtolower(trim((string) $request->request->get('contentFileMimeType', 'text/html'))),
+            language: $language,
+        );
+    }
+
+    /**
+     * @template TResource of object
+     *
+     * @param ResourceRepository<TResource> $resourceRepository
+     *
+     * @return array<string, mixed>
+     */
+    public function handleCreateFile(
+        AbstractResource $resource,
+        ResourceRepository $resourceRepository,
+        ResourceFileInput $input,
+        EntityManager $em,
+        CidReqHelper $cidReqHelper,
+        string $fileExistsOption = '',
+        ?TranslatorInterface $translator = null,
+        ?CourseRepository $courseRepository = null,
+        ?CourseHelper $courseHelper = null,
+        ?Course $course = null
+    ): array {
+        $title = $input->title;
+        $comment = $input->comment;
+        $parentResourceNodeId = $input->parentResourceNodeId;
+        $fileType = $input->filetype;
+        $resourceLinkList = $input->resourceLinkList;
 
         if (empty($fileType)) {
             throw new Exception('filetype needed: folder or file');
@@ -376,6 +507,8 @@ class BaseResourceFileAction
             throw new Exception('parentResourceNodeId int value needed');
         }
 
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em, $course);
+
         $resource->setParentResourceNode($parentResourceNodeId);
 
         $uploadedFile = null;
@@ -383,21 +516,12 @@ class BaseResourceFileAction
         switch ($fileType) {
             case 'certificate':
             case 'file':
-                $content = '';
-                if ($request->request->has('contentFile')) {
-                    $content = (string) $request->request->get('contentFile');
-                }
+                $content = (string) $input->contentFile;
 
                 $fileParsed = false;
 
-                // Multipart upload
-                if ($request->files->count() > 0) {
-                    if (!$request->files->has('uploadFile')) {
-                        throw new BadRequestHttpException('"uploadFile" is required');
-                    }
-
-                    /** @var UploadedFile $uploadedFile */
-                    $uploadedFile = $request->files->get('uploadFile');
+                if ($input->uploadFile instanceof UploadedFile) {
+                    $uploadedFile = $input->uploadFile;
 
                     $title = (string) $uploadedFile->getClientOriginalName();
                     if (empty($title)) {
@@ -407,7 +531,7 @@ class BaseResourceFileAction
                     // Handle overwrite/rename/nothing when same title already exists under parent
                     if (!empty($fileExistsOption)) {
                         $existingDocument = $resourceRepository->findByTitleAndParentResourceNode($title, $parentResourceNodeId);
-                        if ($existingDocument) {
+                        if ($existingDocument instanceof CDocument) {
                             if ('overwrite' === $fileExistsOption) {
                                 // Quota check with delta: new - old
                                 $oldBytes = 0;
@@ -434,7 +558,7 @@ class BaseResourceFileAction
 
                                 $resourceNode->setUpdatedAt(new DateTime());
                                 $existingDocument->setResourceNode($resourceNode);
-                                $this->applyResourceLanguageFromRequest($existingDocument, $request, $em);
+                                $this->applyResourceLanguageFromInput($existingDocument, $input, $em, $course);
 
                                 $em->persist($existingDocument);
                                 $em->flush();
@@ -496,8 +620,10 @@ class BaseResourceFileAction
                 }
 
                 // HTML/SVG contentFile => create an UploadedFile from content.
-                if (!$fileParsed && !empty($content)) {
-                    $contentFileInfo = $this->getContentFileUploadInfo($request, (string) $title);
+                // An HTML editor save always sends contentFile (possibly empty);
+                // treat that as a real create rather than requiring a binary upload.
+                if (!$fileParsed && null !== $input->contentFile) {
+                    $contentFileInfo = $this->getContentFileUploadInfo($input, (string) $title);
                     $content = $this->sanitizeContentFile((string) $content, $contentFileInfo['extension']);
 
                     $newBytes = (int) \strlen((string) $content);
@@ -550,16 +676,18 @@ class BaseResourceFileAction
         Request $request,
         EntityManager $em,
         KernelInterface $kernel,
+        CidReqHelper $cidReqHelper,
         ?CourseRepository $courseRepository = null,
         ?CDocumentRepository $documentRepository = null,
         ?CourseHelper $courseHelper = null,
-        ?array $resourceLinkListOverride = null
+        ?array $resourceLinkListOverride = null,
+        ?Course $course = null
     ): array {
-        $rawParent = $request->get('parentResourceNodeId');
+        $rawParent = $request->request->get('parentResourceNodeId');
         $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
 
-        $fileType = $request->get('filetype');
-        $resourceLinkList = $request->get('resourceLinkList', []);
+        $fileType = $request->request->get('filetype');
+        $resourceLinkList = ($request->request->get('resourceLinkList') ?? []);
         if (!empty($resourceLinkList)) {
             if (\is_string($resourceLinkList)) {
                 $resourceLinkList = !str_contains($resourceLinkList, '[')
@@ -587,6 +715,10 @@ class BaseResourceFileAction
         if (0 === $parentResourceNodeId) {
             throw new Exception('parentResourceNodeId int value needed');
         }
+
+        // Before extracting: saveZipContentsAsDocuments() writes every entry under this parent,
+        // so an unchecked id would seed a whole tree into a foreign course.
+        $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em, $course);
 
         if ('file' === $fileType && $request->files->count() > 0) {
             if (!$request->files->has('uploadFile')) {
@@ -628,6 +760,11 @@ class BaseResourceFileAction
         ];
     }
 
+    /**
+     * @template TResource of object
+     *
+     * @param ResourceRepository<TResource> $repo
+     */
     protected function handleUpdateRequest(AbstractResource $resource, ResourceRepository $repo, Request $request, EntityManager $em): AbstractResource
     {
         $contentData = $request->getContent();
@@ -656,7 +793,7 @@ class BaseResourceFileAction
                 }
             }
         } else {
-            $title = $request->get('title');
+            $title = $request->request->get('title');
             $content = $request->request->get('contentFile');
 
             if ($request->request->has('comment')) {
@@ -666,7 +803,7 @@ class BaseResourceFileAction
 
             // Keep compatibility with form requests
             if ($request->query->has('parentResourceNodeId') || $request->request->has('parentResourceNodeId')) {
-                $rawParent = $request->get('parentResourceNodeId');
+                $rawParent = $request->request->get('parentResourceNodeId');
                 $parentResourceNodeId = (int) ($this->normalizeNodeId($rawParent) ?? 0);
             }
         }
@@ -687,13 +824,19 @@ class BaseResourceFileAction
 
         $hasFile = $resourceNode->hasResourceFile();
 
-        if ($hasFile && !empty($content)) {
+        if ($hasFile && null !== $content) {
             $content = $this->sanitizeContentFileForUpdate((string) $content, $request, $resourceNode);
 
-            $resourceNode->setContent($content);
-            foreach ($resourceNode->getResourceFiles() as $resourceFile) {
-                $resourceFile->setSize(\strlen($content));
+            if ($resource instanceof CDocument && $repo instanceof CDocumentRepository) {
+                $repo->updateStoredFileContent(
+                    $resource,
+                    $content,
+                    $this->resolveUpdatedContentMimeType($request, $resourceNode, $content),
+                );
+            } else {
+                $repo->updateResourceFileContent($resource, $content);
             }
+
             $resource->setResourceNode($resourceNode);
         }
 
@@ -801,10 +944,36 @@ class BaseResourceFileAction
         return $resource;
     }
 
-    private function getContentFileUploadInfo(Request $request, string $title): array
+    private function resolveUpdatedContentMimeType(Request $request, ResourceNode $resourceNode, string $content): string
     {
-        $extension = strtolower(trim((string) $request->request->get('contentFileExtension', 'html')));
-        $mimeType = strtolower(trim((string) $request->request->get('contentFileMimeType', 'text/html')));
+        $requestedMimeType = strtolower(trim((string) $request->request->get('contentFileMimeType', '')));
+        if ('' !== $requestedMimeType) {
+            return $requestedMimeType;
+        }
+
+        $resourceFile = $resourceNode->getFirstResourceFile();
+        $currentMimeType = $resourceFile instanceof ResourceFile
+            ? strtolower(trim((string) $resourceFile->getMimeType()))
+            : '';
+
+        if ('image/svg+xml' === $currentMimeType) {
+            return $currentMimeType;
+        }
+
+        if (1 === preg_match('/<(?:!doctype\s+html|html|head|body|main|section|article|div|p|h[1-6]|table|ul|ol|style)\b/i', $content)) {
+            return 'text/html';
+        }
+
+        return '' !== $currentMimeType ? $currentMimeType : 'text/plain';
+    }
+
+    /**
+     * @return array{extension: string, mimeType: string, fileName: string}
+     */
+    private function getContentFileUploadInfo(ResourceFileInput $input, string $title): array
+    {
+        $extension = $input->contentFileExtension;
+        $mimeType = $input->contentFileMimeType;
 
         $allowed = [
             'html' => 'text/html',
@@ -961,6 +1130,106 @@ class BaseResourceFileAction
         $this->applyResourceLanguage($resource, $language, $em);
     }
 
+    /**
+     * The typed sibling of applyResourceLanguageFromRequest().
+     *
+     * A null $input->language means the caller said nothing, so the resource keeps
+     * what it has. An empty one means "the course's": that course is $course when
+     * an in-process caller supplied it, and otherwise the one the link list is
+     * already bound to -- which is the authorized course, not a raw query
+     * parameter.
+     */
+    protected function applyResourceLanguageFromInput(
+        AbstractResource $resource,
+        ResourceFileInput $input,
+        EntityManagerInterface $em,
+        ?Course $course = null
+    ): void {
+        $this->applyResourceLanguageCode(
+            $resource,
+            $input->language,
+            $em,
+            $course ?? $em->getRepository(Course::class)->find($input->courseIdFromLinks())
+        );
+    }
+
+    /**
+     * Same contract on a bare language code, for a caller that holds the course
+     * and the code but has no ResourceFileInput to hand.
+     */
+    protected function applyResourceLanguageCode(
+        AbstractResource $resource,
+        ?string $languageCode,
+        EntityManagerInterface $em,
+        ?Course $course = null
+    ): void {
+        if (null === $languageCode) {
+            return;
+        }
+
+        $this->applyResourceLanguage(
+            $resource,
+            $this->resolveResourceLanguage($languageCode, $em, $course),
+            $em
+        );
+    }
+
+    private function resolveResourceLanguage(
+        string $languageCode,
+        EntityManagerInterface $em,
+        ?Course $course
+    ): ?Language {
+        $languageCode = trim($languageCode);
+
+        if ('' === $languageCode) {
+            return $this->findDefaultCourseLanguage($course, $em);
+        }
+
+        if (preg_match('#/api/languages/(\d+)#', $languageCode, $matches)) {
+            $language = $em->getRepository(Language::class)->find((int) $matches[1]);
+
+            if ($language instanceof Language) {
+                return $language;
+            }
+
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9_-]{1,8}$/', $languageCode)) {
+            throw new BadRequestHttpException('Invalid resource language.');
+        }
+
+        $language = $em->getRepository(Language::class)->findOneBy([
+            'isocode' => $languageCode,
+            'available' => true,
+        ]);
+
+        if ($language instanceof Language) {
+            return $language;
+        }
+
+        throw new BadRequestHttpException('Invalid resource language.');
+    }
+
+    private function findDefaultCourseLanguage(?Course $course, EntityManagerInterface $em): ?Language
+    {
+        if (!$course instanceof Course) {
+            return null;
+        }
+
+        $courseLanguage = trim((string) $course->getCourseLanguage());
+        if ('' === $courseLanguage) {
+            return null;
+        }
+
+        $language = $em->getRepository(Language::class)->findOneBy([
+            'isocode' => $courseLanguage,
+            'available' => true,
+        ]);
+
+        return $language instanceof Language ? $language : null;
+    }
+
     protected function applyResourceLanguage(AbstractResource $resource, ?Language $language, EntityManagerInterface $em): void
     {
         $resourceNode = $resource->getResourceNode();
@@ -1049,22 +1318,10 @@ class BaseResourceFileAction
             return null;
         }
 
-        $course = $em->getRepository(Course::class)->find($courseId);
-        if (!$course instanceof Course) {
-            return null;
-        }
-
-        $courseLanguage = trim((string) $course->getCourseLanguage());
-        if ('' === $courseLanguage) {
-            return null;
-        }
-
-        $language = $em->getRepository(Language::class)->findOneBy([
-            'isocode' => $courseLanguage,
-            'available' => true,
-        ]);
-
-        return $language instanceof Language ? $language : null;
+        return $this->findDefaultCourseLanguage(
+            $em->getRepository(Course::class)->find($courseId),
+            $em
+        );
     }
 
     private function resolveCourseIdFromRequest(Request $request): int

@@ -8,14 +8,14 @@ namespace Chamilo\LtiBundle\Component;
 
 class OutcomeResponseStatus
 {
-    public const SEVERITY_STATUS = 'status';
-    public const SEVERITY_WARNING = 'warning';
-    public const SEVERITY_ERROR = 'error';
+    public const string SEVERITY_STATUS = 'status';
+    public const string SEVERITY_WARNING = 'warning';
+    public const string SEVERITY_ERROR = 'error';
 
-    public const CODEMAJOR_SUCCESS = 'success';
-    public const CODEMAJOR_PROCESSING = 'processing';
-    public const CODEMAJOR_FAILURE = 'failure';
-    public const CODEMAJOR_UNSUPPORTED = 'unsupported';
+    public const string CODEMAJOR_SUCCESS = 'success';
+    public const string CODEMAJOR_PROCESSING = 'processing';
+    public const string CODEMAJOR_FAILURE = 'failure';
+    public const string CODEMAJOR_UNSUPPORTED = 'unsupported';
 
     private string $codeMajor = '';
 

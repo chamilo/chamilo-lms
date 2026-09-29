@@ -40,6 +40,18 @@ class GradebookScoreLog
     #[ORM\Column(name: 'registered_at', type: 'datetime', nullable: false)]
     protected DateTime $registeredAt;
 
+    public function getCategory(): GradebookCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(GradebookCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
     /**
      * Get the achieved score.
      *
@@ -48,26 +60,6 @@ class GradebookScoreLog
     public function getScore()
     {
         return $this->score;
-    }
-
-    /**
-     * Get the datetime of register.
-     *
-     * @return DateTime
-     */
-    public function getRegisteredAt()
-    {
-        return $this->registeredAt;
-    }
-
-    /**
-     * Get the id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -83,6 +75,16 @@ class GradebookScoreLog
     }
 
     /**
+     * Get the datetime of register.
+     *
+     * @return DateTime
+     */
+    public function getRegisteredAt()
+    {
+        return $this->registeredAt;
+    }
+
+    /**
      * Set the datetime of register.
      *
      * @return $this
@@ -92,5 +94,15 @@ class GradebookScoreLog
         $this->registeredAt = $registeredAt;
 
         return $this;
+    }
+
+    /**
+     * Get the id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

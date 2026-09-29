@@ -147,6 +147,12 @@ if (!empty($exerciseId)) {
 
 $objExercise->createForm($form);
 
+foreach (['lp_id', 'origin', 'returnToLp', 'node', 'parent', 'type', 'isStudentView', 'gradebook', 'lpTool'] as $key) {
+    if (isset($_REQUEST[$key]) && '' !== (string) $_REQUEST[$key]) {
+        $form->addElement('hidden', $key, (string) $_REQUEST[$key]);
+    }
+}
+
 if ($form->validate()) {
     $objExercise->processCreation($form);
     if ('true' === $form->getSubmitValue('edit')) {
@@ -160,7 +166,15 @@ if ($form->validate()) {
     }
     $exercise_id = $objExercise->getId();
     Session::erase('objExercise');
-    header('Location:admin.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
+
+    $redirectParams = ['exerciseId' => $exercise_id];
+    foreach (['lp_id', 'origin', 'returnToLp', 'node', 'parent', 'type', 'isStudentView', 'gradebook', 'lpTool'] as $key) {
+        if (isset($_REQUEST[$key]) && '' !== (string) $_REQUEST[$key]) {
+            $redirectParams[$key] = (string) $_REQUEST[$key];
+        }
+    }
+
+    header('Location: admin.php?'.http_build_query($redirectParams).'&'.api_get_cidreq());
     exit;
 } else {
     if (api_is_in_gradebook()) {

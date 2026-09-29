@@ -2,549 +2,65 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Usergroup;
+declare(strict_types=1);
+
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
-use Chamilo\CourseBundle\Entity\CLpCategory;
-use Chamilo\CourseBundle\Entity\CLpRelUser;
-use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 
-/**
- * Report from students for learning path.
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
-$isAllowedToEdit = api_is_allowed_to_edit(null, true);
-if (!$isAllowedToEdit) {
+if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);
 }
 
-$lpTable = Database::get_course_table(TABLE_LP_MAIN);
+$learningPathId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 $course = api_get_course_entity();
-$courseInfo = api_get_course_info();
-$sessionId = api_get_session_id();
-$courseId = api_get_course_int_id();
-$courseCode = api_get_course_id();
+$learningPath = Container::getLpRepository()->find($learningPathId);
 
-$lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
-$studentId = isset($_REQUEST['student_id']) ? (int) $_REQUEST['student_id'] : 0;
-$groupFilter = isset($_REQUEST['group_filter']) ? Security::remove_XSS($_REQUEST['group_filter']) : '';
-$deleteExercisesAttempts = isset($_REQUEST['delete_exercise_attempts']) && 1 === (int) $_REQUEST['delete_exercise_attempts'] ? true : false;
-
-$groupFilterType = '';
-$groupFilterId = 0;
-$groupFilterParts = explode(':', $groupFilter);
-if (!empty($groupFilterParts) && isset($groupFilterParts[1])) {
-    $groupFilterType = $groupFilterParts[0];
-    $groupFilterId = (int) $groupFilterParts[1];
-}
-$export = isset($_REQUEST['export']);
-$reset = isset($_REQUEST['reset']) ? $_REQUEST['reset'] : '';
-$showTeachers = isset($_GET['show_teachers']) ? (int) $_GET['show_teachers'] : 0;
-
-$repo = Container::getLpRepository();
-/** @var CLp $entity */
-$entity = $repo->find($lpId);
-
-$lp = new learnpath($entity, $courseInfo, api_get_user_id());
-if (empty($lp)) {
+if (!$course instanceof Course || !$learningPath instanceof CLp) {
     api_not_allowed(true);
 }
 
-$urlBase = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&lp_id='.$lpId;
-$statsUrl = api_get_path(WEB_CODE_PATH)
-    .'my_space/lp_tracking.php?'
-    .api_get_cidreq()
-    .'&action=stats'
-    .'&origin=tracking_course'
-    .'&lp_id='.$lpId;
-$ajaxUrl  = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.$lpId.'&'.api_get_cidreq();
-$url = $urlBase.'&group_filter='.$groupFilter;
-$allowUserGroups = ('true' === api_get_setting('lp.allow_lp_subscription_to_usergroups'));
-
-$course = api_get_course_entity($courseId);
-$session = api_get_session_entity($sessionId);
-
-$em = Database::getManager();
-// Check LP subscribers
-if ('1' === $lp->getSubscribeUsers()) {
-
-    /** @var CLpRelUserRepository $cLpRelUserRepo */
-    $cLpRelUserRepo = $em->getRepository(CLpRelUser::class);
-    $subscribedUsersInLp = $cLpRelUserRepo->getUsersSubscribedToItem(
-        $entity,
-        $course,
-        $session
-    );
-
-    // Subscribed groups to a LP
-    $links = $entity->getResourceNode()->getResourceLinks();
-    $groups = [];
-    foreach ($links as $link) {
-        if (null !== $link->getGroup()) {
-            $groups[] = $link->getGroup()->getIid();
-        }
-    }
-
-    $users = [];
-    if (!empty($groups)) {
-        foreach ($groups as $groupId) {
-            $students = GroupManager::getStudents($groupId);
-            if (!empty($students)) {
-                foreach ($students as $studentInfo) {
-                    $users[]['user_id'] = $studentInfo['user_id'];
-                }
-            }
-        }
-    }
-
-    if (!empty($subscribedUsersInLp)) {
-        foreach ($subscribedUsersInLp as $rel) {
-            /** @var CLpRelUser $rel */
-            $u = $rel->getUser();
-            if ($u) {
-                $users[] = ['user_id' => $u->getId()];
-            }
-        }
-    }
-} else {
-    $categoryId = $lp->getCategoryId();
-    $users = [];
-    if (!empty($categoryId)) {
-        /** @var CLpCategory $category */
-        $category = $em->getRepository(CLpCategory::class)->find($categoryId);
-        $subscribedUsersInCategory = $category->getUsers();
-        if (!empty($subscribedUsersInCategory)) {
-            foreach ($subscribedUsersInCategory as $item) {
-                $user = $item->getUser();
-                if ($user) {
-                    $users[]['user_id'] = $item->getUser()->getId();
-                }
-            }
-        }
-    }
-
-    if (empty($categoryId) || empty($users)) {
-        if (empty($sessionId)) {
-            $users = CourseManager::get_user_list_from_course_code(
-                $courseCode,
-                0,
-                null,
-                null,
-                STUDENT
-            );
-        } else {
-            $users = CourseManager::get_user_list_from_course_code(
-                $courseCode,
-                $sessionId,
-                null,
-                null,
-                0
-            );
-        }
-    }
+$courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+if ($courseNodeId <= 0) {
+    api_not_allowed(true);
 }
 
-$groups = GroupManager::get_group_list(null, $course, null, $sessionId);
-$label = get_lang('Groups');
-$classes = [];
-if ($allowUserGroups) {
-    $label = get_lang('Groups').' / '.get_lang('Classes');
-    $userGroup = new UserGroupModel();
-    $conditions = [];
-    $conditions['where'] = [' usergroup.course_id = ? ' => $courseId];
-    $classes = $userGroup->getUserGroupInCourse($conditions);
-}
-
-$groupFilterForm = '';
-if (!empty($groups)) {
-    $form = new FormValidator('group', 'GET', $url);
-    $form->addHidden('action', 'report');
-    $form->addHidden('lp_id', $lpId);
-    $form->addCourseHiddenParams();
-
-    $courseGroups = [];
-    foreach ($groups as $group) {
-        $option = [
-            'text' => $group['title'],
-            'value' => "group:".$group['iid'],
-        ];
-        $courseGroups[] = $option;
-    }
-
-    $select = $form->addSelect(
-        'group_filter',
-        $label,
-        [],
-        [
-            'id' => 'group_filter',
-            'placeholder' => get_lang('All'),
-        ]
-    );
-    $select->addOptGroup($courseGroups, get_lang('Groups'));
-
-    if ($allowUserGroups) {
-        $options = [];
-        foreach ($classes as $group) {
-            $option = [
-                'text' => $group['title'],
-                'value' => "class:".$group['id'],
-            ];
-            $options[] = $option;
-        }
-        $select->addOptGroup($options, get_lang('Classes'));
-    }
-
-    if (!empty($groupFilter)) {
-        switch ($groupFilterType) {
-            case 'group':
-                $users = GroupManager::getStudents($groupFilterId, true);
-                break;
-            case 'class':
-                if ($allowUserGroups) {
-                    $users = $userGroup->getUserListByUserGroup($groupFilterId);
-                }
-                break;
-        }
-
-        $form->setDefaults(['group_filter' => $groupFilter]);
-    }
-    $groupFilterForm = $form->returnForm();
-}
-
-if ($reset) {
-    switch ($reset) {
-        case 'student':
-            if ($studentId) {
-                $studentInfo = api_get_user_info($studentId);
-                if ($studentInfo) {
-                    Event::delete_student_lp_events(
-                        $studentId,
-                        $lpId,
-                        $courseInfo,
-                        $sessionId,
-                        false === $deleteExercisesAttempts
-                    );
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('Learning path was reset for the learner').': '.$studentInfo['complete_name_with_username'],
-                            'success'
-                        )
-                    );
-                }
-            }
-            break;
-        case 'all':
-            $result = [];
-            foreach ($users as $user) {
-                $userId = $user['user_id'];
-                $studentInfo = api_get_user_info($userId);
-                if ($studentInfo) {
-                    Event::delete_student_lp_events(
-                        $userId,
-                        $lpId,
-                        $courseInfo,
-                        $sessionId,
-                        false === $deleteExercisesAttempts
-                    );
-                    $result[] = $studentInfo['complete_name_with_username'];
-                }
-            }
-
-            if (!empty($result)) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('Learning path was reset for the learner').': '.implode(', ', $result),
-                        'success'
-                    )
-                );
-            }
-
-            break;
-    }
-    api_location($url);
-}
-
-$userList = [];
-$showEmail = api_get_setting('show_email_addresses');
-
-if (!empty($users)) {
-    $added = [];
-    foreach ($users as $user) {
-        $userId = $user['user_id'];
-        if (in_array($userId, $added)) {
-            continue;
-        }
-
-        $userInfo = api_get_user_info($userId);
-        $lpTime = Tracking::get_time_spent_in_lp(
-            $userId,
-            $course,
-            [$lpId],
-            $sessionId
-        );
-
-        $lpScore = Tracking::get_avg_student_score(
-            $userId,
-            $course,
-            [$lpId],
-            $session
-        );
-
-        $lpProgress = Tracking::get_avg_student_progress(
-            $userId,
-            $course,
-            [$lpId],
-            $session
-        );
-
-        $lpLastConnection = Tracking::get_last_connection_time_in_lp(
-            $userId,
-            $courseCode,
-            $lpId,
-            $sessionId
-        );
-
-        $lpLastConnection = empty($lpLastConnection) ? '-' : api_convert_and_format_date(
-            $lpLastConnection,
-            DATE_TIME_FORMAT_LONG
-        );
-
-        $userGroupList = '';
-        if (!empty($groups)) {
-            $groupsByUser = GroupManager::getAllGroupPerUserSubscription($userId, $courseId, $sessionId);
-            $icon = Display::getMdiIcon('account-group', 'ch-tool-icon', null, 22, get_lang('Group'));
-            if (!empty($groupsByUser)) {
-                $groupUrl = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
-                foreach ($groupsByUser as $group) {
-                    $userGroupList .= Display::url($icon.$group['title'], $groupUrl.'&gid='.$group['iid']).'&nbsp;';
-                }
-            }
-        }
-
-        $classesToString = '';
-        if ($allowUserGroups) {
-            $classes = $userGroup->getUserGroupListByUser($userId, Usergroup::NORMAL_CLASS);
-            $icon = Display::getMdiIcon('account-group', 'ch-tool-icon', null, 22, get_lang('Class'));
-            if (!empty($classes)) {
-                $classUrl = api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq(true, false);
-                foreach ($classes as $class) {
-                    $classesToString .= Display::url(
-                            $icon.$class['name'],
-                            $classUrl.'&class_id='.$class['id']
-                        ).'&nbsp;';
-                }
-            }
-        }
-        $trackingUrl = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&'.
-        api_get_cidreq().'&course='.$courseCode.'&origin=tracking_course&student='.$userId;
-        $row = [];
-        $row[] = Display::url($userInfo['firstname'], $trackingUrl);
-        $row[] = Display::url($userInfo['lastname'], $trackingUrl);
-        if ('true' === $showEmail) {
-            $row[] = $userInfo['email'];
-        }
-        $row[] = $userGroupList.$classesToString;
-        $row[] = api_time_to_hms($lpTime);
-        $row[] = "$lpProgress %";
-        $row[] = is_numeric($lpScore) ? "$lpScore%" : $lpScore;
-        $row[] = $lpLastConnection;
-        $actions = Display::url(
-            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('Reporting')),
-            $trackingUrl
-        ).'&nbsp;';
-
-        $statsHref = api_get_path(WEB_CODE_PATH).'my_space/lp_tracking.php?'
-            .api_get_cidreq()
-            .'&action=stats&extend_all=0&origin=tracking_course&allow_extend=0&lp_id='.$lpId;
-
-        $actions .= Display::url(
-                Display::getMdiIcon('fast-forward-outline','ch-tool-icon',null,32,get_lang('Details')),
-                $statsHref,
-                ['data-id' => $userId,'class' => 'details']
-            ).'&nbsp;';
-
-        $actions .= Display::url(
-            Display::getMdiIcon('broom', 'ch-tool-icon', null, 32, get_lang('Reset')),
-            'javascript:void(0);',
-            ['data-id' => $userId, 'data-username' => $userInfo['username'], 'class' => 'delete_attempt']
-        );
-
-        $actions .= Display::url(
-            Display::getMdiIcon('file-document-refresh', 'ch-tool-icon', null, 32, get_lang('Recalculate results')),
-            api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq().'&action=recalculate&user_id='.$userId.'&lp_id='.$lpId,
-            ['title' => get_lang('Recalculate results')]
-        );
-
-        $row[] = $actions;
-        $row['username'] = $userInfo['username'];
-        $userList[] = $row;
-        $added[] = $userId;
-    }
-} else {
-    Display::addFlash(Display::return_message(get_lang('No user added'), 'warning'));
-}
-
-if ($showTeachers) {
-    $teacherUsers = empty($sessionId)
-        ? CourseManager::get_teacher_list_from_course_code($courseCode)
-        : CourseManager::get_coachs_from_course($sessionId, $courseId);
-
-    $addedTeachers = [];
-    foreach ($teacherUsers as $teacher) {
-        $userId = (int) ($teacher['user_id'] ?? 0);
-        if (in_array($userId, $addedTeachers)) {
-            continue;
-        }
-
-        $userInfo = api_get_user_info($userId);
-        $lpTime = Tracking::get_time_spent_in_lp($userId, $course, [$lpId], $sessionId);
-        $lpScore = Tracking::get_avg_student_score($userId, $course, [$lpId], $session);
-        $lpProgress = Tracking::get_avg_student_progress($userId, $course, [$lpId], $session);
-        $lpLastConnection = Tracking::get_last_connection_time_in_lp($userId, $courseCode, $lpId, $sessionId);
-        $lpLastConnection = empty($lpLastConnection) ? '-' : api_convert_and_format_date(
-            $lpLastConnection,
-            DATE_TIME_FORMAT_LONG
-        );
-
-        $trackingUrl = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&'
-            .api_get_cidreq().'&course='.$courseCode.'&origin=tracking_course&student='.$userId;
-
-        $row = [];
-        $row[] = Display::url($userInfo['firstname'].' ('.get_lang('Teacher').')', $trackingUrl);
-        $row[] = Display::url($userInfo['lastname'], $trackingUrl);
-        if ('true' === $showEmail) {
-            $row[] = $userInfo['email'];
-        }
-        $row[] = '';
-        $row[] = api_time_to_hms($lpTime);
-        $row[] = "$lpProgress %";
-        $row[] = is_numeric($lpScore) ? "$lpScore%" : $lpScore;
-        $row[] = $lpLastConnection;
-
-        if (false === $export) {
-            $statsHref = api_get_path(WEB_CODE_PATH).'my_space/lp_tracking.php?'
-                .api_get_cidreq()
-                .'&action=stats&extend_all=0&origin=tracking_course&allow_extend=0&lp_id='.$lpId;
-            $teacherActions = Display::url(
-                Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('Reporting')),
-                $trackingUrl
-            );
-            $teacherActions .= '&nbsp;'.Display::url(
-                Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 32, get_lang('Details')),
-                $statsHref,
-                ['data-id' => $userId, 'class' => 'details']
-            );
-            $teacherActions .= '&nbsp;'.Display::url(
-                Display::getMdiIcon('broom', 'ch-tool-icon', null, 32, get_lang('Reset')),
-                'javascript:void(0);',
-                ['data-id' => $userId, 'data-username' => $userInfo['username'], 'class' => 'delete_attempt']
-            );
-            $teacherActions .= Display::url(
-                Display::getMdiIcon('file-document-refresh', 'ch-tool-icon', null, 32, get_lang('Recalculate results')),
-                api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=recalculate&user_id='.$userId.'&lp_id='.$lpId,
-                ['title' => get_lang('Recalculate results')]
-            );
-            $row[] = $teacherActions;
-        }
-
-        $row['username'] = $userInfo['username'];
-        $userList[] = $row;
-        $addedTeachers[] = $userId;
-    }
-}
-
-$parameters = [
-    'action' => 'report',
-    'group_filter' => $groupFilter,
-    'cidReq' => $courseCode,
-    'id_session' => $sessionId,
-    'lp_id' => $lpId,
+$query = [
+    'cid' => (int) $course->getId(),
+    'sid' => api_get_session_id(),
+    'gid' => api_get_group_id(),
+    'isStudentView' => 'false',
 ];
 
-$table = new SortableTableFromArrayConfig($userList, 1, 20, 'lp');
-$table->set_additional_parameters($parameters);
-$column = 0;
-$table->set_header($column++, get_lang('First name'));
-$table->set_header($column++, get_lang('Last name'));
-if ('true' === $showEmail) {
-    $table->set_header($column++, get_lang('E-mail'));
-}
-$table->set_header($column++, $label, false);
-$table->set_header($column++, get_lang('Time'));
-$table->set_header($column++, get_lang('Progress'));
-$table->set_header($column++, get_lang('Score'));
-$table->set_header($column++, get_lang('Last connection'), false);
-if (false === $export) {
-    $table->set_header($column++, get_lang('Actions'), false);
+$groupFilter = trim((string) ($_REQUEST['group_filter'] ?? ''));
+if ('' !== $groupFilter) {
+    $query['groupFilter'] = $groupFilter;
 }
 
-$interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq(),
-    'name' => get_lang('Learning paths'),
-];
-
-$actions = Display::url(
-    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('Back')),
-    api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq()
-);
-
-if (!empty($users)) {
-    $actions .= Display::url(
-        Display::getMdiIcon('file-pdf-box', 'ch-tool-icon', null, 32, get_lang('Export to PDF')),
-        $url.'&export=pdf'
-    );
-    $userListToString = array_column($userList, 'username');
-    $userListToString = implode(', ', $userListToString);
-    $actions .= Display::url(
-        Display::getMdiIcon('broom', 'ch-tool-icon', null, 32, get_lang('Clean')),
-        'javascript:void(0);',
-        ['data-users' => $userListToString, 'class' => 'delete_all']
-    );
+if (isset($_REQUEST['show_teachers']) && 1 === (int) $_REQUEST['show_teachers']) {
+    $query['showTeachers'] = 1;
 }
 
-$teacherToggleUrl = $urlBase.'&group_filter='.$groupFilter.'&show_teachers='.($showTeachers ? 0 : 1);
-$teacherToggleLbl = $showTeachers ? get_lang('Hide teachers') : get_lang('Show teachers');
-$teacherToggleBtn = '<div class="mb-2" style="margin-top:8px;">'
-    .'<a class="btn btn--info" style="font-size:13px;padding:4px 10px;" href="'.Security::remove_XSS($teacherToggleUrl).'">'
-    .Security::remove_XSS($teacherToggleLbl)
-    .'</a>'
-    .'</div>';
+$studentId = isset($_REQUEST['student_id']) ? (int) $_REQUEST['student_id'] : 0;
+if ($studentId > 0) {
+    $query['studentId'] = $studentId;
+}
 
-$template = new Template(get_lang('Learner score'));
-$template->assign('group_class_label', $label);
-$template->assign('user_list', $userList);
-$template->assign('session_id', api_get_session_id());
-$template->assign('course_code', api_get_course_id());
-$template->assign('course_id', $courseId);
-$template->assign('lp_id', $lpId);
-$template->assign('show_email', 'true' === $showEmail);
-$template->assign('table', $table->return_table());
-$template->assign('export', (int) $export);
-$template->assign('group_form', $groupFilterForm);
-$template->assign('url', $url);
-$template->assign('url_base', $urlBase);
-$template->assign('stats_url', $statsUrl);
-$template->assign('ajax_url',  $ajaxUrl);
-$template->assign('header', $entity->getTitle());
-$template->assign('actions', Display::toolbarAction('lp_actions', [$actions]));
-$template->assign('teacher_toggle_btn', $teacherToggleBtn);
-$result = $template->fetch('@ChamiloCore/LearnPath/report.html.twig');
-$template->assign('content', $result);
-
-if ($export) {
-    $pdfParams = [
-        'filename' => get_lang('Learner score').'_'.api_get_local_time(),
-    ];
-    $pdf = new PDF('A4', 'P', $pdfParams);
-    $pdf->html_to_pdf_with_template(
-        $result,
-        false,
-        false,
-        true
+if (isset($_REQUEST['export']) && 'pdf' === (string) $_REQUEST['export']) {
+    header(
+        'Location: '.api_get_path(WEB_PATH).'api/learning_paths/'.$learningPathId.'/reporting.pdf?'.http_build_query($query),
+        true,
+        302,
     );
     exit;
 }
 
-$template->display_one_col_template();
+header(
+    'Location: '.api_get_path(WEB_PATH).'resources/lp/'.$courseNodeId.'/'.$learningPathId.'/reporting?'.http_build_query($query),
+    true,
+    302,
+);
+exit;

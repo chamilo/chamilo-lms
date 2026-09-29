@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Controller;
 use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Psr\Log\LoggerInterface;
+use Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,9 +39,18 @@ class MyServicesController extends AbstractController
         try {
             $plugin = BuyCoursesPlugin::create();
             $userId = $user->getId();
+            $csrfToken = (string) Security::get_existing_token();
+
+            if ('' === $csrfToken) {
+                $csrfToken = (string) Security::get_token();
+            }
 
             return new JsonResponse([
-                'activeServices' => $this->normalizeActiveServices($plugin->getActiveServicesForUser($userId)),
+                'activeServices' => $this->normalizeActiveServices(
+                    $plugin,
+                    $plugin->getActiveServicesForUser($userId),
+                    $csrfToken
+                ),
                 'purchaseHistory' => $this->normalizePurchaseHistory($plugin->getPurchaseHistoryForUser($userId)),
             ]);
         } catch (Throwable $exception) {
@@ -58,24 +68,58 @@ class MyServicesController extends AbstractController
         }
     }
 
-    private function normalizeActiveServices(array $rows): array
+    private function normalizeActiveServices(BuyCoursesPlugin $plugin, array $rows, string $csrfToken): array
     {
-        return array_map(static function (array $row): array {
+        return array_map(static function (array $row) use ($plugin, $csrfToken): array {
             $serviceSaleId = (int) ($row['id'] ?? 0);
             $serviceId = (int) ($row['service']['id'] ?? $row['service_id'] ?? 0);
             $paymentType = (int) ($row['payment_type'] ?? 0);
             $recurringPayment = (int) ($row['recurring_payment'] ?? BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_DISABLED);
             $isRenewable = 1 === (int) ($row['service']['renewable'] ?? $row['renewable'] ?? 0);
+            $recurringGateway = strtolower(trim((string) ($row['recurring_gateway'] ?? '')));
+            $recurringProfileId = trim((string) ($row['recurring_profile_id'] ?? ''));
+            $gatewaySubscriptionId = trim((string) ($row['gateway_subscription_id'] ?? ''));
+
+            if ('' === $recurringGateway) {
+                $recurringGateway = match ($paymentType) {
+                    BuyCoursesPlugin::PAYMENT_TYPE_STRIPE => 'stripe',
+                    BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL => 'paypal',
+                    default => '',
+                };
+            }
+
             $isPayPalPayment = BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL === $paymentType;
+            $hasRecurringReference = '' !== $gatewaySubscriptionId || '' !== $recurringProfileId;
+            $isSupportedCancellationGateway = \in_array($recurringGateway, ['stripe', 'paypal'], true);
+            $isCancellationAlreadyScheduled = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED === $recurringPayment
+                || '' !== trim((string) ($row['cancelled_at'] ?? ''));
+            $saleEndTimestamp = !empty($row['date_end']) ? strtotime((string) $row['date_end']) : 0;
+            $isCurrentPeriodActive = $saleEndTimestamp > time();
 
             $canEnableRecurringPayment = $isRenewable
                 && $isPayPalPayment
                 && BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED !== $recurringPayment;
 
             $canCancelRecurringPayment = $isRenewable
-                && $isPayPalPayment
+                && !$isCancellationAlreadyScheduled
                 && BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED === $recurringPayment
-                && '' !== (string) ($row['recurring_profile_id'] ?? '');
+                && $hasRecurringReference
+                && $isSupportedCancellationGateway;
+
+            $canRestoreRecurringPayment = $isRenewable
+                && $isCurrentPeriodActive
+                && $isCancellationAlreadyScheduled
+                && 'stripe' === $recurringGateway
+                && $hasRecurringReference;
+
+            $plannedRenewalDate = trim((string) ($row['next_charge_date'] ?? ''));
+            if ('' === $plannedRenewalDate) {
+                $plannedRenewalDate = trim((string) ($row['date_end'] ?? ''));
+            }
+
+            $formattedRenewalDate = '' !== $plannedRenewalDate
+                ? api_format_date(api_get_local_time($plannedRenewalDate), DATE_TIME_FORMAT_LONG_24H)
+                : '—';
 
             return [
                 'id' => $serviceSaleId,
@@ -88,8 +132,11 @@ class MyServicesController extends AbstractController
                 'paymentType' => $paymentType,
                 'isRenewable' => $isRenewable,
                 'recurringPayment' => $recurringPayment,
-                'recurringProfileId' => (string) ($row['recurring_profile_id'] ?? ''),
+                'recurringGateway' => $recurringGateway,
+                'recurringProfileId' => $recurringProfileId,
+                'gatewaySubscriptionId' => $gatewaySubscriptionId,
                 'nextChargeDate' => (string) ($row['next_charge_date'] ?? ''),
+                'plannedRenewalDate' => $plannedRenewalDate,
                 'cancelledAt' => (string) ($row['cancelled_at'] ?? ''),
                 'canEnableRecurringPayment' => $canEnableRecurringPayment,
                 'canCancelRecurringPayment' => $canCancelRecurringPayment,
@@ -98,8 +145,31 @@ class MyServicesController extends AbstractController
                     ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php?action=enable_recurring_payment&order='.$serviceSaleId
                     : null,
                 'cancelRecurringPaymentUrl' => $canCancelRecurringPayment
-                    ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php?action=cancel_recurring_payment&order='.$serviceSaleId
+                    ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php'
                     : null,
+                'cancelRecurringPaymentToken' => $canCancelRecurringPayment ? $csrfToken : null,
+                'restoreRecurringPaymentUrl' => $canRestoreRecurringPayment
+                    ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php'
+                    : null,
+                'restoreRecurringPaymentToken' => $canRestoreRecurringPayment ? $csrfToken : null,
+                'canRestoreRecurringPayment' => $canRestoreRecurringPayment,
+                'restoreRenewalButtonLabel' => $plugin->get_lang('RestoreRenewal'),
+                'restoreRenewalMessage' => \sprintf(
+                    $plugin->get_lang('RestoreRenewalConfirmation'),
+                    $formattedRenewalDate
+                ),
+                'cancelRenewalButtonLabel' => $plugin->get_lang('CancelRenewal'),
+                'cancelRenewalDismissLabel' => $plugin->get_lang('IChangedMyMind'),
+                'cancelRenewalTitle' => $plugin->get_lang('CancelRenewalTitle'),
+                'cancelRenewalMessage' => \sprintf(
+                    $plugin->get_lang('CancelRenewalConfirmation'),
+                    $formattedRenewalDate,
+                    12,
+                    $formattedRenewalDate
+                ),
+                'renewalDateLabel' => $isCancellationAlreadyScheduled
+                    ? $plugin->get_lang('ServiceAccessUntil')
+                    : $plugin->get_lang('NextRenewal'),
                 'benefitSummaries' => array_map(static function (array $summary): array {
                     return [
                         'title' => (string) ($summary['title'] ?? ''),
@@ -124,6 +194,8 @@ class MyServicesController extends AbstractController
                 'amount' => (string) ($row['amount'] ?? ''),
                 'status' => (int) ($row['status'] ?? 0),
                 'receiptUrl' => $row['receipt_url'] ?? null,
+                'invoiceUrl' => $row['invoice_url'] ?? null,
+                'requestInvoiceUrl' => $row['request_invoice_url'] ?? null,
             ];
         }, $rows);
     }

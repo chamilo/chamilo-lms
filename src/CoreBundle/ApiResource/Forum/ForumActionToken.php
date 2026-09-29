@@ -9,15 +9,15 @@ namespace Chamilo\CoreBundle\ApiResource\Forum;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use Chamilo\CoreBundle\State\ForumActionTokenProvider;
+use Chamilo\CoreBundle\State\Forum\ForumActionTokenProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
         new Get(
             uriTemplate: '/forum/action-token',
-            provider: ForumActionTokenProvider::class,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            provider: ForumActionTokenProvider::class,
         ),
     ],
     normalizationContext: [
@@ -30,8 +30,11 @@ final class ForumActionToken
     #[Groups(['forum_action_token:read'])]
     public string $id = 'forum_action_token';
 
+    /**
+     * @var array<string, mixed>
+     */
     #[Groups(['forum_action_token:read'])]
-    public string $token = '';
+    public array $settings = [];
 
     public function getId(): string
     {

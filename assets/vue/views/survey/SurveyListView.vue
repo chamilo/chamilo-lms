@@ -1,49 +1,43 @@
 <template>
   <section class="space-y-6">
-    <div class="space-y-3">
-      <div class="flex flex-wrap items-center gap-2">
-        <div
-          class="survey-list-toolbar flex flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
-        >
-          <BaseButton
-            v-if="canCreate"
-            class="survey-list-toolbar__button"
-            :label="t('Create survey')"
-            :route="buildCreateRoute()"
-            icon="plus"
-            only-icon
-            size="small"
-            type="primary-text"
-          />
-          <BaseButton
-            v-if="canCreate"
-            class="survey-list-toolbar__button"
-            :label="t('Create meeting poll')"
-            :route="buildMeetingCreateRoute()"
-            icon="calendar-plus"
-            only-icon
-            size="small"
-            type="primary-text"
-          />
-          <span
-            v-if="canCreate"
-            class="mx-1 h-6 w-px bg-gray-20"
-            aria-hidden="true"
-          />
-          <BaseButton
-            class="survey-list-toolbar__button"
-            :label="isSearchVisible ? t('Hide search') : t('Search')"
-            :icon="isSearchVisible ? 'close' : 'search'"
-            only-icon
-            size="small"
-            type="primary-text"
-            @click="toggleSearchForm"
-          />
-        </div>
+    <SectionHeader :title="t('Surveys')">
+      <div class="survey-list-toolbar flex flex-wrap items-center gap-1">
+        <BaseButton
+          v-if="canCreate"
+          class="survey-list-toolbar__button"
+          :label="t('Create survey')"
+          :route="buildCreateRoute()"
+          icon="plus"
+          only-icon
+          size="small"
+          type="primary-text"
+        />
+        <BaseButton
+          v-if="canCreate"
+          class="survey-list-toolbar__button"
+          :label="t('Create meeting poll')"
+          :route="buildMeetingCreateRoute()"
+          icon="calendar-plus"
+          only-icon
+          size="small"
+          type="primary-text"
+        />
+        <span
+          v-if="canCreate"
+          class="mx-1 h-6 w-px bg-gray-20"
+          aria-hidden="true"
+        />
+        <BaseButton
+          class="survey-list-toolbar__button"
+          :label="isSearchVisible ? t('Hide search') : t('Search')"
+          :icon="isSearchVisible ? 'close' : 'search'"
+          only-icon
+          size="small"
+          type="primary-text"
+          @click="toggleSearchForm"
+        />
       </div>
-    </div>
-
-    <div class="border-b border-gray-20" />
+    </SectionHeader>
 
     <div
       v-if="activeSearch && !isSearchVisible"
@@ -192,7 +186,17 @@
                 class="ch-tool-icon"
                 aria-hidden="true"
               />
-              <span class="font-semibold text-gray-90">
+              <RouterLink
+                v-if="data.canAnswer"
+                :to="buildAnswerRoute(data)"
+                class="font-semibold text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              >
+                {{ displayText(data.title, t("Untitled")) }}
+              </RouterLink>
+              <span
+                v-else
+                class="font-semibold text-gray-90"
+              >
                 {{ displayText(data.title, t("Untitled")) }}
               </span>
             </div>
@@ -315,7 +319,7 @@
               v-if="data.canAnswer"
               :label="t('Answer')"
               :route="buildAnswerRoute(data)"
-              icon="check"
+              icon="reply"
               only-icon
               size="small"
               type="primary-text"
@@ -462,11 +466,15 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { chamiloIconToClass } from "../../components/basecomponents/ChamiloIcons"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
 const { requireConfirmation } = useConfirmation()
 
 const surveys = ref([])
@@ -481,9 +489,6 @@ const searchTerm = ref(getSearchQuery())
 const isSearchVisible = ref(Boolean(getSearchQuery()))
 const activeSearch = computed(() => getSearchQuery())
 const selectableSurveys = computed(() => surveys.value.filter((survey) => survey.canDelete))
-const selectedSurveys = computed(() =>
-  surveys.value.filter((survey) => selectedSurveyIds.value.includes(Number(survey.iid))),
-)
 const areAllSelectableSurveysSelected = computed(
   () =>
     selectableSurveys.value.length > 0 &&
@@ -756,10 +761,6 @@ function pruneSelection() {
   selectedSurveyIds.value = selectedSurveyIds.value.filter((id) => availableIds.has(id))
 }
 
-function getBulkActionCsrfToken() {
-  return selectedSurveys.value.find((survey) => survey.actionCsrfToken)?.actionCsrfToken || ""
-}
-
 function confirmBulkDelete() {
   if (selectedSurveyIds.value.length === 0) {
     return
@@ -778,11 +779,7 @@ async function performBulkDelete() {
   isLoading.value = true
 
   try {
-    const response = await surveyService.runSurveyBulkDelete(
-      getContextParams(),
-      selectedSurveyIds.value,
-      getBulkActionCsrfToken(),
-    )
+    const response = await surveyService.runSurveyBulkDelete(getContextParams(), selectedSurveyIds.value)
 
     successMessage.value = response.message ? t(response.message) : t("Updated")
     clearSelection()
@@ -854,7 +851,7 @@ async function performSurveyAction(survey, action) {
   isLoading.value = true
 
   try {
-    const response = await surveyService.runSurveyAction(getContextParams(), survey.iid, action, survey.actionCsrfToken)
+    const response = await surveyService.runSurveyAction(getContextParams(), survey.iid, action)
 
     successMessage.value = response.message ? t(response.message) : t("Updated")
     await loadSurveys()
@@ -920,7 +917,7 @@ function decodeHtml(value) {
 }
 
 function displayText(value, fallback = "") {
-  const decodedValue = decodeHtml(value)
+  const decodedValue = decodeHtml(displayTranslatedHtml(value))
   const plainValue = decodeHtml(decodedValue.replace(/<[^>]*>/g, " "))
     .replace(/\s+/g, " ")
     .trim()
@@ -929,6 +926,8 @@ function displayText(value, fallback = "") {
 }
 
 onMounted(loadSurveys)
+
+useStudentViewRefresh(loadSurveys)
 
 watch(
   () => route.query,

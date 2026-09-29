@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Base\CcGene
 
 class CcWebLink extends CcGeneralFile
 {
-    public const DEAFULTNAME = 'weblink.xml';
+    public const string DEAFULTNAME = 'weblink.xml';
 
     protected $rootns = 'wl';
     protected $rootname = 'webLink';

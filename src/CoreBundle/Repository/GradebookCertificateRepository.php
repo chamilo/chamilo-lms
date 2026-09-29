@@ -18,6 +18,7 @@ use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
 use RuntimeException;
@@ -77,8 +78,8 @@ class GradebookCertificateRepository extends ResourceRepository
         if (!$existingCertificate) {
             $certificate = new GradebookCertificate();
 
-            $category = 0 === $catId ? null : $this->_em->getRepository(GradebookCategory::class)->find($catId);
-            $user = $this->_em->getRepository(User::class)->find($userId);
+            $category = 0 === $catId ? null : $this->getEntityManager()->getRepository(GradebookCategory::class)->find($catId);
+            $user = $this->getEntityManager()->getRepository(User::class)->find($userId);
 
             if ($category) {
                 $certificate->setCategory($category);
@@ -87,9 +88,10 @@ class GradebookCertificateRepository extends ResourceRepository
             $certificate->setPathCertificate($fileName ?: null);
             $certificate->setScoreCertificate($scoreCertificate);
             $certificate->setCreatedAt(new DateTime());
+            $this->applyValidityPeriodExpiry($certificate, $category);
 
-            $this->_em->persist($certificate);
-            $this->_em->flush();
+            $this->getEntityManager()->persist($certificate);
+            $this->getEntityManager()->flush();
 
             return;
         }
@@ -98,7 +100,26 @@ class GradebookCertificateRepository extends ResourceRepository
             $existingCertificate->setPathCertificate($fileName);
         }
         $existingCertificate->setScoreCertificate($scoreCertificate);
-        $this->_em->flush();
+        $this->applyValidityPeriodExpiry($existingCertificate, $existingCertificate->getCategory());
+        $this->getEntityManager()->flush();
+    }
+
+    /**
+     * Computes and sets the certificate's expiry date when its category has a
+     * certificateValidityPeriod configured (expiry = createdAt + N days, so
+     * regeneration on the same day is idempotent and the stored expiry stays
+     * coherent with the issue date printed on the document). When no validity
+     * period is configured, this never writes anything — preserving a teacher's
+     * manually-set expiry date, or leaving it null.
+     */
+    private function applyValidityPeriodExpiry(GradebookCertificate $cert, ?GradebookCategory $category): void
+    {
+        $days = (int) ($category?->getCertificateValidityPeriod() ?? 0);
+        if ($days <= 0) {
+            return;
+        }
+
+        $cert->setExpiryDate((new DateTime($cert->getCreatedAt()->format('Y-m-d')))->modify("+{$days} days"));
     }
 
     /**
@@ -167,10 +188,12 @@ class GradebookCertificateRepository extends ResourceRepository
             $cert->setUser($user);
             $cert->setScoreCertificate($scoreCertificate);
             $cert->setCreatedAt(new DateTime());
+            $this->applyValidityPeriodExpiry($cert, $category);
             $em->persist($cert);
             $em->flush();
         } else {
             $cert->setScoreCertificate($scoreCertificate);
+            $this->applyValidityPeriodExpiry($cert, $category);
         }
 
         // Reuse existing hash for existing certificates; generate unpredictable hash for new ones.
@@ -212,6 +235,16 @@ class GradebookCertificateRepository extends ResourceRepository
         $cert->setPathCertificate($logicalFileName);
 
         $em->flush();
+
+        // ResourceFile::file is a transient Vich/Symfony File object. Keep it out of
+        // the managed resource graph after persistence because the current request
+        // session may serialize Doctrine entities that can reach this certificate.
+        $resourceNode = $cert->getResourceNode();
+        if ($resourceNode instanceof ResourceNode) {
+            foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+                $resourceFile->setFile(null);
+            }
+        }
 
         return $cert;
     }
@@ -373,6 +406,34 @@ class GradebookCertificateRepository extends ResourceRepository
         ;
     }
 
+    /**
+     * Query (not executed) for certificates whose expiry_date is set and falls on or
+     * before $horizon, optionally restricted to one access URL. Returns a Query rather
+     * than an array so the caller can page through it with toIterable() instead of
+     * loading every matching certificate into memory at once.
+     */
+    public function createExpiringCertificatesQuery(DateTime $horizon, ?int $accessUrlId = null): Query
+    {
+        $qb = $this->createQueryBuilder('gc')
+            ->join('gc.category', 'cat')
+            ->join('cat.course', 'course')
+            ->andWhere('gc.expiryDate IS NOT NULL')
+            ->andWhere('gc.expiryDate <= :horizon')
+            ->setParameter('horizon', $horizon)
+            ->orderBy('gc.id', 'ASC')
+        ;
+
+        if (null !== $accessUrlId) {
+            $qb->join('course.urls', 'curl')
+                ->join('curl.url', 'url')
+                ->andWhere('url.id = :urlId')
+                ->setParameter('urlId', $accessUrlId)
+            ;
+        }
+
+        return $qb->getQuery();
+    }
+
     public function findIncompleteCertificates(int $urlId): array
     {
         $today = new DateTimeImmutable();
@@ -419,7 +480,7 @@ class GradebookCertificateRepository extends ResourceRepository
     ): array {
         $today = new DateTimeImmutable();
 
-        $qb = $this->_em->createQueryBuilder();
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('srcu')
             ->from(SessionRelCourseRelUser::class, 'srcu')
@@ -433,7 +494,7 @@ class GradebookCertificateRepository extends ResourceRepository
             ->andWhere(
                 $qb->expr()->not(
                     $qb->expr()->exists(
-                        $this->_em->createQueryBuilder()
+                        $this->getEntityManager()->createQueryBuilder()
                             ->select('gc2.id')
                             ->from(GradebookCertificate::class, 'gc2')
                             ->join('gc2.category', 'cat2')

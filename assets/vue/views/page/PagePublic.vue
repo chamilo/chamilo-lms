@@ -33,7 +33,7 @@ pageService
     <SectionHeader :title="page.title" />
 
     <div
-      class="wysiwyg"
+      class="tiny-content"
       v-html="page.content"
     ></div>
   </div>

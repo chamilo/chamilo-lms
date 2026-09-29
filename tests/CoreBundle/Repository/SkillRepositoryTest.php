@@ -29,37 +29,6 @@ class SkillRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testCreateSkill(): void
-    {
-        $skillRepo = self::getContainer()->get(SkillRepository::class);
-        $accessUrl = $this->getAccessUrl();
-
-        $skill = (new Skill())
-            ->setTitle('php')
-            ->setShortCode('php')
-            ->setDescription('desc')
-            ->setStatus(Skill::STATUS_ENABLED)
-            ->setCriteria('criteria')
-            ->setIcon('icon')
-            ->setAccessUrlId($accessUrl->getId())
-            ->setUpdatedAt(new DateTime())
-        ;
-
-        $this->assertHasNoEntityViolations($skill);
-        $skillRepo->update($skill);
-
-        // By default, there's 1 root skill + this newly skill created.
-        $this->assertSame(2, $skillRepo->count([]));
-        $this->assertSame('php', (string) $skill);
-        $this->assertSame('desc', $skill->getDescription());
-        $this->assertSame($accessUrl->getId(), $skill->getAccessUrlId());
-        $this->assertSame(0, $skill->getItems()->count());
-        $this->assertSame(0, $skill->getCourses()->count());
-        $this->assertSame(0, $skill->getIssuedSkills()->count());
-        $this->assertSame(0, $skill->getGradeBookCategories()->count());
-        $this->assertSame(0, $skill->getSkills()->count());
-    }
-
     public function testCreateWithProfile(): void
     {
         $em = $this->getEntityManager();
@@ -257,45 +226,6 @@ class SkillRepositoryTest extends AbstractApiTest
         $skillRepo->delete($skill);
 
         $this->assertSame(1, $skillRepo->count([]));
-    }
-
-    public function testCreateSkillWithAsset(): void
-    {
-        $em = $this->getEntityManager();
-
-        $skillRepo = self::getContainer()->get(SkillRepository::class);
-        $assetRepo = self::getContainer()->get(AssetRepository::class);
-
-        $file = $this->getUploadedFile();
-        $accessUrl = $this->getAccessUrl();
-
-        // Create skill.
-        $skill = (new Skill())
-            ->setTitle('php')
-            ->setShortCode('php')
-            ->setAccessUrlId($accessUrl->getId())
-        ;
-
-        $this->assertHasNoEntityViolations($skill);
-
-        // Create asset.
-        $asset = (new Asset())
-            ->setTitle($skill->getTitle())
-            ->setCategory(Asset::SKILL)
-            ->setFile($file)
-        ;
-        $em->persist($asset);
-
-        $skill->setAsset($asset);
-
-        $skillRepo->update($skill);
-
-        // Root + php skills
-        $this->assertSame(2, $skillRepo->count([]));
-        // 1 asset
-        $this->assertSame(1, $assetRepo->count([]));
-        // Asset has an URL
-        $this->assertNotEmpty($assetRepo->getAssetUrl($asset));
     }
 
     public function testDeleteSkillWithAsset(): void

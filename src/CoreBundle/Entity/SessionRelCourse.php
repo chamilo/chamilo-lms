@@ -10,8 +10,10 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\State\RoomAssignmentStateProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -22,9 +24,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     operations: [
         new Get(security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)"),
-        new Put(security: "is_granted('ROLE_ADMIN')"),
+        new Put(security: "is_granted('ROLE_ADMIN')", processor: RoomAssignmentStateProcessor::class),
+        new Patch(security: "is_granted('ROLE_ADMIN')", processor: RoomAssignmentStateProcessor::class),
         new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_ADMIN')"),
+        new Post(security: "is_granted('ROLE_ADMIN')", processor: RoomAssignmentStateProcessor::class),
         new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('DELETE', object)"),
     ],
     normalizationContext: [
@@ -61,6 +64,29 @@ class SessionRelCourse
 
     #[ORM\Column(name: 'nbr_users', type: 'integer')]
     protected int $nbrUsers;
+
+    #[Groups(['session_rel_course:read', 'session_rel_course:write', 'session:read'])]
+    #[ORM\ManyToOne(targetEntity: Room::class)]
+    #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?Room $room = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?float $trackingProgress = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?float $score = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?float $bestScore = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?int $timeSpentSeconds = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?bool $certificateAvailable = null;
+
+    #[Groups(['user_subscriptions:sessions'])]
+    private ?bool $completed = null;
 
     public function __construct()
     {
@@ -109,6 +135,18 @@ class SessionRelCourse
         return $this;
     }
 
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): self
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
     public function getPosition(): int
     {
         return $this->position;
@@ -117,5 +155,65 @@ class SessionRelCourse
     public function setPosition(int $position): void
     {
         $this->position = $position;
+    }
+
+    public function getTrackingProgress(): ?float
+    {
+        return $this->trackingProgress;
+    }
+
+    public function setTrackingProgress(?float $trackingProgress): void
+    {
+        $this->trackingProgress = $trackingProgress;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(?float $score): void
+    {
+        $this->score = $score;
+    }
+
+    public function getBestScore(): ?float
+    {
+        return $this->bestScore;
+    }
+
+    public function setBestScore(?float $bestScore): void
+    {
+        $this->bestScore = $bestScore;
+    }
+
+    public function getTimeSpentSeconds(): ?int
+    {
+        return $this->timeSpentSeconds;
+    }
+
+    public function setTimeSpentSeconds(?int $timeSpentSeconds): void
+    {
+        $this->timeSpentSeconds = $timeSpentSeconds;
+    }
+
+    public function getCertificateAvailable(): ?bool
+    {
+        return $this->certificateAvailable;
+    }
+
+    public function setCertificateAvailable(?bool $certificateAvailable): void
+    {
+        $this->certificateAvailable = $certificateAvailable;
+    }
+
+    public function getCompleted(): ?bool
+    {
+        return $this->completed;
+    }
+
+    public function setCompleted(?bool $completed): void
+    {
+        $this->completed = $completed;
     }
 }

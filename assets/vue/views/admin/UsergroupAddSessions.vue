@@ -13,7 +13,6 @@ const router = useRouter()
 const groupId = computed(() => Number(route.params.id))
 
 const groupTitle = ref("")
-const csrfToken = ref("")
 const allSessions = ref([])
 const selectedIds = ref(new Set())
 const keyword = ref("")
@@ -38,7 +37,6 @@ async function loadData() {
   try {
     const data = await usergroupAdminService.getSessionsData(groupId.value)
     groupTitle.value = data.groupTitle
-    csrfToken.value = data.csrfToken
     const merged = [...data.sessionsInGroup, ...data.sessionsNotInGroup].sort((a, b) => a.label.localeCompare(b.label))
     allSessions.value = merged
     selectedIds.value = new Set(data.sessionsInGroup.map((s) => s.id))
@@ -72,7 +70,6 @@ async function save() {
   errorMessage.value = ""
   try {
     const formData = new FormData()
-    formData.append("_token", csrfToken.value)
     selectedIds.value.forEach((id) => formData.append("sessionIds[]", String(id)))
     await usergroupAdminService.saveSessions(groupId.value, formData)
     await router.push({ name: "AdminUsergroupList" })

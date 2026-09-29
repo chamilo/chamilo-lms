@@ -50,6 +50,21 @@ class ValidationToken
         $this->createdAt = $this->createdAt ?? new DateTime();
     }
 
+    /**
+     * Generates a validation link.
+     */
+    public static function generateLink(int $type, int $resourceId): string
+    {
+        $token = new self($type, $resourceId);
+
+        return '/validate/'.$type.'/'.$token->getHash();
+    }
+
+    public function getHash(): string
+    {
+        return $this->hash;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,11 +94,6 @@ class ValidationToken
         return $this;
     }
 
-    public function getHash(): string
-    {
-        return $this->hash;
-    }
-
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
@@ -94,15 +104,5 @@ class ValidationToken
         $this->createdAt = $createdAt;
 
         return $this;
-    }
-
-    /**
-     * Generates a validation link.
-     */
-    public static function generateLink(int $type, int $resourceId): string
-    {
-        $token = new self($type, $resourceId);
-
-        return '/validate/'.$type.'/'.$token->getHash();
     }
 }

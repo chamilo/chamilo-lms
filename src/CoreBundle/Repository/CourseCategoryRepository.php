@@ -40,7 +40,7 @@ class CourseCategoryRepository extends ServiceEntityRepository
             ->innerJoin(
                 AccessUrlRelCourseCategory::class,
                 'a',
-                Join::WITH,
+                Join::ON,
                 'c = a.courseCategory'
             )
             ->where($qb->expr()->eq('a.url', $accessUrl))
@@ -98,7 +98,7 @@ class CourseCategoryRepository extends ServiceEntityRepository
             ->innerJoin(
                 AccessUrlRelCourseCategory::class,
                 'a',
-                Join::WITH,
+                Join::ON,
                 'c = a.courseCategory'
             )
             ->where(

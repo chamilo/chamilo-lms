@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use JeroenDesloovere\VCard\VCard;
+use Sabre\VObject\Component\VCard;
 
 /**
  * VCard Generator.
@@ -51,16 +51,27 @@ if ($currentUserId !== $userId && !api_is_platform_admin() && !$hasRelation) {
 $language = get_lang('Language').': '.$userInfo['language'];
 
 // Instance the vCard Class
-$vcard = new VCard();
-// Adding the User Info to the vCard
-$vcard->addName($userInfo['firstname'], $userInfo['lastname']);
+$vcard = new VCard([
+    'VERSION' => '3.0',
+    'N' => [$userInfo['lastname'], $userInfo['firstname'], '', '', ''],
+    'FN' => trim($userInfo['firstname'].' '.$userInfo['lastname']),
+]);
 
-if ('true' == api_get_setting('show_email_addresses')) {
-    $vcard->addEmail($userInfo['email']);
+if ('true' == api_get_setting('show_email_addresses') && !empty($userInfo['email'])) {
+    $vcard->add('EMAIL', $userInfo['email']);
 }
 
-$vcard->addPhoneNumber($userInfo['phone'], 'CELL');
-$vcard->addNote($language);
+if (!empty($userInfo['phone'])) {
+    $vcard->add('TEL', $userInfo['phone'], ['TYPE' => 'CELL']);
+}
+
+$vcard->add('NOTE', $language);
 
 // Generate the vCard
-return $vcard->download();
+$filename = api_replace_dangerous_char(trim($userInfo['firstname'].'-'.$userInfo['lastname']));
+$filename = ('' === $filename ? 'vcard' : $filename).'.vcf';
+
+header('Content-Type: text/vcard; charset=utf-8');
+header('Content-Disposition: attachment; filename="'.$filename.'"');
+echo $vcard->serialize();
+exit;

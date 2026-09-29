@@ -11,6 +11,7 @@ export const CERTIFICATE_TAGS = [
   "((official_code))",
   "((date_certificate))",
   "((date_certificate_no_time))",
+  "((expiry_date))",
   "((course_code))",
   "((course_title))",
   "((gradebook_grade))",

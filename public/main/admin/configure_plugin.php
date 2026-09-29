@@ -470,6 +470,12 @@ function plugin_remove_toggle_fields_from_form_html(string $html): string
 
 $pluginRepo = Container::getPluginRepository();
 $pluginName = isset($_GET['plugin']) ? (string) $_GET['plugin'] : '';
+
+// The plugin name must be validated before it is used to build any file path.
+if (!AppPlugin::isValidPluginName($pluginName)) {
+    api_not_allowed(true);
+}
+
 $plugin = $pluginRepo->getInstalledByName($pluginName);
 
 if (!$plugin || !$plugin->isInstalled()) {

@@ -105,20 +105,25 @@ class LinkAddEditForm extends FormValidator
             }
         }
 
-        $this->addFloat(
-            'weight_mask',
-            [
-                get_lang('Weight'),
-                null,
-                ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight(
-                ).'</span>] ',
-            ],
-            true,
-            [
-                'size' => '4',
-                'maxlength' => '5',
-            ]
-        );
+        // Forum participation derives its weight from pointsMany (its maximum points),
+        // so the manual weight field is hidden for that type.
+        $isForumParticipation = LINK_FORUM_PARTICIPATION == $link->get_type();
+        if (!$isForumParticipation) {
+            $this->addFloat(
+                'weight_mask',
+                [
+                    get_lang('Weight'),
+                    null,
+                    ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight(
+                    ).'</span>] ',
+                ],
+                true,
+                [
+                    'size' => '4',
+                    'maxlength' => '5',
+                ]
+            );
+        }
 
         // ELEMENT: min_score
         $this->addFloat(
@@ -141,6 +146,36 @@ class LinkAddEditForm extends FormValidator
             false,
             0
         );
+
+        // ELEMENTS: forum participation points (only for the forum participation link type)
+        if (LINK_FORUM_PARTICIPATION == $link->get_type()) {
+            $this->addFloat(
+                'points_one',
+                [
+                    get_lang('Points for one message'),
+                    get_lang('Points awarded when the student posted exactly one message in the thread.'),
+                ],
+                true,
+                ['size' => '4', 'maxlength' => '8']
+            );
+            $this->addRule('points_one', get_lang('Only numbers'), 'numeric');
+
+            $this->addFloat(
+                'points_many',
+                [
+                    get_lang('Points for two or more messages'),
+                    get_lang('Optional. If left empty, one or more messages award the points for one message.'),
+                ],
+                false,
+                ['size' => '4', 'maxlength' => '8']
+            );
+            $this->addRule('points_many', get_lang('Only numbers'), 'numeric');
+
+            if (self::TYPE_EDIT == $form_type) {
+                $defaults['points_one'] = $link->get_points_one();
+                $defaults['points_many'] = $link->get_points_many();
+            }
+        }
 
         $this->addElement('hidden', 'weight');
 

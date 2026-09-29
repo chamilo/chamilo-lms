@@ -12,7 +12,7 @@ use ExtraField as ExtraFieldModel;
  * to their course.
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool = TOOL_USER;
+$current_course_tool = 'member';
 
 // the section (for the tabs)
 $this_section = SECTION_COURSES;

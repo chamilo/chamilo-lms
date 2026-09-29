@@ -50,18 +50,6 @@ class Chat
     }
 
     /**
-     * Set fromUser.
-     *
-     * @return Chat
-     */
-    public function setFromUser(int $fromUser)
-    {
-        $this->fromUser = $fromUser;
-
-        return $this;
-    }
-
-    /**
      * Get fromUser.
      *
      * @return int
@@ -72,13 +60,13 @@ class Chat
     }
 
     /**
-     * Set toUser.
+     * Set fromUser.
      *
      * @return Chat
      */
-    public function setToUser(int $toUser)
+    public function setFromUser(int $fromUser)
     {
-        $this->toUser = $toUser;
+        $this->fromUser = $fromUser;
 
         return $this;
     }
@@ -94,13 +82,13 @@ class Chat
     }
 
     /**
-     * Set message.
+     * Set toUser.
      *
      * @return Chat
      */
-    public function setMessage(string $message)
+    public function setToUser(int $toUser)
     {
-        $this->message = $message;
+        $this->toUser = $toUser;
 
         return $this;
     }
@@ -116,13 +104,13 @@ class Chat
     }
 
     /**
-     * Set sent.
+     * Set message.
      *
      * @return Chat
      */
-    public function setSent(DateTime $sent)
+    public function setMessage(string $message)
     {
-        $this->sent = $sent;
+        $this->message = $message;
 
         return $this;
     }
@@ -138,13 +126,13 @@ class Chat
     }
 
     /**
-     * Set recd.
+     * Set sent.
      *
      * @return Chat
      */
-    public function setRecd(int $recd)
+    public function setSent(DateTime $sent)
     {
-        $this->recd = $recd;
+        $this->sent = $sent;
 
         return $this;
     }
@@ -157,5 +145,17 @@ class Chat
     public function getRecd()
     {
         return $this->recd;
+    }
+
+    /**
+     * Set recd.
+     *
+     * @return Chat
+     */
+    public function setRecd(int $recd)
+    {
+        $this->recd = $recd;
+
+        return $this;
     }
 }

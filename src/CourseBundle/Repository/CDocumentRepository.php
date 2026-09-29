@@ -20,11 +20,15 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
+
+use const ENT_HTML5;
+use const ENT_QUOTES;
 
 /**
  * @extends ResourceRepository<CDocument>
@@ -45,6 +49,46 @@ final class CDocumentRepository extends ResourceRepository
         }
 
         return null;
+    }
+
+    public function updateStoredFileContent(CDocument $document, string $content, string $mimeType): bool
+    {
+        $resourceNode = $document->getResourceNode();
+        if (null === $resourceNode || !$resourceNode->hasResourceFile()) {
+            return false;
+        }
+
+        $resourceFile = $resourceNode->getFirstResourceFile();
+        if (!$resourceFile instanceof ResourceFile) {
+            return false;
+        }
+
+        $resourceNodeRepository = $this->getResourceNodeRepository();
+        $filename = $resourceNodeRepository->getFilename($resourceFile);
+        if (!\is_string($filename) || '' === trim($filename)) {
+            return false;
+        }
+
+        try {
+            // Do not re-apply storage visibility while replacing existing content.
+            // Some valid files live on filesystems where chmod is not supported.
+            $resourceNodeRepository->getFileSystem()->write($filename, $content, ['visibility' => null]);
+        } catch (Throwable $exception) {
+            throw new RuntimeException('Unable to update the stored document content.', 0, $exception);
+        }
+
+        $resourceNode->setContent($content);
+        $resourceFile
+            ->setSize(\strlen($content))
+            ->setMimeType($mimeType)
+        ;
+
+        $em = $this->getEntityManager();
+        $em->persist($document);
+        $em->persist($resourceNode);
+        $em->persist($resourceFile);
+
+        return true;
     }
 
     public function getFolderSize(ResourceNode $resourceNode, Course $course, ?Session $session = null): int
@@ -90,14 +134,19 @@ final class CDocumentRepository extends ResourceRepository
 
     /**
      * Register the original SCORM ZIP under:
-     *   <course root> / Learning paths / SCORM - {lp_id} - {lp_title} / {lp_title}.zip
+     *   learning_path / SCORM - {lp_id} - {lp_title} / {lp_title}.zip
      */
-    public function registerScormZip(Course $course, ?Session $session, CLp $lp, UploadedFile $zip): void
-    {
+    public function registerScormZip(
+        Course $course,
+        ?Session $session,
+        CLp $lp,
+        UploadedFile $zip,
+        ?CGroup $group = null,
+    ): void {
         $em = $this->em();
 
-        // Ensure "Learning paths" directly under the course resource node
-        $lpTop = $this->ensureLearningPathSystemFolder($course, $session);
+        // Reuse the legacy-compatible learning_path root.
+        $lpTop = $this->ensureLearningPathSystemFolder($course, $session, $group);
 
         // Subfolder per LP
         $lpFolderTitle = \sprintf('SCORM - %d - %s', $lp->getIid(), $this->safeTitle($lp->getTitle()));
@@ -106,7 +155,8 @@ final class CDocumentRepository extends ResourceRepository
             $lpTop,
             $lpFolderTitle,
             ResourceLink::VISIBILITY_DRAFT,
-            $session
+            $session,
+            $group,
         );
 
         // ZIP file under the LP folder
@@ -116,14 +166,93 @@ final class CDocumentRepository extends ResourceRepository
             $zip,
             \sprintf('SCORM ZIP for LP #%d', $lp->getIid()),
             ResourceLink::VISIBILITY_DRAFT,
-            $session
+            $session,
+            $group,
         );
 
         $em->flush();
     }
 
     /**
-     * Remove the LP subfolder "SCORM - {lp_id} - ..." under "Learning paths".
+     * Find the draft ZIP document registered for a SCORM Learning Path.
+     */
+    public function findScormZipDocument(Course $course, CLp $lp): ?CDocument
+    {
+        $courseRoot = $course->getResourceNode();
+        if (!$courseRoot instanceof ResourceNode) {
+            return null;
+        }
+
+        $parents = [$courseRoot];
+        $documentsRoot = $this->getCourseDocumentsRootNode($course);
+        if ($documentsRoot instanceof ResourceNode) {
+            $parents[(int) $documentsRoot->getId()] = $documentsRoot;
+        }
+
+        $learningPathFolderTitles = array_values(array_unique(array_filter([
+            'learning_path',
+            \function_exists('get_lang') ? get_lang('Learning paths') : null,
+            \function_exists('get_lang') ? get_lang('Learning path') : null,
+            'Learning paths',
+            'Learning path',
+        ])));
+
+        foreach (array_values($parents) as $parent) {
+            foreach ($learningPathFolderTitles as $folderTitle) {
+                $learningPathsFolder = $this->findChildNodeByTitle($parent, $folderTitle);
+                if ($learningPathsFolder instanceof ResourceNode) {
+                    $parents[(int) $learningPathsFolder->getId()] = $learningPathsFolder;
+                }
+            }
+        }
+
+        $prefix = \sprintf('SCORM - %d - ', $lp->getIid());
+        $em = $this->em();
+
+        foreach ($parents as $parent) {
+            $folderQuery = $em->createQueryBuilder()
+                ->select('rn')
+                ->from(ResourceNode::class, 'rn')
+                ->innerJoin(CDocument::class, 'd', Join::ON, 'd.resourceNode = rn')
+                ->where('rn.parent = :parent')
+                ->andWhere('rn.title LIKE :prefix')
+                ->andWhere('d.filetype = :folderType')
+                ->setParameter('parent', $parent)
+                ->setParameter('prefix', $prefix.'%')
+                ->setParameter('folderType', 'folder')
+                ->setMaxResults(1)
+            ;
+
+            /** @var ResourceNode|null $folder */
+            $folder = $folderQuery->getQuery()->getOneOrNullResult();
+            if (!$folder instanceof ResourceNode) {
+                continue;
+            }
+
+            $documentQuery = $em->createQueryBuilder()
+                ->select('d')
+                ->from(CDocument::class, 'd')
+                ->innerJoin('d.resourceNode', 'rn')
+                ->where('rn.parent = :folder')
+                ->andWhere('d.filetype = :fileType')
+                ->setParameter('folder', $folder)
+                ->setParameter('fileType', 'file')
+                ->orderBy('d.iid', 'DESC')
+                ->setMaxResults(1)
+            ;
+
+            /** @var CDocument|null $document */
+            $document = $documentQuery->getQuery()->getOneOrNullResult();
+            if ($document instanceof CDocument) {
+                return $document;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Remove the LP subfolder "SCORM - {lp_id} - ..." under the learning path system folder.
      */
     public function purgeScormZip(Course $course, CLp $lp): void
     {
@@ -131,20 +260,27 @@ final class CDocumentRepository extends ResourceRepository
         $prefix = \sprintf('SCORM - %d - ', $lp->getIid());
 
         $courseRoot = $course->getResourceNode();
-        if ($courseRoot) {
-            // SCORM folder directly under course root
-            if ($this->tryDeleteFirstFolderByTitlePrefix($courseRoot, $prefix)) {
-                $em->flush();
-
-                return;
+        if ($courseRoot instanceof ResourceNode) {
+            $parents = [$courseRoot];
+            $documentsRoot = $this->getCourseDocumentsRootNode($course);
+            if ($documentsRoot instanceof ResourceNode) {
+                $parents[] = $documentsRoot;
             }
 
-            // Or under "Learning paths"
-            $lpTop = $this->findChildNodeByTitle($courseRoot, 'Learning paths');
-            if ($lpTop && $this->tryDeleteFirstFolderByTitlePrefix($lpTop, $prefix)) {
-                $em->flush();
+            foreach ($parents as $parent) {
+                if ($this->tryDeleteFirstFolderByTitlePrefix($parent, $prefix)) {
+                    $em->flush();
 
-                return;
+                    return;
+                }
+
+                $lpTop = $this->findChildNodeByTitle($parent, 'learning_path')
+                    ?? $this->findChildNodeByTitle($parent, 'Learning paths');
+                if ($lpTop instanceof ResourceNode && $this->tryDeleteFirstFolderByTitlePrefix($lpTop, $prefix)) {
+                    $em->flush();
+
+                    return;
+                }
             }
         }
     }
@@ -161,7 +297,8 @@ final class CDocumentRepository extends ResourceRepository
             ->from(ResourceNode::class, 'rn')
             ->where('rn.parent = :parent')
             ->andWhere('rn.title LIKE :prefix')
-            ->setParameters(['parent' => $parent, 'prefix' => $prefix.'%'])
+            ->setParameter('parent', $parent)
+            ->setParameter('prefix', $prefix.'%')
             ->setMaxResults(1)
         ;
 
@@ -179,6 +316,7 @@ final class CDocumentRepository extends ResourceRepository
     /**
      * Find the course Documents root node.
      *
+     * The Documents root is a structural ResourceNode, not a CDocument row.
      * Primary: parent = course.resourceNode
      * Fallback (legacy): parent IS NULL
      */
@@ -194,9 +332,11 @@ final class CDocumentRepository extends ResourceRepository
                    FROM Chamilo\CoreBundle\Entity\ResourceNode rn
                    JOIN rn.resourceType rt
                    JOIN rn.resourceLinks rl
+              LEFT JOIN Chamilo\CourseBundle\Entity\CDocument rootDocument ON rootDocument.resourceNode = rn
                   WHERE rn.parent = :parent
                     AND rt = :rtype
                     AND rl.course = :course
+                    AND rootDocument.iid IS NULL
                ORDER BY rn.id ASC'
             )
                 ->setParameters([
@@ -219,9 +359,11 @@ final class CDocumentRepository extends ResourceRepository
                FROM Chamilo\CoreBundle\Entity\ResourceNode rn
                JOIN rn.resourceType rt
                JOIN rn.resourceLinks rl
+          LEFT JOIN Chamilo\CourseBundle\Entity\CDocument rootDocument ON rootDocument.resourceNode = rn
               WHERE rn.parent IS NULL
                 AND rt = :rtype
                 AND rl.course = :course
+                AND rootDocument.iid IS NULL
            ORDER BY rn.id ASC'
         )
             ->setParameters(['rtype' => $rt, 'course' => $course])
@@ -280,7 +422,8 @@ final class CDocumentRepository extends ResourceRepository
         ResourceNode $parent,
         string $folderTitle,
         int $visibility = ResourceLink::VISIBILITY_DRAFT,
-        ?Session $session = null
+        ?Session $session = null,
+        ?CGroup $group = null,
     ): ResourceNode {
         try {
             if ($child = $this->findChildNodeByTitle($parent, $folderTitle)) {
@@ -289,8 +432,6 @@ final class CDocumentRepository extends ResourceRepository
 
             /** @var User|null $user */
             $user = api_get_user_entity();
-            $creatorId = $user?->getId();
-
             $doc = new CDocument();
             $doc->setTitle($folderTitle);
             $doc->setFiletype('folder');
@@ -302,6 +443,9 @@ final class CDocumentRepository extends ResourceRepository
             ];
             if ($session && method_exists($session, 'getId')) {
                 $link['sid'] = $session->getId();
+            }
+            if ($group instanceof CGroup) {
+                $link['gid'] = $group->getIid();
             }
             $doc->setResourceLinkArray([$link]);
 
@@ -331,7 +475,8 @@ final class CDocumentRepository extends ResourceRepository
         UploadedFile $uploaded,
         string $comment,
         int $visibility,
-        ?Session $session = null
+        ?Session $session = null,
+        ?CGroup $group = null,
     ): ResourceNode {
         /** @var User|null $user */
         $user = api_get_user_entity();
@@ -350,6 +495,9 @@ final class CDocumentRepository extends ResourceRepository
         ];
         if ($session && method_exists($session, 'getId')) {
             $link['sid'] = $session->getId();
+        }
+        if ($group instanceof CGroup) {
+            $link['gid'] = $group->getIid();
         }
         $doc->setResourceLinkArray([$link]);
 
@@ -378,38 +526,165 @@ final class CDocumentRepository extends ResourceRepository
     }
 
     /**
-     * Ensure "Learning paths" exists directly under the course resource node.
-     * Links are created for course (and optional session) context.
+     * Ensure the Learning Path system folder exists without creating a second
+     * translated/canonical root when the course already has one.
      */
-    public function ensureLearningPathSystemFolder(Course $course, ?Session $session = null): ResourceNode
-    {
+    public function ensureLearningPathSystemFolder(
+        Course $course,
+        ?Session $session = null,
+        ?CGroup $group = null,
+    ): ResourceNode {
         $courseRoot = $course->getResourceNode();
         if (!$courseRoot instanceof ResourceNode) {
             throw new RuntimeException('Course has no ResourceNode root.');
         }
 
-        // Try common i18n variants first
-        $candidates = array_values(array_unique(array_filter([
+        $existingFolders = $this->findLearningPathSystemFolders($course);
+        $existingFolder = $this->selectEstablishedDocumentFolder($existingFolders);
+        if ($existingFolder instanceof ResourceNode) {
+            return $existingFolder;
+        }
+
+        return $this->ensureFolder(
+            $course,
+            $courseRoot,
+            'learning_path',
+            ResourceLink::VISIBILITY_DRAFT,
+            $session,
+            $group,
+        );
+    }
+
+    /**
+     * Ensure the folder dedicated to one Learning Path exists.
+     *
+     * If previous implementations created equivalent system roots such as
+     * "Learning paths" and "learning_path", reuse the LP folder that already
+     * contains the established content instead of creating another copy.
+     */
+    public function ensureLearningPathDocumentFolder(
+        Course $course,
+        ?Session $session,
+        CLp $lp,
+        ?CGroup $group = null,
+    ): ResourceNode {
+        $title = $this->safeTitle(html_entity_decode(strip_tags($lp->getTitle()), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        $title = mb_substr($title, 0, 80);
+        $folderTitle = '' !== $title ? $title : \sprintf('Learning path %d', (int) $lp->getIid());
+
+        $existingLpFolders = [];
+        foreach ($this->findLearningPathSystemFolders($course) as $systemFolder) {
+            $lpFolder = $this->findChildDocumentFolderByTitle($systemFolder, $folderTitle);
+            if ($lpFolder instanceof ResourceNode) {
+                $existingLpFolders[] = $lpFolder;
+            }
+        }
+
+        $existingLpFolder = $this->selectEstablishedDocumentFolder($existingLpFolders);
+        if ($existingLpFolder instanceof ResourceNode) {
+            return $existingLpFolder;
+        }
+
+        $learningPathsFolder = $this->ensureLearningPathSystemFolder($course, $session, $group);
+
+        return $this->ensureFolder(
+            $course,
+            $learningPathsFolder,
+            $folderTitle,
+            ResourceLink::VISIBILITY_DRAFT,
+            $session,
+            $group,
+        );
+    }
+
+    /**
+     * @return ResourceNode[]
+     */
+    private function findLearningPathSystemFolders(Course $course): array
+    {
+        $courseRoot = $course->getResourceNode();
+        if (!$courseRoot instanceof ResourceNode) {
+            return [];
+        }
+
+        $parents = [$courseRoot];
+        $documentsRoot = $this->getCourseDocumentsRootNode($course);
+        if ($documentsRoot instanceof ResourceNode && $documentsRoot->getId() !== $courseRoot->getId()) {
+            $parents[] = $documentsRoot;
+        }
+
+        $titles = array_values(array_unique(array_filter([
+            'learning_path',
             \function_exists('get_lang') ? get_lang('Learning paths') : null,
             \function_exists('get_lang') ? get_lang('Learning path') : null,
             'Learning paths',
             'Learning path',
         ])));
 
-        foreach ($candidates as $title) {
-            if ($child = $this->findChildNodeByTitle($courseRoot, $title)) {
-                return $child;
+        $folders = [];
+        $seen = [];
+        foreach ($parents as $parent) {
+            foreach ($titles as $title) {
+                $folder = $this->findChildDocumentFolderByTitle($parent, $title);
+                if (!$folder instanceof ResourceNode) {
+                    continue;
+                }
+
+                $folderId = (int) $folder->getId();
+                if (isset($seen[$folderId])) {
+                    continue;
+                }
+
+                $seen[$folderId] = true;
+                $folders[] = $folder;
             }
         }
 
-        // Create "Learning paths" directly under the course root
-        return $this->ensureFolder(
-            $course,
-            $courseRoot,
-            'Learning paths',
-            ResourceLink::VISIBILITY_DRAFT,
-            $session
+        return $folders;
+    }
+
+    /**
+     * Prefer the folder that already contains the most direct document content.
+     * On ties, keep the oldest ResourceNode to avoid switching between duplicate roots.
+     *
+     * @param ResourceNode[] $folders
+     */
+    private function selectEstablishedDocumentFolder(array $folders): ?ResourceNode
+    {
+        if ([] === $folders) {
+            return null;
+        }
+
+        $rankedFolders = [];
+        foreach ($folders as $folder) {
+            $rankedFolders[] = [
+                'folder' => $folder,
+                'children' => $this->countDirectDocumentChildren($folder),
+                'id' => (int) $folder->getId(),
+            ];
+        }
+
+        usort(
+            $rankedFolders,
+            static fn (array $left, array $right): int => $right['children'] <=> $left['children']
+                ?: $left['id'] <=> $right['id']
         );
+
+        return $rankedFolders[0]['folder'];
+    }
+
+    private function countDirectDocumentChildren(ResourceNode $parent): int
+    {
+        return (int) $this->em()
+            ->createQueryBuilder()
+            ->select('COUNT(d.iid)')
+            ->from(CDocument::class, 'd')
+            ->innerJoin('d.resourceNode', 'rn')
+            ->where('rn.parent = :parent')
+            ->setParameter('parent', $parent)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -519,14 +794,12 @@ final class CDocumentRepository extends ResourceRepository
         $qb = $em->createQueryBuilder()
             ->select('rn')
             ->from(ResourceNode::class, 'rn')
-            ->innerJoin(CDocument::class, 'd', 'WITH', 'd.resourceNode = rn')
+            ->innerJoin(CDocument::class, 'd', Join::ON, 'd.resourceNode = rn')
             ->where('rn.parent = :parent AND rn.title = :title AND rn.resourceType = :rt AND d.filetype = :ft')
-            ->setParameters([
-                'parent' => $parent,
-                'title' => $title,
-                'rt' => $docRt,
-                'ft' => 'folder',
-            ])
+            ->setParameter('parent', $parent)
+            ->setParameter('title', $title)
+            ->setParameter('rt', $docRt)
+            ->setParameter('ft', 'folder')
             ->setMaxResults(1)
         ;
 
@@ -586,17 +859,15 @@ final class CDocumentRepository extends ResourceRepository
         $qb = $em->createQueryBuilder()
             ->select('rn')
             ->from(ResourceNode::class, 'rn')
-            ->innerJoin(CDocument::class, 'd', 'WITH', 'd.resourceNode = rn')
+            ->innerJoin(CDocument::class, 'd', Join::ON, 'd.resourceNode = rn')
             ->where('rn.parent = :parent')
             ->andWhere('rn.title = :title')
             ->andWhere('rn.resourceType = :rt')
             ->andWhere('d.filetype = :ft')
-            ->setParameters([
-                'parent' => $parent,
-                'title' => $title,
-                'rt' => $docRt,
-                'ft' => 'file',
-            ])
+            ->setParameter('parent', $parent)
+            ->setParameter('title', $title)
+            ->setParameter('rt', $docRt)
+            ->setParameter('ft', 'file')
             ->setMaxResults(1)
         ;
 

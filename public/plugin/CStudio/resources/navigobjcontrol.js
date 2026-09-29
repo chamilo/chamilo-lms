@@ -935,7 +935,38 @@ function getLangTerm(term) {
             term = "Controlla le risposte";
         }
     }
+    if (term=='Page incomplete') {
+        if (projLang=='fr') {
+            term = "Page incomplète";
+        } else if (projLang=='es') {
+            term = "Página incompleta";
+        } else if (projLang=='it') {
+            term = "Pagina incompleta";
+        }
+    }
+    if (term=='All answers are correct') {
+        if (projLang=='fr') {
+            term = "Toutes les réponses sont correctes";
+        } else if (projLang=='es') {
+            term = "Todas las respuestas son correctas";
+        } else if (projLang=='it') {
+            term = "Tutte le risposte sono corrette";
+        }
+    }
     return term;
+}
+
+function cstudioIsDefaultIncompleteMessage(message) {
+    var value = String(message || '').replace(/\s+/g, ' ').trim();
+    var defaults = [
+        'Page incomplete',
+        'Page not complete.',
+        'Page incomplète',
+        'Página incompleta',
+        'Pagina incompleta'
+    ];
+
+    return value === '' || defaults.indexOf(value) !== -1;
 }
 
 var tmpIndexTbl = 200; 
@@ -1278,9 +1309,13 @@ function checkAnswers(){
 
     if (ctrPage==false) {
         showErrorMessages();
-        showTopMessage();
+        showTopMessage('error');
+        scrollToFirstErrorMessages();
+    } else {
+        showTopMessage('success', getLangTerm('All answers are correct'));
     }
 
+    return ctrPage;
 }
 
 function showErrorMessages(){
@@ -1317,11 +1352,24 @@ function scrollToFirstErrorMessages() {
 
 var onetimeoutShow;
 
-function showTopMessage(){
-   
-    $(".fixed-top-message").css("right","-350px");
-    $(".fixed-top-message").css("display","block");
-    $( ".fixed-top-message" ).animate({
+function showTopMessage(type, message){
+
+    var typeClass = type === 'success' ? 'cstudio-message-success' : 'cstudio-message-error';
+    var messageBox = $(".fixed-top-message");
+
+    messageBox
+        .removeClass('cstudio-message-success cstudio-message-error')
+        .addClass(typeClass);
+
+    if (typeof message !== 'undefined' && message !== null && String(message).trim() !== '') {
+        messageBox.text(message);
+    } else if (cstudioIsDefaultIncompleteMessage(messageBox.text())) {
+        messageBox.text(getLangTerm('Page incomplete'));
+    }
+
+    messageBox.css("right","-350px");
+    messageBox.css("display","block");
+    messageBox.animate({
         right: "4px"
     },500);
 
@@ -3273,11 +3321,13 @@ function cstudioClickHvpCheckButtons(frameContent) {
 
 function cstudioRunQuestionCheck() {
     cstudioTriggerHvpQuestionChecks();
-    checkAnswers();
+    var firstResult = checkAnswers();
 
-    setTimeout(function() {
-        checkAnswers();
-    }, 700);
+    if (!firstResult) {
+        setTimeout(function() {
+            checkAnswers();
+        }, 700);
+    }
 
     return false;
 }

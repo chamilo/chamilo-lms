@@ -47,7 +47,7 @@ if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && !isset($_GET["type"])) 
 }
 
 if (isset($_GET["user_id"]) && "" != $_GET["user_id"] && isset($_GET["type"]) && "coach" == $_GET["type"]) {
-    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Coaches')];
+    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Tutors')];
 }
 
 function get_count_users()
@@ -262,7 +262,7 @@ if (api_is_drh()) {
     );
     $actionsLeft .= Display::url(
         Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('See list of learner certificates')),
-        $webCodePath.'gradebook/certificate_report.php'
+        api_get_path(WEB_PATH).'reporting/certificates'
     );
 }
 

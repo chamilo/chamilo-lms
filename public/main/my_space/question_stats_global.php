@@ -20,7 +20,7 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
 
 $courseIdList = $_REQUEST['courses'] ?? [];
 $exercises = $_REQUEST['exercises'] ?? [];

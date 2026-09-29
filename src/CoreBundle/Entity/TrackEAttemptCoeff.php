@@ -27,6 +27,16 @@ class TrackEAttemptCoeff
     protected ?float $marksCoeff = null;
 
     /**
+     * Get attemptId.
+     *
+     * @return int
+     */
+    public function getAttemptId()
+    {
+        return $this->attemptId;
+    }
+
+    /**
      * Set attemptId.
      *
      * @return TrackEAttemptCoeff
@@ -39,13 +49,13 @@ class TrackEAttemptCoeff
     }
 
     /**
-     * Get attemptId.
+     * Get marksCoeff.
      *
-     * @return int
+     * @return float
      */
-    public function getAttemptId()
+    public function getMarksCoeff()
     {
-        return $this->attemptId;
+        return $this->marksCoeff;
     }
 
     /**
@@ -58,16 +68,6 @@ class TrackEAttemptCoeff
         $this->marksCoeff = $marksCoeff;
 
         return $this;
-    }
-
-    /**
-     * Get marksCoeff.
-     *
-     * @return float
-     */
-    public function getMarksCoeff()
-    {
-        return $this->marksCoeff;
     }
 
     /**

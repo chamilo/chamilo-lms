@@ -58,6 +58,22 @@ class AppPlugin
     }
 
     /**
+     * Checks that a plugin name matches an existing directory inside the plugin
+     * directory, so it can never be used to escape from it when building a file
+     * path. The directory list is read only once per request.
+     */
+    public static function isValidPluginName(string $pluginName): bool
+    {
+        static $availablePlugins = null;
+
+        if (null === $availablePlugins) {
+            $availablePlugins = self::getInstance()->read_plugins_from_path();
+        }
+
+        return in_array($pluginName, $availablePlugins, true);
+    }
+
+    /**
      * Read plugin from path.
      */
     public function read_plugins_from_path(): array
@@ -432,6 +448,11 @@ class AppPlugin
         $plugin_file = null;
 
         foreach ($posibleName as $dir) {
+            // The name is used to build a file path, so it must match a plugin directory.
+            if (!self::isValidPluginName($dir)) {
+                continue;
+            }
+
             $path = $pluginPath."$dir/plugin.php";
             if (is_file($path)) {
                 $plugin_file = $path;
@@ -524,36 +545,6 @@ class AppPlugin
             $obj->get_settings(true);
 
             $obj->course_install($courseId);
-        }
-    }
-
-    /**
-     * Trigger for Plugin::doWhenDeleting[Item] functions.
-     *
-     * @param string $itemType
-     * @param int    $itemId
-     */
-    public function performActionsWhenDeletingItem($itemType, $itemId)
-    {
-        $pluginList = $this->getInstalledPluginListObject();
-
-        if (empty($pluginList)) {
-            return;
-        }
-
-        /** @var Plugin $pluginObj */
-        foreach ($pluginList as $pluginObj) {
-            switch ($itemType) {
-                case 'course':
-                    $pluginObj->doWhenDeletingCourse($itemId);
-                    break;
-                case 'session':
-                    $pluginObj->doWhenDeletingSession($itemId);
-                    break;
-                case 'user':
-                    $pluginObj->doWhenDeletingUser($itemId);
-                    break;
-            }
         }
     }
 

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Level;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Page for assign skills to a user.
@@ -304,14 +305,25 @@ if ($form->validate()) {
     }
 
     if ($user->hasSkill($skill)) {
-        $_SESSION['flash_message'] = [
-            'type' => 'warning',
-            'message' => sprintf(
+        // Container::addFlash() writes straight to the Symfony flash bag,
+        // rendered client-side via #app[data-flashes] — $_SESSION['flash_message']
+        // (the previous mechanism here) is never read anywhere in the codebase,
+        // same dead-write bug already fixed for extra_fields.php. Must
+        // session->save() before header+exit: legacy scripts leave the kernel
+        // without a Response event, so the flash would otherwise never reach
+        // the next request.
+        Container::addFlash(
+            sprintf(
                 get_lang('The user %s has already achieved the skill %s'),
                 UserManager::formatUserFullName($user),
                 $skill->getTitle()
-            )
-        ];
+            ),
+            'warning'
+        );
+        $session = Container::getSession();
+        if ($session && method_exists($session, 'save')) {
+            $session->save();
+        }
 
         header('Location: '.$currentUrl);
         exit;
@@ -376,14 +388,19 @@ if ($form->validate()) {
         }
     }
 
-    $_SESSION['flash_message'] = [
-        'type' => 'success',
-        'message' => sprintf(
+    // Same dead-write fix as above — $_SESSION['flash_message'] is never read.
+    Container::addFlash(
+        sprintf(
             get_lang('The skill %s has been assigned to user %s'),
             $skill->getTitle(),
             UserManager::formatUserFullName($user)
-        )
-    ];
+        ),
+        'success'
+    );
+    $session = Container::getSession();
+    if ($session && method_exists($session, 'save')) {
+        $session->save();
+    }
 
     if (isset($_POST['save_and_add_more'])) {
         header('Location: '.api_get_path(WEB_CODE_PATH)."skills/assign.php?user={$userId}");

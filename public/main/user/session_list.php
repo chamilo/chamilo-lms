@@ -39,7 +39,7 @@ $columns = [
     get_lang('Category name'),
     get_lang('Start Date'),
     get_lang('End Date'),
-    get_lang('Coach'),
+    get_lang('Tutor'),
     get_lang('Status'),
     get_lang('Visibility'),
     get_lang('Detail'),

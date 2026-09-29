@@ -37,7 +37,6 @@ function prepare_user_sql_query($getCount)
 {
     $sql = '';
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
-    $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
     if ($getCount) {
         $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
@@ -120,21 +119,18 @@ function prepare_user_sql_query($getCount)
                 )
         ";
     } elseif (isset($keywordListValues) && !empty($keywordListValues)) {
-        $query_admin_table = '';
         $keyword_admin = '';
 
         if (isset($keywordListValues['keyword_status']) &&
             PLATFORM_ADMIN == $keywordListValues['keyword_status']
         ) {
-            $query_admin_table = " , $admin_table a ";
-            $keyword_admin = ' AND a.user_id = u.id ';
+            $keyword_admin = " AND (u.roles LIKE '%ROLE_ADMIN%' OR u.roles LIKE '%ROLE_GLOBAL_ADMIN%') ";
             $keywordListValues['keyword_status'] = '%';
         }
 
         $keyword_extra_value = '';
 
-        $sql .= " $query_admin_table
-            WHERE (
+        $sql .= " WHERE (
                 u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
                 u.lastname LIKE '".Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
                 u.username LIKE '".Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND

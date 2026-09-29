@@ -54,10 +54,8 @@ class ConferenceActivityRepository extends ServiceEntityRepository
             ->andWhere('a.participant = :participantId')
             ->orderBy('a.id', 'DESC')
             ->setMaxResults(1)
-            ->setParameters([
-                'meetingId' => $meetingId,
-                'participantId' => $participantId,
-            ])
+            ->setParameter('meetingId', $meetingId)
+            ->setParameter('participantId', $participantId)
         ;
 
         $result = $qb->getQuery()->getResult();

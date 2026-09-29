@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillRelSkill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -24,6 +25,25 @@ class SkillRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Skill::class);
+    }
+
+    /**
+     * @return array<int, Skill>
+     */
+    public function findTopLevelSkills(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin(
+                SkillRelSkill::class,
+                'relation',
+                Join::WITH,
+                's.id = relation.skill',
+            )
+            ->andWhere('relation.parent IS NULL')
+            ->orderBy('relation.id', Criteria::ASC)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     public function deleteAsset(Skill $skill): void
@@ -61,7 +81,7 @@ class SkillRepository extends ServiceEntityRepository
             ->innerJoin(
                 SkillRelUser::class,
                 'su',
-                Join::WITH,
+                Join::ON,
                 's.id = su.skill'
             )
             ->where(

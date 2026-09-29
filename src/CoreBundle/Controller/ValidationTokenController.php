@@ -62,7 +62,7 @@ class ValidationTokenController extends AbstractController
         if ('ticket' === $type) {
             $ticketId = $token->getResourceId();
 
-            return $this->redirect('/main/ticket/ticket_details.php?ticket_id='.$ticketId);
+            return $this->redirect('/tickets/'.$ticketId);
         }
 
         return $this->render('@ChamiloCore/Validation/success.html.twig', [

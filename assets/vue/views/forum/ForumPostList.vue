@@ -63,7 +63,7 @@
         </select>
       </label>
       <BaseButton
-        v-if="canManageThread"
+        v-if="thread?.canToggleSticky"
         :label="thread?.threadSticky ? t('Remove sticky') : t('Make sticky')"
         icon="tag-outline"
         only-icon
@@ -81,7 +81,7 @@
         @click="toggleThreadVisibility"
       />
       <BaseButton
-        v-if="canManageThread"
+        v-if="thread?.canToggleLock"
         :label="Number(thread?.locked || 0) ? t('Open thread') : t('Close thread')"
         :icon="Number(thread?.locked || 0) ? 'unlock' : 'lock'"
         only-icon
@@ -90,7 +90,7 @@
         @click="toggleThreadLock"
       />
       <BaseButton
-        v-if="canManageThread"
+        v-if="thread?.canDelete"
         :label="t('Delete thread')"
         icon="delete"
         only-icon
@@ -108,10 +108,24 @@
     </div>
 
     <div
+      v-if="thread?.lockedByGradebook"
+      class="mb-4 rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm text-gray-700"
+    >
+      {{ t("This option is not available.") }}
+    </div>
+
+    <div
       v-if="isLoading"
       class="rounded-xl border border-gray-20 bg-white p-4 text-sm text-gray-600"
     >
       {{ t("Loading") }}
+    </div>
+
+    <div
+      v-else-if="loadError"
+      class="rounded-xl border border-danger bg-white p-6 text-center text-sm text-danger"
+    >
+      {{ t("Could not retrieve posts") }}
     </div>
 
     <div
@@ -136,187 +150,252 @@
         :key="post.iid"
         :class="['rounded-xl border border-gray-20 bg-white p-4 shadow-sm', getPostLevelClass(post)]"
       >
-        <div class="mb-3 flex flex-col gap-3 border-b border-gray-20 pb-3 md:flex-row md:items-start md:justify-between">
-          <div class="min-w-0">
-            <h2 class="truncate text-base font-semibold text-gray-90">{{ post.title }}</h2>
-            <div class="mt-1 flex flex-wrap gap-2 text-xs text-gray-500">
-              <span>{{ post.posterFullName || t("Unknown user") }}</span>
-              <span v-if="post.postDate">{{ formatDate(post.postDate) }}</span>
-              <span v-if="!isPostVisible(post)">{{ t("Hidden") }}</span>
+        <div class="grid gap-4 md:grid-cols-[10rem_minmax(0,1fr)]">
+          <aside class="flex flex-row items-center gap-3 md:flex-col md:items-center md:border-r md:border-gray-20 md:pr-4 md:text-center">
+            <div class="relative shrink-0">
+              <BaseUserAvatar
+                :alt="post.posterFullName || t('Unknown user')"
+                :image-url="getPosterAvatarUrl(post)"
+                size="large"
+              />
               <span
-                v-if="showModerationStatus(post)"
-                :class="getModerationBadgeClass(post)"
+                v-if="isTeacherRole(post)"
+                :title="getRoleLabel(post)"
+                class="absolute -bottom-1 -right-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white bg-support-2 text-primary shadow-sm"
               >
-                {{ t(post.statusLabel || getModerationStatusLabel(post)) }}
-              </span>
-              <span
-                v-if="post.revisionRequested"
-                class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
-              >
-                {{ t('Revision requested') }}
-              </span>
-              <span
-                v-if="post.revisionLanguage"
-                class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
-              >
-                {{ t('Revision') }}
+                <i
+                  class="mdi mdi-account-tie text-sm"
+                  aria-hidden="true"
+                ></i>
+                <span class="sr-only">{{ getRoleLabel(post) }}</span>
               </span>
             </div>
-          </div>
+            <div class="min-w-0">
+              <div class="truncate text-sm font-semibold text-primary">
+                {{ post.posterFullName || t("Unknown user") }}
+              </div>
+              <div
+                v-if="getPostRelativeTime(post) || getPostDateValue(post)"
+                class="mt-1 text-xs text-gray-500"
+              >
+                <span :title="formatDate(getPostDateValue(post)) || getPostRelativeTime(post)">{{ getPostRelativeTime(post) }}</span>
+              </div>
+            </div>
+          </aside>
 
-          <div class="flex shrink-0 flex-wrap items-center justify-end gap-1">
-            <BaseButton
-              v-if="post.canApprove"
-              :label="t('Approve post')"
-              icon="check"
-              only-icon
-              size="small"
-              type="success-text"
-              @click="approvePost(post)"
-            />
-            <BaseButton
-              v-if="post.canReject"
-              :label="t('Reject post')"
-              icon="close"
-              only-icon
-              size="small"
-              type="danger-text"
-              @click="confirmRejectPost(post)"
-            />
-            <BaseButton
-              v-if="post.canToggleVisibility"
-              :label="isPostVisible(post) ? t('Hide') : t('Show')"
-              :icon="isPostVisible(post) ? 'eye-on' : 'eye-off'"
-              only-icon
-              size="small"
-              type="primary-text"
-              @click="togglePostVisibility(post)"
-            />
-            <BaseButton
-              v-if="canReply && post.canReplyToPost"
-              :label="t('Reply to this message')"
-              :route="getReplyToPostRoute(post)"
-              icon="send"
-              only-icon
-              size="small"
-              type="success-text"
-            />
-            <BaseButton
-              v-if="canReply && post.canQuote"
-              :label="t('Quote this message')"
-              :route="getQuotePostRoute(post)"
-              icon="comment"
-              only-icon
-              size="small"
-              type="primary-text"
-            />
-            <BaseButton
-              v-if="post.canAskRevision"
-              :label="post.revisionRequested ? t('Cancel revision request') : t('Ask for a revision')"
-              icon="refresh"
-              only-icon
-              size="small"
-              type="secondary-text"
-              @click="askRevision(post)"
-            />
-            <BaseButton
-              v-if="post.canGiveRevision"
-              :label="t('Give revision')"
-              :route="getGiveRevisionRoute(post)"
-              icon="reply"
-              only-icon
-              size="small"
-              type="primary-text"
-            />
-            <BaseButton
-              v-if="post.canReport"
-              :label="t('Report')"
-              icon="alert"
-              only-icon
-              size="small"
-              type="danger-text"
-              @click="confirmReportPost(post)"
-            />
-            <BaseButton
-              v-if="post.canMove"
-              :label="t('Move post')"
-              icon="arrows-left-right"
-              only-icon
-              size="small"
-              type="secondary-text"
-              @click="openMovePost(post)"
-            />
-            <BaseButton
-              v-if="post.canEdit"
-              :label="t('Edit post')"
-              icon="edit"
-              only-icon
-              size="small"
-              type="secondary-text"
-              @click="openEditPost(post)"
-            />
-            <BaseButton
-              v-if="post.canDelete"
-              :label="t('Delete post')"
-              icon="delete"
-              only-icon
-              size="small"
-              type="danger-text"
-              @click="confirmDeletePost(post)"
-            />
-          </div>
-        </div>
+          <div class="min-w-0">
+            <div class="mb-3 flex flex-col gap-3 border-b border-gray-20 pb-3 md:flex-row md:items-start md:justify-between">
+              <div class="min-w-0">
+                <h2 class="truncate text-base font-semibold text-gray-90">{{ post.title }}</h2>
+                <div class="mt-1 flex flex-wrap gap-2 text-xs text-gray-500">
+                  <span v-if="!isPostVisible(post)">{{ t("Hidden") }}</span>
+                  <span
+                    v-if="showModerationStatus(post)"
+                    :class="getModerationBadgeClass(post)"
+                  >
+                    {{ t(post.statusLabel || getModerationStatusLabel(post)) }}
+                  </span>
+                  <span
+                    v-if="getPostRelativeTime(post) || getPostDateValue(post)"
+                    :title="formatDate(getPostDateValue(post)) || getPostRelativeTime(post)"
+                  >
+                    {{ getPostRelativeTime(post) }}
+                  </span>
+                  <span
+                    v-if="post.revisionRequested"
+                    class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
+                  >
+                    {{ t('Revision requested') }}
+                  </span>
+                  <span
+                    v-if="post.revisionLanguage"
+                    class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
+                  >
+                    {{ t('Revision') }}
+                  </span>
+                </div>
+              </div>
 
-        <div
-          class="prose prose-sm max-w-none text-gray-800"
-          v-html="sanitizePostText(post.postText)"
-        />
+              <div class="flex shrink-0 flex-wrap items-center justify-end gap-1">
+                <BaseButton
+                  v-if="post.canApprove"
+                  :label="t('Approve post')"
+                  icon="check"
+                  only-icon
+                  size="small"
+                  type="success-text"
+                  @click="approvePost(post)"
+                />
+                <BaseButton
+                  v-if="post.canReject"
+                  :label="t('Reject post')"
+                  icon="close"
+                  only-icon
+                  size="small"
+                  type="danger-text"
+                  @click="confirmRejectPost(post)"
+                />
+                <BaseButton
+                  v-if="post.canToggleVisibility"
+                  :label="isPostVisible(post) ? t('Hide') : t('Show')"
+                  :icon="isPostVisible(post) ? 'eye-on' : 'eye-off'"
+                  only-icon
+                  size="small"
+                  type="primary-text"
+                  @click="togglePostVisibility(post)"
+                />
+                <BaseButton
+                  v-if="canReply && post.canReplyToPost"
+                  :label="t('Reply to this message')"
+                  :route="getReplyToPostRoute(post)"
+                  icon="send"
+                  only-icon
+                  size="small"
+                  type="success-text"
+                />
+                <BaseButton
+                  v-if="canReply && post.canQuote"
+                  :label="t('Quote this message')"
+                  :route="getQuotePostRoute(post)"
+                  icon="comment"
+                  only-icon
+                  size="small"
+                  type="primary-text"
+                />
+                <BaseButton
+                  v-if="post.canAskRevision"
+                  :label="post.revisionRequested ? t('Cancel revision request') : t('Ask for a revision')"
+                  icon="refresh"
+                  only-icon
+                  size="small"
+                  type="secondary-text"
+                  @click="askRevision(post)"
+                />
+                <BaseButton
+                  v-if="post.canGiveRevision"
+                  :label="t('Give revision')"
+                  :route="getGiveRevisionRoute(post)"
+                  icon="reply"
+                  only-icon
+                  size="small"
+                  type="primary-text"
+                />
+                <BaseButton
+                  v-if="post.canReport"
+                  :label="t('Report')"
+                  icon="alert"
+                  only-icon
+                  size="small"
+                  type="danger-text"
+                  @click="confirmReportPost(post)"
+                />
+                <BaseButton
+                  v-if="post.canMove"
+                  :label="t('Move post')"
+                  icon="arrows-left-right"
+                  only-icon
+                  size="small"
+                  type="secondary-text"
+                  @click="openMovePost(post)"
+                />
+                <BaseButton
+                  v-if="post.canEdit"
+                  :label="t('Edit post')"
+                  icon="edit"
+                  only-icon
+                  size="small"
+                  type="secondary-text"
+                  @click="openEditPost(post)"
+                />
+                <BaseButton
+                  v-if="post.canDelete"
+                  :label="t('Delete post')"
+                  icon="delete"
+                  only-icon
+                  size="small"
+                  type="danger-text"
+                  @click="confirmDeletePost(post)"
+                />
+              </div>
+            </div>
 
-        <div
-          v-if="getAttachments(post).length"
-          class="mt-4 rounded-lg border border-gray-20 bg-gray-10 p-3"
-        >
-          <h3 class="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-800">
-            <BaseIcon
-              icon="attachment"
-              size="small"
+            <div
+              class="prose prose-sm max-w-none text-gray-800"
+              v-html="sanitizePostText(post.postText)"
             />
-            {{ t('Attachments') }}
-          </h3>
-          <ul class="flex flex-col gap-2">
-            <li
-              v-for="attachment in getAttachments(post)"
-              :key="attachment.iid || attachment.id || attachment.filename"
-              class="flex items-center justify-between gap-2 text-sm"
+
+            <div
+              v-if="getAttachments(post).length"
+              class="mt-4 rounded-lg border border-gray-20 bg-gray-10 p-3"
             >
-              <div class="flex min-w-0 items-center gap-2">
+              <h3 class="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-800">
                 <BaseIcon
-                  icon="file-generic"
+                  icon="attachment"
                   size="small"
                 />
-                <a
-                  :href="getAttachmentUrl(attachment)"
-                  class="truncate text-primary hover:underline"
-                  rel="noopener noreferrer"
-                  target="_blank"
+                {{ t('Attachments') }}
+              </h3>
+              <ul class="flex flex-col gap-2">
+                <li
+                  v-for="attachment in getAttachments(post)"
+                  :key="attachment.iid || attachment.id || attachment.filename"
+                  class="flex items-center justify-between gap-2 text-sm"
                 >
-                  {{ attachment.filename || attachment.path || t('Attachment') }}
-                </a>
-                <span class="shrink-0 text-xs text-gray-500">{{ formatSize(attachment.size) }}</span>
-              </div>
-              <BaseButton
-                v-if="attachment.canDelete"
-                :label="t('Delete attachment')"
-                icon="delete"
-                only-icon
-                size="small"
-                type="danger-text"
-                @click="confirmDeleteAttachment(attachment)"
-              />
-            </li>
-          </ul>
+                  <div class="flex min-w-0 items-center gap-2">
+                    <BaseIcon
+                      icon="file-generic"
+                      size="small"
+                    />
+                    <a
+                      :href="getAttachmentUrl(attachment)"
+                      class="truncate text-primary hover:underline"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {{ attachment.filename || attachment.path || t('Attachment') }}
+                    </a>
+                    <span class="shrink-0 text-xs text-gray-500">{{ formatSize(attachment.size) }}</span>
+                  </div>
+                  <BaseButton
+                    v-if="attachment.canDelete"
+                    :label="t('Delete attachment')"
+                    icon="delete"
+                    only-icon
+                    size="small"
+                    type="danger-text"
+                    @click="confirmDeleteAttachment(attachment)"
+                  />
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </article>
+
+      <div class="flex items-center justify-center text-xs text-gray-500">
+        {{ posts.length }} / {{ totalItems }}
+      </div>
+
+      <div
+        v-if="hasMorePosts"
+        ref="loadMoreSentinel"
+        class="flex min-h-10 items-center justify-center"
+      >
+        <span
+          v-if="isLoadingMore"
+          class="text-sm text-gray-500"
+        >
+          {{ t("Loading") }}
+        </span>
+        <BaseButton
+          v-else-if="!supportsIntersectionObserver"
+          :label="t('Load more')"
+          icon="plus"
+          size="small"
+          type="plain"
+          @click="loadNextPage"
+        />
+      </div>
     </div>
 
     <BaseDialog
@@ -390,7 +469,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from "vue"
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -400,26 +479,40 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useFormatDate } from "../../composables/formatDate"
 import forumService from "../../services/forumService"
+import { useSecurityStore } from "../../store/securityStore"
 import { sanitizeHtml } from "../../utils/sanitizeHtml"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t, d } = useI18n()
+const { relativeDatetime } = useFormatDate()
 const route = useRoute()
 const router = useRouter()
 const notifications = useNotification()
+const securityStore = useSecurityStore()
 const { requireConfirmation } = useConfirmation()
 
 const isLoading = ref(false)
+const isLoadingMore = ref(false)
+const loadError = ref(false)
 const isSavingEdit = ref(false)
 const isSavingMove = ref(false)
 const isLoadingMoveOptions = ref(false)
 const forum = ref(null)
 const thread = ref(null)
 const posts = ref([])
-const csrfToken = ref("")
+const currentPage = ref(1)
+const totalItems = ref(0)
+const totalPages = ref(0)
+const itemsPerPage = 25
+const loadMoreSentinel = ref(null)
+const supportsIntersectionObserver = typeof window !== "undefined" && "IntersectionObserver" in window
+let postObserver = null
 const editDialogVisible = ref(false)
 const moveDialogVisible = ref(false)
 const editFormSubmitted = ref(false)
@@ -441,7 +534,6 @@ const sid = computed(() => Number(route.query.sid || 0))
 const gid = computed(() => Number(route.query.gid || 0))
 const lpId = computed(() => Number(route.query.lp_id || 0))
 const canReply = computed(() => Boolean(thread.value?.canReply))
-const canManageThread = computed(() => Boolean(thread.value?.canEdit || thread.value?.canDelete || thread.value?.canToggleLock))
 const canToggleThreadVisibility = computed(() => Boolean(thread.value?.canToggleVisibility))
 
 const baseQuery = computed(() => ({
@@ -449,7 +541,6 @@ const baseQuery = computed(() => ({
   sid: sid.value || null,
   gid: gid.value || null,
 }))
-const actionPayload = computed(() => ({ csrfToken: csrfToken.value }))
 const hasEditMessage = computed(() => stripTags(editForm.text).trim().length > 0)
 const viewType = ref(["flat", "threaded", "nested"].includes(String(route.query.view || "")) ? String(route.query.view) : "flat")
 const viewTypeOptions = computed(() => [
@@ -458,6 +549,9 @@ const viewTypeOptions = computed(() => [
   { label: t("Nested"), value: "nested" },
 ])
 const displayedPosts = computed(() => buildDisplayedPosts(posts.value, viewType.value))
+const hasMorePosts = computed(
+  () => currentPage.value < totalPages.value && posts.value.length < totalItems.value,
+)
 
 function sanitizePostText(value) {
   return sanitizeHtml(value || "")
@@ -580,7 +674,9 @@ function isPostVisible(post) {
 
 
 function showModerationStatus(post) {
-  return Boolean(forum.value?.moderated || post?.status)
+  const status = getModerationStatus(post)
+
+  return 1 !== status && (Boolean(forum.value?.moderated) || status > 0)
 }
 
 function getModerationStatus(post) {
@@ -624,12 +720,143 @@ function getAttachmentUrl(attachment) {
   return attachment.downloadUrl || attachment.contentUrl || attachment.url || "#"
 }
 
-function formatDate(value) {
+function normalizeDateValue(value) {
   if (!value) {
     return ""
   }
 
-  return d(new Date(value), "long")
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? "" : value
+  }
+
+  if (typeof value === "number") {
+    const timestamp = value > 100000000000 ? value : value * 1000
+    const date = new Date(timestamp)
+
+    return Number.isNaN(date.getTime()) ? "" : date
+  }
+
+  if (typeof value === "object") {
+    return normalizeDateValue(
+      value.date || value.datetime || value.dateTime || value.value || value.timestamp || value.time || "",
+    )
+  }
+
+  const rawValue = String(value).trim()
+  if (!rawValue) {
+    return ""
+  }
+
+  if (/^\d+$/.test(rawValue)) {
+    return normalizeDateValue(Number(rawValue))
+  }
+
+  const normalizedValue = rawValue.includes("T") ? rawValue : rawValue.replace(" ", "T")
+  const date = new Date(normalizedValue)
+
+  return Number.isNaN(date.getTime()) ? "" : date
+}
+
+function resolveDateValue(...values) {
+  for (const value of values) {
+    const date = normalizeDateValue(value)
+    if (date) {
+      return date
+    }
+  }
+
+  return ""
+}
+
+function formatDate(value) {
+  const date = normalizeDateValue(value)
+  if (!date) {
+    return ""
+  }
+
+  return d(date, "long")
+}
+
+function isDefaultAvatarUrl(value) {
+  const avatarUrl = String(value || "").trim()
+  if (!avatarUrl) {
+    return true
+  }
+
+  return ["/img/user_default.svg", "user_default.svg", "unknown.png", "anonymous"].some((marker) =>
+    avatarUrl.includes(marker),
+  )
+}
+
+function getCurrentUserAvatarUrl() {
+  const user = securityStore.user || {}
+
+  return String(user.illustrationUrl || user.avatarUrl || user.pictureUri || "").trim()
+}
+
+function isCurrentUserItem(item) {
+  const posterUserId = Number(item?.posterUserId || 0)
+  const currentUserId = Number(securityStore.user?.id || 0)
+
+  return posterUserId > 0 && currentUserId > 0 && posterUserId === currentUserId
+}
+
+function getPosterAvatarUrl(item) {
+  const avatarUrl = String(item?.posterAvatarUrl || item?.avatarUrl || "").trim()
+  if (avatarUrl && !isDefaultAvatarUrl(avatarUrl)) {
+    return avatarUrl
+  }
+
+  if (isCurrentUserItem(item)) {
+    const currentAvatarUrl = getCurrentUserAvatarUrl()
+    if (currentAvatarUrl && !isDefaultAvatarUrl(currentAvatarUrl)) {
+      return currentAvatarUrl
+    }
+  }
+
+  return ""
+}
+
+function getPostDateValue(post) {
+  return resolveDateValue(
+    post?.postDateIso,
+    post?.createdAtIso,
+    post?.sentAtIso,
+    post?.postDate,
+    post?.createdAt,
+    post?.date,
+    post?.sentAt,
+    post?.postDateTimestamp,
+    post?.createdAtTimestamp,
+    post?.post_date,
+    post?.created_at,
+  )
+}
+
+function getPostRelativeTime(post) {
+  return (
+    post?.postRelativeTime ||
+    post?.relativeTime ||
+    post?.createdAtRelative ||
+    (getPostDateValue(post) ? formatRelativeTime(getPostDateValue(post)) : "")
+  )
+}
+
+function formatRelativeTime(value) {
+  const date = normalizeDateValue(value)
+  if (!date) {
+    return ""
+  }
+
+  return relativeDatetime(date) ?? formatDate(value)
+}
+
+function isTeacherRole(item) {
+  return Boolean(item?.posterIsTeacher || item?.posterRole === "teacher")
+}
+
+function getRoleLabel(item) {
+  return item?.posterRoleLabel ? t(item.posterRoleLabel) : t("Teacher")
 }
 
 function formatSize(value) {
@@ -650,47 +877,131 @@ function formatSize(value) {
 }
 
 function goBackToLearningPath() {
-  const params = new URLSearchParams()
-  params.set("cid", String(cid.value || ""))
-  params.set("sid", String(sid.value || 0))
-  params.set("gid", String(gid.value || 0))
-  params.set("gradebook", "")
-  params.set("action", "add_item")
-  params.set("type", "step")
-  params.set("lp_id", String(lpId.value))
-  window.location.href = `/main/lp/lp_controller.php?${params.toString()}#resource_tab-5`
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.editThreadId
+  delete query.lpItemId
+
+  return router.push({
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: lpId.value,
+    },
+    query,
+  })
 }
 
-async function ensureToken() {
-  if (csrfToken.value) {
+function disconnectPostObserver() {
+  if (postObserver) {
+    postObserver.disconnect()
+    postObserver = null
+  }
+}
+
+async function observeLoadMoreSentinel() {
+  disconnectPostObserver()
+
+  if (!supportsIntersectionObserver || !hasMorePosts.value) {
     return
   }
 
-  const tokenResponse = await forumService.getActionToken()
-  csrfToken.value = tokenResponse.token || ""
+  await nextTick()
+
+  if (!loadMoreSentinel.value) {
+    return
+  }
+
+  postObserver = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        void loadNextPage()
+      }
+    },
+    { rootMargin: "400px 0px" },
+  )
+  postObserver.observe(loadMoreSentinel.value)
+}
+
+function updatePagination(data, requestedPage) {
+  currentPage.value = Number(data.page || requestedPage || 1)
+  totalItems.value = Number(data.totalItems || 0)
+  totalPages.value = Number(data.totalPages || 0)
+}
+
+function mergePosts(currentPosts, newPosts) {
+  const byId = new Map(currentPosts.map((post) => [Number(post.iid), post]))
+
+  newPosts.forEach((post) => {
+    byId.set(Number(post.iid), post)
+  })
+
+  return Array.from(byId.values())
 }
 
 async function loadPosts() {
+  disconnectPostObserver()
   isLoading.value = true
+  loadError.value = false
+  currentPage.value = 1
+  totalItems.value = 0
+  totalPages.value = 0
 
   try {
-    const [data, tokenResponse] = await Promise.all([
-      forumService.getThreadPosts(threadId.value, forumId.value, baseQuery.value),
-      forumService.getActionToken(),
-    ])
+    const data = await forumService.getThreadPosts(threadId.value, forumId.value, {
+      ...baseQuery.value,
+      page: 1,
+      itemsPerPage,
+    })
 
     forum.value = data.forum
     thread.value = { ...(data.thread || {}), canReply: Boolean(data.canReply) }
     posts.value = data.posts || []
+    updatePagination(data, 1)
     if (!route.query.view && forum.value?.defaultView) {
       viewType.value = ["flat", "threaded", "nested"].includes(forum.value.defaultView) ? forum.value.defaultView : "flat"
     }
-    csrfToken.value = tokenResponse.token || ""
   } catch (error) {
+    loadError.value = true
     console.error("Error fetching forum posts:", error)
     notifications.showErrorNotification(t("Could not retrieve posts"))
   } finally {
     isLoading.value = false
+    await observeLoadMoreSentinel()
+  }
+}
+
+async function loadNextPage() {
+  if (isLoading.value || isLoadingMore.value || !hasMorePosts.value) {
+    return
+  }
+
+  const nextPage = currentPage.value + 1
+  isLoadingMore.value = true
+  disconnectPostObserver()
+
+  try {
+    const data = await forumService.getThreadPosts(threadId.value, forumId.value, {
+      ...baseQuery.value,
+      page: nextPage,
+      itemsPerPage,
+    })
+
+    forum.value = data.forum || forum.value
+    thread.value = {
+      ...(data.thread || thread.value || {}),
+      canReply: Boolean(data.canReply ?? thread.value?.canReply),
+    }
+    posts.value = mergePosts(posts.value, data.posts || [])
+    updatePagination(data, nextPage)
+  } catch (error) {
+    console.error("Error fetching more forum posts:", error)
+    notifications.showErrorNotification(t("Could not retrieve posts"))
+  } finally {
+    isLoadingMore.value = false
+    await observeLoadMoreSentinel()
   }
 }
 
@@ -699,8 +1010,7 @@ async function toggleThreadVisibility() {
   const wasVisible = isThreadVisible(thread.value)
 
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadVisibility(threadId.value, baseQuery.value, { ...actionPayload.value, visible: !wasVisible })
+    const response = await forumService.toggleThreadVisibility(threadId.value, baseQuery.value, { visible: !wasVisible })
     if (thread.value) {
       thread.value.threadVisible = response.visible
     }
@@ -714,8 +1024,7 @@ async function toggleThreadVisibility() {
 
 async function toggleThreadLock() {
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadLock(threadId.value, baseQuery.value, actionPayload.value)
+    const response = await forumService.toggleThreadLock(threadId.value, baseQuery.value, {})
 
     notifications.showSuccessNotification(Number(response.locked || 0) ? t("Thread closed") : t("Thread opened"))
     await loadPosts()
@@ -727,8 +1036,7 @@ async function toggleThreadLock() {
 
 async function toggleThreadSticky() {
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadSticky(threadId.value, baseQuery.value, actionPayload.value)
+    const response = await forumService.toggleThreadSticky(threadId.value, baseQuery.value, {})
 
     notifications.showSuccessNotification(response.threadSticky ? t("Thread marked as sticky") : t("Thread unmarked as sticky"))
     await loadPosts()
@@ -745,9 +1053,7 @@ async function toggleThreadNotification() {
   }
 
   try {
-    await ensureToken()
     const response = await forumService.toggleThreadSubscription(threadId.value, baseQuery.value, {
-      ...actionPayload.value,
       subscribed: !thread.value.subscribed,
     })
 
@@ -769,8 +1075,7 @@ function confirmDeleteThread() {
 
 async function deleteThread() {
   try {
-    await ensureToken()
-    await forumService.deleteThread(threadId.value, baseQuery.value, actionPayload.value)
+    await forumService.deleteThread(threadId.value, baseQuery.value, {})
 
     notifications.showSuccessNotification(t("Thread deleted"))
     await router.push({ name: "ForumThreadList", params: { node: parentId.value, forumId: forumId.value }, query: route.query })
@@ -783,8 +1088,7 @@ async function deleteThread() {
 
 async function approvePost(post) {
   try {
-    await ensureToken()
-    const response = await forumService.approvePost(post.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.approvePost(post.iid, baseQuery.value, {})
     post.visible = response.visible
     post.status = response.status
     notifications.showSuccessNotification(t("Post approved"))
@@ -804,8 +1108,7 @@ function confirmRejectPost(post) {
 
 async function rejectPost(post) {
   try {
-    await ensureToken()
-    const response = await forumService.rejectPost(post.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.rejectPost(post.iid, baseQuery.value, {})
     post.visible = response.visible
     post.status = response.status
     notifications.showSuccessNotification(t("Post rejected"))
@@ -820,8 +1123,7 @@ async function togglePostVisibility(post) {
   const wasVisible = isPostVisible(post)
 
   try {
-    await ensureToken()
-    const response = await forumService.togglePostVisibility(post.iid, baseQuery.value, { ...actionPayload.value, visible: !wasVisible })
+    const response = await forumService.togglePostVisibility(post.iid, baseQuery.value, { visible: !wasVisible })
     post.visible = response.visible
     notifications.showSuccessNotification(response.visible ? t("Post shown") : t("Post hidden"))
     await loadPosts()
@@ -849,9 +1151,7 @@ async function savePostEdit() {
   isSavingEdit.value = true
 
   try {
-    await ensureToken()
     await forumService.updatePost(editPost.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       title: editForm.title.trim(),
       text: editForm.text.trim(),
     })
@@ -876,8 +1176,7 @@ function confirmDeletePost(post) {
 
 async function deletePost(post) {
   try {
-    await ensureToken()
-    const response = await forumService.deletePost(post.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.deletePost(post.iid, baseQuery.value, {})
 
     notifications.showSuccessNotification(response.threadDeleted ? t("Thread deleted") : t("Post deleted"))
 
@@ -930,9 +1229,7 @@ async function savePostMove() {
   isSavingMove.value = true
 
   try {
-    await ensureToken()
     const response = await forumService.movePost(movePost.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       targetThreadId: Number(moveTargetThreadId.value),
     })
 
@@ -959,8 +1256,7 @@ async function savePostMove() {
 
 async function askRevision(post) {
   try {
-    await ensureToken()
-    const response = await forumService.askPostRevision(post.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.askPostRevision(post.iid, baseQuery.value, {})
     post.revisionRequested = response.revisionRequested
     notifications.showSuccessNotification(response.revisionRequested ? t("Revision requested") : t("Revision request removed"))
     await loadPosts()
@@ -979,8 +1275,7 @@ function confirmReportPost(post) {
 
 async function reportPost(post) {
   try {
-    await ensureToken()
-    await forumService.reportPost(post.iid, baseQuery.value, actionPayload.value)
+    await forumService.reportPost(post.iid, baseQuery.value, {})
     notifications.showSuccessNotification(t("Reported"))
   } catch (error) {
     console.error("Error reporting forum post:", error)
@@ -997,8 +1292,7 @@ function confirmDeleteAttachment(attachment) {
 
 async function deleteAttachment(attachment) {
   try {
-    await ensureToken()
-    await forumService.deleteAttachment(attachment.iid || attachment.id, baseQuery.value, actionPayload.value)
+    await forumService.deleteAttachment(attachment.iid || attachment.id, baseQuery.value, {})
 
     notifications.showSuccessNotification(t("Attachment deleted"))
     await loadPosts()
@@ -1009,4 +1303,7 @@ async function deleteAttachment(attachment) {
 }
 
 onMounted(loadPosts)
+
+useStudentViewRefresh(loadPosts)
+onBeforeUnmount(disconnectPostObserver)
 </script>

@@ -71,6 +71,43 @@ final class CourseAccessResolver
     }
 
     /**
+     * Returns true when a public course must challenge the current visitor for
+     * its registration password before granting access.
+     */
+    public function requiresRegistrationPassword(
+        Course $course,
+        ?User $user = null,
+        ?Session $session = null,
+    ): bool {
+        if (!$course->isPublic() || '' === trim((string) $course->getRegistrationCode())) {
+            return false;
+        }
+
+        if (null === $user) {
+            return true;
+        }
+
+        if ($user->isAdmin()
+            || $course->hasUserAsTeacher($user)
+            || $course->hasSubscriptionByUser($user)
+        ) {
+            return false;
+        }
+
+        if (null !== $session
+            && (
+                $session->hasUserAsGeneralCoach($user)
+                || $session->hasCourseCoachInCourse($user, $course)
+                || $session->hasUserInCourse($user, $course, Session::STUDENT)
+            )
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @return array<int, string> ROLE_CURRENT_COURSE_GROUP_* role names the user holds in the given group
      */
     public function resolveGroupRoles(User $user, Course $course, CGroup $group): array

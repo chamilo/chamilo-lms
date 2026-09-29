@@ -14,6 +14,8 @@ if (PHP_SAPI != 'cli') {
     die('This script can only be executed from the command line');
 }
 
+$scriptStartTime = microtime(true);
+
 $translationSourceLanguageCode = 'en_US';
 $translationAPIEndpoint = 'https://api.x.ai/v1/chat/completions';
 
@@ -23,12 +25,22 @@ if (!is_file(__DIR__ . '/config.php')) {
 }
 require_once __DIR__ . '/config.php';
 $apiKey = $translationAPIKey ?? '';
+$model = $translationModel ?? 'grok-4.6';
+$reasoningEffort = $translationReasoningEffort ?? 'low';
+$timeoutSeconds = (int) ($translationTimeoutSeconds ?? 180);
+if ($timeoutSeconds < 30) {
+    $timeoutSeconds = 30;
+} 
 
 /**
- * Chamilo Gettext auto-translator using Grok (grok-4-1-fast-non-reasoning)
+ * Chamilo Gettext auto-translator using the Grok chat-completions API.
+ *
+ * grok-4.6 defaults to reasoning_effort=high (~30–45s time-to-first-token).
+ * This script therefore sends reasoning_effort=low (overridable in config.php)
+ * and uses a much longer cURL timeout than PHP's 30s default.
  *
  * Usage:
- *   php translate.php [--test] [--backup] [fr_FR es de]
+ *   php ai_translate.php [--test] [--backup] [fr_FR es de]
  *
  * - messages.en.po is used as the source of truth for terms and ordering.
  * - For each requested language (e.g. "fr_FR"), messages.fr_FR.po will be updated. If no language requested, all except English are processed.
@@ -39,6 +51,10 @@ $apiKey = $translationAPIKey ?? '';
  *   the partially translated .po file is written so you can inspect it.
  * - --backup creates a .bak copy of each file before modifying it.
  *   Off by default (Git history serves as backup).
+ * - Terms the API returns unchanged (same as the English source) are recorded
+ *   in ai_translate_memory.json with a per-language hit count. After 3 hits
+ *   the term is skipped on later runs (not sent to the API). Delete an entry
+ *   or lower its count below 3 to retry. The file is gitignored.
  *
  * Notes:
  * - This script rewrites translation .po files (except the header entry),
@@ -60,9 +76,17 @@ $basePoFile = $translationsDir . "messages.{$sourceLanguageCode}.po";
 // Log file
 $logFile = __DIR__ . "/grok_translate.log";
 
-// Batch size for API calls
-$batchSize = 50;
-$batchSizeInTestMode = 20;
+// Per-language memory of terms the API keeps returning in English.
+// After $untranslatedSkipThreshold identical hits, the term is skipped.
+$memoryFile = __DIR__.'/ai_translate_memory.json';
+$untranslatedSkipThreshold = 3;
+
+// Batch size for API calls (10 was a workaround for grok-4.6 high-reasoning timeouts)
+$batchSize = (int) ($translationBatchSize ?? 50);
+if ($batchSize < 1) {
+    $batchSize = 50;
+}
+$batchSizeInTestMode = min(20, $batchSize);
 
 // ===================== HELPER FUNCTIONS =====================
 
@@ -74,6 +98,18 @@ function eprintln(string $msg, bool $timestam = false): void {
         $msg = '[' . date('H:i:s') . '] ' . $msg;
     }
     fwrite(STDERR, $msg . PHP_EOL);
+}
+
+/**
+ * Format a duration in seconds as hh:mm:ss (hours are not capped at 24).
+ */
+function formatDuration(float $seconds): string {
+    $totalSeconds = (int) round(max(0, $seconds));
+    $hours = intdiv($totalSeconds, 3600);
+    $minutes = intdiv($totalSeconds % 3600, 60);
+    $secs = $totalSeconds % 60;
+
+    return sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
 }
 
 /**
@@ -96,6 +132,7 @@ function getLanguageName(string $code): string {
         'eo'    => 'Esperanto',
         'es'    => 'Spanish',
         'es_MX' => 'Spanish (Mexico)',
+	'et'    => 'Estonian',
         'eu_ES' => 'Basque (Spain)',
         'fa_AF' => 'Persian (Afghanistan)',
         'fa_IR' => 'Persian (Iran)',
@@ -111,15 +148,19 @@ function getLanguageName(string $code): string {
         'hu_HU' => 'Hungarian',
         'hy'    => 'Armenian',
         'id_ID' => 'Indonesian',
+	'is_IS' => 'Icelandic',
         'it'    => 'Italian',
         'ja'    => 'Japanese',
         'ka_GE' => 'Georgian',
         'ko_KR' => 'Korean',
+	'lo'    => 'Lao',
         'lt_LT' => 'Lithuanian',
         'lv_LV' => 'Latvian',
         'mk_MK' => 'Macedonian',
         'ms_MY' => 'Malay (Malaysia)',
+	'mt'    => 'Maltese',
         'my_MM' => 'Burmese (Myanmar)',
+	'nb_NO' => 'Bokmal (Norway)',
         'ne'    => 'Nepali (Nepal)',
         'nl'    => 'Dutch',
         'nn_NO' => 'Norwegian Nynorsk',
@@ -230,8 +271,10 @@ function parseBasePoFile(string $filePath): array {
     $entries = [];
     $currentLines = [];
     $firstEntry = true;
+    $sawMsgid = false;
+    $sawMsgstr = false;
 
-    $flushEntry = function () use (&$entries, &$currentLines, &$firstEntry) {
+    $flushEntry = function () use (&$entries, &$currentLines, &$firstEntry, &$sawMsgid, &$sawMsgstr) {
         if (empty($currentLines)) {
             return;
         }
@@ -289,14 +332,36 @@ function parseBasePoFile(string $filePath): array {
         $entries[] = $entry;
         $currentLines = [];
         $firstEntry = false;
+        $sawMsgid = false;
+        $sawMsgstr = false;
     };
 
     foreach ($lines as $line) {
-        if (trim($line) === '') {
+        $trim = ltrim($line);
+
+        if ($trim === '') {
             $flushEntry();
-        } else {
-            $currentLines[] = $line;
+            continue;
         }
+
+        // Defensive: entries should be separated by a blank line, but some
+        // generated/hand-edited .po files are missing it. If we already have a
+        // complete entry buffered (msgid AND msgstr both seen) and this line
+        // looks like the start of a new one (a comment or a fresh msgid), flush
+        // the buffered entry first. Without this, the new msgid/comment would
+        // simply be appended into the same buffer and silently overwrite the
+        // previous entry's msgid when it is parsed, discarding it entirely.
+        if ($sawMsgid && $sawMsgstr && ($trim[0] === '#' || preg_match('/^msgid\s+"/', $trim))) {
+            $flushEntry();
+        }
+
+        if (preg_match('/^msgid\s+"/', $trim)) {
+            $sawMsgid = true;
+        } elseif (preg_match('/^msgstr(\[\d+\])?\s+"/', $trim)) {
+            $sawMsgstr = true;
+        }
+
+        $currentLines[] = $line;
     }
     $flushEntry();
 
@@ -338,8 +403,10 @@ function parseTargetPoFile(string $filePath): array {
     $currentLines = [];
     $entryIndex = 0;
     $inHeader = true;
+    $sawMsgid = false;
+    $sawMsgstr = false;
 
-    $flushEntry = function () use (&$currentLines, &$headerRaw, &$singular, &$singularRaw, &$pluralRaw, &$entryIndex, &$inHeader) {
+    $flushEntry = function () use (&$currentLines, &$headerRaw, &$singular, &$singularRaw, &$pluralRaw, &$entryIndex, &$inHeader, &$sawMsgid, &$sawMsgstr) {
         if (empty($currentLines)) {
             return;
         }
@@ -399,14 +466,32 @@ function parseTargetPoFile(string $filePath): array {
 
         $currentLines = [];
         $entryIndex++;
+        $sawMsgid = false;
+        $sawMsgstr = false;
     };
 
     foreach ($lines as $line) {
-        if (trim($line) === '') {
+        $trim = ltrim($line);
+
+        if ($trim === '') {
             $flushEntry();
-        } else {
-            $currentLines[] = $line;
+            continue;
         }
+
+        // Defensive: see the matching comment in parseBasePoFile() — some .po
+        // files are missing the blank line between entries, which would
+        // otherwise silently merge two entries and discard the first one.
+        if ($sawMsgid && $sawMsgstr && ($trim[0] === '#' || preg_match('/^msgid\s+"/', $trim))) {
+            $flushEntry();
+        }
+
+        if (preg_match('/^msgid\s+"/', $trim)) {
+            $sawMsgid = true;
+        } elseif (preg_match('/^msgstr(\[\d+\])?\s+"/', $trim)) {
+            $sawMsgstr = true;
+        }
+
+        $currentLines[] = $line;
     }
     $flushEntry();
 
@@ -471,6 +556,153 @@ function needsTranslationUpdate(string $msgid, string $msgstr, string $targetLan
 }
 
 /**
+ * Normalize a string for "same as English source" comparison.
+ */
+function normalizeForIdentity(string $s): string {
+    $s = poUnescape($s);
+    $s = preg_replace('/\s+/u', ' ', $s);
+
+    return mb_strtolower(trim((string) $s));
+}
+
+/**
+ * True when the API result is the same text as the English source.
+ */
+function translationEqualsSource(string $msgid, string $translation): bool {
+    $src = normalizeForIdentity($msgid);
+    $tgt = normalizeForIdentity($translation);
+
+    return $src !== '' && $src === $tgt;
+}
+
+/**
+ * Load ai_translate_memory.json.
+ *
+ * Shape:
+ * {
+ *   "_comment": "...",
+ *   "fr_FR": { "Some English term": 3 }
+ * }
+ *
+ * @return array<string, array<string, int>>
+ */
+function loadTranslationMemory(string $path): array {
+    if (!is_file($path)) {
+        return [];
+    }
+
+    $raw = file_get_contents($path);
+    if ($raw === false || trim($raw) === '') {
+        return [];
+    }
+
+    $data = json_decode($raw, true);
+    if (!is_array($data)) {
+        eprintln("Warning: Could not parse translation memory file {$path}; starting empty.");
+
+        return [];
+    }
+
+    $out = [];
+    foreach ($data as $lang => $terms) {
+        if (!is_string($lang) || $lang === '' || $lang[0] === '_') {
+            continue;
+        }
+        if (!is_array($terms)) {
+            continue;
+        }
+        foreach ($terms as $term => $count) {
+            // json_decode turns purely numeric keys into ints
+            $term = (string) $term;
+            if ($term === '') {
+                continue;
+            }
+            $out[$lang][$term] = (int) $count;
+        }
+    }
+
+    return $out;
+}
+
+/**
+ * Write ai_translate_memory.json (pretty-printed, atomic replace).
+ *
+ * @param array<string, array<string, int>> $memory
+ */
+function saveTranslationMemory(string $path, array $memory): void {
+    ksort($memory);
+    foreach ($memory as &$terms) {
+        if (is_array($terms)) {
+            ksort($terms);
+        }
+    }
+    unset($terms);
+
+    $payload = [
+        '_comment' => 'Terms the translator returned unchanged (same as English). Count increments per identical API result. After 3 hits the term is skipped on later runs. Delete a term (or set its count below 3) to retry it.',
+    ] + $memory;
+
+    $json = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if ($json === false) {
+        eprintln('Warning: Failed to encode translation memory as JSON.');
+
+        return;
+    }
+
+    $tmp = $path.'.tmp';
+    if (file_put_contents($tmp, $json."\n") === false) {
+        eprintln("Warning: Failed to write translation memory file: {$tmp}");
+
+        return;
+    }
+
+    if (!rename($tmp, $path)) {
+        if (!copy($tmp, $path)) {
+            eprintln("Warning: Failed to replace translation memory file: {$path}");
+        }
+        @unlink($tmp);
+    }
+}
+
+/**
+ * @param array<string, array<string, int>> $memory
+ */
+function isIgnoredByTranslationMemory(array $memory, string $lang, string $msgid, int $threshold): bool {
+    return ((int) ($memory[$lang][$msgid] ?? 0)) >= $threshold;
+}
+
+/**
+ * @param array<string, array<string, int>> $memory
+ */
+function recordUntranslatedIdentity(array &$memory, string $lang, string $msgid): int {
+    if (!isset($memory[$lang]) || !is_array($memory[$lang])) {
+        $memory[$lang] = [];
+    }
+    $current = (int) ($memory[$lang][$msgid] ?? 0);
+    ++$current;
+    $memory[$lang][$msgid] = $current;
+
+    return $current;
+}
+
+/**
+ * Drop a term from memory after a real (non-identical) translation arrives.
+ *
+ * @param array<string, array<string, int>> $memory
+ */
+function clearUntranslatedIdentity(array &$memory, string $lang, string $msgid): bool {
+    if (!isset($memory[$lang][$msgid])) {
+        return false;
+    }
+    unset($memory[$lang][$msgid]);
+    if ($memory[$lang] === []) {
+        unset($memory[$lang]);
+    }
+
+    return true;
+}
+
+/**
  * Append line to log file.
  */
 function logAction(string $logFile, string $lang, string $msgid, string $action): void {
@@ -481,23 +713,71 @@ function logAction(string $logFile, string $lang, string $msgid, string $action)
 }
 
 /**
+ * Parse translated items out of a Grok message body.
+ *
+ * Accepts either {"translations":[...]} (structured output) or a bare JSON array.
+ *
+ * @return array<int, string>
+ */
+function parseTranslationItems(string $content): array {
+    $content = trim($content);
+    if ($content === '') {
+        return [];
+    }
+
+    $decoded = json_decode($content, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        if (preg_match('/```(?:json)?\s*(.*?)```/s', $content, $m)) {
+            $decoded = json_decode(trim($m[1]), true);
+        }
+    }
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+        $start = strpos($content, '[');
+        $end = strrpos($content, ']');
+        if ($start === false || $end === false || $end <= $start) {
+            return [];
+        }
+        $decoded = json_decode(substr($content, $start, $end - $start + 1), true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+            return [];
+        }
+    }
+
+    if (isset($decoded['translations']) && is_array($decoded['translations'])) {
+        $decoded = $decoded['translations'];
+    }
+
+    $result = [];
+    foreach ($decoded as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        if (isset($item['id'], $item['translation']) && is_scalar($item['translation'])) {
+            $result[(int) $item['id']] = (string) $item['translation'];
+        }
+    }
+
+    return $result;
+}
+
+/**
  * Call Grok API to translate a batch of strings.
- * → Only malformed JSON is gracefully ignored (batch skipped).
- * → All other errors (cURL, HTTP 5xx, timeout, invalid structure) still throw exceptions.
- * @param string $apiUrl
- * @param string $apiKey
- * @param string $targetLangCode
- * @param string $targetLangName
- * @param array  $batchItems [ ['id'=>int, 'source'=>string], ... ]
+ * Transient errors (timeout, 429, 5xx) are retried. Malformed JSON after
+ * retries is skipped. Other errors still throw.
+ *
+ * @param array $batchItems [ ['id'=>int, 'source'=>string], ... ]
  *
  * @return array [id => translation]
  */
 function callGrokTranslateBatch(
     string $apiUrl,
     string $apiKey,
+    string $model,
     string $targetLangCode,
     string $targetLangName,
-    array $batchItems
+    array $batchItems,
+    int $timeoutSeconds = 180,
+    string $reasoningEffort = 'low'
 ): array {
     if (empty($batchItems)) {
         return [];
@@ -514,114 +794,158 @@ Requirements:
 - Preserve all placeholders (like %s, %d, {name}), HTML tags, and punctuation.
 - Do not reorder placeholders or change their format.
 - When in doubt, prefer neutral, academic-language style.
+- Return translations only; no commentary.
 EOT;
 
     $inputList = [];
     foreach ($batchItems as $item) {
         $inputList[] = [
-            'id'     => $item['id'],
+            'id'     => (int) $item['id'],
             'source' => $item['source'],
         ];
     }
 
     $userPrompt = "Translate the following Chamilo LMS interface strings from English (source_language: en) "
-        . "into {$targetLangName} (target_language code: {$targetLangCode}).\n"
-        . "Return ONLY a valid JSON array, no extra text. Each array item MUST be an object with:\n"
-        . "  - \"id\": the same integer id as in the input\n"
-        . "  - \"translation\": the translated string\n\n"
-        . "Do not change or remove any placeholders (e.g., %s, %d, {name}) or HTML tags.\n\n"
-        . "Input:\n"
-        . json_encode($inputList, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        ."into {$targetLangName} (target_language code: {$targetLangCode}).\n"
+        ."Do not change or remove any placeholders (e.g., %s, %d, {name}) or HTML tags.\n\n"
+        ."Input:\n"
+        .json_encode($inputList, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
     $payload = [
-        'model'    => 'grok-4-1-fast-non-reasoning',
+        'model'    => $model,
         'messages' => [
             ['role' => 'system', 'content' => $systemPrompt],
             ['role' => 'user',   'content' => $userPrompt],
         ],
         'temperature' => 0.2,
+        'response_format' => [
+            'type' => 'json_schema',
+            'json_schema' => [
+                'name' => 'chamilo_translations',
+                'strict' => true,
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'translations' => [
+                            'type' => 'array',
+                            'items' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'id' => ['type' => 'integer'],
+                                    'translation' => ['type' => 'string'],
+                                ],
+                                'required' => ['id', 'translation'],
+                                'additionalProperties' => false,
+                            ],
+                        ],
+                    ],
+                    'required' => ['translations'],
+                    'additionalProperties' => false,
+                ],
+            ],
+        ],
     ];
-
-    $ch = curl_init($apiUrl);
-    if ($ch === false) {
-        throw new RuntimeException("Failed to initialize cURL.");
+    if ($reasoningEffort !== '') {
+        $payload['reasoning_effort'] = $reasoningEffort;
     }
 
     $payloadJson = json_encode($payload, JSON_UNESCAPED_UNICODE);
-    curl_setopt_array($ch, [
-        CURLOPT_POST           => true,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER     => [
-            'Content-Type: application/json',
-            'Accept: application/json',
-            'Authorization: Bearer ' . $apiKey,
-        ],
-        CURLOPT_POSTFIELDS     => $payloadJson,
-        CURLOPT_TIMEOUT        => 30,
-    ]);
-
-    $responseBody = curl_exec($ch);
-    if ($responseBody === false) {
-        $err   = curl_error($ch);
-        $errno = curl_errno($ch);
-        curl_close($ch);
-        throw new RuntimeException("cURL error ({$errno}): {$err}");
+    if ($payloadJson === false) {
+        throw new RuntimeException('Failed to encode Grok request payload as JSON.');
     }
 
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    $maxAttempts = 3;
+    $lastError = null;
 
-    if ($httpCode < 200 || $httpCode >= 300) {
-        throw new RuntimeException("Grok API HTTP error {$httpCode}: {$responseBody}");
-    }
-
-    // ——— SAFE JSON PARSING STARTS HERE ———
-    $data = json_decode($responseBody, true);
-
-    // Case 1: Full response is not valid JSON → treat as malformed, skip batch
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        eprintln("[Grok] Invalid JSON in full response (" . json_last_error_msg() . ") – skipping batch.", true);
-        return [];
-    }
-
-    // Case 2: Valid JSON, but missing expected structure
-    if (!is_array($data) || !isset($data['choices'][0]['message']['content'])) {
-        throw new RuntimeException("Unexpected Grok API response structure (missing choices/content).");
-    }
-
-    $content = $data['choices'][0]['message']['content'];
-
-    // Extract the JSON array part
-    $start = strpos($content, '[');
-    $end   = strrpos($content, ']');
-    if ($start === false || $end === false || $end <= $start) {
-        eprintln("[Grok] No JSON array found in response content – skipping batch.", true);
-        return [];
-    }
-
-    $jsonPart = substr($content, $start, $end - $start + 1);
-    $translationsArray = json_decode($jsonPart, true);
-
-    // Case 3: The extracted part is not valid JSON → ignore and continue
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        eprintln("[Grok] Invalid JSON in extracted array (" . json_last_error_msg() . ") – skipping batch.", true);
-        return [];
-    }
-
-    if (!is_array($translationsArray)) {
-        eprintln("[Grok] Extracted JSON is not an array – skipping batch.", true);
-        return [];
-    }
-
-    // ——— SUCCESS: Valid translations ———
-    $result = [];
-    foreach ($translationsArray as $item) {
-        if (isset($item['id'], $item['translation']) && is_scalar($item['translation'])) {
-            $result[(int)$item['id']] = (string)$item['translation'];
+    for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+        $ch = curl_init($apiUrl);
+        if ($ch === false) {
+            throw new RuntimeException('Failed to initialize cURL.');
         }
+
+        curl_setopt_array($ch, [
+            CURLOPT_POST           => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'Accept: application/json',
+                'Authorization: Bearer '.$apiKey,
+                'x-grok-conv-id: chamilo-po-translate-v1',
+            ],
+            CURLOPT_POSTFIELDS     => $payloadJson,
+            CURLOPT_CONNECTTIMEOUT => 15,
+            CURLOPT_TIMEOUT        => $timeoutSeconds,
+        ]);
+
+        $startedAt = microtime(true);
+        $responseBody = curl_exec($ch);
+        $elapsed = round(microtime(true) - $startedAt, 1);
+        $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($responseBody === false) {
+            $err = curl_error($ch);
+            $errno = curl_errno($ch);
+            curl_close($ch);
+            $lastError = "cURL error ({$errno}): {$err} after {$elapsed}s";
+            if ($attempt < $maxAttempts && in_array($errno, [CURLE_OPERATION_TIMEDOUT, CURLE_COULDNT_CONNECT, CURLE_RECV_ERROR], true)) {
+                $sleep = $attempt * 2;
+                eprintln("[Grok] {$lastError} – retrying in {$sleep}s (attempt {$attempt}/{$maxAttempts}).", true);
+                sleep($sleep);
+                continue;
+            }
+            throw new RuntimeException($lastError);
+        }
+
+        curl_close($ch);
+
+        if ($httpCode === 429 || $httpCode >= 500) {
+            $snippet = mb_substr($responseBody, 0, 300);
+            $lastError = "Grok API HTTP error {$httpCode} after {$elapsed}s: {$snippet}";
+            if ($attempt < $maxAttempts) {
+                $sleep = $attempt * 3;
+                eprintln("[Grok] {$lastError} – retrying in {$sleep}s (attempt {$attempt}/{$maxAttempts}).", true);
+                sleep($sleep);
+                continue;
+            }
+            throw new RuntimeException($lastError);
+        }
+
+        if ($httpCode < 200 || $httpCode >= 300) {
+            throw new RuntimeException("Grok API HTTP error {$httpCode} after {$elapsed}s: {$responseBody}");
+        }
+
+        $data = json_decode($responseBody, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            eprintln('[Grok] Invalid JSON in full response ('.json_last_error_msg().") after {$elapsed}s – skipping batch.", true);
+            return [];
+        }
+
+        if (!is_array($data) || !isset($data['choices'][0]['message']['content'])) {
+            throw new RuntimeException('Unexpected Grok API response structure (missing choices/content).');
+        }
+
+        $usage = $data['usage'] ?? [];
+        $promptTokens = $usage['prompt_tokens'] ?? '?';
+        $completionTokens = $usage['completion_tokens'] ?? '?';
+        $reasoningTokens = $usage['completion_tokens_details']['reasoning_tokens']
+            ?? $usage['reasoning_tokens']
+            ?? '?';
+        eprintln(
+            "[Grok] Batch HTTP {$httpCode} in {$elapsed}s"
+            ." (prompt={$promptTokens}, completion={$completionTokens}, reasoning={$reasoningTokens}).",
+            true
+        );
+
+        $content = (string) $data['choices'][0]['message']['content'];
+        $result = parseTranslationItems($content);
+        if ($result === []) {
+            eprintln('[Grok] No translations parsed from response content – skipping batch.', true);
+        }
+
+        return $result;
     }
 
-    return $result;
+    throw new RuntimeException($lastError ?? 'Grok API request failed after retries.');
 }
 
 /**
@@ -773,22 +1097,52 @@ if ($apiKey === '' || $apiKey === 'YOUR_GROK_API_KEY_HERE') {
     eprintln("Please edit this script and set \$apiKey at the top.");
 }
 
+eprintln(
+    "Grok client: model={$model} reasoning_effort={$reasoningEffort}"
+    ." timeout={$timeoutSeconds}s batch_size={$batchSize}.",
+    true
+);
+
 // Parse base messages.en.po
 eprintln("Loading base file: {$basePoFile}", true);
 $baseEntries = parseBasePoFile($basePoFile);
 $totalTerms = count($baseEntries);
 eprintln("Base entries loaded: {$totalTerms} (including header and plurals).", true);
 
+$translationMemory = loadTranslationMemory($memoryFile);
+$memoryIgnoredTotal = 0;
+foreach ($translationMemory as $memTerms) {
+    foreach ($memTerms as $memCount) {
+        if ((int) $memCount >= $untranslatedSkipThreshold) {
+            ++$memoryIgnoredTotal;
+        }
+    }
+}
+$memoryLangCount = count($translationMemory);
+eprintln(
+    "Translation memory: {$memoryFile} ({$memoryLangCount} language(s), "
+    ."{$memoryIgnoredTotal} term(s) at or above skip threshold {$untranslatedSkipThreshold}).",
+    true
+);
+
+$totalLangCount = count(array_filter($langCodes, static fn ($l) => trim((string) $l) !== ''));
+$langIndex = 0;
+
 foreach ($langCodes as $lang) {
     $lang = trim($lang);
     if ($lang === '') {
         continue;
     }
+    $langIndex++;
 
     $targetLangName = getLanguageName($lang);
     $targetFile = $translationsDir."messages.{$lang}.po";
     eprintln("------------------------------------------------------------");
-    eprintln("Processing language: {$lang} ({$targetLangName})", true);
+    eprintln(
+        "Processing language: {$lang} ({$targetLangName}) ({$langIndex}/{$totalLangCount})"
+        ." [Running for ".formatDuration(microtime(true) - $scriptStartTime)." so far]",
+        true
+    );
     eprintln("Target file: {$targetFile}");
 
     if (is_file($targetFile)) {
@@ -819,24 +1173,148 @@ foreach ($langCodes as $lang) {
 
     $pendingBatch = [];
     $pendingMap = []; // id => ['msgid'=>..., 'action'=>...]
+    $skippedByMemory = 0;
 
     $entryIndex = 0;
 
+    // Progress is noisy when printed on every 50-entry batch even though most
+    // batches make no change (nothing needed translating). Only print it as an
+    // occasional heartbeat (every 1000 entries) or right before an API call is
+    // about to be made, so the log shows where we were when something actually happened.
+    $lastProgressLoggedAt = 0;
+    $logProgress = function () use (&$lastProgressLoggedAt, &$processedCount, $totalTerms, $lang) {
+        if ($processedCount === $lastProgressLoggedAt) {
+            return;
+        }
+        $lastProgressLoggedAt = $processedCount;
+        eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed.", true);
+    };
+
     // Helper to write current state to disk (used on success AND on failure)
-    $writeCurrentState = function () use (
+    $writeCurrentState = function (?Throwable $error = null) use (
         &$targetTranslations,
         &$keepRawSingular,
+        &$translationMemory,
         $baseEntries,
         $targetParsed,
         $targetFile,
+        $memoryFile,
         $lang
     ) {
         $newContent = buildTargetPoContent($baseEntries, $targetParsed, $targetTranslations, $keepRawSingular);
-        if (file_put_contents($targetFile, $newContent) !== false) {
-            eprintln("[{$lang}] Partial translation file successfully written after error.", true);
-        } else {
+        if (file_put_contents($targetFile, $newContent) === false) {
             eprintln("[{$lang}] WARNING: Failed to write partial file!", true);
+            return;
         }
+
+        saveTranslationMemory($memoryFile, $translationMemory);
+
+        if ($error !== null) {
+            eprintln("[{$lang}] Partial translation file successfully written after error: ".$error->getMessage(), true);
+        } else {
+            eprintln("[{$lang}] Translation file written successfully.", true);
+        }
+    };
+
+    $flushBatch = function (bool $isFinal = false) use (
+        &$pendingBatch,
+        &$pendingMap,
+        &$apiBatchCount,
+        &$targetTranslations,
+        &$keepRawSingular,
+        &$translationMemory,
+        $existingSingular,
+        $logFile,
+        $lang,
+        $targetLangName,
+        $apiUrl,
+        $apiKey,
+        $model,
+        $timeoutSeconds,
+        $reasoningEffort,
+        $memoryFile,
+        $untranslatedSkipThreshold,
+        $logProgress
+    ): void {
+        if (empty($pendingBatch)) {
+            return;
+        }
+
+        $apiBatchCount++;
+        $logProgress();
+        $label = $isFinal ? 'final batch' : 'batch';
+        eprintln("[{$lang}] Sending {$label} {$apiBatchCount} to Grok API ("
+            .count($pendingBatch).' terms, model='.$model
+            .', reasoning_effort='.$reasoningEffort
+            .', timeout='.$timeoutSeconds.'s).', true);
+
+        $batchSuccess = false;
+        $translations = [];
+        try {
+            $translations = callGrokTranslateBatch(
+                $apiUrl,
+                $apiKey,
+                $model,
+                $lang,
+                $targetLangName,
+                $pendingBatch,
+                $timeoutSeconds,
+                $reasoningEffort
+            );
+            eprintln("[{$lang}] Grok API {$label} {$apiBatchCount} completed, "
+                .count($translations).' translations received.', true);
+            $batchSuccess = true;
+        } catch (Throwable $ex) {
+            eprintln("[{$lang}] API ERROR in {$label} {$apiBatchCount}: ".$ex->getMessage(), true);
+            eprintln("[{$lang}] Skipping this batch. All previous batches are preserved.", true);
+        }
+
+        if ($batchSuccess) {
+            $memoryDirty = false;
+            foreach ($pendingBatch as $item) {
+                $id = $item['id'];
+                $msgidBatch = $pendingMap[$id]['msgid'];
+                $actionBatch = $pendingMap[$id]['action'];
+                $translated = $translations[$id] ?? '';
+
+                if ($translated === '') {
+                    $translated = $existingSingular[$msgidBatch] ?? '';
+                    if (isset($existingSingular[$msgidBatch])) {
+                        $keepRawSingular[$msgidBatch] = true;
+                    }
+                } elseif (translationEqualsSource($msgidBatch, $translated)) {
+                    $hitCount = recordUntranslatedIdentity($translationMemory, $lang, $msgidBatch);
+                    $memoryDirty = true;
+                    $actionBatch .= ' – same as English ('.$hitCount.'/'.$untranslatedSkipThreshold.')';
+                    if ($hitCount >= $untranslatedSkipThreshold) {
+                        $actionBatch .= ', will skip next runs';
+                    }
+                } elseif (clearUntranslatedIdentity($translationMemory, $lang, $msgidBatch)) {
+                    $memoryDirty = true;
+                }
+
+                $targetTranslations[$msgidBatch] = $translated;
+                logAction($logFile, $lang, $msgidBatch, $actionBatch);
+            }
+            if ($memoryDirty) {
+                saveTranslationMemory($memoryFile, $translationMemory);
+            }
+            sleep(1);
+        } else {
+            foreach ($pendingBatch as $item) {
+                $id = $item['id'];
+                $msgidBatch = $pendingMap[$id]['msgid'];
+                $translated = $existingSingular[$msgidBatch] ?? '';
+                $targetTranslations[$msgidBatch] = $translated;
+                if ($translated !== '') {
+                    $keepRawSingular[$msgidBatch] = true;
+                }
+                logAction($logFile, $lang, $msgidBatch, 'failed – kept original');
+            }
+        }
+
+        $pendingBatch = [];
+        $pendingMap = [];
     };
 
     try {
@@ -845,9 +1323,8 @@ foreach ($langCodes as $lang) {
 
             if ($entry['isHeader'] || $entry['hasPlural']) {
                 $processedCount++;
-                if ($processedCount % 50 === 0) {
-                    eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed (header/plurals included).",
-                        true);
+                if ($processedCount % 1000 === 0) {
+                    $logProgress();
                 }
                 continue;
             }
@@ -873,6 +1350,24 @@ foreach ($langCodes as $lang) {
                 }
             }
 
+            if ($needsTranslation && isIgnoredByTranslationMemory(
+                $translationMemory,
+                $lang,
+                $msgid,
+                $untranslatedSkipThreshold
+            )) {
+                $needsTranslation = false;
+                ++$skippedByMemory;
+                if ($existing !== '') {
+                    $targetTranslations[$msgid] = $existing;
+                    $keepRawSingular[$msgid] = true;
+                } else {
+                    $targetTranslations[$msgid] = $msgid;
+                }
+                $action = 'ignored (untranslatable memory)';
+                logAction($logFile, $lang, $msgid, $action);
+            }
+
             if ($needsTranslation && $apiBatchCount < $maxBatches) {
                 $localId = count($pendingBatch);
                 $pendingBatch[] = [
@@ -886,64 +1381,7 @@ foreach ($langCodes as $lang) {
 
                 // Send batch when full
                 if (count($pendingBatch) >= $batchSize) {
-                    $apiBatchCount++;
-                    eprintln("[{$lang}] Sending batch {$apiBatchCount} to Grok API ("
-                        .count($pendingBatch)." terms).", true);
-
-                    $batchSuccess = false;
-                    try {
-                        $translations = callGrokTranslateBatch(
-                            $apiUrl,
-                            $apiKey,
-                            $lang,
-                            $targetLangName,
-                            $pendingBatch
-                        );
-                        eprintln("[{$lang}] Grok API batch {$apiBatchCount} completed, "
-                            .count($translations)." translations received.", true);
-                        $batchSuccess = true;
-                    } catch (Throwable $ex) {
-                        eprintln("[{$lang}] API ERROR in batch {$apiBatchCount}: ".$ex->getMessage(), true);
-                        eprintln("[{$lang}] Skipping this batch. All previous batches are preserved.", true);
-                        // Do NOT re-throw — we continue with next entries
-                    }
-
-                    if ($batchSuccess) {
-                        foreach ($pendingBatch as $item) {
-                            $id = $item['id'];
-                            $msgidBatch = $pendingMap[$id]['msgid'];
-                            $actionBatch = $pendingMap[$id]['action'];
-                            $translated = $translations[$id] ?? '';
-
-                            if ($translated === '') {
-                                $translated = $existingSingular[$msgidBatch] ?? '';
-                                if (isset($existingSingular[$msgidBatch])) {
-                                    $keepRawSingular[$msgidBatch] = true;
-                                }
-                            }
-
-                            $targetTranslations[$msgidBatch] = $translated;
-                            logAction($logFile, $lang, $msgidBatch, $actionBatch);
-                        }
-                        sleep(1);
-                    } else {
-                        // On failure: keep existing translations (or empty) and preserve raw formatting
-                        foreach ($pendingBatch as $item) {
-                            $id = $item['id'];
-                            $msgidBatch = $pendingMap[$id]['msgid'];
-                            $translated = $existingSingular[$msgidBatch] ?? '';
-                            $targetTranslations[$msgidBatch] = $translated;
-                            if ($translated !== '') {
-                                $keepRawSingular[$msgidBatch] = true;
-                            }
-                            logAction($logFile, $lang, $msgidBatch, 'failed – kept original');
-                        }
-                    }
-
-                    // Always clear batch after processing (success or fail)
-                    $pendingBatch = [];
-                    $pendingMap = [];
-
+                    $flushBatch(false);
                     if ($testMode && $apiBatchCount >= $maxBatches) {
                         eprintln("[{$lang}] Test mode limit reached.", true);
                     }
@@ -956,72 +1394,31 @@ foreach ($langCodes as $lang) {
             }
 
             $processedCount++;
-            if ($processedCount % 50 === 0) {
-                eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed.", true);
+            if ($processedCount % 1000 === 0) {
+                $logProgress();
             }
         }
 
         // Final batch (if any)
         if (!empty($pendingBatch) && $apiBatchCount < $maxBatches) {
-            $apiBatchCount++;
-            eprintln("[{$lang}] Sending final batch {$apiBatchCount} to Grok API ("
-                .count($pendingBatch)." terms).", true);
-
-            $finalSuccess = false;
-            try {
-                $translations = callGrokTranslateBatch(
-                    $apiUrl,
-                    $apiKey,
-                    $lang,
-                    $targetLangName,
-                    $pendingBatch
-                );
-                eprintln("[{$lang}] Final batch completed.", true);
-                $finalSuccess = true;
-            } catch (Throwable $ex) {
-                eprintln("[{$lang}] FINAL BATCH FAILED: ".$ex->getMessage(), true);
-                eprintln("[{$lang}] Writing file with all previously translated batches.", true);
-            }
-
-            if ($finalSuccess) {
-                foreach ($pendingBatch as $item) {
-                    $id = $item['id'];
-                    $msgidBatch = $pendingMap[$id]['msgid'];
-                    $actionBatch = $pendingMap[$id]['action'];
-                    $translated = $translations[$id] ?? '';
-                    if ($translated === '') {
-                        $translated = $existingSingular[$msgidBatch] ?? '';
-                        if (isset($existingSingular[$msgidBatch])) {
-                            $keepRawSingular[$msgidBatch] = true;
-                        }
-                    }
-                    $targetTranslations[$msgidBatch] = $translated;
-                    logAction($logFile, $lang, $msgidBatch, $actionBatch);
-                }
-            } else {
-                // Keep existing or leave empty for failed items
-                foreach ($pendingBatch as $item) {
-                    $id = $item['id'];
-                    $msgidBatch = $pendingMap[$id]['msgid'];
-                    $translated = $existingSingular[$msgidBatch] ?? '';
-                    $targetTranslations[$msgidBatch] = $translated;
-                    if ($translated !== '') {
-                        $keepRawSingular[$msgidBatch] = true;
-                    }
-                    logAction($logFile, $lang, $msgidBatch, 'failed – kept original');
-                }
-            }
+            $flushBatch(true);
         }
 
         // Final write on success
         $writeCurrentState();
+        if ($skippedByMemory > 0) {
+            eprintln(
+                "[{$lang}] Skipped {$skippedByMemory} term(s) already marked untranslatable in memory.",
+                true
+            );
+        }
         eprintln("[{$lang}] Translation completed and file written successfully.", true);
 
     } catch (Throwable $fatal) {
         // Any unexpected fatal error outside batch processing
         eprintln("[{$lang}] FATAL ERROR: ".$fatal->getMessage(), true);
         eprintln("[{$lang}] Attempting to save partial progress...", true);
-        $writeCurrentState();
+        $writeCurrentState($fatal);
         throw $fatal; // re-throw so you know something went very wrong
     }
 }

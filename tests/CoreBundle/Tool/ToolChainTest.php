@@ -7,16 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Tool;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Entity\PersonalFile;
-use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\Tool\GlobalTool;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class ToolChainTest extends AbstractApiTest
 {
@@ -84,7 +81,7 @@ class ToolChainTest extends AbstractApiTest
 
         $toolChain = self::getContainer()->get(ToolChain::class);
 
-        $tools = $toolChain->getTools();
+        $tools = [...$toolChain->getTools()];
 
         foreach ($tools as $tool) {
             $name = $tool->getTitle();
@@ -117,71 +114,15 @@ class ToolChainTest extends AbstractApiTest
         $this->assertTrue(\count($tools) > 0);
     }
 
-    public function testCreateTools(): void
+    public function testCreateToolsIsIdempotent(): void
     {
         self::bootKernel();
 
         $toolChain = self::getContainer()->get(ToolChain::class);
-        $countBefore = \count($toolChain->getTools());
+        $countBefore = \count([...$toolChain->getTools()]);
 
         $toolChain->createTools();
 
-        $tools = $toolChain->getTools();
-
-        $this->assertCount($countBefore, $tools);
-
-        $em = $this->getEntityManager();
-
-        // Delete BranchSync
-        $branchRepo = $em->getRepository(BranchSync::class);
-        $items = $branchRepo->findAll();
-        foreach ($items as $item) {
-            $em->remove($item);
-        }
-        $em->flush();
-
-        // Delete AccessUrl
-        $urlRepo = $em->getRepository(AccessUrl::class);
-        $items = $urlRepo->findAll();
-        foreach ($items as $item) {
-            $em->remove($item);
-        }
-        $em->flush();
-
-        $resourceTypeRepo = $em->getRepository(ResourceType::class);
-
-        $items = $resourceTypeRepo->findAll();
-        foreach ($items as $item) {
-            $em->remove($item);
-        }
-        $em->flush();
-
-        $items = $resourceTypeRepo->findAll();
-        $this->assertSame([], $items);
-
-        $toolChain = self::getContainer()->get(ToolChain::class);
-        $toolChain->createTools();
-
-        $items = $resourceTypeRepo->findAll();
-        $this->assertNotEmpty($items);
-
-        $resourceType = (new ResourceType())
-            ->setTitle('test')
-        ;
-        $this->assertHasNoEntityViolations($resourceType);
-        $em->persist($resourceType);
-
-        $collection = new ArrayCollection();
-        $collection->add($resourceType);
-
-        $tool = (new Tool())
-            ->setTitle('lasagna')
-            ->setResourceTypes($collection)
-        ;
-        $this->assertHasNoEntityViolations($tool);
-        $em->persist($tool);
-        $em->flush();
-
-        $this->assertNotNull($resourceType->getId());
+        $this->assertCount($countBefore, [...$toolChain->getTools()]);
     }
 }

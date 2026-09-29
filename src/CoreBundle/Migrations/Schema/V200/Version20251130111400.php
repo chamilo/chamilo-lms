@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\AssetRepository;
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -20,7 +20,7 @@ use Throwable;
 
 final class Version20251130111400 extends AbstractMigrationChamilo
 {
-    private const DRY_RUN = false;
+    private const bool DRY_RUN = false;
 
     public function getDescription(): string
     {
@@ -527,7 +527,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                  SET resource_node_id = NULL
                  WHERE resource_node_id IN (?)',
                 [$nodeIds],
-                [Connection::PARAM_INT_ARRAY]
+                [ArrayParameterType::INTEGER]
             );
 
             // Delete orphan ResourceNode entries that do not have any ResourceFile
@@ -538,7 +538,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                  WHERE rn.id IN (?)
                    AND rf.id IS NULL',
                 [$nodeIds],
-                [Connection::PARAM_INT_ARRAY]
+                [ArrayParameterType::INTEGER]
             );
 
             error_log(
@@ -566,7 +566,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                  SET resource_node_id = NULL
                  WHERE resource_node_id IN (?)',
                 [$fbNodeIds],
-                [Connection::PARAM_INT_ARRAY]
+                [ArrayParameterType::INTEGER]
             );
 
             $this->connection->executeStatement(
@@ -576,7 +576,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                  WHERE rn.id IN (?)
                    AND rf.id IS NULL',
                 [$fbNodeIds],
-                [Connection::PARAM_INT_ARRAY]
+                [ArrayParameterType::INTEGER]
             );
 
             error_log(

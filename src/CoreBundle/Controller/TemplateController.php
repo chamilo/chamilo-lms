@@ -20,6 +20,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,7 @@ class TemplateController extends AbstractController
         $cid = $request->request->get('cid');
         $imageFile = $request->files->get('thumbnail');
 
-        if (!$imageFile) {
+        if (!$imageFile instanceof UploadedFile) {
             return $this->json(['error' => 'No image provided.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -86,6 +87,20 @@ class TemplateController extends AbstractController
     #[Route('/document-templates/{documentId}/is-template', methods: ['GET'])]
     public function isDocumentTemplate(int $documentId, EntityManagerInterface $entityManager): Response
     {
+        // Same gate as creating and deleting the template: the answer is only for someone who
+        // may edit the document's course, never for anyone walking through document ids.
+        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
+        if (!$document) {
+            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $course = $document->getFirstResourceLink()?->getCourse();
+        if (!$course instanceof Course) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+
         $template = $entityManager->getRepository(Templates::class)->findOneBy(['refDoc' => $documentId]);
 
         return $this->json([

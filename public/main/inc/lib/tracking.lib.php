@@ -992,7 +992,7 @@ class Tracking
                                             null,
                                             ICON_SIZE_SMALL,
                                             get_lang(
-                                                'Show all attemptsByExercise'
+                                                'Show all attempts by exercise'
                                             )
                                         ),
                                         api_get_self().'?action=stats&extend_attempt=1'.$my_url_suffix.'&sid='.$sessionId.'&lp_item_id='.$my_id.'#'.$linkId,
@@ -2165,8 +2165,18 @@ class Tracking
                             $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                             $icon = null;
                             if (api_is_allowed_to_edit()) {
-                                $url = api_get_path(WEB_CODE_PATH).
-                                    'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
+                                $courseEntity = api_get_course_entity((int) $courseInfo['real_id']);
+                                $courseResourceNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
+                                if ($courseResourceNodeId > 0) {
+                                    $url = api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/add?'.http_build_query([
+                                        'cid' => (int) $courseInfo['real_id'],
+                                        'sid' => (int) $sessionId,
+                                        'remind_inactive' => (int) $student_id,
+                                    ]);
+                                } else {
+                                    $url = api_get_path(WEB_CODE_PATH).
+                                        'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
+                                }
                                 $icon = '<a href="'.$url.'" title="'.get_lang('Remind inactive user').'">
                                   '.Display::getMdiIcon(
                                         StateIcon::WARNING,
@@ -3426,7 +3436,8 @@ class Tracking
             $sql = "SELECT DISTINCT(iid) FROM $lpTable
                 WHERE 1=1 $condition_lp";
             $result = Database::query($sql);
-            $session_condition = api_get_session_condition($sessionId);
+            $sessionCondition = api_get_session_condition($sessionId);
+            $vSessionCondition = api_get_session_condition($sessionId, true, false, 'v.session_id');
 
             // calculates time
             if (Database::num_rows($result) > 0) {
@@ -3448,7 +3459,7 @@ class Tracking
                                 c_id = $courseId AND
                                 lp_id = $lp_id AND
                                 user_id = $student_id
-                                $session_condition";
+                                $sessionCondition";
                         $res = Database::query($sql);
                         $view = '';
                         if (Database::num_rows($res) > 0) {
@@ -3476,8 +3487,8 @@ class Tracking
                                 i.lp_id = $lp_id  AND
                                 v.user_id = $student_id AND
                                 item_type = 'quiz' AND
-                                path <> '' AND
-                                v.session_id = $sessionId
+                                path <> ''
+                                $vSessionCondition
                                 $viewCondition
                             ORDER BY iv.view_count DESC ";
 
@@ -3486,7 +3497,6 @@ class Tracking
                             $row = Database::fetch_array($resultRow);
                             $totalTimeInLpItemView = $row['mytime'];
                             $lpItemViewId = $row['iid'];
-                            $sessionCondition = api_get_session_condition($sessionId);
                             $sql = 'SELECT SUM(exe_duration) exe_duration
                                 FROM '.$trackExercises.'
                                 WHERE
@@ -3528,8 +3538,8 @@ class Tracking
                         WHERE
                             view.c_id = $courseId AND
                             view.lp_id = $lp_id AND
-                            view.user_id = $student_id AND
-                            session_id = $sessionId";
+                            view.user_id = $student_id
+                            $sessionCondition";
 
                     $rs = Database::query($sql);
                     if (Database::num_rows($rs) > 0) {
@@ -6768,9 +6778,9 @@ class Tracking
         return Database::getManager()
             ->createQuery("
                 SELECT csp
-                FROM ChamiloCourseBundle:CStudentPublication csp
-                INNER JOIN ChamiloCourseBundle:CItemProperty cip
-                    WITH (
+                FROM Chamilo\CourseBundle\Entity\CStudentPublication csp
+                INNER JOIN Chamilo\CourseBundle\Entity\CItemProperty cip
+                    ON (
                         csp.iid = cip.ref AND
                         csp.session = cip.session AND
                         csp.cId = cip.course AND

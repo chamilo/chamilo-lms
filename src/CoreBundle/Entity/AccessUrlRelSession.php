@@ -38,6 +38,11 @@ class AccessUrlRelSession implements EntityAccessUrlInterface
         return $this->id;
     }
 
+    public function getUrl(): ?AccessUrl
+    {
+        return $this->url;
+    }
+
     public function setUrl(?AccessUrl $url): self
     {
         $this->url = $url;
@@ -45,9 +50,9 @@ class AccessUrlRelSession implements EntityAccessUrlInterface
         return $this;
     }
 
-    public function getUrl(): ?AccessUrl
+    public function getSession(): Session
     {
-        return $this->url;
+        return $this->session;
     }
 
     public function setSession(Session $session): self
@@ -55,10 +60,5 @@ class AccessUrlRelSession implements EntityAccessUrlInterface
         $this->session = $session;
 
         return $this;
-    }
-
-    public function getSession(): Session
-    {
-        return $this->session;
     }
 }

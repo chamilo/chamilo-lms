@@ -137,17 +137,18 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseSearchSelect from "../../components/basecomponents/BaseSearchSelect.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
 const { requireConfirmation } = useConfirmation()
 
 const survey = ref({})
 const targets = ref([])
 const selectedTargetKey = ref("")
-const csrfToken = ref("")
 const searchQuery = ref("")
 const errorMessage = ref("")
 const successMessage = ref("")
@@ -192,7 +193,6 @@ async function loadCopyForm() {
 
     survey.value = response.survey || {}
     targets.value = Array.isArray(response.targets) ? response.targets : []
-    csrfToken.value = response.csrfToken || ""
 
     if (selectedTargetKey.value && !targets.value.some((target) => String(target.id) === String(selectedTargetKey.value))) {
       selectedTargetKey.value = ""
@@ -243,7 +243,6 @@ async function copySurvey() {
       {
         targetCourseId: selectedTarget.value.targetCourseId,
         targetSessionId: selectedTarget.value.targetSessionId || 0,
-        csrfToken: csrfToken.value,
       },
       getContextParams(),
       surveyId.value,
@@ -276,7 +275,7 @@ function decodeHtml(value) {
 }
 
 function displayText(value, fallback = "") {
-  const decodedValue = decodeHtml(value)
+  const decodedValue = decodeHtml(displayTranslatedHtml(value))
   const plainValue = decodeHtml(decodedValue.replace(/<[^>]*>/g, " "))
     .replace(/\s+/g, " ")
     .trim()

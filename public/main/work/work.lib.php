@@ -2452,7 +2452,7 @@ function get_work_user_list(
                             $actionCompilatio = get_lang('File format not supported');
                         } elseif (filesize($workDirectory.'/'.$work['url']) > $compilation->getMaxFileSize()) {
                             $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
-                            $actionCompilatio = get_lang('The file is too big to upload.').': '.format_file_size($sizeFile).'<br />';
+                            $actionCompilatio = get_lang('The file is too big to upload.').': '.\Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($sizeFile).'<br />';
                         } else {
                             $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>";
                             $actionCompilatio .= Display::url(
@@ -2932,7 +2932,7 @@ function getAllWork(
                         $actionCompilatio = get_lang('File format not supported');
                     } elseif (filesize($workDirectory.'/'.$work['url']) > $compilation->getMaxFileSize()) {
                         $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
-                        $actionCompilatio = get_lang('The file is too big to upload.').': '.format_file_size($sizeFile).'<br />';
+                        $actionCompilatio = get_lang('The file is too big to upload.').': '.\Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($sizeFile).'<br />';
                     } else {
                         $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>";
                         $actionCompilatio .= Display::url(

@@ -196,7 +196,7 @@
                                 {% for teacher in course.teachers %}
                                 <li class="flex items-center gap-2 text-sm text-gray-90">
                                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-support-2 text-primary">
-                                                    <em class="fa fa-user" aria-hidden="true"></em>
+                                                    <em class="mdi mdi-account" aria-hidden="true"></em>
                                                 </span>
                                     <span>{{ teacher.name }}</span>
                                 </li>
@@ -218,7 +218,7 @@
 
                             {% if session.dates is defined and session.dates.display %}
                             <p class="text-sm text-gray-50">
-                                <em class="fa fa-calendar fa-fw text-primary"></em>
+                                <em class="mdi mdi-calendar text-primary"></em>
                                 {{ session.dates.display }}
                             </p>
                             {% endif %}
@@ -236,7 +236,7 @@
                                 <ul class="mt-2 space-y-1">
                                     {% for coach in itemCourse.coaches %}
                                     <li class="flex items-center gap-2 text-sm text-gray-50">
-                                        <em class="fa fa-user text-primary" aria-hidden="true"></em>
+                                        <em class="mdi mdi-account text-primary" aria-hidden="true"></em>
                                         <span>{{ coach }}</span>
                                     </li>
                                     {% endfor %}
@@ -256,26 +256,26 @@
 
                             <ul class="space-y-2 text-sm text-gray-90">
                                 {% if service.applies_to == 0 %}
-                                <li><em class="fa fa-hand-o-right text-primary"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'None'|get_lang }}</li>
+                                <li><em class="mdi mdi-hand-pointing-right text-primary"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'None'|get_lang }}</li>
                                 {% elseif service.applies_to == 1 %}
-                                <li><em class="fa fa-hand-o-right text-primary"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'User'|get_lang }}</li>
+                                <li><em class="mdi mdi-hand-pointing-right text-primary"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'User'|get_lang }}</li>
                                 {% elseif service.applies_to == 2 %}
-                                <li><em class="fa fa-hand-o-right text-primary"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Course'|get_lang }}</li>
+                                <li><em class="mdi mdi-hand-pointing-right text-primary"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Course'|get_lang }}</li>
                                 {% elseif service.applies_to == 3 %}
-                                <li><em class="fa fa-hand-o-right text-primary"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Session'|get_lang }}</li>
+                                <li><em class="mdi mdi-hand-pointing-right text-primary"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'Session'|get_lang }}</li>
                                 {% elseif service.applies_to == 4 %}
-                                <li><em class="fa fa-hand-o-right text-primary"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'TemplateTitleCertificate'|get_lang }}</li>
+                                <li><em class="mdi mdi-hand-pointing-right text-primary"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'TemplateTitleCertificate'|get_lang }}</li>
                                 {% endif %}
 
                                 <li>
-                                    <em class="fa fa-money text-primary"></em>
+                                    <em class="mdi mdi-cash text-primary"></em>
                                     {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}:
                                     {{ service_item.total_price_formatted }}
                                 </li>
 
                                 {% if service.owner is defined %}
                                 <li>
-                                    <em class="fa fa-user text-primary"></em>
+                                    <em class="mdi mdi-account text-primary"></em>
                                     {{ service.owner.name }}
                                 </li>
                                 {% endif %}
@@ -460,7 +460,7 @@
       type: "POST",
       url: url,
       beforeSend: function () {
-        $("#confirm").html('<em class="fa fa-spinner fa-pulse fa-fw"></em> {{ 'Loading'|get_lang }}');
+        $("#confirm").html('<em class="mdi mdi-loading mdi-spin"></em> {{ 'Loading'|get_lang }}');
         $("#confirm").prop("disabled", true);
         $("#cancel").prop("disabled", true);
       },

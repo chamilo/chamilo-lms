@@ -30,7 +30,7 @@ class ExtraFieldSavedSearch
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\Column(name: 'value', type: 'array', unique: false, nullable: true)]
+    #[ORM\Column(name: 'value', type: 'json', unique: false, nullable: true)]
     protected ?array $value;
 
     public function __construct()

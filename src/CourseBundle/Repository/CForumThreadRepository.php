@@ -60,18 +60,22 @@ class CForumThreadRepository extends ResourceRepository
             $resource->setParent($forum);
         }
 
-        $posts = $resource->getPosts();
-        if (!empty($posts)) {
-            foreach ($posts as $post) {
-                $post->setParent($resource);
+        // Only repair the resource-node hierarchy here; do NOT delete post by post.
+        // parent::delete() already removes the whole descendant tree in a SINGLE flush,
+        // and that is deliberate — see ResourceRepository::scheduleForRemoval(). One
+        // flush per post re-enters ResourceDoctrineListener's own persist-and-flush
+        // cycle, and those interleaved flushes make the UnitOfWork report an
+        // already-removed post as a new entity through CForumPost::$postParent, so the
+        // delete aborted with a 500 on any thread whose posts form a parent chain
+        // (a reply, plus a quote of that reply).
+        foreach ($resource->getPosts() as $post) {
+            $post->setParent($resource);
 
-                foreach ($post->getAttachments() as $attachment) {
-                    $attachment->setParent($post);
-                }
-
-                parent::delete($post);
+            foreach ($post->getAttachments() as $attachment) {
+                $attachment->setParent($post);
             }
         }
+
         parent::delete($resource);
     }
 

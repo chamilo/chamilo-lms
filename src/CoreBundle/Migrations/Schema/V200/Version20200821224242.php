@@ -16,6 +16,11 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         return 'Messages';
     }
 
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         if ($schema->hasTable('message_feedback')) {
@@ -128,6 +133,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
          * }*/
 
         if (!$table->hasForeignKey('FK_B6BD307FF6C43E79')) {
+            $this->addSql('ALTER TABLE message CHANGE user_sender_id user_sender_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)'
             );

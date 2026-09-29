@@ -97,7 +97,7 @@ try {
             if (!empty($toolLinks)) {
                 $em
                     ->createQuery(
-                        "DELETE FROM ChamiloCourseBundle:CTool ct WHERE ct.category = :category AND ct.link IN (:links) AND ct.session_id = :sessionId"
+                        "DELETE FROM Chamilo\CourseBundle\Entity\CTool ct WHERE ct.category = :category AND ct.link IN (:links) AND ct.session_id = :sessionId"
                     )
                     ->execute(['category' => 'plugin', 'links' => $toolLinks, 'sessionId' => $sessionId]);
             }

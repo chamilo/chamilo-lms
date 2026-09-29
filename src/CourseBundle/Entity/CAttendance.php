@@ -12,15 +12,19 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\CAttendanceDeleteProcessor;
 use Chamilo\CoreBundle\State\CAttendanceStateProcessor;
+use Chamilo\CoreBundle\State\RoomAssignmentStateProcessor;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,26 +37,29 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     shortName: 'Attendance',
     operations: [
-        new Put(
+        new Patch(
             uriTemplate: '/attendances/{iid}/toggle_visibility',
             openapi: new Operation(
                 summary: 'Toggle visibility of the attendance\'s associated ResourceLink'
             ),
             security: "is_granted('EDIT', object.resourceNode)",
             name: 'toggle_visibility',
-            processor: CAttendanceStateProcessor::class
+            processor: CAttendanceStateProcessor::class,
+            deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/attendances/{iid}/soft_delete',
             openapi: new Operation(
                 summary: 'Soft delete the attendance'
             ),
             security: "is_granted('EDIT', object.resourceNode)",
             name: 'soft_delete',
-            processor: CAttendanceStateProcessor::class
+            processor: CAttendanceStateProcessor::class,
+            deserialize: false
         ),
         new Delete(
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            security: "is_granted('EDIT', object.resourceNode)",
+            processor: CAttendanceDeleteProcessor::class,
         ),
         new Post(
             uriTemplate: '/attendances/{iid}/calendars',
@@ -82,11 +89,18 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             denormalizationContext: ['groups' => ['attendance:write']],
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
-            validationContext: ['groups' => ['Default']]
+            validationContext: ['groups' => ['Default']],
+            processor: RoomAssignmentStateProcessor::class,
         ),
         new Put(
             denormalizationContext: ['groups' => ['attendance:write']],
-            security: "is_granted('EDIT', object.resourceNode)"
+            security: "is_granted('EDIT', object.resourceNode)",
+            processor: RoomAssignmentStateProcessor::class,
+        ),
+        new Patch(
+            denormalizationContext: ['groups' => ['attendance:write']],
+            security: "is_granted('EDIT', object.resourceNode)",
+            processor: RoomAssignmentStateProcessor::class,
         ),
     ],
     normalizationContext: [
@@ -104,6 +118,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CAttendanceRepository::class)]
 class CAttendance extends AbstractResource implements ResourceInterface, Stringable
 {
+    #[Groups(['attendance:write'])]
+    public bool $addToGradebook = false;
+
+    #[Groups(['attendance:write'])]
+    public int $gradebookCategoryId = 0;
+
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -145,8 +165,13 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     #[Groups(['attendance:read', 'attendance:write'])]
     protected bool $requireUnique = false;
 
+    #[ORM\ManyToOne(targetEntity: Room::class)]
+    #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Groups(['attendance:read', 'attendance:write'])]
+    protected ?Room $room = null;
+
     /**
-     * @var Collection|CAttendanceCalendar[]
+     * @var Collection<int, CAttendanceCalendar>
      */
     #[ORM\OneToMany(mappedBy: 'attendance', targetEntity: CAttendanceCalendar::class, cascade: ['persist', 'remove'])]
     #[Groups(['attendance:read'])]
@@ -350,6 +375,33 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
         $this->results = $results;
 
         return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): self
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
+    public static function formatRoomData(?Room $room): ?array
+    {
+        if (null === $room) {
+            return null;
+        }
+
+        return [
+            'id' => $room->getId(),
+            'title' => $room->getTitle(),
+            'branchTitle' => $room->getBranch()?->getTitle(),
+            'floorNumber' => $room->getFloorNumber(),
+            'capacity' => $room->getCapacity(),
+        ];
     }
 
     public function isRequireUnique(): bool

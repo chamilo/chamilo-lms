@@ -44,7 +44,7 @@
               type="black"
               :disabled="isAtRoot"
               :title="t('Root')"
-              class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !bg-white !p-0"
+              class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !p-0"
               @click="goToRoot"
             />
 
@@ -54,7 +54,7 @@
               type="black"
               :disabled="!canGoUp"
               :title="t('Up')"
-              class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !bg-white !p-0"
+              class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !p-0"
               @click="goUpOneLevel"
             />
 
@@ -134,15 +134,7 @@
           <template #body="slotProps">
             <div class="py-1">
               <div class="flex min-w-0 items-center gap-3">
-                <div
-                  :class="getEntryIconContainerClass(slotProps.data)"
-                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border"
-                >
-                  <v-icon
-                    :icon="getEntryIcon(slotProps.data)"
-                    class="text-lg"
-                  />
-                </div>
+                <DocumentEntryThumbnail :data="slotProps.data" />
 
                 <div class="min-w-0 flex-1">
                   <template v-if="slotProps.data?.resourceNode?.firstResourceFile">
@@ -280,21 +272,19 @@ import { mapActions, mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import ListMixin from "../../mixins/ListMixin"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
-import ResourceFileLink from "../../components/documents/ResourceFileLink.vue"
-import DataFilter from "../../components/DataFilter"
-import DocumentsFilterForm from "../../components/documents/Filter"
 import resourceNodeService from "../../services/resourcenode"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
+import { useNotification } from "../../composables/notification"
 import prettyBytes from "pretty-bytes"
-import { useSecurityStore } from "../../store/securityStore"
-import { storeToRefs } from "pinia"
-import { ref } from "vue"
+import { computed, ref } from "vue"
+import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
+import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import DocumentEntryThumbnail from "../../components/documents/DocumentEntryThumbnail.vue"
 
 export default {
   name: "DocumentForHtmlEditor",
@@ -304,25 +294,24 @@ export default {
     BaseDialogConfirmCancel,
     BaseButton,
     BaseToolbar,
-    ResourceFileLink,
-    DocumentsFilterForm,
-    DataFilter,
+    DocumentEntryThumbnail,
   },
   mixins: [ListMixin],
   setup() {
     const { t } = useI18n()
     const { relativeDatetime } = useFormatDate()
-    const securityStore = useSecurityStore()
-    const { isAuthenticated, isAdmin, isCurrentTeacher } = storeToRefs(securityStore)
-    const { showUploadButton, showNewFolderButton } = useDocumentActionButtons()
+    const { showErrorNotification } = useNotification()
+    const route = useRoute()
+    const { isAllowedToEdit } = useIsAllowedToEdit()
+    const isCertificateMode = computed(() => route.query.filetype === "certificate")
+    const showUploadButton = computed(() => isAllowedToEdit.value && !isCertificateMode.value)
+    const showNewFolderButton = computed(() => isAllowedToEdit.value && !isCertificateMode.value)
 
     return {
       t,
       relativeDatetime,
+      showErrorNotification,
       prettyBytes,
-      isAuthenticated,
-      isAdmin,
-      isCurrentTeacher,
       showNewFolderButton,
       showUploadButton,
       selectedItems: [],
@@ -532,21 +521,7 @@ export default {
     notifyError(message) {
       if (!message) return
 
-      if (this.$toast?.add) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Error",
-          detail: message,
-          life: 4000,
-        })
-        return
-      }
-
-      console.error("[DOC PICKER]", message)
-
-      if (typeof window !== "undefined" && typeof window.alert === "function") {
-        window.alert(message)
-      }
+      this.showErrorNotification(message)
     },
     getEntryType(entry) {
       if (this.isFolderEntry(entry)) return "folder"
@@ -564,37 +539,6 @@ export default {
       if (type === "audio") return this.t("Audio")
 
       return this.t("File")
-    },
-    getEntryIcon(entry) {
-      const type = this.getEntryType(entry)
-
-      if (type === "folder") return "mdi-folder"
-      if (type === "image") return "mdi-file-image-outline"
-      if (type === "video") return "mdi-file-video-outline"
-      if (type === "audio") return "mdi-file-music-outline"
-
-      return "mdi-file-document-outline"
-    },
-    getEntryIconContainerClass(entry) {
-      const type = this.getEntryType(entry)
-
-      if (type === "folder") {
-        return "border-support-3 bg-support-1 text-support-4"
-      }
-
-      if (type === "image") {
-        return "border-info bg-support-2 text-info"
-      }
-
-      if (type === "video") {
-        return "border-secondary bg-support-6 text-secondary"
-      }
-
-      if (type === "audio") {
-        return "border-primary bg-support-2 text-primary"
-      }
-
-      return "border-gray-25 bg-gray-10 text-gray-50"
     },
     getEntryBadgeClass(entry) {
       const type = this.getEntryType(entry)

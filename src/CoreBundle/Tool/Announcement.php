@@ -23,7 +23,7 @@ class Announcement extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/announcements/announcements.php';
+        return '/resources/announcement/:nodeId/';
     }
 
     public function getCategory(): string

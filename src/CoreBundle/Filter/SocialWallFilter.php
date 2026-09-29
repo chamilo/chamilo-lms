@@ -17,7 +17,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\PropertyInfo\Type;
 
 class SocialWallFilter extends AbstractFilter
 {
@@ -40,7 +39,7 @@ class SocialWallFilter extends AbstractFilter
         foreach ($this->properties as $property => $strategy) {
             $description["socialwall_$property"] = [
                 'property' => $property,
-                'type' => Type::BUILTIN_TYPE_RESOURCE,
+                'type' => 'resource',
                 'required' => false,
             ];
         }

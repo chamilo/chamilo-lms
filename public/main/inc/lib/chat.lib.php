@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use ChamiloSession as Session;
 
 /**
@@ -96,7 +98,9 @@ class Chat extends Model
         $html = (string) SocialManager::listMyFriendsBlock(api_get_user_id(), '', true);
 
         // Add AI Tutor contact when enabled (global chat).
-        if ('true' === api_get_setting('ai_helpers.tutor_chatbot') && api_get_course_int_id() > 0) {
+        $aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
+
+        if ($aiFeatureAccessHelper->isFeatureEnabledForCourse('tutor_chatbot', api_get_course_int_id())) {
             // Hide AI when user is in an exam (best effort).
             if (empty($_SESSION['is_in_a_test'])) {
                 $ai = ''

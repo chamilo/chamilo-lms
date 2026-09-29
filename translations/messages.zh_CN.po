@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "此致敬礼"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式示例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式示例: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "变量范围"
@@ -1580,7 +1580,7 @@ msgstr "你肯定要取消这些步骤吗？"
 msgid "Authoring tool"
 msgstr "原始"
 
-msgid "SCORM or AICC file to upload"
+msgid "SCORM file to upload"
 msgstr "需要上传的文件"
 
 msgid "Course location"
@@ -7718,6 +7718,54 @@ msgstr "测验的题目列表"
 msgid "Recycle existing questions"
 msgstr "从题库选择"
 
+msgid "Add this question to the test: %s"
+msgstr "将此题目添加到测验：%s"
+
+msgid "Edit question: %s"
+msgstr "编辑题目：%s"
+
+msgid "Add a question: %s"
+msgstr "添加题目：%s"
+
+msgid "Detected blanks: %s"
+msgstr "检测到的填空：%s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s 道题目，所有题目总分 %s。"
+
+msgid "Unique answer"
+msgstr "单选题"
+
+msgid "Multiple answer true/false"
+msgstr "多项判断题"
+
+msgid "Multiple answer combination true/false"
+msgstr "多项判断组合题"
+
+msgid "Unique answer with images"
+msgstr "带图片的单选题"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "带确信度的多项判断题"
+
+msgid "Answer in Office document"
+msgstr "在 Office 文档中作答"
+
+msgid "Matching draggable"
+msgstr "可拖拽匹配题"
+
+msgid "Matching draggable combination"
+msgstr "可拖拽匹配组合题"
+
+msgid "Fill in blanks combination"
+msgstr "填空组合题"
+
+msgid "Multiple answer dropdown combination"
+msgstr "下拉多项选择组合题"
+
+msgid "Matching combination"
+msgstr "匹配组合题"
+
 msgid "Correct test"
 msgstr "完成测验"
 
@@ -8552,6 +8600,9 @@ msgstr "住址机构（单位）"
 msgid "Reporting"
 msgstr "报告"
 
+msgid "Analytics"
+msgstr "分析"
+
 msgid "Update"
 msgstr "更新"
 
@@ -8729,11 +8780,23 @@ msgstr "显示"
 msgid "My courses"
 msgstr "我的课程"
 
+msgid "Shop"
+msgstr "商店"
+
+msgid "Invoice"
+msgstr "发票"
+
+msgid "Request invoice"
+msgstr "申请发票"
+
 msgid "View my progress"
 msgstr "查看状态"
 
 msgid "Personal agenda"
 msgstr "日程安排"
+
+msgid "Group agenda"
+msgstr "小组日程"
 
 msgid "Switch to teacher view"
 msgstr "教师视角"
@@ -9257,6 +9320,15 @@ msgstr "届次 %s 的时间报告"
 msgid "Error"
 msgstr "错误"
 
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "用户已创建，但其中一个附加个人资料字段无法保存。"
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "用户已更新，但其中一个附加个人资料字段无法保存。"
+
+msgid "One or more fields contain invalid values."
+msgstr "一个或多个字段包含无效值。"
+
 msgid "Anonymous"
 msgstr "匿名"
 
@@ -9528,7 +9600,7 @@ msgid "File upload failed: this file extension or file type is prohibited"
 msgstr "上传文件失败：文件类型不符合要求"
 
 msgid "OpenID URL"
-msgstr "OpenID URL"
+msgstr "OpenID 网址"
 
 msgid "The file is too big to upload."
 msgstr "文件过大"
@@ -14399,6 +14471,9 @@ msgstr "请返回步骤 1"
 msgid "has not been found in that directory"
 msgstr "在该目录中未找到"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "安装程序没有独立的登录功能，因此必须在服务器上授权升级。请在项目根目录中、.env 文件旁边创建一个名为 %s 的空文件，然后继续。"
+
 msgid "Old version's root path"
 msgstr "旧版本根路径"
 
@@ -15057,7 +15132,7 @@ msgid "Install Chamilo"
 msgstr "安装 Chamilo"
 
 msgid "Chamilo URL"
-msgstr "Chamilo URL"
+msgstr "Chamilo 网址"
 
 msgid "You have no session in your sessions history"
 msgstr "你还没有任何培训记录"
@@ -15295,6 +15370,30 @@ msgstr "上周花费的时间"
 
 msgid "System status"
 msgstr "系统状态"
+
+msgid "Courses space"
+msgstr "课程空间"
+
+msgid "Database server configuration and metadata"
+msgstr "数据库服务器配置和元数据"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "每门课程磁盘使用量与磁盘配额"
+
+msgid "Information about your webserver configuration"
+msgstr "Web 服务器配置信息"
+
+msgid "Paths"
+msgstr "路径"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo 系统要求状态"
+
+msgid "State of PHP settings on the server"
+msgstr "服务器 PHP 设置状态"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "此门户上解析的 api_get_path() 常量"
 
 msgid "Is writable"
 msgstr "可写"
@@ -20471,6 +20570,9 @@ msgstr "父语言：%s"
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "通过搜索某个术语为子语言 %s 定义新术语，然后点击保存按钮保存每个翻译。然后您需要切换自己的用户语言以查看新术语出现。"
 
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "此处保存的术语会立即显示在已迁移的界面中。尚未迁移的页面读取的是已编译的目录，因此会保留旧文本，直到您使用 php bin/console cache:clear 清除缓存。请在完成编辑后执行一次，而不是每改一个术语就执行一次。"
+
 msgid "See sequences"
 msgstr "查看序列"
 
@@ -20498,8 +20600,8 @@ msgstr "链接已过期，请重试。"
 msgid "Instructions for the password change procedure"
 msgstr "密码更改程序说明"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "您收到此消息是因为您（或冒充您的人）请求为您生成新密码。<br/>"
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "此邮件发送给您，是因为您（或有人试图冒充您）请求为您的账户生成新密码。<br/>要设置新密码，请点击以下链接：<br/>%s<br/>如果您并未提出此请求，可忽略本邮件。如果您持续收到此类邮件，请联系门户管理员。"
 
 msgid "Remind Course Expiration cron"
 msgstr "提醒课程到期 cron"
@@ -20662,6 +20764,9 @@ msgstr "在技能轮上，当技能有短代码时显示技能名称。"
 
 msgid "Created by"
 msgstr "创建者"
+
+msgid "Created by %s on %s"
+msgstr "由 %s 于 %s 创建"
 
 msgid "Hide general coach in dropbox"
 msgstr "在下拉框中隐藏通用教练"
@@ -23968,6 +24073,18 @@ msgstr "向学习者显示结果：显示分数、学习者的选择及其每次
 
 msgid "Signed in as"
 msgstr "登录为"
+
+msgid "Authorize application"
+msgstr "授权应用"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "希望连接到您的 Chamilo 账户。"
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "此应用将能够以与您相同的方式在 Chamilo 上操作——仅使用您现有账户权限，不会获得您尚未拥有的任何访问权限。"
+
+msgid "Allow"
+msgstr "允许"
 
 msgid "Remember me"
 msgstr "记住我"
@@ -31335,6 +31452,9 @@ msgstr "返回用户分配页面"
 msgid "Authentication sources assigned successfully"
 msgstr "认证源分配成功"
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "未选择任何认证方式。这将移除所选用户在此 URL 上的所有认证方式，可能导致其无法登录。是否继续？"
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "提示：选择“— 仅上传 —”以存储而不发送给任何人。"
 
@@ -31866,6 +31986,9 @@ msgstr "向 %s 写点什么"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "首选：SVG。PNG 推荐宽度：%spx。"
 
+msgid "PNG recommended width: %spx."
+msgstr "建议 PNG 宽度：%spx。"
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "上传用于电子邮件的 PNG 徽标 (~%spx 宽度)"
 
@@ -31901,6 +32024,9 @@ msgstr "点击插入"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "首选：SVG。PNG 最大尺寸：%spx。"
+
+msgid "PNG max size: %spx."
+msgstr "PNG 最大尺寸：%spx。"
 
 msgid "View badge"
 msgstr "查看徽章"
@@ -36482,4 +36608,4966 @@ msgstr "已审核"
 
 msgid "View threads"
 msgstr "查看主题"
+
+msgid "No auth source"
+msgstr "无认证源"
+
+msgid "You must add at least one question"
+msgstr "您必须至少添加一个问题"
+
+msgid "Advanced actions"
+msgstr "高级操作"
+
+msgid "Application path"
+msgstr "应用程序路径"
+
+msgid "Apply files details"
+msgstr "应用文件详情"
+
+msgid "Apply plan details"
+msgstr "应用计划详情"
+
+msgid "Apply plan failed"
+msgstr "应用计划失败"
+
+msgid "Apply plan ready"
+msgstr "应用计划就绪"
+
+msgid "Apply preparation"
+msgstr "应用准备"
+
+msgid "Apply staged files"
+msgstr "应用暂存文件"
+
+msgid "Applying files..."
+msgstr "正在应用文件..."
+
+msgid "Audit file"
+msgstr "审核文件"
+
+msgid "Backup directory"
+msgstr "备份目录"
+
+msgid "Baseline clean"
+msgstr "基线清理"
+
+msgid "Baseline warnings"
+msgstr "基线警告"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "根据暂存包生成安全的应用计划。此操作仅检查文件、权限、备份路径和锁定状态，不会替换文件。"
+
+msgid "Build production frontend assets."
+msgstr "构建生产环境前端资源。"
+
+msgid "Building plan..."
+msgstr "正在生成计划..."
+
+msgid "Channel"
+msgstr "通道"
+
+msgid "Check"
+msgstr "检查"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "检查可用的 Chamilo 更新，验证软件包，暂存文件并执行受控的更新后步骤。"
+
+msgid "Check manifest"
+msgstr "检查清单"
+
+msgid "Checking post-apply actions..."
+msgstr "正在检查应用后操作..."
+
+msgid "Checking..."
+msgstr "正在检查..."
+
+msgid "Composer install"
+msgstr "Composer 安装"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer、Yarn 和数据库迁移操作可能会修改依赖、生成资源或数据库。仅在确认备份和权限后选择这些操作。"
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "在服务器上配置 CHAMILO_UPDATE_MANIFEST_URL 或提供 HTTPS 清单 URL。"
+
+msgid "Configured"
+msgstr "已配置"
+
+msgid "Current migration"
+msgstr "当前迁移"
+
+msgid "Database baseline"
+msgstr "数据库基线"
+
+msgid "Database migration safety review"
+msgstr "数据库迁移安全审查"
+
+msgid "Database migrations"
+msgstr "数据库迁移"
+
+msgid "Development mode"
+msgstr "开发模式"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "除非已审查更新备份和服务器权限，否则请勿启用。"
+
+msgid "Doctrine dry-run command"
+msgstr "Doctrine 试运行命令"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine 报告了历史基线警告。更新程序仍将在明确确认后仅执行已暂存的 V210 迁移。"
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine 将在安全审查通过后，仅执行已明确暂存的 V210 迁移。"
+
+msgid "Dry-run exit code"
+msgstr "试运行退出代码"
+
+msgid "Executed unavailable migrations"
+msgstr "已执行不可用迁移"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "将已验证的更新包解压到暂存目录以供检查。这不会替换文件、运行迁移或修改数据库。"
+
+msgid "File apply available"
+msgstr "文件应用可用"
+
+msgid "Files to replace"
+msgstr "待替换文件"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "我确认在运行迁移前已存在并验证了数据库备份。"
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "我理解高级操作可能会修改依赖项、生成资源或数据库。"
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "我理解这将替换 Chamilo 安装中的文件。"
+
+msgid "I understand this will run update commands on the server."
+msgstr "我理解这将在服务器上运行更新命令。"
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "在重新构建资源前安装前端依赖。"
+
+msgid "Installed version"
+msgstr "已安装版本"
+
+msgid "Latest migration"
+msgstr "最新迁移"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "将已验证的更新包和签名路径留空以从已验证的清单 URL 下载。仅在开发测试时使用本地路径。"
+
+msgid "Live command log"
+msgstr "实时命令日志"
+
+msgid "Live update log"
+msgstr "实时更新日志"
+
+msgid "Local test options"
+msgstr "本地测试选项"
+
+msgid "Local test update notice link"
+msgstr "本地测试更新通知链接"
+
+msgid "Local update notice simulation"
+msgstr "本地更新通知模拟"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "本地更新通知模拟仅在开发模式下可用。"
+
+msgid "Manifest"
+msgstr "清单"
+
+msgid "Manifest source"
+msgstr "清单来源"
+
+msgid "Migration safety details"
+msgstr "迁移安全详情"
+
+msgid "Migration safety review failed"
+msgstr "迁移安全审查失败"
+
+msgid "Migration safety review ready"
+msgstr "迁移安全审查就绪"
+
+msgid "Migration target"
+msgstr "迁移目标"
+
+msgid "New files"
+msgstr "新文件"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Doctrine 报告的新迁移"
+
+msgid "Next migration"
+msgstr "下一迁移"
+
+msgid "No executed unavailable migration was reported."
+msgstr "未报告已执行的不可用迁移。"
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "尚未配置官方清单 URL。请使用 HTTPS URL 或本地路径进行开发测试。"
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "在暂存更新目标之前未检测到待处理的迁移。"
+
+msgid "Not configured"
+msgstr "未配置"
+
+msgid "Not detected"
+msgstr "未检测到"
+
+msgid "Official Chamilo update channel"
+msgstr "官方 Chamilo 更新通道"
+
+msgid "Package SHA-256"
+msgstr "软件包 SHA-256"
+
+msgid "Package URL"
+msgstr "软件包 URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "软件包和签名文件将从清单下载。此环境中已禁用本地路径。"
+
+msgid "Package path"
+msgstr "软件包路径"
+
+msgid "Package staged successfully"
+msgstr "软件包暂存成功"
+
+msgid "Package staging failed"
+msgstr "软件包暂存失败"
+
+msgid "Package verification"
+msgstr "软件包验证"
+
+msgid "Package verification failed"
+msgstr "软件包验证失败"
+
+msgid "Package verified successfully"
+msgstr "软件包验证成功"
+
+msgid "Pending migrations before this update"
+msgstr "此更新前的待处理迁移"
+
+msgid "Planned backup path"
+msgstr "计划的备份路径"
+
+msgid "Post-apply actions completed"
+msgstr "应用后操作已完成"
+
+msgid "Post-apply actions failed"
+msgstr "应用后操作失败"
+
+msgid "Post-apply actions ready"
+msgstr "应用后操作就绪"
+
+msgid "Post-apply checks"
+msgstr "应用后检查"
+
+msgid "Post-apply checks failed"
+msgstr "应用后检查失败"
+
+msgid "Post-apply details"
+msgstr "应用后详情"
+
+msgid "Post-apply run details"
+msgstr "应用后运行详情"
+
+msgid "Preflight checks"
+msgstr "预检"
+
+msgid "Preflight checks completed"
+msgstr "预检已完成"
+
+msgid "Preflight checks failed"
+msgstr "预检失败"
+
+msgid "Preflight details"
+msgstr "预检详情"
+
+msgid "Prepare staging"
+msgstr "准备暂存"
+
+msgid "Preparing staging..."
+msgstr "正在准备暂存..."
+
+msgid "Production mode"
+msgstr "生产模式"
+
+msgid "Released at"
+msgstr "发布于"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "使用已审核的应用计划替换暂存包中的 Chamilo 文件。此操作不会运行数据库迁移、Composer、Yarn 或缓存命令。"
+
+msgid "Review apply plan"
+msgstr "审核应用计划"
+
+msgid "Review database migrations"
+msgstr "审核数据库迁移"
+
+msgid "Review post-apply actions"
+msgstr "审核应用后操作"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "应用更新文件后，审核推荐的手动命令。此步骤不会运行 Composer、Yarn、迁移或缓存命令。"
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "在运行数据库迁移前，审核暂存的 Doctrine 迁移及 dry-run 输出。"
+
+msgid "Reviewing database migrations..."
+msgstr "正在审核数据库迁移..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "在执行数据库迁移前，运行并通过迁移安全审核。"
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "在任何未来的更新应用步骤前运行环境检查。此操作不会修改文件或数据库。"
+
+msgid "Run post-apply actions"
+msgstr "运行应用后操作"
+
+msgid "Run preflight checks"
+msgstr "运行预检"
+
+msgid "Run selected post-apply actions"
+msgstr "运行选定的应用后操作"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "使用受控白名单从服务器运行选定的应用后命令。不接受自定义 shell 命令。"
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "在确认文件更新结果和备份后，从服务器手动运行这些命令。"
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "在生产模式下禁用从 UI 运行应用后操作。"
+
+msgid "Running post-apply actions..."
+msgstr "正在运行应用后操作..."
+
+msgid "Safe actions"
+msgstr "安全操作"
+
+msgid "Signature path"
+msgstr "签名路径"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "在此环境中无法跳过签名验证。"
+
+msgid "Skip signature verification for local development tests"
+msgstr "为本地开发测试跳过签名验证"
+
+msgid "Staged file application failed"
+msgstr "暂存文件应用失败"
+
+msgid "Staged files applied successfully"
+msgstr "暂存文件应用成功"
+
+msgid "Staging details"
+msgstr "暂存详情"
+
+msgid "Staging directory"
+msgstr "暂存目录"
+
+msgid "Staging extraction"
+msgstr "暂存解压"
+
+msgid "Symfony cache clear"
+msgstr "Symfony 缓存清除"
+
+msgid "System update"
+msgstr "系统更新"
+
+msgid "Target version"
+msgstr "目标版本"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "已预填配置的官方清单 URL。如有需要，您可将其更改为其他 HTTPS 清单。"
+
+msgid "The database migration baseline is clean."
+msgstr "数据库迁移基线干净。"
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "操作完成后最终 HTTP 响应失败。这通常由运行时缓存权限或请求期间 Web 服务器重启导致。"
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "操作日志显示应用后操作已成功完成。"
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "选定的应用后命令已成功完成，但最终 HTTP 响应失败。如果页面无法正确加载，请刷新页面并检查运行时缓存权限。"
+
+msgid "The updater does not create or restore database backups."
+msgstr "更新程序不会创建或恢复数据库备份。"
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "这些操作在查看更新结果后可安全地从界面运行。"
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "这些命令可能会修改依赖项、生成资源、缓存或数据库。继续操作前请确认已备份。"
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "此操作将修改 Chamilo 安装目录中的文件。继续操作前请确保已审核应用计划并启用备份。"
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "此开发条目使用本地测试包路径模拟未来的 Chamilo.org 更新通知。"
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "此屏幕由官方更新通知打开，但尚未配置官方清单源。"
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "此屏幕由更新通知打开。仅自动启动清单检查。"
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "此步骤仅准备审核。文件替换将在稍后的“应用暂存文件”步骤中进行，并提供锁定、备份和回滚保护。"
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "此更新程序不会创建数据库备份。运行迁移前请创建并验证备份。"
+
+msgid "Trusted public key"
+msgstr "受信任的公钥"
+
+msgid "Trusted signing key"
+msgstr "受信任的签名密钥"
+
+msgid "Unknown update notice source."
+msgstr "未知的更新通知来源。"
+
+msgid "Update availability"
+msgstr "更新可用性"
+
+msgid "Update directory"
+msgstr "更新目录"
+
+msgid "Update lock path"
+msgstr "更新锁定路径"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "使用上一步生成的暂存目录。后端仅接受 var/update/staging 内的目录。"
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "使用此链接可在开发测试期间模拟未来的 Chamilo.org 更新通知。"
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "仅用于本地开发测试。生产环境更新必须使用服务器配置的密钥。"
+
+msgid "Verification details"
+msgstr "验证详情"
+
+msgid "Verify package"
+msgstr "验证软件包"
+
+msgid "Verifying..."
+msgstr "正在验证..."
+
+msgid "Waiting for command progress events..."
+msgstr "等待命令进度事件..."
+
+msgid "Waiting for update progress events..."
+msgstr "等待更新进度事件..."
+
+msgid "Yarn build"
+msgstr "Yarn 构建"
+
+msgid "Yarn install"
+msgstr "Yarn 安装"
+
+msgid "A comment is required"
+msgstr "必须填写评论"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "已存在同名数据库。如果其中包含表，这些表将被删除；如果为空，则会被复用。"
+
+msgid "AI generated"
+msgstr "AI 生成"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "返回学习路径前请至少添加一个问题。"
+
+msgid "Add attachments"
+msgstr "添加附件"
+
+msgid "Additional fields"
+msgstr "附加字段"
+
+msgid "Allow comments"
+msgstr "允许评论"
+
+msgid "Allow new pages"
+msgstr "允许新建页面"
+
+msgid "Allow ratings"
+msgstr "允许评分"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "确定要删除所有项目吗？"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "确定要恢复自动续订吗？"
+
+msgid "Attachment has been deleted"
+msgstr "附件已删除"
+
+msgid "Backup file"
+msgstr "备份文件"
+
+msgid "Block comments"
+msgstr "屏蔽评论"
+
+msgid "Block new pages"
+msgstr "屏蔽新建页面"
+
+msgid "Block ratings"
+msgstr "屏蔽评分"
+
+msgid "Cancel renewal"
+msgstr "取消续订"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "分类链接将从 %s 个 Wiki 页面中移除。"
+
+msgid "Change"
+msgstr "更改"
+
+msgid "Clear group"
+msgstr "清除群组"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "点击标签将其插入编辑器。这些占位符将在生成证书时被替换。"
+
+msgid "Comment added"
+msgstr "评论已添加"
+
+msgid "Comment is required"
+msgstr "评论为必填项"
+
+msgid "Comment score"
+msgstr "评论得分"
+
+msgid "Compare selected versions line by line"
+msgstr "逐行比较所选版本"
+
+msgid "Compare selected versions word by word"
+msgstr "逐词比较所选版本"
+
+msgid "Compare versions"
+msgstr "比较版本"
+
+msgid "Copy completed"
+msgstr "复制完成"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "为学习者创建个人 Wiki 工作页"
+
+msgid "Current view mode"
+msgstr "当前视图模式"
+
+msgid "Delete Wiki"
+msgstr "删除 Wiki"
+
+msgid "Delete page"
+msgstr "删除页面"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "不建议删除 Wiki 首页。您可以稍后重新创建。"
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "禁用 Wiki 将阻止正常 Wiki 页面和操作。此设置页仍可供课程教师使用。"
+
+msgid "Discussion"
+msgstr "讨论"
+
+msgid "Edit Comment"
+msgstr "编辑评论"
+
+msgid "Edit page"
+msgstr "编辑页面"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "结束日期必须晚于或等于到期日期"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "输入搜索词以查找 Wiki 页面"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "到期日期必须早于或等于结束日期"
+
+msgid "Failed email recipients"
+msgstr "邮件发送失败的收件人"
+
+msgid "Finish and return to learning path"
+msgstr "完成并返回学习路径"
+
+msgid "Forum image"
+msgstr "论坛图片"
+
+msgid "Hide discussion"
+msgstr "隐藏讨论"
+
+msgid "Hide page"
+msgstr "隐藏页面"
+
+msgid "I changed my mind"
+msgstr "我改变主意了"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "若不勾选，这些文件仍可通过“文件信息”工具供平台管理员使用。"
+
+msgid "Internal message failures"
+msgstr "内部消息失败"
+
+msgid "Internal messages available"
+msgstr "内部消息可用"
+
+msgid "Internal messages created now"
+msgstr "内部消息已创建"
+
+msgid "Item score"
+msgstr "项目得分"
+
+msgid "Last post"
+msgstr "最后发帖"
+
+msgid "Lock page"
+msgstr "锁定页面"
+
+msgid "Manage categories"
+msgstr "管理分类"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "将此文档标记为 AI 辅助内容。用于内容由 AI 工具创建或显著修改的情况。"
+
+msgid "Maximum score is required"
+msgstr "最高分必填"
+
+msgid "Metric"
+msgstr "指标"
+
+msgid "New comments are blocked in this discussion"
+msgstr "此讨论中已禁止新评论"
+
+msgid "No Wiki categories are available yet."
+msgstr "尚无可用的 Wiki 分类。"
+
+msgid "No categories found"
+msgstr "未找到分类"
+
+msgid "No content"
+msgstr "无内容"
+
+msgid "No parent category"
+msgstr "无父分类"
+
+msgid "Number of comments scored"
+msgstr "已评分的评论数量"
+
+msgid "Old version"
+msgstr "旧版本"
+
+msgid "Only image files are allowed."
+msgstr "仅允许图片文件。"
+
+msgid "Please fill all required fields"
+msgstr "请填写所有必填字段"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "包含班级或学生占位符的问题将为课程班级或小组生成：%s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "此讨论中已禁止评分"
+
+msgid "Remove image"
+msgstr "移除图片"
+
+msgid "Restore renewal"
+msgstr "恢复续订"
+
+msgid "Restore version"
+msgstr "恢复版本"
+
+msgid "Search in"
+msgstr "搜索范围"
+
+msgid "Select group"
+msgstr "选择小组"
+
+msgid "Select image"
+msgstr "选择图片"
+
+msgid "Selected image"
+msgstr "已选图片"
+
+msgid "Show discussion"
+msgstr "显示讨论"
+
+msgid "Show page"
+msgstr "显示页面"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "部分文件或文件夹没有写入权限。要安装 Chamilo，您必须先更改其权限（使用 CHMOD）。请阅读"
+
+msgid "Subcategories"
+msgstr "子类别"
+
+msgid "Tap on the left or right to navigate"
+msgstr "点击左侧或右侧进行导航"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Wiki 作业截止日期已过，但允许延迟提交。"
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Wiki 作业截止日期已过。"
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Wiki 作业尚未开始。"
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "保存前需要锁定 Wiki 页面编辑。"
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "公告已保存，但附件无法上传。"
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "公告已保存，但邮件发送失败。"
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "公告已保存，但无法发送任何邮件。"
+
+msgid "The category has been created"
+msgstr "类别已创建"
+
+msgid "The category has been deleted"
+msgstr "类别已删除"
+
+msgid "The category has been updated"
+msgstr "类别已更新"
+
+msgid "The end date is invalid"
+msgstr "结束日期无效"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "最大版本数必须是非负整数"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "最大字数必须是非负整数"
+
+msgid "The print window could not be opened"
+msgstr "无法打开打印窗口"
+
+msgid "The start date is invalid"
+msgstr "开始日期无效"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "这些设置适用于整个课程，包括其会话和小组。"
+
+msgid "This announcement has already been sent by email."
+msgstr "此公告已通过邮件发送。"
+
+msgid "This discussion is hidden from learners"
+msgstr "此讨论对学习者隐藏"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "此生成式 AI 工具可帮助您创建图片和短视频来展示课程。通过在提示部分（文本）说明您想要的内容，您将为配置的 AI 模型提供生成图片或视频所需的元素。请耐心等待。AI 模型需要一些时间生成结果，您可能希望将媒体保存到文档文件夹中，然后嵌入 HTML 文档。并非所有 AI 模型在速度或质量上都相同。AI 模型也可能给您一个修改后的提示，这是对您请求的更详细解释。然后您可以使用此修改后的提示来微调请求。请注意，此工具（尤其是视频）可能会给您的组织带来相当大的成本，即使您决定不保存生成的媒体。请合理使用。如果您无法获得想要的结果，请花些时间在线研究可用的 AI 模型的提示技巧。"
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "此历史记录属于基础课程。创建会话版本后即可恢复。"
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "此图片将替换论坛标题旁显示的默认论坛图标。"
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "此页面来自基础课程。保存后将为当前会话创建版本。"
+
+msgid "This will also delete %s subcategories."
+msgstr "这也将删除 %s 个子类别。"
+
+msgid "This will create individual work pages for %s learners."
+msgstr "这将为 %s 名学习者创建单独的工作页面。"
+
+msgid "Thread history"
+msgstr "主题历史"
+
+msgid "Title and content"
+msgstr "标题和内容"
+
+msgid "Unable to cancel renewal right now."
+msgstr "目前无法取消续订权限。"
+
+msgid "Unable to restore renewal right now."
+msgstr "目前无法恢复续订权限。"
+
+msgid "Unlock page"
+msgstr "解锁页面"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "使用 [[Page]] 或 [[Page|可见文本]] 创建内部 Wiki 链接。"
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "使用空格键或方向键进行导航"
+
+msgid "View version"
+msgstr "查看版本"
+
+msgid "Visible only to teachers"
+msgstr "仅对教师可见"
+
+msgid "Weight is required"
+msgstr "权重为必填项"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "此课程已禁用 Wiki 类别。"
+
+msgid "Wiki categories enabled"
+msgstr "已启用 Wiki 类别"
+
+msgid "Wiki html strict filtering"
+msgstr "Wiki HTML 严格过滤"
+
+msgid "Wiki settings"
+msgstr "Wiki 设置"
+
+msgid "Wiki settings updated"
+msgstr "Wiki 设置已更新"
+
+msgid "You are viewing a historical version of this page"
+msgstr "您正在查看此页面的历史版本"
+
+msgid "You can attach one or more files to this reply."
+msgstr "您可以为此回复附加一个或多个文件。"
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "您可以编辑此作业页面，但学习者的工作页面不会被修改。"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "您可以在问题中使用标签 {{class_name}} 和 {{student_full_name}}。"
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "您有 20 分钟的时间编辑此页面，之后编辑锁定将失效。"
+
+msgid "by"
+msgstr "作者"
+
+msgid "required"
+msgstr "必填"
+
+msgid "Incorrect password."
+msgstr "密码错误。"
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "文件完整性警报已暂停 1 小时。"
+
+msgid "New baseline established: %s files."
+msgstr "已建立新基线：%s 个文件。"
+
+msgid "Scan complete: changes were detected."
+msgstr "扫描完成：检测到更改。"
+
+msgid "Scan complete: no changes were detected."
+msgstr "扫描完成：未检测到更改。"
+
+msgid "File integrity"
+msgstr "文件完整性"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "此报告将已安装的文件（除 var/ 和 .git/ 外，但仍监视 .git/config 以检测远程劫持）与可信基线进行比较，以检测意外的添加、修改或删除。"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "您可以在下方查看最新报告。运行扫描、暂停警报或建立新基线需要全局管理员权限。"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "警报当前因维护而暂停。它将在 %date% 自动恢复。"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "尚未运行扫描。请从此处或使用命令行 app:file-integrity:scan 运行扫描。"
+
+msgid "Last scan"
+msgstr "上次扫描"
+
+msgid "Files scanned"
+msgstr "已扫描文件"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "尚无基线：本次扫描已建立基线。从下次扫描起将报告更改。"
+
+msgid "No changes detected since the baseline."
+msgstr "自基线以来未检测到更改。"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git 远程配置（.git/config）已更改。请确认此操作是否符合预期。"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "扫描因无法读取子目录而提前停止（请检查文件权限）。以下结果可能不完整。"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "更改过多，无法完整列出；仅显示每个类别的首条记录。完整列表请参阅 CEF 日志。"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% 个文件因权限问题无法读取，已跳过。"
+
+msgid "Run a scan now"
+msgstr "立即运行扫描"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "暂停警报 1 小时（用于维护）"
+
+msgid "Pause for 1 hour"
+msgstr "暂停 1 小时"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "将当前文件树设为新基线"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "这将信任所有当前文件为正确，包括任何未审核的更改。继续？"
+
+msgid "Establish new baseline"
+msgstr "建立新基线"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "例如从系统 crontab 计划扫描"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform% 的文件完整性警报"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "文件完整性扫描在平台上检测到更改："
+
+msgid "Added files"
+msgstr "已添加文件"
+
+msgid "Modified files"
+msgstr "已修改的文件"
+
+msgid "Deleted files"
+msgstr "已删除的文件"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "请在“管理 > 安全 > 文件完整性”中查看完整报告。"
+
+msgid "Password to confirm pausing alerts"
+msgstr "确认暂停警报的密码"
+
+msgid "Password to confirm the new baseline"
+msgstr "确认新基线的密码"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "已有扫描正在运行。请等待其完成后再启动新的扫描。"
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "当前正在运行扫描（开始于 %date%）。完整扫描可能需要数分钟；可安全刷新此页面以查看进度。"
+
+msgid "Currently processing"
+msgstr "正在处理"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "之前的扫描（开始于 %date%）在完成前被中断——进程已不再运行。您可以安全地启动新的扫描。"
+
+msgid "files"
+msgstr "文件"
+
+msgid "Permissions changed"
+msgstr "权限已更改"
+
+msgid "Files with changed permissions"
+msgstr "权限已更改的文件"
+
+msgid "Alert history"
+msgstr "警报历史"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "每次发现问题的扫描都会保留，即使偏差已解决或建立了新基线——与上方报告不同，干净扫描或重新基线不会清除此记录。"
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "此条目在捕获时被截断；请参阅 CEF 日志以获取完整列表。"
+
+msgid "No alert has been recorded yet."
+msgstr "尚未记录任何警报。"
+
+msgid "Git remote changed"
+msgstr "Git 远程已更改"
+
+msgid "Press enter to select"
+msgstr "按 Enter 键选择"
+
+msgid "Press enter to remove"
+msgstr "按 Enter 键移除"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "未找到任何元素。请尝试更改搜索条件。"
+
+msgid "List is empty."
+msgstr "列表为空。"
+
+msgid "Your session has expired. Please try again."
+msgstr "您的会话已过期，请重试。"
+
+msgid "Generate with AI"
+msgstr "使用 AI 生成"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "以干净的扁平设计风格，使用平台配色作为点缀，呈现本课程主题的现代欢迎插图。"
+
+msgid "Back to account"
+msgstr "返回账户"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "您的反馈将帮助我们改进未来的培训课程。"
+
+msgid "Thank you for sharing your feedback."
+msgstr "感谢您分享反馈。"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "您对培训的整体质量满意吗？"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "您对内容的关联性满意吗？"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "您对讲解的清晰度满意吗？"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "您对培训的组织和节奏满意吗？"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "您对所学内容的实用性满意吗？"
+
+msgid "Would you recommend this training to other people?"
+msgstr "您会向他人推荐本次培训吗？"
+
+msgid "What should we improve in future editions?"
+msgstr "未来版本中我们应改进哪些方面？"
+
+msgid "Very satisfied"
+msgstr "非常满意"
+
+msgid "Satisfied"
+msgstr "满意"
+
+msgid "Neutral"
+msgstr "中立"
+
+msgid "Dissatisfied"
+msgstr "不满意"
+
+msgid "Very dissatisfied"
+msgstr "非常不满意"
+
+msgid "Add destination"
+msgstr "添加目标"
+
+msgid "Add this test to the assessment tool"
+msgstr "将此测试添加到评估工具"
+
+msgid "Attempts and timing"
+msgstr "尝试次数与时间"
+
+msgid "Available questions"
+msgstr "可用题目"
+
+msgid "Cancel and return to learning path"
+msgstr "取消并返回学习路径"
+
+msgid "Category destinations"
+msgstr "类别目标"
+
+msgid "Classification"
+msgstr "分类"
+
+msgid "Context"
+msgstr "上下文"
+
+msgid "Could not load exercise configuration"
+msgstr "无法加载练习配置"
+
+msgid "Could not save exercise"
+msgstr "无法保存练习"
+
+msgid "Display and learning path"
+msgstr "显示与学习路径"
+
+msgid "Edit test"
+msgstr "编辑测试"
+
+msgid "Exercise settings saved."
+msgstr "练习设置已保存。"
+
+msgid "Extra settings"
+msgstr "额外设置"
+
+msgid "Feedback and results"
+msgstr "反馈与结果"
+
+msgid "Finish exercise"
+msgstr "完成练习"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "将此练习的语言标识为资源元数据。该操作本身不会启用搜索索引。"
+
+msgid "Maximum score (%)"
+msgstr "最高得分（%）"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "元数据包含为练习配置的技能和附加字段。此项为可选，保持隐藏直至打开。"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "此练习尚无可用的题目类别。"
+
+msgid "Question categories matrix"
+msgstr "题目类别矩阵"
+
+msgid "Questions behavior"
+msgstr "题目行为"
+
+msgid "Random by category"
+msgstr "按类别随机"
+
+msgid "Remove destination"
+msgstr "移除目标"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "规则按得分百分比升序评估。选择“完成练习”以结束测试。"
+
+msgid "Score and final messages"
+msgstr "得分与最终消息"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "部分选项在练习创建后将被锁定。"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "此值以分钟为单位存储为总时长。"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "使用 0 保留所有可用题目。使用 -1 表示允许所有可用题目。"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "使用这些字段对练习进行分类，与其显示选项无关。"
+
+msgid "Invite by email"
+msgstr "通过电子邮件邀请"
+
+msgid "Invitation has been sent"
+msgstr "邀请已发送"
+
+msgid "Sent on"
+msgstr "发送于"
+
+msgid "Accepted on"
+msgstr "接受于"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "本课程在教学周期中开放。在此发送邀请将使收件人订阅整个教学周期 %s，而非仅本课程。"
+
+msgid "Revoke"
+msgstr "撤销"
+
+msgid "Revoked"
+msgstr "已撤销"
+
+msgid "Invitation has been revoked"
+msgstr "邀请已撤销"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "确定要撤销发送给 %s 的邀请吗？"
+
+msgid "No default room"
+msgstr "无默认教室"
+
+msgid "Floor"
+msgstr "楼层"
+
+msgid "Capacity"
+msgstr "容量"
+
+msgid "Use attendance default room"
+msgstr "使用考勤默认教室"
+
+msgid "Floor number"
+msgstr "楼层号"
+
+msgid "Copy to students"
+msgstr "复制给学生"
+
+msgid "Generate a quick test on this topic"
+msgstr "基于此主题快速生成测试"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "保存的文档内容将发送至 AI 模型进行处理。"
+
+msgid "MCP API key"
+msgstr "MCP API 密钥"
+
+msgid "Authorized applications"
+msgstr "已授权应用"
+
+msgid "Your session is about to expire"
+msgstr "您的会话即将过期"
+
+msgid "Do you want to continue your session?"
+msgstr "是否继续会话？"
+
+msgid "Your session details have been lost, please login again."
+msgstr "您的会话详情已丢失，请重新登录。"
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "访问此资源已被拒绝。您似乎没有访问所需的权限。"
+
+msgid "Stay connected"
+msgstr "保持连接"
+
+msgid "You will be signed out in %s seconds."
+msgstr "您将在 %s 秒后退出登录。"
+
+msgid "No descriptions available yet."
+msgstr "暂无描述。"
+
+msgid "%s users selected"
+msgstr "已选择 %s 位用户"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "所选用户已订阅课程"
+
+msgid "Import teachers"
+msgstr "导入教师"
+
+msgid "Import learners"
+msgstr "导入学员"
+
+msgid "Select CSV file"
+msgstr "选择 CSV 文件"
+
+msgid "Some users could not be subscribed"
+msgstr "部分用户无法订阅"
+
+msgid "Browse available classes"
+msgstr "浏览可用班级"
+
+msgid "Back to linked classes"
+msgstr "返回已关联班级"
+
+msgid "No classes are currently linked to this course."
+msgstr "目前没有班级与此课程关联。"
+
+msgid "No available classes were found for this course."
+msgstr "未找到此课程的可用班级。"
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "确定要取消订阅所选用户吗？"
+
+msgid "Learning path access"
+msgstr "学习路径访问"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "仅选定的用户和群组可访问此学习路径。保存后进行管理。"
+
+msgid "All current and future course users can access this learning path."
+msgstr "所有当前及未来的课程用户均可访问此学习路径。"
+
+msgid "All course users"
+msgstr "所有课程用户"
+
+msgid "Selected users and groups"
+msgstr "选定用户和群组"
+
+msgid "No access"
+msgstr "无访问权限"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "仅此处添加的用户和群组可访问此学习路径。"
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "题目数量上限为 %s"
+
+msgid "Open exercise player"
+msgstr "打开练习播放器"
+
+msgid "The score is hidden for this exercise."
+msgstr "此练习的得分已隐藏。"
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "根据练习结果设置，批改已隐藏。"
+
+msgid "Progressive adaptive result"
+msgstr "渐进式自适应结果"
+
+msgid "Achieved level"
+msgstr "已达到的等级"
+
+msgid "Correction history"
+msgstr "批改历史"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "本次尝试的手动批改历史。"
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "此练习使用雷达/蛛网结果模式。图表在此页面不可用。"
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "根据练习结果设置，题目详情已隐藏。"
+
+msgid "Media question"
+msgstr "媒体题目"
+
+msgid "Pending correction"
+msgstr "待批改"
+
+msgid "No answer"
+msgstr "未作答"
+
+msgid "Blank %s"
+msgstr "空白 %s"
+
+msgid "Your order"
+msgstr "您的顺序"
+
+msgid "Correct order"
+msgstr "正确顺序"
+
+msgid "Delineation review"
+msgstr "标注审阅"
+
+msgid "Learner clicks"
+msgstr "学习者点击"
+
+msgid "Question image"
+msgstr "题目图片"
+
+msgid "No hotspot image available"
+msgstr "无热点图片可用"
+
+msgid "Learner delineation"
+msgstr "学习者标注"
+
+msgid "Expected delineation"
+msgstr "预期标注"
+
+msgid "Expected zones"
+msgstr "预期区域"
+
+msgid "Zone"
+msgstr "区域"
+
+msgid "Learner annotation"
+msgstr "学习者批注"
+
+msgid "No annotation image available"
+msgstr "无批注图片可用"
+
+msgid "This answer is pending teacher correction."
+msgstr "此答案待教师批改。"
+
+msgid "Teacher comment"
+msgstr "教师评语"
+
+msgid "Teacher correction"
+msgstr "教师批改"
+
+msgid "Save correction"
+msgstr "保存批改"
+
+msgid "Learner audio"
+msgstr "学习者音频"
+
+msgid "Download audio"
+msgstr "下载音频"
+
+msgid "No uploaded audio"
+msgstr "未上传音频"
+
+msgid "Learner Office document"
+msgstr "学习者 Office 文档"
+
+msgid "Learner file"
+msgstr "学习者文件"
+
+msgid "Download Office document"
+msgstr "下载 Office 文档"
+
+msgid "No submitted document"
+msgstr "未提交文档"
+
+msgid "No uploaded file"
+msgstr "未上传文件"
+
+msgid "Content item"
+msgstr "内容项"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "此问题类型无法在此页面审核。"
+
+msgid "Exercise completed"
+msgstr "练习已完成"
+
+msgid "Could not start the attempt"
+msgstr "无法开始尝试"
+
+msgid "Invalid exercise attempt"
+msgstr "无效的练习尝试"
+
+msgid "Could not load exercise result"
+msgstr "无法加载练习结果"
+
+msgid "Could not load AI providers"
+msgstr "无法加载 AI 提供商"
+
+msgid "Could not generate AI suggestion"
+msgstr "无法生成 AI 建议"
+
+msgid "Correction saved"
+msgstr "批改已保存"
+
+msgid "Could not save correction"
+msgstr "无法保存批改"
+
+msgid "Create exercise"
+msgstr "创建练习"
+
+msgid "Exercise categories"
+msgstr "练习分类"
+
+msgid "Question categories"
+msgstr "问题分类"
+
+msgid "Search by exercise title or description."
+msgstr "按练习标题或描述搜索。"
+
+msgid "Search exercises"
+msgstr "搜索练习"
+
+msgid "No exercises found"
+msgstr "未找到练习"
+
+msgid "Open exercise"
+msgstr "打开练习"
+
+msgid "Disable autolaunch"
+msgstr "禁用自动启动"
+
+msgid "Enable autolaunch"
+msgstr "启用自动启动"
+
+msgid "Export QTI2"
+msgstr "导出 QTI2"
+
+msgid "Bulk actions"
+msgstr "批量操作"
+
+msgid "Selected exercises"
+msgstr "已选练习"
+
+msgid "No exercises selected"
+msgstr "未选择练习"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "确定要对所选练习执行此操作吗？"
+
+msgid "Bulk action completed"
+msgstr "批量操作已完成"
+
+msgid "Could not update exercises"
+msgstr "无法更新练习"
+
+msgid "Could not update exercise"
+msgstr "无法更新练习"
+
+msgid "Copy exercise"
+msgstr "复制练习"
+
+msgid "Delete exercise"
+msgstr "删除练习"
+
+msgid "Could not load exercises"
+msgstr "无法加载练习"
+
+msgid "No limit"
+msgstr "无限制"
+
+msgid "Add selected questions to the test"
+msgstr "将所选问题添加到测试"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "此问题已用于活动测试，无法在此编辑。"
+
+msgid "This question cannot be edited here."
+msgstr "此问题无法在此编辑。"
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "此问题已用于活动测试，无法在此删除。"
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "此问题无法删除，因为您的访问权限受平台设置限制。"
+
+msgid "Already in test"
+msgstr "已在测试中"
+
+msgid "Select at least one question."
+msgstr "请至少选择一个问题。"
+
+msgid "Question bank updated"
+msgstr "问题库已更新"
+
+msgid "Could not update the question bank"
+msgstr "无法更新问题库"
+
+msgid "Could not load the question bank"
+msgstr "无法加载问题库"
+
+msgid "Total score"
+msgstr "总分"
+
+msgid "Starting"
+msgstr "开始"
+
+msgid "Attempt history"
+msgstr "尝试历史"
+
+msgid "No attempts yet"
+msgstr "尚无尝试"
+
+msgid "Invalid exercise"
+msgstr "无效的练习"
+
+msgid "Could not load exercise overview"
+msgstr "无法加载练习概览"
+
+msgid "Open test"
+msgstr "打开测试"
+
+msgid "Random answers"
+msgstr "随机答案"
+
+msgid "Prevent moving backwards"
+msgstr "禁止后退"
+
+msgid "Previous button hidden"
+msgstr "隐藏上一题按钮"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "此练习使用了需要不同测试播放器的选项。"
+
+msgid "Continue test"
+msgstr "继续测试"
+
+msgid "Attempt started"
+msgstr "开始答题"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "教师预览不会创建可追踪的答题记录。"
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "开始或继续练习答题。草稿答案可在最终提交前保存。"
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "已达到时间限制。正在结束答题。"
+
+msgid "Question time reached. Saving your answer."
+msgstr "已达到题目时间限制。正在保存您的答案。"
+
+msgid "Finishing"
+msgstr "正在结束"
+
+msgid "Draft saved"
+msgstr "草稿已保存"
+
+msgid "Save as draft"
+msgstr "保存为草稿"
+
+msgid "Statement"
+msgstr "题干"
+
+msgid "Drop each option on the matching answer"
+msgstr "将每个选项拖放到对应的答案上"
+
+msgid "Clear match"
+msgstr "清除匹配"
+
+msgid "Click to place the selected option here"
+msgstr "点击此处放置所选选项"
+
+msgid "Select an option, then click here"
+msgstr "选择一个选项，然后点击此处"
+
+msgid "Already matched"
+msgstr "已匹配"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "您可以将选项拖到答案上，或先选择选项再点击目标框。"
+
+msgid "Put the items in the correct order."
+msgstr "请按正确顺序排列项目。"
+
+msgid "Move left"
+msgstr "向左移动"
+
+msgid "Move right"
+msgstr "向右移动"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "您可以左右拖动项目，或使用移动按钮更改顺序。"
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "您可以拖动项目或使用移动按钮更改顺序。"
+
+msgid "Or upload an audio file"
+msgstr "或上传音频文件"
+
+msgid "Selected audio"
+msgstr "已选音频"
+
+msgid "Uploaded audio"
+msgstr "已上传音频"
+
+msgid "Office document"
+msgstr "Office 文档"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "在下方编辑器中完成文档。该文件将作为附件提交，供教师批改。"
+
+msgid "Reload Office editor"
+msgstr "重新加载 Office 编辑器"
+
+msgid "Prepare Office document"
+msgstr "准备 Office 文档"
+
+msgid "Open in new tab"
+msgstr "在新标签页中打开"
+
+msgid "Preparing Office document"
+msgstr "正在准备 Office 文档"
+
+msgid "Submitted document"
+msgstr "已提交文档"
+
+msgid "Annotation tools"
+msgstr "标注工具"
+
+msgid "Text to place"
+msgstr "待放置文本"
+
+msgid "Click the image to place the text annotation."
+msgstr "点击图片放置文本标注。"
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "点击图片添加路径点。使用“开始新路径”可分隔路径。"
+
+msgid "Start new path"
+msgstr "开始新路径"
+
+msgid "Current annotations"
+msgstr "当前标注"
+
+msgid "Remove point"
+msgstr "移除点"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "点击图片绘制轮廓多边形。"
+
+msgid "Click a marker to remove it."
+msgstr "点击标记以移除。"
+
+msgid "Placed"
+msgstr "已放置"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "选择一个答案，然后点击图片进行标记。"
+
+msgid "Reading speed"
+msgstr "阅读速度"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "此题型无法在此播放器中显示。"
+
+msgid "Save draft"
+msgstr "保存草稿"
+
+msgid "I confirm that my answers were saved."
+msgstr "我确认已保存我的答案。"
+
+msgid "Finish test"
+msgstr "结束测试"
+
+msgid "Attempt finished"
+msgstr "尝试已完成"
+
+msgid "Question category"
+msgstr "题目类别"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "您已完成与此题目类别相关的题目，这是您返回修改这些题目的最后机会。"
+
+msgid "Question time left"
+msgstr "题目剩余时间"
+
+msgid "Time left"
+msgstr "剩余时间"
+
+msgid "Current attempt"
+msgstr "当前尝试"
+
+msgid "Could not save draft answer"
+msgstr "无法保存草稿答案"
+
+msgid "Could not load exercise"
+msgstr "无法加载练习"
+
+msgid "Draft answer saved"
+msgstr "草稿答案已保存"
+
+msgid "Could not finish the attempt"
+msgstr "无法完成尝试"
+
+msgid "Could not prepare Office document"
+msgstr "无法准备 Office 文档"
+
+msgid "Back to learner score"
+msgstr "返回学习者分数"
+
+msgid "Disable auto refresh"
+msgstr "禁用自动刷新"
+
+msgid "Enable auto refresh"
+msgstr "启用自动刷新"
+
+msgid "Live window"
+msgstr "实时窗口"
+
+msgid "Ongoing attempts"
+msgstr "进行中的尝试"
+
+msgid "Completed attempts"
+msgstr "已完成的尝试"
+
+msgid "Started"
+msgstr "开始时间"
+
+msgid "Last activity"
+msgstr "最后活动"
+
+msgid "Could not load live results"
+msgstr "无法加载实时结果"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "此练习为只读，因为它已包含在学习路径中。"
+
+msgid "Select a question type to create a question."
+msgstr "请选择一个题目类型以创建题目。"
+
+msgid "Click to preview"
+msgstr "点击预览"
+
+msgid "Hide preview"
+msgstr "隐藏预览"
+
+msgid "Shape"
+msgstr "形状"
+
+msgid "Coordinates"
+msgstr "坐标"
+
+msgid "Blanks"
+msgstr "填空"
+
+msgid "Switchable blanks"
+msgstr "可切换填空"
+
+msgid "Blank"
+msgstr "填空"
+
+msgid "Input width"
+msgstr "输入框宽度"
+
+msgid "Orientation"
+msgstr "方向"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "当前练习反馈模式下不可用"
+
+msgid "Not available in the learning path creation flow"
+msgstr "学习路径创建流程中不可用"
+
+msgid "Delete question"
+msgstr "删除题目"
+
+msgid "Could not update exercise questions"
+msgstr "无法更新练习题目"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "无法将练习添加到学习路径"
+
+msgid "A valid exercise id is required."
+msgstr "需要有效的练习 ID。"
+
+msgid "Could not load exercise questions"
+msgstr "无法加载练习题目"
+
+msgid "Delete selected attempts"
+msgstr "删除选中的尝试"
+
+msgid "Before date"
+msgstr "截止日期前"
+
+msgid "Pending corrections"
+msgstr "待批改"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "此练习已被成绩册锁定。尝试清理操作已禁用。"
+
+msgid "No attempts found"
+msgstr "未找到尝试"
+
+msgid "Review"
+msgstr "审阅"
+
+msgid "Print/PDF"
+msgstr "打印/PDF"
+
+msgid "Could not load exercise report"
+msgstr "无法加载练习报告"
+
+msgid "Select at least one attempt"
+msgstr "请至少选择一次尝试"
+
+msgid "Delete selected attempts?"
+msgstr "删除选中的尝试？"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "发送已审阅尝试的结果邮件？"
+
+msgid "Could not send emails"
+msgstr "无法发送邮件"
+
+msgid "Exercise result emails sent"
+msgstr "已发送练习结果邮件"
+
+msgid "Skipped"
+msgstr "已跳过"
+
+msgid "Close attempt?"
+msgstr "关闭尝试？"
+
+msgid "Attempt closed"
+msgstr "尝试已关闭"
+
+msgid "Could not close attempt"
+msgstr "无法关闭尝试"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "通过邮件将本次尝试结果发送给学习者？"
+
+msgid "Email sent"
+msgstr "邮件已发送"
+
+msgid "Could not send email"
+msgstr "无法发送邮件"
+
+msgid "Attempt deleted"
+msgstr "尝试已删除"
+
+msgid "Could not delete attempt"
+msgstr "无法删除尝试"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "请选择包含标题和描述列的 CSV 文件。"
+
+msgid "Manage categories used to classify questions."
+msgstr "管理用于分类问题的类别。"
+
+msgid "Manage categories used to classify exercises."
+msgstr "管理用于分类练习的类别。"
+
+msgid "Could not load categories"
+msgstr "无法加载类别"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "已导入类别：%s。已跳过行：%s。"
+
+msgid "Imported categories: %s."
+msgstr "已导入类别：%s。"
+
+msgid "Could not import categories"
+msgstr "无法导入类别"
+
+msgid "Could not save category"
+msgstr "无法保存类别"
+
+msgid "Answer distribution"
+msgstr "答案分布"
+
+msgid "Configured answers"
+msgstr "已配置答案"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "某些题型的详细答案统计在迁移后的报告中暂不可用。"
+
+msgid "No report by question data found"
+msgstr "未找到按问题分类的报告数据"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "此题型的详细答案统计在迁移后的报告中暂不可用。"
+
+msgid "No answer distribution found"
+msgstr "未找到答案分布"
+
+msgid "Could not load report by question"
+msgstr "无法加载按问题分类的报告"
+
+msgid "Question settings"
+msgstr "问题设置"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "留空或填 0 表示无时间限制。"
+
+msgid "Time limit in seconds"
+msgstr "时间限制（秒）"
+
+msgid "Attached questions"
+msgstr "已附加的问题"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "此处仅列出当前练习中附加到此媒体问题的题目。"
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "当前练习中没有附加到此媒体问题的题目。"
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "上传学习者将使用 OnlyOffice 编辑的 Office 文档模板。"
+
+msgid "Replace Office document"
+msgstr "替换 Office 文档"
+
+msgid "Current Office document"
+msgstr "当前 Office 文档"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "学习者提交编辑后的文档后，此题将手动批改。"
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "总分按热点区域得分之和计算。"
+
+msgid "Global score"
+msgstr "全局得分"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "选择一个热点行，选定形状，然后在图像上绘制。多边形请依次点击各点完成绘制，或双击结束。"
+
+msgid "Finish polygon"
+msgstr "完成多边形"
+
+msgid "Calculated answer"
+msgstr "计算型答案"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "请在下方输入文本，并使用方括号 [...] 定义一个或多个空白。"
+
+msgid "Lowest value"
+msgstr "最低值"
+
+msgid "Highest value"
+msgstr "最高值"
+
+msgid "Fill in blanks"
+msgstr "填空"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "使用选定的标记定义空白。例如：秘鲁的首都是 [利马]。"
+
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "要将空白变为下拉菜单，请用单个 | 分隔选项，第一个为正确答案。示例：秘鲁的首都是 [Lima|Paris|Bogota]。"
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "要允许多个正确答案，请用 || 分隔。示例：1||one||uno。"
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "输入下拉选项，每行一个答案。然后在下方标记正确答案，操作方式与旧版工具相同。"
+
+msgid "Refresh answers"
+msgstr "刷新答案"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "此下拉组合题使用全局得分，与旧版一致。"
+
+msgid "Please enter at least two dropdown options."
+msgstr "请至少输入两个下拉选项。"
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "请先创建目标选项，然后将每个项目链接到正确选项。"
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "此匹配组合题使用全局分数，与旧版相同。"
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "创建步骤并选择每个步骤的预期位置，与旧版拖拽题相同。"
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "学习者在作答时选择正确或错误，然后选择其确定程度。编辑器保存与旧版相同的正确/错误分数和确定程度。"
+
+msgid "Hotspot combination"
+msgstr "热点组合"
+
+msgid "Add delineation"
+msgstr "添加划界"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "此 Office 文档题没有答案选项。其分数在批改/结果查看时分配。"
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "此上传题没有答案选项。其分数在批改/结果查看时分配。"
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "此口头表达题没有答案选项。其分数在批改/结果查看时分配。"
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "此开放题没有答案选项。其分数在批改/结果查看时分配。"
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "添加带滚动速度设置的阅读文本。"
+
+msgid "Add content, media or reading context without adding score."
+msgstr "添加内容、媒体或阅读背景而不添加分数。"
+
+msgid "Insert a page break without adding score."
+msgstr "插入分页符而不添加分数。"
+
+msgid "Could not save question"
+msgstr "无法保存题目"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "仅允许 DOC、DOCX、XLS 或 XLSX 文档。"
+
+msgid "Please select an Office document."
+msgstr "请选择一个 Office 文档。"
+
+msgid "Please draw at least one hotspot."
+msgstr "请至少绘制一个热点。"
+
+msgid "Please draw at least one delineation."
+msgstr "请至少绘制一个划界。"
+
+msgid "The fill in blanks text is required."
+msgstr "填空文本为必填项。"
+
+msgid "At least one expected answer is required."
+msgstr "至少需要一个预期答案。"
+
+msgid "At least two draggable items are required."
+msgstr "至少需要两个可拖拽项。"
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "每个可拖拽项必须链接到有效目标位置。"
+
+msgid "At least two matching options are required."
+msgstr "至少需要两个匹配选项。"
+
+msgid "At least two matching pairs are required."
+msgstr "至少需要两个匹配对。"
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "每个匹配对必须链接到有效选项。"
+
+msgid "At least two answers are required."
+msgstr "至少需要两个答案。"
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "每个正确/错误答案必须选择正确或错误。"
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "唯一答案题必须恰好有一个正确答案。"
+
+msgid "At least one correct answer is required."
+msgstr "至少需要一个正确答案。"
+
+msgid "Could not load question"
+msgstr "无法加载题目"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "选择课程并将全局练习结果报告导出为 CSV。"
+
+msgid "Back to reports catalog"
+msgstr "返回报告目录"
+
+msgid "Could not load exercise global report"
+msgstr "无法加载练习全局报告"
+
+msgid "Imported questions"
+msgstr "已导入的题目"
+
+msgid "Aiken content"
+msgstr "Aiken 内容"
+
+msgid "Could not load AI Aiken generator"
+msgstr "无法加载 AI Aiken 生成器"
+
+msgid "Could not generate Aiken content"
+msgstr "无法生成 Aiken 内容"
+
+msgid "Could not import generated Aiken content"
+msgstr "无法导入生成的 Aiken 内容"
+
+msgid "Back to my courses"
+msgstr "返回我的课程"
+
+msgid "Open report"
+msgstr "打开报告"
+
+msgid "Questions with no automatic correction"
+msgstr "无自动批改的题目"
+
+msgid "Could not load pending attempts"
+msgstr "无法加载待处理尝试"
+
+msgid "Skipped questions"
+msgstr "已跳过的题目"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken 导入将此总权重分配到导入的题目，除非题目定义了 SCORE。"
+
+msgid "Import warnings"
+msgstr "导入警告"
+
+msgid "Could not import questions"
+msgstr "无法导入题目"
+
+msgid "No question statistics found"
+msgstr "未找到题目统计"
+
+msgid "Could not load question statistics"
+msgstr "无法加载题目统计"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "您也可以通过将 MCP 客户端指向以下端点直接连接："
+
+msgid "No applications are currently connected to your account."
+msgstr "目前没有应用程序连接到您的账户。"
+
+msgid "Connected on"
+msgstr "连接于"
+
+msgid "Last used"
+msgstr "最近使用"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s 将无法再访问您的 Chamilo 账户。继续？"
+
+msgid "Application revoked"
+msgstr "应用已撤销"
+
+msgid "Copied to clipboard"
+msgstr "已复制到剪贴板"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "无法复制 MCP 端点"
+
+msgid "MCP endpoint"
+msgstr "MCP 端点"
+
+msgid "API key"
+msgstr "API 密钥"
+
+msgid "Last used at"
+msgstr "最后使用于"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "立即复制此密钥。它不会再次显示。"
+
+msgid "Rotate API key"
+msgstr "轮换 API 密钥"
+
+msgid "Revoke API key"
+msgstr "撤销 API 密钥"
+
+msgid "Remote MCP connection"
+msgstr "远程 MCP 连接"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "使用以下值配置您的 MCP 客户端："
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "当前密钥将立即停止工作。继续？"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "将生成新的个人 MCP API 密钥。继续？"
+
+msgid "MCP API key generated"
+msgstr "MCP API 密钥已生成"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "使用此密钥的已连接 MCP 客户端将立即停止工作。继续？"
+
+msgid "MCP API key revoked"
+msgstr "MCP API 密钥已撤销"
+
+msgid "Could not copy the API key"
+msgstr "无法复制 API 密钥"
+
+msgid "Project"
+msgstr "项目"
+
+msgid "Close old tickets"
+msgstr "关闭旧工单"
+
+msgid "Close tickets older than seven days?"
+msgstr "关闭超过七天的工单？"
+
+msgid "Assignment history"
+msgstr "分配历史"
+
+msgid "Translate with AI"
+msgstr "使用 AI 翻译"
+
+msgid "Target language"
+msgstr "目标语言"
+
+msgid "Please select a provider"
+msgstr "请选择提供商"
+
+msgid "Generate translation"
+msgstr "生成翻译"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "至少一个条款与条件部分必须包含文本。"
+
+msgid "No active target languages are available."
+msgstr "没有可用的活动目标语言。"
+
+msgid "Tutor"
+msgstr "辅导教师"
+
+msgid "Access dates"
+msgstr "访问日期"
+
+msgid "Coach access dates"
+msgstr "辅导教师访问日期"
+
+msgid "No sessions found"
+msgstr "未找到会话"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "选择此用户在此会话中不得访问的课程。"
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "用户不能被阻止访问会话中的所有课程。请取消订阅该用户。"
+
+msgid "Users subscribed to this session"
+msgstr "已订阅此会话的用户"
+
+msgid "No available users found"
+msgstr "未找到可用用户"
+
+msgid "Subscribe this user to the session?"
+msgstr "将此用户订阅到会话？"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "将选定用户订阅到会话？"
+
+msgid "General tutor planning"
+msgstr "辅导教师总体规划"
+
+msgid "User is already registered by another tutor."
+msgstr "用户已被另一位辅导教师注册。"
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "您收到副本是因为您是课程辅导教师"
+
+msgid "General tutor"
+msgstr "总体辅导教师"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "考虑课程、辅导教师、技术支持、教师和/或可用材料。"
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "在课程 %s 中作为教师订阅的辅导教师"
+
+msgid "Tutor name"
+msgstr "辅导教师姓名"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "会话辅导教师是会话的协调员，可以担任会话中每门课程的辅导教师。只有具有教师角色的用户才能被选为会话辅导教师。"
+
+msgid "Access start date for tutors"
+msgstr "辅导教师访问开始日期"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "会话对辅导教师开放的日期，以便他们在学生连接前进行准备"
+
+msgid "Access end date for tutors"
+msgstr "辅导教师访问结束日期"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "会话对辅导教师关闭的日期。额外延迟将允许他们导出所有相关跟踪信息"
+
+msgid "Tutor and student"
+msgstr "辅导教师与学生"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "此报告显示所选日期范围内每位普通辅导教师的会话周分布情况。"
+
+msgid "User is general tutor in some sessions"
+msgstr "用户是某些会话的普通辅导教师"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "教师将被添加为所有课程会话的辅导教师。"
+
+msgid "Delete failed: invalid question id."
+msgstr "删除失败：无效的问题 ID。"
+
+msgid "Average number of sessions per general session tutor"
+msgstr "每位普通会话辅导教师的平均会话数"
+
+msgid "No room"
+msgstr "无教室"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "将课程教师导入为会话中的课程辅导教师"
+
+msgid "Clean and update course tutors"
+msgstr "清理并更新课程辅导教师"
+
+msgid "Add me as tutor"
+msgstr "将我添加为辅导教师"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "无法将调查添加到学习路径"
+
+msgid "Access dates for tutors"
+msgstr "辅导教师的访问日期"
+
+msgid "Tutor and group member"
+msgstr "辅导教师与小组成员"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "您已达到每日 AI 令牌限制。请明天再试。"
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "您已达到每月 AI 令牌限制。请下月再试。"
+
+msgid "This course code already exists, please choose another code."
+msgstr "此课程代码已存在，请选择其他代码。"
+
+msgid "This course title already exists, please choose another title."
+msgstr "此课程标题已存在，请选择其他标题。"
+
+msgid "This tool visibility cannot be changed"
+msgstr "此工具的可见性无法更改"
+
+msgid "Invalid visibility"
+msgstr "无效的可见性"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "您收到副本是因为您是课程辅导教师之一"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "您收到副本是因为您是课程辅导教师"
+
+msgid "Manual completion"
+msgstr "手动完成"
+
+msgid "Send to tutors"
+msgstr "发送给辅导教师"
+
+msgid "Lab title"
+msgstr "实验标题"
+
+msgid "Lab week"
+msgstr "实验周"
+
+msgid "Final exam access rule"
+msgstr "期末考试访问规则"
+
+msgid "Course completion rule"
+msgstr "课程完成规则"
+
+msgid "You have been invited to join a course"
+msgstr "您已被邀请加入课程"
+
+msgid "No user has been found"
+msgstr "未找到用户"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "所选用户无法在此上下文中注册"
+
+msgid "No change has been made"
+msgstr "未进行任何更改"
+
+msgid "Back to group list"
+msgstr "返回小组列表"
+
+msgid "Remove class link"
+msgstr "移除班级链接"
+
+msgid "Group settings"
+msgstr "小组设置"
+
+msgid "Self-registration allowed"
+msgstr "允许自助注册"
+
+msgid "Self-unregistration allowed"
+msgstr "允许自助取消注册"
+
+msgid "This group is linked to the class"
+msgstr "此小组已链接到班级"
+
+msgid "Create one or more empty course groups"
+msgstr "创建一或多个空课程小组"
+
+msgid "Number of places"
+msgstr "名额数"
+
+msgid "Base group"
+msgstr "基础小组"
+
+msgid "Share"
+msgstr "共享"
+
+msgid "Collaboration"
+msgstr "协作"
+
+msgid "The group title is required."
+msgstr "小组标题为必填项。"
+
+msgid "Back to group area"
+msgstr "返回小组区域"
+
+msgid "Members are managed by the linked class"
+msgstr "成员由关联班级管理"
+
+msgid "%s groups selected"
+msgstr "已选择 %s 个小组"
+
+msgid "Fill selected groups"
+msgstr "填充所选小组"
+
+msgid "Empty selected groups"
+msgstr "清空所选小组"
+
+msgid "Fill group"
+msgstr "填充小组"
+
+msgid "Empty group"
+msgstr "空群组"
+
+msgid "Groups per user"
+msgstr "每用户群组数"
+
+msgid "No tutors"
+msgstr "无导师"
+
+msgid "No users"
+msgstr "无用户"
+
+msgid "Calculation mode"
+msgstr "计算模式"
+
+msgid "Weighted average"
+msgstr "加权平均"
+
+msgid "Points sum"
+msgstr "分数总和"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "加权平均按权重总和归一化；分数总和将每个权重视为最高分并直接相加，不进行归一化。"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "每个项目的权重视为其最高分；成绩为分数总和，不进行归一化。"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "成绩为各项目的加权平均值，按权重总和归一化。"
+
+msgid "Forum participation"
+msgstr "论坛参与"
+
+msgid "Forum thread"
+msgstr "论坛主题"
+
+msgid "Points for one message"
+msgstr "单条消息得分"
+
+msgid "Points for two or more messages"
+msgstr "两条及以上消息得分"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "学生在主题中仅发布一条消息时获得的得分。"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "学生在主题中发布两条及以上消息时获得的得分。"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "可选。若留空，则一条或多条消息均按单条消息得分计算。"
+
+msgid "Current password is required to change your password."
+msgstr "修改密码需要当前密码。"
+
+msgid "The 2FA code is required."
+msgstr "需要 2FA 验证码。"
+
+msgid "Invalid 2FA configuration."
+msgstr "2FA 配置无效。"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA 验证码无效或已过期。"
+
+msgid "Database load"
+msgstr "数据库负载"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "MySQL 和 MariaDB 服务器实时负载指标"
+
+msgid "Click to show database server load metrics"
+msgstr "点击查看数据库服务器负载指标"
+
+msgid "Threads connected"
+msgstr "已连接线程"
+
+msgid "Temporary tables on disk"
+msgstr "磁盘上的临时表"
+
+msgid "Privilege scope"
+msgstr "权限范围"
+
+msgid "Not measurable with the current database user"
+msgstr "当前数据库用户无法测量"
+
+msgid "Uptime"
+msgstr "运行时间"
+
+msgid "Queries per second"
+msgstr "每秒查询数"
+
+msgid "Slow queries"
+msgstr "慢查询"
+
+msgid "Slow query time limit"
+msgstr "慢查询时间限制"
+
+msgid "Slow query log"
+msgstr "慢查询日志"
+
+msgid "Slow queries per second"
+msgstr "每秒慢查询数"
+
+msgid "Threads running"
+msgstr "运行中的线程"
+
+msgid "Threads cached"
+msgstr "缓存中的线程"
+
+msgid "Table lock waits"
+msgstr "表锁等待"
+
+msgid "Row lock waits"
+msgstr "行锁等待"
+
+msgid "Aborted connections"
+msgstr "中止的连接"
+
+msgid "Opened tables"
+msgstr "已打开的表"
+
+msgid "Query cache"
+msgstr "查询缓存"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "数据库负载指标仅适用于 MySQL 和 MariaDB。"
+
+msgid "Inserts"
+msgstr "插入"
+
+msgid "Hit rate"
+msgstr "命中率"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "每 5 秒自动刷新"
+
+msgid "Web server load"
+msgstr "Web 服务器负载"
+
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Apache、Nginx 或 FrankenPHP 实时状态指标"
+
+msgid "Click to show web server load metrics"
+msgstr "点击显示 Web 服务器负载指标"
+
+msgid "Requires a local web server status module"
+msgstr "需要本地 Web 服务器状态模块"
+
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Web 服务器负载仅从本机读取 Apache mod_status、Nginx stub_status 或 FrankenPHP/Caddy 指标端点。状态页必须允许来自 127.0.0.1（或 ::1）的请求。"
+
+msgid "Paths scanned"
+msgstr "已扫描路径"
+
+msgid "Detected"
+msgstr "已检测"
+
+msgid "Status path"
+msgstr "状态路径"
+
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Web 服务器负载指标仅适用于 Apache、Nginx 和 FrankenPHP。"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "本地主机上没有扫描到的状态路径有响应。"
+
+msgid "Busy workers"
+msgstr "繁忙的工作进程"
+
+msgid "Idle workers"
+msgstr "空闲的工作进程"
+
+msgid "Graceful workers"
+msgstr "优雅退出的工作进程"
+
+msgid "Server MPM"
+msgstr "服务器 MPM"
+
+msgid "Requests per second (live)"
+msgstr "每秒请求数（实时）"
+
+msgid "Requests per second (since start)"
+msgstr "每秒请求数（自启动起）"
+
+msgid "Bytes per second (live)"
+msgstr "每秒字节数（实时）"
+
+msgid "Bytes per second (since start)"
+msgstr "每秒字节数（自启动起）"
+
+msgid "Bytes per request"
+msgstr "每请求字节数"
+
+msgid "Total accesses"
+msgstr "总访问量"
+
+msgid "Total traffic"
+msgstr "总流量"
+
+msgid "CPU load"
+msgstr "CPU 负载"
+
+msgid "Load average (1 min)"
+msgstr "负载平均值（1 分钟）"
+
+msgid "Load average (5 min)"
+msgstr "负载平均值（5 分钟）"
+
+msgid "Load average (15 min)"
+msgstr "负载平均值（15 分钟）"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard 发送中"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard 读取中"
+
+msgid "Scoreboard keepalive"
+msgstr "成绩板保活"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard 等待中"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard 空闲槽位"
+
+msgid "Active connections"
+msgstr "活动连接"
+
+msgid "Reading"
+msgstr "读取中"
+
+msgid "Writing"
+msgstr "写入中"
+
+msgid "Total requests"
+msgstr "总请求数"
+
+msgid "Accepts"
+msgstr "接受"
+
+msgid "Handled"
+msgstr "已处理"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache：启用 mod_status（ExtendedStatus On），并允许本机访问 /server-status。Nginx：在仅限本机的位置（如 /nginx_status 或 /stub_status）启用 stub_status。FrankenPHP：在 Caddyfile 中添加全局 \"metrics\" 选项，默认会在 Caddy 管理 API（127.0.0.1:2019/metrics）上公开 Prometheus 指标。"
+
+msgid "Total threads"
+msgstr "线程总数"
+
+msgid "Busy threads"
+msgstr "忙碌线程"
+
+msgid "Queue depth"
+msgstr "队列深度"
+
+msgid "Worker"
+msgstr "工作进程"
+
+msgid "Average request time"
+msgstr "平均请求时间"
+
+msgid "Grade percentage distribution"
+msgstr "成绩百分比分布"
+
+msgid "Top learners"
+msgstr "学习者排名"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "此进度结合学习路径进度和学习者的平均练习成绩"
+
+msgid "Additional profile fields"
+msgstr "附加个人资料字段"
+
+msgid "Visible columns"
+msgstr "可见列"
+
+msgid "Learning path completion"
+msgstr "学习路径完成情况"
+
+msgid "Number of certificates"
+msgstr "证书数量"
+
+msgid "Could not export the report"
+msgstr "无法导出报告"
+
+msgid "Second learner"
+msgstr "第二名学习者"
+
+msgid "Results by learner"
+msgstr "按学习者统计结果"
+
+msgid "Use filters to narrow down questions."
+msgstr "使用筛选器缩小问题范围。"
+
+msgid "Try adjusting your filters and search again."
+msgstr "请调整筛选器后重试。"
+
+msgid "Results per page"
+msgstr "每页结果数"
+
+msgid "No answers"
+msgstr "无答案"
+
+msgid "Tests using this question"
+msgstr "使用此问题的测验"
+
+msgid "Delete failed"
+msgstr "删除失败"
+
+msgid "PHP cache"
+msgstr "PHP 缓存"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "实时 OPcache 和 APCu 诊断"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "点击显示 OPcache 和 APCu 诊断"
+
+msgid "Memory used"
+msgstr "已用内存"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache 已安装但未启用。"
+
+msgid "OPcache extension is not available on this server."
+msgstr "此服务器上没有 OPcache 扩展。"
+
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache 报告的内存统计不一致（部分线程化 PHP 运行时上的已知问题，例如 FrankenPHP）。"
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu 已安装但未启用。"
+
+msgid "APCu extension is not available on this server."
+msgstr "此服务器上没有 APCu 扩展。"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu 报告的内存统计不一致（部分线程化 PHP 运行时上的已知问题）。"
+
+msgid "Constant"
+msgstr "常量"
+
+msgid "Space used on disk (MB)"
+msgstr "磁盘已用空间 (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "设置课程最大空间 (MB)"
+
+msgid "Memory free"
+msgstr "可用内存"
+
+msgid "Memory wasted"
+msgstr "已浪费内存"
+
+msgid "Memory used %"
+msgstr "已用内存 %"
+
+msgid "Cached scripts"
+msgstr "缓存脚本"
+
+msgid "Cached keys"
+msgstr "缓存键"
+
+msgid "Misses"
+msgstr "未命中"
+
+msgid "Cache full"
+msgstr "缓存已满"
+
+msgid "OOM restarts"
+msgstr "OOM 重启"
+
+msgid "Hash restarts"
+msgstr "哈希重启"
+
+msgid "Manual restarts"
+msgstr "手动重启"
+
+msgid "Interned strings used"
+msgstr "已用内部字符串"
+
+msgid "Interned strings free"
+msgstr "空闲内部字符串"
+
+msgid "Interned strings count"
+msgstr "内部字符串数量"
+
+msgid "Memory available"
+msgstr "可用内存"
+
+msgid "Memory size"
+msgstr "内存大小"
+
+msgid "Entries"
+msgstr "条目"
+
+msgid "Slots"
+msgstr "槽位"
+
+msgid "Expunges"
+msgstr "清除"
+
+msgid "Cache start time"
+msgstr "缓存启动时间"
+
+msgid "Time zone"
+msgstr "时区"
+
+msgid "Not registered"
+msgstr "未注册"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "按会话、课程、日期或学员筛选并列出学习者证书，必要时导出。"
+
+msgid "Filter by session and course"
+msgstr "按会话和课程筛选"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "选择会话、课程和可选日期以列出已生成的证书。"
+
+msgid "Filter by learner"
+msgstr "按学员筛选"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "查找特定学员在各会话和课程中的证书。"
+
+msgid "Certificates found"
+msgstr "找到的证书"
+
+msgid "Open certificate"
+msgstr "打开证书"
+
+msgid "Certificate file not available"
+msgstr "证书文件不可用"
+
+msgid "Export to CSV"
+msgstr "导出为 CSV"
+
+msgid "Acquired skills"
+msgstr "已获得技能"
+
+msgid "No acquired skill"
+msgstr "无已获得技能"
+
+msgid "Absences"
+msgstr "缺席"
+
+msgid "No courses"
+msgstr "无课程"
+
+msgid "No session matched"
+msgstr "无匹配会话"
+
+msgid "Unable to load the report"
+msgstr "无法加载报告"
+
+msgid "Please select a profile"
+msgstr "请选择个人资料"
+
+msgid "Please select a session"
+msgstr "请选择会话"
+
+msgid "Please select a user"
+msgstr "请选择用户"
+
+msgid "Unable to export the report"
+msgstr "无法导出报告"
+
+msgid "Accepted on web"
+msgstr "已在网页上接受"
+
+msgid "Accepted by e-mail"
+msgstr "已通过电子邮件接受"
+
+msgid "The course title is required"
+msgstr "课程标题为必填项"
+
+msgid "Unexpected error"
+msgstr "意外错误"
+
+msgid "Separate tags with commas"
+msgstr "用逗号分隔标签"
+
+msgid "Open link"
+msgstr "打开链接"
+
+msgid "Describe the course picture to generate"
+msgstr "描述要生成的课程图片"
+
+msgid "Generate picture"
+msgstr "生成图片"
+
+msgid "PDF watermark"
+msgstr "PDF 水印"
+
+msgid "No watermark image"
+msgstr "无水印图片"
+
+msgid "Upload watermark"
+msgstr "上传水印"
+
+msgid "Delete watermark"
+msgstr "删除水印"
+
+msgid "Course legal agreement file"
+msgstr "课程法律协议文件"
+
+msgid "Upload agreement file"
+msgstr "上传协议文件"
+
+msgid "Download agreement file"
+msgstr "下载协议文件"
+
+msgid "Delete agreement file"
+msgstr "删除协议文件"
+
+msgid "Custom certificate images"
+msgstr "自定义证书图片"
+
+msgid "Course picture updated"
+msgstr "课程图片已更新"
+
+msgid "The course picture could not be uploaded"
+msgstr "课程图片无法上传"
+
+msgid "Course picture deleted"
+msgstr "课程图片已删除"
+
+msgid "Enter a description for the image"
+msgstr "请输入图片描述"
+
+msgid "The image generator returned an empty response"
+msgstr "图像生成器返回空响应"
+
+msgid "Course picture generated"
+msgstr "课程图片已生成"
+
+msgid "Watermark updated"
+msgstr "水印已更新"
+
+msgid "Watermark deleted"
+msgstr "水印已删除"
+
+msgid "Agreement file updated"
+msgstr "协议文件已更新"
+
+msgid "Agreement file deleted"
+msgstr "协议文件已删除"
+
+msgid "Certificate image updated"
+msgstr "证书图片已更新"
+
+msgid "Certificate image deleted"
+msgstr "证书图片已删除"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "上传前请使用图像编辑器裁剪、旋转或调整课程图片大小。"
+
+msgid "This invitation link is invalid or has expired."
+msgstr "此邀请链接无效或已过期。"
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "此邀请已发送给其他用户。请使用被邀请的账号登录。"
+
+msgid "The invitation could not be accepted."
+msgstr "邀请无法被接受。"
+
+msgid "You have been subscribed successfully."
+msgstr "您已成功订阅。"
+
+msgid "This email address cannot be invited."
+msgstr "此邮箱地址无法被邀请。"
+
+msgid "This user is already subscribed to the session."
+msgstr "此用户已订阅该课次。"
+
+msgid "This user is already subscribed to the course."
+msgstr "此用户已订阅该课程。"
+
+msgid "Multi URLs"
+msgstr "多 URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "用户和课程等实体可同时在多个 URL 中处于活动状态，因此下方数值之和与总数不会相符。"
+
+msgid "User directory"
+msgstr "用户目录"
+
+msgid "Course directory"
+msgstr "课程目录"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "用户详情"
+
+msgid "Course details"
+msgstr "课程详情"
+
+msgid "View details"
+msgstr "查看详情"
+
+msgid "Average progress"
+msgstr "平均进度"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "直接注册属于整个课程，而非特定 URL，因此该课程关联的每个 URL 下方都会重复相同的“直接”数据。会话才是在多个 URL 间共享课程并获得按 URL 实际不同指标的预期方式。"
+
+msgid "Logins (all URLs combined)"
+msgstr "登录次数（所有 URL 合计）"
+
+msgid "Unique logins"
+msgstr "独立登录次数"
+
+msgid "Parent URL"
+msgstr "父级 URL"
+
+msgid "Logins (your URLs)"
+msgstr "登录次数（您的 URL）"
+
+msgid "The picture could not be uploaded"
+msgstr "图片无法上传"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "此字段类型尚未完全支持 — 仅显示原始值。"
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "本课程已接近用户注册上限（%d\/%d）。"
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "空间受课程属性限制。要提高上限，请获取"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "用户注册受课程属性限制。要提高上限，请获取"
+
+msgid "pro plan"
+msgstr "专业版套餐"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "并通过课程维护将本课程的备份导入到您的新付费课程，或在购买该套餐后提交工单，将本课程转换为专业版课程。"
+
+msgid "Tired of writing questions?"
+msgstr "厌倦了编写题目？"
+
+msgid "Upgrade your plan"
+msgstr "升级您的套餐"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "升级到专业套餐，即可借助 AI 为您生成高质量题目。"
+
+msgid "Student Success AI Coach"
+msgstr "学业成功 AI 教练"
+
+msgid "No AI text provider is configured."
+msgstr "尚未配置 AI 文本服务提供商。"
+
+msgid "Additional instructions for the AI coach"
+msgstr "给 AI 教练的补充说明"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "示例：该学员难以保持注意力。建议安排更短的活动，并更频繁地检查理解情况。"
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "请保持此窗口打开，以便 Chamilo 准备建议。"
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "该建议也已保存到您的 Chamilo 收件箱。"
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "已为该学员生成并保存建议，但无法创建收件箱副本。"
+
+msgid "Student success recommendation"
+msgstr "学业成功建议"
+
+msgid "Generated"
+msgstr "已生成"
+
+msgid "Priority actions"
+msgstr "优先行动"
+
+msgid "Evidence"
+msgstr "依据"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "此功能将分析本课程内容，并将学习行为信息发送到已配置的 AI 模型。虽然不会向 AI 模型直接发送可识别的个人数据，但部分数据仍可能间接提供可识别用户的信息。如有疑问，请在使用此功能前咨询您的 AI 负责人。"
+
+msgid "Additional activities"
+msgstr "补充活动"
+
+msgid "Rhythm"
+msgstr "节奏"
+
+msgid "Learning methodologies"
+msgstr "学习方法"
+
+msgid "Other recommendations"
+msgstr "其他建议"
+
+msgid "Analyzing course..."
+msgstr "正在分析课程…"
+
+msgid "Analyzing student's learning..."
+msgstr "正在分析学员学习情况…"
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "接受此邀请后，您将与请求用户建立关联，其将可读取您的部分或全部个人资料数据。请先与您已信任的用户核对个人资料，确保不会分享过多信息。"
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "未启用麦克风权限，请在浏览器中启用以便录制音频"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "此版本的 Chamilo 预装了一个（或多个）多语言课程。请在课程列表中查看，并决定是否将其设为公开。"
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "您目前无法访问任何 URL。请联系管理员，授予您所属 URL 的访问权限。"
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "如果所选 AI 提供商不是主权服务，所选文档内容可能会发送到外部服务。除非您的组织允许，否则请勿继续处理机密信息。"
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "请在应保留的账户上点击“合并”。系统会将该重复组中的所有其他账户合并到该账户。被合并的账户将被永久删除，并从本报告中消失。此操作无法撤销。"
+
+msgid "Permanent deletion"
+msgstr "永久删除"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "合并操作已会永久删除被合并的账户。仅当您需要手动删除其他账户时，才使用用户列表。"
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "您正在修改默认视觉主题“chamilo”的徽标。建议创建/使用自定义视觉主题，以免覆盖默认设置。"
+
+msgid "This exercise has no questions."
+msgstr "此测验没有题目。"
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "每道题的反馈/评语应如何显示？此选项决定学员在参加测验时的显示方式。"
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "这些应用可以以您的身份访问 Chamilo，仅使用您现有账户权限。请撤销不再使用或不认识的应用。"
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "请说明您为何要撤回法律同意，以便我们妥善处理您的请求"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "使用此个人密钥，可将远程 MCP 客户端以您自己的账户和权限连接到 Chamilo。"
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "完整密钥仅显示一次。请妥善保存。生成新密钥会立即使旧密钥失效。"
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "该密钥将客户端认证为您的 Chamilo 账户，不会授予您账户本身没有的权限。"
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "在注册页面显示条款与条件声明，访客须接受条款与条件才能注册"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "条款与条件内容将发送到 AI 语言模型。保存前请审核建议的译文。"
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "目标语言已有已保存版本。保存此建议将创建新版本。"
+
+msgid "Acquired"
+msgstr "已获得"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "建议的课程图片尺寸：1600 × 900 像素（16:9）。为在较大或高密度屏幕上清晰显示，请至少使用 1280 × 720 像素。"
+
+msgid "Courses of the selected URL"
+msgstr "所选 URL 的课程"
+
+msgid "Course categories in selected URL"
+msgstr "所选 URL 中的课程类别"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "您的账户已激活，现在可以登录并查看课程。"
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "请先<a href='%s'>在此</a>下载批改文件。\n然后解压该文件，按需编辑文件内容，但不要更改文件名。\n再将这些修改后的文件打包为 zip，并在此表单中上传。"
+
+msgid "Adding students from session %s to session %s"
+msgstr "正在将会话 %s 中的学员添加到会话 %s"
+
+msgid "Show all attempts by exercise"
+msgstr "按测验显示所有尝试"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "此操作将超出所选课程允许的用户上限。"
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "部分订阅未能执行，因为已达到相关课程允许的用户上限。受影响的用户/课程：%s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "此注册表列出已知报告页面、其类别、规范 URL、旧版 URL 以及预期角色受众。规范 URL 会路由到当前报告实现，并执行已记录的报告角色矩阵。"
+
+msgid "E-mail notification subscription"
+msgstr "电子邮件通知订阅"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "此操作将超过管理员设置的每门课程 %s 名用户的限制。订阅已取消。"
+
+msgid "Language the document is in"
+msgstr "文档所用语言"
+
+msgid "There is no session still"
+msgstr "仍然没有学期"
+
+msgid "Origin courses from session"
+msgstr "学期中的源课程"
+
+msgid "Destination courses from session"
+msgstr "学期中的目标课程"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "公共访问-用户不从登录也可访问。"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "生成 %d 个关于“%s”的课程术语表条目，每个术语单独一行，其定义在下一行，各术语之间空一行。不要为标题或定义添加任何其他格式。"
+
+msgid "This is a short description of the course '%s'."
+msgstr "这是课程“%s”的简短描述。"
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "您正在 Windows 平台上使用 Chamilo。文档转换辅助工具无法用于全文索引。"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "测验自动启动设置已开启。学生将被重定向到测验列表。"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "测验自动启动设置已开启。学生将被重定向到特定测验。"
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "本课程的订阅人数已达上限（%current%\/%limit%）。"
+
+msgid "Count course by language"
+msgstr "按语言统计课程数量"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "最近访问早于所选日期的用户。"
+
+msgid "Your certificate is about to expire"
+msgstr "您的证书即将过期"
+
+msgid "Your certificate has expired"
+msgstr "您的证书已过期"
+
+msgid "Your certificate is about to expire:"
+msgstr "您的证书即将过期："
+
+msgid "Your certificate has expired:"
+msgstr "您的证书已过期："
+
+msgid "Expiry date"
+msgstr "到期日期"
+
+msgid "%s days remaining"
+msgstr "剩余 %s 天"
+
+msgid "Hello, %s"
+msgstr "您好，%s"
+
+msgid "Edit expiry date"
+msgstr "编辑到期日期"
+
+msgid "Certificate validity (days)"
+msgstr "证书有效期（天）"
+
+msgid "Expiring certificates"
+msgstr "即将过期的证书"
+
+msgid "Expiring soon"
+msgstr "即将过期"
+
+msgid "Expired notice"
+msgstr "过期通知"
+
+msgid "Expiring notice"
+msgstr "即将过期通知"
+
+msgid "outdated"
+msgstr "已过期"
+
+msgid "Last reminder sent"
+msgstr "上次提醒发送时间"
+
+msgid "Days ahead"
+msgstr "提前天数"
+
+msgid "Send notification"
+msgstr "发送通知"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "确定要发送此通知吗？"
+
+msgid "Expired: %s"
+msgstr "已过期：%s"
+
+msgid "Expiring soon: %s"
+msgstr "即将过期：%s"
+
+msgid "Expired notice: %s"
+msgstr "过期通知：%s"
+
+msgid "Expiring notice: %s"
+msgstr "即将过期通知：%s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "通知将以用户自行配置的语言发送。"
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "页面默认按 Page 实体中的定义进行 60 秒 HTTP 缓存，因此更改可能不会立即生效。"
+
+msgid "Activate legal notice"
+msgstr "启用法律声明"
+
+msgid "Agreement content"
+msgstr "协议内容"
+
+msgid "Allow learners to delete their own publication"
+msgstr "允许学员删除自己的发布内容"
+
+msgid "Allow learners to edit agenda"
+msgstr "允许学员编辑日程"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "允许学员确认自己的出勤"
+
+msgid "Allow learners to view users list"
+msgstr "允许学员查看用户列表"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "自动为用户订阅论坛通知"
+
+msgid "Certificate mode"
+msgstr "证书模式"
+
+msgid "Configure external tools"
+msgstr "配置外部工具"
+
+msgid "Contents"
+msgstr "内容"
+
+msgid "Contents to show"
+msgstr "要显示的内容"
+
+msgid "Course certificate"
+msgstr "课程证书"
+
+msgid "Course delivery dates"
+msgstr "课程交付日期"
+
+msgid "Course duration in hours"
+msgstr "课程时长（小时）"
+
+msgid "Course legal agreement"
+msgstr "课程法律协议"
+
+msgid "Custom"
+msgstr "自定义"
+
+msgid "Custom certificate"
+msgstr "自定义证书"
+
+msgid "Default visibility for new documents"
+msgstr "新文档的默认可见性"
+
+msgid "Direct invitation link"
+msgstr "直接邀请链接"
+
+msgid "Do not notify"
+msgstr "不通知"
+
+msgid "Documents list"
+msgstr "文档列表"
+
+msgid "E-mail learner on manual subscription"
+msgstr "手动注册时向学员发送电子邮件"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "学员作业收到反馈时向教师发送电子邮件"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "接收投递箱文件时向用户发送电子邮件"
+
+msgid "Enable course home notification"
+msgstr "启用课程主页通知"
+
+msgid "Enable course themes in learning paths"
+msgstr "在学习路径中启用课程主题"
+
+msgid "Exercises invisible in session"
+msgstr "会话中练习不可见"
+
+msgid "Expiration link"
+msgstr "过期链接"
+
+msgid "Forums list"
+msgstr "论坛列表"
+
+msgid "Issue date type"
+msgstr "签发日期类型"
+
+msgid "Learning path index"
+msgstr "学习路径索引"
+
+msgid "Learning paths list"
+msgstr "学习路径列表"
+
+msgid "Left margin"
+msgstr "左边距"
+
+msgid "Legal notice"
+msgstr "法律声明"
+
+msgid "Maximum subscribed students"
+msgstr "最大学员订阅数"
+
+msgid "Notify in course home"
+msgstr "在课程主页通知"
+
+msgid "Notify learners"
+msgstr "通知学员"
+
+msgid "Notify with agreement file"
+msgstr "附协议文件通知"
+
+msgid "Notify without attachment"
+msgstr "无附件通知"
+
+msgid "Open chat in a new window"
+msgstr "在新窗口中打开聊天"
+
+msgid "Open to the platform"
+msgstr "对平台开放"
+
+msgid "Place"
+msgstr "地点"
+
+msgid "Platform default"
+msgstr "平台默认"
+
+msgid "Registration password"
+msgstr "注册密码"
+
+msgid "Remove previous agreements"
+msgstr "删除先前协议"
+
+msgid "Right margin"
+msgstr "右边距"
+
+msgid "Selected learning path"
+msgstr "所选学习路径"
+
+msgid "Selected test"
+msgstr "所选测验"
+
+msgid "Show learner picture in forums"
+msgstr "在论坛中显示学员头像"
+
+msgid "Show system folders"
+msgstr "显示系统文件夹"
+
+msgid "Signature text 1"
+msgstr "签名文本 1"
+
+msgid "Signature text 2"
+msgstr "签名文本 2"
+
+msgid "Signature text 3"
+msgstr "签名文本 3"
+
+msgid "Signature text 4"
+msgstr "签名文本 4"
+
+msgid "Student and course information"
+msgstr "学员与课程信息"
+
+msgid "Subscription allowed"
+msgstr "允许订阅"
+
+msgid "Tests list"
+msgstr "测验列表"
+
+msgid "Unsubscription allowed"
+msgstr "允许取消订阅"
+
+msgid "Use certificate download date"
+msgstr "使用证书下载日期"
+
+msgid "Use certificate generation date"
+msgstr "使用证书生成日期"
+
+msgid "Use session access dates"
+msgstr "使用学期访问日期"
+
+msgid "Use session access end date"
+msgstr "使用学期访问结束日期"
+
+msgid "Group report"
+msgstr "小组报告"
+
+msgid "Student follow-up"
+msgstr "学生跟进"
+
+msgid "Use system default certificate"
+msgstr "使用系统默认证书"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "所附证书不可用。将使用系统默认证书。"
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "使用系统默认证书代替所附证书？"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "可选的本地开发覆盖。生产环境更新使用官方 Chamilo 可信密钥。"
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "根据暂存包生成安全应用计划。将检查要替换、添加或删除的文件、权限、备份路径和锁定状态。不会修改安装。"
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "此步骤仅准备审阅。文件替换及软件包声明的清理将在后续“应用暂存文件”步骤中进行，并带有锁定、备份和回滚保护。"
+
+msgid "Files to remove"
+msgstr "要删除的文件"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "从暂存包替换 Chamilo 文件，并删除已签名软件包元数据明确声明的过时文件。不会运行数据库迁移、Composer、Yarn 或缓存命令。"
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "此操作将替换并可能删除 Chamilo 安装中的文件。继续前请确认已审阅应用计划并已启用备份。"
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "我理解此操作将替换文件，并删除软件包声明的过时文件。"
+
+msgid "Type the exact text below to confirm"
+msgstr "请输入下方确切文字以确认"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "通过安全审阅后，Doctrine 将仅执行已暂存的 V300 迁移。"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine 报告了历史基线警告。更新程序在明确确认后仍将仅执行已暂存的 V300 迁移。"
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "仅可更改清单路径。HTTPS 协议和官方更新域名为固定值。"
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "开发模式允许使用 HTTPS 清单 URL 或本地清单路径。"
+
+msgid "The official update manifest is configured by the server."
+msgstr "官方更新清单由服务器配置。"
+
+msgid "What feedback do you want about this course?"
+msgstr "您希望获得关于本课程的哪些反馈？"
+
+msgid "Analysis summary"
+msgstr "分析摘要"
+
+msgid "Lessons included"
+msgstr "包含的课时"
+
+msgid "Standalone documents included"
+msgstr "包含的独立文档"
+
+msgid "Standalone exercises included"
+msgstr "包含的独立练习"
+
+msgid "General feedback"
+msgstr "总体反馈"
+
+msgid "Strengths"
+msgstr "优势"
+
+msgid "Risks"
+msgstr "风险"
+
+msgid "Recommendations"
+msgstr "建议"
+
+msgid "Lesson feedback"
+msgstr "课时反馈"
+
+msgid "Standalone document feedback"
+msgstr "独立文档反馈"
+
+msgid "Standalone exercise feedback"
+msgstr "独立练习反馈"
+
+msgid "AI response"
+msgstr "AI 回复"
+
+msgid "Sequence feedback"
+msgstr "序列反馈"
+
+msgid "Purpose"
+msgstr "目的"
+
+msgid "You"
+msgstr "您"
+
+msgid "City of internship"
+msgstr "实习城市"
+
+msgid "City"
+msgstr "城市"
+
+msgid "Update workflow restored after page refresh"
+msgstr "页面刷新后已恢复更新流程"
+
+msgid "Last completed step"
+msgstr "最后完成的步骤"
+
+msgid "Stage package"
+msgstr "暂存软件包"
+
+msgid "Package staging"
+msgstr "软件包暂存"
+
+msgid "Apply plan"
+msgstr "应用计划"
+
+msgid "Update workflow completed"
+msgstr "更新流程已完成"
+
+msgid "Update directory exists and is writable."
+msgstr "更新目录存在且可写。"
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "更新目录存在但不可写：%s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "更新目录尚不存在，但其上级目录可写。"
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "更新目录尚不存在，但可在 var/ 下创建。"
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "更新目录不存在，且以当前权限无法创建。"
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "无法确定更新预检所需的可用磁盘空间。"
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "可用磁盘空间不足，无法安全执行更新暂存操作。"
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "可用磁盘空间足以完成本次验证阶段的更新流程。"
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "更新清单未定义 PHP 版本要求。"
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "无法完整评估 PHP 要求：%s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "当前 PHP 版本不满足更新要求：%s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "当前 PHP 版本满足更新要求。"
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "未提供本地软件包路径。已下载的软件包只能在下载后检查。"
+
+msgid "Local update package is not readable: %s"
+msgstr "本地更新软件包不可读：%s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "本地更新软件包必须是 ZIP 压缩包。"
+
+msgid "Local update package is readable."
+msgstr "本地更新软件包可读。"
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "无法自动检测已安装的 Chamilo 版本。无法检查版本方向。"
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "已安装版本或目标版本不是可比较的语义化版本格式。"
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "目标版本低于已安装版本。默认不允许降级。"
+
+msgid "Target version matches the installed version."
+msgstr "目标版本与已安装版本相同。"
+
+msgid "Target version is newer than the installed version."
+msgstr "目标版本新于已安装版本。"
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "项目不是 Git 检出，或不存在 .git。"
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "此更新系统适用于不支持 Git 的安装。我们检测到本地系统使用 Git。继续更新可能导致 Git 历史损坏。对于支持 Git 的系统，建议使用网站根目录 CONTRIBUTING.md 中详述的 Git 流程。"
+
+msgid "Local Git changes were also detected."
+msgstr "还检测到本地 Git 更改。"
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "部分项目元数据文件缺失。后续更新阶段可能需要手动检查依赖。"
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer 和 Yarn 元数据文件均存在。"
+
+msgid "Starting staged file application."
+msgstr "开始应用已暂存的文件。"
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "应用已暂存文件需要明确确认。"
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "应用已暂存的更新文件需要明确确认。"
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "暂存目录位于 Chamilo 更新暂存目录内。"
+
+msgid "Staging directory was validated."
+msgstr "暂存目录已通过验证。"
+
+msgid "Apply plan metadata was read successfully."
+msgstr "已成功读取应用计划元数据。"
+
+msgid "Staged application path is valid."
+msgstr "已暂存的应用路径有效。"
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "已签名软件包的清理元数据与已审核的应用计划匹配。"
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "已签名软件包的清理元数据已通过验证。"
+
+msgid "Update lock was acquired."
+msgstr "已获取更新锁。"
+
+msgid "Update backup directory was created."
+msgstr "已创建更新备份目录。"
+
+msgid "Update file operations were collected."
+msgstr "已收集更新文件操作。"
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "计划替换或删除的现有文件已备份。"
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "已将暂存的更新文件复制到 Chamilo 安装目录。"
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "已从 Chamilo 安装中移除软件包声明的过时文件。"
+
+msgid "Package-declared obsolete files were removed."
+msgstr "已移除软件包声明的过时文件。"
+
+msgid "Update apply audit metadata was written."
+msgstr "已写入更新应用审计元数据。"
+
+msgid "Staged files applied successfully."
+msgstr "暂存文件已成功应用。"
+
+msgid "Unable to restore removed files: %s"
+msgstr "无法还原已移除的文件：%s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "无法回滚已复制的文件：%s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "更新应用失败后已执行文件回滚。"
+
+msgid "Rollback failed: %s"
+msgstr "回滚失败：%s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "无法写入更新应用审计元数据：%s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "失败后无法释放更新锁：%s"
+
+msgid "Staging path is required to apply update files."
+msgstr "应用更新文件需要暂存路径。"
+
+msgid "Staging directory does not exist: %s"
+msgstr "暂存目录不存在：%s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Chamilo 更新暂存根目录不存在。"
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "暂存目录必须位于 var/update/staging 内。"
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "暂存目录缺少 APPLY-PLAN.json。"
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "无法读取更新应用计划元数据：%s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "更新应用计划元数据不是有效的 JSON：%s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "更新应用计划元数据必须是 JSON 对象。"
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "更新应用计划缺少 application_path 字段。"
+
+msgid "Staged application path is not readable: %s"
+msgstr "暂存的应用程序路径不可读：%s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "暂存的应用程序路径必须位于暂存目录内。"
+
+msgid "Staged application path is missing composer.json."
+msgstr "暂存的应用程序路径缺少 composer.json。"
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "更新包缺少 %s。请重新暂存带有已签名清理元数据的已验证软件包。"
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "更新应用计划缺少已审核的软件包清理元数据。"
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "生成应用计划后，更新包清理元数据已更改。请在继续前重新生成应用计划。"
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "更新应用计划包含无效的软件包移除列表。"
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "生成应用计划后，更新包清理路径已更改。请在继续前重新生成应用计划。"
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "更新应用计划缺少已审核的移除路径列表。"
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "更新应用计划的移除路径与已签名的软件包清理元数据不匹配。"
+
+msgid "Update lock path must be inside var/update."
+msgstr "更新锁路径必须位于 var/update 内。"
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "更新应用计划缺少 backup_path 字段。"
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "更新备份路径包含不安全的路径段。"
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "更新备份路径必须位于 var/update/backups 内。"
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "无法获取更新锁。可能有其他更新正在进行。"
+
+msgid "Unable to release update lock: %s"
+msgstr "无法释放更新锁：%s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "更新备份目录已存在：%s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "无法创建目标目录：%s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "计划的更新将覆盖现有符号链接：%s"
+
+msgid "Target file is not writable: %s"
+msgstr "目标文件不可写：%s"
+
+msgid "Target file cannot be created: %s"
+msgstr "无法创建目标文件：%s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "移除过时文件前无法解析 Chamilo 项目目录。"
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "更新清理无法移除受保护路径：%s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "计划的更新将移除现有符号链接：%s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "更新清理仅支持文件，不支持目录：%s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "过时目标文件不可读，无法备份：%s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "以当前目录权限无法移除过时目标文件：%s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "过时目标文件解析到 Chamilo 项目目录之外：%s"
+
+msgid "Unable to back up target file: %s"
+msgstr "无法备份目标文件：%s"
+
+msgid "Unable to write update backup metadata."
+msgstr "无法写入更新备份元数据。"
+
+msgid "Unable to copy staged update file: %s"
+msgstr "无法复制暂存的更新文件：%s"
+
+msgid "Copied %d of %d staged files."
+msgstr "已复制 %d / %d 个暂存文件。"
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "无法删除软件包声明的过时文件：%s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "已删除 %d / %d 个软件包声明的过时文件。"
+
+msgid "Unable to restore backed up file: %s"
+msgstr "无法还原备份文件：%s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "回滚时无法删除新复制的文件：%s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "无法还原已删除的文件，因为缺少备份：%s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "无法从备份还原已删除的文件：%s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "无法写入更新应用审计元数据。"
+
+msgid "Unable to write global update apply log."
+msgstr "无法写入全局更新应用日志。"
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "检测到不安全的暂存相对路径：%s"
+
+msgid "Directory is not writable: %s"
+msgstr "目录不可写：%s"
+
+msgid "Unable to create directory: %s"
+msgstr "无法创建目录：%s"
+
+msgid "Staging metadata was read successfully."
+msgstr "暂存元数据已成功读取。"
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "应用计划元数据已写入暂存目录。"
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "目标文件和目录看起来可写，可用于计划的更新和清理。"
+
+msgid "Update apply plan check failed."
+msgstr "更新应用计划检查失败。"
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "部分目标文件或目录无法写入或删除。"
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "要解决此问题，请暂时将整个 Chamilo 目录的所有者更改为 %s（Web 服务器用户），应用更新，之后将所有者改回 %s，然后将 var/（及其内容）的所有者改回 %s，以便应用程序继续写入。"
+
+msgid "Update package verification failed."
+msgstr "更新包验证失败。"
+
+msgid "Update preflight checks failed."
+msgstr "更新预检失败。"
+
+msgid "Unable to stage update package."
+msgstr "无法暂存更新包。"
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "此服务器已禁用从界面运行应用后命令。"
+
+msgid "Missing required field: %s"
+msgstr "缺少必填字段：%s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "未提供更新清单来源，也未配置默认更新清单 URL。"
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "更新清单 URL 必须使用官方更新源 %s。仅可更改清单路径。"
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "已禁用本地更新清单路径。请使用 HTTPS 清单 URL，或在服务器环境中设置 CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 以进行本地测试。"
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "请勿提供 HTTP %s 路径。将此字段留空以从更新清单下载。"
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "此环境中已禁用本地更新 %s 路径。"
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "此环境中必须在服务器上配置受信任的更新公钥。"
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "此环境中已禁用跳过更新签名验证。"
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "运行应用后更新操作需要确认文本 \"%s\"。"
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "应用暂存的更新文件需要确认文本 \"%s\"。"
+
+msgid "Unable to resolve project directory."
+msgstr "无法解析项目目录。"
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "此更新程序不管理数据库备份。运行迁移前请创建并验证数据库备份。"
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine 迁移的 down() 方法不能保证还原已删除或已转换的数据。"
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "应用后元数据建议审查数据库迁移。"
+
+msgid "No migration files were found in the staged package."
+msgstr "暂存包中未找到迁移文件。"
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "已检测到暂存的 Doctrine 迁移文件。"
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "已从暂存包解析 Doctrine 迁移目标。"
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine 迁移基线对暂存迁移存在阻塞问题。"
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine 报告历史迁移基线警告，但将仅审查并显式执行暂存的 %s 迁移。"
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine 报告历史迁移基线警告。更新程序将在明确确认后仅执行暂存的 %s 迁移类。"
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Doctrine 基线对暂存的 %s 迁移没有阻塞问题。"
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "至少有一个暂存迁移的 Doctrine 试运行失败。在修复之前请勿运行数据库迁移。"
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "每个暂存迁移类的 Doctrine 试运行均已成功完成。"
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "运行迁移前必须在此更新程序之外创建数据库备份。"
+
+msgid "Staging path is required to review database migrations."
+msgstr "审查数据库迁移需要暂存路径。"
+
+msgid "Unable to read update %s: %s"
+msgstr "无法读取更新 %s：%s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "更新 %s JSON 无效：%s"
+
+msgid "Update %s JSON must be an object."
+msgstr "更新 %s JSON 必须是对象。"
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "应用后检查元数据不包含有效的操作列表。"
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "此次暂存更新不建议执行数据库迁移。"
+
+msgid "Update metadata is missing the staged application path."
+msgstr "更新元数据缺少暂存应用路径。"
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "未找到计划的暂存迁移文件：%s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "无法读取暂存迁移文件：%s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "无法从 getDescription() 提取描述。"
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "更新运行器仅支持 %s 个暂存迁移：%s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "无法写入迁移安全元数据：%s"
+
+msgid "Migration safety check failed."
+msgstr "迁移安全检查失败。"
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "检测到不安全的暂存相对迁移路径：%s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "无法自动检测已安装的 Chamilo 版本。请仅在确认此更新兼容后再继续。"
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "已安装版本或目标版本不是可比较的语义版本格式。请仅在人工核实后再继续。"
+
+msgid "An update is available."
+msgstr "有可用更新。"
+
+msgid "The installed version already matches the manifest version."
+msgstr "已安装版本已与清单版本一致。"
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "清单版本低于已安装版本。默认禁止降级。"
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "暂存文件未成功应用。无法继续应用后检查。"
+
+msgid "Apply result metadata was read successfully."
+msgstr "已成功读取应用结果元数据。"
+
+msgid "Post-apply action recommendations were generated."
+msgstr "已生成应用后操作建议。"
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "在暂存包中检测到数据库迁移。请仅在确认文件更新正确且已有数据库备份后再运行。"
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "运行应用后检查需要暂存路径。"
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "更新 %s 不是有效的 JSON：%s"
+
+msgid "Update %s must be a JSON object."
+msgstr "更新 %s 必须是 JSON 对象。"
+
+msgid "Composer dependencies"
+msgstr "Composer 依赖"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "暂存包中包含 Composer 元数据。请在应用程序根目录运行 Composer install，然后再将更新视为完成。"
+
+msgid "Frontend assets"
+msgstr "前端资源"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "暂存包中包含前端相关文件。安装依赖后请重新构建生产资源。"
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "在暂存包中检测到 Doctrine 迁移文件。运行迁移前请确认已有数据库备份。"
+
+msgid "Symfony cache"
+msgstr "Symfony 缓存"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "应用更新文件并运行任何所需命令后，请清除 Symfony 缓存。"
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "无法写入应用后检查元数据。"
+
+msgid "Post-apply check failed."
+msgstr "应用后检查失败。"
+
+msgid "Update package is not readable: %s"
+msgstr "无法读取更新包：%s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "更新包不是有效的 ZIP 归档。"
+
+msgid "Update package ZIP archive is empty."
+msgstr "更新包 ZIP 归档为空。"
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "更新包包含无法读取的 ZIP 条目。"
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "更新包包含不安全的绝对路径：%s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "更新包包含路径遍历条目：%s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "更新包包含符号链接：%s"
+
+msgid "Starting post-apply actions."
+msgstr "正在开始应用后操作。"
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "执行应用后命令需要明确确认。"
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "已成功读取应用后建议元数据。"
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "已根据建议报告验证应用后操作。"
+
+msgid "Post-apply actions were selected."
+msgstr "已选择应用后操作。"
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "高级应用后操作需要明确的高级确认。"
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "已明确确认高级应用后操作。"
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "所选应用后命令已成功完成。"
+
+msgid "Post-apply command run metadata was written."
+msgstr "已写入应用后命令运行元数据。"
+
+msgid "Post-apply actions completed successfully."
+msgstr "应用后操作已成功完成。"
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "请记得将文件和目录权限恢复到本次更新之前的状态。如果 Web 服务器对 Chamilo 代码保持写入权限，未来任何漏洞都可能被用来修改您平台的文件。"
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "无效的更新应用后命令定义：%s"
+
+msgid "Running post-apply action: %s"
+msgstr "正在运行应用后操作：%s"
+
+msgid "Running command %d of %d for %s."
+msgstr "正在为 %s 运行第 %d 条命令，共 %d 条。"
+
+msgid "Post-apply action failed: %s"
+msgstr "应用后操作失败：%s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "应用后操作“%s”失败，退出代码为 %d。"
+
+msgid "Post-apply action completed: %s"
+msgstr "应用后操作已完成：%s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "运行应用后操作需要暂存路径。"
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "没有建议运行的应用后操作。"
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "没有允许运行的应用后操作。"
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "此更新不允许该应用后操作：%s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "数据库迁移在执行前需要通过迁移安全审查。"
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "无法运行数据库迁移，因为迁移安全审查未通过。"
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "无法运行数据库迁移，因为迁移安全审查未列出已暂存的迁移。"
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "无法运行数据库迁移，因为迁移安全审查包含无效的迁移条目。"
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "更新运行器只能执行已暂存的 %s 迁移。"
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "无法运行数据库迁移，因为已暂存迁移的安全审查报告了阻塞性错误。"
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine 报告了迁移基线警告。将仅显式执行已暂存的 %s 迁移类。"
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "数据库迁移需要确认已存在数据库备份。"
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "数据库迁移需要确认文本“RUN DATABASE MIGRATIONS”。"
+
+msgid "Database migration safety review was completed before execution."
+msgstr "数据库迁移安全审查已在执行前完成。"
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "已明确确认数据库备份存在。"
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "已提供数据库迁移安全审查和备份确认。"
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "数据库迁移已在明确确认数据库备份后执行。更新程序未创建该数据库备份。"
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "所需的应用后可执行文件权限已规范化。"
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "无法运行数据库迁移，因为未找到 bin/console。"
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "所选应用后命令具备所需的可写路径。"
+
+msgid "Post-apply command writable paths were validated."
+msgstr "应用后命令的可写路径已验证。"
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "高级应用后操作可能修改依赖项、生成的资源或数据库。继续前请检查备份。"
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "无法从 Web 更新程序安全运行 Composer，因为 Composer 生成的文件“%s”归 UID %d 所有，而 PHP 运行时使用 UID %d。请以部署所有者身份手动运行 Composer，然后继续其余应用后操作。"
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "应用后操作“%s”所需的路径不可写：%s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "应用后操作“%s”所需的父目录不可写：%s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "无法读取所需应用后可执行文件的权限：%s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "无法将所需应用后可执行文件标记为可执行：%s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "chmod 后所需应用后可执行文件仍不可执行：%s"
+
+msgid "Executable permission was normalized."
+msgstr "可执行权限已规范化。"
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "无法为应用后命令写入隔离的 Git 配置。"
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "似乎另有更新操作正在运行。仅在确认没有活动更新时才删除 var/update/update.lock。"
+
+msgid "Unable to create update lock: %s"
+msgstr "无法创建更新锁：%s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "无法写入应用后命令运行元数据：%s"
+
+msgid "Update manifest is missing the package block."
+msgstr "更新清单缺少软件包块。"
+
+msgid "Update manifest signature block must be an object."
+msgstr "更新清单签名块必须为对象。"
+
+msgid "Update manifest requirements block must be an object."
+msgstr "更新清单要求块必须为对象。"
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "更新软件包 sha256 必须是 64 位十六进制字符串。"
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "更新清单缺少必需的字符串字段“%s”。"
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "更新清单字段“%s”必须为字符串。"
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "更新清单不是有效的 JSON：%s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "更新清单 JSON 必须为对象。"
+
+msgid "Manifest source cannot be empty."
+msgstr "清单来源不能为空。"
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "更新清单 URL 必须使用官方更新源 %s。"
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "无法下载更新清单。HTTP 状态：%d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "清单文件不可读：%s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "无法读取清单文件：%s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "更新清单 URL 必须使用 HTTPS。"
+
+msgid "Update package metadata is not readable: %s"
+msgstr "更新包元数据不可读：%s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "无法读取更新包元数据：%s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "更新包元数据不是有效的 JSON：%s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "更新包元数据必须是 JSON 对象。"
+
+msgid "Update package metadata format must be %d."
+msgstr "更新包元数据格式必须为 %d。"
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "更新包元数据字段 \"remove\" 必须是数组。"
+
+msgid "Update package removal paths must be strings."
+msgstr "更新包删除路径必须是字符串。"
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "更新包元数据无法删除受保护路径：%s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "更新包不能同时包含并删除同一路径：%s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "无法计算更新包元数据的 sha256。"
+
+msgid "Update package removal path cannot be empty."
+msgstr "更新包删除路径不能为空。"
+
+msgid "Update package removal path contains a null byte."
+msgstr "更新包删除路径包含空字节。"
+
+msgid "Update package removal path must be relative: %s"
+msgstr "更新包删除路径必须是相对路径：%s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "更新包删除路径包含不安全的段：%s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "构建更新应用计划需要暂存路径。"
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "暂存目录缺少 STAGING-INFO.json。"
+
+msgid "Unable to read staging metadata: %s"
+msgstr "无法读取暂存元数据：%s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "暂存元数据不是有效的 JSON：%s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "暂存元数据必须是 JSON 对象。"
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "暂存元数据缺少 application_path 字段。"
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "更新包缺少 %s。在应用文件之前需要已签名的清理元数据。"
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "暂存元数据不包含提取期间记录的已签名包清理元数据。"
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "暂存后更新包清理元数据已更改。请在继续之前重新暂存已验证的包。"
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "暂存元数据不包含有效的包删除列表。"
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "暂存后更新包清理路径已更改。请在继续之前重新暂存已验证的包。"
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "自暂存以来，已签名的包清理元数据未更改。"
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "更新锁文件已存在。可能有另一个更新正在进行。"
+
+msgid "Update lock directory is not writable."
+msgstr "更新锁目录不可写。"
+
+msgid "No update lock is currently active."
+msgstr "当前没有活动的更新锁。"
+
+msgid "Update backup directory is not writable."
+msgstr "更新备份目录不可写。"
+
+msgid "Update backup directory is writable."
+msgstr "更新备份目录可写。"
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "当前进程无法创建更新备份目录。"
+
+msgid "Update backup directory can be created."
+msgstr "可以创建更新备份目录。"
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "某些更新工作目录不可写，或当前进程无法创建。"
+
+msgid "Update working directories are writable or can be created."
+msgstr "更新工作目录可写或可以创建。"
+
+msgid "Update apply file plan was generated."
+msgstr "已生成更新应用文件计划。"
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "包清理元数据包含无法安全删除的路径。"
+
+msgid "Package-declared removal targets are safe."
+msgstr "包声明的删除目标是安全的。"
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "某些包声明的过时文件在此安装中已不存在。"
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "计划的更新将覆盖或删除现有符号链接。"
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "计划的更新不会覆盖或删除现有符号链接。"
+
+msgid "New update migration files must be placed under %s."
+msgstr "新的更新迁移文件必须放在 %s 下。"
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "检测到新的 %s Doctrine 迁移文件。应用文件后需要进行数据库迁移安全审查。"
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "JSON 响应中部分更新应用计划文件列表已被截断。"
+
+msgid "Unable to write update apply plan metadata."
+msgstr "无法写入更新应用计划元数据。"
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "无法下载更新包。HTTP 状态：%d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "无法打开更新包目标文件：%s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "更新下载必须使用官方更新源 %s。"
+
+msgid "The update package URL must use HTTPS."
+msgstr "更新包 URL 必须使用 HTTPS。"
+
+msgid "Update package archive safety checks passed."
+msgstr "更新包归档安全检查已通过。"
+
+msgid "Update package was extracted to staging."
+msgstr "更新包已解压到暂存区。"
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "已加载已签名包的清理元数据。"
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "更新包不包含 %s。在提供已签名的清理元数据之前，将阻止文件应用。"
+
+msgid "Staged package dry-run report was generated."
+msgstr "已生成暂存包试运行报告。"
+
+msgid "Staging metadata was written."
+msgstr "已写入暂存元数据。"
+
+msgid "Unable to extract update package to staging directory."
+msgstr "无法将更新包解压到暂存目录。"
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "无法在暂存包中定位 Chamilo 应用程序根目录。"
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "暂存包缺少必需的 Chamilo 入口：%s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "暂存包包含预期的 Chamilo 结构。"
+
+msgid "Staged package does not contain composer.lock."
+msgstr "暂存包不包含 composer.lock。"
+
+msgid "Staged package contains composer.lock."
+msgstr "暂存包包含 composer.lock。"
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "暂存包不包含 yarn.lock。"
+
+msgid "Staged package contains yarn.lock."
+msgstr "暂存包包含 yarn.lock。"
+
+msgid "Unable to encode staging metadata."
+msgstr "无法编码暂存元数据。"
+
+msgid "Unable to write staging metadata."
+msgstr "无法写入暂存元数据。"
+
+msgid "Update operation log created."
+msgstr "已创建更新操作日志。"
+
+msgid "Unable to write update operation log."
+msgstr "无法写入更新操作日志。"
+
+msgid "Invalid update operation id."
+msgstr "无效的更新操作 ID。"
+
+msgid "AI study helper"
+msgstr "AI 学习助手"
+
+msgid "Selected text"
+msgstr "所选文本"
+
+msgid "Learning technique"
+msgstr "学习方法"
+
+msgid "AI response"
+msgstr "AI 回复"
+
+msgid "AI request failed."
+msgstr "AI 请求失败。"
+
+msgid "Mind mapping"
+msgstr "思维导图"
+
+msgid "Feynman Technique"
+msgstr "费曼学习法"
+
+msgid "Elaborative interrogation"
+msgstr "精细化追问"
+
+msgid "Spaced repetition"
+msgstr "间隔重复"
+
+msgid "SQ3R Method"
+msgstr "SQ3R 学习法"
+
+msgid "Analogies and metaphors"
+msgstr "类比与隐喻"
+
+msgid "Dual coding"
+msgstr "双重编码"
+
+msgid "Storytelling"
+msgstr "故事讲述"
+
+msgid "Thematic connections"
+msgstr "主题关联"
+
+msgid "Interleaved learning"
+msgstr "交错学习"
+
+msgid "Memory palaces"
+msgstr "记忆宫殿"
+
+msgid "Logins (Month)"
+msgstr "登录次数（月）"
+
+msgid "Logins (Day)"
+msgstr "登录次数（日）"
+
+msgid "Logins (Hour)"
+msgstr "登录次数（小时）"
+
+msgid "Number of users (Picture)"
+msgstr "用户数量（图片）"
+
+msgid "Allow tutors to register users"
+msgstr "允许辅导教师注册用户"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "允许辅导教师在课程学期内编辑"
+
+msgid "Extend rights for tutors"
+msgstr "扩展辅导教师权限"
+
+msgid "Show session tutor"
+msgstr "显示学期辅导教师"
+
+msgid "Default tutor access days after session"
+msgstr "学期结束后辅导教师默认访问天数"
+
+msgid "Default tutor access days before session"
+msgstr "学期开始前辅导教师默认访问天数"
+
+msgid "Dropbox: hide course tutor"
+msgstr "投递箱：隐藏课程辅导教师"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "在投递箱中隐藏总辅导教师"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "扩展辅导教师在问卷上的权限"
+
+msgid "Maximum courses per user"
+msgstr "每位用户最大学课程数"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "允许辅导教师在批改练习时发表评论"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "在导出的测验结果 PDF 文件名中包含官方编号"
+
+msgid "Certificate expiry reminder cron"
+msgstr "证书到期提醒定时任务"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "证书到期提醒窗口（天）"
+
+msgid "Allow certificates search"
+msgstr "允许搜索证书"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "允许辅导教师始终编辑公告"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "在考勤表中显示学生的官方编号"
+
+msgid "Restrict course chat to tutors"
+msgstr "将课程聊天限制为仅辅导教师"
+
+msgid "Language by resource"
+msgstr "按资源设置语言"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "离开时若状态仍为未完成则完成 SCO"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "按类别目标启用渐进式自适应测验"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "阻止向总辅导教师发送测验通知"
+
+msgid "Enable session expiration warning"
+msgstr "启用学期到期警告"
+
+msgid "Session expiration warning time"
+msgstr "学期到期警告时间"
+
+msgid "Check password requirements"
+msgstr "检查密码要求"
+
+msgid "File integrity check notification recipients"
+msgstr "文件完整性检查通知收件人"
+
+msgid "Enable the OAuth authorization server"
+msgstr "启用 OAuth 授权服务器"
+
+msgid "Enable MCP server"
+msgstr "启用 MCP 服务器"
+
+msgid "Allow MCP by roles"
+msgstr "按角色允许 MCP"
+
+msgid "Enable external API keys"
+msgstr "启用外部 API 密钥"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "按时长的学期始终对辅导教师可用"
+
+msgid "Allow registration via course invitation links"
+msgstr "允许通过课程邀请链接注册"
+
+msgid "Add student fullname in file download name"
+msgstr "在文件下载名称中添加学生全名"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "允许在所见即所得编辑器中将 AI 翻译到所有已启用语言"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "禁用编辑课程辅导教师的功能"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "使用学期时，默认行为是使用基础课程中定义的工具可见性。此设置可改为允许学期课程中的辅导教师根据需要调整工具可见性。"
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "辅导教师可在平台上创建用户并将用户注册到学期。"
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "启用此选项可为辅导教师授予与培训者在创作工具上相同的权限"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "在课程列表的学期标题框中显示总学期辅导教师姓名"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "启用后，学期中的课程辅导教师可将新用户注册到其学期。否则此选项仅对管理员和学期管理员可用。"
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "官方学期结束日期后导师可访问该学期的默认天数"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "官方学期开始日期前导师可访问该学期的默认天数"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "启用 MathJax 库以可视化数学公式。这将在编辑器工具栏中添加公式按钮，公式使用 LaTeX 编写。"
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "用 \"|\" 分隔的课程代码。人力资源主管登录时，用户会自动订阅这些课程。示例：COURSE001|COURSE002。这不会更改用户角色。"
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "用 \"|\" 分隔的课程代码。学期管理员登录时，用户会自动订阅这些课程。示例：COURSE001|COURSE002。这不会更改用户角色。"
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "用 \"|\" 分隔的课程代码。学员登录时，用户会自动订阅这些课程。示例：COURSE001|COURSE002。"
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "用 \"|\" 分隔的课程代码。教师登录时，用户会自动订阅这些课程。示例：COURSE001|COURSE002。这不会授予课程教师权限。"
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "当导师向学生发送文档时，在投递箱中隐藏学期课程导师"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "当总导师上传文件时，在投递箱工具中隐藏总导师姓名"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "启用此选项以允许导师创建和编辑调查问卷"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "调查问卷邀请应使用导师电子邮件地址，还是主配置中定义的无回复地址？"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "教师/培训师可创建的课程数量上限。设为 0 表示不限制。可通过 BuyCourses 服务购买按用户覆盖。"
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "允许导师在批改练习时编辑反馈"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "将测验结果导出为 PDF 时，是否在文件名中包含学生的官方编号"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "允许不受限制地访问所有个人文件"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "启用 app:send-certificate-expiry-reminders 定时任务，向证书已过期或即将过期的学员发送提醒。"
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "扫描即将过期证书的默认提前天数，除非定时任务使用 --days-ahead 运行。"
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "允许用户和访客通过顶部栏菜单搜索已生成的证书。"
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "允许导师始终编辑进行中或已结束学期内的公告。"
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "是否在考勤表和名单中于学生姓名旁显示其官方编号。"
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "允许为单个资源指定特定语言。"
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "部分 SCORM 包只会调用一次 LMSSetValue(cmi.core.lesson_status, 'incomplete')，且从不发送真正的结束状态，也不发送有意义的 LMSFinish()。启用此选项后，Chamilo 将把持续的“incomplete”视为无状态，并在学员离开 SCO 时判定完成。"
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "若学习路径被设为不可见，但教师或导师决定从课程主页提供访问，此选项可防止 Chamilo 隐藏课程主页上的链接。"
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "启用渐进式自适应测验，每个题目类别可根据学员得分将学员重定向到另一类别。"
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "学员完成测验时，通知通常会发送给导师（包括学期总导师）。启用此选项可从这些通知中排除总导师。"
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "在待批测验报告中，显示总导师有权访问的所有学期中用户的测验尝试。"
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "在服务器端会话即将过期前向已登录用户显示警告。"
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "显示警告时距会话过期的秒数。默认为 180 秒。"
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "定义用户密码的必需要求结构。示例：{\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}。使用 \"specials\"（复数）以要求特殊字符。"
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "在创建或更新密码时，启用对上述密码要求的验证。"
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "文件完整性扫描检测到更改时要通知的电子邮件地址列表（逗号分隔）。留空则改为通知所有全局管理员。"
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "允许外部应用（例如 Claude.ai MCP 连接器）通过 OAuth 2.1 动态客户端注册进行注册，并使用每位用户自己的 Chamilo 账户和权限进行连接。默认禁用：发现、注册、授权和令牌端点在开启前均返回 404。"
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "启用 Chamilo MCP 端点和个人 MCP API 密钥界面。禁用时，现有 API 密钥、OAuth 访问令牌和 JWT 凭据无法在 /mcp 上使用。"
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "允许使用 MCP 的 Chamilo 用户角色 JSON 映射。用户必须至少匹配一个已启用角色。此限制也适用于先前生成的 API 密钥和现有 OAuth 连接。"
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "允许受信任的服务器到服务器集成（例如 WordPress 店面插件）使用通过 \"chamilo:security:generate-external-api-key\" 控制台命令生成的每用户外部 API 密钥，对通用 /api 端点进行身份验证。默认禁用：开启前无法使用现有密钥。"
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "在学期列表的学期副标题中添加导师和日期。"
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "否则，学期导师仅在有效持续期内可按持续时间访问学期。"
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "启用后，教师/管理员可从课程的“用户”工具发送一次性邀请链接，使未注册人员即使在禁用一般自行注册（allow_registration）时也能到达注册表单并完成注册。"
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "下载单个作业提交或作业压缩包时，在作业文件名中添加学生全名。"
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "允许教师在一次所见即所得操作中为所有已启用的平台语言生成翻译。这可能消耗大量 AI 令牌。"
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "禁用时，管理员在课程编辑页面没有快速为学期课程分配导师的链接。"
+
+msgid "Show courses & sessions"
+msgstr "显示课程和学期"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "可选 JSON。示例：{\"speed\": true}"
+
+msgid "Table"
+msgstr "表格"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "主题"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "课程导师邮件发件人"
+
+msgid "Card (visual blocks)"
+msgstr "卡片（可视化块）"
+
+msgid "List (classic)"
+msgstr "列表（经典）"
+
+msgid "Limit identical emails"
+msgstr "限制相同邮箱"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "教师或培训师可创建的课程数量上限。设为 0 可禁用该限制。"
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "允许使用同一邮箱的账户数量上限。设为 0 可禁用该限制。"
+
+msgid "Validation"
+msgstr "验证"
+
+msgid "Test/Development"
+msgstr "测试/开发"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "从 /admin-dashboard/register 搜索和命名课程班时使用的用户扩展字段键。"
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "搜索预筛选字段的 JSON 配置。"
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "此操作会将本版本附带的所有迁移标记为已执行。仅在平台已是最新且从未记录过迁移历史时执行此操作。"
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "已记录 %s 条迁移。您的平台现在可以正常更新。"
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "无迁移历史：点击修复（否则更新可能会失败）"
+
+msgid "Migration history is recorded"
+msgstr "已记录迁移历史"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "项目根目录中存在 %s：删除该文件以关闭升级端点"
 

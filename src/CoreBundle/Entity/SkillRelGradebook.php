@@ -33,16 +33,16 @@ class SkillRelGradebook
         $this->type = '';
     }
 
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
     public function setType(string $type): self
     {
         $this->type = $type;
 
         return $this;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
     }
 
     public function getId(): ?int

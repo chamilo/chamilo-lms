@@ -7,7 +7,7 @@
           v-if="report.survey?.title"
           class="mt-1 text-sm text-gray-600"
         >
-          {{ report.survey.title }}
+          {{ displayText(report.survey.title) }}
         </p>
       </div>
 
@@ -169,7 +169,11 @@
         <Column
           :header="t('Question')"
           field="question"
-        />
+        >
+          <template #body="{ data }">
+            <span>{{ displayText(data.question) }}</span>
+          </template>
+        </Column>
         <Column :header="t('Answer')">
           <template #body="{ data }">
             <span>{{ data.answer || '-' }}</span>
@@ -199,7 +203,7 @@
                 v-for="question in report.questionReports || []"
                 :key="question.id"
               >
-                <span class="font-semibold">{{ question.title }}:</span>
+                <span class="font-semibold">{{ displayText(question.title) }}:</span>
                 <span>{{ data.answers?.[question.id] || '-' }}</span>
               </div>
             </div>
@@ -217,14 +221,43 @@ import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
+
+function displayText(value, fallback = "") {
+  if (!value) {
+    return fallback
+  }
+
+  const textarea = document.createElement("textarea")
+  textarea.innerHTML = displayTranslatedHtml(String(value)).replace(/<[^>]*>/g, " ")
+
+  return textarea.value.replace(/\s+/g, " ").trim() || fallback
+}
+
+// Report types the backend serves (SurveyReportingProvider::getReportTypes()). Kept as a
+// list here so an unknown ?report= value falls back to the overview instead of rendering
+// nothing: the query is user-facing, and legacy links carry their own report names.
+const REPORT_TYPES = ["overview", "question", "user", "complete"]
+
+/**
+ * Reads the requested report type from the URL, falling back to the overview.
+ *
+ * @returns {string}
+ */
+function reportTypeFromQuery() {
+  const requested = String(route.query.report || "")
+
+  return REPORT_TYPES.includes(requested) ? requested : "overview"
+}
 
 const report = ref({})
-const activeReport = ref("overview")
+const activeReport = ref(reportTypeFromQuery())
 const selectedUser = ref(route.query.user ? String(route.query.user) : "")
 const isLoading = ref(false)
 const errorMessage = ref("")
@@ -259,8 +292,8 @@ const QuestionReportList = defineComponent({
             h("div", { class: "mb-3 flex items-start gap-3" }, [
               h(BaseIcon, { icon: "chart-bar", size: "small" }),
               h("div", null, [
-                h("h3", { class: "text-lg font-semibold text-gray-90" }, question.title),
-                question.comment ? h("p", { class: "text-sm text-gray-500" }, question.comment) : null,
+                h("h3", { class: "text-lg font-semibold text-gray-90" }, displayText(question.title)),
+                question.comment ? h("p", { class: "text-sm text-gray-500" }, displayText(question.comment)) : null,
                 h("p", { class: "text-xs text-gray-500" }, `${question.typeLabel} · ${question.totalAnswers} ${t("answers")}`),
               ]),
             ]),
@@ -278,7 +311,7 @@ function renderQuestionBody(question) {
       { class: "space-y-3" },
       question.scoreRows.map((row) =>
         h("div", { class: "rounded-lg border border-gray-20 p-3" }, [
-          h("div", { class: "mb-2 font-semibold" }, row.optionLabel),
+          h("div", { class: "mb-2 font-semibold" }, displayText(row.optionLabel)),
           h(
             "div",
             { class: "grid gap-2 md:grid-cols-5" },
@@ -306,7 +339,7 @@ function renderQuestionBody(question) {
       question.options.map((option) =>
         h("div", { class: "rounded-lg border border-gray-20 p-3" }, [
           h("div", { class: "flex items-center justify-between gap-4" }, [
-            h("span", { class: "font-medium" }, option.label),
+            h("span", { class: "font-medium" }, displayText(option.label)),
             h("span", { class: "text-sm text-gray-600" }, `${option.count} · ${option.percentage}%`),
           ]),
           h("div", { class: "mt-2 h-2 rounded bg-gray-15" }, [
@@ -358,25 +391,46 @@ async function loadReporting() {
   }
 }
 
-function reloadForUser() {
+/**
+ * Puts the current selection in the URL so the view can be linked to and reloaded.
+ *
+ * @param {Object} changes
+ * @returns {void}
+ */
+function syncQuery(changes) {
   router.replace({
     name: "SurveyReporting",
     params: route.params,
-    query: {
-      ...route.query,
-      user: selectedUser.value || undefined,
-    },
+    query: { ...route.query, ...changes },
   })
-  loadReporting()
+}
+
+function reloadForUser() {
+  syncQuery({ user: selectedUser.value || undefined })
 }
 
 onMounted(loadReporting)
 
+// Only the selected user changes what the backend returns; the report type just picks
+// which part of the same payload is shown, so it must not trigger a reload.
 watch(
-  () => route.query,
+  () => route.query.user,
   () => {
     selectedUser.value = route.query.user ? String(route.query.user) : ""
     loadReporting()
   },
 )
+
+watch(
+  () => route.query.report,
+  () => {
+    activeReport.value = reportTypeFromQuery()
+  },
+)
+
+watch(activeReport, (value) => {
+  if (String(route.query.report || "") !== value) {
+    syncQuery({ report: value })
+  }
+})
 </script>

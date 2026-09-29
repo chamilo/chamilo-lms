@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\FacebookUser;
 use League\OAuth2\Client\Token\AccessToken;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
@@ -32,6 +33,7 @@ class FacebookAuthenticator extends AbstractAuthenticator
         AuthenticationConfigHelper $authenticationConfigHelper,
         AccessUrlHelper $urlHelper,
         EntityManagerInterface $entityManager,
+        LoggerInterface $logger,
         protected readonly SlugifyInterface $slugify,
     ) {
         parent::__construct(
@@ -41,6 +43,7 @@ class FacebookAuthenticator extends AbstractAuthenticator
             $authenticationConfigHelper,
             $urlHelper,
             $entityManager,
+            $logger,
         );
     }
 

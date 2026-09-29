@@ -40,18 +40,6 @@ class TrackELinks
     protected int $linksId;
 
     /**
-     * Set linksUserId.
-     *
-     * @return TrackELinks
-     */
-    public function setLinksUserId(int $linksUserId)
-    {
-        $this->linksUserId = $linksUserId;
-
-        return $this;
-    }
-
-    /**
      * Get linksUserId.
      *
      * @return int
@@ -62,13 +50,13 @@ class TrackELinks
     }
 
     /**
-     * Set linksDate.
+     * Set linksUserId.
      *
      * @return TrackELinks
      */
-    public function setLinksDate(DateTime $linksDate)
+    public function setLinksUserId(int $linksUserId)
     {
-        $this->linksDate = $linksDate;
+        $this->linksUserId = $linksUserId;
 
         return $this;
     }
@@ -84,13 +72,13 @@ class TrackELinks
     }
 
     /**
-     * Set cId.
+     * Set linksDate.
      *
      * @return TrackELinks
      */
-    public function setCId(int $cId)
+    public function setLinksDate(DateTime $linksDate)
     {
-        $this->cId = $cId;
+        $this->linksDate = $linksDate;
 
         return $this;
     }
@@ -106,13 +94,13 @@ class TrackELinks
     }
 
     /**
-     * Set linksLinkId.
+     * Set cId.
      *
      * @return TrackELinks
      */
-    public function setLinksLinkId(int $linksLinkId)
+    public function setCId(int $cId)
     {
-        $this->linksLinkId = $linksLinkId;
+        $this->cId = $cId;
 
         return $this;
     }
@@ -128,13 +116,13 @@ class TrackELinks
     }
 
     /**
-     * Set sessionId.
+     * Set linksLinkId.
      *
      * @return TrackELinks
      */
-    public function setSessionId(int $sessionId)
+    public function setLinksLinkId(int $linksLinkId)
     {
-        $this->sessionId = $sessionId;
+        $this->linksLinkId = $linksLinkId;
 
         return $this;
     }
@@ -147,6 +135,18 @@ class TrackELinks
     public function getSessionId()
     {
         return $this->sessionId;
+    }
+
+    /**
+     * Set sessionId.
+     *
+     * @return TrackELinks
+     */
+    public function setSessionId(int $sessionId)
+    {
+        $this->sessionId = $sessionId;
+
+        return $this;
     }
 
     /**

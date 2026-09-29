@@ -27,7 +27,7 @@ class PageLayoutTemplate
 
     #[Groups(['page_layout_template:read', 'page_layout_template:write'])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $name = null;
+    private ?string $title = null;
 
     #[Groups(['page_layout_template:read', 'page_layout_template:write'])]
     #[ORM\Column(type: 'text')]
@@ -38,14 +38,14 @@ class PageLayoutTemplate
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(?string $name): self
+    public function setTitle(?string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

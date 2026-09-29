@@ -8,11 +8,15 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use BuyCoursesPlugin;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\ForcedLoginRedirectHelper;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
-use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Service\Mcp\McpAccessPolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -37,21 +41,30 @@ class PlatformConfigurationController extends AbstractController
     use ControllerTrait;
 
     public function __construct(
-        private readonly TicketProjectHelper $ticketProjectHelper,
         private readonly UserHelper $userHelper,
         private readonly ThemeHelper $themeHelper,
+        private readonly StudentViewHelper $studentViewHelper,
     ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
     public function list(
         SettingsManager $settingsManager,
         AuthenticationConfigHelper $authenticationConfigHelper,
+        McpAccessPolicy $mcpAccessPolicy,
         UrlGeneratorInterface $urlGenerator,
+        PluginHelper $pluginHelper,
+        ForcedLoginRedirectHelper $forcedLoginRedirectHelper,
+        Request $request,
     ): Response {
-        $requestSession = $this->getRequest()->getSession();
+        $requestSession = $request->getSession();
 
         $enabledOAuthProviders = $authenticationConfigHelper->getEnabledOAuthProviders();
-        $forcedLoginMethod = $authenticationConfigHelper->getForcedLoginMethod();
+
+        // The escape hatch also drops force_as_login_method: otherwise the page would
+        // still offer the provider button alone.
+        $forcedLoginMethod = $forcedLoginRedirectHelper->isEscapeActive($request)
+            ? null
+            : $authenticationConfigHelper->getForcedLoginMethod();
 
         if ($forcedLoginMethod) {
             if (\array_key_exists($forcedLoginMethod, $enabledOAuthProviders)) {
@@ -72,7 +85,10 @@ class PlatformConfigurationController extends AbstractController
 
         $configuration = [
             'settings' => [],
-            'studentview' => $requestSession->get('studentview'),
+            // Through the helper, so the payload cannot report the student view as active
+            // after an administrator turned course.student_view_enabled off while a session
+            // still carries the key. Keeps the string shape the Vue store compares against.
+            'studentview' => $this->studentViewHelper->isActive() ? 'studentview' : 'teacherview',
             'plugins' => [],
             'visual_theme' => $this->themeHelper->getVisualTheme(),
             'oauth2_providers' => $oauth2Providers,
@@ -103,6 +119,7 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['catalog.course_subscription_in_user_s_session'] = $settingsManager->getSetting('catalog.course_subscription_in_user_s_session', true);
         $configuration['settings']['catalog.course_catalog_settings'] = $this->decodeSetting($settingsManager->getSetting('catalog.course_catalog_settings', true));
         $configuration['settings']['catalog.session_catalog_settings'] = $this->decodeSetting($settingsManager->getSetting('catalog.session_catalog_settings', true));
+        $configuration['settings']['course.hide_course_rating'] = $settingsManager->getSetting('course.hide_course_rating', true);
         $configuration['settings']['display.display_categories_on_homepage'] = $settingsManager->getSetting('display.display_categories_on_homepage', true);
         $configuration['settings']['admin.chamilo_latest_news'] = $settingsManager->getSetting('admin.chamilo_latest_news', true);
         $configuration['settings']['admin.chamilo_support'] = $settingsManager->getSetting('admin.chamilo_support', true);
@@ -115,6 +132,7 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['platform.disable_copy_paste'] = $settingsManager->getSetting('platform.disable_copy_paste', true);
         $configuration['settings']['platform.use_virtual_keyboard'] = $settingsManager->getSetting('platform.use_virtual_keyboard', true);
         $configuration['settings']['platform.use_custom_pages'] = $settingsManager->getSetting('platform.use_custom_pages', true);
+        $configuration['settings']['editor.enabled_support_svg'] = $settingsManager->getSetting('editor.enabled_support_svg', true);
 
         $configuration['plugins']['buycourses'] = $this->getBuyCoursesFrontendConfig();
         $configuration['plugins']['dashboard'] = $this->getDashboardFrontendConfig();
@@ -161,6 +179,7 @@ class PlatformConfigurationController extends AbstractController
                 'session.limit_session_admin_list_users',
                 'workflows.redirect_index_to_url_for_logged_users',
                 'language.platform_language',
+                'language.language_by_resource',
                 'language.language_priority_1',
                 'language.language_priority_2',
                 'language.language_priority_3',
@@ -203,6 +222,7 @@ class PlatformConfigurationController extends AbstractController
                 'language.show_different_course_language',
                 'workflows.allow_users_to_create_courses',
                 'work.allow_only_one_student_publication_per_user',
+                'work.add_fullname_in_file_download',
                 'course.course_creation_form_hide_course_code',
                 'course.course_creation_form_set_course_category_mandatory',
                 'display.hide_logout_button',
@@ -212,6 +232,7 @@ class PlatformConfigurationController extends AbstractController
                 'agenda.allow_careers_in_global_agenda',
                 'display.display_categories_on_homepage',
                 'security.hide_breadcrumb_if_not_allowed',
+                'security.access_to_personal_file_for_all',
                 'lp.show_invisible_lp_in_course_home',
                 'lp.lp_start_and_end_date_visible_in_student_view',
                 'lp.lp_allow_export_to_students',
@@ -229,17 +250,15 @@ class PlatformConfigurationController extends AbstractController
 
             $user = $this->userHelper->getCurrent();
 
-            $configuration['settings']['ticket.show_link_ticket_notification'] = 'false';
+            $configuration['settings']['security.oauth_server_enabled'] = $settingsManager->getSetting(
+                'security.oauth_server_enabled',
+                true,
+            );
+            $configuration['settings']['security.mcp_access_allowed'] = $mcpAccessPolicy->canUse($user);
 
-            if (!empty($user)) {
-                $userIsAllowedInProject = $this->ticketProjectHelper->userIsAllowInProject(1);
-
-                if ($userIsAllowedInProject
-                    && 'true' === $settingsManager->getSetting('ticket.show_link_ticket_notification')
-                ) {
-                    $configuration['settings']['ticket.show_link_ticket_notification'] = 'true';
-                }
-            }
+            $configuration['settings']['ticket.show_link_ticket_notification'] = $settingsManager->getSetting(
+                'ticket.show_link_ticket_notification'
+            );
 
             $configuration['plugins']['bbb'] = [
                 'show_global_conference_link' => Bbb::showGlobalConferenceLink([
@@ -250,6 +269,14 @@ class PlatformConfigurationController extends AbstractController
             ];
 
             $configuration['plugins']['onlyoffice'] = $this->getOnlyofficeFrontendConfig();
+            $configuration['plugins']['extauthchamilologoutbuttonbehaviour'] = [
+                'enabled' => $pluginHelper->isPluginEnabled('ExtAuthChamiloLogoutButtonBehaviour'),
+            ];
+            $configuration['plugins']['justification'] = [
+                'enabled' => $pluginHelper->isPluginEnabled('Justification'),
+            ];
+        } else {
+            $configuration['settings']['security.allow_captcha'] = $settingsManager->getSetting('security.allow_captcha', true);
         }
 
         return new JsonResponse($configuration);
@@ -260,6 +287,7 @@ class PlatformConfigurationController extends AbstractController
         SettingsCourseManager $courseSettingsManager,
         CourseRepository $courseRepository,
         EntityManagerInterface $entityManager,
+        AiFeatureAccessHelper $aiFeatureAccessHelper,
         Request $request
     ): JsonResponse {
         $courseId = $request->query->get('cid');
@@ -303,12 +331,16 @@ class PlatformConfigurationController extends AbstractController
         ];
 
         foreach ($aiSettings as $variable) {
-            $value = $this->getCourseSettingValueByCategory(
-                $entityManager,
-                $courseId,
-                $variable,
-                'ai_helpers'
-            );
+            $value = 'false';
+
+            if ($aiFeatureAccessHelper->isFeatureConfigurableForCourse($variable, $courseId)) {
+                $value = $this->getCourseSettingValueByCategory(
+                    $entityManager,
+                    $courseId,
+                    $variable,
+                    'ai_helpers'
+                ) ?? 'false';
+            }
 
             $settingsByCategory['ai_helpers'][$variable] = $value;
 

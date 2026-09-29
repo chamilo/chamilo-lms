@@ -3596,10 +3596,10 @@ class Exercise
             && !empty($extra)
         ) {
             $extra = explode(':', $extra);
-            // Fixes problems with negatives values using intval
-            $true_score = (float) trim($extra[0]);
-            $false_score = (float) trim($extra[1]);
-            $doubt_score = (float) trim($extra[2]);
+            // Fixes problems with negatives values using intval and keeps older questions compatible.
+            $true_score = isset($extra[0]) ? (float) trim($extra[0]) : 1.0;
+            $false_score = isset($extra[1]) ? (float) trim($extra[1]) : -0.5;
+            $doubt_score = isset($extra[2]) ? (float) trim($extra[2]) : 0.0;
         }
 
         // Construction of the Answer object
@@ -9285,8 +9285,10 @@ class Exercise
         }
 
         if (!empty($keyword)) {
+            // Exercise titles are stored HTML-entity-encoded (see format_title_variable()),
+            // so the search keyword must be encoded the same way to match accented characters.
             $qb->andWhere($qb->expr()->like('resource.title', ':keyword'));
-            $qb->setParameter('keyword', '%'.$keyword.'%');
+            $qb->setParameter('keyword', '%'.api_htmlentities($keyword).'%');
         }
 
         // Students should only see published exercises.
@@ -10425,18 +10427,24 @@ class Exercise
     {
         $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
         $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tableResourceLink = Database::get_main_table('resource_link');
 
         $exerciseId = (int) $exerciseId;
         $courseId = (int) $courseId;
 
-        $sql = "SELECT
+        $sql = "SELECT DISTINCT
                     lp.title,
                     lpi.lp_id,
+                    lpi.iid AS item_id,
                     lpi.max_score
                 FROM $tableLpItem lpi
                 INNER JOIN $tblLp lp
-                ON (lpi.lp_id = lp.iid)
+                    ON lpi.lp_id = lp.iid
+                INNER JOIN $tableResourceLink resource_link
+                    ON resource_link.resource_node_id = lp.resource_node_id
                 WHERE
+                    resource_link.c_id = $courseId AND
+                    resource_link.deleted_at IS NULL AND
                     lpi.item_type = '".TOOL_QUIZ."' AND
                     lpi.path = '$exerciseId'";
         $result = Database::query($sql);

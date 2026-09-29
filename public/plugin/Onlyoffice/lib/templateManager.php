@@ -24,7 +24,9 @@ class TemplateManager
     public static function getEmptyTemplate($fileExtension): string
     {
         $langInfo = LangManager::getLangUser();
-        $lang = $langInfo['isocode'];
+        $lang = is_array($langInfo) && !empty($langInfo['isocode'])
+            ? trim((string) $langInfo['isocode'])
+            : 'default';
         $templateFolder = api_get_path(SYS_PLUGIN_PATH).'Onlyoffice/assets/';
         if (!is_dir($templateFolder.$lang)) {
             $lang = 'default';

@@ -16,6 +16,8 @@ use Symfony\Component\Uid\Uuid;
 
 final class Version20201212114912 extends AbstractMigrationChamilo
 {
+    private const int USER_BATCH_SIZE = 200;
+
     public function getDescription(): string
     {
         return 'Migrate access_url, users';
@@ -26,13 +28,10 @@ final class Version20201212114912 extends AbstractMigrationChamilo
         $urlRepo = $this->container->get(AccessUrlRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
 
-        $userList = [];
         // Adding first admin as main creator also adding to the resource node tree.
         $admin = $this->getAdmin();
         $admin->addRole('ROLE_ADMIN');
-
         $adminId = $admin->getId();
-        $userList[$adminId] = $admin;
 
         $this->write('Adding admin user');
         if (false === $admin->hasResourceNode()) {
@@ -51,68 +50,88 @@ final class Version20201212114912 extends AbstractMigrationChamilo
             }
         }
         $this->entityManager->flush();
+        $this->entityManager->clear();
+        unset($urls, $admin);
 
-        $sql = 'SELECT DISTINCT(user_id) FROM admin';
-        $result = $this->entityManager->getConnection()->executeQuery($sql);
-        $results = $result->fetchAllAssociative();
-        $adminList = [];
-        if (!empty($results)) {
-            $adminList = array_map('intval', array_column($results, 'user_id'));
-        }
+        $adminList = array_fill_keys(
+            array_map(
+                'intval',
+                $this->connection->fetchFirstColumn('SELECT DISTINCT user_id FROM admin')
+            ),
+            true
+        );
 
-        // Adding users to the resource node tree.
-        $batchSize = self::BATCH_SIZE;
-        $counter = 1;
-        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
+        // Avoid one long-lived ORM iterator for all users. A keyset loop releases the
+        // UnitOfWork after every small batch and can resume naturally because users that
+        // already have a resource node are skipped.
+        $lastUserId = 0;
+        $migratedUsers = 0;
+        $processedUsers = 0;
 
         $this->write('Migrating users');
 
-        /** @var User $userEntity */
-        foreach ($q->toIterable() as $userEntity) {
-            if ($userEntity->hasResourceNode()) {
-                continue;
+        while (true) {
+            $userIds = $this->connection->fetchFirstColumn(
+                'SELECT id
+                 FROM user
+                 WHERE id > :lastUserId
+                   AND resource_node_id IS NULL
+                 ORDER BY id
+                 LIMIT '.self::USER_BATCH_SIZE,
+                ['lastUserId' => $lastUserId]
+            );
+
+            if ([] === $userIds) {
+                break;
             }
 
-            $userId = $userEntity->getId();
-            $this->write("Migrating user: #$userId");
+            foreach ($userIds as $userIdValue) {
+                $userId = (int) $userIdValue;
+                $lastUserId = $userId;
+                ++$processedUsers;
 
-            $userEntity
-                ->setUuid(Uuid::v4())
-                ->setRoles([])
-                ->setRoleFromStatus($userEntity->getStatus())
-            ;
+                /** @var User|null $userEntity */
+                $userEntity = $userRepo->find($userId);
+                if (null === $userEntity || $userEntity->hasResourceNode()) {
+                    continue;
+                }
 
-            if (\in_array($userId, $adminList, true)) {
-                $userEntity->addRole('ROLE_ADMIN');
+                $userEntity
+                    ->setUuid(Uuid::v4())
+                    ->setRoles([])
+                    ->setRoleFromStatus($userEntity->getStatus())
+                ;
+
+                if (isset($adminList[$userId])) {
+                    $userEntity->addRole('ROLE_ADMIN');
+                }
+
+                if ($userEntity::ANONYMOUS === $userEntity->getStatus()) {
+                    $userEntity->addRole('ROLE_ANONYMOUS');
+                }
+
+                // Historical behavior uses the platform admin as creator for migrated user nodes.
+                $resourceNode = $userRepo->addUserToResourceNode($userId, $adminId);
+                $this->entityManager->persist($resourceNode);
+                ++$migratedUsers;
             }
 
-            if ($userEntity::ANONYMOUS === $userEntity->getStatus()) {
-                $userEntity->addRole('ROLE_ANONYMOUS');
-            }
+            $this->entityManager->flush();
+            $this->entityManager->clear();
 
-            $creatorId = $userEntity->getCreatorId();
-            $creator = null;
-            if (isset($userList[$adminId])) {
-                $creator = $userList[$adminId];
-            } else {
-                $creator = $userRepo->find($creatorId);
-                $userList[$adminId] = $creator;
+            if (0 === $processedUsers % 2000) {
+                $this->getLogger()->info('Legacy user resource migration progress.', [
+                    'last_user_id' => $lastUserId,
+                    'processed_users' => $processedUsers,
+                    'migrated_users' => $migratedUsers,
+                ]);
             }
-            if (null === $creator) {
-                $creator = $admin;
-            }
-
-            $resourceNode = $userRepo->addUserToResourceNode($userId, $creator->getId());
-            $this->entityManager->persist($resourceNode);
-
-            if (($counter % $batchSize) === 0) {
-                $this->entityManager->flush();
-                $this->entityManager->clear(); // Detaches all objects from Doctrine!
-            }
-            $counter++;
         }
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+
+        $this->getLogger()->info('Migrated legacy user resources.', [
+            'processed_users' => $processedUsers,
+            'migrated_users' => $migratedUsers,
+        ]);
 
         $table = $schema->getTable('user');
         if (false === $table->hasIndex('UNIQ_8D93D649D17F50A6')) {

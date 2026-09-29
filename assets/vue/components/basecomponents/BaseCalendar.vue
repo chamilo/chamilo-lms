@@ -23,15 +23,49 @@ const modelValue = defineModel({
   default: null,
 })
 
-// Internal value used by the DatePicker
-const internalValue = ref(modelValue.value)
+function cloneCalendarValue(value) {
+  if (value instanceof Date) {
+    return new Date(value.getTime())
+  }
 
-// Sync internal value when the external model changes (e.g. reset from parent)
+  if (Array.isArray(value)) {
+    return value.map((item) => cloneCalendarValue(item))
+  }
+
+  return value
+}
+
+function calendarValuesEqual(left, right) {
+  if (left instanceof Date || right instanceof Date) {
+    return left instanceof Date && right instanceof Date && left.getTime() === right.getTime()
+  }
+
+  if (Array.isArray(left) || Array.isArray(right)) {
+    return (
+      Array.isArray(left) &&
+      Array.isArray(right) &&
+      left.length === right.length &&
+      left.every((item, index) => calendarValuesEqual(item, right[index]))
+    )
+  }
+
+  return left === right
+}
+
+// Internal value used by the DatePicker.
+const internalValue = ref(cloneCalendarValue(modelValue.value))
+const valueBeforeOpen = ref(null)
+const hasOpenSnapshot = ref(false)
+
+// Sync internal value when the external model changes (e.g. reset from parent).
 watch(
   () => modelValue.value,
   (newValue) => {
-    internalValue.value = newValue
+    if (!calendarValuesEqual(internalValue.value, newValue)) {
+      internalValue.value = cloneCalendarValue(newValue)
+    }
   },
+  { deep: true },
 )
 
 const datepickerRef = ref(null)
@@ -56,6 +90,11 @@ const props = defineProps({
     validator: (value) => ["single", "range"].includes(value),
   },
   showTime: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  disabled: {
     type: Boolean,
     required: false,
     default: false,
@@ -115,14 +154,16 @@ const allowManualInput = computed(() => {
   return !props.showTime
 })
 
-// When showTime is false, we keep the old behavior: update parent immediately
+// Keep the parent model synchronized with the value displayed by PrimeVue.
+// A snapshot is restored when the user explicitly cancels the selection.
 watch(
   () => internalValue.value,
   (newValue) => {
-    if (!props.showTime) {
-      modelValue.value = newValue
+    if (!calendarValuesEqual(modelValue.value, newValue)) {
+      modelValue.value = cloneCalendarValue(newValue)
     }
   },
+  { deep: true },
 )
 
 // Safely hide the calendar overlay (PrimeVue internal API)
@@ -143,15 +184,34 @@ const hideOverlay = () => {
   }
 }
 
-// User confirms the current selection
+const onOverlayShow = () => {
+  valueBeforeOpen.value = cloneCalendarValue(modelValue.value)
+  hasOpenSnapshot.value = true
+}
+
+const onOverlayHide = () => {
+  hasOpenSnapshot.value = false
+  valueBeforeOpen.value = null
+}
+
+// User confirms the current selection.
 const onApplyClick = () => {
-  modelValue.value = internalValue.value
+  modelValue.value = cloneCalendarValue(internalValue.value)
+  hasOpenSnapshot.value = false
+  valueBeforeOpen.value = null
   hideOverlay()
 }
 
-// User cancels the selection and restores external value
+// User cancels the selection and restores the value from before the overlay opened.
 const onCancelClick = () => {
-  internalValue.value = modelValue.value
+  const restoredValue = hasOpenSnapshot.value
+    ? cloneCalendarValue(valueBeforeOpen.value)
+    : cloneCalendarValue(modelValue.value)
+
+  internalValue.value = restoredValue
+  modelValue.value = cloneCalendarValue(restoredValue)
+  hasOpenSnapshot.value = false
+  valueBeforeOpen.value = null
   hideOverlay()
 }
 </script>
@@ -163,6 +223,7 @@ const onCancelClick = () => {
         ref="datepickerRef"
         v-model="internalValue"
         :date-format="dateFormat"
+        :disabled="disabled"
         :inline="showInline"
         :input-id="id"
         :invalid="isInvalid"
@@ -173,6 +234,8 @@ const onCancelClick = () => {
         fluid
         icon-display="input"
         show-icon
+        @hide="onOverlayHide"
+        @show="onOverlayShow"
       >
         <!-- Custom footer only when using time selection -->
         <template

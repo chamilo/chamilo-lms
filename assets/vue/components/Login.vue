@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!isInIframe"
+    v-if="showLoginForm"
     class="login-section"
   >
     <h2 class="login-section__title">{{ t("Sign in") }}</h2>
@@ -25,7 +25,7 @@
           :placeholder="t('Username')"
           type="text"
           variant="filled"
-          @blur="updateCaptchaStatus"
+          @blur="updateCaptchaStatus(login)"
           @focus="setFocusedField('login')"
         />
       </div>
@@ -48,32 +48,32 @@
         <VirtualKeyboard @key-press="handleVirtualKeyboardKey" />
       </div>
       <div
-        v-if="captchaEnabled && !requires2FA"
+        v-if="captcha.required && !requires2FA"
         class="field"
       >
         <div class="mb-3">
           <img
-            v-if="captchaImageUrl"
-            :src="captchaImageUrl"
+            v-if="captcha.imageUrl"
+            :src="captcha.imageUrl"
             alt="Login captcha"
             class="block w-full max-w-[220px] rounded border border-gray-200 bg-white"
           />
         </div>
         <InputText
-          v-model="captchaCode"
+          v-model="captcha.code"
           :placeholder="t('Enter captcha code')"
           type="text"
           variant="filled"
         />
         <button
-          type="button"
           class="mt-2 text-sm text-primary hover:underline"
+          type="button"
           @click="refreshCaptcha"
         >
           {{ t("Refresh captcha") }}
         </button>
         <p
-          v-if="captchaBlocked && captchaBlockedSeconds > 0"
+          v-if="captcha.blocked && captcha.blockedSeconds > 0"
           class="mt-2 text-sm text-danger"
         >
           {{ t("Captcha is temporarily blocked. Please try again later.") }}
@@ -153,7 +153,6 @@ import BaseCheckbox from "./basecomponents/BaseCheckbox.vue"
 import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"
 import CategoryLinks from "./page/CategoryLinks.vue"
 import { useLogin } from "../composables/auth/login"
-import securityService from "../services/securityService"
 import { usePlatformConfig } from "../store/platformConfig"
 import VirtualKeyboard from "./login/VirtualKeyboard.vue"
 
@@ -162,15 +161,38 @@ const useVirtualKeyboard = computed(() => {
 })
 const isInIframe = window.self !== window.top
 const isHttps = window.location.protocol === "https:"
+const showLoginForm = ref(!isInIframe)
 
 if (isInIframe) {
+  // The original iframe escape was added for same-origin learning-path content.
+  // OAuth clients can host Chamilo in a cross-origin authorization frame, where
+  // reading window.top.location is forbidden. In that case the current URL is
+  // already /login?redirect=/oauth/authorize..., so preserve it verbatim and use
+  // an absolute Chamilo URL when trying to escape the frame.
+  let topTarget = window.location.href
+  let hasSameOriginParent = false
+
   try {
-    const parentUrl = window.top.location.href
-    const parent = new URL(parentUrl)
-    const redirectPath = parent.pathname + parent.search + parent.hash
-    window.top.location.href = "/login?redirect=" + encodeURIComponent(redirectPath)
-  } catch (error) {
-    window.top.location.href = "/login"
+    const parent = new URL(window.top.location.href)
+
+    if (parent.origin === window.location.origin) {
+      hasSameOriginParent = true
+      const redirectPath = parent.pathname + parent.search + parent.hash
+      topTarget = `${window.location.origin}/login?redirect=${encodeURIComponent(redirectPath)}`
+    }
+  } catch {
+    // Cross-origin parent: keep the current absolute login URL, including its
+    // OAuth redirect parameter, and leave the form visible as a fallback.
+  }
+
+  showLoginForm.value = !hasSameOriginParent
+
+  try {
+    window.top.location.href = topTarget
+  } catch {
+    // Sandboxed frames can reject top navigation. Never leave the user with an
+    // empty Chamilo shell in that case; allow authentication inside the frame.
+    showLoginForm.value = true
   }
 }
 
@@ -181,7 +203,16 @@ const allowRegistration = computed(() => {
   return "false" !== platformConfigStore.getSetting("registration.allow_registration")
 })
 
-const { redirectNotAuthenticated, performLogin, isLoading, requires2FA } = useLogin()
+const {
+  redirectNotAuthenticated,
+  submitLogin,
+  isLoading,
+  requires2FA,
+  captcha,
+  refreshCaptcha,
+  loadCaptchaStatus,
+  updateCaptchaStatus,
+} = useLogin()
 
 const ldapAuth = ref(false)
 const login = ref("")
@@ -189,51 +220,6 @@ const password = ref("")
 const focusedField = ref(null)
 const totp = ref("")
 const remember = ref(false)
-
-const captchaEnabled = ref(false)
-const captchaCode = ref("")
-const captchaImageUrl = ref("")
-const captchaBlocked = ref(false)
-const captchaBlockedSeconds = ref(0)
-
-function resetCaptchaState() {
-  captchaCode.value = ""
-  captchaBlocked.value = false
-  captchaBlockedSeconds.value = 0
-}
-
-async function refreshCaptcha() {
-  captchaImageUrl.value = `/login/captcha/image?ts=${Date.now()}`
-}
-
-async function loadCaptchaStatus() {
-  try {
-    const response = await securityService.getLoginCaptchaStatus(login.value || "")
-
-    captchaEnabled.value = !!response.enabled
-    captchaBlocked.value = !!response.blocked
-    captchaBlockedSeconds.value = response.remainingSeconds || 0
-    captchaImageUrl.value = response.imageUrl || ""
-
-    if (!captchaEnabled.value) {
-      resetCaptchaState()
-      captchaImageUrl.value = ""
-    }
-  } catch (error) {
-    captchaEnabled.value = false
-    captchaBlocked.value = false
-    captchaBlockedSeconds.value = 0
-    captchaImageUrl.value = ""
-  }
-}
-
-async function updateCaptchaStatus() {
-  if (requires2FA.value) {
-    return
-  }
-
-  await loadCaptchaStatus()
-}
 
 function setFocusedField(field) {
   focusedField.value = field
@@ -267,48 +253,22 @@ function handleVirtualKeyboardKey(key) {
   target.value += key
 }
 
+/**
+ * Submits the login form, delegating the login and captcha flow to the composable.
+ * @returns {Promise<void>}
+ */
 async function onSubmitLoginForm() {
-  if (!requires2FA.value && captchaEnabled.value && !captchaImageUrl.value) {
-    await refreshCaptcha()
-  }
-
-  const result = await performLogin({
+  await submitLogin({
     login: login.value,
     password: password.value,
     totp: requires2FA.value ? totp.value : null,
-    captcha_code: captchaEnabled.value ? captchaCode.value : null,
     _remember_me: isHttps ? remember.value : false,
     isLoginLdap: ldapAuth.value,
   })
-
-  if (result?.captchaBlocked) {
-    captchaBlocked.value = true
-    captchaBlockedSeconds.value = result.captchaBlockedSeconds || 0
-    captchaCode.value = ""
-    await refreshCaptcha()
-    return
-  }
-
-  if (result?.captchaRequired) {
-    captchaCode.value = ""
-    await loadCaptchaStatus()
-    if (captchaEnabled.value && !captchaImageUrl.value) {
-      await refreshCaptcha()
-    }
-    return
-  }
-
-  if (!result?.success && !requires2FA.value) {
-    captchaCode.value = ""
-    await loadCaptchaStatus()
-    if (captchaEnabled.value && !captchaImageUrl.value) {
-      await refreshCaptcha()
-    }
-  }
 }
 
 onMounted(async () => {
-  redirectNotAuthenticated()
-  await loadCaptchaStatus()
+  await redirectNotAuthenticated()
+  await loadCaptchaStatus(login.value)
 })
 </script>

@@ -16,7 +16,7 @@ use Random\RandomException;
 
 readonly class ScimHelper
 {
-    public const SCIM_FIELD = 'scim_external_id';
+    public const string SCIM_FIELD = 'scim_external_id';
 
     public function __construct(
         private ExtraFieldRepository $extraFieldRepo,

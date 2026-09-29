@@ -85,16 +85,18 @@ switch ($action) {
         exit;
     case 'disable_all_except_default':
         $allLanguages = SubLanguageManager::getAllLanguages();
+        $platformLanguageIsocode = api_get_setting('language.platform_language');
         $failedDisabledLanguages = '';
         $checkFailed = false;
         foreach ($allLanguages as $language) {
+            if ($language['isocode'] === $platformLanguageIsocode) {
+                continue;
+            }
             if (false == SubLanguageManager::check_if_language_is_used((int) $language['id'])) {
                 SubLanguageManager::make_unavailable_language((int) $language['id']);
             } else {
-                if ((int) SubLanguageManager::get_platform_language_id() !== (int) $language['id']) {
-                    $failedDisabledLanguages .= ' - '.$language['english_name'].'<br />';
-                    $checkFailed = true;
-                }
+                $failedDisabledLanguages .= ' - '.$language['english_name'].'<br />';
+                $checkFailed = true;
             }
         }
 

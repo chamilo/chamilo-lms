@@ -22,6 +22,12 @@ require_once '../0_dal/dal.chamidoc_object.php';
 
 require_once 'inc/functions.php';
 
+if (api_is_anonymous() || !oel_ctr_rights(get_int_from('id'))) {
+    echo 'KO';
+
+    exit;
+}
+
 $pluginFileSystem = Container::getPluginsFileSystem();
 
 if (isset($_GET['step'])) {

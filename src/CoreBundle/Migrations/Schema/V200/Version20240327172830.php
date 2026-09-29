@@ -54,6 +54,16 @@ class Version20240327172830 extends AbstractMigrationChamilo
                 }
             }
 
+            if ($resource && null === $resource->getResourceNode()) {
+                $this->write(\sprintf(
+                    'Skipping shortcut for %s #%s: resource has no resource node (orphaned legacy data).',
+                    $resource::class,
+                    $resource->getResourceIdentifier()
+                ));
+
+                continue;
+            }
+
             if ($resource) {
                 $shortcut = $shortcutRepo->getShortcutFromResource($resource);
 

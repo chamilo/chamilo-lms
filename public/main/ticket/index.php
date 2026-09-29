@@ -1,10 +1,12 @@
 <?php
 
-/* For licensing terms, see /license.txt */
+declare(strict_types=1);
 
-/**
- * Redirects to "myticket.php".
- */
+/* Deprecated compatibility entry point. */
+
 require_once __DIR__.'/../inc/global.inc.php';
-header('Location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
+
+api_block_anonymous_users();
+header('Location: '.api_get_path(WEB_PATH).'tickets');
+
 exit;

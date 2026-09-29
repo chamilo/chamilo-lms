@@ -5,7 +5,7 @@
     <BaseToolbar class="mb-4">
       <BaseButton
         v-if="isAllowedToEdit"
-        :label="t('Add category')"
+        :label="t('Add a category')"
         icon="folder-plus"
         only-icon
         size="small"
@@ -68,7 +68,7 @@
         class="mt-4 flex flex-wrap justify-center gap-2"
       >
         <BaseButton
-          :label="t('Add category')"
+          :label="t('Add a category')"
           icon="folder-plus"
           type="success"
           @click="openCreateCategoryDialog"
@@ -86,6 +86,28 @@
       v-else
       class="flex flex-col gap-4"
     >
+      <div
+        v-if="canFilterCategoryLanguage"
+        class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
+      >
+        <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <BaseSelect
+            id="forum-category-language-filter"
+            v-model="categoryLanguageFilter"
+            :label="t('Language')"
+            :options="categoryLanguageFilterOptions"
+            class="min-w-64"
+            name="extra_language"
+          />
+          <BaseButton
+            v-if="categoryLanguageFilter"
+            :label="t('Reset')"
+            size="small"
+            type="plain"
+            @click="resetCategoryLanguageFilter"
+          />
+        </div>
+      </div>
       <section
         v-if="forumsWithoutCategory.length"
         class="overflow-hidden rounded-xl border border-gray-20 bg-white shadow-sm"
@@ -93,7 +115,7 @@
         <div class="flex flex-col gap-3 border-b border-gray-20 bg-gray-15 p-4 md:flex-row md:items-center md:justify-between">
           <div class="flex items-center gap-2">
             <BaseIcon
-              icon="folder-generic"
+              icon="folder-open"
               size="normal"
             />
             <h2 class="text-lg font-semibold text-gray-90">{{ t("General") }}</h2>
@@ -147,13 +169,21 @@
               >
                 {{ t("Hidden") }}
               </span>
+              <BaseButton
+                v-if="canFoldCategories"
+                :label="isCategoryFolded(category) ? t('Show') : t('Hide')"
+                :icon="isCategoryFolded(category) ? 'unfold' : 'fold'"
+                only-icon
+                size="small"
+                type="plain"
+                @click="toggleCategoryFold(category)"
+              />
             </div>
-            <p
+            <div
               v-if="category.catComment"
-              class="mt-1 text-sm text-gray-600"
-            >
-              {{ category.catComment }}
-            </p>
+              class="prose prose-sm mt-1 max-w-none text-sm leading-5 text-gray-600"
+              v-html="sanitizeCategoryComment(category.catComment)"
+            />
           </div>
 
           <div
@@ -221,7 +251,10 @@
           </div>
         </div>
 
-        <div class="p-4">
+        <div
+          v-show="!isCategoryFolded(category)"
+          class="p-4"
+        >
           <ForumCardList
             v-if="category.forums.length"
             :can-manage="isAllowedToEdit"
@@ -245,7 +278,7 @@
 
     <BaseDialog
       v-model:is-visible="isCategoryDialogVisible"
-      :title="categoryForm.id ? t('Edit category') : t('Add category')"
+      :title="categoryForm.id ? t('Edit category') : t('Add a category')"
       header-icon="folder-plus"
     >
       <form
@@ -269,6 +302,14 @@
           name="forum_category_comment"
           rows="5"
         />
+        <BaseSelect
+          v-if="canEditCategoryLanguage"
+          id="forum-category-language"
+          v-model="categoryForm.language"
+          :label="t('Language')"
+          :options="categoryLanguageFilterOptions"
+          name="extra_language"
+        />
         <BaseCheckbox
           id="forum-category-locked"
           v-model="categoryForm.locked"
@@ -290,6 +331,7 @@
 
     <BaseDialog
       v-model:is-visible="isForumDialogVisible"
+      :show-close-button="!shouldReturnToLearningPathAfterForumSave"
       :title="forumForm.id ? t('Edit forum') : t('Add forum')"
       header-icon="add-topic"
     >
@@ -307,12 +349,15 @@
           name="forum_title"
           required
         />
-        <BaseTextArea
-          id="forum-comment"
+        <BaseTinyEditor
           v-model="forumForm.comment"
-          :label="t('Description')"
+          :title="t('Description')"
+          editor-id="forum-comment"
+        />
+        <input
+          :value="forumForm.comment"
           name="forum_comment"
-          rows="5"
+          type="hidden"
         />
         <BaseSelect
           id="forum-category"
@@ -386,31 +431,99 @@
           />
         </div>
         <div class="grid gap-3 md:grid-cols-2">
-          <label class="flex flex-col gap-1 text-sm text-gray-700">
-            <span>{{ t('Publication date') }}</span>
-            <input
+          <div class="flex flex-col gap-1">
+            <BaseCalendar
               id="forum-start-time"
               v-model="forumForm.startTime"
-              class="rounded border border-gray-30 px-3 py-2 text-sm"
+              :label="t('Publication date')"
+              :show-time="true"
+            />
+            <input
+              :value="toApiDateTime(forumForm.startTime)"
               name="forum_start_time"
-              type="datetime-local"
+              type="hidden"
             />
             <span class="text-xs text-gray-500">{{ t('The forum will be visible starting from this date') }}</span>
-          </label>
-          <label class="flex flex-col gap-1 text-sm text-gray-700">
-            <span>{{ t('Closing date') }}</span>
-            <input
+          </div>
+          <div class="flex flex-col gap-1">
+            <BaseCalendar
               id="forum-end-time"
               v-model="forumForm.endTime"
-              class="rounded border border-gray-30 px-3 py-2 text-sm"
+              :label="t('Closing date')"
+              :show-time="true"
+            />
+            <input
+              :value="toApiDateTime(forumForm.endTime)"
               name="forum_end_time"
-              type="datetime-local"
+              type="hidden"
             />
             <span class="text-xs text-gray-500">{{ t('Once this date has passed, the forum will be closed') }}</span>
-          </label>
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-gray-20 bg-gray-10 p-4">
+          <div class="flex flex-col gap-4 md:flex-row md:items-center">
+            <div class="flex h-24 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white">
+              <img
+                v-if="forumImagePreview"
+                :alt="forumForm.title || t('Forum image')"
+                :src="forumImagePreview"
+                class="h-full w-full object-cover"
+              />
+              <BaseIcon
+                v-else
+                icon="comment"
+                size="big"
+              />
+            </div>
+            <div class="flex flex-1 flex-col gap-2">
+              <div>
+                <h3 class="text-sm font-semibold text-gray-90">{{ t('Forum image') }}</h3>
+                <p class="text-xs text-gray-500">
+                  {{ t('This image replaces the default forum icon shown next to the forum title.') }}
+                </p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <BaseFileUpload
+                  :key="forumImageInputKey"
+                  :label="t('Select image')"
+                  accept="image/*"
+                  size="small"
+                  @fileSelected="selectForumImage"
+                />
+                <BaseButton
+                  v-if="forumImagePreview"
+                  :label="t('Remove image')"
+                  icon="delete"
+                  size="small"
+                  type="danger-text"
+                  @click="removeForumImage"
+                />
+              </div>
+              <input
+                :value="forumForm.imageFile?.name || ''"
+                name="forum_image"
+                type="hidden"
+              />
+              <p
+                v-if="forumForm.imageFile"
+                class="text-xs text-gray-500"
+              >
+                {{ t('Selected image') }}: {{ forumForm.imageFile.name }}
+              </p>
+            </div>
+          </div>
         </div>
       </form>
       <template #footer>
+        <BaseButton
+          v-if="shouldReturnToLearningPathAfterForumSave"
+          :disabled="isSavingForum"
+          :label="t('Cancel')"
+          icon="close"
+          type="black"
+          @click="goBackToLearningPath"
+        />
         <BaseButton
           :disabled="isSavingForum"
           :is-loading="isSavingForum"
@@ -425,15 +538,18 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
+import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
+import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -442,13 +558,14 @@ import ForumCardList from "./ForumCardList.vue"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
-import { usePlatformConfig } from "../../store/platformConfig"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const notifications = useNotification()
 const { requireConfirmation } = useConfirmation()
-const platformConfigStore = usePlatformConfig()
 const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true, sessionCoach: true })
 
 const isLoading = ref(false)
@@ -458,15 +575,28 @@ const categoryFormSubmitted = ref(false)
 const forumFormSubmitted = ref(false)
 const isCategoryDialogVisible = ref(false)
 const isForumDialogVisible = ref(false)
-const csrfToken = ref("")
+const forumSettings = ref({
+  defaultForumView: "flat",
+  forumFoldCategories: false,
+  allowForumPostRevisions: false,
+  hideForumPostRevisionLanguage: false,
+  categoryLanguageFilter: {
+    enabled: false,
+    options: [],
+  },
+})
 const categories = ref([])
 const forums = ref([])
+const foldedCategoryIds = ref(new Set())
+const categoryLanguageFilter = ref("")
+const forumImageInputKey = ref(0)
 
 const categoryForm = reactive({
   id: null,
   title: "",
   comment: "",
   locked: false,
+  language: "",
 })
 
 const forumForm = reactive({
@@ -482,9 +612,13 @@ const forumForm = reactive({
   defaultView: "flat",
   useCurrentGroup: false,
   groupVisibility: "public",
-  startTime: "",
-  endTime: "",
+  startTime: null,
+  endTime: null,
   locked: false,
+  imageFile: null,
+  imageUrl: "",
+  imagePreviewUrl: "",
+  removeImage: false,
 })
 
 const parentId = computed(() => Number(route.params.node || 0))
@@ -492,18 +626,50 @@ const cid = computed(() => Number(route.query.cid || 0))
 const sid = computed(() => Number(route.query.sid || 0))
 const gid = computed(() => Number(route.query.gid || 0))
 const lpId = computed(() => Number(route.query.lp_id || 0))
+const requestedForumEditId = computed(() => Number(route.query.editForumId || 0))
 const currentGroupId = computed(() => gid.value)
+const shouldOpenCreateForumDialogOnLoad = computed(() => {
+  const create = String(route.query.create || route.query.content || "").toLowerCase()
+  const action = String(route.query.action || "").toLowerCase()
+
+  return isAllowedToEdit.value && ("forum" === create || ("add" === action && "forum" === create))
+})
+const shouldReturnToLearningPathAfterForumSave = computed(() => {
+  const origin = String(route.query.origin || "").toLowerCase()
+  const returnToLp = String(route.query.returnToLp || "")
+
+  return Boolean(lpId.value) && "learnpath" === origin && "1" === returnToLp
+})
 const baseQuery = computed(() => ({
   "resourceNode.parent": parentId.value || null,
   cid: cid.value || null,
   sid: sid.value || null,
   gid: gid.value || null,
 }))
+const categoryQuery = computed(() => ({
+  ...baseQuery.value,
+  extra_language: categoryLanguageFilter.value || null,
+  language_filter_applied: categoryLanguageFilter.value ? 1 : null,
+}))
 const defaultForumView = computed(() => {
-  const value = String(platformConfigStore.getSetting("forum.default_forum_view") || "flat")
+  const value = String(forumSettings.value.defaultForumView || "flat")
 
   return ["flat", "threaded", "nested"].includes(value) ? value : "flat"
 })
+const canFoldCategories = computed(() => Boolean(forumSettings.value.forumFoldCategories))
+const categoryLanguageOptions = computed(() => {
+  const options = forumSettings.value.categoryLanguageFilter?.options
+
+  return Array.isArray(options) ? options : []
+})
+const canFilterCategoryLanguage = computed(
+  () => Boolean(forumSettings.value.categoryLanguageFilter?.enabled) && categoryLanguageOptions.value.length > 0,
+)
+const canEditCategoryLanguage = computed(() => canFilterCategoryLanguage.value)
+const categoryLanguageFilterOptions = computed(() => [
+  { label: t("Please select a language"), value: "" },
+  ...categoryLanguageOptions.value,
+])
 
 const defaultViewOptions = computed(() => [
   { label: t("Flat"), value: "flat" },
@@ -516,10 +682,18 @@ const groupVisibilityOptions = computed(() => [
   { label: t("Private"), value: "private" },
 ])
 
-const categoryOptions = computed(() => [
-  { label: t("No category"), value: 0 },
-  ...categories.value.map((category) => ({ label: category.title, value: category.iid })),
-])
+const categoryOptions = computed(() => {
+  const options = categories.value.map((category) => ({ label: category.title, value: category.iid }))
+
+  return options.length ? options : [{ label: t("General"), value: 0 }]
+})
+const forumImagePreview = computed(() => {
+  if (forumForm.removeImage) {
+    return forumForm.imagePreviewUrl || ""
+  }
+
+  return forumForm.imagePreviewUrl || forumForm.imageUrl || ""
+})
 
 const categoryByIri = computed(() => {
   const byIri = new Map()
@@ -549,15 +723,25 @@ const categoriesWithForums = computed(() => {
 })
 
 function goBackToLearningPath() {
-  const params = new URLSearchParams()
-  params.set("cid", String(cid.value || ""))
-  params.set("sid", String(sid.value || 0))
-  params.set("gid", String(gid.value || 0))
-  params.set("gradebook", "")
-  params.set("action", "add_item")
-  params.set("type", "step")
-  params.set("lp_id", String(lpId.value))
-  window.location.href = `/main/lp/lp_controller.php?${params.toString()}#resource_tab-5`
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.editForumId
+  delete query.lpItemId
+
+  return router.push({
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: lpId.value,
+    },
+    query,
+  })
+}
+
+function sanitizeCategoryComment(value) {
+  return sanitizeHtml(value || "")
 }
 
 function isCategoryVisible(category) {
@@ -574,6 +758,26 @@ function isForumVisible(forum) {
   }
 
   return true === forum.forumVisible || 1 === forum.forumVisible || "1" === String(forum.forumVisible)
+}
+
+function isCategoryFolded(category) {
+  return canFoldCategories.value && foldedCategoryIds.value.has(Number(category?.iid || 0))
+}
+
+function toggleCategoryFold(category) {
+  const categoryId = Number(category?.iid || 0)
+  if (!categoryId) {
+    return
+  }
+
+  const nextValue = new Set(foldedCategoryIds.value)
+  if (nextValue.has(categoryId)) {
+    nextValue.delete(categoryId)
+  } else {
+    nextValue.add(categoryId)
+  }
+
+  foldedCategoryIds.value = nextValue
 }
 
 function getCategoryIdFromForum(forum) {
@@ -595,14 +799,16 @@ function resetCategoryForm() {
   categoryForm.title = ""
   categoryForm.comment = ""
   categoryForm.locked = false
+  categoryForm.language = ""
   categoryFormSubmitted.value = false
 }
 
 function resetForumForm(category = null) {
+  revokeForumImagePreview()
   forumForm.id = null
   forumForm.title = ""
   forumForm.comment = ""
-  forumForm.categoryId = category?.iid || 0
+  forumForm.categoryId = category?.iid || categories.value[0]?.iid || 0
   forumForm.moderated = false
   forumForm.studentsCanEdit = false
   forumForm.requiresApproval = false
@@ -611,25 +817,25 @@ function resetForumForm(category = null) {
   forumForm.defaultView = defaultForumView.value
   forumForm.useCurrentGroup = Boolean(currentGroupId.value)
   forumForm.groupVisibility = "public"
-  forumForm.startTime = ""
-  forumForm.endTime = ""
+  forumForm.startTime = null
+  forumForm.endTime = null
   forumForm.locked = false
+  forumForm.imageFile = null
+  forumForm.imageUrl = ""
+  forumForm.imagePreviewUrl = ""
+  forumForm.removeImage = false
+  forumImageInputKey.value += 1
   forumFormSubmitted.value = false
 }
 
-function toDateTimeLocal(value) {
+function toDate(value) {
   if (!value) {
-    return ""
+    return null
   }
 
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) {
-    return ""
-  }
 
-  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-
-  return localDate.toISOString().slice(0, 16)
+  return Number.isNaN(date.getTime()) ? null : date
 }
 
 function toApiDateTime(value) {
@@ -637,7 +843,7 @@ function toApiDateTime(value) {
     return ""
   }
 
-  const date = new Date(value)
+  const date = value instanceof Date ? value : new Date(value)
 
   return Number.isNaN(date.getTime()) ? "" : date.toISOString()
 }
@@ -647,7 +853,42 @@ function hasInvalidForumDates() {
     return false
   }
 
-  return new Date(forumForm.startTime).getTime() >= new Date(forumForm.endTime).getTime()
+  return forumForm.startTime.getTime() >= forumForm.endTime.getTime()
+}
+
+function revokeForumImagePreview() {
+  if (forumForm.imagePreviewUrl) {
+    URL.revokeObjectURL(forumForm.imagePreviewUrl)
+  }
+}
+
+function selectForumImage(file) {
+  if (!file) {
+    return
+  }
+
+  const type = String(file.type || "").toLowerCase()
+  if (!type.startsWith("image/") || ["image/svg", "image/svg+xml"].includes(type)) {
+    notifications.showErrorNotification(t("Only image files are allowed."))
+
+    return
+  }
+
+  revokeForumImagePreview()
+  forumForm.imageFile = file
+  forumForm.imagePreviewUrl = URL.createObjectURL(file)
+  forumForm.removeImage = false
+}
+
+function removeForumImage() {
+  const hadStoredImage = Boolean(forumForm.imageUrl)
+
+  revokeForumImagePreview()
+  forumForm.imageFile = null
+  forumForm.imageUrl = ""
+  forumForm.imagePreviewUrl = ""
+  forumForm.removeImage = hadStoredImage
+  forumImageInputKey.value += 1
 }
 
 function openCreateCategoryDialog() {
@@ -660,6 +901,7 @@ function openEditCategoryDialog(category) {
   categoryForm.title = category.title || ""
   categoryForm.comment = category.catComment || ""
   categoryForm.locked = Boolean(Number(category.locked || 0))
+  categoryForm.language = category.language || ""
   categoryFormSubmitted.value = false
   isCategoryDialogVisible.value = true
 }
@@ -682,16 +924,25 @@ function openEditForumDialog(forum) {
   forumForm.defaultView = forum.defaultView || "flat"
   forumForm.useCurrentGroup = Number(forum.forumOfGroup || 0) > 0
   forumForm.groupVisibility = forum.forumGroupPublicPrivate || "public"
-  forumForm.startTime = toDateTimeLocal(forum.startTime)
-  forumForm.endTime = toDateTimeLocal(forum.endTime)
+  revokeForumImagePreview()
+  forumForm.startTime = toDate(forum.startTime)
+  forumForm.endTime = toDate(forum.endTime)
   forumForm.locked = Boolean(Number(forum.locked || 0))
+  forumForm.imageFile = null
+  forumForm.imageUrl = String(forum.forumImage || "")
+  forumForm.imagePreviewUrl = ""
+  forumForm.removeImage = false
+  forumImageInputKey.value += 1
   forumFormSubmitted.value = false
   isForumDialogVisible.value = true
 }
 
-async function loadToken() {
+async function loadForumSettings() {
   const response = await forumService.getActionToken()
-  csrfToken.value = response.token || ""
+  forumSettings.value = {
+    ...forumSettings.value,
+    ...(response.settings || {}),
+  }
 }
 
 async function loadForums() {
@@ -699,7 +950,7 @@ async function loadForums() {
 
   try {
     const [categoryItems, forumItems] = await Promise.all([
-      forumService.getCategories(baseQuery.value),
+      forumService.getCategories(categoryQuery.value),
       forumService.getForums(baseQuery.value),
     ])
 
@@ -726,8 +977,8 @@ async function saveCategory() {
     title: categoryForm.title.trim(),
     comment: categoryForm.comment.trim(),
     locked: categoryForm.locked,
+    language: canEditCategoryLanguage.value ? categoryForm.language : "",
     parentResourceNodeId: parentId.value,
-    csrfToken: csrfToken.value,
   }
 
   try {
@@ -744,7 +995,6 @@ async function saveCategory() {
   } catch (error) {
     console.error("Error saving forum category:", error)
     notifications.showErrorNotification(t("Could not save forum category"))
-    await loadToken()
   } finally {
     isSavingCategory.value = false
   }
@@ -781,27 +1031,56 @@ async function saveForum() {
     endTime: toApiDateTime(forumForm.endTime),
     locked: forumForm.locked,
     parentResourceNodeId: parentId.value,
-    csrfToken: csrfToken.value,
+    lpId: lpId.value || 0,
+    lpParentId: Number(route.query.parent || 0) || 0,
   }
 
   try {
+    const isCreate = !forumForm.id
+    let savedForum = null
+
     if (forumForm.id) {
-      await forumService.updateForum(forumForm.id, baseQuery.value, payload)
-      notifications.showSuccessNotification(t("Forum updated"))
+      savedForum = await forumService.updateForum(forumForm.id, baseQuery.value, payload)
     } else {
-      await forumService.createForum(baseQuery.value, payload)
-      notifications.showSuccessNotification(t("Forum created"))
+      savedForum = await forumService.createForum(baseQuery.value, payload)
     }
 
+    await saveForumImageIfNeeded(Number(savedForum?.iid || forumForm.id || 0))
+    notifications.showSuccessNotification(isCreate ? t("Forum created") : t("Forum updated"))
+
     isForumDialogVisible.value = false
+
+    if (shouldReturnToLearningPathAfterForumSave.value) {
+      await goBackToLearningPath()
+
+      return
+    }
+
     await loadForums()
   } catch (error) {
     console.error("Error saving forum:", error)
     notifications.showErrorNotification(t("Could not save forum"))
-    await loadToken()
   } finally {
     isSavingForum.value = false
   }
+}
+
+async function saveForumImageIfNeeded(forumId) {
+  if (!forumId || (!forumForm.imageFile && !forumForm.removeImage)) {
+    return
+  }
+
+  const response = await forumService.uploadForumImage(forumId, baseQuery.value, {
+    image: forumForm.imageFile,
+    removeImage: forumForm.removeImage,
+  })
+
+  revokeForumImagePreview()
+  forumForm.imageUrl = response?.forumImage || ""
+  forumForm.imageFile = null
+  forumForm.imagePreviewUrl = ""
+  forumForm.removeImage = false
+  forumImageInputKey.value += 1
 }
 
 function confirmDeleteCategory(category) {
@@ -813,13 +1092,12 @@ function confirmDeleteCategory(category) {
 
 async function deleteCategory(category) {
   try {
-    await forumService.deleteCategory(category.iid, baseQuery.value, { csrfToken: csrfToken.value })
+    await forumService.deleteCategory(category.iid, baseQuery.value, {})
     notifications.showSuccessNotification(t("Forum category deleted"))
     await loadForums()
   } catch (error) {
     console.error("Error deleting forum category:", error)
     notifications.showErrorNotification(t("Could not delete forum category"))
-    await loadToken()
   }
 }
 
@@ -832,25 +1110,23 @@ function confirmDeleteForum(forum) {
 
 async function deleteForum(forum) {
   try {
-    await forumService.deleteForum(forum.iid, baseQuery.value, { csrfToken: csrfToken.value })
+    await forumService.deleteForum(forum.iid, baseQuery.value, {})
     notifications.showSuccessNotification(t("Forum deleted"))
     await loadForums()
   } catch (error) {
     console.error("Error deleting forum:", error)
     notifications.showErrorNotification(t("Could not delete forum"))
-    await loadToken()
   }
 }
 
 async function toggleCategoryLock(category) {
   try {
-    await forumService.toggleCategoryLock(category.iid, baseQuery.value, { csrfToken: csrfToken.value })
+    await forumService.toggleCategoryLock(category.iid, baseQuery.value, {})
     notifications.showSuccessNotification(Number(category.locked || 0) ? t("Forum category unlocked") : t("Forum category locked"))
     await loadForums()
   } catch (error) {
     console.error("Error toggling forum category lock:", error)
     notifications.showErrorNotification(t("Could not update forum category"))
-    await loadToken()
   }
 }
 
@@ -860,7 +1136,6 @@ async function toggleCategoryVisibility(category) {
   try {
     const response = await forumService.toggleCategoryVisibility(category.iid, baseQuery.value, {
       visible: !wasVisible,
-      csrfToken: csrfToken.value,
     })
     category.forumCategoryVisible = response.visible
     notifications.showSuccessNotification(response.visible ? t("Forum category shown") : t("Forum category hidden"))
@@ -868,19 +1143,17 @@ async function toggleCategoryVisibility(category) {
   } catch (error) {
     console.error("Error toggling forum category visibility:", error)
     notifications.showErrorNotification(t("Could not update forum category"))
-    await loadToken()
   }
 }
 
 async function toggleForumLock(forum) {
   try {
-    await forumService.toggleForumLock(forum.iid, baseQuery.value, { csrfToken: csrfToken.value })
+    await forumService.toggleForumLock(forum.iid, baseQuery.value, {})
     notifications.showSuccessNotification(Number(forum.locked || 0) ? t("Forum unlocked") : t("Forum locked"))
     await loadForums()
   } catch (error) {
     console.error("Error toggling forum lock:", error)
     notifications.showErrorNotification(t("Could not update forum"))
-    await loadToken()
   }
 }
 
@@ -890,7 +1163,6 @@ async function toggleForumVisibility(forum) {
   try {
     const response = await forumService.toggleForumVisibility(forum.iid, baseQuery.value, {
       visible: !wasVisible,
-      csrfToken: csrfToken.value,
     })
     forum.forumVisible = response.visible
     notifications.showSuccessNotification(response.visible ? t("Forum shown") : t("Forum hidden"))
@@ -898,7 +1170,6 @@ async function toggleForumVisibility(forum) {
   } catch (error) {
     console.error("Error toggling forum visibility:", error)
     notifications.showErrorNotification(t("Could not update forum"))
-    await loadToken()
   }
 }
 
@@ -906,7 +1177,6 @@ async function toggleForumVisibility(forum) {
 async function toggleForumNotification(forum) {
   try {
     const response = await forumService.toggleForumSubscription(forum.iid, baseQuery.value, {
-      csrfToken: csrfToken.value,
       subscribed: !forum.subscribed,
     })
 
@@ -916,35 +1186,59 @@ async function toggleForumNotification(forum) {
   } catch (error) {
     console.error("Error toggling forum notification:", error)
     notifications.showErrorNotification(t("Could not update forum notification"))
-    await loadToken()
   }
 }
 
 async function moveCategory(category, direction) {
   try {
-    await forumService.moveCategory(category.iid, baseQuery.value, { direction, csrfToken: csrfToken.value })
+    await forumService.moveCategory(category.iid, baseQuery.value, { direction })
     notifications.showSuccessNotification(t("Forum category moved"))
     await loadForums()
   } catch (error) {
     console.error("Error moving forum category:", error)
     notifications.showErrorNotification(t("Could not move forum category"))
-    await loadToken()
   }
 }
 
 async function moveForum(forum, direction) {
   try {
-    await forumService.moveForum(forum.iid, baseQuery.value, { direction, csrfToken: csrfToken.value })
+    await forumService.moveForum(forum.iid, baseQuery.value, { direction })
     notifications.showSuccessNotification(t("Forum moved"))
     await loadForums()
   } catch (error) {
     console.error("Error moving forum:", error)
     notifications.showErrorNotification(t("Could not move forum"))
-    await loadToken()
   }
 }
 
-onMounted(async () => {
-  await Promise.all([loadToken(), loadForums()])
+function resetCategoryLanguageFilter() {
+  categoryLanguageFilter.value = ""
+}
+
+watch(categoryLanguageFilter, async () => {
+  if (!canFilterCategoryLanguage.value) {
+    return
+  }
+
+  await loadForums()
 })
+
+onMounted(async () => {
+  await Promise.all([loadForumSettings(), loadForums()])
+
+  if (shouldOpenCreateForumDialogOnLoad.value) {
+    openCreateForumDialog()
+
+    return
+  }
+
+  if (isAllowedToEdit.value && requestedForumEditId.value > 0) {
+    const forum = forums.value.find((item) => Number(item.iid || 0) === requestedForumEditId.value)
+    if (forum) {
+      openEditForumDialog(forum)
+    }
+  }
+})
+
+useStudentViewRefresh(loadForums)
 </script>

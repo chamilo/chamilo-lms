@@ -211,6 +211,7 @@ function range_all_pages($idTopPage, $idPage, $action, $idUrl): void
     $idTopPage = (int) $idTopPage;
     $idPage = (int) $idPage;
     $action = (int) $action;
+    $idUrl = (int) $idUrl;
 
     if ($idTopPage <= 0 || $idPage <= 0 || !in_array($action, [0, 1], true)) {
         echo 'KO';
@@ -222,7 +223,7 @@ function range_all_pages($idTopPage, $idPage, $action, $idUrl): void
     $table = 'plugin_oel_tools_teachdoc';
 
     $sqlSubs = 'SELECT id FROM plugin_oel_tools_teachdoc ';
-    $sqlSubs .= " WHERE type_node <> -1 AND id_parent = $idTopPage ";
+    $sqlSubs .= " WHERE type_node <> -1 AND id_parent = $idTopPage AND id_url = $idUrl ";
     $sqlSubs .= ' ORDER BY order_lst, id';
 
     $resultSubs = $VDB->query_to_array($sqlSubs);
@@ -264,7 +265,7 @@ function range_all_pages($idTopPage, $idPage, $action, $idUrl): void
         $orderedPageId = (int) $orderedPageId;
         $sqlUpdate = "UPDATE $table ";
         $sqlUpdate .= "SET order_lst = $indexOrder ";
-        $sqlUpdate .= "WHERE id = $orderedPageId AND id_parent = $idTopPage";
+        $sqlUpdate .= "WHERE id = $orderedPageId AND id_parent = $idTopPage AND id_url = $idUrl";
         $VDB->query($sqlUpdate);
 
         ++$indexOrder;

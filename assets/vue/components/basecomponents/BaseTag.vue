@@ -2,6 +2,7 @@
   <Tag
     :severity="normalizedType"
     :value="label"
+    :icon="icon"
   />
 </template>
 
@@ -17,6 +18,11 @@ const props = defineProps({
   label: {
     type: String,
     required: true,
+  },
+  icon: {
+    type: String,
+    required: false,
+    default: undefined,
   },
 })
 

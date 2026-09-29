@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
 /**
@@ -25,20 +26,21 @@ use Gedmo\Sortable\Entity\Repository\SortableRepository;
 class ResourceLinkRepository extends SortableRepository
 {
     private array $toolList = [
-        'course_description' => '/main/course_description/index.php',
+        'course_description' => '/resources/course-description/%resource_node_id%/',
         'document' => '/resources/document/%resource_node_id%/',
-        'learnpath' => '/main/lp/lp_controller.php',
+        'learnpath' => '/resources/lp/%resource_node_id%/',
         'link' => '/resources/links/%resource_node_id%/',
-        'quiz' => '/main/exercise/exercise.php',
-        'announcement' => '/main/announcements/announcements.php',
+        'quiz' => '/resources/exercise/%resource_node_id%/',
+        'announcement' => '/resources/announcement/%resource_node_id%/',
         'glossary' => '/resources/glossary/%resource_node_id%/',
         'attendance' => '/main/attendance/index.php',
-        'course_progress' => '/main/course_progress/index.php',
+        'course_progress' => '/resources/course-progress/%resource_node_id%/',
         'agenda' => '/resources/ccalendarevent',
-        'forum' => '/main/forum/index.php',
+        'forum' => '/resources/forum/%resource_node_id%/',
         'student_publication' => '/resources/assignment/%resource_node_id%',
-        'survey' => '/main/survey/survey_list.php',
-        'notebook' => '/main/notebook/index.php',
+        'survey' => '/resources/survey/%resource_node_id%/',
+        'notebook' => '/resources/notebook/%resource_node_id%/',
+        'portfolio' => '/resources/portfolio/%resource_node_id%/',
     ];
 
     public function __construct(EntityManagerInterface $em)
@@ -70,6 +72,10 @@ class ResourceLinkRepository extends SortableRepository
         );
 
         foreach ($links as $link) {
+            if (!$link->getUser() instanceof User) {
+                continue;
+            }
+
             $this->remove($link); // soft delete
             $this->remove($link); // hard delete
         }
@@ -97,12 +103,12 @@ class ResourceLinkRepository extends SortableRepository
      */
     public function getAvailableTools(): array
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder
             ->select('DISTINCT t.id, t.title')
             ->from(ResourceLink::class, 'rl')
-            ->innerJoin(ResourceType::class, 'rt', 'WITH', 'rt.id = rl.resourceTypeGroup')
-            ->innerJoin(Tool::class, 't', 'WITH', 't.id = rt.tool')
+            ->innerJoin(ResourceType::class, 'rt', Join::ON, 'rt.id = rl.resourceTypeGroup')
+            ->innerJoin(Tool::class, 't', Join::ON, 't.id = rt.tool')
             ->where('rl.course IS NOT NULL')
             ->andWhere('t.title IN (:toolList)')
             ->setParameter('toolList', array_keys($this->toolList))
@@ -125,7 +131,7 @@ class ResourceLinkRepository extends SortableRepository
      */
     public function getToolUsageReportByTools(array $toolIds): array
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder
             ->select(
@@ -139,10 +145,10 @@ class ResourceLinkRepository extends SortableRepository
                 'MAX(rl.updatedAt) AS last_updated'
             )
             ->from(ResourceLink::class, 'rl')
-            ->innerJoin(ResourceType::class, 'rt', 'WITH', 'rt.id = rl.resourceTypeGroup')
-            ->innerJoin(Tool::class, 't', 'WITH', 't.id = rt.tool')
-            ->innerJoin(Course::class, 'c', 'WITH', 'c.id = rl.course')
-            ->leftJoin(Session::class, 's', 'WITH', 's.id = rl.session')
+            ->innerJoin(ResourceType::class, 'rt', Join::ON, 'rt.id = rl.resourceTypeGroup')
+            ->innerJoin(Tool::class, 't', Join::ON, 't.id = rt.tool')
+            ->innerJoin(Course::class, 'c', Join::ON, 'c.id = rl.course')
+            ->leftJoin(Session::class, 's', Join::ON, 's.id = rl.session')
             ->where($queryBuilder->expr()->in('t.id', ':toolIds'))
             ->groupBy('rl.course, rl.session, t.title')
             ->orderBy('t.title', 'ASC')

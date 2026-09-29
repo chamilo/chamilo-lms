@@ -66,13 +66,6 @@ class BranchTransaction
         return $this->id;
     }
 
-    public function setAction(string $action): self
-    {
-        $this->action = $action;
-
-        return $this;
-    }
-
     /**
      * Get action.
      *
@@ -83,14 +76,9 @@ class BranchTransaction
         return $this->action;
     }
 
-    /**
-     * Set itemId.
-     *
-     * @return BranchTransaction
-     */
-    public function setItemId(string $itemId)
+    public function setAction(string $action): self
     {
-        $this->itemId = $itemId;
+        $this->action = $action;
 
         return $this;
     }
@@ -106,13 +94,13 @@ class BranchTransaction
     }
 
     /**
-     * Set destId.
+     * Set itemId.
      *
      * @return BranchTransaction
      */
-    public function setDestId(string $destId)
+    public function setItemId(string $itemId)
     {
-        $this->destId = $destId;
+        $this->itemId = $itemId;
 
         return $this;
     }
@@ -128,13 +116,13 @@ class BranchTransaction
     }
 
     /**
-     * Set timeInsert.
+     * Set destId.
      *
      * @return BranchTransaction
      */
-    public function setTimeInsert(DateTime $timeInsert)
+    public function setDestId(string $destId)
     {
-        $this->timeInsert = $timeInsert;
+        $this->destId = $destId;
 
         return $this;
     }
@@ -150,13 +138,13 @@ class BranchTransaction
     }
 
     /**
-     * Set timeUpdate.
+     * Set timeInsert.
      *
      * @return BranchTransaction
      */
-    public function setTimeUpdate(DateTime $timeUpdate)
+    public function setTimeInsert(DateTime $timeInsert)
     {
-        $this->timeUpdate = $timeUpdate;
+        $this->timeInsert = $timeInsert;
 
         return $this;
     }
@@ -169,6 +157,18 @@ class BranchTransaction
     public function getTimeUpdate()
     {
         return $this->timeUpdate;
+    }
+
+    /**
+     * Set timeUpdate.
+     *
+     * @return BranchTransaction
+     */
+    public function setTimeUpdate(DateTime $timeUpdate)
+    {
+        $this->timeUpdate = $timeUpdate;
+
+        return $this;
     }
 
     /**

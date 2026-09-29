@@ -49,6 +49,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
 
         $this->addSql('DELETE FROM c_group_rel_user WHERE user_id NOT IN (SELECT id FROM user)');
         $this->addSql('DELETE FROM c_group_rel_user WHERE group_id NOT IN (SELECT iid FROM c_group_info)');
+        $this->addSql('ALTER TABLE c_group_rel_user CHANGE user_id user_id INT DEFAULT NULL, CHANGE group_id group_id INT DEFAULT NULL');
         if (false === $table->hasForeignKey('FK_C5D3D49FA76ED395')) {
             $this->addSql(
                 'ALTER TABLE c_group_rel_user ADD CONSTRAINT FK_C5D3D49FA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)'
@@ -71,6 +72,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM c_group_rel_tutor WHERE group_id NOT IN (SELECT iid FROM c_group_info)');
 
         $table = $schema->getTable('c_group_rel_tutor');
+        $this->addSql('ALTER TABLE c_group_rel_tutor CHANGE user_id user_id INT DEFAULT NULL, CHANGE group_id group_id INT DEFAULT NULL');
         if (false === $table->hasForeignKey('FK_F6FF71ABA76ED395')) {
             $this->addSql(
                 'ALTER TABLE c_group_rel_tutor ADD CONSTRAINT FK_F6FF71ABA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)'

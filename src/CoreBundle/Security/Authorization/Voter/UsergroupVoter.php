@@ -9,8 +9,9 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -19,13 +20,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UsergroupVoter extends Voter
 {
-    public const CREATE = 'CREATE';
-    public const VIEW = 'VIEW';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
+    public const string CREATE = 'CREATE';
+    public const string VIEW = 'VIEW';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
 
     public function __construct(
-        private Security $security,
+        private AccessDecisionManagerInterface $accessDecisionManager,
         private UsergroupRepository $usergroupRepository
     ) {}
 
@@ -47,14 +48,14 @@ class UsergroupVoter extends Voter
         return $subject instanceof Usergroup;
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $currentUser = $token->getUser();
         if (!$currentUser instanceof UserInterface) {
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 

@@ -18,9 +18,14 @@
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\AttemptFile;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use ChamiloSession as Session;
 
 const ONLYOFFICE_EDITOR_LOG_ENABLED = false;
@@ -47,11 +52,14 @@ if (empty($docApiUrl)) {
 
 $isMetaRequest = isset($_GET['meta']) && '1' === (string) $_GET['meta'];
 $docId = isset($_GET['docId']) ? (int) $_GET['docId'] : null;
+$resourceNodeId = isset($_GET['resourceNodeId']) ? (int) $_GET['resourceNodeId'] : null;
 $docPath = isset($_GET['doc']) ? urldecode((string) $_GET['doc']) : null;
 
 $groupId = isset($_GET['groupId']) && !empty($_GET['groupId'])
     ? (int) $_GET['groupId']
-    : (!empty($_GET['gidReq']) ? (int) $_GET['gidReq'] : 0);
+    : (!empty($_GET['gid'])
+        ? (int) $_GET['gid']
+        : (!empty($_GET['gidReq']) ? (int) $_GET['gidReq'] : 0));
 
 $userId = (int) api_get_user_id();
 $userInfo = api_get_user_info($userId);
@@ -63,6 +71,10 @@ if (empty($courseInfo)) {
     api_not_allowed(true);
 }
 
+// The editor issues signed download and save hashes, so the caller must be
+// allowed inside the current course before any hash is built.
+api_protect_course_script(true);
+
 $courseCode = $courseInfo['code'];
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : null;
 $exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : null;
@@ -71,6 +83,12 @@ $isReadOnly = isset($_GET['readOnly']) ? (int) $_GET['readOnly'] : null;
 $forceEdit = isset($_GET['forceEdit']) && in_array(strtolower((string) $_GET['forceEdit']), ['1', 'true', 'yes', 'on'], true);
 $origin = isset($_GET['origin']) ? strtolower(trim((string) $_GET['origin'])) : '';
 $isEmbedded = isset($_GET['embedded']) && in_array(strtolower((string) $_GET['embedded']), ['1', 'true', 'yes', 'on'], true);
+$isExercisePreview = isset($_GET['exercisePreview'])
+    && in_array(strtolower((string) $_GET['exercisePreview']), ['1', 'true', 'yes', 'on'], true);
+if ($isExercisePreview) {
+    $isReadOnly = 1;
+    $forceEdit = false;
+}
 $isLearnpathEmbedded = $isEmbedded || 'learnpath' === $origin;
 $rawReturnUrl = isset($_GET['returnUrl']) ? urldecode((string) $_GET['returnUrl']) : '';
 $returnUrl = resolveOnlyofficeEditorReturnUrl(
@@ -89,6 +107,7 @@ $jwtManager = new OnlyofficeJwtManager($appSettings);
 
 onlyofficeEditorLog('DEBUG', 'Editor entry', [
     'docId' => $docId,
+    'resourceNodeId' => $resourceNodeId,
     'docPath' => $docPath,
     'courseId' => $courseId,
     'courseCode' => $courseCode,
@@ -104,10 +123,141 @@ onlyofficeEditorLog('DEBUG', 'Editor entry', [
     'returnUrl' => $returnUrl,
     'origin' => $origin,
     'embedded' => $isEmbedded,
+    'exercisePreview' => $isExercisePreview,
     'learnpathEmbedded' => $isLearnpathEmbedded,
 ]);
 
-if (!empty($docPath)) {
+if (!empty($resourceNodeId)) {
+    if ($isExercisePreview || empty($exeId)) {
+        $canOpenResourceNode = userCanManageExerciseQuestionResourceNodeForOnlyofficeEditor(
+            $resourceNodeId,
+            (int) $exerciseId,
+            (int) $questionId
+        );
+    } else {
+        $canOpenResourceNode = userCanOpenExerciseResourceNodeForOnlyofficeEditor(
+            $resourceNodeId,
+            (int) $exerciseId,
+            (int) $exeId,
+            (int) $questionId,
+            $userId
+        );
+
+        if (!$canOpenResourceNode && !empty($isReadOnly)) {
+            $canOpenResourceNode = userCanReviewExerciseResourceNodeForOnlyofficeEditor(
+                $resourceNodeId,
+                (int) $exerciseId,
+                (int) $exeId,
+                (int) $questionId
+            );
+        }
+    }
+
+    if (!$canOpenResourceNode) {
+        onlyofficeEditorLog('ERROR', 'Resource node access was rejected for the exercise editor', [
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => $exerciseId,
+            'exeId' => $exeId,
+            'questionId' => $questionId,
+            'userId' => $userId,
+            'exercisePreview' => $isExercisePreview,
+        ]);
+        api_not_allowed(true);
+    }
+
+    $resolvedC2 = resolveResourceNodeSourceFromC2ForEditor($resourceNodeId);
+    if (null !== $resolvedC2) {
+        $fileId = 'rn'.$resourceNodeId;
+        $versionToken = $resolvedC2['versionToken'];
+
+        $downloadPayload = [
+            'type' => 'download',
+            'courseId' => $courseId,
+            'userId' => $userId,
+            'resourceNodeId' => $resourceNodeId,
+            'sessionId' => $sessionId,
+        ];
+
+        $trackPayload = [
+            'type' => 'track',
+            'courseId' => $courseId,
+            'userId' => $userId,
+            'resourceNodeId' => $resourceNodeId,
+            'sessionId' => $sessionId,
+        ];
+
+        if (!empty($groupId)) {
+            $downloadPayload['groupId'] = $groupId;
+            $trackPayload['groupId'] = $groupId;
+        }
+
+        if ($isExercisePreview) {
+            $trackPayload['exercisePreview'] = 1;
+        }
+        if (!empty($isReadOnly)) {
+            $trackPayload['readOnly'] = 1;
+        }
+
+        $downloadHash = $jwtManager->getHash($downloadPayload);
+        $trackHash = $jwtManager->getHash($trackPayload);
+
+        $fileUrl = appendVersionTokenToUrl(
+            api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$downloadHash,
+            $versionToken
+        );
+
+        $callbackUrl = appendVersionTokenToUrl(
+            api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$trackHash,
+            $versionToken
+        );
+
+        $docInfo = [
+            'iid' => null,
+            'id' => null,
+            'c_id' => $courseId,
+            'path' => $resolvedC2['storagePath'],
+            'comment' => null,
+            'title' => $resolvedC2['title'],
+            'filetype' => 'file',
+            'size' => $resolvedC2['size'],
+            'readonly' => (int) $isReadOnly,
+            'session_id' => $sessionId,
+            'url' => api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?resourceNodeId='.$resourceNodeId
+                .($exerciseId ? '&exerciseId='.$exerciseId : '')
+                .($exeId ? '&exeId='.$exeId : '')
+                .($questionId ? '&questionId='.$questionId : '')
+                .($isReadOnly ? '&readOnly='.$isReadOnly : '')
+                .($groupId ? '&groupId='.$groupId : '')
+                .($forceEdit ? '&forceEdit=true' : '')
+                .($origin ? '&origin='.rawurlencode($origin) : '')
+                .($isEmbedded ? '&embedded=1' : '')
+                .($isExercisePreview ? '&exercisePreview=1' : '')
+                .($returnUrl ? '&returnUrl='.rawurlencode($returnUrl) : ''),
+            'document_url' => $callbackUrl,
+            'direct_url' => $fileUrl,
+            'basename' => basename((string) $resolvedC2['title']),
+            'parent_id' => 0,
+            'legacy_parent_id' => 0,
+            'parents' => [],
+            'forceEdit' => $forceEdit,
+            'exercise_id' => $exerciseId,
+            'creator_id' => $resolvedC2['creatorId'],
+            'resource_node_id' => $resolvedC2['resourceNodeId'],
+            'resource_file_id' => $resolvedC2['resourceFileId'],
+            'version_token' => $versionToken,
+            'return_url' => $returnUrl,
+            'origin' => $origin,
+            'embedded' => $isEmbedded,
+        ];
+
+        onlyofficeEditorLog('DEBUG', 'Resolved C2 resource node for exercise', [
+            'resourceNodeId' => $resourceNodeId,
+            'title' => $resolvedC2['title'],
+            'storagePath' => $resolvedC2['storagePath'],
+            'versionToken' => $versionToken,
+        ]);
+    }
+} elseif (!empty($docPath)) {
     $resolvedDocPath = resolveOnlyofficeEditorDocPath($docPath);
     if (null === $resolvedDocPath) {
         onlyofficeEditorLog('ERROR', 'Invalid document path', [
@@ -170,12 +320,12 @@ if (!empty($docPath)) {
     $trackHash = $jwtManager->getHash($trackPayload);
 
     $fileUrl = appendVersionTokenToUrl(
-        api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$downloadHash.'&docPath='.urlencode($newDocPath),
+        api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$downloadHash,
         $versionToken
     );
 
     $callbackUrl = appendVersionTokenToUrl(
-        api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$trackHash.'&docPath='.urlencode($newDocPath),
+        api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$trackHash,
         $versionToken
     );
 
@@ -220,6 +370,16 @@ if (!empty($docPath)) {
         'versionToken' => $versionToken,
     ]);
 } elseif (!empty($docId)) {
+    // The document id comes from the request, so it must belong to the course
+    // the caller was authorized for.
+    if (!documentBelongsToCourseForOnlyofficeEditor($docId, $courseId)) {
+        onlyofficeEditorLog('ERROR', 'Document does not belong to the current course', [
+            'docId' => $docId,
+            'courseId' => $courseId,
+        ]);
+        api_not_allowed(true);
+    }
+
     $resolvedC2 = resolveDocumentSourceFromC2ForEditor($docId);
 
     if (null !== $resolvedC2) {
@@ -277,11 +437,13 @@ if (!empty($docPath)) {
                 .($forceEdit ? '&forceEdit=true' : '')
                 .($origin ? '&origin='.rawurlencode($origin) : '')
                 .($isEmbedded ? '&embedded=1' : '')
+                .($isExercisePreview ? '&exercisePreview=1' : '')
                 .($returnUrl ? '&returnUrl='.rawurlencode($returnUrl) : ''),
             'document_url' => $callbackUrl,
             'direct_url' => $fileUrl,
             'basename' => basename((string) $resolvedC2['title']),
             'parent_id' => $resolvedC2['parentId'],
+            'legacy_parent_id' => 0,
             'parents' => [],
             'forceEdit' => $forceEdit,
             'exercise_id' => $exerciseId,
@@ -348,6 +510,8 @@ if (!empty($docPath)) {
                 $versionToken
             );
 
+            $docInfo['legacy_parent_id'] = (int) ($docInfo['parent_id'] ?? 0);
+            $docInfo['parent_id'] = 0;
             $docInfo['direct_url'] = $fileUrl;
             $docInfo['document_url'] = $callbackUrl;
             $docInfo['version_token'] = $versionToken;
@@ -374,6 +538,7 @@ if (!empty($docPath)) {
 if (empty($docInfo) || empty($fileId)) {
     onlyofficeEditorLog('ERROR', 'Document not found', [
         'docId' => $docId,
+        'resourceNodeId' => $resourceNodeId,
         'docPath' => $docPath,
     ]);
     exit('Error: Document not found.');
@@ -394,13 +559,14 @@ $editorReadOnly = shouldOpenOnlyofficeInReadOnlyMode(
     $exeId
 );
 
-$fileIdentifier = $docId ? (string) $docId : md5((string) $docPath);
+$fileIdentifier = $docId ? (string) $docId : (!empty($resourceNodeId) ? 'rn'.(string) $resourceNodeId : md5((string) $docPath));
 $versionToken = (string) ($docInfo['version_token'] ?? buildOnlyofficeVersionTokenFromLegacyDocInfo($docInfo, $fileIdentifier));
 $runtimeIdentifier = buildOnlyofficeRuntimeFileIdentifier($fileIdentifier, $versionToken);
 $runtimeKey = buildOnlyofficeRuntimeDocumentKey($fileIdentifier, $courseCode, $docInfo, $versionToken);
 $documentIdentity = buildOnlyofficeDocumentIdentity($courseId, $sessionId, $groupId, $fileIdentifier);
 $metaUrl = buildOnlyofficeMetaUrl(
     $docId,
+    $resourceNodeId,
     $docPath,
     $groupId,
     $exerciseId,
@@ -410,7 +576,8 @@ $metaUrl = buildOnlyofficeMetaUrl(
     $forceEdit,
     $returnUrl,
     $origin,
-    $isEmbedded
+    $isEmbedded,
+    $isExercisePreview
 );
 
 $fileUrl = $fileUrl ?? $documentManager->getFileUrl($runtimeIdentifier);
@@ -490,6 +657,8 @@ $config['document']['permissions']['copy'] = true;
 
 $config['editorConfig']['customization']['autosave'] = true;
 $config['editorConfig']['customization']['forcesave'] = true;
+$config['width'] = '100%';
+$config['height'] = '100%';
 
 if ($isLearnpathEmbedded) {
     if (isset($config['editorConfig']['customization']['goback'])) {
@@ -519,6 +688,7 @@ $config = refreshOnlyofficeEditorToken($config, $jwtManager, $appSettings);
 $isMobileAgent = $configService->isMobileAgent($userAgent);
 $langCode = $configService->getLang();
 $editorContainerId = 'iframeEditor';
+$editorShellId = 'onlyofficeEditorShell';
 
 onlyofficeEditorLog('DEBUG', 'Final config summary', [
     'docId' => (string) ($docId ?? 0),
@@ -533,12 +703,17 @@ onlyofficeEditorLog('DEBUG', 'Final config summary', [
     'returnUrl' => $returnUrl,
     'origin' => $origin,
     'embedded' => $isEmbedded,
+    'exercisePreview' => $isExercisePreview,
     'learnpathEmbedded' => $isLearnpathEmbedded,
 ]);
 
 sendOnlyofficeEditorNoCacheHeaders();
 
-?>
+$hideChamiloLayout = $isLearnpathEmbedded
+    || (isset($_GET['nh']) && '1' === (string) $_GET['nh']);
+
+if ($hideChamiloLayout) {
+    ?>
     <!DOCTYPE html>
     <html lang="<?php echo htmlspecialchars((string) $langCode, ENT_QUOTES, 'UTF-8'); ?>">
     <head>
@@ -547,12 +722,29 @@ sendOnlyofficeEditorNoCacheHeaders();
         <title>ONLYOFFICE</title>
         <style>
             html,
-            body,
-            #<?php echo $editorContainerId; ?> {
+            body {
                 width: 100%;
                 height: 100%;
                 margin: 0;
                 padding: 0;
+            }
+
+            #<?php echo $editorShellId; ?> {
+                position: relative;
+                width: 100%;
+                height: 100vh;
+                min-height: 100%;
+                overflow: hidden;
+            }
+
+            #<?php echo $editorShellId; ?> #<?php echo $editorContainerId; ?>,
+            #<?php echo $editorShellId; ?> iframe {
+                display: block !important;
+                width: 100% !important;
+                height: 100% !important;
+                min-height: 100% !important;
+                max-height: none !important;
+                border: 0 !important;
             }
 
             body {
@@ -564,18 +756,48 @@ sendOnlyofficeEditorNoCacheHeaders();
         <script type="text/javascript" src="<?php echo htmlspecialchars((string) $docApiUrl, ENT_QUOTES, 'UTF-8'); ?>"></script>
     </head>
     <body>
-    <div id="<?php echo $editorContainerId; ?>"></div>
+    <?php
+} else {
+    Display::display_header($plugin->get_lang('openByOnlyoffice'));
+    ?>
+    <style>
+        #<?php echo $editorShellId; ?> {
+            position: relative;
+            width: 100%;
+            min-height: 760px;
+            overflow: hidden;
+        }
+
+        #<?php echo $editorShellId; ?> #<?php echo $editorContainerId; ?>,
+        #<?php echo $editorShellId; ?> iframe {
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 760px !important;
+            max-height: none !important;
+            border: 0 !important;
+        }
+    </style>
+    <script type="text/javascript" src="<?php echo htmlspecialchars((string) $docApiUrl, ENT_QUOTES, 'UTF-8'); ?>"></script>
+    <?php
+}
+?>
+    <div id="<?php echo $editorShellId; ?>">
+        <div id="<?php echo $editorContainerId; ?>"></div>
+    </div>
 
     <script type="text/javascript">
         (function () {
             const config = <?php echo json_encode($config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
             const errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/error.php'); ?>;
             const saveAsUrl = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/ajax/saveas.php'); ?>;
-            const folderId = <?php echo json_encode((int) ($docInfo['parent_id'] ?? 0)); ?>;
+            const folderId = <?php echo json_encode((int) ($docInfo['legacy_parent_id'] ?? 0)); ?>;
+            const parentResourceNodeId = <?php echo json_encode((int) ($docInfo['parent_id'] ?? 0)); ?>;
             const sessionId = <?php echo json_encode((int) $sessionId); ?>;
             const courseId = <?php echo json_encode((int) $courseId); ?>;
             const groupId = <?php echo json_encode((int) $groupId); ?>;
             const editorContainerId = <?php echo json_encode($editorContainerId); ?>;
+            const editorShellId = <?php echo json_encode($editorShellId); ?>;
             const isMobileAgent = <?php echo json_encode((bool) $isMobileAgent); ?>;
             const debugEnabled = <?php echo json_encode((bool) ONLYOFFICE_EDITOR_LOG_ENABLED); ?>;
             const saveAsCsrfToken = <?php echo json_encode($saveAsCsrfToken); ?>;
@@ -596,6 +818,60 @@ sendOnlyofficeEditorNoCacheHeaders();
 
                 const args = Array.prototype.slice.call(arguments);
                 console.log.apply(console, args);
+            }
+
+            function getEditorHeight() {
+                const shell = document.getElementById(editorShellId);
+                if (!shell) {
+                    return 760;
+                }
+
+                if (isEmbeddedEditor) {
+                    return Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+                }
+
+                const top = Math.max(0, shell.getBoundingClientRect().top);
+                const remainingViewportHeight = window.innerHeight - top - 8;
+                const preferredViewportHeight = Math.round(window.innerHeight * 0.86);
+
+                return Math.max(760, remainingViewportHeight, preferredViewportHeight);
+            }
+
+            function forceEditorDimensions() {
+                const shell = document.getElementById(editorShellId);
+                if (!shell) {
+                    return;
+                }
+
+                const editorHeight = getEditorHeight();
+                const heightValue = isEmbeddedEditor ? "100%" : editorHeight + "px";
+
+                if (isEmbeddedEditor) {
+                    shell.style.setProperty("height", "100vh", "important");
+                    shell.style.setProperty("min-height", "100%", "important");
+                } else {
+                    shell.style.setProperty("height", editorHeight + "px", "important");
+                    shell.style.setProperty("min-height", "760px", "important");
+                }
+
+                shell.style.setProperty("width", "100%", "important");
+                shell.style.setProperty("max-height", "none", "important");
+
+                const elements = shell.querySelectorAll("#" + editorContainerId + ", iframe");
+                elements.forEach(function (element) {
+                    element.style.setProperty("display", "block", "important");
+                    element.style.setProperty("width", "100%", "important");
+                    element.style.setProperty("height", heightValue, "important");
+                    element.style.setProperty("min-height", isEmbeddedEditor ? "100%" : "760px", "important");
+                    element.style.setProperty("max-height", "none", "important");
+                    element.style.setProperty("border", "0", "important");
+                });
+            }
+
+            function scheduleEditorDimensionSync() {
+                [0, 50, 150, 300, 750, 1500].forEach(function (delay) {
+                    window.setTimeout(forceEditorDimensions, delay);
+                });
             }
 
             function getNavigationType() {
@@ -655,6 +931,7 @@ sendOnlyofficeEditorNoCacheHeaders();
             }
 
             function onAppReady() {
+                forceEditorDimensions();
                 debugLog("ONLYOFFICE editor ready");
             }
 
@@ -675,6 +952,7 @@ sendOnlyofficeEditorNoCacheHeaders();
                     title: event.data.title,
                     url: event.data.url,
                     folderId: folderId,
+                    parentResourceNodeId: parentResourceNodeId,
                     sessionId: sessionId,
                     courseId: courseId,
                     groupId: groupId
@@ -758,14 +1036,20 @@ sendOnlyofficeEditorNoCacheHeaders();
                     onRequestClose: onRequestClose
                 };
 
+                forceEditorDimensions();
                 window.docEditor = new DocsAPI.DocEditor(editorContainerId, config);
+                scheduleEditorDimensionSync();
+
+                const shell = document.getElementById(editorShellId);
+                if (shell && typeof MutationObserver !== "undefined") {
+                    const observer = new MutationObserver(function () {
+                        forceEditorDimensions();
+                    });
+                    observer.observe(shell, { childList: true, subtree: true });
+                }
 
                 if (isMobileAgent) {
-                    const iframe = document.querySelector("#" + editorContainerId + " iframe");
-                    if (iframe) {
-                        iframe.style.height = "100%";
-                        iframe.style.top = "0";
-                    }
+                    scheduleEditorDimensionSync();
                 }
             }
 
@@ -797,12 +1081,58 @@ sendOnlyofficeEditorNoCacheHeaders();
                 return "";
             });
 
-            window.addEventListener("load", connectEditor);
+            window.addEventListener("resize", forceEditorDimensions);
+            window.addEventListener("load", function () {
+                forceEditorDimensions();
+                connectEditor();
+            });
         })();
     </script>
+<?php
+if ($hideChamiloLayout) {
+    ?>
     </body>
     </html>
-<?php
+    <?php
+} else {
+    Display::display_footer();
+}
+
+/**
+ * Check that a document is linked to the given course.
+ */
+function documentBelongsToCourseForOnlyofficeEditor(int $docId, int $courseId): bool
+{
+    if ($docId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        return false;
+    }
+
+    /** @var CDocument|null $document */
+    $document = $entityManager->getRepository(CDocument::class)->find($docId);
+    if (!$document instanceof CDocument) {
+        return false;
+    }
+
+    $resourceNode = $document->getResourceNode();
+    if (!$resourceNode instanceof ResourceNode) {
+        return false;
+    }
+
+    foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+        $linkedCourse = $resourceLink->getCourse();
+
+        if (null !== $linkedCourse && (int) $linkedCourse->getId() === $courseId) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 /**
  * Resolve a C2 document for editor usage.
@@ -883,6 +1213,262 @@ function resolveDocumentSourceFromC2ForEditor(int $docId): ?array
         'creatorId' => $resourceNode->getCreator() ? (int) $resourceNode->getCreator()->getId() : (int) api_get_user_id(),
         'versionToken' => $versionToken,
     ];
+}
+
+/**
+ * Resolve a C2 resource node directly. Used by exercise AttemptFile resources.
+ */
+function resolveResourceNodeSourceFromC2ForEditor(int $resourceNodeId): ?array
+{
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        onlyofficeEditorLog('ERROR', 'Entity manager could not be resolved');
+
+        return null;
+    }
+
+    /** @var ResourceNode|null $resourceNode */
+    $resourceNode = $entityManager->getRepository(ResourceNode::class)->find($resourceNodeId);
+    if (!$resourceNode instanceof ResourceNode) {
+        onlyofficeEditorLog('ERROR', 'ResourceNode not found', [
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return null;
+    }
+
+    $resourceFile = $resourceNode->getFirstResourceFile();
+    if (!$resourceFile instanceof ResourceFile) {
+        onlyofficeEditorLog('ERROR', 'ResourceFile not found for ResourceNode', [
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return null;
+    }
+
+    $resourceNodeRepository = getResourceNodeRepositoryForOnlyofficeEditor();
+    if (null === $resourceNodeRepository) {
+        onlyofficeEditorLog('ERROR', 'ResourceNodeRepository could not be resolved');
+
+        return null;
+    }
+
+    $storagePath = '';
+    try {
+        $storagePath = (string) $resourceNodeRepository->getFilename($resourceFile);
+    } catch (\Throwable $e) {
+        onlyofficeEditorLog('WARNING', 'Failed to resolve storage path', [
+            'message' => $e->getMessage(),
+        ]);
+    }
+
+    $title = (string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle() ?: $resourceNode->getTitle());
+    $size = (int) ($resourceFile->getSize() ?? 0);
+    $versionToken = buildOnlyofficeVersionTokenFromDatabase(
+        $entityManager,
+        (int) $resourceNode->getId(),
+        (int) $resourceFile->getId(),
+        $size,
+        $storagePath ?: $title
+    );
+
+    return [
+        'title' => $title,
+        'size' => $size,
+        'storagePath' => $storagePath,
+        'resourceNodeId' => (int) $resourceNode->getId(),
+        'resourceFileId' => (int) $resourceFile->getId(),
+        'creatorId' => $resourceNode->getCreator() ? (int) $resourceNode->getCreator()->getId() : (int) api_get_user_id(),
+        'versionToken' => $versionToken,
+    ];
+}
+
+function userCanOpenExerciseResourceNodeForOnlyofficeEditor(int $resourceNodeId, int $exerciseId, int $exeId, int $questionId, int $userId): bool
+{
+    if ($resourceNodeId <= 0 || $exerciseId <= 0 || $exeId <= 0 || $questionId <= 0 || $userId <= 0) {
+        return false;
+    }
+
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        return false;
+    }
+
+    try {
+        $row = $entityManager->createQueryBuilder()
+            ->select('saved.id')
+            ->from(TrackEAttempt::class, 'saved')
+            ->innerJoin('saved.trackExercise', 'exerciseAttempt')
+            ->innerJoin('saved.attemptFiles', 'attemptFile')
+            ->andWhere('saved.questionId = :questionId')
+            ->andWhere('IDENTITY(saved.trackExercise) = :exeId')
+            ->andWhere('IDENTITY(exerciseAttempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(exerciseAttempt.user) = :userId')
+            ->andWhere('IDENTITY(attemptFile.resourceNode) = :resourceNodeId')
+            ->setParameter('questionId', $questionId)
+            ->setParameter('exeId', $exeId)
+            ->setParameter('exerciseId', $exerciseId)
+            ->setParameter('userId', $userId)
+            ->setParameter('resourceNodeId', $resourceNodeId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return null !== $row;
+    } catch (\Throwable $exception) {
+        onlyofficeEditorLog('ERROR', 'Failed to validate exercise resource node ownership', [
+            'message' => $exception->getMessage(),
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => $exerciseId,
+            'exeId' => $exeId,
+            'questionId' => $questionId,
+            'userId' => $userId,
+        ]);
+
+        return false;
+    }
+}
+
+/**
+ * Validate teacher review access to an OnlyOffice file attached to a completed exercise attempt.
+ */
+function userCanReviewExerciseResourceNodeForOnlyofficeEditor(
+    int $resourceNodeId,
+    int $exerciseId,
+    int $exeId,
+    int $questionId
+): bool {
+    if (
+        $resourceNodeId <= 0
+        || $exerciseId <= 0
+        || $exeId <= 0
+        || $questionId <= 0
+        || !api_is_allowed_to_edit(true, true)
+    ) {
+        return false;
+    }
+
+    $courseId = (int) api_get_course_int_id();
+    if ($courseId <= 0) {
+        return false;
+    }
+
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        return false;
+    }
+
+    try {
+        $queryBuilder = $entityManager->createQueryBuilder()
+            ->select('saved.id')
+            ->from(TrackEAttempt::class, 'saved')
+            ->innerJoin('saved.trackExercise', 'exerciseAttempt')
+            ->innerJoin('saved.attemptFiles', 'attemptFile')
+            ->andWhere('saved.questionId = :questionId')
+            ->andWhere('IDENTITY(saved.trackExercise) = :exeId')
+            ->andWhere('IDENTITY(exerciseAttempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(exerciseAttempt.course) = :courseId')
+            ->andWhere('IDENTITY(attemptFile.resourceNode) = :resourceNodeId')
+            ->setParameter('questionId', $questionId)
+            ->setParameter('exeId', $exeId)
+            ->setParameter('exerciseId', $exerciseId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('resourceNodeId', $resourceNodeId)
+            ->setMaxResults(1)
+        ;
+
+        $sessionId = (int) api_get_session_id();
+        if ($sessionId > 0) {
+            $queryBuilder
+                ->andWhere('IDENTITY(exerciseAttempt.session) = :sessionId')
+                ->setParameter('sessionId', $sessionId)
+            ;
+        } else {
+            $queryBuilder->andWhere('exerciseAttempt.session IS NULL');
+        }
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    } catch (\Throwable $exception) {
+        onlyofficeEditorLog('ERROR', 'Failed to validate OnlyOffice exercise review access', [
+            'message' => $exception->getMessage(),
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => $exerciseId,
+            'exeId' => $exeId,
+            'questionId' => $questionId,
+            'courseId' => $courseId,
+        ]);
+
+        return false;
+    }
+}
+
+/**
+ * Validate teacher access to the template attached to an OnlyOffice question.
+ */
+function userCanManageExerciseQuestionResourceNodeForOnlyofficeEditor(
+    int $resourceNodeId,
+    int $exerciseId,
+    int $questionId
+): bool {
+    if ($resourceNodeId <= 0 || $exerciseId <= 0 || $questionId <= 0 || !api_is_allowed_to_edit(true, true)) {
+        return false;
+    }
+
+    $courseId = (int) api_get_course_int_id();
+    if ($courseId <= 0) {
+        return false;
+    }
+
+    $entityManager = getEntityManagerForOnlyofficeEditor();
+    if (null === $entityManager) {
+        return false;
+    }
+
+    try {
+        $question = $entityManager->getRepository(CQuizQuestion::class)->find($questionId);
+        if (!$question instanceof CQuizQuestion) {
+            return false;
+        }
+
+        $questionResourceNode = $question->getResourceNode();
+        if (!$questionResourceNode instanceof ResourceNode || (int) $questionResourceNode->getId() !== $resourceNodeId) {
+            return false;
+        }
+
+        foreach ($question->getRelQuizzes() as $relation) {
+            if (!$relation instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $quiz = $relation->getQuiz();
+            if ((int) ($quiz->getIid() ?? 0) !== $exerciseId) {
+                continue;
+            }
+
+            $quizResourceNode = $quiz->getResourceNode();
+            if (!$quizResourceNode instanceof ResourceNode) {
+                return false;
+            }
+
+            foreach ($quizResourceNode->getResourceLinks() as $resourceLink) {
+                $linkedCourse = $resourceLink->getCourse();
+                if (null !== $linkedCourse && (int) $linkedCourse->getId() === $courseId) {
+                    return true;
+                }
+            }
+        }
+    } catch (\Throwable $exception) {
+        onlyofficeEditorLog('ERROR', 'Failed to validate OnlyOffice exercise template access', [
+            'message' => $exception->getMessage(),
+            'resourceNodeId' => $resourceNodeId,
+            'exerciseId' => $exerciseId,
+            'questionId' => $questionId,
+            'courseId' => $courseId,
+        ]);
+    }
+
+    return false;
 }
 
 /**
@@ -1079,6 +1665,7 @@ function buildOnlyofficeDocumentIdentity(int $courseId, int $sessionId, int $gro
  */
 function buildOnlyofficeMetaUrl(
     ?int $docId,
+    ?int $resourceNodeId,
     ?string $docPath,
     int $groupId,
     ?int $exerciseId,
@@ -1088,7 +1675,8 @@ function buildOnlyofficeMetaUrl(
     bool $forceEdit,
     string $returnUrl = '',
     string $origin = '',
-    bool $isEmbedded = false
+    bool $isEmbedded = false,
+    bool $isExercisePreview = false
 ): string {
     $params = [
         'meta' => '1',
@@ -1098,7 +1686,11 @@ function buildOnlyofficeMetaUrl(
         $params['docId'] = (string) $docId;
     }
 
-    if (!empty($docPath)) {
+    if (!empty($resourceNodeId)) {
+        $params['resourceNodeId'] = (string) $resourceNodeId;
+    }
+
+    if (empty($resourceNodeId) && !empty($docPath)) {
         $params['doc'] = $docPath;
     }
 
@@ -1138,6 +1730,10 @@ function buildOnlyofficeMetaUrl(
         $params['embedded'] = '1';
     }
 
+    if ($isExercisePreview) {
+        $params['exercisePreview'] = '1';
+    }
+
     return api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php?'.http_build_query($params);
 }
 
@@ -1160,6 +1756,10 @@ function appendVersionTokenToUrl(string $url, string $versionToken): string
  */
 function shouldOpenOnlyofficeInReadOnlyMode(string $extension, ?int $isReadOnly, bool $forceEdit, ?int $exeId): bool
 {
+    if (!empty($isReadOnly)) {
+        return true;
+    }
+
     if ($forceEdit) {
         return false;
     }
@@ -1170,10 +1770,6 @@ function shouldOpenOnlyofficeInReadOnlyMode(string $extension, ?int $isReadOnly,
 
     if ($exeId) {
         return false;
-    }
-
-    if (!empty($isReadOnly)) {
-        return true;
     }
 
     if (api_is_allowed_to_edit(false, true, true, false)) {

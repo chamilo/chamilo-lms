@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -31,9 +32,10 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         KernelInterface $kernel,
         TranslatorInterface $translator,
         Security $security,
+        CidReqHelper $cidReqHelper,
         SettingsManager $settingsManager
     ): CStudentPublication {
-        $cid = (int) $request->query->get('cid', 0);
+        $cid = (int) $request->query->get('cid', '0');
         if ($cid > 0) {
             $course = $em->getRepository(Course::class)->find($cid);
             if (!$course || !$security->isGranted(CourseVoter::VIEW, $course)) {
@@ -41,7 +43,8 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
             }
         }
 
-        $fileExistsOption = $request->get('fileExistsOption', 'rename');
+        $fileExistsOption = $request->request->get('fileExistsOption', 'rename');
+        $resourceLinkList = $this->buildResourceLinkListFromContext($cidReqHelper, []);
 
         $studentPublication = new CStudentPublication();
 
@@ -50,8 +53,12 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
             $repo,
             $request,
             $em,
+            $cidReqHelper,
             $fileExistsOption,
-            $translator
+            $translator,
+            null,
+            null,
+            $resourceLinkList,
         );
 
         $studentPublication->setTitle($result['title']);
@@ -75,7 +82,7 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         $managedUser = $em->getReference(User::class, $userId);
         $studentPublication->setUser($managedUser);
 
-        $parentId = (int) $request->get('parentId');
+        $parentId = (int) $request->request->get('parentId');
         if ($parentId > 0) {
             $parentEntity = $repo->find($parentId);
             if ($parentEntity) {

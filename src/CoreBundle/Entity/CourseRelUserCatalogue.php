@@ -42,11 +42,13 @@ class CourseRelUserCatalogue implements Stringable
     }
 
     /**
-     * @return int
+     * Get Course.
+     *
+     * @return Course
      */
-    public function getId()
+    public function getCourse()
     {
-        return $this->id;
+        return $this->course;
     }
 
     public function setCourse(Course $course): self
@@ -57,20 +59,11 @@ class CourseRelUserCatalogue implements Stringable
     }
 
     /**
-     * Get Course.
-     *
-     * @return Course
+     * @return int
      */
-    public function getCourse()
+    public function getId()
     {
-        return $this->course;
-    }
-
-    public function setVisible(int $visible): self
-    {
-        $this->visible = $visible;
-
-        return $this;
+        return $this->id;
     }
 
     /**
@@ -81,5 +74,12 @@ class CourseRelUserCatalogue implements Stringable
     public function getVisible()
     {
         return $this->visible;
+    }
+
+    public function setVisible(int $visible): self
+    {
+        $this->visible = $visible;
+
+        return $this;
     }
 }

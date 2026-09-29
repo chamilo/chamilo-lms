@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use ChamiloSession as Session;
 
 /**
@@ -120,8 +122,12 @@ if (!empty($sessionId) && !$is_allowedToEdit) {
 
 $allowCoachFeedbackExercises = 'true' === api_get_setting('exercise.allow_coach_feedback_exercises');
 $maxEditors = (int) api_get_setting('exercise.exercise_max_editors_in_page');
-$enableAi     = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
-$openAnsGrader= 'true' === api_get_setting('ai_helpers.open_answers_grader');
+$aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
+$enableAi = $aiFeatureAccessHelper->isFeatureEnabledForCourse(
+    'open_answers_grader',
+    api_get_course_int_id()
+);
+$openAnsGrader = $enableAi;
 $isCoachAllowedToEdit = api_is_allowed_to_edit(false, true);
 $isFeedbackAllowed = false;
 

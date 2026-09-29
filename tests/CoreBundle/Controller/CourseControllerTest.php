@@ -11,8 +11,11 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\Tests\ChamiloTestTrait;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+
+use const JSON_THROW_ON_ERROR;
 
 class CourseControllerTest extends WebTestCase
 {
@@ -105,6 +108,51 @@ class CourseControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testReorderToolsIsDeniedForStudent(): void
+    {
+        $client = static::createClient();
+        $course = $this->createCourse('course to reorder');
+
+        $student = $this->createUser('student');
+        $course->addUserAsStudent($student);
+
+        $em = $this->getEntityManager();
+        $em->persist($course);
+        $em->flush();
+
+        $client->loginUser($student);
+        $this->postToolOrder($client, $course, $this->getFirstToolId($course), 0);
+
+        // A student can read the course home, so the GET flow would let them
+        // through: reordering must be gated on its own, not on VIEW.
+        $this->assertResponseStatusCodeSame(403);
+
+        // ...and denied by the voter, not by the central CSRF gate, which also
+        // answers 403 and would keep this test green if the check were removed.
+        $this->assertStringNotContainsString(
+            'The security token is invalid.',
+            (string) $client->getResponse()->getContent()
+        );
+    }
+
+    public function testReorderToolsIsAllowedForTeacher(): void
+    {
+        $client = static::createClient();
+        $course = $this->createCourse('course to reorder by teacher');
+
+        $teacher = $this->createUser('teacher');
+        $course->addUserAsTeacher($teacher);
+
+        $em = $this->getEntityManager();
+        $em->persist($course);
+        $em->flush();
+
+        $client->loginUser($teacher);
+        $this->postToolOrder($client, $course, $this->getFirstToolId($course), 0);
+
+        $this->assertResponseIsSuccessful();
+    }
+
     public function testRedirectTool(): void
     {
         $client = static::createClient();
@@ -169,7 +217,14 @@ class CourseControllerTest extends WebTestCase
         foreach ($schemas as $name => $schema) {
             $category = $courseSettingsManager->convertServiceToNameSpace($name);
             $client->request('GET', '/course/'.$course->getId().'/settings/'.$category);
-            $this->assertResponseIsSuccessful();
+
+            // A category whose settings page already moved out of the legacy form
+            // answers with a redirect to its new location rather than rendering.
+            $this->assertContains(
+                $client->getResponse()->getStatusCode(),
+                [Response::HTTP_OK, Response::HTTP_FOUND],
+                \sprintf('Course settings category "%s" is not reachable', $category)
+            );
         }
     }
 
@@ -219,5 +274,35 @@ class CourseControllerTest extends WebTestCase
         $client->request('GET', '/course/'.$course->getId().'/about');
         $this->assertResponseIsSuccessful();
         $this->assertStringContainsString('new course', $client->getResponse()->getContent());
+    }
+
+    private function getFirstToolId(Course $course): int
+    {
+        $tool = $course->getTools()->first();
+
+        $this->assertNotFalse($tool, 'The course was created without tools.');
+
+        return (int) $tool->getIid();
+    }
+
+    /**
+     * Sec-Fetch-Site is what a browser sends on a same-origin write, and what
+     * CsrfProtectionListener checks. Without it the central gate answers 403
+     * before the controller runs, which would both break the teacher case and
+     * make the student case pass for the wrong reason.
+     */
+    private function postToolOrder(KernelBrowser $client, Course $course, int $toolId, int $index): void
+    {
+        $client->request(
+            'POST',
+            '/course/'.$course->getId().'/home.json',
+            [],
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_SEC_FETCH_SITE' => 'same-origin',
+            ],
+            json_encode(['toolId' => $toolId, 'index' => $index], JSON_THROW_ON_ERROR)
+        );
     }
 }

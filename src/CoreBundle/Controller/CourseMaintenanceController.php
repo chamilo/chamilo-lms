@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
@@ -43,10 +44,10 @@ use const PATHINFO_EXTENSION;
 #[Route('/course_maintenance/{node}', name: 'cm_', requirements: ['node' => '\d+'])]
 class CourseMaintenanceController extends AbstractCourseMaintenanceController
 {
-    private const IMPORT_ALLOWED_EXTENSIONS = ['zip', 'mbz', 'gz', 'tgz'];
-    private const CC13_ALLOWED_EXTENSIONS = ['imscc', 'zip'];
+    private const array IMPORT_ALLOWED_EXTENSIONS = ['zip', 'mbz', 'gz', 'tgz'];
+    private const array CC13_ALLOWED_EXTENSIONS = ['imscc', 'zip'];
 
-    private const LEGACY_SNAPSHOT_TOOLS = [
+    private const array LEGACY_SNAPSHOT_TOOLS = [
         'documents',
         'forums',
         'tool_intro',
@@ -69,7 +70,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         'learnpaths',
     ];
 
-    private const MOODLE_EXPORT_DEFAULT_TOOLS = [
+    private const array MOODLE_EXPORT_DEFAULT_TOOLS = [
         'documents',
         'links',
         'forums',
@@ -90,7 +91,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         'course_descriptions',
     ];
 
-    private const MOODLE_EXPORT_RESOURCE_PICKER_DEFAULT_TOOLS = [
+    private const array MOODLE_EXPORT_RESOURCE_PICKER_DEFAULT_TOOLS = [
         'documents',
         'links',
         'forums',
@@ -312,11 +313,15 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 )
             );
 
+            $restoreCourseSettings = $isMoodle
+                && 'full_backup' === $importOption
+                && !empty($course->resources['course_settings']);
+
             $restorer = new CourseRestorer($course);
             $restorer->set_file_option($this->mapSameNameOption($sameFileNameOption));
             $restorer->setResourcesAllSnapshot($resourcesAll);
             $restorer->setDebug($this->debug);
-            $restorer->restore();
+            $restorer->restore('', 0, $restoreCourseSettings);
 
             CourseArchiver::cleanBackupDir();
 
@@ -529,7 +534,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/delete', name: 'delete', methods: ['POST'])]
-    public function deleteCourse(int $node, Request $req): JsonResponse
+    public function deleteCourse(int $node, Request $req, EntityManagerInterface $em, CourseHelper $courseHelper): JsonResponse
     {
         // Basic permission gate (adjust roles to your policy if needed)
         if (
@@ -572,7 +577,18 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 return $this->jsonError('Course code confirmation mismatch', 400);
             }
 
-            CourseManager::delete_course($sysCode, $deleteDocs);
+            $courseId = (int) ($courseInfo['real_id'] ?? 0);
+            $course = $courseId > 0 ? $em->getRepository(CourseEntity::class)->find($courseId) : null;
+            if (!$course instanceof CourseEntity) {
+                return $this->jsonError('Course not found', 404);
+            }
+
+            if (!$courseHelper->deleteCourse($course, $deleteDocs)) {
+                return $this->json([
+                    'ok' => false,
+                    'message' => 'The course is still used in other portals; it was removed from the current one but not deleted.',
+                ]);
+            }
 
             // Best-effort cleanup
             try {
@@ -591,7 +607,6 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         } catch (Throwable $e) {
             return $this->json([
                 'error' => 'Failed to delete course: '.$e->getMessage(),
-                'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,
             ], 500);
         }
     }
@@ -781,7 +796,9 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $exporter = new MoodleExport($course, $selectionMode);
             $exporter->setAdminUserData($adminId, $adminLogin, $adminEmail);
 
-            $exportDir = 'moodle_export_'.date('Ymd_His');
+            $courseCode = api_replace_dangerous_char((string) ($course->code ?? ''));
+            $exportPrefix = '' !== $courseCode ? $courseCode : 'course_export';
+            $exportDir = $exportPrefix.'_'.date('Ymd_His');
             $versionNum = ('3' === $moodleVersion) ? 3 : 4;
 
             $this->logDebug('[moodleExportExecute] starting exporter', [
@@ -1328,7 +1345,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $payload = CourseArchiver::preprocessSerializedPayloadForTypedProps($payload);
             CourseArchiver::ensureLegacyAliases();
 
-            set_error_handler(static function (): void {});
+            set_error_handler(static fn (int $errno, string $errstr): bool => true);
 
             try {
                 if (class_exists(UnserializeApi::class)) {

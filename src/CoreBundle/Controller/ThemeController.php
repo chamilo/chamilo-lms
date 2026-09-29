@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use DateTimeImmutable;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -173,6 +174,7 @@ class ThemeController extends AbstractController
     public function logo(
         string $slug,
         string $type,
+        Request $request,
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
         FilesystemOperator $filesystem
     ): Response {
@@ -211,7 +213,7 @@ class ThemeController extends AbstractController
             throw $this->createNotFoundException('No logo file found.');
         }
 
-        return $this->streamFile($filesystem, $filePath);
+        return $this->streamFile($filesystem, $filePath, $request);
     }
 
     /**
@@ -273,7 +275,7 @@ class ThemeController extends AbstractController
             throw $this->createNotFoundException('The requested file does not exist.');
         }
 
-        return $this->streamFile($filesystem, $filePath);
+        return $this->streamFile($filesystem, $filePath, $request);
     }
 
     /**
@@ -292,9 +294,24 @@ class ThemeController extends AbstractController
 
     /**
      * Stream a file from Flysystem with correct mime type.
+     * Theme assets are re-uploadable (e.g. logos), so freshness is validated via
+     * ETag/Last-Modified (derived from the file's own mtime/size) rather than a
+     * blanket no-store: a re-upload changes the mtime and busts the cache automatically.
      */
-    private function streamFile(FilesystemOperator $filesystem, string $filePath): Response
+    private function streamFile(FilesystemOperator $filesystem, string $filePath, Request $request): Response
     {
+        $lastModifiedTimestamp = $filesystem->lastModified($filePath);
+        $etag = md5($filePath.$lastModifiedTimestamp.$filesystem->fileSize($filePath));
+
+        $conditionalResponse = new Response();
+        $conditionalResponse->setLastModified((new DateTimeImmutable())->setTimestamp($lastModifiedTimestamp));
+        $conditionalResponse->setEtag($etag);
+        $conditionalResponse->setPublic();
+
+        if ($conditionalResponse->isNotModified($request)) {
+            return $conditionalResponse;
+        }
+
         $response = new StreamedResponse(function () use ($filesystem, $filePath): void {
             $out = fopen('php://output', 'wb');
             $in = $filesystem->readStream($filePath);
@@ -330,7 +347,10 @@ class ThemeController extends AbstractController
 
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', $mimeType);
-        $response->headers->set('Cache-Control', 'no-store');
+        $response->setLastModified((new DateTimeImmutable())->setTimestamp($lastModifiedTimestamp));
+        $response->setEtag($etag);
+        $response->setPublic();
+        $response->setMaxAge(86400);
 
         return $response;
     }

@@ -34,13 +34,13 @@ class TemplatesRepository extends ServiceEntityRepository
             ->innerJoin(
                 Course::class,
                 'c',
-                Join::WITH,
+                Join::ON,
                 't.id = c.id'
             )
             ->innerJoin(
                 CDocument::class,
                 'd',
-                Join::WITH,
+                Join::ON,
                 'c.id = d.course'
             )
             ->where(

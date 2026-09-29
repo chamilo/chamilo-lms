@@ -93,7 +93,46 @@ function recurseCopyFolderScoNoVideos($src, $dst): void
 }
 
 /**
+ * Resolve $candidatePath to a real, existing, regular file strictly contained
+ * within $allowedRoot. Defeats path traversal (../, absolute paths, symlink
+ * escapes) by canonicalising both paths with realpath() and checking
+ * containment on the canonical result, rather than blacklisting patterns in
+ * the untrusted input.
+ *
+ * Returns null when the path does not exist, is not a regular file, or
+ * resolves outside of $allowedRoot.
+ */
+function oel_resolve_safe_local_path(string $candidatePath, string $allowedRoot): ?string
+{
+    $realRoot = realpath($allowedRoot);
+    if (false === $realRoot) {
+        return null;
+    }
+
+    $realPath = realpath($candidatePath);
+    if (false === $realPath || !is_file($realPath)) {
+        return null;
+    }
+
+    $realRoot = rtrim($realRoot, \DIRECTORY_SEPARATOR).\DIRECTORY_SEPARATOR;
+
+    if (0 !== strncmp($realPath, $realRoot, \strlen($realRoot))) {
+        return null;
+    }
+
+    return $realPath;
+}
+
+/**
  * This method control rights user for editing a OeL page.
+ *
+ * Fails closed: a page id must have been explicitly whitelisted into the
+ * current session (via oel_add_ctr_rights(), called once by editor/index.php
+ * after it verifies a real edit permission + CSRF token) before any request
+ * for that id is allowed. Previously this returned true whenever the session
+ * whitelist was empty/unset -- the plugin's normal state for any request that
+ * never went through editor/index.php first -- which let anonymous or
+ * unrelated requests reach state-changing actions gated only by this check.
  *
  * @param mixed $idPage
  */
@@ -106,16 +145,10 @@ function oel_ctr_rights($idPage): bool
     }
 
     if ('' == $lst_ids) {
-        return true;
-    }
-
-    $pos = strrpos($lst_ids, ";$idPage;");
-
-    if (false === $pos) {
         return false;
     }
 
-    return true;
+    return false !== strrpos($lst_ids, ";$idPage;");
 }
 
 /**

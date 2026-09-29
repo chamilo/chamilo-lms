@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Index(name: 'idx_xapi_statement_stored', columns: ['stored'])]
 #[ORM\Entity(repositoryClass: XApiStatementRepository::class)]
 class XApiStatement
 {
@@ -22,7 +23,10 @@ class XApiStatement
     #[ORM\Column(nullable: true)]
     private ?int $created = null;
 
-    #[ORM\Column(nullable: true)]
+    // STORED is a reserved word. The schema tool quotes it on its own because DDL consults the
+    // platform keyword list, but the ORM only quotes a column in DML when the mapping declares
+    // it quoted -- without the backticks every INSERT is a syntax error on MySQL.
+    #[ORM\Column(name: '`stored`', nullable: true)]
     private ?int $stored = null;
 
     #[ORM\Column]
@@ -66,6 +70,13 @@ class XApiStatement
     public function getId(): ?string
     {
         return $this->id;
+    }
+
+    public function setId(string $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getCreated(): ?int

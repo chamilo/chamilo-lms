@@ -30,7 +30,7 @@ final class Version20260116085001 extends AbstractMigrationChamilo
      * keep false to avoid creating new documents during link rewrite migrations,
      * which may generate duplicates at the root folder.
      */
-    private const ENABLE_DOCUMENT_CREATION = false;
+    private const bool ENABLE_DOCUMENT_CREATION = false;
 
     public function getDescription(): string
     {

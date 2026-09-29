@@ -306,7 +306,11 @@ class Security
      */
     public static function remove_XSS($var, int $user_status = null, bool $filter_terms = false)
     {
-        if ($filter_terms) {
+        if (null === $var) {
+            return '';
+        }
+
+	if ($filter_terms) {
             $var = self::filter_terms($var);
         }
 
@@ -397,7 +401,9 @@ class Security
 
             // Set some HTML5 properties
             $config->set('HTML.DefinitionID', 'html5-definitions'); // unqiue id
-            $config->set('HTML.DefinitionRev', 1);
+            // Bump this whenever the definition below changes, or HTMLPurifier keeps
+            // serving the cached definition and the change never takes effect.
+            $config->set('HTML.DefinitionRev', 2);
             if ($def = $config->maybeGetRawHTMLDefinition()) {
                 // https://html.spec.whatwg.org/dev/media.html#the-video-element
                 $def->addElement(
@@ -437,16 +443,94 @@ class Security
                     'Common',
                     ['src' => 'URI', 'type' => 'Text']
                 );
+
+                // The "mathjax" TinyMCE plugin stores a formula's LaTeX source in
+                // <span class="math-latex" data-latex="...">. HTMLPurifier drops every
+                // data-* attribute it was not told about, which would erase the formula
+                // on save. The value is plain text and is only ever read back through
+                // getAttribute() and written with textContent, never innerHTML.
+                $def->addAttribute('span', 'data-latex', 'Text');
             }
 
             $purifier[$user_status] = new HTMLPurifier($config);
         }
 
+        $langPlaceholders = [];
+        $var = self::normalizeLangAttributesForPurifier($var, $langPlaceholders);
+
         if (is_array($var)) {
-            return $purifier[$user_status]->purifyArray($var);
+            $result = $purifier[$user_status]->purifyArray($var);
         } else {
-            return $purifier[$user_status]->purify($var);
+            $result = $purifier[$user_status]->purify($var);
         }
+
+        return self::restoreLangAttributesAfterPurifier($result, $langPlaceholders);
+    }
+
+    /**
+     * HTMLPurifier's lang attribute validator (HTMLPurifier_AttrDef_Lang)
+     * rejects any underscore-separated value (e.g. "fr_FR", the form used
+     * throughout translate_html content — see
+     * TranslateHtmlLanguageService::normalizeLanguageCode()) and silently
+     * drops the whole attribute, leaving the element itself untouched. It
+     * also lowercases whatever it does accept, so a plain hyphen conversion
+     * would still corrupt the region casing (e.g. "fr-FR" -> "fr-fr").
+     *
+     * So each underscore-separated lang value is swapped for a placeholder
+     * from the "qaa".."qtz" range before purifying — codes ISO 639-3
+     * reserves for local/private use and therefore never assigned to a real
+     * language — then swapped back verbatim afterwards.
+     */
+    private static function normalizeLangAttributesForPurifier(array|string $var, array &$langPlaceholders): array|string
+    {
+        if (is_array($var)) {
+            foreach ($var as $key => $item) {
+                $var[$key] = self::normalizeLangAttributesForPurifier($item, $langPlaceholders);
+            }
+
+            return $var;
+        }
+
+        return preg_replace_callback(
+            '/\blang="([a-zA-Z]{2,3}_[a-zA-Z]{2,3})"/',
+            function (array $matches) use (&$langPlaceholders): string {
+                $token = self::nextLangPlaceholderToken(count($langPlaceholders));
+                $langPlaceholders[$token] = $matches[1];
+
+                return 'lang="'.$token.'"';
+            },
+            $var
+        );
+    }
+
+    private static function restoreLangAttributesAfterPurifier(array|string $var, array $langPlaceholders): array|string
+    {
+        if (!$langPlaceholders) {
+            return $var;
+        }
+
+        if (is_array($var)) {
+            foreach ($var as $key => $item) {
+                $var[$key] = self::restoreLangAttributesAfterPurifier($item, $langPlaceholders);
+            }
+
+            return $var;
+        }
+
+        $searchReplace = [];
+        foreach ($langPlaceholders as $token => $original) {
+            $searchReplace['lang="'.$token.'"'] = 'lang="'.$original.'"';
+        }
+
+        return strtr($var, $searchReplace);
+    }
+
+    private static function nextLangPlaceholderToken(int $index): string
+    {
+        $first = intdiv($index, 26) % 20;
+        $second = $index % 26;
+
+        return 'q'.chr(97 + $first).chr(97 + $second);
     }
 
     /**

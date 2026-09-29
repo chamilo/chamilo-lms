@@ -40,7 +40,6 @@ class CidFilter extends AbstractFilter
     {
         return [
             'cid' => [
-                'property' => null,
                 'type' => 'string',
                 'required' => $this->isRequired(),
                 'description' => 'Course identifier',

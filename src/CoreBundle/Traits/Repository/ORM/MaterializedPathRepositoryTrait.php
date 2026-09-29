@@ -88,13 +88,13 @@ trait MaterializedPathRepositoryTrait
     public function getPathQueryBuilder($node)
     {
         $meta = $this->getClassMetadata();
-        $config = $this->listener->getConfiguration($this->_em, $meta->name);
+        $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
         $alias = 'materialized_path_entity';
         $qb = $this->getQueryBuilder()
             ->select($alias)
             ->from($config['useObjectClass'], $alias);
 
-        $node = new EntityWrapper($node, $this->_em);
+        $node = new EntityWrapper($node, $this->getEntityManager());
         $nodePath = $node->getPropertyValue($config['path']);
         $paths = [];
         $nodePathLength = strlen($nodePath);
@@ -266,7 +266,7 @@ trait MaterializedPathRepositoryTrait
     public function getNodesHierarchy($node = null, $direct = false, array $options = array(), $includeNode = false)
     {
         $meta = $this->getClassMetadata();
-        $config = $this->listener->getConfiguration($this->_em, $meta->name);
+        $config = $this->listener->getConfiguration($this->getEntityManager(), $meta->name);
         $path = $config['path'];
 
         $nodes = $this->getNodesHierarchyQuery($node, $direct, $options, $includeNode)->getArrayResult();

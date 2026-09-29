@@ -794,7 +794,7 @@ if ($hasFrequencies) {
                         <em class="fa fa-exclamation-triangle text-lg"></em>
                     </div>
                     <div>
-                        <h2 class="text-lg font-semibold text-gray-90">Subscription periods are not configured</h2>
+                        <h2 class="text-lg font-semibold text-gray-90">'.$plugin->get_lang('SubscriptionPeriodsNotConfigured').'</h2>
                         <p class="mt-2 text-sm leading-6 text-gray-90">
                             '.htmlspecialchars($frequencyMissingMessage, ENT_QUOTES, 'UTF-8').'
                         </p>

@@ -5,7 +5,9 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CLp;
 
 class LpAiHelper
 {
@@ -13,9 +15,12 @@ class LpAiHelper
 
     public function aiHelperForm()
     {
-        if ('true' !== api_get_setting('ai_helpers.enable_ai_helpers') ||
-            'true' !== api_get_course_setting('learning_path_generator')
-        ) {
+        $aiFeatureAccessHelper = Container::$container->get(AiFeatureAccessHelper::class);
+
+        if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'learning_path_generator',
+            api_get_course_int_id()
+        )) {
             return false;
         }
 
@@ -251,7 +256,8 @@ class LpAiHelper
         array $lpData,
         string $courseCode,
         bool $aiAssisted = false,
-        ?string $aiProvider = null
+        ?string $aiProvider = null,
+        ?CLp $existingLearningPath = null
     ): array {
         if (!isset($lpData['topic'])) {
             return ['success' => false, 'text' => 'Error: Topic not set in AI response.'];
@@ -263,15 +269,18 @@ class LpAiHelper
         $ai = $this->getAiDisclosureHelper();
         $aiEnabled = $aiAssisted && $ai instanceof AiDisclosureHelper && $ai->isDisclosureEnabled();
 
-        $lp = learnpath::add_lp(
-            $courseCode,
-            $lpData['topic'],
-            '',
-            'chamilo',
-            'manual'
-        );
+        $lp = $existingLearningPath;
+        if (!$lp instanceof CLp) {
+            $lp = learnpath::add_lp(
+                $courseCode,
+                $lpData['topic'],
+                '',
+                'chamilo',
+                'manual'
+            );
+        }
 
-        if (null === $lp || empty($lp->getIid())) {
+        if (!$lp instanceof CLp || empty($lp->getIid())) {
             return ['success' => false, 'text' => 'Failed to create Learning Path.'];
         }
 

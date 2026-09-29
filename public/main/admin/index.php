@@ -370,7 +370,7 @@ if (api_is_platform_admin()) {
         'url' => api_get_path(WEB_CODE_PATH).'auth/inscription.php?create_intro_page=1',
         'label' => get_lang('Setting the registration page')
     ];
-    $items[] = ['url' => 'statistics/index.php', 'label' => get_lang('Statistics')];
+    $items[] = ['url' => '/admin/statistics', 'label' => get_lang('Statistics')];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'my_space/company_reports.php',
         'label' => get_lang('Reports'),
@@ -390,7 +390,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'extra_field_list.php', 'label' => get_lang('Extra fields')];
 
     if (api_is_global_platform_admin()) {
-        $items[] = ['url' => 'access_urls.php', 'label' => get_lang('Configure multiple access URL')];
+        $items[] = ['url' => '/admin/urls/manage', 'label' => get_lang('Configure multiple access URL')];
     }
 
     if ('true' == api_get_plugin_setting('dictionary', 'enable_plugin_dictionary')) {
@@ -403,8 +403,6 @@ if (api_is_platform_admin()) {
     if ('true' == api_get_setting('allow_terms_conditions')) {
         $items[] = ['url' => 'legal_add.php', 'label' => get_lang('Terms and Conditions')];
     }
-
-    $items[] = ['url' => api_get_path(WEB_PUBLIC_PATH).'admin/lti/', 'label' => get_lang('External tools (LTI)')];
 
     $blocks['platform']['items'] = $items;
     $blocks['platform']['extra'] = null;
@@ -434,12 +432,8 @@ if (api_is_platform_admin()) {
         'url' => 'special_exports.php',
         'label' => get_lang('Special exports'),
     ];
-    /*$items[] = [
-        'url' => 'periodic_export.php',
-        'label' => get_lang('Periodic export'),
-    ];*/
     $items[] = [
-        'url' => 'system_status.php',
+        'url' => '/admin/system-status',
         'label' => get_lang('System status'),
     ];
     if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {

@@ -426,7 +426,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
             }
 
             // Strict mode
-            set_error_handler(static function (): void {});
+            set_error_handler(static fn (int $errno, string $errstr): bool => true);
 
             try {
                 // Untrusted backup bytes: never instantiate arbitrary classes (PHP Object
@@ -446,7 +446,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
             // Relaxed fallback (no class instantiation) + deincomplete to stdClass
             if (!$ok) {
                 $err2 = null;
-                set_error_handler(static function (): void {});
+                set_error_handler(static fn (int $errno, string $errstr): bool => true);
 
                 try {
                     // No class instantiation at all (UnserializeApi default => allowed_classes:false).
@@ -1061,6 +1061,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
         };
 
         // Categories
+        /** @var array<int, array<string, mixed>> $cats */
         $cats = [];
         foreach ($catRaw as $id => $obj) {
             $id = (int) $id;
@@ -1236,6 +1237,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
         $catRaw = $res['link_category'] ?? $res['Link_Category'] ?? [];
         $linkRaw = $res['link'] ?? $res['Link'] ?? [];
 
+        /** @var array<int, array<string, mixed>> $cats */
         $cats = [];
         foreach ($catRaw as $id => $obj) {
             $id = (int) $id;
@@ -1689,6 +1691,101 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
     }
 
     /**
+     * Keep hidden quiz/survey questions required by selected parent resources.
+     *
+     * Question buckets are intentionally hidden from the resource picker, so they
+     * never arrive in the selection map. A selected quiz/survey must nevertheless
+     * remain self-contained for export/import/copy operations.
+     *
+     * @param array<string,mixed> $orig
+     * @param array<string,mixed> $selectedBuckets
+     */
+    protected function hydrateSelectedQuestionDependencies(array $orig, array &$selectedBuckets): void
+    {
+        $dependencies = [
+            [
+                'parent_types' => ['quiz', 'quizzes', 'exercise'],
+                'child_types' => ['exercise_question', 'quiz_question', 'quiz_questions'],
+            ],
+            [
+                'parent_types' => ['survey', 'surveys'],
+                'child_types' => ['survey_question', 'survey_questions'],
+            ],
+        ];
+
+        foreach ($dependencies as $dependency) {
+            $parentBuckets = [];
+
+            foreach ($dependency['parent_types'] as $parentType) {
+                $parentKey = $this->findBucketKey($orig, $parentType);
+                if (null !== $parentKey && !empty($selectedBuckets[$parentKey]) && \is_array($selectedBuckets[$parentKey])) {
+                    $parentBuckets[] = $selectedBuckets[$parentKey];
+                }
+            }
+
+            if (empty($parentBuckets)) {
+                continue;
+            }
+
+            $childKey = null;
+            foreach ($dependency['child_types'] as $childType) {
+                $candidate = $this->findBucketKey($orig, $childType);
+                if (null !== $candidate && !empty($orig[$candidate]) && \is_array($orig[$candidate])) {
+                    $childKey = $candidate;
+
+                    break;
+                }
+            }
+
+            if (null === $childKey) {
+                continue;
+            }
+
+            $neededIds = [];
+            foreach ($parentBuckets as $parentBucket) {
+                foreach ($parentBucket as $parentWrap) {
+                    $parent = (\is_object($parentWrap) && isset($parentWrap->obj) && \is_object($parentWrap->obj))
+                        ? $parentWrap->obj
+                        : $parentWrap;
+
+                    if (\is_object($parent)) {
+                        $questionIds = $parent->question_ids ?? ($parentWrap->question_ids ?? []);
+                    } elseif (\is_array($parent)) {
+                        $questionIds = $parent['question_ids'] ?? [];
+                    } else {
+                        $questionIds = [];
+                    }
+
+                    foreach ((array) $questionIds as $questionId) {
+                        $questionId = (int) $questionId;
+                        if ($questionId > 0) {
+                            $neededIds[(string) $questionId] = true;
+                        }
+                    }
+                }
+            }
+
+            if (empty($neededIds)) {
+                continue;
+            }
+
+            $children = $this->intersectBucketByIds((array) $orig[$childKey], $neededIds);
+            if (empty($children)) {
+                continue;
+            }
+
+            $selectedBuckets[$childKey] = isset($selectedBuckets[$childKey]) && \is_array($selectedBuckets[$childKey])
+                ? $selectedBuckets[$childKey] + $children
+                : $children;
+
+            $this->logDebug('[filterSelection] hydrated hidden question dependencies', [
+                'child_type' => $childKey,
+                'count' => \count($children),
+            ]);
+        }
+    }
+
+    /**
      * Filter legacy Course by UI selections (and pull dependencies).
      *
      * @param array<string,array> $selected [type => [id => true]]
@@ -1808,6 +1905,8 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
                     $out['Forum_Category'] = $forumCat;
                 }
 
+                $this->hydrateSelectedQuestionDependencies($orig, $out);
+
                 $out = array_filter($out);
                 $course->resources = !empty($__metaBuckets) ? ($__metaBuckets + $out) : $out;
 
@@ -1835,6 +1934,8 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
                 $keep[$legacyKey] = $this->intersectBucketByIds($bucket, $idsMap);
             }
         }
+
+        $this->hydrateSelectedQuestionDependencies($orig, $keep);
 
         // Gradebook
         $gbKey = $this->firstExistingKey($orig, ['gradebook', 'Gradebook', 'GradebookBackup', 'gradebookbackup']);
@@ -2043,7 +2144,7 @@ abstract class AbstractCourseMaintenanceController extends AbstractController
     /**
      * Filter course resources using a simplified selection structure (documents/links/forums).
      *
-     * @param array<string,array<string,bool>> $selected
+     * @param array<string, array<array-key, bool>> $selected
      */
     protected function filterCourseResources(object $course, array $selected): void
     {

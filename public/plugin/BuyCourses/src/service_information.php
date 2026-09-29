@@ -12,6 +12,7 @@ $serviceId = isset($_GET['service_id']) ? (int) $_GET['service_id'] : 0;
 $saleId = isset($_GET['sale_id']) ? (int) $_GET['sale_id'] : 0;
 $plugin = BuyCoursesPlugin::create();
 $includeServices = 'true' === $plugin->get('include_services');
+
 $currentUserId = api_get_user_id();
 
 $renderPageMessage = static function (string $title, string $message, int $statusCode = 200): void {
@@ -70,37 +71,77 @@ if ($saleId > 0) {
     }
 }
 
-$serviceDetailsHtml = '';
-if (!empty($service['service_information'])) {
-    $serviceDetailsHtml = (string) $service['service_information'];
-} elseif (!empty($service['description'])) {
-    $serviceDetailsHtml = (string) $service['description'];
+$isServiceActive = $plugin->isServiceActive($service);
+if (!$isServiceActive && !$isPurchasedContext && !api_is_platform_admin()) {
+    $renderPageMessage(
+        $plugin->get_lang('ServiceNotFound'),
+        $plugin->get_lang('ServiceInactiveForPurchase'),
+        404
+    );
 }
 
-$serviceImage = !empty($service['image'])
-    ? (string) $service['image']
-    : Template::get_icon_path('session_default.png');
+$purchaseUpsaleChainBlock = $isServiceActive && !$isPurchasedContext
+    ? $plugin->getCurrentUserServicePurchaseUpsaleChainBlock($serviceId)
+    : null;
+$upgradeOffer = $isServiceActive && !$isPurchasedContext && null === $purchaseUpsaleChainBlock
+    ? $plugin->getCurrentUserServiceUpgradeOffer($serviceId)
+    : null;
+$plugin->applyServiceUpgradeOfferToPricing($service, $upgradeOffer);
+$service['upgrade_offer'] = $upgradeOffer;
+$service['is_upgrade'] = null !== $upgradeOffer;
+
+$serviceDetailsHtml = '';
+if (!empty($service['service_information'])) {
+    $serviceDetailsHtml = $plugin->filterServiceMultilingualHtml((string) $service['service_information']);
+} elseif (!empty($service['description'])) {
+    $serviceDetailsHtml = $plugin->filterServiceMultilingualHtml((string) $service['description']);
+}
 
 $durationDays = (int) ($service['duration_days'] ?? 0);
 $durationLabel = $durationDays > 0
-    ? $durationDays.' '.($durationDays === 1 ? 'day' : 'days')
+    ? sprintf($plugin->get_lang('ServiceDurationXDays'), $durationDays)
     : get_lang('None');
 
 $serviceTypes = $plugin->getServiceTypes();
 $appliesToLabel = $serviceTypes[(int) ($service['applies_to'] ?? 0)] ?? '';
 
-$totalPriceFormatted = '';
-if (!empty($service['total_price_formatted'])) {
-    $totalPriceFormatted = (string) $service['total_price_formatted'];
-} elseif (isset($service['total_price'])) {
-    $totalPriceFormatted = (string) $service['total_price'];
+$basePriceFormatted = '';
+if (!empty($service['price_formatted'])) {
+    $basePriceFormatted = (string) $service['price_formatted'];
 } elseif (isset($service['price'])) {
-    $totalPriceFormatted = (string) $service['price'];
+    $basePriceFormatted = $plugin->getPriceWithCurrencyFromIsoCode(
+        (float) $service['price'],
+        (string) ($service['iso_code'] ?? '')
+    );
 }
 
+$priceDisplay = $basePriceFormatted;
+if ('' !== $basePriceFormatted && !empty($service['tax_enable'])) {
+    $priceDisplay = sprintf($plugin->get_lang('ServicePricePlusTax'), $basePriceFormatted);
+}
+
+$serviceDescriptionHtml = '';
 $serviceDescription = '';
 if (!empty($service['description'])) {
-    $serviceDescription = strip_tags((string) $service['description']);
+    $serviceDescriptionHtml = $plugin->filterServiceMultilingualHtml((string) $service['description']);
+    $serviceDescription = $plugin->filterServiceMultilingualPlainText((string) $service['description']);
+}
+
+$canCurrentUserBuyService = $plugin->canCurrentUserBuyService($service);
+$hasBlockingSale = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
+$canBuyService = $canCurrentUserBuyService
+    && !$hasBlockingSale
+    && null === $purchaseUpsaleChainBlock
+    && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
+$buyerRoleNotice = null;
+$purchaseBlockNotice = !$isServiceActive
+    ? $plugin->get_lang('ServiceInactiveForPurchase')
+    : (null !== $purchaseUpsaleChainBlock
+        ? $plugin->formatServicePurchaseUpsaleChainBlockMessage($purchaseUpsaleChainBlock)
+        : null);
+
+if ($isServiceActive && !$canCurrentUserBuyService && !$isPurchasedContext && !$hasBlockingSale) {
+    $buyerRoleNotice = $plugin->get_lang('ServicesOnlyForTeachers');
 }
 
 $pageUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId;
@@ -111,14 +152,21 @@ $backUrl = $isPurchasedContext
 $template = new Template($service['name'] ?? $plugin->get_lang('ServiceInformation'));
 $template->assign('service', $service);
 $template->assign('service_sale', $serviceSale);
-$template->assign('service_image', $serviceImage);
 $template->assign('service_details_html', $serviceDetailsHtml);
 $template->assign('service_description', $serviceDescription);
+$template->assign('service_description_html', $serviceDescriptionHtml);
 $template->assign('pageUrl', $pageUrl);
 $template->assign('duration_label', $durationLabel);
 $template->assign('applies_to_label', $appliesToLabel);
-$template->assign('total_price_formatted', $totalPriceFormatted);
+$template->assign('price_display', $priceDisplay);
 $template->assign('is_purchased_context', $isPurchasedContext);
+$template->assign('can_buy_service', $canBuyService);
+$template->assign('has_blocking_sale', $hasBlockingSale);
+$template->assign('purchase_blocked_by_active_upsale_chain', null !== $purchaseUpsaleChainBlock);
+$template->assign('purchase_block_notice', $purchaseBlockNotice);
+$template->assign('upgrade_offer', $upgradeOffer);
+$template->assign('is_upgrade', null !== $upgradeOffer);
+$template->assign('buyer_role_notice', $buyerRoleNotice);
 $template->assign('back_url', $backUrl);
 
 $content = $template->fetch('BuyCourses/view/service_information.tpl');

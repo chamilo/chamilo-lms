@@ -391,6 +391,9 @@ class ScheduledAnnouncement extends Model
                             $tags = [
                                 '((session_name))' => $sessionInfo['name'],
                                 '((session_start_date))' => $startTime,
+                                '((general_tutor))' => implode(' - ', $generalCoachName),
+                                '((general_tutor_email))' => implode(' - ', $generalCoachEmail),
+                                // Legacy aliases kept for existing scheduled announcements.
                                 '((general_coach))' => implode(' - ', $generalCoachName),
                                 '((general_coach_email))' => implode(' - ', $generalCoachEmail),
                                 '((session_end_date))' => $endTime,
@@ -413,13 +416,13 @@ class ScheduledAnnouncement extends Model
                             );
                         }
 
-                        $message = get_lang('You\'re receiving a copy because, you\'re a course coach').
+                        $message = get_lang('You\'re receiving a copy because you\'re a course tutor').
                             '<br /><br />'.$message;
 
                         foreach ($coachList as $courseCoachId) {
                             MessageManager::send_message_simple(
                                 $courseCoachId,
-                                get_lang('You\'re receiving a copy because, you\'re a course coach').'&nbsp;'.$subject,
+                                get_lang('You\'re receiving a copy because you\'re a course tutor').'&nbsp;'.$subject,
                                 $message,
                                 $coachId
                             );
@@ -442,8 +445,8 @@ class ScheduledAnnouncement extends Model
             '((session_name))',
             '((session_start_date))',
             '((session_end_date))',
-            '((general_coach))',
-            '((general_coach_email))',
+            '((general_tutor))',
+            '((general_tutor_email))',
             '((user_complete_name))',
             '((user_first_name))',
             '((user_last_name))',

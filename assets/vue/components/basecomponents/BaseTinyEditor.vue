@@ -22,6 +22,13 @@
         :for="editorId"
       >
         {{ title }}
+        <span
+          v-if="showRequiredMarker"
+          aria-hidden="true"
+          class="text-red-500"
+        >
+          *
+        </span>
       </label>
     </FloatLabel>
     <small
@@ -55,13 +62,16 @@ const isFocused = ref(false)
 const props = defineProps({
   editorId: { type: String, required: true },
   required: { type: Boolean, default: false },
-  title: { type: String, default: "" },
+  showRequiredMarker: { type: Boolean, default: false },
+  title: { type: String, default: "", required: true },
   editorConfig: { type: Object, default: () => ({}) },
   helpText: { type: String, default: "" },
   // If true: use Chamilo file manager; if false: use system file picker.
   useFileManager: { type: Boolean, default: false },
   // When true, includes TinyMCE "fullpage" plugin/button.
   fullPage: { type: Boolean, default: true },
+  // Keep translate_html enabled by default, but allow language-specific editors to opt out.
+  enableTranslateHtml: { type: Boolean, default: true },
 })
 
 /* Derived UI flags */
@@ -99,6 +109,16 @@ function resolveParentNodeId() {
 
   return routeNode || routeId || courseNodeId || userNodeId || 0
 }
+
+/**
+ * Personal-files image uploads must always target the authenticated user's
+ * personal resource root — never a course or route node. Parenting under a
+ * course triggers ResourceListener's "cannot add a file to another user" check.
+ */
+function resolvePersonalParentNodeId() {
+  return Number(securityStore.user?.resourceNode?.id || 0)
+}
+
 parentResourceNodeId.value = resolveParentNodeId()
 
 /* Language resolution */
@@ -141,6 +161,20 @@ const languageConfig = getLanguageConfig(appLocale.value)
 const base = (typeof window !== "undefined" ? window.CHAMILO_TINYMCE_BASE_CONFIG : {}) || {}
 
 const RESPONSIVE_IMAGE_CLASS = "ch-img-responsive"
+const TINYMCE_CONTENT_SPACING_RULE = [
+  "body.mce-content-body",
+  "{ padding: 8px 12px !important; box-sizing: border-box; }",
+  "body.mce-content-body > :first-child",
+  "{ margin-top: 0; }",
+].join(" ")
+
+const TINYMCE_FIREFOX_FOCUS_RULE = [
+  "html:focus,",
+  "html:focus-visible,",
+  "body.mce-content-body:focus,",
+  "body.mce-content-body:focus-visible",
+  "{ outline: none !important; box-shadow: none !important; }",
+].join(" ")
 const HOOK_GUARD_KEY = "__chamiloBaseTinyEditorHooksAttached"
 const EDITOR_IMAGE_ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "bmp"]
 
@@ -212,6 +246,12 @@ function ensureTinyContentStyles(contentStyleRaw) {
   }
   if (!out.includes(`img.${RESPONSIVE_IMAGE_CLASS}`)) {
     out += responsiveRule
+  }
+  if (!out.includes("body.mce-content-body") || !out.includes("padding: 8px 12px")) {
+    out += ` ${TINYMCE_CONTENT_SPACING_RULE}`
+  }
+  if (!out.includes("body.mce-content-body:focus")) {
+    out += ` ${TINYMCE_FIREFOX_FOCUS_RULE}`
   }
 
   return out
@@ -362,11 +402,19 @@ const editorFeatureFlags = computed(() => ({
   enabledSupportSvg: allowSvgInEditor.value,
 }))
 
+const translateHtmlEnabled = computed(() => {
+  return props.enableTranslateHtml && toBool(platformConfigStore.getSetting("editor.translate_html"))
+})
+
+const mathJaxEnabled = computed(() => {
+  return toBool(platformConfigStore.getSetting("editor.enabled_mathjax"))
+})
+
 const enableUploadImageInEditor = computed(() => {
   return (
     securityStore.isAuthenticated === true &&
     toBool(platformConfigStore.getSetting("editor.enable_uploadimage_editor")) &&
-    Number(parentResourceNodeId.value || 0) > 0
+    resolvePersonalParentNodeId() > 0
   )
 })
 
@@ -380,10 +428,13 @@ async function uploadEditorImage(blobInfo, progress) {
   }
 
   const filename = blobInfo?.filename?.() || `editor-image-${Date.now()}.png`
-  const nodeId = Number(parentResourceNodeId.value || 0)
+  // Always upload into the current user's personal space (/api/personal_files).
+  // Do not reuse resolveParentNodeId() here: that prefers course/route nodes and
+  // ResourceListener rejects PersonalFile parents outside the user's tree.
+  const nodeId = resolvePersonalParentNodeId()
 
   if (nodeId <= 0) {
-    throw new Error("A valid parent resource node is required.")
+    throw new Error("A valid personal resource node is required for image upload.")
   }
 
   const formData = new FormData()
@@ -486,7 +537,15 @@ function resolvePickedUrl(url) {
 }
 
 function removeToolbarItems(toolbar, removedItems) {
-  const blocked = new Set(removedItems.map((item) => String(item || "").trim().toLowerCase()).filter(Boolean))
+  const blocked = new Set(
+    removedItems
+      .map((item) =>
+        String(item || "")
+          .trim()
+          .toLowerCase(),
+      )
+      .filter(Boolean),
+  )
 
   const cleanupToolbar = (toolbarValue) =>
     String(toolbarValue || "")
@@ -506,6 +565,64 @@ function removeToolbarItems(toolbar, removedItems) {
   }
 
   return cleanupToolbar(toolbar)
+}
+
+function normalizeTinyPluginList(rawPlugins) {
+  const values = Array.isArray(rawPlugins) ? rawPlugins : [rawPlugins]
+
+  return values
+    .flatMap((value) => String(value || "").split(/\s+/))
+    .map((value) => value.trim())
+    .filter(Boolean)
+}
+
+function mergeTinyPlugins(rawPlugins, additionalPlugins) {
+  return Array.from(new Set([...normalizeTinyPluginList(rawPlugins), ...additionalPlugins])).join(" ")
+}
+
+function toolbarContainsItem(toolbar, item) {
+  const rows = Array.isArray(toolbar) ? toolbar : [toolbar]
+  const expected = String(item || "")
+    .trim()
+    .toLowerCase()
+
+  return rows.some((row) =>
+    String(row || "")
+      .split(/[|\s]+/)
+      .map((value) => value.trim().toLowerCase())
+      .filter(Boolean)
+      .includes(expected),
+  )
+}
+
+function appendToolbarItem(toolbar, item) {
+  if (toolbarContainsItem(toolbar, item)) {
+    return toolbar
+  }
+
+  if (Array.isArray(toolbar)) {
+    const rows = [...toolbar]
+
+    if (rows.length === 0) {
+      return [item]
+    }
+
+    const lastIndex = rows.length - 1
+    const currentRow = String(rows[lastIndex] || "").trim()
+    rows[lastIndex] = currentRow ? `${currentRow} | ${item}` : item
+
+    return rows
+  }
+
+  const currentToolbar = String(toolbar || "").trim()
+
+  return currentToolbar ? `${currentToolbar} | ${item}` : item
+}
+
+function positiveContextId(value) {
+  const parsed = Number.parseInt(String(value ?? "0"), 10)
+
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : 0
 }
 
 const editorConfig = computed(() => {
@@ -548,7 +665,28 @@ const editorConfig = computed(() => {
         }),
   }
 
+  // Declared before the builder runs, not after: buildTinyMceConfig is what adds
+  // the toolbar button (TOOLBAR_POLICY = "base" discards any toolbar sent from
+  // here) and the extended_valid_elements entry that keeps data-latex alive.
+  if (mathJaxEnabled.value) {
+    local.plugins = mergeTinyPlugins(local.plugins, ["mathjax"])
+  }
+
   const built = builder ? builder(local) : local
+
+  if (translateHtmlEnabled.value) {
+    built.plugins = mergeTinyPlugins(built.plugins, ["translatehtml"])
+    built.toolbar = appendToolbarItem(built.toolbar, "translatehtml")
+    built.translatehtml_ai_endpoint = built.translatehtml_ai_endpoint || "/api/wysiwyg_translation"
+    built.translatehtml_context = {
+      ...(built.translatehtml_context && typeof built.translatehtml_context === "object"
+        ? built.translatehtml_context
+        : {}),
+      courseId: positiveContextId(course.value?.id || route.query?.cid),
+      sessionId: positiveContextId(route.query?.sid),
+      groupId: positiveContextId(route.query?.gid),
+    }
+  }
 
   if (removeToolbarButtons.length > 0) {
     built.toolbar = removeToolbarItems(built.toolbar, removeToolbarButtons)
@@ -670,11 +808,15 @@ function buildManagerUrl(meta) {
 
   try {
     const hasCourse = Boolean(course.value?.id)
+    // FileManagerList has My files + Documents tabs. Do not pass the course
+    // resource node as :node — that polluted personal_files listing (parent=course).
+    // Each tab resolves its own root (user vs course) inside useFileManager.
+    const personalNodeId = resolvePersonalParentNodeId()
     const resolved = router.resolve({
       name: "FileManagerList",
-      params: { node: Number(parentResourceNodeId.value || 0) },
+      params: personalNodeId > 0 ? { node: personalNodeId } : {},
       query: hasCourse
-        ? { cid: course.value.id, sid: 0, gid: 0, type, picker: "tinymce" }
+        ? { cid: course.value.id, sid: 0, gid: 0, type, picker: "tinymce", loadNode: 1 }
         : { loadNode: 1, type, picker: "tinymce" },
     })
     return resolved.href
@@ -786,3 +928,12 @@ onBeforeUnmount(() => {
   removeActiveMessageHandler()
 })
 </script>
+
+<style scoped>
+.html-editor-container :deep(.tox .tox-edit-area__iframe),
+.html-editor-container :deep(.tox .tox-edit-area__iframe:focus),
+.html-editor-container :deep(.tox .tox-edit-area__iframe:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+</style>

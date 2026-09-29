@@ -100,7 +100,7 @@ if ('true' === api_get_setting('allow_message_tool')) {
         'attach_1',
         sprintf(
             get_lang('Maximun file size: %s'),
-            format_file_size(api_get_setting('message_max_upload_filesize'))
+            \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize(api_get_setting('message_max_upload_filesize'))
         )
     );
     $form->addButtonSend(get_lang('Send message'));

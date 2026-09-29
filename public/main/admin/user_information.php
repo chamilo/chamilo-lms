@@ -120,7 +120,7 @@ if (api_is_platform_admin()) {
             ICON_SIZE_MEDIUM,
             get_lang('Edit')
         ),
-        api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId
+        api_get_path(WEB_PATH).'admin/user-edit/'.$userId
     );
 
     $actions[] = Display::url(
@@ -194,7 +194,7 @@ $data = [
     get_lang('Phone') => $user->getPhone(),
     get_lang('Course code') => $user->getOfficialCode(),
     //get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
-    get_lang('Status') => 1 === $user->getStatus() ? get_lang('Trainer') : get_lang('Learner'),
+    get_lang('Status') => api_get_status_langvars()[$user->getStatus()] ?? get_lang('Learner'),
 ];
 
 $params = [];
@@ -350,7 +350,7 @@ if (count($sessions) > 0) {
                     $status = get_lang('Learner');
                     break;
                 case 2:
-                    $status = get_lang('Course coach');
+                    $status = get_lang('Course tutor');
                     break;
             }
 

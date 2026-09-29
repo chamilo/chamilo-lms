@@ -120,7 +120,7 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
         $eval->set_visible(1);
         $eval->add();
 
-        $evaluation = $em->find('ChamiloCoreBundle:GradebookEvaluation', $eval->get_id());
+        $evaluation = $em->find('Chamilo\CoreBundle\Entity\GradebookEvaluation', $eval->get_id());
 
         $lineItem = new LineItem();
         $lineItem

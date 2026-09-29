@@ -13,9 +13,9 @@ use const PHP_SESSION_ACTIVE;
 
 final class AiHelper
 {
-    public const SESSION_CURRENT_EXERCISES = 'current_exercises';
-    public const SESSION_IS_IN_A_TEST = 'is_in_a_test';
-    public const SESSION_IN_TEST_LP = 'ai_in_test_lp';
+    public const string SESSION_CURRENT_EXERCISES = 'current_exercises';
+    public const string SESSION_IS_IN_A_TEST = 'is_in_a_test';
+    public const string SESSION_IN_TEST_LP = 'ai_in_test_lp';
 
     public function __construct(
         private readonly RequestStack $requestStack

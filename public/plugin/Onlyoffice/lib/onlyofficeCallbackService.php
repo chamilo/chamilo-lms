@@ -19,6 +19,7 @@ use Onlyoffice\DocsIntegrationSdk\Service\Callback\CallbackService;
 class OnlyofficeCallbackService extends CallbackService
 {
     private $docData;
+    private $trackResult;
 
     public function __construct($settingsManager, $jwtManager, $docData = [])
     {
@@ -132,13 +133,14 @@ class OnlyofficeCallbackService extends CallbackService
     public function getPermissionsByDocInfo(array $docInfo)
     {
         $isAllowToEdit = api_is_allowed_to_edit(true, true);
-        $isMyDir = DocumentManager::is_my_shared_folder($this->docData['userId'], $docInfo['absolute_parent_path'], $this->docData['sessionId']);
+        $isMyDir = false;
 
         $isGroupAccess = false;
-        if (!empty($groupId)) {
+        $groupId = (int) ($this->docData['groupId'] ?? 0);
+        if ($groupId > 0) {
             $courseInfo = api_get_course_info($this->docData['courseCode']);
             Session::write('_real_cid', $courseInfo['real_id']);
-            $groupProperties = GroupManager::get_group_properties($this->docData['groupId']);
+            $groupProperties = GroupManager::get_group_properties($groupId);
             $docInfoGroup = api_get_item_property_info($courseInfo['real_id'], 'document', $docInfo['id'], $this->docData['sessionId']);
             $isGroupAccess = GroupManager::allowUploadEditDocument($this->docData['userId'], $this->docData['courseCode'], $groupProperties, $docInfoGroup);
         }

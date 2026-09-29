@@ -66,7 +66,7 @@ $course_id = api_get_course_int_id();
 /* SHOWING THE ADMIN TOOLS	*/
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
+        'url' => api_get_path(WEB_PATH).'gradebook/redirect?view=overview&'.api_get_cidreq(),
         'name' => get_lang('Assessments'),
     ];
 }

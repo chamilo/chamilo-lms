@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
@@ -18,6 +19,7 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\CourseUserSubscriptionCheckEvent;
 use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\SessionDeletedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -1268,6 +1270,8 @@ class SessionManager
         $table_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
         $course = api_get_course_info_by_id($courseId);
+        $courseEntity = api_get_course_entity((int) $course['real_id']);
+        $wikiNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
         $where = " WHERE c_id = '%s' AND s.status = ".Session::STUDENT;
 
         $limit = null;
@@ -1418,6 +1422,19 @@ class SessionManager
             $getAllSessions
         );
 
+        $wikiQuery = [
+            'cid' => (int) $course['real_id'],
+            'report' => 'statistics',
+        ];
+        if ($sessionId > 0) {
+            $wikiQuery['sid'] = $sessionId;
+        }
+        $linkWiki = '%s';
+        if ($wikiNodeId > 0) {
+            $linkWiki = '<a href="'.api_get_path(WEB_PATH).'resources/wiki/'.$wikiNodeId.'/reports?'.
+                http_build_query($wikiQuery).'"> %s </a>';
+        }
+
         //process table info
         foreach ($users as $user) {
             //Course description
@@ -1533,11 +1550,20 @@ class SessionManager
             // Overall Total
             $overall_total = ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
 
-            $link = '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$user[0].'&details=true&course='.$course['code'].'&sid='.$sessionId.'"> %s </a>';
+            $link = '<a href="'.api_get_path(WEB_PATH).'reporting/learners/'.(int) $user[0].'/courses/'.(int) $course['real_id'].'?'.http_build_query([
+                'sid' => (int) $sessionId,
+            ]).'"> %s </a>';
             $linkForum = '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
             $linkWork = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
-            $linkWiki = '<a href="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?cid='.$course['real_id'].'&sid='.$sessionId.'&action=statistics"> %s </a>';
-            $linkSurvey = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
+            // The survey tool lives at /resources/survey/{courseResourceNodeId}/; the legacy
+            // list it used to point at links on to survey/reporting.php, which now denies
+            // access. Without a resource node there is nothing to link to, so plain text.
+            $surveyNodeId = (int) (api_get_course_entity((int) $course['real_id'])?->getResourceNode()?->getId() ?? 0);
+            $linkSurvey = $surveyNodeId > 0
+                ? '<a href="'.api_get_path(WEB_PATH).'resources/survey/'.$surveyNodeId.'/?'.http_build_query(
+                    ['cid' => (int) $course['real_id'], 'sid' => (int) $sessionId, 'gid' => 0]
+                ).'"> %s </a>'
+                : ' %s ';
 
             $table[] = [
                 'lastname' => $user[1],
@@ -2064,6 +2090,11 @@ class SessionManager
             }
         }
 
+        Container::getEventDispatcher()->dispatch(
+            new SessionDeletedEvent(['session' => $sessionEntity], AbstractEvent::TYPE_PRE),
+            Events::SESSION_DELETED
+        );
+
         // Delete Picture Session
         SessionManager::deleteAsset($sessionId);
 
@@ -2150,11 +2181,11 @@ class SessionManager
      * @author Carlos Vargas from existing code
      * @author Julio Montoya. Cleaning code.
      *
-     * @param int   $sessionId
-     * @param array $userList
-     * @param int   $session_visibility
-     * @param bool  $empty_users
-     * @param bool  $registerUsersToAllCourses
+     * @param int      $sessionId
+     * @param array    $userList
+     * @param int|null $session_visibility null falls back to the session's own visibility
+     * @param bool     $empty_users
+     * @param bool     $registerUsersToAllCourses
      *
      * @return bool
      */
@@ -2230,10 +2261,23 @@ class SessionManager
                     false,
                     false
                 );
-                $layoutSubject = $tplSubject->get_template(
-                    'mail/subject_subscription_to_session_confirmation.tpl'
+                $subject = '';
+                $mailTemplateManagerSubject = new MailTemplateManager();
+                $subjectTemplateText = $mailTemplateManagerSubject->getTemplateByType(
+                    'subject_subscription_to_session_confirmation.html.twig'
                 );
-                $subject = $tplSubject->fetch($layoutSubject);
+                if (!empty($subjectTemplateText)) {
+                    // Stored mail templates are admin-edited and therefore untrusted: render
+                    // them through a sandboxed Twig environment instead of compiling the raw
+                    // string with the full application Twig (which would allow SSTI → RCE).
+                    $subject = MailTemplateManager::renderSandboxedTemplate($subjectTemplateText, $tplSubject->params);
+                }
+                if (empty($subject)) {
+                    $layoutSubject = $tplSubject->get_template(
+                        'mail/subject_subscription_to_session_confirmation.tpl'
+                    );
+                    $subject = $tplSubject->fetch($layoutSubject);
+                }
 
                 $user_info = api_get_user_info($user_id);
 
@@ -2264,10 +2308,23 @@ class SessionManager
                 $tplContent->assign('lost_password_url', $lostPasswordUrl);
                 $tplContent->assign('lost_password_link_label', get_lang('Recover your password'));
 
-                $layoutContent = $tplContent->get_template(
-                    'mail/content_subscription_to_session_confirmation.tpl'
+                $content = '';
+                $mailTemplateManager = new MailTemplateManager();
+                $templateText = $mailTemplateManager->getTemplateByType(
+                    'content_subscription_to_session_confirmation.html.twig'
                 );
-                $content = $tplContent->fetch($layoutContent);
+                if (!empty($templateText)) {
+                    // Stored mail templates are admin-edited and therefore untrusted: render
+                    // them through a sandboxed Twig environment instead of compiling the raw
+                    // string with the full application Twig (which would allow SSTI → RCE).
+                    $content = MailTemplateManager::renderSandboxedTemplate($templateText, $tplContent->params);
+                }
+                if (empty($content)) {
+                    $layoutContent = $tplContent->get_template(
+                        'mail/content_subscription_to_session_confirmation.tpl'
+                    );
+                    $content = $tplContent->fetch($layoutContent);
+                }
 
                 // Send email.
                 api_mail_html(
@@ -2376,8 +2433,8 @@ class SessionManager
             if (false === $isUserSubscribed) {
                 $enreg_user = (int) $enreg_user;
                 if ($session->getDuration() > 0) {
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
-                        VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."')";
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, duration, registered_at)
+                        VALUES (".Session::STUDENT.", $sessionId, $enreg_user, 0, '".api_get_utc_datetime()."')";
                 } else {
                     if (null != ($accessStartDate = $session->getAccessStartDate())) {
                         $accessStartDate = "'".$accessStartDate->format('Y-m-d H:i:s')."'";
@@ -2389,8 +2446,8 @@ class SessionManager
                     } else {
                         $accessEndDate = "NULL";
                     }
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at, access_start_date, access_end_date)
-                            VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."', ".$accessStartDate.", ".$accessEndDate.")";
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, duration, registered_at, access_start_date, access_end_date)
+                            VALUES (".Session::STUDENT.", $sessionId, $enreg_user, 0, '".api_get_utc_datetime()."', ".$accessStartDate.", ".$accessEndDate.")";
                 }
                 Database::query($sql);
                 Event::addEvent(
@@ -3981,8 +4038,12 @@ class SessionManager
             return 0;
         }
 
-        $userId = $userInfo['user_id'];
-        $user = api_get_user_entity();
+        $userId = (int) $userInfo['user_id'];
+        $user = api_get_user_entity($userId);
+
+        if (null === $user) {
+            return 0;
+        }
 
         // Only subscribe DRH users.
         $rolesAllowed = [
@@ -3992,7 +4053,8 @@ class SessionManager
             COURSE_TUTOR,
         ];
         $isAdmin = api_is_platform_admin_by_id($userInfo['user_id']);
-        if (!$isAdmin && !in_array($userInfo['status'], $rolesAllowed)) {
+        $currentUserCanAssignFromDashboard = api_is_platform_admin();
+        if (!$isAdmin && !$currentUserCanAssignFromDashboard && !in_array($userInfo['status'], $rolesAllowed)) {
             return 0;
         }
 
@@ -5369,8 +5431,8 @@ class SessionManager
 
             $displayAccessStartDate = $enreg['DisplayStartDate'] ?? $enreg['DateStart'];
             $displayAccessEndDate = $enreg['DisplayEndDate'] ?? $enreg['DateEnd'];
-            $coachAccessStartDate = $enreg['CoachStartDate'] ?? $enreg['DateStart'];
-            $coachAccessEndDate = $enreg['CoachEndDate'] ?? $enreg['DateEnd'];
+            $coachAccessStartDate = $enreg['TutorStartDate'] ?? $enreg['CoachStartDate'] ?? $enreg['DateStart'];
+            $coachAccessEndDate = $enreg['TutorEndDate'] ?? $enreg['CoachEndDate'] ?? $enreg['DateEnd'];
             $dateStart = date('Y-m-d H:i:s', strtotime(trim($enreg['DateStart'])));
             $displayAccessStartDate = date('Y-m-d H:i:s', strtotime(trim($displayAccessStartDate)));
             $coachAccessStartDate = date('Y-m-d H:i:s', strtotime(trim($coachAccessStartDate)));
@@ -5418,11 +5480,12 @@ class SessionManager
                 $extraParams['session_category_id'] = $session_category_id;
             }
 
-            // Searching a general coach.
-            if (!empty($enreg['Coach'])) {
-                $coach_id = UserManager::get_user_id_from_username($enreg['Coach']);
+            // Searching a general tutor.
+            $tutorUsername = $enreg['Tutor'] ?? $enreg['Coach'] ?? '';
+            if (!empty($tutorUsername)) {
+                $coach_id = UserManager::get_user_id_from_username($tutorUsername);
                 if (false === $coach_id) {
-                    // If the coach-user does not exist - I'm the coach.
+                    // If the tutor user does not exist, use the default user.
                     $coach_id = $defaultUserId;
                 }
             } else {
@@ -5440,7 +5503,7 @@ class SessionManager
             $deleteOnlyCourseCoaches = false;
             if (1 == count($courses)) {
                 if ($logger) {
-                    $logger->debug('Only one course delete old coach list');
+                    $logger->debug('Only one course: delete the old tutor list');
                 }
                 $deleteOnlyCourseCoaches = true;
             }
@@ -5906,7 +5969,7 @@ class SessionManager
                                     );
 
                                     if ($debug) {
-                                        $logger->debug("Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                        $logger->debug("Adding course tutor: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                     }
                                     $savedCoaches[] = $coach_id;
                                 } else {
@@ -5995,7 +6058,7 @@ class SessionManager
                                 );
 
                                 if ($debug) {
-                                    $logger->debug("Add coach #$teacherToAdd to course $courseId and session $session_id");
+                                    $logger->debug("Add tutor #$teacherToAdd to course $courseId and session $session_id");
                                 }
 
                                 $userCourseCategory = '';
@@ -6187,7 +6250,7 @@ class SessionManager
                                         );
 
                                         if ($debug) {
-                                            $logger->debug("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                            $logger->debug("Sessions - Adding course tutor: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                         }
                                         $savedCoaches[] = $coach_id;
                                     } else {
@@ -6369,7 +6432,8 @@ class SessionManager
         if (isset($root->Session)) {
             foreach ($root->Session as $nodeSession) {
                 $sessionName = trim(api_utf8_decode($nodeSession->SessionName));
-                $coachUsername = trim(api_utf8_decode($nodeSession->Coach));
+                $tutorNode = isset($nodeSession->Tutor) ? $nodeSession->Tutor : $nodeSession->Coach;
+                $coachUsername = trim(api_utf8_decode((string) $tutorNode));
                 $coachId = UserManager::get_user_id_from_username($coachUsername) ?: $defaultUserId;
                 $dateStart = api_utf8_decode($nodeSession->DateStart);
                 $dateEnd = api_utf8_decode($nodeSession->DateEnd);
@@ -6476,7 +6540,8 @@ class SessionManager
                             'nbr_users' => 0,
                             'position' => 0,
                         ]);
-                        $courseCoachUsernames = explode(',', $nodeCourse->Coach);
+                        $tutorNode = isset($nodeCourse->Tutor) ? $nodeCourse->Tutor : $nodeCourse->Coach;
+                        $courseCoachUsernames = explode(',', (string) $tutorNode);
                         foreach ($courseCoachUsernames as $coachUname) {
                             $coachId = UserManager::get_user_id_from_username(trim($coachUname));
                             if ($coachId) {
@@ -6828,8 +6893,8 @@ class SessionManager
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND (
             u.last_login IS NULL OR
-            u.last_login = '0000-00-00 00:00:00' OR
-            u.last_login = '0000-00-00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00 00:00:00' OR
+            CAST(u.last_login AS CHAR(20)) = '0000-00-00' OR
             u.last_login <= '$lastConnectionDate'
         ) ";
         }
@@ -6988,7 +7053,7 @@ class SessionManager
                             $messages[] = Display::return_message(
                                 sprintf(
                                     get_lang(
-                                        'AddingStudentsFromSessionXToSessionY'
+                                        'Adding students from session %s to session %s'
                                     ),
                                     $sessionInfo['title'],
                                     $sessionDestinationInfo['title']
@@ -7033,7 +7098,7 @@ class SessionManager
     }
 
     /**
-     * Assign coaches of a session(s) as teachers to a given course (or courses).
+     * Assign tutors of a session(s) as teachers to a given course (or courses).
      *
      * @param array A list of session IDs
      * @param array A list of course IDs
@@ -7072,7 +7137,7 @@ class SessionManager
             foreach ($result as $courseCode => $data) {
                 $url = api_get_course_url($courseCode);
                 $htmlResult .= sprintf(
-                    get_lang('Coaches subscribed as teachers in course %s'),
+                    get_lang('Tutors subscribed as teachers in course %s'),
                     Display::url($courseCode, $url, ['target' => '_blank'])
                 );
                 foreach ($data as $sessionId => $coachList) {
@@ -8514,7 +8579,7 @@ class SessionManager
         if (!api_is_platform_admin() && api_is_teacher()) {
             $form->addSelectFromCollection(
                 'coach_username',
-                [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
+                [get_lang('Tutor name'), get_lang('Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors.')],
                 [api_get_user_entity()],
                 [
                     'id' => 'coach_username',
@@ -8564,7 +8629,7 @@ class SessionManager
 
                 $form->addSelect(
                     'coach_username',
-                    [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
+                    [get_lang('Tutor name'), get_lang('Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors.')],
                     $coachesOptions,
                     [
                         'id' => 'coach_username',
@@ -8583,7 +8648,7 @@ class SessionManager
 
                 $form->addSelectAjax(
                     'coach_username',
-                    [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
+                    [get_lang('Tutor name'), get_lang('Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors.')],
                     $coaches,
                     [
                         'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_general_coach',
@@ -8740,8 +8805,8 @@ class SessionManager
         $form->addDateTimePicker(
             'coach_access_start_date',
             [
-                get_lang('Access start date for coaches'),
-                get_lang('Date on which the session is made available to coaches, so they can prepare it before the students get connected'),
+                get_lang('Access start date for tutors'),
+                get_lang('Date on which the session is made available to tutors, so they can prepare it before the students get connected'),
             ],
             ['id' => 'coach_access_start_date']
         );
@@ -8749,8 +8814,8 @@ class SessionManager
         $form->addDateTimePicker(
             'coach_access_end_date',
             [
-                get_lang('Access end date for coaches'),
-                get_lang('Date on which the session is closed to coaches. The additional delay will allow them to export all relevant tracking information'),
+                get_lang('Access end date for tutors'),
+                get_lang('Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information'),
             ],
             ['id' => 'coach_access_end_date']
         );
@@ -9026,10 +9091,10 @@ class SessionManager
         $query_rows = "SELECT count(*) as total_rows, c.title as course_title, s.title,
                         IF (
                             (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
-                            (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
+                            (CAST(s.access_start_date AS CHAR(20)) = '0000-00-00 00:00:00' AND CAST(s.access_end_date AS CHAR(20)) = '0000-00-00 00:00:00' ) OR
                             (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
-                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
-                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
+                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = CAST(s.access_end_date AS CHAR(20)) OR s.access_end_date IS NULL )) OR
+                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = CAST(s.access_start_date AS CHAR(20)) OR s.access_start_date IS NULL) )
                         , 1, 0) as session_active
                        FROM $extraFieldTables $tbl_session s
                        LEFT JOIN  $tbl_session_category sc
@@ -9328,7 +9393,7 @@ class SessionManager
                     get_lang('Title'),
                     get_lang('Start date to display'),
                     get_lang('End date to display'),
-                    get_lang('Coach'),
+                    get_lang('Tutor'),
                     get_lang('Status'),
                     get_lang('Visibility'),
                     get_lang('Course title'),
@@ -9689,10 +9754,10 @@ class SessionManager
                     SELECT DISTINCT
                         IF (
                             (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
-                            (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
+                            (CAST(s.access_start_date AS CHAR(20)) = '0000-00-00 00:00:00' AND CAST(s.access_end_date AS CHAR(20)) = '0000-00-00 00:00:00' ) OR
                             (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
-                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
-                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
+                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = CAST(s.access_end_date AS CHAR(20)) OR s.access_end_date IS NULL )) OR
+                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = CAST(s.access_start_date AS CHAR(20)) OR s.access_start_date IS NULL) )
                         , 1, 0) as session_active,
                 s.title,
                 s.nbr_courses,
@@ -10218,11 +10283,11 @@ class SessionManager
         return Database::getManager()
             ->createQuery("
                 SELECT COUNT(scu)
-                FROM ChamiloCoreBundle:SessionRelCourseRelUser scu
-                INNER JOIN ChamiloCoreBundle:SessionRelUser su
+                FROM ".SessionRelCourseRelUser::class." scu
+                INNER JOIN ".SessionRelUser::class." su
                     WITH scu.user = su.user
                     AND scu.session = su.session
-                INNER JOIN ChamiloCoreBundle:AccessUrlRelUser a
+                INNER JOIN ".AccessUrlRelUser::class." a
                     WITH a.user = su.user
                 WHERE
                     scu.course = :course AND

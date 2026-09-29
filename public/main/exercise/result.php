@@ -16,7 +16,11 @@ $current_course_tool = TOOL_QUIZ;
 $id = isset($_REQUEST['id']) ? (int) $_GET['id'] : 0; // exe id
 $show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers'] : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$requestedLearnpathId = (int) ($_REQUEST['learnpath_id'] ?? $_REQUEST['lp_id'] ?? 0);
 $origin = api_get_origin();
+if (empty($origin) && $requestedLearnpathId > 0) {
+    $origin = 'learnpath';
+}
 $is_courseTutor = api_is_course_tutor();
 
 if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
@@ -176,11 +180,20 @@ switch ($action) {
 $lpId = (int) $track_exercise_info['orig_lp_id'];
 $lpItemId = (int) $track_exercise_info['orig_lp_item_id'];
 $lpViewId = (int) $track_exercise_info['orig_lp_item_view_id'];
+if (empty($origin) && $lpId > 0) {
+    $origin = 'learnpath';
+    $show_headers = false;
+}
 $pageBottom = '<div class="question-return mb-4">';
 $pageBottom .= Display::url(
     get_lang('Back to the attempt list'),
-    api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq().
-    "&learnpath_id=$lpId&learnpath_item_id=$lpItemId&learnpath_item_view_id=$lpViewId",
+    api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
+        'exerciseId' => $exercise_id,
+        'learnpath_id' => $lpId,
+        'learnpath_item_id' => $lpItemId,
+        'learnpath_item_view_id' => $lpViewId,
+        'origin' => $origin,
+    ]),
     ['class' => 'btn btn--primary']
 );
 $pageBottom .= '</div>';
@@ -194,4 +207,8 @@ $template->assign('allow_signature', $allowSignature);
 $template->assign('exe_id', $id);
 $layout = $template->fetch($template->get_template('exercise/result.tpl'));
 $template->assign('content', $layout);
-$template->display_one_col_template();
+if (in_array($origin, ['learnpath', 'embeddable'], true)) {
+    $template->display_blank_template();
+} else {
+    $template->display_one_col_template();
+}

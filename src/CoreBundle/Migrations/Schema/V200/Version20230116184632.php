@@ -29,6 +29,10 @@ final class Version20230116184632 extends AbstractMigrationChamilo
         $cQuizQuestionTable = $schema->getTable('c_quiz_question');
         $cQuizQuestionCategoryTable = $schema->getTable('c_quiz_question_category');
 
+        $this->addSql(
+            'ALTER TABLE c_quiz_question_rel_category CHANGE question_id question_id INT NOT NULL, CHANGE category_id category_id INT NOT NULL'
+        );
+
         $fks = $table->getForeignKeys();
 
         if (!empty($fks)) {

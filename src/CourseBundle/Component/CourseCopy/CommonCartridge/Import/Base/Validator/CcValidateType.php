@@ -14,28 +14,28 @@ use const LIBXML_NONET;
 class CcValidateType
 {
     // v1.0
-    public const MANIFEST_VALIDATOR1 = 'cclibxml2validator.xsd';
-    public const ASSESSMENT_VALIDATOR1 = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
+    public const string MANIFEST_VALIDATOR1 = 'cclibxml2validator.xsd';
+    public const string ASSESSMENT_VALIDATOR1 = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
     // Kept for backwards compatibility (original typo).
-    public const ASSESMENT_VALIDATOR1 = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
-    public const DISCUSSION_VALIDATOR1 = '/domainProfile_6/imsdt_v1p0_localised.xsd';
-    public const WEBLINK_VALIDATOR1 = '/domainProfile_5/imswl_v1p0_localised.xsd';
+    public const string ASSESMENT_VALIDATOR1 = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
+    public const string DISCUSSION_VALIDATOR1 = '/domainProfile_6/imsdt_v1p0_localised.xsd';
+    public const string WEBLINK_VALIDATOR1 = '/domainProfile_5/imswl_v1p0_localised.xsd';
 
     // v1.1
-    public const MANIFEST_VALIDATOR11 = 'cc11libxml2validator.xsd';
-    public const BLTI_VALIDATOR11 = 'imslticc_v1p0p1.xsd';
-    public const ASSESSMENT_VALIDATOR11 = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd';
-    public const ASSESMENT_VALIDATOR11 = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd'; // BC
-    public const DISCUSSION_VALIDATOR11 = 'ccv1p1_imsdt_v1p1.xsd';
-    public const WEBLINK_VALIDATOR11 = 'ccv1p1_imswl_v1p1.xsd';
+    public const string MANIFEST_VALIDATOR11 = 'cc11libxml2validator.xsd';
+    public const string BLTI_VALIDATOR11 = 'imslticc_v1p0p1.xsd';
+    public const string ASSESSMENT_VALIDATOR11 = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd';
+    public const string ASSESMENT_VALIDATOR11 = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd'; // BC
+    public const string DISCUSSION_VALIDATOR11 = 'ccv1p1_imsdt_v1p1.xsd';
+    public const string WEBLINK_VALIDATOR11 = 'ccv1p1_imswl_v1p1.xsd';
 
     // v1.3
-    public const MANIFEST_VALIDATOR13 = 'cc13libxml2validator.xsd';
-    public const BLTI_VALIDATOR13 = 'imslticc_v1p3.xsd';
-    public const ASSESSMENT_VALIDATOR13 = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd';
-    public const ASSESMENT_VALIDATOR13 = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd'; // BC
-    public const DISCUSSION_VALIDATOR13 = 'ccv1p3_imsdt_v1p3.xsd';
-    public const WEBLINK_VALIDATOR13 = 'ccv1p3_imswl_v1p3.xsd';
+    public const string MANIFEST_VALIDATOR13 = 'cc13libxml2validator.xsd';
+    public const string BLTI_VALIDATOR13 = 'imslticc_v1p3.xsd';
+    public const string ASSESSMENT_VALIDATOR13 = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd';
+    public const string ASSESMENT_VALIDATOR13 = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd'; // BC
+    public const string DISCUSSION_VALIDATOR13 = 'ccv1p3_imsdt_v1p3.xsd';
+    public const string WEBLINK_VALIDATOR13 = 'ccv1p3_imswl_v1p3.xsd';
 
     /**
      * @var string|null Validator type (XSD file name).

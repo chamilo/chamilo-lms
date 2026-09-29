@@ -16,12 +16,10 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-
 /**
  * Extension is called when loading api/personal_files.json.
  */
-final class PersonalFileExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
+final class PersonalFileExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly Security $security,
@@ -61,7 +59,7 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
         }
 
         $request = $this->requestStack->getCurrentRequest();
-        $isShared = 1 === (int) $request->get('shared');
+        $isShared = 1 === (int) $request->query->get('shared');
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder
@@ -81,7 +79,7 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
                 ->setParameter('userLink', $user->getId())
             ;
         } else {
-            $queryBuilder->orWhere('node.creator = :current');
+            $queryBuilder->andWhere('node.creator = :current');
             $queryBuilder->setParameter('current', $user->getId());
         }
     }

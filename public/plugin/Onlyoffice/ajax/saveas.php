@@ -44,6 +44,7 @@ if (!is_array($body)) {
 $title = trim((string) ($body['title'] ?? ''));
 $templateUrl = trim((string) ($body['url'] ?? ''));
 $folderId = isset($body['folderId']) ? (int) $body['folderId'] : 0;
+$parentResourceNodeId = isset($body['parentResourceNodeId']) ? (int) $body['parentResourceNodeId'] : 0;
 
 if ('' === $title || mb_strlen($title) > 255) {
     sendOnlyofficeSaveAsResponse(['error' => 'Invalid title'], 400);
@@ -63,32 +64,7 @@ if (empty($courseInfo)) {
     sendOnlyofficeSaveAsResponse(['error' => 'Course context not found'], 403);
 }
 
-$courseCode = $courseInfo['code'];
-
-$isMyDir = false;
-if ($folderId > 0) {
-    $folderInfo = DocumentManager::get_document_data_by_id(
-        $folderId,
-        $courseCode,
-        true,
-        $sessionId
-    );
-
-    if (empty($folderInfo)) {
-        sendOnlyofficeSaveAsResponse(['error' => 'Folder not found'], 404);
-    }
-
-    $isMyDir = DocumentManager::is_my_shared_folder(
-        $userId,
-        $folderInfo['absolute_path'],
-        $sessionId
-    );
-}
-
-$groupRights = Session::read('group_member_with_upload_rights');
-$isAllowToEdit = api_is_allowed_to_edit(true, true);
-
-if (!($isAllowToEdit || $isMyDir || $groupRights)) {
+if (!api_is_allowed_to_edit(true, true)) {
     sendOnlyofficeSaveAsResponse(['error' => 'Not permitted'], 403);
 }
 
@@ -111,7 +87,8 @@ $result = OnlyofficeDocumentManager::createFile(
     $sessionId,
     $courseId,
     $groupId,
-    $templateUrl
+    $templateUrl,
+    $parentResourceNodeId
 );
 
 if (isset($result['error'])) {

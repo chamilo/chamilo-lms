@@ -3,19 +3,48 @@
 This directory is being used for all kinds of tests and scripts and is removed from
 public releases as it may represent a risk for production systems.
 
-## Behat
+## Playwright
 
-Make sure you set the right base_url in behat/behat.yml, then run (on the command
-line, from the tests/ directory):
+Browser-driven tests live in `playwright/`. They use
+[playwright-bdd](https://vitalets.github.io/playwright-bdd/), so the scenarios stay
+plain Gherkin (`playwright/features/*.feature`) and only the step definitions are
+TypeScript (`playwright/steps/common.steps.ts`). The base URL and browser options are
+in `playwright/playwright.config.ts`.
+
+Before the first run, create the fixtures most scenarios assume exist, in this order:
 ```
-../vendor/behat/behat/bin/behat behat/features/login.feature
-../vendor/behat/behat/bin/behat behat/features/createUser.feature
-../vendor/behat/behat/bin/behat behat/features/createCourse.feature
-../vendor/behat/behat/bin/behat behat/features/courseTools.feature
-../vendor/behat/behat/bin/behat behat/features/forum.feature
-../vendor/behat/behat/bin/behat behat/features/socialGroup.feature
-../vendor/behat/behat/bin/behat behat/features/accessCompanyReports.feature
+yarn test:playwright:seed                 # the fixed test users
+yarn test:playwright:seed-course          # the TEMP course
+yarn test:playwright:seed-private-course  # the TEMPPRIVATE course
+yarn test:playwright:seed-settings        # settings some scenarios need enabled
 ```
+
+Then run the suite (the seeds and the installer scenario are excluded from it):
+```
+yarn test:playwright                                              # everything
+yarn test:playwright tests/playwright/features/toolForum.feature  # a single file
+yarn test:playwright:ui                                           # interactive runner
+```
+
+`yarn test:playwright:install` covers the web installer itself. It recreates the
+database, so it is CI-only — never run it against an installation you care about.
+
+After editing a `.feature` file or anything under `playwright/steps/`, regenerate the
+compiled specs before trusting a run:
+```
+node_modules/.bin/bddgen --config=tests/playwright/playwright.config.ts
+```
+
+The old Behat suite has been removed. Its scenarios remain in git history and are worth
+consulting when adding coverage for an area it once tested:
+
+```
+git ls-tree -r --name-only 98c77757ea6 tests/behat        # the 84 files it had
+git show 98c77757ea6:tests/behat/features/<name>.feature  # read one
+```
+
+Treat those as a hint of which flows were considered worth testing — never as a source of
+truth for selectors, which have rotted since. Verify against the live app.
 
 ## PHPUnit
 

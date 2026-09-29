@@ -10,8 +10,8 @@ use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiSearchMediaTextProviderInterface;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use DateTimeImmutable;
 use Symfony\Component\Process\Process;
@@ -24,17 +24,17 @@ use const PATHINFO_EXTENSION;
 
 final class DocumentRawTextExtractor
 {
-    private const MAX_ARCHIVE_BYTES = 30_000_000; // 30MB safety limit for zip-based docs
+    private const int MAX_ARCHIVE_BYTES = 30_000_000; // 30MB safety limit for zip-based docs
 
-    private const MAX_AI_MEDIA_BYTES = 25_000_000; // 25MB safety limit before sending media to AI
+    private const int MAX_AI_MEDIA_BYTES = 25_000_000; // 25MB safety limit before sending media to AI
 
-    private const AI_METADATA_KEY_TEXT = 'xapian_ai_extracted_text';
+    private const string AI_METADATA_KEY_TEXT = 'xapian_ai_extracted_text';
 
-    private const AI_METADATA_KEY_SIGNATURE = 'xapian_ai_extracted_signature';
+    private const string AI_METADATA_KEY_SIGNATURE = 'xapian_ai_extracted_signature';
 
-    private const GENERIC_EXTENSIONS = ['bin', 'tmp', 'dat'];
+    private const array GENERIC_EXTENSIONS = ['bin', 'tmp', 'dat'];
 
-    private const SUPPORTED_EXTENSIONS = [
+    private const array SUPPORTED_EXTENSIONS = [
         'html', 'htm', 'txt', 'md', 'csv', 'log',
         'pdf', 'ps', 'doc', 'ppt', 'rtf', 'xls',
         'docx', 'docm', 'dotx', 'dotm',
@@ -46,15 +46,15 @@ final class DocumentRawTextExtractor
         'mp4', 'm4v', 'mov',
     ];
 
-    private const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    private const array IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 
-    private const AUDIO_EXTENSIONS = ['mp3', 'm4a', 'wav', 'webm', 'mpga', 'mpeg', 'ogg', 'oga'];
+    private const array AUDIO_EXTENSIONS = ['mp3', 'm4a', 'wav', 'webm', 'mpga', 'mpeg', 'ogg', 'oga'];
 
-    private const VIDEO_EXTENSIONS = ['mp4', 'm4v', 'mov', 'webm'];
+    private const array VIDEO_EXTENSIONS = ['mp4', 'm4v', 'mov', 'webm'];
 
     public function __construct(
         private readonly ResourceNodeRepository $resourceNodeRepository,
-        private readonly SettingsManager $settingsManager,
+        private readonly AiFeatureAccessHelper $aiFeatureAccessHelper,
         private readonly AiProviderFactory $aiProviderFactory,
     ) {}
 
@@ -151,7 +151,7 @@ final class DocumentRawTextExtractor
         string $ext,
         string $mediaType
     ): string {
-        if (!$this->isAiMediaExtractionEnabled()) {
+        if (!$this->isAiMediaExtractionEnabled($resourceNode)) {
             error_log('[Xapian] DocumentRawTextExtractor: AI media extraction disabled, ext='.$ext.', nodeId='.$resourceNode->getId());
 
             return '';
@@ -236,10 +236,18 @@ final class DocumentRawTextExtractor
         return '';
     }
 
-    private function isAiMediaExtractionEnabled(): bool
+    private function isAiMediaExtractionEnabled(ResourceNode $resourceNode): bool
     {
-        return 'true' === $this->settingsManager->getSetting('ai_helpers.enable_ai_helpers', true)
-            && 'true' === $this->settingsManager->getSetting('ai_helpers.content_analyser', true);
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            $course = $resourceLink->getCourse();
+            $courseId = (int) ($course?->getId() ?? 0);
+
+            if ($courseId > 0 && $this->aiFeatureAccessHelper->isFeatureEnabledForCourse('content_analyser', $courseId)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function detectAiMediaType(string $ext, string $mimeType): ?string

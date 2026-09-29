@@ -217,13 +217,12 @@ export function useSidebarMenu() {
   const displayTabs = computed(() => resolveDisplayTabsConfig(platformConfigStore, securityStore))
 
   const isMenuTabEnabled = (key) => displayTabs.value?.menu?.[key] === true
-  const isTopbarTabEnabled = (key) => displayTabs.value?.topbar?.[key] === true // kept for completeness
 
   const rawShowCatalogue = platformConfigStore.getSetting("catalog.show_courses_sessions")
   const showCatalogue = Number(rawShowCatalogue)
   const isAnonymous = !securityStore.isAuthenticated
-  const isPrivilegedUser =
-    securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+  // ROLE_TEACHER covers admin and HR through the hierarchy; ROLE_SESSION_MANAGER covers session admins.
+  const isPrivilegedUser = securityStore.isGranted("ROLE_TEACHER") || securityStore.isGranted("ROLE_SESSION_MANAGER")
 
   const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
   const searchCourseConfig = computed(() => platformConfigStore.plugins?.searchcourse || {})
@@ -352,10 +351,8 @@ export function useSidebarMenu() {
         extraMenuFromWebserviceTitle.value = data.title
       }
 
-      extraMenuFromWebserviceItems.value = data.enabled
-        ? normalizeExtraMenuFromWebserviceItems(data.items)
-        : []
-    } catch (error) {
+      extraMenuFromWebserviceItems.value = data.enabled ? normalizeExtraMenuFromWebserviceItems(data.items) : []
+    } catch {
       extraMenuFromWebserviceItems.value = []
     }
   }
@@ -416,6 +413,28 @@ export function useSidebarMenu() {
     const items = []
 
     if (securityStore.isAuthenticated && isMenuTabEnabled("my_courses")) {
+      const defaultCourseItems = [
+        {
+          label: t("My courses"),
+          route: { name: "MyCourses" },
+        },
+        {
+          label: t("My sessions"),
+          route: { name: "MySessions" },
+        },
+      ]
+
+      if (!enrolledStore.isInitialized) {
+        items.push({
+          icon: "mdi mdi-book-open-page-variant",
+          label: t("My courses"),
+          items: defaultCourseItems,
+          expanded: isActive({ items: defaultCourseItems }),
+        })
+
+        return items
+      }
+
       const courseItems = []
 
       if (enrolledStore.isEnrolledInCourses) {
@@ -435,7 +454,7 @@ export function useSidebarMenu() {
       if (courseItems.length > 0) {
         items.push({
           icon: "mdi mdi-book-open-page-variant",
-          label: courseItems.length > 1 ? t("Courses") : courseItems[0].label,
+          label: enrolledStore.isEnrolledInCourses ? t("My courses") : courseItems[0].label,
           items: courseItems.length > 1 ? courseItems : undefined,
           route: 1 === courseItems.length ? courseItems[0].route : undefined,
           class: courseItems.length > 0 ? courseItems[0].class : "",
@@ -464,7 +483,7 @@ export function useSidebarMenu() {
     if (showBuyCoursesMenuItem.value) {
       items.push({
         icon: "mdi mdi-cart-outline",
-        label: t("Buy courses"),
+        label: t("Shop"),
         url: buyCoursesIndexPath.value,
       })
     }
@@ -515,20 +534,20 @@ export function useSidebarMenu() {
     if (isMenuTabEnabled("reporting")) {
       const subItems = []
 
-      if (securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin) {
+      if (securityStore.isGranted("ROLE_TEACHER") || securityStore.isGranted("ROLE_SESSION_MANAGER")) {
         subItems.push({
           label: securityStore.isHRM ? t("Course sessions") : t("Reporting"),
-          url: "/main/my_space/" + (securityStore.isHRM ? "session.php" : "index.php"),
+          url: securityStore.isHRM ? "/reporting/sessions" : "/reporting",
         })
       } else if (securityStore.isStudentBoss) {
         subItems.push({
           label: t("Learners"),
-          url: "/main/my_space/student.php",
+          url: "/reporting/learners",
         })
       } else {
         subItems.push({
           label: t("Progress"),
-          url: "/main/auth/my_progress.php",
+          url: "/reporting/my-progress",
         })
       }
 
@@ -612,14 +631,13 @@ export function useSidebarMenu() {
     }
 
     {
-      const roles = securityStore.user?.roles || []
-      const isQuestionManager = securityStore.isAdmin || roles.includes("ROLE_QUESTION_MANAGER")
+      const isQuestionManager = securityStore.isGranted("ROLE_QUESTION_MANAGER")
 
       if (isQuestionManager && isMenuTabEnabled("question_manager")) {
         const questionAdminItems = [
           {
             label: t("Questions"),
-            url: "/main/admin/questions.php",
+            route: { name: "AdminQuestionBank" },
             icon: "mdi mdi-comment-question-outline",
             class: "pl-4",
           },
@@ -634,7 +652,7 @@ export function useSidebarMenu() {
       }
     }
 
-    if (isMenuTabEnabled("session_admin") && (securityStore.isAdmin || securityStore.isSessionAdmin)) {
+    if (isMenuTabEnabled("session_admin") && securityStore.isGranted("ROLE_SESSION_MANAGER")) {
       const sessionAdminItems = [
         {
           label: t("Dashboard"),
@@ -677,12 +695,12 @@ export function useSidebarMenu() {
     }
 
     if (isMenuTabEnabled("platform_administration")) {
-      if (securityStore.isAdmin || securityStore.isSessionAdmin) {
+      if (securityStore.isGranted("ROLE_SESSION_MANAGER")) {
         const adminItems = [
           { label: t("Administration"), route: { name: "AdminIndex" } },
           ...(securityStore.isSessionAdmin &&
           "true" === platformConfigStore.getSetting("session.limit_session_admin_list_users")
-            ? [{ label: t("Add user"), url: "/main/admin/user_add.php" }]
+            ? [{ label: t("Add user"), route: { name: "AdminUserAdd" } }]
             : [{ label: t("Users"), route: { name: "AdminUserList" } }]),
           { label: t("Courses"), route: { name: "AdminCourseList" } },
           { label: t("Sessions"), route: { name: "AdminSessionList" } },

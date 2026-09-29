@@ -44,6 +44,16 @@ class ExtraFieldOptionRelFieldOption
     }
 
     /**
+     * Get roleId.
+     *
+     * @return int
+     */
+    public function getRoleId()
+    {
+        return $this->roleId;
+    }
+
+    /**
      * Set roleId.
      *
      * @return ExtraFieldOptionRelFieldOption
@@ -53,16 +63,6 @@ class ExtraFieldOptionRelFieldOption
         $this->roleId = $roleId;
 
         return $this;
-    }
-
-    /**
-     * Get roleId.
-     *
-     * @return int
-     */
-    public function getRoleId()
-    {
-        return $this->roleId;
     }
 
     public function getExtraFieldOption(): ExtraFieldOptions

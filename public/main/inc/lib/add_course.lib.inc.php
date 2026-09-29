@@ -968,7 +968,7 @@ class AddCourse
                             $message .= get_lang('Category').': '.$category->getCode()."\n";
                         }
                     }
-                    $message .= get_lang('Coach').' '.$tutor_name."\n";
+                    $message .= get_lang('Tutor').' '.$tutor_name."\n";
                     $message .= get_lang('Language').' '.$course_language;
 
                     api_mail_html(

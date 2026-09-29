@@ -66,7 +66,7 @@ class CForumPostRepository extends ResourceRepository
      * (p.status IS NULL AND p.posterId = {$userId})";
      * }
      * $dql = "SELECT p
-     * FROM ChamiloCourseBundle:CForumPost p
+     * FROM Chamilo\CourseBundle\Entity\CForumPost p
      * WHERE
      * p.thread = :thread AND
      * p.cId = :course AND

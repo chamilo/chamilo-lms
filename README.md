@@ -1,10 +1,10 @@
-# Chamilo 2
+# Chamilo 3
 
-[![Behat tests 🐞](https://github.com/chamilo/chamilo-lms/actions/workflows/behat.yml/badge.svg)](https://github.com/chamilo/chamilo-lms/actions/workflows/behat.yml)
+[![Playwright tests 🎭](https://github.com/chamilo/chamilo-lms/actions/workflows/playwright.yml/badge.svg)](https://github.com/chamilo/chamilo-lms/actions/workflows/playwright.yml)
 [![PHPUnit 🐛](https://github.com/chamilo/chamilo-lms/actions/workflows/phpunit.yml/badge.svg)](https://github.com/chamilo/chamilo-lms/actions/workflows/phpunit.yml)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=master)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/166/badge)](https://bestpractices.coreinfrastructure.org/projects/166)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/88e934aab2f34bb7a0397a6f62b078b2)](https://www.codacy.com/app/chamilo/chamilo-lms?utm_source=github.com&utm_medium=referral&utm_content=chamilo/chamilo-lms&utm_campaign=badger)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/1b8196d2631748898d2f3b83f030fe53)](https://app.codacy.com/gh/chamilo/chamilo-lms/dashboard)
 [![type-coverage](https://shepherd.dev/github/chamilo/chamilo-lms/coverage.svg)](https://shepherd.dev/github/chamilo/chamilo-lms/coverage.svg)
 [![psalm level](https://shepherd.dev/github/chamilo/chamilo-lms/level.svg)](https://shepherd.dev/github/chamilo/chamilo-lms/level.svg)
 [![DPG Badge](https://img.shields.io/badge/Verified-DPG%20(Since%20%202024)-3333AB?logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iMzEiIGhlaWdodD0iMzMiIHZpZXdCb3g9IjAgMCAzMSAzMyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE0LjIwMDggMjEuMzY3OEwxMC4xNzM2IDE4LjAxMjRMMTEuNTIxOSAxNi40MDAzTDEzLjk5MjggMTguNDU5TDE5LjYyNjkgMTIuMjExMUwyMS4xOTA5IDEzLjYxNkwxNC4yMDA4IDIxLjM2NzhaTTI0LjYyNDEgOS4zNTEyN0wyNC44MDcxIDMuMDcyOTdMMTguODgxIDUuMTg2NjJMMTUuMzMxNCAtMi4zMzA4MmUtMDVMMTEuNzgyMSA1LjE4NjYyTDUuODU2MDEgMy4wNzI5N0w2LjAzOTA2IDkuMzUxMjdMMCAxMS4xMTc3TDMuODQ1MjEgMTYuMDg5NUwwIDIxLjA2MTJMNi4wMzkwNiAyMi44Mjc3TDUuODU2MDEgMjkuMTA2TDExLjc4MjEgMjYuOTkyM0wxNS4zMzE0IDMyLjE3OUwxOC44ODEgMjYuOTkyM0wyNC44MDcxIDI5LjEwNkwyNC42MjQxIDIyLjgyNzdMMzAuNjYzMSAyMS4wNjEyTDI2LjgxNzYgMTYuMDg5NUwzMC42NjMxIDExLjExNzdMMjQuNjI0MSA5LjM1MTI3WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==)](https://digitalpublicgoods.net/r/chamilo)
@@ -29,7 +29,7 @@ Chamilo offers a wide range of features, including:
 - Learning paths (create, manage, ...)
 - Live chat (at course level or global, including AI chatbot)
 - GDPR compliance (GDPR-ready, export of personal data, ...)
-- Gradebook (including generation of badges and certificates with QR codes)
+- Gradebook (including generation of badges and certificates with QR codes and expiry dates)
 - Learning analytics (progress, course completion, participation, average time spent, average score, auditing, ...)
 - Groups/Classes (at course or global level)
 - Multilingual support (60+ languages fully translated, including RTL support)
@@ -37,19 +37,20 @@ Chamilo offers a wide range of features, including:
 - Quizzes (20+ question types, random selection with categories, adaptative tests, time limits, co-creation with AI, proctoring tools integration, ...)
 - Roles and permissions management (beta)
 - Rooms and branches for in-person courses
-- SCORM 1.2, QTI, LTI, xAPI CMI 5, Aiken, and other standards compliant formats
+- SCORM 1.2, QTI, LTI, xAPI CMI 5, Aiken, and other standards compliant formats (partial SCORM 2004 support)
 - Security features (password policy and rotation, 2FA/MFA authentication, HSTS, regular updates, IDS, ...)
 - Sessions management (re-use courses multiple times, add structure to long-term courses management chaos)
 - Skills management (create, edit, delete, assign to users, scale/levels of acquisition, ...)
 - Student profiles (edit personal data, change password, subscribe to push notifications, ...)
 - Style customization (easy color changes, custom CSS, custom logo, ...)
 - Surveys (create, take, analyse)
+- Hierarchical Multi-Tenant ("Multi-URLs")
 - Upgrades from previous versions and import of existing courses from other LMS
 - Videoconference through integrations / Realtime collaboration
 - ...
 
 Note: AI features (with support for OpenAI, Grok, Gemini, Claude and DeepSeek
-models) and other integrations do require active subscriptions to, or
+models) and other integrations may require active subscriptions to, or
 availability of, external services/applications.
 
 ## Try it out
@@ -57,11 +58,6 @@ availability of, external services/applications.
 You can try out Chamilo at https://campus.chamilo.net/ (use the "Teach courses" option to give yourself creation rights).
 
 ## Quick install
-
-**IMPORTANT** Chamilo 2.0 is in its validation phase right now.
-The installation procedure below is for reference only.
-For a stable Chamilo, please install Chamilo 1.11.x.
-See the 1.11.x branch's README.md for details.
 
 ### Minimum hardware requirements
 
@@ -72,10 +68,9 @@ You will need:
 - 4GB RAM
 - 4GB free disk space
 
-Chamilo 2.0 has been tested on a 2 vCPUs, 2GB RAM virtual machine under Ubuntu 24.04 and has been shown to work, but to
+Chamilo 3.0 has been tested on a 2 vCPUs, 2GB RAM virtual machine under Ubuntu 24.04 and has been shown to work, but to
 build the development environment, you will need at least 4GB RAM.
 At this stage, we haven't made any load testing to evaluate the number of users that could use the system simultaneously.
-Remember this is an alpha version. As such, it will run in "dev" mode (see the `.env` file), considerably more slowly the "prod" mode.
 
 #### Client
 
@@ -86,7 +81,7 @@ Any recent computer with a recent (no older than 5y) browser should do.
 You should have:
 
 - A web server with a virtualhost in a domain or subdomain (not in a subfolder inside a domain with another application).
-- A working PHP configuration with PHP 8.2 or 8.3
+- A working PHP configuration with PHP 8.3, 8.4 or 8.5
 - MariaDB 10 or higer (alternatively, MySQL 5.7 or higher can also be used)
 
 ### Software stack installation (Ubuntu)
@@ -95,7 +90,7 @@ You can install Chamilo using 3rd party installers like Softaculous,
 Installatron, DigitalOcean marketplace, etc. and skip the following steps.
 
 These are instructions for a fictitious `my.chamilo.net` domain, with a
-`chamilo2` database and DB user, on your own self-managed server.
+`chamilo` database, DB user and password, on your own self-managed server.
 Please adapt the commands below accordingly.
 
 These instructions are meant for a standalone public server, with no
@@ -110,21 +105,21 @@ Install the software stack and Chamilo using the commands below.
 ~~~~
 sudo apt update && sudo apt -y upgrade
 sudo apt install -y apache2 libapache2-mod-php mariadb-client mariadb-server php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} unzip curl
-sudo mysql -e "CREATE USER chamilo2@localhost IDENTIFIED BY 'chamilo2';"
-sudo mysql -e "GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;"
+sudo mysql -e "CREATE USER chamilo@localhost IDENTIFIED BY 'chamilo';"
+sudo mysql -e "GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost;"
 cd /var/www
-sudo wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-RC.2/chamilo-2.0.0-RC.2.tar.gz
-sudo tar zxf chamilo-2.0.0-RC.2.tar.gz
-sudo mv chamilo-2.0.0-RC.2 chamilo
+sudo wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.3/chamilo-2.0.3.tar.gz
+sudo tar zxf chamilo-2.0.3.tar.gz
 cd chamilo
 sudo cp public/main/install/apache.dist.conf /etc/apache2/sites-available/my.chamilo.net.conf
-# Edit /etc/apache2/sites-available/my.chamilo.net.conf to match your domain
+# Edit /etc/apache2/sites-available/my.chamilo.net.conf to match your domain name
 sudo a2ensite my.chamilo.net
 sudo a2enmod rewrite ssl headers expires
+sudo touch .env
 sudo chown -R www-data: .env config/ var/
 sudo systemctl restart apache2
 # Open http://my.chamilo.net in your browser to go through the installation wizard
-# Complete the installation information using DB credentials chamilo2/chamilo2/chamilo2 and the default host and port
+# Complete the installation information using DB credentials chamilo/chamilo/chamilo and the default host and port
 # Done
 ~~~~
 
@@ -161,10 +156,9 @@ environment). This will improve maintainability through different Chamilo upgrad
 
 ## Documentation
 
-For more information on Chamilo 2, visit https://2.chamilo.org/documentation/index.html
+For more information on Chamilo, visit https://campus.chamilo.net/documentation/index.html
 For Chamilo usage documentation, most of the documentation at
-https://docs.chamilo.org/ is still valid for Chamilo 2, despite having been
-written for Chamilo 1.
+https://docs.chamilo.org/ is up to date.
 
 ## JWT Authentication
 
@@ -198,7 +192,7 @@ Then you can make queries using the JWT token.
 
 ## Contributing
 
-If you want to submit new features or patches to Chamilo 2, please follow the
+If you want to submit new features or patches to Chamilo, please follow the
 Github contribution guide https://guides.github.com/activities/contributing-to-open-source/
 and our [CONTRIBUTING.md](CONTRIBUTING.md) file.
 

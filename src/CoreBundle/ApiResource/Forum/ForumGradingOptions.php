@@ -9,35 +9,27 @@ namespace Chamilo\CoreBundle\ApiResource\Forum;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
-use Chamilo\CoreBundle\State\ForumGradingOptionsProvider;
+use ApiPlatform\Metadata\QueryParameter;
+use Chamilo\CoreBundle\State\Forum\ForumGradingOptionsProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
         new Get(
             uriTemplate: '/forum/grading-options',
-            openapi: new Operation(
-                parameters: [
-                    new Parameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course id',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'sid',
-                        in: 'query',
-                        description: 'Session id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                ],
-            ),
-            provider: ForumGradingOptionsProvider::class,
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_ADMIN')",
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
+            provider: ForumGradingOptionsProvider::class,
         ),
     ],
     normalizationContext: [
@@ -56,11 +48,6 @@ final class ForumGradingOptions
     #[Groups(['forum_grading_options:read'])]
     public array $categories = [];
 
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
     /**
      * @param array<int, array<string, mixed>> $categories
      */
@@ -70,5 +57,10 @@ final class ForumGradingOptions
         $options->categories = $categories;
 
         return $options;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 }

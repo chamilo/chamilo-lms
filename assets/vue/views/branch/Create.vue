@@ -12,14 +12,14 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
+import { useNotification } from "../../composables/notification"
 import BranchForm from "../../components/branch/Form.vue"
 import Loading from "../../components/Loading.vue"
 import baseService from "../../services/baseService"
 
 const router = useRouter()
 const { t } = useI18n()
-const toast = useToast()
+const { showSuccessNotification, showErrorNotification } = useNotification()
 
 const item = ref({
   title: "",
@@ -31,10 +31,10 @@ async function createItem(formData) {
   isLoading.value = true
   try {
     await baseService.post("/api/branches", formData)
-    toast.add({ severity: "success", detail: t("{0} created", [formData.title]), life: 3500 })
+    showSuccessNotification(t("{0} created", [formData.title]))
     router.push({ name: "BranchList" })
   } catch (e) {
-    toast.add({ severity: "error", detail: e.message, life: 3500 })
+    showErrorNotification(e)
   } finally {
     isLoading.value = false
   }

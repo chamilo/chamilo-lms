@@ -18,13 +18,16 @@ final class WeakPasswordCheckerHelper
      *
      * Keep this list short because every candidate is checked against every selected user hash.
      */
-    private const COMMON_PASSWORD_CANDIDATES = [
+    private const array COMMON_PASSWORD_CANDIDATES = [
         '123456',
-        '123456789',
-        '12345',
-        'qwerty',
         'password',
+        'changeme',
+        '123456789',
+        'qwerty',
         '12345678',
+        '12345',
+        'admin',
+        'admin123',
         '111111',
         '123123',
         '1234567890',
@@ -35,12 +38,9 @@ final class WeakPasswordCheckerHelper
         'password1',
         '1234',
         'password123',
-        'admin',
-        'admin123',
         'welcome',
         'welcome1',
         'letmein',
-        'changeme',
         'secret',
     ];
 
@@ -233,7 +233,7 @@ final class WeakPasswordCheckerHelper
         $weakUsers = [];
 
         foreach ($users as $user) {
-            foreach (self::COMMON_PASSWORD_CANDIDATES as $passwordCandidate) {
+            foreach ($this->getPasswordCandidates($user) as $passwordCandidate) {
                 if ($this->userRepository->isPasswordValid($user, $passwordCandidate)) {
                     $weakUsers[] = $user;
 
@@ -243,6 +243,18 @@ final class WeakPasswordCheckerHelper
         }
 
         return $weakUsers;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getPasswordCandidates(User $user): array
+    {
+        if ('' === (string) $user->getPassword()) {
+            return [];
+        }
+
+        return self::COMMON_PASSWORD_CANDIDATES;
     }
 
     /**

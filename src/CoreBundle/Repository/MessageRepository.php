@@ -50,6 +50,92 @@ class MessageRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @return Message[]
+     */
+    public function findMobileMessagesForUser(
+        User $user,
+        string $box,
+        ?string $search = null,
+        ?bool $unread = null,
+        ?bool $starred = null,
+        int $limit = 50
+    ): array {
+        $queryBuilder = $this->createQueryBuilder('message')
+            ->innerJoin('message.receivers', 'userRelation')
+            ->where('userRelation.receiver = :user')
+            ->andWhere('userRelation.deletedAt IS NULL OR userRelation.deletedAt > CURRENT_TIMESTAMP()')
+            ->andWhere('message.msgType = :messageType')
+            ->andWhere('message.status <> :deletedStatus')
+            ->setParameter('user', $user)
+            ->setParameter('senderType', MessageRelUser::TYPE_SENDER)
+            ->setParameter('messageType', Message::MESSAGE_TYPE_INBOX)
+            ->setParameter('deletedStatus', Message::MESSAGE_STATUS_DELETED)
+            ->orderBy('message.sendDate', 'DESC')
+            ->addOrderBy('message.id', 'DESC')
+        ;
+
+        if ('sent' === $box) {
+            $queryBuilder
+                ->andWhere('userRelation.receiverType = :senderType')
+                ->andWhere('message.sender = :user')
+            ;
+        } else {
+            $queryBuilder->andWhere('userRelation.receiverType <> :senderType');
+        }
+
+        $normalizedSearch = trim((string) $search);
+
+        if ('' !== $normalizedSearch) {
+            $queryBuilder
+                ->andWhere('LOWER(message.title) LIKE :search OR LOWER(message.content) LIKE :search')
+                ->setParameter('search', '%'.mb_strtolower($normalizedSearch).'%')
+            ;
+        }
+
+        if (null !== $unread && 'sent' !== $box) {
+            $queryBuilder
+                ->andWhere('userRelation.read = :read')
+                ->setParameter('read', !$unread)
+            ;
+        }
+
+        if (null !== $starred) {
+            $queryBuilder
+                ->andWhere('userRelation.starred = :starred')
+                ->setParameter('starred', $starred)
+            ;
+        }
+
+        return $queryBuilder
+            ->setMaxResults(max(1, min($limit, 100)))
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findMobileMessageForUser(int $messageId, User $user): ?Message
+    {
+        if ($messageId <= 0) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('message')
+            ->innerJoin('message.receivers', 'userRelation')
+            ->where('message.id = :messageId')
+            ->andWhere('userRelation.receiver = :user')
+            ->andWhere('userRelation.deletedAt IS NULL OR userRelation.deletedAt > CURRENT_TIMESTAMP()')
+            ->andWhere('message.msgType = :messageType')
+            ->andWhere('message.status <> :deletedStatus')
+            ->setParameter('messageId', $messageId)
+            ->setParameter('user', $user)
+            ->setParameter('messageType', Message::MESSAGE_TYPE_INBOX)
+            ->setParameter('deletedStatus', Message::MESSAGE_STATUS_DELETED)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     protected function addReceiverQueryBuilder(User $user, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'm');
@@ -117,11 +203,9 @@ class MessageRepository extends ServiceEntityRepository
             ->where('mr.receiver = :user')
             ->andWhere('m.msgType = :msgType')
             ->andWhere('m.status = :status')
-            ->setParameters([
-                'user' => $user,
-                'msgType' => Message::MESSAGE_TYPE_INVITATION,
-                'status' => Message::MESSAGE_STATUS_INVITATION_PENDING,
-            ])
+            ->setParameter('user', $user)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_INVITATION)
+            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING)
             ->getQuery()
             ->getResult()
         ;
@@ -133,11 +217,9 @@ class MessageRepository extends ServiceEntityRepository
             ->where('m.sender = :user')
             ->andWhere('m.msgType = :msgType')
             ->andWhere('m.status = :status')
-            ->setParameters([
-                'user' => $user,
-                'msgType' => Message::MESSAGE_TYPE_INVITATION,
-                'status' => Message::MESSAGE_STATUS_INVITATION_PENDING,
-            ])
+            ->setParameter('user', $user)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_INVITATION)
+            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING)
             ->getQuery()
             ->getResult()
         ;
@@ -163,9 +245,9 @@ class MessageRepository extends ServiceEntityRepository
         $messageRelUser->setReceiverType(MessageRelUser::TYPE_TO);
         $message->addReceiver($messageRelUser);
 
-        $this->_em->persist($message);
-        $this->_em->persist($messageRelUser);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($message);
+        $this->getEntityManager()->persist($messageRelUser);
+        $this->getEntityManager()->flush();
 
         return true;
     }
@@ -189,12 +271,10 @@ class MessageRepository extends ServiceEntityRepository
             ->andWhere('mr.receiver = :receiver')
             ->andWhere('m.msgType = :msgType')
             ->andWhere($qb->expr()->in('m.status', ':statuses'))
-            ->setParameters([
-                'sender' => $userSender,
-                'receiver' => $userReceiver,
-                'msgType' => Message::MESSAGE_TYPE_INVITATION,
-                'statuses' => $statuses,
-            ])
+            ->setParameter('sender', $userSender)
+            ->setParameter('receiver', $userReceiver)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_INVITATION)
+            ->setParameter('statuses', $statuses)
         ;
 
         return $qb->getQuery()->getResult();
@@ -202,7 +282,7 @@ class MessageRepository extends ServiceEntityRepository
 
     public function invitationAccepted(User $sender, User $receiver): bool
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder->select('m')
             ->from(Message::class, 'm')
@@ -215,7 +295,7 @@ class MessageRepository extends ServiceEntityRepository
         $messages = $queryBuilder->getQuery()->getResult();
 
         foreach ($messages as $message) {
-            $messageRelUser = $this->_em->getRepository(MessageRelUser::class)->findOneBy([
+            $messageRelUser = $this->getEntityManager()->getRepository(MessageRelUser::class)->findOneBy([
                 'message' => $message,
                 'receiver' => $receiver,
             ]);
@@ -224,9 +304,9 @@ class MessageRepository extends ServiceEntityRepository
                 $invitation = $messageRelUser->getMessage();
                 $invitation->setStatus(Message::MESSAGE_STATUS_INVITATION_ACCEPTED);
 
-                $this->_em->flush();
+                $this->getEntityManager()->flush();
 
-                $friendship = $this->_em->getRepository(UserRelUser::class)->findOneBy([
+                $friendship = $this->getEntityManager()->getRepository(UserRelUser::class)->findOneBy([
                     'user' => $sender,
                     'friend' => $receiver,
                 ]) ?: new UserRelUser();
@@ -235,8 +315,8 @@ class MessageRepository extends ServiceEntityRepository
                 $friendship->setFriend($receiver);
                 $friendship->setRelationType(UserRelUser::USER_RELATION_TYPE_FRIEND);
 
-                $this->_em->persist($friendship);
-                $this->_em->flush();
+                $this->getEntityManager()->persist($friendship);
+                $this->getEntityManager()->flush();
 
                 return true;
             }
@@ -247,7 +327,7 @@ class MessageRepository extends ServiceEntityRepository
 
     public function invitationDenied(User $sender, User $receiver): bool
     {
-        $queryBuilder = $this->_em->createQueryBuilder();
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder->select('m')
             ->from(Message::class, 'm')
@@ -260,14 +340,14 @@ class MessageRepository extends ServiceEntityRepository
         $messages = $queryBuilder->getQuery()->getResult();
 
         foreach ($messages as $message) {
-            $messageRelUser = $this->_em->getRepository(MessageRelUser::class)->findOneBy([
+            $messageRelUser = $this->getEntityManager()->getRepository(MessageRelUser::class)->findOneBy([
                 'message' => $message,
                 'receiver' => $receiver,
             ]);
 
             if ($messageRelUser) {
-                $this->_em->remove($messageRelUser);
-                $this->_em->flush();
+                $this->getEntityManager()->remove($messageRelUser);
+                $this->getEntityManager()->flush();
 
                 return true;
             }
@@ -376,10 +456,8 @@ class MessageRepository extends ServiceEntityRepository
             ->innerJoin('m.receivers', 'mr')
             ->where('mr.receiver = :userTwo')
             ->andWhere('m.sender = :userOne')
-            ->setParameters([
-                'userOne' => $targetUser,
-                'userTwo' => $currentUser,
-            ])
+            ->setParameter('userOne', $targetUser)
+            ->setParameter('userTwo', $currentUser)
             ->setMaxResults(1)
         ;
 

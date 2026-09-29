@@ -305,7 +305,7 @@ if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
     $form->addCheckBox(
         'add_teachers_to_sessions_courses',
         null,
-        get_lang('Teachers will be added as a coach in all course sessions.')
+        get_lang('Teachers will be added as tutors in all course sessions.')
     );
 }
 
@@ -337,7 +337,7 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
                 $session['title'],
                 $sessionUrl,
                 ['target' => '_blank']
-            ).' - '.get_lang('Coaches'),
+            ).' - '.get_lang('Tutors'),
             $allTeachers
         );
         $courseInfo[$groupName] = $sessionTeachers;

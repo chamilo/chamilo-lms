@@ -12,17 +12,16 @@
       />
 
       <BaseTextArea
+        id="document-description"
         v-model="item.comment"
         :label="t('Description')"
+        name="document_description"
         rows="4"
         auto-resize
       />
 
       <BaseTinyEditor
-        v-if="
-          (item.resourceNode && item.resourceNode.firstResourceFile && item.resourceNode.firstResourceFile.text) ||
-          ['file', 'certificate'].includes(item.filetype)
-        "
+        v-if="showContentEditor"
         id="item_content"
         v-model="item.contentFile"
         :full-page="fullPage"
@@ -32,7 +31,7 @@
       />
     </div>
     <div
-      v-if="editorDrafts.length > 0"
+      v-if="showContentEditor && editorDrafts.length > 0"
       class="mt-3 rounded-lg border border-gray-25 bg-gray-10 px-4 py-3"
     >
       <button
@@ -111,7 +110,7 @@
     </div>
 
     <BaseAdvancedSettingsButton
-      v-if="searchEnabled || showResourceLanguageAdvancedSettings || hasAdvancedSlot"
+      v-if="(searchEnabled && !isCertificateDocument) || showResourceLanguageAdvancedSettings || hasAdvancedSlot"
       v-model="showAdvancedSettings"
     >
       <ResourceLanguageSelector
@@ -120,7 +119,7 @@
       />
 
       <div
-        v-if="searchEnabled"
+        v-if="searchEnabled && !isCertificateDocument"
         class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center"
       >
         <div class="flex w-40 shrink-0 items-center gap-1 font-semibold">
@@ -146,7 +145,7 @@
       </div>
 
       <div
-        v-if="searchEnabled && searchFields.length > 0"
+        v-if="searchEnabled && !isCertificateDocument && searchFields.length > 0"
         class="mt-3 flex flex-col gap-2"
       >
         <div
@@ -186,7 +185,7 @@
         type="primary"
         icon="save"
         :label="$t('Save')"
-        @click.prevent="$emit('submit')"
+        @click.prevent="saveFromFormSubmit"
       />
     </div>
 
@@ -209,6 +208,7 @@ import { ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
+import { looksLikeHtmlContent } from "../../composables/fileUtils"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
@@ -287,6 +287,7 @@ export default {
       item: {
         title: { required },
         comment: {},
+        contentFile: {},
       },
     }
   },
@@ -297,6 +298,50 @@ export default {
     violations() {
       return this.errors || {}
     },
+    isCertificateDocument() {
+      return "certificate" === String(this.item?.filetype || "").trim().toLowerCase()
+    },
+    showContentEditor() {
+      if (Boolean(this.item?.newDocument)) {
+        return true
+      }
+
+      const filetype = String(this.item?.filetype || "")
+        .trim()
+        .toLowerCase()
+
+      if (["certificate", "html"].includes(filetype)) {
+        return true
+      }
+
+      const resourceFile = this.item?.resourceNode?.firstResourceFile
+      if (!resourceFile || "file" !== filetype) {
+        return false
+      }
+
+      const mime = String(resourceFile.mimeType || "")
+        .split(";")[0]
+        .trim()
+        .toLowerCase()
+      const originalName = String(resourceFile.originalName || resourceFile.title || this.item?.title || "")
+        .trim()
+        .toLowerCase()
+      const extension = originalName.includes(".") ? originalName.split(".").pop() : ""
+
+      if (mime.includes("text/html") || mime.includes("application/xhtml") || ["html", "htm", "xhtml"].includes(extension)) {
+        return true
+      }
+
+      if (resourceFile.image || resourceFile.video || resourceFile.audio) {
+        return false
+      }
+
+      if (mime.startsWith("image/") || mime.startsWith("video/") || mime.startsWith("audio/")) {
+        return false
+      }
+
+      return looksLikeHtmlContent(this.item?.contentFile)
+    },
     effectiveParentResourceNodeId() {
       const routeNode = this.normalizeNodeId(this.$route?.params?.node ?? this.$route?.params?.id)
       const itemNode = this.normalizeNodeId(this.item?.parentResourceNodeId)
@@ -304,6 +349,10 @@ export default {
       return itemNode || routeNode || resourceNodeId || null
     },
     showResourceLanguageAdvancedSettings() {
+      if ("true" !== this.platformConfigStore.getSetting("language.language_by_resource")) {
+        return false
+      }
+
       const languages = Array.isArray(window.languages) ? window.languages : []
 
       return (
@@ -379,7 +428,9 @@ export default {
       this.item.searchFieldValues = {}
     }
 
-    if (undefined === this.item.indexDocumentContent) {
+    if (this.isCertificateDocument) {
+      this.item.indexDocumentContent = false
+    } else if (undefined === this.item.indexDocumentContent) {
       this.item.indexDocumentContent = true
     }
 
@@ -387,7 +438,7 @@ export default {
 
     this.ensureResourceLanguage()
 
-    if (!this.searchEnabled) {
+    if (!this.searchEnabled || this.isCertificateDocument) {
       return
     }
 
@@ -415,10 +466,19 @@ export default {
       immediate: true,
       handler() {
         this.ensureResourceLanguage()
+        this.enforceCertificateIndexingDisabled()
       },
     },
   },
   methods: {
+    enforceCertificateIndexingDisabled() {
+      if (!this.isCertificateDocument || !this.item) {
+        return
+      }
+
+      this.item.indexDocumentContent = false
+      this.item.searchFieldValues = {}
+    },
     getDocumentEditorContentStyle() {
       const baseStyle =
         typeof window !== "undefined" ? String(window.CHAMILO_TINYMCE_BASE_CONFIG?.content_style || "") : ""
@@ -458,6 +518,7 @@ export default {
         this.item.contentFile = editor.getContent()
       }
 
+      this.enforceCertificateIndexingDisabled()
       this.$emit("submit")
     },
     patchDocumentFormNativeSubmit() {
@@ -618,6 +679,7 @@ export default {
         this.item.contentFile = editor.getContent()
       }
 
+      this.enforceCertificateIndexingDisabled()
       this.$nextTick(() => {
         this.$emit("submit")
 
@@ -1014,6 +1076,19 @@ export default {
       this.showAiMediaDialog = false
       this.insertMediaAfterSelectedBlock(payload)
     },
+    escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;")
+    },
+    buildAiGeneratedMediaHtml(mediaHtml) {
+      const label = this.escapeHtml(this.t("AI generated"))
+
+      return `<span data-ai-generated-media-wrapper="1" style="position:relative;display:inline-block;max-width:100%;">${mediaHtml}<span data-ai-generated-media="1" style="position:absolute;right:8px;bottom:8px;z-index:1;display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:rgba(15,23,42,.82);color:#fff;font-size:12px;font-weight:600;line-height:16px;">${label}</span></span>`
+    },
     insertMediaAfterSelectedBlock(payload) {
       const editor = this.getTinyEditor()
 
@@ -1022,15 +1097,17 @@ export default {
       }
 
       const mediaType = String(payload.type || "image").toLowerCase()
-      const safeUrl = String(payload.url).trim()
-      const safeAlt = String(payload.alt || payload.title || "Generated media").trim()
+      const safeUrl = this.escapeHtml(String(payload.url).trim())
+      const safeAlt = this.escapeHtml(String(payload.alt || payload.title || "Generated media").trim())
 
-      let html = ""
+      let mediaHtml = ""
       if ("video" === mediaType) {
-        html = `<p><video controls src="${safeUrl}"></video></p>`
+        mediaHtml = `<video controls src="${safeUrl}" style="display:block;max-width:100%;"></video>`
       } else {
-        html = `<p><img src="${safeUrl}" alt="${safeAlt}" /></p>`
+        mediaHtml = `<img src="${safeUrl}" alt="${safeAlt}" style="display:block;max-width:100%;" />`
       }
+
+      const html = `<p>${this.buildAiGeneratedMediaHtml(mediaHtml)}</p>`
 
       editor.focus()
 

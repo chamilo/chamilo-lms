@@ -43,9 +43,10 @@ final class ExportGlossaryToDocumentsAction
 
         $resourceLinkList = $this->normalizeResourceLinks($resourceLinkListRaw);
 
-        // Resolve context from resource links.
-        $cid = (int) ($resourceLinkList[0]['cid'] ?? 0);
-        $sid = (int) ($resourceLinkList[0]['sid'] ?? 0);
+        // cid/sid are top-level body fields, not part of resourceLinkList (which
+        // only ever carries visibility) -- same shape as CreateCGlossaryAction.
+        $cid = (int) ($data['cid'] ?? 0);
+        $sid = isset($data['sid']) ? (int) $data['sid'] : 0;
 
         $course = null;
         $session = null;

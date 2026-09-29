@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\QueryParameter;
@@ -61,7 +62,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/documents/{iid}/toggle_visibility',
             controller: UpdateVisibilityDocument::class,
             openapi: new Operation(
@@ -70,7 +71,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/documents/{iid}/move',
             controller: MoveDocumentAction::class,
             openapi: new Operation(summary: 'Move document (context-aware using ResourceLink.parent)'),
@@ -144,9 +145,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                                             'type' => 'object',
                                             'properties' => [
                                                 'visibility' => ['type' => 'integer'],
-                                                'cid' => ['type' => 'integer'],
-                                                'gid' => ['type' => 'integer'],
-                                                'sid' => ['type' => 'integer'],
                                             ],
                                         ],
                                     ],
@@ -161,6 +159,18 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ]),
                 ),
             ),
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                    required: false,
+                ),
+            ],
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
             deserialize: false
@@ -180,10 +190,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
-                ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Course group identifier',
                 ),
             ],
             openapi: new Operation(
@@ -225,10 +231,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
-                'gid' => new QueryParameter(
-                    schema: ['type' => 'integer'],
-                    description: 'Course group identifier',
-                ),
             ],
             openapi: new Operation(
                 summary: 'Download all documents as a ZIP file.',
@@ -260,15 +262,25 @@ use Symfony\Component\Validator\Constraints as Assert;
                     ),
                 ],
             ),
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                    required: false,
+                ),
+            ],
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             provider: DocumentCollectionStateProvider::class,
         ),
         new Get(
             uriTemplate: '/documents/{cid}/usage',
             controller: DocumentUsageAction::class,
-            openapiContext: [
-                'summary' => 'Get usage/quota information for documents.',
-            ],
+            openapi: new Operation(summary: 'Get usage/quota information for documents.'),
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             read: false,
             name: 'api_documents_usage'
@@ -311,7 +323,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
 
     #[Groups(['document:read', 'document:write', 'document:browse', 'student_publication_rel_document:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['document:read', 'document:write'])]
@@ -319,7 +331,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     protected ?string $comment;
 
     #[Groups(['document:read', 'document:write'])]
-    #[Assert\Choice(['folder', 'file', 'certificate', 'video', 'link'], message: 'Choose a valid filetype.')]
+    #[Assert\Choice(choices: ['folder', 'file', 'certificate', 'video', 'link'], message: 'Choose a valid filetype.')]
     #[ORM\Column(name: 'filetype', type: 'string', length: 15, nullable: false)]
     protected string $filetype;
 

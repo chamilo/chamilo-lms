@@ -62,9 +62,9 @@
               </button>
             </div>
 
-            <!-- AI Tutor quick entry (only when course context is available) -->
+            <!-- AI Tutor quick entry (course tutor or global Chamilo support) -->
             <div
-              v-if="inCourse && tutorCtx.enabled && !contactsHasAiTutor"
+              v-if="tutorCtx.enabled && !contactsHasAiTutor"
               class="chd-ai"
             >
               <button
@@ -158,7 +158,7 @@
                   >
                     <div
                       class="chd-bubble__content"
-                      v-html="renderMessage(msg.message)"
+                      v-html="renderMessage(msg)"
                     />
                     <div class="chd-bubble__meta">
                       <span class="chd-bubble__date">{{ formatTs(msg.date) }}</span>
@@ -173,7 +173,22 @@
                   </div>
                 </div>
                 <div
-                  v-if="activeMessages.length === 0"
+                  v-if="isAiThread && aiTutorResponding"
+                  :aria-label="t('AI Tutor')"
+                  aria-live="polite"
+                  class="chd-row chd-row--peer"
+                >
+                  <div
+                    class="chd-bubble chd-ai-typing"
+                    role="status"
+                  >
+                    <span class="chd-ai-typing__dot" />
+                    <span class="chd-ai-typing__dot" />
+                    <span class="chd-ai-typing__dot" />
+                  </div>
+                </div>
+                <div
+                  v-if="activeMessages.length === 0 && !aiTutorResponding"
                   class="chd-text--muted chd-center chd-py-8"
                 >
                   {{ t("No messages yet") }}
@@ -220,6 +235,20 @@
               <div class="chd-composer__actions">
                 <span class="chd-hint">{{ t("Enter to send · Shift+Enter for newline") }}</span>
                 <div class="chd-spacer" />
+                <button
+                  v-if="isAiThread"
+                  :aria-label="t('Save')"
+                  :disabled="conversationSaved || savingConversation || sending || clearing || activeMessages.length === 0"
+                  :title="t('Save')"
+                  class="chd-btn chd-btn--ghost chd-btn--xs"
+                  type="button"
+                  @click="saveConversation"
+                >
+                  <i
+                    :class="savingConversation ? 'mdi mdi-loading mdi-spin' : conversationSaved ? 'mdi mdi-check' : 'mdi mdi-content-save-outline'"
+                    aria-hidden="true"
+                  />
+                </button>
                 <button
                   :disabled="sending || clearing"
                   class="chd-btn chd-btn--danger-outline"
@@ -366,26 +395,53 @@ watch(activePeer, (v) => {
   if (v?.id) localStorage.setItem(LAST_PEER_KEY, String(v.id))
 })
 
+function currentRouteContext() {
+  const routeName = String(route?.name || "").toLowerCase()
+  const routePath = String(route?.path || "").toLowerCase()
+  const fullPath = String(route?.fullPath || "").toLowerCase()
+  const tool = String(route?.meta?.tool || "").toLowerCase()
+  const locationPath = String(window.location.pathname || "").toLowerCase()
+  const locationSearch = String(window.location.search || "").toLowerCase()
+  const context = `${routeName} ${routePath} ${fullPath} ${locationPath} ${locationSearch}`
+
+  return { routeName, tool, context }
+}
+
 function isAssignmentsPage() {
-  const p = String(window.location.pathname || "")
-  const q = String(window.location.search || "")
+  const { routeName, tool, context } = currentRouteContext()
+
   return (
-    p.includes("/work/") ||
-    p.includes("/student_publication/") ||
-    p.endsWith("/work.php") ||
-    q.includes("work.php") ||
-    q.includes("student_publication")
+    tool === "student_publication" ||
+    routeName.startsWith("assignment") ||
+    context.includes("/resources/assignment/") ||
+    context.includes("/work/") ||
+    context.includes("/student_publication/") ||
+    context.includes("/work.php") ||
+    context.includes("student_publication")
   )
 }
 
 function isExercisePage() {
-  const p = String(window.location.pathname || "")
-  const q = String(window.location.search || "")
+  const { routeName, tool, context } = currentRouteContext()
+
   return (
-    p.includes("/exercise/") ||
-    p.endsWith("/exercise.php") ||
-    q.includes("exercise.php") ||
-    (q.includes("cidReq") && (q.includes("exercise") || q.includes("lp_id")))
+    tool === "exercise" ||
+    routeName.startsWith("exercise") ||
+    context.includes("/resources/exercise/") ||
+    context.includes("/exercise/") ||
+    context.includes("/exercise.php")
+  )
+}
+
+function isLearningPathPage() {
+  const { routeName, context } = currentRouteContext()
+
+  return (
+    routeName.startsWith("lp") ||
+    context.includes("/resources/lp/") ||
+    context.includes("/lp/lp_controller.php") ||
+    context.includes("origin=learnpath") ||
+    context.includes("lp_id=")
   )
 }
 
@@ -403,6 +459,7 @@ const canRenderDock = computed(() => {
   if (!dockEnabled.value) return false
   if (isAssignmentsPage()) return false
   if (isExercisePage()) return false
+  if (isLearningPathPage()) return false
   return true
 })
 
@@ -437,6 +494,7 @@ const API = {
     "/account/chat/api/tutor_context",
   ),
   tutor_reset: RG(["chat_api_tutor_reset", "chamilo_core_chat_api_tutor_reset"], "/account/chat/api/tutor/reset"),
+  tutor_save: RG(["chat_api_tutor_save", "chamilo_core_chat_api_tutor_save"], "/account/chat/api/tutor/save"),
 }
 
 /** ===== State ===== */
@@ -452,6 +510,9 @@ const fetchingPrev = ref(false)
 
 const draft = ref("")
 const sending = ref(false)
+const aiTutorResponding = ref(false)
+const savingConversation = ref(false)
+const conversationSaved = ref(false)
 const clearing = ref(false)
 
 const scrollBox = ref(null)
@@ -459,10 +520,11 @@ const scrollBox = ref(null)
 /** Tutor context (backend-authoritative) */
 const tutorCtx = reactive({
   loaded: false,
-  enabled: false, // TRUE only when backend says enabled (course-aware)
+  enabled: false, // TRUE only when backend says enabled for the current context
   inTest: false,
   course: null, // { id, title, language }
   provider: "", // default provider key
+  mode: null, // "course" or "global"
 })
 
 /** Unread tracking */
@@ -531,21 +593,31 @@ function normalizeContactsHtmlForAiTutor(html) {
     )
     .forEach((n) => n.remove())
 
-  const shouldShowAi = !!tutorCtx.enabled && !!inCourse.value && !tutorCtx.inTest
+  const shouldShowAi = !!tutorCtx.enabled && !tutorCtx.inTest
 
   if (shouldShowAi) {
     const row = document.createElement("div")
     row.className = "chd-ai-contact"
+    const tutorLabel = t("AI Tutor")
     row.dataset.user = String(AI_PEER_ID)
-    row.setAttribute("data-name", "AI Tutor")
+    row.setAttribute("data-name", tutorLabel)
     row.style.cursor = "pointer"
     row.style.padding = "10px"
     row.style.borderBottom = "1px solid #eee"
-    row.innerHTML = `
-      <span style="margin-right:8px;">🤖</span>
-      <strong>AI Tutor</strong>
-      <span style="float:right; color:#2e7d32;">●</span>
-    `
+
+    const robot = document.createElement("span")
+    robot.style.marginRight = "8px"
+    robot.textContent = "🤖"
+
+    const label = document.createElement("strong")
+    label.textContent = tutorLabel
+
+    const presence = document.createElement("span")
+    presence.style.float = "right"
+    presence.style.color = "#2e7d32"
+    presence.textContent = "●"
+
+    row.replaceChildren(robot, label, presence)
     wrap.prepend(row)
   }
 
@@ -622,11 +694,172 @@ function linkify(raw) {
 }
 
 /**
- * Render chat message safely for v-html.
- * Allow only <a> and <br> tags (chat messages are treated as plain text).
+ * Decode the HTML entities/line breaks produced by legacy chat storage back
+ * into plain text. The result is always escaped again before being rendered.
  */
-function renderMessage(rawMessage) {
-  const html = linkify(rawMessage)
+function normalizeStoredChatText(rawMessage) {
+  let text = String(rawMessage ?? "")
+
+  // Chat::sanitize() stores line breaks as <br>. Some AI providers can also
+  // escape the tag, so accept an optional leading backslash.
+  text = text.replace(/\\?<br\s*\/?>/gi, "\n")
+
+  // Messages coming from the legacy chat table have already passed through
+  // htmlspecialchars(). Decode once, then escape again in the renderer below.
+  const decoder = document.createElement("textarea")
+  decoder.innerHTML = text
+
+  return decoder.value
+}
+
+function safeHttpUrl(rawUrl) {
+  try {
+    const url = new URL(String(rawUrl || ""))
+    if (!/^https?:$/i.test(url.protocol)) return ""
+    return url.toString()
+  } catch {
+    return ""
+  }
+}
+
+/**
+ * Render the limited Markdown normally returned by AI providers.
+ * Raw HTML is never trusted: content is escaped first and DOMPurify remains
+ * the final safety boundary.
+ */
+function renderAiInlineMarkdown(rawText) {
+  let text = String(rawText ?? "")
+
+  // Providers occasionally escape Markdown punctuation (\*\*, \[, ...).
+  // Unescape it only for assistant messages so normal user chat stays literal.
+  text = text.replace(/\\([\\`*_[\]{}()#+\-.!>])/g, "$1")
+
+  const tokens = []
+  const token = (html) => {
+    const key = `\uE000${tokens.length}\uE001`
+    tokens.push(html)
+    return key
+  }
+
+  // Markdown links first so the URL is not picked up again by bare-link logic.
+  text = text.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, (match, label, rawUrl) => {
+    const href = safeHttpUrl(rawUrl)
+    if (!href) return match
+
+    return token(
+      `<a href="${escapeForHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeForHtml(label)}</a>`,
+    )
+  })
+
+  // Inline code.
+  text = text.replace(/`([^`\n]+)`/g, (match, code) => token(`<code>${escapeForHtml(code)}</code>`))
+
+  // Bare HTTP(S) URLs.
+  text = text.replace(/https?:\/\/[^\s<>"']+/g, (rawUrl) => {
+    const href = safeHttpUrl(rawUrl)
+    if (!href) return rawUrl
+
+    return token(
+      `<a href="${escapeForHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeForHtml(rawUrl)}</a>`,
+    )
+  })
+
+  let html = escapeForHtml(text)
+
+  // Limited emphasis support. Keep this intentionally small and predictable.
+  html = html.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>")
+  html = html.replace(/__([^_\n]+)__/g, "<strong>$1</strong>")
+  html = html.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>")
+  html = html.replace(/(^|[^_])_([^_\n]+)_(?!_)/g, "$1<em>$2</em>")
+
+  tokens.forEach((value, index) => {
+    html = html.replaceAll(`\uE000${index}\uE001`, value)
+  })
+
+  return html
+}
+
+function renderAiMarkdown(rawMessage) {
+  const text = normalizeStoredChatText(rawMessage)
+  const lines = text.split(/\n/)
+  const out = []
+  let listType = ""
+
+  const closeList = () => {
+    if (!listType) return
+    out.push(`</${listType}>`)
+    listType = ""
+  }
+
+  const openList = (type) => {
+    if (listType === type) return
+    closeList()
+    listType = type
+    out.push(`<${type}>`)
+  }
+
+  for (const rawLine of lines) {
+    const line = rawLine.trimEnd()
+
+    if (!line.trim()) {
+      closeList()
+      out.push("<br>")
+      continue
+    }
+
+    const heading = line.match(/^#{1,6}\s+(.+)$/)
+    if (heading) {
+      closeList()
+      out.push(`<strong>${renderAiInlineMarkdown(heading[1])}</strong><br>`)
+      continue
+    }
+
+    if (/^\s*---+\s*$/.test(line)) {
+      closeList()
+      out.push("<br>")
+      continue
+    }
+
+    const bullet = line.match(/^\s*[-*]\s+(.+)$/)
+    if (bullet) {
+      openList("ul")
+      out.push(`<li>${renderAiInlineMarkdown(bullet[1])}</li>`)
+      continue
+    }
+
+    const numbered = line.match(/^\s*\d+[.)]\s+(.+)$/)
+    if (numbered) {
+      openList("ol")
+      out.push(`<li>${renderAiInlineMarkdown(numbered[1])}</li>`)
+      continue
+    }
+
+    closeList()
+    out.push(`${renderAiInlineMarkdown(line)}<br>`)
+  }
+
+  closeList()
+
+  return DOMPurify.sanitize(out.join(""), {
+    ALLOWED_TAGS: ["a", "br", "strong", "em", "code", "ul", "ol", "li"],
+    ALLOWED_ATTR: ["href", "target", "rel"],
+    ADD_ATTR: ["target", "rel"],
+  })
+}
+
+/**
+ * Render chat messages safely for v-html.
+ * - Normal chat stays plain text with safe clickable links.
+ * - AI assistant messages get a small, sanitized Markdown renderer.
+ */
+function renderMessage(message) {
+  const fromId = Number(message?.from_user_info?.id ?? message?.f ?? 0)
+
+  if (fromId === AI_PEER_ID) {
+    return renderAiMarkdown(message?.message)
+  }
+
+  const html = linkify(normalizeStoredChatText(message?.message))
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: ["a", "br"],
     ALLOWED_ATTR: ["href", "target", "rel"],
@@ -911,8 +1144,8 @@ function collectVisibleContactIds() {
   const root = document.querySelector(".chd .chd-contacts .chd-contacts-html")
   const ids = new Set()
 
-  // Only include AI Tutor when backend says it is enabled (course-aware).
-  if (tutorCtx.enabled && inCourse.value) ids.add(AI_PEER_ID)
+  // Include AI Tutor whenever the backend enables it for the current context.
+  if (tutorCtx.enabled) ids.add(AI_PEER_ID)
 
   if (root) {
     root
@@ -948,13 +1181,24 @@ function paintPresenceOnContacts(map) {
   })
 }
 
+/** Current Chamilo URL without scheme or domain, for AI contextual help. */
+function currentRelativeUrl() {
+  const pathname = String(window.location.pathname || "/")
+  const search = String(window.location.search || "")
+  const hash = String(window.location.hash || "")
+
+  return `${pathname}${search}${hash}`
+}
+
 /** Tutor context */
 async function loadTutorContext() {
   tutorCtx.loaded = false
+  conversationSaved.value = false
   tutorCtx.enabled = false
   tutorCtx.inTest = false
   tutorCtx.course = null
   tutorCtx.provider = ""
+  tutorCtx.mode = null
 
   try {
     const r = await getJSON(API.tutor_context)
@@ -962,11 +1206,13 @@ async function loadTutorContext() {
     tutorCtx.inTest = !!r?.in_test
     tutorCtx.course = r?.course || null
     tutorCtx.provider = typeof r?.provider === "string" ? r.provider : ""
+    tutorCtx.mode = typeof r?.mode === "string" ? r.mode : null
   } catch {
     tutorCtx.enabled = false
     tutorCtx.inTest = false
     tutorCtx.course = null
     tutorCtx.provider = ""
+    tutorCtx.mode = null
   } finally {
     tutorCtx.loaded = true
   }
@@ -1080,8 +1326,8 @@ function resetAiThreadCache() {
 async function openConversation(peer) {
   const pid = Number(peer.id)
 
-  // Guard: AI Tutor must be course-only and enabled by backend.
-  if (pid === AI_PEER_ID && (!tutorCtx.enabled || !inCourse.value || tutorCtx.inTest)) return
+  // Backend decides whether the AI Tutor is available in course or global support mode.
+  if (pid === AI_PEER_ID && (!tutorCtx.enabled || tutorCtx.inTest)) return
 
   activePeer.value = {
     id: pid,
@@ -1377,7 +1623,7 @@ const sendDisabled = computed(() => {
   if (sending.value) return true
   if (userStatus.value !== 1) return true
   if (isAiThread.value && tutorCtx.inTest) return true
-  if (isAiThread.value && (!tutorCtx.enabled || !inCourse.value)) return true
+  if (isAiThread.value && !tutorCtx.enabled) return true
   return false
 })
 
@@ -1705,7 +1951,7 @@ async function send() {
 
   if (pid === AI_PEER_ID) {
     if (tutorCtx.inTest) return
-    if (!tutorCtx.enabled || !inCourse.value) return
+    if (!tutorCtx.enabled) return
   }
 
   const nowSec = Math.floor(Date.now() / 1000)
@@ -1735,18 +1981,32 @@ async function send() {
   draft.value = ""
   sending.value = true
 
+  if (pid === AI_PEER_ID) {
+    conversationSaved.value = false
+    aiTutorResponding.value = true
+    requestAnimationFrame(() => {
+      const el = scrollBox.value
+      if (el) el.scrollTop = el.scrollHeight
+    })
+  }
+
   try {
     const selectionContext = pid === AI_PEER_ID && selectedTextContext.value ? selectedTextContext.value : ""
     const extra =
       pid === AI_PEER_ID
-        ? { ai_provider: tutorCtx.provider, selected_text: selectionContext }
+        ? { ai_provider: tutorCtx.provider, selected_text: selectionContext, current_path: currentRelativeUrl() }
         : {}
     const res = await post(API.send, { to: pid, message: raw, chat_sec_token: me.secToken, ...extra })
 
-    if (res?.assistant?.id) {
+    if (res?.assistant) {
+      const assistant = { ...res.assistant }
+      if (!Number(assistant.id)) {
+        assistant.id = -Date.now() - 1
+      }
+
       const arr2 = messagesByPeer.get(pid) || []
-      if (!arr2.find((m) => Number(m.id) === Number(res.assistant.id))) {
-        messagesByPeer.set(pid, [...arr2, res.assistant].sort(byChronoId))
+      if (!arr2.find((m) => Number(m.id) === Number(assistant.id))) {
+        messagesByPeer.set(pid, [...arr2, assistant].sort(byChronoId))
       }
       requestAnimationFrame(() => {
         const el = scrollBox.value
@@ -1758,11 +2018,42 @@ async function send() {
       if (res.sec_token) me.secToken = res.sec_token
       replaceTempId(pid, tempId, { id: Number(res.id), recd: 2, date: nowSec })
       removePending(pid, tempId)
+    } else if (pid === AI_PEER_ID && res?.assistant) {
+      // Course AI errors are intentionally not persisted in the global chat table.
+      // Remove the optimistic user row and keep only the transient assistant error.
+      const arr2 = messagesByPeer.get(pid) || []
+      messagesByPeer.set(
+        pid,
+        arr2.filter((m) => Number(m.id) !== Number(tempId)),
+      )
+      removePending(pid, tempId)
     }
   } catch {
     // keep pending bubble
   } finally {
+    if (pid === AI_PEER_ID) {
+      aiTutorResponding.value = false
+    }
     sending.value = false
+  }
+}
+
+async function saveConversation() {
+  if (!isAiThread.value || savingConversation.value || activeMessages.value.length === 0) return
+
+  savingConversation.value = true
+  conversationSaved.value = false
+
+  try {
+    const res = await post(API.tutor_save, {
+      ai_provider: tutorCtx.provider || "",
+      current_path: currentRelativeUrl(),
+    })
+    conversationSaved.value = !!res?.ok
+  } catch {
+    conversationSaved.value = false
+  } finally {
+    savingConversation.value = false
   }
 }
 
@@ -1774,9 +2065,10 @@ async function clearConversation() {
     const pid = activePeer.value.id
 
     if (Number(pid) === AI_PEER_ID) {
-      // Server reset for AI tutor (course-only)
+      // Server reset for the current AI tutor context.
       await post(API.tutor_reset, { ai_provider: tutorCtx.provider || "" })
       resetAiThreadCache()
+      conversationSaved.value = false
       await getPreviousMessages()
     } else {
       const nowSec = Math.floor(Date.now() / 1000)
@@ -1923,7 +2215,7 @@ async function onNavigationChanged() {
   }
 
   if (aiActive) {
-    if (!tutorCtx.enabled || !inCourse.value || tutorCtx.inTest) {
+    if (!tutorCtx.enabled || tutorCtx.inTest) {
       activePeer.value = null
       resetAiThreadCache()
       return
@@ -2118,6 +2410,47 @@ html[dir="rtl"] .chd .chd-contacts .chd-contact-dot {
   align-items: center;
   justify-content: center;
 }
+/* AI Tutor response indicator. */
+.chd-ai-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 48px;
+  min-height: 30px;
+}
+.chd-ai-typing__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.35;
+  animation: chd-ai-typing-pulse 1.2s infinite ease-in-out;
+}
+.chd-ai-typing__dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.chd-ai-typing__dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes chd-ai-typing-pulse {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  40% {
+    transform: translateY(-3px);
+    opacity: 0.9;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chd-ai-typing__dot {
+    animation: none;
+    opacity: 0.55;
+  }
+}
+
 /* AI contact styles (minimal and non-breaking) */
 .chd-ai {
   padding: 8px 10px;

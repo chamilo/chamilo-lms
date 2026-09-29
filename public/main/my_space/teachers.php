@@ -33,7 +33,7 @@ $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : n
 $webCodePath = api_get_path(WEB_CODE_PATH);
 
 $interbreadcrumb[] = [
-    'url' => 'index.php',
+    'url' => api_get_path(WEB_PATH).'reporting',
     'name' => get_lang('Reporting'),
 ];
 
@@ -47,7 +47,7 @@ if (isset($_GET['user_id']) && '' !== $_GET['user_id'] && !isset($_GET['type']))
 if (isset($_GET['user_id']) && '' !== $_GET['user_id'] && isset($_GET['type']) && 'coach' === $_GET['type']) {
     $interbreadcrumb[] = [
         'url' => 'coaches.php',
-        'name' => get_lang('Coaches'),
+        'name' => get_lang('Tutors'),
     ];
 }
 

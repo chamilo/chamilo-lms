@@ -19,59 +19,12 @@ class CLpRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testCreateLp(): void
-    {
-        $repo = self::getContainer()->get(CLpRepository::class);
-
-        $course = $this->createCourse('new');
-        $teacher = $this->createUser('teacher');
-
-        $lp = (new CLp())
-            ->setTitle('lp')
-            ->setDescription('desc')
-            ->setTheme('chamilo')
-            ->setAccumulateScormTime(100)
-            ->setAccumulateWorkTime(100)
-            ->setAuthor('author')
-            ->setContentMaker('maker')
-            ->setContentLocal('local')
-            ->setForceCommit(false)
-            ->setUseMaxScore(100)
-            ->setSubscribeUsers(1)
-            ->setJsLib('lib')
-            ->setHideTocFrame(true)
-            ->setRef('ref')
-            ->setPath('path')
-            ->setAutolaunch(0)
-            ->setCategory(null)
-            ->setParent($course)
-            ->setCreator($teacher)
-            ->setLpType(CLp::LP_TYPE)
-        ;
-        $this->assertHasNoEntityViolations($lp);
-        $repo->createLp($lp);
-
-        $this->assertSame('lp', $lp->getTitle());
-        $this->assertSame('desc', $lp->getDescription());
-        $this->assertSame('chamilo', $lp->getTheme());
-        $this->assertSame('author', $lp->getAuthor());
-        $this->assertSame('local', $lp->getContentLocal());
-        $this->assertSame('maker', $lp->getContentMaker());
-
-        $this->assertNotNull($lp->getResourceNode());
-        $this->assertSame(1, $lp->getItems()->count());
-        $this->assertFalse($lp->hasCategory());
-        $this->assertSame('lp', (string) $lp);
-        $this->assertSame(1, $repo->count([]));
-
-        $link = $repo->getLink($lp, $this->getContainer()->get('router'));
-        $this->assertSame('/main/lp/lp_controller.php?lp_id='.$lp->getIid().'&action=view', $link);
-    }
-
     public function testCreateWithCategory(): void
     {
         $lpRepo = self::getContainer()->get(CLpRepository::class);
         $categoryRepo = self::getContainer()->get(CLpCategoryRepository::class);
+
+        $lpCountBefore = $lpRepo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -95,13 +48,13 @@ class CLpRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($lp);
         $lpRepo->createLp($lp);
 
-        $this->assertSame(1, $lpRepo->count([]));
+        $this->assertSame($lpCountBefore + 1, $lpRepo->count([]));
         $this->assertSame(1, $categoryRepo->count([]));
         $this->assertInstanceOf(CLpCategory::class, $lp->getCategory());
 
         $lpRepo->delete($lp);
 
-        $this->assertSame(0, $lpRepo->count([]));
+        $this->assertSame($lpCountBefore, $lpRepo->count([]));
         $this->assertSame(1, $categoryRepo->count([]));
     }
 

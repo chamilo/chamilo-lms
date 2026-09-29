@@ -1,0 +1,29 @@
+<div id="email-message" style="padding-top:10px; padding-bottom:10px;">
+    <p>{{ 'Hello,'|trans }}</p>
+    <p>
+        {% if is_session %}
+            {{ 'You have been invited to join the following session:'|trans }}
+        {% else %}
+            {{ 'You have been invited to join the following course:'|trans }}
+        {% endif %}
+    </p>
+    <div style="border-color: #bce8f1; padding: 15px; background-color: #d9edf7; margin-bottom: 15px; font-size: 16px; color:#31708f;">
+        <p>
+            <strong>{{ (is_session ? 'Session'|trans : 'Course'|trans) }}: </strong>
+            {{ target_title }}
+        </p>
+    </div>
+
+    {% if is_existing_user %}
+        <p>{{ 'Click the link below to log in (if needed) and join automatically.'|trans }}</p>
+    {% else %}
+        <p>{{ 'Click the link below to create your account and join automatically.'|trans }}</p>
+    {% endif %}
+    <p><a style="font-weight: bold; color: #2BA6CB;" href="{{ url }}">{{ url }}</a></p>
+    <p>{{ 'This link can only be used once and will expire after a few days.'|trans }}</p>
+
+    <div style="text-align: right;">
+        <p><strong>{{ 'Regards'|trans }}</strong><br>
+            {{ inviter_name }}</p>
+    </div>
+</div>

@@ -492,7 +492,7 @@ class Notification extends Model
             $extraFieldValue = new ExtraFieldValue('user');
             $valueInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
                 $userId,
-                Rest::EXTRA_FIELD_GCM_REGISTRATION
+                'gcm_registration_id'
             );
 
             if (empty($valueInfo)) {

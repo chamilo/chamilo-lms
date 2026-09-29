@@ -23,7 +23,23 @@ class Diagnoser
     public const STATUS_ERROR = 3;
     public const STATUS_INFORMATION = 4;
 
+    /**
+     * When true, build_setting() returns structured arrays suitable for JSON APIs
+     * instead of HTML table rows.
+     */
+    private bool $structuredOutput = false;
+
     public function __construct() {}
+
+    /**
+     * Enable structured (non-HTML) rows from build_setting().
+     */
+    public function withStructuredOutput(bool $enabled = true): self
+    {
+        $this->structuredOutput = $enabled;
+
+        return $this;
+    }
 
     /**
      * Render diagnostics UI with Tailwind (no Bootstrap).
@@ -306,8 +322,8 @@ class Diagnoser
     {
         $array = [];
         $writable_folders = [
-            api_get_path(SYS_ARCHIVE_PATH).'cache',
-            api_get_path(SYS_PATH).'upload/users/',
+            api_get_path(SYS_ARCHIVE_PATH),
+            api_get_path(SYMFONY_SYS_PATH).'var/upload/users/',
         ];
         foreach ($writable_folders as $folder) {
             $writable = is_writable($folder);
@@ -451,7 +467,7 @@ class Diagnoser
             get_lang('Output buffering setting is "On" for being enabled or "Off" for being disabled. This setting also may be enabled through an integer value (4096 for example) which is the output buffer size.')
         );
 
-        $setting = ini_get('file_uploads');
+        $setting = $this->normalize_ini_boolean(ini_get('file_uploads'));
         $req_setting = 1;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
@@ -465,7 +481,7 @@ class Diagnoser
             get_lang('File uploads indicate whether file uploads are authorized at all')
         );
 
-        $setting = ini_get('magic_quotes_runtime');
+        $setting = $this->normalize_ini_boolean(ini_get('magic_quotes_runtime'));
         $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
@@ -479,7 +495,7 @@ class Diagnoser
             get_lang('This is a highly unrecommended feature which converts values returned by all functions that returned external values to slash-escaped values. This feature should *not* be enabled.')
         );
 
-        $setting = ini_get('safe_mode');
+        $setting = $this->normalize_ini_boolean(ini_get('safe_mode'));
         $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
@@ -493,7 +509,7 @@ class Diagnoser
             get_lang('Safe mode is a deprecated PHP feature which (badly) limits the access of PHP scripts to other resources. It is recommended to leave it off.')
         );
 
-        $setting = ini_get('register_globals');
+        $setting = $this->normalize_ini_boolean(ini_get('register_globals'));
         $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
@@ -507,7 +523,7 @@ class Diagnoser
             get_lang('Whether to use the register globals feature or not. Using it represents potential security risks with this software.')
         );
 
-        $setting = ini_get('short_open_tag');
+        $setting = $this->normalize_ini_boolean(ini_get('short_open_tag'));
         $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
@@ -521,7 +537,7 @@ class Diagnoser
             get_lang('Whether to allow for short open tags to be used or not. This feature should not be used.')
         );
 
-        $setting = ini_get('magic_quotes_gpc');
+        $setting = $this->normalize_ini_boolean(ini_get('magic_quotes_gpc'));
         $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
@@ -535,7 +551,7 @@ class Diagnoser
             get_lang('Whether to automatically escape values from GET, POST and COOKIES arrays. A similar feature is provided for the required data inside this software, so using it provokes double slash-escaping of values.')
         );
 
-        $setting = ini_get('display_errors');
+        $setting = $this->normalize_ini_boolean(ini_get('display_errors'));
         $req_setting = 0;
         $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
@@ -804,13 +820,12 @@ class Diagnoser
         $em = Database::getManager();
         $connection = $em->getConnection();
 
-        // Prefer platform name (mysql, postgresql, sqlite, …)
+        // Prefer platform name (mysql, mariadb, postgresql, sqlite, …)
         try {
-            $driver = $connection->getDatabasePlatform()->getName();
+            $platform = $connection->getDatabasePlatform();
+            $driver = strtolower(str_replace('Platform', '', (new ReflectionClass($platform))->getShortName()));
         } catch (Throwable $e) {
-            $driver = (method_exists($connection, 'getDriver') && method_exists($connection->getDriver(), 'getName'))
-                ? $connection->getDriver()->getName()
-                : 'unknown';
+            $driver = 'unknown';
         }
 
         $params = method_exists($connection, 'getParams') ? (array) $connection->getParams() : [];
@@ -1189,6 +1204,40 @@ class Diagnoser
         $formatter,
         $comment
     ) {
+        $formatted_current_value = $current_value;
+        $formatted_expected_value = $expected_value;
+
+        if ($formatter) {
+            if (method_exists($this, 'format_'.$formatter)) {
+                $formatted_current_value = call_user_func([$this, 'format_'.$formatter], $current_value);
+                $formatted_expected_value = call_user_func([$this, 'format_'.$formatter], $expected_value);
+            }
+        }
+
+        if ($this->structuredOutput) {
+            $statusMap = [
+                self::STATUS_OK => 'ok',
+                self::STATUS_WARNING => 'warning',
+                self::STATUS_ERROR => 'error',
+                self::STATUS_INFORMATION => 'info',
+            ];
+
+            $urlOut = null;
+            if (null !== $url && '' !== $url && '#' !== $url) {
+                $urlOut = (string) $url;
+            }
+
+            return [
+                'status' => $statusMap[$status] ?? 'info',
+                'section' => (string) $section,
+                'title' => (string) $title,
+                'url' => $urlOut,
+                'current' => $this->stringifyDiagnosticValue($formatted_current_value),
+                'expected' => $this->stringifyDiagnosticValue($formatted_expected_value),
+                'comment' => (string) $comment,
+            ];
+        }
+
         switch ($status) {
             case self::STATUS_OK:
                 $img = StateIcon::COMPLETE;
@@ -1213,19 +1262,29 @@ class Diagnoser
         }
 
         $image = Display::getMdiIcon($img, 'ch-tool-icon', null, ICON_SIZE_SMALL, $title);
-        $url = $this->get_link($title, $url);
+        $linkedTitle = $this->get_link($title, $url);
 
-        $formatted_current_value = $current_value;
-        $formatted_expected_value = $expected_value;
+        return [$image, $section, $linkedTitle, $formatted_current_value, $formatted_expected_value, $comment];
+    }
 
-        if ($formatter) {
-            if (method_exists($this, 'format_'.$formatter)) {
-                $formatted_current_value = call_user_func([$this, 'format_'.$formatter], $current_value);
-                $formatted_expected_value = call_user_func([$this, 'format_'.$formatter], $expected_value);
-            }
+    /**
+     * Normalize diagnostic cell values for JSON transport.
+     */
+    private function stringifyDiagnosticValue(mixed $value): string
+    {
+        if (null === $value) {
+            return '';
         }
 
-        return [$image, $section, $url, $formatted_current_value, $formatted_expected_value, $comment];
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+
+        return (string) json_encode($value);
     }
 
     /**
@@ -1279,6 +1338,24 @@ class Diagnoser
     public function format_yes_no($value)
     {
         return $value ? get_lang('Yes') : get_lang('No');
+    }
+
+    /**
+     * Normalize boolean php.ini values before comparing them with numeric requirements.
+     */
+    private function normalize_ini_boolean(string|false $value): int
+    {
+        if (false === $value) {
+            return 0;
+        }
+
+        $value = strtolower(trim($value));
+
+        if ('' === $value || in_array($value, ['0', 'off', 'false', 'no', 'none'], true)) {
+            return 0;
+        }
+
+        return 1;
     }
 
     /**

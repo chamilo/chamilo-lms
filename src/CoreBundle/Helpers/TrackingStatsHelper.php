@@ -21,6 +21,7 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bundle\SecurityBundle\Security;
 use Tracking;
 
@@ -321,7 +322,7 @@ class TrackingStatsHelper
             return $this->em->createQueryBuilder()
                 ->select('DISTINCT u')
                 ->from(User::class, 'u')
-                ->innerJoin(SessionRelCourseRelUser::class, 'scru', 'WITH', 'scru.user = u')
+                ->innerJoin(SessionRelCourseRelUser::class, 'scru', Join::ON, 'scru.user = u')
                 ->where('IDENTITY(scru.course) = :courseId')
                 ->andWhere('IDENTITY(scru.session) = :sessionId')
                 ->andWhere('u.active = :active')

@@ -77,14 +77,14 @@
 import { inject, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { useToast } from "primevue/usetoast"
+import { useNotification } from "../../composables/notification"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import branchService from "../../services/branchService"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 const router = useRouter()
-const toast = useToast()
+const { showSuccessNotification, showErrorNotification } = useNotification()
 const layoutMenuItems = inject("layoutMenuItems")
 
 const items = ref([])
@@ -119,13 +119,10 @@ async function performDelete() {
   deleteDialog.value = false
   try {
     await baseService.delete(`/api/branches/${itemToDelete.value.id}`)
-    toast.add({ severity: "success", detail: t("Deleted"), life: 3500 })
+    showSuccessNotification(t("Deleted"))
     await loadItems()
   } catch (e) {
-    const message = e?.response?.status === 500
-      ? t("Cannot delete branch with rooms attached")
-      : e.message
-    toast.add({ severity: "error", detail: message, life: 5000 })
+    showErrorNotification(e?.response?.status === 500 ? t("Cannot delete branch with rooms attached") : e)
   }
 }
 

@@ -1,23 +1,38 @@
+export function looksLikeHtmlContent(content) {
+  const value = String(content || "").trim()
+
+  if (!value) {
+    return false
+  }
+
+  if (/^<!doctype\s+html[\s>]/i.test(value) || /^<html[\s>]/i.test(value)) {
+    return true
+  }
+
+  return /<(?:head|body|main|section|article|div|p|h[1-6]|table|thead|tbody|tr|td|ul|ol|li|figure|figcaption|style)\b[^>]*>/i.test(
+    value,
+  )
+}
+
 export function useFileUtils() {
   const isFile = (fileData) => {
     return !!fileData?.resourceNode?.firstResourceFile
   }
 
   const safeMime = (fileData) => {
-    // normalize: strip params like "; charset=UTF-8"
+    // Normalize MIME parameters such as "; charset=UTF-8".
     const raw = fileData?.resourceNode?.firstResourceFile?.mimeType || ""
     return String(raw).split(";")[0].trim()
   }
 
   const fileName = (fileData) => {
-    // prefer originalName; fallback to node title
     return fileData?.resourceNode?.firstResourceFile?.originalName || fileData?.resourceNode?.title || ""
   }
 
   const ext = (fileData) => {
     const name = fileName(fileData)
-    const m = /\.([A-Za-z0-9]+)$/.exec(name)
-    return m ? m[1].toLowerCase() : ""
+    const match = /\.([A-Za-z0-9]+)$/.exec(name)
+    return match ? match[1].toLowerCase() : ""
   }
 
   const isImage = (fileData) => {
@@ -38,13 +53,9 @@ export function useFileUtils() {
     if (!isFile(fileData)) return false
 
     const mime = safeMime(fileData).toLowerCase()
-    const e = ext(fileData)
-
-    // MIME-based detection
+    const extension = ext(fileData)
     const byMime = mime.includes("text/html") || mime.includes("application/html") || mime.includes("application/xhtml")
-
-    // Extension-based fallback when MIME is missing/wrong
-    const byExt = e === "html" || e === "htm" || e === "xhtml"
+    const byExt = extension === "html" || extension === "htm" || extension === "xhtml"
 
     return byMime || byExt
   }

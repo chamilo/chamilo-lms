@@ -12,8 +12,10 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Enums\GradebookCalculationMode;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -29,9 +31,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('ROLE_USER')"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_TEACHER')"),
-        new Put(security: "is_granted('ROLE_TEACHER')"),
-        new Delete(security: "is_granted('ROLE_TEACHER')"),
+        new Post(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"),
+        // Checked against the category's own course and session, not the request-context ones.
+        new Put(security: "is_granted('EDIT', object)"),
+        new Patch(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
     ],
     normalizationContext: [
         'groups' => ['gradebookCategory:read'],
@@ -124,11 +128,6 @@ class GradebookCategory
     #[ORM\Column(name: 'certif_min_score', type: 'integer', nullable: true)]
     protected ?int $certifMinScore = null;
 
-    #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
-    #[ORM\ManyToOne(targetEntity: CDocument::class, inversedBy: 'gradebookCategories')]
-    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'set null')]
-    private ?CDocument $document = null;
-
     #[Assert\NotBlank]
     #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected ?int $locked;
@@ -158,6 +157,15 @@ class GradebookCategory
 
     #[ORM\Column(name: 'allow_skills_by_subcategory', type: 'integer', nullable: true, options: ['default' => 1])]
     protected ?int $allowSkillsBySubcategory;
+    #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
+    #[ORM\ManyToOne(targetEntity: CDocument::class, inversedBy: 'gradebookCategories')]
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'set null')]
+    private ?CDocument $document = null;
+
+    #[Assert\NotNull]
+    #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
+    #[ORM\Column(name: 'calculation_mode', type: 'string', length: 32, nullable: false, enumType: GradebookCalculationMode::class, options: ['default' => GradebookCalculationMode::WEIGHTED_AVERAGE->value])]
+    protected GradebookCalculationMode $calculationMode = GradebookCalculationMode::WEIGHTED_AVERAGE;
 
     public function __construct()
     {
@@ -183,21 +191,14 @@ class GradebookCategory
         return $this->id;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setDescription(?string $description): self
+    public function setTitle(string $title): self
     {
-        $this->description = $description;
+        $this->title = $title;
 
         return $this;
     }
@@ -207,9 +208,9 @@ class GradebookCategory
         return $this->description;
     }
 
-    public function setWeight(float $weight): self
+    public function setDescription(?string $description): self
     {
-        $this->weight = $weight;
+        $this->description = $description;
 
         return $this;
     }
@@ -224,9 +225,9 @@ class GradebookCategory
         return $this->weight;
     }
 
-    public function setVisible(bool $visible): self
+    public function setWeight(float $weight): self
     {
-        $this->visible = $visible;
+        $this->weight = $weight;
 
         return $this;
     }
@@ -241,9 +242,9 @@ class GradebookCategory
         return $this->visible;
     }
 
-    public function setCertifMinScore(int $certifMinScore): self
+    public function setVisible(bool $visible): self
     {
-        $this->certifMinScore = $certifMinScore;
+        $this->visible = $visible;
 
         return $this;
     }
@@ -258,9 +259,9 @@ class GradebookCategory
         return $this->certifMinScore;
     }
 
-    public function setDocument(?CDocument $document): static
+    public function setCertifMinScore(int $certifMinScore): self
     {
-        $this->document = $document;
+        $this->certifMinScore = $certifMinScore;
 
         return $this;
     }
@@ -270,9 +271,9 @@ class GradebookCategory
         return $this->document;
     }
 
-    public function setLocked(int $locked): self
+    public function setDocument(?CDocument $document): static
     {
-        $this->locked = $locked;
+        $this->document = $document;
 
         return $this;
     }
@@ -287,9 +288,9 @@ class GradebookCategory
         return $this->locked;
     }
 
-    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude): self
+    public function setLocked(int $locked): self
     {
-        $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
+        $this->locked = $locked;
 
         return $this;
     }
@@ -304,9 +305,9 @@ class GradebookCategory
         return $this->defaultLowestEvalExclude;
     }
 
-    public function setGenerateCertificates(bool $generateCertificates): self
+    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude): self
     {
-        $this->generateCertificates = $generateCertificates;
+        $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
 
         return $this;
     }
@@ -319,6 +320,13 @@ class GradebookCategory
     public function getGenerateCertificates()
     {
         return $this->generateCertificates;
+    }
+
+    public function setGenerateCertificates(bool $generateCertificates): self
+    {
+        $this->generateCertificates = $generateCertificates;
+
+        return $this;
     }
 
     /**
@@ -335,13 +343,6 @@ class GradebookCategory
     public function setCertificateValidityPeriod(?int $certificateValidityPeriod): self
     {
         $this->certificateValidityPeriod = $certificateValidityPeriod;
-
-        return $this;
-    }
-
-    public function setIsRequirement(bool $isRequirement): self
-    {
-        $this->isRequirement = $isRequirement;
 
         return $this;
     }
@@ -390,6 +391,13 @@ class GradebookCategory
     public function getIsRequirement()
     {
         return $this->isRequirement;
+    }
+
+    public function setIsRequirement(bool $isRequirement): self
+    {
+        $this->isRequirement = $isRequirement;
+
+        return $this;
     }
 
     public function getGradeBooksToValidateInDependence(): ?int
@@ -490,16 +498,16 @@ class GradebookCategory
         return $this->subCategories;
     }
 
-    public function hasSubCategories(): bool
-    {
-        return $this->subCategories->count() > 0;
-    }
-
     public function setSubCategories(Collection $subCategories): self
     {
         $this->subCategories = $subCategories;
 
         return $this;
+    }
+
+    public function hasSubCategories(): bool
+    {
+        return $this->subCategories->count() > 0;
     }
 
     public function getDepends(): ?string
@@ -560,6 +568,18 @@ class GradebookCategory
     public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
     {
         $this->allowSkillsBySubcategory = $allowSkillsBySubcategory;
+
+        return $this;
+    }
+
+    public function getCalculationMode(): GradebookCalculationMode
+    {
+        return $this->calculationMode;
+    }
+
+    public function setCalculationMode(GradebookCalculationMode $calculationMode): self
+    {
+        $this->calculationMode = $calculationMode;
 
         return $this;
     }

@@ -20,12 +20,12 @@ use DOMElement;
  */
 class CcVersion1 extends CcVersionBase
 {
-    public const WEBCONTENT = 'webcontent';
-    public const QUESTIONBANK = 'imsqti_xmlv1p2/imscc_xmlv1p0/question-bank';
-    public const ASSESSMENT = 'imsqti_xmlv1p2/imscc_xmlv1p0/assessment';
-    public const ASSOCIATEDCONTENT = 'associatedcontent/imscc_xmlv1p0/learning-application-resource';
-    public const DISCUSSIONTOPIC = 'imsdt_xmlv1p0';
-    public const WEBLINK = 'imswl_xmlv1p0';
+    public const string WEBCONTENT = 'webcontent';
+    public const string QUESTIONBANK = 'imsqti_xmlv1p2/imscc_xmlv1p0/question-bank';
+    public const string ASSESSMENT = 'imsqti_xmlv1p2/imscc_xmlv1p0/assessment';
+    public const string ASSOCIATEDCONTENT = 'associatedcontent/imscc_xmlv1p0/learning-application-resource';
+    public const string DISCUSSIONTOPIC = 'imsdt_xmlv1p0';
+    public const string WEBLINK = 'imswl_xmlv1p0';
 
     public static $checker = [self::WEBCONTENT,
         self::ASSESSMENT,

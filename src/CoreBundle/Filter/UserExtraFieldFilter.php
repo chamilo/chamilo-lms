@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\PropertyInfo\Type;
 
 class UserExtraFieldFilter extends AbstractFilter
 {
@@ -28,7 +27,7 @@ class UserExtraFieldFilter extends AbstractFilter
         foreach ($this->properties as $property => $strategy) {
             $description[$property] = [
                 'property' => $property,
-                'type' => Type::BUILTIN_TYPE_STRING,
+                'type' => 'string',
                 'required' => false,
                 'description' => 'Properties to use as filters. To search by a user extra field',
             ];
@@ -63,7 +62,7 @@ class UserExtraFieldFilter extends AbstractFilter
                     ->innerJoin(
                         ExtraFieldValues::class,
                         $efvAlias,
-                        Join::WITH,
+                        Join::ON,
                         "$alias.user = $efvAlias.itemId"
                     )
                     ->innerJoin("$efvAlias.field", $efAlias)

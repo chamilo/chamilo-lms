@@ -8,12 +8,12 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Lib\A
 
 abstract class CcQtiProfiletype
 {
-    public const MULTIPLE_CHOICE = 'cc.multiple_choice.v0p1';
-    public const MULTIPLE_RESPONSE = 'cc.multiple_response.v0p1';
-    public const TRUE_FALSE = 'cc.true_false.v0p1';
-    public const FIELD_ENTRY = 'cc.fib.v0p1';
-    public const PATTERN_MATCH = 'cc.pattern_match.v0p1';
-    public const ESSAY = 'cc.essay.v0p1';
+    public const string MULTIPLE_CHOICE = 'cc.multiple_choice.v0p1';
+    public const string MULTIPLE_RESPONSE = 'cc.multiple_response.v0p1';
+    public const string TRUE_FALSE = 'cc.true_false.v0p1';
+    public const string FIELD_ENTRY = 'cc.fib.v0p1';
+    public const string PATTERN_MATCH = 'cc.pattern_match.v0p1';
+    public const string ESSAY = 'cc.essay.v0p1';
 
     /**
      * validates a profile value.

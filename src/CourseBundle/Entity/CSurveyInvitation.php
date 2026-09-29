@@ -39,8 +39,8 @@ class CSurveyInvitation
     protected CSurvey $survey;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'surveyInvitations')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    protected User $user;
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?User $user = null;
 
     protected string $externalEmail;
 
@@ -86,12 +86,12 @@ class CSurveyInvitation
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(User $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 

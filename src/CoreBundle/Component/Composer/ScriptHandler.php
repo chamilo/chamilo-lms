@@ -27,6 +27,66 @@ class ScriptHandler
     }
 
     /**
+     * Point git at the versioned hooks in tests/scripts/git-hooks so every clone runs the
+     * pre-push code style check without any manual setup.
+     *
+     * Writes .git/config directly instead of shelling out to "git config":
+     * composer usually runs inside the Docker container, where git refuses the
+     * bind-mounted repository as "dubious ownership".
+     */
+    public static function installGitHooks(): void
+    {
+        $root = \dirname(__DIR__, 4);
+
+        if (!is_dir($root.'/tests/scripts/git-hooks')) {
+            return;
+        }
+
+        $gitDir = $root.'/.git';
+
+        // In a worktree or a submodule, .git is a file pointing at the real dir.
+        if (is_file($gitDir)) {
+            $pointer = trim((string) file_get_contents($gitDir));
+
+            if (!str_starts_with($pointer, 'gitdir:')) {
+                return;
+            }
+
+            $gitDir = self::resolveGitPath($root, trim(substr($pointer, 7)));
+        }
+
+        // A worktree keeps the shared config one level up, next to commondir.
+        if (is_file($gitDir.'/commondir')) {
+            $gitDir = self::resolveGitPath($gitDir, trim((string) file_get_contents($gitDir.'/commondir')));
+        }
+
+        $configFile = $gitDir.'/config';
+
+        if (!is_file($configFile) || !is_writable($configFile)) {
+            return;
+        }
+
+        $config = (string) file_get_contents($configFile);
+
+        // Never override a hooks path the developer set on purpose.
+        if (preg_match('/^\s*hooksPath\s*=/mi', $config)) {
+            return;
+        }
+
+        $config = preg_match('/^\[core\]/m', $config)
+            ? preg_replace('/^\[core\]/m', "[core]\n\thooksPath = tests/scripts/git-hooks", $config, 1)
+            : $config."[core]\n\thooksPath = tests/scripts/git-hooks\n";
+
+        if (false === file_put_contents($configFile, $config)) {
+            echo "Chamilo: could not enable git hooks. Run \"git config core.hooksPath tests/scripts/git-hooks\" manually.\n";
+
+            return;
+        }
+
+        echo "Chamilo: git hooks enabled (core.hooksPath=tests/scripts/git-hooks).\n";
+    }
+
+    /**
      * Delete old Symfony folder before update (generates conflicts with composer)
      * This method also applies to 1.10 folders removed for 1.11.
      */
@@ -148,5 +208,10 @@ class ScriptHandler
             '/src/CoreBundle/Entity/TrackEExercises.php',
             '/main/inc/lib/tablesort.lib.php',
         ];
+    }
+
+    private static function resolveGitPath(string $base, string $path): string
+    {
+        return str_starts_with($path, '/') ? $path : $base.'/'.$path;
     }
 }

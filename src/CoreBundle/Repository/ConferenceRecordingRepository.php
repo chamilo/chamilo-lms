@@ -38,7 +38,7 @@ class ConferenceRecordingRepository extends ServiceEntityRepository
      */
     public function deleteByMeetingId(string $meetingId): void
     {
-        $qb = $this->_em->createQueryBuilder();
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb
             ->delete('Chamilo\CoreBundle\Entity\ConferenceRecording', 'r')

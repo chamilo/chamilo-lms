@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
@@ -31,7 +30,6 @@ class UsergroupListController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly IllustrationRepository $illustrationRepository,
     ) {}
@@ -140,8 +138,6 @@ class UsergroupListController extends AbstractController
         return $this->json([
             'items' => $items,
             'totalItems' => $total,
-            'csrfToken' => $this->csrfTokenManager->getToken('usergroup_list')->getValue(),
-            'importCsrfToken' => $this->csrfTokenManager->getToken('usergroup_import')->getValue(),
         ]);
     }
 
@@ -267,11 +263,6 @@ class UsergroupListController extends AbstractController
     #[Route('', name: 'admin_usergroups_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        $token = (string) $request->request->get('_token', '');
-        if (!$this->isCsrfTokenValid('usergroup_list', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
-        }
-
         $title = trim((string) $request->request->get('title', ''));
         if ('' === $title) {
             return $this->json(['error' => 'Title is required'], Response::HTTP_BAD_REQUEST);
@@ -314,11 +305,6 @@ class UsergroupListController extends AbstractController
     #[Route('/{id}', name: 'admin_usergroups_update', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function update(Request $request, int $id): JsonResponse
     {
-        $token = (string) $request->request->get('_token', '');
-        if (!$this->isCsrfTokenValid('usergroup_list', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
-        }
-
         $ug = $this->em->find(Usergroup::class, $id);
         if (null === $ug) {
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
@@ -363,11 +349,6 @@ class UsergroupListController extends AbstractController
     #[Route('/{id}', name: 'admin_usergroups_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function delete(Request $request, int $id): JsonResponse
     {
-        $token = (string) $request->headers->get('X-CSRF-Token', '');
-        if (!$this->isCsrfTokenValid('usergroup_list', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
-        }
-
         $ug = $this->em->find(Usergroup::class, $id);
         if (null === $ug) {
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);

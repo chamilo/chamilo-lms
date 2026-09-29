@@ -76,6 +76,30 @@ instance.interceptors.request.use((config) => {
     }
   }
 
+  // Send API Platform writes as JSON-LD so relation IRIs (e.g. "/api/users/1")
+  // are resolved during denormalization. API Platform 4 only resolves relation
+  // IRIs for application/ld+json; with plain application/json they arrive null.
+  // PATCH keeps its application/merge-patch+json type; FormData uploads keep the
+  // multipart type axios derives from the payload.
+  const method = String(config.method || "").toLowerCase()
+  const isJsonLdWrite =
+    isApiPlatformPath(path) &&
+    ("post" === method || "put" === method) &&
+    config.data &&
+    !("undefined" !== typeof FormData && config.data instanceof FormData)
+
+  if (isJsonLdWrite) {
+    const currentType = "function" === typeof headers?.get ? headers.get("Content-Type") : headers?.["Content-Type"]
+
+    if (null === currentType || undefined === currentType || "application/json" === String(currentType)) {
+      if ("function" === typeof headers?.set) {
+        headers.set("Content-Type", "application/ld+json")
+      } else {
+        config.headers = { ...(config.headers || {}), "Content-Type": "application/ld+json" }
+      }
+    }
+  }
+
   return config
 })
 
@@ -123,5 +147,29 @@ instance.interceptors.request.use((config) => {
 
   return config
 })
+
+// RFC 7807 compatibility. API Platform 4 returns errors as
+// application/problem+json ("detail"/"title") instead of the Hydra format
+// ("hydra:description"/"hydra:title"). Expose the legacy Hydra keys from the
+// RFC 7807 fields so existing error handling keeps working regardless of which
+// format the backend sends.
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const data = error?.response?.data
+
+    if (data && "object" === typeof data) {
+      if (undefined === data["hydra:description"] && undefined !== data.detail) {
+        data["hydra:description"] = data.detail
+      }
+
+      if (undefined === data["hydra:title"] && undefined !== data.title) {
+        data["hydra:title"] = data.title
+      }
+    }
+
+    return Promise.reject(error)
+  },
+)
 
 export default instance

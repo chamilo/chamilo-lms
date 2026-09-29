@@ -16,30 +16,40 @@ use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\EntityListeners([ResourceListener::class])]
-abstract class AbstractResource
+abstract class AbstractResource implements ResourceInterface
 {
     use UserCreatorTrait;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read', 'student_publication:read', 'student_publication_comment:read'])]
+    #[Groups([
+        'resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read',
+        'student_publication:read', 'student_publication_comment:read',
+    ])]
     public ?string $contentUrl = null;
 
     /**
      * Download URL of the Resource File Property set by ResourceNormalizer.php.
      */
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read', 'student_publication:read', 'student_publication_comment:read', 'student_publication_rel_document:read'])]
+    #[Groups([
+        'resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read',
+        'student_publication:read', 'student_publication_comment:read', 'student_publication_rel_document:read',
+    ])]
     public ?string $downloadUrl = null;
 
     /**
      * Content from ResourceFile - Property set by ResourceNormalizer.php.
      */
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'document:write', 'media_object_read', 'student_publication:read'])]
+    #[Groups([
+        'resource_file:read', 'resource_node:read', 'document:read', 'document:write', 'media_object_read',
+        'student_publication:read',
+    ])]
     public ?string $contentFile = null;
 
     /**
@@ -116,7 +126,10 @@ abstract class AbstractResource
      */
     public $parentResource;
 
-    #[Groups(['resource_node:read', 'document:read', 'attendance:read', 'student_publication:read', 'student_publication_comment:read'])]
+    #[Groups([
+        'resource_node:read', 'document:read', 'attendance:read', 'student_publication:read',
+        'student_publication_comment:read',
+    ])]
     public ?array $resourceLinkListFromEntity = null;
 
     /**
@@ -125,7 +138,7 @@ abstract class AbstractResource
      *
      * @var array<int, array<string, int>>
      */
-    #[Groups(['c_tool_intro:write', 'resource_node:write', 'c_student_publication:write', 'calendar_event:write', 'attendance:write'])]
+    #[Groups(['resource_node:write', 'c_student_publication:write', 'calendar_event:write', 'attendance:write'])]
     public array $resourceLinkList = [];
 
     /**
@@ -171,6 +184,10 @@ abstract class AbstractResource
         return $sendTo;
     }
 
+    abstract public function __toString(): string;
+
+    abstract public function getResourceIdentifier(): int|Uuid;
+
     abstract public function getResourceName(): string;
 
     abstract public function setResourceName(string $name);
@@ -190,7 +207,7 @@ abstract class AbstractResource
         int $visibility = ResourceLink::VISIBILITY_PUBLISHED,
         ?DateTime $createdAt = null,
         ?DateTime $updatedAt = null,
-    ): self {
+    ): static {
         if (null === $this->getParent()) {
             throw new Exception('$resource->addCourseLink requires to set the parent first.');
         }
@@ -265,7 +282,7 @@ abstract class AbstractResource
         return $this->resourceNode;
     }
 
-    public function setResourceNode(?ResourceNode $resourceNode): self
+    public function setResourceNode(?ResourceNode $resourceNode): static
     {
         $this->resourceNode = $resourceNode;
 
@@ -443,7 +460,7 @@ abstract class AbstractResource
         return $this->parentResourceNode;
     }
 
-    public function setParentResourceNode(?int $resourceNode): self
+    public function setParentResourceNode(?int $resourceNode): static
     {
         $this->parentResourceNode = $resourceNode;
 
@@ -460,7 +477,7 @@ abstract class AbstractResource
         return $this->uploadFile;
     }
 
-    public function setUploadFile(?UploadedFile $file): self
+    public function setUploadFile(?UploadedFile $file): static
     {
         $this->uploadFile = $file;
 

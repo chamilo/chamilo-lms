@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class Token
 {
-    public const TOKEN_LIFETIME = 3600;
+    public const int TOKEN_LIFETIME = 3600;
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

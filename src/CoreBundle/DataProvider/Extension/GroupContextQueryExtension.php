@@ -14,10 +14,10 @@ use Chamilo\CoreBundle\Entity\ResourceRestrictToGroupContextInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-final class GroupContextQueryExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+final readonly class GroupContextQueryExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
     public function __construct(
-        private readonly RequestStack $requestStack,
+        private RequestStack $requestStack,
     ) {}
 
     public function applyToCollection(
@@ -30,6 +30,10 @@ final class GroupContextQueryExtension implements QueryCollectionExtensionInterf
         $this->applyGroupRestriction($queryBuilder, $queryNameGenerator, $resourceClass, $operation);
     }
 
+    /**
+     * @param array<string, mixed> $identifiers
+     * @param array<string, mixed> $context
+     */
     public function applyToItem(
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,

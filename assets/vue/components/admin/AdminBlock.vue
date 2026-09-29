@@ -52,7 +52,21 @@
           role="menuitem"
         >
           <div class="p-menu-item-content">
+            <!-- An item may carry an action instead of a destination. The parent view
+                 owns what the action does; this component only reports the click. -->
+            <button
+              v-if="item.action"
+              type="button"
+              class="p-menu-item-link"
+              @click="emit('itemAction', item)"
+            >
+              <span
+                class="p-menu-item-label"
+                v-text="item.label"
+              />
+            </button>
             <BaseAppLink
+              v-else-if="item.route || item.url"
               :to="item.route"
               :url="item.url"
               class="p-menu-item-link"
@@ -62,6 +76,17 @@
                 v-text="item.label"
               />
             </BaseAppLink>
+            <!-- An item with neither a destination nor an action is plain text: a health
+                 check result the administrator has nothing to do about. -->
+            <span
+              v-else
+              class="p-menu-item-link"
+            >
+              <span
+                class="p-menu-item-label"
+                v-text="item.label"
+              />
+            </span>
           </div>
         </li>
       </ul>
@@ -70,7 +95,10 @@
       v-if="bgImageUrl"
       aria-hidden="true"
       class="admin-block__bg-image"
-      :style="{ backgroundImage: `url('${bgImageUrl}')` }"
+      :style="{
+        backgroundImage: `url('${bgImageUrl}')`,
+        backgroundPositionY: `-${props.bgIndex * BG_SPRITE_FRAME_HEIGHT}px`,
+      }"
     />
   </BaseCard>
 </template>
@@ -86,6 +114,8 @@ import { useVisualTheme } from "../../composables/theme"
 const { getThemeAssetUrl } = useVisualTheme()
 
 const { t } = useI18n()
+
+const emit = defineEmits(["itemAction"])
 
 const modelExtraContent = defineModel("extraContent", {
   type: Object,
@@ -107,8 +137,14 @@ const props = defineProps({
   description: { type: String, required: false, default: () => null },
   searchUrl: { type: String, required: false, default: () => null },
   items: { type: Array, required: true, default: () => [] },
-  bgImage: { type: String, required: false, default: null },
+  bgIndex: { type: Number, required: false, default: null },
 })
+
+// All admin blocks share one sprite sheet (13 frames stacked vertically, 50px
+// each once scaled by .admin-block__bg-image's background-size) to cut 13
+// per-block image requests down to 1; bgIndex selects the frame.
+const BG_SPRITE_PATH = "images/bg-block-admin-sprite.png"
+const BG_SPRITE_FRAME_HEIGHT = 50
 
 // computed IDs for search input and button derived from the title
 const inputId = computed(() => {
@@ -131,5 +167,5 @@ const visibleItems = computed(() =>
     .filter((item) => item.visible),
 )
 
-const bgImageUrl = computed(() => (props.bgImage ? getThemeAssetUrl(props.bgImage) : null))
+const bgImageUrl = computed(() => (props.bgIndex !== null ? getThemeAssetUrl(BG_SPRITE_PATH) : null))
 </script>

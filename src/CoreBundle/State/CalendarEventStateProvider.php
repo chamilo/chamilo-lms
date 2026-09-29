@@ -12,12 +12,12 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -32,7 +32,7 @@ final class CalendarEventStateProvider implements ProviderInterface
         private readonly Security $security,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SessionRepository $sessionRepository,
-        private readonly RequestStack $requestStack,
+        private readonly CidReqHelper $cidReqHelper,
         private readonly SettingsManager $settingsManager,
         private readonly RouterInterface $router,
         private readonly UsergroupRepository $usergroupRepository,
@@ -55,9 +55,8 @@ final class CalendarEventStateProvider implements ProviderInterface
         $cCalendarEvents = $this->collectionProvider->provide($operation, $uriVariables, $context);
         $userSessions = [];
 
-        $request = $this->requestStack->getMainRequest();
-        $courseId = $request->query->getInt('cid');
-        $sessionId = $request->query->getInt('sid');
+        $courseId = (int) ($this->cidReqHelper->getCourseId() ?? 0);
+        $sessionId = (int) ($this->cidReqHelper->getSessionId() ?? 0);
 
         $inCourseBase = !empty($courseId);
         $inSession = !empty($sessionId);
@@ -66,6 +65,7 @@ final class CalendarEventStateProvider implements ProviderInterface
         $inPersonalAgenda = !$inCourseBase && !$inCourseSession;
 
         if ($inPersonalAgenda
+            && $user instanceof User
             && 'true' === $this->settingsManager->getSetting('agenda.personal_calendar_show_sessions_occupation')
         ) {
             $userSessions = $this->getSessionList($user, $accessUrl, $context);

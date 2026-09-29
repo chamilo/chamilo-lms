@@ -23,12 +23,12 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 
 final class RememberMeCookieAuthenticator extends AbstractAuthenticator
 {
-    private const COOKIE_NAME = 'ch_remember_me';
+    private const string COOKIE_NAME = 'ch_remember_me';
 
     /**
      * 14 days.
      */
-    private const TTL_SECONDS = 1209600;
+    private const int TTL_SECONDS = 1209600;
 
     public function __construct(
         private readonly ValidationTokenRepository $tokenRepository,

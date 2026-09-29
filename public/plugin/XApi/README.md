@@ -187,6 +187,20 @@ Common supported operations:
 - `about`
 - `statements`
 - `activities/state`
+- `activities/profile`
+
+Statements are persisted in the core `xapi_statement` tables, so they are
+readable by any client of the LRS, not only by the one that stored them.
+
+`GET /statements` supports these xAPI 1.0.3 parameters: `statementId`,
+`voidedStatementId`, `agent` (matched by its inverse functional identifier),
+`verb`, `activity`, `registration`, `since`, `until`, `ascending` and `limit`,
+plus a `cursor` offset used to build the `more` paging URL. A statement voided
+by a later `http://adlnet.gov/expapi/verbs/voided` statement is excluded from
+the regular results and is only retrievable through `voidedStatementId`.
+
+Not implemented yet: `related_activities`, `related_agents`, `attachments`,
+`format` (statements are always returned in `exact` form) and signed statements.
 
 Internal queue and cron sender
 ------------------------------

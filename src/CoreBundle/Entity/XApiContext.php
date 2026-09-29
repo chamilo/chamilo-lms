@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Index(name: 'idx_xapi_context_registration', columns: ['registration'])]
 #[ORM\Entity(repositoryClass: XApiContextRepository::class)]
 class XApiContext
 {
@@ -52,25 +53,25 @@ class XApiContext
     /**
      * @var Collection<int, XApiObject>
      */
-    #[ORM\OneToMany(mappedBy: 'parentContext', targetEntity: XApiObject::class)]
+    #[ORM\OneToMany(mappedBy: 'parentContext', targetEntity: XApiObject::class, cascade: ['persist', 'remove'])]
     private Collection $parentActivities;
 
     /**
      * @var Collection<int, XApiObject>
      */
-    #[ORM\OneToMany(mappedBy: 'groupingContext', targetEntity: XApiObject::class)]
+    #[ORM\OneToMany(mappedBy: 'groupingContext', targetEntity: XApiObject::class, cascade: ['persist', 'remove'])]
     private Collection $groupingActivities;
 
     /**
      * @var Collection<int, XApiObject>
      */
-    #[ORM\OneToMany(mappedBy: 'categoryContext', targetEntity: XApiObject::class)]
+    #[ORM\OneToMany(mappedBy: 'categoryContext', targetEntity: XApiObject::class, cascade: ['persist', 'remove'])]
     private Collection $categoryActivities;
 
     /**
      * @var Collection<int, XApiObject>
      */
-    #[ORM\OneToMany(mappedBy: 'otherContext', targetEntity: XApiObject::class)]
+    #[ORM\OneToMany(mappedBy: 'otherContext', targetEntity: XApiObject::class, cascade: ['persist', 'remove'])]
     private Collection $otherActivities;
 
     public function __construct()

@@ -1,6 +1,8 @@
 <?php
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 require_once __DIR__.'/../0_dal/dal.global_lib.php';
 
@@ -18,6 +20,7 @@ echo "var userStatusCS = '?';";
 echo "var listPagesCS = '?';";
 echo "var renderFromSvg = '';";
 echo "var optionsGlobalPage = '';";
+echo "var cstudioUploadMaxFileSize = '".addslashes((string) ini_get('upload_max_filesize'))."';";
 echo "var lfIdent = '';";
 echo '</script>';
 
@@ -34,6 +37,11 @@ $loadh = '';
 $changColor = '';
 $changQuizzColor = '';
 $localFolder = '';
+$cstudioAiCsrfToken = '';
+$cstudioLegacyCsrfToken = '';
+$chamiloThemeColorCss = '';
+$cstudioMdiCssFiles = [];
+$cstudioChamiloCssVersion = (string) (@filemtime(__DIR__.'/jscss/cstudio-chamilo.css') ?: '1');
 
 if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
@@ -46,7 +54,7 @@ if (isset($_GET['id'])) {
         $changQuizzColor = $_GET['changquizz'];
     }
     if (isset($_GET['loadh'])) {
-        $loadh = $_GET['loadh'];
+        $loadh = basename((string) $_GET['loadh']);
     }
     $fromsvg = '';
     if (isset($_GET['fromsvg'])) {
@@ -82,13 +90,26 @@ if (isset($_GET['id'])) {
     echo "optionsCSCDT = '".$options_studio_cdt."';";
     echo 'renderFromSvg = '.json_encode((string) $fromsvg).';';
 
-    // Authorization gate: deny anonymous outright. The previous code nested the
-    // role check inside `!is_anonymous()`, which let anonymous callers fall
-    // through to the CSRF check (where cotk=-2 used to pass) and reach the
-    // template-lang require sink. Teachers only — checked before anything else.
-    if ($VDB->w_api_is_anonymous() || !$VDB->w_api_is_allowed_to_edit()) {
-        echo 'Context token is not valid or has expired. User rejected !</br>';
-        echo "<a href='javascript:history.back();' >Return</a></br></head></html>";
+    // Authorization gate: deny anonymous users outright. CStudio editor URLs are
+    // opened without a cid parameter after the project link redirects to
+    // editor/index.php, so the strict course-context edit check can fail even for
+    // teachers. Use the same fallback as oel_tools_teachdoc_link.php.
+    $isAllowedToEdit = false;
+
+    if (!$VDB->w_api_is_anonymous()) {
+        $isAllowedToEdit = (bool) $VDB->w_api_is_allowed_to_edit();
+
+        if (!$isAllowedToEdit && function_exists('api_is_allowed_to_edit')) {
+            $isAllowedToEdit = (bool) api_is_allowed_to_edit(null, true, false, false);
+        }
+    }
+
+    if (!$isAllowedToEdit) {
+        echo '<script>';
+        echo 'document.addEventListener("DOMContentLoaded", function () {';
+        echo 'document.body.innerHTML = "<p style=\"padding:20px;color:#b91c1c;font-family:sans-serif;\">Context token is not valid or has expired. User rejected.</p>";';
+        echo '});';
+        echo '</script>';
 
         exit;
     }
@@ -111,6 +132,64 @@ if (isset($_GET['id'])) {
         exit;
     }
     echo "<script>console.log('api_get_user_id');</script>";
+    $cstudioLegacyCsrfToken = savedCSRFToken($VDB->w_api_get_user_id());
+
+    /** @var CsrfTokenManagerInterface $csrfTokenManager */
+    $csrfTokenManager = Container::$container->get(CsrfTokenManagerInterface::class);
+    $cstudioAiCsrfToken = $csrfTokenManager
+        ->getToken('cstudio_ai_'.$idPage)
+        ->getValue()
+    ;
+
+    // Read only the active Chamilo theme color variables. The theme file is
+    // generated as :root custom properties; do not load the full app stylesheet
+    // because CStudio/GrapesJS owns this standalone editor layout.
+    try {
+        /** @var ThemeHelper $themeHelper */
+        $themeHelper = Container::$container->get(ThemeHelper::class);
+        $themeCss = $themeHelper->getAssetContents('colors.css');
+        $themeVariables = [];
+
+        if (preg_match_all('/(--color-[a-z0-9-]+)\s*:\s*(-?\d+(?:\.\d+)?(?:\s+-?\d+(?:\.\d+)?){2})\s*;/i', $themeCss, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                $themeVariables[$match[1]] = trim($match[2]);
+            }
+        }
+
+        if (!empty($themeVariables)) {
+            $declarations = [];
+            foreach ($themeVariables as $name => $value) {
+                $declarations[] = '  '.$name.': '.$value.';';
+            }
+            $chamiloThemeColorCss = ":root {\n".implode("\n", $declarations)."\n}";
+        }
+    } catch (\Throwable) {
+        $chamiloThemeColorCss = '';
+    }
+
+    // CStudio is a standalone legacy editor, so it does not mount the Vue app.
+    // Reuse only the CSS files emitted for Chamilo's Vue entry in order to make
+    // the same Material Design Icons font available without loading Vue JS.
+    $publicDir = dirname(__DIR__, 3);
+    $entrypointsFile = $publicDir.'/build/entrypoints.json';
+    if (is_readable($entrypointsFile)) {
+        $entrypoints = json_decode((string) file_get_contents($entrypointsFile), true);
+        $vueCssFiles = $entrypoints['entrypoints']['vue']['css'] ?? [];
+
+        if (is_array($vueCssFiles)) {
+            foreach ($vueCssFiles as $cssFile) {
+                if (!is_string($cssFile) || !preg_match('#^/build/[A-Za-z0-9._/-]+\.css(?:\?.*)?$#', $cssFile)) {
+                    continue;
+                }
+
+                $cssPath = $publicDir.strtok($cssFile, '?');
+                if (is_readable($cssPath)) {
+                    $cstudioMdiCssFiles[] = $cssFile;
+                }
+            }
+            $cstudioMdiCssFiles = array_values(array_unique($cstudioMdiCssFiles));
+        }
+    }
 
     if ('' != $idPage && 0 != $idPage) {
         $pluginFileSystem = Container::getPluginsFileSystem();
@@ -175,18 +254,19 @@ if (isset($_GET['id'])) {
 
         if ('' == $base_html) {
             if (isset($_GET['pty'])) {
-                $pathFile = 'templates/pages/'.$_GET['pty'].'.html';
+                $pty = basename((string) $_GET['pty']);
+                $pathFile = 'templates/pages/'.$pty.'.html';
                 if (file_exists($pathFile)) {
                     $base_html = file_get_contents($pathFile);
                 } else {
-                    $pathFile = 'CStudio/custom_code/page-templates/'.$_GET['pty'].'/data.html';
+                    $pathFile = 'CStudio/custom_code/page-templates/'.$pty.'/data.html';
                     if ($pluginFileSystem->fileExists($pathFile)) {
                         $base_html = $pluginFileSystem->read($pathFile);
                         $localfold = get_local_folder($idPage);
                         $base_html = str_replace('{folderlocal}', $localfold, $base_html);
                         $foldDest = 'img_cache/'.$localfold.'/';
                         recurseCopyTeachdocOufs(
-                            'CStudio/custom_code/page-templates/'.$_GET['pty'].'/data/',
+                            'CStudio/custom_code/page-templates/'.$pty.'/data/',
                             "CStudio/editor/$foldDest"
                         );
                     } else {
@@ -233,6 +313,7 @@ if (isset($_GET['id'])) {
         echo 'var cstudioCourseLocale = '.json_encode($cstudioCourseLocale).';';
         echo '</script>';
 
+        echo '<script>var baseMyCollImgs = [];</script>';
         echo '<script type="text/javascript" src="img_cache/getextras.php?id='.$id_parent.'" ></script>';
     } else {
         echo "<script>location.href = '../oel_tools_teachdoc_list.php';</script>";
@@ -313,9 +394,23 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <link href="dist/css/grapes.min.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="dist/grapesjs-preset-webpage.min.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="jscss/oel-teachdoc.css?v=<?php echo $version; ?>" rel="stylesheet" />
+    <link href="jscss/cstudio-ai.css?v=<?php echo $version; ?>" rel="stylesheet" />
     <link href="templates/styles/classic-ux.css?v=<?php echo $version; ?>" rel="stylesheet"/>
+<?php foreach ($cstudioMdiCssFiles as $cstudioMdiCssFile) { ?>
+    <link href="<?php echo htmlspecialchars($cstudioMdiCssFile, ENT_QUOTES, 'UTF-8'); ?>" rel="stylesheet" />
+<?php } ?>
+<?php if (!empty($cstudioMdiCssFiles)) { ?>
+    <script>document.documentElement.classList.add('cstudio-mdi-ready');</script>
+<?php } ?>
+<?php if ('' !== $chamiloThemeColorCss) { ?>
+    <style id="cstudio-chamilo-theme-colors">
+<?php echo $chamiloThemeColorCss; ?>
+    </style>
+<?php } ?>
+    <link href="jscss/cstudio-chamilo.css?v=<?php echo rawurlencode($cstudioChamiloCssVersion); ?>" rel="stylesheet" />
 
     <script src="dist/js/filestack-0.1.10.js?v=<?php echo $version; ?>"></script>
+    <script src="dist/js/grapes.js?v=<?php echo $version; ?>"></script>
     <script src="dist/js/grapesludi.js?v=<?php echo $version; ?>"></script>
     <script src="dist/grapesjs-preset-webpage.min.js?v=<?php echo $version; ?>"></script>
     <script src="jscss/jquery.js?v=<?php echo $version; ?>"></script>
@@ -325,7 +420,55 @@ echo '<div id="filcustomcode" style="display:none;" >'.$filcustomcode.'&v='.$var
     <script src="../vendor/tinymce/js/tinymce/jquery.tinymce.min.js?v=<?php echo $version; ?>" defer></script>
     <script src="jscss/oel-teachdoc-x.js?v=<?php echo $version; ?>"></script>
     <script src="../resources/js/cstudio-i18n.js?v=<?php echo $version; ?>"></script>
+    <?php
+$cstudioProjectId = $id_parent > 0 ? (int) $id_parent : (int) $idPage;
+$cstudioLpId = 0;
+$cstudioCourseId = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
+$cstudioSessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
+$cstudioGroupId = isset($_GET['gid']) ? (int) $_GET['gid'] : 0;
+
+if ($cstudioProjectId > 0) {
+    $cstudioLpId = (int) $VDB->get_value_by_query(
+        'SELECT lp_id FROM plugin_oel_tools_teachdoc WHERE id = '.(int) $cstudioProjectId,
+        'lp_id'
+    );
+}
+
+if ($cstudioLpId > 0) {
+    $cstudioLp = Container::getLpRepository()->find($cstudioLpId);
+    $cstudioResourceLink = $cstudioLp?->getFirstResourceLink();
+
+    if ($cstudioCourseId <= 0) {
+        $cstudioCourseId = (int) ($cstudioResourceLink?->getCourse()?->getId() ?? 0);
+    }
+    if (!isset($_GET['sid'])) {
+        $cstudioSessionId = (int) ($cstudioResourceLink?->getSession()?->getId() ?? 0);
+    }
+    if (!isset($_GET['gid'])) {
+        $cstudioGroupId = (int) ($cstudioResourceLink?->getGroup()?->getIid() ?? 0);
+    }
+}
+?>
+    <script>
+      window.cstudioChamiloContentConfig = <?php echo json_encode([
+          'enabled' => $cstudioLpId > 0 && $cstudioCourseId > 0,
+          'lpId' => $cstudioLpId,
+          'cid' => $cstudioCourseId,
+          'sid' => $cstudioSessionId,
+          'gid' => $cstudioGroupId,
+          'apiBase' => api_get_path(WEB_PATH).'api',
+      ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+    </script>
     <script src="jscss/oel-teachdoc.js?v=<?php echo $version; ?>"></script>
+    <script>
+      window.cstudioAiConfig = <?php echo json_encode([
+          'endpoint' => api_get_path(WEB_PATH).'ai/cstudio',
+          'pageId' => (int) $idPage,
+          'csrfToken' => $cstudioAiCsrfToken,
+          'locale' => $cstudioInterfaceLocale,
+      ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+    </script>
+    <script src="jscss/cstudio-ai.js?v=<?php echo $version; ?>"></script>
     <script>correctPositionsEditor();</script>
 
     <?php
@@ -359,7 +502,7 @@ if (isset($_GET['pty'])) {
 
     <script src="../resources/interfaces/xapi/base64.js"></script>
     <form method="POST" action="index.php">
-    <input type="hidden" id="cotk" name="csrf_oel_token" value="<?php echo savedCSRFToken($VDB->w_api_get_user_id()); ?>">
+    <input type="hidden" id="cotk" name="csrf_oel_token" value="<?php echo htmlspecialchars($cstudioLegacyCsrfToken, ENT_QUOTES, 'UTF-8'); ?>">
     </form>
     <?php
     if (false != strpos($base_html, 'txtmathjax')) {

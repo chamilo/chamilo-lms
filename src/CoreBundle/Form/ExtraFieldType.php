@@ -37,14 +37,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ExtraFieldType extends AbstractType
 {
-    private const PAUSE_TRAINING_LABELS = [
+    private const array PAUSE_TRAINING_LABELS = [
         'pause_formation' => 'Pause training',
         'start_pause_date' => 'Start pause date',
         'end_pause_date' => 'End pause date',
         'disable_emails' => 'Disable automatic emails',
     ];
 
-    private const PAUSE_TRAINING_HELP = [
+    private const array PAUSE_TRAINING_HELP = [
         'pause_formation' => 'Temporarily pause inactivity follow-up for your account.',
         'start_pause_date' => 'Use your local date and time.',
         'end_pause_date' => 'Use your local date and time.',
@@ -194,6 +194,7 @@ class ExtraFieldType extends AbstractType
                 ? (bool) $editableMap[$variable]
                 : (bool) $extraField->isChangeable();
 
+            /** @var array<string, mixed> $defaultOptions */
             $defaultOptions = [
                 'label' => $text,
                 'required' => false,

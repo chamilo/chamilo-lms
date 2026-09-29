@@ -95,7 +95,6 @@
   "Separator": "Séparateur",
   "Title 1": "Titre 1",
   "Title 2": "Titre 2",
-  "Text Bloc": "Texte",
   "Card": "Carte",
   "Quiz": "Question",
   "Drag & Drop": "Glisser-Déposer",
@@ -143,7 +142,7 @@
   "Learning path thumbnail (click to change)": "Miniature du parcours d’apprentissage (cliquer pour modifier)",
   "Reset thumbnail": "Réinitialiser la miniature",
   "Delete page": "Supprimer la page",
-  "Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.": "Effacer les traces supprime la progression enregistrée des apprenants pour ce parcours CStudio. Cela ne supprime ni les pages ni le contenu du projet.",
+  "Clean traces removes the saved learner progress for this Chamidoc Studio learning path. It does not delete pages or project content.": "Effacer les traces supprime la progression enregistrée des apprenants pour ce parcours Chamidoc Studio. Cela ne supprime ni les pages ni le contenu du projet.",
   "Quiz text": "Texte du quiz",
   "Object schema": "Schéma de l’objet",
   "Layout": "Mise en page",
@@ -164,5 +163,6 @@
   "Image": "Image",
   "Audio": "Audio",
   "Check the answers": "Vérifier les réponses",
-  "Table": "Tableau"
+  "Table": "Tableau",
+  "Text Block": "Texte"
 }

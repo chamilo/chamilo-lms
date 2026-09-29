@@ -1,5 +1,5 @@
 # Symfony Lock Component Configuration
-# Docs: https://symfony.com/doc/6.4/components/lock.html
+# Docs: https://symfony.com/doc/7.4/components/lock.html
 #
 # This configures the default lock store used by:
 # - Login throttling (rate limiting) - see security.yaml for login_throttling configuration

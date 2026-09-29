@@ -3,17 +3,26 @@
     <FloatLabel variant="on">
       <MultiSelect
         v-model="selectedValues"
-        :options="options"
+        :options="normalizedOptions"
         display="chip"
         fluid
-        input-id="multiSelect"
+        :filter="filter"
+        :input-id="inputId"
         :option-label="optionLabel"
         :option-value="optionValue"
+        :show-toggle-all="showToggleAll"
         @blur="isFocused = false"
         @focus="isFocused = true"
         @update:model-value="updateModelValue"
         :loading="isLoading"
-      />
+      >
+        <template
+          v-if="showToggleAll && toggleAllLabel"
+          #header
+        >
+          <div class="px-3 pt-2 text-body-2 text-gray-70">{{ toggleAllLabel }}</div>
+        </template>
+      </MultiSelect>
       <label
         :for="inputId"
         v-text="label"
@@ -28,17 +37,17 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import FloatLabel from "primevue/floatlabel"
 import MultiSelect from "primevue/multiselect"
 
 const props = defineProps({
   modelValue: {
-    type: Array,
+    type: [Array, Object],
     default: () => [],
   },
   options: {
-    type: Array,
+    type: [Array, Object],
     default: () => [],
   },
   placeholder: String,
@@ -77,19 +86,48 @@ const props = defineProps({
     required: false,
     default: "id",
   },
+  filter: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  showToggleAll: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
+  toggleAllLabel: {
+    type: String,
+    required: false,
+    default: null,
+  },
 })
 const emit = defineEmits(["update:modelValue"])
-const selectedValues = ref([...props.modelValue])
+
+function normalizeValues(value) {
+  if (Array.isArray(value)) {
+    return [...value]
+  }
+
+  if (value && typeof value === "object") {
+    return Object.values(value)
+  }
+
+  return []
+}
+
+const normalizedOptions = computed(() => normalizeValues(props.options))
+const selectedValues = ref(normalizeValues(props.modelValue))
 const isFocused = ref(false)
 
 watch(
   () => props.modelValue,
   (newValue) => {
-    selectedValues.value = [...newValue]
+    selectedValues.value = normalizeValues(newValue)
   },
 )
 
 const updateModelValue = (newValue) => {
-  emit("update:modelValue", newValue)
+  emit("update:modelValue", normalizeValues(newValue))
 }
 </script>

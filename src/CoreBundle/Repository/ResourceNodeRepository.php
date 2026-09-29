@@ -14,7 +14,9 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Parameter;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -165,7 +167,14 @@ class ResourceNodeRepository extends MaterializedPathRepository
         $params['parentNode'] = $resourceNode;
         $params['type'] = $type;
 
-        $qb->setParameters($params);
+        /** @var ArrayCollection<int, Parameter> $parameters */
+        $parameters = new ArrayCollection(array_map(
+            static fn ($name, $value): Parameter => new Parameter($name, $value),
+            array_keys($params),
+            array_values($params)
+        ));
+
+        $qb->setParameters($parameters);
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -179,10 +188,8 @@ class ResourceNodeRepository extends MaterializedPathRepository
             ->innerJoin('node.resourceLinks', 'resourceLinks')
             ->where($qb->expr()->eq('resourceType.title', ':resourceType'))
             ->andWhere($qb->expr()->eq('resourceLinks.course', ':course'))
-            ->setParameters([
-                'resourceType' => $type,
-                'course' => $course,
-            ])
+            ->setParameter('resourceType', $type)
+            ->setParameter('course', (int) $course->getId())
             ->getQuery()
             ->getResult()
         ;

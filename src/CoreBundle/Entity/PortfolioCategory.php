@@ -113,8 +113,11 @@ class PortfolioCategory implements Stringable
     /**
      * Get items.
      */
-    public function getItems(?Course $course = null, ?Session $session = null, bool $onlyVisibles = false): ArrayCollection
-    {
+    public function getItems(
+        ?Course $course = null,
+        ?Session $session = null,
+        bool $onlyVisibles = false
+    ): ArrayCollection {
         $criteria = Criteria::create();
 
         if ($onlyVisibles) {
@@ -144,18 +147,6 @@ class PortfolioCategory implements Stringable
         return $this;
     }
 
-    public function getParent(): ?self
-    {
-        return $this->parent;
-    }
-
-    public function setParent(?self $parent): self
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
     public function getChildren(): Collection
     {
         return $this->children;
@@ -178,6 +169,18 @@ class PortfolioCategory implements Stringable
                 $child->setParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
 
         return $this;
     }

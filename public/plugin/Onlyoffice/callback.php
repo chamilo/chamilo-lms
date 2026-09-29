@@ -18,6 +18,7 @@
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -63,13 +64,15 @@ $type = (string) getHashValue($hashData, 'type', '');
 $courseId = (int) getHashValue($hashData, 'courseId', 0);
 $userId = (int) getHashValue($hashData, 'userId', 0);
 $docId = (int) getHashValue($hashData, 'docId', 0);
+$resourceNodeId = (int) getHashValue($hashData, 'resourceNodeId', 0);
 $groupId = (int) getHashValue($hashData, 'groupId', 0);
 $sessionId = (int) getHashValue($hashData, 'sessionId', 0);
+$isExercisePreview = 1 === (int) getHashValue($hashData, 'exercisePreview', 0);
+$isReadOnly = 1 === (int) getHashValue($hashData, 'readOnly', 0);
 
-$docPathFromQuery = isset($_GET['docPath']) ? urldecode((string) $_GET['docPath']) : '';
-$docPath = '' !== $docPathFromQuery
-    ? $docPathFromQuery
-    : (string) getHashValue($hashData, 'docPath', '');
+// Only the signed value is trusted: a query parameter would let the caller
+// replace the document the hash was issued for.
+$docPath = (string) getHashValue($hashData, 'docPath', '');
 
 $courseInfo = [];
 $courseCode = '';
@@ -85,8 +88,11 @@ onlyofficeLog('DEBUG', 'Callback entry', [
     'courseCode' => $courseCode,
     'userId' => $userId,
     'docId' => $docId,
+    'resourceNodeId' => $resourceNodeId,
     'groupId' => $groupId,
     'sessionId' => $sessionId,
+    'exercisePreview' => $isExercisePreview,
+    'readOnly' => $isReadOnly,
     'docPath' => $docPath,
 ]);
 
@@ -112,6 +118,8 @@ if (empty($userInfo)) {
     ]));
 }
 
+$identityCameFromHash = false;
+
 if (api_is_anonymous()) {
     $loggedUser = [
         'user_id' => $userInfo['id'],
@@ -121,10 +129,18 @@ if (api_is_anonymous()) {
 
     Session::write('_user', $loggedUser);
     Login::init_user($loggedUser['user_id'], true);
+    $identityCameFromHash = true;
 }
 
 if (PHP_SESSION_ACTIVE === session_status()) {
-    session_write_close();
+    if ($identityCameFromHash) {
+        // The hash names the user, and the document server is not a browser:
+        // keep that identity in memory for this request only, so the caller
+        // never receives a session it could reuse.
+        session_abort();
+    } else {
+        session_write_close();
+    }
 }
 
 switch ($type) {
@@ -160,8 +176,21 @@ function track(): array
     global $jwtManager;
     global $courseCode;
     global $docId;
+    global $resourceNodeId;
     global $docPath;
     global $sessionId;
+    global $isExercisePreview;
+    global $isReadOnly;
+
+    if ($isExercisePreview || $isReadOnly) {
+        onlyofficeLog('INFO', 'Ignored write callback for read-only OnlyOffice editor', [
+            'resourceNodeId' => $resourceNodeId,
+            'exercisePreview' => $isExercisePreview,
+            'readOnly' => $isReadOnly,
+        ]);
+
+        return ['error' => 0];
+    }
 
     $bodyStream = file_get_contents('php://input');
     if (false === $bodyStream || '' === $bodyStream) {
@@ -204,7 +233,7 @@ function track(): array
         return ['error' => 0];
     }
 
-    $resolved = resolveDocumentSource($docId, $courseCode, $sessionId, $docPath);
+    $resolved = resolveDocumentSource($docId, $resourceNodeId, $courseCode, $sessionId, $docPath);
     if (null === $resolved) {
         onlyofficeLog('ERROR', 'File not found for save', [
             'docId' => $docId,
@@ -265,10 +294,11 @@ function download(): void
 {
     global $courseCode;
     global $docId;
+    global $resourceNodeId;
     global $docPath;
     global $sessionId;
 
-    $resolved = resolveDocumentSource($docId, $courseCode, $sessionId, $docPath);
+    $resolved = resolveDocumentSource($docId, $resourceNodeId, $courseCode, $sessionId, $docPath);
 
     if (null === $resolved) {
         sendNoCacheHeaders();
@@ -363,14 +393,42 @@ function emptyFile(): void
 }
 
 /**
+ * Resolve a course-relative document path to an existing file inside the course
+ * directory. Returns null when the file is missing or the path escapes that root.
+ */
+function resolveContainedCoursePath(string $docPath): ?string
+{
+    // SYS_COURSE_PATH is not declared by the 2.x core, so treat it as unresolvable
+    // rather than raising an undefined-constant error.
+    if (!\defined('SYS_COURSE_PATH')) {
+        return null;
+    }
+
+    $root = realpath(api_get_path(SYS_COURSE_PATH));
+
+    if (false === $root) {
+        return null;
+    }
+
+    $root = rtrim($root, '/').'/';
+    $realPath = realpath($root.ltrim(str_replace('\\', '/', $docPath), '/'));
+
+    if (false === $realPath || !str_starts_with($realPath, $root)) {
+        return null;
+    }
+
+    return $realPath;
+}
+
+/**
  * Resolve a document source in C2 first, then legacy.
  */
-function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, string $docPath): ?array
+function resolveDocumentSource(int $docId, int $resourceNodeId, string $courseCode, int $sessionId, string $docPath): ?array
 {
     if ('' !== $docPath) {
-        $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
+        $filePath = resolveContainedCoursePath($docPath);
 
-        if (file_exists($filePath)) {
+        if (null !== $filePath) {
             onlyofficeLog('DEBUG', 'Resolved direct docPath', [
                 'docPath' => $docPath,
                 'filePath' => $filePath,
@@ -391,10 +449,16 @@ function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, s
             ];
         }
 
-        onlyofficeLog('WARNING', 'Direct docPath not found', [
+        onlyofficeLog('WARNING', 'Direct docPath not found inside the course directory', [
             'docPath' => $docPath,
-            'filePath' => $filePath,
         ]);
+    }
+
+    if ($resourceNodeId > 0) {
+        $resolved = resolveResourceNodeSourceFromC2($resourceNodeId);
+        if (null !== $resolved) {
+            return $resolved;
+        }
     }
 
     if ($docId > 0) {
@@ -435,6 +499,7 @@ function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, s
 
     onlyofficeLog('ERROR', 'resolveDocumentSource failed', [
         'docId' => $docId,
+        'resourceNodeId' => $resourceNodeId,
         'docPath' => $docPath,
         'courseCode' => $courseCode,
         'sessionId' => $sessionId,
@@ -543,6 +608,93 @@ function resolveDocumentSourceFromC2(int $docId): ?array
         'storagePath' => $storagePath,
         'title' => $title,
         'documentKey' => (string) $docId,
+        'resourceFileId' => (int) $resourceFile->getId(),
+        'resourceNodeId' => (int) $resourceNode->getId(),
+        'entityManager' => $entityManager,
+        'resourceNodeRepository' => $resourceNodeRepository,
+        'size' => $size,
+        'mimeType' => $mimeType,
+    ];
+}
+
+/**
+ * Resolve a C2 ResourceNode directly. Used for exercise AttemptFile documents.
+ */
+function resolveResourceNodeSourceFromC2(int $resourceNodeId): ?array
+{
+    $entityManager = getEntityManager();
+    if (null === $entityManager) {
+        onlyofficeLog('ERROR', 'Entity manager could not be resolved');
+
+        return null;
+    }
+
+    /** @var ResourceNode|null $resourceNode */
+    $resourceNode = $entityManager->getRepository(ResourceNode::class)->find($resourceNodeId);
+    if (!$resourceNode instanceof ResourceNode) {
+        onlyofficeLog('ERROR', 'ResourceNode not found', [
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return null;
+    }
+
+    $resourceFile = $resourceNode->getFirstResourceFile();
+    if (!$resourceFile instanceof ResourceFile) {
+        onlyofficeLog('ERROR', 'ResourceFile missing for ResourceNode', [
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return null;
+    }
+
+    $resourceNodeRepository = getResourceNodeRepository();
+    if (null === $resourceNodeRepository) {
+        onlyofficeLog('ERROR', 'ResourceNodeRepository could not be resolved');
+
+        return null;
+    }
+
+    $storagePath = '';
+    try {
+        $storagePath = (string) $resourceNodeRepository->getFilename($resourceFile);
+    } catch (\Throwable $e) {
+        onlyofficeLog('WARNING', 'Failed to resolve storage filename', [
+            'message' => $e->getMessage(),
+        ]);
+    }
+
+    try {
+        $stream = $resourceNodeRepository->getResourceNodeFileStream($resourceNode, $resourceFile);
+    } catch (\Throwable $e) {
+        onlyofficeLog('ERROR', 'Failed to open resource stream', [
+            'message' => $e->getMessage(),
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+
+        return null;
+    }
+
+    if (!\is_resource($stream)) {
+        onlyofficeLog('ERROR', 'Resource stream is not available', [
+            'resourceNodeId' => $resourceNodeId,
+            'resourceFileId' => (int) $resourceFile->getId(),
+            'storagePath' => $storagePath,
+        ]);
+
+        return null;
+    }
+
+    $title = (string) ($resourceFile->getOriginalName() ?: $resourceFile->getTitle() ?: $resourceNode->getTitle());
+    $size = (int) ($resourceFile->getSize() ?? 0);
+    $mimeType = (string) ($resourceFile->getMimeType() ?: getMimeTypeFromFilename($title));
+
+    return [
+        'filePath' => null,
+        'stream' => $stream,
+        'storagePath' => $storagePath,
+        'title' => $title,
+        'documentKey' => 'rn'.$resourceNodeId,
         'resourceFileId' => (int) $resourceFile->getId(),
         'resourceNodeId' => (int) $resourceNode->getId(),
         'entityManager' => $entityManager,
@@ -727,16 +879,81 @@ function extractCallbackDownloadUrl(array $data, mixed $payload): string
 }
 
 /**
+ * Reduce a URL to scheme://host[:port], or '' when it is not an http(s) URL.
+ */
+function extractUrlOrigin(string $url): string
+{
+    $parts = parse_url($url);
+
+    if (!is_array($parts) || empty($parts['scheme']) || empty($parts['host'])) {
+        return '';
+    }
+
+    $scheme = strtolower((string) $parts['scheme']);
+
+    if (!\in_array($scheme, ['http', 'https'], true)) {
+        return '';
+    }
+
+    $origin = $scheme.'://'.strtolower((string) $parts['host']);
+
+    if (!empty($parts['port'])) {
+        $origin .= ':'.(int) $parts['port'];
+    }
+
+    return $origin;
+}
+
+/**
+ * Origins the callback is allowed to download from: the configured document server.
+ *
+ * The document server legitimately lives on a private network in most
+ * installations, so the control is an origin allowlist rather than a
+ * private-range block.
+ */
+function isAllowedDownloadUrl(string $url, $appSettings): bool
+{
+    $origin = extractUrlOrigin($url);
+
+    if ('' === $origin) {
+        return false;
+    }
+
+    $allowed = [];
+
+    foreach ([$appSettings->getDocumentServerUrl(), $appSettings->getDocumentServerInternalUrl()] as $serverUrl) {
+        $serverOrigin = extractUrlOrigin((string) $serverUrl);
+
+        if ('' !== $serverOrigin) {
+            $allowed[] = $serverOrigin;
+        }
+    }
+
+    return \in_array($origin, $allowed, true);
+}
+
+/**
  * Fetch remote binary data.
  */
 function fetchRemoteBinary(string $url): ?string
 {
+    global $appSettings;
+
+    // The URL comes from the callback body, so it must point at the document server.
+    if (!isAllowedDownloadUrl($url, $appSettings)) {
+        onlyofficeLog('ERROR', 'Rejected download URL outside the document server origin', [
+            'origin' => extractUrlOrigin($url),
+        ]);
+
+        return null;
+    }
+
     if (function_exists('curl_init')) {
         $ch = curl_init($url);
 
         if (false !== $ch) {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
             curl_setopt($ch, CURLOPT_TIMEOUT, 120);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -760,7 +977,14 @@ function fetchRemoteBinary(string $url): ?string
         }
     }
 
-    $content = @file_get_contents($url);
+    $context = stream_context_create([
+        'http' => [
+            'follow_location' => 0,
+            'timeout' => 120,
+        ],
+    ]);
+
+    $content = @file_get_contents($url, false, $context);
 
     if (false === $content) {
         return null;

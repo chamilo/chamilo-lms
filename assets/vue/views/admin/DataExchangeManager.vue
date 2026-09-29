@@ -332,7 +332,7 @@ const submitExchange = async () => {
         await adminService.assignExchangeUsers(userPayload)
       }
 
-      showSuccessNotification(t("Data exchange successfully saved."))
+      showSuccessNotification(t("Data exchange successfully saved"))
     }
 
     await fetchExchanges()
@@ -340,7 +340,7 @@ const submitExchange = async () => {
     resetForm()
   } catch (error) {
     console.error("Error saving data exchange", error)
-    showErrorNotification(t("Error saving data exchange."))
+    showErrorNotification(t("Error saving data exchange"))
   }
 }
 

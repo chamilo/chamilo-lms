@@ -2,8 +2,16 @@ export default {
   path: "/resources/document/:node/",
   meta: {
     requiresAuth: true,
+    requiresCourseContext: true,
     showBreadcrumb: true,
     tool: "document",
+    breadcrumb: "Documents",
+    // The trail follows the folder chain of the open document.
+    breadcrumbResource: {
+      trail: "ancestors",
+      listRoute: "DocumentsList",
+      detailRoute: "DocumentsList",
+    },
   },
   name: "documents",
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),

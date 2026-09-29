@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Framework\Container;
 
+require_once __DIR__.'/functions.php';
+
 function cstudio_project_lang_to_resource_code($projectLang): string
 {
     $lang = str_replace('-', '_', trim((string) $projectLang));
@@ -262,16 +264,39 @@ function pagePrepareFileCopy($filename, $courseSys, $bh, $courseDirImg, $totempl
 
     $VDB = new VirtualDatabase();
 
+    // $filename may be this plugin's own img-cache.php proxy URL, saved as an
+    // absolute, server-specific link (see migration Version20260918000000 for
+    // the data-side fix of already-saved rows). Resolve it back to the
+    // relative "editor/img_cache/..." form so the copy logic below -- which
+    // already understands that relative form via the "mg_cache/" check --
+    // picks it up, instead of silently skipping it just because it starts
+    // with "http".
+    if (str_contains($filename, 'img-cache.php')) {
+        $normalized = preg_replace('/img-cache\.php([^?])/', 'img-cache.php?$1', $filename);
+        $query = parse_url($normalized, PHP_URL_QUERY);
+        parse_str($query ?? '', $queryParams);
+        if (isset($queryParams['path']) && '' !== $queryParams['path']) {
+            $filename = 'img_cache/'.rawurldecode($queryParams['path']);
+        }
+    }
+
     echo $filename.'</br>';
     $isHttp = strpos($filename, 'http');
 
     if (false === $isHttp) {
+        // Everything below must stay inside the editor's own resource tree --
+        // $filename comes from stored page HTML, which a low-privilege editor
+        // session can influence, so a raw fopen() on it (as this used to do)
+        // is an arbitrary local file read.
+        $allowedRoot = $VDB->w_get_path(SYS_PLUGIN_PATH).'CStudio/editor/';
+
         $isImgFolder = strpos($filename, 'mg/');
         $isVideoFolder = strpos($filename, 'ideo/');
         $isVideoAudio = strpos($filename, 'udio/');
 
         if (false != $isImgFolder || false != $isVideoFolder || false != $isVideoAudio) {
-            $srcFimg = $VDB->w_get_path(SYS_PLUGIN_PATH).'CStudio/editor/'.$filename;
+            $srcFimgCandidate = $allowedRoot.$filename;
+            $srcFimg = oel_resolve_safe_local_path($srcFimgCandidate, $allowedRoot);
 
             if (false == $totempl) {
                 $courseSysFdest = $courseSys.'/'.$filename;
@@ -281,7 +306,7 @@ function pagePrepareFileCopy($filename, $courseSys, $bh, $courseDirImg, $totempl
             }
 
             // process 132
-            if (file_exists($srcFimg)) {
+            if (null !== $srcFimg) {
                 if (!$fileSystem->fileExists($courseSysFdest)) {
                     $stream = fopen($srcFimg, 'r');
                     $fileSystem->writeStream($courseSysFdest, $stream);
@@ -290,7 +315,7 @@ function pagePrepareFileCopy($filename, $courseSys, $bh, $courseDirImg, $totempl
                     echo '<span style="color:gray;" >process 132 '.$srcFimg.' <b>to</b> '.$courseSysFdest.'</span></br>';
                 }
             } else {
-                echo '<span style="color:red;" >process 132 '.$srcFimg.' <b>Not exits</b></span></br>';
+                echo '<span style="color:red;" >process 132 '.$srcFimgCandidate.' <b>Not exits</b></span></br>';
             }
         }
 
@@ -298,7 +323,8 @@ function pagePrepareFileCopy($filename, $courseSys, $bh, $courseDirImg, $totempl
 
         if (false != $isImgCache) {
             echo " -> Log $filename <br>";
-            $srcFimg = $VDB->w_get_path(SYS_PLUGIN_PATH).'CStudio/editor/'.$filename;
+            $srcFimgCandidate = $allowedRoot.$filename;
+            $srcFimg = oel_resolve_safe_local_path($srcFimgCandidate, $allowedRoot);
 
             if (false == $totempl) {
                 $courseSysFdest = $courseSys.'/'.$filename;
@@ -308,7 +334,7 @@ function pagePrepareFileCopy($filename, $courseSys, $bh, $courseDirImg, $totempl
             }
 
             // process 243
-            if (file_exists($srcFimg)) {
+            if (null !== $srcFimg) {
                 if (!$fileSystem->fileExists($courseSysFdest)) {
                     $stream = fopen($srcFimg, 'r');
                     $fileSystem->writeStream($courseSysFdest, $stream);
@@ -317,13 +343,13 @@ function pagePrepareFileCopy($filename, $courseSys, $bh, $courseDirImg, $totempl
                     echo '<span style="color:gray;" >@copy'.$srcFimg.' <b>to</b> '.$courseSysFdest.'</span></br>';
                 }
             } else {
-                echo '<span style="color:red;" >process 243 '.$srcFimg.' <b>Not exits</b></span></br>';
+                echo '<span style="color:red;" >process 243 '.$srcFimgCandidate.' <b>Not exits</b></span></br>';
             }
 
-            $isSvgFile = strpos($srcFimg, '.svg');
+            $isSvgFile = strpos($srcFimgCandidate, '.svg');
             if (false != $isSvgFile) {
-                $svgNsch = str_replace('.svg', '.html', $srcFimg);
-                if (file_exists($svgNsch)) {
+                $svgNsch = oel_resolve_safe_local_path(str_replace('.svg', '.html', $srcFimgCandidate), $allowedRoot);
+                if (null !== $svgNsch) {
                     $courseSysNschdest = str_replace('.svg', '.html', $courseSysFdest);
                     $stream = fopen($svgNsch, 'r');
                     $fileSystem->writeStream($courseSysNschdest, $stream);

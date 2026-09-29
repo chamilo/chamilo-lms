@@ -25,15 +25,22 @@ function buildQueryString(params = {}) {
 }
 
 function surveyRequestConfig(config = {}) {
+  const { headers = {}, ...restConfig } = config
+
   return {
     skipCourseContext: true,
-    ...config,
+    ...restConfig,
+    headers: { ...headers },
   }
 }
 
 export default {
   async getSurveyList(params = {}) {
     return await baseService.get("/api/survey/list", cleanParams(params), surveyRequestConfig())
+  },
+
+  async getPendingSurveys(params = {}) {
+    return await baseService.get("/api/survey/pending", cleanParams(params), surveyRequestConfig())
   },
 
   async getSurveyConfiguration(params = {}, surveyId = null) {
@@ -46,10 +53,19 @@ export default {
     const queryString = buildQueryString(params)
 
     if (surveyId) {
-      return await baseService.put(`/api/survey/configuration/${surveyId}${queryString}`, payload, surveyRequestConfig())
+      return await baseService.patch(
+        `/api/survey/configuration/${surveyId}${queryString}`,
+        payload,
+        surveyRequestConfig(),
+      )
     }
 
-    return await baseService.post(`/api/survey/configuration${queryString}`, payload, {}, surveyRequestConfig())
+    return await baseService.post(
+      `/api/survey/configuration${queryString}`,
+      payload,
+      {},
+      surveyRequestConfig(),
+    )
   },
 
   async getSurveyMeeting(params = {}, surveyId = null) {
@@ -62,16 +78,30 @@ export default {
     const queryString = buildQueryString(params)
 
     if (surveyId) {
-      return await baseService.put(`/api/survey/meeting/${surveyId}${queryString}`, payload, surveyRequestConfig())
+      return await baseService.patch(
+        `/api/survey/meeting/${surveyId}${queryString}`,
+        payload,
+        surveyRequestConfig(),
+      )
     }
 
-    return await baseService.post(`/api/survey/meeting${queryString}`, payload, {}, surveyRequestConfig())
+    return await baseService.post(
+      `/api/survey/meeting${queryString}`,
+      payload,
+      {},
+      surveyRequestConfig(),
+    )
   },
 
   async submitSurveyMeetingAnswer(payload, params = {}, surveyId) {
     const queryString = buildQueryString(params)
 
-    return await baseService.post(`/api/survey/meeting/${surveyId}/answer${queryString}`, payload, {}, surveyRequestConfig())
+    return await baseService.post(
+      `/api/survey/meeting/${surveyId}/answer${queryString}`,
+      payload,
+      {},
+      surveyRequestConfig(),
+    )
   },
 
   async getSurveyQuestions(params = {}, surveyId) {
@@ -82,36 +112,42 @@ export default {
     const queryString = buildQueryString(params)
 
     if (questionId) {
-      return await baseService.put(`/api/survey/questions/${surveyId}/${questionId}${queryString}`, payload, surveyRequestConfig())
+      return await baseService.patch(
+        `/api/survey/questions/${surveyId}/${questionId}${queryString}`,
+        payload,
+        surveyRequestConfig(),
+      )
     }
 
-    return await baseService.post(`/api/survey/questions/${surveyId}${queryString}`, payload, {}, surveyRequestConfig())
+    return await baseService.post(
+      `/api/survey/questions/${surveyId}${queryString}`,
+      payload,
+      {},
+      surveyRequestConfig(),
+    )
   },
 
-  async deleteSurveyQuestion(params = {}, surveyId, questionId, csrfToken) {
+  async deleteSurveyQuestion(params = {}, surveyId, questionId) {
     const queryString = buildQueryString(params)
 
-    return await baseService.delete(`/api/survey/questions/${surveyId}/${questionId}${queryString}`, {
-      data: { csrfToken },
-      ...surveyRequestConfig(),
-    })
+    return await baseService.delete(
+      `/api/survey/questions/${surveyId}/${questionId}${queryString}`,
+      surveyRequestConfig(),
+    )
   },
 
-  async moveSurveyQuestion(params = {}, surveyId, questionId, direction, csrfToken) {
+  async moveSurveyQuestion(params = {}, surveyId, questionId, direction) {
     const queryString = buildQueryString(params)
 
     return await baseService.post(`/api/survey/questions/${surveyId}/${questionId}/move${queryString}`, {
       direction,
-      csrfToken,
     }, {}, surveyRequestConfig())
   },
 
-  async copySurveyQuestion(params = {}, surveyId, questionId, csrfToken) {
+  async copySurveyQuestion(params = {}, surveyId, questionId) {
     const queryString = buildQueryString(params)
 
-    return await baseService.post(`/api/survey/questions/${surveyId}/${questionId}/copy${queryString}`, {
-      csrfToken,
-    }, {}, surveyRequestConfig())
+    return await baseService.post(`/api/survey/questions/${surveyId}/${questionId}/copy${queryString}`, {}, {}, surveyRequestConfig())
   },
 
   async getSurveyAnswer(params = {}, surveyId) {
@@ -121,7 +157,12 @@ export default {
   async submitSurveyAnswer(payload, params = {}, surveyId) {
     const queryString = buildQueryString(params)
 
-    return await baseService.post(`/api/survey/answer/${surveyId}${queryString}`, payload, {}, surveyRequestConfig())
+    return await baseService.post(
+      `/api/survey/answer/${surveyId}${queryString}`,
+      payload,
+      {},
+      surveyRequestConfig(),
+    )
   },
 
   async getSurveyInvitations(params = {}, surveyId) {
@@ -131,23 +172,25 @@ export default {
   async publishSurveyInvitations(payload, params = {}, surveyId) {
     const queryString = buildQueryString(params)
 
-    return await baseService.post(`/api/survey/invitations/${surveyId}/publish${queryString}`, payload, {}, surveyRequestConfig())
+    return await baseService.post(
+      `/api/survey/invitations/${surveyId}/publish${queryString}`,
+      payload,
+      {},
+      surveyRequestConfig(),
+    )
   },
 
-  async runSurveyAction(params = {}, surveyId, action, csrfToken) {
+  async runSurveyAction(params = {}, surveyId, action) {
     const queryString = buildQueryString(params)
 
-    return await baseService.post(`/api/survey/actions/${surveyId}/${action}${queryString}`, {
-      csrfToken,
-    }, {}, surveyRequestConfig())
+    return await baseService.post(`/api/survey/actions/${surveyId}/${action}${queryString}`, {}, {}, surveyRequestConfig())
   },
 
-  async runSurveyBulkDelete(params = {}, surveyIds = [], csrfToken) {
+  async runSurveyBulkDelete(params = {}, surveyIds = []) {
     const queryString = buildQueryString(params)
 
     return await baseService.post(`/api/survey/actions/bulk-delete${queryString}`, {
       surveyIds,
-      csrfToken,
     }, {}, surveyRequestConfig())
   },
 
@@ -158,7 +201,12 @@ export default {
   async copySurveyToTarget(payload, params = {}, surveyId) {
     const queryString = buildQueryString(params)
 
-    return await baseService.post(`/api/survey/actions/${surveyId}/copy${queryString}`, payload, {}, surveyRequestConfig())
+    return await baseService.post(
+      `/api/survey/actions/${surveyId}/copy${queryString}`,
+      payload,
+      {},
+      surveyRequestConfig(),
+    )
   },
 
   async getSurveyReporting(params = {}, surveyId) {

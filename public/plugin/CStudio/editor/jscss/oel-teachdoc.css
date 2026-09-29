@@ -4456,3 +4456,220 @@ z-index : 10014;
         text-align: left;
     }
 }
+
+/* Keep GrapesJS toolbar aligned inside the editor header. */
+.gjs-pn-panel {
+    padding: 2px;
+}
+
+/* Center CStudio Colors modal content. */
+.WinEditColorsTeach.cstudio-centered-colors-window,
+.WinEditColorsTeach {
+    text-align: center;
+}
+
+.WinEditColorsTeach .cstudio-centered-colors-panel,
+.WinEditColorsTeach .innerEditColorsTeach,
+.WinEditColorsTeach .innerEditQuizzTeach {
+    float: none;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 6px;
+    margin-right: 6px;
+    text-align: left;
+}
+
+.WinEditColorsTeach .colorCube {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* CStudio media/button tool polish. */
+.cstudio-media-help {
+  clear: both;
+  margin-left: 70px;
+  padding-top: 6px;
+  color: #555;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.gjs-block[aria-hidden="true"] {
+  display: none !important;
+}
+
+.videoByLudi,
+.audioByLudi,
+.teachdocbtnteach {
+  cursor: pointer;
+}
+
+
+/* Keep the CStudio Quiz block visible and easy to find in the block panel. */
+.gjs-block.cstudio-quiz-block {
+  display: block !important;
+}
+
+.gjs-block.cstudio-quiz-block .gjs-block-label {
+  display: block !important;
+}
+
+/* Keep the first and last blocks reachable inside the GrapesJS block sidebar. */
+.gjs-pn-views-container {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+.gjs-pn-views-container .gjs-blocks-c,
+.gjs-pn-views-container .gjs-blocks-cs,
+.gjs-blocks-c,
+.gjs-blocks-cs {
+  box-sizing: border-box;
+  padding-top: 16px !important;
+  padding-bottom: 72px !important;
+  scroll-padding-top: 16px;
+  scroll-padding-bottom: 72px;
+}
+
+.gjs-pn-views-container .gjs-block {
+  flex-shrink: 0;
+}
+
+/* Final CStudio UI polish: keep the collapsed Hide menus eye usable. */
+.gjs-pn-btn.fa-eye,
+.gjs-pn-btn.fa-eye-slash,
+.gjs-pn-btn[class*="fa-eye"],
+.fa-eye[data-cstudio-tooltip],
+.fa-eye-slash[data-cstudio-tooltip],
+[class*="fa-eye"][data-cstudio-tooltip],
+[class*="fa-eye-slash"][data-cstudio-tooltip] {
+    width: 32px !important;
+    min-width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    font-size: 20px !important;
+    line-height: 32px !important;
+    text-align: center !important;
+}
+
+.gjs-am-assets-cont .gjs-am-asset[aria-hidden="true"] {
+    display: none !important;
+}
+
+/* CStudio toolbar alignment: keep the top icon panels compact and centered. */
+.gjs-pn-panel.gjs-pn-options,
+.gjs-pn-panel.gjs-pn-devices-c,
+.gjs-pn-panel.gjs-pn-commands {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 30px !important;
+    height: 30px !important;
+    padding: 2px 4px !important;
+    box-sizing: border-box !important;
+}
+
+.gjs-pn-panel.gjs-pn-options .gjs-pn-buttons,
+.gjs-pn-panel.gjs-pn-devices-c .gjs-pn-buttons,
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-buttons {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px;
+    min-height: 26px !important;
+    height: 26px !important;
+}
+
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn,
+.gjs-pn-panel.gjs-pn-devices-c .gjs-pn-btn,
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    min-width: 24px !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    margin: 0 1px !important;
+    padding: 0 !important;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    vertical-align: middle !important;
+}
+
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn.fa-eye,
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn.fa-eye-slash,
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn[class*="fa-eye"],
+.gjs-pn-panel.gjs-pn-options .fa-eye[data-cstudio-tooltip],
+.gjs-pn-panel.gjs-pn-options .fa-eye-slash[data-cstudio-tooltip],
+.gjs-pn-panel.gjs-pn-options [class*="fa-eye"][data-cstudio-tooltip],
+.gjs-pn-panel.gjs-pn-options [class*="fa-eye-slash"][data-cstudio-tooltip] {
+    width: 24px !important;
+    min-width: 24px !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    font-size: 18px !important;
+    line-height: 24px !important;
+    position: static !important;
+    top: auto !important;
+    transform: none !important;
+}
+
+/* Hide confusing top-toolbar source-code and canvas-delete actions.
+   Page deletion remains available from the page edit modal, where it is persistent and explicit. */
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn.fa-code,
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn[class*="fa-code"],
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn.fa-trash,
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn.fa-trash-o,
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn[class*="fa-trash"],
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn.fa-code,
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn[class*="fa-code"],
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn.fa-trash,
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn.fa-trash-o,
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn[class*="fa-trash"] {
+    display: none !important;
+}
+
+/* Hide blank/placeholder toolbar actions that render without a visible icon or clear tooltip. */
+.gjs-pn-panel.gjs-pn-devices-c .gjs-pn-btn:not([class*="fa-"]):not([data-cstudio-tooltip]),
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn:not([class*="fa-"]):not([data-cstudio-tooltip]):empty,
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn:not([class*="fa-"]):not([data-cstudio-tooltip]):empty,
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn[title*="Import"],
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn[aria-label*="Import"],
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn[class*="import"],
+.gjs-pn-panel.gjs-pn-options .gjs-pn-btn[class*="upload"],
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn[title*="Import"],
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn[aria-label*="Import"],
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn[class*="import"],
+.gjs-pn-panel.gjs-pn-commands .gjs-pn-btn[class*="upload"] {
+    display: none !important;
+}
+
+
+/* Hide unsupported toolbar actions completely, including invisible import placeholders. */
+.gjs-pn-panel .gjs-pn-btn.cstudio-hidden-toolbar-action,
+.gjs-pn-panel .gjs-pn-btn.fa-download,
+.gjs-pn-panel .gjs-pn-btn[class*="fa-download"],
+.gjs-pn-panel .gjs-pn-btn.fa-upload,
+.gjs-pn-panel .gjs-pn-btn[class*="fa-upload"],
+.gjs-pn-panel .gjs-pn-btn[title*="Import"],
+.gjs-pn-panel .gjs-pn-btn[title*="import"],
+.gjs-pn-panel .gjs-pn-btn[aria-label*="Import"],
+.gjs-pn-panel .gjs-pn-btn[aria-label*="import"],
+.gjs-pn-panel .gjs-pn-btn[data-tooltip*="Import"],
+.gjs-pn-panel .gjs-pn-btn[data-tooltip*="import"],
+.gjs-pn-panel .gjs-pn-btn[data-command*="import"],
+.gjs-pn-panel .gjs-pn-btn[data-command*="Import"],
+.gjs-pn-panel .gjs-pn-btn[data-cmd*="import"],
+.gjs-pn-panel .gjs-pn-btn[data-cmd*="Import"] {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+}

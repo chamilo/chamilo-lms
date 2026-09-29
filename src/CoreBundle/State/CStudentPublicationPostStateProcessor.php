@@ -13,7 +13,9 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -21,8 +23,8 @@ use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
-use GradebookUtils;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -40,6 +42,8 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         private readonly RouterInterface $router,
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
+        private readonly GradebookLinkManager $gradebookLinkManager,
+        private readonly RequestStack $requestStack,
     ) {}
 
     public function process(
@@ -73,70 +77,83 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
             $publication->setUser($this->entityManager->getReference(User::class, $targetUserId));
         }
 
-        // Persist/flush (ApiPlatform default processor)
-        $result = $this->persistProcessor->process($publication, $operation, $uriVariables, $context);
+        $this->entityManager->beginTransaction();
 
-        $assignment = $publication->getAssignment();
-        $courseLink = $publication->getFirstResourceLink();
-        $course = $courseLink->getCourse();
-        $session = $courseLink->getSession();
-        $group = $courseLink->getGroup();
+        try {
+            // Persist/flush (ApiPlatform default processor). Keep the assignment and
+            // its Gradebook relation atomic so an invalid Gradebook context cannot
+            // leave a partially updated assignment behind.
+            $result = $this->persistProcessor->process($publication, $operation, $uriVariables, $context);
 
-        if (!$assignment) {
-            $assignment = new CStudentPublicationAssignment();
-            $assignment->setPublication($publication);
-            $publication->setAssignment($assignment);
-            $this->entityManager->persist($assignment);
-        }
+            $assignment = $publication->getAssignment();
+            $courseLink = $publication->getFirstResourceLink();
+            $course = $courseLink->getCourse();
+            $session = $courseLink->getSession();
+            $group = $courseLink->getGroup();
 
-        $payload = [];
-        if (isset($context['request'])) {
-            try {
-                $payload = $context['request']->toArray();
-            } catch (Throwable $e) {
-                // Non-fatal: keep processing without payload.
-                $payload = [];
+            if (!$assignment) {
+                $assignment = new CStudentPublicationAssignment();
+                $assignment->setPublication($publication);
+                $publication->setAssignment($assignment);
+                $this->entityManager->persist($assignment);
             }
-        }
 
-        $this->applyResourceLanguage($publication, $payload);
-
-        if (\array_key_exists('qualification', $payload)) {
-            $publication->setQualification((float) $payload['qualification']);
-
-            // Store who graded (qualificator) and when.
-            if ($currentUser instanceof User) {
-                $publication->setQualificatorId($currentUser->getId());
-                $publication->setDateOfQualification(new DateTime());
+            $payload = [];
+            $request = $this->requestStack->getCurrentRequest();
+            if (null !== $request) {
+                try {
+                    $payload = $request->toArray();
+                } catch (Throwable) {
+                    // Non-fatal: keep processing without request-only fields.
+                    $payload = [];
+                }
             }
-        }
 
-        if (isset($payload['expiresOn'])) {
-            $assignment->setExpiresOn(new DateTime($payload['expiresOn']));
-        }
-        if (isset($payload['endsOn'])) {
-            $assignment->setEndsOn(new DateTime($payload['endsOn']));
-        }
+            $this->applyResourceLanguage($publication, $payload);
 
-        if (!$isUpdate || $publication->getQualification() > 0) {
-            $assignment->setEnableQualification(true);
+            if (\array_key_exists('qualification', $payload)) {
+                $publication->setQualification((float) $payload['qualification']);
+
+                // Store who graded (qualificator) and when.
+                if ($currentUser instanceof User) {
+                    $publication->setQualificatorId($currentUser->getId());
+                    $publication->setDateOfQualification(new DateTime());
+                }
+            }
+
+            if (isset($payload['expiresOn'])) {
+                $assignment->setExpiresOn(new DateTime($payload['expiresOn']));
+            }
+            if (isset($payload['endsOn'])) {
+                $assignment->setEndsOn(new DateTime($payload['endsOn']));
+            }
+
+            if (!$isUpdate || $publication->getQualification() > 0) {
+                $assignment->setEnableQualification(true);
+            }
+
+            if ($publication->addToCalendar) {
+                $event = $this->saveCalendarEvent($publication, $assignment, $courseLink, $course, $session, $group);
+                $assignment->setEventCalendarId($event->getIid());
+            } elseif (!$isUpdate) {
+                $assignment->setEventCalendarId(0);
+            }
+
+            if (null !== $assignment->getIid()) {
+                $publication->setHasProperties($assignment->getIid());
+            }
+
+            $publication->setViewProperties(true);
+            $this->entityManager->flush();
+
+            $this->saveGradebookConfig($publication, $course, $session, $payload);
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+        } catch (Throwable $exception) {
+            $this->entityManager->rollback();
+
+            throw $exception;
         }
-
-        if ($publication->addToCalendar) {
-            $event = $this->saveCalendarEvent($publication, $assignment, $courseLink, $course, $session, $group);
-            $assignment->setEventCalendarId($event->getIid());
-        } elseif (!$isUpdate) {
-            $assignment->setEventCalendarId(0);
-        }
-
-        if (null !== $assignment->getIid()) {
-            $publication->setHasProperties($assignment->getIid());
-        }
-
-        $publication->setViewProperties(true);
-        $this->entityManager->flush();
-
-        $this->saveGradebookConfig($publication, $course, $session);
 
         if (!$isUpdate) {
             $this->sendEmailAlertStudentsOnNewHomework($publication, $course, $session);
@@ -270,46 +287,51 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         return $event;
     }
 
-    private function saveGradebookConfig(CStudentPublication $publication, Course $course, ?Session $session): void
-    {
-        if ($publication->gradebookCategoryId <= 0) {
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function saveGradebookConfig(
+        CStudentPublication $publication,
+        Course $course,
+        ?Session $session,
+        array $payload,
+    ): void {
+        if (!\array_key_exists('addToGradebook', $payload)
+            && !\array_key_exists('gradebookCategoryId', $payload)
+        ) {
             return;
         }
 
-        $gradebookLinkInfo = GradebookUtils::isResourceInCourseGradebook(
-            $course->getId(),
-            LINK_STUDENTPUBLICATION,
-            $publication->getIid(),
-            $session?->getId()
-        );
-
-        $linkId = empty($gradebookLinkInfo) ? null : $gradebookLinkInfo['id'];
-
-        if ($publication->addToGradebook) {
-            if (empty($linkId)) {
-                GradebookUtils::add_resource_to_course_gradebook(
-                    $publication->gradebookCategoryId,
-                    $course->getId(),
-                    LINK_STUDENTPUBLICATION,
-                    $publication->getIid(),
-                    $publication->getTitle(),
-                    $publication->getWeight(),
-                    $publication->getQualification(),
-                    $publication->getDescription(),
-                    1,
-                    $session?->getId()
-                );
-            } else {
-                GradebookUtils::updateResourceFromCourseGradebook(
-                    $linkId,
-                    $course->getId(),
-                    $publication->getWeight()
-                );
-            }
-        } else {
-            // Delete everything of the gradebook for this $linkId
-            GradebookUtils::remove_resource_from_course_gradebook($linkId);
+        $publicationId = (int) ($publication->getIid() ?? 0);
+        if ($publicationId <= 0) {
+            return;
         }
+
+        if (!$publication->addToGradebook) {
+            $this->gradebookLinkManager->removeLinks(
+                $course,
+                $session,
+                GradebookLinkResourceResolver::LINK_STUDENT_PUBLICATION,
+                $publicationId,
+            );
+
+            return;
+        }
+
+        if ($publication->gradebookCategoryId <= 0) {
+            throw new BadRequestHttpException('A Gradebook category is required.');
+        }
+
+        $this->gradebookLinkManager->upsertLink(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_STUDENT_PUBLICATION,
+            $publicationId,
+            $publication->gradebookCategoryId,
+            max(0.0, (float) $publication->getWeight()),
+            true,
+            0.0,
+        );
     }
 
     private function sendEmailAlertStudentsOnNewHomework(

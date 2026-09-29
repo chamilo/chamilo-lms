@@ -330,6 +330,25 @@
         class="mb-4"
       />
     </div>
+    <Message
+      v-if="upgradeFlagWarning"
+      :closable="false"
+      severity="warn"
+      class="mb-4"
+    >
+      {{ upgradeFlagWarning }}
+    </Message>
+    <Message
+      :closable="false"
+      severity="info"
+      class="mb-4"
+    >
+      {{
+        t(
+          "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not.",
+        )
+      }}
+    </Message>
     <div class="formgroup-inline">
       <div class="field">
         <Button
@@ -406,7 +425,11 @@ const sanitizedDbName = computed(() => {
 })
 
 const loading = ref(false)
-const isButtonDisabled = ref(installerData.value.isUpdateAvailable)
+// Do NOT initialize from isUpdateAvailable: a pending/failed migration means
+// isUpdateAvailable=true, but the button must stay enabled so the user can
+// (re)run the migration.  The button is disabled only while the migration is
+// actually running (loading=true, set in btnStep6OnClick).
+const isButtonDisabled = ref(false)
 const isExecutable = ref("")
 
 const progressPercentage = ref(0)
@@ -414,6 +437,7 @@ const currentMigration = ref("")
 const successDialogVisible = ref(false)
 const errorDialogVisible = ref(false)
 const errorMessage = ref("")
+const upgradeFlagWarning = ref("")
 
 const showAdminPass = ref(false)
 const toggleAdminPass = () => {
@@ -438,13 +462,55 @@ function btnStep6OnClick() {
 function startMigration(updatePath) {
   const xhr = new XMLHttpRequest()
   xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status !== 200) {
+    if (xhr.readyState !== 4) {
+      return
+    }
+
+    if (xhr.status === 200) {
+      let response
+
+      try {
+        response = JSON.parse(xhr.responseText)
+      } catch {
+        // A 200 that is not JSON means the server wrote something else first: a PHP
+        // notice, or nothing at all when the connection dropped. Show that text instead
+        // of dying in the console, because it is the only copy of the reason.
+        loading.value = false
+        isButtonDisabled.value = false
+        errorDialogVisible.value = true
+        errorMessage.value = `${t("Please check the following error:")} ${
+          xhr.responseText.trim().slice(0, 1000) || `${xhr.status} - ${xhr.statusText}`
+        }`
+
+        return
+      }
+
+      progressPercentage.value = response.progress_percentage
+      currentMigration.value = response.current_migration
       loading.value = false
       isButtonDisabled.value = false
-      errorDialogVisible.value = true
-      errorMessage.value = `
-        ${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}.
-      `
+
+      if (response.redirect_to_step7) {
+        upgradeFlagWarning.value = response.upgrade_flag_warning || ""
+        successDialogVisible.value = true
+      } else {
+        errorDialogVisible.value = true
+        errorMessage.value = response.message || t("Migration failed!")
+      }
+
+      return
+    }
+
+    loading.value = false
+    isButtonDisabled.value = false
+    errorDialogVisible.value = true
+
+    try {
+      const response = JSON.parse(xhr.responseText)
+      errorMessage.value =
+        response.message || `${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}`
+    } catch {
+      errorMessage.value = `${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}`
     }
   }
 
@@ -458,16 +524,23 @@ function pollMigrationStatus() {
     const xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText)
+        let response
+
+        try {
+          response = JSON.parse(xhr.responseText)
+        } catch {
+          // Keep polling: one unreadable answer must not stop the progress bar for the
+          // rest of a migration that can run for hours.
+          pollMigrationStatus()
+
+          return
+        }
+
         progressPercentage.value = response.progress_percentage
         currentMigration.value = response.current_migration
 
         if (response.progress_percentage < 100) {
           pollMigrationStatus()
-        } else {
-          loading.value = false
-          isButtonDisabled.value = false
-          successDialogVisible.value = true
         }
       } else if (xhr.readyState === 4 && xhr.status !== 200) {
         loading.value = false
@@ -487,6 +560,6 @@ function btnFinishOnClick() {
 }
 
 function btnSupportOnClick() {
-  alert(t("Please contact support with the error details."))
+  alert(t("Please contact support with the error details"))
 }
 </script>

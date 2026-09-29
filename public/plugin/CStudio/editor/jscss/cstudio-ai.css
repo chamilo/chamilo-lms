@@ -1,0 +1,219 @@
+.cstudio-ai-speed-tool {
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 18%);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 22px;
+    height: 40px;
+    justify-content: center;
+    margin: 4px;
+    text-decoration: none;
+    width: 40px;
+}
+
+.cstudio-ai-speed-tool:hover,
+.cstudio-ai-speed-tool:focus {
+    background: #f3f4f6;
+    border-color: #2563eb;
+    outline: none;
+}
+
+.cstudio-ai-modal {
+    align-items: center;
+    background: rgb(15 23 42 / 58%);
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    padding: 24px;
+    position: fixed;
+    z-index: 100000;
+}
+
+.cstudio-ai-dialog {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 24px 64px rgb(0 0 0 / 35%);
+    color: #111827;
+    max-height: calc(100vh - 48px);
+    max-width: 680px;
+    overflow: auto;
+    width: 100%;
+}
+
+.cstudio-ai-header {
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 24px;
+}
+
+.cstudio-ai-header h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.cstudio-ai-close {
+    background: transparent;
+    border: 0;
+    color: #4b5563;
+    cursor: pointer;
+    font-size: 28px;
+    line-height: 1;
+    padding: 4px 8px;
+}
+
+.cstudio-ai-body {
+    padding: 24px;
+}
+
+.cstudio-ai-body form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cstudio-ai-body label,
+.cstudio-ai-body legend {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.cstudio-ai-body textarea,
+.cstudio-ai-body input,
+.cstudio-ai-body select {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-sizing: border-box;
+    color: #111827;
+    font: inherit;
+    padding: 10px 12px;
+    width: 100%;
+}
+
+.cstudio-ai-body textarea:focus,
+.cstudio-ai-body input:focus,
+.cstudio-ai-body select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgb(37 99 235 / 18%);
+    outline: none;
+}
+
+.cstudio-ai-formats {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    display: flex;
+    gap: 16px;
+    margin: 8px 0 0;
+    padding: 16px;
+}
+
+.cstudio-ai-format {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-weight: 400 !important;
+    gap: 8px;
+}
+
+.cstudio-ai-format input {
+    width: auto;
+}
+
+.cstudio-ai-format-shape {
+    border: 2px solid #64748b;
+    display: inline-block;
+}
+
+.cstudio-ai-format-shape--square {
+    height: 22px;
+    width: 22px;
+}
+
+.cstudio-ai-format-shape--landscape {
+    height: 18px;
+    width: 28px;
+}
+
+.cstudio-ai-format-shape--portrait {
+    height: 28px;
+    width: 18px;
+}
+
+.cstudio-ai-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+.cstudio-ai-submit {
+    background: #2563eb;
+    border: 0;
+    border-radius: 6px;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    min-width: 150px;
+    padding: 10px 18px;
+}
+
+.cstudio-ai-submit:hover,
+.cstudio-ai-submit:focus {
+    background: #1d4ed8;
+}
+
+.cstudio-ai-submit:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+.cstudio-ai-loading::before {
+    animation: cstudio-ai-spin 0.8s linear infinite;
+    border: 2px solid rgb(255 255 255 / 45%);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    content: '';
+    display: inline-block;
+    height: 14px;
+    margin-right: 8px;
+    vertical-align: -2px;
+    width: 14px;
+}
+
+.cstudio-ai-status {
+    color: #1f2937;
+    font-size: 14px;
+    min-height: 20px;
+    padding-top: 12px;
+}
+
+.cstudio-ai-status--error {
+    color: #b91c1c;
+}
+
+@keyframes cstudio-ai-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 640px) {
+    .cstudio-ai-modal {
+        padding: 8px;
+    }
+
+    .cstudio-ai-header,
+    .cstudio-ai-body {
+        padding: 16px;
+    }
+
+    .cstudio-ai-formats {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

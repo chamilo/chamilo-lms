@@ -307,6 +307,8 @@ class ProfileType extends AbstractType
             }
 
             $isEditable = $isCoreEditable($key);
+
+            /** @var array<string, mixed> $opts */
             $opts = [
                 'label' => $fieldConfig['label'],
                 'required' => $required,
@@ -352,10 +354,10 @@ class ProfileType extends AbstractType
                 $constraints = $this->addConstraintIfMissing(
                     $constraints,
                     EmailConstraint::class,
-                    new EmailConstraint([
-                        'mode' => EmailConstraint::VALIDATION_MODE_HTML5,
-                        'message' => 'Please enter a valid email address.',
-                    ])
+                    new EmailConstraint(
+                        mode: EmailConstraint::VALIDATION_MODE_HTML5,
+                        message: 'Please enter a valid email address.',
+                    )
                 );
                 $opts['constraints'] = $constraints;
                 $opts['invalid_message'] = 'Please enter a valid email address.';
@@ -365,9 +367,7 @@ class ProfileType extends AbstractType
                 $constraints = $this->addConstraintIfMissing(
                     $constraints,
                     NotBlank::class,
-                    new NotBlank([
-                        'message' => 'This value should not be blank.',
-                    ])
+                    new NotBlank(message: 'This value should not be blank.')
                 );
                 $opts['constraints'] = $constraints;
             }
@@ -394,6 +394,7 @@ class ProfileType extends AbstractType
             $tzCfg = $fieldsMap['timezone'];
             $isEditable = $isCoreEditable('timezone');
 
+            /** @var array<string, mixed> $opts */
             $opts = [
                 'label' => $tzCfg['label'],
                 'required' => $tzCfg['required'],
@@ -414,9 +415,7 @@ class ProfileType extends AbstractType
                 $opts['label_attr'] = $existingLabelAttr;
 
                 $constraints = $opts['constraints'] ?? [];
-                $constraints[] = new NotBlank([
-                    'message' => 'This value should not be blank.',
-                ]);
+                $constraints[] = new NotBlank(message: 'This value should not be blank.');
                 $opts['constraints'] = $constraints;
             }
 

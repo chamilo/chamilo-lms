@@ -38,18 +38,6 @@ class ChatVideo
     protected DateTime $datetime;
 
     /**
-     * Set fromUser.
-     *
-     * @return ChatVideo
-     */
-    public function setFromUser(int $fromUser)
-    {
-        $this->fromUser = $fromUser;
-
-        return $this;
-    }
-
-    /**
      * Get fromUser.
      *
      * @return int
@@ -60,13 +48,13 @@ class ChatVideo
     }
 
     /**
-     * Set toUser.
+     * Set fromUser.
      *
      * @return ChatVideo
      */
-    public function setToUser(int $toUser)
+    public function setFromUser(int $fromUser)
     {
-        $this->toUser = $toUser;
+        $this->fromUser = $fromUser;
 
         return $this;
     }
@@ -82,13 +70,13 @@ class ChatVideo
     }
 
     /**
-     * Set title.
+     * Set toUser.
      *
      * @return ChatVideo
      */
-    public function setTitle(string $title)
+    public function setToUser(int $toUser)
     {
-        $this->title = $title;
+        $this->toUser = $toUser;
 
         return $this;
     }
@@ -104,13 +92,13 @@ class ChatVideo
     }
 
     /**
-     * Set datetime.
+     * Set title.
      *
      * @return ChatVideo
      */
-    public function setDatetime(DateTime $datetime)
+    public function setTitle(string $title)
     {
-        $this->datetime = $datetime;
+        $this->title = $title;
 
         return $this;
     }
@@ -123,6 +111,18 @@ class ChatVideo
     public function getDatetime()
     {
         return $this->datetime;
+    }
+
+    /**
+     * Set datetime.
+     *
+     * @return ChatVideo
+     */
+    public function setDatetime(DateTime $datetime)
+    {
+        $this->datetime = $datetime;
+
+        return $this;
     }
 
     /**

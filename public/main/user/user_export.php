@@ -46,9 +46,9 @@ if (!empty($export['session'])) {
 
 if (is_array($courseSessionValue) && isset($courseSessionValue[1])) {
     $courseSessionCode = $courseSessionValue[0];
-    $sessionId = $courseSessionValue[1];
+    $sessionId = (int) $courseSessionValue[1];
     $courseSessionInfo = api_get_course_info($courseSessionCode);
-    $courseSessionId = $courseSessionInfo['real_id'];
+    $courseSessionId = (int) $courseSessionInfo['real_id'];
     $sessionInfo = api_get_session_info($sessionId);
 }
 

@@ -13,7 +13,6 @@ const router = useRouter()
 const groupId = computed(() => Number(route.params.id))
 
 const groupTitle = ref("")
-const csrfToken = ref("")
 const allCourses = ref([])
 const selectedIds = ref(new Set())
 const keyword = ref("")
@@ -38,7 +37,6 @@ async function loadData() {
   try {
     const data = await usergroupAdminService.getCoursesData(groupId.value)
     groupTitle.value = data.groupTitle
-    csrfToken.value = data.csrfToken
     const merged = [...data.coursesInGroup, ...data.coursesNotInGroup].sort((a, b) => a.label.localeCompare(b.label))
     allCourses.value = merged
     selectedIds.value = new Set(data.coursesInGroup.map((c) => c.id))
@@ -72,7 +70,6 @@ async function save() {
   errorMessage.value = ""
   try {
     const formData = new FormData()
-    formData.append("_token", csrfToken.value)
     selectedIds.value.forEach((id) => formData.append("courseIds[]", String(id)))
     await usergroupAdminService.saveCourses(groupId.value, formData)
     await router.push({ name: "AdminUsergroupList" })

@@ -37,121 +37,144 @@
           required
         />
 
-        <BaseTinyEditor
-          v-model="form.text"
-          :help-text="formSubmitted && !hasMessage ? t('Message is required') : ''"
-          :title="t('Message')"
-          editor-id="forum-thread-message"
-        />
-
-        <label
-          v-if="isAllowedToEdit"
-          class="flex items-center gap-2 text-sm text-gray-700"
-        >
-          <input
-            v-model="form.threadSticky"
-            class="h-4 w-4 rounded border-gray-300"
-            name="thread_sticky"
-            type="checkbox"
+        <div>
+          <BaseTinyEditor
+            v-model="form.text"
+            :title="t('Message')"
+            editor-id="forum-thread-message"
           />
-          {{ t('Sticky thread') }}
-        </label>
-
-        <div
-          v-if="isAllowedToEdit"
-          class="rounded-lg border border-gray-20 bg-gray-10 p-3"
-        >
-          <label class="mb-3 flex items-center gap-2 text-sm text-gray-700">
-            <input
-              v-model="form.gradebookEnabled"
-              class="h-4 w-4 rounded border-gray-300"
-              name="thread_qualify_gradebook"
-              type="checkbox"
-            />
-            {{ t("Grade this thread") }}
-          </label>
-
-          <div
-            v-if="form.gradebookEnabled"
-            class="grid gap-3 md:grid-cols-2"
+          <p
+            v-if="formSubmitted && !hasMessage"
+            class="mt-1 text-sm font-medium text-red-700"
           >
-            <BaseSelect
-              id="forum-thread-gradebook-category"
-              v-model="form.gradebookCategoryId"
-              :is-invalid="formSubmitted && form.gradebookEnabled && !form.gradebookCategoryId"
-              :label="t('Select assessment')"
-              :message-text="formSubmitted && form.gradebookEnabled && !form.gradebookCategoryId ? t('Select assessment') : null"
-              :options="gradebookCategoryOptions"
-              name="category_id"
-            />
-
-            <BaseInputText
-              id="forum-thread-grade-title"
-              v-model="form.threadTitleQualify"
-              :label="t('Column header in Competences Report')"
-              name="calification_notebook_title"
-            />
-
-            <BaseInputText
-              id="forum-thread-grade-max"
-              v-model="form.threadQualifyMax"
-              :is-invalid="formSubmitted && form.gradebookEnabled && Number(form.threadQualifyMax) <= 0"
-              :label="t('Maximum score')"
-              name="numeric_calification"
-              type="number"
-            />
-
-            <BaseInputText
-              id="forum-thread-grade-weight"
-              v-model="form.threadWeight"
-              :is-invalid="formSubmitted && form.gradebookEnabled && Number(form.threadWeight) <= 0"
-              :label="t('Weight in Report')"
-              name="weight_calification"
-              type="number"
-            />
-          </div>
-
-          <label
-            v-if="form.gradebookEnabled"
-            class="mt-3 flex items-center gap-2 text-sm text-gray-700"
-          >
-            <input
-              v-model="form.threadPeerQualify"
-              class="h-4 w-4 rounded border-gray-300"
-              name="thread_peer_qualify"
-              type="checkbox"
-            />
-            {{ t("Thread scored by peers") }}
-          </label>
+            {{ t('Message is required') }}
+          </p>
         </div>
 
-        <label
-          v-if="showPostNotification"
-          class="flex items-center gap-2 text-sm text-gray-700"
-        >
-          <input
-            v-model="form.postNotification"
-            class="h-4 w-4 rounded border-gray-300"
-            name="post_notification"
-            type="checkbox"
-          />
-          {{ t('Notify me by e-mail when somebody replies') }}
-        </label>
+        <BaseAdvancedSettingsButton v-model="advancedSettingsVisible">
+          <div class="space-y-4">
+            <div
+              v-if="isAllowedToEdit"
+              class="rounded-lg border border-gray-20 bg-white p-4"
+            >
+              <label class="flex items-center gap-3 text-sm font-medium text-gray-800">
+                <input
+                  v-model="form.threadSticky"
+                  class="h-4 w-4 rounded border-gray-300"
+                  name="thread_sticky"
+                  type="checkbox"
+                />
+                <span>{{ t('Sticky thread') }}</span>
+              </label>
+            </div>
 
-        <BaseFileUploadMultiple
-          v-if="allowAttachments"
-          v-model="form.attachments"
-          :label="t('Attach files')"
-          name="thread_attachments"
-          size="small"
-        />
+            <div
+              v-if="isAllowedToEdit"
+              class="rounded-lg border border-gray-20 bg-white p-4"
+            >
+              <label class="flex items-center gap-3 text-sm font-medium text-gray-800">
+                <input
+                  v-model="form.gradebookEnabled"
+                  class="h-4 w-4 rounded border-gray-300"
+                  name="thread_qualify_gradebook"
+                  type="checkbox"
+                />
+                <span>{{ t("Grade this thread") }}</span>
+              </label>
 
-        <p
-          v-else-if="forum"
-          class="text-xs text-gray-500"
-        >
-          {{ t('Attachments are disabled for this forum') }}
-        </p>
+              <div
+                v-if="form.gradebookEnabled"
+                class="mt-4 space-y-4"
+              >
+                <div class="grid gap-4 md:grid-cols-2">
+                  <BaseSelect
+                    v-if="gradebookCategoryOptions.length > 1"
+                    id="forum-thread-gradebook-category"
+                    v-model="form.gradebookCategoryId"
+                    :is-invalid="formSubmitted && form.gradebookEnabled && !form.gradebookCategoryId"
+                    :label="t('Select assessment')"
+                    :message-text="formSubmitted && form.gradebookEnabled && !form.gradebookCategoryId ? t('Select assessment') : null"
+                    :options="gradebookCategoryOptions"
+                    name="category_id"
+                  />
+
+                  <BaseInputText
+                    id="forum-thread-grade-title"
+                    v-model="form.threadTitleQualify"
+                    :label="t('Column header in Competences Report')"
+                    name="calification_notebook_title"
+                  />
+
+                  <BaseInputText
+                    id="forum-thread-grade-max"
+                    v-model="form.threadQualifyMax"
+                    :error-text="t('Maximum score is required')"
+                    :is-invalid="formSubmitted && form.gradebookEnabled && Number(form.threadQualifyMax) <= 0"
+                    :label="t('Maximum score')"
+                    name="numeric_calification"
+                    :required="form.gradebookEnabled"
+                    type="number"
+                  />
+
+                  <BaseInputText
+                    id="forum-thread-grade-weight"
+                    v-model="form.threadWeight"
+                    :error-text="t('Weight is required')"
+                    :is-invalid="formSubmitted && form.gradebookEnabled && Number(form.threadWeight) <= 0"
+                    :label="t('Weight in Report')"
+                    name="weight_calification"
+                    :required="form.gradebookEnabled"
+                    type="number"
+                  />
+                </div>
+
+                <label class="flex items-center gap-3 rounded-md bg-gray-10 p-3 text-sm text-gray-700">
+                  <input
+                    v-model="form.threadPeerQualify"
+                    class="h-4 w-4 rounded border-gray-300"
+                    name="thread_peer_qualify"
+                    type="checkbox"
+                  />
+                  <span>{{ t("Thread scored by peers") }}</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="rounded-lg border border-gray-20 bg-white p-4">
+              <label
+                v-if="showPostNotification"
+                class="flex items-center gap-3 text-sm font-medium text-gray-800"
+              >
+                <input
+                  v-model="form.postNotification"
+                  class="h-4 w-4 rounded border-gray-300"
+                  name="post_notification"
+                  type="checkbox"
+                />
+                <span>{{ t('Notify me by e-mail when somebody replies') }}</span>
+              </label>
+
+              <div
+                v-if="allowAttachments"
+                class="mt-4 border-t border-gray-20 pt-4"
+              >
+                <BaseFileUploadMultiple
+                  v-model="form.attachments"
+                  :label="t('Attach files')"
+                  name="thread_attachments"
+                  size="small"
+                />
+              </div>
+
+              <p
+                v-else-if="forum"
+                class="mt-4 border-t border-gray-20 pt-4 text-xs text-gray-500"
+              >
+                {{ t('Attachments are disabled for this forum') }}
+              </p>
+            </div>
+          </div>
+        </BaseAdvancedSettingsButton>
 
         <div class="flex flex-wrap justify-end gap-2">
           <BaseButton
@@ -178,6 +201,7 @@
 import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseFileUploadMultiple from "../../components/basecomponents/BaseFileUploadMultiple.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
@@ -197,12 +221,12 @@ const notifications = useNotification()
 const courseSettingsStore = useCourseSettings()
 const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true, sessionCoach: true })
 
-const csrfToken = ref("")
 const forum = ref(null)
 const gradebookCategories = ref([])
 const showPostNotification = computed(() => !courseSettingsStore.isSettingEnabled("hide_forum_notifications"))
 const isSubmitting = ref(false)
 const formSubmitted = ref(false)
+const advancedSettingsVisible = ref(false)
 const form = reactive({
   title: "",
   text: "",
@@ -294,7 +318,9 @@ function stripTags(value) {
 }
 
 function isFormValid() {
-  if (!form.title.trim() || !hasMessage.value) {
+  const hasRequiredThreadFields = Boolean(form.title.trim() && hasMessage.value)
+
+  if (!hasRequiredThreadFields) {
     return false
   }
 
@@ -325,16 +351,10 @@ async function loadGradingOptions() {
 }
 
 async function loadInitialData() {
-  const [forumItem, tokenResponse] = await Promise.all([
-    forumService.getForum(forumId.value, baseQuery.value),
-    forumService.getActionToken(),
-  ])
-
-  forum.value = forumItem
+  forum.value = await forumService.getForum(forumId.value, baseQuery.value)
   if (!showPostNotification.value) {
     form.postNotification = false
   }
-  csrfToken.value = tokenResponse.token || ""
   await loadGradingOptions()
 }
 
@@ -360,7 +380,6 @@ async function submitThread() {
       text: form.text.trim(),
       threadSticky: isAllowedToEdit.value && form.threadSticky,
       postNotification: showPostNotification.value && form.postNotification,
-      csrfToken: csrfToken.value,
       attachments: allowAttachments.value ? form.attachments : [],
       gradebookEnabled: isAllowedToEdit.value && form.gradebookEnabled,
       gradebookCategoryId: form.gradebookEnabled ? Number(form.gradebookCategoryId || 0) : null,

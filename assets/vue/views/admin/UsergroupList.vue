@@ -15,7 +15,6 @@ const isLoading = ref(false)
 const isSaving = ref(false)
 const items = ref([])
 const totalItems = ref(0)
-const csrfToken = ref("")
 const search = ref("")
 const currentPage = ref(1)
 const pageSize = ref(20)
@@ -49,7 +48,6 @@ async function loadData() {
     })
     items.value = data.items
     totalItems.value = data.totalItems
-    csrfToken.value = data.csrfToken
   } catch {
     errorMessage.value = t("An error occurred")
   } finally {
@@ -115,7 +113,6 @@ async function saveForm() {
 
   try {
     const payload = new FormData()
-    payload.append("_token", csrfToken.value)
     payload.append("title", form.value.title.trim())
     payload.append("description", form.value.description)
     payload.append("groupType", String(form.value.groupType))
@@ -162,7 +159,7 @@ function confirmDelete(item) {
 
 async function performDelete(item) {
   try {
-    await usergroupAdminService.remove(item.id, csrfToken.value)
+    await usergroupAdminService.remove(item.id)
     successMessage.value = t("Deleted")
     await loadData()
     setTimeout(() => {

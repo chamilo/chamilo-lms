@@ -109,15 +109,16 @@ class CourseRepositoryTest extends AbstractApiTest
     public function testCreate(): void
     {
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
+
         $course = $this->createCourse('Test course');
 
         $this->assertHasNoEntityViolations($course);
 
-        $count = $courseRepo->count([]);
-        $this->assertSame(1, $count);
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
 
-        // Check tools (all declared in the ToolChain minus blog and "course_tool")
-        $this->assertCount(24, $course->getTools());
+        // One CTool per entry of ToolChain::addToolsInCourse()'s hardcoded list.
+        $this->assertCount(28, $course->getTools());
 
         // Check resource links for each Tool
         foreach ($course->getTools() as $tool) {
@@ -136,12 +137,13 @@ class CourseRepositoryTest extends AbstractApiTest
     {
         /** @var CourseRepository $courseRepo */
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
 
         $course = $this->createCourse('Test course');
 
         $courseRepo->deleteCourse($course);
 
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 
     public function testGetCoursesByUser(): void
@@ -300,6 +302,9 @@ class CourseRepositoryTest extends AbstractApiTest
 
     public function testGetCourses(): void
     {
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
+
         $this->createCourse('new');
 
         // Test as admin.
@@ -310,21 +315,15 @@ class CourseRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/Course',
             '@id' => '/api/courses',
             '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 1,
+            'hydra:totalItems' => $courseCountBefore + 1,
         ]);
 
+        // Listing every course on the platform is a teacher/admin operation: the
+        // collection carries no per-user scoping, so a student is denied outright
+        // instead of getting a filtered catalogue.
         $student = $this->createUser('student');
         $token = $this->getUserTokenFromUser($student);
-        $response = $this->createClientWithCredentials($token)->request('GET', '/api/courses');
-        $this->assertResponseIsSuccessful();
-
-        // Asserts that the returned JSON is a superset of this one
-        $this->assertJsonContains([
-            '@context' => '/api/contexts/Course',
-            '@id' => '/api/courses',
-            '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 1,
-        ]);
-        $this->assertCount(1, $response->toArray()['hydra:member']);
+        $this->createClientWithCredentials($token)->request('GET', '/api/courses');
+        $this->assertResponseStatusCodeSame(403);
     }
 }

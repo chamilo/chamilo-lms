@@ -50,6 +50,12 @@ readonly class PushSubscriptionStateProvider implements ProviderInterface
         ];
     }
 
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<PushSubscription>|PushSubscription|null
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         $currentUser = $this->userHelper->getCurrent();
@@ -77,7 +83,12 @@ readonly class PushSubscriptionStateProvider implements ProviderInterface
         return $subscription;
     }
 
-    private function provideCollection(Operation $operation, array $context, ?int $userId): array|object
+    /**
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<PushSubscription>
+     */
+    private function provideCollection(Operation $operation, array $context, ?int $userId): iterable
     {
         $queryNameGenerator = new QueryNameGenerator();
         $queryBuilder = $this->repository->createQueryBuilder('p');
@@ -101,6 +112,8 @@ readonly class PushSubscriptionStateProvider implements ProviderInterface
             }
         }
 
-        return $queryBuilder->getQuery()->getResult();
+        $rows = $queryBuilder->getQuery()->getResult();
+
+        return array_values(array_filter($rows, static fn (mixed $row): bool => $row instanceof PushSubscription));
     }
 }

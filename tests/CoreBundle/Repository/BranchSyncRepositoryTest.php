@@ -15,21 +15,28 @@ class BranchSyncRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testCreate(): void
+    public function testCoordinatesKeepDecimalPrecision(): void
     {
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(BranchSyncRepository::class);
 
         $item = (new BranchSync())
-            ->setTitle('Branch')
-            ->setAdminName('Julio')
+            ->setTitle('Precise coordinates branch')
+            ->setLatitude('50.84655731')
+            ->setLongitude('4.35169742')
         ;
+
         $this->assertHasNoEntityViolations($item);
         $em->persist($item);
         $em->flush();
+        $id = $item->getId();
+        $em->clear();
 
-        // By default there's a root branch.
-        $this->assertSame(2, $repo->count([]));
+        $stored = $repo->find($id);
+
+        $this->assertInstanceOf(BranchSync::class, $stored);
+        $this->assertSame('50.84655731', $stored->getLatitude());
+        $this->assertSame('4.35169742', $stored->getLongitude());
     }
 
     public function testSearchByKeyword(): void

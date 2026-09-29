@@ -97,6 +97,7 @@
         {% endif %}
     </section>
 
+    {% if is_granted('ROLE_ADMIN') %}
     <section class="mt-8">
         <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {% if services_are_included %}
@@ -308,5 +309,8 @@
             {% endif %}
         </div>
     </section>
+    {% else %}
+        {% include 'BuyCourses/view/index_products.tpl' %}
+    {% endif %}
 </div>
 {% endautoescape %}

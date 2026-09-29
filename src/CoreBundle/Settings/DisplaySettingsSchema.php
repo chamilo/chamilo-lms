@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Json;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
@@ -119,7 +120,9 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             )
             ->add('order_user_list_by_official_code', YesNoType::class)
             ->add('pdf_logo_header')
-            ->add('show_tabs', TextareaType::class)
+            ->add('show_tabs', TextareaType::class, [
+                'constraints' => [new Json()],
+            ])
             ->add('show_tabs_per_role', TextareaType::class)
             ->add('hide_main_navigation_menu', YesNoType::class)
             ->add('hide_complete_name_in_whoisonline', YesNoType::class)

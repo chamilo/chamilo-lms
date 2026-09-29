@@ -68,11 +68,14 @@ function addSkillToSearch(skillId, skillName) {
 }
 
 function gradebookUrl(link) {
-  let url = `/main/gradebook/index.php?cid=${link.courseId}`
-  if (link.sessionId) {
-    url += `&sid=${link.sessionId}`
-  }
-  return url
+  const query = new URLSearchParams({
+    view: "overview",
+    cid: String(link.courseId),
+    sid: String(link.sessionId || 0),
+    gid: "0",
+  })
+
+  return `/gradebook/redirect?${query.toString()}`
 }
 
 // Kept for compatibility (origin might still be used elsewhere, e.g. breadcrumb logic)
@@ -235,11 +238,12 @@ async function onSearchProfile(profile) {
         ref="wheelEl"
         @skill-detail="onSkillDetail"
       />
-      <SkillProfileMatches
+      <div
         v-if="canUseProfiles"
         v-show="showProfileMatches"
-        ref="profileMatchesEl"
-      />
+      >
+        <SkillProfileMatches ref="profileMatchesEl" />
+      </div>
     </div>
   </div>
 

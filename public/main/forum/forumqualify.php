@@ -426,14 +426,14 @@ if (api_is_allowed_to_edit() && $counter > 0) {
     if (isset($_GET['type']) && 'false' === $_GET['type']) {
         $buttons = '<a
             class="btn btn--plain"
-            href="forumqualify.php?'.api_get_cidreq().'&forum='.$forumId.'&origin='.$origin.'&thread='.$threadId.'&user='.$userQueryId.'&user_id='.$userQueryId.'&type=true&idtextqualify='.$score.'#history">'.
+            href="forumqualify.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'&user='.$userQueryId.'&user_id='.$userQueryId.'&type=true&idtextqualify='.$score.'#history">'.
             get_lang('more recent').'</a>
             <a class="btn btn--plain disabled">'.get_lang('older').'</a>';
     } else {
         $buttons = '<a class="btn btn--plain">'.get_lang('more recent').'</a>
             <a
                 class="btn btn--plain"
-                href="forumqualify.php?'.api_get_cidreq().'&forum='.$forumId.'&origin='.$origin.'&thread='.$threadId.'&user='.$userQueryId.'&user_id='.$userQueryId.'&type=false&idtextqualify='.$score.'#history">'.
+                href="forumqualify.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'&user='.$userQueryId.'&user_id='.$userQueryId.'&type=false&idtextqualify='.$score.'#history">'.
             get_lang('older').'</a>';
     }
 

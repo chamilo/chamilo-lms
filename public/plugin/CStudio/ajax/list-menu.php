@@ -73,7 +73,7 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
         } else {
             echo "<li><span class='miniMenuLudi' behavior=$base_behavior leveldoc=$base_leveldoc id='labelMenuLudi$topPage'  onclick='loadSubLudi($topPage);' >$base_title_safe</span>";
         }
-        echo '<span onclick="loadContextMenuSub('.$topPage.','.$indexPage.');" class="badge fa fa-pencil"></span>';
+        echo '<span onclick="loadContextMenuSub('.$topPage.','.$indexPage.');" class="badge"><i class="mdi mdi-pencil cstudio-mdi-icon" aria-hidden="true"></i><i class="fa fa-pencil cstudio-legacy-icon" aria-hidden="true"></i></span>';
         echo '</li>';
 
         $sqlSubs = 'SELECT title , id, behavior, type_node , leveldoc FROM plugin_oel_tools_teachdoc ';
@@ -128,7 +128,7 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
                 }
             }
 
-            echo '<span onclick="loadContextMenuSub('.$id_subtitle.','.$indexPage.');" class="badge fa fa-pencil"></span>';
+            echo '<span onclick="loadContextMenuSub('.$id_subtitle.','.$indexPage.');" class="badge"><i class="mdi mdi-pencil cstudio-mdi-icon" aria-hidden="true"></i><i class="fa fa-pencil cstudio-legacy-icon" aria-hidden="true"></i></span>';
             echo '</li>';
 
             ++$indexPage;

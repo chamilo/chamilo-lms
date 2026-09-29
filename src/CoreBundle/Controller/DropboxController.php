@@ -218,7 +218,7 @@ class DropboxController extends AbstractController
         [$cid, $sid] = $this->context();
         $uid = (int) $this->getUser()?->getId();
         $area = (string) $r->query->get('area', 'sent');
-        $categoryId = (int) $r->query->get('categoryId', 0);
+        $categoryId = (int) $r->query->get('categoryId', '0');
 
         if ('sent' === $area) {
             $files = $this->fileRepo->findSentByContextAndCategory($cid, $sid, $uid, $categoryId);

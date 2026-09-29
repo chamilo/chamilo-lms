@@ -160,7 +160,10 @@ switch ($action) {
         $content = $form->returnForm();
 
         if ($form->validate()) {
-            if (sha1($_POST['course_registration_code']) === $courseInfo['registration_code']) {
+            if (CourseManager::verifyRegistrationCode(
+                (string) $_POST['course_registration_code'],
+                $courseInfo['registration_code']
+            )) {
                 CourseManager::autoSubscribeToCourse((int)$_POST['subscribe_user_with_password']);
 
                 if ('course_home' === $redirectAfterSubscription) {

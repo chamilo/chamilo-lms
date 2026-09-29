@@ -48,6 +48,25 @@ class LanguageRepository extends ServiceEntityRepository
     }
 
     /**
+     * Maps every sub-language's isocode to its parent's isocode (e.g. 'fr_69' => 'fr_FR').
+     * Used to feed the Vue i18n fallback chain, since array hydration of
+     * getAllAvailable() drops the un-joined 'parent' association.
+     *
+     * @return array<string, string>
+     */
+    public function getParentIsocodesByChildIsocode(): array
+    {
+        $rows = $this->createQueryBuilder('l')
+            ->select('l.isocode AS childIso', 'p.isocode AS parentIso')
+            ->innerJoin('l.parent', 'p')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return array_column($rows, 'parentIso', 'childIso');
+    }
+
+    /**
      * @return array<string,string> [isocode => original_name]
      */
     public function getAllAvailableToArray(
@@ -162,5 +181,44 @@ class LanguageRepository extends ServiceEntityRepository
         } catch (NonUniqueResultException) {
             return null;
         }
+    }
+
+    /**
+     * Resolves either an isocode (e.g. "es"), a human-readable title (e.g.
+     * "Spanish", "Español"), or a bare ISO-639 prefix (e.g. "en" matching
+     * the available "en_US") to the matching available language.
+     */
+    public function findOneAvailableByTitleOrCode(string $value): ?Language
+    {
+        $value = trim($value);
+        if ('' === $value) {
+            return null;
+        }
+
+        $normalized = mb_strtolower(str_replace('-', '_', $value));
+
+        try {
+            $exact = $this->createQueryBuilder('l')
+                ->andWhere('l.available = true')
+                ->andWhere('LOWER(l.isocode) = :value OR LOWER(l.englishName) = :value OR LOWER(l.originalName) = :value')
+                ->setParameter('value', $normalized)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+        } catch (NonUniqueResultException) {
+            $exact = null;
+        }
+
+        if ($exact instanceof Language) {
+            return $exact;
+        }
+
+        $baseIso = explode('_', $normalized, 2)[0];
+        if (1 === preg_match('/^[a-z]{2,3}$/', $baseIso)) {
+            return $this->findFirstAvailableByIsoPrefix($baseIso);
+        }
+
+        return null;
     }
 }

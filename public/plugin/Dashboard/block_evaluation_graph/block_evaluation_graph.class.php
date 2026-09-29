@@ -25,6 +25,8 @@ class BlockEvaluationGraph extends Block
     private $courses;
     private $sessions;
     private $permission = [DRH, SESSIONADMIN];
+    private $bg_width;
+    private $bg_height;
 
     /**
      * Constructor.

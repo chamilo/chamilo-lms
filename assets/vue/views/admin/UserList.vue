@@ -3,7 +3,7 @@
     <SectionHeader :title="t('User list')">
       <BaseButton
         :label="t('Add a user')"
-        :to-url="'/main/admin/user_add.php'"
+        :route="{ name: 'AdminUserAdd' }"
         icon="user-add"
         type="success"
       />
@@ -42,6 +42,7 @@
             v-model="simpleKeyword"
             :placeholder="t('Search users')"
             class="form-control w-full"
+            name="keyword"
             type="text"
           />
         </div>
@@ -314,7 +315,7 @@
           >
             <BaseButton
               :label="t('Edit')"
-              :to-url="`/main/admin/user_edit.php?user_id=${data.id}`"
+              :route="{ name: 'AdminUserEdit', params: { userId: data.id } }"
               icon="edit"
               only-icon
               size="small"
@@ -371,7 +372,7 @@
             <BaseButton
               :disabled="!data.isStudent"
               :label="t('Reporting')"
-              :to-url="data.isStudent ? `/main/my_space/myStudents.php?student=${data.id}` : null"
+              :route="data.isStudent ? { name: 'GlobalReportingLearnerDetail', params: { userId: data.id } } : null"
               icon="tracking"
               only-icon
               size="small"
@@ -383,7 +384,7 @@
               v-if="viewer.isPlatformAdmin || viewer.isSessionAdmin"
               :disabled="data.isAnonymous"
               :label="t('Edit')"
-              :to-url="data.isAnonymous ? null : `/main/admin/user_edit.php?user_id=${data.id}`"
+              :route="data.isAnonymous ? null : { name: 'AdminUserEdit', params: { userId: data.id } }"
               icon="edit"
               only-icon
               size="small"
@@ -526,6 +527,7 @@
 import { onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
+import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -535,6 +537,7 @@ import baseService from "../../services/baseService"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
+const { showWarningNotification, showErrorNotification } = useNotification()
 const route = useRoute()
 
 const urlParams = new URLSearchParams(window.location.search)
@@ -566,7 +569,6 @@ const advancedFilters = reactive({
 
 const viewer = reactive({ id: 0, isPlatformAdmin: false, isSessionAdmin: false })
 const roleLabelsMap = ref({})
-const csrfToken = ref("")
 const loginAsToken = ref("")
 
 const roleOptions = {
@@ -634,7 +636,6 @@ function confirmAction(action, data, title) {
         const formData = new URLSearchParams()
         formData.set("action", action)
         formData.set("user_id", String(data.id))
-        formData.set("_token", csrfToken.value)
 
         // URLSearchParams body makes axios send application/x-www-form-urlencoded.
         await baseService.post("/admin/user-list-action", formData)
@@ -643,6 +644,7 @@ function confirmAction(action, data, title) {
         await load()
       } catch (e) {
         console.error("Error performing action:", e)
+        showErrorNotification(e)
       }
     },
   })
@@ -654,16 +656,20 @@ function confirmBulkAction(action) {
       try {
         const formData = new URLSearchParams()
         formData.set("action", action)
-        formData.set("_token", csrfToken.value)
         selectedItems.value.forEach((item) => formData.append("user_ids[]", String(item.id)))
 
         // URLSearchParams body makes axios send application/x-www-form-urlencoded.
-        await baseService.post("/admin/user-list-action", formData)
+        const data = await baseService.post("/admin/user-list-action", formData)
+
+        if (data?.error) {
+          showWarningNotification(data.error)
+        }
 
         selectedItems.value = []
         await load()
       } catch (e) {
         console.error("Error performing bulk action:", e)
+        showErrorNotification(e)
       }
     },
   })
@@ -708,9 +714,6 @@ async function load() {
     }
     if (data.roleLabels) {
       roleLabelsMap.value = data.roleLabels
-    }
-    if (data.csrfToken) {
-      csrfToken.value = data.csrfToken
     }
     if (data.loginAsToken) {
       loginAsToken.value = data.loginAsToken

@@ -17,7 +17,7 @@ use const PHP_SAPI;
 
 final class InstallDbGuardSubscriber implements EventSubscriberInterface
 {
-    private const VERSION_KEY = 'chamilo_database_version';
+    private const string VERSION_KEY = 'chamilo_database_version';
 
     public function __construct(
         private readonly Connection $connection
@@ -92,14 +92,34 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
                 return;
             }
 
-            // Read DB version (try common column names; only runs until first success)
+            // Doctrine's migration metadata is the primary signal. Rows there mean the
+            // database went through the migrations, or is going through them right now:
+            // either way the installer must stay reachable, because APP_INSTALLED=1 is
+            // written to .env at step 5, before the migration runs. Redirecting on a
+            // half-finished migration would loop.
+            //
+            // A 1.11.x database carries an unrelated `version` table, but it never reaches
+            // this point: it has no `settings` table, so detectSettingsTable() above has
+            // already redirected it.
+            if ($this->hasMigrationMetadata()) {
+                $isHealthy = true;
+
+                return;
+            }
+
+            // Fallback for an installation created before the installer seeded that
+            // metadata: the presence of chamilo_database_version is the only marker it
+            // has. Never its value — that setting is deprecated and carries a stale
+            // default. Column names differ across the 1.11.x and 2.x schemas.
             $version = null;
+
             foreach (['selected_value', 'value', 'c_value'] as $col) {
                 try {
                     $version = $this->connection->fetchOne(
                         "SELECT {$col} FROM {$settingsTable} WHERE variable = :var LIMIT 1",
                         ['var' => self::VERSION_KEY]
                     );
+
                     if (!empty($version)) {
                         break;
                     }
@@ -109,6 +129,7 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
             }
 
             if (empty($version)) {
+                // No metadata and no marker: a 1.11.x database before its migration.
                 $this->redirectToInstaller($event);
 
                 return;
@@ -117,6 +138,19 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
             $isHealthy = true;
         } catch (Throwable) {
             $this->redirectToInstaller($event);
+        }
+    }
+
+    /**
+     * Tells whether Doctrine's migration metadata table holds any executed migration.
+     */
+    private function hasMigrationMetadata(): bool
+    {
+        try {
+            return (int) $this->connection->fetchOne('SELECT COUNT(*) FROM version') > 0;
+        } catch (Throwable) {
+            // The table does not exist yet.
+            return false;
         }
     }
 

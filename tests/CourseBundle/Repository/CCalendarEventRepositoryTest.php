@@ -14,7 +14,7 @@ use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use Datetime;
+use DateTime;
 
 class CCalendarEventRepositoryTest extends AbstractApiTest
 {
@@ -50,8 +50,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(CCalendarEventRepository::class);
 
         // Current server local time (check your php.ini).
-        $start = new Datetime('2040-06-30 11:00');
-        $end = new Datetime('2040-06-30 15:00');
+        $start = new DateTime('2040-06-30 11:00');
+        $end = new DateTime('2040-06-30 15:00');
 
         // 1. Add event.
         $event = (new CCalendarEvent())
@@ -94,8 +94,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $resourceNodeId = $user->getResourceNode()->getId();
 
         // Current server local time (check your php.ini).
-        $start = new Datetime('2040-06-30 11:00');
-        $end = new Datetime('2040-06-30 15:00');
+        $start = new DateTime('2040-06-30 11:00');
+        $end = new DateTime('2040-06-30 15:00');
 
         // 1. Add event.
         $responseEvent = $this->createClientWithCredentials($token)->request(
@@ -166,8 +166,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $resourceNodeId = $user->getResourceNode()->getId();
 
         // Current server local time (check your php.ini).
-        $start = new Datetime('2040-06-30 11:00');
-        $end = new Datetime('2040-06-30 15:00');
+        $start = new DateTime('2040-06-30 11:00');
+        $end = new DateTime('2040-06-30 15:00');
 
         // 2. Create user "another"
         $this->createUser('another');
@@ -223,8 +223,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $resourceNodeId = $user->getResourceNode()->getId();
 
         // Current server local time (check your php.ini).
-        $start = new Datetime('2040-06-30 11:00');
-        $end = new Datetime('2040-06-30 15:00');
+        $start = new DateTime('2040-06-30 11:00');
+        $end = new DateTime('2040-06-30 15:00');
 
         // 2. Add event to user test
         $response = $this->createClientWithCredentials($token)->request(
@@ -346,8 +346,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $resourceNodeId = $course->getResourceNode()->getId();
 
         // Current server local time (check your php.ini).
-        $start = new Datetime('2040-06-30 11:00');
-        $end = new Datetime('2040-06-30 15:00');
+        $start = new DateTime('2040-06-30 11:00');
+        $end = new DateTime('2040-06-30 15:00');
 
         $this->createClientWithCredentials($token)->request(
             'POST',
@@ -409,8 +409,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
         $event = $calendarRepo->createFromAnnouncement(
             $announcement,
-            new Datetime('now'),
-            new Datetime('now +30 days'),
+            new DateTime('now'),
+            new DateTime('now +30 days'),
             ['everyone'],
             $course,
         );
@@ -429,8 +429,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
         $event = $calendarRepo->createFromAnnouncement(
             $announcement2,
-            new Datetime('now'),
-            new Datetime('now +30 days'),
+            new DateTime('now'),
+            new DateTime('now +30 days'),
             ['USER:'.$student->getId(), 'GROUP:'.$group->getIid()],
             $course,
         );

@@ -112,6 +112,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
 
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_forum_thread ADD resource_node_id INT DEFAULT NULL, DROP thread_id');
+            $this->addSql('ALTER TABLE c_forum_thread CHANGE forum_id forum_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -130,6 +131,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_forum_thread_qualify CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_forum_thread_qualify CHANGE thread_id thread_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_forum_thread_qualify CHANGE qualify_user_id qualify_user_id INT DEFAULT NULL');
 
         if (!$table->hasForeignKey('FK_715FC3A5A76ED395')) {
             $this->addSql('ALTER TABLE c_forum_thread_qualify ADD CONSTRAINT FK_715FC3A5A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
@@ -161,6 +163,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE c_forum_post SET post_parent_id = NULL WHERE post_parent_id = 0 OR post_parent_id NOT IN (SELECT iid FROM c_forum_post)');
+        $this->addSql('ALTER TABLE c_forum_post CHANGE post_parent_id post_parent_id INT DEFAULT NULL');
 
         if (!$table->hasForeignKey('FK_B5BEF559D314B487')) {
             $this->addSql('ALTER TABLE c_forum_post ADD CONSTRAINT FK_B5BEF559D314B487 FOREIGN KEY (post_parent_id) REFERENCES c_forum_post (iid) ON DELETE SET NULL');
@@ -183,6 +186,8 @@ class Version20170625153000 extends AbstractMigrationChamilo
 
         if (false === $table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_forum_post ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_forum_post CHANGE forum_id forum_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_forum_post CHANGE thread_id thread_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_forum_post ADD CONSTRAINT FK_B5BEF55929CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid) ON DELETE SET NULL'
             );

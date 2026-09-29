@@ -6,7 +6,7 @@
     <header class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm lg:p-8">
       <div class="space-y-3">
         <div class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
-          {{ t("Buy courses") }}
+          {{ t("Shop") }}
         </div>
         <div>
           <h1 class="text-2xl font-semibold tracking-tight text-gray-90 sm:text-3xl">
@@ -24,6 +24,13 @@
       class="rounded-2xl border border-warning bg-support-6 px-5 py-4 text-body-2 text-gray-90"
     >
       {{ loadError }}
+    </div>
+
+    <div
+      v-if="actionMessage"
+      class="rounded-2xl border border-success bg-support-3 px-5 py-4 text-body-2 text-gray-90"
+    >
+      {{ actionMessage }}
     </div>
 
     <section class="space-y-4">
@@ -82,10 +89,11 @@
                     {{ getRecurringPaymentStatusText(service) }}
                   </p>
                   <p
-                    v-if="service.nextChargeDate || service.next_charge_date"
+                    v-if="service.plannedRenewalDate || service.nextChargeDate || service.next_charge_date || service.dateEnd"
                     class="text-xs font-medium text-primary"
                   >
-                    {{ t("Next charge") }}: {{ formatDate(service.nextChargeDate || service.next_charge_date) }}
+                    {{ service.renewalDateLabel || t("Next charge") }}:
+                    {{ formatDate(service.plannedRenewalDate || service.nextChargeDate || service.next_charge_date || service.dateEnd) }}
                   </p>
                   <p
                     v-if="service.recurringProfileId || service.recurring_profile_id"
@@ -104,12 +112,22 @@
                     {{ t("Enable auto billing") }}
                   </a>
                   <button
+                    v-if="service.canRestoreRecurringPayment && service.restoreRecurringPaymentUrl"
+                    type="button"
+                    class="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                    :disabled="isCancellingRenewal || isRestoringRenewal"
+                    @click="confirmRestoreRenewal(service)"
+                  >
+                    {{ service.restoreRenewalButtonLabel || t("Restore renewal") }}
+                  </button>
+                  <button
                     v-if="service.canCancelRecurringPayment && service.cancelRecurringPaymentUrl"
                     type="button"
-                    class="inline-flex items-center justify-center rounded-xl border border-danger px-4 py-2 text-sm font-semibold text-danger transition hover:bg-danger hover:text-white"
-                    @click="goToCancelRecurringPayment(service.cancelRecurringPaymentUrl)"
+                    class="inline-flex items-center justify-center rounded-xl border border-danger px-4 py-2 text-sm font-semibold text-danger transition hover:bg-danger hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                    :disabled="isCancellingRenewal || isRestoringRenewal"
+                    @click="openCancelRenewalModal(service)"
                   >
-                    {{ t("Cancel auto billing") }}
+                    {{ service.cancelRenewalButtonLabel || t("Cancel renewal") }}
                   </button>
                 </div>
               </div>
@@ -193,7 +211,7 @@
                 <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Product") }}</th>
                 <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Reference") }}</th>
                 <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Amount") }}</th>
-                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Receipt") }}</th>
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Documents") }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-20">
@@ -201,12 +219,12 @@
                 v-for="purchase in purchaseHistory"
                 :key="getPurchaseKey(purchase)"
               >
-                <td class="whitespace-nowrap px-4 py-3 text-gray-50">{{ formatDate(purchase.date) }}</td>
+                <td class="whitespace-nowrap px-4 py-3 text-gray-50">{{ formatDateTime(purchase.date) }}</td>
                 <td class="whitespace-nowrap px-4 py-3 text-gray-90">{{ purchase.type || "—" }}</td>
                 <td class="px-4 py-3 text-gray-90">{{ purchase.productName || purchase.product_name || "—" }}</td>
                 <td class="whitespace-nowrap px-4 py-3 text-gray-50">{{ purchase.reference || "—" }}</td>
                 <td class="whitespace-nowrap px-4 py-3 font-medium text-gray-90">{{ purchase.amount || "—" }}</td>
-                <td class="whitespace-nowrap px-4 py-3">
+                <td class="whitespace-nowrap px-4 py-3 space-x-3">
                   <a
                     v-if="purchase.receiptUrl || purchase.receipt_url"
                     :href="purchase.receiptUrl || purchase.receipt_url"
@@ -214,12 +232,35 @@
                     rel="noopener noreferrer"
                     class="text-sm font-semibold text-primary transition hover:underline"
                   >
-                    {{ t("Download") }}
+                    {{ t("Receipt") }}
+                  </a>
+                  <a
+                    v-if="purchase.invoiceUrl || purchase.invoice_url"
+                    :href="purchase.invoiceUrl || purchase.invoice_url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-sm font-semibold text-primary transition hover:underline"
+                  >
+                    {{ t("Invoice") }}
+                  </a>
+                  <a
+                    v-else-if="purchase.requestInvoiceUrl || purchase.request_invoice_url"
+                    :href="purchase.requestInvoiceUrl || purchase.request_invoice_url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-sm font-semibold text-primary transition hover:underline"
+                  >
+                    {{ t("Request invoice") }}
                   </a>
                   <span
-                    v-else
+                    v-if="
+                      !(purchase.receiptUrl || purchase.receipt_url) &&
+                      !(purchase.invoiceUrl || purchase.invoice_url) &&
+                      !(purchase.requestInvoiceUrl || purchase.request_invoice_url)
+                    "
                     class="text-gray-50"
-                  >—</span>
+                    >—</span
+                  >
                 </td>
               </tr>
             </tbody>
@@ -228,6 +269,62 @@
       </div>
     </section>
   </div>
+
+  <Teleport to="body">
+    <div
+      v-if="cancelRenewalService"
+      class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 px-4 py-8"
+      role="presentation"
+      @click.self="closeCancelRenewalModal"
+    >
+      <section
+        class="w-full max-w-2xl rounded-3xl bg-white p-6 shadow-xl sm:p-8"
+        role="dialog"
+        aria-modal="true"
+        :aria-labelledby="`cancel-renewal-title-${cancelRenewalService.id}`"
+      >
+        <div class="space-y-5">
+          <div class="space-y-2">
+            <h2
+              :id="`cancel-renewal-title-${cancelRenewalService.id}`"
+              class="text-xl font-semibold text-gray-90"
+            >
+              {{ cancelRenewalService.cancelRenewalTitle || cancelRenewalService.cancelRenewalButtonLabel }}
+            </h2>
+            <p class="text-body-2 leading-6 text-gray-50">
+              {{ cancelRenewalService.cancelRenewalMessage }}
+            </p>
+          </div>
+
+          <div
+            v-if="cancelRenewalError"
+            class="rounded-2xl border border-danger bg-support-6 px-4 py-3 text-sm text-danger"
+          >
+            {{ cancelRenewalError }}
+          </div>
+
+          <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-xl border border-gray-30 px-4 py-2 text-sm font-semibold text-gray-70 transition hover:bg-support-2 disabled:cursor-not-allowed disabled:opacity-50"
+              :disabled="isCancellingRenewal"
+              @click="closeCancelRenewalModal"
+            >
+              {{ cancelRenewalService.cancelRenewalDismissLabel || t("I changed my mind") }}
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-xl bg-danger px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              :disabled="isCancellingRenewal"
+              @click="confirmCancelRenewal"
+            >
+              {{ cancelRenewalService.cancelRenewalButtonLabel || t("Cancel renewal") }}
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
@@ -243,9 +340,14 @@ const platformConfigStore = usePlatformConfig()
 
 const isLoading = ref(false)
 const loadError = ref("")
+const actionMessage = ref("")
 const activeServices = ref([])
 const purchaseHistory = ref([])
 const hasResolvedPluginState = ref(false)
+const cancelRenewalService = ref(null)
+const cancelRenewalError = ref("")
+const isCancellingRenewal = ref(false)
+const isRestoringRenewal = ref(false)
 
 function normalizeBooleanFlag(value) {
   if (typeof value === "boolean") return value
@@ -306,6 +408,22 @@ function formatDate(dateValue) {
   return new Intl.DateTimeFormat(undefined, { year: "numeric", month: "2-digit", day: "2-digit" }).format(date)
 }
 
+// Used only for the purchase-history date column, which needs the time (h:i, no
+// seconds) to disambiguate purchases made on the same day. formatDate() above stays
+// date-only since it's also used for the unrelated "Valid until"/"Next charge" fields.
+function formatDateTime(dateValue) {
+  if (!dateValue) return "—"
+  const date = new Date(dateValue)
+  if (Number.isNaN(date.getTime())) return String(dateValue).substring(0, 10)
+  return new Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date)
+}
+
 function getPlainText(value) {
   if (!value) return ""
   const temp = document.createElement("div")
@@ -344,9 +462,93 @@ function getRecurringPaymentStatusText(service) {
   return t("Auto billing disabled")
 }
 
-function goToCancelRecurringPayment(url) {
-  if (!url) return
-  if (!window.confirm(t("Cancel auto billing for this service?"))) return
-  window.location.assign(url)
+function openCancelRenewalModal(service) {
+  cancelRenewalError.value = ""
+  cancelRenewalService.value = service
+}
+
+function closeCancelRenewalModal() {
+  if (isCancellingRenewal.value) return
+  cancelRenewalError.value = ""
+  cancelRenewalService.value = null
+}
+
+async function confirmCancelRenewal() {
+  const service = cancelRenewalService.value
+  if (!service?.cancelRecurringPaymentUrl || !service?.cancelRecurringPaymentToken) return
+
+  isCancellingRenewal.value = true
+  cancelRenewalError.value = ""
+  actionMessage.value = ""
+
+  try {
+    const formData = new URLSearchParams()
+    formData.set("order", String(service.id))
+    formData.set("action", "cancel_recurring_payment")
+    formData.set("sec_token", service.cancelRecurringPaymentToken)
+
+    const response = await fetch(service.cancelRecurringPaymentUrl, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: formData.toString(),
+    })
+
+    const result = await response.json().catch(() => ({}))
+    if (!response.ok || result?.success !== true) {
+      throw new Error(result?.message || t("Unable to cancel renewal right now."))
+    }
+
+    actionMessage.value = result.message || service.cancelRenewalButtonLabel
+    cancelRenewalService.value = null
+    await loadMyServicesData()
+  } catch (error) {
+    cancelRenewalError.value = error?.message || t("Unable to cancel renewal right now.")
+  } finally {
+    isCancellingRenewal.value = false
+  }
+}
+
+async function confirmRestoreRenewal(service) {
+  if (!service?.restoreRecurringPaymentUrl || !service?.restoreRecurringPaymentToken) return
+
+  const message = service.restoreRenewalMessage || t("Are you sure you want to restore automatic renewal?")
+  if (!window.confirm(message)) return
+
+  isRestoringRenewal.value = true
+  loadError.value = ""
+  actionMessage.value = ""
+
+  try {
+    const formData = new URLSearchParams()
+    formData.set("order", String(service.id))
+    formData.set("action", "restore_recurring_payment")
+    formData.set("sec_token", service.restoreRecurringPaymentToken)
+
+    const response = await fetch(service.restoreRecurringPaymentUrl, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: formData.toString(),
+    })
+
+    const result = await response.json().catch(() => ({}))
+    if (!response.ok || result?.success !== true) {
+      throw new Error(result?.message || t("Unable to restore renewal right now."))
+    }
+
+    actionMessage.value = result.message || service.restoreRenewalButtonLabel
+    await loadMyServicesData()
+  } catch (error) {
+    loadError.value = error?.message || t("Unable to restore renewal right now.")
+  } finally {
+    isRestoringRenewal.value = false
+  }
 }
 </script>

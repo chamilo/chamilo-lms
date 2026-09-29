@@ -124,7 +124,7 @@ class quiz_processor extends search_processor
                 // get author
                 $author = '';
                 $item_result = $em
-                    ->getRepository('ChamiloCourseBundle:CItemProperty')
+                    ->getRepository('Chamilo\CourseBundle\Entity\CItemProperty')
                     ->findOneBy([
                         'ref' => $exercise_id,
                         'tool' => TOOL_QUIZ,

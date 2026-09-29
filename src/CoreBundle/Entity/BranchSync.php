@@ -12,9 +12,11 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Repository\BranchSyncRepository;
+use Chamilo\CoreBundle\State\BranchSyncStateProcessor;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -30,22 +32,30 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'Branch',
     operations: [
         new GetCollection(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             normalizationContext: ['groups' => ['branch:list']],
         ),
         new Get(
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             normalizationContext: ['groups' => ['branch:read']],
+            security: "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('VIEW', object)",
         ),
         new Post(
-            security: "is_granted('ROLE_ADMIN')",
             denormalizationContext: ['groups' => ['branch:write']],
+            security: "is_granted('ROLE_ADMIN')",
+            processor: BranchSyncStateProcessor::class,
         ),
         new Put(
-            security: "is_granted('ROLE_ADMIN')",
             denormalizationContext: ['groups' => ['branch:write']],
+            security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
+            processor: BranchSyncStateProcessor::class,
+        ),
+        new Patch(
+            denormalizationContext: ['groups' => ['branch:write']],
+            security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
+            processor: BranchSyncStateProcessor::class,
         ),
         new Delete(
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') and is_granted('DELETE', object)",
         ),
     ],
 )]
@@ -63,7 +73,7 @@ class BranchSync
 
     #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id')]
-    protected AccessUrl $url;
+    protected ?AccessUrl $url = null;
 
     #[Groups(['branch:read'])]
     #[ORM\Column(name: 'unique_id', type: 'string', length: 50, nullable: false, unique: true)]
@@ -87,12 +97,12 @@ class BranchSync
 
     #[Groups(['branch:read', 'branch:write'])]
     #[Assert\Range(min: -90, max: 90)]
-    #[ORM\Column(name: 'latitude', type: 'decimal', nullable: true, unique: false)]
+    #[ORM\Column(name: 'latitude', type: 'decimal', precision: 10, scale: 8, nullable: true, unique: false)]
     protected ?string $latitude = null;
 
     #[Groups(['branch:read', 'branch:write'])]
     #[Assert\Range(min: -180, max: 180)]
-    #[ORM\Column(name: 'longitude', type: 'decimal', nullable: true, unique: false)]
+    #[ORM\Column(name: 'longitude', type: 'decimal', precision: 11, scale: 8, nullable: true, unique: false)]
     protected ?string $longitude = null;
 
     #[Groups(['branch:read', 'branch:write'])]
@@ -192,13 +202,6 @@ class BranchSync
         return $this->id;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     /**
      * Get title.
      *
@@ -209,26 +212,21 @@ class BranchSync
         return $this->title;
     }
 
-    public function setBranchIp(?string $branchIp): self
+    public function setTitle(string $title): self
     {
-        $this->branchIp = $branchIp;
+        $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get branchIp.
-     *
-     * @return string
-     */
-    public function getBranchIp()
+    public function getBranchIp(): ?string
     {
         return $this->branchIp;
     }
 
-    public function setLatitude(?string $latitude): self
+    public function setBranchIp(?string $branchIp): self
     {
-        $this->latitude = $latitude;
+        $this->branchIp = $branchIp;
 
         return $this;
     }
@@ -241,9 +239,9 @@ class BranchSync
         return $this->latitude;
     }
 
-    public function setLongitude(?string $longitude): self
+    public function setLatitude(?string $latitude): self
     {
-        $this->longitude = $longitude;
+        $this->latitude = $latitude;
 
         return $this;
     }
@@ -256,146 +254,81 @@ class BranchSync
         return $this->longitude;
     }
 
-    /**
-     * Set dwnSpeed.
-     *
-     * @return BranchSync
-     */
-    public function setDwnSpeed(?int $dwnSpeed)
+    public function setLongitude(?string $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getDwnSpeed(): ?int
+    {
+        return $this->dwnSpeed;
+    }
+
+    public function setDwnSpeed(?int $dwnSpeed): self
     {
         $this->dwnSpeed = $dwnSpeed;
 
         return $this;
     }
 
-    /**
-     * Get dwnSpeed.
-     *
-     * @return int
-     */
-    public function getDwnSpeed()
+    public function getUpSpeed(): ?int
     {
-        return $this->dwnSpeed;
+        return $this->upSpeed;
     }
 
-    /**
-     * Set upSpeed.
-     *
-     * @return BranchSync
-     */
-    public function setUpSpeed(?int $upSpeed)
+    public function setUpSpeed(?int $upSpeed): self
     {
         $this->upSpeed = $upSpeed;
 
         return $this;
     }
 
-    /**
-     * Get upSpeed.
-     *
-     * @return int
-     */
-    public function getUpSpeed()
+    public function getDelay(): ?int
     {
-        return $this->upSpeed;
+        return $this->delay;
     }
 
-    /**
-     * Set delay.
-     *
-     * @return BranchSync
-     */
-    public function setDelay(?int $delay)
+    public function setDelay(?int $delay): self
     {
         $this->delay = $delay;
 
         return $this;
     }
 
-    /**
-     * Get delay.
-     *
-     * @return int
-     */
-    public function getDelay()
+    public function getAdminMail(): ?string
     {
-        return $this->delay;
+        return $this->adminMail;
     }
 
-    /**
-     * Set adminMail.
-     *
-     * @return BranchSync
-     */
-    public function setAdminMail(?string $adminMail)
+    public function setAdminMail(?string $adminMail): self
     {
         $this->adminMail = $adminMail;
 
         return $this;
     }
 
-    /**
-     * Get adminMail.
-     *
-     * @return string
-     */
-    public function getAdminMail()
+    public function getAdminName(): ?string
     {
-        return $this->adminMail;
+        return $this->adminName;
     }
 
-    /**
-     * Set adminName.
-     *
-     * @return BranchSync
-     */
-    public function setAdminName(?string $adminName)
+    public function setAdminName(?string $adminName): self
     {
         $this->adminName = $adminName;
 
         return $this;
     }
 
-    /**
-     * Get adminName.
-     *
-     * @return string
-     */
-    public function getAdminName()
-    {
-        return $this->adminName;
-    }
-
-    /**
-     * Set adminPhone.
-     *
-     * @return BranchSync
-     */
-    public function setAdminPhone(?string $adminPhone)
-    {
-        $this->adminPhone = $adminPhone;
-
-        return $this;
-    }
-
-    /**
-     * Get adminPhone.
-     *
-     * @return string
-     */
-    public function getAdminPhone()
+    public function getAdminPhone(): ?string
     {
         return $this->adminPhone;
     }
 
-    /**
-     * Set lastSyncTransId.
-     *
-     * @return BranchSync
-     */
-    public function setLastSyncTransId(?int $lastSyncTransId)
+    public function setAdminPhone(?string $adminPhone): self
     {
-        $this->lastSyncTransId = $lastSyncTransId;
+        $this->adminPhone = $adminPhone;
 
         return $this;
     }
@@ -411,25 +344,13 @@ class BranchSync
     }
 
     /**
-     * Set lastSyncTransDate.
+     * Set lastSyncTransId.
      *
      * @return BranchSync
      */
-    public function setLastSyncTransDate(?DateTime $lastSyncTransDate)
+    public function setLastSyncTransId(?int $lastSyncTransId)
     {
-        $this->lastSyncTransDate = $lastSyncTransDate;
-
-        return $this;
-    }
-
-    /**
-     * Set sslPubKey.
-     *
-     * @return BranchSync
-     */
-    public function setSslPubKey(?string $sslPubKey)
-    {
-        $this->sslPubKey = $sslPubKey;
+        $this->lastSyncTransId = $lastSyncTransId;
 
         return $this;
     }
@@ -449,9 +370,9 @@ class BranchSync
      *
      * @return BranchSync
      */
-    public function setBranchType(?string $branchType)
+    public function setSslPubKey(?string $sslPubKey)
     {
-        $this->branchType = $branchType;
+        $this->sslPubKey = $sslPubKey;
 
         return $this;
     }
@@ -467,6 +388,18 @@ class BranchSync
     }
 
     /**
+     * Set sslPubKey.
+     *
+     * @return BranchSync
+     */
+    public function setBranchType(?string $branchType)
+    {
+        $this->branchType = $branchType;
+
+        return $this;
+    }
+
+    /**
      * Get lastSyncTransDate.
      *
      * @return DateTime
@@ -477,13 +410,13 @@ class BranchSync
     }
 
     /**
-     * Set lastSyncType.
+     * Set lastSyncTransDate.
      *
      * @return BranchSync
      */
-    public function setLastSyncType(?string $lastSyncType)
+    public function setLastSyncTransDate(?DateTime $lastSyncTransDate)
     {
-        $this->lastSyncType = $lastSyncType;
+        $this->lastSyncTransDate = $lastSyncTransDate;
 
         return $this;
     }
@@ -499,13 +432,13 @@ class BranchSync
     }
 
     /**
-     * Set lft.
+     * Set lastSyncType.
      *
      * @return BranchSync
      */
-    public function setLft(int $lft)
+    public function setLastSyncType(?string $lastSyncType)
     {
-        $this->lft = $lft;
+        $this->lastSyncType = $lastSyncType;
 
         return $this;
     }
@@ -521,13 +454,13 @@ class BranchSync
     }
 
     /**
-     * Set rgt.
+     * Set lft.
      *
      * @return BranchSync
      */
-    public function setRgt(int $rgt)
+    public function setLft(int $lft)
     {
-        $this->rgt = $rgt;
+        $this->lft = $lft;
 
         return $this;
     }
@@ -543,13 +476,13 @@ class BranchSync
     }
 
     /**
-     * Set lvl.
+     * Set rgt.
      *
      * @return BranchSync
      */
-    public function setLvl(int $lvl)
+    public function setRgt(int $rgt)
     {
-        $this->lvl = $lvl;
+        $this->rgt = $rgt;
 
         return $this;
     }
@@ -565,13 +498,13 @@ class BranchSync
     }
 
     /**
-     * Set root.
+     * Set lvl.
      *
      * @return BranchSync
      */
-    public function setRoot(int $root)
+    public function setLvl(int $lvl)
     {
-        $this->root = $root;
+        $this->lvl = $lvl;
 
         return $this;
     }
@@ -586,9 +519,14 @@ class BranchSync
         return $this->root;
     }
 
-    public function setParent(?self $parent = null): self
+    /**
+     * Set root.
+     *
+     * @return BranchSync
+     */
+    public function setRoot(int $root)
     {
-        $this->parent = $parent;
+        $this->root = $root;
 
         return $this;
     }
@@ -596,6 +534,13 @@ class BranchSync
     public function getParent(): ?self
     {
         return $this->parent;
+    }
+
+    public function setParent(?self $parent = null): self
+    {
+        $this->parent = $parent;
+
+        return $this;
     }
 
     public function getUniqueId(): string
@@ -622,12 +567,12 @@ class BranchSync
         return $this;
     }
 
-    public function getUrl(): AccessUrl
+    public function getUrl(): ?AccessUrl
     {
         return $this->url;
     }
 
-    public function setUrl(AccessUrl $url): self
+    public function setUrl(?AccessUrl $url): self
     {
         $this->url = $url;
 

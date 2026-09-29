@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  *  Class DocumentManager
@@ -1342,6 +1343,11 @@ class DocumentManager
             $courseObjectives = $description['description_content'];
         }
 
+        $expiryDateRaw = $info_grade_certificate['expiry_date'] ?? '';
+        $expiryDate = !empty($expiryDateRaw)
+            ? api_format_date($expiryDateRaw, DATE_FORMAT_LONG, $course_info['language'])
+            : get_lang('Never expires');
+
         // Replace content
         $info_to_replace_in_content_html = [
             $first_name,
@@ -1367,6 +1373,7 @@ class DocumentManager
             $timeInCourseInAllSessions,
             $startDateAndEndDate,
             $courseObjectives,
+            $expiryDate,
         ];
 
         $tags = [
@@ -1393,6 +1400,7 @@ class DocumentManager
             '((time_in_course_in_all_sessions))',
             '((start_date_and_end_date))',
             '((course_objectives))',
+            '((expiry_date))',
         ];
 
         if (!empty($extraFields)) {
@@ -2483,7 +2491,7 @@ jQuery(function ($) {
             ->innerJoin(
                 CDocument::class,
                 'doc',
-                'WITH',
+                Join::ON,
                 'doc.resourceNode = node'
             )
             ->addSelect('files')
@@ -3511,21 +3519,21 @@ This folder contains all sessions that have been opened in the chat. Although th
     /**
      * Adds a new document to the database.
      *
-     * @param array  $courseInfo
-     * @param string $path
-     * @param string $fileType
-     * @param int    $fileSize
-     * @param string $title
-     * @param string $comment
-     * @param int    $readonly
-     * @param int    $visibility       see ResourceLink constants
-     * @param int    $groupId          group.id
-     * @param int    $sessionId        Session ID, if any
-     * @param int    $userId           creator user id
-     * @param bool   $sendNotification
-     * @param string $content
-     * @param int    $parentId
-     * @param string $realPath
+     * @param array       $courseInfo
+     * @param string      $path
+     * @param string      $fileType
+     * @param int|null    $fileSize
+     * @param string      $title
+     * @param string|null $comment
+     * @param int|null    $readonly
+     * @param int|null    $visibility       see ResourceLink constants; null keeps addCourseLink()'s default
+     * @param int|null    $groupId          group.id
+     * @param int|null    $sessionId        Session ID, if any
+     * @param int|null    $userId           creator user id
+     * @param bool        $sendNotification
+     * @param string|null $content
+     * @param int|null    $parentId
+     * @param string      $realPath
      *
      * @return CDocument|false
      */
@@ -3609,6 +3617,29 @@ This folder contains all sessions that have been opened in the chat. Although th
 
         // Ensure contextual hierarchy (course/session/group) uses ResourceLink.parent.
         self::syncResourceLinkParentForContext($document, $parentResource, $courseEntity, $session, $group);
+
+        // Optional ResourceLink visibility (draft/pending/published). When null, keep
+        // addCourseLink()'s default (published). Critical for course backup restore so
+        // hidden documents do not become learner-visible.
+        if (null !== $visibility && '' !== $visibility) {
+            $visibility = (int) $visibility;
+            if (\in_array(
+                $visibility,
+                [
+                    ResourceLink::VISIBILITY_DRAFT,
+                    ResourceLink::VISIBILITY_PENDING,
+                    ResourceLink::VISIBILITY_PUBLISHED,
+                ],
+                true
+            )) {
+                $link = self::findResourceLinkForContext($em, $document->getResourceNode(), $courseEntity, $session, $group);
+                if (null !== $link && (int) $link->getVisibility() !== $visibility) {
+                    $link->setVisibility($visibility);
+                    $em->persist($link);
+                    $em->flush();
+                }
+            }
+        }
 
         $repo = Container::getDocumentRepository();
         $isHtmlDocument = in_array(strtolower((string) $fileType), ['html', 'htm'], true);

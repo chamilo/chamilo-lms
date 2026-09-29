@@ -1,0 +1,84 @@
+{% set start_page = current_page - 2 > 1 ? current_page - 2 : 1 %}
+{% set end_page = current_page + 2 < total_pages ? current_page + 2 : total_pages %}
+{% set current_query = app.request.query.all %}
+
+<nav class="flex flex-wrap items-center justify-center gap-2" aria-label="{{ 'Page'|trans }}">
+    {% set first_query = current_query|merge({'page': 1}) %}
+    {% set previous_query = current_query|merge({'page': current_page - 1}) %}
+    {% set next_query = current_query|merge({'page': current_page + 1}) %}
+    {% set last_query = current_query|merge({'page': total_pages}) %}
+
+    {% if current_page > 1 %}
+        <a
+            href="{{ path('chamilo_core.search_ui', first_query) }}"
+            class="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-gray-20 bg-white px-3 text-gray-70 hover:border-primary hover:text-primary"
+            title="{{ 'First page'|trans }}"
+            aria-label="{{ 'First page'|trans }}"
+        >«</a>
+        <a
+            href="{{ path('chamilo_core.search_ui', previous_query) }}"
+            class="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-gray-20 bg-white px-3 text-gray-70 hover:border-primary hover:text-primary"
+            title="{{ 'Previous'|trans }}"
+            aria-label="{{ 'Previous'|trans }}"
+        >‹</a>
+    {% else %}
+        <span class="inline-flex h-10 min-w-10 cursor-not-allowed items-center justify-center rounded-lg border border-gray-10 bg-gray-5 px-3 text-gray-30">«</span>
+        <span class="inline-flex h-10 min-w-10 cursor-not-allowed items-center justify-center rounded-lg border border-gray-10 bg-gray-5 px-3 text-gray-30">‹</span>
+    {% endif %}
+
+    {% if start_page > 1 %}
+        {% set page_query = current_query|merge({'page': 1}) %}
+        <a
+            href="{{ path('chamilo_core.search_ui', page_query) }}"
+            class="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-gray-20 bg-white px-3 text-gray-70 hover:border-primary hover:text-primary"
+        >1</a>
+        {% if start_page > 2 %}
+            <span class="inline-flex h-10 items-center px-2 text-gray-40">…</span>
+        {% endif %}
+    {% endif %}
+
+    {% for page_number in start_page..end_page %}
+        {% set page_query = current_query|merge({'page': page_number}) %}
+        {% if page_number == current_page %}
+            <span class="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-primary bg-primary px-3 font-semibold text-white">
+                {{ page_number }}
+            </span>
+        {% else %}
+            <a
+                href="{{ path('chamilo_core.search_ui', page_query) }}"
+                class="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-gray-20 bg-white px-3 text-gray-70 hover:border-primary hover:text-primary"
+            >
+                {{ page_number }}
+            </a>
+        {% endif %}
+    {% endfor %}
+
+    {% if end_page < total_pages %}
+        {% if end_page < total_pages - 1 %}
+            <span class="inline-flex h-10 items-center px-2 text-gray-40">…</span>
+        {% endif %}
+        {% set page_query = current_query|merge({'page': total_pages}) %}
+        <a
+            href="{{ path('chamilo_core.search_ui', page_query) }}"
+            class="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-gray-20 bg-white px-3 text-gray-70 hover:border-primary hover:text-primary"
+        >{{ total_pages }}</a>
+    {% endif %}
+
+    {% if current_page < total_pages %}
+        <a
+            href="{{ path('chamilo_core.search_ui', next_query) }}"
+            class="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-gray-20 bg-white px-3 text-gray-70 hover:border-primary hover:text-primary"
+            title="{{ 'Next'|trans }}"
+            aria-label="{{ 'Next'|trans }}"
+        >›</a>
+        <a
+            href="{{ path('chamilo_core.search_ui', last_query) }}"
+            class="inline-flex h-10 min-w-10 items-center justify-center rounded-lg border border-gray-20 bg-white px-3 text-gray-70 hover:border-primary hover:text-primary"
+            title="{{ 'Last page'|trans }}"
+            aria-label="{{ 'Last page'|trans }}"
+        >»</a>
+    {% else %}
+        <span class="inline-flex h-10 min-w-10 cursor-not-allowed items-center justify-center rounded-lg border border-gray-10 bg-gray-5 px-3 text-gray-30">›</span>
+        <span class="inline-flex h-10 min-w-10 cursor-not-allowed items-center justify-center rounded-lg border border-gray-10 bg-gray-5 px-3 text-gray-30">»</span>
+    {% endif %}
+</nav>

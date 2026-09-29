@@ -23,7 +23,7 @@ final class Version20251014132200 extends AbstractMigrationChamilo
     /**
      * Toggle verbose debug logs.
      */
-    private const DEBUG = false;
+    private const bool DEBUG = false;
 
     public function getDescription(): string
     {

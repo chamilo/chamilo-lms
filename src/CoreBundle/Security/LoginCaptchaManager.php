@@ -17,9 +17,9 @@ use const ENT_SUBSTITUTE;
 
 class LoginCaptchaManager
 {
-    private const SESSION_CODE_KEY = 'login_captcha.code';
-    private const CACHE_PREFIX = 'login_captcha.state.';
-    private const DEFAULT_CODE_LENGTH = 5;
+    private const string SESSION_CODE_KEY = 'login_captcha.code';
+    private const string CACHE_PREFIX = 'login_captcha.state.';
+    private const int DEFAULT_CODE_LENGTH = 5;
 
     public function __construct(
         private readonly SettingsManager $settingsManager,

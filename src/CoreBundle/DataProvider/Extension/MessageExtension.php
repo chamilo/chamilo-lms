@@ -79,7 +79,7 @@ final class MessageExtension implements QueryCollectionExtensionInterface
             "
         );
 
-        $qb->setParameter('current', $user);
+        $qb->setParameter('current', (int) $user->getId());
         $qb->setParameter('deleted', Message::MESSAGE_STATUS_DELETED);
         $qb->setParameter('inbox', Message::MESSAGE_TYPE_INBOX);
         $qb->setParameter('invitation', Message::MESSAGE_TYPE_INVITATION);

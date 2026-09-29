@@ -88,6 +88,13 @@ $unsubscribeUrl = api_get_self().'?'.api_get_cidreq().'&selfUnReg=1&group_id='.(
 
 $editUrl = api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq();
 
+$announcementUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq();
+$courseEntity = api_get_course_entity($courseId);
+$courseResourceNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
+if ($courseResourceNodeId > 0) {
+    $announcementUrl = api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/?'.api_get_cidreq();
+}
+
 // Build header actions
 $actionsHtml = '<div class="flex flex-wrap items-center gap-2">';
 
@@ -203,7 +210,7 @@ if ($hasBrowseAccess) {
 
     if (GroupManager::TOOL_NOT_AVAILABLE != $groupEntity->getAnnouncementsState()) {
         $actions_array[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
+            'url' => $announcementUrl,
             'icon' => Display::getMdiIcon(ToolIcon::ANNOUNCEMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Announcements')),
             'label' => get_lang('Announcements'),
         ];
@@ -276,7 +283,7 @@ if ($hasBrowseAccess) {
 
     if (GroupManager::TOOL_PUBLIC == $groupEntity->getAnnouncementsState()) {
         $actions_array[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
+            'url' => $announcementUrl,
             'content' => Display::getMdiIcon(ToolIcon::ANNOUNCEMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Announcements')),
         ];
     }
@@ -331,7 +338,7 @@ if (!empty($actions_array)) {
 $tutors = $groupEntity->getTutors();
 
 echo '<div class="mt-8 rounded-2xl border border-gray-50 bg-white p-6 shadow-sm">';
-echo '<h2 class="text-base font-semibold text-gray-900">'.get_lang('Coaches').'</h2>';
+echo '<h2 class="text-base font-semibold text-gray-900">'.get_lang('Tutors').'</h2>';
 
 if (0 == count($tutors)) {
     echo '<p class="mt-3 text-sm text-gray-600">'.get_lang('(none)').'</p>';

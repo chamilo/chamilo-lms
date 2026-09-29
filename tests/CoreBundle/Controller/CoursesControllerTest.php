@@ -36,8 +36,10 @@ class CoursesControllerTest extends WebTestCase
         // simulate $testUser being logged in
         $client->loginUser($admin);
 
-        $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $documentCountBefore = $documentRepo->count([]);
+
+        $course = $this->createCourse('Test');
         $admin = $this->getUser('admin');
 
         $document = (new CDocument())
@@ -50,7 +52,7 @@ class CoursesControllerTest extends WebTestCase
 
         $documentRepo->create($document);
 
-        $this->assertSame(1, $documentRepo->count([]));
+        $this->assertSame($documentCountBefore + 1, $documentRepo->count([]));
 
         $path = $this->getUploadedFile()->getRealPath();
         $resourceFile = $documentRepo->addFileFromPath($document, 'logo.png', $path, true);

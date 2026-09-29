@@ -1,13 +1,14 @@
 <template>
   <div class="dbx">
+    <SectionHeader
+      class="px-6 pt-4"
+      :title="t('Dropbox')"
+    />
+
     <BaseToolbar
       class="dbx-toolbar"
       :showTopBorder="true"
     >
-      <template #start>
-        <h2 class="text-lg font-semibold m-0">{{ t("Dropbox") }}</h2>
-      </template>
-
       <template #end>
         <BaseAppLink
           class="nav-link"
@@ -32,6 +33,7 @@
 
 <script setup>
 import BaseToolbar from "../basecomponents/BaseToolbar.vue"
+import SectionHeader from "../layout/SectionHeader.vue"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()

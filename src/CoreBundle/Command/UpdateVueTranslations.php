@@ -8,13 +8,13 @@ namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Chamilo\CoreBundle\Translation\VueTranslationsBuilder;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
@@ -27,28 +27,46 @@ class UpdateVueTranslations extends Command
 {
     private LanguageRepository $languageRepository;
     private ParameterBagInterface $parameterBag;
-    private TranslatorInterface $translator;
-    private TranslatorBagInterface $translatorBag;
+    private VueTranslationsBuilder $builder;
 
-    public function __construct(LanguageRepository $languageRepository, ParameterBagInterface $parameterBag, TranslatorInterface $translator)
+    public function __construct(LanguageRepository $languageRepository, ParameterBagInterface $parameterBag, VueTranslationsBuilder $builder)
     {
         $this->languageRepository = $languageRepository;
         $this->parameterBag = $parameterBag;
-        $this->translator = $translator;
-        \assert($translator instanceof TranslatorBagInterface, 'The translator service must implement TranslatorBagInterface.');
-        $this->translatorBag = $translator;
+        $this->builder = $builder;
 
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // Clear the compiled translation catalogue cache first. In prod the translator
+        // serves cached catalogues from var/cache/<env>/translations without checking
+        // whether the .po files changed, so without this step the command would write
+        // stale English fallbacks into the locale JSON files. The translator loads
+        // catalogues lazily, so removing the cache here forces a rebuild from the .po
+        // files on first use below.
+        $translationCacheDir = $this->parameterBag->get('kernel.cache_dir').'/translations';
+        $filesystem = new Filesystem();
+        if ($filesystem->exists($translationCacheDir)) {
+            $filesystem->remove($translationCacheDir);
+            $output->writeln("Cleared compiled translation cache: $translationCacheDir");
+        }
+
         $languages = $this->languageRepository->findAll();
         $dir = $this->parameterBag->get('kernel.project_dir');
 
         $vueLocalePath = $dir.'/assets/locales/';
-        $englishJson = file_get_contents($vueLocalePath.'en_US.json');
+        $englishJson = @file_get_contents($vueLocalePath.'en_US.json');
+
+        if (false === $englishJson) {
+            $output->writeln("<error>Could not read {$vueLocalePath}en_US.json. Nothing was written.</error>");
+
+            return Command::FAILURE;
+        }
+
         $translations = json_decode($englishJson, true);
+        $unwritable = [];
 
         foreach ($languages as $language) {
             $iso = $language->getIsocode();
@@ -57,41 +75,55 @@ class UpdateVueTranslations extends Command
                 // Only update with the same variables.
                 $newLanguage = [];
                 foreach ($translations as $variable => $translation) {
-                    $gettextVariable = $this->replaceMarkersVueToGettext($variable);
-                    $translated = $this->getTranslationWithFallback($gettextVariable, $language);
-                    if (empty($translated)) {
-                        $gettextVariable = $this->replaceMarkersVueToGettext($variable, true);
-                        $translated = $this->getTranslationWithFallback($gettextVariable, $language);
-                    }
-                    $translated = $this->escapeVueI18nSpecialChars($translated);
-                    $newLanguage[$variable] = $this->replaceMarkersGettextToVue($translated);
+                    $newLanguage[$variable] = $this->translateKey($variable, $language);
                 }
-                $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT);
+                // No JSON_UNESCAPED_UNICODE: the committed files escape their accented
+                // characters, and tests/scripts/lang/sync_json_translations.php writes them
+                // the same way. Adding it here rewrites every accented line of all ~70
+                // files on each run, a diff that says nothing about the change.
+                $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
                 $fileToSave = $vueLocalePath.'en_US.json';
-                file_put_contents($fileToSave, $newLanguageToString);
+
+                if (false === @file_put_contents($fileToSave, $newLanguageToString)) {
+                    $unwritable[] = $iso;
+                }
 
                 continue;
             }
 
             $newLanguage = [];
             foreach ($translations as $variable => $translation) {
-                // $translated = $this->translator->trans($variable, [], null, $iso);
-                $gettextVariable = $this->replaceMarkersVueToGettext($variable);
-                $translated = $this->getTranslationWithFallback($gettextVariable, $language);
-                if (empty($translated)) {
-                    $gettextVariable = $this->replaceMarkersVueToGettext($variable, true);
-                    $translated = $this->getTranslationWithFallback($gettextVariable, $language);
-                }
-                $translated = $this->escapeVueI18nSpecialChars($translated);
-                $newLanguage[$variable] = $this->replaceMarkersGettextToVue($translated);
+                $newLanguage[$variable] = $this->translateKey($variable, $language);
             }
             $newLanguage = array_filter($newLanguage);
             $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             $newLanguageToString = str_replace('</br>', '<br>', $newLanguageToString);
             $fileToSave = $vueLocalePath.$iso.'.json';
-            file_put_contents($fileToSave, $newLanguageToString);
+
+            // Suppressed and answered here: this also runs from a migration over the web,
+            // where one warning per language would break the installer's JSON reply.
+            if (false === @file_put_contents($fileToSave, $newLanguageToString)) {
+                $unwritable[] = $iso;
+
+                continue;
+            }
+
             $output->writeln("json file generated for iso $iso: $fileToSave");
         }
+
+        if ([] !== $unwritable) {
+            $output->writeln('');
+            $output->writeln(\sprintf(
+                '<error>Could not write %d of the locale files in %s: %s. Make that directory and its'
+                    .' files writable by the user running this command, then run it again.</error>',
+                \count($unwritable),
+                $vueLocalePath,
+                implode(', ', $unwritable)
+            ));
+
+            return Command::FAILURE;
+        }
+
         $output->writeln('');
         $output->writeln("Now you can commit the changes in $vueLocalePath ");
 
@@ -99,99 +131,20 @@ class UpdateVueTranslations extends Command
     }
 
     /**
-     * Gets the translation for a given variable with fallbacks to parent language and base language.
+     * Answers one vue-i18n key for one language, in the shape the JSON files hold.
      *
-     * @param string   $variable the variable to be translated
-     * @param Language $language the Language entity for the current language
-     *
-     * @return string the translated string
+     * The mapping lives in VueTranslationsBuilder, shared with LocaleController.
      */
-    private function getTranslationWithFallback(string $variable, Language $language): string
+    private function translateKey(string $vueKey, Language $language): string
     {
-        $iso = $language->getIsocode();
+        $gettextKey = VueTranslationsBuilder::toGettextKey($vueKey);
+        $translated = $this->builder->translateWithFallback($gettextKey, $language);
 
-        // If the key is explicitly defined in this locale's catalogue, use it directly —
-        // even when msgstr equals msgid (intentional identity translation).
-        // Without this check, "Login" → "Login" would be mistaken for a missing translation
-        // and fall back to the parent language.
-        if ($this->translatorBag->getCatalogue($iso)->defines($variable, 'messages')) {
-            return $this->translator->trans($variable, [], 'messages', $iso);
+        if (empty($translated)) {
+            $gettextKey = VueTranslationsBuilder::toGettextKey($vueKey, true);
+            $translated = $this->builder->translateWithFallback($gettextKey, $language);
         }
 
-        // Key not defined in this locale: fall back to parent language, then English.
-        if ($language->getParent()) {
-            $parentIso = $language->getParent()->getIsocode();
-            $translated = $this->translator->trans($variable, [], 'messages', $parentIso);
-
-            if ($translated === $variable) {
-                $translated = $this->translator->trans($variable, [], 'messages', 'en_US');
-            }
-        } else {
-            $translated = $this->translator->trans($variable, [], 'messages', 'en_US');
-        }
-
-        return $translated;
-    }
-
-    /**
-     * Replace specifiers in a string to allow rendering them by i18n.
-     *
-     * <code>
-     *     $txt = "Bonjour %s. Je m’appelle %s";
-     *     $replaced = replaceMarkersGettextToVue($txt); // Bonjour {0}. Je m’appelle {1}
-     * </code>
-     */
-    private function replaceMarkersGettextToVue(string $text): string
-    {
-        $count = 0;
-
-        $replace = function ($matches) use (&$count) {
-            $type = $matches[1];
-
-            return match ($type) {
-                's', 'd', 'f' => '{'.$count++.'}',
-                default => $matches[0],
-            };
-        };
-
-        $pattern = '/%([sdf])/';
-
-        return preg_replace_callback($pattern, $replace, $text);
-    }
-
-    /**
-     * Replace specifiers in a Vue string to allow finding them in Gettext.
-     * This method only supports the %s specifier (%d will not be replaced).
-     *
-     * <code>
-     *     $txt = "Bonjour {0}. Je m'appelle {1};
-     *     $replaced = replaceMarkersVueToGettext($txt); // Bonjour %s. Je m'appelle %s
-     * </code>
-     */
-    private function replaceMarkersVueToGettext(string $text, bool $alternativeSpecifier = false): string
-    {
-        $pattern = '/\{([0-9]+)\}/';
-
-        if ($alternativeSpecifier) {
-            return preg_replace($pattern, '%d', $text);
-        }
-
-        return preg_replace($pattern, '%s', $text);
-    }
-
-    /**
-     * The characters used in the message format syntax are processed by the compiler as special characters: { } @ $ |.
-     */
-    private function escapeVueI18nSpecialChars(string $text): string
-    {
-        $replace = function ($matches) {
-            $type = $matches[0];
-
-            return "{'$type'}";
-        };
-
-        $pattern = '/[\{\}\@\$\|]/';
-
-        return preg_replace_callback($pattern, $replace, $text);
+        return VueTranslationsBuilder::toVueValue($translated);
     }
 }

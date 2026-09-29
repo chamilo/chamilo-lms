@@ -88,7 +88,7 @@ class Mobidico extends Plugin
             return null;
         }
 
-        return $baseUrl.'/app/index.html?session='.rawurlencode($session);
+        return $baseUrl.'/hybrid-app/www/index.html?session='.rawurlencode($session);
     }
 
     public function getBaseUrl(): string
@@ -176,7 +176,7 @@ SQL
 
     private function requestRemoteSession(string $baseUrl, string $apiKey, int $userId): ?string
     {
-        $authenticateUrl = $baseUrl.'/app/desktop/php/authenticate.php';
+        $authenticateUrl = $baseUrl.'/hybrid-app/www/desktop/php/remote/authenticate.php';
 
         try {
             $client = HttpClient::create([

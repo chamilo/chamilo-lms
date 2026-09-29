@@ -16,6 +16,8 @@ use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Installer\InstallerGate;
+use Chamilo\CoreBundle\Installer\MigrationHistoryRecorder;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
@@ -51,6 +53,7 @@ class IndexBlocksController extends BaseController
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly AccessUrlRepository $accessUrlRepository,
         AuthenticationConfigHelper $authConfigHelper,
+        private readonly MigrationHistoryRecorder $migrationHistoryRecorder,
     ) {
         $this->isLdapActive = $authConfigHelper->getLdapConfig()['enabled'];
     }
@@ -196,7 +199,7 @@ class IndexBlocksController extends BaseController
         return [
             [
                 'class' => 'item-security-activities-audit',
-                'url' => '/main/admin/report.php?id=security_activities_audit',
+                'url' => '/main/admin/activities_audit.php',
                 'label' => $this->translator->trans('Activities audit'),
             ],
             [
@@ -214,6 +217,11 @@ class IndexBlocksController extends BaseController
                 'url' => $this->generateUrl('admin_security_password_strength'),
                 'label' => $this->translator->trans('Password strength checker'),
             ],
+            [
+                'class' => 'item-security-file-integrity',
+                'url' => $this->generateUrl('admin_security_file_integrity'),
+                'label' => $this->translator->trans('File integrity'),
+            ],
         ];
     }
 
@@ -227,7 +235,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-user-add',
-            'url' => '/main/admin/user_add.php',
+            'route' => ['name' => 'AdminUserAdd'],
             'label' => $this->translator->trans('Add a user'),
         ];
 
@@ -292,23 +300,26 @@ class IndexBlocksController extends BaseController
             ];
 
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_role')) {
+                // Matched by 'class', not 'url': both surviving items ('item-user-list',
+                // 'item-user-add') are route-based (no 'url' key at all), so matching on
+                // 'url' silently dropped them both here.
                 $items = array_filter($items, function (array $item) {
-                    $urls = [
-                        '/admin/user-list',
-                        '/main/admin/user_add.php',
+                    $classes = [
+                        'item-user-list',
+                        'item-user-add',
                     ];
 
-                    return \in_array($item['url'], $urls, true);
+                    return \in_array($item['class'], $classes, true);
                 });
             }
 
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_list_users')) {
                 $items = array_filter($items, function (array $item): bool {
-                    $urls = [
-                        '/admin/user-list',
+                    $classes = [
+                        'item-user-list',
                     ];
 
-                    return !\in_array($item['url'], $urls, true);
+                    return !\in_array($item['class'], $classes, true);
                 });
             }
 
@@ -440,7 +451,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-question-bank',
-            'url' => '/main/admin/questions.php',
+            'route' => ['name' => 'AdminQuestionBank'],
             'label' => $this->translator->trans('Questions'),
         ];
         $items[] = [
@@ -528,10 +539,14 @@ class IndexBlocksController extends BaseController
         ];
 
         if ($this->isGlobalAdmin) {
+            // The legacy "Configure multiple access URL" entry is intentionally not
+            // listed here anymore: it's reachable from the button on the Multi URLs
+            // dashboard itself (assets/vue/views/admin/MultiUrlList.vue), so this
+            // panel only needs the one entry point into that feature.
             $items[] = [
                 'class' => 'item-access-url',
-                'url' => '/main/admin/access_urls.php',
-                'label' => $this->translator->trans('Configure multiple access URL'),
+                'route' => ['name' => 'AdminMultiUrlList'],
+                'label' => $this->translator->trans('Multi URLs'),
             ];
         }
 
@@ -576,12 +591,6 @@ class IndexBlocksController extends BaseController
         }
 
         $items[] = [
-            'class' => 'item-lti-admin',
-            'url' => $this->generateUrl('chamilo_lti_admin'),
-            'label' => $this->translator->trans('External tools (LTI)'),
-        ];
-
-        $items[] = [
             'class' => 'item-contact-category-admin',
             'url' => $this->generateUrl('chamilo_contact_category_index'),
             'label' => $this->translator->trans('Contact form categories'),
@@ -601,7 +610,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-stats',
-            'url' => '/main/admin/report.php?id=platform_global_statistics',
+            'route' => ['name' => 'AdminStatistics'],
             'label' => $this->translator->trans('Global statistics'),
         ];
         $items[] = [
@@ -611,32 +620,32 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-my-space',
-            'url' => '/main/admin/report.php?id=learning_analytics_dashboard',
+            'route' => ['name' => 'GlobalReportingOverview'],
             'label' => $this->translator->trans('Learning analytics'),
         ];
         $items[] = [
             'class' => 'item-quarterly-report',
-            'url' => '/main/admin/report.php?id=platform_quarterly_report',
+            'route' => ['name' => 'AdminStatistics', 'query' => ['report' => 'quarterly_report']],
             'label' => $this->translator->trans('Quarterly report'),
         ];
         $items[] = [
             'class' => 'item-teacher-time-report',
-            'url' => '/main/admin/report.php?id=learning_teacher_time_report',
+            'url' => '/main/admin/teacher_time_report.php',
             'label' => $this->translator->trans('Teachers time report'),
         ];
         $items[] = [
             'class' => 'item-stats-report',
-            'url' => '/main/admin/report.php?id=learning_corporate_report',
+            'route' => ['name' => 'GlobalReportingCompany'],
             'label' => $this->translator->trans('Corporate report'),
         ];
         $items[] = [
             'class' => 'item-special-export',
-            'url' => '/main/admin/report.php?id=export_special_exports',
+            'url' => '/main/admin/special_exports.php',
             'label' => $this->translator->trans('Special exports'),
         ];
         $items[] = [
             'class' => 'item-ticket-system',
-            'url' => '/main/ticket/tickets.php',
+            'url' => '/tickets',
             'label' => $this->translator->trans('Tickets'),
         ];
 
@@ -652,15 +661,17 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Clean temporary files'),
         ];
 
-        /*$items[] = [
-            'url' => '/main/admin/periodic_export.php',
-            'label' => $this->translator->$this->trans('Periodic export'),
-        ];*/
         $items[] = [
             'class' => 'item-system-status',
-            'url' => '/main/admin/system_status.php',
+            'route' => ['name' => 'AdminSystemStatus'],
             'label' => $this->translator->trans('System status'),
         ];
+        $items[] = [
+            'class' => 'item-system-update',
+            'route' => ['name' => 'AdminSystemUpdate'],
+            'label' => $this->translator->trans('System update'),
+        ];
+
         if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
             $items[] = [
                 'class' => 'item-data-filler',
@@ -1008,13 +1019,13 @@ class IndexBlocksController extends BaseController
         $nameSender = $this->settingsManager->getSetting('mail.mailer_from_name', true);
         if ((empty($mailDsn) || 'null://null' == $mailDsn) || empty($mailSender) || empty($nameSender)) {
             $items[] = [
-                'className' => 'item-health-check-mail-settings text-error',
+                'class' => 'item-health-check-mail-settings text-error',
                 'url' => '/admin/settings/mail',
                 'label' => $this->translator->trans('E-mail settings need to be configured'),
             ];
         } else {
             $items[] = [
-                'className' => 'item-health-check-mail-settings text-success',
+                'class' => 'item-health-check-mail-settings text-success',
                 'url' => '/admin/settings/mail',
                 'label' => $this->translator->trans('E-mail settings are OK'),
             ];
@@ -1023,14 +1034,14 @@ class IndexBlocksController extends BaseController
         // Check if the admin user has access to all URLs
         if (api_is_admin_in_all_active_urls()) {
             $items[] = [
-                'className' => 'item-health-check-admin-urls text-success',
-                'url' => '/main/admin/access_urls.php',
+                'class' => 'item-health-check-admin-urls text-success',
+                'url' => '/admin/urls/manage',
                 'label' => $this->translator->trans('All URLs have at least one admin assigned'),
             ];
         } else {
             $items[] = [
-                'className' => 'item-health-check-admin-urls text-error',
-                'url' => '/main/admin/access_url_edit_users_to_url.php',
+                'class' => 'item-health-check-admin-urls text-error',
+                'url' => '/admin/urls/assign-users',
                 'label' => $this->translator->trans('At least one URL has no admin assigned'),
             ];
         }
@@ -1049,7 +1060,7 @@ class IndexBlocksController extends BaseController
         $envIsWritable = is_file($envPath) && is_writable($envPath);
 
         $items[] = [
-            'className' => 'item-health-check-env-perms '.($envIsWritable ? 'text-error' : 'text-success'),
+            'class' => 'item-health-check-env-perms '.($envIsWritable ? 'text-error' : 'text-success'),
             'url' => $securityGuideUrl,
             'label' => \sprintf(
                 $this->translator->trans($envIsWritable ? '%s is writeable' : '%s is not writeable'),
@@ -1062,7 +1073,7 @@ class IndexBlocksController extends BaseController
         $configIsWritable = is_dir($configPath) && is_writable($configPath);
 
         $items[] = [
-            'className' => 'item-health-check-config-perms '.($configIsWritable ? 'text-error' : 'text-success'),
+            'class' => 'item-health-check-config-perms '.($configIsWritable ? 'text-error' : 'text-success'),
             'url' => $securityGuideUrl,
             'label' => \sprintf(
                 $this->translator->trans($configIsWritable ? '%s is writeable' : '%s is not writeable'),
@@ -1075,7 +1086,7 @@ class IndexBlocksController extends BaseController
         $cacheIsWritable = is_dir($cachePath) && is_writable($cachePath);
 
         $items[] = [
-            'className' => 'item-health-check-cache-perms '.($cacheIsWritable ? 'text-success' : 'text-error'),
+            'class' => 'item-health-check-cache-perms '.($cacheIsWritable ? 'text-success' : 'text-error'),
             'url' => $optimizationGuideUrl,
             'label' => \sprintf(
                 $this->translator->trans($cacheIsWritable ? '%s is writeable' : '%s is not writeable'),
@@ -1088,10 +1099,46 @@ class IndexBlocksController extends BaseController
         $installExists = is_dir($installPath);
 
         $items[] = [
-            'className' => 'item-health-check-install-folder '.($installExists ? 'text-warning' : 'text-success'),
+            'class' => 'item-health-check-install-folder '.($installExists ? 'text-warning' : 'text-success'),
             'url' => $securityGuideUrl,
             'label' => $this->translator->trans($installExists ? 'Install folder is still present' : 'Install folder is not present'),
         ];
+
+        // The flag file authorises the unauthenticated upgrade endpoints
+        // (GHSA-mfgc-693v-xq5v). The installer deletes it once the upgrade finishes;
+        // a read-only project root can leave it behind, and nothing else warns the
+        // administrator to remove it by hand. Say nothing when it is absent, which is
+        // the normal state outside of an upgrade.
+        if (InstallerGate::isUpgradeAuthorised($projectDir)) {
+            $items[] = [
+                'class' => 'item-health-check-upgrade-flag text-error',
+                'url' => '/documentation/installation_guide.html#web-upgrade-enable',
+                'label' => \sprintf(
+                    $this->translator->trans('%s is present in the project root: delete it to close the upgrade endpoints'),
+                    InstallerGate::UPGRADE_FLAG_FILE
+                ),
+            ];
+        }
+
+        // An empty migration history blocks every future update. While it is empty the
+        // item carries an action and records the history in place; once recorded there is
+        // nothing left to do, so it stays as plain text with no destination.
+        $historyIsEmpty = $this->migrationHistoryRecorder->isEmpty();
+
+        $migrationHistoryItem = [
+            'class' => 'item-health-check-migration-history '.($historyIsEmpty ? 'text-error' : 'text-success'),
+            'label' => $this->translator->trans(
+                $historyIsEmpty
+                    ? 'No migration history: click to fix (or updates might break)'
+                    : 'Migration history is recorded'
+            ),
+        ];
+
+        if ($historyIsEmpty) {
+            $migrationHistoryItem['action'] = 'record-migration-history';
+        }
+
+        $items[] = $migrationHistoryItem;
 
         return $items;
     }

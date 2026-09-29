@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -22,8 +21,9 @@ use Stringable;
 #[ApiResource(
     types: ['http://schema.org/MediaObject'],
     operations: [
-        new Get(security: "is_granted('ROLE_USER')"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        // Kept because API Platform needs an item operation to build this resource's IRI; reading
+        // the attachments of a post goes through /social_posts/{id}/attachments.
+        new Get(security: "object.getSocialPost() != null and is_granted('VIEW', object.getSocialPost())"),
         new Post(
             controller: CreateSocialPostAttachmentAction::class,
             openapi: new Operation(
@@ -100,11 +100,18 @@ class SocialPostAttachment extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getFilename()
     {
-        return $this->id;
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): self
+    {
+        $this->filename = $filename;
+
+        return $this;
     }
 
     /**
@@ -118,21 +125,6 @@ class SocialPostAttachment extends AbstractResource implements ResourceInterface
     public function setPath(string $path): self
     {
         $this->path = $path;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFilename()
-    {
-        return $this->filename;
-    }
-
-    public function setFilename(string $filename): self
-    {
-        $this->filename = $filename;
 
         return $this;
     }
@@ -177,6 +169,14 @@ class SocialPostAttachment extends AbstractResource implements ResourceInterface
     public function getResourceIdentifier(): int
     {
         return $this->getId();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function setInsertUserId(int $insertUserId): self

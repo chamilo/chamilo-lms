@@ -8,9 +8,8 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use ApiPlatform\Validator\ValidatorInterface;
 use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\GradebookEvaluation;
-use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
@@ -93,6 +92,10 @@ class CreateSessionWithUsersAndCoursesAction
             $this->em->persist($relCourse);
 
             $relCourses[$courseId] = $relCourse;
+
+            if ($data->getCopyEvaluation()) {
+                $this->copyGradebookFromBaseCourse($course, $session);
+            }
         }
 
         foreach ($data->getStudentIds() as $userId) {
@@ -150,76 +153,47 @@ class CreateSessionWithUsersAndCoursesAction
 
         $this->em->flush();
 
-        // Copy gradebook categories/links/evaluations from each base course into the new session.
-        foreach (array_keys($courses) as $courseId) {
-            $this->copyGradebookToSession((int) $courseId, $session);
-        }
-
         return $session;
     }
 
     /**
-     * Copy gradebook categories, links and evaluations from the base course
-     * (no session) to the given session, mirroring SessionRepetitionCommand::copyEvaluationsAndCategories().
+     * Duplicates the base course's gradebook (categories, links and evaluations)
+     * into the given session, mirroring the "Import gradebook from base course"
+     * checkbox in add_courses_to_session.php.
      */
-    private function copyGradebookToSession(int $courseId, Session $session): void
+    private function copyGradebookFromBaseCourse(Course $course, Session $session): void
     {
-        // Load base-course categories (session = null means the stand-alone course gradebook).
-        $baseCategories = $this->em->getRepository(GradebookCategory::class)
-            ->findBy(['course' => $courseId, 'session' => null])
+        $categories = $this->em->getRepository(GradebookCategory::class)
+            ->findBy(['course' => $course->getId(), 'session' => null])
         ;
 
-        if (empty($baseCategories)) {
-            return;
-        }
-
-        // Avoid duplicating if already copied (e.g. action called twice).
-        $existing = $this->em->getRepository(GradebookCategory::class)
-            ->findOneBy(['course' => $courseId, 'session' => $session])
-        ;
-        if (null !== $existing) {
-            return;
-        }
-
-        foreach ($baseCategories as $baseCategory) {
+        foreach ($categories as $category) {
             $newCategory = new GradebookCategory();
             $newCategory
-                ->setTitle($baseCategory->getTitle())
-                ->setDescription($baseCategory->getDescription())
-                ->setWeight($baseCategory->getWeight())
-                ->setVisible($baseCategory->getVisible())
-                ->setCertifMinScore($baseCategory->getCertifMinScore())
-                ->setGenerateCertificates($baseCategory->getGenerateCertificates())
-                ->setIsRequirement($baseCategory->getIsRequirement())
-                ->setCourse($baseCategory->getCourse())
+                ->setTitle($category->getTitle())
+                ->setDescription($category->getDescription())
+                ->setWeight($category->getWeight())
+                ->setVisible($category->getVisible())
+                ->setCertifMinScore($category->getCertifMinScore())
+                ->setGenerateCertificates($category->getGenerateCertificates())
+                ->setIsRequirement($category->getIsRequirement())
+                ->setCourse($course)
                 ->setSession($session)
-                ->setParent($baseCategory->getParent())
+                ->setParent($category->getParent())
             ;
-
             $this->em->persist($newCategory);
-            $this->em->flush();
 
-            // Copy links (quiz, LP, attendance, etc.).
-            $links = $this->em->getRepository(GradebookLink::class)
-                ->findBy(['category' => $baseCategory->getId()])
-            ;
-            foreach ($links as $link) {
+            foreach ($category->getLinks() as $link) {
                 $newLink = clone $link;
                 $newLink->setCategory($newCategory);
                 $this->em->persist($newLink);
             }
 
-            // Copy evaluations (manual grade items).
-            $evaluations = $this->em->getRepository(GradebookEvaluation::class)
-                ->findBy(['category' => $baseCategory->getId()])
-            ;
-            foreach ($evaluations as $evaluation) {
+            foreach ($category->getEvaluations() as $evaluation) {
                 $newEvaluation = clone $evaluation;
                 $newEvaluation->setCategory($newCategory);
                 $this->em->persist($newEvaluation);
             }
-
-            $this->em->flush();
         }
     }
 }

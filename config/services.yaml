@@ -15,6 +15,18 @@ parameters:
     packager: '%env(PACKAGER)%'
     default_template: '%env(DEFAULT_TEMPLATE)%'
     scim_token: '%env(SCIM_TOKEN)%'
+    # Whether CsrfProtectionListener rejects requests that fail CSRF validation.
+    # On by default, so an installation that never updates its .env is still
+    # protected. Set CHAMILO_CSRF_ENFORCE=false to drop back to log-only mode,
+    # where the listener records what it would have rejected instead of
+    # answering 403 -- useful to find clients that write with a session cookie
+    # but send no Origin before enforcing on them.
+    env(CHAMILO_CSRF_ENFORCE): '1'
+    chamilo.csrf.enforce: '%env(bool:CHAMILO_CSRF_ENFORCE)%'
+    # The kernel resolves trusted_proxies on every boot, so a checkout with no
+    # .env yet (a fresh clone running composer install) fails without this
+    # default. Empty means "trust no proxy".
+    env(TRUSTED_PROXIES): ''
     .container.dumper.inline_factories: true
     twig:
         form:
@@ -136,6 +148,10 @@ services:
             $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
             $removeProcessor: '@api_platform.doctrine.orm.state.remove_processor'
 
+    Chamilo\CoreBundle\Push\FcmV1MobilePushProvider:
+        tags:
+            - { name: 'chamilo.mobile_push_provider' }
+
     Chamilo\CoreBundle\State\CBlogAssignAuthorProcessor:
       arguments:
         $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
@@ -198,10 +214,75 @@ services:
                 projectId: '%env(GOOGLE_STORAGE_CLOUD_PROJECT_ID)%'
                 keyFilePath: '%env(resolve:GOOGLE_STORAGE_KEY_FILE_PATH)%'
 
-    MicrosoftAzure\Storage\Blob\BlobRestProxy:
-        factory: ['MicrosoftAzure\Storage\Blob\BlobRestProxy', 'createBlobService']
+    AzureOss\Storage\Blob\BlobServiceClient:
+        factory: ['AzureOss\Storage\Blob\BlobServiceClient', 'fromConnectionString']
         arguments:
             - '%env(AZURE_STORAGE_CONNECTION_STRING)%'
+
+    chamilo.storage.azure_asset_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_ASSET_CONTAINER)%'
+            - '%env(AZURE_STORAGE_ASSET_PREFIX)%'
+
+    chamilo.storage.azure_asset_cache_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_ASSET_CACHE_CONTAINER)%'
+            - '%env(AZURE_STORAGE_ASSET_CACHE_PREFIX)%'
+
+    chamilo.storage.azure_resource_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_RESOURCE_CONTAINER)%'
+            - '%env(AZURE_STORAGE_RESOURCE_PREFIX)%'
+
+    chamilo.storage.azure_resource_cache_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_RESOURCE_CACHE_CONTAINER)%'
+            - '%env(AZURE_STORAGE_RESOURCE_CACHE_PREFIX)%'
+
+    chamilo.storage.azure_themes_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_THEMES_CONTAINER)%'
+            - '%env(AZURE_STORAGE_THEMES_PREFIX)%'
+
+    chamilo.storage.azure_plugins_adapter:
+        class: AzureOss\Storage\BlobFlysystem\AzureBlobStorageAdapter
+        factory: ['Chamilo\CoreBundle\Storage\Factory\AzureBlobAdapterFactory', 'create']
+        arguments:
+            - '@AzureOss\Storage\Blob\BlobServiceClient'
+            - '%env(AZURE_STORAGE_PLUGINS_CONTAINER)%'
+            - '%env(AZURE_STORAGE_PLUGINS_PREFIX)%'
+
+    # Template for the `api` firewall's JWT authenticator (see security.yaml,
+    # `api.jwt.authenticator`) — same 5 arguments as Lexik's own abstract
+    # `lexik_jwt_authentication.security.jwt_authenticator` template (index 3, the
+    # user provider, is left unset here; Lexik's own JWTAuthenticatorFactory fills it
+    # in per-firewall via replaceArgument(3, ...)), just backed by a subclass that
+    # narrows supports() to actual JWT-shaped tokens. See StrictJwtAuthenticator's
+    # docblock for why.
+    chamilo.security.strict_jwt_authenticator:
+        class: Chamilo\CoreBundle\Security\Authenticator\StrictJwtAuthenticator
+        abstract: true
+        arguments:
+            - '@lexik_jwt_authentication.jwt_manager'
+            - '@event_dispatcher'
+            - '@lexik_jwt_authentication.extractor.chain_extractor'
+            - ~
+            - '@?translator'
 
     Chamilo\CoreBundle\Security\Authenticator\Ldap\ExtAdapter: ~
 

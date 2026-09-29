@@ -12,14 +12,14 @@ body {
     background-image: url('bg-pattern.svg');
     background-size: 600px 600px;
     background-repeat: repeat;
-    color: #333;
+    color: #444;
     line-height: 1.6;
     font-size: 15px;
 }
 
 /* Top navigation */
 nav {
-    background: #2c3e50;
+    background: #203e61;
     padding: 0 24px;
     position: sticky;
     top: 0;
@@ -45,7 +45,6 @@ nav .nav-logo img {
     height: 26px;
     width: auto;
     display: block;
-    filter: brightness(0) invert(1);
 }
 
 nav ul {
@@ -58,22 +57,47 @@ nav ul {
 
 nav li {
     margin: 0;
+    padding: 0;
+    border-radius: 0;
+    border-left: none;
+}
+
+nav li:hover {
+    background: none;
+    border-left-color: transparent;
 }
 
 nav a {
     display: block;
+    position: relative;
     padding: 12px 16px;
     color: #cfd8dc;
     text-decoration: none;
     font-size: 14px;
     font-weight: 500;
-    transition: background 0.15s, color 0.15s;
+    transition: color 0.15s;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 6px;
+    height: 2px;
+    background: #f26722;
+    border-radius: 1px;
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
 }
 
 nav a:hover {
-    background: #34495e;
     color: #fff;
     text-decoration: none;
+}
+
+nav a:hover::after {
+    transform: scaleX(1);
 }
 
 /* Main content container */
@@ -95,8 +119,8 @@ body > .version {
 /* Release title (h1) */
 h1 {
     font-size: 1.75em;
-    color: #2c3e50;
-    border-left: 4px solid #3498db;
+    color: #203e61;
+    border-left: 4px solid #f26722;
     padding: 12px 16px;
     margin: 32px 0 16px;
     background: #fff;
@@ -110,24 +134,24 @@ h1:first-of-type {
 
 h2 {
     font-size: 1.5em;
-    color: #2c3e50;
+    color: #203e61;
     margin-top: 28px;
     margin-bottom: 12px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #dee2e7;
 }
 
 /* Section headings (Security fixes, Added, Changed, etc.) */
 h3 {
     font-size: 1.05em;
     font-weight: 600;
-    color: #555;
+    color: #444;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 20px;
     margin-bottom: 8px;
     padding: 6px 10px;
-    background: #eef2f7;
+    background: #ebeef1;
     border-radius: 4px;
 }
 
@@ -153,34 +177,34 @@ li {
 }
 
 li:hover {
-    background: #f0f4f8;
-    border-left-color: #3498db;
+    background: #eff1f4;
+    border-left-color: #f26722;
 }
 
 /* Links */
 a {
-    color: #2980b9;
+    color: #3584e4;
     text-decoration: none;
 }
 
 a:hover {
     text-decoration: underline;
-    color: #1a5276;
+    color: #f26722;
 }
 
 /* Commit hash links within list items */
 li a[href*="commit"] {
     font-family: "SF Mono", "Fira Code", "Courier New", monospace;
     font-size: 12px;
-    background: #e8ecf0;
+    background: #e4e8ec;
     padding: 1px 5px;
     border-radius: 3px;
-    color: #555;
+    color: #444;
 }
 
 li a[href*="commit"]:hover {
-    background: #d5dce4;
-    color: #333;
+    background: #ced5dc;
+    color: #444;
     text-decoration: none;
 }
 
@@ -206,7 +230,7 @@ pre {
 
 code {
     font-family: "SF Mono", "Fira Code", "Courier New", monospace;
-    background-color: #e8ecf0;
+    background-color: #e4e8ec;
     padding: 2px 5px;
     border-radius: 3px;
     font-size: 13px;
@@ -234,7 +258,7 @@ i.material-icons {
 /* Horizontal rules */
 hr {
     border: none;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #dee2e7;
     margin: 24px 0;
 }
 
@@ -253,7 +277,7 @@ body > a[href*="validator"]:hover {
 /* Table of contents (if added) */
 .toc {
     background: #fff;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #dee2e7;
     border-radius: 6px;
     padding: 16px 20px;
     margin-bottom: 24px;
@@ -264,7 +288,7 @@ body > a[href*="validator"]:hover {
     margin-top: 0;
     margin-bottom: 10px;
     border-bottom: none;
-    color: #2c3e50;
+    color: #203e61;
 }
 
 .toc ul {
@@ -285,7 +309,7 @@ body > a[href*="validator"]:hover {
 }
 
 .toc a {
-    color: #2980b9;
+    color: #3584e4;
 }
 
 /* Responsive */

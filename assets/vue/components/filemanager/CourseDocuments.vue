@@ -40,13 +40,22 @@
         </div>
       </div>
       <div class="breadcrumbs">
-        <span
-          v-for="(folder, index) in previousFolders"
-          :key="index"
+        <button
+          type="button"
+          class="text-primary hover:underline"
+          @click="resetToRoot"
         >
-          <span>{{ folder.title }}</span> /
-        </span>
-        <span>{{ currentFolderTitle }}</span>
+          Root
+        </button>
+        <template v-if="currentFolderTitle !== 'Root'">
+          <span
+            v-for="(folder, index) in previousFolders.slice(1)"
+            :key="`${folder.id}-${index}`"
+          >
+            / {{ folder.title }}
+          </span>
+          <span>/ {{ currentFolderTitle }}</span>
+        </template>
       </div>
     </div>
 
@@ -253,7 +262,7 @@
           class="mdi mdi-alert p-mr-3"
           style="font-size: 2rem"
         ></i>
-        <span>{{ $t("Are you sure you want to delete {title}?", { title: itemToDelete?.title }) }}</span>
+        <span>{{ $t("Are you sure you want to delete {0}?", [itemToDelete?.title]) }}</span>
       </div>
       <template #footer>
         <Button
@@ -354,7 +363,7 @@ const isTinyPicker = computed(() => String(route.query.picker || "") === "tinymc
 const cbId = computed(() => String(route.query.cbId || ""))
 
 const {
-  filteredFiles: baseFilteredFiles,
+  files,
   totalFiles,
   isLoading,
   selectedFiles,
@@ -375,6 +384,7 @@ const {
   currentFolderTitle,
   handleClickFile,
   goBack,
+  resetToRoot,
   returnToEditor: baseReturnToEditor,
   toggleViewMode,
   viewModeIcon,
@@ -451,7 +461,7 @@ function matchesFilter(entry, type) {
 
 const filteredFiles = computed(() => {
   const type = filterType.value
-  return (baseFilteredFiles.value || []).filter((f) => matchesFilter(f, type))
+  return (files.value || []).filter((f) => matchesFilter(f, type))
 })
 
 function returnToEditor(entry) {

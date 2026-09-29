@@ -17,9 +17,11 @@
                         <td class="text-right">{{ row.score }}</td>
                         <td class="text-center">{{ row.date }}</td>
                         <td class="text-right">
-                            <a href="{{ row.link }}" target="_blank" class="btn btn--plain">
-                                <em class="fa fa-external-link"></em> {{ 'Certificate'|get_lang }}
-                            </a>
+                            {% if row.link is not empty %}
+                                <a href="{{ row.link }}" target="_blank" rel="noopener" class="btn btn--plain">
+                                    <em class="fa fa-external-link"></em> {{ 'Certificate'|get_lang }}
+                                </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -49,9 +51,11 @@
                         <td class="text-right">{{ row.score }}</td>
                         <td class="text-center">{{ row.date }}</td>
                         <td class="text-right">
-                            <a href="{{ row.link }}" target="_blank" class="btn btn--plain">
-                                <em class="fa fa-external-link"></em> {{ 'Certificate'|get_lang }}
-                            </a>
+                            {% if row.link is not empty %}
+                                <a href="{{ row.link }}" target="_blank" rel="noopener" class="btn btn--plain">
+                                    <em class="fa fa-external-link"></em> {{ 'Certificate'|get_lang }}
+                                </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

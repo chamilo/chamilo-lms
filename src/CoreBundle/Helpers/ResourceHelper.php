@@ -56,7 +56,7 @@ class ResourceHelper
         $event = new TrackEDefault();
         $event->setDefaultUserId($userId ?? 0);
         $event->setCId($courseId);
-        $event->setSessionId($sessionId);
+        $event->setSessionId($sessionId ?? 0);
         $event->setDefaultDate(new DateTime());
         $event->setDefaultEventType($eventType);
         $event->setDefaultValueType('resource_type_'.$resourceTypeTitle);

@@ -23,16 +23,6 @@ export default {
   },
 
   /**
-   * Fetches the CourseHomeNotify plugin notification for a course.
-   * @param {number} cid
-   * @param {number} sid
-   * @returns {Promise<Object>}
-   */
-  getCourseHomeNotification: async (cid, sid = 0) => {
-    return await baseService.get("/plugin/CourseHomeNotify/ajax.php", { cid, sid, gid: 0 })
-  },
-
-  /**
    * Lists the current user's courses (paginated). Returns the raw response body
    * so the caller can normalize it; accepts extra axios options (e.g. a signal).
    * @param {number} page
@@ -128,21 +118,6 @@ export default {
   /**
    * @param {number} courseId
    * @param {number=} sessionId
-   * @returns {Promise<{Object}>}
-   */
-  loadHomeIntro: async (courseId, sessionId = 0) => {
-    const { data } = await api.get(`/course/${courseId}/getToolIntro`, {
-      params: {
-        sid: sessionId,
-      },
-    })
-
-    return data
-  },
-
-  /**
-   * @param {number} courseId
-   * @param {number=} sessionId
    * @returns {Promise<Object>}
    */
   checkLegal: async (courseId, sessionId = 0) => {
@@ -157,6 +132,15 @@ export default {
     const { data } = await api.get(`/plugin/BuyCourses/src/course_creation_options.php`)
 
     return data
+  },
+
+  /**
+   * Returns BuyCourses service labels for courses managed by the current user.
+   * @param {number[]} courseIds
+   * @returns {Promise<Object>}
+   */
+  getBuyCoursesCourseServiceLabels: async (courseIds = []) => {
+    return await getBuyCoursesCourseServiceLabels(courseIds)
   },
 
   /**
@@ -263,38 +247,6 @@ export default {
     return data
   },
 
-  toggleFavorite: async (courseId, userId) => {
-    // Check if the vote already exists
-    const { data } = await api.get("/api/user_rel_course_votes", {
-      params: { "user.id": userId, "course.id": courseId },
-    })
-
-    if (data["hydra:totalItems"] > 0) {
-      // Already favorite → remove
-      await api.delete(data["hydra:member"][0]["@id"])
-
-      return false
-    }
-
-    // Not favorite → create
-    await api.post("/api/user_rel_course_votes", {
-      user: `/api/users/${userId}`,
-      course: `/api/courses/${courseId}`,
-      vote: 1,
-      url: `/api/access_urls/${window.access_url_id ?? 1}`,
-    })
-
-    return true
-  },
-
-  listFavoriteCourses: async (userId) => {
-    const { data } = await api.get("/api/user_rel_course_votes", {
-      params: { "user.id": userId, vote: 1, pagination: false },
-    })
-
-    return data["hydra:member"].map((vote) => vote.course)
-  },
-
   getCompletedCourses: async (offset = 0, limit = 10) => {
     const res = await api.get("/admin/sessionadmin/courses/completed", {
       params: { offset, limit },
@@ -351,6 +303,26 @@ export default {
     const { data } = await api.get("/course/create-capability", config)
     return data
   },
+}
+
+
+export async function getBuyCoursesCourseServiceLabels(courseIds = []) {
+  const normalizedIds = [...new Set(courseIds.map((courseId) => Number(courseId) || 0).filter((courseId) => courseId > 0))].slice(
+    0,
+    100,
+  )
+
+  if (normalizedIds.length === 0) {
+    return {}
+  }
+
+  const { data } = await api.get("/plugin/BuyCourses/src/course_service_labels.php", {
+    params: {
+      course_ids: normalizedIds.join(","),
+    },
+  })
+
+  return data?.courses && typeof data.courses === "object" ? data.courses : {}
 }
 
 export async function getStickyCourses() {

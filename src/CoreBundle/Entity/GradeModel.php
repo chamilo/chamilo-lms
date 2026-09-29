@@ -35,13 +35,6 @@ class GradeModel
     #[ORM\Column(name: 'default_external_eval_prefix', type: 'string', length: 140, nullable: true)]
     protected ?string $defaultExternalEvalPrefix = null;
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     /**
      * Get title.
      *
@@ -52,9 +45,9 @@ class GradeModel
         return $this->title;
     }
 
-    public function setDescription(string $description): self
+    public function setTitle(string $title): self
     {
-        $this->description = $description;
+        $this->title = $title;
 
         return $this;
     }
@@ -69,9 +62,9 @@ class GradeModel
         return $this->description;
     }
 
-    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude): self
+    public function setDescription(string $description): self
     {
-        $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
+        $this->description = $description;
 
         return $this;
     }
@@ -86,9 +79,9 @@ class GradeModel
         return $this->defaultLowestEvalExclude;
     }
 
-    public function setDefaultExternalEval(bool $defaultExternalEval): self
+    public function setDefaultLowestEvalExclude(bool $defaultLowestEvalExclude): self
     {
-        $this->defaultExternalEval = $defaultExternalEval;
+        $this->defaultLowestEvalExclude = $defaultLowestEvalExclude;
 
         return $this;
     }
@@ -103,9 +96,9 @@ class GradeModel
         return $this->defaultExternalEval;
     }
 
-    public function setDefaultExternalEvalPrefix(string $defaultExternalEvalPrefix): self
+    public function setDefaultExternalEval(bool $defaultExternalEval): self
     {
-        $this->defaultExternalEvalPrefix = $defaultExternalEvalPrefix;
+        $this->defaultExternalEval = $defaultExternalEval;
 
         return $this;
     }
@@ -118,6 +111,13 @@ class GradeModel
     public function getDefaultExternalEvalPrefix()
     {
         return $this->defaultExternalEvalPrefix;
+    }
+
+    public function setDefaultExternalEvalPrefix(string $defaultExternalEvalPrefix): self
+    {
+        $this->defaultExternalEvalPrefix = $defaultExternalEvalPrefix;
+
+        return $this;
     }
 
     /**

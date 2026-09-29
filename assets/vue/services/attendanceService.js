@@ -23,8 +23,8 @@ export default {
    * @param {Number|String} attendanceId - ID of the attendance list.
    * @returns {Promise<Object>} - Data of the specific attendance list.
    */
-  getAttendance: async (attendanceId) => {
-    return await baseService.get(`/api/attendances/${attendanceId}/`)
+  getAttendance: async (attendanceId, params = {}) => {
+    return await baseService.get(`/api/attendances/${attendanceId}/`, params)
   },
 
   /**
@@ -66,7 +66,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated attendance list.
    */
   updateAttendance: async (attendanceId, data) => {
-    return await baseService.put(`/api/attendances/${attendanceId}`, data)
+    return await baseService.patch(`/api/attendances/${attendanceId}`, data)
   },
 
   /**
@@ -89,7 +89,7 @@ export default {
    * @returns {Promise<void>} - Result of the toggle action.
    */
   toggleVisibility: async (attendanceId) => {
-    await baseService.put(`/api/attendances/${attendanceId}/toggle_visibility`, {})
+    await baseService.patch(`/api/attendances/${attendanceId}/toggle_visibility`, {})
   },
 
   /**
@@ -98,7 +98,7 @@ export default {
    * @returns {Promise<void>} - Result of the soft delete action.
    */
   softDelete: async (attendanceId) => {
-    await baseService.put(`/api/attendances/${attendanceId}/soft_delete`, {})
+    await baseService.patch(`/api/attendances/${attendanceId}/soft_delete`, {})
   },
 
   /**
@@ -118,7 +118,7 @@ export default {
    * @returns {Promise<Object>} - Data of the updated calendar event.
    */
   updateCalendarEvent: async (calendarId, data) => {
-    return await baseService.put(`/api/c_attendance_calendars/${calendarId}`, data)
+    return await baseService.patch(`/api/c_attendance_calendars/${calendarId}`, data)
   },
 
   /**
@@ -145,9 +145,12 @@ export default {
    * @param {Number|String} attendanceId - ID of the attendance list.
    * @returns {Promise<Object>} - Full attendance data structured for Vue.
    */
-  getFullAttendanceData: async (attendanceId) => {
+  getFullAttendanceData: async (attendanceId, params = {}) => {
     try {
-      return await baseService.get(`/attendance/full-data`, { attendanceId })
+      return await baseService.get(`/attendance/full-data`, {
+        attendanceId,
+        ...params,
+      })
     } catch (error) {
       console.error("Error fetching full attendance data:", error)
       throw error
@@ -161,17 +164,6 @@ export default {
       console.error("Error fetching attendance sheet users:", error)
       throw error
     }
-  },
-
-  /**
-   * Updates an existing calendar entry for an attendance list.
-   * @param {Number|String} attendanceId - ID of the attendance list.
-   * @param {Number|String} calendarId - ID of the calendar entry to update.
-   * @param {Object} data - Updated calendar data.
-   * @returns {Promise<Object>} - Data of the updated calendar entry.
-   */
-  updateAttendanceCalendar: async (attendanceId, calendarId, data) => {
-    return await baseService.put(`/api/attendances/${attendanceId}/calendars/${calendarId}`, data)
   },
 
   /**
@@ -241,9 +233,9 @@ export default {
     return await baseService.get(`/attendance/list_with_done_count`, params)
   },
 
-  getStudentAttendanceData: async (attendanceId) => {
+  getStudentAttendanceData: async (attendanceId, params = {}) => {
     try {
-      return await baseService.get(`/attendance/${attendanceId}/student-dates`)
+      return await baseService.get(`/attendance/${attendanceId}/student-dates`, params)
     } catch (error) {
       console.error("Error fetching student attendance data:", error)
       throw error

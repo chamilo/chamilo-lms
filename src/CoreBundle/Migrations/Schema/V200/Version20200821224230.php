@@ -13,7 +13,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20200821224230 extends AbstractMigrationChamilo
 {
-    public const INBOX_TAGS_FILE = 'inbox_message_tags';
+    public const string INBOX_TAGS_FILE = 'inbox_message_tags';
 
     public function getDescription(): string
     {

@@ -6,7 +6,16 @@
     "dev-server": "encore dev-server",
     "dev": "encore dev",
     "watch": "encore dev --watch",
-    "build": "encore production --progress"
+    "build": "encore production --progress",
+    "test:playwright:install": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Installation process\" --timeout=300000",
+    "test:playwright:seed": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Create tests users successfully\" --timeout=120000",
+    "test:playwright:seed-course": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Create a course before testing\" --timeout=120000 --workers=1",
+    "test:playwright:seed-private-course": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Create a private course before testing\" --timeout=120000",
+    "test:playwright:seed-settings": "playwright test --config=tests/playwright/playwright.config.ts --grep \"Enable group categories before testing\" --timeout=120000",
+    "test:playwright:specialcase1": "playwright test --config=tests/playwright/playwright.config.ts --grep \"@specialcase1\" --workers=1 --retries=0 --trace=retain-on-failure",
+    "test:playwright": "playwright test --config=tests/playwright/playwright.config.ts --grep-invert \"Installation process|Create tests users successfully|Create a course before testing|Create a private course before testing|Enable group categories before testing|@specialcase1\"",
+    "test:playwright:ui": "playwright test --config=tests/playwright/playwright.config.ts --ui",
+    "check:breadcrumb-routes": "node tests/scripts/check-breadcrumb-routes.cjs"
   },
   "dependencies": {
     "@fancyapps/fancybox": "^3.5.7",
@@ -60,6 +69,7 @@
     "js-cookie": "^2.2.1",
     "jspdf": "^4.2.1",
     "jsplumb": "^2.15.6",
+    "leaflet": "^1.9.4",
     "linkifyjs": "4.3.3",
     "litepicker": "^2.0.12",
     "lodash": "^4.18.1",
@@ -105,11 +115,13 @@
     "@babel/preset-env": "^7.29.7",
     "@eslint/js": "^10.0.1",
     "@mdi/font": "^7.4.47",
+    "@playwright/test": "^1.61.1",
     "@symfony/webpack-encore": "^5.3.1",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.19",
     "@types/d3": "^7.4.3",
+    "@types/leaflet": "^1",
     "@types/qs": "^6.15.1",
     "@vue/compiler-sfc": "^3.5.35",
     "autoprefixer": "^10.5.0",
@@ -122,6 +134,7 @@
     "eslint-plugin-vue": "^10.9.1",
     "file-loader": "^6.2.0",
     "globals": "^17.6.0",
+    "playwright-bdd": "^9.2.0",
     "postcss": "^8.5.15",
     "postcss-loader": "^8.2.1",
     "postcss-prefix-selector": "^2.1.1",
@@ -164,5 +177,5 @@
     "follow-redirects": ">=1.16.0"
   },
   "license": "GPL-3.0",
-  "packageManager": "yarn@4.15.0"
+  "packageManager": "yarn@4.17.1"
 }

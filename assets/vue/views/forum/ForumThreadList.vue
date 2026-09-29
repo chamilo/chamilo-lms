@@ -74,29 +74,100 @@
         :key="thread.iid"
         class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
       >
-        <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-          <div class="min-w-0">
-            <div class="flex items-center gap-2">
-              <BaseIcon
-                :icon="thread.locked ? 'lock' : 'add-topic'"
-                size="normal"
+        <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div class="flex min-w-0 flex-1 gap-4">
+            <div class="relative shrink-0">
+              <BaseUserAvatar
+                :alt="thread.posterFullName || t('Unknown user')"
+                :image-url="getPosterAvatarUrl(thread)"
+                size="large"
               />
-              <h2 class="truncate text-base font-semibold text-gray-90">{{ thread.title }}</h2>
-            </div>
-            <div class="mt-2 flex flex-wrap gap-2 text-xs text-gray-500">
-              <span>{{ t("Replies") }}: {{ thread.threadReplies || 0 }}</span>
-              <span>{{ t("Views") }}: {{ thread.threadViews || 0 }}</span>
-              <span v-if="thread.threadSticky">{{ t("Sticky") }}</span>
-              <span v-if="Number(thread.threadQualifyMax || 0) > 0">{{ t("Graded") }}</span>
-              <span v-if="thread.locked">{{ t("Locked") }}</span>
-              <span v-if="!isThreadVisible(thread)">{{ t("Hidden") }}</span>
               <span
-                v-if="Number(thread.pendingPostCount || 0)"
-                class="rounded-full bg-yellow-100 px-2 py-0.5 text-yellow-700"
+                v-if="isTeacherRole(thread)"
+                :title="getRoleLabel(thread)"
+                class="absolute -bottom-1 -right-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white bg-support-2 text-primary shadow-sm"
               >
-                {{ t("Posts pending moderation") }}: {{ thread.pendingPostCount }}
+                <i
+                  class="mdi mdi-account-tie text-sm"
+                  aria-hidden="true"
+                ></i>
+                <span class="sr-only">{{ getRoleLabel(thread) }}</span>
               </span>
-              <span v-if="thread.posterFullName">{{ thread.posterFullName }}</span>
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start gap-2">
+                <BaseIcon
+                  :icon="thread.locked ? 'lock' : 'add-topic'"
+                  class="mt-0.5 shrink-0"
+                  size="normal"
+                />
+                <router-link
+                  :to="getThreadRoute(thread)"
+                  class="min-w-0 truncate text-base font-semibold text-primary hover:underline"
+                >
+                  {{ thread.title }}
+                </router-link>
+              </div>
+
+              <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+                <span v-if="thread.posterFullName">{{ t("By") }} {{ thread.posterFullName }}</span>
+                <span
+                  v-if="getThreadRelativeTime(thread) || getThreadDateValue(thread)"
+                  :title="formatAbsoluteDate(getThreadDateValue(thread)) || getThreadRelativeTime(thread)"
+                >
+                  {{ getThreadRelativeTime(thread) }}
+                </span>
+                <span>{{ t("Replies") }}: {{ thread.threadReplies || 0 }}</span>
+                <span>{{ t("Views") }}: {{ thread.threadViews || 0 }}</span>
+                <span v-if="thread.lastPostDate">{{ getThreadLastPostLabel(thread) }}</span>
+              </div>
+
+              <p
+                v-if="getThreadPreview(thread)"
+                class="mt-2 text-sm text-gray-700"
+              >
+                {{ getThreadPreview(thread) }}
+              </p>
+
+              <div class="mt-2 flex flex-wrap gap-2 text-xs text-gray-500">
+                <span
+                  v-if="thread.threadSticky"
+                  class="rounded-full bg-blue-100 px-2 py-0.5 text-blue-700"
+                >
+                  {{ t("Sticky") }}
+                </span>
+                <span
+                  v-if="Number(thread.threadQualifyMax || 0) > 0"
+                  class="rounded-full bg-green-100 px-2 py-0.5 text-green-700"
+                >
+                  {{ t("Graded") }}
+                </span>
+                <span
+                  v-if="thread.lockedByGradebook && !thread.locked"
+                  class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
+                >
+                  {{ t("Locked") }}
+                </span>
+                <span
+                  v-if="thread.locked"
+                  class="rounded-full bg-gray-100 px-2 py-0.5 text-gray-700"
+                >
+                  {{ t("Locked") }}
+                </span>
+                <span
+                  v-if="!isThreadVisible(thread)"
+                  class="rounded-full bg-red-100 px-2 py-0.5 text-red-700"
+                >
+                  {{ t("Hidden") }}
+                </span>
+                <span
+                  v-if="Number(thread.pendingPostCount || 0)"
+                  class="rounded-full bg-yellow-100 px-2 py-0.5 text-yellow-700"
+                >
+                  {{ t("Posts pending moderation") }}: {{ thread.pendingPostCount }}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -132,7 +203,7 @@
               @click="toggleThreadNotification(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canToggleVisibility"
               :label="isThreadVisible(thread) ? t('Hide') : t('Show')"
               :icon="isThreadVisible(thread) ? 'eye-on' : 'eye-off'"
               only-icon
@@ -141,7 +212,7 @@
               @click="toggleThreadVisibility(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canEdit"
               :label="t('Move thread')"
               icon="arrows-left-right"
               only-icon
@@ -150,7 +221,7 @@
               @click="openMoveThread(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canEdit"
               :label="t('Edit thread')"
               icon="edit"
               only-icon
@@ -159,7 +230,7 @@
               @click="openEditThread(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canToggleSticky"
               :label="thread.threadSticky ? t('Remove sticky') : t('Make sticky')"
               icon="tag-outline"
               only-icon
@@ -168,7 +239,7 @@
               @click="toggleThreadSticky(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canToggleLock"
               :label="Number(thread.locked || 0) ? t('Open thread') : t('Close thread')"
               :icon="Number(thread.locked || 0) ? 'unlock' : 'lock'"
               only-icon
@@ -177,7 +248,7 @@
               @click="toggleThreadLock(thread)"
             />
             <BaseButton
-              v-if="canManage"
+              v-if="thread.canDelete"
               :label="t('Delete thread')"
               icon="delete"
               only-icon
@@ -408,6 +479,13 @@
 
       <template #footer>
         <BaseButton
+          v-if="lpId"
+          :label="t('Cancel')"
+          icon="close"
+          type="black"
+          @click="goBackToLearningPath"
+        />
+        <BaseButton
           :label="t('Save')"
           :is-loading="isSavingEdit"
           icon="save"
@@ -422,23 +500,30 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useFormatDate } from "../../composables/formatDate"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import forumService from "../../services/forumService"
+import { useSecurityStore } from "../../store/securityStore"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
-const { t } = useI18n()
+const { t, d } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const notifications = useNotification()
+const securityStore = useSecurityStore()
 const { requireConfirmation } = useConfirmation()
+const { relativeDatetime } = useFormatDate()
 const { isAllowedToEdit } = useIsAllowedToEdit({ coach: true, sessionCoach: true })
 
 const isLoading = ref(false)
@@ -447,7 +532,6 @@ const isSavingMove = ref(false)
 const isLoadingMoveOptions = ref(false)
 const forum = ref(null)
 const threads = ref([])
-const csrfToken = ref("")
 const editDialogVisible = ref(false)
 const moveDialogVisible = ref(false)
 const editFormSubmitted = ref(false)
@@ -481,6 +565,7 @@ const cid = computed(() => Number(route.query.cid || 0))
 const sid = computed(() => Number(route.query.sid || 0))
 const gid = computed(() => Number(route.query.gid || 0))
 const lpId = computed(() => Number(route.query.lp_id || 0))
+const requestedThreadEditId = computed(() => Number(route.query.editThreadId || 0))
 const canManage = computed(() => isAllowedToEdit.value)
 const forumAvailabilityStatus = computed(() => getForumAvailabilityStatus(forum.value))
 const forumAvailabilityMessage = computed(() => {
@@ -533,27 +618,22 @@ const baseQuery = computed(() => ({
   sid: sid.value || null,
   gid: gid.value || null,
 }))
-const actionPayload = computed(() => ({ csrfToken: csrfToken.value }))
-
-async function ensureToken() {
-  if (csrfToken.value) {
-    return
-  }
-
-  const tokenResponse = await forumService.getActionToken()
-  csrfToken.value = tokenResponse.token || ""
-}
-
 function goBackToLearningPath() {
-  const params = new URLSearchParams()
-  params.set("cid", String(cid.value || ""))
-  params.set("sid", String(sid.value || 0))
-  params.set("gid", String(gid.value || 0))
-  params.set("gradebook", "")
-  params.set("action", "add_item")
-  params.set("type", "step")
-  params.set("lp_id", String(lpId.value))
-  window.location.href = `/main/lp/lp_controller.php?${params.toString()}#resource_tab-5`
+  const query = { ...route.query }
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.editThreadId
+  delete query.lpItemId
+
+  return router.push({
+    name: "LpBuilder",
+    params: {
+      node: Number(route.query.node || route.params.node || 0),
+      lpId: lpId.value,
+    },
+    query,
+  })
 }
 
 function getForumAvailabilityStatus(item) {
@@ -585,6 +665,184 @@ function isThreadVisible(thread) {
   }
 
   return true === thread.threadVisible || 1 === thread.threadVisible || "1" === String(thread.threadVisible)
+}
+
+function getThreadRoute(thread) {
+  return {
+    name: "ForumPostList",
+    params: { node: parentId.value, forumId: forumId.value, threadId: thread.iid },
+    query: route.query,
+  }
+}
+
+function stripTags(value) {
+  const element = document.createElement("div")
+  element.innerHTML = value || ""
+
+  return element.textContent || element.innerText || ""
+}
+
+function getThreadPreview(thread) {
+  return stripTags(thread?.lastPostText || "").trim()
+}
+
+function normalizeDateValue(value) {
+  if (!value) {
+    return ""
+  }
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? "" : value
+  }
+
+  if (typeof value === "number") {
+    const timestamp = value > 100000000000 ? value : value * 1000
+    const date = new Date(timestamp)
+
+    return Number.isNaN(date.getTime()) ? "" : date
+  }
+
+  if (typeof value === "object") {
+    return normalizeDateValue(
+      value.date || value.datetime || value.dateTime || value.value || value.timestamp || value.time || "",
+    )
+  }
+
+  const rawValue = String(value).trim()
+  if (!rawValue) {
+    return ""
+  }
+
+  if (/^\d+$/.test(rawValue)) {
+    return normalizeDateValue(Number(rawValue))
+  }
+
+  const normalizedValue = rawValue.includes("T") ? rawValue : rawValue.replace(" ", "T")
+  const date = new Date(normalizedValue)
+
+  return Number.isNaN(date.getTime()) ? "" : date
+}
+
+function resolveDateValue(...values) {
+  for (const value of values) {
+    const date = normalizeDateValue(value)
+    if (date) {
+      return date
+    }
+  }
+
+  return ""
+}
+
+function formatAbsoluteDate(value) {
+  const date = normalizeDateValue(value)
+  if (!date) {
+    return ""
+  }
+
+  return d(date, "long")
+}
+
+function isDefaultAvatarUrl(value) {
+  const avatarUrl = String(value || "").trim()
+  if (!avatarUrl) {
+    return true
+  }
+
+  return ["/img/user_default.svg", "user_default.svg", "unknown.png", "anonymous"].some((marker) =>
+    avatarUrl.includes(marker),
+  )
+}
+
+function getCurrentUserAvatarUrl() {
+  const user = securityStore.user || {}
+
+  return String(user.illustrationUrl || user.avatarUrl || user.pictureUri || "").trim()
+}
+
+function isCurrentUserItem(item) {
+  const posterUserId = Number(item?.posterUserId || 0)
+  const currentUserId = Number(securityStore.user?.id || 0)
+
+  return posterUserId > 0 && currentUserId > 0 && posterUserId === currentUserId
+}
+
+function getPosterAvatarUrl(item) {
+  const avatarUrl = String(item?.posterAvatarUrl || item?.avatarUrl || "").trim()
+  if (avatarUrl && !isDefaultAvatarUrl(avatarUrl)) {
+    return avatarUrl
+  }
+
+  if (isCurrentUserItem(item)) {
+    const currentAvatarUrl = getCurrentUserAvatarUrl()
+    if (currentAvatarUrl && !isDefaultAvatarUrl(currentAvatarUrl)) {
+      return currentAvatarUrl
+    }
+  }
+
+  return ""
+}
+
+function getThreadDateValue(thread) {
+  return resolveDateValue(
+    thread?.threadDateIso,
+    thread?.createdAtIso,
+    thread?.threadDate,
+    thread?.createdAt,
+    thread?.date,
+    thread?.threadDateTimestamp,
+    thread?.thread_date,
+    thread?.created_at,
+  )
+}
+
+function getLastPostDateValue(thread) {
+  return resolveDateValue(
+    thread?.lastPostDateIso,
+    thread?.lastPostCreatedAtIso,
+    thread?.lastPostDate,
+    thread?.lastPostCreatedAt,
+    thread?.lastPostDateTimestamp,
+    thread?.last_post_date,
+    thread?.last_post_created_at,
+  )
+}
+
+function getThreadRelativeTime(thread) {
+  return (
+    thread?.threadRelativeTime ||
+    thread?.relativeTime ||
+    thread?.createdAtRelative ||
+    (getThreadDateValue(thread) ? formatRelativeTime(getThreadDateValue(thread)) : "")
+  )
+}
+
+function getLastPostRelativeTime(thread) {
+  return thread?.lastPostRelativeTime || (getLastPostDateValue(thread) ? formatRelativeTime(getLastPostDateValue(thread)) : "")
+}
+
+function formatRelativeTime(value) {
+  const date = normalizeDateValue(value)
+  if (!date) {
+    return ""
+  }
+
+  return relativeDatetime(date) ?? formatAbsoluteDate(value)
+}
+
+function getThreadLastPostLabel(thread) {
+  const author = thread?.lastPosterFullName ? ` ${t("by")} ${thread.lastPosterFullName}` : ""
+  const date = getLastPostRelativeTime(thread)
+
+  return `${t("Last post")}${author}${date ? ` - ${date}` : ""}`
+}
+
+function isTeacherRole(item) {
+  return Boolean(item?.posterIsTeacher || item?.posterRole === "teacher")
+}
+
+function getRoleLabel(item) {
+  return item?.posterRoleLabel ? t(item.posterRoleLabel) : t("Teacher")
 }
 
 function getForumCategoryId(item) {
@@ -633,15 +891,13 @@ async function loadThreads() {
   isLoading.value = true
 
   try {
-    const [forumItem, threadItems, tokenResponse] = await Promise.all([
+    const [forumItem, threadItems] = await Promise.all([
       forumService.getForum(forumId.value, baseQuery.value),
       forumService.getThreads(forumId.value, baseQuery.value),
-      forumService.getActionToken(),
     ])
 
     forum.value = forumItem
     threads.value = threadItems
-    csrfToken.value = tokenResponse.token || ""
   } catch (error) {
     console.error("Error fetching forum threads:", error)
     notifications.showErrorNotification(t("Could not retrieve threads"))
@@ -655,6 +911,10 @@ function canPeerGradeThread(thread) {
 }
 
 function canOpenGrading(thread) {
+  if (thread?.lockedByGradebook) {
+    return false
+  }
+
   return canManage.value || canPeerGradeThread(thread)
 }
 
@@ -680,7 +940,6 @@ async function loadThreadGrading(thread) {
   isLoadingGrading.value = true
 
   try {
-    await ensureToken()
     const data = await forumService.getThreadGrading(thread.iid, baseQuery.value)
     gradingData.value = {
       ...data,
@@ -722,9 +981,7 @@ async function saveThreadGradingSettings() {
   isSavingGrading.value = true
 
   try {
-    await ensureToken()
     await forumService.updateThreadGrading(gradingThread.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       enabled: gradingForm.enabled,
       categoryId: gradingForm.enabled ? Number(gradingForm.categoryId || 0) : null,
       title: gradingForm.title.trim(),
@@ -759,9 +1016,7 @@ async function saveStudentScore(student) {
   student.isSaving = true
 
   try {
-    await ensureToken()
     const response = await forumService.saveThreadScore(gradingThread.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       userId: Number(student.userId),
       score,
     })
@@ -803,9 +1058,7 @@ async function saveThreadMove() {
   isSavingMove.value = true
 
   try {
-    await ensureToken()
     await forumService.moveThread(moveThread.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       targetForumId: Number(moveTargetForumId.value),
     })
 
@@ -830,14 +1083,19 @@ async function saveThreadEdit() {
   isSavingEdit.value = true
 
   try {
-    await ensureToken()
     await forumService.updateThread(editThread.value.iid, baseQuery.value, {
-      ...actionPayload.value,
       title: editForm.title.trim(),
     })
 
     notifications.showSuccessNotification(t("Thread updated"))
     editDialogVisible.value = false
+
+    if (lpId.value > 0) {
+      await goBackToLearningPath()
+
+      return
+    }
+
     await loadThreads()
   } catch (error) {
     console.error("Error updating forum thread:", error)
@@ -849,8 +1107,7 @@ async function saveThreadEdit() {
 
 async function toggleThreadLock(thread) {
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadLock(thread.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.toggleThreadLock(thread.iid, baseQuery.value, {})
 
     notifications.showSuccessNotification(Number(response.locked || 0) ? t("Thread closed") : t("Thread opened"))
     await loadThreads()
@@ -862,8 +1119,7 @@ async function toggleThreadLock(thread) {
 
 async function toggleThreadSticky(thread) {
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadSticky(thread.iid, baseQuery.value, actionPayload.value)
+    const response = await forumService.toggleThreadSticky(thread.iid, baseQuery.value, {})
 
     notifications.showSuccessNotification(response.threadSticky ? t("Thread marked as sticky") : t("Thread unmarked as sticky"))
     await loadThreads()
@@ -877,8 +1133,7 @@ async function toggleThreadVisibility(thread) {
   const wasVisible = isThreadVisible(thread)
 
   try {
-    await ensureToken()
-    const response = await forumService.toggleThreadVisibility(thread.iid, baseQuery.value, { ...actionPayload.value, visible: !wasVisible })
+    const response = await forumService.toggleThreadVisibility(thread.iid, baseQuery.value, { visible: !wasVisible })
     thread.threadVisible = response.visible
     notifications.showSuccessNotification(response.visible ? t("Thread shown") : t("Thread hidden"))
     await loadThreads()
@@ -890,9 +1145,7 @@ async function toggleThreadVisibility(thread) {
 
 async function toggleThreadNotification(thread) {
   try {
-    await ensureToken()
     const response = await forumService.toggleThreadSubscription(thread.iid, baseQuery.value, {
-      ...actionPayload.value,
       subscribed: !thread.subscribed,
     })
 
@@ -914,8 +1167,7 @@ function confirmDeleteThread(thread) {
 
 async function deleteThread(thread) {
   try {
-    await ensureToken()
-    await forumService.deleteThread(thread.iid, baseQuery.value, actionPayload.value)
+    await forumService.deleteThread(thread.iid, baseQuery.value, {})
 
     notifications.showSuccessNotification(t("Thread deleted"))
     await loadThreads()
@@ -925,5 +1177,16 @@ async function deleteThread(thread) {
   }
 }
 
-onMounted(loadThreads)
+onMounted(async () => {
+  await loadThreads()
+
+  if (canManage.value && requestedThreadEditId.value > 0) {
+    const thread = threads.value.find((item) => Number(item.iid || 0) === requestedThreadEditId.value)
+    if (thread) {
+      openEditThread(thread)
+    }
+  }
+})
+
+useStudentViewRefresh(loadThreads)
 </script>

@@ -46,4 +46,45 @@ class CLpRelUserGroup
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     protected DateTime $createdAt;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getLp(): CLp
+    {
+        return $this->lp;
+    }
+
+    public function setLp(CLp $lp): self
+    {
+        $this->lp = $lp;
+
+        return $this;
+    }
+
+    public function getUserGroup(): ?Usergroup
+    {
+        return $this->userGroup;
+    }
+
+    public function setUserGroup(?Usergroup $userGroup): self
+    {
+        $this->userGroup = $userGroup;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
 }

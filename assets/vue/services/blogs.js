@@ -203,7 +203,7 @@ async function toggleProjectVisibility(id) {
   const params = withCourseParams({
     parentResourceNodeId: resolveParentResourceNode(),
   })
-  await baseService.put(`/api/c_blogs/${id}/toggle_visibility`, null, { params })
+  await baseService.patch(`/api/c_blogs/${id}/toggle_visibility`, null, { params })
   return { ok: true }
 }
 

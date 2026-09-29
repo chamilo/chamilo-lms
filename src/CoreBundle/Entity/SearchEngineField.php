@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,7 +32,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         // Keep write operations admin-only (optional, but safe).
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new Put(security: "is_granted('ROLE_ADMIN')"),
-        new Delete(security: "is_granted('ROLE_ADMIN')"),
+        new Patch(security: "is_granted('ROLE_ADMIN')"), new Delete(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => ['search_engine_field:read']],
     denormalizationContext: ['groups' => ['search_engine_field:write']],
@@ -61,6 +62,11 @@ class SearchEngineField
         return $this->id;
     }
 
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
     public function setCode(string $code): self
     {
         $this->code = $code;
@@ -68,9 +74,9 @@ class SearchEngineField
         return $this;
     }
 
-    public function getCode(): string
+    public function getTitle(): string
     {
-        return $this->code;
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -78,10 +84,5 @@ class SearchEngineField
         $this->title = $title;
 
         return $this;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
     }
 }

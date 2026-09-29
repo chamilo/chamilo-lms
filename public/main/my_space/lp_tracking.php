@@ -59,12 +59,17 @@ if ('user_course' === $origin) {
         'name' => get_lang('Users'),
     ];
 } elseif ('tracking_course' === $origin) {
+    $courseReportingUrl = api_get_path(WEB_PATH).'resources/course-reporting/?'.http_build_query([
+        'cid' => (int) $courseId,
+        'sid' => (int) $session_id,
+        'gid' => 0,
+    ]);
     $interbreadcrumb[] = [
-        'url' => "../tracking/courseLog.php?cid=$courseId&sid=$session_id",
+        'url' => $courseReportingUrl,
         'name' => get_lang('Reporting'),
     ];
 } else {
-    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
     $interbreadcrumb[] = ['url' => 'student.php', 'name' => get_lang('My learners')];
     $interbreadcrumb[] = ['url' => "myStudents.php?student=$user_id", 'name' => get_lang('Learner details')];
     $nameTools = get_lang('Learner details in course');

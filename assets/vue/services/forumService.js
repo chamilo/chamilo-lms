@@ -17,7 +17,7 @@ function buildForumFormData(payload = {}) {
   const attachments = Array.isArray(payload.attachments) ? payload.attachments : []
 
   for (const [key, value] of Object.entries(payload)) {
-    if (key === "attachments") {
+    if (["attachments", "image"].includes(key)) {
       continue
     }
 
@@ -30,6 +30,10 @@ function buildForumFormData(payload = {}) {
     formData.append("attachments[]", file)
   })
 
+  if (hasForumImage(payload)) {
+    formData.append("image", payload.image)
+  }
+
   return formData
 }
 
@@ -37,8 +41,16 @@ function hasAttachments(payload = {}) {
   return Array.isArray(payload.attachments) && payload.attachments.length > 0
 }
 
-export default {
+function hasForumImage(payload = {}) {
+  const image = payload.image
 
+  return (
+    (typeof File !== "undefined" && image instanceof File) ||
+    (typeof Blob !== "undefined" && image instanceof Blob)
+  )
+}
+
+export default {
   async searchForums(params = {}) {
     return await baseService.get("/api/forum/search", cleanParams(params))
   },
@@ -53,7 +65,9 @@ export default {
   },
 
   async updateCategory(categoryId, params, payload) {
-    return await baseService.put(`/api/forum_categories/${categoryId}/update`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_categories/${categoryId}/update`, payload, {
+      params: cleanParams(params),
+    })
   },
 
   async deleteCategory(categoryId, params, payload) {
@@ -61,15 +75,15 @@ export default {
   },
 
   async toggleCategoryLock(categoryId, params, payload) {
-    return await baseService.put(`/api/forum_categories/${categoryId}/toggle-lock`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_categories/${categoryId}/toggle-lock`, payload, { params: cleanParams(params) })
   },
 
   async toggleCategoryVisibility(categoryId, params, payload) {
-    return await baseService.put(`/api/forum_categories/${categoryId}/toggle-visibility`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_categories/${categoryId}/toggle-visibility`, payload, { params: cleanParams(params) })
   },
 
   async moveCategory(categoryId, params, payload) {
-    return await baseService.put(`/api/forum_categories/${categoryId}/move`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_categories/${categoryId}/move`, payload, { params: cleanParams(params) })
   },
 
   async getForums(params) {
@@ -82,13 +96,12 @@ export default {
     return await baseService.get(`/api/forums/${forumId}`, cleanParams(params))
   },
 
-
   async createForum(params, payload) {
     return await baseService.post("/api/forums/create", payload, {}, { params: cleanParams(params) })
   },
 
   async updateForum(forumId, params, payload) {
-    return await baseService.put(`/api/forums/${forumId}/update`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forums/${forumId}/update`, payload, { params: cleanParams(params) })
   },
 
   async deleteForum(forumId, params, payload) {
@@ -96,19 +109,27 @@ export default {
   },
 
   async toggleForumLock(forumId, params, payload) {
-    return await baseService.put(`/api/forums/${forumId}/toggle-lock`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forums/${forumId}/toggle-lock`, payload, { params: cleanParams(params) })
   },
 
   async toggleForumVisibility(forumId, params, payload) {
-    return await baseService.put(`/api/forums/${forumId}/toggle-visibility`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forums/${forumId}/toggle-visibility`, payload, { params: cleanParams(params) })
   },
 
   async moveForum(forumId, params, payload) {
-    return await baseService.put(`/api/forums/${forumId}/move`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forums/${forumId}/move`, payload, { params: cleanParams(params) })
   },
 
   async toggleForumSubscription(forumId, params, payload) {
-    return await baseService.put(`/api/forums/${forumId}/toggle-subscription`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forums/${forumId}/toggle-subscription`, payload, {
+      params: cleanParams(params),
+    })
+  },
+
+  async uploadForumImage(forumId, params, payload) {
+    const body = hasForumImage(payload) ? buildForumFormData(payload) : payload
+
+    return await baseService.post(`/api/forums/${forumId}/image`, body, {}, { params: cleanParams(params) })
   },
 
   async getThreads(forumId, params) {
@@ -147,35 +168,37 @@ export default {
   },
 
   async updateThreadGrading(threadId, params = {}, payload = {}) {
-    return await baseService.put(`/api/forum_threads/${threadId}/grading`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_threads/${threadId}/grading`, payload, { params: cleanParams(params) })
   },
 
   async saveThreadScore(threadId, params = {}, payload = {}) {
-    return await baseService.put(`/api/forum_threads/${threadId}/grading/score`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_threads/${threadId}/grading/score`, payload, { params: cleanParams(params) })
   },
 
   async updateThread(threadId, params, payload) {
-    return await baseService.put(`/api/forum_threads/${threadId}/update`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_threads/${threadId}/update`, payload, { params: cleanParams(params) })
   },
 
   async toggleThreadLock(threadId, params, payload) {
-    return await baseService.put(`/api/forum_threads/${threadId}/toggle-lock`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_threads/${threadId}/toggle-lock`, payload, {
+      params: cleanParams(params),
+    })
   },
 
   async toggleThreadSticky(threadId, params, payload) {
-    return await baseService.put(`/api/forum_threads/${threadId}/toggle-sticky`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_threads/${threadId}/toggle-sticky`, payload, { params: cleanParams(params) })
   },
 
   async toggleThreadVisibility(threadId, params, payload) {
-    return await baseService.put(`/api/forum_threads/${threadId}/toggle-visibility`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_threads/${threadId}/toggle-visibility`, payload, { params: cleanParams(params) })
   },
 
   async moveThread(threadId, params, payload) {
-    return await baseService.put(`/api/forum_threads/${threadId}/move`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_threads/${threadId}/move`, payload, { params: cleanParams(params) })
   },
 
   async toggleThreadSubscription(threadId, params, payload) {
-    return await baseService.put(`/api/forum_threads/${threadId}/toggle-subscription`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_threads/${threadId}/toggle-subscription`, payload, { params: cleanParams(params) })
   },
 
   async deleteThread(threadId, params, payload) {
@@ -183,20 +206,19 @@ export default {
   },
 
   async updatePost(postId, params, payload) {
-    return await baseService.put(`/api/forum_posts/${postId}/update`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_posts/${postId}/update`, payload, { params: cleanParams(params) })
   },
 
   async togglePostVisibility(postId, params, payload) {
-    return await baseService.put(`/api/forum_posts/${postId}/toggle-visibility`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_posts/${postId}/toggle-visibility`, payload, { params: cleanParams(params) })
   },
 
-
   async approvePost(postId, params, payload) {
-    return await baseService.put(`/api/forum_posts/${postId}/approve`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_posts/${postId}/approve`, payload, { params: cleanParams(params) })
   },
 
   async rejectPost(postId, params, payload) {
-    return await baseService.put(`/api/forum_posts/${postId}/reject`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_posts/${postId}/reject`, payload, { params: cleanParams(params) })
   },
 
   async deletePost(postId, params, payload) {
@@ -204,15 +226,15 @@ export default {
   },
 
   async movePost(postId, params, payload) {
-    return await baseService.put(`/api/forum_posts/${postId}/move`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_posts/${postId}/move`, payload, { params: cleanParams(params) })
   },
 
   async askPostRevision(postId, params, payload) {
-    return await baseService.put(`/api/forum_posts/${postId}/ask-revision`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_posts/${postId}/ask-revision`, payload, { params: cleanParams(params) })
   },
 
   async reportPost(postId, params, payload) {
-    return await baseService.put(`/api/forum_posts/${postId}/report`, payload, { params: cleanParams(params) })
+    return await baseService.patch(`/api/forum_posts/${postId}/report`, payload, { params: cleanParams(params) })
   },
 
   async deleteAttachment(attachmentId, params, payload) {

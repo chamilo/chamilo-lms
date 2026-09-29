@@ -26,9 +26,9 @@ use Throwable;
 #[AsController]
 class VideoConferenceCallbackController
 {
-    private const SIGNATURE_TTL_SECONDS = 300; // 5 minutes window to limit replay
-    private const SIGNATURE_HEADER = 'X-Chamilo-Signature';
-    private const TIMESTAMP_HEADER = 'X-Chamilo-Timestamp';
+    private const int SIGNATURE_TTL_SECONDS = 300; // 5 minutes window to limit replay
+    private const string SIGNATURE_HEADER = 'X-Chamilo-Signature';
+    private const string TIMESTAMP_HEADER = 'X-Chamilo-Timestamp';
 
     public function __invoke(Request $request, EntityManagerInterface $em, ParameterBagInterface $params): Response
     {

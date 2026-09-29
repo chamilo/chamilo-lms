@@ -30,13 +30,6 @@ class SettingsOptions
     #[ORM\Column(name: 'display_text', type: 'string', length: 255, nullable: false)]
     protected string $displayText;
 
-    public function setVariable(string $variable): self
-    {
-        $this->variable = $variable;
-
-        return $this;
-    }
-
     /**
      * Get variable.
      *
@@ -47,9 +40,9 @@ class SettingsOptions
         return $this->variable;
     }
 
-    public function setValue(string $value): self
+    public function setVariable(string $variable): self
     {
-        $this->value = $value;
+        $this->variable = $variable;
 
         return $this;
     }
@@ -64,9 +57,9 @@ class SettingsOptions
         return $this->value;
     }
 
-    public function setDisplayText(string $displayText): self
+    public function setValue(string $value): self
     {
-        $this->displayText = $displayText;
+        $this->value = $value;
 
         return $this;
     }
@@ -79,6 +72,13 @@ class SettingsOptions
     public function getDisplayText()
     {
         return $this->displayText;
+    }
+
+    public function setDisplayText(string $displayText): self
+    {
+        $this->displayText = $displayText;
+
+        return $this;
     }
 
     /**

@@ -35,6 +35,11 @@
       :header="t('ID')"
     />
 
+    <Column
+      field="title"
+      :header="t('Title')"
+    />
+
     <Column :header="t('Columns')">
       <template #body="{ data }">
         {{ getColumnsCount(data) }}

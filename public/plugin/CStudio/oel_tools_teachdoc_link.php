@@ -72,6 +72,13 @@ $action = isset($_GET['action']) ? $VDB->remove_XSS($_GET['action']) : 'add';
 $cid = isset($_GET['cid']) ? (int) $VDB->remove_XSS($_GET['cid']) : '';
 $idLudiLP = isset($_GET['idLudiLP']) ? (int) $_GET['idLudiLP'] : 0;
 
+$editorContextParameters = [];
+foreach (['cid', 'sid', 'gid', 'gradebook'] as $contextParameter) {
+    if (isset($_GET[$contextParameter])) {
+        $editorContextParameters[$contextParameter] = (int) $_GET[$contextParameter];
+    }
+}
+
 if (0 == $idLudiLP) {
     if (!isset($_GET['cotk']) || $_GET['cotk'] != $cotk) {
         $redirurl = $VDB->w_get_path(WEB_PLUGIN_PATH)."CStudio/oel_tools_teachdoc_link.php?action=$action&cid=$cid&cotk=$cotk";
@@ -154,16 +161,25 @@ if (0 == $idLudiLP) {
             $idLudiEditorPage = $idLudiProject;
         }
 
-        if (isset($_GET['first'])) {
-            (new RedirectResponse('editor/index.php?action=edit&id='.$idLudiEditorPage.'&cotk='.$cotk.'&first=1#page0'))->send();
-        } else {
-            if ('' != $cotk) {
-                (new RedirectResponse('editor/index.php?action=edit&id='.$idLudiEditorPage.'&cotk='.$cotk.'#page0'))->send();
-            } else {
-                Display::display_header();
-                echo "<div style='color:red;' >CSRF Token Error !</div>";
-                Display::display_footer();
+        if ('' != $cotk) {
+            $editorQueryParameters = array_merge(
+                [
+                    'action' => 'edit',
+                    'id' => $idLudiEditorPage,
+                    'cotk' => $cotk,
+                ],
+                $editorContextParameters
+            );
+
+            if (isset($_GET['first'])) {
+                $editorQueryParameters['first'] = 1;
             }
+
+            (new RedirectResponse('editor/index.php?'.http_build_query($editorQueryParameters).'#page0'))->send();
+        } else {
+            Display::display_header();
+            echo "<div style='color:red;' >CSRF Token Error !</div>";
+            Display::display_footer();
         }
     } else {
         Display::display_header();

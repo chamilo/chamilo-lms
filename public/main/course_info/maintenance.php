@@ -1,80 +1,11 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+
 /**
- * @author Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
+ * Migrated to the Vue SPA course maintenance tool.
+ *
+ * @see assets/vue/components/coursemaintenance/CourseMaintenanceLayout.vue
+ * @see assets/vue/router/coursemaintenance.js
+ * @see src/CoreBundle/Controller/CourseMaintenanceController.php
  */
-
-use Chamilo\CoreBundle\Enums\ActionIcon;
-
-require_once __DIR__.'/../inc/global.inc.php';
-$current_course_tool = TOOL_COURSE_MAINTENANCE;
-$this_section = SECTION_COURSES;
-
-$nameTools = get_lang('Backup and import');
-api_protect_course_script(true);
-api_block_anonymous_users();
-
-// Check access rights (only teachers are allowed here)
-if (!api_is_allowed_to_edit()) {
-    api_not_allowed(true);
-}
-
-Display::display_header($nameTools);
-echo Display::page_header($nameTools);
-
-?>
-
-<div class="sectiontitle">
-    <?php echo Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, get_lang('Backup and import')); ?>&nbsp;&nbsp;
-    <?php echo get_lang('Backup and import'); ?>
-</div>
-<div class="sectioncomment">
-    <ul>
-        <li>
-            <a href="../course_copy/create_backup.php?<?php echo api_get_cidreq(); ?>">
-                <?php echo get_lang('Create a backup'); ?>
-            </a><br/>
-            <?php echo get_lang('Create a backup. You can select the learning objects to integrate in the backup file.'); ?>
-        </li>
-        <li>
-            <a href="../course_copy/import_backup.php?<?php echo api_get_cidreq(); ?>">
-                <?php echo get_lang('Import backup'); ?>
-            </a><br/>
-            <?php echo get_lang('Import a backup. You will be able to upload a backup file from you local drive or you can use a backup file available on the server.'); ?>
-        </li>
-        <li>
-            <a href="../course_copy/import_moodle.php?<?php echo api_get_cidreq(); ?>">
-                <?php echo get_lang('Import from Moodle'); ?>
-            </a><br/>
-            <?php echo get_lang('Import a Moodle course backup file (.mbz) into this Chamilo course'); ?>
-        </li>
-    </ul>
-</div>
-
-<div class="sectiontitle">
-    <?php echo Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy course')); ?>&nbsp;&nbsp;
-    <a href="../course_copy/copy_course.php?<?php echo api_get_cidreq(); ?>">
-        <?php echo get_lang('Copy course'); ?></a>
-</div>
-<div class="sectioncomment"><?php echo get_lang('Duplicate the course or some learning objects in another course. You need 2 courses to use this feature: an original course and a target course.'); ?>
-</div>
-
-<div class="sectiontitle">
-    <?php echo Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Empty this course')); ?>&nbsp;&nbsp;
-    <a href="../course_copy/recycle_course.php?<?php echo api_get_cidreq(); ?>">
-        <?php echo get_lang('Empty this course'); ?>
-    </a>
-</div>
-<div class="sectioncomment"><?php echo get_lang('This tool empties the course. It removes documents, forums, links. And allows you to select what parts you want to remove or decide to remove the whole.'); ?></div>
-
-<div class="sectiontitle">
-    <?php echo Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Completely delete this course')); ?>&nbsp;&nbsp;
-    <a href="../course_info/delete_course.php?<?php echo api_get_cidreq(); ?>"><?php echo get_lang('Completely delete this course'); ?>
-    </a>
-</div>
-<div class="sectioncomment"><?php echo get_lang('Click on this link for a full removal of the course from the server.<br /><br />Be carefull, there\'s no way back!'); ?></div>
-
-<?php
-
-Display::display_footer();

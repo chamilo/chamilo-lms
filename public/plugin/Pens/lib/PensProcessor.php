@@ -1,8 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt. */
 
+use Chamilo\CoreBundle\Service\Pens\PensRemoteException;
+use Chamilo\CoreBundle\Service\Pens\PensRemoteTransport;
+
 require_once __DIR__.'/../../../main/inc/global.inc.php';
+
 require_once __DIR__.'/pens.php';
 
 /**
@@ -10,11 +16,16 @@ require_once __DIR__.'/pens.php';
  */
 class PensProcessor
 {
-    private const TABLE_PENS = 'plugin_pens';
-    private const SUPPORTED_PACKAGE_TYPES = ['scorm-pif'];
-    private const SUPPORTED_PACKAGE_FORMATS = ['zip'];
-    private const ALLOWED_REMOTE_SCHEMES = ['http', 'https'];
-    private const MAX_PACKAGE_BYTES = 104857600; // 100 MB
+    private const string TABLE_PENS = 'plugin_pens';
+    private const array SUPPORTED_PACKAGE_TYPES = ['scorm-pif'];
+    private const array SUPPORTED_PACKAGE_FORMATS = ['zip'];
+
+    private PensRemoteTransport $remoteTransport;
+
+    public function __construct(?PensRemoteTransport $remoteTransport = null)
+    {
+        $this->remoteTransport = $remoteTransport ?? new PensRemoteTransport();
+    }
 
     /**
      * Handle a PENS collect request and return the plain-text PENS response.
@@ -105,126 +116,77 @@ class PensProcessor
      */
     private function collectPackage(PENSRequestCollect $request): string
     {
-        error_log('[Pens][collectPackage] start package-url='.$request->getPackageUrl());
+        error_log('[Pens][collectPackage] start');
 
         if (!in_array($request->getPackageType(), self::SUPPORTED_PACKAGE_TYPES, true)) {
             error_log('[Pens][collectPackage] invalid package type');
+
             throw new PENSException(1430);
         }
 
         if (!in_array($request->getPackageFormat(), self::SUPPORTED_PACKAGE_FORMATS, true)) {
             error_log('[Pens][collectPackage] invalid package format');
+
             throw new PENSException(1431);
         }
 
         if (!$this->isExpiryDateValid($request->getPackageUrlExpiry())) {
             error_log('[Pens][collectPackage] expired package url');
-            throw new PENSException(1322);
-        }
 
-        if (!$this->isAllowedPackageUrl($request->getPackageUrl())) {
-            error_log('[Pens][collectPackage] download url rejected');
-            throw new PENSException(1301);
+            throw new PENSException(1322);
         }
 
         $temporaryPackagePath = tempnam(sys_get_temp_dir(), 'pens_');
 
         if (false === $temporaryPackagePath) {
             error_log('[Pens][collectPackage] tempnam failed');
+
             throw new PENSException(1432);
         }
 
-        $fileHandle = fopen($temporaryPackagePath, 'w');
+        $fileHandle = fopen($temporaryPackagePath, 'wb');
 
         if (false === $fileHandle) {
+            unlink($temporaryPackagePath);
             error_log('[Pens][collectPackage] fopen failed');
+
             throw new PENSException(1432);
         }
 
-        $curlHandle = curl_init();
-        curl_setopt($curlHandle, CURLOPT_URL, $request->getPackageUrl());
-        curl_setopt($curlHandle, CURLOPT_HEADER, false);
-        curl_setopt($curlHandle, CURLOPT_FILE, $fileHandle);
-        curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, false);
-        curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, 15);
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 300);
-
-        if (null !== $request->getPackageUrlUserId()) {
-            curl_setopt(
-                $curlHandle,
-                CURLOPT_USERPWD,
-                $request->getPackageUrlUserId().':'.$request->getPackageUrlPassword()
+        try {
+            $downloadedSize = $this->remoteTransport->downloadToStream(
+                (string) $request->getPackageUrl(),
+                $fileHandle,
+                null !== $request->getPackageUrlUserId() ? (string) $request->getPackageUrlUserId() : null,
+                null !== $request->getPackageUrlPassword() ? (string) $request->getPackageUrlPassword() : null
             );
-        }
-
-        $result = curl_exec($curlHandle);
-        $curlErrorNumber = curl_errno($curlHandle);
-        $curlErrorMessage = curl_error($curlHandle);
-        $httpStatusCode = (int) curl_getinfo($curlHandle, CURLINFO_RESPONSE_CODE);
-
-        curl_close($curlHandle);
-        fclose($fileHandle);
-
-        error_log('[Pens][collectPackage] curl result='.var_export($result, true).' errno='.$curlErrorNumber.' http='.$httpStatusCode.' error='.$curlErrorMessage);
-
-        if (false === $result) {
-            if (is_file($temporaryPackagePath)) {
-                unlink($temporaryPackagePath);
-            }
-
-            switch ($curlErrorNumber) {
-                case CURLE_UNSUPPORTED_PROTOCOL:
-                    throw new PENSException(1301);
-
-                case CURLE_URL_MALFORMAT:
-                case CURLE_COULDNT_RESOLVE_PROXY:
-                case CURLE_COULDNT_RESOLVE_HOST:
-                case CURLE_COULDNT_CONNECT:
-                case CURLE_OPERATION_TIMEOUTED:
-                case 78: //CURLE_REMOTE_FILE_NOT_FOUND
-                    throw new PENSException(1310);
-
-                case CURLE_FTP_ACCESS_DENIED: //CURLE_REMOTE_ACCESS_DENIED
-                    throw new PENSException(1312);
-
-                default:
-                    throw new PENSException(1301);
-            }
-        }
-
-        if (401 === $httpStatusCode || 403 === $httpStatusCode) {
+        } catch (PensRemoteException $exception) {
+            fclose($fileHandle);
             unlink($temporaryPackagePath);
-            error_log('[Pens][collectPackage] rejected by remote server');
-            throw new PENSException(1312);
-        }
+            error_log('[Pens][collectPackage] safe download failed: '.$exception->getMessage());
 
-        if ($httpStatusCode >= 400) {
+            throw new PENSException($exception->getPensErrorCode());
+        } catch (Throwable $exception) {
+            fclose($fileHandle);
             unlink($temporaryPackagePath);
-            error_log('[Pens][collectPackage] remote server returned http >= 400');
-            throw new PENSException(1310);
+            error_log('[Pens][collectPackage] internal download failure: '.$exception->getMessage());
+
+            throw new PENSException(1432);
         }
 
-        $downloadedSize = @filesize($temporaryPackagePath);
-        error_log('[Pens][collectPackage] downloaded size='.var_export($downloadedSize, true));
-
-        if (false === $downloadedSize || 0 === $downloadedSize) {
-            if (is_file($temporaryPackagePath)) {
-                unlink($temporaryPackagePath);
-            }
-
-            error_log('[Pens][collectPackage] invalid downloaded size');
-            throw new PENSException(1310);
-        }
-
-        if ($downloadedSize > self::MAX_PACKAGE_BYTES) {
+        if (!fclose($fileHandle)) {
             unlink($temporaryPackagePath);
-            error_log('[Pens][collectPackage] file too large');
-            throw new PENSException(1310);
+            error_log('[Pens][collectPackage] closing temporary file failed');
+
+            throw new PENSException(1440);
         }
+
+        error_log('[Pens][collectPackage] downloaded size='.$downloadedSize);
 
         if (!$this->hasZipSignature($temporaryPackagePath)) {
             unlink($temporaryPackagePath);
             error_log('[Pens][collectPackage] invalid zip signature');
+
             throw new PENSException(1310);
         }
 
@@ -370,23 +332,15 @@ class PensProcessor
             return;
         }
 
-        if (!$this->isAllowedCallbackUrl($url)) {
-            return;
-        }
-
         $parameters = 'alert' === $mode
             ? array_merge($request->getSendAlertArray(), $response->getArray())
             : array_merge($request->getSendReceiptArray(), $response->getArray());
 
-        $curlHandle = curl_init($url);
-        curl_setopt($curlHandle, CURLOPT_POST, true);
-        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $parameters);
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, false);
-        curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, 15);
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 60);
-        curl_exec($curlHandle);
-        curl_close($curlHandle);
+        try {
+            $this->remoteTransport->sendCallback($url, $parameters);
+        } catch (PensRemoteException $exception) {
+            error_log('[Pens][sendCallback] safe callback failed: '.$exception->getMessage());
+        }
     }
 
     /**
@@ -420,85 +374,6 @@ class PensProcessor
     }
 
     /**
-     * Allow package URLs pointing to public hosts or to the current Chamilo host.
-     */
-    private function isAllowedPackageUrl(string $url): bool
-    {
-        return $this->isAllowedRemoteUrl($url, true);
-    }
-
-    /**
-     * Allow callback URLs pointing to public hosts only (no private/reserved ranges).
-     */
-    private function isAllowedCallbackUrl(string $url): bool
-    {
-        return $this->isAllowedRemoteUrl($url, false);
-    }
-
-    /**
-     * Allow only public HTTP(S) URLs, except the current Chamilo host for local development.
-     */
-    private function isAllowedRemoteUrl(string $url, bool $allowCurrentHost): bool
-    {
-        $parts = parse_url($url);
-        if (!is_array($parts)) {
-            return false;
-        }
-
-        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
-        if (!in_array($scheme, self::ALLOWED_REMOTE_SCHEMES, true)) {
-            return false;
-        }
-
-        $host = strtolower((string) ($parts['host'] ?? ''));
-        if ('' === $host) {
-            return false;
-        }
-
-        if ($this->isLocalHostName($host)) {
-            return $allowCurrentHost && $this->isCurrentApplicationHost($host);
-        }
-
-        $resolvedIp = gethostbyname($host);
-        if (filter_var($resolvedIp, FILTER_VALIDATE_IP)) {
-            $isPublicIp = filter_var(
-                $resolvedIp,
-                FILTER_VALIDATE_IP,
-                FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
-            );
-
-            if (!$isPublicIp) {
-                return $allowCurrentHost && $this->isCurrentApplicationHost($host);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Check whether the host matches the current Chamilo host.
-     */
-    private function isCurrentApplicationHost(string $host): bool
-    {
-        $host = strtolower(trim($host));
-        $currentHost = strtolower((string) parse_url(api_get_path(WEB_PATH), PHP_URL_HOST));
-
-        if ('' !== $currentHost && $host === $currentHost) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Check whether the host is a classic local hostname or loopback address.
-     */
-    private function isLocalHostName(string $host): bool
-    {
-        return in_array($host, ['localhost', '127.0.0.1', '::1'], true);
-    }
-
-    /**
      * Verify that the downloaded file looks like a ZIP archive.
      */
     private function hasZipSignature(string $path): bool
@@ -513,5 +388,4 @@ class PensProcessor
 
         return in_array($signature, ["PK\x03\x04", "PK\x05\x06", "PK\x07\x08"], true);
     }
-
 }

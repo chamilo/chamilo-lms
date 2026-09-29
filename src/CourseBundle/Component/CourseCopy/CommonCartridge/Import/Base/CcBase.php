@@ -20,27 +20,27 @@ class CcBase
     /**
      * Common Cartridge v1.3 resource types (strings as they appear in manifest).
      */
-    public const CC_TYPE_FORUM = 'imsdt_xmlv1p3';
-    public const CC_TYPE_QUIZ = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
-    public const CC_TYPE_QUESTION_BANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
-    public const CC_TYPE_WEBLINK = 'imswl_xmlv1p3';
-    public const CC_TYPE_WEBCONTENT = 'webcontent';
-    public const CC_TYPE_ASSOCIATED_CONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
-    public const CC_TYPE_EMPTY = '';
+    public const string CC_TYPE_FORUM = 'imsdt_xmlv1p3';
+    public const string CC_TYPE_QUIZ = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
+    public const string CC_TYPE_QUESTION_BANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
+    public const string CC_TYPE_WEBLINK = 'imswl_xmlv1p3';
+    public const string CC_TYPE_WEBCONTENT = 'webcontent';
+    public const string CC_TYPE_ASSOCIATED_CONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
+    public const string CC_TYPE_EMPTY = '';
 
     /**
      * Internal tool types (used as keys within $instances). Keep them stable.
      */
-    public const TOOL_TYPE_FORUM = 'forum';
-    public const TOOL_TYPE_QUIZ = 'quiz';
-    public const TOOL_TYPE_WEBLINK = 'weblink';
-    public const TOOL_TYPE_DOCUMENT = 'document';
-    public const TOOL_TYPE_UNKNOWN = 'unknown';
+    public const string TOOL_TYPE_FORUM = 'forum';
+    public const string TOOL_TYPE_QUIZ = 'quiz';
+    public const string TOOL_TYPE_WEBLINK = 'weblink';
+    public const string TOOL_TYPE_DOCUMENT = 'document';
+    public const string TOOL_TYPE_UNKNOWN = 'unknown';
 
     /**
      * Depth constant for top-level items inside <organization>.
      */
-    public const ROOT_DEEP = 1;
+    public const int ROOT_DEEP = 1;
 
     /**
      * Legacy/rest helpers (kept for compatibility).

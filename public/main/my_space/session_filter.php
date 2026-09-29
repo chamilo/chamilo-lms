@@ -328,7 +328,7 @@ $htmlHeadXtra[] = "<script>
     });
 </script>";
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
 Display::display_header(get_lang('Certificates in sessions'));
 echo Display::page_header(get_lang('Certificates in sessions'));
 $actions = '';

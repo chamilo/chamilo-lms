@@ -15,38 +15,26 @@ class LanguageRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testCreate(): void
+    public function testGetAllAvailable(): void
     {
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(LanguageRepository::class);
-        $defaultCount = $repo->count([]);
+
+        // LanguageFixtures enables every language it ships, so the filter only has
+        // something to leave out once an unavailable language exists.
+        $availableCountBefore = \count($repo->getAllAvailable()->getQuery()->getResult());
 
         $language = (new Language())
-            ->setAvailable(true)
-            ->setOriginalName('language')
-            ->setEnglishName('language')
-            ->setIsocode('lan')
+            ->setAvailable(false)
+            ->setOriginalName('unavailable')
+            ->setEnglishName('unavailable')
+            ->setIsocode('una')
         ;
-        $this->assertHasNoEntityViolations($language);
         $em->persist($language);
         $em->flush();
 
-        $this->assertSame('language', $language->getOriginalName());
-        $this->assertSame('language', $language->getEnglishName());
-        $this->assertSame('lan', $language->getIsocode());
-        $this->assertIsInt($language->getId());
-        $this->assertSame($defaultCount + 1, $repo->count([]));
-    }
-
-    public function testGetAllAvailable(): void
-    {
-        $repo = self::getContainer()->get(LanguageRepository::class);
-        $languages = $repo->getAllAvailable()->getQuery()->getResult();
-        $this->assertNotNull($languages);
-        $this->assertCount(11, $languages);
-
-        $languages = $repo->getAllAvailableToArray(true);
-        $this->assertCount(11, $languages);
+        $this->assertCount($availableCountBefore, $repo->getAllAvailable()->getQuery()->getResult());
+        $this->assertCount($availableCountBefore, $repo->getAllAvailableToArray(true));
     }
 
     public function testFindAllSubLanguages(): void

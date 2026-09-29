@@ -1,0 +1,942 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
+namespace Chamilo\CoreBundle\State\Exercise;
+
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseConfiguration;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillRelItem;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
+use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Repository\CQuizRepository;
+use DateTimeInterface;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+/**
+ * @implements ProviderInterface<ExerciseConfiguration>
+ */
+final readonly class ExerciseConfigurationProvider implements ProviderInterface
+{
+    private const FEEDBACK_TYPE_DIRECT = 1;
+    private const FEEDBACK_TYPE_EXAM = 2;
+    private const FEEDBACK_TYPE_POPUP = 3;
+    private const FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE = 4;
+    private const MEDIA_QUESTION = 15;
+    private const PAGE_BREAK = 31;
+    private const SKILL_ITEM_TYPE_EXERCISE = 1;
+
+    public function __construct(
+        private CidReqHelper $cidReqHelper,
+        private RequestStack $requestStack,
+        private EntityManagerInterface $entityManager,
+        private CQuizRepository $quizRepository,
+        private SettingsManager $settingsManager,
+        private GradebookLinkManager $gradebookLinkManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private AiFeatureAccessHelper $aiFeatureAccessHelper,
+        private CourseHelper $courseHelper,
+    ) {}
+
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     */
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ExerciseConfiguration
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            throw new BadRequestHttpException('The current request is required.');
+        }
+
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
+            throw new AccessDeniedHttpException('You are not allowed to manage exercises in this context.');
+        }
+
+        $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : 0;
+        if ($exerciseId > 0) {
+            $quiz = $this->quizRepository->findInCourseContext($exerciseId, $course, $session)
+        ?? throw new NotFoundHttpException('The requested exercise was not found.');
+
+            return $this->buildEditConfiguration($quiz, $course, $session);
+        }
+
+        return $this->buildCreateConfiguration($course, $session);
+    }
+
+    private function buildCreateConfiguration(Course $course, ?Session $session): ExerciseConfiguration
+    {
+        $configuration = new ExerciseConfiguration();
+        $configuration->mode = 'create';
+        $configuration->canCreate = true;
+        $configuration->canEdit = false;
+        $configuration->settings = $this->getSettings($course);
+        $configuration->options = $this->getOptions($course, $session, null);
+        $configuration->listUrl = '';
+        $configuration->questionsUrl = '';
+        $configuration->maxAttempt = 0;
+        $configuration->displayCategoryName = true;
+        $configuration->hideAttemptsTable = $this->isSettingEnabled('exercise.quiz_hide_attempts_table_on_start_page');
+        $configuration->feedbackType = 0;
+        $configuration->resultsDisabled = 0;
+        $configuration->questionSelectionType = 1;
+        $configuration->randomByCategory = 0;
+        $configuration->categoryMatrix = [];
+        $configuration->language = $this->getDefaultResourceLanguage($course);
+        $configuration->updateTitleInLearningPaths = false;
+        $configuration->skillIds = [];
+        $configuration->extraFieldValues = $this->getDefaultExtraFieldValues();
+        $configuration->extraNotification = '';
+        $configuration->lockedFields = [];
+        $configuration->displayCategoryName = true;
+        $configuration->pageResultConfiguration = $this->getDefaultPageResultConfiguration();
+        $configuration->addToGradebook = false;
+        $configuration->gradebookCategoryId = null;
+        $configuration->gradebookWeight = 100;
+        $configuration->gradebookVisible = true;
+        $configuration->notifications = [];
+        $configuration->accessCondition = '';
+        $configuration->sound = '';
+
+        return $configuration;
+    }
+
+    private function buildEditConfiguration(CQuiz $quiz, Course $course, ?Session $session): ExerciseConfiguration
+    {
+        $category = $quiz->getQuizCategory();
+        $configuration = new ExerciseConfiguration();
+        $configuration->exerciseId = (int) $quiz->getIid();
+        $configuration->mode = 'edit';
+        $configuration->title = $quiz->getTitle();
+        $configuration->description = (string) $quiz->getDescription();
+        $configuration->type = $quiz->getType();
+        $configuration->categoryId = null !== $category && null !== $category->getId() ? (int) $category->getId() : null;
+        $configuration->language = $this->getResourceLanguageIsoCode($quiz);
+        $configuration->updateTitleInLearningPaths = false;
+        $configuration->skillIds = $this->getSelectedSkillIds($quiz);
+        $configuration->extraFieldValues = $this->getExerciseExtraFieldValues($quiz);
+        $configuration->extraNotification = '';
+        $configuration->lockedFields = [];
+        $configuration->startTime = $this->formatDateForInput($quiz->getStartTime());
+        $configuration->endTime = $this->formatDateForInput($quiz->getEndTime());
+        $configuration->duration = $quiz->getDuration();
+        $configuration->maxAttempt = $quiz->getMaxAttempt();
+        $configuration->passPercentage = (int) ($quiz->getPassPercentage() ?? 0);
+        $configuration->random = (int) $quiz->getRandom();
+        $configuration->randomByCategory = (int) $quiz->getRandomByCategory();
+        $configuration->categoryMatrix = $this->getCategoryMatrix($quiz);
+        $configuration->randomAnswers = $quiz->getRandomAnswers();
+        $configuration->showPreviousButton = $quiz->isShowPreviousButton();
+        $configuration->preventBackwards = 1 === $quiz->getPreventBackwards();
+        $configuration->hideAttemptsTable = $quiz->isHideAttemptsTable();
+        $configuration->autoLaunch = $quiz->isAutoLaunch();
+        $gradebookLink = $this->getExerciseGradebookLink($quiz, $course, $session);
+        $configuration->addToGradebook = $gradebookLink instanceof GradebookLink;
+        $configuration->gradebookCategoryId = $gradebookLink instanceof GradebookLink ? (int) $gradebookLink->getCategory()->getId() : null;
+        $configuration->gradebookWeight = $gradebookLink instanceof GradebookLink ? (int) round($gradebookLink->getWeight()) : 100;
+        $configuration->gradebookVisible = !$gradebookLink instanceof GradebookLink || 1 === (int) $gradebookLink->getVisible();
+        $configuration->notifications = $this->normalizeNotifications($quiz->getNotifications());
+        $configuration->accessCondition = (string) $quiz->getAccessCondition();
+        $configuration->sound = (string) ($quiz->getSound() ?? '');
+        $configuration->feedbackType = $quiz->getFeedbackType();
+        $configuration->resultsDisabled = $quiz->getResultsDisabled();
+        $configuration->questionSelectionType = (int) ($quiz->getQuestionSelectionType() ?? 1);
+        $configuration->displayCategoryName = 1 === $quiz->getDisplayCategoryName();
+        $configuration->hideQuestionTitle = $quiz->isHideQuestionTitle();
+        $configuration->hideQuestionNumber = 1 === (int) $quiz->getHideQuestionNumber();
+        $configuration->propagateNeg = 1 === $quiz->getPropagateNeg();
+        $configuration->saveCorrectAnswers = (int) ($quiz->getSaveCorrectAnswers() ?? 0);
+        $configuration->reviewAnswers = 1 === $quiz->getReviewAnswers();
+        $configuration->expiredTime = $quiz->getExpiredTime();
+        $configuration->displayChartDegreeCertainty = (int) $quiz->getDisplayChartDegreeCertainty();
+        $configuration->sendEmailChartDegreeCertainty = (int) $quiz->getSendEmailChartDegreeCertainty();
+        $configuration->notDisplayBalancePercentageCategorieQuestion = (int) $quiz->getNotDisplayBalancePercentageCategorieQuestion();
+        $configuration->displayChartDegreeCertaintyCategory = (int) $quiz->getDisplayChartDegreeCertaintyCategory();
+        $configuration->gatherQuestionsCategories = (int) $quiz->getGatherQuestionsCategories();
+        $configuration->pageResultConfiguration = $this->normalizePageResultConfiguration($quiz->getPageResultConfiguration());
+        $configuration->textWhenFinished = (string) $quiz->getTextWhenFinished();
+        $configuration->textWhenFinishedFailure = (string) $quiz->getTextWhenFinishedFailure();
+        $configuration->canCreate = true;
+        $configuration->canEdit = true;
+        $configuration->settings = $this->getSettings($course);
+        $configuration->options = $this->getOptions($course, $session, $quiz);
+        $configuration->listUrl = '';
+        $configuration->questionsUrl = $this->buildLegacyQuestionsUrl($quiz, $course, $session);
+
+        return $configuration;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getSettings(Course $course): array
+    {
+        $exerciseGeneratorEnabled = $this->aiFeatureAccessHelper->isFeatureEnabledForCourse(
+            'exercise_generator',
+            (int) $course->getId(),
+        );
+
+        return [
+            'showBuyCoursesUpgradeCta' => !$exerciseGeneratorEnabled
+                && $this->courseHelper->shouldOfferBuyCoursesExerciseGeneratorUpgrade($course),
+            'allowExerciseCategories' => $this->isSettingEnabled('exercise.allow_exercise_categories'),
+            'allowShowPreviousButtonSetting' => $this->isSettingEnabled('exercise.allow_quiz_show_previous_button_setting'),
+            'allowQuizResultsPageConfig' => $this->isSettingEnabled('exercise.allow_quiz_results_page_config'),
+            'disableNewAttempts' => $this->isSettingEnabled('exercise.exercises_disable_new_attempts'),
+            'hideAttemptsTableOnStartPage' => $this->isSettingEnabled('exercise.quiz_hide_attempts_table_on_start_page'),
+            'limitTeacherAccess' => $this->isSettingEnabled('exercise.limit_exercise_teacher_access'),
+            'allowNotificationSettingPerExercise' => $this->isSettingEnabled('exercise.allow_notification_setting_per_exercise'),
+            'allowHideQuestionNumberSetting' => $this->isSettingEnabled('exercise.quiz_hide_question_number'),
+            'enableQuizScenario' => $this->isSettingEnabled('enable_quiz_scenario'),
+            'quizQuestionCategoryDestinations' => $this->isProgressiveAdaptiveSettingEnabled(),
+        ];
+    }
+
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
+    private function getOptions(Course $course, ?Session $session, ?CQuiz $quiz): array
+    {
+        return [
+            'typeOptions' => [
+                ['value' => CQuiz::ALL_ON_ONE_PAGE, 'label' => 'All questions on one page'],
+                ['value' => CQuiz::ONE_PER_PAGE, 'label' => 'One question per page'],
+            ],
+            'categoryOptions' => $this->getCategoryOptions($course),
+            'gradebookCategoryOptions' => $this->getGradebookCategoryOptions($course, $session),
+            'languageOptions' => $this->getResourceLanguageOptions(),
+            'skillOptions' => $this->getSkillOptions(),
+            'extraFieldDefinitions' => $this->getExtraFieldDefinitions(),
+            'extraNotificationOptions' => [],
+            'feedbackOptions' => $this->getFeedbackOptions($quiz),
+            'resultOptions' => [
+                ['value' => 0, 'label' => 'Auto-evaluation mode: show score and expected answers'],
+                ['value' => 1, 'label' => 'Exam mode: Do not show score nor answers'],
+                ['value' => 2, 'label' => 'Practice mode: Show score only, by category if at least one is used'],
+                ['value' => 4, 'label' => 'Show score on every attempt, show correct answers only on last attempt (only works with an attempts limit)'],
+                ['value' => 5, 'label' => 'Do not show the score (only when user finishes all attempts) but show feedback for each attempt.'],
+                ['value' => 6, 'label' => 'Ranking mode: Do not show results details question by question and show a table with the ranking of all other users.'],
+                ['value' => 7, 'label' => 'Show only global score (not question score) and show only the correct answers, do not show incorrect answers at all'],
+                ['value' => 8, 'label' => 'Auto-evaluation mode and ranking'],
+                ['value' => 9, 'label' => 'Show score by category on a radar/spiderweb chart'],
+                ['value' => 10, 'label' => 'Show the result to the learner: Show the score, the learner choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached.'],
+            ],
+            'questionSelectionTypeOptions' => [
+                ['value' => 1, 'label' => 'Ordered by user'],
+                ['value' => 2, 'label' => 'Random'],
+                ['value' => 3, 'label' => 'Ordered categories alphabetically with questions ordered'],
+                ['value' => 4, 'label' => 'Random categories with questions ordered'],
+                ['value' => 5, 'label' => 'Ordered categories alphabetically with random questions'],
+                ['value' => 6, 'label' => 'Random categories with random questions'],
+            ],
+            'randomByCategoryOptions' => [
+                ['value' => 0, 'label' => 'No'],
+                ['value' => 1, 'label' => 'Random shuffled categories'],
+                ['value' => 2, 'label' => 'Random ordered categories'],
+            ],
+            'notificationOptions' => [
+                ['value' => 2, 'label' => 'Paranoid: E-mail teacher when a student starts an exercise'],
+                ['value' => 1, 'label' => 'Aware: E-mail teacher when a student ends an exercise'],
+                ['value' => 3, 'label' => 'Relaxed open: E-mail teacher when a student ends an exercise, only if an open question is answered'],
+                ['value' => 4, 'label' => 'Relaxed audio: E-mail teacher when a student ends an exercise, only if an oral question is answered'],
+            ],
+            'saveCorrectAnswerOptions' => [
+                ['value' => 0, 'label' => 'Please select an option'],
+                ['value' => 1, 'label' => 'Save the correct answer for the next attempt'],
+                ['value' => 2, 'label' => 'Pre-fill with answers from previous attempt'],
+            ],
+        ];
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getFeedbackOptions(?CQuiz $quiz): array
+    {
+        $options = [
+            ['value' => 0, 'label' => 'At end of test'],
+            ['value' => self::FEEDBACK_TYPE_EXAM, 'label' => 'Exam (no feedback)'],
+        ];
+
+        $currentFeedbackType = (int) ($quiz?->getFeedbackType() ?? 0);
+        if (
+            $this->isSettingEnabled('enable_quiz_scenario')
+            || \in_array($currentFeedbackType, [self::FEEDBACK_TYPE_DIRECT, self::FEEDBACK_TYPE_POPUP], true)
+        ) {
+            $options[] = ['value' => self::FEEDBACK_TYPE_DIRECT, 'label' => 'Adaptative test with immediate feedback'];
+            $options[] = ['value' => self::FEEDBACK_TYPE_POPUP, 'label' => 'Direct pop-up mode'];
+        }
+
+        if ($this->isProgressiveAdaptiveSettingEnabled() || self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE === $currentFeedbackType) {
+            $options[] = ['value' => self::FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE, 'label' => 'Progressive adaptive'];
+        }
+
+        return $options;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getCategoryMatrix(CQuiz $quiz): array
+    {
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        if ($exerciseId <= 0) {
+            return [];
+        }
+
+        $relations = $this->entityManager->createQueryBuilder()
+            ->select('relQuestion', 'question')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->innerJoin('relQuestion.question', 'question')
+            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
+            ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
+            ->orderBy('relQuestion.questionOrder', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $categories = [];
+        $generalQuestionCount = 0;
+        foreach ($relations as $relation) {
+            if (!$relation instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $question = $relation->getQuestion();
+            if (!$question instanceof CQuizQuestion) {
+                continue;
+            }
+
+            $questionType = (int) $question->getType();
+            if (self::MEDIA_QUESTION === $questionType || self::PAGE_BREAK === $questionType) {
+                continue;
+            }
+
+            $questionCategories = $question->getCategories();
+            if (0 === $questionCategories->count()) {
+                $generalQuestionCount++;
+
+                continue;
+            }
+
+            foreach ($questionCategories as $category) {
+                if (!$category instanceof CQuizQuestionCategory || null === $category->getIid()) {
+                    continue;
+                }
+
+                $categoryId = (int) $category->getIid();
+                if (!isset($categories[$categoryId])) {
+                    $categories[$categoryId] = [
+                        'categoryId' => $categoryId,
+                        'title' => $category->getTitle(),
+                        'availableQuestions' => 0,
+                    ];
+                }
+
+                $categories[$categoryId]['availableQuestions']++;
+            }
+        }
+
+        if ([] === $categories) {
+            return [];
+        }
+
+        uasort(
+            $categories,
+            static fn (array $left, array $right): int => strcasecmp((string) $left['title'], (string) $right['title'])
+        );
+
+        $savedCategorySettings = $this->getSavedCategoryQuestionSettings($exerciseId);
+        $matrix = [];
+        foreach ($categories as $category) {
+            $categoryId = (int) $category['categoryId'];
+            $matrix[] = [
+                'categoryId' => $categoryId,
+                'title' => (string) $category['title'],
+                'availableQuestions' => (int) $category['availableQuestions'],
+                'countQuestions' => $savedCategorySettings[$categoryId]['countQuestions'] ?? -1,
+                'destinations' => $savedCategorySettings[$categoryId]['destinations'] ?? '',
+            ];
+        }
+
+        $matrix[] = [
+            'categoryId' => 0,
+            'title' => 'General',
+            'availableQuestions' => $generalQuestionCount,
+            'countQuestions' => $savedCategorySettings[0]['countQuestions'] ?? (0 === $generalQuestionCount ? 0 : -1),
+            'destinations' => $savedCategorySettings[0]['destinations'] ?? '',
+        ];
+
+        return $matrix;
+    }
+
+    /**
+     * @return array<int, array{countQuestions: int, destinations: string}>
+     */
+    private function getSavedCategoryQuestionSettings(int $exerciseId): array
+    {
+        $rows = $this->entityManager->getConnection()->fetchAllAssociative(
+            'SELECT category_id, count_questions, destinations FROM c_quiz_rel_category WHERE exercise_id = :exerciseId',
+            ['exerciseId' => $exerciseId],
+            ['exerciseId' => Types::INTEGER]
+        );
+
+        $settings = [];
+        foreach ($rows as $row) {
+            $settings[(int) $row['category_id']] = [
+                'countQuestions' => (int) $row['count_questions'],
+                'destinations' => (string) ($row['destinations'] ?? ''),
+            ];
+        }
+
+        return $settings;
+    }
+
+    /**
+     * @return array<string, bool>
+     */
+    private function getDefaultPageResultConfiguration(): array
+    {
+        return [
+            'hideExpectedAnswers' => false,
+            'hideTotalScore' => false,
+            'hideQuestionScore' => false,
+            'hideCategoryTable' => false,
+            'hideCorrectAnsweredQuestions' => false,
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $configuration
+     *
+     * @return array<string, bool>
+     */
+    private function normalizePageResultConfiguration(array $configuration): array
+    {
+        return [
+            'hideExpectedAnswers' => $this->isEnabledPageResultFlag($configuration, 'hideExpectedAnswers', 'hide_expected_answer'),
+            'hideTotalScore' => $this->isEnabledPageResultFlag($configuration, 'hideTotalScore', 'hide_total_score'),
+            'hideQuestionScore' => $this->isEnabledPageResultFlag($configuration, 'hideQuestionScore', 'hide_question_score'),
+            'hideCategoryTable' => $this->isEnabledPageResultFlag($configuration, 'hideCategoryTable', 'hide_category_table'),
+            'hideCorrectAnsweredQuestions' => $this->isEnabledPageResultFlag($configuration, 'hideCorrectAnsweredQuestions', 'hide_correct_answered_questions'),
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $configuration
+     */
+    private function isEnabledPageResultFlag(array $configuration, string $camelKey, string $legacyKey): bool
+    {
+        $value = $configuration[$camelKey] ?? $configuration[$legacyKey] ?? false;
+
+        return true === $value || 1 === $value || '1' === (string) $value || 'on' === strtolower((string) $value);
+    }
+
+    private function getResourceLanguageOptions(): array
+    {
+        $languages = $this->entityManager->getRepository(Language::class)->findBy(
+            ['available' => true],
+            ['englishName' => 'ASC']
+        );
+
+        $items = [
+            ['value' => '', 'label' => 'No specific language'],
+        ];
+
+        foreach ($languages as $language) {
+            if (!$language instanceof Language) {
+                continue;
+            }
+
+            $items[] = [
+                'value' => $language->getIsocode(),
+                'label' => $language->getOriginalName() ?: $language->getEnglishName(),
+            ];
+        }
+
+        return $items;
+    }
+
+    private function getResourceLanguageIsoCode(CQuiz $quiz): string
+    {
+        $resourceNode = $quiz->getResourceNode();
+        if (null === $resourceNode) {
+            return '';
+        }
+
+        $language = $resourceNode->getLanguage();
+        if (!$language instanceof Language) {
+            return '';
+        }
+
+        return $language->getIsocode();
+    }
+
+    private function getDefaultResourceLanguage(Course $course): string
+    {
+        $courseLanguage = trim((string) $course->getCourseLanguage());
+        if ('' === $courseLanguage) {
+            return '';
+        }
+
+        $repository = $this->entityManager->getRepository(Language::class);
+        if (!$repository instanceof LanguageRepository) {
+            return '';
+        }
+
+        $language = $repository->findOneAvailableByTitleOrCode($courseLanguage);
+
+        return $language instanceof Language ? $language->getIsocode() : '';
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getSkillOptions(): array
+    {
+        $skills = $this->entityManager->createQueryBuilder()
+            ->select('skill')
+            ->from(Skill::class, 'skill')
+            ->andWhere('skill.status = :status')
+            ->setParameter('status', Skill::STATUS_ENABLED, Types::INTEGER)
+            ->orderBy('skill.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $items = [];
+        foreach ($skills as $skill) {
+            if (!$skill instanceof Skill || null === $skill->getId()) {
+                continue;
+            }
+
+            $label = $skill->getTitle();
+            if ('' !== trim($skill->getShortCode())) {
+                $label .= ' ('.$skill->getShortCode().')';
+            }
+
+            $items[] = [
+                'value' => (int) $skill->getId(),
+                'label' => $label,
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getSelectedSkillIds(CQuiz $quiz): array
+    {
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        if ($exerciseId <= 0) {
+            return [];
+        }
+
+        $relations = $this->entityManager->createQueryBuilder()
+            ->select('relation', 'skill')
+            ->from(SkillRelItem::class, 'relation')
+            ->innerJoin('relation.skill', 'skill')
+            ->andWhere('relation.itemType = :itemType')
+            ->andWhere('relation.itemId = :itemId')
+            ->andWhere('skill.status = :status')
+            ->setParameter('itemType', self::SKILL_ITEM_TYPE_EXERCISE, Types::INTEGER)
+            ->setParameter('itemId', $exerciseId, Types::INTEGER)
+            ->setParameter('status', Skill::STATUS_ENABLED, Types::INTEGER)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $ids = [];
+        foreach ($relations as $relation) {
+            if (!$relation instanceof SkillRelItem || null === $relation->getSkill()->getId()) {
+                continue;
+            }
+
+            $ids[] = (int) $relation->getSkill()->getId();
+        }
+
+        return array_values(array_unique($ids));
+    }
+
+    /**
+     * @return array<int, ExtraField>
+     */
+    private function getExerciseExtraFields(bool $includeNotifications = false): array
+    {
+        $fields = $this->entityManager->createQueryBuilder()
+            ->select('field', 'options')
+            ->from(ExtraField::class, 'field')
+            ->leftJoin('field.options', 'options')
+            ->andWhere('field.itemType = :itemType')
+            ->setParameter('itemType', ExtraField::EXERCISE_FIELD_TYPE, Types::INTEGER)
+            ->orderBy('field.fieldOrder', 'ASC')
+            ->addOrderBy('field.displayText', 'ASC')
+            ->addOrderBy('options.optionOrder', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $items = [];
+        foreach ($fields as $field) {
+            if (!$field instanceof ExtraField) {
+                continue;
+            }
+
+            if (!$includeNotifications && 'notifications' === $field->getVariable()) {
+                continue;
+            }
+
+            $items[] = $field;
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getExtraFieldDefinitions(): array
+    {
+        $items = [];
+        foreach ($this->getExerciseExtraFields() as $field) {
+            if (null === $field->getId() || !$this->isSupportedExtraFieldType((int) $field->getValueType())) {
+                continue;
+            }
+
+            $items[] = [
+                'id' => (int) $field->getId(),
+                'variable' => $field->getVariable(),
+                'label' => $field->getDisplayText() ?: $field->getVariable(),
+                'type' => (int) $field->getValueType(),
+                'defaultValue' => (string) ($field->getDefaultValue() ?? ''),
+                'changeable' => true === $field->isChangeable(),
+                'options' => $this->getExtraFieldOptionItems($field),
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return array<int, array<string, string>>
+     */
+    private function getExtraFieldOptionItems(ExtraField $field): array
+    {
+        $items = [];
+        foreach ($field->getOptions() as $option) {
+            if (!$option instanceof ExtraFieldOptions) {
+                continue;
+            }
+
+            $value = (string) ($option->getValue() ?? '');
+            if ('' === $value) {
+                continue;
+            }
+
+            $items[] = [
+                'value' => $value,
+                'label' => $option->getDisplayText() ?: $value,
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getDefaultExtraFieldValues(): array
+    {
+        $values = [];
+        foreach ($this->getExerciseExtraFields() as $field) {
+            if (!$this->isSupportedExtraFieldType((int) $field->getValueType())) {
+                continue;
+            }
+
+            $values[$field->getVariable()] = $this->normalizeExtraFieldValueForFrontend(
+                (int) $field->getValueType(),
+                (string) ($field->getDefaultValue() ?? ''),
+                $field->getOptions()->count() > 0
+            );
+        }
+
+        return $values;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getExerciseExtraFieldValues(CQuiz $quiz): array
+    {
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        $values = $this->getDefaultExtraFieldValues();
+        if ($exerciseId <= 0) {
+            return $values;
+        }
+
+        $rows = $this->entityManager->createQueryBuilder()
+            ->select('value', 'field')
+            ->from(ExtraFieldValues::class, 'value')
+            ->innerJoin('value.field', 'field')
+            ->andWhere('value.itemId = :itemId')
+            ->andWhere('field.itemType = :itemType')
+            ->setParameter('itemId', $exerciseId, Types::INTEGER)
+            ->setParameter('itemType', ExtraField::EXERCISE_FIELD_TYPE, Types::INTEGER)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        foreach ($rows as $row) {
+            if (!$row instanceof ExtraFieldValues) {
+                continue;
+            }
+
+            $field = $row->getField();
+            if ('notifications' === $field->getVariable() || !$this->isSupportedExtraFieldType((int) $field->getValueType())) {
+                continue;
+            }
+
+            $values[$field->getVariable()] = $this->normalizeExtraFieldValueForFrontend(
+                (int) $field->getValueType(),
+                (string) ($row->getFieldValue() ?? ''),
+                $field->getOptions()->count() > 0
+            );
+        }
+
+        return $values;
+    }
+
+    private function getExerciseExtraNotification(CQuiz $quiz): string
+    {
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        if ($exerciseId <= 0) {
+            return '';
+        }
+
+        $row = $this->entityManager->createQueryBuilder()
+            ->select('value', 'field')
+            ->from(ExtraFieldValues::class, 'value')
+            ->innerJoin('value.field', 'field')
+            ->andWhere('value.itemId = :itemId')
+            ->andWhere('field.itemType = :itemType')
+            ->andWhere('field.variable = :variable')
+            ->setParameter('itemId', $exerciseId, Types::INTEGER)
+            ->setParameter('itemType', ExtraField::EXERCISE_FIELD_TYPE, Types::INTEGER)
+            ->setParameter('variable', 'notifications', Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return $row instanceof ExtraFieldValues ? (string) ($row->getFieldValue() ?? '') : '';
+    }
+
+    /**
+     * @return array<int, array<string, string>>
+     */
+    private function getExtraNotificationOptions(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function normalizeExtraNotificationSettings(mixed $rawValue): array
+    {
+        if (
+            \is_array($rawValue)
+        ) {
+            return $rawValue;
+        }
+
+        if (!\is_string($rawValue) || '' === trim($rawValue)) {
+            return [];
+        }
+
+        $decoded = json_decode($rawValue, true);
+        if (\is_array($decoded)) {
+            return $decoded;
+        }
+
+        return [];
+    }
+
+    private function normalizeExtraFieldValueForFrontend(int $type, string $value, bool $hasOptions): mixed
+    {
+        if (ExtraField::FIELD_TYPE_SELECT_MULTIPLE === $type || (ExtraField::FIELD_TYPE_CHECKBOX === $type && $hasOptions)) {
+            if ('' === trim($value)) {
+                return [];
+            }
+
+            return array_values(array_filter(explode(';', $value), static fn (string $item): bool => '' !== trim($item)));
+        }
+
+        if (ExtraField::FIELD_TYPE_CHECKBOX === $type) {
+            return true === $value || '1' === $value || 'on' === strtolower($value);
+        }
+
+        return $value;
+    }
+
+    private function isSupportedExtraFieldType(int $type): bool
+    {
+        return \in_array($type, [
+            ExtraField::FIELD_TYPE_TEXT,
+            ExtraField::FIELD_TYPE_TEXTAREA,
+            ExtraField::FIELD_TYPE_RADIO,
+            ExtraField::FIELD_TYPE_SELECT,
+            ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
+            ExtraField::FIELD_TYPE_DATE,
+            ExtraField::FIELD_TYPE_DATETIME,
+            ExtraField::FIELD_TYPE_CHECKBOX,
+            ExtraField::FIELD_TYPE_INTEGER,
+            ExtraField::FIELD_TYPE_FLOAT,
+        ], true);
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getCategoryOptions(Course $course): array
+    {
+        if (!$this->isSettingEnabled('exercise.allow_exercise_categories')) {
+            return [];
+        }
+
+        $categories = $this->entityManager->createQueryBuilder()
+            ->select('category')
+            ->from(CQuizCategory::class, 'category')
+            ->andWhere('IDENTITY(category.course) = :courseId')
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->orderBy('category.position', 'ASC')
+            ->addOrderBy('category.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $items = [];
+        foreach ($categories as $category) {
+            if (!$category instanceof CQuizCategory || null === $category->getId()) {
+                continue;
+            }
+
+            $items[] = [
+                'value' => (int) $category->getId(),
+                'label' => $category->getTitle(),
+            ];
+        }
+
+        return $items;
+    }
+
+    private function getExerciseGradebookLink(CQuiz $quiz, Course $course, ?Session $session): ?GradebookLink
+    {
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        if ($exerciseId <= 0) {
+            return null;
+        }
+
+        return $this->gradebookLinkManager->findLink(
+            $course,
+            $session,
+            GradebookLinkResourceResolver::LINK_EXERCISE,
+            $exerciseId,
+        );
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function getGradebookCategoryOptions(Course $course, ?Session $session): array
+    {
+        return $this->gradebookLinkManager->getCategoryOptions($course, $session);
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function normalizeNotifications(?string $notifications): array
+    {
+        if (null === $notifications || '' === trim($notifications)) {
+            return [];
+        }
+
+        return array_values(array_filter(
+            array_map(
+                static fn (string $value): int => (int) trim($value),
+                explode(',', $notifications)
+            ),
+            static fn (int $value): bool => $value > 0
+        ));
+    }
+
+    private function isProgressiveAdaptiveSettingEnabled(): bool
+    {
+        $value = $this->entityManager->getConnection()->fetchOne(
+            'SELECT selected_value FROM settings WHERE category = :category AND variable = :variable LIMIT 1',
+            [
+                'category' => 'exercise',
+                'variable' => 'quiz_question_category_destinations',
+            ]
+        );
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    private function isSettingEnabled(string $name): bool
+    {
+        $value = $this->settingsManager->getSetting($name, true);
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    private function formatDateForInput(?DateTimeInterface $date): ?string
+    {
+        if (null === $date) {
+            return null;
+        }
+
+        return $date->format('Y-m-d\TH:i');
+    }
+
+    private function buildLegacyQuestionsUrl(CQuiz $quiz, Course $course, ?Session $session): string
+    {
+        return '/main/exercise/admin.php?'.http_build_query([
+            'exerciseId' => (int) $quiz->getIid(),
+            'cid' => (int) $course->getId(),
+            'sid' => (int) ($session?->getId() ?? 0),
+        ]);
+    }
+}

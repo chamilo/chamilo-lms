@@ -4,123 +4,7 @@
     id="course-home"
     class="course-home"
   >
-    <div
-      v-if="courseHomeNotifyVisible"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
-      role="dialog"
-      aria-modal="true"
-      :aria-label="courseHomeNotify.title"
-    >
-      <div class="max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl">
-        <div class="flex items-center justify-between gap-4 border-b border-gray-25 px-6 py-4">
-          <h2 class="text-lg font-semibold text-gray-90">
-            {{ courseHomeNotify.title }}
-          </h2>
-
-          <button
-            type="button"
-            class="inline-flex h-8 w-8 items-center justify-center rounded-full text-gray-50 hover:bg-gray-10 hover:text-gray-90"
-            :aria-label="t('Close')"
-            @click="closeCourseHomeNotify"
-          >
-            <span class="mdi mdi-close" />
-          </button>
-        </div>
-
-        <div
-          class="max-h-[55vh] overflow-y-auto px-6 py-4 text-gray-90"
-          v-html="courseHomeNotify.content"
-        />
-
-        <div
-          v-if="courseHomeNotify.requiresLink && courseHomeNotify.contentUrl"
-          class="flex justify-end border-t border-gray-25 px-6 py-4"
-        >
-          <a
-            :href="courseHomeNotify.contentUrl"
-            class="btn btn--primary"
-            target="_blank"
-            rel="noopener noreferrer"
-            @click="closeCourseHomeNotify"
-          >
-            <span class="mdi mdi-open-in-new ch-tool-icon" />
-            {{ courseHomeNotify.linkLabel }}
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div
-      v-if="isCourseLoading"
-      class="flex flex-col gap-4"
-    >
-      <div class="flex gap-4 items-center">
-        <Skeleton
-          class="mr-auto"
-          height="2.5rem"
-          width="12rem"
-        />
-        <Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          height="2.5rem"
-          width="8rem"
-        />
-        <Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          height="2.5rem"
-          width="3rem"
-        />
-      </div>
-
-      <Skeleton height="16rem" />
-
-      <div class="flex items-center gap-6">
-        <Skeleton
-          height="1.5rem"
-          width="6rem"
-        />
-        <Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          class="ml-auto"
-          height="1.5rem"
-          width="6rem"
-        />
-        <Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          class="aspect-square"
-          height="1.5rem"
-          width="6rem"
-        />
-        <Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          class="aspect-square"
-          height="1.5rem"
-          width="6rem"
-        />
-        <!-- Skeleton
-          v-if="securityStore.isCurrentTeacher"
-          class="aspect-square"
-          height="1.5rem"
-          width="6rem"
-        / -->
-      </div>
-
-      <hr class="mt-0 mb-4" />
-
-      <div class="course-home__tools">
-        <Skeleton
-          v-for="v in 30"
-          :key="v"
-          class="aspect-square"
-          height="auto"
-          width="7.5rem"
-        />
-      </div>
-    </div>
-    <div
-      v-else
-      class="flex flex-col gap-4"
-    >
+    <div class="flex flex-col gap-4">
       <SectionHeader :title="course.title">
         <BaseButton
           v-if="isAllowedToEdit && courseIntroEl?.introduction?.iid"
@@ -134,11 +18,10 @@
         <BaseButton
           v-if="isAllowedToEdit"
           :label="t('Reporting')"
-          :to-url="reportingUrl"
+          :route="reportingRoute"
           icon="tracking"
           only-icon
           type="black"
-          @click="courseIntroEl.goToCreateOrUpdate()"
         />
 
         <template v-if="hasCourseTMenuItems">
@@ -174,22 +57,14 @@
         v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
         class="text-sm text-gray-600"
       >
-        {{
-          t(
-            "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.",
-          )
-        }}
+        {{ exerciseAutoLaunchMessage }}
       </p>
 
       <p
         v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
         class="text-sm text-gray-600"
       >
-        {{
-          t(
-            "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.",
-          )
-        }}
+        {{ lpAutoLaunchMessage }}
       </p>
 
       <p
@@ -207,10 +82,7 @@
 
       <div class="flex flex-col lg:flex-row gap-6">
         <div :class="showCourseSequence ? 'w-full lg:w-[80%]' : 'w-full'">
-          <CourseIntroduction
-            ref="courseIntroEl"
-            :is-allowed-to-edit="isAllowedToEdit"
-          />
+          <CourseIntroduction ref="courseIntroEl" />
         </div>
         <div
           v-if="showCourseSequence"
@@ -228,7 +100,7 @@
 
         <div class="ml-auto">
           <BaseToggleButton
-            :disabled="isSorting || isCustomizing || !allowEditToolVisibilityInSession"
+            :disabled="isCourseLoading || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Show all')"
             :on-label="t('Show all')"
@@ -240,7 +112,7 @@
             @click="onClickShowAll"
           />
           <BaseToggleButton
-            :disabled="isSorting || isCustomizing || !allowEditToolVisibilityInSession"
+            :disabled="isCourseLoading || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Hide all')"
             :on-label="t('Hide all')"
@@ -252,7 +124,7 @@
           />
           <BaseToggleButton
             v-model="isSorting"
-            :disabled="isCustomizing"
+            :disabled="isCourseLoading || isCustomizing"
             :off-label="t('Sort')"
             :on-label="t('Sort')"
             off-icon="swap-vertical"
@@ -274,6 +146,31 @@
       </div>
 
       <div
+        v-if="isCourseLoading"
+        aria-busy="true"
+        class="course-home__tools"
+      >
+        <div
+          v-for="item in COURSE_TOOL_SKELETON_COUNT"
+          :key="`course-tool-skeleton-${item}`"
+          aria-hidden="true"
+          class="course-tool"
+        >
+          <Skeleton
+            class="aspect-square"
+            height="auto"
+            width="7.5rem"
+          />
+          <Skeleton
+            class="mt-2"
+            height="1rem"
+            width="5.5rem"
+          />
+        </div>
+      </div>
+
+      <div
+        v-else
         id="course-tools"
         class="course-home__tools"
       >
@@ -329,23 +226,20 @@ import courseService from "../../services/courseService"
 import baseService from "../../services/baseService"
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
 import CourseThematicProgress from "../../components/course/CourseThematicProgress.vue"
 import PluginRegion from "../../components/layout/PluginRegion.vue"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
 const platformConfigStore = usePlatformConfig()
-const securityStore = useSecurityStore()
 const { course, session } = storeToRefs(cidReqStore)
 const { getSetting } = storeToRefs(platformConfigStore)
 
 const tools = ref([])
 const shortcuts = ref([])
-const courseHomeNotify = ref({})
-const courseHomeNotifyVisible = ref(false)
 
 const courseIntroEl = ref(null)
 
@@ -360,20 +254,88 @@ provide("isCustomizing", isCustomizing)
 const courseItems = ref([])
 
 const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
-const documentAutoLaunch = ref(0)
-const exerciseAutoLaunch = ref(0)
-const lpAutoLaunch = ref(0)
-const forumAutoLaunch = ref(0)
 const courseSettingsStore = useCourseSettings()
 
+function getCourseSettingInt(variable) {
+  return parseInt(courseSettingsStore.getSetting(variable), 10) || 0
+}
+
+const documentAutoLaunch = computed(() => getCourseSettingInt("enable_document_auto_launch"))
+const exerciseAutoLaunch = computed(() => getCourseSettingInt("enable_exercise_auto_launch"))
+const lpAutoLaunch = computed(() => getCourseSettingInt("enable_lp_auto_launch"))
+const forumAutoLaunch = computed(() => getCourseSettingInt("enable_forum_auto_launch"))
+
+const exerciseAutoLaunchMessage = computed(() => {
+  if (exerciseAutoLaunch.value === 2) {
+    return [t("The exercises auto-launch feature configuration is enabled"), t("Redirect to the exercises list")].join(
+      " ",
+    )
+  }
+
+  return t(
+    "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.",
+  )
+})
+
+const lpAutoLaunchMessage = computed(() => {
+  if (lpAutoLaunch.value === 2) {
+    return [t("The learning path auto-launch setting is ON"), t("Redirect to the learning paths list")].join(" ")
+  }
+
+  return t(
+    "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.",
+  )
+})
+
+const COURSE_TOOL_SKELETON_COUNT = 16
 const TOOL_VISIBILITY_VISIBLE = 2
 
+function normalizeToolNavigation(tool) {
+  if (routerTools.includes(tool.title)) {
+    tool.to = tool.url
+  }
+
+  return tool
+}
+
 function getToolVisibility(tool) {
+  if (typeof tool?.visibility === "boolean") {
+    return tool.visibility ? TOOL_VISIBILITY_VISIBLE : 0
+  }
+
   return tool?.resourceNode?.resourceLinks?.[0]?.visibility
 }
 
 function isLearningPathTool(tool) {
   return tool?.title === "learnpath" || tool?.tool?.title === "learnpath"
+}
+
+function isCourseDescriptionTool(tool) {
+  return tool?.title === "course_description" || tool?.tool?.title === "course_description"
+}
+
+function isCourseDescriptionToolEnabled() {
+  const value = courseSettingsStore.getSetting("enabled", "course_description")
+
+  if (value === null || value === undefined || value === "") {
+    return true
+  }
+
+  return isSettingEnabled(value)
+}
+
+function isAnnouncementTool(tool) {
+  return tool?.title === "announcement" || tool?.tool?.title === "announcement"
+}
+
+function isAnnouncementToolEnabled() {
+  const value = courseSettingsStore.getSetting("enabled", "announcement")
+
+  if (value === null || value === undefined || value === "") {
+    return true
+  }
+
+  return isSettingEnabled(value)
 }
 
 function shouldShowInvisibleLearningPathTool(tool) {
@@ -396,11 +358,18 @@ const toolsForDisplay = computed(() => {
   })
 })
 
-const reportingUrl = computed(() => {
+const reportingRoute = computed(() => {
   const cid = course.value?.id
   if (!cid) return null
-  const sid = session.value?.id || 0
-  return `/main/tracking/courseLog.php?cid=${cid}&sid=${sid}&gid=0`
+
+  return {
+    name: "CourseReportingLearners",
+    query: {
+      cid,
+      sid: session.value?.id || 0,
+      gid: 0,
+    },
+  }
 })
 
 const aiCourseAnalyzerUrl = computed(() => {
@@ -419,7 +388,7 @@ function isSettingEnabled(value) {
 const isAiCourseAnalyzerEnabled = computed(() => {
   return (
     isSettingEnabled(getSetting.value("ai_helpers.enable_ai_helpers")) &&
-    isSettingEnabled(getSetting.value("ai_helpers.course_analyser"))
+    courseSettingsStore.isSettingEnabled("course_analyser", "ai_helpers")
   )
 })
 
@@ -437,15 +406,10 @@ async function loadCourseTools(showSkeleton = true) {
     const cTools = await courseService.loadCTools(course.value.id, session.value?.id)
 
     const normalizedTools = cTools.map((rawTool) => {
-      const tool = { ...rawTool }
-
-      if (routerTools.includes(tool.title)) {
-        tool.to = tool.url
-      }
+      const tool = normalizeToolNavigation({ ...rawTool })
 
       // Convenience flag for UI states (e.g. customize mode)
-      tool.isEnabled =
-        tool.resourceNode?.resourceLinks?.[0]?.visibility === 2 || shouldShowInvisibleLearningPathTool(tool)
+      tool.isEnabled = getToolVisibility(tool) === TOOL_VISIBILITY_VISIBLE || shouldShowInvisibleLearningPathTool(tool)
 
       return tool
     })
@@ -454,6 +418,14 @@ async function loadCourseTools(showSkeleton = true) {
     const regularTools = []
 
     normalizedTools.forEach((tool) => {
+      if (isCourseDescriptionTool(tool) && !isCourseDescriptionToolEnabled()) {
+        return
+      }
+
+      if (isAnnouncementTool(tool) && !isAnnouncementToolEnabled()) {
+        return
+      }
+
       if (tool.title === "tracking") {
         // Tracking/Reporting is shown as a dedicated icon in the header, not in the tools grid.
       } else if (tool.tool?.category === "admin") {
@@ -520,7 +492,11 @@ function goToSettingCourseTool(tool) {
 }
 
 const setToolVisibility = (tool, visibility) => {
-  tool.resourceNode.resourceLinks[0].visibility = visibility
+  tool.visibility = visibility === TOOL_VISIBILITY_VISIBLE
+
+  if (tool.resourceNode?.resourceLinks?.[0]) {
+    tool.resourceNode.resourceLinks[0].visibility = visibility
+  }
 }
 
 async function changeVisibility(tool) {
@@ -536,8 +512,10 @@ async function changeVisibility(tool) {
 
 async function onClickShowAll() {
   try {
-    await baseService.post(`/r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`)
-    tools.value.forEach((tool) => setToolVisibility(tool, 2))
+    await baseService.post(
+      `/r/course_tool/links/change_visibility/show?cid=${course.value.id}&sid=${session.value?.id}`,
+    )
+    await loadCourseTools(false)
   } catch (error) {
     console.log(error)
   }
@@ -545,8 +523,10 @@ async function onClickShowAll() {
 
 async function onClickHideAll() {
   try {
-    await baseService.post(`/r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`)
-    tools.value.forEach((tool) => setToolVisibility(tool, 0))
+    await baseService.post(
+      `/r/course_tool/links/change_visibility/hide?cid=${course.value.id}&sid=${session.value?.id}`,
+    )
+    await loadCourseTools(false)
   } catch (error) {
     console.log(error)
   }
@@ -587,7 +567,6 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 
 const { isAllowedToEdit } = useIsAllowedToEdit()
 
-
 async function enforceCourseLegalAgreement() {
   if (!course.value?.id) {
     return
@@ -604,52 +583,15 @@ async function enforceCourseLegalAgreement() {
   }
 }
 
-async function loadCourseHomeNotification() {
-  if (!course.value?.id) {
-    return
-  }
-
-  try {
-    const data = await courseService.getCourseHomeNotification(course.value.id, session.value?.id || 0)
-
-    if (!data?.show) {
-      courseHomeNotify.value = {}
-      courseHomeNotifyVisible.value = false
-
-      return
-    }
-
-    courseHomeNotify.value = data
-    courseHomeNotifyVisible.value = true
-  } catch (error) {
-    console.error("[CourseHomeNotify] Failed to load course notification", error)
-    courseHomeNotify.value = {}
-    courseHomeNotifyVisible.value = false
-  }
-}
-
-function closeCourseHomeNotify() {
-  courseHomeNotifyVisible.value = false
-}
-
 const showCourseSequence = computed(() => {
   return platformConfigStore.getSetting("course.resource_sequence_show_dependency_in_course_intro") === "true"
 })
 
 onMounted(() => {
   enforceCourseLegalAgreement()
-  loadCourseHomeNotification()
-
-  documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
-  exerciseAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
-  lpAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
-  forumAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
 })
 
-watch(
-  () => platformConfigStore.isStudentViewActive,
-  () => loadCourseTools(false),
-)
+useStudentViewRefresh(() => loadCourseTools(false))
 
 const allowEditToolVisibilityInSession = computed(() => {
   const isInASession = session.value?.id

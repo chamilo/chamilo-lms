@@ -60,6 +60,7 @@ class Version20250927180000 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE portfolio SET category_id = NULL WHERE category_id NOT IN (SELECT id FROM portfolio_category)');
+        $this->addSql('ALTER TABLE portfolio CHANGE category_id category_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_id) REFERENCES portfolio_category (id) ON DELETE SET NULL');
 
         if (!$tblPortfolio->hasColumn('duplicated_from')) {

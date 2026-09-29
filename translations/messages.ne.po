@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "शुभकामना"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र नमुना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चलहरूको दायरा"
@@ -1579,8 +1579,8 @@ msgstr "के तपाईं यी चरणहरू हटाउन चा�
 msgid "Authoring tool"
 msgstr "लेखन उपकरण"
 
-msgid "SCORM or AICC file to upload"
-msgstr "अपलोड गर्न SCORM वा AICC फाइल"
+msgid "SCORM file to upload"
+msgstr "अपलोड गर्न SCORM फाइल"
 
 msgid "Course location"
 msgstr "कोर्स स्थान"
@@ -7717,6 +7717,54 @@ msgstr "परीक्षाको प्रश्न सूची"
 msgid "Recycle existing questions"
 msgstr "विद्यमान प्रश्नहरू पुन: प्रयोग गर्नुहोस्"
 
+msgid "Add this question to the test: %s"
+msgstr "यो प्रश्न परीक्षणमा थप्नुहोस्: %s"
+
+msgid "Edit question: %s"
+msgstr "प्रश्न सम्पादन गर्नुहोस्: %s"
+
+msgid "Add a question: %s"
+msgstr "प्रश्न थप्नुहोस्: %s"
+
+msgid "Detected blanks: %s"
+msgstr "पत्ता लागेका खाली ठाउँहरू: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s प्रश्नहरू, कुल अंक (सबै प्रश्नहरू) %s।"
+
+msgid "Unique answer"
+msgstr "एकल उत्तर"
+
+msgid "Multiple answer true/false"
+msgstr "बहु उत्तर सत्य/असत्य"
+
+msgid "Multiple answer combination true/false"
+msgstr "बहु उत्तर संयोजन सत्य/असत्य"
+
+msgid "Unique answer with images"
+msgstr "तस्बिरसहित एकल उत्तर"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "निश्चितताको डिग्रीसहित बहु उत्तर सत्य/असत्य"
+
+msgid "Answer in Office document"
+msgstr "अफिस कागजातमा उत्तर"
+
+msgid "Matching draggable"
+msgstr "मिल्दो तान्न सकिने"
+
+msgid "Matching draggable combination"
+msgstr "मिल्दो तान्न सकिने संयोजन"
+
+msgid "Fill in blanks combination"
+msgstr "खाली ठाउँ भर्ने संयोजन"
+
+msgid "Multiple answer dropdown combination"
+msgstr "बहु उत्तर ड्रपडाउन संयोजन"
+
+msgid "Matching combination"
+msgstr "मिल्दो संयोजन"
+
 msgid "Correct test"
 msgstr "सही परीक्षा"
 
@@ -8551,6 +8599,9 @@ msgstr "कम्पनी"
 msgid "Reporting"
 msgstr "रिपोर्टिङ"
 
+msgid "Analytics"
+msgstr "विश्लेषण"
+
 msgid "Update"
 msgstr "अपडेट"
 
@@ -8728,11 +8779,23 @@ msgstr "देखाउनुहोस्"
 msgid "My courses"
 msgstr "मेरा कोर्सहरू"
 
+msgid "Shop"
+msgstr "पसल"
+
+msgid "Invoice"
+msgstr "चलानी"
+
+msgid "Request invoice"
+msgstr "चलानी अनुरोध गर्नुहोस्"
+
 msgid "View my progress"
 msgstr "मेरो प्रगति हेर्नुहोस्"
 
 msgid "Personal agenda"
 msgstr "व्यक्तिगत एजेन्डा"
+
+msgid "Group agenda"
+msgstr "समूह एजेन्डा"
 
 msgid "Switch to teacher view"
 msgstr "शिक्षक दृश्यमा स्विच गर्नुहोस्"
@@ -9255,6 +9318,15 @@ msgstr "सत्र %s को लागि समय प्रतिवेद�
 
 msgid "Error"
 msgstr "त्रुटि"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "प्रयोगकर्ता सिर्जना गरियो, तर थप प्रोफाइल फिल्डहरू मध्ये एउटा सुरक्षित गर्न सकिएन।"
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "प्रयोगकर्ता अद्यावधिक गरियो, तर थप प्रोफाइल फिल्डहरू मध्ये एउटा सुरक्षित गर्न सकिएन।"
+
+msgid "One or more fields contain invalid values."
+msgstr "एक वा बढी फिल्डहरूमा अमान्य मानहरू छन्।"
 
 msgid "Anonymous"
 msgstr "अज्ञात"
@@ -14398,6 +14470,9 @@ msgstr "कृपया चरण १ मा फर्कनुहोस्"
 msgid "has not been found in that directory"
 msgstr "त्यो डाइरेक्टरीमा फेला परेन"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "इन्स्टलरको आफ्नै लगइन हुँदैन, त्यसैले सर्भरमा अपग्रेडलाई अनुमति दिनुपर्छ। परियोजनाको मूलमा .env को छेउमा %s नामको खाली फाइल बनाउनुहोस्, त्यसपछि जारी राख्नुहोस्।"
+
 msgid "Old version's root path"
 msgstr "पुरानो संस्करणको रुट पथ"
 
@@ -15294,6 +15369,30 @@ msgstr "गत हप्ता खर्च गरिएको समय"
 
 msgid "System status"
 msgstr "प्रणाली स्थिति"
+
+msgid "Courses space"
+msgstr "पाठ्यक्रम स्थान"
+
+msgid "Database server configuration and metadata"
+msgstr "डाटाबेस सर्भर कन्फिगरेसन र मेटाडेटा"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "पाठ्यक्रमअनुसार डिस्क प्रयोग बनाम डिस्क कोटा"
+
+msgid "Information about your webserver configuration"
+msgstr "तपाईंको वेबसर्भर कन्फिगरेसनसम्बन्धी जानकारी"
+
+msgid "Paths"
+msgstr "पथहरू"
+
+msgid "State of Chamilo requirements"
+msgstr "Chamilo आवश्यकताहरूको अवस्था"
+
+msgid "State of PHP settings on the server"
+msgstr "सर्भरमा PHP सेटिङहरूको अवस्था"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "यो पोर्टलमा समाधान गरिएका api_get_path() स्थिरांकहरू"
 
 msgid "Is writable"
 msgstr "लेख्न सकिन्छ"
@@ -20470,6 +20569,9 @@ msgstr "आम भाषा: %s"
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "केही शब्द खोजेर उपभाषा %s का लागि नयाँ शब्दहरू परिभाषित गर्नुहोस्, त्यसपछि सेभ बटन थिचेर प्रत्येक अनुवाद सेभ गर्नुहोस्। नयाँ शब्दहरू देख्न आफ्नो प्रयोगकर्ता भाषा परिवर्तन गर्नुपर्नेछ।"
 
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "यहाँ सुरक्षित गरिएको शब्द पहिले नै माइग्रेट भइसकेको इन्टरफेसमा तुरुन्तै देखिन्छ। अझै माइग्रेट नभएका पृष्ठहरूले कम्पाइल गरिएको क्याटलग पढ्छन्, त्यसैले तपाईंले php bin\/console cache:clear बाट क्यास खाली नगरेसम्म पुरानो पाठ रहन्छ। सम्पादन सकिएपछि एक पटक मात्र गर्नुहोस्, प्रत्येक शब्दपछि होइन।"
+
 msgid "See sequences"
 msgstr "क्रमहरू हेर्नुहोस्"
 
@@ -20497,8 +20599,8 @@ msgstr "लिङ्क म्याद सकियो, कृपया फे�
 msgid "Instructions for the password change procedure"
 msgstr "पासवर्ड परिवर्तन प्रक्रियाका लागि निर्देशनहरू"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "तपाईंलाई यो सन्देश प्राप्त भएको छ किनभने तपाईंले (वा तपाईं भएको भन्दै गर्ने कसैले) तपाईंको लागि नयाँ पासवर्ड उत्पन्न गर्न अनुरोध गर्नुभएको छ।<br/>"
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "यो सन्देश तपाईंलाई पठाइएको छ किनभने तपाईंले (वा तपाईंको नक्कल गर्ने कसैले) तपाईंको खाताका लागि नयाँ पासवर्ड उत्पन्न गर्न अनुरोध गर्नुभएको थियो।<br/>नयाँ पासवर्ड सेट गर्न, कृपया यो लिङ्क अनुसरण गर्नुहोस्:<br/>%s<br/>यदि तपाईंले यो अनुरोध गर्नुभएको होइन भने, यो सन्देशलाई बेवास्ता गर्न सक्नुहुन्छ। यदि यस्ता सन्देशहरू आउँदै रहन्छन् भने, कृपया पोर्टल प्रशासकलाई सम्पर्क गर्नुहोस्।"
 
 msgid "Remind Course Expiration cron"
 msgstr "कोर्स म्याद समाप्ति सम्झना क्रन"
@@ -20661,6 +20763,9 @@ msgstr "दक्षताहरूको चक्रमा, जब यसम�
 
 msgid "Created by"
 msgstr "निर्माणकर्ता"
+
+msgid "Created by %s on %s"
+msgstr "%s द्वारा %s मा सिर्जना गरिएको"
 
 msgid "Hide general coach in dropbox"
 msgstr "ड्रपबक्समा सामान्य प्रशिक्षक लुकाउनुहोस्"
@@ -23967,6 +24072,18 @@ msgstr "विद्यार्थीलाई परिणाम देखा�
 
 msgid "Signed in as"
 msgstr "भित्र प्रवेश गरिएको"
+
+msgid "Authorize application"
+msgstr "अनुप्रयोगलाई अनुमति दिनुहोस्"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "तपाईंको Chamilo खातामा जडान गर्न चाहन्छ।"
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "यो अनुप्रयोग Chamilo मा तपाईं जस्तै काम गर्न सक्नेछ — तपाईंको विद्यमान खाता अनुमतिहरू प्रयोग गरेर र त्योभन्दा बढी केही पनि होइन। यसले तपाईंलाई पहिले नै नभएको कुनै पहुँच कहिल्यै पाउने छैन।"
+
+msgid "Allow"
+msgstr "अनुमति दिनुहोस्"
 
 msgid "Remember me"
 msgstr "मलाई सम्झनुहोस्"
@@ -31333,6 +31450,9 @@ msgstr "प्रयोगकर्ता नियुक्ति पृष्�
 msgid "Authentication sources assigned successfully"
 msgstr "प्रमाणीकरण स्रोतहरू सफलतापूर्वक नियुक्त गरियो"
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "कुनै प्रमाणीकरण विधि चयन गरिएको छैन। यसले यस URL मा चयन गरिएका प्रयोगकर्ता(हरू) का सबै प्रमाणीकरण विधिहरू हटाउँछ, जसले उनीहरूलाई लग इन गर्नबाट रोक्न सक्छ। जारी राख्ने हो?"
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "सुझाव: कसैलाई पठाउँदा नपठाई भण्डारण गर्न “— Just upload —” छान्नुहोस्।"
 
@@ -31864,6 +31984,9 @@ msgstr "%s मा केही लेख्नुहोस्"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "उत्तम: SVG। PNG सिफारिस गरिएको चौडाइ: %spx।"
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG सिफारिस गरिएको चौडाइ: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "ईमेलका लागि PNG लोगो अपलोड गर्नुहोस् (~%spx चौडाइ)"
 
@@ -31899,6 +32022,9 @@ msgstr "प्रविष्ट गर्न क्लिक गर्नुह
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "उत्कृष्ट: SVG। PNG अधिकतम आकार: %spx।"
+
+msgid "PNG max size: %spx."
+msgstr "PNG अधिकतम आकार: %spx."
 
 msgid "View badge"
 msgstr "बेज हेर्नुहोस्"
@@ -36480,4 +36606,4966 @@ msgstr "मध्यस्थ गरिएको"
 
 msgid "View threads"
 msgstr "थ्रेडहरू हेर्नुहोस्"
+
+msgid "No auth source"
+msgstr "कुनै प्रमाणीकरण स्रोत छैन"
+
+msgid "You must add at least one question"
+msgstr "तपाईंले कम्तिमा एउटा प्रश्न थप्नुपर्छ"
+
+msgid "Advanced actions"
+msgstr "उन्नत कार्यहरू"
+
+msgid "Application path"
+msgstr "अनुप्रयोग पथ"
+
+msgid "Apply files details"
+msgstr "फाइल विवरणहरू लागू गर्नुहोस्"
+
+msgid "Apply plan details"
+msgstr "योजना विवरणहरू लागू गर्नुहोस्"
+
+msgid "Apply plan failed"
+msgstr "योजना लागू गर्न असफल"
+
+msgid "Apply plan ready"
+msgstr "योजना लागू गर्न तयार"
+
+msgid "Apply preparation"
+msgstr "तयारी लागू गर्नुहोस्"
+
+msgid "Apply staged files"
+msgstr "स्टेज गरिएका फाइलहरू लागू गर्नुहोस्"
+
+msgid "Applying files..."
+msgstr "फाइलहरू लागू गर्दै..."
+
+msgid "Audit file"
+msgstr "अडिट फाइल"
+
+msgid "Backup directory"
+msgstr "ब्याकअप डाइरेक्टरी"
+
+msgid "Baseline clean"
+msgstr "बेसलाइन सफा"
+
+msgid "Baseline warnings"
+msgstr "बेसलाइन चेतावनीहरू"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "स्टेज गरिएको प्याकेजबाट सुरक्षित लागू योजना बनाउनुहोस्। यसले केवल फाइलहरू, अनुमतिहरू, ब्याकअप पथ र लक स्थिति जाँच गर्दछ। यसले फाइलहरू प्रतिस्थापन गर्दैन।"
+
+msgid "Build production frontend assets."
+msgstr "उत्पादन फ्रन्टएन्ड सम्पत्तिहरू निर्माण गर्नुहोस्।"
+
+msgid "Building plan..."
+msgstr "योजना निर्माण गर्दै..."
+
+msgid "Channel"
+msgstr "च्यानल"
+
+msgid "Check"
+msgstr "जाँच गर्नुहोस्"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "उपलब्ध Chamilo अद्यावधिकहरू जाँच गर्नुहोस्, प्याकेजहरू प्रमाणित गर्नुहोस्, फाइलहरू स्टेज गर्नुहोस् र नियन्त्रित अद्यावधिक-पछिका चरणहरू चलाउनुहोस्।"
+
+msgid "Check manifest"
+msgstr "म्यानिफेस्ट जाँच गर्नुहोस्"
+
+msgid "Checking post-apply actions..."
+msgstr "लागू-पछिका कार्यहरू जाँच गर्दै..."
+
+msgid "Checking..."
+msgstr "जाँच गर्दै..."
+
+msgid "Composer install"
+msgstr "Composer स्थापना"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Composer, Yarn र डाटाबेस माइग्रेसन कार्यहरूले निर्भरताहरू, उत्पन्न सम्पत्तिहरू वा डाटाबेस परिवर्तन गर्न सक्छन्। तिनीहरूलाई ब्याकअप र अनुमतिहरू पुष्टि गरेपछि मात्र चयन गर्नुहोस्।"
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "सर्भरमा CHAMILO_UPDATE_MANIFEST_URL कन्फिगर गर्नुहोस् वा HTTPS म्यानिफेस्ट URL प्रदान गर्नुहोस्।"
+
+msgid "Configured"
+msgstr "कन्फिगर गरिएको"
+
+msgid "Current migration"
+msgstr "हालको माइग्रेसन"
+
+msgid "Database baseline"
+msgstr "डाटाबेस बेसलाइन"
+
+msgid "Database migration safety review"
+msgstr "डाटाबेस माइग्रेसन सुरक्षा समीक्षा"
+
+msgid "Database migrations"
+msgstr "डाटाबेस माइग्रेसनहरू"
+
+msgid "Development mode"
+msgstr "विकास मोड"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "अद्यावधिक ब्याकअप र सर्भर अनुमतिहरू समीक्षा नभएसम्म यो सक्षम नगर्नुहोस्।"
+
+msgid "Doctrine dry-run command"
+msgstr "डक्ट्रीन ड्राई-रन आदेश"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "डक्ट्रीनले ऐतिहासिक आधाररेखा चेतावनीहरू रिपोर्ट गरेको छ। अद्यावधिककर्ताले स्पष्ट पुष्टि पछि मात्र चरणबद्ध V210 माइग्रेसनहरू कार्यान्वयन गर्नेछ।"
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "डक्ट्रीनले सुरक्षा समीक्षा पास भएपछि मात्र चरणबद्ध V210 माइग्रेसनहरू स्पष्ट रूपमा कार्यान्वयन गर्नेछ।"
+
+msgid "Dry-run exit code"
+msgstr "ड्राई-रन निकास कोड"
+
+msgid "Executed unavailable migrations"
+msgstr "उपलब्ध नभएका माइग्रेसनहरू कार्यान्वयन गरियो"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "निरीक्षणका लागि प्रमाणित अद्यावधिक प्याकेजलाई स्टेजिङ डाइरेक्टरीमा निकाल्नुहोस्। यसले फाइलहरू प्रतिस्थापन गर्दैन, माइग्रेसन चलाउँदैन वा डाटाबेस परिमार्जन गर्दैन।"
+
+msgid "File apply available"
+msgstr "फाइल लागू उपलब्ध"
+
+msgid "Files to replace"
+msgstr "प्रतिस्थापन गर्नुपर्ने फाइलहरू"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "माइग्रेसनहरू चलाउनुअघि डाटाबेस ब्याकअप अवस्थित छ र प्रमाणित गरिएको छ भनी म पुष्टि गर्दछु।"
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "उन्नत कार्यहरूले निर्भरताहरू, उत्पन्न सम्पत्तिहरू वा डाटाबेस परिमार्जन गर्न सक्छ भनी म बुझ्दछु।"
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "यसले चामिलो स्थापनामा फाइलहरू प्रतिस्थापन गर्नेछ भनी म बुझ्दछु।"
+
+msgid "I understand this will run update commands on the server."
+msgstr "यसले सर्भरमा अद्यावधिक आदेशहरू चलाउनेछ भनी म बुझ्दछु।"
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "सम्पत्तिहरू पुनर्निर्माण गर्नुअघि फ्रन्टएन्ड निर्भरताहरू स्थापना गर्नुहोस्।"
+
+msgid "Installed version"
+msgstr "स्थापित संस्करण"
+
+msgid "Latest migration"
+msgstr "पछिल्लो माइग्रेसन"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "प्याकेज र हस्ताक्षर मार्गहरू खाली छोड्नुहोस् ताकि तिनीहरू प्रमाणित म्यानिफेस्ट URL हरूबाट डाउनलोड होस्। स्थानीय मार्गहरू विकास परीक्षणका लागि मात्र उपलब्ध छन्।"
+
+msgid "Live command log"
+msgstr "लाइभ आदेश लग"
+
+msgid "Live update log"
+msgstr "लाइभ अद्यावधिक लग"
+
+msgid "Local test options"
+msgstr "स्थानीय परीक्षण विकल्पहरू"
+
+msgid "Local test update notice link"
+msgstr "स्थानीय परीक्षण अद्यावधिक सूचना लिङ्क"
+
+msgid "Local update notice simulation"
+msgstr "स्थानीय अद्यावधिक सूचना सिमुलेशन"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "स्थानीय अद्यावधिक सूचना सिमुलेशन विकास मोडमा मात्र उपलब्ध छ।"
+
+msgid "Manifest"
+msgstr "म्यानिफेस्ट"
+
+msgid "Manifest source"
+msgstr "म्यानिफेस्ट स्रोत"
+
+msgid "Migration safety details"
+msgstr "माइग्रेसन सुरक्षा विवरणहरू"
+
+msgid "Migration safety review failed"
+msgstr "माइग्रेसन सुरक्षा समीक्षा असफल भयो"
+
+msgid "Migration safety review ready"
+msgstr "माइग्रेसन सुरक्षा समीक्षा तयार छ"
+
+msgid "Migration target"
+msgstr "माइग्रेसन लक्ष्य"
+
+msgid "New files"
+msgstr "नयाँ फाइलहरू"
+
+msgid "New migrations reported by Doctrine"
+msgstr "डक्ट्रीनद्वारा रिपोर्ट गरिएका नयाँ माइग्रेसनहरू"
+
+msgid "Next migration"
+msgstr "अर्को माइग्रेसन"
+
+msgid "No executed unavailable migration was reported."
+msgstr "कुनै पनि कार्यान्वयन नगरिएको अनुपलब्ध माइग्रेसन रिपोर्ट गरिएको थिएन।"
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "अहिलेसम्म कुनै आधिकारिक म्यानिफेस्ट URL कन्फिगर गरिएको छैन। विकास परीक्षणका लागि HTTPS URL वा स्थानीय मार्ग प्रयोग गर्नुहोस्।"
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "चरणबद्ध अद्यावधिक लक्ष्यअघि कुनै पनि पेन्डिङ माइग्रेसन पत्ता लागेन।"
+
+msgid "Not configured"
+msgstr "कन्फिगर गरिएको छैन"
+
+msgid "Not detected"
+msgstr "पत्ता लागेन"
+
+msgid "Official Chamilo update channel"
+msgstr "आधिकारिक चामिलो अद्यावधिक च्यानल"
+
+msgid "Package SHA-256"
+msgstr "प्याकेज SHA-256"
+
+msgid "Package URL"
+msgstr "प्याकेज URL"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "प्याकेज र हस्ताक्षर फाइलहरू म्यानिफेस्टबाट डाउनलोड गरिनेछ। यस वातावरणमा स्थानीय मार्गहरू असक्षम छन्।"
+
+msgid "Package path"
+msgstr "प्याकेज मार्ग"
+
+msgid "Package staged successfully"
+msgstr "प्याकेज सफलतापूर्वक स्टेज गरियो"
+
+msgid "Package staging failed"
+msgstr "प्याकेज स्टेजिङ असफल भयो"
+
+msgid "Package verification"
+msgstr "प्याकेज प्रमाणीकरण"
+
+msgid "Package verification failed"
+msgstr "प्याकेज प्रमाणीकरण असफल भयो"
+
+msgid "Package verified successfully"
+msgstr "प्याकेज सफलतापूर्वक प्रमाणित गरियो"
+
+msgid "Pending migrations before this update"
+msgstr "यो अद्यावधिक गर्नुअघि बाँकी माइग्रेसनहरू"
+
+msgid "Planned backup path"
+msgstr "योजनाबद्ध ब्याकअप मार्ग"
+
+msgid "Post-apply actions completed"
+msgstr "पोस्ट-एप्लाई कार्यहरू सम्पन्न"
+
+msgid "Post-apply actions failed"
+msgstr "पोस्ट-एप्लाई कार्यहरू असफल"
+
+msgid "Post-apply actions ready"
+msgstr "पोस्ट-एप्लाई कार्यहरू तयार"
+
+msgid "Post-apply checks"
+msgstr "पोस्ट-एप्लाई जाँचहरू"
+
+msgid "Post-apply checks failed"
+msgstr "पोस्ट-एप्लाई जाँचहरू असफल"
+
+msgid "Post-apply details"
+msgstr "पोस्ट-एप्लाई विवरणहरू"
+
+msgid "Post-apply run details"
+msgstr "पोस्ट-एप्लाई रन विवरणहरू"
+
+msgid "Preflight checks"
+msgstr "प्रीफ्लाइट जाँचहरू"
+
+msgid "Preflight checks completed"
+msgstr "प्रीफ्लाइट जाँचहरू सम्पन्न"
+
+msgid "Preflight checks failed"
+msgstr "प्रीफ्लाइट जाँचहरू असफल"
+
+msgid "Preflight details"
+msgstr "प्रीफ्लाइट विवरणहरू"
+
+msgid "Prepare staging"
+msgstr "स्टेजिङ तयार गर्नुहोस्"
+
+msgid "Preparing staging..."
+msgstr "स्टेजिङ तयार गर्दै..."
+
+msgid "Production mode"
+msgstr "उत्पादन मोड"
+
+msgid "Released at"
+msgstr "रिलिज गरिएको मिति"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "समीक्षा गरिएको एप्लाई योजना प्रयोग गरेर स्टेज्ड प्याकेजबाट चामिलो फाइलहरू प्रतिस्थापन गर्नुहोस्। यसले डाटाबेस माइग्रेसन, कम्पोजर, यार्न वा क्यास आदेशहरू चलाउँदैन।"
+
+msgid "Review apply plan"
+msgstr "एप्लाई योजना समीक्षा गर्नुहोस्"
+
+msgid "Review database migrations"
+msgstr "डाटाबेस माइग्रेसन समीक्षा गर्नुहोस्"
+
+msgid "Review post-apply actions"
+msgstr "पोस्ट-एप्लाई कार्यहरू समीक्षा गर्नुहोस्"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "अद्यावधिक फाइलहरू लागू गरेपछि सिफारिस गरिएका म्यानुअल आदेशहरू समीक्षा गर्नुहोस्। यस चरणले कम्पोजर, यार्न, माइग्रेसन वा क्यास आदेशहरू चलाउँदैन।"
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "डाटाबेस माइग्रेसन चलाउनुअघि स्टेज्ड डक्ट्रीन माइग्रेसन र ड्राई-रन आउटपुट समीक्षा गर्नुहोस्।"
+
+msgid "Reviewing database migrations..."
+msgstr "डाटाबेस माइग्रेसन समीक्षा गर्दै..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "डाटाबेस माइग्रेसन कार्यान्वयन गर्नुअघि माइग्रेसन सुरक्षा समीक्षा चलाउनुहोस् र पास गर्नुहोस्।"
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "कुनै पनि भविष्यको अद्यावधिक एप्लिकेसन चरण अघि वातावरण जाँचहरू चलाउनुहोस्। यसले फाइल वा डाटाबेस परिमार्जन गर्दैन।"
+
+msgid "Run post-apply actions"
+msgstr "पोस्ट-एप्लाई कार्यहरू चलाउनुहोस्"
+
+msgid "Run preflight checks"
+msgstr "प्रीफ्लाइट जाँचहरू चलाउनुहोस्"
+
+msgid "Run selected post-apply actions"
+msgstr "चयन गरिएका पोस्ट-एप्लाई कार्यहरू चलाउनुहोस्"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "नियन्त्रित अनुमति सूची प्रयोग गरेर सर्भरबाट चयन गरिएका पोस्ट-एप्लाई आदेशहरू चलाउनुहोस्। कुनै पनि अनुकूलन शेल आदेश स्वीकार गरिँदैन।"
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "फाइल अद्यावधिक परिणाम र ब्याकअपहरू पुष्टि गरेपछि सर्भरबाट यी आदेशहरू म्यानुअल रूपमा चलाउनुहोस्।"
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "उत्पादन मोडमा UI बाट पोस्ट-एप्लाई कार्यहरू चलाउन असक्षम गरिएको छ।"
+
+msgid "Running post-apply actions..."
+msgstr "पोस्ट-एप्लाई कार्यहरू चलाउँदै..."
+
+msgid "Safe actions"
+msgstr "सुरक्षित कार्यहरू"
+
+msgid "Signature path"
+msgstr "हस्ताक्षर मार्ग"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "यो वातावरणमा हस्ताक्षर प्रमाणीकरण छोड्न सकिँदैन।"
+
+msgid "Skip signature verification for local development tests"
+msgstr "स्थानीय विकास परीक्षणका लागि हस्ताक्षर प्रमाणीकरण छोड्नुहोस्"
+
+msgid "Staged file application failed"
+msgstr "स्टेज्ड फाइल एप्लिकेसन असफल"
+
+msgid "Staged files applied successfully"
+msgstr "स्टेज्ड फाइलहरू सफलतापूर्वक लागू गरियो"
+
+msgid "Staging details"
+msgstr "स्टेजिङ विवरणहरू"
+
+msgid "Staging directory"
+msgstr "स्टेजिङ डाइरेक्टरी"
+
+msgid "Staging extraction"
+msgstr "स्टेजिङ एक्स्ट्र्याक्सन"
+
+msgid "Symfony cache clear"
+msgstr "सिम्फोनी क्यास खाली गर्नुहोस्"
+
+msgid "System update"
+msgstr "प्रणाली अद्यावधिक"
+
+msgid "Target version"
+msgstr "लक्ष्य संस्करण"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "कन्फिगर गरिएको आधिकारिक म्यानिफेस्ट URL पूर्वपूरित छ। आवश्यक परेमा तपाईं यसलाई अर्को HTTPS म्यानिफेस्टमा परिवर्तन गर्न सक्नुहुन्छ।"
+
+msgid "The database migration baseline is clean."
+msgstr "डाटाबेस माइग्रेसन बेसलाइन सफा छ।"
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "कार्य सम्पन्न भएपछि अन्तिम HTTP प्रतिक्रिया असफल भयो। यो सामान्यतया रनटाइम क्यास अनुमतिहरू वा अनुरोधको क्रममा वेब सर्भर रिस्टार्टको कारणले हुन्छ।"
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "अपरेशन लगले पोस्ट-एप्लाई कार्यहरू सफलतापूर्वक सम्पन्न भएको रिपोर्ट गर्दछ।"
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "चयन गरिएका पोस्ट-एप्लाई आदेशहरू सफलतापूर्वक सम्पन्न भए, तर अन्तिम HTTP प्रतिक्रिया असफल भयो। पृष्ठ पुनः लोड गर्नुहोस् र यदि पृष्ठ सही रूपमा लोड नभएमा रनटाइम क्यास अनुमतिहरू प्रमाणित गर्नुहोस्।"
+
+msgid "The updater does not create or restore database backups."
+msgstr "अपडेटरले डाटाबेस ब्याकअप सिर्जना वा पुनर्स्थापना गर्दैन।"
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "यी कार्यहरू अपडेट परिणाम समीक्षा गरेपछि UI बाट चलाउन सुरक्षित छन्।"
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "यी आदेशहरूले निर्भरता, उत्पन्न सम्पत्ति, क्यास वा डाटाबेस परिमार्जन गर्न सक्छन्। जारी राख्नुअघि ब्याकअप पुष्टि गर्नुहोस्।"
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "यो कार्यले चामिलो स्थापनामा फाइलहरू परिमार्जन गर्छ। जारी राख्नुअघि लागू योजना समीक्षा गरिएको र ब्याकअप सक्षम गरिएको सुनिश्चित गर्नुहोस्।"
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "यो विकास प्रविष्टिले स्थानीय परीक्षण प्याकेज मार्गहरू प्रयोग गरी भविष्यको चामिलो.ओर्ग अपडेट सूचना अनुकरण गर्छ।"
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "यो स्क्रिन आधिकारिक अपडेट सूचनाबाट खोलिएको थियो, तर अहिलेसम्म कुनै आधिकारिक म्यानिफेस्ट स्रोत कन्फिगर गरिएको छैन।"
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "यो स्क्रिन अपडेट सूचनाबाट खोलिएको थियो। केवल म्यानिफेस्ट जाँच स्वतः सुरु हुन्छ।"
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "यो चरणले समीक्षा मात्र तयार पार्छ। फाइल प्रतिस्थापन पछि लागू स्टेज गरिएका फाइलहरू चरणमा हुन्छ, लक, ब्याकअप र रोलब्याक सुरक्षा सहित।"
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "यो अपडेटरले डाटाबेस ब्याकअप सिर्जना गर्दैन। माइग्रेसन चलाउनुअघि ब्याकअप सिर्जना र प्रमाणित गर्नुहोस्।"
+
+msgid "Trusted public key"
+msgstr "विश्वसनीय सार्वजनिक कुञ्जी"
+
+msgid "Trusted signing key"
+msgstr "विश्वसनीय हस्ताक्षर कुञ्जी"
+
+msgid "Unknown update notice source."
+msgstr "अज्ञात अपडेट सूचना स्रोत।"
+
+msgid "Update availability"
+msgstr "अपडेट उपलब्धता"
+
+msgid "Update directory"
+msgstr "अपडेट डाइरेक्टरी"
+
+msgid "Update lock path"
+msgstr "अपडेट लक मार्ग"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "अघिल्लो चरणद्वारा उत्पन्न स्टेजिङ डाइरेक्टरी प्रयोग गर्नुहोस्। ब्याकएन्डले var/update/staging भित्रका डाइरेक्टरीहरू मात्र स्वीकार गर्छ।"
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "विकास परीक्षणहरूको क्रममा भविष्यको चामिलो.ओर्ग अपडेट सूचना अनुकरण गर्न यो लिङ्क प्रयोग गर्नुहोस्।"
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "यो केवल स्थानीय विकास परीक्षणका लागि प्रयोग गर्नुहोस्। उत्पादन अपडेटहरूले सर्भर कन्फिगर गरिएको कुञ्जी प्रयोग गर्नुपर्छ।"
+
+msgid "Verification details"
+msgstr "प्रमाणीकरण विवरणहरू"
+
+msgid "Verify package"
+msgstr "प्याकेज प्रमाणित गर्नुहोस्"
+
+msgid "Verifying..."
+msgstr "प्रमाणित गर्दै..."
+
+msgid "Waiting for command progress events..."
+msgstr "आदेश प्रगति घटनाहरूको प्रतीक्षा गर्दै..."
+
+msgid "Waiting for update progress events..."
+msgstr "अपडेट प्रगति घटनाहरूको प्रतीक्षा गर्दै..."
+
+msgid "Yarn build"
+msgstr "यार्न बिल्ड"
+
+msgid "Yarn install"
+msgstr "यार्न इनस्टल"
+
+msgid "A comment is required"
+msgstr "टिप्पणी आवश्यक छ"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "उही नामको डाटाबेस पहिले नै अवस्थित छ। यदि यसमा तालिकाहरू छन् भने तिनीहरू मेटिनेछन्; यदि खाली छ भने पुन: प्रयोग गरिनेछ।"
+
+msgid "AI generated"
+msgstr "AI उत्पन्न"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "सिकाइ मार्गमा फर्कनुअघि कम्तीमा एउटा प्रश्न थप्नुहोस्।"
+
+msgid "Add attachments"
+msgstr "एट्याचमेन्टहरू थप्नुहोस्"
+
+msgid "Additional fields"
+msgstr "अतिरिक्त क्षेत्रहरू"
+
+msgid "Allow comments"
+msgstr "टिप्पणी अनुमति दिनुहोस्"
+
+msgid "Allow new pages"
+msgstr "नयाँ पृष्ठहरू अनुमति दिनुहोस्"
+
+msgid "Allow ratings"
+msgstr "रेटिङ अनुमति दिनुहोस्"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "के तपाईं सबै वस्तुहरू मेटाउन निश्चित हुनुहुन्छ?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "के तपाईं स्वचालित नवीकरण पुनर्स्थापना गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Attachment has been deleted"
+msgstr "एट्याचमेन्ट मेटिएको छ"
+
+msgid "Backup file"
+msgstr "ब्याकअप फाइल"
+
+msgid "Block comments"
+msgstr "टिप्पणी ब्लक गर्नुहोस्"
+
+msgid "Block new pages"
+msgstr "नयाँ पृष्ठहरू ब्लक गर्नुहोस्"
+
+msgid "Block ratings"
+msgstr "रेटिङ ब्लक गर्नुहोस्"
+
+msgid "Cancel renewal"
+msgstr "नवीकरण रद्द गर्नुहोस्"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "कोटि लिङ्कहरू %s विकि पृष्ठहरूबाट हटाइनेछ।"
+
+msgid "Change"
+msgstr "परिवर्तन गर्नुहोस्"
+
+msgid "Clear group"
+msgstr "समूह खाली गर्नुहोस्"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "सम्पादकमा घुसाउन ट्यागमा क्लिक गर्नुहोस्। यी प्लेसहोल्डरहरू प्रमाणपत्र उत्पन्न गर्दा प्रतिस्थापन हुनेछन्।"
+
+msgid "Comment added"
+msgstr "टिप्पणी थपियो"
+
+msgid "Comment is required"
+msgstr "टिप्पणी आवश्यक छ"
+
+msgid "Comment score"
+msgstr "टिप्पणी स्कोर"
+
+msgid "Compare selected versions line by line"
+msgstr "चयन गरिएका संस्करणहरू लाइन अनुसार तुलना गर्नुहोस्"
+
+msgid "Compare selected versions word by word"
+msgstr "चयन गरिएका संस्करणहरू शब्द अनुसार तुलना गर्नुहोस्"
+
+msgid "Compare versions"
+msgstr "संस्करणहरू तुलना गर्नुहोस्"
+
+msgid "Copy completed"
+msgstr "प्रतिलिपि सम्पन्न भयो"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "सिकारुहरूका लागि व्यक्तिगत विकि कार्य पृष्ठहरू सिर्जना गर्नुहोस्"
+
+msgid "Current view mode"
+msgstr "हालको दृश्य मोड"
+
+msgid "Delete Wiki"
+msgstr "विकि मेटाउनुहोस्"
+
+msgid "Delete page"
+msgstr "पृष्ठ मेटाउनुहोस्"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "विकि गृहपृष्ठ मेटाउन सिफारिस गरिँदैन। तपाईं पछि यसलाई पुनः सिर्जना गर्न सक्नुहुन्छ।"
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "विकि असक्षम गर्दा सामान्य विकि पृष्ठहरू र कार्यहरू अवरुद्ध हुन्छन्। यो सेटिङ्स पृष्ठ पाठ्यक्रम शिक्षकहरूलाई उपलब्ध रहन्छ।"
+
+msgid "Discussion"
+msgstr "छलफल"
+
+msgid "Edit Comment"
+msgstr "टिप्पणी सम्पादन गर्नुहोस्"
+
+msgid "Edit page"
+msgstr "पृष्ठ सम्पादन गर्नुहोस्"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "समाप्ति मिति म्याद सकिने मितिभन्दा पछि वा बराबर हुनुपर्छ"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "विकि पृष्ठहरू खोज्न खोज शब्द प्रविष्ट गर्नुहोस्"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "म्याद सकिने मिति समाप्ति मितिभन्दा अघि वा बराबर हुनुपर्छ"
+
+msgid "Failed email recipients"
+msgstr "असफल इमेल प्राप्तकर्ताहरू"
+
+msgid "Finish and return to learning path"
+msgstr "समाप्त गर्नुहोस् र सिकाइ मार्गमा फर्कनुहोस्"
+
+msgid "Forum image"
+msgstr "फोरम छवि"
+
+msgid "Hide discussion"
+msgstr "छलफल लुकाउनुहोस्"
+
+msgid "Hide page"
+msgstr "पृष्ठ लुकाउनुहोस्"
+
+msgid "I changed my mind"
+msgstr "मैले मेरो विचार परिवर्तन गरेँ"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "यदि चेक नगरेमा, ती फाइलहरू 'फाइल जानकारी' उपकरण मार्फत प्लेटफर्म प्रशासकलाई उपलब्ध रहनेछन्।"
+
+msgid "Internal message failures"
+msgstr "आन्तरिक सन्देश असफलताहरू"
+
+msgid "Internal messages available"
+msgstr "आन्तरिक सन्देशहरू उपलब्ध"
+
+msgid "Internal messages created now"
+msgstr "आन्तरिक सन्देशहरू अहिले सिर्जना गरिए"
+
+msgid "Item score"
+msgstr "वस्तु स्कोर"
+
+msgid "Last post"
+msgstr "अन्तिम पोस्ट"
+
+msgid "Lock page"
+msgstr "पृष्ठ लक गर्नुहोस्"
+
+msgid "Manage categories"
+msgstr "कोटिहरू व्यवस्थापन गर्नुहोस्"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "यो कागजातलाई एआई-सहायता प्राप्तको रूपमा चिन्ह लगाउनुहोस्। सामग्री एआई उपकरणहरूसँग सिर्जना वा उल्लेखनीय रूपमा परिमार्जन गरिएको बेला प्रयोग गर्नुहोस्।"
+
+msgid "Maximum score is required"
+msgstr "अधिकतम स्कोर आवश्यक छ"
+
+msgid "Metric"
+msgstr "मेट्रिक"
+
+msgid "New comments are blocked in this discussion"
+msgstr "यस छलफलमा नयाँ टिप्पणीहरू अवरुद्ध छन्"
+
+msgid "No Wiki categories are available yet."
+msgstr "अहिले कुनै विकि कोटिहरू उपलब्ध छैनन्।"
+
+msgid "No categories found"
+msgstr "कुनै कोटि फेला परेन"
+
+msgid "No content"
+msgstr "कुनै सामग्री छैन"
+
+msgid "No parent category"
+msgstr "कुनै अभिभावक कोटि छैन"
+
+msgid "Number of comments scored"
+msgstr "स्कोर गरिएका टिप्पणीहरूको संख्या"
+
+msgid "Old version"
+msgstr "पुरानो संस्करण"
+
+msgid "Only image files are allowed."
+msgstr "केवल छवि फाइलहरूलाई अनुमति दिइएको छ।"
+
+msgid "Please fill all required fields"
+msgstr "कृपया सबै आवश्यक फिल्डहरू भर्नुहोस्"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "कक्षा वा विद्यार्थी प्लेसहोल्डर भएका प्रश्नहरू पाठ्यक्रम कक्षा वा समूहहरूका लागि उत्पन्न गरिनेछ: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "यस छलफलमा रेटिङहरू अवरुद्ध छन्"
+
+msgid "Remove image"
+msgstr "छवि हटाउनुहोस्"
+
+msgid "Restore renewal"
+msgstr "नवीकरण पुनर्स्थापना गर्नुहोस्"
+
+msgid "Restore version"
+msgstr "संस्करण पुनर्स्थापना गर्नुहोस्"
+
+msgid "Search in"
+msgstr "मा खोज्नुहोस्"
+
+msgid "Select group"
+msgstr "समूह चयन गर्नुहोस्"
+
+msgid "Select image"
+msgstr "छवि चयन गर्नुहोस्"
+
+msgid "Selected image"
+msgstr "चयन गरिएको छवि"
+
+msgid "Show discussion"
+msgstr "छलफल देखाउनुहोस्"
+
+msgid "Show page"
+msgstr "पृष्ठ देखाउनुहोस्"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "केही फाइल वा फोल्डरहरूमा लेख्ने अनुमति छैन। चामिलो स्थापना गर्न सक्षम हुन तपाईंले पहिले तिनीहरूको अनुमति परिवर्तन गर्नुपर्छ (CHMOD प्रयोग गरेर)। कृपया पढ्नुहोस्"
+
+msgid "Subcategories"
+msgstr "उपश्रेणीहरू"
+
+msgid "Tap on the left or right to navigate"
+msgstr "नेभिगेट गर्न बायाँ वा दायाँ ट्याप गर्नुहोस्"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "विकी असाइनमेन्टको समयसीमा सकिएको छ, तर ढिलो बुझाउन अनुमति दिइएको छ।"
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "विकी असाइनमेन्टको समयसीमा सकिएको छ।"
+
+msgid "The Wiki assignment has not started yet."
+msgstr "विकी असाइनमेन्ट अझै सुरु भएको छैन।"
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "सेभ गर्नुअघि विकि पृष्ठ सम्पादन लक आवश्यक छ।"
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "घोषणा सेभ गरियो, तर एउटा संलग्नक अपलोड गर्न सकिएन।"
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "घोषणा सेभ गरियो, तर इमेल डेलिभरी असफल भयो।"
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "घोषणा सेभ गरियो, तर कुनै पनि इमेल डेलिभर गर्न सकिएन।"
+
+msgid "The category has been created"
+msgstr "श्रेणी सिर्जना गरिएको छ"
+
+msgid "The category has been deleted"
+msgstr "श्रेणी मेटाइएको छ"
+
+msgid "The category has been updated"
+msgstr "श्रेणी अद्यावधिक गरिएको छ"
+
+msgid "The end date is invalid"
+msgstr "अन्त्य मिति अमान्य छ"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "संस्करणको अधिकतम संख्या गैर-ऋणात्मक पूर्णांक हुनुपर्छ"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "शब्दहरूको अधिकतम संख्या गैर-ऋणात्मक पूर्णांक हुनुपर्छ"
+
+msgid "The print window could not be opened"
+msgstr "प्रिन्ट विन्डो खोल्न सकिएन"
+
+msgid "The start date is invalid"
+msgstr "सुरु मिति अमान्य छ"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "यी सेटिङहरू सम्पूर्ण कोर्समा लागू हुन्छन्, यसका सत्रहरू र समूहहरू सहित।"
+
+msgid "This announcement has already been sent by email."
+msgstr "यो घोषणा पहिले नै इमेलद्वारा पठाइसकिएको छ।"
+
+msgid "This discussion is hidden from learners"
+msgstr "यो छलफल शिक्षार्थीहरूबाट लुकाइएको छ"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "यो जेनेरेटिभ एआई उपकरणले तपाईंको कोर्सलाई चित्रण गर्न छविहरू र छोटो भिडियोहरू सिर्जना गर्न अनुमति दिन्छ। प्रॉम्प्ट खण्डमा (पाठमा) तपाईंले के चाहनुहुन्छ भनेर व्याख्या गरेर, तपाईंले कन्फिगर गरिएको एआई मोडेललाई छवि वा भिडियो उत्पन्न गर्न आवश्यक तत्वहरू दिनुहुनेछ। कृपया धैर्य गर्नुहोस्। एआई मोडेलले केही समय लिनेछ र केही नतिजा उत्पन्न गर्नेछ, जुन तपाईंले आफ्नो कागजात फोल्डरमा मिडिया सेभ गरेर राख्न चाहनुहुनेछ, र त्यसपछि एचटीएमएल कागजातभित्र इम्बेड गर्नुहुनेछ। सबै एआई मोडेलहरू गति वा गुणस्तरको हिसाबले समान हुँदैनन्। एआई मोडेलले तपाईंलाई संशोधित प्रॉम्प्ट पनि दिन सक्छ, जुन तपाईंको अनुरोधको थप विस्तृत व्याख्या हो। त्यसपछि तपाईंले आफ्नो अनुरोधलाई फाइनट्यून गर्न यो संशोधित प्रॉम्प्ट प्रयोग गर्न सक्नुहुन्छ। कृपया ध्यान दिनुहोस् कि यो उपकरण, विशेष गरी भिडियोहरूको लागि, तपाईंले उत्पन्न गरिएको मिडिया सेभ नगर्ने निर्णय गरे पनि तपाईंको संस्थालाई उल्लेखनीय लागत उत्पन्न गर्न सक्छ। कृपया यसलाई त्यही अनुसार प्रयोग गर्नुहोस्। यदि तपाईंले खोजिरहनुभएको कुरा प्राप्त गर्न समस्या छ भने, कृपया आफूसँग उपलब्ध एआई मोडेलको लागि अनलाइन प्रॉम्प्टिङ ट्रिक्स अनुसन्धान गर्न केही समय लिनुहोस्।"
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "यो इतिहास आधार कोर्सको हो। सत्र संस्करण सिर्जना गरेपछि पुनर्स्थापना उपलब्ध हुन्छ।"
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "यो छविले फोरम शीर्षकको छेउमा देखाइएको पूर्वनिर्धारित फोरम आइकन प्रतिस्थापन गर्छ।"
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "यो पृष्ठ आधार कोर्सबाट आएको हो। यसलाई सेभ गर्दा हालको सत्रको लागि संस्करण सिर्जना हुनेछ।"
+
+msgid "This will also delete %s subcategories."
+msgstr "यसले %s उपश्रेणीहरू पनि मेटाउनेछ।"
+
+msgid "This will create individual work pages for %s learners."
+msgstr "यसले %s शिक्षार्थीहरूको लागि व्यक्तिगत कार्य पृष्ठहरू सिर्जना गर्नेछ।"
+
+msgid "Thread history"
+msgstr "थ्रेड इतिहास"
+
+msgid "Title and content"
+msgstr "शीर्षक र सामग्री"
+
+msgid "Unable to cancel renewal right now."
+msgstr "अहिले नवीकरण अधिकार रद्द गर्न सकिएन।"
+
+msgid "Unable to restore renewal right now."
+msgstr "अहिले नवीकरण अधिकार पुनर्स्थापना गर्न सकिएन।"
+
+msgid "Unlock page"
+msgstr "पृष्ठ अनलक गर्नुहोस्"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "आन्तरिक विकि लिङ्कहरू सिर्जना गर्न [[Page]] वा [[Page|Visible text]] प्रयोग गर्नुहोस्।"
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "नेभिगेट गर्न स्पेसबार वा एरो कुञ्जीहरू प्रयोग गर्नुहोस्"
+
+msgid "View version"
+msgstr "संस्करण हेर्नुहोस्"
+
+msgid "Visible only to teachers"
+msgstr "शिक्षकहरूलाई मात्र दृश्यमान"
+
+msgid "Weight is required"
+msgstr "तौल आवश्यक छ"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "यस कोर्सको लागि विकि श्रेणीहरू असक्षम छन्।"
+
+msgid "Wiki categories enabled"
+msgstr "विकी श्रेणीहरू सक्षम गरिएको"
+
+msgid "Wiki html strict filtering"
+msgstr "विकी एचटीएमएल कडा फिल्टरिङ"
+
+msgid "Wiki settings"
+msgstr "विकी सेटिङहरू"
+
+msgid "Wiki settings updated"
+msgstr "विकी सेटिङहरू अद्यावधिक गरियो"
+
+msgid "You are viewing a historical version of this page"
+msgstr "तपाईं यस पृष्ठको ऐतिहासिक संस्करण हेर्दै हुनुहुन्छ"
+
+msgid "You can attach one or more files to this reply."
+msgstr "तपाईं यस जवाफमा एक वा बढी फाइलहरू संलग्न गर्न सक्नुहुन्छ।"
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "तपाईं यस असाइनमेन्ट पृष्ठ सम्पादन गर्न सक्नुहुन्छ, तर शिक्षार्थी कार्य पृष्ठहरू परिमार्जन गरिने छैनन्।"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "तपाईं प्रश्नमा {{class_name}} र {{student_full_name}} ट्यागहरू प्रयोग गर्न सक्नुहुन्छ।"
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "सम्पादन लक समाप्त हुनुअघि तपाईंसँग यो पृष्ठ सम्पादन गर्न २० मिनेट बाँकी छ।"
+
+msgid "by"
+msgstr "द्वारा"
+
+msgid "required"
+msgstr "आवश्यक"
+
+msgid "Incorrect password."
+msgstr "गलत पासवर्ड।"
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "फाइल अखण्डता चेतावनी १ घण्टाका लागि रोकिएको छ।"
+
+msgid "New baseline established: %s files."
+msgstr "नयाँ आधाररेखा स्थापना गरियो: %s फाइलहरू।"
+
+msgid "Scan complete: changes were detected."
+msgstr "स्क्यान सम्पन्न: परिवर्तनहरू पत्ता लागे।"
+
+msgid "Scan complete: no changes were detected."
+msgstr "स्क्यान सम्पन्न: कुनै परिवर्तन पत्ता लागेन।"
+
+msgid "File integrity"
+msgstr "फाइल अखण्डता"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "यो प्रतिवेदनले स्थापित फाइलहरू (var/ र .git/ बाहेक, तर .git/config अझै पनि हाइज्याक गरिएको रिमोट पत्ता लगाउन हेर्न सकिन्छ) लाई विश्वसनीय आधाररेखासँग तुलना गर्दछ, अप्रत्याशित थप, परिमार्जन वा मेटाइ पत्ता लगाउन।"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "तपाईं तलको नवीनतम प्रतिवेदन समीक्षा गर्न सक्नुहुन्छ। स्क्यान चलाउने, चेतावनी रोक्ने, वा नयाँ आधाररेखा स्थापना गर्न विश्वव्यापी प्रशासक आवश्यक पर्छ।"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "मर्मतसम्भारका लागि चेतावनी हाल रोकिएको छ। यो स्वतः %date% मा पुनः सुरु हुनेछ।"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "अहिलेसम्म कुनै स्क्यान चलेको छैन। यहाँबाट वा आदेश रेखाबाट app:file-integrity:scan सँग चलाउनुहोस्।"
+
+msgid "Last scan"
+msgstr "अन्तिम स्क्यान"
+
+msgid "Files scanned"
+msgstr "स्क्यान गरिएका फाइलहरू"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "अहिलेसम्म कुनै आधाररेखा थिएन: यो स्क्यानले एउटा स्थापना गर्‍यो। अर्को स्क्यानबाट परिवर्तनहरू रिपोर्ट गरिनेछ।"
+
+msgid "No changes detected since the baseline."
+msgstr "आधाररेखादेखि कुनै परिवर्तन पत्ता लागेन।"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Git रिमोट कन्फिगरेसन (.git/config) परिवर्तन भएको छ। यो अपेक्षित थियो कि थिएन जाँच गर्नुहोस्।"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "स्क्यान चाँडै रोकियो किनकि उपनिर्देशिका पढ्न सकिएन (फाइल अनुमतिहरू जाँच गर्नुहोस्)। तलका नतिजाहरू आंशिक हुन सक्छन्।"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "सूचीमा पूर्ण रूपमा देखाउन धेरै परिवर्तनहरू छन्; प्रत्येक कोटिको पहिलो प्रविष्टिहरू मात्र तल देखाइएको छ। पूर्ण सूचीको लागि CEF लग हेर्नुहोस्।"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% फाइल(हरू) पढ्न सकिएन (अनुमतिहरू) र छोडियो।"
+
+msgid "Run a scan now"
+msgstr "अहिले स्क्यान चलाउनुहोस्"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "१ घण्टाका लागि चेतावनी रोक्नुहोस् (मर्मतसम्भारका लागि)"
+
+msgid "Pause for 1 hour"
+msgstr "१ घण्टाका लागि रोक्नुहोस्"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "हालको फाइल ट्रीलाई नयाँ आधाररेखाको रूपमा विश्वास गर्नुहोस्"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "यसले कुनै पनि समीक्षा नगरिएको परिवर्तन सहित प्रत्येक हालको फाइललाई सही मान्नेछ। जारी राख्ने?"
+
+msgid "Establish new baseline"
+msgstr "नयाँ आधाररेखा स्थापना गर्नुहोस्"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "उदाहरणका लागि प्रणाली क्रोन्ट्याबबाट स्क्यान तालिका बनाउनुहोस्"
+
+msgid "File integrity alert on %platform%"
+msgstr "%platform% मा फाइल अखण्डता चेतावनी"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "फाइल अखण्डता स्क्यानले प्लेटफर्ममा परिवर्तनहरू पत्ता लगायो:"
+
+msgid "Added files"
+msgstr "थपिएका फाइलहरू"
+
+msgid "Modified files"
+msgstr "परिमार्जित फाइलहरू"
+
+msgid "Deleted files"
+msgstr "मेटिएका फाइलहरू"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "प्रशासन > सुरक्षा > फाइल अखण्डता बाट पूर्ण प्रतिवेदन समीक्षा गर्नुहोस्।"
+
+msgid "Password to confirm pausing alerts"
+msgstr "अलर्ट रोक्न पासवर्ड पुष्टि गर्नुहोस्"
+
+msgid "Password to confirm the new baseline"
+msgstr "नयाँ आधाररेखा पुष्टि गर्न पासवर्ड"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "स्क्यान पहिले नै चलिरहेको छ। अर्को सुरु गर्नुअघि यसलाई समाप्त हुन दिनुहोस्।"
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "स्क्यान हाल चलिरहेको छ (%date% मा सुरु भएको)। पूर्ण स्क्यानमा केही मिनेट लाग्न सक्छ; प्रगति जाँच्न यो पृष्ठ सुरक्षित रूपमा पुनः लोड गर्न सकिन्छ।"
+
+msgid "Currently processing"
+msgstr "हाल प्रक्रिया गर्दै"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "अघिल्लो स्क्यान (%date% मा सुरु भएको) समाप्त हुनुअघि अवरोधित भएको थियो — प्रक्रिया अब चलिरहेको छैन। तपाईं सुरक्षित रूपमा नयाँ स्क्यान सुरु गर्न सक्नुहुन्छ।"
+
+msgid "files"
+msgstr "फाइलहरू"
+
+msgid "Permissions changed"
+msgstr "अनुमतिहरू परिवर्तन गरियो"
+
+msgid "Files with changed permissions"
+msgstr "अनुमति परिवर्तन भएका फाइलहरू"
+
+msgid "Alert history"
+msgstr "अलर्ट इतिहास"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "प्रत्येक स्क्यान जसले केही फेला पार्‍यो, ड्रिफ्ट समाधान भएपछि वा नयाँ आधाररेखा स्थापना भएपछि पनि राखिन्छ — माथिको प्रतिवेदन विपरीत, सफा स्क्यान वा पुनः आधाररेखाले यसलाई कहिल्यै खाली गर्दैन।"
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "यो प्रविष्टि क्याप्चर समयमा काटिएको थियो; पूर्ण सूचीका लागि CEF लग हेर्नुहोस्।"
+
+msgid "No alert has been recorded yet."
+msgstr "अहिलेसम्म कुनै अलर्ट रेकर्ड गरिएको छैन।"
+
+msgid "Git remote changed"
+msgstr "Git रिमोट परिवर्तन भयो"
+
+msgid "Press enter to select"
+msgstr "चयन गर्न इन्टर थिच्नुहोस्"
+
+msgid "Press enter to remove"
+msgstr "हटाउन इन्टर थिच्नुहोस्"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "कुनै तत्व फेला परेन। खोज क्वेरी परिवर्तन गर्न विचार गर्नुहोस्।"
+
+msgid "List is empty."
+msgstr "सूची खाली छ।"
+
+msgid "Your session has expired. Please try again."
+msgstr "तपाईंको सत्र समाप्त भएको छ। कृपया पुनः प्रयास गर्नुहोस्।"
+
+msgid "Generate with AI"
+msgstr "AI सँग उत्पन्न गर्नुहोस्"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "यो कोर्सको विषयलाई प्रतिनिधित्व गर्ने आधुनिक, स्वागतयोग्य चित्रण, सफा फ्ल्याट-डिजाइन शैलीमा, मेरो प्लेटफर्मको रङहरूलाई उच्चारणको रूपमा प्रयोग गर्दै।"
+
+msgid "Back to account"
+msgstr "खातामा फर्कनुहोस्"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "तपाईंको प्रतिक्रियाले हामीलाई भविष्यका तालिम सत्रहरू सुधार्न मद्दत गर्नेछ।"
+
+msgid "Thank you for sharing your feedback."
+msgstr "तपाईंको प्रतिक्रिया साझा गर्नुभएकोमा धन्यवाद।"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "तालिमको समग्र गुणस्तरप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "सामग्रीको प्रासंगिकताप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "व्याख्याको स्पष्टताप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "तालिमको संगठन र गतिप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "तपाईंले सिकेको कुराको व्यावहारिक उपयोगिताप्रति तपाईं कति सन्तुष्ट हुनुहुन्छ?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "के तपाईं यो तालिम अरूलाई सिफारिस गर्नुहुन्छ?"
+
+msgid "What should we improve in future editions?"
+msgstr "भविष्यका संस्करणहरूमा हामीले के सुधार गर्नुपर्छ?"
+
+msgid "Very satisfied"
+msgstr "धेरै सन्तुष्ट"
+
+msgid "Satisfied"
+msgstr "सन्तुष्ट"
+
+msgid "Neutral"
+msgstr "तटस्थ"
+
+msgid "Dissatisfied"
+msgstr "असन्तुष्ट"
+
+msgid "Very dissatisfied"
+msgstr "धेरै असन्तुष्ट"
+
+msgid "Add destination"
+msgstr "गन्तव्य थप्नुहोस्"
+
+msgid "Add this test to the assessment tool"
+msgstr "यो परीक्षा मूल्यांकन उपकरणमा थप्नुहोस्"
+
+msgid "Attempts and timing"
+msgstr "प्रयास र समय"
+
+msgid "Available questions"
+msgstr "उपलब्ध प्रश्नहरू"
+
+msgid "Cancel and return to learning path"
+msgstr "रद्द गर्नुहोस् र सिकाइ मार्गमा फर्कनुहोस्"
+
+msgid "Category destinations"
+msgstr "कोटि गन्तव्यहरू"
+
+msgid "Classification"
+msgstr "वर्गीकरण"
+
+msgid "Context"
+msgstr "सन्दर्भ"
+
+msgid "Could not load exercise configuration"
+msgstr "व्यायाम कन्फिगरेसन लोड गर्न सकिएन"
+
+msgid "Could not save exercise"
+msgstr "व्यायाम बचत गर्न सकिएन"
+
+msgid "Display and learning path"
+msgstr "प्रदर्शन र सिकाइ मार्ग"
+
+msgid "Edit test"
+msgstr "परीक्षा सम्पादन गर्नुहोस्"
+
+msgid "Exercise settings saved."
+msgstr "व्यायाम सेटिङहरू बचत गरियो।"
+
+msgid "Extra settings"
+msgstr "अतिरिक्त सेटिङहरू"
+
+msgid "Feedback and results"
+msgstr "प्रतिक्रिया र नतिजाहरू"
+
+msgid "Finish exercise"
+msgstr "व्यायाम समाप्त गर्नुहोस्"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "यो व्यायामको भाषा स्रोत मेटाडेटाको रूपमा पहिचान गर्दछ। यसले आफैं खोज अनुक्रमणिका सक्षम गर्दैन।"
+
+msgid "Maximum score (%)"
+msgstr "अधिकतम अंक (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "मेटाडेटामा व्यायामका लागि कन्फिगर गरिएका सीप र अतिरिक्त क्षेत्रहरू समावेश छन्। यो वैकल्पिक छ र खोलिएसम्म लुकाइएको रहन्छ।"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "यो व्यायामका लागि अहिलेसम्म कुनै प्रश्न कोटि उपलब्ध छैन।"
+
+msgid "Question categories matrix"
+msgstr "प्रश्न कोटि म्याट्रिक्स"
+
+msgid "Questions behavior"
+msgstr "प्रश्न व्यवहार"
+
+msgid "Random by category"
+msgstr "कोटि अनुसार अनियमित"
+
+msgid "Remove destination"
+msgstr "गन्तव्य हटाउनुहोस्"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "नियमहरू अंक प्रतिशत अनुसार आरोही क्रममा मूल्यांकन गरिन्छ। परीक्षा समाप्त गर्न समाप्त व्यायाम चयन गर्नुहोस्।"
+
+msgid "Score and final messages"
+msgstr "अंक र अन्तिम सन्देशहरू"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "व्यायाम सिर्जना भएपछि केही विकल्पहरू लक हुन्छन्।"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "यो मान मिनेटमा कुल अवधिको रूपमा भण्डारण गरिन्छ।"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "सबै उपलब्ध प्रश्नहरू राख्न ० प्रयोग गर्नुहोस्। सबै उपलब्ध प्रश्नहरूलाई अनुमति दिइएको ठाउँमा -१ प्रयोग गर्नुहोस्।"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "यी क्षेत्रहरू प्रयोग गरेर अभ्यासलाई यसको प्रदर्शन विकल्पहरूबाट स्वतन्त्र रूपमा वर्गीकरण गर्नुहोस्।"
+
+msgid "Invite by email"
+msgstr "इमेल मार्फत आमन्त्रण गर्नुहोस्"
+
+msgid "Invitation has been sent"
+msgstr "आमन्त्रण पठाइएको छ"
+
+msgid "Sent on"
+msgstr "पठाइएको मिति"
+
+msgid "Accepted on"
+msgstr "स्वीकृत मिति"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "यो पाठ्यक्रम सत्रमा खुला छ। यहाँ आमन्त्रण पठाउँदा प्राप्तकर्ता सम्पूर्ण सत्र %s मा सदस्यता लिनेछ, केवल यो पाठ्यक्रममा होइन।"
+
+msgid "Revoke"
+msgstr "रद्द गर्नुहोस्"
+
+msgid "Revoked"
+msgstr "रद्द गरिएको"
+
+msgid "Invitation has been revoked"
+msgstr "आमन्त्रण रद्द गरिएको छ"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "के तपाईं %s लाई पठाइएको आमन्त्रण रद्द गर्न निश्चित हुनुहुन्छ?"
+
+msgid "No default room"
+msgstr "पूर्वनिर्धारित कोठा छैन"
+
+msgid "Floor"
+msgstr "तला"
+
+msgid "Capacity"
+msgstr "क्षमता"
+
+msgid "Use attendance default room"
+msgstr "उपस्थिति पूर्वनिर्धारित कोठा प्रयोग गर्नुहोस्"
+
+msgid "Floor number"
+msgstr "तला नम्बर"
+
+msgid "Copy to students"
+msgstr "विद्यार्थीहरूलाई प्रतिलिपि गर्नुहोस्"
+
+msgid "Generate a quick test on this topic"
+msgstr "यस विषयमा द्रुत परीक्षण उत्पन्न गर्नुहोस्"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "सेभ गरिएको कागजात सामग्री प्रशोधनका लागि AI मोडेलमा पठाइनेछ।"
+
+msgid "MCP API key"
+msgstr "MCP API कुञ्जी"
+
+msgid "Authorized applications"
+msgstr "अधिकृत अनुप्रयोगहरू"
+
+msgid "Your session is about to expire"
+msgstr "तपाईंको सत्र समाप्त हुन लागेको छ"
+
+msgid "Do you want to continue your session?"
+msgstr "के तपाईं आफ्नो सत्र जारी राख्न चाहनुहुन्छ?"
+
+msgid "Your session details have been lost, please login again."
+msgstr "तपाईंको सत्र विवरण हराएको छ, कृपया फेरि लगइन गर्नुहोस्।"
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "यस स्रोतमा पहुँच अस्वीकृत गरिएको छ। यसमा पहुँच गर्न आवश्यक अनुमति तपाईंसँग नभएको जस्तो देखिन्छ।"
+
+msgid "Stay connected"
+msgstr "जडान रहनुहोस्"
+
+msgid "You will be signed out in %s seconds."
+msgstr "तपाईं %s सेकेन्डमा साइन आउट हुनुहुनेछ।"
+
+msgid "No descriptions available yet."
+msgstr "अहिलेसम्म कुनै विवरण उपलब्ध छैन।"
+
+msgid "%s users selected"
+msgstr "%s प्रयोगकर्ताहरू चयन गरिएको"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "चयन गरिएका प्रयोगकर्ताहरू पाठ्यक्रममा सदस्यता लिएका छन्"
+
+msgid "Import teachers"
+msgstr "शिक्षकहरू आयात गर्नुहोस्"
+
+msgid "Import learners"
+msgstr "विद्यार्थीहरू आयात गर्नुहोस्"
+
+msgid "Select CSV file"
+msgstr "CSV फाइल चयन गर्नुहोस्"
+
+msgid "Some users could not be subscribed"
+msgstr "केही प्रयोगकर्ताहरू सदस्यता लिन सकिएन"
+
+msgid "Browse available classes"
+msgstr "उपलब्ध कक्षा ब्राउज गर्नुहोस्"
+
+msgid "Back to linked classes"
+msgstr "लिङ्क गरिएका कक्षामा फर्कनुहोस्"
+
+msgid "No classes are currently linked to this course."
+msgstr "यस कोर्ससँग हाल कुनै कक्षा लिङ्क गरिएको छैन।"
+
+msgid "No available classes were found for this course."
+msgstr "यस कोर्सका लागि कुनै उपलब्ध कक्षा फेला परेन।"
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "के तपाईं चयन गरिएका प्रयोगकर्ताहरूलाई सदस्यता रद्द गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Learning path access"
+msgstr "शिक्षण मार्ग पहुँच"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "केवल चयन गरिएका प्रयोगकर्ता र समूहहरूले यो शिक्षण मार्ग पहुँच गर्न सक्छन्। बचत गरेपछि तिनीहरूलाई व्यवस्थापन गर्नुहोस्।"
+
+msgid "All current and future course users can access this learning path."
+msgstr "हालका र भविष्यका सबै कोर्स प्रयोगकर्ताहरूले यो शिक्षण मार्ग पहुँच गर्न सक्छन्।"
+
+msgid "All course users"
+msgstr "सबै कोर्स प्रयोगकर्ता"
+
+msgid "Selected users and groups"
+msgstr "चयन गरिएका प्रयोगकर्ता र समूह"
+
+msgid "No access"
+msgstr "पहुँच छैन"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "यहाँ थपिएका प्रयोगकर्ता र समूहहरूले मात्र यो शिक्षण मार्ग पहुँच गर्न सक्छन्।"
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "प्रश्नहरूको संख्या अधिकतम %s सम्म सीमित"
+
+msgid "Open exercise player"
+msgstr "खुला अभ्यास प्लेयर"
+
+msgid "The score is hidden for this exercise."
+msgstr "यो अभ्यासको स्कोर लुकाइएको छ।"
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "अभ्यास परिणाम सेटिङ अनुसार सुधार लुकाइएको छ।"
+
+msgid "Progressive adaptive result"
+msgstr "प्रगतिशील अनुकूलन परिणाम"
+
+msgid "Achieved level"
+msgstr "प्राप्त स्तर"
+
+msgid "Correction history"
+msgstr "सुधार इतिहास"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "यो प्रयासका लागि गरिएका म्यानुअल सुधारको इतिहास।"
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "यो अभ्यासले राडार/स्पाइडरवेब परिणाम मोड प्रयोग गर्दछ। चार्ट यस पृष्ठमा उपलब्ध छैन।"
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "अभ्यास परिणाम सेटिङ अनुसार प्रश्न विवरण लुकाइएको छ।"
+
+msgid "Media question"
+msgstr "मिडिया प्रश्न"
+
+msgid "Pending correction"
+msgstr "सुधार बाँकी"
+
+msgid "No answer"
+msgstr "उत्तर छैन"
+
+msgid "Blank %s"
+msgstr "खाली %s"
+
+msgid "Your order"
+msgstr "तपाईंको क्रम"
+
+msgid "Correct order"
+msgstr "सही क्रम"
+
+msgid "Delineation review"
+msgstr "सीमांकन समीक्षा"
+
+msgid "Learner clicks"
+msgstr "सिकारु क्लिक"
+
+msgid "Question image"
+msgstr "प्रश्न छवि"
+
+msgid "No hotspot image available"
+msgstr "कुनै हटस्पट छवि उपलब्ध छैन"
+
+msgid "Learner delineation"
+msgstr "सिकारु सीमांकन"
+
+msgid "Expected delineation"
+msgstr "अपेक्षित सीमांकन"
+
+msgid "Expected zones"
+msgstr "अपेक्षित क्षेत्र"
+
+msgid "Zone"
+msgstr "क्षेत्र"
+
+msgid "Learner annotation"
+msgstr "सिकारु एनोटेसन"
+
+msgid "No annotation image available"
+msgstr "कुनै एनोटेसन छवि उपलब्ध छैन"
+
+msgid "This answer is pending teacher correction."
+msgstr "यो उत्तर शिक्षक सुधारको लागि बाँकी छ।"
+
+msgid "Teacher comment"
+msgstr "शिक्षक टिप्पणी"
+
+msgid "Teacher correction"
+msgstr "शिक्षक सुधार"
+
+msgid "Save correction"
+msgstr "सुधार बचत गर्नुहोस्"
+
+msgid "Learner audio"
+msgstr "सिकारु अडियो"
+
+msgid "Download audio"
+msgstr "अडियो डाउनलोड गर्नुहोस्"
+
+msgid "No uploaded audio"
+msgstr "कुनै अपलोड गरिएको अडियो छैन"
+
+msgid "Learner Office document"
+msgstr "सिकारु अफिस कागजात"
+
+msgid "Learner file"
+msgstr "सिकारु फाइल"
+
+msgid "Download Office document"
+msgstr "अफिस कागजात डाउनलोड गर्नुहोस्"
+
+msgid "No submitted document"
+msgstr "कुनै पनि कागजात पेस गरिएको छैन"
+
+msgid "No uploaded file"
+msgstr "कुनै पनि फाइल अपलोड गरिएको छैन"
+
+msgid "Content item"
+msgstr "सामग्री वस्तु"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "यो प्रश्न प्रकार यस पृष्ठमा समीक्षा गर्न सकिँदैन।"
+
+msgid "Exercise completed"
+msgstr "अभ्यास सम्पन्न भयो"
+
+msgid "Could not start the attempt"
+msgstr "प्रयास सुरु गर्न सकिएन"
+
+msgid "Invalid exercise attempt"
+msgstr "अवैध अभ्यास प्रयास"
+
+msgid "Could not load exercise result"
+msgstr "अभ्यास परिणाम लोड गर्न सकिएन"
+
+msgid "Could not load AI providers"
+msgstr "AI प्रदायकहरू लोड गर्न सकिएन"
+
+msgid "Could not generate AI suggestion"
+msgstr "AI सुझाव उत्पन्न गर्न सकिएन"
+
+msgid "Correction saved"
+msgstr "सुधार बचत गरियो"
+
+msgid "Could not save correction"
+msgstr "सुधार बचत गर्न सकिएन"
+
+msgid "Create exercise"
+msgstr "अभ्यास सिर्जना गर्नुहोस्"
+
+msgid "Exercise categories"
+msgstr "अभ्यास कोटिहरू"
+
+msgid "Question categories"
+msgstr "प्रश्न कोटिहरू"
+
+msgid "Search by exercise title or description."
+msgstr "अभ्यास शीर्षक वा विवरणद्वारा खोज्नुहोस्।"
+
+msgid "Search exercises"
+msgstr "अभ्यासहरू खोज्नुहोस्"
+
+msgid "No exercises found"
+msgstr "कुनै पनि अभ्यास फेला परेन"
+
+msgid "Open exercise"
+msgstr "अभ्यास खोल्नुहोस्"
+
+msgid "Disable autolaunch"
+msgstr "स्वतः सुरु अक्षम गर्नुहोस्"
+
+msgid "Enable autolaunch"
+msgstr "स्वतः सुरु सक्षम गर्नुहोस्"
+
+msgid "Export QTI2"
+msgstr "QTI2 निर्यात गर्नुहोस्"
+
+msgid "Bulk actions"
+msgstr "थोक कार्यहरू"
+
+msgid "Selected exercises"
+msgstr "चयन गरिएका अभ्यासहरू"
+
+msgid "No exercises selected"
+msgstr "कुनै पनि अभ्यास चयन गरिएको छैन"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "के तपाईं चयन गरिएका अभ्यासहरूमा यो कार्य लागू गर्न निश्चित हुनुहुन्छ?"
+
+msgid "Bulk action completed"
+msgstr "थोक कार्य सम्पन्न भयो"
+
+msgid "Could not update exercises"
+msgstr "अभ्यासहरू अद्यावधिक गर्न सकिएन"
+
+msgid "Could not update exercise"
+msgstr "अभ्यास अद्यावधिक गर्न सकिएन"
+
+msgid "Copy exercise"
+msgstr "अभ्यास प्रतिलिपि गर्नुहोस्"
+
+msgid "Delete exercise"
+msgstr "अभ्यास मेटाउनुहोस्"
+
+msgid "Could not load exercises"
+msgstr "अभ्यासहरू लोड गर्न सकिएन"
+
+msgid "No limit"
+msgstr "कुनै सीमा छैन"
+
+msgid "Add selected questions to the test"
+msgstr "चयन गरिएका प्रश्नहरू परीक्षामा थप्नुहोस्"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "यो प्रश्न सक्रिय परीक्षामा प्रयोग भएको छ र यहाँ सम्पादन गर्न सकिँदैन।"
+
+msgid "This question cannot be edited here."
+msgstr "यो प्रश्न यहाँ सम्पादन गर्न सकिँदैन।"
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "यो प्रश्न सक्रिय परीक्षामा प्रयोग भएको छ र यहाँ मेटाउन सकिँदैन।"
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "यो प्रश्न मेटाउन सकिँदैन किनकि तपाईंको पहुँच प्लेटफर्म सेटिङद्वारा सीमित छ।"
+
+msgid "Already in test"
+msgstr "पहिले नै परीक्षामा छ"
+
+msgid "Select at least one question."
+msgstr "कम्तीमा एउटा प्रश्न चयन गर्नुहोस्।"
+
+msgid "Question bank updated"
+msgstr "प्रश्न बैंक अद्यावधिक गरियो"
+
+msgid "Could not update the question bank"
+msgstr "प्रश्न बैंक अद्यावधिक गर्न सकिएन"
+
+msgid "Could not load the question bank"
+msgstr "प्रश्न बैंक लोड गर्न सकिएन"
+
+msgid "Total score"
+msgstr "कुल स्कोर"
+
+msgid "Starting"
+msgstr "सुरु गर्दै"
+
+msgid "Attempt history"
+msgstr "प्रयास इतिहास"
+
+msgid "No attempts yet"
+msgstr "अहिलेसम्म कुनै प्रयास छैन"
+
+msgid "Invalid exercise"
+msgstr "अवैध अभ्यास"
+
+msgid "Could not load exercise overview"
+msgstr "अभ्यास अवलोकन लोड गर्न सकिएन"
+
+msgid "Open test"
+msgstr "परीक्षा खोल्नुहोस्"
+
+msgid "Random answers"
+msgstr "अनियमित उत्तरहरू"
+
+msgid "Prevent moving backwards"
+msgstr "पछाडि जान निषेध गर्नुहोस्"
+
+msgid "Previous button hidden"
+msgstr "अघिल्लो बटन लुकाइएको"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "यो अभ्यासले फरक परीक्षण प्लेयर आवश्यक पर्ने विकल्पहरू प्रयोग गर्दछ।"
+
+msgid "Continue test"
+msgstr "परीक्षण जारी राख्नुहोस्"
+
+msgid "Attempt started"
+msgstr "प्रयास सुरु गरियो"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "शिक्षक पूर्वावलोकनले ट्र्याक गरिएको प्रयास सिर्जना गर्दैन।"
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "अभ्यास प्रयास सुरु गर्नुहोस् वा पुनः सुरु गर्नुहोस्। अन्तिम बुझाउनुअघि मस्यौदा उत्तरहरू बचत गर्न सकिन्छ।"
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "समय सीमा पुग्यो। प्रयास समाप्त गर्दै।"
+
+msgid "Question time reached. Saving your answer."
+msgstr "प्रश्न समय पुग्यो। तपाईंको उत्तर बचत गर्दै।"
+
+msgid "Finishing"
+msgstr "समाप्त गर्दै"
+
+msgid "Draft saved"
+msgstr "मस्यौदा बचत गरियो"
+
+msgid "Save as draft"
+msgstr "मस्यौदाको रूपमा बचत गर्नुहोस्"
+
+msgid "Statement"
+msgstr "कथन"
+
+msgid "Drop each option on the matching answer"
+msgstr "प्रत्येक विकल्प मिल्दो उत्तरमा छोड्नुहोस्"
+
+msgid "Clear match"
+msgstr "मिलान खाली गर्नुहोस्"
+
+msgid "Click to place the selected option here"
+msgstr "यहाँ चयन गरिएको विकल्प राख्न क्लिक गर्नुहोस्"
+
+msgid "Select an option, then click here"
+msgstr "एउटा विकल्प चयन गर्नुहोस्, त्यसपछि यहाँ क्लिक गर्नुहोस्"
+
+msgid "Already matched"
+msgstr "पहिले नै मिलाइएको"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "तपाईं विकल्पलाई उत्तरमा तान्न सक्नुहुन्छ, वा विकल्प चयन गरेर लक्ष्य बक्समा क्लिक गर्न सक्नुहुन्छ।"
+
+msgid "Put the items in the correct order."
+msgstr "वस्तुहरूलाई सही क्रममा राख्नुहोस्।"
+
+msgid "Move left"
+msgstr "बायाँ सार्नुहोस्"
+
+msgid "Move right"
+msgstr "दायाँ सार्नुहोस्"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "तपाईं वस्तुहरूलाई बायाँ वा दायाँ तान्न सक्नुहुन्छ, वा क्रम परिवर्तन गर्न सार्ने बटनहरू प्रयोग गर्न सक्नुहुन्छ।"
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "तपाईं वस्तुहरू तान्न सक्नुहुन्छ वा क्रम परिवर्तन गर्न सार्ने बटनहरू प्रयोग गर्न सक्नुहुन्छ।"
+
+msgid "Or upload an audio file"
+msgstr "वा अडियो फाइल अपलोड गर्नुहोस्"
+
+msgid "Selected audio"
+msgstr "चयन गरिएको अडियो"
+
+msgid "Uploaded audio"
+msgstr "अपलोड गरिएको अडियो"
+
+msgid "Office document"
+msgstr "अफिस कागजात"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "तलको सम्पादकमा कागजात पूरा गर्नुहोस्। फाइल शिक्षक सुधारका लागि यस प्रयासमा संलग्न गरिनेछ।"
+
+msgid "Reload Office editor"
+msgstr "अफिस सम्पादक पुनः लोड गर्नुहोस्"
+
+msgid "Prepare Office document"
+msgstr "अफिस कागजात तयार गर्नुहोस्"
+
+msgid "Open in new tab"
+msgstr "नयाँ ट्याबमा खोल्नुहोस्"
+
+msgid "Preparing Office document"
+msgstr "अफिस कागजात तयार गर्दै"
+
+msgid "Submitted document"
+msgstr "बुझाइएको कागजात"
+
+msgid "Annotation tools"
+msgstr "एनोटेसन उपकरणहरू"
+
+msgid "Text to place"
+msgstr "राख्ने पाठ"
+
+msgid "Click the image to place the text annotation."
+msgstr "पाठ एनोटेसन राख्न छविमा क्लिक गर्नुहोस्।"
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "पथ बिन्दुहरू थप्न छविमा क्लिक गर्नुहोस्। बाटोहरू अलग गर्न नयाँ बाटो सुरु गर्नुहोस्।"
+
+msgid "Start new path"
+msgstr "नयाँ बाटो सुरु गर्नुहोस्"
+
+msgid "Current annotations"
+msgstr "हालका एनोटेसनहरू"
+
+msgid "Remove point"
+msgstr "बिन्दु हटाउनुहोस्"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "सीमांकन बहुभुज कोर्न छविमा क्लिक गर्नुहोस्।"
+
+msgid "Click a marker to remove it."
+msgstr "मार्कर हटाउन क्लिक गर्नुहोस्।"
+
+msgid "Placed"
+msgstr "राखिएको"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "उत्तर चयन गर्नुहोस्, त्यसपछि यसलाई चिन्ह लगाउन छविमा क्लिक गर्नुहोस्।"
+
+msgid "Reading speed"
+msgstr "पढ्ने गति"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "यो प्रश्न प्रकार यस प्लेयरमा प्रदर्शन गर्न सकिँदैन।"
+
+msgid "Save draft"
+msgstr "मस्यौदा बचत गर्नुहोस्"
+
+msgid "I confirm that my answers were saved."
+msgstr "मेरो उत्तरहरू बचत भएको पुष्टि गर्दछु।"
+
+msgid "Finish test"
+msgstr "परीक्षण समाप्त गर्नुहोस्"
+
+msgid "Attempt finished"
+msgstr "प्रयास समाप्त"
+
+msgid "Question category"
+msgstr "प्रश्न कोटि"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "तपाईंले यस प्रश्न कोटिसँग सम्बन्धित प्रश्नहरू समाप्त गर्नुभयो, ती प्रश्नहरूमा फर्केर संशोधन गर्ने तपाईंको अन्तिम मौका हो।"
+
+msgid "Question time left"
+msgstr "प्रश्नको बाँकी समय"
+
+msgid "Time left"
+msgstr "बाँकी समय"
+
+msgid "Current attempt"
+msgstr "हालको प्रयास"
+
+msgid "Could not save draft answer"
+msgstr "ड्राफ्ट उत्तर बचत गर्न सकिएन"
+
+msgid "Could not load exercise"
+msgstr "अभ्यास लोड गर्न सकिएन"
+
+msgid "Draft answer saved"
+msgstr "ड्राफ्ट उत्तर बचत भयो"
+
+msgid "Could not finish the attempt"
+msgstr "प्रयास समाप्त गर्न सकिएन"
+
+msgid "Could not prepare Office document"
+msgstr "अफिस कागजात तयार गर्न सकिएन"
+
+msgid "Back to learner score"
+msgstr "सिकारुको स्कोरमा फर्कनुहोस्"
+
+msgid "Disable auto refresh"
+msgstr "स्वतः रिफ्रेस असक्षम गर्नुहोस्"
+
+msgid "Enable auto refresh"
+msgstr "स्वतः रिफ्रेस सक्षम गर्नुहोस्"
+
+msgid "Live window"
+msgstr "लाइभ विन्डो"
+
+msgid "Ongoing attempts"
+msgstr "चलिरहेका प्रयासहरू"
+
+msgid "Completed attempts"
+msgstr "सम्पन्न प्रयासहरू"
+
+msgid "Started"
+msgstr "सुरु गरिएको"
+
+msgid "Last activity"
+msgstr "अन्तिम गतिविधि"
+
+msgid "Could not load live results"
+msgstr "लाइभ नतिजा लोड गर्न सकिएन"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "यो अभ्यास पढ्न-मात्र हो किनकि यो सिकाइ मार्गमा समावेश गरिएको छ।"
+
+msgid "Select a question type to create a question."
+msgstr "प्रश्न सिर्जना गर्न प्रश्न प्रकार चयन गर्नुहोस्।"
+
+msgid "Click to preview"
+msgstr "पूर्वावलोकनका लागि क्लिक गर्नुहोस्"
+
+msgid "Hide preview"
+msgstr "पूर्वावलोकन लुकाउनुहोस्"
+
+msgid "Shape"
+msgstr "आकार"
+
+msgid "Coordinates"
+msgstr "समन्वय"
+
+msgid "Blanks"
+msgstr "खाली ठाउँहरू"
+
+msgid "Switchable blanks"
+msgstr "स्विच गर्न मिल्ने खाली ठाउँहरू"
+
+msgid "Blank"
+msgstr "खाली ठाउँ"
+
+msgid "Input width"
+msgstr "इनपुट चौडाइ"
+
+msgid "Orientation"
+msgstr "अभिमुखीकरण"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "हालको अभ्यास प्रतिक्रिया मोडसँग उपलब्ध छैन"
+
+msgid "Not available in the learning path creation flow"
+msgstr "सिकाइ मार्ग सिर्जना प्रक्रियामा उपलब्ध छैन"
+
+msgid "Delete question"
+msgstr "प्रश्न मेटाउनुहोस्"
+
+msgid "Could not update exercise questions"
+msgstr "अभ्यास प्रश्नहरू अद्यावधिक गर्न सकिएन"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "अभ्यासलाई सिकाइ मार्गमा थप्न सकिएन"
+
+msgid "A valid exercise id is required."
+msgstr "मान्य अभ्यास आईडी आवश्यक छ।"
+
+msgid "Could not load exercise questions"
+msgstr "अभ्यास प्रश्नहरू लोड गर्न सकिएन"
+
+msgid "Delete selected attempts"
+msgstr "चयन गरिएका प्रयासहरू मेटाउनुहोस्"
+
+msgid "Before date"
+msgstr "मिति अघि"
+
+msgid "Pending corrections"
+msgstr "पेन्डिङ सुधारहरू"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "यो अभ्यास ग्रेडबुकद्वारा लक गरिएको छ। प्रयास सफाइ कार्यहरू असक्षम छन्।"
+
+msgid "No attempts found"
+msgstr "कुनै प्रयास फेला परेन"
+
+msgid "Review"
+msgstr "समीक्षा"
+
+msgid "Print/PDF"
+msgstr "प्रिन्ट/पीडीएफ"
+
+msgid "Could not load exercise report"
+msgstr "अभ्यास प्रतिवेदन लोड गर्न सकिएन"
+
+msgid "Select at least one attempt"
+msgstr "कम्तीमा एउटा प्रयास चयन गर्नुहोस्"
+
+msgid "Delete selected attempts?"
+msgstr "चयन गरिएका प्रयासहरू मेटाउने हो?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "समीक्षा गरिएको प्रयास नतिजा इमेलहरू पठाउने हो?"
+
+msgid "Could not send emails"
+msgstr "इमेलहरू पठाउन सकिएन"
+
+msgid "Exercise result emails sent"
+msgstr "अभ्यास नतिजा इमेलहरू पठाइयो"
+
+msgid "Skipped"
+msgstr "छोडियो"
+
+msgid "Close attempt?"
+msgstr "प्रयास बन्द गर्ने?"
+
+msgid "Attempt closed"
+msgstr "प्रयास बन्द गरियो"
+
+msgid "Could not close attempt"
+msgstr "प्रयास बन्द गर्न सकिएन"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "यो प्रयासको नतिजा सिकारुलाई इमेल मार्फत पठाउने?"
+
+msgid "Email sent"
+msgstr "इमेल पठाइयो"
+
+msgid "Could not send email"
+msgstr "इमेल पठाउन सकिएन"
+
+msgid "Attempt deleted"
+msgstr "प्रयास मेटाइयो"
+
+msgid "Could not delete attempt"
+msgstr "प्रयास मेटाउन सकिएन"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "शीर्षक र विवरण स्तम्भहरू समावेश भएको CSV फाइल चयन गर्नुहोस्।"
+
+msgid "Manage categories used to classify questions."
+msgstr "प्रश्नहरू वर्गीकरण गर्न प्रयोग हुने कोटिहरू व्यवस्थापन गर्नुहोस्।"
+
+msgid "Manage categories used to classify exercises."
+msgstr "अभ्यासहरू वर्गीकरण गर्न प्रयोग हुने कोटिहरू व्यवस्थापन गर्नुहोस्।"
+
+msgid "Could not load categories"
+msgstr "कोटिहरू लोड गर्न सकिएन"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "आयात गरिएका कोटिहरू: %s। छोडिएका पङ्क्तिहरू: %s।"
+
+msgid "Imported categories: %s."
+msgstr "आयात गरिएका कोटिहरू: %s।"
+
+msgid "Could not import categories"
+msgstr "कोटिहरू आयात गर्न सकिएन"
+
+msgid "Could not save category"
+msgstr "कोटि बचत गर्न सकिएन"
+
+msgid "Answer distribution"
+msgstr "उत्तर वितरण"
+
+msgid "Configured answers"
+msgstr "कन्फिगर गरिएका उत्तरहरू"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "केही प्रश्न प्रकारहरूको लागि विस्तृत उत्तर गणना अझै माइग्रेट गरिएको रिपोर्टमा उपलब्ध छैन।"
+
+msgid "No report by question data found"
+msgstr "प्रश्न अनुसारको रिपोर्ट डाटा फेला परेन"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "यो प्रश्न प्रकारको लागि विस्तृत उत्तर गणना अझै माइग्रेट गरिएको रिपोर्टमा उपलब्ध छैन।"
+
+msgid "No answer distribution found"
+msgstr "उत्तर वितरण फेला परेन"
+
+msgid "Could not load report by question"
+msgstr "प्रश्न अनुसारको रिपोर्ट लोड गर्न सकिएन"
+
+msgid "Question settings"
+msgstr "प्रश्न सेटिङहरू"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "समय सीमा नराख्न खाली वा ० छोड्नुहोस्।"
+
+msgid "Time limit in seconds"
+msgstr "सेकेन्डमा समय सीमा"
+
+msgid "Attached questions"
+msgstr "संलग्न प्रश्नहरू"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "हालको अभ्यासभित्र यो मिडिया प्रश्नसँग संलग्न प्रश्नहरू मात्र यहाँ सूचीबद्ध छन्।"
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "हालको अभ्यासमा यो मिडिया प्रश्नसँग कुनै प्रश्न संलग्न छैनन्।"
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "OnlyOffice सँग सिकारुहरूले सम्पादन गर्ने Office कागजात टेम्प्लेट अपलोड गर्नुहोस्।"
+
+msgid "Replace Office document"
+msgstr "Office कागजात बदल्नुहोस्"
+
+msgid "Current Office document"
+msgstr "हालको Office कागजात"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "सिकारुले सम्पादित कागजात पेस गरेपछि यो प्रश्न म्यानुअल रूपमा सुधारिन्छ।"
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "कुल स्कोर हटस्पट स्कोरहरूको योगफलको रूपमा गणना गरिन्छ।"
+
+msgid "Global score"
+msgstr "विश्वव्यापी स्कोर"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "हटस्पट पङ्क्ति चयन गर्नुहोस्, यसको आकार छान्नुहोस्, त्यसपछि छविमाथि कोर्नुहोस्। बहुभुजका लागि, प्रत्येक बिन्दुमा क्लिक गर्नुहोस् र बहुभुज समाप्त गर्नुहोस्, वा समाप्त गर्न डबल-क्लिक गर्नुहोस्।"
+
+msgid "Finish polygon"
+msgstr "बहुभुज समाप्त गर्नुहोस्"
+
+msgid "Calculated answer"
+msgstr "गणना गरिएको उत्तर"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "कृपया तल आफ्नो पाठ टाइप गर्नुहोस् र एक वा बढी खाली ठाउँ परिभाषित गर्न वर्ग कोष्ठक [...] प्रयोग गर्नुहोस्।"
+
+msgid "Lowest value"
+msgstr "सबैभन्दा कम मान"
+
+msgid "Highest value"
+msgstr "सबैभन्दा बढी मान"
+
+msgid "Fill in blanks"
+msgstr "खाली ठाउँ भर्नुहोस्"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "चयन गरिएका मार्करहरू प्रयोग गरेर खाली ठाउँ परिभाषित गर्नुहोस्। उदाहरण: पेरुको राजधानी [लिमा] हो।"
+
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "खाली ठाउँलाई ड्रपडाउन मेनुमा बदल्न, विकल्पहरूलाई एउटा | ले छुट्याउनुहोस्; पहिलो सही उत्तर हो। उदाहरण: पेरूको राजधानी [Lima|Paris|Bogota] हो।"
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "धेरै सही उत्तरहरू अनुमति दिन, तिनीहरूलाई || ले छुट्याउनुहोस्। उदाहरण: 1||one||uno।"
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "ड्रपडाउन विकल्पहरू प्रविष्ट गर्नुहोस्, एउटा उत्तर प्रति लाइन। त्यसपछि तल अपेक्षित उत्तरहरू चिन्ह लगाउनुहोस्, जस्तै लिगेसी उपकरण।"
+
+msgid "Refresh answers"
+msgstr "उत्तरहरू ताजा गर्नुहोस्"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "यो ड्रपडाउन संयोजन प्रश्नले लिगेसी जस्तै एउटा विश्वव्यापी स्कोर प्रयोग गर्दछ।"
+
+msgid "Please enter at least two dropdown options."
+msgstr "कृपया कम्तिमा दुई ड्रपडाउन विकल्पहरू प्रविष्ट गर्नुहोस्।"
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "पहिले गन्तव्य विकल्पहरू सिर्जना गर्नुहोस्, त्यसपछि प्रत्येक वस्तुलाई सही विकल्पसँग लिङ्क गर्नुहोस्।"
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "यो मिलान संयोजन प्रश्नले एउटा विश्वव्यापी स्कोर प्रयोग गर्दछ, जस्तै पुरानो प्रणालीमा।"
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "चरणहरू सिर्जना गर्नुहोस् र प्रत्येकको लागि अपेक्षित स्थान चयन गर्नुहोस्, जस्तै पुरानो ड्र्यागेबल।"
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "सिकारुहरूले सही वा गलत चयन गर्नेछन् र त्यसपछि प्रयासको क्रममा आफ्नो निश्चितताको स्तर चयन गर्नेछन्। सम्पादकले पुरानो प्रणाली जस्तै सही/गलत स्कोर र निश्चितता स्तरहरू भण्डारण गर्दछ।"
+
+msgid "Hotspot combination"
+msgstr "हटस्पट संयोजन"
+
+msgid "Add delineation"
+msgstr "सीमांकन थप्नुहोस्"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "यो अफिस कागजात प्रश्नमा कुनै उत्तर विकल्पहरू छैनन्। यसको स्कोर सुधार/परिणाम समीक्षाको क्रममा तोकिन्छ।"
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "यो अपलोड प्रश्नमा कुनै उत्तर विकल्पहरू छैनन्। यसको स्कोर सुधार/परिणाम समीक्षाको क्रममा तोकिन्छ।"
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "यो मौखिक अभिव्यक्ति प्रश्नमा कुनै उत्तर विकल्पहरू छैनन्। यसको स्कोर सुधार/परिणाम समीक्षाको क्रममा तोकिन्छ।"
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "यो खुला प्रश्नमा कुनै उत्तर विकल्पहरू छैनन्। यसको स्कोर सुधार/परिणाम समीक्षाको क्रममा तोकिन्छ।"
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "स्क्रोलिङ गति सेटिङहरूसहित पठन पाठ थप्नुहोस्।"
+
+msgid "Add content, media or reading context without adding score."
+msgstr "स्कोर थप नगरी सामग्री, मिडिया वा पठन सन्दर्भ थप्नुहोस्।"
+
+msgid "Insert a page break without adding score."
+msgstr "स्कोर थप नगरी पृष्ठ ब्रेक घुसाउनुहोस्।"
+
+msgid "Could not save question"
+msgstr "प्रश्न बचत गर्न सकिएन"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "केवल DOC, DOCX, XLS वा XLSX कागजातहरू अनुमति दिइएको छ।"
+
+msgid "Please select an Office document."
+msgstr "कृपया एउटा अफिस कागजात चयन गर्नुहोस्।"
+
+msgid "Please draw at least one hotspot."
+msgstr "कृपया कम्तिमा एउटा हटस्पट कोर्नुहोस्।"
+
+msgid "Please draw at least one delineation."
+msgstr "कृपया कम्तिमा एउटा सीमांकन कोर्नुहोस्।"
+
+msgid "The fill in blanks text is required."
+msgstr "खाली ठाउँ भर्ने पाठ आवश्यक छ।"
+
+msgid "At least one expected answer is required."
+msgstr "कम्तिमा एउटा अपेक्षित उत्तर आवश्यक छ।"
+
+msgid "At least two draggable items are required."
+msgstr "कम्तिमा दुई ड्र्यागेबल वस्तुहरू आवश्यक छन्।"
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "प्रत्येक ड्र्यागेबल वस्तु वैध लक्ष्य स्थानसँग जोडिएको हुनुपर्छ।"
+
+msgid "At least two matching options are required."
+msgstr "कम्तिमा दुई मिलान विकल्पहरू आवश्यक छन्।"
+
+msgid "At least two matching pairs are required."
+msgstr "कम्तिमा दुई मिलान जोडीहरू आवश्यक छन्।"
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "प्रत्येक मिलान जोडी वैध विकल्पसँग जोडिएको हुनुपर्छ।"
+
+msgid "At least two answers are required."
+msgstr "कम्तिमा दुई उत्तरहरू आवश्यक छन्।"
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "प्रत्येक सही/गलत उत्तरमा सही वा गलत चयन गरिएको हुनुपर्छ।"
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "एउटा अद्वितीय उत्तर प्रश्नमा ठ्याक्कै एउटा सही उत्तर हुनुपर्छ।"
+
+msgid "At least one correct answer is required."
+msgstr "कम्तिमा एउटा सही उत्तर आवश्यक छ।"
+
+msgid "Could not load question"
+msgstr "प्रश्न लोड गर्न सकिएन"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "पाठ्यक्रम चयन गर्नुहोस् र विश्वव्यापी अभ्यास परिणाम रिपोर्ट CSV को रूपमा निर्यात गर्नुहोस्।"
+
+msgid "Back to reports catalog"
+msgstr "रिपोर्ट क्याटलगमा फर्कनुहोस्"
+
+msgid "Could not load exercise global report"
+msgstr "अभ्यास विश्वव्यापी रिपोर्ट लोड गर्न सकिएन"
+
+msgid "Imported questions"
+msgstr "आयात गरिएका प्रश्नहरू"
+
+msgid "Aiken content"
+msgstr "Aiken सामग्री"
+
+msgid "Could not load AI Aiken generator"
+msgstr "AI Aiken जनरेटर लोड गर्न सकिएन"
+
+msgid "Could not generate Aiken content"
+msgstr "Aiken सामग्री उत्पन्न गर्न सकिएन"
+
+msgid "Could not import generated Aiken content"
+msgstr "उत्पन्न गरिएको Aiken सामग्री आयात गर्न सकिएन"
+
+msgid "Back to my courses"
+msgstr "मेरा पाठ्यक्रमहरूमा फर्कनुहोस्"
+
+msgid "Open report"
+msgstr "रिपोर्ट खोल्नुहोस्"
+
+msgid "Questions with no automatic correction"
+msgstr "स्वचालित सुधार नभएका प्रश्नहरू"
+
+msgid "Could not load pending attempts"
+msgstr "पेन्डिङ प्रयासहरू लोड गर्न सकिएन"
+
+msgid "Skipped questions"
+msgstr "छोडिएका प्रश्नहरू"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Aiken आयातले आयात गरिएका प्रश्नहरूमा यो कुल तौल वितरण गर्दछ जबसम्म प्रश्नले SCORE परिभाषित गर्दैन।"
+
+msgid "Import warnings"
+msgstr "आयात चेतावनीहरू"
+
+msgid "Could not import questions"
+msgstr "प्रश्नहरू आयात गर्न सकिएन"
+
+msgid "No question statistics found"
+msgstr "कुनै प्रश्न तथ्याङ्क फेला परेन"
+
+msgid "Could not load question statistics"
+msgstr "प्रश्न तथ्याङ्क लोड गर्न सकिएन"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "तपाईं निम्न अन्तबिन्दुमा औंल्याएर MCP क्लाइन्ट सिधै जडान गर्न सक्नुहुन्छ:"
+
+msgid "No applications are currently connected to your account."
+msgstr "हाल तपाईंको खातामा कुनै एप्लिकेसनहरू जडान गरिएको छैन।"
+
+msgid "Connected on"
+msgstr "जडान गरिएको मिति"
+
+msgid "Last used"
+msgstr "पछिल्लो प्रयोग"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s ले तपाईंको Chamilo खातामा पहुँच गर्न सक्नेछैन। जारी राख्नुहुन्छ?"
+
+msgid "Application revoked"
+msgstr "अनुप्रयोग रद्द गरियो"
+
+msgid "Copied to clipboard"
+msgstr "क्लिपबोर्डमा प्रतिलिपि गरियो"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "MCP अन्त्यबिन्दु प्रतिलिपि गर्न सकिएन"
+
+msgid "MCP endpoint"
+msgstr "MCP अन्त्यबिन्दु"
+
+msgid "API key"
+msgstr "API कुञ्जी"
+
+msgid "Last used at"
+msgstr "पछिल्लो प्रयोग"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "यो कुञ्जी अहिले प्रतिलिपि गर्नुहोस्। यो फेरि देखाइने छैन।"
+
+msgid "Rotate API key"
+msgstr "API कुञ्जी घुमाउनुहोस्"
+
+msgid "Revoke API key"
+msgstr "API कुञ्जी रद्द गर्नुहोस्"
+
+msgid "Remote MCP connection"
+msgstr "दूरस्थ MCP जडान"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "तलका मानहरूसँग आफ्नो MCP क्लाइन्ट कन्फिगर गर्नुहोस्:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "हालको कुञ्जी तुरुन्तै काम गर्न बन्द हुनेछ। जारी राख्नुहुन्छ?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "नयाँ व्यक्तिगत MCP API कुञ्जी उत्पन्न गरिनेछ। जारी राख्नुहुन्छ?"
+
+msgid "MCP API key generated"
+msgstr "MCP API कुञ्जी उत्पन्न गरियो"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "यो कुञ्जी प्रयोग गर्ने जडान गरिएका MCP क्लाइन्टहरू तुरुन्तै काम गर्न बन्द हुनेछन्। जारी राख्नुहुन्छ?"
+
+msgid "MCP API key revoked"
+msgstr "MCP API कुञ्जी रद्द गरियो"
+
+msgid "Could not copy the API key"
+msgstr "API कुञ्जी प्रतिलिपि गर्न सकिएन"
+
+msgid "Project"
+msgstr "परियोजना"
+
+msgid "Close old tickets"
+msgstr "पुराना टिकटहरू बन्द गर्नुहोस्"
+
+msgid "Close tickets older than seven days?"
+msgstr "सात दिनभन्दा पुराना टिकटहरू बन्द गर्नुहुन्छ?"
+
+msgid "Assignment history"
+msgstr "असाइनमेन्ट इतिहास"
+
+msgid "Translate with AI"
+msgstr "AI सँग अनुवाद गर्नुहोस्"
+
+msgid "Target language"
+msgstr "लक्ष्य भाषा"
+
+msgid "Please select a provider"
+msgstr "कृपया प्रदायक चयन गर्नुहोस्"
+
+msgid "Generate translation"
+msgstr "अनुवाद उत्पन्न गर्नुहोस्"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "कम्तीमा एउटा नियम र सर्त खण्डमा पाठ हुनुपर्छ।"
+
+msgid "No active target languages are available."
+msgstr "कुनै सक्रिय लक्ष्य भाषाहरू उपलब्ध छैनन्।"
+
+msgid "Tutor"
+msgstr "ट्यूटर"
+
+msgid "Access dates"
+msgstr "पहुँच मितिहरू"
+
+msgid "Coach access dates"
+msgstr "कोच पहुँच मितिहरू"
+
+msgid "No sessions found"
+msgstr "कुनै सत्र फेला परेन"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "यो सत्रमा प्रयोगकर्ताले पहुँच गर्न नसक्ने पाठ्यक्रमहरू चयन गर्नुहोस्।"
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "प्रयोगकर्तालाई सत्रका सबै पाठ्यक्रमबाट रोक्न सकिँदैन। यसको सट्टा प्रयोगकर्ता अनसब्स्क्राइब गर्नुहोस्।"
+
+msgid "Users subscribed to this session"
+msgstr "यो सत्रमा सदस्यता लिएका प्रयोगकर्ताहरू"
+
+msgid "No available users found"
+msgstr "कुनै उपलब्ध प्रयोगकर्ता फेला परेन"
+
+msgid "Subscribe this user to the session?"
+msgstr "यो प्रयोगकर्तालाई सत्रमा सदस्यता दिनुहुन्छ?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "चयन गरिएका प्रयोगकर्ताहरूलाई सत्रमा सदस्यता दिनुहुन्छ?"
+
+msgid "General tutor planning"
+msgstr "सामान्य ट्यूटर योजना"
+
+msgid "User is already registered by another tutor."
+msgstr "प्रयोगकर्ता अर्को ट्यूटरद्वारा पहिले नै दर्ता गरिएको छ।"
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "तपाईं पाठ्यक्रम ट्यूटर भएकोले प्रतिलिपि प्राप्त गर्दै हुनुहुन्छ"
+
+msgid "General tutor"
+msgstr "सामान्य ट्यूटर"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "पाठ्यक्रमहरू, ट्यूटरहरू, प्राविधिक सहायता डेस्क, शिक्षकहरू र/वा उपलब्ध सामग्रीहरूलाई विचार गर्नुहोस्।"
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "%s पाठ्यक्रममा शिक्षकको रूपमा सदस्यता लिएका ट्यूटरहरू"
+
+msgid "Tutor name"
+msgstr "ट्यूटरको नाम"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "सत्र ट्यूटरहरू सत्रका समन्वयकर्ता हुन् र सत्रका प्रत्येक पाठ्यक्रमका लागि ट्यूटरको रूपमा काम गर्न सक्छन्। केवल शिक्षक भूमिका भएका प्रयोगकर्ताहरूलाई सत्र ट्यूटरको रूपमा चयन गर्न सकिन्छ।"
+
+msgid "Access start date for tutors"
+msgstr "ट्यूटरहरूका लागि पहुँच सुरु मिति"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "विद्यार्थीहरू जडान हुनुअघि तयारी गर्न सक्ने गरी सत्र ट्यूटरहरूलाई उपलब्ध गराइने मिति"
+
+msgid "Access end date for tutors"
+msgstr "ट्यूटरहरूका लागि पहुँच अन्त्य मिति"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "सत्र ट्युटरहरूका लागि बन्द हुने मिति। थप ढिलाइले उनीहरूलाई सम्बन्धित ट्र्याकिङ जानकारी निर्यात गर्न अनुमति दिनेछ"
+
+msgid "Tutor and student"
+msgstr "ट्युटर र विद्यार्थी"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "यो प्रतिवेदनले चयन गरिएको मिति दायरामा सामान्य ट्युटर अनुसार सत्रहरूको साप्ताहिक वितरण देखाउँछ।"
+
+msgid "User is general tutor in some sessions"
+msgstr "प्रयोगकर्ता केही सत्रहरूमा सामान्य ट्युटर हो"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "शिक्षकहरूलाई सबै कोर्स सत्रहरूमा ट्युटरको रूपमा थपिनेछ।"
+
+msgid "Delete failed: invalid question id."
+msgstr "मेटाउन असफल: अवैध प्रश्न आईडी।"
+
+msgid "Average number of sessions per general session tutor"
+msgstr "सामान्य सत्र ट्युटर प्रति औसत सत्र संख्या"
+
+msgid "No room"
+msgstr "कोठा छैन"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "सत्रमा कोर्स शिक्षकहरूलाई कोर्स ट्युटरको रूपमा आयात गर्नुहोस्"
+
+msgid "Clean and update course tutors"
+msgstr "कोर्स ट्युटरहरू सफा र अद्यावधिक गर्नुहोस्"
+
+msgid "Add me as tutor"
+msgstr "मलाई ट्युटरको रूपमा थप्नुहोस्"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "सर्भेलाई सिकाइ मार्गमा थप्न असमर्थ"
+
+msgid "Access dates for tutors"
+msgstr "ट्युटरहरूका लागि पहुँच मितिहरू"
+
+msgid "Tutor and group member"
+msgstr "ट्युटर र समूह सदस्य"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "तपाईंको दैनिक एआई टोकन सीमा पुगेको छ। कृपया भोलि फेरि प्रयास गर्नुहोस्।"
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "तपाईंको मासिक एआई टोकन सीमा पुगेको छ। कृपया अर्को महिना फेरि प्रयास गर्नुहोस्।"
+
+msgid "This course code already exists, please choose another code."
+msgstr "यो कोर्स कोड पहिले नै अवस्थित छ, कृपया अर्को कोड चयन गर्नुहोस्।"
+
+msgid "This course title already exists, please choose another title."
+msgstr "यो कोर्स शीर्षक पहिले नै अवस्थित छ, कृपया अर्को शीर्षक चयन गर्नुहोस्।"
+
+msgid "This tool visibility cannot be changed"
+msgstr "यो उपकरण दृश्यता परिवर्तन गर्न सकिँदैन"
+
+msgid "Invalid visibility"
+msgstr "अवैध दृश्यता"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "तपाईंले प्रतिलिपि प्राप्त गर्दै हुनुहुन्छ किनकि तपाईं कोर्स ट्युटरहरूमध्ये एक हुनुहुन्छ"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "तपाईंले प्रतिलिपि प्राप्त गर्दै हुनुहुन्छ किनकि तपाईं कोर्स ट्युटर हुनुहुन्छ"
+
+msgid "Manual completion"
+msgstr "म्यानुअल सम्पन्नता"
+
+msgid "Send to tutors"
+msgstr "ट्युटरहरूलाई पठाउनुहोस्"
+
+msgid "Lab title"
+msgstr "ल्याब शीर्षक"
+
+msgid "Lab week"
+msgstr "ल्याब हप्ता"
+
+msgid "Final exam access rule"
+msgstr "अन्तिम परीक्षा पहुँच नियम"
+
+msgid "Course completion rule"
+msgstr "कोर्स सम्पन्नता नियम"
+
+msgid "You have been invited to join a course"
+msgstr "तपाईंलाई कोर्समा सामेल हुन आमन्त्रित गरिएको छ"
+
+msgid "No user has been found"
+msgstr "कुनै प्रयोगकर्ता फेला परेन"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "चयन गरिएको प्रयोगकर्तालाई यस सन्दर्भमा सदस्यता दिन सकिँदैन"
+
+msgid "No change has been made"
+msgstr "कुनै परिवर्तन गरिएको छैन"
+
+msgid "Back to group list"
+msgstr "समूह सूचीमा फर्कनुहोस्"
+
+msgid "Remove class link"
+msgstr "कक्षा लिङ्क हटाउनुहोस्"
+
+msgid "Group settings"
+msgstr "समूह सेटिङहरू"
+
+msgid "Self-registration allowed"
+msgstr "स्व-दर्ता अनुमति दिइएको"
+
+msgid "Self-unregistration allowed"
+msgstr "स्व-अद्यावधिक अनुमति दिइएको"
+
+msgid "This group is linked to the class"
+msgstr "यो समूह कक्षासँग लिङ्क गरिएको छ"
+
+msgid "Create one or more empty course groups"
+msgstr "एक वा बढी खाली कोर्स समूहहरू सिर्जना गर्नुहोस्"
+
+msgid "Number of places"
+msgstr "स्थानहरूको संख्या"
+
+msgid "Base group"
+msgstr "आधार समूह"
+
+msgid "Share"
+msgstr "साझेदारी गर्नुहोस्"
+
+msgid "Collaboration"
+msgstr "सहकार्य"
+
+msgid "The group title is required."
+msgstr "समूह शीर्षक आवश्यक छ।"
+
+msgid "Back to group area"
+msgstr "समूह क्षेत्रमा फर्कनुहोस्"
+
+msgid "Members are managed by the linked class"
+msgstr "सदस्यहरू लिङ्क गरिएको कक्षाद्वारा व्यवस्थापन गरिन्छ"
+
+msgid "%s groups selected"
+msgstr "%s समूहहरू चयन गरिएको"
+
+msgid "Fill selected groups"
+msgstr "चयन गरिएका समूहहरू भर्नुहोस्"
+
+msgid "Empty selected groups"
+msgstr "चयन गरिएका समूहहरू खाली गर्नुहोस्"
+
+msgid "Fill group"
+msgstr "समूह भर्नुहोस्"
+
+msgid "Empty group"
+msgstr "खाली समूह"
+
+msgid "Groups per user"
+msgstr "प्रति प्रयोगकर्ता समूहहरू"
+
+msgid "No tutors"
+msgstr "कुनै ट्यूटरहरू छैनन्"
+
+msgid "No users"
+msgstr "कुनै प्रयोगकर्ताहरू छैनन्"
+
+msgid "Calculation mode"
+msgstr "गणना मोड"
+
+msgid "Weighted average"
+msgstr "भारित औसत"
+
+msgid "Points sum"
+msgstr "अंक योग"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "भारित औसतले तौलहरूको योगले सामान्यीकरण गर्छ; अंक योगले प्रत्येक तौललाई अधिकतम अंकको रूपमा लिन्छ र सामान्यीकरण नगरी जोड्छ।"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "प्रत्येक वस्तुको तौललाई यसको अधिकतम अंकको रूपमा लिइन्छ; ग्रेड अंकहरूको योग हो, सामान्यीकरण गरिएको हुँदैन।"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "ग्रेड वस्तुहरूको भारित औसत हो, तौलहरूको योगले सामान्यीकरण गरिएको।"
+
+msgid "Forum participation"
+msgstr "फोरम सहभागिता"
+
+msgid "Forum thread"
+msgstr "फोरम थ्रेड"
+
+msgid "Points for one message"
+msgstr "एउटा सन्देशको लागि अंक"
+
+msgid "Points for two or more messages"
+msgstr "दुई वा बढी सन्देशहरूको लागि अंक"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "विद्यार्थीले थ्रेडमा ठ्याक्कै एउटा सन्देश पोष्ट गर्दा प्रदान गरिने अंक।"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "विद्यार्थीले थ्रेडमा दुई वा बढी सन्देशहरू पोष्ट गर्दा प्रदान गरिने अंक।"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "वैकल्पिक। यदि खाली छोडियो भने, एउटा वा बढी सन्देशहरूले एउटा सन्देशको लागि अंक प्रदान गर्छन्।"
+
+msgid "Current password is required to change your password."
+msgstr "तपाईंको पासवर्ड परिवर्तन गर्न हालको पासवर्ड आवश्यक छ।"
+
+msgid "The 2FA code is required."
+msgstr "2FA कोड आवश्यक छ।"
+
+msgid "Invalid 2FA configuration."
+msgstr "अवैध 2FA कन्फिगरेसन।"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "2FA कोड अवैध वा म्याद सकिएको छ।"
+
+msgid "Database load"
+msgstr "डाटाबेस लोड"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "लाइभ MySQL र MariaDB सर्भर लोड मेट्रिक्स"
+
+msgid "Click to show database server load metrics"
+msgstr "डाटाबेस सर्भर लोड मेट्रिक्स देखाउन क्लिक गर्नुहोस्"
+
+msgid "Threads connected"
+msgstr "थ्रेडहरू जडान गरिएको"
+
+msgid "Temporary tables on disk"
+msgstr "डिस्कमा अस्थायी तालिकाहरू"
+
+msgid "Privilege scope"
+msgstr "अधिकार क्षेत्र"
+
+msgid "Not measurable with the current database user"
+msgstr "हालको डाटाबेस प्रयोगकर्तासँग मापन गर्न सकिँदैन"
+
+msgid "Uptime"
+msgstr "अपटाइम"
+
+msgid "Queries per second"
+msgstr "प्रति सेकेन्ड क्वेरीहरू"
+
+msgid "Slow queries"
+msgstr "ढिलो क्वेरीहरू"
+
+msgid "Slow query time limit"
+msgstr "ढिलो क्वेरी समय सीमा"
+
+msgid "Slow query log"
+msgstr "ढिलो क्वेरी लग"
+
+msgid "Slow queries per second"
+msgstr "ढिलो क्वेरी प्रति सेकेन्ड"
+
+msgid "Threads running"
+msgstr "चलिरहेका थ्रेडहरू"
+
+msgid "Threads cached"
+msgstr "क्यास गरिएका थ्रेडहरू"
+
+msgid "Table lock waits"
+msgstr "तालिका लक प्रतीक्षा"
+
+msgid "Row lock waits"
+msgstr "पङ्क्ति लक प्रतीक्षा"
+
+msgid "Aborted connections"
+msgstr "रद्द गरिएका जडानहरू"
+
+msgid "Opened tables"
+msgstr "खोलिएका तालिकाहरू"
+
+msgid "Query cache"
+msgstr "क्वेरी क्यास"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "डाटाबेस लोड मेट्रिक्स केवल MySQL र MariaDB का लागि उपलब्ध छन्।"
+
+msgid "Inserts"
+msgstr "इन्सर्टहरू"
+
+msgid "Hit rate"
+msgstr "हिट दर"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "हरेक ५ सेकेन्डमा स्वतः रिफ्रेस"
+
+msgid "Web server load"
+msgstr "वेब सर्भर लोड"
+
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "लाइभ Apache, Nginx वा FrankenPHP स्थिति मेट्रिक्स"
+
+msgid "Click to show web server load metrics"
+msgstr "वेब सर्भर लोड मेट्रिक्स देखाउन क्लिक गर्नुहोस्"
+
+msgid "Requires a local web server status module"
+msgstr "स्थानीय वेब सर्भर स्थिति मोड्युल आवश्यक छ"
+
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "वेब सर्भर लोड localhost मा मात्र Apache mod_status, Nginx stub_status, वा FrankenPHP/Caddy मेट्रिक्स एन्डपोइन्टबाट पढिन्छ। स्थिति पृष्ठले 127.0.0.1 (वा ::1) बाट अनुरोधहरू अनुमति दिनुपर्छ।"
+
+msgid "Paths scanned"
+msgstr "स्क्यान गरिएका पथहरू"
+
+msgid "Detected"
+msgstr "पत्ता लगाइयो"
+
+msgid "Status path"
+msgstr "स्थिति पथ"
+
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "वेब सर्भर लोड मेट्रिक्स Apache, Nginx र FrankenPHP का लागि मात्र उपलब्ध छन्।"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "स्क्यान गरिएका कुनै पनि स्थिति पथहरू localhost मा प्रतिक्रिया दिएनन्।"
+
+msgid "Busy workers"
+msgstr "व्यस्त कार्यकर्ताहरू"
+
+msgid "Idle workers"
+msgstr "निष्क्रिय कार्यकर्ताहरू"
+
+msgid "Graceful workers"
+msgstr "शान्त कार्यकर्ताहरू"
+
+msgid "Server MPM"
+msgstr "सर्भर MPM"
+
+msgid "Requests per second (live)"
+msgstr "अनुरोध प्रति सेकेन्ड (लाइभ)"
+
+msgid "Requests per second (since start)"
+msgstr "अनुरोध प्रति सेकेन्ड (सुरु भएदेखि)"
+
+msgid "Bytes per second (live)"
+msgstr "बाइट प्रति सेकेन्ड (लाइभ)"
+
+msgid "Bytes per second (since start)"
+msgstr "बाइट प्रति सेकेन्ड (सुरु भएदेखि)"
+
+msgid "Bytes per request"
+msgstr "अनुरोध प्रति बाइट"
+
+msgid "Total accesses"
+msgstr "कुल पहुँचहरू"
+
+msgid "Total traffic"
+msgstr "कुल ट्राफिक"
+
+msgid "CPU load"
+msgstr "CPU लोड"
+
+msgid "Load average (1 min)"
+msgstr "लोड औसत (१ मिनेट)"
+
+msgid "Load average (5 min)"
+msgstr "लोड औसत (५ मिनेट)"
+
+msgid "Load average (15 min)"
+msgstr "लोड औसत (१५ मिनेट)"
+
+msgid "Scoreboard sending"
+msgstr "स्कोरबोर्ड पठाउँदै"
+
+msgid "Scoreboard reading"
+msgstr "स्कोरबोर्ड पढ्दै"
+
+msgid "Scoreboard keepalive"
+msgstr "स्कोरबोर्ड किपअलाइभ"
+
+msgid "Scoreboard waiting"
+msgstr "स्कोरबोर्ड प्रतिक्षा गर्दै"
+
+msgid "Scoreboard open slots"
+msgstr "स्कोरबोर्ड खुला स्लटहरू"
+
+msgid "Active connections"
+msgstr "सक्रिय जडानहरू"
+
+msgid "Reading"
+msgstr "पढ्दै"
+
+msgid "Writing"
+msgstr "लेख्दै"
+
+msgid "Total requests"
+msgstr "कुल अनुरोधहरू"
+
+msgid "Accepts"
+msgstr "स्वीकारहरू"
+
+msgid "Handled"
+msgstr "ह्यान्डल गरिएका"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status सक्षम गर्नुहोस् (ExtendedStatus On) र localhost लाई /server-status मा अनुमति दिनुहोस्। Nginx: /nginx_status वा /stub_status जस्तो localhost-मात्र स्थानमा stub_status सक्षम गर्नुहोस्। FrankenPHP: Caddyfile मा विश्वव्यापी \"metrics\" विकल्प थप्नुहोस्, जसले पूर्वनिर्धारित रूपमा Caddy को एडमिन API (127.0.0.1:2019/metrics) मा Prometheus मेट्रिक्स उपलब्ध गराउँछ।"
+
+msgid "Total threads"
+msgstr "कुल थ्रेडहरू"
+
+msgid "Busy threads"
+msgstr "व्यस्त थ्रेडहरू"
+
+msgid "Queue depth"
+msgstr "कतार गहिराइ"
+
+msgid "Worker"
+msgstr "वर्कर"
+
+msgid "Average request time"
+msgstr "औसत अनुरोध समय"
+
+msgid "Grade percentage distribution"
+msgstr "ग्रेड प्रतिशत वितरण"
+
+msgid "Top learners"
+msgstr "शीर्ष सिकारुहरू"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "यो प्रगति सिकाइ पथको प्रगति र सिकारुको औसत अभ्यास परिणामलाई संयोजन गर्छ"
+
+msgid "Additional profile fields"
+msgstr "थप प्रोफाइल फिल्डहरू"
+
+msgid "Visible columns"
+msgstr "देखिने स्तम्भहरू"
+
+msgid "Learning path completion"
+msgstr "सिकाइ पथ पूरा हुनु"
+
+msgid "Number of certificates"
+msgstr "प्रमाणपत्रहरूको संख्या"
+
+msgid "Could not export the report"
+msgstr "प्रतिवेदन निर्यात गर्न सकिएन"
+
+msgid "Second learner"
+msgstr "दोस्रो सिकारु"
+
+msgid "Results by learner"
+msgstr "सिकारु अनुसार परिणामहरू"
+
+msgid "Use filters to narrow down questions."
+msgstr "प्रश्नहरू सीमित गर्न फिल्टरहरू प्रयोग गर्नुहोस्।"
+
+msgid "Try adjusting your filters and search again."
+msgstr "आफ्ना फिल्टरहरू समायोजन गरी फेरि खोज्नुहोस्।"
+
+msgid "Results per page"
+msgstr "प्रति पृष्ठ परिणामहरू"
+
+msgid "No answers"
+msgstr "कुनै उत्तर छैन"
+
+msgid "Tests using this question"
+msgstr "यो प्रश्न प्रयोग गर्ने परीक्षणहरू"
+
+msgid "Delete failed"
+msgstr "मेटाउन असफल"
+
+msgid "PHP cache"
+msgstr "PHP क्यास"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "लाइभ OPcache र APCu निदान"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "OPcache र APCu निदान देखाउन क्लिक गर्नुहोस्"
+
+msgid "Memory used"
+msgstr "प्रयोग भएको मेमोरी"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache स्थापना गरिएको छ तर सक्षम छैन।"
+
+msgid "OPcache extension is not available on this server."
+msgstr "यस सर्भरमा OPcache एक्सटेन्सन उपलब्ध छैन।"
+
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache असंगत मेमोरी तथ्याङ्क रिपोर्ट गर्दैछ (केही थ्रेडेड PHP रनटाइमहरूमा ज्ञात समस्या, जस्तै FrankenPHP)।"
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu स्थापना गरिएको छ तर सक्षम छैन।"
+
+msgid "APCu extension is not available on this server."
+msgstr "यस सर्भरमा APCu एक्सटेन्सन उपलब्ध छैन।"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu असंगत मेमोरी तथ्याङ्क रिपोर्ट गर्दैछ (केही थ्रेडेड PHP रनटाइमहरूमा ज्ञात समस्या)।"
+
+msgid "Constant"
+msgstr "कन्स्टेन्ट"
+
+msgid "Space used on disk (MB)"
+msgstr "डिस्कमा प्रयोग भएको स्थान (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "अधिकतम पाठ्यक्रम स्थान सेट गर्नुहोस् (MB)"
+
+msgid "Memory free"
+msgstr "खाली मेमोरी"
+
+msgid "Memory wasted"
+msgstr "खेर गएको मेमोरी"
+
+msgid "Memory used %"
+msgstr "प्रयोग भएको मेमोरी %"
+
+msgid "Cached scripts"
+msgstr "क्यास गरिएका स्क्रिप्टहरू"
+
+msgid "Cached keys"
+msgstr "क्यास गरिएका कुञ्जीहरू"
+
+msgid "Misses"
+msgstr "मिसहरू"
+
+msgid "Cache full"
+msgstr "क्यास भरिएको"
+
+msgid "OOM restarts"
+msgstr "OOM पुनःसुरु"
+
+msgid "Hash restarts"
+msgstr "ह्यास पुनःसुरु"
+
+msgid "Manual restarts"
+msgstr "म्यानुअल पुनःसुरु"
+
+msgid "Interned strings used"
+msgstr "प्रयोग भएका इन्टर्न स्ट्रिङहरू"
+
+msgid "Interned strings free"
+msgstr "खाली इन्टर्न स्ट्रिङहरू"
+
+msgid "Interned strings count"
+msgstr "इन्टर्न स्ट्रिङहरूको संख्या"
+
+msgid "Memory available"
+msgstr "उपलब्ध मेमोरी"
+
+msgid "Memory size"
+msgstr "मेमोरी आकार"
+
+msgid "Entries"
+msgstr "प्रविष्टिहरू"
+
+msgid "Slots"
+msgstr "स्लटहरू"
+
+msgid "Expunges"
+msgstr "मेटाइएका"
+
+msgid "Cache start time"
+msgstr "क्यास सुरु समय"
+
+msgid "Time zone"
+msgstr "समय क्षेत्र"
+
+msgid "Not registered"
+msgstr "दर्ता नभएको"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "सत्र, पाठ्यक्रम, मिति वा सिकारु अनुसार सिकारु प्रमाणपत्रहरू फिल्टर र सूचीबद्ध गर्नुहोस्, त्यसपछि आवश्यक पर्दा निर्यात गर्नुहोस्।"
+
+msgid "Filter by session and course"
+msgstr "सत्र र पाठ्यक्रम अनुसार फिल्टर गर्नुहोस्"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "उत्पन्न प्रमाणपत्रहरू सूचीबद्ध गर्न सत्र, पाठ्यक्रम र वैकल्पिक मिति छान्नुहोस्।"
+
+msgid "Filter by learner"
+msgstr "सिकारु अनुसार फिल्टर गर्नुहोस्"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "सत्र र पाठ्यक्रमहरूमा विशिष्ट सिकारुका प्रमाणपत्रहरू खोज्नुहोस्।"
+
+msgid "Certificates found"
+msgstr "प्रमाणपत्रहरू फेला परे"
+
+msgid "Open certificate"
+msgstr "प्रमाणपत्र खोल्नुहोस्"
+
+msgid "Certificate file not available"
+msgstr "प्रमाणपत्र फाइल उपलब्ध छैन"
+
+msgid "Export to CSV"
+msgstr "CSV मा निर्यात गर्नुहोस्"
+
+msgid "Acquired skills"
+msgstr "हासिल गरिएका सीपहरू"
+
+msgid "No acquired skill"
+msgstr "हासिल गरिएको सीप छैन"
+
+msgid "Absences"
+msgstr "अनुपस्थितिहरू"
+
+msgid "No courses"
+msgstr "पाठ्यक्रम छैनन्"
+
+msgid "No session matched"
+msgstr "कुनै सत्र मिलेन"
+
+msgid "Unable to load the report"
+msgstr "प्रतिवेदन लोड गर्न सकिएन"
+
+msgid "Please select a profile"
+msgstr "कृपया प्रोफाइल चयन गर्नुहोस्"
+
+msgid "Please select a session"
+msgstr "कृपया सत्र चयन गर्नुहोस्"
+
+msgid "Please select a user"
+msgstr "कृपया प्रयोगकर्ता चयन गर्नुहोस्"
+
+msgid "Unable to export the report"
+msgstr "प्रतिवेदन निर्यात गर्न सकिएन"
+
+msgid "Accepted on web"
+msgstr "वेबमा स्वीकृत"
+
+msgid "Accepted by e-mail"
+msgstr "इमेलद्वारा स्वीकृत"
+
+msgid "The course title is required"
+msgstr "पाठ्यक्रमको शीर्षक आवश्यक छ"
+
+msgid "Unexpected error"
+msgstr "अप्रत्याशित त्रुटि"
+
+msgid "Separate tags with commas"
+msgstr "ट्यागहरूलाई अल्पविरामले छुट्याउनुहोस्"
+
+msgid "Open link"
+msgstr "लिङ्क खोल्नुहोस्"
+
+msgid "Describe the course picture to generate"
+msgstr "उत्पन्न गर्नुपर्ने पाठ्यक्रमको तस्बिर वर्णन गर्नुहोस्"
+
+msgid "Generate picture"
+msgstr "तस्बिर उत्पन्न गर्नुहोस्"
+
+msgid "PDF watermark"
+msgstr "PDF वाटरमार्क"
+
+msgid "No watermark image"
+msgstr "वाटरमार्क छवि छैन"
+
+msgid "Upload watermark"
+msgstr "वाटरमार्क अपलोड गर्नुहोस्"
+
+msgid "Delete watermark"
+msgstr "वाटरमार्क मेटाउनुहोस्"
+
+msgid "Course legal agreement file"
+msgstr "पाठ्यक्रम कानुनी सम्झौता फाइल"
+
+msgid "Upload agreement file"
+msgstr "सम्झौता फाइल अपलोड गर्नुहोस्"
+
+msgid "Download agreement file"
+msgstr "सम्झौता फाइल डाउनलोड गर्नुहोस्"
+
+msgid "Delete agreement file"
+msgstr "सम्झौता फाइल मेटाउनुहोस्"
+
+msgid "Custom certificate images"
+msgstr "अनुकूलन प्रमाणपत्र छविहरू"
+
+msgid "Course picture updated"
+msgstr "पाठ्यक्रम चित्र अद्यावधिक गरियो"
+
+msgid "The course picture could not be uploaded"
+msgstr "पाठ्यक्रम चित्र अपलोड गर्न सकिएन"
+
+msgid "Course picture deleted"
+msgstr "पाठ्यक्रम चित्र मेटाइयो"
+
+msgid "Enter a description for the image"
+msgstr "छविको लागि विवरण प्रविष्ट गर्नुहोस्"
+
+msgid "The image generator returned an empty response"
+msgstr "छवि जनरेटरले खाली प्रतिक्रिया फर्कायो"
+
+msgid "Course picture generated"
+msgstr "पाठ्यक्रम चित्र उत्पन्न गरियो"
+
+msgid "Watermark updated"
+msgstr "वाटरमार्क अद्यावधिक गरियो"
+
+msgid "Watermark deleted"
+msgstr "वाटरमार्क मेटाइयो"
+
+msgid "Agreement file updated"
+msgstr "सम्झौता फाइल अद्यावधिक गरियो"
+
+msgid "Agreement file deleted"
+msgstr "सम्झौता फाइल मेटाइयो"
+
+msgid "Certificate image updated"
+msgstr "प्रमाणपत्र छवि अद्यावधिक गरियो"
+
+msgid "Certificate image deleted"
+msgstr "प्रमाणपत्र छवि मेटाइयो"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "पाठ्यक्रम चित्र काट्न, घुमाउन वा आकार परिवर्तन गर्न अपलोड गर्नुअघि छवि सम्पादक प्रयोग गर्नुहोस्।"
+
+msgid "This invitation link is invalid or has expired."
+msgstr "यो निमन्त्रणा लिङ्क अवैध छ वा म्याद सकिएको छ।"
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "यो निमन्त्रणा फरक प्रयोगकर्तालाई पठाइएको थियो। कृपया निमन्त्रणा गरिएको खाताबाट लग इन गर्नुहोस्।"
+
+msgid "The invitation could not be accepted."
+msgstr "निमन्त्रणा स्वीकार गर्न सकिएन।"
+
+msgid "You have been subscribed successfully."
+msgstr "तपाईं सफलतापूर्वक सदस्यता लिइएको छ।"
+
+msgid "This email address cannot be invited."
+msgstr "यो इमेल ठेगाना निमन्त्रणा गर्न सकिँदैन।"
+
+msgid "This user is already subscribed to the session."
+msgstr "यो प्रयोगकर्ता पहिले नै सत्रमा सदस्यता लिइसकेको छ।"
+
+msgid "This user is already subscribed to the course."
+msgstr "यो प्रयोगकर्ता पहिले नै पाठ्यक्रममा सदस्यता लिइसकेको छ।"
+
+msgid "Multi URLs"
+msgstr "बहु URL हरू"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "प्रयोगकर्ता र पाठ्यक्रम जस्ता इकाईहरू एकै समयमा एकभन्दा बढी URL मा सक्रिय हुन सक्छन्, त्यसैले तलका मानहरूको योगफल कुल सङ्ख्यासँग मेल खाँदैन।"
+
+msgid "User directory"
+msgstr "प्रयोगकर्ता निर्देशिका"
+
+msgid "Course directory"
+msgstr "पाठ्यक्रम निर्देशिका"
+
+msgid "URLs"
+msgstr "URL हरू"
+
+msgid "User details"
+msgstr "प्रयोगकर्ता विवरण"
+
+msgid "Course details"
+msgstr "पाठ्यक्रम विवरण"
+
+msgid "View details"
+msgstr "विवरण हेर्नुहोस्"
+
+msgid "Average progress"
+msgstr "औसत प्रगति"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "प्रत्यक्ष नामांकन सम्पूर्ण पाठ्यक्रमसँग सम्बन्धित हुन्छ, कुनै खास URL सँग होइन, त्यसैले यो पाठ्यक्रम जोडिएका हरेक URL का लागि तल एउटै ‘Direct’ आँकडा दोहोरिन्छन्। सत्रहरू नै URL हरूमा पाठ्यक्रम साझा गर्ने र URL अनुसार फरक मेट्रिक्स राख्ने अपेक्षित तरिका हुन्।"
+
+msgid "Logins (all URLs combined)"
+msgstr "लगइनहरू (सबै URL हरू मिलाएर)"
+
+msgid "Unique logins"
+msgstr "अद्वितीय लगइनहरू"
+
+msgid "Parent URL"
+msgstr "अभिभावक URL"
+
+msgid "Logins (your URLs)"
+msgstr "लगइनहरू (तपाईंका URL हरू)"
+
+msgid "The picture could not be uploaded"
+msgstr "तस्बिर अपलोड गर्न सकिएन"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "यो फिल्ड प्रकार अझै पूर्ण रूपमा समर्थित छैन — कच्चा मान मात्र।"
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "यो पाठ्यक्रम आफ्नो प्रयोगकर्ता सदस्यता सीमा (%d/%d) नजिक छ।"
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "तपाईंका पाठ्यक्रम गुणहरूबाट स्थान सीमित छ। सीमा बढाउन, प्राप्त गर्नुहोस्"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "तपाईंका पाठ्यक्रम गुणहरूबाट प्रयोगकर्ता सदस्यता सीमित छन्। सीमा बढाउन, प्राप्त गर्नुहोस्"
+
+msgid "pro plan"
+msgstr "प्रो योजना"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "र यो योजना प्राप्त गरेपछि पाठ्यक्रम मर्मतबाट यस पाठ्यक्रमको ब्याकअप नयाँ भुक्तानी गरिएको पाठ्यक्रममा आयात गर्नुहोस्, वा आफ्नो पाठ्यक्रमलाई प्रो पाठ्यक्रममा रूपान्तरण गर्न टिकट खोल्नुहोस्।"
+
+msgid "Tired of writing questions?"
+msgstr "प्रश्न लेख्न थाकिसक्नुभयो?"
+
+msgid "Upgrade your plan"
+msgstr "आफ्नो योजना स्तरोन्नति गर्नुहोस्"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "प्रो योजनामा गएर तपाईंका लागि गुणस्तरीय प्रश्न उत्पन्न गर्न AI बाट सहयोग पाउनुहोस्।"
+
+msgid "Student Success AI Coach"
+msgstr "विद्यार्थी सफलता AI प्रशिक्षक"
+
+msgid "No AI text provider is configured."
+msgstr "कुनै AI पाठ प्रदायक कन्फिगर गरिएको छैन।"
+
+msgid "Additional instructions for the AI coach"
+msgstr "AI प्रशिक्षकका लागि थप निर्देशनहरू"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "उदाहरण: यो सिकारुलाई ध्यान कायम राख्न कठिनाइ छ। छोटा गतिविधि र बुझाइ जाँचका लागि बारम्बार जाँच सुझाव दिनुहोस्।"
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Chamilo सिफारिस तयार गर्दा यो विन्डो खुला राख्नुहोस्।"
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "सिफारिस तपाईंको Chamilo इनबक्समा पनि सुरक्षित गरियो।"
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "सिफारिस उत्पन्न गरी यस सिकारुका लागि सुरक्षित गरियो, तर इनबक्स प्रतिलिपि सिर्जना गर्न सकिएन।"
+
+msgid "Student success recommendation"
+msgstr "विद्यार्थी सफलता सिफारिस"
+
+msgid "Generated"
+msgstr "उत्पन्न गरिएको"
+
+msgid "Priority actions"
+msgstr "प्राथमिकता कार्यहरू"
+
+msgid "Evidence"
+msgstr "प्रमाण"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "यो सुविधा यस पाठ्यक्रमको सामग्री विश्लेषण गर्नेछ र सिकाइ व्यवहारसम्बन्धी जानकारी कन्फिगर गरिएको AI मोडेलमा पठाउनेछ। AI मोडेलमा प्रत्यक्ष पहिचानयोग्य व्यक्तिगत डाटा नपठाए पनि, पठाइएको केही डाटाले प्रयोगकर्ताबारे अप्रत्यक्ष पहिचानयोग्य जानकारी दिन सक्छ। शङ्का भए यो सुविधा प्रयोग गर्नुअघि सधैं आफ्नो AI सन्दर्भ व्यक्तिसँग जाँच गर्नुहोस्।"
+
+msgid "Additional activities"
+msgstr "थप गतिविधिहरू"
+
+msgid "Rhythm"
+msgstr "ताल"
+
+msgid "Learning methodologies"
+msgstr "सिकाइ विधिहरू"
+
+msgid "Other recommendations"
+msgstr "अन्य सिफारिसहरू"
+
+msgid "Analyzing course..."
+msgstr "पाठ्यक्रम विश्लेषण गर्दै..."
+
+msgid "Analyzing student's learning..."
+msgstr "विद्यार्थीको सिकाइ विश्लेषण गर्दै..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "यो निमन्त्रणा स्वीकार गर्दा तपाईं अनुरोध गर्ने प्रयोगकर्तासँग यसरी जोडिनेछौ कि तपाईंको प्रोफाइल डाटाको केही वा सबै भाग उनीहरूले पढ्न सक्नेछन्। पहिले नै विश्वास गर्ने प्रयोगकर्ताहरूसँग आफ्नो प्रोफाइल जाँच गरी धेरै जानकारी नबाँड्नुहोस्।"
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "माइक्रोफोन प्रयोग गर्ने अनुमति सक्षम छैन, अडियो रेकर्ड गर्न ब्राउजरमा यसलाई सक्षम गर्नुहोस्"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "चामिलोको यो संस्करणमा एक (वा बढी) बहुभाषिक पाठ्यक्रम पूर्वस्थापित छन्। पाठ्यक्रम सूचीमा तिनीहरू हेर्नुहोस् र सार्वजनिक राख्ने वा नराख्ने निर्णय गर्नुहोस्।"
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "तपाईंलाई हाल कुनै URL मा पहुँच छैन। आफू सम्बन्धित URL मा पहुँच दिन प्रशासकलाई अनुरोध गर्नुहोस्।"
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "चयन गरिएको AI प्रदायक सार्वभौम सेवा होइन भने चयन गरिएको कागजातको सामग्री बाह्य सेवामा पठाइन सक्छ। तपाईंको संस्थाले अनुमति नदिएसम्म गोप्य जानकारीसहित अगाडि नबढ्नुहोस्।"
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "बाँकी रहनुपर्ने खातामा Unify क्लिक गर्नुहोस्। प्रणालीले सोही दोहोरिएको समूहका अन्य सबै खाताहरू त्यसमा मर्ज गर्नेछ। मर्ज भएका खाताहरू स्थायी रूपमा मेटिनेछन् र यो प्रतिवेदनबाट हराउनेछन्। यो कार्य उल्ट्याउन सकिँदैन।"
+
+msgid "Permanent deletion"
+msgstr "स्थायी मेटाउने"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify ले मर्ज भएका खाताहरू पहिले नै स्थायी रूपमा मेटाउँछ। थप खाताहरू म्यानुअल रूपमा मेटाउन चाहनुहुन्छ भने मात्र प्रयोगकर्ता सूची प्रयोग गर्नुहोस्।"
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "तपाईं पूर्वनिर्धारित दृश्य थिम “chamilo” का लोगोहरू परिवर्तन गर्दै हुनुहुन्छ। पूर्वनिर्धारितहरू अधिलेखन नगर्न अनुकूल दृश्य थिम सिर्जना/प्रयोग गर्ने विचार गर्नुहोस्।"
+
+msgid "This exercise has no questions."
+msgstr "यो अभ्यासमा कुनै प्रश्न छैनन्।"
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "प्रत्येक प्रश्नको प्रतिक्रिया/टिप्पणी कसरी देखाउने? यो विकल्पले परीक्षा दिँदा सिकारुलाई कसरी देखाइनेछ भन्ने निर्धारण गर्छ।"
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "यी अनुप्रयोगहरूले तपाईंको विद्यमान खाता अनुमति मात्र प्रयोग गरी तपाईंको रूपमा चामिलोमा पहुँच गर्न सक्छन्। प्रयोग नगर्ने वा नचिनेका कुनै पनि रद्द गर्नुहोस्।"
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "कानुनी सहमति फिर्ता लिन चाहनुको कारण व्याख्या गर्नुहोस् ताकि हामी तपाईंको अनुरोध सही रूपमा प्रक्रिया गर्न सकौं"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "दूरस्थ MCP क्लाइन्टलाई तपाईंको आफ्नै खाता र अनुमतिसहित चामिलोसँग जोड्न यो व्यक्तिगत कुञ्जी प्रयोग गर्नुहोस्।"
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "पूर्ण कुञ्जी एक पटक मात्र देखाइन्छ। यसलाई सुरक्षित रूपमा भण्डारण गर्नुहोस्। नयाँ कुञ्जी उत्पन्न गर्नासाथ अघिल्लो कुञ्जी अमान्य हुन्छ।"
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "कुञ्जीले क्लाइन्टलाई तपाईंको चामिलो खाताको रूपमा प्रमाणित गर्छ। तपाईंको खातामा नभएका अनुमति दिँदैन।"
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "दर्ता पृष्ठमा नियम तथा सर्तहरूको कथन देखाउनुहोस्, दर्ता गर्न आगन्तुकले T&C स्वीकार गर्नुपर्ने बनाउनुहोस्"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "नियम तथा सर्तहरूको सामग्री AI भाषा मोडेलमा पठाइनेछ। बचत गर्नुअघि प्रस्तावित अनुवाद समीक्षा गर्नुहोस्।"
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "लक्ष्य भाषाका लागि बचत गरिएको संस्करण पहिले नै छ। यो प्रस्ताव बचत गर्दा नयाँ संस्करण सिर्जना हुनेछ।"
+
+msgid "Acquired"
+msgstr "प्राप्त"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "सिफारिस गरिएको पाठ्यक्रम तस्बिर: १६०० × ९०० px (१६:९)। ठूला वा उच्च-घनत्व स्क्रिनमा स्पष्ट देखाउन कम्तीमा १२८० × ७२० px प्रयोग गर्नुहोस्।"
+
+msgid "Courses of the selected URL"
+msgstr "चयन गरिएको URL का पाठ्यक्रमहरू"
+
+msgid "Course categories in selected URL"
+msgstr "चयन गरिएको URL का पाठ्यक्रम श्रेणीहरू"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "तपाईंको खाता सक्रिय छ, अब लगइन गरी आफ्ना पाठ्यक्रमहरू जाँच्न सक्नुहुन्छ।"
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "पहिले सुधारहरू <a href='%s'> यहाँ </a> डाउनलोड गर्नुहोस्।\nत्यसपछि त्यो फाइल अनजिप गरी फाइल नाम नबदली आवश्यक सम्पादन गर्नुहोस्।\nत्यसपछि ती परिमार्जित फाइलहरूको जिप बनाई यस फारममा अपलोड गर्नुहोस्।"
+
+msgid "Adding students from session %s to session %s"
+msgstr "सत्र %s बाट विद्यार्थीहरू सत्र %s मा थप्दै"
+
+msgid "Show all attempts by exercise"
+msgstr "अभ्यासअनुसार सबै प्रयास देखाउनुहोस्"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "यो कार्यले चयन गरिएको पाठ्यक्रमको अनुमति दिइएको प्रयोगकर्ता सीमा नाघ्नेछ।"
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "केही सदस्यता प्रभावित पाठ्यक्रमको प्रयोगकर्ता सीमा पुगेकाले पूरा हुन सकेनन्। प्रभावित प्रयोगकर्ता/पाठ्यक्रम: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "यो रजिस्ट्रीले ज्ञात प्रतिवेदन पृष्ठहरू, तिनीहरूको श्रेणी, क्यानोनिकल URL, पुरानो URL र अपेक्षित भूमिका दर्शक सूचीबद्ध गर्छ। क्यानोनिकल URL हरू हालको प्रतिवेदन कार्यान्वयनमा रूट गर्छन् र दस्तावेजीकृत प्रतिवेदन भूमिका म्याट्रिक्स लागू गर्छन्।"
+
+msgid "E-mail notification subscription"
+msgstr "इमेल सूचना सदस्यता"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "यो कार्यले प्रशासकले तोकेको प्रति पाठ्यक्रम %s प्रयोगकर्ताको सीमा नाघ्नेछ। सदस्यता रद्द गरिएको छ।"
+
+msgid "Language the document is in"
+msgstr "कागजात रहेको भाषा"
+
+msgid "There is no session still"
+msgstr "अहिलेसम्म कुनै सत्र छैन"
+
+msgid "Origin courses from session"
+msgstr "सत्रबाट स्रोत पाठ्यक्रमहरू"
+
+msgid "Destination courses from session"
+msgstr "सत्रबाट गन्तव्य पाठ्यक्रमहरू"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "सार्वजनिक पहुँच (पाठ्यक्रमका कुनै पनि सदस्यलाई पहुँच अनुमति)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "'%s' विषयको पाठ्यक्रमका लागि %d शब्दावली शब्द उत्पन्न गर्नुहोस्, प्रत्येक शब्द एक पङ्क्तिमा, अर्को पङ्क्तिमा परिभाषा र प्रत्येक शब्दबीच एक खाली पङ्क्ति। शीर्षक वा परिभाषाका लागि अन्य कुनै ढाँचा नथप्नुहोस्।"
+
+msgid "This is a short description of the course '%s'."
+msgstr "यो पाठ्यक्रम '%s' को छोटो विवरण हो।"
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "तपाईं विन्डोज प्लेटफर्ममा चामिलो प्रयोग गर्दै हुनुहुन्छ। पूर्ण-पाठ अनुक्रमणिकाका लागि कागजात रूपान्तरण सहायक उपलब्ध छैनन्।"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "परीक्षा स्वतः-सुरु सेटिङ चालु छ। विद्यार्थीहरू परीक्षा सूचीमा पुनर्निर्देशित हुनेछन्।"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "परीक्षा स्वतः-सुरु सेटिङ चालु छ। विद्यार्थीहरू विशिष्ट परीक्षामा पुनर्निर्देशित हुनेछन्।"
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "यो पाठ्यक्रमको सदस्यता सीमा पुगेको छ (%current%/%limit%)।"
+
+msgid "Count course by language"
+msgstr "भाषाअनुसार पाठ्यक्रम गणना"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "पछिल्लो पहुँच चयन गरिएको मितिभन्दा पुरानो भएका प्रयोगकर्ताहरू।"
+
+msgid "Your certificate is about to expire"
+msgstr "तपाईंको प्रमाणपत्र म्याद सकिन लागेको छ"
+
+msgid "Your certificate has expired"
+msgstr "तपाईंको प्रमाणपत्रको म्याद सकिएको छ"
+
+msgid "Your certificate is about to expire:"
+msgstr "तपाईंको प्रमाणपत्र म्याद सकिन लागेको छ:"
+
+msgid "Your certificate has expired:"
+msgstr "तपाईंको प्रमाणपत्रको म्याद सकिएको छ:"
+
+msgid "Expiry date"
+msgstr "म्याद सकिने मिति"
+
+msgid "%s days remaining"
+msgstr "%s दिन बाँकी"
+
+msgid "Hello, %s"
+msgstr "नमस्ते, %s"
+
+msgid "Edit expiry date"
+msgstr "म्याद सकिने मिति सम्पादन गर्नुहोस्"
+
+msgid "Certificate validity (days)"
+msgstr "प्रमाणपत्र वैधता (दिन)"
+
+msgid "Expiring certificates"
+msgstr "म्याद सकिन लागेका प्रमाणपत्रहरू"
+
+msgid "Expiring soon"
+msgstr "चाँडै म्याद सकिने"
+
+msgid "Expired notice"
+msgstr "म्याद सकिएको सूचना"
+
+msgid "Expiring notice"
+msgstr "म्याद सकिन लागेको सूचना"
+
+msgid "outdated"
+msgstr "पुरानो"
+
+msgid "Last reminder sent"
+msgstr "पछिल्लो सम्झना पठाइएको"
+
+msgid "Days ahead"
+msgstr "अगाडिका दिनहरू"
+
+msgid "Send notification"
+msgstr "सूचना पठाउनुहोस्"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "के तपाईं यो सूचना पठाउन निश्चित हुनुहुन्छ?"
+
+msgid "Expired: %s"
+msgstr "म्याद सकिएको: %s"
+
+msgid "Expiring soon: %s"
+msgstr "चाँडै म्याद सकिने: %s"
+
+msgid "Expired notice: %s"
+msgstr "म्याद सकिएको सूचना: %s"
+
+msgid "Expiring notice: %s"
+msgstr "म्याद सकिन लागेको सूचना: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "सूचनाहरू प्रयोगकर्ताहरूलाई उनीहरूको आफ्नै कन्फिगर गरिएको भाषामा पठाइन्छ।"
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "पृष्ठहरू पूर्वनिर्धारित रूपमा ६० सेकेन्डका लागि HTTP-क्यास गरिन्छन्, जुन Page entity मा परिभाषित छ, त्यसैले परिवर्तनहरू तुरुन्तै देखिन नसक्छन्।"
+
+msgid "Activate legal notice"
+msgstr "कानुनी सूचना सक्रिय गर्नुहोस्"
+
+msgid "Agreement content"
+msgstr "सम्झौताको सामग्री"
+
+msgid "Allow learners to delete their own publication"
+msgstr "शिक्षार्थीहरूलाई आफ्नै प्रकाशन मेटाउन अनुमति दिनुहोस्"
+
+msgid "Allow learners to edit agenda"
+msgstr "शिक्षार्थीहरूलाई एजेन्डा सम्पादन गर्न अनुमति दिनुहोस्"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "शिक्षार्थीहरूलाई आफ्नै उपस्थिति प्रमाणित गर्न अनुमति दिनुहोस्"
+
+msgid "Allow learners to view users list"
+msgstr "शिक्षार्थीहरूलाई प्रयोगकर्ता सूची हेर्न अनुमति दिनुहोस्"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "प्रयोगकर्ताहरूलाई फोरम सूचनाहरूमा स्वतः सदस्यता दिनुहोस्"
+
+msgid "Certificate mode"
+msgstr "प्रमाणपत्र मोड"
+
+msgid "Configure external tools"
+msgstr "बाह्य उपकरणहरू कन्फिगर गर्नुहोस्"
+
+msgid "Contents"
+msgstr "सामग्रीहरू"
+
+msgid "Contents to show"
+msgstr "देखाउने सामग्रीहरू"
+
+msgid "Course certificate"
+msgstr "पाठ्यक्रम प्रमाणपत्र"
+
+msgid "Course delivery dates"
+msgstr "पाठ्यक्रम वितरण मितिहरू"
+
+msgid "Course duration in hours"
+msgstr "घण्टामा पाठ्यक्रम अवधि"
+
+msgid "Course legal agreement"
+msgstr "पाठ्यक्रम कानुनी सम्झौता"
+
+msgid "Custom"
+msgstr "अनुकूलित"
+
+msgid "Custom certificate"
+msgstr "अनुकूलित प्रमाणपत्र"
+
+msgid "Default visibility for new documents"
+msgstr "नयाँ कागजातहरूको पूर्वनिर्धारित दृश्यता"
+
+msgid "Direct invitation link"
+msgstr "प्रत्यक्ष निमन्त्रणा लिङ्क"
+
+msgid "Do not notify"
+msgstr "सूचना नदिनुहोस्"
+
+msgid "Documents list"
+msgstr "कागजात सूची"
+
+msgid "E-mail learner on manual subscription"
+msgstr "म्यानुअल सदस्यतामा शिक्षार्थीलाई इमेल गर्नुहोस्"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "नयाँ प्रयोगकर्ताको विद्यार्थी प्रकाशन प्रतिक्रियामा शिक्षकहरूलाई इमेल गर्नुहोस्"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ड्रपबक्स फाइल प्राप्तिमा प्रयोगकर्ताहरूलाई इमेल गर्नुहोस्"
+
+msgid "Enable course home notification"
+msgstr "पाठ्यक्रम गृह सूचना सक्षम गर्नुहोस्"
+
+msgid "Enable course themes in learning paths"
+msgstr "सिकाइ पथहरूमा पाठ्यक्रम थिमहरू सक्षम गर्नुहोस्"
+
+msgid "Exercises invisible in session"
+msgstr "सत्रमा अभ्यासहरू अदृश्य"
+
+msgid "Expiration link"
+msgstr "म्याद सकिने लिङ्क"
+
+msgid "Forums list"
+msgstr "फोरमहरूको सूची"
+
+msgid "Issue date type"
+msgstr "जारी मिति प्रकार"
+
+msgid "Learning path index"
+msgstr "सिकाइ मार्ग अनुक्रमणिका"
+
+msgid "Learning paths list"
+msgstr "सिकाइ मार्गहरूको सूची"
+
+msgid "Left margin"
+msgstr "बायाँ मार्जिन"
+
+msgid "Legal notice"
+msgstr "कानुनी सूचना"
+
+msgid "Maximum subscribed students"
+msgstr "अधिकतम दर्ता भएका विद्यार्थीहरू"
+
+msgid "Notify in course home"
+msgstr "पाठ्यक्रम गृहपृष्ठमा सूचना दिनुहोस्"
+
+msgid "Notify learners"
+msgstr "सिकारुहरूलाई सूचना दिनुहोस्"
+
+msgid "Notify with agreement file"
+msgstr "सम्झौता फाइलसहित सूचना दिनुहोस्"
+
+msgid "Notify without attachment"
+msgstr "संलग्नक बिना सूचना दिनुहोस्"
+
+msgid "Open chat in a new window"
+msgstr "नयाँ विन्डोमा च्याट खोल्नुहोस्"
+
+msgid "Open to the platform"
+msgstr "प्लेटफर्ममा खुला"
+
+msgid "Place"
+msgstr "स्थान"
+
+msgid "Platform default"
+msgstr "प्लेटफर्म पूर्वनिर्धारित"
+
+msgid "Registration password"
+msgstr "दर्ता पासवर्ड"
+
+msgid "Remove previous agreements"
+msgstr "अघिल्ला सम्झौताहरू हटाउनुहोस्"
+
+msgid "Right margin"
+msgstr "दायाँ मार्जिन"
+
+msgid "Selected learning path"
+msgstr "चयन गरिएको सिकाइ मार्ग"
+
+msgid "Selected test"
+msgstr "चयन गरिएको परीक्षा"
+
+msgid "Show learner picture in forums"
+msgstr "फोरमहरूमा सिकारुको तस्बिर देखाउनुहोस्"
+
+msgid "Show system folders"
+msgstr "प्रणाली फोल्डरहरू देखाउनुहोस्"
+
+msgid "Signature text 1"
+msgstr "हस्ताक्षर पाठ १"
+
+msgid "Signature text 2"
+msgstr "हस्ताक्षर पाठ २"
+
+msgid "Signature text 3"
+msgstr "हस्ताक्षर पाठ ३"
+
+msgid "Signature text 4"
+msgstr "हस्ताक्षर पाठ ४"
+
+msgid "Student and course information"
+msgstr "विद्यार्थी र पाठ्यक्रम जानकारी"
+
+msgid "Subscription allowed"
+msgstr "सदस्यता अनुमति छ"
+
+msgid "Tests list"
+msgstr "परीक्षाहरूको सूची"
+
+msgid "Unsubscription allowed"
+msgstr "सदस्यता रद्द अनुमति छ"
+
+msgid "Use certificate download date"
+msgstr "प्रमाणपत्र डाउनलोड मिति प्रयोग गर्नुहोस्"
+
+msgid "Use certificate generation date"
+msgstr "प्रमाणपत्र सिर्जना मिति प्रयोग गर्नुहोस्"
+
+msgid "Use session access dates"
+msgstr "सत्र पहुँच मितिहरू प्रयोग गर्नुहोस्"
+
+msgid "Use session access end date"
+msgstr "सत्र पहुँच अन्त्य मिति प्रयोग गर्नुहोस्"
+
+msgid "Group report"
+msgstr "समूह प्रतिवेदन"
+
+msgid "Student follow-up"
+msgstr "विद्यार्थी अनुगमन"
+
+msgid "Use system default certificate"
+msgstr "प्रणालीको पूर्वनिर्धारित प्रमाणपत्र प्रयोग गर्नुहोस्"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "संलग्न प्रमाणपत्र उपलब्ध छैन। प्रणालीको पूर्वनिर्धारित प्रमाणपत्र प्रयोग गरिनेछ।"
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "संलग्न प्रमाणपत्रको सट्टा प्रणालीको पूर्वनिर्धारित प्रमाणपत्र प्रयोग गर्ने हो?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "वैकल्पिक स्थानीय विकास ओभरराइड। उत्पादन अपडेटहरूले आधिकारिक Chamilo विश्वसनीय कुञ्जी प्रयोग गर्छन्।"
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "स्टेज गरिएको प्याकेजबाट सुरक्षित लागू योजना बनाउनुहोस्। यसले प्रतिस्थापन, थप्न वा हटाउनका फाइलहरू, अनुमतिहरू, ब्याकअप पथ र लक स्थिति जाँच गर्छ। यसले स्थापना परिवर्तन गर्दैन।"
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "यो चरणले केवल समीक्षा तयार गर्छ। फाइल प्रतिस्थापन र प्याकेज-घोषित सफाई पछि स्टेज गरिएका फाइलहरू लागू गर्ने चरणमा लक, ब्याकअप र रोलब्याक सुरक्षा सहित हुन्छ।"
+
+msgid "Files to remove"
+msgstr "हटाउनुपर्ने फाइलहरू"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "स्टेज गरिएको प्याकेजबाट Chamilo फाइलहरू प्रतिस्थापन गर्नुहोस् र हस्ताक्षरित प्याकेज मेटाडेटामा स्पष्ट रूपमा घोषित पुराना फाइलहरू हटाउनुहोस्। यसले डाटाबेस माइग्रेसन, Composer, Yarn वा क्यास आदेशहरू चलाउँदैन।"
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "यो कार्यले Chamilo स्थापनामा फाइलहरू प्रतिस्थापन गर्छ र हटाउन सक्छ। जारी राख्नु अघि लागू योजना समीक्षा गरिएको र ब्याकअप सक्षम छन् भनी सुनिश्चित गर्नुहोस्।"
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "म बुझ्छु कि यसले Chamilo स्थापनामा फाइलहरू प्रतिस्थापन गर्नेछ र प्याकेज-घोषित पुराना फाइलहरू हटाउनेछ।"
+
+msgid "Type the exact text below to confirm"
+msgstr "पुष्टि गर्न तलको ठ्याक्कै पाठ टाइप गर्नुहोस्"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "सुरक्षा समीक्षा पास भएपछि Doctrine ले स्पष्ट रूपमा केवल स्टेज गरिएका V300 माइग्रेसनहरू कार्यान्वयन गर्नेछ।"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine ले ऐतिहासिक बेसलाइन चेतावनीहरू रिपोर्ट गर्‍यो। अपडेटरले स्पष्ट पुष्टि पछि पनि केवल स्टेज गरिएका V300 माइग्रेसनहरू कार्यान्वयन गर्नेछ।"
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "केवल म्यानिफेस्ट पथ परिवर्तन गर्न सकिन्छ। HTTPS प्रोटोकल र आधिकारिक अपडेट डोमेन निश्चित छन्।"
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "विकास मोडले HTTPS म्यानिफेस्ट URL वा स्थानीय म्यानिफेस्ट पथ अनुमति दिन्छ।"
+
+msgid "The official update manifest is configured by the server."
+msgstr "आधिकारिक अपडेट म्यानिफेस्ट सर्भरद्वारा कन्फिगर गरिएको छ।"
+
+msgid "What feedback do you want about this course?"
+msgstr "यो पाठ्यक्रमबारे तपाईं कस्तो प्रतिक्रिया चाहनुहुन्छ?"
+
+msgid "Analysis summary"
+msgstr "विश्लेषण सारांश"
+
+msgid "Lessons included"
+msgstr "समावेश पाठहरू"
+
+msgid "Standalone documents included"
+msgstr "समावेश स्वतन्त्र कागजातहरू"
+
+msgid "Standalone exercises included"
+msgstr "समावेश स्वतन्त्र अभ्यासहरू"
+
+msgid "General feedback"
+msgstr "सामान्य प्रतिक्रिया"
+
+msgid "Strengths"
+msgstr "शक्तिहरू"
+
+msgid "Risks"
+msgstr "जोखिमहरू"
+
+msgid "Recommendations"
+msgstr "सिफारिसहरू"
+
+msgid "Lesson feedback"
+msgstr "पाठ प्रतिक्रिया"
+
+msgid "Standalone document feedback"
+msgstr "स्वतन्त्र कागजात प्रतिक्रिया"
+
+msgid "Standalone exercise feedback"
+msgstr "स्वतन्त्र अभ्यास प्रतिक्रिया"
+
+msgid "AI response"
+msgstr "AI प्रतिक्रिया"
+
+msgid "Sequence feedback"
+msgstr "क्रम प्रतिक्रिया"
+
+msgid "Purpose"
+msgstr "उद्देश्य"
+
+msgid "You"
+msgstr "तपाईं"
+
+msgid "City of internship"
+msgstr "इन्टर्नशिपको शहर"
+
+msgid "City"
+msgstr "शहर"
+
+msgid "Update workflow restored after page refresh"
+msgstr "पृष्ठ रिफ्रेस पछि अद्यावधिक कार्यप्रवाह पुनर्स्थापित भयो"
+
+msgid "Last completed step"
+msgstr "अन्तिम पूरा चरण"
+
+msgid "Stage package"
+msgstr "स्टेज प्याकेज"
+
+msgid "Package staging"
+msgstr "प्याकेज स्टेजिङ"
+
+msgid "Apply plan"
+msgstr "योजना लागू गर्नुहोस्"
+
+msgid "Update workflow completed"
+msgstr "अद्यावधिक कार्यप्रवाह पूरा भयो"
+
+msgid "Update directory exists and is writable."
+msgstr "अद्यावधिक निर्देशिका अवस्थित छ र लेख्न योग्य छ।"
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "अद्यावधिक निर्देशिका अवस्थित छ तर लेख्न योग्य छैन: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "अद्यावधिक निर्देशिका अझै अवस्थित छैन, तर यसको अभिभावक निर्देशिका लेख्न योग्य छ।"
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "अद्यावधिक निर्देशिका अझै अवस्थित छैन, तर यसलाई var/ अन्तर्गत सिर्जना गर्न सकिन्छ।"
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "अद्यावधिक निर्देशिका अवस्थित छैन र हालको अनुमतिहरूले सिर्जना गर्न सकिँदैन।"
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "अद्यावधिक प्रिफ्लाइटका लागि खाली डिस्क स्पेस निर्धारण गर्न सकिएन।"
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "सुरक्षित अद्यावधिक स्टेजिङ सञ्चालनका लागि पर्याप्त खाली डिस्क स्पेस छैन।"
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "यो प्रमाणीकरण-चरण अद्यावधिक प्रवाहका लागि खाली डिस्क स्पेस पर्याप्त छ।"
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "अद्यावधिक म्यानिफेस्टले PHP संस्करण आवश्यकता परिभाषित गर्दैन।"
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "PHP आवश्यकता पूर्ण रूपमा मूल्याङ्कन गर्न सकिएन: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "हालको PHP संस्करणले अद्यावधिक आवश्यकता पूरा गर्दैन: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "हालको PHP संस्करणले अद्यावधिक आवश्यकता पूरा गर्छ।"
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "कुनै स्थानीय प्याकेज पथ प्रदान गरिएको थिएन। डाउनलोड गरिएका प्याकेजहरू डाउनलोड पछि मात्र जाँच गर्न सकिन्छ।"
+
+msgid "Local update package is not readable: %s"
+msgstr "स्थानीय अद्यावधिक प्याकेज पढ्न योग्य छैन: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "स्थानीय अद्यावधिक प्याकेज ZIP अभिलेख हुनुपर्छ।"
+
+msgid "Local update package is readable."
+msgstr "स्थानीय अद्यावधिक प्याकेज पढ्न योग्य छ।"
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "स्थापित Chamilo संस्करण स्वचालित रूपमा पत्ता लगाउन सकिएन। संस्करण दिशा जाँच गर्न सकिँदैन।"
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "स्थापित वा लक्ष्य संस्करण तुलनायोग्य सेमान्टिक संस्करण ढाँचामा छैन।"
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "लक्ष्य संस्करण स्थापित संस्करणभन्दा कम छ। पूर्वनिर्धारित रूपमा डाउनग्रेड अनुमति छैन।"
+
+msgid "Target version matches the installed version."
+msgstr "लक्ष्य संस्करण स्थापित संस्करणसँग मेल खान्छ।"
+
+msgid "Target version is newer than the installed version."
+msgstr "लक्ष्य संस्करण स्थापित संस्करणभन्दा नयाँ छ।"
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "परियोजना Git चेकआउट होइन वा .git उपस्थित छैन।"
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "यो अद्यावधिक प्रणाली Git समर्थन बिनाका स्थापनाहरूका लागि हो। हामीले पत्ता लगाएका छौं कि स्थानीय प्रणालीले Git प्रयोग गर्छ। अद्यावधिक अगाडि बढाउँदा Git इतिहास बिग्रन सक्छ। Git समर्थन भएका प्रणालीहरूका लागि, वेब रुटमा CONTRIBUTING.md मा विस्तृत Git प्रक्रिया प्रयोग गर्न सिफारिस गर्छौं।"
+
+msgid "Local Git changes were also detected."
+msgstr "स्थानीय Git परिवर्तनहरू पनि पत्ता लागे।"
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "केही परियोजना मेटाडाटा फाइलहरू हराइरहेका छन्। पछिल्ला अद्यावधिक चरणहरूमा म्यानुअल निर्भरता जाँच आवश्यक पर्न सक्छ।"
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Composer र Yarn मेटाडाटा फाइलहरू उपस्थित छन्।"
+
+msgid "Starting staged file application."
+msgstr "स्टेज गरिएको फाइल अनुप्रयोग सुरु गर्दै।"
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "स्टेज गरिएका फाइलहरू लागू गर्न स्पष्ट पुष्टि आवश्यक छ।"
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "स्टेज गरिएका अद्यावधिक फाइलहरू लागू गर्न स्पष्ट पुष्टि आवश्यक छ।"
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "स्टेजिङ निर्देशिका Chamilo अद्यावधिक स्टेजिङ निर्देशिकाभित्र छ।"
+
+msgid "Staging directory was validated."
+msgstr "स्टेजिङ निर्देशिका प्रमाणित भयो।"
+
+msgid "Apply plan metadata was read successfully."
+msgstr "योजना लागू गर्ने मेटाडाटा सफलतापूर्वक पढियो।"
+
+msgid "Staged application path is valid."
+msgstr "स्टेज गरिएको अनुप्रयोग पथ मान्य छ।"
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "हस्ताक्षरित प्याकेज सफाइ मेटाडाटा समीक्षा गरिएको लागू योजनासँग मेल खान्छ।"
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "हस्ताक्षरित प्याकेज सफाइ मेटाडाटा प्रमाणित भयो।"
+
+msgid "Update lock was acquired."
+msgstr "अद्यावधिक लक प्राप्त भयो।"
+
+msgid "Update backup directory was created."
+msgstr "अद्यावधिक ब्याकअप निर्देशिका सिर्जना भयो।"
+
+msgid "Update file operations were collected."
+msgstr "अद्यावधिक फाइल सञ्चालनहरू सङ्कलन गरियो।"
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "प्रतिस्थापन वा हटाउन योजना गरिएका विद्यमान फाइलहरू ब्याकअप गरियो।"
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "स्टेज गरिएका अद्यावधिक फाइलहरू Chamilo स्थापनामा प्रतिलिपि गरियो।"
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "प्याकेजमा घोषित पुराना फाइलहरू चामिलो स्थापनाबाट हटाइए।"
+
+msgid "Package-declared obsolete files were removed."
+msgstr "प्याकेजमा घोषित पुराना फाइलहरू हटाइए।"
+
+msgid "Update apply audit metadata was written."
+msgstr "अद्यावधिक लागू गर्ने अडिट मेटाडेटा लेखियो।"
+
+msgid "Staged files applied successfully."
+msgstr "स्टेज गरिएका फाइलहरू सफलतापूर्वक लागू गरिए।"
+
+msgid "Unable to restore removed files: %s"
+msgstr "हटाइएका फाइलहरू पुनर्स्थापना गर्न सकिएन: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "कपी गरिएका फाइलहरू रोलब्याक गर्न सकिएन: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "अद्यावधिक लागू असफल भएपछि फाइल रोलब्याक कार्यान्वयन गरियो।"
+
+msgid "Rollback failed: %s"
+msgstr "रोलब्याक असफल: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "अद्यावधिक लागू गर्ने अडिट मेटाडेटा लेख्न सकिएन: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "असफलतापछि अद्यावधिक लक छोड्न सकिएन: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "अद्यावधिक फाइलहरू लागू गर्न स्टेजिङ पथ आवश्यक छ।"
+
+msgid "Staging directory does not exist: %s"
+msgstr "स्टेजिङ डाइरेक्टरी अवस्थित छैन: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "चामिलो अद्यावधिक स्टेजिङ आधार डाइरेक्टरी अवस्थित छैन।"
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "स्टेजिङ डाइरेक्टरी var/update/staging भित्र हुनुपर्छ।"
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "स्टेजिङ डाइरेक्टरीमा APPLY-PLAN.json छैन।"
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "अद्यावधिक लागू योजना मेटाडेटा पढ्न सकिएन: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "अद्यावधिक लागू योजना मेटाडेटा मान्य JSON होइन: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "अद्यावधिक लागू योजना मेटाडेटा JSON वस्तु हुनुपर्छ।"
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "अद्यावधिक लागू योजनामा application_path फिल्ड छैन।"
+
+msgid "Staged application path is not readable: %s"
+msgstr "स्टेज गरिएको अनुप्रयोग पथ पढ्न मिल्दैन: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "स्टेज गरिएको अनुप्रयोग पथ स्टेजिङ डाइरेक्टरीभित्र हुनुपर्छ।"
+
+msgid "Staged application path is missing composer.json."
+msgstr "स्टेज गरिएको अनुप्रयोग पथमा composer.json छैन।"
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "अद्यावधिक प्याकेजमा %s छैन। हस्ताक्षरित सफाइ मेटाडेटा सहित प्रमाणित प्याकेज फेरि स्टेज गर्नुहोस्।"
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "अद्यावधिक लागू योजनामा समीक्षा गरिएको प्याकेज सफाइ मेटाडेटा छैन।"
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "लागू योजना बनेपछि अद्यावधिक प्याकेज सफाइ मेटाडेटा परिवर्तन भयो। जारी राख्नुअघि लागू योजना पुनः निर्माण गर्नुहोस्।"
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "अद्यावधिक लागू योजनामा अमान्य प्याकेज हटाउने सूची छ।"
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "लागू योजना बनेपछि अद्यावधिक प्याकेज सफाइ पथहरू परिवर्तन भए। जारी राख्नुअघि लागू योजना पुनः निर्माण गर्नुहोस्।"
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "अद्यावधिक लागू योजनामा समीक्षा गरिएको हटाउने पथ सूची छैन।"
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "अद्यावधिक लागू योजनाका हटाउने पथहरू हस्ताक्षरित प्याकेज सफाइ मेटाडेटासँग मेल खाँदैनन्।"
+
+msgid "Update lock path must be inside var/update."
+msgstr "अद्यावधिक लक पथ var/update भित्र हुनुपर्छ।"
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "अद्यावधिक लागू योजनामा backup_path फिल्ड छैन।"
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "अद्यावधिक ब्याकअप पथमा असुरक्षित पथ खण्डहरू छन्।"
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "अद्यावधिक ब्याकअप पथ var/update/backups भित्र हुनुपर्छ।"
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "अद्यावधिक लक प्राप्त गर्न सकिएन। अर्को अद्यावधिक चलिरहेको हुन सक्छ।"
+
+msgid "Unable to release update lock: %s"
+msgstr "अद्यावधिक लक छोड्न सकिएन: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "अद्यावधिक ब्याकअप डाइरेक्टरी पहिले नै अवस्थित छ: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "लक्ष्य डाइरेक्टरी सिर्जना गर्न सकिँदैन: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "योजनाबद्ध अद्यावधिकले विद्यमान प्रतीकात्मक लिङ्क अधिलेखन गर्नेछ: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "लक्ष्य फाइल लेख्न मिल्दैन: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "लक्ष्य फाइल सिर्जना गर्न सकिँदैन: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "पुराना फाइलहरू हटाउनुअघि चामिलो परियोजना डाइरेक्टरी समाधान गर्न सकिएन।"
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "अद्यावधिक सफाइले सुरक्षित पथ हटाउन सक्दैन: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "योजनाबद्ध अद्यावधिकले विद्यमान प्रतीकात्मक लिङ्क हटाउनेछ: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "अद्यावधिक सफाइले फाइल मात्र समर्थन गर्छ, डाइरेक्टरी होइन: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "पुरानो लक्ष्य फाइल ब्याकअपका लागि पढ्न मिल्दैन: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "हालको डाइरेक्टरी अनुमतिहरूसँग पुरानो लक्ष्य फाइल हटाउन सकिँदैन: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "पुरानो लक्ष्य फाइल चामिलो परियोजना डाइरेक्टरीबाहिर समाधान हुन्छ: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "लक्ष्य फाइल ब्याकअप गर्न सकिएन: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "अद्यावधिक ब्याकअप मेटाडेटा लेख्न सकिएन।"
+
+msgid "Unable to copy staged update file: %s"
+msgstr "स्टेज गरिएको अद्यावधिक फाइल कपी गर्न सकिएन: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d मध्ये %d स्टेज गरिएका फाइलहरू प्रतिलिपि गरियो।"
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "प्याकेजमा घोषित पुरानो फाइल हटाउन सकिएन: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d मध्ये %d प्याकेजमा घोषित पुराना फाइलहरू हटाइयो।"
+
+msgid "Unable to restore backed up file: %s"
+msgstr "ब्याकअप गरिएको फाइल पुनर्स्थापना गर्न सकिएन: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "रोलब्याक गर्दा नयाँ प्रतिलिपि गरिएको फाइल हटाउन सकिएन: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "हटाइएको फाइल पुनर्स्थापना गर्न सकिएन किनकि यसको ब्याकअप छैन: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "ब्याकअपबाट हटाइएको फाइल पुनर्स्थापना गर्न सकिएन: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "अपडेट लागू गर्ने अडिट मेटाडेटा लेख्न सकिएन।"
+
+msgid "Unable to write global update apply log."
+msgstr "विश्वव्यापी अपडेट लागू लग लेख्न सकिएन।"
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "असुरक्षित स्टेज गरिएको सापेक्ष पथ पत्ता लाग्यो: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "डाइरेक्टरी लेख्न योग्य छैन: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "डाइरेक्टरी सिर्जना गर्न सकिएन: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "स्टेजिङ मेटाडेटा सफलतापूर्वक पढियो।"
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "लागू योजना मेटाडेटा स्टेजिङ डाइरेक्टरीमा लेखियो।"
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "योजनाबद्ध अपडेट र सफाइका लागि लक्षित फाइल र डाइरेक्टरीहरू लेख्न योग्य देखिन्छन्।"
+
+msgid "Update apply plan check failed."
+msgstr "अपडेट लागू योजना जाँच असफल भयो।"
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "केही लक्षित फाइल वा डाइरेक्टरीहरू लेख्न वा हटाउन सकिँदैन।"
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "यसलाई समाधान गर्न, सम्पूर्ण Chamilo डाइरेक्टरीको मालिक अस्थायी रूपमा %s (वेब सर्भर प्रयोगकर्ता) मा परिवर्तन गर्नुहोस्, अपडेट लागू गर्नुहोस्, त्यसपछि मालिक फेरि %s मा फर्काउनुहोस्, अनि var/ (र यसका सामग्रीहरू) को मालिक %s मा सेट गर्नुहोस् ताकि अनुप्रयोगले लेख्न जारी राख्न सकोस्।"
+
+msgid "Update package verification failed."
+msgstr "अपडेट प्याकेज प्रमाणीकरण असफल भयो।"
+
+msgid "Update preflight checks failed."
+msgstr "अपडेट प्रिफ्लाइट जाँचहरू असफल भए।"
+
+msgid "Unable to stage update package."
+msgstr "अपडेट प्याकेज स्टेज गर्न सकिएन।"
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "यो सर्भरमा UI बाट पोस्ट-एप्लाई आदेशहरू चलाउन अक्षम छ।"
+
+msgid "Missing required field: %s"
+msgstr "आवश्यक फिल्ड छैन: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "कुनै अपडेट म्यानिफेस्ट स्रोत दिइएको छैन र कुनै पूर्वनिर्धारित अपडेट म्यानिफेस्ट URL कन्फिगर गरिएको छैन।"
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "अपडेट म्यानिफेस्ट URL ले आधिकारिक अपडेट मूल %s प्रयोग गर्नुपर्छ। केवल म्यानिफेस्ट पथ परिवर्तन गर्न सकिन्छ।"
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "स्थानीय अपडेट म्यानिफेस्ट पथहरू अक्षम छन्। HTTPS म्यानिफेस्ट URL प्रयोग गर्नुहोस् वा स्थानीय परीक्षणका लागि सर्भर वातावरणमा CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 सेट गर्नुहोस्।"
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "HTTP %s पथ नदिनुहोस्। अपडेट म्यानिफेस्टबाट डाउनलोड गर्न यो फिल्ड खाली छोड्नुहोस्।"
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "यो वातावरणमा स्थानीय अपडेट %s पथहरू अक्षम छन्।"
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "यो वातावरणमा सर्भरमा विश्वसनीय अपडेट सार्वजनिक कुञ्जीहरू कन्फिगर गर्नुपर्छ।"
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "यो वातावरणमा अपडेट हस्ताक्षर प्रमाणीकरण छोड्न अक्षम छ।"
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "पोस्ट-एप्लाई अपडेट कार्यहरू चलाउन पुष्टि पाठ \"%s\" आवश्यक छ।"
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "स्टेज गरिएका अपडेट फाइलहरू लागू गर्न पुष्टि पाठ \"%s\" आवश्यक छ।"
+
+msgid "Unable to resolve project directory."
+msgstr "प्रोजेक्ट डाइरेक्टरी समाधान गर्न सकिएन।"
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "डेटाबेस ब्याकअप यो अपडेटरले व्यवस्थापन गर्दैन। माइग्रेसन चलाउनुअघि डेटाबेस ब्याकअप सिर्जना गरी प्रमाणित गर्नुहोस्।"
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Doctrine माइग्रेसन down() विधिहरूले मेटाइएको वा रूपान्तरित डेटा पुनर्स्थापना गर्ने ग्यारेन्टी गर्दैनन्।"
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "पोस्ट-एप्लाई मेटाडेटा डेटाबेस माइग्रेसन समीक्षा सिफारिस गर्छ।"
+
+msgid "No migration files were found in the staged package."
+msgstr "स्टेज गरिएको प्याकेजमा कुनै माइग्रेसन फाइल फेला परेनन्।"
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "स्टेज गरिएका Doctrine माइग्रेसन फाइलहरू पत्ता लागे।"
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Doctrine माइग्रेसन लक्ष्य स्टेज गरिएको प्याकेजबाट समाधान गरियो।"
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Doctrine माइग्रेसन बेसलाइनमा स्टेज गरिएका माइग्रेसनहरूका लागि अवरोधक समस्याहरू छन्।"
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine ले ऐतिहासिक माइग्रेसन बेसलाइन चेतावनीहरू रिपोर्ट गर्छ, तर केवल स्टेज गरिएका %s माइग्रेसनहरू स्पष्ट रूपमा समीक्षा र कार्यान्वयन गरिनेछन्।"
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine ले ऐतिहासिक माइग्रेसन बेसलाइन चेतावनीहरू रिपोर्ट गर्छ। अपडेटरले स्पष्ट पुष्टि पछि केवल स्टेज गरिएका %s माइग्रेसन कक्षाहरू कार्यान्वयन गर्नेछ।"
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "स्टेज गरिएका %s माइग्रेसनहरूका लागि Doctrine बेसलाइनमा कुनै अवरोधक समस्या छैन।"
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "कम्तीमा एक स्टेज गरिएको माइग्रेसनका लागि Doctrine माइग्रेसन ड्राई-रन असफल भयो। यो समाधान नभएसम्म डेटाबेस माइग्रेसन नचलाउनुहोस्।"
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "प्रत्येक स्टेज गरिएको माइग्रेसन कक्षाका लागि Doctrine ड्राई-रन सफलतापूर्वक पूरा भयो।"
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "माइग्रेसन चलाउनुअघि यो अपडेटरबाहिर डेटाबेस ब्याकअप सिर्जना गर्नुपर्छ।"
+
+msgid "Staging path is required to review database migrations."
+msgstr "डेटाबेस माइग्रेसन समीक्षा गर्न स्टेजिङ पथ आवश्यक छ।"
+
+msgid "Unable to read update %s: %s"
+msgstr "अपडेट %s पढ्न सकिएन: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "अपडेट %s JSON अमान्य छ: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "अपडेट %s JSON वस्तु हुनुपर्छ।"
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "पोस्ट-एप्लाई जाँच मेटाडेटामा मान्य कार्यहरूको सूची छैन।"
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "यो स्टेज गरिएको अद्यावधिकका लागि डाटाबेस माइग्रेसन सिफारिस गरिएको थिएन।"
+
+msgid "Update metadata is missing the staged application path."
+msgstr "अद्यावधिक मेटाडेटामा स्टेज गरिएको अनुप्रयोग पथ छैन।"
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "योजनाबद्ध स्टेज गरिएको माइग्रेसन फाइल फेला परेन: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "स्टेज गरिएको माइग्रेसन फाइल पढ्न सकिएन: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "getDescription() बाट कुनै विवरण निकाल्न सकिएन।"
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "अद्यावधिक रनरले केवल %s स्टेज गरिएका माइग्रेसन समर्थन गर्छ: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "माइग्रेसन सुरक्षा मेटाडेटा लेख्न सकिएन: %s"
+
+msgid "Migration safety check failed."
+msgstr "माइग्रेसन सुरक्षा जाँच असफल भयो।"
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "असुरक्षित स्टेज गरिएको सापेक्ष माइग्रेसन पथ पत्ता लाग्यो: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "स्थापित चामिलो संस्करण स्वतः पत्ता लगाउन सकिएन। यो अद्यावधिक अनुकूल छ भनी पुष्टि गरेपछि मात्र जारी राख्नुहोस्।"
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "स्थापित वा लक्ष्य संस्करण तुलनायोग्य सेमान्टिक संस्करण ढाँचामा छैन। म्यानुअल प्रमाणीकरणपछि मात्र जारी राख्नुहोस्।"
+
+msgid "An update is available."
+msgstr "अद्यावधिक उपलब्ध छ।"
+
+msgid "The installed version already matches the manifest version."
+msgstr "स्थापित संस्करण पहिले नै म्यानिफेस्ट संस्करणसँग मेल खान्छ।"
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "म्यानिफेस्ट संस्करण स्थापित संस्करणभन्दा पुरानो छ। डाउनग्रेड पूर्वनिर्धारित रूपमा अवरुद्ध छन्।"
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "स्टेज गरिएका फाइलहरू सफलतापूर्वक लागू भएनन्। पोस्ट-एप्लाई जाँच जारी राख्न सकिँदैन।"
+
+msgid "Apply result metadata was read successfully."
+msgstr "लागू परिणाम मेटाडेटा सफलतापूर्वक पढियो।"
+
+msgid "Post-apply action recommendations were generated."
+msgstr "पोस्ट-एप्लाई कार्य सिफारिसहरू उत्पन्न गरिए।"
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "स्टेज गरिएको प्याकेजमा डाटाबेस माइग्रेसन पत्ता लागे। फाइल अद्यावधिक सही छ र डाटाबेस ब्याकअप छ भनी पुष्टि गरेपछि मात्र चलाउनुहोस्।"
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "पोस्ट-एप्लाई जाँच चलाउन स्टेजिङ पथ आवश्यक छ।"
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "अद्यावधिक %s मान्य JSON होइन: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "अद्यावधिक %s JSON वस्तु हुनुपर्छ।"
+
+msgid "Composer dependencies"
+msgstr "कम्पोजर निर्भरताहरू"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "स्टेज गरिएको प्याकेजमा कम्पोजर मेटाडेटा समावेश थियो। अद्यावधिक पूरा मान्नुअघि अनुप्रयोग मूलबाट Composer install चलाउनुहोस्।"
+
+msgid "Frontend assets"
+msgstr "फ्रन्टेन्ड सम्पत्तिहरू"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "स्टेज गरिएको प्याकेजमा फ्रन्टेन्ड-सम्बन्धी फाइलहरू समावेश थिए। निर्भरता स्थापना गरेपछि उत्पादन सम्पत्तिहरू पुनः निर्माण गर्नुहोस्।"
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "स्टेज गरिएको प्याकेजमा Doctrine माइग्रेसन फाइलहरू पत्ता लागे। माइग्रेसन चलाउनुअघि डाटाबेस ब्याकअप छ भनी पुष्टि गर्नुहोस्।"
+
+msgid "Symfony cache"
+msgstr "सिम्फोनी क्यास"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "अद्यावधिक फाइलहरू लागू गरेपछि र आवश्यक कमाण्ड चलाएपछि Symfony क्यास खाली गर्नुहोस्।"
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "पोस्ट-एप्लाई जाँच मेटाडेटा लेख्न सकिएन।"
+
+msgid "Post-apply check failed."
+msgstr "पोस्ट-एप्लाई जाँच असफल भयो।"
+
+msgid "Update package is not readable: %s"
+msgstr "अद्यावधिक प्याकेज पढ्न सकिँदैन: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "अद्यावधिक प्याकेज मान्य ZIP अभिलेख होइन।"
+
+msgid "Update package ZIP archive is empty."
+msgstr "अद्यावधिक प्याकेज ZIP अभिलेख खाली छ।"
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "अद्यावधिक प्याकेजमा पढ्न नसकिने ZIP प्रविष्टि छ।"
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "अद्यावधिक प्याकेजमा असुरक्षित निरपेक्ष पथ छ: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "अद्यावधिक प्याकेजमा पथ ट्र्याभर्सल प्रविष्टि छ: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "अद्यावधिक प्याकेजमा प्रतीकात्मक लिङ्क छ: %s"
+
+msgid "Starting post-apply actions."
+msgstr "पोस्ट-एप्लाई कार्यहरू सुरु गर्दै।"
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "पोस्ट-एप्लाई कमाण्ड कार्यान्वयनका लागि स्पष्ट पुष्टि आवश्यक छ।"
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "पोस्ट-एप्लाई सिफारिस मेटाडेटा सफलतापूर्वक पढियो।"
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "पोस्ट-एप्लाई कार्यहरू सिफारिस प्रतिवेदनसँग प्रमाणित गरिए।"
+
+msgid "Post-apply actions were selected."
+msgstr "पोस्ट-एप्लाई कार्यहरू चयन गरिए।"
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "उन्नत पोस्ट-एप्लाई कार्यहरूका लागि स्पष्ट उन्नत पुष्टि आवश्यक छ।"
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "उन्नत पोस्ट-एप्लाई कार्यहरू स्पष्ट रूपमा पुष्टि गरिए।"
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "चयन गरिएका पोस्ट-एप्लाई कमाण्डहरू सफलतापूर्वक पूरा भए।"
+
+msgid "Post-apply command run metadata was written."
+msgstr "पोस्ट-एप्लाई कमाण्ड चलाउने मेटाडेटा लेखियो।"
+
+msgid "Post-apply actions completed successfully."
+msgstr "पोस्ट-एप्लाई कार्यहरू सफलतापूर्वक पूरा भए।"
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "यो अद्यावधिक गर्नुअघिको अवस्थामा आफ्ना फाइल र डाइरेक्टरी अनुमतिहरू पुनर्स्थापना गर्न नबिर्सनुहोस्। वेब सर्भरलाई चामिलो कोडमा लेख्ने पहुँच छोड्दा भविष्यको कुनै पनि कमजोरी तपाईंको प्लेटफर्मका फाइलहरू परिमार्जन गर्ने माध्यम बन्न सक्छ।"
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "अमान्य अद्यावधिक पोस्ट-एप्लाई कमाण्ड परिभाषा: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "पोस्ट-एप्लाई कार्य चलाउँदै: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "%s का लागि %d मध्ये %d आदेश चलिरहेको छ।"
+
+msgid "Post-apply action failed: %s"
+msgstr "पोस्ट-एप्लाई कार्य असफल भयो: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "पोस्ट-एप्लाई कार्य \"%s\" एक्जिट कोड %d सँग असफल भयो।"
+
+msgid "Post-apply action completed: %s"
+msgstr "पोस्ट-एप्लाई कार्य पूरा भयो: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "पोस्ट-एप्लाई कार्यहरू चलाउन स्टेजिङ पथ आवश्यक छ।"
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "चलाउन सिफारिस गरिएका पोस्ट-एप्लाई कार्यहरू छैनन्।"
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "चलाउन अनुमति प्राप्त पोस्ट-एप्लाई कार्यहरू छैनन्।"
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "यो अद्यावधिकका लागि पोस्ट-एप्लाई कार्य अनुमति छैन: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "डेटाबेस माइग्रेसनहरू कार्यान्वयन गर्नुअघि माइग्रेसन सुरक्षा समीक्षा आवश्यक छ।"
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "माइग्रेसन सुरक्षा समीक्षा पास नभएकाले डेटाबेस माइग्रेसनहरू चलाउन सकिँदैन।"
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "माइग्रेसन सुरक्षा समीक्षाले स्टेज गरिएका माइग्रेसनहरू सूचीबद्ध नगरेकाले डेटाबेस माइग्रेसनहरू चलाउन सकिँदैन।"
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "माइग्रेसन सुरक्षा समीक्षामा अमान्य माइग्रेसन प्रविष्टि भएकाले डेटाबेस माइग्रेसनहरू चलाउन सकिँदैन।"
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "अद्यावधिक रनरले स्टेज गरिएका %s माइग्रेसनहरू मात्र कार्यान्वयन गर्न सक्छ।"
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "स्टेज गरिएको माइग्रेसन सुरक्षा समीक्षाले अवरोधक त्रुटिहरू रिपोर्ट गरेकाले डेटाबेस माइग्रेसनहरू चलाउन सकिँदैन।"
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine ले माइग्रेसन बेसलाइन चेतावनीहरू रिपोर्ट गर्छ। स्टेज गरिएका %s माइग्रेसन कक्षाहरू मात्र स्पष्ट रूपमा कार्यान्वयन गरिनेछन्।"
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "डेटाबेस माइग्रेसनहरूका लागि डेटाबेस ब्याकअप रहेको पुष्टि आवश्यक छ।"
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "डेटाबेस माइग्रेसनहरूका लागि पुष्टि पाठ \"RUN DATABASE MIGRATIONS\" आवश्यक छ।"
+
+msgid "Database migration safety review was completed before execution."
+msgstr "कार्यान्वयनअघि डेटाबेस माइग्रेसन सुरक्षा समीक्षा पूरा भएको थियो।"
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "डेटाबेस ब्याकअप रहेको स्पष्ट रूपमा पुष्टि गरिएको थियो।"
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "डेटाबेस माइग्रेसन सुरक्षा समीक्षा र ब्याकअप पुष्टि प्रदान गरिएका थिए।"
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "स्पष्ट डेटाबेस ब्याकअप पुष्टिपछि डेटाबेस माइग्रेसनहरू कार्यान्वयन गरिएका थिए। अद्यावधिककर्ताले डेटाबेस ब्याकअप सिर्जना गरेन।"
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "आवश्यक पोस्ट-एप्लाई कार्यान्वयन अनुमतिहरू सामान्यीकरण गरिए।"
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "bin/console फेला नपरेकाले डेटाबेस माइग्रेसनहरू चलाउन सकिएन।"
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "चयन गरिएका पोस्ट-एप्लाई आदेशहरूसँग आवश्यक लेख्न मिल्ने पथहरू छन्।"
+
+msgid "Post-apply command writable paths were validated."
+msgstr "पोस्ट-एप्लाई आदेशका लेख्न मिल्ने पथहरू प्रमाणित गरिए।"
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "उन्नत पोस्ट-एप्लाई कार्यहरूले निर्भरता, उत्पन्न सम्पत्ति वा डेटाबेस परिमार्जन गर्न सक्छन्। जारी राख्नुअघि ब्याकअपहरू समीक्षा गर्नुहोस्।"
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "वेब अद्यावधिककर्ताबाट Composer सुरक्षित रूपमा चलाउन सकिँदैन किनकि Composer-उत्पन्न फाइल \"%s\" UID %d को स्वामित्वमा छ जबकि PHP रनटाइमले UID %d प्रयोग गर्छ। डिप्लोयमेन्ट मालिकको रूपमा Composer म्यानुअल रूपमा चलाउनुहोस्, त्यसपछि बाँकी पोस्ट-एप्लाई कार्यहरू जारी राख्नुहोस्।"
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "पोस्ट-एप्लाई कार्य \"%s\" का लागि आवश्यक पथ लेख्न मिल्दैन: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "पोस्ट-एप्लाई कार्य \"%s\" का लागि आवश्यक अभिभावक निर्देशिका लेख्न मिल्दैन: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "आवश्यक पोस्ट-एप्लाई कार्यान्वयनयोग्यका लागि अनुमतिहरू पढ्न सकिएन: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "आवश्यक पोस्ट-एप्लाई कार्यान्वयनयोग्यलाई कार्यान्वयनयोग्य चिन्ह लगाउन सकिएन: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "chmod पछि पनि आवश्यक पोस्ट-एप्लाई कार्यान्वयनयोग्य अझै कार्यान्वयनयोग्य छैन: %s"
+
+msgid "Executable permission was normalized."
+msgstr "कार्यान्वयन अनुमति सामान्यीकरण गरियो।"
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "पोस्ट-एप्लाई आदेशहरूका लागि पृथक Git कन्फिगरेसन लेख्न सकिएन।"
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "अर्को अद्यावधिक सञ्चालन चलिरहेको देखिन्छ। कुनै अद्यावधिक सक्रिय नभए मात्र var/update/update.lock हटाउनुहोस्।"
+
+msgid "Unable to create update lock: %s"
+msgstr "अद्यावधिक लक सिर्जना गर्न सकिएन: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "पोस्ट-एप्लाई आदेश चलाउने मेटाडेटा लेख्न सकिएन: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "अद्यावधिक म्यानिफेस्टमा प्याकेज ब्लक छैन।"
+
+msgid "Update manifest signature block must be an object."
+msgstr "अद्यावधिक म्यानिफेस्ट हस्ताक्षर ब्लक वस्तु हुनुपर्छ।"
+
+msgid "Update manifest requirements block must be an object."
+msgstr "अद्यावधिक म्यानिफेस्ट आवश्यकता ब्लक वस्तु हुनुपर्छ।"
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "अद्यावधिक प्याकेज sha256 ६४-अक्षरको हेक्साडेसिमल स्ट्रिङ हुनुपर्छ।"
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "अद्यावधिक म्यानिफेस्टमा आवश्यक स्ट्रिङ फिल्ड \"%s\" छैन।"
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "अद्यावधिक म्यानिफेस्ट फिल्ड \"%s\" स्ट्रिङ हुनुपर्छ।"
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "अद्यावधिक म्यानिफेस्ट मान्य JSON होइन: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "अद्यावधिक म्यानिफेस्ट JSON वस्तु हुनुपर्छ।"
+
+msgid "Manifest source cannot be empty."
+msgstr "म्यानिफेस्ट स्रोत खाली हुन सक्दैन।"
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "अद्यावधिक म्यानिफेस्ट URL ले आधिकारिक अद्यावधिक मूल %s प्रयोग गर्नुपर्छ।"
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "अद्यावधिक म्यानिफेस्ट डाउनलोड गर्न सकिएन। HTTP स्थिति: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "म्यानिफेस्ट फाइल पढ्न मिल्दैन: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "म्यानिफेस्ट फाइल पढ्न सकिएन: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "अद्यावधिक म्यानिफेस्ट URL ले HTTPS प्रयोग गर्नुपर्छ।"
+
+msgid "Update package metadata is not readable: %s"
+msgstr "अद्यावधिक प्याकेज मेटाडेटा पढ्न सकिँदैन: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "अद्यावधिक प्याकेज मेटाडेटा पढ्न असमर्थ: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "अद्यावधिक प्याकेज मेटाडेटा मान्य JSON होइन: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "अद्यावधिक प्याकेज मेटाडेटा JSON वस्तु हुनुपर्छ।"
+
+msgid "Update package metadata format must be %d."
+msgstr "अद्यावधिक प्याकेज मेटाडेटा ढाँचा %d हुनुपर्छ।"
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "अद्यावधिक प्याकेज मेटाडेटा फिल्ड \"remove\" एरे हुनुपर्छ।"
+
+msgid "Update package removal paths must be strings."
+msgstr "अद्यावधिक प्याकेज हटाउने पथहरू स्ट्रिङ हुनुपर्छ।"
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "अद्यावधिक प्याकेज मेटाडेटाले सुरक्षित पथ हटाउन सक्दैन: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "अद्यावधिक प्याकेजले एउटै पथ समावेश र हटाउन सक्दैन: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "अद्यावधिक प्याकेज मेटाडेटाको sha256 गणना गर्न असमर्थ।"
+
+msgid "Update package removal path cannot be empty."
+msgstr "अद्यावधिक प्याकेज हटाउने पथ खाली हुन सक्दैन।"
+
+msgid "Update package removal path contains a null byte."
+msgstr "अद्यावधिक प्याकेज हटाउने पथमा नल बाइट छ।"
+
+msgid "Update package removal path must be relative: %s"
+msgstr "अद्यावधिक प्याकेज हटाउने पथ सापेक्ष हुनुपर्छ: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "अद्यावधिक प्याकेज हटाउने पथमा असुरक्षित खण्ड छ: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "अद्यावधिक लागू योजना बनाउन स्टेजिङ पथ आवश्यक छ।"
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "स्टेजिङ डाइरेक्टरीमा STAGING-INFO.json छैन।"
+
+msgid "Unable to read staging metadata: %s"
+msgstr "स्टेजिङ मेटाडेटा पढ्न असमर्थ: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "स्टेजिङ मेटाडेटा मान्य JSON होइन: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "स्टेजिङ मेटाडेटा JSON वस्तु हुनुपर्छ।"
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "स्टेजिङ मेटाडेटामा application_path फिल्ड छैन।"
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "अद्यावधिक प्याकेजमा %s छैन। फाइलहरू लागू गर्नुअघि हस्ताक्षरित सफाई मेटाडेटा आवश्यक छ।"
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "स्टेजिङ मेटाडेटामा निकाल्ने क्रममा रेकर्ड गरिएको हस्ताक्षरित प्याकेज सफाई मेटाडेटा छैन।"
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "स्टेजिङपछि अद्यावधिक प्याकेज सफाई मेटाडेटा परिवर्तन भयो। जारी राख्नुअघि प्रमाणित प्याकेज फेरि स्टेज गर्नुहोस्।"
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "स्टेजिङ मेटाडेटामा मान्य प्याकेज हटाउने सूची छैन।"
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "स्टेजिङपछि अद्यावधिक प्याकेज सफाई पथहरू परिवर्तन भए। जारी राख्नुअघि प्रमाणित प्याकेज फेरि स्टेज गर्नुहोस्।"
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "हस्ताक्षरित प्याकेज सफाई मेटाडेटा स्टेजिङदेखि अपरिवर्तित छ।"
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "अद्यावधिक लक फाइल पहिले नै अवस्थित छ। अर्को अद्यावधिक चलिरहेको हुन सक्छ।"
+
+msgid "Update lock directory is not writable."
+msgstr "अद्यावधिक लक डाइरेक्टरी लेख्न योग्य छैन।"
+
+msgid "No update lock is currently active."
+msgstr "हाल कुनै अद्यावधिक लक सक्रिय छैन।"
+
+msgid "Update backup directory is not writable."
+msgstr "अद्यावधिक ब्याकअप डाइरेक्टरी लेख्न योग्य छैन।"
+
+msgid "Update backup directory is writable."
+msgstr "अद्यावधिक ब्याकअप डाइरेक्टरी लेख्न योग्य छ।"
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "हालको प्रक्रियाले अद्यावधिक ब्याकअप डाइरेक्टरी सिर्जना गर्न सक्दैन।"
+
+msgid "Update backup directory can be created."
+msgstr "अद्यावधिक ब्याकअप डाइरेक्टरी सिर्जना गर्न सकिन्छ।"
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "केही अद्यावधिक कार्य डाइरेक्टरीहरू लेख्न योग्य छैनन् वा हालको प्रक्रियाले सिर्जना गर्न सक्दैन।"
+
+msgid "Update working directories are writable or can be created."
+msgstr "अद्यावधिक कार्य डाइरेक्टरीहरू लेख्न योग्य छन् वा सिर्जना गर्न सकिन्छ।"
+
+msgid "Update apply file plan was generated."
+msgstr "अद्यावधिक लागू फाइल योजना उत्पन्न गरियो।"
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "प्याकेज सफाई मेटाडेटामा सुरक्षित रूपमा हटाउन नसकिने पथहरू छन्।"
+
+msgid "Package-declared removal targets are safe."
+msgstr "प्याकेज-घोषित हटाउने लक्ष्यहरू सुरक्षित छन्।"
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "केही प्याकेज-घोषित पुराना फाइलहरू यस स्थापनाबाट पहिले नै छैनन्।"
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "योजनाबद्ध अद्यावधिकले विद्यमान प्रतीकात्मक लिङ्कहरू अधिलेखन वा हटाउनेछ।"
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "योजनाबद्ध अद्यावधिकले विद्यमान प्रतीकात्मक लिङ्कहरू अधिलेखन वा हटाउँदैन।"
+
+msgid "New update migration files must be placed under %s."
+msgstr "नयाँ अद्यावधिक माइग्रेसन फाइलहरू %s अन्तर्गत राख्नुपर्छ।"
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "नयाँ %s Doctrine माइग्रेसन फाइलहरू पत्ता लागे। फाइलहरू लागू गरेपछि तिनीहरूलाई डाटाबेस माइग्रेसन सुरक्षा समीक्षा आवश्यक पर्नेछ।"
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "केही अद्यावधिक लागू योजना फाइल सूचीहरू JSON प्रतिक्रियामा काटिए।"
+
+msgid "Unable to write update apply plan metadata."
+msgstr "अद्यावधिक लागू योजना मेटाडेटा लेख्न असमर्थ।"
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "अद्यावधिक प्याकेज डाउनलोड गर्न असमर्थ। HTTP स्थिति: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "अद्यावधिक प्याकेज लक्ष्य फाइल खोल्न असमर्थ: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "अद्यावधिक डाउनलोडहरूले आधिकारिक अद्यावधिक स्रोत %s प्रयोग गर्नुपर्छ।"
+
+msgid "The update package URL must use HTTPS."
+msgstr "अद्यावधिक प्याकेज URL ले HTTPS प्रयोग गर्नुपर्छ।"
+
+msgid "Update package archive safety checks passed."
+msgstr "अपडेट प्याकेज आर्काइभका सुरक्षा जाँचहरू सफल भए।"
+
+msgid "Update package was extracted to staging."
+msgstr "अपडेट प्याकेज स्टेजिङमा निकालियो।"
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "हस्ताक्षरित प्याकेजको सफाई मेटाडेटा लोड भयो।"
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "अपडेट प्याकेजमा %s छैन। हस्ताक्षरित सफाई मेटाडेटा प्रदान नगरेसम्म फाइल लागू गर्न रोकिनेछ।"
+
+msgid "Staged package dry-run report was generated."
+msgstr "स्टेज गरिएको प्याकेजको ड्राई-रन रिपोर्ट तयार भयो।"
+
+msgid "Staging metadata was written."
+msgstr "स्टेजिङ मेटाडेटा लेखियो।"
+
+msgid "Unable to extract update package to staging directory."
+msgstr "अपडेट प्याकेज स्टेजिङ डाइरेक्टरीमा निकाल्न सकिएन।"
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "स्टेज गरिएको प्याकेजमा Chamilo एप्लिकेसन रुट फेला पार्न सकिएन।"
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "स्टेज गरिएको प्याकेजमा आवश्यक Chamilo प्रविष्टि छैन: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "स्टेज गरिएको प्याकेजमा अपेक्षित Chamilo संरचना छ।"
+
+msgid "Staged package does not contain composer.lock."
+msgstr "स्टेज गरिएको प्याकेजमा composer.lock छैन।"
+
+msgid "Staged package contains composer.lock."
+msgstr "स्टेज गरिएको प्याकेजमा composer.lock छ।"
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "स्टेज गरिएको प्याकेजमा yarn.lock छैन।"
+
+msgid "Staged package contains yarn.lock."
+msgstr "स्टेज गरिएको प्याकेजमा yarn.lock छ।"
+
+msgid "Unable to encode staging metadata."
+msgstr "स्टेजिङ मेटाडेटा इन्कोड गर्न सकिएन।"
+
+msgid "Unable to write staging metadata."
+msgstr "स्टेजिङ मेटाडेटा लेख्न सकिएन।"
+
+msgid "Update operation log created."
+msgstr "अपडेट सञ्चालन लग सिर्जना भयो।"
+
+msgid "Unable to write update operation log."
+msgstr "अपडेट सञ्चालन लग लेख्न सकिएन।"
+
+msgid "Invalid update operation id."
+msgstr "अमान्य अपडेट सञ्चालन आईडी।"
+
+msgid "AI study helper"
+msgstr "एआई अध्ययन सहायक"
+
+msgid "Selected text"
+msgstr "चयनित पाठ"
+
+msgid "Learning technique"
+msgstr "सिकाइ प्रविधि"
+
+msgid "AI response"
+msgstr "AI प्रतिक्रिया"
+
+msgid "AI request failed."
+msgstr "एआई अनुरोध असफल भयो।"
+
+msgid "Mind mapping"
+msgstr "माइन्ड म्यापिङ"
+
+msgid "Feynman Technique"
+msgstr "फाइनम्यान प्रविधि"
+
+msgid "Elaborative interrogation"
+msgstr "विस्तृत अन्तरप्रश्न"
+
+msgid "Spaced repetition"
+msgstr "अन्तराल पुनरावृत्ति"
+
+msgid "SQ3R Method"
+msgstr "SQ3R विधि"
+
+msgid "Analogies and metaphors"
+msgstr "उपमा र रूपक"
+
+msgid "Dual coding"
+msgstr "द्वैत कोडिङ"
+
+msgid "Storytelling"
+msgstr "कथा कथन"
+
+msgid "Thematic connections"
+msgstr "विषयगत सम्बन्धहरू"
+
+msgid "Interleaved learning"
+msgstr "अन्तरमिश्रित सिकाइ"
+
+msgid "Memory palaces"
+msgstr "स्मृति महलहरू"
+
+msgid "Logins (Month)"
+msgstr "लगइनहरू (महिना)"
+
+msgid "Logins (Day)"
+msgstr "लगइनहरू (दिन)"
+
+msgid "Logins (Hour)"
+msgstr "लगइनहरू (घण्टा)"
+
+msgid "Number of users (Picture)"
+msgstr "प्रयोगकर्ताहरूको संख्या (तस्बिर)"
+
+msgid "Allow tutors to register users"
+msgstr "ट्युटरहरूलाई प्रयोगकर्ता दर्ता गर्न अनुमति दिनुहोस्"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "ट्युटरहरूलाई कोर्स सत्रभित्र सम्पादन गर्न अनुमति दिनुहोस्"
+
+msgid "Extend rights for tutors"
+msgstr "ट्युटरहरूका लागि अधिकार विस्तार गर्नुहोस्"
+
+msgid "Show session tutor"
+msgstr "सत्र ट्युटर देखाउनुहोस्"
+
+msgid "Default tutor access days after session"
+msgstr "सत्रपछि पूर्वनिर्धारित ट्युटर पहुँच दिनहरू"
+
+msgid "Default tutor access days before session"
+msgstr "सत्रअघि पूर्वनिर्धारित ट्युटर पहुँच दिनहरू"
+
+msgid "Dropbox: hide course tutor"
+msgstr "ड्रपबक्स: कोर्स ट्युटर लुकाउनुहोस्"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "ड्रपबक्समा सामान्य ट्युटर लुकाउनुहोस्"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "सर्वेक्षणहरूमा ट्युटरहरूका लागि अधिकार विस्तार गर्नुहोस्"
+
+msgid "Maximum courses per user"
+msgstr "प्रति प्रयोगकर्ता अधिकतम कोर्सहरू"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "अभ्यासहरू समीक्षा गर्दा ट्युटरहरूलाई टिप्पणी गर्न अनुमति दिनुहोस्"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "निर्यात गरिएको क्विज नतिजा PDF फाइल नाममा आधिकारिक कोड समावेश गर्नुहोस्"
+
+msgid "Certificate expiry reminder cron"
+msgstr "प्रमाणपत्र समाप्ति स्मरण cron"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "प्रमाणपत्र समाप्ति स्मरण अवधि (दिनहरू)"
+
+msgid "Allow certificates search"
+msgstr "प्रमाणपत्र खोज अनुमति दिनुहोस्"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "ट्युटरहरूलाई सधैं घोषणाहरू सम्पादन गर्न अनुमति दिनुहोस्"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "उपस्थिति पानाहरूमा विद्यार्थीहरूको आधिकारिक कोड देखाउनुहोस्"
+
+msgid "Restrict course chat to tutors"
+msgstr "कोर्स च्याटलाई ट्युटरहरूमा सीमित गर्नुहोस्"
+
+msgid "Language by resource"
+msgstr "स्रोतअनुसार भाषा"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "स्थिति अपूर्ण रहँदा छोड्दा SCO पूरा गर्नुहोस्"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "श्रेणी गन्तव्यअनुसार प्रगतिशील अनुकूल परीक्षणहरू सक्षम गर्नुहोस्"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "सामान्य ट्युटरलाई परीक्षण सूचना पठाउन रोक्नुहोस्"
+
+msgid "Enable session expiration warning"
+msgstr "सत्र समाप्ति चेतावनी सक्षम गर्नुहोस्"
+
+msgid "Session expiration warning time"
+msgstr "सत्र समाप्ति चेतावनी समय"
+
+msgid "Check password requirements"
+msgstr "पासवर्ड आवश्यकताहरू जाँच गर्नुहोस्"
+
+msgid "File integrity check notification recipients"
+msgstr "फाइल अखण्डता जाँच सूचना प्राप्तकर्ताहरू"
+
+msgid "Enable the OAuth authorization server"
+msgstr "OAuth प्राधिकरण सर्भर सक्षम गर्नुहोस्"
+
+msgid "Enable MCP server"
+msgstr "MCP सर्भर सक्षम गर्नुहोस्"
+
+msgid "Allow MCP by roles"
+msgstr "भूमिकाअनुसार MCP अनुमति दिनुहोस्"
+
+msgid "Enable external API keys"
+msgstr "बाह्य API कुञ्जीहरू सक्षम गर्नुहोस्"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "अवधिअनुसारका सत्रहरू ट्युटरहरूलाई सधैं उपलब्ध"
+
+msgid "Allow registration via course invitation links"
+msgstr "कोर्स निमन्त्रणा लिङ्कहरूमार्फत दर्ता अनुमति दिनुहोस्"
+
+msgid "Add student fullname in file download name"
+msgstr "फाइल डाउनलोड नाममा विद्यार्थीको पूरा नाम थप्नुहोस्"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "WYSIWYG सम्पादकहरूमा सबै सक्रिय भाषाहरूमा AI अनुवाद अनुमति दिनुहोस्"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "कोर्स ट्युटरहरू सम्पादन गर्ने क्षमता अक्षम गर्नुहोस्"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "सत्रहरू प्रयोग गर्दा, पूर्वनिर्धारित व्यवहार आधार कोर्समा परिभाषित उपकरण दृश्यता प्रयोग गर्नु हो। यो सेटिङले सत्र कोर्सका ट्युटरहरूलाई आफ्ना आवश्यकताअनुसार उपकरण दृश्यता अनुकूलन गर्न अनुमति दिन्छ।"
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "ट्युटरहरूले प्लेटफर्ममा प्रयोगकर्ता सिर्जना गर्न र सत्रमा प्रयोगकर्ताहरू सदस्यता गर्न सक्छन्।"
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "ट्युटरहरूलाई लेखन उपकरणहरूमा प्रशिक्षकसरह अनुमति दिन यो विकल्प सक्षम गर्नुहोस्"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "कोर्स सूचीको सत्र शीर्षक बाकसमा सामान्य सत्र ट्युटरको नाम देखाउनुहोस्"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "सक्षम हुँदा, सत्रका कोर्स ट्युटरहरूले आफ्नो सत्रमा नयाँ प्रयोगकर्ताहरू सदस्यता गर्न सक्छन्। अन्यथा यो विकल्प केवल प्रशासक र सत्र प्रशासकहरूलाई मात्र उपलब्ध हुन्छ।"
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "आधिकारिक सत्र अन्त्य मितिपछि ट्युटरले सत्र पहुँच गर्न सक्ने पूर्वनिर्धारित दिनहरूको संख्या"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "आधिकारिक सत्र सुरु मितिअघि ट्युटरले सत्र पहुँच गर्न सक्ने पूर्वनिर्धारित दिनहरूको संख्या"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "गणितीय सूत्रहरू देखाउन MathJax लाइब्रेरी सक्षम गर्नुहोस्। यसले सम्पादक टुलबारमा सूत्र बटन थप्छ, जहाँ सूत्रहरू LaTeX मा लेखिन्छन्।"
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "\"|\" ले छुट्याइएका कोर्स कोडहरू। मानव संसाधन निर्देशक लग इन गर्दा प्रयोगकर्ता स्वतः यी कोर्सहरूमा सदस्यता लिन्छन्। उदाहरण: COURSE001|COURSE002। यसले प्रयोगकर्ता भूमिका परिवर्तन गर्दैन।"
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "\"|\" ले छुट्याइएका कोर्स कोडहरू। सत्र प्रशासक लग इन गर्दा प्रयोगकर्ता स्वतः यी कोर्सहरूमा सदस्यता लिन्छन्। उदाहरण: COURSE001|COURSE002। यसले प्रयोगकर्ता भूमिका परिवर्तन गर्दैन।"
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "\"|\" ले छुट्याइएका कोर्स कोडहरू। सिकारु लग इन गर्दा प्रयोगकर्ता स्वतः यी कोर्सहरूमा सदस्यता लिन्छन्। उदाहरण: COURSE001|COURSE002।"
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "\"|\" ले छुट्याइएका कोर्स कोडहरू। शिक्षक लग इन गर्दा प्रयोगकर्ता स्वतः यी कोर्सहरूमा सदस्यता लिन्छन्। उदाहरण: COURSE001|COURSE002। यसले कोर्स शिक्षक अनुमति दिँदैन।"
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "ट्युटरले विद्यार्थीहरूलाई कागजात पठाउँदा ड्रपबक्समा सत्र कोर्स ट्युटर लुकाउनुहोस्"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "सामान्य ट्युटरले फाइल अपलोड गर्दा ड्रपबक्स उपकरणमा सामान्य ट्युटरको नाम लुकाउनुहोस्"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "ट्युटरहरूलाई सर्वेक्षण सिर्जना र सम्पादन गर्न दिन यो विकल्प सक्षम गर्नुहोस्"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "सर्वेक्षण निमन्त्रणाहरूमा ट्युटरको इमेल ठेगाना प्रयोग गर्ने कि मुख्य कन्फिगरेसन खण्डमा परिभाषित नो-रिप्लाई ठेगाना?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "शिक्षक/प्रशिक्षकले सिर्जना गर्न सक्ने कोर्सहरूको अधिकतम संख्या। सीमा अक्षम गर्न 0 राख्नुहोस्। BuyCourses सेवा खरिदबाट प्रति प्रयोगकर्ता ओभरराइड गर्न सकिन्छ।"
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "अभ्यास समीक्षा गर्दा ट्युटरहरूलाई प्रतिक्रिया सम्पादन गर्न दिनुहोस्"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "क्विज नतिजा PDF मा निर्यात गर्दा फाइल नाममा विद्यार्थीको आधिकारिक कोड समावेश गर्ने कि नगर्ने"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "प्रतिबन्ध बिना सबै व्यक्तिगत फाइलहरूमा पहुँच अनुमति दिन्छ"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "app:send-certificate-expiry-reminders क्रन सक्षम गर्नुहोस्, जसले प्रमाणपत्र सकिएका वा सकिन लागेका सिकारुहरूलाई सम्झाउँछ।"
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "सकिन लागेका प्रमाणपत्रहरू स्क्यान गर्न पूर्वनिर्धारित दिनहरूको संख्या, क्रन --days-ahead सँग नचलाइएसम्म प्रयोग हुन्छ।"
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "प्रयोगकर्ता र आगन्तुकहरूलाई माथिल्लो बार मेनुबाट सिर्जित प्रमाणपत्रहरू खोज्न दिनुहोस्।"
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "सक्रिय वा विगतका सत्रहरूभित्र ट्युटरहरूलाई सधैं घोषणाहरू सम्पादन गर्न दिनुहोस्।"
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "उपस्थिति पाना र सूचीहरूमा नामसँगै विद्यार्थीहरूको आधिकारिक कोड देखाउने कि नदेखाउने।"
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "व्यक्तिगत स्रोतहरूलाई विशिष्ट भाषा तोक्न अनुमति दिनुहोस्।"
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "केही SCORM प्याकेजहरूले LMSSetValue(cmi.core.lesson_status, 'incomplete') एक पटक मात्र बोलाउँछन् र वास्तविक टर्मिनल स्थिति वा अर्थपूर्ण LMSFinish() कहिल्यै पठाउँदैनन्। बाँकी रहेको 'incomplete' लाई कुनै स्थिति नभएको जस्तै व्यवहार गर्न यो सक्षम गर्नुहोस्, सिकारु SCO छोड्दा समापन समाधान हुन्छ।"
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "सिकाइ पथ अदृश्य सेट गरिए पनि शिक्षक वा ट्युटरले कोर्स होमपेजबाट उपलब्ध गराएमा, यो विकल्पले चामिलोलाई कोर्स होमपेजमा लिंक लुकाउनबाट रोक्छ।"
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "प्रगतिशील अनुकूल परीक्षण सक्षम गर्नुहोस् जहाँ प्रत्येक प्रश्न श्रेणीले स्कोरअनुसार सिकारुलाई अर्को श्रेणीमा पठाउन सक्छ।"
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "सिकारुहरूले परीक्षण पूरा गर्दा सामान्यतया ट्युटरहरूलाई सूचना पठाइन्छ, सामान्य सत्र ट्युटर सहित। यी सूचनाहरूबाट सामान्य ट्युटर हटाउन यो विकल्प सक्षम गर्नुहोस्।"
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "पेन्डिङ परीक्षण प्रतिवेदनमा सामान्य ट्युटरको पहुँच भएका सबै सत्रहरूका प्रयोगकर्ताहरूका परीक्षण प्रयासहरू देखाउनुहोस्।"
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "प्रमाणित प्रयोगकर्ताहरूलाई सर्भर-साइड सत्र सकिनुअघि चेतावनी देखाउनुहोस्।"
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "चेतावनी देखाइने सत्र समाप्तिअघिको सेकेन्ड संख्या। पूर्वनिर्धारित १८० सेकेन्ड हो।"
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "प्रयोगकर्ता पासवर्डको आवश्यक संरचना परिभाषित गर्छ। उदाहरण: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}। विशेष वर्ण आवश्यक पार्न \"specials\" (बहुवचन) प्रयोग गर्नुहोस्।"
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "पासवर्ड सिर्जना वा अद्यावधिक गर्दा माथि परिभाषित पासवर्ड आवश्यकताहरूको प्रमाणीकरण सक्षम गर्नुहोस्।"
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "फाइल अखण्डता स्क्यानले परिवर्तन पत्ता लगाउँदा सूचित गर्ने इमेल ठेगानाहरूको अल्पविराम-विभाजित सूची। सबै विश्वव्यापी प्रशासकलाई सूचित गर्न खाली छोड्नुहोस्।"
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "बाह्य अनुप्रयोगहरू (जस्तै Claude.ai MCP कनेक्टर) लाई OAuth 2.1 Dynamic Client Registration मार्फत दर्ता गर्न र प्रत्येक प्रयोगकर्ताको आफ्नै चामिलो खाता र अनुमति प्रयोग गरी जडान गर्न अनुमति दिन्छ। पूर्वनिर्धारित रूपमा अक्षम: यो नखुलेसम्म डिस्कभरी, दर्ता, प्राधिकरण र टोकन एन्डपोइन्टहरूले ४०४ फर्काउँछन्।"
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "चामिलो MCP एन्डपोइन्ट र व्यक्तिगत MCP API कुञ्जी इन्टरफेस सक्षम गर्छ। अक्षम हुँदा विद्यमान API कुञ्जी, OAuth पहुँच टोकन र JWT प्रमाणहरू /mcp मा प्रयोग गर्न सकिँदैन।"
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "MCP प्रयोग गर्न अनुमति दिइएका चामिलो प्रयोगकर्ता भूमिकाहरूको JSON नक्सा। प्रयोगकर्ता कम्तीमा एक सक्षम भूमिका मिल्नुपर्छ। यो प्रतिबन्ध पहिले सिर्जित API कुञ्जी र विद्यमान OAuth जडानहरूमा पनि लागू हुन्छ।"
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "विश्वसनीय सर्भर-देखि-सर्भर एकीकरणहरू (जस्तै WordPress स्टोरफ्रन्ट प्लगइन) लाई प्रति-प्रयोगकर्ता बाह्य API कुञ्जी प्रयोग गरी सामान्य /api एन्डपोइन्टमा प्रमाणीकरण गर्न अनुमति दिन्छ, \"chamilo:security:generate-external-api-key\" कन्सोल आदेशबाट सिर्जना। पूर्वनिर्धारित रूपमा अक्षम: यो नखुलेसम्म विद्यमान कुञ्जी प्रयोग गर्न सकिँदैन।"
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "सत्र सूचीमा सत्र उपशीर्षकमा ट्युटर र मितिहरू थप्नुहोस्।"
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "अन्यथा, सत्र ट्युटरहरूलाई अवधिअनुसारका सत्रहरूमा सक्रिय अवधिसम्म मात्र पहुँच हुन्छ।"
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "सक्षम हुँदा, शिक्षक/प्रशासकले कोर्सको प्रयोगकर्ता उपकरणबाट एकपटकको निमन्त्रणा लिंक पठाउन सक्छन् जसले दर्ता नभएको व्यक्तिलाई दर्ता फारममा पुग्न र सामान्य स्व-दर्ता (allow_registration) अक्षम हुँदा पनि दर्ता गर्न दिन्छ।"
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "व्यक्तिगत पेश वा असाइनमेन्ट प्याकेज डाउनलोड गर्दा असाइनमेन्ट फाइल नाममा विद्यार्थीको पूरा नाम थप्नुहोस्।"
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "शिक्षकहरूलाई एक WYSIWYG कार्यमा सबै सक्रिय प्लेटफर्म भाषाहरूका लागि अनुवाद सिर्जना गर्न अनुमति दिन्छ। यसले धेरै AI टोकन खपत गर्न सक्छ।"
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "अक्षम हुँदा, प्रशासकहरूलाई कोर्स सम्पादन पृष्ठमा सत्र कोर्सहरूमा ट्युटर छिटो तोक्ने लिंक हुँदैन।"
+
+msgid "Show courses & sessions"
+msgstr "कोर्स र सत्रहरू देखाउनुहोस्"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "वैकल्पिक JSON। उदाहरण: {\"speed\": true}"
+
+msgid "Table"
+msgstr "तालिका"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "थिम"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "पाठ्यक्रम ट्युटर इमेल प्रेषक"
+
+msgid "Card (visual blocks)"
+msgstr "कार्ड (दृश्य ब्लकहरू)"
+
+msgid "List (classic)"
+msgstr "सूची (क्लासिक)"
+
+msgid "Limit identical emails"
+msgstr "समान इमेलहरू सीमित गर्नुहोस्"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "शिक्षक वा प्रशिक्षकले सिर्जना गर्न सक्ने पाठ्यक्रमहरूको अधिकतम संख्या। सीमा निष्क्रिय गर्न ० सेट गर्नुहोस्।"
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "एउटै इमेलसँग अनुमति दिइएका खाताहरूको अधिकतम संख्या। सीमा निष्क्रिय गर्न ० सेट गर्नुहोस्।"
+
+msgid "Validation"
+msgstr "प्रमाणीकरण"
+
+msgid "Test/Development"
+msgstr "परीक्षण/विकास"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "/admin-dashboard/register बाट सत्रहरू खोज्दा र नामकरण गर्दा प्रयोग गर्ने प्रयोगकर्ता अतिरिक्त फिल्ड कुञ्जी।"
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "खोज प्रिफिल्टर फिल्डहरूको लागि JSON कन्फिगरेसन।"
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "यसले यस संस्करणले पठाएका सबै माइग्रेसनलाई पहिले नै कार्यान्वयन भइसकेको भनी चिन्ह लगाउँछ। यो केवल अद्यावधिक भएको र कहिल्यै इतिहास रेकर्ड नगरेको प्लेटफर्ममा मात्र गर्नुहोस्।"
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s माइग्रेसन रेकर्ड गरियो। तपाईंको प्लेटफर्म अब सामान्य रूपमा अद्यावधिक गर्न सकिन्छ।"
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "माइग्रेसन इतिहास छैन: ठीक गर्न क्लिक गर्नुहोस् (नत्र अद्यावधिक बिग्रन सक्छ)"
+
+msgid "Migration history is recorded"
+msgstr "माइग्रेसन इतिहास रेकर्ड गरिएको छ"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "परियोजना मूलमा %s छ: अपग्रेड एन्डपोइन्ट बन्द गर्न यसलाई मेटाउनुहोस्"
 

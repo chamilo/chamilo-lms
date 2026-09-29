@@ -164,7 +164,7 @@ if (isset($_GET['id'])) {
         $finalPathW = '';
 
         if (isset($_GET['namesrc'])) {
-            $namFileZip = $_GET['namesrc'];
+            $namFileZip = basename((string) $_GET['namesrc']);
             $pluginFileSystem = Container::getPluginsFileSystem();
 
             if ($pluginFileSystem->fileExists(api_get_folder_imporfiles().$namFileZip)) {
@@ -333,6 +333,7 @@ if (isset($_GET['id'])) {
             $localFolder = get_local_folder($objectIdTop);
 
             $base_html = cleanOldCode($base_html, $oldFolder, $localFolder);
+            $base_css = cleanOldCode($base_css, $oldFolder, $localFolder);
             $GpsStyle = cleanOldCode($GpsStyle, $oldFolder, $localFolder);
             $GpsComps = cleanOldCode($GpsComps, $oldFolder, $localFolder);
 
@@ -387,6 +388,7 @@ if ('create2' == $action) {
             $type_node = $pluginFileSystem->read($tmpFolderWork.$i.'-type_node.txt');
 
             $base_html = cleanOldCode($base_html, $oldFolder, $localFolder);
+            $base_css = cleanOldCode($base_css, $oldFolder, $localFolder);
             $GpsStyle = cleanOldCode($GpsStyle, $oldFolder, $localFolder);
             $GpsComps = cleanOldCode($GpsComps, $oldFolder, $localFolder);
 
@@ -530,6 +532,13 @@ if ('create2' == $action) {
 
   function cleanOldCode($src, $oldFold, $newFold)
   {
+      // The source project may still carry this plugin's absolute img-cache.php
+      // proxy URL -- an export made before the export-time fix in prepare-sco.php,
+      // or from a server that hasn't been upgraded yet. Resolve it to the same
+      // relative "img_cache/<oldFold>/..." form the replacements below already
+      // expect, before applying them.
+      $src = rewriteImgCacheProxyUrlsToRelative($src);
+
       $src = str_replace('img_cache/'.$oldFold, 'img_cache/'.$newFold, $src);
 
       return str_replace('/'.$oldFold.'/', '/'.$newFold.'/', $src);

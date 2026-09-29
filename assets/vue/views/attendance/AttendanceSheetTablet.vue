@@ -221,9 +221,7 @@ const { abbreviatedDatetime } = useFormatDate()
 // --------------------------- Permissions / flags -----------------------------
 const securityStore = useSecurityStore()
 const platformConfig = usePlatformConfig()
-const isTeacherUser = computed(
-  () => securityStore.isAdmin || securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isHRM,
-)
+const isTeacherUser = computed(() => securityStore.isGranted("ROLE_TEACHER") || securityStore.isCourseAdmin)
 const isStudentView = computed(() => platformConfig.isStudentViewActive)
 const canEdit = computed(() => isTeacherUser.value && !isStudentView.value && route.query.readonly !== "1")
 
@@ -464,6 +462,7 @@ const save = async () => {
     }))
 
     await attendanceService.saveAttendanceSheet({
+      attendanceId: attendanceId.value,
       courseId: parseInt(cid),
       sessionId: sid ? parseInt(sid) : null,
       groupId: gid ? parseInt(gid) : null,

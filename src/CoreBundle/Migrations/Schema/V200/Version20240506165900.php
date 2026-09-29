@@ -15,6 +15,8 @@ use const PREG_SET_ORDER;
 
 final class Version20240506165900 extends AbstractMigrationChamilo
 {
+    private const int CONTENT_BATCH_SIZE = 500;
+
     public function getDescription(): string
     {
         return 'Update HTML content blocks to replace old file paths with resource links to personal documents (images, videos, audio) in course tools';
@@ -51,19 +53,67 @@ final class Version20240506165900 extends AbstractMigrationChamilo
         $fields = isset($config['field']) ? [$config['field']] : $config['fields'] ?? [];
 
         foreach ($fields as $field) {
-            $sql = "SELECT iid, {$field} FROM {$config['table']}";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
+            $lastIid = 0;
 
-            foreach ($items as $item) {
-                $originalText = $item[$field];
-                if (!empty($originalText)) {
-                    $updatedText = $this->replaceOldURLsWithNew($originalText);
-                    if ($originalText !== $updatedText) {
-                        $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
-                        $this->connection->executeQuery($updateSql, ['newText' => $updatedText, 'id' => $item['iid']]);
-                    }
+            while (true) {
+                $sql = \sprintf(
+                    'SELECT iid, %s
+                       FROM %s
+                      WHERE iid > :lastIid
+                      ORDER BY iid
+                      LIMIT %d',
+                    $field,
+                    $config['table'],
+                    self::CONTENT_BATCH_SIZE
+                );
+
+                $items = $this->connection->fetchAllAssociative(
+                    $sql,
+                    ['lastIid' => $lastIid]
+                );
+
+                if ([] === $items) {
+                    break;
                 }
+
+                foreach ($items as $item) {
+                    $iid = (int) $item['iid'];
+                    $lastIid = $iid;
+
+                    $originalText = $item[$field];
+
+                    if (empty($originalText)) {
+                        continue;
+                    }
+
+                    $updatedText = $this->replaceOldURLsWithNew($originalText);
+
+                    if ($originalText === $updatedText) {
+                        continue;
+                    }
+
+                    $updateSql = \sprintf(
+                        'UPDATE %s SET %s = :newText WHERE iid = :id',
+                        $config['table'],
+                        $field
+                    );
+
+                    $this->connection->executeStatement(
+                        $updateSql,
+                        [
+                            'newText' => $updatedText,
+                            'id' => $iid,
+                        ]
+                    );
+                }
+
+                unset($items);
+
+                // Personal-file lookups use ORM repositories. Release managed
+                // users/resources after every DBAL content batch so very large
+                // legacy tables cannot grow the Doctrine identity map.
+                $this->entityManager->clear();
+                gc_collect_cycles();
             }
         }
     }

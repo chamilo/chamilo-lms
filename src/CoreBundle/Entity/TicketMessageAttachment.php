@@ -55,11 +55,18 @@ class TicketMessageAttachment extends AbstractResource implements ResourceInterf
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId()
+    public function getFilename()
     {
-        return $this->id;
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): self
+    {
+        $this->filename = $filename;
+
+        return $this;
     }
 
     /**
@@ -88,21 +95,6 @@ class TicketMessageAttachment extends AbstractResource implements ResourceInterf
     public function setPath(string $path): self
     {
         $this->path = $path;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFilename()
-    {
-        return $this->filename;
-    }
-
-    public function setFilename(string $filename): self
-    {
-        $this->filename = $filename;
 
         return $this;
     }
@@ -147,6 +139,14 @@ class TicketMessageAttachment extends AbstractResource implements ResourceInterf
     public function getResourceIdentifier(): int
     {
         return $this->getId();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function setInsertUserId(int $insertUserId): self

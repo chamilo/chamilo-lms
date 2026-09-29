@@ -28,6 +28,10 @@ final class DocumentSearchEntityListener
 
     public function postPersist(CDocument $document, LifecycleEventArgs $args): void
     {
+        if ($this->isCertificateDocument($document)) {
+            return;
+        }
+
         if (!$this->shouldIndexDocumentFromRequest()) {
             error_log('[Xapian] DocumentSearchEntityListener postPersist: indexing disabled by indexDocumentContent flag');
 
@@ -46,6 +50,12 @@ final class DocumentSearchEntityListener
 
     public function postUpdate(CDocument $document, LifecycleEventArgs $args): void
     {
+        if ($this->isCertificateDocument($document)) {
+            $this->removeDocumentFromIndex($document, 'postUpdate');
+
+            return;
+        }
+
         if (!$this->shouldIndexDocumentFromRequest()) {
             error_log('[Xapian] DocumentSearchEntityListener postUpdate: indexing disabled by indexDocumentContent flag');
 
@@ -64,6 +74,16 @@ final class DocumentSearchEntityListener
 
     public function postRemove(CDocument $document, LifecycleEventArgs $args): void
     {
+        $this->removeDocumentFromIndex($document, 'postRemove');
+    }
+
+    private function isCertificateDocument(CDocument $document): bool
+    {
+        return 'certificate' === strtolower(trim($document->getFiletype()));
+    }
+
+    private function removeDocumentFromIndex(CDocument $document, string $operation): void
+    {
         $resourceNode = $document->getResourceNode();
         if (null === $resourceNode) {
             return;
@@ -73,7 +93,7 @@ final class DocumentSearchEntityListener
             $this->indexer->deleteForResourceNodeId((int) $resourceNode->getId());
         } catch (Throwable $e) {
             error_log(
-                '[Xapian] DocumentSearchEntityListener postRemove: delete failed: '.
+                '[Xapian] DocumentSearchEntityListener '.$operation.': delete failed: '.
                 $e->getMessage().' in '.$e->getFile().':'.$e->getLine()
             );
         }
@@ -95,7 +115,7 @@ final class DocumentSearchEntityListener
         }
 
         // indexDocumentContent may come from form-data, query or JSON body
-        $raw = $currentRequest->get('indexDocumentContent');
+        $raw = $currentRequest->query->get('indexDocumentContent', $currentRequest->request->get('indexDocumentContent'));
 
         // If not present, keep legacy behavior (index)
         if (null === $raw) {

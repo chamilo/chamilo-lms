@@ -16,5 +16,5 @@ if (!api_is_platform_admin()) {
 
 $plugin->update();
 
-header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses');
+header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php');
 exit;

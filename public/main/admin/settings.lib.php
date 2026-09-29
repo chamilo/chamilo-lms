@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Library of the settings.php file.
@@ -20,7 +19,6 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @since Chamilo 1.8.7
  */
-define('CSS_UPLOAD_PATH', api_get_path(SYMFONY_SYS_PATH).'var/themes/');
 
 /**
  * Safely read plugin metadata for the Regions page.
@@ -1698,161 +1696,6 @@ function plugin_get_management_url(string $pluginName): ?string
     return $cache[$pluginName] = api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?'.http_build_query([
             'plugin' => $pluginName,
         ]);
-}
-
-/**
- * Creates the folder (if needed) and uploads the stylesheet in it.
- *
- * @param array $values  the values of the form
- * @param array $picture the values of the uploaded file
- *
- * @return bool
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- *
- * @version May 2008
- *
- * @since v1.8.5
- */
-function uploadStylesheet($values, $picture)
-{
-    $result = false;
-    // Valid name for the stylesheet folder.
-    $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
-    if (empty($style_name) || is_array($style_name)) {
-        // The name of the uploaded stylesheet doesn't have the expected format
-        return $result;
-    }
-    $cssToUpload = CSS_UPLOAD_PATH;
-
-    // Check if a virtual instance vchamilo is used
-    $virtualInstanceTheme = api_get_configuration_value('virtual_css_theme_folder');
-    if (!empty($virtualInstanceTheme)) {
-        $cssToUpload = $cssToUpload.$virtualInstanceTheme.'/';
-    }
-
-    // Create the folder if needed.
-    if (!is_dir($cssToUpload.$style_name.'/')) {
-        mkdir($cssToUpload.$style_name.'/', api_get_permissions_for_new_directories());
-    }
-
-    $info = pathinfo($picture['name']);
-
-    if ('zip' == $info['extension']) {
-        // Try to open the file and extract it in the theme.
-        $zip = new ZipArchive();
-        if ($zip->open($picture['tmp_name'])) {
-            // Make sure all files inside the zip are images or css.
-            $num_files = $zip->numFiles;
-            $valid = true;
-            $single_directory = true;
-            $invalid_files = [];
-
-            $allowedFiles = getAllowedFileTypes();
-
-            for ($i = 0; $i < $num_files; $i++) {
-                $file = $zip->statIndex($i);
-                // Reject path traversal entries (ZIP Slip)
-                $entryName = str_replace('\\', '/', $file['name']);
-                if (str_contains($entryName, '../') || str_starts_with($entryName, '/')) {
-                    $valid = false;
-                    $invalid_files[] = $file['name'];
-                    continue;
-                }
-                if ('/' != substr($file['name'], -1)) {
-                    $path_parts = pathinfo($file['name']);
-                    if (!in_array($path_parts['extension'], $allowedFiles)) {
-                        $valid = false;
-                        $invalid_files[] = $file['name'];
-                    }
-                }
-
-                if (false === strpos($file['name'], '/')) {
-                    $single_directory = false;
-                }
-            }
-            if (!$valid) {
-                $error_string = '<ul>';
-                foreach ($invalid_files as $invalid_file) {
-                    $error_string .= '<li>'.$invalid_file.'</li>';
-                }
-                $error_string .= '</ul>';
-                echo Display::return_message(
-                    get_lang('The only accepted extensions in the ZIP file are .jp(e)g, .png, .gif and .css.').$error_string,
-                    'error',
-                    false
-                );
-            } else {
-                // If the zip does not contain a single directory, extract it.
-                if (!$single_directory) {
-                    // Extract zip file.
-                    $zip->extractTo($cssToUpload.$style_name.'/');
-                    $result = true;
-                } else {
-                    $extraction_path = $cssToUpload.$style_name.'/';
-                    $mode = api_get_permissions_for_new_directories();
-                    for ($i = 0; $i < $num_files; $i++) {
-                        $entry = $zip->getNameIndex($i);
-                        if ('/' == substr($entry, -1)) {
-                            continue;
-                        }
-
-                        $pos_slash = strpos($entry, '/');
-                        $entry_without_first_dir = substr($entry, $pos_slash + 1);
-                        // Guard against ZIP Slip: resolve and verify the destination stays within extraction_path
-                        $destDir = $extraction_path.dirname($entry_without_first_dir);
-                        $destFile = $destDir.'/'.basename($entry);
-                        $realExtraction = realpath($extraction_path);
-                        // realpath() returns false for non-existent paths; build normalised path manually
-                        $normDest = $realExtraction.'/'.ltrim(
-                            str_replace(['\\', '../', './'], ['/', '', ''], $entry_without_first_dir),
-                            '/'
-                        );
-                        if (!str_starts_with($normDest, $realExtraction.'/')) {
-                            continue; // skip malicious entry
-                        }
-                        // If there is still a slash, we need to make sure the directories are created.
-                        if (false !== strpos($entry_without_first_dir, '/')) {
-                            if (!is_dir($destDir)) {
-                                // Create it.
-                                @mkdir($destDir, $mode, true);
-                            }
-                        }
-
-                        $fp = $zip->getStream($entry);
-                        $ofp = fopen($destFile, 'w');
-
-                        while (!feof($fp)) {
-                            fwrite($ofp, fread($fp, 8192));
-                        }
-
-                        fclose($fp);
-                        fclose($ofp);
-                    }
-                    $result = true;
-                }
-            }
-            $zip->close();
-        } else {
-            echo Display::return_message(get_lang('Error reading ZIP file').$info['extension'], 'error', false);
-        }
-    } else {
-        // Simply move the file.
-        move_uploaded_file($picture['tmp_name'], $cssToUpload.$style_name.'/'.basename($picture['name']));
-        $result = true;
-    }
-
-    if ($result) {
-        $fs = new Filesystem();
-        $fs->mirror(
-            CSS_UPLOAD_PATH,
-            api_get_path(SYMFONY_SYS_PATH).'var/themes/',
-            null,
-            ['override' => true]
-        );
-    }
-
-    return $result;
 }
 
 /**

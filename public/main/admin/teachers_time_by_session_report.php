@@ -34,7 +34,7 @@ $selectSession = $form->addSelect(
 $form->addButtonFilter(get_lang('Filter'));
 
 foreach ($sessionsInfo as $sessionInfo) {
-    $selectSession->addOption($sessionInfo['name'], $sessionInfo['id']);
+    $selectSession->addOption($sessionInfo['title'], $sessionInfo['id']);
 }
 
 if (isset($_GET['session']) && intval($_GET['session'])) {
@@ -110,7 +110,7 @@ if (isset($_GET['export']) && $session && $coursesInfo && $usersInfo) {
     $dataToExport[] = [$toolName, $session->getTitle()];
     $dataToExport['headers'] = [
         get_lang('Code'),
-        get_lang('Coach name'),
+        get_lang('Tutor name'),
         get_lang('Time spent in portal'),
         get_lang('First login in platform'),
         get_lang('Latest login in platform'),

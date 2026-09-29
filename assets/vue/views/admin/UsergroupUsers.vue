@@ -16,7 +16,6 @@ const groupId = computed(() => Number(route.params.id))
 
 const groupTitle = ref("")
 const users = ref([])
-const csrfToken = ref("")
 const isLoading = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
@@ -28,7 +27,6 @@ async function loadData() {
     const data = await usergroupAdminService.listUsers(groupId.value)
     groupTitle.value = data.groupTitle
     users.value = data.users
-    csrfToken.value = data.csrfToken
   } catch {
     errorMessage.value = t("An error occurred. Please try again.")
   } finally {
@@ -47,7 +45,7 @@ async function performRemove(user) {
   errorMessage.value = ""
   successMessage.value = ""
   try {
-    await usergroupAdminService.removeUser(groupId.value, user.id, csrfToken.value)
+    await usergroupAdminService.removeUser(groupId.value, user.id)
     successMessage.value = t("User removed")
     users.value = users.value.filter((u) => u.id !== user.id)
     setTimeout(() => {

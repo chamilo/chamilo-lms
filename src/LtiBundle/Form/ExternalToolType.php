@@ -23,18 +23,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ExternalToolType extends AbstractType
 {
-    private const VERSION_1P1 = 'lti1p1';
-    private const VERSION_1P3 = 'lti1p3';
+    private const string VERSION_1P1 = 'lti1p1';
+    private const string VERSION_1P3 = 'lti1p3';
 
-    private const KEY_TYPE_JWK = 'jwk_keyset';
-    private const KEY_TYPE_RSA = 'rsa_key';
+    private const string KEY_TYPE_JWK = 'jwk_keyset';
+    private const string KEY_TYPE_RSA = 'rsa_key';
 
-    private const AGS_NONE = 'none';
-    private const AGS_SIMPLE = 'simple';
-    private const AGS_FULL = 'full';
+    private const string AGS_NONE = 'none';
+    private const string AGS_SIMPLE = 'simple';
+    private const string AGS_FULL = 'full';
 
-    private const NRPS_NONE = 'none';
-    private const NRPS_CONTEXT_MEMBERSHIP = 'simple';
+    private const string NRPS_NONE = 'none';
+    private const string NRPS_CONTEXT_MEMBERSHIP = 'simple';
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

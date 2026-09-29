@@ -27,21 +27,21 @@ use const WEB_PATH;
 
 final class CourseStudentInfoHelper
 {
-    private const LOG_PREFIX = '[CourseStudentInfoHelper]';
-    private const TOOL_TABLE = 'tool';
-    private const TOOL_TITLE_CACHE_KEY = 'course_student_info_tool_id_title_map_v1';
+    private const string LOG_PREFIX = '[CourseStudentInfoHelper]';
+    private const string TOOL_TABLE = 'tool';
+    private const string TOOL_TITLE_CACHE_KEY = 'course_student_info_tool_id_title_map_v1';
 
     /**
      * Hard limit to avoid log storms when listing many courses.
      */
-    private const LOG_LIMIT = 600;
+    private const int LOG_LIMIT = 600;
 
     private static int $logCount = 0;
 
     /**
      * Standard table in Chamilo 2 for resources visibility and placement.
      */
-    private const RESOURCE_LINK_TABLE = 'resource_link';
+    private const string RESOURCE_LINK_TABLE = 'resource_link';
 
     private bool $showDebug = false;
 
@@ -370,6 +370,7 @@ final class CourseStudentInfoHelper
         $toolAccessMap = $this->fetchLastAccessPerToolMapFromTrackLastAccess($userId, $courseId, $sessionId);
         $typeRows = $this->fetchLastChangeByTypeForCourse($userId, $courseId, $sessionId);
 
+        /** @var array<string, array<string, mixed>> $toolMap */
         $toolMap = [];
 
         foreach ($typeRows as $row) {
@@ -595,12 +596,12 @@ final class CourseStudentInfoHelper
             'course_home' => $base.'course/'.$courseId.'/home?'.$qs,
             'documents' => $base.'resources/document/'.$parentResourceNodeId.'/?'.$qs,
             'learnpaths' => $base.'resources/lp/'.$parentResourceNodeId.'/?'.$qs,
-            'exercises' => $base.'main/exercise/exercise.php?'.$qs,
-            'forums' => $base.'main/forum/index.php?'.$qs,
-            'wikis' => $base.'main/wiki/index.php?'.$qs,
+            'exercises' => $base.'resources/exercise/'.$parentResourceNodeId.'/?'.$qs,
+            'forums' => $base.'resources/forum/'.$parentResourceNodeId.'/?'.$qs,
+            'wikis' => $base.'resources/wiki/'.$parentResourceNodeId.'/?'.$qs,
             'links' => $base.'resources/links/'.$parentResourceNodeId.'/?'.$qs,
-            'surveys' => $base.'main/survey/survey_list.php?'.$qs,
-            'gradebook' => $base.'main/gradebook/index.php?'.$qs,
+            'surveys' => $base.'resources/survey/'.$parentResourceNodeId.'/?'.$qs,
+            'gradebook' => $base.'resources/gradebook/'.$parentResourceNodeId.'/?'.$qs,
             'attendances' => $base.'resources/attendance/'.$parentResourceNodeId.'/?'.$qs,
             'dropbox' => $base.'resources/dropbox/'.$parentResourceNodeId.'/received?'.$qs,
 
@@ -933,8 +934,7 @@ final class CourseStudentInfoHelper
         ]);
 
         try {
-            $courseCode = $course->getCode();
-            $value = Tracking::get_time_spent_on_the_course($userId, $courseCode, $sessionId);
+            $value = Tracking::get_time_spent_on_the_course($userId, (int) $course->getId(), $sessionId);
 
             $this->log('computeTimeSpentSeconds: Tracking returned', [
                 'raw' => $value,
@@ -972,8 +972,9 @@ final class CourseStudentInfoHelper
         }
 
         try {
-            $category = Category::load($categoryId);
-            if (!$category) {
+            // Category::load() returns a list; the certificate rules apply to the root category.
+            $category = Category::load($categoryId)[0] ?? null;
+            if (!$category instanceof Category) {
                 $this->log('computeCertificateAvailable: Category::load returned empty', [
                     'category_id' => $categoryId,
                 ]);
@@ -1296,9 +1297,7 @@ final class CourseStudentInfoHelper
     private function tableExists(string $tableName): bool
     {
         try {
-            $sm = method_exists($this->connection, 'createSchemaManager')
-                ? $this->connection->createSchemaManager()
-                : $this->connection->getSchemaManager();
+            $sm = $this->connection->createSchemaManager();
 
             return $sm->tablesExist([$tableName]);
         } catch (Throwable $e) {

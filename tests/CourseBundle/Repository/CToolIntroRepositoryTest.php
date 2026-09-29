@@ -23,6 +23,8 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $courseCountBefore = $courseRepo->count([]);
         $repo = self::getContainer()->get(CToolIntroRepository::class);
 
         $this->assertSame(0, $repo->count([]));
@@ -55,7 +57,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         // Delete intro.
         $repo->delete($intro);
         $this->assertSame(0, $repo->count([]));
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
     }
 
     public function testCreateAndDeleteCourse(): void
@@ -63,6 +65,8 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
 
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $courseCountBefore = $courseRepo->count([]);
         $repo = self::getContainer()->get(CToolIntroRepository::class);
 
         $course = $this->createCourse('new');
@@ -82,13 +86,13 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $em->persist($intro);
         $em->flush();
 
-        $this->assertSame(1, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
         $this->assertSame(1, $repo->count([]));
 
         // Delete course.
         $courseRepo->delete($course);
         $this->assertSame(0, $repo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 
     public function testCreateInSession(): void
@@ -188,7 +192,20 @@ class CToolIntroRepositoryTest extends AbstractApiTest
     public function testGetToolIntros(): void
     {
         $token = $this->getUserToken([]);
-        $response = $this->createClientWithCredentials($token)->request('GET', '/api/c_tool_intros');
+
+        // Tool introductions belong to a course tool, so listing them without a
+        // course is a contract violation, not an empty result.
+        $this->createClientWithCredentials($token)->request('GET', '/api/c_tool_intros');
+        $this->assertResponseStatusCodeSame(422);
+
+        $course = $this->createCourse('new');
+        $response = $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_tool_intros',
+            [
+                'query' => ['cid' => $course->getId()],
+            ]
+        );
         $this->assertResponseIsSuccessful();
 
         // Asserts that the returned content type is JSON-LD (the default)
@@ -219,7 +236,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
 
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/c_tool_intros',
+            '/api/c_tool_intros?cid='.$course->getId(),
             [
                 'json' => [
                     'introText' => 'introduction here',
@@ -247,6 +264,10 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(CToolIntroRepository::class);
         $id = $response->toArray()['iid'];
 
+        // The IRI must point at the item route, not at the "current" one: the
+        // frontend sends its next PATCH to exactly this @id.
+        $this->assertSame('/api/c_tool_intros/'.$id, $response->toArray()['@id']);
+
         /** @var CToolIntro $toolIntro */
         $toolIntro = $repo->find($id);
         $this->assertNotNull($toolIntro);
@@ -270,7 +291,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
 
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/c_tool_intros',
+            '/api/c_tool_intros?cid='.$course->getId(),
             [
                 'json' => [
                     'introText' => 'introduction here',
@@ -281,14 +302,19 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         );
         $this->assertResponseIsSuccessful();
 
+        // PATCH, not PUT: courseTool is set server-side by the Post branch of the
+        // processor and is not writable, so a PUT -- which replaces the whole
+        // representation -- leaves it uninitialized. The Vue service works around
+        // the same thing.
         $iri = $response->toArray()['@id'];
         $this->createClientWithCredentials($token)->request(
-            'PUT',
-            $iri,
+            'PATCH',
+            $iri.'?cid='.$course->getId(),
             [
                 'json' => [
                     'introText' => 'MODIFIED',
                 ],
+                'headers' => ['content-type' => 'application/merge-patch+json'],
             ]
         );
 
@@ -298,6 +324,54 @@ class CToolIntroRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/CToolIntro',
             '@type' => 'CToolIntro',
             'introText' => 'MODIFIED',
+        ]);
+    }
+
+    public function testGetCurrentIntroApi(): void
+    {
+        $course = $this->createCourse('new');
+        $token = $this->getUserToken();
+
+        // Without an introduction the provider answers with a transient empty one.
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_tool_intros/current',
+            [
+                'query' => ['cid' => $course->getId()],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@id' => '/api/c_tool_intros/current',
+            'introText' => '',
+        ]);
+
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/c_tool_intros?cid='.$course->getId(),
+            [
+                'json' => [
+                    'introText' => 'introduction here',
+                    'toolName' => 'course_homepage',
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(201);
+
+        // The item Get accepts a numeric iid only, so "current" keeps its own route
+        // even though it is declared after it.
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_tool_intros/current',
+            [
+                'query' => ['cid' => $course->getId()],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@id' => '/api/c_tool_intros/current',
+            '@type' => 'CToolIntro',
+            'introText' => 'introduction here',
         ]);
     }
 }

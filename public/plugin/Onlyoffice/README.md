@@ -79,6 +79,12 @@ the third party, here is the recommended procedure:
 
 The plugin has been integrated into Chamilo since version 1.11.16.
 
+Important: If you use Apache + PHP-FPM, this line has to be added to your Apache vhost block before your reload the Apache configuration:
+
+```
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+```
+
 To enable, go to the plugins list, select the ONLYOFFICE plugin, and click _Enable_ the selected plugins.
 
 If you want more up-to-date versions of the plugin, you need to replace the pre-installed default plugin folder with the newly collected plugin: 

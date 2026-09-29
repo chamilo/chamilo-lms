@@ -71,7 +71,7 @@
       class="flex justify-center items-center h-64"
     >
       <div class="loader"></div>
-      <span class="ml-4 text-lg text-primary">{{ t("Loading attendance data...") }}</span>
+      <span class="ml-4 text-lg text-primary">{{ t("Loading attendance data") }}</span>
     </div>
 
     <!-- Student UI -->
@@ -93,7 +93,7 @@
           v-if="filteredDates.length === 0"
           class="p-4 mb-4 text-yellow-900 bg-yellow-100 border border-yellow-300 rounded"
         >
-          {{ t("No attendance assigned yet.") }}
+          {{ t("No attendance assigned yet") }}
         </div>
 
         <div
@@ -118,7 +118,15 @@
                 @change="(e) => onStudentAttendanceChange(date.id, e.target.checked)"
               />
             </template>
-            <span>{{ formatAttendanceDate(date.dateTime) }}</span>
+            <div class="flex flex-col">
+              <span>{{ formatAttendanceDate(date.dateTime) }}</span>
+              <span
+                v-if="date.effectiveRoom"
+                class="text-xs text-gray-600"
+              >
+                {{ t("Room") }}: {{ formatRoom(date.effectiveRoom) }}
+              </span>
+            </div>
           </div>
           <div class="flex gap-2">
             <BaseButton
@@ -162,7 +170,7 @@
         >
           {{
             t(
-              "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.",
+              "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons",
             )
           }}
         </div>
@@ -171,7 +179,7 @@
           <p>
             {{
               t(
-                "The attendance calendar allows you to register attendance lists (one per real session the students need to attend).",
+                "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)",
               )
             }}
           </p>
@@ -256,7 +264,7 @@
                         />
                         <span>{{
                           t(
-                            "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.",
+                            "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons",
                           )
                         }}</span>
                         <BaseButton
@@ -284,6 +292,13 @@
                           class="text-xs text-gray-600 mt-1"
                         >
                           {{ t("{0} min", [date.duration]) }}
+                        </span>
+
+                        <span
+                          v-if="date.effectiveRoom"
+                          class="text-xs text-gray-600 mt-1"
+                        >
+                          {{ t("Room") }}: {{ formatRoom(date.effectiveRoom) }}
                         </span>
 
                         <div
@@ -335,7 +350,7 @@
                     colspan="100"
                     class="text-center text-gray-500 border border-gray-25 py-6"
                   >
-                    {{ t("No attendance data for today.") }}
+                    {{ t("No attendance data for today") }}
                   </td>
                 </tr>
                 <template v-else>
@@ -532,7 +547,7 @@
   </div>
 </template>
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from "vue"
+import { computed, nextTick, onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import SignaturePad from "signature_pad"
@@ -550,6 +565,7 @@ import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
 import { useFormatDate } from "../../composables/formatDate"
 import { DateTime } from "luxon"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -557,28 +573,50 @@ const route = useRoute()
 const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
 
 const formatAttendanceDate = (dateTimeStr) => abbreviatedDatetime(dateTimeStr) || dateTimeStr
+const formatRoom = (room) => {
+  if (!room) return ""
+  return [room.branchTitle, room.title].filter(Boolean).join(" — ")
+}
 const { sid, cid, gid } = getCourseContext()
+
+const getAttendanceRequestContext = () => {
+  const context = {}
+
+  if (cid) {
+    context.cid = Number(cid)
+  }
+
+  if (sid) {
+    context.sid = Number(sid)
+  }
+
+  if (gid) {
+    context.gid = Number(gid)
+  }
+
+  return context
+}
 const isLoading = ref(true)
 const attendanceTitle = ref("")
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 
-const isTeacherUser = computed(
-  () => securityStore.isAdmin || securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isHRM,
-)
+const isTeacherUser = computed(() => securityStore.isGranted("ROLE_TEACHER") || securityStore.isCourseAdmin)
 const isTeacherUI = computed(() => isTeacherUser.value && !platformConfigStore.isStudentViewActive)
 const isStudentUI = computed(() => !isTeacherUser.value || platformConfigStore.isStudentViewActive)
 
-function onStudentViewChange() {
+async function loadAttendanceDataForCurrentMode() {
   if (isStudentUI.value) {
-    fetchStudentAttendanceData(route.params.id)
-  } else {
-    fetchFullAttendanceData(route.params.id)
-  }
-}
+    attendanceSheetUsers.value = []
+    await fetchStudentAttendanceData(route.params.id)
 
-watch(() => platformConfigStore.isStudentViewActive, onStudentViewChange)
+    return
+  }
+
+  await fetchFullAttendanceData(route.params.id)
+  await fetchAttendanceSheetUsers(route.params.id)
+}
 
 const currentUserId = computed(() => securityStore.user?.id)
 
@@ -611,11 +649,13 @@ const signedCount = computed(
 )
 const totalCount = computed(() => filteredDates.value.length)
 
-const isTodayScheduled = computed(() => attendanceDates.value.some((date) => {
-  if (!date.dateTime) return false
-  const dt = DateTime.fromISO(date.dateTime, { zone: "utc" }).setZone(getCurrentTimezone())
-  return dt.isValid && dt.toISODate() === DateTime.now().setZone(getCurrentTimezone()).toISODate()
-}))
+const isTodayScheduled = computed(() =>
+  attendanceDates.value.some((date) => {
+    if (!date.dateTime) return false
+    const dt = DateTime.fromISO(date.dateTime, { zone: "utc" }).setZone(getCurrentTimezone())
+    return dt.isValid && dt.toISODate() === DateTime.now().setZone(getCurrentTimezone()).toISODate()
+  }),
+)
 
 const attendanceDates = ref([])
 const attendanceSheetUsers = ref([])
@@ -671,7 +711,7 @@ const saveAttendanceSheet = async () => {
   if (!canEdit.value) return
 
   if (!attendanceData.value || Object.keys(attendanceData.value).length === 0) {
-    alert(t("No attendance data to save."))
+    alert(t("No attendance data to save"))
     return
   }
 
@@ -697,6 +737,7 @@ const saveAttendanceSheet = async () => {
   isSaving.value = true
   try {
     await attendanceService.saveAttendanceSheet({
+      attendanceId: Number(route.params.id),
       courseId: parseInt(cid, 10),
       sessionId: sid ? parseInt(sid, 10) : null,
       groupId: gid ? parseInt(gid, 10) : null,
@@ -771,7 +812,7 @@ const fetchAttendanceSheetUsers = async (attendanceId) => {
 const fetchFullAttendanceData = async (attendanceId) => {
   isLoading.value = true
   try {
-    const data = await attendanceService.getFullAttendanceData(attendanceId)
+    const data = await attendanceService.getFullAttendanceData(attendanceId, getAttendanceRequestContext())
     attendanceDates.value = data.attendanceDates
     attendanceData.value = data.attendanceData
     comments.value = data.commentData || {}
@@ -786,7 +827,7 @@ const fetchFullAttendanceData = async (attendanceId) => {
 const fetchStudentAttendanceData = async (attendanceId) => {
   isLoading.value = true
   try {
-    const data = await attendanceService.getStudentAttendanceData(attendanceId)
+    const data = await attendanceService.getStudentAttendanceData(attendanceId, getAttendanceRequestContext())
     attendanceDates.value = data.attendanceDates
     attendanceData.value = data.attendanceData
     comments.value = data.commentData || {}
@@ -802,7 +843,7 @@ const fetchAttendanceTitle = async () => {
   try {
     isLoading.value = true
     const attendanceId = route.params.id
-    const response = await attendanceService.getAttendance(attendanceId)
+    const response = await attendanceService.getAttendance(attendanceId, getAttendanceRequestContext())
     attendanceTitle.value = response.title || t("Unknown attendance")
   } catch (error) {
     console.error("Error fetching attendance title:", error)
@@ -886,14 +927,7 @@ const toggleLock = (dateId) => {
 onMounted(async () => {
   await fetchAttendanceTitle()
 
-  // Fetch data based on UI mode
-  if (isStudentUI.value) {
-    await fetchStudentAttendanceData(route.params.id)
-  } else {
-    await fetchFullAttendanceData(route.params.id)
-  }
-
-  await fetchAttendanceSheetUsers(route.params.id)
+  await loadAttendanceDataForCurrentMode()
   initializeColumnLocks(attendanceDates.value)
   updateAvailableFilters()
 
@@ -901,27 +935,22 @@ onMounted(async () => {
     selectedFilter.value = "today"
     filterAttendanceSheets()
   } else {
-    const userId = currentUserId.value
-    filteredDates.value = attendanceDates.value.filter(
-      (d) =>
-        attendanceData.value[`${userId}-${d.id}`] !== undefined && attendanceData.value[`${userId}-${d.id}`] !== null,
-    )
+    filteredDates.value = attendanceDates.value
   }
 })
 
 // Recompute when the global Student View toggle changes
-watch(
-  () => platformConfigStore.isStudentViewActive,
-  async () => {
-    if (isStudentUI.value) {
-      await fetchStudentAttendanceData(route.params.id)
-    } else {
-      await fetchFullAttendanceData(route.params.id)
-    }
-    updateAvailableFilters()
+useStudentViewRefresh(async () => {
+  await loadAttendanceDataForCurrentMode()
+  updateAvailableFilters()
+
+  if (isTeacherUI.value) {
+    selectedFilter.value = "today"
     filterAttendanceSheets()
-  },
-)
+  } else {
+    filteredDates.value = attendanceDates.value
+  }
+})
 
 const ATTENDANCE_STATES_BY_ID = Object.values(ATTENDANCE_STATES).reduce((acc, state) => {
   acc[state.id] = state

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue"
+import { ref } from "vue"
 import { useI18n } from "vue-i18n"
 import usergroupAdminService from "../../services/usergroupAdminService"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -7,22 +7,12 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 
-const csrfToken = ref("")
 const fileInput = ref(null)
 const unsubscribe = ref(false)
 const isSubmitting = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
 const importErrors = ref([])
-
-async function loadCsrf() {
-  try {
-    const data = await usergroupAdminService.list({ page: 1, limit: 1 })
-    csrfToken.value = data.importCsrfToken
-  } catch {
-    errorMessage.value = t("An error occurred. Please try again.")
-  }
-}
 
 async function handleSubmit() {
   errorMessage.value = ""
@@ -39,7 +29,6 @@ async function handleSubmit() {
   try {
     const formData = new FormData()
     formData.append("import_file", file)
-    formData.append("_token", csrfToken.value)
     if (unsubscribe.value) {
       formData.append("unsubscribe", "1")
     }
@@ -60,10 +49,6 @@ async function handleSubmit() {
     isSubmitting.value = false
   }
 }
-
-onMounted(() => {
-  loadCsrf()
-})
 </script>
 
 <template>

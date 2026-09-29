@@ -28,6 +28,8 @@ require_once __DIR__.'/../../0_dal/dal.chamidoc_object.php';
 
 require_once __DIR__.'/../../0_dal/dal.getpaths.php';
 
+require_once __DIR__.'/../../inc/tranformSource.php';
+
 /*
 ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
@@ -41,7 +43,10 @@ if (!isset($_GET['id'])) {
 }
 
 $step = isset($_GET['step']) ? $VDB->remove_XSS($_GET['step']) : '0';
-$idPageTop = isset($_GET['id']) ? $VDB->remove_XSS($_GET['id']) : '0';
+// Cast (not remove_XSS(), which does not strip '/' or '.'): $idPageTop is
+// concatenated straight into filesystem paths below, so a value like
+// "5/../6" must not be able to redirect those paths onto another page.
+$idPageTop = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $process = isset($_GET['p']) ? $VDB->remove_XSS($_GET['p']) : '0';
 /*
 0 = scorm
@@ -146,13 +151,16 @@ if (2 == $step) {
 
             // echo $path_p."-base_html.txt<br>";
 
-            $base_html = $row['base_html'];
+            // Rewritten so the exported project no longer carries an absolute,
+            // server-specific img-cache.php proxy URL -- see import.php's
+            // cleanOldCode(), which reads these same files back in on reimport.
+            $base_html = rewriteImgCacheProxyUrlsToRelative($row['base_html']);
             $pluginFileSystem->write("$path_p-base_html.txt", $base_html);
-            $base_css = $row['base_css'];
+            $base_css = rewriteImgCacheProxyUrlsToRelative($row['base_css']);
             $pluginFileSystem->write("$path_p-base_css.txt", $base_css);
-            $GpsComps = $row['gpscomps'];
+            $GpsComps = rewriteImgCacheProxyUrlsToRelative($row['gpscomps']);
             $pluginFileSystem->write("$path_p-GpsComps.txt", $GpsComps);
-            $GpsStyle = $row['gpsstyle'];
+            $GpsStyle = rewriteImgCacheProxyUrlsToRelative($row['gpsstyle']);
             $pluginFileSystem->write("$path_p-GpsStyle.txt", $GpsStyle);
             $GpsStyle = $row['options'];
             $pluginFileSystem->write("$path_p-options.txt", $GpsStyle);

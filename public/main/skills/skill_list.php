@@ -19,7 +19,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script(false, 'true' === api_get_setting('allow_hr_skills_management'));
 
 SkillModel::isAllowed();
 
@@ -29,8 +29,23 @@ $skillId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $entityManager = Database::getManager();
 $skillRepo = Container::getSkillRepository();
 
+$check = Security::check_token('get');
+$token = Security::get_token();
+
 switch ($action) {
     case 'enable':
+        if (!$check) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('Invalid security token'),
+                    'error'
+                )
+            );
+
+            header('Location: '.api_get_self());
+            exit;
+        }
+
         /** @var Skill|null $skill */
         $skill = $skillRepo->find($skillId);
 
@@ -65,6 +80,18 @@ switch ($action) {
         exit;
 
     case 'disable':
+        if (!$check) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('Invalid security token'),
+                    'error'
+                )
+            );
+
+            header('Location: '.api_get_self());
+            exit;
+        }
+
         /** @var Skill|null $skill */
         $skill = $skillRepo->find($skillId);
 
@@ -174,6 +201,7 @@ switch ($action) {
         $tpl->assign('skills', $skillList);
         $tpl->assign('current_tag_id', $extraFieldSearchTagId);
         $tpl->assign('tags', $tags);
+        $tpl->assign('token', $token);
 
         $templateName = $tpl->get_template('skill/list.html.twig');
         $content = $tpl->fetch($templateName);

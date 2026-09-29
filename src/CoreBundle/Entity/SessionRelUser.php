@@ -30,11 +30,19 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('ROLE_ADMIN') or object.user == user"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')"),
+        new Post(
+            security: "is_granted('ROLE_USER')",
+            securityPostDenormalize: "is_granted('CREATE', object)"
+        ),
     ],
     normalizationContext: [
         'groups' => [
             'session_rel_user:read',
+        ],
+    ],
+    denormalizationContext: [
+        'groups' => [
+            'session_rel_user:write',
         ],
     ],
     security: "is_granted('ROLE_USER')"
@@ -71,18 +79,24 @@ class SessionRelUser
     protected ?int $id = null;
 
     #[Assert\NotNull]
-    #[Groups(['session_rel_user:read'])]
+    #[Groups(['session_rel_user:read', 'session_rel_user:write'])]
     #[ORM\ManyToOne(targetEntity: Session::class, cascade: ['persist'], inversedBy: 'users')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
     protected ?Session $session = null;
 
     #[Assert\NotNull]
-    #[Groups(['session_rel_user:read', 'session:item:read', 'user_subscriptions:sessions', 'session:basic'])]
+    #[Groups([
+        'session_rel_user:read',
+        'session_rel_user:write',
+        'session:item:read',
+        'user_subscriptions:sessions',
+        'session:basic',
+    ])]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'sessionsRelUser')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[Groups(['session_rel_user:read', 'session:item:read', 'user_subscriptions:sessions'])]
+    #[Groups(['session_rel_user:read', 'session_rel_user:write', 'session:item:read', 'user_subscriptions:sessions'])]
     #[Assert\Choice(callback: [Session::class, 'getRelationTypeList'], message: 'Choose a valid relation type.')]
     #[ORM\Column(name: 'relation_type', type: 'integer')]
     protected int $relationType;

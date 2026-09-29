@@ -25,7 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/admin/user-list-data')]
 class UserListController extends AbstractController
 {
-    private const ALLOWED_SORT_FIELDS = [
+    private const array ALLOWED_SORT_FIELDS = [
         'officialCode' => 'u.officialCode',
         'firstname' => 'u.firstname',
         'lastname' => 'u.lastname',
@@ -36,7 +36,7 @@ class UserListController extends AbstractController
         'lastLogin' => 'u.lastLogin',
     ];
 
-    private const ROLE_LABELS = [
+    private const array ROLE_LABELS = [
         'ROLE_STUDENT' => 'Learner',
         'ROLE_TEACHER' => 'Teacher',
         'ROLE_HR' => 'Human Resources Manager',
@@ -60,8 +60,8 @@ class UserListController extends AbstractController
     #[Route('', name: 'admin_user_list_data', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
-        $page = max(1, (int) $request->query->get('page', 1));
-        $limit = max(1, min(200, (int) $request->query->get('limit', 20)));
+        $page = max(1, (int) $request->query->get('page', '1'));
+        $limit = max(1, min(200, (int) $request->query->get('limit', '20')));
         $sortField = (string) $request->query->get('sortField', 'lastname');
         $sortOrder = 'DESC' === strtoupper((string) $request->query->get('sortOrder', 'ASC')) ? 'DESC' : 'ASC';
         $view = (string) $request->query->get('view', 'all');
@@ -74,7 +74,7 @@ class UserListController extends AbstractController
         $keywordRoles = $request->query->all('keyword_roles');
         $keywordActive = $request->query->get('keyword_active');
         $keywordInactive = $request->query->get('keyword_inactive');
-        $classId = (int) $request->query->get('class_id', 0);
+        $classId = (int) $request->query->get('class_id', '0');
 
         $dqlSortField = self::ALLOWED_SORT_FIELDS[$sortField] ?? 'u.lastname';
         $showDeleted = 'deleted' === $view;
@@ -188,14 +188,6 @@ class UserListController extends AbstractController
         $isPlatformAdmin = $this->isGranted('ROLE_ADMIN');
         $isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER') && !$isPlatformAdmin;
 
-        $adminTable = $this->em->getConnection()->createQueryBuilder()
-            ->select('user_id')
-            ->from('admin')
-            ->executeQuery()
-            ->fetchFirstColumn()
-        ;
-        $adminIds = array_map('intval', $adminTable);
-
         $items = [];
         $now = new DateTime();
 
@@ -210,8 +202,7 @@ class UserListController extends AbstractController
             $isAnonymous = \in_array('ROLE_ANONYMOUS', $allRoles, true);
             $isUserAdmin = \in_array('ROLE_PLATFORM_ADMIN', $allRoles, true)
                 || \in_array('ROLE_GLOBAL_ADMIN', $allRoles, true)
-                || \in_array('ROLE_ADMIN', $allRoles, true)
-                || \in_array($userId, $adminIds, true);
+                || \in_array('ROLE_ADMIN', $allRoles, true);
             $isStudent = \in_array('ROLE_STUDENT', $allRoles, true);
             $isSessionManager = \in_array('ROLE_SESSION_MANAGER', $allRoles, true);
             $isHR = \in_array('ROLE_HR', $allRoles, true);
@@ -253,7 +244,10 @@ class UserListController extends AbstractController
                 'isSessionAdmin' => $isSessionAdmin,
             ],
             'roleLabels' => array_map(fn (string $label): string => $this->translator->trans($label), self::ROLE_LABELS),
-            'csrfToken' => $this->csrfTokenManager->getToken('user_list_action')->getValue(),
+            // "Login as" is a GET route, which the central CSRF listener never
+            // inspects (it skips safe methods), so this token stays: it is the
+            // only thing standing between an admin session and an attacker-chosen
+            // impersonation triggered by a plain <img> tag.
             'loginAsToken' => $this->csrfTokenManager->getToken('login_as')->getValue(),
         ]);
     }

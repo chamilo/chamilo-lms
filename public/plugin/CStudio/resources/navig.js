@@ -39,6 +39,115 @@ function appendCStudioQueryParam(query, name, value){
     return query + '&' + encodeURIComponent(name) + '=' + encodeURIComponent(value);
 }
 
+function getCStudioRuntimeContextUrls(){
+    var urls = [];
+
+    try {
+        if (
+            window.parent
+            && window.parent !== window
+            && window.parent.chamiloCidReq
+            && window.parent.chamiloCidReq.queryParams
+        ) {
+            urls.push('?' + window.parent.chamiloCidReq.queryParams);
+        }
+    } catch (ignoreParentCidContextError) {
+        // Keep the URL fallbacks below.
+    }
+
+    try {
+        if (
+            window.top
+            && window.top !== window
+            && window.top.chamiloCidReq
+            && window.top.chamiloCidReq.queryParams
+        ) {
+            urls.push('?' + window.top.chamiloCidReq.queryParams);
+        }
+    } catch (ignoreTopCidContextError) {
+        // Keep the URL fallbacks below.
+    }
+
+    try {
+        if (window.top && window.top.location && window.top.location.href) {
+            urls.push(window.top.location.href);
+        }
+    } catch (ignoreTopLocationError) {
+        // Keep the accessible URL fallbacks below.
+    }
+
+    try {
+        if (window.parent && window.parent.location && window.parent.location.href) {
+            urls.push(window.parent.location.href);
+        }
+    } catch (ignoreParentLocationError) {
+        // Keep the local URL fallback below.
+    }
+
+    try {
+        urls.push(window.location.href);
+    } catch (ignoreLocalLocationError) {
+        // No accessible runtime URL is available.
+    }
+
+    return urls;
+}
+
+function refreshCStudioChamiloResourceContext(){
+    var contextUrls = getCStudioRuntimeContextUrls();
+    var cid = getCStudioQueryParamFromUrls(contextUrls, 'cid');
+    var sid = getCStudioQueryParamFromUrls(contextUrls, 'sid');
+    var gid = getCStudioQueryParamFromUrls(contextUrls, 'gid');
+
+    if (cid === '' && sid === '' && gid === '') {
+        return;
+    }
+
+    var frames = document.querySelectorAll('iframe.cstudio-chamilo-resource-frame');
+
+    for (var i = 0; i < frames.length; i++) {
+        var frame = frames[i];
+        var source = frame.getAttribute('src') || '';
+
+        if (source === '') {
+            continue;
+        }
+
+        try {
+            var url = new URL(source, window.location.href);
+
+            if (cid !== '') {
+                url.searchParams.set('cid', cid);
+            }
+            if (sid !== '') {
+                url.searchParams.set('sid', sid);
+            }
+            if (gid !== '') {
+                url.searchParams.set('gid', gid);
+            }
+
+            var nextSource = url.toString();
+            if (frame.src !== nextSource) {
+                frame.src = nextSource;
+            }
+        } catch (ignoreInvalidResourceUrl) {
+            // Keep the authoring-time URL when the browser cannot parse it.
+        }
+    }
+}
+
+function scheduleCStudioChamiloResourceContextRefresh(){
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', refreshCStudioChamiloResourceContext);
+
+        return;
+    }
+
+    refreshCStudioChamiloResourceContext();
+}
+
+scheduleCStudioChamiloResourceContextRefresh();
+
 function getCStudioQueryParamFromUrls(urls, name, defaultValue){
     for (var i = 0; i < urls.length; i++) {
         if (!urls[i]) {
@@ -62,26 +171,17 @@ function buildCStudioEditUrl(parentUrl, mainUrl, lpId, fallbackUrl){
         return '';
     }
 
-    var query = '?action=add_item';
+    var query = '?action=redir';
     var sourceUrls = [parentUrl, fallbackUrl || ''];
-    var cid = getCStudioQueryParamFromUrls(sourceUrls, 'cid');
 
-    if (cid === '') {
-        return '';
-    }
-
-    query = appendCStudioQueryParam(query, 'cid', cid);
-    query = appendCStudioQueryParam(query, 'lp_id', String(parsedLpId));
+    query = appendCStudioQueryParam(query, 'idLudiLP', String(parsedLpId));
+    query = appendCStudioQueryParam(query, 'first', '1');
+    query = appendCStudioQueryParam(query, 'cid', getCStudioQueryParamFromUrls(sourceUrls, 'cid'));
     query = appendCStudioQueryParam(query, 'sid', getCStudioQueryParamFromUrls(sourceUrls, 'sid', '0'));
     query = appendCStudioQueryParam(query, 'gid', getCStudioQueryParamFromUrls(sourceUrls, 'gid', '0'));
     query = appendCStudioQueryParam(query, 'gradebook', getCStudioQueryParamFromUrls(sourceUrls, 'gradebook', '0'));
-    query = appendCStudioQueryParam(query, 'origin', getCStudioQueryParamFromUrls(sourceUrls, 'origin'));
-    query = appendCStudioQueryParam(query, 'node', getCStudioQueryParamFromUrls(sourceUrls, 'node'));
-    query = appendCStudioQueryParam(query, 'type', getCStudioQueryParamFromUrls(sourceUrls, 'type', 'step'));
-    query = appendCStudioQueryParam(query, 'isStudentView', 'false');
-    query = appendCStudioQueryParam(query, 'teachdoc', 'edit');
 
-    return mainUrl + 'main/lp/lp_controller.php' + query;
+    return mainUrl + 'plugin/CStudio/oel_tools_teachdoc_link.php' + query;
 }
 
 function getCStudioAccessibleDocuments(){

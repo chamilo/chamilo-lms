@@ -1,0 +1,451 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
+namespace Chamilo\CoreBundle\State\Exercise;
+
+use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\ProcessorInterface;
+use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionAction;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
+use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
+use Chamilo\CourseBundle\Repository\CQuizRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+/**
+ * @implements ProcessorInterface<ExerciseQuestionAction, ExerciseQuestionAction>
+ */
+final readonly class ExerciseQuestionActionProcessor implements ProcessorInterface
+{
+    private const ACTION_DELETE = 'delete';
+    private const ACTION_DUPLICATE = 'duplicate';
+    private const ACTION_REORDER = 'reorder';
+    private const MATCHING = 4;
+    private const MATCHING_DRAGGABLE = 19;
+    private const MATCHING_DRAGGABLE_COMBINATION = 25;
+    private const LP_ITEM_TYPE_QUIZ = 'quiz';
+
+    public function __construct(
+        private CidReqHelper $cidReqHelper,
+        private RequestStack $requestStack,
+        private EntityManagerInterface $entityManager,
+        private CQuizRepository $quizRepository,
+        private CQuizQuestionRepository $questionRepository,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
+    ) {}
+
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     */
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ExerciseQuestionAction
+    {
+        if (!$data instanceof ExerciseQuestionAction) {
+            throw new BadRequestHttpException('Invalid exercise question action payload.');
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            throw new BadRequestHttpException('The current request is required.');
+        }
+
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
+            throw new AccessDeniedHttpException('You are not allowed to manage exercise questions in this context.');
+        }
+
+        $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
+        if ($exerciseId <= 0) {
+            throw new BadRequestHttpException('A valid exercise id is required.');
+        }
+
+        $quiz = $this->quizRepository->findInCourseContext($exerciseId, $course, $session)
+        ?? throw new NotFoundHttpException('The requested exercise was not found.');
+        if ($this->isExerciseReadOnlyFromLearningPath((int) $quiz->getIid())) {
+            throw new AccessDeniedHttpException('This exercise is read-only because it is included in a learning path.');
+        }
+
+        $action = strtolower(trim($data->action));
+
+        $message = match ($action) {
+            self::ACTION_DELETE => $this->deleteQuestion($quiz, (int) $data->questionId),
+            self::ACTION_DUPLICATE => $this->duplicateQuestion($quiz, (int) $data->questionId, $course, $session),
+            self::ACTION_REORDER => $this->reorderQuestions($quiz, $data->questionIds),
+            default => throw new BadRequestHttpException('Unsupported exercise question action.'),
+        };
+
+        $this->entityManager->flush();
+
+        $response = new ExerciseQuestionAction();
+        $response->exerciseId = $exerciseId;
+        $response->action = $action;
+        $response->questionId = $data->questionId;
+        $response->questionIds = $data->questionIds;
+        $response->success = true;
+        $response->message = $message;
+
+        return $response;
+    }
+
+    private function isExerciseReadOnlyFromLearningPath(int $exerciseId): bool
+    {
+        if ($this->isSettingEnabled('lp.force_edit_exercise_in_lp')) {
+            return false;
+        }
+
+        return null !== $this->entityManager->createQueryBuilder()
+            ->select('lpItem.iid')
+            ->from(CLpItem::class, 'lpItem')
+            ->andWhere('lpItem.itemType = :itemType')
+            ->andWhere('lpItem.path = :exerciseId OR lpItem.ref = :exerciseId')
+            ->setParameter('itemType', self::LP_ITEM_TYPE_QUIZ, Types::STRING)
+            ->setParameter('exerciseId', (string) $exerciseId, Types::STRING)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    private function isSettingEnabled(string $settingName): bool
+    {
+        $value = api_get_setting($settingName);
+
+        return true === $value || 'true' === strtolower((string) $value) || '1' === (string) $value;
+    }
+
+    private function getQuestionRelation(CQuiz $quiz, int $questionId): CQuizRelQuestion
+    {
+        if ($questionId <= 0) {
+            throw new BadRequestHttpException('A valid question id is required.');
+        }
+
+        $relation = $this->entityManager->createQueryBuilder()
+            ->select('relQuestion', 'question')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->innerJoin('relQuestion.question', 'question')
+            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(relQuestion.question) = :questionId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('questionId', $questionId, Types::INTEGER)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if (!$relation instanceof CQuizRelQuestion) {
+            throw new NotFoundHttpException('The requested question was not found in this exercise.');
+        }
+
+        return $relation;
+    }
+
+    private function deleteQuestion(CQuiz $quiz, int $questionId): string
+    {
+        $relation = $this->getQuestionRelation($quiz, $questionId);
+        $question = $relation->getQuestion();
+        $relationCount = $this->countQuestionRelations($question);
+
+        $this->entityManager->remove($relation);
+
+        if ($relationCount <= 1) {
+            foreach ($this->getAnswers($question) as $answer) {
+                $this->entityManager->remove($answer);
+            }
+            $this->entityManager->remove($question);
+        }
+
+        $this->normalizeQuestionOrder($quiz);
+
+        return 'Question deleted';
+    }
+
+    private function duplicateQuestion(CQuiz $quiz, int $questionId, Course $course, ?Session $session): string
+    {
+        $relation = $this->getQuestionRelation($quiz, $questionId);
+        $sourceQuestion = $relation->getQuestion();
+        $nextOrder = $this->getNextQuestionOrder($quiz);
+
+        $newQuestion = new CQuizQuestion();
+        $newQuestion
+            ->setQuestion(trim($sourceQuestion->getQuestion()).' - Copy')
+            ->setDescription($sourceQuestion->getDescription())
+            ->setFeedback($sourceQuestion->getFeedback())
+            ->setType((int) $sourceQuestion->getType())
+            ->setLevel(max(1, (int) $sourceQuestion->getLevel()))
+            ->setPosition($nextOrder)
+            ->setPonderation((float) $sourceQuestion->getPonderation())
+            ->setMandatory((int) $sourceQuestion->getMandatory())
+            ->setDuration($sourceQuestion->getDuration())
+            ->setParentMediaId($sourceQuestion->getParentMediaId())
+            ->setExtra($sourceQuestion->getExtra())
+            ->setParent($course)
+            ->addCourseLink($course, $session)
+        ;
+
+        foreach ($sourceQuestion->getCategories() as $category) {
+            if ($category instanceof CQuizQuestionCategory) {
+                $newQuestion->addCategory($category);
+            }
+        }
+
+        $this->questionRepository->create($newQuestion);
+
+        if ($this->isMatchingQuestion((int) $sourceQuestion->getType())) {
+            $this->copyMatchingAnswers($sourceQuestion, $newQuestion);
+        } else {
+            $optionIidMap = $this->copyQuestionOptions($sourceQuestion, $newQuestion);
+
+            foreach ($this->getAnswers($sourceQuestion) as $sourceAnswer) {
+                $sourceCorrect = (int) $sourceAnswer->getCorrect();
+                $answer = new CQuizAnswer();
+                $answer
+                    ->setQuestion($newQuestion)
+                    ->setAnswer($sourceAnswer->getAnswer())
+                    ->setCorrect((int) ($optionIidMap[$sourceCorrect] ?? $sourceCorrect))
+                    ->setComment((string) $sourceAnswer->getComment())
+                    ->setPonderation((float) $sourceAnswer->getPonderation())
+                    ->setPosition((int) $sourceAnswer->getPosition())
+                ;
+
+                if (null !== $sourceAnswer->getHotspotCoordinates()) {
+                    $answer->setHotspotCoordinates($sourceAnswer->getHotspotCoordinates());
+                }
+
+                if (null !== $sourceAnswer->getHotspotType()) {
+                    $answer->setHotspotType($sourceAnswer->getHotspotType());
+                }
+
+                if (null !== $sourceAnswer->getAnswerCode()) {
+                    $answer->setAnswerCode($sourceAnswer->getAnswerCode());
+                }
+
+                $this->entityManager->persist($answer);
+            }
+        }
+
+        $newRelation = new CQuizRelQuestion();
+        $newRelation
+            ->setQuiz($quiz)
+            ->setQuestion($newQuestion)
+            ->setQuestionOrder($nextOrder)
+        ;
+        $this->entityManager->persist($newRelation);
+
+        return 'Question copied';
+    }
+
+    private function isMatchingQuestion(int $type): bool
+    {
+        return \in_array($type, [self::MATCHING, self::MATCHING_DRAGGABLE, self::MATCHING_DRAGGABLE_COMBINATION], true);
+    }
+
+    private function copyMatchingAnswers(CQuizQuestion $sourceQuestion, CQuizQuestion $newQuestion): void
+    {
+        $sourceAnswers = $this->getAnswers($sourceQuestion);
+        $optionIidMap = [];
+
+        foreach ($sourceAnswers as $sourceAnswer) {
+            if ((int) $sourceAnswer->getCorrect() > 0) {
+                continue;
+            }
+
+            $newOption = $this->cloneAnswer($sourceAnswer, $newQuestion, 0);
+            $this->entityManager->persist($newOption);
+            $this->entityManager->flush();
+
+            if (null !== $sourceAnswer->getIid() && null !== $newOption->getIid()) {
+                $optionIidMap[(int) $sourceAnswer->getIid()] = (int) $newOption->getIid();
+            }
+        }
+
+        foreach ($sourceAnswers as $sourceAnswer) {
+            $sourceCorrect = (int) $sourceAnswer->getCorrect();
+            if ($sourceCorrect <= 0) {
+                continue;
+            }
+
+            $mappedCorrect = (int) ($optionIidMap[$sourceCorrect] ?? 0);
+            $newPair = $this->cloneAnswer($sourceAnswer, $newQuestion, $mappedCorrect);
+            $this->entityManager->persist($newPair);
+        }
+    }
+
+    private function cloneAnswer(CQuizAnswer $sourceAnswer, CQuizQuestion $newQuestion, int $correct): CQuizAnswer
+    {
+        $answer = new CQuizAnswer();
+        $answer
+            ->setQuestion($newQuestion)
+            ->setAnswer($sourceAnswer->getAnswer())
+            ->setCorrect($correct)
+            ->setComment((string) $sourceAnswer->getComment())
+            ->setPonderation((float) $sourceAnswer->getPonderation())
+            ->setPosition((int) $sourceAnswer->getPosition())
+        ;
+
+        if (null !== $sourceAnswer->getHotspotCoordinates()) {
+            $answer->setHotspotCoordinates($sourceAnswer->getHotspotCoordinates());
+        }
+
+        if (null !== $sourceAnswer->getHotspotType()) {
+            $answer->setHotspotType($sourceAnswer->getHotspotType());
+        }
+
+        if (null !== $sourceAnswer->getAnswerCode()) {
+            $answer->setAnswerCode($sourceAnswer->getAnswerCode());
+        }
+
+        return $answer;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function copyQuestionOptions(CQuizQuestion $sourceQuestion, CQuizQuestion $newQuestion): array
+    {
+        $optionIidMap = [];
+        foreach ($sourceQuestion->getOptions() as $sourceOption) {
+            if (!$sourceOption instanceof CQuizQuestionOption) {
+                continue;
+            }
+
+            $newOption = new CQuizQuestionOption();
+            $newOption
+                ->setQuestion($newQuestion)
+                ->setTitle((string) $sourceOption->getTitle())
+                ->setPosition((int) $sourceOption->getPosition())
+            ;
+            $this->entityManager->persist($newOption);
+            $this->entityManager->flush();
+
+            if (null !== $sourceOption->getIid() && null !== $newOption->getIid()) {
+                $optionIidMap[(int) $sourceOption->getIid()] = (int) $newOption->getIid();
+            }
+        }
+
+        return $optionIidMap;
+    }
+
+    /**
+     * @param array<int, mixed> $questionIds
+     */
+    private function reorderQuestions(CQuiz $quiz, array $questionIds): string
+    {
+        $orderedQuestionIds = array_values(array_unique(array_map('intval', $questionIds)));
+        if (empty($orderedQuestionIds)) {
+            throw new BadRequestHttpException('Question order is required.');
+        }
+
+        $relations = $this->getQuestionRelations($quiz);
+        $relationsByQuestionId = [];
+        foreach ($relations as $relation) {
+            $relationsByQuestionId[(int) $relation->getQuestion()->getIid()] = $relation;
+        }
+
+        $position = 1;
+        foreach ($orderedQuestionIds as $questionId) {
+            if (!isset($relationsByQuestionId[$questionId])) {
+                throw new BadRequestHttpException('Question order contains a question outside this exercise.');
+            }
+
+            $relationsByQuestionId[$questionId]->setQuestionOrder($position);
+            $relationsByQuestionId[$questionId]->getQuestion()->setPosition($position);
+            unset($relationsByQuestionId[$questionId]);
+            ++$position;
+        }
+
+        foreach ($relationsByQuestionId as $relation) {
+            $relation->setQuestionOrder($position);
+            $relation->getQuestion()->setPosition($position);
+            ++$position;
+        }
+
+        return 'Question order updated';
+    }
+
+    /**
+     * @return array<int, CQuizRelQuestion>
+     */
+    private function getQuestionRelations(CQuiz $quiz): array
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select('relQuestion', 'question')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->innerJoin('relQuestion.question', 'question')
+            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->orderBy('relQuestion.questionOrder', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    private function normalizeQuestionOrder(CQuiz $quiz): void
+    {
+        $position = 1;
+        foreach ($this->getQuestionRelations($quiz) as $relation) {
+            $relation->setQuestionOrder($position);
+            $relation->getQuestion()->setPosition($position);
+            ++$position;
+        }
+    }
+
+    /**
+     * @return array<int, CQuizAnswer>
+     */
+    private function getAnswers(CQuizQuestion $question): array
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select('answer')
+            ->from(CQuizAnswer::class, 'answer')
+            ->andWhere('IDENTITY(answer.question) = :questionId')
+            ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
+            ->orderBy('answer.position', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    private function countQuestionRelations(CQuizQuestion $question): int
+    {
+        return (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(relQuestion.iid)')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->andWhere('IDENTITY(relQuestion.question) = :questionId')
+            ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    private function getNextQuestionOrder(CQuiz $quiz): int
+    {
+        $result = $this->entityManager->createQueryBuilder()
+            ->select('MAX(relQuestion.questionOrder)')
+            ->from(CQuizRelQuestion::class, 'relQuestion')
+            ->andWhere('IDENTITY(relQuestion.quiz) = :exerciseId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return (int) $result + 1;
+    }
+}

@@ -1,0 +1,15 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <div class="mx-auto max-w-lg space-y-6">
+        <div class="rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
+            <h1 class="m-0 text-2xl font-semibold text-gray-90">
+                {{ 'An error occurred'|trans }}
+            </h1>
+
+            <p class="mt-4 text-body-2 text-gray-90">
+                {{ message }}
+            </p>
+        </div>
+    </div>
+{% endblock %}

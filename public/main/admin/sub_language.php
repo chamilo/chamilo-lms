@@ -98,6 +98,19 @@ $html .= '</form>';
 $html .= '</div>';
 echo $html;
 echo '<br /><br /><br />';
+// Saving a term writes var/translations/messages.<iso>.po, which the migrated interface
+// reads on the next request. The legacy pages read a catalogue compiled into var/cache,
+// so they need one cache clear -- once, at the end: clearing it per term would rebuild
+// every catalogue each time.
+echo Display::return_message(
+    get_lang(
+        'A term saved here shows at once in the interface that has already been migrated. '
+        .'The pages that have not been migrated yet read a compiled catalogue, so they keep '
+        .'the old text until you clear the cache with php bin/console cache:clear. Do that '
+        .'once when you finish editing, not after each term.'
+    ),
+    'info'
+);
 if (!empty($sublanguage_folder_error)) {
     echo Display::return_message($sublanguage_folder_error, 'warning');
 }

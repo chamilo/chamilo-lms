@@ -778,7 +778,7 @@ if (!empty($teacherList) || !empty($coaches) || !empty($sessionLinks)) {
 
         // Coaches list
         if (!empty($coaches)) {
-            $html .= '<div class="course-log-card__subsection-title">'.get_lang('Coaches').'</div>';
+            $html .= '<div class="course-log-card__subsection-title">'.get_lang('Tutors').'</div>';
             $html .= $coaches;
         }
 
@@ -1031,10 +1031,16 @@ if ($nbStudents > 0) {
     $html .= $mainForm->returnForm();
 
     $getLangXDays = get_lang('%s days');
+    $announcementReminderUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php';
+    $courseResourceNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+    if ($courseResourceNodeId > 0) {
+        $announcementReminderUrl = api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/add';
+    }
+
     $form = new FormValidator(
         'reminder_form',
         'get',
-        api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
+        $announcementReminderUrl,
         null,
         ['style' => 'margin-bottom: 10px'],
         FormValidator::LAYOUT_INLINE

@@ -3,8 +3,6 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\PluginBundle\EmbedRegistry\EventSubscriber;
-
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\CourseCreatedEvent;
 use Chamilo\CoreBundle\Event\Events;
@@ -12,11 +10,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 readonly class EmbedRegistryEventSubscriber implements EventSubscriberInterface
 {
-    private \EmbedRegistryPlugin $plugin;
+    private EmbedRegistryPlugin $plugin;
 
     public function __construct()
     {
-        $this->plugin = \EmbedRegistryPlugin::create();
+        $this->plugin = EmbedRegistryPlugin::create();
     }
 
     public static function getSubscribedEvents(): array

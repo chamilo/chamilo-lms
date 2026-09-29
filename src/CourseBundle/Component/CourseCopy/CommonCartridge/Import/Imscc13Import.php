@@ -20,13 +20,14 @@ use Throwable;
 use ZipArchive;
 
 use const DIRECTORY_SEPARATOR;
+use const LIBXML_NONET;
 use const PCLZIP_OPT_PATH;
 
 class Imscc13Import
 {
-    public const FORMAT_IMSCC13 = 'imscc13';
+    public const string FORMAT_IMSCC13 = 'imscc13';
 
-    public function log(string $message, string|int $level = 'info', $a = null, $depth = null, bool $display = false): void
+    public function log(string $message, int|string $level = 'info', $a = null, $depth = null, bool $display = false): void
     {
         // Minimal, central logger for importer
         error_log("(imscc13) $message , level: $level , extra: ".json_encode($a));
@@ -244,6 +245,15 @@ class Imscc13Import
             $zip = new ZipArchive();
             $res = $zip->open($file);
             if (true === $res) {
+                // Guard against ZIP Slip: reject entries with path traversal
+                for ($zi = 0; $zi < $zip->numFiles; ++$zi) {
+                    $entryName = str_replace('\\', '/', (string) $zip->getNameIndex($zi));
+                    if (str_contains($entryName, '../') || str_starts_with($entryName, '/')) {
+                        $zip->close();
+
+                        throw new RuntimeException('Malicious ZIP entry detected');
+                    }
+                }
                 if (!$zip->extractTo($to)) {
                     $zip->close();
 

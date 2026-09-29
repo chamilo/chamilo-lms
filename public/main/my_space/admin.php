@@ -25,16 +25,16 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
 
 if (isset($_POST['export'])) {
     $order_clause = api_is_western_name_order(PERSON_NAME_DATA_EXPORT) ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 } else {
     $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 }
-$sql = "SELECT user.id as user_id,lastname,firstname,email
-        FROM $tbl_user as user, $tbl_admin as admin
-        WHERE admin.user_id=user.id".$order_clause;
+$sql = "SELECT user.id AS user_id, lastname, firstname, email
+        FROM $tbl_user user
+        WHERE user.roles LIKE '%ROLE_ADMIN%'
+           OR user.roles LIKE '%ROLE_GLOBAL_ADMIN%'".$order_clause;
 $result_admins = Database::query($sql);
 
 if (api_is_western_name_order()) {

@@ -14,20 +14,21 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ArrayObject;
 use Chamilo\CoreBundle\ApiResource\Forum\ForumWriteInput;
-use Chamilo\CoreBundle\State\ForumCollectionStateProvider;
-use Chamilo\CoreBundle\State\ForumDeleteProcessor;
-use Chamilo\CoreBundle\State\ForumProcessor;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CoreBundle\State\Forum\ForumCollectionStateProvider;
+use Chamilo\CoreBundle\State\Forum\ForumDeleteProcessor;
+use Chamilo\CoreBundle\State\Forum\ForumProcessor;
 use Chamilo\CourseBundle\Repository\CForumRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -65,9 +66,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                                     'endTime' => ['type' => 'string', 'format' => 'date-time'],
                                     'locked' => ['type' => 'boolean'],
                                     'parentResourceNodeId' => ['type' => 'integer'],
-                                    'csrfToken' => ['type' => 'string'],
                                 ],
-                                'required' => ['title', 'parentResourceNodeId', 'csrfToken'],
+                                'required' => ['title', 'parentResourceNodeId'],
                             ],
                         ],
                     ]),
@@ -77,41 +77,182 @@ use Symfony\Component\Validator\Constraints as Assert;
             input: ForumWriteInput::class,
             read: false,
             name: 'create_forum',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: ForumProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forums/{iid}/update',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'update_forum',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: ForumProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forums/{iid}/toggle-lock',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'toggle_forum_lock',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: ForumProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forums/{iid}/toggle-visibility',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'toggle_forum_visibility',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: ForumProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forums/{iid}/move',
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'move_forum',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: ForumProcessor::class,
         ),
-        new Put(
+        new Patch(
             uriTemplate: '/forums/{iid}/toggle-subscription',
             security: "is_granted('VIEW', object.resourceNode)",
             deserialize: false,
             name: 'toggle_forum_subscription',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
+            processor: ForumProcessor::class,
+        ),
+        new Post(
+            uriTemplate: '/forums/{iid}/image',
+            openapi: new Operation(
+                summary: 'Upload or remove a forum image',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'image' => ['type' => 'string', 'format' => 'binary'],
+                                    'removeImage' => ['type' => 'boolean'],
+                                ],
+                            ],
+                        ],
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'removeImage' => ['type' => 'boolean'],
+                                ],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false,
+            inputFormats: [
+                'jsonld' => ['application/ld+json'],
+                'json' => ['application/json'],
+                'multipart' => ['multipart/form-data'],
+            ],
+            name: 'upload_forum_image',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: ForumProcessor::class,
         ),
         new Delete(
@@ -119,11 +260,41 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false,
             name: 'delete_forum',
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
             processor: ForumDeleteProcessor::class,
         ),
         new Get(
             uriTemplate: '/forums/{iid}',
             security: "is_granted('VIEW', object.resourceNode)",
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
         ),
         new GetCollection(
             uriTemplate: '/forums',
@@ -143,31 +314,21 @@ use Symfony\Component\Validator\Constraints as Assert;
                         required: false,
                         schema: ['type' => 'string'],
                     ),
-                    new Parameter(
-                        name: 'cid',
-                        in: 'query',
-                        description: 'Course id',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'sid',
-                        in: 'query',
-                        description: 'Session id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'gid',
-                        in: 'query',
-                        description: 'Group id',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
                 ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
             provider: ForumCollectionStateProvider::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: [
@@ -193,7 +354,7 @@ class CForum extends AbstractResource implements ResourceInterface, ResourceShow
 
     #[Groups(['forum:read', 'forum_thread:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['forum:read'])]
@@ -253,6 +414,7 @@ class CForum extends AbstractResource implements ResourceInterface, ResourceShow
     #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected int $locked;
 
+    #[Groups(['forum:read'])]
     #[ORM\Column(name: 'forum_image', type: 'string', length: 255, nullable: false)]
     protected string $forumImage;
 
@@ -565,7 +727,6 @@ class CForum extends AbstractResource implements ResourceInterface, ResourceShow
     {
         return $this->posts;
     }
-
 
     #[Groups(['forum:read'])]
     public function getForumVisible(): bool

@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use BuyCoursesPlugin;
-use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\CatalogueSessionRelAccessUrlRelUsergroup;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
@@ -17,6 +16,7 @@ use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\TrackECourseAccessRepository;
 use Chamilo\CoreBundle\Repository\UserRelCourseVoteRepository;
@@ -38,6 +38,7 @@ class CatalogueController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly UserHelper $userHelper,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly UserRepository $userRepository,
         private readonly SessionRepository $sessionRepository,
         private readonly UserRelCourseVoteRepository $courseVoteRepository,
         private readonly CourseHelper $courseHelper,
@@ -390,10 +391,7 @@ class CatalogueController extends AbstractController
             }
 
             if (!$adminId) {
-                $adminEntity = $this->em->getRepository(Admin::class)->findOneBy([]);
-                if ($adminEntity) {
-                    $adminId = $adminEntity->getUser()->getId();
-                }
+                $adminId = $this->userRepository->findOnePlatformAdmin()?->getId();
             }
 
             if ($adminId) {

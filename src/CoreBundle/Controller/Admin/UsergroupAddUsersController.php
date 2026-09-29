@@ -9,25 +9,23 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
-use Chamilo\CourseBundle\Entity\CGroupRelUser;
-use Chamilo\CourseBundle\Entity\CGroupRelUsergroup;
+use Chamilo\CoreBundle\Helpers\UsergroupHelper;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use GroupManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
 #[Route('/admin/usergroups/{id}/add-users-data', requirements: ['id' => '\d+'])]
 class UsergroupAddUsersController extends AbstractController
 {
-    private const ALLOWED_RELATION_TYPES = [
+    private const array ALLOWED_RELATION_TYPES = [
         Usergroup::GROUP_USER_PERMISSION_ADMIN,
         Usergroup::GROUP_USER_PERMISSION_READER,
         Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION,
@@ -37,7 +35,8 @@ class UsergroupAddUsersController extends AbstractController
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
+        private readonly SettingsManager $settingsManager,
+        private readonly UsergroupHelper $usergroupHelper,
     ) {}
 
     #[Route('', name: 'admin_usergroup_add_users_data', methods: ['GET'])]
@@ -49,7 +48,7 @@ class UsergroupAddUsersController extends AbstractController
         }
 
         $isSocialGroup = Usergroup::SOCIAL_CLASS === $usergroup->getGroupType();
-        $relationType = (int) $request->query->get('relation', Usergroup::GROUP_USER_PERMISSION_READER);
+        $relationType = (int) $request->query->get('relation', (string) Usergroup::GROUP_USER_PERMISSION_READER);
         if (!\in_array($relationType, self::ALLOWED_RELATION_TYPES, true)) {
             $relationType = Usergroup::GROUP_USER_PERMISSION_READER;
         }
@@ -66,11 +65,13 @@ class UsergroupAddUsersController extends AbstractController
             $membersQb->andWhere('ru.relationType = :rel')
                 ->setParameter('rel', $relationType, Types::INTEGER)
             ;
-        } else {
-            $membersQb->andWhere('ru.relationType = :rel')
-                ->setParameter('rel', Usergroup::GROUP_USER_PERMISSION_READER, Types::INTEGER)
-            ;
         }
+        // A normal class has no per-user "role" — every UsergroupRelUser row is a member,
+        // whichever screen or CSV import created it, regardless of its relationType. Filtering
+        // by Usergroup::GROUP_USER_PERMISSION_READER here (a Doctrine-entity constant that,
+        // unlike every other GROUP_USER_PERMISSION_* value, does not match the legacy global
+        // constant of the same name — legacy uses 0, this constant is 2) hid every member
+        // added via CSV import, which persists with the legacy value; see save() below.
 
         $memberRows = $membersQb->getQuery()->getArrayResult();
         $memberIds = array_map(static fn (array $r): int => (int) $r['userId'], $memberRows);
@@ -79,6 +80,11 @@ class UsergroupAddUsersController extends AbstractController
         $keyword = trim((string) $request->query->get('keyword', ''));
         $firstLetter = trim((string) $request->query->get('firstLetter', ''));
 
+        $orderByOfficialCode = 'true' === $this->settingsManager->getSetting(
+            'display.order_user_list_by_official_code',
+            true,
+        );
+
         $qb = $this->em->createQueryBuilder()
             ->select('u.id, u.firstname, u.lastname, u.username, u.officialCode')
             ->from(User::class, 'u')
@@ -86,9 +92,20 @@ class UsergroupAddUsersController extends AbstractController
             ->setParameter('anonymous', User::ANONYMOUS, Types::INTEGER)
             ->andWhere('u.active != :softDeleted')
             ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
-            ->orderBy('u.lastname', 'ASC')
-            ->addOrderBy('u.firstname', 'ASC')
         ;
+
+        if ($orderByOfficialCode) {
+            $qb
+                ->orderBy('u.officialCode', 'ASC')
+                ->addOrderBy('u.lastname', 'ASC')
+                ->addOrderBy('u.firstname', 'ASC')
+            ;
+        } else {
+            $qb
+                ->orderBy('u.lastname', 'ASC')
+                ->addOrderBy('u.firstname', 'ASC')
+            ;
+        }
 
         if ('' !== $keyword) {
             $qb->andWhere(
@@ -111,15 +128,31 @@ class UsergroupAddUsersController extends AbstractController
 
         foreach ($allUsers as $user) {
             $userId = (int) $user['id'];
-            $label = $user['lastname'].', '.$user['firstname'].' ('.$user['username'].')';
-            if (!empty($user['officialCode'])) {
-                $label .= ' - '.$user['officialCode'];
+            $firstName = (string) $user['firstname'];
+            $lastName = (string) $user['lastname'];
+            $username = (string) $user['username'];
+            $officialCode = trim((string) ($user['officialCode'] ?? ''));
+            $label = $lastName.', '.$firstName.' ('.$username.')';
+
+            if ('' !== $officialCode) {
+                $label = $orderByOfficialCode
+                    ? $officialCode.' - '.$label
+                    : $label.' - '.$officialCode;
             }
 
+            $userData = [
+                'id' => $userId,
+                'label' => $label,
+                'officialCode' => $officialCode,
+                'lastName' => $lastName,
+                'firstName' => $firstName,
+                'username' => $username,
+            ];
+
             if (\in_array($userId, $memberIds, true)) {
-                $usersInGroup[] = ['id' => $userId, 'label' => $label];
+                $usersInGroup[] = $userData;
             } else {
-                $usersNotInGroup[] = ['id' => $userId, 'label' => $label];
+                $usersNotInGroup[] = $userData;
             }
         }
 
@@ -128,9 +161,9 @@ class UsergroupAddUsersController extends AbstractController
             'groupTitle' => $usergroup->getTitle(),
             'isSocialGroup' => $isSocialGroup,
             'relationType' => $relationType,
+            'orderByOfficialCode' => $orderByOfficialCode,
             'usersInGroup' => $usersInGroup,
             'usersNotInGroup' => $usersNotInGroup,
-            'csrfToken' => $this->csrfTokenManager->getToken('usergroup_add_users')->getValue(),
         ]);
     }
 
@@ -142,11 +175,6 @@ class UsergroupAddUsersController extends AbstractController
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $token = (string) $request->request->get('_token', '');
-        if (!$this->isCsrfTokenValid('usergroup_add_users', $token)) {
-            return $this->json(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
-        }
-
         $isSocialGroup = Usergroup::SOCIAL_CLASS === $usergroup->getGroupType();
         $relationType = (int) $request->request->get('relationType', Usergroup::GROUP_USER_PERMISSION_READER);
 
@@ -155,84 +183,24 @@ class UsergroupAddUsersController extends AbstractController
                 return $this->json(['error' => 'Invalid relation type'], Response::HTTP_BAD_REQUEST);
             }
         } else {
-            $relationType = Usergroup::GROUP_USER_PERMISSION_READER;
+            // Must match every other class-membership writer (CSV imports, legacy
+            // ClassId user import) so subscribeUsers()'s own "current members" diff — which
+            // reads every relation_type back — doesn't wipe members those wrote. See the
+            // matching comment in data() above for why this isn't
+            // Usergroup::GROUP_USER_PERMISSION_READER.
+            $relationType = 0;
         }
 
         $rawIds = $request->request->all('userIds');
         $userIds = array_map('intval', (array) $rawIds);
 
-        // Remove existing memberships for this group + relation type
-        $this->em->createQueryBuilder()
-            ->delete(UsergroupRelUser::class, 'ru')
-            ->where('ru.usergroup = :ugId')
-            ->andWhere('ru.relationType = :rel')
-            ->setParameter('ugId', $id, Types::INTEGER)
-            ->setParameter('rel', $relationType, Types::INTEGER)
-            ->getQuery()
-            ->execute()
-        ;
-
-        // Add new memberships
-        foreach ($userIds as $userId) {
-            $user = $this->em->find(User::class, $userId);
-            if (null === $user) {
-                continue;
-            }
-
-            $rel = new UsergroupRelUser();
-            $rel->setUsergroup($usergroup);
-            $rel->setUser($user);
-            $rel->setRelationType($relationType);
-            $this->em->persist($rel);
-        }
-
-        $this->em->flush();
-
-        // Sync course group members for groups linked to this usergroup.
-        $this->syncLinkedCourseGroups($id, $userIds);
+        // Delegates to the legacy workflow: diffs against the current membership,
+        // (un)subscribes users to/from every session and course linked to this
+        // usergroup, persists the usergroup_rel_user rows, and re-syncs any
+        // course groups linked to the usergroup.
+        $this->usergroupHelper->subscribeUsers($id, $userIds, true, $relationType);
 
         return $this->json(['success' => true]);
-    }
-
-    /**
-     * When a usergroup's member list changes, update all course groups
-     * that are linked to it via CGroupRelUsergroup.
-     */
-    private function syncLinkedCourseGroups(int $usergroupId, array $newUserIds): void
-    {
-        $linkedRels = $this->em->getRepository(CGroupRelUsergroup::class)
-            ->findBy(['usergroup' => $usergroupId])
-        ;
-
-        if (empty($linkedRels)) {
-            return;
-        }
-
-        foreach ($linkedRels as $rel) {
-            $cGroup = $rel->getGroup();
-            $course = $rel->getCourse();
-            if (null === $cGroup || null === $course) {
-                continue;
-            }
-
-            $courseId = $course->getId();
-
-            // Current group member IDs
-            $currentMemberIds = array_map(
-                fn (CGroupRelUser $m) => $m->getUser()->getId(),
-                $cGroup->getMembers()->toArray()
-            );
-
-            $toAdd = array_diff($newUserIds, $currentMemberIds);
-            $toRemove = array_diff($currentMemberIds, $newUserIds);
-
-            if (!empty($toAdd)) {
-                GroupManager::subscribeUsers(array_values($toAdd), $cGroup, $courseId);
-            }
-            if (!empty($toRemove)) {
-                GroupManager::unsubscribeUsers(array_values($toRemove), $cGroup);
-            }
-        }
     }
 
     #[Route('/export', name: 'admin_usergroup_add_users_export', methods: ['GET'])]

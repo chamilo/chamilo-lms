@@ -18,24 +18,19 @@ class AgendaReminder
 {
     use TimestampableTypedEntity;
 
+    #[Groups(['calendar_event:write', 'calendar_event:read'])]
+    public int $count;
+    #[Groups(['calendar_event:write', 'calendar_event:read'])]
+    public string $period;
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[Groups(['calendar_event:read'])]
     protected ?int $id = null;
-
     #[ORM\Column(name: 'date_interval', type: 'dateinterval')]
     protected DateInterval $dateInterval;
-
     #[ORM\Column(name: 'sent', type: 'boolean')]
     protected bool $sent;
-
-    #[Groups(['calendar_event:write', 'calendar_event:read'])]
-    public int $count;
-
-    #[Groups(['calendar_event:write', 'calendar_event:read'])]
-    public string $period;
-
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'reminders')]
     #[ORM\JoinColumn(referencedColumnName: 'iid', nullable: false)]
     private ?CCalendarEvent $event = null;

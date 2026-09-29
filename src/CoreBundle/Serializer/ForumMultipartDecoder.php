@@ -10,10 +10,12 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
+use const JSON_ERROR_NONE;
+
 #[AutoconfigureTag('serializer.encoder')]
 final readonly class ForumMultipartDecoder implements DecoderInterface
 {
-    public const FORMAT = 'multipart';
+    public const string FORMAT = 'multipart';
 
     public function __construct(
         private RequestStack $requestStack,

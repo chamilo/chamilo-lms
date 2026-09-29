@@ -15,8 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'plugin')]
 class Plugin
 {
-    public const SOURCE_THIRD_PARTY = 'third_party';
-    public const SOURCE_OFFICIAL = 'official';
+    public const string SOURCE_THIRD_PARTY = 'third_party';
+    public const string SOURCE_OFFICIAL = 'official';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -107,11 +107,10 @@ class Plugin
         return $this->configurationsInUrl;
     }
 
-    public function addConfigurationsInUrl(AccessUrlRelPlugin $url): static
+    public function clearConfigurationsInUrls(): static
     {
-        if (!$this->configurationsInUrl->contains($url)) {
-            $this->configurationsInUrl->add($url);
-            $url->setPlugin($this);
+        foreach ($this->configurationsInUrl->toArray() as $configurationInUrl) {
+            $this->removeConfigurationsInUrl($configurationInUrl);
         }
 
         return $this;
@@ -127,25 +126,6 @@ class Plugin
         }
 
         return $this;
-    }
-
-    public function clearConfigurationsInUrls(): static
-    {
-        foreach ($this->configurationsInUrl->toArray() as $configurationInUrl) {
-            $this->removeConfigurationsInUrl($configurationInUrl);
-        }
-
-        return $this;
-    }
-
-    public function getConfigurationsByAccessUrl(AccessUrl $url): ?AccessUrlRelPlugin
-    {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq('url', $url))
-            ->setMaxResults(1)
-        ;
-
-        return $this->configurationsInUrl->matching($criteria)->first() ?: null;
     }
 
     public function uninstall(AccessUrl $currentAccessUrl): static
@@ -164,13 +144,6 @@ class Plugin
         return $this;
     }
 
-    public function enable(AccessUrl $currentAccessUrl): static
-    {
-        $this->getOrCreatePluginConfiguration($currentAccessUrl)->setActive(true);
-
-        return $this;
-    }
-
     public function getOrCreatePluginConfiguration(AccessUrl $currentAccessUrl): AccessUrlRelPlugin
     {
         $pluginConfiguration = $this->getConfigurationsByAccessUrl($currentAccessUrl);
@@ -181,5 +154,32 @@ class Plugin
         }
 
         return $pluginConfiguration;
+    }
+
+    public function getConfigurationsByAccessUrl(AccessUrl $url): ?AccessUrlRelPlugin
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('url', $url))
+            ->setMaxResults(1)
+        ;
+
+        return $this->configurationsInUrl->matching($criteria)->first() ?: null;
+    }
+
+    public function addConfigurationsInUrl(AccessUrlRelPlugin $url): static
+    {
+        if (!$this->configurationsInUrl->contains($url)) {
+            $this->configurationsInUrl->add($url);
+            $url->setPlugin($this);
+        }
+
+        return $this;
+    }
+
+    public function enable(AccessUrl $currentAccessUrl): static
+    {
+        $this->getOrCreatePluginConfiguration($currentAccessUrl)->setActive(true);
+
+        return $this;
     }
 }

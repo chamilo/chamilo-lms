@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataTransformer;
 
 use Chamilo\CoreBundle\ApiResource\CalendarEvent;
-use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
@@ -79,7 +78,9 @@ readonly class CalendarEventTransformer
             ];
         }
 
-        $object->getReminders()->forAll(fn (int $i, AgendaReminder $reminder) => $reminder->encodeDateInterval());
+        foreach ($object->getReminders() as $reminder) {
+            $reminder->encodeDateInterval();
+        }
 
         $calendarEvent->reminders = $object->getReminders();
 

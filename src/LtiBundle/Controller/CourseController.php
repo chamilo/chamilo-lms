@@ -25,12 +25,13 @@ use Evaluation;
 use HTML_QuickForm_select;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UserManager;
 
-#[Route(path: '/courses/{cid}/lti')]
+// Disabled until the ImsLti plugin integration is completed. The course-level LTI screens are
+// served by public/plugin/ImsLti/ instead. Restore the #[Route] attributes (class prefix
+// '/courses/{cid}/lti' and the ones on each action below) to bring this controller back.
 class CourseController extends ToolBaseController
 {
     public function __construct(
@@ -39,7 +40,6 @@ class CourseController extends ToolBaseController
         private readonly UserHelper $userHelper,
     ) {}
 
-    #[Route(path: '/edit/{id}', name: 'chamilo_lti_edit', requirements: ['id' => '\d+'])]
     public function edit(int $id, Request $request): Response
     {
         $em = $this->managerRegistry->getManager();
@@ -100,7 +100,6 @@ class CourseController extends ToolBaseController
         return $this->redirect($formActionUrl);
     }
 
-    #[Route(path: '/launch/{id}', name: 'chamilo_lti_launch', requirements: ['id' => '\d+'])]
     public function launch(int $id, Utils $ltiUtil): Response
     {
         $em = $this->managerRegistry->getManager();
@@ -243,11 +242,10 @@ class CourseController extends ToolBaseController
         );
     }
 
-    #[Route(path: '/item_return', name: 'chamilo_lti_return_item')]
     public function returnItem(Request $request): Response
     {
-        $contentItems = $request->get('content_items');
-        $data = $request->get('data');
+        $contentItems = $request->request->get('content_items');
+        $data = $request->request->get('data');
 
         if (empty($contentItems) || empty($data)) {
             throw $this->createAccessDeniedException();
@@ -273,8 +271,8 @@ class CourseController extends ToolBaseController
 
         $signatureIsValid = Utils::checkRequestSignature(
             $url,
-            $request->get('oauth_consumer_key'),
-            $request->get('oauth_signature'),
+            $request->request->get('oauth_consumer_key'),
+            $request->request->get('oauth_signature'),
             $tool
         );
 
@@ -312,7 +310,6 @@ class CourseController extends ToolBaseController
         );
     }
 
-    #[Route(path: '/{id}', name: 'chamilo_lti_show', requirements: ['id' => '\d+'])]
     public function show(int $id): Response
     {
         $course = $this->getCourse();
@@ -339,7 +336,6 @@ class CourseController extends ToolBaseController
     }
 
     #[IsGranted('ROLE_TEACHER')]
-    #[Route(path: '/remove/{id}', name: 'chamilo_lti_remove_from_course', requirements: ['id' => '\d+'])]
     public function removeFromCourse(int $id, Request $request): Response
     {
         $em = $this->managerRegistry->getManager();
@@ -401,8 +397,6 @@ class CourseController extends ToolBaseController
     }
 
     #[IsGranted('ROLE_TEACHER')]
-    #[Route(path: '/', name: 'chamilo_lti_configure')]
-    #[Route(path: '/add/{id}', name: 'chamilo_lti_configure_global', requirements: ['id' => '\d+'])]
     public function courseConfigure(?int $id, Request $request): Response
     {
         $em = $this->managerRegistry->getManager();
@@ -524,7 +518,6 @@ class CourseController extends ToolBaseController
         );
     }
 
-    #[Route(path: '/grade/{catId}', name: 'chamilo_lti_grade', requirements: ['catId' => '\d+'])]
     #[IsGranted('ROLE_TEACHER')]
     public function grade(int $catId, Request $request): Response
     {
@@ -911,9 +904,15 @@ class CourseController extends ToolBaseController
     private function buildGradebookIndexUrl(Course $course, int $categoryId, Request $request): string
     {
         $params = $this->getLegacyContextParams($request, $course);
-        $params['selectcat'] = $categoryId;
+        $params['categoryId'] = $categoryId;
+        $nodeId = $course->getResourceNode()?->getId();
+        if (null === $nodeId) {
+            $params['view'] = 'overview';
 
-        return api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.http_build_query($params);
+            return api_get_path(WEB_PATH).'gradebook/redirect?'.http_build_query($params);
+        }
+
+        return api_get_path(WEB_PATH).'resources/gradebook/'.$nodeId.'/?'.http_build_query($params);
     }
 
     private function getLegacyContextParams(Request $request, Course $course): array

@@ -5,19 +5,25 @@ on: [push, pull_request]
 permissions:
   contents: read
 
+# Cancel a still-running job when a newer commit lands on the same branch.
+# Pushes to master are exempt, so every commit there keeps its own result.
+concurrency:
+    group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+    cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 jobs:
     build:
         name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
-        runs-on: ubuntu-24.04
+        runs-on: ${{ matrix.operating-system }}
 
         strategy:
             fail-fast: false
             matrix:
                 operating-system: [ubuntu-latest]
-                php-versions: ['8.2']
+                php-versions: ['8.3']
         steps:
             - name: Checkout
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
 
             - name: Setup PHP, with composer and extensions
               uses: shivammathur/setup-php@v2
@@ -31,16 +37,28 @@ jobs:
               run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             - name: Cache composer dependencies
-              uses: actions/cache@v5
+              uses: actions/cache@v6
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
-                  # Use composer.json for key, if composer.lock is not committed.
-                  # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
                   restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
               run: composer install --no-progress
+
+            # A cold run over src/ + tests takes ~3.5 minutes; ECS caches per
+            # file content, so restoring the previous run's cache brings a
+            # typical pull request down to seconds. The key includes ecs.php
+            # and composer.lock so changing a rule or a dependency version
+            # invalidates it instead of trusting stale results.
+            - name: Cache ecs results
+              uses: actions/cache@v6
+              with:
+                  path: var/cache/ecs
+                  key: ${{ runner.os }}-ecs-${{ hashFiles('ecs.php', 'composer.lock') }}-${{ github.sha }}
+                  restore-keys: |
+                      ${{ runner.os }}-ecs-${{ hashFiles('ecs.php', 'composer.lock') }}-
+                      ${{ runner.os }}-ecs-
 
             - name: ecs (easy-coding-standard)
               id: analyse

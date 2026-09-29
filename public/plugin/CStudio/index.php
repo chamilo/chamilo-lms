@@ -25,10 +25,13 @@ $posGdr = 'LpList' === $requestRouteName;
 $posModernLpList = 1 === preg_match('#^/resources/lp/[0-9]+$#', $normalizedRoute)
     || 1 === preg_match('#^/resources/lp/[0-9]+$#', $normalizedPath);
 
-$versionLudi = '11';
+$posModernLpRuntime = 1 === preg_match('#^/resources/lp/[0-9]+/[0-9]+/runtime$#', $normalizedRoute)
+    || 1 === preg_match('#^/resources/lp/[0-9]+/[0-9]+/runtime$#', $normalizedPath);
+
+$versionLudi = '12';
 $fhL = '';
 
-if ($posCtr || $posGdr || $posModernLpList) {
+if ($posCtr || $posGdr || $posModernLpList || $posModernLpRuntime) {
     require_once '0_dal/dal.vdatabase.php';
     $VDB = new VirtualDatabase();
 

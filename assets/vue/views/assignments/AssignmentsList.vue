@@ -83,7 +83,6 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { ref, computed } from "vue"
@@ -101,12 +100,7 @@ const platformConfigStore = usePlatformConfig()
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 const isTeacherUI = computed(
-  () =>
-    (securityStore.isCurrentTeacher ||
-      securityStore.isCourseAdmin ||
-      securityStore.isAdmin ||
-      securityStore.isTeacher) &&
-    !platformConfigStore.isStudentViewActive,
+  () => (securityStore.isCourseAdmin || securityStore.isTeacher) && !platformConfigStore.isStudentViewActive,
 )
 
 const componentToShow = computed(() => (isTeacherUI.value ? TeacherAssignmentList : StudentAssignmentList))

@@ -21,9 +21,9 @@ contribution. We will thoroughly review them before integration
 to make sure they do not introduce security vulnerabilities or degrade the
 platform's ease of use, but we do appreciate any sincere effort to help.
 
-Version 2.0 of Chamilo is composed of 2 parts: one legacy part located mostly
+Version 3.0 of Chamilo is composed of 2 parts: one (now minor) legacy part located mostly
 in the "public/main" folder, and the main Symfony-based part located in the
-"src" folder.
+"src" folder (with support of a VueJS frontent in assets/vue/).
 
 Any contribution to the project should either strive to convert legacy code to
 Symfony or to add new features to the Symfony part.
@@ -31,7 +31,7 @@ Symfony or to add new features to the Symfony part.
 # Installing Chamilo
 
 The following instructions are all intended to set a development environment up
-for Chamilo 2.
+for Chamilo 3.
 If you want to install Chamilo on a production server, please refer to the
 official installation guide in the documentation/ folder.
 
@@ -40,7 +40,7 @@ official installation guide in the documentation/ folder.
 ### Hardware
 
 We recommend developing Chamilo on a machine with at least
-- 8GB of RAM
+- 8GB of RAM (or 4GB + 4GB of swap on SSD/NVMe)
 - 2 powerful CPUs
 - about 10GB of disk space
 
@@ -57,17 +57,17 @@ We recommend developing Chamilo on a machine with at least
 
 ## Quick step-by-step
 
-You will need PHP8.2 or 8.3 and NodeJS v18+ to run Chamilo 2.
+You will need PHP8.3, 8.4 or 8.5 and NodeJS v20+ to run Chamilo 2.
 
 On Ubuntu 24.04+, the following should take care of all dependencies (certbot is optional).
 
-Replace 'chamilo2' by the database name and user you want, and '{password}' by a more secure password.
+Replace 'chamilo' by the database name and user you want, and '{password}' by a more secure password.
 ~~~~
 sudo apt update && apt -y upgrade
-sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,soap,xml,zip} git unzip curl certbot
 sudo mysql
-mysql> CREATE USER chamilo2@localhost IDENTIFIED BY '{password}';
-mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;
+mysql> CREATE USER chamilo@localhost IDENTIFIED BY '{password}';
+mysql> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost;
 mysql> exit
 cd ~
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
@@ -88,7 +88,8 @@ sudo cp public/main/install/apache.dist.conf /etc/apache2/sites-available/my.cha
 sudo a2ensite my.chamilo.net
 sudo systemctl restart apache2
 yarn set version stable
-yarn up && yarn install && yarn dev
+yarn up && yarn install && NODE_OPTIONS="--max-old-space-size=4096" yarn dev
+# The NODE_OPTIONS is to avoid "FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory", use this instead of only "yarn dev"
 sudo touch .env
 sudo chown -R www-data: var/ .env config/
 # load http://my.chamilo.net in your browser and follow the installation wizard
@@ -101,10 +102,10 @@ The following is the section above, but with more details and hedge cases.
 ~~~~
 sudo apt update
 sudo apt -y upgrade
-sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,soap,xml,zip} git unzip curl certbot
 sudo mysql
-mysql> CREATE USER chamilo2@localhost IDENTIFIED BY '{password}';
-mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;
+mysql> CREATE USER chamilo@localhost IDENTIFIED BY '{password}';
+mysql> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost;
 mysql> exit
 ~~~~
 
@@ -116,18 +117,18 @@ sudo apt -y upgrade
 sudo apt -y install ca-certificates curl gnupg software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
-sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl
+sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,soap,xml,zip} git unzip curl
 sudo mysql
-mysql> CREATE USER chamilo2@localhost IDENTIFIED BY '{password}';
-mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost;
+mysql> CREATE USER chamilo@localhost IDENTIFIED BY '{password}';
+mysql> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost;
 mysql> exit
 ~~~~
-(replace 'chamilo2' by the database name and user you want, and '{password}' by a more secure password)
+(replace 'chamilo' by the database name and user you want, and '{password}' by a more secure password)
 
 ## NodeJS, Yarn, Composer
 
 If you already have nodejs installed, check the version with `node -v`
-Otherwise, install Node.js 18 or above.
+Otherwise, install Node.js 20 or above.
 
 Use the following lines to get a static version of Node.js 20 from https://deb.nodesource.com/ (recommended)
 ~~~~
@@ -211,8 +212,6 @@ If you do not use SSL, you can remove the first block and change `*:443` by `*:8
     Require all denied
   </LocationMatch>
   php_value session.cookie_httponly 1
-  php_admin_value session.save_handler "redis"
-  php_admin_value session.save_path "tcp://127.0.0.1:6379"
   php_admin_value upload_max_filesize 256M
   php_admin_value post_max_size 256M
 </VirtualHost>
@@ -224,39 +223,71 @@ sudo systemctl reload apache2
 
 ## Quick updates for development/testing purposes
 
-If you have already installed it and just want to update it from Git, do:
+If Chamilo is already installed in a development environment and you only want
+to update the code and dependencies, use:
 ~~~~
 git pull origin master
-composer install
-# php bin/console doctrine:schema:update --force --complete (only recommended if you installed before beta 1)
-php bin/console cache:clear
-yarn install && yarn dev
+composer install && php bin/console cache:clear && chown -R www-data: var/cache && yarn install && NODE_OPTIONS="--max-old-space-size=4096" yarn dev && php bin/console cache:warmup && chown -R www-data: var/cache
+php bin/console doctrine:migrations:migrate --no-interaction
 ~~~~
 
-The commands above will update the JS (yarn) in public/build/ and PHP (composer) dependencies in vendor/.
+Note: the double `chown` in the command above is just to make sure you can use
+your Chamilo portal in the meantime. In some cases, `yarn dev` or 
+`cache:warmup` might take a while to "come back", and in the meantime the 
+changes you have made through composer install might have written some files or
+created some directories to `var/cache` as another user, which might prevent
+Chamilo itself to write its cache there while yarn is running.
 
-Note for developers in alpha stage: the doctrine command will try to update
-your database schema to the expected database schema in a fresh installation.
+If your local clone uses a fork, replace `origin` with the remote that tracks the
+official Chamilo repository (commonly `upstream`).
 
-This is not always perfect, as Doctrine will take the fastest route to do this.
+`doctrine:migrations:migrate` is the normal way to update the database of an
+existing development installation. Do not use `doctrine:schema:update --force`
+as a replacement: schema updates do not execute the data-processing logic
+contained in migrations and can result in data loss.
 
-For example, if you have a migration to rename a table (which would apply just
-fine to a system in Chamilo 1 being *migrated*), Doctrine might consider that
-the destination table does not exist and the original (which should not be
-there in a new installation) is still there, so it will just drop the old
-table and create a new one, losing all records in that table in the process.
-
-To avoid this, prefer executing migrations with the following instead.
+Occasionally a change can add data to a migration that your local database has
+already marked as executed. In that specific case, re-run the migration
+explicitly as instructed by the change:
 ```
-php bin/console doctrine:migrations:execute "Chamilo\CoreBundle\Migrations\Schema\V200\Version[date]"
+php bin/console doctrine:migrations:execute "Chamilo\CoreBundle\Migrations\Schema\V300\Version[date]" --up
 ```
-This will respect the migration logic and do the required data processing.
-You can see the version numbers in the list of updated or created files when launching `git pull`.
 
-Som`e updates might (rarely) cause conflicts with existing files so, to avoid those, here are some hints :
-- for composer errors, you can remove the vendor folder and composer.lock file, then launch `composer update`
-- for yarn errors, you can remove yarn.lock .yarn/cache/* node_modules/* and launch `yarn up`
-- when opening Chamilo, if the page does not load, then you might want to delete var/cache/* or launch `php bin/console cache:clear` from the root of Chamilo
+### Fixtures for development and testing
+
+Doctrine fixtures are intended for fresh or disposable development/test
+databases. `doctrine:fixtures:load` purges existing data by default, so do not
+run it against a database containing data you want to keep.
+
+For the PHPUnit test database, after creating the schema as described in
+`tests/README.md`, load the fixtures with:
+```
+php bin/console --env=test doctrine:fixtures:load --no-interaction
+```
+
+Playwright uses additional browser-level seed scenarios. Run them once, in this
+order, before the main browser test suite:
+```
+yarn test:playwright:seed
+yarn test:playwright:seed-course
+yarn test:playwright:seed-private-course
+yarn test:playwright:seed-settings
+```
+
+These seeds create the fixed test users, the `TEMP` and `TEMPPRIVATE` courses,
+and the platform settings expected by the Playwright scenarios. The
+`yarn test:playwright:install` command is destructive because it recreates the
+database and is intended for CI installation testing, not for updating an
+existing development environment.
+
+Fixture groups are not a substitute for migrations on an existing installation.
+Changes that must reach already-installed databases should be delivered through
+the corresponding migration.
+
+If an update causes dependency or cache problems, first retry the normal
+installation commands (`composer install`, `yarn install`, and
+`php bin/console cache:clear`) before removing lock files or replacing pinned
+dependencies.
 
 ### Refresh configuration settings
 
@@ -327,7 +358,7 @@ sudo apt update
 sudo apt install php8.3 libapache2-mod-php7.4 php8.3-{modules} php7.4-{modules}
 sudo apt remove libapache2-mod-php8.3 php7.4-fpm
 sudo a2enmod proxy_fcgi
-sudo vim /etc/apache2/sites-available/[your-chamilo2-vhost].conf
+sudo vim /etc/apache2/sites-available/[your-chamilo-vhost].conf
 ```
 
 In the vhost configuration, make sure you set PHP 8.3 FPM to answer this single
@@ -382,10 +413,25 @@ and Composer complains again.
 
 ### git hooks
 
-To use the git hook sample scripts under `tests/scripts/git-hooks/`, the
-following commands can be used.
+`composer install` points git at `tests/scripts/git-hooks/`, so every clone gets
+the project hooks without any manual step. If you cloned before that change, or
+composer ran with `--no-scripts`, enable them with:
 
     git config core.hooksPath tests/scripts/git-hooks/
+
+An existing `core.hooksPath` of your own is never overwritten.
+
+The `pre-push` hook runs ECS (the tool behind `composer phpcs-fix`) over the PHP
+files of the commits you push. If it finds a code style problem, it fixes the
+files in your working tree and stops the push. Add the fix to your commits and
+push again:
+
+    git add -u && git commit --amend --no-edit
+
+The hook uses the `php` of your machine when it can see `vendor/`. If it cannot,
+the hook uses the Docker container `chamilo2-php83`. Set `CHAMILO_PHP` or
+`CHAMILO_PHP_CONTAINER` if your setup is different. To skip the hook one time,
+push with `--no-verify`.
 
 ## Big changes from 1.x (for developers)
 
@@ -408,8 +454,8 @@ This is a list of structural changes to help developers/maintainers of Chamilo 1
 
 ### Libraries
 
-* Integration with Symfony 6
-* PHPMailer replaced with Symfony Mailer
+* Integration with Symfony 7.4
+* PHPMailer replaced with Symfony's Mailer
 * Bower replaced by [yarn](https://yarnpkg.com)
 
 
@@ -434,9 +480,11 @@ with this purpose into your own repository, forked from the original Chamilo rep
 As new major features are added, automated tests should be added that ensure
 that the feature continues to work for the foreseeable future.
 
-In Chamilo, we rely on "Behat":http://docs.behat.org/en/latest/ to do
-Automated Behavior Testing. You can find examples and information on how to
-run Behat tests in the tests/behat/ folder of your Chamilo installation.
+In Chamilo, we rely on "Playwright":https://playwright.dev/ (with
+"playwright-bdd":https://vitalets.github.io/playwright-bdd/, so the scenarios
+stay plain Gherkin) to do Automated Behavior Testing. You can find the feature
+files in tests/playwright/features/, the shared step definitions in
+tests/playwright/steps/, and run them with `yarn test:playwright`.
 
 Tests are run automatically for every new contribution, courtesy of Github
 actions, so you can follow your feature in time and see whether something
@@ -452,7 +500,7 @@ proceed. You will then need to submit these changes as explained above.
 
 If your changes are about structure, you want to follow these steps:
 1. Create or modify an entity in src/*something*Bundle/Entity/
-2. Create a new Migration in src/CoreBundle/Migrations/Schema/*something*/
+2. Create a new Migration in src/CoreBundle/Migrations/Schema/V{VERSION}/Version{time-stamp}.php
 
 This second step is most easily done by copying one of the current migration
 files in that directory. For example, if you're doing it on the 14th of July 2019 at noon:

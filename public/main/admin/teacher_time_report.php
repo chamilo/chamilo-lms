@@ -70,7 +70,7 @@ $courseList = CourseManager::get_courses_list(
     api_get_current_access_url_id()
 );
 
-$sessionList = SessionManager::get_sessions_list([], ['name']);
+$sessionList = SessionManager::get_sessions_list([], ['title']);
 $teacherList = UserManager::get_user_list(['status' => COURSEMANAGER]);
 
 foreach ($courseList as $courseItem) {
@@ -78,7 +78,7 @@ foreach ($courseList as $courseItem) {
 }
 
 foreach ($sessionList as $sessionItem) {
-    $optionsSessions[$sessionItem['id']] = $sessionItem['name'];
+    $optionsSessions[$sessionItem['id']] = $sessionItem['title'];
 }
 
 foreach ($teacherList as $teacherItem) {
@@ -156,7 +156,7 @@ if (!empty($selectedCourse)) {
                 $timeReport->data[] = [
                     'session' => [
                         'id' => $session['id'],
-                        'name' => $session['name'],
+                        'name' => $session['title'],
                     ],
                     'course' => [
                         'id' => $course['real_id'],

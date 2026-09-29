@@ -9,7 +9,19 @@ export default [
   },
   {
     languageOptions: {
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        // Webpack replaces process.env.NODE_ENV at build time.
+        process: "readonly",
+      },
+    },
+  },
+  {
+    // CommonJS files are build and check scripts; they run under Node, not in a browser.
+    files: ["**/*.cjs"],
+    languageOptions: {
+      sourceType: "commonjs",
+      globals: globals.node,
     },
   },
   pluginJs.configs.recommended,

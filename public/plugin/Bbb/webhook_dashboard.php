@@ -43,6 +43,9 @@ function hms(int $s): string {
     return sprintf('%02d:%02d:%02d', $h, $m, $sec);
 }
 
+/* --- Plugin instance (needed for translations) --- */
+$plugin = BbbPlugin::create();
+
 /* --- Repos --- */
 $em          = Database::getManager();
 $actRepo     = $em->getRepository(ConferenceActivity::class);
@@ -230,8 +233,8 @@ $statsAndData = (function() use ($actRepo, $meetingRepo, $ROOM_OPEN, $ROOM_CLOSE
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     $rows = [];
     foreach ($statsAndData['grouped'] as $G) {
-        $rows[] = ['# Meeting', $G['meeting']['title']];
-        $rows[] = ['User','Online','Talking','Camera','Messages','Reactions','Hands','Status','First join','Last seen'];
+        $rows[] = ['# '.$plugin->get_lang('Meeting'), $G['meeting']['title']];
+        $rows[] = [$plugin->get_lang('User'),$plugin->get_lang('OnlineTime'),$plugin->get_lang('Talking'),$plugin->get_lang('CameraShare'),$plugin->get_lang('Messages'),$plugin->get_lang('Reactions'),$plugin->get_lang('Hands'),$plugin->get_lang('Status'),$plugin->get_lang('FirstJoin'),$plugin->get_lang('LastSeen')];
         foreach ($G['rows'] as $r) {
             $rows[] = [
                 (string)$r['user'],
@@ -246,7 +249,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
                 (string)$r['last_seen'],
             ];
         }
-        $rows[] = ['Totals',
+        $rows[] = [$plugin->get_lang('Totals'),
             hms((int)$G['totals']['online_seconds']),
             hms((int)$G['totals']['talk_seconds']),
             hms((int)$G['totals']['camera_seconds']),
@@ -268,7 +271,7 @@ if (isset($_GET['ajax'])) {
 }
 
 /* ===================== HTML ===================== */
-$tpl = new Template('[BBB] Webhooks Dashboard (Global)');
+$tpl = new Template('[BBB] '.$plugin->get_lang('WebhooksDashboard'));
 ob_start(); ?>
     <style>
         .cards {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px;}
@@ -304,40 +307,40 @@ ob_start(); ?>
 
     <div class="toolbar">
         <div class="field">
-            <label class="muted">Meeting title contains</label>
+            <label class="muted"><?php echo $plugin->get_lang('MeetingTitleContains')?></label>
             <input id="q" type="text" value="<?php echo htmlspecialchars($qTitle)?>">
         </div>
         <div class="field">
-            <label class="muted">From (UTC)</label>
+            <label class="muted"><?php echo $plugin->get_lang('FromUTC')?></label>
             <input id="from" type="date" value="<?php echo htmlspecialchars($fromStr)?>">
         </div>
         <div class="field">
-            <label class="muted">To (UTC)</label>
+            <label class="muted"><?php echo $plugin->get_lang('ToUTC')?></label>
             <input id="to" type="date" value="<?php echo htmlspecialchars($toStr)?>">
         </div>
         <div class="field">
-            <label class="chip"><input id="only_open" type="checkbox" <?php echo $onlyOpen?'checked':''?>> Only online rows</label>
+            <label class="chip"><input id="only_open" type="checkbox" <?php echo $onlyOpen?'checked':''?>> <?php echo $plugin->get_lang('OnlyOnlineRows')?></label>
         </div>
         <div class="field">
-            <label class="muted">Meeting</label>
+            <label class="muted"><?php echo $plugin->get_lang('Meeting')?></label>
             <select id="meeting_id">
-                <option value="0">All meetings</option>
+                <option value="0"><?php echo $plugin->get_lang('AllMeetings')?></option>
                 <?php foreach ($meetingOptions as $m): ?>
                     <option value="<?php echo $m['id']?>" <?php echo $meetingFilter===(int)$m['id']?'selected':''?>><?php echo htmlspecialchars($m['title'])?></option>
                 <?php endforeach; ?>
             </select>
         </div>
     <div class="field">
-        <button id="apply" class="btn-primary">Apply</button>
+        <button id="apply" class="btn-primary"><?php echo $plugin->get_lang('Apply')?></button>
     </div>
     <div class="field">
-        <a id="csv" class="btn-slim">Export CSV</a>
+        <a id="csv" class="btn-slim"><?php echo $plugin->get_lang('ExportCSV')?></a>
     </div>
-    <label class="chip" style="margin-left:auto"><input id="auto" type="checkbox" checked> Auto-refresh (10s)</label>
+    <label class="chip" style="margin-left:auto"><input id="auto" type="checkbox" checked> <?php echo $plugin->get_lang('AutoRefresh10s')?></label>
     </div>
 
     <div class="cards">
-        <?php $k=$statsAndData['kpis']; foreach ([['Active meetings',$k['active_meetings']],['Connected now',$k['connected_now']],['Joins today',$k['joins_today']],['Events (24h)',$k['events_24h']]] as $c): ?>
+        <?php $k=$statsAndData['kpis']; foreach ([[$plugin->get_lang('ActiveMeetings'),$k['active_meetings']],[$plugin->get_lang('ConnectedNow'),$k['connected_now']],[$plugin->get_lang('JoinsToday'),$k['joins_today']],[$plugin->get_lang('Events24h'),$k['events_24h']]] as $c): ?>
             <div class="card"><div class="lbl"><?php echo $c[0]?></div><div class="val kpi-val"><?php echo $c[1]?></div></div>
         <?php endforeach; ?>
     </div>
@@ -348,13 +351,13 @@ ob_start(); ?>
                 <div class="g-head">
                     <div class="g-title">
                         <?php echo htmlspecialchars($G['meeting']['title'])?>
-                        <span class="badge <?php echo $G['meeting']['status']==='running'?'online':'offline'?>"><?php echo htmlspecialchars($G['meeting']['status'])?></span>
+                        <span class="badge <?php echo $G['meeting']['status']==='running'?'online':'offline'?>"><?php echo $G['meeting']['status']==='running' ? $plugin->get_lang('Running') : $plugin->get_lang('Finished')?></span>
                     </div>
                     <div class="muted">
-                        Users: <?php echo $G['totals']['users']?> —
-                        Online: <?php echo hms((int)$G['totals']['online_seconds'])?> —
-                        Talk: <?php echo hms((int)$G['totals']['talk_seconds'])?> —
-                        Camera: <?php echo hms((int)$G['totals']['camera_seconds'])?>
+                        <?php echo $plugin->get_lang('UsersColon')?> <?php echo $G['totals']['users']?> —
+                        <?php echo $plugin->get_lang('OnlineColon')?> <?php echo hms((int)$G['totals']['online_seconds'])?> —
+                        <?php echo $plugin->get_lang('TalkColon')?> <?php echo hms((int)$G['totals']['talk_seconds'])?> —
+                        <?php echo $plugin->get_lang('CameraColon')?> <?php echo hms((int)$G['totals']['camera_seconds'])?>
                     </div>
                 </div>
 
@@ -362,15 +365,15 @@ ob_start(); ?>
                     <table>
                         <thead>
                         <tr>
-                            <th>USERS</th>
-                            <th style="width:260px">ONLINE TIME</th>
-                            <th>CONVERSATION</th>
-                            <th>CAMERA SHARE</th>
-                            <th>MESSAGES</th>
-                            <th>REACTIONS</th>
-                            <th>HANDS</th>
-                            <th>RESULTS</th>
-                            <th>STATUS</th>
+                            <th><?php echo strtoupper($plugin->get_lang('Participants'))?></th>
+                            <th style="width:260px"><?php echo strtoupper($plugin->get_lang('OnlineTime'))?></th>
+                            <th><?php echo strtoupper($plugin->get_lang('Conversation'))?></th>
+                            <th><?php echo strtoupper($plugin->get_lang('CameraShare'))?></th>
+                            <th><?php echo strtoupper($plugin->get_lang('Messages'))?></th>
+                            <th><?php echo strtoupper($plugin->get_lang('Reactions'))?></th>
+                            <th><?php echo strtoupper($plugin->get_lang('Hands'))?></th>
+                            <th><?php echo strtoupper($plugin->get_lang('Results'))?></th>
+                            <th><?php echo strtoupper($plugin->get_lang('Status'))?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -394,7 +397,7 @@ ob_start(); ?>
                                         <div class="avatar">👤</div>
                                         <div>
                                             <div style="font-weight:600;color:#0f172a"><?php echo htmlspecialchars($r['user'])?></div>
-                                            <div class="muted">Joined: <?php echo htmlspecialchars($r['first_join'] ?? '—')?> · Last: <?php echo htmlspecialchars($r['last_seen'] ?? '—')?></div>
+                                            <div class="muted"><?php echo $plugin->get_lang('Joined')?>: <?php echo htmlspecialchars($r['first_join'] ?? '—')?> · <?php echo $plugin->get_lang('Last')?>: <?php echo htmlspecialchars($r['last_seen'] ?? '—')?></div>
                                         </div>
                                     </div>
                                 </td>
@@ -424,10 +427,10 @@ ob_start(); ?>
                                     <div class="row-meta">✋ <?php echo  (int)$r['hands'] ?></div>
                                 </td>
 
-                                <td class="muted">N/A</td>
+                                <td class="muted">—</td>
 
                                 <td>
-                                    <span class="badge <?php echo $r['status']==='online'?'online':'offline'?>"><?php echo htmlspecialchars(strtoupper($r['status']))?></span>
+                                    <span class="badge <?php echo $r['status']==='online'?'online':'offline'?>"><?php echo $r['status']==='online' ? strtoupper($plugin->get_lang('Running')) : strtoupper($plugin->get_lang('Finished'))?></span>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -438,7 +441,7 @@ ob_start(); ?>
         <?php endforeach; ?>
     </div>
 
-    <div class="muted">Updated: <span id="updatedAt"><?php echo $statsAndData['now']?></span></div>
+    <div class="muted"><?php echo $plugin->get_lang('Updated')?>: <span id="updatedAt"><?php echo $statsAndData['now']?></span></div>
 
     <script>
         (function(){
@@ -502,7 +505,7 @@ $html = ob_get_clean();
 /* Render */
 $tpl->assign('content', $html);
 $actionLinks = Display::toolbarButton(
-    get_lang('VideoConference'),
+    get_lang('Videoconference'),
     api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?global=1&user_id='.api_get_user_id(),
     'video',
     'primary'

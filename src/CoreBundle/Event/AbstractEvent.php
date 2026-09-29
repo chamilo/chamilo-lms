@@ -8,10 +8,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 abstract class AbstractEvent extends Event
 {
-    public const TYPE_NONE = -1;
-    public const TYPE_PRE = 0;
-    public const TYPE_POST = 1;
-    public const TYPE_PRE_POST = 2;
+    public const int TYPE_NONE = -1;
+    public const int TYPE_PRE = 0;
+    public const int TYPE_POST = 1;
+    public const int TYPE_PRE_POST = 2;
 
     public function __construct(
         protected array $data = [],

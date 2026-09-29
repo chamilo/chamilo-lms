@@ -1,7 +1,9 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
-/**
+/*
  * This is the text library for Chamilo.
  * It is loaded during the global initialization,
  * so the functions below are available everywhere.
@@ -64,8 +66,9 @@ function api_detect_encoding_html($string)
  *
  * @param string $string the input full-html document
  * @param string                        the new encoding value to be set
+ * @param mixed $encoding
  */
-function api_set_encoding_html(&$string, $encoding)
+function api_set_encoding_html(&$string, $encoding): void
 {
     $old_encoding = api_detect_encoding_html($string);
     if (@preg_match('/(.*<head.*)(<meta[^>]*content=[^>]*>)(.*<\/head>.*)/si', $string, $matches)) {
@@ -78,7 +81,7 @@ function api_set_encoding_html(&$string, $encoding)
         }
     } else {
         $count = 1;
-        if (false !== strpos('</head>', strtolower($string))) {
+        if (str_contains('</head>', strtolower($string))) {
             $string = str_ireplace(
                 '</head>',
                 '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/></head>',
@@ -123,7 +126,7 @@ function api_get_title_html(&$string, $output_encoding = null, $input_encoding =
                 ' ',
                 api_html_entity_decode(
                     api_convert_encoding($matches[1], $output_encoding, $input_encoding),
-                    ENT_QUOTES,
+                    \ENT_QUOTES,
                     $output_encoding
                 )
             )
@@ -231,7 +234,7 @@ function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding)
         );
     }
     if (!preg_match(_PCRE_XML_ENCODING, $string)) {
-        if (false !== strpos($matches[0], 'standalone')) {
+        if (str_contains($matches[0], 'standalone')) {
             // The encoding option should precede the standalone option,
             // othewise DOMDocument fails to load the document.
             $replace = str_replace('standalone', ' encoding="'.$to_encoding.'" standalone', $matches[0]);
@@ -325,7 +328,7 @@ function api_contains_asciisvg($html)
  */
 function api_camel_case_to_underscore($string)
 {
-    return strtolower(preg_replace('/([a-z])([A-Z])/', "$1_$2", $string));
+    return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $string));
 }
 
 /**
@@ -404,9 +407,12 @@ function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $e
  * Replace tags with a space in a text.
  * If $in_double_quote_replace, replace " with '' (for HTML attribute purpose, for exemple).
  *
- * @return string
- *
  * @author hubert borderiou
+ *
+ * @param mixed $in_html
+ * @param mixed $in_double_quote_replace
+ *
+ * @return string
  */
 function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
 {
@@ -415,10 +421,9 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
         $out_res = str_replace('"', "''", $out_res);
     }
     // avoid text stuck together when tags are removed, adding a space after >
-    $out_res = str_replace(">", "> ", $out_res);
-    $out_res = strip_tags($out_res);
+    $out_res = str_replace('>', '> ', $out_res);
 
-    return $out_res;
+    return strip_tags($out_res);
 }
 
 /**
@@ -436,6 +441,8 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
  *
  * Notes: the email one might get annoying - it's easy to make it more restrictive, though.. maybe
  * have it require something like xxxx@yyyy.zzzz or such. We'll see.
+ *
+ * @param mixed $matches
  */
 
 /**
@@ -499,11 +506,11 @@ function _make_url_clickable_cb($matches)
  */
 function esc_url($url, $protocols = null, $_context = 'display')
 {
-    //$original_url = $url;
+    // $original_url = $url;
     if ('' == $url) {
         return $url;
     }
-    $url = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\\x80-\\xff]|i', '', $url);
+    $url = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\x80-\xff]|i', '', $url);
     $strip = ['%0d', '%0a', '%0D', '%0A'];
     $url = _deep_replace($strip, $url);
     $url = str_replace(';//', '://', $url);
@@ -511,8 +518,8 @@ function esc_url($url, $protocols = null, $_context = 'display')
      * presume it needs http:// appended (unless a relative
      * link starting with /, # or ? or a php file).
      */
-    if (false === strpos($url, ':') && !in_array($url[0], ['/', '#', '?']) &&
-        !preg_match('/^[a-z0-9-]+?\.php/i', $url)) {
+    if (!str_contains($url, ':') && !in_array($url[0], ['/', '#', '?'])
+        && !preg_match('/^[a-z0-9-]+?\.php/i', $url)) {
         $url = 'http://'.$url;
     }
 
@@ -583,6 +590,9 @@ function _make_web_ftp_clickable_cb($matches)
  * @param string    The text to "cut"
  * @param int       Count of chars
  * @param bool      Whether to embed in a <span title="...">...</span>
+ * @param mixed $text
+ * @param mixed $maxchar
+ * @param mixed $embed
  * */
 function cut($text, $maxchar, $embed = false): string
 {
@@ -604,6 +614,8 @@ function cut($text, $maxchar, $embed = false): string
  * @param int       Decimal points 0=never, 1=if needed, 2=always
  * @param string $decimalPoint
  * @param string $thousandsSeparator
+ * @param mixed  $number
+ * @param mixed  $flag
  *
  * @return mixed An integer or a float depends on the parameter
  */
@@ -612,20 +624,22 @@ function float_format($number, $flag = 1, $decimalPoint = '.', $thousandsSeparat
     $flag = (int) $flag;
 
     if (is_numeric($number)) {
+        $number = (float) $number;
+
         if (!$number) {
             $result = (2 == $flag ? '0.'.str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');
         } else {
             if (floor($number) == $number) {
                 $result = number_format(
                     $number,
-                    (2 == $flag ? EXERCISE_NUMBER_OF_DECIMALS : 0),
+                    2 == $flag ? EXERCISE_NUMBER_OF_DECIMALS : 0,
                     $decimalPoint,
                     $thousandsSeparator
                 );
             } else {
                 $result = number_format(
                     round($number, 2),
-                    (0 == $flag ? 0 : EXERCISE_NUMBER_OF_DECIMALS),
+                    0 == $flag ? 0 : EXERCISE_NUMBER_OF_DECIMALS,
                     $decimalPoint,
                     $thousandsSeparator
                 );
@@ -653,7 +667,7 @@ function get_last_week()
         $year--;
     }
 
-    $lastweek = sprintf("%02d", $lastweek);
+    $lastweek = sprintf('%02d', $lastweek);
     $arrdays = [];
     for ($i = 1; $i <= 7; $i++) {
         $arrdays[] = strtotime("$year"."W$lastweek"."$i");
@@ -666,6 +680,7 @@ function get_last_week()
  * Gets the week from a day.
  *
  * @param   string   Date in UTC (2010-01-01 12:12:12)
+ * @param mixed $date
  *
  * @return int Returns an integer with the week number of the year
  */
@@ -685,31 +700,26 @@ function get_week_from_day($date)
  * Example: "Test example of a long string"
  * substrwords(5) = Test ... *.
  *
- * @param $text string
- * @param $maxchar int the max number of character
- * @param $end string how the string will be ended
- *
- * @return string
+ * @param string $text
+ * @param int    $maxchar the max number of character
+ * @param string $end     how the string will be ended
  */
 function substrwords(string $text, int $maxchar, string $end = '...'): string
 {
     if (strlen($text) > $maxchar) {
-        $words = explode(" ", $text);
+        $words = explode(' ', $text);
         $output = '';
         $i = 0;
         while (1) {
             $length = (strlen($output) + strlen($words[$i]));
             if ($length > $maxchar) {
                 break;
-            } else {
-                $output = $output." ".$words[$i];
-                $i++;
             }
+            $output = $output.' '.$words[$i];
+            $i++;
         }
     } else {
-        $output = $text;
-
-        return $output;
+        return $text;
     }
 
     return $output.$end;
@@ -727,36 +737,13 @@ function implode_with_key($glue, $array)
                 // We don't supported embedded arrays here yet. Will show as "{array}".
                 $value = 'array';
             }
-            $string .= $key." : ".$value." $glue ";
+            $string .= $key.' : '.$value." $glue ";
         }
 
         return $string;
     }
 
     return '';
-}
-
-/**
- * Transform the file size in a human readable format.
- *
- * @param int $file_size Size of the file in bytes
- *
- * @return string A human readable representation of the file size
- */
-function format_file_size($file_size)
-{
-    $file_size = (int) $file_size;
-    if ($file_size >= 1073741824) {
-        $file_size = (round($file_size / 1073741824 * 100) / 100).'G';
-    } elseif ($file_size >= 1048576) {
-        $file_size = (round($file_size / 1048576 * 100) / 100).'M';
-    } elseif ($file_size >= 1024) {
-        $file_size = (round($file_size / 1024 * 100) / 100).'k';
-    } else {
-        $file_size = $file_size.'B';
-    }
-
-    return $file_size;
 }
 
 /**
@@ -769,13 +756,11 @@ function format_file_size($file_size)
  *  amann,acostea
  * )
  *
- * @param $array
- *
  * @return array
  */
 function bracketsToArray($array)
 {
-    return preg_split('/[\[\]]+/', $array, -1, PREG_SPLIT_NO_EMPTY);
+    return preg_split('/[\[\]]+/', $array, -1, \PREG_SPLIT_NO_EMPTY);
 }
 
 /**
@@ -798,7 +783,7 @@ function underScoreToCamelCase($string, $capitalizeFirstCharacter = true)
 /**
  * @param string $value
  */
-function trim_value(&$value)
+function trim_value(&$value): void
 {
     $value = trim($value);
 }
@@ -835,10 +820,10 @@ function strip_tags_blacklist($html, $tags)
 function api_get_short_text_from_html($text, $number)
 {
     // Delete script and style tags
-    $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
+    $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', '$1$3', $text);
     $text = api_html_entity_decode($text);
     $out_res = api_remove_tags_with_space($text, false);
-    $postfix = "...";
+    $postfix = '...';
     if (strlen($out_res) > $number) {
         $out_res = substr($out_res, 0, $number).$postfix;
     }
@@ -856,13 +841,14 @@ function api_get_short_text_from_html($text, $number)
  *
  * @return string The filtered string in the given language, or the full string if no translated string was identified
  *
- *@throws Exception
+ * @throws Exception
  */
 function api_get_filtered_multilingual_HTML_string($htmlString, $language = null)
 {
     if ('false' === api_get_setting('editor.translate_html')) {
         return $htmlString;
     }
+
     $userInfo = api_get_user_info();
     $languageId = 0;
     if (!empty($language)) {
@@ -870,32 +856,99 @@ function api_get_filtered_multilingual_HTML_string($htmlString, $language = null
     } elseif (!empty($userInfo['language'])) {
         $languageId = api_get_language_id($userInfo['language']);
     }
+
     $languageInfo = api_get_language_info($languageId);
-    $isoCode = 'en';
-
-    if (!empty($languageInfo)) {
-        $isoCode = $languageInfo['isocode'];
+    $isoCode = !empty($languageInfo['isocode']) ? (string) $languageInfo['isocode'] : 'en';
+    $normalizedIso = str_replace('-', '_', trim($isoCode));
+    $baseIso = strtolower(explode('_', $normalizedIso)[0]);
+    $localeParts = explode('_', $normalizedIso, 2);
+    $normalizedIso = strtolower($localeParts[0]);
+    if (isset($localeParts[1]) && '' !== trim($localeParts[1])) {
+        $normalizedIso .= '_'.strtoupper($localeParts[1]);
     }
 
-    // Split HTML in the separate language strings
-    // Note: some strings might look like <p><span ..>...</span></p> but others might be like combine 2 <span> in 1 <p>
-    if (!preg_match('/<span.*?lang="(\w\w)">/is', $htmlString)) {
-        return $htmlString;
-    }
-    $matches = [];
-    preg_match_all('/<span.*?lang="(\w\w)">(.*?)<\/span>/is', $htmlString, $matches);
-    if (!empty($matches)) {
-        // matches[0] are the full string
-        // matches[1] are the languages
-        // matches[2] are the strings
-        foreach ($matches[1] as $id => $match) {
-            if ($match == $isoCode) {
-                return $matches[2][$id];
+    $languageCandidates = array_values(array_unique(array_filter([
+        $baseIso,
+        $normalizedIso,
+        str_replace('_', '-', $normalizedIso),
+    ])));
+
+    if (!class_exists(DOMDocument::class)) {
+        if (!preg_match('/<(?:span|div|section|article)\b[^>]*\blang=["\']([a-z]{2}(?:[_-][a-z]{2})?)["\'][^>]*>/i', $htmlString)) {
+            return $htmlString;
+        }
+
+        preg_match_all(
+            '/<(span|div|section|article)\b[^>]*\blang=["\']([a-z]{2}(?:[_-][a-z]{2})?)["\'][^>]*>(.*?)<\/\1>/is',
+            $htmlString,
+            $matches,
+            \PREG_SET_ORDER
+        );
+
+        foreach ($languageCandidates as $candidate) {
+            $parts = [];
+            foreach ($matches as $match) {
+                if (strtolower(str_replace('_', '-', $match[2])) === strtolower(str_replace('_', '-', $candidate))) {
+                    $parts[] = $match[3];
+                }
+            }
+            if (!empty($parts)) {
+                return implode('', $parts);
             }
         }
-        // Could find the pattern but could not find our language. Return the first language found.
-        return $matches[2][0];
+
+        return !empty($matches[0][3]) ? $matches[0][3] : $htmlString;
     }
-    // Could not find pattern. Just return the whole string. We shouldn't get here.
-    return $htmlString;
+
+    $document = new DOMDocument('1.0', 'UTF-8');
+    $previous = libxml_use_internal_errors(true);
+    $loaded = $document->loadHTML(
+        '<?xml encoding="UTF-8"><div id="__chamilo_multilingual_root">'.$htmlString.'</div>',
+        \LIBXML_HTML_NOIMPLIED | \LIBXML_HTML_NODEFDTD | \LIBXML_NOERROR | \LIBXML_NOWARNING
+    );
+    libxml_clear_errors();
+    libxml_use_internal_errors($previous);
+
+    if (!$loaded) {
+        return $htmlString;
+    }
+
+    $xpath = new DOMXPath($document);
+    $nodes = $xpath->query(
+        '//*[@lang and (contains(concat(" ", normalize-space(@class), " "), " mce-translatehtml ") or self::span)]'
+    );
+    if (false === $nodes || 0 === $nodes->length) {
+        return $htmlString;
+    }
+
+    $innerHtml = static function (DOMNode $node): string {
+        $html = '';
+        foreach ($node->childNodes as $childNode) {
+            $html .= $node->ownerDocument?->saveHTML($childNode) ?: '';
+        }
+
+        return $html;
+    };
+
+    foreach ($languageCandidates as $candidate) {
+        $parts = [];
+        foreach ($nodes as $node) {
+            if (!$node instanceof DOMElement) {
+                continue;
+            }
+
+            $nodeLanguage = strtolower(str_replace('_', '-', trim($node->getAttribute('lang'))));
+            if ($nodeLanguage === strtolower(str_replace('_', '-', $candidate))) {
+                $parts[] = $innerHtml($node);
+            }
+        }
+
+        if (!empty($parts)) {
+            return implode('', $parts);
+        }
+    }
+
+    $first = $nodes->item(0);
+
+    return $first instanceof DOMNode ? $innerHtml($first) : $htmlString;
 }

@@ -24,7 +24,7 @@ readonly class UserAnonymizationHelper
      * Extra-field variable names that must be deleted as part of the anonymization
      * (GDPR consent and deletion-request records).
      */
-    private const CONSENT_FIELDS = [
+    private const array CONSENT_FIELDS = [
         'legal_accept',
         'request_for_legal_agreement_consent_removal',
         'request_for_legal_agreement_consent_removal_justification',
@@ -38,7 +38,7 @@ readonly class UserAnonymizationHelper
      *
      * @var array<string, array{user_column: string, ip_column: string}>
      */
-    private const IP_TABLES = [
+    private const array IP_TABLES = [
         'track_e_access' => [
             'user_column' => 'access_user_id',
             'ip_column' => 'user_ip',

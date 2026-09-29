@@ -180,18 +180,16 @@ class ExtraFieldValue extends Model
             switch ($extraFieldInfo['value_type']) {
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
-                    if (!empty($value)) {
-                        if (isset($params['extra_'.$extraFieldInfo['variable'].'_coordinates'])) {
-                            $value = $value.'::'.$params['extra_'.$extraFieldInfo['variable'].'_coordinates'];
-                        }
-                        $newParams = [
-                            'item_id' => $params['item_id'],
-                            'field_id' => $extraFieldInfo['id'],
-                            'field_value' => $value,
-                            'comment' => $comment,
-                        ];
-                        self::save($newParams, $showQuery);
+                    if (isset($params['extra_'.$extraFieldInfo['variable'].'_coordinates'])) {
+                        $value = $value.'::'.$params['extra_'.$extraFieldInfo['variable'].'_coordinates'];
                     }
+                    $newParams = [
+                        'item_id' => $params['item_id'],
+                        'field_id' => $extraFieldInfo['id'],
+                        'field_value' => $value,
+                        'comment' => $comment,
+                    ];
+                    self::save($newParams, $showQuery);
                     break;
                 case ExtraField::FIELD_TYPE_TAG:
                     if (EntityExtraField::USER_FIELD_TYPE == $type) {

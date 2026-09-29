@@ -38,8 +38,9 @@ class Group implements Stringable
         #[Assert\NotBlank]
         #[ORM\Column(name: 'title', type: 'string', length: 255, unique: true, nullable: false)]
         protected string $title,
-        #[ORM\Column(name: 'roles', type: 'array')]
-        protected array $roles = [
+        #[ORM\Column(name: 'roles', type: 'json')]
+        protected array $roles
+        = [
         ]
     ) {
         $this->users = new ArrayCollection();
@@ -48,6 +49,11 @@ class Group implements Stringable
     public function __toString(): string
     {
         return $this->getTitle() ?: '';
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 
     public function addRole(string $role): self
@@ -77,11 +83,6 @@ class Group implements Stringable
         }
 
         return $this;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
     }
 
     public function setTitle(string $title): self

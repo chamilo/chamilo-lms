@@ -26,6 +26,22 @@ import assignments from "./assignments"
 import links from "./links"
 import forum from "./forum"
 import survey from "./survey"
+import exercise from "./exercise"
+import gradebook from "./gradebook"
+import courseDescription from "./courseDescription"
+import courseInvitation from "./courseInvitation"
+import notebook from "./notebook"
+import portfolio from "./portfolio"
+import wiki from "./wiki"
+import courseProgress from "./courseProgress"
+import courseSettings from "./courseSettings"
+import courseReporting from "./courseReporting"
+import globalReporting from "./globalReporting"
+import courseUser from "./courseUser"
+import courseSession from "./courseSession"
+import myClass from "./myClass"
+import announcement from "./announcement"
+import ticket from "./ticket"
 import glossary from "./glossary"
 import attendance from "./attendance"
 import lpRoutes from "./lp"
@@ -51,19 +67,104 @@ import { useCourseSettings } from "../store/courseSettingStore"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
 import courseService from "../services/courseService"
-import { checkIsAllowedToEdit, useUserSessionSubscription } from "../composables/userPermissions"
+import { checkIsAllowedToEdit } from "../composables/userPermissions"
+import securityService from "../services/securityService"
+import globalReportingService from "../services/globalReportingService"
 import { customVueTemplateEnabled } from "../config/env"
+import { resolveCourseIdFromRoute } from "../utils/courseContext"
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function resolveCourseId(to) {
-  if ("CourseHome" === to.name) {
-    return parseInt(to.params?.id ?? 0)
+// Parses an internal (same-origin) URL and appends the course context
+// (cid, and sid when present) without overriding params already there.
+// Returns an origin-relative URL, or null for external/malformed URLs —
+// the result is assigned to window.location.href, so rejecting foreign
+// origins here is the open-redirect defense.
+function appendCourseContext(url, courseId, sessionId) {
+  if (!url || typeof url !== "string") {
+    return null
   }
 
-  return parseInt(to.query?.cid ?? 0)
+  let parsedUrl
+
+  try {
+    parsedUrl = new URL(url, window.location.origin)
+  } catch {
+    return null
+  }
+
+  if (parsedUrl.origin !== window.location.origin) {
+    return null
+  }
+
+  if (!parsedUrl.searchParams.has("cid")) {
+    parsedUrl.searchParams.set("cid", courseId)
+  }
+
+  if (sessionId && !parsedUrl.searchParams.has("sid")) {
+    parsedUrl.searchParams.set("sid", sessionId)
+  }
+
+  return parsedUrl.pathname + parsedUrl.search + parsedUrl.hash
+}
+
+function isForumCourseTool(tool) {
+  const title = String(tool?.title || tool?.tool?.title || "").toLowerCase()
+
+  return title === "forum"
+}
+
+function buildForumToolUrlFromResourceNode(tool, courseId, sessionId) {
+  const nodeId = parseInt(tool?.resourceNode?.id || tool?.resourceNodeId || 0)
+
+  if (!nodeId) {
+    return null
+  }
+
+  const query = new URLSearchParams({ cid: String(courseId) })
+
+  if (sessionId) {
+    query.set("sid", String(sessionId))
+  }
+
+  return `/resources/forum/${nodeId}/?${query.toString()}`
+}
+
+async function resolveForumAutoLaunchUrl(courseId, sessionId, course) {
+  try {
+    const cTools = await courseService.loadCTools(courseId, sessionId || 0)
+    const forumTool = Array.isArray(cTools) ? cTools.find(isForumCourseTool) : null
+
+    if (forumTool) {
+      const toolUrl = appendCourseContext(forumTool.url, courseId, sessionId)
+
+      if (toolUrl && !toolUrl.includes("/main/forum/")) {
+        return toolUrl
+      }
+
+      const resourceNodeUrl = buildForumToolUrlFromResourceNode(forumTool, courseId, sessionId)
+
+      if (resourceNodeUrl) {
+        return resourceNodeUrl
+      }
+    }
+  } catch (error) {
+    console.error("[CourseHome] Failed to resolve forum tool URL", error)
+  }
+
+  const courseResourceNodeUrl = buildForumToolUrlFromResourceNode(
+    { resourceNode: course?.resourceNode },
+    courseId,
+    sessionId,
+  )
+
+  if (courseResourceNodeUrl) {
+    return courseResourceNodeUrl
+  }
+
+  return null
 }
 
 /**
@@ -139,6 +240,10 @@ function derivePageTypeClasses(to) {
     return ["page-administration", "page-administration-platform"]
   }
 
+  if (p.startsWith("/reporting")) {
+    return ["page-reporting"]
+  }
+
   if (p.startsWith("/tracking")) {
     return ["page-tracking"]
   }
@@ -172,7 +277,7 @@ function derivePageTypeClasses(to) {
  */
 async function courseHomeBeforeEnter(to) {
   const courseId = parseInt(to.params.id)
-  const sessionId = parseInt(to.query?.sid)
+  const sessionId = parseInt(to.query?.sid ?? 0) || 0
   const autoLaunchKey = `course_autolaunch_${courseId}`
 
   if (sessionStorage.getItem(autoLaunchKey) === "true") {
@@ -203,6 +308,11 @@ async function courseHomeBeforeEnter(to) {
 
     const courseSettingsStore = useCourseSettings()
     const sid = sessionId ? `&sid=${sessionId}` : ""
+    const courseContextQuery = {
+      cid: courseId,
+      sid: sessionId || 0,
+      gid: 0,
+    }
 
     // Document auto-launch
     const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
@@ -216,38 +326,46 @@ async function courseHomeBeforeEnter(to) {
 
     // Exercise auto-launch
     const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
+    const exerciseResourceNodeId = cidReqStore.course?.resourceNode?.id
 
-    if (exerciseAutoLaunch === 2) {
+    if (exerciseAutoLaunch === 2 && exerciseResourceNodeId) {
       sessionStorage.setItem(autoLaunchKey, "true")
-      window.location.href = `/main/exercise/exercise.php?cid=${courseId}` + sid
 
-      return false
+      return {
+        name: "ExerciseList",
+        params: { node: exerciseResourceNodeId },
+        query: courseContextQuery,
+      }
     } else if (exerciseAutoLaunch === 1) {
       const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
 
-      if (exerciseId) {
+      if (exerciseId && exerciseResourceNodeId) {
         sessionStorage.setItem(autoLaunchKey, "true")
-        window.location.href = `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}` + sid
 
-        return false
+        return {
+          name: "ExerciseOverview",
+          params: { node: exerciseResourceNodeId, exerciseId },
+          query: courseContextQuery,
+        }
       }
     }
 
     // Learning path auto-launch
     const lpAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
+    const learningPathNodeId = Number(cidReqStore.course?.resourceNode?.id || 0)
 
-    if (lpAutoLaunch === 2) {
+    if (lpAutoLaunch === 2 && learningPathNodeId > 0) {
       sessionStorage.setItem(autoLaunchKey, "true")
-      window.location.href = `/main/lp/lp_controller.php?cid=${courseId}` + sid
+      window.location.href = `/resources/lp/${learningPathNodeId}?cid=${courseId}` + sid
 
       return false
-    } else if (lpAutoLaunch === 1) {
+    } else if (lpAutoLaunch === 1 && learningPathNodeId > 0) {
       const lpId = await courseService.getAutoLaunchLPId(courseId, sessionId)
 
       if (lpId) {
         sessionStorage.setItem(autoLaunchKey, "true")
         window.location.href =
-          `/main/lp/lp_controller.php?lp_id=${lpId}&cid=${courseId}&action=view&isStudentView=true` + sid
+          `/resources/lp/${learningPathNodeId}/${lpId}/runtime?cid=${courseId}&isStudentView=true` + sid
 
         return false
       }
@@ -257,10 +375,16 @@ async function courseHomeBeforeEnter(to) {
     const forumAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
 
     if (forumAutoLaunch === 1) {
-      sessionStorage.setItem(autoLaunchKey, "true")
-      window.location.href = `/main/forum/index.php?cid=${courseId}` + sid
+      const forumAutoLaunchUrl = await resolveForumAutoLaunchUrl(courseId, sessionId, cidReqStore.course)
 
-      return false
+      if (forumAutoLaunchUrl) {
+        sessionStorage.setItem(autoLaunchKey, "true")
+        window.location.href = forumAutoLaunchUrl
+
+        return false
+      }
+
+      console.warn("[CourseHome] Forum auto-launch is enabled but the Vue forum URL could not be resolved.")
     }
   } catch (error) {
     console.error("Error during CourseHome route guard:", error)
@@ -290,6 +414,15 @@ const router = createRouter({
       name: "AccessUrlDelete",
       component: () => import("../views/accessurl/DeleteAccessUrl.vue"),
       props: (route) => ({ id: Number(route.params.id) }),
+      meta: {
+        requiresGlobalAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Delete access",
+        breadcrumbParents: [
+          { label: "Administration", route: { name: "AdminIndex" } },
+          { label: "Multiple access URL / Branding", route: { name: "AccessUrlManage" } },
+        ],
+      },
     },
     {
       path: "/home",
@@ -336,6 +469,21 @@ const router = createRouter({
       beforeEnter: courseHomeBeforeEnter,
     },
     {
+      path: "/ai/course/:id/analyzer",
+      name: "AiCourseAnalyzer",
+      // The page body is rendered by Symfony/Twig and moved into the DashboardLayout slot by App.vue.
+      // This empty route component only registers the URL in Vue Router so the shared course context
+      // and breadcrumb mechanisms can treat it like the other course tools.
+      component: { render: () => null },
+      meta: {
+        requiresAuth: true,
+        requiresCourseContext: true,
+        showBreadcrumb: true,
+        preserveLegacyContent: true,
+        breadcrumb: "AI analyzer",
+      },
+    },
+    {
       path: "/courses",
       component: MyCoursesLayout,
       children: [
@@ -344,6 +492,26 @@ const router = createRouter({
           name: "MyCourses",
           component: MyCourseList,
           meta: { requiresAuth: true },
+        },
+        {
+          path: "exercise/pending-attempts",
+          name: "ExercisePendingAttempts",
+          component: () => import("../views/exercise/ExercisePendingAttemptsView.vue"),
+          meta: {
+            requiresAuth: true,
+            showBreadcrumb: true,
+            breadcrumb: "Pending attempts",
+          },
+        },
+        {
+          path: "exercise/global-report",
+          name: "ExerciseGlobalReport",
+          component: () => import("../views/exercise/ExerciseGlobalReportView.vue"),
+          meta: {
+            requiresAuth: true,
+            showBreadcrumb: true,
+            breadcrumb: "Exercises global report",
+          },
         },
       ],
     },
@@ -371,7 +539,37 @@ const router = createRouter({
       component: MySessionListUpcoming,
       meta: { requiresAuth: true },
     },
+    {
+      path: "/survey/pending",
+      name: "SurveyPending",
+      component: () => import("../views/survey/SurveyPendingView.vue"),
+      meta: {
+        requiresAuth: true,
+        showBreadcrumb: true,
+        breadcrumb: "Pending surveys",
+      },
+    },
+    {
+      path: "/my-certificates",
+      name: "MyCertificates",
+      component: () => import("../views/gradebook/MyCertificatesView.vue"),
+      meta: {
+        requiresAuth: true,
+        showBreadcrumb: true,
+        breadcrumb: "My certificates",
+      },
+    },
+    {
+      path: "/certificates/search",
+      name: "CertificateSearch",
+      component: () => import("../views/gradebook/CertificateSearchView.vue"),
+      meta: {
+        showBreadcrumb: true,
+        breadcrumb: "Search certificates",
+      },
+    },
     fileManagerRoutes,
+    ...portfolio,
     socialNetworkRoutes,
     catalogue,
     adminRoutes,
@@ -381,6 +579,21 @@ const router = createRouter({
     links,
     forum,
     survey,
+    exercise,
+    gradebook,
+    courseDescription,
+    courseInvitation,
+    notebook,
+    wiki,
+    courseProgress,
+    courseSettings,
+    courseReporting,
+    globalReporting,
+    courseUser,
+    courseSession,
+    myClass,
+    announcement,
+    ticket,
     glossary,
     attendance,
     lpRoutes,
@@ -406,8 +619,18 @@ const router = createRouter({
     roomRoutes,
     buycoursesRoutes,
   ],
-})
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
 
+    if (to.hash) {
+      return { el: to.hash }
+    }
+
+    return { top: 0 }
+  },
+})
 
 // ---------------------------------------------------------------------------
 // Route loading indicator
@@ -480,7 +703,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  const cid = resolveCourseId(to)
+  const cid = resolveCourseIdFromRoute(to)
 
   if (!cid) {
     Object.keys(sessionStorage)
@@ -489,15 +712,29 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // Determine what the route requires
+  const allowsAnonymousAccess = to.matched.some((record) => record.meta?.allowAnonymousAccess === true)
   const needsAuth = to.matched.some((record) => record.meta?.requiresAuth === true)
   const wantsAdmin = to.matched.some((record) => record.meta?.requiresAdmin === true)
+  const wantsGlobalAdmin = to.matched.some((record) => record.meta?.requiresGlobalAdmin === true)
   const wantsSessionAdmin = to.matched.some((record) => record.meta?.requiresSessionAdmin === true)
   const wantsHR = to.matched.some((record) => record.meta?.requiresHR === true)
+  const wantsQuestionManager = to.matched.some((record) => record.meta?.requiresQuestionManager === true)
 
-  const mustBeLogged = needsAuth || wantsAdmin || wantsSessionAdmin || wantsHR
+  const mustBeLogged =
+    !allowsAnonymousAccess &&
+    (needsAuth || wantsAdmin || wantsGlobalAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager)
 
   if (mustBeLogged && !securityStore.isLoading) {
-    await securityStore.checkSession()
+    // force:true - a protected route needs a real answer from the server,
+    // not the client's not-yet-hydrated guess (see securityStore.checkSession).
+    await securityStore.checkSession(
+      {
+        cid,
+        sid: parseInt(to.query?.sid ?? 0) || 0,
+        gid: parseInt(to.query?.gid ?? 0) || 0,
+      },
+      { force: true },
+    )
   }
 
   // If user must be logged but is not, send to login
@@ -508,13 +745,17 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // Role-based access control: admin / session-admin / HR
-  if (wantsAdmin || wantsSessionAdmin || wantsHR) {
+  // Role-based access control: admin / global-admin / session-admin / HR / question manager
+  if (wantsAdmin || wantsGlobalAdmin || wantsSessionAdmin || wantsHR || wantsQuestionManager) {
     let allowed = true
 
-    if (wantsAdmin && wantsSessionAdmin) {
+    if (wantsGlobalAdmin) {
+      // Only global admins (ROLE_GLOBAL_ADMIN), e.g. the Multi URLs dashboard.
+      // A plain ROLE_ADMIN is not enough here, unlike requiresAdmin/isAdmin below.
+      allowed = securityStore.isGranted("ROLE_GLOBAL_ADMIN")
+    } else if (wantsAdmin && wantsSessionAdmin) {
       // Route can be accessed by platform admins OR session admins
-      allowed = !!securityStore.isAdmin || !!securityStore.isSessionAdmin
+      allowed = securityStore.isGranted("ROLE_SESSION_MANAGER")
     } else if (wantsAdmin && wantsHR) {
       // Route can be accessed by platform admins OR HR users
       allowed = !!securityStore.isAdmin || !!securityStore.isHRM
@@ -527,6 +768,9 @@ router.beforeEach(async (to, from, next) => {
     } else if (wantsHR) {
       // Only HR users
       allowed = !!securityStore.isHRM
+    } else if (wantsQuestionManager) {
+      // Platform administrators and dedicated question managers.
+      allowed = !!securityStore.isAdmin || securityStore.isGranted("ROLE_QUESTION_MANAGER")
     }
 
     if (!allowed) {
@@ -535,6 +779,42 @@ router.beforeEach(async (to, from, next) => {
 
       return
     }
+  }
+
+  // Resolve the global reporting landing page before mounting the Overview component.
+  // This prevents users without global-report access from briefly seeing the overview UI
+  // while its component waits for the dashboard API response and redirects afterwards.
+  // Uses the cheap /landing endpoint (context/settings only) rather than /dashboard, which
+  // also computes expensive followed-user and generic-metrics queries the Overview page
+  // needs to display but the redirect decision itself never depends on. The full dashboard
+  // fetch is still kicked off here (not awaited) so it's already in flight, memoized, and
+  // ready for the Overview component's own (spinner-backed) load by the time it mounts.
+  if (to.name === "GlobalReportingOverview") {
+    globalReportingService.getDashboard(true).catch(() => {})
+
+    try {
+      const landing = await globalReportingService.getLanding()
+
+      if (landing.redirectUrl && landing.redirectUrl !== "/reporting") {
+        next({ path: landing.redirectUrl, replace: true })
+
+        return
+      }
+    } catch (error) {
+      console.error("[Router] Failed to resolve the global reporting landing page", error)
+    }
+  }
+
+  // Course-context guard: routes flagged with requiresCourseContext need a cid
+  // (query param, or path param on CourseHome — see utils/courseContext.js).
+  // sid/gid stay optional. Blocking here, before beforeResolve, keeps the
+  // cidReq store from being fed a course-less context.
+  const requiresCourseContext = to.matched.some((record) => record.meta?.requiresCourseContext === true)
+
+  if (requiresCourseContext && !cid) {
+    next({ name: "Home", replace: true })
+
+    return
   }
 
   // Feature-flag guard: platform.allow_my_files
@@ -558,40 +838,48 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
+// Tracks the last course context for which contextual roles were loaded, so we
+// skip the backend round-trip when navigating between tools of the same course.
+let lastCourseContextKey = null
+
 router.beforeResolve(async (to) => {
   const cidReqStore = useCidReqStore()
   const securityStore = useSecurityStore()
 
-  const cid = resolveCourseId(to)
-  const sid = parseInt(to.query?.sid ?? 0)
+  const cid = resolveCourseIdFromRoute(to)
+  const sid = parseInt(to.query?.sid ?? 0) || 0
+  const gid = parseInt(to.query?.gid ?? 0) || 0
 
-  if (cid) {
-    await cidReqStore.setCourseAndSessionById(cid, sid)
-
-    if (cidReqStore.session) {
-      const { isGeneralCoach, isCourseCoach } = useUserSessionSubscription()
-
-      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_TEACHER")
-      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_STUDENT")
-
-      if (isGeneralCoach.value || isCourseCoach.value) {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_TEACHER")
-      } else {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_STUDENT")
-      }
-    } else {
-      const isTeacher = cidReqStore.course?.teachers?.some((userSubscription) => {
-        return 0 === userSubscription.relationType && userSubscription.user["@id"] === securityStore.user["@id"]
-      })
-
-      if (isTeacher) {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_TEACHER")
-      } else {
-        securityStore.user.roles.push("ROLE_CURRENT_COURSE_STUDENT")
-      }
-    }
-  } else {
+  if (!cid) {
+    // Leaving the course context resets both the cid and the contextual roles,
+    // keeping the personal/global roles intact.
     cidReqStore.resetCid()
+    securityStore.setContextRoles([])
+    lastCourseContextKey = ""
+
+    return
+  }
+
+  await cidReqStore.setCourseAndSessionById(cid, sid)
+
+  // Skip the backend round-trip when navigating between tools of the same course.
+  const courseContextKey = `${cid}:${sid}:${gid}`
+
+  if (courseContextKey === lastCourseContextKey) {
+    return
+  }
+
+  lastCourseContextKey = courseContextKey
+
+  // The backend (CourseAccessResolver) is the single source of truth for the
+  // ROLE_CURRENT_COURSE_* roles; replace the contextual roles with its result.
+  try {
+    const roles = await securityService.getCourseContextRoles({ cid, sid, gid })
+
+    securityStore.setContextRoles(roles)
+  } catch (error) {
+    console.error("[Router] Failed to load course context roles", error)
+    securityStore.setContextRoles([])
   }
 })
 

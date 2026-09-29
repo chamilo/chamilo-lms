@@ -35,6 +35,11 @@ final class MessageStateProvider implements ProviderInterface
 
     /**
      * Provides data based on the operation type (collection or item).
+     *
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<Message>|Message|null
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
@@ -48,8 +53,12 @@ final class MessageStateProvider implements ProviderInterface
 
     /**
      * Handles collection-level operations with filtering and pagination.
+     *
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<Message>
      */
-    private function handleCollection(Operation $operation, array $context): array|Paginator
+    private function handleCollection(Operation $operation, array $context): iterable
     {
         $user = $this->userHelper->getCurrent();
         if (!$user) {

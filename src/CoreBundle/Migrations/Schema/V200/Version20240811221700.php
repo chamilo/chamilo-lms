@@ -16,6 +16,11 @@ final class Version20240811221700 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $gradebookEvaluationIdIsUnsigned = $schema->hasTable('gradebook_evaluation')
+            && $schema->getTable('gradebook_evaluation')->hasColumn('id')
+            && $schema->getTable('gradebook_evaluation')->getColumn('id')->getUnsigned();
+        $gradebookEvaluationIdType = $gradebookEvaluationIdIsUnsigned ? 'INT UNSIGNED' : 'INT';
+
         $this->addSql('
             CREATE TABLE IF NOT EXISTS lti_token (
                 id INT AUTO_INCREMENT NOT NULL,
@@ -29,20 +34,20 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
         ');
 
-        $this->addSql('
+        $this->addSql("
             CREATE TABLE IF NOT EXISTS lti_lineitem (
                 id INT AUTO_INCREMENT NOT NULL,
                 tool_id INT NOT NULL,
-                evaluation INT NOT NULL,
+                evaluation {$gradebookEvaluationIdType} NOT NULL,
                 resource_id VARCHAR(255) DEFAULT NULL,
                 tag VARCHAR(255) DEFAULT NULL,
-                start_date DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\',
-                end_date DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime)\',
+                start_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
+                end_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
                 INDEX IDX_5C76B75D8F7B22CC (tool_id),
                 UNIQUE INDEX UNIQ_5C76B75D1323A575 (evaluation),
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
-        ');
+        ");
 
         $this->addSql('
             CREATE TABLE IF NOT EXISTS lti_platform (
@@ -54,12 +59,12 @@ final class Version20240811221700 extends AbstractMigrationChamilo
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
         ');
 
-        $this->addSql('
+        $this->addSql("
             CREATE TABLE IF NOT EXISTS lti_external_tool (
                 id INT AUTO_INCREMENT NOT NULL,
                 resource_node_id INT DEFAULT NULL,
                 c_id INT DEFAULT NULL,
-                gradebook_eval_id INT DEFAULT NULL,
+                gradebook_eval_id {$gradebookEvaluationIdType} DEFAULT NULL,
                 parent_id INT DEFAULT NULL,
                 title VARCHAR(255) NOT NULL,
                 description LONGTEXT DEFAULT NULL,
@@ -72,59 +77,85 @@ final class Version20240811221700 extends AbstractMigrationChamilo
                 client_id VARCHAR(255) DEFAULT NULL,
                 login_url VARCHAR(255) DEFAULT NULL,
                 redirect_url VARCHAR(255) DEFAULT NULL,
-                advantage_services LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\',
-                version VARCHAR(255) DEFAULT \'lti1p1\' NOT NULL,
-                launch_presentation LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\',
-                replacement_params LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\',
+                advantage_services LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)',
+                version VARCHAR(255) DEFAULT 'lti1p1' NOT NULL,
+                launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
+                replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
                 UNIQUE INDEX UNIQ_DB0E04E41BAD783F (resource_node_id),
                 INDEX IDX_DB0E04E491D79BD3 (c_id),
                 INDEX IDX_DB0E04E482F80D8B (gradebook_eval_id),
                 INDEX IDX_DB0E04E4727ACA70 (parent_id),
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
-        ');
+        ");
 
-        $this->addSql('
-            ALTER TABLE lti_token
-            ADD CONSTRAINT FK_EA71C468F7B22CC FOREIGN KEY (tool_id)
-            REFERENCES lti_external_tool (id) ON DELETE CASCADE;
-        ');
+        $ltiToken = $schema->hasTable('lti_token')
+            ? $schema->getTable('lti_token')
+            : null;
+        $ltiExternalTool = $schema->hasTable('lti_external_tool')
+            ? $schema->getTable('lti_external_tool')
+            : null;
+        $ltiLineitem = $schema->hasTable('lti_lineitem')
+            ? $schema->getTable('lti_lineitem')
+            : null;
 
-        $this->addSql('
-            ALTER TABLE lti_external_tool
-            ADD CONSTRAINT FK_DB0E04E41BAD783F FOREIGN KEY (resource_node_id)
-            REFERENCES resource_node (id) ON DELETE CASCADE;
-        ');
+        if (null === $ltiToken || !$ltiToken->hasForeignKey('FK_EA71C468F7B22CC')) {
+            $this->addSql('
+                ALTER TABLE lti_token
+                ADD CONSTRAINT FK_EA71C468F7B22CC FOREIGN KEY (tool_id)
+                REFERENCES lti_external_tool (id) ON DELETE CASCADE;
+            ');
+        }
 
-        $this->addSql('
-            ALTER TABLE lti_external_tool
-            ADD CONSTRAINT FK_DB0E04E491D79BD3 FOREIGN KEY (c_id)
-            REFERENCES course (id);
-        ');
+        if (null === $ltiExternalTool || !$ltiExternalTool->hasForeignKey('FK_DB0E04E41BAD783F')) {
+            $this->addSql('
+                ALTER TABLE lti_external_tool
+                ADD CONSTRAINT FK_DB0E04E41BAD783F FOREIGN KEY (resource_node_id)
+                REFERENCES resource_node (id) ON DELETE CASCADE;
+            ');
+        }
 
-        $this->addSql('
-            ALTER TABLE lti_external_tool
-            ADD CONSTRAINT FK_DB0E04E482F80D8B FOREIGN KEY (gradebook_eval_id)
-            REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;
-        ');
+        if (null === $ltiExternalTool || !$ltiExternalTool->hasForeignKey('FK_DB0E04E491D79BD3')) {
+            $this->addSql('
+                ALTER TABLE lti_external_tool
+                ADD CONSTRAINT FK_DB0E04E491D79BD3 FOREIGN KEY (c_id)
+                REFERENCES course (id);
+            ');
+        }
 
-        $this->addSql('
-            ALTER TABLE lti_external_tool
-            ADD CONSTRAINT FK_DB0E04E4727ACA70 FOREIGN KEY (parent_id)
-            REFERENCES lti_external_tool (id);
-        ');
+        if (null === $ltiExternalTool || !$ltiExternalTool->hasForeignKey('FK_DB0E04E482F80D8B')) {
+            $this->addSql("ALTER TABLE lti_external_tool CHANGE gradebook_eval_id gradebook_eval_id {$gradebookEvaluationIdType} DEFAULT NULL");
+            $this->addSql('
+                ALTER TABLE lti_external_tool
+                ADD CONSTRAINT FK_DB0E04E482F80D8B FOREIGN KEY (gradebook_eval_id)
+                REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;
+            ');
+        }
 
-        $this->addSql('
-            ALTER TABLE lti_lineitem
-            ADD CONSTRAINT FK_5C76B75D8F7B22CC FOREIGN KEY (tool_id)
-            REFERENCES lti_external_tool (id) ON DELETE CASCADE;
-        ');
+        if (null === $ltiExternalTool || !$ltiExternalTool->hasForeignKey('FK_DB0E04E4727ACA70')) {
+            $this->addSql('
+                ALTER TABLE lti_external_tool
+                ADD CONSTRAINT FK_DB0E04E4727ACA70 FOREIGN KEY (parent_id)
+                REFERENCES lti_external_tool (id);
+            ');
+        }
 
-        $this->addSql('
-            ALTER TABLE lti_lineitem
-            ADD CONSTRAINT FK_5C76B75D1323A575 FOREIGN KEY (evaluation)
-            REFERENCES gradebook_evaluation (id) ON DELETE CASCADE;
-        ');
+        if (null === $ltiLineitem || !$ltiLineitem->hasForeignKey('FK_5C76B75D8F7B22CC')) {
+            $this->addSql('
+                ALTER TABLE lti_lineitem
+                ADD CONSTRAINT FK_5C76B75D8F7B22CC FOREIGN KEY (tool_id)
+                REFERENCES lti_external_tool (id) ON DELETE CASCADE;
+            ');
+        }
+
+        if (null === $ltiLineitem || !$ltiLineitem->hasForeignKey('FK_5C76B75D1323A575')) {
+            $this->addSql("ALTER TABLE lti_lineitem CHANGE evaluation evaluation {$gradebookEvaluationIdType} NOT NULL");
+            $this->addSql('
+                ALTER TABLE lti_lineitem
+                ADD CONSTRAINT FK_5C76B75D1323A575 FOREIGN KEY (evaluation)
+                REFERENCES gradebook_evaluation (id) ON DELETE CASCADE;
+            ');
+        }
     }
 
     public function down(Schema $schema): void

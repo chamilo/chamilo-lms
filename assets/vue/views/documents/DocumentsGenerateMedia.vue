@@ -172,6 +172,13 @@
         <p class="text-xs text-gray-600">{{ t("Tip: click a preset to quickly set the size.") }}</p>
       </div>
 
+      <BaseAdvancedSettingsButton
+        v-if="showResourceLanguageAdvancedSettings"
+        v-model="showAdvancedSettings"
+      >
+        <ResourceLanguageSelector v-model="selectedLanguage" />
+      </BaseAdvancedSettingsButton>
+
       <!-- Actions -->
       <div class="flex flex-wrap items-center gap-2">
         <BaseButton
@@ -219,19 +226,29 @@
       >
         <h3 class="font-semibold">{{ t("Preview") }}</h3>
 
-        <img
-          v-if="selectedType === 'image'"
-          :src="previewUrl"
-          class="max-w-full rounded border border-gray-200"
-          alt="Generated preview"
-        />
+        <div class="relative inline-block max-w-full">
+          <img
+            v-if="selectedType === 'image'"
+            :src="previewUrl"
+            class="block max-w-full rounded border border-gray-200"
+            alt="Generated preview"
+          />
 
-        <video
-          v-else
-          :src="previewUrl"
-          class="max-w-full rounded border border-gray-200"
-          controls
-        />
+          <video
+            v-else
+            :src="previewUrl"
+            class="block max-w-full rounded border border-gray-200"
+            controls
+          />
+
+          <span
+            v-if="showPreviewAiGeneratedBadge"
+            class="absolute bottom-2 right-2 rounded px-2 py-1 text-xs font-semibold shadow"
+            style="background-color: rgba(15, 23, 42, 0.82); color: #fff"
+          >
+            {{ t("AI generated") }}
+          </span>
+        </div>
       </div>
 
       <!-- Revised prompt -->
@@ -363,6 +380,10 @@ function isResourceLanguageActive(language) {
 }
 
 const showResourceLanguageAdvancedSettings = computed(() => {
+  if ("true" !== platformConfig.getSetting("language.language_by_resource")) {
+    return false
+  }
+
   const languages = Array.isArray(window.languages) ? window.languages : []
 
   return languages.filter(isResourceLanguageActive).length > 1
@@ -371,6 +392,77 @@ const showResourceLanguageAdvancedSettings = computed(() => {
 const folders = ref([])
 const selectedFolderId = ref(null)
 const selectedLanguage = ref("")
+
+function normalizeLanguageIso(value) {
+  const raw = String(value || "").trim()
+  if (!raw) {
+    return ""
+  }
+
+  const normalizedRaw = raw.replace("-", "_").toLowerCase()
+  const languages = Array.isArray(window.languages) ? window.languages : []
+  const exact = languages.find((language) => {
+    const candidates = [
+      language?.isocode,
+      language?.isoCode,
+      language?.englishName,
+      language?.english_name,
+      language?.originalName,
+      language?.original_name,
+    ]
+
+    return candidates.some(
+      (candidate) => String(candidate || "").replace("-", "_").toLowerCase() === normalizedRaw,
+    )
+  })
+
+  if (exact) {
+    return String(exact.isocode || exact.isoCode || "")
+  }
+
+  const shortCode = normalizedRaw.split("_")[0]
+  const byShortCode = languages.find((language) => {
+    const code = String(language?.isocode || language?.isoCode || "")
+      .replace("-", "_")
+      .toLowerCase()
+
+    return code === shortCode || code.startsWith(`${shortCode}_`)
+  })
+
+  return String(byShortCode?.isocode || byShortCode?.isoCode || "")
+}
+
+async function applyDefaultLanguageFromContext() {
+  if (selectedLanguage.value) {
+    return
+  }
+
+  let defaultLanguage = normalizeLanguageIso(route.query.course_language)
+
+  if (!defaultLanguage && cid) {
+    try {
+      const response = await fetch(`/api/courses/${cid}`, {
+        credentials: "same-origin",
+        headers: { Accept: "application/json" },
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        defaultLanguage = normalizeLanguageIso(data?.courseLanguage || data?.course_language || data?.language)
+      }
+    } catch (error) {
+      console.warn("[DocumentsGenerateMedia] Failed to load course language.", error)
+    }
+  }
+
+  if (!defaultLanguage) {
+    defaultLanguage = normalizeLanguageIso(securityStore.user?.locale)
+  }
+
+  if (defaultLanguage && !selectedLanguage.value) {
+    selectedLanguage.value = defaultLanguage
+  }
+}
 
 const fileName = ref("")
 const prompt = ref("")
@@ -540,6 +632,12 @@ const canGenerate = computed(() => {
 
 const hasGeneratedResult = computed(() => !!generatedResult.value)
 
+// Base64 images are resized locally and receive an embedded AI-generated watermark.
+// Keep the HTML preview badge only when no embedded image watermark is guaranteed.
+const showPreviewAiGeneratedBadge = computed(
+  () => selectedType.value !== "image" || !generatedResult.value?.is_base64,
+)
+
 const canAccept = computed(() => {
   if (!generatedResult.value) return false
   if (!generatedResult.value.is_base64) return false
@@ -614,6 +712,32 @@ function canvasMimeFromContentType(contentType) {
   return "image/png"
 }
 
+function drawAiGeneratedWatermark(ctx, canvas) {
+  const label = t("AI generated")
+  const smallerSide = Math.max(1, Math.min(canvas.width, canvas.height))
+  const fontSize = Math.max(14, Math.round(smallerSide * 0.035))
+  const paddingX = Math.max(10, Math.round(fontSize * 0.75))
+  const paddingY = Math.max(6, Math.round(fontSize * 0.45))
+  const margin = Math.max(12, Math.round(fontSize * 0.8))
+
+  ctx.save()
+  ctx.font = `600 ${fontSize}px sans-serif`
+
+  const textMetrics = ctx.measureText(label)
+  const boxWidth = Math.ceil(textMetrics.width + paddingX * 2)
+  const boxHeight = Math.ceil(fontSize + paddingY * 2)
+  const x = Math.max(margin, canvas.width - boxWidth - margin)
+  const y = Math.max(margin, canvas.height - boxHeight - margin)
+
+  ctx.fillStyle = "rgba(15, 23, 42, 0.72)"
+  ctx.fillRect(x, y, boxWidth, boxHeight)
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.96)"
+  ctx.textBaseline = "middle"
+  ctx.fillText(label, x + paddingX, y + boxHeight / 2)
+  ctx.restore()
+}
+
 function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -634,6 +758,8 @@ function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
         const sy = (img.height - sh) / 2
 
         ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH)
+
+        drawAiGeneratedWatermark(ctx, canvas)
 
         const preferredMime = canvasMimeFromContentType(inContentType)
         let dataUrl = canvas.toDataURL(preferredMime)
@@ -1103,6 +1229,7 @@ onMounted(async () => {
 
     folders.value = await fetchFolders()
     selectedFolderId.value = normalizeResourceNodeId(route.params.node) || folders.value[0]?.value || null
+    await applyDefaultLanguageFromContext()
 
     if (typeOptions.value.length === 1) {
       selectedType.value = typeOptions.value[0].value

@@ -16,6 +16,7 @@ import courseRelUserService from "../../services/courseRelUserService"
 import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
 import { useLocale } from "../../composables/locale"
 import baseService from "../../services/baseService"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 
 const { t } = useI18n()
 const { getOriginalLanguageName } = useLocale()
@@ -46,13 +47,19 @@ const ratingResetKey = ref(0)
 const localCourse = ref(JSON.parse(JSON.stringify(props.course || {})))
 const localVote = ref(props.course?.userVote?.vote || 0)
 
+// This card's own course language is the correct fallback here — not cidReq's
+// course, which may hold a different course visited earlier in the SPA session.
+const { displayTranslatedHtml } = useTranslatedHtml(() => localCourse.value?.courseLanguage)
+
 localCourse.value.ratingAvg = Number(localCourse.value.ratingAvg ?? 0)
 localCourse.value.ratingCount = Number(
   localCourse.value.ratingCount ?? props.course?.count ?? props.course?.ratingCount ?? 0,
 )
 
+const isRatingHidden = computed(() => platformConfigStore.getSetting("course.hide_course_rating") === "true")
+
 const fetchRating = async () => {
-  if (!localCourse.value?.id) return
+  if (!localCourse.value?.id || isRatingHidden.value) return
   try {
     const params = localCourse.value?.sessionId ? { session: localCourse.value.sessionId } : {}
     const data = await baseService.get(`/catalogue/api/courses/${localCourse.value.id}/rating`, params)
@@ -247,9 +254,34 @@ function routeExists(name) {
   return router.getRoutes().some((route) => route.name === name)
 }
 
+const defaultLinkSettings = {
+  info_url: "course_about",
+  image_url: "course_about",
+}
+
+function normalizeCatalogueSettings(rawSettings) {
+  if (!rawSettings || rawSettings === false || rawSettings === "false") {
+    return {}
+  }
+
+  if (typeof rawSettings === "string") {
+    try {
+      return JSON.parse(rawSettings)
+    } catch (error) {
+      console.error("Invalid catalogue settings format", error)
+      return {}
+    }
+  }
+
+  return typeof rawSettings === "object" ? rawSettings : {}
+}
+
 const linkSettings = computed(() => {
-  const settings = platformConfigStore.getSetting("catalog.course_catalog_settings")
-  return settings?.link_settings ?? {}
+  const settings = normalizeCatalogueSettings(platformConfigStore.getSetting("catalog.course_catalog_settings"))
+  return {
+    ...defaultLinkSettings,
+    ...(settings?.link_settings ?? {}),
+  }
 })
 
 function resolveLinkSetting(value) {
@@ -360,7 +392,7 @@ onMounted(() => {
         />
 
         <BaseAppLink
-          v-if="allowDescription && showInfoButton && infoLink && typeof infoLink === 'string'"
+          v-if="showInfoButton && infoLink && typeof infoLink === 'string'"
           :url="infoLink"
           class="absolute bottom-0 left-0"
         >
@@ -374,7 +406,7 @@ onMounted(() => {
         </BaseAppLink>
 
         <BaseAppLink
-          v-else-if="allowDescription && showInfoButton && infoLink && typeof infoLink === 'object'"
+          v-else-if="showInfoButton && infoLink && typeof infoLink === 'object'"
           :to="infoLink"
           class="absolute bottom-0 left-0"
         >
@@ -466,7 +498,10 @@ onMounted(() => {
     <template #content>
       <BaseAvatarList :users="localCourse.teachers.map((cru) => cru.user)" />
 
-      <div class="flex gap-2">
+      <div
+        v-if="!isRatingHidden"
+        class="flex gap-2"
+      >
         <div
           v-if="displayRatingAvg !== null"
           class="text-caption"
@@ -482,7 +517,7 @@ onMounted(() => {
       </div>
 
       <div
-        v-if="localCourse.popularity || localVote"
+        v-if="!isRatingHidden && (localCourse.popularity || localVote)"
         class="text-caption"
       >
         {{ localCourse.popularity || 0 }} Vote<span v-if="localCourse.popularity !== 1">s</span>
@@ -602,14 +637,13 @@ onMounted(() => {
         <h3
           v-if="item.title"
           class="text-lg font-semibold"
-        >
-          {{ item.title }}
-        </h3>
+          v-html="displayTranslatedHtml(item.title)"
+        ></h3>
 
         <div
           v-if="item.content"
           class="rich-html-content"
-          v-html="item.content"
+          v-html="displayTranslatedHtml(item.content)"
         />
       </section>
     </div>

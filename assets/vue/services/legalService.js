@@ -40,6 +40,14 @@ const legalExtensions = {
   async saveOrUpdateLegal(payload) {
     return baseService.post("/legal/save", payload)
   },
+
+  async getAiTranslationConfiguration() {
+    return baseService.get("/api/terms_and_conditions_translation")
+  },
+
+  async translateTermsWithAi(payload) {
+    return baseService.post("/api/terms_and_conditions_translation", payload)
+  },
 }
 
 export default makeService("legals", legalExtensions)

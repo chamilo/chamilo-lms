@@ -398,8 +398,8 @@ $form->addElement(
     null,
     get_lang('Unsubscribe students which are not in the imported list')
 );
-$form->addElement('checkbox', 'update_course_coaches', null, get_lang('Clean and update course coaches'));
-$form->addElement('checkbox', 'add_me_as_coach', null, get_lang('Add me as coach'));
+$form->addElement('checkbox', 'update_course_coaches', null, get_lang('Clean and update course tutors'));
+$form->addElement('checkbox', 'add_me_as_coach', null, get_lang('Add me as tutor'));
 $form->addElement('checkbox', 'sendMail', null, get_lang('Send a mail to users'));
 $form->addButtonImport(get_lang('Import session(s)'));
 
@@ -453,10 +453,10 @@ document.addEventListener("DOMContentLoaded", function () {
     <div id="csv-example" class="mt-6 rounded-lg border border-gray-300 bg-gray-100 p-4 overflow-auto">
         <h3 class="font-bold text-lg mb-2"><?php echo get_lang('Example CSV file'); ?>:</h3>
         <pre class="whitespace-pre text-sm">
-<strong>SessionName</strong>,Coach,<strong>DateStart</strong>,<strong>DateEnd</strong>,Users,Courses,VisibilityAfterExpiration,DisplayStartDate,DisplayEndDate,CoachStartDate,CoachEndDate,Classes
-<strong>Example 1</strong>,username,<strong>2025/04/01</strong>,<strong>2025/04/30</strong>,username1|username2,course1[coach1][username1,...],read_only,2025/04/01,2025/04/30,2025/04/01,2025/04/30,class1
-<strong>Example 2</strong>,username,<strong>2025-04-01</strong>,<strong>2025-04-30</strong>,username1|username2,course1[coach1][username1,...],accessible,2025-04-01,2025-04-30,2025-04-01,2025-04-30,class2
-<strong>Example 3</strong>,username,<strong>2025/04/01 08:00:00</strong>,<strong>2025/04/30 23:59:59</strong>,username1|username2,course1[coach1][username1,...],not_accessible,2025/04/01 08:00:00,2025/04/30 23:59:59,2025/04/01 08:00:00,2025/04/30 23:59:59,class3
+<strong>SessionName</strong>,Tutor,<strong>DateStart</strong>,<strong>DateEnd</strong>,Users,Courses,VisibilityAfterExpiration,DisplayStartDate,DisplayEndDate,TutorStartDate,TutorEndDate,Classes
+<strong>Example 1</strong>,username,<strong>2025/04/01</strong>,<strong>2025/04/30</strong>,username1|username2,course1[tutor1][username1,...],read_only,2025/04/01,2025/04/30,2025/04/01,2025/04/30,class1
+<strong>Example 2</strong>,username,<strong>2025-04-01</strong>,<strong>2025-04-30</strong>,username1|username2,course1[tutor1][username1,...],accessible,2025-04-01,2025-04-30,2025-04-01,2025-04-30,class2
+<strong>Example 3</strong>,username,<strong>2025/04/01 08:00:00</strong>,<strong>2025/04/30 23:59:59</strong>,username1|username2,course1[tutor1][username1,...],not_accessible,2025/04/01 08:00:00,2025/04/30 23:59:59,2025/04/01 08:00:00,2025/04/30 23:59:59,class3
 </pre>
     </div>
     <div id="xml-example" class="mt-6 rounded-lg border border-gray-300 bg-gray-100 p-4 overflow-auto hidden">
@@ -466,39 +466,39 @@ document.addEventListener("DOMContentLoaded", function () {
 &lt;Sessions&gt;
     &lt;Session&gt;
         &lt;SessionName&gt;<strong>Example 1</strong>&lt;/SessionName&gt;
-        &lt;Coach&gt;username&lt;/Coach&gt;
+        &lt;Tutor&gt;username&lt;/Tutor&gt;
         &lt;DateStart&gt;<strong>2025/04/01</strong>&lt;/DateStart&gt;
         &lt;DateEnd&gt;<strong>2025/04/30</strong>&lt;/DateEnd&gt;
         &lt;User&gt;username1&lt;/User&gt;
         &lt;Course&gt;
             &lt;CourseCode&gt;coursecode1&lt;/CourseCode&gt;
-            &lt;Coach&gt;coach1&lt;/Coach&gt;
+            &lt;Tutor&gt;tutor1&lt;/Tutor&gt;
             &lt;User&gt;username2&lt;/User&gt;
         &lt;/Course&gt;
     &lt;/Session&gt;
 
     &lt;Session&gt;
         &lt;SessionName&gt;<strong>Example 2</strong>&lt;/SessionName&gt;
-        &lt;Coach&gt;username&lt;/Coach&gt;
+        &lt;Tutor&gt;username&lt;/Tutor&gt;
         &lt;DateStart&gt;<strong>2025-04-01</strong>&lt;/DateStart&gt;
         &lt;DateEnd&gt;<strong>2025-04-30</strong>&lt;/DateEnd&gt;
         &lt;User&gt;username1&lt;/User&gt;
         &lt;Course&gt;
             &lt;CourseCode&gt;coursecode2&lt;/CourseCode&gt;
-            &lt;Coach&gt;coach2&lt;/Coach&gt;
+            &lt;Tutor&gt;tutor2&lt;/Tutor&gt;
             &lt;User&gt;username2&lt;/User&gt;
         &lt;/Course&gt;
     &lt;/Session&gt;
 
     &lt;Session&gt;
         &lt;SessionName&gt;<strong>Example 3</strong>&lt;/SessionName&gt;
-        &lt;Coach&gt;username&lt;/Coach&gt;
+        &lt;Tutor&gt;username&lt;/Tutor&gt;
         &lt;DateStart&gt;<strong>2025/04/01 08:00:00</strong>&lt;/DateStart&gt;
         &lt;DateEnd&gt;<strong>2025/04/30 23:59:59</strong>&lt;/DateEnd&gt;
         &lt;User&gt;username1&lt;/User&gt;
         &lt;Course&gt;
             &lt;CourseCode&gt;coursecode3&lt;/CourseCode&gt;
-            &lt;Coach&gt;coach3&lt;/Coach&gt;
+            &lt;Tutor&gt;tutor3&lt;/Tutor&gt;
             &lt;User&gt;username2&lt;/User&gt;
         &lt;/Course&gt;
     &lt;/Session&gt;

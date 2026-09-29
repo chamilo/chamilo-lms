@@ -40,7 +40,7 @@ class PENSClient extends PENSController
     /**
      * Instance of the PENSClient.
      *
-     * @var PENSServer
+     * @var PENSClient
      */
     private static $_instance;
 

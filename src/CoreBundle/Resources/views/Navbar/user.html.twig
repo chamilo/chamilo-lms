@@ -25,7 +25,7 @@
             <a title="{{ "Inbox"|trans }}" href="/main/messages/inbox.php">
                 <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|trans }}
             </a>
-            <a title="{{ "My certificates"|trans }}" href="/main/gradebook/my_certificates.php">
+            <a title="{{ "My certificates"|trans }}" href="{{ path('my_certificates_vue_entrypoint') }}">
                 <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "My certificates"|trans }}
             </a>
             <a id="logout_button" title="{{ "Logout"|trans }}" href="{{ path('logout') }) }}" >

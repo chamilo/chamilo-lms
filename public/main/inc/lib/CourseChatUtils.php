@@ -187,7 +187,6 @@ class CourseChatUtils
 
         $message = trim($message);
         $message = nl2br($message);
-        $message = Security::remove_XSS($message);
 
         // url -> anchor
         $message = preg_replace(
@@ -203,6 +202,10 @@ class CourseChatUtils
         );
 
         $message = MarkdownExtra::defaultTransform($message);
+
+        // Sanitize last, after Markdown produced the final HTML, so HTMLPurifier
+        // strips javascript: links and other payloads Markdown may have generated.
+        $message = Security::remove_XSS($message);
 
         return $message;
     }
@@ -546,7 +549,7 @@ class CourseChatUtils
         $rows = Database::getManager()
             ->createQuery("
             SELECT ccc.userId AS uid
-            FROM ChamiloCourseBundle:CChatConnected ccc
+            FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
             WHERE ccc.lastConnection > :date
               AND ccc.cId = :course
               $extraCondition
@@ -650,7 +653,7 @@ class CourseChatUtils
         foreach ($listCourse as $course) {
             Database::getManager()
                 ->createQuery('
-                    DELETE FROM ChamiloCourseBundle:CChatConnected ccc
+                    DELETE FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                     WHERE ccc.cId = :course AND ccc.userId = :user
                 ')
                 ->execute([
@@ -670,7 +673,7 @@ class CourseChatUtils
 
         $connectedUsers = $em
             ->createQuery("
-                SELECT ccc FROM ChamiloCourseBundle:CChatConnected ccc
+                SELECT ccc FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                 WHERE ccc.cId = :course $extraCondition
             ")
             ->setParameter('course', $this->courseId)
@@ -690,7 +693,7 @@ class CourseChatUtils
             }
 
             $em->createQuery('
-                DELETE FROM ChamiloCourseBundle:CChatConnected ccc
+                DELETE FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                 WHERE ccc.cId = :course
                   AND ccc.userId = :user
                   AND ccc.sessionId = :sid
@@ -717,7 +720,7 @@ class CourseChatUtils
         /** @var CChatConnected|null $connection */
         $connection = $em
             ->createQuery("
-                SELECT ccc FROM ChamiloCourseBundle:CChatConnected ccc
+                SELECT ccc FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                 WHERE ccc.userId = :user AND ccc.cId = :course $extraCondition
             ")
             ->setParameters([
@@ -774,7 +777,7 @@ class CourseChatUtils
 
         $number = Database::getManager()
             ->createQuery("
-                SELECT COUNT(ccc.userId) FROM ChamiloCourseBundle:CChatConnected ccc
+                SELECT COUNT(ccc.userId) FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                 WHERE ccc.lastConnection > :date AND ccc.cId = :course $extraCondition
             ")
             ->setParameters([
@@ -850,9 +853,9 @@ class CourseChatUtils
         if ($this->groupId) {
             $students = $em
                 ->createQuery(
-                    'SELECT u FROM ChamiloCoreBundle:User u
-                     INNER JOIN ChamiloCourseBundle:CGroupRelUser gru
-                        WITH u.id = gru.userId AND gru.cId = :course
+                    'SELECT u FROM Chamilo\CoreBundle\Entity\User u
+                     INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelUser gru
+                        ON u.id = gru.userId AND gru.cId = :course
                      WHERE u.id != :user AND gru.groupId = :group
                        AND u.active = true'
                 )
@@ -861,9 +864,9 @@ class CourseChatUtils
 
             $tutors = $em
                 ->createQuery(
-                    'SELECT u FROM ChamiloCoreBundle:User u
-                     INNER JOIN ChamiloCourseBundle:CGroupRelTutor grt
-                        WITH u.id = grt.userId AND grt.cId = :course
+                    'SELECT u FROM Chamilo\CoreBundle\Entity\User u
+                     INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelTutor grt
+                        ON u.id = grt.userId AND grt.cId = :course
                      WHERE u.id != :user AND grt.groupId = :group
                        AND u.active = true'
                 )
@@ -917,7 +920,7 @@ class CourseChatUtils
 
         $number = Database::getManager()
             ->createQuery("
-                SELECT COUNT(ccc.userId) FROM ChamiloCourseBundle:CChatConnected ccc
+                SELECT COUNT(ccc.userId) FROM Chamilo\CourseBundle\Entity\CChatConnected ccc
                 WHERE ccc.lastConnection > :date AND ccc.cId = :course AND ccc.userId = :user $extraCondition
             ")
             ->setParameters([

@@ -42,7 +42,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->innerJoin(
                 ExtraField::class,
                 'f',
-                Join::WITH,
+                Join::ON,
                 'fv.field = f.id'
             )
             ->where(
@@ -194,7 +194,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('efv')
             ->select('efv.itemId as lp_id, efv.fieldValue as ndays')
             ->innerJoin('efv.field', 'ef')
-            ->innerJoin(CLp::class, 'lp', 'WITH', 'lp.iid = efv.itemId')
+            ->innerJoin(CLp::class, 'lp', Join::ON, 'lp.iid = efv.itemId')
             ->where('ef.variable = :variable')
             ->andWhere('efv.fieldValue > 0')
             ->setParameter('variable', 'number_of_days_for_completion')
@@ -228,11 +228,41 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->where($qb->expr()->eq('efv.itemId', ':item_id'))
             ->andWhere($qb->expr()->eq('efv.field', ':field_id'))
             ->andWhere($qb->expr()->eq('ef.itemType', ':item_type'))
-            ->setParameters([
-                'item_id' => $itemId,
-                'field_id' => $fieldId,
-                'item_type' => $itemType,
-            ])
+            ->setParameter('item_id', $itemId)
+            ->setParameter('field_id', $fieldId)
+            ->setParameter('item_type', $itemType)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * Batch variant of self::getByHandlerAndFieldId() for many items and many fields at once,
+     * so a listing page can fetch every value it needs in a single query instead of one per item.
+     *
+     * @param int[] $itemIds
+     * @param int[] $fieldIds
+     *
+     * @return ExtraFieldValues[]
+     */
+    public function getByItemIdsAndFieldIds(array $itemIds, array $fieldIds, int $itemType): array
+    {
+        $itemIds = array_values(array_unique(array_map('intval', $itemIds)));
+        $fieldIds = array_values(array_unique(array_map('intval', $fieldIds)));
+        if ([] === $itemIds || [] === $fieldIds) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('efv');
+
+        return $qb
+            ->innerJoin('efv.field', 'ef')
+            ->where($qb->expr()->in('efv.itemId', ':item_ids'))
+            ->andWhere($qb->expr()->in('efv.field', ':field_ids'))
+            ->andWhere($qb->expr()->eq('ef.itemType', ':item_type'))
+            ->setParameter('item_ids', $itemIds)
+            ->setParameter('field_ids', $fieldIds)
+            ->setParameter('item_type', $itemType)
             ->getQuery()
             ->getResult()
         ;

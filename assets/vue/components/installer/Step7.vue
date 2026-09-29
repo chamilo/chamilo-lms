@@ -14,7 +14,6 @@
       class="mb-4"
       v-text="installerData.installationProfile"
     />
-
     <div class="RequirementContent">
       <p
         v-text="
@@ -27,11 +26,22 @@
 
       <Message
         :closable="false"
+        severity="info"
+        class="mb-4"
+      >
+        {{
+          t(
+            "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not.",
+          )
+        }}
+      </Message>
+
+      <Message
+        :closable="false"
         severity="warn"
         style="margin-bottom: 8px;"
       >
         <strong v-text="t('Security advice')" />
-
         <i18n-t
           keypath="To protect your site, make the whole {0} directory read-only (chmod -R 0555 on Linux) and delete the {1} directory."
           tag="p"
@@ -39,8 +49,13 @@
           <code>config/</code>
           <code>public/main/install/</code>
         </i18n-t>
+        <!-- The installer never asks for write permission on its own directory, so it cannot
+             remove it. Give the commands instead, and leave the step to the administrator. -->
+        <pre
+          class="mt-2 overflow-x-auto rounded bg-white px-4 py-3 text-xs text-gray-700"
+          v-text="cleanupCommands"
+        />
       </Message>
-
       <div class="formgroup-inline">
         <div class="field">
           <BaseAppLink url="../../">
@@ -59,7 +74,6 @@
 <script setup>
 import { inject } from "vue"
 import { useI18n } from "vue-i18n"
-
 import Message from "primevue/message"
 import Button from "primevue/button"
 import SectionHeader from "../layout/SectionHeader.vue"
@@ -68,4 +82,7 @@ import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 const { t } = useI18n()
 
 const installerData = inject("installerData")
+
+// Not translated: these are literal shell commands.
+const cleanupCommands = ["chmod -R 0555 config/", "rm -r public/main/install/"].join("\n")
 </script>

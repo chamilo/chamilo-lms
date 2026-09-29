@@ -17,13 +17,17 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class GrokProvider implements AiProviderInterface, AiImageProviderInterface, AiDocumentProviderInterface, AiVideoJobProviderInterface
 {
+    private const float DEFAULT_TEXT_TIMEOUT = 180.0;
+
     private string $apiKey;
+    private ?string $lastTextError = null;
 
     // Text
     private string $textApiUrl;
     private string $textModel;
     private float $textTemperature;
     private int $textMaxTokens;
+    private float $textTimeout;
 
     // Image
     private string $imageApiUrl;
@@ -35,6 +39,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
     private string $documentModel;
     private float $documentTemperature;
     private int $documentMaxTokens;
+    private float $documentTimeout;
 
     // Video (optional)
     private string $videoApiUrl = '';
@@ -70,6 +75,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         $this->textModel = (string) ($textCfg['model'] ?? 'grok-beta');
         $this->textTemperature = (float) ($textCfg['temperature'] ?? 0.7);
         $this->textMaxTokens = (int) ($textCfg['max_tokens'] ?? 1000);
+        $this->textTimeout = $this->normalizeTimeout($textCfg['timeout'] ?? null, self::DEFAULT_TEXT_TIMEOUT);
 
         // IMAGE config (optional)
         $imageCfg = $providerConfig['image'] ?? null;
@@ -94,6 +100,9 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         $this->documentModel = \is_array($docCfg) ? (string) ($docCfg['model'] ?? $this->textModel) : $this->textModel;
         $this->documentTemperature = \is_array($docCfg) ? (float) ($docCfg['temperature'] ?? $this->textTemperature) : $this->textTemperature;
         $this->documentMaxTokens = \is_array($docCfg) ? (int) ($docCfg['max_tokens'] ?? $this->textMaxTokens) : $this->textMaxTokens;
+        $this->documentTimeout = \is_array($docCfg)
+            ? $this->normalizeTimeout($docCfg['timeout'] ?? null, $this->textTimeout)
+            : $this->textTimeout;
 
         // VIDEO config (optional)
         $videoCfg = $providerConfig['video'] ?? null;
@@ -149,6 +158,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
                     'Content-Type' => 'application/json',
                 ],
                 'json' => $payload,
+                'timeout' => $resolved['timeout'],
             ]);
 
             $status = $response->getStatusCode();
@@ -236,7 +246,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             $topic
         );
 
-        return $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $prompt, 'quiz');
+        return $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $prompt, 'quiz', $this->textTimeout);
     }
 
     public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array
@@ -249,9 +259,10 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             $topic
         );
 
-        $lpStructure = $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $tocPrompt, 'learnpath');
+        $this->lastTextError = null;
+        $lpStructure = $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $tocPrompt, 'learnpath', $this->textTimeout);
         if (!$lpStructure) {
-            return ['success' => false, 'message' => 'Failed to generate course structure.'];
+            return ['success' => false, 'message' => $this->buildTextFailureMessage('Grok')];
         }
 
         $lpItems = [];
@@ -271,7 +282,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
                 $chapterTitle
             );
 
-            $chapterContent = $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $chapterPrompt, 'learnpath');
+            $chapterContent = $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $chapterPrompt, 'learnpath', $this->textTimeout);
             if (!$chapterContent) {
                 continue;
             }
@@ -303,7 +314,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
                     $chapter['title']
                 );
 
-                $quizContent = $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $quizPrompt, 'learnpath');
+                $quizContent = $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $quizPrompt, 'learnpath', $this->textTimeout);
                 if (!$quizContent) {
                     continue;
                 }
@@ -328,7 +339,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
 
     public function gradeOpenAnswer(string $prompt, string $toolName): ?string
     {
-        return $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $prompt, $toolName);
+        return $this->requestText($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $prompt, $toolName, $this->textTimeout);
     }
 
     public function generateImage(string $prompt, string $toolName, ?array $options = []): array|string|null
@@ -355,8 +366,19 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             $this->documentTemperature,
             $this->documentMaxTokens,
             $prompt,
-            $toolName
+            $toolName,
+            $this->documentTimeout,
         );
+    }
+
+    private function buildTextFailureMessage(string $provider): string
+    {
+        $detail = trim((string) $this->lastTextError);
+        if ('' === $detail) {
+            return $provider.' failed to generate the course structure.';
+        }
+
+        return $provider.' failed to generate the course structure: '.mb_substr($detail, 0, 1000);
     }
 
     private function filterValidAikenQuestions(string $quizContent): array
@@ -382,11 +404,22 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         return $valid;
     }
 
-    private function requestText(string $url, string $model, float $temperature, int $maxTokens, string $prompt, string $toolName): ?string
-    {
+    private function requestText(
+        string $url,
+        string $model,
+        float $temperature,
+        int $maxTokens,
+        string $prompt,
+        string $toolName,
+        float $timeout,
+    ): ?string {
+        $this->lastTextError = null;
+
         $userId = $this->getUserId();
         if (!$userId) {
-            throw new RuntimeException('User not authenticated.');
+            $this->lastTextError = 'User is not authenticated.';
+
+            return null;
         }
 
         $system = 'You are a helpful AI assistant that generates structured educational content.';
@@ -399,6 +432,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
                     'Content-Type' => 'application/json',
                 ],
                 'json' => $payload,
+                'timeout' => $timeout,
             ]);
 
             $status = $response->getStatusCode();
@@ -406,13 +440,17 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             $data = json_decode($rawBody, true);
 
             if (200 !== $status || !\is_array($data)) {
-                error_log('[AI][Grok][Text] Invalid response (status='.$status.').');
+                $message = \is_array($data) ? ($data['error']['message'] ?? 'Invalid response.') : 'Invalid JSON response.';
+                $message = \is_string($message) ? trim($message) : 'Invalid response.';
+                $this->lastTextError = 'HTTP '.$status.': '.$message;
+                error_log('[AI][Grok][Text] Invalid response (status='.$status.'): '.$message);
 
                 return null;
             }
 
             $generated = $this->extractTextContent($data);
             if (null === $generated || '' === trim($generated)) {
+                $this->lastTextError = 'HTTP '.$status.': Empty content returned.';
                 error_log('[AI][Grok][Text] Empty content returned by API.');
 
                 return null;
@@ -424,6 +462,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
 
             return $generated;
         } catch (Exception $e) {
+            $this->lastTextError = $e->getMessage();
             error_log('[AI][Grok][Text] Exception: '.$e->getMessage());
 
             return null;
@@ -1142,16 +1181,17 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
     /**
      * @param array<string,mixed> $options
      *
-     * @return array{url:string,model:string,temperature:float,max_tokens:int}
+     * @return array{url:string,model:string,temperature:float,max_tokens:int,timeout:float}
      */
     private function resolveTextOptions(array $options): array
     {
-        $url = (string) (($options['url'] ?? null) ?? $this->textApiUrl);
-        $model = (string) (($options['model'] ?? null) ?? $this->textModel);
-        $temperature = (float) (($options['temperature'] ?? null) ?? $this->textTemperature);
+        $url = (string) ($options['url'] ?? $this->textApiUrl);
+        $model = (string) ($options['model'] ?? $this->textModel);
+        $temperature = (float) ($options['temperature'] ?? $this->textTemperature);
+        $timeout = $this->normalizeTimeout($options['timeout'] ?? null, $this->textTimeout);
 
         $maxTokens = $options['max_tokens'] ?? ($options['max_output_tokens'] ?? null);
-        $maxTokens = (int) (($maxTokens ?? null) ?? $this->textMaxTokens);
+        $maxTokens = (int) ($maxTokens ?? $this->textMaxTokens);
 
         if ($maxTokens <= 0) {
             $maxTokens = $this->textMaxTokens > 0 ? $this->textMaxTokens : 1000;
@@ -1162,6 +1202,18 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
             'model' => $model,
             'temperature' => $temperature,
             'max_tokens' => $maxTokens,
+            'timeout' => $timeout,
         ];
+    }
+
+    private function normalizeTimeout(mixed $value, float $fallback): float
+    {
+        if (null === $value || '' === trim((string) $value) || !is_numeric($value)) {
+            return $fallback;
+        }
+
+        $timeout = (float) $value;
+
+        return $timeout > 0.0 ? $timeout : $fallback;
     }
 }

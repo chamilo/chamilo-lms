@@ -11,9 +11,9 @@ $nbre = 0;
 echo '<form name="form" method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'">';
 if (1 == $statut) {
     echo get_lang(
-            'e-mailNotifySubscription'
+            'E-mail notification subscription'
         ).': <input type="checkbox" name="mailling" value="1" checked="checked"><i>'.get_lang(
-            'DontUnchek'
+            "Don't uncheck"
         ).'</i>';
 } else {
     echo '<input type="hidden" name="mailling" value="1">';

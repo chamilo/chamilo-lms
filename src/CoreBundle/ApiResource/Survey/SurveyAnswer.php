@@ -10,10 +10,11 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
-use Chamilo\CoreBundle\State\SurveyAnswerProcessor;
-use Chamilo\CoreBundle\State\SurveyAnswerProvider;
+use Chamilo\CoreBundle\State\Survey\SurveyAnswerProcessor;
+use Chamilo\CoreBundle\State\Survey\SurveyAnswerProvider;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
@@ -21,39 +22,56 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/survey/answer/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Survey answer or preview data',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'gid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'preview', in: 'query', required: false, schema: ['type' => 'boolean']),
                     new Parameter(name: 'invitationCode', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'invitationcode', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'lpItemId', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'get_survey_answer',
             provider: SurveyAnswerProvider::class,
+            parameters: [
+                // Not required: an invitee answering from a link has no course context, and the
+                // provider then resolves the course from the survey itself, as the Post does.
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier; falls back to publicCid or to the survey own course',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
         new Post(
             uriTemplate: '/survey/answer/{surveyId}',
-            requirements: ['surveyId' => '\\d+'],
+            requirements: ['surveyId' => '\d+'],
             openapi: new Operation(
                 summary: 'Submit survey answers',
                 parameters: [
                     new Parameter(name: 'surveyId', in: 'path', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'cid', in: 'query', required: true, schema: ['type' => 'integer']),
-                    new Parameter(name: 'sid', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'invitationCode', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'invitationcode', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'lpItemId', in: 'query', required: false, schema: ['type' => 'integer']),
                 ],
             ),
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'post_survey_answer',
             processor: SurveyAnswerProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier; falls back to publicCid or to the survey own course',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
         ),
     ],
     normalizationContext: ['groups' => ['survey_answer:read']],
@@ -67,9 +85,6 @@ final class SurveyAnswer
 
     #[Groups(['survey_answer:read', 'survey_answer:write'])]
     public ?string $invitationCode = null;
-
-    #[Groups(['survey_answer:read', 'survey_answer:write'])]
-    public string $csrfToken = '';
 
     #[Groups(['survey_answer:read'])]
     public bool $preview = false;

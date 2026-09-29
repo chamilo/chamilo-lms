@@ -2,19 +2,25 @@ name: PHP static analysis ✨
 
 on: [push, pull_request]
 
+# Cancel a still-running job when a newer commit lands on the same branch.
+# Pushes to master are exempt, so every commit there keeps its own result.
+concurrency:
+    group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+    cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 jobs:
     build:
         name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
-        runs-on: ubuntu-24.04
+        runs-on: ${{ matrix.operating-system }}
 
         strategy:
             fail-fast: false
             matrix:
                 operating-system: [ubuntu-latest]
-                php-versions: ['8.2']
+                php-versions: ['8.3']
         steps:
             - name: Checkout
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
 
             - name: Setup PHP, with composer and extensions
               uses: shivammathur/setup-php@v2
@@ -32,19 +38,17 @@ jobs:
               run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             - name: Cache composer dependencies
-              uses: actions/cache@v5
+              uses: actions/cache@v6
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
-                  # Use composer.json for key, if composer.lock is not committed.
-                  # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
                   restore-keys: ${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
               run: composer install --no-progress
 
             - name: Cache clear
-              run: php bin/console cache:clear
+              run: php bin/console cache:clear --no-warmup
 
             - name: Check Symfony requirements
               run: vendor/bin/requirements-checker
@@ -56,5 +60,11 @@ jobs:
               id: psalm
               run: vendor/bin/psalm --show-info=false --output-format=github --shepherd
 
+            - name: Start MySQL service
+              run: sudo /etc/init.d/mysql start
+
+            - name: Create test database
+              run: php bin/console --env=test doctrine:database:create
+
             - name: Doctrine Schema Validator
-              run: php bin/console doctrine:schema:validate --skip-sync
+              run: php bin/console --env=test doctrine:schema:validate --skip-sync

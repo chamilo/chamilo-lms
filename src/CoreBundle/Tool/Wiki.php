@@ -22,7 +22,7 @@ class Wiki extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/wiki/index.php';
+        return '/resources/wiki/:nodeId/';
     }
 
     public function getCategory(): string

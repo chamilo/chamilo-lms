@@ -117,7 +117,7 @@ class LtiResultsResource extends LtiAdvantageServiceResource
         $limit = (int) $limit;
         $page = (int) $page;
 
-        $dql = 'SELECT r FROM ChamiloCoreBundle:GradebookResult r WHERE r.evaluationId = :id';
+        $dql = 'SELECT r FROM Chamilo\CoreBundle\Entity\GradebookResult r WHERE r.evaluationId = :id';
         $parameters = ['id' => $this->lineItem->getEvaluation()->getId()];
 
         if ($userId) {
@@ -187,7 +187,7 @@ class LtiResultsResource extends LtiAdvantageServiceResource
 
         $em = Database::getManager();
 
-        $dql = 'SELECT COUNT(r) FROM ChamiloCoreBundle:GradebookResult r WHERE r.evaluationId = :id';
+        $dql = 'SELECT COUNT(r) FROM Chamilo\CoreBundle\Entity\GradebookResult r WHERE r.evaluationId = :id';
         $parameters = ['id' => $this->lineItem->getEvaluation()->getId()];
 
         if ($userId) {

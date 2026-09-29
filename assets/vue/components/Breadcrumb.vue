@@ -57,16 +57,18 @@ const { t } = useI18n()
 const { course, session } = storeToRefs(cidReqStore)
 const store = useStore()
 
-const specialRouteNames = [
+// Personal pages that live outside any course. The cidReq store can still hold the course the
+// user came from, so these names keep that stale course out of their trail.
+const personalRouteNames = [
   "MyCourses",
   "MySessions",
   "MySessionsUpcoming",
   "MySessionsPast",
   "Home",
   "MessageList",
-  "MessageNew",
   "MessageShow",
   "MessageCreate",
+  "MessageReply",
 ]
 
 let legacyItems = []
@@ -154,7 +156,7 @@ function isInCourseOrSessionContext() {
     return true
   }
 
-  if (course.value?.id && !specialRouteNames.includes(routeName)) {
+  if (course.value?.id && !personalRouteNames.includes(routeName)) {
     return true
   }
 
@@ -162,30 +164,81 @@ function isInCourseOrSessionContext() {
 }
 
 /**
- * Build a hardcoded breadcrumb trail for the access-URL delete confirmation page.
- * Matches paths of the form `/resources/accessurl/<id>/delete`.
+ * Resolve the raw translation key a route declares for its own crumb.
  *
- * @returns {Array|null} Array of crumb items if the path matched; `null` otherwise.
+ * `meta.breadcrumb` is either a key or a function of the route. An empty result means
+ * "omit this crumb", whichever of the two forms produced it.
+ *
+ * @param {object|undefined} meta - Route meta that can hold a `breadcrumb` label or resolver.
+ * @returns {string|undefined} The declared key, or `undefined` when nothing was declared.
  */
-function buildAccessUrlDeleteCrumbs() {
-  if (!/^\/resources\/accessurl\/[^/]+\/delete(?:\/|$)/u.test(route.path)) {
+function resolveCrumbKey(meta) {
+  const label = meta?.breadcrumb
+
+  return "function" === typeof label ? label(route) : label
+}
+
+/**
+ * Resolve a crumb label from a route meta object.
+ *
+ * When no key is declared, the label falls back to the formatted route name and stays
+ * untranslated, so the warning exposes the missing declaration instead of hiding it.
+ *
+ * @param {object|undefined} meta - Route meta that can hold a `breadcrumb` label or resolver.
+ * @param {string} name - Route or tool name used to build the fallback label.
+ * @returns {string} Translated label, or the formatted route name.
+ */
+function resolveCrumbLabel(meta, name) {
+  const key = resolveCrumbKey(meta)
+
+  if (key) {
+    return t(key)
+  }
+
+  if ("production" !== process.env.NODE_ENV) {
+    console.warn(`[Breadcrumb] Route "${name}" has no meta.breadcrumb. Declare it in the router.`)
+  }
+
+  return formatToolName(name)
+}
+
+/**
+ * Build the trail of a route that declares its own fixed ancestors.
+ *
+ * `meta.breadcrumbParents` holds the crumbs that always precede the page, each one a
+ * `{ label, route }` pair whose label is a translation key. The page's own crumb comes from
+ * `meta.breadcrumb`, so the route owns its whole trail and this file names no page. An empty
+ * key omits that last crumb, which is what a page whose own name depends on the query wants.
+ *
+ * @returns {Array|null} Array of crumb items if the route declared ancestors; `null` otherwise.
+ */
+function buildDeclaredParentCrumbs() {
+  const parents = route.meta?.breadcrumbParents
+
+  if (!Array.isArray(parents) || 0 === parents.length) {
     return null
   }
 
-  return [
-    { label: t("Administration"), url: "/main/admin/index.php" },
-    { label: t("Multiple access URL / Branding"), url: "/main/admin/access_urls.php" },
-    { label: t("Delete access") },
-  ]
+  const items = parents.map((parent) => ({ label: t(parent.label), route: parent.route }))
+
+  if ("" !== resolveCrumbKey(route.meta)) {
+    items.push({ label: resolveCrumbLabel(route.meta, route.name) })
+  }
+
+  return items
 }
 
 /**
  * Build the breadcrumb trail from server-injected legacy items or from whitelisted path segments.
  *
- * Two cases are handled:
+ * Three cases are handled:
  * 1. `window.breadcrumb` was set by the PHP layer — consume those items directly.
- * 2. The URL starts with a whitelisted segment (e.g. `/admin`) that has no matching Vue route —
+ * 2. `/admin/settings/<namespace>`, whose last crumb is read from the DOM because the server
+ *    already translated it. This is the one trail a route cannot declare on its own.
+ * 3. The URL starts with a whitelisted segment (e.g. `/admin`) that has no matching Vue route —
  *    synthesize crumbs from path segments using the `overrides` map.
+ *
+ * Every other fixed trail lives in the router as `meta.breadcrumbParents`.
  *
  * @returns {Array|null} Array of crumb items if a manual trail was built; `null` to fall through.
  */
@@ -196,7 +249,9 @@ function buildManualCrumbs() {
     if (isInCourseOrSessionContext()) {
       const rootRouteName = session.value?.id ? "MySessions" : "MyCourses"
 
-      items.push({ label: t(session.value?.id ? "My sessions" : "My courses"), route: { name: rootRouteName } })
+      const rootLabel = session.value?.id ? t("My sessions") : t("My courses")
+
+      items.push({ label: rootLabel, route: { name: rootRouteName } })
     }
 
     legacyItems.forEach((item) => {
@@ -234,17 +289,6 @@ function buildManualCrumbs() {
     ]
   }
 
-  // /admin/usergroup-import, /admin/usergroup-user-import, /admin/usergroup-users/:id
-  if (["usergroup-import", "usergroup-user-import", "usergroup-users"].includes(pathSegments[1])
-    || (pathSegments[1] === "usergroups" && pathSegments[3] !== undefined)) {
-    const pageLabel = route.meta?.breadcrumb || formatToolName(route.name)
-    return [
-      { label: t("Administration"), route: { name: overrides.admin, params: route.params, query: route.query } },
-      { label: t("Classes"), route: { path: "/admin/usergroups" } },
-      { label: t(pageLabel) },
-    ]
-  }
-
   const fullPath = "/" + pathSegments.join("/")
 
   if (router.getRoutes().some((r) => r.path === fullPath)) {
@@ -270,25 +314,6 @@ function buildManualCrumbs() {
 }
 
 /**
- * Build the static category prefix crumbs ("Pages", "Messages") when the route name contains them.
- *
- * @returns {Array} Zero, one, or two crumb items.
- */
-function buildStaticCategoryPrefixes() {
-  const items = []
-
-  if (route.name?.includes("Page")) {
-    items.push({ label: t("Pages"), route: { path: "/resources/pages" } })
-  }
-
-  if (route.name?.includes("Message")) {
-    items.push({ label: t("Messages"), route: { path: "/resources/messages" } })
-  }
-
-  return items
-}
-
-/**
  * Build the root crumb ("My sessions" or "My courses") when inside a course/session context.
  *
  * @returns {Array} One crumb item, or empty array if not in a course/session context.
@@ -299,7 +324,7 @@ function buildCourseContextRootCrumb() {
   }
 
   const rootRouteName = session.value?.id ? "MySessions" : "MyCourses"
-  const rootLabel = t(session.value?.id ? "My sessions" : "My courses")
+  const rootLabel = session.value?.id ? t("My sessions") : t("My courses")
 
   return [{ label: rootLabel, route: { name: rootRouteName } }]
 }
@@ -335,166 +360,143 @@ function buildGroupCrumb() {
 }
 
 /**
- * Build the Documents section breadcrumb trail by walking the resource-node parent chain.
+ * Build the crumbs of a tool whose resource is a chain of folders, such as Documents.
  *
- * Traverses upward from the current `resourceNode` until it reaches the "courses" root,
- * collecting intermediate folder crumbs along the way. The first folder becomes the
- * Documents list entry point; remaining folders are appended as individual crumbs.
- * Appends the current sub-page label last, unless `route.meta.breadcrumb` is explicitly `""`.
+ * Walks up the resource-node parent chain until it reaches the "courses" root. The outermost
+ * folder becomes the entry point of the tool's list route; the rest follow as their own crumbs.
  *
- * @returns {Array} Array of crumb items for the document trail.
+ * @param {object} toolBase - Root matched route of the tool.
+ * @param {object} spec - The route's `meta.breadcrumbResource` declaration.
+ * @returns {Array} Array of crumb items.
  */
-function buildDocumentCrumbs() {
-  const folderTrail = []
+function buildAncestorTrailCrumbs(toolBase, spec) {
+  const folders = []
 
   let current = resourceNode.value
 
   while (current?.parent && current.parent.title !== "courses") {
-    folderTrail.unshift({ label: current.title, nodeId: current.id })
+    folders.unshift({ label: current.title, node: current.id })
     current = current.parent
   }
 
-  const first = folderTrail.shift()
+  const entry = folders.shift()
 
   const items = [
     {
-      label: t("Documents"),
+      label: resolveCrumbLabel(toolBase.meta, toolBase.name),
       route: {
-        name: "DocumentsList",
-        params: first ? { node: first.nodeId } : route.params,
+        name: spec.listRoute,
+        params: entry ? { node: entry.node } : route.params,
         query: route.query,
       },
     },
   ]
 
-  folderTrail.forEach((folder) => {
+  folders.forEach((folder) => {
     items.push({
       label: folder.label,
-      route: { name: "DocumentsList", params: { node: folder.nodeId }, query: route.query },
+      route: { name: spec.listRoute, params: { node: folder.node }, query: route.query },
     })
   })
 
-  const currentMatched = route.matched.find((r) => r.name === route.name)
-  const label = currentMatched?.meta?.breadcrumb
-
-  if (label !== "") {
-    const finalLabel = label || formatToolName(currentMatched?.name)
-
-    if (!items.some((item) => item.label === finalLabel)) {
-      items.push({
-        label: t(finalLabel),
-        route: { name: currentMatched.name, params: route.params, query: route.query },
-      })
-    }
-  }
-
   return items
 }
 
 /**
- * Build breadcrumbs for a tool that follows the list → detail navigation pattern
- * (e.g. Assignments, Attendance).
+ * Build the crumbs of a tool that opens one resource at a time, such as Assignments.
  *
- * Returns up to three crumbs in order:
- * 1. The tool list page (always included).
- * 2. The resource node title linking to the detail page (when a resource is loaded).
- * 3. The current sub-page label (when not already on the detail route).
+ * On the list page the resource crumb is skipped: the loaded node is the tool itself, not an
+ * item the user picked.
  *
- * @param {string} toolName - Raw tool name used to derive the list label via `formatToolName`.
- * @param {string} listRouteName - Vue Router name for the tool's list page.
- * @param {string} detailRouteName - Vue Router name for the tool's detail page.
+ * @param {object} toolBase - Root matched route of the tool.
+ * @param {object} spec - The route's `meta.breadcrumbResource` declaration.
  * @returns {Array} Array of crumb items.
  */
-function buildToolWithResourceCrumbs(toolName, listRouteName, detailRouteName) {
+function buildSingleResourceCrumbs(toolBase, spec) {
   const items = [
     {
-      label: t(formatToolName(toolName)),
-      route: { name: listRouteName, params: { node: course.value.resourceNode.id }, query: route.query },
+      label: resolveCrumbLabel(toolBase.meta, toolBase.name),
+      route: { name: spec.listRoute, params: { node: course.value.resourceNode.id }, query: route.query },
     },
   ]
 
-  if (route.name === listRouteName) {
+  if (route.name === spec.listRoute || !resourceNode.value?.title) {
     return items
   }
 
-  if (resourceNode.value?.title) {
-    const idParam = route.params.id?.toString().match(/(\d+)$/)?.[1]
-    items.push({
-      label: resourceNode.value.title,
-      route: idParam ? { name: detailRouteName, params: { id: idParam }, query: route.query } : undefined,
-    })
-  }
+  const id = route.params.id?.toString().match(/(\d+)$/)?.[1]
+
+  items.push({
+    label: resourceNode.value.title,
+    route: id ? { name: spec.detailRoute, params: { [spec.detailParam]: id }, query: route.query } : undefined,
+  })
+
+  return items
+}
+
+/**
+ * Build the crumbs of a tool that navigates a resource: tool, resource, current sub-page.
+ *
+ * The shape comes from `meta.breadcrumbResource`, so this file names no tool. The sub-page crumb
+ * is dropped when the route asks for it with an empty label, when the page is the detail page
+ * itself, or when it would repeat a crumb already in the trail.
+ *
+ * @param {object} toolBase - Root matched route of the tool.
+ * @returns {Array} Array of crumb items.
+ */
+function buildResourceToolCrumbs(toolBase) {
+  const spec = toolBase.meta.breadcrumbResource
+  const items =
+    "ancestors" === spec.trail ? buildAncestorTrailCrumbs(toolBase, spec) : buildSingleResourceCrumbs(toolBase, spec)
 
   const currentMatched = route.matched.find((r) => r.name === route.name)
-  const label = currentMatched?.meta?.breadcrumb || formatToolName(route.name)
 
-  if (route.name !== detailRouteName) {
-    items.push({ label: t(label), route: { name: route.name, params: route.params, query: route.query } })
+  if ("" === currentMatched?.meta?.breadcrumb || route.name === spec.detailRoute) {
+    return items
+  }
+
+  const finalLabel = resolveCrumbLabel(currentMatched?.meta, currentMatched?.name)
+
+  if (!items.some((item) => item.label === finalLabel)) {
+    items.push({
+      label: finalLabel,
+      route: { name: currentMatched.name, params: route.params, query: route.query },
+    })
   }
 
   return items
 }
 
 /**
- * Dispatch to the appropriate tool-specific crumb builder based on the current route.
+ * Dispatch to the appropriate crumb builder based on the current route.
  *
- * Handles documents, assignments, attendance, and generic tool routes.
- * For admin resource routes ("rooms", "branches"), prepends an Administration crumb.
- * For `ccalendarevent`, resolves the label dynamically from the `cid`/`gid` query params.
+ * A route that declares `meta.breadcrumbResource` and has its resource loaded gets the resource
+ * trail; every other tool route gets the generic tool crumb plus its sub-page.
  *
  * @returns {Array|null} Array of crumb items if a builder handled the route; `null` otherwise.
  */
 function buildToolCrumbs() {
-  const mainToolName = route.matched?.[0]?.name
-  const currentRouteName = route.name || ""
-  const nodeId = route.params.node || route.query.node
-  const isAssignmentRoute = currentRouteName.startsWith("Assignment") && resourceNode.value && nodeId
-  const isAttendanceRoute = currentRouteName.startsWith("Attendance") && resourceNode.value && nodeId
+  const toolBase = route.matched?.[0]
+  const mainToolName = toolBase?.name
 
-  if (mainToolName === "documents" && resourceNode.value) {
-    return buildDocumentCrumbs()
+  if (toolBase?.meta?.breadcrumbResource && resourceNode.value) {
+    return buildResourceToolCrumbs(toolBase)
   }
 
-  if (isAssignmentRoute) {
-    return buildToolWithResourceCrumbs("Assignments", "AssignmentsList", "AssignmentDetail")
-  }
-
-  if (isAttendanceRoute) {
-    return buildToolWithResourceCrumbs("Attendance", "AttendanceList", "AttendanceSheetList")
-  }
-
-  const adminResourceRoutes = ["rooms", "branches"]
-  const items = []
-
-  if (adminResourceRoutes.includes(mainToolName)) {
-    items.push({ label: t("Administration"), route: { name: "AdminIndex" } })
-  }
-
-  if (mainToolName && !["documents", "assignments", "attendance"].includes(mainToolName)) {
+  if (mainToolName) {
     const matchedRoutes = route.matched
-    const toolBase = matchedRoutes[0]
     const currentMatched = matchedRoutes[matchedRoutes.length - 1]
 
-    let toolLabel = toolBase.meta?.breadcrumb || formatToolName(mainToolName)
-
-    if (mainToolName === "ccalendarevent") {
-      const cidVal = Number(route.query?.cid || 0)
-      const gidVal = Number(route.query?.gid || 0)
-
-      toolLabel = gidVal > 0 ? "Group agenda" : cidVal > 0 ? "Agenda" : "Personal agenda"
-    }
-
+    const toolLabel = resolveCrumbLabel(toolBase.meta, mainToolName)
     const toolBaseRouteName = toolBase.name === "admin" ? "AdminIndex" : toolBase.name
-    items.push({ label: t(toolLabel), route: { name: toolBaseRouteName, params: route.params, query: route.query } })
+    const items = [{ label: toolLabel, route: { name: toolBaseRouteName, params: route.params, query: route.query } }]
 
-    const label = currentMatched.meta?.breadcrumb
+    if (currentMatched.meta?.breadcrumb !== "") {
+      const finalLabel = resolveCrumbLabel(currentMatched.meta, currentMatched.name)
 
-    if (label !== "") {
-      const finalLabel = label || formatToolName(currentMatched.name)
-
-      if (!items.some((item) => item.label === t(finalLabel))) {
+      if (!items.some((item) => item.label === finalLabel)) {
         items.push({
-          label: t(finalLabel),
+          label: finalLabel,
           route: { name: currentMatched.name, params: route.params, query: route.query },
         })
       }
@@ -503,7 +505,7 @@ function buildToolCrumbs() {
     return items
   }
 
-  return items.length > 0 ? items : null
+  return null
 }
 
 /**
@@ -514,12 +516,14 @@ function buildToolCrumbs() {
  */
 function buildRemainingMatchedCrumbs() {
   return route.matched.slice(1).reduce((items, r) => {
-    const label = r.meta?.breadcrumb || formatToolName(r.name)
     const alreadyHasResource =
       resourceNode.value?.title && items.some((item) => item.label === resourceNode.value.title)
 
     if (!alreadyHasResource) {
-      items.push({ label: t(label), route: { name: r.name, params: route.params, query: route.query } })
+      items.push({
+        label: resolveCrumbLabel(r.meta, r.name),
+        route: { name: r.name, params: route.params, query: route.query },
+      })
     }
 
     return items
@@ -535,17 +539,12 @@ if (Array.isArray(wb) && wb.length > 0) {
 }
 
 /**
- * Load the resource node for routes that require it (Documents, Assignments, Attendance).
+ * Load the resource node for the routes whose tool declares `meta.breadcrumbResource`.
  * Clears the store for all other routes to prevent stale data from bleeding into the trail.
  */
 async function loadResourceNodeIfNeeded() {
-  const currentRouteName = route.name || ""
   const nodeId = route.params.node || route.query.node
-  const needsNode =
-    (currentRouteName.startsWith("Assignment") ||
-      currentRouteName.startsWith("Attendance") ||
-      currentRouteName.startsWith("Documents")) &&
-    nodeId
+  const needsNode = Boolean(route.matched?.[0]?.meta?.breadcrumbResource) && nodeId
 
   if (needsNode) {
     try {
@@ -570,10 +569,10 @@ async function loadResourceNodeIfNeeded() {
  * Must be called only after async data (resource node) has been resolved.
  */
 function buildBreadcrumb() {
-  const accessUrlCrumbs = buildAccessUrlDeleteCrumbs()
+  const declaredParentCrumbs = buildDeclaredParentCrumbs()
 
-  if (accessUrlCrumbs !== null) {
-    calculatedList.value = accessUrlCrumbs
+  if (declaredParentCrumbs !== null) {
+    calculatedList.value = declaredParentCrumbs
     return
   }
 
@@ -584,17 +583,9 @@ function buildBreadcrumb() {
     return
   }
 
-  const prefix = buildStaticCategoryPrefixes()
-
-  if (specialRouteNames.includes(route.name)) {
-    calculatedList.value = prefix
-    return
-  }
-
   const toolCrumbs = buildToolCrumbs()
 
   calculatedList.value = [
-    ...prefix,
     ...buildCourseContextRootCrumb(),
     ...buildCourseTitleCrumb(),
     ...buildGroupCrumb(),

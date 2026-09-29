@@ -241,6 +241,22 @@ class GradingElectronicPlugin extends Plugin
                 >
                     <input type="hidden" name="grading_electronic_action" value="generate">
 
+                    <div class="rounded-lg border border-gray-25 bg-support-1 px-4 py-3">
+                        <label class="flex items-start gap-3 text-body-2 text-gray-90">
+                            <input
+                                type="checkbox"
+                                name="preview_only"
+                                value="1"
+                                checked
+                                class="mt-1"
+                            >
+                            <span>
+                                <strong><?php echo Security::remove_XSS(get_lang('Preview')); ?></strong><br>
+                                <?php echo Security::remove_XSS($this->getPluginText('PreviewOnlyHelp', 'Preview only: do not create a file, generate certificates, or send notifications.')); ?>
+                            </span>
+                        </label>
+                    </div>
+
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                         <div class="space-y-1">
                             <label for="<?php echo Security::remove_XSS($formId); ?>-range-start" class="block text-body-2 font-semibold text-gray-90">
@@ -360,6 +376,7 @@ class GradingElectronicPlugin extends Plugin
             $rangeStart = trim((string) ($_REQUEST['range_start'] ?? ''));
             $rangeEnd = trim((string) ($_REQUEST['range_end'] ?? ''));
             $externalCourseId = trim((string) ($_REQUEST['course'] ?? ''));
+            $previewOnly = !empty($_REQUEST['preview_only']);
 
             if ('' === $rangeStart || '' === $rangeEnd || '' === $externalCourseId) {
                 throw new Exception(get_lang('Required field'));
@@ -398,12 +415,14 @@ class GradingElectronicPlugin extends Plugin
                 $session = $em->find(Session::class, $sessionId);
             }
 
-            $this->saveExtraFieldStoredValue(
-                'course',
-                $course->getId(),
-                self::EXTRAFIELD_COURSE_ID,
-                $externalCourseId
-            );
+            if (!$previewOnly) {
+                $this->saveExtraFieldStoredValue(
+                    'course',
+                    $course->getId(),
+                    self::EXTRAFIELD_COURSE_ID,
+                    $externalCourseId
+                );
+            }
 
             $providerId = $this->getExtraFieldStoredValue(
                 'course',
@@ -470,8 +489,15 @@ class GradingElectronicPlugin extends Plugin
                 $dateStart->format('m/d/Y')
             );
 
+            $previewRows = [];
+            $processedCount = 0;
+            $passedCount = 0;
+            $scoredisplay = ScoreDisplay::instance();
+
             /** @var User $student */
             foreach ($students as $student) {
+                ++$processedCount;
+
                 $userFinishedCourse = Category::userFinishedCourse(
                     $student->getId(),
                     $gradebookCategory,
@@ -479,23 +505,32 @@ class GradingElectronicPlugin extends Plugin
                     $course->getId(),
                     $session ? $session->getId() : 0
                 );
-
-                if (!$userFinishedCourse) {
-                    continue;
-                }
-
+                $scoretotal = $gradebook->calc_score($student->getId());
+                $score = $scoredisplay->display_score(
+                    $scoretotal,
+                    SCORE_SIMPLE
+                );
                 $studentId = $this->getExtraFieldStoredValue(
                     'user',
                     $student->getId(),
                     self::EXTRAFIELD_STUDENT_ID
                 );
-                $scoretotal = $gradebook->calc_score($student->getId());
-                $scoredisplay = ScoreDisplay::instance();
-                $score = $scoredisplay->display_score(
-                    $scoretotal,
-                    SCORE_SIMPLE
-                );
 
+                if ($previewOnly) {
+                    $previewRows[] = [
+                        'user_id' => $student->getId(),
+                        'username' => (string) $student->getUsername(),
+                        'external_id' => (string) $studentId,
+                        'score' => $score,
+                        'status' => $userFinishedCourse ? 'PASS' : 'SKIP',
+                    ];
+                }
+
+                if (!$userFinishedCourse) {
+                    continue;
+                }
+
+                ++$passedCount;
                 $fileData[] = sprintf(
                     '2 %sPASS%s %s %s',
                     (string) $studentId,
@@ -504,11 +539,25 @@ class GradingElectronicPlugin extends Plugin
                     $dateEnd->format('m/d/Y')
                 );
 
-                if (!$gradebook->getGenerateCertificates()) {
+                if ($previewOnly || !$gradebook->getGenerateCertificates()) {
                     continue;
                 }
 
-                Category::generateUserCertificate($gradebookCategory, $student->getId(), true);
+                Category::generateUserCertificate(
+                    $gradebookCategory,
+                    $student->getId(),
+                    false,
+                    true
+                );
+            }
+
+            if ($previewOnly) {
+                return $this->renderPreviewResult(
+                    $processedCount,
+                    $passedCount,
+                    $previewRows,
+                    $fileData
+                );
             }
 
             $fileName = implode('_', [
@@ -536,6 +585,52 @@ class GradingElectronicPlugin extends Plugin
 
             return $this->getAlertHtml($exception->getMessage(), 'error');
         }
+    }
+
+    private function renderPreviewResult(
+        int $processedCount,
+        int $passedCount,
+        array $previewRows,
+        array $fileData
+    ): string {
+        $rowsHtml = '';
+
+        foreach ($previewRows as $row) {
+            $statusClass = 'PASS' === $row['status'] ? 'text-success' : 'text-gray-50';
+            $rowsHtml .= sprintf(
+                '<tr><td>%d</td><td>%s</td><td>%s</td><td>%s</td><td class="%s">%s</td></tr>',
+                (int) $row['user_id'],
+                Security::remove_XSS((string) $row['username']),
+                Security::remove_XSS((string) $row['external_id']),
+                Security::remove_XSS((string) $row['score']),
+                $statusClass,
+                Security::remove_XSS((string) $row['status'])
+            );
+        }
+
+        return sprintf(
+            '<div class="space-y-4">
+                <div class="alert alert-info">%s: %d &mdash; PASS: %d &mdash; SKIP: %d</div>
+                <div class="max-h-96 overflow-auto rounded-lg border border-gray-25">
+                    <table class="table table-hover table-striped m-0">
+                        <thead><tr><th>User ID</th><th>%s</th><th>External ID</th><th>%s</th><th>Status</th></tr></thead>
+                        <tbody>%s</tbody>
+                    </table>
+                </div>
+                <details>
+                    <summary class="cursor-pointer font-semibold">TXT preview</summary>
+                    <pre class="mt-2 max-h-96 overflow-auto rounded-lg bg-gray-10 p-3 text-body-2">%s</pre>
+                </details>
+            </div>',
+            Security::remove_XSS(get_lang('Users')),
+            $processedCount,
+            $passedCount,
+            max(0, $processedCount - $passedCount),
+            Security::remove_XSS(get_lang('Username')),
+            Security::remove_XSS(get_lang('Score')),
+            $rowsHtml,
+            Security::remove_XSS(implode("\r\n", array_merge($fileData, [null])))
+        );
     }
 
     public function isDownloadRequest(): bool

@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Tool;
 
 use Symfony\Component\Serializer\Attribute\Groups;
 
-abstract class AbstractTool
+abstract class AbstractTool implements ToolInterface
 {
     #[Groups(['ctool:read'])]
     protected string $title;
@@ -44,6 +44,12 @@ abstract class AbstractTool
     }
 
     abstract public function getTitle(): string;
+
+    abstract public function getCategory(): string;
+
+    abstract public function getLink(): string;
+
+    abstract public function getIcon(): string;
 
     public function getTarget(): string
     {

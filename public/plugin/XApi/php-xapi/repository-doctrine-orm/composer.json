@@ -10,15 +10,6 @@
             "homepage": "https://github.com/xabbuh"
         }
     ],
-    "require": {
-        "php": "^5.6 || ^7.0",
-        "doctrine/orm": "^2.3",
-        "php-xapi/repository-api": "^0.4",
-        "php-xapi/repository-doctrine": "^0.4"
-    },
-    "require-dev": {
-        "symfony/phpunit-bridge": "^3.4 || ^4.0"
-    },
     "provide": {
         "php-xapi/repository-implementation": "0.3"
     },

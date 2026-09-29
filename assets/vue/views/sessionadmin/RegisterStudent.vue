@@ -36,14 +36,23 @@
       </template>
 
       <template #content>
-        <div v-if="course.descriptions?.length" class="space-y-4">
+        <div
+          v-if="course.descriptions?.length"
+          class="space-y-4"
+        >
           <div
             v-for="(item, idx) in course.descriptions"
             :key="idx"
             class="p-4 bg-gray-10 rounded-lg shadow-sm"
           >
-            <h4 class="font-semibold text-gray-90 mb-2">{{ item.title }}</h4>
-            <div class="text-gray-50" v-html="item.content"></div>
+            <h4
+              class="font-semibold text-gray-90 mb-2"
+              v-html="displayTranslatedHtml(item.title)"
+            ></h4>
+            <div
+              class="text-gray-50"
+              v-html="displayTranslatedHtml(item.content)"
+            ></div>
           </div>
         </div>
       </template>
@@ -152,7 +161,7 @@
         v-else-if="searchAttempted"
         severity="error"
       >
-        {{ t("User not found.") }}
+        {{ t("User not found") }}
       </Message>
     </div>
 
@@ -234,6 +243,7 @@ import courseService from "../../services/courseService"
 import sessionService from "../../services/sessionService"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 
 const { t } = useI18n()
 const { showErrorNotification, showSuccessNotification } = useNotification()
@@ -253,7 +263,10 @@ const course = ref({
   description: "",
   descriptions: [],
   illustrationUrl: null,
+  courseLanguage: "",
 })
+
+const { displayTranslatedHtml } = useTranslatedHtml(() => course.value?.courseLanguage)
 
 function normalizeUrl(u) {
   if (!u || typeof u !== "string") return null
@@ -295,6 +308,7 @@ async function loadCourse() {
       description: data.description,
       descriptions: data.descriptions || [],
       illustrationUrl: normalizeUrl(data.illustrationUrl),
+      courseLanguage: data.courseLanguage,
     }
     rawBanner.value = normalizeUrl(data.illustrationUrl)
     if (rawBanner.value) {
@@ -388,7 +402,7 @@ async function sendCourseTo(user) {
     showSuccessNotification(`${t("Course sent to")} ${user.email}`)
   } catch (e) {
     console.error(e)
-    showErrorNotification(t("An error occurred while sending the course."))
+    showErrorNotification(t("An error occurred while sending the course"))
   }
 }
 

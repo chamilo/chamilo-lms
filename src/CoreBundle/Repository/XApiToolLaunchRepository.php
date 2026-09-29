@@ -81,7 +81,7 @@ class XApiToolLaunchRepository extends ServiceEntityRepository
                 ->leftJoin(
                     CLpItem::class,
                     'lpi',
-                    Join::WITH,
+                    Join::ON,
                     "lpi.itemType = :itemType AND lpi.path = CONCAT('', tl.id)"
                 )
                 ->andWhere($qb->expr()->isNull('lpi.iid'))

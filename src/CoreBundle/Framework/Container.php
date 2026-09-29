@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Framework;
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Component\Editor\Tiny\TinyEditor;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\PortfolioCategoryHelper;
@@ -653,14 +654,22 @@ class Container
 
     public static function addFlash(string $message, string $type = 'success'): void
     {
+        // Map legacy Display::return_message() type names onto Symfony flash
+        // bag keys the Vue toast consumer understands. Previous default=>'info'
+        // silently rewrote an explicit 'success' into 'info'.
         $type = match ($type) {
-            'confirmation', 'confirm' => 'success',
-            default => 'info',
+            'confirmation', 'confirm', 'success' => 'success',
+            'error', 'danger' => 'error',
+            'warning' => 'warning',
+            default => $type,
         };
 
         $session = self::getSession();
 
         if ($session instanceof Session) {
+            $session->getFlashBag()->add($type, $message);
+        } elseif ($session) {
+            // request_stack->getSession() is typed SessionInterface; still has a flash bag.
             $session->getFlashBag()->add($type, $message);
         }
     }
@@ -718,6 +727,11 @@ class Container
     public static function getAccessUrlUtil(): AccessUrlHelper
     {
         return self::$container->get(AccessUrlHelper::class);
+    }
+
+    public static function getAccessUrlScopeHelper(): AccessUrlScopeHelper
+    {
+        return self::$container->get(AccessUrlScopeHelper::class);
     }
 
     public static function getEventDispatcher(): EventDispatcherInterface

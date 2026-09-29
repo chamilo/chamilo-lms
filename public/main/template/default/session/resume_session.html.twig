@@ -35,9 +35,9 @@
                         </dd>
                     </div>
 
-                    {# General coach #}
+                    {# General tutor #}
                     <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'General coach'|trans }}</dt>
+                        <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'General tutor'|trans }}</dt>
                         <dd class="prose prose-sm max-w-none text-gray-90 mt-1">
                             {% autoescape false %}
                                 {% for coach in session.generalCoaches %}
@@ -75,7 +75,7 @@
                         </div>
 
                         <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
-                            <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Access dates for coaches'|trans }}</dt>
+                            <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Access dates for tutors'|trans }}</dt>
                             <dd class="text-gray-90 text-body-2 mt-1">{{ session_dates.coach }}</dd>
                         </div>
                     {% endif %}

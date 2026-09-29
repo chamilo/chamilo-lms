@@ -32,11 +32,10 @@ export default {
 
   /**
    * @param {number|string} id
-   * @param {string} csrfToken
    * @returns {Promise<any>}
    */
-  remove(id, csrfToken) {
-    return baseService.delete(`/admin/usergroups-data/${id}`, { headers: { "X-CSRF-Token": csrfToken } })
+  remove(id) {
+    return baseService.delete(`/admin/usergroups-data/${id}`)
   },
 
   /**
@@ -74,13 +73,10 @@ export default {
   /**
    * @param {number|string} groupId
    * @param {number|string} userId
-   * @param {string} csrfToken
    * @returns {Promise<any>}
    */
-  removeUser(groupId, userId, csrfToken) {
-    return baseService.delete(`/admin/usergroup-users-data/${groupId}/user/${userId}`, {
-      headers: { "X-CSRF-Token": csrfToken },
-    })
+  removeUser(groupId, userId) {
+    return baseService.delete(`/admin/usergroup-users-data/${groupId}/user/${userId}`)
   },
 
   /**

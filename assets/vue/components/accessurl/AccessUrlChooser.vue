@@ -33,7 +33,7 @@ const visible = ref(loadComponent.value)
     >
       <div v-if="1 === accessUrls.length">
         <p>{{ t("You only have access to the URL {0}", [accessUrls[0].url]) }}</p>
-        <p v-text="t('You will therefore be automatically redirected to this URL.')" />
+        <p v-text="t('You will therefore be automatically redirected to this URL')" />
       </div>
       <div v-else-if="accessUrls.length > 1">
         <p v-text="t('You have access to multiple URLs. Here is the list of your accesses.')" />

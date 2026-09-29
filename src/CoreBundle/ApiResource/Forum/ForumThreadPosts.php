@@ -31,6 +31,16 @@ final class ForumThreadPosts
 
     public bool $canManageThread = false;
 
+    public int $page = 1;
+
+    public int $itemsPerPage = 25;
+
+    public int $totalItems = 0;
+
+    public int $totalPages = 0;
+
+    public bool $hasNextPage = false;
+
     /**
      * @var array<int, array<string, mixed>>
      */
@@ -57,6 +67,11 @@ final class ForumThreadPosts
 
         $result->canReply = (bool) ($data['canReply'] ?? false);
         $result->canManageThread = (bool) ($data['canManageThread'] ?? false);
+        $result->page = max(1, (int) ($data['page'] ?? 1));
+        $result->itemsPerPage = max(1, (int) ($data['itemsPerPage'] ?? 25));
+        $result->totalItems = max(0, (int) ($data['totalItems'] ?? 0));
+        $result->totalPages = max(0, (int) ($data['totalPages'] ?? 0));
+        $result->hasNextPage = (bool) ($data['hasNextPage'] ?? false);
 
         $posts = $data['posts'] ?? [];
         $result->posts = \is_array($posts) ? $posts : [];

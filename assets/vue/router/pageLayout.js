@@ -1,6 +1,6 @@
 export default {
   path: "/resources/pages/layouts",
-  meta: { requiresAuth: true },
+  meta: { requiresAuth: true, breadcrumb: "Page layouts" },
   name: "page-layouts",
   component: () => import("../components/page/Layout.vue"),
   redirect: { name: "PageLayoutList" },

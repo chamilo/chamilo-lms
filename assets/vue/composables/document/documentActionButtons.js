@@ -1,18 +1,11 @@
 import { computed } from "vue"
 import { useRoute } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
-import { usePlatformConfig } from "../../store/platformConfig"
 
 export function useDocumentActionButtons() {
   const route = useRoute()
   const securityStore = useSecurityStore()
-  const platformConfigStore = usePlatformConfig()
-
-  const inStudentView = computed(() => platformConfigStore.isStudentViewActive)
-  const isTeacherUI = computed(
-    () =>
-      (securityStore.isCurrentTeacher || securityStore.isCourseAdmin || securityStore.isAdmin) && !inStudentView.value,
-  )
+  const isTeacherUI = computed(() => securityStore.isCurrentTeacher)
 
   const isCertificateMode = computed(() => route.query.filetype === "certificate")
 
@@ -23,11 +16,11 @@ export function useDocumentActionButtons() {
   const showRecordAudioButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
   const showNewCloudFileButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
 
-  const showSlideshowButton = computed(() => true)
+  const showSlideshowButton = computed(() => !isCertificateMode.value)
 
-  const showUsageButton = computed(() => isTeacherUI.value)
+  const showUsageButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
 
-  const showDownloadAllButton = computed(() => securityStore.isAuthenticated)
+  const showDownloadAllButton = computed(() => securityStore.isAuthenticated && !isCertificateMode.value)
 
   const showNewCertificateButton = computed(() => isTeacherUI.value && isCertificateMode.value)
   const showUploadCertificateButton = computed(() => isTeacherUI.value && isCertificateMode.value)

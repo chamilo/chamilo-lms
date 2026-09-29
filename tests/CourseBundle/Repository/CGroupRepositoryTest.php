@@ -121,6 +121,7 @@ class CGroupRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $groupRepo = self::getContainer()->get(CGroupRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $courseCountBefore = $courseRepo->count([]);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -185,7 +186,7 @@ class CGroupRepositoryTest extends AbstractApiTest
 
         // FIXME a group is a course-specific feature, so it should be cascade-deleted with the course
         // $this->assertSame(0, $groupRepo->count([]));
-        $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame($courseCountBefore, $courseRepo->count([]));
     }
 
     public function testFindAllByCourse(): void

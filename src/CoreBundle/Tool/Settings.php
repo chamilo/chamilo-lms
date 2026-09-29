@@ -20,7 +20,7 @@ class Settings extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/course_info/infocours.php';
+        return '/resources/course-settings/:nodeId/';
     }
 
     public function getCategory(): string

@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ScimHelper;
+use Chamilo\CoreBundle\Installer\InstallerGate;
+use Chamilo\CoreBundle\Installer\InstallerState;
 use Chamilo\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -76,98 +78,55 @@ $envFile = api_get_path(SYMFONY_SYS_PATH).'.env';
 $versionInfo = require __DIR__.'/version.php';
 $installerVersion = $versionInfo['new_version'] ?? null;
 
-if (file_exists($envFile)) {
-    $dotenv = new Dotenv();
-    try {
-        // Load .env without crashing if incomplete
-        $dotenv->loadEnv($envFile);
-    } catch (\Throwable $e) {
-        // Ignore and let the wizard continue
+// The wizard has no authentication of its own, so it stays reachable only while it
+// still has work to do: a fresh install, a half-installed instance, or an installed
+// platform with pending migrations (the 1.11.x and 2.x upgrades).
+if (isInstallerLocked()) {
+    $needsUpgradeFlag = InstallerState::UpgradeNotAuthorised === resolveInstallerState();
+
+    header('HTTP/1.1 409 Conflict');
+    echo '<!doctype html><meta charset="utf-8">';
+    echo '<title>'.($needsUpgradeFlag ? 'Upgrade not enabled' : 'Chamilo already installed').'</title>';
+    echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
+
+    if ($needsUpgradeFlag) {
+        echo '<h1>No '.InstallerGate::UPGRADE_FLAG_FILE.' found in the project root</h1>';
+        echo '<p>This platform has pending migrations, but the upgrade is not enabled yet.</p>';
+        echo '<p>Create an empty <code>'.InstallerGate::UPGRADE_FLAG_FILE.'</code> file next to';
+        echo ' <code>.env</code>, then reload this page. The installer deletes it once the upgrade';
+        echo ' is over.</p>';
+    } else {
+        echo '<h1>Chamilo is already installed</h1>';
+        echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';
+        echo '<p>If an upgrade is pending, run <code>php bin/console doctrine:migrations:status</code> to check it.';
+        echo ' An installation that predates the migration metadata seeding needs';
+        echo ' <code>php bin/console doctrine:migrations:version --add --all</code> once.</p>';
+        echo '<p>If you need a fresh install, set <code>APP_INSTALLED=0</code> or remove <code>.env</code> first.</p>';
     }
 
-    $appInstalled = (string) (
-            $_SERVER['APP_INSTALLED']
-            ?? $_ENV['APP_INSTALLED']
-            ?? getenv('APP_INSTALLED')
-            ?? ''
-        ) === '1';
-
-    if ($appInstalled && $installerVersion) {
-        $dbVersion = null;
-        $dbLooksInitialized = false;
-
-        try {
-            $dbHost = (string) ($_SERVER['DATABASE_HOST'] ?? $_ENV['DATABASE_HOST'] ?? getenv('DATABASE_HOST') ?? 'localhost');
-            $dbUser = (string) ($_SERVER['DATABASE_USER'] ?? $_ENV['DATABASE_USER'] ?? getenv('DATABASE_USER') ?? '');
-            $dbPass = (string) ($_SERVER['DATABASE_PASSWORD'] ?? $_ENV['DATABASE_PASSWORD'] ?? getenv('DATABASE_PASSWORD') ?? '');
-            $dbName = (string) ($_SERVER['DATABASE_NAME'] ?? $_ENV['DATABASE_NAME'] ?? getenv('DATABASE_NAME') ?? '');
-            $dbPort = (int) ($_SERVER['DATABASE_PORT'] ?? $_ENV['DATABASE_PORT'] ?? getenv('DATABASE_PORT') ?? 3306);
-
-            // Connect using the legacy installer helpers
-            connectToDatabase($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
-
-            $conn = Database::getManager()->getConnection();
-
-            // Fast "is initialized?" proof:
-            // - if settings_current (or settings) exists AND has at least 1 row, we treat it as initialized.
-            // Avoid schema introspection for performance and reliability.
-            try {
-                $hasAnySetting = $conn->fetchOne('SELECT 1 FROM settings_current LIMIT 1');
-                if ($hasAnySetting !== false && $hasAnySetting !== null) {
-                    $dbLooksInitialized = true;
-
-                    $dbVersion = $conn->fetchOne(
-                        "SELECT selected_value FROM settings_current WHERE variable = 'chamilo_database_version' LIMIT 1"
-                    );
-                }
-            } catch (\Throwable $e) {
-                // Ignore and try legacy table
-            }
-
-            if (!$dbLooksInitialized) {
-                try {
-                    $hasAnySetting = $conn->fetchOne('SELECT 1 FROM settings LIMIT 1');
-                    if ($hasAnySetting !== false && $hasAnySetting !== null) {
-                        $dbLooksInitialized = true;
-
-                        $dbVersion = $conn->fetchOne(
-                            "SELECT selected_value FROM settings WHERE variable = 'chamilo_database_version' LIMIT 1"
-                        );
-                    }
-                } catch (\Throwable $e) {
-                    // No settings tables -> DB is not initialized
-                }
-            }
-        } catch (\Throwable $e) {
-            // If we cannot connect, do not block the wizard
-            $dbLooksInitialized = false;
-            $dbVersion = null;
-        }
-
-        // Block ONLY if DB is initialized AND version is up-to-date.
-        $dbVersion = is_string($dbVersion) ? trim($dbVersion) : '';
-        if ($dbLooksInitialized && $dbVersion !== '' && version_compare($dbVersion, $installerVersion, '>=')) {
-            header('HTTP/1.1 409 Conflict');
-            echo '<!doctype html><meta charset="utf-8"><title>Chamilo already installed</title>';
-            echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
-            echo '<h1>Chamilo is already installed</h1>';
-            echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';
-            echo '<p>If you need a fresh install, set <code>APP_INSTALLED=0</code> or remove <code>.env</code> first.</p>';
-            echo '</div>';
-            exit;
-        }
-
-        // If APP_INSTALLED=1 but DB is NOT initialized, we intentionally allow the wizard to run.
-    }
+    echo '</div>';
+    exit;
 }
 
 $httpRequest = Request::createFromGlobals();
 $installationLanguage = 'en_US';
 
-$langParam = $httpRequest->get('language_list');
+// Request::get() is deprecated since symfony/http-foundation 7.4; check the
+// bags directly in the same attributes -> query -> request priority order.
+$langParam = $httpRequest->attributes->get('language_list')
+    ?? $httpRequest->query->get('language_list')
+    ?? $httpRequest->request->get('language_list');
 if ($langParam !== null && $langParam !== '') {
     $search = ['../', '\\0'];
-    $installationLanguage = str_replace($search, '', urldecode($langParam));
+    $candidate = str_replace($search, '', urldecode($langParam));
+    // Accept only a locale-shaped value. This value reaches the Symfony
+    // Translator, which throws Invalid "<value>" locale verbatim into the PHP
+    // error log for anything else; reflecting attacker text (e.g. inline PHP)
+    // there is the write half of a log-poisoning chain. Fall back to the
+    // default rather than pass an unvalidated locale through.
+    $installationLanguage = 1 === preg_match('/^[A-Za-z0-9_-]{1,32}$/', $candidate)
+        ? $candidate
+        : 'en_US';
     ChamiloSession::write('install_language', $installationLanguage);
 } elseif (ChamiloSession::has('install_language')) {
     $installationLanguage = ChamiloSession::read('install_language');
@@ -179,10 +138,18 @@ if ($langParam !== null && $langParam !== '') {
 $translator = new Translator($installationLanguage);
 $translator->addLoader('po', new PoFileLoader());
 
-$langResourceFile = api_get_path(SYMFONY_SYS_PATH).'translations/messages.'.(explode('_', $installationLanguage, 2)[0]).'.po';
+$translationsPath = api_get_path(SYMFONY_SYS_PATH).'translations/';
+$baseInstallationLanguage = explode('_', $installationLanguage, 2)[0];
+$langResourceCandidates = array_unique([
+    $translationsPath.'messages.'.$installationLanguage.'.po',
+    $translationsPath.'messages.'.$baseInstallationLanguage.'.po',
+]);
 
-if (file_exists($langResourceFile)) {
-    $translator->addResource('po', $langResourceFile, $installationLanguage);
+foreach ($langResourceCandidates as $langResourceFile) {
+    if (file_exists($langResourceFile)) {
+        $translator->addResource('po', $langResourceFile, $installationLanguage);
+        break;
+    }
 }
 
 Container::$translator = $translator;
@@ -251,6 +218,11 @@ $upgradeFromVersion = [
     '1.11.30',
     '1.11.32',
     '1.11.34',
+    '1.11.36',
+    '1.11.38',
+    '1.11.40',
+    // Not released yet: security fixes planned for the 1.11 branch.
+    '1.11.42',
 ];
 
 $my_old_version = '';
@@ -275,6 +247,7 @@ $new_version = $versionData['new_version'];
 
 /* STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 $badUpdatePath = false;
+$upgradeNotAuthorised = false;
 $emptyUpdatePath = true;
 $proposedUpdatePath = '';
 
@@ -284,19 +257,71 @@ if (!empty($_POST['updatePath'])) {
 
 $checkMigrationStatus = [];
 $isUpdateAvailable = isUpdateAvailable();
+
+// A modern upgrade is recognised from the schema, not from chamilo_database_version:
+// that setting is deprecated and a fresh install seeds it with a stale default.
+// isInstallerLocked() above already refused an installed platform with no pending
+// migration, so reaching this point with a 2.x schema means an upgrade is due.
+$isModernUpdate = false;
+
+if ($isUpdateAvailable) {
+    try {
+        $isModernUpdate = InstallerGate::isModernSchema(Database::getManager()->getConnection());
+    } catch (\Throwable $e) {
+        error_log('Installer: Could not inspect the source database schema: '.$e->getMessage());
+    }
+}
+
+if ($isModernUpdate && empty($proposedUpdatePath)) {
+    // Chamilo 2.x already stores DB configuration in .env and its 2.x schema no
+    // longer needs the 1.11 source-tree path. Keep the active update tree as the
+    // path so the wizard can continue without asking for a legacy directory.
+    $proposedUpdatePath = api_add_trailing_slash(api_get_path(SYMFONY_SYS_PATH));
+    $emptyUpdatePath = false;
+}
+
+if ($isModernUpdate) {
+    $existingEncryptMethod = get_config_param('password_encryption', $proposedUpdatePath);
+    if (is_string($existingEncryptMethod) && '' !== trim($existingEncryptMethod)) {
+        $encryptPassForm = trim($existingEncryptMethod);
+    }
+}
+
+// Step2.vue intentionally navigates to this GET URL for the upgrade action.
+// Normalize it into the same internal state as the historical POST flow.
+if ('step2_update_8' === ($_GET['step'] ?? '')) {
+    $_POST['step2_update_8'] = '1';
+    $_POST['updatePath'] = $proposedUpdatePath;
+    $_POST['old_version'] = $my_old_version;
+}
+
 if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) {
     if (isset($_POST['step2_install'])) {
         $installType = 'new';
         $_POST['step2'] = 1;
     } else {
         $installType = 'update';
-        if (isset($_POST['step2_update_8'])) {
+
+        // An upgrade needs a deliberate act on the server, because these endpoints carry
+        // no authentication. Ask for it here, before the database form: step 4 writes
+        // .env, and from that request on the gate treats this platform as installed and
+        // refuses the wizard without the flag file.
+        $upgradeNotAuthorised = !InstallerGate::isUpgradeAuthorised(api_get_path(SYMFONY_SYS_PATH));
+
+        if (!$upgradeNotAuthorised && isset($_POST['step2_update_8'])) {
             $emptyUpdatePath = false;
             $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYMFONY_SYS_PATH) : $_POST['updatePath']);
 
             if (file_exists($proposedUpdatePath)) {
-                if (in_array($my_old_version, $upgradeFromVersion)) {
+                // Recompute from the path just submitted rather than trusting $my_old_version:
+                // that value was derived earlier from the stale 'old_version' hidden field (echoed
+                // back from the previous, path-less render), which otherwise silently overrides the
+                // correct detection for this submission.
+                $detectedOldVersion = get_config_param('system_version', $proposedUpdatePath);
+                $isLegacy111Update = 1 === preg_match('/^1\.11\.\d+$/', (string) $detectedOldVersion);
+                if ($isLegacy111Update || $isModernUpdate) {
                     $_POST['step2'] = 1;
+                    $my_old_version = $detectedOldVersion;
                 } else {
                     $badUpdatePath = true;
                 }
@@ -334,7 +359,20 @@ if (!isset($_GET['running'])) {
     }
 
     $loginForm = 'admin';
-    $passForm = api_generate_password(12, false);
+    // CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD is a server-side-only escape
+    // hatch for automated test installs (set via Apache's SetEnv in the
+    // CI-only .github/gh-apache vhost, never reachable via any request
+    // parameter) so a deterministic admin password can be asserted
+    // afterward instead of an unpredictable generated one. Checks $_SERVER
+    // as well as getenv(): under mod_php specifically, getenv() doesn't
+    // reliably see values Apache sets via SetEnv, while $_SERVER does.
+    // Falls back to the normal random generation whenever neither is set,
+    // i.e. for every real install.
+    $defaultAdminPassword = getenv('CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD');
+    if (false === $defaultAdminPassword || '' === $defaultAdminPassword) {
+        $defaultAdminPassword = $_SERVER['CHAMILO_INSTALLER_DEFAULT_ADMIN_PASSWORD'] ?? '';
+    }
+    $passForm = '' !== $defaultAdminPassword ? $defaultAdminPassword : api_generate_password(12, false);
     $institutionUrlForm = 'https://chamilo.org';
     $checkEmailByHashSent = 0;
     $userMailCanBeEmpty = 1;
@@ -344,17 +382,16 @@ if (!isset($_GET['running'])) {
         $installationProfile = htmlentities($_GET['profile']);
     }
 } else {
-    foreach ($_POST as $key => $val) {
+    // Walk the leaves only: trim() throws a TypeError on the intermediate arrays
+    // that a nested input such as a[b][c] produces.
+    array_walk_recursive($_POST, static function (&$val): void {
         if (is_string($val)) {
             $val = trim($val);
-            $_POST[$key] = $val;
-        } elseif (is_array($val)) {
-            foreach ($val as $key2 => $val2) {
-                $val2 = trim($val2);
-                $_POST[$key][$key2] = $val2;
-            }
         }
-        $GLOBALS[$key] = $_POST[$key];
+    });
+
+    foreach ($_POST as $key => $val) {
+        $GLOBALS[$key] = $val;
     }
 }
 
@@ -363,15 +400,15 @@ $total_steps = 7;
 $current_step = 1;
 if (!$_POST) {
     $current_step = 1;
-} elseif ($httpRequest->request->get('language_list') || !empty($_POST['step1']) || ((!empty($_POST['step2_update_8']) || (!empty($_POST['step2_update_6']))) && ($emptyUpdatePath || $badUpdatePath))) {
+} elseif ($httpRequest->request->get('language_list') || !empty($_POST['step1']) || ((isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) && ($emptyUpdatePath || $badUpdatePath || $upgradeNotAuthorised))) {
     $current_step = 2;
-} elseif (!empty($_POST['step2']) || (!empty($_POST['step2_update_8']) || (!empty($_POST['step2_update_6'])))) {
+} elseif (!empty($_POST['step2']) || (isset($_POST['step2_update_8']) || isset($_POST['step2_update_6']))) {
     $current_step = 3;
-} elseif (!empty($_POST['step3'])) {
+} elseif (isset($_POST['step3'])) {
     $current_step = 4;
-} elseif (!empty($_POST['step4'])) {
+} elseif (isset($_POST['step4'])) {
     $current_step = 5;
-} elseif (!empty($_POST['step5'])) {
+} elseif (isset($_POST['step5'])) {
     $current_step = 6;
 } elseif (isset($_POST['step6'])) {
     $current_step = 7;
@@ -446,6 +483,15 @@ if (isset($_POST['step2'])) {
             $dbPortForm
         );
         $manager = Database::getManager();
+
+        try {
+            $detectedDbServerVersion = $manager->getConnection()->fetchOne('SELECT VERSION()');
+            if (is_string($detectedDbServerVersion) && '' !== trim($detectedDbServerVersion)) {
+                setEnvDatabaseServerVersion($envFile, trim($detectedDbServerVersion));
+            }
+        } catch (\Throwable $e) {
+            error_log('Could not detect DB server version: ' . $e->getMessage());
+        }
 
         $tmp = get_config_param_from_db('platformLanguage');
         if (!empty($tmp)) {
@@ -658,6 +704,13 @@ if (isset($_POST['step2'])) {
             $dbSchemaManager = $conn->createSchemaManager();
             $platform = $conn->getDatabasePlatform();
 
+            $detectedDbServerVersion = null;
+            try {
+                $detectedDbServerVersion = $conn->fetchOne('SELECT VERSION()');
+            } catch (\Throwable $e) {
+                error_log('Could not detect DB server version: ' . $e->getMessage());
+            }
+
             // If there are tables, drop them (no DROP DATABASE required)
             try {
                 $tables = $dbSchemaManager->listTableNames();
@@ -736,11 +789,24 @@ if (isset($_POST['step2'])) {
             ];
 
             updateEnvFile($distFile, $envFile, $params);
+
+            if (is_string($detectedDbServerVersion) && '' !== trim($detectedDbServerVersion)) {
+                setEnvDatabaseServerVersion($envFile, trim($detectedDbServerVersion));
+            }
+
             (new Dotenv())->load($envFile);
 
             error_log('Load kernel');
-            // Load Symfony Kernel
-            $kernel = new Kernel('dev', true);
+            // Load Symfony Kernel using the environment just written to .env
+            // (not hardcoded 'dev'), so a "composer install --no-dev" deployment
+            // (no DebugBundle/WebProfilerBundle/etc. installed) can finish installing.
+            $installerAppEnv = (string) (
+                $_SERVER['APP_ENV']
+                ?? $_ENV['APP_ENV']
+                ?? getenv('APP_ENV')
+                ?? 'dev'
+            );
+            $kernel = new Kernel($installerAppEnv, true);
             $application = new Application($kernel);
 
             // Create database schema
@@ -748,6 +814,33 @@ if (isset($_POST['step2'])) {
             $input = new ArrayInput([]);
             $command = $application->find('doctrine:schema:create');
             $result = $command->run($input, new ConsoleOutput());
+
+            // The schema above is built from the entities, so it is already the final one.
+            // Record every migration as executed: without this baseline a later
+            // doctrine:migrations:migrate would replay the whole history over a current
+            // schema, and the installer gate could not tell a pending upgrade apart from
+            // an up-to-date platform.
+            if (0 === $result) {
+                error_log('Seed migration metadata');
+
+                // sync-metadata-storage creates the `version` table, which the next
+                // command needs; it errors out on its own otherwise.
+                foreach (['doctrine:migrations:sync-metadata-storage', 'doctrine:migrations:version'] as $baselineName) {
+                    $baselineInput = new ArrayInput(
+                        'doctrine:migrations:version' === $baselineName
+                            ? ['--add' => true, '--all' => true]
+                            : []
+                    );
+                    $baselineInput->setInteractive(false);
+                    $baselineResult = $application->find($baselineName)->run($baselineInput, new ConsoleOutput());
+
+                    if (0 !== $baselineResult) {
+                        error_log('Installer: could not seed the migration metadata ('.$baselineName.').');
+
+                        break;
+                    }
+                }
+            }
 
             // Load fixtures (no errors)
             if (0 === $result) {
@@ -795,13 +888,28 @@ if (isset($_POST['step2'])) {
                     $kernel
                 );
 
+                // Upload the themes bundled in var/themes to the configured themes
+                // filesystem. Does nothing when no remote storage is configured, and never
+                // aborts the installation: a storage misconfiguration only costs the theme
+                // files, which can be uploaded later with the same command.
+                error_log('Upload themes to the configured storage');
+
+                try {
+                    $input = new ArrayInput([]);
+                    $input->setInteractive(false);
+                    $command = $application->find('chamilo:remote-storage:upload-themes');
+                    $command->run($input, new ConsoleOutput());
+                } catch (Throwable $e) {
+                    error_log('Could not upload the themes: '.$e->getMessage());
+                }
+
                 error_log('Finish installation');
             } else {
                 error_log('ERROR during installation.');
             }
         }
     }
-} elseif (isset($_POST['step1']) || $badUpdatePath) {
+} elseif (isset($_POST['step1']) || $badUpdatePath || $upgradeNotAuthorised) {
     //STEP 1 : REQUIREMENTS
     //make sure that proposed path is set, shouldn't be necessary but...
     if (empty($proposedUpdatePath)) {
@@ -835,6 +943,10 @@ $installerData = [
 
     'badUpdatePath' => $badUpdatePath,
 
+    'upgradeNotAuthorised' => $upgradeNotAuthorised,
+
+    'upgradeFlagFile' => InstallerGate::UPGRADE_FLAG_FILE,
+
     'upgradeFromVersion' => $upgradeFromVersion,
 
     'langIso' => $installationLanguage,
@@ -845,7 +957,7 @@ $installerData = [
             'updateFromConfigFile' => $updateFromConfigFile,
         ]),
 
-    'updatePath' => !$badUpdatePath ? $proposedUpdatePath : '',
+    'updatePath' => $proposedUpdatePath,
     'urlAppendPath' => $urlAppendPath,
     'pathForm' => $pathForm,
     'urlForm' => $urlForm,
@@ -902,7 +1014,8 @@ function getEncoreAssetFromManifest(string $assetName): ?string
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $installationLanguage ?>" class="no-js h-100">
+<?php $escapedInstallationLanguage = htmlspecialchars($installationLanguage, ENT_QUOTES, 'UTF-8'); ?>
+<html lang="<?php echo $escapedInstallationLanguage ?>" data-lang="<?php echo $escapedInstallationLanguage ?>" class="no-js h-100">
 <head>
     <title>
         &mdash; <?php echo $translator->trans('Chamilo installation').' &mdash; '.$translator->trans('Version').' '.$new_version; ?>
@@ -949,7 +1062,7 @@ function getEncoreAssetFromManifest(string $assetName): ?string
 <body class="flex min-h-screen p-2 md:px-16 md:py-8 xl:px-32 xl:py-16 bg-gradient-to-br from-primary to-primary-gradient">
 <div id="app" class="m-auto"></div>
 <script>
-  var installerData = <?php echo json_encode($installerData) ?>;
+  var installerData = <?php echo json_encode($installerData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
 </script>
 <script type="text/javascript" src="<?php echo getEncoreAssetFromManifest('public/build/runtime.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo getEncoreAssetFromManifest('public/build/vue_installer.js'); ?>"></script>

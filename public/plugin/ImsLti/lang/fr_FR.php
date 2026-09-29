@@ -85,3 +85,22 @@ $strings['SelectCoursesForExternalTool'] = 'Sélectionnez un ou plusieurs cours 
 $strings['ExternalToolWithoutResourceNode'] = 'L’outil externe ne possède pas encore de nœud de ressource.';
 $strings['JwksUrlOrRsaKey'] = 'URL JWKS ou clé RSA';
 $strings['CompleteParamsLti'] = 'Complétez la configuration de l’outil externe avant de l’ajouter aux cours : %s.';
+
+// Admin/create interface.
+$strings['LogicalTools'] = 'Outils logiques';
+$strings['ReadyForCourses'] = 'Prêts pour les cours';
+$strings['WithHiddenDuplicates'] = 'Avec doublons masqués';
+$strings['ExternalTools'] = 'Outils externes';
+$strings['Tools'] = 'Outils';
+$strings['ToolId'] = 'ID de l’outil';
+$strings['CreateFirstExternalToolHelp'] = 'Créez votre premier outil externe pour commencer à utiliser le plugin client IMS/LTI.';
+$strings['BackToTools'] = 'Retour aux outils';
+$strings['CreateExternalToolDescription'] = 'Créez et configurez un outil externe réutilisable pour le plugin client IMS/LTI.';
+$strings['LaunchUrlRequiredLti11'] = 'L’URL de lancement est requise pour les outils LTI 1.0 / 1.1.';
+$strings['ToolHasInternalCourseCopies'] = 'Cet outil possède des copies internes dans des cours. Supprimez d’abord les affectations aux cours.';
+$strings['RemoveCourseActivityConfirm'] = 'La suppression d’une activité d’un cours peut avoir un impact sur les évaluations de ce cours. Voulez-vous vraiment la supprimer ?';
+$strings['InvalidServerResponse'] = 'Réponse du serveur invalide.';
+$strings['UnexpectedServerResponse'] = 'Réponse inattendue du serveur.';
+$strings['UnableToSubmitForm'] = 'Impossible d’envoyer le formulaire.';
+$strings['UnableToLoadContent'] = 'Impossible de charger le contenu.';
+$strings['EditExternalToolDescription'] = 'Modifiez et mettez à jour la configuration de cet outil externe.';

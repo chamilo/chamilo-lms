@@ -15,6 +15,7 @@
 
       <div class="flex flex-wrap items-center justify-end gap-2">
         <BaseButton
+          v-if="showBackToSurveyList"
           :label="t('Back to survey list')"
           :route="buildListRoute()"
           icon="back"
@@ -391,11 +392,13 @@ import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
 
 const survey = ref({})
 const questions = ref([])
@@ -404,7 +407,6 @@ const answers = ref({})
 const otherAnswers = ref({})
 const profileFields = ref([])
 const profileValues = ref({})
-const csrfToken = ref("")
 const settings = ref({})
 const canSubmit = ref(false)
 const isAnswered = ref(false)
@@ -418,6 +420,28 @@ const currentPageIndex = ref(0)
 
 const surveyId = computed(() => Number(route.params.surveyId || 0))
 const previewMode = computed(() => route.name === "SurveyPreview" || route.query.preview === "1")
+const isLearningPathContext = computed(() => {
+  const origin = String(getQueryValue(route.query.origin) || "")
+  const returnToLp = String(getQueryValue(route.query.returnToLp) || "")
+
+  return (
+    origin === "learnpath" ||
+    returnToLp === "1" ||
+    Boolean(getQueryValue(route.query.lp_id)) ||
+    Boolean(getQueryValue(route.query.lpItemId || route.query.lp_item_id))
+  )
+})
+const isPublicAnswerContext = computed(() => {
+  return (
+    Boolean(getQueryValue(route.query.invitationCode || route.query.invitationcode)) ||
+    Boolean(getQueryValue(route.query.publicCid)) ||
+    Boolean(getQueryValue(route.query.publicSid)) ||
+    Boolean(getQueryValue(route.query.publicGid))
+  )
+})
+const showBackToSurveyList = computed(() => {
+  return !isLearningPathContext.value && !isPublicAnswerContext.value
+})
 const canInteract = computed(() => previewMode.value || canSubmit.value)
 const totalPages = computed(() => Math.max(1, pages.value.length))
 const currentQuestionIds = computed(() => pages.value[currentPageIndex.value] || [])
@@ -426,13 +450,25 @@ const currentVisibleQuestions = computed(() => currentQuestions.value.filter((qu
 const canGoNext = computed(() => currentPageIndex.value < totalPages.value - 1)
 const canGoBack = computed(() => settings.value.backwardsEnabled && currentPageIndex.value > 0)
 
+function getQueryValue(value) {
+  return Array.isArray(value) ? value[0] : value
+}
+
 function getContextParams() {
   return {
-    cid: route.query.cid,
-    sid: route.query.sid,
-    gid: route.query.gid,
-    invitationCode: route.query.invitationCode || route.query.invitationcode,
-    lpItemId: route.query.lpItemId || route.query.lp_item_id,
+    cid: getQueryValue(route.query.cid),
+    sid: getQueryValue(route.query.sid),
+    gid: getQueryValue(route.query.gid),
+    publicCid: getQueryValue(route.query.publicCid),
+    publicSid: getQueryValue(route.query.publicSid),
+    publicGid: getQueryValue(route.query.publicGid),
+    invitationCode: getQueryValue(route.query.invitationCode || route.query.invitationcode),
+    lpItemId: getQueryValue(route.query.lpItemId || route.query.lp_item_id),
+    lp_id: getQueryValue(route.query.lp_id),
+    origin: getQueryValue(route.query.origin),
+    type: getQueryValue(route.query.type),
+    returnToLp: getQueryValue(route.query.returnToLp),
+    embedded: getQueryValue(route.query.embedded),
     preview: previewMode.value ? 1 : undefined,
   }
 }
@@ -442,9 +478,9 @@ function buildListRoute() {
     name: "SurveyList",
     params: { node: route.params.node },
     query: {
-      cid: route.query.cid,
-      sid: route.query.sid,
-      gid: route.query.gid,
+      ...getContextParams(),
+      invitationCode: undefined,
+      preview: undefined,
     },
   }
 }
@@ -457,9 +493,9 @@ function buildConfigureRoute() {
       surveyId: surveyId.value,
     },
     query: {
-      cid: route.query.cid,
-      sid: route.query.sid,
-      gid: route.query.gid,
+      ...getContextParams(),
+      invitationCode: undefined,
+      preview: undefined,
     },
   }
 }
@@ -468,7 +504,6 @@ function normalizeResponse(data) {
   survey.value = data.survey || {}
   questions.value = Array.isArray(data.questions) ? data.questions : []
   pages.value = Array.isArray(data.pages) && data.pages.length ? data.pages : [[]]
-  csrfToken.value = data.csrfToken || csrfToken.value
   settings.value = data.settings || {}
   canSubmit.value = true === data.canSubmit
   isAnswered.value = true === data.isAnswered
@@ -564,7 +599,7 @@ function displayText(value, fallback = "") {
   }
 
   const textarea = document.createElement("textarea")
-  textarea.innerHTML = String(value).replace(/<[^>]*>/g, " ")
+  textarea.innerHTML = displayTranslatedHtml(String(value)).replace(/<[^>]*>/g, " ")
 
   return textarea.value.replace(/\s+/g, " ").trim() || fallback
 }
@@ -766,13 +801,15 @@ async function submitSurvey() {
         answers: answers.value,
         otherAnswers: otherAnswers.value,
         profileValues: profileValues.value,
-        csrfToken: csrfToken.value,
       },
       getContextParams(),
       surveyId.value,
     )
     normalizeResponse(data)
     successMessage.value = t("Survey completed")
+    if (isLearningPathContext.value && window.parent !== window) {
+      window.parent.postMessage({ type: "chamilo:learning-path:refresh" }, window.location.origin)
+    }
   } catch (error) {
     console.error("Error submitting survey answers", error)
     errorMessage.value = error?.response?.data?.detail || t("Could not save survey answers")

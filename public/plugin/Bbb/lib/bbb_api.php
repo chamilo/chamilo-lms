@@ -190,6 +190,7 @@ class BigBlueButtonBN
             if (isset($p['voiceBridge']))  $cp->setVoiceBridge((int)$p['voiceBridge']);
             if (isset($p['webVoice']))     $cp->setWebVoice($p['webVoice']);
             if (isset($p['logoutUrl']))    $cp->setLogoutUrl($p['logoutUrl']);
+            if (!empty($p['endCallbackUrl'])) $cp->setEndCallbackUrl((string) $p['endCallbackUrl']);
             if (isset($p['maxParticipants'])) $cp->setMaxParticipants((int)$p['maxParticipants']);
             if (isset($p['record']))       $cp->setRecord((bool)$p['record']);
             if (isset($p['duration']))     $cp->setDuration((int)$p['duration']);

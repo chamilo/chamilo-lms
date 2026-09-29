@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ตัวอย่างสูตร: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -1580,8 +1580,8 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 msgid "Authoring tool"
 msgstr "เครื่องมือสร้างเนื้อหา"
 
-msgid "SCORM or AICC file to upload"
-msgstr "ไฟล์ SCORM หรือ AICC ที่จะอัปโหลด"
+msgid "SCORM file to upload"
+msgstr "ไฟล์ SCORM ที่จะอัปโหลด"
 
 msgid "Course location"
 msgstr "ตำแหน่งรายวิชา"
@@ -2022,7 +2022,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":ใช่ :ลิขสิทธิ์,, ไม่:ไม่มีลิขสิทธิ์ :yes:copyright,, no:no copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:โฟลเดอร์,, application/msword:MsWord,, application/octet-stream:สตรีมออคเต็ต,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:โฟลเดอร์,, application\/msword:MsWord,, application\/octet-stream:Octet stream,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:แบบฝึกหัด,, simulation:การจำลอง,, questionnaire:แบบสอบถาม,, diagram:ไดอะแกรม,, figure:รูปภาพ,, graph:กราฟ,, index:ดัชนี,, slide:สไลด์,, table:ตาราง,, narrative text:ข้อความบรรยาย,, exam:ข้อสอบ,, experiment:การทดลอง,, problem statement:ประโยคปัญหา,, self assessment:การประเมินตนเอง,, lecture:การบรรยาย"
@@ -7718,6 +7718,54 @@ msgstr "รายการคำถามของแบบทดสอบ"
 msgid "Recycle existing questions"
 msgstr "เลือกคำถามที่มีจากฐานข้อมูล"
 
+msgid "Add this question to the test: %s"
+msgstr "เพิ่มคำถามนี้ลงในการทดสอบ: %s"
+
+msgid "Edit question: %s"
+msgstr "แก้ไขคำถาม: %s"
+
+msgid "Add a question: %s"
+msgstr "เพิ่มคำถาม: %s"
+
+msgid "Detected blanks: %s"
+msgstr "ช่องว่างที่ตรวจพบ: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s คำถาม คะแนนรวม (ทุกคำถาม) %s"
+
+msgid "Unique answer"
+msgstr "คำตอบเดียว"
+
+msgid "Multiple answer true/false"
+msgstr "หลายคำตอบ จริง/เท็จ"
+
+msgid "Multiple answer combination true/false"
+msgstr "ชุดหลายคำตอบ จริง/เท็จ"
+
+msgid "Unique answer with images"
+msgstr "คำตอบเดียวพร้อมรูปภาพ"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "หลายคำตอบ จริง/เท็จ พร้อมระดับความมั่นใจ"
+
+msgid "Answer in Office document"
+msgstr "คำตอบในเอกสาร Office"
+
+msgid "Matching draggable"
+msgstr "จับคู่แบบลากวาง"
+
+msgid "Matching draggable combination"
+msgstr "ชุดจับคู่แบบลากวาง"
+
+msgid "Fill in blanks combination"
+msgstr "ชุดเติมช่องว่าง"
+
+msgid "Multiple answer dropdown combination"
+msgstr "ชุดหลายคำตอบแบบดรอปดาวน์"
+
+msgid "Matching combination"
+msgstr "ชุดจับคู่"
+
 msgid "Correct test"
 msgstr "สอบเสร็จ"
 
@@ -8552,6 +8600,9 @@ msgstr "บริษัท"
 msgid "Reporting"
 msgstr "รายงาน"
 
+msgid "Analytics"
+msgstr "การวิเคราะห์"
+
 msgid "Update"
 msgstr "อัปเดต"
 
@@ -8729,11 +8780,23 @@ msgstr "แสดง"
 msgid "My courses"
 msgstr "รายวิชาของเรา"
 
+msgid "Shop"
+msgstr "ร้านค้า"
+
+msgid "Invoice"
+msgstr "ใบแจ้งหนี้"
+
+msgid "Request invoice"
+msgstr "ขอใบแจ้งหนี้"
+
 msgid "View my progress"
 msgstr "ดูสถิติการเข้าใช้งานระบบของเรา"
 
 msgid "Personal agenda"
 msgstr "กำหนดการของเรา"
+
+msgid "Group agenda"
+msgstr "วาระกลุ่ม"
 
 msgid "Switch to teacher view"
 msgstr "หน้าแสดงผลของผู้สอน"
@@ -9256,6 +9319,15 @@ msgstr "รายงานเวลาใช้งานสำหรับเซ
 
 msgid "Error"
 msgstr "ข้อผิดพลาด"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "สร้างผู้ใช้แล้ว แต่ไม่สามารถบันทึกหนึ่งในฟิลด์โปรไฟล์เพิ่มเติมได้"
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "อัปเดตผู้ใช้แล้ว แต่ไม่สามารถบันทึกหนึ่งในฟิลด์โปรไฟล์เพิ่มเติมได้"
+
+msgid "One or more fields contain invalid values."
+msgstr "ฟิลด์อย่างน้อยหนึ่งฟิลด์มีค่าที่ไม่ถูกต้อง"
 
 msgid "Anonymous"
 msgstr "ผู้เยี่ยมชม"
@@ -14399,6 +14471,9 @@ msgstr "กรุณากลับไปขั้นตอนที่ 1"
 msgid "has not been found in that directory"
 msgstr "ไม่พบในไดเรกทอรีนั้น"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "ตัวติดตั้งไม่มีระบบเข้าสู่ระบบของตัวเอง ดังนั้นการอัปเกรดต้องได้รับอนุญาตบนเซิร์ฟเวอร์ สร้างไฟล์ว่างชื่อ %s ที่รากโปรเจกต์ ข้างไฟล์ .env จากนั้นดำเนินการต่อ"
+
 msgid "Old version's root path"
 msgstr "เส้นทางรากของเวอร์ชันเก่า"
 
@@ -15295,6 +15370,30 @@ msgstr "เวลาที่ใช้สัปดาห์ที่แล้ว
 
 msgid "System status"
 msgstr "สถานะระบบ"
+
+msgid "Courses space"
+msgstr "พื้นที่รายวิชา"
+
+msgid "Database server configuration and metadata"
+msgstr "การกำหนดค่าเซิร์ฟเวอร์ฐานข้อมูลและเมทาดาทา"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "การใช้ดิสก์ต่อรายวิชาเทียบกับโควตาดิสก์"
+
+msgid "Information about your webserver configuration"
+msgstr "ข้อมูลเกี่ยวกับการกำหนดค่าเว็บเซิร์ฟเวอร์ของคุณ"
+
+msgid "Paths"
+msgstr "เส้นทาง"
+
+msgid "State of Chamilo requirements"
+msgstr "สถานะข้อกำหนดของ Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "สถานะการตั้งค่า PHP บนเซิร์ฟเวอร์"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "ค่าคงที่ api_get_path() ที่แปลงแล้วบนพอร์ทัลนี้"
 
 msgid "Is writable"
 msgstr "สามารถเขียนได้"
@@ -16770,7 +16869,7 @@ msgid "Fill with demo content"
 msgstr "กรอกด้วยเนื้อหาตัวอย่าง"
 
 msgid "Single Sign On"
-msgstr "Single Sign On"
+msgstr "การลงชื่อเข้าใช้ครั้งเดียว"
 
 msgid "Enabling Single Sign On allows you to connect this platform as a slave of an authentication master, for example a Drupal website with the Drupal-Chamilo plugin or any other similar master setup."
 msgstr "การเปิดใช้งาน Single Sign On ช่วยให้คุณเชื่อมต่อแพลตฟอร์มนี้เป็น slave ของ authentication master เช่น เว็บไซต์ Drupal ที่มีปลั๊กอิน Drupal-Chamilo หรือการตั้งค่า master อื่นๆ ที่คล้ายกัน"
@@ -20471,6 +20570,9 @@ msgstr "ภาษาแม่: %s"
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "กำหนดคำศัพท์ใหม่สำหรับภาษาย่อย %s โดยค้นหาคำศัพท์ จากนั้นบันทึกการแปลแต่ละอันโดยคลิกปุ่มบันทึก จากนั้นคุณต้องเปลี่ยนภาษาผู้ใช้ของคุณเองเพื่อดูคำศัพท์ใหม่ปรากฏ"
 
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "คำที่บันทึกที่นี่จะแสดงทันทีในส่วนติดต่อที่โยกย้ายแล้ว หน้าที่ยังไม่ได้โยกย้ายจะอ่านแคตตาล็อกที่คอมไพล์แล้ว จึงยังใช้ข้อความเก่าจนกว่าคุณจะล้างแคชด้วย php bin/console cache:clear ทำครั้งเดียวเมื่อแก้ไขเสร็จ ไม่ใช่หลังทุกคำ"
+
 msgid "See sequences"
 msgstr "ดูลำดับ"
 
@@ -20498,8 +20600,8 @@ msgstr "ลิงก์หมดอายุแล้ว กรุณาลอ�
 msgid "Instructions for the password change procedure"
 msgstr "คำแนะนำสำหรับขั้นตอนการเปลี่ยนรหัสผ่าน"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "คุณได้รับข้อความนี้เพราะคุณ (หรือใครบางคนที่แสร้งเป็นคุณ) ได้ร้องขอให้สร้างรหัสผ่านใหม่สำหรับคุณ<br/>"
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "ข้อความนี้ถูกส่งถึงคุณเนื่องจากคุณ (หรือผู้ที่พยายามแอบอ้างเป็นคุณ) ได้ขอให้สร้างรหัสผ่านใหม่สำหรับบัญชีของคุณ<br/>หากต้องการตั้งรหัสผ่านใหม่ โปรดไปที่ลิงก์นี้:<br/>%s<br/>หากคุณไม่ได้เป็นผู้ขอ คุณสามารถเพิกเฉยต่อข้อความนี้ได้ หากคุณยังคงได้รับข้อความเหล่านี้ โปรดติดต่อผู้ดูแลพอร์ทัล"
 
 msgid "Remind Course Expiration cron"
 msgstr "เตือนการหมดอายุหลักสูตร cron"
@@ -20662,6 +20764,9 @@ msgstr "ในวงล้อทักษะ จะแสดงชื่อท�
 
 msgid "Created by"
 msgstr "สร้างโดย"
+
+msgid "Created by %s on %s"
+msgstr "สร้างโดย %s เมื่อ %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "ซ่อนโค้ชทั่วไปในกล่องดรอป"
@@ -23968,6 +24073,18 @@ msgstr "แสดงผลให้ผู้เรียน: แสดงคะ�
 
 msgid "Signed in as"
 msgstr "ลงชื่อเข้าใช้ในฐานะ"
+
+msgid "Authorize application"
+msgstr "อนุญาตแอปพลิเคชัน"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "ต้องการเชื่อมต่อกับบัญชี Chamilo ของคุณ"
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "แอปพลิเคชันนี้จะสามารถดำเนินการบน Chamilo ได้เหมือนกับที่คุณทำได้ — โดยใช้สิทธิ์บัญชีที่มีอยู่ของคุณเท่านั้น ไม่มากกว่านั้น จะไม่ได้รับสิทธิ์เข้าถึงใด ๆ ที่คุณยังไม่มี"
+
+msgid "Allow"
+msgstr "อนุญาต"
 
 msgid "Remember me"
 msgstr "จดจำฉัน"
@@ -31335,6 +31452,9 @@ msgstr "กลับไปยังหน้าจึงกำหนดผู้
 msgid "Authentication sources assigned successfully"
 msgstr "กำหนดแหล่งยืนยันตัวตนเรียบร้อยแล้ว"
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "ไม่ได้เลือกวิธีการยืนยันตัวตน การดำเนินการนี้จะลบวิธีการยืนยันตัวตนทั้งหมดของผู้ใช้ที่เลือกบน URL นี้ ซึ่งอาจทำให้เข้าสู่ระบบไม่ได้ ต้องการดำเนินการต่อหรือไม่?"
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "เคล็ดลับ: เลือก “— แค่อัปโหลด —” เพื่อเก็บโดยไม่ส่งให้ใคร"
 
@@ -31866,6 +31986,9 @@ msgstr "เขียนบางอย่างถึง %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "แนะนำ: SVG. PNG ความกว้างแนะนำ: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "ความกว้าง PNG ที่แนะนำ: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "อัปโหลดโลโก้ PNG สำหรับอีเมล (~%spx ความกว้าง)"
 
@@ -31901,6 +32024,9 @@ msgstr "คลิกเพื่อแทรกลงไป"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "แนะนำ: SVG. PNG สูงสุด: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "ขนาดสูงสุดของ PNG: %spx."
 
 msgid "View badge"
 msgstr "ดูเครื่องหมาย"
@@ -32680,7 +32806,7 @@ msgid "IPv4 or IPv6"
 msgstr "IPv4 หรือ IPv6"
 
 msgid "IP mask"
-msgstr "IP mask"
+msgstr "มาสก์ IP"
 
 msgid "e.g. /24"
 msgstr "เช่น /24"
@@ -36482,4 +36608,4966 @@ msgstr "มีการกลั่นกรอง"
 
 msgid "View threads"
 msgstr "ดูกระทู้"
+
+msgid "No auth source"
+msgstr "ไม่มีแหล่งตรวจสอบสิทธิ์"
+
+msgid "You must add at least one question"
+msgstr "คุณต้องเพิ่มคำถามอย่างน้อยหนึ่งข้อ"
+
+msgid "Advanced actions"
+msgstr "การดำเนินการขั้นสูง"
+
+msgid "Application path"
+msgstr "เส้นทางแอปพลิเคชัน"
+
+msgid "Apply files details"
+msgstr "นำรายละเอียดไฟล์ไปใช้"
+
+msgid "Apply plan details"
+msgstr "นำรายละเอียดแผนไปใช้"
+
+msgid "Apply plan failed"
+msgstr "นำแผนไปใช้ล้มเหลว"
+
+msgid "Apply plan ready"
+msgstr "นำแผนไปใช้พร้อมแล้ว"
+
+msgid "Apply preparation"
+msgstr "นำการเตรียมการไปใช้"
+
+msgid "Apply staged files"
+msgstr "นำไฟล์ที่จัดเตรียมไว้ไปใช้"
+
+msgid "Applying files..."
+msgstr "กำลังนำไฟล์ไปใช้..."
+
+msgid "Audit file"
+msgstr "ตรวจสอบไฟล์"
+
+msgid "Backup directory"
+msgstr "ไดเรกทอรีสำรองข้อมูล"
+
+msgid "Baseline clean"
+msgstr "ทำความสะอาดเบสไลน์"
+
+msgid "Baseline warnings"
+msgstr "คำเตือนเบสไลน์"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "สร้างแผนการนำไปใช้ที่ปลอดภัยจากแพ็กเกจที่จัดเตรียมไว้ การดำเนินการนี้ตรวจสอบเฉพาะไฟล์ สิทธิ์ เส้นทางสำรองข้อมูล และสถานะล็อกเท่านั้น ไม่ได้แทนที่ไฟล์"
+
+msgid "Build production frontend assets."
+msgstr "สร้างแอสเซ็ตส่วนหน้าแบบ production"
+
+msgid "Building plan..."
+msgstr "กำลังสร้างแผน..."
+
+msgid "Channel"
+msgstr "ช่องทาง"
+
+msgid "Check"
+msgstr "ตรวจสอบ"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "ตรวจสอบการอัปเดต Chamilo ที่พร้อมใช้งาน ตรวจสอบแพ็กเกจ จัดเตรียมไฟล์ และดำเนินการขั้นตอนหลังการอัปเดตแบบควบคุม"
+
+msgid "Check manifest"
+msgstr "ตรวจสอบ manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "กำลังตรวจสอบการดำเนินการหลังนำไปใช้..."
+
+msgid "Checking..."
+msgstr "กำลังตรวจสอบ..."
+
+msgid "Composer install"
+msgstr "ติดตั้ง Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "การดำเนินการของ Composer, Yarn และการย้ายฐานข้อมูลสามารถแก้ไข dependencies, แอสเซ็ตที่สร้างขึ้น หรือฐานข้อมูลได้ เลือกเฉพาะหลังจากยืนยันการสำรองข้อมูลและสิทธิ์แล้ว"
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "กำหนดค่า CHAMILO_UPDATE_MANIFEST_URL บนเซิร์ฟเวอร์หรือระบุ URL manifest แบบ HTTPS"
+
+msgid "Configured"
+msgstr "กำหนดค่าแล้ว"
+
+msgid "Current migration"
+msgstr "การย้ายข้อมูลปัจจุบัน"
+
+msgid "Database baseline"
+msgstr "ฐานข้อมูลพื้นฐาน"
+
+msgid "Database migration safety review"
+msgstr "การตรวจสอบความปลอดภัยของการย้ายฐานข้อมูล"
+
+msgid "Database migrations"
+msgstr "การย้ายฐานข้อมูล"
+
+msgid "Development mode"
+msgstr "โหมดพัฒนา"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "อย่าเปิดใช้งานเว้นแต่จะมีการตรวจสอบการสำรองข้อมูลการอัปเดตและสิทธิ์ของเซิร์ฟเวอร์แล้ว"
+
+msgid "Doctrine dry-run command"
+msgstr "คำสั่งทดสอบ Doctrine"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine รายงานคำเตือนพื้นฐานในอดีต โปรแกรมอัปเดตจะยังคงดำเนินการย้ายข้อมูล V210 ที่จัดเตรียมไว้หลังจากการยืนยันอย่างชัดเจนเท่านั้น"
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine จะดำเนินการย้ายข้อมูล V210 ที่จัดเตรียมไว้อย่างชัดเจนหลังจากการตรวจสอบความปลอดภัยผ่านเท่านั้น"
+
+msgid "Dry-run exit code"
+msgstr "รหัสออกจากการทดสอบ"
+
+msgid "Executed unavailable migrations"
+msgstr "ดำเนินการย้ายข้อมูลที่ไม่พร้อมใช้งาน"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "แตกแพ็กเกจอัปเดตที่ตรวจสอบแล้วไปยังไดเรกทอรีชั่วคราวเพื่อตรวจสอบ การดำเนินการนี้จะไม่แทนที่ไฟล์ เรียกใช้การย้ายข้อมูล หรือแก้ไขฐานข้อมูล"
+
+msgid "File apply available"
+msgstr "ไฟล์พร้อมใช้งาน"
+
+msgid "Files to replace"
+msgstr "ไฟล์ที่จะแทนที่"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "ฉันยืนยันว่ามีการสำรองข้อมูลฐานข้อมูลและได้รับการตรวจสอบก่อนดำเนินการย้ายข้อมูล"
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "ฉันเข้าใจว่าการดำเนินการขั้นสูงอาจแก้ไขการพึ่งพา สินทรัพย์ที่สร้างขึ้น หรือฐานข้อมูล"
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "ฉันเข้าใจว่าการดำเนินการนี้จะแทนที่ไฟล์ในระบบติดตั้ง Chamilo"
+
+msgid "I understand this will run update commands on the server."
+msgstr "ฉันเข้าใจว่าการดำเนินการนี้จะเรียกใช้คำสั่งอัปเดตบนเซิร์ฟเวอร์"
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "ติดตั้งการพึ่งพาส่วนหน้า ก่อนสร้างสินทรัพย์ใหม่"
+
+msgid "Installed version"
+msgstr "เวอร์ชันที่ติดตั้ง"
+
+msgid "Latest migration"
+msgstr "การย้ายข้อมูลล่าสุด"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "เว้นว่างเส้นทางแพ็กเกจและลายเซ็นเพื่อดาวน์โหลดจาก URL แมนิเฟสต์ที่ตรวจสอบแล้ว เส้นทางภายในเครื่องใช้ได้เฉพาะสำหรับการทดสอบการพัฒนาเท่านั้น"
+
+msgid "Live command log"
+msgstr "บันทึกคำสั่งแบบเรียลไทม์"
+
+msgid "Live update log"
+msgstr "บันทึกการอัปเดตแบบเรียลไทม์"
+
+msgid "Local test options"
+msgstr "ตัวเลือกการทดสอบภายในเครื่อง"
+
+msgid "Local test update notice link"
+msgstr "ลิงก์แจ้งการอัปเดตการทดสอบภายในเครื่อง"
+
+msgid "Local update notice simulation"
+msgstr "การจำลองการแจ้งการอัปเดตภายในเครื่อง"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "การจำลองการแจ้งการอัปเดตภายในเครื่องใช้ได้เฉพาะในโหมดพัฒนาเท่านั้น"
+
+msgid "Manifest"
+msgstr "แมนิเฟสต์"
+
+msgid "Manifest source"
+msgstr "แหล่งที่มาแมนิเฟสต์"
+
+msgid "Migration safety details"
+msgstr "รายละเอียดการตรวจสอบความปลอดภัยการย้ายข้อมูล"
+
+msgid "Migration safety review failed"
+msgstr "การตรวจสอบความปลอดภัยการย้ายข้อมูลล้มเหลว"
+
+msgid "Migration safety review ready"
+msgstr "การตรวจสอบความปลอดภัยการย้ายข้อมูลพร้อม"
+
+msgid "Migration target"
+msgstr "เป้าหมายการย้ายข้อมูล"
+
+msgid "New files"
+msgstr "ไฟล์ใหม่"
+
+msgid "New migrations reported by Doctrine"
+msgstr "การย้ายข้อมูลใหม่ที่รายงานโดย Doctrine"
+
+msgid "Next migration"
+msgstr "การย้ายข้อมูลถัดไป"
+
+msgid "No executed unavailable migration was reported."
+msgstr "ไม่มีการรายงานการย้ายข้อมูลที่ไม่พร้อมใช้งานที่ดำเนินการแล้ว"
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "ยังไม่ได้กำหนดค่า URL แมนิเฟสต์อย่างเป็นทางการ ใช้ URL HTTPS หรือเส้นทางภายในเครื่องสำหรับการทดสอบการพัฒนา"
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "ไม่พบการย้ายข้อมูลที่รอดำเนินการก่อนเป้าหมายการอัปเดตที่จัดเตรียมไว้"
+
+msgid "Not configured"
+msgstr "ยังไม่ได้กำหนดค่า"
+
+msgid "Not detected"
+msgstr "ไม่พบ"
+
+msgid "Official Chamilo update channel"
+msgstr "ช่องทางการอัปเดต Chamilo อย่างเป็นทางการ"
+
+msgid "Package SHA-256"
+msgstr "แพ็กเกจ SHA-256"
+
+msgid "Package URL"
+msgstr "URL แพ็กเกจ"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "ไฟล์แพ็กเกจและลายเซ็นจะถูกดาวน์โหลดจากแมนิเฟสต์ เส้นทางภายในเครื่องถูกปิดใช้งานในสภาพแวดล้อมนี้"
+
+msgid "Package path"
+msgstr "เส้นทางแพ็กเกจ"
+
+msgid "Package staged successfully"
+msgstr "จัดเตรียมแพ็กเกจสำเร็จ"
+
+msgid "Package staging failed"
+msgstr "การจัดเตรียมแพ็กเกจล้มเหลว"
+
+msgid "Package verification"
+msgstr "การตรวจสอบแพ็กเกจ"
+
+msgid "Package verification failed"
+msgstr "การตรวจสอบแพ็กเกจล้มเหลว"
+
+msgid "Package verified successfully"
+msgstr "ตรวจสอบแพ็กเกจสำเร็จแล้ว"
+
+msgid "Pending migrations before this update"
+msgstr "การย้ายข้อมูลที่รอดำเนินการก่อนการอัปเดตนี้"
+
+msgid "Planned backup path"
+msgstr "เส้นทางสำรองข้อมูลที่วางแผนไว้"
+
+msgid "Post-apply actions completed"
+msgstr "ดำเนินการหลังการปรับใช้เสร็จสมบูรณ์"
+
+msgid "Post-apply actions failed"
+msgstr "ดำเนินการหลังการปรับใช้ล้มเหลว"
+
+msgid "Post-apply actions ready"
+msgstr "ดำเนินการหลังการปรับใช้พร้อมแล้ว"
+
+msgid "Post-apply checks"
+msgstr "การตรวจสอบหลังการปรับใช้"
+
+msgid "Post-apply checks failed"
+msgstr "การตรวจสอบหลังการปรับใช้ล้มเหลว"
+
+msgid "Post-apply details"
+msgstr "รายละเอียดหลังการปรับใช้"
+
+msgid "Post-apply run details"
+msgstr "รายละเอียดการดำเนินการหลังการปรับใช้"
+
+msgid "Preflight checks"
+msgstr "การตรวจสอบก่อนการปรับใช้"
+
+msgid "Preflight checks completed"
+msgstr "การตรวจสอบก่อนการปรับใช้เสร็จสมบูรณ์"
+
+msgid "Preflight checks failed"
+msgstr "การตรวจสอบก่อนการปรับใช้ล้มเหลว"
+
+msgid "Preflight details"
+msgstr "รายละเอียดก่อนการปรับใช้"
+
+msgid "Prepare staging"
+msgstr "เตรียมสภาพแวดล้อมชั่วคราว"
+
+msgid "Preparing staging..."
+msgstr "กำลังเตรียมสภาพแวดล้อมชั่วคราว..."
+
+msgid "Production mode"
+msgstr "โหมดการผลิต"
+
+msgid "Released at"
+msgstr "เผยแพร่เมื่อ"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "แทนที่ไฟล์ Chamilo จากแพ็กเกจที่เตรียมไว้โดยใช้แผนการปรับใช้ที่ตรวจสอบแล้ว การดำเนินการนี้ไม่รวมการย้ายฐานข้อมูล คำสั่ง Composer, Yarn หรือคำสั่งล้างแคช"
+
+msgid "Review apply plan"
+msgstr "ตรวจสอบแผนการปรับใช้"
+
+msgid "Review database migrations"
+msgstr "ตรวจสอบการย้ายฐานข้อมูล"
+
+msgid "Review post-apply actions"
+msgstr "ตรวจสอบการดำเนินการหลังการปรับใช้"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "ตรวจสอบคำสั่งแนะนำด้วยตนเองหลังจากปรับใช้ไฟล์อัปเดต ขั้นตอนนี้ไม่รวมการรัน Composer, Yarn, การย้ายข้อมูล หรือคำสั่งล้างแคช"
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "ตรวจสอบการย้ายข้อมูล Doctrine ที่เตรียมไว้และผลลัพธ์การทดสอบก่อนรันการย้ายฐานข้อมูล"
+
+msgid "Reviewing database migrations..."
+msgstr "กำลังตรวจสอบการย้ายฐานข้อมูล..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "ดำเนินการและผ่านการตรวจสอบความปลอดภัยของการย้ายข้อมูลก่อนดำเนินการย้ายฐานข้อมูล"
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "ดำเนินการตรวจสอบสภาพแวดล้อมก่อนขั้นตอนการปรับใช้การอัปเดตในอนาคต การดำเนินการนี้ไม่แก้ไขไฟล์หรือฐานข้อมูล"
+
+msgid "Run post-apply actions"
+msgstr "ดำเนินการหลังการปรับใช้"
+
+msgid "Run preflight checks"
+msgstr "ดำเนินการตรวจสอบก่อนการปรับใช้"
+
+msgid "Run selected post-apply actions"
+msgstr "ดำเนินการหลังการปรับใช้ที่เลือก"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "รันคำสั่งหลังการปรับใช้ที่เลือกจากเซิร์ฟเวอร์โดยใช้รายการที่อนุญาตที่ควบคุม ไม่ยอมรับคำสั่งเชลล์แบบกำหนดเอง"
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "รันคำสั่งเหล่านี้ด้วยตนเองจากเซิร์ฟเวอร์หลังจากยืนยันผลการอัปเดตไฟล์และการสำรองข้อมูล"
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "การดำเนินการหลังการปรับใช้จาก UI ถูกปิดใช้งานในโหมดการผลิต"
+
+msgid "Running post-apply actions..."
+msgstr "กำลังดำเนินการหลังการปรับใช้..."
+
+msgid "Safe actions"
+msgstr "การดำเนินการที่ปลอดภัย"
+
+msgid "Signature path"
+msgstr "เส้นทางลายเซ็น"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "ไม่สามารถข้ามการตรวจสอบลายเซ็นในสภาพแวดล้อมนี้ได้"
+
+msgid "Skip signature verification for local development tests"
+msgstr "ข้ามการตรวจสอบลายเซ็นสำหรับการทดสอบการพัฒนาในเครื่อง"
+
+msgid "Staged file application failed"
+msgstr "การปรับใช้ไฟล์ที่เตรียมไว้ล้มเหลว"
+
+msgid "Staged files applied successfully"
+msgstr "ปรับใช้ไฟล์ที่เตรียมไว้สำเร็จแล้ว"
+
+msgid "Staging details"
+msgstr "รายละเอียดสภาพแวดล้อมชั่วคราว"
+
+msgid "Staging directory"
+msgstr "ไดเรกทอรีสภาพแวดล้อมชั่วคราว"
+
+msgid "Staging extraction"
+msgstr "การแตกไฟล์สภาพแวดล้อมชั่วคราว"
+
+msgid "Symfony cache clear"
+msgstr "ล้างแคช Symfony"
+
+msgid "System update"
+msgstr "การอัปเดตระบบ"
+
+msgid "Target version"
+msgstr "เวอร์ชันเป้าหมาย"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL แมนิเฟสต์อย่างเป็นทางการที่กำหนดค่าไว้จะถูกเติมล่วงหน้า คุณสามารถเปลี่ยนเป็นแมนิเฟสต์ HTTPS อื่นได้หากจำเป็น"
+
+msgid "The database migration baseline is clean."
+msgstr "ฐานข้อมูลการย้ายข้อมูลเริ่มต้นสะอาด"
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "การตอบสนอง HTTP สุดท้ายล้มเหลวหลังจากการดำเนินการเสร็จสิ้น โดยปกติเกิดจากสิทธิ์แคชรันไทม์หรือการรีสตาร์ทเว็บเซิร์ฟเวอร์ระหว่างการร้องขอ"
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "บันทึกการดำเนินการรายงานว่าการดำเนินการหลังการปรับใช้เสร็จสมบูรณ์แล้ว"
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "คำสั่งหลังการใช้งานที่เลือกเสร็จสมบูรณ์แล้ว แต่การตอบสนอง HTTP สุดท้ายล้มเหลว โปรดรีเฟรชหน้าและตรวจสอบสิทธิ์แคชรันไทม์หากหน้าไม่โหลดถูกต้อง"
+
+msgid "The updater does not create or restore database backups."
+msgstr "ตัวอัปเดตไม่ได้สร้างหรือกู้คืนข้อมูลสำรองฐานข้อมูล"
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "การดำเนินการเหล่านี้สามารถเรียกใช้จาก UI ได้อย่างปลอดภัยหลังจากตรวจสอบผลการอัปเดตแล้ว"
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "คำสั่งเหล่านี้อาจแก้ไขการพึ่งพา สินทรัพย์ที่สร้างขึ้น แคช หรือฐานข้อมูล โปรดยืนยันข้อมูลสำรองก่อนดำเนินการต่อ"
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "การดำเนินการนี้แก้ไขไฟล์ในระบบติดตั้ง Chamilo โปรดตรวจสอบให้แน่ใจว่าแผนการใช้งานได้รับการตรวจสอบและเปิดใช้งานข้อมูลสำรองก่อนดำเนินการต่อ"
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "รายการพัฒนานี้จำลองประกาศการอัปเดต Chamilo.org ในอนาคตโดยใช้เส้นทางแพ็กเกจทดสอบภายในเครื่อง"
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "หน้าจอนี้เปิดจากประกาศการอัปเดตอย่างเป็นทางการ แต่ยังไม่ได้กำหนดค่าต้นทางแมนนิเฟสต์อย่างเป็นทางการ"
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "หน้าจอนี้เปิดจากประกาศการอัปเดต โดยเริ่มตรวจสอบแมนนิเฟสต์โดยอัตโนมัติเท่านั้น"
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "ขั้นตอนนี้เตรียมการตรวจสอบเท่านั้น การแทนที่ไฟล์จะเกิดขึ้นในขั้นตอนการใช้งานไฟล์ที่จัดเตรียมไว้ในภายหลัง พร้อมการล็อก ข้อมูลสำรอง และการป้องกันการย้อนกลับ"
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "ตัวอัปเดตนี้ไม่ได้สร้างข้อมูลสำรองฐานข้อมูล โปรดสร้างและตรวจสอบข้อมูลสำรองก่อนเรียกใช้การย้ายข้อมูล"
+
+msgid "Trusted public key"
+msgstr "กุญแจสาธารณะที่เชื่อถือได้"
+
+msgid "Trusted signing key"
+msgstr "กุญแจลายเซ็นที่เชื่อถือได้"
+
+msgid "Unknown update notice source."
+msgstr "ไม่ทราบแหล่งที่มาของประกาศการอัปเดต"
+
+msgid "Update availability"
+msgstr "ความพร้อมใช้งานของการอัปเดต"
+
+msgid "Update directory"
+msgstr "ไดเรกทอรีการอัปเดต"
+
+msgid "Update lock path"
+msgstr "เส้นทางล็อกการอัปเดต"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "ใช้ไดเรกทอรีจัดเตรียมที่สร้างโดยขั้นตอนก่อนหน้า แบ็กเอนด์ยอมรับเฉพาะไดเรกทอรีภายใน var/update/staging เท่านั้น"
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "ใช้ลิงก์นี้เพื่อจำลองประกาศการอัปเดต Chamilo.org ในอนาคตระหว่างการทดสอบการพัฒนา"
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "ใช้เฉพาะการทดสอบการพัฒนาภายในเครื่องเท่านั้น การอัปเดตจริงต้องใช้กุญแจที่กำหนดค่าไว้บนเซิร์ฟเวอร์"
+
+msgid "Verification details"
+msgstr "รายละเอียดการตรวจสอบ"
+
+msgid "Verify package"
+msgstr "ตรวจสอบแพ็กเกจ"
+
+msgid "Verifying..."
+msgstr "กำลังตรวจสอบ..."
+
+msgid "Waiting for command progress events..."
+msgstr "กำลังรอเหตุการณ์ความคืบหน้าของคำสั่ง..."
+
+msgid "Waiting for update progress events..."
+msgstr "กำลังรอเหตุการณ์ความคืบหน้าของการอัปเดต..."
+
+msgid "Yarn build"
+msgstr "สร้างด้วย Yarn"
+
+msgid "Yarn install"
+msgstr "ติดตั้งด้วย Yarn"
+
+msgid "A comment is required"
+msgstr "ต้องระบุความคิดเห็น"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "มีฐานข้อมูลชื่อเดียวกันอยู่แล้ว หากมีตารางจะถูกลบ หากว่างเปล่าจะถูกนำกลับมาใช้ใหม่"
+
+msgid "AI generated"
+msgstr "สร้างโดย AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "เพิ่มคำถามอย่างน้อยหนึ่งข้อก่อนกลับไปยังเส้นทางการเรียนรู้"
+
+msgid "Add attachments"
+msgstr "เพิ่มไฟล์แนบ"
+
+msgid "Additional fields"
+msgstr "ฟิลด์เพิ่มเติม"
+
+msgid "Allow comments"
+msgstr "อนุญาตความคิดเห็น"
+
+msgid "Allow new pages"
+msgstr "อนุญาตหน้าใหม่"
+
+msgid "Allow ratings"
+msgstr "อนุญาตการให้คะแนน"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบรายการทั้งหมด?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการคืนค่าการต่ออายุอัตโนมัติ?"
+
+msgid "Attachment has been deleted"
+msgstr "ไฟล์แนบถูกลบแล้ว"
+
+msgid "Backup file"
+msgstr "ไฟล์สำรอง"
+
+msgid "Block comments"
+msgstr "บล็อกความคิดเห็น"
+
+msgid "Block new pages"
+msgstr "บล็อกหน้าใหม่"
+
+msgid "Block ratings"
+msgstr "บล็อกการให้คะแนน"
+
+msgid "Cancel renewal"
+msgstr "ยกเลิกการต่ออายุ"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "ลิงก์หมวดหมู่จะถูกลบออกจากหน้า Wiki %s"
+
+msgid "Change"
+msgstr "เปลี่ยน"
+
+msgid "Clear group"
+msgstr "ล้างกลุ่ม"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "คลิกแท็กเพื่อแทรกลงในตัวแก้ไข ตัวยึดตำแหน่งเหล่านี้จะถูกแทนที่เมื่อสร้างใบรับรอง"
+
+msgid "Comment added"
+msgstr "เพิ่มความคิดเห็นแล้ว"
+
+msgid "Comment is required"
+msgstr "จำเป็นต้องมีข้อความ"
+
+msgid "Comment score"
+msgstr "คะแนนความคิดเห็น"
+
+msgid "Compare selected versions line by line"
+msgstr "เปรียบเทียบเวอร์ชันที่เลือกทีละบรรทัด"
+
+msgid "Compare selected versions word by word"
+msgstr "เปรียบเทียบเวอร์ชันที่เลือกทีละคำ"
+
+msgid "Compare versions"
+msgstr "เปรียบเทียบเวอร์ชัน"
+
+msgid "Copy completed"
+msgstr "คัดลอกเสร็จสมบูรณ์"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "สร้างหน้างานวิกิรายบุคคลสำหรับผู้เรียน"
+
+msgid "Current view mode"
+msgstr "โหมดมุมมองปัจจุบัน"
+
+msgid "Delete Wiki"
+msgstr "ลบวิกิ"
+
+msgid "Delete page"
+msgstr "ลบหน้า"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "ไม่แนะนำให้ลบหน้าแรกของวิกิ คุณสามารถสร้างใหม่ได้ในภายหลัง"
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "การปิดใช้งานวิกิจะบล็อกหน้าวิกิและการดำเนินการปกติ หน้าการตั้งค่านี้ยังคงใช้งานได้สำหรับผู้สอนในหลักสูตร"
+
+msgid "Discussion"
+msgstr "การสนทนา"
+
+msgid "Edit Comment"
+msgstr "แก้ไขความคิดเห็น"
+
+msgid "Edit page"
+msgstr "แก้ไขหน้า"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "วันที่สิ้นสุดต้องอยู่หลังหรือเท่ากับวันหมดอายุ"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "ป้อนคำค้นหาเพื่อค้นหาหน้าวิกิ"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "วันหมดอายุต้องอยู่ก่อนหรือเท่ากับวันสิ้นสุด"
+
+msgid "Failed email recipients"
+msgstr "ผู้รับอีเมลที่ล้มเหลว"
+
+msgid "Finish and return to learning path"
+msgstr "เสร็จสิ้นและกลับไปยังเส้นทางการเรียนรู้"
+
+msgid "Forum image"
+msgstr "ภาพฟอรัม"
+
+msgid "Hide discussion"
+msgstr "ซ่อนการสนทนา"
+
+msgid "Hide page"
+msgstr "ซ่อนหน้า"
+
+msgid "I changed my mind"
+msgstr "ฉันเปลี่ยนใจ"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "หากไม่เลือก ไฟล์เหล่านั้นจะยังคงใช้งานได้สำหรับผู้ดูแลระบบผ่านเครื่องมือ 'ข้อมูลไฟล์'"
+
+msgid "Internal message failures"
+msgstr "ข้อความภายในล้มเหลว"
+
+msgid "Internal messages available"
+msgstr "ข้อความภายในพร้อมใช้งาน"
+
+msgid "Internal messages created now"
+msgstr "ข้อความภายในที่สร้างขึ้นใหม่"
+
+msgid "Item score"
+msgstr "คะแนนรายการ"
+
+msgid "Last post"
+msgstr "โพสต์ล่าสุด"
+
+msgid "Lock page"
+msgstr "ล็อกหน้า"
+
+msgid "Manage categories"
+msgstr "จัดการหมวดหมู่"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "ทำเครื่องหมายเอกสารนี้ว่าได้รับความช่วยเหลือจาก AI ใช้เมื่อเนื้อหาถูกสร้างหรือปรับเปลี่ยนอย่างมีนัยสำคัญด้วยเครื่องมือ AI"
+
+msgid "Maximum score is required"
+msgstr "จำเป็นต้องมีคะแนนสูงสุด"
+
+msgid "Metric"
+msgstr "เมตริก"
+
+msgid "New comments are blocked in this discussion"
+msgstr "ความคิดเห็นใหม่ถูกบล็อกในการสนทนานี้"
+
+msgid "No Wiki categories are available yet."
+msgstr "ยังไม่มีหมวดหมู่วิกิ"
+
+msgid "No categories found"
+msgstr "ไม่พบหมวดหมู่"
+
+msgid "No content"
+msgstr "ไม่มีเนื้อหา"
+
+msgid "No parent category"
+msgstr "ไม่มีหมวดหมู่หลัก"
+
+msgid "Number of comments scored"
+msgstr "จำนวนความคิดเห็นที่ได้รับคะแนน"
+
+msgid "Old version"
+msgstr "เวอร์ชันเก่า"
+
+msgid "Only image files are allowed."
+msgstr "อนุญาตเฉพาะไฟล์ภาพเท่านั้น"
+
+msgid "Please fill all required fields"
+msgstr "กรุณากรอกข้อมูลในช่องที่จำเป็นทั้งหมด"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "คำถามที่มีตัวแทนชั้นเรียนหรือนักเรียนจะถูกสร้างขึ้นสำหรับชั้นเรียนหรือกลุ่มในหลักสูตร: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "การให้คะแนนถูกบล็อกในการสนทนานี้"
+
+msgid "Remove image"
+msgstr "ลบภาพ"
+
+msgid "Restore renewal"
+msgstr "คืนค่าการต่ออายุ"
+
+msgid "Restore version"
+msgstr "คืนค่าเวอร์ชัน"
+
+msgid "Search in"
+msgstr "ค้นหาใน"
+
+msgid "Select group"
+msgstr "เลือกกลุ่ม"
+
+msgid "Select image"
+msgstr "เลือกภาพ"
+
+msgid "Selected image"
+msgstr "ภาพที่เลือก"
+
+msgid "Show discussion"
+msgstr "แสดงการสนทนา"
+
+msgid "Show page"
+msgstr "แสดงหน้า"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "บางไฟล์หรือโฟลเดอร์ไม่มีสิทธิ์เขียน หากต้องการติดตั้ง Chamilo คุณต้องเปลี่ยนสิทธิ์ก่อน (โดยใช้ CHMOD) โปรดอ่าน"
+
+msgid "Subcategories"
+msgstr "หมวดย่อย"
+
+msgid "Tap on the left or right to navigate"
+msgstr "แตะด้านซ้ายหรือขวาเพื่อนำทาง"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "กำหนดส่งงาน Wiki ผ่านไปแล้ว แต่ยังอนุญาตให้ส่งงานล่าช้าได้"
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "กำหนดส่งงาน Wiki ผ่านไปแล้ว"
+
+msgid "The Wiki assignment has not started yet."
+msgstr "งาน Wiki ยังไม่เริ่มต้น"
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "ต้องล็อกการแก้ไขหน้าก่อนบันทึก"
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "บันทึกประกาศแล้ว แต่ไม่สามารถอัปโหลดไฟล์แนบได้"
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "บันทึกประกาศแล้ว แต่การส่งอีเมลล้มเหลว"
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "บันทึกประกาศแล้ว แต่ไม่สามารถส่งอีเมลได้"
+
+msgid "The category has been created"
+msgstr "สร้างหมวดหมู่แล้ว"
+
+msgid "The category has been deleted"
+msgstr "ลบหมวดหมู่แล้ว"
+
+msgid "The category has been updated"
+msgstr "อัปเดตหมวดหมู่แล้ว"
+
+msgid "The end date is invalid"
+msgstr "วันที่สิ้นสุดไม่ถูกต้อง"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "จำนวนเวอร์ชันสูงสุดต้องเป็นจำนวนเต็มที่ไม่เป็นลบ"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "จำนวนคำสูงสุดต้องเป็นจำนวนเต็มที่ไม่เป็นลบ"
+
+msgid "The print window could not be opened"
+msgstr "ไม่สามารถเปิดหน้าต่างพิมพ์ได้"
+
+msgid "The start date is invalid"
+msgstr "วันที่เริ่มต้นไม่ถูกต้อง"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "การตั้งค่าเหล่านี้มีผลกับหลักสูตรทั้งหมด รวมถึงเซสชันและกลุ่ม"
+
+msgid "This announcement has already been sent by email."
+msgstr "ประกาศนี้ถูกส่งทางอีเมลแล้ว"
+
+msgid "This discussion is hidden from learners"
+msgstr "การสนทนานี้ถูกซ่อนจากผู้เรียน"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "เครื่องมือ AI นี้ช่วยให้คุณสร้างภาพและวิดีโอสั้นเพื่อประกอบหลักสูตร โดยการอธิบาย (ด้วยข้อความ) สิ่งที่ต้องการในส่วนพรอมต์ คุณจะให้โมเดล AI ที่กำหนดค่าไว้มีองค์ประกอบที่จำเป็นในการสร้างภาพหรือวิดีโอ โปรดอดทน โมเดล AI จะใช้เวลาสักระยะและสร้างผลลัพธ์ ซึ่งคุณอาจต้องการเก็บไว้โดยบันทึกสื่อในโฟลเดอร์เอกสารของคุณ แล้วฝังในเอกสาร HTML ไม่ใช่ทุกโมเดล AI จะมีประสิทธิภาพเท่ากันในด้านความเร็วหรือคุณภาพ โมเดล AI อาจให้พรอมต์ที่ปรับแก้แล้ว ซึ่งเป็นการตีความคำขอของคุณอย่างละเอียดยิ่งขึ้น จากนั้นคุณสามารถใช้พรอมต์ที่ปรับแก้แล้วเพื่อปรับแต่งคำขอของคุณ โปรดทราบว่าเครื่องมือนี้ โดยเฉพาะวิดีโอ อาจทำให้องค์กรของคุณมีค่าใช้จ่ายสูง แม้ว่าคุณจะตัดสินใจไม่บันทึกสื่อที่สร้างขึ้นก็ตาม โปรดใช้อย่างเหมาะสม หากคุณมีปัญหาในการได้ผลลัพธ์ที่ต้องการ โปรดใช้เวลาศึกษาเทคนิคการเขียนพรอมต์ออนไลน์สำหรับโมเดล AI ที่คุณมี"
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "ประวัตินี้เป็นของหลักสูตรหลัก การกู้คืนจะพร้อมใช้งานหลังจากสร้างเวอร์ชันเซสชันแล้ว"
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "ภาพนี้แทนที่ไอคอนฟอรัมเริ่มต้นที่แสดงถัดจากชื่อฟอรัม"
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "หน้านี้มาจากหลักสูตรหลัก การบันทึกจะสร้างเวอร์ชันสำหรับเซสชันปัจจุบัน"
+
+msgid "This will also delete %s subcategories."
+msgstr "การดำเนินการนี้จะลบหมวดย่อย %s ด้วย"
+
+msgid "This will create individual work pages for %s learners."
+msgstr "การดำเนินการนี้จะสร้างหน้างานแยกสำหรับผู้เรียน %s คน"
+
+msgid "Thread history"
+msgstr "ประวัติกระทู้"
+
+msgid "Title and content"
+msgstr "ชื่อเรื่องและเนื้อหา"
+
+msgid "Unable to cancel renewal right now."
+msgstr "ไม่สามารถยกเลิกการต่ออายุได้ในขณะนี้"
+
+msgid "Unable to restore renewal right now."
+msgstr "ไม่สามารถกู้คืนสิทธิ์การต่ออายุได้ในขณะนี้"
+
+msgid "Unlock page"
+msgstr "ปลดล็อกหน้า"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "ใช้ [[Page]] หรือ [[Page|ข้อความที่แสดง]] เพื่อสร้างลิงก์ Wiki ภายใน"
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "ใช้แถบเว้นวรรคหรือปุ่มลูกศรเพื่อนำทาง"
+
+msgid "View version"
+msgstr "ดูเวอร์ชัน"
+
+msgid "Visible only to teachers"
+msgstr "มองเห็นได้เฉพาะครู"
+
+msgid "Weight is required"
+msgstr "ต้องระบุน้ำหนัก"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "หมวดหมู่ Wiki ถูกปิดใช้งานสำหรับหลักสูตรนี้"
+
+msgid "Wiki categories enabled"
+msgstr "เปิดใช้งานหมวดหมู่ Wiki แล้ว"
+
+msgid "Wiki html strict filtering"
+msgstr "การกรอง HTML แบบเข้มงวดของ Wiki"
+
+msgid "Wiki settings"
+msgstr "การตั้งค่า Wiki"
+
+msgid "Wiki settings updated"
+msgstr "อัปเดตการตั้งค่า Wiki แล้ว"
+
+msgid "You are viewing a historical version of this page"
+msgstr "คุณกำลังดูเวอร์ชันประวัติของหน้านี้"
+
+msgid "You can attach one or more files to this reply."
+msgstr "คุณสามารถแนบไฟล์อย่างน้อยหนึ่งไฟล์กับการตอบกลับนี้ได้"
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "คุณสามารถแก้ไขหน้านี้ของงานที่มอบหมายได้ แต่หน้าผลงานของผู้เรียนจะไม่ถูกแก้ไข"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "คุณสามารถใช้แท็ก {{class_name}} และ {{student_full_name}} ในคำถามได้"
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "คุณมีเวลา 20 นาทีในการแก้ไขหน้านี้ก่อนที่การล็อกการแก้ไขจะหมดอายุ"
+
+msgid "by"
+msgstr "โดย"
+
+msgid "required"
+msgstr "จำเป็น"
+
+msgid "Incorrect password."
+msgstr "รหัสผ่านไม่ถูกต้อง"
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "การแจ้งเตือนความสมบูรณ์ของไฟล์ถูกหยุดชั่วคราวเป็นเวลา 1 ชั่วโมง"
+
+msgid "New baseline established: %s files."
+msgstr "สร้าง baseline ใหม่แล้ว: %s ไฟล์"
+
+msgid "Scan complete: changes were detected."
+msgstr "สแกนเสร็จสมบูรณ์: ตรวจพบการเปลี่ยนแปลง"
+
+msgid "Scan complete: no changes were detected."
+msgstr "สแกนเสร็จสมบูรณ์: ไม่พบการเปลี่ยนแปลง"
+
+msgid "File integrity"
+msgstr "ความสมบูรณ์ของไฟล์"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "รายงานนี้เปรียบเทียบไฟล์ที่ติดตั้ง (ทุกอย่างยกเว้น var/ และ .git/ แม้ว่า .git/config จะยังถูกตรวจสอบเพื่อจับการไฮแจ็กรีโมท) กับ baseline ที่เชื่อถือได้ เพื่อตรวจจับการเพิ่ม การแก้ไข หรือการลบที่ไม่คาดคิด"
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "คุณสามารถตรวจสอบรายงานล่าสุดด้านล่าง การรันสแกน การหยุดการแจ้งเตือนชั่วคราว หรือการสร้าง baseline ใหม่ต้องใช้ผู้ดูแลระบบระดับโลก"
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "การแจ้งเตือนถูกหยุดชั่วคราวเพื่อการบำรุงรักษาในขณะนี้ จะกลับมาทำงานโดยอัตโนมัติที่ %date%"
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "ยังไม่มีการสแกนใด ๆ เกิดขึ้น สแกนจากที่นี่ หรือจากบรรทัดคำสั่งด้วย app:file-integrity:scan"
+
+msgid "Last scan"
+msgstr "สแกนล่าสุด"
+
+msgid "Files scanned"
+msgstr "ไฟล์ที่สแกน"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "ยังไม่มี baseline: การสแกนนี้ได้สร้าง baseline ขึ้นมา การเปลี่ยนแปลงจะถูกรายงานเริ่มจากการสแกนครั้งถัดไป"
+
+msgid "No changes detected since the baseline."
+msgstr "ไม่พบการเปลี่ยนแปลงตั้งแต่ baseline"
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "การกำหนดค่ารีโมท Git (.git/config) มีการเปลี่ยนแปลง โปรดตรวจสอบว่าคาดการณ์ไว้"
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "การสแกนหยุดก่อนกำหนดเนื่องจากไม่สามารถอ่านไดเรกทอรีย่อยได้ (ตรวจสอบสิทธิ์ไฟล์) ผลลัพธ์ด้านล่างอาจไม่สมบูรณ์"
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "มีการเปลี่ยนแปลงมากเกินไปที่จะแสดงทั้งหมด; แสดงเฉพาะรายการแรกของแต่ละหมวดด้านล่าง ดูบันทึก CEF สำหรับรายการทั้งหมด"
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% ไฟล์ไม่สามารถอ่านได้ (สิทธิ์) และถูกข้าม"
+
+msgid "Run a scan now"
+msgstr "รันสแกนตอนนี้"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "หยุดการแจ้งเตือนเป็นเวลา 1 ชั่วโมง (เพื่อการบำรุงรักษา)"
+
+msgid "Pause for 1 hour"
+msgstr "หยุดเป็นเวลา 1 ชั่วโมง"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "เชื่อถือโครงสร้างไฟล์ปัจจุบันเป็น baseline ใหม่"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "การดำเนินการนี้จะเชื่อถือทุกไฟล์ปัจจุบันว่าถูกต้อง รวมถึงการเปลี่ยนแปลงที่ยังไม่ได้ตรวจสอบ ดำเนินการต่อ?"
+
+msgid "Establish new baseline"
+msgstr "สร้าง baseline ใหม่"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "กำหนดการสแกนจาก crontab ของระบบ เช่น"
+
+msgid "File integrity alert on %platform%"
+msgstr "การแจ้งเตือนความสมบูรณ์ของไฟล์บน %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "การสแกนความสมบูรณ์ของไฟล์ตรวจพบการเปลี่ยนแปลงบนแพลตฟอร์ม:"
+
+msgid "Added files"
+msgstr "ไฟล์ที่เพิ่ม"
+
+msgid "Modified files"
+msgstr "ไฟล์ที่แก้ไข"
+
+msgid "Deleted files"
+msgstr "ไฟล์ที่ลบ"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "ดูรายงานฉบับเต็มได้ที่ การจัดการ > ความปลอดภัย > ความสมบูรณ์ของไฟล์"
+
+msgid "Password to confirm pausing alerts"
+msgstr "รหัสผ่านเพื่อยืนยันการหยุดแจ้งเตือนชั่วคราว"
+
+msgid "Password to confirm the new baseline"
+msgstr "รหัสผ่านเพื่อยืนยันฐานข้อมูลใหม่"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "มีการสแกนกำลังทำงานอยู่ โปรดรอให้เสร็จสิ้นก่อนเริ่มการสแกนใหม่"
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "กำลังสแกนอยู่ (เริ่มเมื่อ %date%) การสแกนเต็มรูปแบบอาจใช้เวลาหลายนาที สามารถโหลดหน้านี้ใหม่เพื่อตรวจสอบความคืบหน้าได้อย่างปลอดภัย"
+
+msgid "Currently processing"
+msgstr "กำลังประมวลผล"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "การสแกนก่อนหน้า (เริ่มเมื่อ %date%) ถูกขัดจังหวะก่อนเสร็จสิ้น — กระบวนการไม่ได้ทำงานอีกต่อไป คุณสามารถเริ่มการสแกนใหม่ได้อย่างปลอดภัย"
+
+msgid "files"
+msgstr "ไฟล์"
+
+msgid "Permissions changed"
+msgstr "สิทธิ์การเข้าถึงเปลี่ยนแปลง"
+
+msgid "Files with changed permissions"
+msgstr "ไฟล์ที่มีสิทธิ์การเข้าถึงเปลี่ยนแปลง"
+
+msgid "Alert history"
+msgstr "ประวัติการแจ้งเตือน"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "ทุกการสแกนที่พบปัญหาจะถูกเก็บรักษาไว้ แม้ปัญหาจะได้รับการแก้ไขหรือมีการกำหนดฐานข้อมูลใหม่ — ต่างจากรายงานด้านบน การสแกนที่ไม่มีปัญหาหรือการกำหนดฐานข้อมูลใหม่จะไม่ล้างข้อมูลนี้"
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "รายการนี้ถูกตัดทอนในขณะที่บันทึก ดูบันทึก CEF สำหรับรายการทั้งหมด"
+
+msgid "No alert has been recorded yet."
+msgstr "ยังไม่มีบันทึกการแจ้งเตือน"
+
+msgid "Git remote changed"
+msgstr "รีโมท Git เปลี่ยนแปลง"
+
+msgid "Press enter to select"
+msgstr "กด Enter เพื่อเลือก"
+
+msgid "Press enter to remove"
+msgstr "กด Enter เพื่อลบ"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "ไม่พบองค์ประกอบ ลองเปลี่ยนคำค้นหา"
+
+msgid "List is empty."
+msgstr "รายการว่างเปล่า"
+
+msgid "Your session has expired. Please try again."
+msgstr "เซสชันของคุณหมดอายุแล้ว โปรดลองอีกครั้ง"
+
+msgid "Generate with AI"
+msgstr "สร้างด้วย AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "ภาพประกอบสมัยใหม่ที่เป็นมิตร แสดงหัวข้อของหลักสูตรนี้ ในสไตล์ flat-design ที่สะอาดตา โดยใช้สีของแพลตฟอร์มเป็นสีเน้น"
+
+msgid "Back to account"
+msgstr "กลับไปยังบัญชี"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "ความคิดเห็นของคุณจะช่วยให้เราปรับปรุงการฝึกอบรมในอนาคต"
+
+msgid "Thank you for sharing your feedback."
+msgstr "ขอบคุณที่แบ่งปันความคิดเห็นของคุณ"
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "คุณพึงพอใจกับคุณภาพโดยรวมของการฝึกอบรมมากน้อยเพียงใด"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "คุณพึงพอใจกับความเกี่ยวข้องของเนื้อหามากน้อยเพียงใด"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "คุณพึงพอใจกับความชัดเจนของคำอธิบายมากน้อยเพียงใด"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "คุณพึงพอใจกับการจัดองค์กรและจังหวะของการฝึกอบรมมากน้อยเพียงใด"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "คุณพึงพอใจกับประโยชน์ในทางปฏิบัติของสิ่งที่คุณได้เรียนรู้มากน้อยเพียงใด"
+
+msgid "Would you recommend this training to other people?"
+msgstr "คุณจะแนะนำการฝึกอบรมนี้ให้กับผู้อื่นหรือไม่"
+
+msgid "What should we improve in future editions?"
+msgstr "เราควรปรับปรุงอะไรในรุ่นต่อไป"
+
+msgid "Very satisfied"
+msgstr "พึงพอใจมาก"
+
+msgid "Satisfied"
+msgstr "พึงพอใจ"
+
+msgid "Neutral"
+msgstr "เฉย ๆ"
+
+msgid "Dissatisfied"
+msgstr "ไม่พึงพอใจ"
+
+msgid "Very dissatisfied"
+msgstr "ไม่พึงพอใจมาก"
+
+msgid "Add destination"
+msgstr "เพิ่มปลายทาง"
+
+msgid "Add this test to the assessment tool"
+msgstr "เพิ่มแบบทดสอบนี้ไปยังเครื่องมือประเมินผล"
+
+msgid "Attempts and timing"
+msgstr "การพยายามและระยะเวลา"
+
+msgid "Available questions"
+msgstr "คำถามที่มีอยู่"
+
+msgid "Cancel and return to learning path"
+msgstr "ยกเลิกและกลับไปยังเส้นทางการเรียนรู้"
+
+msgid "Category destinations"
+msgstr "ปลายทางของหมวดหมู่"
+
+msgid "Classification"
+msgstr "การจัดหมวดหมู่"
+
+msgid "Context"
+msgstr "บริบท"
+
+msgid "Could not load exercise configuration"
+msgstr "ไม่สามารถโหลดการกำหนดค่าแบบฝึกหัดได้"
+
+msgid "Could not save exercise"
+msgstr "ไม่สามารถบันทึกแบบฝึกหัดได้"
+
+msgid "Display and learning path"
+msgstr "การแสดงผลและเส้นทางการเรียนรู้"
+
+msgid "Edit test"
+msgstr "แก้ไขแบบทดสอบ"
+
+msgid "Exercise settings saved."
+msgstr "บันทึกการตั้งค่าแบบฝึกหัดแล้ว"
+
+msgid "Extra settings"
+msgstr "การตั้งค่าเพิ่มเติม"
+
+msgid "Feedback and results"
+msgstr "ผลป้อนกลับและผลลัพธ์"
+
+msgid "Finish exercise"
+msgstr "เสร็จสิ้นแบบฝึกหัด"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "ระบุภาษาของแบบฝึกหัดนี้เป็นข้อมูลเมตาของทรัพยากร ซึ่งไม่เปิดใช้งานการจัดทำดัชนีการค้นหาโดยอัตโนมัติ"
+
+msgid "Maximum score (%)"
+msgstr "คะแนนสูงสุด (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "ข้อมูลเมตาประกอบด้วยทักษะและฟิลด์เพิ่มเติมที่กำหนดค่าสำหรับแบบฝึกหัด ซึ่งเป็นตัวเลือกและจะถูกซ่อนไว้จนกว่าจะเปิด"
+
+msgid "No question categories are available for this exercise yet."
+msgstr "ยังไม่มีหมวดหมู่คำถามสำหรับแบบฝึกหัดนี้"
+
+msgid "Question categories matrix"
+msgstr "เมทริกซ์หมวดหมู่คำถาม"
+
+msgid "Questions behavior"
+msgstr "พฤติกรรมคำถาม"
+
+msgid "Random by category"
+msgstr "สุ่มตามหมวดหมู่"
+
+msgid "Remove destination"
+msgstr "ลบปลายทาง"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "กฎจะถูกประเมินตามเปอร์เซ็นต์คะแนนจากน้อยไปมาก เลือกเสร็จสิ้นแบบฝึกหัดเพื่อสิ้นสุดการทดสอบ"
+
+msgid "Score and final messages"
+msgstr "คะแนนและข้อความสุดท้าย"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "บางตัวเลือกจะถูกล็อกหลังจากสร้างแบบฝึกหัดแล้ว"
+
+msgid "This value is stored as total duration in minutes."
+msgstr "ค่านี้จะถูกบันทึกเป็นระยะเวลารวมเป็นนาที"
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "ใช้ 0 เพื่อเก็บคำถามทั้งหมดที่มีอยู่ ใช้ -1 เมื่ออนุญาตให้ใช้คำถามทั้งหมดที่มีอยู่"
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "ใช้ช่องเหล่านี้เพื่อจัดหมวดหมู่แบบฝึกหัดโดยไม่ขึ้นกับตัวเลือกการแสดงผล"
+
+msgid "Invite by email"
+msgstr "เชิญทางอีเมล"
+
+msgid "Invitation has been sent"
+msgstr "ส่งคำเชิญแล้ว"
+
+msgid "Sent on"
+msgstr "ส่งเมื่อ"
+
+msgid "Accepted on"
+msgstr "ยอมรับเมื่อ"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "หลักสูตรนี้เปิดในเซสชัน การส่งคำเชิญที่นี่จะสมัครผู้รับเข้าร่วมเซสชันทั้งหมด %s ไม่ใช่แค่หลักสูตรนี้"
+
+msgid "Revoke"
+msgstr "เพิกถอน"
+
+msgid "Revoked"
+msgstr "เพิกถอนแล้ว"
+
+msgid "Invitation has been revoked"
+msgstr "เพิกถอนคำเชิญแล้ว"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการเพิกถอนคำเชิญที่ส่งไปยัง %s?"
+
+msgid "No default room"
+msgstr "ไม่มีห้องเริ่มต้น"
+
+msgid "Floor"
+msgstr "ชั้น"
+
+msgid "Capacity"
+msgstr "ความจุ"
+
+msgid "Use attendance default room"
+msgstr "ใช้ห้องเริ่มต้นการเข้าร่วม"
+
+msgid "Floor number"
+msgstr "เลขชั้น"
+
+msgid "Copy to students"
+msgstr "คัดลอกไปยังนักเรียน"
+
+msgid "Generate a quick test on this topic"
+msgstr "สร้างแบบทดสอบด่วนในหัวข้อนี้"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "เนื้อหาเอกสารที่บันทึกจะถูกส่งไปยังโมเดล AI เพื่อประมวลผล"
+
+msgid "MCP API key"
+msgstr "คีย์ API ของ MCP"
+
+msgid "Authorized applications"
+msgstr "แอปพลิเคชันที่ได้รับอนุญาต"
+
+msgid "Your session is about to expire"
+msgstr "เซสชันของคุณใกล้จะหมดอายุ"
+
+msgid "Do you want to continue your session?"
+msgstr "คุณต้องการดำเนินเซสชันต่อหรือไม่?"
+
+msgid "Your session details have been lost, please login again."
+msgstr "รายละเอียดเซสชันของคุณหายไป โปรดเข้าสู่ระบบอีกครั้ง"
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "การเข้าถึงทรัพยากรนี้ถูกปฏิเสธ ดูเหมือนว่าคุณไม่มีสิทธิ์ที่จำเป็นในการเข้าถึง"
+
+msgid "Stay connected"
+msgstr "เชื่อมต่อต่อ"
+
+msgid "You will be signed out in %s seconds."
+msgstr "คุณจะถูกออกจากระบบใน %s วินาที"
+
+msgid "No descriptions available yet."
+msgstr "ยังไม่มีคำอธิบาย"
+
+msgid "%s users selected"
+msgstr "เลือกผู้ใช้ %s คน"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "ผู้ใช้ที่เลือกได้รับการสมัครเข้าเรียนในหลักสูตรแล้ว"
+
+msgid "Import teachers"
+msgstr "นำเข้าผู้สอน"
+
+msgid "Import learners"
+msgstr "นำเข้าผู้เรียน"
+
+msgid "Select CSV file"
+msgstr "เลือกไฟล์ CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "ผู้ใช้บางรายไม่สามารถสมัครได้"
+
+msgid "Browse available classes"
+msgstr "เรียกดูชั้นเรียนที่มีอยู่"
+
+msgid "Back to linked classes"
+msgstr "กลับไปยังชั้นเรียนที่เชื่อมโยง"
+
+msgid "No classes are currently linked to this course."
+msgstr "ไม่มีชั้นเรียนที่เชื่อมโยงกับหลักสูตรนี้ในขณะนี้"
+
+msgid "No available classes were found for this course."
+msgstr "ไม่พบชั้นเรียนที่ใช้ได้สำหรับหลักสูตรนี้"
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการสมัครผู้ใช้ที่เลือก?"
+
+msgid "Learning path access"
+msgstr "การเข้าถึงเส้นทางการเรียนรู้"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "เฉพาะผู้ใช้และกลุ่มที่เลือกเท่านั้นที่สามารถเข้าถึงเส้นทางการเรียนรู้นี้ได้ จัดการพวกเขาหลังจากบันทึก"
+
+msgid "All current and future course users can access this learning path."
+msgstr "ผู้ใช้หลักสูตรปัจจุบันและอนาคตทั้งหมดสามารถเข้าถึงเส้นทางการเรียนรู้นี้ได้"
+
+msgid "All course users"
+msgstr "ผู้ใช้หลักสูตรทั้งหมด"
+
+msgid "Selected users and groups"
+msgstr "ผู้ใช้และกลุ่มที่เลือก"
+
+msgid "No access"
+msgstr "ไม่มีการเข้าถึง"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "เฉพาะผู้ใช้และกลุ่มที่เพิ่มที่นี่เท่านั้นที่สามารถเข้าถึงเส้นทางการเรียนรู้นี้ได้"
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "จำนวนคำถามจำกัดสูงสุด %s"
+
+msgid "Open exercise player"
+msgstr "เปิดตัวเล่นแบบฝึกหัด"
+
+msgid "The score is hidden for this exercise."
+msgstr "คะแนนถูกซ่อนสำหรับแบบฝึกหัดนี้"
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "การแก้ไขถูกซ่อนตามการตั้งค่าผลลัพธ์แบบฝึกหัด"
+
+msgid "Progressive adaptive result"
+msgstr "ผลลัพธ์แบบปรับตัวแบบก้าวหน้า"
+
+msgid "Achieved level"
+msgstr "ระดับที่บรรลุ"
+
+msgid "Correction history"
+msgstr "ประวัติการแก้ไข"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "ประวัติการแก้ไขด้วยตนเองที่ทำสำหรับความพยายามนี้"
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "แบบฝึกหัดนี้ใช้โหมดผลลัพธ์เรดาร์/ใยแมงมุม แผนภูมิไม่พร้อมใช้งานในหน้านี้"
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "รายละเอียดคำถามถูกซ่อนตามการตั้งค่าผลลัพธ์แบบฝึกหัด"
+
+msgid "Media question"
+msgstr "คำถามสื่อ"
+
+msgid "Pending correction"
+msgstr "รอการแก้ไข"
+
+msgid "No answer"
+msgstr "ไม่มีคำตอบ"
+
+msgid "Blank %s"
+msgstr "ช่องว่าง %s"
+
+msgid "Your order"
+msgstr "ลำดับของคุณ"
+
+msgid "Correct order"
+msgstr "ลำดับที่ถูกต้อง"
+
+msgid "Delineation review"
+msgstr "การตรวจสอบการกำหนดขอบเขต"
+
+msgid "Learner clicks"
+msgstr "การคลิกของผู้เรียน"
+
+msgid "Question image"
+msgstr "ภาพคำถาม"
+
+msgid "No hotspot image available"
+msgstr "ไม่มีภาพจุดร้อน"
+
+msgid "Learner delineation"
+msgstr "การกำหนดขอบเขตของผู้เรียน"
+
+msgid "Expected delineation"
+msgstr "การกำหนดขอบเขตที่คาดหวัง"
+
+msgid "Expected zones"
+msgstr "โซนที่คาดหวัง"
+
+msgid "Zone"
+msgstr "โซน"
+
+msgid "Learner annotation"
+msgstr "คำอธิบายประกอบของผู้เรียน"
+
+msgid "No annotation image available"
+msgstr "ไม่มีภาพคำอธิบายประกอบ"
+
+msgid "This answer is pending teacher correction."
+msgstr "คำตอบนี้รอการแก้ไขจากผู้สอน"
+
+msgid "Teacher comment"
+msgstr "ความคิดเห็นของผู้สอน"
+
+msgid "Teacher correction"
+msgstr "การแก้ไขของผู้สอน"
+
+msgid "Save correction"
+msgstr "บันทึกการแก้ไข"
+
+msgid "Learner audio"
+msgstr "เสียงของผู้เรียน"
+
+msgid "Download audio"
+msgstr "ดาวน์โหลดเสียง"
+
+msgid "No uploaded audio"
+msgstr "ไม่มีเสียงที่อัปโหลด"
+
+msgid "Learner Office document"
+msgstr "เอกสาร Office ของผู้เรียน"
+
+msgid "Learner file"
+msgstr "ไฟล์ของผู้เรียน"
+
+msgid "Download Office document"
+msgstr "ดาวน์โหลดเอกสาร Office"
+
+msgid "No submitted document"
+msgstr "ยังไม่มีเอกสารที่ส่ง"
+
+msgid "No uploaded file"
+msgstr "ยังไม่มีไฟล์ที่อัปโหลด"
+
+msgid "Content item"
+msgstr "รายการเนื้อหา"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "ไม่สามารถตรวจสอบคำถามประเภทนี้ได้ในหน้านี้"
+
+msgid "Exercise completed"
+msgstr "แบบฝึกหัดเสร็จสมบูรณ์"
+
+msgid "Could not start the attempt"
+msgstr "ไม่สามารถเริ่มการทำแบบฝึกหัดได้"
+
+msgid "Invalid exercise attempt"
+msgstr "การทำแบบฝึกหัดไม่ถูกต้อง"
+
+msgid "Could not load exercise result"
+msgstr "ไม่สามารถโหลดผลลัพธ์แบบฝึกหัดได้"
+
+msgid "Could not load AI providers"
+msgstr "ไม่สามารถโหลดผู้ให้บริการ AI ได้"
+
+msgid "Could not generate AI suggestion"
+msgstr "ไม่สามารถสร้างคำแนะนำ AI ได้"
+
+msgid "Correction saved"
+msgstr "บันทึกการแก้ไขแล้ว"
+
+msgid "Could not save correction"
+msgstr "ไม่สามารถบันทึกการแก้ไขได้"
+
+msgid "Create exercise"
+msgstr "สร้างแบบฝึกหัด"
+
+msgid "Exercise categories"
+msgstr "หมวดหมู่แบบฝึกหัด"
+
+msgid "Question categories"
+msgstr "หมวดหมู่คำถาม"
+
+msgid "Search by exercise title or description."
+msgstr "ค้นหาตามชื่อหรือคำอธิบายแบบฝึกหัด"
+
+msgid "Search exercises"
+msgstr "ค้นหาแบบฝึกหัด"
+
+msgid "No exercises found"
+msgstr "ไม่พบแบบฝึกหัด"
+
+msgid "Open exercise"
+msgstr "เปิดแบบฝึกหัด"
+
+msgid "Disable autolaunch"
+msgstr "ปิดการเปิดอัตโนมัติ"
+
+msgid "Enable autolaunch"
+msgstr "เปิดการเปิดอัตโนมัติ"
+
+msgid "Export QTI2"
+msgstr "ส่งออก QTI2"
+
+msgid "Bulk actions"
+msgstr "การดำเนินการเป็นกลุ่ม"
+
+msgid "Selected exercises"
+msgstr "แบบฝึกหัดที่เลือก"
+
+msgid "No exercises selected"
+msgstr "ยังไม่ได้เลือกแบบฝึกหัด"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการดำเนินการนี้กับแบบฝึกหัดที่เลือก?"
+
+msgid "Bulk action completed"
+msgstr "ดำเนินการเป็นกลุ่มเสร็จสมบูรณ์"
+
+msgid "Could not update exercises"
+msgstr "ไม่สามารถอัปเดตแบบฝึกหัดได้"
+
+msgid "Could not update exercise"
+msgstr "ไม่สามารถอัปเดตแบบฝึกหัดได้"
+
+msgid "Copy exercise"
+msgstr "คัดลอกแบบฝึกหัด"
+
+msgid "Delete exercise"
+msgstr "ลบแบบฝึกหัด"
+
+msgid "Could not load exercises"
+msgstr "ไม่สามารถโหลดแบบฝึกหัดได้"
+
+msgid "No limit"
+msgstr "ไม่จำกัด"
+
+msgid "Add selected questions to the test"
+msgstr "เพิ่มคำถามที่เลือกไปยังแบบทดสอบ"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "คำถามนี้ถูกใช้ในแบบทดสอบที่ใช้งานอยู่และไม่สามารถแก้ไขได้ที่นี่"
+
+msgid "This question cannot be edited here."
+msgstr "ไม่สามารถแก้ไขคำถามนี้ได้ที่นี่"
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "คำถามนี้ถูกใช้ในแบบทดสอบที่ใช้งานอยู่และไม่สามารถลบได้ที่นี่"
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "ไม่สามารถลบคำถามนี้ได้เนื่องจากการเข้าถึงของคุณถูกจำกัดโดยการตั้งค่าของแพลตฟอร์ม"
+
+msgid "Already in test"
+msgstr "อยู่ในแบบทดสอบแล้ว"
+
+msgid "Select at least one question."
+msgstr "เลือกอย่างน้อยหนึ่งคำถาม"
+
+msgid "Question bank updated"
+msgstr "อัปเดตคลังคำถามแล้ว"
+
+msgid "Could not update the question bank"
+msgstr "ไม่สามารถอัปเดตคลังคำถามได้"
+
+msgid "Could not load the question bank"
+msgstr "ไม่สามารถโหลดคลังคำถามได้"
+
+msgid "Total score"
+msgstr "คะแนนรวม"
+
+msgid "Starting"
+msgstr "กำลังเริ่มต้น"
+
+msgid "Attempt history"
+msgstr "ประวัติการทำแบบฝึกหัด"
+
+msgid "No attempts yet"
+msgstr "ยังไม่มีประวัติการทำ"
+
+msgid "Invalid exercise"
+msgstr "แบบฝึกหัดไม่ถูกต้อง"
+
+msgid "Could not load exercise overview"
+msgstr "ไม่สามารถโหลดภาพรวมแบบฝึกหัดได้"
+
+msgid "Open test"
+msgstr "เปิดแบบทดสอบ"
+
+msgid "Random answers"
+msgstr "สุ่มคำตอบ"
+
+msgid "Prevent moving backwards"
+msgstr "ป้องกันการย้อนกลับ"
+
+msgid "Previous button hidden"
+msgstr "ซ่อนปุ่มย้อนกลับ"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "แบบฝึกหัดนี้ใช้ตัวเลือกที่ต้องการผู้เล่นแบบทดสอบอื่น"
+
+msgid "Continue test"
+msgstr "ดำเนินการแบบทดสอบต่อ"
+
+msgid "Attempt started"
+msgstr "เริ่มทำแบบฝึกหัด"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "การแสดงตัวอย่างของผู้สอนจะไม่สร้างการพยายามที่ถูกติดตาม"
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "เริ่มหรือดำเนินการพยายามทำแบบฝึกหัดต่อ คำตอบแบบร่างสามารถบันทึกก่อนส่งขั้นสุดท้าย"
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "ถึงขีดจำกัดเวลา กำลังสิ้นสุดการพยายาม"
+
+msgid "Question time reached. Saving your answer."
+msgstr "ถึงเวลาของคำถาม กำลังบันทึกคำตอบของคุณ"
+
+msgid "Finishing"
+msgstr "กำลังสิ้นสุด"
+
+msgid "Draft saved"
+msgstr "บันทึกร่างแล้ว"
+
+msgid "Save as draft"
+msgstr "บันทึกเป็นฉบับร่าง"
+
+msgid "Statement"
+msgstr "คำชี้แจง"
+
+msgid "Drop each option on the matching answer"
+msgstr "วางแต่ละตัวเลือกบนคำตอบที่ตรงกัน"
+
+msgid "Clear match"
+msgstr "ล้างการจับคู่"
+
+msgid "Click to place the selected option here"
+msgstr "คลิกเพื่อวางตัวเลือกที่เลือกที่นี่"
+
+msgid "Select an option, then click here"
+msgstr "เลือกตัวเลือก แล้วคลิกที่นี่"
+
+msgid "Already matched"
+msgstr "จับคู่แล้ว"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "คุณสามารถลากตัวเลือกไปยังคำตอบ หรือเลือกตัวเลือกแล้วคลิกกล่องเป้าหมาย"
+
+msgid "Put the items in the correct order."
+msgstr "จัดเรียงรายการให้ถูกต้อง"
+
+msgid "Move left"
+msgstr "เลื่อนซ้าย"
+
+msgid "Move right"
+msgstr "เลื่อนขวา"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "คุณสามารถลากรายการไปทางซ้ายหรือขวา หรือใช้ปุ่มเลื่อนเพื่อเปลี่ยนลำดับ"
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "คุณสามารถลากรายการหรือใช้ปุ่มเลื่อนเพื่อเปลี่ยนลำดับ"
+
+msgid "Or upload an audio file"
+msgstr "หรืออัปโหลดไฟล์เสียง"
+
+msgid "Selected audio"
+msgstr "เสียงที่เลือก"
+
+msgid "Uploaded audio"
+msgstr "เสียงที่อัปโหลด"
+
+msgid "Office document"
+msgstr "เอกสารสำนักงาน"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "กรอกเอกสารในตัวแก้ไขด้านล่าง ไฟล์จะถูกแนบกับการพยายามนี้เพื่อให้ผู้สอนตรวจสอบ"
+
+msgid "Reload Office editor"
+msgstr "โหลดตัวแก้ไข Office ใหม่"
+
+msgid "Prepare Office document"
+msgstr "เตรียมเอกสาร Office"
+
+msgid "Open in new tab"
+msgstr "เปิดในแท็บใหม่"
+
+msgid "Preparing Office document"
+msgstr "กำลังเตรียมเอกสาร Office"
+
+msgid "Submitted document"
+msgstr "เอกสารที่ส่ง"
+
+msgid "Annotation tools"
+msgstr "เครื่องมืออธิบายประกอบ"
+
+msgid "Text to place"
+msgstr "ข้อความที่จะวาง"
+
+msgid "Click the image to place the text annotation."
+msgstr "คลิกที่ภาพเพื่อวางคำอธิบายประกอบข้อความ"
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "คลิกที่ภาพเพื่อเพิ่มจุดเส้นทาง ใช้ \"เริ่มเส้นทางใหม่\" เพื่อแยกเส้นทาง"
+
+msgid "Start new path"
+msgstr "เริ่มเส้นทางใหม่"
+
+msgid "Current annotations"
+msgstr "คำอธิบายประกอบปัจจุบัน"
+
+msgid "Remove point"
+msgstr "ลบจุด"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "คลิกที่ภาพเพื่อวาดรูปหลายเหลี่ยมขอบเขต"
+
+msgid "Click a marker to remove it."
+msgstr "คลิกที่เครื่องหมายเพื่อลบ"
+
+msgid "Placed"
+msgstr "วางแล้ว"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "เลือกคำตอบ แล้วคลิกบนภาพเพื่อทำเครื่องหมาย"
+
+msgid "Reading speed"
+msgstr "ความเร็วในการอ่าน"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "ไม่สามารถแสดงประเภทคำถามนี้ในผู้เล่นนี้ได้"
+
+msgid "Save draft"
+msgstr "บันทึกร่าง"
+
+msgid "I confirm that my answers were saved."
+msgstr "ฉันยืนยันว่าคำตอบของฉันถูกบันทึกแล้ว"
+
+msgid "Finish test"
+msgstr "ส่งแบบทดสอบ"
+
+msgid "Attempt finished"
+msgstr "การทำแบบทดสอบเสร็จสิ้น"
+
+msgid "Question category"
+msgstr "หมวดคำถาม"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "คุณตอบคำถามในหมวดนี้ครบแล้ว นี่เป็นโอกาสสุดท้ายที่จะย้อนกลับไปตรวจสอบ"
+
+msgid "Question time left"
+msgstr "เวลาที่เหลือสำหรับคำถาม"
+
+msgid "Time left"
+msgstr "เวลาที่เหลือ"
+
+msgid "Current attempt"
+msgstr "การทำแบบทดสอบปัจจุบัน"
+
+msgid "Could not save draft answer"
+msgstr "ไม่สามารถบันทึกร่างคำตอบได้"
+
+msgid "Could not load exercise"
+msgstr "ไม่สามารถโหลดแบบฝึกหัดได้"
+
+msgid "Draft answer saved"
+msgstr "บันทึกร่างคำตอบแล้ว"
+
+msgid "Could not finish the attempt"
+msgstr "ไม่สามารถสิ้นสุดการทำแบบทดสอบได้"
+
+msgid "Could not prepare Office document"
+msgstr "ไม่สามารถเตรียมเอกสาร Office ได้"
+
+msgid "Back to learner score"
+msgstr "กลับไปที่คะแนนผู้เรียน"
+
+msgid "Disable auto refresh"
+msgstr "ปิดการรีเฟรชอัตโนมัติ"
+
+msgid "Enable auto refresh"
+msgstr "เปิดการรีเฟรชอัตโนมัติ"
+
+msgid "Live window"
+msgstr "หน้าต่างสด"
+
+msgid "Ongoing attempts"
+msgstr "การทำแบบทดสอบที่กำลังดำเนินอยู่"
+
+msgid "Completed attempts"
+msgstr "การทำแบบทดสอบที่เสร็จสิ้นแล้ว"
+
+msgid "Started"
+msgstr "เริ่มเมื่อ"
+
+msgid "Last activity"
+msgstr "กิจกรรมล่าสุด"
+
+msgid "Could not load live results"
+msgstr "ไม่สามารถโหลดผลลัพธ์สดได้"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "แบบฝึกหัดนี้เป็นแบบอ่านอย่างเดียวเพราะรวมอยู่ในเส้นทางการเรียนรู้"
+
+msgid "Select a question type to create a question."
+msgstr "เลือกประเภทคำถามเพื่อสร้างคำถาม"
+
+msgid "Click to preview"
+msgstr "คลิกเพื่อดูตัวอย่าง"
+
+msgid "Hide preview"
+msgstr "ซ่อนตัวอย่าง"
+
+msgid "Shape"
+msgstr "รูปร่าง"
+
+msgid "Coordinates"
+msgstr "พิกัด"
+
+msgid "Blanks"
+msgstr "ช่องว่าง"
+
+msgid "Switchable blanks"
+msgstr "ช่องว่างที่สลับได้"
+
+msgid "Blank"
+msgstr "ช่องว่าง"
+
+msgid "Input width"
+msgstr "ความกว้างของช่องป้อนข้อมูล"
+
+msgid "Orientation"
+msgstr "ทิศทาง"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "ไม่สามารถใช้ได้กับโหมดผลตอบกลับแบบฝึกหัดปัจจุบัน"
+
+msgid "Not available in the learning path creation flow"
+msgstr "ไม่สามารถใช้ได้ในขั้นตอนการสร้างเส้นทางการเรียนรู้"
+
+msgid "Delete question"
+msgstr "ลบคำถาม"
+
+msgid "Could not update exercise questions"
+msgstr "ไม่สามารถอัปเดตคำถามแบบฝึกหัดได้"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "ไม่สามารถเพิ่มแบบฝึกหัดลงในเส้นทางการเรียนรู้ได้"
+
+msgid "A valid exercise id is required."
+msgstr "ต้องระบุรหัสแบบฝึกหัดที่ถูกต้อง"
+
+msgid "Could not load exercise questions"
+msgstr "ไม่สามารถโหลดคำถามแบบฝึกหัดได้"
+
+msgid "Delete selected attempts"
+msgstr "ลบการทำแบบทดสอบที่เลือก"
+
+msgid "Before date"
+msgstr "ก่อนวันที่"
+
+msgid "Pending corrections"
+msgstr "รอการตรวจสอบ"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "แบบฝึกหัดนี้ถูกล็อกโดยสมุดเกรด การดำเนินการล้างข้อมูลการทำแบบทดสอบถูกปิดใช้งาน"
+
+msgid "No attempts found"
+msgstr "ไม่พบการทำแบบทดสอบ"
+
+msgid "Review"
+msgstr "ตรวจสอบ"
+
+msgid "Print/PDF"
+msgstr "พิมพ์/PDF"
+
+msgid "Could not load exercise report"
+msgstr "ไม่สามารถโหลดรายงานแบบฝึกหัดได้"
+
+msgid "Select at least one attempt"
+msgstr "เลือกอย่างน้อยหนึ่งการทำแบบทดสอบ"
+
+msgid "Delete selected attempts?"
+msgstr "ลบความพยายามที่เลือก?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "ส่งอีเมลผลการตรวจสอบความพยายาม?"
+
+msgid "Could not send emails"
+msgstr "ไม่สามารถส่งอีเมลได้"
+
+msgid "Exercise result emails sent"
+msgstr "ส่งอีเมลผลแบบฝึกหัดแล้ว"
+
+msgid "Skipped"
+msgstr "ข้าม"
+
+msgid "Close attempt?"
+msgstr "ปิดความพยายาม?"
+
+msgid "Attempt closed"
+msgstr "ปิดความพยายามแล้ว"
+
+msgid "Could not close attempt"
+msgstr "ไม่สามารถปิดความพยายามได้"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "ส่งผลความพยายามนี้ทางอีเมลไปยังผู้เรียน?"
+
+msgid "Email sent"
+msgstr "ส่งอีเมลแล้ว"
+
+msgid "Could not send email"
+msgstr "ไม่สามารถส่งอีเมลได้"
+
+msgid "Attempt deleted"
+msgstr "ลบความพยายามแล้ว"
+
+msgid "Could not delete attempt"
+msgstr "ไม่สามารถลบความพยายามได้"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "เลือกไฟล์ CSV ที่มีคอลัมน์ชื่อและคำอธิบาย"
+
+msgid "Manage categories used to classify questions."
+msgstr "จัดการหมวดหมู่ที่ใช้จัดประเภทคำถาม"
+
+msgid "Manage categories used to classify exercises."
+msgstr "จัดการหมวดหมู่ที่ใช้จัดประเภทแบบฝึกหัด"
+
+msgid "Could not load categories"
+msgstr "ไม่สามารถโหลดหมวดหมู่ได้"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "นำเข้าหมวดหมู่แล้ว: %s. แถวที่ข้าม: %s."
+
+msgid "Imported categories: %s."
+msgstr "นำเข้าหมวดหมู่แล้ว: %s."
+
+msgid "Could not import categories"
+msgstr "ไม่สามารถนำเข้าหมวดหมู่ได้"
+
+msgid "Could not save category"
+msgstr "ไม่สามารถบันทึกหมวดหมู่ได้"
+
+msgid "Answer distribution"
+msgstr "การกระจายคำตอบ"
+
+msgid "Configured answers"
+msgstr "คำตอบที่กำหนดค่าไว้"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "การนับคำตอบแบบละเอียดสำหรับคำถามบางประเภทยังไม่พร้อมใช้งานในรายงานที่ย้ายข้อมูล"
+
+msgid "No report by question data found"
+msgstr "ไม่พบข้อมูลรายงานตามคำถาม"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "การนับคำตอบแบบละเอียดสำหรับประเภทคำถามนี้ยังไม่พร้อมใช้งานในรายงานที่ย้ายข้อมูล"
+
+msgid "No answer distribution found"
+msgstr "ไม่พบการกระจายคำตอบ"
+
+msgid "Could not load report by question"
+msgstr "ไม่สามารถโหลดรายงานตามคำถามได้"
+
+msgid "Question settings"
+msgstr "การตั้งค่าคำถาม"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "เว้นว่างหรือใส่ 0 หากไม่จำกัดเวลา"
+
+msgid "Time limit in seconds"
+msgstr "จำกัดเวลาเป็นวินาที"
+
+msgid "Attached questions"
+msgstr "คำถามที่แนบ"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "แสดงเฉพาะคำถามที่แนบกับคำถามสื่อนี้ในแบบฝึกหัดปัจจุบัน"
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "ไม่มีคำถามที่แนบกับคำถามสื่อนี้ในแบบฝึกหัดปัจจุบัน"
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "อัปโหลดเทมเพลตเอกสาร Office ที่ผู้เรียนจะแก้ไขด้วย OnlyOffice"
+
+msgid "Replace Office document"
+msgstr "แทนที่เอกสาร Office"
+
+msgid "Current Office document"
+msgstr "เอกสาร Office ปัจจุบัน"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "คำถามนี้จะถูกตรวจสอบด้วยตนเองหลังจากผู้เรียนส่งเอกสารที่แก้ไขแล้ว"
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "คะแนนรวมคำนวณจากผลรวมของคะแนนจุดร้อน"
+
+msgid "Global score"
+msgstr "คะแนนรวม"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "เลือกแถวจุดร้อน เลือกรูปร่าง แล้ววาดบนภาพ สำหรับรูปหลายเหลี่ยม ให้คลิกแต่ละจุดแล้วปิดรูปหลายเหลี่ยม หรือดับเบิลคลิกเพื่อปิด"
+
+msgid "Finish polygon"
+msgstr "ปิดรูปหลายเหลี่ยม"
+
+msgid "Calculated answer"
+msgstr "คำตอบที่คำนวณ"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "พิมพ์ข้อความด้านล่างและใช้เครื่องหมายวงเล็บเหลี่ยม [...] เพื่อกำหนดช่องว่างอย่างน้อยหนึ่งช่อง"
+
+msgid "Lowest value"
+msgstr "ค่าต่ำสุด"
+
+msgid "Highest value"
+msgstr "ค่าสูงสุด"
+
+msgid "Fill in blanks"
+msgstr "เติมช่องว่าง"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "ใช้เครื่องหมายที่เลือกเพื่อกำหนดช่องว่าง ตัวอย่าง: เมืองหลวงของเปรูคือ [ลิมา]"
+
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "หากต้องการเปลี่ยนช่องว่างให้เป็นเมนูแบบเลื่อนลง ให้แยกตัวเลือกด้วย | เพียงตัวเดียว โดยตัวเลือกแรกเป็นคำตอบที่ถูกต้อง ตัวอย่าง: The capital of Peru is [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "หากต้องการอนุญาตคำตอบที่ถูกต้องหลายข้อ ให้แยกด้วย || ตัวอย่าง: 1||one||uno."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "ป้อนตัวเลือกแบบดรอปดาวน์ คำตอบละบรรทัด แล้วทำเครื่องหมายคำตอบที่คาดหวังด้านล่างเหมือนเครื่องมือเดิม"
+
+msgid "Refresh answers"
+msgstr "รีเฟรชคำตอบ"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "คำถามแบบดรอปดาวน์ผสมนี้ใช้คะแนนรวมเดียว เหมือนแบบเดิม"
+
+msgid "Please enter at least two dropdown options."
+msgstr "กรุณากรอกตัวเลือกดรอปดาวน์อย่างน้อยสองตัวเลือก"
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "สร้างตัวเลือกปลายทางก่อน แล้วเชื่อมโยงแต่ละรายการกับตัวเลือกที่ถูกต้อง"
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "คำถามแบบจับคู่ผสมนี้ใช้คะแนนรวมเดียว เหมือนแบบเดิม"
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "สร้างขั้นตอนและเลือกตำแหน่งที่คาดหวังสำหรับแต่ละขั้นตอน เหมือนแบบลากได้เดิม"
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "ผู้เรียนจะเลือกจริงหรือเท็จ แล้วระบุระดับความมั่นใจระหว่างทำแบบทดสอบ ตัวแก้ไขจะบันทึกคะแนนถูก/ผิดและระดับความมั่นใจเหมือนแบบเดิม"
+
+msgid "Hotspot combination"
+msgstr "จุดร้อนผสม"
+
+msgid "Add delineation"
+msgstr "เพิ่มการกำหนดขอบเขต"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "คำถามเอกสาร Office นี้ไม่มีตัวเลือกคำตอบ คะแนนจะถูกกำหนดระหว่างตรวจสอบ/ดูผลลัพธ์"
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "คำถามอัปโหลดนี้ไม่มีตัวเลือกคำตอบ คะแนนจะถูกกำหนดระหว่างตรวจสอบ/ดูผลลัพธ์"
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "คำถามการแสดงออกด้วยวาจานี้ไม่มีตัวเลือกคำตอบ คะแนนจะถูกกำหนดระหว่างตรวจสอบ/ดูผลลัพธ์"
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "คำถามเปิดนี้ไม่มีตัวเลือกคำตอบ คะแนนจะถูกกำหนดระหว่างตรวจสอบ/ดูผลลัพธ์"
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "เพิ่มข้อความอ่านพร้อมการตั้งค่าความเร็วการเลื่อน"
+
+msgid "Add content, media or reading context without adding score."
+msgstr "เพิ่มเนื้อหา สื่อ หรือบริบทการอ่านโดยไม่เพิ่มคะแนน"
+
+msgid "Insert a page break without adding score."
+msgstr "แทรกตัวแบ่งหน้าโดยไม่เพิ่มคะแนน"
+
+msgid "Could not save question"
+msgstr "ไม่สามารถบันทึกคำถามได้"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "อนุญาตเฉพาะเอกสาร DOC, DOCX, XLS หรือ XLSX เท่านั้น"
+
+msgid "Please select an Office document."
+msgstr "กรุณาเลือกเอกสาร Office"
+
+msgid "Please draw at least one hotspot."
+msgstr "กรุณาวาดจุดร้อนอย่างน้อยหนึ่งจุด"
+
+msgid "Please draw at least one delineation."
+msgstr "กรุณาวาดการกำหนดขอบเขตอย่างน้อยหนึ่งรายการ"
+
+msgid "The fill in blanks text is required."
+msgstr "ต้องมีข้อความเติมคำในช่องว่าง"
+
+msgid "At least one expected answer is required."
+msgstr "ต้องมีคำตอบที่คาดหวังอย่างน้อยหนึ่งคำตอบ"
+
+msgid "At least two draggable items are required."
+msgstr "ต้องมีรายการที่ลากได้อย่างน้อยสองรายการ"
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "แต่ละรายการที่ลากได้ต้องเชื่อมโยงกับตำแหน่งเป้าหมายที่ถูกต้อง"
+
+msgid "At least two matching options are required."
+msgstr "ต้องมีตัวเลือกการจับคู่อย่างน้อยสองตัวเลือก"
+
+msgid "At least two matching pairs are required."
+msgstr "ต้องมีคู่การจับคู่อย่างน้อยสองคู่"
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "แต่ละคู่การจับคู่ต้องเชื่อมโยงกับตัวเลือกที่ถูกต้อง"
+
+msgid "At least two answers are required."
+msgstr "ต้องมีคำตอบอย่างน้อยสองคำตอบ"
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "แต่ละคำตอบจริง/เท็จต้องเลือกจริงหรือเท็จ"
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "คำถามคำตอบเดียวต้องมีคำตอบที่ถูกต้องเพียงหนึ่งคำตอบ"
+
+msgid "At least one correct answer is required."
+msgstr "ต้องมีคำตอบที่ถูกต้องอย่างน้อยหนึ่งคำตอบ"
+
+msgid "Could not load question"
+msgstr "ไม่สามารถโหลดคำถามได้"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "เลือกหลักสูตรและส่งออกรายงานผลแบบฝึกหัดทั่วโลกเป็น CSV"
+
+msgid "Back to reports catalog"
+msgstr "กลับไปที่แคตตาล็อกรายงาน"
+
+msgid "Could not load exercise global report"
+msgstr "ไม่สามารถโหลดรายงานทั่วโลกของแบบฝึกหัดได้"
+
+msgid "Imported questions"
+msgstr "คำถามที่นำเข้า"
+
+msgid "Aiken content"
+msgstr "เนื้อหา Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "ไม่สามารถโหลดตัวสร้าง AI Aiken ได้"
+
+msgid "Could not generate Aiken content"
+msgstr "ไม่สามารถสร้างเนื้อหา Aiken ได้"
+
+msgid "Could not import generated Aiken content"
+msgstr "ไม่สามารถนำเข้าเนื้อหา Aiken ที่สร้างขึ้นได้"
+
+msgid "Back to my courses"
+msgstr "กลับไปที่หลักสูตรของฉัน"
+
+msgid "Open report"
+msgstr "เปิดรายงาน"
+
+msgid "Questions with no automatic correction"
+msgstr "คำถามที่ไม่มีการตรวจสอบอัตโนมัติ"
+
+msgid "Could not load pending attempts"
+msgstr "ไม่สามารถโหลดความพยายามที่รอดำเนินการได้"
+
+msgid "Skipped questions"
+msgstr "คำถามที่ข้าม"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "การนำเข้า Aiken จะกระจายน้ำหนักรวมนี้ไปยังคำถามที่นำเข้า เว้นแต่คำถามจะกำหนด SCORE"
+
+msgid "Import warnings"
+msgstr "คำเตือนการนำเข้า"
+
+msgid "Could not import questions"
+msgstr "ไม่สามารถนำเข้าคำถามได้"
+
+msgid "No question statistics found"
+msgstr "ไม่พบสถิติคำถาม"
+
+msgid "Could not load question statistics"
+msgstr "ไม่สามารถโหลดสถิติคำถามได้"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "คุณยังสามารถเชื่อมต่อไคลเอนต์ MCP โดยตรงได้โดยชี้ไปที่จุดสิ้นสุดต่อไปนี้:"
+
+msgid "No applications are currently connected to your account."
+msgstr "ไม่มีแอปพลิเคชันที่เชื่อมต่อกับบัญชีของคุณในขณะนี้"
+
+msgid "Connected on"
+msgstr "เชื่อมต่อเมื่อ"
+
+msgid "Last used"
+msgstr "ใช้ล่าสุด"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s จะไม่สามารถเข้าถึงบัญชี Chamilo ของคุณได้อีกต่อไป ดำเนินการต่อ?"
+
+msgid "Application revoked"
+msgstr "เพิกถอนแอปพลิเคชันแล้ว"
+
+msgid "Copied to clipboard"
+msgstr "คัดลอกไปยังคลิปบอร์ดแล้ว"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "ไม่สามารถคัดลอกจุดสิ้นสุด MCP ได้"
+
+msgid "MCP endpoint"
+msgstr "จุดสิ้นสุด MCP"
+
+msgid "API key"
+msgstr "คีย์ API"
+
+msgid "Last used at"
+msgstr "ใช้ล่าสุดเมื่อ"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "คัดลอกคีย์นี้ทันที มันจะไม่แสดงอีก"
+
+msgid "Rotate API key"
+msgstr "หมุนเวียนคีย์ API"
+
+msgid "Revoke API key"
+msgstr "เพิกถอนคีย์ API"
+
+msgid "Remote MCP connection"
+msgstr "การเชื่อมต่อ MCP ระยะไกล"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "กำหนดค่าไคลเอนต์ MCP ของคุณด้วยค่าต่อไปนี้:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "คีย์ปัจจุบันจะหยุดทำงานทันที ดำเนินการต่อ?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "จะมีการสร้างคีย์ API MCP ส่วนบุคคลใหม่ ดำเนินการต่อ?"
+
+msgid "MCP API key generated"
+msgstr "สร้างคีย์ API MCP แล้ว"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "ไคลเอนต์ MCP ที่เชื่อมต่อโดยใช้คีย์นี้จะหยุดทำงานทันที ดำเนินการต่อ?"
+
+msgid "MCP API key revoked"
+msgstr "เพิกถอนคีย์ API MCP แล้ว"
+
+msgid "Could not copy the API key"
+msgstr "ไม่สามารถคัดลอกคีย์ API ได้"
+
+msgid "Project"
+msgstr "โครงการ"
+
+msgid "Close old tickets"
+msgstr "ปิดตั๋วเก่า"
+
+msgid "Close tickets older than seven days?"
+msgstr "ปิดตั๋วที่เก่ากว่าเจ็ดวัน?"
+
+msgid "Assignment history"
+msgstr "ประวัติการมอบหมาย"
+
+msgid "Translate with AI"
+msgstr "แปลด้วย AI"
+
+msgid "Target language"
+msgstr "ภาษาปลายทาง"
+
+msgid "Please select a provider"
+msgstr "กรุณาเลือกผู้ให้บริการ"
+
+msgid "Generate translation"
+msgstr "สร้างการแปล"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "ส่วนข้อกำหนดและเงื่อนไขอย่างน้อยหนึ่งส่วนต้องมีข้อความ"
+
+msgid "No active target languages are available."
+msgstr "ไม่มีภาษาปลายทางที่ใช้งานอยู่"
+
+msgid "Tutor"
+msgstr "ผู้สอน"
+
+msgid "Access dates"
+msgstr "วันที่เข้าถึง"
+
+msgid "Coach access dates"
+msgstr "วันที่เข้าถึงของโค้ช"
+
+msgid "No sessions found"
+msgstr "ไม่พบเซสชัน"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "เลือกหลักสูตรที่ผู้ใช้นี้ต้องไม่สามารถเข้าถึงได้ในเซสชันนี้"
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "ผู้ใช้ไม่สามารถถูกบล็อกจากทุกหลักสูตรในเซสชันได้ ให้ยกเลิกการสมัครผู้ใช้แทน"
+
+msgid "Users subscribed to this session"
+msgstr "ผู้ใช้ที่สมัครเซสชันนี้"
+
+msgid "No available users found"
+msgstr "ไม่พบผู้ใช้ที่พร้อมใช้งาน"
+
+msgid "Subscribe this user to the session?"
+msgstr "สมัครผู้ใช้นี้เข้าร่วมเซสชัน?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "สมัครผู้ใช้ที่เลือกเข้าร่วมเซสชัน?"
+
+msgid "General tutor planning"
+msgstr "การวางแผนผู้สอนทั่วไป"
+
+msgid "User is already registered by another tutor."
+msgstr "ผู้ใช้ลงทะเบียนโดยผู้สอนคนอื่นแล้ว"
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "คุณได้รับสำเนาเพราะคุณเป็นผู้สอนหลักสูตร"
+
+msgid "General tutor"
+msgstr "ผู้สอนทั่วไป"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "พิจารณาหลักสูตร ผู้สอน ฝ่ายช่วยเหลือด้านเทคนิค ครู และ/หรือสื่อที่มีอยู่"
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "ผู้สอนที่สมัครเป็นครูในหลักสูตร %s"
+
+msgid "Tutor name"
+msgstr "ชื่อผู้สอน"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "ผู้สอนเซสชันเป็นผู้ประสานงานสำหรับเซสชันและสามารถทำหน้าที่เป็นผู้สอนสำหรับแต่ละหลักสูตรในเซสชันได้ เฉพาะผู้ใช้ที่มีบทบาทครูเท่านั้นที่สามารถเลือกเป็นผู้สอนเซสชันได้"
+
+msgid "Access start date for tutors"
+msgstr "วันที่เริ่มต้นการเข้าถึงสำหรับผู้สอน"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "วันที่เซสชันเปิดให้ผู้สอนเข้าถึง เพื่อให้เตรียมการก่อนนักเรียนเชื่อมต่อ"
+
+msgid "Access end date for tutors"
+msgstr "วันที่สิ้นสุดการเข้าถึงสำหรับผู้สอน"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "วันที่เซสชันปิดสำหรับผู้สอน ระยะเวลาที่เพิ่มจะช่วยให้ส่งออกข้อมูลการติดตามที่เกี่ยวข้องทั้งหมด"
+
+msgid "Tutor and student"
+msgstr "ผู้สอนและนักเรียน"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "รายงานนี้แสดงการกระจายรายสัปดาห์ของเซสชันต่อผู้สอนทั่วไปในช่วงวันที่ที่เลือก"
+
+msgid "User is general tutor in some sessions"
+msgstr "ผู้ใช้เป็นผู้สอนทั่วไปในบางเซสชัน"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "ครูจะถูกเพิ่มเป็นผู้สอนในทุกเซสชันของหลักสูตร"
+
+msgid "Delete failed: invalid question id."
+msgstr "ลบไม่สำเร็จ: รหัสคำถามไม่ถูกต้อง"
+
+msgid "Average number of sessions per general session tutor"
+msgstr "จำนวนเซสชันเฉลี่ยต่อผู้สอนเซสชันทั่วไป"
+
+msgid "No room"
+msgstr "ไม่มีห้อง"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "นำเข้าครูหลักสูตรเป็นผู้สอนหลักสูตรในเซสชัน"
+
+msgid "Clean and update course tutors"
+msgstr "ล้างและอัปเดตผู้สอนหลักสูตร"
+
+msgid "Add me as tutor"
+msgstr "เพิ่มฉันเป็นผู้สอน"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "ไม่สามารถเพิ่มแบบสำรวจไปยังเส้นทางการเรียนรู้"
+
+msgid "Access dates for tutors"
+msgstr "วันที่เข้าถึงสำหรับผู้สอน"
+
+msgid "Tutor and group member"
+msgstr "ผู้สอนและสมาชิกกลุ่ม"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "คุณถึงขีดจำกัดโทเค็น AI รายวันแล้ว โปรดลองอีกครั้งในวันพรุ่งนี้"
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "คุณถึงขีดจำกัดโทเค็น AI รายเดือนแล้ว โปรดลองอีกครั้งในเดือนหน้า"
+
+msgid "This course code already exists, please choose another code."
+msgstr "รหัสหลักสูตรนี้มีอยู่แล้ว โปรดเลือกรหัสอื่น"
+
+msgid "This course title already exists, please choose another title."
+msgstr "ชื่อหลักสูตรนี้มีอยู่แล้ว โปรดเลือกชื่ออื่น"
+
+msgid "This tool visibility cannot be changed"
+msgstr "ไม่สามารถเปลี่ยนการมองเห็นเครื่องมือนี้ได้"
+
+msgid "Invalid visibility"
+msgstr "การมองเห็นไม่ถูกต้อง"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "คุณได้รับสำเนาเพราะคุณเป็นหนึ่งในผู้สอนหลักสูตร"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "คุณได้รับสำเนาเพราะคุณเป็นผู้สอนหลักสูตร"
+
+msgid "Manual completion"
+msgstr "การเสร็จสิ้นด้วยตนเอง"
+
+msgid "Send to tutors"
+msgstr "ส่งไปยังผู้สอน"
+
+msgid "Lab title"
+msgstr "ชื่อห้องปฏิบัติการ"
+
+msgid "Lab week"
+msgstr "สัปดาห์ห้องปฏิบัติการ"
+
+msgid "Final exam access rule"
+msgstr "กฎการเข้าถึงการสอบปลายภาค"
+
+msgid "Course completion rule"
+msgstr "กฎการเสร็จสิ้นหลักสูตร"
+
+msgid "You have been invited to join a course"
+msgstr "คุณได้รับเชิญให้เข้าร่วมหลักสูตร"
+
+msgid "No user has been found"
+msgstr "ไม่พบผู้ใช้"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "ไม่สามารถสมัครผู้ใช้ที่เลือกในบริบทนี้ได้"
+
+msgid "No change has been made"
+msgstr "ไม่มีการเปลี่ยนแปลงใด ๆ"
+
+msgid "Back to group list"
+msgstr "กลับไปยังรายชื่อกลุ่ม"
+
+msgid "Remove class link"
+msgstr "ลบลิงก์ชั้นเรียน"
+
+msgid "Group settings"
+msgstr "การตั้งค่ากลุ่ม"
+
+msgid "Self-registration allowed"
+msgstr "อนุญาตให้ลงทะเบียนด้วยตนเอง"
+
+msgid "Self-unregistration allowed"
+msgstr "อนุญาตให้ยกเลิกการลงทะเบียนด้วยตนเอง"
+
+msgid "This group is linked to the class"
+msgstr "กลุ่มนี้เชื่อมโยงกับชั้นเรียน"
+
+msgid "Create one or more empty course groups"
+msgstr "สร้างกลุ่มหลักสูตรว่างหนึ่งกลุ่มหรือมากกว่า"
+
+msgid "Number of places"
+msgstr "จำนวนที่นั่ง"
+
+msgid "Base group"
+msgstr "กลุ่มฐาน"
+
+msgid "Share"
+msgstr "แชร์"
+
+msgid "Collaboration"
+msgstr "การทำงานร่วมกัน"
+
+msgid "The group title is required."
+msgstr "ต้องระบุชื่อกลุ่ม"
+
+msgid "Back to group area"
+msgstr "กลับไปยังพื้นที่กลุ่ม"
+
+msgid "Members are managed by the linked class"
+msgstr "สมาชิกถูกจัดการโดยชั้นเรียนที่เชื่อมโยง"
+
+msgid "%s groups selected"
+msgstr "เลือกกลุ่ม %s กลุ่ม"
+
+msgid "Fill selected groups"
+msgstr "เติมกลุ่มที่เลือก"
+
+msgid "Empty selected groups"
+msgstr "ล้างกลุ่มที่เลือก"
+
+msgid "Fill group"
+msgstr "เติมกลุ่ม"
+
+msgid "Empty group"
+msgstr "ล้างกลุ่ม"
+
+msgid "Groups per user"
+msgstr "กลุ่มต่อผู้ใช้"
+
+msgid "No tutors"
+msgstr "ไม่มีผู้สอน"
+
+msgid "No users"
+msgstr "ไม่มีผู้ใช้"
+
+msgid "Calculation mode"
+msgstr "โหมดการคำนวณ"
+
+msgid "Weighted average"
+msgstr "ค่าเฉลี่ยถ่วงน้ำหนัก"
+
+msgid "Points sum"
+msgstr "ผลรวมคะแนน"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "ค่าเฉลี่ยถ่วงน้ำหนักจะปรับตามผลรวมของน้ำหนัก; ผลรวมคะแนนถือว่าน้ำหนักแต่ละตัวเป็นคะแนนสูงสุดและนำมารวมกันโดยไม่ปรับค่า"
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "น้ำหนักของแต่ละรายการถือเป็นคะแนนสูงสุด; เกรดคือผลรวมของคะแนน ไม่ได้ปรับค่า"
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "เกรดคือค่าเฉลี่ยถ่วงน้ำหนักของรายการ ปรับตามผลรวมของน้ำหนัก"
+
+msgid "Forum participation"
+msgstr "การมีส่วนร่วมในฟอรัม"
+
+msgid "Forum thread"
+msgstr "กระทู้ฟอรัม"
+
+msgid "Points for one message"
+msgstr "คะแนนต่อข้อความหนึ่งข้อความ"
+
+msgid "Points for two or more messages"
+msgstr "คะแนนต่อข้อความตั้งแต่สองข้อความขึ้นไป"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "คะแนนที่มอบให้เมื่อนักเรียนโพสต์ข้อความเพียงข้อความเดียวในกระทู้"
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "คะแนนที่มอบให้เมื่อนักเรียนโพสต์ข้อความตั้งแต่สองข้อความขึ้นไปในกระทู้"
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "ไม่บังคับ หากเว้นว่างไว้ ข้อความหนึ่งข้อความหรือมากกว่าจะได้รับคะแนนสำหรับข้อความหนึ่งข้อความ"
+
+msgid "Current password is required to change your password."
+msgstr "ต้องใช้รหัสผ่านปัจจุบันเพื่อเปลี่ยนรหัสผ่านของคุณ"
+
+msgid "The 2FA code is required."
+msgstr "ต้องใช้รหัส 2FA"
+
+msgid "Invalid 2FA configuration."
+msgstr "การกำหนดค่า 2FA ไม่ถูกต้อง"
+
+msgid "The 2FA code is invalid or expired."
+msgstr "รหัส 2FA ไม่ถูกต้องหรือหมดอายุ"
+
+msgid "Database load"
+msgstr "โหลดฐานข้อมูล"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "เมตริกโหลดเซิร์ฟเวอร์ MySQL และ MariaDB แบบเรียลไทม์"
+
+msgid "Click to show database server load metrics"
+msgstr "คลิกเพื่อแสดงเมตริกโหลดเซิร์ฟเวอร์ฐานข้อมูล"
+
+msgid "Threads connected"
+msgstr "เธรดที่เชื่อมต่อ"
+
+msgid "Temporary tables on disk"
+msgstr "ตารางชั่วคราวบนดิสก์"
+
+msgid "Privilege scope"
+msgstr "ขอบเขตสิทธิ์"
+
+msgid "Not measurable with the current database user"
+msgstr "ไม่สามารถวัดได้ด้วยผู้ใช้ฐานข้อมูลปัจจุบัน"
+
+msgid "Uptime"
+msgstr "เวลาทำงาน"
+
+msgid "Queries per second"
+msgstr "คำค้นหาต่อวินาที"
+
+msgid "Slow queries"
+msgstr "คำค้นหาช้า"
+
+msgid "Slow query time limit"
+msgstr "ขีดจำกัดเวลาคำค้นหาช้า"
+
+msgid "Slow query log"
+msgstr "บันทึกคำค้นหาช้า"
+
+msgid "Slow queries per second"
+msgstr "คำค้นหาช้าต่อวินาที"
+
+msgid "Threads running"
+msgstr "เธรดที่กำลังทำงาน"
+
+msgid "Threads cached"
+msgstr "เธรดที่แคชไว้"
+
+msgid "Table lock waits"
+msgstr "การรอการล็อกตาราง"
+
+msgid "Row lock waits"
+msgstr "การรอการล็อกแถว"
+
+msgid "Aborted connections"
+msgstr "การเชื่อมต่อที่ถูกยกเลิก"
+
+msgid "Opened tables"
+msgstr "ตารางที่เปิดแล้ว"
+
+msgid "Query cache"
+msgstr "แคชคำค้นหา"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "เมตริกโหลดฐานข้อมูลใช้ได้เฉพาะ MySQL และ MariaDB เท่านั้น"
+
+msgid "Inserts"
+msgstr "การแทรกข้อมูล"
+
+msgid "Hit rate"
+msgstr "อัตราสำเร็จ"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "รีเฟรชอัตโนมัติทุก 5 วินาที"
+
+msgid "Web server load"
+msgstr "โหลดเว็บเซิร์ฟเวอร์"
+
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "เมตริกสถานะ Apache, Nginx หรือ FrankenPHP แบบเรียลไทม์"
+
+msgid "Click to show web server load metrics"
+msgstr "คลิกเพื่อแสดงเมตริกโหลดเว็บเซิร์ฟเวอร์"
+
+msgid "Requires a local web server status module"
+msgstr "ต้องใช้โมดูลสถานะเว็บเซิร์ฟเวอร์ภายในเครื่อง"
+
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "โหลดเว็บเซิร์ฟเวอร์อ่านจาก Apache mod_status, Nginx stub_status หรือจุดปลายเมตริก FrankenPHP/Caddy บน localhost เท่านั้น หน้าสถานะต้องอนุญาตคำขอจาก 127.0.0.1 (หรือ ::1)"
+
+msgid "Paths scanned"
+msgstr "เส้นทางที่สแกน"
+
+msgid "Detected"
+msgstr "ตรวจพบ"
+
+msgid "Status path"
+msgstr "เส้นทางสถานะ"
+
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "เมตริกโหลดเว็บเซิร์ฟเวอร์ใช้ได้เฉพาะ Apache, Nginx และ FrankenPHP"
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "ไม่มีเส้นทางสถานะที่สแกนตอบสนองบน localhost"
+
+msgid "Busy workers"
+msgstr "เวิร์กเกอร์ที่ยุ่ง"
+
+msgid "Idle workers"
+msgstr "เวิร์กเกอร์ที่ว่าง"
+
+msgid "Graceful workers"
+msgstr "เวิร์กเกอร์ที่ทำงานอย่างนุ่มนวล"
+
+msgid "Server MPM"
+msgstr "เซิร์ฟเวอร์ MPM"
+
+msgid "Requests per second (live)"
+msgstr "คำขอต่อวินาที (เรียลไทม์)"
+
+msgid "Requests per second (since start)"
+msgstr "คำขอต่อวินาที (ตั้งแต่เริ่ม)"
+
+msgid "Bytes per second (live)"
+msgstr "ไบต์ต่อวินาที (เรียลไทม์)"
+
+msgid "Bytes per second (since start)"
+msgstr "ไบต์ต่อวินาที (ตั้งแต่เริ่ม)"
+
+msgid "Bytes per request"
+msgstr "ไบต์ต่อคำขอ"
+
+msgid "Total accesses"
+msgstr "การเข้าถึงทั้งหมด"
+
+msgid "Total traffic"
+msgstr "การรับส่งข้อมูลทั้งหมด"
+
+msgid "CPU load"
+msgstr "โหลด CPU"
+
+msgid "Load average (1 min)"
+msgstr "ค่าเฉลี่ยโหลด (1 นาที)"
+
+msgid "Load average (5 min)"
+msgstr "ค่าเฉลี่ยโหลด (5 นาที)"
+
+msgid "Load average (15 min)"
+msgstr "ค่าเฉลี่ยโหลด (15 นาที)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard กำลังส่ง"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard กำลังอ่าน"
+
+msgid "Scoreboard keepalive"
+msgstr "คงการเชื่อมต่อกระดานคะแนน"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard กำลังรอ"
+
+msgid "Scoreboard open slots"
+msgstr "Scoreboard ช่องว่าง"
+
+msgid "Active connections"
+msgstr "การเชื่อมต่อที่ใช้งานอยู่"
+
+msgid "Reading"
+msgstr "กำลังอ่าน"
+
+msgid "Writing"
+msgstr "กำลังเขียน"
+
+msgid "Total requests"
+msgstr "คำขอทั้งหมด"
+
+msgid "Accepts"
+msgstr "ยอมรับ"
+
+msgid "Handled"
+msgstr "จัดการแล้ว"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: เปิด mod_status (ExtendedStatus On) และอนุญาต localhost ไปที่ /server-status Nginx: เปิด stub_status ที่ตำแหน่งเฉพาะ localhost เช่น /nginx_status หรือ /stub_status FrankenPHP: เพิ่มตัวเลือกส่วนกลาง \"metrics\" ใน Caddyfile ซึ่งเปิดเผยเมตริก Prometheus บน Caddy admin API (127.0.0.1:2019/metrics) ตามค่าเริ่มต้น"
+
+msgid "Total threads"
+msgstr "เธรดทั้งหมด"
+
+msgid "Busy threads"
+msgstr "เธรดที่ใช้งานอยู่"
+
+msgid "Queue depth"
+msgstr "ความลึกคิว"
+
+msgid "Worker"
+msgstr "เวิร์กเกอร์"
+
+msgid "Average request time"
+msgstr "เวลาคำขอเฉลี่ย"
+
+msgid "Grade percentage distribution"
+msgstr "การกระจายเปอร์เซ็นต์เกรด"
+
+msgid "Top learners"
+msgstr "ผู้เรียนยอดเยี่ยม"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "ความคืบหน้านี้รวมความคืบหน้าของเส้นทางการเรียนรู้และผลเฉลี่ยแบบฝึกหัดของผู้เรียน"
+
+msgid "Additional profile fields"
+msgstr "ช่องโปรไฟล์เพิ่มเติม"
+
+msgid "Visible columns"
+msgstr "คอลัมน์ที่แสดง"
+
+msgid "Learning path completion"
+msgstr "การเสร็จสิ้นเส้นทางการเรียนรู้"
+
+msgid "Number of certificates"
+msgstr "จำนวนใบรับรอง"
+
+msgid "Could not export the report"
+msgstr "ไม่สามารถส่งออกรายงานได้"
+
+msgid "Second learner"
+msgstr "ผู้เรียนคนที่สอง"
+
+msgid "Results by learner"
+msgstr "ผลลัพธ์ตามผู้เรียน"
+
+msgid "Use filters to narrow down questions."
+msgstr "ใช้ตัวกรองเพื่อจำกัดคำถาม"
+
+msgid "Try adjusting your filters and search again."
+msgstr "ลองปรับตัวกรองและค้นหาอีกครั้ง"
+
+msgid "Results per page"
+msgstr "ผลลัพธ์ต่อหน้า"
+
+msgid "No answers"
+msgstr "ไม่มีคำตอบ"
+
+msgid "Tests using this question"
+msgstr "แบบทดสอบที่ใช้คำถามนี้"
+
+msgid "Delete failed"
+msgstr "การลบล้มเหลว"
+
+msgid "PHP cache"
+msgstr "แคช PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "การวินิจฉัย OPcache และ APCu แบบเรียลไทม์"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "คลิกเพื่อแสดงการวินิจฉัย OPcache และ APCu"
+
+msgid "Memory used"
+msgstr "หน่วยความจำที่ใช้"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache ติดตั้งแล้วแต่ไม่ได้เปิดใช้งาน"
+
+msgid "OPcache extension is not available on this server."
+msgstr "ส่วนขยาย OPcache ไม่พร้อมใช้งานบนเซิร์ฟเวอร์นี้"
+
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache รายงานสถิติหน่วยความจำไม่สอดคล้องกัน (ปัญหาที่ทราบในรันไทม์ PHP แบบเธรดบางตัว เช่น FrankenPHP)"
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu ติดตั้งแล้วแต่ยังไม่ได้เปิดใช้งาน"
+
+msgid "APCu extension is not available on this server."
+msgstr "ส่วนขยาย APCu ไม่พร้อมใช้งานบนเซิร์ฟเวอร์นี้"
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu รายงานสถิติหน่วยความจำไม่สอดคล้องกัน (ปัญหาที่ทราบในรันไทม์ PHP แบบเธรดบางตัว)"
+
+msgid "Constant"
+msgstr "ค่าคงที่"
+
+msgid "Space used on disk (MB)"
+msgstr "พื้นที่ที่ใช้บนดิสก์ (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "กำหนดพื้นที่สูงสุดของหลักสูตร (MB)"
+
+msgid "Memory free"
+msgstr "หน่วยความจำว่าง"
+
+msgid "Memory wasted"
+msgstr "หน่วยความจำสูญเปล่า"
+
+msgid "Memory used %"
+msgstr "หน่วยความจำที่ใช้ %"
+
+msgid "Cached scripts"
+msgstr "สคริปต์ที่แคช"
+
+msgid "Cached keys"
+msgstr "คีย์ที่แคช"
+
+msgid "Misses"
+msgstr "พลาด"
+
+msgid "Cache full"
+msgstr "แคชเต็ม"
+
+msgid "OOM restarts"
+msgstr "รีสตาร์ท OOM"
+
+msgid "Hash restarts"
+msgstr "รีสตาร์ทแฮช"
+
+msgid "Manual restarts"
+msgstr "รีสตาร์ทด้วยตนเอง"
+
+msgid "Interned strings used"
+msgstr "สตริงที่เก็บภายในที่ใช้แล้ว"
+
+msgid "Interned strings free"
+msgstr "สตริงที่เก็บภายในที่ว่าง"
+
+msgid "Interned strings count"
+msgstr "จำนวนสตริงที่เก็บภายใน"
+
+msgid "Memory available"
+msgstr "หน่วยความจำที่ใช้ได้"
+
+msgid "Memory size"
+msgstr "ขนาดหน่วยความจำ"
+
+msgid "Entries"
+msgstr "รายการ"
+
+msgid "Slots"
+msgstr "ช่อง"
+
+msgid "Expunges"
+msgstr "การลบออก"
+
+msgid "Cache start time"
+msgstr "เวลาเริ่มแคช"
+
+msgid "Time zone"
+msgstr "เขตเวลา"
+
+msgid "Not registered"
+msgstr "ยังไม่ได้ลงทะเบียน"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "กรองและแสดงรายการใบรับรองของผู้เรียนตามเซสชัน รายวิชา วันที่ หรือผู้เรียน แล้วส่งออกเมื่อต้องการ"
+
+msgid "Filter by session and course"
+msgstr "กรองตามเซสชันและรายวิชา"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "เลือกเซสชัน รายวิชา และวันที่ (ไม่บังคับ) เพื่อแสดงรายการใบรับรองที่สร้างแล้ว"
+
+msgid "Filter by learner"
+msgstr "กรองตามผู้เรียน"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "ค้นหาใบรับรองของผู้เรียนคนหนึ่งในทุกเซสชันและรายวิชา"
+
+msgid "Certificates found"
+msgstr "พบใบรับรอง"
+
+msgid "Open certificate"
+msgstr "เปิดใบรับรอง"
+
+msgid "Certificate file not available"
+msgstr "ไฟล์ใบรับรองไม่พร้อมใช้งาน"
+
+msgid "Export to CSV"
+msgstr "ส่งออกเป็น CSV"
+
+msgid "Acquired skills"
+msgstr "ทักษะที่ได้มา"
+
+msgid "No acquired skill"
+msgstr "ไม่มีทักษะที่ได้มา"
+
+msgid "Absences"
+msgstr "การขาดเรียน"
+
+msgid "No courses"
+msgstr "ไม่มีรายวิชา"
+
+msgid "No session matched"
+msgstr "ไม่พบเซสชันที่ตรงกัน"
+
+msgid "Unable to load the report"
+msgstr "ไม่สามารถโหลดรายงานได้"
+
+msgid "Please select a profile"
+msgstr "โปรดเลือกโปรไฟล์"
+
+msgid "Please select a session"
+msgstr "โปรดเลือกเซสชัน"
+
+msgid "Please select a user"
+msgstr "โปรดเลือกผู้ใช้"
+
+msgid "Unable to export the report"
+msgstr "ไม่สามารถส่งออกรายงานได้"
+
+msgid "Accepted on web"
+msgstr "ยอมรับบนเว็บ"
+
+msgid "Accepted by e-mail"
+msgstr "ยอมรับทางอีเมล"
+
+msgid "The course title is required"
+msgstr "ต้องระบุชื่อรายวิชา"
+
+msgid "Unexpected error"
+msgstr "เกิดข้อผิดพลาดที่ไม่คาดคิด"
+
+msgid "Separate tags with commas"
+msgstr "คั่นแท็กด้วยเครื่องหมายจุลภาค"
+
+msgid "Open link"
+msgstr "เปิดลิงก์"
+
+msgid "Describe the course picture to generate"
+msgstr "อธิบายภาพหลักสูตรที่จะสร้าง"
+
+msgid "Generate picture"
+msgstr "สร้างภาพ"
+
+msgid "PDF watermark"
+msgstr "ลายน้ำ PDF"
+
+msgid "No watermark image"
+msgstr "ไม่มีภาพลายน้ำ"
+
+msgid "Upload watermark"
+msgstr "อัปโหลดลายน้ำ"
+
+msgid "Delete watermark"
+msgstr "ลบลายน้ำ"
+
+msgid "Course legal agreement file"
+msgstr "ไฟล์ข้อตกลงทางกฎหมายของหลักสูตร"
+
+msgid "Upload agreement file"
+msgstr "อัปโหลดไฟล์ข้อตกลง"
+
+msgid "Download agreement file"
+msgstr "ดาวน์โหลดไฟล์ข้อตกลง"
+
+msgid "Delete agreement file"
+msgstr "ลบไฟล์ข้อตกลง"
+
+msgid "Custom certificate images"
+msgstr "ภาพใบรับรองแบบกำหนดเอง"
+
+msgid "Course picture updated"
+msgstr "อัปเดตภาพหลักสูตรแล้ว"
+
+msgid "The course picture could not be uploaded"
+msgstr "ไม่สามารถอัปโหลดภาพหลักสูตรได้"
+
+msgid "Course picture deleted"
+msgstr "ลบภาพหลักสูตรแล้ว"
+
+msgid "Enter a description for the image"
+msgstr "ป้อนคำอธิบายสำหรับภาพ"
+
+msgid "The image generator returned an empty response"
+msgstr "ตัวสร้างภาพส่งการตอบกลับว่างเปล่า"
+
+msgid "Course picture generated"
+msgstr "สร้างภาพหลักสูตรแล้ว"
+
+msgid "Watermark updated"
+msgstr "อัปเดตลายน้ำแล้ว"
+
+msgid "Watermark deleted"
+msgstr "ลบลายน้ำแล้ว"
+
+msgid "Agreement file updated"
+msgstr "อัปเดตไฟล์ข้อตกลงแล้ว"
+
+msgid "Agreement file deleted"
+msgstr "ลบไฟล์ข้อตกลงแล้ว"
+
+msgid "Certificate image updated"
+msgstr "อัปเดตภาพใบรับรองแล้ว"
+
+msgid "Certificate image deleted"
+msgstr "ลบภาพใบรับรองแล้ว"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "ใช้ตัวแก้ไขภาพก่อนอัปโหลดเพื่อครอบตัด หมุน หรือปรับขนาดภาพหลักสูตร"
+
+msgid "This invitation link is invalid or has expired."
+msgstr "ลิงก์คำเชิญนี้ไม่ถูกต้องหรือหมดอายุแล้ว"
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "คำเชิญนี้ถูกส่งไปยังผู้ใช้รายอื่น โปรดเข้าสู่ระบบด้วยบัญชีที่ได้รับเชิญ"
+
+msgid "The invitation could not be accepted."
+msgstr "ไม่สามารถยอมรับคำเชิญได้"
+
+msgid "You have been subscribed successfully."
+msgstr "คุณสมัครสมาชิกสำเร็จแล้ว"
+
+msgid "This email address cannot be invited."
+msgstr "ไม่สามารถเชิญที่อยู่อีเมลนี้ได้"
+
+msgid "This user is already subscribed to the session."
+msgstr "ผู้ใช้นี้สมัครสมาชิกเซสชันแล้ว"
+
+msgid "This user is already subscribed to the course."
+msgstr "ผู้ใช้นี้สมัครสมาชิกหลักสูตรแล้ว"
+
+msgid "Multi URLs"
+msgstr "หลาย URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "เอนทิตีอย่างผู้ใช้และรายวิชาสามารถใช้งานได้ในมากกว่าหนึ่ง URL พร้อมกัน ดังนั้นผลรวมของค่าด้านล่างจะไม่ตรงกับยอดรวม"
+
+msgid "User directory"
+msgstr "ไดเรกทอรีผู้ใช้"
+
+msgid "Course directory"
+msgstr "ไดเรกทอรีรายวิชา"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "รายละเอียดผู้ใช้"
+
+msgid "Course details"
+msgstr "รายละเอียดรายวิชา"
+
+msgid "View details"
+msgstr "ดูรายละเอียด"
+
+msgid "Average progress"
+msgstr "ความคืบหน้าเฉลี่ย"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "การลงทะเบียนโดยตรงเป็นของรายวิชาทั้งรายวิชา ไม่ใช่ของ URL ใด URL หนึ่ง ดังนั้นตัวเลข 'โดยตรง' เดียวกันจึงถูกแสดงซ้ำด้านล่างสำหรับทุก URL ที่รายวิชานี้เชื่อมโยงอยู่ เซสชันเป็นวิธีที่ตั้งใจไว้ในการแชร์รายวิชาข้าม URL พร้อมตัวชี้วัดที่แตกต่างกันจริงตามแต่ละ URL"
+
+msgid "Logins (all URLs combined)"
+msgstr "การเข้าสู่ระบบ (รวมทุก URL)"
+
+msgid "Unique logins"
+msgstr "การเข้าสู่ระบบที่ไม่ซ้ำ"
+
+msgid "Parent URL"
+msgstr "URL หลัก"
+
+msgid "Logins (your URLs)"
+msgstr "การเข้าสู่ระบบ (URL ของคุณ)"
+
+msgid "The picture could not be uploaded"
+msgstr "ไม่สามารถอัปโหลดรูปภาพได้"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "ประเภทฟิลด์นี้ยังไม่รองรับเต็มที่ — แสดงเฉพาะค่าดิบ"
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "รายวิชานี้ใกล้ถึงขีดจำกัดการลงทะเบียนผู้ใช้แล้ว (%d/%d)"
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "พื้นที่จำกัดตามคุณสมบัติของรายวิชา หากต้องการเพิ่มขีดจำกัด โปรดเลือก"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "การลงทะเบียนผู้ใช้ถูกจำกัดตามคุณสมบัติของรายวิชา หากต้องการเพิ่มขีดจำกัด โปรดเลือก"
+
+msgid "pro plan"
+msgstr "แผนโปร"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "แล้วนำเข้าข้อมูลสำรองของรายวิชานี้ผ่านการบำรุงรักษารายวิชาไปยังรายวิชาแบบชำระเงินใหม่ หรือเปิดตั๋วเพื่อแปลงรายวิชาเป็นรายวิชาโปรเมื่อคุณได้แผนนี้แล้ว"
+
+msgid "Tired of writing questions?"
+msgstr "เบื่อกับการเขียนคำถามหรือไม่?"
+
+msgid "Upgrade your plan"
+msgstr "อัปเกรดแผนของคุณ"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "เป็นแผนโปรเพื่อให้ AI ช่วยสร้างคำถามคุณภาพให้คุณ"
+
+msgid "Student Success AI Coach"
+msgstr "โค้ช AI ความสำเร็จของผู้เรียน"
+
+msgid "No AI text provider is configured."
+msgstr "ยังไม่ได้กำหนดผู้ให้บริการข้อความ AI"
+
+msgid "Additional instructions for the AI coach"
+msgstr "คำแนะนำเพิ่มเติมสำหรับโค้ช AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "ตัวอย่าง: ผู้เรียนคนนี้มีปัญหาในการรักษาสมาธิ แนะนำกิจกรรมที่สั้นลงและตรวจสอบความเข้าใจบ่อยขึ้น"
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "เปิดหน้าต่างนี้ไว้ขณะที่ Chamilo กำลังจัดทำคำแนะนำ"
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "คำแนะนำถูกบันทึกในกล่องข้อความของ Chamilo ของคุณแล้วด้วย"
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "สร้างและบันทึกคำแนะนำสำหรับผู้เรียนคนนี้แล้ว แต่ไม่สามารถสร้างสำเนาในกล่องข้อความได้"
+
+msgid "Student success recommendation"
+msgstr "คำแนะนำความสำเร็จของผู้เรียน"
+
+msgid "Generated"
+msgstr "สร้างเมื่อ"
+
+msgid "Priority actions"
+msgstr "การดำเนินการสำคัญ"
+
+msgid "Evidence"
+msgstr "หลักฐาน"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "ฟีเจอร์นี้จะวิเคราะห์เนื้อหารายวิชาและส่งข้อมูลพฤติกรรมการเรียนรู้ไปยังโมเดล AI ที่กำหนด แม้จะไม่ได้ส่งข้อมูลส่วนบุคคลที่ระบุตัวตนได้โดยตรงไปยังโมเดล AI แต่ข้อมูลบางส่วนอาจให้ข้อมูลที่ระบุตัวตนได้ทางอ้อม หากไม่แน่ใจ โปรดตรวจสอบกับผู้รับผิดชอบด้าน AI ของคุณก่อนใช้ฟีเจอร์นี้"
+
+msgid "Additional activities"
+msgstr "กิจกรรมเพิ่มเติม"
+
+msgid "Rhythm"
+msgstr "จังหวะ"
+
+msgid "Learning methodologies"
+msgstr "วิธีการเรียนรู้"
+
+msgid "Other recommendations"
+msgstr "คำแนะนำอื่น ๆ"
+
+msgid "Analyzing course..."
+msgstr "กำลังวิเคราะห์รายวิชา..."
+
+msgid "Analyzing student's learning..."
+msgstr "กำลังวิเคราะห์การเรียนรู้ของผู้เรียน..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "เมื่อยอมรับคำเชิญนี้ คุณจะเชื่อมโยงกับผู้ใช้ที่ขอในลักษณะที่ทำให้ข้อมูลโปรไฟล์บางส่วนหรือทั้งหมดของคุณสามารถอ่านได้โดยผู้ใช้ที่ขอ โปรดตรวจสอบโปรไฟล์ของคุณกับผู้ใช้ที่คุณไว้วางใจอยู่แล้ว เพื่อไม่ให้แชร์มากเกินไป"
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "ยังไม่ได้เปิดสิทธิ์ใช้ไมโครโฟน โปรดเปิดในเบราว์เซอร์เพื่อบันทึกเสียง"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "เวอร์ชันนี้ของ Chamilo มีรายวิชาหลายภาษาติดตั้งไว้ล่วงหน้าหนึ่งรายวิชา (หรือมากกว่า) คุณสามารถตรวจสอบในรายการรายวิชาและตัดสินใจว่าควรเป็นสาธารณะหรือไม่"
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "ขณะนี้คุณยังไม่มีสิทธิ์เข้าถึง URL ใด ๆ โปรดขอให้ผู้ดูแลระบบให้สิทธิ์เข้าถึง URL ที่คุณสังกัด"
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "หากผู้ให้บริการ AI ที่เลือกไม่ใช่บริการอธิปไตย เนื้อหาเอกสารที่เลือกอาจถูกส่งไปยังบริการภายนอก อย่าดำเนินการต่อกับข้อมูลลับ เว้นแต่ได้รับอนุญาตจากองค์กรของคุณ"
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "คลิก Unify บนบัญชีที่ต้องการคงไว้ ระบบจะรวมบัญชีอื่นทั้งหมดในกลุ่มซ้ำเดียวกันเข้ากับบัญชีนั้น บัญชีที่รวมแล้วจะถูกลบถาวรและหายไปจากรายงานนี้ การดำเนินการนี้ไม่สามารถย้อนกลับได้"
+
+msgid "Permanent deletion"
+msgstr "การลบถาวร"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify จะลบบัญชีที่รวมแล้วอย่างถาวรอยู่แล้ว ใช้รายการผู้ใช้เฉพาะเมื่อต้องการลบบัญชีเพิ่มเติมด้วยตนเอง"
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "คุณกำลังแก้ไขโลโก้สำหรับธีมภาพเริ่มต้น “chamilo” ควรสร้าง/ใช้ธีมภาพที่กำหนดเองเพื่อไม่ให้ทับค่าเริ่มต้น"
+
+msgid "This exercise has no questions."
+msgstr "แบบฝึกหัดนี้ไม่มีคำถาม"
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "ควรแสดงผลตอบรับ/ความคิดเห็นของแต่ละคำถามอย่างไร ตัวเลือกนี้กำหนดวิธีแสดงต่อผู้เรียนขณะทำแบบทดสอบ"
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "แอปพลิเคชันเหล่านี้สามารถเข้าถึง Chamilo ในฐานะคุณ โดยใช้สิทธิ์บัญชีที่มีอยู่เท่านั้น เพิกถอนรายการที่ไม่ได้ใช้หรือไม่รู้จักอีกต่อไป"
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "โปรดอธิบายเหตุผลที่ต้องการถอนความยินยอมทางกฎหมาย เพื่อให้เราดำเนินการคำขอได้อย่างถูกต้อง"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "ใช้คีย์ส่วนตัวนี้เพื่อเชื่อมต่อไคลเอนต์ MCP ระยะไกลกับ Chamilo ด้วยบัญชีและสิทธิ์ของคุณเอง"
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "คีย์ทั้งหมดจะแสดงเพียงครั้งเดียว เก็บไว้อย่างปลอดภัย การสร้างคีย์ใหม่จะทำให้คีย์ก่อนหน้าใช้ไม่ได้ทันที"
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "คีย์ยืนยันตัวตนไคลเอนต์ในฐานะบัญชี Chamilo ของคุณ โดยไม่ให้สิทธิ์ที่บัญชีของคุณไม่มีอยู่แล้ว"
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "แสดงข้อความข้อกำหนดและเงื่อนไขในหน้าลงทะเบียน และกำหนดให้ผู้เยี่ยมชมยอมรับข้อกำหนดและเงื่อนไขเพื่อลงทะเบียน"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "เนื้อหาข้อกำหนดและเงื่อนไขจะถูกส่งไปยังโมเดลภาษา AI โปรดตรวจทานคำแปลที่เสนอก่อนบันทึก"
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "มีเวอร์ชันที่บันทึกไว้แล้วสำหรับภาษาเป้าหมาย การบันทึกข้อเสนอนี้จะสร้างเวอร์ชันใหม่"
+
+msgid "Acquired"
+msgstr "ได้รับแล้ว"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "รูปภาพรายวิชาที่แนะนำ: 1600 × 900 พิกเซล (16:9) ใช้ขนาดอย่างน้อย 1280 × 720 พิกเซลเพื่อความคมชัดบนหน้าจอขนาดใหญ่หรือความหนาแน่นสูง"
+
+msgid "Courses of the selected URL"
+msgstr "รายวิชาของ URL ที่เลือก"
+
+msgid "Course categories in selected URL"
+msgstr "หมวดหมู่รายวิชาใน URL ที่เลือก"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "บัญชีของคุณใช้งานได้แล้ว คุณสามารถเข้าสู่ระบบและตรวจสอบรายวิชาได้ทันที"
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "ก่อนอื่นคุณต้องดาวน์โหลดไฟล์แก้ไข <a href='%s'>ที่นี่</a>.\nจากนั้นแตกไฟล์ zip แล้วแก้ไขไฟล์ตามต้องการโดยไม่เปลี่ยนชื่อไฟล์\nจากนั้นสร้างไฟล์ zip จากไฟล์ที่แก้ไขแล้วอัปโหลดในแบบฟอร์มนี้"
+
+msgid "Adding students from session %s to session %s"
+msgstr "กำลังเพิ่มผู้เรียนจากเซสชัน %s ไปยังเซสชัน %s"
+
+msgid "Show all attempts by exercise"
+msgstr "แสดงความพยายามทั้งหมดตามแบบทดสอบ"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "การดำเนินการนี้จะเกินจำนวนผู้ใช้ที่อนุญาตสำหรับรายวิชาที่เลือก"
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "การลงทะเบียนบางรายการไม่สามารถดำเนินการได้เนื่องจากถึงจำนวนผู้ใช้ที่อนุญาตสำหรับรายวิชาที่เกี่ยวข้อง ผู้ใช้/รายวิชาที่ได้รับผลกระทบ: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "ทะเบียนนี้แสดงหน้ารายงานที่รู้จัก หมวดหมู่ URL มาตรฐาน URL เดิม และกลุ่มบทบาทที่คาดหวัง URL มาตรฐานจะนำไปสู่การใช้งานรายงานปัจจุบันและบังคับใช้เมทริกซ์บทบาทของรายงานตามที่ระบุ"
+
+msgid "E-mail notification subscription"
+msgstr "การสมัครรับการแจ้งเตือนทางอีเมล"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "การดำเนินการนี้จะเกินขีดจำกัด %s ผู้ใช้ต่อรายวิชาที่ผู้ดูแลระบบกำหนด การลงทะเบียนถูกยกเลิกแล้ว"
+
+msgid "Language the document is in"
+msgstr "ภาษาของเอกสาร"
+
+msgid "There is no session still"
+msgstr "ยังไม่มีเซสชัน"
+
+msgid "Origin courses from session"
+msgstr "รายวิชาต้นทางจากเซสชัน"
+
+msgid "Destination courses from session"
+msgstr "รายวิชาปลายทางจากเซสชัน"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "บุคคลทั่วไปเข้าโฮมเพจได้โดยไม่ต้องใช้รหัส"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "สร้างคำศัพท์อภิธานศัพท์ %d คำสำหรับรายวิชาเกี่ยวกับ '%s' โดยแต่ละคำอยู่บรรทัดเดียว คำจำกัดความอยู่บรรทัดถัดไป และเว้นบรรทัดว่างหนึ่งบรรทัดระหว่างแต่ละคำ อย่าเพิ่มการจัดรูปแบบอื่นใดทั้งชื่อและคำจำกัดความ"
+
+msgid "This is a short description of the course '%s'."
+msgstr "นี่คือคำอธิบายสั้น ๆ ของรายวิชา '%s'"
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "คุณกำลังใช้ Chamilo บนแพลตฟอร์ม Windows เครื่องมือช่วยแปลงเอกสารไม่พร้อมใช้งานสำหรับการจัดทำดัชนีข้อความเต็ม"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "การตั้งค่าเปิดแบบทดสอบอัตโนมัติเปิดอยู่ ผู้เรียนจะถูกนำไปยังรายการแบบทดสอบ"
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "การตั้งค่าเปิดแบบทดสอบอัตโนมัติเปิดอยู่ ผู้เรียนจะถูกนำไปยังแบบทดสอบที่ระบุ"
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "ถึงขีดจำกัดการลงทะเบียนของรายวิชานี้แล้ว (%current%/%limit%)"
+
+msgid "Count course by language"
+msgstr "นับจำนวนรายวิชาตามภาษา"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "ผู้ใช้ที่เข้าใช้ล่าสุดเก่ากว่าวันที่ที่เลือก"
+
+msgid "Your certificate is about to expire"
+msgstr "ใบรับรองของคุณใกล้หมดอายุ"
+
+msgid "Your certificate has expired"
+msgstr "ใบรับรองของคุณหมดอายุแล้ว"
+
+msgid "Your certificate is about to expire:"
+msgstr "ใบรับรองของคุณใกล้หมดอายุ:"
+
+msgid "Your certificate has expired:"
+msgstr "ใบรับรองของคุณหมดอายุแล้ว:"
+
+msgid "Expiry date"
+msgstr "วันหมดอายุ"
+
+msgid "%s days remaining"
+msgstr "เหลืออีก %s วัน"
+
+msgid "Hello, %s"
+msgstr "สวัสดี %s"
+
+msgid "Edit expiry date"
+msgstr "แก้ไขวันหมดอายุ"
+
+msgid "Certificate validity (days)"
+msgstr "อายุใบรับรอง (วัน)"
+
+msgid "Expiring certificates"
+msgstr "ใบรับรองที่กำลังหมดอายุ"
+
+msgid "Expiring soon"
+msgstr "ใกล้หมดอายุ"
+
+msgid "Expired notice"
+msgstr "แจ้งเตือนหมดอายุแล้ว"
+
+msgid "Expiring notice"
+msgstr "แจ้งเตือนใกล้หมดอายุ"
+
+msgid "outdated"
+msgstr "หมดอายุแล้ว"
+
+msgid "Last reminder sent"
+msgstr "ส่งการเตือนครั้งล่าสุด"
+
+msgid "Days ahead"
+msgstr "จำนวนวันล่วงหน้า"
+
+msgid "Send notification"
+msgstr "ส่งการแจ้งเตือน"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการส่งการแจ้งเตือนนี้?"
+
+msgid "Expired: %s"
+msgstr "หมดอายุแล้ว: %s"
+
+msgid "Expiring soon: %s"
+msgstr "ใกล้หมดอายุ: %s"
+
+msgid "Expired notice: %s"
+msgstr "แจ้งเตือนหมดอายุแล้ว: %s"
+
+msgid "Expiring notice: %s"
+msgstr "แจ้งเตือนใกล้หมดอายุ: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "การแจ้งเตือนจะถูกส่งไปยังผู้ใช้ในภาษาที่ผู้ใช้ตั้งค่าไว้"
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "หน้าถูกแคช HTTP เป็นเวลา 60 วินาทีตามค่าเริ่มต้น ตามที่กำหนดในเอนทิตี Page ดังนั้นการเปลี่ยนแปลงอาจไม่แสดงทันที"
+
+msgid "Activate legal notice"
+msgstr "เปิดใช้งานประกาศทางกฎหมาย"
+
+msgid "Agreement content"
+msgstr "เนื้อหาข้อตกลง"
+
+msgid "Allow learners to delete their own publication"
+msgstr "อนุญาตให้ผู้เรียนลบผลงานของตนเอง"
+
+msgid "Allow learners to edit agenda"
+msgstr "อนุญาตให้ผู้เรียนแก้ไขวาระ"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "อนุญาตให้ผู้เรียนยืนยันการเข้าเรียนของตนเอง"
+
+msgid "Allow learners to view users list"
+msgstr "อนุญาตให้ผู้เรียนดูรายชื่อผู้ใช้"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "สมัครผู้ใช้รับการแจ้งเตือนฟอรัมโดยอัตโนมัติ"
+
+msgid "Certificate mode"
+msgstr "โหมดใบรับรอง"
+
+msgid "Configure external tools"
+msgstr "กำหนดค่าเครื่องมือภายนอก"
+
+msgid "Contents"
+msgstr "เนื้อหา"
+
+msgid "Contents to show"
+msgstr "เนื้อหาที่จะแสดง"
+
+msgid "Course certificate"
+msgstr "ใบรับรองหลักสูตร"
+
+msgid "Course delivery dates"
+msgstr "วันที่จัดการเรียนการสอน"
+
+msgid "Course duration in hours"
+msgstr "ระยะเวลาหลักสูตรเป็นชั่วโมง"
+
+msgid "Course legal agreement"
+msgstr "ข้อตกลงทางกฎหมายของหลักสูตร"
+
+msgid "Custom"
+msgstr "กำหนดเอง"
+
+msgid "Custom certificate"
+msgstr "ใบรับรองกำหนดเอง"
+
+msgid "Default visibility for new documents"
+msgstr "การมองเห็นเริ่มต้นสำหรับเอกสารใหม่"
+
+msgid "Direct invitation link"
+msgstr "ลิงก์เชิญโดยตรง"
+
+msgid "Do not notify"
+msgstr "ไม่แจ้งเตือน"
+
+msgid "Documents list"
+msgstr "รายการเอกสาร"
+
+msgid "E-mail learner on manual subscription"
+msgstr "ส่งอีเมลถึงผู้เรียนเมื่อลงทะเบียนด้วยตนเอง"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "ส่งอีเมลถึงครูเมื่อมีการให้ข้อเสนอแนะผลงานของผู้เรียนใหม่"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ส่งอีเมลถึงผู้ใช้เมื่อได้รับไฟล์ Dropbox"
+
+msgid "Enable course home notification"
+msgstr "เปิดใช้งานการแจ้งเตือนหน้าแรกของหลักสูตร"
+
+msgid "Enable course themes in learning paths"
+msgstr "เปิดใช้งานธีมหลักสูตรในเส้นทางการเรียนรู้"
+
+msgid "Exercises invisible in session"
+msgstr "แบบฝึกหัดที่มองไม่เห็นในเซสชัน"
+
+msgid "Expiration link"
+msgstr "ลิงก์หมดอายุ"
+
+msgid "Forums list"
+msgstr "รายการฟอรัม"
+
+msgid "Issue date type"
+msgstr "ประเภทวันที่ออกเอกสาร"
+
+msgid "Learning path index"
+msgstr "ดัชนีเส้นทางการเรียนรู้"
+
+msgid "Learning paths list"
+msgstr "รายการเส้นทางการเรียนรู้"
+
+msgid "Left margin"
+msgstr "ระยะขอบซ้าย"
+
+msgid "Legal notice"
+msgstr "ประกาศทางกฎหมาย"
+
+msgid "Maximum subscribed students"
+msgstr "จำนวนนักเรียนที่ลงทะเบียนสูงสุด"
+
+msgid "Notify in course home"
+msgstr "แจ้งเตือนในหน้าหลักของหลักสูตร"
+
+msgid "Notify learners"
+msgstr "แจ้งเตือนผู้เรียน"
+
+msgid "Notify with agreement file"
+msgstr "แจ้งเตือนพร้อมไฟล์ข้อตกลง"
+
+msgid "Notify without attachment"
+msgstr "แจ้งเตือนโดยไม่มีไฟล์แนบ"
+
+msgid "Open chat in a new window"
+msgstr "เปิดแชทในหน้าต่างใหม่"
+
+msgid "Open to the platform"
+msgstr "เปิดให้แพลตฟอร์ม"
+
+msgid "Place"
+msgstr "สถานที่"
+
+msgid "Platform default"
+msgstr "ค่าเริ่มต้นของแพลตฟอร์ม"
+
+msgid "Registration password"
+msgstr "รหัสผ่านการลงทะเบียน"
+
+msgid "Remove previous agreements"
+msgstr "ลบข้อตกลงก่อนหน้า"
+
+msgid "Right margin"
+msgstr "ระยะขอบขวา"
+
+msgid "Selected learning path"
+msgstr "เส้นทางการเรียนรู้ที่เลือก"
+
+msgid "Selected test"
+msgstr "แบบทดสอบที่เลือก"
+
+msgid "Show learner picture in forums"
+msgstr "แสดงรูปผู้เรียนในฟอรัม"
+
+msgid "Show system folders"
+msgstr "แสดงโฟลเดอร์ระบบ"
+
+msgid "Signature text 1"
+msgstr "ข้อความลายเซ็น 1"
+
+msgid "Signature text 2"
+msgstr "ข้อความลายเซ็น 2"
+
+msgid "Signature text 3"
+msgstr "ข้อความลายเซ็น 3"
+
+msgid "Signature text 4"
+msgstr "ข้อความลายเซ็น 4"
+
+msgid "Student and course information"
+msgstr "ข้อมูลนักเรียนและหลักสูตร"
+
+msgid "Subscription allowed"
+msgstr "อนุญาตให้ลงทะเบียน"
+
+msgid "Tests list"
+msgstr "รายการแบบทดสอบ"
+
+msgid "Unsubscription allowed"
+msgstr "อนุญาตให้ยกเลิกการลงทะเบียน"
+
+msgid "Use certificate download date"
+msgstr "ใช้วันที่ดาวน์โหลดใบรับรอง"
+
+msgid "Use certificate generation date"
+msgstr "ใช้วันที่สร้างใบรับรอง"
+
+msgid "Use session access dates"
+msgstr "ใช้วันที่เข้าถึงเซสชัน"
+
+msgid "Use session access end date"
+msgstr "ใช้วันที่สิ้นสุดการเข้าถึงเซสชัน"
+
+msgid "Group report"
+msgstr "รายงานกลุ่ม"
+
+msgid "Student follow-up"
+msgstr "การติดตามผู้เรียน"
+
+msgid "Use system default certificate"
+msgstr "ใช้ใบรับรองเริ่มต้นของระบบ"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "ใบรับรองที่แนบมาไม่พร้อมใช้งาน จะใช้ใบรับรองเริ่มต้นของระบบ"
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "ใช้ใบรับรองเริ่มต้นของระบบแทนใบรับรองที่แนบมาหรือไม่?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "การแทนที่สำหรับการพัฒนาในเครื่อง (ไม่บังคับ) การอัปเดตในสภาพแวดล้อมจริงใช้คีย์ที่เชื่อถือได้ของ Chamilo อย่างเป็นทางการ"
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "สร้างแผนการนำไปใช้ที่ปลอดภัยจากแพ็กเกจที่จัดเตรียมไว้ ขั้นตอนนี้ตรวจสอบไฟล์ที่จะแทนที่ เพิ่ม หรือลบ สิทธิ์ เส้นทางสำรองข้อมูล และสถานะล็อก โดยไม่แก้ไขการติดตั้ง"
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "ขั้นตอนนี้เตรียมไว้เพื่อตรวจสอบเท่านั้น การแทนที่ไฟล์และการล้างข้อมูลตามที่แพ็กเกจประกาศจะเกิดขึ้นในขั้นตอนนำไปใช้ไฟล์ที่จัดเตรียม โดยมีการล็อก สำรองข้อมูล และการย้อนกลับ"
+
+msgid "Files to remove"
+msgstr "ไฟล์ที่จะลบ"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "แทนที่ไฟล์ Chamilo จากแพ็กเกจที่จัดเตรียม และลบไฟล์ที่ล้าสมัยตามที่เมทาดาทาของแพ็กเกจที่ลงนามประกาศไว้โดยชัดเจน ขั้นตอนนี้ไม่รันการย้ายฐานข้อมูล Composer Yarn หรือคำสั่งแคช"
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "การดำเนินการนี้จะแทนที่และอาจลบไฟล์ในการติดตั้ง Chamilo โปรดตรวจสอบว่าได้ตรวจทานแผนการนำไปใช้แล้ว และเปิดการสำรองข้อมูลก่อนดำเนินการต่อ"
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "ข้าพเจ้าเข้าใจว่าการดำเนินการนี้จะแทนที่ไฟล์และลบไฟล์ที่ล้าสมัยตามที่แพ็กเกจประกาศในการติดตั้ง Chamilo"
+
+msgid "Type the exact text below to confirm"
+msgstr "พิมพ์ข้อความด้านล่างให้ตรงทุกตัวอักษรเพื่อยืนยัน"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine จะรันเฉพาะการย้ายข้อมูล V300 ที่จัดเตรียมไว้ หลังจากผ่านการตรวจสอบความปลอดภัยแล้วเท่านั้น"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine รายงานคำเตือนเส้นฐานในอดีต ตัวอัปเดตจะยังรันเฉพาะการย้ายข้อมูล V300 ที่จัดเตรียมไว้ หลังการยืนยันอย่างชัดเจน"
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "เปลี่ยนได้เฉพาะเส้นทางของแมนิเฟสต์ โปรโตคอล HTTPS และโดเมนอัปเดตอย่างเป็นทางการถูกกำหนดไว้แล้ว"
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "โหมดพัฒนาอนุญาตให้ใช้ URL แมนิเฟสต์แบบ HTTPS หรือเส้นทางแมนิเฟสต์ในเครื่อง"
+
+msgid "The official update manifest is configured by the server."
+msgstr "แมนิเฟสต์อัปเดตอย่างเป็นทางการถูกกำหนดโดยเซิร์ฟเวอร์"
+
+msgid "What feedback do you want about this course?"
+msgstr "คุณต้องการข้อเสนอแนะเกี่ยวกับรายวิชานี้อย่างไร?"
+
+msgid "Analysis summary"
+msgstr "สรุปการวิเคราะห์"
+
+msgid "Lessons included"
+msgstr "บทเรียนที่รวมอยู่"
+
+msgid "Standalone documents included"
+msgstr "เอกสารแบบอิสระที่รวมอยู่"
+
+msgid "Standalone exercises included"
+msgstr "แบบฝึกหัดแบบอิสระที่รวมอยู่"
+
+msgid "General feedback"
+msgstr "ข้อเสนอแนะทั่วไป"
+
+msgid "Strengths"
+msgstr "จุดแข็ง"
+
+msgid "Risks"
+msgstr "ความเสี่ยง"
+
+msgid "Recommendations"
+msgstr "ข้อเสนอแนะ"
+
+msgid "Lesson feedback"
+msgstr "ข้อเสนอแนะบทเรียน"
+
+msgid "Standalone document feedback"
+msgstr "ข้อเสนอแนะเอกสารแบบอิสระ"
+
+msgid "Standalone exercise feedback"
+msgstr "ข้อเสนอแนะแบบฝึกหัดแบบอิสระ"
+
+msgid "AI response"
+msgstr "การตอบกลับของ AI"
+
+msgid "Sequence feedback"
+msgstr "ข้อเสนอแนะลำดับการเรียน"
+
+msgid "Purpose"
+msgstr "วัตถุประสงค์"
+
+msgid "You"
+msgstr "คุณ"
+
+msgid "City of internship"
+msgstr "เมืองที่ฝึกงาน"
+
+msgid "City"
+msgstr "เมือง"
+
+msgid "Update workflow restored after page refresh"
+msgstr "กู้คืนขั้นตอนการอัปเดตแล้วหลังรีเฟรชหน้า"
+
+msgid "Last completed step"
+msgstr "ขั้นตอนที่เสร็จล่าสุด"
+
+msgid "Stage package"
+msgstr "จัดเตรียมแพ็กเกจ"
+
+msgid "Package staging"
+msgstr "การจัดเตรียมแพ็กเกจ"
+
+msgid "Apply plan"
+msgstr "แผนการนำไปใช้"
+
+msgid "Update workflow completed"
+msgstr "ขั้นตอนการอัปเดตเสร็จสมบูรณ์"
+
+msgid "Update directory exists and is writable."
+msgstr "ไดเรกทอรีอัปเดตมีอยู่และสามารถเขียนได้"
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "ไดเรกทอรีอัปเดตมีอยู่แต่ไม่สามารถเขียนได้: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "ไดเรกทอรีอัปเดตยังไม่มี แต่ไดเรกทอรีแม่สามารถเขียนได้"
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "ไดเรกทอรีอัปเดตยังไม่มี แต่สามารถสร้างภายใต้ var/ ได้"
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "ไดเรกทอรีอัปเดตไม่มีอยู่และไม่สามารถสร้างได้ด้วยสิทธิ์ปัจจุบัน"
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "ไม่สามารถระบุพื้นที่ดิสก์ว่างสำหรับการตรวจสอบก่อนอัปเดตได้"
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "พื้นที่ดิสก์ว่างไม่เพียงพอสำหรับการจัดเตรียมอัปเดตอย่างปลอดภัย"
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "พื้นที่ดิสก์ว่างเพียงพอสำหรับขั้นตอนการอัปเดตในขั้นตรวจสอบนี้"
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "ไฟล์ manifest ของการอัปเดตไม่ได้กำหนดข้อกำหนดเวอร์ชัน PHP"
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "ไม่สามารถประเมินข้อกำหนด PHP ได้ครบถ้วน: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "เวอร์ชัน PHP ปัจจุบันไม่ตรงตามข้อกำหนดการอัปเดต: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "เวอร์ชัน PHP ปัจจุบันตรงตามข้อกำหนดการอัปเดต"
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "ไม่ได้ระบุเส้นทางแพ็กเกจในเครื่อง แพ็กเกจที่ดาวน์โหลดสามารถตรวจสอบได้หลังดาวน์โหลดเท่านั้น"
+
+msgid "Local update package is not readable: %s"
+msgstr "แพ็กเกจอัปเดตในเครื่องอ่านไม่ได้: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "แพ็กเกจอัปเดตในเครื่องต้องเป็นไฟล์ ZIP"
+
+msgid "Local update package is readable."
+msgstr "แพ็กเกจอัปเดตในเครื่องอ่านได้"
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "ตรวจไม่พบเวอร์ชัน Chamilo ที่ติดตั้งโดยอัตโนมัติ จึงไม่สามารถตรวจสอบทิศทางของเวอร์ชันได้"
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "เวอร์ชันที่ติดตั้งหรือเวอร์ชันเป้าหมายไม่อยู่ในรูปแบบ semantic version ที่เปรียบเทียบได้"
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "เวอร์ชันเป้าหมายต่ำกว่าเวอร์ชันที่ติดตั้ง โดยค่าเริ่มต้นไม่อนุญาตให้ดาวน์เกรด"
+
+msgid "Target version matches the installed version."
+msgstr "เวอร์ชันเป้าหมายตรงกับเวอร์ชันที่ติดตั้ง"
+
+msgid "Target version is newer than the installed version."
+msgstr "เวอร์ชันเป้าหมายใหม่กว่าเวอร์ชันที่ติดตั้ง"
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "โปรเจกต์ไม่ใช่ Git checkout หรือไม่มี .git"
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "ระบบอัปเดตนี้มีไว้สำหรับการติดตั้งที่ไม่มี Git ตรวจพบว่าระบบในเครื่องใช้ Git การดำเนินการอัปเดตอาจทำให้ประวัติ Git เสียหาย สำหรับระบบที่มี Git แนะนำให้ใช้ขั้นตอน Git ตามที่ระบุใน CONTRIBUTING.md ที่รากเว็บ"
+
+msgid "Local Git changes were also detected."
+msgstr "ตรวจพบการเปลี่ยนแปลง Git ในเครื่องด้วย"
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "ไฟล์เมตาดาต้าของโปรเจกต์บางไฟล์หายไป ขั้นตอนอัปเดตถัดไปอาจต้องตรวจสอบการพึ่งพาด้วยตนเอง"
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "มีไฟล์เมตาดาต้าของ Composer และ Yarn"
+
+msgid "Starting staged file application."
+msgstr "เริ่มนำไฟล์ที่จัดเตรียมไปใช้"
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "ต้องมีการยืนยันอย่างชัดเจนเพื่อนำไฟล์ที่จัดเตรียมไปใช้"
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "การนำไฟล์อัปเดตที่จัดเตรียมไปใช้ต้องมีการยืนยันอย่างชัดเจน"
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "ไดเรกทอรีจัดเตรียมอยู่ภายในไดเรกทอรีจัดเตรียมอัปเดตของ Chamilo"
+
+msgid "Staging directory was validated."
+msgstr "ตรวจสอบไดเรกทอรีจัดเตรียมแล้ว"
+
+msgid "Apply plan metadata was read successfully."
+msgstr "อ่านเมตาดาต้าของแผนการนำไปใช้สำเร็จ"
+
+msgid "Staged application path is valid."
+msgstr "เส้นทางการนำไปใช้ที่จัดเตรียมถูกต้อง"
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "เมตาดาต้าการล้างแพ็กเกจที่ลงนามตรงกับแผนการนำไปใช้ที่ตรวจสอบแล้ว"
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "ตรวจสอบเมตาดาต้าการล้างแพ็กเกจที่ลงนามแล้ว"
+
+msgid "Update lock was acquired."
+msgstr "ได้ล็อกการอัปเดตแล้ว"
+
+msgid "Update backup directory was created."
+msgstr "สร้างไดเรกทอรีสำรองการอัปเดตแล้ว"
+
+msgid "Update file operations were collected."
+msgstr "รวบรวมการดำเนินการไฟล์อัปเดตแล้ว"
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "สำรองไฟล์ที่มีอยู่ที่วางแผนจะแทนที่หรือลบแล้ว"
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "คัดลอกไฟล์อัปเดตที่จัดเตรียมไปยังการติดตั้ง Chamilo แล้ว"
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "ไฟล์ที่ล้าสมัยตามที่ระบุในแพ็กเกจถูกลบออกจากการติดตั้ง Chamilo แล้ว"
+
+msgid "Package-declared obsolete files were removed."
+msgstr "ไฟล์ที่ล้าสมัยตามที่ระบุในแพ็กเกจถูกลบแล้ว"
+
+msgid "Update apply audit metadata was written."
+msgstr "เขียนข้อมูลเมตาการตรวจสอบการนำการอัปเดตไปใช้แล้ว"
+
+msgid "Staged files applied successfully."
+msgstr "นำไฟล์ที่จัดเตรียมไปใช้สำเร็จแล้ว"
+
+msgid "Unable to restore removed files: %s"
+msgstr "ไม่สามารถกู้คืนไฟล์ที่ถูกลบได้: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "ไม่สามารถย้อนกลับไฟล์ที่คัดลอกได้: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "ดำเนินการย้อนกลับไฟล์หลังจากการนำการอัปเดตไปใช้ล้มเหลว"
+
+msgid "Rollback failed: %s"
+msgstr "การย้อนกลับล้มเหลว: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "ไม่สามารถเขียนข้อมูลเมตาการตรวจสอบการนำการอัปเดตไปใช้ได้: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "ไม่สามารถปลดล็อกการอัปเดตหลังเกิดความล้มเหลวได้: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "ต้องระบุเส้นทางจัดเตรียมเพื่อนำไฟล์อัปเดตไปใช้"
+
+msgid "Staging directory does not exist: %s"
+msgstr "ไม่มีไดเรกทอรีจัดเตรียม: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "ไม่มีไดเรกทอรีฐานการจัดเตรียมการอัปเดตของ Chamilo"
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "ไดเรกทอรีจัดเตรียมต้องอยู่ภายใน var/update/staging"
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "ไดเรกทอรีจัดเตรียมไม่มี APPLY-PLAN.json"
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "ไม่สามารถอ่านข้อมูลเมตาแผนการนำการอัปเดตไปใช้ได้: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "ข้อมูลเมตาแผนการนำการอัปเดตไปใช้ไม่ใช่ JSON ที่ถูกต้อง: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "ข้อมูลเมตาแผนการนำการอัปเดตไปใช้ต้องเป็นอ็อบเจ็กต์ JSON"
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "แผนการนำการอัปเดตไปใช้ไม่มีฟิลด์ application_path"
+
+msgid "Staged application path is not readable: %s"
+msgstr "เส้นทางแอปพลิเคชันที่จัดเตรียมอ่านไม่ได้: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "เส้นทางแอปพลิเคชันที่จัดเตรียมต้องอยู่ภายในไดเรกทอรีจัดเตรียม"
+
+msgid "Staged application path is missing composer.json."
+msgstr "เส้นทางแอปพลิเคชันที่จัดเตรียมไม่มี composer.json"
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "แพ็กเกจอัปเดตไม่มี %s กรุณาจัดเตรียมแพ็กเกจที่ตรวจสอบแล้วพร้อมข้อมูลเมตาการล้างข้อมูลที่ลงนามอีกครั้ง"
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "แผนการนำการอัปเดตไปใช้ไม่มีข้อมูลเมตาการล้างแพ็กเกจที่ตรวจสอบแล้ว"
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "ข้อมูลเมตาการล้างแพ็กเกจอัปเดตเปลี่ยนแปลงหลังจากสร้างแผนการนำไปใช้แล้ว กรุณาสร้างแผนการนำไปใช้อีกครั้งก่อนดำเนินการต่อ"
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "แผนการนำการอัปเดตไปใช้มีรายการลบแพ็กเกจที่ไม่ถูกต้อง"
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "เส้นทางการล้างแพ็กเกจอัปเดตเปลี่ยนแปลงหลังจากสร้างแผนการนำไปใช้แล้ว กรุณาสร้างแผนการนำไปใช้อีกครั้งก่อนดำเนินการต่อ"
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "แผนการนำการอัปเดตไปใช้ไม่มีรายการเส้นทางการลบที่ตรวจสอบแล้ว"
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "เส้นทางการลบในแผนการนำการอัปเดตไปใช้ไม่ตรงกับข้อมูลเมตาการล้างแพ็กเกจที่ลงนาม"
+
+msgid "Update lock path must be inside var/update."
+msgstr "เส้นทางล็อกการอัปเดตต้องอยู่ภายใน var/update"
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "แผนการนำการอัปเดตไปใช้ไม่มีฟิลด์ backup_path"
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "เส้นทางสำรองการอัปเดตมีส่วนของเส้นทางที่ไม่ปลอดภัย"
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "เส้นทางสำรองการอัปเดตต้องอยู่ภายใน var/update/backups"
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "ไม่สามารถรับล็อกการอัปเดตได้ อาจมีการอัปเดตอื่นกำลังดำเนินการอยู่"
+
+msgid "Unable to release update lock: %s"
+msgstr "ไม่สามารถปลดล็อกการอัปเดตได้: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "ไดเรกทอรีสำรองการอัปเดตมีอยู่แล้ว: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "ไม่สามารถสร้างไดเรกทอรีปลายทางได้: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "การอัปเดตตามแผนจะเขียนทับลิงก์สัญลักษณ์ที่มีอยู่: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "ไฟล์ปลายทางเขียนไม่ได้: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "ไม่สามารถสร้างไฟล์ปลายทางได้: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "ไม่สามารถระบุไดเรกทอรีโปรเจกต์ Chamilo ก่อนลบไฟล์ที่ล้าสมัยได้"
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "การล้างการอัปเดตไม่สามารถลบเส้นทางที่ได้รับการป้องกันได้: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "การอัปเดตตามแผนจะลบลิงก์สัญลักษณ์ที่มีอยู่: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "การล้างการอัปเดตรองรับเฉพาะไฟล์ ไม่ใช่ไดเรกทอรี: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "ไฟล์ปลายทางที่ล้าสมัยอ่านไม่ได้สำหรับการสำรอง: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "ไม่สามารถลบไฟล์ปลายทางที่ล้าสมัยได้ด้วยสิทธิ์ไดเรกทอรีปัจจุบัน: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "ไฟล์ปลายทางที่ล้าสมัยชี้ไปนอกไดเรกทอรีโปรเจกต์ Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "ไม่สามารถสำรองไฟล์ปลายทางได้: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "ไม่สามารถเขียนข้อมูลเมตาการสำรองการอัปเดตได้"
+
+msgid "Unable to copy staged update file: %s"
+msgstr "ไม่สามารถคัดลอกไฟล์อัปเดตที่จัดเตรียมได้: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "คัดลอกไฟล์ที่จัดเตรียมแล้ว %d จาก %d ไฟล์"
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "ไม่สามารถลบไฟล์ที่ล้าสมัยตามที่แพ็กเกจระบุ: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "ลบไฟล์ที่ล้าสมัยตามที่แพ็กเกจระบุแล้ว %d จาก %d ไฟล์"
+
+msgid "Unable to restore backed up file: %s"
+msgstr "ไม่สามารถกู้คืนไฟล์ที่สำรองไว้: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "ไม่สามารถลบไฟล์ที่คัดลอกใหม่ระหว่างการย้อนกลับ: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "ไม่สามารถกู้คืนไฟล์ที่ถูกลบได้เนื่องจากไม่มีไฟล์สำรอง: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "ไม่สามารถกู้คืนไฟล์ที่ถูกลบจากไฟล์สำรอง: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "ไม่สามารถเขียนข้อมูลเมตาการตรวจสอบการนำการอัปเดตไปใช้"
+
+msgid "Unable to write global update apply log."
+msgstr "ไม่สามารถเขียนบันทึกการนำการอัปเดตไปใช้ระดับระบบ"
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "ตรวจพบเส้นทางสัมพัทธ์ที่ไม่ปลอดภัยในพื้นที่จัดเตรียม: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "ไดเรกทอรีไม่สามารถเขียนได้: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "ไม่สามารถสร้างไดเรกทอรี: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "อ่านข้อมูลเมตาการจัดเตรียมสำเร็จแล้ว"
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "เขียนข้อมูลเมตาแผนการนำไปใช้ไปยังไดเรกทอรีจัดเตรียมแล้ว"
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "ไฟล์และไดเรกทอรีปลายทางดูเหมือนสามารถเขียนได้สำหรับการอัปเดตและการล้างข้อมูลตามแผน"
+
+msgid "Update apply plan check failed."
+msgstr "การตรวจสอบแผนการนำการอัปเดตไปใช้ล้มเหลว"
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "ไฟล์หรือไดเรกทอรีปลายทางบางรายการไม่สามารถเขียนหรือลบได้"
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "เพื่อแก้ไขปัญหานี้ ให้เปลี่ยนเจ้าของไดเรกทอรี Chamilo ทั้งชุดชั่วคราวเป็น %s (ผู้ใช้เว็บเซิร์ฟเวอร์) นำการอัปเดตไปใช้ จากนั้นเปลี่ยนเจ้าของกลับเป็น %s แล้วตั้งเจ้าของของ var/ (และเนื้อหาภายใน) กลับเป็น %s เพื่อให้แอปพลิเคชันเขียนต่อไปได้"
+
+msgid "Update package verification failed."
+msgstr "การตรวจสอบแพ็กเกจอัปเดตล้มเหลว"
+
+msgid "Update preflight checks failed."
+msgstr "การตรวจสอบก่อนอัปเดตล้มเหลว"
+
+msgid "Unable to stage update package."
+msgstr "ไม่สามารถจัดเตรียมแพ็กเกจอัปเดตได้"
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "การรันคำสั่งหลังนำไปใช้จาก UI ถูกปิดใช้งานบนเซิร์ฟเวอร์นี้"
+
+msgid "Missing required field: %s"
+msgstr "ไม่มีฟิลด์ที่จำเป็น: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "ไม่ได้ระบุแหล่งแมนิเฟสต์การอัปเดต และไม่ได้กำหนด URL แมนิเฟสต์การอัปเดตเริ่มต้น"
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL แมนิเฟสต์การอัปเดตต้องใช้แหล่งอัปเดตอย่างเป็นทางการ %s เปลี่ยนได้เฉพาะเส้นทางแมนิเฟสต์เท่านั้น"
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "เส้นทางแมนิเฟสต์การอัปเดตในเครื่องถูกปิดใช้งาน ใช้ URL แมนิเฟสต์แบบ HTTPS หรือตั้งค่า CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 ในสภาพแวดล้อมเซิร์ฟเวอร์สำหรับการทดสอบในเครื่อง"
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "อย่าใส่เส้นทาง HTTP %s ปล่อยฟิลด์นี้ว่างเพื่อดาวน์โหลดจากแมนิเฟสต์การอัปเดต"
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "เส้นทางอัปเดตในเครื่อง %s ถูกปิดใช้งานในสภาพแวดล้อมนี้"
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "ต้องกำหนดคีย์สาธารณะที่เชื่อถือได้สำหรับการอัปเดตบนเซิร์ฟเวอร์ในสภาพแวดล้อมนี้"
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "การข้ามการตรวจสอบลายเซ็นการอัปเดตถูกปิดใช้งานในสภาพแวดล้อมนี้"
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "การรันการดำเนินการหลังนำไปใช้ของการอัปเดตต้องใช้ข้อความยืนยัน \"%s\""
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "การนำไฟล์อัปเดตที่จัดเตรียมไปใช้ต้องใช้ข้อความยืนยัน \"%s\""
+
+msgid "Unable to resolve project directory."
+msgstr "ไม่สามารถระบุไดเรกทอรีโปรเจกต์ได้"
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "ตัวอัปเดตนี้ไม่จัดการการสำรองฐานข้อมูล สร้างและตรวจสอบการสำรองฐานข้อมูลก่อนรันการย้ายข้อมูล"
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "เมธอด down() ของ Doctrine migration ไม่รับประกันว่าจะกู้คืนข้อมูลที่ถูกลบหรือถูกแปลงแล้ว"
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "ข้อมูลเมตาหลังนำไปใช้แนะนำให้ตรวจสอบการย้ายฐานข้อมูล"
+
+msgid "No migration files were found in the staged package."
+msgstr "ไม่พบไฟล์การย้ายข้อมูลในแพ็กเกจที่จัดเตรียม"
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "ตรวจพบไฟล์ Doctrine migration ที่จัดเตรียมแล้ว"
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "ระบุเป้าหมาย Doctrine migration จากแพ็กเกจที่จัดเตรียมแล้ว"
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "เส้นฐาน Doctrine migration มีปัญหาที่ขัดขวางสำหรับการย้ายข้อมูลที่จัดเตรียม"
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine รายงานคำเตือนเส้นฐานการย้ายข้อมูลในอดีต แต่จะตรวจสอบและดำเนินการเฉพาะการย้ายข้อมูล %s ที่จัดเตรียมอย่างชัดเจนเท่านั้น"
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine รายงานคำเตือนเส้นฐานการย้ายข้อมูลในอดีต ตัวอัปเดตจะดำเนินการเฉพาะคลาสการย้ายข้อมูล %s ที่จัดเตรียมหลังจากยืนยันอย่างชัดเจน"
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "เส้นฐาน Doctrine ไม่มีปัญหาที่ขัดขวางสำหรับการย้ายข้อมูล %s ที่จัดเตรียม"
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "การทดลองรัน Doctrine migration ล้มเหลวอย่างน้อยหนึ่งรายการที่จัดเตรียม อย่ารันการย้ายฐานข้อมูลจนกว่าจะแก้ไขแล้ว"
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "การทดลองรัน Doctrine สำเร็จสำหรับแต่ละคลาสการย้ายข้อมูลที่จัดเตรียม"
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "ต้องสร้างการสำรองฐานข้อมูลนอกตัวอัปเดตนี้ก่อนรันการย้ายข้อมูล"
+
+msgid "Staging path is required to review database migrations."
+msgstr "ต้องมีเส้นทางจัดเตรียมเพื่อตรวจสอบการย้ายฐานข้อมูล"
+
+msgid "Unable to read update %s: %s"
+msgstr "ไม่สามารถอ่านการอัปเดต %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON ของการอัปเดต %s ไม่ถูกต้อง: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON ของการอัปเดต %s ต้องเป็นอ็อบเจ็กต์"
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "ข้อมูลเมตาของการตรวจสอบหลังนำไปใช้ไม่มีรายการการดำเนินการที่ถูกต้อง"
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "ไม่แนะนำให้รันการย้ายฐานข้อมูลสำหรับการอัปเดตแบบจัดเตรียมนี้"
+
+msgid "Update metadata is missing the staged application path."
+msgstr "ข้อมูลเมตาของการอัปเดตไม่มีเส้นทางแอปพลิเคชันที่จัดเตรียมไว้"
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "ไม่พบไฟล์การย้ายแบบจัดเตรียมตามแผน: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "ไม่สามารถอ่านไฟล์การย้ายแบบจัดเตรียม: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "ไม่สามารถดึงคำอธิบายจาก getDescription() ได้"
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "ตัวรันการอัปเดตรองรับการย้ายแบบจัดเตรียมเพียง %s รายการ: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "ไม่สามารถเขียนข้อมูลเมตาความปลอดภัยของการย้าย: %s"
+
+msgid "Migration safety check failed."
+msgstr "การตรวจสอบความปลอดภัยของการย้ายล้มเหลว"
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "ตรวจพบเส้นทางการย้ายแบบสัมพัทธ์ที่ไม่ปลอดภัย: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "ไม่สามารถตรวจจับเวอร์ชัน Chamilo ที่ติดตั้งโดยอัตโนมัติได้ ดำเนินการต่อเฉพาะเมื่อยืนยันแล้วว่าการอัปเดตนี้เข้ากันได้"
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "เวอร์ชันที่ติดตั้งหรือเวอร์ชันเป้าหมายไม่อยู่ในรูปแบบเวอร์ชันเชิงความหมายที่เปรียบเทียบได้ ดำเนินการต่อเฉพาะหลังการตรวจสอบด้วยตนเอง"
+
+msgid "An update is available."
+msgstr "มีการอัปเดตพร้อมใช้งาน"
+
+msgid "The installed version already matches the manifest version."
+msgstr "เวอร์ชันที่ติดตั้งตรงกับเวอร์ชันในแมนิเฟสต์แล้ว"
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "เวอร์ชันในแมนิเฟสต์เก่ากว่าเวอร์ชันที่ติดตั้ง การดาวน์เกรดถูกบล็อกตามค่าเริ่มต้น"
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "ไฟล์ที่จัดเตรียมไม่ได้นำไปใช้สำเร็จ ไม่สามารถดำเนินการตรวจสอบหลังนำไปใช้ต่อได้"
+
+msgid "Apply result metadata was read successfully."
+msgstr "อ่านข้อมูลเมตาผลลัพธ์การนำไปใช้สำเร็จแล้ว"
+
+msgid "Post-apply action recommendations were generated."
+msgstr "สร้างคำแนะนำการดำเนินการหลังนำไปใช้แล้ว"
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "ตรวจพบการย้ายฐานข้อมูลในแพ็กเกจที่จัดเตรียม รันเฉพาะหลังจากยืนยันว่าการอัปเดตไฟล์ถูกต้องและมีข้อมูลสำรองฐานข้อมูลแล้ว"
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "ต้องมีเส้นทางการจัดเตรียมเพื่อรันการตรวจสอบหลังนำไปใช้"
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "การอัปเดต %s ไม่ใช่ JSON ที่ถูกต้อง: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "การอัปเดต %s ต้องเป็นออบเจ็กต์ JSON"
+
+msgid "Composer dependencies"
+msgstr "การพึ่งพา Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "แพ็กเกจที่จัดเตรียมมีข้อมูลเมตาของ Composer รัน Composer install จากรากของแอปพลิเคชันก่อนถือว่าการอัปเดตเสร็จสมบูรณ์"
+
+msgid "Frontend assets"
+msgstr "สินทรัพย์ส่วนหน้า"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "แพ็กเกจที่จัดเตรียมมีไฟล์ที่เกี่ยวข้องกับส่วนหน้า สร้างสินทรัพย์สำหรับโปรดักชันใหม่หลังติดตั้งการพึ่งพา"
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "ตรวจพบไฟล์การย้าย Doctrine ในแพ็กเกจที่จัดเตรียม ยืนยันว่ามีข้อมูลสำรองฐานข้อมูลก่อนรันการย้าย"
+
+msgid "Symfony cache"
+msgstr "แคช Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "ล้างแคช Symfony หลังจากนำไปใช้ไฟล์อัปเดตและรันคำสั่งที่จำเป็น"
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "ไม่สามารถเขียนข้อมูลเมตาของการตรวจสอบหลังนำไปใช้"
+
+msgid "Post-apply check failed."
+msgstr "การตรวจสอบหลังนำไปใช้ล้มเหลว"
+
+msgid "Update package is not readable: %s"
+msgstr "แพ็กเกจอัปเดตอ่านไม่ได้: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "แพ็กเกจอัปเดตไม่ใช่ไฟล์ ZIP ที่ถูกต้อง"
+
+msgid "Update package ZIP archive is empty."
+msgstr "ไฟล์ ZIP ของแพ็กเกจอัปเดตว่างเปล่า"
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "แพ็กเกจอัปเดตมีรายการ ZIP ที่อ่านไม่ได้"
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "แพ็กเกจอัปเดตมีเส้นทางสัมบูรณ์ที่ไม่ปลอดภัย: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "แพ็กเกจอัปเดตมีรายการที่ข้ามไดเรกทอรี: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "แพ็กเกจอัปเดตมีลิงก์สัญลักษณ์: %s"
+
+msgid "Starting post-apply actions."
+msgstr "กำลังเริ่มการดำเนินการหลังนำไปใช้"
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "การรันคำสั่งหลังนำไปใช้ต้องมีการยืนยันอย่างชัดเจน"
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "อ่านข้อมูลเมตาคำแนะนำหลังนำไปใช้สำเร็จแล้ว"
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "การดำเนินการหลังนำไปใช้ได้รับการตรวจสอบกับรายงานคำแนะนำแล้ว"
+
+msgid "Post-apply actions were selected."
+msgstr "เลือกการดำเนินการหลังนำไปใช้แล้ว"
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "การดำเนินการหลังนำไปใช้ขั้นสูงต้องมีการยืนยันขั้นสูงอย่างชัดเจน"
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "การดำเนินการหลังนำไปใช้ขั้นสูงได้รับการยืนยันอย่างชัดเจนแล้ว"
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "คำสั่งหลังนำไปใช้ที่เลือกเสร็จสมบูรณ์แล้ว"
+
+msgid "Post-apply command run metadata was written."
+msgstr "เขียนข้อมูลเมตาการรันคำสั่งหลังนำไปใช้แล้ว"
+
+msgid "Post-apply actions completed successfully."
+msgstr "การดำเนินการหลังนำไปใช้เสร็จสมบูรณ์แล้ว"
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "โปรดคืนค่าสิทธิ์ของไฟล์และไดเรกทอรีให้เป็นสถานะก่อนการอัปเดตนี้ การปล่อยให้เว็บเซิร์ฟเวอร์มีสิทธิ์เขียนไปยังโค้ดของ Chamilo จะทำให้ช่องโหว่ในอนาคตกลายเป็นช่องทางในการแก้ไขไฟล์ของแพลตฟอร์มของคุณ"
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "คำจำกัดความคำสั่งหลังนำไปใช้ของการอัปเดตไม่ถูกต้อง: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "กำลังรันการดำเนินการหลังนำไปใช้: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "กำลังรันคำสั่ง %d จาก %d สำหรับ %s"
+
+msgid "Post-apply action failed: %s"
+msgstr "การดำเนินการหลังนำไปใช้ล้มเหลว: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "การดำเนินการหลังนำไปใช้ \"%s\" ล้มเหลวด้วยรหัสออก %d"
+
+msgid "Post-apply action completed: %s"
+msgstr "การดำเนินการหลังนำไปใช้เสร็จสมบูรณ์: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "ต้องมีเส้นทางสเตจเพื่อรันการดำเนินการหลังนำไปใช้"
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "ไม่มีการดำเนินการหลังนำไปใช้ที่แนะนำให้รัน"
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "ไม่มีการดำเนินการหลังนำไปใช้ที่อนุญาตให้รัน"
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "ไม่อนุญาตการดำเนินการหลังนำไปใช้สำหรับการอัปเดตนี้: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "การย้ายฐานข้อมูลต้องมีการตรวจสอบความปลอดภัยของการย้ายก่อนดำเนินการ"
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "ไม่สามารถรันการย้ายฐานข้อมูลได้เนื่องจากการตรวจสอบความปลอดภัยของการย้ายไม่ผ่าน"
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "ไม่สามารถรันการย้ายฐานข้อมูลได้เนื่องจากการตรวจสอบความปลอดภัยของการย้ายไม่ได้ระบุรายการย้ายที่สเตจไว้"
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "ไม่สามารถรันการย้ายฐานข้อมูลได้เนื่องจากการตรวจสอบความปลอดภัยของการย้ายมีรายการย้ายที่ไม่ถูกต้อง"
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "ตัวรันการอัปเดตสามารถดำเนินการได้เฉพาะการย้าย %s ที่สเตจไว้เท่านั้น"
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "ไม่สามารถรันการย้ายฐานข้อมูลได้เนื่องจากการตรวจสอบความปลอดภัยของการย้ายที่สเตจไว้รายงานข้อผิดพลาดที่บล็อก"
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine รายงานคำเตือนเส้นฐานของการย้าย จะดำเนินการคลาสการย้าย %s ที่สเตจไว้อย่างชัดเจนเท่านั้น"
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "การย้ายฐานข้อมูลต้องยืนยันว่ามีการสำรองฐานข้อมูลอยู่แล้ว"
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "การย้ายฐานข้อมูลต้องใช้ข้อความยืนยัน \"RUN DATABASE MIGRATIONS\""
+
+msgid "Database migration safety review was completed before execution."
+msgstr "การตรวจสอบความปลอดภัยของการย้ายฐานข้อมูลเสร็จสมบูรณ์ก่อนดำเนินการ"
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "ยืนยันการมีอยู่ของการสำรองฐานข้อมูลอย่างชัดเจนแล้ว"
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "มีการให้การตรวจสอบความปลอดภัยของการย้ายฐานข้อมูลและการยืนยันการสำรองแล้ว"
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "ดำเนินการย้ายฐานข้อมูลแล้วหลังยืนยันการสำรองฐานข้อมูลอย่างชัดเจน ตัวอัปเดตไม่ได้สร้างการสำรองฐานข้อมูล"
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "ปรับสิทธิ์ไฟล์ปฏิบัติการหลังนำไปใช้ที่จำเป็นให้เป็นมาตรฐานแล้ว"
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "ไม่สามารถรันการย้ายฐานข้อมูลได้เนื่องจากไม่พบ bin/console"
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "คำสั่งหลังนำไปใช้ที่เลือกมีเส้นทางที่เขียนได้ตามที่ต้องการ"
+
+msgid "Post-apply command writable paths were validated."
+msgstr "ตรวจสอบเส้นทางที่เขียนได้ของคำสั่งหลังนำไปใช้แล้ว"
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "การดำเนินการหลังนำไปใช้ขั้นสูงสามารถแก้ไขการพึ่งพา แอสเซ็ตที่สร้างขึ้น หรือฐานข้อมูลได้ ตรวจสอบการสำรองก่อนดำเนินการต่อ"
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "ไม่สามารถรัน Composer อย่างปลอดภัยจากตัวอัปเดตบนเว็บได้เนื่องจากไฟล์ที่ Composer สร้าง \"%s\" เป็นของ UID %d ในขณะที่รันไทม์ PHP ใช้ UID %d โปรดรัน Composer ด้วยตนเองในฐานะเจ้าของการปรับใช้ จากนั้นดำเนินการหลังนำไปใช้ที่เหลือต่อ"
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "เส้นทางที่การดำเนินการหลังนำไปใช้ \"%s\" ต้องการไม่สามารถเขียนได้: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "ไดเรกทอรีแม่ที่การดำเนินการหลังนำไปใช้ \"%s\" ต้องการไม่สามารถเขียนได้: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "ไม่สามารถอ่านสิทธิ์ของไฟล์ปฏิบัติการหลังนำไปใช้ที่จำเป็น: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "ไม่สามารถทำเครื่องหมายไฟล์ปฏิบัติการหลังนำไปใช้ที่จำเป็นให้ปฏิบัติการได้: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "ไฟล์ปฏิบัติการหลังนำไปใช้ที่จำเป็นยังปฏิบัติการไม่ได้หลัง chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "ปรับสิทธิ์การปฏิบัติการให้เป็นมาตรฐานแล้ว"
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "ไม่สามารถเขียนการกำหนดค่า Git แยกสำหรับคำสั่งหลังนำไปใช้"
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "ดูเหมือนมีการดำเนินการอัปเดตอื่นกำลังทำงานอยู่ ลบ var/update/update.lock เฉพาะเมื่อไม่มีการอัปเดตที่ใช้งานอยู่"
+
+msgid "Unable to create update lock: %s"
+msgstr "ไม่สามารถสร้างล็อกการอัปเดต: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "ไม่สามารถเขียนเมทาดาทาการรันคำสั่งหลังนำไปใช้: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "แมนิเฟสต์การอัปเดตขาดบล็อกแพ็กเกจ"
+
+msgid "Update manifest signature block must be an object."
+msgstr "บล็อกลายเซ็นของแมนิเฟสต์การอัปเดตต้องเป็นอ็อบเจกต์"
+
+msgid "Update manifest requirements block must be an object."
+msgstr "บล็อกข้อกำหนดของแมนิเฟสต์การอัปเดตต้องเป็นอ็อบเจกต์"
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 ของแพ็กเกจอัปเดตต้องเป็นสตริงเลขฐานสิบหก 64 ตัวอักษร"
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "แมนิเฟสต์การอัปเดตขาดฟิลด์สตริงที่จำเป็น \"%s\""
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "ฟิลด์แมนิเฟสต์การอัปเดต \"%s\" ต้องเป็นสตริง"
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "แมนิเฟสต์การอัปเดตไม่ใช่ JSON ที่ถูกต้อง: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON ของแมนิเฟสต์การอัปเดตต้องเป็นอ็อบเจกต์"
+
+msgid "Manifest source cannot be empty."
+msgstr "แหล่งแมนิเฟสต์ต้องไม่ว่างเปล่า"
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL แมนิเฟสต์การอัปเดตต้องใช้ต้นทางอัปเดตอย่างเป็นทางการ %s"
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "ไม่สามารถดาวน์โหลดแมนิเฟสต์การอัปเดต สถานะ HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "ไฟล์แมนิเฟสต์อ่านไม่ได้: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "ไม่สามารถอ่านไฟล์แมนิเฟสต์: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL ของไฟล์ manifest การอัปเดตต้องใช้ HTTPS"
+
+msgid "Update package metadata is not readable: %s"
+msgstr "ไม่สามารถอ่านข้อมูลเมตาของแพ็กเกจอัปเดตได้: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "ไม่สามารถอ่านข้อมูลเมตาของแพ็กเกจอัปเดตได้: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "ข้อมูลเมตาของแพ็กเกจอัปเดตไม่ใช่ JSON ที่ถูกต้อง: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "ข้อมูลเมตาของแพ็กเกจอัปเดตต้องเป็นออบเจ็กต์ JSON"
+
+msgid "Update package metadata format must be %d."
+msgstr "รูปแบบข้อมูลเมตาของแพ็กเกจอัปเดตต้องเป็น %d"
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "ฟิลด์ \"remove\" ในข้อมูลเมตาของแพ็กเกจอัปเดตต้องเป็นอาร์เรย์"
+
+msgid "Update package removal paths must be strings."
+msgstr "เส้นทางการลบของแพ็กเกจอัปเดตต้องเป็นสตริง"
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "ข้อมูลเมตาของแพ็กเกจอัปเดตไม่สามารถลบเส้นทางที่ได้รับการป้องกันได้: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "แพ็กเกจอัปเดตไม่สามารถรวมและลบเส้นทางเดียวกันได้: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "ไม่สามารถคำนวณ sha256 ของข้อมูลเมตาแพ็กเกจอัปเดตได้"
+
+msgid "Update package removal path cannot be empty."
+msgstr "เส้นทางการลบของแพ็กเกจอัปเดตต้องไม่ว่างเปล่า"
+
+msgid "Update package removal path contains a null byte."
+msgstr "เส้นทางการลบของแพ็กเกจอัปเดตมีไบต์ว่าง (null byte)"
+
+msgid "Update package removal path must be relative: %s"
+msgstr "เส้นทางการลบของแพ็กเกจอัปเดตต้องเป็นเส้นทางสัมพัทธ์: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "เส้นทางการลบของแพ็กเกจอัปเดตมีส่วนที่ไม่ปลอดภัย: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "ต้องมีเส้นทางสเตจจิ้งเพื่อสร้างแผนการนำการอัปเดตไปใช้"
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "ไดเรกทอรีสเตจจิ้งไม่มีไฟล์ STAGING-INFO.json"
+
+msgid "Unable to read staging metadata: %s"
+msgstr "ไม่สามารถอ่านข้อมูลเมตาสเตจจิ้งได้: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "ข้อมูลเมตาสเตจจิ้งไม่ใช่ JSON ที่ถูกต้อง: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "ข้อมูลเมตาสเตจจิ้งต้องเป็นออบเจ็กต์ JSON"
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "ข้อมูลเมตาสเตจจิ้งไม่มีฟิลด์ application_path"
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "แพ็กเกจอัปเดตไม่มี %s ต้องมีข้อมูลเมตาการล้างข้อมูลที่ลงนามแล้วก่อนจึงจะนำไฟล์ไปใช้ได้"
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "ข้อมูลเมตาสเตจจิ้งไม่มีข้อมูลเมตาการล้างแพ็กเกจที่ลงนามซึ่งบันทึกไว้ระหว่างการแตกไฟล์"
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "ข้อมูลเมตาการล้างแพ็กเกจอัปเดตเปลี่ยนแปลงหลังสเตจจิ้ง โปรดสเตจแพ็กเกจที่ตรวจสอบแล้วอีกครั้งก่อนดำเนินการต่อ"
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "ข้อมูลเมตาสเตจจิ้งไม่มีรายการลบแพ็กเกจที่ถูกต้อง"
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "เส้นทางการล้างแพ็กเกจอัปเดตเปลี่ยนแปลงหลังสเตจจิ้ง โปรดสเตจแพ็กเกจที่ตรวจสอบแล้วอีกครั้งก่อนดำเนินการต่อ"
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "ข้อมูลเมตาการล้างแพ็กเกจที่ลงนามไม่เปลี่ยนแปลงนับตั้งแต่สเตจจิ้ง"
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "มีไฟล์ล็อกการอัปเดตอยู่แล้ว อาจมีการอัปเดตอื่นกำลังดำเนินการอยู่"
+
+msgid "Update lock directory is not writable."
+msgstr "ไดเรกทอรีล็อกการอัปเดตไม่สามารถเขียนได้"
+
+msgid "No update lock is currently active."
+msgstr "ขณะนี้ไม่มีล็อกการอัปเดตที่ใช้งานอยู่"
+
+msgid "Update backup directory is not writable."
+msgstr "ไดเรกทอรีสำรองการอัปเดตไม่สามารถเขียนได้"
+
+msgid "Update backup directory is writable."
+msgstr "ไดเรกทอรีสำรองการอัปเดตสามารถเขียนได้"
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "กระบวนการปัจจุบันไม่สามารถสร้างไดเรกทอรีสำรองการอัปเดตได้"
+
+msgid "Update backup directory can be created."
+msgstr "สามารถสร้างไดเรกทอรีสำรองการอัปเดตได้"
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "ไดเรกทอรีทำงานของการอัปเดตบางรายการไม่สามารถเขียนได้หรือกระบวนการปัจจุบันสร้างไม่ได้"
+
+msgid "Update working directories are writable or can be created."
+msgstr "ไดเรกทอรีทำงานของการอัปเดตสามารถเขียนได้หรือสามารถสร้างได้"
+
+msgid "Update apply file plan was generated."
+msgstr "สร้างแผนไฟล์สำหรับการนำการอัปเดตไปใช้แล้ว"
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "ข้อมูลเมตาการล้างแพ็กเกจมีเส้นทางที่ไม่สามารถลบได้อย่างปลอดภัย"
+
+msgid "Package-declared removal targets are safe."
+msgstr "เป้าหมายการลบที่ประกาศในแพ็กเกจปลอดภัย"
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "ไฟล์ที่ล้าสมัยซึ่งประกาศในแพ็กเกจบางรายการไม่มีอยู่แล้วในการติดตั้งนี้"
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "การอัปเดตตามแผนจะเขียนทับหรือลบลิงก์สัญลักษณ์ที่มีอยู่"
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "การอัปเดตตามแผนจะไม่เขียนทับหรือลบลิงก์สัญลักษณ์ที่มีอยู่"
+
+msgid "New update migration files must be placed under %s."
+msgstr "ไฟล์ไมเกรชันการอัปเดตใหม่ต้องอยู่ใน %s"
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "ตรวจพบไฟล์ไมเกรชัน Doctrine ใหม่ %s จะต้องมีการตรวจสอบความปลอดภัยของการไมเกรชันฐานข้อมูลหลังจากนำไฟล์ไปใช้"
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "รายการไฟล์ในแผนการนำการอัปเดตไปใช้บางรายการถูกตัดทอนในคำตอบ JSON"
+
+msgid "Unable to write update apply plan metadata."
+msgstr "ไม่สามารถเขียนข้อมูลเมตาของแผนการนำการอัปเดตไปใช้ได้"
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "ไม่สามารถดาวน์โหลดแพ็กเกจอัปเดตได้ สถานะ HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "ไม่สามารถเปิดไฟล์ปลายทางของแพ็กเกจอัปเดตได้: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "การดาวน์โหลดการอัปเดตต้องใช้แหล่งอัปเดตอย่างเป็นทางการ %s"
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL ของแพ็กเกจอัปเดตต้องใช้ HTTPS"
+
+msgid "Update package archive safety checks passed."
+msgstr "การตรวจสอบความปลอดภัยของไฟล์แพ็กเกจอัปเดตผ่านแล้ว"
+
+msgid "Update package was extracted to staging."
+msgstr "แพ็กเกจอัปเดตถูกแตกไฟล์ไปยังพื้นที่เตรียมการแล้ว"
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "โหลดข้อมูลเมตาการล้างแพ็กเกจที่ลงนามแล้ว"
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "แพ็กเกจอัปเดตไม่มี %s การนำไฟล์ไปใช้จะถูกบล็อกจนกว่าจะมีข้อมูลเมตาการล้างที่ลงนามแล้ว"
+
+msgid "Staged package dry-run report was generated."
+msgstr "สร้างรายงานทดลองรันของแพ็กเกจที่เตรียมไว้แล้ว"
+
+msgid "Staging metadata was written."
+msgstr "เขียนข้อมูลเมตาการเตรียมการแล้ว"
+
+msgid "Unable to extract update package to staging directory."
+msgstr "ไม่สามารถแตกไฟล์แพ็กเกจอัปเดตไปยังไดเรกทอรีเตรียมการได้"
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "ไม่พบรากของแอปพลิเคชัน Chamilo ในแพ็กเกจที่เตรียมไว้"
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "แพ็กเกจที่เตรียมไว้ขาดรายการ Chamilo ที่จำเป็น: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "แพ็กเกจที่เตรียมไว้มีโครงสร้าง Chamilo ตามที่คาดไว้"
+
+msgid "Staged package does not contain composer.lock."
+msgstr "แพ็กเกจที่เตรียมไว้ไม่มี composer.lock"
+
+msgid "Staged package contains composer.lock."
+msgstr "แพ็กเกจที่เตรียมไว้มี composer.lock"
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "แพ็กเกจที่เตรียมไว้ไม่มี yarn.lock"
+
+msgid "Staged package contains yarn.lock."
+msgstr "แพ็กเกจที่เตรียมไว้มี yarn.lock"
+
+msgid "Unable to encode staging metadata."
+msgstr "ไม่สามารถเข้ารหัสข้อมูลเมตาการเตรียมการได้"
+
+msgid "Unable to write staging metadata."
+msgstr "ไม่สามารถเขียนข้อมูลเมตาการเตรียมการได้"
+
+msgid "Update operation log created."
+msgstr "สร้างบันทึกการดำเนินการอัปเดตแล้ว"
+
+msgid "Unable to write update operation log."
+msgstr "ไม่สามารถเขียนบันทึกการดำเนินการอัปเดตได้"
+
+msgid "Invalid update operation id."
+msgstr "รหัสการดำเนินการอัปเดตไม่ถูกต้อง"
+
+msgid "AI study helper"
+msgstr "ผู้ช่วยการเรียนด้วย AI"
+
+msgid "Selected text"
+msgstr "ข้อความที่เลือก"
+
+msgid "Learning technique"
+msgstr "เทคนิคการเรียนรู้"
+
+msgid "AI response"
+msgstr "การตอบกลับของ AI"
+
+msgid "AI request failed."
+msgstr "คำขอ AI ล้มเหลว"
+
+msgid "Mind mapping"
+msgstr "แผนที่ความคิด"
+
+msgid "Feynman Technique"
+msgstr "เทคนิคไฟน์แมน"
+
+msgid "Elaborative interrogation"
+msgstr "การซักถามเชิงขยายความ"
+
+msgid "Spaced repetition"
+msgstr "การทบทวนแบบเว้นระยะ"
+
+msgid "SQ3R Method"
+msgstr "วิธี SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "อุปมาอุปไมยและคำเปรียบเทียบ"
+
+msgid "Dual coding"
+msgstr "การเข้ารหัสคู่"
+
+msgid "Storytelling"
+msgstr "การเล่าเรื่อง"
+
+msgid "Thematic connections"
+msgstr "การเชื่อมโยงตามหัวข้อ"
+
+msgid "Interleaved learning"
+msgstr "การเรียนรู้แบบสลับกัน"
+
+msgid "Memory palaces"
+msgstr "พระราชวังแห่งความจำ"
+
+msgid "Logins (Month)"
+msgstr "การเข้าสู่ระบบ (เดือน)"
+
+msgid "Logins (Day)"
+msgstr "การเข้าสู่ระบบ (วัน)"
+
+msgid "Logins (Hour)"
+msgstr "การเข้าสู่ระบบ (ชั่วโมง)"
+
+msgid "Number of users (Picture)"
+msgstr "จำนวนผู้ใช้ (รูปภาพ)"
+
+msgid "Allow tutors to register users"
+msgstr "อนุญาตให้ติวเตอร์ลงทะเบียนผู้ใช้"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "อนุญาตให้ติวเตอร์แก้ไขภายในเซสชันของรายวิชา"
+
+msgid "Extend rights for tutors"
+msgstr "ขยายสิทธิ์สำหรับติวเตอร์"
+
+msgid "Show session tutor"
+msgstr "แสดงติวเตอร์ของเซสชัน"
+
+msgid "Default tutor access days after session"
+msgstr "จำนวนวันเข้าถึงเริ่มต้นของติวเตอร์หลังเซสชัน"
+
+msgid "Default tutor access days before session"
+msgstr "จำนวนวันเข้าถึงเริ่มต้นของติวเตอร์ก่อนเซสชัน"
+
+msgid "Dropbox: hide course tutor"
+msgstr "กล่องฝากไฟล์: ซ่อนติวเตอร์รายวิชา"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "ซ่อนติวเตอร์ทั่วไปในกล่องฝากไฟล์"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "ขยายสิทธิ์สำหรับติวเตอร์ในการสำรวจ"
+
+msgid "Maximum courses per user"
+msgstr "จำนวนรายวิชาสูงสุดต่อผู้ใช้"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "อนุญาตให้ติวเตอร์แสดงความเห็นเมื่อตรวจแบบฝึกหัด"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "รวมรหัสทางการในชื่อไฟล์ PDF ผลการทดสอบที่ส่งออก"
+
+msgid "Certificate expiry reminder cron"
+msgstr "cron เตือนใบรับรองหมดอายุ"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "ช่วงเตือนใบรับรองหมดอายุ (วัน)"
+
+msgid "Allow certificates search"
+msgstr "อนุญาตการค้นหาใบรับรอง"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "อนุญาตให้ติวเตอร์แก้ไขประกาศได้เสมอ"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "แสดงรหัสทางการของนักเรียนในใบเช็คชื่อ"
+
+msgid "Restrict course chat to tutors"
+msgstr "จำกัดแชทรายวิชาเฉพาะติวเตอร์"
+
+msgid "Language by resource"
+msgstr "ภาษาตามทรัพยากร"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "ทำให้ SCO เสร็จสมบูรณ์เมื่อออกหากสถานะยังไม่สมบูรณ์"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "เปิดใช้แบบทดสอบปรับตามความก้าวหน้าตามปลายทางหมวดหมู่"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "บล็อกการส่งการแจ้งเตือนแบบทดสอบไปยังติวเตอร์ทั่วไป"
+
+msgid "Enable session expiration warning"
+msgstr "เปิดใช้คำเตือนเซสชันหมดอายุ"
+
+msgid "Session expiration warning time"
+msgstr "เวลาเตือนเซสชันหมดอายุ"
+
+msgid "Check password requirements"
+msgstr "ตรวจสอบข้อกำหนดรหัสผ่าน"
+
+msgid "File integrity check notification recipients"
+msgstr "ผู้รับการแจ้งเตือนการตรวจสอบความสมบูรณ์ของไฟล์"
+
+msgid "Enable the OAuth authorization server"
+msgstr "เปิดใช้เซิร์ฟเวอร์อนุญาต OAuth"
+
+msgid "Enable MCP server"
+msgstr "เปิดใช้เซิร์ฟเวอร์ MCP"
+
+msgid "Allow MCP by roles"
+msgstr "อนุญาต MCP ตามบทบาท"
+
+msgid "Enable external API keys"
+msgstr "เปิดใช้คีย์ API ภายนอก"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "เซสชันตามระยะเวลาพร้อมใช้งานสำหรับติวเตอร์เสมอ"
+
+msgid "Allow registration via course invitation links"
+msgstr "อนุญาตการลงทะเบียนผ่านลิงก์เชิญรายวิชา"
+
+msgid "Add student fullname in file download name"
+msgstr "เพิ่มชื่อเต็มของนักเรียนในชื่อไฟล์ดาวน์โหลด"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "อนุญาตการแปลด้วย AI เป็นภาษาที่ใช้งานทั้งหมดในตัวแก้ไข WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "ปิดความสามารถในการแก้ไขติวเตอร์รายวิชา"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "เมื่อใช้เซสชัน พฤติกรรมเริ่มต้นคือใช้การมองเห็นเครื่องมือที่กำหนดในรายวิชาฐาน การตั้งค่านี้เปลี่ยนให้ติวเตอร์ในรายวิชาของเซสชันปรับการมองเห็นเครื่องมือตามความต้องการได้"
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "ติวเตอร์สามารถสร้างผู้ใช้บนแพลตฟอร์มและลงทะเบียนผู้ใช้เข้าเซสชันได้"
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "เปิดตัวเลือกนี้เพื่อให้ติวเตอร์มีสิทธิ์เท่ากับผู้สอนในเครื่องมือสร้างเนื้อหา"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "แสดงชื่อติวเตอร์ทั่วไปของเซสชันในกล่องชื่อเซสชันในรายการรายวิชา"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "เมื่อเปิดใช้ ติวเตอร์รายวิชาในเซสชันสามารถลงทะเบียนผู้ใช้ใหม่เข้าเซสชันได้ มิฉะนั้นตัวเลือกนี้มีเฉพาะผู้ดูแลระบบและผู้ดูแลเซสชัน"
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "จำนวนวันเริ่มต้นที่ติวเตอร์สามารถเข้าถึงเซสชันได้หลังจากวันที่สิ้นสุดเซสชันอย่างเป็นทางการ"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "จำนวนวันเริ่มต้นที่ติวเตอร์สามารถเข้าถึงเซสชันได้ก่อนวันที่เริ่มเซสชันอย่างเป็นทางการ"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "เปิดใช้ไลบรารี MathJax เพื่อแสดงสูตรคณิตศาสตร์ จะเพิ่มปุ่มสูตรในแถบเครื่องมือของตัวแก้ไข โดยเขียนสูตรด้วย LaTeX"
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "รหัสรายวิชาคั่นด้วย \"|\" เมื่อผู้อำนวยการทรัพยากรบุคคลเข้าสู่ระบบ ผู้ใช้จะถูกสมัครเข้ารายวิชาเหล่านี้โดยอัตโนมัติ ตัวอย่าง: COURSE001|COURSE002 ไม่เปลี่ยนบทบาทผู้ใช้"
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "รหัสรายวิชาคั่นด้วย \"|\" เมื่อผู้ดูแลเซสชันเข้าสู่ระบบ ผู้ใช้จะถูกสมัครเข้ารายวิชาเหล่านี้โดยอัตโนมัติ ตัวอย่าง: COURSE001|COURSE002 ไม่เปลี่ยนบทบาทผู้ใช้"
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "รหัสรายวิชาคั่นด้วย \"|\" เมื่อผู้เรียนเข้าสู่ระบบ ผู้ใช้จะถูกสมัครเข้ารายวิชาเหล่านี้โดยอัตโนมัติ ตัวอย่าง: COURSE001|COURSE002"
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "รหัสรายวิชาคั่นด้วย \"|\" เมื่อครูเข้าสู่ระบบ ผู้ใช้จะถูกสมัครเข้ารายวิชาเหล่านี้โดยอัตโนมัติ ตัวอย่าง: COURSE001|COURSE002 ไม่ให้สิทธิ์ครูประจำรายวิชา"
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "ซ่อนติวเตอร์รายวิชาของเซสชันใน Dropbox เมื่อติวเตอร์ส่งเอกสารให้นักเรียน"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "ซ่อนชื่อติวเตอร์ทั่วไปในเครื่องมือ Dropbox เมื่อติวเตอร์ทั่วไปเป็นผู้อัปโหลดไฟล์"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "เปิดตัวเลือกนี้เพื่อให้ติวเตอร์สร้างและแก้ไขแบบสำรวจได้"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "คำเชิญแบบสำรวจควรใช้ที่อยู่อีเมลของติวเตอร์ หรือที่อยู่ no-reply ที่กำหนดในส่วนการตั้งค่าหลัก?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "จำนวนรายวิชาสูงสุดที่ครู/วิทยากรสามารถสร้างได้ ตั้งเป็น 0 เพื่อปิดจำกัด สามารถแทนที่ได้ต่อผู้ใช้ผ่านการซื้อบริการ BuyCourses"
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "อนุญาตให้ติวเตอร์แก้ไขข้อเสนอแนะเมื่อตรวจแบบฝึกหัด"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "รวมรหัสทางการของนักเรียนในชื่อไฟล์เมื่อส่งออกผลแบบทดสอบเป็น PDF หรือไม่"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "อนุญาตให้เข้าถึงไฟล์ส่วนตัวทั้งหมดโดยไม่มีข้อจำกัด"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "เปิดใช้ cron app:send-certificate-expiry-reminders ซึ่งเตือนผู้เรียนที่ใบรับรองหมดอายุแล้วหรือใกล้หมดอายุ"
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "จำนวนวันล่วงหน้าเริ่มต้นสำหรับสแกนใบรับรองที่ใกล้หมดอายุ ใช้เว้นแต่ cron จะรันด้วย --days-ahead"
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "อนุญาตให้ผู้ใช้และผู้เยี่ยมชมค้นหาใบรับรองที่สร้างแล้วจากเมนูแถบบน"
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "อนุญาตให้ติวเตอร์แก้ไขประกาศในเซสชันที่กำลังดำเนินอยู่หรือที่ผ่านมาได้เสมอ"
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "แสดงรหัสทางการของนักเรียนคู่กับชื่อในใบเช็คชื่อและรายชื่อหรือไม่"
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "อนุญาตกำหนดภาษาเฉพาะให้กับทรัพยากรแต่ละรายการ"
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "แพ็กเกจ SCORM บางชุดเรียก LMSSetValue(cmi.core.lesson_status, 'incomplete') เพียงครั้งเดียว และไม่ส่งสถานะสิ้นสุดจริงหรือ LMSFinish() ที่มีความหมาย เปิดใช้เพื่อให้ Chamilo ถือว่า 'incomplete' ที่ค้างอยู่นั้นเหมือนไม่มีสถานะ และสรุปความสำเร็จเมื่อผู้เรียนออกจาก SCO"
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "หากเส้นทางการเรียนรู้ถูกตั้งเป็นไม่แสดง แต่ครูหรือติวเตอร์ทำให้พร้อมใช้งานจากหน้าแรกของรายวิชา ตัวเลือกนี้จะป้องกันไม่ให้ Chamilo ซ่อนลิงก์บนหน้าแรกของรายวิชา"
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "เปิดใช้แบบทดสอบปรับตัวแบบก้าวหน้า โดยแต่ละหมวดคำถามสามารถส่งผู้เรียนไปหมวดอื่นตามคะแนนได้"
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "เมื่อผู้เรียนทำแบบทดสอบเสร็จ มักมีการแจ้งเตือนไปยังติวเตอร์ รวมถึงติวเตอร์ทั่วไปของเซสชัน เปิดตัวเลือกนี้เพื่อไม่รวมติวเตอร์ทั่วไปในการแจ้งเตือนเหล่านี้"
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "แสดงความพยายามทำแบบทดสอบของผู้ใช้ในทุกเซสชันที่ติวเตอร์ทั่วไปเข้าถึงได้ ในรายงานแบบทดสอบที่รอดำเนินการ"
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "แสดงคำเตือนแก่ผู้ใช้ที่เข้าสู่ระบบแล้วก่อนที่เซสชันฝั่งเซิร์ฟเวอร์จะหมดอายุ"
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "จำนวนวินาทีก่อนเซสชันหมดอายุที่จะแสดงคำเตือน ค่าเริ่มต้นคือ 180 วินาที"
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "กำหนดโครงสร้างที่จำเป็นสำหรับรหัสผ่านผู้ใช้ ตัวอย่าง: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}} ใช้ \"specials\" (พหูพจน์) เพื่อกำหนดให้ต้องมีอักขระพิเศษ"
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "เปิดการตรวจสอบข้อกำหนดรหัสผ่านที่กำหนดด้านบนเมื่อสร้างหรืออัปเดตรหัสผ่าน"
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "รายการที่อยู่อีเมลคั่นด้วยจุลภาคเพื่อแจ้งเมื่อการสแกนความสมบูรณ์ของไฟล์พบการเปลี่ยนแปลง เว้นว่างเพื่อแจ้งผู้ดูแลระบบส่วนกลางทุกคนแทน"
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "อนุญาตให้แอปพลิเคชันภายนอก (เช่น ตัวเชื่อมต่อ Claude.ai MCP) ลงทะเบียนผ่าน OAuth 2.1 Dynamic Client Registration และเชื่อมต่อด้วยบัญชีและสิทธิ์ Chamilo ของผู้ใช้แต่ละคน ปิดตามค่าเริ่มต้น: จุดปลาย discovery, registration, authorization และ token จะคืนค่า 404 จนกว่าจะเปิดใช้"
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "เปิดใช้จุดปลาย MCP ของ Chamilo และอินเทอร์เฟซคีย์ API ส่วนตัวของ MCP เมื่อปิด คีย์ API ที่มีอยู่ โทเค็นเข้าถึง OAuth และข้อมูลรับรอง JWT จะใช้บน /mcp ไม่ได้"
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "แผนที่ JSON ของบทบาทผู้ใช้ Chamilo ที่อนุญาตให้ใช้ MCP ผู้ใช้ต้องตรงกับอย่างน้อยหนึ่งบทบาทที่เปิดใช้ ข้อจำกัดนี้ใช้กับคีย์ API ที่สร้างไว้ก่อนและการเชื่อมต่อ OAuth ที่มีอยู่ด้วย"
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "อนุญาตให้การเชื่อมต่อเซิร์ฟเวอร์ต่อเซิร์ฟเวอร์ที่เชื่อถือได้ (เช่น ปลั๊กอินหน้าร้าน WordPress) ยืนยันตัวตนกับจุดปลาย /api ทั่วไปโดยใช้คีย์ API ภายนอกต่อผู้ใช้ สร้างผ่านคำสั่งคอนโซล \"chamilo:security:generate-external-api-key\" ปิดตามค่าเริ่มต้น: คีย์ที่มีอยู่ใช้ไม่ได้จนกว่าจะเปิดใช้"
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "เพิ่มติวเตอร์และวันที่ในคำบรรยายย่อยของเซสชันในรายการเซสชัน"
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "มิฉะนั้น ติวเตอร์เซสชันจะเข้าถึงเซสชันตามระยะเวลาได้เฉพาะในช่วงระยะเวลาที่ใช้งานอยู่เท่านั้น"
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "เมื่อเปิดใช้ ครู/ผู้ดูแลสามารถส่งลิงก์เชิญครั้งเดียวจากเครื่องมือผู้ใช้ของรายวิชา ให้บุคคลที่ยังไม่ได้ลงทะเบียนเข้าถึงแบบฟอร์มลงทะเบียนและลงทะเบียนได้ แม้การลงทะเบียนด้วยตนเองทั่วไป (allow_registration) จะถูกปิด"
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "เพิ่มชื่อเต็มของนักเรียนในชื่อไฟล์งานเมื่อดาวน์โหลดงานส่งรายชิ้นหรือแพ็กเกจงาน"
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "อนุญาตให้ครูสร้างคำแปลสำหรับภาษาแพลตฟอร์มที่ใช้งานทั้งหมดในการกระทำ WYSIWYG ครั้งเดียว อาจใช้โทเค็น AI จำนวนมาก"
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "เมื่อปิด ผู้ดูแลระบบจะไม่มีลิงก์สำหรับกำหนดติวเตอร์ให้รายวิชาในเซสชันอย่างรวดบนหน้าแก้ไขรายวิชา"
+
+msgid "Show courses & sessions"
+msgstr "แสดงรายวิชาและเซสชัน"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON ไม่บังคับ ตัวอย่าง: {\"speed\": true}"
+
+msgid "Table"
+msgstr "ตาราง"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "ธีม"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "ผู้ส่งอีเมลติวเตอร์รายวิชา"
+
+msgid "Card (visual blocks)"
+msgstr "การ์ด (บล็อกภาพ)"
+
+msgid "List (classic)"
+msgstr "รายการ (แบบคลาสสิก)"
+
+msgid "Limit identical emails"
+msgstr "จำกัดอีเมลที่ซ้ำกัน"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "จำนวนรายวิชาสูงสุดที่ครูหรือผู้ฝึกอบรมสามารถสร้างได้ ตั้งเป็น 0 เพื่อปิดการจำกัด"
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "จำนวนบัญชีสูงสุดที่อนุญาตให้ใช้อีเมลเดียวกัน ตั้งเป็น 0 เพื่อปิดการจำกัด"
+
+msgid "Validation"
+msgstr "การตรวจสอบความถูกต้อง"
+
+msgid "Test/Development"
+msgstr "ทดสอบ/พัฒนา"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "คีย์ฟิลด์เพิ่มเติมของผู้ใช้สำหรับค้นหาและตั้งชื่อเซสชันจาก /admin-dashboard/register"
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "การกำหนดค่า JSON สำหรับฟิลด์กรองล่วงหน้าในการค้นหา"
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "การดำเนินการนี้จะทำเครื่องหมายว่าการโยกย้ายทั้งหมดที่มาพร้อมเวอร์ชันนี้ได้ดำเนินการแล้ว ทำเฉพาะบนแพลตฟอร์มที่เป็นปัจจุบันและไม่เคยบันทึกประวัติไว้"
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "บันทึกการโยกย้ายแล้ว %s รายการ แพลตฟอร์มของคุณสามารถอัปเดตได้ตามปกติแล้ว"
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "ไม่มีประวัติการโยกย้าย: คลิกเพื่อแก้ไข (มิฉะนั้นการอัปเดตอาจเสียหาย)"
+
+msgid "Migration history is recorded"
+msgstr "บันทึกประวัติการโยกย้ายแล้ว"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "พบ %s ที่รากโปรเจกต์: ลบออกเพื่อปิดจุดสิ้นสุดการอัปเกรด"
 

@@ -44,18 +44,6 @@ class TrackEAccess
     protected string $userIp;
 
     /**
-     * Set accessUserId.
-     *
-     * @return TrackEAccess
-     */
-    public function setAccessUserId(int $accessUserId)
-    {
-        $this->accessUserId = $accessUserId;
-
-        return $this;
-    }
-
-    /**
      * Get accessUserId.
      *
      * @return int
@@ -66,13 +54,13 @@ class TrackEAccess
     }
 
     /**
-     * Set accessDate.
+     * Set accessUserId.
      *
      * @return TrackEAccess
      */
-    public function setAccessDate(DateTime $accessDate)
+    public function setAccessUserId(int $accessUserId)
     {
-        $this->accessDate = $accessDate;
+        $this->accessUserId = $accessUserId;
 
         return $this;
     }
@@ -88,13 +76,13 @@ class TrackEAccess
     }
 
     /**
-     * Set cId.
+     * Set accessDate.
      *
      * @return TrackEAccess
      */
-    public function setCId(int $cId)
+    public function setAccessDate(DateTime $accessDate)
     {
-        $this->cId = $cId;
+        $this->accessDate = $accessDate;
 
         return $this;
     }
@@ -110,13 +98,13 @@ class TrackEAccess
     }
 
     /**
-     * Set accessTool.
+     * Set cId.
      *
      * @return TrackEAccess
      */
-    public function setAccessTool(string $accessTool)
+    public function setCId(int $cId)
     {
-        $this->accessTool = $accessTool;
+        $this->cId = $cId;
 
         return $this;
     }
@@ -132,13 +120,13 @@ class TrackEAccess
     }
 
     /**
-     * Set sessionId.
+     * Set accessTool.
      *
      * @return TrackEAccess
      */
-    public function setSessionId(int $sessionId)
+    public function setAccessTool(string $accessTool)
     {
-        $this->sessionId = $sessionId;
+        $this->accessTool = $accessTool;
 
         return $this;
     }
@@ -154,13 +142,13 @@ class TrackEAccess
     }
 
     /**
-     * Set userIp.
+     * Set sessionId.
      *
      * @return TrackEAccess
      */
-    public function setUserIp(string $userIp)
+    public function setSessionId(int $sessionId)
     {
-        $this->userIp = $userIp;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
@@ -173,6 +161,18 @@ class TrackEAccess
     public function getUserIp()
     {
         return $this->userIp;
+    }
+
+    /**
+     * Set userIp.
+     *
+     * @return TrackEAccess
+     */
+    public function setUserIp(string $userIp)
+    {
+        $this->userIp = $userIp;
+
+        return $this;
     }
 
     /**

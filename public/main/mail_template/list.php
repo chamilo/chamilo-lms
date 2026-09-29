@@ -24,11 +24,7 @@ $redirectToList = static function (): never {
 };
 
 $backButton = static function (): string {
-    return '<a
-        class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-gray-25 bg-white text-primary shadow-sm transition hover:bg-gray-15"
-        href="'.api_get_self().'"
-        title="'.api_htmlentities(get_lang('Back')).'"
-    >'.
+    return '<a href="'.api_get_self().'">'.
         Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).
     '</a>';
 };

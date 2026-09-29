@@ -77,23 +77,80 @@
     <script>
         <?php
             if (isset($_GET['i'])) {
-                $quitExept = 0;
-                if (isset($_GET['quit'])) {
-                    $quitExept = (int) $_GET['quit'];
-                }
-                $idPageTop = $_GET['i'];
+                $quitExcept = isset($_GET['quit']) ? (int) $_GET['quit'] : 0;
+                $idPageTop = (int) $_GET['i'];
+
                 if (isset($_GET['redir'])) {
-                    $RedirLP = $_GET['redir'];
-                    $RedirLP = str_replace('t@d', '/', $RedirLP);
-                    $RedirLP = str_replace('t@@d', '?', $RedirLP);
-                    $RedirLP = str_replace('t@@@d', '&', $RedirLP);
-                    if (1 == $quitExept) {
-                        $RedirLP = str_replace('action=view', 'action=list', $RedirLP);
-                        $RedirLP = str_replace('isStudentView=true', 'isStudentView=false', $RedirLP);
-                        $RedirLP .= '&isStudentView=false';
+                    $redirectUrl = (string) $_GET['redir'];
+                    $redirectUrl = str_replace('t@d', '/', $redirectUrl);
+                    $redirectUrl = str_replace('t@@d', '?', $redirectUrl);
+                    $redirectUrl = str_replace('t@@@d', '&', $redirectUrl);
+
+                    // Only ever redirect within this same origin: strip any
+                    // attacker-supplied scheme/host down to a relative
+                    // path+query before either branch below builds on it, so
+                    // this can't become an open redirect to another domain.
+                    $requestUrlParts = parse_url($redirectUrl);
+                    if (!empty($requestUrlParts['host'])) {
+                        $currentHost = (string) ($_SERVER['HTTP_HOST'] ?? '');
+                        if ('' === $currentHost || 0 !== strcasecmp($requestUrlParts['host'], $currentHost)) {
+                            $redirectUrl = (string) ($requestUrlParts['path'] ?? '/');
+                            if (isset($requestUrlParts['query'])) {
+                                $redirectUrl .= '?'.$requestUrlParts['query'];
+                            }
+                        }
                     }
-                    echo "var idPageTop = $idPageTop;";
-                    echo "var RedirLP = '$RedirLP';";
+
+                    if (1 === $quitExcept) {
+                        $urlParts = parse_url($redirectUrl);
+                        $path = (string) ($urlParts['path'] ?? '');
+
+                        if (preg_match('#^/resources/lp/(\d+)/\d+/runtime/?$#', $path, $matches)) {
+                            $queryParams = [];
+                            parse_str((string) ($urlParts['query'] ?? ''), $queryParams);
+
+                            $queryParams['isStudentView'] = 'false';
+                            unset(
+                                $queryParams['item_id'],
+                                $queryParams['temporaryStudentView'],
+                                $queryParams['teachdoc'],
+                                $queryParams['cstudio_preview'],
+                            );
+
+                            $baseUrl = '';
+                            if (!empty($urlParts['scheme']) && !empty($urlParts['host'])) {
+                                $baseUrl = $urlParts['scheme'].'://'.$urlParts['host'];
+                                if (!empty($urlParts['port'])) {
+                                    $baseUrl .= ':'.(int) $urlParts['port'];
+                                }
+                            }
+
+                            $redirectUrl = $baseUrl.'/resources/lp/'.(int) $matches[1];
+                            if ([] !== $queryParams) {
+                                $redirectUrl .= '?'.http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986);
+                            }
+                        } else {
+                            $redirectUrl = str_replace('action=view', 'action=list', $redirectUrl);
+                            $redirectUrl = preg_replace(
+                                '/([?&])isStudentView=[^&]*/',
+                                '$1isStudentView=false',
+                                $redirectUrl,
+                                1,
+                                $studentViewReplacementCount,
+                            );
+
+                            if (0 === $studentViewReplacementCount) {
+                                $separator = str_contains($redirectUrl, '?') ? '&' : '?';
+                                $redirectUrl .= $separator.'isStudentView=false';
+                            }
+                        }
+                    }
+
+                    echo 'var idPageTop = '.json_encode($idPageTop).';';
+                    echo 'var RedirLP = '.json_encode(
+                        $redirectUrl,
+                        JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT,
+                    ).';';
                 }
             }
         ?>

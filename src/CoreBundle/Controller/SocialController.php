@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\MessageRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
@@ -54,7 +55,7 @@ use UserManager;
 #[Route('/social-network')]
 class SocialController extends AbstractController
 {
-    private const TERMS_SECTIONS = [
+    private const array TERMS_SECTIONS = [
         0 => ['title' => 'Terms and Conditions', 'subtitle' => null],
         1 => ['title' => 'Personal data collection', 'subtitle' => 'Why do we collect this data?'],
         2 => ['title' => 'Personal data recording', 'subtitle' => 'Where do we record the data?'],
@@ -459,7 +460,7 @@ class SocialController extends AbstractController
         }
 
         UserManager::createDataPrivacyExtraFields();
-        UserManager::update_extra_field_value($targetUserId, $fieldToUpdate, 1);
+        UserManager::update_extra_field_value($targetUserId, $fieldToUpdate, '1');
         UserManager::update_extra_field_value($targetUserId, $justificationFieldToUpdate, $explanation);
 
         $emailOfficer = (string) $settingsManager->getSetting('profile.data_protection_officer_email');
@@ -490,6 +491,7 @@ class SocialController extends AbstractController
         User $currentUser,
         UsergroupRepository $usergroupRepository,
         CForumThreadRepository $forumThreadRepository,
+        CourseRepository $courseRepository,
         SettingsManager $settingsManager,
         RequestStack $requestStack
     ): JsonResponse {
@@ -502,7 +504,13 @@ class SocialController extends AbstractController
         $items = [];
         $goToUrl = '';
 
-        if (!empty($cid)) {
+        // The forum tool lives at /resources/forum/{courseResourceNodeId}/, so the
+        // global-forums course has to resolve to a resource node before any link can
+        // be built; without one there is no forum to point at.
+        $forumNodeId = $courseRepository->find($cid)?->getResourceNode()?->getId();
+
+        if (!empty($cid) && null !== $forumNodeId) {
+            $courseQuery = http_build_query(['cid' => $cid, 'sid' => 0, 'gid' => 0]);
             $threads = $forumThreadRepository->getThreadsBySubscriptions($userId, $cid);
             foreach ($threads as $thread) {
                 $threadId = $thread->getIid();
@@ -511,10 +519,10 @@ class SocialController extends AbstractController
                     'id' => $threadId,
                     'name' => $thread->getTitle(),
                     'description' => '',
-                    'url' => $baseUrl.'/main/forum/viewthread.php?cid='.$cid.'&sid=0&gid=0&forum='.$forumId.'&thread='.$threadId,
+                    'url' => $baseUrl.'/resources/forum/'.$forumNodeId.'/forum/'.$forumId.'/thread/'.$threadId.'?'.$courseQuery,
                 ];
             }
-            $goToUrl = $baseUrl.'/main/forum/index.php?cid='.$cid.'&sid=0&gid=0';
+            $goToUrl = $baseUrl.'/resources/forum/'.$forumNodeId.'/?'.$courseQuery;
         } else {
             $groups = $usergroupRepository->getGroupsByUser($userId);
             foreach ($groups as $group) {
@@ -559,14 +567,18 @@ class SocialController extends AbstractController
     #[Route('/get-forum-link', name: 'get_forum_link')]
     public function getForumLink(
         SettingsManager $settingsManager,
+        CourseRepository $courseRepository,
         RequestStack $requestStack
     ): JsonResponse {
         $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
         $cid = (int) $settingsManager->getSetting('forum.global_forums_course_id');
 
         $goToLink = '';
-        if (!empty($cid)) {
-            $goToLink = $baseUrl.'/main/forum/index.php?cid='.$cid.'&sid=0&gid=0';
+        $forumNodeId = $courseRepository->find($cid)?->getResourceNode()?->getId();
+        if (!empty($cid) && null !== $forumNodeId) {
+            $goToLink = $baseUrl.'/resources/forum/'.$forumNodeId.'/?'.http_build_query(
+                ['cid' => $cid, 'sid' => 0, 'gid' => 0]
+            );
         }
 
         return $this->json(['go_to' => $goToLink]);

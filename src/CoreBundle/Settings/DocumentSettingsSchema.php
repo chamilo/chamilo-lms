@@ -77,9 +77,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('upload_extensions_whitelist', TextareaType::class, [
                 'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
             ])
-            ->add('upload_extensions_skip', TextareaType::class, [
-                'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
-            ])
+            ->add('upload_extensions_skip', YesNoType::class)
             ->add('upload_extensions_replace_by', TextareaType::class, [
                 'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
             ])

@@ -22,6 +22,7 @@
 
         <div class="flex flex-wrap items-center gap-2">
           <BaseButton
+            v-if="!isLearningPathContext"
             :label="t('Back to surveys')"
             :route="buildListRoute()"
             icon="back"
@@ -144,7 +145,7 @@
             v-model="form.availableUntil"
             :error-text="t('Invalid date')"
             :is-invalid="formSubmitted && !form.availableUntil"
-            :label="t('End Date')"
+            :label="t('End date')"
             :show-time="true"
           />
         </div>
@@ -201,7 +202,7 @@
                 v-model="slot.end"
                 :error-text="t('Invalid date')"
                 :is-invalid="formSubmitted && !slot.end"
-                :label="t('End Date')"
+                :label="t('End date')"
                 :show-time="true"
               />
             </div>
@@ -366,11 +367,13 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
 
 const meeting = ref({
   surveyId: null,
@@ -408,6 +411,17 @@ const successMessage = ref("")
 
 const isCreateMode = computed(() => route.name === "SurveyMeetingCreate")
 const isEditorMode = computed(() => isCreateMode.value || route.name === "SurveyMeetingEdit")
+const isLearningPathContext = computed(() => {
+  const origin = String(getQueryValue(route.query.origin) || "")
+  const returnToLp = String(getQueryValue(route.query.returnToLp) || "")
+
+  return (
+    origin === "learnpath" ||
+    returnToLp === "1" ||
+    Boolean(getQueryValue(route.query.lp_id)) ||
+    Boolean(getQueryValue(route.query.lpItemId || route.query.lp_item_id))
+  )
+})
 const pageTitle = computed(() => {
   if (isCreateMode.value) {
     return t("Create meeting poll")
@@ -429,6 +443,12 @@ function getContextParams(extra = {}) {
     cid: getQueryValue(route.query.cid),
     sid: getQueryValue(route.query.sid),
     gid: getQueryValue(route.query.gid),
+    lpItemId: getQueryValue(route.query.lpItemId || route.query.lp_item_id),
+    lp_id: getQueryValue(route.query.lp_id),
+    origin: getQueryValue(route.query.origin),
+    type: getQueryValue(route.query.type),
+    returnToLp: getQueryValue(route.query.returnToLp),
+    embedded: getQueryValue(route.query.embedded),
     ...extra,
   }
 }
@@ -566,13 +586,12 @@ async function saveMeeting() {
         start: normalizeDateForPayload(slot.start),
         end: normalizeDateForPayload(slot.end),
       })),
-      csrfToken: meeting.value.csrfToken,
     }
 
     const surveyId = isCreateMode.value ? null : Number(route.params.surveyId)
     const response = await surveyService.saveSurveyMeeting(payload, getContextParams(), surveyId)
     meeting.value = response
-    successMessage.value = response.message ? t(response.message) : t("Saved.")
+    successMessage.value = response.message ? t(response.message) : t("Saved")
 
     if (isCreateMode.value && response.surveyId) {
       await router.replace({
@@ -604,14 +623,16 @@ async function submitAvailability() {
     const response = await surveyService.submitSurveyMeetingAnswer(
       {
         selectedSlots: selectedSlots.value,
-        csrfToken: meeting.value.csrfToken,
       },
       getContextParams({ invitationCode: getQueryValue(route.query.invitationCode) }),
       Number(route.params.surveyId),
     )
     meeting.value = response
     selectedSlots.value = Array.isArray(response.selectedSlots) ? [...response.selectedSlots] : []
-    successMessage.value = response.message ? t(response.message) : t("Saved.")
+    successMessage.value = response.message ? t(response.message) : t("Saved")
+    if (isLearningPathContext.value && window.parent !== window) {
+      window.parent.postMessage({ type: "chamilo:learning-path:refresh" }, window.location.origin)
+    }
   } catch (error) {
     console.error("Error saving meeting availability", error)
     errorMessage.value = error?.response?.data?.["hydra:description"] || t("Could not save meeting availability")
@@ -675,7 +696,7 @@ function decodeHtml(value) {
 }
 
 function displayText(value, fallback = "") {
-  const decodedValue = decodeHtml(value)
+  const decodedValue = decodeHtml(displayTranslatedHtml(value))
   const plainValue = decodeHtml(decodedValue.replace(/<[^>]*>/g, " "))
     .replace(/\s+/g, " ")
     .trim()

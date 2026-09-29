@@ -20,7 +20,6 @@ parameters:
 	excludes_analyse:
 		- public/main/admin/index.php
 		- public/main/admin/settings.php
-		- public/main/admin/periodic_export.php
 		- public/main/admin/user_move_stats.php
 		- public/main/admin/settings.lib.php
 		- public/main/admin/user_update_import.php

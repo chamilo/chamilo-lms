@@ -11,7 +11,7 @@
       v-if="showPendingExerciseAttemptsLink"
       :label="t('Pending tests')"
       icon="quiz"
-      to-url="/main/exercise/pending.php"
+      :route="{ name: 'ExercisePendingAttempts' }"
       type="primary"
     />
   </SectionHeader>
@@ -38,12 +38,7 @@ function isSettingEnabled(name) {
 }
 
 const canReviewCourseItems = computed(() => {
-  return Boolean(
-    securityStore.isAdmin ||
-    securityStore.isTeacher ||
-    securityStore.isCurrentTeacher ||
-    securityStore.isCurrentCourseTeacher,
-  )
+  return Boolean(securityStore.isTeacher || securityStore.isCurrentTeacher || securityStore.isCurrentCourseTeacher)
 })
 
 const showPendingAssignmentsSetting = computed(() => {

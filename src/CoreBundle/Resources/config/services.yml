@@ -19,7 +19,7 @@ services:
 
     Chamilo\CoreBundle\:
       resource: '../../*'
-      exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form/DataTransformer/ResourceToIdentifierTransformer.php,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity,ApiResource,Security/Badge,Tool/LegacyPluginCourseTool.php}'
+      exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form/DataTransformer/ResourceToIdentifierTransformer.php,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity,ApiResource,Security/Badge,Security/ExerciseAttemptScope.php,Tool/LegacyPluginCourseTool.php}'
       public: true
 
     Doctrine\Migrations\Version\DbalMigrationFactory: ~
@@ -30,8 +30,6 @@ services:
     Chamilo\CoreBundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
-
-    Chamilo\CoreBundle\Hook\HookFactory: ~
 
     # Form types
     # Custom yes/no form type, use in the platform settings
@@ -67,11 +65,6 @@ services:
           cache: '@oneup_flysystem.asset_cache_filesystem'
           driver: 'gd'
         $filters: [ ]
-
-    Chamilo\CoreBundle\Helpers\GlideAssetUtil:
-        arguments:
-            - {source: '@oneup_flysystem.asset_filesystem', cache: '@oneup_flysystem.asset_cache_filesystem'}
-            - '%glide_media_filters%'
 
     # Check if users are online
 #    chamilo_core.listener.online:

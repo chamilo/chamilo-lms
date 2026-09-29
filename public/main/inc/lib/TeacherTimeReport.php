@@ -82,12 +82,12 @@ class TeacherTimeReport
             $dataToExport[] = [
                 get_lang('Session'),
                 get_lang('Course'),
-                get_lang('Coach'),
+                get_lang('Tutor'),
                 get_lang('Total time'),
             ];
         } else {
             $dataToExport[] = [
-                get_lang('Coach'),
+                get_lang('Tutor'),
                 get_lang('Total time'),
             ];
         }

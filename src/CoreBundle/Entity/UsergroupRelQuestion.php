@@ -39,13 +39,6 @@ class UsergroupRelQuestion
         return $this->id;
     }
 
-    public function setCoefficient(float $coefficient): self
-    {
-        $this->coefficient = $coefficient;
-
-        return $this;
-    }
-
     /**
      * Get coefficient.
      *
@@ -54,6 +47,13 @@ class UsergroupRelQuestion
     public function getCoefficient()
     {
         return $this->coefficient;
+    }
+
+    public function setCoefficient(float $coefficient): self
+    {
+        $this->coefficient = $coefficient;
+
+        return $this;
     }
 
     public function getQuestion(): CQuizQuestion

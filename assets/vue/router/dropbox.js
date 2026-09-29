@@ -3,6 +3,7 @@ export default {
   meta: {
     requiresAuth: true,
     showBreadcrumb: true,
+    breadcrumb: "Dropbox",
   },
   name: "dropbox",
   component: () => import("../components/dropbox/DropboxLayout.vue"),

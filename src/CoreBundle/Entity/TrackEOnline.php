@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'course', columns: ['c_id'])]
 #[ORM\Index(name: 'login_user_id', columns: ['login_user_id'])]
 #[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\UniqueConstraint(name: 'uniq_track_e_online_user_url', columns: ['login_user_id', 'access_url_id'])]
 #[ORM\Entity(repositoryClass: TrackEOnlineRepository::class)]
 class TrackEOnline
 {
@@ -44,18 +45,6 @@ class TrackEOnline
     protected int $accessUrlId;
 
     /**
-     * Set loginUserId.
-     *
-     * @return TrackEOnline
-     */
-    public function setLoginUserId(int $loginUserId)
-    {
-        $this->loginUserId = $loginUserId;
-
-        return $this;
-    }
-
-    /**
      * Get loginUserId.
      *
      * @return int
@@ -66,13 +55,13 @@ class TrackEOnline
     }
 
     /**
-     * Set loginDate.
+     * Set loginUserId.
      *
      * @return TrackEOnline
      */
-    public function setLoginDate(DateTime $loginDate)
+    public function setLoginUserId(int $loginUserId)
     {
-        $this->loginDate = $loginDate;
+        $this->loginUserId = $loginUserId;
 
         return $this;
     }
@@ -88,13 +77,13 @@ class TrackEOnline
     }
 
     /**
-     * Set userIp.
+     * Set loginDate.
      *
      * @return TrackEOnline
      */
-    public function setUserIp(string $userIp)
+    public function setLoginDate(DateTime $loginDate)
     {
-        $this->userIp = $userIp;
+        $this->loginDate = $loginDate;
 
         return $this;
     }
@@ -110,13 +99,13 @@ class TrackEOnline
     }
 
     /**
-     * Set cId.
+     * Set userIp.
      *
      * @return TrackEOnline
      */
-    public function setCId(int $cId)
+    public function setUserIp(string $userIp)
     {
-        $this->cId = $cId;
+        $this->userIp = $userIp;
 
         return $this;
     }
@@ -132,13 +121,13 @@ class TrackEOnline
     }
 
     /**
-     * Set sessionId.
+     * Set cId.
      *
      * @return TrackEOnline
      */
-    public function setSessionId(int $sessionId)
+    public function setCId(int $cId)
     {
-        $this->sessionId = $sessionId;
+        $this->cId = $cId;
 
         return $this;
     }
@@ -154,13 +143,13 @@ class TrackEOnline
     }
 
     /**
-     * Set accessUrlId.
+     * Set sessionId.
      *
      * @return TrackEOnline
      */
-    public function setAccessUrlId(int $accessUrlId)
+    public function setSessionId(int $sessionId)
     {
-        $this->accessUrlId = $accessUrlId;
+        $this->sessionId = $sessionId;
 
         return $this;
     }
@@ -173,6 +162,18 @@ class TrackEOnline
     public function getAccessUrlId()
     {
         return $this->accessUrlId;
+    }
+
+    /**
+     * Set accessUrlId.
+     *
+     * @return TrackEOnline
+     */
+    public function setAccessUrlId(int $accessUrlId)
+    {
+        $this->accessUrlId = $accessUrlId;
+
+        return $this;
     }
 
     /**

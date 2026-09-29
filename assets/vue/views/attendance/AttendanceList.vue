@@ -18,7 +18,7 @@
       :attendances="attendances"
       :loading="isLoading"
       :total-records="totalAttendances"
-      :readonly="securityStore.isStudent || platformConfigStore.isStudentViewActive"
+      :readonly="readonly"
       @edit="redirectToEditAttendance"
       @view="toggleResourceLinkVisibility"
       @delete="confirmDeleteAttendance"
@@ -34,7 +34,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, computed, watch } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import attendanceService from "../../services/attendanceService"
 import AttendanceTable from "../../components/attendance/AttendanceTable.vue"
@@ -42,11 +42,11 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
 import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -54,7 +54,10 @@ const route = useRoute()
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 
-const readonly = computed(() => securityStore.isStudent || platformConfigStore.isStudentViewActive)
+// Editable only for users who can manage the current course (course/session
+// teacher or admin), matching CAttendance's write security. The student view
+// forces read-only even for them.
+const readonly = computed(() => !securityStore.isCourseAdmin || platformConfigStore.isStudentViewActive)
 
 const attendances = ref([])
 const isDeleteDialogVisible = ref(false)
@@ -146,12 +149,7 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
   }
 }
 
-watch(
-  () => platformConfigStore.isStudentViewActive,
-  () => {
-    fetchAttendances()
-  },
-)
+useStudentViewRefresh(fetchAttendances)
 
 onMounted(fetchAttendances)
 </script>

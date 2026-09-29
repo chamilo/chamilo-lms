@@ -45,13 +45,6 @@ class UsergroupRelUser
         return $this->id;
     }
 
-    public function setUsergroup(Usergroup $usergroup): self
-    {
-        $this->usergroup = $usergroup;
-
-        return $this;
-    }
-
     /**
      * Get usergroup.
      *
@@ -62,9 +55,9 @@ class UsergroupRelUser
         return $this->usergroup;
     }
 
-    public function setRelationType(int $relationType): self
+    public function setUsergroup(Usergroup $usergroup): self
     {
-        $this->relationType = $relationType;
+        $this->usergroup = $usergroup;
 
         return $this;
     }
@@ -77,5 +70,12 @@ class UsergroupRelUser
     public function getRelationType()
     {
         return $this->relationType;
+    }
+
+    public function setRelationType(int $relationType): self
+    {
+        $this->relationType = $relationType;
+
+        return $this;
     }
 }

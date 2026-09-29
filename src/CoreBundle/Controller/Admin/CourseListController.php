@@ -13,18 +13,18 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_ADMIN')]
 #[Route('/admin/course-list-data')]
 class CourseListController extends AbstractController
 {
-    private const ALLOWED_SORT_FIELDS = [
+    private const array ALLOWED_SORT_FIELDS = [
         'title' => 'c.title',
         'code' => 'c.code',
         'courseLanguage' => 'c.courseLanguage',
@@ -34,7 +34,7 @@ class CourseListController extends AbstractController
         'visibility' => 'c.visibility',
     ];
 
-    private const VISIBILITY_LABELS = [
+    private const array VISIBILITY_LABELS = [
         Course::CLOSED => 'Closed - the account is not active',
         Course::REGISTERED => 'Private access (access authorized to group members only)',
         Course::OPEN_PLATFORM => 'Open - access allowed for users registered on the platform',
@@ -44,7 +44,6 @@ class CourseListController extends AbstractController
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly CourseRelUserRepository $courseRelUserRepository,
     ) {}
@@ -52,8 +51,8 @@ class CourseListController extends AbstractController
     #[Route('', name: 'admin_course_list_data', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
-        $page = max(1, (int) $request->query->get('page', 1));
-        $limit = max(1, min(200, (int) $request->query->get('limit', 20)));
+        $page = max(1, (int) $request->query->get('page', '1'));
+        $limit = max(1, min(200, (int) $request->query->get('limit', '20')));
         $sortField = (string) $request->query->get('sortField', 'title');
         $sortOrder = 'DESC' === strtoupper((string) $request->query->get('sortOrder', 'ASC')) ? 'DESC' : 'ASC';
         $view = (string) $request->query->get('view', 'simple');
@@ -74,7 +73,7 @@ class CourseListController extends AbstractController
 
         $qb = $this->em->createQueryBuilder()
             ->from(Course::class, 'c')
-            ->innerJoin(AccessUrlRelCourse::class, 'auc', 'WITH', 'auc.course = c')
+            ->innerJoin(AccessUrlRelCourse::class, 'auc', Join::ON, 'auc.course = c')
         ;
 
         if ($accessUrl) {
@@ -125,7 +124,7 @@ class CourseListController extends AbstractController
         $total = (int) $countQb->select('COUNT(DISTINCT c.id)')->getQuery()->getSingleScalarResult();
 
         $rows = (clone $qb)
-            ->select('DISTINCT c.id, c.title, c.code, c.courseLanguage, c.visibility, c.subscribe, c.unsubscribe, c.creationDate')
+            ->select('DISTINCT c.id, c.title, c.code, c.courseLanguage, c.visibility, c.subscribe, c.unsubscribe, c.creationDate, IDENTITY(c.resourceNode) AS resourceNodeId')
             ->orderBy($dqlSortField, $sortOrder)
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit)
@@ -158,6 +157,7 @@ class CourseListController extends AbstractController
             $courseId = (int) $row['id'];
             $item = [
                 'id' => $courseId,
+                'resourceNodeId' => isset($row['resourceNodeId']) ? (int) $row['resourceNodeId'] : null,
                 'title' => $row['title'] ?? '',
                 'code' => $row['code'] ?? '',
                 'courseLanguage' => $row['courseLanguage'] ?? '',
@@ -189,7 +189,6 @@ class CourseListController extends AbstractController
         return $this->json([
             'items' => $items,
             'total' => $total,
-            'csrfToken' => $this->csrfTokenManager->getToken('admin_course_list')->getValue(),
         ]);
     }
 

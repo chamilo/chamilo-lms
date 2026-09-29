@@ -87,6 +87,7 @@ class CourseExport
         $enddate = (int) ($this->courseInfo['enddate'] ?? (time() + 31536000));
         $visible = (int) ($this->courseInfo['visible'] ?? 1);
         $enablecompletion = (int) ($this->courseInfo['enablecompletion'] ?? 0);
+        $language = (string) ($this->courseInfo['language'] ?? '');
 
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xmlContent .= '<course id="'.$courseId.'" contextid="'.$contextId.'">'.PHP_EOL;
@@ -108,7 +109,7 @@ class CourseExport
         $xmlContent .= '  <groupmode>0</groupmode>'.PHP_EOL;
         $xmlContent .= '  <groupmodeforce>0</groupmodeforce>'.PHP_EOL;
         $xmlContent .= '  <defaultgroupingid>0</defaultgroupingid>'.PHP_EOL;
-        $xmlContent .= '  <lang></lang>'.PHP_EOL;
+        $xmlContent .= '  <lang>'.htmlspecialchars($language).'</lang>'.PHP_EOL;
         $xmlContent .= '  <theme></theme>'.PHP_EOL;
         $xmlContent .= '  <timecreated>'.time().'</timecreated>'.PHP_EOL;
         $xmlContent .= '  <timemodified>'.time().'</timemodified>'.PHP_EOL;
@@ -182,9 +183,17 @@ class CourseExport
             if (($activity['modulename'] ?? '') === 'quiz') {
                 $quizExport = new QuizExport($this->course);
                 $quizData = $quizExport->getData((int) $activity['id'], (int) $activity['sectionid']);
+                $questions = $quizData['questions'] ?? [];
+                if (!\is_array($questions)) {
+                    continue;
+                }
 
-                foreach ($quizData['questions'] as $question) {
-                    $categoryId = (int) $question['questioncategoryid'];
+                foreach ($questions as $question) {
+                    $categoryId = (int) ($question['questioncategoryid'] ?? 0);
+                    if ($categoryId <= 0) {
+                        continue;
+                    }
+
                     if (!\in_array($categoryId, $questionCategories, true)) {
                         $questionCategories[] = $categoryId;
                     }

@@ -36,8 +36,8 @@ class UpdatePositionLink extends AbstractController
         }
 
         // Context is mandatory for ordering
-        $cid = (int) $request->query->get('cid', 0);
-        $sid = (int) $request->query->get('sid', 0);
+        $cid = (int) $request->query->get('cid', '0');
+        $sid = (int) $request->query->get('sid', '0');
 
         if ($cid <= 0) {
             throw new BadRequestHttpException('Missing or invalid "cid" for link move operation.');

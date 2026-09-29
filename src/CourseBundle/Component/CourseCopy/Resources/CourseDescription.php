@@ -29,19 +29,33 @@ class CourseDescription extends Resource
     public $description_type;
 
     /**
+     * The description progress.
+     */
+    public $progress;
+
+    /**
+     * The resource language ISO code.
+     */
+    public $language;
+
+    /**
      * Create a new course description.
      *
      * @param int    $id
      * @param string $title
      * @param string $content
      * @param string $descriptionType
+     * @param int    $progress
+     * @param string $language
      */
-    public function __construct($id, $title, $content, $descriptionType)
+    public function __construct($id, $title, $content, $descriptionType, $progress = 0, $language = '')
     {
         parent::__construct($id, RESOURCE_COURSEDESCRIPTION);
         $this->title = $title;
         $this->content = $content;
         $this->description_type = $descriptionType;
+        $this->progress = $progress;
+        $this->language = $language;
     }
 
     /**

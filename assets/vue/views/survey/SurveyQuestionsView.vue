@@ -13,10 +13,20 @@
 
       <div class="flex flex-wrap items-center justify-end gap-2">
         <BaseButton
+          v-if="!isLearningPathContext"
           :label="t('Back to survey list')"
           :route="buildListRoute()"
           icon="back"
           type="black"
+        />
+        <BaseButton
+          v-if="isLearningPathContext"
+          :disabled="questions.length === 0"
+          :is-loading="isFinishingLearningPath"
+          :label="t('Finish and return to learning path')"
+          icon="check"
+          type="success"
+          @click="finishLearningPathSurvey"
         />
         <BaseButton
           :label="t('Configure')"
@@ -41,6 +51,13 @@
       class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
     >
       {{ successMessage }}
+    </div>
+
+    <div
+      v-if="isLearningPathContext && questions.length === 0 && !isLoading"
+      class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700"
+    >
+      {{ t("Add at least one question before returning to the learning path.") }}
     </div>
 
     <div
@@ -422,7 +439,7 @@
 <script setup>
 import { computed, nextTick, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -432,21 +449,25 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
+import lpService from "../../services/lpService"
 import surveyService from "../../services/surveyService"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
+const { displayTranslatedHtml } = useTranslatedHtml()
 const { requireConfirmation } = useConfirmation()
 
 const survey = ref({})
 const questions = ref([])
 const settings = ref({})
 const choices = ref({})
-const csrfToken = ref("")
 const canEdit = ref(false)
 const hasAnswers = ref(false)
 const isLoading = ref(false)
 const isSaving = ref(false)
+const isFinishingLearningPath = ref(false)
 const isFormVisible = ref(false)
 const isEditing = ref(false)
 const errorMessage = ref("")
@@ -538,13 +559,52 @@ const optionEditorConfig = {
   resize: true,
 }
 
-function getContextParams() {
-  return {
-    cid: route.query.cid,
-    sid: route.query.sid,
-    gid: route.query.gid,
+function getQueryValue(value) {
+  if (Array.isArray(value)) {
+    return value[0] || ""
   }
+
+  return value || ""
 }
+
+function cleanQueryParams(params = {}) {
+  const cleanParams = {}
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null && String(value) !== "") {
+      cleanParams[key] = value
+    }
+  }
+
+  return cleanParams
+}
+
+function getContextParams(extra = {}) {
+  return cleanQueryParams({
+    cid: getQueryValue(route.query.cid),
+    sid: getQueryValue(route.query.sid),
+    gid: getQueryValue(route.query.gid),
+    origin: getQueryValue(route.query.origin),
+    lp_id: getQueryValue(route.query.lp_id),
+    lpItemId: getQueryValue(route.query.lpItemId || route.query.lp_item_id),
+    type: getQueryValue(route.query.type),
+    returnToLp: getQueryValue(route.query.returnToLp),
+    parent: getQueryValue(route.query.parent),
+    node: getQueryValue(route.query.node),
+    gradebook: getQueryValue(route.query.gradebook),
+    lpTool: getQueryValue(route.query.lpTool),
+    ...extra,
+  })
+}
+
+const learningPathId = computed(() => Number(getQueryValue(route.query.lp_id) || 0))
+const learningPathItemId = computed(() =>
+  Number(getQueryValue(route.query.lpItemId || route.query.lp_item_id) || 0),
+)
+
+const isLearningPathContext = computed(() => {
+  return getQueryValue(route.query.origin) === "learnpath" && learningPathId.value > 0
+})
 
 function createEmptyForm() {
   return {
@@ -581,6 +641,54 @@ function buildConfigureRoute() {
   }
 }
 
+function buildLearningPathBuilderRoute() {
+  const query = getContextParams()
+  delete query.action
+  delete query.create
+  delete query.content
+  delete query.lpItemId
+
+  return {
+    name: "LpBuilder",
+    params: {
+      node: Number(getQueryValue(route.query.node) || route.params.node || 0),
+      lpId: learningPathId.value,
+    },
+    query,
+  }
+}
+
+async function finishLearningPathSurvey() {
+  if (!isLearningPathContext.value || questions.value.length === 0 || isFinishingLearningPath.value) {
+    return
+  }
+
+  isFinishingLearningPath.value = true
+  errorMessage.value = ""
+
+  try {
+    if (learningPathItemId.value <= 0) {
+      const context = {
+        cid: Number(getQueryValue(route.query.cid) || 0),
+        sid: Number(getQueryValue(route.query.sid) || 0),
+        gid: Number(getQueryValue(route.query.gid) || 0),
+      }
+      await lpService.addBuilderResource(learningPathId.value, context, {
+        resourceType: "survey",
+        resourceId: surveyId.value,
+        parentId: Number(getQueryValue(route.query.parent) || 0) || null,
+        exportAllowed: false,
+      })
+    }
+
+    await router.push(buildLearningPathBuilderRoute())
+  } catch (error) {
+    console.error("Error adding survey to learning path", error)
+    errorMessage.value = error?.response?.data?.detail || t("An error occurred. Please try again.")
+  } finally {
+    isFinishingLearningPath.value = false
+  }
+}
 
 function translateOptions(items) {
   return items.map((item) => ({
@@ -594,7 +702,6 @@ function normalizeResponse(data) {
   questions.value = Array.isArray(data.questions) ? data.questions : []
   settings.value = data.settings || {}
   choices.value = data.choices || {}
-  csrfToken.value = data.csrfToken || csrfToken.value
   canEdit.value = true === data.canEdit
   hasAnswers.value = true === data.hasAnswers
 }
@@ -766,7 +873,7 @@ function decodeHtml(value) {
 }
 
 function displayText(value, fallback = "") {
-  const decodedValue = decodeHtml(value)
+  const decodedValue = decodeHtml(displayTranslatedHtml(value))
   const plainValue = decodeHtml(decodedValue.replace(/<[^>]*>/g, " "))
     .replace(/\s+/g, " ")
     .trim()
@@ -816,7 +923,6 @@ function buildPayload() {
       text: option.text,
       value: Number(option.value || 0),
     })),
-    csrfToken: csrfToken.value,
   }
 
   if (showsMandatoryField.value) {
@@ -864,7 +970,7 @@ function confirmDelete(question) {
 
 async function deleteQuestion(question) {
   try {
-    await surveyService.deleteSurveyQuestion(getContextParams(), surveyId.value, question.iid, csrfToken.value)
+    await surveyService.deleteSurveyQuestion(getContextParams(), surveyId.value, question.iid)
     await loadQuestions()
     successMessage.value = t("Deleted")
   } catch (error) {
@@ -875,7 +981,7 @@ async function deleteQuestion(question) {
 
 async function moveQuestion(question, direction) {
   try {
-    const data = await surveyService.moveSurveyQuestion(getContextParams(), surveyId.value, question.iid, direction, csrfToken.value)
+    const data = await surveyService.moveSurveyQuestion(getContextParams(), surveyId.value, question.iid, direction)
     normalizeResponse(data)
     successMessage.value = t("The question has been moved")
   } catch (error) {
@@ -886,7 +992,7 @@ async function moveQuestion(question, direction) {
 
 async function copyQuestion(question) {
   try {
-    const data = await surveyService.copySurveyQuestion(getContextParams(), surveyId.value, question.iid, csrfToken.value)
+    const data = await surveyService.copySurveyQuestion(getContextParams(), surveyId.value, question.iid)
     normalizeResponse(data)
     successMessage.value = t("The question has been added.")
   } catch (error) {

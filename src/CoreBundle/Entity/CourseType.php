@@ -29,13 +29,6 @@ class CourseType
     #[ORM\Column(name: 'props', type: 'text', nullable: true)]
     protected ?string $props = null;
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     /**
      * Get title.
      *
@@ -46,9 +39,9 @@ class CourseType
         return $this->title;
     }
 
-    public function setTranslationVar(string $translationVar): self
+    public function setTitle(string $title): self
     {
-        $this->translationVar = $translationVar;
+        $this->title = $title;
 
         return $this;
     }
@@ -63,9 +56,9 @@ class CourseType
         return $this->translationVar;
     }
 
-    public function setDescription(string $description): self
+    public function setTranslationVar(string $translationVar): self
     {
-        $this->description = $description;
+        $this->translationVar = $translationVar;
 
         return $this;
     }
@@ -80,9 +73,9 @@ class CourseType
         return $this->description;
     }
 
-    public function setProps(string $props): self
+    public function setDescription(string $description): self
     {
-        $this->props = $props;
+        $this->description = $description;
 
         return $this;
     }
@@ -95,6 +88,13 @@ class CourseType
     public function getProps()
     {
         return $this->props;
+    }
+
+    public function setProps(string $props): self
+    {
+        $this->props = $props;
+
+        return $this;
     }
 
     /**

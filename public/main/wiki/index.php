@@ -1,99 +1,111 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\State\Wiki\WikiLegacyRouteResolver;
+use Chamilo\CoreBundle\State\Wiki\WikiPageRenderer;
+use Chamilo\CourseBundle\Entity\CWiki;
+use Chamilo\CourseBundle\Repository\CWikiRepository;
+
 require_once __DIR__.'/../inc/global.inc.php';
-require_once 'wiki.inc.php';
 
-global $charset;
-
-$wiki = new WikiManager();
-$wiki->charset = $charset;
-
-$wiki->setBaseUrl(api_get_self().'?'.api_get_cidreq());
-
-// Section / tool
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_WIKI;
 
-// Context
-$courseId  = api_get_course_int_id();
-$sessionId = api_get_session_id();
-$groupId   = api_get_group_id();
-
-// Legacy CSS
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'wiki/css/default.css"/>';
-
-// Small UI helpers
-$htmlHeadXtra[] = '<script>
-function setFocus(){ $("#search_title").focus(); }
-$(function(){
-  setFocus();
-  $("#start_date_toggle").on("click", function(){ $("#start_date").toggle(); });
-  $("#end_date_toggle").on("click", function(){ $("#end_date").toggle(); });
-});
-</script>';
-
-// Access control
-api_protect_course_script();
+api_protect_course_script(true);
 api_block_anonymous_users();
 api_protect_course_group(GroupManager::GROUP_TOOL_WIKI);
 
-// Tracking
-Event::event_access_tool(TOOL_WIKI);
-
-// Group breadcrumbs
-if ($groupId) {
-    $groupProperties = GroupManager::get_group_properties($groupId);
-    $interbreadcrumb[] = [
-        'url'  => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
-        'name' => get_lang('Groups'),
-    ];
-    $interbreadcrumb[] = [
-        'url'  => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.Security::remove_XSS($groupProperties['name']),
-    ];
+$course = api_get_course_entity();
+$courseNodeId = $course?->getResourceNode()?->getId();
+if (null === $course || null === $courseNodeId) {
+    api_not_allowed(true);
 }
 
-// Request params
-$rawTitle = $_GET['title'] ?? null;
-$reflink  = WikiManager::normalizeReflink($rawTitle);
+$courseId = (int) $course->getId();
+$sessionId = (int) api_get_session_id();
+$groupId = (int) api_get_group_id();
+$renderer = new WikiPageRenderer();
+$resolver = new WikiLegacyRouteResolver();
 
-$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'showpage';
-$view   = isset($_GET['view'])   ? Security::remove_XSS($_GET['view'])   : null;
+$scalarString = static fn (mixed $value, string $default = ''): string => \is_scalar($value)
+    ? trim((string) $value)
+    : $default;
+$positiveInt = static fn (mixed $value): int => \is_scalar($value) ? max(0, (int) $value) : 0;
 
-// Set on instance
-$wiki->page   = $reflink;
-$wiki->action = $action;
+$legacyParameters = array_merge($_GET, $_POST);
+$action = strtolower($scalarString($legacyParameters['action'] ?? null, 'showpage'));
+$reflink = $renderer->normalizeReflink($scalarString($legacyParameters['title'] ?? null));
+$pageId = $positiveInt($legacyParameters['page_id'] ?? null);
+$versionIid = $positiveInt($legacyParameters['view'] ?? $legacyParameters['wiki_id'] ?? null);
 
-// Preload historical view if any
-if (!empty($view)) {
-    $wiki->setWikiData($view);
+/** @var CWikiRepository $wikiRepository */
+$wikiRepository = Container::getEntityManager()->getRepository(CWiki::class);
+
+$isVersionInContext = static function (
+    CWiki $wiki,
+    int $expectedCourseId,
+    int $expectedSessionId,
+    int $expectedGroupId,
+): bool {
+    if ($wiki->getCId() !== $expectedCourseId) {
+        return false;
+    }
+
+    if ((int) ($wiki->getGroupId() ?? 0) !== $expectedGroupId) {
+        return false;
+    }
+
+    $sourceSessionId = (int) ($wiki->getSessionId() ?? 0);
+
+    return $sourceSessionId === $expectedSessionId
+        || ($expectedSessionId > 0 && 0 === $sourceSessionId);
+};
+
+$resolvedVersion = null;
+if ($versionIid > 0) {
+    $candidate = $wikiRepository->find($versionIid);
+    if ($candidate instanceof CWiki && $isVersionInContext($candidate, $courseId, $sessionId, $groupId)) {
+        $resolvedVersion = $candidate;
+    }
 }
 
-// Concurrency lock
-$wiki->blockConcurrentEditions(api_get_user_id(), $action);
-
-// Header
-$tool_name = get_lang('Wiki');
-Display::display_header($tool_name, 'Wiki');
-
-// “Not last version” hint
-if (!empty($view)) {
-    $wiki->checkLastVersion($view);
+if (!$resolvedVersion instanceof CWiki && $pageId > 0) {
+    $resolvedVersion = $wikiRepository->findLatestVersionInContext($courseId, $pageId, $groupId, $sessionId);
+    if (!$resolvedVersion instanceof CWiki && $sessionId > 0) {
+        $resolvedVersion = $wikiRepository->findLatestVersionInContext($courseId, $pageId, $groupId, 0);
+    }
 }
 
-// Intro section
-Display::display_introduction_section(TOOL_WIKI);
+if (!$resolvedVersion instanceof CWiki) {
+    $resolvedVersion = $wikiRepository->findFirstVersionInContext($courseId, $reflink, $groupId, $sessionId);
+    if (!$resolvedVersion instanceof CWiki && $sessionId > 0) {
+        $resolvedVersion = $wikiRepository->findFirstVersionInContext($courseId, $reflink, $groupId, 0);
+    }
+}
 
-// Global action bar
-echo '<div class="mb-4">';
-$wiki->showActionBar();
-echo '</div>';
+if ($resolvedVersion instanceof CWiki) {
+    $pageId = (int) ($resolvedVersion->getPageId() ?? 0);
+    $reflink = $resolvedVersion->getReflink();
+    $versionIid = $versionIid > 0 ? $versionIid : null;
+} else {
+    $pageId = 0;
+    $versionIid = null;
+}
 
-// Main content: handleAction() PRINTS content (void)
-echo '<div class="space-y-4">';
-$wiki->handleAction($action);
-echo '</div>';
+$targetPath = $resolver->resolve(
+    (int) $courseNodeId,
+    $courseId,
+    $sessionId,
+    $groupId,
+    $action,
+    $reflink,
+    $pageId > 0 ? $pageId : null,
+    $versionIid,
+    $legacyParameters,
+);
 
-// Footer
-Display::display_footer();
+api_location(rtrim(api_get_path(WEB_PATH), '/').$targetPath);

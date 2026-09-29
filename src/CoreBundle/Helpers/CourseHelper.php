@@ -35,6 +35,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UsergroupRelCourse;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\CourseDeletedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -83,7 +84,7 @@ use const JSON_UNESCAPED_UNICODE;
 
 class CourseHelper
 {
-    public const MAX_COURSE_LENGTH_CODE = 40;
+    public const int MAX_COURSE_LENGTH_CODE = 40;
     private bool $debug = false;
 
     public function __construct(
@@ -105,6 +106,7 @@ class CourseHelper
         private readonly CDocumentRepository $documentRepository,
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly PluginHelper $pluginHelper,
     ) {}
 
     public function createCourse(array $params): ?Course
@@ -175,15 +177,26 @@ class CourseHelper
 
         $this->assertCanCreateCourse($params);
 
+        // A course created with a validated BuyCourses service starts as private.
+        // Explicit visibility values remain respected for administrative/custom flows.
+        if (
+            !empty($params['buycourses_service_sale_id'])
+            && !\array_key_exists('visibility', $params)
+        ) {
+            $params['visibility'] = Course::REGISTERED;
+        }
+
+        $wantedCodeWasGeneratedFromTitle = false;
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $this->generateCourseCode($params['title']);
+            $wantedCodeWasGeneratedFromTitle = true;
             $this->debugLog('createCourse:generatedWantedCode', ['wanted_code' => $params['wanted_code']]);
         }
 
         if ($this->courseRepository->courseCodeExists($params['wanted_code'])) {
             $this->debugLog('createCourse:duplicateCode', ['wanted_code' => $params['wanted_code']]);
 
-            throw new Exception('The course code already exists: '.$params['wanted_code']);
+            throw new InvalidArgumentException($this->translator->trans($wantedCodeWasGeneratedFromTitle ? 'This course title already exists, please choose another title.' : 'This course code already exists, please choose another code.'));
         }
 
         $keys = $this->defineCourseKeys($params['wanted_code']);
@@ -381,7 +394,7 @@ class CourseHelper
             $message .= $this->translator->trans('Category').': '.$category->getCode()."\n";
         }
 
-        $message .= $this->translator->trans('Coach').': '.$course->getTutorName()."\n";
+        $message .= $this->translator->trans('Tutor').': '.$course->getTutorName()."\n";
         $message .= $this->translator->trans('Language').': '.$course->getCourseLanguage();
 
         $email = (new Email())
@@ -481,6 +494,8 @@ class CourseHelper
             'allow_user_edit_announcement' => ['default' => 0, 'category' => 'announcement'],
             'email_alert_manager_on_new_quiz' => ['default' => $defaultEmailExerciseAlert, 'category' => 'quiz'],
             'allow_user_image_forum' => ['default' => 1, 'category' => 'forum'],
+            'hide_forum_notifications' => ['default' => 0, 'category' => 'forum'],
+            'subscribe_users_to_forum_notifications' => ['default' => 0, 'category' => 'forum'],
             'course_theme' => ['default' => '', 'category' => 'theme'],
             'allow_learning_path_theme' => ['default' => 1, 'category' => 'theme'],
             'allow_open_chat_window' => ['default' => 1, 'category' => 'chat'],
@@ -738,7 +753,7 @@ class CourseHelper
             $agenda->addEvent(
                 $formattedNow,
                 $formattedNow,
-                0,
+                'false',
                 $this->translator->trans('Course creation'),
                 $this->translator->trans('This course was created at this time'),
                 ['everyone' => 'everyone']
@@ -791,7 +806,7 @@ class CourseHelper
                 $this->translator->trans('This is an announcement example'),
                 $this->translator->trans('This is an announcement example. Only trainers are allowed to publish announcements.'),
                 ['everyone' => 'everyone'],
-                null,
+                [],
                 null,
                 (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s')
             );
@@ -1589,7 +1604,7 @@ class CourseHelper
         return $limits;
     }
 
-    public function deleteCourse(Course $course, bool $deleteExclusiveDocuments = false): void
+    public function deleteCourse(Course $course, bool $deleteExclusiveDocuments = false): bool
     {
         $em = $this->entityManager;
 
@@ -1613,11 +1628,13 @@ class CourseHelper
             $count = UrlManager::getCountUrlRelCourse($course->getId());
         }
 
+        // In a multi-URL portal the course may still be linked to other URLs.
+        // In that case it was only unsubscribed from the current URL, not deleted.
         if (0 !== $count) {
-            return;
+            return false;
         }
 
-        $groupCategories = GroupManager::get_categories($course, null);
+        $groupCategories = GroupManager::get_categories($course);
         if (!empty($groupCategories)) {
             foreach ($groupCategories as $category) {
                 GroupManager::delete_category($category['iid'], $course->getCode());
@@ -1712,8 +1729,10 @@ class CourseHelper
             ->execute()
         ;
 
-        $appPlugin = new AppPlugin();
-        $appPlugin->performActionsWhenDeletingItem('course', $course->getId());
+        $this->eventDispatcher->dispatch(
+            new CourseDeletedEvent(['course' => $course], AbstractEvent::TYPE_PRE),
+            Events::COURSE_DELETED
+        );
 
         // Purge Xapian index BEFORE deleting the course entity (resource links still exist)
         try {
@@ -1745,6 +1764,8 @@ class CourseHelper
             api_get_user_id(),
             $course->getId()
         );
+
+        return true;
     }
 
     /**
@@ -2046,6 +2067,143 @@ class CourseHelper
 
             return false;
         }
+    }
+
+    public function shouldOfferBuyCoursesDocumentQuotaUpgrade(Course $course): bool
+    {
+        $baseQuotaMb = $this->resolveDocumentsToolQuotaMb();
+        if ($baseQuotaMb <= 0) {
+            return false;
+        }
+
+        $plugin = $this->getBuyCoursesPluginForUpgradeCta();
+        if (!$plugin instanceof BuyCoursesPlugin) {
+            return false;
+        }
+
+        try {
+            $effectiveQuotaMb = $plugin->getEffectiveDocumentQuotaMbForCourse(
+                (int) $course->getId(),
+                $baseQuotaMb,
+            );
+            if ($effectiveQuotaMb > $baseQuotaMb) {
+                return false;
+            }
+
+            $userId = $this->resolveBuyCoursesUpgradeUserId($course);
+            if ($userId > 0 && (int) ($plugin->getActiveDocumentQuotaMb($userId) ?? 0) > $baseQuotaMb) {
+                return false;
+            }
+
+            return $plugin->hasActiveDisplayedCourseCreationServiceBenefit(
+                BuyCoursesPlugin::EXTRA_FIELD_DOCUMENT_QUOTA,
+                $baseQuotaMb,
+            );
+        } catch (Throwable $exception) {
+            $this->debugLog('buyCourses:documentQuotaUpgradeCtaCheckFailed', [
+                'courseId' => (int) $course->getId(),
+                'message' => $exception->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    public function shouldOfferBuyCoursesHostingLimitUpgrade(Course $course): bool
+    {
+        $baseLimit = $this->getGlobalUsersPerCourseLimit();
+        if ($baseLimit <= 0) {
+            return false;
+        }
+
+        $plugin = $this->getBuyCoursesPluginForUpgradeCta();
+        if (!$plugin instanceof BuyCoursesPlugin) {
+            return false;
+        }
+
+        try {
+            $effectiveLimit = $plugin->getEffectiveUsersPerCourseLimitForCourse((int) $course->getId());
+            if ($effectiveLimit > $baseLimit) {
+                return false;
+            }
+
+            $userId = $this->resolveBuyCoursesUpgradeUserId($course);
+            if ($userId > 0 && (int) ($plugin->getActiveHostingLimit($userId) ?? 0) > $baseLimit) {
+                return false;
+            }
+
+            return $plugin->hasActiveDisplayedCourseCreationServiceBenefit(
+                BuyCoursesPlugin::EXTRA_FIELD_HOSTING_LIMIT,
+                $baseLimit,
+            );
+        } catch (Throwable $exception) {
+            $this->debugLog('buyCourses:hostingLimitUpgradeCtaCheckFailed', [
+                'courseId' => (int) $course->getId(),
+                'message' => $exception->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    public function shouldOfferBuyCoursesExerciseGeneratorUpgrade(Course $course): bool
+    {
+        $plugin = $this->getBuyCoursesPluginForUpgradeCta();
+        if (!$plugin instanceof BuyCoursesPlugin) {
+            return false;
+        }
+
+        try {
+            $userId = $this->resolveBuyCoursesUpgradeUserId($course);
+            if ($userId > 0 && $plugin->userHasActiveAiCourseFeatureService(
+                $userId,
+                BuyCoursesPlugin::AI_COURSE_FEATURE_EXERCISE_GENERATOR,
+            )) {
+                return false;
+            }
+
+            return $plugin->hasActiveDisplayedCourseCreationServiceAiFeature(
+                BuyCoursesPlugin::AI_COURSE_FEATURE_EXERCISE_GENERATOR,
+            );
+        } catch (Throwable $exception) {
+            $this->debugLog('buyCourses:exerciseGeneratorUpgradeCtaCheckFailed', [
+                'courseId' => (int) $course->getId(),
+                'message' => $exception->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    private function getBuyCoursesPluginForUpgradeCta(): ?BuyCoursesPlugin
+    {
+        if (!$this->pluginHelper->isPluginEnabled('BuyCourses')) {
+            return null;
+        }
+
+        try {
+            $plugin = BuyCoursesPlugin::create();
+
+            return $plugin->isEnabled() ? $plugin : null;
+        } catch (Throwable $exception) {
+            $this->debugLog('buyCourses:upgradeCtaPluginCheckFailed', [
+                'message' => $exception->getMessage(),
+            ]);
+
+            return null;
+        }
+    }
+
+    private function resolveBuyCoursesUpgradeUserId(Course $course): int
+    {
+        $user = $this->security->getUser();
+        if ($user instanceof User) {
+            return (int) $user->getId();
+        }
+
+        $owner = $this->getCourseOwnerForQuota($course);
+
+        return $owner instanceof User ? (int) $owner->getId() : 0;
     }
 
     public function resolveDocumentsToolQuotaMbForCourse(Course $course): int

@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونه فرمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونه فرمول: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -1575,8 +1575,8 @@ msgstr "آیا مطمئن هستید که می‌خواهید این مراحل 
 msgid "Authoring tool"
 msgstr "ابزار نویسندگی"
 
-msgid "SCORM or AICC file to upload"
-msgstr "فایل SCORM یا AICC برای بارگذاری"
+msgid "SCORM file to upload"
+msgstr "فایل SCORM برای بارگذاری"
 
 msgid "Course location"
 msgstr "موقعیت دوره"
@@ -2017,7 +2017,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":بله:حق نشر,, خیر:بدون حق نشر"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:پوشه,, application/msword:MsWord,, application/octet-stream:جریان اکتت,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text\/plain;iso-8859-1:text\/plain;iso-8859-1,, text\/plain;utf-8:text\/plain;utf-8,, text\/html;iso-8859-1:text\/html;iso-8859-1,, text\/html;utf-8:text\/html;utf-8,, inode\/directory:پوشه,, application\/msword:MsWord,, application\/octet-stream:جریان اُکتت,, application\/pdf:PDF,, application\/postscript:PostScript,, application\/rtf:RTF,, application\/vnd.ms-excel:MsExcel,, application\/vnd.ms-powerpoint:MsPowerpoint,, application\/xml;iso-8859-1:XML;iso-8859-1,, application\/xml;utf-8:XML;utf-8,, application\/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":تمرین:تمرین,,      شبیه‌سازی:شبیه‌سازی,,      پرسشنامه:پرسشنامه,,      نمودار:نمودار,,      شکل:شکل,,      گراف:گراف,,      نمایه:نمایه,,      اسلاید:اسلاید,,      جدول:جدول,,      متن روایی:متن روایی,,      امتحان:امتحان,,      آزمایش:آزمایش,,      بیان مسئله:بیان مسئله,,      خودارزیابی:خودارزیابی,,      سخنرانی:سخنرانی"
@@ -4636,7 +4636,7 @@ msgid "Invalid end date was given."
 msgstr "تاریخ پایان نامعتبر داده شد."
 
 msgid "(d/m/y h:m)"
-msgstr "(d/m/y h:m)"
+msgstr "(ر/م/س س:د)"
 
 msgid "Homepage-files are not writable!"
 msgstr "فایل‌های صفحه اصلی قابل نوشتن نیستند!"
@@ -7713,6 +7713,54 @@ msgstr "فهرست سؤالات آزمون"
 msgid "Recycle existing questions"
 msgstr "بازیافت سؤالات موجود"
 
+msgid "Add this question to the test: %s"
+msgstr "این سؤال را به آزمون اضافه کنید: %s"
+
+msgid "Edit question: %s"
+msgstr "ویرایش سؤال: %s"
+
+msgid "Add a question: %s"
+msgstr "افزودن سؤال: %s"
+
+msgid "Detected blanks: %s"
+msgstr "جاهای خالی تشخیص‌شده: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s سؤال، با مجموع نمره (همه سؤالات) %s."
+
+msgid "Unique answer"
+msgstr "پاسخ واحد"
+
+msgid "Multiple answer true/false"
+msgstr "چندپاسخی درست/نادرست"
+
+msgid "Multiple answer combination true/false"
+msgstr "ترکیب چندپاسخی درست/نادرست"
+
+msgid "Unique answer with images"
+msgstr "پاسخ واحد با تصاویر"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "چندپاسخی درست/نادرست با درجه اطمینان"
+
+msgid "Answer in Office document"
+msgstr "پاسخ در سند آفیس"
+
+msgid "Matching draggable"
+msgstr "تطبیق کشیدنی"
+
+msgid "Matching draggable combination"
+msgstr "ترکیب تطبیق کشیدنی"
+
+msgid "Fill in blanks combination"
+msgstr "ترکیب پر کردن جاهای خالی"
+
+msgid "Multiple answer dropdown combination"
+msgstr "ترکیب چندپاسخی کشویی"
+
+msgid "Matching combination"
+msgstr "ترکیب تطبیق"
+
 msgid "Correct test"
 msgstr "آزمون درست"
 
@@ -8547,6 +8595,9 @@ msgstr "شرکت"
 msgid "Reporting"
 msgstr "گزارش‌گیری"
 
+msgid "Analytics"
+msgstr "تحلیل‌ها"
+
 msgid "Update"
 msgstr "به‌روزرسانی"
 
@@ -8724,11 +8775,23 @@ msgstr "نمایش"
 msgid "My courses"
 msgstr "دوره‌های من"
 
+msgid "Shop"
+msgstr "فروشگاه"
+
+msgid "Invoice"
+msgstr "فاکتور"
+
+msgid "Request invoice"
+msgstr "درخواست فاکتور"
+
 msgid "View my progress"
 msgstr "مشاهده پیشرفت من"
 
 msgid "Personal agenda"
 msgstr "تقویم شخصی"
+
+msgid "Group agenda"
+msgstr "تقویم گروه"
 
 msgid "Switch to teacher view"
 msgstr "تغییر به نمای مدرس"
@@ -9251,6 +9314,15 @@ msgstr "گزارش زمانی برای جلسه %s"
 
 msgid "Error"
 msgstr "خطا"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "کاربر ایجاد شد، اما یکی از خانه‌های اضافی پروفایل ذخیره نشد."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "کاربر به‌روزرسانی شد، اما یکی از خانه‌های اضافی پروفایل ذخیره نشد."
+
+msgid "One or more fields contain invalid values."
+msgstr "یک یا چند خانه دارای مقادیر نامعتبر است."
 
 msgid "Anonymous"
 msgstr "ناشناس"
@@ -14394,6 +14466,9 @@ msgstr "لطفاً به مرحله ۱ برگردید"
 msgid "has not been found in that directory"
 msgstr "در آن دایرکتوری پیدا نشد"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "نصب‌کننده ورود جداگانه ندارد، بنابراین ارتقا باید روی سرور مجاز شود. یک فایل خالی به نام %s در ریشهٔ پروژه، کنار .env بسازید، سپس ادامه دهید."
+
 msgid "Old version's root path"
 msgstr "مسیر ریشه نسخه قدیمی"
 
@@ -15290,6 +15365,30 @@ msgstr "زمان صرف شده هفته گذشته"
 
 msgid "System status"
 msgstr "وضعیت سیستم"
+
+msgid "Courses space"
+msgstr "فضای کورس‌ها"
+
+msgid "Database server configuration and metadata"
+msgstr "پیکربندی سرور پایگاه‌داده و فراداده"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "استفاده دیسک فی کورس در مقابل سهمیه دیسک"
+
+msgid "Information about your webserver configuration"
+msgstr "معلومات درباره پیکربندی وب‌سرور شما"
+
+msgid "Paths"
+msgstr "مسیرها"
+
+msgid "State of Chamilo requirements"
+msgstr "وضعیت نیازمندی‌های چامیلو"
+
+msgid "State of PHP settings on the server"
+msgstr "وضعیت تنظیمات PHP روی سرور"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "ثابت‌های api_get_path() حل‌شده در این پورتال"
 
 msgid "Is writable"
 msgstr "قابل نوشتن است"
@@ -20466,6 +20565,9 @@ msgstr "زبان والد: %s"
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "تعاریف جدید برای زیرزبان %s را با جستجوی اصطلاح، سپس ذخیره هر ترجمه با کلیک بر روی دکمه ذخیره تعریف کنید. سپس باید زبان کاربر خود را تغییر دهید تا اصطلاحات جدید ظاهر شوند."
 
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "اصطلاحی که اینجا ذخیره شود فوراً در رابطی که قبلاً مهاجرت شده نمایش داده می‌شود. صفحاتی که هنوز مهاجرت نشده‌اند کاتالوگ کامپایل‌شده می‌خوانند، بنابراین متن قدیمی را نگه می‌دارند تا وقتی که کش را با php bin/console cache:clear پاک کنید. این کار را یک‌بار پس از پایان ویرایش انجام دهید، نه بعد از هر اصطلاح."
+
 msgid "See sequences"
 msgstr "مشاهده توالی‌ها"
 
@@ -20493,8 +20595,8 @@ msgstr "لینک منقضی شده، لطفاً دوباره تلاش کنید."
 msgid "Instructions for the password change procedure"
 msgstr "دستورالعمل‌های فرآیند تغییر رمز عبور"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "این پیام را دریافت می‌کنید زیرا شما (یا کسی که خود را شما جا زده) درخواست تولید رمز عبور جدید کرده‌اید.<br/>"
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "این پیام به این دلیل برایتان فرستاده می‌شود که شما (یا کسی که سعی در جعل هویت شما دارد) درخواست تولید گذرواژه جدید برای حساب‌تان را کرده است.<br/>برای تنظیم گذرواژه جدید، لطفاً این پیوند را دنبال کنید:<br/>%s<br/>اگر این درخواست را نکرده‌اید، می‌توانید این پیام را نادیده بگیرید. اگر همچنان این پیام‌ها را دریافت می‌کنید، لطفاً با مدیر پورتال تماس بگیرید."
 
 msgid "Remind Course Expiration cron"
 msgstr "یادآوری انقضای دوره cron"
@@ -20657,6 +20759,9 @@ msgstr "در چرخه مهارت‌ها، نام مهارت را هنگامي ک
 
 msgid "Created by"
 msgstr "ايجاد شده توسط"
+
+msgid "Created by %s on %s"
+msgstr "ایجادشده توسط %s در %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "پنهان کردن مربي کل در جعبه افتادن"
@@ -23963,6 +24068,18 @@ msgstr "نتیجه را به یادگیرنده نشان دهید: امتیاز�
 
 msgid "Signed in as"
 msgstr "وارد شده به عنوان"
+
+msgid "Authorize application"
+msgstr "مجاز ساختن برنامه"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "می‌خواهد به حساب چامیلو شما وصل شود."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "این برنامه می‌تواند در چامیلو دقیقاً مانند شما عمل کند — با استفاده از مجوزهای موجود حساب شما و نه بیشتر. هرگز به دسترسی‌ای که شما ندارید دست نخواهد یافت."
+
+msgid "Allow"
+msgstr "اجازه دادن"
 
 msgid "Remember me"
 msgstr "مرا به خاطر بسپار"
@@ -31329,6 +31446,9 @@ msgstr "بازگشت به صفحه اختصاص کاربر"
 msgid "Authentication sources assigned successfully"
 msgstr "منابع احراز هویت با موفقیت اختصاص یافت"
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "هیچ روش احراز هویت انتخاب نشده است. این کار تمام روش‌های احراز هویت را برای کاربر(ان) انتخاب‌شده در این URL حذف می‌کند، که ممکن است از ورود آن‌ها جلوگیری کند. ادامه می‌دهید؟"
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "نکته: «— فقط بارگذاری —» را انتخاب کنید تا بدون ارسال به کسی ذخیره شود."
 
@@ -31860,6 +31980,9 @@ msgstr "چیزی به %s بنویسید"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "ترجیحی: SVG. عرض PNG پیشنهادی: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "عرض توصیه‌شده PNG: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "آپلود لوگوی PNG برای ایمیل‌ها (~%spx عرض)"
 
@@ -31895,6 +32018,9 @@ msgstr "کلیک برای درج"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "ترجیحی: SVG. حداکثر اندازه PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "حداکثر اندازه PNG: %spx."
 
 msgid "View badge"
 msgstr "مشاهده نشان"
@@ -36476,4 +36602,4966 @@ msgstr "تعدیل‌شده"
 
 msgid "View threads"
 msgstr "مشاهده موضوعات"
+
+msgid "No auth source"
+msgstr "بدون منبع احراز هویت"
+
+msgid "You must add at least one question"
+msgstr "باید حداقل یک سوال اضافه کنید"
+
+msgid "Advanced actions"
+msgstr "اقدامات پیشرفته"
+
+msgid "Application path"
+msgstr "مسیر برنامه"
+
+msgid "Apply files details"
+msgstr "اعمال جزئیات فایل‌ها"
+
+msgid "Apply plan details"
+msgstr "اعمال جزئیات برنامه"
+
+msgid "Apply plan failed"
+msgstr "اعمال برنامه ناموفق بود"
+
+msgid "Apply plan ready"
+msgstr "اعمال برنامه آماده است"
+
+msgid "Apply preparation"
+msgstr "اعمال آماده‌سازی"
+
+msgid "Apply staged files"
+msgstr "اعمال فایل‌های مرحله‌بندی‌شده"
+
+msgid "Applying files..."
+msgstr "در حال اعمال فایل‌ها..."
+
+msgid "Audit file"
+msgstr "بررسی فایل"
+
+msgid "Backup directory"
+msgstr "پوشه پشتیبان"
+
+msgid "Baseline clean"
+msgstr "پاک‌سازی مبنا"
+
+msgid "Baseline warnings"
+msgstr "هشدارهای مبنا"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "ساخت برنامه اعمال امن از بسته مرحله‌بندی‌شده. این فقط فایل‌ها، مجوزها، مسیر پشتیبان و وضعیت قفل را بررسی می‌کند. فایل‌ها را جایگزین نمی‌کند."
+
+msgid "Build production frontend assets."
+msgstr "ساخت دارایی‌های فرانت‌اند تولید."
+
+msgid "Building plan..."
+msgstr "در حال ساخت برنامه..."
+
+msgid "Channel"
+msgstr "کانال"
+
+msgid "Check"
+msgstr "بررسی"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "بررسی به‌روزرسانی‌های موجود شامیلو، تأیید بسته‌ها، مرحله‌بندی فایل‌ها و اجرای مراحل کنترل‌شده پس از به‌روزرسانی."
+
+msgid "Check manifest"
+msgstr "بررسی مانیفست"
+
+msgid "Checking post-apply actions..."
+msgstr "در حال بررسی اقدامات پس از اعمال..."
+
+msgid "Checking..."
+msgstr "در حال بررسی..."
+
+msgid "Composer install"
+msgstr "نصب Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "اقدامات Composer، Yarn و مهاجرت پایگاه داده می‌توانند وابستگی‌ها، دارایی‌های تولیدشده یا پایگاه داده را تغییر دهند. فقط پس از تأیید پشتیبان‌ها و مجوزها آن‌ها را انتخاب کنید."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "CHAMILO_UPDATE_MANIFEST_URL را روی سرور پیکربندی کنید یا یک URL مانیفست HTTPS ارائه دهید."
+
+msgid "Configured"
+msgstr "پیکربندی‌شده"
+
+msgid "Current migration"
+msgstr "مهاجرت فعلی"
+
+msgid "Database baseline"
+msgstr "مبنای پایگاه داده"
+
+msgid "Database migration safety review"
+msgstr "بررسی ایمنی مهاجرت پایگاه داده"
+
+msgid "Database migrations"
+msgstr "مهاجرت‌های پایگاه داده"
+
+msgid "Development mode"
+msgstr "حالت توسعه"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "این را فعال نکنید مگر اینکه پشتیبان به‌روزرسانی و مجوزهای سرور بررسی شده باشند."
+
+msgid "Doctrine dry-run command"
+msgstr "دستور Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine هشدارهای مبنای تاریخی را گزارش داد. به‌روزرسان فقط مهاجرت‌های V210 مرحله‌بندی‌شده را پس از تأیید صریح اجرا خواهد کرد."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine فقط مهاجرت‌های V210 مرحله‌بندی‌شده را پس از گذراندن بررسی ایمنی به‌صورت صریح اجرا خواهد کرد."
+
+msgid "Dry-run exit code"
+msgstr "کد خروج dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "مهاجرت‌های در دسترس اجرا شد"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "استخراج بسته به‌روزرسانی تأییدشده در یک پوشه مرحله‌بندی برای بازرسی. این فایل‌ها را جایگزین نمی‌کند، مهاجرت‌ها را اجرا نمی‌کند یا پایگاه داده را تغییر نمی‌دهد."
+
+msgid "File apply available"
+msgstr "اعمال فایل در دسترس است"
+
+msgid "Files to replace"
+msgstr "فایل‌های جایگزین"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "تأیید می‌کنم که یک پشتیبان پایگاه داده وجود دارد و قبل از اجرای مهاجرت‌ها تأیید شده است."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "درک می‌کنم که اقدامات پیشرفته می‌توانند وابستگی‌ها، دارایی‌های تولیدشده یا پایگاه داده را تغییر دهند."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "درک می‌کنم که این کار فایل‌ها را در نصب شامیلو جایگزین خواهد کرد."
+
+msgid "I understand this will run update commands on the server."
+msgstr "درک می‌کنم که این کار دستورات به‌روزرسانی را روی سرور اجرا خواهد کرد."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "وابستگی‌های فرانت‌اند را قبل از بازسازی دارایی‌ها نصب کنید."
+
+msgid "Installed version"
+msgstr "نسخه نصب‌شده"
+
+msgid "Latest migration"
+msgstr "آخرین مهاجرت"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "مسیرهای بسته و امضا را خالی بگذارید تا از نشانی‌های تأییدشده مانیفست دانلود شوند. مسیرهای محلی فقط برای آزمون‌های توسعه در دسترس هستند."
+
+msgid "Live command log"
+msgstr "گزارش زنده فرمان"
+
+msgid "Live update log"
+msgstr "گزارش زنده به‌روزرسانی"
+
+msgid "Local test options"
+msgstr "گزینه‌های آزمون محلی"
+
+msgid "Local test update notice link"
+msgstr "پیوند اعلان به‌روزرسانی آزمون محلی"
+
+msgid "Local update notice simulation"
+msgstr "شبیه‌سازی اعلان به‌روزرسانی محلی"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "شبیه‌سازی اعلان به‌روزرسانی محلی فقط در حالت توسعه در دسترس است."
+
+msgid "Manifest"
+msgstr "مانیفست"
+
+msgid "Manifest source"
+msgstr "منبع مانیفست"
+
+msgid "Migration safety details"
+msgstr "جزئیات ایمنی مهاجرت"
+
+msgid "Migration safety review failed"
+msgstr "بررسی ایمنی مهاجرت ناموفق بود"
+
+msgid "Migration safety review ready"
+msgstr "بررسی ایمنی مهاجرت آماده است"
+
+msgid "Migration target"
+msgstr "هدف مهاجرت"
+
+msgid "New files"
+msgstr "پرونده‌های جدید"
+
+msgid "New migrations reported by Doctrine"
+msgstr "مهاجرت‌های جدید گزارش‌شده توسط Doctrine"
+
+msgid "Next migration"
+msgstr "مهاجرت بعدی"
+
+msgid "No executed unavailable migration was reported."
+msgstr "هیچ مهاجرت ناموجود اجرا‌شده‌ای گزارش نشده است."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "هنوز هیچ نشانی مانیفست رسمی پیکربندی نشده است. از یک نشانی HTTPS یا مسیر محلی برای آزمون‌های توسعه استفاده کنید."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "هیچ مهاجرت در حال انتظاری پیش از هدف به‌روزرسانی مرحله‌ای شناسایی نشد."
+
+msgid "Not configured"
+msgstr "پیکربندی‌نشده"
+
+msgid "Not detected"
+msgstr "شناسایی‌نشده"
+
+msgid "Official Chamilo update channel"
+msgstr "کانال رسمی به‌روزرسانی Chamilo"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 بسته"
+
+msgid "Package URL"
+msgstr "نشانی بسته"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "پرونده‌های بسته و امضا از مانیفست دانلود خواهند شد. مسیرهای محلی در این محیط غیرفعال هستند."
+
+msgid "Package path"
+msgstr "مسیر بسته"
+
+msgid "Package staged successfully"
+msgstr "بسته با موفقیت مرحله‌بندی شد"
+
+msgid "Package staging failed"
+msgstr "مرحله‌بندی بسته ناموفق بود"
+
+msgid "Package verification"
+msgstr "تأیید بسته"
+
+msgid "Package verification failed"
+msgstr "تأیید بسته ناموفق بود"
+
+msgid "Package verified successfully"
+msgstr "بسته با موفقیت تأیید شد"
+
+msgid "Pending migrations before this update"
+msgstr "مهاجرت‌های در حال انتظار پیش از این به‌روزرسانی"
+
+msgid "Planned backup path"
+msgstr "مسیر پشتیبان‌گیری برنامه‌ریزی‌شده"
+
+msgid "Post-apply actions completed"
+msgstr "اقدامات پس از اعمال تکمیل شد"
+
+msgid "Post-apply actions failed"
+msgstr "اقدامات پس از اعمال ناموفق بود"
+
+msgid "Post-apply actions ready"
+msgstr "اقدامات پس از اعمال آماده است"
+
+msgid "Post-apply checks"
+msgstr "بررسی‌های پس از اعمال"
+
+msgid "Post-apply checks failed"
+msgstr "بررسی‌های پس از اعمال ناموفق بود"
+
+msgid "Post-apply details"
+msgstr "جزئیات پس از اعمال"
+
+msgid "Post-apply run details"
+msgstr "جزئیات اجرای پس از اعمال"
+
+msgid "Preflight checks"
+msgstr "بررسی‌های پیش‌پرواز"
+
+msgid "Preflight checks completed"
+msgstr "بررسی‌های پیش‌پرواز تکمیل شد"
+
+msgid "Preflight checks failed"
+msgstr "بررسی‌های پیش‌پرواز ناموفق بود"
+
+msgid "Preflight details"
+msgstr "جزئیات پیش‌پرواز"
+
+msgid "Prepare staging"
+msgstr "آماده‌سازی مرحله‌بندی"
+
+msgid "Preparing staging..."
+msgstr "در حال آماده‌سازی مرحله‌بندی..."
+
+msgid "Production mode"
+msgstr "حالت تولید"
+
+msgid "Released at"
+msgstr "منتشرشده در"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "جایگزینی فایل‌های چامی‌لو از بسته مرحله‌بندی‌شده با استفاده از برنامه اعمال بررسی‌شده. این کار مهاجرت‌های پایگاه‌داده، Composer، Yarn یا دستورات کش را اجرا نمی‌کند."
+
+msgid "Review apply plan"
+msgstr "بررسی برنامه اعمال"
+
+msgid "Review database migrations"
+msgstr "بررسی مهاجرت‌های پایگاه‌داده"
+
+msgid "Review post-apply actions"
+msgstr "بررسی اقدامات پس از اعمال"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "بررسی دستورات دستی توصیه‌شده پس از اعمال فایل‌های به‌روزرسانی. این مرحله Composer، Yarn، مهاجرت‌ها یا دستورات کش را اجرا نمی‌کند."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "بررسی مهاجرت‌های Doctrine مرحله‌بندی‌شده و خروجی dry-run پیش از اجرای مهاجرت‌های پایگاه‌داده."
+
+msgid "Reviewing database migrations..."
+msgstr "در حال بررسی مهاجرت‌های پایگاه‌داده..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "اجرای بررسی ایمنی مهاجرت پیش از اجرای مهاجرت‌های پایگاه‌داده."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "اجرای بررسی‌های محیطی پیش از هر مرحله آتی اعمال به‌روزرسانی. این کار فایل‌ها یا پایگاه‌داده را تغییر نمی‌دهد."
+
+msgid "Run post-apply actions"
+msgstr "اجرای اقدامات پس از اعمال"
+
+msgid "Run preflight checks"
+msgstr "اجرای بررسی‌های پیش‌پرواز"
+
+msgid "Run selected post-apply actions"
+msgstr "اجرای اقدامات پس از اعمال انتخاب‌شده"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "اجرای دستورات پس از اعمال انتخاب‌شده از سرور با استفاده از فهرست مجاز کنترل‌شده. هیچ دستور شل سفارشی پذیرفته نمی‌شود."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "اجرای دستی این دستورات از سرور پس از تأیید نتیجه به‌روزرسانی فایل و پشتیبان‌ها."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "اجرای اقدامات پس از اعمال از رابط کاربری در حالت تولید غیرفعال است."
+
+msgid "Running post-apply actions..."
+msgstr "در حال اجرای اقدامات پس از اعمال..."
+
+msgid "Safe actions"
+msgstr "اقدامات ایمن"
+
+msgid "Signature path"
+msgstr "مسیر امضا"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "در این محیط نمی‌توان تأیید امضا را نادیده گرفت."
+
+msgid "Skip signature verification for local development tests"
+msgstr "نادیده‌گرفتن تأیید امضا برای آزمون‌های توسعه محلی"
+
+msgid "Staged file application failed"
+msgstr "اعمال فایل مرحله‌بندی‌شده ناموفق بود"
+
+msgid "Staged files applied successfully"
+msgstr "فایل‌های مرحله‌بندی‌شده با موفقیت اعمال شدند"
+
+msgid "Staging details"
+msgstr "جزئیات مرحله‌بندی"
+
+msgid "Staging directory"
+msgstr "دایرکتوری مرحله‌بندی"
+
+msgid "Staging extraction"
+msgstr "استخراج مرحله‌بندی"
+
+msgid "Symfony cache clear"
+msgstr "پاک‌سازی کش Symfony"
+
+msgid "System update"
+msgstr "به‌روزرسانی سیستم"
+
+msgid "Target version"
+msgstr "نسخه هدف"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "آدرس manifest رسمی پیکربندی‌شده از پیش پر شده است. در صورت نیاز می‌توانید آن را به manifest HTTPS دیگری تغییر دهید."
+
+msgid "The database migration baseline is clean."
+msgstr "خط پایه مهاجرت پایگاه‌داده تمیز است."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "پاسخ HTTP نهایی پس از تکمیل عملیات ناموفق بود. این معمولاً ناشی از مجوزهای کش زمان اجرا یا راه‌اندازی مجدد وب‌سرور در حین درخواست است."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "گزارش لاگ عملیات نشان می‌دهد که اقدامات پس از اعمال با موفقیت تکمیل شدند."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "دستورات پس از اعمال انتخاب‌شده با موفقیت تکمیل شدند، اما پاسخ HTTP نهایی ناموفق بود. صفحه را تازه‌سازی کنید و در صورت بارگذاری نادرست صفحه، مجوزهای کش زمان اجرا را بررسی کنید."
+
+msgid "The updater does not create or restore database backups."
+msgstr "به‌روزرسانی‌کننده پشتیبان‌های پایگاه‌داده را ایجاد یا بازیابی نمی‌کند."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "اجرای این اقدامات از رابط کاربری پس از بررسی نتیجه به‌روزرسانی ایمن است."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "این دستورات می‌توانند وابستگی‌ها، دارایی‌های تولیدشده، کش یا پایگاه‌داده را تغییر دهند. پیش از ادامه، پشتیبان‌ها را تأیید کنید."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "این اقدام فایل‌ها را در نصب چامی‌لو تغییر می‌دهد. پیش از ادامه مطمئن شوید که برنامه اعمال بررسی شده و پشتیبان‌ها فعال هستند."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "این ورودی توسعه، اعلان به‌روزرسانی آینده Chamilo.org را با استفاده از مسیرهای بسته آزمایشی محلی شبیه‌سازی می‌کند."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "این صفحه از یک اعلان به‌روزرسانی رسمی باز شده است، اما هنوز منبع manifest رسمی پیکربندی نشده است."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "این صفحه از یک اعلان به‌روزرسانی باز شده است. فقط بررسی manifest به‌صورت خودکار شروع می‌شود."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "این مرحله فقط یک بررسی آماده می‌کند. جایگزینی فایل‌ها بعداً در مرحله اعمال فایل‌های مرحله‌بندی‌شده، با قفل، پشتیبان و حفاظت از بازگشت انجام می‌شود."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "این به‌روزرسانی‌کننده پشتیبان پایگاه‌داده ایجاد نمی‌کند. پیش از اجرای مهاجرت‌ها، پشتیبان ایجاد و تأیید کنید."
+
+msgid "Trusted public key"
+msgstr "کلید عمومی معتبر"
+
+msgid "Trusted signing key"
+msgstr "کلید امضای معتبر"
+
+msgid "Unknown update notice source."
+msgstr "منبع اعلان به‌روزرسانی ناشناخته است."
+
+msgid "Update availability"
+msgstr "در دسترس بودن به‌روزرسانی"
+
+msgid "Update directory"
+msgstr "دایرکتوری به‌روزرسانی"
+
+msgid "Update lock path"
+msgstr "به‌روزرسانی مسیر قفل"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "از پوشه مرحله‌ای ایجاد شده توسط مرحله قبلی استفاده کنید. بک‌اند فقط پوشه‌های داخل var/update/staging را می‌پذیرد."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "از این پیوند برای شبیه‌سازی اعلان به‌روزرسانی آینده Chamilo.org در طول آزمایش‌های توسعه استفاده کنید."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "این گزینه فقط برای آزمایش‌های توسعه محلی استفاده شود. به‌روزرسانی‌های تولیدی باید از کلید پیکربندی‌شده سرور استفاده کنند."
+
+msgid "Verification details"
+msgstr "جزئیات تأیید"
+
+msgid "Verify package"
+msgstr "تأیید بسته"
+
+msgid "Verifying..."
+msgstr "در حال تأیید..."
+
+msgid "Waiting for command progress events..."
+msgstr "در انتظار رویدادهای پیشرفت فرمان..."
+
+msgid "Waiting for update progress events..."
+msgstr "در انتظار رویدادهای پیشرفت به‌روزرسانی..."
+
+msgid "Yarn build"
+msgstr "ساخت Yarn"
+
+msgid "Yarn install"
+msgstr "نصب Yarn"
+
+msgid "A comment is required"
+msgstr "نظر الزامی است"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "پایگاه داده‌ای با همین نام از قبل وجود دارد. اگر حاوی جدول باشد، حذف خواهند شد؛ اگر خالی باشد، دوباره استفاده خواهد شد."
+
+msgid "AI generated"
+msgstr "تولید شده توسط هوش مصنوعی"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "پیش از بازگشت به مسیر یادگیری، حداقل یک سؤال اضافه کنید."
+
+msgid "Add attachments"
+msgstr "افزودن پیوست‌ها"
+
+msgid "Additional fields"
+msgstr "فیلدهای اضافی"
+
+msgid "Allow comments"
+msgstr "اجازه نظرات"
+
+msgid "Allow new pages"
+msgstr "اجازه صفحات جدید"
+
+msgid "Allow ratings"
+msgstr "اجازه امتیازدهی"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "آیا مطمئن هستید که می‌خواهید همه موارد را حذف کنید؟"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "آیا مطمئن هستید که می‌خواهید تمدید خودکار را بازیابی کنید؟"
+
+msgid "Attachment has been deleted"
+msgstr "پیوست حذف شد"
+
+msgid "Backup file"
+msgstr "پرونده پشتیبان"
+
+msgid "Block comments"
+msgstr "مسدود کردن نظرات"
+
+msgid "Block new pages"
+msgstr "مسدود کردن صفحات جدید"
+
+msgid "Block ratings"
+msgstr "مسدود کردن امتیازدهی"
+
+msgid "Cancel renewal"
+msgstr "لغو تمدید"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "پیوندهای دسته‌بندی از صفحات ویکی %s حذف خواهند شد."
+
+msgid "Change"
+msgstr "تغییر"
+
+msgid "Clear group"
+msgstr "پاک کردن گروه"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "برای درج تگ در ویرایشگر، روی آن کلیک کنید. این نگهدارنده‌ها هنگام تولید گواهی جایگزین خواهند شد."
+
+msgid "Comment added"
+msgstr "نظر اضافه شد"
+
+msgid "Comment is required"
+msgstr "نظر الزامی است"
+
+msgid "Comment score"
+msgstr "امتیاز نظر"
+
+msgid "Compare selected versions line by line"
+msgstr "مقایسه نسخه‌های انتخاب‌شده خط به خط"
+
+msgid "Compare selected versions word by word"
+msgstr "مقایسه نسخه‌های انتخاب‌شده کلمه به کلمه"
+
+msgid "Compare versions"
+msgstr "مقایسه نسخه‌ها"
+
+msgid "Copy completed"
+msgstr "کپی کامل شد"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "ایجاد صفحات کاری فردی ویکی برای یادگیرندگان"
+
+msgid "Current view mode"
+msgstr "حالت نمای فعلی"
+
+msgid "Delete Wiki"
+msgstr "حذف ویکی"
+
+msgid "Delete page"
+msgstr "حذف صفحه"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "حذف صفحه اصلی ویکی توصیه نمی‌شود. بعداً می‌توانید آن را دوباره بسازید."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "غیرفعال کردن ویکی صفحات و اقدامات عادی ویکی را مسدود می‌کند. این صفحه تنظیمات برای معلمان دوره در دسترس باقی می‌ماند."
+
+msgid "Discussion"
+msgstr "بحث"
+
+msgid "Edit Comment"
+msgstr "ویرایش نظر"
+
+msgid "Edit page"
+msgstr "ویرایش صفحه"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "تاریخ پایان باید بعد از یا برابر با تاریخ انقضا باشد"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "یک عبارت جستجو وارد کنید تا صفحات ویکی را پیدا کنید"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "تاریخ انقضا باید قبل یا برابر با تاریخ پایان باشد"
+
+msgid "Failed email recipients"
+msgstr "گیرندگان ایمیل ناموفق"
+
+msgid "Finish and return to learning path"
+msgstr "پایان و بازگشت به مسیر یادگیری"
+
+msgid "Forum image"
+msgstr "تصویر انجمن"
+
+msgid "Hide discussion"
+msgstr "پنهان کردن بحث"
+
+msgid "Hide page"
+msgstr "پنهان کردن صفحه"
+
+msgid "I changed my mind"
+msgstr "نظرم را تغییر دادم"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "اگر انتخاب نشود، این فایل‌ها از طریق ابزار «اطلاعات فایل» برای مدیر پلتفرم در دسترس باقی خواهند ماند."
+
+msgid "Internal message failures"
+msgstr "شکست‌های پیام داخلی"
+
+msgid "Internal messages available"
+msgstr "پیام‌های داخلی موجود"
+
+msgid "Internal messages created now"
+msgstr "پیام‌های داخلی ایجاد شده اکنون"
+
+msgid "Item score"
+msgstr "امتیاز مورد"
+
+msgid "Last post"
+msgstr "آخرین پست"
+
+msgid "Lock page"
+msgstr "قفل کردن صفحه"
+
+msgid "Manage categories"
+msgstr "مدیریت دسته‌ها"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "این سند را به‌عنوان کمک‌شده با هوش مصنوعی علامت‌گذاری کنید. زمانی استفاده کنید که محتوا با ابزارهای هوش مصنوعی ایجاد یا به‌طور قابل توجهی تغییر کرده باشد."
+
+msgid "Maximum score is required"
+msgstr "حداکثر امتیاز الزامی است"
+
+msgid "Metric"
+msgstr "متریک"
+
+msgid "New comments are blocked in this discussion"
+msgstr "نظرات جدید در این بحث مسدود شده‌اند"
+
+msgid "No Wiki categories are available yet."
+msgstr "هنوز هیچ دسته‌بندی ویکی در دسترس نیست."
+
+msgid "No categories found"
+msgstr "هیچ دسته‌بندی یافت نشد"
+
+msgid "No content"
+msgstr "بدون محتوا"
+
+msgid "No parent category"
+msgstr "بدون دسته‌بندی والد"
+
+msgid "Number of comments scored"
+msgstr "تعداد نظرات امتیازدهی‌شده"
+
+msgid "Old version"
+msgstr "نسخه قدیمی"
+
+msgid "Only image files are allowed."
+msgstr "فقط فایل‌های تصویری مجاز هستند."
+
+msgid "Please fill all required fields"
+msgstr "لطفاً تمام فیلدهای الزامی را پر کنید"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "سؤالاتی که دارای جانشین‌ساز کلاس یا دانشجو هستند، برای کلاس‌ها یا گروه‌های دوره تولید خواهند شد: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "امتیازدهی در این بحث مسدود شده است"
+
+msgid "Remove image"
+msgstr "حذف تصویر"
+
+msgid "Restore renewal"
+msgstr "بازگرداندن تمدید"
+
+msgid "Restore version"
+msgstr "بازگرداندن نسخه"
+
+msgid "Search in"
+msgstr "جستجو در"
+
+msgid "Select group"
+msgstr "انتخاب گروه"
+
+msgid "Select image"
+msgstr "انتخاب تصویر"
+
+msgid "Selected image"
+msgstr "تصویر انتخاب‌شده"
+
+msgid "Show discussion"
+msgstr "نمایش بحث"
+
+msgid "Show page"
+msgstr "نمایش صفحه"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "برخی فایل‌ها یا پوشه‌ها مجوز نوشتن ندارند. برای نصب Chamilo ابتدا باید مجوزهای آن‌ها را تغییر دهید (با استفاده از CHMOD). لطفاً"
+
+msgid "Subcategories"
+msgstr "زیر‌دسته‌ها"
+
+msgid "Tap on the left or right to navigate"
+msgstr "برای پیمایش، روی چپ یا راست ضربه بزنید"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "مهلت تکلیف ویکی گذشته است، اما ارسال با تأخیر مجاز است."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "مهلت تکلیف ویکی گذشته است."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "تکلیف ویکی هنوز شروع نشده است."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "قفل ویرایش صفحه ویکی قبل از ذخیره‌سازی الزامی است."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "اعلامیه ذخیره شد، اما پیوست بارگذاری نشد."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "اعلامیه ذخیره شد، اما تحویل ایمیل ناموفق بود."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "اعلامیه ذخیره شد، اما هیچ ایمیلی تحویل داده نشد."
+
+msgid "The category has been created"
+msgstr "دسته‌بندی ایجاد شد"
+
+msgid "The category has been deleted"
+msgstr "دسته‌بندی حذف شد"
+
+msgid "The category has been updated"
+msgstr "دسته‌بندی به‌روزرسانی شد"
+
+msgid "The end date is invalid"
+msgstr "تاریخ پایان نامعتبر است"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "حداکثر تعداد نسخه‌ها باید یک عدد صحیح غیرمنفی باشد"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "حداکثر تعداد کلمات باید یک عدد صحیح غیرمنفی باشد"
+
+msgid "The print window could not be opened"
+msgstr "پنجره چاپ باز نشد"
+
+msgid "The start date is invalid"
+msgstr "تاریخ شروع نامعتبر است"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "این تنظیمات برای کل دوره اعمال می‌شود، از جمله جلسات و گروه‌های آن."
+
+msgid "This announcement has already been sent by email."
+msgstr "این اعلامیه قبلاً از طریق ایمیل ارسال شده است."
+
+msgid "This discussion is hidden from learners"
+msgstr "این بحث از یادگیرندگان پنهان است"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "این ابزار هوش مصنوعی مولد به شما امکان می‌دهد تصاویر و ویدیوهای کوتاهی برای توضیح دوره خود بسازید. با توضیح (به صورت متنی) آنچه در بخش درخواست می‌خواهید، عناصر لازم را به مدل هوش مصنوعی پیکربندی‌شده ارائه می‌دهید تا تصویر یا ویدیو تولید کند. لطفاً صبور باشید. مدل هوش مصنوعی مدتی زمان می‌برد و نتیجه‌ای تولید می‌کند که ممکن است بخواهید با ذخیره رسانه در پوشه اسناد خود آن را نگه دارید و سپس در یک سند HTML جاسازی کنید. همه مدل‌های هوش مصنوعی از نظر سرعت یا کیفیت برابر نیستند. مدل هوش مصنوعی ممکن است یک درخواست اصلاح‌شده به شما بدهد که تفسیر دقیق‌تری از درخواست شماست. سپس می‌توانید از این درخواست اصلاح‌شده برای تنظیم دقیق‌تر درخواست خود استفاده کنید. لطفاً توجه داشته باشید که این ابزار، به‌ویژه برای ویدیوها، ممکن است هزینه‌های قابل توجهی برای سازمان شما ایجاد کند، حتی اگر تصمیم بگیرید رسانه تولیدشده را ذخیره نکنید. لطفاً از آن به‌طور مناسب استفاده کنید. اگر در به‌دست‌آوردن آنچه به دنبال آن هستید مشکل دارید، لطفاً مدتی وقت بگذارید و ترفندهای درخواست‌دهی را به‌صورت آنلاین برای مدل هوش مصنوعی در دسترس خود جستجو کنید."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "این تاریخچه متعلق به دوره پایه است. بازیابی پس از ایجاد نسخه جلسه در دسترس است."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "این تصویر جایگزین نماد پیش‌فرض انجمن می‌شود که در کنار عنوان انجمن نمایش داده می‌شود."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "این صفحه از دوره پایه می‌آید. ذخیره آن نسخه‌ای برای جلسه فعلی ایجاد می‌کند."
+
+msgid "This will also delete %s subcategories."
+msgstr "این کار همچنین %s زیرمجموعه را حذف خواهد کرد."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "این کار صفحات کاری جداگانه‌ای برای %s یادگیرنده ایجاد خواهد کرد."
+
+msgid "Thread history"
+msgstr "تاریخچه موضوع"
+
+msgid "Title and content"
+msgstr "عنوان و محتوا"
+
+msgid "Unable to cancel renewal right now."
+msgstr "در حال حاضر امکان لغو حق تمدید وجود ندارد."
+
+msgid "Unable to restore renewal right now."
+msgstr "در حال حاضر امکان بازگرداندن حق تمدید وجود ندارد."
+
+msgid "Unlock page"
+msgstr "باز کردن قفل صفحه"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "از [[صفحه]] یا [[صفحه|متن قابل مشاهده]] برای ایجاد پیوندهای داخلی ویکی استفاده کنید."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "از نوار فاصله یا کلیدهای جهت‌دار برای پیمایش استفاده کنید"
+
+msgid "View version"
+msgstr "مشاهده نسخه"
+
+msgid "Visible only to teachers"
+msgstr "فقط برای معلمان قابل مشاهده است"
+
+msgid "Weight is required"
+msgstr "وزن الزامی است"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "دسته‌بندی‌های ویکی برای این دوره غیرفعال هستند."
+
+msgid "Wiki categories enabled"
+msgstr "دسته‌بندی‌های ویکی فعال شد"
+
+msgid "Wiki html strict filtering"
+msgstr "فیلتر سخت‌گیرانه HTML ویکی"
+
+msgid "Wiki settings"
+msgstr "تنظیمات ویکی"
+
+msgid "Wiki settings updated"
+msgstr "تنظیمات ویکی به‌روزرسانی شد"
+
+msgid "You are viewing a historical version of this page"
+msgstr "شما در حال مشاهده نسخه تاریخی این صفحه هستید"
+
+msgid "You can attach one or more files to this reply."
+msgstr "می‌توانید یک یا چند فایل را به این پاسخ پیوست کنید."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "می‌توانید این صفحه تکلیف را ویرایش کنید، اما صفحات کاری یادگیرندگان تغییر نخواهند کرد."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "می‌توانید از برچسب‌های {{class_name}} و {{student_full_name}} در سؤال استفاده کنید."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "۲۰ دقیقه فرصت دارید تا این صفحه را ویرایش کنید قبل از اینکه قفل ویرایش منقضی شود."
+
+msgid "by"
+msgstr "توسط"
+
+msgid "required"
+msgstr "الزامی"
+
+msgid "Incorrect password."
+msgstr "رمز عبور نادرست است."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "هشدار یکپارچگی فایل برای ۱ ساعت متوقف شد."
+
+msgid "New baseline established: %s files."
+msgstr "خط پایه جدید ایجاد شد: %s فایل."
+
+msgid "Scan complete: changes were detected."
+msgstr "اسکن کامل شد: تغییرات شناسایی شدند."
+
+msgid "Scan complete: no changes were detected."
+msgstr "اسکن کامل شد: هیچ تغییری شناسایی نشد."
+
+msgid "File integrity"
+msgstr "یکپارچگی فایل"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "این گزارش فایل‌های نصب‌شده (همه به‌جز var/ و .git/، هرچند .git/config همچنان برای شناسایی ربوده شدن ریموت نظارت می‌شود) را با یک خط پایه معتبر مقایسه می‌کند تا افزودن‌ها، تغییرات یا حذف‌های غیرمنتظره را شناسایی کند."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "می‌توانید گزارش آخرین اسکن را در زیر بررسی کنید. اجرای اسکن، توقف هشدار یا ایجاد خط پایه جدید نیازمند مدیر سراسری است."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "هشداردهی در حال حاضر برای نگهداری متوقف شده است. به‌طور خودکار در %date% از سر گرفته خواهد شد."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "هنوز هیچ اسکنی اجرا نشده است. از اینجا یا از خط فرمان با app:file-integrity:scan اجرا کنید."
+
+msgid "Last scan"
+msgstr "آخرین اسکن"
+
+msgid "Files scanned"
+msgstr "فایل‌های اسکن‌شده"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "هنوز خط پایه‌ای وجود نداشت: این اسکن یکی ایجاد کرد. تغییرات از اسکن بعدی گزارش خواهند شد."
+
+msgid "No changes detected since the baseline."
+msgstr "از زمان ایجاد خط پایه هیچ تغییری شناسایی نشد."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "پیکربندی ریموت Git (.git/config) تغییر کرده است. بررسی کنید که این تغییر مورد انتظار بوده است."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "اسکن زودتر متوقف شد زیرا یک زیرپوشه قابل خواندن نبود (مجوزهای فایل را بررسی کنید). نتایج زیر ممکن است ناقص باشند."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "تغییرات بسیار زیاد برای فهرست کامل؛ فقط اولین ورودی‌های هر دسته در زیر نشان داده شده‌اند. برای فهرست کامل به گزارش CEF مراجعه کنید."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% فایل(ها) به دلیل مجوزها قابل خواندن نبودند و نادیده گرفته شدند."
+
+msgid "Run a scan now"
+msgstr "اکنون اسکن را اجرا کنید"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "توقف هشدار برای ۱ ساعت (برای نگهداری)"
+
+msgid "Pause for 1 hour"
+msgstr "توقف برای ۱ ساعت"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "درخت فایل فعلی را به‌عنوان خط پایه جدید تأیید کنید"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "این کار هر فایل فعلی را به‌عنوان صحیح تأیید می‌کند، از جمله هر تغییری که بررسی نشده است. ادامه می‌دهید؟"
+
+msgid "Establish new baseline"
+msgstr "ایجاد خط پایه جدید"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "زمان‌بندی اسکن از crontab سیستم، برای مثال"
+
+msgid "File integrity alert on %platform%"
+msgstr "هشدار یکپارچگی فایل در %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "اسکن یکپارچگی فایل تغییرات روی پلتفرم را شناسایی کرد:"
+
+msgid "Added files"
+msgstr "فایل‌های اضافه‌شده"
+
+msgid "Modified files"
+msgstr "فایل‌های تغییر‌یافته"
+
+msgid "Deleted files"
+msgstr "فایل‌های حذف‌شده"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "گزارش کامل را از مدیریت > امنیت > یکپارچگی فایل بررسی کنید."
+
+msgid "Password to confirm pausing alerts"
+msgstr "رمز عبور برای تأیید توقف هشدارها"
+
+msgid "Password to confirm the new baseline"
+msgstr "رمز عبور برای تأیید خط پایه جدید"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "اسکنی در حال اجرا است. لطفاً پیش از شروع اسکن جدید منتظر پایان آن بمانید."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "اسکنی در حال اجرا است (شروع‌شده در %date%). اسکن کامل ممکن است چند دقیقه طول بکشد؛ این صفحه را می‌توان با خیال راحت برای بررسی پیشرفت بارگذاری مجدد کرد."
+
+msgid "Currently processing"
+msgstr "در حال پردازش"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "اسکن قبلی (شروع‌شده در %date%) پیش از پایان قطع شد — فرآیند دیگر در حال اجرا نیست. می‌توانید با خیال راحت اسکن جدیدی شروع کنید."
+
+msgid "files"
+msgstr "فایل‌ها"
+
+msgid "Permissions changed"
+msgstr "مجوزها تغییر کردند"
+
+msgid "Files with changed permissions"
+msgstr "فایل‌هایی با مجوزهای تغییر‌یافته"
+
+msgid "Alert history"
+msgstr "تاریخچه هشدار"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "هر اسکنی که چیزی یافت، حتی پس از حل انحراف یا ایجاد خط پایه جدید نگه داشته می‌شود — برخلاف گزارش بالا، اسکن تمیز یا بازتنظیم خط پایه هرگز این را پاک نمی‌کند."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "این ورودی در زمان ثبت کوتاه شد؛ برای فهرست کامل به لاگ CEF مراجعه کنید."
+
+msgid "No alert has been recorded yet."
+msgstr "هنوز هیچ هشداری ثبت نشده است."
+
+msgid "Git remote changed"
+msgstr "ریموت Git تغییر کرد"
+
+msgid "Press enter to select"
+msgstr "برای انتخاب، کلید Enter را فشار دهید"
+
+msgid "Press enter to remove"
+msgstr "برای حذف، کلید Enter را فشار دهید"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "هیچ عنصری یافت نشد. تغییر عبارت جستجو را در نظر بگیرید."
+
+msgid "List is empty."
+msgstr "فهرست خالی است."
+
+msgid "Your session has expired. Please try again."
+msgstr "نشست شما منقضی شده است. لطفاً دوباره تلاش کنید."
+
+msgid "Generate with AI"
+msgstr "تولید با هوش مصنوعی"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "تصویر مدرن و خوش‌آمدگویی که موضوع این دوره را در سبک طراحی تخت و تمیز نشان می‌دهد و از رنگ‌های پلتفرم من به عنوان تأکید استفاده می‌کند."
+
+msgid "Back to account"
+msgstr "بازگشت به حساب"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "بازخورد شما به ما کمک می‌کند تا جلسات آموزشی آینده را بهبود ببخشیم."
+
+msgid "Thank you for sharing your feedback."
+msgstr "از به اشتراک گذاشتن بازخوردتان متشکریم."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "از کیفیت کلی آموزش چقدر راضی هستید؟"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "از مرتبط بودن محتوا چقدر راضی هستید؟"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "از وضوح توضیحات چقدر راضی هستید؟"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "از سازماندهی و سرعت آموزش چقدر راضی هستید؟"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "از مفید بودن عملی آنچه آموختید چقدر راضی هستید؟"
+
+msgid "Would you recommend this training to other people?"
+msgstr "آیا این آموزش را به دیگران توصیه می‌کنید؟"
+
+msgid "What should we improve in future editions?"
+msgstr "در نسخه‌های آینده چه چیزی را باید بهبود ببخشیم؟"
+
+msgid "Very satisfied"
+msgstr "بسیار راضی"
+
+msgid "Satisfied"
+msgstr "راضی"
+
+msgid "Neutral"
+msgstr "خنثی"
+
+msgid "Dissatisfied"
+msgstr "ناراضی"
+
+msgid "Very dissatisfied"
+msgstr "بسیار ناراضی"
+
+msgid "Add destination"
+msgstr "افزودن مقصد"
+
+msgid "Add this test to the assessment tool"
+msgstr "افزودن این آزمون به ابزار ارزیابی"
+
+msgid "Attempts and timing"
+msgstr "تلاش‌ها و زمان‌بندی"
+
+msgid "Available questions"
+msgstr "سوالات موجود"
+
+msgid "Cancel and return to learning path"
+msgstr "لغو و بازگشت به مسیر یادگیری"
+
+msgid "Category destinations"
+msgstr "مقصدهای دسته‌بندی"
+
+msgid "Classification"
+msgstr "طبقه‌بندی"
+
+msgid "Context"
+msgstr "زمینه"
+
+msgid "Could not load exercise configuration"
+msgstr "بارگذاری پیکربندی تمرین ممکن نیست"
+
+msgid "Could not save exercise"
+msgstr "ذخیره تمرین ممکن نیست"
+
+msgid "Display and learning path"
+msgstr "نمایش و مسیر یادگیری"
+
+msgid "Edit test"
+msgstr "ویرایش آزمون"
+
+msgid "Exercise settings saved."
+msgstr "تنظیمات تمرین ذخیره شد."
+
+msgid "Extra settings"
+msgstr "تنظیمات اضافی"
+
+msgid "Feedback and results"
+msgstr "بازخورد و نتایج"
+
+msgid "Finish exercise"
+msgstr "پایان تمرین"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "زبان این تمرین را به عنوان فراداده منبع شناسایی می‌کند. به تنهایی جستجو را فعال نمی‌کند."
+
+msgid "Maximum score (%)"
+msgstr "حداکثر نمره (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "فراداده شامل مهارت‌ها و فیلدهای اضافی پیکربندی‌شده برای تمرین‌ها است. اختیاری است و تا باز شدن پنهان می‌ماند."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "هنوز هیچ دسته‌بندی سوالی برای این تمرین در دسترس نیست."
+
+msgid "Question categories matrix"
+msgstr "ماتریس دسته‌بندی سوالات"
+
+msgid "Questions behavior"
+msgstr "رفتار سوالات"
+
+msgid "Random by category"
+msgstr "تصادفی بر اساس دسته‌بندی"
+
+msgid "Remove destination"
+msgstr "حذف مقصد"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "قوانین بر اساس درصد نمره به ترتیب صعودی ارزیابی می‌شوند. برای پایان آزمون، پایان تمرین را انتخاب کنید."
+
+msgid "Score and final messages"
+msgstr "نمره و پیام‌های نهایی"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "برخی گزینه‌ها پس از ایجاد تمرین قفل می‌شوند."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "این مقدار به عنوان مدت زمان کل به دقیقه ذخیره می‌شود."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "از ۰ برای نگه داشتن همه سوالات موجود استفاده کنید. از -۱ جایی که همه سوالات موجود مجاز هستند استفاده کنید."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "از این فیلدها برای طبقه‌بندی تمرین مستقل از گزینه‌های نمایش آن استفاده کنید."
+
+msgid "Invite by email"
+msgstr "دعوت از طریق ایمیل"
+
+msgid "Invitation has been sent"
+msgstr "دعوت‌نامه ارسال شد"
+
+msgid "Sent on"
+msgstr "ارسال‌شده در"
+
+msgid "Accepted on"
+msgstr "پذیرفته‌شده در"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "این دوره در یک جلسه باز است. ارسال دعوت‌نامه در اینجا، گیرنده را به کل جلسه %s مشترک می‌کند، نه فقط این دوره."
+
+msgid "Revoke"
+msgstr "لغو"
+
+msgid "Revoked"
+msgstr "لغو شده"
+
+msgid "Invitation has been revoked"
+msgstr "دعوت‌نامه لغو شد"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "آیا مطمئن هستید که می‌خواهید دعوت‌نامه ارسال‌شده به %s را لغو کنید؟"
+
+msgid "No default room"
+msgstr "اتاق پیش‌فرض وجود ندارد"
+
+msgid "Floor"
+msgstr "طبقه"
+
+msgid "Capacity"
+msgstr "ظرفیت"
+
+msgid "Use attendance default room"
+msgstr "استفاده از اتاق پیش‌فرض حضور"
+
+msgid "Floor number"
+msgstr "شماره طبقه"
+
+msgid "Copy to students"
+msgstr "کپی به دانشجویان"
+
+msgid "Generate a quick test on this topic"
+msgstr "تولید آزمون سریع در این موضوع"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "محتوای سند ذخیره‌شده برای پردازش به مدل هوش مصنوعی ارسال خواهد شد."
+
+msgid "MCP API key"
+msgstr "کلید API MCP"
+
+msgid "Authorized applications"
+msgstr "برنامه‌های مجاز"
+
+msgid "Your session is about to expire"
+msgstr "جلسه شما در حال انقضا است"
+
+msgid "Do you want to continue your session?"
+msgstr "آیا می‌خواهید جلسه خود را ادامه دهید؟"
+
+msgid "Your session details have been lost, please login again."
+msgstr "جزئیات جلسه شما از دست رفته است، لطفاً دوباره وارد شوید."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "دسترسی به این منبع رد شده است. به نظر می‌رسد شما مجوزهای لازم برای دسترسی به آن را ندارید."
+
+msgid "Stay connected"
+msgstr "متصل بمانید"
+
+msgid "You will be signed out in %s seconds."
+msgstr "شما در %s ثانیه خارج خواهید شد."
+
+msgid "No descriptions available yet."
+msgstr "هنوز توصیفی در دسترس نیست."
+
+msgid "%s users selected"
+msgstr "%s کاربر انتخاب‌شده"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "کاربران انتخاب‌شده به دوره مشترک شدند"
+
+msgid "Import teachers"
+msgstr "وارد کردن معلمان"
+
+msgid "Import learners"
+msgstr "وارد کردن یادگیرندگان"
+
+msgid "Select CSV file"
+msgstr "انتخاب فایل CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "برخی کاربران نتوانستند مشترک شوند"
+
+msgid "Browse available classes"
+msgstr "مرور کلاس‌های موجود"
+
+msgid "Back to linked classes"
+msgstr "بازگشت به کلاس‌های مرتبط"
+
+msgid "No classes are currently linked to this course."
+msgstr "در حال حاضر هیچ کلاسی به این دوره مرتبط نیست."
+
+msgid "No available classes were found for this course."
+msgstr "هیچ کلاس موجودی برای این دوره یافت نشد."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "آیا مطمئن هستید که می‌خواهید کاربران انتخاب‌شده را لغو اشتراک کنید؟"
+
+msgid "Learning path access"
+msgstr "دسترسی به مسیر یادگیری"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "فقط کاربران و گروه‌های انتخاب‌شده می‌توانند به این مسیر یادگیری دسترسی داشته باشند. پس از ذخیره، آن‌ها را مدیریت کنید."
+
+msgid "All current and future course users can access this learning path."
+msgstr "همه کاربران فعلی و آینده دوره می‌توانند به این مسیر یادگیری دسترسی داشته باشند."
+
+msgid "All course users"
+msgstr "همه کاربران دوره"
+
+msgid "Selected users and groups"
+msgstr "کاربران و گروه‌های انتخاب‌شده"
+
+msgid "No access"
+msgstr "بدون دسترسی"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "فقط کاربران و گروه‌های اضافه‌شده در اینجا می‌توانند به این مسیر یادگیری دسترسی داشته باشند."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "تعداد سوالات به حداکثر %s محدود شده است"
+
+msgid "Open exercise player"
+msgstr "باز کردن پخش‌کننده تمرین"
+
+msgid "The score is hidden for this exercise."
+msgstr "نمره برای این تمرین پنهان است."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "اصلاحات طبق تنظیمات نتیجه تمرین مخفی شده‌اند."
+
+msgid "Progressive adaptive result"
+msgstr "نتیجه تطبیقی تدریجی"
+
+msgid "Achieved level"
+msgstr "سطح کسب‌شده"
+
+msgid "Correction history"
+msgstr "تاریخچه اصلاح"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "تاریخچه اصلاحات دستی انجام‌شده برای این تلاش."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "این تمرین از حالت نتیجه رادار/تارعنکبوتی استفاده می‌کند. نمودار در این صفحه در دسترس نیست."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "جزئیات سؤال طبق تنظیمات نتیجه تمرین مخفی شده‌اند."
+
+msgid "Media question"
+msgstr "سؤال رسانه‌ای"
+
+msgid "Pending correction"
+msgstr "در انتظار اصلاح"
+
+msgid "No answer"
+msgstr "بدون پاسخ"
+
+msgid "Blank %s"
+msgstr "خالی %s"
+
+msgid "Your order"
+msgstr "ترتیب شما"
+
+msgid "Correct order"
+msgstr "ترتیب صحیح"
+
+msgid "Delineation review"
+msgstr "بررسی ترسیم"
+
+msgid "Learner clicks"
+msgstr "کلیک‌های یادگیرنده"
+
+msgid "Question image"
+msgstr "تصویر سؤال"
+
+msgid "No hotspot image available"
+msgstr "تصویر نقطه داغ موجود نیست"
+
+msgid "Learner delineation"
+msgstr "ترسیم یادگیرنده"
+
+msgid "Expected delineation"
+msgstr "ترسیم مورد انتظار"
+
+msgid "Expected zones"
+msgstr "مناطق مورد انتظار"
+
+msgid "Zone"
+msgstr "منطقه"
+
+msgid "Learner annotation"
+msgstr "یادداشت یادگیرنده"
+
+msgid "No annotation image available"
+msgstr "تصویر یادداشت موجود نیست"
+
+msgid "This answer is pending teacher correction."
+msgstr "این پاسخ در انتظار اصلاح معلم است."
+
+msgid "Teacher comment"
+msgstr "نظر معلم"
+
+msgid "Teacher correction"
+msgstr "اصلاح معلم"
+
+msgid "Save correction"
+msgstr "ذخیره اصلاح"
+
+msgid "Learner audio"
+msgstr "صوت یادگیرنده"
+
+msgid "Download audio"
+msgstr "دانلود صوت"
+
+msgid "No uploaded audio"
+msgstr "صوت بارگذاری‌شده وجود ندارد"
+
+msgid "Learner Office document"
+msgstr "سند آفیس یادگیرنده"
+
+msgid "Learner file"
+msgstr "فایل یادگیرنده"
+
+msgid "Download Office document"
+msgstr "دانلود سند آفیس"
+
+msgid "No submitted document"
+msgstr "سند ارسالی وجود ندارد"
+
+msgid "No uploaded file"
+msgstr "فایل بارگذاری‌شده وجود ندارد"
+
+msgid "Content item"
+msgstr "آیتم محتوا"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "این نوع سؤال در این صفحه قابل بررسی نیست."
+
+msgid "Exercise completed"
+msgstr "تمرین تکمیل شد"
+
+msgid "Could not start the attempt"
+msgstr "نتوانست تلاش را شروع کند"
+
+msgid "Invalid exercise attempt"
+msgstr "تلاش تمرین نامعتبر"
+
+msgid "Could not load exercise result"
+msgstr "نتوانست نتیجه تمرین را بارگذاری کند"
+
+msgid "Could not load AI providers"
+msgstr "نتوانست ارائه‌دهندگان هوش مصنوعی را بارگذاری کند"
+
+msgid "Could not generate AI suggestion"
+msgstr "نتوانست پیشنهاد هوش مصنوعی تولید کند"
+
+msgid "Correction saved"
+msgstr "اصلاح ذخیره شد"
+
+msgid "Could not save correction"
+msgstr "نتوانست اصلاح را ذخیره کند"
+
+msgid "Create exercise"
+msgstr "ایجاد تمرین"
+
+msgid "Exercise categories"
+msgstr "دسته‌بندی‌های تمرین"
+
+msgid "Question categories"
+msgstr "دسته‌بندی‌های سؤال"
+
+msgid "Search by exercise title or description."
+msgstr "جستجو بر اساس عنوان یا توضیحات تمرین."
+
+msgid "Search exercises"
+msgstr "جستجوی تمرین‌ها"
+
+msgid "No exercises found"
+msgstr "هیچ تمرینی یافت نشد"
+
+msgid "Open exercise"
+msgstr "باز کردن تمرین"
+
+msgid "Disable autolaunch"
+msgstr "غیرفعال کردن راه‌اندازی خودکار"
+
+msgid "Enable autolaunch"
+msgstr "فعال کردن راه‌اندازی خودکار"
+
+msgid "Export QTI2"
+msgstr "صادر کردن QTI2"
+
+msgid "Bulk actions"
+msgstr "عملیات گروهی"
+
+msgid "Selected exercises"
+msgstr "تمرین‌های انتخاب‌شده"
+
+msgid "No exercises selected"
+msgstr "هیچ تمرینی انتخاب نشده است"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "آیا مطمئن هستید که می‌خواهید این عمل را روی تمرین‌های انتخاب‌شده اعمال کنید؟"
+
+msgid "Bulk action completed"
+msgstr "عملیات گروهی تکمیل شد"
+
+msgid "Could not update exercises"
+msgstr "به‌روزرسانی تمرین‌ها ممکن نبود"
+
+msgid "Could not update exercise"
+msgstr "به‌روزرسانی تمرین ممکن نبود"
+
+msgid "Copy exercise"
+msgstr "کپی کردن تمرین"
+
+msgid "Delete exercise"
+msgstr "حذف تمرین"
+
+msgid "Could not load exercises"
+msgstr "بارگذاری تمرین‌ها ممکن نبود"
+
+msgid "No limit"
+msgstr "بدون محدودیت"
+
+msgid "Add selected questions to the test"
+msgstr "افزودن سوالات انتخاب‌شده به آزمون"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "این سوال در یک آزمون فعال استفاده شده و نمی‌توان آن را در اینجا ویرایش کرد."
+
+msgid "This question cannot be edited here."
+msgstr "این سوال را نمی‌توان در اینجا ویرایش کرد."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "این سوال در یک آزمون فعال استفاده شده و نمی‌توان آن را در اینجا حذف کرد."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "این سوال را نمی‌توان حذف کرد زیرا دسترسی شما توسط تنظیمات پلتفرم محدود شده است."
+
+msgid "Already in test"
+msgstr "قبلاً در آزمون است"
+
+msgid "Select at least one question."
+msgstr "حداقل یک سوال انتخاب کنید."
+
+msgid "Question bank updated"
+msgstr "بانک سوالات به‌روزرسانی شد"
+
+msgid "Could not update the question bank"
+msgstr "به‌روزرسانی بانک سوالات ممکن نبود"
+
+msgid "Could not load the question bank"
+msgstr "بارگذاری بانک سوالات ممکن نبود"
+
+msgid "Total score"
+msgstr "نمره کل"
+
+msgid "Starting"
+msgstr "شروع"
+
+msgid "Attempt history"
+msgstr "تاریخچه تلاش‌ها"
+
+msgid "No attempts yet"
+msgstr "هنوز تلاشی انجام نشده است"
+
+msgid "Invalid exercise"
+msgstr "تمرین نامعتبر"
+
+msgid "Could not load exercise overview"
+msgstr "بارگذاری نمای کلی تمرین ممکن نبود"
+
+msgid "Open test"
+msgstr "باز کردن آزمون"
+
+msgid "Random answers"
+msgstr "پاسخ‌های تصادفی"
+
+msgid "Prevent moving backwards"
+msgstr "جلوگیری از بازگشت به عقب"
+
+msgid "Previous button hidden"
+msgstr "دکمه قبلی مخفی است"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "این تمرین از گزینه‌هایی استفاده می‌کند که به پخش‌کننده آزمون متفاوتی نیاز دارند."
+
+msgid "Continue test"
+msgstr "ادامه آزمون"
+
+msgid "Attempt started"
+msgstr "تلاش آغاز شد"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "پیش‌نمایش معلم تلاش پیگیری‌شده‌ای ایجاد نمی‌کند."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "شروع یا ازسرگیری یک تلاش تمرینی. پاسخ‌های پیش‌نویس را می‌توان قبل از ارسال نهایی ذخیره کرد."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "محدودیت زمانی به پایان رسید. در حال پایان دادن به تلاش."
+
+msgid "Question time reached. Saving your answer."
+msgstr "زمان سوال به پایان رسید. در حال ذخیره پاسخ شما."
+
+msgid "Finishing"
+msgstr "در حال پایان دادن"
+
+msgid "Draft saved"
+msgstr "پیش‌نویس ذخیره شد"
+
+msgid "Save as draft"
+msgstr "ذخیره به‌عنوان پیش‌نویس"
+
+msgid "Statement"
+msgstr "بیانیه"
+
+msgid "Drop each option on the matching answer"
+msgstr "هر گزینه را روی پاسخ منطبق رها کنید"
+
+msgid "Clear match"
+msgstr "پاک کردن تطابق"
+
+msgid "Click to place the selected option here"
+msgstr "برای قرار دادن گزینه انتخاب‌شده اینجا کلیک کنید"
+
+msgid "Select an option, then click here"
+msgstr "یک گزینه انتخاب کنید، سپس اینجا کلیک کنید"
+
+msgid "Already matched"
+msgstr "قبلاً تطبیق داده شده"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "می‌توانید یک گزینه را به پاسخ بکشید، یا گزینه‌ای را انتخاب کرده و سپس روی جعبه هدف کلیک کنید."
+
+msgid "Put the items in the correct order."
+msgstr "موارد را به ترتیب صحیح قرار دهید."
+
+msgid "Move left"
+msgstr "انتقال به چپ"
+
+msgid "Move right"
+msgstr "انتقال به راست"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "می‌توانید موارد را به چپ یا راست بکشید، یا از دکمه‌های انتقال برای تغییر ترتیب استفاده کنید."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "می‌توانید موارد را بکشید یا از دکمه‌های انتقال برای تغییر ترتیب استفاده کنید."
+
+msgid "Or upload an audio file"
+msgstr "یا یک فایل صوتی بارگذاری کنید"
+
+msgid "Selected audio"
+msgstr "صوت انتخاب‌شده"
+
+msgid "Uploaded audio"
+msgstr "صوت بارگذاری‌شده"
+
+msgid "Office document"
+msgstr "سند آفیس"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "سند را در ویرایشگر زیر تکمیل کنید. فایل به این تلاش برای تصحیح توسط معلم پیوست خواهد شد."
+
+msgid "Reload Office editor"
+msgstr "بارگذاری مجدد ویرایشگر آفیس"
+
+msgid "Prepare Office document"
+msgstr "آماده‌سازی سند آفیس"
+
+msgid "Open in new tab"
+msgstr "باز کردن در زبانه جدید"
+
+msgid "Preparing Office document"
+msgstr "در حال آماده‌سازی سند آفیس"
+
+msgid "Submitted document"
+msgstr "سند ارسالی"
+
+msgid "Annotation tools"
+msgstr "ابزارهای حاشیه‌نویسی"
+
+msgid "Text to place"
+msgstr "متن برای قرار دادن"
+
+msgid "Click the image to place the text annotation."
+msgstr "روی تصویر کلیک کنید تا حاشیه‌نویسی متنی قرار گیرد."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "روی تصویر کلیک کنید تا نقاط مسیر اضافه شود. برای جدا کردن مسیرها از «شروع مسیر جدید» استفاده کنید."
+
+msgid "Start new path"
+msgstr "شروع مسیر جدید"
+
+msgid "Current annotations"
+msgstr "حاشیه‌نویسی‌های فعلی"
+
+msgid "Remove point"
+msgstr "حذف نقطه"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "روی تصویر کلیک کنید تا چندضلعی محدوده رسم شود."
+
+msgid "Click a marker to remove it."
+msgstr "روی نشانگر کلیک کنید تا حذف شود."
+
+msgid "Placed"
+msgstr "قرار گرفته"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "پاسخی را انتخاب کنید، سپس روی تصویر کلیک کنید تا علامت‌گذاری شود."
+
+msgid "Reading speed"
+msgstr "سرعت خواندن"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "این نوع سؤال در این پخش‌کننده قابل نمایش نیست."
+
+msgid "Save draft"
+msgstr "ذخیره پیش‌نویس"
+
+msgid "I confirm that my answers were saved."
+msgstr "تأیید می‌کنم که پاسخ‌هایم ذخیره شده است."
+
+msgid "Finish test"
+msgstr "پایان آزمون"
+
+msgid "Attempt finished"
+msgstr "تلاش به پایان رسید"
+
+msgid "Question category"
+msgstr "دسته‌بندی سؤال"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "سؤالات مربوط به این دسته‌بندی سؤال را به پایان رساندید، آخرین فرصت شما برای بازگشت و بازنگری این سؤالات است."
+
+msgid "Question time left"
+msgstr "زمان باقی‌مانده سؤال"
+
+msgid "Time left"
+msgstr "زمان باقی‌مانده"
+
+msgid "Current attempt"
+msgstr "تلاش فعلی"
+
+msgid "Could not save draft answer"
+msgstr "ذخیره پیش‌نویس پاسخ ممکن نشد"
+
+msgid "Could not load exercise"
+msgstr "بارگذاری تمرین ممکن نشد"
+
+msgid "Draft answer saved"
+msgstr "پیش‌نویس پاسخ ذخیره شد"
+
+msgid "Could not finish the attempt"
+msgstr "پایان تلاش ممکن نشد"
+
+msgid "Could not prepare Office document"
+msgstr "آماده‌سازی سند آفیس ممکن نشد"
+
+msgid "Back to learner score"
+msgstr "بازگشت به نمره یادگیرنده"
+
+msgid "Disable auto refresh"
+msgstr "غیرفعال‌سازی تازه‌سازی خودکار"
+
+msgid "Enable auto refresh"
+msgstr "فعال‌سازی تازه‌سازی خودکار"
+
+msgid "Live window"
+msgstr "پنجره زنده"
+
+msgid "Ongoing attempts"
+msgstr "تلاش‌های در جریان"
+
+msgid "Completed attempts"
+msgstr "تلاش‌های تکمیل‌شده"
+
+msgid "Started"
+msgstr "شروع شده"
+
+msgid "Last activity"
+msgstr "آخرین فعالیت"
+
+msgid "Could not load live results"
+msgstr "نتایج زنده بارگذاری نشد"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "این تمرین فقط خواندنی است زیرا در یک مسیر یادگیری گنجانده شده است."
+
+msgid "Select a question type to create a question."
+msgstr "یک نوع سوال برای ایجاد سوال انتخاب کنید."
+
+msgid "Click to preview"
+msgstr "برای پیش‌نمایش کلیک کنید"
+
+msgid "Hide preview"
+msgstr "پنهان کردن پیش‌نمایش"
+
+msgid "Shape"
+msgstr "شکل"
+
+msgid "Coordinates"
+msgstr "مختصات"
+
+msgid "Blanks"
+msgstr "جاهای خالی"
+
+msgid "Switchable blanks"
+msgstr "جاهای خالی قابل تعویض"
+
+msgid "Blank"
+msgstr "جای خالی"
+
+msgid "Input width"
+msgstr "عرض ورودی"
+
+msgid "Orientation"
+msgstr "جهت"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "با حالت بازخورد فعلی تمرین در دسترس نیست"
+
+msgid "Not available in the learning path creation flow"
+msgstr "در جریان ایجاد مسیر یادگیری در دسترس نیست"
+
+msgid "Delete question"
+msgstr "حذف سوال"
+
+msgid "Could not update exercise questions"
+msgstr "سوالات تمرین به‌روزرسانی نشد"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "تمرین به مسیر یادگیری اضافه نشد"
+
+msgid "A valid exercise id is required."
+msgstr "شناسه معتبر تمرین الزامی است."
+
+msgid "Could not load exercise questions"
+msgstr "سوالات تمرین بارگذاری نشد"
+
+msgid "Delete selected attempts"
+msgstr "حذف تلاش‌های انتخاب‌شده"
+
+msgid "Before date"
+msgstr "قبل از تاریخ"
+
+msgid "Pending corrections"
+msgstr "اصلاحات در انتظار"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "این تمرین توسط کتاب نمرات قفل شده است. اقدامات پاکسازی تلاش غیرفعال است."
+
+msgid "No attempts found"
+msgstr "هیچ تلاشی یافت نشد"
+
+msgid "Review"
+msgstr "بررسی"
+
+msgid "Print/PDF"
+msgstr "چاپ/پی‌دی‌اف"
+
+msgid "Could not load exercise report"
+msgstr "گزارش تمرین بارگذاری نشد"
+
+msgid "Select at least one attempt"
+msgstr "حداقل یک تلاش انتخاب کنید"
+
+msgid "Delete selected attempts?"
+msgstr "تلاش‌های انتخاب‌شده حذف شود؟"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "ایمیل نتایج تلاش بررسی‌شده ارسال شود؟"
+
+msgid "Could not send emails"
+msgstr "ایمیل‌ها ارسال نشد"
+
+msgid "Exercise result emails sent"
+msgstr "ایمیل‌های نتیجه تمرین ارسال شد"
+
+msgid "Skipped"
+msgstr "نادیده گرفته شد"
+
+msgid "Close attempt?"
+msgstr "تلاش بسته شود؟"
+
+msgid "Attempt closed"
+msgstr "تلاش بسته شد"
+
+msgid "Could not close attempt"
+msgstr "تلاش بسته نشد"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "نتیجه این تلاش از طریق ایمیل به یادگیرنده ارسال شود؟"
+
+msgid "Email sent"
+msgstr "ایمیل ارسال شد"
+
+msgid "Could not send email"
+msgstr "ایمیل ارسال نشد"
+
+msgid "Attempt deleted"
+msgstr "تلاش حذف شد"
+
+msgid "Could not delete attempt"
+msgstr "تلاش حذف نشد"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "یک فایل CSV حاوی ستون‌های عنوان و توصیف انتخاب کنید."
+
+msgid "Manage categories used to classify questions."
+msgstr "مدیریت دسته‌بندی‌های مورد استفاده برای طبقه‌بندی سوالات."
+
+msgid "Manage categories used to classify exercises."
+msgstr "مدیریت دسته‌بندی‌های مورد استفاده برای طبقه‌بندی تمرین‌ها."
+
+msgid "Could not load categories"
+msgstr "دسته‌بندی‌ها بارگذاری نشد"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "دسته‌بندی‌های واردشده: %s. ردیف‌های نادیده‌گرفته‌شده: %s."
+
+msgid "Imported categories: %s."
+msgstr "دسته‌بندی‌های واردشده: %s."
+
+msgid "Could not import categories"
+msgstr "دسته‌بندی‌ها وارد نشد"
+
+msgid "Could not save category"
+msgstr "ذخیره دسته‌بندی ممکن نشد"
+
+msgid "Answer distribution"
+msgstr "توزیع پاسخ‌ها"
+
+msgid "Configured answers"
+msgstr "پاسخ‌های پیکربندی‌شده"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "شمارش دقیق پاسخ برای برخی انواع سؤال هنوز در گزارش مهاجرت‌شده در دسترس نیست."
+
+msgid "No report by question data found"
+msgstr "داده‌ای برای گزارش بر اساس سؤال یافت نشد"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "شمارش دقیق پاسخ برای این نوع سؤال هنوز در گزارش مهاجرت‌شده در دسترس نیست."
+
+msgid "No answer distribution found"
+msgstr "توزیع پاسخی یافت نشد"
+
+msgid "Could not load report by question"
+msgstr "بارگذاری گزارش بر اساس سؤال ممکن نشد"
+
+msgid "Question settings"
+msgstr "تنظیمات سؤال"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "برای بدون محدودیت زمانی، خالی یا ۰ بگذارید."
+
+msgid "Time limit in seconds"
+msgstr "محدودیت زمانی به ثانیه"
+
+msgid "Attached questions"
+msgstr "سؤالات پیوست‌شده"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "فقط سؤالاتی که به این سؤال رسانه‌ای داخل تمرین فعلی پیوست شده‌اند، در اینجا فهرست می‌شوند."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "هیچ سؤالی به این سؤال رسانه‌ای در تمرین فعلی پیوست نشده است."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "قالب سند آفیس را که فراگیران با OnlyOffice ویرایش خواهند کرد، بارگذاری کنید."
+
+msgid "Replace Office document"
+msgstr "جایگزینی سند آفیس"
+
+msgid "Current Office document"
+msgstr "سند آفیس فعلی"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "این سؤال پس از ارسال سند ویرایش‌شده توسط فراگیر، به‌صورت دستی تصحیح می‌شود."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "نمره کل به‌عنوان مجموع نمرات نقاط داغ محاسبه می‌شود."
+
+msgid "Global score"
+msgstr "نمره کلی"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "یک ردیف نقطه داغ را انتخاب کنید، شکل آن را برگزینید، سپس روی تصویر بکشید. برای چندضلعی‌ها، هر نقطه را کلیک کنید و چندضلعی را تمام کنید، یا دوبار کلیک کنید تا تمام شود."
+
+msgid "Finish polygon"
+msgstr "اتمام چندضلعی"
+
+msgid "Calculated answer"
+msgstr "پاسخ محاسبه‌شده"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "لطفاً متن خود را در زیر تایپ کنید و از براکت‌های مربعی [...] برای تعریف یک یا چند جای خالی استفاده کنید."
+
+msgid "Lowest value"
+msgstr "کمترین مقدار"
+
+msgid "Highest value"
+msgstr "بیشترین مقدار"
+
+msgid "Fill in blanks"
+msgstr "پر کردن جاهای خالی"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "از نشانگرهای انتخاب‌شده برای تعریف جاهای خالی استفاده کنید. مثال: پایتخت پرو [لیما] است."
+
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "برای تبدیل یک جای خالی به منوی کشویی، گزینه‌ها را با یک | جدا کنید؛ گزینهٔ اول پاسخ درست است. مثال: پایتخت پرو [Lima|Paris|Bogota] است."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "برای اجازه دادن به چند پاسخ درست، آن‌ها را با || جدا کنید. مثال: 1||one||uno."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "گزینه‌های منوی کشویی را وارد کنید، هر پاسخ در یک خط. سپس پاسخ‌های مورد انتظار را در زیر علامت بزنید، مانند ابزار قدیمی."
+
+msgid "Refresh answers"
+msgstr "تازه‌سازی پاسخ‌ها"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "این سؤال ترکیبی منوی کشویی از یک نمره کلی استفاده می‌کند، مانند ابزار قدیمی."
+
+msgid "Please enter at least two dropdown options."
+msgstr "لطفاً حداقل دو گزینه منوی کشویی وارد کنید."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "ابتدا گزینه‌های مقصد را ایجاد کنید، سپس هر مورد را به گزینه صحیح پیوند دهید."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "این سؤال ترکیبی تطبیقی از یک نمره کلی استفاده می‌کند، مانند ابزار قدیمی."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "گام‌ها را ایجاد کنید و موقعیت مورد انتظار هر یک را انتخاب کنید، مانند ابزار قدیمی کشیدنی."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "فراگیران درست یا نادرست را انتخاب می‌کنند و سپس درجه اطمینان خود را در طول تلاش مشخص می‌کنند. ویرایشگر همان نمرات درست/نادرست و سطوح اطمینان را مانند ابزار قدیمی ذخیره می‌کند."
+
+msgid "Hotspot combination"
+msgstr "ترکیب نقاط داغ"
+
+msgid "Add delineation"
+msgstr "افزودن ترسیم"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "این سؤال سند آفیس هیچ گزینه پاسخی ندارد. نمره آن در حین تصحیح/بررسی نتایج اختصاص داده می‌شود."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "این سؤال بارگذاری هیچ گزینه پاسخی ندارد. نمره آن در حین تصحیح/بررسی نتایج اختصاص داده می‌شود."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "این سؤال بیان شفاهی هیچ گزینه پاسخی ندارد. نمره آن در حین تصحیح/بررسی نتایج اختصاص داده می‌شود."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "این سؤال باز هیچ گزینه پاسخی ندارد. نمره آن در حین تصحیح/بررسی نتایج اختصاص داده می‌شود."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "افزودن متن خواندنی با تنظیمات سرعت پیمایش."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "افزودن محتوا، رسانه یا زمینه خواندنی بدون افزودن نمره."
+
+msgid "Insert a page break without adding score."
+msgstr "درج شکست صفحه بدون افزودن نمره."
+
+msgid "Could not save question"
+msgstr "ذخیره سؤال ممکن نشد"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "فقط اسناد DOC، DOCX، XLS یا XLSX مجاز هستند."
+
+msgid "Please select an Office document."
+msgstr "لطفاً یک سند آفیس انتخاب کنید."
+
+msgid "Please draw at least one hotspot."
+msgstr "لطفاً حداقل یک نقطه داغ رسم کنید."
+
+msgid "Please draw at least one delineation."
+msgstr "لطفاً حداقل یک ترسیم رسم کنید."
+
+msgid "The fill in blanks text is required."
+msgstr "متن جای خالی الزامی است."
+
+msgid "At least one expected answer is required."
+msgstr "حداقل یک پاسخ مورد انتظار الزامی است."
+
+msgid "At least two draggable items are required."
+msgstr "حداقل دو مورد قابل کشیدن الزامی است."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "هر مورد قابل کشیدن باید به یک موقعیت هدف معتبر متصل شود."
+
+msgid "At least two matching options are required."
+msgstr "حداقل دو گزینه تطبیقی الزامی است."
+
+msgid "At least two matching pairs are required."
+msgstr "حداقل دو جفت تطبیقی الزامی است."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "هر جفت تطبیقی باید به یک گزینه معتبر متصل شود."
+
+msgid "At least two answers are required."
+msgstr "حداقل دو پاسخ الزامی است."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "هر پاسخ درست/غلط باید درست یا غلط انتخاب شود."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "سؤال با پاسخ منحصربه‌فرد باید دقیقاً یک پاسخ صحیح داشته باشد."
+
+msgid "At least one correct answer is required."
+msgstr "حداقل یک پاسخ صحیح الزامی است."
+
+msgid "Could not load question"
+msgstr "بارگذاری سؤال ممکن نشد"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "یک دوره انتخاب کنید و گزارش نتایج کلی تمرین را به صورت CSV صادر کنید."
+
+msgid "Back to reports catalog"
+msgstr "بازگشت به فهرست گزارش‌ها"
+
+msgid "Could not load exercise global report"
+msgstr "بارگذاری گزارش کلی تمرین ممکن نشد"
+
+msgid "Imported questions"
+msgstr "سؤالات واردشده"
+
+msgid "Aiken content"
+msgstr "محتوای Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "بارگذاری مولد AI Aiken ممکن نشد"
+
+msgid "Could not generate Aiken content"
+msgstr "تولید محتوای Aiken ممکن نشد"
+
+msgid "Could not import generated Aiken content"
+msgstr "وارد کردن محتوای Aiken تولیدشده ممکن نشد"
+
+msgid "Back to my courses"
+msgstr "بازگشت به دوره‌های من"
+
+msgid "Open report"
+msgstr "باز کردن گزارش"
+
+msgid "Questions with no automatic correction"
+msgstr "سؤالاتی بدون تصحیح خودکار"
+
+msgid "Could not load pending attempts"
+msgstr "بارگذاری تلاش‌های در انتظار ممکن نشد"
+
+msgid "Skipped questions"
+msgstr "سؤالات ردشده"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "واردات Aiken این وزن کلی را بین سؤالات واردشده توزیع می‌کند مگر اینکه سؤال SCORE را تعریف کند."
+
+msgid "Import warnings"
+msgstr "هشدارهای واردات"
+
+msgid "Could not import questions"
+msgstr "وارد کردن سؤالات ممکن نشد"
+
+msgid "No question statistics found"
+msgstr "هیچ آمار سؤالی یافت نشد"
+
+msgid "Could not load question statistics"
+msgstr "بارگذاری آمار سؤال ممکن نشد"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "همچنین می‌توانید یک کلاینت MCP را مستقیماً با اشاره به نقطه پایانی زیر متصل کنید:"
+
+msgid "No applications are currently connected to your account."
+msgstr "هیچ برنامه‌ای در حال حاضر به حساب شما متصل نیست."
+
+msgid "Connected on"
+msgstr "متصل شده در"
+
+msgid "Last used"
+msgstr "آخرین استفاده"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s دیگر قادر به دسترسی به حساب Chamilo شما نخواهد بود. ادامه می‌دهید؟"
+
+msgid "Application revoked"
+msgstr "برنامه لغو شد"
+
+msgid "Copied to clipboard"
+msgstr "به کلیپ‌بورد کپی شد"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "کپی کردن نقطه پایانی MCP ممکن نشد"
+
+msgid "MCP endpoint"
+msgstr "نقطه پایانی MCP"
+
+msgid "API key"
+msgstr "کلید API"
+
+msgid "Last used at"
+msgstr "آخرین استفاده در"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "این کلید را اکنون کپی کنید. دیگر نمایش داده نخواهد شد."
+
+msgid "Rotate API key"
+msgstr "چرخش کلید API"
+
+msgid "Revoke API key"
+msgstr "لغو کلید API"
+
+msgid "Remote MCP connection"
+msgstr "اتصال MCP راه‌دور"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "کلاینت MCP خود را با مقادیر زیر پیکربندی کنید:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "کلید فعلی فوراً کار نخواهد کرد. ادامه می‌دهید؟"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "یک کلید API شخصی MCP جدید تولید خواهد شد. ادامه می‌دهید؟"
+
+msgid "MCP API key generated"
+msgstr "کلید API MCP تولید شد"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "کلاینت‌های MCP متصل با استفاده از این کلید فوراً کار نخواهند کرد. ادامه می‌دهید؟"
+
+msgid "MCP API key revoked"
+msgstr "کلید API MCP باطل شد"
+
+msgid "Could not copy the API key"
+msgstr "کپی کلید API ممکن نشد"
+
+msgid "Project"
+msgstr "پروژه"
+
+msgid "Close old tickets"
+msgstr "بستن تیکت‌های قدیمی"
+
+msgid "Close tickets older than seven days?"
+msgstr "تیکت‌های قدیمی‌تر از هفت روز بسته شوند؟"
+
+msgid "Assignment history"
+msgstr "تاریخچه تکلیف"
+
+msgid "Translate with AI"
+msgstr "ترجمه با هوش مصنوعی"
+
+msgid "Target language"
+msgstr "زبان مقصد"
+
+msgid "Please select a provider"
+msgstr "لطفاً یک ارائه‌دهنده انتخاب کنید"
+
+msgid "Generate translation"
+msgstr "تولید ترجمه"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "حداقل یک بخش از شرایط و ضوابط باید حاوی متن باشد."
+
+msgid "No active target languages are available."
+msgstr "هیچ زبان مقصد فعالی در دسترس نیست."
+
+msgid "Tutor"
+msgstr "مربی"
+
+msgid "Access dates"
+msgstr "تاریخ‌های دسترسی"
+
+msgid "Coach access dates"
+msgstr "تاریخ‌های دسترسی مربی"
+
+msgid "No sessions found"
+msgstr "هیچ جلسه‌ای یافت نشد"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "دوره‌هایی را انتخاب کنید که این کاربر نباید در این جلسه به آن‌ها دسترسی داشته باشد."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "یک کاربر نمی‌تواند از همه دوره‌های جلسه مسدود شود. به‌جای آن کاربر را لغو اشتراک کنید."
+
+msgid "Users subscribed to this session"
+msgstr "کاربران مشترک در این جلسه"
+
+msgid "No available users found"
+msgstr "هیچ کاربر در دسترس یافت نشد"
+
+msgid "Subscribe this user to the session?"
+msgstr "این کاربر به جلسه مشترک شود؟"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "کاربران انتخاب‌شده به جلسه مشترک شوند؟"
+
+msgid "General tutor planning"
+msgstr "برنامه‌ریزی مربی عمومی"
+
+msgid "User is already registered by another tutor."
+msgstr "کاربر قبلاً توسط مربی دیگری ثبت شده است."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "شما یک رونوشت دریافت می‌کنید زیرا مربی دوره هستید"
+
+msgid "General tutor"
+msgstr "مربی عمومی"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "دوره‌ها، مربیان، میز کمک فنی، معلمان و/یا مواد موجود را در نظر بگیرید."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "مربیان مشترک به‌عنوان معلم در دوره %s"
+
+msgid "Tutor name"
+msgstr "نام مربی"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "مربیان جلسه هماهنگ‌کننده جلسه هستند و می‌توانند به‌عنوان مربی هر دوره در جلسه عمل کنند. فقط کاربران با نقش معلم می‌توانند به‌عنوان مربی جلسه انتخاب شوند."
+
+msgid "Access start date for tutors"
+msgstr "تاریخ شروع دسترسی برای مربیان"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "تاریخی که جلسه برای مربیان در دسترس قرار می‌گیرد تا بتوانند قبل از اتصال دانشجویان آن را آماده کنند"
+
+msgid "Access end date for tutors"
+msgstr "تاریخ پایان دسترسی برای مربیان"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "تاریخی که جلسه برای مربیان بسته می‌شود. تأخیر اضافی به آن‌ها اجازه می‌دهد تمام اطلاعات پیگیری مرتبط را صادر کنند"
+
+msgid "Tutor and student"
+msgstr "مربی و دانشجو"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "این گزارش توزیع هفتگی جلسات بر اساس مربی عمومی جلسه را در محدوده تاریخ انتخاب‌شده نشان می‌دهد."
+
+msgid "User is general tutor in some sessions"
+msgstr "کاربر مربی عمومی در برخی جلسات است"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "معلمان به‌عنوان مربی در تمام جلسات دوره اضافه خواهند شد."
+
+msgid "Delete failed: invalid question id."
+msgstr "حذف ناموفق: شناسه سؤال نامعتبر."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "میانگین تعداد جلسات به ازای هر مربی عمومی جلسه"
+
+msgid "No room"
+msgstr "بدون اتاق"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "وارد کردن معلمان دوره به‌عنوان مربیان دوره در جلسه"
+
+msgid "Clean and update course tutors"
+msgstr "پاک‌سازی و به‌روزرسانی مربیان دوره"
+
+msgid "Add me as tutor"
+msgstr "مرا به‌عنوان مربی اضافه کن"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "افزودن نظرسنجی به مسیر یادگیری ممکن نشد"
+
+msgid "Access dates for tutors"
+msgstr "تاریخ‌های دسترسی برای مربیان"
+
+msgid "Tutor and group member"
+msgstr "مربی و عضو گروه"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "محدودیت روزانه توکن هوش مصنوعی شما به پایان رسیده است. لطفاً فردا دوباره تلاش کنید."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "محدودیت ماهانه توکن هوش مصنوعی شما به پایان رسیده است. لطفاً ماه آینده دوباره تلاش کنید."
+
+msgid "This course code already exists, please choose another code."
+msgstr "این کد دوره از قبل وجود دارد، لطفاً کد دیگری انتخاب کنید."
+
+msgid "This course title already exists, please choose another title."
+msgstr "این عنوان دوره از قبل وجود دارد، لطفاً عنوان دیگری انتخاب کنید."
+
+msgid "This tool visibility cannot be changed"
+msgstr "قابلیت مشاهده این ابزار قابل تغییر نیست"
+
+msgid "Invalid visibility"
+msgstr "قابلیت مشاهده نامعتبر است"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "شما یک رونوشت دریافت می‌کنید زیرا یکی از مربیان دوره هستید"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "شما یک رونوشت دریافت می‌کنید زیرا مربی دوره هستید"
+
+msgid "Manual completion"
+msgstr "تکمیل دستی"
+
+msgid "Send to tutors"
+msgstr "ارسال به مربیان"
+
+msgid "Lab title"
+msgstr "عنوان آزمایشگاه"
+
+msgid "Lab week"
+msgstr "هفته آزمایشگاه"
+
+msgid "Final exam access rule"
+msgstr "قانون دسترسی به آزمون نهایی"
+
+msgid "Course completion rule"
+msgstr "قانون تکمیل دوره"
+
+msgid "You have been invited to join a course"
+msgstr "شما برای پیوستن به یک دوره دعوت شده‌اید"
+
+msgid "No user has been found"
+msgstr "هیچ کاربری یافت نشد"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "کاربر انتخاب‌شده نمی‌تواند در این زمینه ثبت‌نام شود"
+
+msgid "No change has been made"
+msgstr "هیچ تغییری انجام نشده است"
+
+msgid "Back to group list"
+msgstr "بازگشت به فهرست گروه"
+
+msgid "Remove class link"
+msgstr "حذف پیوند کلاس"
+
+msgid "Group settings"
+msgstr "تنظیمات گروه"
+
+msgid "Self-registration allowed"
+msgstr "ثبت‌نام خودکار مجاز است"
+
+msgid "Self-unregistration allowed"
+msgstr "لغو ثبت‌نام خودکار مجاز است"
+
+msgid "This group is linked to the class"
+msgstr "این گروه به کلاس مرتبط است"
+
+msgid "Create one or more empty course groups"
+msgstr "ایجاد یک یا چند گروه خالی دوره"
+
+msgid "Number of places"
+msgstr "تعداد مکان‌ها"
+
+msgid "Base group"
+msgstr "گروه پایه"
+
+msgid "Share"
+msgstr "اشتراک‌گذاری"
+
+msgid "Collaboration"
+msgstr "همکاری"
+
+msgid "The group title is required."
+msgstr "عنوان گروه الزامی است."
+
+msgid "Back to group area"
+msgstr "بازگشت به ناحیه گروه"
+
+msgid "Members are managed by the linked class"
+msgstr "اعضا توسط کلاس مرتبط مدیریت می‌شوند"
+
+msgid "%s groups selected"
+msgstr "%s گروه انتخاب‌شده"
+
+msgid "Fill selected groups"
+msgstr "پر کردن گروه‌های انتخاب‌شده"
+
+msgid "Empty selected groups"
+msgstr "خالی کردن گروه‌های انتخاب‌شده"
+
+msgid "Fill group"
+msgstr "پر کردن گروه"
+
+msgid "Empty group"
+msgstr "خالی کردن گروه"
+
+msgid "Groups per user"
+msgstr "گروه‌ها به ازای کاربر"
+
+msgid "No tutors"
+msgstr "بدون مربی"
+
+msgid "No users"
+msgstr "بدون کاربر"
+
+msgid "Calculation mode"
+msgstr "حالت محاسبه"
+
+msgid "Weighted average"
+msgstr "میانگین وزنی"
+
+msgid "Points sum"
+msgstr "جمع امتیازات"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "میانگین وزنی با جمع وزن‌ها نرمال‌سازی می‌شود؛ جمع امتیازات هر وزن را به عنوان حداکثر امتیاز در نظر می‌گیرد و بدون نرمال‌سازی جمع می‌زند."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "هر وزن مورد به عنوان حداکثر امتیاز آن در نظر گرفته می‌شود؛ نمره جمع امتیازات است و نرمال‌سازی نمی‌شود."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "نمره میانگین وزنی موارد است که با جمع وزن‌ها نرمال‌سازی می‌شود."
+
+msgid "Forum participation"
+msgstr "مشارکت در فروم"
+
+msgid "Forum thread"
+msgstr "موضوع فروم"
+
+msgid "Points for one message"
+msgstr "امتیاز برای یک پیام"
+
+msgid "Points for two or more messages"
+msgstr "امتیاز برای دو یا چند پیام"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "امتیاز اعطا شده وقتی دانشجو دقیقاً یک پیام در موضوع ارسال کرده است."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "امتیاز اعطا شده وقتی دانشجو دو یا چند پیام در موضوع ارسال کرده است."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "اختیاری. اگر خالی بماند، یک یا چند پیام امتیاز یک پیام را اعطا می‌کنند."
+
+msgid "Current password is required to change your password."
+msgstr "رمز عبور فعلی برای تغییر رمز عبور الزامی است."
+
+msgid "The 2FA code is required."
+msgstr "کد ۲FA الزامی است."
+
+msgid "Invalid 2FA configuration."
+msgstr "پیکربندی ۲FA نامعتبر است."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "کد ۲FA نامعتبر یا منقضی شده است."
+
+msgid "Database load"
+msgstr "بارگذاری پایگاه داده"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "معیارهای بارگذاری زنده سرور MySQL و MariaDB"
+
+msgid "Click to show database server load metrics"
+msgstr "برای نمایش معیارهای بارگذاری سرور پایگاه داده کلیک کنید"
+
+msgid "Threads connected"
+msgstr "رشته‌های متصل"
+
+msgid "Temporary tables on disk"
+msgstr "جدول‌های موقت روی دیسک"
+
+msgid "Privilege scope"
+msgstr "محدوده امتیاز"
+
+msgid "Not measurable with the current database user"
+msgstr "با کاربر فعلی پایگاه داده قابل اندازه‌گیری نیست"
+
+msgid "Uptime"
+msgstr "زمان کارکرد"
+
+msgid "Queries per second"
+msgstr "پرس‌وجو در ثانیه"
+
+msgid "Slow queries"
+msgstr "پرس‌وجوهای کند"
+
+msgid "Slow query time limit"
+msgstr "محدودیت زمانی پرس‌وجوی کند"
+
+msgid "Slow query log"
+msgstr "گزارش پرس‌وجوی کند"
+
+msgid "Slow queries per second"
+msgstr "پرس‌وجوهای کند در ثانیه"
+
+msgid "Threads running"
+msgstr "رشته‌های در حال اجرا"
+
+msgid "Threads cached"
+msgstr "رشته‌های کش‌شده"
+
+msgid "Table lock waits"
+msgstr "انتظار قفل جدول"
+
+msgid "Row lock waits"
+msgstr "انتظار قفل سطر"
+
+msgid "Aborted connections"
+msgstr "اتصال‌های قطع‌شده"
+
+msgid "Opened tables"
+msgstr "جدول‌های بازشده"
+
+msgid "Query cache"
+msgstr "حافظه نهان پرس‌وجو"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "معیارهای بارگذاری پایگاه داده فقط برای MySQL و MariaDB در دسترس است."
+
+msgid "Inserts"
+msgstr "درج‌ها"
+
+msgid "Hit rate"
+msgstr "نرخ ضربه"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "تازه‌سازی خودکار هر ۵ ثانیه"
+
+msgid "Web server load"
+msgstr "بارگذاری وب‌سرور"
+
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "معیارهای وضعیت زنده Apache، Nginx یا FrankenPHP"
+
+msgid "Click to show web server load metrics"
+msgstr "برای نمایش معیارهای بارگذاری وب‌سرور کلیک کنید"
+
+msgid "Requires a local web server status module"
+msgstr "نیاز به ماژول وضعیت وب‌سرور محلی دارد"
+
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "بار سرور وب از Apache mod_status، Nginx stub_status، یا نقطه پایانی معیارهای FrankenPHP/Caddy، فقط روی localhost خوانده می‌شود. صفحه وضعیت باید درخواست‌ها از 127.0.0.1 (یا ::1) را اجازه دهد."
+
+msgid "Paths scanned"
+msgstr "مسیرهای اسکن‌شده"
+
+msgid "Detected"
+msgstr "تشخیص‌داده‌شده"
+
+msgid "Status path"
+msgstr "مسیر وضعیت"
+
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "معیارهای بار سرور وب فقط برای Apache، Nginx و FrankenPHP در دسترس است."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "هیچ‌کدام از مسیرهای وضعیت اسکن‌شده در localhost پاسخ ندادند."
+
+msgid "Busy workers"
+msgstr "کارگران مشغول"
+
+msgid "Idle workers"
+msgstr "کارگران بیکار"
+
+msgid "Graceful workers"
+msgstr "کارگران graceful"
+
+msgid "Server MPM"
+msgstr "MPM سرور"
+
+msgid "Requests per second (live)"
+msgstr "درخواست‌ها در ثانیه (زنده)"
+
+msgid "Requests per second (since start)"
+msgstr "درخواست‌ها در ثانیه (از شروع)"
+
+msgid "Bytes per second (live)"
+msgstr "بایت‌ها در ثانیه (زنده)"
+
+msgid "Bytes per second (since start)"
+msgstr "بایت‌ها در ثانیه (از شروع)"
+
+msgid "Bytes per request"
+msgstr "بایت‌ها در هر درخواست"
+
+msgid "Total accesses"
+msgstr "مجموع دسترسی‌ها"
+
+msgid "Total traffic"
+msgstr "مجموع ترافیک"
+
+msgid "CPU load"
+msgstr "بار CPU"
+
+msgid "Load average (1 min)"
+msgstr "میانگین بار (۱ دقیقه)"
+
+msgid "Load average (5 min)"
+msgstr "میانگین بار (۵ دقیقه)"
+
+msgid "Load average (15 min)"
+msgstr "میانگین بار (۱۵ دقیقه)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard در حال ارسال"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard در حال خواندن"
+
+msgid "Scoreboard keepalive"
+msgstr "نگهداری زنده تابلوی امتیازات"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard در حال انتظار"
+
+msgid "Scoreboard open slots"
+msgstr "اسلات‌های باز Scoreboard"
+
+msgid "Active connections"
+msgstr "اتصال‌های فعال"
+
+msgid "Reading"
+msgstr "در حال خواندن"
+
+msgid "Writing"
+msgstr "در حال نوشتن"
+
+msgid "Total requests"
+msgstr "مجموع درخواست‌ها"
+
+msgid "Accepts"
+msgstr "پذیرفته‌شده‌ها"
+
+msgid "Handled"
+msgstr "مدیریت‌شده‌ها"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: mod_status را فعال کنید (ExtendedStatus On) و localhost را به /server-status اجازه دهید. Nginx: stub_status را روی یک مکان فقط-localhost مانند /nginx_status یا /stub_status فعال کنید. FrankenPHP: گزینه سراسری \"metrics\" را به Caddyfile اضافه کنید، که به‌طور پیش‌فرض معیارهای Prometheus را روی API مدیریت Caddy (127.0.0.1:2019/metrics) در معرض قرار می‌دهد."
+
+msgid "Total threads"
+msgstr "مجموع رشته‌ها"
+
+msgid "Busy threads"
+msgstr "رشته‌های مشغول"
+
+msgid "Queue depth"
+msgstr "عمق صف"
+
+msgid "Worker"
+msgstr "کارگر"
+
+msgid "Average request time"
+msgstr "میانگین زمان درخواست"
+
+msgid "Grade percentage distribution"
+msgstr "توزیع درصد نمرات"
+
+msgid "Top learners"
+msgstr "یادگیرندگان برتر"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "این پیشرفت، پیشرفت مسیر یادگیری و میانگین نتیجه تمرین یادگیرنده را ترکیب می‌کند"
+
+msgid "Additional profile fields"
+msgstr "فیلدهای پروفایل اضافی"
+
+msgid "Visible columns"
+msgstr "ستون‌های قابل مشاهده"
+
+msgid "Learning path completion"
+msgstr "تکمیل مسیر یادگیری"
+
+msgid "Number of certificates"
+msgstr "تعداد گواهینامه‌ها"
+
+msgid "Could not export the report"
+msgstr "نمی‌توان گزارش را صادر کرد"
+
+msgid "Second learner"
+msgstr "یادگیرنده دوم"
+
+msgid "Results by learner"
+msgstr "نتایج بر اساس یادگیرنده"
+
+msgid "Use filters to narrow down questions."
+msgstr "از فیلترها برای محدود کردن سوالات استفاده کنید."
+
+msgid "Try adjusting your filters and search again."
+msgstr "فیلترهای خود را تنظیم کنید و دوباره جستجو کنید."
+
+msgid "Results per page"
+msgstr "نتایج در هر صفحه"
+
+msgid "No answers"
+msgstr "بدون پاسخ"
+
+msgid "Tests using this question"
+msgstr "آزمون‌هایی که از این سوال استفاده می‌کنند"
+
+msgid "Delete failed"
+msgstr "حذف ناموفق بود"
+
+msgid "PHP cache"
+msgstr "حافظه نهان PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "تشخیص زنده OPcache و APCu"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "برای نمایش تشخیص OPcache و APCu کلیک کنید"
+
+msgid "Memory used"
+msgstr "حافظه استفاده شده"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache نصب شده اما فعال نیست."
+
+msgid "OPcache extension is not available on this server."
+msgstr "افزونه OPcache در این سرور در دسترس نیست."
+
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache آمار حافظه ناسازگار گزارش می‌کند (مشکل شناخته‌شده در برخی زمان‌اجراهای PHP چندرشته‌ای، مثلاً FrankenPHP)."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu نصب شده اما فعال نیست."
+
+msgid "APCu extension is not available on this server."
+msgstr "افزونه APCu در این سرور در دسترس نیست."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu آمار حافظه ناسازگار گزارش می‌کند (مشکل شناخته‌شده در برخی زمان‌اجراهای PHP چندرشته‌ای)."
+
+msgid "Constant"
+msgstr "ثابت"
+
+msgid "Space used on disk (MB)"
+msgstr "فضای استفاده شده روی دیسک (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "تنظیم حداکثر فضای دوره (MB)"
+
+msgid "Memory free"
+msgstr "حافظه آزاد"
+
+msgid "Memory wasted"
+msgstr "حافظه هدر رفته"
+
+msgid "Memory used %"
+msgstr "حافظه استفاده شده %"
+
+msgid "Cached scripts"
+msgstr "اسکریپت‌های حافظه نهان"
+
+msgid "Cached keys"
+msgstr "کلیدهای حافظه نهان"
+
+msgid "Misses"
+msgstr "از دست رفته‌ها"
+
+msgid "Cache full"
+msgstr "حافظه نهان پر"
+
+msgid "OOM restarts"
+msgstr "راه‌اندازی مجدد OOM"
+
+msgid "Hash restarts"
+msgstr "راه‌اندازی مجدد هش"
+
+msgid "Manual restarts"
+msgstr "راه‌اندازی مجدد دستی"
+
+msgid "Interned strings used"
+msgstr "رشته‌های داخلی استفاده شده"
+
+msgid "Interned strings free"
+msgstr "رشته‌های داخلی آزاد"
+
+msgid "Interned strings count"
+msgstr "تعداد رشته‌های داخلی"
+
+msgid "Memory available"
+msgstr "حافظه در دسترس"
+
+msgid "Memory size"
+msgstr "اندازه حافظه"
+
+msgid "Entries"
+msgstr "ورودی‌ها"
+
+msgid "Slots"
+msgstr "محل‌ها"
+
+msgid "Expunges"
+msgstr "حذف‌ها"
+
+msgid "Cache start time"
+msgstr "زمان شروع کش"
+
+msgid "Time zone"
+msgstr "منطقه زمانی"
+
+msgid "Not registered"
+msgstr "ثبت‌نام نشده"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "گواهینامه‌های فراگیران را بر اساس جلسه، دوره، تاریخ یا فراگیر فیلتر و فهرست کنید، سپس در صورت نیاز آن‌ها را صادر کنید."
+
+msgid "Filter by session and course"
+msgstr "فیلتر بر اساس جلسه و دوره"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "یک جلسه، دوره و تاریخ اختیاری انتخاب کنید تا گواهینامه‌های تولید شده فهرست شوند."
+
+msgid "Filter by learner"
+msgstr "فیلتر بر اساس فراگیر"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "گواهینامه‌های یک فراگیر خاص را در جلسات و دوره‌های مختلف پیدا کنید."
+
+msgid "Certificates found"
+msgstr "گواهینامه‌های یافت شده"
+
+msgid "Open certificate"
+msgstr "باز کردن گواهینامه"
+
+msgid "Certificate file not available"
+msgstr "فایل گواهینامه در دسترس نیست"
+
+msgid "Export to CSV"
+msgstr "صادر کردن به CSV"
+
+msgid "Acquired skills"
+msgstr "مهارت‌های کسب شده"
+
+msgid "No acquired skill"
+msgstr "مهارت کسب شده‌ای وجود ندارد"
+
+msgid "Absences"
+msgstr "غیبت‌ها"
+
+msgid "No courses"
+msgstr "دوره‌ای وجود ندارد"
+
+msgid "No session matched"
+msgstr "جلسه‌ای مطابقت ندارد"
+
+msgid "Unable to load the report"
+msgstr "بارگذاری گزارش ممکن نیست"
+
+msgid "Please select a profile"
+msgstr "لطفاً یک پروفایل انتخاب کنید"
+
+msgid "Please select a session"
+msgstr "لطفاً یک جلسه انتخاب کنید"
+
+msgid "Please select a user"
+msgstr "لطفاً یک کاربر انتخاب کنید"
+
+msgid "Unable to export the report"
+msgstr "صادر کردن گزارش ممکن نیست"
+
+msgid "Accepted on web"
+msgstr "پذیرفته شده در وب"
+
+msgid "Accepted by e-mail"
+msgstr "پذیرفته شده از طریق ایمیل"
+
+msgid "The course title is required"
+msgstr "عنوان دوره الزامی است"
+
+msgid "Unexpected error"
+msgstr "خطای غیرمنتظره"
+
+msgid "Separate tags with commas"
+msgstr "برچسب‌ها را با کاما جدا کنید"
+
+msgid "Open link"
+msgstr "باز کردن پیوند"
+
+msgid "Describe the course picture to generate"
+msgstr "توضیح تصویر دوره برای تولید را وارد کنید"
+
+msgid "Generate picture"
+msgstr "تولید تصویر"
+
+msgid "PDF watermark"
+msgstr "واترمارک PDF"
+
+msgid "No watermark image"
+msgstr "تصویر واترمارک وجود ندارد"
+
+msgid "Upload watermark"
+msgstr "بارگذاری واترمارک"
+
+msgid "Delete watermark"
+msgstr "حذف واترمارک"
+
+msgid "Course legal agreement file"
+msgstr "فایل توافق‌نامه قانونی دوره"
+
+msgid "Upload agreement file"
+msgstr "بارگذاری فایل توافق‌نامه"
+
+msgid "Download agreement file"
+msgstr "دانلود فایل توافق‌نامه"
+
+msgid "Delete agreement file"
+msgstr "حذف فایل توافق‌نامه"
+
+msgid "Custom certificate images"
+msgstr "تصاویر گواهینامه سفارشی"
+
+msgid "Course picture updated"
+msgstr "تصویر دوره به‌روزرسانی شد"
+
+msgid "The course picture could not be uploaded"
+msgstr "تصویر دوره بارگذاری نشد"
+
+msgid "Course picture deleted"
+msgstr "تصویر دوره حذف شد"
+
+msgid "Enter a description for the image"
+msgstr "توضیحی برای تصویر وارد کنید"
+
+msgid "The image generator returned an empty response"
+msgstr "مولد تصویر پاسخ خالی برگرداند"
+
+msgid "Course picture generated"
+msgstr "تصویر دوره تولید شد"
+
+msgid "Watermark updated"
+msgstr "واترمارک به‌روزرسانی شد"
+
+msgid "Watermark deleted"
+msgstr "واترمارک حذف شد"
+
+msgid "Agreement file updated"
+msgstr "فایل توافق‌نامه به‌روزرسانی شد"
+
+msgid "Agreement file deleted"
+msgstr "فایل توافق‌نامه حذف شد"
+
+msgid "Certificate image updated"
+msgstr "تصویر گواهی‌نامه به‌روزرسانی شد"
+
+msgid "Certificate image deleted"
+msgstr "تصویر گواهی‌نامه حذف شد"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "قبل از بارگذاری، از ویرایشگر تصویر برای برش، چرخش یا تغییر اندازه تصویر دوره استفاده کنید."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "این پیوند دعوت معتبر نیست یا منقضی شده است."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "این دعوت به کاربر دیگری ارسال شده است. لطفاً با حساب دعوت‌شده وارد شوید."
+
+msgid "The invitation could not be accepted."
+msgstr "دعوت پذیرفته نشد."
+
+msgid "You have been subscribed successfully."
+msgstr "با موفقیت ثبت‌نام شدید."
+
+msgid "This email address cannot be invited."
+msgstr "این آدرس ایمیل قابل دعوت نیست."
+
+msgid "This user is already subscribed to the session."
+msgstr "این کاربر قبلاً در جلسه ثبت‌نام شده است."
+
+msgid "This user is already subscribed to the course."
+msgstr "این کاربر قبلاً در دوره ثبت‌نام شده است."
+
+msgid "Multi URLs"
+msgstr "چند URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "موجودیت‌هایی مانند کاربران و کورس‌ها می‌توانند هم‌زمان در بیش از یک URL فعال باشند؛ بنابراین مجموع مقادیر پایین با کل مطابقت نخواهد داشت."
+
+msgid "User directory"
+msgstr "فهرست کاربران"
+
+msgid "Course directory"
+msgstr "فهرست کورس‌ها"
+
+msgid "URLs"
+msgstr "URLها"
+
+msgid "User details"
+msgstr "جزئیات کاربر"
+
+msgid "Course details"
+msgstr "جزئیات کورس"
+
+msgid "View details"
+msgstr "مشاهده جزئیات"
+
+msgid "Average progress"
+msgstr "میانگین پیشرفت"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "ثبت‌نام مستقیم متعلق به کل کورس است، نه به یک URL مشخص؛ بنابراین ارقام «مستقیم» یکسان در پایین برای هر URL که این کورس به آن پیوند دارد تکرار می‌شود. سشن‌ها روش مورد نظر برای اشتراک‌گذاری یک کورس در چند URL با معیارهایی هستند که واقعاً برای هر URL متفاوت‌اند."
+
+msgid "Logins (all URLs combined)"
+msgstr "ورودها (همه URLها با هم)"
+
+msgid "Unique logins"
+msgstr "ورودهای یکتا"
+
+msgid "Parent URL"
+msgstr "URL والد"
+
+msgid "Logins (your URLs)"
+msgstr "ورودها (URLهای شما)"
+
+msgid "The picture could not be uploaded"
+msgstr "تصویر بارگذاری نشد"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "این نوع خانه هنوز به‌طور کامل پشتیبانی نمی‌شود — فقط مقدار خام."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "این کورس نزدیک به حد اشتراک کاربران است (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "فضا از طریق ویژگی‌های کورس شما محدود است. برای افزایش حد، یک"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "اشتراک کاربران از طریق ویژگی‌های کورس شما محدود است. برای افزایش حد، یک"
+
+msgid "pro plan"
+msgstr "پلان حرفه‌ای"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "بگیرید و پشتیبان این کورس را از طریق نگهداری کورس به کورس پولی جدیدتان وارد کنید، یا پس از تهیه این پلان تیکت باز کنید تا کورس‌تان به کورس حرفه‌ای تبدیل شود."
+
+msgid "Tired of writing questions?"
+msgstr "از نوشتن سوال‌ها خسته شده‌اید؟"
+
+msgid "Upgrade your plan"
+msgstr "پلان خود را ارتقا دهید"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "به پلان حرفه‌ای تا از هوش مصنوعی برای تولید سوال‌های باکیفیت کمک بگیرید."
+
+msgid "Student Success AI Coach"
+msgstr "مربی هوش مصنوعی موفقیت دانشجو"
+
+msgid "No AI text provider is configured."
+msgstr "هیچ ارائه‌دهنده متن هوش مصنوعی پیکربندی نشده است."
+
+msgid "Additional instructions for the AI coach"
+msgstr "دستورالعمل‌های اضافی برای مربی هوش مصنوعی"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "مثال: این یادگیرنده در حفظ توجه مشکل دارد. فعالیت‌های کوتاه‌تر و بررسی‌های مکرر درک را پیشنهاد کنید."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "این پنجره را باز نگه دارید تا چامیلو توصیه را آماده کند."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "توصیه همچنین در صندوق ورودی چامیلو شما ذخیره شد."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "توصیه تولید و برای این یادگیرنده ذخیره شد، اما نسخه صندوق ورودی ایجاد نشد."
+
+msgid "Student success recommendation"
+msgstr "توصیه موفقیت دانشجو"
+
+msgid "Generated"
+msgstr "تولیدشده"
+
+msgid "Priority actions"
+msgstr "اقدامات اولویت‌دار"
+
+msgid "Evidence"
+msgstr "شواهد"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "این قابلیت محتوای این کورس را تحلیل می‌کند و اطلاعات رفتار یادگیری را به مدل هوش مصنوعی پیکربندی‌شده می‌فرستد. هرچند داده‌های شخصی مستقیماً قابل شناسایی به مدل ارسال نمی‌شود، برخی داده‌ها ممکن است به‌طور غیرمستقیم اطلاعات شناسایی‌کننده درباره کاربر بدهد. در صورت تردید، پیش از استفاده همیشه با شخص مرجع هوش مصنوعی خود مشورت کنید."
+
+msgid "Additional activities"
+msgstr "فعالیت‌های اضافی"
+
+msgid "Rhythm"
+msgstr "ریتم"
+
+msgid "Learning methodologies"
+msgstr "روش‌های یادگیری"
+
+msgid "Other recommendations"
+msgstr "سایر پیشنهادها"
+
+msgid "Analyzing course..."
+msgstr "در حال تحلیل دوره..."
+
+msgid "Analyzing student's learning..."
+msgstr "در حال تحلیل یادگیری دانشجو..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "با پذیرش این دعوت، شما به کاربر درخواست‌کننده پیوند داده می‌شوید به‌گونه‌ای که بخشی یا تمام داده‌های نمایه شما برای خواندن در دسترس او قرار می‌گیرد. لطفاً با بررسی نمایه خود نزد کاربرانی که به آن‌ها اعتماد دارید، مطمئن شوید اطلاعات زیادی را به اشتراک نمی‌گذارید."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "مجوز استفاده از میکروفون فعال نیست؛ لطفاً آن را در مرورگر خود فعال کنید تا صدا ضبط شود"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "این نسخه از چامیلو با یک (یا چند) دوره چندزبانه از پیش نصب‌شده ارائه می‌شود. می‌توانید آن‌ها را در فهرست دوره‌ها بررسی کنید و تصمیم بگیرید که عمومی باشند یا نه."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "در حال حاضر به هیچ URL دسترسی ندارید. لطفاً از مدیر بخواهید دسترسی به URL مربوط به شما را برایتان فراهم کند."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "اگر ارائه‌دهنده هوش مصنوعی انتخاب‌شده یک خدمت حاکمیتی نباشد، محتوای سند انتخاب‌شده ممکن است به یک خدمت خارجی ارسال شود. با اطلاعات محرمانه ادامه ندهید مگر اینکه سازمان شما اجازه دهد."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "روی «یکپارچه‌سازی» حسابی که باید باقی بماند کلیک کنید. سامانه همه حساب‌های دیگر همان گروه تکراری را در آن ادغام می‌کند. حساب‌های ادغام‌شده برای همیشه حذف می‌شوند و از این گزارش ناپدید می‌گردند. این عمل قابل بازگشت نیست."
+
+msgid "Permanent deletion"
+msgstr "حذف دائمی"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "یکپارچه‌سازی از قبل حساب‌های ادغام‌شده را برای همیشه حذف می‌کند. فهرست کاربران را فقط در صورتی استفاده کنید که بخواهید حساب‌های اضافی را به‌صورت دستی حذف کنید."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "شما نشان‌های موضوع دیداری پیش‌فرض «chamilo» را تغییر می‌دهید. برای جلوگیری از بازنویسی پیش‌فرض‌ها، ایجاد/استفاده از یک موضوع دیداری سفارشی را در نظر بگیرید."
+
+msgid "This exercise has no questions."
+msgstr "این تمرین هیچ پرسشی ندارد."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "بازخورد/توضیح هر پرسش چگونه نمایش داده شود؟ این گزینه نحوه نمایش آن به فراگیر هنگام شرکت در آزمون را تعیین می‌کند."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "این برنامه‌ها می‌توانند مانند شما به چامیلو دسترسی داشته باشند، با همان مجوزهای حساب موجود و نه بیشتر. هر موردی را که دیگر استفاده نمی‌کنید یا نمی‌شناسید لغو کنید."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "لطفاً توضیح دهید چرا می‌خواهید رضایت قانونی خود را پس بگیرید تا بتوانیم درخواست شما را به‌درستی پردازش کنیم"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "از این کلید شخصی برای اتصال یک کلاینت MCP از راه دور به چامیلو با حساب و مجوزهای خودتان استفاده کنید."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "کلید کامل فقط یک بار نمایش داده می‌شود. آن را به‌صورت امن ذخیره کنید. تولید کلید جدید فوراً کلید قبلی را نامعتبر می‌کند."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "این کلید کلاینت را به‌عنوان حساب چامیلو شما احراز هویت می‌کند. مجوزی فراتر از آنچه حساب شما از قبل دارد اعطا نمی‌کند."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "نمایش بیانیه شرایط و ضوابط در صفحه ثبت‌نام و الزام بازدیدکننده به پذیرش آن برای ثبت‌نام"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "محتوای شرایط و ضوابط به یک مدل زبانی هوش مصنوعی ارسال خواهد شد. ترجمه پیشنهادی را پیش از ذخیره بررسی کنید."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "نسخه ذخیره‌شده‌ای برای زبان مقصد از قبل وجود دارد. ذخیره این پیشنهاد نسخه جدیدی ایجاد می‌کند."
+
+msgid "Acquired"
+msgstr "کسب‌شده"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "تصویر پیشنهادی دوره: ۱۶۰۰ × ۹۰۰ پیکسل (۱۶:۹). برای نمایش واضح در صفحه‌های بزرگ‌تر یا با تراکم بالا حداقل ۱۲۸۰ × ۷۲۰ پیکسل استفاده کنید."
+
+msgid "Courses of the selected URL"
+msgstr "دوره‌های URL انتخاب‌شده"
+
+msgid "Course categories in selected URL"
+msgstr "دسته‌بندی‌های دوره در URL انتخاب‌شده"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "حساب شما فعال است؛ اکنون می‌توانید وارد شوید و دوره‌های خود را بررسی کنید."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "ابتدا باید اصلاحات را <a href='%s'> اینجا </a> بارگیری کنید.\nسپس آن پرونده را از حالت فشرده خارج کنید و پرونده‌ها را بدون تغییر نام ویرایش کنید.\nسپس یک پرونده فشرده از پرونده‌های اصلاح‌شده بسازید و آن را در این فرم بارگذاری کنید."
+
+msgid "Adding students from session %s to session %s"
+msgstr "افزودن دانشجویان از نشست %s به نشست %s"
+
+msgid "Show all attempts by exercise"
+msgstr "نمایش همه تلاش‌ها بر اساس تمرین"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "این عملیات از حد مجاز کاربران برای دوره انتخاب‌شده فراتر می‌رود."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "برخی اشتراک‌ها اجرا نشدند زیرا به حد مجاز کاربران برای دوره مربوطه رسیدند. کاربران/دوره‌های متأثر: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "این ثبت، صفحات گزارش‌دهی شناخته‌شده، دسته، URL متعارف، URL قدیمی و مخاطب نقش مورد انتظار را فهرست می‌کند. URLهای متعارف به پیاده‌سازی فعلی گزارش هدایت می‌کنند و ماتریس نقش گزارش مستند را اعمال می‌کنند."
+
+msgid "E-mail notification subscription"
+msgstr "اشتراک اطلاع‌رسانی ایمیل"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "این عملیات از حد %s کاربر در هر دوره که مدیران تعیین کرده‌اند فراتر می‌رود. اشتراک لغو شد."
+
+msgid "Language the document is in"
+msgstr "زبانی که سند به آن است"
+
+msgid "There is no session still"
+msgstr "هنوز هیچ نشستی وجود ندارد"
+
+msgid "Origin courses from session"
+msgstr "دوره‌های مبدأ از نشست"
+
+msgid "Destination courses from session"
+msgstr "دوره‌های مقصد از نشست"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "دسترسی عمومی (مجاز برای هر عضو دوره)"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "تولید %d اصطلاح واژه‌نامه برای دوره‌ای درباره «%s»، هر اصطلاح در یک خط، تعریف آن در خط بعدی و یک خط خالی میان هر اصطلاح. هیچ قالب‌بندی دیگری برای عنوان یا تعریف اضافه نکنید."
+
+msgid "This is a short description of the course '%s'."
+msgstr "این توضیح کوتاهی از دوره «%s» است."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "شما چامیلو را روی بستر ویندوز اجرا می‌کنید. ابزارهای کمکی تبدیل سند برای نمایه‌سازی تمام‌متن در دسترس نیستند."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "تنظیم راه‌اندازی خودکار آزمون روشن است. دانشجویان به فهرست آزمون‌ها هدایت می‌شوند."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "تنظیم راه‌اندازی خودکار آزمون روشن است. دانشجویان به یک آزمون مشخص هدایت می‌شوند."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "حد اشتراک این دوره رسیده است (%current%/%limit%)."
+
+msgid "Count course by language"
+msgstr "شمارش دوره بر اساس زبان"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "کاربرانی که آخرین دسترسی‌شان قدیمی‌تر از تاریخ انتخاب‌شده است."
+
+msgid "Your certificate is about to expire"
+msgstr "گواهینامهٔ شما به‌زودی منقضی می‌شود"
+
+msgid "Your certificate has expired"
+msgstr "گواهینامهٔ شما منقضی شده است"
+
+msgid "Your certificate is about to expire:"
+msgstr "گواهینامهٔ شما به‌زودی منقضی می‌شود:"
+
+msgid "Your certificate has expired:"
+msgstr "گواهینامهٔ شما منقضی شده است:"
+
+msgid "Expiry date"
+msgstr "تاریخ انقضا"
+
+msgid "%s days remaining"
+msgstr "%s روز باقی‌مانده"
+
+msgid "Hello, %s"
+msgstr "سلام، %s"
+
+msgid "Edit expiry date"
+msgstr "ویرایش تاریخ انقضا"
+
+msgid "Certificate validity (days)"
+msgstr "اعتبار تصدیق‌نامه (روز)"
+
+msgid "Expiring certificates"
+msgstr "تصدیق‌نامه‌های در حال انقضا"
+
+msgid "Expiring soon"
+msgstr "به‌زودی منقضی می‌شود"
+
+msgid "Expired notice"
+msgstr "اطلاعیه منقضی‌شده"
+
+msgid "Expiring notice"
+msgstr "اطلاعیه در حال انقضا"
+
+msgid "outdated"
+msgstr "منسوخ"
+
+msgid "Last reminder sent"
+msgstr "آخرین یادآوری ارسال‌شده"
+
+msgid "Days ahead"
+msgstr "روزهای پیش‌رو"
+
+msgid "Send notification"
+msgstr "ارسال اطلاعیه"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "آیا مطمئن هستید که می‌خواهید این اطلاعیه را ارسال کنید؟"
+
+msgid "Expired: %s"
+msgstr "منقضی‌شده: %s"
+
+msgid "Expiring soon: %s"
+msgstr "به‌زودی منقضی می‌شود: %s"
+
+msgid "Expired notice: %s"
+msgstr "اطلاعیه منقضی‌شده: %s"
+
+msgid "Expiring notice: %s"
+msgstr "اطلاعیه در حال انقضا: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "اطلاعیه‌ها به کاربران به زبان پیکربندی‌شدهٔ خودشان ارسال می‌شوند."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "صفحات به‌صورت پیش‌فرض برای ۶۰ ثانیه در HTTP کش می‌شوند، چنان‌که در موجودیت Page تعریف شده است؛ بنابراین تغییرات ممکن است فوراً ظاهر نشوند."
+
+msgid "Activate legal notice"
+msgstr "فعال‌سازی اطلاعیهٔ حقوقی"
+
+msgid "Agreement content"
+msgstr "محتوای توافق‌نامه"
+
+msgid "Allow learners to delete their own publication"
+msgstr "اجازه به متعلمین برای حذف نشریهٔ خود"
+
+msgid "Allow learners to edit agenda"
+msgstr "اجازه به متعلمین برای ویرایش اجندا"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "اجازه به متعلمین برای تأیید حضور خود"
+
+msgid "Allow learners to view users list"
+msgstr "اجازه به متعلمین برای مشاهدهٔ فهرست کاربران"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "اشتراک خودکار کاربران در اطلاعیه‌های فوروم"
+
+msgid "Certificate mode"
+msgstr "حالت گواهینامه"
+
+msgid "Configure external tools"
+msgstr "پیکربندی ابزارهای خارجی"
+
+msgid "Contents"
+msgstr "محتواها"
+
+msgid "Contents to show"
+msgstr "محتواهای قابل نمایش"
+
+msgid "Course certificate"
+msgstr "گواهینامهٔ کورس"
+
+msgid "Course delivery dates"
+msgstr "تاریخ‌های ارائهٔ کورس"
+
+msgid "Course duration in hours"
+msgstr "مدت کورس به ساعت"
+
+msgid "Course legal agreement"
+msgstr "توافق‌نامهٔ حقوقی کورس"
+
+msgid "Custom"
+msgstr "سفارشی"
+
+msgid "Custom certificate"
+msgstr "گواهینامهٔ سفارشی"
+
+msgid "Default visibility for new documents"
+msgstr "قابلیت دید پیش‌فرض برای اسناد جدید"
+
+msgid "Direct invitation link"
+msgstr "لینک دعوت مستقیم"
+
+msgid "Do not notify"
+msgstr "اطلاع نده"
+
+msgid "Documents list"
+msgstr "فهرست اسناد"
+
+msgid "E-mail learner on manual subscription"
+msgstr "ارسال ایمیل به متعلم هنگام اشتراک دستی"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "ارسال ایمیل به استادان هنگام بازخورد نشریهٔ شاگرد از کاربر جدید"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "ارسال ایمیل به کاربران هنگام دریافت فایل در دراپ‌باکس"
+
+msgid "Enable course home notification"
+msgstr "فعال‌سازی اطلاعیه در صفحهٔ اصلی کورس"
+
+msgid "Enable course themes in learning paths"
+msgstr "فعال‌سازی قالب‌های کورس در مسیرهای یادگیری"
+
+msgid "Exercises invisible in session"
+msgstr "تمرین‌ها در سشن نامرئی"
+
+msgid "Expiration link"
+msgstr "لینک انقضا"
+
+msgid "Forums list"
+msgstr "فهرست فوروم‌ها"
+
+msgid "Issue date type"
+msgstr "نوع تاریخ صدور"
+
+msgid "Learning path index"
+msgstr "فهرست مسیر یادگیری"
+
+msgid "Learning paths list"
+msgstr "فهرست مسیرهای یادگیری"
+
+msgid "Left margin"
+msgstr "حاشیهٔ چپ"
+
+msgid "Legal notice"
+msgstr "اطلاعیهٔ حقوقی"
+
+msgid "Maximum subscribed students"
+msgstr "حداکثر شاگردان مشترک"
+
+msgid "Notify in course home"
+msgstr "اطلاع در صفحهٔ اصلی کورس"
+
+msgid "Notify learners"
+msgstr "اطلاع به متعلمین"
+
+msgid "Notify with agreement file"
+msgstr "اطلاع همراه با فایل توافق‌نامه"
+
+msgid "Notify without attachment"
+msgstr "اطلاع بدون پیوست"
+
+msgid "Open chat in a new window"
+msgstr "باز کردن چت در پنجرهٔ جدید"
+
+msgid "Open to the platform"
+msgstr "باز برای پلتفرم"
+
+msgid "Place"
+msgstr "مکان"
+
+msgid "Platform default"
+msgstr "پیش‌فرض پلتفرم"
+
+msgid "Registration password"
+msgstr "رمز ثبت‌نام"
+
+msgid "Remove previous agreements"
+msgstr "حذف توافق‌نامه‌های قبلی"
+
+msgid "Right margin"
+msgstr "حاشیهٔ راست"
+
+msgid "Selected learning path"
+msgstr "مسیر یادگیری انتخاب‌شده"
+
+msgid "Selected test"
+msgstr "آزمون انتخاب‌شده"
+
+msgid "Show learner picture in forums"
+msgstr "نمایش تصویر شاگرد در فوروم‌ها"
+
+msgid "Show system folders"
+msgstr "نمایش پوشه‌های سیستم"
+
+msgid "Signature text 1"
+msgstr "متن امضا ۱"
+
+msgid "Signature text 2"
+msgstr "متن امضا ۲"
+
+msgid "Signature text 3"
+msgstr "متن امضا ۳"
+
+msgid "Signature text 4"
+msgstr "متن امضا ۴"
+
+msgid "Student and course information"
+msgstr "معلومات شاگرد و کورس"
+
+msgid "Subscription allowed"
+msgstr "اشتراک مجاز است"
+
+msgid "Tests list"
+msgstr "فهرست آزمون‌ها"
+
+msgid "Unsubscription allowed"
+msgstr "لغو اشتراک مجاز است"
+
+msgid "Use certificate download date"
+msgstr "استفاده از تاریخ دانلود گواهینامه"
+
+msgid "Use certificate generation date"
+msgstr "استفاده از تاریخ تولید گواهینامه"
+
+msgid "Use session access dates"
+msgstr "استفاده از تاریخ‌های دسترسی جلسه"
+
+msgid "Use session access end date"
+msgstr "استفاده از تاریخ پایان دسترسی جلسه"
+
+msgid "Group report"
+msgstr "گزارش گروه"
+
+msgid "Student follow-up"
+msgstr "پیگیری دانش‌آموز"
+
+msgid "Use system default certificate"
+msgstr "استفاده از گواهینامه پیش‌فرض سیستم"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "گواهینامه پیوست‌شده در دسترس نیست. گواهینامه پیش‌فرض سیستم استفاده خواهد شد."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "از گواهینامه پیش‌فرض سیستم به‌جای گواهینامه پیوست‌شده استفاده شود؟"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "بازنویسی اختیاری برای توسعه محلی. به‌روزرسانی‌های تولیدی از کلید مورد اعتماد رسمی Chamilo استفاده می‌کنند."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "ساخت یک پلان اعمال ایمن از بسته مرحله‌بندی‌شده. این فایل‌ها را برای جایگزینی، افزودن یا حذف، مجوزها، مسیر پشتیبان و وضعیت قفل بررسی می‌کند. نصب را تغییر نمی‌دهد."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "این مرحله فقط یک بررسی آماده می‌کند. جایگزینی فایل و پاک‌سازی اعلام‌شده توسط بسته بعداً در مرحله اعمال فایل‌های مرحله‌بندی‌شده، با قفل، پشتیبان و حفاظت برگشت انجام می‌شود."
+
+msgid "Files to remove"
+msgstr "فایل‌ها برای حذف"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "جایگزینی فایل‌های Chamilo از بسته مرحله‌بندی‌شده و حذف فایل‌های منسوخ که صریحاً در فراداده بسته امضاشده اعلام شده‌اند. این مهاجرت پایگاه داده، Composer، Yarn یا دستورات کش را اجرا نمی‌کند."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "این عمل فایل‌ها را در نصب Chamilo جایگزین می‌کند و می‌تواند حذف کند. پیش از ادامه مطمئن شوید که پلان اعمال بررسی شده و پشتیبان‌گیری فعال است."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "می‌فهمم که این کار فایل‌ها را جایگزین می‌کند و فایل‌های منسوخ اعلام‌شده توسط بسته را در نصب Chamilo حذف می‌کند."
+
+msgid "Type the exact text below to confirm"
+msgstr "متن دقیق زیر را برای تأیید تایپ کنید"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine تنها مهاجرت‌های V300 مرحله‌بندی‌شده را پس از عبور از بررسی ایمنی به‌طور صریح اجرا خواهد کرد."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine هشدارهای پایه تاریخی گزارش کرد. به‌روزرسانی‌کننده همچنان تنها مهاجرت‌های V300 مرحله‌بندی‌شده را پس از تأیید صریح اجرا خواهد کرد."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "تنها مسیر مانیفست قابل تغییر است. پروتکل HTTPS و دامنه رسمی به‌روزرسانی ثابت هستند."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "حالت توسعه اجازه می‌دهد URL مانیفست HTTPS یا مسیر مانیفست محلی استفاده شود."
+
+msgid "The official update manifest is configured by the server."
+msgstr "مانیفست رسمی به‌روزرسانی توسط سرور پیکربندی شده است."
+
+msgid "What feedback do you want about this course?"
+msgstr "درباره این کورس چه بازخوردی می‌خواهید؟"
+
+msgid "Analysis summary"
+msgstr "خلاصه تحلیل"
+
+msgid "Lessons included"
+msgstr "درس‌های شامل‌شده"
+
+msgid "Standalone documents included"
+msgstr "اسناد مستقل شامل‌شده"
+
+msgid "Standalone exercises included"
+msgstr "تمرین‌های مستقل شامل‌شده"
+
+msgid "General feedback"
+msgstr "بازخورد عمومی"
+
+msgid "Strengths"
+msgstr "نقاط قوت"
+
+msgid "Risks"
+msgstr "خطرات"
+
+msgid "Recommendations"
+msgstr "توصیه‌ها"
+
+msgid "Lesson feedback"
+msgstr "بازخورد درس"
+
+msgid "Standalone document feedback"
+msgstr "بازخورد سند مستقل"
+
+msgid "Standalone exercise feedback"
+msgstr "بازخورد تمرین مستقل"
+
+msgid "AI response"
+msgstr "پاسخ هوش مصنوعی"
+
+msgid "Sequence feedback"
+msgstr "بازخورد تسلسل"
+
+msgid "Purpose"
+msgstr "هدف"
+
+msgid "You"
+msgstr "شما"
+
+msgid "City of internship"
+msgstr "شهر کارآموزی"
+
+msgid "City"
+msgstr "شهر"
+
+msgid "Update workflow restored after page refresh"
+msgstr "جریان کاری به‌روزرسانی پس از تازه‌سازی صفحه بازیابی شد"
+
+msgid "Last completed step"
+msgstr "آخرین گام تکمیل‌شده"
+
+msgid "Stage package"
+msgstr "بستهٔ مرحله‌بندی"
+
+msgid "Package staging"
+msgstr "مرحله‌بندی بسته"
+
+msgid "Apply plan"
+msgstr "اعمال طرح"
+
+msgid "Update workflow completed"
+msgstr "جریان کاری به‌روزرسانی تکمیل شد"
+
+msgid "Update directory exists and is writable."
+msgstr "پوشهٔ به‌روزرسانی وجود دارد و قابل نوشتن است."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "پوشهٔ به‌روزرسانی وجود دارد اما قابل نوشتن نیست: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "پوشهٔ به‌روزرسانی هنوز وجود ندارد، اما پوشهٔ والد آن قابل نوشتن است."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "پوشهٔ به‌روزرسانی هنوز وجود ندارد، اما می‌توان آن را زیر var/ ایجاد کرد."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "پوشهٔ به‌روزرسانی وجود ندارد و با مجوزهای فعلی نمی‌توان آن را ایجاد کرد."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "تعیین فضای آزاد دیسک برای بررسی پیش از به‌روزرسانی ممکن نیست."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "فضای آزاد دیسک برای عملیات ایمن مرحله‌بندی به‌روزرسانی کافی نیست."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "فضای آزاد دیسک برای این جریان به‌روزرسانی در مرحلهٔ تأیید کافی است."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "مانیفست به‌روزرسانی نیازمندی نسخهٔ PHP را تعریف نکرده است."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "ارزیابی کامل نیازمندی PHP ممکن نیست: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "نسخهٔ فعلی PHP نیازمندی به‌روزرسانی را برآورده نمی‌کند: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "نسخهٔ فعلی PHP نیازمندی به‌روزرسانی را برآورده می‌کند."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "مسیر بستهٔ محلی ارائه نشده است. بسته‌های دانلودشده تنها پس از دانلود قابل بررسی هستند."
+
+msgid "Local update package is not readable: %s"
+msgstr "بستهٔ به‌روزرسانی محلی قابل خواندن نیست: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "بستهٔ به‌روزرسانی محلی باید یک بایگانی ZIP باشد."
+
+msgid "Local update package is readable."
+msgstr "بستهٔ به‌روزرسانی محلی قابل خواندن است."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "نسخهٔ نصب‌شدهٔ چامیلو به‌صورت خودکار تشخیص داده نشد. جهت نسخه قابل بررسی نیست."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "نسخهٔ نصب‌شده یا نسخهٔ هدف در قالب نسخهٔ معنایی قابل مقایسه نیست."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "نسخهٔ هدف از نسخهٔ نصب‌شده پایین‌تر است. به‌طور پیش‌فرض پایین‌آوردن نسخه مجاز نیست."
+
+msgid "Target version matches the installed version."
+msgstr "نسخهٔ هدف با نسخهٔ نصب‌شده مطابقت دارد."
+
+msgid "Target version is newer than the installed version."
+msgstr "نسخهٔ هدف از نسخهٔ نصب‌شده جدیدتر است."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "پروژه یک checkout گیت نیست یا .git موجود نیست."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "این سامانهٔ به‌روزرسانی برای نصب‌هایی بدون پشتیبانی گیت در نظر گرفته شده است. تشخیص داده شد که سامانهٔ محلی از گیت استفاده می‌کند. ادامهٔ به‌روزرسانی ممکن است تاریخچهٔ گیت را خراب کند. برای سامانه‌هایی با پشتیبانی گیت، توصیه می‌شود از رویهٔ گیت که در CONTRIBUTING.md در ریشهٔ وب شرح داده شده استفاده کنید."
+
+msgid "Local Git changes were also detected."
+msgstr "تغییرات محلی گیت نیز تشخیص داده شد."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "برخی فایل‌های فرادادهٔ پروژه موجود نیستند. مراحل بعدی به‌روزرسانی ممکن است نیازمند بررسی دستی وابستگی‌ها باشد."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "فایل‌های فرادادهٔ Composer و Yarn موجود هستند."
+
+msgid "Starting staged file application."
+msgstr "شروع اعمال مرحله‌ای فایل‌ها."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "برای اعمال فایل‌های مرحله‌بندی‌شده تأیید صریح لازم است."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "اعمال فایل‌های به‌روزرسانی مرحله‌بندی‌شده نیازمند تأیید صریح است."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "پوشهٔ مرحله‌بندی داخل پوشهٔ مرحله‌بندی به‌روزرسانی چامیلو است."
+
+msgid "Staging directory was validated."
+msgstr "پوشهٔ مرحله‌بندی اعتبارسنجی شد."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "فرادادهٔ طرح اعمال با موفقیت خوانده شد."
+
+msgid "Staged application path is valid."
+msgstr "مسیر اعمال مرحله‌بندی‌شده معتبر است."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "فرادادهٔ پاکسازی بستهٔ امضاشده با طرح اعمال بررسی‌شده مطابقت دارد."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "فرادادهٔ پاکسازی بستهٔ امضاشده اعتبارسنجی شد."
+
+msgid "Update lock was acquired."
+msgstr "قفل به‌روزرسانی گرفته شد."
+
+msgid "Update backup directory was created."
+msgstr "پوشهٔ پشتیبان به‌روزرسانی ایجاد شد."
+
+msgid "Update file operations were collected."
+msgstr "عملیات فایل به‌روزرسانی جمع‌آوری شد."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "فایل‌های موجود که برای جایگزینی یا حذف برنامه‌ریزی شده بودند پشتیبان‌گیری شدند."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "فایل‌های به‌روزرسانی مرحله‌بندی‌شده به نصب چامیلو کپی شدند."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "فایل‌های منسوخ اعلام‌شده در بسته از نصب چامیلو حذف شدند."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "فایل‌های منسوخ اعلام‌شده در بسته حذف شدند."
+
+msgid "Update apply audit metadata was written."
+msgstr "فرادادهٔ حسابرسی اعمال به‌روزرسانی نوشته شد."
+
+msgid "Staged files applied successfully."
+msgstr "فایل‌های مرحله‌بندی‌شده با موفقیت اعمال شدند."
+
+msgid "Unable to restore removed files: %s"
+msgstr "بازیابی فایل‌های حذف‌شده ممکن نیست: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "بازگردانی فایل‌های کپی‌شده ممکن نیست: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "پس از ناکامی در اعمال به‌روزرسانی، بازگردانی فایل اجرا شد."
+
+msgid "Rollback failed: %s"
+msgstr "بازگردانی ناکام شد: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "نوشتن فرادادهٔ حسابرسی اعمال به‌روزرسانی ممکن نیست: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "آزاد کردن قفل به‌روزرسانی پس از ناکامی ممکن نیست: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "مسیر مرحله‌بندی برای اعمال فایل‌های به‌روزرسانی لازم است."
+
+msgid "Staging directory does not exist: %s"
+msgstr "پوشهٔ مرحله‌بندی وجود ندارد: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "پوشهٔ پایهٔ مرحله‌بندی به‌روزرسانی چامیلو وجود ندارد."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "پوشهٔ مرحله‌بندی باید داخل var/update/staging باشد."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "پوشهٔ مرحله‌بندی فاقد APPLY-PLAN.json است."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "خواندن فرادادهٔ پلان اعمال به‌روزرسانی ممکن نیست: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "فرادادهٔ پلان اعمال به‌روزرسانی JSON معتبر نیست: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "فرادادهٔ پلان اعمال به‌روزرسانی باید یک شیء JSON باشد."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "پلان اعمال به‌روزرسانی فاقد فیلد application_path است."
+
+msgid "Staged application path is not readable: %s"
+msgstr "مسیر برنامهٔ مرحله‌بندی‌شده قابل خواندن نیست: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "مسیر برنامهٔ مرحله‌بندی‌شده باید داخل پوشهٔ مرحله‌بندی باشد."
+
+msgid "Staged application path is missing composer.json."
+msgstr "مسیر برنامهٔ مرحله‌بندی‌شده فاقد composer.json است."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "بستهٔ به‌روزرسانی فاقد %s است. یک بستهٔ تأییدشده با فرادادهٔ پاکسازی امضاشده را دوباره مرحله‌بندی کنید."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "پلان اعمال به‌روزرسانی فاقد فرادادهٔ پاکسازی بستهٔ بررسی‌شده است."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "فرادادهٔ پاکسازی بستهٔ به‌روزرسانی پس از تولید پلان اعمال تغییر کرده است. پیش از ادامه، پلان اعمال را دوباره بسازید."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "پلان اعمال به‌روزرسانی حاوی فهرست حذف بستهٔ نامعتبر است."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "مسیرهای پاکسازی بستهٔ به‌روزرسانی پس از تولید پلان اعمال تغییر کرده‌اند. پیش از ادامه، پلان اعمال را دوباره بسازید."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "پلان اعمال به‌روزرسانی فاقد فهرست مسیرهای حذف بررسی‌شده است."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "مسیرهای حذف پلان اعمال به‌روزرسانی با فرادادهٔ پاکسازی امضاشدهٔ بسته مطابقت ندارند."
+
+msgid "Update lock path must be inside var/update."
+msgstr "مسیر قفل به‌روزرسانی باید داخل var/update باشد."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "پلان اعمال به‌روزرسانی فاقد فیلد backup_path است."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "مسیر پشتیبان به‌روزرسانی حاوی بخش‌های مسیر ناامن است."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "مسیر پشتیبان به‌روزرسانی باید داخل var/update/backups باشد."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "گرفتن قفل به‌روزرسانی ممکن نیست. ممکن است به‌روزرسانی دیگری در جریان باشد."
+
+msgid "Unable to release update lock: %s"
+msgstr "آزاد کردن قفل به‌روزرسانی ممکن نیست: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "پوشهٔ پشتیبان به‌روزرسانی از قبل وجود دارد: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "پوشهٔ مقصد ایجاد نمی‌شود: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "به‌روزرسانی برنامه‌ریزی‌شده یک پیوند نمادین موجود را بازنویسی می‌کند: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "فایل مقصد قابل نوشتن نیست: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "فایل مقصد ایجاد نمی‌شود: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "پیش از حذف فایل‌های منسوخ، تعیین پوشهٔ پروژهٔ چامیلو ممکن نیست."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "پاکسازی به‌روزرسانی نمی‌تواند مسیر محافظت‌شده را حذف کند: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "به‌روزرسانی برنامه‌ریزی‌شده یک پیوند نمادین موجود را حذف می‌کند: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "پاکسازی به‌روزرسانی فقط از فایل‌ها پشتیبانی می‌کند، نه پوشه‌ها: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "فایل مقصد منسوخ برای پشتیبان قابل خواندن نیست: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "فایل مقصد منسوخ با مجوزهای فعلی پوشه حذف نمی‌شود: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "فایل مقصد منسوخ خارج از پوشهٔ پروژهٔ چامیلو قرار می‌گیرد: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "پشتیبان‌گیری از فایل مقصد ممکن نیست: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "نوشتن فرادادهٔ پشتیبان به‌روزرسانی ممکن نیست."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "کپی فایل به‌روزرسانی مرحله‌بندی‌شده ممکن نیست: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "%d از %d فایل مرحله‌بندی‌شده کپی شد."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "حذف فایل منسوخ اعلام‌شده در بسته ممکن نیست: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "%d از %d فایل منسوخ اعلام‌شده در بسته حذف شد."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "ناتوان در بازگرداندن فایل پشتیبان‌گیری‌شده: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "ناتوان در حذف فایل تازه‌کپی‌شده هنگام بازگشت: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "ناتوان در بازگرداندن فایل حذف‌شده چون پشتیبان آن موجود نیست: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "ناتوان در بازگرداندن فایل حذف‌شده از پشتیبان: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "ناتوان در نوشتن فرادادهٔ حسابرسی اعمال به‌روزرسانی."
+
+msgid "Unable to write global update apply log."
+msgstr "ناتوان در نوشتن گزارش سراسری اعمال به‌روزرسانی."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "مسیر نسبی مرحله‌بندی‌شدهٔ ناامن تشخیص داده شد: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "پوشه قابل نوشتن نیست: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "ناتوان در ایجاد پوشه: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "فرادادهٔ مرحله‌بندی با موفقیت خوانده شد."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "فرادادهٔ پلان اعمال در پوشهٔ مرحله‌بندی نوشته شد."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "فایل‌ها و پوشه‌های هدف برای به‌روزرسانی و پاک‌سازی برنامه‌ریزی‌شده قابل نوشتن به‌نظر می‌رسند."
+
+msgid "Update apply plan check failed."
+msgstr "بررسی پلان اعمال به‌روزرسانی ناکام شد."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "برخی فایل‌ها یا پوشه‌های هدف قابل نوشتن یا حذف نیستند."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "برای رفع این مشکل، موقتاً مالک کل پوشهٔ چامیلو را به %s (کاربر سرور وب) تغییر دهید، به‌روزرسانی را اعمال کنید، سپس مالک را دوباره به %s برگردانید، و بعد مالک var/ (و محتویات آن) را دوباره به %s تنظیم کنید تا برنامه بتواند به نوشتن در آن ادامه دهد."
+
+msgid "Update package verification failed."
+msgstr "تأیید بستهٔ به‌روزرسانی ناکام شد."
+
+msgid "Update preflight checks failed."
+msgstr "بررسی‌های پیش‌پرواز به‌روزرسانی ناکام شد."
+
+msgid "Unable to stage update package."
+msgstr "نمی‌توان بستهٔ به‌روزرسانی را مرحله‌بندی کرد."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "اجرای فرمان‌های پس از اعمال از رابط کاربری در این سرور غیرفعال است."
+
+msgid "Missing required field: %s"
+msgstr "فیلد الزامی موجود نیست: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "هیچ منبع مانیفست به‌روزرسانی ارائه نشده و هیچ URL پیش‌فرض مانیفست به‌روزرسانی پیکربندی نشده است."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL مانیفست به‌روزرسانی باید از مبدأ رسمی به‌روزرسانی %s استفاده کند. فقط مسیر مانیفست قابل تغییر است."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "مسیرهای محلی مانیفست به‌روزرسانی غیرفعال است. از URL مانیفست HTTPS استفاده کنید یا برای آزمایش‌های محلی CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 را در محیط سرور تنظیم کنید."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "مسیر HTTP %s ارائه نکنید. این فیلد را خالی بگذارید تا از مانیفست به‌روزرسانی بارگیری شود."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "مسیرهای محلی به‌روزرسانی %s در این محیط غیرفعال است."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "کلیدهای عمومی مورد اعتماد به‌روزرسانی باید در این محیط روی سرور پیکربندی شوند."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "رد شدن از تأیید امضای به‌روزرسانی در این محیط غیرفعال است."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "اجرای اقدامات به‌روزرسانی پس از اعمال نیازمند متن تأیید \"%s\" است."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "اعمال فایل‌های به‌روزرسانی مرحله‌بندی‌شده نیازمند متن تأیید \"%s\" است."
+
+msgid "Unable to resolve project directory."
+msgstr "نمی‌توان پوشهٔ پروژه را مشخص کرد."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "پشتیبان پایگاه داده توسط این به‌روزرسان مدیریت نمی‌شود. پیش از اجرای مهاجرت‌ها یک پشتیبان پایگاه داده ایجاد و تأیید کنید."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "روش‌های down() مهاجرت Doctrine تضمین نمی‌کنند که داده‌های حذف‌شده یا تبدیل‌شده بازیابی شوند."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "فرادادهٔ پس از اعمال، بازبینی مهاجرت پایگاه داده را توصیه می‌کند."
+
+msgid "No migration files were found in the staged package."
+msgstr "هیچ فایل مهاجرتی در بستهٔ مرحله‌بندی‌شده یافت نشد."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "فایل‌های مهاجرت Doctrine مرحله‌بندی‌شده شناسایی شد."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "هدف مهاجرت Doctrine از بستهٔ مرحله‌بندی‌شده مشخص شد."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "خط پایهٔ مهاجرت Doctrine برای مهاجرت‌های مرحله‌بندی‌شده مشکلات مسدودکننده دارد."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine هشدارهای تاریخی خط پایهٔ مهاجرت را گزارش می‌کند، اما فقط مهاجرت‌های مرحله‌بندی‌شدهٔ %s به‌طور صریح بازبینی و اجرا خواهند شد."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine هشدارهای تاریخی خط پایهٔ مهاجرت را گزارش می‌کند. به‌روزرسان پس از تأیید صریح فقط کلاس‌های مهاجرت مرحله‌بندی‌شدهٔ %s را اجرا خواهد کرد."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "خط پایهٔ Doctrine برای مهاجرت‌های مرحله‌بندی‌شدهٔ %s مشکل مسدودکننده ندارد."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "اجرای آزمایشی مهاجرت Doctrine برای حداقل یک مهاجرت مرحله‌بندی‌شده ناکام شد. تا رفع این مشکل مهاجرت‌های پایگاه داده را اجرا نکنید."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "اجرای آزمایشی Doctrine برای هر کلاس مهاجرت مرحله‌بندی‌شده با موفقیت تکمیل شد."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "پیش از اجرای مهاجرت‌ها باید یک پشتیبان پایگاه داده خارج از این به‌روزرسان ایجاد شود."
+
+msgid "Staging path is required to review database migrations."
+msgstr "برای بازبینی مهاجرت‌های پایگاه داده مسیر مرحله‌بندی الزامی است."
+
+msgid "Unable to read update %s: %s"
+msgstr "نمی‌توان به‌روزرسانی %s را خواند: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON به‌روزرسانی %s نامعتبر است: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON به‌روزرسانی %s باید یک شیء باشد."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "فرادادهٔ بررسی‌های پس از اعمال فهرست اقدامات معتبر ندارد."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "برای این به‌روزرسانی مرحله‌بندی‌شده مهاجرت‌های پایگاه داده توصیه نشده بود."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "فرادادهٔ به‌روزرسانی مسیر برنامهٔ مرحله‌بندی‌شده را ندارد."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "فایل مهاجرت مرحله‌بندی‌شدهٔ برنامه‌ریزی‌شده یافت نشد: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "نمی‌توان فایل مهاجرت مرحله‌بندی‌شده را خواند: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "هیچ توصیفی از getDescription() استخراج نشد."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "اجراکنندهٔ به‌روزرسانی فقط مهاجرت‌های مرحله‌بندی‌شدهٔ %s را پشتیبانی می‌کند: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "نمی‌توان فرادادهٔ ایمنی مهاجرت را نوشت: %s"
+
+msgid "Migration safety check failed."
+msgstr "بررسی ایمنی مهاجرت ناکام شد."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "مسیر نسبی ناامن مهاجرت مرحله‌بندی‌شده شناسایی شد: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "نسخهٔ نصب‌شدهٔ چامیلو به‌طور خودکار تشخیص داده نشد. فقط پس از تأیید سازگاری این به‌روزرسانی ادامه دهید."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "نسخهٔ نصب‌شده یا هدف در قالب نسخهٔ معنایی قابل مقایسه نیست. فقط پس از تأیید دستی ادامه دهید."
+
+msgid "An update is available."
+msgstr "یک به‌روزرسانی در دسترس است."
+
+msgid "The installed version already matches the manifest version."
+msgstr "نسخهٔ نصب‌شده از قبل با نسخهٔ مانیفست مطابقت دارد."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "نسخه مانیفست قدیمی‌تر از نسخه نصب‌شده است. پایین‌آوردن نسخه به‌طور پیش‌فرض مسدود است."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "فایل‌های مرحله‌بندی‌شده با موفقیت اعمال نشدند. بررسی‌های پس از اعمال نمی‌توانند ادامه یابند."
+
+msgid "Apply result metadata was read successfully."
+msgstr "فراداده نتیجه اعمال با موفقیت خوانده شد."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "توصیه‌های اقدام پس از اعمال تولید شدند."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "مهاجرت‌های پایگاه داده در بسته مرحله‌بندی‌شده شناسایی شدند. آن‌ها را تنها پس از تأیید صحت به‌روزرسانی فایل و وجود نسخه پشتیبان پایگاه داده اجرا کنید."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "مسیر مرحله‌بندی برای اجرای بررسی‌های پس از اعمال لازم است."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "به‌روزرسانی %s JSON معتبر نیست: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "به‌روزرسانی %s باید یک شیء JSON باشد."
+
+msgid "Composer dependencies"
+msgstr "وابستگی‌های Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "فراداده Composer در بسته مرحله‌بندی‌شده گنجانده شده بود. قبل از کامل دانستن به‌روزرسانی، Composer install را از ریشه برنامه اجرا کنید."
+
+msgid "Frontend assets"
+msgstr "دارایی‌های فرانت‌اند"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "فایل‌های مرتبط با فرانت‌اند در بسته مرحله‌بندی‌شده گنجانده شده بودند. پس از نصب وابستگی‌ها، دارایی‌های تولید را دوباره بسازید."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "فایل‌های مهاجرت Doctrine در بسته مرحله‌بندی‌شده شناسایی شدند. قبل از اجرای مهاجرت‌ها تأیید کنید که نسخه پشتیبان پایگاه داده وجود دارد."
+
+msgid "Symfony cache"
+msgstr "کش Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "پس از اعمال فایل‌های به‌روزرسانی و اجرای هر فرمان لازم، کش Symfony را پاک کنید."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "نوشتن فراداده بررسی‌های پس از اعمال ممکن نیست."
+
+msgid "Post-apply check failed."
+msgstr "بررسی پس از اعمال ناموفق بود."
+
+msgid "Update package is not readable: %s"
+msgstr "بسته به‌روزرسانی قابل خواندن نیست: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "بسته به‌روزرسانی یک بایگانی ZIP معتبر نیست."
+
+msgid "Update package ZIP archive is empty."
+msgstr "بایگانی ZIP بسته به‌روزرسانی خالی است."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "بسته به‌روزرسانی حاوی یک ورودی ZIP غیرقابل خواندن است."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "بسته به‌روزرسانی حاوی مسیر مطلق ناامن است: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "بسته به‌روزرسانی حاوی ورودی پیمایش مسیر است: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "بسته به‌روزرسانی حاوی پیوند نمادین است: %s"
+
+msgid "Starting post-apply actions."
+msgstr "شروع اقدامات پس از اعمال."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "اجرای فرمان پس از اعمال نیازمند تأیید صریح است."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "فراداده توصیه پس از اعمال با موفقیت خوانده شد."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "اقدامات پس از اعمال در برابر گزارش توصیه اعتبارسنجی شدند."
+
+msgid "Post-apply actions were selected."
+msgstr "اقدامات پس از اعمال انتخاب شدند."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "اقدامات پیشرفته پس از اعمال نیازمند تأیید پیشرفته صریح هستند."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "اقدامات پیشرفته پس از اعمال به‌طور صریح تأیید شدند."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "فرمان‌های پس از اعمال انتخاب‌شده با موفقیت تکمیل شدند."
+
+msgid "Post-apply command run metadata was written."
+msgstr "فراداده اجرای فرمان پس از اعمال نوشته شد."
+
+msgid "Post-apply actions completed successfully."
+msgstr "اقدامات پس از اعمال با موفقیت تکمیل شدند."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "به یاد داشته باشید که مجوزهای فایل و پوشه را به وضعیت قبل از این به‌روزرسانی بازگردانید. باقی گذاشتن دسترسی نوشتن وب‌سرور به کد چامیلو، هر آسیب‌پذیری آینده را به راهی برای تغییر فایل‌های پلتفرم شما تبدیل می‌کند."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "تعریف فرمان پس از اعمال به‌روزرسانی نامعتبر است: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "در حال اجرای اقدام پس از اعمال: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "در حال اجرای فرمان %d از %d برای %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "اقدام پس از اعمال ناموفق بود: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "اقدام پس از اعمال \"%s\" با کد خروج %d ناموفق بود."
+
+msgid "Post-apply action completed: %s"
+msgstr "اقدام پس از اعمال تکمیل شد: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "مسیر مرحله‌بندی برای اجرای اقدامات پس از اعمال لازم است."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "هیچ اقدام پس از اعمال توصیه‌شده‌ای برای اجرا وجود ندارد."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "هیچ اقدام پس از اعمال مجازی برای اجرا وجود ندارد."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "اقدام پس از اعمال برای این به‌روزرسانی مجاز نیست: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "مهاجرت‌های پایگاه داده قبل از اجرا نیازمند بازبینی ایمنی مهاجرت هستند."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "مهاجرت‌های پایگاه داده نمی‌توانند اجرا شوند زیرا بازبینی ایمنی مهاجرت موفق نبود."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "مهاجرت‌های پایگاه داده نمی‌توانند اجرا شوند زیرا بازبینی ایمنی مهاجرت مهاجرت‌های مرحله‌بندی‌شده را فهرست نکرد."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "مهاجرت‌های پایگاه داده نمی‌توانند اجرا شوند زیرا بازبینی ایمنی مهاجرت حاوی یک ورودی مهاجرت نامعتبر است."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "تنها مهاجرت‌های %s مرحله‌بندی‌شده می‌توانند توسط اجراکننده به‌روزرسانی اجرا شوند."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "مهاجرت‌های پایگاه داده نمی‌توانند اجرا شوند زیرا بازبینی ایمنی مهاجرت مرحله‌بندی‌شده خطاهای مسدودکننده گزارش کرده است."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "داکترین هشدارهای خط پایه مهاجرت را گزارش می‌دهد. تنها کلاس‌های مهاجرت مرحله‌بندی‌شده %s به‌صورت صریح اجرا خواهند شد."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "مهاجرت‌های پایگاه داده نیازمند تأیید وجود نسخه پشتیبان پایگاه داده هستند."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "مهاجرت‌های پایگاه داده نیازمند متن تأیید \"RUN DATABASE MIGRATIONS\" هستند."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "بازبینی ایمنی مهاجرت پایگاه داده پیش از اجرا تکمیل شد."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "وجود نسخه پشتیبان پایگاه داده به‌صورت صریح تأیید شد."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "بازبینی ایمنی مهاجرت پایگاه داده و تأیید نسخه پشتیبان ارائه شد."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "مهاجرت‌های پایگاه داده پس از تأیید صریح نسخه پشتیبان پایگاه داده اجرا شدند. به‌روزرسان نسخه پشتیبان پایگاه داده را ایجاد نکرد."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "مجوزهای اجرایی لازم پس از اعمال، یکسان‌سازی شدند."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "اجرای مهاجرت‌های پایگاه داده ممکن نیست زیرا bin/console یافت نشد."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "دستورهای انتخاب‌شده پس از اعمال، مسیرهای قابل‌نوشتن لازم را دارند."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "مسیرهای قابل‌نوشتن دستورهای پس از اعمال اعتبارسنجی شدند."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "اقدامات پیشرفته پس از اعمال می‌توانند وابستگی‌ها، دارایی‌های تولیدشده یا پایگاه داده را تغییر دهند. پیش از ادامه، نسخه‌های پشتیبان را بررسی کنید."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer نمی‌تواند از به‌روزرسان وب به‌صورت ایمن اجرا شود زیرا فایل تولیدشده توسط Composer \"%s\" متعلق به UID %d است در حالی که زمان اجرای PHP از UID %d استفاده می‌کند. Composer را به‌صورت دستی به‌عنوان مالک استقرار اجرا کنید، سپس با بقیه اقدامات پس از اعمال ادامه دهید."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "مسیر مورد نیاز اقدام پس از اعمال \"%s\" قابل‌نوشتن نیست: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "پوشه والد مورد نیاز اقدام پس از اعمال \"%s\" قابل‌نوشتن نیست: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "خواندن مجوزهای فایل اجرایی لازم پس از اعمال ممکن نیست: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "علامت‌گذاری فایل اجرایی لازم پس از اعمال به‌عنوان اجرایی ممکن نیست: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "فایل اجرایی لازم پس از اعمال پس از chmod هنوز اجرایی نیست: %s"
+
+msgid "Executable permission was normalized."
+msgstr "مجوز اجرایی یکسان‌سازی شد."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "نوشتن پیکربندی جداگانه Git برای دستورهای پس از اعمال ممکن نیست."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "به‌نظر می‌رسد عملیات به‌روزرسانی دیگری در حال اجرا است. var/update/update.lock را تنها در صورتی حذف کنید که هیچ به‌روزرسانی فعالی وجود نداشته باشد."
+
+msgid "Unable to create update lock: %s"
+msgstr "ایجاد قفل به‌روزرسانی ممکن نیست: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "نوشتن فراداده اجرای دستور پس از اعمال ممکن نیست: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "مانیفست به‌روزرسانی بلوک بسته را ندارد."
+
+msgid "Update manifest signature block must be an object."
+msgstr "بلوک امضای مانیفست به‌روزرسانی باید یک شیء باشد."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "بلوک الزامات مانیفست به‌روزرسانی باید یک شیء باشد."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 بسته به‌روزرسانی باید یک رشته هگزادسیمال ۶۴ نویسه‌ای باشد."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "مانیفست به‌روزرسانی فیلد رشته‌ای لازم \"%s\" را ندارد."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "فیلد مانیفست به‌روزرسانی \"%s\" باید یک رشته باشد."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "مانیفست به‌روزرسانی JSON معتبر نیست: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON مانیفست به‌روزرسانی باید یک شیء باشد."
+
+msgid "Manifest source cannot be empty."
+msgstr "منبع مانیفست نمی‌تواند خالی باشد."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "نشانی اینترنتی مانیفست به‌روزرسانی باید از مبدأ رسمی به‌روزرسانی %s استفاده کند."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "بارگیری مانیفست به‌روزرسانی ممکن نیست. وضعیت HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "فایل مانیفست قابل‌خواندن نیست: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "خواندن فایل مانیفست ممکن نیست: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "نشانی اینترنتی مانیفست به‌روزرسانی باید از HTTPS استفاده کند."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "فراداده بسته به‌روزرسانی قابل‌خواندن نیست: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "خواندن فراداده بسته به‌روزرسانی ممکن نیست: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "فراداده بسته به‌روزرسانی JSON معتبر نیست: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "فراداده بسته به‌روزرسانی باید یک شیء JSON باشد."
+
+msgid "Update package metadata format must be %d."
+msgstr "قالب فراداده بسته به‌روزرسانی باید %d باشد."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "فیلد \"remove\" در فراداده بسته به‌روزرسانی باید یک آرایه باشد."
+
+msgid "Update package removal paths must be strings."
+msgstr "مسیرهای حذف بسته به‌روزرسانی باید رشته باشند."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "فراداده بسته به‌روزرسانی نمی‌تواند مسیر محافظت‌شده را حذف کند: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "بسته به‌روزرسانی نمی‌تواند همان مسیر را هم شامل شود و هم حذف کند: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "محاسبه sha256 فراداده بسته به‌روزرسانی ممکن نیست."
+
+msgid "Update package removal path cannot be empty."
+msgstr "مسیر حذف بسته به‌روزرسانی نمی‌تواند خالی باشد."
+
+msgid "Update package removal path contains a null byte."
+msgstr "مسیر حذف بسته به‌روزرسانی حاوی بایت تهی است."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "مسیر حذف بسته به‌روزرسانی باید نسبی باشد: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "مسیر حذف بستهٔ به‌روزرسانی شامل بخش ناامن است: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "برای ساخت طرح اعمال به‌روزرسانی، مسیر مرحله‌بندی لازم است."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "پوشهٔ مرحله‌بندی فاقد STAGING-INFO.json است."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "خواندن فرادادهٔ مرحله‌بندی ممکن نیست: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "فرادادهٔ مرحله‌بندی JSON معتبر نیست: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "فرادادهٔ مرحله‌بندی باید یک شیء JSON باشد."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "فرادادهٔ مرحله‌بندی فاقد فیلد application_path است."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "بستهٔ به‌روزرسانی فاقد %s است. فرادادهٔ پاک‌سازی امضاشده پیش از اعمال فایل‌ها لازم است."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "فرادادهٔ مرحله‌بندی شامل فرادادهٔ پاک‌سازی امضاشدهٔ بسته که هنگام استخراج ثبت شده نیست."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "فرادادهٔ پاک‌سازی بستهٔ به‌روزرسانی پس از مرحله‌بندی تغییر کرده است. پیش از ادامه، بستهٔ تأییدشده را دوباره مرحله‌بندی کنید."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "فرادادهٔ مرحله‌بندی فهرست معتبر حذف بسته را ندارد."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "مسیرهای پاک‌سازی بستهٔ به‌روزرسانی پس از مرحله‌بندی تغییر کرده است. پیش از ادامه، بستهٔ تأییدشده را دوباره مرحله‌بندی کنید."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "فرادادهٔ پاک‌سازی امضاشدهٔ بسته از زمان مرحله‌بندی بدون تغییر است."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "فایل قفل به‌روزرسانی از قبل وجود دارد. ممکن است به‌روزرسانی دیگری در جریان باشد."
+
+msgid "Update lock directory is not writable."
+msgstr "پوشهٔ قفل به‌روزرسانی قابل نوشتن نیست."
+
+msgid "No update lock is currently active."
+msgstr "در حال حاضر هیچ قفل به‌روزرسانی فعالی وجود ندارد."
+
+msgid "Update backup directory is not writable."
+msgstr "پوشهٔ پشتیبان به‌روزرسانی قابل نوشتن نیست."
+
+msgid "Update backup directory is writable."
+msgstr "پوشهٔ پشتیبان به‌روزرسانی قابل نوشتن است."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "پوشهٔ پشتیبان به‌روزرسانی توسط فرایند فعلی قابل ایجاد نیست."
+
+msgid "Update backup directory can be created."
+msgstr "پوشهٔ پشتیبان به‌روزرسانی قابل ایجاد است."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "برخی پوشه‌های کاری به‌روزرسانی قابل نوشتن نیستند یا توسط فرایند فعلی قابل ایجاد نیستند."
+
+msgid "Update working directories are writable or can be created."
+msgstr "پوشه‌های کاری به‌روزرسانی قابل نوشتن هستند یا قابل ایجاداند."
+
+msgid "Update apply file plan was generated."
+msgstr "طرح فایل اعمال به‌روزرسانی تولید شد."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "فرادادهٔ پاک‌سازی بسته شامل مسیرهایی است که به‌صورت ایمن قابل حذف نیستند."
+
+msgid "Package-declared removal targets are safe."
+msgstr "اهداف حذف اعلام‌شده در بسته ایمن هستند."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "برخی فایل‌های منسوخ اعلام‌شده در بسته از قبل در این نصب وجود ندارند."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "به‌روزرسانی برنامه‌ریزی‌شده پیوندهای نمادین موجود را بازنویسی یا حذف می‌کند."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "به‌روزرسانی برنامه‌ریزی‌شده پیوندهای نمادین موجود را بازنویسی یا حذف نمی‌کند."
+
+msgid "New update migration files must be placed under %s."
+msgstr "فایل‌های مهاجرت جدید به‌روزرسانی باید زیر %s قرار گیرند."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "%s فایل مهاجرت Doctrine جدید شناسایی شد. پس از اعمال فایل‌ها به بازبینی ایمنی مهاجرت پایگاه داده نیاز خواهند داشت."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "برخی فهرست‌های فایل طرح اعمال به‌روزرسانی در پاسخ JSON کوتاه شده‌اند."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "نوشتن فرادادهٔ طرح اعمال به‌روزرسانی ممکن نیست."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "دانلود بستهٔ به‌روزرسانی ممکن نیست. وضعیت HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "باز کردن فایل مقصد بستهٔ به‌روزرسانی ممکن نیست: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "دانلودهای به‌روزرسانی باید از مبدأ رسمی به‌روزرسانی %s استفاده کنند."
+
+msgid "The update package URL must use HTTPS."
+msgstr "نشانی URL بستهٔ به‌روزرسانی باید از HTTPS استفاده کند."
+
+msgid "Update package archive safety checks passed."
+msgstr "بررسی‌های ایمنی بایگانی بستهٔ به‌روزرسانی موفق بود."
+
+msgid "Update package was extracted to staging."
+msgstr "بستهٔ به‌روزرسانی به مرحله‌بندی استخراج شد."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "فرادادهٔ پاک‌سازی امضاشدهٔ بسته بارگذاری شد."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "بستهٔ به‌روزرسانی فاقد %s است. اعمال فایل تا ارائهٔ فرادادهٔ پاک‌سازی امضاشده مسدود خواهد شد."
+
+msgid "Staged package dry-run report was generated."
+msgstr "گزارش اجرای آزمایشی بستهٔ مرحله‌بندی‌شده تولید شد."
+
+msgid "Staging metadata was written."
+msgstr "فرادادهٔ مرحله‌بندی نوشته شد."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "استخراج بستهٔ به‌روزرسانی به پوشهٔ مرحله‌بندی ممکن نیست."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "یافتن ریشهٔ برنامهٔ چامیلو در بستهٔ مرحله‌بندی‌شده ممکن نیست."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "بستهٔ مرحله‌بندی‌شده فاقد ورودی لازم چامیلو است: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "بستهٔ مرحله‌بندی‌شده ساختار مورد انتظار چامیلو را دارد."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "بستهٔ مرحله‌بندی‌شده فاقد composer.lock است."
+
+msgid "Staged package contains composer.lock."
+msgstr "بستهٔ مرحله‌بندی‌شده شامل composer.lock است."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "بستهٔ مرحله‌بندی‌شده فاقد yarn.lock است."
+
+msgid "Staged package contains yarn.lock."
+msgstr "بستهٔ مرحله‌بندی‌شده شامل yarn.lock است."
+
+msgid "Unable to encode staging metadata."
+msgstr "ناتوان از رمزگذاری فرادادهٔ مرحله‌بندی."
+
+msgid "Unable to write staging metadata."
+msgstr "ناتوان از نوشتن فرادادهٔ مرحله‌بندی."
+
+msgid "Update operation log created."
+msgstr "گزارش عملیات به‌روزرسانی ایجاد شد."
+
+msgid "Unable to write update operation log."
+msgstr "ناتوان از نوشتن گزارش عملیات به‌روزرسانی."
+
+msgid "Invalid update operation id."
+msgstr "شناسهٔ عملیات به‌روزرسانی نامعتبر است."
+
+msgid "AI study helper"
+msgstr "دستیار مطالعه هوش مصنوعی"
+
+msgid "Selected text"
+msgstr "متن انتخاب‌شده"
+
+msgid "Learning technique"
+msgstr "تکنیک یادگیری"
+
+msgid "AI response"
+msgstr "پاسخ هوش مصنوعی"
+
+msgid "AI request failed."
+msgstr "درخواست هوش مصنوعی ناکام شد."
+
+msgid "Mind mapping"
+msgstr "نقشه ذهنی"
+
+msgid "Feynman Technique"
+msgstr "تکنیک فاینمن"
+
+msgid "Elaborative interrogation"
+msgstr "پرسش‌گری تشریحی"
+
+msgid "Spaced repetition"
+msgstr "تکرار با فاصله"
+
+msgid "SQ3R Method"
+msgstr "روش SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "تشبیهات و استعاره‌ها"
+
+msgid "Dual coding"
+msgstr "رمزگذاری دوگانه"
+
+msgid "Storytelling"
+msgstr "داستان‌گویی"
+
+msgid "Thematic connections"
+msgstr "ارتباطات موضوعی"
+
+msgid "Interleaved learning"
+msgstr "یادگیری درهم‌آمیخته"
+
+msgid "Memory palaces"
+msgstr "کاخ‌های حافظه"
+
+msgid "Logins (Month)"
+msgstr "ورودها (ماه)"
+
+msgid "Logins (Day)"
+msgstr "ورودها (روز)"
+
+msgid "Logins (Hour)"
+msgstr "ورودها (ساعت)"
+
+msgid "Number of users (Picture)"
+msgstr "تعداد کاربران (تصویر)"
+
+msgid "Allow tutors to register users"
+msgstr "اجازه به مربیان برای ثبت کاربران"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "اجازه به مربیان برای ویرایش داخل نشست‌های درس"
+
+msgid "Extend rights for tutors"
+msgstr "گسترش حقوق مربیان"
+
+msgid "Show session tutor"
+msgstr "نمایش مربی نشست"
+
+msgid "Default tutor access days after session"
+msgstr "روزهای پیش‌فرض دسترسی مربی پس از نشست"
+
+msgid "Default tutor access days before session"
+msgstr "روزهای پیش‌فرض دسترسی مربی پیش از نشست"
+
+msgid "Dropbox: hide course tutor"
+msgstr "صندوق فایل: پنهان کردن مربی درس"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "پنهان کردن مربی عمومی در صندوق فایل"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "گسترش حقوق مربیان در نظرسنجی‌ها"
+
+msgid "Maximum courses per user"
+msgstr "حداکثر درس‌ها برای هر کاربر"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "اجازه به مربیان برای نظر دادن هنگام بررسی تمرین‌ها"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "شامل کردن کد رسمی در نام فایل PDF نتایج آزمون صادرشده"
+
+msgid "Certificate expiry reminder cron"
+msgstr "کرون یادآوری انقضای گواهینامه"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "پنجره یادآوری انقضای گواهینامه (روز)"
+
+msgid "Allow certificates search"
+msgstr "اجازه جستجوی گواهینامه‌ها"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "اجازه به مربیان برای همیشه ویرایش اعلان‌ها"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "نمایش کد رسمی دانشجویان در برگه‌های حضور"
+
+msgid "Restrict course chat to tutors"
+msgstr "محدود کردن گفتگوی درس به مربیان"
+
+msgid "Language by resource"
+msgstr "زبان بر اساس منبع"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "تکمیل SCO هنگام خروج وقتی وضعیت ناقص می‌ماند"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "فعال‌سازی آزمون‌های تطبیقی پیش‌رونده بر اساس مقصد دسته"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "مسدود کردن ارسال اعلان‌های آزمون به مربی عمومی"
+
+msgid "Enable session expiration warning"
+msgstr "فعال‌سازی هشدار انقضای نشست"
+
+msgid "Session expiration warning time"
+msgstr "زمان هشدار انقضای نشست"
+
+msgid "Check password requirements"
+msgstr "بررسی الزامات گذرواژه"
+
+msgid "File integrity check notification recipients"
+msgstr "گیرندگان اعلان بررسی یکپارچگی فایل"
+
+msgid "Enable the OAuth authorization server"
+msgstr "فعال‌سازی سرور مجوز OAuth"
+
+msgid "Enable MCP server"
+msgstr "فعال‌سازی سرور MCP"
+
+msgid "Allow MCP by roles"
+msgstr "اجازه MCP بر اساس نقش‌ها"
+
+msgid "Enable external API keys"
+msgstr "فعال‌سازی کلیدهای API خارجی"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "نشست‌های بر اساس مدت همیشه برای مربیان در دسترس"
+
+msgid "Allow registration via course invitation links"
+msgstr "اجازه ثبت‌نام از طریق پیوندهای دعوت درس"
+
+msgid "Add student fullname in file download name"
+msgstr "افزودن نام کامل دانشجو در نام فایل دانلود"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "اجازه ترجمه هوش مصنوعی به تمام زبان‌های فعال در ویرایشگرهای WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "غیرفعال کردن امکان ویرایش مربیان درس"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "هنگام استفاده از نشست‌ها، رفتار پیش‌فرض استفاده از قابلیت دید ابزار تعریف‌شده در درس پایه است. این تنظیم آن را تغییر می‌دهد تا مربیان در درس‌های نشست بتوانند قابلیت دید ابزارها را مطابق نیاز خود تنظیم کنند."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "مربیان می‌توانند کاربران را در پلتفرم ایجاد کنند و کاربران را در یک نشست ثبت‌نام کنند."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "این گزینه را فعال کنید تا به مربیان همان مجوزهای استادان در ابزارهای تألیف داده شود"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "نمایش نام مربی عمومی نشست در جعبه عنوان نشست در فهرست درس‌ها"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "وقتی فعال باشد، مربیان درس در نشست‌ها می‌توانند کاربران جدید را در نشست خود ثبت‌نام کنند. در غیر این صورت این گزینه فقط برای مدیران و مدیران نشست در دسترس است."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "تعداد پیش‌فرض روزهایی که مربی می‌تواند پس از تاریخ رسمی پایان جلسه به جلسه دسترسی داشته باشد"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "تعداد پیش‌فرض روزهایی که مربی می‌تواند پیش از تاریخ رسمی شروع جلسه به جلسه دسترسی داشته باشد"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "فعال‌سازی کتابخانه MathJax برای نمایش فرمول‌های ریاضی. این گزینه دکمه فرمول را به نوار ابزار ویرایشگر اضافه می‌کند که فرمول‌ها در آن با LaTeX نوشته می‌شوند."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "کدهای درس جداشده با \"|\". هنگام ورود مدیر منابع انسانی، کاربر به‌طور خودکار در این درس‌ها ثبت‌نام می‌شود. مثال: COURSE001|COURSE002. این کار نقش کاربر را تغییر نمی‌دهد."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "کدهای درس جداشده با \"|\". هنگام ورود مدیر جلسه، کاربر به‌طور خودکار در این درس‌ها ثبت‌نام می‌شود. مثال: COURSE001|COURSE002. این کار نقش کاربر را تغییر نمی‌دهد."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "کدهای درس جداشده با \"|\". هنگام ورود فراگیر، کاربر به‌طور خودکار در این درس‌ها ثبت‌نام می‌شود. مثال: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "کدهای درس جداشده با \"|\". هنگام ورود مدرس، کاربر به‌طور خودکار در این درس‌ها ثبت‌نام می‌شود. مثال: COURSE001|COURSE002. این کار مجوز مدرس درس را اعطا نمی‌کند."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "پنهان کردن مربی درس جلسه در Dropbox وقتی مدرک توسط مربی برای دانشجویان ارسال می‌شود"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "پنهان کردن نام مربی عمومی در ابزار Dropbox وقتی مربی عمومی پرونده را بارگذاری کرده است"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "فعال کردن این گزینه برای اجازه به مربیان جهت ایجاد و ویرایش نظرسنجی‌ها"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "آیا دعوت‌نامه‌های نظرسنجی باید از نشانی ایمیل مربی استفاده کنند یا از نشانی بدون‌پاسخ تعریف‌شده در بخش پیکربندی اصلی؟"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "حداکثر تعداد درس‌هایی که یک مدرس/آموزگار می‌تواند ایجاد کند. برای غیرفعال کردن محدودیت روی ۰ تنظیم کنید. می‌تواند برای هر کاربر از طریق خرید خدمات BuyCourses لغو شود."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "اجازه به مربیان برای ویرایش بازخورد هنگام بررسی تمرین‌ها"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "آیا هنگام صدور نتیجه آزمون به PDF، کد رسمی دانشجو در نام پرونده گنجانده شود"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "اجازه دسترسی بدون محدودیت به همه پرونده‌های شخصی"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "فعال‌سازی cron با نام app:send-certificate-expiry-reminders که به فراگیرانی که گواهی‌نامه‌شان منقضی شده یا در آستانه انقضا است یادآوری می‌کند."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "تعداد پیش‌فرض روزهای پیش‌رو برای پویش گواهی‌نامه‌های در آستانه انقضا، مگر اینکه cron با --days-ahead اجرا شود."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "اجازه به کاربران و بازدیدکنندگان برای جستجوی گواهی‌نامه‌های تولیدشده از منوی نوار بالا."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "اجازه به مربیان برای همیشه ویرایش اطلاعیه‌ها در جلسات فعال یا گذشته."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "آیا کد رسمی دانشجویان در کنار نامشان در برگه‌ها و فهرست‌های حضور نمایش داده شود."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "اجازه اختصاص زبان مشخص به منابع جداگانه."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "برخی بسته‌های SCORM فقط یک‌بار LMSSetValue(cmi.core.lesson_status, 'incomplete') را فراخوانی می‌کنند و هرگز وضعیت پایانی واقعی یا LMSFinish() معنادار ارسال نمی‌کنند. این گزینه را فعال کنید تا چامیلو آن «incomplete» باقی‌مانده را مانند نبود وضعیت در نظر بگیرد و هنگام ترک SCO توسط فراگیر، تکمیل را حل کند."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "اگر مسیر یادگیری نامرئی تنظیم شده باشد اما مدرس یا مربی تصمیم گرفته باشد آن را از صفحه اصلی درس در دسترس قرار دهد، این گزینه از پنهان کردن پیوند در صفحه اصلی درس توسط چامیلو جلوگیری می‌کند."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "فعال‌سازی آزمون‌های تطبیقی پیش‌رونده که در آن هر دسته سؤال می‌تواند فراگیران را بسته به نمره‌شان به دسته دیگری هدایت کند."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "وقتی فراگیران آزمونی را کامل می‌کنند، معمولاً اعلان‌ها به مربیان از جمله مربی عمومی جلسه ارسال می‌شود. این گزینه را فعال کنید تا مربی عمومی از این اعلان‌ها حذف شود."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "نمایش تلاش‌های آزمون کاربران در همه جلساتی که مربی عمومی به آن‌ها دسترسی دارد، در گزارش آزمون‌های در انتظار."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "نمایش هشدار به کاربران احراز هویت‌شده پیش از انقضای جلسه سمت سرور."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "تعداد ثانیه‌ها پیش از انقضای جلسه که هشدار نمایش داده می‌شود. پیش‌فرض ۱۸۰ ثانیه است."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "ساختار لازم برای گذرواژه‌های کاربر را تعریف می‌کند. مثال: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. برای الزام نویسه‌های ویژه از \"specials\" (جمع) استفاده کنید."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "فعال‌سازی اعتبارسنجی الزامات گذرواژه تعریف‌شده در بالا هنگام ایجاد یا به‌روزرسانی گذرواژه."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "فهرست نشانی‌های ایمیل جداشده با ویرگول برای اطلاع‌رسانی وقتی پویش یکپارچگی پرونده تغییری تشخیص دهد. خالی بگذارید تا به‌جای آن به همه مدیران سراسری اطلاع داده شود."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "اجازه به برنامه‌های خارجی (مثلاً اتصال‌دهنده MCP در Claude.ai) برای ثبت از طریق OAuth 2.1 Dynamic Client Registration و اتصال با حساب و مجوزهای خود هر کاربر چامیلو. به‌طور پیش‌فرض غیرفعال است: نقاط پایانی کشف، ثبت، مجوز و توکن تا زمان روشن شدن همه ۴۰۴ برمی‌گردانند."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "نقطه پایانی MCP چامیلو و رابط کلید API شخصی MCP را فعال می‌کند. وقتی غیرفعال باشد، کلیدهای API موجود، توکن‌های دسترسی OAuth و اعتبارنامه‌های JWT روی /mcp قابل استفاده نیستند."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "نقشه JSON نقش‌های کاربری چامیلو که مجاز به استفاده از MCP هستند. کاربر باید حداقل با یک نقش فعال مطابقت داشته باشد. این محدودیت برای کلیدهای API قبلاً تولیدشده و اتصال‌های OAuth موجود نیز اعمال می‌شود."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "اجازه به یکپارچه‌سازی‌های مورد اعتماد سرور به سرور (مثلاً افزونه فروشگاه WordPress) برای احراز هویت در نقطه پایانی عمومی /api با کلید API خارجی به‌ازای هر کاربر، که از طریق فرمان کنسول \"chamilo:security:generate-external-api-key\" تولید می‌شود. به‌طور پیش‌فرض غیرفعال است: کلیدهای موجود تا زمان روشن شدن قابل استفاده نیستند."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "افزودن مربی و تاریخ‌ها به زیرعنوان جلسه در فهرست جلسات."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "در غیر این صورت، مربیان جلسه فقط در مدت فعال به جلسات بر اساس مدت دسترسی دارند."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "وقتی فعال باشد، مدرس/مدیر می‌تواند از ابزار کاربران یک درس پیوند دعوت یک‌باره بفرستد که به فرد ثبت‌نشده اجازه می‌دهد به فرم ثبت‌نام برسد و حتی در حالی که ثبت‌نام خودخدمت عمومی (allow_registration) غیرفعال است ثبت‌نام کند."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "افزودن نام کامل دانشجو به نام پرونده‌های تکلیف هنگام بارگیری ارسال‌های فردی یا بسته‌های تکلیف."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "اجازه به مدرسان برای تولید ترجمه برای همه زبان‌های فعال بستر در یک اقدام WYSIWYG. این کار ممکن است تعداد زیادی توکن هوش مصنوعی مصرف کند."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "وقتی غیرفعال باشد، مدیران پیوندی برای اختصاص سریع مربیان به درس‌های جلسه در صفحه ویرایش درس ندارند."
+
+msgid "Show courses & sessions"
+msgstr "نمایش درس‌ها و جلسات"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON اختیاری. مثال: {\"speed\": true}"
+
+msgid "Table"
+msgstr "جدول"
+
+msgid "LoginIsEmailTitle"
+msgstr "ورود با ایمیل"
+
+msgid "Theme"
+msgstr "پوسته"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "فرستنده ایمیل مربی دوره"
+
+msgid "Card (visual blocks)"
+msgstr "کارت (بلوک‌های بصری)"
+
+msgid "List (classic)"
+msgstr "فهرست (کلاسیک)"
+
+msgid "Limit identical emails"
+msgstr "محدودیت ایمیل‌های یکسان"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "حداکثر تعداد دوره‌هایی که یک معلم یا مربی می‌تواند ایجاد کند. برای غیرفعال کردن محدودیت، مقدار را ۰ قرار دهید."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "حداکثر تعداد حساب‌های مجاز با ایمیل یکسان. برای غیرفعال کردن محدودیت، مقدار را ۰ قرار دهید."
+
+msgid "Validation"
+msgstr "اعتبارسنجی"
+
+msgid "Test/Development"
+msgstr "آزمایش/توسعه"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "کلید فیلد اضافی کاربر برای جستجو و نام‌گذاری نشست‌ها از /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "پیکربندی JSON برای فیلدهای پیش‌فیلتر جستجو."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "این همه مهاجرت‌های ارائه‌شده توسط این نسخه را به‌عنوان اجراشده علامت می‌زند. این کار را فقط روی بستری انجام دهید که به‌روز است و هرگز تاریخچهٔ خود را ثبت نکرده است."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s مهاجرت ثبت شد. بستر شما اکنون می‌تواند به‌طور عادی به‌روزرسانی شود."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "بدون تاریخچهٔ مهاجرت: برای رفع کلیک کنید (در غیر این صورت به‌روزرسانی‌ها ممکن است خراب شوند)"
+
+msgid "Migration history is recorded"
+msgstr "تاریخچهٔ مهاجرت ثبت شده است"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s در ریشهٔ پروژه موجود است: آن را حذف کنید تا نقاط پایانی ارتقا بسته شوند"
 

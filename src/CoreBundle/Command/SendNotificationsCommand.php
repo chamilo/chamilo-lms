@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[AsCommand(
     name: 'app:send-notifications',
@@ -24,7 +25,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class SendNotificationsCommand extends Command
 {
     public function __construct(
-        private readonly EntityManager $em
+        private readonly EntityManager $em,
+        private readonly KernelInterface $kernel,
     ) {
         parent::__construct();
     }
@@ -41,7 +43,7 @@ class SendNotificationsCommand extends Command
     {
         Database::setManager($this->em);
 
-        $container = $this->getApplication()->getKernel()->getContainer();
+        $container = $this->kernel->getContainer();
         Container::setContainer($container);
 
         $io = new SymfonyStyle($input, $output);

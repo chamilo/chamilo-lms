@@ -57,22 +57,22 @@ class CourseType extends AbstractType
                 ]
             )
             /* ->add('general_coach', 'entity', array(
-                 'class' => 'ChamiloCoreBundle:User',
+                 'class' => 'Chamilo\CoreBundle\Entity\User',
                  'property' => 'username',
              ))
              ->add('session_admin_id',  'entity', array(
-                 'class' => 'ChamiloCoreBundle:User',
+                 'class' => 'Chamilo\CoreBundle\Entity\User',
                  'property' => 'username',
              ))
              ->add('visibility', 'choice',
                  array('choices' => Session::getStatusList())
              )
              ->add('session_category_id', 'entity', array(
-                 'class' => 'ChamiloCoreBundle:SessionCategory',
+                 'class' => 'Chamilo\CoreBundle\Entity\SessionCategory',
                  'property' => 'name',
              ))
              ->add('promotion_id', 'entity', array(
-                 'class' => 'ChamiloCoreBundle:Promotion',
+                 'class' => 'Chamilo\CoreBundle\Entity\Promotion',
                  'property' => 'name',
              ))*/
             /*

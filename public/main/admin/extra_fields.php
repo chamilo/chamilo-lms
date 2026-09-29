@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 
@@ -126,7 +127,16 @@ switch ($action) {
             $values['auto_remove'] = isset($_POST['auto_remove']) ? 1 : 0;
             $res = $obj->save($values);
             if ($res) {
-                Display::addFlash(Display::return_message(get_lang('Item added'), 'confirmation'));
+                // Container::addFlash writes straight to the Symfony flash bag
+                // (Display::addFlash parses HTML alert markup instead). Must
+                // session->save() before header+exit: legacy scripts leave the
+                // kernel without a Response event, so the flash would otherwise
+                // never reach the next request's data-flashes / toast.
+                Container::addFlash(get_lang('Item added'), 'success');
+                $session = Container::getSession();
+                if ($session && method_exists($session, 'save')) {
+                    $session->save();
+                }
                 header('Location: '.api_get_self().'?type='.$obj->type);
                 exit;
             }
@@ -151,13 +161,14 @@ switch ($action) {
             $values['auto_remove'] = isset($_POST['auto_remove']) ? 1 : 0;
             $res = $obj->update($values);
             if ($res) {
-                Display::addFlash(
-                    Display::return_message(
-                        sprintf(get_lang('Item updated'), $values['variable']),
-                        'confirmation',
-                        false
-                    )
+                Container::addFlash(
+                    sprintf(get_lang('Item updated'), $values['variable']),
+                    'success'
                 );
+                $session = Container::getSession();
+                if ($session && method_exists($session, 'save')) {
+                    $session->save();
+                }
                 header('Location: '.api_get_self().'?type='.$obj->type);
                 exit;
             }

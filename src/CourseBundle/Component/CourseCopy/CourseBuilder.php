@@ -58,7 +58,9 @@ use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Entity\CWiki;
+use Chamilo\CourseBundle\Entity\CWikiCategory;
 use Chamilo\CourseBundle\Entity\CWikiConf;
+use Chamilo\CourseBundle\Entity\CWikiDiscuss;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Closure;
 use Countable;
@@ -163,7 +165,7 @@ class CourseBuilder
      * Internal trace toggle for this class.
      * Set to false to disable logs.
      */
-    private const TRACE_ENABLED = false;
+    private const bool TRACE_ENABLED = false;
 
     /**
      * Constructor (keeps legacy init; wires Doctrine repositories).
@@ -320,13 +322,40 @@ class CourseBuilder
             $path = $decoded;
         }
 
-        // Most common patterns:
+        // Modern Chamilo resource viewer:
+        // /r/document/files/{uuid}/view|download|link
+        $trimmed = trim($path, '/');
+        if (preg_match(
+            '~^(?:r/)?document/files/(?P<uuid>[0-9a-fA-F-]{16,64})/(?:view|download|link)/?$~i',
+            $trimmed,
+            $m
+        )) {
+            $fromUuid = $this->resolveDocumentRelPathFromResourceUuid((string) $m['uuid']);
+            if ('' !== $fromUuid) {
+                return $fromUuid;
+            }
+        }
+
+        // Most common legacy patterns:
         // - /courses/COURSECODE/document/Folder/file.png
         // - /document/Folder/file.png
         // - document/Folder/file.png
         $pos = stripos($path, '/document/');
         if (false !== $pos) {
-            return substr($path, $pos + \strlen('/document/')) ?: '';
+            $tail = substr($path, $pos + \strlen('/document/')) ?: '';
+            // Avoid treating modern files/{uuid}/view as a relative path.
+            if (preg_match('~^files/[0-9a-fA-F-]{16,64}/(?:view|download|link)/?$~i', $tail)) {
+                if (preg_match('~^files/(?P<uuid>[0-9a-fA-F-]{16,64})/~i', $tail, $m2)) {
+                    $fromUuid = $this->resolveDocumentRelPathFromResourceUuid((string) $m2['uuid']);
+                    if ('' !== $fromUuid) {
+                        return $fromUuid;
+                    }
+                }
+
+                return '';
+            }
+
+            return $tail;
         }
 
         if (str_starts_with($path, 'document/')) {
@@ -402,16 +431,20 @@ class CourseBuilder
         $docs = $qb->getQuery()->getResult();
 
         $documentsRoot = $this->docRepo->getCourseDocumentsRootNode($course);
+        $courseRoot = $course->getResourceNode();
 
         $iids = [];
 
         foreach ($docs as $doc) {
-            $rel = $this->getLogicalDocumentRelativePath(
+            $documentBase = $this->resolveDocumentExportBaseNode(
                 $doc,
-                $documentsRoot instanceof ResourceNode ? $documentsRoot : null
+                $documentsRoot instanceof ResourceNode ? $documentsRoot : null,
+                $courseRoot instanceof ResourceNode ? $courseRoot : null
             );
 
+            $rel = $this->getLogicalDocumentRelativePath($doc, $documentBase);
             $rel = $this->normalizeDocumentRelPath($rel);
+            $rel = $this->applyDocumentOriginalFilename($doc, $rel);
 
             if ('' === $rel) {
                 continue;
@@ -806,6 +839,12 @@ class CourseBuilder
                     'next_item_id' => null !== $it->getNextItemId() ? (int) $it->getNextItemId() : null,
                     'display_order' => (int) $it->getDisplayOrder(),
                     'prerequisite' => (string) ($it->getPrerequisite() ?? ''),
+                    'prerequisite_min_score' => null !== $it->getPrerequisiteMinScore()
+                        ? (float) $it->getPrerequisiteMinScore()
+                        : null,
+                    'prerequisite_max_score' => null !== $it->getPrerequisiteMaxScore()
+                        ? (float) $it->getPrerequisiteMaxScore()
+                        : null,
                     'parameters' => (string) ($it->getParameters() ?? ''),
                     'launch_data' => (string) $it->getLaunchData(),
                     'audio' => (string) ($it->getAudio() ?? ''),
@@ -1510,10 +1549,11 @@ class CourseBuilder
         /** @var ObjectRepository $confRepo */
         $confRepo = $this->em->getRepository(CWikiConf::class);
 
+        /** @var ObjectRepository $discussionRepo */
+        $discussionRepo = $this->em->getRepository(CWikiDiscuss::class);
+
         $ids = array_values(array_unique(array_map('intval', $ids)));
         $keep = $this->makeIdFilter($ids);
-
-        // Try the generic QB (ResourceLinks-based) first
         $qb = $this->getResourcesByCourseQbFromRepo(
             $repo,
             $courseEntity,
@@ -1521,8 +1561,7 @@ class CourseBuilder
             $this->withBaseContent
         );
 
-        // Optional filter: accept ids as wiki iid OR page_id
-        if (!empty($ids)) {
+        if ([] !== $ids) {
             $qb->andWhere(
                 $qb->expr()->orX(
                     $qb->expr()->in('resource.iid', ':ids'),
@@ -1531,111 +1570,104 @@ class CourseBuilder
             )->setParameter('ids', $ids);
         }
 
-        // Stable order: latest version first for each page_id
         $qb->addOrderBy('resource.pageId', 'ASC')
-            ->addOrderBy('resource.version', 'DESC')
-            ->addOrderBy('resource.iid', 'DESC');
+            ->addOrderBy('resource.version', 'ASC')
+            ->addOrderBy('resource.iid', 'ASC');
 
         /** @var CWiki[] $pages */
         $pages = $qb->getQuery()->getResult();
 
-        // if generic QB returns nothing, query by legacy columns (cId/sessionId)
-        if (!$pages) {
-            $cid = method_exists($courseEntity, 'getId') ? (int) $courseEntity->getId() : 0;
-            $sid = $sessionEntity && method_exists($sessionEntity, 'getId') ? (int) $sessionEntity->getId() : 0;
+        if ([] === $pages) {
+            $cid = (int) $courseEntity->getId();
+            $sid = (int) ($sessionEntity?->getId() ?? 0);
+            $qb = $repo->createQueryBuilder('resource')
+                ->andWhere('resource.cId = :cid')
+                ->setParameter('cid', $cid)
+                ->andWhere('COALESCE(resource.groupId, 0) = 0');
 
-            if ($cid > 0) {
-                $qb2 = $repo->createQueryBuilder('resource')
-                    ->andWhere('resource.cId = :cid')
-                    ->setParameter('cid', $cid);
-
-                if ($sid > 0) {
-                    if ($this->withBaseContent) {
-                        // Include session-specific + base (NULL/0)
-                        $qb2->andWhere(
-                            $qb2->expr()->orX(
-                                'resource.sessionId = :sid',
-                                'resource.sessionId IS NULL',
-                                'resource.sessionId = 0'
-                            )
-                        )->setParameter('sid', $sid);
-                    } else {
-                        // Only session-specific
-                        $qb2->andWhere('resource.sessionId = :sid')
-                            ->setParameter('sid', $sid);
-                    }
-                } else {
-                    // No session context => base only
-                    $qb2->andWhere(
-                        $qb2->expr()->orX(
+            if ($sid > 0) {
+                if ($this->withBaseContent) {
+                    $qb->andWhere(
+                        $qb->expr()->orX(
+                            'resource.sessionId = :sid',
                             'resource.sessionId IS NULL',
                             'resource.sessionId = 0'
                         )
-                    );
+                    )->setParameter('sid', $sid);
+                } else {
+                    $qb->andWhere('resource.sessionId = :sid')->setParameter('sid', $sid);
                 }
-
-                $qb2->andWhere('COALESCE(resource.groupId, 0) = 0');
-
-                if (!empty($ids)) {
-                    $qb2->andWhere(
-                        $qb2->expr()->orX(
-                            $qb2->expr()->in('resource.iid', ':ids'),
-                            $qb2->expr()->in('resource.pageId', ':ids')
-                        )
-                    )->setParameter('ids', $ids);
-                }
-
-                $qb2->addOrderBy('resource.pageId', 'ASC')
-                    ->addOrderBy('resource.version', 'DESC')
-                    ->addOrderBy('resource.iid', 'DESC');
-
-                $pages = $qb2->getQuery()->getResult();
+            } else {
+                $qb->andWhere(
+                    $qb->expr()->orX(
+                        'resource.sessionId IS NULL',
+                        'resource.sessionId = 0'
+                    )
+                );
             }
-        }
 
-        if (!$pages) {
-            return;
+            if ([] !== $ids) {
+                $qb->andWhere(
+                    $qb->expr()->orX(
+                        $qb->expr()->in('resource.iid', ':ids'),
+                        $qb->expr()->in('resource.pageId', ':ids')
+                    )
+                )->setParameter('ids', $ids);
+            }
+
+            $qb->addOrderBy('resource.pageId', 'ASC')
+                ->addOrderBy('resource.version', 'ASC')
+                ->addOrderBy('resource.iid', 'ASC');
+            $pages = $qb->getQuery()->getResult();
         }
 
         $selected = [];
+        $pageIds = [];
         foreach ($pages as $page) {
             $iid = (int) $page->getIid();
-            if ($iid <= 0) {
-                continue;
-            }
-
             $pageId = (int) ($page->getPageId() ?? $iid);
-
-            // If ids provided, allow matching by iid or by page_id
-            if (!empty($ids) && !$keep($iid) && !$keep($pageId)) {
+            if ($iid <= 0 || $pageId <= 0) {
                 continue;
             }
 
-            $groupId = 0;
-            $reflink = (string) $page->getReflink();
-
-            $key = $pageId.'|'.$groupId.'|'.$reflink;
-            if (!isset($selected[$key])) {
-                $selected[$key] = $page;
+            if ([] !== $ids && !$keep($iid) && !$keep($pageId)) {
+                continue;
             }
+
+            $selected[] = $page;
+            $pageIds[$pageId] = $pageId;
         }
 
+        if ([] === $selected) {
+            return;
+        }
+
+        /** @var CWikiDiscuss[] $discussionRows */
+        $discussionRows = $discussionRepo->createQueryBuilder('discussion')
+            ->andWhere('discussion.cId = :courseId')
+            ->andWhere('discussion.publicationId IN (:pageIds)')
+            ->setParameter('courseId', (int) $courseEntity->getId())
+            ->setParameter('pageIds', array_values($pageIds))
+            ->addOrderBy('discussion.publicationId', 'ASC')
+            ->addOrderBy('discussion.iid', 'ASC')
+            ->getQuery()
+            ->getResult();
+        $discussionsByPage = [];
+        foreach ($discussionRows as $discussion) {
+            $discussionsByPage[$discussion->getPublicationId()][] = [
+                'source_id' => (int) ($discussion->getIid() ?? 0),
+                'user_id' => (int) $discussion->getUsercId(),
+                'comment' => (string) $discussion->getComment(),
+                'score' => (string) ($discussion->getPScore() ?? '-'),
+                'dtime' => $discussion->getDtime()->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        $exportedDiscussions = [];
         foreach ($selected as $page) {
             $iid = (int) $page->getIid();
-            if ($iid <= 0) {
-                continue;
-            }
-
             $pageId = (int) ($page->getPageId() ?? $iid);
-            $reflink = (string) $page->getReflink();
-            $title = (string) $page->getTitle();
             $content = $this->normalizeWikiHtmlForExport((string) $page->getContent());
-            $userId = (int) $page->getUserId();
-            $groupId = 0;
-            $progress = (string) ($page->getProgress() ?? '');
-            $version = (int) ($page->getVersion() ?? 1);
-            $dtime = $page->getDtime()?->format('Y-m-d H:i:s') ?? '';
-
             if ('' !== $content) {
                 $this->findAndSetDocumentsInText($content);
             }
@@ -1644,18 +1676,45 @@ class CourseBuilder
                 'cId' => (int) $courseEntity->getId(),
                 'pageId' => $pageId,
             ]);
+            $categoryPaths = [];
+            foreach ($page->getCategories() as $category) {
+                if (!$category instanceof CWikiCategory) {
+                    continue;
+                }
+
+                $path = [];
+                $current = $category;
+                $visited = [];
+                while ($current instanceof CWikiCategory) {
+                    $categoryId = (int) ($current->getId() ?? 0);
+                    if ($categoryId <= 0 || isset($visited[$categoryId])) {
+                        break;
+                    }
+                    $visited[$categoryId] = true;
+                    array_unshift($path, [
+                        'source_id' => $categoryId,
+                        'title' => $current->getTitle(),
+                    ]);
+                    $current = $current->getParent();
+                }
+
+                if ([] !== $path) {
+                    $categoryPaths[] = $path;
+                }
+            }
 
             $payload = [
-                'title' => $title,
-                'name' => $title,
-                'reflink' => $reflink,
+                'iid' => $iid,
+                'title' => (string) $page->getTitle(),
+                'name' => (string) $page->getTitle(),
+                'reflink' => (string) $page->getReflink(),
                 'content' => $content,
                 'comment' => (string) ($page->getComment() ?? ''),
-                'user_id' => $userId,
+                'user_id' => (int) $page->getUserId(),
                 'group_id' => 0,
-                'dtime' => $dtime,
-                'progress' => $progress,
-                'version' => $version,
+                'dtime' => $page->getDtime()?->format('Y-m-d H:i:s') ?? '',
+                'progress' => (string) ($page->getProgress() ?? ''),
+                'version' => (int) ($page->getVersion() ?? 1),
                 'page_id' => $pageId,
                 'hits' => (int) ($page->getHits() ?? 0),
                 'addlock' => (int) ($page->getAddlock() ?? 1),
@@ -1679,17 +1738,22 @@ class CourseBuilder
                 'max_size' => $conf ? (int) ($conf->getMaxSize() ?? 0) : 0,
                 'max_text' => $conf ? (int) ($conf->getMaxText() ?? 0) : 0,
                 'max_version' => $conf ? (int) ($conf->getMaxVersion() ?? 0) : 0,
-                'startdate_assig' => ($conf && $conf->getStartdateAssig())
-                    ? $conf->getStartdateAssig()->format('Y-m-d H:i:s')
-                    : '',
-                'enddate_assig' => ($conf && $conf->getEnddateAssig())
-                    ? $conf->getEnddateAssig()->format('Y-m-d H:i:s')
-                    : '',
+                'startdate_assig' => $conf?->getStartdateAssig()?->format('Y-m-d H:i:s') ?? '',
+                'enddate_assig' => $conf?->getEnddateAssig()?->format('Y-m-d H:i:s') ?? '',
                 'delayedsubmit' => $conf ? (int) ($conf->getDelayedsubmit() ?? 0) : 0,
+                'category_paths' => $categoryPaths,
+                'discussions' => isset($exportedDiscussions[$pageId])
+                    ? []
+                    : ($discussionsByPage[$pageId] ?? []),
             ];
+            $exportedDiscussions[$pageId] = true;
 
-            $legacyCourse->resources[RESOURCE_WIKI][$iid] =
-                $this->mkLegacyItem(RESOURCE_WIKI, $iid, $payload);
+            $legacyCourse->resources[RESOURCE_WIKI][$iid] = $this->mkLegacyItem(
+                RESOURCE_WIKI,
+                $iid,
+                $payload,
+                ['category_paths', 'discussions']
+            );
         }
     }
 
@@ -1748,7 +1812,7 @@ class CourseBuilder
         }
 
         $repo = Container::getCourseDescriptionRepository();
-        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, true);
+        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -1764,10 +1828,12 @@ class CourseBuilder
             $title = (string) ($row->getTitle() ?? '');
             $html = (string) ($row->getContent() ?? '');
             $type = (int) $row->getDescriptionType();
+            $progress = (int) $row->getProgress();
+            $language = (string) ($row->getResourceNode()?->getLanguage()?->getIsocode() ?? '');
 
             $this->findAndSetDocumentsInText($html);
 
-            $export = new CourseDescription($iid, $title, $html, $type);
+            $export = new CourseDescription($iid, $title, $html, $type, $progress, $language);
             $this->course->add_resource($export);
         }
     }
@@ -3124,6 +3190,7 @@ class CourseBuilder
         $docs = $qb->getQuery()->getResult();
 
         $documentsRoot = $this->docRepo->getCourseDocumentsRootNode($course);
+        $courseRoot = $course->getResourceNode();
 
         foreach ($docs as $doc) {
             $node = $doc->getResourceNode();
@@ -3149,12 +3216,15 @@ class CourseBuilder
                 }
             }
 
+            $documentBase = $this->resolveDocumentExportBaseNode(
+                $doc,
+                $documentsRoot instanceof ResourceNode ? $documentsRoot : null,
+                $courseRoot instanceof ResourceNode ? $courseRoot : null
+            );
+
             $logicalRel = '';
             try {
-                $logicalRel = $this->getLogicalDocumentRelativePath(
-                    $doc,
-                    $documentsRoot instanceof ResourceNode ? $documentsRoot : null
-                );
+                $logicalRel = $this->getLogicalDocumentRelativePath($doc, $documentBase);
             } catch (Throwable $e) {
                 error_log(sprintf(
                     '[MOODLE EXPORT] Failed to resolve logical document path. doc_iid=%d node_id=%d title="%s" error="%s"',
@@ -3172,7 +3242,7 @@ class CourseBuilder
                     $rel = $this->normalizeDocumentRelativePathForMoodleExport(
                         (string) ($node->getPath() ?? ''),
                         $course,
-                        $documentsRoot instanceof ResourceNode ? (string) ($documentsRoot->getPath() ?? '') : '',
+                        $documentBase instanceof ResourceNode ? (string) ($documentBase->getPath() ?? '') : '',
                         $title,
                         'folder' === $filetype
                     );
@@ -3192,6 +3262,8 @@ class CourseBuilder
                 $rel = trim($title, '/');
             }
 
+            $rel = $this->applyDocumentOriginalFilename($doc, $rel);
+
             if ('' === $rel) {
                 continue;
             }
@@ -3201,13 +3273,41 @@ class CourseBuilder
                 $pathForSelector = rtrim($pathForSelector, '/').'/';
             }
 
+            // Preserve learner-facing visibility (ResourceLink) for restore confidentiality.
+            $visibility = null;
+            try {
+                $link = $doc->getFirstResourceLinkFromCourseSession($course, $session);
+                if (null === $link && null !== $session) {
+                    // Session export of base content may only have a base-course link.
+                    $link = $doc->getFirstResourceLinkFromCourseSession($course, null);
+                }
+                if (null !== $link) {
+                    $visibility = (int) $link->getVisibility();
+                }
+            } catch (Throwable $e) {
+                // Keep export resilient; missing visibility defaults to published on restore.
+            }
+
+            // ResourceNode UUID powers modern HTML embeds: /r/document/files/{uuid}/view
+            $resourceNodeUuid = null;
+            try {
+                $uuidObj = $node->getUuid();
+                if (null !== $uuidObj) {
+                    $resourceNodeUuid = (string) $uuidObj;
+                }
+            } catch (Throwable $e) {
+                // optional
+            }
+
             $exportDoc = new Document(
                 $iid,
                 $pathForSelector,
                 $comment,
                 $title,
                 $filetype,
-                (string) $size
+                (string) $size,
+                $visibility,
+                $resourceNodeUuid
             );
 
             $this->course->add_resource($exportDoc);
@@ -3531,6 +3631,99 @@ class CourseBuilder
         }
 
         error_log($message);
+    }
+
+    /**
+     * Resolve the structural base node used to build a document export path.
+     *
+     * Modern course documents can live directly under the course ResourceNode,
+     * while system/legacy documents can live below a dedicated Documents root.
+     * Never use the document node itself as its own base.
+     */
+    private function resolveDocumentExportBaseNode(
+        CDocument $doc,
+        ?ResourceNode $documentsRoot,
+        ?ResourceNode $courseRoot
+    ): ?ResourceNode {
+        $node = $doc->getResourceNode();
+        if (!$node instanceof ResourceNode) {
+            return null;
+        }
+
+        if (
+            $documentsRoot instanceof ResourceNode
+            && $node !== $documentsRoot
+            && $this->isResourceNodeDescendantOf($node, $documentsRoot)
+        ) {
+            return $documentsRoot;
+        }
+
+        if (
+            $courseRoot instanceof ResourceNode
+            && $node !== $courseRoot
+            && $this->isResourceNodeDescendantOf($node, $courseRoot)
+        ) {
+            return $courseRoot;
+        }
+
+        return null;
+    }
+
+    private function isResourceNodeDescendantOf(ResourceNode $node, ResourceNode $ancestor): bool
+    {
+        $parent = $node->getParent();
+
+        while ($parent instanceof ResourceNode) {
+            if ($parent === $ancestor) {
+                return true;
+            }
+
+            $parent = $parent->getParent();
+        }
+
+        return false;
+    }
+
+    /**
+     * Keep the logical folder hierarchy but use the stored ResourceFile name for files.
+     *
+     * ResourceNode titles are display labels and may omit the real extension (for
+     * example an HTML document titled "Module 1" whose ResourceFile is "Module 1.html").
+     */
+    private function applyDocumentOriginalFilename(CDocument $doc, string $relativePath): string
+    {
+        $relativePath = trim(str_replace('\\', '/', $relativePath), '/');
+
+        if ('' === $relativePath || 'folder' === (string) $doc->getFiletype()) {
+            return $relativePath;
+        }
+
+        $node = $doc->getResourceNode();
+        if (!$node instanceof ResourceNode) {
+            return $relativePath;
+        }
+
+        $files = $node->getResourceFiles();
+        if (0 === $files->count()) {
+            return $relativePath;
+        }
+
+        $first = $files->first();
+        if (!$first instanceof ResourceFile) {
+            return $relativePath;
+        }
+
+        $originalName = trim(str_replace('\\', '/', (string) ($first->getOriginalName() ?? '')));
+        $originalName = basename($originalName);
+
+        if ('' === $originalName || '.' === $originalName || '..' === $originalName) {
+            return $relativePath;
+        }
+
+        $segments = explode('/', $relativePath);
+        $segments[array_key_last($segments)] = $originalName;
+
+        return implode('/', $segments);
     }
 
     /**

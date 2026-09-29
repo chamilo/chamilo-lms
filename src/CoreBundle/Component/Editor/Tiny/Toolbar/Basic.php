@@ -46,8 +46,6 @@ class Basic extends Toolbar
 
         if ('true' === api_get_setting('enabled_mathjax')) {
             $candidates[] = 'mathjax';
-            // MathJax library URL (used by your integration if needed)
-            $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
         if ('true' === api_get_setting('enabled_asciisvg')) {
@@ -93,7 +91,7 @@ class Basic extends Toolbar
             // 'ckeditor_wiris' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/ckeditor_wiris/plugin.js',
             // 'ckeditor_vimeo_embed' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/ckeditor_vimeo_embed/plugin.js',
             // 'scayt' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/scayt/plugin.js',
-            'translatehtml' => api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js',
+            'translatehtml' => api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js?v=translatehtml_block_div_20260808_1',
         ];
 
         // Filter candidates by availability (core or external). Build external_plugins map as needed.
@@ -157,6 +155,15 @@ class Basic extends Toolbar
         $iso = api_get_language_isocode();
         $languageConfig = $this->getLanguageConfig($iso);
         $config = array_merge($config, $languageConfig);
+
+        if (\in_array('translatehtml', $this->plugins, true)) {
+            $config['translatehtml_ai_endpoint'] = api_get_path(WEB_PATH).'api/wysiwyg_translation';
+            $config['translatehtml_context'] = [
+                'courseId' => (int) api_get_course_int_id(),
+                'sessionId' => (int) api_get_session_id(),
+                'groupId' => (int) api_get_group_id(),
+            ];
+        }
 
         $config['height'] = '300';
 

@@ -715,9 +715,9 @@ class SettingsController extends BaseController
 
         // Sort by translated label (locale-aware)
         $collator = class_exists(Collator::class) ? new Collator($request->getLocale()) : null;
-        usort($namespaces, function ($a, $b) use ($labelMap, $collator) {
+        usort($namespaces, function ($a, $b) use ($labelMap, $collator): int {
             return $collator
-                ? $collator->compare($labelMap[$a], $labelMap[$b])
+                ? (int) $collator->compare($labelMap[$a], $labelMap[$b])
                 : strcasecmp($labelMap[$a], $labelMap[$b]);
         });
 

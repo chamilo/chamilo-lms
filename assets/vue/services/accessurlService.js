@@ -30,11 +30,8 @@ export async function findById(id) {
 
 /**
  * @param {number} id
- * @param {string} [secToken]
- * @returns {Promise<Object>}
+ * @returns {Promise<void>}
  */
-export async function deleteById(id, secToken = "") {
+export async function deleteById(id) {
   await baseService.delete(`/api/access_urls/${id}`)
-
-  return { redirectUrl: "/main/admin/access_urls.php" }
 }

@@ -53,13 +53,25 @@ class ErrorController
             $format = $request->getPreferredFormat();
 
             if ('html' === $format) {
-                $content = $this->twig->render(
-                    '@ChamiloCore/Layout/no_layout.html.twig',
-                    [
-                        'exception' => $exception,
-                        'content' => '',
-                    ]
-                );
+                try {
+                    $content = $this->twig->render(
+                        '@ChamiloCore/Layout/no_layout.html.twig',
+                        [
+                            'exception' => $exception,
+                            'content' => '',
+                        ]
+                    );
+                } catch (Throwable $renderFailure) {
+                    // The branded page needs settings, theme and user data, so it
+                    // dies with the database. Fall back to a self-contained page
+                    // instead of letting Symfony show its bare built-in one.
+                    error_log('Falling back to the minimal error page: '.$renderFailure->getMessage());
+
+                    $content = $this->twig->render(
+                        '@ChamiloCore/Exception/minimal.html.twig',
+                        ['status_code' => $statusCode]
+                    );
+                }
             } else {
                 $exception = $this->errorRenderer->render($exception);
 

@@ -7,30 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
-use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Doctrine\ORM\Event\PostRemoveEventArgs;
-use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Exception\ORMException;
 use Event;
 
 class ResourceLinkListener
 {
-    public function __construct(
-        protected ResourceHelper $trackEDefaultHelper
-    ) {}
-
-    public function postUpdate(ResourceLink $resourceLink, PostUpdateEventArgs $event): void
-    {
-        $changeSet = $event->getObjectManager()->getUnitOfWork()->getEntityChangeSet($resourceLink);
-
-        if (isset($changeSet['visibility'])) {
-            $this->trackEDefaultHelper->createAndSaveResourceEvent(
-                $resourceLink->getResourceNode(),
-                'visibility_change'
-            );
-        }
-    }
-
     /**
      * @throws ORMException
      */

@@ -62,7 +62,7 @@ $content = '
             class="mb-6 inline-flex items-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2 text-body-2 font-semibold text-gray-90 shadow-sm transition hover:border-primary hover:text-primary"
         >
             <i class="mdi mdi-arrow-left" aria-hidden="true"></i>
-            <span>Back to tools</span>
+            <span>'.$plugin->get_lang('BackToTools').'</span>
         </a>
 
         <div class="overflow-hidden rounded-2xl border border-gray-25 bg-white shadow-xl">

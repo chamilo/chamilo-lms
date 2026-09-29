@@ -7,12 +7,12 @@
     {% set readOnlyDiscountType = read_only_discount_type|default(false) %}
     {% set readOnlyDiscountAmount = read_only_discount_amount|default(false) %}
     {% set submitLabel = submit_label|default('Save'|get_lang) %}
-    {% set pageDescription = page_description|default('Create a coupon, define the discount type and validity period, and assign it to courses, sessions or services.') %}
-    {% set formHelp = form_section_help|default('Complete the form below and save the coupon configuration.') %}
+    {% set pageDescription = page_description|default('CouponAddPageDescription'|get_plugin_lang('BuyCoursesPlugin')) %}
+    {% set formHelp = form_section_help|default('CouponFormHelp'|get_plugin_lang('BuyCoursesPlugin')) %}
     {% set formTitle = form_section_title|default(page_title) %}
-    {% set discountTypeHelp = discount_type_help|default('Percentage or fixed amount.') %}
-    {% set dateHelp = date_help|default('Define the validity period for the coupon.') %}
-    {% set scopeHelp = scope_help|default('Assign the coupon to one or more courses, sessions or services.') %}
+    {% set discountTypeHelp = discount_type_help|default('CouponDiscountTypeHelp'|get_plugin_lang('BuyCoursesPlugin')) %}
+    {% set dateHelp = date_help|default('CouponDateHelp'|get_plugin_lang('BuyCoursesPlugin')) %}
+    {% set scopeHelp = scope_help|default('CouponScopeHelp'|get_plugin_lang('BuyCoursesPlugin')) %}
 
     <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm lg:p-8">
         <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -36,7 +36,7 @@
                     href="{{ back_url }}"
                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
-                    <em class="fa fa-arrow-left fa-fw"></em>
+                    <em class="mdi mdi-arrow-left"></em>
                     {{ 'Back'|get_lang }}
                 </a>
             </div>
@@ -167,10 +167,28 @@
                         {% endif %}
                     </div>
 
+                    <div class="w-full max-w-lg space-y-2">
+                        <label for="coupon-times-applied" class="block text-sm font-semibold text-gray-90">
+                            {{ 'CouponTimesApplied'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </label>
+                        <input
+                            id="coupon-times-applied"
+                            name="times_applied"
+                            type="number"
+                            min="0"
+                            step="1"
+                            value="{{ data.times_applied|default('0')|e('html_attr') }}"
+                            class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
+                        >
+                        <div class="text-sm text-gray-50">
+                            {{ 'CouponTimesAppliedHelp'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </div>
+                    </div>
+
                     <div class="grid gap-4 lg:grid-cols-2">
                         <div class="w-full max-w-lg space-y-2">
                             <label for="coupon-date-start" class="block text-sm font-semibold text-gray-90">
-                                * Start date
+                                * {{ 'StartDate'|get_lang }}
                             </label>
                             <input
                                 id="coupon-date-start"
@@ -183,7 +201,7 @@
 
                         <div class="w-full max-w-lg space-y-2">
                             <label for="coupon-date-end" class="block text-sm font-semibold text-gray-90">
-                                * End date
+                                * {{ 'EndDate'|get_lang }}
                             </label>
                             <input
                                 id="coupon-date-end"
@@ -218,7 +236,7 @@
                                     <input
                                         type="text"
                                         id="courses_available_search"
-                                        placeholder="Search"
+                                        placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                         class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                     >
                                     <select
@@ -252,7 +270,7 @@
                                     <input
                                         type="text"
                                         id="courses_selected_search"
-                                        placeholder="Search"
+                                        placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                         class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                     >
                                     <select
@@ -283,7 +301,7 @@
                                         <input
                                             type="text"
                                             id="sessions_available_search"
-                                            placeholder="Search"
+                                            placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                             class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                         >
                                         <select
@@ -317,7 +335,7 @@
                                         <input
                                             type="text"
                                             id="sessions_selected_search"
-                                            placeholder="Search"
+                                            placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                             class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                         >
                                         <select
@@ -349,7 +367,7 @@
                                         <input
                                             type="text"
                                             id="services_available_search"
-                                            placeholder="Search"
+                                            placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                             class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                         >
                                         <select
@@ -383,7 +401,7 @@
                                         <input
                                             type="text"
                                             id="services_selected_search"
-                                            placeholder="Search"
+                                            placeholder="{{ 'Search'|get_lang|e('html_attr') }}"
                                             class="block w-full rounded-xl border-gray-25 bg-white text-sm text-gray-90 shadow-sm placeholder:text-gray-50 focus:border-primary focus:ring-primary"
                                         >
                                         <select
@@ -411,7 +429,7 @@
                         class="inline-flex items-center justify-center gap-2 rounded-xl bg-success px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-success/30 focus:ring-offset-2 {{ submit_disabled ? 'opacity-50 cursor-not-allowed' : '' }}"
                         {{ submit_disabled ? 'disabled' : '' }}
                     >
-                        <em class="fa fa-check fa-fw"></em>
+                        <em class="mdi mdi-check"></em>
                         {{ submitLabel }}
                     </button>
                 </div>

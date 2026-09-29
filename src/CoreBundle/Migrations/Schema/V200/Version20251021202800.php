@@ -11,14 +11,14 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20251021202800 extends AbstractMigrationChamilo
 {
-    private const DEBUG = true;
+    private const bool DEBUG = true;
 
     public function getDescription(): string
     {
         return 'Update titles/comments for show_tabs and show_tabs_per_role and ensure they live under category "display".';
     }
 
-    private const UPDATES = [
+    private const array UPDATES = [
         'show_tabs' => [
             'title' => 'Main menu entries',
             'comment' => 'Check the entrie you want to see appear in the main menu',

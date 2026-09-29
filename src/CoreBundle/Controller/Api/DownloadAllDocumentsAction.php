@@ -36,7 +36,7 @@ use ZipStream\ZipStream;
 
 class DownloadAllDocumentsAction
 {
-    public const CONTENT_TYPE = 'application/zip';
+    public const string CONTENT_TYPE = 'application/zip';
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

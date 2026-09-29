@@ -109,7 +109,7 @@ function process_uploaded_file($uploadedFileData, $show_output = true)
                 if ($show_output) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('The file size exceeds the maximum allowed setting:').format_file_size($max_file_size),
+                            get_lang('The file size exceeds the maximum allowed setting:').\Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($max_file_size),
                             'error'
                         )
                     );

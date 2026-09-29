@@ -1,7 +1,7 @@
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { useStore } from "vuex"
-import { useToast } from "primevue/usetoast"
+import { useNotification } from "./notification"
 
 export function useDatatableCreate(servicePrefix) {
   const moduleName = servicePrefix.toLowerCase()
@@ -11,16 +11,14 @@ export function useDatatableCreate(servicePrefix) {
   const route = useRoute()
   const { t } = useI18n()
 
-  const toast = useToast()
+  const { showSuccessNotification } = useNotification()
 
   function onCreated(item) {
-    toast.add({
-      severity: "success",
-      detail: t("{0} created", {
+    showSuccessNotification(
+      t("{0} created", {
         resource: item.resourceNode ? item.resourceNode.title : item.title,
       }),
-      life: 3500,
-    })
+    )
 
     let folderParams = route.query
 

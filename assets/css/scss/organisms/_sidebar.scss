@@ -2,7 +2,7 @@
   @apply block bg-white fixed left-0 transition-[width] duration-150 items-stretch w-full text-gray-50 z-10
     sm:bg-gray-15 sm:border-r sm:border-solid sm:border-gray-25 sm:w-60;
   height: calc(100vh - 4.5rem - 1px);
-  top: calc(4.5rem + 1px);
+  top: calc(5.125rem + 1px);
 
   &__container {
     @apply flex flex-col h-full;

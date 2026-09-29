@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\CourseDeletedEvent;
 use Chamilo\CoreBundle\Event\CourseUserSubscriptionCheckEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
@@ -2418,7 +2419,7 @@ class CourseManager
                             'ch-tool-icon',
                             null,
                             ICON_SIZE_TINY,
-                            get_lang('Coach')
+                            get_lang('Tutor')
                         ).' '.$coachs
                     );
                 }
@@ -2516,6 +2517,8 @@ class CourseManager
      *                                         only used in this course.
      *
      * @return bool
+     *
+     * @deprecated use CourseHelper::deleteCourse() instead
      */
     public static function delete_course($code, bool $deleteExclusiveDocuments = false)
     {
@@ -2682,8 +2685,10 @@ class CourseManager
             // To prevent FK mix up on some tables
             //GroupManager::deleteAllGroupsFromCourse($courseId);
 
-            $appPlugin = new AppPlugin();
-            $appPlugin->performActionsWhenDeletingItem('course', $courseId);
+            Container::getEventDispatcher()->dispatch(
+                new CourseDeletedEvent(['course' => $course], AbstractEvent::TYPE_PRE),
+                Events::COURSE_DELETED
+            );
 
             //$repo = Container::getQuizRepository();
             //$repo->deleteAllByCourse($courseEntity);
@@ -3221,7 +3226,7 @@ class CourseManager
             $sql = "SELECT DISTINCT (c.code),
                         c.id as real_id,
                         s.id as session_id,
-                        s.name as session_name
+                        s.title as session_name
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
                     INNER JOIN $tbl_course c
                     ON (scu.c_id = c.id)
@@ -3829,7 +3834,7 @@ class CourseManager
                 $params['edit_actions'] = '';
                 $params['document'] = '';
                 if (api_is_platform_admin()) {
-                    $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'];
+                    $params['edit_actions'] .= api_get_path(WEB_PATH).'course-settings/'.$course['real_id'];
                     if ($load_dirs) {
                         $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn--secondary-outline btn-sm" href="javascript:void(0);">'
                            .Display::getMdiIcon('folder-open-outline').'</a>';
@@ -4011,7 +4016,7 @@ class CourseManager
             $params['edit_actions'] = '';
             $params['document'] = '';
             if (api_is_platform_admin()) {
-                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course_info['real_id'];
+                $params['edit_actions'] .= api_get_path(WEB_PATH).'course-settings/'.$course_info['real_id'];
                 if ($load_dirs) {
                     $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn--plain btn-sm" href="javascript:void(0);">'
                                .Display::getMdiIcon('folder-open-outline').'</a>';
@@ -4313,7 +4318,7 @@ class CourseManager
             Course::HIDDEN != $course_visibility
         ) {
             if ($isAdmin) {
-                $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
+                $params['edit_actions'] .= api_get_path(WEB_PATH).'course-settings/'.$course_info['real_id'];
                 if ($load_dirs) {
                     $params['document'] .= '<a
                         id="document_preview_'.$course_info['real_id'].'_'.$session_id.'"
@@ -4368,7 +4373,7 @@ class CourseManager
                 ) {
                 $sessionInfo['dates'] = '';
                 if ('true' === api_get_setting('show_session_coach')) {
-                    $sessionInfo['coach'] = get_lang('General coach').': '.$sessionCoachName;
+                    $sessionInfo['coach'] = get_lang('General tutor').': '.$sessionCoachName;
                 }
                 $active = true;
             } else {
@@ -4376,7 +4381,7 @@ class CourseManager
                     get_lang('From').' '.$sessionInfo['access_start_date'].' '.
                     get_lang('To').' '.$sessionInfo['access_end_date'];
                 if ('true' === api_get_setting('show_session_coach')) {
-                    $sessionInfo['coach'] = get_lang('General coach').': '.$sessionCoachName;
+                    $sessionInfo['coach'] = get_lang('General tutor').': '.$sessionCoachName;
                 }
                 $date_start = $sessionInfo['access_start_date'];
                 $date_end = $sessionInfo['access_end_date'];
@@ -5254,6 +5259,28 @@ class CourseManager
     }
 
     /**
+     * Validates a submitted course registration password.
+     *
+     * Current Chamilo 2 course settings persist the value as entered, while
+     * upgraded courses can still contain the historical SHA-1 representation.
+     */
+    public static function verifyRegistrationCode(string $submittedCode, ?string $storedCode): bool
+    {
+        $storedCode = (string) $storedCode;
+
+        if ('' === $submittedCode || '' === $storedCode) {
+            return false;
+        }
+
+        if (hash_equals($storedCode, $submittedCode)) {
+            return true;
+        }
+
+        return 1 === preg_match('/^[a-f0-9]{40}$/i', $storedCode)
+            && hash_equals(strtolower($storedCode), sha1($submittedCode));
+    }
+
+    /**
      * Return a link to go to the course, validating the visibility of the
      * course and the user status.
      *
@@ -5443,7 +5470,7 @@ class CourseManager
                     if ($deleteSessionTeacherNotInList) {
                         foreach ($teachers as $userId) {
                             if ($logger) {
-                                $logger->debug("Set coach #$userId in session #$sessionId of course #$courseId ");
+                                $logger->debug("Set tutor #$userId in session #$sessionId of course #$courseId ");
                             }
                             SessionManager::set_coach_to_course_session(
                                 $userId,
@@ -5460,7 +5487,7 @@ class CourseManager
                         if (!empty($teachersToDelete)) {
                             foreach ($teachersToDelete as $userId) {
                                 if ($logger) {
-                                    $logger->debug("Delete coach #$userId in session #$sessionId of course #$courseId ");
+                                    $logger->debug("Delete tutor #$userId in session #$sessionId of course #$courseId ");
                                 }
                                 SessionManager::set_coach_to_course_session(
                                     $userId,
@@ -5474,7 +5501,7 @@ class CourseManager
                         // Add new teachers only
                         foreach ($teachers as $userId) {
                             if ($logger) {
-                                $logger->debug("Add coach #$userId in session #$sessionId of course #$courseId ");
+                                $logger->debug("Add tutor #$userId in session #$sessionId of course #$courseId ");
                             }
                             SessionManager::set_coach_to_course_session(
                                 $userId,
@@ -6398,7 +6425,7 @@ class CourseManager
         if (api_is_platform_admin()) {
             if ($loadDirs) {
                 $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::getMdiIcon(ObjectIcon::FOLDER, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Documents')).'</a>';
-                $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
+                $params['right_actions'] .= '<a href="'.api_get_path(WEB_PATH).'course-settings/'.$course['real_id'].'">'.
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Edit')).
                     '</a>';
                 $params['right_actions'] .= Display::div(
@@ -6410,7 +6437,7 @@ class CourseManager
                 );
             } else {
                 $params['right_actions'] .=
-                    '<a class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
+                    '<a class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_PATH).'course-settings/'.$course['real_id'].'">'.
                     Display::getMdiIcon('pencil').'</a>';
             }
         } else {
@@ -6428,7 +6455,7 @@ class CourseManager
                 } else {
                     if (COURSEMANAGER == $course_info['status']) {
                         $params['right_actions'] .= '<a
-                            class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
+                            class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_PATH).'course-settings/'.$course['real_id'].'">'.
                             Display::getMdiIcon('pencil').'</a>';
                     }
                 }
@@ -7097,13 +7124,22 @@ class CourseManager
             return 0;
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sql = "SELECT COUNT(DISTINCT user_id) AS total
-                FROM $table
-                WHERE c_id = $courseId
-                  AND status = ".STUDENT."
-                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH;
+                FROM (
+                    SELECT user_id
+                    FROM $courseUserTable
+                    WHERE c_id = $courseId
+                      AND status = ".STUDENT."
+                      AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                    UNION
+                    SELECT user_id
+                    FROM $sessionCourseUserTable
+                    WHERE c_id = $courseId
+                      AND status = ".STUDENT."
+                ) subscribed_users";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC') ?: [];
@@ -7163,14 +7199,23 @@ class CourseManager
             return false;
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $idList = implode(',', $userIds);
 
         $sql = "SELECT COUNT(DISTINCT user_id) AS already
-                FROM $table
-                WHERE c_id = $courseId
-                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                  AND user_id IN ($idList)";
+                FROM (
+                    SELECT user_id
+                    FROM $courseUserTable
+                    WHERE c_id = $courseId
+                      AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                      AND user_id IN ($idList)
+                    UNION
+                    SELECT user_id
+                    FROM $sessionCourseUserTable
+                    WHERE c_id = $courseId
+                      AND user_id IN ($idList)
+                ) existing_users";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC') ?: [];

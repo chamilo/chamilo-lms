@@ -34,7 +34,14 @@ $(document).ready(function(){
 		traductAll();
         cstudioApplyEditorTooltips();
         cstudioFixVisibleEditorLabels();
+        cstudioHideExperimentalEditorOptions();
+        cstudioCenterColorsWindow();
+        cstudioPolishMediaAndButtonBlocks();
+        cstudioEnsureQuizBlockVisible();
+        cstudioHideDuplicateImageFolderAssets();
+        cstudioApplyFinalVisibleTranslations();
         cstudioStartEditorUiEnhancements();
+        cstudioHideUnsupportedToolbarActions();
 	},200);
 
 	if (renderFromSvg!=''){
@@ -61,12 +68,135 @@ function cstudioIsCheckboxChecked(id){
     return element ? element.checked : false;
 }
 
-function cstudioTranslateTerm(term) {
-    if (typeof returnTradTerm === 'function') {
-        return returnTradTerm(term);
+function cstudioNormalizeVisibleTerm(term) {
+    var normalizedTerm = String(term || '').replace(/\s+/g, ' ').trim();
+    var replacements = {
+        'Quizz text': 'Quiz text',
+        'quizz text': 'Quiz text',
+        'Schema obj': 'Object schema',
+        'Help and services': 'Help and pro services',
+        'UI Language': 'UI language',
+        'Export ...': 'Export...',
+        'Import ...': 'Import...',
+        'Export Project': 'Export project',
+        'Import Project': 'Import project',
+        'Export to xApi Package': 'Create an xAPI package',
+        'Export to xAPI package': 'Create an xAPI package',
+        'Publish to the web': 'Create a web page',
+        'Free page': 'Free access page',
+        'Save context game and exercise resolutions': 'Save game context and resolved exercises',
+        'White-quizz': 'White quiz',
+        'Yellow-contrast': 'Yellow contrast',
+        'Blue-contrast': 'Blue contrast',
+        'Registrar': 'Save'
+    };
+
+    return replacements[normalizedTerm] || term;
+}
+
+function cstudioGetFallbackTranslatedTerm(term) {
+    var normalizedTerm = String(term || '').replace(/\s+/g, ' ').trim();
+    var locale = String((typeof langselectUI !== 'undefined' ? langselectUI : 'en_US') || 'en_US').replace('-', '_');
+    var baseLocale = locale.split('_')[0];
+    var fallbackTranslations = {
+        fr: {
+            'UI language': 'Langue de l’interface',
+            'Export...': 'Exporter...',
+            'Import...': 'Importer...',
+            'Glossary': 'Glossaire',
+            'Help and pro services': 'Aide et services professionnels',
+            'Create an xAPI package': 'Créer un paquet xAPI',
+            'Create a web page': 'Créer une page web',
+            'Image': 'Image',
+            'Audio': 'Audio',
+            'Version': 'Version',
+            'Title': 'Titre',
+            'Edition': 'Édition',
+            'Content': 'Contenu',
+            'Section': 'Section',
+            'File': 'Fichier',
+            'Add': 'Ajouter',
+            'Save': 'Enregistrer',
+            'Cancel': 'Annuler',
+            'Free access page': 'Page en accès libre',
+            'Learning paths list': 'Liste des parcours',
+            'Clean data': 'Nettoyer les traces',
+            'Create a browser-friendly web page that can be opened outside the Chamidoc Studio editor.': 'Crée une page web consultable dans un navigateur en dehors de l’éditeur Chamidoc Studio.',
+            'Clean traces removes the saved learner progress for this Chamidoc Studio learning path. It does not delete pages or project content.': 'Nettoie les traces de progression enregistrées pour cet apprenant dans ce parcours Chamidoc Studio. Cela ne supprime pas les pages ni le contenu du projet.',
+            'Language of the project': 'Langue du projet',
+            'The project language is used by Chamidoc Studio content and defaults to the course language.': 'La langue du projet est utilisée par le contenu Chamidoc Studio et reprend par défaut la langue du cours.',
+            'Automatic language translation': 'Traduction automatique',
+            'Enables Chamidoc Studio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.': 'Active les outils de traduction automatique de Chamidoc Studio pour ce projet lorsque les services de traduction sont configurés. La langue du projet sélectionnée est utilisée comme langue cible.',
+            'Progressive documents': 'Documents progressifs',
+            'Shows progressive difficulty choices in the player when the content includes progressive levels. Learners can choose the level that matches their progress.': 'Affiche des choix de difficulté progressive dans le lecteur lorsque le contenu contient des niveaux progressifs. Les apprenants peuvent choisir le niveau adapté à leur progression.'
+        },
+        es: {
+            'UI language': 'Idioma de la interfaz',
+            'Export...': 'Exportar...',
+            'Import...': 'Importar...',
+            'Glossary': 'Glosario',
+            'Help and pro services': 'Ayuda y servicios profesionales',
+            'Create an xAPI package': 'Crear un paquete xAPI',
+            'Create a web page': 'Crear una página web',
+            'Image': 'Imagen',
+            'Audio': 'Audio',
+            'Version': 'Versión',
+            'Title': 'Título',
+            'Edition': 'Edición',
+            'Content': 'Contenido',
+            'Section': 'Sección',
+            'File': 'Archivo',
+            'Add': 'Agregar',
+            'Save': 'Guardar',
+            'Cancel': 'Cancelar',
+            'Free access page': 'Página de acceso libre',
+            'Learning paths list': 'Lista de lecciones',
+            'Clean data': 'Limpiar trazas',
+            'Create a browser-friendly web page that can be opened outside the Chamidoc Studio editor.': 'Crea una página web compatible con navegador que se puede abrir fuera del editor Chamidoc Studio.',
+            'Clean traces removes the saved learner progress for this Chamidoc Studio learning path. It does not delete pages or project content.': 'Limpia las trazas de progreso guardadas del alumno para esta lección Chamidoc Studio. No elimina páginas ni contenido del proyecto.',
+            'Language of the project': 'Idioma del proyecto',
+            'The project language is used by Chamidoc Studio content and defaults to the course language.': 'El idioma del proyecto se usa en el contenido Chamidoc Studio y toma por defecto el idioma del curso.',
+            'Automatic language translation': 'Traducción automática',
+            'Enables Chamidoc Studio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.': 'Activa las herramientas de traducción automática de Chamidoc Studio para este proyecto cuando los servicios de traducción estén configurados. El idioma del proyecto seleccionado se usa como idioma de destino.',
+            'Progressive documents': 'Documentos progresivos',
+            'Shows progressive difficulty choices in the player when the content includes progressive levels. Learners can choose the level that matches their progress.': 'Muestra opciones de dificultad progresiva en el reproductor cuando el contenido incluye niveles progresivos. Los alumnos pueden elegir el nivel que corresponda a su progreso.'
+        }
+    };
+
+    if (fallbackTranslations[locale] && fallbackTranslations[locale][normalizedTerm]) {
+        return fallbackTranslations[locale][normalizedTerm];
+    }
+
+    if (fallbackTranslations[baseLocale] && fallbackTranslations[baseLocale][normalizedTerm]) {
+        return fallbackTranslations[baseLocale][normalizedTerm];
     }
 
     return term;
+}
+
+function cstudioTranslateTerm(term) {
+    var normalizedTerm = cstudioNormalizeVisibleTerm(term);
+
+    if (typeof returnTradTerm === 'function') {
+        var translatedTerm = returnTradTerm(term);
+        if (translatedTerm !== term) {
+            return translatedTerm;
+        }
+
+        if (normalizedTerm !== term) {
+            translatedTerm = returnTradTerm(normalizedTerm);
+            if (translatedTerm !== normalizedTerm) {
+                return translatedTerm;
+            }
+        }
+    }
+
+    var fallbackTranslatedTerm = cstudioGetFallbackTranslatedTerm(normalizedTerm);
+    if (fallbackTranslatedTerm !== normalizedTerm) {
+        return fallbackTranslatedTerm;
+    }
+
+    return normalizedTerm;
 }
 
 function cstudioEscapeHtml(value) {
@@ -104,14 +234,186 @@ function cstudioSetElementTooltip(selector, label) {
 
 function cstudioApplyEditorTooltips() {
     cstudioSetElementTooltip('#btnsave, .fa-save, [class*="fa-save"]', 'Save');
-    cstudioSetElementTooltip('.fa-th-large, .fa-columns, [class*="fa-th-large"], [class*="fa-columns"]', 'Layout');
+    cstudioSetElementTooltip('.fa-th-large, .fa-columns, .fa-square, .fa-square-o, .fa-stop, [class*="fa-th-large"], [class*="fa-columns"], [class*="fa-square"], [class*="fa-stop"]', 'Layout');
     cstudioSetElementTooltip('.fa-eye, [class*="fa-eye"]', 'Hide menus');
     cstudioSetElementTooltip('.fa-arrows-alt, .fa-expand, [class*="fa-arrows"], [class*="fa-expand"]', 'Toggle fullscreen');
     cstudioSetElementTooltip('.fa-undo, [class*="fa-undo"]', 'Undo');
     cstudioSetElementTooltip('.fa-repeat, .fa-redo, [class*="fa-repeat"], [class*="fa-redo"]', 'Redo');
-    cstudioSetElementTooltip('.cstudio-delete-page-action', 'Delete this page');
+    cstudioSetElementTooltip('.cstudio-delete-page-action, [onclick="deleteContextMenuSub();"]', 'Delete this page');
     cstudioSetElementTooltip('.uPIcon', 'Move page up');
     cstudioSetElementTooltip('.dowNIcon', 'Move page down');
+    cstudioApplyTopToolbarTooltips();
+}
+
+function cstudioApplyTopToolbarTooltips() {
+    var labels = ['Save', 'Layout', 'Hide menus', 'Toggle fullscreen', 'Undo', 'Redo'];
+    var $containers = $('.gjs-pn-commands .gjs-pn-buttons');
+
+    if (!$containers.length) {
+        var $saveButton = $('#btnsave, .gjs-pn-btn.fa-save').first();
+        if ($saveButton.length) {
+            $containers = $saveButton.closest('.gjs-pn-buttons');
+        }
+    }
+
+    $containers.each(function () {
+        var buttons = $(this).children('.gjs-pn-btn').toArray();
+
+        if (buttons.length < 5) {
+            return;
+        }
+
+        buttons.sort(function (first, second) {
+            return first.getBoundingClientRect().left - second.getBoundingClientRect().left;
+        });
+
+        for (var index = 0; index < labels.length && index < buttons.length; index++) {
+            var translatedLabel = cstudioTranslateTerm(labels[index]);
+            $(buttons[index])
+                .attr('title', translatedLabel)
+                .attr('aria-label', translatedLabel)
+                .attr('data-cstudio-tooltip', translatedLabel);
+        }
+    });
+}
+
+
+function cstudioHideUnsupportedToolbarActions() {
+    var blockedTerms = [
+        'import',
+        'open-import-template',
+        'download',
+        'upload',
+        'export-template',
+        'source-code',
+        'code',
+        'trash',
+        'delete',
+    ];
+
+    $('.gjs-pn-panel .gjs-pn-btn').each(function () {
+        var $button = $(this);
+        var raw = [
+            $button.attr('id'),
+            $button.attr('class'),
+            $button.attr('title'),
+            $button.attr('aria-label'),
+            $button.attr('data-tooltip'),
+            $button.attr('data-cstudio-tooltip'),
+            $button.attr('data-command'),
+            $button.attr('data-cmd'),
+            $button.attr('onclick'),
+            $button.text(),
+        ].join(' ').toLowerCase();
+
+        var keepTerms = ['save', 'layout', 'eye', 'fullscreen', 'undo', 'redo'];
+        var shouldKeep = keepTerms.some(function (term) {
+            return raw.indexOf(term) !== -1;
+        });
+
+        if (shouldKeep) {
+            return;
+        }
+
+        var shouldHide = blockedTerms.some(function (term) {
+            return raw.indexOf(term) !== -1;
+        });
+
+        if (!shouldHide && !$button.children().length && !$button.text().trim() && !$button.attr('data-cstudio-tooltip')) {
+            shouldHide = true;
+        }
+
+        if (!shouldHide) {
+            return;
+        }
+
+        $button
+            .attr('aria-hidden', 'true')
+            .attr('tabindex', '-1')
+            .addClass('cstudio-hidden-toolbar-action')
+            .hide();
+    });
+
+    setTimeout(function () {
+        $('.gjs-mdl-title').each(function () {
+            if ($(this).text().trim().toLowerCase() !== 'import') {
+                return;
+            }
+
+            var modal = $(this).closest('.gjs-mdl-dialog, .gjs-mdl-container');
+            if (modal.length && typeof editor !== 'undefined' && editor.Modal) {
+                editor.Modal.close();
+            }
+        });
+    }, 0);
+}
+
+
+function cstudioHasStoredMenu(menuHtml) {
+    return typeof menuHtml !== 'undefined'
+        && menuHtml !== null
+        && menuHtml !== ''
+        && menuHtml !== 'undefined';
+}
+
+function cstudioClearStoredMenu() {
+    if (typeof amplify === 'undefined' || !amplify.store) {
+        return;
+    }
+
+    amplify.store('menuHtmlInLocal' + idPageHtmlTop, null);
+    amplify.store('menuHtmlInLocal' + idPageHtmlTop + '_' + refIdPageLudi, null);
+}
+
+function cstudioHideDuplicateImageFolderAssets() {
+    $('.gjs-am-assets-cont .gjs-am-asset').each(function () {
+        var asset = $(this);
+        var html = String(asset.html() || '').toLowerCase();
+        var style = String(asset.attr('style') || '').toLowerCase();
+        var title = String(asset.attr('title') || '').toLowerCase();
+        var source = String(asset.find('img').attr('src') || '').toLowerCase();
+        var allContent = html + ' ' + style + ' ' + title + ' ' + source;
+
+        if (allContent.indexOf('folder') !== -1 && allContent.indexOf('chamiloimages') === -1) {
+            asset.hide().attr('aria-hidden', 'true');
+        }
+    });
+}
+
+function cstudioApplyFinalVisibleTranslations() {
+    $('.cstudio-title-label').text(cstudioTranslateTerm('Title'));
+    $('#inputAddSubPage').val(cstudioTranslateTerm('Add'));
+    $('.ludiButtonCancel').text(cstudioTranslateTerm('Cancel'));
+    $('.ludiButtonSaveMenu, .ludiButtonSave').each(function () {
+        $(this).text(cstudioTranslateTerm('Save')).attr('value', cstudioTranslateTerm('Save'));
+    });
+    $('.topmenuabout p').each(function () {
+        var text = $.trim($(this).text());
+        if (text.indexOf('Version:') === 0 || text.indexOf('Version :') === 0) {
+            $(this).text(cstudioTranslateTerm('Version') + ': ' + versionCS);
+        }
+    });
+}
+
+
+function cstudioHideExperimentalEditorOptions() {
+    $('#tool-colors-paste, .tool-colors-paste').hide();
+    $('.monotablist2, .monotablist3').hide();
+    $('#allParamsArea2, #allParamsArea3').hide();
+
+    if (typeof startTab !== 'undefined' && startTab !== 1) {
+        displayParamsTab1();
+    }
+}
+
+function cstudioCenterColorsWindow() {
+    var $window = $('#WinEditColorsTeach');
+    if (!$window.length) {
+        return;
+    }
+
+    $window.addClass('cstudio-centered-colors-window');
+    $window.find('.innerEditColorsTeach, .innerEditQuizzTeach').addClass('cstudio-centered-colors-panel');
 }
 
 function cstudioStartEditorUiEnhancements() {
@@ -119,11 +421,106 @@ function cstudioStartEditorUiEnhancements() {
     var interval = setInterval(function () {
         cstudioApplyEditorTooltips();
         cstudioFixVisibleEditorLabels();
+        cstudioHideExperimentalEditorOptions();
+        cstudioCenterColorsWindow();
+        cstudioPolishMediaAndButtonBlocks();
+        cstudioEnsureQuizBlockVisible();
+        cstudioHideDuplicateImageFolderAssets();
+        cstudioApplyFinalVisibleTranslations();
         attempts++;
         if (attempts > 20) {
             clearInterval(interval);
         }
     }, 500);
+}
+
+function cstudioFindBlockByLabel(label) {
+    var normalizedLabel = $.trim(String(label || '')).toLowerCase();
+    var matches = $();
+
+    $('.gjs-block').each(function () {
+        var block = $(this);
+        var labelText = $.trim(block.find('.gjs-block-label').first().text()).toLowerCase();
+        var titleText = $.trim(String(block.attr('title') || '')).toLowerCase();
+
+        if (labelText === normalizedLabel || titleText === normalizedLabel) {
+            matches = matches.add(block);
+        }
+    });
+
+    return matches;
+}
+
+function cstudioHideBlockByLabel(label) {
+    cstudioFindBlockByLabel(label).hide().attr('aria-hidden', 'true');
+}
+
+function cstudioEnsureQuizBlockVisible() {
+    var quizBlocks = cstudioFindBlockByLabel('Quiz');
+
+    if (quizBlocks.length === 0) {
+        quizBlocks = $('.gjs-block').filter(function () {
+            var block = $(this);
+            var labelText = $.trim(block.find('.gjs-block-label').first().text()).toLowerCase();
+            var titleText = $.trim(String(block.attr('title') || '')).toLowerCase();
+            var html = String(block.html() || '').toLowerCase();
+
+            return labelText === 'quiz'
+                || titleText === 'quiz'
+                || html.indexOf('icon-cmq') !== -1
+                || html.indexOf('qcm') !== -1;
+        });
+    }
+
+    quizBlocks
+        .show()
+        .removeAttr('aria-hidden')
+        .addClass('cstudio-quiz-block')
+        .attr('title', cstudioTranslateTerm('Quiz'))
+        .attr('aria-label', cstudioTranslateTerm('Quiz'));
+
+    quizBlocks.find('.gjs-block-label').first().text(cstudioTranslateTerm('Quiz')).show();
+
+    var referenceBlock = cstudioFindBlockByLabel('Card').last();
+
+    if (referenceBlock.length === 0) {
+        referenceBlock = cstudioFindBlockByLabel('Button').last();
+    }
+
+    if (referenceBlock.length > 0 && quizBlocks.length > 0) {
+        quizBlocks.each(function () {
+            var block = $(this);
+
+            if (block.index() > referenceBlock.index() + 1) {
+                block.insertAfter(referenceBlock);
+            }
+        });
+    }
+}
+
+function cstudioPolishMediaAndButtonBlocks() {
+    // Button Bar is currently not configurable enough, so keep it hidden until its behavior is clarified.
+    cstudioHideBlockByLabel('Button Bar');
+
+    cstudioFindBlockByLabel('Video')
+        .attr('title', cstudioTranslateTerm('Insert video'))
+        .attr('aria-label', cstudioTranslateTerm('Insert video'));
+
+    cstudioFindBlockByLabel('Audio')
+        .attr('title', cstudioTranslateTerm('Insert audio'))
+        .attr('aria-label', cstudioTranslateTerm('Insert audio'));
+
+    cstudioFindBlockByLabel('Button')
+        .attr('title', cstudioTranslateTerm('Insert button'))
+        .attr('aria-label', cstudioTranslateTerm('Insert button'));
+}
+
+function cstudioGetUploadMaxSizeLabel() {
+    if (typeof cstudioUploadMaxFileSize !== 'undefined' && cstudioUploadMaxFileSize) {
+        return cstudioUploadMaxFileSize;
+    }
+
+    return cstudioTranslateTerm('platform upload limit');
 }
 
 function cstudioTranslateDefaultCheckAnswerLabel(label) {
@@ -164,10 +561,13 @@ function cstudioTranslateBlockLabels() {
         }
 
         var rawTitle = block.attr('title');
+        var translatedTitle = translatedLabel;
         if (rawTitle) {
-            var translatedTitle = cstudioTranslateTerm($.trim(rawTitle).replace(/\s+/g, ' '));
-            block.attr('title', translatedTitle);
+            translatedTitle = cstudioTranslateTerm($.trim(rawTitle).replace(/\s+/g, ' '));
         }
+
+        block.attr('title', translatedTitle);
+        block.attr('aria-label', translatedTitle);
     });
 }
 
@@ -195,6 +595,7 @@ function cstudioFixVisibleEditorLabels() {
     });
 
     cstudioTranslateBlockLabels();
+    cstudioApplyFinalVisibleTranslations();
 }
 
 
@@ -300,6 +701,8 @@ function restyleCadre(){
 
         cstudioApplyEditorTooltips();
         cstudioFixVisibleEditorLabels();
+        cstudioHideExperimentalEditorOptions();
+        cstudioCenterColorsWindow();
         cstudioStartEditorUiEnhancements();
 		
 		$("div[title='Interactive Map']").css("display","none").addClass("extraPluginRightPanel");
@@ -715,10 +1118,11 @@ function reloadVideosToGrap(iframeBody){
 		allVideos.each(function(index){
 			$(this).on("mouseup mouseover", function () {
 				var containDiv = $(this).parent();
-				if (containDiv.find('rapidselectorgrapvideo').length==0) {
+				if (containDiv.find('.rapidselectorgrapvideo').length==0) {
 					containDiv.css("position","relative");
 					var bdDiv = '<div class="rapidselectorgrapvideo" ';
-					bdDiv += ' onMouseDown="parent.displayEditButon(this);" ></div>';
+					bdDiv += ' title="' + parent.cstudioTranslateTerm('Edit video') + '" aria-label="' + parent.cstudioTranslateTerm('Edit video') + '" ';
+					bdDiv += ' onMouseDown="parent.displayEditButon(this);" ondblclick="parent.displayVideoEdit(this); return false;" ></div>';
 					containDiv.prepend(bdDiv);
 				}
 			});
@@ -924,11 +1328,14 @@ function restyleLstImage(){
 	$('.gjs-am-close').css("display","none");
 
 	restyleLateral();
+	cstudioHideDuplicateImageFolderAssets();
 	setTimeout(function(){
 		restyleLateral();
+		cstudioHideDuplicateImageFolderAssets();
 	},10);
 	setTimeout(function(){
 		restyleLateral();
+		cstudioHideDuplicateImageFolderAssets();
 	},300);
 	
 	$('.gjs-am-preview').click(function(){
@@ -975,8 +1382,44 @@ var saveOCss = "";
 var saveEventG = false;
 var onRenderUpdate = false;
 var globalQuitAction = false;
+var cstudioPendingActionAfterSave = null;
 
 var alcLogs = "";
+
+function cstudioRunPendingActionAfterSave(){
+
+	if (typeof cstudioPendingActionAfterSave !== 'function') {
+		return false;
+	}
+
+	var pendingAction = cstudioPendingActionAfterSave;
+	cstudioPendingActionAfterSave = null;
+	setTimeout(function(){
+		pendingAction();
+	},250);
+
+	return true;
+
+}
+
+function cstudioClearPendingActionAfterSave(){
+
+	cstudioPendingActionAfterSave = null;
+
+}
+
+function cstudioSaveBeforeAction(action){
+
+	if (typeof action !== 'function') {
+		return;
+	}
+
+	cstudioPendingActionAfterSave = action;
+	$('#btnsave').css("display","none");
+	$('#loadsave').css("display","block");
+	saveSourceFrame(false,false,0);
+
+}
 
 
 function activeEventSave(){
@@ -1065,6 +1508,7 @@ function saveSourceFrame(CreateRedirect,HaveRender,idNode){
 					$('#loadsave').css("display","none");
 				},200);
 				onlyOneUpdate = true;
+				cstudioRunPendingActionAfterSave();
 			}else{
 
 				$.ajax({
@@ -1103,6 +1547,9 @@ function saveSourceFrame(CreateRedirect,HaveRender,idNode){
 										$('#loadsave').css("display","none");
 									}
 									onlyOneUpdate = true;
+									if (cstudioRunPendingActionAfterSave()) {
+										return;
+									}
 									if (loadFXObjectevent) {
 										var location = window.location.href;
 										location = location.replace("#page0","");
@@ -1114,6 +1561,7 @@ function saveSourceFrame(CreateRedirect,HaveRender,idNode){
 								}
 							}
 						} else {
+							cstudioClearPendingActionAfterSave();
 							$('#logMsgLoad').css("display","block");
 							$('#logMsgLoad').html(data);
 							onlyOneUpdate = true;
@@ -1128,6 +1576,7 @@ function saveSourceFrame(CreateRedirect,HaveRender,idNode){
 								saveSourceFrame(CreateRedirect,HaveRender,idNode);
 							},200);
 						} else {
+							cstudioClearPendingActionAfterSave();
 							$('#logMsgLoad').css("display","block");
 							$('#logMsgLoad').html(textStatus);
 							onlyOneUpdate = true;
@@ -1139,6 +1588,7 @@ function saveSourceFrame(CreateRedirect,HaveRender,idNode){
 			}
 
 		}else{
+			cstudioClearPendingActionAfterSave();
 			$('#logMsgLoad').css("display","block");
 			$('#logMsgLoad').html("localStorage error !");
 			onlyOneUpdate = true;
@@ -1197,7 +1647,7 @@ function processRender(CreateRedirect){
 	
 	$('#loadsave').css("display","block");
 	
-	if (CreateRedirect&&RedirectToLP!=''&&RedirectToLP.indexOf('.php')!=-1) {
+	if (CreateRedirect&&RedirectToLP!='') {
 		
 		var quitVar = '&quit=0';
 		if (globalQuitAction) {
@@ -1218,7 +1668,7 @@ function processRender(CreateRedirect){
 			url :urRend,type: "POST",
 			success: function(data,textStatus,jqXHR){
 				
-				if(CreateRedirect&&RedirectToLP!=''&&RedirectToLP.indexOf('.php')!=-1){
+				if(CreateRedirect&&RedirectToLP!=''){
 					window.location.href = RedirectToLP;
 					onlyOneUpdate = true;
 				}else{
@@ -1323,9 +1773,9 @@ function getMenuTop(){
 
 	h += '<div class="topmenufile" >';
 	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();saveSourceFrame(false,false,0);" >Save</div>';
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();showExportMenu();" >Export ...</div>';
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();showImportMenu();" >Import ...</div>';
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySelectLanguage();" >UI Language</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();showExportMenu();" >Export...</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();showImportMenu();" >Import...</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySelectLanguage();" >UI language</div>';
 	if (modeUIeol=='a') {// alpha version
 		h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displayExportToManager(\'pdf\');" >Print</div>';
 	}
@@ -1337,15 +1787,15 @@ function getMenuTop(){
 	if (modeUIeol=='a') { // alpha version
 		h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displayExportToPdf();" >Export to PDF</div>';
 	}
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportXapi();" >Export to xApi Package</div>';
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportProject();" >Export Project</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportXapi();" >Create an xAPI package</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubExportProject();" >Export project</div>';
 	if (modeUIeol=='a') {// alpha version
-		h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubToTheWeb();" >Publish to the web</div>';
+		h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubToTheWeb();" >Create a web page</div>';
 	}
 	h += '</div>';
 	
 	h += '<div class="topmenuimport" >';
-	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubImportProject();" >Import Project</div>';
+	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubImportProject();" >Import project</div>';
 	h += '<div class="topsubmenublock trd" onClick="deleteAllTopMenu();displaySubImportProject();" >Extensions</div>';
 	h += '</div>';
 	
@@ -1360,16 +1810,16 @@ function getMenuTop(){
 	// h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();loadTerminalStudio();" >Terminal</div>';
 
 	if (modeUIeol=='a') {
-		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and pro services</a></div>';
+		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.chamidoc.com/" >Help and pro services</a></div>';
 	} else {
-		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and pro services</a></div>';
+		h += '<div class="topsubmenublock topsubmenublockEdit trd" onClick="deleteAllTopMenu();" ><a style="text-decoration:none;" target="_blank" href="https://www.chamidoc.com/" >Help and pro services</a></div>';
 	}
 	h += '</div>';
 	
 	h += '<div class="topmenuabout" >';
 	h += '<p>CS engine 2018 - 2025</p>';
-	h += '<p>Version : ' + versionCS;
-	h += '<p><a target="_blank" href="https://www.batisseurs-numeriques.fr/c-studio-help.html" >Help and services</a></p>';
+	h += '<p>' + cstudioTranslateTerm('Version') + ': ' + versionCS;
+	h += '<p><a target="_blank" href="https://www.chamidoc.com/" >Help and pro services</a></p>';
 	
 	h += '<a href="#" style="position:absolute;right:0px;bottom:0px;color:#E5E8E8;" onClick="displayDevAdminParams()" >...</a>';
 	h += '</p>';
@@ -1440,12 +1890,12 @@ function deleteAllTopMenu(){
 function getMenuR(){
 	
 	var h = '<div class="ludimenu" onMouseMove="if(windowEditorIsOpen==false){$(this).css(\'z-index\',\'1000\');displayToolsCarre();}" >';
-	h += '<div class="luditopheader" ></div>';
+	h += '<div class="luditopheader" ><i class="mdi mdi-table-of-contents cstudio-mdi-icon" aria-hidden="true"></i><i class="fa fa-list cstudio-legacy-icon" aria-hidden="true"></i></div>';
 	
 	h += '<div class="ludimenuteachdoc" >';
 	
 	var loadM = amplify.store("menuHtmlInLocal" + idPageHtmlTop +'_'+refIdPageLudi);
-	if(loadM!=undefined||loadM!=''||loadM!='undefined'){
+	if(cstudioHasStoredMenu(loadM)){
 		h += loadM;
 	}else{
 		h += lstUlLoad;
@@ -1464,7 +1914,7 @@ function getMenuR(){
 	
 	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;left:12px;top:90px;padding:0px;margin:0 5px 0;" >';
 	h += '<input style="margin:0 5px 0 0;" type="radio" class=checkBehaviorWind id="Behavior0" name="behaviorPage" ></input>';
-	h += '<label class="trd" for="Behavior0">Free page</label>';
+	h += '<label class="trd" for="Behavior0">Free access page</label>';
 	h += '</p>';
 	
 	h += '<p style="display:inline-flex;align-items:center;min-height:28px;line-height:1;font-size:14px;position:absolute;left:12px;top:118px;padding:0px;margin:0 5px 0;" >';
@@ -1502,7 +1952,8 @@ function getMenuR(){
 
 	h += '<a class="cstudio-delete-page-action" title="Delete this page" aria-label="Delete this page" onClick="deleteContextMenuSub();" ';
 	h += ' style="position:absolute;bottom:10px;left:5px;"  >';
-	h += '<img src="icon/delete-icon-24.png" /></a>';
+	h += '<i class="mdi mdi-delete cstudio-mdi-icon" aria-hidden="true"></i>';
+	h += '<img class="cstudio-legacy-icon" src="icon/delete-icon-24.png" /></a>';
 
 	h += '<a onClick="closeAllEditWindows();" ';
 	h += ' style="position:absolute;bottom:10px;right:120px;" ';
@@ -1545,7 +1996,7 @@ function refreshMenu(refEditNode){
 
 	if (refEditNode==-1) {
 		var loadM = amplify.store("menuHtmlInLocal" + idPageHtmlTop+'_'+refIdPageLudi);
-		if(loadM!=undefined||loadM!=''||loadM!='undefined'){
+		if(cstudioHasStoredMenu(loadM)){
 			$delay = 500;
 		}
 	}
@@ -1558,7 +2009,7 @@ function refreshMenu(refEditNode){
 			success: function(data,textStatus,jqXHR){
 				if(data.indexOf("ul")!=-1){
 					$('.ludimenuteachdoc').html(data);
-					$('.addli').html(getISVG('addbutton',0));
+					$('.addli').html('<span class="mdi mdi-plus cstudio-mdi-icon cstudio-add-page-icon" aria-hidden="true"></span><span class="fa fa-plus cstudio-legacy-icon cstudio-add-page-icon" aria-hidden="true"></span>');
 					if (refEditNode!=-1) {
 						$('#labelMenuLudi'+refEditNode).css('background','#F3E2A9');
 					}
@@ -1858,6 +2309,7 @@ function upContextMenuSub(u){
 					$('.ludiEditMenuContext').css("top",parseInt(78 + (refPosiPageLudi * 35) - scrollTeachdoc)+"px");
 					$('#labelMenuLudi'+refIdPageLudi).css('color','black');
 					$('#labelMenuLudi'+refIdPageLudi).css('background','#F3E2A9');
+					cstudioClearStoredMenu();
 					refreshMenu(refIdPageLudi);
 				}else{
 					$('#labelMenuLudi'+refIdPageLudi).css('color','orange');
@@ -1932,9 +2384,13 @@ function actionEditButon(){
 		var domObj = $(tmpObjDom);
 
 		if(domObj.hasClass("rapidselectorgrapvideo")){
-			//displayVideoEdit(tmpObjDom);
-			//actionFind = true;
-		}
+				var videoObj = domObj.closest('div').find('video').first();
+				if (videoObj.length) {
+					tmpObjDom = videoObj[0];
+					displayVideoEdit(tmpObjDom);
+					actionFind = true;
+				}
+			}
 		if(domObj.is("video")){
 			displayVideoEdit(tmpObjDom);
 			actionFind = true;
@@ -2432,7 +2888,7 @@ function showFileManagerStudio(t,src,callbackfct){
 							type: "POST",data : formData,
 							success: function(data,textStatus,jqXHR){
 
-								if(data.indexOf("error")==-1&&data.indexOf("img_cache")!=-1){
+								if(data.indexOf("error")==-1&&data.indexOf("img-cache.php")!=-1){
 									pushImageToColl(data);
 								}else{
 									pushImageToColl(file.url);
@@ -2591,6 +3047,47 @@ var refPosiPageLudi = 0;
 var refLedtAddPage = 0;
 var tplSelectPg = -1;
 var reftypeNodeV = 0;
+var addSubPageRequestPending = false;
+
+function resetSubPageEditorState(clearTitle){
+
+	var addPageEditor = $('#pageEditAdd');
+
+	refLedtAddPage = 0;
+	tplSelectPg = -1;
+	reftypeNodeV = 0;
+
+	if(clearTitle){
+		addPageEditor.find('#inputTitlePage').val('');
+	}
+
+	addPageEditor.find('#inputAddSubPage').prop('disabled', false);
+	addPageEditor.find('.oelTitlePage').css('display','');
+	addPageEditor.find('.oelChosePage').css('display','none');
+	addPageEditor.find('.oelChoseTemplatesPage').css('display','none');
+	addPageEditor.find('.oelInputAdd1').css('display','');
+	addPageEditor.find('.oelInputAdd2').css('display','none');
+	addPageEditor.find('#oelTitleload').css('display','none');
+	addPageEditor.find('.tpl-page-loader').css('display','none');
+	addPageEditor.find('.tpl-page-select').css('display','');
+	addPageEditor.find('.tpl-page-title').css('display','');
+	addPageEditor.find('.contain-pagetpl-select').css('display','');
+	addPageEditor.find('.pageDefautTplRight').css('display','none');
+	addPageEditor.find('.pageTemplateRight').css('display','none');
+
+	addPageEditor.find('#typenode2').prop('checked', true);
+	addPageEditor.find('#typenode3').prop('checked', false);
+	addPageEditor.find('#typenode4').prop('checked', false);
+
+}
+
+function restoreSubPageEditorAfterFailure(){
+
+	$('#loadsave').css('display','none');
+	resetSubPageEditorState(false);
+	$('#inputTitlePage').focus();
+
+}
 
 function selectTplPage(i){
 	tplSelectPg = i;
@@ -2599,6 +3096,10 @@ function selectTplPage(i){
 }
 
 function saveNextSubLudi(){
+
+	if(addSubPageRequestPending){
+		return false;
+	}
 	
 	var inputTitlePageStr = $('#inputTitlePage').val();	
 	
@@ -2624,8 +3125,9 @@ function saveNextSubLudi(){
 		}
 		reftypeNodeV = typeNodeV;
 		
-		// $('#inputAddSubPage').css("display","none");
 		$('#loadsave').css("display","block");
+		$('#inputAddSubPage').prop('disabled', true);
+		addSubPageRequestPending = true;
 
 		updateMenuEvent = true;
 		var formData = {
@@ -2660,37 +3162,49 @@ function saveNextSubLudi(){
 			type : "POST",
 			data : formData,
 			success : function(data,textStatus,jqXHR) {
-				if (data.indexOf("KO")==-1&&data.indexOf("error")==-1) {
-					var idNp = parseInt(data);
-					if (isNaN(idNp)) {
-					} else {
-						$('#loadsave').css("display","none");
-						refLedtAddPage = idNp;
-						//title section
-						if (reftypeNodeV==3) {
-							refreshMenu(-1);
-							$('#oelTitleload').css("display","none");
-							$('.oelInputAdd2').css("display","none");
-							$('.tpl-page-select').css("display","none");
-							$('.tpl-page-title').css("display","none");
-							$('.tpl-page-loader').css("display","block");
-							closeAllEditWindows();
-						}
-						if (reftypeNodeV==4) {
-							tplSelectPg = 1;
-							saveNextSubLudiFinal();
-						}
-					}
+				var response = $.trim(String(data));
+				var idNp = parseInt(response, 10);
+
+				if (response.indexOf("KO")!=-1||response.indexOf("error")!=-1||isNaN(idNp)||idNp<=0) {
+					$('#logMsgLoad').css("display","block");
+					$('#logMsgLoad').html("Error !");
+					restoreSubPageEditorAfterFailure();
+					return;
+				}
+
+				$('#loadsave').css("display","none");
+				refLedtAddPage = idNp;
+				//title section
+				if (reftypeNodeV==3) {
+					refreshMenu(-1);
+					$('#oelTitleload').css("display","none");
+					$('.oelInputAdd2').css("display","none");
+					$('.tpl-page-select').css("display","none");
+					$('.tpl-page-title').css("display","none");
+					$('.tpl-page-loader').css("display","block");
+					closeAllEditWindows();
+				}
+				if (reftypeNodeV==4) {
+					tplSelectPg = 1;
+					saveNextSubLudiFinal();
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown)
 			{
 				$('#logMsgLoad').css("display","block");
 				$('#logMsgLoad').html("Error !");
+				restoreSubPageEditorAfterFailure();
+			},
+			complete: function()
+			{
+				addSubPageRequestPending = false;
+				$('#inputAddSubPage').prop('disabled', false);
 			}
 		});
 
 	}
+
+	return false;
 
 }
 
@@ -2737,7 +3251,7 @@ function displaySubProgressClean(){
 		
 		bdDiv += '<div class="gjs-am-add-asset" ';
 		bdDiv += 'style="padding:25px;font-size:16px;" >';
-		bdDiv += '<p class="trd cstudio-clean-data-help">Clean traces removes the saved learner progress for this CStudio learning path. It does not delete pages or project content.</p>';
+		bdDiv += '<p class="trd cstudio-clean-data-help">Clean traces removes the saved learner progress for this Chamidoc Studio learning path. It does not delete pages or project content.</p>';
 		bdDiv += '<br/>';
 		bdDiv += '<img class="brossIcons" src="img/bross.png" />';
 		bdDiv += '<br/>';
@@ -2874,6 +3388,7 @@ function displayAudioEdit(myObj){
 		bdDiv += '&nbsp;<input onClick="filterGlobalFiles=\'.mp3\';showFileManagerStudio2(23,\'inputAudioLink\',0);" ';
 		bdDiv += ' style="width:50px;" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave" type="button" value="..." />';
+		bdDiv += '<div class="cstudio-media-help">' + cstudioEscapeHtml(cstudioTranslateTerm('Accepted format: MP3. Maximum file size:')) + ' ' + cstudioEscapeHtml(cstudioGetUploadMaxSizeLabel()) + '</div>';
 		
 		bdDiv += '<br/>';
 		bdDiv += '<div style="padding:25px;text-align:right;" >';
@@ -2957,6 +3472,7 @@ function displayVideoEdit(myObj){
 		bdDiv += '<input id="inputVideoLink" type="text" value="http://" style="width:450px;font-size:12px;padding:5px;" />';
 		bdDiv += '&nbsp;<input onClick="filterGlobalFiles=\'.mp4\';showFileManagerStudio2(23,\'inputVideoLink\',0);" ';
 		bdDiv += ' class="gjs-one-bg ludiButtonSave" type="button" value="..." />';
+		bdDiv += '<div class="cstudio-media-help">' + cstudioEscapeHtml(cstudioTranslateTerm('Accepted format: MP4. Maximum file size:')) + ' ' + cstudioEscapeHtml(cstudioGetUploadMaxSizeLabel()) + '</div>';
 		
 		bdDiv += '<br/>';
 		bdDiv += '<div style="padding:25px;text-align:right;" >';
@@ -5103,6 +5619,20 @@ editor.on('block:drag:stop', function (droppedComponent) {
 				}
 			}
 		}
+
+		var droppedElement = typeof droppedComponent.getEl === 'function' ? droppedComponent.getEl() : null;
+		if (droppedElement) {
+			var chamiloElement = $(droppedElement).is('.cstudio-chamilo-resource')
+				? droppedElement
+				: $(droppedElement).find('.cstudio-chamilo-resource').get(0);
+
+			if (chamiloElement) {
+				editor.select(droppedComponent);
+				setTimeout(function(){
+					displayChamiloResourceEdit(chamiloElement);
+				}, 0);
+			}
+		}
 	}
 
 });
@@ -5146,6 +5676,8 @@ var cssI = " style='position:absolute;cursor:pointer;background-image:url(\"img/
 //baseButton += '<div class="editRapidIcon" ' + cssI + ' onClick="parent.displayVideoEdit(this);" ></div>';
 
 var baseButton = '<video onMouseDown="parent.displayEditButon(this);" ';
+baseButton += ' ondblclick="parent.displayVideoEdit(this); return false;" ';
+baseButton += ' title="' + cstudioEscapeHtml(cstudioTranslateTerm('Double click to edit video')) + '" ';
 baseButton += ' oncontextmenu="return false;" class="videoByLudi" ';
 baseButton += ' datahref="video/oel-teachdoc.mp4" ';
 baseButton += ' controls  controlsList="nofullscreen nodownload" >';
@@ -5156,9 +5688,17 @@ baseButton += ' type="video/mp4" ></video>';
 //baseButton += '</div>';
 //baseButton += '</div>';
 
+function cstudioBlockIconClasses(legacyClasses, mdiClass) {
+	if (document.documentElement.classList.contains('cstudio-mdi-ready')) {
+		return 'mdi ' + mdiClass + ' cstudio-block-mdi';
+	}
+
+	return legacyClasses;
+}
+
 editor.BlockManager.add('VideoTeach',{
-	label: '',
-	attributes: {class: 'fa fa-text icon-action'},
+	label: 'Video',
+	attributes: {class: cstudioBlockIconClasses('fa fa-text icon-action', 'mdi-file-video'), title: 'Video'},
 	category: 'Basic',
 	content: {
 		content: baseButton,
@@ -5179,7 +5719,10 @@ editor.BlockManager.add('VideoTeach',{
 
 //baseButtonAudio += '<div class="editRapidIcon" ' + cssI + ' onClick="parent.displayAudioEdit(this);" ></div>';
 
-var baseButtonAudio = '<audio onMouseUp="parent.displayEditButon(this);" oncontextmenu="return false;" class="audioByLudi" ';
+var baseButtonAudio = '<audio onMouseUp="parent.displayEditButon(this);" ';
+baseButtonAudio += ' ondblclick="parent.displayAudioEdit(this); return false;" ';
+baseButtonAudio += ' title="' + cstudioEscapeHtml(cstudioTranslateTerm('Double click to edit audio')) + '" ';
+baseButtonAudio += ' oncontextmenu="return false;" class="audioByLudi" ';
 baseButtonAudio += ' datahref="audio/teachdoc-sample.mp3" ';
 baseButtonAudio += ' src="audio/teachdoc-sample.mp3" ';
 baseButtonAudio += ' controls controlsList="nodownload" ></audio>';
@@ -5189,7 +5732,7 @@ baseButtonAudio += ' controls controlsList="nodownload" ></audio>';
   
 editor.BlockManager.add('AudioTeach',{
 	label: 'Audio',
-	attributes: {class: 'fa fa-text icon-audio'},
+	attributes: {class: cstudioBlockIconClasses('fa fa-text icon-audio', 'mdi-file-music'), title: 'Audio'},
 	category: 'Basic',
 	content: {
 		content: baseButtonAudio,
@@ -5307,7 +5850,7 @@ editor.BlockManager.add('spaceteach',{
 editor.BlockManager.add('sectionSeparator',{
 	label: 'Separator',
 	attributes: {
-		class: 'fa fa-text icon-plugTeach',
+		class: cstudioBlockIconClasses('fa fa-text icon-plugTeach', 'mdi-minus'),
         style: "background-image: url('icon/separator.png');background-repeat:no-repeat;background-position:center center;"
 	},
     category: 'Basic',
@@ -5354,8 +5897,8 @@ bTxt += '</td></tr>';
 bTxt +='</table>';
 
 editor.BlockManager.add('TxtTeach',{
-	label: 'Text Bloc',
-	attributes: {class: 'fa fa-text icon-txtteach'},
+	label: 'Text Block',
+	attributes: {class: cstudioBlockIconClasses('fa fa-text icon-txtteach', 'mdi-file-document')},
 	category: 'Basic',
 	content: {
 		content: bTxt,
@@ -5367,7 +5910,10 @@ editor.BlockManager.add('TxtTeach',{
 	}
 });
 var btnSrc = '<table class="teachdocbtnteach" ';
-btnSrc += 'onMouseDown="parent.displayEditButon(this);" style="width:100%;text-align:center;" >';
+btnSrc += 'onMouseDown="parent.displayEditButon(this);" ';
+btnSrc += 'ondblclick="parent.displayBtnEdit(this); return false;" ';
+btnSrc += 'title="' + cstudioEscapeHtml(cstudioTranslateTerm('Double click to edit button')) + '" ';
+btnSrc += 'style="width:100%;text-align:center;" >';
 btnSrc += '<tr><td style="text-align:center;padding:10px;width:100%;" >';
 
 btnSrc += '<a href="" class="btn-btnTeach btnteachblue" ';
@@ -5378,7 +5924,7 @@ btnSrc += '</td></tr></table>';
 
 editor.BlockManager.add('btnTeach',{
 	label: 'Button',
-	attributes: {class: 'fa fa-text icon-btnTeach'},
+	attributes: {class: 'fa fa-text icon-btnTeach', title: 'Button'},
 	category: 'Basic',
 	content: {
 		content: btnSrc,
@@ -5445,7 +5991,8 @@ contentT = {type : 'box',columns : 3,rows : 1};
 editor.BlockManager.add('buttonbar',{
 	label : 'Button Bar',
 	attributes : {
-		class : 'fa fa-text icon-plugTeach',
+		title : 'Button Bar',
+		class : cstudioBlockIconClasses('fa fa-text icon-plugTeach', 'mdi-table'),
         style : "background-image: url('icon/buttonbar.png');background-repeat:no-repeat;background-position:center center;"
 	},
     category : 'Basic',
@@ -6272,6 +6819,11 @@ function displayPlugTeachEdit(myObj){
 		displayImageMapEdit(myObj);
 		return false;
 	}
+
+	if (typesource=='chamilo-resource') {
+		displayChamiloResourceEdit(myObj);
+		return false;
+	}
 	
 	contentSourceEdition = '';
 	identSourceEdition++;
@@ -6951,7 +7503,7 @@ var firstSrcT = GplugSrcT.replace("{content}",renderplugincard('',''));
 editor.BlockManager.add('plugTeachCard',{
 	label: 'Card',
 	attributes: {
-		class: 'fa fa-text icon-plugTeach',
+		class: cstudioBlockIconClasses('fa fa-text icon-plugTeach', 'mdi-view-gallery'),
 		style: "background-image: url('icon/plug-card.png');background-repeat:no-repeat;background-position:center center;"
 	},
 	category: 'Basic',
@@ -6969,7 +7521,7 @@ var bCMQ = '<div class="row" style="position:relative;" id="i27td">';
 
 var baseRenderLUDIQcm = '<table class="qcmbarre" onMouseDown="parent.displayEditButon(this);" style="width:100%;" >';
 
-baseRenderLUDIQcm += '<tr><td colspan=2 style="padding:15px;" class=quizzTextqcm >'+returnTradTerm("Quizz text")+'</td></tr>';
+baseRenderLUDIQcm += '<tr><td colspan=2 style="padding:15px;" class=quizzTextqcm >'+cstudioTranslateTerm('Quizz text')+'</td></tr>';
 
 baseRenderLUDIQcm += '<tr class=quizzTextTr ><td class=quizzTextTd ><img class=checkboxqcm src="img/qcm/matgreen0.png" />';
 baseRenderLUDIQcm += '</td><td style="text-align:left;" >'+returnTradTerm("Answer 1")+'</td></tr>';
@@ -6986,7 +7538,7 @@ bCMQ = baseRenderLUDIQcm;
 
 editor.BlockManager.add('CmqTeach',{
 	label: 'Quiz',
-	attributes: {class: 'fa fa-text qlab icon-cmq'},
+	attributes: {class: cstudioBlockIconClasses('fa fa-text qlab icon-cmq', 'mdi-check-circle')},
 	category: 'Basic',
 	content: {
 		content: bCMQ,
@@ -7003,7 +7555,7 @@ firstSrcT = GplugSrcT.replace("{content}",renderpluginblank('',''));
 editor.BlockManager.add('plugTeachBlank',{
 	label: 'Drag Drop',
 	attributes: {
-		class: 'fa fa-text qlab icon-plugTeach',
+		class: cstudioBlockIconClasses('fa fa-text qlab icon-plugTeach', 'mdi-cursor-move'),
 		style: "background-image: url('icon/plug-blank.png');background-repeat:no-repeat;background-position:center center;"
 	},
 	category: 'Basic',
@@ -7022,7 +7574,7 @@ firstSrcT = GplugSrcT.replace("{content}",renderpluginfilltext('',''));
 editor.BlockManager.add('plugTeachFillText',{
 	label: 'Fill text',
 	attributes: {
-		class: 'fa fa-text qlab icon-plugTeach',
+		class: cstudioBlockIconClasses('fa fa-text qlab icon-plugTeach', 'mdi-form-textarea'),
 		style: "background-image: url('icon/plug-filltext.png');background-repeat:no-repeat;background-position:center center;"
 	},
 	category: 'Basic',
@@ -7055,6 +7607,81 @@ editor.BlockManager.add('plugTeachIframe',{
 		}
 	}
 });
+
+function cstudioChamiloContentEnabled(){
+	var config = window.cstudioChamiloContentConfig || {};
+
+	return config.enabled === true
+		&& parseInt(config.lpId || 0, 10) > 0
+		&& parseInt(config.cid || 0, 10) > 0;
+}
+
+function cstudioChamiloResourcePlaceholder(resourceTool, label){
+	var h = '<div class="cstudio-chamilo-resource-placeholder" ';
+	h += 'style="min-height:220px;padding:55px 20px;text-align:center;background:#f4f6f7;border:2px dashed #aab7b8;">';
+	h += '<strong>' + cstudioEscapeHtml(label) + '</strong><br/>';
+	h += '<span style="display:inline-block;margin-top:12px;">Select a Chamilo course resource</span>';
+	h += '</div>';
+	h += cstudioChamiloResourceMetadata(resourceTool, '', '', '', 650);
+
+	return h;
+}
+
+function cstudioChamiloResourceMetadata(resourceTool, resourceKey, title, launchUrl, height){
+	var h = '';
+	h += '<span class="chamiloResourceTool" style="display:none;">' + cstudioEscapeHtml(resourceTool) + '</span>';
+	h += '<span class="chamiloResourceKey" style="display:none;">' + cstudioEscapeHtml(resourceKey) + '</span>';
+	h += '<span class="chamiloResourceTitle" style="display:none;">' + cstudioEscapeHtml(title) + '</span>';
+	h += '<span class="datatext1" style="display:none;">' + cstudioEscapeHtml(launchUrl) + '</span>';
+	h += '<span class="datatext2" style="display:none;">' + parseInt(height || 650, 10) + '</span>';
+	h += '<span class="typesource" style="display:none;">chamilo-resource</span>';
+
+	return h;
+}
+
+function cstudioEscapeHtml(value){
+	return String(value === undefined || value === null ? '' : value)
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;');
+}
+
+function cstudioAddChamiloResourceBlock(id, label, resourceTool, iconClass, mdiClass){
+	if (!cstudioChamiloContentEnabled()) {
+		return;
+	}
+
+	var chamiloTop = '<table class="teachdocplugteach cstudio-chamilo-resource" ';
+	chamiloTop += 'onMouseDown="parent.displayEditButon(this);" ';
+	chamiloTop += 'style="width:100%;text-align:center;">';
+	var chamiloContent = GplugSrcT.replace(
+		'{content}',
+		cstudioChamiloResourcePlaceholder(resourceTool, label)
+	);
+
+	editor.BlockManager.add(id,{
+		label: label,
+		attributes: {class: cstudioBlockIconClasses('fa ' + iconClass, mdiClass), title: label},
+		category: 'Basic',
+		content: {
+			content: chamiloTop + chamiloContent + GplugSrcBottom,
+			script: '',
+			style: {
+				width: '100%',
+				minHeight: '300px'
+			}
+		}
+	});
+}
+
+cstudioAddChamiloResourceBlock('chamiloDocuments', 'Chamilo documents', 'documents', 'fa-folder-open', 'mdi-folder-open');
+cstudioAddChamiloResourceBlock('chamiloTests', 'Chamilo tests', 'tests', 'fa-check-square-o', 'mdi-check-circle');
+cstudioAddChamiloResourceBlock('chamiloLinks', 'Chamilo links', 'links', 'fa-link', 'mdi-link');
+cstudioAddChamiloResourceBlock('chamiloAssignments', 'Chamilo assignments', 'assignments', 'fa-inbox', 'mdi-inbox');
+cstudioAddChamiloResourceBlock('chamiloForums', 'Chamilo forums', 'forums', 'fa-comments', 'mdi-forum-outline');
+cstudioAddChamiloResourceBlock('chamiloSurveys', 'Chamilo surveys', 'surveys', 'fa-list-alt', 'mdi-format-list-bulleted');
 
 
 firstSrcT = GplugSrcT.replace("{content}",renderplugminidia('',''));
@@ -7289,6 +7916,301 @@ function renderpluginblank(var1,var2) {
     
     return h;
 
+}
+
+var cstudioChamiloCatalogCache = null;
+var cstudioChamiloCatalogRequest = null;
+var cstudioChamiloCurrentResources = [];
+var cstudioChamiloCurrentObject = null;
+
+function cstudioChamiloBuilderUrl(){
+	var config = window.cstudioChamiloContentConfig || {};
+	var apiBase = String(config.apiBase || '/api').replace(/\/$/, '');
+	var params = new URLSearchParams();
+	params.set('cid', String(parseInt(config.cid || 0, 10)));
+	params.set('sid', String(parseInt(config.sid || 0, 10)));
+	params.set('gid', String(parseInt(config.gid || 0, 10)));
+	params.set('includeLaunchUrls', '1');
+	params.set('catalogOnly', '1');
+
+	return apiBase + '/learning_paths/' + parseInt(config.lpId || 0, 10) + '/builder?' + params.toString();
+}
+
+function cstudioLoadChamiloCatalog(){
+	if (cstudioChamiloCatalogCache) {
+		return $.Deferred().resolve(cstudioChamiloCatalogCache).promise();
+	}
+	if (cstudioChamiloCatalogRequest) {
+		return cstudioChamiloCatalogRequest;
+	}
+
+	cstudioChamiloCatalogRequest = $.ajax({
+		url: cstudioChamiloBuilderUrl(),
+		type: 'GET',
+		dataType: 'json',
+		cache: false
+	}).done(function(data){
+		cstudioChamiloCatalogCache = data || {};
+	}).always(function(){
+		cstudioChamiloCatalogRequest = null;
+	});
+
+	return cstudioChamiloCatalogRequest;
+}
+
+function cstudioFlattenChamiloResources(items, prefix, target){
+	(items || []).forEach(function(item){
+		if (!item) {
+			return;
+		}
+
+		var title = String(item.title || '');
+		var itemPrefix = prefix ? prefix + ' / ' : '';
+		var children = Array.isArray(item.children) ? item.children : [];
+		if (item.isFolder || item.canAdd === false) {
+			cstudioFlattenChamiloResources(children, itemPrefix + title, target);
+			return;
+		}
+
+		if (String(item.launchUrl || '') !== '') {
+			target.push({
+				key: String(item.resourceType || '') + ':' + String(item.id || ''),
+				id: parseInt(item.id || 0, 10),
+				title: itemPrefix + title,
+				resourceType: String(item.resourceType || ''),
+				launchUrl: String(item.launchUrl || '')
+			});
+		}
+
+		cstudioFlattenChamiloResources(children, itemPrefix + title, target);
+	});
+}
+
+function cstudioChamiloResourcesForTool(catalog, resourceTool){
+	var resources = catalog && catalog.resources ? catalog.resources : {};
+	var result = [];
+
+	if (resourceTool === 'documents') {
+		cstudioFlattenChamiloResources(resources.documents ? resources.documents.files : [], '', result);
+		cstudioFlattenChamiloResources(resources.documents ? resources.documents.videos : [], '', result);
+	}
+	if (resourceTool === 'tests') {
+		cstudioFlattenChamiloResources(resources.tests ? resources.tests.items : [], '', result);
+	}
+	if (resourceTool === 'links') {
+		cstudioFlattenChamiloResources(resources.links ? resources.links.items : [], '', result);
+	}
+	if (resourceTool === 'assignments') {
+		cstudioFlattenChamiloResources(resources.assignments ? resources.assignments.items : [], '', result);
+	}
+	if (resourceTool === 'surveys') {
+		cstudioFlattenChamiloResources(resources.surveys ? resources.surveys.items : [], '', result);
+	}
+	if (resourceTool === 'forums') {
+		(resources.forums && resources.forums.items ? resources.forums.items : []).forEach(function(forum){
+			if (!forum) {
+				return;
+			}
+			if (String(forum.launchUrl || '') !== '') {
+				result.push({
+					key: 'forum:' + String(forum.id || ''),
+					id: parseInt(forum.id || 0, 10),
+					title: String(forum.title || ''),
+					resourceType: 'forum',
+					launchUrl: String(forum.launchUrl || '')
+				});
+			}
+			(forum.threads || []).forEach(function(thread){
+				if (!thread || String(thread.launchUrl || '') === '') {
+					return;
+				}
+				result.push({
+					key: 'thread:' + String(thread.id || ''),
+					id: parseInt(thread.id || 0, 10),
+					title: String(forum.title || '') + ' / ' + String(thread.title || ''),
+					resourceType: 'thread',
+					launchUrl: String(thread.launchUrl || '')
+				});
+			});
+		});
+	}
+
+	return result;
+}
+
+function cstudioChamiloToolLabel(resourceTool){
+	var labels = {
+		documents: 'Chamilo documents',
+		tests: 'Chamilo tests',
+		links: 'Chamilo links',
+		assignments: 'Chamilo assignments',
+		forums: 'Chamilo forums',
+		surveys: 'Chamilo surveys'
+	};
+
+	return labels[resourceTool] || 'Chamilo content';
+}
+
+function cstudioEnsureChamiloResourceDialog(){
+	if ($('#CStudioChamiloResourceWindow').length > 0) {
+		return;
+	}
+
+	var h = '<div id="CStudioChamiloResourceWindow" class="gjs-mdl-container autodestroy-windows" style="display:none;">';
+	h += '<div class="gjs-mdl-dialog-v2 gjs-one-bg gjs-two-color" style="max-width:720px!important;">';
+	h += '<div class="gjs-mdl-header">';
+	h += '<div id="CStudioChamiloResourceTitle" class="gjs-mdl-title">Chamilo content</div>';
+	h += '<div class="gjs-mdl-btn-close" onClick="closeCStudioChamiloResourceEdit()" data-close-modal>⨯</div>';
+	h += '</div>';
+	h += '<div class="gjs-am-add-asset" style="padding:25px;font-size:16px;">';
+	h += '<div id="CStudioChamiloResourceLoading" style="padding:25px;text-align:center;">Loading...</div>';
+	h += '<div id="CStudioChamiloResourceForm" style="display:none;">';
+	h += '<label for="CStudioChamiloResourceSelect" style="display:block;margin-bottom:6px;">Course resource</label>';
+	h += '<select id="CStudioChamiloResourceSelect" style="width:100%;min-height:38px;padding:6px;"></select>';
+	h += '<label for="CStudioChamiloResourceHeight" style="display:block;margin-top:18px;margin-bottom:6px;">Iframe height</label>';
+	h += '<input id="CStudioChamiloResourceHeight" type="number" min="350" max="1600" step="25" value="650" style="width:120px;padding:6px;" />';
+	h += '<div id="CStudioChamiloResourceEmpty" style="display:none;margin-top:18px;padding:12px;background:#f8f9f9;color:#566573;">No available resources were found in this course.</div>';
+	h += '</div>';
+	h += '<div id="CStudioChamiloResourceError" style="display:none;padding:12px;background:#fdecea;color:#922b21;"></div>';
+	h += '<div style="padding-top:22px;text-align:right;">';
+	h += '<input id="CStudioChamiloResourceSave" onClick="saveChamiloResourceSelection()" class="gjs-one-bg ludiButtonSave" type="button" value="Insert" />';
+	h += '</div>';
+	h += '</div>';
+	h += '</div>';
+	h += '<div class="gjs-mdl-collector" style="display:none"></div>';
+	h += '</div>';
+
+	$('body').append(h);
+	$('#CStudioChamiloResourceSelect').on('change', function(){
+		$('#CStudioChamiloResourceError').hide().text('');
+		$('#CStudioChamiloResourceSave').prop('disabled', String($(this).val() || '') === '');
+	});
+}
+
+function closeCStudioChamiloResourceEdit(){
+	cstudioChamiloCurrentObject = null;
+	cstudioChamiloCurrentResources = [];
+	closeAllEditWindows();
+}
+
+function displayChamiloResourceEdit(myObj){
+	if (!cstudioChamiloContentEnabled()) {
+		alert('Chamilo course content is not available in this context.');
+		return false;
+	}
+
+	closeAllEditWindows();
+	cstudioChamiloCurrentObject = $(myObj);
+	tmpObjDom = cstudioChamiloCurrentObject;
+	identchange = getUnikId();
+	tmpObjDom.attr('data-ref', identchange);
+
+	var resourceTool = String(tmpObjDom.find('span.chamiloResourceTool').first().text() || 'documents');
+	var selectedKey = String(tmpObjDom.find('span.chamiloResourceKey').first().text() || '');
+	var storedHeight = parseInt(tmpObjDom.find('span.datatext2').first().text() || 650, 10);
+	if (!Number.isFinite(storedHeight) || storedHeight < 350) {
+		storedHeight = 650;
+	}
+
+	cstudioEnsureChamiloResourceDialog();
+	$('#CStudioChamiloResourceTitle').text(cstudioChamiloToolLabel(resourceTool));
+	$('#CStudioChamiloResourceHeight').val(storedHeight);
+	$('#CStudioChamiloResourceLoading').show();
+	$('#CStudioChamiloResourceForm').hide();
+	$('#CStudioChamiloResourceError').hide().text('');
+	$('#CStudioChamiloResourceSave').prop('disabled', true);
+	$('#CStudioChamiloResourceWindow').css('display', '');
+	$('.ludimenu').css('z-index', '2');
+	windowEditorIsOpen = true;
+	loadaFunction();
+
+	cstudioLoadChamiloCatalog().done(function(catalog){
+		cstudioChamiloCurrentResources = cstudioChamiloResourcesForTool(catalog, resourceTool);
+		var select = $('#CStudioChamiloResourceSelect');
+		select.empty();
+		select.append($('<option>').val('').text('Select a resource'));
+
+		cstudioChamiloCurrentResources.forEach(function(resource){
+			select.append($('<option>').val(resource.key).text(resource.title));
+		});
+
+		if (selectedKey !== '') {
+			select.val(selectedKey);
+		}
+
+		$('#CStudioChamiloResourceLoading').hide();
+		$('#CStudioChamiloResourceForm').show();
+		$('#CStudioChamiloResourceEmpty').toggle(cstudioChamiloCurrentResources.length === 0);
+		$('#CStudioChamiloResourceSave').prop(
+			'disabled',
+			cstudioChamiloCurrentResources.length === 0 || String(select.val() || '') === ''
+		);
+	}).fail(function(jqXHR){
+		var message = 'Unable to load the Chamilo course resources.';
+		if (jqXHR && jqXHR.status) {
+			message += ' HTTP ' + jqXHR.status + '.';
+		}
+		$('#CStudioChamiloResourceLoading').hide();
+		$('#CStudioChamiloResourceError').text(message).show();
+	});
+
+	return false;
+}
+
+function renderpluginchamiloresource(resourceTool, resourceKey, title, launchUrl, height){
+	var safeHeight = parseInt(height || 650, 10);
+	if (!Number.isFinite(safeHeight) || safeHeight < 350) {
+		safeHeight = 650;
+	}
+	safeHeight = Math.min(safeHeight, 1600);
+
+	var h = '<div class="topinactiveteach"></div>';
+	h += '<div style="padding:6px 8px;text-align:left;font-size:13px;background:#f4f6f7;border-bottom:1px solid #d5dbdb;">';
+	h += cstudioEscapeHtml(title);
+	h += '</div>';
+	h += '<iframe class="cstudio-chamilo-resource-frame" style="width:100%;min-height:350px;z-index:1;height:' + safeHeight + 'px;overflow:auto;" ';
+	h += 'title="' + cstudioEscapeHtml(title) + '" frameBorder="0" src="' + cstudioEscapeHtml(launchUrl) + '"></iframe>';
+	h += cstudioChamiloResourceMetadata(resourceTool, resourceKey, title, launchUrl, safeHeight);
+
+	return h;
+}
+
+function saveChamiloResourceSelection(){
+	if (!cstudioChamiloCurrentObject || cstudioChamiloCurrentObject.length === 0) {
+		return false;
+	}
+
+	var selectedKey = String($('#CStudioChamiloResourceSelect').val() || '');
+	var selectedResource = cstudioChamiloCurrentResources.find(function(resource){
+		return resource.key === selectedKey;
+	});
+	if (!selectedResource || selectedResource.launchUrl === '') {
+		$('#CStudioChamiloResourceError').text('Select a valid course resource.').show();
+		return false;
+	}
+
+	var resourceTool = String(cstudioChamiloCurrentObject.find('span.chamiloResourceTool').first().text() || 'documents');
+	var height = parseInt($('#CStudioChamiloResourceHeight').val() || 650, 10);
+	var renderH = renderpluginchamiloresource(
+		resourceTool,
+		selectedResource.key,
+		selectedResource.title,
+		selectedResource.launchUrl,
+		height
+	);
+
+	var row = GplugSrcT.replace('{content}', renderH);
+	if (GlobalTagGrappeObj === 'div') {
+		var chamiloTop = '<table class="teachdocplugteach cstudio-chamilo-resource" ';
+		chamiloTop += 'onMouseDown="parent.displayEditButon(this);" style="width:100%;text-align:center;">';
+		row = chamiloTop + row + GplugSrcBottom;
+	}
+
+	setAbstractObjContent(row);
+	activeEventSave();
+	closeCStudioChamiloResourceEdit();
+
+	return false;
 }
 
 function renderpluginiframe(var1,var2) {
@@ -8692,7 +9614,7 @@ function getListUpdate(){
     b += "<ul>";
     b += '<li>New avatar image in littledialog</li>';
     b += '<li>New option Custom Display for a page</li>';
-    b += '<li>Make your content visible to anyone by publishing it to the web.</li>';
+    b += '<li>Create a browser-friendly web page that can be opened outside the Chamidoc Studio editor.</li>';
     b += '<li>You can link to or embed your document.</li>';
     b += '<li>Accept pptx , odp and otp files in download action</li>';
     b += "</ul>";
@@ -9028,7 +9950,7 @@ function displaySubExportXapi(){
 		var bdDiv = '<div id="pageEditExportXapi" class="gjs-mdl-container" >';
 		bdDiv += '<div class="gjs-mdl-dialog-v2 gjs-one-bg gjs-two-color" style="max-width:575px;" >';
 		bdDiv += '<div class="gjs-mdl-header">';
-		bdDiv += '<div class="gjs-mdl-title trd ">Export to xApi package</div>';
+		bdDiv += '<div class="gjs-mdl-title trd ">Create an xAPI package</div>';
 		bdDiv += '<div class="gjs-mdl-btn-close" onClick="closeAllEditWindows();processScoExport=false;" data-close-modal="">⨯</div>';
 		bdDiv += '</div>';
 		
@@ -9306,14 +10228,14 @@ function displaySubToTheWeb(){
 		var bdDiv = '<div id="pageEditToTheWeb" class="gjs-mdl-container" >';
 		bdDiv += '<div class="gjs-mdl-dialog-v2 gjs-one-bg gjs-two-color" style="max-width:650px;" >';
 		bdDiv += '<div class="gjs-mdl-header">';
-		bdDiv += '<div class="gjs-mdl-title trd ">Publish to the web</div>';
+		bdDiv += '<div class="gjs-mdl-title trd ">Create a web page</div>';
 		bdDiv += '<div class="gjs-mdl-btn-close" onClick="closeAllEditWindows();processScoExport=false;" data-close-modal="">⨯</div>';
 		bdDiv += '</div>';
 		
 		bdDiv += '<div class="gjs-am-add-asset" ';
 		bdDiv += 'style="padding:25px;font-size:16px;" >';
 
-		bdDiv += '<p class="trd" style="text-align:center;" >Make your content visible to anyone by publishing it to the web.</p>';
+		bdDiv += '<p class="trd" style="text-align:center;" >Create a browser-friendly web page that can be opened outside the Chamidoc Studio editor.</p>';
 		
 		bdDiv += '<div class="progressExport progressExport3" style="display:none;" ><div class="pourcentExport" ></div></div>';
 		bdDiv += '<div class="logMsgLoadSco" ><br/></div>';
@@ -9646,29 +10568,26 @@ function getCollectionsColorsThemes(){
 function changColor(t){
 	
 	var urlNc = 'index.php?action=edit&id='+ idPageHtml +'&changc=' + t + '&cotk=' + $('#cotk').val();
-    $('#btnsave').css("display","none");
-    $('#loadsave').css("display","block");
-    saveSourceFrame(false,false,0);
-    setTimeout(function(){
-        window.location.href = urlNc;
-    },1600);
+	cstudioSaveBeforeAction(function(){
+		window.location.href = urlNc;
+	});
 
 }
 
 function getCollectionsQuizzThemes(){
 
 	var bdDiv = '';
-	bdDiv += '<a title="White-quizz" onClick="changQuizzColor(\'white-quizz\');" ';
+	bdDiv += '<a title="White quiz" onClick="changQuizzColor(\'white-quizz\');" ';
 	bdDiv += ' class="colorCube" >';
 	bdDiv += '<img src="templates/quizztheme/white-quizz.png" />';
 	bdDiv += '</a>';
 	
-	bdDiv += '<a title="Yellow-contrast" onClick="changQuizzColor(\'yellow-contrast\');" ';
+	bdDiv += '<a title="Yellow contrast" onClick="changQuizzColor(\'yellow-contrast\');" ';
 	bdDiv += ' class="colorCube" >';
 	bdDiv += '<img src="templates/quizztheme/yellow-contrast.png" />';
 	bdDiv += '</a>';
 
-	bdDiv += '<a title="Blue-contrast" onClick="changQuizzColor(\'blue-contrast\');" ';
+	bdDiv += '<a title="Blue contrast" onClick="changQuizzColor(\'blue-contrast\');" ';
 	bdDiv += ' class="colorCube" >';
 	bdDiv += '<img src="templates/quizztheme/blue-contrast.png" />';
 	bdDiv += '</a>';
@@ -9682,12 +10601,9 @@ function getCollectionsQuizzThemes(){
 function changQuizzColor(t){
 	
 	var urlNc = 'index.php?action=edit&id='+ idPageHtml +'&changquizz=' + t + '&cotk=' + $('#cotk').val();
-    $('#btnsave').css("display","none");
-    $('#loadsave').css("display","block");
-    saveSourceFrame(false,false,0);
-    setTimeout(function(){
-        window.location.href = urlNc;
-    },1600);
+	cstudioSaveBeforeAction(function(){
+		window.location.href = urlNc;
+	});
 
 }
 
@@ -9705,30 +10621,36 @@ function displayParamsTeachEdit() {
         h += '</div>';
         
         h += '<a class="tool-clean-data tool-base" onClick="displaySubProgressClean();" style="cursor:pointer;" >';
+        h += '<i class="mdi mdi-broom cstudio-tool-mdi" aria-hidden="true"></i>';
         h += '<div class="trd" >Clean data</div>';
         h += '</a>';
         
         // reloadEditorAll();
         
         h += '<a class="tool-play tool-base" onClick="playAllinCore();" style="cursor:pointer;" >';
+        h += '<i class="mdi mdi-play-box-outline cstudio-tool-mdi" aria-hidden="true"></i>';
         h += '<div class="trd" >Preview</div>';
         h += '</a>';
         
         h += '<a class="tool-colors-editor tool-base" onClick="displayEditThemeParamsProject();" style="cursor:pointer;" >';
+        h += '<i class="mdi mdi-format-paint cstudio-tool-mdi" aria-hidden="true"></i>';
         h += '<div class="trd" >Colors</div>';
         h += '</a>';
 
         h += '<a class="tool-colors-params tool-base" onClick="displayGlobalParams();" style="cursor:pointer;" >';
+        h += '<i class="mdi mdi-cog cstudio-tool-mdi" aria-hidden="true"></i>';
         h += '<div class="trd" >Options</div>';
         h += '</a>';
         
         if (cstudioShowExperimentalTabs) {
             h += '<a id="tool-colors-paste" name="tool-colors-paste" class="tool-colors-paste tool-base" onClick="pasteWindowsShow(false);" style="cursor:pointer;" >';
+            h += '<i class="mdi mdi-puzzle cstudio-tool-mdi" aria-hidden="true"></i>';
             h += '<div class="trd" >Integration</div>';
             h += '</a>';
         }
         
         h += '<a id="tool-quit" name="tool-quit" class="tool-quit tool-base" onClick="quitEditorAll();"style="cursor:pointer;" >';
+        h += '<i class="mdi mdi-arrow-left-bold-box cstudio-tool-mdi" aria-hidden="true"></i>';
         h += '<div class="trd" >Quit</div>';
         h += '</a>';
         
@@ -9795,37 +10717,74 @@ function cstudioGetLanguageNames(){
 }
 
 function cstudioGetAvailableProjectLocales(){
-    var available = (typeof cstudioAvailableLocales !== 'undefined') ? cstudioAvailableLocales : ['en_US'];
+    var names = cstudioGetLanguageNames();
+    var available = (typeof cstudioAvailableLocales !== 'undefined' && cstudioAvailableLocales && cstudioAvailableLocales.length)
+        ? cstudioAvailableLocales
+        : Object.keys(names);
     var locales = [];
     for (var i = 0; i < available.length; i++) {
-        var locale = String(available[i] || '').replace('-', '_');
-        if (locale !== '' && locales.indexOf(locale) === -1) {
+        var locale = cstudioNormalizeLocaleCandidate(available[i]);
+        if (locale !== '' && typeof names[locale] !== 'undefined' && locales.indexOf(locale) === -1) {
             locales.push(locale);
         }
     }
+
     if (locales.length === 0) {
-        locales.push('en_US');
+        locales = Object.keys(names);
     }
+
     return locales;
 }
 
-function cstudioCanonicalProjectLocale(value){
-    var locale = String(value || '').replace('-', '_');
+function cstudioNormalizeLocaleCandidate(value){
+    var locale = String(value || '').replace('-', '_').trim();
     if (locale === '') {
         return '';
     }
 
+    var lowerLocale = locale.toLowerCase();
     var aliases = {
         'en':'en_US',
+        'en_us':'en_US',
+        'english':'en_US',
         'fr':'fr_FR',
-        'es_ES':'es',
+        'fr_fr':'fr_FR',
+        'fr-fr':'fr_FR',
+        'french':'fr_FR',
+        'francais':'fr_FR',
+        'français':'fr_FR',
+        'es':'es',
+        'es_es':'es',
+        'spanish':'es',
+        'spanish latin america':'es',
         'pt':'pt_PT',
+        'pt_pt':'pt_PT',
+        'pt_br':'pt_BR',
         'zh':'zh_CN',
-        'no':'nn_NO'
+        'zh_cn':'zh_CN',
+        'zh_tw':'zh_TW',
+        'no':'nn_NO',
+        'nn_no':'nn_NO'
     };
 
-    if (typeof aliases[locale] !== 'undefined') {
-        locale = aliases[locale];
+    if (typeof aliases[lowerLocale] !== 'undefined') {
+        return aliases[lowerLocale];
+    }
+
+    var parts = locale.split('_');
+    if (parts.length > 1) {
+        locale = parts[0].toLowerCase() + '_' + parts.slice(1).join('_').toUpperCase();
+    } else {
+        locale = lowerLocale;
+    }
+
+    return locale;
+}
+
+function cstudioCanonicalProjectLocale(value){
+    var locale = cstudioNormalizeLocaleCandidate(value);
+    if (locale === '') {
+        return '';
     }
 
     var available = cstudioGetAvailableProjectLocales();
@@ -9858,6 +10817,24 @@ function cstudioGetDefaultProjectLanguage(){
     return cstudioCanonicalProjectLocale('en_US') || 'en_US';
 }
 
+function cstudioGetSavedOrDefaultProjectLanguage(value){
+    var rawValue = String(value || '').replace('-', '_').trim();
+    var courseDefault = cstudioGetDefaultProjectLanguage();
+
+    if (rawValue === '') {
+        return courseDefault;
+    }
+
+    // Older CStudio projects were often initialized with the legacy short English
+    // value even when the course language was not English. Treat only that legacy
+    // short value as "no explicit project language"; a saved en_US remains explicit.
+    if (rawValue.toLowerCase() === 'en' && courseDefault !== 'en_US') {
+        return courseDefault;
+    }
+
+    return cstudioCanonicalProjectLocale(rawValue) || courseDefault;
+}
+
 function cstudioBuildProjectLanguageSelect(){
     var names = cstudioGetLanguageNames();
     var locales = cstudioGetAvailableProjectLocales();
@@ -9875,9 +10852,9 @@ function cstudioBuildProjectLanguageSelect(){
         return a.label.localeCompare(b.label);
     });
 
-    var select = '<select name="projectLangSelect" id="projectLangSelect" style="padding:5px;" class="projectLangSelect" >';
+    var select = '<select name="projectLangSelect" id="projectLangSelect" style="padding:5px;max-width:310px;" class="projectLangSelect" title="' + cstudioEscapeHtml(cstudioTranslateTerm('Language of the project')) + '" >';
     for (var j = 0; j < options.length; j++) {
-        select += '<option value="' + options[j].code + '">' + options[j].label + '</option>';
+        select += '<option value="' + cstudioEscapeHtml(options[j].code) + '">' + cstudioEscapeHtml(options[j].label) + '</option>';
     }
     select += '</select>';
 
@@ -9964,7 +10941,7 @@ function displayGlobalParams(){
         bdDiv += '<div class="cstudio-project-thumbnail-preview" title="Learning path thumbnail (click to change)" onClick="loadAnImage();">';
         bdDiv += '<img title="Learning path thumbnail (click to change)" onerror="this.src=\'img/classique/oel_back.jpg\';" id="imgshow" src="img/classique/oel_back.jpg" />';
         bdDiv += '</div>';
-        bdDiv += '<img class="cstudio-project-thumbnail-reset" title="Reset thumbnail" onClick="initProjectImage();" src="img/bross.png" />';
+        bdDiv += '<img class="cstudio-project-thumbnail-reset" title="Reset image" aria-label="Reset image" onClick="initProjectImage();" src="img/bross.png" />';
         bdDiv += '</div>';
         bdDiv += '</div>';
 
@@ -9976,16 +10953,18 @@ function displayGlobalParams(){
         bdDiv += '<input style="position:relative;width:300px;padding:5px;" id="messageNoOk" type="text" value="" />';
         bdDiv += '</div>';
 
-        bdDiv += '<div style="position:relative;margin:15px;" >';
+        bdDiv += '<div class="cstudio-options-field-row" style="position:relative;margin:15px;" >';
         bdDiv += '<span>&nbsp;&nbsp;<span class="trd" >Language of the project</span>&nbsp;:&nbsp;</span>';
         bdDiv += cstudioBuildProjectLanguageSelect();
+        bdDiv += '<div class="cstudio-option-help trd" style="margin-inline-start:20px;margin-top:6px;font-size:12px;line-height:1.4;color:#667085;">The project language is used by Chamidoc Studio content and defaults to the course language.</div>';
         bdDiv += '</div>';
         
         if (modeUIeol=='a') {
             bdDiv += addCheckOptions('Option Accessibility Tools','I');
         }
-        if (cstudioShowExperimentalTabs) {
-            bdDiv += addCheckOptions('Automatic language translation','G');
+        bdDiv += addCheckOptions('Automatic language translation','G', 'Enables Chamidoc Studio automatic translation tools for this project when translation services are configured. The selected project language is used as the target language.');
+        if (modeUIeol=='a') {
+            bdDiv += addCheckOptions('Progressive documents','D', 'Shows progressive difficulty choices in the player when the content includes progressive levels. Learners can choose the level that matches their progress.');
         }
         
         bdDiv += '<div class="bottomSaveParamsBloc" >';
@@ -10007,7 +10986,6 @@ function displayGlobalParams(){
         bdDiv += addCheckOptions('Option full screen on video','F');
         bdDiv += addCheckOptions('Disable full menu page on start','M');
         if (modeUIeol=='a') {
-            bdDiv += addCheckOptions('Progressive documents','D');
             bdDiv += addCheckOptions('Thumbnail window at bottom of screen','S');
         }
         
@@ -10048,7 +11026,7 @@ function displayGlobalParams(){
         bdDiv += '</table>';
         bdDiv += '</p>';
 
-        bdDiv += addCheckOptions('Save context game and exercise resolutions','P');
+        bdDiv += addCheckOptions('Save game context and resolved exercises','P');
         
         bdDiv += '<div class="bottomSaveParamsBloc" >';
 		bdDiv += '<input onClick="saveParamsGlobal()" ';
@@ -10063,6 +11041,8 @@ function displayGlobalParams(){
 		$('body').append(bdDiv);
 
 	}
+
+	cstudioHideExperimentalEditorOptions();
 
 	if ($("#pageEditGlobalParams").length==1) {
         windowEditorIsOpen = true;
@@ -10223,7 +11203,7 @@ function loadOptGlobal(){
     }
 
     var langLST = parseTexte(getObjD[3]);
-    cstudioSetProjectLanguageValue(langLST);
+    cstudioSetProjectLanguageValue(cstudioGetSavedOrDefaultProjectLanguage(langLST));
     
 }
 
@@ -10267,6 +11247,14 @@ function getParamsGlobal() {
 }
 
 function saveParamsGlobal(){
+
+	cstudioSaveBeforeAction(function(){
+		cstudioSaveParamsGlobalAfterPageSave();
+	});
+
+}
+
+function cstudioSaveParamsGlobalAfterPageSave(){
 
     $('#allParamsArea').css("display","none");
     $('#allParamsArea2').css("display","none");
@@ -10392,17 +11380,23 @@ function uploadGameOverImage() {
 
 }
 
-function addCheckOptions(label,code){
+function addCheckOptions(label,code,helpText){
 
-    var bdDiv = '<div style="position:relative;margin-left:20px;';
-    bdDiv += 'width:440px;margin-bottom:4px;" >';
-    bdDiv += '<label style="margin-top:1px;" class="el-switch el-switch-green" >';
+    var translatedHelp = helpText ? cstudioTranslateTerm(helpText) : '';
+    var bdDiv = '<div class="cstudio-option-check-row" style="position:relative;margin-left:20px;';
+    bdDiv += 'width:440px;margin-bottom:' + (helpText ? '10px' : '4px') + ';" >';
+    bdDiv += '<label style="margin-top:1px;" class="el-switch el-switch-green" title="' + cstudioEscapeHtml(translatedHelp || cstudioTranslateTerm(label)) + '" >';
     bdDiv += '<input id="checkbox'+code+'" type="checkbox" name="switch" >';
     bdDiv += '<span class="el-switch-style"></span>';
     bdDiv += '</label>';
     bdDiv += '<div class="margin-r trd" ';
-    bdDiv += ' style="position:absolute;left:50px;top:0px;padding:5px;" >';
+    bdDiv += ' style="position:absolute;left:50px;top:0px;padding:5px;" title="' + cstudioEscapeHtml(translatedHelp || cstudioTranslateTerm(label)) + '" >';
     bdDiv += '&nbsp;'+label+'</div>';
+    if (helpText) {
+        bdDiv += '<div class="cstudio-option-help" style="margin-left:50px;margin-top:25px;padding-right:8px;font-size:12px;line-height:1.4;color:#667085;">';
+        bdDiv += cstudioEscapeHtml(translatedHelp);
+        bdDiv += '</div>';
+    }
     bdDiv += '</div>';
 
     return bdDiv;
@@ -13840,7 +14834,7 @@ function displayFXTeachList(myObj){
 		bdDiv += generateIconFx('Text MathJax','txtmathjax');
 		
 		bdDiv += generateIconFx('intro bloc','oelcontentcardinfo');
-		bdDiv += generateIconFx('text bloc circle','oelcontentcardinfocircle');
+		bdDiv += generateIconFx('text block circle','oelcontentcardinfocircle');
 		bdDiv += generateIconFx('Photo legend','oelcontentphotowtitle');
 
 		bdDiv += generateIconFx('2 lists','oelcontentlistbox50');
@@ -15144,7 +16138,7 @@ function RapidStyleWindows() {
             finalHeightStyleBox = '475px';
         } else {
             bdDiv += '<a style="cursor:pointer;" target="_blank" ';
-            bdDiv += ' href="https://www.batisseurs-numeriques.fr/c-studio-extends.html" class="styleBlocSelect" >';
+            bdDiv += ' href="https://www.chamidoc.com/" class="styleBlocSelect" >';
             bdDiv += '<div class="showBlocTitleClass titleIconDocH1" >';
             bdDiv += 'Extended styles ...';
             bdDiv += '</div></a>';
@@ -15544,6 +16538,11 @@ function haveSpeedTools(nameObj,nameObj2) {
             r = true;
         }
     }
+    if (typeof window.cstudioAiCanHandleSelection === "function") {
+        if (window.cstudioAiCanHandleSelection(nameObj, nameObj2)) {
+            r = true;
+        }
+    }
     return r;
 }
 
@@ -15570,6 +16569,10 @@ function installSpeedTools() {
         var coolTools = '<a onClick="RapidStyleTxtBox();" ';
         coolTools += ' class="style-over-opt" ></a>';
         $('.ludiSpeedTools').html(coolTools);
+    }
+
+    if (typeof window.cstudioAiInstallSpeedTool === "function") {
+        window.cstudioAiInstallSpeedTool();
     }
 
 }
@@ -15717,17 +16720,13 @@ function selectLangUI(lg) {
 
 	closeAllEditWindows();
 
-	$('#btnsave').css("display","none");
-	$('#loadsave').css("display","block");
-	saveSourceFrame(false,false,0);
-
 	// The editor is generated by legacy JavaScript, so changing the language in
 	// place leaves many already-rendered controls with their previous text.
 	// Reload the editor after saving so all UI strings are rebuilt with the
 	// selected locale and the user does not have to refresh manually.
-	setTimeout(function(){
+	cstudioSaveBeforeAction(function(){
 		window.location.reload();
-	},1600);
+	});
 
 }
 
@@ -15874,10 +16873,12 @@ function traductAll() {
         if ($(this).parent().hasClass("gjs-block")) {
             var parentNode = $(this).parent();
             var txt1 = parentNode.attr("title");
-            var txt2 = returnTradTerm(txt1);
-            txt2 = txt2.replace(/&nbsp;/g, ' ');
-            if (txt1!=txt2) {
-               parentNode.attr("title",txt2);
+            if (txt1) {
+                var txt2 = cstudioTranslateTerm(txt1);
+                txt2 = txt2.replace(/&nbsp;/g, ' ');
+                if (txt1!=txt2) {
+                   parentNode.attr("title",txt2);
+                }
             }
         }
     });
@@ -15891,7 +16892,7 @@ function traductAll() {
             txt1 = $(this).attr("value");
             isBtn = 1;
         }
-        var txt2 = returnTradTerm(txt1);
+        var txt2 = cstudioTranslateTerm(txt1);
         if (txt1!=txt2) {
             if (isBtn==1) {
                 $(this).attr("value",txt2);
@@ -15906,7 +16907,7 @@ function traductAll() {
     $('.trd-title').each(function () {
         var label = $(this).attr('title');
         if (label) {
-            var translatedLabel = returnTradTerm(label);
+            var translatedLabel = cstudioTranslateTerm(label);
             $(this).attr('title', translatedLabel);
             $(this).attr('aria-label', translatedLabel);
         }
@@ -16480,6 +17481,7 @@ function pasteWindowsShow(fromevent){
 		$('.ludimenu').css("display","none");
 		$('#TeachDocPasteEditWindows').css("display","");
         traductAll();
+        cstudioFixVisibleEditorLabels();
 
 	}
 
@@ -16760,22 +17762,15 @@ function displaySubPageEdit(i){
 		
 		windowEditorIsOpen = true;
 		loadaFunction();
+		resetSubPageEditorState(true);
 		
 		getTemplatesPageLst();
 
 		$('.ludimenu').css("display","none");
-		$('#oelTitleload').css("display","none");
-
-		$('.pageDefautTplRight').css("display","none");
-		$('.pageTemplateRight').css("display","none");
-
 		$('.ludiEditMenuContext').css("display","none");
 		$('#pageEditAdd').css("display","");
 
-		$('#typenode2').attr('checked',true);
-		$('#typenode3').attr('checked',false);
-		$('#typenode4').attr('checked',false);
-
+		cstudioFixVisibleEditorLabels();
 		$('#inputTitlePage').focus();
 	}
 

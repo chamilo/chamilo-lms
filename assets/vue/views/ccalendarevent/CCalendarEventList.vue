@@ -106,11 +106,11 @@
         <h5 v-text="sessionState.sessionAsEvent.title" />
         <p
           v-show="sessionState.sessionAsEvent.start"
-          v-text="t('From %s', [abbreviatedDatetime(sessionState.sessionAsEvent.start)])"
+          v-text="t('From {0}', [abbreviatedDatetime(sessionState.sessionAsEvent.start)])"
         />
         <p
           v-show="sessionState.sessionAsEvent.end"
-          v-text="t('Until %s', [abbreviatedDatetime(sessionState.sessionAsEvent.end)])"
+          v-text="t('Until {0}', [abbreviatedDatetime(sessionState.sessionAsEvent.end)])"
         />
       </div>
 
@@ -144,7 +144,7 @@ import CCalendarEventForm from "../../components/ccalendarevent/CCalendarEventFo
 import CCalendarEventInfo from "../../components/ccalendarevent/CCalendarEventInfo"
 import allLocales from "@fullcalendar/core/locales-all"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { useToast } from "primevue/usetoast"
+import { useNotification } from "../../composables/notification"
 import { useCidReqStore } from "../../store/cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useLocale, useParentLocale } from "../../composables/locale"
@@ -933,7 +933,7 @@ async function onCreateEventForm() {
   }
 }
 
-const toast = useToast()
+const { showSuccessNotification } = useNotification()
 
 watch(
   () => route.query.type,
@@ -950,11 +950,7 @@ watch(
       return
     }
 
-    toast.add({
-      severity: "success",
-      detail: t("{0} created", [created.resourceNode.title]),
-      life: 3500,
-    })
+    showSuccessNotification(t("{0} created", [created.resourceNode.title]))
 
     reFetch()
   },
@@ -967,11 +963,7 @@ watch(
       return
     }
 
-    toast.add({
-      severity: "success",
-      detail: t("{0} updated", [updated.resourceNode.title]),
-      life: 3500,
-    })
+    showSuccessNotification(t("{0} updated", [updated.resourceNode.title]))
 
     reFetch()
   },

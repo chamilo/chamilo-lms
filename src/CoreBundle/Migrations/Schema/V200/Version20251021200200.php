@@ -11,7 +11,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20251021200200 extends AbstractMigrationChamilo
 {
-    private const DEBUG = true;
+    private const bool DEBUG = true;
 
     public function getDescription(): string
     {

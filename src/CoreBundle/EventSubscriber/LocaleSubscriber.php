@@ -7,10 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventSubscriber;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\LanguageHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -29,16 +29,23 @@ readonly class LocaleSubscriber implements EventSubscriberInterface
         private SettingsManager $settingsManager,
         private ParameterBagInterface $parameterBag,
         private SettingsCourseManager $courseSettingsManager,
-        private EntityManagerInterface $em,
+        private CourseFromRequestHelper $courseFromRequest,
         private LanguageHelper $languageHelper,
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void
     {
+        // Error pages run as a sub-request and inherit the locale already
+        // resolved for the main one. Resolving it again would query the database
+        // right when it may be what failed, and the error page would never render.
+        if (!$event->isMainRequest()) {
+            return;
+        }
+
         $request = $event->getRequest();
 
         // Skip if not installed or no session is available
-        $installed = $this->parameterBag->has('installed') && 1 === (int) $this->parameterBag->get('installed');
+        $installed = $this->parameterBag->has('installed') && 1 === (int) (string) $this->parameterBag->get('installed');
         if (!$installed || !$request->hasSession()) {
             return;
         }
@@ -71,8 +78,10 @@ readonly class LocaleSubscriber implements EventSubscriberInterface
             $localeList['user_profil_lang'] = $userLocale;
         }
 
-        // 3) Course language only when the current request is in course context
-        $course = $this->resolveCourseFromRequest($request);
+        // 3) Course language only when the current request is in the course context.
+        // Resolved from the request itself (never from the course stored in the
+        // user session, which may belong to a previous request on global pages).
+        $course = $this->courseFromRequest->resolveCourse($request);
 
         if ($course instanceof Course) {
             $userLocale = $localeList['user_profil_lang'] ?? null;
@@ -134,37 +143,6 @@ readonly class LocaleSubscriber implements EventSubscriberInterface
         }
 
         return $result;
-    }
-
-    /**
-     * Resolve course context only from the current request.
-     * Do not reuse a course stored in session for global pages.
-     */
-    private function resolveCourseFromRequest(Request $request): ?Course
-    {
-        $cid = $request->attributes->get('cid');
-        if (!$cid) {
-            $cid = $request->query->get('cid');
-        }
-
-        $cidReq = $request->attributes->get('cidReq');
-        if (!$cidReq) {
-            $cidReq = $request->query->get('cidReq');
-        }
-
-        if ($cid) {
-            if (ctype_digit((string) $cid)) {
-                return $this->em->getRepository(Course::class)->find((int) $cid);
-            }
-
-            return $this->em->getRepository(Course::class)->findOneBy(['code' => (string) $cid]);
-        }
-
-        if ($cidReq) {
-            return $this->em->getRepository(Course::class)->findOneBy(['code' => (string) $cidReq]);
-        }
-
-        return null;
     }
 
     private function detectBrowserLanguage(Request $request): ?string

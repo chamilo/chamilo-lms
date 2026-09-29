@@ -127,7 +127,7 @@ class FrmAdd extends FormValidator
         $showAGS = false;
 
         if (api_get_course_int_id()) {
-            $caterories = Category::load(null, null, api_get_course_id());
+            $caterories = Category::load(null, null, api_get_course_int_id());
 
             if (!empty($caterories)) {
                 $showAGS = true;
@@ -149,7 +149,7 @@ class FrmAdd extends FormValidator
                 ]
             );
         } else {
-            $gradebookUrl = api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq();
+            $gradebookUrl = api_get_path(WEB_PATH).'gradebook/redirect?view=overview&'.api_get_cidreq();
 
             $this->addLabel(
                 $plugin->get_lang('AssigmentAndGradesService'),

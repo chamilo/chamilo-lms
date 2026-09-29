@@ -1,6 +1,6 @@
 import { createApp, watch } from "vue"
 import App from "./App.vue"
-import i18n from "./i18n"
+import i18n, { i18nReady } from "./i18n"
 import router from "./router"
 import store from "./store"
 import { createPinia } from "pinia"
@@ -28,7 +28,7 @@ import roomService from "./services/roomService"
 
 import makeCrudModule from "./store/modules/crud"
 import installHttpErrors from "./plugins/httpErrors"
-import uxModule from "./store/modules/ux"
+import installSessionExpiry from "./plugins/sessionExpiry"
 
 import VueFlatPickr from "vue-flatpickr-component"
 import "flatpickr/dist/flatpickr.css"
@@ -188,8 +188,6 @@ store.registerModule(
   }),
 )
 
-store.registerModule("ux", uxModule)
-
 // Vue setup.
 const app = createApp(App)
 
@@ -241,25 +239,29 @@ function applyPrimeLocale() {
     reject: t("No"),
     emptyMessage: t("No available options"),
     emptyFilterMessage: t("No available options"),
+    emptySearchMessage: t("No results found"),
   }
 }
-applyPrimeLocale()
 
-try {
-  const loc = i18n.global.locale
-  if (loc && typeof loc === "object" && "value" in loc) {
-    watch(loc, applyPrimeLocale)
-  }
-} catch {}
+// Locale messages are now loaded on demand (see i18n.js) instead of all ~70
+// languages being bundled eagerly, so the boot locale's messages must finish
+// loading before anything that reads translations runs.
+i18nReady.then(() => {
+  applyPrimeLocale()
 
-installHttpErrors({
-  store,
-  t: (key, params) => i18n.global.t(key, params),
-  on401: (err) => console.warn("Unauthorized", err?.response?.data?.error || "Unauthorized"),
-  on403: (msg) => console.info("Forbidden shown:", msg),
-  on500: (err) => console.error("Server error", err?.response?.data?.detail || "Server error"),
+  try {
+    const loc = i18n.global.locale
+    if (loc && typeof loc === "object" && "value" in loc) {
+      watch(loc, applyPrimeLocale)
+    }
+  } catch {}
+
+  // Both need Pinia active (see .use(pinia) above): they publish through the ux
+  // and security stores.
+  installHttpErrors()
+  installSessionExpiry()
+
+  // The cid/sid/gid request interceptor lives on the shared api instance (config/api.js).
+
+  app.mount("#app")
 })
-
-// The cid/sid/gid request interceptor lives on the shared api instance (config/api.js).
-
-app.mount("#app")

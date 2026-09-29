@@ -52,11 +52,9 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
             ->where('o.field = :fieldId')
             ->andWhere('o.value = :optionValue')
             ->andWhere('f.itemType = :itemType')
-            ->setParameters([
-                'fieldId' => $fieldId,
-                'optionValue' => $optionValue,
-                'itemType' => $itemType,
-            ])
+            ->setParameter('fieldId', $fieldId)
+            ->setParameter('optionValue', $optionValue)
+            ->setParameter('itemType', $itemType)
         ;
 
         return $qb->getQuery()->getResult();

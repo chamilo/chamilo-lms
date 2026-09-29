@@ -18,6 +18,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 final class MistralProvider implements AiProviderInterface, AiDocumentProviderInterface
 {
     private string $apiKey;
+    private ?string $lastTextError = null;
 
     // Text defaults
     private string $textApiUrl;
@@ -216,9 +217,10 @@ final class MistralProvider implements AiProviderInterface, AiDocumentProviderIn
             $topic
         );
 
+        $this->lastTextError = null;
         $lpStructure = $this->requestMistral($this->textApiUrl, $this->textModel, $this->textTemperature, $this->textMaxTokens, $tocPrompt, 'learnpath');
         if (!$lpStructure) {
-            return ['success' => false, 'message' => 'Failed to generate course structure.'];
+            return ['success' => false, 'message' => $this->buildTextFailureMessage('Mistral')];
         }
 
         $lpItems = [];
@@ -317,9 +319,13 @@ Title: "%s". Assume the reader already knows the context.',
 
     private function requestMistral(string $url, string $model, float $temperature, int $maxTokens, string $prompt, string $toolName): ?string
     {
+        $this->lastTextError = null;
+
         $userId = $this->getUserId();
         if (!$userId) {
-            throw new RuntimeException('User not authenticated.');
+            $this->lastTextError = 'User is not authenticated.';
+
+            return null;
         }
 
         $payload = [
@@ -345,7 +351,10 @@ Title: "%s". Assume the reader already knows the context.',
             $data = $response->toArray(false);
 
             if (200 !== $statusCode || !isset($data['choices'][0]['message']['content'])) {
-                error_log('[AI][Mistral] Invalid response (status='.$statusCode.').');
+                $message = $data['message'] ?? ($data['error']['message'] ?? 'Invalid or empty response.');
+                $message = \is_string($message) ? trim($message) : 'Invalid or empty response.';
+                $this->lastTextError = 'HTTP '.$statusCode.': '.$message;
+                error_log('[AI][Mistral] Invalid response (status='.$statusCode.'): '.$message);
 
                 return null;
             }
@@ -372,10 +381,21 @@ Title: "%s". Assume the reader already knows the context.',
 
             return $generatedContent;
         } catch (Exception $e) {
+            $this->lastTextError = $e->getMessage();
             error_log('[AI][Mistral] Exception: '.$e->getMessage());
 
             return null;
         }
+    }
+
+    private function buildTextFailureMessage(string $provider): string
+    {
+        $detail = trim((string) $this->lastTextError);
+        if ('' === $detail) {
+            return $provider.' failed to generate the course structure.';
+        }
+
+        return $provider.' failed to generate the course structure: '.mb_substr($detail, 0, 1000);
     }
 
     private function filterValidAikenQuestions(string $quizContent): array
@@ -466,12 +486,12 @@ Title: "%s". Assume the reader already knows the context.',
      */
     private function resolveTextOptions(array $options): array
     {
-        $url = (string) (($options['url'] ?? null) ?? $this->textApiUrl);
-        $model = (string) (($options['model'] ?? null) ?? $this->textModel);
-        $temperature = (float) (($options['temperature'] ?? null) ?? $this->textTemperature);
+        $url = (string) ($options['url'] ?? $this->textApiUrl);
+        $model = (string) ($options['model'] ?? $this->textModel);
+        $temperature = (float) ($options['temperature'] ?? $this->textTemperature);
 
         $maxTokens = $options['max_tokens'] ?? ($options['max_output_tokens'] ?? null);
-        $maxTokens = (int) (($maxTokens ?? null) ?? $this->textMaxTokens);
+        $maxTokens = (int) ($maxTokens ?? $this->textMaxTokens);
 
         if ($maxTokens <= 0) {
             $maxTokens = $this->textMaxTokens > 0 ? $this->textMaxTokens : 1000;

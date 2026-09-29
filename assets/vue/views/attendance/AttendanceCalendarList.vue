@@ -45,14 +45,22 @@
         :key="event.id"
         class="calendar-item flex justify-between items-center border border-gray-25 rounded bg-gray-10 p-4"
       >
-        <div class="flex items-center gap-2">
-          <i class="mdi mdi-calendar text-primary text-lg"></i>
-          <span class="text-gray-90">
-            {{ formatDateTime(event.dateTime) }}
-            <template v-if="event.duration !== null && event.duration !== undefined">
-              · {{ t("{0} min", [event.duration]) }}
-            </template>
-          </span>
+        <div class="flex items-start gap-2">
+          <i class="mdi mdi-calendar text-primary text-lg mt-1"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-90">
+              {{ formatDateTime(event.dateTime) }}
+              <template v-if="event.duration !== null && event.duration !== undefined">
+                · {{ t("{0} min", [event.duration]) }}
+              </template>
+            </span>
+            <span
+              v-if="event.effectiveRoom"
+              class="text-sm text-gray-600"
+            >
+              {{ t("Room") }}: {{ formatRoom(event.effectiveRoom) }}
+            </span>
+          </div>
         </div>
         <div class="calendar-actions flex gap-2">
           <BaseButton
@@ -100,6 +108,13 @@
             :placeholder="t('Duration in minutes')"
           />
         </div>
+
+        <BaseSelect
+          id="attendance_calendar_room"
+          v-model="selectedEventRoom"
+          :label="t('Room')"
+          :options="roomOptions"
+        />
       </div>
       <div class="dialog-actions mt-4">
         <BaseButton
@@ -151,6 +166,8 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import Dialog from "primevue/dialog"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
+import roomService from "../../services/roomService"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -163,12 +180,19 @@ const selectedEvent = ref(null)
 
 const selectedEventDate = ref(null)
 const selectedEventDuration = ref(null)
+const selectedEventRoom = ref(null)
+const roomOptions = ref([])
 
 const eventIdToDelete = ref(null)
 
 const formatDateTime = (dateTime) => {
   const date = dateTime instanceof Date ? dateTime : new Date(dateTime)
   return date.toLocaleString()
+}
+
+const formatRoom = (room) => {
+  if (!room) return ""
+  return [room.branchTitle, room.title].filter(Boolean).join(" — ")
 }
 
 const fetchCalendarEvents = async () => {
@@ -187,6 +211,8 @@ const fetchCalendarEvents = async () => {
             : calendar.duration !== undefined && calendar.duration !== null
               ? Number(calendar.duration)
               : null,
+        room: typeof calendar.room === "string" ? calendar.room : calendar.room?.["@id"] || null,
+        effectiveRoom: calendar.effectiveRoomData || null,
       }))
     } else {
       calendarEvents.value = []
@@ -210,6 +236,8 @@ const openEditDialog = (event) => {
     selectedEventDuration.value = null
   }
 
+  selectedEventRoom.value = event?.room || null
+
   editDialogVisible.value = true
 }
 
@@ -223,20 +251,13 @@ const updateCalendarEvent = async () => {
     const payload = {
       dateTime: selectedEventDate.value,
       duration: selectedEventDuration.value,
+      room: selectedEventRoom.value || null,
     }
 
     await attendanceService.updateCalendarEvent(selectedEvent.value.id, payload)
 
-    const index = calendarEvents.value.findIndex((e) => e.id === selectedEvent.value.id)
-    if (index !== -1) {
-      calendarEvents.value[index] = {
-        ...calendarEvents.value[index],
-        dateTime: selectedEventDate.value,
-        duration: selectedEventDuration.value,
-      }
-    }
-
     closeEditDialog()
+    await fetchCalendarEvents()
   } catch (error) {
     console.error("Error updating calendar event:", error)
   }
@@ -247,6 +268,7 @@ const closeEditDialog = () => {
   selectedEvent.value = null
   selectedEventDate.value = null
   selectedEventDuration.value = null
+  selectedEventRoom.value = null
 }
 
 const openDeleteDialog = (id) => {
@@ -306,7 +328,22 @@ const redirectToAddCalendarEvent = () => {
   })
 }
 
-onMounted(fetchCalendarEvents)
+const loadRooms = async () => {
+  try {
+    roomOptions.value = await roomService.getOptions({
+      includeDefault: true,
+      defaultLabel: t("Use attendance default room"),
+      floorLabel: t("Floor"),
+      capacityLabel: t("Capacity"),
+    })
+  } catch (error) {
+    console.error("Error loading rooms:", error)
+  }
+}
+
+onMounted(async () => {
+  await Promise.all([fetchCalendarEvents(), loadRooms()])
+})
 </script>
 <style scoped>
 .calendar-list {

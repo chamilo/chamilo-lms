@@ -213,7 +213,7 @@ $myProgressIcon = Display::getMdiIcon(
 if (api_is_drh()) {
     // DRH / managers: full reporting navigation.
     $menuItems = [
-        Display::url($followUpIcon, $webCodePath.'my_space/index.php'),
+        Display::url($followUpIcon, api_get_path(WEB_PATH).'reporting'),
         Display::url($myProgressIcon, '#'),
         Display::url(
             Display::getMdiIcon(
@@ -260,7 +260,7 @@ if (api_is_drh()) {
     $actionsLeft .= implode('', $menuItems);
 } else {
     // Standard users: keep at least Follow up + My progress.
-    $actionsLeft .= Display::url($followUpIcon, $webCodePath.'my_space/index.php');
+    $actionsLeft .= Display::url($followUpIcon, api_get_path(WEB_PATH).'reporting');
     $actionsLeft .= Display::url($myProgressIcon, '#');
 
     // Platform admins also get quick access to Courses / Sessions.

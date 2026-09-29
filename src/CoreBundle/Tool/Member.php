@@ -20,7 +20,7 @@ class Member extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/user/user.php';
+        return '/resources/course-users/:nodeId/';
     }
 
     public function getCategory(): string

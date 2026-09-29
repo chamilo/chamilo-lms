@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CourseBundle\Repository\CLpItemViewRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'c_lp_item_view')]
 #[ORM\Index(name: 'lp_item_id', columns: ['lp_item_id'])]
 #[ORM\Index(name: 'lp_view_id', columns: ['lp_view_id'])]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CLpItemViewRepository::class)]
 class CLpItemView
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -41,6 +42,9 @@ class CLpItemView
 
     #[ORM\Column(name: 'score', type: 'float', precision: 10, scale: 0, nullable: false)]
     protected float $score;
+
+    #[ORM\Column(name: 'progress', type: 'float', precision: 10, scale: 0, nullable: true)]
+    protected ?float $progress = null;
 
     #[ORM\Column(name: 'status', type: 'string', length: 32, nullable: false, options: ['default' => 'not attempted'])]
     protected string $status;
@@ -134,6 +138,18 @@ class CLpItemView
     public function getScore()
     {
         return $this->score;
+    }
+
+    public function setProgress(?float $progress): self
+    {
+        $this->progress = $progress;
+
+        return $this;
+    }
+
+    public function getProgress(): ?float
+    {
+        return $this->progress;
     }
 
     public function setStatus(string $status): self

@@ -51,7 +51,8 @@ final class IllustrationRepository extends ResourceRepository
         ResourceInterface $resource,
         User $creator,
         ?UploadedFile $uploadFile = null,
-        string $crop = ''
+        string $crop = '',
+        bool $flush = true
     ): ?ResourceFile {
         if (null === $uploadFile) {
             return null;
@@ -79,7 +80,9 @@ final class IllustrationRepository extends ResourceRepository
             }
             $em->persist($file);
         }
-        $em->flush();
+        if ($flush) {
+            $em->flush();
+        }
 
         return $file;
     }
@@ -96,10 +99,8 @@ final class IllustrationRepository extends ResourceRepository
             ->innerJoin('node.resourceFiles', 'file')
             ->where('node.parent = :parent')
             ->andWhere('type.title = :name')
-            ->setParameters([
-                'parent' => $resourceNode->getId(),
-                'name' => $name,
-            ])
+            ->setParameter('parent', $resourceNode->getId())
+            ->setParameter('name', $name)
             ->setMaxResults(1)
         ;
 
@@ -144,6 +145,73 @@ final class IllustrationRepository extends ResourceRepository
         }
 
         return $illustration;
+    }
+
+    /**
+     * Batch variant of self::getIllustrationUrl() for many resources at once: runs a single query
+     * for all of them instead of one query per resource.
+     *
+     * @param array<int|string, ResourceIllustrationInterface> $resourcesByKey
+     * @param string                                           $filter         See: services.yaml parameter "glide_media_filters" to see the list of filters.
+     *
+     * @return array<int|string, string> Illustration URL keyed exactly like $resourcesByKey
+     */
+    public function getIllustrationUrlsForResources(array $resourcesByKey, string $filter = '', int $size = 32): array
+    {
+        $urls = [];
+        $keysByNodeId = [];
+        foreach ($resourcesByKey as $key => $resource) {
+            $urls[$key] = $resource->getDefaultIllustration($size);
+            $node = $resource->getResourceNode();
+            if (null !== $node) {
+                $keysByNodeId[$node->getId()] = $key;
+            }
+        }
+
+        if ([] === $keysByNodeId) {
+            return $urls;
+        }
+
+        $nodeRepo = $this->getResourceNodeRepository();
+        $name = $this->getResourceTypeName();
+
+        $rows = $nodeRepo->createQueryBuilder('n')
+            ->select('node', 'IDENTITY(node.parent) AS parentId')
+            ->from(ResourceNode::class, 'node')
+            ->innerJoin('node.resourceType', 'type')
+            ->innerJoin('node.resourceFiles', 'file')
+            ->where('node.parent IN (:parents)')
+            ->andWhere('type.title = :name')
+            ->setParameter('parents', array_keys($keysByNodeId))
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $seenParents = [];
+        foreach ($rows as $row) {
+            $parentId = (int) $row['parentId'];
+            if (isset($seenParents[$parentId]) || !isset($keysByNodeId[$parentId])) {
+                continue;
+            }
+            $seenParents[$parentId] = true;
+
+            /** @var ResourceNode $node */
+            $node = $row[0];
+            $params = [
+                'id' => $node->getUuid(),
+                'tool' => $node->getResourceType()->getTool(),
+                'type' => $node->getResourceType()->getTitle(),
+            ];
+
+            if (!empty($filter)) {
+                $params['filter'] = $filter;
+            }
+
+            $urls[$keysByNodeId[$parentId]] = $this->getRouter()->generate('chamilo_core_resource_view', $params);
+        }
+
+        return $urls;
     }
 
     private function getIllustrationUrlFromNode(ResourceNode $node, string $filter = ''): string

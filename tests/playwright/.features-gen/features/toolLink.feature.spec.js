@@ -1,0 +1,75 @@
+// Generated from: features/toolLink.feature
+import { test } from "playwright-bdd";
+
+test.describe('Link tool', () => {
+
+  test.beforeEach('Background', async ({ Given, And, page }, testInfo) => { if (testInfo.error) return;
+    await Given('I am a platform administrator', null, { page }); 
+    await And('I am on course "TEMP" homepage', null, { page }); 
+  });
+  
+  test('Create a link category', async ({ Given, When, Then, And, page }) => { 
+    await Given('I am on "/main/link/link.php?action=addcategory&cid=3"', null, { page }); 
+    await And('I wait for the page to be loaded', null, { page }); 
+    await When('I fill in the following:', {"dataTable":{"rows":[{"cells":[{"value":"category_title"},{"value":"Link Category Test"}]}]}}, { page }); 
+    await And('I fill in editor field "description" with "Category description"', null, { page }); 
+    await And('I press "submitCategory"', null, { page }); 
+    await And('wait for the page to be loaded', null, { page }); 
+    await Then('I should see "Link Category Test"', null, { page }); 
+    await Then('I should not see an error', null, { page }); 
+  });
+
+  test('Create a link', async ({ When, Then, And, page }) => { 
+    await And('I am on "/main/link/link.php?action=addlink&cid=3"', null, { page }); 
+    await And('I wait for the page to be loaded', null, { page }); 
+    await When('I fill in the following:', {"dataTable":{"rows":[{"cells":[{"value":"url"},{"value":"http://www.chamilo.org"}]},{"cells":[{"value":"title"},{"value":"Chamilo Link Test"}]}]}}, { page }); 
+    await And('I press "submitLink"', null, { page }); 
+    await And('wait for the page to be loaded', null, { page }); 
+    await Then('I should see "Chamilo Link Test"', null, { page }); 
+    await And('I should not see an error', null, { page }); 
+  });
+
+  test('Create a link with category', async ({ Given, When, Then, And, page }) => { 
+    await Given('I am on "/main/link/link.php?action=addlink&cid=3"', null, { page }); 
+    await And('I wait for the page to be loaded', null, { page }); 
+    await When('I fill in the following:', {"dataTable":{"rows":[{"cells":[{"value":"url"},{"value":"http://www.chamilo.org"}]},{"cells":[{"value":"title"},{"value":"Chamilo Categorized Link Test"}]}]}}, { page }); 
+    await And('I select "Link Category Test" from "category_id"', null, { page }); 
+    await And('I press "submitLink"', null, { page }); 
+    await And('wait for the page to be loaded', null, { page }); 
+    await Then('I should see "Chamilo Categorized Link Test"', null, { page }); 
+  });
+
+  test('Delete link', async ({ Given, Then, And, page }) => { 
+    await Given('I am on "/main/link/link.php?cid=3"', null, { page }); 
+    await And('I wait for the page to be loaded', null, { page }); 
+    await And('I click the "i.mdi-delete" icon in the card for "Chamilo Link Test"', null, { page }); 
+    await And('wait very long for the page to be loaded', null, { page }); 
+    await Then('I should not see an error', null, { page }); 
+  });
+
+  test('Delete link category', async ({ Given, Then, And, page }) => { 
+    await Given('I am on "/main/link/link.php?cid=3"', null, { page }); 
+    await And('I wait for the page to be loaded', null, { page }); 
+    await And('I click the "i.mdi-delete" icon in the card for "Link Category Test"', null, { page }); 
+    await And('wait very long for the page to be loaded', null, { page }); 
+    await Then('I should not see an error', null, { page }); 
+    await Then('I should not see "Link Category Test"', null, { page }); 
+  });
+
+});
+
+// == technical section ==
+
+test.use({
+  $test: [({}, use) => use(test), { scope: 'test', box: true }],
+  $uri: [({}, use) => use('features/toolLink.feature'), { scope: 'test', box: true }],
+  $bddFileData: [({}, use) => use(bddFileData), { scope: "test", box: true }],
+});
+
+const bddFileData = [ // bdd-data-start
+  {"pwTestLine":11,"pickleLine":35,"tags":[],"steps":[{"pwStepLine":7,"gherkinStepLine":32,"keywordType":"Context","textWithKeyword":"Given I am a platform administrator","isBg":true,"stepMatchArguments":[]},{"pwStepLine":8,"gherkinStepLine":33,"keywordType":"Context","textWithKeyword":"And I am on course \"TEMP\" homepage","isBg":true,"stepMatchArguments":[{"group":{"start":15,"value":"\"TEMP\"","children":[{"start":16,"value":"TEMP","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":12,"gherkinStepLine":36,"keywordType":"Context","textWithKeyword":"Given I am on \"/main/link/link.php?action=addcategory&cid=3\"","stepMatchArguments":[{"group":{"start":8,"value":"\"/main/link/link.php?action=addcategory&cid=3\"","children":[{"start":9,"value":"/main/link/link.php?action=addcategory&cid=3","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":13,"gherkinStepLine":37,"keywordType":"Context","textWithKeyword":"And I wait for the page to be loaded","stepMatchArguments":[]},{"pwStepLine":14,"gherkinStepLine":38,"keywordType":"Action","textWithKeyword":"When I fill in the following:","stepMatchArguments":[]},{"pwStepLine":15,"gherkinStepLine":40,"keywordType":"Action","textWithKeyword":"And I fill in editor field \"description\" with \"Category description\"","stepMatchArguments":[{"group":{"start":23,"value":"\"description\"","children":[{"start":24,"value":"description","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"},{"group":{"start":42,"value":"\"Category description\"","children":[{"start":43,"value":"Category description","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":16,"gherkinStepLine":41,"keywordType":"Action","textWithKeyword":"And I press \"submitCategory\"","stepMatchArguments":[{"group":{"start":8,"value":"\"submitCategory\"","children":[{"start":9,"value":"submitCategory","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":17,"gherkinStepLine":42,"keywordType":"Action","textWithKeyword":"And wait for the page to be loaded","stepMatchArguments":[]},{"pwStepLine":18,"gherkinStepLine":43,"keywordType":"Outcome","textWithKeyword":"Then I should see \"Link Category Test\"","stepMatchArguments":[{"group":{"start":13,"value":"\"Link Category Test\"","children":[{"start":14,"value":"Link Category Test","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":19,"gherkinStepLine":44,"keywordType":"Outcome","textWithKeyword":"Then I should not see an error","stepMatchArguments":[]}]},
+  {"pwTestLine":22,"pickleLine":46,"tags":[],"steps":[{"pwStepLine":7,"gherkinStepLine":32,"keywordType":"Context","textWithKeyword":"Given I am a platform administrator","isBg":true,"stepMatchArguments":[]},{"pwStepLine":8,"gherkinStepLine":33,"keywordType":"Context","textWithKeyword":"And I am on course \"TEMP\" homepage","isBg":true,"stepMatchArguments":[{"group":{"start":15,"value":"\"TEMP\"","children":[{"start":16,"value":"TEMP","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":23,"gherkinStepLine":47,"keywordType":"Context","textWithKeyword":"And I am on \"/main/link/link.php?action=addlink&cid=3\"","stepMatchArguments":[{"group":{"start":8,"value":"\"/main/link/link.php?action=addlink&cid=3\"","children":[{"start":9,"value":"/main/link/link.php?action=addlink&cid=3","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":24,"gherkinStepLine":48,"keywordType":"Context","textWithKeyword":"And I wait for the page to be loaded","stepMatchArguments":[]},{"pwStepLine":25,"gherkinStepLine":49,"keywordType":"Action","textWithKeyword":"When I fill in the following:","stepMatchArguments":[]},{"pwStepLine":26,"gherkinStepLine":52,"keywordType":"Action","textWithKeyword":"And I press \"submitLink\"","stepMatchArguments":[{"group":{"start":8,"value":"\"submitLink\"","children":[{"start":9,"value":"submitLink","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":27,"gherkinStepLine":53,"keywordType":"Action","textWithKeyword":"And wait for the page to be loaded","stepMatchArguments":[]},{"pwStepLine":28,"gherkinStepLine":54,"keywordType":"Outcome","textWithKeyword":"Then I should see \"Chamilo Link Test\"","stepMatchArguments":[{"group":{"start":13,"value":"\"Chamilo Link Test\"","children":[{"start":14,"value":"Chamilo Link Test","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":29,"gherkinStepLine":55,"keywordType":"Outcome","textWithKeyword":"And I should not see an error","stepMatchArguments":[]}]},
+  {"pwTestLine":32,"pickleLine":57,"tags":[],"steps":[{"pwStepLine":7,"gherkinStepLine":32,"keywordType":"Context","textWithKeyword":"Given I am a platform administrator","isBg":true,"stepMatchArguments":[]},{"pwStepLine":8,"gherkinStepLine":33,"keywordType":"Context","textWithKeyword":"And I am on course \"TEMP\" homepage","isBg":true,"stepMatchArguments":[{"group":{"start":15,"value":"\"TEMP\"","children":[{"start":16,"value":"TEMP","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":33,"gherkinStepLine":58,"keywordType":"Context","textWithKeyword":"Given I am on \"/main/link/link.php?action=addlink&cid=3\"","stepMatchArguments":[{"group":{"start":8,"value":"\"/main/link/link.php?action=addlink&cid=3\"","children":[{"start":9,"value":"/main/link/link.php?action=addlink&cid=3","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":34,"gherkinStepLine":59,"keywordType":"Context","textWithKeyword":"And I wait for the page to be loaded","stepMatchArguments":[]},{"pwStepLine":35,"gherkinStepLine":60,"keywordType":"Action","textWithKeyword":"When I fill in the following:","stepMatchArguments":[]},{"pwStepLine":36,"gherkinStepLine":63,"keywordType":"Action","textWithKeyword":"And I select \"Link Category Test\" from \"category_id\"","stepMatchArguments":[{"group":{"start":9,"value":"\"Link Category Test\"","children":[{"start":10,"value":"Link Category Test","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"},{"group":{"start":35,"value":"\"category_id\"","children":[{"start":36,"value":"category_id","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":37,"gherkinStepLine":64,"keywordType":"Action","textWithKeyword":"And I press \"submitLink\"","stepMatchArguments":[{"group":{"start":8,"value":"\"submitLink\"","children":[{"start":9,"value":"submitLink","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":38,"gherkinStepLine":65,"keywordType":"Action","textWithKeyword":"And wait for the page to be loaded","stepMatchArguments":[]},{"pwStepLine":39,"gherkinStepLine":66,"keywordType":"Outcome","textWithKeyword":"Then I should see \"Chamilo Categorized Link Test\"","stepMatchArguments":[{"group":{"start":13,"value":"\"Chamilo Categorized Link Test\"","children":[{"start":14,"value":"Chamilo Categorized Link Test","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+  {"pwTestLine":42,"pickleLine":68,"tags":[],"steps":[{"pwStepLine":7,"gherkinStepLine":32,"keywordType":"Context","textWithKeyword":"Given I am a platform administrator","isBg":true,"stepMatchArguments":[]},{"pwStepLine":8,"gherkinStepLine":33,"keywordType":"Context","textWithKeyword":"And I am on course \"TEMP\" homepage","isBg":true,"stepMatchArguments":[{"group":{"start":15,"value":"\"TEMP\"","children":[{"start":16,"value":"TEMP","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":43,"gherkinStepLine":69,"keywordType":"Context","textWithKeyword":"Given I am on \"/main/link/link.php?cid=3\"","stepMatchArguments":[{"group":{"start":8,"value":"\"/main/link/link.php?cid=3\"","children":[{"start":9,"value":"/main/link/link.php?cid=3","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":44,"gherkinStepLine":70,"keywordType":"Context","textWithKeyword":"And I wait for the page to be loaded","stepMatchArguments":[]},{"pwStepLine":45,"gherkinStepLine":71,"keywordType":"Context","textWithKeyword":"And I click the \"i.mdi-delete\" icon in the card for \"Chamilo Link Test\"","stepMatchArguments":[{"group":{"start":12,"value":"\"i.mdi-delete\"","children":[{"start":13,"value":"i.mdi-delete","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"},{"group":{"start":48,"value":"\"Chamilo Link Test\"","children":[{"start":49,"value":"Chamilo Link Test","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":46,"gherkinStepLine":72,"keywordType":"Context","textWithKeyword":"And wait very long for the page to be loaded","stepMatchArguments":[]},{"pwStepLine":47,"gherkinStepLine":73,"keywordType":"Outcome","textWithKeyword":"Then I should not see an error","stepMatchArguments":[]}]},
+  {"pwTestLine":50,"pickleLine":75,"tags":[],"steps":[{"pwStepLine":7,"gherkinStepLine":32,"keywordType":"Context","textWithKeyword":"Given I am a platform administrator","isBg":true,"stepMatchArguments":[]},{"pwStepLine":8,"gherkinStepLine":33,"keywordType":"Context","textWithKeyword":"And I am on course \"TEMP\" homepage","isBg":true,"stepMatchArguments":[{"group":{"start":15,"value":"\"TEMP\"","children":[{"start":16,"value":"TEMP","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":51,"gherkinStepLine":76,"keywordType":"Context","textWithKeyword":"Given I am on \"/main/link/link.php?cid=3\"","stepMatchArguments":[{"group":{"start":8,"value":"\"/main/link/link.php?cid=3\"","children":[{"start":9,"value":"/main/link/link.php?cid=3","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":52,"gherkinStepLine":77,"keywordType":"Context","textWithKeyword":"And I wait for the page to be loaded","stepMatchArguments":[]},{"pwStepLine":53,"gherkinStepLine":78,"keywordType":"Context","textWithKeyword":"And I click the \"i.mdi-delete\" icon in the card for \"Link Category Test\"","stepMatchArguments":[{"group":{"start":12,"value":"\"i.mdi-delete\"","children":[{"start":13,"value":"i.mdi-delete","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"},{"group":{"start":48,"value":"\"Link Category Test\"","children":[{"start":49,"value":"Link Category Test","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]},{"pwStepLine":54,"gherkinStepLine":79,"keywordType":"Context","textWithKeyword":"And wait very long for the page to be loaded","stepMatchArguments":[]},{"pwStepLine":55,"gherkinStepLine":80,"keywordType":"Outcome","textWithKeyword":"Then I should not see an error","stepMatchArguments":[]},{"pwStepLine":56,"gherkinStepLine":81,"keywordType":"Outcome","textWithKeyword":"Then I should not see \"Link Category Test\"","stepMatchArguments":[{"group":{"start":17,"value":"\"Link Category Test\"","children":[{"start":18,"value":"Link Category Test","children":[{}]},{"children":[{}]}]},"parameterTypeName":"string"}]}]},
+]; // bdd-data-end

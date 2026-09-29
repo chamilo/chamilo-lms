@@ -25,20 +25,11 @@ class ExtraFieldRelTag
     #[ORM\ManyToOne(targetEntity: ExtraField::class)]
     #[ORM\JoinColumn(name: 'field_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ExtraField $field;
-
+    #[ORM\Column(name: 'item_id', type: 'integer', nullable: false)]
+    protected int $itemId;
     #[ORM\ManyToOne(targetEntity: Tag::class, inversedBy: 'extraFieldRelTags')]
     #[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?Tag $tag = null;
-
-    #[ORM\Column(name: 'item_id', type: 'integer', nullable: false)]
-    protected int $itemId;
-
-    public function setItemId(int $itemId): self
-    {
-        $this->itemId = $itemId;
-
-        return $this;
-    }
 
     /**
      * Get itemId.
@@ -48,6 +39,13 @@ class ExtraFieldRelTag
     public function getItemId()
     {
         return $this->itemId;
+    }
+
+    public function setItemId(int $itemId): self
+    {
+        $this->itemId = $itemId;
+
+        return $this;
     }
 
     /**

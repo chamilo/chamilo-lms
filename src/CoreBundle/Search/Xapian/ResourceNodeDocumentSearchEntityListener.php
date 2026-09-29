@@ -25,12 +25,6 @@ final class ResourceNodeDocumentSearchEntityListener
 
     public function postUpdate(ResourceNode $node, LifecycleEventArgs $args): void
     {
-        if (!$this->shouldIndexFromRequest()) {
-            error_log('[Xapian] ResourceNodeDocumentSearchEntityListener postUpdate: indexing disabled by indexDocumentContent flag');
-
-            return;
-        }
-
         $om = $args->getObjectManager();
         if (!$om instanceof EntityManagerInterface) {
             return;
@@ -59,11 +53,40 @@ final class ResourceNodeDocumentSearchEntityListener
             return; // Not a document node
         }
 
+        if ('certificate' === strtolower(trim($document->getFiletype()))) {
+            $this->removeDocumentFromIndex($document);
+
+            return;
+        }
+
+        if (!$this->shouldIndexFromRequest()) {
+            error_log('[Xapian] ResourceNodeDocumentSearchEntityListener postUpdate: indexing disabled by indexDocumentContent flag');
+
+            return;
+        }
+
         try {
             $this->indexer->indexDocument($document);
         } catch (Throwable $e) {
             error_log(
                 '[Xapian] ResourceNodeDocumentSearchEntityListener postUpdate: indexing failed: '.
+                $e->getMessage().' in '.$e->getFile().':'.$e->getLine()
+            );
+        }
+    }
+
+    private function removeDocumentFromIndex(CDocument $document): void
+    {
+        $resourceNode = $document->getResourceNode();
+        if (null === $resourceNode) {
+            return;
+        }
+
+        try {
+            $this->indexer->deleteForResourceNodeId((int) $resourceNode->getId());
+        } catch (Throwable $e) {
+            error_log(
+                '[Xapian] ResourceNodeDocumentSearchEntityListener: certificate cleanup failed: '.
                 $e->getMessage().' in '.$e->getFile().':'.$e->getLine()
             );
         }
@@ -78,7 +101,7 @@ final class ResourceNodeDocumentSearchEntityListener
             return true;
         }
 
-        $raw = $req->get('indexDocumentContent');
+        $raw = $req->request->get('indexDocumentContent');
 
         // Not present => default index
         if (null === $raw) {

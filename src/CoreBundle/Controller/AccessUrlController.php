@@ -6,10 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use ApiPlatform\Api\IriConverterInterface;
+use ApiPlatform\Metadata\IriConverterInterface;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,19 +22,45 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * CSV import/export of user<->URL relations, and per-URL auth-source assignment.
+ *
+ * importUsers()/removeUsers() genuinely move a user between portals, so they require
+ * ROLE_GLOBAL_ADMIN (previously plain ROLE_ADMIN, a materially weaker bar than the rest of the
+ * Multi URLs feature for the same kind of action) and every target access_url is checked against
+ * AccessUrlScopeHelper — a subtree admin may only act on a URL they manage, an unrestricted admin
+ * (registered in the topmost URL of a tree) may act on any of them, unchanged.
+ *
+ * The auth-sources/* actions are deliberately left as plain ROLE_ADMIN with no URL-ownership
+ * check: an auth source identifies an authentication mechanism, not a URL/portal identity, so it
+ * is not part of the same "who owns this portal" authorization surface.
+ */
 #[Route('/access-url')]
 class AccessUrlController extends AbstractController
 {
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $em,
+        private readonly AccessUrlScopeHelper $accessUrlScope,
+        private readonly UserHelper $userHelper,
     ) {}
 
-    #[IsGranted('ROLE_ADMIN')]
+    private function currentUser(): User
+    {
+        $user = $this->userHelper->getCurrent();
+        if (null === $user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $user;
+    }
+
+    #[IsGranted('ROLE_GLOBAL_ADMIN')]
     #[Route('/users/import', name: 'chamilo_core_access_url_users_import', methods: ['GET', 'POST'])]
     public function importUsers(Request $request): Response
     {
         $report = [];
+        $currentUser = $this->currentUser();
 
         if ($request->isMethod('POST') && $request->files->has('csv_file')) {
             $file = $request->files->get('csv_file')->getPathname();
@@ -76,7 +104,9 @@ class AccessUrlController extends AbstractController
                 }
 
                 $accessUrl = $this->em->getRepository(AccessUrl::class)->findOneBy(['url' => $url]);
-                if (!$accessUrl) {
+                // Same message whether the URL doesn't exist or simply isn't managed by the
+                // caller -- a subtree admin should not learn that a foreign URL exists.
+                if (!$accessUrl || !$this->accessUrlScope->isUrlManaged($currentUser, (int) $accessUrl->getId())) {
                     $report[] = $this->formatReport('close-circle', "Line %s: URL '%s' not found.", [$lineNumber, $url]);
 
                     continue;
@@ -107,11 +137,12 @@ class AccessUrlController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_GLOBAL_ADMIN')]
     #[Route('/users/remove', name: 'chamilo_core_access_url_users_remove', methods: ['GET', 'POST'])]
     public function removeUsers(Request $request): Response
     {
         $report = [];
+        $currentUser = $this->currentUser();
 
         if ($request->isMethod('POST') && $request->files->has('csv_file')) {
             $file = $request->files->get('csv_file')->getPathname();
@@ -148,7 +179,7 @@ class AccessUrlController extends AbstractController
                 }
 
                 $accessUrl = $this->em->getRepository(AccessUrl::class)->findOneBy(['url' => $url]);
-                if (!$accessUrl) {
+                if (!$accessUrl || !$this->accessUrlScope->isUrlManaged($currentUser, (int) $accessUrl->getId())) {
                     $report[] = $this->formatReport('close-circle', "Line %s: URL '%s' not found.", [$lineNumber, $url]);
 
                     continue;
@@ -209,13 +240,14 @@ class AccessUrlController extends AbstractController
     }
 
     /**
-     * Returns the current auth_source (if any) for a list of users on a given access URL.
+     * Returns the current auth_source(s) (if any) for a list of users on a given access URL.
+     * A user may have more than one authentication method configured for the same URL.
      *
      * Query parameters:
      *   access_url  – IRI of the AccessUrl entity
      *   users[]     – one or more IRIs of User entities
      *
-     * Response: { "/api/users/42": "platform", "/api/users/99": null, ... }
+     * Response: { "/api/users/42": ["platform", "extldap"], "/api/users/99": [], ... }
      */
     #[Route('/auth-sources/users-current', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
@@ -246,16 +278,17 @@ class AccessUrlController extends AbstractController
                 continue;
             }
 
-            $sources = $user->getAuthSourcesByUrl($accessUrl);
-            $result[$userIri] = $sources->count() > 0
-                ? $sources->first()->getAuthentication()
-                : null;
+            $result[$userIri] = $user->getAuthSourcesAuthentications($accessUrl);
         }
 
         return new JsonResponse($result);
     }
 
     /**
+     * Sets each user's authentication methods for the given access URL to exactly the
+     * provided list — adding newly selected methods and removing any existing one that is
+     * no longer selected (an empty list removes every method for that user on this URL).
+     *
      * @throws Exception
      */
     #[Route('/auth-sources/assign', methods: ['POST'])]
@@ -268,7 +301,7 @@ class AccessUrlController extends AbstractController
     ): Response {
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data['users']) || empty($data['access_url'] || empty($data['auth_source']))) {
+        if (empty($data['users']) || empty($data['access_url']) || !isset($data['auth_sources']) || !\is_array($data['auth_sources'])) {
             throw new Exception('Missing required parameters');
         }
 
@@ -279,10 +312,12 @@ class AccessUrlController extends AbstractController
             throw $this->createNotFoundException('Access URL not found');
         }
 
-        $authSources = $authConfigHelper->getAuthSourceAuthentications($accessUrl);
+        $allowedAuthSources = $authConfigHelper->getAuthSourceAuthentications($accessUrl);
 
-        if (!\in_array($data['auth_source'], $authSources)) {
-            throw new Exception('User authentication method not allowed');
+        foreach ($data['auth_sources'] as $authentication) {
+            if (!\in_array($authentication, $allowedAuthSources, true)) {
+                throw new Exception('User authentication method not allowed');
+            }
         }
 
         foreach ($data['users'] as $userIri) {
@@ -293,7 +328,15 @@ class AccessUrlController extends AbstractController
                 continue;
             }
 
-            $user->addAuthSourceByAuthentication($data['auth_source'], $accessUrl);
+            foreach ($user->getAuthSourcesByUrl($accessUrl) as $existingAuthSource) {
+                if (!\in_array($existingAuthSource->getAuthentication(), $data['auth_sources'], true)) {
+                    $user->removeAuthSource($existingAuthSource);
+                }
+            }
+
+            foreach ($data['auth_sources'] as $authentication) {
+                $user->addAuthSourceByAuthentication($authentication, $accessUrl);
+            }
         }
 
         $entityManager->flush();

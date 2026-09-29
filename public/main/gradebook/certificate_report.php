@@ -25,7 +25,7 @@ $this_section = SECTION_TRACKING;
 $interbreadcrumb[] = [
     'url' => api_is_student_boss()
         ? '#'
-        : api_get_path(WEB_CODE_PATH).'my_space/index.php?'.api_get_cidreq(),
+        : api_get_path(WEB_PATH).'reporting',
     'name' => get_lang('Reporting'),
 ];
 

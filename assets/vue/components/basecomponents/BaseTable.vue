@@ -161,6 +161,7 @@ defineExpose({
     :loading="isLoading"
     :reorderable-rows="reorderableRows"
     :removable-sort="removableSort"
+    :row-class="rowClass"
     :rows-per-page-options="rowsPerPageOptions"
     :sort-mode="sortMode"
     :total-records="totalItems"

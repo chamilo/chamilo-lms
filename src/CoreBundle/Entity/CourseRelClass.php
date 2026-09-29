@@ -26,6 +26,16 @@ class CourseRelClass
     protected int $classId;
 
     /**
+     * Get courseCode.
+     *
+     * @return string
+     */
+    public function getCourseCode()
+    {
+        return $this->courseCode;
+    }
+
+    /**
      * Set courseCode.
      *
      * @return CourseRelClass
@@ -38,13 +48,13 @@ class CourseRelClass
     }
 
     /**
-     * Get courseCode.
+     * Get classId.
      *
-     * @return string
+     * @return int
      */
-    public function getCourseCode()
+    public function getClassId()
     {
-        return $this->courseCode;
+        return $this->classId;
     }
 
     /**
@@ -57,15 +67,5 @@ class CourseRelClass
         $this->classId = $classId;
 
         return $this;
-    }
-
-    /**
-     * Get classId.
-     *
-     * @return int
-     */
-    public function getClassId()
-    {
-        return $this->classId;
     }
 }

@@ -41,6 +41,12 @@ readonly class StickyCourseStateProvider implements ProviderInterface
         ];
     }
 
+    /**
+     * @param array<string, mixed> $uriVariables
+     * @param array<string, mixed> $context
+     *
+     * @return iterable<Course>|Course|null
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         $queryNameGenerator = new QueryNameGenerator();
@@ -56,7 +62,9 @@ readonly class StickyCourseStateProvider implements ProviderInterface
             }
         }
 
-        return $queryBuilder->getQuery()->getResult();
+        $rows = $queryBuilder->getQuery()->getResult();
+
+        return array_values(array_filter($rows, static fn (mixed $row): bool => $row instanceof Course));
     }
 
     private function createQueryBuilder(QueryNameGeneratorInterface $queryNameGenerator): QueryBuilder

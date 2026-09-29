@@ -61,12 +61,13 @@ const fetchAttendance = async () => {
       id: fetchedData.iid,
       title: fetchedData.title,
       description: DOMPurify.sanitize(fetchedData.description),
-      qualifyGradebook: !!fetchedData.attendanceQualifyTitle,
-      gradebookOption: fetchedData.gradebookOption || null,
+      qualifyGradebook: false,
+      gradebookOption: null,
       gradebookTitle: fetchedData.attendanceQualifyTitle || "",
       gradeWeight: fetchedData.attendanceWeight || 0.0,
       requireUnique: !!fetchedData.requireUnique,
       language: extractResourceLanguage(fetchedData),
+      room: typeof fetchedData.room === "string" ? fetchedData.room : fetchedData.room?.["@id"] || null,
     }
   } catch (error) {
     console.error("Error fetching attendance:", error)

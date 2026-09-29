@@ -14,8 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use DocumentManager as ChamiloDocumentManager;
 use Onlyoffice\DocsIntegrationSdk\Manager\Document\DocumentManager;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class OnlyofficeDocumentManager extends DocumentManager
 {
@@ -86,9 +92,13 @@ class OnlyofficeDocumentManager extends DocumentManager
 
     public function getGroupId()
     {
-        $groupId = isset($_GET['groupId']) && !empty($_GET['groupId']) ? $_GET['groupId'] : null;
+        foreach (['groupId', 'gid', 'gidReq'] as $parameter) {
+            if (isset($_GET[$parameter]) && '' !== (string) $_GET[$parameter]) {
+                return (int) $_GET[$parameter];
+            }
+        }
 
-        return $groupId;
+        return (int) api_get_group_id();
     }
 
     public function getCallbackUrl(string $fileId)
@@ -118,19 +128,38 @@ class OnlyofficeDocumentManager extends DocumentManager
 
     public function getGobackUrl(string $fileId): string
     {
-        if (!empty($this->docInfo)) {
-            if (isset($this->docInfo['path']) && str_contains($this->docInfo['path'], 'exercises/')) {
-                return api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php'
-                    .'?cidReq='.Security::remove_XSS(api_get_course_id())
-                    .'&id_session='.Security::remove_XSS(api_get_session_id())
-                    .'&gidReq='.Security::remove_XSS($this->getGroupId())
-                    .'&exerciseId='.Security::remove_XSS($this->docInfo['exercise_id']);
-            }
-
-            return self::getUrlToLocation(api_get_course_id(), api_get_session_id(), $this->getGroupId(), $this->docInfo['parent_id'], $this->docInfo['path'] ?? '');
+        if (empty($this->docInfo)) {
+            return '';
         }
 
-        return '';
+        $returnUrl = trim((string) ($this->docInfo['return_url'] ?? ''));
+        if ('' !== $returnUrl) {
+            return $returnUrl;
+        }
+
+        if (isset($this->docInfo['path']) && str_contains((string) $this->docInfo['path'], 'exercises/')) {
+            $query = http_build_query(
+                [
+                    'cidReq' => (string) api_get_course_id(),
+                    'id_session' => (int) api_get_session_id(),
+                    'gidReq' => (int) $this->getGroupId(),
+                    'exerciseId' => (int) ($this->docInfo['exercise_id'] ?? 0),
+                ],
+                '',
+                '&',
+                PHP_QUERY_RFC3986
+            );
+
+            return api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$query;
+        }
+
+        return self::getUrlToLocation(
+            api_get_course_id(),
+            api_get_session_id(),
+            $this->getGroupId(),
+            $this->docInfo['parent_id'] ?? 0,
+            $this->docInfo['path'] ?? ''
+        );
     }
 
     /**
@@ -138,19 +167,32 @@ class OnlyofficeDocumentManager extends DocumentManager
      */
     public static function getUrlToLocation($courseCode, $sessionId, $groupId, $folderId, $filePath = ''): string
     {
-        if (!empty($filePath) && str_contains($filePath, 'exercises/')) {
-            return api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php'
-                .'?cidReq='.Security::remove_XSS($courseCode)
-                .'&id_session='.Security::remove_XSS($sessionId)
-                .'&gidReq='.Security::remove_XSS($groupId)
-                .'&exerciseId='.Security::remove_XSS($folderId);
+        $isExercise = '' !== (string) $filePath && str_contains((string) $filePath, 'exercises/');
+        $query = [
+            'cidReq' => (string) $courseCode,
+            'id_session' => (int) $sessionId,
+            'gidReq' => (int) $groupId,
+        ];
+
+        if ($isExercise) {
+            $query['exerciseId'] = (int) $folderId;
+
+            return api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.http_build_query(
+                $query,
+                '',
+                '&',
+                PHP_QUERY_RFC3986
+            );
         }
 
-        return api_get_path(WEB_CODE_PATH).'document/document.php'
-            .'?cidReq='.Security::remove_XSS($courseCode)
-            .'&id_session='.Security::remove_XSS($sessionId)
-            .'&gidReq='.Security::remove_XSS($groupId)
-            .'&id='.Security::remove_XSS($folderId);
+        $query['id'] = (int) $folderId;
+
+        return api_get_path(WEB_CODE_PATH).'document/document.php?'.http_build_query(
+            $query,
+            '',
+            '&',
+            PHP_QUERY_RFC3986
+        );
     }
 
     public function getCreateUrl(string $fileId)
@@ -203,7 +245,7 @@ class OnlyofficeDocumentManager extends DocumentManager
     }
 
     /**
-     * Create new file.
+     * Create a new document using the current CDocument/ResourceNode storage model.
      */
     public static function createFile(
         string $basename,
@@ -213,83 +255,234 @@ class OnlyofficeDocumentManager extends DocumentManager
         int $sessionId,
         int $courseId,
         int $groupId,
-        string $templatePath = ''): array
-    {
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $courseCode = $courseInfo['code'];
-        $groupInfo = GroupManager::get_group_properties($groupId);
-
-        $fileTitle = Security::remove_XSS($basename).'.'.$fileExt;
-
-        $fileNameSuffix = ChamiloDocumentManager::getDocumentSuffix($courseInfo, $sessionId, $groupId);
-        // Try to avoid directories browsing (remove .., slashes and backslashes)
-        $patterns = ['#\.\./#', '#\.\.#', '#/#', '#\\\#'];
-        $replacements = ['', '', '', ''];
-        $fileName = preg_replace($patterns, $replacements, $basename).$fileNameSuffix.'.'.$fileExt;
-
-        if (empty($templatePath)) {
-            $templatePath = TemplateManager::getEmptyTemplate($fileExt);
+        string $templatePath = '',
+        int $parentResourceNodeId = 0,
+    ): array {
+        $course = api_get_course_entity($courseId);
+        if (!$course) {
+            return ['error' => 'impossibleCreateFile'];
         }
 
-        $folderPath = '';
-        $fileRelatedPath = '/';
-        if (!empty($folderId)) {
-            $document_data = ChamiloDocumentManager::get_document_data_by_id(
-                $folderId,
-                $courseCode,
-                true,
-                $sessionId
-            );
-            $folderPath = $document_data['absolute_path'];
-            $fileRelatedPath = $fileRelatedPath.substr($document_data['absolute_path_from_document'], 10).'/'.$fileName;
-        } else {
-            $folderPath = api_get_path(SYS_COURSE_PATH).api_get_course_path($courseCode).'/document';
-            if (!empty($groupId)) {
-                $folderPath = $folderPath.'/'.$groupInfo['directory'];
-                $fileRelatedPath = $groupInfo['directory'].'/';
-            }
-            $fileRelatedPath = $fileRelatedPath.$fileName;
+        $session = $sessionId > 0 ? api_get_session_entity($sessionId) : null;
+        if ($sessionId > 0 && null === $session) {
+            return ['error' => 'impossibleCreateFile'];
         }
-        $filePath = $folderPath.'/'.$fileName;
 
-        if (file_exists($filePath)) {
+        $group = $groupId > 0 ? api_get_group_entity($groupId) : null;
+        if ($groupId > 0 && null === $group) {
+            return ['error' => 'impossibleCreateFile'];
+        }
+
+        $documentRepository = Container::getDocumentRepository();
+        if (!$documentRepository instanceof CDocumentRepository) {
+            return ['error' => 'impossibleCreateFile'];
+        }
+
+        $parentNode = self::resolveCreateParentNode(
+            $documentRepository,
+            $courseId,
+            $folderId,
+            $parentResourceNodeId
+        );
+        if (!$parentNode instanceof ResourceNode) {
+            return ['error' => 'impossibleCreateFile'];
+        }
+
+        $fileExt = strtolower(trim($fileExt));
+        if (!in_array($fileExt, ['docx', 'xlsx', 'pptx', 'pdf'], true)) {
+            return ['error' => 'impossibleCreateFile'];
+        }
+
+        $safeBasename = trim(Security::remove_XSS($basename));
+        $safeBasename = str_replace(['/', '\\', '..'], '', $safeBasename);
+        if ('' === $safeBasename) {
+            return ['error' => 'impossibleCreateFile'];
+        }
+
+        $fileTitle = $safeBasename.'.'.$fileExt;
+        if (self::documentExistsInContext(
+            $documentRepository,
+            $parentNode,
+            $fileTitle,
+            $courseId,
+            $sessionId,
+            $groupId
+        )) {
             return ['error' => 'fileIsExist'];
         }
 
-        if ($fp = @fopen($filePath, 'w')) {
-            $content = file_get_contents($templatePath);
-            fputs($fp, $content);
-            fclose($fp);
+        if ('' === $templatePath) {
+            $templatePath = TemplateManager::getEmptyTemplate($fileExt);
+        }
 
-            chmod($filePath, api_get_permissions_for_new_files());
+        $content = @file_get_contents($templatePath);
+        if (false === $content) {
+            return ['error' => 'impossibleCreateFile'];
+        }
 
-            $documentId = add_document(
-                $courseInfo,
-                $fileRelatedPath,
-                'file',
-                filesize($filePath),
-                $fileTitle,
-                null,
-                false
-            );
-            if ($documentId) {
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_DOCUMENT,
-                    $documentId,
-                    'DocumentAdded',
-                    $userId,
-                    $groupInfo,
-                    null,
-                    null,
-                    null,
-                    $sessionId
-                );
-            } else {
+        $tempPath = tempnam(sys_get_temp_dir(), 'onlyoffice_');
+        if (false === $tempPath) {
+            return ['error' => 'impossibleCreateFile'];
+        }
+
+        try {
+            if (false === file_put_contents($tempPath, $content)) {
                 return ['error' => 'impossibleCreateFile'];
+            }
+
+            $mimeType = ChamiloDocumentManager::file_get_mime_type($fileTitle);
+            $uploadedFile = new UploadedFile($tempPath, $fileTitle, $mimeType, null, true);
+            $visibility = 'visible' === ChamiloDocumentManager::getDocumentDefaultVisibility($course->getCode())
+                ? ResourceLink::VISIBILITY_PUBLISHED
+                : ResourceLink::VISIBILITY_DRAFT;
+
+            $resourceNode = $documentRepository->createFileInFolder(
+                $course,
+                $parentNode,
+                $uploadedFile,
+                '',
+                $visibility,
+                $session,
+                $group
+            );
+
+            $document = $documentRepository->findOneBy(['resourceNode' => $resourceNode]);
+            if (!$document instanceof CDocument || empty($document->getIid())) {
+                return ['error' => 'impossibleCreateFile'];
+            }
+
+            return ['documentId' => (int) $document->getIid()];
+        } catch (Throwable $exception) {
+            error_log('[Onlyoffice] Failed to create CDocument: '.$exception->getMessage());
+
+            return ['error' => 'impossibleCreateFile'];
+        } finally {
+            if (is_file($tempPath)) {
+                @unlink($tempPath);
+            }
+        }
+    }
+
+    private static function resolveCreateParentNode(
+        CDocumentRepository $documentRepository,
+        int $courseId,
+        int $folderId,
+        int $parentResourceNodeId,
+    ): ?ResourceNode {
+        $course = api_get_course_entity($courseId);
+        if (!$course) {
+            return null;
+        }
+
+        $courseRoot = $course->getResourceNode();
+
+        if ($parentResourceNodeId > 0) {
+            $entityManager = Database::getManager();
+            $parentNode = $entityManager->getRepository(ResourceNode::class)->find($parentResourceNodeId);
+            if (!$parentNode instanceof ResourceNode) {
+                return null;
+            }
+
+            // The modern Documents Vue root is the course ResourceNode itself.
+            // Course root nodes do not need their own ResourceLink back to the course.
+            if ($courseRoot instanceof ResourceNode && $courseRoot->getId() === $parentNode->getId()) {
+                return $parentNode;
+            }
+
+            if (!self::resourceNodeBelongsToCourse($parentNode, $courseId)) {
+                return null;
+            }
+
+            $documentsRoot = $documentRepository->getCourseDocumentsRootNode($course);
+            if ($documentsRoot instanceof ResourceNode && $documentsRoot->getId() === $parentNode->getId()) {
+                return $parentNode;
+            }
+
+            $parentDocument = $documentRepository->findOneBy(['resourceNode' => $parentNode]);
+            if ($parentDocument instanceof CDocument && 'folder' === $parentDocument->getFiletype()) {
+                return $parentNode;
+            }
+
+            return null;
+        }
+
+        if ($folderId > 0) {
+            $parentDocument = $documentRepository->find($folderId);
+            if (!$parentDocument instanceof CDocument || 'folder' !== $parentDocument->getFiletype()) {
+                return null;
+            }
+
+            $parentNode = $parentDocument->getResourceNode();
+            if (!$parentNode instanceof ResourceNode || !self::resourceNodeBelongsToCourse($parentNode, $courseId)) {
+                return null;
+            }
+
+            return $parentNode;
+        }
+
+        if ($courseRoot instanceof ResourceNode) {
+            return $courseRoot;
+        }
+
+        return $documentRepository->getCourseDocumentsRootNode($course)
+            ?? $documentRepository->ensureCourseDocumentsRootNode($course);
+    }
+
+    private static function documentExistsInContext(
+        CDocumentRepository $documentRepository,
+        ResourceNode $parentNode,
+        string $title,
+        int $courseId,
+        int $sessionId,
+        int $groupId,
+    ): bool {
+        $entityManager = Database::getManager();
+        $nodes = $entityManager->getRepository(ResourceNode::class)->findBy([
+            'parent' => $parentNode->getId(),
+            'title' => $title,
+        ]);
+
+        foreach ($nodes as $node) {
+            if (!$node instanceof ResourceNode) {
+                continue;
+            }
+
+            $document = $documentRepository->findOneBy(['resourceNode' => $node]);
+            if (!$document instanceof CDocument || 'file' !== $document->getFiletype()) {
+                continue;
+            }
+
+            foreach ($node->getResourceLinks() as $resourceLink) {
+                $course = $resourceLink->getCourse();
+                $session = $resourceLink->getSession();
+                $group = $resourceLink->getGroup();
+
+                if (!$course || $courseId !== (int) $course->getId()) {
+                    continue;
+                }
+
+                $linkedSessionId = $session ? (int) $session->getId() : 0;
+                $linkedGroupId = $group ? (int) $group->getIid() : 0;
+
+                if ($sessionId === $linkedSessionId && $groupId === $linkedGroupId) {
+                    return true;
+                }
             }
         }
 
-        return ['documentId' => $documentId];
+        return false;
+    }
+
+    private static function resourceNodeBelongsToCourse(ResourceNode $resourceNode, int $courseId): bool
+    {
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            $course = $resourceLink->getCourse();
+            if ($course && $courseId === (int) $course->getId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
+

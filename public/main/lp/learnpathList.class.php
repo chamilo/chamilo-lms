@@ -85,7 +85,7 @@ class LearnpathList
             $qb->andWhere($categoryFilter);
         }
 
-        /*$dql = "SELECT lp FROM ChamiloCourseBundle:CLp as lp
+        /*$dql = "SELECT lp FROM Chamilo\CourseBundle\Entity\CLp as lp
                 WHERE
                     $time_conditions
                     $condition_session

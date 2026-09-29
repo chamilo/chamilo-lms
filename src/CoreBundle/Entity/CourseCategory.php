@@ -43,6 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiResource(
     uriTemplate: '/courses/{id}/categories.{_format}',
+    shortName: 'CourseCategoryByCourse',
     operations: [
         new GetCollection(),
     ],

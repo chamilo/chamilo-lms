@@ -58,15 +58,16 @@ class PluginRegionController extends AbstractController
                 continue;
             }
 
-            $regions = $configByAccessUrl->getConfiguration()['regions'] ?? [];
+            $html = '';
 
-            if (!\in_array($region, $regions)) {
-                continue;
+            $regions = $configByAccessUrl->getConfiguration()['regions'] ?? [];
+            $title = $plugin->getTitle();
+
+            if (\in_array($region, $regions)) {
+                $html .= $appPlugin->loadRegion($title, $region, $context);
             }
 
-            $title = $plugin->getTitle();
             $pluginInfo = $appPlugin->getPluginInfo($title);
-            $html = $appPlugin->loadRegion($title, $region, $context);
 
             if (($pluginInfo['is_course_plugin'] ?? false)
                 && $courseId
@@ -99,8 +100,8 @@ class PluginRegionController extends AbstractController
                 continue;
             }
 
-            $key = preg_replace('/[^a-zA-Z0-9_]/', '', $key);
-            $context[$key] = htmlspecialchars($value);
+            $key = (string) preg_replace('/[^a-zA-Z0-9_]/', '', (string) $key);
+            $context[$key] = htmlspecialchars((string) $value);
         }
 
         return $context;

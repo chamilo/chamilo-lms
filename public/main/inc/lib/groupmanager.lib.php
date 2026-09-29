@@ -727,7 +727,7 @@ class GroupManager
 
         $em
             ->createQuery(
-                'DELETE FROM ChamiloCourseBundle:CForum f WHERE f.forumOfGroup = :group'
+                'DELETE FROM Chamilo\CourseBundle\Entity\CForum f WHERE f.forumOfGroup = :group'
             )
             ->execute(['group' => $groupIid]);
 
@@ -1190,8 +1190,8 @@ class GroupManager
      *
      * @param string $title                     The title of the new category
      * @param string $description               The description of the new category
-     * @param int    $selfRegistrationAllowed   allow users to self register
-     * @param int    $selfUnRegistrationAllowed allow user to self unregister
+     * @param bool   $selfRegistrationAllowed   allow users to self register
+     * @param bool   $selfUnRegistrationAllowed allow user to self unregister
      * @param int    $documentAccess            document access
      *
      * @return mixed
@@ -1564,11 +1564,11 @@ class GroupManager
         $em = Database::getManager();
         $subscriptions = $em
             ->createQuery("
-                SELECT u.id FROM ChamiloCoreBundle:User u
-                INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
-                WITH u.id = gu.user
-                INNER JOIN ChamiloCourseBundle:CGroup g
-                WITH gu.group = g.iid
+                SELECT u.id FROM Chamilo\CoreBundle\Entity\User u
+                INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelUser gu
+                ON u.id = gu.user
+                INNER JOIN Chamilo\CourseBundle\Entity\CGroup g
+                ON gu.group = g.iid
                 WHERE g.iid = :group
                     $activeCondition
             ")
@@ -1596,11 +1596,11 @@ class GroupManager
 
         return $em
             ->createQuery("
-                SELECT COUNT(u.id) FROM ChamiloCoreBundle:User u
-                INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
-                WITH u.id = gu.user
-                INNER JOIN ChamiloCourseBundle:CGroup g
-                WITH gu.group = g.iid
+                SELECT COUNT(u.id) FROM Chamilo\CoreBundle\Entity\User u
+                INNER JOIN Chamilo\CourseBundle\Entity\CGroupRelUser gu
+                ON u.id = gu.user
+                INNER JOIN Chamilo\CourseBundle\Entity\CGroup g
+                ON gu.group = g.iid
                 WHERE g.iid = :group
                     $activeCondition
             ")
@@ -2430,6 +2430,55 @@ class GroupManager
     }
 
     /**
+     * Batch variant of self::getAllGroupPerUserSubscription() for many users at once: runs 2 queries
+     * total (one for member subscriptions, one for tutorships) instead of one query per user.
+     * Preserves the same matching rules as the single-user method (no course/session scoping).
+     *
+     * @param int[] $userIds
+     *
+     * @return array<int, array> Groups keyed by user id
+     */
+    public static function getAllGroupsPerUsersSubscription(array $userIds): array
+    {
+        $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds))));
+        if ([] === $userIds) {
+            return [];
+        }
+
+        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
+        $table_tutor_user = Database::get_course_table(TABLE_GROUP_TUTOR);
+        $table_group = Database::get_course_table(TABLE_GROUP);
+        $idList = implode(',', $userIds);
+
+        $groupsByUser = [];
+        $sql = "SELECT gu.user_id AS assoc_user_id, g.*
+                FROM $table_group g
+                INNER JOIN $table_group_user gu
+                ON (gu.group_id = g.iid)
+                WHERE gu.user_id IN ($idList)";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_assoc($res)) {
+            $userId = (int) $row['assoc_user_id'];
+            unset($row['assoc_user_id']);
+            $groupsByUser[$userId][(int) $row['iid']] = $row;
+        }
+
+        $sql = "SELECT tu.user_id AS assoc_user_id, g.*
+                FROM $table_group g
+                INNER JOIN $table_tutor_user tu
+                ON (tu.group_id = g.iid)
+                WHERE tu.user_id IN ($idList)";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_assoc($res)) {
+            $userId = (int) $row['assoc_user_id'];
+            unset($row['assoc_user_id']);
+            $groupsByUser[$userId][(int) $row['iid']] = $row;
+        }
+
+        return array_map('array_values', $groupsByUser);
+    }
+
+    /**
      * @param CGroup[] $groupList
      * @param int      $category_id
      *
@@ -3105,7 +3154,7 @@ class GroupManager
                 'ch-tool-icon',
                 null,
                 ICON_SIZE_SMALL,
-                get_lang('Coaches')
+                get_lang('Tutors')
             ).'</a>',
         ];
 
@@ -3126,7 +3175,7 @@ class GroupManager
         $users = self::getTutors($group);
         if (!empty($users)) {
             $content .= '<ul>';
-            $content .= "<li>".Display::tag('h4', get_lang('Coaches'))."</li><ul>";
+            $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
             foreach ($users as $user) {
                 $userInfo = api_get_user_info($user['user_id']);
                 $content .= '<li title="'.$userInfo['username'].'">'.
@@ -3428,13 +3477,13 @@ class GroupManager
 
             $tabs['tutor'] = [
                 'href' => sprintf($urlBase, 'tutor_settings.php'),
-                'label' => get_lang('Coaches'),
+                'label' => get_lang('Tutors'),
                 'icon' => Display::getMdiIcon(
                     'human-male-board',
                     'ch-tool-icon',
                     null,
                     ICON_SIZE_SMALL,
-                    get_lang('Coaches')
+                    get_lang('Tutors')
                 ),
             ];
         } else {

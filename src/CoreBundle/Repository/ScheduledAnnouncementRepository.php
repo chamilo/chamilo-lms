@@ -23,7 +23,7 @@ class ScheduledAnnouncementRepository extends ServiceEntityRepository
     public function markAsSent(ScheduledAnnouncement $announcement): void
     {
         $announcement->setSent(true);
-        $this->_em->persist($announcement);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($announcement);
+        $this->getEntityManager()->flush();
     }
 }

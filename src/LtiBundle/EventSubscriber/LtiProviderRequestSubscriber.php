@@ -23,15 +23,15 @@ use const PHP_URL_PATH;
 
 final class LtiProviderRequestSubscriber implements EventSubscriberInterface
 {
-    private const TOKEN_PARAM = 'lti_provider_token';
-    private const LAUNCH_ID_PARAM = 'lti_launch_id';
-    private const SESSION_CONTEXT_KEY = '_ltiProvider';
-    private const MAIN_PREFIX = '/main/';
+    private const string TOKEN_PARAM = 'lti_provider_token';
+    private const string LAUNCH_ID_PARAM = 'lti_launch_id';
+    private const string SESSION_CONTEXT_KEY = '_ltiProvider';
+    private const string MAIN_PREFIX = '/main/';
 
     /**
      * Exclude profiler and static directories. We only want legacy PHP entrypoints.
      */
-    private const EXCLUDED_PREFIXES = [
+    private const array EXCLUDED_PREFIXES = [
         '/_wdt',
         '/_profiler',
         '/build/',

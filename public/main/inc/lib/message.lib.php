@@ -264,7 +264,7 @@ class MessageManager
         } elseif ($totalFileSize > (int) api_get_setting('message_max_upload_filesize')) {
             $warning = sprintf(
                 get_lang('Files size exceeds'),
-                format_file_size(api_get_setting('message_max_upload_filesize'))
+                \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize(api_get_setting('message_max_upload_filesize'))
             );
 
             Display::addFlash(Display::return_message($warning, 'warning'));
@@ -810,7 +810,7 @@ class MessageManager
                 if ($topic['send_date'] != $topic['update_date']) {
                     if (!empty($topic['update_date'])) {
                         $date .= '<i class="fa fa-calendar"></i> '.get_lang(
-                                'LastUpdate'
+                                'Last update'
                             ).' '.Display::dateToStringAgoAndLongDate($topic['update_date']);
                     }
                 } else {
@@ -1270,7 +1270,7 @@ class MessageManager
             $attachIcon = Display::getMdiIcon('paperclip');
             $repo = Container::getMessageAttachmentRepository();
             foreach ($files as $file) {
-                $size = format_file_size($file->getSize());
+                $size = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($file->getSize());
                 $comment = Security::remove_XSS($file->getComment());
                 $filename = Security::remove_XSS($file->getFilename());
                 $url = $repo->getResourceFileUrl($file);
@@ -1426,7 +1426,7 @@ class MessageManager
         $tplMailBody->assign('is_western_name_order', api_is_western_name_order());
         $tplMailBody->assign(
             'manageUrl',
-            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user->getId()
+            api_get_path(WEB_PATH).'admin/user-edit/'.$user->getId()
         );
 
         $layoutContent = $tplMailBody->get_template('mail/new_user_mail_to_admin.tpl');
@@ -1471,8 +1471,8 @@ class MessageManager
         $tplMailBody->assign('is_western_name_order', api_is_western_name_order());
         $userId = $user->getId();
         $url_edit = Display::url(
-            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId,
-            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId
+            api_get_path(WEB_PATH).'admin/user-edit/'.$userId,
+            api_get_path(WEB_PATH).'admin/user-edit/'.$userId
         );
         $tplMailBody->assign(
             'manageUrl',
@@ -1492,7 +1492,7 @@ class MessageManager
         $layoutContent = '';
         $emailbody = '';
         $mailTemplateManager = new MailTemplateManager();
-        $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
+        $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.html.twig');
         if (!empty($templateText)) {
             // Stored mail templates are admin-edited and therefore untrusted: render
             // them through a sandboxed Twig environment instead of compiling the raw

@@ -10,15 +10,18 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
+use Chamilo\CoreBundle\Security\ExerciseAttemptScopeFactory;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 readonly class TrackEAttemptQualifyExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private Security $security,
+        private ExerciseAttemptScopeFactory $exerciseAttemptScopeFactory,
+        private TrackEExerciseRepository $trackEExerciseRepository,
     ) {}
 
     public function applyToCollection(
@@ -36,24 +39,16 @@ readonly class TrackEAttemptQualifyExtension implements QueryCollectionExtension
             return;
         }
 
-        $user = $this->security->getUser();
+        $scope = $this->exerciseAttemptScopeFactory->fromToken($this->security->getToken());
 
-        if (!$user instanceof UserInterface) {
-            return;
+        // The previous version only filtered students, so every other role read the whole table.
+        if (null === $scope) {
+            throw new AccessDeniedException('Access denied to exercise attempt corrections.');
         }
-
-        \assert($user instanceof User);
 
         $alias = $queryBuilder->getRootAliases()[0];
+        $queryBuilder->innerJoin("$alias.trackExercise", 'tee');
 
-        // @todo Check permissions with other roles of the current user
-
-        if ($user->isStudent()) {
-            $queryBuilder
-                ->innerJoin("$alias.trackExercise", 'tee')
-                ->andWhere('tee.user = :user')
-                ->setParameter('user', $user->getId())
-            ;
-        }
+        $this->trackEExerciseRepository->addViewCriteria($queryBuilder, 'tee', $scope);
     }
 }

@@ -44,6 +44,12 @@ if (isset($_GET['id'])) {
     exit;
 }
 
+if ($VDB->w_api_is_anonymous() || !oel_ctr_rights($idPage)) {
+    echo 'Error 1';
+
+    exit;
+}
+
 $pluginFileSystem = Container::getPluginsFileSystem();
 
 $urFileDi = 'CStudio/editor/img_cache/tmp/page'.$idPage.'.png';

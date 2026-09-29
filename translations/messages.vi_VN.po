@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Công thức mẫu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -1580,8 +1580,8 @@ msgstr "Bạn có chắc chắn muốn xóa các bước này không?"
 msgid "Authoring tool"
 msgstr "Công cụ soạn thảo"
 
-msgid "SCORM or AICC file to upload"
-msgstr "Tệp SCORM hoặc AICC để tải lên"
+msgid "SCORM file to upload"
+msgstr "Tệp SCORM để tải lên"
 
 msgid "Course location"
 msgstr "Vị trí khóa học"
@@ -4140,10 +4140,10 @@ msgid "works"
 msgstr "work"
 
 msgid "MySql Client"
-msgstr "MySql Client"
+msgstr "Máy khách MySQL"
 
 msgid "MySql Server"
-msgstr "MySql Server"
+msgstr "Máy chủ MySQL"
 
 msgid "Owner"
 msgstr "Chủ sở hữu"
@@ -7718,6 +7718,54 @@ msgstr "Danh mục câu hỏi trong bài tập"
 msgid "Recycle existing questions"
 msgstr "Lấy câu hỏi từ một bài tập khác"
 
+msgid "Add this question to the test: %s"
+msgstr "Thêm câu hỏi này vào bài kiểm tra: %s"
+
+msgid "Edit question: %s"
+msgstr "Chỉnh sửa câu hỏi: %s"
+
+msgid "Add a question: %s"
+msgstr "Thêm câu hỏi: %s"
+
+msgid "Detected blanks: %s"
+msgstr "Các chỗ trống đã phát hiện: %s"
+
+msgid "%s questions, for a total score (all questions) of %s."
+msgstr "%s câu hỏi, tổng điểm (tất cả câu hỏi) là %s."
+
+msgid "Unique answer"
+msgstr "Câu trả lời duy nhất"
+
+msgid "Multiple answer true/false"
+msgstr "Nhiều câu trả lời đúng/sai"
+
+msgid "Multiple answer combination true/false"
+msgstr "Tổ hợp nhiều câu trả lời đúng/sai"
+
+msgid "Unique answer with images"
+msgstr "Câu trả lời duy nhất kèm hình ảnh"
+
+msgid "Multiple answer true/false with degree of certainty"
+msgstr "Nhiều câu trả lời đúng/sai kèm mức độ chắc chắn"
+
+msgid "Answer in Office document"
+msgstr "Trả lời trong tài liệu Office"
+
+msgid "Matching draggable"
+msgstr "Ghép cặp kéo thả"
+
+msgid "Matching draggable combination"
+msgstr "Tổ hợp ghép cặp kéo thả"
+
+msgid "Fill in blanks combination"
+msgstr "Tổ hợp điền chỗ trống"
+
+msgid "Multiple answer dropdown combination"
+msgstr "Tổ hợp nhiều câu trả lời dạng danh sách thả xuống"
+
+msgid "Matching combination"
+msgstr "Tổ hợp ghép cặp"
+
 msgid "Correct test"
 msgstr "Chấm bài kiểm tra"
 
@@ -8552,6 +8600,9 @@ msgstr "Công ty"
 msgid "Reporting"
 msgstr "Báo cáo"
 
+msgid "Analytics"
+msgstr "Phân tích"
+
 msgid "Update"
 msgstr "Cập nhật"
 
@@ -8729,11 +8780,23 @@ msgstr "Hiển thị"
 msgid "My courses"
 msgstr "Danh mục khoá học"
 
+msgid "Shop"
+msgstr "Cửa hàng"
+
+msgid "Invoice"
+msgstr "Hóa đơn"
+
+msgid "Request invoice"
+msgstr "Yêu cầu hóa đơn"
+
 msgid "View my progress"
 msgstr "Xem thống kê"
 
 msgid "Personal agenda"
 msgstr "Lịch cá nhân"
+
+msgid "Group agenda"
+msgstr "Lịch nhóm"
 
 msgid "Switch to teacher view"
 msgstr "Chuyển sang chế độ giảng viên"
@@ -9256,6 +9319,15 @@ msgstr "Báo cáo thời gian cho buổi %s"
 
 msgid "Error"
 msgstr "Lỗi"
+
+msgid "The user was created, but one of the additional profile fields could not be saved."
+msgstr "Người dùng đã được tạo, nhưng một trong các trường hồ sơ bổ sung không thể lưu."
+
+msgid "The user was updated, but one of the additional profile fields could not be saved."
+msgstr "Người dùng đã được cập nhật, nhưng một trong các trường hồ sơ bổ sung không thể lưu."
+
+msgid "One or more fields contain invalid values."
+msgstr "Một hoặc nhiều trường chứa giá trị không hợp lệ."
 
 msgid "Anonymous"
 msgstr "Ẩn danh"
@@ -14399,6 +14471,9 @@ msgstr "Vui lòng quay lại Bước 1"
 msgid "has not been found in that directory"
 msgstr "không tìm thấy trong thư mục đó"
 
+msgid "The installer has no login of its own, so an upgrade must be authorised on the server. Create an empty file named %s in the project root, next to .env, then continue."
+msgstr "Trình cài đặt không có đăng nhập riêng, nên việc nâng cấp phải được ủy quyền trên máy chủ. Tạo một tệp trống tên %s trong thư mục gốc dự án, cạnh .env, rồi tiếp tục."
+
 msgid "Old version's root path"
 msgstr "Đường dẫn gốc phiên bản cũ"
 
@@ -15296,6 +15371,30 @@ msgstr "Thời gian dành tuần trước"
 msgid "System status"
 msgstr "Trạng thái hệ thống"
 
+msgid "Courses space"
+msgstr "Không gian khóa học"
+
+msgid "Database server configuration and metadata"
+msgstr "Cấu hình máy chủ cơ sở dữ liệu và siêu dữ liệu"
+
+msgid "Disk usage per course vs disk quota"
+msgstr "Dung lượng đĩa theo khóa học so với hạn mức đĩa"
+
+msgid "Information about your webserver configuration"
+msgstr "Thông tin về cấu hình máy chủ web của bạn"
+
+msgid "Paths"
+msgstr "Đường dẫn"
+
+msgid "State of Chamilo requirements"
+msgstr "Trạng thái các yêu cầu của Chamilo"
+
+msgid "State of PHP settings on the server"
+msgstr "Trạng thái cài đặt PHP trên máy chủ"
+
+msgid "api_get_path() constants resolved on this portal"
+msgstr "Hằng số api_get_path() được phân giải trên cổng này"
+
 msgid "Is writable"
 msgstr "Có thể ghi"
 
@@ -15375,7 +15474,7 @@ msgid "MySQL server information"
 msgstr "Thông tin máy chủ MySQL"
 
 msgid "MySQL client"
-msgstr "MySQL client"
+msgstr "Máy khách MySQL"
 
 msgid "Protocol used by this server"
 msgstr "Giao thức được sử dụng bởi máy chủ này"
@@ -20471,6 +20570,9 @@ msgstr "Ngôn ngữ cha: %s"
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr "Định nghĩa các thuật ngữ mới cho ngôn ngữ con %s bằng cách tìm kiếm một thuật ngữ, sau đó lưu từng bản dịch bằng cách nhấp nút lưu. Sau đó bạn phải chuyển ngôn ngữ người dùng của mình để xem các thuật ngữ mới xuất hiện."
 
+msgid "A term saved here shows at once in the interface that has already been migrated. The pages that have not been migrated yet read a compiled catalogue, so they keep the old text until you clear the cache with php bin/console cache:clear. Do that once when you finish editing, not after each term."
+msgstr "Thuật ngữ lưu ở đây hiện ngay trên giao diện đã được chuyển đổi. Các trang chưa chuyển đổi vẫn đọc danh mục đã biên dịch, nên chúng giữ văn bản cũ cho đến khi bạn xóa bộ nhớ đệm bằng php bin/console cache:clear. Chỉ làm vậy một lần khi hoàn tất chỉnh sửa, không phải sau mỗi thuật ngữ."
+
 msgid "See sequences"
 msgstr "Xem chuỗi"
 
@@ -20498,8 +20600,8 @@ msgstr "Liên kết đã hết hạn, vui lòng thử lại."
 msgid "Instructions for the password change procedure"
 msgstr "Hướng dẫn cho quy trình thay đổi mật khẩu"
 
-msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
-msgstr "Bạn nhận được thông báo này vì bạn (hoặc ai đó giả mạo bạn) đã yêu cầu tạo mật khẩu mới cho bạn.<br/>"
+msgid "This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator."
+msgstr "Thông báo này được gửi cho bạn vì bạn (hoặc ai đó đang cố mạo danh bạn) đã yêu cầu tạo mật khẩu mới cho tài khoản của bạn.<br/>Để thiết lập mật khẩu mới, vui lòng theo liên kết này:<br/>%s<br/>Nếu bạn không thực hiện yêu cầu này, bạn có thể bỏ qua thông báo này. Nếu bạn tiếp tục nhận được các thông báo này, vui lòng liên hệ quản trị viên cổng thông tin."
 
 msgid "Remind Course Expiration cron"
 msgstr "Nhắc nhở hết hạn khóa học cron"
@@ -20662,6 +20764,9 @@ msgstr "Trên bánh xe kỹ năng, hiển thị tên kỹ năng khi nó có mã 
 
 msgid "Created by"
 msgstr "Tạo bởi"
+
+msgid "Created by %s on %s"
+msgstr "Tạo bởi %s vào %s"
 
 msgid "Hide general coach in dropbox"
 msgstr "Ẩn giảng viên chung trong hộp thả"
@@ -23968,6 +24073,18 @@ msgstr "Hiển thị kết quả cho người học: Hiển thị điểm số, 
 
 msgid "Signed in as"
 msgstr "Đăng nhập với tư cách"
+
+msgid "Authorize application"
+msgstr "Ủy quyền ứng dụng"
+
+msgid "wants to connect to your Chamilo account."
+msgstr "muốn kết nối với tài khoản Chamilo của bạn."
+
+msgid "This application will be able to act on Chamilo exactly as you can — using your existing account permissions and nothing more. It will never gain any access you do not already have."
+msgstr "Ứng dụng này sẽ có thể thao tác trên Chamilo giống hệt như bạn — sử dụng quyền hiện có của tài khoản bạn và không hơn. Nó sẽ không bao giờ có quyền truy cập mà bạn chưa có."
+
+msgid "Allow"
+msgstr "Cho phép"
 
 msgid "Remember me"
 msgstr "Ghi nhớ tôi"
@@ -31335,6 +31452,9 @@ msgstr "Quay lại trang gán người dùng"
 msgid "Authentication sources assigned successfully"
 msgstr "Gán nguồn xác thực thành công"
 
+msgid "No authentication method is selected. This removes every authentication method for the selected user(s) on this URL, which may prevent them from logging in. Continue?"
+msgstr "Chưa chọn phương thức xác thực nào. Điều này sẽ gỡ mọi phương thức xác thực của (các) người dùng đã chọn trên URL này, có thể khiến họ không đăng nhập được. Tiếp tục?"
+
 msgid "Tip: choose “— Just upload —” to store without sending to anyone."
 msgstr "Mẹo: chọn “— Chỉ tải lên —” để lưu mà không gửi cho ai."
 
@@ -31866,6 +31986,9 @@ msgstr "Viết gì đó đến %s"
 msgid "Preferred: SVG. PNG recommended width: %spx."
 msgstr "Ưu tiên: SVG. Chiều rộng PNG khuyến nghị: %spx."
 
+msgid "PNG recommended width: %spx."
+msgstr "PNG khuyến nghị chiều rộng: %spx."
+
 msgid "Upload PNG logo for e-mails (~%spx width)"
 msgstr "Tải lên logo PNG cho email (~%spx chiều rộng)"
 
@@ -31901,6 +32024,9 @@ msgstr "Nhấp để chèn"
 
 msgid "Preferred: SVG. PNG max size: %spx."
 msgstr "Ưu tiên: SVG. Kích thước tối đa PNG: %spx."
+
+msgid "PNG max size: %spx."
+msgstr "PNG kích thước tối đa: %spx."
 
 msgid "View badge"
 msgstr "Xem huy hiệu"
@@ -36482,4 +36608,4966 @@ msgstr "Được kiểm duyệt"
 
 msgid "View threads"
 msgstr "Xem chủ đề"
+
+msgid "No auth source"
+msgstr "Không có nguồn xác thực"
+
+msgid "You must add at least one question"
+msgstr "Bạn phải thêm ít nhất một câu hỏi"
+
+msgid "Advanced actions"
+msgstr "Hành động nâng cao"
+
+msgid "Application path"
+msgstr "Đường dẫn ứng dụng"
+
+msgid "Apply files details"
+msgstr "Áp dụng chi tiết tệp"
+
+msgid "Apply plan details"
+msgstr "Áp dụng chi tiết kế hoạch"
+
+msgid "Apply plan failed"
+msgstr "Áp dụng kế hoạch thất bại"
+
+msgid "Apply plan ready"
+msgstr "Áp dụng kế hoạch sẵn sàng"
+
+msgid "Apply preparation"
+msgstr "Áp dụng chuẩn bị"
+
+msgid "Apply staged files"
+msgstr "Áp dụng tệp đã chuẩn bị"
+
+msgid "Applying files..."
+msgstr "Đang áp dụng tệp..."
+
+msgid "Audit file"
+msgstr "Kiểm tra tệp"
+
+msgid "Backup directory"
+msgstr "Thư mục sao lưu"
+
+msgid "Baseline clean"
+msgstr "Baseline sạch"
+
+msgid "Baseline warnings"
+msgstr "Cảnh báo baseline"
+
+msgid "Build a safe apply plan from the staged package. This only checks files, permissions, backup path and lock status. It does not replace files."
+msgstr "Tạo kế hoạch áp dụng an toàn từ gói đã chuẩn bị. Chỉ kiểm tra tệp, quyền, đường dẫn sao lưu và trạng thái khóa. Không thay thế tệp."
+
+msgid "Build production frontend assets."
+msgstr "Xây dựng tài sản giao diện sản xuất."
+
+msgid "Building plan..."
+msgstr "Đang xây dựng kế hoạch..."
+
+msgid "Channel"
+msgstr "Kênh"
+
+msgid "Check"
+msgstr "Kiểm tra"
+
+msgid "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps."
+msgstr "Kiểm tra cập nhật Chamilo khả dụng, xác minh gói, chuẩn bị tệp và chạy các bước sau cập nhật có kiểm soát."
+
+msgid "Check manifest"
+msgstr "Kiểm tra manifest"
+
+msgid "Checking post-apply actions..."
+msgstr "Đang kiểm tra hành động sau áp dụng..."
+
+msgid "Checking..."
+msgstr "Đang kiểm tra..."
+
+msgid "Composer install"
+msgstr "Cài đặt Composer"
+
+msgid "Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions."
+msgstr "Hành động Composer, Yarn và di chuyển cơ sở dữ liệu có thể thay đổi phụ thuộc, tài sản được tạo hoặc cơ sở dữ liệu. Chỉ chọn sau khi xác nhận sao lưu và quyền."
+
+msgid "Configure CHAMILO_UPDATE_MANIFEST_URL on the server or provide an HTTPS manifest URL."
+msgstr "Cấu hình CHAMILO_UPDATE_MANIFEST_URL trên máy chủ hoặc cung cấp URL manifest HTTPS."
+
+msgid "Configured"
+msgstr "Đã cấu hình"
+
+msgid "Current migration"
+msgstr "Di chuyển hiện tại"
+
+msgid "Database baseline"
+msgstr "Baseline cơ sở dữ liệu"
+
+msgid "Database migration safety review"
+msgstr "Đánh giá an toàn di chuyển cơ sở dữ liệu"
+
+msgid "Database migrations"
+msgstr "Di chuyển cơ sở dữ liệu"
+
+msgid "Development mode"
+msgstr "Chế độ phát triển"
+
+msgid "Do not enable this unless the update backup and server permissions were reviewed."
+msgstr "Không bật trừ khi sao lưu cập nhật và quyền máy chủ đã được xem xét."
+
+msgid "Doctrine dry-run command"
+msgstr "Lệnh Doctrine dry-run"
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V210 migrations after explicit confirmation."
+msgstr "Doctrine đã báo cáo cảnh báo baseline lịch sử. Trình cập nhật vẫn sẽ chỉ thực thi các migration V210 đã được dàn xếp sau khi có xác nhận rõ ràng."
+
+msgid "Doctrine will execute only the staged V210 migrations explicitly after the safety review passes."
+msgstr "Doctrine sẽ chỉ thực thi các migration V210 đã được dàn xếp sau khi quá trình xem xét an toàn hoàn tất."
+
+msgid "Dry-run exit code"
+msgstr "Mã thoát dry-run"
+
+msgid "Executed unavailable migrations"
+msgstr "Đã thực thi các migration không khả dụng"
+
+msgid "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database."
+msgstr "Giải nén gói cập nhật đã xác minh vào thư mục dàn xếp để kiểm tra. Thao tác này không thay thế tệp, chạy migration hay sửa đổi cơ sở dữ liệu."
+
+msgid "File apply available"
+msgstr "Tệp áp dụng khả dụng"
+
+msgid "Files to replace"
+msgstr "Tệp cần thay thế"
+
+msgid "I confirm that a database backup exists and was verified before running migrations."
+msgstr "Tôi xác nhận đã có bản sao lưu cơ sở dữ liệu và đã được kiểm tra trước khi chạy migration."
+
+msgid "I understand that advanced actions can modify dependencies, generated assets or the database."
+msgstr "Tôi hiểu rằng các hành động nâng cao có thể thay đổi các phụ thuộc, tài nguyên đã tạo hoặc cơ sở dữ liệu."
+
+msgid "I understand this will replace files in the Chamilo installation."
+msgstr "Tôi hiểu điều này sẽ thay thế các tệp trong cài đặt Chamilo."
+
+msgid "I understand this will run update commands on the server."
+msgstr "Tôi hiểu điều này sẽ chạy các lệnh cập nhật trên máy chủ."
+
+msgid "Install frontend dependencies before rebuilding assets."
+msgstr "Cài đặt các phụ thuộc frontend trước khi xây dựng lại tài nguyên."
+
+msgid "Installed version"
+msgstr "Phiên bản đã cài đặt"
+
+msgid "Latest migration"
+msgstr "Migration mới nhất"
+
+msgid "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests."
+msgstr "Để trống đường dẫn gói và chữ ký để tải chúng từ URL manifest đã xác minh. Đường dẫn cục bộ chỉ khả dụng cho kiểm thử phát triển."
+
+msgid "Live command log"
+msgstr "Nhật ký lệnh trực tiếp"
+
+msgid "Live update log"
+msgstr "Nhật ký cập nhật trực tiếp"
+
+msgid "Local test options"
+msgstr "Tùy chọn kiểm thử cục bộ"
+
+msgid "Local test update notice link"
+msgstr "Liên kết thông báo cập nhật kiểm thử cục bộ"
+
+msgid "Local update notice simulation"
+msgstr "Mô phỏng thông báo cập nhật cục bộ"
+
+msgid "Local update notice simulation is only available in development mode."
+msgstr "Mô phỏng thông báo cập nhật cục bộ chỉ khả dụng ở chế độ phát triển."
+
+msgid "Manifest"
+msgstr "Manifest"
+
+msgid "Manifest source"
+msgstr "Nguồn manifest"
+
+msgid "Migration safety details"
+msgstr "Chi tiết xem xét an toàn migration"
+
+msgid "Migration safety review failed"
+msgstr "Xem xét an toàn migration thất bại"
+
+msgid "Migration safety review ready"
+msgstr "Xem xét an toàn migration sẵn sàng"
+
+msgid "Migration target"
+msgstr "Migration mục tiêu"
+
+msgid "New files"
+msgstr "Tệp mới"
+
+msgid "New migrations reported by Doctrine"
+msgstr "Migration mới được Doctrine báo cáo"
+
+msgid "Next migration"
+msgstr "Migration tiếp theo"
+
+msgid "No executed unavailable migration was reported."
+msgstr "Không có migration không khả dụng nào được báo cáo."
+
+msgid "No official manifest URL is configured yet. Use an HTTPS URL or a local path for development tests."
+msgstr "Chưa cấu hình URL manifest chính thức. Sử dụng URL HTTPS hoặc đường dẫn cục bộ cho kiểm thử phát triển."
+
+msgid "No pending migration was detected before the staged update target."
+msgstr "Không phát hiện migration đang chờ trước mục tiêu cập nhật đã dàn xếp."
+
+msgid "Not configured"
+msgstr "Chưa cấu hình"
+
+msgid "Not detected"
+msgstr "Không phát hiện"
+
+msgid "Official Chamilo update channel"
+msgstr "Kênh cập nhật Chamilo chính thức"
+
+msgid "Package SHA-256"
+msgstr "SHA-256 của gói"
+
+msgid "Package URL"
+msgstr "URL gói"
+
+msgid "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment."
+msgstr "Các tệp gói và chữ ký sẽ được tải từ manifest. Đường dẫn cục bộ bị vô hiệu hóa trong môi trường này."
+
+msgid "Package path"
+msgstr "Đường dẫn gói"
+
+msgid "Package staged successfully"
+msgstr "Gói đã được dàn xếp thành công"
+
+msgid "Package staging failed"
+msgstr "Dàn xếp gói thất bại"
+
+msgid "Package verification"
+msgstr "Xác minh gói"
+
+msgid "Package verification failed"
+msgstr "Xác minh gói thất bại"
+
+msgid "Package verified successfully"
+msgstr "Gói đã được xác minh thành công"
+
+msgid "Pending migrations before this update"
+msgstr "Migration đang chờ trước bản cập nhật này"
+
+msgid "Planned backup path"
+msgstr "Đường dẫn sao lưu dự kiến"
+
+msgid "Post-apply actions completed"
+msgstr "Hành động sau áp dụng đã hoàn tất"
+
+msgid "Post-apply actions failed"
+msgstr "Hành động sau áp dụng thất bại"
+
+msgid "Post-apply actions ready"
+msgstr "Hành động sau áp dụng đã sẵn sàng"
+
+msgid "Post-apply checks"
+msgstr "Kiểm tra sau áp dụng"
+
+msgid "Post-apply checks failed"
+msgstr "Kiểm tra sau áp dụng thất bại"
+
+msgid "Post-apply details"
+msgstr "Chi tiết sau áp dụng"
+
+msgid "Post-apply run details"
+msgstr "Chi tiết chạy sau áp dụng"
+
+msgid "Preflight checks"
+msgstr "Kiểm tra trước áp dụng"
+
+msgid "Preflight checks completed"
+msgstr "Kiểm tra trước áp dụng hoàn tất"
+
+msgid "Preflight checks failed"
+msgstr "Kiểm tra trước áp dụng thất bại"
+
+msgid "Preflight details"
+msgstr "Chi tiết trước áp dụng"
+
+msgid "Prepare staging"
+msgstr "Chuẩn bị môi trường thử nghiệm"
+
+msgid "Preparing staging..."
+msgstr "Đang chuẩn bị môi trường thử nghiệm..."
+
+msgid "Production mode"
+msgstr "Chế độ sản xuất"
+
+msgid "Released at"
+msgstr "Phát hành lúc"
+
+msgid "Replace Chamilo files from the staged package using the reviewed apply plan. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Thay thế các tệp Chamilo từ gói đã chuẩn bị theo kế hoạch áp dụng đã xem xét. Bước này không chạy di trú cơ sở dữ liệu, Composer, Yarn hay lệnh xóa bộ nhớ đệm."
+
+msgid "Review apply plan"
+msgstr "Xem xét kế hoạch áp dụng"
+
+msgid "Review database migrations"
+msgstr "Xem xét di trú cơ sở dữ liệu"
+
+msgid "Review post-apply actions"
+msgstr "Xem xét hành động sau áp dụng"
+
+msgid "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands."
+msgstr "Xem xét các lệnh thủ công được khuyến nghị sau khi áp dụng tệp cập nhật. Bước này không chạy Composer, Yarn, di trú hay lệnh xóa bộ nhớ đệm."
+
+msgid "Review staged Doctrine migrations and dry-run output before running database migrations."
+msgstr "Xem xét di trú Doctrine đã chuẩn bị và kết quả chạy thử trước khi thực hiện di trú cơ sở dữ liệu."
+
+msgid "Reviewing database migrations..."
+msgstr "Đang xem xét di trú cơ sở dữ liệu..."
+
+msgid "Run and pass the migration safety review before executing database migrations."
+msgstr "Chạy và vượt qua đánh giá an toàn di trú trước khi thực hiện di trú cơ sở dữ liệu."
+
+msgid "Run environment checks before any future update application step. This does not modify files or the database."
+msgstr "Chạy kiểm tra môi trường trước bất kỳ bước áp dụng cập nhật nào. Bước này không sửa đổi tệp hay cơ sở dữ liệu."
+
+msgid "Run post-apply actions"
+msgstr "Chạy hành động sau áp dụng"
+
+msgid "Run preflight checks"
+msgstr "Chạy kiểm tra trước áp dụng"
+
+msgid "Run selected post-apply actions"
+msgstr "Chạy các hành động sau áp dụng đã chọn"
+
+msgid "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted."
+msgstr "Chạy các lệnh sau áp dụng đã chọn từ máy chủ bằng danh sách cho phép được kiểm soát. Không chấp nhận lệnh shell tùy chỉnh."
+
+msgid "Run these commands manually from the server after confirming the file update result and backups."
+msgstr "Chạy các lệnh này thủ công từ máy chủ sau khi xác nhận kết quả cập nhật tệp và sao lưu."
+
+msgid "Running post-apply actions from the UI is disabled in production mode."
+msgstr "Chạy hành động sau áp dụng từ giao diện người dùng bị vô hiệu hóa ở chế độ sản xuất."
+
+msgid "Running post-apply actions..."
+msgstr "Đang chạy hành động sau áp dụng..."
+
+msgid "Safe actions"
+msgstr "Hành động an toàn"
+
+msgid "Signature path"
+msgstr "Đường dẫn chữ ký"
+
+msgid "Signature verification cannot be skipped in this environment."
+msgstr "Không thể bỏ qua xác minh chữ ký trong môi trường này."
+
+msgid "Skip signature verification for local development tests"
+msgstr "Bỏ qua xác minh chữ ký cho kiểm thử phát triển cục bộ"
+
+msgid "Staged file application failed"
+msgstr "Áp dụng tệp đã chuẩn bị thất bại"
+
+msgid "Staged files applied successfully"
+msgstr "Áp dụng tệp đã chuẩn bị thành công"
+
+msgid "Staging details"
+msgstr "Chi tiết môi trường thử nghiệm"
+
+msgid "Staging directory"
+msgstr "Thư mục môi trường thử nghiệm"
+
+msgid "Staging extraction"
+msgstr "Giải nén môi trường thử nghiệm"
+
+msgid "Symfony cache clear"
+msgstr "Xóa bộ nhớ đệm Symfony"
+
+msgid "System update"
+msgstr "Cập nhật hệ thống"
+
+msgid "Target version"
+msgstr "Phiên bản đích"
+
+msgid "The configured official manifest URL is prefilled. You can change it to another HTTPS manifest if needed."
+msgstr "URL manifest chính thức đã cấu hình được điền sẵn. Bạn có thể thay đổi sang manifest HTTPS khác nếu cần."
+
+msgid "The database migration baseline is clean."
+msgstr "Đường cơ sở di trú cơ sở dữ liệu đã sạch."
+
+msgid "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."
+msgstr "Phản hồi HTTP cuối cùng thất bại sau khi thao tác hoàn tất. Điều này thường do quyền bộ nhớ đệm runtime hoặc máy chủ web khởi động lại trong quá trình yêu cầu."
+
+msgid "The operation log reports that post-apply actions completed successfully."
+msgstr "Nhật ký thao tác báo cáo rằng các hành động sau áp dụng đã hoàn tất thành công."
+
+msgid "The selected post-apply commands completed successfully, but the final HTTP response failed. Refresh the page and verify runtime cache permissions if the page does not load correctly."
+msgstr "Các lệnh sau áp dụng đã chọn đã hoàn tất thành công, nhưng phản hồi HTTP cuối cùng thất bại. Làm mới trang và kiểm tra quyền bộ nhớ đệm runtime nếu trang không tải đúng."
+
+msgid "The updater does not create or restore database backups."
+msgstr "Công cụ cập nhật không tạo hay khôi phục bản sao lưu cơ sở dữ liệu."
+
+msgid "These actions are safe to run from the UI after reviewing the update result."
+msgstr "Các hành động này an toàn để chạy từ giao diện người dùng sau khi xem xét kết quả cập nhật."
+
+msgid "These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing."
+msgstr "Các lệnh này có thể sửa đổi phụ thuộc, tài sản được tạo, bộ nhớ đệm hoặc cơ sở dữ liệu. Xác nhận sao lưu trước khi tiếp tục."
+
+msgid "This action modifies files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Hành động này sửa đổi tệp trong cài đặt Chamilo. Đảm bảo kế hoạch áp dụng đã được xem xét và sao lưu được bật trước khi tiếp tục."
+
+msgid "This development entry simulates the future Chamilo.org update notice using local test package paths."
+msgstr "Mục nhập phát triển này mô phỏng thông báo cập nhật Chamilo.org trong tương lai bằng cách sử dụng các đường dẫn gói thử nghiệm cục bộ."
+
+msgid "This screen was opened from an official update notice, but no official manifest source is configured yet."
+msgstr "Màn hình này được mở từ thông báo cập nhật chính thức, nhưng chưa có nguồn manifest chính thức nào được cấu hình."
+
+msgid "This screen was opened from an update notice. Only the manifest check is started automatically."
+msgstr "Màn hình này được mở từ thông báo cập nhật. Chỉ kiểm tra manifest được bắt đầu tự động."
+
+msgid "This step prepares a review only. File replacement happens later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Bước này chỉ chuẩn bị để xem xét. Việc thay thế tệp diễn ra sau trong bước Áp dụng tệp đã chuẩn bị, với khóa, sao lưu và bảo vệ khôi phục."
+
+msgid "This updater does not create a database backup. Create and verify a backup before running migrations."
+msgstr "Trình cập nhật này không tạo bản sao lưu cơ sở dữ liệu. Hãy tạo và xác minh bản sao lưu trước khi chạy di chuyển."
+
+msgid "Trusted public key"
+msgstr "Khóa công khai đáng tin cậy"
+
+msgid "Trusted signing key"
+msgstr "Khóa ký đáng tin cậy"
+
+msgid "Unknown update notice source."
+msgstr "Nguồn thông báo cập nhật không xác định."
+
+msgid "Update availability"
+msgstr "Khả dụng cập nhật"
+
+msgid "Update directory"
+msgstr "Thư mục cập nhật"
+
+msgid "Update lock path"
+msgstr "Đường dẫn khóa cập nhật"
+
+msgid "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging."
+msgstr "Sử dụng thư mục staging được tạo bởi bước trước. Backend chỉ chấp nhận các thư mục bên trong var/update/staging."
+
+msgid "Use this link to simulate the future Chamilo.org update notice during development tests."
+msgstr "Sử dụng liên kết này để mô phỏng thông báo cập nhật Chamilo.org trong tương lai trong quá trình kiểm thử phát triển."
+
+msgid "Use this only for local development tests. Production updates must use the server configured key."
+msgstr "Chỉ sử dụng cho kiểm thử phát triển cục bộ. Các cập nhật production phải sử dụng khóa được cấu hình trên máy chủ."
+
+msgid "Verification details"
+msgstr "Chi tiết xác minh"
+
+msgid "Verify package"
+msgstr "Xác minh gói"
+
+msgid "Verifying..."
+msgstr "Đang xác minh..."
+
+msgid "Waiting for command progress events..."
+msgstr "Đang chờ sự kiện tiến trình lệnh..."
+
+msgid "Waiting for update progress events..."
+msgstr "Đang chờ sự kiện tiến trình cập nhật..."
+
+msgid "Yarn build"
+msgstr "Xây dựng Yarn"
+
+msgid "Yarn install"
+msgstr "Cài đặt Yarn"
+
+msgid "A comment is required"
+msgstr "Yêu cầu một nhận xét"
+
+msgid "A database with the same name already exists. If it contains tables, they will be deleted; if it is empty, it will be reused."
+msgstr "Một cơ sở dữ liệu cùng tên đã tồn tại. Nếu nó chứa bảng, chúng sẽ bị xóa; nếu trống, nó sẽ được tái sử dụng."
+
+msgid "AI generated"
+msgstr "Được tạo bởi AI"
+
+msgid "Add at least one question before returning to the learning path."
+msgstr "Thêm ít nhất một câu hỏi trước khi quay lại lộ trình học tập."
+
+msgid "Add attachments"
+msgstr "Thêm tệp đính kèm"
+
+msgid "Additional fields"
+msgstr "Trường bổ sung"
+
+msgid "Allow comments"
+msgstr "Cho phép nhận xét"
+
+msgid "Allow new pages"
+msgstr "Cho phép trang mới"
+
+msgid "Allow ratings"
+msgstr "Cho phép đánh giá"
+
+msgid "Are you sure you want to delete all items?"
+msgstr "Bạn có chắc chắn muốn xóa tất cả các mục không?"
+
+msgid "Are you sure you want to restore automatic renewal?"
+msgstr "Bạn có chắc chắn muốn khôi phục gia hạn tự động không?"
+
+msgid "Attachment has been deleted"
+msgstr "Tệp đính kèm đã bị xóa"
+
+msgid "Backup file"
+msgstr "Tệp sao lưu"
+
+msgid "Block comments"
+msgstr "Chặn nhận xét"
+
+msgid "Block new pages"
+msgstr "Chặn trang mới"
+
+msgid "Block ratings"
+msgstr "Chặn đánh giá"
+
+msgid "Cancel renewal"
+msgstr "Hủy gia hạn"
+
+msgid "Category links will be removed from %s Wiki pages."
+msgstr "Liên kết danh mục sẽ bị xóa khỏi %s trang Wiki."
+
+msgid "Change"
+msgstr "Thay đổi"
+
+msgid "Clear group"
+msgstr "Xóa nhóm"
+
+msgid "Click a tag to insert it into the editor. These placeholders will be replaced when generating the certificate."
+msgstr "Nhấp vào một thẻ để chèn nó vào trình soạn thảo. Các placeholder này sẽ được thay thế khi tạo chứng chỉ."
+
+msgid "Comment added"
+msgstr "Đã thêm nhận xét"
+
+msgid "Comment is required"
+msgstr "Yêu cầu nhận xét"
+
+msgid "Comment score"
+msgstr "Điểm nhận xét"
+
+msgid "Compare selected versions line by line"
+msgstr "So sánh các phiên bản đã chọn theo từng dòng"
+
+msgid "Compare selected versions word by word"
+msgstr "So sánh các phiên bản đã chọn theo từng từ"
+
+msgid "Compare versions"
+msgstr "So sánh các phiên bản"
+
+msgid "Copy completed"
+msgstr "Sao chép hoàn tất"
+
+msgid "Create individual Wiki work pages for learners"
+msgstr "Tạo trang Wiki cá nhân cho người học"
+
+msgid "Current view mode"
+msgstr "Chế độ xem hiện tại"
+
+msgid "Delete Wiki"
+msgstr "Xóa Wiki"
+
+msgid "Delete page"
+msgstr "Xóa trang"
+
+msgid "Deleting the Wiki homepage is not recommended. You can recreate it later."
+msgstr "Không nên xóa trang chủ Wiki. Bạn có thể tạo lại sau."
+
+msgid "Disabling Wiki blocks normal Wiki pages and actions. This settings page remains available to course teachers."
+msgstr "Vô hiệu hóa Wiki sẽ chặn các trang và hành động Wiki thông thường. Trang cài đặt này vẫn khả dụng cho giáo viên khóa học."
+
+msgid "Discussion"
+msgstr "Thảo luận"
+
+msgid "Edit Comment"
+msgstr "Chỉnh sửa nhận xét"
+
+msgid "Edit page"
+msgstr "Chỉnh sửa trang"
+
+msgid "End date must be after or equal to expiration date"
+msgstr "Ngày kết thúc phải sau hoặc bằng ngày hết hạn"
+
+msgid "Enter a search term to find Wiki pages"
+msgstr "Nhập từ khóa tìm kiếm để tìm trang Wiki"
+
+msgid "Expiration date must be before or equal to end date"
+msgstr "Ngày hết hạn phải trước hoặc bằng ngày kết thúc"
+
+msgid "Failed email recipients"
+msgstr "Người nhận email thất bại"
+
+msgid "Finish and return to learning path"
+msgstr "Hoàn tất và quay lại lộ trình học tập"
+
+msgid "Forum image"
+msgstr "Hình ảnh diễn đàn"
+
+msgid "Hide discussion"
+msgstr "Ẩn thảo luận"
+
+msgid "Hide page"
+msgstr "Ẩn trang"
+
+msgid "I changed my mind"
+msgstr "Tôi đã thay đổi ý định"
+
+msgid "If unchecked, those files will remain available to the platform administrator through the 'File information' tool."
+msgstr "Nếu không chọn, các tệp này vẫn khả dụng cho quản trị viên nền tảng qua công cụ 'Thông tin tệp'."
+
+msgid "Internal message failures"
+msgstr "Lỗi tin nhắn nội bộ"
+
+msgid "Internal messages available"
+msgstr "Tin nhắn nội bộ khả dụng"
+
+msgid "Internal messages created now"
+msgstr "Tin nhắn nội bộ được tạo ngay bây giờ"
+
+msgid "Item score"
+msgstr "Điểm mục"
+
+msgid "Last post"
+msgstr "Bài đăng cuối cùng"
+
+msgid "Lock page"
+msgstr "Khóa trang"
+
+msgid "Manage categories"
+msgstr "Quản lý danh mục"
+
+msgid "Marks this document as AI-assisted. Use it when the content was created or significantly modified with AI tools."
+msgstr "Đánh dấu tài liệu này là hỗ trợ AI. Sử dụng khi nội dung được tạo hoặc sửa đổi đáng kể bằng công cụ AI."
+
+msgid "Maximum score is required"
+msgstr "Điểm tối đa là bắt buộc"
+
+msgid "Metric"
+msgstr "Chỉ số"
+
+msgid "New comments are blocked in this discussion"
+msgstr "Bình luận mới bị chặn trong thảo luận này"
+
+msgid "No Wiki categories are available yet."
+msgstr "Chưa có danh mục Wiki nào."
+
+msgid "No categories found"
+msgstr "Không tìm thấy danh mục"
+
+msgid "No content"
+msgstr "Không có nội dung"
+
+msgid "No parent category"
+msgstr "Không có danh mục cha"
+
+msgid "Number of comments scored"
+msgstr "Số lượng nhận xét được chấm điểm"
+
+msgid "Old version"
+msgstr "Phiên bản cũ"
+
+msgid "Only image files are allowed."
+msgstr "Chỉ cho phép tệp hình ảnh."
+
+msgid "Please fill all required fields"
+msgstr "Vui lòng điền đầy đủ các trường bắt buộc"
+
+msgid "Questions with class or student placeholders will be generated for course classes or groups: %s"
+msgstr "Các câu hỏi có chỗ trống cho lớp hoặc sinh viên sẽ được tạo cho các lớp hoặc nhóm khóa học: %s"
+
+msgid "Ratings are blocked in this discussion"
+msgstr "Đánh giá bị chặn trong thảo luận này"
+
+msgid "Remove image"
+msgstr "Xóa hình ảnh"
+
+msgid "Restore renewal"
+msgstr "Khôi phục gia hạn"
+
+msgid "Restore version"
+msgstr "Khôi phục phiên bản"
+
+msgid "Search in"
+msgstr "Tìm kiếm trong"
+
+msgid "Select group"
+msgstr "Chọn nhóm"
+
+msgid "Select image"
+msgstr "Chọn hình ảnh"
+
+msgid "Selected image"
+msgstr "Hình ảnh đã chọn"
+
+msgid "Show discussion"
+msgstr "Hiển thị thảo luận"
+
+msgid "Show page"
+msgstr "Hiển thị trang"
+
+msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the"
+msgstr "Một số tệp hoặc thư mục không có quyền ghi. Để cài đặt Chamilo, trước tiên bạn cần thay đổi quyền của chúng (sử dụng CHMOD). Vui lòng đọc"
+
+msgid "Subcategories"
+msgstr "Danh mục con"
+
+msgid "Tap on the left or right to navigate"
+msgstr "Nhấn bên trái hoặc bên phải để điều hướng"
+
+msgid "The Wiki assignment deadline has passed, but delayed submission is allowed."
+msgstr "Hạn nộp bài tập Wiki đã qua, nhưng vẫn cho phép nộp muộn."
+
+msgid "The Wiki assignment deadline has passed."
+msgstr "Hạn nộp bài tập Wiki đã qua."
+
+msgid "The Wiki assignment has not started yet."
+msgstr "Bài tập Wiki chưa bắt đầu."
+
+msgid "The Wiki page edition lock is required before saving."
+msgstr "Yêu cầu khóa chỉnh sửa trang Wiki trước khi lưu."
+
+msgid "The announcement was saved, but an attachment could not be uploaded."
+msgstr "Thông báo đã được lưu, nhưng không thể tải lên tệp đính kèm."
+
+msgid "The announcement was saved, but email delivery failed."
+msgstr "Thông báo đã được lưu, nhưng gửi email thất bại."
+
+msgid "The announcement was saved, but no email could be delivered."
+msgstr "Thông báo đã được lưu, nhưng không thể gửi email."
+
+msgid "The category has been created"
+msgstr "Danh mục đã được tạo"
+
+msgid "The category has been deleted"
+msgstr "Danh mục đã bị xóa"
+
+msgid "The category has been updated"
+msgstr "Danh mục đã được cập nhật"
+
+msgid "The end date is invalid"
+msgstr "Ngày kết thúc không hợp lệ"
+
+msgid "The maximum number of versions must be a non-negative integer"
+msgstr "Số phiên bản tối đa phải là số nguyên không âm"
+
+msgid "The maximum number of words must be a non-negative integer"
+msgstr "Số từ tối đa phải là số nguyên không âm"
+
+msgid "The print window could not be opened"
+msgstr "Không thể mở cửa sổ in"
+
+msgid "The start date is invalid"
+msgstr "Ngày bắt đầu không hợp lệ"
+
+msgid "These settings apply to the whole course, including its sessions and groups."
+msgstr "Các thiết lập này áp dụng cho toàn bộ khóa học, bao gồm các phiên và nhóm của nó."
+
+msgid "This announcement has already been sent by email."
+msgstr "Thông báo này đã được gửi qua email."
+
+msgid "This discussion is hidden from learners"
+msgstr "Cuộc thảo luận này bị ẩn với người học"
+
+msgid "This generative AI tool allows you to create images and short videos to illustrate your course. By explaining (in text) what you want in the prompt section, you will give the configured AI model the elements necessary to generate an image or a video. Please be patient. The AI model will take some time and generate some result, which you might want to keep by saving the media in your documents folder, and then embed inside an HTML document. Not all AI models are equal in terms of speed or quality. The AI model might also give you a modified prompt, which is a more detailed interpretation of your request. You can then use this modified prompt to finetune your request. Please be aware that this tool, in particular for videos, might generate considerable costs to your organization, even if you decide not to save the generated media. Please use it accordingly. If you have issues obtaining what you are looking for, please take some time to research prompting tricks online for the AI model at your disposal."
+msgstr "Công cụ AI tạo sinh này cho phép bạn tạo hình ảnh và video ngắn để minh họa khóa học. Bằng cách giải thích (bằng văn bản) những gì bạn muốn trong phần nhắc lệnh, bạn sẽ cung cấp cho mô hình AI đã cấu hình các yếu tố cần thiết để tạo hình ảnh hoặc video. Vui lòng kiên nhẫn. Mô hình AI sẽ mất một chút thời gian và tạo ra một số kết quả, mà bạn có thể muốn giữ lại bằng cách lưu phương tiện vào thư mục tài liệu của mình, sau đó nhúng vào tài liệu HTML. Không phải tất cả mô hình AI đều ngang nhau về tốc độ hoặc chất lượng. Mô hình AI cũng có thể cung cấp cho bạn một nhắc lệnh đã chỉnh sửa, là cách diễn giải chi tiết hơn yêu cầu của bạn. Sau đó, bạn có thể sử dụng nhắc lệnh đã chỉnh sửa này để tinh chỉnh yêu cầu của mình. Xin lưu ý rằng công cụ này, đặc biệt đối với video, có thể tạo ra chi phí đáng kể cho tổ chức của bạn, ngay cả khi bạn quyết định không lưu phương tiện đã tạo. Vui lòng sử dụng nó một cách phù hợp. Nếu bạn gặp vấn đề khi đạt được những gì bạn đang tìm kiếm, vui lòng dành thời gian để nghiên cứu các mẹo nhắc lệnh trực tuyến cho mô hình AI mà bạn có."
+
+msgid "This history belongs to the base course. Restore is available after creating a session version."
+msgstr "Lịch sử này thuộc về khóa học cơ sở. Khôi phục có sẵn sau khi tạo phiên bản cho phiên."
+
+msgid "This image replaces the default forum icon shown next to the forum title."
+msgstr "Hình ảnh này thay thế biểu tượng diễn đàn mặc định hiển thị bên cạnh tiêu đề diễn đàn."
+
+msgid "This page comes from the base course. Saving it will create a version for the current session."
+msgstr "Trang này đến từ khóa học cơ sở. Lưu nó sẽ tạo phiên bản cho phiên hiện tại."
+
+msgid "This will also delete %s subcategories."
+msgstr "Thao tác này cũng sẽ xóa %s danh mục con."
+
+msgid "This will create individual work pages for %s learners."
+msgstr "Thao tác này sẽ tạo trang bài tập cá nhân cho %s người học."
+
+msgid "Thread history"
+msgstr "Lịch sử chủ đề"
+
+msgid "Title and content"
+msgstr "Tiêu đề và nội dung"
+
+msgid "Unable to cancel renewal right now."
+msgstr "Không thể hủy quyền gia hạn ngay bây giờ."
+
+msgid "Unable to restore renewal right now."
+msgstr "Không thể khôi phục quyền gia hạn ngay bây giờ."
+
+msgid "Unlock page"
+msgstr "Mở khóa trang"
+
+msgid "Use [[Page]] or [[Page|Visible text]] to create internal Wiki links."
+msgstr "Sử dụng [[Trang]] hoặc [[Trang|Văn bản hiển thị]] để tạo liên kết Wiki nội bộ."
+
+msgid "Use a spacebar or arrow keys to navigate"
+msgstr "Sử dụng phím cách hoặc phím mũi tên để điều hướng"
+
+msgid "View version"
+msgstr "Xem phiên bản"
+
+msgid "Visible only to teachers"
+msgstr "Chỉ hiển thị cho giáo viên"
+
+msgid "Weight is required"
+msgstr "Trọng số là bắt buộc"
+
+msgid "Wiki categories are disabled for this course."
+msgstr "Danh mục Wiki bị vô hiệu hóa cho khóa học này."
+
+msgid "Wiki categories enabled"
+msgstr "Danh mục Wiki đã được kích hoạt"
+
+msgid "Wiki html strict filtering"
+msgstr "Lọc nghiêm ngặt HTML Wiki"
+
+msgid "Wiki settings"
+msgstr "Cài đặt Wiki"
+
+msgid "Wiki settings updated"
+msgstr "Cài đặt Wiki đã được cập nhật"
+
+msgid "You are viewing a historical version of this page"
+msgstr "Bạn đang xem phiên bản lịch sử của trang này"
+
+msgid "You can attach one or more files to this reply."
+msgstr "Bạn có thể đính kèm một hoặc nhiều tệp vào phản hồi này."
+
+msgid "You can edit this assignment page, but learner work pages will not be modified."
+msgstr "Bạn có thể chỉnh sửa trang bài tập này, nhưng các trang bài tập của người học sẽ không bị thay đổi."
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question."
+msgstr "Bạn có thể sử dụng các thẻ {{class_name}} và {{student_full_name}} trong câu hỏi."
+
+msgid "You have 20 minutes to edit this page before the editing lock expires."
+msgstr "Bạn có 20 phút để chỉnh sửa trang này trước khi khóa chỉnh sửa hết hạn."
+
+msgid "by"
+msgstr "bởi"
+
+msgid "required"
+msgstr "bắt buộc"
+
+msgid "Incorrect password."
+msgstr "Mật khẩu không đúng."
+
+msgid "File integrity alerting paused for 1 hour."
+msgstr "Cảnh báo toàn vẹn tệp đã tạm dừng trong 1 giờ."
+
+msgid "New baseline established: %s files."
+msgstr "Đường cơ sở mới được thiết lập: %s tệp."
+
+msgid "Scan complete: changes were detected."
+msgstr "Quét hoàn tất: đã phát hiện thay đổi."
+
+msgid "Scan complete: no changes were detected."
+msgstr "Quét hoàn tất: không phát hiện thay đổi."
+
+msgid "File integrity"
+msgstr "Toàn vẹn tệp"
+
+msgid "This report compares the installed files (everything except var/ and .git/, though .git/config is still watched to catch a hijacked remote) against a trusted baseline, to detect unexpected additions, modifications or deletions."
+msgstr "Báo cáo này so sánh các tệp đã cài đặt (tất cả ngoại trừ var\/ và .git\/, mặc dù .git\/config vẫn được theo dõi để phát hiện điều khiển từ xa bị chiếm đoạt) với đường cơ sở đáng tin cậy, nhằm phát hiện các thêm, sửa đổi hoặc xóa không mong muốn."
+
+msgid "You can review the latest report below. Running a scan, pausing alerting, or establishing a new baseline requires a global administrator."
+msgstr "Bạn có thể xem báo cáo mới nhất bên dưới. Chạy quét, tạm dừng cảnh báo hoặc thiết lập đường cơ sở mới yêu cầu quản trị viên toàn cục."
+
+msgid "Alerting is currently paused for maintenance. It will automatically resume at %date%."
+msgstr "Cảnh báo hiện đang tạm dừng để bảo trì. Nó sẽ tự động tiếp tục vào %date%."
+
+msgid "No scan has run yet. Run one from here, or from the command line with app:file-integrity:scan."
+msgstr "Chưa có lần quét nào được chạy. Chạy một lần từ đây hoặc từ dòng lệnh với app:file-integrity:scan."
+
+msgid "Last scan"
+msgstr "Lần quét gần nhất"
+
+msgid "Files scanned"
+msgstr "Tệp đã quét"
+
+msgid "No baseline existed yet: this scan established one. Changes will be reported starting from the next scan."
+msgstr "Chưa có đường cơ sở nào: lần quét này đã thiết lập một đường cơ sở. Các thay đổi sẽ được báo cáo bắt đầu từ lần quét tiếp theo."
+
+msgid "No changes detected since the baseline."
+msgstr "Không phát hiện thay đổi nào kể từ đường cơ sở."
+
+msgid "The Git remote configuration (.git/config) has changed. Verify this was expected."
+msgstr "Cấu hình Git remote (.git\/config) đã thay đổi. Hãy xác minh đây là điều mong muốn."
+
+msgid "The scan stopped early because a subdirectory could not be read (check file permissions). Results below may be partial."
+msgstr "Quét đã dừng sớm vì không thể đọc một thư mục con (kiểm tra quyền tệp). Kết quả bên dưới có thể chỉ là một phần."
+
+msgid "Too many changes to list in full; only the first entries of each category are shown below. See the CEF log for the complete list."
+msgstr "Quá nhiều thay đổi để liệt kê đầy đủ; chỉ các mục đầu tiên của mỗi danh mục được hiển thị bên dưới. Xem nhật ký CEF để có danh sách đầy đủ."
+
+msgid "%count% file(s) could not be read (permissions) and were skipped."
+msgstr "%count% tệp không thể đọc (quyền) và đã bị bỏ qua."
+
+msgid "Run a scan now"
+msgstr "Chạy quét ngay"
+
+msgid "Pause alerting for 1 hour (for maintenance)"
+msgstr "Tạm dừng cảnh báo trong 1 giờ (để bảo trì)"
+
+msgid "Pause for 1 hour"
+msgstr "Tạm dừng trong 1 giờ"
+
+msgid "Trust the current file tree as the new baseline"
+msgstr "Tin tưởng cây tệp hiện tại làm đường cơ sở mới"
+
+msgid "This will trust every current file as correct, including any unreviewed change. Continue?"
+msgstr "Thao tác này sẽ tin tưởng mọi tệp hiện tại là đúng, bao gồm mọi thay đổi chưa được xem xét. Tiếp tục?"
+
+msgid "Establish new baseline"
+msgstr "Thiết lập đường cơ sở mới"
+
+msgid "Schedule the scan from a system crontab, for example"
+msgstr "Lên lịch quét từ crontab hệ thống, ví dụ"
+
+msgid "File integrity alert on %platform%"
+msgstr "Cảnh báo toàn vẹn tệp trên %platform%"
+
+msgid "A file integrity scan detected changes on the platform:"
+msgstr "Một lần quét toàn vẹn tệp đã phát hiện thay đổi trên nền tảng:"
+
+msgid "Added files"
+msgstr "Tệp đã thêm"
+
+msgid "Modified files"
+msgstr "Tệp đã sửa đổi"
+
+msgid "Deleted files"
+msgstr "Tệp đã xóa"
+
+msgid "Review the full report from Administration > Security > File integrity."
+msgstr "Xem báo cáo đầy đủ từ Quản trị > Bảo mật > Toàn vẹn tệp."
+
+msgid "Password to confirm pausing alerts"
+msgstr "Mật khẩu để xác nhận tạm dừng cảnh báo"
+
+msgid "Password to confirm the new baseline"
+msgstr "Mật khẩu để xác nhận đường cơ sở mới"
+
+msgid "A scan is already running. Please wait for it to finish before starting another one."
+msgstr "Một lần quét đang chạy. Vui lòng đợi nó kết thúc trước khi bắt đầu lần quét khác."
+
+msgid "A scan is currently running (started at %date%). A full scan can take several minutes; this page can be safely reloaded to check progress."
+msgstr "Một lần quét đang chạy (bắt đầu lúc %date%). Một lần quét đầy đủ có thể mất vài phút; trang này có thể được tải lại an toàn để kiểm tra tiến độ."
+
+msgid "Currently processing"
+msgstr "Đang xử lý"
+
+msgid "A previous scan (started at %date%) was interrupted before it finished — the process is no longer running. You can safely start a new one."
+msgstr "Một lần quét trước đó (bắt đầu lúc %date%) đã bị gián đoạn trước khi hoàn tất — tiến trình không còn chạy nữa. Bạn có thể bắt đầu một lần quét mới an toàn."
+
+msgid "files"
+msgstr "tệp"
+
+msgid "Permissions changed"
+msgstr "Quyền đã thay đổi"
+
+msgid "Files with changed permissions"
+msgstr "Tệp có quyền thay đổi"
+
+msgid "Alert history"
+msgstr "Lịch sử cảnh báo"
+
+msgid "Every scan that found something, kept even after the drift is resolved or a new baseline is established — unlike the report above, a clean scan or a rebaseline never clears this."
+msgstr "Mỗi lần quét phát hiện điều gì đó đều được giữ lại ngay cả sau khi sự lệch đã được giải quyết hoặc một đường cơ sở mới được thiết lập — không giống như báo cáo trên, một lần quét sạch hoặc thiết lập lại đường cơ sở không bao giờ xóa mục này."
+
+msgid "This entry was truncated at capture time; see the CEF log for the complete list."
+msgstr "Mục này đã bị cắt bớt tại thời điểm thu thập; xem nhật ký CEF để có danh sách đầy đủ."
+
+msgid "No alert has been recorded yet."
+msgstr "Chưa có cảnh báo nào được ghi lại."
+
+msgid "Git remote changed"
+msgstr "Git remote đã thay đổi"
+
+msgid "Press enter to select"
+msgstr "Nhấn enter để chọn"
+
+msgid "Press enter to remove"
+msgstr "Nhấn enter để xóa"
+
+msgid "No elements found. Consider changing the search query."
+msgstr "Không tìm thấy phần tử nào. Hãy thử thay đổi truy vấn tìm kiếm."
+
+msgid "List is empty."
+msgstr "Danh sách trống."
+
+msgid "Your session has expired. Please try again."
+msgstr "Phiên của bạn đã hết hạn. Vui lòng thử lại."
+
+msgid "Generate with AI"
+msgstr "Tạo bằng AI"
+
+msgid "A modern, welcoming illustration representing this course's topic, in a clean flat-design style, using my platform's colors as accents."
+msgstr "Một hình minh họa hiện đại, thân thiện thể hiện chủ đề của khóa học này, theo phong cách thiết kế phẳng sạch sẽ, sử dụng màu sắc của nền tảng làm điểm nhấn."
+
+msgid "Back to account"
+msgstr "Quay lại tài khoản"
+
+msgid "Your feedback will help us improve future training sessions."
+msgstr "Phản hồi của bạn sẽ giúp chúng tôi cải thiện các buổi đào tạo trong tương lai."
+
+msgid "Thank you for sharing your feedback."
+msgstr "Cảm ơn bạn đã chia sẻ phản hồi."
+
+msgid "How satisfied are you with the overall quality of the training?"
+msgstr "Bạn hài lòng đến mức nào với chất lượng tổng thể của buổi đào tạo?"
+
+msgid "How satisfied are you with the relevance of the content?"
+msgstr "Bạn hài lòng đến mức nào với mức độ phù hợp của nội dung?"
+
+msgid "How satisfied are you with the clarity of the explanations?"
+msgstr "Bạn hài lòng đến mức nào với sự rõ ràng của các giải thích?"
+
+msgid "How satisfied are you with the organization and pace of the training?"
+msgstr "Bạn hài lòng đến mức nào với sự tổ chức và nhịp độ của buổi đào tạo?"
+
+msgid "How satisfied are you with the practical usefulness of what you learned?"
+msgstr "Bạn hài lòng đến mức nào với tính hữu ích thực tiễn của những gì bạn đã học?"
+
+msgid "Would you recommend this training to other people?"
+msgstr "Bạn có khuyến nghị buổi đào tạo này cho người khác không?"
+
+msgid "What should we improve in future editions?"
+msgstr "Chúng tôi nên cải thiện điều gì trong các lần tổ chức sau?"
+
+msgid "Very satisfied"
+msgstr "Rất hài lòng"
+
+msgid "Satisfied"
+msgstr "Hài lòng"
+
+msgid "Neutral"
+msgstr "Trung lập"
+
+msgid "Dissatisfied"
+msgstr "Không hài lòng"
+
+msgid "Very dissatisfied"
+msgstr "Rất không hài lòng"
+
+msgid "Add destination"
+msgstr "Thêm điểm đến"
+
+msgid "Add this test to the assessment tool"
+msgstr "Thêm bài kiểm tra này vào công cụ đánh giá"
+
+msgid "Attempts and timing"
+msgstr "Số lần thử và thời gian"
+
+msgid "Available questions"
+msgstr "Câu hỏi có sẵn"
+
+msgid "Cancel and return to learning path"
+msgstr "Hủy và quay lại lộ trình học tập"
+
+msgid "Category destinations"
+msgstr "Điểm đến theo danh mục"
+
+msgid "Classification"
+msgstr "Phân loại"
+
+msgid "Context"
+msgstr "Ngữ cảnh"
+
+msgid "Could not load exercise configuration"
+msgstr "Không thể tải cấu hình bài tập"
+
+msgid "Could not save exercise"
+msgstr "Không thể lưu bài tập"
+
+msgid "Display and learning path"
+msgstr "Hiển thị và lộ trình học tập"
+
+msgid "Edit test"
+msgstr "Chỉnh sửa bài kiểm tra"
+
+msgid "Exercise settings saved."
+msgstr "Đã lưu cài đặt bài tập."
+
+msgid "Extra settings"
+msgstr "Cài đặt bổ sung"
+
+msgid "Feedback and results"
+msgstr "Phản hồi và kết quả"
+
+msgid "Finish exercise"
+msgstr "Hoàn thành bài tập"
+
+msgid "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself."
+msgstr "Xác định ngôn ngữ của bài tập này dưới dạng siêu dữ liệu tài nguyên. Điều này không tự động bật đánh chỉ mục tìm kiếm."
+
+msgid "Maximum score (%)"
+msgstr "Điểm tối đa (%)"
+
+msgid "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened."
+msgstr "Siêu dữ liệu chứa kỹ năng và các trường bổ sung được cấu hình cho bài tập. Đây là tùy chọn và vẫn ẩn cho đến khi được mở."
+
+msgid "No question categories are available for this exercise yet."
+msgstr "Chưa có danh mục câu hỏi nào cho bài tập này."
+
+msgid "Question categories matrix"
+msgstr "Ma trận danh mục câu hỏi"
+
+msgid "Questions behavior"
+msgstr "Hành vi câu hỏi"
+
+msgid "Random by category"
+msgstr "Ngẫu nhiên theo danh mục"
+
+msgid "Remove destination"
+msgstr "Xóa điểm đến"
+
+msgid "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test."
+msgstr "Các quy tắc được đánh giá theo tỷ lệ phần trăm điểm theo thứ tự tăng dần. Chọn Hoàn thành bài tập để kết thúc bài kiểm tra."
+
+msgid "Score and final messages"
+msgstr "Điểm số và thông báo cuối cùng"
+
+msgid "Some options are locked after the exercise has been created."
+msgstr "Một số tùy chọn bị khóa sau khi bài tập đã được tạo."
+
+msgid "This value is stored as total duration in minutes."
+msgstr "Giá trị này được lưu dưới dạng tổng thời lượng tính bằng phút."
+
+msgid "Use 0 to keep all available questions. Use -1 where all available questions are allowed."
+msgstr "Sử dụng 0 để giữ tất cả câu hỏi có sẵn. Sử dụng -1 khi cho phép tất cả câu hỏi có sẵn."
+
+msgid "Use these fields to classify the exercise independently from its display options."
+msgstr "Sử dụng các trường này để phân loại bài tập độc lập với các tùy chọn hiển thị."
+
+msgid "Invite by email"
+msgstr "Mời qua email"
+
+msgid "Invitation has been sent"
+msgstr "Lời mời đã được gửi"
+
+msgid "Sent on"
+msgstr "Đã gửi vào"
+
+msgid "Accepted on"
+msgstr "Đã chấp nhận vào"
+
+msgid "This course is opened in a session. Sending an invitation here will subscribe the recipient to the entire session %s, not just this course."
+msgstr "Khóa học này được mở trong một phiên học. Gửi lời mời tại đây sẽ đăng ký người nhận vào toàn bộ phiên học %s, không chỉ khóa học này."
+
+msgid "Revoke"
+msgstr "Thu hồi"
+
+msgid "Revoked"
+msgstr "Đã thu hồi"
+
+msgid "Invitation has been revoked"
+msgstr "Lời mời đã bị thu hồi"
+
+msgid "Are you sure you want to revoke the invitation sent to %s?"
+msgstr "Bạn có chắc chắn muốn thu hồi lời mời đã gửi cho %s không?"
+
+msgid "No default room"
+msgstr "Không có phòng mặc định"
+
+msgid "Floor"
+msgstr "Tầng"
+
+msgid "Capacity"
+msgstr "Sức chứa"
+
+msgid "Use attendance default room"
+msgstr "Sử dụng phòng mặc định điểm danh"
+
+msgid "Floor number"
+msgstr "Số tầng"
+
+msgid "Copy to students"
+msgstr "Sao chép cho học viên"
+
+msgid "Generate a quick test on this topic"
+msgstr "Tạo bài kiểm tra nhanh về chủ đề này"
+
+msgid "The saved document content will be sent to an AI model for processing."
+msgstr "Nội dung tài liệu đã lưu sẽ được gửi đến mô hình AI để xử lý."
+
+msgid "MCP API key"
+msgstr "Khóa API MCP"
+
+msgid "Authorized applications"
+msgstr "Ứng dụng được ủy quyền"
+
+msgid "Your session is about to expire"
+msgstr "Phiên của bạn sắp hết hạn"
+
+msgid "Do you want to continue your session?"
+msgstr "Bạn có muốn tiếp tục phiên không?"
+
+msgid "Your session details have been lost, please login again."
+msgstr "Chi tiết phiên làm việc của bạn đã bị mất, vui lòng đăng nhập lại."
+
+msgid "Access to this resource has been denied. You don't seem to have the necessary permissions to access it."
+msgstr "Truy cập tài nguyên này đã bị từ chối. Có vẻ bạn không có quyền truy cập cần thiết."
+
+msgid "Stay connected"
+msgstr "Giữ kết nối"
+
+msgid "You will be signed out in %s seconds."
+msgstr "Bạn sẽ bị đăng xuất sau %s giây."
+
+msgid "No descriptions available yet."
+msgstr "Chưa có mô tả nào."
+
+msgid "%s users selected"
+msgstr "Đã chọn %s người dùng"
+
+msgid "The selected users have been subscribed to the course"
+msgstr "Người dùng đã chọn đã được đăng ký vào khóa học"
+
+msgid "Import teachers"
+msgstr "Nhập giáo viên"
+
+msgid "Import learners"
+msgstr "Nhập học viên"
+
+msgid "Select CSV file"
+msgstr "Chọn tệp CSV"
+
+msgid "Some users could not be subscribed"
+msgstr "Một số người dùng không thể đăng ký"
+
+msgid "Browse available classes"
+msgstr "Duyệt các lớp có sẵn"
+
+msgid "Back to linked classes"
+msgstr "Quay lại các lớp đã liên kết"
+
+msgid "No classes are currently linked to this course."
+msgstr "Hiện chưa có lớp nào được liên kết với khóa học này."
+
+msgid "No available classes were found for this course."
+msgstr "Không tìm thấy lớp nào khả dụng cho khóa học này."
+
+msgid "Are you sure you want to unsubscribe the selected users?"
+msgstr "Bạn có chắc chắn muốn hủy đăng ký người dùng đã chọn không?"
+
+msgid "Learning path access"
+msgstr "Truy cập lộ trình học tập"
+
+msgid "Only selected users and groups can access this learning path. Manage them after saving."
+msgstr "Chỉ người dùng và nhóm được chọn mới có thể truy cập lộ trình học tập này. Quản lý họ sau khi lưu."
+
+msgid "All current and future course users can access this learning path."
+msgstr "Tất cả người dùng hiện tại và tương lai của khóa học đều có thể truy cập lộ trình học tập này."
+
+msgid "All course users"
+msgstr "Tất cả người dùng khóa học"
+
+msgid "Selected users and groups"
+msgstr "Người dùng và nhóm được chọn"
+
+msgid "No access"
+msgstr "Không có quyền truy cập"
+
+msgid "Only users and groups added here can access this learning path."
+msgstr "Chỉ người dùng và nhóm được thêm vào đây mới có thể truy cập lộ trình học tập này."
+
+msgid "Number of questions limited to a maximum of %s"
+msgstr "Số lượng câu hỏi được giới hạn tối đa là %s"
+
+msgid "Open exercise player"
+msgstr "Mở trình phát bài tập"
+
+msgid "The score is hidden for this exercise."
+msgstr "Điểm số bị ẩn đối với bài tập này."
+
+msgid "Corrections are hidden according to the exercise result settings."
+msgstr "Phần sửa chữa bị ẩn theo cài đặt kết quả bài tập."
+
+msgid "Progressive adaptive result"
+msgstr "Kết quả thích ứng tiến bộ"
+
+msgid "Achieved level"
+msgstr "Cấp độ đạt được"
+
+msgid "Correction history"
+msgstr "Lịch sử sửa chữa"
+
+msgid "History of manual corrections made for this attempt."
+msgstr "Lịch sử sửa chữa thủ công cho lần thử này."
+
+msgid "This exercise uses the radar/spiderweb result mode. The chart is not available on this page."
+msgstr "Bài tập này sử dụng chế độ kết quả radar/nhện. Biểu đồ không khả dụng trên trang này."
+
+msgid "Question details are hidden according to the exercise result settings."
+msgstr "Chi tiết câu hỏi bị ẩn theo cài đặt kết quả bài tập."
+
+msgid "Media question"
+msgstr "Câu hỏi đa phương tiện"
+
+msgid "Pending correction"
+msgstr "Chờ sửa chữa"
+
+msgid "No answer"
+msgstr "Không có câu trả lời"
+
+msgid "Blank %s"
+msgstr "Ô trống %s"
+
+msgid "Your order"
+msgstr "Thứ tự của bạn"
+
+msgid "Correct order"
+msgstr "Thứ tự đúng"
+
+msgid "Delineation review"
+msgstr "Xem xét phân định"
+
+msgid "Learner clicks"
+msgstr "Số lần nhấp của người học"
+
+msgid "Question image"
+msgstr "Hình ảnh câu hỏi"
+
+msgid "No hotspot image available"
+msgstr "Không có hình ảnh điểm nóng"
+
+msgid "Learner delineation"
+msgstr "Phân định của người học"
+
+msgid "Expected delineation"
+msgstr "Phân định mong đợi"
+
+msgid "Expected zones"
+msgstr "Vùng mong đợi"
+
+msgid "Zone"
+msgstr "Vùng"
+
+msgid "Learner annotation"
+msgstr "Chú thích của người học"
+
+msgid "No annotation image available"
+msgstr "Không có hình ảnh chú thích"
+
+msgid "This answer is pending teacher correction."
+msgstr "Câu trả lời này đang chờ giáo viên sửa chữa."
+
+msgid "Teacher comment"
+msgstr "Nhận xét của giáo viên"
+
+msgid "Teacher correction"
+msgstr "Sửa chữa của giáo viên"
+
+msgid "Save correction"
+msgstr "Lưu sửa chữa"
+
+msgid "Learner audio"
+msgstr "Âm thanh của người học"
+
+msgid "Download audio"
+msgstr "Tải xuống âm thanh"
+
+msgid "No uploaded audio"
+msgstr "Không có âm thanh được tải lên"
+
+msgid "Learner Office document"
+msgstr "Tài liệu Office của người học"
+
+msgid "Learner file"
+msgstr "Tệp của người học"
+
+msgid "Download Office document"
+msgstr "Tải xuống tài liệu Office"
+
+msgid "No submitted document"
+msgstr "Không có tài liệu được nộp"
+
+msgid "No uploaded file"
+msgstr "Không có tệp được tải lên"
+
+msgid "Content item"
+msgstr "Mục nội dung"
+
+msgid "This question type cannot be reviewed on this page."
+msgstr "Loại câu hỏi này không thể được xem xét trên trang này."
+
+msgid "Exercise completed"
+msgstr "Bài tập đã hoàn thành"
+
+msgid "Could not start the attempt"
+msgstr "Không thể bắt đầu lần thử"
+
+msgid "Invalid exercise attempt"
+msgstr "Lần thử bài tập không hợp lệ"
+
+msgid "Could not load exercise result"
+msgstr "Không thể tải kết quả bài tập"
+
+msgid "Could not load AI providers"
+msgstr "Không thể tải nhà cung cấp AI"
+
+msgid "Could not generate AI suggestion"
+msgstr "Không thể tạo gợi ý AI"
+
+msgid "Correction saved"
+msgstr "Đã lưu chỉnh sửa"
+
+msgid "Could not save correction"
+msgstr "Không thể lưu chỉnh sửa"
+
+msgid "Create exercise"
+msgstr "Tạo bài tập"
+
+msgid "Exercise categories"
+msgstr "Danh mục bài tập"
+
+msgid "Question categories"
+msgstr "Danh mục câu hỏi"
+
+msgid "Search by exercise title or description."
+msgstr "Tìm kiếm theo tiêu đề hoặc mô tả bài tập."
+
+msgid "Search exercises"
+msgstr "Tìm kiếm bài tập"
+
+msgid "No exercises found"
+msgstr "Không tìm thấy bài tập"
+
+msgid "Open exercise"
+msgstr "Mở bài tập"
+
+msgid "Disable autolaunch"
+msgstr "Tắt tự động khởi chạy"
+
+msgid "Enable autolaunch"
+msgstr "Bật tự động khởi chạy"
+
+msgid "Export QTI2"
+msgstr "Xuất QTI2"
+
+msgid "Bulk actions"
+msgstr "Hành động hàng loạt"
+
+msgid "Selected exercises"
+msgstr "Bài tập đã chọn"
+
+msgid "No exercises selected"
+msgstr "Chưa chọn bài tập nào"
+
+msgid "Are you sure you want to apply this action to the selected exercises?"
+msgstr "Bạn có chắc chắn muốn áp dụng hành động này cho các bài tập đã chọn không?"
+
+msgid "Bulk action completed"
+msgstr "Hành động hàng loạt đã hoàn tất"
+
+msgid "Could not update exercises"
+msgstr "Không thể cập nhật các bài tập"
+
+msgid "Could not update exercise"
+msgstr "Không thể cập nhật bài tập"
+
+msgid "Copy exercise"
+msgstr "Sao chép bài tập"
+
+msgid "Delete exercise"
+msgstr "Xóa bài tập"
+
+msgid "Could not load exercises"
+msgstr "Không thể tải bài tập"
+
+msgid "No limit"
+msgstr "Không giới hạn"
+
+msgid "Add selected questions to the test"
+msgstr "Thêm câu hỏi đã chọn vào bài kiểm tra"
+
+msgid "This question is used in an active test and cannot be edited here."
+msgstr "Câu hỏi này đang được sử dụng trong bài kiểm tra đang hoạt động và không thể chỉnh sửa tại đây."
+
+msgid "This question cannot be edited here."
+msgstr "Câu hỏi này không thể chỉnh sửa tại đây."
+
+msgid "This question is used in an active test and cannot be deleted here."
+msgstr "Câu hỏi này đang được sử dụng trong bài kiểm tra đang hoạt động và không thể xóa tại đây."
+
+msgid "This question cannot be deleted because your access is limited by the platform settings."
+msgstr "Không thể xóa câu hỏi này vì quyền truy cập của bạn bị hạn chế bởi cài đặt nền tảng."
+
+msgid "Already in test"
+msgstr "Đã có trong bài kiểm tra"
+
+msgid "Select at least one question."
+msgstr "Chọn ít nhất một câu hỏi."
+
+msgid "Question bank updated"
+msgstr "Ngân hàng câu hỏi đã được cập nhật"
+
+msgid "Could not update the question bank"
+msgstr "Không thể cập nhật ngân hàng câu hỏi"
+
+msgid "Could not load the question bank"
+msgstr "Không thể tải ngân hàng câu hỏi"
+
+msgid "Total score"
+msgstr "Tổng điểm"
+
+msgid "Starting"
+msgstr "Đang bắt đầu"
+
+msgid "Attempt history"
+msgstr "Lịch sử lần thử"
+
+msgid "No attempts yet"
+msgstr "Chưa có lần thử nào"
+
+msgid "Invalid exercise"
+msgstr "Bài tập không hợp lệ"
+
+msgid "Could not load exercise overview"
+msgstr "Không thể tải tổng quan bài tập"
+
+msgid "Open test"
+msgstr "Mở bài kiểm tra"
+
+msgid "Random answers"
+msgstr "Trả lời ngẫu nhiên"
+
+msgid "Prevent moving backwards"
+msgstr "Ngăn di chuyển ngược"
+
+msgid "Previous button hidden"
+msgstr "Nút quay lại bị ẩn"
+
+msgid "This exercise uses options that require a different test player."
+msgstr "Bài tập này sử dụng các tùy chọn yêu cầu trình phát bài kiểm tra khác."
+
+msgid "Continue test"
+msgstr "Tiếp tục bài kiểm tra"
+
+msgid "Attempt started"
+msgstr "Lần thử đã bắt đầu"
+
+msgid "Teacher preview does not create a tracked attempt."
+msgstr "Xem trước của giáo viên không tạo lần thử được theo dõi."
+
+msgid "Start or resume an exercise attempt. Draft answers can be saved before final submission."
+msgstr "Bắt đầu hoặc tiếp tục một lần thử bài tập. Có thể lưu câu trả lời nháp trước khi nộp bài cuối cùng."
+
+msgid "Time limit reached. Finishing the attempt."
+msgstr "Đã hết thời gian. Đang hoàn tất lần thử."
+
+msgid "Question time reached. Saving your answer."
+msgstr "Đã hết thời gian cho câu hỏi. Đang lưu câu trả lời của bạn."
+
+msgid "Finishing"
+msgstr "Đang hoàn tất"
+
+msgid "Draft saved"
+msgstr "Bản nháp đã lưu"
+
+msgid "Save as draft"
+msgstr "Lưu dưới dạng bản nháp"
+
+msgid "Statement"
+msgstr "Đề bài"
+
+msgid "Drop each option on the matching answer"
+msgstr "Kéo từng lựa chọn vào câu trả lời phù hợp"
+
+msgid "Clear match"
+msgstr "Xóa ghép đôi"
+
+msgid "Click to place the selected option here"
+msgstr "Nhấp để đặt lựa chọn đã chọn vào đây"
+
+msgid "Select an option, then click here"
+msgstr "Chọn một lựa chọn, sau đó nhấp vào đây"
+
+msgid "Already matched"
+msgstr "Đã ghép đôi"
+
+msgid "You can drag an option to an answer, or select an option and then click a target box."
+msgstr "Bạn có thể kéo một lựa chọn vào câu trả lời, hoặc chọn một lựa chọn rồi nhấp vào hộp đích."
+
+msgid "Put the items in the correct order."
+msgstr "Sắp xếp các mục theo đúng thứ tự."
+
+msgid "Move left"
+msgstr "Di chuyển sang trái"
+
+msgid "Move right"
+msgstr "Di chuyển sang phải"
+
+msgid "You can drag items left or right, or use the move buttons to change the order."
+msgstr "Bạn có thể kéo các mục sang trái hoặc phải, hoặc sử dụng nút di chuyển để thay đổi thứ tự."
+
+msgid "You can drag items or use the move buttons to change the order."
+msgstr "Bạn có thể kéo các mục hoặc sử dụng nút di chuyển để thay đổi thứ tự."
+
+msgid "Or upload an audio file"
+msgstr "Hoặc tải lên tệp âm thanh"
+
+msgid "Selected audio"
+msgstr "Âm thanh đã chọn"
+
+msgid "Uploaded audio"
+msgstr "Âm thanh đã tải lên"
+
+msgid "Office document"
+msgstr "Tài liệu Office"
+
+msgid "Complete the document in the editor below. The file will be attached to this attempt for teacher correction."
+msgstr "Hoàn thành tài liệu trong trình soạn thảo bên dưới. Tệp sẽ được đính kèm vào lần thử này để giáo viên chấm."
+
+msgid "Reload Office editor"
+msgstr "Tải lại trình soạn thảo Office"
+
+msgid "Prepare Office document"
+msgstr "Chuẩn bị tài liệu Office"
+
+msgid "Open in new tab"
+msgstr "Mở trong tab mới"
+
+msgid "Preparing Office document"
+msgstr "Đang chuẩn bị tài liệu Office"
+
+msgid "Submitted document"
+msgstr "Tài liệu đã nộp"
+
+msgid "Annotation tools"
+msgstr "Công cụ chú thích"
+
+msgid "Text to place"
+msgstr "Văn bản cần đặt"
+
+msgid "Click the image to place the text annotation."
+msgstr "Nhấp vào hình ảnh để đặt chú thích văn bản."
+
+msgid "Click the image to add path points. Use Start new path to separate paths."
+msgstr "Nhấp vào hình ảnh để thêm các điểm đường. Sử dụng Bắt đầu đường mới để tách các đường."
+
+msgid "Start new path"
+msgstr "Bắt đầu đường mới"
+
+msgid "Current annotations"
+msgstr "Chú thích hiện tại"
+
+msgid "Remove point"
+msgstr "Xóa điểm"
+
+msgid "Click the image to draw the delineation polygon."
+msgstr "Nhấp vào hình ảnh để vẽ đa giác phân định."
+
+msgid "Click a marker to remove it."
+msgstr "Nhấp vào một điểm đánh dấu để xóa nó."
+
+msgid "Placed"
+msgstr "Đã đặt"
+
+msgid "Select an answer, then click on the image to mark it."
+msgstr "Chọn một câu trả lời, sau đó nhấp vào hình ảnh để đánh dấu."
+
+msgid "Reading speed"
+msgstr "Tốc độ đọc"
+
+msgid "This question type cannot be displayed in this player."
+msgstr "Loại câu hỏi này không thể hiển thị trong trình phát này."
+
+msgid "Save draft"
+msgstr "Lưu bản nháp"
+
+msgid "I confirm that my answers were saved."
+msgstr "Tôi xác nhận rằng các câu trả lời của tôi đã được lưu."
+
+msgid "Finish test"
+msgstr "Hoàn tất bài kiểm tra"
+
+msgid "Attempt finished"
+msgstr "Lần thử đã hoàn tất"
+
+msgid "Question category"
+msgstr "Danh mục câu hỏi"
+
+msgid "You finished the questions related to this question category, it is your last chance to go back and revise those questions."
+msgstr "Bạn đã hoàn thành các câu hỏi liên quan đến danh mục câu hỏi này, đây là cơ hội cuối cùng để quay lại và sửa đổi các câu hỏi đó."
+
+msgid "Question time left"
+msgstr "Thời gian còn lại cho câu hỏi"
+
+msgid "Time left"
+msgstr "Thời gian còn lại"
+
+msgid "Current attempt"
+msgstr "Lần thử hiện tại"
+
+msgid "Could not save draft answer"
+msgstr "Không thể lưu câu trả lời nháp"
+
+msgid "Could not load exercise"
+msgstr "Không thể tải bài tập"
+
+msgid "Draft answer saved"
+msgstr "Đã lưu câu trả lời nháp"
+
+msgid "Could not finish the attempt"
+msgstr "Không thể kết thúc lần thử"
+
+msgid "Could not prepare Office document"
+msgstr "Không thể chuẩn bị tài liệu Office"
+
+msgid "Back to learner score"
+msgstr "Quay lại điểm người học"
+
+msgid "Disable auto refresh"
+msgstr "Tắt tự động làm mới"
+
+msgid "Enable auto refresh"
+msgstr "Bật tự động làm mới"
+
+msgid "Live window"
+msgstr "Cửa sổ trực tiếp"
+
+msgid "Ongoing attempts"
+msgstr "Các lần thử đang diễn ra"
+
+msgid "Completed attempts"
+msgstr "Các lần thử đã hoàn thành"
+
+msgid "Started"
+msgstr "Đã bắt đầu"
+
+msgid "Last activity"
+msgstr "Hoạt động cuối"
+
+msgid "Could not load live results"
+msgstr "Không thể tải kết quả trực tiếp"
+
+msgid "This exercise is read-only because it is included in a learning path."
+msgstr "Bài tập này chỉ đọc vì nó nằm trong lộ trình học tập."
+
+msgid "Select a question type to create a question."
+msgstr "Chọn loại câu hỏi để tạo câu hỏi."
+
+msgid "Click to preview"
+msgstr "Nhấn để xem trước"
+
+msgid "Hide preview"
+msgstr "Ẩn xem trước"
+
+msgid "Shape"
+msgstr "Hình dạng"
+
+msgid "Coordinates"
+msgstr "Tọa độ"
+
+msgid "Blanks"
+msgstr "Chỗ trống"
+
+msgid "Switchable blanks"
+msgstr "Chỗ trống có thể chuyển đổi"
+
+msgid "Blank"
+msgstr "Chỗ trống"
+
+msgid "Input width"
+msgstr "Chiều rộng ô nhập"
+
+msgid "Orientation"
+msgstr "Hướng"
+
+msgid "Not available with the current exercise feedback mode"
+msgstr "Không khả dụng với chế độ phản hồi bài tập hiện tại"
+
+msgid "Not available in the learning path creation flow"
+msgstr "Không khả dụng trong quy trình tạo lộ trình học tập"
+
+msgid "Delete question"
+msgstr "Xóa câu hỏi"
+
+msgid "Could not update exercise questions"
+msgstr "Không thể cập nhật câu hỏi bài tập"
+
+msgid "Could not add the exercise to the learning path"
+msgstr "Không thể thêm bài tập vào lộ trình học tập"
+
+msgid "A valid exercise id is required."
+msgstr "Cần có ID bài tập hợp lệ."
+
+msgid "Could not load exercise questions"
+msgstr "Không thể tải câu hỏi bài tập"
+
+msgid "Delete selected attempts"
+msgstr "Xóa các lần thử đã chọn"
+
+msgid "Before date"
+msgstr "Trước ngày"
+
+msgid "Pending corrections"
+msgstr "Chờ chấm điểm"
+
+msgid "This exercise is locked by gradebook. Attempt cleanup actions are disabled."
+msgstr "Bài tập này bị khóa bởi sổ điểm. Các hành động dọn dẹp lần thử bị vô hiệu hóa."
+
+msgid "No attempts found"
+msgstr "Không tìm thấy lần thử nào"
+
+msgid "Review"
+msgstr "Xem lại"
+
+msgid "Print/PDF"
+msgstr "In/PDF"
+
+msgid "Could not load exercise report"
+msgstr "Không thể tải báo cáo bài tập"
+
+msgid "Select at least one attempt"
+msgstr "Chọn ít nhất một lần thử"
+
+msgid "Delete selected attempts?"
+msgstr "Xóa các lần thử đã chọn?"
+
+msgid "Send reviewed attempt result emails?"
+msgstr "Gửi email kết quả lần thử đã xem xét?"
+
+msgid "Could not send emails"
+msgstr "Không thể gửi email"
+
+msgid "Exercise result emails sent"
+msgstr "Đã gửi email kết quả bài tập"
+
+msgid "Skipped"
+msgstr "Đã bỏ qua"
+
+msgid "Close attempt?"
+msgstr "Đóng lần thử?"
+
+msgid "Attempt closed"
+msgstr "Đã đóng lần thử"
+
+msgid "Could not close attempt"
+msgstr "Không thể đóng bài làm"
+
+msgid "Send this attempt result by email to the learner?"
+msgstr "Gửi kết quả bài làm này qua email cho học viên?"
+
+msgid "Email sent"
+msgstr "Đã gửi email"
+
+msgid "Could not send email"
+msgstr "Không thể gửi email"
+
+msgid "Attempt deleted"
+msgstr "Đã xóa bài làm"
+
+msgid "Could not delete attempt"
+msgstr "Không thể xóa bài làm"
+
+msgid "Select a CSV file containing title and description columns."
+msgstr "Chọn tệp CSV chứa cột tiêu đề và mô tả."
+
+msgid "Manage categories used to classify questions."
+msgstr "Quản lý các danh mục dùng để phân loại câu hỏi."
+
+msgid "Manage categories used to classify exercises."
+msgstr "Quản lý các danh mục dùng để phân loại bài tập."
+
+msgid "Could not load categories"
+msgstr "Không thể tải danh mục"
+
+msgid "Imported categories: %s. Skipped rows: %s."
+msgstr "Đã nhập danh mục: %s. Bỏ qua dòng: %s."
+
+msgid "Imported categories: %s."
+msgstr "Đã nhập danh mục: %s."
+
+msgid "Could not import categories"
+msgstr "Không thể nhập danh mục"
+
+msgid "Could not save category"
+msgstr "Không thể lưu danh mục"
+
+msgid "Answer distribution"
+msgstr "Phân bố câu trả lời"
+
+msgid "Configured answers"
+msgstr "Câu trả lời đã cấu hình"
+
+msgid "Detailed answer counting for some question types is not available in the migrated report yet."
+msgstr "Tính năng đếm chi tiết câu trả lời cho một số loại câu hỏi chưa có trong báo cáo đã di chuyển."
+
+msgid "No report by question data found"
+msgstr "Không tìm thấy dữ liệu báo cáo theo câu hỏi"
+
+msgid "Detailed answer counting for this question type is not available in the migrated report yet."
+msgstr "Tính năng đếm chi tiết câu trả lời cho loại câu hỏi này chưa có trong báo cáo đã di chuyển."
+
+msgid "No answer distribution found"
+msgstr "Không tìm thấy phân bố câu trả lời"
+
+msgid "Could not load report by question"
+msgstr "Không thể tải báo cáo theo câu hỏi"
+
+msgid "Question settings"
+msgstr "Cài đặt câu hỏi"
+
+msgid "Leave empty or 0 for no time limit."
+msgstr "Để trống hoặc 0 nếu không giới hạn thời gian."
+
+msgid "Time limit in seconds"
+msgstr "Giới hạn thời gian (giây)"
+
+msgid "Attached questions"
+msgstr "Câu hỏi đã đính kèm"
+
+msgid "Only questions attached to this media question inside the current exercise are listed here."
+msgstr "Chỉ liệt kê các câu hỏi được đính kèm với câu hỏi phương tiện này trong bài tập hiện tại."
+
+msgid "No questions are attached to this media question in the current exercise."
+msgstr "Không có câu hỏi nào được đính kèm với câu hỏi phương tiện này trong bài tập hiện tại."
+
+msgid "Upload the Office document template that learners will edit with OnlyOffice."
+msgstr "Tải lên mẫu tài liệu Office mà học viên sẽ chỉnh sửa bằng OnlyOffice."
+
+msgid "Replace Office document"
+msgstr "Thay thế tài liệu Office"
+
+msgid "Current Office document"
+msgstr "Tài liệu Office hiện tại"
+
+msgid "This question is corrected manually after the learner submits the edited document."
+msgstr "Câu hỏi này được chấm thủ công sau khi học viên nộp tài liệu đã chỉnh sửa."
+
+msgid "Total score is calculated as the sum of hotspot scores."
+msgstr "Điểm tổng được tính bằng tổng điểm các điểm nóng."
+
+msgid "Global score"
+msgstr "Điểm tổng"
+
+msgid "Select a hotspot row, choose its shape, then draw over the image. For polygons, click each point and finish the polygon, or double-click to finish."
+msgstr "Chọn một dòng điểm nóng, chọn hình dạng, sau đó vẽ lên hình ảnh. Với đa giác, nhấp từng điểm và kết thúc đa giác, hoặc nhấp đúp để kết thúc."
+
+msgid "Finish polygon"
+msgstr "Kết thúc đa giác"
+
+msgid "Calculated answer"
+msgstr "Câu trả lời tính toán"
+
+msgid "Please type your text below and use square brackets [...] to define one or more blanks."
+msgstr "Vui lòng nhập văn bản bên dưới và dùng dấu ngoặc vuông [...] để xác định một hoặc nhiều chỗ trống."
+
+msgid "Lowest value"
+msgstr "Giá trị thấp nhất"
+
+msgid "Highest value"
+msgstr "Giá trị cao nhất"
+
+msgid "Fill in blanks"
+msgstr "Điền chỗ trống"
+
+msgid "Use the selected markers to define blanks. Example: The capital of Peru is [Lima]."
+msgstr "Dùng các điểm đánh dấu đã chọn để xác định chỗ trống. Ví dụ: Thủ đô của Peru là [Lima]."
+
+msgid "To turn a blank into a dropdown menu, separate the choices with a single |, the first one being the correct answer. Example: The capital of Peru is [Lima|Paris|Bogota]."
+msgstr "Để biến chỗ trống thành menu thả xuống, hãy phân tách các lựa chọn bằng một dấu |, lựa chọn đầu tiên là đáp án đúng. Ví dụ: Thủ đô của Peru là [Lima|Paris|Bogota]."
+
+msgid "To allow several correct answers, separate them with ||. Example: 1||one||uno."
+msgstr "Để cho phép nhiều đáp án đúng, hãy phân tách chúng bằng ||. Ví dụ: 1||one||uno."
+
+msgid "Enter the dropdown options, one answer by line. Then mark the expected answers below, like the legacy tool."
+msgstr "Nhập các tùy chọn danh sách thả xuống, mỗi câu trả lời một dòng. Sau đó đánh dấu các câu trả lời mong đợi bên dưới, giống công cụ cũ."
+
+msgid "Refresh answers"
+msgstr "Làm mới câu trả lời"
+
+msgid "This dropdown combination question uses one global score, like legacy."
+msgstr "Câu hỏi kết hợp danh sách thả xuống này dùng một điểm tổng, giống phiên bản cũ."
+
+msgid "Please enter at least two dropdown options."
+msgstr "Vui lòng nhập ít nhất hai tùy chọn danh sách thả xuống."
+
+msgid "Create destination options first, then link each item to the correct option."
+msgstr "Tạo các tùy chọn đích trước, sau đó liên kết từng mục với tùy chọn đúng."
+
+msgid "This matching combination question uses one global score, like legacy."
+msgstr "Câu hỏi kết hợp ghép đôi này dùng một điểm tổng, giống phiên bản cũ."
+
+msgid "Create the steps and choose the expected position for each one, like legacy Draggable."
+msgstr "Tạo các bước và chọn vị trí mong đợi cho từng bước, giống Draggable cũ."
+
+msgid "Learners will choose True or False and then select their degree of certainty during the attempt. The editor stores the same Correct/Wrong scores and certainty levels as legacy."
+msgstr "Học viên sẽ chọn Đúng hoặc Sai, sau đó chọn mức độ chắc chắn trong quá trình làm bài. Trình soạn thảo lưu cùng điểm Đúng/Sai và mức độ chắc chắn như phiên bản cũ."
+
+msgid "Hotspot combination"
+msgstr "Kết hợp điểm nóng"
+
+msgid "Add delineation"
+msgstr "Thêm đường phân định"
+
+msgid "This Office document question has no answer options. Its score is assigned during correction/results review."
+msgstr "Câu hỏi văn bản Office này không có phương án trả lời. Điểm số được gán trong quá trình chấm điểm/xem kết quả."
+
+msgid "This upload question has no answer options. Its score is assigned during correction/results review."
+msgstr "Câu hỏi tải lên này không có phương án trả lời. Điểm số được gán trong quá trình chấm điểm/xem kết quả."
+
+msgid "This oral expression question has no answer options. Its score is assigned during correction/results review."
+msgstr "Câu hỏi diễn đạt bằng lời nói này không có phương án trả lời. Điểm số được gán trong quá trình chấm điểm/xem kết quả."
+
+msgid "This open question has no answer options. Its score is assigned during correction/results review."
+msgstr "Câu hỏi mở này không có phương án trả lời. Điểm số được gán trong quá trình chấm điểm/xem kết quả."
+
+msgid "Add a reading text with scrolling speed settings."
+msgstr "Thêm văn bản đọc với cài đặt tốc độ cuộn."
+
+msgid "Add content, media or reading context without adding score."
+msgstr "Thêm nội dung, phương tiện hoặc ngữ cảnh đọc mà không thêm điểm."
+
+msgid "Insert a page break without adding score."
+msgstr "Chèn ngắt trang mà không thêm điểm."
+
+msgid "Could not save question"
+msgstr "Không thể lưu câu hỏi"
+
+msgid "Only DOC, DOCX, XLS or XLSX documents are allowed."
+msgstr "Chỉ cho phép tài liệu DOC, DOCX, XLS hoặc XLSX."
+
+msgid "Please select an Office document."
+msgstr "Vui lòng chọn một tài liệu Office."
+
+msgid "Please draw at least one hotspot."
+msgstr "Vui lòng vẽ ít nhất một điểm nóng."
+
+msgid "Please draw at least one delineation."
+msgstr "Vui lòng vẽ ít nhất một đường phân định."
+
+msgid "The fill in blanks text is required."
+msgstr "Văn bản điền vào chỗ trống là bắt buộc."
+
+msgid "At least one expected answer is required."
+msgstr "Cần ít nhất một câu trả lời mong đợi."
+
+msgid "At least two draggable items are required."
+msgstr "Cần ít nhất hai mục có thể kéo."
+
+msgid "Each draggable item must be linked to a valid target position."
+msgstr "Mỗi mục có thể kéo phải được liên kết với một vị trí đích hợp lệ."
+
+msgid "At least two matching options are required."
+msgstr "Cần ít nhất hai tùy chọn ghép cặp."
+
+msgid "At least two matching pairs are required."
+msgstr "Cần ít nhất hai cặp ghép cặp."
+
+msgid "Each matching pair must be linked to a valid option."
+msgstr "Mỗi cặp ghép cặp phải được liên kết với một tùy chọn hợp lệ."
+
+msgid "At least two answers are required."
+msgstr "Cần ít nhất hai câu trả lời."
+
+msgid "Each true/false answer must have True or False selected."
+msgstr "Mỗi câu trả lời đúng/sai phải chọn Đúng hoặc Sai."
+
+msgid "A unique answer question must have exactly one correct answer."
+msgstr "Câu hỏi có một câu trả lời duy nhất phải có đúng một câu trả lời đúng."
+
+msgid "At least one correct answer is required."
+msgstr "Cần ít nhất một câu trả lời đúng."
+
+msgid "Could not load question"
+msgstr "Không thể tải câu hỏi"
+
+msgid "Select a course and export the global exercise results report as CSV."
+msgstr "Chọn một khóa học và xuất báo cáo kết quả bài tập toàn cục dưới dạng CSV."
+
+msgid "Back to reports catalog"
+msgstr "Quay lại danh mục báo cáo"
+
+msgid "Could not load exercise global report"
+msgstr "Không thể tải báo cáo toàn cục bài tập"
+
+msgid "Imported questions"
+msgstr "Các câu hỏi đã nhập"
+
+msgid "Aiken content"
+msgstr "Nội dung Aiken"
+
+msgid "Could not load AI Aiken generator"
+msgstr "Không thể tải trình tạo AI Aiken"
+
+msgid "Could not generate Aiken content"
+msgstr "Không thể tạo nội dung Aiken"
+
+msgid "Could not import generated Aiken content"
+msgstr "Không thể nhập nội dung Aiken đã tạo"
+
+msgid "Back to my courses"
+msgstr "Quay lại các khóa học của tôi"
+
+msgid "Open report"
+msgstr "Mở báo cáo"
+
+msgid "Questions with no automatic correction"
+msgstr "Các câu hỏi không có chấm điểm tự động"
+
+msgid "Could not load pending attempts"
+msgstr "Không thể tải các lần thử đang chờ"
+
+msgid "Skipped questions"
+msgstr "Các câu hỏi đã bỏ qua"
+
+msgid "Aiken import distributes this total weight across imported questions unless a question defines SCORE."
+msgstr "Nhập Aiken phân phối tổng trọng số này cho các câu hỏi đã nhập trừ khi một câu hỏi xác định SCORE."
+
+msgid "Import warnings"
+msgstr "Cảnh báo nhập"
+
+msgid "Could not import questions"
+msgstr "Không thể nhập câu hỏi"
+
+msgid "No question statistics found"
+msgstr "Không tìm thấy thống kê câu hỏi"
+
+msgid "Could not load question statistics"
+msgstr "Không thể tải thống kê câu hỏi"
+
+msgid "You can also connect an MCP client directly by pointing it to the following endpoint:"
+msgstr "Bạn cũng có thể kết nối trực tiếp một máy khách MCP bằng cách trỏ nó đến điểm cuối sau:"
+
+msgid "No applications are currently connected to your account."
+msgstr "Hiện tại không có ứng dụng nào được kết nối với tài khoản của bạn."
+
+msgid "Connected on"
+msgstr "Đã kết nối vào"
+
+msgid "Last used"
+msgstr "Sử dụng lần cuối"
+
+msgid "%s will no longer be able to access your Chamilo account. Continue?"
+msgstr "%s sẽ không còn truy cập được vào tài khoản Chamilo của bạn nữa. Tiếp tục?"
+
+msgid "Application revoked"
+msgstr "Ứng dụng đã thu hồi"
+
+msgid "Copied to clipboard"
+msgstr "Đã sao chép vào bảng tạm"
+
+msgid "Could not copy the MCP endpoint"
+msgstr "Không thể sao chép điểm cuối MCP"
+
+msgid "MCP endpoint"
+msgstr "Điểm cuối MCP"
+
+msgid "API key"
+msgstr "Khóa API"
+
+msgid "Last used at"
+msgstr "Sử dụng lần cuối lúc"
+
+msgid "Copy this key now. It will not be shown again."
+msgstr "Sao chép khóa này ngay. Khóa sẽ không được hiển thị lại."
+
+msgid "Rotate API key"
+msgstr "Xoay khóa API"
+
+msgid "Revoke API key"
+msgstr "Thu hồi khóa API"
+
+msgid "Remote MCP connection"
+msgstr "Kết nối MCP từ xa"
+
+msgid "Configure your MCP client with the following values:"
+msgstr "Cấu hình ứng dụng khách MCP của bạn với các giá trị sau:"
+
+msgid "The current key will stop working immediately. Continue?"
+msgstr "Khóa hiện tại sẽ ngừng hoạt động ngay lập tức. Tiếp tục?"
+
+msgid "A new personal MCP API key will be generated. Continue?"
+msgstr "Một khóa API MCP cá nhân mới sẽ được tạo. Tiếp tục?"
+
+msgid "MCP API key generated"
+msgstr "Khóa API MCP đã được tạo"
+
+msgid "Connected MCP clients using this key will stop working immediately. Continue?"
+msgstr "Các ứng dụng khách MCP đang sử dụng khóa này sẽ ngừng hoạt động ngay lập tức. Tiếp tục?"
+
+msgid "MCP API key revoked"
+msgstr "Khóa API MCP đã bị thu hồi"
+
+msgid "Could not copy the API key"
+msgstr "Không thể sao chép khóa API"
+
+msgid "Project"
+msgstr "Dự án"
+
+msgid "Close old tickets"
+msgstr "Đóng phiếu cũ"
+
+msgid "Close tickets older than seven days?"
+msgstr "Đóng các phiếu cũ hơn bảy ngày?"
+
+msgid "Assignment history"
+msgstr "Lịch sử phân công"
+
+msgid "Translate with AI"
+msgstr "Dịch bằng AI"
+
+msgid "Target language"
+msgstr "Ngôn ngữ đích"
+
+msgid "Please select a provider"
+msgstr "Vui lòng chọn nhà cung cấp"
+
+msgid "Generate translation"
+msgstr "Tạo bản dịch"
+
+msgid "At least one terms and conditions section must contain text."
+msgstr "Ít nhất một phần điều khoản và điều kiện phải có nội dung."
+
+msgid "No active target languages are available."
+msgstr "Không có ngôn ngữ đích đang hoạt động."
+
+msgid "Tutor"
+msgstr "Gia sư"
+
+msgid "Access dates"
+msgstr "Ngày truy cập"
+
+msgid "Coach access dates"
+msgstr "Ngày truy cập của huấn luyện viên"
+
+msgid "No sessions found"
+msgstr "Không tìm thấy buổi học nào"
+
+msgid "Select the courses that this user must not be able to access in this session."
+msgstr "Chọn các khóa học mà người dùng này không được phép truy cập trong buổi học này."
+
+msgid "A user cannot be blocked from every course in the session. Unsubscribe the user instead."
+msgstr "Một người dùng không thể bị chặn khỏi mọi khóa học trong buổi học. Thay vào đó, hãy hủy đăng ký người dùng."
+
+msgid "Users subscribed to this session"
+msgstr "Người dùng đã đăng ký buổi học này"
+
+msgid "No available users found"
+msgstr "Không tìm thấy người dùng khả dụng"
+
+msgid "Subscribe this user to the session?"
+msgstr "Đăng ký người dùng này vào buổi học?"
+
+msgid "Subscribe the selected users to the session?"
+msgstr "Đăng ký các người dùng đã chọn vào buổi học?"
+
+msgid "General tutor planning"
+msgstr "Lập kế hoạch gia sư chung"
+
+msgid "User is already registered by another tutor."
+msgstr "Người dùng đã được đăng ký bởi gia sư khác."
+
+msgid "You're receiving a copy because you're a course tutor"
+msgstr "Bạn nhận được bản sao vì bạn là gia sư khóa học"
+
+msgid "General tutor"
+msgstr "Gia sư chung"
+
+msgid "Consider the courses, tutors, a technical helpdesk, teachers, and/or materials available."
+msgstr "Xem xét các khóa học, gia sư, bộ phận hỗ trợ kỹ thuật, giáo viên và/hoặc tài liệu có sẵn."
+
+msgid "Tutors subscribed as teachers in course %s"
+msgstr "Gia sư đã đăng ký làm giáo viên trong khóa học %s"
+
+msgid "Tutor name"
+msgstr "Tên gia sư"
+
+msgid "Session tutors are coordinators for the session and can act as tutors for each course in the session. Only users with the teacher role can be selected as session tutors."
+msgstr "Gia sư buổi học là điều phối viên cho buổi học và có thể đóng vai trò gia sư cho mỗi khóa học trong buổi học. Chỉ người dùng có vai trò giáo viên mới có thể được chọn làm gia sư buổi học."
+
+msgid "Access start date for tutors"
+msgstr "Ngày bắt đầu truy cập cho gia sư"
+
+msgid "Date on which the session is made available to tutors, so they can prepare it before the students get connected"
+msgstr "Ngày mà buổi học được cung cấp cho gia sư, để họ có thể chuẩn bị trước khi học viên kết nối"
+
+msgid "Access end date for tutors"
+msgstr "Ngày kết thúc truy cập cho gia sư"
+
+msgid "Date on which the session is closed to tutors. The additional delay will allow them to export all relevant tracking information"
+msgstr "Ngày mà buổi học bị đóng đối với gia sư. Thời gian bổ sung sẽ cho phép họ xuất tất cả thông tin theo dõi liên quan"
+
+msgid "Tutor and student"
+msgstr "Gia sư và học viên"
+
+msgid "This report shows the weekly distribution of sessions per general tutor in the selected date range."
+msgstr "Báo cáo này hiển thị phân bố hàng tuần của các buổi học theo gia sư chung trong khoảng ngày đã chọn."
+
+msgid "User is general tutor in some sessions"
+msgstr "Người dùng là gia sư chung trong một số buổi học"
+
+msgid "Teachers will be added as tutors in all course sessions."
+msgstr "Giáo viên sẽ được thêm làm trợ giảng trong tất cả các phiên học của khóa học."
+
+msgid "Delete failed: invalid question id."
+msgstr "Xóa thất bại: mã câu hỏi không hợp lệ."
+
+msgid "Average number of sessions per general session tutor"
+msgstr "Số phiên trung bình mỗi trợ giảng phiên chung"
+
+msgid "No room"
+msgstr "Không có phòng"
+
+msgid "Import course teachers as course tutors in the session"
+msgstr "Nhập giáo viên khóa học làm trợ giảng khóa học trong phiên"
+
+msgid "Clean and update course tutors"
+msgstr "Xóa và cập nhật trợ giảng khóa học"
+
+msgid "Add me as tutor"
+msgstr "Thêm tôi làm trợ giảng"
+
+msgid "Unable to add the survey to the learning path"
+msgstr "Không thể thêm khảo sát vào lộ trình học tập"
+
+msgid "Access dates for tutors"
+msgstr "Ngày truy cập cho trợ giảng"
+
+msgid "Tutor and group member"
+msgstr "Trợ giảng và thành viên nhóm"
+
+msgid "Your daily AI token limit has been reached. Please try again tomorrow."
+msgstr "Bạn đã đạt giới hạn token AI hàng ngày. Vui lòng thử lại vào ngày mai."
+
+msgid "Your monthly AI token limit has been reached. Please try again next month."
+msgstr "Bạn đã đạt giới hạn token AI hàng tháng. Vui lòng thử lại vào tháng sau."
+
+msgid "This course code already exists, please choose another code."
+msgstr "Mã khóa học này đã tồn tại, vui lòng chọn mã khác."
+
+msgid "This course title already exists, please choose another title."
+msgstr "Tiêu đề khóa học này đã tồn tại, vui lòng chọn tiêu đề khác."
+
+msgid "This tool visibility cannot be changed"
+msgstr "Không thể thay đổi khả năng hiển thị của công cụ này"
+
+msgid "Invalid visibility"
+msgstr "Khả năng hiển thị không hợp lệ"
+
+msgid "You are receiving a copy because you are one of the course tutors"
+msgstr "Bạn nhận được bản sao vì bạn là một trong những trợ giảng khóa học"
+
+msgid "You are receiving a copy because you are the course tutor"
+msgstr "Bạn nhận được bản sao vì bạn là trợ giảng khóa học"
+
+msgid "Manual completion"
+msgstr "Hoàn thành thủ công"
+
+msgid "Send to tutors"
+msgstr "Gửi đến trợ giảng"
+
+msgid "Lab title"
+msgstr "Tiêu đề phòng thí nghiệm"
+
+msgid "Lab week"
+msgstr "Tuần phòng thí nghiệm"
+
+msgid "Final exam access rule"
+msgstr "Quy tắc truy cập thi cuối kỳ"
+
+msgid "Course completion rule"
+msgstr "Quy tắc hoàn thành khóa học"
+
+msgid "You have been invited to join a course"
+msgstr "Bạn đã được mời tham gia khóa học"
+
+msgid "No user has been found"
+msgstr "Không tìm thấy người dùng nào"
+
+msgid "The selected user cannot be subscribed in this context"
+msgstr "Người dùng đã chọn không thể đăng ký trong ngữ cảnh này"
+
+msgid "No change has been made"
+msgstr "Không có thay đổi nào được thực hiện"
+
+msgid "Back to group list"
+msgstr "Quay lại danh sách nhóm"
+
+msgid "Remove class link"
+msgstr "Xóa liên kết lớp"
+
+msgid "Group settings"
+msgstr "Cài đặt nhóm"
+
+msgid "Self-registration allowed"
+msgstr "Cho phép tự đăng ký"
+
+msgid "Self-unregistration allowed"
+msgstr "Cho phép tự hủy đăng ký"
+
+msgid "This group is linked to the class"
+msgstr "Nhóm này được liên kết với lớp"
+
+msgid "Create one or more empty course groups"
+msgstr "Tạo một hoặc nhiều nhóm khóa học trống"
+
+msgid "Number of places"
+msgstr "Số chỗ"
+
+msgid "Base group"
+msgstr "Nhóm cơ sở"
+
+msgid "Share"
+msgstr "Chia sẻ"
+
+msgid "Collaboration"
+msgstr "Hợp tác"
+
+msgid "The group title is required."
+msgstr "Tiêu đề nhóm là bắt buộc."
+
+msgid "Back to group area"
+msgstr "Quay lại khu vực nhóm"
+
+msgid "Members are managed by the linked class"
+msgstr "Thành viên được quản lý bởi lớp liên kết"
+
+msgid "%s groups selected"
+msgstr "%s nhóm đã chọn"
+
+msgid "Fill selected groups"
+msgstr "Điền các nhóm đã chọn"
+
+msgid "Empty selected groups"
+msgstr "Làm trống các nhóm đã chọn"
+
+msgid "Fill group"
+msgstr "Điền nhóm"
+
+msgid "Empty group"
+msgstr "Làm trống nhóm"
+
+msgid "Groups per user"
+msgstr "Số nhóm mỗi người dùng"
+
+msgid "No tutors"
+msgstr "Không có trợ giảng"
+
+msgid "No users"
+msgstr "Không có người dùng"
+
+msgid "Calculation mode"
+msgstr "Chế độ tính điểm"
+
+msgid "Weighted average"
+msgstr "Trung bình trọng số"
+
+msgid "Points sum"
+msgstr "Tổng điểm"
+
+msgid "Weighted average normalizes by the sum of weights; points sum treats each weight as maximum points and adds them up without normalizing."
+msgstr "Trung bình trọng số chuẩn hóa theo tổng trọng số; tổng điểm coi mỗi trọng số là điểm tối đa và cộng chúng lại mà không chuẩn hóa."
+
+msgid "Each item weight is treated as its maximum points; the grade is the sum of points, not normalized."
+msgstr "Mỗi trọng số của mục được coi là điểm tối đa của nó; điểm số là tổng điểm, không chuẩn hóa."
+
+msgid "The grade is the weighted average of items, normalized by the sum of weights."
+msgstr "Điểm số là trung bình trọng số của các mục, chuẩn hóa theo tổng trọng số."
+
+msgid "Forum participation"
+msgstr "Tham gia diễn đàn"
+
+msgid "Forum thread"
+msgstr "Chủ đề diễn đàn"
+
+msgid "Points for one message"
+msgstr "Điểm cho một tin nhắn"
+
+msgid "Points for two or more messages"
+msgstr "Điểm cho hai tin nhắn trở lên"
+
+msgid "Points awarded when the student posted exactly one message in the thread."
+msgstr "Điểm được trao khi sinh viên đăng đúng một tin nhắn trong chủ đề."
+
+msgid "Points awarded when the student posted two or more messages in the thread."
+msgstr "Điểm được trao khi sinh viên đăng hai tin nhắn trở lên trong chủ đề."
+
+msgid "Optional. If left empty, one or more messages award the points for one message."
+msgstr "Tùy chọn. Nếu để trống, một hoặc nhiều tin nhắn sẽ được tính điểm như một tin nhắn."
+
+msgid "Current password is required to change your password."
+msgstr "Mật khẩu hiện tại là bắt buộc để thay đổi mật khẩu."
+
+msgid "The 2FA code is required."
+msgstr "Mã 2FA là bắt buộc."
+
+msgid "Invalid 2FA configuration."
+msgstr "Cấu hình 2FA không hợp lệ."
+
+msgid "The 2FA code is invalid or expired."
+msgstr "Mã 2FA không hợp lệ hoặc đã hết hạn."
+
+msgid "Database load"
+msgstr "Tải cơ sở dữ liệu"
+
+msgid "Live MySQL and MariaDB server load metrics"
+msgstr "Số liệu tải máy chủ MySQL và MariaDB theo thời gian thực"
+
+msgid "Click to show database server load metrics"
+msgstr "Nhấp để hiển thị số liệu tải máy chủ cơ sở dữ liệu"
+
+msgid "Threads connected"
+msgstr "Luồng đã kết nối"
+
+msgid "Temporary tables on disk"
+msgstr "Bảng tạm trên ổ đĩa"
+
+msgid "Privilege scope"
+msgstr "Phạm vi quyền"
+
+msgid "Not measurable with the current database user"
+msgstr "Không thể đo lường với người dùng cơ sở dữ liệu hiện tại"
+
+msgid "Uptime"
+msgstr "Thời gian hoạt động"
+
+msgid "Queries per second"
+msgstr "Truy vấn mỗi giây"
+
+msgid "Slow queries"
+msgstr "Truy vấn chậm"
+
+msgid "Slow query time limit"
+msgstr "Giới hạn thời gian truy vấn chậm"
+
+msgid "Slow query log"
+msgstr "Nhật ký truy vấn chậm"
+
+msgid "Slow queries per second"
+msgstr "Truy vấn chậm mỗi giây"
+
+msgid "Threads running"
+msgstr "Luồng đang chạy"
+
+msgid "Threads cached"
+msgstr "Luồng được lưu trữ"
+
+msgid "Table lock waits"
+msgstr "Chờ khóa bảng"
+
+msgid "Row lock waits"
+msgstr "Chờ khóa dòng"
+
+msgid "Aborted connections"
+msgstr "Kết nối bị hủy"
+
+msgid "Opened tables"
+msgstr "Bảng đã mở"
+
+msgid "Query cache"
+msgstr "Bộ nhớ đệm truy vấn"
+
+msgid "Database load metrics are only available for MySQL and MariaDB."
+msgstr "Chỉ số tải cơ sở dữ liệu chỉ khả dụng cho MySQL và MariaDB."
+
+msgid "Inserts"
+msgstr "Chèn"
+
+msgid "Hit rate"
+msgstr "Tỷ lệ trúng"
+
+msgid "Auto-refresh every 5 seconds"
+msgstr "Tự động làm mới mỗi 5 giây"
+
+msgid "Web server load"
+msgstr "Tải máy chủ web"
+
+msgid "Live Apache, Nginx or FrankenPHP status metrics"
+msgstr "Chỉ số trạng thái Apache, Nginx hoặc FrankenPHP theo thời gian thực"
+
+msgid "Click to show web server load metrics"
+msgstr "Nhấp để hiển thị số liệu tải máy chủ web"
+
+msgid "Requires a local web server status module"
+msgstr "Yêu cầu mô-đun trạng thái máy chủ web cục bộ"
+
+msgid "Web server load is read from Apache mod_status, Nginx stub_status, or the FrankenPHP/Caddy metrics endpoint, on localhost only. The status page must allow requests from 127.0.0.1 (or ::1)."
+msgstr "Tải máy chủ web được đọc từ Apache mod_status, Nginx stub_status, hoặc điểm cuối metrics của FrankenPHP/Caddy, chỉ trên localhost. Trang trạng thái phải cho phép yêu cầu từ 127.0.0.1 (hoặc ::1)."
+
+msgid "Paths scanned"
+msgstr "Đường dẫn đã quét"
+
+msgid "Detected"
+msgstr "Đã phát hiện"
+
+msgid "Status path"
+msgstr "Đường dẫn trạng thái"
+
+msgid "Web server load metrics are only available for Apache, Nginx and FrankenPHP."
+msgstr "Chỉ số tải máy chủ web chỉ khả dụng cho Apache, Nginx và FrankenPHP."
+
+msgid "None of the scanned status paths responded on localhost."
+msgstr "Không có đường dẫn trạng thái nào được quét phản hồi trên localhost."
+
+msgid "Busy workers"
+msgstr "Worker đang bận"
+
+msgid "Idle workers"
+msgstr "Worker nhàn rỗi"
+
+msgid "Graceful workers"
+msgstr "Worker graceful"
+
+msgid "Server MPM"
+msgstr "MPM máy chủ"
+
+msgid "Requests per second (live)"
+msgstr "Yêu cầu mỗi giây (trực tiếp)"
+
+msgid "Requests per second (since start)"
+msgstr "Yêu cầu mỗi giây (từ khi bắt đầu)"
+
+msgid "Bytes per second (live)"
+msgstr "Byte mỗi giây (trực tiếp)"
+
+msgid "Bytes per second (since start)"
+msgstr "Byte mỗi giây (từ khi bắt đầu)"
+
+msgid "Bytes per request"
+msgstr "Byte mỗi yêu cầu"
+
+msgid "Total accesses"
+msgstr "Tổng số truy cập"
+
+msgid "Total traffic"
+msgstr "Tổng lưu lượng"
+
+msgid "CPU load"
+msgstr "Tải CPU"
+
+msgid "Load average (1 min)"
+msgstr "Trung bình tải (1 phút)"
+
+msgid "Load average (5 min)"
+msgstr "Trung bình tải (5 phút)"
+
+msgid "Load average (15 min)"
+msgstr "Trung bình tải (15 phút)"
+
+msgid "Scoreboard sending"
+msgstr "Scoreboard đang gửi"
+
+msgid "Scoreboard reading"
+msgstr "Scoreboard đang đọc"
+
+msgid "Scoreboard keepalive"
+msgstr "Giữ kết nối bảng điểm"
+
+msgid "Scoreboard waiting"
+msgstr "Scoreboard đang chờ"
+
+msgid "Scoreboard open slots"
+msgstr "Khe trống scoreboard"
+
+msgid "Active connections"
+msgstr "Kết nối đang hoạt động"
+
+msgid "Reading"
+msgstr "Đang đọc"
+
+msgid "Writing"
+msgstr "Đang ghi"
+
+msgid "Total requests"
+msgstr "Tổng số yêu cầu"
+
+msgid "Accepts"
+msgstr "Chấp nhận"
+
+msgid "Handled"
+msgstr "Đã xử lý"
+
+msgid "Apache: enable mod_status (ExtendedStatus On) and allow localhost to /server-status. Nginx: enable stub_status on a localhost-only location such as /nginx_status or /stub_status. FrankenPHP: add a global \"metrics\" option to the Caddyfile, which exposes Prometheus metrics on Caddy's admin API (127.0.0.1:2019/metrics) by default."
+msgstr "Apache: bật mod_status (ExtendedStatus On) và cho phép localhost truy cập /server-status. Nginx: bật stub_status trên một vị trí chỉ localhost như /nginx_status hoặc /stub_status. FrankenPHP: thêm tùy chọn toàn cục \"metrics\" vào Caddyfile, mặc định xuất metrics Prometheus trên API quản trị của Caddy (127.0.0.1:2019/metrics)."
+
+msgid "Total threads"
+msgstr "Tổng số luồng"
+
+msgid "Busy threads"
+msgstr "Luồng đang bận"
+
+msgid "Queue depth"
+msgstr "Độ sâu hàng đợi"
+
+msgid "Worker"
+msgstr "Worker"
+
+msgid "Average request time"
+msgstr "Thời gian yêu cầu trung bình"
+
+msgid "Grade percentage distribution"
+msgstr "Phân bố phần trăm điểm số"
+
+msgid "Top learners"
+msgstr "Học viên xuất sắc"
+
+msgid "This progress combines learning path progress and the learner's average exercise result"
+msgstr "Tiến độ này kết hợp tiến độ lộ trình học tập và kết quả trung bình bài tập của học viên"
+
+msgid "Additional profile fields"
+msgstr "Trường hồ sơ bổ sung"
+
+msgid "Visible columns"
+msgstr "Cột hiển thị"
+
+msgid "Learning path completion"
+msgstr "Hoàn thành lộ trình học tập"
+
+msgid "Number of certificates"
+msgstr "Số lượng chứng chỉ"
+
+msgid "Could not export the report"
+msgstr "Không thể xuất báo cáo"
+
+msgid "Second learner"
+msgstr "Học viên thứ hai"
+
+msgid "Results by learner"
+msgstr "Kết quả theo học viên"
+
+msgid "Use filters to narrow down questions."
+msgstr "Sử dụng bộ lọc để thu hẹp câu hỏi."
+
+msgid "Try adjusting your filters and search again."
+msgstr "Hãy điều chỉnh bộ lọc và tìm kiếm lại."
+
+msgid "Results per page"
+msgstr "Kết quả mỗi trang"
+
+msgid "No answers"
+msgstr "Không có câu trả lời"
+
+msgid "Tests using this question"
+msgstr "Bài kiểm tra sử dụng câu hỏi này"
+
+msgid "Delete failed"
+msgstr "Xóa thất bại"
+
+msgid "PHP cache"
+msgstr "Bộ nhớ đệm PHP"
+
+msgid "Live OPcache and APCu diagnostics"
+msgstr "Chẩn đoán OPcache và APCu trực tiếp"
+
+msgid "Click to show OPcache and APCu diagnostics"
+msgstr "Nhấp để hiển thị chẩn đoán OPcache và APCu"
+
+msgid "Memory used"
+msgstr "Bộ nhớ đã sử dụng"
+
+msgid "OPcache is installed but not enabled."
+msgstr "OPcache đã cài đặt nhưng chưa được kích hoạt."
+
+msgid "OPcache extension is not available on this server."
+msgstr "Phần mở rộng OPcache không khả dụng trên máy chủ này."
+
+msgid "OPcache is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes, e.g. FrankenPHP)."
+msgstr "OPcache đang báo cáo thống kê bộ nhớ không nhất quán (vấn đề đã biết trên một số môi trường PHP đa luồng, ví dụ FrankenPHP)."
+
+msgid "APCu is installed but not enabled."
+msgstr "APCu đã cài đặt nhưng chưa được kích hoạt."
+
+msgid "APCu extension is not available on this server."
+msgstr "Phần mở rộng APCu không khả dụng trên máy chủ này."
+
+msgid "APCu is reporting inconsistent memory statistics (a known issue on some threaded PHP runtimes)."
+msgstr "APCu đang báo cáo thống kê bộ nhớ không nhất quán (vấn đề đã biết trên một số môi trường PHP đa luồng)."
+
+msgid "Constant"
+msgstr "Hằng số"
+
+msgid "Space used on disk (MB)"
+msgstr "Dung lượng sử dụng trên ổ đĩa (MB)"
+
+msgid "Set max course space (MB)"
+msgstr "Đặt dung lượng khóa học tối đa (MB)"
+
+msgid "Memory free"
+msgstr "Bộ nhớ trống"
+
+msgid "Memory wasted"
+msgstr "Bộ nhớ lãng phí"
+
+msgid "Memory used %"
+msgstr "Bộ nhớ đã dùng %"
+
+msgid "Cached scripts"
+msgstr "Script đã lưu"
+
+msgid "Cached keys"
+msgstr "Khóa đã lưu"
+
+msgid "Misses"
+msgstr "Lỗi truy cập"
+
+msgid "Cache full"
+msgstr "Bộ nhớ đầy"
+
+msgid "OOM restarts"
+msgstr "Khởi động lại OOM"
+
+msgid "Hash restarts"
+msgstr "Khởi động lại Hash"
+
+msgid "Manual restarts"
+msgstr "Khởi động lại thủ công"
+
+msgid "Interned strings used"
+msgstr "Chuỗi nội trú đã dùng"
+
+msgid "Interned strings free"
+msgstr "Chuỗi nội trú còn trống"
+
+msgid "Interned strings count"
+msgstr "Số chuỗi nội trú"
+
+msgid "Memory available"
+msgstr "Bộ nhớ khả dụng"
+
+msgid "Memory size"
+msgstr "Kích thước bộ nhớ"
+
+msgid "Entries"
+msgstr "Mục"
+
+msgid "Slots"
+msgstr "Khe"
+
+msgid "Expunges"
+msgstr "Xóa"
+
+msgid "Cache start time"
+msgstr "Thời gian bắt đầu bộ nhớ đệm"
+
+msgid "Time zone"
+msgstr "Múi giờ"
+
+msgid "Not registered"
+msgstr "Chưa đăng ký"
+
+msgid "Filter and list learner certificates by session, course, date or learner, then export them when needed."
+msgstr "Lọc và liệt kê chứng chỉ người học theo phiên, khóa học, ngày hoặc người học, sau đó xuất khi cần."
+
+msgid "Filter by session and course"
+msgstr "Lọc theo phiên và khóa học"
+
+msgid "Choose a session, course and optional date to list the generated certificates."
+msgstr "Chọn phiên, khóa học và ngày tùy chọn để liệt kê các chứng chỉ đã tạo."
+
+msgid "Filter by learner"
+msgstr "Lọc theo người học"
+
+msgid "Find certificates for a specific learner across sessions and courses."
+msgstr "Tìm chứng chỉ của một người học cụ thể trên các phiên và khóa học."
+
+msgid "Certificates found"
+msgstr "Chứng chỉ đã tìm thấy"
+
+msgid "Open certificate"
+msgstr "Mở chứng chỉ"
+
+msgid "Certificate file not available"
+msgstr "Tệp chứng chỉ không khả dụng"
+
+msgid "Export to CSV"
+msgstr "Xuất CSV"
+
+msgid "Acquired skills"
+msgstr "Kỹ năng đạt được"
+
+msgid "No acquired skill"
+msgstr "Chưa có kỹ năng đạt được"
+
+msgid "Absences"
+msgstr "Vắng mặt"
+
+msgid "No courses"
+msgstr "Không có khóa học"
+
+msgid "No session matched"
+msgstr "Không có phiên phù hợp"
+
+msgid "Unable to load the report"
+msgstr "Không thể tải báo cáo"
+
+msgid "Please select a profile"
+msgstr "Vui lòng chọn hồ sơ"
+
+msgid "Please select a session"
+msgstr "Vui lòng chọn phiên"
+
+msgid "Please select a user"
+msgstr "Vui lòng chọn người dùng"
+
+msgid "Unable to export the report"
+msgstr "Không thể xuất báo cáo"
+
+msgid "Accepted on web"
+msgstr "Đã chấp nhận trên web"
+
+msgid "Accepted by e-mail"
+msgstr "Đã chấp nhận qua email"
+
+msgid "The course title is required"
+msgstr "Tiêu đề khóa học là bắt buộc"
+
+msgid "Unexpected error"
+msgstr "Lỗi không mong muốn"
+
+msgid "Separate tags with commas"
+msgstr "Phân tách thẻ bằng dấu phẩy"
+
+msgid "Open link"
+msgstr "Mở liên kết"
+
+msgid "Describe the course picture to generate"
+msgstr "Mô tả hình ảnh khóa học cần tạo"
+
+msgid "Generate picture"
+msgstr "Tạo hình ảnh"
+
+msgid "PDF watermark"
+msgstr "Hình mờ PDF"
+
+msgid "No watermark image"
+msgstr "Không có hình mờ"
+
+msgid "Upload watermark"
+msgstr "Tải lên hình mờ"
+
+msgid "Delete watermark"
+msgstr "Xóa hình mờ"
+
+msgid "Course legal agreement file"
+msgstr "Tệp thỏa thuận pháp lý khóa học"
+
+msgid "Upload agreement file"
+msgstr "Tải lên tệp thỏa thuận"
+
+msgid "Download agreement file"
+msgstr "Tải xuống tệp thỏa thuận"
+
+msgid "Delete agreement file"
+msgstr "Xóa tệp thỏa thuận"
+
+msgid "Custom certificate images"
+msgstr "Hình ảnh chứng chỉ tùy chỉnh"
+
+msgid "Course picture updated"
+msgstr "Đã cập nhật hình ảnh khóa học"
+
+msgid "The course picture could not be uploaded"
+msgstr "Không thể tải lên hình ảnh khóa học"
+
+msgid "Course picture deleted"
+msgstr "Đã xóa hình ảnh khóa học"
+
+msgid "Enter a description for the image"
+msgstr "Nhập mô tả cho hình ảnh"
+
+msgid "The image generator returned an empty response"
+msgstr "Trình tạo hình ảnh trả về phản hồi trống"
+
+msgid "Course picture generated"
+msgstr "Đã tạo hình ảnh khóa học"
+
+msgid "Watermark updated"
+msgstr "Đã cập nhật hình mờ"
+
+msgid "Watermark deleted"
+msgstr "Đã xóa hình mờ"
+
+msgid "Agreement file updated"
+msgstr "Đã cập nhật tệp thỏa thuận"
+
+msgid "Agreement file deleted"
+msgstr "Đã xóa tệp thỏa thuận"
+
+msgid "Certificate image updated"
+msgstr "Đã cập nhật hình ảnh chứng chỉ"
+
+msgid "Certificate image deleted"
+msgstr "Đã xóa hình ảnh chứng chỉ"
+
+msgid "Use the image editor before uploading to crop, rotate or resize the course picture."
+msgstr "Sử dụng trình chỉnh sửa hình ảnh trước khi tải lên để cắt, xoay hoặc thay đổi kích thước hình ảnh khóa học."
+
+msgid "This invitation link is invalid or has expired."
+msgstr "Liên kết mời này không hợp lệ hoặc đã hết hạn."
+
+msgid "This invitation was sent to a different user. Please log in with the invited account."
+msgstr "Lời mời này đã được gửi đến người dùng khác. Vui lòng đăng nhập bằng tài khoản được mời."
+
+msgid "The invitation could not be accepted."
+msgstr "Không thể chấp nhận lời mời."
+
+msgid "You have been subscribed successfully."
+msgstr "Bạn đã đăng ký thành công."
+
+msgid "This email address cannot be invited."
+msgstr "Không thể mời địa chỉ email này."
+
+msgid "This user is already subscribed to the session."
+msgstr "Người dùng này đã đăng ký vào phiên học."
+
+msgid "This user is already subscribed to the course."
+msgstr "Người dùng này đã đăng ký vào khóa học."
+
+msgid "Multi URLs"
+msgstr "Nhiều URL"
+
+msgid "Entities like users and courses can be active in more than one URL at the same time, so the sum of values below will not match the total."
+msgstr "Các thực thể như người dùng và khóa học có thể hoạt động trên nhiều URL cùng lúc, nên tổng các giá trị bên dưới sẽ không khớp với tổng số."
+
+msgid "User directory"
+msgstr "Thư mục người dùng"
+
+msgid "Course directory"
+msgstr "Thư mục khóa học"
+
+msgid "URLs"
+msgstr "URL"
+
+msgid "User details"
+msgstr "Chi tiết người dùng"
+
+msgid "Course details"
+msgstr "Chi tiết khóa học"
+
+msgid "View details"
+msgstr "Xem chi tiết"
+
+msgid "Average progress"
+msgstr "Tiến độ trung bình"
+
+msgid "Direct enrollment belongs to the course as a whole, not to a specific URL, so the same 'Direct' figures are repeated below for every URL this course is linked to. Sessions are the intended way to share a course across URLs with metrics that actually differ per URL."
+msgstr "Đăng ký trực tiếp thuộc về khóa học nói chung, không thuộc một URL cụ thể, nên cùng số liệu 'Trực tiếp' được lặp lại bên dưới cho mọi URL mà khóa học này được liên kết. Khóa học theo phiên là cách dự kiến để chia sẻ khóa học giữa các URL với số liệu thực sự khác nhau theo từng URL."
+
+msgid "Logins (all URLs combined)"
+msgstr "Đăng nhập (tất cả URL gộp lại)"
+
+msgid "Unique logins"
+msgstr "Đăng nhập duy nhất"
+
+msgid "Parent URL"
+msgstr "URL cha"
+
+msgid "Logins (your URLs)"
+msgstr "Đăng nhập (URL của bạn)"
+
+msgid "The picture could not be uploaded"
+msgstr "Không thể tải ảnh lên"
+
+msgid "This field type is not fully supported yet — raw value only."
+msgstr "Loại trường này chưa được hỗ trợ đầy đủ — chỉ giá trị thô."
+
+msgid "This course is close to its user subscription limit (%d/%d)."
+msgstr "Khóa học này sắp đạt giới hạn đăng ký người dùng (%d/%d)."
+
+msgid "Space is limited through your course properties. To increase your limit, get a"
+msgstr "Dung lượng bị giới hạn theo thuộc tính khóa học của bạn. Để tăng giới hạn, hãy chọn"
+
+msgid "User subscriptions are limited through your course properties. To increase your limit, get a"
+msgstr "Đăng ký người dùng bị giới hạn theo thuộc tính khóa học của bạn. Để tăng giới hạn, hãy chọn"
+
+msgid "pro plan"
+msgstr "gói pro"
+
+msgid "and import this course's backup through Course Maintenance to your new paid course, or open a ticket to get your course converted into a pro course once you've acquired this plan."
+msgstr "và nhập bản sao lưu khóa học này qua Bảo trì khóa học vào khóa học trả phí mới, hoặc mở phiếu hỗ trợ để chuyển khóa học thành khóa học pro sau khi bạn đã mua gói này."
+
+msgid "Tired of writing questions?"
+msgstr "Mệt mỏi vì phải viết câu hỏi?"
+
+msgid "Upgrade your plan"
+msgstr "Nâng cấp gói của bạn"
+
+msgid "to a pro plan to get help from an AI to generate quality questions for you."
+msgstr "lên gói pro để được AI hỗ trợ tạo câu hỏi chất lượng cho bạn."
+
+msgid "Student Success AI Coach"
+msgstr "Huấn luyện viên AI thành công học viên"
+
+msgid "No AI text provider is configured."
+msgstr "Chưa cấu hình nhà cung cấp văn bản AI."
+
+msgid "Additional instructions for the AI coach"
+msgstr "Hướng dẫn bổ sung cho huấn luyện viên AI"
+
+msgid "Example: This learner has difficulty maintaining attention. Suggest shorter activities and more frequent checks for understanding."
+msgstr "Ví dụ: Người học này gặp khó khăn trong việc duy trì sự chú ý. Đề xuất các hoạt động ngắn hơn và kiểm tra mức độ hiểu thường xuyên hơn."
+
+msgid "Keep this window open while Chamilo prepares the recommendation."
+msgstr "Giữ cửa sổ này mở trong khi Chamilo chuẩn bị khuyến nghị."
+
+msgid "The recommendation was also saved in your Chamilo inbox."
+msgstr "Khuyến nghị cũng đã được lưu trong hộp thư đến Chamilo của bạn."
+
+msgid "The recommendation was generated and saved for this learner, but the inbox copy could not be created."
+msgstr "Khuyến nghị đã được tạo và lưu cho người học này, nhưng không thể tạo bản sao trong hộp thư đến."
+
+msgid "Student success recommendation"
+msgstr "Khuyến nghị thành công của học viên"
+
+msgid "Generated"
+msgstr "Đã tạo"
+
+msgid "Priority actions"
+msgstr "Hành động ưu tiên"
+
+msgid "Evidence"
+msgstr "Bằng chứng"
+
+msgid "This feature will analyse this course's content and send learning behaviour information to the configured AI model. Despite not sending directly identifiable personal data to the AI model, some of the data sent might indirectly provide identifiable information about the user. If in doubt, always check with your AI Reference person before using this feature."
+msgstr "Tính năng này sẽ phân tích nội dung khóa học và gửi thông tin hành vi học tập tới mô hình AI đã cấu hình. Mặc dù không gửi trực tiếp dữ liệu cá nhân có thể nhận dạng tới mô hình AI, một số dữ liệu được gửi có thể gián tiếp cung cấp thông tin nhận dạng về người dùng. Nếu nghi ngờ, hãy luôn kiểm tra với người phụ trách AI của bạn trước khi sử dụng tính năng này."
+
+msgid "Additional activities"
+msgstr "Hoạt động bổ sung"
+
+msgid "Rhythm"
+msgstr "Nhịp độ"
+
+msgid "Learning methodologies"
+msgstr "Phương pháp học tập"
+
+msgid "Other recommendations"
+msgstr "Khuyến nghị khác"
+
+msgid "Analyzing course..."
+msgstr "Đang phân tích khóa học..."
+
+msgid "Analyzing student's learning..."
+msgstr "Đang phân tích việc học của học viên..."
+
+msgid "By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust."
+msgstr "Bằng cách chấp nhận lời mời này, bạn sẽ được liên kết với người dùng yêu cầu theo cách khiến một phần hoặc toàn bộ dữ liệu hồ sơ của bạn có thể được người dùng đó đọc. Hãy đảm bảo bạn không chia sẻ quá nhiều bằng cách kiểm tra hồ sơ của mình với những người dùng bạn đã tin tưởng."
+
+msgid "Permission to use the microphone is not enabled, please enable it in your browser to record audio"
+msgstr "Quyền sử dụng microphone chưa được bật, vui lòng bật trong trình duyệt để ghi âm"
+
+msgid "This version of Chamilo comes with one (or more) multi-language course(s) pre-installed. Feel free to review them in the courses list and decide whether they should be public or not."
+msgstr "Phiên bản Chamilo này đi kèm một (hoặc nhiều) khóa học đa ngôn ngữ được cài sẵn. Hãy xem lại chúng trong danh sách khóa học và quyết định chúng có nên công khai hay không."
+
+msgid "You do not currently have access to any URL. Please ask the administrator to grant you access to the URL to which you belong."
+msgstr "Hiện bạn không có quyền truy cập bất kỳ URL nào. Vui lòng yêu cầu quản trị viên cấp quyền truy cập URL mà bạn thuộc về."
+
+msgid "If the selected AI provider is not a sovereign service, the selected document content may be sent to an external service. Do not continue with confidential information unless this is allowed by your organization."
+msgstr "Nếu nhà cung cấp AI được chọn không phải dịch vụ chủ quyền, nội dung tài liệu đã chọn có thể được gửi tới dịch vụ bên ngoài. Không tiếp tục với thông tin mật trừ khi tổ chức của bạn cho phép."
+
+msgid "Click Unify on the account that should remain. The system will merge all other accounts in the same duplicate group into it. Merged accounts will be permanently deleted and will disappear from this report. This action cannot be undone."
+msgstr "Nhấp Unify trên tài khoản cần giữ lại. Hệ thống sẽ gộp tất cả tài khoản khác trong cùng nhóm trùng vào tài khoản đó. Các tài khoản đã gộp sẽ bị xóa vĩnh viễn và biến mất khỏi báo cáo này. Hành động này không thể hoàn tác."
+
+msgid "Permanent deletion"
+msgstr "Xóa vĩnh viễn"
+
+msgid "Unify already permanently deletes merged accounts. Use the Users list only if you want to delete additional accounts manually."
+msgstr "Unify đã xóa vĩnh viễn các tài khoản đã gộp. Chỉ dùng danh sách Người dùng nếu bạn muốn xóa thêm tài khoản thủ công."
+
+msgid "You are modifying logos for the default visual theme “chamilo”. Consider creating/using a custom visual theme to avoid overriding defaults."
+msgstr "Bạn đang sửa logo cho giao diện mặc định “chamilo”. Hãy cân nhắc tạo/sử dụng giao diện tùy chỉnh để tránh ghi đè mặc định."
+
+msgid "This exercise has no questions."
+msgstr "Bài tập này không có câu hỏi."
+
+msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test."
+msgstr "Nên hiển thị phản hồi/nhận xét cho mỗi câu hỏi như thế nào? Tùy chọn này xác định cách hiển thị cho người học khi làm bài kiểm tra."
+
+msgid "These applications can access Chamilo as you, using your existing account permissions and nothing more. Revoke any you no longer use or recognize."
+msgstr "Các ứng dụng này có thể truy cập Chamilo với tư cách bạn, dùng quyền tài khoản hiện có và không hơn. Thu hồi những ứng dụng bạn không còn dùng hoặc không nhận ra."
+
+msgid "Please explain why you want to request the withdrawal of your legal consent, so we can process your request properly"
+msgstr "Vui lòng giải thích lý do bạn muốn rút lại sự đồng ý pháp lý, để chúng tôi xử lý yêu cầu đúng cách"
+
+msgid "Use this personal key to connect a remote MCP client to Chamilo with your own account and permissions."
+msgstr "Dùng khóa cá nhân này để kết nối máy khách MCP từ xa với Chamilo bằng tài khoản và quyền của bạn."
+
+msgid "The complete key is displayed only once. Store it securely. Generating a new key immediately invalidates the previous one."
+msgstr "Khóa đầy đủ chỉ hiển thị một lần. Hãy lưu trữ an toàn. Tạo khóa mới sẽ vô hiệu hóa ngay khóa trước."
+
+msgid "The key authenticates the client as your Chamilo account. It does not grant permissions that your account does not already have."
+msgstr "Khóa xác thực máy khách với tư cách tài khoản Chamilo của bạn. Nó không cấp quyền mà tài khoản của bạn chưa có."
+
+msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register"
+msgstr "Hiển thị tuyên bố Điều khoản & Điều kiện trên trang đăng ký, yêu cầu khách truy cập chấp nhận T&C để đăng ký"
+
+msgid "The terms and conditions content will be sent to an AI language model. Review the proposed translation before saving it."
+msgstr "Nội dung điều khoản và điều kiện sẽ được gửi tới mô hình ngôn ngữ AI. Hãy xem lại bản dịch đề xuất trước khi lưu."
+
+msgid "A saved version already exists for the target language. Saving this proposal will create a new version."
+msgstr "Đã có phiên bản đã lưu cho ngôn ngữ đích. Lưu đề xuất này sẽ tạo phiên bản mới."
+
+msgid "Acquired"
+msgstr "Đã đạt được"
+
+msgid "Recommended course picture: 1600 × 900 px (16:9). Use at least 1280 × 720 px for sharp display on larger or high-density screens."
+msgstr "Ảnh khóa học khuyến nghị: 1600 × 900 px (16:9). Dùng ít nhất 1280 × 720 px để hiển thị sắc nét trên màn hình lớn hoặc mật độ cao."
+
+msgid "Courses of the selected URL"
+msgstr "Khóa học của URL đã chọn"
+
+msgid "Course categories in selected URL"
+msgstr "Danh mục khóa học trong URL đã chọn"
+
+msgid "Your account is active, you can login and check your courses now."
+msgstr "Tài khoản của bạn đã kích hoạt, bạn có thể đăng nhập và xem khóa học ngay."
+
+msgid "First you have to download the corrections <a href='%s'> here </a>.\nAfter that you have to unzip that file and edit the files as you wanted without changing the file names.\nThen create a zip file with those modified files and upload it in this form."
+msgstr "Trước tiên bạn phải tải các bản sửa <a href='%s'> tại đây </a>.\nSau đó giải nén tệp đó và chỉnh sửa các tệp theo ý muốn mà không đổi tên tệp.\nRồi tạo tệp zip với các tệp đã sửa và tải lên biểu mẫu này."
+
+msgid "Adding students from session %s to session %s"
+msgstr "Thêm học viên từ phiên %s vào phiên %s"
+
+msgid "Show all attempts by exercise"
+msgstr "Hiện tất cả lần thử theo bài tập"
+
+msgid "This operation would exceed the allowed user limit for the selected course."
+msgstr "Thao tác này sẽ vượt quá giới hạn người dùng cho phép của khóa học đã chọn."
+
+msgid "Some subscriptions could not be executed because they reached the allowed user limit for the affected course. Users/Courses affected: %s"
+msgstr "Một số đăng ký không thể thực hiện vì đã đạt giới hạn người dùng cho khóa học liên quan. Người dùng/Khóa học bị ảnh hưởng: %s"
+
+msgid "This registry lists known reporting pages, their category, canonical URL, legacy URL and expected role audience. Canonical URLs route to the current report implementation and enforce the documented report role matrix."
+msgstr "Sổ đăng ký này liệt kê các trang báo cáo đã biết, danh mục, URL chuẩn, URL cũ và đối tượng vai trò dự kiến. URL chuẩn dẫn tới triển khai báo cáo hiện tại và áp dụng ma trận vai trò báo cáo đã ghi."
+
+msgid "E-mail notification subscription"
+msgstr "Đăng ký thông báo e-mail"
+
+msgid "This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled."
+msgstr "Thao tác này sẽ vượt quá giới hạn %s người dùng mỗi khóa học do quản trị viên đặt. Đăng ký đã bị hủy."
+
+msgid "Language the document is in"
+msgstr "Ngôn ngữ của tài liệu"
+
+msgid "There is no session still"
+msgstr "Vẫn chưa có phiên nào"
+
+msgid "Origin courses from session"
+msgstr "Khóa học nguồn từ phiên"
+
+msgid "Destination courses from session"
+msgstr "Khóa học đích từ phiên"
+
+msgid "Public access (access authorized to any member of the course)"
+msgstr "Truy cập không cần đăng nhập"
+
+msgid "Generate %d glossary terms for a course on '%s', each term on a single line, with its definition on the next line and one blank line between each term. Do not add any other formatting for the title nor for the definition."
+msgstr "Tạo %d thuật ngữ bảng chú giải cho khóa học về '%s', mỗi thuật ngữ trên một dòng, định nghĩa ở dòng tiếp theo và một dòng trống giữa mỗi thuật ngữ. Không thêm định dạng nào khác cho tiêu đề cũng như định nghĩa."
+
+msgid "This is a short description of the course '%s'."
+msgstr "Đây là mô tả ngắn về khóa học '%s'."
+
+msgid "You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing."
+msgstr "Bạn đang sử dụng Chamilo trên nền tảng Windows. Các công cụ hỗ trợ chuyển đổi tài liệu không khả dụng cho lập chỉ mục toàn văn."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to the test list."
+msgstr "Cài đặt tự động khởi chạy bài kiểm tra đang BẬT. Học viên sẽ được chuyển hướng đến danh sách bài kiểm tra."
+
+msgid "The test auto-launch setting is ON. Students will be redirected to a specific test."
+msgstr "Cài đặt tự động khởi chạy bài kiểm tra đang BẬT. Học viên sẽ được chuyển hướng đến một bài kiểm tra cụ thể."
+
+msgid "The subscription limit for this course has been reached (%current%/%limit%)."
+msgstr "Đã đạt giới hạn đăng ký cho khóa học này (%current%\/%limit%)."
+
+msgid "Count course by language"
+msgstr "Đếm khóa học theo ngôn ngữ"
+
+msgid "Users whose latest access is older than the selected date."
+msgstr "Người dùng có lần truy cập gần nhất cũ hơn ngày đã chọn."
+
+msgid "Your certificate is about to expire"
+msgstr "Chứng chỉ của bạn sắp hết hạn"
+
+msgid "Your certificate has expired"
+msgstr "Chứng chỉ của bạn đã hết hạn"
+
+msgid "Your certificate is about to expire:"
+msgstr "Chứng chỉ của bạn sắp hết hạn:"
+
+msgid "Your certificate has expired:"
+msgstr "Chứng chỉ của bạn đã hết hạn:"
+
+msgid "Expiry date"
+msgstr "Ngày hết hạn"
+
+msgid "%s days remaining"
+msgstr "Còn %s ngày"
+
+msgid "Hello, %s"
+msgstr "Xin chào, %s"
+
+msgid "Edit expiry date"
+msgstr "Sửa ngày hết hạn"
+
+msgid "Certificate validity (days)"
+msgstr "Thời hạn chứng chỉ (ngày)"
+
+msgid "Expiring certificates"
+msgstr "Chứng chỉ sắp hết hạn"
+
+msgid "Expiring soon"
+msgstr "Sắp hết hạn"
+
+msgid "Expired notice"
+msgstr "Thông báo hết hạn"
+
+msgid "Expiring notice"
+msgstr "Thông báo sắp hết hạn"
+
+msgid "outdated"
+msgstr "hết hạn"
+
+msgid "Last reminder sent"
+msgstr "Lần nhắc cuối đã gửi"
+
+msgid "Days ahead"
+msgstr "Số ngày trước"
+
+msgid "Send notification"
+msgstr "Gửi thông báo"
+
+msgid "Are you sure you want to send this notification?"
+msgstr "Bạn có chắc muốn gửi thông báo này?"
+
+msgid "Expired: %s"
+msgstr "Đã hết hạn: %s"
+
+msgid "Expiring soon: %s"
+msgstr "Sắp hết hạn: %s"
+
+msgid "Expired notice: %s"
+msgstr "Thông báo hết hạn: %s"
+
+msgid "Expiring notice: %s"
+msgstr "Thông báo sắp hết hạn: %s"
+
+msgid "Notifications are sent to users in their own configured language."
+msgstr "Thông báo được gửi đến người dùng bằng ngôn ngữ họ đã cấu hình."
+
+msgid "Pages are HTTP-cached for 60s by default, as defined in the Page entity, so changes might not reflect immediately."
+msgstr "Các trang được lưu bộ nhớ đệm HTTP trong 60 giây theo mặc định, như được định nghĩa trong thực thể Page, nên thay đổi có thể không hiển thị ngay."
+
+msgid "Activate legal notice"
+msgstr "Kích hoạt thông báo pháp lý"
+
+msgid "Agreement content"
+msgstr "Nội dung thỏa thuận"
+
+msgid "Allow learners to delete their own publication"
+msgstr "Cho phép người học xóa bài đăng của chính họ"
+
+msgid "Allow learners to edit agenda"
+msgstr "Cho phép người học chỉnh sửa lịch trình"
+
+msgid "Allow learners to validate their own attendance"
+msgstr "Cho phép người học xác nhận điểm danh của chính họ"
+
+msgid "Allow learners to view users list"
+msgstr "Cho phép người học xem danh sách người dùng"
+
+msgid "Automatically subscribe users to forum notifications"
+msgstr "Tự động đăng ký người dùng nhận thông báo diễn đàn"
+
+msgid "Certificate mode"
+msgstr "Chế độ chứng chỉ"
+
+msgid "Configure external tools"
+msgstr "Cấu hình công cụ bên ngoài"
+
+msgid "Contents"
+msgstr "Nội dung"
+
+msgid "Contents to show"
+msgstr "Nội dung hiển thị"
+
+msgid "Course certificate"
+msgstr "Chứng chỉ khóa học"
+
+msgid "Course delivery dates"
+msgstr "Ngày triển khai khóa học"
+
+msgid "Course duration in hours"
+msgstr "Thời lượng khóa học tính bằng giờ"
+
+msgid "Course legal agreement"
+msgstr "Thỏa thuận pháp lý khóa học"
+
+msgid "Custom"
+msgstr "Tùy chỉnh"
+
+msgid "Custom certificate"
+msgstr "Chứng chỉ tùy chỉnh"
+
+msgid "Default visibility for new documents"
+msgstr "Hiển thị mặc định cho tài liệu mới"
+
+msgid "Direct invitation link"
+msgstr "Liên kết mời trực tiếp"
+
+msgid "Do not notify"
+msgstr "Không thông báo"
+
+msgid "Documents list"
+msgstr "Danh sách tài liệu"
+
+msgid "E-mail learner on manual subscription"
+msgstr "Gửi e-mail cho người học khi đăng ký thủ công"
+
+msgid "E-mail to teachers on new user's student publication feedback"
+msgstr "Gửi e-mail cho giảng viên khi có phản hồi bài đăng của học viên"
+
+msgid "E-mail users on Dropbox file reception"
+msgstr "Gửi e-mail cho người dùng khi nhận tệp Dropbox"
+
+msgid "Enable course home notification"
+msgstr "Bật thông báo trang chủ khóa học"
+
+msgid "Enable course themes in learning paths"
+msgstr "Bật giao diện khóa học trong lộ trình học"
+
+msgid "Exercises invisible in session"
+msgstr "Bài tập ẩn trong phiên"
+
+msgid "Expiration link"
+msgstr "Liên kết hết hạn"
+
+msgid "Forums list"
+msgstr "Danh sách diễn đàn"
+
+msgid "Issue date type"
+msgstr "Loại ngày cấp"
+
+msgid "Learning path index"
+msgstr "Mục lục lộ trình học"
+
+msgid "Learning paths list"
+msgstr "Danh sách lộ trình học"
+
+msgid "Left margin"
+msgstr "Lề trái"
+
+msgid "Legal notice"
+msgstr "Thông báo pháp lý"
+
+msgid "Maximum subscribed students"
+msgstr "Số học viên đăng ký tối đa"
+
+msgid "Notify in course home"
+msgstr "Thông báo trên trang chủ khóa học"
+
+msgid "Notify learners"
+msgstr "Thông báo cho học viên"
+
+msgid "Notify with agreement file"
+msgstr "Thông báo kèm tệp thỏa thuận"
+
+msgid "Notify without attachment"
+msgstr "Thông báo không kèm tệp đính kèm"
+
+msgid "Open chat in a new window"
+msgstr "Mở trò chuyện trong cửa sổ mới"
+
+msgid "Open to the platform"
+msgstr "Mở cho toàn nền tảng"
+
+msgid "Place"
+msgstr "Địa điểm"
+
+msgid "Platform default"
+msgstr "Mặc định của nền tảng"
+
+msgid "Registration password"
+msgstr "Mật khẩu đăng ký"
+
+msgid "Remove previous agreements"
+msgstr "Xóa các thỏa thuận trước đó"
+
+msgid "Right margin"
+msgstr "Lề phải"
+
+msgid "Selected learning path"
+msgstr "Lộ trình học đã chọn"
+
+msgid "Selected test"
+msgstr "Bài kiểm tra đã chọn"
+
+msgid "Show learner picture in forums"
+msgstr "Hiển thị ảnh học viên trong diễn đàn"
+
+msgid "Show system folders"
+msgstr "Hiển thị thư mục hệ thống"
+
+msgid "Signature text 1"
+msgstr "Văn bản chữ ký 1"
+
+msgid "Signature text 2"
+msgstr "Văn bản chữ ký 2"
+
+msgid "Signature text 3"
+msgstr "Văn bản chữ ký 3"
+
+msgid "Signature text 4"
+msgstr "Văn bản chữ ký 4"
+
+msgid "Student and course information"
+msgstr "Thông tin học viên và khóa học"
+
+msgid "Subscription allowed"
+msgstr "Cho phép đăng ký"
+
+msgid "Tests list"
+msgstr "Danh sách bài kiểm tra"
+
+msgid "Unsubscription allowed"
+msgstr "Cho phép hủy đăng ký"
+
+msgid "Use certificate download date"
+msgstr "Sử dụng ngày tải chứng chỉ"
+
+msgid "Use certificate generation date"
+msgstr "Sử dụng ngày tạo chứng chỉ"
+
+msgid "Use session access dates"
+msgstr "Sử dụng ngày truy cập phiên"
+
+msgid "Use session access end date"
+msgstr "Sử dụng ngày kết thúc truy cập phiên"
+
+msgid "Group report"
+msgstr "Báo cáo nhóm"
+
+msgid "Student follow-up"
+msgstr "Theo dõi học viên"
+
+msgid "Use system default certificate"
+msgstr "Sử dụng chứng chỉ mặc định của hệ thống"
+
+msgid "The attached certificate is unavailable. The system default certificate will be used."
+msgstr "Chứng chỉ đính kèm không khả dụng. Chứng chỉ mặc định của hệ thống sẽ được sử dụng."
+
+msgid "Use the system default certificate instead of the attached certificate?"
+msgstr "Sử dụng chứng chỉ mặc định của hệ thống thay cho chứng chỉ đính kèm?"
+
+msgid "Optional local development override. Production updates use the official Chamilo trusted key."
+msgstr "Tùy chọn ghi đè cho phát triển cục bộ. Cập nhật môi trường sản xuất sử dụng khóa tin cậy chính thức của Chamilo."
+
+msgid "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation."
+msgstr "Tạo kế hoạch áp dụng an toàn từ gói đã chuẩn bị. Bước này kiểm tra các tệp cần thay thế, thêm hoặc xóa, quyền, đường dẫn sao lưu và trạng thái khóa. Nó không sửa đổi cài đặt."
+
+msgid "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection."
+msgstr "Bước này chỉ chuẩn bị để xem xét. Việc thay thế tệp và dọn dẹp theo khai báo của gói diễn ra sau ở bước Áp dụng tệp đã chuẩn bị, với bảo vệ khóa, sao lưu và hoàn tác."
+
+msgid "Files to remove"
+msgstr "Tệp cần xóa"
+
+msgid "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands."
+msgstr "Thay thế các tệp Chamilo từ gói đã chuẩn bị và xóa các tệp lỗi thời được khai báo rõ trong siêu dữ liệu gói đã ký. Bước này không chạy di chuyển cơ sở dữ liệu, Composer, Yarn hoặc lệnh bộ nhớ đệm."
+
+msgid "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing."
+msgstr "Hành động này thay thế và có thể xóa tệp trong cài đặt Chamilo. Hãy đảm bảo kế hoạch áp dụng đã được xem xét và sao lưu đã được bật trước khi tiếp tục."
+
+msgid "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation."
+msgstr "Tôi hiểu thao tác này sẽ thay thế tệp và xóa các tệp lỗi thời được khai báo bởi gói trong cài đặt Chamilo."
+
+msgid "Type the exact text below to confirm"
+msgstr "Nhập chính xác văn bản bên dưới để xác nhận"
+
+msgid "Doctrine will execute only the staged V300 migrations explicitly after the safety review passes."
+msgstr "Doctrine sẽ chỉ thực thi các di chuyển V300 đã chuẩn bị sau khi vượt qua kiểm tra an toàn."
+
+msgid "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation."
+msgstr "Doctrine đã báo cảnh báo đường cơ sở lịch sử. Trình cập nhật vẫn chỉ thực thi các di chuyển V300 đã chuẩn bị sau khi xác nhận rõ ràng."
+
+msgid "Only the manifest path can be changed. The HTTPS protocol and official update domain are fixed."
+msgstr "Chỉ có thể thay đổi đường dẫn manifest. Giao thức HTTPS và miền cập nhật chính thức được cố định."
+
+msgid "Development mode allows an HTTPS manifest URL or a local manifest path."
+msgstr "Chế độ phát triển cho phép URL manifest HTTPS hoặc đường dẫn manifest cục bộ."
+
+msgid "The official update manifest is configured by the server."
+msgstr "Manifest cập nhật chính thức được cấu hình bởi máy chủ."
+
+msgid "What feedback do you want about this course?"
+msgstr "Bạn muốn phản hồi gì về khóa học này?"
+
+msgid "Analysis summary"
+msgstr "Tóm tắt phân tích"
+
+msgid "Lessons included"
+msgstr "Bài học được đưa vào"
+
+msgid "Standalone documents included"
+msgstr "Tài liệu độc lập được đưa vào"
+
+msgid "Standalone exercises included"
+msgstr "Bài tập độc lập được đưa vào"
+
+msgid "General feedback"
+msgstr "Phản hồi chung"
+
+msgid "Strengths"
+msgstr "Điểm mạnh"
+
+msgid "Risks"
+msgstr "Rủi ro"
+
+msgid "Recommendations"
+msgstr "Khuyến nghị"
+
+msgid "Lesson feedback"
+msgstr "Phản hồi bài học"
+
+msgid "Standalone document feedback"
+msgstr "Phản hồi tài liệu độc lập"
+
+msgid "Standalone exercise feedback"
+msgstr "Phản hồi bài tập độc lập"
+
+msgid "AI response"
+msgstr "Phản hồi AI"
+
+msgid "Sequence feedback"
+msgstr "Phản hồi chuỗi"
+
+msgid "Purpose"
+msgstr "Mục đích"
+
+msgid "You"
+msgstr "Bạn"
+
+msgid "City of internship"
+msgstr "Thành phố thực tập"
+
+msgid "City"
+msgstr "Thành phố"
+
+msgid "Update workflow restored after page refresh"
+msgstr "Quy trình cập nhật đã được khôi phục sau khi làm mới trang"
+
+msgid "Last completed step"
+msgstr "Bước hoàn thành gần nhất"
+
+msgid "Stage package"
+msgstr "Gói dàn dựng"
+
+msgid "Package staging"
+msgstr "Dàn dựng gói"
+
+msgid "Apply plan"
+msgstr "Kế hoạch áp dụng"
+
+msgid "Update workflow completed"
+msgstr "Quy trình cập nhật đã hoàn tất"
+
+msgid "Update directory exists and is writable."
+msgstr "Thư mục cập nhật tồn tại và có thể ghi."
+
+msgid "Update directory exists but is not writable: %s"
+msgstr "Thư mục cập nhật tồn tại nhưng không thể ghi: %s"
+
+msgid "Update directory does not exist yet, but its parent directory is writable."
+msgstr "Thư mục cập nhật chưa tồn tại, nhưng thư mục cha có thể ghi."
+
+msgid "Update directory does not exist yet, but it can be created under var/."
+msgstr "Thư mục cập nhật chưa tồn tại, nhưng có thể được tạo trong var/."
+
+msgid "Update directory does not exist and cannot be created with the current permissions."
+msgstr "Thư mục cập nhật không tồn tại và không thể tạo với quyền hiện tại."
+
+msgid "Unable to determine free disk space for update preflight."
+msgstr "Không thể xác định dung lượng đĩa trống cho kiểm tra trước khi cập nhật."
+
+msgid "Not enough free disk space for a safe update staging operation."
+msgstr "Không đủ dung lượng đĩa trống cho thao tác dàn dựng cập nhật an toàn."
+
+msgid "Free disk space is sufficient for this verification-stage update flow."
+msgstr "Dung lượng đĩa trống đủ cho luồng cập nhật giai đoạn xác minh này."
+
+msgid "Update manifest does not define a PHP version requirement."
+msgstr "Tệp manifest cập nhật không định nghĩa yêu cầu phiên bản PHP."
+
+msgid "Unable to fully evaluate PHP requirement: %s"
+msgstr "Không thể đánh giá đầy đủ yêu cầu PHP: %s"
+
+msgid "Current PHP version does not satisfy update requirement: %s"
+msgstr "Phiên bản PHP hiện tại không đáp ứng yêu cầu cập nhật: %s"
+
+msgid "Current PHP version satisfies the update requirement."
+msgstr "Phiên bản PHP hiện tại đáp ứng yêu cầu cập nhật."
+
+msgid "No local package path was provided. Downloaded packages can only be checked after download."
+msgstr "Chưa cung cấp đường dẫn gói cục bộ. Các gói đã tải xuống chỉ có thể được kiểm tra sau khi tải xuống."
+
+msgid "Local update package is not readable: %s"
+msgstr "Gói cập nhật cục bộ không thể đọc: %s"
+
+msgid "Local update package must be a ZIP archive."
+msgstr "Gói cập nhật cục bộ phải là tệp ZIP."
+
+msgid "Local update package is readable."
+msgstr "Gói cập nhật cục bộ có thể đọc được."
+
+msgid "Installed Chamilo version could not be detected automatically. Version direction cannot be checked."
+msgstr "Không thể tự động phát hiện phiên bản Chamilo đã cài đặt. Không thể kiểm tra hướng phiên bản."
+
+msgid "Installed or target version is not in a comparable semantic version format."
+msgstr "Phiên bản đã cài đặt hoặc phiên bản đích không ở định dạng phiên bản ngữ nghĩa có thể so sánh."
+
+msgid "Target version is lower than the installed version. Downgrades are not allowed by default."
+msgstr "Phiên bản đích thấp hơn phiên bản đã cài đặt. Hạ cấp không được phép theo mặc định."
+
+msgid "Target version matches the installed version."
+msgstr "Phiên bản đích trùng với phiên bản đã cài đặt."
+
+msgid "Target version is newer than the installed version."
+msgstr "Phiên bản đích mới hơn phiên bản đã cài đặt."
+
+msgid "Project is not a Git checkout or .git is not present."
+msgstr "Dự án không phải bản checkout Git hoặc không có .git."
+
+msgid "This update system is meant for installations without Git support. We have detected that the local system uses Git. Proceeding with the update might result in broken Git history. For systems with Git support, we recommend using the Git procedure detailed in CONTRIBUTING.md in the web root."
+msgstr "Hệ thống cập nhật này dành cho các cài đặt không hỗ trợ Git. Chúng tôi phát hiện hệ thống cục bộ đang dùng Git. Tiếp tục cập nhật có thể làm hỏng lịch sử Git. Với hệ thống có Git, chúng tôi khuyến nghị dùng quy trình Git được mô tả trong CONTRIBUTING.md ở thư mục gốc web."
+
+msgid "Local Git changes were also detected."
+msgstr "Cũng phát hiện các thay đổi Git cục bộ."
+
+msgid "Some project metadata files are missing. Later update stages may require manual dependency checks."
+msgstr "Một số tệp siêu dữ liệu dự án bị thiếu. Các giai đoạn cập nhật sau có thể cần kiểm tra phụ thuộc thủ công."
+
+msgid "Composer and Yarn metadata files are present."
+msgstr "Các tệp siêu dữ liệu Composer và Yarn đều có mặt."
+
+msgid "Starting staged file application."
+msgstr "Bắt đầu áp dụng tệp đã dàn dựng."
+
+msgid "Explicit confirmation is required to apply staged files."
+msgstr "Cần xác nhận rõ ràng để áp dụng các tệp đã dàn dựng."
+
+msgid "Applying staged update files requires an explicit confirmation."
+msgstr "Áp dụng các tệp cập nhật đã dàn dựng yêu cầu xác nhận rõ ràng."
+
+msgid "Staging directory is inside the Chamilo update staging directory."
+msgstr "Thư mục dàn dựng nằm trong thư mục dàn dựng cập nhật của Chamilo."
+
+msgid "Staging directory was validated."
+msgstr "Thư mục dàn dựng đã được xác thực."
+
+msgid "Apply plan metadata was read successfully."
+msgstr "Siêu dữ liệu kế hoạch áp dụng đã được đọc thành công."
+
+msgid "Staged application path is valid."
+msgstr "Đường dẫn ứng dụng đã dàn dựng hợp lệ."
+
+msgid "Signed package cleanup metadata matches the reviewed apply plan."
+msgstr "Siêu dữ liệu dọn dẹp gói đã ký khớp với kế hoạch áp dụng đã xem xét."
+
+msgid "Signed package cleanup metadata was validated."
+msgstr "Siêu dữ liệu dọn dẹp gói đã ký đã được xác thực."
+
+msgid "Update lock was acquired."
+msgstr "Khóa cập nhật đã được lấy."
+
+msgid "Update backup directory was created."
+msgstr "Thư mục sao lưu cập nhật đã được tạo."
+
+msgid "Update file operations were collected."
+msgstr "Các thao tác tệp cập nhật đã được thu thập."
+
+msgid "Existing files planned for replacement or removal were backed up."
+msgstr "Các tệp hiện có dự kiến thay thế hoặc xóa đã được sao lưu."
+
+msgid "Staged update files were copied to the Chamilo installation."
+msgstr "Các tệp cập nhật đã dàn dựng đã được sao chép vào cài đặt Chamilo."
+
+msgid "Package-declared obsolete files were removed from the Chamilo installation."
+msgstr "Các tệp lỗi thời được khai báo trong gói đã được gỡ khỏi cài đặt Chamilo."
+
+msgid "Package-declared obsolete files were removed."
+msgstr "Các tệp lỗi thời được khai báo trong gói đã được gỡ."
+
+msgid "Update apply audit metadata was written."
+msgstr "Siêu dữ liệu kiểm toán áp dụng cập nhật đã được ghi."
+
+msgid "Staged files applied successfully."
+msgstr "Các tệp đã chuẩn bị được áp dụng thành công."
+
+msgid "Unable to restore removed files: %s"
+msgstr "Không thể khôi phục các tệp đã gỡ: %s"
+
+msgid "Unable to roll back copied files: %s"
+msgstr "Không thể hoàn tác các tệp đã sao chép: %s"
+
+msgid "File rollback was executed after the update apply failure."
+msgstr "Đã thực hiện hoàn tác tệp sau khi áp dụng cập nhật thất bại."
+
+msgid "Rollback failed: %s"
+msgstr "Hoàn tác thất bại: %s"
+
+msgid "Unable to write update apply audit metadata: %s"
+msgstr "Không thể ghi siêu dữ liệu kiểm toán áp dụng cập nhật: %s"
+
+msgid "Unable to release update lock after failure: %s"
+msgstr "Không thể giải phóng khóa cập nhật sau khi thất bại: %s"
+
+msgid "Staging path is required to apply update files."
+msgstr "Cần đường dẫn chuẩn bị để áp dụng tệp cập nhật."
+
+msgid "Staging directory does not exist: %s"
+msgstr "Thư mục chuẩn bị không tồn tại: %s"
+
+msgid "Chamilo update staging base directory does not exist."
+msgstr "Thư mục gốc chuẩn bị cập nhật Chamilo không tồn tại."
+
+msgid "Staging directory must be inside var/update/staging."
+msgstr "Thư mục chuẩn bị phải nằm trong var/update/staging."
+
+msgid "Staging directory is missing APPLY-PLAN.json."
+msgstr "Thư mục chuẩn bị thiếu APPLY-PLAN.json."
+
+msgid "Unable to read update apply plan metadata: %s"
+msgstr "Không thể đọc siêu dữ liệu kế hoạch áp dụng cập nhật: %s"
+
+msgid "Update apply plan metadata is not valid JSON: %s"
+msgstr "Siêu dữ liệu kế hoạch áp dụng cập nhật không phải JSON hợp lệ: %s"
+
+msgid "Update apply plan metadata must be a JSON object."
+msgstr "Siêu dữ liệu kế hoạch áp dụng cập nhật phải là một đối tượng JSON."
+
+msgid "Update apply plan is missing the application_path field."
+msgstr "Kế hoạch áp dụng cập nhật thiếu trường application_path."
+
+msgid "Staged application path is not readable: %s"
+msgstr "Đường dẫn ứng dụng đã chuẩn bị không đọc được: %s"
+
+msgid "Staged application path must be inside the staging directory."
+msgstr "Đường dẫn ứng dụng đã chuẩn bị phải nằm trong thư mục chuẩn bị."
+
+msgid "Staged application path is missing composer.json."
+msgstr "Đường dẫn ứng dụng đã chuẩn bị thiếu composer.json."
+
+msgid "Update package is missing %s. Re-stage a verified package with signed cleanup metadata."
+msgstr "Gói cập nhật thiếu %s. Hãy chuẩn bị lại một gói đã xác minh với siêu dữ liệu dọn dẹp đã ký."
+
+msgid "Update apply plan is missing the reviewed package cleanup metadata."
+msgstr "Kế hoạch áp dụng cập nhật thiếu siêu dữ liệu dọn dẹp gói đã được xem xét."
+
+msgid "Update package cleanup metadata changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Siêu dữ liệu dọn dẹp gói cập nhật đã thay đổi sau khi tạo kế hoạch áp dụng. Hãy tạo lại kế hoạch áp dụng trước khi tiếp tục."
+
+msgid "Update apply plan contains an invalid package removal list."
+msgstr "Kế hoạch áp dụng cập nhật chứa danh sách gỡ gói không hợp lệ."
+
+msgid "Update package cleanup paths changed after the apply plan was generated. Rebuild the apply plan before continuing."
+msgstr "Các đường dẫn dọn dẹp gói cập nhật đã thay đổi sau khi tạo kế hoạch áp dụng. Hãy tạo lại kế hoạch áp dụng trước khi tiếp tục."
+
+msgid "Update apply plan is missing the reviewed removal path list."
+msgstr "Kế hoạch áp dụng cập nhật thiếu danh sách đường dẫn gỡ đã được xem xét."
+
+msgid "Update apply plan removal paths do not match the signed package cleanup metadata."
+msgstr "Các đường dẫn gỡ trong kế hoạch áp dụng cập nhật không khớp với siêu dữ liệu dọn dẹp gói đã ký."
+
+msgid "Update lock path must be inside var/update."
+msgstr "Đường dẫn khóa cập nhật phải nằm trong var/update."
+
+msgid "Update apply plan is missing the backup_path field."
+msgstr "Kế hoạch áp dụng cập nhật thiếu trường backup_path."
+
+msgid "Update backup path contains unsafe path segments."
+msgstr "Đường dẫn sao lưu cập nhật chứa các phân đoạn đường dẫn không an toàn."
+
+msgid "Update backup path must be inside var/update/backups."
+msgstr "Đường dẫn sao lưu cập nhật phải nằm trong var/update/backups."
+
+msgid "Unable to acquire update lock. Another update may be in progress."
+msgstr "Không thể lấy khóa cập nhật. Có thể đang có một bản cập nhật khác đang chạy."
+
+msgid "Unable to release update lock: %s"
+msgstr "Không thể giải phóng khóa cập nhật: %s"
+
+msgid "Update backup directory already exists: %s"
+msgstr "Thư mục sao lưu cập nhật đã tồn tại: %s"
+
+msgid "Target directory cannot be created: %s"
+msgstr "Không thể tạo thư mục đích: %s"
+
+msgid "The planned update would overwrite an existing symbolic link: %s"
+msgstr "Bản cập nhật dự kiến sẽ ghi đè một liên kết tượng trưng hiện có: %s"
+
+msgid "Target file is not writable: %s"
+msgstr "Tệp đích không ghi được: %s"
+
+msgid "Target file cannot be created: %s"
+msgstr "Không thể tạo tệp đích: %s"
+
+msgid "Unable to resolve the Chamilo project directory before removing obsolete files."
+msgstr "Không thể xác định thư mục dự án Chamilo trước khi gỡ các tệp lỗi thời."
+
+msgid "Update cleanup cannot remove protected path: %s"
+msgstr "Dọn dẹp cập nhật không thể gỡ đường dẫn được bảo vệ: %s"
+
+msgid "The planned update would remove an existing symbolic link: %s"
+msgstr "Bản cập nhật dự kiến sẽ gỡ một liên kết tượng trưng hiện có: %s"
+
+msgid "Update cleanup supports files only, not directories: %s"
+msgstr "Dọn dẹp cập nhật chỉ hỗ trợ tệp, không hỗ trợ thư mục: %s"
+
+msgid "Obsolete target file is not readable for backup: %s"
+msgstr "Tệp đích lỗi thời không đọc được để sao lưu: %s"
+
+msgid "Obsolete target file cannot be removed with the current directory permissions: %s"
+msgstr "Không thể gỡ tệp đích lỗi thời với quyền thư mục hiện tại: %s"
+
+msgid "Obsolete target file resolves outside the Chamilo project directory: %s"
+msgstr "Tệp đích lỗi thời được phân giải ra ngoài thư mục dự án Chamilo: %s"
+
+msgid "Unable to back up target file: %s"
+msgstr "Không thể sao lưu tệp đích: %s"
+
+msgid "Unable to write update backup metadata."
+msgstr "Không thể ghi siêu dữ liệu sao lưu cập nhật."
+
+msgid "Unable to copy staged update file: %s"
+msgstr "Không thể sao chép tệp cập nhật đã chuẩn bị: %s"
+
+msgid "Copied %d of %d staged files."
+msgstr "Đã sao chép %d trong %d tệp đã chuẩn bị."
+
+msgid "Unable to remove package-declared obsolete file: %s"
+msgstr "Không thể xóa tệp lỗi thời do gói khai báo: %s"
+
+msgid "Removed %d of %d package-declared obsolete files."
+msgstr "Đã xóa %d trong %d tệp lỗi thời do gói khai báo."
+
+msgid "Unable to restore backed up file: %s"
+msgstr "Không thể khôi phục tệp đã sao lưu: %s"
+
+msgid "Unable to remove newly copied file during rollback: %s"
+msgstr "Không thể xóa tệp mới sao chép trong quá trình hoàn tác: %s"
+
+msgid "Unable to restore removed file because its backup is missing: %s"
+msgstr "Không thể khôi phục tệp đã xóa vì thiếu bản sao lưu: %s"
+
+msgid "Unable to restore removed file from backup: %s"
+msgstr "Không thể khôi phục tệp đã xóa từ bản sao lưu: %s"
+
+msgid "Unable to write update apply audit metadata."
+msgstr "Không thể ghi siêu dữ liệu kiểm toán áp dụng cập nhật."
+
+msgid "Unable to write global update apply log."
+msgstr "Không thể ghi nhật ký áp dụng cập nhật toàn cục."
+
+msgid "Unsafe staged relative path detected: %s"
+msgstr "Phát hiện đường dẫn tương đối không an toàn trong khu vực chuẩn bị: %s"
+
+msgid "Directory is not writable: %s"
+msgstr "Thư mục không thể ghi: %s"
+
+msgid "Unable to create directory: %s"
+msgstr "Không thể tạo thư mục: %s"
+
+msgid "Staging metadata was read successfully."
+msgstr "Đã đọc thành công siêu dữ liệu khu vực chuẩn bị."
+
+msgid "Apply plan metadata was written to the staging directory."
+msgstr "Siêu dữ liệu kế hoạch áp dụng đã được ghi vào thư mục chuẩn bị."
+
+msgid "Target files and directories appear writable for the planned update and cleanup."
+msgstr "Các tệp và thư mục đích có vẻ có thể ghi cho việc cập nhật và dọn dẹp đã lên kế hoạch."
+
+msgid "Update apply plan check failed."
+msgstr "Kiểm tra kế hoạch áp dụng cập nhật thất bại."
+
+msgid "Some target files or directories cannot be written or removed."
+msgstr "Một số tệp hoặc thư mục đích không thể ghi hoặc xóa."
+
+msgid "To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it."
+msgstr "Để khắc phục, tạm thời đổi chủ sở hữu toàn bộ thư mục Chamilo thành %s (người dùng máy chủ web), áp dụng cập nhật, đổi chủ sở hữu trở lại %s sau đó, rồi đặt chủ sở hữu của var/ (và nội dung bên trong) trở lại %s để ứng dụng tiếp tục ghi được."
+
+msgid "Update package verification failed."
+msgstr "Xác minh gói cập nhật thất bại."
+
+msgid "Update preflight checks failed."
+msgstr "Kiểm tra trước khi cập nhật thất bại."
+
+msgid "Unable to stage update package."
+msgstr "Không thể chuẩn bị gói cập nhật."
+
+msgid "Running post-apply commands from the UI is disabled on this server."
+msgstr "Chạy lệnh sau khi áp dụng từ giao diện người dùng bị tắt trên máy chủ này."
+
+msgid "Missing required field: %s"
+msgstr "Thiếu trường bắt buộc: %s"
+
+msgid "No update manifest source was provided and no default update manifest URL is configured."
+msgstr "Không có nguồn manifest cập nhật nào được cung cấp và chưa cấu hình URL manifest cập nhật mặc định."
+
+msgid "Update manifest URL must use the official update origin %s. Only the manifest path can be changed."
+msgstr "URL manifest cập nhật phải dùng nguồn cập nhật chính thức %s. Chỉ có thể thay đổi đường dẫn manifest."
+
+msgid "Local update manifest paths are disabled. Use an HTTPS manifest URL or set CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 in the server environment for local tests."
+msgstr "Đường dẫn manifest cập nhật cục bộ bị tắt. Dùng URL manifest HTTPS hoặc đặt CHAMILO_UPDATE_DEVELOPMENT_TOOLS=1 trong môi trường máy chủ để kiểm thử cục bộ."
+
+msgid "Do not provide an HTTP %s path. Leave this field empty to download it from the update manifest."
+msgstr "Không cung cấp đường dẫn HTTP %s. Để trống trường này để tải xuống từ manifest cập nhật."
+
+msgid "Local update %s paths are disabled in this environment."
+msgstr "Đường dẫn cập nhật cục bộ %s bị tắt trong môi trường này."
+
+msgid "Trusted update public keys must be configured on the server in this environment."
+msgstr "Phải cấu hình khóa công khai cập nhật đáng tin cậy trên máy chủ trong môi trường này."
+
+msgid "Skipping update signature verification is disabled in this environment."
+msgstr "Bỏ qua xác minh chữ ký cập nhật bị tắt trong môi trường này."
+
+msgid "Running post-apply update actions requires the confirmation text \"%s\"."
+msgstr "Chạy các hành động cập nhật sau khi áp dụng yêu cầu văn bản xác nhận \"%s\"."
+
+msgid "Applying staged update files requires the confirmation text \"%s\"."
+msgstr "Áp dụng các tệp cập nhật đã chuẩn bị yêu cầu văn bản xác nhận \"%s\"."
+
+msgid "Unable to resolve project directory."
+msgstr "Không thể xác định thư mục dự án."
+
+msgid "Database backup is not managed by this updater. Create and verify a database backup before running migrations."
+msgstr "Sao lưu cơ sở dữ liệu không do trình cập nhật này quản lý. Tạo và xác minh bản sao lưu cơ sở dữ liệu trước khi chạy di chuyển."
+
+msgid "Doctrine migration down() methods are not guaranteed to restore deleted or transformed data."
+msgstr "Các phương thức down() của Doctrine migration không đảm bảo khôi phục dữ liệu đã xóa hoặc đã biến đổi."
+
+msgid "Post-apply metadata recommends database migration review."
+msgstr "Siêu dữ liệu sau khi áp dụng khuyến nghị xem xét di chuyển cơ sở dữ liệu."
+
+msgid "No migration files were found in the staged package."
+msgstr "Không tìm thấy tệp di chuyển nào trong gói đã chuẩn bị."
+
+msgid "Staged Doctrine migration files were detected."
+msgstr "Đã phát hiện tệp Doctrine migration đã chuẩn bị."
+
+msgid "Doctrine migration target was resolved from the staged package."
+msgstr "Đích Doctrine migration đã được xác định từ gói đã chuẩn bị."
+
+msgid "Doctrine migration baseline has blocking issues for staged migrations."
+msgstr "Đường cơ sở Doctrine migration có vấn đề chặn đối với các di chuyển đã chuẩn bị."
+
+msgid "Doctrine reports historical migration baseline warnings, but only staged %s migrations will be reviewed and executed explicitly."
+msgstr "Doctrine báo cảnh báo đường cơ sở di chuyển lịch sử, nhưng chỉ các di chuyển %s đã chuẩn bị sẽ được xem xét và thực thi một cách tường minh."
+
+msgid "Doctrine reports historical migration baseline warnings. The updater will execute only staged %s migration classes after explicit confirmation."
+msgstr "Doctrine báo cảnh báo đường cơ sở di chuyển lịch sử. Trình cập nhật sẽ chỉ thực thi các lớp di chuyển %s đã chuẩn bị sau khi xác nhận tường minh."
+
+msgid "Doctrine baseline has no blocking issue for the staged %s migrations."
+msgstr "Đường cơ sở Doctrine không có vấn đề chặn đối với các di chuyển %s đã chuẩn bị."
+
+msgid "Doctrine migration dry-run failed for at least one staged migration. Do not run database migrations until this is fixed."
+msgstr "Chạy thử Doctrine migration thất bại với ít nhất một di chuyển đã chuẩn bị. Không chạy di chuyển cơ sở dữ liệu cho đến khi được khắc phục."
+
+msgid "Doctrine dry-run completed successfully for each staged migration class."
+msgstr "Chạy thử Doctrine hoàn tất thành công cho từng lớp di chuyển đã chuẩn bị."
+
+msgid "A database backup must be created outside this updater before running migrations."
+msgstr "Phải tạo bản sao lưu cơ sở dữ liệu bên ngoài trình cập nhật này trước khi chạy di chuyển."
+
+msgid "Staging path is required to review database migrations."
+msgstr "Cần đường dẫn chuẩn bị để xem xét di chuyển cơ sở dữ liệu."
+
+msgid "Unable to read update %s: %s"
+msgstr "Không thể đọc cập nhật %s: %s"
+
+msgid "Update %s JSON is invalid: %s"
+msgstr "JSON cập nhật %s không hợp lệ: %s"
+
+msgid "Update %s JSON must be an object."
+msgstr "JSON cập nhật %s phải là một đối tượng."
+
+msgid "Post-apply checks metadata does not contain a valid actions list."
+msgstr "Siêu dữ liệu kiểm tra sau khi áp dụng không chứa danh sách hành động hợp lệ."
+
+msgid "Database migrations were not recommended for this staged update."
+msgstr "Không khuyến nghị chạy di chuyển cơ sở dữ liệu cho bản cập nhật theo giai đoạn này."
+
+msgid "Update metadata is missing the staged application path."
+msgstr "Siêu dữ liệu cập nhật thiếu đường dẫn ứng dụng theo giai đoạn."
+
+msgid "Planned staged migration file was not found: %s"
+msgstr "Không tìm thấy tệp di chuyển theo giai đoạn đã lập kế hoạch: %s"
+
+msgid "Unable to read staged migration file: %s"
+msgstr "Không thể đọc tệp di chuyển theo giai đoạn: %s"
+
+msgid "No description could be extracted from getDescription()."
+msgstr "Không thể trích xuất mô tả từ getDescription()."
+
+msgid "Only %s staged migrations are supported by the update runner: %s"
+msgstr "Trình chạy cập nhật chỉ hỗ trợ %s di chuyển theo giai đoạn: %s"
+
+msgid "Unable to write migration safety metadata: %s"
+msgstr "Không thể ghi siêu dữ liệu an toàn di chuyển: %s"
+
+msgid "Migration safety check failed."
+msgstr "Kiểm tra an toàn di chuyển thất bại."
+
+msgid "Unsafe staged relative migration path detected: %s"
+msgstr "Phát hiện đường dẫn di chuyển tương đối theo giai đoạn không an toàn: %s"
+
+msgid "Installed Chamilo version could not be detected automatically. Continue only after confirming this update is compatible."
+msgstr "Không thể tự động phát hiện phiên bản Chamilo đã cài đặt. Chỉ tiếp tục sau khi xác nhận bản cập nhật này tương thích."
+
+msgid "Installed or target version is not in a comparable semantic version format. Continue only after manual verification."
+msgstr "Phiên bản đã cài đặt hoặc phiên bản đích không ở định dạng phiên bản ngữ nghĩa có thể so sánh. Chỉ tiếp tục sau khi xác minh thủ công."
+
+msgid "An update is available."
+msgstr "Có bản cập nhật."
+
+msgid "The installed version already matches the manifest version."
+msgstr "Phiên bản đã cài đặt đã khớp với phiên bản trong manifest."
+
+msgid "The manifest version is older than the installed version. Downgrades are blocked by default."
+msgstr "Phiên bản trong manifest cũ hơn phiên bản đã cài đặt. Hạ cấp bị chặn theo mặc định."
+
+msgid "Staged files were not applied successfully. Post-apply checks cannot continue."
+msgstr "Các tệp theo giai đoạn chưa được áp dụng thành công. Không thể tiếp tục kiểm tra sau khi áp dụng."
+
+msgid "Apply result metadata was read successfully."
+msgstr "Đã đọc thành công siêu dữ liệu kết quả áp dụng."
+
+msgid "Post-apply action recommendations were generated."
+msgstr "Đã tạo khuyến nghị hành động sau khi áp dụng."
+
+msgid "Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists."
+msgstr "Đã phát hiện di chuyển cơ sở dữ liệu trong gói theo giai đoạn. Chỉ chạy chúng sau khi xác nhận cập nhật tệp là đúng và đã có bản sao lưu cơ sở dữ liệu."
+
+msgid "Staging path is required to run post-apply checks."
+msgstr "Cần đường dẫn giai đoạn để chạy kiểm tra sau khi áp dụng."
+
+msgid "Update %s is not valid JSON: %s"
+msgstr "Cập nhật %s không phải JSON hợp lệ: %s"
+
+msgid "Update %s must be a JSON object."
+msgstr "Cập nhật %s phải là một đối tượng JSON."
+
+msgid "Composer dependencies"
+msgstr "Phụ thuộc Composer"
+
+msgid "Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete."
+msgstr "Siêu dữ liệu Composer đã được đưa vào gói theo giai đoạn. Chạy Composer install từ thư mục gốc ứng dụng trước khi coi bản cập nhật là hoàn tất."
+
+msgid "Frontend assets"
+msgstr "Tài nguyên giao diện"
+
+msgid "Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies."
+msgstr "Các tệp liên quan đến giao diện đã được đưa vào gói theo giai đoạn. Xây dựng lại tài nguyên production sau khi cài đặt phụ thuộc."
+
+msgid "Doctrine migration files were detected in the staged package. Confirm that a database backup exists before running migrations."
+msgstr "Đã phát hiện tệp di chuyển Doctrine trong gói theo giai đoạn. Xác nhận đã có bản sao lưu cơ sở dữ liệu trước khi chạy di chuyển."
+
+msgid "Symfony cache"
+msgstr "Bộ nhớ đệm Symfony"
+
+msgid "Clear Symfony cache after applying update files and running any required commands."
+msgstr "Xóa bộ nhớ đệm Symfony sau khi áp dụng tệp cập nhật và chạy các lệnh cần thiết."
+
+msgid "Unable to write post-apply checks metadata."
+msgstr "Không thể ghi siêu dữ liệu kiểm tra sau khi áp dụng."
+
+msgid "Post-apply check failed."
+msgstr "Kiểm tra sau khi áp dụng thất bại."
+
+msgid "Update package is not readable: %s"
+msgstr "Gói cập nhật không thể đọc: %s"
+
+msgid "Update package is not a valid ZIP archive."
+msgstr "Gói cập nhật không phải kho lưu trữ ZIP hợp lệ."
+
+msgid "Update package ZIP archive is empty."
+msgstr "Kho lưu trữ ZIP của gói cập nhật trống."
+
+msgid "Update package contains an unreadable ZIP entry."
+msgstr "Gói cập nhật chứa mục ZIP không thể đọc."
+
+msgid "Update package contains an unsafe absolute path: %s"
+msgstr "Gói cập nhật chứa đường dẫn tuyệt đối không an toàn: %s"
+
+msgid "Update package contains a path traversal entry: %s"
+msgstr "Gói cập nhật chứa mục duyệt đường dẫn: %s"
+
+msgid "Update package contains a symbolic link: %s"
+msgstr "Gói cập nhật chứa liên kết tượng trưng: %s"
+
+msgid "Starting post-apply actions."
+msgstr "Bắt đầu hành động sau khi áp dụng."
+
+msgid "Post-apply command execution requires explicit confirmation."
+msgstr "Thực thi lệnh sau khi áp dụng yêu cầu xác nhận rõ ràng."
+
+msgid "Post-apply recommendation metadata was read successfully."
+msgstr "Đã đọc thành công siêu dữ liệu khuyến nghị sau khi áp dụng."
+
+msgid "Post-apply actions were validated against the recommendation report."
+msgstr "Các hành động sau khi áp dụng đã được xác thực theo báo cáo khuyến nghị."
+
+msgid "Post-apply actions were selected."
+msgstr "Đã chọn các hành động sau khi áp dụng."
+
+msgid "Advanced post-apply actions require explicit advanced confirmation."
+msgstr "Các hành động sau khi áp dụng nâng cao yêu cầu xác nhận nâng cao rõ ràng."
+
+msgid "Advanced post-apply actions were explicitly confirmed."
+msgstr "Các hành động sau khi áp dụng nâng cao đã được xác nhận rõ ràng."
+
+msgid "Selected post-apply commands completed successfully."
+msgstr "Các lệnh sau khi áp dụng đã chọn hoàn tất thành công."
+
+msgid "Post-apply command run metadata was written."
+msgstr "Đã ghi siêu dữ liệu chạy lệnh sau khi áp dụng."
+
+msgid "Post-apply actions completed successfully."
+msgstr "Các hành động sau khi áp dụng hoàn tất thành công."
+
+msgid "Remember to restore your file and directory permissions to their state before this update. Leaving the web server with write access to the Chamilo code turns any future vulnerability into a way to modify your platform's files."
+msgstr "Hãy nhớ khôi phục quyền của tệp và thư mục về trạng thái trước bản cập nhật này. Việc để máy chủ web có quyền ghi vào mã nguồn Chamilo sẽ biến mọi lỗ hổng trong tương lai thành cách để sửa đổi các tệp của nền tảng."
+
+msgid "Invalid update post-apply command definition: %s"
+msgstr "Định nghĩa lệnh sau khi áp dụng cập nhật không hợp lệ: %s"
+
+msgid "Running post-apply action: %s"
+msgstr "Đang chạy hành động sau khi áp dụng: %s"
+
+msgid "Running command %d of %d for %s."
+msgstr "Đang chạy lệnh %d trên %d cho %s."
+
+msgid "Post-apply action failed: %s"
+msgstr "Hành động sau khi áp dụng thất bại: %s"
+
+msgid "Post-apply action \"%s\" failed with exit code %d."
+msgstr "Hành động sau khi áp dụng \"%s\" thất bại với mã thoát %d."
+
+msgid "Post-apply action completed: %s"
+msgstr "Hành động sau khi áp dụng đã hoàn tất: %s"
+
+msgid "Staging path is required to run post-apply actions."
+msgstr "Cần đường dẫn staging để chạy các hành động sau khi áp dụng."
+
+msgid "There are no recommended post-apply actions to run."
+msgstr "Không có hành động sau khi áp dụng được khuyến nghị để chạy."
+
+msgid "There are no allowed post-apply actions to run."
+msgstr "Không có hành động sau khi áp dụng được phép để chạy."
+
+msgid "Post-apply action is not allowed for this update: %s"
+msgstr "Hành động sau khi áp dụng không được phép cho bản cập nhật này: %s"
+
+msgid "Database migrations require a migration safety review before execution."
+msgstr "Di chuyển cơ sở dữ liệu yêu cầu đánh giá an toàn di chuyển trước khi thực thi."
+
+msgid "Database migrations cannot run because the migration safety review did not pass."
+msgstr "Không thể chạy di chuyển cơ sở dữ liệu vì đánh giá an toàn di chuyển không đạt."
+
+msgid "Database migrations cannot run because the migration safety review did not list staged migrations."
+msgstr "Không thể chạy di chuyển cơ sở dữ liệu vì đánh giá an toàn di chuyển không liệt kê các di chuyển đã staging."
+
+msgid "Database migrations cannot run because the migration safety review contains an invalid migration entry."
+msgstr "Không thể chạy di chuyển cơ sở dữ liệu vì đánh giá an toàn di chuyển chứa mục di chuyển không hợp lệ."
+
+msgid "Only staged %s migrations can be executed by the update runner."
+msgstr "Chỉ các di chuyển %s đã staging mới có thể được thực thi bởi trình chạy cập nhật."
+
+msgid "Database migrations cannot run because the staged migration safety review reported blocking errors."
+msgstr "Không thể chạy di chuyển cơ sở dữ liệu vì đánh giá an toàn di chuyển đã staging báo lỗi chặn."
+
+msgid "Doctrine reports migration baseline warnings. Only staged %s migration classes will be executed explicitly."
+msgstr "Doctrine báo cảnh báo đường cơ sở di chuyển. Chỉ các lớp di chuyển %s đã staging sẽ được thực thi tường minh."
+
+msgid "Database migrations require confirmation that a database backup exists."
+msgstr "Di chuyển cơ sở dữ liệu yêu cầu xác nhận rằng bản sao lưu cơ sở dữ liệu tồn tại."
+
+msgid "Database migrations require the confirmation text \"RUN DATABASE MIGRATIONS\"."
+msgstr "Di chuyển cơ sở dữ liệu yêu cầu văn bản xác nhận \"RUN DATABASE MIGRATIONS\"."
+
+msgid "Database migration safety review was completed before execution."
+msgstr "Đánh giá an toàn di chuyển cơ sở dữ liệu đã hoàn tất trước khi thực thi."
+
+msgid "Database backup existence was explicitly confirmed."
+msgstr "Sự tồn tại của bản sao lưu cơ sở dữ liệu đã được xác nhận tường minh."
+
+msgid "Database migration safety review and backup confirmation were provided."
+msgstr "Đánh giá an toàn di chuyển cơ sở dữ liệu và xác nhận sao lưu đã được cung cấp."
+
+msgid "Database migrations were executed after an explicit database backup confirmation. The updater did not create the database backup."
+msgstr "Di chuyển cơ sở dữ liệu đã được thực thi sau khi xác nhận tường minh bản sao lưu cơ sở dữ liệu. Trình cập nhật không tạo bản sao lưu cơ sở dữ liệu."
+
+msgid "Required post-apply executable permissions were normalized."
+msgstr "Quyền thực thi bắt buộc cho sau khi áp dụng đã được chuẩn hóa."
+
+msgid "Unable to run database migrations because bin/console was not found."
+msgstr "Không thể chạy di chuyển cơ sở dữ liệu vì không tìm thấy bin/console."
+
+msgid "Selected post-apply commands have the required writable paths."
+msgstr "Các lệnh sau khi áp dụng đã chọn có các đường dẫn ghi được yêu cầu."
+
+msgid "Post-apply command writable paths were validated."
+msgstr "Đường dẫn ghi của lệnh sau khi áp dụng đã được xác thực."
+
+msgid "Advanced post-apply actions can modify dependencies, generated assets or the database. Review backups before continuing."
+msgstr "Các hành động sau khi áp dụng nâng cao có thể thay đổi phụ thuộc, tài nguyên được tạo hoặc cơ sở dữ liệu. Kiểm tra bản sao lưu trước khi tiếp tục."
+
+msgid "Composer cannot run safely from the web updater because Composer-generated file \"%s\" is owned by UID %d while the PHP runtime uses UID %d. Run Composer manually as the deployment owner, then continue with the remaining post-apply actions."
+msgstr "Composer không thể chạy an toàn từ trình cập nhật web vì tệp do Composer tạo \"%s\" thuộc sở hữu UID %d trong khi PHP runtime dùng UID %d. Chạy Composer thủ công với tư cách chủ triển khai, sau đó tiếp tục các hành động sau khi áp dụng còn lại."
+
+msgid "Path required by post-apply action \"%s\" is not writable: %s"
+msgstr "Đường dẫn yêu cầu bởi hành động sau khi áp dụng \"%s\" không ghi được: %s"
+
+msgid "Parent directory required by post-apply action \"%s\" is not writable: %s"
+msgstr "Thư mục cha yêu cầu bởi hành động sau khi áp dụng \"%s\" không ghi được: %s"
+
+msgid "Unable to read permissions for required post-apply executable: %s"
+msgstr "Không thể đọc quyền cho tệp thực thi sau khi áp dụng bắt buộc: %s"
+
+msgid "Unable to mark required post-apply executable as executable: %s"
+msgstr "Không thể đánh dấu tệp thực thi sau khi áp dụng bắt buộc là thực thi được: %s"
+
+msgid "Required post-apply executable is still not executable after chmod: %s"
+msgstr "Tệp thực thi sau khi áp dụng bắt buộc vẫn chưa thực thi được sau chmod: %s"
+
+msgid "Executable permission was normalized."
+msgstr "Quyền thực thi đã được chuẩn hóa."
+
+msgid "Unable to write isolated Git configuration for post-apply commands."
+msgstr "Không thể ghi cấu hình Git tách biệt cho các lệnh sau khi áp dụng."
+
+msgid "Another update operation appears to be running. Remove var/update/update.lock only if no update is active."
+msgstr "Có vẻ một thao tác cập nhật khác đang chạy. Chỉ xóa var/update/update.lock nếu không có cập nhật nào đang hoạt động."
+
+msgid "Unable to create update lock: %s"
+msgstr "Không thể tạo khóa cập nhật: %s"
+
+msgid "Unable to write post-apply command run metadata: %s"
+msgstr "Không thể ghi siêu dữ liệu chạy lệnh sau khi áp dụng: %s"
+
+msgid "Update manifest is missing the package block."
+msgstr "Manifest cập nhật thiếu khối gói."
+
+msgid "Update manifest signature block must be an object."
+msgstr "Khối chữ ký manifest cập nhật phải là một đối tượng."
+
+msgid "Update manifest requirements block must be an object."
+msgstr "Khối yêu cầu manifest cập nhật phải là một đối tượng."
+
+msgid "Update package sha256 must be a 64-character hexadecimal string."
+msgstr "sha256 của gói cập nhật phải là chuỗi thập lục phân 64 ký tự."
+
+msgid "Update manifest is missing required string field \"%s\"."
+msgstr "Manifest cập nhật thiếu trường chuỗi bắt buộc \"%s\"."
+
+msgid "Update manifest field \"%s\" must be a string."
+msgstr "Trường manifest cập nhật \"%s\" phải là chuỗi."
+
+msgid "Update manifest is not valid JSON: %s"
+msgstr "Manifest cập nhật không phải JSON hợp lệ: %s"
+
+msgid "Update manifest JSON must be an object."
+msgstr "JSON manifest cập nhật phải là một đối tượng."
+
+msgid "Manifest source cannot be empty."
+msgstr "Nguồn manifest không được để trống."
+
+msgid "Update manifest URL must use the official update origin %s."
+msgstr "URL manifest cập nhật phải dùng nguồn cập nhật chính thức %s."
+
+msgid "Unable to download update manifest. HTTP status: %d"
+msgstr "Không thể tải manifest cập nhật. Trạng thái HTTP: %d"
+
+msgid "Manifest file is not readable: %s"
+msgstr "Tệp manifest không đọc được: %s"
+
+msgid "Unable to read manifest file: %s"
+msgstr "Không thể đọc tệp manifest: %s"
+
+msgid "The update manifest URL must use HTTPS."
+msgstr "URL tệp kê khai cập nhật phải sử dụng HTTPS."
+
+msgid "Update package metadata is not readable: %s"
+msgstr "Không thể đọc siêu dữ liệu gói cập nhật: %s"
+
+msgid "Unable to read update package metadata: %s"
+msgstr "Không thể đọc siêu dữ liệu gói cập nhật: %s"
+
+msgid "Update package metadata is not valid JSON: %s"
+msgstr "Siêu dữ liệu gói cập nhật không phải JSON hợp lệ: %s"
+
+msgid "Update package metadata must be a JSON object."
+msgstr "Siêu dữ liệu gói cập nhật phải là một đối tượng JSON."
+
+msgid "Update package metadata format must be %d."
+msgstr "Định dạng siêu dữ liệu gói cập nhật phải là %d."
+
+msgid "Update package metadata field \"remove\" must be an array."
+msgstr "Trường siêu dữ liệu gói cập nhật \"remove\" phải là một mảng."
+
+msgid "Update package removal paths must be strings."
+msgstr "Đường dẫn xóa của gói cập nhật phải là chuỗi."
+
+msgid "Update package metadata cannot remove protected path: %s"
+msgstr "Siêu dữ liệu gói cập nhật không thể xóa đường dẫn được bảo vệ: %s"
+
+msgid "Update package cannot include and remove the same path: %s"
+msgstr "Gói cập nhật không thể vừa bao gồm vừa xóa cùng một đường dẫn: %s"
+
+msgid "Unable to calculate update package metadata sha256."
+msgstr "Không thể tính sha256 của siêu dữ liệu gói cập nhật."
+
+msgid "Update package removal path cannot be empty."
+msgstr "Đường dẫn xóa của gói cập nhật không được để trống."
+
+msgid "Update package removal path contains a null byte."
+msgstr "Đường dẫn xóa của gói cập nhật chứa byte null."
+
+msgid "Update package removal path must be relative: %s"
+msgstr "Đường dẫn xóa của gói cập nhật phải là đường dẫn tương đối: %s"
+
+msgid "Update package removal path contains an unsafe segment: %s"
+msgstr "Đường dẫn xóa của gói cập nhật chứa phân đoạn không an toàn: %s"
+
+msgid "Staging path is required to build an update apply plan."
+msgstr "Cần có đường dẫn staging để xây dựng kế hoạch áp dụng cập nhật."
+
+msgid "Staging directory is missing STAGING-INFO.json."
+msgstr "Thư mục staging thiếu STAGING-INFO.json."
+
+msgid "Unable to read staging metadata: %s"
+msgstr "Không thể đọc siêu dữ liệu staging: %s"
+
+msgid "Staging metadata is not valid JSON: %s"
+msgstr "Siêu dữ liệu staging không phải JSON hợp lệ: %s"
+
+msgid "Staging metadata must be a JSON object."
+msgstr "Siêu dữ liệu staging phải là một đối tượng JSON."
+
+msgid "Staging metadata is missing the application_path field."
+msgstr "Siêu dữ liệu staging thiếu trường application_path."
+
+msgid "Update package is missing %s. Signed cleanup metadata is required before files can be applied."
+msgstr "Gói cập nhật thiếu %s. Cần siêu dữ liệu dọn dẹp đã ký trước khi có thể áp dụng tệp."
+
+msgid "Staging metadata does not contain the signed package cleanup metadata recorded during extraction."
+msgstr "Siêu dữ liệu staging không chứa siêu dữ liệu dọn dẹp gói đã ký được ghi lại trong quá trình giải nén."
+
+msgid "Update package cleanup metadata changed after staging. Re-stage the verified package before continuing."
+msgstr "Siêu dữ liệu dọn dẹp gói cập nhật đã thay đổi sau khi staging. Hãy staging lại gói đã xác minh trước khi tiếp tục."
+
+msgid "Staging metadata does not contain a valid package removal list."
+msgstr "Siêu dữ liệu staging không chứa danh sách xóa gói hợp lệ."
+
+msgid "Update package cleanup paths changed after staging. Re-stage the verified package before continuing."
+msgstr "Đường dẫn dọn dẹp gói cập nhật đã thay đổi sau khi staging. Hãy staging lại gói đã xác minh trước khi tiếp tục."
+
+msgid "Signed package cleanup metadata is unchanged since staging."
+msgstr "Siêu dữ liệu dọn dẹp gói đã ký không thay đổi kể từ khi staging."
+
+msgid "An update lock file already exists. Another update may be in progress."
+msgstr "Tệp khóa cập nhật đã tồn tại. Có thể đang có một quá trình cập nhật khác."
+
+msgid "Update lock directory is not writable."
+msgstr "Thư mục khóa cập nhật không thể ghi."
+
+msgid "No update lock is currently active."
+msgstr "Hiện không có khóa cập nhật nào đang hoạt động."
+
+msgid "Update backup directory is not writable."
+msgstr "Thư mục sao lưu cập nhật không thể ghi."
+
+msgid "Update backup directory is writable."
+msgstr "Thư mục sao lưu cập nhật có thể ghi."
+
+msgid "Update backup directory cannot be created by the current process."
+msgstr "Tiến trình hiện tại không thể tạo thư mục sao lưu cập nhật."
+
+msgid "Update backup directory can be created."
+msgstr "Có thể tạo thư mục sao lưu cập nhật."
+
+msgid "Some update working directories are not writable or cannot be created by the current process."
+msgstr "Một số thư mục làm việc cập nhật không thể ghi hoặc tiến trình hiện tại không thể tạo."
+
+msgid "Update working directories are writable or can be created."
+msgstr "Các thư mục làm việc cập nhật có thể ghi hoặc có thể được tạo."
+
+msgid "Update apply file plan was generated."
+msgstr "Đã tạo kế hoạch áp dụng tệp cập nhật."
+
+msgid "Package cleanup metadata contains paths that cannot be removed safely."
+msgstr "Siêu dữ liệu dọn dẹp gói chứa các đường dẫn không thể xóa an toàn."
+
+msgid "Package-declared removal targets are safe."
+msgstr "Các đích xóa do gói khai báo là an toàn."
+
+msgid "Some package-declared obsolete files are already absent from this installation."
+msgstr "Một số tệp lỗi thời do gói khai báo đã không còn trong cài đặt này."
+
+msgid "The planned update would overwrite or remove existing symbolic links."
+msgstr "Cập nhật theo kế hoạch sẽ ghi đè hoặc xóa các liên kết tượng trưng hiện có."
+
+msgid "The planned update does not overwrite or remove existing symbolic links."
+msgstr "Cập nhật theo kế hoạch không ghi đè hoặc xóa các liên kết tượng trưng hiện có."
+
+msgid "New update migration files must be placed under %s."
+msgstr "Các tệp di chuyển cập nhật mới phải được đặt dưới %s."
+
+msgid "New %s Doctrine migration files were detected. They will require a database migration safety review after applying files."
+msgstr "Đã phát hiện tệp di chuyển Doctrine %s mới. Chúng sẽ cần rà soát an toàn di chuyển cơ sở dữ liệu sau khi áp dụng tệp."
+
+msgid "Some update apply plan file lists were truncated in the JSON response."
+msgstr "Một số danh sách tệp trong kế hoạch áp dụng cập nhật đã bị cắt ngắn trong phản hồi JSON."
+
+msgid "Unable to write update apply plan metadata."
+msgstr "Không thể ghi siêu dữ liệu kế hoạch áp dụng cập nhật."
+
+msgid "Unable to download update package. HTTP status: %d"
+msgstr "Không thể tải gói cập nhật. Mã trạng thái HTTP: %d"
+
+msgid "Unable to open update package target file: %s"
+msgstr "Không thể mở tệp đích gói cập nhật: %s"
+
+msgid "Update downloads must use the official update origin %s."
+msgstr "Tải xuống cập nhật phải sử dụng nguồn cập nhật chính thức %s."
+
+msgid "The update package URL must use HTTPS."
+msgstr "URL gói cập nhật phải sử dụng HTTPS."
+
+msgid "Update package archive safety checks passed."
+msgstr "Kiểm tra an toàn kho lưu trữ gói cập nhật đã thành công."
+
+msgid "Update package was extracted to staging."
+msgstr "Gói cập nhật đã được giải nén vào khu vực tạm."
+
+msgid "Signed package cleanup metadata was loaded."
+msgstr "Siêu dữ liệu dọn dẹp gói đã ký đã được tải."
+
+msgid "Update package does not contain %s. File application will be blocked until signed cleanup metadata is provided."
+msgstr "Gói cập nhật không chứa %s. Việc áp dụng tệp sẽ bị chặn cho đến khi siêu dữ liệu dọn dẹp đã ký được cung cấp."
+
+msgid "Staged package dry-run report was generated."
+msgstr "Báo cáo chạy thử gói tạm đã được tạo."
+
+msgid "Staging metadata was written."
+msgstr "Siêu dữ liệu khu vực tạm đã được ghi."
+
+msgid "Unable to extract update package to staging directory."
+msgstr "Không thể giải nén gói cập nhật vào thư mục tạm."
+
+msgid "Unable to locate Chamilo application root in staged package."
+msgstr "Không thể tìm thấy thư mục gốc ứng dụng Chamilo trong gói tạm."
+
+msgid "Staged package is missing required Chamilo entry: %s"
+msgstr "Gói tạm thiếu mục Chamilo bắt buộc: %s"
+
+msgid "Staged package contains the expected Chamilo structure."
+msgstr "Gói tạm chứa cấu trúc Chamilo mong đợi."
+
+msgid "Staged package does not contain composer.lock."
+msgstr "Gói tạm không chứa composer.lock."
+
+msgid "Staged package contains composer.lock."
+msgstr "Gói tạm chứa composer.lock."
+
+msgid "Staged package does not contain yarn.lock."
+msgstr "Gói tạm không chứa yarn.lock."
+
+msgid "Staged package contains yarn.lock."
+msgstr "Gói tạm chứa yarn.lock."
+
+msgid "Unable to encode staging metadata."
+msgstr "Không thể mã hóa siêu dữ liệu khu vực tạm."
+
+msgid "Unable to write staging metadata."
+msgstr "Không thể ghi siêu dữ liệu khu vực tạm."
+
+msgid "Update operation log created."
+msgstr "Nhật ký thao tác cập nhật đã được tạo."
+
+msgid "Unable to write update operation log."
+msgstr "Không thể ghi nhật ký thao tác cập nhật."
+
+msgid "Invalid update operation id."
+msgstr "ID thao tác cập nhật không hợp lệ."
+
+msgid "AI study helper"
+msgstr "Trợ lý học tập AI"
+
+msgid "Selected text"
+msgstr "Văn bản đã chọn"
+
+msgid "Learning technique"
+msgstr "Kỹ thuật học tập"
+
+msgid "AI response"
+msgstr "Phản hồi AI"
+
+msgid "AI request failed."
+msgstr "Yêu cầu AI thất bại."
+
+msgid "Mind mapping"
+msgstr "Sơ đồ tư duy"
+
+msgid "Feynman Technique"
+msgstr "Kỹ thuật Feynman"
+
+msgid "Elaborative interrogation"
+msgstr "Hỏi đáp khai triển"
+
+msgid "Spaced repetition"
+msgstr "Lặp lại ngắt quãng"
+
+msgid "SQ3R Method"
+msgstr "Phương pháp SQ3R"
+
+msgid "Analogies and metaphors"
+msgstr "Phép so sánh và ẩn dụ"
+
+msgid "Dual coding"
+msgstr "Mã hóa kép"
+
+msgid "Storytelling"
+msgstr "Kể chuyện"
+
+msgid "Thematic connections"
+msgstr "Liên kết chủ đề"
+
+msgid "Interleaved learning"
+msgstr "Học đan xen"
+
+msgid "Memory palaces"
+msgstr "Cung điện trí nhớ"
+
+msgid "Logins (Month)"
+msgstr "Lần đăng nhập (Tháng)"
+
+msgid "Logins (Day)"
+msgstr "Lần đăng nhập (Ngày)"
+
+msgid "Logins (Hour)"
+msgstr "Lần đăng nhập (Giờ)"
+
+msgid "Number of users (Picture)"
+msgstr "Số người dùng (Ảnh)"
+
+msgid "Allow tutors to register users"
+msgstr "Cho phép gia sư đăng ký người dùng"
+
+msgid "Allow tutors to edit inside course sessions"
+msgstr "Cho phép gia sư chỉnh sửa trong khóa học của phiên"
+
+msgid "Extend rights for tutors"
+msgstr "Mở rộng quyền cho gia sư"
+
+msgid "Show session tutor"
+msgstr "Hiện gia sư phiên"
+
+msgid "Default tutor access days after session"
+msgstr "Số ngày truy cập mặc định của gia sư sau phiên"
+
+msgid "Default tutor access days before session"
+msgstr "Số ngày truy cập mặc định của gia sư trước phiên"
+
+msgid "Dropbox: hide course tutor"
+msgstr "Hộp thư: ẩn gia sư khóa học"
+
+msgid "Hide general tutor in Dropbox"
+msgstr "Ẩn gia sư chung trong Hộp thư"
+
+msgid "Extend rights for tutors on surveys"
+msgstr "Mở rộng quyền cho gia sư trên khảo sát"
+
+msgid "Maximum courses per user"
+msgstr "Số khóa học tối đa mỗi người dùng"
+
+msgid "Allow tutors to comment when reviewing exercises"
+msgstr "Cho phép gia sư nhận xét khi chấm bài tập"
+
+msgid "Include official code in exported quiz result PDF file name"
+msgstr "Đưa mã chính thức vào tên tệp PDF kết quả bài kiểm tra xuất ra"
+
+msgid "Certificate expiry reminder cron"
+msgstr "Cron nhắc hết hạn chứng chỉ"
+
+msgid "Certificate expiry reminder window (days)"
+msgstr "Cửa sổ nhắc hết hạn chứng chỉ (ngày)"
+
+msgid "Allow certificates search"
+msgstr "Cho phép tìm kiếm chứng chỉ"
+
+msgid "Allow tutors to always edit announcements"
+msgstr "Cho phép gia sư luôn chỉnh sửa thông báo"
+
+msgid "Show students' official code in attendance sheets"
+msgstr "Hiện mã chính thức của học viên trên bảng điểm danh"
+
+msgid "Restrict course chat to tutors"
+msgstr "Giới hạn trò chuyện khóa học chỉ cho gia sư"
+
+msgid "Language by resource"
+msgstr "Ngôn ngữ theo tài nguyên"
+
+msgid "Complete SCO on leave when status stays incomplete"
+msgstr "Hoàn thành SCO khi rời đi nếu trạng thái vẫn chưa hoàn thành"
+
+msgid "Enable progressive adaptive tests by category destination"
+msgstr "Bật bài kiểm tra thích ứng tiến bộ theo đích danh mục"
+
+msgid "Block sending test notifications to the general tutor"
+msgstr "Chặn gửi thông báo bài kiểm tra tới gia sư chung"
+
+msgid "Enable session expiration warning"
+msgstr "Bật cảnh báo hết hạn phiên"
+
+msgid "Session expiration warning time"
+msgstr "Thời gian cảnh báo hết hạn phiên"
+
+msgid "Check password requirements"
+msgstr "Kiểm tra yêu cầu mật khẩu"
+
+msgid "File integrity check notification recipients"
+msgstr "Người nhận thông báo kiểm tra tính toàn vẹn tệp"
+
+msgid "Enable the OAuth authorization server"
+msgstr "Bật máy chủ ủy quyền OAuth"
+
+msgid "Enable MCP server"
+msgstr "Bật máy chủ MCP"
+
+msgid "Allow MCP by roles"
+msgstr "Cho phép MCP theo vai trò"
+
+msgid "Enable external API keys"
+msgstr "Bật khóa API bên ngoài"
+
+msgid "Sessions by duration always available to tutors"
+msgstr "Phiên theo thời lượng luôn khả dụng cho gia sư"
+
+msgid "Allow registration via course invitation links"
+msgstr "Cho phép đăng ký qua liên kết mời khóa học"
+
+msgid "Add student fullname in file download name"
+msgstr "Thêm họ tên học viên vào tên tệp tải xuống"
+
+msgid "Allow AI translation to all active languages in WYSIWYG editors"
+msgstr "Cho phép dịch AI sang tất cả ngôn ngữ đang hoạt động trong trình soạn thảo WYSIWYG"
+
+msgid "Disable the ability to edit course tutors"
+msgstr "Tắt khả năng chỉnh sửa gia sư khóa học"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow tutors in session courses to adapt tool visibilities to their needs."
+msgstr "Khi dùng phiên, hành vi mặc định là dùng độ hiển thị công cụ được định nghĩa trong khóa học gốc. Cài đặt này thay đổi điều đó để gia sư trong khóa học phiên có thể điều chỉnh độ hiển thị công cụ theo nhu cầu."
+
+msgid "Tutors may create users on the platform and subscribe users to a session."
+msgstr "Gia sư có thể tạo người dùng trên nền tảng và ghi danh người dùng vào một phiên."
+
+msgid "Enable this option to give tutors the same permissions as trainers on authoring tools"
+msgstr "Bật tùy chọn này để cấp cho gia sư cùng quyền với giảng viên trên các công cụ soạn thảo"
+
+msgid "Show the general session tutor name in the session title box in the course list"
+msgstr "Hiện tên gia sư phiên chung trong hộp tiêu đề phiên trên danh sách khóa học"
+
+msgid "When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
+msgstr "Khi bật, gia sư khóa học trong phiên có thể ghi danh người dùng mới vào phiên của họ. Nếu không, tùy chọn này chỉ dành cho quản trị viên và quản trị viên phiên."
+
+msgid "Default number of days a tutor can access a session after the official session end date"
+msgstr "Số ngày mặc định gia sư có thể truy cập khóa học sau ngày kết thúc chính thức của phiên"
+
+msgid "Default number of days a tutor can access a session before the official session start date"
+msgstr "Số ngày mặc định gia sư có thể truy cập khóa học trước ngày bắt đầu chính thức của phiên"
+
+msgid "Enable the MathJax library to visualize mathematical formulas. This adds a formula button to the editor toolbar, where formulas are written in LaTeX."
+msgstr "Bật thư viện MathJax để hiển thị công thức toán học. Thêm nút công thức vào thanh công cụ trình soạn thảo, công thức được viết bằng LaTeX."
+
+msgid "Course codes separated by \"|\". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Mã khóa học phân tách bằng \"|\". Khi giám đốc nhân sự đăng nhập, người dùng được tự động ghi danh vào các khóa học này. Ví dụ: COURSE001|COURSE002. Không thay đổi vai trò người dùng."
+
+msgid "Course codes separated by \"|\". When a session administrator logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role."
+msgstr "Mã khóa học phân tách bằng \"|\". Khi quản trị viên phiên đăng nhập, người dùng được tự động ghi danh vào các khóa học này. Ví dụ: COURSE001|COURSE002. Không thay đổi vai trò người dùng."
+
+msgid "Course codes separated by \"|\". When a learner logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002."
+msgstr "Mã khóa học phân tách bằng \"|\". Khi người học đăng nhập, người dùng được tự động ghi danh vào các khóa học này. Ví dụ: COURSE001|COURSE002."
+
+msgid "Course codes separated by \"|\". When a teacher logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not grant course teacher permissions."
+msgstr "Mã khóa học phân tách bằng \"|\". Khi giáo viên đăng nhập, người dùng được tự động ghi danh vào các khóa học này. Ví dụ: COURSE001|COURSE002. Không cấp quyền giáo viên khóa học."
+
+msgid "Hide the session course tutor in Dropbox when a document is sent by the tutor to students"
+msgstr "Ẩn gia sư khóa học của phiên trong Dropbox khi gia sư gửi tài liệu cho học viên"
+
+msgid "Hide the general tutor name in the Dropbox tool when the general tutor uploaded the file"
+msgstr "Ẩn tên gia sư chung trong công cụ Dropbox khi gia sư chung đã tải tệp lên"
+
+msgid "Enable this option to allow tutors to create and edit surveys"
+msgstr "Bật tùy chọn này để cho phép gia sư tạo và chỉnh sửa khảo sát"
+
+msgid "Should survey invitations use the tutor e-mail address or the no-reply address defined in the main configuration section?"
+msgstr "Lời mời khảo sát nên dùng địa chỉ e-mail của gia sư hay địa chỉ không trả lời được định nghĩa trong phần cấu hình chính?"
+
+msgid "Maximum number of courses a teacher/trainer can create. Set to 0 to disable the limit. Can be overridden per user via a BuyCourses service purchase."
+msgstr "Số khóa học tối đa một giáo viên/giảng viên có thể tạo. Đặt 0 để tắt giới hạn. Có thể ghi đè theo từng người dùng qua mua dịch vụ BuyCourses."
+
+msgid "Allow tutors to edit feedback when reviewing exercises"
+msgstr "Cho phép gia sư chỉnh sửa phản hồi khi chấm bài tập"
+
+msgid "Whether to include the student's official code in the file name when exporting a quiz result to PDF"
+msgstr "Có đưa mã chính thức của học viên vào tên tệp khi xuất kết quả bài kiểm tra sang PDF hay không"
+
+msgid "Allows access to all personal files without restriction"
+msgstr "Cho phép truy cập tất cả tệp cá nhân không hạn chế"
+
+msgid "Enable the app:send-certificate-expiry-reminders cron, which reminds learners whose certificates have expired or are about to expire."
+msgstr "Bật cron app:send-certificate-expiry-reminders, nhắc người học có chứng chỉ đã hết hạn hoặc sắp hết hạn."
+
+msgid "Default number of days ahead to scan for certificates about to expire, used unless the cron is run with --days-ahead."
+msgstr "Số ngày mặc định quét trước các chứng chỉ sắp hết hạn, dùng trừ khi cron chạy với --days-ahead."
+
+msgid "Allow users and visitors to search generated certificates from the top bar menu."
+msgstr "Cho phép người dùng và khách tìm kiếm chứng chỉ đã tạo từ menu thanh trên."
+
+msgid "Allow tutors to always edit announcements inside active or past sessions."
+msgstr "Cho phép gia sư luôn chỉnh sửa thông báo trong các phiên đang hoạt động hoặc đã kết thúc."
+
+msgid "Whether to display the students' official code alongside their name in attendance sheets and lists."
+msgstr "Có hiển thị mã chính thức của học viên cạnh tên trong bảng điểm danh và danh sách hay không."
+
+msgid "Allow assigning a specific language to individual resources."
+msgstr "Cho phép gán ngôn ngữ cụ thể cho từng tài nguyên."
+
+msgid "Some SCORM packages only ever call LMSSetValue(cmi.core.lesson_status, 'incomplete') once and never send a real terminal status nor a meaningful LMSFinish(). Enable this to let Chamilo treat that lingering 'incomplete' the same as no status at all, resolving completion when the learner leaves the SCO."
+msgstr "Một số gói SCORM chỉ gọi LMSSetValue(cmi.core.lesson_status, 'incomplete') một lần và không gửi trạng thái kết thúc thực sự cũng như LMSFinish() có ý nghĩa. Bật tùy chọn này để Chamilo coi 'incomplete' còn lại giống như không có trạng thái, xác định hoàn thành khi người học rời SCO."
+
+msgid "If a learning path is set to invisible but the teacher or tutor decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr "Nếu lộ trình học được đặt ẩn nhưng giáo viên hoặc gia sư quyết định hiển thị từ trang chủ khóa học, tùy chọn này ngăn Chamilo ẩn liên kết trên trang chủ khóa học."
+
+msgid "Enable progressive adaptive tests where each question category can redirect learners to another category depending on their score."
+msgstr "Bật bài kiểm tra thích ứng tiến dần, mỗi danh mục câu hỏi có thể chuyển người học sang danh mục khác tùy theo điểm số."
+
+msgid "When learners complete a test, notifications are usually sent to tutors, including the general session tutor. Enable this option to omit the general tutor from these notifications."
+msgstr "Khi người học hoàn thành bài kiểm tra, thông báo thường được gửi cho gia sư, gồm gia sư phiên chung. Bật tùy chọn này để bỏ gia sư chung khỏi các thông báo này."
+
+msgid "Show test attempts from users in all sessions where the general tutor has access in the pending tests report."
+msgstr "Hiển thị lần làm bài của người dùng trong tất cả phiên mà gia sư chung có quyền truy cập trong báo cáo bài kiểm tra đang chờ."
+
+msgid "Show a warning to authenticated users before their server-side session expires."
+msgstr "Hiển thị cảnh báo cho người dùng đã xác thực trước khi phiên phía máy chủ hết hạn."
+
+msgid "Number of seconds before session expiration when the warning is displayed. The default is 180 seconds."
+msgstr "Số giây trước khi phiên hết hạn khi hiển thị cảnh báo. Mặc định là 180 giây."
+
+msgid "Defines the required structure for user passwords. Example: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Use \"specials\" (plural) to require special characters."
+msgstr "Định nghĩa cấu trúc bắt buộc cho mật khẩu người dùng. Ví dụ: {\"min\":{\"length\":8,\"lowercase\":1,\"uppercase\":1,\"numeric\":1,\"specials\":1}}. Dùng \"specials\" (số nhiều) để yêu cầu ký tự đặc biệt."
+
+msgid "Enable validation of the password requirements defined above during password creation or password update."
+msgstr "Bật kiểm tra các yêu cầu mật khẩu được định nghĩa ở trên khi tạo hoặc cập nhật mật khẩu."
+
+msgid "Comma-separated list of e-mail addresses to notify when a file integrity scan detects a change. Leave empty to notify every global administrator instead."
+msgstr "Danh sách địa chỉ e-mail phân tách bằng dấu phẩy để thông báo khi quét toàn vẹn tệp phát hiện thay đổi. Để trống để thông báo mọi quản trị viên toàn cục."
+
+msgid "Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user's own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on."
+msgstr "Cho phép ứng dụng bên ngoài (ví dụ trình kết nối MCP Claude.ai) đăng ký qua OAuth 2.1 Dynamic Client Registration và kết nối bằng tài khoản Chamilo cùng quyền của từng người dùng. Tắt mặc định: các điểm cuối discovery, đăng ký, ủy quyền và token đều trả về 404 cho đến khi bật."
+
+msgid "Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp."
+msgstr "Bật điểm cuối MCP của Chamilo và giao diện khóa API MCP cá nhân. Khi tắt, khóa API hiện có, token truy cập OAuth và thông tin JWT không dùng được trên /mcp."
+
+msgid "JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections."
+msgstr "Bản đồ JSON các vai trò người dùng Chamilo được phép dùng MCP. Người dùng phải khớp ít nhất một vai trò đã bật. Hạn chế này cũng áp dụng cho khóa API đã tạo trước và kết nối OAuth hiện có."
+
+msgid "Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the \"chamilo:security:generate-external-api-key\" console command. Disabled by default: existing keys cannot be used until this is turned on."
+msgstr "Cho phép tích hợp máy chủ-máy chủ tin cậy (ví dụ plugin cửa hàng WordPress) xác thực với điểm cuối /api chung bằng khóa API bên ngoài theo người dùng, tạo qua lệnh console \"chamilo:security:generate-external-api-key\". Tắt mặc định: khóa hiện có không dùng được cho đến khi bật."
+
+msgid "Add the tutor and dates to the session subtitle in the session list."
+msgstr "Thêm gia sư và ngày vào phụ đề phiên trong danh sách phiên."
+
+msgid "Otherwise, session tutors only have access to sessions by duration during the active duration."
+msgstr "Nếu không, gia sư phiên chỉ truy cập các phiên theo thời lượng trong thời gian hoạt động."
+
+msgid "When enabled, a teacher/admin can send a one-time invitation link from a course's Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled."
+msgstr "Khi bật, giáo viên/quản trị viên có thể gửi liên kết mời một lần từ công cụ Người dùng của khóa học, cho phép người chưa đăng ký đến biểu mẫu đăng ký và đăng ký ngay cả khi tự đăng ký chung (allow_registration) bị tắt."
+
+msgid "Add the student full name to assignment file names when downloading individual submissions or assignment packages."
+msgstr "Thêm họ tên đầy đủ của học viên vào tên tệp bài tập khi tải bài nộp riêng hoặc gói bài tập."
+
+msgid "Allows teachers to generate translations for all active platform languages in one WYSIWYG action. This may consume a large number of AI tokens."
+msgstr "Cho phép giáo viên tạo bản dịch cho tất cả ngôn ngữ nền tảng đang hoạt động trong một thao tác WYSIWYG. Có thể tiêu tốn nhiều token AI."
+
+msgid "When disabled, administrators do not have a link to quickly assign tutors to session courses on the course editing page."
+msgstr "Khi tắt, quản trị viên không có liên kết để gán nhanh gia sư cho khóa học của phiên trên trang chỉnh sửa khóa học."
+
+msgid "Show courses & sessions"
+msgstr "Hiển thị khóa học & phiên"
+
+msgid "Optional JSON. Example: {\"speed\": true}"
+msgstr "JSON tùy chọn. Ví dụ: {\"speed\": true}"
+
+msgid "Table"
+msgstr "Bảng"
+
+msgid "LoginIsEmailTitle"
+msgstr "LoginIsEmailTitle"
+
+msgid "Theme"
+msgstr "Giao diện"
+
+msgid "mistery-man"
+msgstr "mistery-man"
+
+msgid "identicon"
+msgstr "identicon"
+
+msgid "monsterid"
+msgstr "monsterid"
+
+msgid "wavatar"
+msgstr "wavatar"
+
+msgid "Course tutor email sender"
+msgstr "Người gửi email gia sư khóa học"
+
+msgid "Card (visual blocks)"
+msgstr "Thẻ (khối trực quan)"
+
+msgid "List (classic)"
+msgstr "Danh sách (cổ điển)"
+
+msgid "Limit identical emails"
+msgstr "Giới hạn email trùng nhau"
+
+msgid "Maximum number of courses a teacher or trainer can create. Set to 0 to disable the limit."
+msgstr "Số khóa học tối đa mà giáo viên hoặc giảng viên có thể tạo. Đặt thành 0 để tắt giới hạn."
+
+msgid "Maximum number of accounts allowed with the same email. Set to 0 to disable limit."
+msgstr "Số tài khoản tối đa được phép dùng cùng một email. Đặt thành 0 để tắt giới hạn."
+
+msgid "Validation"
+msgstr "Xác thực"
+
+msgid "Test/Development"
+msgstr "Kiểm thử/Phát triển"
+
+msgid "User extra field key to use when searching and naming sessions from /admin-dashboard/register."
+msgstr "Khóa trường bổ sung của người dùng dùng khi tìm kiếm và đặt tên phiên từ /admin-dashboard/register."
+
+msgid "JSON configuration for search prefilter fields."
+msgstr "Cấu hình JSON cho các trường bộ lọc trước khi tìm kiếm."
+
+msgid "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history."
+msgstr "Thao tác này đánh dấu mọi migration đi kèm phiên bản này là đã thực thi. Chỉ làm vậy trên nền tảng đã cập nhật và chưa từng ghi lịch sử."
+
+msgid "%s migrations recorded. Your platform can now be updated normally."
+msgstr "%s migration đã được ghi nhận. Nền tảng của bạn giờ có thể được cập nhật bình thường."
+
+msgid "No migration history: click to fix (or updates might break)"
+msgstr "Không có lịch sử migration: nhấn để sửa (hoặc các bản cập nhật có thể bị lỗi)"
+
+msgid "Migration history is recorded"
+msgstr "Lịch sử migration đã được ghi nhận"
+
+msgid "%s is present in the project root: delete it to close the upgrade endpoints"
+msgstr "%s đang có trong thư mục gốc dự án: xóa nó để đóng các điểm cuối nâng cấp"
 

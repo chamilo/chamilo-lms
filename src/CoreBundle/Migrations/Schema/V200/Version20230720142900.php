@@ -57,6 +57,7 @@ class Version20230720142900 extends AbstractMigrationChamilo
             ->setLocale('en_US')
             ->setActive(User::SOFT_DELETED)
             ->setTimezone('UTC')
+            ->setHrDeptId(0)
         ;
 
         $this->entityManager->persist($fallbackUser);

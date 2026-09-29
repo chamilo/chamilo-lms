@@ -7,9 +7,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 use SubLanguageManager;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Filesystem\Filesystem;
 
 use const FILE_APPEND;
 
@@ -17,7 +15,7 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migration of sublanguages and Vue translation updates.';
+        return 'Migration of sublanguages from 1.11.x.';
     }
 
     public function up(Schema $schema): void
@@ -31,8 +29,10 @@ final class Version20240122221400 extends AbstractMigrationChamilo
             $this->generatePoFileFromTrad4All($sublanguage['english_name'], $newIsoCode);
         }
 
-        // Update Vue translations after processing all sublanguages.
-        $this->executeVueTranslationsUpdate();
+        // No Vue locale file is generated here. webpack enumerates assets/locales/ at
+        // build time, so a file written now would need a rebuild to reach the browser;
+        // LocaleController serves a sublanguage from its .po at runtime instead.
+        $this->clearTranslationCache();
 
         // Delete the 'import' folder at the end of the process.
         // $this->deleteImportFolder();
@@ -151,21 +151,20 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         error_log("Done generating gettext file in $destinationFilePath !\n");
     }
 
-    private function executeVueTranslationsUpdate(): void
+    /**
+     * Drops the compiled catalogues, so the .po files written above are read again.
+     *
+     * In prod the translator does not check whether a .po changed, so without this the
+     * migrated sublanguages would stay invisible until someone cleared the cache.
+     */
+    private function clearTranslationCache(): void
     {
-        $application = new Application($this->container->get('kernel'));
-        $application->setAutoExit(false);
+        $directory = $this->container->get('kernel')->getCacheDir().'/translations';
+        $filesystem = new Filesystem();
 
-        $input = new ArrayInput([
-            'command' => 'chamilo:update_vue_translations',
-        ]);
-        $output = new BufferedOutput();
-
-        $application->run($input, $output);
-
-        $content = $output->fetch();
-
-        error_log($content);
+        if ($filesystem->exists($directory)) {
+            $filesystem->remove($directory);
+        }
     }
 
     private function recursiveRemoveDirectory($directory): void

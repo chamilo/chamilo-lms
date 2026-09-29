@@ -281,13 +281,13 @@ export function useTopbarLoggedIn(props) {
     isSettingEnabled(platformConfigStore, "workflows.allow_users_to_create_courses"),
   )
 
-  const canCreateCourseFromTopbar = computed(() => isAdmin.value || (isTeacher.value && allowUsersToCreateCourses.value))
+  const canCreateCourseFromTopbar = computed(
+    () => isAdmin.value || (isTeacher.value && allowUsersToCreateCourses.value),
+  )
 
   const hideLogoutButton = computed(() => isSettingEnabled(platformConfigStore, "display.hide_logout_button"))
 
-  const showTicketLink = computed(
-    () => platformConfigStore.getSetting("ticket.show_link_ticket_notification") !== "false",
-  )
+  const showTicketLink = computed(() => isSettingEnabled(platformConfigStore, "ticket.show_link_ticket_notification"))
 
   const displayTabs = computed(() => resolveDisplayTabsConfig(platformConfigStore, securityStore))
 
@@ -304,8 +304,11 @@ export function useTopbarLoggedIn(props) {
       if (resolvedRoute?.href) {
         return resolvedRoute.href
       }
-    } catch {}
-    return "/main/survey/pending.php"
+    } catch (error) {
+      console.error("Could not resolve pending surveys route", error)
+    }
+
+    return "/survey/pending"
   })
 
   const myServicesUrl = computed(() => {
@@ -315,7 +318,10 @@ export function useTopbarLoggedIn(props) {
       if (resolvedRoute?.href) {
         return resolvedRoute.href
       }
-    } catch {}
+    } catch {
+      return "/my-services"
+    }
+
     return "/my-services"
   })
 
@@ -340,18 +346,30 @@ export function useTopbarLoggedIn(props) {
     () => isSettingEnabled(platformConfigStore, "message.allow_message_tool") && !isAnonymous.value,
   )
 
-  const ticketUrl = computed(() => {
-    const searchParams = new URLSearchParams()
+  const ticketRoute = computed(() => {
+    const query = {}
+    const courseId = Number(cidReqStore.course?.id ?? route.query.cid ?? 0)
+    const sessionId = Number(cidReqStore.session?.id ?? route.query.sid ?? 0)
+    const groupId = Number(cidReqStore.group?.id ?? route.query.gid ?? 0)
 
-    searchParams.append("project_id", "1")
-    searchParams.append("cid", cidReqStore.course?.id ?? 0)
-    searchParams.append("sid", cidReqStore.session?.id ?? 0)
-    searchParams.append("gid", cidReqStore.group?.id ?? 0)
+    if (courseId > 0) {
+      query.cid = String(courseId)
+    }
+    if (sessionId > 0) {
+      query.sid = String(sessionId)
+    }
+    if (groupId > 0) {
+      query.gid = String(groupId)
+    }
 
-    return "/main/ticket/tickets.php?" + searchParams.toString()
+    return { name: "TicketList", query }
   })
 
   const buyCoursesConfig = computed(() => platformConfigStore.plugins?.buycourses || {})
+  const externalLogoutPluginEnabled = computed(
+    () => platformConfigStore.plugins?.extauthchamilologoutbuttonbehaviour?.enabled === true,
+  )
+  const justificationPluginEnabled = computed(() => platformConfigStore.plugins?.justification?.enabled === true)
 
   const showMyServicesLink = computed(() => normalizeBooleanFlag(buyCoursesConfig.value?.enabled))
 
@@ -364,7 +382,7 @@ export function useTopbarLoggedIn(props) {
   const showMyJustificationsLink = computed(() => !isAnonymous.value && justificationMenu.value.enabled === true)
 
   async function fetchJustificationMenu() {
-    if (isAnonymous.value) {
+    if (isAnonymous.value || !justificationPluginEnabled.value) {
       justificationMenu.value.enabled = false
 
       return
@@ -505,14 +523,14 @@ export function useTopbarLoggedIn(props) {
     if (isTopbarEnabled("topbar_my_certificates")) {
       items[0].items.push({
         label: t("My certificates"),
-        url: "/main/gradebook/my_certificates.php",
+        url: "/my-certificates",
       })
     }
 
     if (certificatesSearchAllowed.value) {
       items[0].items.push({
         label: t("Search certificates"),
-        url: "/main/gradebook/search.php",
+        url: "/certificates/search",
       })
     }
 
@@ -573,7 +591,7 @@ export function useTopbarLoggedIn(props) {
   onMounted(async () => {
     fetchJustificationMenu()
 
-    if (!isAnonymous.value) {
+    if (!isAnonymous.value && externalLogoutPluginEnabled.value) {
       externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()
     }
   })
@@ -591,7 +609,7 @@ export function useTopbarLoggedIn(props) {
     showTicketLink,
     isAnonymous,
     messagingEnabled,
-    ticketUrl,
+    ticketRoute,
     btnInboxBadge,
     userSubmenuItems,
     toggleUserMenu,

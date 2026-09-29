@@ -78,11 +78,12 @@ function pageGenerationProcess($iPR, $pid, $courseSys, $extra, $extraCss, $extra
 
     $finalTop .= '<body style="background-color:#D8D8D8;" >';
     $finalhtml = getSrcForSave($base_html);
+    $finalhtml = rewriteImgCacheProxyUrlsToRelative($finalhtml);
     $finalhtml = str_replace('dhcondiM', 'displayhideCondiM', $finalhtml);
 
     if (false == $alone) {
         $finalFooter = '<style>body,html {height: 100%;';
-        $finalFooter .= 'margin: 0;}'.$extraCss.$base_css;
+        $finalFooter .= 'margin: 0;}'.$extraCss.rewriteImgCacheProxyUrlsToRelative($base_css);
         $finalFooter .= '.cell{border:dashed 0px #A9CCE3;}';
         $finalFooter .= '.displayhideCondiMB,.displayhideCondiMC,.displayhideCondiME{display:none;}';
         $finalFooter .= '</style>';

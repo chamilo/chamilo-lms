@@ -39,13 +39,11 @@ $qb = $plugin->getCourses($first, $pageSize);
 $query = $qb->getQuery();
 $courses = new Paginator($query, $fetchJoinCollection = true);
 
+$courseBuyData = [];
+
 foreach ($courses as $course) {
     $item = $plugin->getItemByProduct($course->getId(), BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
-    $course->buyCourseData = [];
-
-    if ($item) {
-        $course->buyCourseData = $item;
-    }
+    $courseBuyData[$course->getId()] = $item ?: [];
 }
 
 $totalItems = count($courses);
@@ -84,6 +82,9 @@ $tpl->assign('showing_services', false);
 
 $tpl->assign('sessions', []);
 $tpl->assign('services', []);
+
+$tpl->assign('course_buy_data', $courseBuyData);
+$tpl->assign('session_buy_data', []);
 
 $tpl->assign('course_current_page', $currentPage);
 $tpl->assign('course_pages_count', $pagesCount);

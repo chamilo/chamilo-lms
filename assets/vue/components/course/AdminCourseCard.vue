@@ -48,7 +48,7 @@
 import Card from "primevue/card"
 import { ref, watch, computed } from "vue"
 import { useI18n } from "vue-i18n"
-import courseService from "../../services/courseService"
+import * as userRelCourseVoteService from "../../services/userRelCourseVoteService"
 import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
@@ -97,7 +97,7 @@ function onImgError(e) {
 }
 
 async function toggleFavorite() {
-  const result = await courseService.toggleFavorite(props.course.id, securityStore.user.id)
+  const result = await userRelCourseVoteService.toggleFavorite(props.course.id, securityStore.user.id)
   isFavorite.value = result
   emit("favorite-toggled", {
     courseId: props.course.id,

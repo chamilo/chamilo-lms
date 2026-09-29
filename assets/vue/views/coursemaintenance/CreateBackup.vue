@@ -43,6 +43,7 @@
         <label class="mb-2 flex items-center gap-2">
           <input
             type="radio"
+            name="backup_scope"
             value="full"
             v-model="scope"
           />
@@ -51,6 +52,7 @@
         <label class="flex items-center gap-2">
           <input
             type="radio"
+            name="backup_scope"
             value="selected"
             v-model="scope"
           />
@@ -67,21 +69,22 @@
       <div class="rounded-lg border border-gray-25 p-4 space-y-3">
         <h3 class="mb-1 text-sm font-semibold text-gray-90">{{ t("Moodle export") }}</h3>
 
-        <label class="block text-xs font-medium text-gray-60">{{ t("Moodle version") }}</label>
-        <select
+        <BaseSelect
+          id="moodle-version"
           v-model="moodleVersion"
-          class="w-full rounded border border-gray-25 p-2 text-sm"
-        >
-          <option value="3">Moodle 3.x</option>
-          <option value="4">Moodle 4.x</option>
-        </select>
+          :label="t('Moodle version')"
+          :options="moodleVersionOptions"
+          name="moodle_version"
+        />
 
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div class="sm:col-span-1">
-            <label class="block text-xs font-medium text-gray-60 mb-1">{{ t("Admin ID") }} *</label>
-            <input
+            <BaseInputText
+              id="moodle-admin-id"
               v-model.trim="adminId"
-              class="w-full rounded border border-gray-25 p-2 text-sm"
+              :label="t('Admin ID')"
+              name="admin_id"
+              required
               :placeholder="t('Internal integer user id')"
             />
             <p class="mt-1 text-[11px] leading-4 text-gray-50">
@@ -90,20 +93,24 @@
           </div>
 
           <div class="sm:col-span-1">
-            <label class="block text-xs font-medium text-gray-60 mb-1">{{ t("Administrator login") }} *</label>
-            <input
+            <BaseInputText
+              id="moodle-admin-login"
               v-model.trim="adminLogin"
-              class="w-full rounded border border-gray-25 p-2 text-sm"
+              :label="t('Administrator login')"
+              name="admin_login"
+              required
               :placeholder="t('Username to appear as owner of imported items')"
             />
           </div>
 
           <div class="sm:col-span-2">
-            <label class="block text-xs font-medium text-gray-60 mb-1">{{ t("Administrator e-mail") }} *</label>
-            <input
+            <BaseInputText
+              id="moodle-admin-email"
               v-model.trim="adminEmail"
-              class="w-full rounded border border-gray-25 p-2 text-sm"
+              :label="t('Administrator e-mail')"
+              name="admin_email"
               type="email"
+              required
               :placeholder="t('Email to use in the archive metadata')"
             />
           </div>
@@ -116,20 +123,20 @@
       </div>
 
       <div class="col-span-full flex justify-end gap-3">
-        <button
-          class="btn-secondary"
+        <BaseButton
+          :label="t('Reset')"
+          icon="refresh"
+          type="tertiary-alternative"
           :disabled="loading"
           @click="resetAll"
-        >
-          <i class="mdi mdi-refresh"></i> {{ t("Reset") }}
-        </button>
-        <button
-          class="btn-primary"
+        />
+        <BaseButton
+          :label="scope === 'selected' ? t('Continue') : t('Create .mbz')"
+          icon="arrow-right"
+          :type="scope === 'selected' ? 'primary' : 'success'"
           :disabled="loading || !canContinueFromStep1"
           @click="nextFromStep1"
-        >
-          <i class="mdi mdi-arrow-right"></i> {{ scope === "selected" ? t("Continue") : t("Create .mbz") }}
-        </button>
+        />
       </div>
     </section>
 
@@ -146,20 +153,20 @@
       />
 
       <div class="flex justify-between">
-        <button
-          class="btn-secondary"
+        <BaseButton
+          :label="t('Back')"
+          icon="arrow-left"
+          type="tertiary-alternative"
+          :disabled="loading"
           @click="step = 1"
+        />
+        <BaseButton
+          :label="t('Create .mbz')"
+          icon="download"
+          type="success"
           :disabled="loading"
-        >
-          <i class="mdi mdi-arrow-left"></i> {{ t("Back") }}
-        </button>
-        <button
-          class="btn-primary"
           @click="doExport"
-          :disabled="loading"
-        >
-          <i class="mdi mdi-download"></i> {{ t("Create .mbz") }}
-        </button>
+        />
       </div>
     </section>
 
@@ -184,10 +191,19 @@ import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import svc from "../../services/courseMaintenance"
 import ResourceSelector from "../../components/coursemaintenance/ResourceSelector.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 
 const { t } = useI18n()
 const route = useRoute()
 const node = ref(Number(route.params.node || 0))
+
+/* Options for the Moodle version select (brand names — not translated) */
+const moodleVersionOptions = [
+  { label: "Moodle 3.x", value: "3" },
+  { label: "Moodle 4.x", value: "4" },
+]
 
 /* UI */
 const step = ref(1)

@@ -10,7 +10,7 @@
   @apply flex flex-col h-screen transition-[margin-left] duration-150 pb-4 px-4
     sm:h-auto sm:min-h-dvh
     md:pb-8 md:px-8;
-  padding-top: calc(4.5rem + 1rem + 1px);
+  padding-top: calc(5.125rem + 1rem + 1px);
 
   &:not(.app-main--no-sidebar) {
     @apply sm:ml-60;

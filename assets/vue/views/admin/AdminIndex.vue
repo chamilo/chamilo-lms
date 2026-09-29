@@ -24,7 +24,7 @@
       :items="blockUsers.items"
       :search-url="blockUsers.searchUrl"
       :title="t('User management')"
-      bg-image="images/bg-block-admin-users.png"
+      :bg-index="0"
       icon="account"
     />
 
@@ -37,7 +37,7 @@
       :items="blockCourses.items"
       :search-url="blockCourses.searchUrl"
       :title="t('Course management')"
-      bg-image="images/bg-block-admin-courses.png"
+      :bg-index="1"
       icon="courses"
     />
 
@@ -50,7 +50,7 @@
       :items="blockSessions.items"
       :search-url="blockSessions.searchUrl"
       :title="t('Sessions management')"
-      bg-image="images/bg-block-admin-sessions.png"
+      :bg-index="2"
       icon="sessions"
     />
 
@@ -63,7 +63,7 @@
       :items="blockPlatform.items"
       :search-url="blockPlatform.searchUrl"
       :title="t('Platform management')"
-      bg-image="images/bg-block-admin-platform.png"
+      :bg-index="3"
       icon="admin-settings"
     />
 
@@ -74,8 +74,8 @@
       :description="t('View reports, statistics and tracking data')"
       :editable="blockTracking.editable"
       :items="blockTracking.items"
-      :title="t('Tracking')"
-      bg-image="images/bg-block-admin-tracking.png"
+      :title="t('Analytics')"
+      :bg-index="4"
       icon="tracking"
     />
 
@@ -86,7 +86,7 @@
       :editable="blockGradebook.editable"
       :items="blockGradebook.items"
       :title="t('Assessments')"
-      bg-image="images/bg-block-admin-gradebook.png"
+      :bg-index="5"
       icon="gradebook"
     />
 
@@ -98,7 +98,7 @@
       :editable="blockSkills.editable"
       :items="blockSkills.items"
       :title="t('Skills')"
-      bg-image="images/bg-block-admin-skills.png"
+      :bg-index="6"
       icon="gradebook"
     />
 
@@ -110,7 +110,7 @@
       :editable="blockSettings.editable"
       :items="blockSettings.items"
       :title="t('System')"
-      bg-image="images/bg-block-admin-settings.png"
+      :bg-index="7"
       icon="settings"
     />
 
@@ -121,7 +121,7 @@
       :editable="blockRooms.editable"
       :items="blockRooms.items"
       :title="t('Rooms')"
-      bg-image="images/bg-block-admin-rooms.png"
+      :bg-index="8"
       icon="room"
     />
 
@@ -133,7 +133,7 @@
       :editable="blockSecurity.editable"
       :items="blockSecurity.items"
       :title="t('Security')"
-      bg-image="images/bg-block-admin-security.png"
+      :bg-index="9"
       icon="shield-check"
     />
 
@@ -144,7 +144,7 @@
       :editable="blockPrivacy.editable"
       :items="blockPrivacy.items"
       :title="t('Personal data protection')"
-      bg-image="images/bg-block-admin-privacy.png"
+      :bg-index="10"
       icon="anonymous"
     />
 
@@ -153,7 +153,7 @@
       :id="blockPlugins.id"
       :items="blockPlugins.items"
       :title="t('Plugins')"
-      bg-image="images/bg-block-plugins.png"
+      :bg-index="11"
       icon="plugin"
     />
 
@@ -162,8 +162,9 @@
       :id="blockHealthCheck.id"
       :items="blockHealthCheck.items"
       :title="t('Health check')"
-      bg-image="images/bg-block-admin-health-check.png"
+      :bg-index="12"
       icon="health-check"
+      @item-action="onHealthCheckAction"
     />
 
     <!-- Small / secondary blocks: sent to the bottom -->
@@ -313,10 +314,15 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useIndexBlocks } from "../../composables/admin/indexBlocks"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import baseService from "../../services/baseService"
+import { useConfirmation } from "../../composables/useConfirmation"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 
 const securityStore = useSecurityStore()
+const { requireConfirmation } = useConfirmation()
+const { showErrorNotification, showSuccessNotification } = useNotification()
 
 const doNotListCampus = ref(false)
 
@@ -344,6 +350,40 @@ const {
 
 function checkVersionOnSubmit() {
   checkVersion(doNotListCampus.value)
+}
+
+/**
+ * Runs the action a health check item carries, if any is known here.
+ *
+ * @param {{action: string}} item the clicked item
+ * @returns {void}
+ */
+function onHealthCheckAction(item) {
+  if ("record-migration-history" !== item.action) {
+    return
+  }
+
+  requireConfirmation({
+    message: t(
+      "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.",
+    ),
+    accept: recordMigrationHistory,
+  })
+}
+
+/**
+ * Records the migration history, then reloads the blocks so the item turns green.
+ *
+ * @returns {Promise<void>}
+ */
+async function recordMigrationHistory() {
+  try {
+    const result = await baseService.post("/admin/system-status-migration-history", {})
+    showSuccessNotification(result.message)
+    await loadBlocks()
+  } catch (e) {
+    showErrorNotification(e)
+  }
 }
 
 const isLoadingBlocks = ref(true)

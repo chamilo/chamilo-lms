@@ -29,6 +29,7 @@ class GradebookDataGenerator
     public $preLoadDataKey;
     public $exportToPdf;
     private $evals_links;
+    private ?Category $currentCategory = null;
 
     /**
      * @param array $cats
@@ -66,6 +67,11 @@ class GradebookDataGenerator
         $this->evals_links = array_merge($allevals, $tabLinkToDisplay);
         $this->userId = api_get_user_id();
         $this->hidePercentage = ('true' === api_get_setting('gradebook.hide_gradebook_percentage_user_result'));
+    }
+
+    public function setCurrentCategory(Category $category): void
+    {
+        $this->currentCategory = $category;
     }
 
     /**
@@ -119,6 +125,7 @@ class GradebookDataGenerator
         $defaultData = Session::read($this->preLoadDataKey);
         $model = ExerciseLib::getCourseScoreModel();
         $useExerciseScoreInTotal = ('true' === api_get_setting('gradebook.gradebook_use_exercise_score_settings_in_total'));
+        $configuredEvaluation = $this->getConfiguredEvaluationForUser((int) $userId);
 
         /** @var GradebookItem $item */
         foreach ($visibleItems as $item) {
@@ -140,7 +147,9 @@ class GradebookDataGenerator
                         $userId,
                         $item,
                         $ignore_score_color,
-                        false
+                        false,
+                        false,
+                        $configuredEvaluation
                     );
                     $row[] = $resultColumn['display'];
                     $row['result_score'] = $resultColumn['score'];
@@ -180,7 +189,9 @@ class GradebookDataGenerator
                         $userId,
                         $item,
                         $ignore_score_color,
-                        true
+                        true,
+                        false,
+                        $configuredEvaluation
                     );
                     $row[] = $result['display'];
                     $row['result_score'] = $result['score'];
@@ -350,7 +361,8 @@ class GradebookDataGenerator
                         $item,
                         $ignore_score_color,
                         true,
-                        $useExerciseScoreInTotal
+                        $useExerciseScoreInTotal,
+                        $configuredEvaluation
                     );
                     $row[] = $result['display'];
                     $row['result_score'] = $result['score'];
@@ -709,10 +721,14 @@ class GradebookDataGenerator
         $item,
         $ignore_score_color,
         $forceSimpleResult = false,
-        $useExerciseScoreInTotal = false
+        $useExerciseScoreInTotal = false,
+        ?array $configuredEvaluation = null
     ) {
         $scoreDisplay = ScoreDisplay::instance();
-        $score = $item->calc_score($userId);
+        $score = $this->getConfiguredItemScore($item, $configuredEvaluation);
+        if (null === $score) {
+            $score = $item->calc_score($userId);
+        }
         $model = ExerciseLib::getCourseScoreModel();
 
         // Get min_score from entity (only if available)
@@ -824,6 +840,105 @@ class GradebookDataGenerator
             'score' => null,
             'score_weight' => null,
         ];
+    }
+
+    /** @return array<string, mixed>|null */
+    private function getConfiguredEvaluationForUser(int $userId): ?array
+    {
+        if (null === $this->currentCategory
+            || !method_exists($this->currentCategory, 'getConfiguredCourseCompletionEvaluationForUser')
+        ) {
+            return null;
+        }
+
+        $evaluation = $this->currentCategory->getConfiguredCourseCompletionEvaluationForUser($userId);
+        if (!is_array($evaluation)
+            || empty($evaluation['supported'])
+            || empty($evaluation['complete'])
+        ) {
+            return null;
+        }
+
+        return $evaluation;
+    }
+
+    /**
+     * Return the configured score pair for one gradebook item.
+     *
+     * @return array{0: float|null, 1: float}|null
+     */
+    private function getConfiguredItemScore($item, ?array $configuredEvaluation): ?array
+    {
+        if (null === $configuredEvaluation || empty($configuredEvaluation['components'])) {
+            return null;
+        }
+
+        $componentType = null;
+        $resourceId = null;
+
+        if ($item instanceof Evaluation) {
+            $componentType = 'evaluation';
+            $resourceId = (int) $item->get_id();
+        } elseif ($item instanceof AbstractLink) {
+            $componentType = match ((int) $item->get_type()) {
+                LINK_FORUM_THREAD => 'forum',
+                LINK_STUDENTPUBLICATION => 'work',
+                LINK_EXERCISE => 'exercise',
+                default => null,
+            };
+
+            if (null !== $componentType && method_exists($item, 'get_ref_id')) {
+                $resourceId = (int) $item->get_ref_id();
+            }
+        }
+
+        if (null === $componentType || null === $resourceId || $resourceId <= 0) {
+            return null;
+        }
+
+        foreach ($configuredEvaluation['components'] as $component) {
+            if (!is_array($component) || $componentType !== ($component['type'] ?? null)) {
+                continue;
+            }
+
+            $mappedResourceId = (int) ($component['mapped_resource_id'] ?? 0);
+            if ($mappedResourceId <= 0) {
+                $mappedResourceId = (int) ($component['resource_id'] ?? 0);
+            }
+
+            if ($mappedResourceId !== $resourceId) {
+                continue;
+            }
+
+            $attempts = (int) ($component['attempts'] ?? 0);
+            if ($attempts <= 0) {
+                $max = 'forum' === $componentType
+                    ? (float) ($component['weight'] ?? 0.0)
+                    : (float) ($component['raw_max'] ?? 100.0);
+
+                return [null, $max > 0.0 ? $max : 100.0];
+            }
+
+            if ('forum' === $componentType) {
+                $weight = (float) ($component['weight'] ?? 0.0);
+                if ($weight <= 0.0) {
+                    return null;
+                }
+
+                return [(float) ($component['score'] ?? 0.0), $weight];
+            }
+
+            $rawScore = $component['raw_score'] ?? null;
+            if (null === $rawScore) {
+                return [null, (float) ($component['raw_max'] ?? 100.0)];
+            }
+
+            $rawMax = (float) ($component['raw_max'] ?? 100.0);
+
+            return [(float) $rawScore, $rawMax > 0.0 ? $rawMax : 100.0];
+        }
+
+        return null;
     }
 
     /**

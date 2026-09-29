@@ -214,19 +214,28 @@
           >
             <h3 class="font-semibold">{{ t("Preview") }}</h3>
 
-            <img
-              v-if="selectedType === 'image'"
-              :src="previewUrl"
-              class="max-w-full rounded border border-gray-200"
-              alt="Generated preview"
-            />
+            <div class="relative inline-block max-w-full">
+              <img
+                v-if="selectedType === 'image'"
+                :src="previewUrl"
+                class="block max-w-full rounded border border-gray-200"
+                alt="Generated preview"
+              />
 
-            <video
-              v-else
-              :src="previewUrl"
-              class="max-w-full rounded border border-gray-200"
-              controls
-            />
+              <video
+                v-else
+                :src="previewUrl"
+                class="block max-w-full rounded border border-gray-200"
+                controls
+              />
+
+              <span
+                class="absolute bottom-2 right-2 rounded px-2 py-1 text-xs font-semibold shadow"
+                style="background-color: rgba(15, 23, 42, 0.82); color: #fff"
+              >
+                {{ t("AI generated") }}
+              </span>
+            </div>
           </div>
 
           <div
@@ -644,6 +653,32 @@ function applyDefaultFileName() {
   fileName.value = sanitizeFilenameBase(combined)
 }
 
+function drawAiGeneratedWatermark(ctx, canvas) {
+  const label = t("AI generated")
+  const smallerSide = Math.max(1, Math.min(canvas.width, canvas.height))
+  const fontSize = Math.max(14, Math.round(smallerSide * 0.035))
+  const paddingX = Math.max(10, Math.round(fontSize * 0.75))
+  const paddingY = Math.max(6, Math.round(fontSize * 0.45))
+  const margin = Math.max(12, Math.round(fontSize * 0.8))
+
+  ctx.save()
+  ctx.font = `600 ${fontSize}px sans-serif`
+
+  const textMetrics = ctx.measureText(label)
+  const boxWidth = Math.ceil(textMetrics.width + paddingX * 2)
+  const boxHeight = Math.ceil(fontSize + paddingY * 2)
+  const x = Math.max(margin, canvas.width - boxWidth - margin)
+  const y = Math.max(margin, canvas.height - boxHeight - margin)
+
+  ctx.fillStyle = "rgba(15, 23, 42, 0.72)"
+  ctx.fillRect(x, y, boxWidth, boxHeight)
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.96)"
+  ctx.textBaseline = "middle"
+  ctx.fillText(label, x + paddingX, y + boxHeight / 2)
+  ctx.restore()
+}
+
 function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -664,6 +699,8 @@ function resizeImageBase64Cover(rawBase64, inContentType, targetW, targetH) {
         const sy = (img.height - sh) / 2
 
         ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH)
+
+        drawAiGeneratedWatermark(ctx, canvas)
 
         const preferredMime = canvasMimeFromContentType(inContentType)
         let dataUrl = canvas.toDataURL(preferredMime)

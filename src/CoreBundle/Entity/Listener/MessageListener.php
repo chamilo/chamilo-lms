@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Doctrine\ORM\Event\PostLoadEventArgs;
+use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
 
 class MessageListener
 {
@@ -19,12 +20,16 @@ class MessageListener
 
         $softDeleteable = $om->getFilters()->enable('softdeleteable');
 
-        $softDeleteable->disableForEntity(MessageRelUser::class);
+        if ($softDeleteable instanceof SoftDeleteableFilter) {
+            $softDeleteable->disableForEntity(MessageRelUser::class);
+        }
 
         $message->setReceiversFromArray(
             $messageRelUserRepo->findBy(['message' => $message])
         );
 
-        $softDeleteable->enableForEntity(Message::class);
+        if ($softDeleteable instanceof SoftDeleteableFilter) {
+            $softDeleteable->enableForEntity(Message::class);
+        }
     }
 }

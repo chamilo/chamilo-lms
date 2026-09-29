@@ -9,10 +9,12 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -21,15 +23,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserVoter extends Voter
 {
-    public const CREATE = 'CREATE';
-    public const VIEW = 'VIEW';
-    public const EDIT = 'EDIT';
-    public const DELETE = 'DELETE';
+    public const string CREATE = 'CREATE';
+    public const string VIEW = 'VIEW';
+    public const string EDIT = 'EDIT';
+    public const string DELETE = 'DELETE';
 
     public function __construct(
-        private Security $security,
+        private AccessDecisionManagerInterface $accessDecisionManager,
         private EntityManagerInterface $entityManager,
-        private RequestStack $requestStack
+        private RequestStack $requestStack,
+        private AccessUrlScopeHelper $accessUrlScope,
     ) {}
 
     protected function supports(string $attribute, $subject): bool
@@ -49,7 +52,7 @@ class UserVoter extends Voter
         return $subject instanceof User;
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         /** @var User $currentUser */
         $currentUser = $token->getUser();
@@ -58,16 +61,36 @@ class UserVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
         /** @var User $user */
         $user = $subject;
 
         if (self::EDIT === $attribute) {
-            // Only the owner can edit private data
-            return (int) $currentUser->getId() === (int) $user->getId();
+            // The owner can always edit their own data. Otherwise, an admin may only edit
+            // a user within their access-URL scope -- see AccessUrlScopeHelper::canEditUser().
+            if ((int) $currentUser->getId() === (int) $user->getId()) {
+                return true;
+            }
+
+            if (!$this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
+                return false;
+            }
+
+            return $this->accessUrlScope->canEditUser($currentUser, $user);
+        }
+
+        if (self::DELETE === $attribute) {
+            // Same access-URL scope as EDIT (see canEditUser()) -- an admin may only
+            // delete a user within their scope. UserDeleteProcessor separately blocks
+            // deleting one's own account regardless.
+            if (!$this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
+                return false;
+            }
+
+            return $this->accessUrlScope->canEditUser($currentUser, $user);
+        }
+
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
+            return true;
         }
 
         if (self::VIEW === $attribute) {

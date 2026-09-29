@@ -1,5 +1,5 @@
 import { computed, nextTick, onUnmounted, ref, watch } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../store/cidReq"
 import pluginRegionService from "../services/pluginRegionService"
 
@@ -9,21 +9,34 @@ import pluginRegionService from "../services/pluginRegionService"
  */
 export function usePluginRegion(region) {
   const route = useRoute()
+  const router = useRouter()
   const cidReqStore = useCidReqStore()
 
   const blocks = ref([])
   const injectedElements = ref([])
   let abortController = null
+  let stopRequestWatcher = null
+  let isUnmounted = false
+
+  function normalizeContextId(value) {
+    if (value === null || value === undefined || value === "") {
+      return undefined
+    }
+
+    return String(value)
+  }
 
   const resolvedParams = computed(() => ({
     ...route.query,
     ...route.params,
-    cid: cidReqStore.course?.id ?? undefined,
-    sid: cidReqStore.session?.id ?? undefined,
-    gid: cidReqStore.group?.id ?? undefined,
+    cid: normalizeContextId(cidReqStore.course?.id ?? route.query.cid),
+    sid: normalizeContextId(cidReqStore.session?.id ?? route.query.sid),
+    gid: normalizeContextId(cidReqStore.group?.id ?? route.query.gid),
     _route: route.path,
     _route_name: route.name ?? undefined,
   }))
+
+  const requestKey = computed(() => JSON.stringify(resolvedParams.value))
 
   async function fetchBlocks() {
     if (abortController) {
@@ -118,9 +131,21 @@ export function usePluginRegion(region) {
     injectedElements.value = []
   }
 
-  watch(resolvedParams, fetchBlocks, { immediate: true })
+  router.isReady().then(() => {
+    if (isUnmounted) {
+      return
+    }
+
+    stopRequestWatcher = watch(requestKey, fetchBlocks, { immediate: true })
+  })
 
   onUnmounted(() => {
+    isUnmounted = true
+
+    if (stopRequestWatcher) {
+      stopRequestWatcher()
+    }
+
     if (abortController) {
       abortController.abort()
     }

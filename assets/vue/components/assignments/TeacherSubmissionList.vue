@@ -137,6 +137,16 @@
         <template #body="{ data }">
           <div class="flex justify-center gap-2">
             <BaseButton
+              v-if="getSubmissionPreviewUrl(data)"
+              icon="link-external"
+              size="small"
+              only-icon
+              :label="t('Preview')"
+              :class="actionBtnClass"
+              @click="openSubmissionPreview(data)"
+              type="primary-text"
+            />
+            <BaseButton
               icon="download"
               size="small"
               only-icon
@@ -310,10 +320,11 @@ const taskGraderEnabled = computed(() => {
 
 const canUseAiTaskGrader = computed(() => {
   // Only teachers/admins and not in student view
-  const canEdit = !!(securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isAdmin)
+  const canEdit = !!(securityStore.isTeacher || securityStore.isCourseAdmin)
   const notStudentView = !platform.isStudentViewActive
   return !!(canEdit && notStudentView && aiHelpersEnabled.value && taskGraderEnabled.value)
 })
+
 
 watch(
   loadParams,
@@ -465,17 +476,45 @@ async function viewSubmission(item) {
   }
 }
 
-function saveCorrection(item) {
-  if (item?.downloadUrl) {
-    const link = document.createElement("a")
-    link.href = item.downloadUrl
-    link.download = ""
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  } else {
-    notification.showErrorNotification(t("No download available"))
+function getSubmissionPreviewUrl(item) {
+  const contentUrl = String(item?.contentUrl || "").trim()
+  if (contentUrl) {
+    return contentUrl
   }
+
+  const downloadUrl = String(item?.downloadUrl || "").trim()
+  if (!downloadUrl) {
+    return ""
+  }
+
+  return downloadUrl.replace(/\/download(\?.*)?$/, "/view$1")
+}
+
+function openSubmissionPreview(item) {
+  const previewUrl = getSubmissionPreviewUrl(item)
+
+  if (!previewUrl) {
+    notification.showErrorNotification(t("No download available"))
+    return
+  }
+
+  window.open(previewUrl, "_blank", "noopener,noreferrer")
+}
+
+function saveCorrection(item) {
+  if (!item?.iid) {
+    notification.showErrorNotification(t("No download available"))
+    return
+  }
+  const params = new URLSearchParams({
+    cid: course.value?.id ?? 0,
+    sid: session.value?.id ?? 0,
+  })
+  const link = document.createElement("a")
+  link.href = `/assignments/submissions/${item.iid}/download?${params}`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 function editSubmission(item) {

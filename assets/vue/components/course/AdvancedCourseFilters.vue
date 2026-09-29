@@ -3,18 +3,20 @@
     class="grid gap-3 md:grid-cols-4 items-end"
     @submit.prevent="apply"
   >
-    <div v-if="allowTitle">
-      <BaseInputText
-        id="search_by_title"
-        v-model="model.title"
-        :label="t('Title')"
+    <div class="space-y-3">
+      <div v-if="allowTitle">
+        <BaseInputText
+          id="search_by_title"
+          v-model="model.title"
+          :label="t('Title')"
+        />
+      </div>
+
+      <CourseCategorySelect
+        v-model="model.categories"
+        action="catalogue"
       />
     </div>
-
-    <CourseCategorySelect
-      v-model="model.categories"
-      action="catalogue"
-    />
 
     <template
       v-for="f in fields"

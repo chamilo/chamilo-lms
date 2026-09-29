@@ -63,7 +63,7 @@
       v-if="loadingMore"
       class="text-center text-gray-400 py-4"
     >
-      {{ $t("Loading more sessions...") }}
+      {{ $t("Loading more sessions") }}
     </div>
   </div>
 </template>

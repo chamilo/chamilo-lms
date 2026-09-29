@@ -38,7 +38,7 @@ class CStudentPublicationCorrection extends AbstractResource implements Resource
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     #[Groups(['student_publication:read'])]
     protected string $title;
 

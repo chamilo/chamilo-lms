@@ -36,6 +36,8 @@ function update_lp_infos($lp_id, $title, $local_folder): void
 {
     $tblCLp = Database::get_course_table(TABLE_LP_MAIN);
     $title = oel_escape_string($title);
+    $local_folder = oel_escape_string($local_folder);
+    $lp_id = (int) $lp_id;
     $sqlU = "UPDATE $tblCLp SET $tblCLp.path = '$local_folder/.' , $tblCLp.default_view_mod = 'embedframe' , $tblCLp.title = '$title' ";
     $sqlU .= " WHERE $tblCLp.iid = $lp_id;";
     Database::query($sqlU);
@@ -43,6 +45,7 @@ function update_lp_infos($lp_id, $title, $local_folder): void
 
 function getCollectionPages($idPage): array
 {
+    $idPage = (int) $idPage;
     $result = [];
     $sql = 'SELECT id , title , type_node , behavior , ';
     $sql .= ' colors , quizztheme , leveldoc ';
@@ -123,6 +126,7 @@ function getCollectionPages($idPage): array
 
 function getAlonePages($idPage): array
 {
+    $idPage = (int) $idPage;
     $result = [];
 
     $ip = 0;
@@ -164,6 +168,7 @@ function getAlonePages($idPage): array
 
 function getDirectoryRender($lpid)
 {
+    $lpid = (int) $lpid;
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $tblCLp = Database::get_course_table(TABLE_LP_MAIN);
     $courseDir = '';

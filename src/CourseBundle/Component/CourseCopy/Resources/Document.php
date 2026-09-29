@@ -15,8 +15,28 @@ class Document extends Resource
     public string $size;
     public string $title;
 
-    public function __construct($id, $fullPath, $comment, $title, $file_type, $size)
-    {
+    /**
+     * ResourceLink visibility for the document in the export context.
+     * Uses ResourceLink constants: 0=draft, 1=pending, 2=published.
+     * Null means "unknown / keep destination default".
+     */
+    public ?int $visibility = null;
+
+    /**
+     * Source ResourceNode UUID (for rewriting modern /r/document/files/{uuid}/view URLs).
+     */
+    public ?string $resource_node_uuid = null;
+
+    public function __construct(
+        $id,
+        $fullPath,
+        $comment,
+        $title,
+        $file_type,
+        $size,
+        ?int $visibility = null,
+        ?string $resourceNodeUuid = null
+    ) {
         parent::__construct($id, RESOURCE_DOCUMENT);
 
         $clean = ltrim((string) $fullPath, '/');
@@ -27,6 +47,8 @@ class Document extends Resource
         $this->file_type = (string) $file_type;
         $this->filetype = (string) $file_type;
         $this->size = (string) $size;
+        $this->visibility = $visibility;
+        $this->resource_node_uuid = $resourceNodeUuid;
     }
 
     public function show(): void

@@ -67,10 +67,25 @@ readonly class ResourceAclHelper
         // Add a security resource.
         $acl->addResource(new GenericResource((string) $resourceLink->getId()));
 
-        // Check all the right this link has.
-        // Set rights from the ResourceRight.
+        // ResourceRight masks are Symfony ACL bitmasks, while Laminas ACL privileges
+        // are literal values. Register every individual bit so a combined mask such
+        // as VIEW|EDIT also grants VIEW and EDIT when checked independently.
         foreach ($rights as $right) {
-            $acl->allow($right->getRole(), null, (string) $right->getMask());
+            $mask = $right->getMask();
+
+            $acl->allow($right->getRole(), null, (string) $mask);
+
+            $remainingMask = $mask;
+            $bit = 1;
+
+            while ($remainingMask > 0) {
+                if (1 === ($remainingMask & 1)) {
+                    $acl->allow($right->getRole(), null, (string) $bit);
+                }
+
+                $remainingMask >>= 1;
+                $bit <<= 1;
+            }
         }
 
         return $acl;
@@ -89,7 +104,7 @@ readonly class ResourceAclHelper
         $askedMask = (string) self::getPermissionMask([$attribute]);
 
         if ($this->security->getToken() instanceof NullToken) {
-            return (bool) $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $resourceLink->getId(), $askedMask);
+            return (bool) $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', (string) $resourceLink->getId(), $askedMask);
         }
 
         $user = $this->security->getUser();
@@ -97,7 +112,20 @@ readonly class ResourceAclHelper
         $roles = $user instanceof UserInterface ? $user->getRoles() : [];
 
         foreach ($roles as $role) {
-            if ($acl->isAllowed($role, $resourceLink->getId(), $askedMask)) {
+            // init() only ever registers a small fixed set of resource-permission
+            // roles (ROLE_USER, ROLE_STUDENT, ROLE_CURRENT_COURSE_TEACHER, ...).
+            // $user->getRoles() returns the user's FULL Symfony role set, which
+            // for an admin using "Login as" also includes roles like
+            // ROLE_SESSION_MANAGER, ROLE_PREVIOUS_ADMIN or ROLE_ALLOWED_TO_SWITCH -
+            // none of which the ACL knows about. Laminas throws
+            // InvalidArgumentException for any role it hasn't registered, so
+            // without this guard a single unrelated role crashes the whole
+            // permission check instead of just being irrelevant to it.
+            if (!$acl->hasRole($role)) {
+                continue;
+            }
+
+            if ($acl->isAllowed($role, (string) $resourceLink->getId(), $askedMask)) {
                 return true;
             }
         }

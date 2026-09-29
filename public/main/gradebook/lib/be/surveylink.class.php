@@ -184,9 +184,22 @@ class SurveyLink extends AbstractLink
             $sessionId = $this->get_session_id();
 
             if ($survey) {
-                return api_get_path(WEB_CODE_PATH) . 'survey/reporting.php?' .
-                    api_get_cidreq_params($this->getCourseId(), $sessionId) .
-                    '&survey_id=' . $survey->getIid();
+                $courseId = (int) $this->getCourseId();
+                $course = Container::getCourseRepository()->find($courseId);
+                $nodeId = $course?->getResourceNode()?->getId() ?: $survey->getResourceNode()?->getId();
+
+                if (empty($nodeId)) {
+                    return null;
+                }
+
+                $query = http_build_query([
+                    'cid' => $courseId,
+                    'sid' => (int) $sessionId,
+                    'gid' => 0,
+                    'gradebook' => 'view',
+                ]);
+
+                return api_get_path(WEB_PATH).'resources/survey/'.$nodeId.'/'.$survey->getIid().'/reporting?'.$query;
             }
         }
 

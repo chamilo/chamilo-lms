@@ -1331,7 +1331,7 @@ class Event
 
             //Checking if this attempt was revised by a teacher
             $sql_revised = "SELECT exe_id FROM $tblTrackAttemptQualify
-                            WHERE author != '' AND exe_id = $exe_id
+                            WHERE author != '' AND final = 1 AND exe_id = $exe_id
                             LIMIT 1";
             $res_revised = Database::query($sql_revised);
             $row['attempt_revised'] = 0;
@@ -1408,7 +1408,7 @@ class Event
             // Checking if this attempt was revised by a teacher
             $exeId = $row['exe_id'];
             $sql = "SELECT exe_id FROM $tblTrackAttemptQualify
-                    WHERE author != '' AND exe_id = $exeId
+                    WHERE author != '' AND final = 1 AND exe_id = $exeId
                     LIMIT 1";
             $res_revised = Database::query($sql);
             $row['attempt_revised'] = 0;

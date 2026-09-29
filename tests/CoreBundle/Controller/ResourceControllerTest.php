@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\Tests\ChamiloTestTrait;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ResourceControllerTest extends WebTestCase
@@ -146,6 +147,8 @@ class ResourceControllerTest extends WebTestCase
         $documentRepo->create($document);
         $resourceFile = $documentRepo->addFile($document, $this->getUploadedFile());
         $resourceFile->setCrop('100,100,100,100');
+        // Simulate a restored image whose persisted MIME metadata was too generic.
+        $resourceFile->setMimeType('text/plain');
         $em->persist($resourceFile);
         $em->flush();
 
@@ -157,11 +160,157 @@ class ResourceControllerTest extends WebTestCase
         $url = '/r/document/files/'.$id.'/view';
         $client->request('GET', $url);
         $this->assertResponseIsSuccessful();
+        self::assertStringStartsWith(
+            'image/',
+            (string) $client->getResponse()->headers->get('content-type')
+        );
 
         // View image with params.
         $url = '/r/document/files/'.$id.'/view';
         $client->request('GET', $url, ['filter' => 'resource_show_preview']);
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testViewHtmlPropagatesLearningPathContextToEmbeddedDocumentFiles(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $client->loginUser($admin);
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $course = $this->createCourse('LP embedded file context');
+
+        $embedded = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('embedded-image.jpg')
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+        $documentRepo->create($embedded);
+        $documentRepo->addFile($embedded, $this->getUploadedFile());
+        $embeddedUuid = $embedded->getResourceNode()->getUuid()->toRfc4122();
+
+        $htmlDocument = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('lp-page.html')
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+        $documentRepo->create($htmlDocument);
+        $documentRepo->addFileFromString(
+            $htmlDocument,
+            'lp-page.html',
+            'text/html',
+            '<html><body><img src="/r/document/files/'.$embeddedUuid.'/view" alt="embedded"></body></html>',
+            true
+        );
+
+        $htmlUuid = $htmlDocument->getResourceNode()->getUuid()->toRfc4122();
+        $client->request(
+            'GET',
+            '/r/document/files/'.$htmlUuid.'/view?cid='.$course->getId().'&lp_id=42&item_id=84'
+        );
+
+        $this->assertResponseIsSuccessful();
+
+        // The view action answers with a StreamedResponse, whose body the browser
+        // already drained into the internal response; getResponse()->getContent()
+        // would be empty.
+        $content = (string) $client->getInternalResponse()->getContent();
+
+        self::assertStringContainsString(
+            '/r/document/files/'.$embeddedUuid.'/view?origin=learnpath&amp;cid='.$course->getId().'&amp;lp_id=42&amp;lp_item_id=84',
+            $content
+        );
+    }
+
+    public function testViewActionWithJwtAuthentication(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $course = $this->createCourse('JWT view');
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('jwt view document')
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+
+        $documentRepo->create($document);
+        $documentRepo->addFileFromString($document, 'JWT view content', 'text/plain', 'jwt-view.txt', true);
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+        $uuid = $document->getResourceNode()->getUuid()->toRfc4122();
+
+        $jwtManager = self::getContainer()->get(JWTTokenManagerInterface::class);
+        $jwt = $jwtManager->create($admin);
+
+        $client->request(
+            'GET',
+            '/r/document/files/'.$uuid.'/view?cid='.$course->getId(),
+            server: ['HTTP_AUTHORIZATION' => 'Bearer '.$jwt]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'text/plain; charset=UTF-8');
+    }
+
+    public function testDownloadActionWithJwtAuthentication(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $course = $this->createCourse('JWT download');
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('jwt download document')
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+
+        $documentRepo->create($document);
+        $documentRepo->addFileFromString(
+            $document,
+            'JWT download content',
+            'text/plain',
+            'jwt-download.txt',
+            true
+        );
+
+        /** @var CDocument $document */
+        $document = $documentRepo->find($document->getIid());
+        $uuid = $document->getResourceNode()->getUuid()->toRfc4122();
+
+        $jwtManager = self::getContainer()->get(JWTTokenManagerInterface::class);
+        $jwt = $jwtManager->create($admin);
+
+        $client->request(
+            'GET',
+            '/r/document/files/'.$uuid.'/download?cid='.$course->getId(),
+            server: ['HTTP_AUTHORIZATION' => 'Bearer '.$jwt]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'text/plain; charset=UTF-8');
+        self::assertStringContainsString(
+            'attachment;',
+            (string) $client->getResponse()->headers->get('content-disposition')
+        );
     }
 
     public function testLinkAction(): void
@@ -185,7 +334,14 @@ class ResourceControllerTest extends WebTestCase
         $url = '/r/learnpath/lps/'.$lp->getResourceNode()->getId().'/link?cid='.$course->getId();
         $client->request('GET', $url);
 
-        $redirects = '/main/lp/lp_controller.php?lp_id='.$lp->getIid().'&action=view&cid='.$course->getId().'&sid=0';
+        // The learning path runtime lives on a resource route now, and it signals
+        // the student view in the URL because a lesson embeds other tools.
+        $redirects = \sprintf(
+            '/resources/lp/%d/%d/runtime?cid=%d&sid=0&origin=learnpath&isStudentView=true',
+            $course->getResourceNode()->getId(),
+            $lp->getIid(),
+            $course->getId()
+        );
         $this->assertResponseRedirects($redirects);
 
         $url = '/r/document/files/'.$lp->getResourceNode()->getId().'/link';

@@ -81,8 +81,8 @@ class TrackEDefaultRepository extends ServiceEntityRepository
         $event->setDefaultValue(json_encode(['hash' => $token->getHash()]));
         $event->setSessionId(null);
 
-        $this->_em->persist($event);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($event);
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -99,7 +99,7 @@ class TrackEDefaultRepository extends ServiceEntityRepository
         $event->setDefaultValue(json_encode(['user_id' => $userId, 'ticket_id' => $ticketId, 'action' => 'unsubscribe']));
         $event->setSessionId(null);
 
-        $this->_em->persist($event);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($event);
+        $this->getEntityManager()->flush();
     }
 }

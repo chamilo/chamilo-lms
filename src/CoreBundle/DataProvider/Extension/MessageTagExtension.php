@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\MessageTag;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Doctrine\ORM\QueryBuilder;
 
-final readonly class MessageTagExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
+final readonly class MessageTagExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private UserHelper $userHelper,

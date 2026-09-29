@@ -76,10 +76,88 @@ async function getLoginCaptchaStatus(username = "") {
 
 /**
  * Checks the status of the user's session.
+ *
+ * When called inside a course, include the current course/session/group context
+ * so the backend can republish the contextual ROLE_CURRENT_COURSE_* roles on
+ * the authenticated user returned by /check-session.
+ *
+ * @param {Object} [context]
+ * @param {number|string|null} [context.cid] - Current course id
+ * @param {number|string|null} [context.sid] - Current session id
+ * @param {number|string|null} [context.gid] - Current group id
  * @returns {Promise<Object>}
  */
-async function checkSession() {
-  return await baseService.get("/check-session")
+async function checkSession({ cid, sid, gid } = {}) {
+  const params = new URLSearchParams()
+
+  if (cid) {
+    params.set("cid", String(cid))
+  }
+
+  if (sid) {
+    params.set("sid", String(sid))
+  }
+
+  if (gid) {
+    params.set("gid", String(gid))
+  }
+
+  const query = params.toString()
+
+  return await baseService.get(query ? `/check-session?${query}` : "/check-session")
+}
+
+/**
+ * Returns the current server-side session expiration metadata.
+ * This endpoint also starts or refreshes an anonymous session when needed.
+ *
+ * @returns {Promise<Object>}
+ */
+async function getSessionExpiration() {
+  return await baseService.get("/session/expiration")
+}
+
+/**
+ * Explicitly renews the current server-side session.
+ *
+ * @returns {Promise<Object>}
+ */
+async function keepSessionAlive() {
+  return await baseService.post("/session/keep-alive", {})
+}
+
+/**
+ * Refreshes the authenticated user's online presence.
+ *
+ * @returns {Promise<Object>}
+ */
+async function updateOnlinePresence() {
+  return await baseService.post("/session/online-presence", {})
+}
+
+/**
+ * Fetches the contextual ROLE_CURRENT_COURSE_* roles the current user holds for
+ * the given course context, as resolved authoritatively by the backend.
+ * @param {Object} context
+ * @param {number} context.cid - Current course id
+ * @param {number} [context.sid=0] - Current session id
+ * @param {number} [context.gid=0] - Current group id
+ * @returns {Promise<string[]>}
+ */
+async function getCourseContextRoles({ cid, sid = 0, gid = 0 }) {
+  const params = new URLSearchParams({ cid: String(cid) })
+
+  if (sid) {
+    params.set("sid", String(sid))
+  }
+
+  if (gid) {
+    params.set("gid", String(gid))
+  }
+
+  const { roles } = await baseService.get(`/course-context-roles?${params.toString()}`)
+
+  return roles ?? []
 }
 
 /**
@@ -114,6 +192,10 @@ export default {
   loginLdap,
   getLoginCaptchaStatus,
   checkSession,
+  getSessionExpiration,
+  keepSessionAlive,
+  updateOnlinePresence,
+  getCourseContextRoles,
   loginTokenRequest,
   loginTokenCheck,
 }

@@ -26,17 +26,17 @@ use const PHP_URL_PATH;
 
 class PageHelper
 {
-    public const CUSTOM_PAGE_INDEX_LOGGED = 'index-logged';
-    public const CUSTOM_PAGE_INDEX_UNLOGGED = 'index-unlogged';
-    public const CUSTOM_PAGE_LOGGED_OUT = 'loggedout';
-    public const CUSTOM_PAGE_REGISTRATION = 'registration';
-    public const CUSTOM_PAGE_REGISTRATION_FEEDBACK = 'registration-feedback';
-    public const CUSTOM_PAGE_LOST_PASSWORD = 'lostpassword';
+    public const string CUSTOM_PAGE_INDEX_LOGGED = 'index-logged';
+    public const string CUSTOM_PAGE_INDEX_UNLOGGED = 'index-unlogged';
+    public const string CUSTOM_PAGE_LOGGED_OUT = 'loggedout';
+    public const string CUSTOM_PAGE_REGISTRATION = 'registration';
+    public const string CUSTOM_PAGE_REGISTRATION_FEEDBACK = 'registration-feedback';
+    public const string CUSTOM_PAGE_LOST_PASSWORD = 'lostpassword';
 
-    private const CUSTOM_PAGE_DIRECTORY = 'custompages';
-    private const CUSTOM_PAGE_EXTENSION = 'php';
+    private const string CUSTOM_PAGE_DIRECTORY = 'custompages';
+    private const string CUSTOM_PAGE_EXTENSION = 'php';
 
-    private const CUSTOM_PAGES = [
+    private const array CUSTOM_PAGES = [
         self::CUSTOM_PAGE_INDEX_LOGGED,
         self::CUSTOM_PAGE_INDEX_UNLOGGED,
         self::CUSTOM_PAGE_LOGGED_OUT,
@@ -520,6 +520,11 @@ class PageHelper
         return '' !== $value ? $value : 'generic';
     }
 
+    /**
+     * Custom pages are PHP files executed with include(), so they are read from the local
+     * disk on purpose and not through the themes filesystem: they must live on the server
+     * that runs them, and a remote storage adapter cannot provide an executable path.
+     */
     private function resolveCustomPageFile(string $page): ?string
     {
         $relativePath = self::CUSTOM_PAGE_DIRECTORY.DIRECTORY_SEPARATOR.$page.'.'.self::CUSTOM_PAGE_EXTENSION;

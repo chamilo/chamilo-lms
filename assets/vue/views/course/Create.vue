@@ -176,7 +176,7 @@ async function submitCourse(formData) {
       throw new Error(t("Course ID is missing. Unable to navigate to the course home page."))
     }
 
-    showSuccessNotification(t("Course created successfully."))
+    showSuccessNotification(t("Course created successfully"))
     await router.push(`/course/${courseId}/home?sid=${sessionId}`)
   } catch (error) {
     console.error(error)

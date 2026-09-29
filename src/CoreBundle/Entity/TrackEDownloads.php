@@ -37,6 +37,16 @@ class TrackEDownloads
     protected ?ResourceLink $resourceLink = null;
 
     /**
+     * Get downDocPath.
+     *
+     * @return string
+     */
+    public function getDownDocPath()
+    {
+        return $this->downDocPath;
+    }
+
+    /**
      * Set downDocPath.
      *
      * @return TrackEDownloads
@@ -49,16 +59,6 @@ class TrackEDownloads
     }
 
     /**
-     * Get downDocPath.
-     *
-     * @return string
-     */
-    public function getDownDocPath()
-    {
-        return $this->downDocPath;
-    }
-
-    /**
      * Get downId.
      *
      * @return int
@@ -66,6 +66,16 @@ class TrackEDownloads
     public function getDownId()
     {
         return $this->downId;
+    }
+
+    /**
+     * Get downUserId.
+     *
+     * @return int
+     */
+    public function getDownUserId()
+    {
+        return $this->downUserId;
     }
 
     /**
@@ -81,13 +91,13 @@ class TrackEDownloads
     }
 
     /**
-     * Get downUserId.
+     * Get downDate.
      *
-     * @return int
+     * @return DateTime
      */
-    public function getDownUserId()
+    public function getDownDate()
     {
-        return $this->downUserId;
+        return $this->downDate;
     }
 
     /**
@@ -100,16 +110,6 @@ class TrackEDownloads
         $this->downDate = $downDate;
 
         return $this;
-    }
-
-    /**
-     * Get downDate.
-     *
-     * @return DateTime
-     */
-    public function getDownDate()
-    {
-        return $this->downDate;
     }
 
     /**

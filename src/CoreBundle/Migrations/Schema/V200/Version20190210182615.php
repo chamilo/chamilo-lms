@@ -16,6 +16,11 @@ class Version20190210182615 extends AbstractMigrationChamilo
         return 'Session changes';
     }
 
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('session');
@@ -27,6 +32,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE session SET promotion_id = NULL WHERE promotion_id = 0 OR promotion_id NOT IN (SELECT id FROM promotion)');
         if (!$table->hasForeignKey('FK_D044D5D4139DF194')) {
+            $this->addSql('ALTER TABLE session CHANGE promotion_id promotion_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE session ADD CONSTRAINT FK_D044D5D4139DF194 FOREIGN KEY (promotion_id) REFERENCES promotion (id) ON DELETE SET NULL');
             $this->addSql('CREATE INDEX IDX_D044D5D4139DF194 ON session (promotion_id);');
         }
@@ -39,6 +45,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
 
         if (!$table->hasForeignKey('FK_D044D5D4EF87E278')) {
             $this->addSql('UPDATE session SET session_admin_id = NULL WHERE session_admin_id NOT IN (SELECT id FROM user)');
+            $this->addSql('ALTER TABLE session CHANGE session_admin_id session_admin_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE session ADD CONSTRAINT FK_D044D5D4EF87E278 FOREIGN KEY(session_admin_id) REFERENCES user(id);');
         }
 

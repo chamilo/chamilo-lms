@@ -51,16 +51,9 @@ class Tag
         $this->extraFieldRelTags = new ArrayCollection();
     }
 
-    public function setTag(string $tag): self
+    public function getCount(): int
     {
-        $this->tag = $tag;
-
-        return $this;
-    }
-
-    public function getTag(): string
-    {
-        return $this->tag;
+        return $this->count;
     }
 
     public function setCount(int $count): self
@@ -68,11 +61,6 @@ class Tag
         $this->count = $count;
 
         return $this;
-    }
-
-    public function getCount(): int
-    {
-        return $this->count;
     }
 
     /**
@@ -123,6 +111,18 @@ class Tag
                 $userRelTag->setTag(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTag(): string
+    {
+        return $this->tag;
+    }
+
+    public function setTag(string $tag): self
+    {
+        $this->tag = $tag;
 
         return $this;
     }

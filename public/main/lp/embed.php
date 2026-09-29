@@ -38,17 +38,23 @@ switch ($type) {
         );
         break;
     case 'youtube':
-        $src = "src ='//www.youtube.com/embed/$src'";
-        $src = Security::remove_XSS($src);
+        $videoId = preg_replace('/[^A-Za-z0-9_-]/', '', (string) $src);
+        if ('' === $videoId) {
+            api_not_allowed();
+        }
+        $videoUrl = 'https://www.youtube.com/embed/'.$videoId.'?enablejsapi=1&playsinline=1';
         $iframe .= '<div id="content" style="width: 700px ;margin-left:auto; margin-right:auto;"><br />';
-        $iframe .= '<iframe class="youtube-player" type="text/html" width="640" height="385" '.$src.' frameborder="0"></iframe>';
+        $iframe .= '<iframe class="youtube-player" type="text/html" width="640" height="385" src="'.Security::remove_XSS($videoUrl).'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
         $iframe .= '</div>';
         break;
     case 'vimeo':
-        $src = "src ='//player.vimeo.com/video/$src'";
-        $src = Security::remove_XSS($src);
+        $videoId = preg_replace('/[^0-9]/', '', (string) $src);
+        if ('' === $videoId) {
+            api_not_allowed();
+        }
+        $videoUrl = 'https://player.vimeo.com/video/'.$videoId.'?api=1';
         $iframe .= '<div id="content" style="width: 700px ;margin-left:auto; margin-right:auto;"><br />';
-        $iframe .= '<iframe '.$src.' width="640" height="385" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+        $iframe .= '<iframe src="'.Security::remove_XSS($videoUrl).'" width="640" height="385" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
         $iframe .= '</div>';
         break;
     case 'nonhttps':
@@ -68,10 +74,12 @@ if ('learnpath' === $origin) {
     echo '<meta charset="utf-8">';
     echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
     echo '<style>';
-    echo 'html,body{margin:0;padding:0;width:100%;min-height:100%;background:#fff;}';
+    echo 'html,body{margin:0;padding:0;width:100%;height:100%;min-height:100%;overflow:hidden;background:#fff;}';
     echo 'body{font-family:Arial,Helvetica,sans-serif;}';
-    echo '#content,.lp-embed-content{box-sizing:border-box;width:100%;max-width:100%;margin:0 auto;padding:16px;text-align:center;}';
-    echo '#content iframe,.lp-embed-content iframe{max-width:100%;}';
+    echo '.lp-embed-content{box-sizing:border-box;display:flex;width:100%;height:100%;min-height:100%;align-items:stretch;justify-content:stretch;margin:0;padding:0;text-align:center;}';
+    echo '#content{box-sizing:border-box;width:100%!important;height:100%!important;max-width:none!important;margin:0!important;padding:0!important;}';
+    echo '#content>br{display:none;}';
+    echo '#content iframe,.lp-embed-content iframe{display:block;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;border:0;}';
     echo '.btn,.btn--primary{display:inline-block;padding:8px 16px;border-radius:4px;text-decoration:none;}';
     echo '</style>';
     echo '</head>';

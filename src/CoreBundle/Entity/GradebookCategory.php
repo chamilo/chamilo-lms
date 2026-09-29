@@ -259,7 +259,7 @@ class GradebookCategory
         return $this->certifMinScore;
     }
 
-    public function setCertifMinScore(int $certifMinScore): self
+    public function setCertifMinScore(?int $certifMinScore): self
     {
         $this->certifMinScore = $certifMinScore;
 

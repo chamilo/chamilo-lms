@@ -106,6 +106,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->maxAttempt = 0;
         $configuration->displayCategoryName = true;
         $configuration->hideAttemptsTable = $this->isSettingEnabled('exercise.quiz_hide_attempts_table_on_start_page');
+        $configuration->allowQuestionFeedbackReports = false;
         $configuration->feedbackType = 0;
         $configuration->resultsDisabled = 0;
         $configuration->questionSelectionType = 1;
@@ -158,6 +159,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->showPreviousButton = $quiz->isShowPreviousButton();
         $configuration->preventBackwards = 1 === $quiz->getPreventBackwards();
         $configuration->hideAttemptsTable = $quiz->isHideAttemptsTable();
+        $configuration->allowQuestionFeedbackReports = $quiz->isQuestionFeedbackReportsAllowed();
         $configuration->autoLaunch = $quiz->isAutoLaunch();
         $gradebookLink = $this->getExerciseGradebookLink($quiz, $course, $session);
         $configuration->addToGradebook = $gradebookLink instanceof GradebookLink;

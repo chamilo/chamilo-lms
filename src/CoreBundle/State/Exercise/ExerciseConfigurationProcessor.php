@@ -247,6 +247,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             ->setShowPreviousButton($data->showPreviousButton)
             ->setPreventBackwards($data->preventBackwards ? 1 : 0)
             ->setHideAttemptsTable($data->hideAttemptsTable)
+            ->setAllowQuestionFeedbackReports($data->allowQuestionFeedbackReports)
             ->setAutoLaunch($data->autoLaunch)
             ->setNotifications($this->normalizeNotifications($data->notifications))
             ->setAccessCondition((string) $data->accessCondition)

@@ -176,6 +176,25 @@ export default {
     )
   },
 
+  async reportExerciseQuestionFeedback(payload = {}, params = {}, exerciseId, attemptId, questionId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/runtime/${exerciseId}/attempt/${attemptId}/question/${questionId}/feedback-report${queryString}`,
+      payload,
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
+  async getExerciseQuestionFeedbackReports(params = {}, questionId) {
+    return await baseService.get(
+      `/api/exercise/questions/${questionId}/feedback-reports`,
+      cleanParams(params),
+      exerciseRequestConfig(),
+    )
+  },
+
 
   async uploadExerciseRuntimeAnswer(formData, params = {}, exerciseId, attemptId) {
     const queryString = buildQueryString(params)

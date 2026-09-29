@@ -25,6 +25,74 @@
       {{ errorMessage }}
     </div>
 
+    <details
+      v-if="!isLoading && isEditMode"
+      class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
+      @toggle="onFeedbackReportsToggle"
+    >
+      <summary class="cursor-pointer text-sm font-semibold text-gray-90">
+        {{ t("Learner reports") }}
+        <span v-if="feedbackReportsLoaded">({{ feedbackReports.length }})</span>
+      </summary>
+
+      <div class="mt-4 space-y-3">
+        <div
+          v-if="isLoadingFeedbackReports"
+          class="text-sm text-gray-700"
+        >
+          {{ t("Loading") }}
+        </div>
+
+        <div
+          v-else-if="feedbackReportsError"
+          class="rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+        >
+          {{ feedbackReportsError }}
+        </div>
+
+        <div
+          v-else-if="feedbackReportsLoaded && feedbackReports.length === 0"
+          class="text-sm text-gray-700"
+        >
+          {{ t("No learner reports have been submitted for this question.") }}
+        </div>
+
+        <template v-else>
+          <article
+            v-for="report in feedbackReports"
+            :key="report.id"
+            class="rounded-lg border border-gray-20 bg-gray-10 p-3"
+          >
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <div class="font-semibold text-gray-90">
+                  {{ report.userName || t("Learner") }}
+                </div>
+                <div class="text-xs text-gray-600">
+                  {{ formatFeedbackReportTime(report.feedbackTime) }}
+                  <span v-if="report.exerciseTitle"> · {{ report.exerciseTitle }}</span>
+                </div>
+              </div>
+
+              <BaseButton
+                v-if="report.attemptUrl"
+                :label="t('View attempt')"
+                :to-url="report.attemptUrl"
+                icon="tracking"
+                only-icon
+                size="small"
+                type="primary-text"
+              />
+            </div>
+
+            <p class="mt-3 whitespace-pre-wrap text-sm text-gray-800">
+              {{ report.feedback }}
+            </p>
+          </article>
+        </template>
+      </div>
+    </details>
+
     <form
       v-if="!isLoading"
       :class="[
@@ -1834,6 +1902,10 @@ const totalScore = ref(0)
 const categoryOptions = ref([])
 const mediaOptions = ref([])
 const attachedQuestions = ref([])
+const feedbackReports = ref([])
+const feedbackReportsLoaded = ref(false)
+const isLoadingFeedbackReports = ref(false)
+const feedbackReportsError = ref("")
 const showAdvancedSettings = ref(false)
 const allowQuestionFeedback = ref(false)
 const imageZoomEnabled = ref(false)
@@ -2161,6 +2233,56 @@ const questionsRoute = computed(() => {
     query: getContextParams(),
   }
 })
+
+function formatFeedbackReportTime(value) {
+  if (!value) {
+    return ""
+  }
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return String(value)
+  }
+
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date)
+}
+
+async function loadFeedbackReports() {
+  if (!isEditMode.value || feedbackReportsLoaded.value || isLoadingFeedbackReports.value) {
+    return
+  }
+
+  isLoadingFeedbackReports.value = true
+  feedbackReportsError.value = ""
+
+  try {
+    const params = { ...getContextParams() }
+    if (!isGlobalQuestionMode.value && exerciseId.value > 0) {
+      params.exerciseId = exerciseId.value
+    }
+
+    const response = await exerciseService.getExerciseQuestionFeedbackReports(params, questionId.value)
+    feedbackReports.value = Array.isArray(response?.reports) ? response.reports : []
+    feedbackReportsLoaded.value = true
+  } catch (error) {
+    console.error("Error loading exercise question feedback reports", error)
+    feedbackReportsError.value =
+      error?.response?.data?.detail ||
+      error?.response?.data?.["hydra:description"] ||
+      t("Could not load learner reports.")
+  } finally {
+    isLoadingFeedbackReports.value = false
+  }
+}
+
+function onFeedbackReportsToggle(event) {
+  if (event?.currentTarget?.open) {
+    loadFeedbackReports()
+  }
+}
 
 function attachedQuestionEditRoute(question) {
   return {
@@ -3987,6 +4109,9 @@ watch(
     }
 
     attachedQuestions.value = []
+    feedbackReports.value = []
+    feedbackReportsLoaded.value = false
+    feedbackReportsError.value = ""
     await loadQuestionEditor()
   },
 )

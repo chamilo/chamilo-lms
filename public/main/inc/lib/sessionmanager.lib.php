@@ -8900,7 +8900,12 @@ class SessionManager
 
         // Extra fields
         $extra_field = new ExtraFieldModel('session');
-        $extra = $extra_field->addElements($form, $session ? $session->getId() : 0, ['image']);
+        $extra = $extra_field->addElements(
+            $form,
+            $session ? $session->getId() : 0,
+            ['image'],
+            adminPermissions: api_is_platform_admin()
+        );
 
         if ('true' === api_get_setting('session.enable_auto_reinscription')) {
             $form->addElement(

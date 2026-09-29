@@ -167,6 +167,7 @@ class CreateSessionWithUsersAndCoursesAction
             ->findBy(['course' => $course->getId(), 'session' => null])
         ;
 
+        $newCategories = [];
         foreach ($categories as $category) {
             $newCategory = new GradebookCategory();
             $newCategory
@@ -179,9 +180,9 @@ class CreateSessionWithUsersAndCoursesAction
                 ->setIsRequirement($category->getIsRequirement())
                 ->setCourse($course)
                 ->setSession($session)
-                ->setParent($category->getParent())
             ;
             $this->em->persist($newCategory);
+            $newCategories[$category->getId()] = $newCategory;
 
             foreach ($category->getLinks() as $link) {
                 $newLink = clone $link;
@@ -193,6 +194,14 @@ class CreateSessionWithUsersAndCoursesAction
                 $newEvaluation = clone $evaluation;
                 $newEvaluation->setCategory($newCategory);
                 $this->em->persist($newEvaluation);
+            }
+        }
+
+        // Attach each copy to the copy of its parent, not to the base course's category.
+        foreach ($categories as $category) {
+            $parentId = $category->getParent()?->getId();
+            if (null !== $parentId && isset($newCategories[$parentId])) {
+                $newCategories[$category->getId()]->setParent($newCategories[$parentId]);
             }
         }
     }

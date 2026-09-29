@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
@@ -69,6 +70,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         private readonly IllustrationRepository $illustrationRepository,
         private readonly CourseAccessResolver $courseAccessResolver,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly CourseFromRequestHelper $courseFromRequestHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
@@ -133,7 +135,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             throw new BadRequestHttpException('Forum does not match the requested thread.');
         }
 
-        $course = $this->getCourse($this->cidReqHelper);
+        $course = $this->resolveCourseForRequest($request);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $canManage = $this->isAllowedToEditHelper->check(coach: true);
@@ -296,6 +298,25 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             ?? $resourceNode->getResourceLinkByContext($course);
 
         return null !== $link;
+    }
+
+    private function resolveCourseForRequest(Request $request): Course
+    {
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        if ($course instanceof Course) {
+            return $course;
+        }
+
+        // This endpoint is served by a dedicated Symfony controller rather than an API Platform
+        // operation. Keep the listener-populated session as the primary source, but recover the
+        // explicitly validated request context when the session value is temporarily unavailable.
+        // The forum member check above still protects non-admin access through the contextual roles.
+        $course = $this->courseFromRequestHelper->resolveCourse($request);
+        if (!$course instanceof Course) {
+            throw new BadRequestHttpException('Missing course id.');
+        }
+
+        return $course;
     }
 
     private function getCurrentUser(): User

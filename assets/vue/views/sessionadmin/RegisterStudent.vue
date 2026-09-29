@@ -392,6 +392,7 @@ async function sendCourseTo(user) {
     duration: 0,
     showDescription: false,
     validityInDays: 0,
+    copyEvaluation: true,
     courseIds: [courseId],
     studentIds: [user.id],
     tutorIds: [],

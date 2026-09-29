@@ -15,6 +15,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Course;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -123,6 +124,8 @@ class MoodleImport
             'document'            => [],
             'Forum_Category'      => [],
             'forum'               => [],
+            'thread'              => [],
+            'post'                => [],
             'Link_Category'       => [],
             'link'                => [],
             'learnpath'           => [],
@@ -407,7 +410,25 @@ class MoodleImport
                         'forum_category' => $dstCatId,
                         'default_view'   => 'flat',
                     ]);
-                    if ($this->debug) { error_log("MBZ[$rid] forum -> forum id={$fid} category={$dstCatId} title=".json_encode($resources['forum'][$fid]->forum_title)); }
+
+                    $forumContent = $this->readForumDiscussions($moduleXml, $fid);
+                    foreach ($forumContent['threads'] as $threadId => $threadPayload) {
+                        $resources['thread'][$threadId] = $this->mkLegacyItem('thread', (int) $threadId, $threadPayload);
+                    }
+                    foreach ($forumContent['posts'] as $postId => $postPayload) {
+                        $resources['post'][$postId] = $this->mkLegacyItem('post', (int) $postId, $postPayload);
+                    }
+
+                    if ($this->debug) {
+                        error_log(
+                            "MBZ[$rid] forum -> forum id={$fid} category={$dstCatId} title="
+                            .json_encode($resources['forum'][$fid]->forum_title)
+                        );
+                        error_log(
+                            "MBZ[$rid] forum -> threads=".\count($forumContent['threads'])
+                            ." posts=".\count($forumContent['posts'])
+                        );
+                    }
 
                     if ($sectionId > 0 && isset($lpMap[$sectionId])) {
                         $lpMap[$sectionId]['items'][] = [
@@ -1114,6 +1135,103 @@ class MoodleImport
             'type' => ('' !== $type ? $type : 'general'),
             'category_id' => $catId,
             'category_title' => $catTitle,
+        ];
+    }
+
+    /**
+     * Read Moodle forum discussions/posts into the legacy buckets consumed by CourseRestorer.
+     *
+     * The discussion and post ids are preserved because Gradebook metadata stores the source
+     * thread iid and restore_gradebook() needs that source id to resolve the destination thread.
+     *
+     * @return array{threads: array<int, array<string, mixed>>, posts: array<int, array<string, mixed>>}
+     */
+    private function readForumDiscussions(string $xmlPath, int $forumResourceId): array
+    {
+        $doc = $this->loadXml($xmlPath);
+        $xp = new DOMXPath($doc);
+
+        $threads = [];
+        $posts = [];
+
+        foreach ($xp->query('//forum/discussions/discussion') as $discussion) {
+            if (!$discussion instanceof DOMElement) {
+                continue;
+            }
+
+            $threadId = (int) $discussion->getAttribute('id');
+            if ($threadId <= 0) {
+                continue;
+            }
+
+            $threadTitle = trim((string) ($discussion->getElementsByTagName('name')->item(0)?->nodeValue ?? ''));
+            if ('' === $threadTitle) {
+                $threadTitle = 'Discussion '.$threadId;
+            }
+
+            $threadTimestamp = (int) ($discussion->getElementsByTagName('timemodified')->item(0)?->nodeValue ?? 0);
+            if ($threadTimestamp <= 0) {
+                $threadTimestamp = time();
+            }
+
+            $threads[$threadId] = [
+                'title' => $threadTitle,
+                'thread_title' => $threadTitle,
+                'forum_id' => $forumResourceId,
+                'thread_date' => gmdate('Y-m-d H:i:s', $threadTimestamp),
+                'thread_sticky' => (int) ($discussion->getElementsByTagName('pinned')->item(0)?->nodeValue ?? 0),
+                'thread_title_qualify' => '',
+                'thread_qualify_max' => 0.0,
+                'thread_weight' => 0.0,
+                'thread_peer_qualify' => 0,
+            ];
+
+            foreach ($discussion->getElementsByTagName('post') as $post) {
+                if (!$post instanceof DOMElement) {
+                    continue;
+                }
+
+                $postId = (int) $post->getAttribute('id');
+                if ($postId <= 0) {
+                    continue;
+                }
+
+                $postTitle = trim((string) ($post->getElementsByTagName('subject')->item(0)?->nodeValue ?? ''));
+                if ('' === $postTitle) {
+                    $postTitle = 'Post '.$postId;
+                }
+
+                $postTimestamp = (int) ($post->getElementsByTagName('created')->item(0)?->nodeValue ?? 0);
+                if ($postTimestamp <= 0) {
+                    $postTimestamp = (int) ($post->getElementsByTagName('modified')->item(0)?->nodeValue ?? 0);
+                }
+                if ($postTimestamp <= 0) {
+                    $postTimestamp = $threadTimestamp;
+                }
+
+                $posts[$postId] = [
+                    'title' => $postTitle,
+                    'post_title' => $postTitle,
+                    'post_text' => (string) ($post->getElementsByTagName('message')->item(0)?->nodeValue ?? ''),
+                    'thread_id' => $threadId,
+                    'forum_id' => $forumResourceId,
+                    'post_notification' => 0,
+                    'visible' => 1,
+                    'status' => CForumPost::STATUS_VALIDATED,
+                    'post_parent_id' => (int) (
+                        $post->getElementsByTagName('parent')->item(0)?->nodeValue ?? 0
+                    ),
+                    'poster_id' => (int) (
+                        $post->getElementsByTagName('userid')->item(0)?->nodeValue ?? 0
+                    ),
+                    'post_date' => gmdate('Y-m-d H:i:s', $postTimestamp),
+                ];
+            }
+        }
+
+        return [
+            'threads' => $threads,
+            'posts' => $posts,
         ];
     }
 

@@ -9731,9 +9731,8 @@ class CourseRestorer
             // Surveys
             LINK_SURVEY => RESOURCE_SURVEY,
 
-            // Forum thread links require a thread/topic restore + mapping.
-            // If you don't restore topics/threads, keep it null to avoid broken links.
-            LINK_FORUM_THREAD => null,
+            // Forum thread and participation links both target the restored thread.
+            LINK_FORUM_THREAD, LINK_FORUM_PARTICIPATION => RESOURCE_FORUMTOPIC,
 
             // Not supported / not mapped
             LINK_DROPBOX => null,

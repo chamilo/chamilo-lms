@@ -478,11 +478,25 @@ Feature: Special case 1 — course/session creation
 
     # Learning Path "LP Test": add introduction, both exercises, final —
     # in that order — then a prerequisite on "final"
+    #
+    # Real CI failure, root-caused via a live DOM dump (not guessed): once
+    # the earlier install-blocking bugs were fixed, this scenario ran far
+    # enough for the first time to actually reach this step, and "I click
+    # the 'span.mdi-plus' element" never opens the LP-create form at all —
+    # confirmed live that the LP list page (a fresh, empty one included) has
+    # NO span.mdi-plus element anywhere on it. The real "add new learning
+    # path" control is a plain, labelled PrimeVue button
+    # (LpList.vue: `t("Create new learning path")`, which renders as
+    # "Créer un parcours" inside this French course) — matching the
+    # convention every other button click in this file already uses. This
+    # step was simply never correct; every previous CI run failed earlier
+    # (at the install stage), so it had never actually been exercised until
+    # now.
     Given I am on course "TESTINGCOURSEFR" homepage
     And I wait for the page to be loaded
     When I follow "Parcours d'apprentissage"
-    And I wait for the page to be loaded
-    And I click the "span.mdi-plus" element
+    And I wait for the page content to settle
+    And I press "Créer un parcours"
     And I wait for the page to be loaded
     # "lp-title" (the real id), NOT the visible label "Learning path name":
     # resolveField()'s label tier is the LAST resort and matches the RENDERED

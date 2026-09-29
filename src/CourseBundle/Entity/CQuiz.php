@@ -128,6 +128,9 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'hide_attempts_table', type: 'boolean', nullable: false, options: ['default' => 0])]
     protected bool $hideAttemptsTable;
 
+    #[ORM\Column(name: 'allow_question_feedback_reports', type: 'boolean', nullable: false, options: ['default' => 0])]
+    protected bool $allowQuestionFeedbackReports = false;
+
     #[ORM\Column(name: 'page_result_configuration', type: 'json')]
     protected array $pageResultConfiguration = [];
 
@@ -190,6 +193,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         $this->randomByCategory = 0;
         $this->displayCategoryName = 0;
         $this->hideAttemptsTable = false;
+        $this->allowQuestionFeedbackReports = false;
         $this->pageResultConfiguration = [];
         $this->attempts = new ArrayCollection();
         $this->hideAttemptsTable = false;
@@ -704,6 +708,18 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     public function setHideAttemptsTable(bool $hideAttemptsTable): self
     {
         $this->hideAttemptsTable = $hideAttemptsTable;
+
+        return $this;
+    }
+
+    public function isQuestionFeedbackReportsAllowed(): bool
+    {
+        return $this->allowQuestionFeedbackReports;
+    }
+
+    public function setAllowQuestionFeedbackReports(bool $allowQuestionFeedbackReports): self
+    {
+        $this->allowQuestionFeedbackReports = $allowQuestionFeedbackReports;
 
         return $this;
     }

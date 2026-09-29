@@ -636,6 +636,13 @@
               />
 
               <BaseCheckbox
+                id="exercise-allow-question-feedback-reports"
+                v-model="form.allowQuestionFeedbackReports"
+                :label="t('Allow learners to report issues in questions')"
+                name="allowQuestionFeedbackReports"
+              />
+
+              <BaseCheckbox
                 v-if="isEditMode"
                 id="exercise-update-title-in-learning-paths"
                 v-model="form.updateTitleInLearningPaths"
@@ -922,6 +929,7 @@ const form = reactive({
   showPreviousButton: true,
   preventBackwards: false,
   hideAttemptsTable: false,
+  allowQuestionFeedbackReports: false,
   autoLaunch: false,
   addToGradebook: false,
   gradebookCategoryId: null,
@@ -1183,6 +1191,7 @@ function fillForm(data) {
   form.showPreviousButton = true === data.showPreviousButton
   form.preventBackwards = true === data.preventBackwards
   form.hideAttemptsTable = true === data.hideAttemptsTable
+  form.allowQuestionFeedbackReports = true === data.allowQuestionFeedbackReports
   form.autoLaunch = true === data.autoLaunch
   form.addToGradebook = true === data.addToGradebook
   form.gradebookCategoryId = data.gradebookCategoryId ? Number(data.gradebookCategoryId) : null
@@ -1483,6 +1492,7 @@ function buildPayload() {
     showPreviousButton: form.showPreviousButton,
     preventBackwards: form.preventBackwards,
     hideAttemptsTable: form.hideAttemptsTable,
+    allowQuestionFeedbackReports: form.allowQuestionFeedbackReports,
     autoLaunch: form.autoLaunch,
     addToGradebook: form.addToGradebook,
     gradebookCategoryId: form.addToGradebook

@@ -4377,13 +4377,13 @@ msgid "Properties"
 msgstr "Propriétés"
 
 msgid "Configuration settings"
-msgstr "Paramètres de configuration de Chamilo"
+msgstr "Paramètres de configuration"
 
 msgid "The settings have been stored"
 msgstr "Les paramètres ont été enregistrés"
 
 msgid "Organization name"
-msgstr "Titre de l'institution"
+msgstr "Titre de l'organisation"
 
 msgid "The name of the organization (appears in the header on the right)"
 msgstr "Le nom de l'institution (apparaît dans l'en-tête du côté droit)"
@@ -4395,25 +4395,25 @@ msgid "The URL of the institutions (the link that appears in the header on the r
 msgstr "L'URL de l'institution (le lien apparaît dans l'en-tête du côté droit)"
 
 msgid "E-learning portal name"
-msgstr "Nom du portal Chamilo"
+msgstr "Nom du portail e-learning"
 
 msgid "The Name of your Chamilo Portal (appears in the header)"
 msgstr "Le nom de votre portail Chamilo (apparaît dans l'en-tête du côté gauche)"
 
 msgid "Portal Administrator: e-mail"
-msgstr "Administrateur de la plateforme : Courriel"
+msgstr "Administrateur : Courriel"
 
 msgid "The e-mail address of the Platform Administrator (appears in the footer on the left)"
 msgstr "L'adresse de courriel de l'administrateur de la plateforme (apparaît dans le pied de page du côté gauche)"
 
 msgid "Portal Administrator: Last Name"
-msgstr "Administrateur de la plateforme : nom de famille"
+msgstr "Administrateur : nom de famille"
 
 msgid "The Family Name of the Platform Administrator (appears in the footer on the left)"
 msgstr "Le nom de famille de l'administrateur de la plateforme (apparaît dans le pied de page du côté gauche)"
 
 msgid "Portal Administrator: First Name"
-msgstr "Administrateur de la plateforme : prénom"
+msgstr "Administrateur : prénom"
 
 msgid "The First Name of the Platform Administrator (appears in the footer on the left)"
 msgstr "Le prénom de l'administrateur de la plateforme (apparaît dans le pied de page, du côté gauche)"

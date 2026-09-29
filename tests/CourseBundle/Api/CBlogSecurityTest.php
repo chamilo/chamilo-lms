@@ -7,8 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CourseBundle\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CBlog;
 use Chamilo\CourseBundle\Entity\CBlogComment;
 use Chamilo\CourseBundle\Entity\CBlogPost;
@@ -106,6 +108,190 @@ final class CBlogSecurityTest extends AbstractApiTest
             'post' => $post,
             'comment' => $comment,
         ];
+    }
+
+    /**
+     * Builds one base-course blog and one blog in each of two sessions.
+     *
+     * @return array{
+     *     course: Course,
+     *     baseStudent: User,
+     *     sessionOneStudent: User,
+     *     sessionTwoStudent: User,
+     *     sessionOneCoach: User,
+     *     sessionOne: Session,
+     *     sessionTwo: Session,
+     *     baseBlog: CBlog,
+     *     sessionOneBlog: CBlog,
+     *     sessionTwoBlog: CBlog
+     * }
+     */
+    private function bootstrapBlogSessionScenario(string $suffix): array
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        /** @var SessionRepository $sessionRepo */
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+
+        $course = $this->createCourse('Blog Session Course '.$suffix);
+        $course->setVisibility(Course::REGISTERED);
+
+        $baseStudent = $this->createUser('blog_base_student_'.$suffix);
+        $sessionOneStudent = $this->createUser('blog_session_one_student_'.$suffix);
+        $sessionTwoStudent = $this->createUser('blog_session_two_student_'.$suffix);
+        $sessionOneCoach = $this->createUser('blog_session_one_coach_'.$suffix, '', '', 'ROLE_TEACHER');
+
+        $course->addUserAsStudent($baseStudent);
+        $courseRepo->update($course);
+
+        $sessionOne = $this->createSession('Blog Session One '.$suffix);
+        $sessionTwo = $this->createSession('Blog Session Two '.$suffix);
+
+        $sessionOne->addCourse($course);
+        $sessionTwo->addCourse($course);
+        $sessionRepo->update($sessionOne);
+        $sessionRepo->update($sessionTwo);
+
+        $sessionRepo->addUserInCourse(Session::STUDENT, $sessionOneStudent, $course, $sessionOne);
+        $sessionRepo->addUserInCourse(Session::STUDENT, $sessionTwoStudent, $course, $sessionTwo);
+        $sessionRepo->addUserInCourse(Session::COURSE_COACH, $sessionOneCoach, $course, $sessionOne);
+        $sessionRepo->update($sessionOne);
+        $sessionRepo->update($sessionTwo);
+
+        $em = $this->getEntityManager();
+        $admin = $this->getUser('admin');
+
+        $baseBlog = (new CBlog())
+            ->setTitle('Base Blog '.$suffix)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+        $sessionOneBlog = (new CBlog())
+            ->setTitle('Session One Blog '.$suffix)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course, $sessionOne)
+        ;
+        $sessionTwoBlog = (new CBlog())
+            ->setTitle('Session Two Blog '.$suffix)
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course, $sessionTwo)
+        ;
+
+        $em->persist($baseBlog);
+        $em->persist($sessionOneBlog);
+        $em->persist($sessionTwoBlog);
+        $em->flush();
+
+        return [
+            'course' => $course,
+            'baseStudent' => $baseStudent,
+            'sessionOneStudent' => $sessionOneStudent,
+            'sessionTwoStudent' => $sessionTwoStudent,
+            'sessionOneCoach' => $sessionOneCoach,
+            'sessionOne' => $sessionOne,
+            'sessionTwo' => $sessionTwo,
+            'baseBlog' => $baseBlog,
+            'sessionOneBlog' => $sessionOneBlog,
+            'sessionTwoBlog' => $sessionTwoBlog,
+        ];
+    }
+
+    // -------------------------------------------------------------------------
+    // Session-only blog context (#1777)
+    // -------------------------------------------------------------------------
+
+    public function testBaseCourseBlogCollectionExcludesSessionBlogs(): void
+    {
+        $ctx = $this->bootstrapBlogSessionScenario('base_collection');
+        $token = $this->getUserTokenFromUser($ctx['baseStudent']);
+
+        $response = $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_blogs?cid='.$ctx['course']->getId(),
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+        $content = $response->getContent(false);
+        $this->assertStringContainsString('Base Blog base_collection', $content);
+        $this->assertStringNotContainsString('Session One Blog base_collection', $content);
+        $this->assertStringNotContainsString('Session Two Blog base_collection', $content);
+    }
+
+    public function testSessionBlogCollectionDoesNotInheritBaseOrOtherSessionBlogs(): void
+    {
+        $ctx = $this->bootstrapBlogSessionScenario('session_collection');
+        $token = $this->getUserTokenFromUser($ctx['sessionOneStudent']);
+
+        $response = $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_blogs?cid='.$ctx['course']->getId().'&sid='.$ctx['sessionOne']->getId(),
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+        $content = $response->getContent(false);
+        $this->assertStringContainsString('Session One Blog session_collection', $content);
+        $this->assertStringNotContainsString('Base Blog session_collection', $content);
+        $this->assertStringNotContainsString('Session Two Blog session_collection', $content);
+    }
+
+    public function testBaseCourseBlogCannotBeOpenedFromSessionContext(): void
+    {
+        $ctx = $this->bootstrapBlogSessionScenario('session_item');
+        $token = $this->getUserTokenFromUser($ctx['sessionOneStudent']);
+
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_blogs/'.$ctx['baseBlog']->getIid()
+                .'?cid='.$ctx['course']->getId()
+                .'&sid='.$ctx['sessionOne']->getId(),
+        );
+
+        $this->assertResponseStatusCodeSame(404);
+    }
+
+    public function testSessionBlogCannotBeOpenedFromBaseCourseContext(): void
+    {
+        $ctx = $this->bootstrapBlogSessionScenario('base_item');
+        $token = $this->getUserTokenFromUser($ctx['baseStudent']);
+
+        $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/c_blogs/'.$ctx['sessionOneBlog']->getIid().'?cid='.$ctx['course']->getId(),
+        );
+
+        $this->assertResponseStatusCodeSame(404);
+    }
+
+    public function testSessionCoachCannotCreatePostInBaseCourseBlog(): void
+    {
+        $ctx = $this->bootstrapBlogSessionScenario('session_write');
+        $token = $this->getUserTokenFromUser($ctx['sessionOneCoach']);
+
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/c_blog_posts?cid='.$ctx['course']->getId().'&sid='.$ctx['sessionOne']->getId(),
+            [
+                'json' => [
+                    'title' => 'Session coach cross-context post',
+                    'fullText' => 'This must not be persisted in the base-course blog.',
+                    'blog' => '/api/c_blogs/'.$ctx['baseBlog']->getIid(),
+                ],
+            ]
+        );
+
+        // The context query extension hides the foreign blog IRI during
+        // API Platform denormalization, so the crafted relation is rejected as
+        // an invalid request before the processor can persist anything.
+        $this->assertResponseStatusCodeSame(400);
+
+        $count = $this->getEntityManager()->getRepository(CBlogPost::class)->count([
+            'blog' => $ctx['baseBlog']->getIid(),
+        ]);
+        $this->assertSame(0, $count);
     }
 
     // -------------------------------------------------------------------------

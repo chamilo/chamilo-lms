@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CGlossaryCategory;
+use Chamilo\CourseBundle\Repository\CGlossaryCategoryRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PDF;
@@ -28,6 +30,7 @@ final class ExportGlossaryToDocumentsAction
     public function __invoke(
         Request $request,
         CGlossaryRepository $repo,
+        CGlossaryCategoryRepository $categoryRepository,
         EntityManagerInterface $em,
         TranslatorInterface $translator,
     ): Response {
@@ -47,6 +50,7 @@ final class ExportGlossaryToDocumentsAction
         // only ever carries visibility) -- same shape as CreateCGlossaryAction.
         $cid = (int) ($data['cid'] ?? 0);
         $sid = isset($data['sid']) ? (int) $data['sid'] : 0;
+        $categoryId = (int) ($data['categoryId'] ?? 0);
 
         $course = null;
         $session = null;
@@ -62,7 +66,20 @@ final class ExportGlossaryToDocumentsAction
             throw new BadRequestHttpException('Course not found.');
         }
 
+        $category = null;
+        if ($categoryId > 0) {
+            $category = $categoryRepository->findInCourseContext($categoryId, $course, $session);
+            if (!$category instanceof CGlossaryCategory) {
+                throw new BadRequestHttpException('Glossary category not found in the current course/session context.');
+            }
+        }
+
         $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
+        if ($category instanceof CGlossaryCategory) {
+            $qb->andWhere('resource.category = :category')
+                ->setParameter('category', $category)
+            ;
+        }
 
         // The alias used by getResourcesByCourse() is "resource" (as seen in GetGlossaryCollectionController).
         $qb->orderBy('resource.title', 'ASC');
@@ -70,7 +87,7 @@ final class ExportGlossaryToDocumentsAction
         /** @var CGlossary[] $glossaryItems */
         $glossaryItems = $qb->getQuery()->getResult();
 
-        $pdfFilePath = $this->generatePdfFile($glossaryItems, $course, $session, $translator);
+        $pdfFilePath = $this->generatePdfFile($glossaryItems, $course, $session, $category, $translator);
 
         if (empty($pdfFilePath) || !file_exists($pdfFilePath)) {
             throw new BadRequestHttpException('The glossary PDF could not be generated.');
@@ -145,6 +162,7 @@ final class ExportGlossaryToDocumentsAction
         array $glossaryItems,
         Course $course,
         ?Session $session,
+        ?CGlossaryCategory $selectedCategory,
         TranslatorInterface $translator,
     ): string {
         $date = date('Y-m-d');
@@ -168,22 +186,39 @@ final class ExportGlossaryToDocumentsAction
         }
         $html .= '<div class="muted">'.htmlspecialchars($meta, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</div>';
 
-        $html .= '<table>';
-        $html .= '<tr>';
-        $html .= '<th>'.$translator->trans('Term').'</th>';
-        $html .= '<th>'.$translator->trans('Term definition').'</th>';
-        $html .= '</tr>';
-
-        foreach ($glossaryItems as $item) {
-            $term = htmlspecialchars((string) $item->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-            $def = htmlspecialchars((string) ($item->getDescription() ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-
-            $html .= '<tr>';
-            $html .= '<td>'.$term.'</td>';
-            $html .= '<td>'.$def.'</td>';
-            $html .= '</tr>';
+        if ($selectedCategory instanceof CGlossaryCategory) {
+            $html .= '<h2>'.htmlspecialchars($selectedCategory->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</h2>';
         }
-        $html .= '</table>';
+
+        $grouped = [];
+        foreach ($glossaryItems as $item) {
+            $categoryTitle = $item->getCategory()?->getTitle() ?? $translator->trans('No category');
+            $grouped[$categoryTitle][] = $item;
+        }
+        uksort($grouped, 'strnatcasecmp');
+
+        foreach ($grouped as $categoryTitle => $items) {
+            if (!$selectedCategory instanceof CGlossaryCategory) {
+                $html .= '<h2>'.htmlspecialchars($categoryTitle, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</h2>';
+            }
+
+            $html .= '<table>';
+            $html .= '<tr>';
+            $html .= '<th>'.$translator->trans('Term').'</th>';
+            $html .= '<th>'.$translator->trans('Term definition').'</th>';
+            $html .= '</tr>';
+
+            foreach ($items as $item) {
+                $term = htmlspecialchars((string) $item->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                $def = htmlspecialchars((string) ($item->getDescription() ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+                $html .= '<tr>';
+                $html .= '<td>'.$term.'</td>';
+                $html .= '<td>'.$def.'</td>';
+                $html .= '</tr>';
+            }
+            $html .= '</table>';
+        }
 
         return (new PDF())
             ->content_to_pdf(

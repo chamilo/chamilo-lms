@@ -66,10 +66,14 @@ class GlossaryExport extends ActivityExport
             }
         }
 
-        $entries   = [];
-        $seen      = [];
-        $nextId    = 1;
-        $userIds   = [];
+        $entries = [];
+        $categories = [];
+        $categoryIds = [];
+        $seen = [];
+        $nextEntryId = 1;
+        $nextCategoryId = 1;
+        $nextCategoryEntryId = 1;
+        $userIds = [];
 
         $norm = static function (string $s): string {
             $s = trim($s);
@@ -115,8 +119,9 @@ class GlossaryExport extends ActivityExport
                     $aliases[] = $lc;
                 }
 
+                $entryId = $nextEntryId++;
                 $entries[] = [
-                    'id'           => $nextId++,
+                    'id'           => $entryId,
                     'userid'       => $adminId,
                     'concept'      => $concept,
                     'definition'   => $definition,
@@ -124,6 +129,30 @@ class GlossaryExport extends ActivityExport
                     'timemodified' => time(),
                     'aliases'      => $aliases,
                 ];
+
+                $categoryName = isset($o->category) && \is_string($o->category)
+                    ? trim($o->category)
+                    : '';
+
+                if ('' !== $categoryName) {
+                    $categoryKey = $norm($categoryName);
+                    if (!isset($categoryIds[$categoryKey])) {
+                        $categoryId = $nextCategoryId++;
+                        $categoryIds[$categoryKey] = $categoryId;
+                        $categories[$categoryId] = [
+                            'id' => $categoryId,
+                            'name' => $categoryName,
+                            'usedynalink' => 1,
+                            'entries' => [],
+                        ];
+                    }
+
+                    $categoryId = $categoryIds[$categoryKey];
+                    $categories[$categoryId]['entries'][] = [
+                        'id' => $nextCategoryEntryId++,
+                        'entryid' => $entryId,
+                    ];
+                }
             }
         }
 
@@ -144,6 +173,7 @@ class GlossaryExport extends ActivityExport
             'sectionnumber'    => 0,
             'userid'           => $adminId,
             'entries'          => $entries,
+            'categories'       => array_values($categories),
             'users'            => array_map('intval', array_keys($userIds)),
             'files'            => [],
             'include_userinfo' => true,
@@ -227,7 +257,21 @@ class GlossaryExport extends ActivityExport
         $xml .= '    </entries>'.PHP_EOL;
 
         $xml .= '    <entriestags></entriestags>'.PHP_EOL;
-        $xml .= '    <categories></categories>'.PHP_EOL;
+        $xml .= '    <categories>'.PHP_EOL;
+        foreach ($glossaryData['categories'] ?? [] as $category) {
+            $xml .= '      <category id="'.$category['id'].'">'.PHP_EOL;
+            $xml .= '        <name>'.$esc((string) $category['name']).'</name>'.PHP_EOL;
+            $xml .= '        <usedynalink>'.(int) ($category['usedynalink'] ?? 1).'</usedynalink>'.PHP_EOL;
+            $xml .= '        <category_entries>'.PHP_EOL;
+            foreach ($category['entries'] ?? [] as $categoryEntry) {
+                $xml .= '          <category_entry id="'.$categoryEntry['id'].'">'.PHP_EOL;
+                $xml .= '            <entryid>'.$categoryEntry['entryid'].'</entryid>'.PHP_EOL;
+                $xml .= '          </category_entry>'.PHP_EOL;
+            }
+            $xml .= '        </category_entries>'.PHP_EOL;
+            $xml .= '      </category>'.PHP_EOL;
+        }
+        $xml .= '    </categories>'.PHP_EOL;
         $xml .= '  </glossary>'.PHP_EOL;
         $xml .= '</activity>';
 

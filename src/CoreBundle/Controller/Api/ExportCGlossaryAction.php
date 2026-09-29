@@ -8,6 +8,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CGlossaryCategory;
+use Chamilo\CourseBundle\Repository\CGlossaryCategoryRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\NotSupported;
@@ -47,6 +49,7 @@ readonly class ExportCGlossaryAction
     public function __invoke(
         Request $request,
         CGlossaryRepository $repo,
+        CGlossaryCategoryRepository $categoryRepository,
         EntityManager $em,
     ): Response {
         $format = (string) $request->request->get('format', '');
@@ -55,6 +58,7 @@ readonly class ExportCGlossaryAction
         // rejects that (FILTER_VALIDATE_INT has no FILTER_NULL_ON_FAILURE here),
         // so cast the raw value instead of using the strict accessor.
         $sid = (int) $request->request->get('sid', '0');
+        $categoryId = (int) $request->request->get('categoryId', '0');
 
         if (!\in_array($format, ['csv', 'xls', 'pdf'], true)) {
             throw new BadRequestHttpException('Invalid export format.');
@@ -74,13 +78,27 @@ readonly class ExportCGlossaryAction
             throw new BadRequestHttpException('Course not found.');
         }
 
+        $category = null;
+        if ($categoryId > 0) {
+            $category = $categoryRepository->findInCourseContext($categoryId, $course, $session);
+            if (!$category instanceof CGlossaryCategory) {
+                throw new BadRequestHttpException('Glossary category not found in the current course/session context.');
+            }
+        }
+
         $qb = $repo->getResourcesByCourse($course, $session);
+        if ($category instanceof CGlossaryCategory) {
+            $qb->andWhere('resource.category = :category')
+                ->setParameter('category', $category)
+            ;
+        }
         $glossaryItems = $qb->getQuery()->getResult();
 
         $exportFilePath = $this->generateExportFile(
             $glossaryItems,
             $format,
             $course,
+            $category,
         );
 
         $response = new BinaryFileResponse(new File($exportFilePath));
@@ -102,13 +120,14 @@ readonly class ExportCGlossaryAction
         array $glossaryItems,
         string $format,
         Course $course,
+        ?CGlossaryCategory $category,
     ): string {
         if ('pdf' === $format) {
-            return $this->generatePdfFile($glossaryItems, $course);
+            return $this->generatePdfFile($glossaryItems, $course, $category);
         }
 
         $list = [];
-        $list[] = ['term', 'definition'];
+        $list[] = ['term', 'definition', 'category'];
 
         $allowStrip = 'true' === $this->settingsManager->getSetting('glossary.allow_remove_tags_in_glossary_export');
 
@@ -123,7 +142,7 @@ readonly class ExportCGlossaryAction
                 $definition = htmlspecialchars_decode(strip_tags($definition), ENT_QUOTES);
             }
 
-            $list[] = [$item->getTitle(), $definition];
+            $list[] = [$item->getTitle(), $definition, $item->getCategory()?->getTitle() ?? ''];
         }
 
         return match ($format) {
@@ -142,8 +161,11 @@ readonly class ExportCGlossaryAction
         return Export::arrayToXls($glossaryItems, 'glossary_course_'.$course->getCode(), true);
     }
 
-    private function generatePdfFile(array $glossaryItems, Course $course): string
-    {
+    private function generatePdfFile(
+        array $glossaryItems,
+        Course $course,
+        ?CGlossaryCategory $selectedCategory,
+    ): string {
         $html = '<style>
             body { font-family: Arial, sans-serif; font-size: 12px; }
             h1 { font-size: 18px; margin-bottom: 6px; }
@@ -153,23 +175,40 @@ readonly class ExportCGlossaryAction
         </style>';
 
         $html .= '<h1>'.$this->translator->trans('Glossary').'</h1>';
-        $html .= '<table>';
-        $html .= '<tr>';
-        $html .= '<th>'.$this->translator->trans('Term').'</th>';
-        $html .= '<th>'.$this->translator->trans('Term definition').'</th>';
-        $html .= '</tr>';
+        if ($selectedCategory instanceof CGlossaryCategory) {
+            $html .= '<h2>'.htmlspecialchars($selectedCategory->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</h2>';
+        }
 
+        $grouped = [];
         foreach ($glossaryItems as $item) {
             if (!$item instanceof CGlossary) {
                 continue;
             }
 
-            $html .= '<tr>';
-            $html .= '<td>'.htmlspecialchars($item->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</td>';
-            $html .= '<td>'.htmlspecialchars((string) ($item->getDescription() ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</td>';
-            $html .= '</tr>';
+            $categoryTitle = $item->getCategory()?->getTitle() ?? $this->translator->trans('No category');
+            $grouped[$categoryTitle][] = $item;
         }
-        $html .= '</table>';
+        uksort($grouped, 'strnatcasecmp');
+
+        foreach ($grouped as $categoryTitle => $items) {
+            if (!$selectedCategory instanceof CGlossaryCategory) {
+                $html .= '<h2>'.htmlspecialchars($categoryTitle, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</h2>';
+            }
+
+            $html .= '<table>';
+            $html .= '<tr>';
+            $html .= '<th>'.$this->translator->trans('Term').'</th>';
+            $html .= '<th>'.$this->translator->trans('Term definition').'</th>';
+            $html .= '</tr>';
+
+            foreach ($items as $item) {
+                $html .= '<tr>';
+                $html .= '<td>'.htmlspecialchars($item->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</td>';
+                $html .= '<td>'.htmlspecialchars((string) ($item->getDescription() ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</td>';
+                $html .= '</tr>';
+            }
+            $html .= '</table>';
+        }
 
         return (new PDF())
             ->content_to_pdf(

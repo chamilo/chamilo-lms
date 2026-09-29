@@ -127,7 +127,7 @@ use UserManager;
         'username' => 'partial',
         'firstname' => 'partial',
         'lastname' => 'partial',
-        'email' => 'partial',
+        'email' => 'exact',
     ]
 )]
 #[ApiFilter(PartialSearchOrFilter::class, properties: ['username', 'firstname', 'lastname'])]

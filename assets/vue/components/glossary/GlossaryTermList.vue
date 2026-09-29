@@ -1,8 +1,16 @@
 <template>
-  <ul>
-    <li>
+  <div>
+    <section
+      v-for="group in groupedGlossaries"
+      :key="group.key"
+      class="mb-6"
+    >
+      <h2 class="mb-3 text-lg font-semibold text-gray-90">
+        {{ group.title }}
+      </h2>
+
       <BaseCard
-        v-for="term in glossaries"
+        v-for="term in group.items"
         :key="term.id"
         class="mb-4 bg-white"
         plain
@@ -33,6 +41,7 @@
                 :label="t('Edit')"
                 class="me-2"
                 icon="edit"
+                only-icon
                 size="small"
                 type="black"
                 @click="emit('edit', term)"
@@ -41,6 +50,7 @@
                 :label="t('Delete')"
                 class="me-2"
                 icon="delete"
+                only-icon
                 size="small"
                 type="danger"
                 @click="emit('delete', term)"
@@ -57,11 +67,12 @@
           v-html="sanitize(term.description)"
         ></div>
       </BaseCard>
-    </li>
-    <li v-if="!isLoading && glossaries.length === 0">
+    </section>
+
+    <p v-if="!isLoading && glossaries.length === 0">
       {{ t("There are no terms that match the search: {0}", [searchTerm]) }}
-    </li>
-  </ul>
+    </p>
+  </div>
 </template>
 
 <script setup>
@@ -70,7 +81,6 @@ import { useI18n } from "vue-i18n"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { useSecurityStore } from "../../store/securityStore"
-import { useRoute } from "vue-router"
 import { computed } from "vue"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { getCourseContext } from "../../utils/courseContext"
@@ -78,11 +88,10 @@ import DOMPurify from "dompurify"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()
-const route = useRoute()
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
-const { cid, sid, gid } = getCourseContext()
+const { sid } = getCourseContext()
 
 const props = defineProps({
   glossaries: {
@@ -105,6 +114,27 @@ const props = defineProps({
 
 const emit = defineEmits(["edit", "delete"])
 
+const groupedGlossaries = computed(() => {
+  const groups = new Map()
+
+  for (const term of props.glossaries) {
+    const categoryId = Number(term.category?.iid || term.category?.id || 0)
+    const key = categoryId > 0 ? `category-${categoryId}` : "uncategorized"
+    const title = categoryId > 0 ? term.category?.title || t("Category") : t("No category")
+
+    if (!groups.has(key)) {
+      groups.set(key, { key, title, categoryId, items: [] })
+    }
+    groups.get(key).items.push(term)
+  }
+
+  return [...groups.values()].sort((a, b) => {
+    if (a.categoryId === 0) return 1
+    if (b.categoryId === 0) return -1
+    return a.title.localeCompare(b.title)
+  })
+})
+
 const canEdit = (item) => {
   const sessionId = item.sessionId
   const isSessionDocument = sessionId && sessionId === sid
@@ -114,5 +144,4 @@ const canEdit = (item) => {
 }
 
 const sanitize = (html) => DOMPurify.sanitize(html ?? "", { ADD_ATTR: ["target", "rel"] })
-
 </script>

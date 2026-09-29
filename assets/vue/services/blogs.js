@@ -501,13 +501,19 @@ async function listCourseOrSessionUsers() {
     }
   }
 
-  if (cid) {
+  // Blogs are session-only resources. Inside a session, only users enrolled
+  // in the current session course belong in the member pool; base-course
+  // users must not be mixed in.
+  if (sid && cid) {
     const params = withCourseParams({
+      session: iri("sessions", sid),
       course: iri("courses", cid),
       itemsPerPage: 1000,
     })
-    const { items } = await baseService.getCollection(`/api/course_rel_users`, params)
-    await addUsers(items ?? [], "course")
+    const { items } = await baseService.getCollection(`/api/session_rel_course_rel_users`, params)
+    await addUsers(items ?? [], "session")
+
+    return Array.from(usersById.values()).sort((a, b) => a.name.localeCompare(b.name))
   }
 
   if (sid) {
@@ -517,6 +523,17 @@ async function listCourseOrSessionUsers() {
     })
     const { items } = await baseService.getCollection(`/api/session_rel_users`, params)
     await addUsers(items ?? [], "session")
+
+    return Array.from(usersById.values()).sort((a, b) => a.name.localeCompare(b.name))
+  }
+
+  if (cid) {
+    const params = withCourseParams({
+      course: iri("courses", cid),
+      itemsPerPage: 1000,
+    })
+    const { items } = await baseService.getCollection(`/api/course_rel_users`, params)
+    await addUsers(items ?? [], "course")
   }
 
   return Array.from(usersById.values()).sort((a, b) => a.name.localeCompare(b.name))

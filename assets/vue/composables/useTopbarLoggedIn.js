@@ -492,7 +492,7 @@ export function useTopbarLoggedIn(props) {
         items: [
           {
             label: t("My profile"),
-            url: router.resolve({ name: "AccountHome" }).href,
+            route: { name: "AccountHome" },
           },
         ],
       },

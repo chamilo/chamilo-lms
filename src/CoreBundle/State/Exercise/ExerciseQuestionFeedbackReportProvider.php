@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseQuestionFeedbackReport;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\QuizQuestionAttemptFeedback;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;

@@ -100,6 +100,14 @@ function showCareer() {
         $("#promotion_id").selectpicker("refresh");
     });
 }
+
+document.addEventListener("submit", function (event) {
+    if ("system_announcement" === event.target.getAttribute("id")) {
+        event.target.querySelectorAll("[type=submit]").forEach(function (button) {
+            button.disabled = true;
+        });
+    }
+});
 </script>';
 
 Display::display_header($tool_name);

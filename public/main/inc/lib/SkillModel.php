@@ -770,7 +770,8 @@ class SkillModel extends Model
                 INNER JOIN '.$this->table.' s
                 ON u.skill_id = s.id
                 WHERE
-                    user_id = '.$userId.' '.$sessionCondition.' '.$courseCondition;
+                    user_id = '.$userId.'
+                    AND u.status = '.SkillRelUser::STATUS_ACQUIRED.' '.$sessionCondition.' '.$courseCondition;
 
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
@@ -1315,7 +1316,8 @@ class SkillModel extends Model
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} su
                 ON (s.id = su.skill_id)
-                WHERE user_id = $user_id";
+                WHERE user_id = $user_id
+                AND su.status = ".SkillRelUser::STATUS_ACQUIRED;
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_row($result);
@@ -1352,7 +1354,9 @@ class SkillModel extends Model
                     ON (s.id = su.skill_id)
                     INNER JOIN {$this->table_user} u
                     ON u.id = su.user_id, (SELECT @rownum:=0) r
-                    WHERE 1=1 AND u.active <> ".USER_SOFT_DELETED." $where_condition
+                    WHERE 1=1
+                    AND su.status = ".SkillRelUser::STATUS_ACQUIRED."
+                    AND u.active <> ".USER_SOFT_DELETED." $where_condition
                     GROUP BY username
                     ORDER BY skills_acquired desc
                     LIMIT $start , $limit)  AS T1, (SELECT @rownum:=0) r";
@@ -1376,6 +1380,7 @@ class SkillModel extends Model
                     ON (s.id = su.skill_id)
                     INNER JOIN {$this->table_user} u
                     ON u.id = su.user_id
+                    WHERE su.status = ".SkillRelUser::STATUS_ACQUIRED."
                     GROUP BY username
                  ) as T1";
         $result = Database::query($sql);
@@ -1451,6 +1456,7 @@ class SkillModel extends Model
         $whereConditions = [
             'user_id = ? ' => (int) $userId,
             'AND skill_id = ? ' => (int) $skillId,
+            'AND status = ? ' => SkillRelUser::STATUS_ACQUIRED,
         ];
 
         if ($courseId > 0) {
@@ -1555,7 +1561,8 @@ class SkillModel extends Model
                 ON sru.user_id = user.id
                 INNER JOIN {$this->table}
                 ON sru.skill_id = skill.id
-                WHERE course.id = $courseId";
+                WHERE course.id = $courseId
+                AND sru.status = ".SkillRelUser::STATUS_ACQUIRED;
 
         $result = Database::query($sql);
 
@@ -1603,7 +1610,8 @@ class SkillModel extends Model
                 ON sru.user_id = user.id
                 INNER JOIN {$this->table}
                 ON sru.skill_id = skill.id
-                WHERE skill.id = $skillId ";
+                WHERE skill.id = $skillId
+                AND sru.status = ".SkillRelUser::STATUS_ACQUIRED;
 
         $result = Database::query($sql);
         while ($row = Database::fetch_assoc($result)) {
@@ -1813,6 +1821,10 @@ class SkillModel extends Model
         $skills = [];
 
         foreach ($achievedSkills as $achievedSkill) {
+            if (!$achievedSkill->isAcquired()) {
+                continue;
+            }
+
             $skill = $achievedSkill->getSkill();
 
             if (empty($level)) {
@@ -2480,25 +2492,49 @@ class SkillModel extends Model
 
         $skillUserRepo = $entityManager->getRepository(SkillRelUser::class);
 
-        $criteria = ['user' => $user, 'skill' => $skill];
-        $result = $skillUserRepo->findOneBy($criteria);
+        $activeAssignment = $skillUserRepo->findOneBy([
+            'user' => $user,
+            'skill' => $skill,
+            'status' => SkillRelUser::STATUS_ACQUIRED,
+        ]);
 
-        if (null !== $result) {
+        if ($activeAssignment instanceof SkillRelUser) {
             return null;
         }
 
         $skillLevelRepo = $entityManager->getRepository(Level::class);
 
-        $skillUser = (new SkillRelUser())
-            ->setUser($user)
-            ->setSkill($skill)
+        $skillUser = $skillUserRepo->findOneBy(
+            [
+                'user' => $user,
+                'skill' => $skill,
+                'course' => null,
+                'session' => null,
+                'status' => SkillRelUser::STATUS_REMOVED,
+            ],
+            ['id' => 'DESC']
+        );
+
+        if (!$skillUser instanceof SkillRelUser) {
+            $skillUser = (new SkillRelUser())
+                ->setUser($user)
+                ->setSkill($skill)
+            ;
+        }
+
+        $skillUser
+            ->setStatus(SkillRelUser::STATUS_ACQUIRED)
             ->setArgumentation($argumentation)
             ->setArgumentationAuthorId($authorId)
         ;
 
+        $skillUser->setLastStatusUpdateUserId($authorId);
+
         if ($showLevels && !empty($levelId)) {
             $level = $skillLevelRepo->find($levelId);
-            $skillUser->setAcquiredLevel($level);
+            if ($level instanceof Level) {
+                $skillUser->setAcquiredLevel($level);
+            }
         }
 
         $entityManager->persist($skillUser);

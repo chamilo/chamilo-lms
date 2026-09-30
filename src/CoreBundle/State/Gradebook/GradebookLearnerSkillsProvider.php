@@ -79,6 +79,7 @@ final readonly class GradebookLearnerSkillsProvider implements ProviderInterface
             'user' => $learner,
             'course' => $resolved->course,
             'session' => $resolved->session,
+            'status' => SkillRelUser::STATUS_ACQUIRED,
         ]);
         $issuedSkillIds = [];
         foreach ($issued as $issue) {

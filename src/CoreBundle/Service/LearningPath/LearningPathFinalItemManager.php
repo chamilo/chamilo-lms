@@ -407,6 +407,7 @@ HTML;
                 'user' => $user,
                 'course' => $course,
                 'session' => $session,
+                'status' => SkillRelUser::STATUS_ACQUIRED,
             ],
             ['id' => 'ASC'],
         );

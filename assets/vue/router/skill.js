@@ -3,6 +3,16 @@ export default {
   component: () => import("../components/layout/SimpleRouterViewLayout.vue"),
   children: [
     {
+      name: "SkillAssign",
+      path: "assign/:userId(\\d+)",
+      meta: {
+        requiresAuth: true,
+        showBreadcrumb: true,
+        breadcrumb: "Assign skill",
+      },
+      component: () => import("../views/skill/SkillAssignView.vue"),
+    },
+    {
       name: "SkillWheel",
       path: "wheel",
       meta: {

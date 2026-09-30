@@ -19,7 +19,10 @@ class UserSkillsController
         $userId = $request->attributes->get('id');
         $skillRelUserRepository = $entityManager->getRepository(SkillRelUser::class);
 
-        $skillRelUsers = $skillRelUserRepository->findBy(['user' => $userId]);
+        $skillRelUsers = $skillRelUserRepository->findBy([
+            'user' => $userId,
+            'status' => SkillRelUser::STATUS_ACQUIRED,
+        ]);
 
         $skillsData = [];
         foreach ($skillRelUsers as $skillRelUser) {

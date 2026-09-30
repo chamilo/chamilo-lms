@@ -62,6 +62,7 @@ $skillLevelRepo = $em->getRepository(Level::class);
 $userSkills = $skillUserRepo->findBy([
     'user' => $user,
     'skill' => $skill,
+    'status' => SkillRelUser::STATUS_ACQUIRED,
 ]);
 
 $currentUser = api_get_user_entity();
@@ -102,8 +103,13 @@ if ($downloadIssueId && $allowDownloadExport) {
     /** @var SkillRelUser|null $issue */
     $issue = $skillUserRepo->find($downloadIssueId);
 
-    // Ensure the issue belongs to the requested user+skill
-    if ($issue && $issue->getUser()->getId() === $user->getId() && $issue->getSkill()->getId() === $skill->getId()) {
+    // Ensure the issue belongs to the requested user+skill and is still acquired.
+    if (
+        $issue
+        && $issue->isAcquired()
+        && $issue->getUser()->getId() === $user->getId()
+        && $issue->getSkill()->getId() === $skill->getId()
+    ) {
         SkillModel::exportBadge($skill, $issue, $currentUrl);
         exit;
     }

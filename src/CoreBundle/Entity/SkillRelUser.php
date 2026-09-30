@@ -45,6 +45,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class SkillRelUser
 {
     use UserTrait;
+    public const int STATUS_REMOVED = 0;
+    public const int STATUS_ACQUIRED = 1;
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -67,6 +69,14 @@ class SkillRelUser
     #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'issuedSkills')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
+
+    #[Groups(['skill_rel_user:read'])]
+    #[ORM\Column(name: 'status', type: 'integer', options: ['default' => self::STATUS_ACQUIRED])]
+    protected int $status = self::STATUS_ACQUIRED;
+
+    #[Groups(['skill_rel_user:read'])]
+    #[ORM\Column(name: 'last_status_update_user_id', type: 'integer', nullable: true)]
+    protected ?int $lastStatusUpdateUserId = null;
 
     /**
      * @var Collection<int, SkillRelUserComment>
@@ -144,6 +154,40 @@ class SkillRelUser
         return $this;
     }
 
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function isAcquired(): bool
+    {
+        return self::STATUS_ACQUIRED === $this->status;
+    }
+
+    public function isManualAssignment(): bool
+    {
+        return null === $this->course && null === $this->session;
+    }
+
+    public function getLastStatusUpdateUserId(): ?int
+    {
+        return $this->lastStatusUpdateUserId;
+    }
+
+    public function setLastStatusUpdateUserId(?int $lastStatusUpdateUserId): self
+    {
+        $this->lastStatusUpdateUserId = $lastStatusUpdateUserId;
+
+        return $this;
+    }
+
     public function getAcquiredSkillAt(): DateTime
     {
         return $this->acquiredSkillAt;
@@ -161,7 +205,7 @@ class SkillRelUser
         return $this->acquiredLevel;
     }
 
-    public function setAcquiredLevel(Level $acquiredLevel): self
+    public function setAcquiredLevel(?Level $acquiredLevel): self
     {
         $this->acquiredLevel = $acquiredLevel;
 

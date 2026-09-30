@@ -57,6 +57,7 @@ final readonly class GradebookBadgesProvider implements ProviderInterface
             'user' => $learner,
             'course' => $resolved->course,
             'session' => $resolved->session,
+            'status' => SkillRelUser::STATUS_ACQUIRED,
         ]);
         $assertions = [];
         foreach ($issues as $issue) {

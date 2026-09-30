@@ -28,3 +28,22 @@ export async function findAll(searchParams) {
 export async function getSkillDetail(skillId) {
   return await baseService.get(`/skill/${skillId}/detail-data`)
 }
+
+/**
+ * @param {number} userId
+ * @param {number|null} skillId
+ * @returns {Promise<Object>}
+ */
+export async function getAssignmentContext(userId, skillId = null) {
+  const params = skillId ? { skillId } : {}
+  return await baseService.get(`/api/skill-assignment/${userId}`, params)
+}
+
+/**
+ * @param {number} userId
+ * @param {Object} payload
+ * @returns {Promise<Object>}
+ */
+export async function updateAssignment(userId, payload) {
+  return await baseService.post(`/api/skill-assignment/${userId}`, payload)
+}

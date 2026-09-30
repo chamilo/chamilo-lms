@@ -1423,7 +1423,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         $achievedSkills = $this->getAchievedSkills();
         foreach ($achievedSkills as $userSkill) {
-            if ($userSkill->getSkill()->getId() !== $skill->getId()) {
+            if (!$userSkill->isAcquired() || $userSkill->getSkill()->getId() !== $skill->getId()) {
                 continue;
             }
 

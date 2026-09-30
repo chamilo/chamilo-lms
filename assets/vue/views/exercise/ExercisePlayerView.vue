@@ -425,7 +425,16 @@
                 v-html="displayTranslatedHtml(question.description)"
               />
             </div>
-            <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <BaseButton
+                v-if="canReportQuestionFeedback(question)"
+                :label="t('Report a problem with this question')"
+                icon="alert-circle"
+                only-icon
+                size="small"
+                type="primary-text"
+                @click="openQuestionFeedbackReport(question)"
+              />
               <span class="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700">
                 {{ t("Score") }}: {{ question.score }}
               </span>
@@ -436,6 +445,13 @@
                 {{ t("Draft saved") }}
               </span>
             </div>
+          </div>
+
+          <div
+            v-if="questionFeedbackReportSuccessQuestionId === Number(question.id)"
+            class="mb-4 rounded-lg border border-success/30 bg-success/10 px-3 py-2 text-sm text-success"
+          >
+            {{ t("Your report was sent to the teacher.") }}
           </div>
 
           <div
@@ -1678,6 +1694,52 @@
     </template>
 
     <BaseDialog
+      v-model:is-visible="isQuestionFeedbackReportDialogVisible"
+      :show-close-button="false"
+      :title="t('Report a problem with this question')"
+      header-icon="alert-circle"
+    >
+      <div class="space-y-4">
+        <p class="text-sm text-gray-700">
+          {{ t("Describe the error or problem you found. Your report will be sent to the teacher.") }}
+        </p>
+
+        <BaseTextArea
+          id="exercise-question-feedback-report"
+          v-model="questionFeedbackReportText"
+          :label="t('Comment')"
+          name="question_feedback_report"
+          rows="5"
+        />
+
+        <div
+          v-if="questionFeedbackReportError"
+          class="rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+        >
+          {{ questionFeedbackReportError }}
+        </div>
+      </div>
+
+      <template #footer>
+        <div class="flex flex-wrap gap-2">
+          <BaseButton
+            :disabled="isSubmittingQuestionFeedbackReport"
+            :label="t('Cancel')"
+            type="plain"
+            @click="closeQuestionFeedbackReport"
+          />
+          <BaseButton
+            :disabled="isSubmittingQuestionFeedbackReport || !questionFeedbackReportText.trim()"
+            :label="isSubmittingQuestionFeedbackReport ? t('Sending') : t('Send')"
+            icon="check"
+            type="primary"
+            @click="submitQuestionFeedbackReport"
+          />
+        </div>
+      </template>
+    </BaseDialog>
+
+    <BaseDialog
       v-if="feedbackDialog"
       v-model:is-visible="isFeedbackDialogVisible"
       :show-close-button="false"
@@ -1870,6 +1932,7 @@ import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue"
+import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import AudioRecorder from "../../components/AudioRecorder.vue"
 import ExerciseFillBlanksRuntime from "./components/ExerciseFillBlanksRuntime.vue"
 import exerciseService from "../../services/exerciseService"
@@ -1902,6 +1965,12 @@ const attemptError = ref("")
 const isSavingAnswer = ref(false)
 const answerSaveError = ref("")
 const answerSaveMessage = ref("")
+const isQuestionFeedbackReportDialogVisible = ref(false)
+const questionFeedbackReportQuestion = ref(null)
+const questionFeedbackReportText = ref("")
+const questionFeedbackReportError = ref("")
+const questionFeedbackReportSuccessQuestionId = ref(0)
+const isSubmittingQuestionFeedbackReport = ref(false)
 const isFinishingAttempt = ref(false)
 const isPreviewFinished = ref(false)
 const finishError = ref("")
@@ -2802,6 +2871,77 @@ function getContextParams() {
   return params
 }
 
+function canReportQuestionFeedback(question) {
+  return (
+    true === settings.value.allowQuestionFeedbackReports &&
+    !canManage.value &&
+    Boolean(activeAttempt.value?.attemptId) &&
+    !isStructuralQuestion(question)
+  )
+}
+
+function openQuestionFeedbackReport(question) {
+  if (!canReportQuestionFeedback(question)) {
+    return
+  }
+
+  questionFeedbackReportQuestion.value = question
+  questionFeedbackReportText.value = ""
+  questionFeedbackReportError.value = ""
+  isQuestionFeedbackReportDialogVisible.value = true
+}
+
+function closeQuestionFeedbackReport() {
+  if (isSubmittingQuestionFeedbackReport.value) {
+    return
+  }
+
+  isQuestionFeedbackReportDialogVisible.value = false
+  questionFeedbackReportQuestion.value = null
+  questionFeedbackReportText.value = ""
+  questionFeedbackReportError.value = ""
+}
+
+async function submitQuestionFeedbackReport() {
+  const question = questionFeedbackReportQuestion.value
+  const feedback = questionFeedbackReportText.value.trim()
+  const exerciseId = getExerciseId()
+  const attemptId = Number(activeAttempt.value?.attemptId || 0)
+  const questionId = Number(question?.id || 0)
+
+  if (!exerciseId || !attemptId || !questionId || !feedback) {
+    questionFeedbackReportError.value = t("A comment is required.")
+    return
+  }
+
+  isSubmittingQuestionFeedbackReport.value = true
+  questionFeedbackReportError.value = ""
+
+  try {
+    const response = await exerciseService.reportExerciseQuestionFeedback(
+      { feedback },
+      getContextParams(),
+      exerciseId,
+      attemptId,
+      questionId,
+    )
+
+    if (!response?.success) {
+      throw new Error(response?.message || "Could not send the report")
+    }
+
+    questionFeedbackReportSuccessQuestionId.value = questionId
+    isQuestionFeedbackReportDialogVisible.value = false
+    questionFeedbackReportQuestion.value = null
+    questionFeedbackReportText.value = ""
+  } catch (error) {
+    console.error("Error reporting exercise question feedback", error)
+    questionFeedbackReportError.value = t("Could not send the report.")
+  } finally {
+    isSubmittingQuestionFeedbackReport.value = false
+  }
+}
+
 function isEmbeddedInLearnpath() {
   if (typeof window === "undefined") {
     return false
@@ -2944,6 +3084,11 @@ async function loadRuntime() {
     directFeedbackByQuestion.value = {}
     feedbackDialog.value = null
     isFeedbackDialogVisible.value = false
+    isQuestionFeedbackReportDialogVisible.value = false
+    questionFeedbackReportQuestion.value = null
+    questionFeedbackReportText.value = ""
+    questionFeedbackReportError.value = ""
+    questionFeedbackReportSuccessQuestionId.value = 0
     confirmedSavedAnswers.value = false
     syncCountdownFromAttempt(activeAttempt.value)
     syncRuntimeSettingsEffects()

@@ -27,6 +27,10 @@ parameters:
     # .env yet (a fresh clone running composer install) fails without this
     # default. Empty means "trust no proxy".
     env(TRUSTED_PROXIES): ''
+    # Keep the native PHP session handler by default. Set SESSION_STORED_IN_DB=true
+    # to store sessions in the shared php_session table instead.
+    env(SESSION_STORED_IN_DB): '0'
+    chamilo.session.stored_in_db: '%env(bool:SESSION_STORED_IN_DB)%'
     .container.dumper.inline_factories: true
     twig:
         form:
@@ -77,6 +81,33 @@ services:
     Symfony\Component\Security\Csrf\CsrfTokenManagerInterface:
         alias: security.csrf.token_manager
         public: true
+
+    chamilo.session.handler.database:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+        lazy: true
+        arguments:
+            $pdoOrDsn: 'mysql:host=%env(DATABASE_HOST)%;port=%env(DATABASE_PORT)%;dbname=%env(DATABASE_NAME)%;charset=utf8mb4'
+            $options:
+                db_table: 'php_session'
+                db_username: '%env(DATABASE_USER)%'
+                db_password: '%env(DATABASE_PASSWORD)%'
+
+    Chamilo\CoreBundle\Session\ConfigurableSessionHandler:
+        arguments:
+            $nativeHandler: '@session.handler.native'
+            $databaseHandler: '@chamilo.session.handler.database'
+            $storeInDatabase: '%chamilo.session.stored_in_db%'
+
+    # Doctrine's built-in schema listener normally receives session.handler.
+    # That is our configurable wrapper, so it cannot discover the PDO-backed
+    # session table. Point the listener at the real PDO handler so fresh
+    # installations created with doctrine:schema:create include php_session.
+    doctrine.orm.listeners.pdo_session_handler_schema_listener:
+        class: Symfony\Bridge\Doctrine\SchemaListener\PdoSessionHandlerSchemaListener
+        arguments:
+            $sessionHandler: '@chamilo.session.handler.database'
+        tags:
+            - { name: doctrine.event_listener, event: postGenerateSchema }
 
     Chamilo\CoreBundle\EventSubscriber\TranslatorFallbackLocaleSubscriber:
       arguments:

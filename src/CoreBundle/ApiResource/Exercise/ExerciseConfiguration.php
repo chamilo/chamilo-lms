@@ -200,6 +200,9 @@ final class ExerciseConfiguration
     public bool $hideAttemptsTable = false;
 
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public bool $allowQuestionFeedbackReports = false;
+
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
     public bool $autoLaunch = false;
 
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]

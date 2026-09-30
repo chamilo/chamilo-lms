@@ -600,6 +600,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'hideQuestionTitle' => true === $quiz->isHideQuestionTitle(),
             'showPreviousButton' => true === $quiz->isShowPreviousButton(),
             'hideAttemptsTable' => true === $quiz->isHideAttemptsTable(),
+            'allowQuestionFeedbackReports' => $quiz->isQuestionFeedbackReportsAllowed(),
             'questionSelectionType' => (int) ($quiz->getQuestionSelectionType() ?? 0),
             'pageResultConfiguration' => $quiz->getPageResultConfiguration(),
             'autoLaunch' => true === $quiz->isAutoLaunch(),

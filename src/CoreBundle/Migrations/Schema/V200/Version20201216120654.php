@@ -42,6 +42,7 @@ final class Version20201216120654 extends AbstractMigrationChamilo
     {
         $this->ensureCGlossaryCidIndex();
         $this->ensureResourceNodeSlugIndex();
+        $this->ensureGlossaryCategorySchema();
 
         $glossaryRepo = $this->container->get(CGlossaryRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
@@ -168,6 +169,45 @@ final class Version20201216120654 extends AbstractMigrationChamilo
             $this->getLogger()->warning('Could not create resource_node slug migration index; continuing safely.', [
                 'error' => $exception->getMessage(),
             ]);
+        }
+    }
+
+    /**
+     * The CGlossary mapping loaded below already has the category relation, whose schema is
+     * only added by V310\Version20260928132000. Create it now, with the same names, so the
+     * ORM can read c_glossary during a 1.11.x upgrade; the V310 migration then skips it.
+     */
+    private function ensureGlossaryCategorySchema(): void
+    {
+        $schemaManager = $this->connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist(['c_glossary_category'])) {
+            $this->connection->executeStatement(
+                'CREATE TABLE c_glossary_category (
+                    iid INT AUTO_INCREMENT NOT NULL,
+                    resource_node_id INT DEFAULT NULL,
+                    title LONGTEXT NOT NULL,
+                    UNIQUE INDEX UNIQ_GLOSSARY_CATEGORY_RESOURCE_NODE (resource_node_id),
+                    PRIMARY KEY(iid)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+            );
+            $this->connection->executeStatement(
+                'ALTER TABLE c_glossary_category ADD CONSTRAINT FK_GLOSSARY_CATEGORY_RESOURCE_NODE FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
+            );
+        }
+
+        $hasCategoryColumn = \in_array(
+            'category_id',
+            array_map(static fn ($column) => strtolower($column->getName()), $schemaManager->listTableColumns('c_glossary')),
+            true
+        );
+        if (!$hasCategoryColumn) {
+            $this->getLogger()->notice('Adding glossary category column to c_glossary before migrating it.');
+            $this->connection->executeStatement('ALTER TABLE c_glossary ADD category_id INT DEFAULT NULL');
+            $this->connection->executeStatement('CREATE INDEX IDX_GLOSSARY_CATEGORY ON c_glossary (category_id)');
+            $this->connection->executeStatement(
+                'ALTER TABLE c_glossary ADD CONSTRAINT FK_GLOSSARY_CATEGORY FOREIGN KEY (category_id) REFERENCES c_glossary_category (iid) ON DELETE SET NULL'
+            );
         }
     }
 

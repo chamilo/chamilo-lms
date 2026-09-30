@@ -87,6 +87,8 @@ class SkillRepository extends ServiceEntityRepository
             ->where(
                 $qb->expr()->eq('su.user', $user->getId())
             )
+            ->andWhere('su.status = :acquiredStatus')
+            ->setParameter('acquiredStatus', SkillRelUser::STATUS_ACQUIRED)
         ;
 
         if (null !== $course) {

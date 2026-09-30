@@ -565,10 +565,25 @@ switch ($action) {
             exit;
         }
 
+        $course = api_get_course_entity($courseId);
+        if (empty($course)) {
+            exit;
+        }
+
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = api_get_session_entity($sessionId);
+            if (empty($session)) {
+                exit;
+            }
+        }
+
         $skillUserRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\SkillRelUser::class);
         $criteria = [
             'user' => $user,
             'skill' => $skill,
+            'course' => $course,
+            'session' => $session,
         ];
         $skillRelUsers = $skillUserRepo->findBy($criteria);
         if (empty($skillRelUsers)) {
@@ -580,10 +595,8 @@ switch ($action) {
                 $skillUser->setAcquiredLevel($level);
             }*/
 
-            $course = api_get_course_entity($courseId);
             $skillUser->setCourse($course);
-            if (!empty($sessionId)) {
-                $session = api_get_session_entity($sessionId);
+            if (null !== $session) {
                 $skillUser->setSession($session);
             }
 

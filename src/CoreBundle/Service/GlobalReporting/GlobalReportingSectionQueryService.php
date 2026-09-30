@@ -1302,7 +1302,7 @@ final readonly class GlobalReportingSectionQueryService
                         ? 'mailto:'.(string) $user['email']
                         : null,
                     'loginAsUrl' => $loginAsUrl,
-                    'assignSkillUrl' => $canManageLearner ? '/main/skills/assign.php?user='.$userId : null,
+                    'assignSkillUrl' => $canManageLearner ? '/skill/assign/'.$userId : null,
                     'attendanceUrl' => $canManageLearner
                         ? '/main/my_space/myStudents.php?action=all_attendance&student='.$userId
                         : null,
@@ -1420,6 +1420,10 @@ final readonly class GlobalReportingSectionQueryService
             return [];
         }
 
+        $relationStatusCondition = $this->hasColumns('skill_rel_user', ['status'])
+            ? ' AND relation_table.status = 1'
+            : '';
+
         return $this->connection->fetchAllAssociative(
             'SELECT skill.id,
                     skill.title,
@@ -1429,7 +1433,7 @@ final readonly class GlobalReportingSectionQueryService
                INNER JOIN skill ON skill.id = relation_table.skill_id
               WHERE relation_table.user_id = :userId
                 AND skill.access_url_id = :accessUrlId
-                AND skill.status = 1
+                AND skill.status = 1'.$relationStatusCondition.'
            ORDER BY skill.title, skill.id',
             ['userId' => $userId, 'accessUrlId' => $context->accessUrlId],
             ['userId' => Types::INTEGER, 'accessUrlId' => Types::INTEGER],
@@ -2439,13 +2443,17 @@ final readonly class GlobalReportingSectionQueryService
         $acquiredSelect = null === $acquiredColumn
             ? 'NULL AS acquiredAt'
             : 'relation.'.$acquiredColumn.' AS acquiredAt';
+        $relationStatusCondition = $this->hasColumns('skill_rel_user', ['status'])
+            ? ' AND relation.status = 1'
+            : '';
+
         $rows = $this->connection->fetchAllAssociative(
             'SELECT skill.id, skill.title, '.$acquiredSelect.'
                FROM skill_rel_user relation
                INNER JOIN skill ON skill.id = relation.skill_id
               WHERE relation.user_id = :userId
                 AND relation.course_id = :courseId
-                AND COALESCE(relation.session_id, 0) = :sessionId
+                AND COALESCE(relation.session_id, 0) = :sessionId'.$relationStatusCondition.'
            ORDER BY skill.title ASC',
             [
                 'userId' => $userId,

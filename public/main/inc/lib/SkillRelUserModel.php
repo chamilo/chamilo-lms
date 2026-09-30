@@ -18,6 +18,8 @@ class SkillRelUserModel extends Model
         'validation_status',
         'argumentation',
         'argumentation_author_id',
+        'status',
+        'last_status_update_user_id',
     ];
 
     public function __construct()
@@ -38,7 +40,8 @@ class SkillRelUserModel extends Model
             $skill_list = implode("', '", $skill_list);
 
             $sql = "SELECT user_id FROM {$this->table}
-                    WHERE skill_id IN ('$skill_list') ";
+                    WHERE skill_id IN ('$skill_list')
+                    AND status = ".SkillRelUser::STATUS_ACQUIRED;
 
             $result = Database::query($sql);
             $users = Database::store_result($result, 'ASSOC');
@@ -66,7 +69,9 @@ class SkillRelUserModel extends Model
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
 
-        $sql = "SELECT skill_id FROM {$this->table} WHERE user_id = $userId";
+        $sql = "SELECT skill_id FROM {$this->table}
+                WHERE user_id = $userId
+                AND status = ".SkillRelUser::STATUS_ACQUIRED;
 
         if ($courseId > 0) {
             $sql .= " AND course_id = $courseId";
@@ -97,7 +102,10 @@ class SkillRelUserModel extends Model
      */
     public function getByUserAndSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE user_id = %d AND skill_id = %d ";
+        $sql = "SELECT * FROM {$this->table}
+                WHERE user_id = %d
+                AND skill_id = %d
+                AND status = ".SkillRelUser::STATUS_ACQUIRED.' ';
 
         if ($courseId > 0) {
             $sql .= "AND course_id = %d ".api_get_session_condition($sessionId, true);

@@ -108,38 +108,41 @@ Feature: Skills
     And wait for the page to be loaded
     Then I should not see an error
 
-  # assign.php's success/already-achieved messages are both set via
-  # $_SESSION['flash_message'] — a dead write nothing in the codebase ever
-  # reads. Fixed to use Container::addFlash() (same fix already applied to
-  # extra_fields.php), but per that fix's own documented finding, the
-  # Symfony flash bag does not reliably survive a legacy header()+exit
-  # redirect into the next request's #app[data-flashes] payload — so, same
-  # as extraFieldUser.feature, asserting the redirect destination itself
-  # (the durable signal) instead of the flash text.
+  # Manual skill assignment/removal is handled by the Vue + API Platform flow.
+  # Skill creation/editing is still legacy and remains covered above until that
+  # separate part of the Skills tool is migrated.
   Scenario: Assign skill11 to user 1
     Given I am a platform administrator
-    And I am on "main/skills/assign.php?user=1"
-    When I select "skill11" from "skill"
-    And wait very long for the page to be loaded
+    And I am on "/skill/assign/1"
+    And I wait for the page to be loaded
+    When I select "skill11" from "skillId"
     Then I fill in the following:
       | argumentation | argumentation |
-    And I press "save"
-    And wait for the page to be loaded
-    Then the URL should contain "myStudents.php"
-    And I should see "s11"
+    And I press "Save"
+    And I wait for the page content to settle
+    Then I should see "Skill acquired"
     And I should not see an error
 
-  Scenario: Reassign skill11 to user 1
+  Scenario: Remove manually assigned skill11 from user 1
     Given I am a platform administrator
-    And I am on "main/skills/assign.php?user=1"
+    And I am on "/skill/assign/1?skillId=3"
     And I wait for the page to be loaded
-    When I select "skill11" from "skill"
-    And wait very long for the page to be loaded
-    Then I fill in the following:
-      | argumentation | argumentation |
-    And I press "save"
-    And wait for the page to be loaded
-    Then the URL should contain "assign.php"
+    Then I should see "Skill acquired"
+    And I should see "Remove"
+    When I press "Remove"
+    And I press "Yes"
+    And I wait for the page content to settle
+    Then I should not see "Skill acquired"
+    And I should not see an error
+
+  Scenario: Reassign removed skill11 to user 1
+    Given I am a platform administrator
+    And I am on "/skill/assign/1?skillId=3"
+    And I wait for the page to be loaded
+    Then the field "argumentation" should have value "argumentation"
+    When I press "Save"
+    And I wait for the page content to settle
+    Then I should see "Skill acquired"
     And I should not see an error
 
   Scenario: View assigned skill skill11 to user 1

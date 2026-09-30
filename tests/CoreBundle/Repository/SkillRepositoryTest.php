@@ -202,8 +202,22 @@ class SkillRepositoryTest extends AbstractApiTest
         $em->persist($skillRelUser);
         $em->flush();
 
+        $this->assertTrue($skillRelUser->isAcquired());
+        $this->assertFalse($skillRelUser->isManualAssignment());
+
         $skill = $skillRepo->getLastByUser($user, $course, $session);
         $this->assertNotNull($skill);
+
+        $skillRelUser
+            ->setStatus(SkillRelUser::STATUS_REMOVED)
+            ->setLastStatusUpdateUserId((int) $user->getId())
+        ;
+        $em->flush();
+        $em->refresh($skillRelUser);
+
+        $this->assertFalse($skillRelUser->isAcquired());
+        $this->assertSame((int) $user->getId(), $skillRelUser->getLastStatusUpdateUserId());
+        $this->assertNull($skillRepo->getLastByUser($user, $course, $session));
     }
 
     public function testDeleteSkill(): void

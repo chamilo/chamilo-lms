@@ -124,6 +124,7 @@ if ($isStudent) {
                 LEFT JOIN $courseTable c
                 ON sru.course_id = c.id
                 WHERE sru.user_id = $selectedStudent
+                AND sru.status = 1
                 ";
 
         $result = Database::query($sql);

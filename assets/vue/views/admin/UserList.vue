@@ -395,7 +395,7 @@
             <BaseButton
               v-if="viewer.isPlatformAdmin"
               :label="t('Assign skill')"
-              :to-url="`/main/skills/assign.php?user=${data.id}`"
+              :route="{ name: 'SkillAssign', params: { userId: data.id } }"
               icon="shield-star"
               only-icon
               size="small"

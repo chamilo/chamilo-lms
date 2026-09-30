@@ -82,6 +82,7 @@ class IndexController extends BaseController
     #[Route('/p/{slug}', name: 'public_page')]
     #[Route('/skill/wheel', name: 'skill_wheel')]
     #[Route('/skill/ranking', name: 'skill_ranking')]
+    #[Route('/skill/assign/{userId}', name: 'skill_assign_vue_entrypoint', requirements: ['userId' => '\d+'], methods: ['GET'])]
     #[Route('/access-url/auth-sources', methods: ['GET'])]
     public function index(Request $request, PageHelper $pageHelper): Response
     {

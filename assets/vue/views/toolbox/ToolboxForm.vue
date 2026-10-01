@@ -47,16 +47,28 @@
       class="mx-auto flex w-full max-w-6xl flex-col gap-5"
       @submit.prevent="generate"
     >
+      <div
+        v-if="generationError"
+        class="rounded-lg border border-danger/30 bg-danger/10 p-4 text-danger"
+      >
+        {{ generationError }}
+      </div>
       <div class="rounded-2xl border border-gray-25 bg-white p-5">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div class="flex items-center gap-4">
-            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
+            <div
+              class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary"
+            >
               <BaseIcon icon="robot" />
             </div>
             <div>
               <h2 class="text-lg font-semibold text-gray-90">{{ t("Create an interactive learning app") }}</h2>
               <p class="mt-1 text-sm text-gray-50">
-                {{ t("Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking.") }}
+                {{
+                  t(
+                    "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking.",
+                  )
+                }}
               </p>
             </div>
           </div>
@@ -65,11 +77,19 @@
             <span class="inline-flex items-center gap-2 rounded-full border border-gray-25 bg-gray-15 px-3 py-1">
               <strong>1</strong> {{ t("Idea") }}
             </span>
-            <span class="mdi mdi-arrow-right rtl:rotate-180 text-gray-40" aria-hidden="true" />
-            <span class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-primary">
+            <span
+              class="mdi mdi-arrow-right rtl:rotate-180 text-gray-40"
+              aria-hidden="true"
+            />
+            <span
+              class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-primary"
+            >
               <strong>2</strong> {{ t("Generate") }}
             </span>
-            <span class="mdi mdi-arrow-right rtl:rotate-180 text-gray-40" aria-hidden="true" />
+            <span
+              class="mdi mdi-arrow-right rtl:rotate-180 text-gray-40"
+              aria-hidden="true"
+            />
             <span class="inline-flex items-center gap-2 rounded-full border border-gray-25 bg-gray-15 px-3 py-1">
               <strong>3</strong> {{ t("Preview") }}
             </span>
@@ -114,8 +134,15 @@
                 required
               />
 
+              <div
+                v-if="configuration.providers.length === 1"
+                class="rounded-xl border border-gray-20 bg-gray-10 p-3 text-sm text-gray-70"
+              >
+                <div class="text-xs text-gray-50">{{ t("AI provider") }}</div>
+                <div class="mt-1 font-semibold text-gray-90">{{ configuration.providers[0].label }}</div>
+              </div>
               <BaseSelect
-                v-if="configuration.providers.length > 1"
+                v-else-if="configuration.providers.length > 1"
                 id="toolbox-provider"
                 v-model="form.provider"
                 name="toolbox_provider"
@@ -154,21 +181,30 @@
           <h2 class="mb-4 text-lg font-semibold text-gray-90">{{ t("How it works") }}</h2>
           <div class="flex flex-col gap-4 text-sm text-gray-60">
             <div class="flex gap-3">
-              <BaseIcon class="mt-0.5 shrink-0 text-primary" icon="robot" />
+              <BaseIcon
+                class="mt-0.5 shrink-0 text-primary"
+                icon="robot"
+              />
               <div>
                 <strong class="block text-gray-90">{{ t("AI generation") }}</strong>
                 <span>{{ t("The app is generated from your instructions and stored as version 1.") }}</span>
               </div>
             </div>
             <div class="flex gap-3">
-              <BaseIcon class="mt-0.5 shrink-0 text-primary" icon="play-box-outline" />
+              <BaseIcon
+                class="mt-0.5 shrink-0 text-primary"
+                icon="play-box-outline"
+              />
               <div>
                 <strong class="block text-gray-90">SCORM 1.2</strong>
                 <span>{{ t("Learner progress, score and resume data are reported to Chamilo.") }}</span>
               </div>
             </div>
             <div class="flex gap-3">
-              <BaseIcon class="mt-0.5 shrink-0 text-primary" icon="restore" />
+              <BaseIcon
+                class="mt-0.5 shrink-0 text-primary"
+                icon="restore"
+              />
               <div>
                 <strong class="block text-gray-90">{{ t("Versions") }}</strong>
                 <span>{{ t("Future improvements create new versions without deleting previous ones.") }}</span>
@@ -178,7 +214,11 @@
 
           <div class="mt-5 rounded-xl border border-gray-25 bg-gray-15 p-4 text-xs leading-5 text-gray-60">
             <strong class="block text-gray-90">{{ t("Tip") }}</strong>
-            {{ t("Include the learning objective, rules, levels, scoring and what should happen when the learner finishes.") }}
+            {{
+              t(
+                "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes.",
+              )
+            }}
           </div>
         </aside>
       </div>
@@ -210,6 +250,7 @@ const { showSuccessNotification, showErrorNotification } = useNotification()
 const loading = ref(true)
 const loadError = ref(false)
 const generating = ref(false)
+const generationError = ref("")
 const formSubmitted = ref(false)
 const configuration = reactive({ enabled: false, canCreate: false, providers: [] })
 const form = reactive({ title: "", description: "", prompt: "", provider: "" })
@@ -255,6 +296,7 @@ async function generate() {
     return
   }
 
+  generationError.value = ""
   generating.value = true
   try {
     const item = await toolboxService.createItem(context.value, {
@@ -270,10 +312,24 @@ async function generate() {
       query: route.query,
     })
   } catch (error) {
+    generationError.value = extractGenerationError(error)
     showErrorNotification(error)
   } finally {
     generating.value = false
   }
+}
+
+function extractGenerationError(error) {
+  const data = error?.response?.data
+
+  return (
+    data?.["hydra:description"] ||
+    data?.detail ||
+    data?.message ||
+    (typeof data?.error === "string" ? data.error : "") ||
+    error?.message ||
+    t("An error occurred")
+  )
 }
 
 function cancel() {

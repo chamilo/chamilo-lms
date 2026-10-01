@@ -35,6 +35,7 @@ use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CToolbox;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
@@ -352,7 +353,12 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         if (isset($runtime->scorm['debug'])) {
             $runtime->scorm['debug'] = true === $runtime->scorm['debug'] && $canEdit;
         }
-        if ($runtime->isToolboxContent && '' !== $runtime->contentUrl && true === ($runtime->scorm['enabled'] ?? false)) {
+        $currentItemIsToolbox = $currentItem instanceof CLpItem
+            && 'toolbox' === strtolower(trim($currentItem->getItemType()));
+        if (($runtime->isToolboxContent || $currentItemIsToolbox)
+            && '' !== $runtime->contentUrl
+            && true === ($runtime->scorm['enabled'] ?? false)
+        ) {
             $encodedState = base64_encode((string) json_encode(
                 $runtime->scorm['values'] ?? [],
                 JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
@@ -833,6 +839,47 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             unset($documentParams['type']);
 
             return $this->resourceNodeRepository->getResourceFileUrl($document->getResourceNode(), $documentParams);
+        }
+
+        if ('toolbox' === $type) {
+            if (!$itemView instanceof CLpItemView) {
+                return '';
+            }
+
+            $toolbox = $this->findContextResource(CToolbox::class, $resourceId, $course, $session, $group);
+            if (!$toolbox instanceof CToolbox) {
+                return '';
+            }
+
+            $toolboxVersion = $toolbox->getCurrentVersionEntity();
+            $toolboxLearningPath = $toolboxVersion?->getLearningPath();
+            if (!$toolboxLearningPath instanceof CLp) {
+                return '';
+            }
+
+            $toolboxItem = $this->lpItemRepository->createQueryBuilder('item')
+                ->andWhere('item.lp = :lpId')
+                ->andWhere('item.itemType = :itemType')
+                ->setParameter('lpId', (int) $toolboxLearningPath->getIid())
+                ->setParameter('itemType', 'sco')
+                ->orderBy('item.displayOrder', 'ASC')
+                ->addOrderBy('item.iid', 'ASC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+            if (!$toolboxItem instanceof CLpItem) {
+                return '';
+            }
+
+            return $this->scormRuntimeManager->buildLaunchUrl(
+                $toolboxLearningPath,
+                $toolboxItem,
+                $course,
+                $session,
+                $group,
+                $params,
+            );
         }
 
         if ('quiz' === $type) {

@@ -74,7 +74,7 @@ final readonly class LearningPathScormCommitProcessor implements ProcessorInterf
             throw new AccessDeniedHttpException('The SCORM item is not available.');
         }
         if (!($runtime->scorm['enabled'] ?? false)) {
-            throw new BadRequestHttpException('The current item is not an active SCORM SCO.');
+            throw new BadRequestHttpException('The current item does not support SCORM-compatible tracking.');
         }
 
         $course = $this->cidReqHelper->requireDoctrineCourseEntity();
@@ -83,14 +83,14 @@ final readonly class LearningPathScormCommitProcessor implements ProcessorInterf
         $item = $this->lpItemRepository->find($itemId);
         $user = $this->security->getUser();
 
-        if (!$lp instanceof CLp || !$this->runtimeManager->isScormLearningPath($lp)) {
-            throw new NotFoundHttpException('SCORM learning path not found.');
+        if (!$lp instanceof CLp) {
+            throw new NotFoundHttpException('Learning path not found.');
         }
         if (!$item instanceof CLpItem
             || (int) $item->getLp()->getIid() !== $lpId
-            || !$this->runtimeManager->isScormItem($item)
+            || !$this->runtimeManager->supportsRuntimeItem($lp, $item)
         ) {
-            throw new NotFoundHttpException('SCORM item not found.');
+            throw new NotFoundHttpException('SCORM-compatible item not found.');
         }
         if (!$user instanceof User) {
             throw new AccessDeniedHttpException('Authentication is required.');

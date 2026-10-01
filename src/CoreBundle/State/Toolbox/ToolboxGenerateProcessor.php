@@ -25,6 +25,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use const PHP_SESSION_ACTIVE;
+
 /** @implements ProcessorInterface<ToolboxGenerateInput, JsonResponse> */
 final readonly class ToolboxGenerateProcessor implements ProcessorInterface
 {
@@ -71,6 +73,13 @@ final readonly class ToolboxGenerateProcessor implements ProcessorInterface
         $user = $this->security->getUser();
         if (!$user instanceof User) {
             throw new AccessDeniedHttpException('Authentication is required.');
+        }
+
+        // AI generation and SCORM packaging can be slow. The course/session context and permissions
+        // are already resolved above, so release the PHP session lock before external/long-running work.
+        // This keeps heartbeat and other concurrent requests from the same browser responsive.
+        if (PHP_SESSION_ACTIVE === session_status()) {
+            session_write_close();
         }
 
         try {

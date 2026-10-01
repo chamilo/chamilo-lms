@@ -179,6 +179,13 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
                 return 'Error: '.$msg;
             }
 
+            $completionIssue = $this->getTextCompletionIssue($data, $resolved['max_tokens']);
+            if (null !== $completionIssue) {
+                error_log('[AI][Grok][chat] '.$completionIssue);
+
+                return 'Error: '.$completionIssue;
+            }
+
             $generated = $this->extractTextContent($data);
             if (null === $generated || '' === trim($generated)) {
                 error_log('[AI][Grok][chat] Empty content returned.');
@@ -1176,6 +1183,34 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         $s = implode(' | ', $parts);
 
         return mb_substr($s, 0, $maxChars);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function getTextCompletionIssue(array $data, int $maxTokens): ?string
+    {
+        $finishReason = strtolower(trim((string) ($data['choices'][0]['finish_reason'] ?? '')));
+        $status = strtolower(trim((string) ($data['status'] ?? '')));
+        $incompleteReason = strtolower(trim((string) ($data['incomplete_details']['reason'] ?? '')));
+
+        $tokenLimited = \in_array($finishReason, ['length', 'max_tokens', 'max_output_tokens'], true)
+            || str_contains($incompleteReason, 'max_output')
+            || str_contains($incompleteReason, 'max_token');
+        if ($tokenLimited) {
+            return \sprintf(
+                'Grok stopped because the text response reached the request output limit (%d tokens).',
+                $maxTokens,
+            );
+        }
+
+        if ('incomplete' === $status) {
+            return '' !== $incompleteReason
+                ? 'Grok returned an incomplete text response: '.$incompleteReason.'.'
+                : 'Grok returned an incomplete text response.';
+        }
+
+        return null;
     }
 
     /**

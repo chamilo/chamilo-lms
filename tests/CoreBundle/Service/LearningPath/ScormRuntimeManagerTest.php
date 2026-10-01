@@ -25,6 +25,28 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ScormRuntimeManagerTest extends TestCase
 {
+    public function testToolboxItemUsesScorm12CompatibleRuntimeInRegularLearningPath(): void
+    {
+        $manager = new ScormRuntimeManager(
+            $this->createMock(EntityManagerInterface::class),
+            $this->createMock(AssetRepository::class),
+            new ScormManifestParser(),
+            new ArticulateRiseSuspendDataDecoder(),
+            $this->createMock(SettingsManager::class),
+            $this->createMock(UrlGeneratorInterface::class),
+            $this->createMock(ExtraFieldRepository::class),
+            $this->createMock(ExtraFieldValuesRepository::class),
+        );
+        $lp = (new CLp())->setLpType(CLp::LP_TYPE);
+        $toolboxItem = (new CLpItem())->setItemType('toolbox');
+        $documentItem = (new CLpItem())->setItemType('document');
+
+        self::assertFalse($manager->isScormLearningPath($lp));
+        self::assertTrue($manager->isToolboxRuntimeItem($toolboxItem));
+        self::assertTrue($manager->supportsRuntimeItem($lp, $toolboxItem));
+        self::assertFalse($manager->supportsRuntimeItem($lp, $documentItem));
+    }
+
     public function testScorm12TerminateKeepsIncompleteStatusWhenCompleteOnLeaveIsDisabled(): void
     {
         $itemView = (new CLpItemView())->setStatus('incomplete');
@@ -127,6 +149,57 @@ final class ScormRuntimeManagerTest extends TestCase
         self::assertSame('incomplete', $itemView->getStatus());
     }
 
+    public function testToolboxTerminateKeepsIncompleteStatusWhenCompleteOnLeaveIsEnabled(): void
+    {
+        $itemView = (new CLpItemView())->setStatus('incomplete');
+
+        $this->applyScorm12Values(
+            $itemView,
+            [
+                'cmi.core.lesson_status' => 'incomplete',
+                'cmi.core.score.raw' => '40',
+                'cmi.core.lesson_location' => '1',
+                'cmi.suspend_data' => '{"answers":["Manzana","Casa",null,null,null],"finished":false}',
+            ],
+            ['cmi.core.session_time'],
+            true,
+            'terminate',
+            true,
+            '',
+            'toolbox',
+        );
+
+        self::assertSame('incomplete', $itemView->getStatus());
+        self::assertSame(40.0, $itemView->getScore());
+        self::assertSame('1', $itemView->getLessonLocation());
+        self::assertSame(
+            '{"answers":["Manzana","Casa",null,null,null],"finished":false}',
+            $itemView->getSuspendData(),
+        );
+    }
+
+    public function testToolboxInternalScormTerminateKeepsIncompleteStatusWhenCompleteOnLeaveIsEnabled(): void
+    {
+        $itemView = (new CLpItemView())->setStatus('incomplete');
+
+        $this->applyScorm12Values(
+            $itemView,
+            [
+                'cmi.core.lesson_status' => 'incomplete',
+                'cmi.core.score.raw' => '40',
+                'cmi.core.lesson_location' => '1',
+                'cmi.suspend_data' => '{"answers":["Manzana","Casa",null,null,null],"finished":false}',
+            ],
+            ['cmi.core.session_time'],
+            true,
+            'terminate',
+            true,
+            'Toolbox',
+        );
+
+        self::assertSame('incomplete', $itemView->getStatus());
+    }
+
     public function testScorm12ExplicitCompletedStatusStillCompletes(): void
     {
         $itemView = (new CLpItemView())->setStatus('incomplete');
@@ -174,6 +247,7 @@ final class ScormRuntimeManagerTest extends TestCase
         string $reason,
         bool $completeOnLeaveWhenIncomplete,
         string $contentMaker = '',
+        string $itemType = '',
     ): void {
         $settingsManager = $this->createMock(SettingsManager::class);
         $settingsManager
@@ -197,7 +271,7 @@ final class ScormRuntimeManagerTest extends TestCase
         $method->invoke(
             $manager,
             (new CLp())->setContentMaker($contentMaker),
-            new CLpItem(),
+            (new CLpItem())->setItemType($itemType),
             $itemView,
             $user,
             ScormRuntimeManager::VERSION_12,

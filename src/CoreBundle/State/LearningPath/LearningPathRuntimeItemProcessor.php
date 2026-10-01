@@ -31,7 +31,7 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
 {
     use LearningPathStateHelperTrait;
 
-    private const array EXTERNALLY_COMPLETED_TYPES = ['quiz', 'hotpotatoes', 'sco', 'au', 'survey'];
+    private const array EXTERNALLY_COMPLETED_TYPES = ['quiz', 'hotpotatoes', 'sco', 'au', 'survey', 'toolbox'];
 
     public function __construct(
         private EntityManagerInterface $entityManager,

@@ -93,6 +93,9 @@ final class LearningPathBuilder
     #[Groups(['learning_path_builder:read'])]
     public bool $aiQuickTestEnabled = false;
 
+    #[Groups(['learning_path_builder:read'])]
+    public bool $toolboxEnabled = false;
+
     /**
      * @var array<int, array{label: string, value: string}>
      */

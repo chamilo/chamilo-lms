@@ -392,7 +392,7 @@
             ref="contentFrame"
             :src="activeContentUrl"
             :title="currentItem?.title || runtime.title"
-            :sandbox="runtime.isToolboxContent ? toolboxSandbox : undefined"
+            :sandbox="isToolboxContent || isToolboxItem ? toolboxSandbox : undefined"
             allowfullscreen
             class="lp-runtime-iframe"
             @load="handleIframeLoad"
@@ -581,6 +581,7 @@ const lpId = computed(() => Number(route.params.lpId || 0))
 const hasCStudioEditorContext = computed(() => String(route.query.teachdoc || "").toLowerCase() === "edit")
 const isCStudioContent = computed(() => Boolean(runtime.value?.isCStudioContent) || hasCStudioEditorContext.value)
 const isToolboxContent = computed(() => Boolean(runtime.value?.isToolboxContent))
+const isToolboxItem = computed(() => String(currentItem.value?.itemType || "").toLowerCase() === "toolbox")
 const isCStudioPreview = computed(() => {
   const previewValue = String(route.query.cstudio_preview || "").toLowerCase()
 
@@ -1120,7 +1121,7 @@ async function waitForToolboxScormCommits() {
     const queue = toolboxCommitQueue
     try {
       await queue
-    } catch (_) {
+    } catch {
       // The commit failure is already logged by queueToolboxScormCommit().
     }
 
@@ -1169,9 +1170,11 @@ function installScormRuntime(data, { forceRecreate = false } = {}) {
   const itemId = Number(data?.currentItemId || 0)
   const itemViewId = Number(config.itemViewId || 0)
   const version = String(config.version || "")
+  const itemType = String(config.itemType || "").toLowerCase()
+  const toolboxBridgeOwnsRuntime = Boolean(data?.isToolboxContent) || itemType === "toolbox"
   const key = config.enabled && itemId > 0 && itemViewId > 0 ? `${lpId.value}:${itemId}:${itemViewId}:${version}` : ""
 
-  if (!key) {
+  if (!key || toolboxBridgeOwnsRuntime) {
     clearScormRuntime()
     return
   }
@@ -1815,7 +1818,7 @@ async function handleRuntimeMessage(event) {
   }
 
   const data = event?.data
-  if (runtime.value?.isToolboxContent && data?.type === "chamilo-toolbox-scorm-commit") {
+  if ((isToolboxContent.value || isToolboxItem.value) && data?.type === "chamilo-toolbox-scorm-commit") {
     const values = data?.values
     const changedKeys = data?.changedKeys
     const config = runtime.value?.scorm || {}
@@ -1855,7 +1858,7 @@ async function handleRuntimeMessage(event) {
 
     try {
       await queueToolboxScormCommit(itemId, payload)
-    } catch (_) {
+    } catch {
       // The commit failure is already logged by queueToolboxScormCommit().
     }
 

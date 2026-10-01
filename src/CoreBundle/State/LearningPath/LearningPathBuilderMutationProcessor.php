@@ -42,6 +42,7 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CToolbox;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use DateTime;
@@ -490,6 +491,10 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
                 && null !== $resourceNode
                 && $resourceNode->hasEditableTextContent()
             );
+        }
+
+        if ($resource instanceof CToolbox) {
+            $item->setMaxScore(100.0);
         }
 
         if ($resource instanceof CQuiz) {
@@ -1050,6 +1055,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             'forum' => CForum::class,
             'thread' => CForumThread::class,
             'survey' => CSurvey::class,
+            'toolbox' => CToolbox::class,
             default => throw new BadRequestHttpException('Unsupported learning path resource type.'),
         };
 
@@ -1058,8 +1064,23 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             throw new NotFoundHttpException('Learning path resource not found.');
         }
 
-        if (!$this->getContextResourceLink($resource, $course, $session, $group) instanceof ResourceLink) {
+        $resourceLink = $this->getContextResourceLink($resource, $course, $session, $group);
+        if (!$resourceLink instanceof ResourceLink) {
             throw new AccessDeniedHttpException('The resource is not linked to the current context.');
+        }
+
+        if ($resource instanceof CToolbox) {
+            if (!$this->settingEnabled('ai_helpers.enable_ai_helpers') || !$this->settingEnabled('ai_helpers.toolbox')) {
+                throw new AccessDeniedHttpException('Toolbox is disabled.');
+            }
+
+            $version = $resource->getCurrentVersionEntity();
+            if (ResourceLink::VISIBILITY_PUBLISHED !== $resourceLink->getVisibility()) {
+                throw new BadRequestHttpException('Publish the Toolbox application before adding it to a learning path.');
+            }
+            if (null === $version || !$version->hasGeneratedSource() || !$version->getLearningPath() instanceof CLp) {
+                throw new BadRequestHttpException('Generate the Toolbox application before adding it to a learning path.');
+            }
         }
 
         if ($resource instanceof CStudentPublication && null !== $resource->getPublicationParent()) {
@@ -1076,7 +1097,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         }
 
         return match ($resourceType) {
-            'document', 'video', 'quiz', 'link', 'student_publication', 'forum', 'thread', 'survey' => $resourceType,
+            'document', 'video', 'quiz', 'link', 'student_publication', 'forum', 'thread', 'survey', 'toolbox' => $resourceType,
             default => throw new BadRequestHttpException('Unsupported learning path item type.'),
         };
     }
@@ -1090,7 +1111,8 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             $resource instanceof CStudentPublication,
             $resource instanceof CForum,
             $resource instanceof CForumThread,
-            $resource instanceof CSurvey => $resource->getTitle(),
+            $resource instanceof CSurvey,
+            $resource instanceof CToolbox => $resource->getTitle(),
             default => throw new BadRequestHttpException('The selected resource has no title.'),
         };
 

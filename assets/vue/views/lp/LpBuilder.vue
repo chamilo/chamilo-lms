@@ -50,6 +50,7 @@ const supportedToolKeys = new Set([
   "forums",
   "sections",
   "surveys",
+  "toolbox",
   "certificate",
 ])
 const requestedTool = String(route.query.lpTool || "")
@@ -128,6 +129,7 @@ const tools = computed(() => [
   { key: "forums", label: t("Forums"), icon: "comment" },
   { key: "sections", label: t("Add section"), icon: "folder-multiple-plus" },
   { key: "surveys", label: t("Create survey"), icon: "form-dropdown" },
+  ...(builder.value?.toolboxEnabled ? [{ key: "toolbox", label: t("Toolbox"), icon: "robot" }] : []),
   { key: "certificate", label: t("Certificate"), icon: "gradebook" },
 ])
 
@@ -310,6 +312,9 @@ async function loadBuilder(showLoading = true) {
 
   try {
     builder.value = await lpService.getBuilder(lpId.value, context.value)
+    if (activeTool.value === "toolbox" && !builder.value?.toolboxEnabled) {
+      activeTool.value = "documents"
+    }
     tree.value = cloneItems(builder.value.items || [])
     if (selectedId.value && !findItem(tree.value, selectedId.value)) {
       selectedId.value = 0
@@ -1166,6 +1171,14 @@ function goBack() {
               <LpBuilderResourceList
                 :can-manage="canManage"
                 :items="resources.surveys?.items || []"
+                @add="addResource"
+              />
+            </template>
+
+            <template v-else-if="activeTool === 'toolbox'">
+              <LpBuilderResourceList
+                :can-manage="canManage"
+                :items="resources.toolbox?.items || []"
                 @add="addResource"
               />
             </template>

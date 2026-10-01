@@ -497,7 +497,7 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
                 continue;
             }
 
-            if (\in_array($itemView->getItem()->getItemType(), ['quiz', 'sco'], true)) {
+            if (\in_array($itemView->getItem()->getItemType(), ['quiz', 'sco', 'toolbox'], true)) {
                 $scorableAttempts[$userId][] = $itemView;
                 if (null !== $itemView->getIid()) {
                     $scorableItemViewIds[] = (int) $itemView->getIid();

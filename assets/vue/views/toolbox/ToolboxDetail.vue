@@ -49,7 +49,9 @@
         <div class="grid grid-cols-1 gap-0 lg:grid-cols-[minmax(0,2fr)_minmax(17rem,1fr)]">
           <div class="flex flex-col gap-5 p-6">
             <div class="flex items-start gap-4">
-              <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
+              <div
+                class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary"
+              >
                 <BaseIcon icon="robot" />
               </div>
               <div class="min-w-0">
@@ -96,7 +98,9 @@
             </div>
           </div>
 
-          <div class="flex flex-col justify-center gap-3 border-t border-gray-20 bg-gray-10 p-6 lg:border-l lg:border-t-0">
+          <div
+            class="flex flex-col justify-center gap-3 border-t border-gray-20 bg-gray-10 p-6 lg:border-l lg:border-t-0"
+          >
             <BaseButton
               v-if="item.launchUrl"
               :label="item.canEdit ? t('Open in student view') : t('Open')"
@@ -111,7 +115,10 @@
               type="secondary"
               @click="openUrl(item.reportingUrl)"
             />
-            <p v-if="!item.launchUrl" class="text-center text-sm text-gray-50">
+            <p
+              v-if="!item.launchUrl"
+              class="text-center text-sm text-gray-50"
+            >
               {{ t("Generate the application to enable preview and publishing.") }}
             </p>
           </div>
@@ -122,6 +129,12 @@
         v-if="item.canGenerate"
         class="rounded-2xl border border-gray-25 bg-white p-5"
       >
+        <div
+          v-if="generationError"
+          class="mb-5 rounded-lg border border-danger/30 bg-danger/10 p-4 text-danger"
+        >
+          {{ generationError }}
+        </div>
         <div class="mb-5 flex items-start gap-3">
           <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <BaseIcon icon="robot" />
@@ -131,7 +144,11 @@
               {{ item.launchUrl ? t("Improve with AI") : t("Generate with AI") }}
             </h2>
             <p class="mt-1 text-sm text-gray-50">
-              {{ item.launchUrl ? t("Describe the change. A new version will be created and previous versions will remain available.") : t("Describe the complete interactive activity you want to generate.") }}
+              {{
+                item.launchUrl
+                  ? t("Describe the change. A new version will be created and previous versions will remain available.")
+                  : t("Describe the complete interactive activity you want to generate.")
+              }}
             </p>
           </div>
         </div>
@@ -146,8 +163,15 @@
           />
 
           <div class="flex flex-col gap-4">
+            <div
+              v-if="providers.length === 1"
+              class="rounded-xl border border-gray-20 bg-gray-10 p-3 text-sm text-gray-70"
+            >
+              <div class="text-xs text-gray-50">{{ t("AI provider") }}</div>
+              <div class="mt-1 font-semibold text-gray-90">{{ providers[0].label }}</div>
+            </div>
             <BaseSelect
-              v-if="providers.length > 1"
+              v-else-if="providers.length > 1"
               id="toolbox-improvement-provider"
               v-model="improvement.provider"
               name="toolbox_improvement_provider"
@@ -202,20 +226,36 @@
                 >
                   {{ t("Current") }}
                 </span>
-                <span v-if="version.provider" class="rounded-full bg-gray-15 px-2.5 py-1 text-xs text-gray-60">
+                <span
+                  v-if="version.provider"
+                  class="rounded-full bg-gray-15 px-2.5 py-1 text-xs text-gray-60"
+                >
                   {{ version.provider }}
                 </span>
               </div>
 
-              <p v-if="version.changeSummary" class="mt-2 text-sm text-gray-70">{{ version.changeSummary }}</p>
-              <p v-else-if="version.description" class="mt-2 text-sm text-gray-60">{{ version.description }}</p>
+              <p
+                v-if="version.changeSummary"
+                class="mt-2 text-sm text-gray-70"
+              >
+                {{ version.changeSummary }}
+              </p>
+              <p
+                v-else-if="version.description"
+                class="mt-2 text-sm text-gray-60"
+              >
+                {{ version.description }}
+              </p>
 
               <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-50">
                 <span>{{ formatDate(version.createdAt) }}</span>
                 <span v-if="version.createdBy?.name">{{ version.createdBy.name }}</span>
               </div>
 
-              <details v-if="version.prompt" class="mt-3 text-sm">
+              <details
+                v-if="version.prompt"
+                class="mt-3 text-sm"
+              >
                 <summary class="cursor-pointer font-semibold text-gray-70">{{ t("Prompt") }}</summary>
                 <p class="mt-2 whitespace-pre-line rounded-lg bg-gray-10 p-3 text-gray-60">{{ version.prompt }}</p>
               </details>
@@ -287,6 +327,7 @@ const { showSuccessNotification, showErrorNotification } = useNotification()
 const loading = ref(true)
 const loadError = ref(false)
 const generating = ref(false)
+const generationError = ref("")
 const visibilityBusy = ref(false)
 const restoringVersion = ref(0)
 const item = ref(null)
@@ -324,6 +365,7 @@ async function load() {
 
 async function generateVersion() {
   if (!improvement.prompt.trim()) return
+  generationError.value = ""
   generating.value = true
   try {
     await toolboxService.generateVersion(route.params.itemId, context.value, {
@@ -334,10 +376,24 @@ async function generateVersion() {
     showSuccessNotification(t("A new version was generated."))
     await load()
   } catch (error) {
+    generationError.value = extractGenerationError(error)
     showErrorNotification(error)
   } finally {
     generating.value = false
   }
+}
+
+function extractGenerationError(error) {
+  const data = error?.response?.data
+
+  return (
+    data?.["hydra:description"] ||
+    data?.detail ||
+    data?.message ||
+    (typeof data?.error === "string" ? data.error : "") ||
+    error?.message ||
+    t("An error occurred")
+  )
 }
 
 async function toggleVisibility() {

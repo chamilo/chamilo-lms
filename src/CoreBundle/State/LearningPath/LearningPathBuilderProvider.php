@@ -33,6 +33,7 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CToolbox;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
@@ -109,6 +110,8 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             || (CLp::SCORM_TYPE === $lp->getLpType()
                 && !str_starts_with(strtolower($lp->getPath()), 'teachcs-'));
         $result->titleAsHtml = $this->settingEnabled('editor.save_titles_as_html');
+        $result->toolboxEnabled = $this->settingEnabled('ai_helpers.enable_ai_helpers')
+            && $this->settingEnabled('ai_helpers.toolbox');
 
         if ($catalogOnly) {
             $documents = $this->findContextDocuments($course, $session, $group);
@@ -637,7 +640,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
     private function normalizeResourceType(string $itemType): string
     {
         return match ($itemType) {
-            'document', 'video', 'quiz', 'link', 'student_publication', 'forum', 'thread', 'survey' => $itemType,
+            'document', 'video', 'quiz', 'link', 'student_publication', 'forum', 'thread', 'survey', 'toolbox' => $itemType,
             default => '',
         };
     }
@@ -849,6 +852,27 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             $surveys[] = $row;
         }
 
+        $toolboxItems = [];
+        if ($this->settingEnabled('ai_helpers.enable_ai_helpers') && $this->settingEnabled('ai_helpers.toolbox')) {
+            foreach ($this->findContextResources(CToolbox::class, $course, $session, $group) as $resource) {
+                if (!$resource instanceof CToolbox) {
+                    continue;
+                }
+
+                $link = $this->getContextResourceLink($resource, $course, $session, $group);
+                $version = $resource->getCurrentVersionEntity();
+                $published = $link instanceof ResourceLink
+                    && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility();
+                $ready = null !== $version
+                    && $version->hasGeneratedSource()
+                    && $version->getLearningPath() instanceof CLp;
+                $row = $this->resourceRow($resource, 'toolbox', $course, $session, $group, false);
+                $row['visible'] = $published;
+                $row['canAdd'] = $published && $ready;
+                $toolboxItems[] = $row;
+            }
+        }
+
         return [
             'documents' => [
                 'files' => $this->buildNestedResources([...$folderRows, ...$documentRows]),
@@ -863,6 +887,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             'forums' => ['items' => $forumRows],
             'sections' => ['items' => []],
             'surveys' => ['items' => $surveys],
+            'toolbox' => ['items' => $toolboxItems],
             'certificate' => ['items' => []],
         ];
     }
@@ -997,7 +1022,8 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             $resource instanceof CStudentPublication,
             $resource instanceof CForum,
             $resource instanceof CForumThread,
-            $resource instanceof CSurvey => (int) $resource->getIid(),
+            $resource instanceof CSurvey,
+            $resource instanceof CToolbox => (int) $resource->getIid(),
             default => 0,
         };
         $title = match (true) {
@@ -1007,7 +1033,8 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             $resource instanceof CStudentPublication,
             $resource instanceof CForum,
             $resource instanceof CForumThread,
-            $resource instanceof CSurvey => $resource->getTitle(),
+            $resource instanceof CSurvey,
+            $resource instanceof CToolbox => $resource->getTitle(),
             default => '',
         };
 

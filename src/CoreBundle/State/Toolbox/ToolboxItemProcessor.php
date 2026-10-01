@@ -22,6 +22,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+use const PHP_SESSION_ACTIVE;
+
 /** @implements ProcessorInterface<ToolboxItem, ToolboxItem> */
 final readonly class ToolboxItemProcessor implements ProcessorInterface
 {
@@ -66,6 +68,13 @@ final readonly class ToolboxItemProcessor implements ProcessorInterface
         $prompt = trim($data->prompt);
         if ('' === $prompt) {
             throw new BadRequestHttpException('Describe the educational application you want to create.');
+        }
+
+        // AI generation and SCORM packaging can be slow. The course/session context and permissions
+        // are already resolved above, so release the PHP session lock before external/long-running work.
+        // This keeps heartbeat and other concurrent requests from the same browser responsive.
+        if (PHP_SESSION_ACTIVE === session_status()) {
+            session_write_close();
         }
 
         try {

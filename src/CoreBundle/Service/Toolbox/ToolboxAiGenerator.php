@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Service\Toolbox;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Service\Mcp\McpTextAiService;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -16,9 +17,11 @@ final readonly class ToolboxAiGenerator
     private const int MAX_HTML_LENGTH = 40000;
     private const int MAX_CSS_LENGTH = 40000;
     private const int MAX_JAVASCRIPT_LENGTH = 70000;
+    private const int MAX_OUTPUT_TOKENS = 10000;
 
     public function __construct(
         private McpTextAiService $textAiService,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -98,12 +101,11 @@ TEXT;
             $userPrompt .= "\n\nPrevious JavaScript:\n".mb_substr((string) ($previousSource['javascript'] ?? ''), 0, 30000);
         }
 
-        $result = $this->textAiService->requestJson(
+        $result = $this->requestJson(
             $user,
             $requestedProvider,
             $systemPrompt,
             $userPrompt,
-            10000,
         );
 
         $generated = $this->normalizeGeneratedResult($result, $title, $requestedProvider);
@@ -115,12 +117,11 @@ TEXT;
 
         if (null !== $violation) {
             $repairProvider = '' !== $generated['provider'] ? $generated['provider'] : $requestedProvider;
-            $repairResult = $this->textAiService->requestJson(
+            $repairResult = $this->requestJson(
                 $user,
                 $repairProvider,
                 $this->safetyRepairSystemPrompt(),
                 $this->buildSafetyRepairPrompt($title, $prompt, $generated, $violation),
-                10000,
             );
             $generated = $this->normalizeGeneratedResult($repairResult, $title, $repairProvider);
             $violation = $this->findSourceViolation(
@@ -135,6 +136,124 @@ TEXT;
         }
 
         return $generated;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function requestJson(
+        User $user,
+        ?string $provider,
+        string $systemPrompt,
+        string $userPrompt,
+    ): array {
+        try {
+            return $this->textAiService->requestJson(
+                $user,
+                $provider,
+                $systemPrompt,
+                $userPrompt,
+                self::MAX_OUTPUT_TOKENS,
+            );
+        } catch (RuntimeException $exception) {
+            throw new RuntimeException($this->buildGenerationErrorMessage($provider, $exception->getMessage()), 0, $exception);
+        }
+    }
+
+    private function buildGenerationErrorMessage(?string $provider, string $message): string
+    {
+        $message = trim($message);
+        $normalized = strtolower($message);
+        if (str_contains($normalized, 'daily ai token limit')
+            || str_contains($normalized, 'monthly ai token limit')
+        ) {
+            return $message;
+        }
+
+        $providerName = trim((string) $provider);
+        $context = $this->getTextProviderContext($providerName);
+        $identity = '' !== $providerName ? '"'.$providerName.'"' : 'the configured provider';
+        if ('' !== $context['model']) {
+            $identity .= ' (model "'.$context['model'].'")';
+        }
+
+        if (str_contains($normalized, 'timeout') || str_contains($normalized, 'timed out')) {
+            $timeout = $context['timeout'];
+            $timeoutDetail = $timeout > 0.0 ? ' Configured text timeout: '.$this->formatTimeout($timeout).' seconds.' : '';
+
+            return 'AI Toolbox generation timed out using text provider '.$identity.'.'.$timeoutDetail
+                .' Increase the provider text timeout or simplify the requested application.';
+        }
+
+        if (str_contains($normalized, 'rate limit') || str_contains($normalized, 'too many requests')) {
+            return 'AI Toolbox generation was rate-limited by text provider '.$identity.'. Please retry later or adjust the provider limits.';
+        }
+
+        if (str_contains($normalized, 'authentication failed')) {
+            return 'AI Toolbox could not authenticate with text provider '.$identity.'. Verify the provider API credentials.';
+        }
+
+        if (str_contains($normalized, 'token/context limit')) {
+            return 'AI Toolbox generation exceeded the token/context limit of text provider '.$identity
+                .'. Reduce the prompt or existing application size, or select a model with a larger context window.';
+        }
+
+        if (str_contains($normalized, 'output limit')
+            || str_contains($normalized, 'truncated')
+            || str_contains($normalized, 'response limit')
+            || str_contains($normalized, 'invalid json')
+            || str_contains($normalized, 'incomplete text response')
+            || str_contains($normalized, 'empty structured response')
+        ) {
+            return 'AI Toolbox generation did not receive a complete structured response from text provider '.$identity
+                .'. This request allows up to '.self::MAX_OUTPUT_TOKENS
+                .' output tokens. Reduce the requested application size or verify the model output-token limit.';
+        }
+
+        return 'AI Toolbox generation failed using text provider '.$identity
+            .'. Check the provider configuration and server logs for details.';
+    }
+
+    /**
+     * @return array{model: string, timeout: float}
+     */
+    private function getTextProviderContext(string $provider): array
+    {
+        if ('' === $provider) {
+            return ['model' => '', 'timeout' => 0.0];
+        }
+
+        $configured = $this->settingsManager->getSetting('ai_helpers.ai_providers', true);
+        if (\is_string($configured)) {
+            $decoded = json_decode($configured, true);
+            $configured = \is_array($decoded) ? $decoded : [];
+        }
+        if (!\is_array($configured)) {
+            return ['model' => '', 'timeout' => 0.0];
+        }
+
+        $providerConfig = $configured[$provider] ?? [];
+        if (!\is_array($providerConfig)) {
+            return ['model' => '', 'timeout' => 0.0];
+        }
+
+        $textConfig = $providerConfig['text'] ?? [];
+        if (!\is_array($textConfig)) {
+            return [
+                'model' => trim((string) ($providerConfig['model'] ?? '')),
+                'timeout' => 0.0,
+            ];
+        }
+
+        return [
+            'model' => trim((string) ($textConfig['model'] ?? $providerConfig['model'] ?? '')),
+            'timeout' => is_numeric($textConfig['timeout'] ?? null) ? max(0.0, (float) $textConfig['timeout']) : 0.0,
+        ];
+    }
+
+    private function formatTimeout(float $timeout): string
+    {
+        return 0.0 === fmod($timeout, 1.0) ? (string) (int) $timeout : rtrim(rtrim((string) $timeout, '0'), '.');
     }
 
     private function plainText(mixed $value, int $maxLength): string

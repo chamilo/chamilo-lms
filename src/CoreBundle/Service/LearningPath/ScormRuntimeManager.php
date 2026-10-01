@@ -72,6 +72,17 @@ final readonly class ScormRuntimeManager
         return \in_array(strtolower(trim($item->getItemType())), ['sco', 'asset'], true);
     }
 
+    public function isToolboxRuntimeItem(CLpItem $item): bool
+    {
+        return 'toolbox' === strtolower(trim($item->getItemType()));
+    }
+
+    public function supportsRuntimeItem(CLp $lp, CLpItem $item): bool
+    {
+        return ($this->isScormLearningPath($lp) && $this->isScormItem($item))
+            || $this->isToolboxRuntimeItem($item);
+    }
+
     public function resolveVersion(CLp $lp): string
     {
         $jsLib = strtolower(trim($lp->getJsLib()));
@@ -166,7 +177,10 @@ final readonly class ScormRuntimeManager
         $packageParameters = $localPackageItem ? $this->buildPackageParameters($item) : '';
         $packageFingerprint = $localPackageItem ? $this->buildPackageFingerprint($lp) : '';
         $packageSize = $localPackageItem ? max(0, (int) ($lp->getAsset()?->getSize() ?? 0)) : 0;
-        $version = $localPackageItem ? $this->resolveVersion($lp) : '';
+        $toolboxRuntimeItem = $this->isToolboxRuntimeItem($item);
+        $version = $toolboxRuntimeItem
+            ? self::VERSION_12
+            : ($localPackageItem ? $this->resolveVersion($lp) : '');
 
         $configuration = [
             'enabled' => false,
@@ -185,8 +199,7 @@ final readonly class ScormRuntimeManager
             'packageSize' => $packageSize,
         ];
 
-        if (!$localPackageItem
-            || !$this->isScormItem($item)
+        if ((!$toolboxRuntimeItem && (!$localPackageItem || !$this->isScormItem($item)))
             || !$itemView instanceof CLpItemView
             || null === $itemView->getIid()
         ) {
@@ -298,7 +311,7 @@ final readonly class ScormRuntimeManager
         bool $terminated,
         string $reason,
     ): void {
-        $expectedVersion = $this->resolveVersion($lp);
+        $expectedVersion = $this->isToolboxRuntimeItem($item) ? self::VERSION_12 : $this->resolveVersion($lp);
         if ($expectedVersion !== $version) {
             throw new RuntimeException('The SCORM runtime version does not match the imported package.');
         }
@@ -636,7 +649,7 @@ final readonly class ScormRuntimeManager
             }
         } else {
             $completeIncompleteOnLeave = 'incomplete' === $status
-                && $this->shouldCompleteIncompleteScorm12OnLeave($lp, $values);
+                && $this->shouldCompleteIncompleteScorm12OnLeave($lp, $item, $values);
 
             if ($this->shouldFinalizeWithoutStatus($terminated, $reason)
                 && !$statusWasSet
@@ -1096,8 +1109,14 @@ final readonly class ScormRuntimeManager
     /**
      * @param array<string, string> $values
      */
-    private function shouldCompleteIncompleteScorm12OnLeave(CLp $lp, array $values): bool
+    private function shouldCompleteIncompleteScorm12OnLeave(CLp $lp, CLpItem $item, array $values): bool
     {
+        if ($this->isToolboxRuntimeItem($item)
+            || 'toolbox' === strtolower(trim($lp->getContentMaker()))
+        ) {
+            return false;
+        }
+
         if (!$this->isTruthy(
             $this->settingsManager->getSetting('lp.scorm_complete_on_leave_when_incomplete', true),
         )) {

@@ -58,10 +58,7 @@ final readonly class ToolboxCollectionProvider implements ProviderInterface
             && $this->canWriteToolboxContext($this->security, $this->studentViewHelper, $session);
 
         if ($result->canManage && $result->enabled) {
-            $result->providers = array_map(
-                static fn (mixed $name): array => ['label' => (string) $name, 'value' => (string) $name],
-                array_values(array_filter($this->aiProviderFactory->getProvidersForType('text'))),
-            );
+            $result->providers = $this->getTextProviderOptions();
         }
 
         if (!$result->enabled) {
@@ -107,5 +104,44 @@ final readonly class ToolboxCollectionProvider implements ProviderInterface
         $result->totalItems = \count($items);
 
         return $result;
+    }
+
+    /**
+     * @return array<int, array{label: string, value: string}>
+     */
+    private function getTextProviderOptions(): array
+    {
+        $configured = $this->settingsManager->getSetting('ai_helpers.ai_providers', true);
+        if (\is_string($configured)) {
+            $decoded = json_decode($configured, true);
+            $configured = \is_array($decoded) ? $decoded : [];
+        }
+        if (!\is_array($configured)) {
+            $configured = [];
+        }
+
+        $options = [];
+        foreach ($this->aiProviderFactory->getProvidersForType('text') as $providerName) {
+            $providerName = trim((string) $providerName);
+            if ('' === $providerName) {
+                continue;
+            }
+
+            $providerConfig = $configured[$providerName] ?? [];
+            $model = '';
+            if (\is_array($providerConfig)) {
+                $textConfig = $providerConfig['text'] ?? [];
+                $model = \is_array($textConfig)
+                    ? trim((string) ($textConfig['model'] ?? ''))
+                    : trim((string) ($providerConfig['model'] ?? ''));
+            }
+
+            $options[] = [
+                'label' => '' !== $model ? $providerName.' ('.$model.')' : $providerName,
+                'value' => $providerName,
+            ];
+        }
+
+        return $options;
     }
 }

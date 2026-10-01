@@ -197,8 +197,11 @@ PROMPT,
         );
 
         $raw = trim(mb_substr($raw, 0, self::MAX_JSON_RESPONSE_LENGTH));
-        if ('' === $raw || str_starts_with($raw, 'Error:')) {
-            throw new RuntimeException('The AI model returned an empty or invalid structured response.');
+        if ('' === $raw) {
+            throw new RuntimeException('The AI model returned an empty structured response.');
+        }
+        if (str_starts_with($raw, 'Error:')) {
+            throw new RuntimeException($this->normalizeProviderError(trim(substr($raw, 6))));
         }
 
         return $raw;
@@ -268,6 +271,43 @@ PROMPT,
         );
 
         return trim(mb_substr($raw, 0, self::MAX_TEXT_RESPONSE_LENGTH));
+    }
+
+    private function normalizeProviderError(string $detail): string
+    {
+        $normalized = strtolower($detail);
+        if (str_contains($normalized, 'timeout') || str_contains($normalized, 'timed out')) {
+            return 'AI provider request timed out.';
+        }
+        if (str_contains($normalized, 'rate limit')
+            || str_contains($normalized, 'too many requests')
+            || str_contains($normalized, 'status code 429')
+        ) {
+            return 'AI provider rate limit was reached.';
+        }
+        if (str_contains($normalized, 'context length')
+            || str_contains($normalized, 'maximum context')
+            || str_contains($normalized, 'too many tokens')
+        ) {
+            return 'AI provider request exceeded the model token/context limit.';
+        }
+        if (str_contains($normalized, 'output limit')
+            || str_contains($normalized, 'max_output')
+            || str_contains($normalized, 'max token')
+            || str_contains($normalized, 'incomplete text response')
+        ) {
+            return 'AI provider output was truncated by its response limit.';
+        }
+        if (str_contains($normalized, 'api key')
+            || str_contains($normalized, 'unauthorized')
+            || str_contains($normalized, 'authentication')
+            || str_contains($normalized, 'status code 401')
+            || str_contains($normalized, 'status code 403')
+        ) {
+            return 'AI provider authentication failed.';
+        }
+
+        return 'AI provider request failed.';
     }
 
     private function normalizeTextResponse(string $content): string

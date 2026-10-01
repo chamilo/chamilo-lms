@@ -32,6 +32,7 @@ Chamilo offers a wide range of features, including:
 - Gradebook (including generation of badges and certificates with QR codes and expiry dates)
 - Learning analytics (progress, course completion, participation, average time spent, average score, auditing, ...)
 - Groups/Classes (at course or global level)
+- MCP (AI agents connector) for content creation and users tracking
 - Multilingual support (60+ languages fully translated, including RTL support)
 - Plugins for advanced features
 - Quizzes (20+ question types, random selection with categories, adaptative tests, time limits, co-creation with AI, proctoring tools integration, ...)
@@ -49,9 +50,7 @@ Chamilo offers a wide range of features, including:
 - Videoconference through integrations / Realtime collaboration
 - ...
 
-Note: AI features (with support for OpenAI, Grok, Gemini, Claude and DeepSeek
-models) and other integrations may require active subscriptions to, or
-availability of, external services/applications.
+Note: AI features (with support for OpenAI, Grok, Gemini, Claude and DeepSeek - and compatible - models) and other integrations may require active subscriptions to, or availability of, external services/applications.
 
 ## Try it out
 

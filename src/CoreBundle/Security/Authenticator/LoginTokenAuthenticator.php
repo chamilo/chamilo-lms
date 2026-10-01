@@ -69,7 +69,10 @@ class LoginTokenAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        return null;
+        // Returning a response stops the authenticator chain: otherwise the firewall's JWT
+        // authenticator would also handle this bearer token and re-check the user's auth
+        // source without the login-token exemption (see UserAuthSourceListener).
+        return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response

@@ -38,7 +38,17 @@ final class Version20260926174500 extends AbstractMigrationChamilo
             return;
         }
 
-        $this->assertLegacyLinksCanBeConverted($schema);
+        $orphanLinkIds = $this->assertLegacyLinksCanBeConverted($schema);
+        if ([] !== $orphanLinkIds) {
+            // These links point to a tool item deleted in 1.11.x: they can never be displayed nor
+            // scored, and would break the foreign key added below.
+            $this->write(\sprintf(
+                'Deleting %d orphan gradebook link(s) whose tool item no longer exists: gradebook_link.id %s.',
+                \count($orphanLinkIds),
+                implode(', ', $orphanLinkIds),
+            ));
+            $this->addSql('DELETE FROM gradebook_link WHERE id IN ('.implode(', ', $orphanLinkIds).')');
+        }
 
         foreach (self::RESOURCE_TYPE_MAP as $resourceTable => $types) {
             $typeList = implode(', ', $types);
@@ -92,8 +102,12 @@ final class Version20260926174500 extends AbstractMigrationChamilo
         }
     }
 
-    private function assertLegacyLinksCanBeConverted(Schema $schema): void
+    /**
+     * @return list<int> IDs of links whose tool item no longer exists, to delete before converting
+     */
+    private function assertLegacyLinksCanBeConverted(Schema $schema): array
     {
+        $orphanLinkIds = [];
         $supportedTypes = [];
         foreach (self::RESOURCE_TYPE_MAP as $types) {
             $supportedTypes = [...$supportedTypes, ...$types];
@@ -119,16 +133,31 @@ final class Version20260926174500 extends AbstractMigrationChamilo
                 throw new RuntimeException(\sprintf('Cannot convert gradebook_link.ref_id because required table "%s" is missing. No data was changed.', $resourceTable));
             }
 
+            $orphanLinkIds = [
+                ...$orphanLinkIds,
+                ...array_map('intval', $this->connection->fetchFirstColumn(
+                    \sprintf(
+                        'SELECT gl.id FROM gradebook_link gl LEFT JOIN %1$s resource ON resource.iid = gl.ref_id WHERE gl.type IN (%2$s) AND resource.iid IS NULL',
+                        $resourceTable,
+                        $typeList,
+                    ),
+                )),
+            ];
+
             $invalidCount = (int) $this->connection->fetchOne(
                 \sprintf(
-                    'SELECT COUNT(*) FROM gradebook_link gl LEFT JOIN %1$s resource ON resource.iid = gl.ref_id LEFT JOIN resource_node rn ON rn.id = resource.resource_node_id WHERE gl.type IN (%2$s) AND (resource.iid IS NULL OR resource.resource_node_id IS NULL OR rn.id IS NULL)',
+                    'SELECT COUNT(*) FROM gradebook_link gl INNER JOIN %1$s resource ON resource.iid = gl.ref_id LEFT JOIN resource_node rn ON rn.id = resource.resource_node_id WHERE gl.type IN (%2$s) AND (resource.resource_node_id IS NULL OR rn.id IS NULL)',
                     $resourceTable,
                     $typeList,
                 ),
             );
             if ($invalidCount > 0) {
-                throw new RuntimeException(\sprintf('Cannot convert %d gradebook link(s) for table "%s" because the legacy iid cannot be mapped to an existing resource_node.id. No data was changed.', $invalidCount, $resourceTable));
+                throw new RuntimeException(\sprintf('Cannot convert %d gradebook link(s) for table "%s" because the tool item exists but has no existing resource_node. No data was changed.', $invalidCount, $resourceTable));
             }
         }
+
+        sort($orphanLinkIds);
+
+        return $orphanLinkIds;
     }
 }

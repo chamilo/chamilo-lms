@@ -675,7 +675,12 @@ const backRoute = computed(() => ({
 }))
 
 function formatLocale() {
-  return String(locale.value || "en-US").replace("_", "-")
+  // Only the first segment is a real BCP-47 primary language subtag (e.g.
+  // "fr" out of "fr_61"). Some accounts carry a Chamilo sub-language isocode
+  // (e.g. "fr_61" instead of "fr_FR"), and passing that whole string to
+  // Intl.DateTimeFormat throws a RangeError that would otherwise crash this
+  // component's render with no visible error.
+  return String(locale.value || "en-US").split(/[_-]/)[0] || "en"
 }
 
 function formatDateTime(value, fallback = "-") {

@@ -1273,10 +1273,24 @@ function formatDateTime(value, dateOnly = false) {
     return String(value)
   }
 
-  return new Intl.DateTimeFormat(String(locale.value || "en-US").replace("_", "-"), {
-    dateStyle: "medium",
-    ...(dateOnly ? {} : { timeStyle: "short" }),
-  }).format(date)
+  // Only the first segment is a real BCP-47 primary language subtag (e.g.
+  // "fr" out of "fr_61"). Some accounts carry a Chamilo sub-language isocode
+  // (e.g. "fr_61" instead of "fr_FR"), and passing that whole string to
+  // Intl.DateTimeFormat throws a RangeError that would otherwise crash this
+  // component's render with no visible error.
+  const intlLocale = String(locale.value || "en-US").split(/[_-]/)[0] || "en"
+
+  try {
+    return new Intl.DateTimeFormat(intlLocale, {
+      dateStyle: "medium",
+      ...(dateOnly ? {} : { timeStyle: "short" }),
+    }).format(date)
+  } catch {
+    return new Intl.DateTimeFormat("en", {
+      dateStyle: "medium",
+      ...(dateOnly ? {} : { timeStyle: "short" }),
+    }).format(date)
+  }
 }
 
 function dateStatusClass(value) {

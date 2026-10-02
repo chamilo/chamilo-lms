@@ -784,6 +784,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $params['item_id'] = $learningPathItemId;
         $params['returnToLp'] = 1;
         $params['embedded'] = 1;
+        $params['isStudentView'] = $request->query->get('isStudentView', 'true');
         $params['type'] = 'step';
         $type = strtolower(trim($item->getItemType()));
 

@@ -41506,3 +41506,119 @@ msgstr ""
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr ""
+msgid "Are you sure you want to delete this file definitively?"
+msgstr ""
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr ""
+
+msgid "Attach this file to another course"
+msgstr ""
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr ""
+
+msgid "Course(s):"
+msgstr ""
+
+msgid "Delete definitively"
+msgstr ""
+
+msgid "Detach from this course"
+msgstr ""
+
+msgid "File actions"
+msgstr ""
+
+msgid "File Information"
+msgstr ""
+
+msgid "File Link:"
+msgstr ""
+
+msgid "File Path:"
+msgstr ""
+
+msgid "Filter courses..."
+msgstr ""
+
+msgid "MIME Type:"
+msgstr ""
+
+msgid "N/A"
+msgstr ""
+
+msgid "No results found."
+msgstr ""
+
+msgid "Original Name"
+msgstr ""
+
+msgid "Original Name:"
+msgstr ""
+
+msgid "Orphan"
+msgstr ""
+
+msgid "Resource File ID:"
+msgstr ""
+
+msgid "Resource Node ID:"
+msgstr ""
+
+msgid "Search..."
+msgstr ""
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr ""
+
+msgid "User:"
+msgstr ""
+
+msgid "View file information"
+msgstr ""
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr ""
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr ""
+
+msgid "bytes"
+msgstr ""
+
+msgid "Failed to copy:"
+msgstr ""
+
+msgid "Missing resource file identifier."
+msgstr ""
+
+msgid "Please select at least one course."
+msgstr ""
+
+msgid "Resource file not found."
+msgstr ""
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr ""
+
+msgid "Some courses were skipped: %s."
+msgstr ""
+
+msgid "Missing file or course identifier."
+msgstr ""
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr ""
+
+msgid "File has been detached from %d course link(s)."
+msgstr ""
+
+msgid "This file is not attached to the selected course."
+msgstr ""
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr ""
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr ""

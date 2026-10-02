@@ -16559,7 +16559,7 @@ msgid "Assign coach"
 msgstr "zuordnen"
 
 msgid "Your account on %s has just been approved by one of our administrators."
-msgstr "Ihr Zugang zu %s wurde soben von einem unserer Administratoren freigeschlaltet."
+msgstr "Ihr Zugang zu %s wurde soeben von einem unserer Administratoren freigeschaltet."
 
 msgid "A student has obtained the number of sub-skills needed to validate the mother skill."
 msgstr "Der Student hat die Anzahl an Teilfähigkeiten erworben, die notwendig sind, um die übergeordnete Fähigkeit zu bestätigen."
@@ -16580,7 +16580,7 @@ msgid "Enable the MathJax library to visualize mathematical formulas. This is on
 msgstr "Aktivieren Sie die MathJax-Bibliothek, um mathematische Formeln zu visualisieren. Dies ist nur sinnvoll, wenn entweder ASCIIMathML oder ASCIISVG Einstellungen aktiviert sind."
 
 msgid "You can now login at %s using the login and the password you have provided."
-msgstr "Sie können Sich jetzt mit den von Ihnen festgelegten Benutzernamen und Ihrem Passwort bei %s einloggen."
+msgstr "Sie können Sich jetzt mit dem von Ihnen festgelegten Benutzernamen und Ihrem Passwort bei %s einloggen."
 
 msgid "Have fun,"
 msgstr "Viel Spaß,"
@@ -18362,7 +18362,7 @@ msgid "You have a new message from %s"
 msgstr "Sie haben eine neue Nachricht von  %s"
 
 msgid "See message"
-msgstr "Nachrichten ansehen"
+msgstr "Nachricht ansehen"
 
 msgid "See invitation"
 msgstr "Einladungen ansehen"

@@ -78,7 +78,8 @@ class CourseCategory
     }
 
     /**
-     * Returns a flat list of all course categories in this URL. If the
+     * Returns a flat list of all course categories in this URL, including the
+     * sub-categories of the categories assigned to it. If the
      * allow_base_course_category option is true, then also show the
      * course categories of the base URL.
      *
@@ -87,13 +88,19 @@ class CourseCategory
     public static function getAllCategories()
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
-        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
+        $accessUrlIds = [api_get_current_access_url_id()];
         $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
         if ($allowBaseCategories) {
-            $whereCondition = " AND (a.access_url_id = ".api_get_current_access_url_id()." OR a.access_url_id = 1)";
+            $accessUrlIds[] = 1;
         }
+
+        // Sub-categories are visible wherever their top-level category is assigned.
+        $categoryIds = Container::getCourseCategoryRepository()->findIdsInAccessUrlTree($accessUrlIds);
+        if (empty($categoryIds)) {
+            return [];
+        }
+
+        $whereCondition = ' AND t1.id IN ('.implode(',', array_map('intval', $categoryIds)).')';
 
         $sql = "SELECT
                 t1.id,
@@ -103,7 +110,6 @@ class CourseCategory
                 t1.tree_pos,
                 t1.children_count
             FROM $tbl_category t1
-            $conditions
             WHERE 1=1
                 $whereCondition
             GROUP BY
@@ -426,6 +432,10 @@ class CourseCategory
             $exportIcon = Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CSV export'));
             $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-danger', null, ICON_SIZE_SMALL, get_lang('Delete'));
             $urlId = api_get_current_access_url_id();
+            // Sub-categories can be managed wherever their top-level category is assigned.
+            $categoryIdsInUrl = Container::getCourseCategoryRepository()->findIdsInAccessUrlTree([$urlId]);
+            $isSecondaryUrl = api_get_multiple_access_url() && 1 != $urlId;
+            $secToken = Security::get_existing_token();
 
             $positions = array_map(fn($c) => $c->getTreePos(), $categories);
             $minTreePos = min($positions);
@@ -443,18 +453,21 @@ class CourseCategory
                 $moveUpUrl = $baseUrl.'?'.http_build_query(array_merge($baseParams, [
                         'action' => 'moveUp',
                         'id' => $categoryId,
+                        'sec_token' => $secToken,
                         'tree_pos' => $treePos,
                     ]));
 
                 $moveDownUrl = $baseUrl.'?'.http_build_query(array_merge($baseParams, [
                         'action' => 'moveDown',
                         'id' => $categoryId,
+                        'sec_token' => $secToken,
                         'tree_pos' => $treePos,
                     ]));
 
                 $deleteUrl = $baseUrl.'?'.http_build_query(array_merge($baseParams, [
                         'action' => 'delete',
                         'id' => $categoryId,
+                        'sec_token' => $secToken,
                     ]));
 
                 $exportUrl = $baseUrl.'?'.http_build_query(array_merge($baseParams, [
@@ -464,13 +477,7 @@ class CourseCategory
 
                 $actions = [];
 
-                $inUrl = $category->getUrls()->filter(
-                    function ($entry) use ($urlId) {
-                        return $entry->getUrl()->getId() === $urlId;
-                    }
-                );
-
-                if ($inUrl->count() > 0) {
+                if (in_array($categoryId, $categoryIdsInUrl, true)) {
                     $actions[] = Display::url($editIcon, $editUrl);
 
                     if ($treePos > $minTreePos) {
@@ -492,15 +499,18 @@ class CourseCategory
                     }
 
                     $actions[] = Display::url($exportIcon, $exportUrl);
-                    $actions[] = Display::url(
-                        $deleteIcon,
-                        $deleteUrl,
-                        [
-                            'onclick' => 'javascript: if (!confirm(\''.addslashes(
-                                    api_htmlentities(sprintf(get_lang('Please confirm your choice')), ENT_QUOTES)
-                                ).'\')) return false;',
-                        ]
-                    );
+                    // Deleting a category removes it from every URL, so it is only allowed in the main portal
+                    if (!$isSecondaryUrl) {
+                        $actions[] = Display::url(
+                            $deleteIcon,
+                            $deleteUrl,
+                            [
+                                'onclick' => 'javascript: if (!confirm(\''.addslashes(
+                                        api_htmlentities(sprintf(get_lang('Please confirm your choice')), ENT_QUOTES)
+                                    ).'\')) return false;',
+                            ]
+                        );
+                    }
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$categoryId;
@@ -680,19 +690,24 @@ class CourseCategory
         }
 
         $tableCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
-        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
+        $accessUrlIds = [api_get_current_access_url_id()];
 
         $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
         if ($allowBaseCategories) {
-            $whereCondition = " AND (a.access_url_id = ".api_get_current_access_url_id()." OR a.access_url_id = 1) ";
+            $accessUrlIds[] = 1;
         }
+
+        // Sub-categories are visible wherever their top-level category is assigned.
+        $categoryIds = Container::getCourseCategoryRepository()->findIdsInAccessUrlTree($accessUrlIds);
+        if (empty($categoryIds)) {
+            return [];
+        }
+        $whereCondition = ' AND c.id IN ('.implode(',', array_map('intval', $categoryIds)).') ';
 
         $keyword = Database::escape_string($keyword);
 
         $sql = "SELECT c.*, c.title as text
-                FROM $tableCategory c $conditions
+                FROM $tableCategory c
                 WHERE
                 (
                     c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%'

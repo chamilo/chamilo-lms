@@ -41586,3 +41586,120 @@ msgstr "You have earned a certificate for this exercise"
 
 msgid "You must complete the learning path \"%s\" before you can access this one."
 msgstr "You must complete the learning path \"%s\" before you can access this one."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Are you sure you want to delete this file definitively?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Are you sure you want to detach this file from the selected course?"
+
+msgid "Attach this file to another course"
+msgstr "Attach this file to another course"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Attach to selected course(s) (hidden)"
+
+msgid "Course(s):"
+msgstr "Course(s):"
+
+msgid "Delete definitively"
+msgstr "Delete definitively"
+
+msgid "Detach from this course"
+msgstr "Detach from this course"
+
+msgid "File actions"
+msgstr "File actions"
+
+msgid "File Information"
+msgstr "File Information"
+
+msgid "File Link:"
+msgstr "File Link:"
+
+msgid "File Path:"
+msgstr "File Path:"
+
+msgid "Filter courses..."
+msgstr "Filter courses..."
+
+msgid "MIME Type:"
+msgstr "MIME Type:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "No results found."
+
+msgid "Original Name"
+msgstr "Original Name"
+
+msgid "Original Name:"
+msgstr "Original Name:"
+
+msgid "Orphan"
+msgstr "Orphan"
+
+msgid "Resource File ID:"
+msgstr "Resource File ID:"
+
+msgid "Resource Node ID:"
+msgstr "Resource Node ID:"
+
+msgid "Search..."
+msgstr "Search..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+
+msgid "User:"
+msgstr "User:"
+
+msgid "View file information"
+msgstr "View file information"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "You can select one or more courses (use Ctrl/Cmd + click)."
+
+msgid "bytes"
+msgstr "bytes"
+
+msgid "Failed to copy:"
+msgstr "Failed to copy:"
+
+msgid "Missing resource file identifier."
+msgstr "Missing resource file identifier."
+
+msgid "Please select at least one course."
+msgstr "Please select at least one course."
+
+msgid "Resource file not found."
+msgstr "Resource file not found."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "File \"%s\" has been attached to %d course(s): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Some courses were skipped: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Missing file or course identifier."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "This resource file has no resource node and cannot be detached."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "File has been detached from %d course link(s)."
+
+msgid "This file is not attached to the selected course."
+msgstr "This file is not attached to the selected course."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "This file is still used by at least one resource and cannot be deleted."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Orphan file and its physical content have been deleted definitively."

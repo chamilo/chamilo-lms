@@ -522,7 +522,7 @@
             document.getElementById('file-title').textContent = title || '';
             document.getElementById('file-mime-type').textContent = mimeType || '';
             document.getElementById('file-original-name').textContent = originalName || '';
-            document.getElementById('file-size').textContent = (size || 0) + ' bytes';
+            document.getElementById('file-size').textContent = (size || 0) + ' {{ 'bytes'|trans|e('js') }}';
             document.getElementById('file-creation-date').textContent = creationDate || '';
             document.getElementById('file-user').textContent = user || '';
             document.getElementById('file-path').textContent = filePath || '';
@@ -595,7 +595,7 @@
                 copyPathButton.classList.add('mdi-content-copy');
               }, 2000);
             }, function(err) {
-              alert('Failed to copy: ' + err);
+              alert('{{ 'Failed to copy:'|trans|e('js') }} ' + err);
             });
           };
         }

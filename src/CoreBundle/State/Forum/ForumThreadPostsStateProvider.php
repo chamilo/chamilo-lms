@@ -170,11 +170,13 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             ->getSingleScalarResult()
         ;
         $totalPages = $totalItems > 0 ? (int) ceil($totalItems / $itemsPerPage) : 0;
+        $isLearningPathContext = 'learnpath' === strtolower((string) $request->query->get('origin', ''));
+        $sortDirection = $isLearningPathContext ? 'DESC' : 'ASC';
 
         $postIdRows = $this->createPostsQueryBuilder($thread, $forum, $canManage)
             ->select('p.iid')
-            ->orderBy('p.postDate', 'ASC')
-            ->addOrderBy('p.iid', 'ASC')
+            ->orderBy('p.postDate', $sortDirection)
+            ->addOrderBy('p.iid', $sortDirection)
             ->setFirstResult(($page - 1) * $itemsPerPage)
             ->setMaxResults($itemsPerPage)
             ->getQuery()
@@ -193,14 +195,21 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                 ->leftJoin('p.attachments', 'a')
                 ->andWhere('p.iid IN (:postIds)')
                 ->setParameter('postIds', $postIds)
-                ->orderBy('p.postDate', 'ASC')
-                ->addOrderBy('p.iid', 'ASC')
+                ->orderBy('p.postDate', $sortDirection)
+                ->addOrderBy('p.iid', $sortDirection)
                 ->getQuery()
                 ->getResult()
             ;
         }
 
-        $firstPostId = 1 === $page && [] !== $postIds ? $postIds[0] : 0;
+        $firstPostId = 0;
+        if ([] !== $postIds) {
+            if (!$isLearningPathContext && 1 === $page) {
+                $firstPostId = $postIds[0];
+            } elseif ($isLearningPathContext && $page === $totalPages) {
+                $firstPostId = $postIds[array_key_last($postIds)];
+            }
+        }
 
         $showPosterAvatar = $this->arePosterImagesAllowed($course);
         $lockedByGradebook = $this->isForumThreadLockedByGradebook(

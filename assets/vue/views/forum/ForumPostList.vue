@@ -4,6 +4,7 @@
 
     <BaseToolbar class="mb-4">
       <BaseButton
+        v-if="!isLearningPathContext"
         :label="t('Back to threads')"
         :route="{ name: 'ForumThreadList', params: { node: parentId, forumId }, query: route.query }"
         icon="back"
@@ -38,7 +39,7 @@
         type="primary-text"
       />
       <BaseButton
-        v-if="lpId"
+        v-if="lpId && !isLearningPathContext"
         :label="t('Back to learning path')"
         icon="back"
         only-icon
@@ -538,6 +539,7 @@ const cid = computed(() => Number(route.query.cid || 0))
 const sid = computed(() => Number(route.query.sid || 0))
 const gid = computed(() => Number(route.query.gid || 0))
 const lpId = computed(() => Number(route.query.lp_id || 0))
+const isLearningPathContext = computed(() => "learnpath" === String(route.query.origin || "").toLowerCase())
 const canReply = computed(() => Boolean(thread.value?.canReply))
 const canToggleThreadVisibility = computed(() => Boolean(thread.value?.canToggleVisibility))
 
@@ -545,6 +547,10 @@ const baseQuery = computed(() => ({
   cid: cid.value || null,
   sid: sid.value || null,
   gid: gid.value || null,
+}))
+const threadPostsQuery = computed(() => ({
+  ...baseQuery.value,
+  origin: isLearningPathContext.value ? "learnpath" : null,
 }))
 const hasEditMessage = computed(() => stripTags(editForm.text).trim().length > 0)
 const viewType = ref(
@@ -955,7 +961,7 @@ async function loadPosts() {
 
   try {
     const data = await forumService.getThreadPosts(threadId.value, forumId.value, {
-      ...baseQuery.value,
+      ...threadPostsQuery.value,
       page: 1,
       itemsPerPage,
     })
@@ -990,7 +996,7 @@ async function loadNextPage() {
 
   try {
     const data = await forumService.getThreadPosts(threadId.value, forumId.value, {
-      ...baseQuery.value,
+      ...threadPostsQuery.value,
       page: nextPage,
       itemsPerPage,
     })

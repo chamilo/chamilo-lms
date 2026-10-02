@@ -344,6 +344,166 @@ function resolveUploadedImageUrl(data) {
   return found ? buildAbsoluteUrl(found) : ""
 }
 
+const WORKSPACE_FULLSCREEN_STYLE_PROPERTIES = [
+  "position",
+  "top",
+  "left",
+  "right",
+  "bottom",
+  "width",
+  "height",
+  "max-width",
+  "max-height",
+  "margin",
+  "border-radius",
+  "background-color",
+  "z-index",
+]
+
+const WORKSPACE_FULLSCREEN_BODY_CLASS = "chamilo-tiny-workspace-fullscreen"
+
+function captureInlineStyles(element, properties) {
+  return properties.reduce((styles, property) => {
+    styles[property] = {
+      value: element.style.getPropertyValue(property),
+      priority: element.style.getPropertyPriority(property),
+    }
+
+    return styles
+  }, {})
+}
+
+function restoreInlineStyles(element, styles) {
+  if (!element || !styles) {
+    return
+  }
+
+  Object.entries(styles).forEach(([property, saved]) => {
+    if (saved.value) {
+      element.style.setProperty(property, saved.value, saved.priority || "")
+    } else {
+      element.style.removeProperty(property)
+    }
+  })
+}
+
+function getWorkspaceFullscreenBounds() {
+  const viewportWidth = document.documentElement.clientWidth || window.innerWidth
+  const viewportHeight = document.documentElement.clientHeight || window.innerHeight
+  const topbar = document.querySelector(".app-topbar")
+  const sidebar = document.querySelector(".app-sidebar")
+  const topbarRect = topbar?.getBoundingClientRect()
+  const top = Math.max(0, Math.round(topbarRect?.bottom || 0))
+  const isSmallScreen = window.matchMedia("(max-width: 639px)").matches
+  const direction = document.documentElement.dir === "rtl" ? "rtl" : "ltr"
+
+  let left = 0
+  let width = viewportWidth
+
+  if (!isSmallScreen && sidebar instanceof HTMLElement && window.getComputedStyle(sidebar).display !== "none") {
+    const sidebarRect = sidebar.getBoundingClientRect()
+
+    if (sidebarRect.width > 0) {
+      if (direction === "rtl") {
+        width = Math.max(0, Math.round(sidebarRect.left))
+      } else {
+        left = Math.max(0, Math.round(sidebarRect.right))
+        width = Math.max(0, viewportWidth - left)
+      }
+    }
+  }
+
+  return {
+    top,
+    left,
+    width,
+    height: Math.max(0, viewportHeight - top),
+  }
+}
+
+function applyWorkspaceFullscreen(editor) {
+  const container = editor?.getContainer?.()
+
+  if (!(container instanceof HTMLElement) || !container.classList.contains("tox-fullscreen")) {
+    return
+  }
+
+  const bounds = getWorkspaceFullscreenBounds()
+  const setImportant = (property, value) => container.style.setProperty(property, value, "important")
+
+  setImportant("position", "fixed")
+  setImportant("top", `${bounds.top}px`)
+  setImportant("left", `${bounds.left}px`)
+  setImportant("right", "auto")
+  setImportant("bottom", "auto")
+  setImportant("width", `${bounds.width}px`)
+  setImportant("height", `${bounds.height}px`)
+  setImportant("max-width", "none")
+  setImportant("max-height", "none")
+  setImportant("margin", "0")
+  setImportant("border-radius", "0")
+  setImportant("background-color", "#fff")
+  setImportant("z-index", "1200")
+}
+
+function attachWorkspaceFullscreen(editor) {
+  let originalStyles = null
+  let fullscreenActive = false
+  let reapplyTimer = 0
+
+  const scheduleApply = () => {
+    if (!fullscreenActive) {
+      return
+    }
+
+    window.clearTimeout(reapplyTimer)
+    window.requestAnimationFrame(() => applyWorkspaceFullscreen(editor))
+    reapplyTimer = window.setTimeout(() => applyWorkspaceFullscreen(editor), 100)
+  }
+
+  const handleBeforeExecCommand = (event) => {
+    if (String(event?.command || "").toLowerCase() !== "mcefullscreen") {
+      return
+    }
+
+    if (!editor?.plugins?.fullscreen?.isFullscreen?.()) {
+      const container = editor?.getContainer?.()
+      if (container instanceof HTMLElement) {
+        originalStyles = captureInlineStyles(container, WORKSPACE_FULLSCREEN_STYLE_PROPERTIES)
+      }
+    }
+  }
+
+  const handleFullscreenStateChanged = (event) => {
+    fullscreenActive = Boolean(event?.state)
+    document.body.classList.toggle(WORKSPACE_FULLSCREEN_BODY_CLASS, fullscreenActive)
+
+    if (fullscreenActive) {
+      scheduleApply()
+      return
+    }
+
+    window.clearTimeout(reapplyTimer)
+    const container = editor?.getContainer?.()
+    if (container instanceof HTMLElement) {
+      restoreInlineStyles(container, originalStyles)
+    }
+    originalStyles = null
+  }
+
+  const handleResize = () => scheduleApply()
+  const handleRemove = () => {
+    window.clearTimeout(reapplyTimer)
+    document.body.classList.remove(WORKSPACE_FULLSCREEN_BODY_CLASS)
+    window.removeEventListener("resize", handleResize)
+  }
+
+  editor.on("BeforeExecCommand", handleBeforeExecCommand)
+  editor.on("FullscreenStateChanged", handleFullscreenStateChanged)
+  editor.on("remove", handleRemove)
+  window.addEventListener("resize", handleResize)
+}
+
 function attachChamiloHooks(editor) {
   try {
     if (editor && editor[HOOK_GUARD_KEY]) return
@@ -364,6 +524,8 @@ function attachChamiloHooks(editor) {
       // Ignore
     }
   })
+
+  attachWorkspaceFullscreen(editor)
 
   editor.on("focus", () => {
     isFocused.value = true
@@ -648,6 +810,9 @@ const editorConfig = computed(() => {
 
   const local = {
     ...defaultEditorConfig,
+    // The shared theme config is applied again by the global TinyMCE init wrapper.
+    // Keep this marker so Vue-specific toolbar/plugin policy survives that second merge.
+    chamiloVueEditor: true,
     ...(enableUploadImageInEditor.value && !callerHasImagesUploadHandler
       ? {
           automatic_uploads: true,
@@ -698,6 +863,10 @@ const editorConfig = computed(() => {
     const currentToolbar = String(built.toolbar || "").trim()
     built.toolbar = currentToolbar ? `${currentToolbar} | ${appendToolbar}` : appendToolbar
   }
+
+  // First-pass safeguard; the shared theme builder also enforces this after the global
+  // TinyMCE init wrapper applies the base config a second time.
+  built.toolbar = removeToolbarItems(built.toolbar, ["save"])
 
   built.image_advtab = built.image_advtab ?? true
   built.image_class_list = buildImageClassList(built.image_class_list)
@@ -930,6 +1099,25 @@ onBeforeUnmount(() => {
   removeActiveMessageHandler()
 })
 </script>
+
+<style>
+/*
+ * TinyMCE workspace fullscreen stays in its original Vue DOM tree so focus,
+ * iframe events and v-model bindings remain intact. Hide the surrounding SPA
+ * content via visibility instead of moving editor nodes to <body>; descendants
+ * can opt back into visibility while hidden branches stop intercepting input.
+ */
+body.chamilo-tiny-workspace-fullscreen .app-main {
+  visibility: hidden;
+}
+
+body.chamilo-tiny-workspace-fullscreen .app-main .tox.tox-tinymce.tox-fullscreen,
+body.chamilo-tiny-workspace-fullscreen .app-main .tox.tox-tinymce.tox-fullscreen *,
+body.chamilo-tiny-workspace-fullscreen .app-main .tox.tox-tinymce-aux,
+body.chamilo-tiny-workspace-fullscreen .app-main .tox.tox-tinymce-aux * {
+  visibility: visible;
+}
+</style>
 
 <style scoped>
 .html-editor-container :deep(.tox .tox-edit-area__iframe),

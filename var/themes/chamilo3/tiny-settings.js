@@ -703,6 +703,15 @@
       merged.toolbar = dedupeToolbar(base.toolbar, localConfig.toolbar)
     }
 
+    // Vue forms own persistence. TinyMCE's stock save plugin calls form.submit()
+    // when no callback is configured, which bypasses Vue submit handlers and can navigate
+    // away without saving. BaseTinyEditor marks its config so this policy also survives
+    // the global tinymce.init() wrapper applying buildTinyMceConfig() a second time.
+    if (toBool(localConfig.chamiloVueEditor)) {
+      merged.plugins = removePlugins(merged.plugins, ["save"])
+      merged.toolbar = removeToolbarCommands(merged.toolbar, ["save"])
+    }
+
     // Always allow lang on span/div, regardless of whether the translatehtml
     // AUTHORING plugin/toolbar button is enabled: rendering already-authored
     // multi-language content (translatehtml.js's own DOM-based show/hide

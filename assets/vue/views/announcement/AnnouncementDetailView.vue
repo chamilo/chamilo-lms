@@ -299,7 +299,14 @@ function formatFileSize(value) {
   const unitIndex = Math.min(Math.floor(Math.log(size) / Math.log(1024)), units.length - 1)
   const normalized = size / 1024 ** unitIndex
 
-  return `${new Intl.NumberFormat(locale.value.replace("_", "-"), { maximumFractionDigits: 1 }).format(normalized)} ${units[unitIndex]}`
+  // Only the first segment is a real BCP-47 primary language subtag (e.g.
+  // "fr" out of "fr_61"). Some accounts carry a Chamilo sub-language isocode
+  // (e.g. "fr_61" instead of "fr_FR"), and passing that whole string to
+  // Intl.NumberFormat throws a RangeError that would otherwise crash this
+  // component's render with no visible error.
+  const intlLocale = String(locale.value || "en_US").split(/[_-]/)[0] || "en"
+
+  return `${new Intl.NumberFormat(intlLocale, { maximumFractionDigits: 1 }).format(normalized)} ${units[unitIndex]}`
 }
 
 function getErrorMessage(error) {

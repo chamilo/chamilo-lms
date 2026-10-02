@@ -263,11 +263,8 @@ $form->addRule(
 );
 
 $allowBaseCourseCategory = ('true' === api_get_setting('course.allow_base_course_category'));
-$categories = $courseCategoriesRepo->getCategoriesByCourseIdAndAccessUrlId(
-    $urlId,
-    $courseId,
-    $allowBaseCourseCategory
-);
+// Show every category of the course, including those outside this URL, so that saving does not drop them
+$categories = api_get_course_entity($courseId)->getCategories();
 
 $courseCategoryNames = [];
 $courseCategoryIds = [];
@@ -860,7 +857,16 @@ if ($form->validate()) {
     $em->persist($courseEntity);
     $em->flush();
 
-    // Updating course categories
+    // Updating course categories: only the ones visible in this URL can be added,
+    // the ones the course already has (even outside this URL) can be kept
+    $allowedCategoryIds = array_merge(
+        $courseCategoriesRepo->findIdsInAccessUrlTree($allowBaseCourseCategory ? [$urlId, 1] : [$urlId]),
+        $courseCategoryIds
+    );
+    $course['course_categories'] = array_values(array_intersect(
+        array_map('intval', (array) ($course['course_categories'] ?? [])),
+        $allowedCategoryIds
+    ));
     $courseCategoriesRepo->updateCourseRelCategoryByCourse($courseEntity, $course);
 
     // update the extra fields

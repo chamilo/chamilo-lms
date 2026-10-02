@@ -28,6 +28,13 @@ class Version20230216122900 extends AbstractMigrationChamilo
             foreach ($settings as $setting) {
                 $variable = $setting['name'];
                 $category = strtolower($category);
+
+                // These profile settings come from legacy settings rows or schema defaults,
+                // not from configuration.php.
+                if (\in_array($variable, ['changeable_options', 'visible_options'], true)) {
+                    continue;
+                }
+
                 $result = $this->connection
                     ->executeQuery(
                         "SELECT COUNT(1) FROM settings WHERE variable = '$variable' AND category = '{$category}'"
@@ -246,6 +253,11 @@ class Version20230216122900 extends AbstractMigrationChamilo
             foreach ($settings as $setting) {
                 $variable = $setting['name'];
                 $category = strtolower($category);
+
+                if (\in_array($variable, ['changeable_options', 'visible_options'], true)) {
+                    continue;
+                }
+
                 $result = $this->connection
                     ->executeQuery(
                         "SELECT COUNT(1) FROM settings WHERE variable = '$variable' AND category = '$category'"

@@ -11,6 +11,7 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\QueryBuilder;
 
@@ -19,6 +20,7 @@ final readonly class CourseCategoryExtension implements QueryCollectionExtension
     public function __construct(
         private AccessUrlHelper $accessUrlHelper,
         private SettingsManager $settingsManager,
+        private CourseCategoryRepository $courseCategoryRepository,
     ) {}
 
     public function applyToCollection(
@@ -47,10 +49,18 @@ final readonly class CourseCategoryExtension implements QueryCollectionExtension
             $accessUrlIds[] = $this->accessUrlHelper->getFirstAccessUrl()?->getId();
         }
 
+        // Sub-categories are visible wherever their top-level category is assigned.
+        $categoryIds = $this->courseCategoryRepository->findIdsInAccessUrlTree(array_filter($accessUrlIds));
+
+        if (empty($categoryIds)) {
+            $queryBuilder->andWhere('1 = 0');
+
+            return;
+        }
+
         $queryBuilder
-            ->innerJoin("$rootAlias.urls", 'url')
-            ->andWhere($queryBuilder->expr()->in('url.url', ':access_url_ids'))
-            ->setParameter('access_url_ids', $accessUrlIds)
+            ->andWhere($queryBuilder->expr()->in("$rootAlias.id", ':course_category_ids'))
+            ->setParameter('course_category_ids', $categoryIds)
         ;
     }
 }

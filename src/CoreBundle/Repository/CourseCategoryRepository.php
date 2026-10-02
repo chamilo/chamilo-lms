@@ -29,37 +29,84 @@ class CourseCategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get all course categories in an access url.
+     * Get all course categories in an access url, including the sub-categories
+     * of the categories assigned to it.
      *
      * @return CourseCategory[]
      */
     public function findAllInAccessUrl(int $accessUrl, bool $allowBaseCategories = false, int $parentId = 0): array
     {
+        $accessUrlIds = [$accessUrl];
+
+        if ($allowBaseCategories) {
+            $accessUrlIds[] = 1;
+        }
+
+        $categoryIds = $this->findIdsInAccessUrlTree($accessUrlIds);
+
+        if (empty($categoryIds)) {
+            return [];
+        }
+
         $qb = $this->createQueryBuilder('c');
         $qb
-            ->innerJoin(
-                AccessUrlRelCourseCategory::class,
-                'a',
-                Join::ON,
-                'c = a.courseCategory'
-            )
-            ->where($qb->expr()->eq('a.url', $accessUrl))
+            ->where($qb->expr()->in('c.id', ':categoryIds'))
+            ->setParameter('categoryIds', $categoryIds)
             ->orderBy('c.treePos', Criteria::ASC)
         ;
 
-        if ($allowBaseCategories) {
-            $qb->orWhere($qb->expr()->eq('a.url', 1));
-        }
-
         if (!empty($parentId)) {
-            $qb->andWhere($qb->expr()->eq('c.parent', $parentId));
+            $qb->andWhere($qb->expr()->eq('c.parent', ':parentId'))
+                ->setParameter('parentId', $parentId)
+            ;
         } else {
             $qb->andWhere($qb->expr()->isNull('c.parent'));
         }
 
-        $query = $qb->getQuery();
+        return $qb->getQuery()->getResult();
+    }
 
-        return $query->getResult();
+    /**
+     * IDs of the categories visible in the given access urls: the categories assigned
+     * to one of them, plus the whole tree of sub-categories below each one.
+     *
+     * @param int[] $accessUrlIds
+     *
+     * @return int[]
+     */
+    public function findIdsInAccessUrlTree(array $accessUrlIds): array
+    {
+        $ids = $this->createQueryBuilder('c')
+            ->select('c.id')
+            ->innerJoin(
+                AccessUrlRelCourseCategory::class,
+                'a',
+                Join::WITH,
+                'c = a.courseCategory'
+            )
+            ->where('a.url IN (:accessUrlIds)')
+            ->setParameter('accessUrlIds', array_map('intval', $accessUrlIds))
+            ->getQuery()
+            ->getSingleColumnResult()
+        ;
+        $ids = array_values(array_unique(array_map('intval', $ids)));
+        $parentIds = $ids;
+
+        while (!empty($parentIds)) {
+            $childIds = $this->createQueryBuilder('c')
+                ->select('c.id')
+                ->where('c.parent IN (:parentIds)')
+                ->andWhere('c.id NOT IN (:knownIds)')
+                ->setParameter('parentIds', $parentIds)
+                ->setParameter('knownIds', $ids)
+                ->getQuery()
+                ->getSingleColumnResult()
+            ;
+            $parentIds = array_map('intval', $childIds);
+            $ids = array_merge($ids, $parentIds);
+        }
+
+        return $ids;
     }
 
     /**

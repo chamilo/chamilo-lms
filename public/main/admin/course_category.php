@@ -24,18 +24,39 @@ if (!empty($categoryId)) {
 }
 $parentId = $parentInfo ? $parentInfo['parent_id'] : null;
 
+// Course categories are global: they can only be changed from a URL whose tree contains them.
+$categoryIdsInUrl = $categoryRepo->findIdsInAccessUrlTree([$urlId]);
+$actionsOnCategory = ['delete', 'export', 'moveUp', 'moveDown', 'add', 'edit'];
+if (in_array($action, $actionsOnCategory, true)) {
+    // State-changing GET links and the add/edit form carry the page token
+    $isFormSent = !empty($_POST['formSent']);
+    if ((in_array($action, ['delete', 'moveUp', 'moveDown'], true) && !Security::check_token('get'))
+        || ($isFormSent && !Security::check_token('post'))
+    ) {
+        api_not_allowed(true);
+    }
+    if (!empty($categoryId) && !in_array((int) $categoryId, $categoryIdsInUrl, true)) {
+        api_not_allowed(true);
+    }
+    $postedParentId = (int) ($_POST['parent_id'] ?? 0);
+    if (!empty($postedParentId) && !in_array($postedParentId, $categoryIdsInUrl, true)) {
+        api_not_allowed(true);
+    }
+}
+
 switch ($action) {
     case 'delete':
         // If multiple URLs and not main URL, prevent deletion and inform user
         if (api_get_multiple_access_url() && 1 != $urlId) {
-            echo Display::return_message(
-                get_lang(
-                    'Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal.'
-                ),
-                'warning'
+            Display::addFlash(
+                Display::return_message(
+                    get_lang(
+                        'Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal.'
+                    ),
+                    'warning'
+                )
             );
-        }
-        if (!empty($categoryId)) {
+        } elseif (!empty($categoryId)) {
             $categoryRepo->delete($categoryRepo->find($categoryId));
             CourseCategory::reorganizeTreePos($parentId);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -157,6 +178,7 @@ if ('add' === $action || 'edit' === $action) {
     $form = new FormValidator('course_category', 'post', $url);
     $form->addHeader($form_title);
     $form->addHidden('formSent', 1);
+    $form->addHidden('sec_token', Security::get_existing_token());
     $form->addElement('text', 'code', get_lang('Category code'));
 
     if ('true' === api_get_setting('editor.save_titles_as_html')) {
@@ -268,7 +290,9 @@ if ('add' === $action || 'edit' === $action) {
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&id='.$categoryId
         );
 
-        if (!empty($parentInfo) && $parentInfo['access_url_id'] != $urlId) {
+        if (!empty($parentInfo)
+            && !in_array((int) $parentInfo['id'], $categoryRepo->findIdsInAccessUrlTree([$urlId]), true)
+        ) {
             $newCategoryLink = '';
         }
         $actions .= $newCategoryLink;

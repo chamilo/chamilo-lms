@@ -853,6 +853,7 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import { useLocale } from "../../composables/locale"
 import globalReportingService from "../../services/globalReportingService"
 import GlobalReportingToolbar from "./GlobalReportingToolbar.vue"
 import AdminMetric from "./GlobalReportingAdminMetric.vue"
@@ -867,6 +868,8 @@ const props = defineProps({
 const route = useRoute()
 const router = useRouter()
 const { locale, t } = useI18n()
+const { getLanguageName, fetchLanguageNameFromApi } = useLocale()
+const langMap = reactive({})
 const loading = ref(false)
 const exportFormat = ref("")
 const errorMessage = ref("")
@@ -1162,7 +1165,18 @@ function studentBossLearnerRoute(learner) {
 }
 
 function formatLanguage(value) {
-  return String(value || "-").replaceAll("_", "-")
+  if (!value) {
+    return "-"
+  }
+  if (!langMap[value]) {
+    langMap[value] = getLanguageName(value)
+    fetchLanguageNameFromApi(value)
+      .then((name) => {
+        if (name) langMap[value] = name
+      })
+      .catch(() => {})
+  }
+  return langMap[value]
 }
 
 function printReport() {

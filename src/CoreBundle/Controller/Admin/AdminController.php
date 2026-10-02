@@ -206,7 +206,8 @@ class AdminController extends BaseController
         Request $request,
         ResourceFileRepository $resourceFileRepository,
         CourseRepository $courseRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        TranslatorInterface $translator
     ): Response {
         $token = (string) $request->request->get('_token', '');
         if (!$this->isCsrfTokenValid('attach_orphan_file', $token)) {
@@ -218,7 +219,7 @@ class AdminController extends BaseController
         $search = (string) $request->request->get('search', '');
 
         if ($fileId <= 0) {
-            $this->addFlash('error', 'Missing resource file identifier.');
+            $this->addFlash('error', $translator->trans('Missing resource file identifier.'));
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -251,7 +252,7 @@ class AdminController extends BaseController
         $courseCodes = array_values(array_unique($courseCodes));
 
         if (0 === \count($courseCodes)) {
-            $this->addFlash('error', 'Please select at least one course.');
+            $this->addFlash('error', $translator->trans('Please select at least one course.'));
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -262,7 +263,7 @@ class AdminController extends BaseController
         /** @var ResourceFile|null $resourceFile */
         $resourceFile = $resourceFileRepository->find($fileId);
         if (!$resourceFile) {
-            $this->addFlash('error', 'Resource file not found.');
+            $this->addFlash('error', $translator->trans('Resource file not found.'));
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -365,7 +366,7 @@ class AdminController extends BaseController
             $this->addFlash(
                 'success',
                 \sprintf(
-                    'File "%s" has been attached to %d course(s): %s.',
+                    $translator->trans('File "%s" has been attached to %d course(s): %s.'),
                     (string) ($resourceFile->getOriginalName() ?? $resourceFile->getTitle() ?? $resourceFile->getId()),
                     \count($attachedTitles),
                     implode(', ', $attachedTitles)
@@ -377,7 +378,7 @@ class AdminController extends BaseController
             $this->addFlash(
                 'warning',
                 \sprintf(
-                    'Some courses were skipped: %s.',
+                    $translator->trans('Some courses were skipped: %s.'),
                     implode(', ', $skippedTitles)
                 )
             );
@@ -394,7 +395,8 @@ class AdminController extends BaseController
     public function detachFileFromCourse(
         Request $request,
         ResourceFileRepository $resourceFileRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        TranslatorInterface $translator
     ): Response {
         $token = (string) $request->request->get('_token', '');
         if (!$this->isCsrfTokenValid('detach_file_from_course', $token)) {
@@ -407,7 +409,7 @@ class AdminController extends BaseController
         $search = (string) $request->request->get('search', '');
 
         if ($fileId <= 0 || $courseId <= 0) {
-            $this->addFlash('error', 'Missing file or course identifier.');
+            $this->addFlash('error', $translator->trans('Missing file or course identifier.'));
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -418,7 +420,7 @@ class AdminController extends BaseController
         /** @var ResourceFile|null $resourceFile */
         $resourceFile = $resourceFileRepository->find($fileId);
         if (!$resourceFile) {
-            $this->addFlash('error', 'Resource file not found.');
+            $this->addFlash('error', $translator->trans('Resource file not found.'));
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -428,7 +430,7 @@ class AdminController extends BaseController
 
         $resourceNode = $resourceFile->getResourceNode();
         if (!$resourceNode) {
-            $this->addFlash('error', 'This resource file has no resource node and cannot be detached.');
+            $this->addFlash('error', $translator->trans('This resource file has no resource node and cannot be detached.'));
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -453,14 +455,14 @@ class AdminController extends BaseController
             $this->addFlash(
                 'success',
                 \sprintf(
-                    'File has been detached from %d course link(s).',
+                    $translator->trans('File has been detached from %d course link(s).'),
                     $removed
                 )
             );
         } else {
             $this->addFlash(
                 'warning',
-                'This file is not attached to the selected course.'
+                $translator->trans('This file is not attached to the selected course.')
             );
         }
 
@@ -476,7 +478,8 @@ class AdminController extends BaseController
         Request $request,
         ResourceFileRepository $resourceFileRepository,
         TicketMessageAttachmentRepository $ticketMessageAttachmentRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        TranslatorInterface $translator
     ): Response {
         $token = (string) $request->request->get('_token', '');
         if (!$this->isCsrfTokenValid('delete_orphan_file', $token)) {
@@ -488,7 +491,7 @@ class AdminController extends BaseController
         $search = (string) $request->request->get('search', '');
 
         if ($fileId <= 0) {
-            $this->addFlash('error', 'Missing resource file identifier.');
+            $this->addFlash('error', $translator->trans('Missing resource file identifier.'));
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -498,7 +501,7 @@ class AdminController extends BaseController
 
         $resourceFile = $resourceFileRepository->find($fileId);
         if (!$resourceFile) {
-            $this->addFlash('error', 'Resource file not found.');
+            $this->addFlash('error', $translator->trans('Resource file not found.'));
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -513,7 +516,7 @@ class AdminController extends BaseController
             : null;
 
         if ($linksCount > 0 || null !== $ticketAttachment) {
-            $this->addFlash('warning', 'This file is still used by at least one resource and cannot be deleted.');
+            $this->addFlash('warning', $translator->trans('This file is still used by at least one resource and cannot be deleted.'));
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -538,7 +541,7 @@ class AdminController extends BaseController
         $em->remove($resourceFile);
         $em->flush();
 
-        $this->addFlash('success', 'Orphan file and its physical content have been deleted definitively.');
+        $this->addFlash('success', $translator->trans('Orphan file and its physical content have been deleted definitively.'));
 
         return $this->redirectToRoute('admin_files_info', [
             'page' => $page,

@@ -1764,7 +1764,12 @@ async function applySessionFilter() {
 
 function setUserSessionLastWeek() {
   const today = new Date()
-  const localeName = String(locale.value || "en_US").replace("_", "-")
+  // Only the first segment is a real BCP-47 primary language subtag (e.g.
+  // "fr" out of "fr_61"). Some accounts carry a Chamilo sub-language isocode
+  // (e.g. "fr_61" instead of "fr_FR"), and passing that whole string to
+  // Intl.Locale would otherwise be silently swallowed by the try/catch below
+  // but still miss the real week-start info.
+  const localeName = String(locale.value || "en_US").split(/[_-]/)[0] || "en"
   let firstDay = 1
 
   try {
@@ -2259,7 +2264,12 @@ function formatLegacyShortDate(value) {
   if (Number.isNaN(date.getTime())) {
     return String(value)
   }
-  return new Intl.DateTimeFormat(String(locale.value || "en_US").replace("_", "-"), {
+  // Only the first segment is a real BCP-47 primary language subtag (e.g.
+  // "fr" out of "fr_61"). Some accounts carry a Chamilo sub-language isocode
+  // (e.g. "fr_61" instead of "fr_FR"), and passing that whole string to
+  // Intl.DateTimeFormat throws a RangeError that would otherwise crash this
+  // component's render with no visible error.
+  return new Intl.DateTimeFormat(String(locale.value || "en_US").split(/[_-]/)[0] || "en", {
     day: "numeric",
     month: "short",
     year: "2-digit",
@@ -2276,7 +2286,12 @@ function formatDateTime(value) {
   if (Number.isNaN(date.getTime())) {
     return String(value)
   }
-  return new Intl.DateTimeFormat(String(locale.value || "en_US").replace("_", "-"), {
+  // Only the first segment is a real BCP-47 primary language subtag (e.g.
+  // "fr" out of "fr_61"). Some accounts carry a Chamilo sub-language isocode
+  // (e.g. "fr_61" instead of "fr_FR"), and passing that whole string to
+  // Intl.DateTimeFormat throws a RangeError that would otherwise crash this
+  // component's render with no visible error.
+  return new Intl.DateTimeFormat(String(locale.value || "en_US").split(/[_-]/)[0] || "en", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(date)
@@ -2291,7 +2306,12 @@ function formatNumber(value) {
   if (!Number.isFinite(number)) {
     return value
   }
-  return new Intl.NumberFormat(String(locale.value || "en_US").replace("_", "-"), {
+  // Only the first segment is a real BCP-47 primary language subtag (e.g.
+  // "fr" out of "fr_61"). Some accounts carry a Chamilo sub-language isocode
+  // (e.g. "fr_61" instead of "fr_FR"), and passing that whole string to
+  // Intl.NumberFormat throws a RangeError that would otherwise crash this
+  // component's render with no visible error.
+  return new Intl.NumberFormat(String(locale.value || "en_US").split(/[_-]/)[0] || "en", {
     maximumFractionDigits: 2,
   }).format(number)
 }

@@ -75,10 +75,14 @@ final class CToolStateProvider implements ProviderInterface
             return [];
         }
 
-        $isAllowToEdit = $user && ($user->isAdmin() || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER'));
+        $isPlatformAdmin = $user && $this->security->isGranted('ROLE_ADMIN');
+        $isAllowToEdit = $user && (
+            $isPlatformAdmin
+                || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+        );
         $isAllowToEditBack = $isAllowToEdit;
         $isAllowToSessionEdit = $user && (
-            $user->isAdmin()
+            $isPlatformAdmin
                 || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
                 || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
         );
@@ -590,7 +594,7 @@ final class CToolStateProvider implements ProviderInterface
 
     private function isCurrentUserTeacherAffectedByHiddenTools(?User $user): bool
     {
-        if (null === $user || $user->isAdmin()) {
+        if (null === $user || $this->security->isGranted('ROLE_ADMIN')) {
             return false;
         }
 

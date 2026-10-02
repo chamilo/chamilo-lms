@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CourseCatalogueHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
@@ -48,6 +49,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         private TranslatorInterface $translator,
         private CourseCatalogueHelper $courseCatalogueHelper,
         private CCourseDescriptionRepository $courseDescriptionRepository,
+        private CourseCategoryRepository $courseCategoryRepository,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
@@ -70,6 +72,11 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 
         $queryBuilder = $this->createQueryBuilder();
         $queryNameGenerator = new QueryNameGenerator();
+
+        // A category filter also matches the courses of its whole sub-category tree
+        if (!empty($context['filters']['categories'])) {
+            $context['filters']['categories'] = $this->expandCategoryFilter((array) $context['filters']['categories']);
+        }
 
         $this->filterExtension->applyToCollection(
             $queryBuilder,
@@ -131,6 +138,27 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         }
 
         return $paginator;
+    }
+
+    /**
+     * @param array<int|string> $categories category IRIs (/api/course_categories/{id}) or IDs
+     *
+     * @return array<int|string>
+     */
+    private function expandCategoryFilter(array $categories): array
+    {
+        $categoryIds = [];
+        foreach ($categories as $category) {
+            if (preg_match('#(\d+)$#', (string) $category, $matches)) {
+                $categoryIds[] = (int) $matches[1];
+            }
+        }
+
+        if (empty($categoryIds)) {
+            return $categories;
+        }
+
+        return array_map('strval', $this->courseCategoryRepository->findWithDescendantIds($categoryIds));
     }
 
     private function createQueryBuilder(): QueryBuilder

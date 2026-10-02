@@ -89,7 +89,20 @@ class CourseCategoryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleColumnResult()
         ;
-        $ids = array_values(array_unique(array_map('intval', $ids)));
+
+        return $this->findWithDescendantIds($ids);
+    }
+
+    /**
+     * The given category IDs plus the IDs of every category below them in the tree.
+     *
+     * @param int[] $categoryIds
+     *
+     * @return int[]
+     */
+    public function findWithDescendantIds(array $categoryIds): array
+    {
+        $ids = array_values(array_unique(array_map('intval', $categoryIds)));
         $parentIds = $ids;
 
         while (!empty($parentIds)) {

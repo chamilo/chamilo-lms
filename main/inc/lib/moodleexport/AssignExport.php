@@ -13,8 +13,6 @@ use DocumentManager;
  */
 class AssignExport extends ActivityExport
 {
-    private static int $embeddedFileGlobalSeq = 0;
-
     /**
      * Export all assign data into a single Moodle assign activity.
      *
@@ -29,7 +27,7 @@ class AssignExport extends ActivityExport
         $assignDir = $this->prepareActivityDirectory($exportDir, 'assign', $moduleId);
 
         // Retrieve assign data
-        $assignData = $this->getData($activityId, $sectionId);
+        $assignData = $this->getData($activityId, $sectionId, (int) $moduleId);
 
         if (empty($assignData)) {
             // The work referenced by this activity is not part of the resources being
@@ -59,7 +57,7 @@ class AssignExport extends ActivityExport
     /**
      * Get all the data related to the assign activity.
      */
-    public function getData(int $assignId, int $sectionId): ?array
+    public function getData(int $assignId, int $sectionId, ?int $moduleId = null): ?array
     {
         $work = $this->course->resources[RESOURCE_WORK][$assignId];
 
@@ -68,7 +66,10 @@ class AssignExport extends ActivityExport
         }
 
         $sentDate = !empty($work->params['sent_date']) ? strtotime($work->params['sent_date']) : time();
-        $effectiveModuleId = (int) $work->params['id'];
+        $effectiveModuleId = (int) ($moduleId ?? $work->params['id']);
+        if ($effectiveModuleId <= 0) {
+            $effectiveModuleId = (int) $work->params['id'];
+        }
 
         $workFiles = getAllDocumentToWork($assignId, $this->course->info['real_id']);
         $files = [];
@@ -91,9 +92,9 @@ class AssignExport extends ActivityExport
             (string) $work->params['description'],
             $effectiveModuleId,
             'mod_assign',
-            'introattachment',
+            'intro',
             0,
-            fn (int $sequence): int => $this->buildAssignEmbeddedFileId($sequence)
+            fn (int $sequence): int => $this->buildAssignEmbeddedFileId($effectiveModuleId, $sequence)
         );
 
         if (!empty($introResult['files'])) {
@@ -105,9 +106,9 @@ class AssignExport extends ActivityExport
 
         return [
             'id' => (int) $work->params['id'],
-            'moduleid' => (int) $work->params['id'],
+            'moduleid' => $effectiveModuleId,
             'modulename' => 'assign',
-            'contextid' => $this->course->info['real_id'],
+            'contextid' => $effectiveModuleId,
             'sectionid' => $sectionId,
             'sectionnumber' => 0,
             'name' => htmlspecialchars($work->params['title'], ENT_QUOTES),
@@ -234,10 +235,8 @@ class AssignExport extends ActivityExport
     /**
      * Build a stable embedded file id for images found in an assign's description.
      */
-    private function buildAssignEmbeddedFileId(int $sequence): int
+    private function buildAssignEmbeddedFileId(int $moduleId, int $sequence): int
     {
-        self::$embeddedFileGlobalSeq++;
-
-        return 1600000000 + self::$embeddedFileGlobalSeq;
+        return 1600000000 + (max(0, $moduleId) * 1000) + max(1, $sequence);
     }
 }

@@ -154,6 +154,12 @@ final class LearningPathRuntime
     #[Groups(['learning_path_runtime:read'])]
     public string $contentUrl = '';
 
+    #[Groups(['learning_path_runtime:read'])]
+    public bool $externalLinkRequiresNewTab = false;
+
+    #[Groups(['learning_path_runtime:read'])]
+    public string $externalLinkOpenUrl = '';
+
     /**
      * @var array<string, mixed>
      */

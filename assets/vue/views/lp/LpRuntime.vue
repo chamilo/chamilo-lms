@@ -372,6 +372,26 @@
             class="h-full overflow-y-auto"
           />
 
+          <div
+            v-else-if="runtime.externalLinkRequiresNewTab && runtime.externalLinkOpenUrl"
+            class="lp-runtime-external-link-fallback"
+          >
+            <BaseIcon
+              icon="link"
+              size="large"
+            />
+            <strong>{{ t("This link cannot be displayed inside the learning path.") }}</strong>
+            <p>{{ t("Open it in a new tab to view the page.") }}</p>
+            <a
+              :href="runtime.externalLinkOpenUrl"
+              class="lp-runtime-external-link-open"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {{ t("Open in a new tab") }}
+            </a>
+          </div>
+
           <video
             v-else-if="runtime.contentUrl && isVideoItem"
             ref="runtimeVideo"
@@ -1639,7 +1659,7 @@ function applyRuntime(data, { contentChanged = false } = {}) {
     if (data.contentUrl) {
       iframeReloadKey.value += 1
     }
-    iframeLoading.value = Boolean(data.contentUrl)
+    iframeLoading.value = Boolean(data.contentUrl) && !data.externalLinkRequiresNewTab
   }
 
   nextTick(expandCurrentAncestors)
@@ -2368,6 +2388,32 @@ body.lp-runtime-document {
 .lp-runtime-iframe {
   border: 0;
   background: #ffffff;
+}
+
+.lp-runtime-external-link-fallback {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px;
+  box-sizing: border-box;
+  text-align: center;
+  background: #ffffff;
+}
+
+.lp-runtime-external-link-fallback p {
+  margin: 0;
+}
+
+.lp-runtime-external-link-open {
+  margin-top: 4px;
+  font-weight: 600;
+  color: var(--color-primary, #1f6fb2);
+  text-decoration: underline;
 }
 
 .lp-runtime-video {

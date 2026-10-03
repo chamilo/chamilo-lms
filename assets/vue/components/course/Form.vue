@@ -204,7 +204,10 @@
         />
       </div>
 
-      <div class="flex flex-col gap-1">
+      <div
+        v-if="languageOptions.length > 1"
+        class="flex flex-col gap-1"
+      >
         <BaseSelect
           id="language-dropdowns"
           v-model="courseLanguage"
@@ -625,14 +628,19 @@ onMounted(async () => {
   await focusCourseNameField()
 
   try {
-    const languagesResponse = await languageService.findAll()
-    const data = await languagesResponse.json()
-    languageOptions.value = data["hydra:member"].map((language) => ({
+    const data = await languageService.findAllAvailable()
+    const availableLanguages = Array.isArray(data?.["hydra:member"]) ? data["hydra:member"] : []
+
+    languageOptions.value = availableLanguages.map((language) => ({
       name: language.originalName,
       id: language.isocode,
     }))
 
-    applyDefaultLanguageIfEmpty()
+    if (languageOptions.value.length === 1) {
+      courseLanguage.value = languageOptions.value[0].id
+    } else {
+      applyDefaultLanguageIfEmpty()
+    }
   } catch (error) {
     console.error("Failed to load dropdown data", error)
   }

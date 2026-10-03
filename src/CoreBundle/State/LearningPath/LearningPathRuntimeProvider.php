@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathAccessChecker;
@@ -51,12 +52,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 use const PATHINFO_EXTENSION;
+use const PHP_URL_SCHEME;
 
 /** @implements ProviderInterface<LearningPathRuntime> */
 final readonly class LearningPathRuntimeProvider implements ProviderInterface
@@ -337,6 +340,23 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
                     $canManage,
                 )
                 : '';
+        if ($currentItem instanceof CLpItem
+            && 'link' === strtolower(trim($currentItem->getItemType()))
+            && '' !== $runtime->contentUrl
+        ) {
+            $resourceId = ctype_digit((string) $currentItem->getPath()) ? (int) $currentItem->getPath() : 0;
+            $link = $resourceId > 0
+                ? $this->findContextResource(CLink::class, $resourceId, $course, $session, $group)
+                : null;
+
+            if ($link instanceof CLink && null === $this->parseExternalVideoUrl((string) $link->getUrl())) {
+                $runtime->externalLinkOpenUrl = $runtime->contentUrl;
+                $runtime->externalLinkRequiresNewTab = !$this->canEmbedExternalLink(
+                    (string) $link->getUrl(),
+                    $request,
+                );
+            }
+        }
         [$runtime->audioUrl, $runtime->audioTitle] = $currentItem instanceof CLpItem
             ? $this->buildItemAudio($currentItem, $course, $session, $group, $request)
             : ['', ''];
@@ -784,7 +804,6 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $params['item_id'] = $learningPathItemId;
         $params['returnToLp'] = 1;
         $params['embedded'] = 1;
-        $params['isStudentView'] = $request->query->get('isStudentView', 'true');
         $params['type'] = 'step';
         $type = strtolower(trim($item->getItemType()));
 
@@ -979,6 +998,169 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         }
 
         return '';
+    }
+
+    private function canEmbedExternalLink(string $url, Request $request): bool
+    {
+        $url = trim($url);
+        if ('' === $url) {
+            return false;
+        }
+
+        $targetOrigin = $this->extractOrigin($url);
+        $platformOrigin = strtolower(rtrim($request->getSchemeAndHttpHost(), '/'));
+        if ('' === $targetOrigin) {
+            return false;
+        }
+
+        if ($targetOrigin === $platformOrigin) {
+            return true;
+        }
+
+        $targetScheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
+        if ($request->isSecure() && 'http' === $targetScheme) {
+            return false;
+        }
+
+        $options = SafeHttpClientHelper::withChamiloProxy([
+            'timeout' => 4,
+            'max_redirects' => 5,
+        ]);
+
+        try {
+            $headers = SafeHttpClientHelper::create()
+                ->request('GET', $url, $options)
+                ->getHeaders(false)
+            ;
+        } catch (ExceptionInterface) {
+            // Preserve the current behavior when the probe cannot determine the
+            // framing policy (timeout, DNS/network error, blocked target, etc.).
+            return true;
+        }
+
+        foreach ($headers['x-frame-options'] ?? [] as $headerValue) {
+            $value = strtolower(trim($headerValue));
+            if (str_contains($value, 'deny')) {
+                return false;
+            }
+
+            if (str_contains($value, 'sameorigin') && $targetOrigin !== $platformOrigin) {
+                return false;
+            }
+
+            if (str_starts_with($value, 'allow-from')) {
+                $allowedOrigin = trim(substr($value, \strlen('allow-from')));
+                if ('' === $allowedOrigin || $this->extractOrigin($allowedOrigin) !== $platformOrigin) {
+                    return false;
+                }
+            }
+        }
+
+        foreach ($headers['content-security-policy'] ?? [] as $policy) {
+            if (!$this->contentSecurityPolicyAllowsFraming($policy, $targetOrigin, $platformOrigin)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function contentSecurityPolicyAllowsFraming(
+        string $policy,
+        string $targetOrigin,
+        string $platformOrigin,
+    ): bool {
+        if (!preg_match('/(?:^|;)\s*frame-ancestors\s+([^;]+)/i', $policy, $matches)) {
+            return true;
+        }
+
+        $sources = preg_split('/\s+/', trim((string) ($matches[1] ?? ''))) ?: [];
+        if ([] === $sources || \in_array("'none'", $sources, true)) {
+            return false;
+        }
+
+        foreach ($sources as $source) {
+            $source = trim($source);
+            if ('' === $source) {
+                continue;
+            }
+
+            if ('*' === $source) {
+                return true;
+            }
+
+            if ("'self'" === strtolower($source) && $targetOrigin === $platformOrigin) {
+                return true;
+            }
+
+            if (preg_match('/^https?:$/i', $source)) {
+                if (str_starts_with($platformOrigin, strtolower($source).'//')) {
+                    return true;
+                }
+
+                continue;
+            }
+
+            if ($this->frameAncestorSourceMatchesOrigin($source, $platformOrigin)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function frameAncestorSourceMatchesOrigin(string $source, string $platformOrigin): bool
+    {
+        $source = strtolower(rtrim(trim($source), '/'));
+        if ('' === $source) {
+            return false;
+        }
+
+        if (!str_contains($source, '*')) {
+            return $this->extractOrigin($source) === $platformOrigin;
+        }
+
+        $sourceParts = parse_url($source);
+        $platformParts = parse_url($platformOrigin);
+        if (!\is_array($sourceParts) || !\is_array($platformParts)) {
+            return false;
+        }
+
+        $sourceScheme = strtolower((string) ($sourceParts['scheme'] ?? ''));
+        $platformScheme = strtolower((string) ($platformParts['scheme'] ?? ''));
+        if ('' !== $sourceScheme && $sourceScheme !== $platformScheme) {
+            return false;
+        }
+
+        $sourceHost = strtolower((string) ($sourceParts['host'] ?? ''));
+        $platformHost = strtolower((string) ($platformParts['host'] ?? ''));
+        if (!str_starts_with($sourceHost, '*.')) {
+            return false;
+        }
+
+        $suffix = substr($sourceHost, 1);
+
+        return '' !== $platformHost && str_ends_with($platformHost, $suffix);
+    }
+
+    private function extractOrigin(string $url): string
+    {
+        $parts = parse_url(trim($url));
+        if (!\is_array($parts)) {
+            return '';
+        }
+
+        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        if (!\in_array($scheme, ['http', 'https'], true) || '' === $host) {
+            return '';
+        }
+
+        $port = isset($parts['port']) ? (int) $parts['port'] : null;
+        $defaultPort = 'https' === $scheme ? 443 : 80;
+        $portSuffix = null !== $port && $port !== $defaultPort ? ':'.$port : '';
+
+        return $scheme.'://'.$host.$portSuffix;
     }
 
     private function resolveRuntimeItemType(

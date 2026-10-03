@@ -4,6 +4,7 @@
     :style="{ width: '28rem' }"
     :title="title"
     :show-close-button="false"
+    :show-header-close-button="showHeaderCloseButton"
     @update:is-visible="$emit('update:isVisible', $event)"
   >
     <slot></slot>
@@ -59,6 +60,10 @@ const props = defineProps({
   cancelLabel: {
     type: String,
     default: "",
+  },
+  showHeaderCloseButton: {
+    type: Boolean,
+    default: true,
   },
 })
 

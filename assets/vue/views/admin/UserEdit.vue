@@ -59,6 +59,7 @@
               :label="t('First name')"
               name="firstname"
               required
+              show-required-marker
             />
             <BaseInputText
               id="lastname"
@@ -66,6 +67,7 @@
               :label="t('Last name')"
               name="lastname"
               required
+              show-required-marker
             />
           </template>
           <template v-else>
@@ -75,6 +77,7 @@
               :label="t('Last name')"
               name="lastname"
               required
+              show-required-marker
             />
             <BaseInputText
               id="firstname"
@@ -82,6 +85,7 @@
               :label="t('First name')"
               name="firstname"
               required
+              show-required-marker
             />
           </template>
 
@@ -95,7 +99,8 @@
             id="email"
             v-model="form.email"
             :label="t('E-mail')"
-            :required="data.emailRequired"
+            :required="data.emailRequired || data.loginIsEmail"
+            :show-required-marker="data.emailRequired || data.loginIsEmail"
             name="email"
           />
         </div>
@@ -117,6 +122,7 @@
             :label="t('Username')"
             name="username"
             required
+            show-required-marker
           />
 
           <p
@@ -133,6 +139,8 @@
             input-id="auth_source"
             option-label="label"
             option-value="value"
+            required
+            show-required-marker
           />
 
           <div
@@ -156,6 +164,8 @@
                   :label="t('Password')"
                   autocomplete="new-password"
                   name="password"
+                  required
+                  show-required-marker
                   :type="showPassword ? 'text' : 'password'"
                 />
                 <button
@@ -181,6 +191,8 @@
             input-id="roles"
             option-label="label"
             option-value="value"
+            required
+            show-required-marker
             :toggle-all-label="t('Select all')"
           />
 

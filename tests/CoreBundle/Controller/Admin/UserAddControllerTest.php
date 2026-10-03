@@ -75,6 +75,43 @@ class UserAddControllerTest extends WebTestCase
         $this->assertIsInt($data['userId']);
     }
 
+    public function testCreateSanitizesPlainTextFieldsAgainstXss(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->getUser('admin'));
+
+        $client->request(
+            'POST',
+            '/admin/user-add-action',
+            [
+                'firstname' => '<script>alert(1)</script>SafeFirst',
+                'lastname' => '<img src=x onerror=alert(2)>SafeLast',
+                'officialCode' => '<b>CODE-123</b>',
+                'phone' => '<svg onload=alert(3)>555123</svg>',
+                'email' => 'xss_user_add@example.com',
+                'username' => 'xss_user_add',
+                'authSource' => ['platform'],
+                'roles' => ['ROLE_STUDENT'],
+                'locale' => 'en_US',
+                'sendMail' => '0',
+                'active' => '1',
+                'passwordMode' => 'auto',
+            ],
+            [],
+            ['HTTP_SEC_FETCH_SITE' => 'same-origin']
+        );
+
+        $this->assertResponseIsSuccessful();
+        $data = json_decode((string) $client->getResponse()->getContent(), true);
+        $user = static::getContainer()->get(UserRepository::class)->find($data['userId']);
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertSame('SafeFirst', $user->getFirstname());
+        $this->assertSame('SafeLast', $user->getLastname());
+        $this->assertSame('CODE-123', $user->getOfficialCode());
+        $this->assertSame('555123', $user->getPhone());
+    }
+
     public function testCreateUserWithoutRolesFails(): void
     {
         $client = static::createClient();

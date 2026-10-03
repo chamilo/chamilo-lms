@@ -139,6 +139,14 @@ Feature: Users management as admin
     Then I should see "Users list"
     And I should see "Add a user"
 
+  Scenario: Required add-user fields are visibly marked
+    Given I am on "/admin/user-add"
+    And wait very long for the page to be loaded
+    Then I should see the "label[for='firstname'] .text-red-500" element
+    And I should see the "label[for='lastname'] .text-red-500" element
+    And I should see the "label[for='username'] .text-red-500" element
+    And I should see the "label[for='roles'] .text-red-500" element
+
   Scenario: Create a user with only basic info
     And I am on "/admin/user-add"
     And I wait very long for the page to be loaded

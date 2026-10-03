@@ -37,6 +37,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 use UserManager;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
 use const FILTER_VALIDATE_EMAIL;
 use const UPLOAD_ERR_OK;
 
@@ -185,8 +187,8 @@ final class UserEditController extends AbstractController
         $adminsCanSetUsersPass = 'true' === api_get_setting('security.admins_can_set_users_pass');
         $loginIsEmail = 'true' === api_get_setting('login_is_email');
 
-        $firstname = trim((string) $payload->get('firstname', ''));
-        $lastname = trim((string) $payload->get('lastname', ''));
+        $firstname = self::sanitizePlainText((string) $payload->get('firstname', ''));
+        $lastname = self::sanitizePlainText((string) $payload->get('lastname', ''));
         if ('' === $firstname || '' === $lastname) {
             return $this->json(['error' => $this->translator->trans('Required field')], Response::HTTP_BAD_REQUEST);
         }
@@ -284,8 +286,8 @@ final class UserEditController extends AbstractController
             }
         }
 
-        $officialCode = trim((string) $payload->get('officialCode', ''));
-        $phone = trim((string) $payload->get('phone', ''));
+        $officialCode = self::sanitizePlainText((string) $payload->get('officialCode', ''));
+        $phone = self::sanitizePlainText((string) $payload->get('phone', ''));
         $locale = (string) $payload->get('locale', $user->getLocale());
         $active = $hideFields
             ? $user->getActive()
@@ -811,6 +813,16 @@ final class UserEditController extends AbstractController
      * Mirrors FormValidator's mobile_phone_number_filter(): strips '+', '(', ')'
      * and left-trims leading zeros, before the exactly-11-digits rule is checked.
      */
+    private static function sanitizePlainText(string $value): string
+    {
+        $value = html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $value = preg_replace('#<\s*(script|style)\b[^>]*>.*?<\s*/\s*\1\s*>#is', '', $value) ?? $value;
+        $value = strip_tags($value);
+        $value = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $value) ?? $value;
+
+        return trim($value);
+    }
+
     private static function filterMobilePhoneNumber(string $value): string
     {
         return ltrim(str_replace(['+', '(', ')'], '', $value), '0');

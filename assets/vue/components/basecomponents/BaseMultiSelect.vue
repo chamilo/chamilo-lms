@@ -10,6 +10,7 @@
         :input-id="inputId"
         :option-label="optionLabel"
         :option-value="optionValue"
+        :required="required"
         :show-toggle-all="showToggleAll"
         @blur="isFocused = false"
         @focus="isFocused = true"
@@ -23,10 +24,16 @@
           <div class="px-3 pt-2 text-body-2 text-gray-70">{{ toggleAllLabel }}</div>
         </template>
       </MultiSelect>
-      <label
-        :for="inputId"
-        v-text="label"
-      />
+      <label :for="inputId">
+        {{ label }}
+        <span
+          v-if="showRequiredMarker"
+          aria-hidden="true"
+          class="text-red-500"
+        >
+          *
+        </span>
+      </label>
     </FloatLabel>
     <small
       v-if="isInvalid"
@@ -100,6 +107,16 @@ const props = defineProps({
     type: String,
     required: false,
     default: null,
+  },
+  required: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  showRequiredMarker: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
 })
 const emit = defineEmits(["update:modelValue"])

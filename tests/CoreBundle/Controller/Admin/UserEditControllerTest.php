@@ -122,6 +122,46 @@ class UserEditControllerTest extends WebTestCase
         $this->assertSame('UpdatedLast', $refreshed->getLastname());
     }
 
+    public function testUpdateSanitizesPlainTextFieldsAgainstXss(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->getUser('admin'));
+        $target = $this->createUser('user_edit_ctrl_xss');
+
+        $client->request(
+            'POST',
+            '/admin/user-edit-action',
+            [
+                'user_id' => $target->getId(),
+                'firstname' => '<script>alert(1)</script>SafeFirst',
+                'lastname' => '<img src=x onerror=alert(2)>SafeLast',
+                'officialCode' => '<b>CODE-456</b>',
+                'phone' => '<svg onload=alert(3)>555456</svg>',
+                'email' => $target->getEmail(),
+                'username' => $target->getUsername(),
+                'authSource' => ['platform'],
+                'roles' => ['ROLE_STUDENT'],
+                'locale' => 'en_US',
+                'sendMail' => '0',
+                'active' => '1',
+                'resetPassword' => '0',
+            ],
+            [],
+            ['HTTP_SEC_FETCH_SITE' => 'same-origin']
+        );
+
+        $this->assertResponseIsSuccessful();
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $refreshed = $em->getRepository(User::class)->find($target->getId());
+
+        $this->assertSame('SafeFirst', $refreshed->getFirstname());
+        $this->assertSame('SafeLast', $refreshed->getLastname());
+        $this->assertSame('CODE-456', $refreshed->getOfficialCode());
+        $this->assertSame('555456', $refreshed->getPhone());
+    }
+
     public function testResubmittingOwnUsernameDoesNotTriggerDuplicateCheck(): void
     {
         // Regression: excluding the target's own current username from the

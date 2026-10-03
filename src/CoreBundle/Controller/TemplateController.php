@@ -27,6 +27,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 #[Route('/template')]
 class TemplateController extends AbstractController
 {
@@ -34,12 +37,22 @@ class TemplateController extends AbstractController
     public function createDocumentTemplate(Request $request, EntityManagerInterface $entityManager, UserHelper $userHelper): Response
     {
         $documentId = (int) $request->request->get('refDoc');
-        $title = $request->request->get('title');
-        $cid = $request->request->get('cid');
+        $title = self::sanitizePlainText((string) $request->request->get('title', ''));
         $imageFile = $request->files->get('thumbnail');
 
-        if (!$imageFile instanceof UploadedFile) {
-            return $this->json(['error' => 'No image provided.'], Response::HTTP_BAD_REQUEST);
+        if ('' === $title) {
+            return $this->json(['error' => 'Title is required.'], Response::HTTP_BAD_REQUEST);
+        }
+        if (mb_strlen($title) > 100) {
+            return $this->json(['error' => 'The title is too long.'], Response::HTTP_BAD_REQUEST);
+        }
+        if (!$imageFile instanceof UploadedFile || !$imageFile->isValid()) {
+            return $this->json(['error' => 'A valid image file is required.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $allowedMimeTypes = ['image/gif', 'image/jpeg', 'image/png'];
+        if (!\in_array((string) $imageFile->getMimeType(), $allowedMimeTypes, true)) {
+            return $this->json(['error' => 'Only PNG, JPG or GIF images allowed'], Response::HTTP_BAD_REQUEST);
         }
 
         $document = $entityManager->getRepository(CDocument::class)->find($documentId);
@@ -55,9 +68,8 @@ class TemplateController extends AbstractController
         $this->denyAccessUnlessGranted(CourseVoter::EDIT, $documentCourse);
 
         $user = $userHelper->getCurrent();
-        $course = null;
-        if ($cid) {
-            $course = $entityManager->getRepository(Course::class)->find($cid);
+        if (!$user) {
+            throw $this->createAccessDeniedException();
         }
 
         $asset = new Asset();
@@ -71,7 +83,7 @@ class TemplateController extends AbstractController
         $template->setTitle($title);
         $template->setDescription('');
         $template->setRefDoc($documentId);
-        $template->setCourse($course);
+        $template->setCourse($documentCourse);
         $template->setUser($user);
         $template->setImage($asset);
         $entityManager->persist($template);
@@ -305,6 +317,16 @@ class TemplateController extends AbstractController
                 $candidates[] = $isoToChamiloLanguage[$shortLocale];
             }
         }
+    }
+
+    private static function sanitizePlainText(string $value): string
+    {
+        $value = html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $value = preg_replace('#<\s*(script|style)\b[^>]*>.*?<\s*/\s*\1\s*>#is', '', $value) ?? $value;
+        $value = strip_tags($value);
+        $value = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $value) ?? $value;
+
+        return trim($value);
     }
 
     private function isSettingEnabled(mixed $value): bool

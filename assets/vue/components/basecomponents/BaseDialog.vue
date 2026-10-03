@@ -46,6 +46,10 @@ const props = defineProps({
     default: "black",
     validator: buttonTypeValidator,
   },
+  showHeaderCloseButton: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const innerCloseLabel = computed(() => (props.closeLabel === "" ? t("Cancel") : props.closeLabel))
@@ -54,6 +58,7 @@ const innerCloseLabel = computed(() => (props.closeLabel === "" ? t("Cancel") : 
 <template>
   <Dialog
     v-model:visible="isVisible"
+    :closable="showHeaderCloseButton"
     :modal="true"
     class="p-fluid"
   >

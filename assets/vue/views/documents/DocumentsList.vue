@@ -334,9 +334,7 @@
             :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
             :disabled="isSettingDefaultCertificate"
             :title="
-              slotProps.data.iid === defaultCertificateId
-                ? t('Default certificate')
-                : t('Set as default certificate')
+              slotProps.data.iid === defaultCertificateId ? t('Default certificate') : t('Set as default certificate')
             "
             size="small"
             type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
@@ -652,32 +650,37 @@
     v-model:is-visible="showTemplateFormModal"
     :cancel-label="t('Cancel')"
     :confirm-label="t('Save')"
+    :show-header-close-button="false"
     :title="t('Add as a template')"
     @confirm-clicked="submitTemplateForm"
-    @cancel-clicked="showTemplateFormModal = false"
+    @cancel-clicked="closeTemplateForm"
   >
-    <form @submit.prevent="submitTemplateForm">
-      <FloatLabel variant="on">
-        <InputText
-          id="templateTitle"
-          v-model.trim="templateFormData.title"
-          class="form-control"
-          required
-        />
-        <label
-          for="templateTitle"
-          v-text="t('Name')"
-        />
-      </FloatLabel>
-      <small
-        v-if="submitted && !templateFormData.title"
-        class="p-error"
-        v-text="t('Title is required')"
+    <form
+      class="flex flex-col gap-4"
+      @submit.prevent="submitTemplateForm"
+    >
+      <BaseInputText
+        id="templateTitle"
+        v-model="templateFormData.title"
+        :error-text="t('Title is required')"
+        :form-submitted="submitted"
+        :is-invalid="submitted && !templateFormData.title.trim()"
+        :label="t('Name')"
+        name="template_title"
+        required
+        show-required-marker
       />
       <BaseFileUpload
-        id="post-file"
+        id="template-thumbnail"
+        accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif"
+        :error-text="t('Required field')"
+        :field-label="t('Image')"
+        :help-text="t('Only PNG, JPG or GIF images allowed')"
+        :is-invalid="submitted && !selectedFile"
         :label="t('File upload')"
-        accept="image/*"
+        name="thumbnail"
+        required
+        show-required-marker
         size="small"
         @file-selected="selectedFile = $event"
       />
@@ -741,6 +744,7 @@ import { useConfirmation } from "../../composables/useConfirmation"
 import { useSecurityStore } from "../../store/securityStore"
 import prettyBytes from "pretty-bytes"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
@@ -2113,6 +2117,18 @@ const getTemplateIcon = (documentId) => {
   return document && document.template ? "template-selected" : "template-not-selected"
 }
 
+const resetTemplateForm = () => {
+  submitted.value = false
+  templateFormData.value.title = ""
+  selectedFile.value = null
+}
+
+const closeTemplateForm = () => {
+  showTemplateFormModal.value = false
+  currentDocumentId.value = null
+  resetTemplateForm()
+}
+
 const openTemplateForm = async (documentId) => {
   const isTemplate = await isDocumentTemplate(documentId)
 
@@ -2120,6 +2136,7 @@ const openTemplateForm = async (documentId) => {
     await deleteDocumentTemplate(documentId)
     triggerTableLoad()
   } else {
+    resetTemplateForm()
     currentDocumentId.value = documentId
     showTemplateFormModal.value = true
   }
@@ -2127,9 +2144,9 @@ const openTemplateForm = async (documentId) => {
 
 const submitTemplateForm = async () => {
   submitted.value = true
+  templateFormData.value.title = templateFormData.value.title.trim()
 
   if (!templateFormData.value.title || !selectedFile.value) {
-    notification.showErrorNotification(t("The title and thumbnail are required"))
     return
   }
 
@@ -2138,18 +2155,15 @@ const submitTemplateForm = async () => {
     formData.append("title", templateFormData.value.title)
     formData.append("thumbnail", selectedFile.value)
     formData.append("refDoc", currentDocumentId.value)
-    formData.append("cid", cid)
 
     await documentsService.createDocumentTemplate(formData)
 
     notification.showSuccessNotification(t("Template created successfully"))
-    templateFormData.value.title = ""
-    selectedFile.value = null
-    showTemplateFormModal.value = false
+    closeTemplateForm()
     triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error submitting template form:", error)
-    notification.showErrorNotification(t("Error submitting the form"))
+    notification.showErrorNotification(error?.response?.data?.error || t("Error submitting the form"))
   }
 }
 

@@ -346,7 +346,8 @@ class MoodleExport
 
             $assignData = $assignExport->getData(
                 (int) $activity['id'],
-                (int) $activity['sectionid']
+                (int) $activity['sectionid'],
+                (int) $activity['moduleid']
             );
 
             if (!empty($assignData['files'])) {

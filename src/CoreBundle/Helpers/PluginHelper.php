@@ -82,8 +82,12 @@ final class PluginHelper
     {
         $name = $this->resolveTitle($pluginName) ?? $pluginName;
 
-        if (class_exists($name) && method_exists($name, 'create')) {
-            return $name::create();
+        // Most plugin classes are named "<Title>Plugin" (e.g. BbbPlugin), while "<Title>" may be
+        // an unrelated library class (e.g. Bbb), so the suffixed name is tried first.
+        foreach ([$name.'Plugin', $name] as $class) {
+            if (class_exists($class) && method_exists($class, 'create')) {
+                return $class::create();
+            }
         }
 
         return null;

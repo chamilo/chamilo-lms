@@ -128,7 +128,8 @@ class OnlyofficeConfigService extends DocEditorConfigService
         $customization = new Customization();
         $customization->setGoback($goback);
         $customization->setCompactHeader(true);
-        $customization->setToolbarNoTabs(true);
+	// Setting toolbarNoTabs: true can trigger issue #3694 in ONLYOFFICE/DocumentServer
+        //$customization->setToolbarNoTabs(true);
 
         return $customization;
     }

@@ -208,6 +208,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         if (!$data instanceof CForumThread) {
             throw new NotFoundHttpException('Forum thread not found.');
         }
+        $this->assertThreadInCurrentContext($data);
 
         $forum = $data->getForum();
         if (!$forum instanceof CForum) {
@@ -248,6 +249,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         if (!$data instanceof CForumThread) {
             throw new NotFoundHttpException('Forum thread not found.');
         }
+        $this->assertThreadInCurrentContext($data);
 
         $forum = $data->getForum();
         if (!$forum instanceof CForum) {
@@ -302,6 +304,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         if (!$data instanceof CForumThread) {
             throw new NotFoundHttpException('Forum thread not found.');
         }
+        $this->assertThreadInCurrentContext($data);
 
         $forum = $data->getForum();
         if (!$forum instanceof CForum) {
@@ -336,6 +339,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         if (!$data instanceof CForumThread) {
             throw new NotFoundHttpException('Forum thread not found.');
         }
+        $this->assertThreadInCurrentContext($data);
 
         $forum = $data->getForum();
         if (!$forum instanceof CForum) {
@@ -370,6 +374,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         if (!$data instanceof CForumThread) {
             throw new NotFoundHttpException('Forum thread not found.');
         }
+        $this->assertThreadInCurrentContext($data);
 
         $forum = $data->getForum();
         if (!$forum instanceof CForum) {
@@ -404,6 +409,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         if (!$data instanceof CForumThread) {
             throw new NotFoundHttpException('Forum thread not found.');
         }
+        $this->assertThreadInCurrentContext($data);
 
         $sourceForum = $data->getForum();
         if (!$sourceForum instanceof CForum) {
@@ -465,6 +471,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         if (!$data instanceof CForumThread) {
             throw new NotFoundHttpException('Forum thread not found.');
         }
+        $this->assertThreadInCurrentContext($data);
 
         $forum = $data->getForum();
         if (!$forum instanceof CForum) {
@@ -585,6 +592,19 @@ final class ForumThreadProcessor implements ProcessorInterface
         }
 
         return $value;
+    }
+
+    /**
+     * A thread can only be managed from the context it was created in (base course or one session).
+     */
+    private function assertThreadInCurrentContext(CForumThread $thread): void
+    {
+        $course = $this->getCourse($this->cidReqHelper);
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+
+        if (!$this->isThreadInCurrentContext($thread, $course, $session)) {
+            throw new NotFoundHttpException('Forum thread not found.');
+        }
     }
 
     private function assertForumBelongsToCurrentContext(CForum $forum, Course $course, ?Session $session, ?CGroup $group): void

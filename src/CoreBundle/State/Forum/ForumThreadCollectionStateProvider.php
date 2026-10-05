@@ -120,7 +120,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         $showPosterAvatar = $this->arePosterImagesAllowed($course);
         $user = $this->getCurrentUser();
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
-        $threads = $this->entityManager->createQueryBuilder()
+        $threadQueryBuilder = $this->entityManager->createQueryBuilder()
             ->select('t')
             ->from(CForumThread::class, 't')
             ->andWhere('IDENTITY(t.forum) = :forumId')
@@ -128,9 +128,9 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
             ->orderBy('t.threadSticky', 'DESC')
             ->addOrderBy('t.threadDate', 'DESC')
             ->addOrderBy('t.iid', 'DESC')
-            ->getQuery()
-            ->getResult()
         ;
+        $this->addThreadContextCondition($threadQueryBuilder, 't', $course, $session);
+        $threads = $threadQueryBuilder->getQuery()->getResult();
 
         $items = [];
         foreach ($threads as $thread) {

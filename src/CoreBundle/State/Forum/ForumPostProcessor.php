@@ -139,13 +139,9 @@ final class ForumPostProcessor implements ProcessorInterface
             $group,
             'The selected forum does not belong to this context.',
         );
-        $this->assertResourceNodeInForumContext(
-            $thread->getResourceNode(),
-            $course,
-            $session,
-            $group,
-            'The selected thread does not belong to this context.',
-        );
+        if (!$this->isThreadInCurrentContext($thread, $course, $session)) {
+            throw new AccessDeniedHttpException('The selected thread does not belong to this context.');
+        }
         $user = $this->security->getUser();
 
         if (!$user instanceof User) {
@@ -258,11 +254,7 @@ final class ForumPostProcessor implements ProcessorInterface
             throw new NotFoundHttpException('Forum post not found.');
         }
 
-        $thread = $data->getThread();
-        $forum = $data->getForum();
-        if (!$thread instanceof CForumThread || !$forum instanceof CForum) {
-            throw new NotFoundHttpException('Forum thread not found.');
-        }
+        [$forum, $thread] = $this->getPostContext($data);
 
         $this->assertVisibleResource($data->getResourceNode());
         $this->assertVisibleResource($thread->getResourceNode());
@@ -308,11 +300,7 @@ final class ForumPostProcessor implements ProcessorInterface
             throw new NotFoundHttpException('Forum post not found.');
         }
 
-        $thread = $data->getThread();
-        $forum = $data->getForum();
-        if (!$thread instanceof CForumThread || !$forum instanceof CForum) {
-            throw new NotFoundHttpException('Forum thread not found.');
-        }
+        [$forum, $thread] = $this->getPostContext($data);
 
         $this->assertVisibleResource($data->getResourceNode());
         $this->assertVisibleResource($thread->getResourceNode());
@@ -618,13 +606,6 @@ final class ForumPostProcessor implements ProcessorInterface
             $group,
             'The source forum does not belong to this context.',
         );
-        $this->assertResourceNodeInForumContext(
-            $sourceThread->getResourceNode(),
-            $course,
-            $session,
-            $group,
-            'The source thread does not belong to this context.',
-        );
         $this->assertForumThreadNotLockedByGradebook($this->gradebookLinkManager, $course, $session, $sourceThread);
 
         if ($this->isFirstPost($data, $sourceThread)) {
@@ -659,6 +640,10 @@ final class ForumPostProcessor implements ProcessorInterface
             $targetForum = $targetThread->getForum();
             if (!$targetForum instanceof CForum) {
                 throw new NotFoundHttpException('Target forum not found.');
+            }
+
+            if (!$this->isThreadInCurrentContext($targetThread, $course, $session)) {
+                throw new NotFoundHttpException('Target forum thread not found.');
             }
 
             $this->assertEditableResourceNodeInForumContext(
@@ -731,12 +716,20 @@ final class ForumPostProcessor implements ProcessorInterface
     /**
      * @return array{0: CForum, 1: CForumThread}
      */
+    /**
+     * A post can only be acted on from the context (base course or one session) its thread belongs to.
+     */
     private function getPostContext(CForumPost $post): array
     {
         $thread = $post->getThread();
         $forum = $post->getForum();
         if (!$thread instanceof CForumThread || !$forum instanceof CForum) {
             throw new NotFoundHttpException('Forum thread not found.');
+        }
+
+        $course = $this->getCourse($this->cidReqHelper);
+        if (!$this->isThreadInCurrentContext($thread, $course, $this->cidReqHelper->getDoctrineSessionEntity())) {
+            throw new NotFoundHttpException('Forum post not found.');
         }
 
         return [$forum, $thread];

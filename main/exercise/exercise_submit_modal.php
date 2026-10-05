@@ -84,9 +84,9 @@ if (!empty($choiceValue)) {
 }
 
 $header = '';
-$exeId = 0;
+// The attempt id is needed in both modes so exercise_result.php can save and close the attempt.
+$exeId = (int) Session::read('exe_id');
 if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP) {
-    $exeId = Session::read('exe_id');
     $header = '
         <div class="modal-header">
             <h4 class="modal-title" id="global-modal-title">'.get_lang('Incorrect').'</h4>
@@ -260,7 +260,7 @@ switch ($answerType) {
 
 ob_start();
 $result = $objExercise->manage_answer(
-    $exeId,
+    $saveResults ? $exeId : 0,
     $questionId,
     $choiceValue,
     'exercise_result',

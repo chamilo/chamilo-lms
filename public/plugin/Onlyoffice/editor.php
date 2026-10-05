@@ -100,8 +100,11 @@ $fileId = null;
 $fileUrl = null;
 $callbackUrl = null;
 
-$saveAsCsrfToken = bin2hex(random_bytes(32));
-Session::write('onlyoffice_saveas_csrf_token', $saveAsCsrfToken);
+$saveAsCsrfToken = '';
+if (!$isMetaRequest) {
+    $saveAsCsrfToken = bin2hex(random_bytes(32));
+    Session::write('onlyoffice_saveas_csrf_token', $saveAsCsrfToken);
+}
 
 $jwtManager = new OnlyofficeJwtManager($appSettings);
 
@@ -565,6 +568,8 @@ $runtimeIdentifier = buildOnlyofficeRuntimeFileIdentifier($fileIdentifier, $vers
 $runtimeKey = buildOnlyofficeRuntimeDocumentKey($fileIdentifier, $courseCode, $docInfo, $versionToken);
 $documentIdentity = buildOnlyofficeDocumentIdentity($courseId, $sessionId, $groupId, $fileIdentifier);
 $metaUrl = buildOnlyofficeMetaUrl(
+    $courseId,
+    $sessionId,
     $docId,
     $resourceNodeId,
     $docPath,
@@ -587,28 +592,6 @@ if (!empty($appSettings->getStorageUrl()) && !empty($fileUrl)) {
     if (!empty($callbackUrl)) {
         $callbackUrl = str_replace(api_get_path(WEB_PATH), $appSettings->getStorageUrl(), $callbackUrl);
     }
-    if (!empty($metaUrl)) {
-        $metaUrl = str_replace(api_get_path(WEB_PATH), $appSettings->getStorageUrl(), $metaUrl);
-    }
-}
-
-if ($isMetaRequest) {
-    sendOnlyofficeEditorNoCacheHeaders();
-    @header('Content-Type: application/json');
-
-    echo json_encode([
-        'status' => 'ok',
-        'docId' => $docId,
-        'fileIdentifier' => $fileIdentifier,
-        'documentIdentity' => $documentIdentity,
-        'versionToken' => $versionToken,
-        'key' => $runtimeKey,
-        'readonly' => $editorReadOnly,
-        'extension' => $extension,
-        'size' => (int) ($docInfo['size'] ?? 0),
-    ]);
-
-    exit;
 }
 
 $configService = new OnlyofficeConfigService($appSettings, $jwtManager, $documentManager);
@@ -684,6 +667,26 @@ if ($isLearnpathEmbedded) {
 }
 
 $config = refreshOnlyofficeEditorToken($config, $jwtManager, $appSettings);
+
+if ($isMetaRequest) {
+    sendOnlyofficeEditorNoCacheHeaders();
+    @header('Content-Type: application/json');
+
+    echo json_encode([
+        'status' => 'ok',
+        'docId' => $docId,
+        'fileIdentifier' => $fileIdentifier,
+        'documentIdentity' => $documentIdentity,
+        'versionToken' => $versionToken,
+        'key' => $runtimeKey,
+        'readonly' => $editorReadOnly,
+        'extension' => $extension,
+        'size' => (int) ($docInfo['size'] ?? 0),
+        'config' => $config,
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
 
 $isMobileAgent = $configService->isMobileAgent($userAgent);
 $langCode = $configService->getLang();
@@ -804,6 +807,10 @@ if ($hideChamiloLayout) {
             const safeReturnUrl = <?php echo json_encode($returnUrl, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
             const isEmbeddedEditor = <?php echo json_encode((bool) $isLearnpathEmbedded); ?>;
             const fallbackHomeUrl = <?php echo json_encode(api_get_path(WEB_PATH), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+            const refreshConfigUrl = <?php echo json_encode($metaUrl, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+            const documentIdentity = <?php echo json_encode($documentIdentity, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+            let currentDocumentKey = String(config && config.document ? config.document.key || "" : "");
+            let refreshFileInProgress = false;
 
             const isEditableMode = !!(
                 config &&
@@ -990,6 +997,108 @@ if ($hideChamiloLayout) {
                 leaveEditorSafely();
             }
 
+            function waitForOnlyofficeRefresh(delay) {
+                return new Promise(function (resolve) {
+                    window.setTimeout(resolve, delay);
+                });
+            }
+
+            function loadOnlyofficeRefreshConfig(attempt) {
+                const maxAttempts = 8;
+                const retryDelay = 500;
+
+                return fetch(refreshConfigUrl, {
+                    method: "GET",
+                    credentials: "same-origin",
+                    cache: "no-store",
+                    headers: {
+                        "Accept": "application/json",
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error("Refresh metadata request failed with HTTP " + response.status);
+                        }
+
+                        return response.json();
+                    })
+                    .then(function (payload) {
+                        if (!payload || payload.status !== "ok" || !payload.config) {
+                            throw new Error("Refresh metadata response is invalid");
+                        }
+
+                        if (String(payload.documentIdentity || "") !== documentIdentity) {
+                            throw new Error("Refresh metadata belongs to a different document");
+                        }
+
+                        const nextKey = String(
+                            payload.config && payload.config.document
+                                ? payload.config.document.key || ""
+                                : ""
+                        );
+
+                        if (!nextKey) {
+                            throw new Error("Refresh metadata does not contain a document key");
+                        }
+
+                        if (nextKey === currentDocumentKey) {
+                            if (attempt < maxAttempts - 1) {
+                                return waitForOnlyofficeRefresh(retryDelay).then(function () {
+                                    return loadOnlyofficeRefreshConfig(attempt + 1);
+                                });
+                            }
+
+                            throw new Error("The saved document version is not available yet");
+                        }
+
+                        return {
+                            config: payload.config,
+                            key: nextKey
+                        };
+                    });
+            }
+
+            function onRequestRefreshFile() {
+                if (refreshFileInProgress) {
+                    return;
+                }
+
+                if (!refreshConfigUrl) {
+                    console.error("ONLYOFFICE refresh configuration URL is not available.");
+                    return;
+                }
+
+                refreshFileInProgress = true;
+
+                loadOnlyofficeRefreshConfig(0)
+                    .then(function (refreshData) {
+                        if (!window.docEditor || typeof window.docEditor.refreshFile !== "function") {
+                            throw new Error("ONLYOFFICE refreshFile API is not available");
+                        }
+
+                        window.docEditor.refreshFile(refreshData.config);
+                        currentDocumentKey = refreshData.key;
+                        debugLog("ONLYOFFICE document version refreshed", currentDocumentKey);
+                    })
+                    .catch(function (error) {
+                        console.error("ONLYOFFICE document refresh failed:", error);
+                        handleUnsafeReload();
+                    })
+                    .then(function () {
+                        refreshFileInProgress = false;
+                    });
+            }
+
+            function onOutdatedVersion() {
+                if (window.docEditor && typeof window.docEditor.refreshFile === "function") {
+                    onRequestRefreshFile();
+                    return;
+                }
+
+                handleUnsafeReload();
+            }
+
             function checkDocsVersion() {
                 if (typeof DocsAPI === "undefined" || !DocsAPI.DocEditor || typeof DocsAPI.DocEditor.version !== "function") {
                     console.error("ONLYOFFICE DocsAPI is not available.");
@@ -1033,7 +1142,9 @@ if ($hideChamiloLayout) {
                     onError: onError,
                     onRequestSaveAs: onRequestSaveAs,
                     onRequestEditRights: onRequestEditRights,
-                    onRequestClose: onRequestClose
+                    onRequestClose: onRequestClose,
+                    onRequestRefreshFile: onRequestRefreshFile,
+                    onOutdatedVersion: onOutdatedVersion
                 };
 
                 forceEditorDimensions();
@@ -1664,6 +1775,8 @@ function buildOnlyofficeDocumentIdentity(int $courseId, int $sessionId, int $gro
  * Build meta URL for the current editor request.
  */
 function buildOnlyofficeMetaUrl(
+    int $courseId,
+    int $sessionId,
     ?int $docId,
     ?int $resourceNodeId,
     ?string $docPath,
@@ -1680,6 +1793,8 @@ function buildOnlyofficeMetaUrl(
 ): string {
     $params = [
         'meta' => '1',
+        'cid' => (string) $courseId,
+        'sid' => (string) $sessionId,
     ];
 
     if (!empty($docId)) {

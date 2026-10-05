@@ -2314,6 +2314,16 @@ Then("I click the {string} element", async ({ page }, selector: string) => {
   await page.locator(`${selector}:visible`).first().click()
 })
 
+// For inputs whose id depends on the data (e.g. one autocomplete per student
+// boss, id="student-boss-<id>-learner") and that have no name: "I fill in"
+// only resolves fields by id or name. Typed key by key so autocompletes fire
+// their search on input, as they do for a real user.
+Then("I type {string} into the {string} element", async ({ page }, text: string, selector: string) => {
+  const input = page.locator(`${selector}:visible`).first()
+  await input.click()
+  await input.pressSequentially(text)
+})
+
 // Ported from FeatureContext::assertElementOnPage() as used via a raw CSS
 // selector (Mink's "I should see the ... element" idiom) — specialCase1
 // PlatformSettings.feature's own porting is the first user of this exact

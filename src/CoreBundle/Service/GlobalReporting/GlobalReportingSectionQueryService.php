@@ -620,7 +620,6 @@ final readonly class GlobalReportingSectionQueryService
             $boss['id'] = $bossId;
             $boss['fullName'] = trim((string) $boss['firstname'].' '.(string) $boss['lastname']);
             $boss['learners'] = $learnersByBoss[$bossId] ?? [];
-            $boss['addLearnerUrl'] = '/main/my_space/tc_report.php?a=add_user&boss_id='.$bossId;
         }
         unset($boss);
 
@@ -656,6 +655,8 @@ final readonly class GlobalReportingSectionQueryService
             [],
             [
                 'renderMode' => 'student-boss-cards',
+                // As in the legacy page, only administrators can assign learners to a boss
+                'canAddLearners' => $context->isAdministrator,
                 'supportsKeyword' => false,
                 'supportsLanguage' => true,
                 'languageOptions' => array_values(array_map('strval', $languageRows)),

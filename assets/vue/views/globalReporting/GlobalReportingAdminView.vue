@@ -599,83 +599,13 @@
         {{ t("No results found") }}
       </div>
 
-      <article
-        v-for="boss in report.items"
-        :key="boss.id"
-        class="rounded-xl border border-gray-25 bg-white p-4 shadow-sm md:p-5"
-      >
-        <header class="flex flex-wrap items-start justify-between gap-3 border-b border-gray-25 pb-3">
-          <div>
-            <h3 class="text-lg font-semibold text-gray-90">{{ boss.fullName }}</h3>
-            <p class="mt-1 text-sm text-gray-50">
-              {{ boss.username }}
-              <span v-if="boss.locale"> · {{ formatLanguage(boss.locale) }}</span>
-            </p>
-          </div>
-
-          <BaseButton
-            :label="t('Add learner')"
-            icon="account-multiple-plus"
-            type="success"
-            :to-url="boss.addLearnerUrl"
-          />
-        </header>
-
-        <div class="mt-4">
-          <h4 class="mb-3 text-sm font-semibold text-gray-90">{{ t("Learners") }}</h4>
-
-          <div
-            v-if="!Array.isArray(boss.learners) || boss.learners.length === 0"
-            class="rounded-lg bg-gray-10 p-4 text-sm text-gray-50"
-          >
-            {{ t("No results found") }}
-          </div>
-
-          <div
-            v-else
-            class="overflow-x-auto"
-          >
-            <table class="w-full border-collapse text-sm">
-              <thead>
-                <tr class="border-b border-gray-25 bg-gray-10 text-start text-gray-70">
-                  <th class="px-3 py-2 font-semibold">{{ t("Learner") }}</th>
-                  <th class="px-3 py-2 font-semibold">{{ t("Username") }}</th>
-                  <th class="px-3 py-2 font-semibold">{{ t("Active") }}</th>
-                  <th class="px-3 py-2 text-end font-semibold">{{ t("Details") }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="learner in boss.learners"
-                  :key="learner.id"
-                  class="border-b border-gray-15 last:border-b-0"
-                >
-                  <td class="px-3 py-2 text-gray-90">{{ learner.fullName }}</td>
-                  <td class="px-3 py-2 text-gray-70">{{ learner.username }}</td>
-                  <td class="px-3 py-2">
-                    <span
-                      class="inline-flex rounded-full px-2 py-1 text-xs font-semibold"
-                      :class="learner.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
-                    >
-                      {{ t(learner.active ? "Active" : "Inactive") }}
-                    </span>
-                  </td>
-                  <td class="px-3 py-2 text-end">
-                    <BaseButton
-                      :label="t('Details')"
-                      icon="next"
-                      only-icon
-                      size="small"
-                      type="primary-alternative"
-                      :route="studentBossLearnerRoute(learner)"
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </article>
+      <GlobalReportingStudentBossColumns
+        v-else
+        :bosses="report.items"
+        :can-add-learners="Boolean(report.meta.canAddLearners)"
+        :learner-route="studentBossLearnerRoute"
+        @learner-added="loadReport"
+      />
 
       <div
         v-if="report.total > filters.itemsPerPage"
@@ -855,6 +785,7 @@ import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { useLocale } from "../../composables/locale"
 import globalReportingService from "../../services/globalReportingService"
+import GlobalReportingStudentBossColumns from "./GlobalReportingStudentBossColumns.vue"
 import GlobalReportingToolbar from "./GlobalReportingToolbar.vue"
 import AdminMetric from "./GlobalReportingAdminMetric.vue"
 

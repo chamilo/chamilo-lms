@@ -646,41 +646,12 @@
         {{ t("No session matched") }}
       </div>
 
-      <article
-        v-for="tutor in report.items"
-        :key="tutor.id"
-        class="rounded-xl border border-gray-25 bg-white p-4 shadow-sm"
-      >
-        <header class="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-gray-25 pb-3">
-          <div>
-            <h3 class="font-semibold text-gray-90">{{ tutor.tutor }}</h3>
-            <p class="text-sm text-gray-50">@{{ tutor.username }}</p>
-          </div>
-          <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
-            {{ tutor.sessions.length }} {{ t("Sessions") }}
-          </span>
-        </header>
-
-        <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          <a
-            v-for="session in tutor.sessions"
-            :key="session.id"
-            :href="session.url"
-            class="rounded-xl border border-gray-25 bg-gray-10 p-3 transition hover:border-primary hover:bg-white"
-          >
-            <div class="font-medium text-gray-90">{{ session.title }}</div>
-            <div class="mt-2 flex items-center justify-between gap-3 text-sm">
-              <span :class="dateStatusClass(session.startDate)">
-                {{ formatDateTime(session.startDate, true) }}
-              </span>
-              <span class="text-gray-40">→</span>
-              <span :class="dateStatusClass(session.endDate)">
-                {{ formatDateTime(session.endDate, true) }}
-              </span>
-            </div>
-          </a>
-        </div>
-      </article>
+      <GlobalReportingTutorPlanningTable
+        v-else
+        :end-date="filters.endDate"
+        :start-date="filters.startDate"
+        :tutors="report.items"
+      />
     </section>
 
     <section
@@ -787,6 +758,7 @@ import { useLocale } from "../../composables/locale"
 import globalReportingService from "../../services/globalReportingService"
 import GlobalReportingStudentBossColumns from "./GlobalReportingStudentBossColumns.vue"
 import GlobalReportingToolbar from "./GlobalReportingToolbar.vue"
+import GlobalReportingTutorPlanningTable from "./GlobalReportingTutorPlanningTable.vue"
 import AdminMetric from "./GlobalReportingAdminMetric.vue"
 
 const props = defineProps({

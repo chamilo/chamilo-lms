@@ -149,6 +149,8 @@ switch ($action) {
                 //if session is not defined lets search all courses STARTING with $_GET['q']
                 //TODO change this function to search not only courses STARTING with $_GET['q']
                 if ($isPlatformAdmin) {
+                    // Only the courses of the current URL, as in the course list (this also leaves out
+                    // courses linked to no URL anymore)
                     $courseList = CourseManager::get_courses_list(
                         0,
                         0,
@@ -156,7 +158,7 @@ switch ($action) {
                         'ASC',
                         -1,
                         $_GET['q'],
-                        null,
+                        api_get_current_access_url_id(),
                         true
                     );
                 } elseif ($isTeacher) {

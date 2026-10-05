@@ -1197,13 +1197,29 @@ switch ($action) {
             exit;
         } else {
             if (!empty($_FILES)) {
-                $currentDirectory = Security::remove_XSS($_REQUEST['curdirpath']);
                 $userId = api_get_user_id();
+                $requestedDirectory = isset($_REQUEST['curdirpath']) ? (string) $_REQUEST['curdirpath'] : '';
 
                 // Upload answer path is created inside user personal folder my_files/upload_answer/[exe_id]/[question_id]
-                $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
+                // The path is rebuilt from the request instead of being used as sent, to avoid path traversal.
+                if (!preg_match('#^/upload_answer/(\d+)/(\d+)/?$#', $requestedDirectory, $matches)) {
+                    api_not_allowed(true);
+                    exit;
+                }
+                $currentDirectory = '/upload_answer/'.$matches[1].'/'.$matches[2].'/';
+
+                $baseSyspath = UserManager::getUserPathById($userId, 'system').'my_files';
+                $syspath = $baseSyspath.$currentDirectory;
                 @mkdir($syspath, api_get_permissions_for_new_directories(), true);
+
+                // The destination must stay inside the user own my_files folder.
+                if (!Security::check_abs_path($syspath, $baseSyspath)) {
+                    api_not_allowed(true);
+                    exit;
+                }
+
                 $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
+                error_log("--> $webpath");
 
                 $files = $_FILES['files'];
                 $fileList = [];

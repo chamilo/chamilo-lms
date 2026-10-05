@@ -32,10 +32,16 @@ if ($allowedFieldsConfiguration !== false) {
 
 $extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
-// User is not allowed if Terms and Conditions are disabled and
-// registration is disabled too.
-$isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' &&
-    api_get_setting('allow_registration') === 'false';
+// Security rule: self-registration must stay blocked whenever
+// allow_registration is disabled, regardless of allow_terms_conditions
+// (that setting is only meant to let a visitor who already has a pending
+// terms-and-conditions acceptance reach this page, not to reopen
+// registration). Previously this used
+// api_get_setting('allow_terms_conditions') === 'false' && ... === 'false',
+// which let self-registration through whenever allow_terms_conditions was
+// enabled, even with registration explicitly disabled.
+$isNotAllowedHere = api_get_setting('allow_registration') === 'false' &&
+    empty($_SESSION['term_and_condition']['user_id']);
 
 if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('RegistrationDisabled'));
@@ -712,6 +718,14 @@ if ($form->validate()) {
         $is_admin = UserManager::is_admin($user_id);
         Session::write('is_platformAdmin', $is_admin);
     } else {
+        // Defense in depth: even if the page-level gate above was somehow
+        // satisfied (e.g. allow_terms_conditions is enabled for an
+        // unrelated consent flow), never actually create a new account
+        // here unless self-registration is genuinely open.
+        if (api_get_setting('allow_registration') === 'false') {
+            api_not_allowed(true, get_lang('RegistrationDisabled'));
+        }
+
         // Moved here to include extra fields when creating a user. Formerly placed after user creation
         // Register extra fields
         $extras = [];

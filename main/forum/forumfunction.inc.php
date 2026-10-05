@@ -4824,10 +4824,14 @@ function move_post_form()
     // Setting the rules
     $form->addRule('thread', get_lang('ThisFieldIsRequired'), 'required');
 
+    $form->protect();
+
     // Validation or display
     if ($form->validate()) {
         $values = $form->exportValues();
         store_move_post($values);
+
+        return 'ThreadMoved';
     } else {
         return $form->returnForm();
     }
@@ -4851,8 +4855,21 @@ function store_move_post($values)
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
 
+    $postId = isset($values['post_id']) ? (int) $values['post_id'] : 0;
+    if (empty($postId)) {
+        return get_lang('NotAllowed');
+    }
+
+    // The select element filters the destination thread against the threads of
+    // the current forum, so an unlisted value is exported as null.
+    if (!isset($values['thread'])) {
+        return get_lang('NotAllowed');
+    }
+
+    $destinationThreadId = (int) $values['thread'];
+
     if ($values['thread'] == '0') {
-        $current_post = get_post_information($values['post_id']);
+        $current_post = get_post_information($postId);
 
         // Storing a new thread.
         $params = [
@@ -4861,7 +4878,7 @@ function store_move_post($values)
             'forum_id' => $current_post['forum_id'],
             'thread_poster_id' => $current_post['poster_id'],
             'thread_poster_name' => $current_post['poster_name'],
-            'thread_last_post' => $values['post_id'],
+            'thread_last_post' => $postId,
             'thread_date' => $current_post['post_date'],
         ];
 
@@ -4877,12 +4894,12 @@ function store_move_post($values)
 
         // Moving the post to the newly created thread.
         $sql = "UPDATE $table_posts SET thread_id='".intval($new_thread_id)."', post_parent_id = NULL
-                WHERE c_id = $course_id AND post_id='".intval($values['post_id'])."'";
+                WHERE c_id = $course_id AND post_id='".$postId."'";
         Database::query($sql);
 
         // Resetting the parent_id of the thread to 0 for all those who had this moved post as parent.
         $sql = "UPDATE $table_posts SET post_parent_id = NULL
-                WHERE c_id = $course_id AND post_parent_id='".intval($values['post_id'])."'";
+                WHERE c_id = $course_id AND post_parent_id='".$postId."'";
         Database::query($sql);
 
         // Updating updating the number of threads in the forum.
@@ -4906,28 +4923,32 @@ function store_move_post($values)
     } else {
         // Moving to the chosen thread.
         $sql = "SELECT thread_id FROM ".$table_posts."
-                WHERE c_id = $course_id AND post_id = '".$values['post_id']."' ";
+                WHERE c_id = $course_id AND post_id = '".$postId."' ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
-        $original_thread_id = $row['thread_id'];
+        if (empty($row)) {
+            return get_lang('NotAllowed');
+        }
+
+        $original_thread_id = (int) $row['thread_id'];
 
         $sql = "SELECT thread_last_post FROM ".$table_threads."
                 WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' ";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
-        $thread_is_last_post = $row['thread_last_post'];
+        $thread_is_last_post = !empty($row) ? (int) $row['thread_last_post'] : 0;
         // If is this thread, update the thread_last_post with the last one.
 
-        if ($thread_is_last_post == $values['post_id']) {
+        if ($thread_is_last_post == $postId) {
             $sql = "SELECT post_id FROM ".$table_posts."
-                    WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' AND post_id <> '".$values['post_id']."'
+                    WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' AND post_id <> '".$postId."'
                     ORDER BY post_date DESC LIMIT 1";
             $result = Database::query($sql);
 
             $row = Database::fetch_array($result);
-            $thread_new_last_post = $row['post_id'];
+            $thread_new_last_post = !empty($row) ? (int) $row['post_id'] : 0;
 
             $sql = "UPDATE ".$table_threads." SET thread_last_post = '".$thread_new_last_post."'
                     WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' ";
@@ -4939,17 +4960,17 @@ function store_move_post($values)
         Database::query($sql);
 
         // moving to the chosen thread
-        $sql = "UPDATE $table_posts SET thread_id='".intval($_POST['thread'])."', post_parent_id = NULL
-                WHERE c_id = $course_id AND post_id='".intval($values['post_id'])."'";
+        $sql = "UPDATE $table_posts SET thread_id='".$destinationThreadId."', post_parent_id = NULL
+                WHERE c_id = $course_id AND post_id='".$postId."'";
         Database::query($sql);
 
         // resetting the parent_id of the thread to 0 for all those who had this moved post as parent
         $sql = "UPDATE $table_posts SET post_parent_id = NULL
-                WHERE c_id = $course_id AND post_parent_id='".intval($values['post_id'])."'";
+                WHERE c_id = $course_id AND post_parent_id='".$postId."'";
         Database::query($sql);
 
         $sql = "UPDATE $table_threads SET thread_replies=thread_replies+1
-                WHERE c_id = $course_id AND thread_id='".intval($_POST['thread'])."'";
+                WHERE c_id = $course_id AND thread_id='".$destinationThreadId."'";
         Database::query($sql);
     }
 

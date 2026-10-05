@@ -259,6 +259,9 @@ function getCourseUsers($courseId, $checkSession = false)
     $lpItemsString = implode(',', array_keys($lpItems));
 
     if ($checkSession) {
+        // A session LP (lp.session_id != 0) must only reach users enrolled
+        // in that same session; a base course LP (lp.session_id = 0)
+        // keeps applying to every session, as before.
         $sql = "SELECT
                 scu.user_id,
                 scu.c_id,
@@ -273,8 +276,12 @@ function getCourseUsers($courseId, $checkSession = false)
                 scu.c_id = $courseId AND
                 (lpv.progress < 100 OR lpv.progress is null) AND
                 lp.id IN($lpItemsString) AND
-                (lp.expired_on IS NULL OR lp.expired_on > NOW())";
+                (lp.session_id = 0 OR lp.session_id = scu.session_id) AND
+		(lp.expired_on IS NULL OR lp.expired_on > NOW()) AND
+                scu.status = 0"; // To only send to users subscribed as students
     } else {
+        // Users enrolled directly in the course (no session) should only
+        // be reminded about base course LPs, never session-specific ones.
         $sql = "SELECT
                 cu.user_id,
                 cu.c_id,
@@ -288,6 +295,7 @@ function getCourseUsers($courseId, $checkSession = false)
                 cu.c_id = $courseId AND
                 (lpv.progress < 100 OR lpv.progress is null) AND
                 lp.id IN($lpItemsString) AND
+                lp.session_id = 0 AND
                 (lp.expired_on IS NULL OR lp.expired_on > NOW())";
     }
 

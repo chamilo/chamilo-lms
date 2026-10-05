@@ -88,7 +88,7 @@ if ($surveyCode != '') {
 }
 
 // First we check if the needed parameters are present
-if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET['user_id'])) {
+if (!isset($_GET['course']) || !isset($_GET['invitationcode'])) {
     api_not_allowed(true, get_lang('SurveyParametersMissingUseCopyPaste'));
 }
 
@@ -109,7 +109,7 @@ if ('auto' === $invitationcode && isset($_GET['scode'])) {
     // Survey_code of the survey
     $surveyCode = $_GET['scode'];
     if ($isAnonymous) {
-        $autoInvitationcode = 'auto-ANONY_'.md5(time())."-$surveyCode";
+        $autoInvitationcode = 'auto-ANONY_'.api_generate_secure_token(16)."-$surveyCode";
     } else {
         $invitations = SurveyManager::getUserInvitationsForSurveyInCourse(
             $userid,
@@ -181,6 +181,22 @@ if (Database::num_rows($result) < 1) {
 }
 
 $survey_invitation = Database::fetch_array($result, 'ASSOC');
+$invitedUser = (string) $survey_invitation['user'];
+$currentUserId = (int) api_get_user_id();
+// Whether the request really comes from the person the invitation was issued to.
+$isInvitedUser = $currentUserId > 0 && (string) $currentUserId === $invitedUser;
+// The "auto" invitation codes are derived from public data (the user id and the survey code),
+// so, unlike the random codes sent by mail, they cannot act as a shared secret. When such a
+// code belongs to a platform user, only that very user is allowed to use it. Codes issued to
+// non-authenticated visitors (user = 0) carry no identity to check against.
+if (0 === strpos((string) $survey_invitation['invitation_code'], 'auto-') &&
+    ctype_digit($invitedUser) &&
+    (int) $invitedUser > 0 &&
+    !$isInvitedUser
+) {
+    api_not_allowed(true, get_lang('WrongInvitationCode'));
+}
+
 $surveyUserFromSession = Session::read('surveyuser');
 // Now we check if the user already filled the survey
 if (!isset($_POST['finish_survey']) &&
@@ -189,7 +205,7 @@ if (!isset($_POST['finish_survey']) &&
         !empty($surveyUserFromSession) &&
         SurveyUtil::isSurveyAnsweredFlagged($survey_invitation['survey_code'], $survey_invitation['c_id'])
     ) ||
-    ($survey_invitation['answered'] == 1 && !isset($_GET['user_id']))
+    ($survey_invitation['answered'] == 1 && !($isInvitedUser && isset($_GET['user_id'])))
 ) {
     api_not_allowed(true, Display::return_message(get_lang('YouAlreadyFilledThisSurvey')));
 }

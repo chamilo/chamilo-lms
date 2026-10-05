@@ -43,6 +43,12 @@ try {
 
     ChamiloSession::write('oauth2state', $provider->getState());
     ChamiloSession::write('oauth2pkceCode', $provider->getPkceCode());
+    if (!empty($targetLinkUri) && preg_match('#^/[^/\\\\]#', $targetLinkUri)) {
+        ChamiloSession::write(
+            'redirect_after_not_allow_page',
+            api_get_path(WEB_PATH).ltrim($targetLinkUri, '/')
+        );
+    }
 
     $httpResponse = new RedirectResponse($authorizationUrl);
     $httpResponse->send();

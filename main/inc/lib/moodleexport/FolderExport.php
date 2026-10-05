@@ -27,6 +27,17 @@ class FolderExport extends ActivityExport
         // Retrieve folder data
         $folderData = $this->getData($activityId, $sectionId);
 
+        if (empty($folderData)) {
+            // The document referenced by this folder is not part of the resources being
+            // exported. Skip it instead of letting the XML generation fail on missing data.
+            MoodleExport::debugStaticLog('Skipping folder export: no data resolved', [
+                'activity_id' => $activityId,
+                'section_id' => $sectionId,
+            ]);
+
+            return;
+        }
+
         // Generate XML files
         $this->createFolderXml($folderData, $folderDir);
         $this->createModuleXml($folderData, $folderDir);
@@ -52,8 +63,13 @@ class FolderExport extends ActivityExport
                 'contextid' => ActivityExport::DOCS_MODULE_ID,
                 'name' => 'Documents',
                 'sectionid' => $sectionId,
+                'sectionnumber' => 0,
                 'timemodified' => time(),
             ];
+        }
+
+        if (empty($this->course->resources['document'][$folderId])) {
+            return null;
         }
 
         $folder = $this->course->resources['document'][$folderId];
@@ -65,6 +81,7 @@ class FolderExport extends ActivityExport
             'contextid' => $folder->source_id,
             'name' => $folder->title,
             'sectionid' => $sectionId,
+            'sectionnumber' => 0,
             'timemodified' => time(),
         ];
     }

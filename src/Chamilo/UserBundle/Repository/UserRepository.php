@@ -364,6 +364,13 @@ class UserRepository extends EntityRepository
      */
     public function findUsersToSendMessage($currentUserId, $search, $limit = 10)
     {
+        $currentUserId = (int) $currentUserId;
+        $limit = (int) $limit;
+
+        if ($limit <= 0) {
+            $limit = 10;
+        }
+
         $allowSendMessageToAllUsers = api_get_setting('allow_send_message_to_all_platform_users');
         $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 1;
 
@@ -428,10 +435,18 @@ class UserRepository extends EntityRepository
 
         $dql .= ' AND (U.firstname LIKE :search OR U.lastname LIKE :search OR U.email LIKE :search OR U.username LIKE :search)';
 
+        $parameters = ['search' => "%$search%"];
+
+        // Non privileged users can only reach the people they already share a
+        // course, a session or a social network relation with.
+        if ($this->mustRestrictUserSearchToSharedContext($currentUserId)) {
+            $dql .= ' AND '.$this->getSharedContextDqlCondition($currentUserId, $parameters);
+        }
+
         return $this->getEntityManager()
             ->createQuery($dql)
             ->setMaxResults($limit)
-            ->setParameters(['search' => "%$search%"])
+            ->setParameters($parameters)
             ->getResult();
     }
 
@@ -1386,5 +1401,117 @@ class UserRepository extends EntityRepository
     public function findByAuthSource(string $authSource): array
     {
         return $this->findBy(['authSource' => $authSource]);
+    }
+
+    /**
+     * Checks whether the user search must be limited to the context shared with
+     * the given user. Platform wide user search is reserved to teachers, admins,
+     * session admins, HR managers and student bosses, in order to avoid the
+     * enumeration of the whole user base (names and e-mail addresses).
+     *
+     * @param int $userId
+     *
+     * @return bool
+     */
+    private function mustRestrictUserSearchToSharedContext($userId): bool
+    {
+        if (api_get_configuration_value('allow_platform_wide_message_user_search_for_students')) {
+            return false;
+        }
+
+        $userInfo = api_get_user_info($userId);
+        $status = isset($userInfo['status']) ? (int) $userInfo['status'] : STUDENT;
+
+        if (in_array($status, [COURSEMANAGER, SESSIONADMIN, DRH, STUDENT_BOSS], true)) {
+            return false;
+        }
+
+        return !\UserManager::is_admin($userId);
+    }
+
+    /**
+     * Builds the DQL condition, over the "U" alias, restricting the user list to
+     * the users subscribed to the same courses or sessions than the given user,
+     * plus their social network contacts (including the assigned HR managers).
+     *
+     * @param int   $userId
+     * @param array $parameters Query parameters. Filled by reference
+     *
+     * @return string
+     */
+    private function getSharedContextDqlCondition($userId, array &$parameters): string
+    {
+        $em = $this->getEntityManager();
+
+        $courseIds = array_column(
+            $em->createQuery(
+                'SELECT IDENTITY(cru.course) AS cid
+                 FROM ChamiloCoreBundle:CourseRelUser cru
+                 WHERE cru.user = :user'
+            )->setParameter('user', $userId)->getScalarResult(),
+            'cid'
+        );
+
+        $sessionIds = array_column(
+            $em->createQuery(
+                'SELECT IDENTITY(sru.session) AS sid
+                 FROM ChamiloCoreBundle:SessionRelUser sru
+                 WHERE sru.user = :user'
+            )->setParameter('user', $userId)->getScalarResult(),
+            'sid'
+        );
+
+        $sessionCourses = $em->createQuery(
+            'SELECT IDENTITY(scru.session) AS sid, IDENTITY(scru.course) AS cid
+             FROM ChamiloCoreBundle:SessionRelCourseRelUser scru
+             WHERE scru.user = :user'
+        )->setParameter('user', $userId)->getScalarResult();
+
+        foreach ($sessionCourses as $sessionCourse) {
+            $sessionIds[] = $sessionCourse['sid'];
+            $courseIds[] = $sessionCourse['cid'];
+        }
+
+        $courseIds = array_values(array_unique(array_map('intval', $courseIds)));
+        $sessionIds = array_values(array_unique(array_map('intval', $sessionIds)));
+
+        $conditions = [
+            'U.id IN (
+                SELECT DISTINCT uru.friendUserId
+                FROM ChamiloCoreBundle:UserRelUser uru
+                WHERE uru.userId = :sharedUserId AND uru.relationType <> '.USER_RELATION_TYPE_DELETED.'
+            )',
+        ];
+        $parameters['sharedUserId'] = $userId;
+
+        if (!empty($courseIds)) {
+            $conditions[] = 'U.id IN (
+                SELECT DISTINCT IDENTITY(cruShared.user)
+                FROM ChamiloCoreBundle:CourseRelUser cruShared
+                WHERE cruShared.course IN (:sharedCourseIds)
+            )';
+            $parameters['sharedCourseIds'] = $courseIds;
+        }
+
+        if (!empty($sessionIds)) {
+            $conditions[] = 'U.id IN (
+                SELECT DISTINCT IDENTITY(sruShared.user)
+                FROM ChamiloCoreBundle:SessionRelUser sruShared
+                WHERE sruShared.session IN (:sharedSessionIds)
+            )';
+            $conditions[] = 'U.id IN (
+                SELECT DISTINCT IDENTITY(scruShared.user)
+                FROM ChamiloCoreBundle:SessionRelCourseRelUser scruShared
+                WHERE scruShared.session IN (:sharedSessionIds)
+            )';
+            $conditions[] = 'U.id IN (
+                SELECT DISTINCT IDENTITY(sShared.generalCoach)
+                FROM ChamiloCoreBundle:Session sShared
+                WHERE sShared.id IN (:sharedSessionIds)
+            )';
+            $parameters['sharedSessionIds'] = $sessionIds;
+        }
+
+        return '('.implode(' OR ', $conditions).')';
     }
 }

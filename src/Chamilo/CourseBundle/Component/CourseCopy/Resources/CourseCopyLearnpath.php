@@ -205,15 +205,40 @@ class CourseCopyLearnpath extends Resource
      */
     public function has_item($resource)
     {
+        $resourceType = $resource->get_type();
+        $resourceId = (string) $resource->get_id();
+
         foreach ($this->items as $item) {
-            if ($item['id'] == $resource->get_id() &&
-                isset($item['type']) && $item['type'] == $resource->get_type()
-            ) {
+            // The item's own id (e.g. the lp_item iid) is irrelevant here: what we need
+            // is the id of the resource it points to, stored in 'path' (e.g. the work,
+            // quiz or link id), and its type, stored in 'item_type' (not 'type').
+            if (!isset($item['path']) || !isset($item['item_type'])) {
+                continue;
+            }
+
+            $itemType = self::normalizeItemType((string) $item['item_type']);
+
+            if ($itemType === $resourceType && (string) $item['path'] === $resourceId) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Map an lp_item's legacy item_type to the resource type constant it refers to.
+     */
+    private static function normalizeItemType(string $itemType): string
+    {
+        switch ($itemType) {
+            case 'student_publication':
+                return RESOURCE_WORK;
+            case 'survey':
+                return RESOURCE_SURVEY;
+            default:
+                return $itemType;
+        }
     }
 
     /**

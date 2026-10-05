@@ -11,30 +11,6 @@
 class MoodleImport
 {
     /**
-     * Loads XML into a DOMDocument hardened against XXE attacks.
-     *
-     * External entity loading is blocked (libxml_disable_entity_loader) so a
-     * malicious Moodle backup cannot trigger SSRF via network entities nor
-     * disclose local files via file:// entities. LIBXML_NONET is passed as
-     * defense-in-depth. The previous loader state is restored afterwards.
-     *
-     * @param \DOMDocument $doc document populated in place
-     * @param string       $xml XML to parse
-     *
-     * @return bool result of DOMDocument::loadXML()
-     */
-    private static function loadXml(\DOMDocument $doc, $xml)
-    {
-        $previous = @libxml_disable_entity_loader(true);
-
-        try {
-            return @$doc->loadXML($xml, LIBXML_NONET);
-        } finally {
-            @libxml_disable_entity_loader($previous);
-        }
-    }
-
-    /**
      * Import moodle file.
      *
      * @param resource $uploadedFile *.* mbz file moodle course backup
@@ -2885,6 +2861,30 @@ class MoodleImport
         }
 
         return $answersList;
+    }
+
+    /**
+     * Loads XML into a DOMDocument hardened against XXE attacks.
+     *
+     * External entity loading is blocked (libxml_disable_entity_loader) so a
+     * malicious Moodle backup cannot trigger SSRF via network entities nor
+     * disclose local files via file:// entities. LIBXML_NONET is passed as
+     * defense-in-depth. The previous loader state is restored afterwards.
+     *
+     * @param \DOMDocument $doc document populated in place
+     * @param string       $xml XML to parse
+     *
+     * @return bool result of DOMDocument::loadXML()
+     */
+    private static function loadXml(DOMDocument $doc, $xml)
+    {
+        $previous = @libxml_disable_entity_loader(true);
+
+        try {
+            return @$doc->loadXML($xml, LIBXML_NONET);
+        } finally {
+            @libxml_disable_entity_loader($previous);
+        }
     }
 
     /**

@@ -27,7 +27,19 @@ class AssignExport extends ActivityExport
         $assignDir = $this->prepareActivityDirectory($exportDir, 'assign', $moduleId);
 
         // Retrieve assign data
-        $assignData = $this->getData($activityId, $sectionId);
+        $assignData = $this->getData($activityId, $sectionId, (int) $moduleId);
+
+        if (empty($assignData)) {
+            // The work referenced by this activity is not part of the resources being
+            // exported (e.g. it was not selected, or could not be resolved). Skip it
+            // instead of letting the XML generation fail on missing data.
+            MoodleExport::debugStaticLog('Skipping assign export: no data resolved', [
+                'activity_id' => $activityId,
+                'section_id' => $sectionId,
+            ]);
+
+            return;
+        }
 
         // Generate XML files for the assign
         $this->createAssignXml($assignData, $assignDir);
@@ -45,7 +57,7 @@ class AssignExport extends ActivityExport
     /**
      * Get all the data related to the assign activity.
      */
-    public function getData(int $assignId, int $sectionId): ?array
+    public function getData(int $assignId, int $sectionId, ?int $moduleId = null): ?array
     {
         $work = $this->course->resources[RESOURCE_WORK][$assignId];
 
@@ -54,6 +66,10 @@ class AssignExport extends ActivityExport
         }
 
         $sentDate = !empty($work->params['sent_date']) ? strtotime($work->params['sent_date']) : time();
+        $effectiveModuleId = (int) ($moduleId ?? $work->params['id']);
+        if ($effectiveModuleId <= 0) {
+            $effectiveModuleId = (int) $work->params['id'];
+        }
 
         $workFiles = getAllDocumentToWork($assignId, $this->course->info['real_id']);
         $files = [];
@@ -69,18 +85,34 @@ class AssignExport extends ActivityExport
             }
         }
 
+        // Extract images embedded in the assignment description (e.g. pasted via the
+        // rich text editor) so they are bundled into the export and the intro references
+        // them via @@PLUGINFILE@@, instead of pointing at a Chamilo-only URL.
+        $introResult = $this->extractEmbeddedFilesAndNormalizeContent(
+            (string) $work->params['description'],
+            $effectiveModuleId,
+            'mod_assign',
+            'intro',
+            0,
+            fn (int $sequence): int => $this->buildAssignEmbeddedFileId($effectiveModuleId, $sequence)
+        );
+
+        if (!empty($introResult['files'])) {
+            $files = array_merge($files, $introResult['files']);
+        }
+
         $adminData = MoodleExport::getAdminUserData();
         $adminId = $adminData['id'];
 
         return [
             'id' => (int) $work->params['id'],
-            'moduleid' => (int) $work->params['id'],
+            'moduleid' => $effectiveModuleId,
             'modulename' => 'assign',
-            'contextid' => $this->course->info['real_id'],
+            'contextid' => $effectiveModuleId,
             'sectionid' => $sectionId,
             'sectionnumber' => 0,
             'name' => htmlspecialchars($work->params['title'], ENT_QUOTES),
-            'intro' => htmlspecialchars($work->params['description'], ENT_QUOTES),
+            'intro' => $introResult['content'],
             'duedate' => $sentDate,
             'gradingduedate' => $sentDate + 7 * 86400,
             'allowsubmissionsfromdate' => $sentDate,
@@ -198,5 +230,13 @@ class AssignExport extends ActivityExport
         $xmlContent .= '</areas>';
 
         $this->createXmlFile('grading', $xmlContent, $assignDir);
+    }
+
+    /**
+     * Build a stable embedded file id for images found in an assign's description.
+     */
+    private function buildAssignEmbeddedFileId(int $moduleId, int $sequence): int
+    {
+        return 1600000000 + (max(0, $moduleId) * 1000) + max(1, $sequence);
     }
 }

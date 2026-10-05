@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 $_dont_save_user_course_access = true;
 
@@ -93,16 +94,30 @@ switch ($action) {
         SocialManager::sendInvitationToUser($_REQUEST['user_id'], $subject, $invitationContent);
         break;
     case 'find_users':
-        if (api_is_anonymous()) {
+        if (api_is_anonymous() || api_get_setting('allow_message_tool') !== 'true') {
             echo '';
             break;
+        }
+
+        $searchQuery = isset($_REQUEST['q']) ? trim($_REQUEST['q']) : '';
+        // The select2 widget requires 3 characters at least. Enforce it here too
+        // to limit the enumeration of users through very short search strings.
+        if (api_strlen($searchQuery) < 3) {
+            JsonResponse::create(['items' => []])->send();
+            break;
+        }
+
+        // The page size is defined by the server, not by the client.
+        $pageLimit = isset($_REQUEST['page_limit']) ? (int) $_REQUEST['page_limit'] : 10;
+        if ($pageLimit < 1 || $pageLimit > 10) {
+            $pageLimit = 10;
         }
 
         $repo = UserManager::getRepository();
         $users = $repo->findUsersToSendMessage(
             api_get_user_id(),
-            $_REQUEST['q'],
-            $_REQUEST['page_limit']
+            $searchQuery,
+            $pageLimit
         );
 
         $showEmail = api_get_setting('show_email_addresses') === 'true';
@@ -121,8 +136,7 @@ switch ($action) {
                 'id' => $user->getId(),
             ];
         }
-        header('Content-type:application/json');
-        echo json_encode($return);
+        JsonResponse::create($return)->send();
         break;
     case 'add_tags':
         $idList = $_POST['id'] ?? [];

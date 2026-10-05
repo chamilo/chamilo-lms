@@ -1718,8 +1718,7 @@ if ($end_date < '2010-01-01') {
             echo Display::url(
                 Display::img('../img/delete.gif', get_lang('Delete'), ['border' => '0', 'onclick' => 'return confirmDelete2()']),
                 'delete_exam.php?num='.$exe_id.'&student_id='.$studentId
-            );
-            ?>
+            ); ?>
             <?php
         }
             ?>
@@ -2588,12 +2587,11 @@ if ($export_csv) {
                     Display::return_icon('edit.png', get_lang('Edit')),
                     'edit_exam.php?num='.$exe_idd.'&student_id='.$studentId
                 );
-                echo '&nbsp;&nbsp;';
-                echo Display::url(
+            echo '&nbsp;&nbsp;';
+            echo Display::url(
                     Display::img('../img/delete.gif', get_lang('Delete'), ['border' => '0', 'onclick' => 'return confirmDelete2()']),
                     'delete_exam.php?num='.$exe_idd.'&student_id='.$studentId
-                );
-                ?>
+                ); ?>
             </td>
             </tr>
             <?php

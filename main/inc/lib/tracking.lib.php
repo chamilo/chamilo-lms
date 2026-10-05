@@ -8095,7 +8095,7 @@ class Tracking
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $list[] = $row['id'];
             }
-    
+
             if (!empty($list)) {
                 foreach ($list as $id) {
                     if ($update_database) {

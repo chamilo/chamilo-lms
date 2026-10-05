@@ -275,8 +275,6 @@ class MailTemplateManager extends Model
      * Builds the help block describing the Twig syntax allowed in a mail
      * template, derived from the same allowlists enforced by
      * renderSandboxedTemplate() so the form and the sandbox never drift apart.
-     *
-     * @return string
      */
     public function getAllowedSyntaxHelp(): string
     {

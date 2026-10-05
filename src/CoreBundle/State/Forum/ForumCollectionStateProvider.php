@@ -127,7 +127,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
 
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
         $subscribedForumIds = $canSubscribe ? $this->getSubscribedForumIds($course, $user, $forums) : [];
-        $forumCounts = $this->getForumCounts($forums);
+        $forumCounts = $this->getForumCounts($forums, $course, $session);
 
         return array_map(
             fn (CForum $forum): array => $this->normalizeForum(
@@ -259,7 +259,7 @@ final class ForumCollectionStateProvider implements ProviderInterface
      *
      * @return array<int, array{threads: int, posts: int}>
      */
-    private function getForumCounts(array $forums): array
+    private function getForumCounts(array $forums, Course $course, ?Session $session): array
     {
         $forumIds = array_values(array_filter(array_map(
             static fn (CForum $forum): int => (int) $forum->getIid(),
@@ -274,15 +274,15 @@ final class ForumCollectionStateProvider implements ProviderInterface
             $counts[$forumId] = ['threads' => 0, 'posts' => 0];
         }
 
-        $threadRows = $this->entityManager->createQueryBuilder()
+        $threadQueryBuilder = $this->entityManager->createQueryBuilder()
             ->select('IDENTITY(thread.forum) AS forumId', 'COUNT(thread.iid) AS total')
             ->from(CForumThread::class, 'thread')
             ->andWhere('IDENTITY(thread.forum) IN (:forumIds)')
             ->setParameter('forumIds', $forumIds)
             ->groupBy('thread.forum')
-            ->getQuery()
-            ->getArrayResult()
         ;
+        $this->addThreadContextCondition($threadQueryBuilder, 'thread', $course, $session);
+        $threadRows = $threadQueryBuilder->getQuery()->getArrayResult();
 
         foreach ($threadRows as $row) {
             $forumId = (int) ($row['forumId'] ?? 0);
@@ -291,16 +291,16 @@ final class ForumCollectionStateProvider implements ProviderInterface
             }
         }
 
-        $postRows = $this->entityManager->createQueryBuilder()
+        $postQueryBuilder = $this->entityManager->createQueryBuilder()
             ->select('IDENTITY(thread.forum) AS forumId', 'COUNT(post.iid) AS total')
             ->from(CForumPost::class, 'post')
             ->innerJoin('post.thread', 'thread')
             ->andWhere('IDENTITY(thread.forum) IN (:forumIds)')
             ->setParameter('forumIds', $forumIds)
             ->groupBy('thread.forum')
-            ->getQuery()
-            ->getArrayResult()
         ;
+        $this->addThreadContextCondition($postQueryBuilder, 'thread', $course, $session);
+        $postRows = $postQueryBuilder->getQuery()->getArrayResult();
 
         foreach ($postRows as $row) {
             $forumId = (int) ($row['forumId'] ?? 0);

@@ -370,7 +370,7 @@ final class ForumSearchStateProvider implements ProviderInterface
             return false;
         }
 
-        if (!$this->resourceBelongsToContext($thread, $course, $session)) {
+        if (!$this->isThreadInCurrentContext($thread, $course, $session)) {
             return false;
         }
 

@@ -8,15 +8,18 @@ namespace Chamilo\CoreBundle\State\Forum;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Event;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -113,6 +116,44 @@ trait ForumStateHelperTrait
     private function isForumResourceVisible(AbstractResource $resource, Course $course, ?Session $session): bool
     {
         return $resource->isVisible($course, $session);
+    }
+
+    /**
+     * Unlike forum categories and forums, which the base course shares with all its sessions, a thread
+     * belongs only to the context it was created in: the base course, or one session.
+     */
+    private function isThreadInCurrentContext(CForumThread $thread, Course $course, ?Session $session): bool
+    {
+        foreach ($thread->getResourceNode()?->getResourceLinks() ?? [] as $link) {
+            if ($link->getCourse()?->getId() === $course->getId()
+                && $link->getSession()?->getId() === $session?->getId()
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Query counterpart of isThreadInCurrentContext(), for the thread aliased $threadAlias.
+     */
+    private function addThreadContextCondition(QueryBuilder $queryBuilder, string $threadAlias, Course $course, ?Session $session): void
+    {
+        $sessionCondition = null === $session ? 'thread_link.session IS NULL' : 'thread_link.session = :threadContextSession';
+
+        $queryBuilder
+            ->andWhere(
+                'EXISTS (SELECT 1 FROM '.ResourceLink::class.' thread_link'
+                .' WHERE thread_link.resourceNode = '.$threadAlias.'.resourceNode'
+                .' AND thread_link.course = :threadContextCourse AND '.$sessionCondition.')'
+            )
+            ->setParameter('threadContextCourse', (int) $course->getId())
+        ;
+
+        if (null !== $session) {
+            $queryBuilder->setParameter('threadContextSession', (int) $session->getId());
+        }
     }
 
     private function getForumAvailabilityStatus(CForum $forum): string

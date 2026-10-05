@@ -415,9 +415,10 @@ final readonly class AdminStatisticsQueryService
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder
-            ->select('course.courseLanguage AS language', 'COUNT(course.id) AS total')
+            ->select('language.isocode AS language', 'COUNT(course.id) AS total')
             ->from(Course::class, 'course')
-            ->groupBy('course.courseLanguage')
+            ->innerJoin('course.courseLanguageEntity', 'language')
+            ->groupBy('language.id, language.isocode')
             ->orderBy('COUNT(course.id)', 'DESC')
         ;
 

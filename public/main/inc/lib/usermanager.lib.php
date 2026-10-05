@@ -3182,7 +3182,7 @@ class UserManager
             course.code code,
             course.title i, CONCAT(user.lastname,' ',user.firstname) t,
             email,
-            course.course_language l,
+            language.isocode l,
             1 sort,
             access_start_date,
             access_end_date,
@@ -3192,6 +3192,8 @@ class UserManager
         FROM $tbl_session_course_user as session_course_user
         INNER JOIN $tbl_course AS course
             ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
+        INNER JOIN ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." language
+            ON language.id = course.language_id
         $join_access_url_2
         INNER JOIN $tbl_session as session
             ON session_course_user.session_id = session.id

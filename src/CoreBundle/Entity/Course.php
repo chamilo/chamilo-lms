@@ -245,15 +245,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected Collection $templates;
     #[ORM\Column(name: 'directory', type: 'string', length: 40, unique: false, nullable: true)]
     protected ?string $directory = null;
-    #[Groups([
-        'course:read',
-        'session:read',
-        'course_catalogue:read',
-        'course_rel_user:read',
-    ])]
-    #[Assert\NotBlank]
-    #[ORM\Column(name: 'course_language', type: 'string', length: 20, unique: false, nullable: false)]
-    protected string $courseLanguage;
+    #[ORM\ManyToOne(targetEntity: Language::class)]
+    #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id', nullable: false)]
+    protected ?Language $courseLanguageEntity = null;
     #[Groups([
         'course:read',
         'course_rel_user:read',
@@ -392,7 +386,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->addTeachersToSessionsCourses = false;
         $this->courseTypeId = null;
         $this->room = null;
-        $this->courseLanguage = 'en';
         $this->subscribe = true;
         $this->unsubscribe = false;
         $this->sticky = false;
@@ -635,14 +628,25 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->directory;
     }
 
+    #[Groups([
+        'course:read',
+        'session:read',
+        'course_catalogue:read',
+        'course_rel_user:read',
+    ])]
     public function getCourseLanguage(): string
     {
-        return $this->courseLanguage;
+        return $this->courseLanguageEntity?->getIsocode() ?? '';
     }
 
-    public function setCourseLanguage(string $courseLanguage): self
+    public function getCourseLanguageEntity(): ?Language
     {
-        $this->courseLanguage = $courseLanguage;
+        return $this->courseLanguageEntity;
+    }
+
+    public function setCourseLanguageEntity(Language $language): self
+    {
+        $this->courseLanguageEntity = $language;
 
         return $this;
     }

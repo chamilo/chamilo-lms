@@ -39,6 +39,7 @@ use Chamilo\CoreBundle\Event\CourseDeletedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -93,6 +94,7 @@ class CourseHelper
         private readonly CourseRepository $courseRepository,
         private readonly Security $security,
         private readonly CourseCategoryRepository $courseCategoryRepository,
+        private readonly LanguageRepository $languageRepository,
         private readonly UserRepository $userRepository,
         private readonly SettingsManager $settingsManager,
         private readonly TranslatorInterface $translator,
@@ -252,12 +254,17 @@ class CourseHelper
             $params['_exemplary_content_request'] = !empty($rawParams['exemplary_content']);
 
             $accessUrl = $this->accessUrlHelper->getCurrent();
+            $language = $this->languageRepository->findByIsoCode((string) $params['courseLanguage']);
+            if (null === $language) {
+                throw new InvalidArgumentException(\sprintf('Invalid course language "%s".', $params['courseLanguage']));
+            }
+
             $course = new Course();
             $course
                 ->setTitle($params['title'])
                 ->setCode($params['code'])
                 ->setVisualCode($params['visualCode'])
-                ->setCourseLanguage($params['courseLanguage'])
+                ->setCourseLanguageEntity($language)
                 ->setDescription($this->translator->trans('Course Description'))
                 ->setVisibility((int) $params['visibility'])
                 ->setShowScore(1)

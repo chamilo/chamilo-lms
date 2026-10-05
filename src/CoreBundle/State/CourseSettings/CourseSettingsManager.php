@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
@@ -1112,9 +1113,14 @@ final readonly class CourseSettingsManager
      */
     private function saveCourseEntity(Course $course, array $values, array $permissions): void
     {
+        $language = $this->languageRepository->findByIsoCode((string) $values['course_language']);
+        if (!$language instanceof Language) {
+            throw new BadRequestHttpException('Invalid course language.');
+        }
+
         $course
             ->setTitle((string) $values['title'])
-            ->setCourseLanguage((string) $values['course_language'])
+            ->setCourseLanguageEntity($language)
             ->setDepartmentName((string) $values['department_name'])
             ->setDepartmentUrl((string) $values['department_url'])
             ->setRegistrationCode((string) $values['course_registration_password'])

@@ -7,10 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Form\Type;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Language;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -30,9 +31,12 @@ class CourseType extends AbstractType
             // ->add('code', 'text')
             ->add(
                 'course_language',
-                LocaleType::class,
+                EntityType::class,
                 [
-                    'preferred_choices' => ['en', 'fr', 'es'],
+                    'class' => Language::class,
+                    'choice_label' => 'originalName',
+                    'choice_value' => 'isocode',
+                    'property_path' => 'courseLanguageEntity',
                 ]
             )
             ->add(

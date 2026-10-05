@@ -455,7 +455,14 @@ class CourseRestorer
         $src = $this->course->info ?? [];
 
         if (!empty($src['language'])) {
-            $courseEntity->setCourseLanguage((string) $src['language']);
+            $language = Database::getManager()->getRepository(Language::class)->findOneBy([
+                'isocode' => (string) $src['language'],
+            ]);
+            if ($language instanceof Language) {
+                $courseEntity->setCourseLanguageEntity($language);
+            } else {
+                $this->dlog('Unknown source course language, keeping destination language: '.(string) $src['language']);
+            }
         }
         if (isset($src['visibility']) && '' !== $src['visibility']) {
             $courseEntity->setVisibility((int) $src['visibility']);

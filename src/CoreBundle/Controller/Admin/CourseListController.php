@@ -27,7 +27,7 @@ class CourseListController extends AbstractController
     private const array ALLOWED_SORT_FIELDS = [
         'title' => 'c.title',
         'code' => 'c.code',
-        'courseLanguage' => 'c.courseLanguage',
+        'courseLanguage' => 'language.isocode',
         'subscribe' => 'c.subscribe',
         'unsubscribe' => 'c.unsubscribe',
         'creationDate' => 'c.creationDate',
@@ -74,6 +74,7 @@ class CourseListController extends AbstractController
         $qb = $this->em->createQueryBuilder()
             ->from(Course::class, 'c')
             ->innerJoin(AccessUrlRelCourse::class, 'auc', Join::ON, 'auc.course = c')
+            ->innerJoin('c.courseLanguageEntity', 'language')
         ;
 
         if ($accessUrl) {
@@ -94,7 +95,7 @@ class CourseListController extends AbstractController
                 $qb->andWhere('c.code LIKE :kwCode')->setParameter('kwCode', '%'.$keywordCode.'%');
             }
             if ('' !== $keywordLanguage) {
-                $qb->andWhere('c.courseLanguage = :kwLang')->setParameter('kwLang', $keywordLanguage);
+                $qb->andWhere('language.isocode = :kwLang')->setParameter('kwLang', $keywordLanguage);
             }
             if ('' !== $keywordCategory) {
                 $qb->innerJoin('c.categories', 'cat')
@@ -124,7 +125,7 @@ class CourseListController extends AbstractController
         $total = (int) $countQb->select('COUNT(DISTINCT c.id)')->getQuery()->getSingleScalarResult();
 
         $rows = (clone $qb)
-            ->select('DISTINCT c.id, c.title, c.code, c.courseLanguage, c.visibility, c.subscribe, c.unsubscribe, c.creationDate, IDENTITY(c.resourceNode) AS resourceNodeId')
+            ->select('DISTINCT c.id, c.title, c.code, language.isocode AS courseLanguage, c.visibility, c.subscribe, c.unsubscribe, c.creationDate, IDENTITY(c.resourceNode) AS resourceNodeId')
             ->orderBy($dqlSortField, $sortOrder)
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit)

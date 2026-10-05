@@ -544,13 +544,7 @@ class SessionManager
                                INNER JOIN $tableCourse c ON (sc.c_id = c.id)";
             $language = Database::escape_string($language);
 
-            // Get the isoCode to filter course_language
-            $isoCode = '';
-            $languageId = api_get_language_id($language);
-            if (!empty($languageId)) {
-                $languageInfo = api_get_language_info($languageId);
-                $isoCode = $languageInfo['isocode'];
-            }
+            $languageId = (int) api_get_language_id($language);
             if ('true' === api_get_setting('language.allow_course_multiple_languages')) {
                 $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
                 $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -560,12 +554,20 @@ class SessionManager
                 if (Database::num_rows($rs) > 0) {
                     $fieldId = Database::result($rs, 0, 0);
                     $sqlInjectJoins .= " LEFT JOIN $tblExtraFieldValue cfv ON (c.id = cfv.item_id AND cfv.field_id = $fieldId)";
-                    $where .= " AND (c.course_language = '$isoCode' OR cfv.field_value LIKE '%$language%')";
+                    if ($languageId > 0) {
+                        $where .= " AND (c.language_id = $languageId OR cfv.field_value LIKE '%$language%')";
+                    } else {
+                        $where .= " AND cfv.field_value LIKE '%$language%'";
+                    }
+                } elseif ($languageId > 0) {
+                    $where .= " AND c.language_id = $languageId ";
                 } else {
-                    $where .= " AND c.course_language = '$isoCode' ";
+                    $where .= ' AND 1 = 0 ';
                 }
+            } elseif ($languageId > 0) {
+                $where .= " AND c.language_id = $languageId ";
             } else {
-                $where .= " AND c.course_language = '$isoCode' ";
+                $where .= ' AND 1 = 0 ';
             }
         }
 
@@ -4514,12 +4516,13 @@ class SessionManager
         }
 
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         if ($getCount) {
             $select = "SELECT COUNT(DISTINCT(c.code)) as count ";
         } else {
-            $select = "SELECT DISTINCT c.* ";
+            $select = "SELECT DISTINCT c.*, language.isocode AS course_language ";
         }
 
         $keywordCondition = null;
@@ -4531,6 +4534,7 @@ class SessionManager
         // Select the courses
         $sql = "$select
                 FROM $tbl_course c
+                INNER JOIN $tbl_language language ON language.id = c.language_id
                 INNER JOIN $tbl_session_rel_course src
                 ON c.id = src.c_id
 		        WHERE

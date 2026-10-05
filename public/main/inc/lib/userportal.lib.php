@@ -121,10 +121,12 @@ class IndexManager
     {
         $setting_show_also_closed_courses = 'true' == api_get_setting('show_closed_courses');
         $main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $mainLanguageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $category = Database::escape_string($category);
-        $sql_query = "SELECT course.*, course_category.code AS category_code
+        $sql_query = "SELECT course.*, language.isocode AS course_language, course_category.code AS category_code
             FROM $main_course_table course
+            INNER JOIN $mainLanguageTable language ON language.id = course.language_id
             INNER JOIN $tblCourseCategory course_category ON course.category_id = course_category.id
             WHERE course_category.code ='$category'";
         $sql_result = Database::query($sql_query);
@@ -268,16 +270,19 @@ class IndexManager
 
         // Database table definitions.
         $main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $main_language_table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $main_category_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         // Get list of courses in category $category.
-        $sql = "SELECT *, '' AS category_code FROM $main_course_table cours
+        $sql = "SELECT cours.*, language.isocode AS course_language, '' AS category_code FROM $main_course_table cours
+                INNER JOIN $main_language_table language ON language.id = cours.language_id
                 WHERE category_id IS NULL
                 ORDER BY title, UPPER(visual_code)";
 
         if (!empty($category)) {
-            $sql = "SELECT course.*, course_category.code AS category_code
+            $sql = "SELECT course.*, language.isocode AS course_language, course_category.code AS category_code
                 FROM $main_course_table course
+                INNER JOIN $main_language_table language ON language.id = course.language_id
                 INNER JOIN $main_category_table course_category ON course.category_id = course_category.id
                 WHERE course_category.code = '$category'
                 ORDER BY course.title, UPPER(visual_code)";
@@ -288,7 +293,8 @@ class IndexManager
             $url_access_id = api_get_current_access_url_id();
             if (-1 != $url_access_id) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql = "SELECT * FROM $main_course_table as course
+                $sql = "SELECT course.*, language.isocode AS course_language, url_rel_course.* FROM $main_course_table as course
+                        INNER JOIN $main_language_table language ON language.id = course.language_id
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
                         WHERE
@@ -297,7 +303,8 @@ class IndexManager
                         ORDER BY title, UPPER(visual_code)";
 
                 if (!empty($category)) {
-                    $sql = "SELECT * FROM $main_course_table as course
+                    $sql = "SELECT course.*, language.isocode AS course_language, course_category.*, url_rel_course.* FROM $main_course_table as course
+                        INNER JOIN $main_language_table language ON language.id = course.language_id
                         INNER  JOIN $main_category_table course_category ON course.category_id = course_category.id
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)

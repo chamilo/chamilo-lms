@@ -28,7 +28,7 @@
 
     <div
       v-if="isMenuOpen"
-      class="absolute end-0 top-full z-50 mt-2 w-44 rounded-2xl border border-gray-200 bg-white p-2 shadow-lg"
+      class="absolute end-0 top-full z-50 mt-2 w-max min-w-[15rem] max-w-[calc(100vw-1rem)] rounded-2xl border border-gray-200 bg-white p-2 shadow-lg"
       role="menu"
       @click.stop
     >

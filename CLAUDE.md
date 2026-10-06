@@ -168,14 +168,27 @@ It is possible to test the application through the web, as admin, by calling loc
 
 ### Documentation screenshots
 
-When you create or replace a screenshot for the English documentation in `chamilo-docs`
-(`3.x/en/.gitbook/assets/*.png` — see that repo's `.claude/commands/document-feature.md`, Step 5),
-also add or update its entry in that repo's screenshot catalogue:
-`chamilo-docs/3.x/en/.gitbook/assets/screenshot-catalogue.yaml`. Record the filename, the doc page
-it appears on, the `my.chamilo.net` URL, the account role needed, and any steps beyond plain
-navigation (opening a dialog, specific demo data, etc.). Without this, the same screenshot can't be
-faithfully reproduced in another language — that catalogue is what `chamilo-docs`'
-`/localize-screenshots` skill reads instead of re-guessing the page from scratch every time.
+All of this happens **on the `all` branch** of the `docs` repository, like every other
+documentation change (see Rule 14). Note that `3.x/en/` below is a **directory** on that branch,
+not the old `3.x` branch of the same name — that branch is superseded, read-only history.
+
+When you create or replace a screenshot for the English documentation
+(`3.x/en/.gitbook/assets/*.png`), also record how to reproduce it, in that space's screenshot
+catalogue: `3.x/en/.gitbook/assets/screenshot-catalogue.yaml`. Per screenshot, record the filename,
+the doc page it appears on, the URL, the account role needed, and any steps beyond plain navigation
+(opening a dialog, specific demo data, etc.).
+
+Why it matters: assets are **not** shared between GitBook spaces, so every translated space keeps
+its own copy of the same screenshot. Without the catalogue, whoever localises `3.x/fr/` has to
+re-derive the page, the role and the steps from the image alone.
+
+Two caveats, true as of 2026-10-06 — check before relying on either:
+- **The catalogue does not exist yet** on any branch. The first screenshot you add creates it,
+  on `all`.
+- **`document-feature.md` (which produces these screenshots) has not been ported to `all`** — it
+  was left behind on the superseded `3.x` branch. Recover it with
+  `git show 3.x:.claude/commands/document-feature.md` and commit it to `all`; do not check out
+  that branch to work from it.
 
 ### Playwright (browser automation tests)
 

@@ -119,6 +119,34 @@ composer phpstan            # Static analysis (level 5)
 composer psalm              # Type checking
 ```
 
+**Both analysers need a warmed dev container first.** `psalm.xml` and `phpstan.neon` both read
+`var/cache/dev/Chamilo_KernelDevDebugContainer.xml`; without it Psalm aborts before analysing
+anything with `ConfigException: Container xml file(s) not found!`. This happens after every
+`composer install`, whose `post-install-cmd` wipes `var/cache`. All three parts matter:
+
+```bash
+rm -rf var/cache/dev && APP_DEBUG=1 php -d memory_limit=-1 bin/console cache:warmup --env=dev
+```
+
+`-d memory_limit=-1` because the default 128M is not enough; `APP_DEBUG=1` because a non-debug
+warmup writes `Chamilo_KernelDevContainer` instead of the `...DevDebugContainer.xml` both tools
+look for; and `rm -rf` because the XML is only written when the container is *compiled* — if the
+`.php` already exists, the warmup will not regenerate it.
+
+**A Psalm error is not real until it survives `--no-cache`.** The cache in `var/cache/psalm` goes
+stale and keeps reporting issues the current code does not have — it has produced whole families of
+phantom `MethodSignatureMismatch` on classes implementing vendor interfaces, which no docblock can
+silence because the code was already correct. Before changing anything, or adding a
+`@psalm-suppress`, re-run just that file:
+
+```bash
+vendor/bin/psalm --no-cache --no-diff --show-info=false --no-progress --output-format=text <file>
+```
+
+If it is clean there, the fix is `rm -rf var/cache/psalm`, not an annotation. Same for stray
+`/opt/Psalmtemp_folder*` directories: Psalm leaves them behind and then reports errors from those
+copies as if they were project files — delete them.
+
 ### Testing
 ```bash
 php bin/phpunit                                    # Run full test suite

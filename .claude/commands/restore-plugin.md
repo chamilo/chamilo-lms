@@ -169,7 +169,12 @@ These are instantiated manually in the PHP bootstrap file (not via Symfony routi
 
 `getAllPluginContentsByRegion()` in `plugin.lib.php` passes template variables **namespaced under the plugin name**:
 ```php
-echo Container::getTwig()->render("$plugin_name/$pluginTemplate", [$plugin_name => $_template]);
+$templateContext = [
+    $plugin_name => $_template,
+    strtolower((string) $plugin_name) => $_template,
+    'plugin_info' => $plugin_info,
+];
+echo Container::getTwig()->render("$plugin_name/$pluginTemplate", $templateContext);
 ```
 This means if your plugin is called `Tour`, all `$_template` variables set in `index.php` are accessible in Twig under the `Tour.` prefix:
 - `$_template['show_tour'] = true;` → `{{ Tour.show_tour }}` in Twig
@@ -209,9 +214,9 @@ Update to use the new class name and modern patterns.
 
 ### Plugin regions in the Vue SPA
 
-Currently, **only `content_bottom`** is rendered in the Vue SPA (`App.vue` contains `<PluginBlockRenderer region="content_bottom" />`). Other regions (e.g., `footer_center`, `header_right`) are only rendered in legacy pages.
+The Vue SPA renders regions through `<PluginRegion region="..." />` (`assets/vue/components/layout/PluginRegion.vue`): `content_bottom` and `pre_footer` on every page (`App.vue`), `login_top`/`login_bottom` on the landing page (`pages/AppIndex.vue`), and `footer_left`/`footer_center`/`footer_right` on the course home (`views/course/CourseHome.vue`). Grep `<PluginRegion` for the current list; other regions are only rendered in legacy pages.
 
-If the plugin needs to be visible in the Vue SPA, it **must** be assigned to `content_bottom` in the admin panel. If the plugin injects UI into a different part of the page (e.g., the topbar), use `content_bottom` as the region for loading, then use JavaScript in the template to relocate the UI element to the desired DOM location (e.g., `document.querySelector('.app-topbar__items').appendChild(btn)`).
+If the plugin needs to be visible on every SPA page, assign it to `content_bottom` in the admin panel. If the plugin injects UI into a different part of the page (e.g., the topbar), use `content_bottom` as the region for loading, then use JavaScript in the template to relocate the UI element to the desired DOM location (e.g., `document.querySelector('.app-topbar__items').appendChild(btn)`).
 
 ### plugin.php
 Must reference:

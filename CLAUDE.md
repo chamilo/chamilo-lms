@@ -54,10 +54,9 @@ Before adding code, read exports, immediate callers, shared utilities.
 Tests must encode WHY behavior matters, not just WHAT it does.
 A test that can't fail when business logic changes is wrong.
 
-### Rule 10 — Checkpoint after every significant step
-Summarize what was done, what's verified, what's left.
-Don't continue from a state you can't describe back.
-If you lose track, stop and restate.
+### Rule 10 — Know where you are
+When you report a task as done, state what was done, what is verified and what is left.
+Don't continue from a state you can't describe back; if you lose track, stop and restate.
 
 ### Rule 11 — Match the codebase's conventions, even if you disagree
 Conformance > taste inside the codebase.
@@ -85,7 +84,7 @@ Review **every** new and modified file (controller, Vue component, updated legac
 
 Any new feature, and any substantially modified feature, must be documented in English in Chamilo's **docs** repository, under `3.x/en/` (the current version's English space). Where that repository is checked out differs per developer — it is **not** reliably a sibling of this one, so do not assume `../docs`. Recognise it by its contents: a `gitbook-docs.yaml` and a `CLAUDE.md` at the root, next to `1.11.x/`, `2.x/` and `3.x/` directories. It is usually added as an additional working directory for the session; if you cannot find it, ask for the path instead of guessing.
 
-**Work on the `all` branch.** The docs site moved from one branch per version+language (`3.x`, `3.x-fr`, `2.x`, `2.x-es`, ...) to a single `all` branch that holds every documented version and language as `<version>/<language>/` directories in one tree (e.g. `3.x/en/`, `3.x/fr/`, `2.x/es/`, `1.11.x/de/`), mapped by one root `gitbook-docs.yaml` — GitBook's Git Sync now expects one branch mapping every space to a directory, not one branch per space. The old per-version-language branches still exist in the repo but are superseded, read-only history; check out/edit `all`, never those. Before writing anything, **read that repository's own `CLAUDE.md`** — it defines the docs repo's own structure and conventions (space layout, `SUMMARY.md`, `.gitbook/assets/` per space, commit-message prefix) and takes precedence over guessing.
+**Work on the `all` branch.** It holds every documented version and language as `<version>/<language>/` directories (e.g. `3.x/en/`, `3.x/fr/`, `2.x/es/`, `1.11.x/de/`), mapped to GitBook spaces by the root `gitbook-docs.yaml`. Branches named after a version or language (`3.x`, `3.x-fr`, `2.x`, ...) are read-only history: never check them out to edit. Before writing anything, **read that repository's own `CLAUDE.md`** — it defines the docs repo's own structure and conventions (space layout, `SUMMARY.md`, `.gitbook/assets/` per space, commit-message prefix) and takes precedence over guessing.
 
 If the docs repository is not accessible locally, write the documentation locally instead, as a `.md` file formatted as if it were being added to the docs repository (i.e. as it would appear under `3.x/en/<guide>/...` on the `all` branch). Write it to a temporary directory outside this repository (e.g. the scratchpad) so it is never included in any commit — it must not be part of the code. As a final note once the feature is finished, tell the developer about the generated file's location and ask that it be uploaded manually on GitHub together with the PR (not committed as part of the code), so maintainers can merge it into the docs repository manually.
 
@@ -169,8 +168,7 @@ It is possible to test the application through the web, as admin, by calling loc
 ### Documentation screenshots
 
 All of this happens **on the `all` branch** of the `docs` repository, like every other
-documentation change (see Rule 14). Note that `3.x/en/` below is a **directory** on that branch,
-not the old `3.x` branch of the same name — that branch is superseded, read-only history.
+documentation change (see Rule 14); `3.x/en/` below is a **directory** on that branch.
 
 When you create or replace a screenshot for the English documentation
 (`3.x/en/.gitbook/assets/*.png`), also record how to reproduce it, in that space's screenshot
@@ -192,7 +190,7 @@ Two caveats, true as of 2026-10-06 — check before relying on either:
 
 ### Playwright (browser automation tests)
 
-The browser-driven test suite uses **Playwright** with `playwright-bdd`, so `.feature` files stay plain Gherkin — only the step definitions are TypeScript. It replaced Behat, which has been removed entirely (see the note at the end of this section). This is the only browser-driven suite: all new coverage goes here.
+The browser-driven test suite uses **Playwright** with `playwright-bdd`, so `.feature` files stay plain Gherkin — only the step definitions are TypeScript. This is the only browser-driven suite: all new coverage goes here.
 
 - Feature files: `tests/playwright/features/*.feature` (organised by domain where it matters, e.g. `admin/`).
 - Step definitions: `tests/playwright/steps/common.steps.ts` — all steps, one shared file.
@@ -240,7 +238,7 @@ Every new feature and every new interface added to an existing feature **must** 
   1. **Clicking into a client-side route change (`router.push`/`<router-link>`) never fires a real navigation event.** `"wait ... for the page to be loaded"` (`page.waitForLoadState("domcontentloaded"/"networkidle")`) resolves immediately regardless of whether the SPA has actually swapped routes — a script that clicks an edit-row icon then immediately checks `page.url()` after that wait can still show the OLD page's URL. Worse, if the old and new page happen to share a field `name` (e.g. a list page's own "Advanced search" filter having the same `name="email"` as the destination edit form), the next `"I fill in ..."` step silently fills the WRONG page's field instead of erroring. Fix: wait for an element unique to the destination page instead — `"I wait up to N seconds for the element {string} to appear"` with a selector/text only the target page has.
   2. **A component whose `onMounted` async-fetches existing data (any edit form) has a fill-before-load race.** The static template (headings, labels) renders immediately on mount, before the fetch resolves; if a test fills a field in that window, the fetch's `.then()` handler overwrites the typed value with the loaded one moments later, and the eventual save submits the ORIGINAL data — no error, because nothing was actually wrong with it. Symptom: a "wrong value should be rejected" scenario times out waiting for a validation message that never appears, because the request that went out was valid. Confirmed by inspecting the actual submitted `multipart/form-data` in the trace's network log, not by re-reading the frontend code. Fix: assert the field already holds its expected LOADED value (`"the field {string} should have value {string}"`) before overwriting it — this doubles as proof the load finished.
 
-**Behat is gone.** `tests/behat/`, `.github/workflows/behat.yml` and the `behat/*` composer dependencies have all been deleted — Playwright is the only browser-driven suite. Do not add Behat scenarios, and do not restore the directory.
+**No Behat.** Do not add Behat scenarios or restore `tests/behat/`.
 
 The old scenarios remain in git history and are still useful when writing new coverage for an area Behat once covered: `git show 98c77757ea6:tests/behat/features/<name>.feature`, or `git ls-tree -r --name-only 98c77757ea6 tests/behat` for the full list (84 files at that commit). Treat anything found there as a **hint** of intended scenarios — never as a source of truth for selectors, since field names, button labels and dialog types have all rotted since. Verify everything against the live app.
 
@@ -431,7 +429,7 @@ round-trips it back into the same multiselect on save.
 
 ### Prod cache must be rebuilt after adding a *new* controller class, not just after editing one
 
-Extends the constructor-change gotcha above: on a box running `APP_ENV=prod` (check `.env`
+On a box running `APP_ENV=prod` (check `.env`
 before assuming `dev`), a **brand-new** `#[Route]`-attributed controller class is invisible to
 the compiled router until `cache:clear --env=prod` (+`cache:warmup` +`chmod -R 777 var/cache/prod`
 if `claude` and `www-data` both need to write there) runs — hitting the new route in the
@@ -599,7 +597,7 @@ These roles **only exist for the current request**. They are computed and publis
 1. `User::$temporaryRoles` — visible to `Security::getUser()->getRoles()` and `ResourceNodeVoter::hasContextRole()`.
 2. The security token's `getRoleNames()` — visible to `is_granted()` and the `RoleHierarchyVoter`.
 
-The relationship logic lives in `CourseAccessResolver` (`src/CoreBundle/Security/CourseAccessResolver.php`), a pure service consumed by the listener. **Voters must never call `$user->addRole(ROLE_CURRENT_COURSE_*)`** — that pattern was removed in #8486 because Voter side-effects break Symfony's contract (non-deterministic order, short-circuit evaluation, etc.).
+The relationship logic lives in `CourseAccessResolver` (`src/CoreBundle/Security/CourseAccessResolver.php`), a pure service consumed by the listener. **Voters must never call `$user->addRole(ROLE_CURRENT_COURSE_*)`**: Voter side-effects break Symfony's contract (non-deterministic order, short-circuit evaluation, etc.).
 
 #### When the contextual-role model applies (scope)
 

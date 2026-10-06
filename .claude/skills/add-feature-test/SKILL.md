@@ -8,22 +8,17 @@ description: >
   Playwright/Gherkin test suite for it in tests/playwright/features/. Use when
   the user describes a feature and asks for test coverage, wants to "add
   tests for X", asks to confirm a feature "keeps working", or runs
-  /add-feature-test. Companion to the Playwright suite described in CLAUDE.md —
-  read that file's "Discovered Patterns" section first, it documents
-  conventions this skill assumes (resolveField/pressButton cascades, base
-  component mapping, breadcrumb rules, etc.).
+  /add-feature-test. Companion to the Playwright section of CLAUDE.md.
 ---
 
 # Add Feature Test
 
 Turn a plain-language feature description into a Playwright/Gherkin test suite
 that actually reflects the live application — not assumptions from reading
-source code alone. The single most repeated lesson across this whole
-migration: **static code reading gets selectors, field names, dialog types,
-and even which page is actually live WRONG often enough that every one of
-those claims must be confirmed against a real running instance before being
-written into a test.** Budget time for that verification step; do not skip it
-to save time.
+source code alone. Static code reading gets selectors, field names, dialog
+types, and even which page is actually live wrong often enough that every one
+of those claims must be confirmed against a running instance before it goes
+into a test.
 
 Scope, per the user's own framing: **wide-ranging, not exhaustive.** Cover the
 feature's real create/read/update/delete flows and role-based access variants
@@ -100,8 +95,9 @@ set up as a separate vhost/DB pointed at this exact worktree). Confirm:
   wastes the rest of the session's work.
 - The one-time seed sequence has run if the feature needs course context
   (`package.json`'s `test:playwright:seed` → `:seed-course` →
-  `:seed-private-course`, in that order — creates the test users and the
-  `TEMP`/`TEMPPRIVATE` courses most course-tool features assume exist).
+  `:seed-private-course` → `:seed-settings`, in that order — creates the test
+  users, the `TEMP`/`TEMPPRIVATE` courses most course-tool features assume
+  exist, and the settings some scenarios assume are enabled).
 
 If no such environment is available and only a shared/production-like box
 exists, get explicit confirmation before creating or deleting ANY data there,
@@ -202,9 +198,9 @@ Other recurring traps to actively check for:
 
 ## Step 6 — Write the feature file
 
-- Path: `tests/playwright/features/<name>.feature`, keeping the name the old
-  Behat file used if a same-topic one existed (the other files here follow that
-  naming).
+- Path: `tests/playwright/features/<name>.feature`, or under a domain
+  subfolder (e.g. `admin/`) where one already exists for that area; keep the
+  name the old Behat file used if a same-topic one existed.
 - Start with a header comment documenting what was actually verified live vs.
   assumed, and any real drift found from the old Behat scenario (if any) — this
   is a load-bearing convention in every existing file in this directory, not
@@ -224,9 +220,8 @@ Other recurring traps to actively check for:
 - Regenerate after every `.feature`/step change:
   `node_modules/.bin/bddgen --config=tests/playwright/playwright.config.ts`
 - Run just the new feature file, not the full suite, unless the user asks for
-  a broader regression — this migration has repeatedly found that full-suite
-  runs are expensive and mostly redundant once the targeted file is green,
-  especially against a shared step-definitions file where changes are scoped.
+  a broader regression: full-suite runs are expensive and add little once the
+  targeted file is green.
 - Root-cause real failures from actual evidence (DOM dump, network trace) —
   never guess-and-retry blindly. If a fix touches shared step code
   (`resolveField()`/`pressButton()`/etc.), re-run at least one other

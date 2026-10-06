@@ -42,9 +42,9 @@ The project enforces code style via `vendor/bin/ecs check`. Write code that pass
 
 ### Psalm static analysis rules
 
-The project runs `vendor/bin/psalm` (level 7, with Doctrine and Symfony plugins). Write code that passes from the start:
+The project runs `vendor/bin/psalm` (level set in `psalm.xml`, with Doctrine and Symfony plugins). Write code that passes from the start:
 
-- **`setParameter()` must include an explicit type** (3rd argument) for non-scalar values. Use `Types::INTEGER` for entity IDs (pass `$user->getId()`, not the entity object), `Types::DATETIME_MUTABLE` for DateTime objects, and `ArrayParameterType::INTEGER` for integer arrays. Import `Doctrine\DBAL\Types\Types` and `Doctrine\DBAL\ArrayParameterType`.
+- **`setParameter()`: pass a scalar ID, not an entity** — `(int) $user->getId()` (`getIid()` for CourseBundle entities). Doctrine infers the type, so omit the 3rd argument; add `Types::*`/`ArrayParameterType::*` only when the binding must differ from the inferred one.
 - **All methods must have return types.** All parameters must have type hints.
 - **Avoid possibly-null access** — check for null before accessing object properties or methods.
 - **No unused variables** — remove or prefix with `$_` if intentionally ignored.
@@ -72,7 +72,7 @@ Find the relevant domain router file in `assets/vue/router/` (e.g., `skill.js`, 
 {
   name: 'YourRouteName',
   path: 'your-path',
-  meta: { requiresAuth: true, showBreadcrumb: true },
+  meta: { requiresAuth: true, showBreadcrumb: true, breadcrumb: 'Your page title key' }, // see the vue-breadcrumb skill
   component: () => import('../views/your-domain/YourComponent.vue'),
 }
 ```
@@ -92,12 +92,12 @@ Create `assets/vue/views/<domain>/YourComponent.vue`.
 
 **Spacing:** Follow the 8-point grid system. Use multiples of 8px for spacing (Tailwind: `gap-2` = 8px, `p-4` = 16px, `mb-8` = 32px, etc.). Fine adjustments of 4px/6px/12px are acceptable when necessary.
 
-**Buttons:** Follow the CRUD color convention:
-- **Create** actions (add, import, save): green/success → `btn btn--primary` or Tailwind `bg-green-*`
-- **Read** actions (export, view, list): blue/primary → `btn btn--primary`
-- **Update** actions (edit, move, configure): orange/secondary → `btn btn--secondary`
-- **Delete** actions (delete, disable): red/error → `btn btn--danger`
-- **Cancel/dismiss**: gray → `btn btn--plain`
+**Buttons:** Use `<BaseButton>` with the CRUD color convention (`type` prop):
+- **Create** (add, import, save) → `type="success"`
+- **Read** (export, view, list) → `type="primary"`
+- **Update** (edit, move, configure) → `type="secondary"`
+- **Delete** (delete, disable) → `type="danger"`
+- **Cancel/dismiss** → `type="plain"`
 - Buttons are for **actions only** — never style a non-action link as a button.
 
 **Icons:** Use Material Design Icons (MDI) via `<span class="mdi mdi-{name} ch-tool-icon" />` in Vue templates.
@@ -122,7 +122,7 @@ Create `assets/vue/views/<domain>/YourComponent.vue`.
 
 **Tables:** Use `BaseTable` (`components/basecomponents/BaseTable.vue`) wrapping PrimeVue `DataTable`. Key props: `:values`, `:total-items`, `:is-loading`, `:lazy`, `@page`, `@sort`. `Column` is globally registered.
 
-**Forms:** Use standard HTML `<input>`, `<select>` with Tailwind classes like `border border-gray-300 rounded px-3 py-1.5 text-sm`. Group form elements with `flex gap-4 items-end`.
+**Forms:** Use `Base*` form components (see the `use-base-components` skill), not native `<input>`/`<select>`. Group fields with `flex gap-4 items-end`.
 
 ## Step 6 — Translations
 

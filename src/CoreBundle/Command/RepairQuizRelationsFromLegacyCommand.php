@@ -64,7 +64,8 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'Insert only verified missing relations. Without this option the command is read-only.'
-            );
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -112,19 +113,11 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
             $expectedAffected = $this->requiredExpectedCount($input, 'expected-affected-quizzes');
 
             if ($expectedMissing !== $audit['summary']['missing_relations']) {
-                throw new RuntimeException(\sprintf(
-                    'Repair refused: missing relation count is %d, expected %d.',
-                    $audit['summary']['missing_relations'],
-                    $expectedMissing
-                ));
+                throw new RuntimeException(\sprintf('Repair refused: missing relation count is %d, expected %d.', $audit['summary']['missing_relations'], $expectedMissing));
             }
 
             if ($expectedAffected !== $audit['summary']['affected_quizzes']) {
-                throw new RuntimeException(\sprintf(
-                    'Repair refused: affected quiz count is %d, expected %d.',
-                    $audit['summary']['affected_quizzes'],
-                    $expectedAffected
-                ));
+                throw new RuntimeException(\sprintf('Repair refused: affected quiz count is %d, expected %d.', $audit['summary']['affected_quizzes'], $expectedAffected));
             }
 
             if (0 === $audit['summary']['missing_relations']) {
@@ -134,20 +127,14 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
             }
 
             if ($audit['summary']['unsafe_affected_quizzes'] > 0) {
-                throw new RuntimeException(\sprintf(
-                    'Repair refused: %d affected quiz(es) contain conflicts or unresolved data. Review them before applying.',
-                    $audit['summary']['unsafe_affected_quizzes']
-                ));
+                throw new RuntimeException(\sprintf('Repair refused: %d affected quiz(es) contain conflicts or unresolved data. Review them before applying.', $audit['summary']['unsafe_affected_quizzes']));
             }
 
             $inserted = $this->apply($sourceDatabase, $quizFilter, $expectedMissing, $expectedAffected);
             $after = $this->audit($sourceDatabase, $quizFilter);
 
             if ($after['summary']['missing_relations'] > 0) {
-                throw new RuntimeException(\sprintf(
-                    'Post-repair verification failed: %d resolved legacy relation(s) are still missing.',
-                    $after['summary']['missing_relations']
-                ));
+                throw new RuntimeException(\sprintf('Post-repair verification failed: %d resolved legacy relation(s) are still missing.', $after['summary']['missing_relations']));
             }
 
             $io->success(\sprintf(
@@ -164,8 +151,6 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
     }
 
     /**
-     * @param mixed $rawQuizFilter
-     *
      * @return list<int>
      */
     private function normalizeQuizFilter(mixed $rawQuizFilter): array
@@ -371,7 +356,7 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
 
         if (!$io->isVerbose() && \count($detailRows) > self::MAX_DEFAULT_DETAIL_ROWS) {
             $omitted = \count($detailRows) - self::MAX_DEFAULT_DETAIL_ROWS;
-            $detailRows = array_slice($detailRows, 0, self::MAX_DEFAULT_DETAIL_ROWS);
+            $detailRows = \array_slice($detailRows, 0, self::MAX_DEFAULT_DETAIL_ROWS);
             $io->warning(\sprintf(
                 'Showing the first %d quiz(es) requiring review; %d additional row(s) omitted. Re-run with -v to show all.',
                 self::MAX_DEFAULT_DETAIL_ROWS,
@@ -477,6 +462,7 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
 
             if (null === $row['question_iid']) {
                 $unresolvedSourceByQuiz[$quizId] = ($unresolvedSourceByQuiz[$quizId] ?? 0) + 1;
+
                 continue;
             }
 
@@ -484,6 +470,7 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
             $pairKey = $quizId.':'.$questionId;
             if (isset($sourcePairSeen[$pairKey])) {
                 $duplicateSourcePairsByQuiz[$quizId] = ($duplicateSourcePairsByQuiz[$quizId] ?? 0) + 1;
+
                 continue;
             }
 
@@ -596,6 +583,7 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
             foreach ($targetQuizRows as $targetRow) {
                 if (null === $targetRow['question_id']) {
                     ++$nullTargetRelations;
+
                     continue;
                 }
 
@@ -612,11 +600,13 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
             foreach ($sourceByQuestion as $questionId => $questionOrder) {
                 if (!isset($targetOrdersByQuestion[$questionId])) {
                     ++$missing;
+
                     continue;
                 }
 
                 if (!\in_array($questionOrder, $targetOrdersByQuestion[$questionId], true)) {
                     ++$orderConflicts;
+
                     continue;
                 }
 
@@ -762,7 +752,7 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
 
         if (!$io->isVerbose() && \count($detailRows) > self::MAX_DEFAULT_DETAIL_ROWS) {
             $omitted = \count($detailRows) - self::MAX_DEFAULT_DETAIL_ROWS;
-            $detailRows = array_slice($detailRows, 0, self::MAX_DEFAULT_DETAIL_ROWS);
+            $detailRows = \array_slice($detailRows, 0, self::MAX_DEFAULT_DETAIL_ROWS);
             $io->warning(\sprintf(
                 'Showing the first %d quiz(es) with issues; %d additional row(s) omitted. Re-run with -v to show all.',
                 self::MAX_DEFAULT_DETAIL_ROWS,
@@ -788,19 +778,11 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
             $audit = $this->audit($sourceDatabase, $quizFilter);
 
             if ($expectedMissing !== $audit['summary']['missing_relations']) {
-                throw new RuntimeException(\sprintf(
-                    'Target changed before repair: missing relation count is now %d, expected %d.',
-                    $audit['summary']['missing_relations'],
-                    $expectedMissing
-                ));
+                throw new RuntimeException(\sprintf('Target changed before repair: missing relation count is now %d, expected %d.', $audit['summary']['missing_relations'], $expectedMissing));
             }
 
             if ($expectedAffected !== $audit['summary']['affected_quizzes']) {
-                throw new RuntimeException(\sprintf(
-                    'Target changed before repair: affected quiz count is now %d, expected %d.',
-                    $audit['summary']['affected_quizzes'],
-                    $expectedAffected
-                ));
+                throw new RuntimeException(\sprintf('Target changed before repair: affected quiz count is now %d, expected %d.', $audit['summary']['affected_quizzes'], $expectedAffected));
             }
 
             if ($audit['summary']['unsafe_affected_quizzes'] > 0) {
@@ -859,10 +841,7 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
                     }
 
                     if (!isset($targetQuestionIds[$questionId])) {
-                        throw new RuntimeException(\sprintf(
-                            'Repair refused: target question iid=%d disappeared before write.',
-                            $questionId
-                        ));
+                        throw new RuntimeException(\sprintf('Repair refused: target question iid=%d disappeared before write.', $questionId));
                     }
 
                     $this->connection->insert(
@@ -886,10 +865,7 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
 
             $verification = $this->audit($sourceDatabase, $quizFilter);
             if ($verification['summary']['missing_relations'] > 0) {
-                throw new RuntimeException(\sprintf(
-                    'Verification failed after inserts: %d resolved legacy relation(s) are still missing.',
-                    $verification['summary']['missing_relations']
-                ));
+                throw new RuntimeException(\sprintf('Verification failed after inserts: %d resolved legacy relation(s) are still missing.', $verification['summary']['missing_relations']));
             }
 
             $this->connection->commit();
@@ -908,10 +884,7 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
     {
         $value = $input->getOption($option);
         if (null === $value || '' === (string) $value || !ctype_digit((string) $value)) {
-            throw new RuntimeException(\sprintf(
-                '--%s is required with --apply and must be a non-negative integer.',
-                $option
-            ));
+            throw new RuntimeException(\sprintf('--%s is required with --apply and must be a non-negative integer.', $option));
         }
 
         return (int) $value;
@@ -976,13 +949,7 @@ final class RepairQuizRelationsFromLegacyCommand extends Command
 
             foreach ($columns as $column) {
                 if (!isset($existingMap[$column])) {
-                    throw new RuntimeException(\sprintf(
-                        '%s database %s is missing %s.%s.',
-                        ucfirst($label),
-                        $database,
-                        $table,
-                        $column
-                    ));
+                    throw new RuntimeException(\sprintf('%s database %s is missing %s.%s.', ucfirst($label), $database, $table, $column));
                 }
             }
         }

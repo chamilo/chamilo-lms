@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Ai\WysiwygTranslation;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Service\Ai\WysiwygTranslationService;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /** @implements ProviderInterface<WysiwygTranslation> */
 final readonly class WysiwygTranslationProvider implements ProviderInterface
@@ -33,11 +34,21 @@ final readonly class WysiwygTranslationProvider implements ProviderInterface
         array $uriVariables = [],
         array $context = [],
     ): WysiwygTranslation {
-        $course = $this->resolveCourseAndAssertAccess($this->security);
+        // The language list feeds the editor's manual "Lang ISO" menu, open to every
+        // editor user; only the AI translation itself (the Post) is restricted.
+        $canTranslate = true;
+
+        try {
+            $course = $this->resolveCourseAndAssertAccess($this->security);
+        } catch (AccessDeniedHttpException) {
+            $canTranslate = false;
+            $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        }
+
         $languages = $this->translationService->getActiveLanguages();
 
         $result = new WysiwygTranslation();
-        $result->enabled = $this->translationService->isEnabled();
+        $result->enabled = $canTranslate && $this->translationService->isEnabled();
         $result->sourceLanguage = $this->translationService->getSourceLanguage($course);
         $result->languages = $this->toOptions($languages);
         $result->allowAllLanguages = $this->translationService->isAllLanguagesAllowed();

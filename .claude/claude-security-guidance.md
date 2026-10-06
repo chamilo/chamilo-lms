@@ -1,4 +1,4 @@
-# Chamilo 2.0 — project security rules
+# Chamilo — project security rules
 
 Codebase-specific rules for the LLM diff reviewer. They supplement (do not replace) the built-in
 web-vulnerability checks. Stack: Symfony 7.4 + API Platform 4.2 + Doctrine ORM 3 + Vue 3, plus legacy PHP

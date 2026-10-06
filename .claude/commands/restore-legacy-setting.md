@@ -72,7 +72,7 @@ Read the setting in the relevant Symfony controller. Follow these conventions:
 
 - Read the setting value from the data endpoint response.
 - Use `v-if` / `v-show` to conditionally render UI elements.
-- Follow Vue conventions: `<script setup>`, Tailwind classes, design guide (button CRUD colors, MDI icons with `ch-tool-icon`).
+- Follow Vue conventions: `<script setup>`, Tailwind classes, design guide (button CRUD colors, icons through `<BaseIcon>`).
 
 ### Translations
 

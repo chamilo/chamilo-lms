@@ -101,7 +101,7 @@ Use this decision tree before writing the `#[ApiResource]` block:
 | Unauthenticated (truly public)                | No restriction — confirm with user first |
 | Any logged-in user (all roles)                | `"is_granted('IS_AUTHENTICATED_FULLY')"` |
 | Admins only                                   | `"is_granted('ROLE_ADMIN')"` |
-| The owner/creator of the resource only        | `"is_granted('ROLE_USER') and object.getCreator() == user"` |
+| The owner/creator of the resource only        | Voter + collection Extension + Processor, not an `object.getCreator() == user` expression (see CLAUDE.md "Securing a per-user owned `#[ApiResource]`") |
 | Course members (teachers + students)          | `"is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"` (see CLAUDE.md "Contextual roles") |
 | Session coaches or course teachers            | use appropriate voter |
 
@@ -263,7 +263,9 @@ Create `assets/vue/views/<domain>/YourFeatureView.vue` (one file per logical pag
 - Cancel/dismiss → `type="plain"`
 - Buttons are for actions only — never style a non-action link as a button.
 
-**Icons (MDI via `<span class="mdi mdi-{name} ch-tool-icon" />`):**
+**Icons — `<BaseIcon icon="{key}" />`** (see CLAUDE.md "Icons"). `icon` takes a key of
+`assets/vue/components/basecomponents/ChamiloIcons.js`, not an MDI class; pick the key that maps
+to the canonical MDI icon below:
 - Edit: `mdi-pencil`, Delete: `mdi-delete`, Add: `mdi-plus-box`, Search: `mdi-magnify`
 - Copy: `mdi-text-box-plus`, Configure: `mdi-hammer-wrench`, Info: `mdi-information`
 - Subscribe users: `mdi-account-multiple-plus`, Add courses: `mdi-book-open-page-variant`

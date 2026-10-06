@@ -100,12 +100,8 @@ Create `assets/vue/views/<domain>/YourComponent.vue`.
 - **Cancel/dismiss** → `type="plain"`
 - Buttons are for **actions only** — never style a non-action link as a button.
 
-**Icons:** Use Material Design Icons (MDI) via `<span class="mdi mdi-{name} ch-tool-icon" />` in Vue templates.
-- Standard actions: `ch-tool-icon` class (primary color)
-- Disabled states: `ch-tool-icon-disabled` class (grayed out)
-- Large/hero icons: `ch-tool-icon-gradient` class (gradient)
-- Icon-only buttons: `ch-tool-icon-button` class
-- Follow the canonical icon names from the design guide:
+**Icons:** Use `<BaseIcon icon="{key}" />` (see CLAUDE.md "Icons"). `icon` takes a key of `assets/vue/components/basecomponents/ChamiloIcons.js` (e.g. `edit`, `delete`, `search`), not an MDI class; inside a button, use the button's `icon` prop instead.
+- Pick the key that maps to the canonical MDI icon from the design guide:
   - Edit: `mdi-pencil`, Delete: `mdi-delete`, Add: `mdi-plus-box`, Search: `mdi-magnify`
   - Copy: `mdi-text-box-plus`, Configure: `mdi-hammer-wrench`, Info: `mdi-information`
   - Subscribe users: `mdi-account-multiple-plus`, Add courses: `mdi-book-open-page-variant`

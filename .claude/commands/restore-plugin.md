@@ -249,7 +249,7 @@ Fix any issues reported. Common fixes:
 
 Review every modified file for common vulnerabilities:
 
-- **CSRF on state-changing endpoints.** POST endpoints that write data should validate a token or at minimum check `api_is_anonymous()` and user permissions.
+- **CSRF on state-changing endpoints.** Plugin AJAX scripts run without a resolved route, so `CsrfProtectionListener` does not guard them: POST endpoints that write data must validate a token (`Security::check_token()`) and check user permissions.
 - **SQL injection.** Verify no raw user input is interpolated into queries. All Doctrine operations use parameterized queries automatically. For any remaining `Database::query()` calls, ensure parameters are properly escaped.
 - **XSS.** Twig auto-escapes `{{ }}` by default. Verify no `|raw` filter is used with user-supplied data. Check that AJAX endpoints returning JSON don't include unescaped HTML.
 - **Access control.** Verify that admin-only functionality checks `api_protect_admin_script()` or equivalent. Verify that user-specific data is filtered by the current user's ID.

@@ -459,8 +459,8 @@ components are globally registered (so you don't import them). When building UI,
 
 Quick essentials that apply everywhere:
 - Tables → `BaseTable` (wraps PrimeVue `DataTable`; `Column` is global, no import needed).
-- Buttons → `<BaseButton>` instead of plain `<button>`. Props: `type`, `icon` (MDI name without
-  `mdi-`), `only-icon` + `size="small"` for icon-only row actions.
+- Buttons → `<BaseButton>` instead of plain `<button>`. Props: `type`, `icon` (a key of
+  `ChamiloIcons.js`, see "Icons" below), `only-icon` + `size="small"` for icon-only row actions.
 - Every non-global component used in the template **must** be imported in `<script setup>` —
   a missing import does NOT fail the build, only warns at runtime.
 
@@ -483,9 +483,9 @@ Table row action convention:
 
 ### Icons (MDI)
 
-Always use `<BaseIcon>` instead of a plain `<icon>` element unless there is a clear reason not to. For standalone decorative icons outside of buttons, prefer `<BaseIcon icon="{name}" />` over the raw `<span class="mdi mdi-{name} ch-tool-icon" />` pattern. The `ch-tool-icon` class applies blue colouring — use it **only outside of buttons**. Never add it to icons inside `<button>` or `BaseButton` — the icon inherits the button's own text colour.
+Always use `<BaseIcon>` instead of a plain `<icon>` element unless there is a clear reason not to. For standalone decorative icons outside of buttons, prefer `<BaseIcon icon="{key}" />` over the raw `<span class="mdi mdi-{name} ch-tool-icon" />` pattern. The `icon` prop of `BaseIcon` and `BaseButton` takes a key of `assets/vue/components/basecomponents/ChamiloIcons.js` (e.g. `edit` → `mdi mdi-pencil`), not an MDI class name; `BaseIcon` rejects any other value. The `ch-tool-icon` class applies blue colouring — use it **only outside of buttons**. Never add it to icons inside `<button>` or `BaseButton` — the icon inherits the button's own text colour.
 
-Common icon names:
+Canonical MDI icons per action (pick the `ChamiloIcons.js` key that maps to each):
 - Edit: `mdi-pencil`, Delete: `mdi-delete`, Add: `mdi-plus-box`, Search: `mdi-magnify`
 - Copy: `mdi-text-box-plus`, Configure: `mdi-hammer-wrench`, Info: `mdi-information`
 - Subscribe users: `mdi-account-multiple-plus`, Add courses: `mdi-book-open-page-variant`

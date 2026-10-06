@@ -103,7 +103,7 @@ Review every new or modified file for:
 - **SQL injection**: no raw interpolation in DQL/SQL. Always use bound parameters.
 - **XSS**: no `v-html` with user data. Dynamic `:href` bindings only interpolate safe values (integer IDs, known constants).
 - **Broken access control**: if the setting enables/disables an action, ensure the backend enforces it too — do not rely solely on hiding a frontend button.
-- **CSRF**: if the setting adds or modifies a state-changing action, validate a CSRF token.
+- **CSRF**: if the setting adds or modifies a state-changing action, make it a POST, not a GET: `CsrfProtectionListener` then guards it (see CLAUDE.md Rule 13). On a legacy page under `public/main/`, use `FormValidator` with `protect()` instead.
 
 ## Step 9 — Summary
 

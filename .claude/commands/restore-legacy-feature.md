@@ -373,11 +373,10 @@ change request that adds features, fixes bugs, or updates links.
 
 ### Checklist
 
-- **CSRF on state-changing endpoints.** Every POST/PUT/DELETE controller action that performs
-  destructive or sensitive operations must validate a CSRF token:
-  `$this->isCsrfTokenValid('intent_name', $token)`. Generate tokens via `CsrfTokenManagerInterface`,
-  return them in the data endpoint JSON, and include them as a hidden `_token` field in the Vue
-  form submission.
+- **CSRF on state-changing endpoints.** Do not add a per-endpoint token: `CsrfProtectionListener`
+  already guards every routed POST/PUT/PATCH/DELETE (see CLAUDE.md Rule 13). Verify instead that no
+  destructive or sensitive action is a GET, that no operation declares
+  `extraProperties: ['csrf' => false]`, and that no route was added to the listener's `EXCLUDED_ROUTES`.
 
 - **API Platform endpoint access control.** Re-verify every `#[ApiResource]` operation against the
   actual access requirements from Step 3. Ask the user to confirm any `GetCollection` or `Get`

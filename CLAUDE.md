@@ -646,7 +646,6 @@ security: "is_granted('ROLE_CURRENT_COURSE_TEACHER')
 - **Body-only `cid` doesn't work.** `CidReqListener` reads `Request::get('cid')`, which sees query params and route attributes but not request bodies. Endpoints that pass `cid` only inside the JSON body need either an extra `cid` query param (preferred) or post-security validation in a `StateProcessor`.
 - **`Post` (create) can't use object-level checks.** On create the `resourceNode` does not exist yet, so `is_granted('CREATE', object)` / `object.resourceNode` fails closed. Gate creation with the contextual teacher roles through an operation-own `security:` (not `securityPostDenormalize`), which also avoids inheriting a resource-level `security:` that may omit `SESSION_TEACHER` and would otherwise block session teachers. `CToolIntro` is the reference.
 - **Output format negotiation runs before security.** Endpoints with binary `outputFormats` (`zip`, `bin`) reject the request with 406 if the `Accept` header is `application/ld+json`. Regression tests must send `Accept: application/zip` (or the matching MIME type) to reach the security gate.
-- **The skill `/migrate-contextual-roles <Entity>`** automates this migration for a single entity, including Vue-caller compatibility checks and lint/test runs.
 
 ### Student view and "may this user edit here"
 

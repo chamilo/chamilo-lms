@@ -35,7 +35,7 @@
                             $("#link_load_more_items").html("{{ 'Loading' | trans|escape('js') }} <em class='fa fa-spinner fa-pulse fa-fw'></em>");
                         },
                         type: "GET",
-                        url: "main/inc/ajax/online.ajax.php?a=load_online_user",
+                        url: "/main/inc/ajax/online.ajax.php?a=load_online_user",
                         data: "online_page_nr=" + page,
                         success: function(data) {
                             if (data != "end") {

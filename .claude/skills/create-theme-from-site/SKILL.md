@@ -438,7 +438,7 @@ it visually.
 
 ---
 
-## Gotchas learned the hard way
+## Gotchas
 
 - **Stale OPcache after a cache:clear.** If API calls suddenly start
   returning a generic 500 error page right after any `cache:clear`/

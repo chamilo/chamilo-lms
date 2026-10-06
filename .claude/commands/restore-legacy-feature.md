@@ -247,7 +247,7 @@ Create `assets/vue/views/<domain>/YourFeatureView.vue` (one file per logical pag
 ### General rules
 - `<script setup>` with `useI18n`.
 - `BaseTable` + `Column` for tabular data (`Column` is globally registered — no import needed).
-- Fetch data with `baseService.get('/your/path-data')` or `useService` composable.
+- Fetch data with `baseService.get('/your/path-data')` creating or using a `useService` composable.
 - State-changing operations (create, update, delete) call `baseService.post/put/delete` and handle
   loading/error states explicitly.
 - Tailwind classes only — no inline styles, no custom CSS unless unavoidable.
@@ -436,7 +436,7 @@ Common issues to watch for:
 ## Step 15 — Handle the legacy files
 
 **Always ask the user** whether to delete each legacy PHP file or leave a deprecation stub.
-During RC phases the default is to keep a stub to avoid breaking bookmarks or external links.
+The usual choice is a stub, to avoid breaking bookmarks or external links.
 
 Stub content:
 ```php

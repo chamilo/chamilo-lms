@@ -238,8 +238,7 @@ they're often more valuable than the tests themselves), local verification
 results, and — always — that **local verification against a reused dev
 instance is not the same guarantee as a fresh CI run.** A dev instance
 accumulates state (course subscriptions, leftover rows, prior test runs) that
-a genuinely fresh install never has, and this migration has hit real cases
-where a fix that was "confirmed" locally turned out to be environment-
-specific and got reverted after the next real CI run disagreed. Say so
+a genuinely fresh install never has, so a fix confirmed only locally can still
+be environment-specific and fail in CI. Say so
 plainly rather than implying local == done; the next CI run is the actual
 verification for anything state-sensitive.

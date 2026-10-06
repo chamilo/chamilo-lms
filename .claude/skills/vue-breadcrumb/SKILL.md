@@ -158,8 +158,8 @@ for a route whose tool declares it. Nothing else has to be wired.
   rule that names a page or a route never belongs there. Widening a contract the declarations
   already document is a different thing, and rare: do it only when a builder fails to honour a
   declaration the skill already describes.
-- **Do not match route names by substring.** A rule like `route.name.includes("Page")` once put a
-  "Pages" crumb on every wiki page of every course. It was removed for that reason.
+- **Do not match route names by substring.** A rule like `route.name.includes("Page")` puts a
+  "Pages" crumb on every wiki page of every course.
 - **Do not pass translated text as a label.** The component calls `t()` on what you declare.
 - **Do not expect a one-crumb trail to appear.** The component gives the first crumb to the
   PrimeVue `home` slot, and the container is hidden while the rest is empty. A page whose trail

@@ -226,7 +226,7 @@ Review **every** new and modified file (controller, Vue component, updated legac
 
 ## Step 12 — Handle the legacy file
 
-**Always ask the user** whether to delete the legacy file or leave a deprecation stub. In most cases (especially during RC phases), the user will prefer keeping a stub to avoid breaking external links or bookmarks.
+**Always ask the user** whether to delete the legacy file or leave a deprecation stub. The usual choice is a stub, to avoid breaking external links or bookmarks.
 
 If the user wants a stub, replace the file contents with:
 ```php

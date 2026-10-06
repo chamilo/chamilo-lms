@@ -528,8 +528,8 @@ class SocialManager extends UserManager
         $hide = ('true' === api_get_setting('display.hide_complete_name_in_whoisonline'));
         foreach ($user_list as $uid) {
             $user_info = api_get_user_info($uid, true);
-            $lastname = $user_info['lastname'];
-            $firstname = $user_info['firstname'];
+            $lastname = htmlspecialchars((string) $user_info['lastname'], ENT_QUOTES, 'UTF-8');
+            $firstname = htmlspecialchars((string) $user_info['firstname'], ENT_QUOTES, 'UTF-8');
             $completeName = $firstname.', '.$lastname;
             $user_rol = 1 == $user_info['status'] ? Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Trainer')) : Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Learner'));
             $status_icon_chat = null;

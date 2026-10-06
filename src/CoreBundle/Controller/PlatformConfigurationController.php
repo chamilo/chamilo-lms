@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Helpers\ForcedLoginRedirectHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Service\Mcp\McpAccessPolicy;
@@ -54,6 +55,7 @@ class PlatformConfigurationController extends AbstractController
         UrlGeneratorInterface $urlGenerator,
         PluginHelper $pluginHelper,
         ForcedLoginRedirectHelper $forcedLoginRedirectHelper,
+        TicketProjectHelper $ticketProjectHelper,
         Request $request,
     ): Response {
         $requestSession = $request->getSession();
@@ -259,6 +261,9 @@ class PlatformConfigurationController extends AbstractController
             $configuration['settings']['ticket.show_link_ticket_notification'] = $settingsManager->getSetting(
                 'ticket.show_link_ticket_notification'
             );
+            // Like the legacy header, the ticket icon is only offered to users allowed in the
+            // default project (1) by ticket.ticket_project_user_roles.
+            $configuration['settings']['ticket.user_allowed_in_default_project'] = $ticketProjectHelper->userIsAllowInProject(1);
 
             $configuration['plugins']['bbb'] = [
                 'show_global_conference_link' => Bbb::showGlobalConferenceLink([

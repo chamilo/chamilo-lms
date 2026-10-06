@@ -180,13 +180,11 @@ Why it matters: assets are **not** shared between GitBook spaces, so every trans
 its own copy of the same screenshot. Without the catalogue, whoever localises `3.x/fr/` has to
 re-derive the page, the role and the steps from the image alone.
 
-Two caveats, true as of 2026-10-06 — check before relying on either:
-- **The catalogue does not exist yet** on any branch. The first screenshot you add creates it,
-  on `all`.
-- **`document-feature.md` (which produces these screenshots) has not been ported to `all`** — it
-  was left behind on the superseded `3.x` branch. Recover it with
-  `git show 3.x:.claude/commands/document-feature.md` and commit it to `all`; do not check out
-  that branch to work from it.
+Check `all` first for both of these:
+- **If the catalogue does not exist**, the first screenshot you add creates it, on `all`.
+- **If `document-feature.md` (which produces these screenshots) is missing from `all`**, recover it
+  from the `3.x` branch with `git show 3.x:.claude/commands/document-feature.md` and commit it to
+  `all`; do not check out that branch to work from it.
 
 ### Playwright (browser automation tests)
 

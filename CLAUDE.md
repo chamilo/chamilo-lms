@@ -325,11 +325,20 @@ Adding a variable to a `*SettingsSchema.php` file (e.g. `SecuritySettingsSchema.
 So a new setting needs both:
 
 1. An entry under the right category key in `SettingsCurrentFixtures::getNewConfigurationSettings()` (`src/CoreBundle/DataFixtures/SettingsCurrentFixtures.php`) — `['name' => ..., 'title' => ..., 'comment' => ...]`.
-2. A fixtures-upsert migration that re-runs the same logic as `Version20250926174000.php`: it reads every setting from `SettingsCurrentFixtures` plus the schema-declared defaults (`SettingsManager::getSchemas()`), `UPDATE`s category/title/comment for settings that already have a row (never touching `selected_value` — an admin's configured value survives being re-synced), and `INSERT`s a row (using the schema default) for ones that don't yet exist. Its `down()` is intentionally a no-op — this is a one-way sync, not meant to be reversed.
+2. A fixtures-upsert migration: it reads every setting from `SettingsCurrentFixtures` plus the schema-declared defaults (`SettingsManager::getSchemas()`), `UPDATE`s category/title/comment for settings that already have a row (never touching `selected_value` — an admin's configured value survives being re-synced), and `INSERT`s a row (using the schema default) for ones that don't yet exist. Its `down()` is intentionally a no-op — this is a one-way sync, not meant to be reversed.
 
-**Only one such migration is needed per version** (i.e. per `Schema/V210/` directory, or whichever is current) — **check that directory first**:
-- If one already exists, **don't create a second one**. Just add the fixture entry from step 1; whoever needs the DB updated re-executes the existing migration manually (`doctrine:migrations:execute '<FQCN>' --up`), since Doctrine won't automatically re-run a migration already marked as executed. Developers/ops are expected to know this and re-run it after pulling changes that add settings.
-- Only create a **new** migration (copy `Version20250926174000.php`'s body verbatim into a freshly dated `Version<timestamp>` class, same namespace) if the current version's directory doesn't have a fixtures-upsert migration yet.
+**Only one such migration is needed per version** — i.e. per `Schema/V<nnn>/` directory. The directories registered in `config/packages/doctrine_migrations.yaml` (keep `public/main/install/migrations.php` in sync) are `V200`, `V210`, `V300` and `V310`; **`V310` is the current one**. Each version carries its own copy under its own namespace, each one derived from the previous generation and slightly grown (294 → 303 → 310 lines), so always start from the newest:
+
+| Directory | Fixtures-upsert migration |
+|-----------|---------------------------|
+| `V200`    | `Version20250926174000.php` (the original) |
+| `V210`    | `Version20260721125301.php` |
+| `V300`    | `Version20260728130000.php` (**copy this one** — most recent) |
+| `V310`    | **none yet** |
+
+**Check the current directory first**, since the table above goes stale:
+- If one already exists there, **don't create a second one**. Just add the fixture entry from step 1; whoever needs the DB updated re-executes the existing migration manually (`doctrine:migrations:execute '<FQCN>' --up`), since Doctrine won't automatically re-run a migration already marked as executed. Developers/ops are expected to know this and re-run it after pulling changes that add settings.
+- Only create a **new** migration if it doesn't. Copy the newest existing one's body verbatim into a freshly dated `Version<timestamp>` class **in the current directory, under that directory's own namespace** (`Chamilo\CoreBundle\Migrations\Schema\V310`) — not the namespace of the file you copied from.
 
 `AbstractMigrationChamilo::addSettingCurrent()` (`src/CoreBundle/Migrations/AbstractMigrationChamilo.php`) exists as a single-setting-insert helper but has zero callers repo-wide — the fixtures-upsert migration above is the actual convention to copy, not that helper.
 

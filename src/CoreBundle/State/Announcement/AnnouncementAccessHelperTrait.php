@@ -162,7 +162,15 @@ trait AnnouncementAccessHelperTrait
         }
 
         if ($session instanceof Session && (
-            Session::READ_ONLY === $session->getVisibility()
+            // getVisibility() is the visibility applied after the access dates; the effective one
+            // depends on the dates/duration, like the legacy api_get_session_visibility().
+            Session::READ_ONLY === $session->setAccessVisibilityByUser(
+                $user,
+                true,
+                $this->isSettingEnabled(
+                    $settingsManager->getSetting('session.session_coach_access_after_duration_end', true),
+                ),
+            )
             || $this->isCourseLockedInsideSessions($entityManager, $settingsManager, $course)
         )) {
             return false;
@@ -207,13 +215,7 @@ trait AnnouncementAccessHelperTrait
                 return true;
             }
 
-            if ($this->isSettingEnabled(
-                $settingsManager->getSetting('announcement.allow_coach_to_edit_announcements', true),
-            ) && (
-                $session->hasUserAsGeneralCoach($user)
-                || $session->hasCourseCoachInCourse($user, $course)
-                || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-            )) {
+            if ($this->isCoachAllowedToEditAnnouncements($security, $settingsManager, $user, $course, $session)) {
                 return true;
             }
         }
@@ -261,12 +263,28 @@ trait AnnouncementAccessHelperTrait
             return true;
         }
 
-        return $this->isSettingEnabled(
-            $settingsManager->getSetting('announcement.allow_coach_to_edit_announcements', true),
-        ) && (
-            $session->hasUserAsGeneralCoach($user)
+        return $this->isCoachAllowedToEditAnnouncements($security, $settingsManager, $user, $course, $session);
+    }
+
+    /**
+     * Legacy granted session coaches through api_is_allowed_to_edit(false, true), which follows
+     * session.allow_coach_to_edit_course_session, and additionally through
+     * announcement.allow_coach_to_edit_announcements.
+     */
+    private function isCoachAllowedToEditAnnouncements(
+        Security $security,
+        SettingsManager $settingsManager,
+        User $user,
+        Course $course,
+        Session $session,
+    ): bool {
+        $isCoach = $session->hasUserAsGeneralCoach($user)
             || $session->hasCourseCoachInCourse($user, $course)
-            || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
+
+        return $isCoach && (
+            $this->isSettingEnabled($settingsManager->getSetting('session.allow_coach_to_edit_course_session', true))
+            || $this->isSettingEnabled($settingsManager->getSetting('announcement.allow_coach_to_edit_announcements', true))
         );
     }
 

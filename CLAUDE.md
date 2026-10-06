@@ -34,7 +34,10 @@ Do NOT use Claude for: routing, retries, deterministic transforms.
 If code can answer, code answers.
 
 ### Rule 6 — Token budgets are not advisory
-Per-task: 20,000 tokens. Per-session: 100,000 tokens.
+Budget the **work**, not the fixed context. This file plus the memory index already
+cost ~21,000 tokens before a single file is read, so a budget counting them is
+unspendable and trains you to ignore it.
+Per-task: 100,000 tokens of actual work. Per-session: 500,000.
 If approaching budget, summarize and start fresh.
 Surface the breach. Do not silently overrun.
 

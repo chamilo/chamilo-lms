@@ -32,6 +32,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use ChamiloSession;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -876,7 +877,32 @@ class ResourceNodeVoter extends Voter
                 continue;
             }
 
-            if ($linkCourse->hasUserAsTeacher($user) || $linkCourse->hasSubscriptionByUser($user)) {
+            if ($linkCourse->hasUserAsTeacher($user)
+                || $linkCourse->hasSubscriptionByUser($user)
+                || $this->isSubscribedToCourseThroughSession($user, $linkCourse)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Base-course content is shared with every session of the course, so a user enrolled in the
+     * course only through a session (student or course coach, or general coach of a session
+     * holding it) takes part in it too — the same terms CourseAccessResolver grants the session
+     * context roles on.
+     */
+    private function isSubscribedToCourseThroughSession(User $user, Course $course): bool
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
+        if ($user->getSessionRelCourseRelUsers()->matching($criteria)->count() > 0) {
+            return true;
+        }
+
+        foreach ($user->getSessionsAsGeneralCoach() as $session) {
+            if ($session->hasCourse($course)) {
                 return true;
             }
         }

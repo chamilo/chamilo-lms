@@ -6,11 +6,10 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Framework\Container;
 
-$cidReset = true;
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_block_anonymous_users();
+api_protect_course_script();
 
 $relativePath = isset($_GET['path']) ? trim((string) $_GET['path']) : '';
 
@@ -24,6 +23,12 @@ $relativePath = normalize_relative_storage_path($relativePath);
 if (null === $relativePath) {
     header('HTTP/1.1 400 Bad Request');
     exit('Invalid path.');
+}
+
+// Only serve packages stored for the course the user has access to.
+if (!str_starts_with($relativePath, 'course_'.api_get_course_int_id().'/')) {
+    header('HTTP/1.1 403 Forbidden');
+    exit('Forbidden.');
 }
 
 $storageBasePath = rtrim(Container::getProjectDir().'/var/plugins/XApi', '/');

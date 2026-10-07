@@ -5,30 +5,39 @@ declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\MimeTypes;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_block_anonymous_users();
 api_protect_course_script();
 
-$relativePath = isset($_GET['path']) ? trim((string) $_GET['path']) : '';
+$httpRequest = Container::getRequest();
+
+$relativePath = $httpRequest->query->all()['path'] ?? '';
+$relativePath = is_string($relativePath) ? trim($relativePath) : '';
 
 if ('' === $relativePath) {
-    header('HTTP/1.1 400 Bad Request');
-    exit('Missing path.');
+    (new Response('Missing path.', Response::HTTP_BAD_REQUEST))->send();
+
+    exit;
 }
 
 $relativePath = normalize_relative_storage_path($relativePath);
 
 if (null === $relativePath) {
-    header('HTTP/1.1 400 Bad Request');
-    exit('Invalid path.');
+    (new Response('Invalid path.', Response::HTTP_BAD_REQUEST))->send();
+
+    exit;
 }
 
 // Only serve packages stored for the course the user has access to.
 if (!str_starts_with($relativePath, 'course_'.api_get_course_int_id().'/')) {
-    header('HTTP/1.1 403 Forbidden');
-    exit('Forbidden.');
+    (new Response('Forbidden.', Response::HTTP_FORBIDDEN))->send();
+
+    exit;
 }
 
 $storageBasePath = rtrim(Container::getProjectDir().'/var/plugins/XApi', '/');
@@ -42,69 +51,60 @@ $realBasePath = realpath($storageBasePath);
 $realFilePath = realpath($absolutePath);
 
 if (false === $realBasePath || false === $realFilePath) {
-    header('HTTP/1.1 404 Not Found');
-    exit('File not found.');
+    (new Response('File not found.', Response::HTTP_NOT_FOUND))->send();
+
+    exit;
 }
 
 $realBasePath = str_replace('\\', '/', $realBasePath);
 $realFilePath = str_replace('\\', '/', $realFilePath);
 
-if (0 !== strpos($realFilePath, $realBasePath.'/') && $realFilePath !== $realBasePath) {
-    header('HTTP/1.1 403 Forbidden');
-    exit('Forbidden.');
+if (!str_starts_with($realFilePath, $realBasePath.'/') && $realFilePath !== $realBasePath) {
+    (new Response('Forbidden.', Response::HTTP_FORBIDDEN))->send();
+
+    exit;
 }
 
 if (!is_file($realFilePath) || !is_readable($realFilePath)) {
-    header('HTTP/1.1 404 Not Found');
-    exit('File not found.');
-}
+    (new Response('File not found.', Response::HTTP_NOT_FOUND))->send();
 
-$extension = strtolower((string) pathinfo($realFilePath, PATHINFO_EXTENSION));
-
-$finfo = new finfo(FILEINFO_MIME_TYPE);
-$contentType = $finfo->file($realFilePath) ?: 'application/octet-stream';
-
-if (is_html_file($contentType, $extension)) {
-    $content = file_get_contents($realFilePath);
-
-    if (false === $content) {
-        header('HTTP/1.1 500 Internal Server Error');
-        exit('Unable to read file.');
-    }
-
-    $content = rewrite_html_package_urls($content, $relativePath);
-
-    header('Content-Type: text/html; charset=UTF-8');
-    header('Content-Length: '.(string) strlen($content));
-    header('Cache-Control: private, max-age=3600');
-
-    echo $content;
     exit;
 }
 
-if (is_css_file($contentType, $extension)) {
+$extension = strtolower(pathinfo($realFilePath, \PATHINFO_EXTENSION));
+$contentType = MimeTypes::getDefault()->guessMimeType($realFilePath) ?? 'application/octet-stream';
+
+$isHtml = is_html_file($contentType, $extension);
+
+if ($isHtml || is_css_file($contentType, $extension)) {
     $content = file_get_contents($realFilePath);
 
     if (false === $content) {
-        header('HTTP/1.1 500 Internal Server Error');
-        exit('Unable to read file.');
+        (new Response('Unable to read file.', Response::HTTP_INTERNAL_SERVER_ERROR))->send();
+
+        exit;
     }
 
-    $content = rewrite_css_package_urls($content, $relativePath);
+    $content = $isHtml
+        ? rewrite_html_package_urls($content, $relativePath)
+        : rewrite_css_package_urls($content, $relativePath);
 
-    header('Content-Type: text/css; charset=UTF-8');
-    header('Content-Length: '.(string) strlen($content));
-    header('Cache-Control: private, max-age=3600');
-
-    echo $content;
-    exit;
+    $response = new Response(
+        $content,
+        Response::HTTP_OK,
+        [
+            'Content-Type' => ($isHtml ? 'text/html' : 'text/css').'; charset=UTF-8',
+            'Content-Length' => (string) strlen($content),
+        ]
+    );
+} else {
+    $response = new BinaryFileResponse($realFilePath, Response::HTTP_OK, ['Content-Type' => $contentType]);
 }
 
-header('Content-Type: '.$contentType);
-header('Content-Length: '.(string) filesize($realFilePath));
-header('Cache-Control: private, max-age=3600');
-
-readfile($realFilePath);
+$response->setPrivate();
+$response->setMaxAge(3600);
+$response->prepare($httpRequest);
+$response->send();
 exit;
 
 /**
@@ -316,7 +316,7 @@ function build_package_asset_url(string $currentRelativePath, string $assetRefer
         return $assetReference;
     }
 
-    $query = $_GET;
+    $query = Container::getRequest()->query->all();
     unset($query['path']);
     $query['path'] = $normalizedPath;
 

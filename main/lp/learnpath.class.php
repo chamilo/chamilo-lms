@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Component\Learnpath\SessionOrderPlanner;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -4311,6 +4312,110 @@ class learnpath
         }
 
         return true;
+    }
+
+    /**
+     * Reorder only the LPs owned by the current session.
+     *
+     * Session pages also display base-course LPs. Their order must remain
+     * untouched, so each category's submitted LPs are required to match the
+     * complete set of session-owned LPs and only exchange their existing slots.
+     *
+     * @param int                      $courseId
+     * @param int                      $sessionId
+     * @param array<int|string, mixed> $lists
+     */
+    public static function reorderSessionLearningPaths($courseId, $sessionId, array $lists): bool
+    {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        if ($courseId <= 0 || $sessionId <= 0 || empty($lists)) {
+            return false;
+        }
+
+        $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+        $connection = Database::getManager()->getConnection();
+
+        try {
+            $connection->beginTransaction();
+            $updates = [];
+
+            // Validate and lock the complete request before changing any row.
+            foreach ($lists as $categoryIdValue => $orderedIds) {
+                $categoryIdValue = (string) $categoryIdValue;
+                if ('' === $categoryIdValue || !ctype_digit($categoryIdValue) || !is_array($orderedIds)) {
+                    throw new RuntimeException('Invalid session learning path order.');
+                }
+
+                $categoryId = (int) $categoryIdValue;
+                $categoryCondition = 0 === $categoryId
+                    ? '(category_id = 0 OR category_id IS NULL)'
+                    : "category_id = $categoryId";
+                $sql = "SELECT id, display_order
+                        FROM $lpTable
+                        WHERE c_id = $courseId
+                          AND session_id = $sessionId
+                          AND $categoryCondition
+                        ORDER BY display_order, id
+                        FOR UPDATE";
+                $result = Database::query($sql);
+                if (false === $result) {
+                    throw new RuntimeException('Could not lock session learning paths.');
+                }
+
+                $currentRows = [];
+                while ($row = Database::fetch_array($result)) {
+                    $currentRows[] = $row;
+                }
+
+                $plan = SessionOrderPlanner::buildPlan($currentRows, $orderedIds);
+                if (null === $plan) {
+                    throw new RuntimeException('Invalid session learning path order.');
+                }
+
+                foreach ($plan as $lpId => $displayOrder) {
+                    if (isset($updates[$lpId])) {
+                        throw new RuntimeException('Duplicate session learning path.');
+                    }
+
+                    $updates[$lpId] = [
+                        'category_id' => $categoryId,
+                        'display_order' => $displayOrder,
+                    ];
+                }
+            }
+
+            if (empty($updates)) {
+                throw new RuntimeException('The session learning path order is empty.');
+            }
+
+            foreach ($updates as $lpId => $update) {
+                $categoryId = $update['category_id'];
+                $displayOrder = $update['display_order'];
+                $categoryCondition = 0 === $categoryId
+                    ? '(category_id = 0 OR category_id IS NULL)'
+                    : "category_id = $categoryId";
+                $sql = "UPDATE $lpTable
+                        SET display_order = $displayOrder
+                        WHERE c_id = $courseId
+                          AND session_id = $sessionId
+                          AND $categoryCondition
+                          AND id = $lpId";
+                if (false === Database::query($sql)) {
+                    throw new RuntimeException('Could not reorder session learning paths.');
+                }
+            }
+
+            $connection->commit();
+
+            return true;
+        } catch (Throwable $exception) {
+            if ($connection->isTransactionActive()) {
+                $connection->rollBack();
+            }
+
+            return false;
+        }
     }
 
     /**

@@ -280,7 +280,9 @@ foreach ($categories as $item) {
         $sessionId,
         null,
         false,
-        $categoryId
+        $categoryId,
+        false,
+        $is_allowed_to_edit
     );
 
     $flat_list = $list->get_flat_list();
@@ -943,6 +945,7 @@ foreach ($categories as $item) {
 
             $listData[] = [
                 'lp_id' => $id,
+                'can_reorder' => 0 === $sessionId || $sessionId === (int) $details['lp_session'],
                 'learnpath_icon' => $icon_learnpath,
                 'url_start' => $url_start_lp,
                 'title' => $my_title,

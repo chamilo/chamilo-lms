@@ -46,7 +46,7 @@
         {% if categories|length > 1 and lp_data.category.id %}
         {% if is_allowed_to_edit %}
         <h3 class="page-header">
-            {% if is_allowed_to_edit %}
+            {% if is_allowed_to_edit and not _c.session_id %}
             <!-- drag handle for category -->
             <span class="drag-handle" title="Drag category to reorder" style="cursor:move;margin-right:6px;">
                     <img src="{{ 'move_everywhere.png'|icon }}" alt="drag">
@@ -105,7 +105,7 @@
         </h3>
         {% elseif lp_data.lp_list is not empty %}
         <h3 class="page-header">
-            {% if is_allowed_to_edit %}
+            {% if is_allowed_to_edit and not _c.session_id %}
             <span class="drag-handle" title="Drag category to reorder" style="cursor:move;margin-right:6px;">
                     <img src="{{ 'move_everywhere.png'|icon }}" alt="drag">
                   </span>
@@ -143,9 +143,9 @@
 
                 <tbody class="lp-sortable" data-cat-id="{{ lp_data.category.getId() }}">
                 {% for row in lp_data.lp_list %}
-                <tr class="lp-row" data-lp-id="{{ row.lp_id|default(row.url_start|split('lp_id=')[1]|split('&')[0]) }}">
+                <tr class="lp-row{% if row.can_reorder %} lp-row-reorderable{% endif %}" data-lp-id="{{ row.lp_id|default(row.url_start|split('lp_id=')[1]|split('&')[0]) }}">
                     <td>
-                        {% if is_allowed_to_edit %}
+                        {% if is_allowed_to_edit and row.can_reorder %}
                         <!-- drag handle for LP row -->
                         <span class="drag-handle" title="Drag to reorder" style="cursor:move;margin-right:6px;">
                             <img src="{{ 'move_everywhere.png'|icon }}" alt="drag">
@@ -242,9 +242,9 @@
 
             <tbody class="lp-sortable" data-cat-id="{{ lp_data.category.getId() }}">
             {% for row in lp_data.lp_list %}
-            <tr class="lp-row" data-lp-id="{{ row.lp_id|default(row.url_start|split('lp_id=')[1]|split('&')[0]) }}">
+            <tr class="lp-row{% if row.can_reorder %} lp-row-reorderable{% endif %}" data-lp-id="{{ row.lp_id|default(row.url_start|split('lp_id=')[1]|split('&')[0]) }}">
                 <td>
-                    {% if is_allowed_to_edit %}
+                    {% if is_allowed_to_edit and row.can_reorder %}
                     <!-- Drag handle (accordion/no-category) -->
                     <span class="drag-handle" title="Drag to reorder" style="cursor:move;margin-right:6px;">
                               <img src="{{ 'move_everywhere.png'|icon }}" alt="drag">
@@ -397,7 +397,7 @@
             </div>
             {% endif %}
             <h4 class="panel-title">
-                {% if is_allowed_to_edit %}
+                {% if is_allowed_to_edit and not _c.session_id %}
                 <!-- drag handle for category (accordion header) -->
                 <span class="drag-handle" title="Drag category to reorder" style="cursor:move;margin-right:6px;">
                     <img src="{{ 'move_everywhere.png'|icon }}" alt="drag">
@@ -443,9 +443,9 @@
 
                         <tbody class="lp-sortable" data-cat-id="{{ lp_data.category.getId() }}">
                         {% for row in lp_data.lp_list %}
-                        <tr class="lp-row" data-lp-id="{{ row.lp_id|default(row.url_start|split('lp_id=')[1]|split('&')[0]) }}">
+                        <tr class="lp-row{% if row.can_reorder %} lp-row-reorderable{% endif %}" data-lp-id="{{ row.lp_id|default(row.url_start|split('lp_id=')[1]|split('&')[0]) }}">
                             <td>
-                                {% if is_allowed_to_edit %}
+                                {% if is_allowed_to_edit and row.can_reorder %}
                                 <span class="drag-handle" title="Drag to reorder" style="cursor:move;margin-right:6px;">
                                     <img src="{{ 'move_everywhere.png'|icon }}" alt="drag">
                                   </span>
@@ -578,51 +578,73 @@
 
     var cidreq     = "{{ _p.web_cid_query|e('js') }}";
     var hasSession = {{ _c.session_id ? 'true' : 'false' }};
-  var canEdit    = {{ is_allowed_to_edit ? 'true' : 'false' }};
-  var secToken   = "{{ sec_token|e('js') }}"; // CSRF token required by controller
+    var canEdit    = {{ is_allowed_to_edit ? 'true' : 'false' }};
+    var secToken   = "{{ sec_token|e('js') }}";
 
-  function refreshPlaceholders(){
-    if (!canEdit) { return; }
-    $(".lp-sortable").each(function(){
-      var $tbody = $(this);
-      var hasRows = $tbody.find("tr.lp-row").length > 0;
-      var $ph = $tbody.find(".lp-empty-placeholder");
-      if (!hasRows && $ph.length === 0) {
-        $tbody.append('<tr class="lp-empty-placeholder"><td colspan="3"><em>Drop a learning path here</em></td></tr>');
-      } else if (hasRows) {
-        $ph.remove();
+    function collectLpIds($list, selector) {
+      var ids = [];
+      $list.find(selector).each(function(){
+        var id = parseInt($(this).data("lp-id"), 10);
+        if (!isNaN(id)) { ids.push(id); }
+      });
+
+      return ids;
+    }
+
+    function refreshPlaceholders(){
+      if (!canEdit) { return; }
+      if (hasSession) {
+        $(".lp-empty-placeholder").remove();
+        return;
+      }
+
+      $(".lp-sortable").each(function(){
+        var $tbody = $(this);
+        var hasRows = $tbody.find("tr.lp-row").length > 0;
+        var $ph = $tbody.find(".lp-empty-placeholder");
+        if (!hasRows && $ph.length === 0) {
+          $tbody.append('<tr class="lp-empty-placeholder"><td colspan="3"><em>Drop a learning path here</em></td></tr>');
+        } else if (hasRows) {
+          $ph.remove();
+        }
+      });
+    }
+
+    /* In sessions, only session-owned rows can move and only inside their category. */
+    $(".lp-sortable").sortable({
+      connectWith: hasSession ? false : ".lp-sortable",
+      items: hasSession ? "> tr.lp-row-reorderable" : "> tr.lp-row",
+      handle: ".drag-handle",
+      cancel: ".lp-empty-placeholder",
+      placeholder: "ui-state-highlight",
+      tolerance: "pointer",
+      update: function(){
+        var lists = {};
+        if (hasSession) {
+          var $list = $(this);
+          var categoryId = String($list.data("cat-id") || 0);
+          lists[categoryId] = collectLpIds($list, "tr.lp-row-reorderable");
+        } else {
+          $(".lp-sortable").each(function(){
+            var categoryId = String($(this).data("cat-id") || 0);
+            lists[categoryId] = collectLpIds($(this), "tr.lp-row");
+          });
+        }
+
+        $.post("lp_controller.php?action=reorder_lps&"+cidreq, {lists: lists, sec_token: secToken})
+          .done(function(){
+            if (hasSession) { window.location.reload(); }
+          })
+          .fail(function(){
+            console.warn("Failed to save LP order");
+            if (hasSession) { window.location.reload(); }
+          });
+        refreshPlaceholders();
+      },
+      receive: function(){
+        $(this).find(".lp-empty-placeholder").remove();
       }
     });
-  }
-
-  /* LP rows drag & drop (move within and across categories) */
-  $(".lp-sortable").sortable({
-    connectWith: ".lp-sortable",
-    items: "> tr.lp-row",
-    handle: ".drag-handle",
-    cancel: ".lp-empty-placeholder",
-    placeholder: "ui-state-highlight",
-    tolerance: "pointer",
-    update: function(){
-      if (hasSession) { return; } // keep current behavior in sessions
-      var lists = {};
-      $(".lp-sortable").each(function(){
-        var catId = String($(this).data("cat-id") || 0);
-        lists[catId] = [];
-        $(this).find("tr.lp-row").each(function(){
-          var id = parseInt($(this).data("lp-id"),10);
-          if (!isNaN(id)) { lists[catId].push(id); }
-        });
-      });
-      // Send CSRF token
-      $.post("lp_controller.php?action=reorder_lps&"+cidreq, {lists: lists, sec_token: secToken})
-        .fail(function(){ console.warn("Failed to save LP order"); });
-      refreshPlaceholders();
-    },
-    receive: function(){
-      $(this).find(".lp-empty-placeholder").remove();
-    }
-  });
 
   /* Categories drag & drop (works for old view containers and accordion panels) */
   $("#lp-accordion").sortable({
@@ -646,8 +668,7 @@
   });
 
   if (hasSession) {
-    /* in session mode, keep current behavior (no drag/save) */
-    $(".lp-sortable").sortable("disable");
+    /* Category order is shared with the base course and cannot be session-specific. */
     $("#lp-accordion").sortable("disable");
   }
 

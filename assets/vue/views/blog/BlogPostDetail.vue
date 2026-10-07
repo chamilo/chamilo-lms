@@ -37,7 +37,7 @@
           <ul class="space-y-1">
             <li v-for="a in post.attachments" :key="a.id" class="flex items-center gap-2 text-sm">
               <i class="mdi mdi-paperclip"></i>
-              <a :href="a.path" target="_blank" rel="noopener" class="text-blue-700 hover:underline">{{ a.name }}</a>
+              <a :href="safeAttachmentHref(a.path)" target="_blank" rel="noopener" class="text-blue-700 hover:underline">{{ a.name }}</a>
               <span class="text-gray-400">({{ humanSize(a.size) }})</span>
             </li>
           </ul>
@@ -271,6 +271,16 @@ function humanSize(bytes) {
   let i = 0, n = bytes
   while (n > 1024 && i < u.length - 1) { n /= 1024; i++ }
   return `${n.toFixed(1)} ${u[i]}`
+}
+/**
+ * Return the attachment path only when it is a same-origin absolute path, so a stored
+ * "javascript:" or external URL is never used as a link.
+ * @param {string} path
+ * @returns {string|undefined}
+ */
+function safeAttachmentHref(path) {
+  // Browsers read "/\host" like "//host", so both are protocol-relative.
+  return typeof path === "string" && /^\/(?![/\\])/.test(path) ? path : undefined
 }
 function formatDate(d){
   try { return new Date(d).toLocaleString() } catch { return d }

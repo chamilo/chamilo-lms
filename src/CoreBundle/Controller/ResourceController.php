@@ -738,9 +738,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // image extensions here so /view can use the image pipeline without changing stored data.
         $mimeType = $this->normalizeImageMimeType($mimeType, (string) $fileName);
 
-        // Defense-in-depth: social post attachments must never render HTML inline (XSS mitigation).
+        // Defense-in-depth: social post and blog attachments must never render HTML inline (XSS mitigation).
         // This covers files uploaded before the MIME-type allowlist was introduced.
-        $isSocialAttachment = 'social_post_attachments' === (string) $request->attributes->get('type');
+        $isSocialAttachment = \in_array(
+            (string) $request->attributes->get('type'),
+            ['social_post_attachments', 'blog'],
+            true
+        );
 
         // Such files are always delivered as a neutral download, so the browser can never
         // execute them in the Chamilo origin, whatever the requested mode is.

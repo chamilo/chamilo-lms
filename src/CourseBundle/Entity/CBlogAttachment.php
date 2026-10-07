@@ -22,7 +22,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode)"),
         new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
-        new Post(securityPostDenormalize: "object.getBlog() != null and is_granted('EDIT', object.getBlog().resourceNode)"),
         new Post(
             uriTemplate: '/c_blog_attachments/upload',
             controller: CreateBlogAttachmentAction::class,

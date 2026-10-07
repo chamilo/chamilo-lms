@@ -410,31 +410,6 @@ async function getManyPostRatingsApi(blogId, postIds = []) {
    Uploads (ResourceFile) + Attachments
    ========================= */
 
-async function uploadResourceFileApi(file) {
-  const fd = new FormData()
-  fd.append("file", file, file.name)
-  const data = (await baseService.post(`/api/resource_files`, fd, {}, { params: withCourseParams() })) || {}
-  return {
-    path: data.path || data.filePath || data.url || "",
-    filename: data.filename || file.name,
-    size: Number(data.size ?? file.size ?? 0),
-    iri: data["@id"] || null,
-  }
-}
-
-async function createAttachmentForPostApi({ blogId, postId, fileInfo, comment = "" }) {
-  const payload = {
-    blog: iri("c_blogs", blogId),
-    post: iri("c_blog_posts", postId),
-    path: fileInfo.path,
-    filename: fileInfo.filename,
-    size: Number(fileInfo.size || 0),
-    comment,
-  }
-  await baseService.post(`/api/c_blog_attachments`, payload, {}, { params: withCourseParams() })
-  return { ok: true }
-}
-
 async function uploadBlogAttachmentApi({ blogId, postId, file, comment = "" }) {
   const fd = new FormData()
   fd.append("uploadFile", file, file.name)
@@ -691,8 +666,6 @@ export default {
   deleteComment,
 
   // Uploads / Attachments
-  uploadResourceFileApi,
-  createAttachmentForPostApi,
   uploadBlogAttachmentApi,
 
   // Comments

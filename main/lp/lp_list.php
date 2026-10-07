@@ -280,9 +280,7 @@ foreach ($categories as $item) {
         $sessionId,
         null,
         false,
-        $categoryId,
-        false,
-        $is_allowed_to_edit
+        $categoryId
     );
 
     $flat_list = $list->get_flat_list();

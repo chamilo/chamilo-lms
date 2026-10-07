@@ -9059,4 +9059,5 @@ $FinalUser = "Utilisateur final";
 $WillMergeNUsers = "Fusionnera {n} utilisateurs";
 $UserUnsubscribedFromOldSessionAsThereWasOnlyOneCourse = "Note: L'utilisateur a été désinscrit de la session d'origine étant donné qu'elle ne contenait que ce cours-là.";
 $LearningPathOrderNotSaved = "Le nouvel ordre des parcours n'a pas pu être enregistré. Veuillez recharger la page et réessayer.";
+$SessionLearningPathReorderHelp = "Glisser pour réordonner. Seuls les parcours créés dans cette session peuvent être déplacés, et ils conservent les places qu'ils occupent déjà parmi les parcours du cours.";
 ?>

@@ -4318,8 +4318,9 @@ class learnpath
      * Reorder only the LPs owned by the current session.
      *
      * Session pages also display base-course LPs. Their order must remain
-     * untouched, so each category's submitted LPs are required to match the
-     * complete set of session-owned LPs and only exchange their existing slots.
+     * untouched, so the submitted LPs of each category must all belong to the
+     * session and only exchange the slots they already occupy. Session LPs the
+     * user cannot see are not submitted and keep their slots.
      *
      * @param int                      $courseId
      * @param int                      $sessionId
@@ -4343,7 +4344,7 @@ class learnpath
             // Validate and lock the complete request before changing any row.
             foreach ($lists as $categoryIdValue => $orderedIds) {
                 $categoryIdValue = (string) $categoryIdValue;
-                if ('' === $categoryIdValue || !ctype_digit($categoryIdValue) || !is_array($orderedIds)) {
+                if ('' === $categoryIdValue || !ctype_digit($categoryIdValue) || !is_array($orderedIds) || empty($orderedIds)) {
                     throw new RuntimeException('Invalid session learning path order.');
                 }
 
@@ -4351,11 +4352,14 @@ class learnpath
                 $categoryCondition = 0 === $categoryId
                     ? '(category_id = 0 OR category_id IS NULL)'
                     : "category_id = $categoryId";
+                // Ids are validated by SessionOrderPlanner, an unknown id leaves a row missing.
+                $idList = implode(',', array_map('intval', $orderedIds));
                 $sql = "SELECT id, display_order
                         FROM $lpTable
                         WHERE c_id = $courseId
                           AND session_id = $sessionId
                           AND $categoryCondition
+                          AND id IN ($idList)
                         ORDER BY display_order, id
                         FOR UPDATE";
                 $result = Database::query($sql);

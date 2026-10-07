@@ -147,7 +147,7 @@
                     <td>
                         {% if is_allowed_to_edit and row.can_reorder %}
                         <!-- drag handle for LP row -->
-                        <span class="drag-handle" title="Drag to reorder" style="cursor:move;margin-right:6px;">
+                        <span class="drag-handle" title="{{ _c.session_id ? 'SessionLearningPathReorderHelp'|get_lang|e('html_attr') : 'Drag to reorder' }}" style="cursor:move;margin-right:6px;">
                             <img src="{{ 'move_everywhere.png'|icon }}" alt="drag">
                           </span>
                         {% endif %}
@@ -246,7 +246,7 @@
                 <td>
                     {% if is_allowed_to_edit and row.can_reorder %}
                     <!-- Drag handle (accordion/no-category) -->
-                    <span class="drag-handle" title="Drag to reorder" style="cursor:move;margin-right:6px;">
+                    <span class="drag-handle" title="{{ _c.session_id ? 'SessionLearningPathReorderHelp'|get_lang|e('html_attr') : 'Drag to reorder' }}" style="cursor:move;margin-right:6px;">
                               <img src="{{ 'move_everywhere.png'|icon }}" alt="drag">
                             </span>
                     {% endif %}
@@ -446,7 +446,7 @@
                         <tr class="lp-row{% if row.can_reorder %} lp-row-reorderable{% endif %}" data-lp-id="{{ row.lp_id|default(row.url_start|split('lp_id=')[1]|split('&')[0]) }}">
                             <td>
                                 {% if is_allowed_to_edit and row.can_reorder %}
-                                <span class="drag-handle" title="Drag to reorder" style="cursor:move;margin-right:6px;">
+                                <span class="drag-handle" title="{{ _c.session_id ? 'SessionLearningPathReorderHelp'|get_lang|e('html_attr') : 'Drag to reorder' }}" style="cursor:move;margin-right:6px;">
                                     <img src="{{ 'move_everywhere.png'|icon }}" alt="drag">
                                   </span>
                                 {% endif %}
@@ -578,73 +578,73 @@
 
     var cidreq     = "{{ _p.web_cid_query|e('js') }}";
     var hasSession = {{ _c.session_id ? 'true' : 'false' }};
-    var canEdit    = {{ is_allowed_to_edit ? 'true' : 'false' }};
-    var secToken   = "{{ sec_token|e('js') }}";
+  var canEdit    = {{ is_allowed_to_edit ? 'true' : 'false' }};
+  var secToken   = "{{ sec_token|e('js') }}";
 
-    function collectLpIds($list, selector) {
-      var ids = [];
-      $list.find(selector).each(function(){
-        var id = parseInt($(this).data("lp-id"), 10);
-        if (!isNaN(id)) { ids.push(id); }
-      });
+  function collectLpIds($list, selector) {
+    var ids = [];
+    $list.find(selector).each(function(){
+      var id = parseInt($(this).data("lp-id"), 10);
+      if (!isNaN(id)) { ids.push(id); }
+    });
 
-      return ids;
+    return ids;
+  }
+
+  function refreshPlaceholders(){
+    if (!canEdit) { return; }
+    if (hasSession) {
+      $(".lp-empty-placeholder").remove();
+      return;
     }
 
-    function refreshPlaceholders(){
-      if (!canEdit) { return; }
-      if (hasSession) {
-        $(".lp-empty-placeholder").remove();
-        return;
-      }
-
-      $(".lp-sortable").each(function(){
-        var $tbody = $(this);
-        var hasRows = $tbody.find("tr.lp-row").length > 0;
-        var $ph = $tbody.find(".lp-empty-placeholder");
-        if (!hasRows && $ph.length === 0) {
-          $tbody.append('<tr class="lp-empty-placeholder"><td colspan="3"><em>Drop a learning path here</em></td></tr>');
-        } else if (hasRows) {
-          $ph.remove();
-        }
-      });
-    }
-
-    /* In sessions, only session-owned rows can move and only inside their category. */
-    $(".lp-sortable").sortable({
-      connectWith: hasSession ? false : ".lp-sortable",
-      items: hasSession ? "> tr.lp-row-reorderable" : "> tr.lp-row",
-      handle: ".drag-handle",
-      cancel: ".lp-empty-placeholder",
-      placeholder: "ui-state-highlight",
-      tolerance: "pointer",
-      update: function(){
-        var lists = {};
-        if (hasSession) {
-          var $list = $(this);
-          var categoryId = String($list.data("cat-id") || 0);
-          lists[categoryId] = collectLpIds($list, "tr.lp-row-reorderable");
-        } else {
-          $(".lp-sortable").each(function(){
-            var categoryId = String($(this).data("cat-id") || 0);
-            lists[categoryId] = collectLpIds($(this), "tr.lp-row");
-          });
-        }
-
-        $.post("lp_controller.php?action=reorder_lps&"+cidreq, {lists: lists, sec_token: secToken})
-          .done(function(){
-            if (hasSession) { window.location.reload(); }
-          })
-          .fail(function(){
-            console.warn("Failed to save LP order");
-            if (hasSession) { window.location.reload(); }
-          });
-        refreshPlaceholders();
-      },
-      receive: function(){
-        $(this).find(".lp-empty-placeholder").remove();
+    $(".lp-sortable").each(function(){
+      var $tbody = $(this);
+      var hasRows = $tbody.find("tr.lp-row").length > 0;
+      var $ph = $tbody.find(".lp-empty-placeholder");
+      if (!hasRows && $ph.length === 0) {
+        $tbody.append('<tr class="lp-empty-placeholder"><td colspan="3"><em>Drop a learning path here</em></td></tr>');
+      } else if (hasRows) {
+        $ph.remove();
       }
     });
+  }
+
+  /* In sessions, only session-owned rows can move and only inside their category. */
+  $(".lp-sortable").sortable({
+    connectWith: hasSession ? false : ".lp-sortable",
+    items: hasSession ? "> tr.lp-row-reorderable" : "> tr.lp-row",
+    handle: ".drag-handle",
+    cancel: ".lp-empty-placeholder",
+    placeholder: "ui-state-highlight",
+    tolerance: "pointer",
+    update: function(){
+      var lists = {};
+      if (hasSession) {
+        var $list = $(this);
+        var categoryId = String($list.data("cat-id") || 0);
+        lists[categoryId] = collectLpIds($list, "tr.lp-row-reorderable");
+      } else {
+        $(".lp-sortable").each(function(){
+          var categoryId = String($(this).data("cat-id") || 0);
+          lists[categoryId] = collectLpIds($(this), "tr.lp-row");
+        });
+      }
+
+      $.post("lp_controller.php?action=reorder_lps&"+cidreq, {lists: lists, sec_token: secToken})
+        .done(function(){
+          if (hasSession) { window.location.reload(); }
+        })
+        .fail(function(){
+          console.warn("Failed to save LP order");
+          if (hasSession) { window.location.reload(); }
+        });
+      refreshPlaceholders();
+    },
+    receive: function(){
+      $(this).find(".lp-empty-placeholder").remove();
+    }
+  });
 
   /* Categories drag & drop (works for old view containers and accordion panels) */
   $("#lp-accordion").sortable({

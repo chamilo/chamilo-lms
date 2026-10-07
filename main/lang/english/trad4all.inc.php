@@ -9123,4 +9123,5 @@ $AreYouSureToUnify = "Are you sure to unify";
 $FinalUser = "Final user";
 $WillMergeNUsers = "Will merge {n} users";
 $UserUnsubscribedFromOldSessionAsThereWasOnlyOneCourse = "Note: User was unsubscribed from the previous session, as there was only this course there.";
+$LearningPathOrderNotSaved = "The new order of the learning paths could not be saved. Please reload the page and try again.";
 ?>

@@ -55,10 +55,7 @@ final class SessionOrderPlanner
             $positions[] = $position;
         }
 
-        if (
-            count($currentIds) !== count(array_unique($currentIds)) ||
-            count($positions) !== count(array_unique($positions))
-        ) {
+        if (count($currentIds) !== count(array_unique($currentIds))) {
             return null;
         }
 
@@ -71,6 +68,12 @@ final class SessionOrderPlanner
         }
 
         sort($positions, SORT_NUMERIC);
+        // Copied LPs keep the display_order of their source, so make the slots strictly increasing.
+        for ($i = 1, $count = count($positions); $i < $count; $i++) {
+            if ($positions[$i] <= $positions[$i - 1]) {
+                $positions[$i] = $positions[$i - 1] + 1;
+            }
+        }
 
         $plan = [];
         foreach ($normalizedOrder as $index => $id) {

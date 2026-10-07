@@ -1290,6 +1290,10 @@ switch ($action) {
 
         if ($sessionId > 0) {
             if (!learnpath::reorderSessionLearningPaths($courseId, $sessionId, $lists)) {
+                // Shown after the page reload triggered by the list script.
+                Display::addFlash(
+                    Display::return_message(get_lang('LearningPathOrderNotSaved'), 'error')
+                );
                 http_response_code(400);
                 echo json_encode(['error' => 'Invalid session learning path order']);
                 exit;

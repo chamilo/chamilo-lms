@@ -25,6 +25,22 @@ final class SessionOrderPlannerTest extends TestCase
         );
     }
 
+    public function testBuildPlanSpreadsDuplicatedSlots(): void
+    {
+        // Copies of an LP keep the display_order of the original one.
+        $rows = [
+            ['id' => '2', 'display_order' => '2'],
+            ['id' => '3', 'display_order' => '2'],
+            ['id' => '4', 'display_order' => '2'],
+            ['id' => '5', 'display_order' => '3'],
+        ];
+
+        self::assertSame(
+            [4 => 2, 2 => 3, 3 => 4, 5 => 5],
+            SessionOrderPlanner::buildPlan($rows, ['4', '2', '3', '5'])
+        );
+    }
+
     /**
      * @dataProvider invalidOrders
      */
@@ -48,10 +64,6 @@ final class SessionOrderPlannerTest extends TestCase
         yield 'duplicate stored id' => [[
             ['id' => 11, 'display_order' => 3],
             ['id' => 11, 'display_order' => 7],
-        ], [11, 22]];
-        yield 'duplicate stored position' => [[
-            ['id' => 11, 'display_order' => 3],
-            ['id' => 22, 'display_order' => 3],
         ], [11, 22]];
         yield 'invalid stored position' => [[
             ['id' => 11, 'display_order' => -1],

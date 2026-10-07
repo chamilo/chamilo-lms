@@ -27,7 +27,7 @@ abstract class PackageImporter
     /**
      * @var string
      */
-    protected $courseDirectoryPath;
+    protected $workspacePath;
 
     /**
      * @var array
@@ -43,28 +43,20 @@ abstract class PackageImporter
     {
         $this->packageFileInfo = $fileInfo;
         $this->course = $course;
-        $this->courseDirectoryPath = $this->resolveRuntimeStoragePath();
+        $this->workspacePath = Container::getCacheDir().'plugins/XApi/'.uniqid('import_', true);
     }
 
     /**
-     * Keep the runtime copy in the legacy local storage so TinCan/cmi5 launch
-     * behavior remains unchanged.
+     * Local directory where the package is extracted before it is copied to the plugins filesystem.
      */
-    protected function resolveRuntimeStoragePath(): string
+    protected function getWorkspacePath(): string
     {
-        $basePath = Container::$container->getParameter('chamilo.plugin.storage_dir');
-
-        $path = rtrim((string) $basePath, '/').'/XApi/course_'.$this->course->getId();
-
-        $filesystem = new Filesystem();
-        $filesystem->mkdir($path, api_get_permissions_for_new_directories());
-
-        return $path;
+        return $this->workspacePath;
     }
 
-    protected function getRuntimeStoragePath(): string
+    protected function removeWorkspace(): void
     {
-        return $this->courseDirectoryPath;
+        (new Filesystem())->remove($this->workspacePath);
     }
 
     protected function getPersistentStoragePrefix(): string
@@ -72,22 +64,32 @@ abstract class PackageImporter
         return 'XApi/course_'.$this->course->getId();
     }
 
+    protected function buildPersistentPackagePrefix(string $packageType, string $packageName): string
+    {
+        return $this->joinPersistentPath($packageType.'/'.api_replace_dangerous_char($packageName));
+    }
+
+    protected function buildStorageUri(string $storagePath): string
+    {
+        return 'storage://'.ltrim($storagePath, '/');
+    }
+
     /**
-     * Mirror a locally extracted runtime package into the persistent plugins filesystem.
+     * Copy a locally extracted package into the plugins filesystem.
      *
      * @throws Exception
      */
-    protected function syncRuntimeDirectoryToPersistentStorage(string $runtimeDirectoryPath): void
+    protected function syncWorkspaceDirectoryToPersistentStorage(string $runtimeDirectoryPath): void
     {
         $runtimeDirectoryPath = rtrim(str_replace('\\', '/', $runtimeDirectoryPath), '/');
-        $runtimeBasePath = rtrim(str_replace('\\', '/', $this->getRuntimeStoragePath()), '/');
+        $runtimeBasePath = rtrim(str_replace('\\', '/', $this->getWorkspacePath()), '/');
 
         if ('' === $runtimeDirectoryPath || !is_dir($runtimeDirectoryPath)) {
-            throw new Exception('The runtime package directory does not exist.');
+            throw new Exception('The extracted package directory does not exist.');
         }
 
         if (0 !== strpos($runtimeDirectoryPath, $runtimeBasePath.'/') && $runtimeDirectoryPath !== $runtimeBasePath) {
-            throw new Exception('The runtime package directory is outside the XApi runtime storage.');
+            throw new Exception('The extracted package directory is outside the XApi workspace.');
         }
 
         $relativeDirectory = ltrim(substr($runtimeDirectoryPath, strlen($runtimeBasePath)), '/');

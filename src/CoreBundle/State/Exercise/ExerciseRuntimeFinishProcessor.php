@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Helpers\ExerciseHotspotGeometryHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptScoringService;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseNotificationManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -102,6 +103,7 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
         private ExerciseHotspotGeometryHelper $exerciseHotspotGeometryHelper,
         private ExerciseAttemptScoringService $exerciseAttemptScoringService,
+        private ExerciseNotificationManager $exerciseNotificationManager,
     ) {}
 
     /**
@@ -210,6 +212,8 @@ final readonly class ExerciseRuntimeFinishProcessor implements ProcessorInterfac
         $learnpathTracking = $this->synchronizeLearnpathTracking($request, $attempt, $quiz, $course, $session, $user);
 
         $this->entityManager->flush();
+
+        $this->exerciseNotificationManager->notifyOnFinish($quiz, $course, $session, $user, $attempt, $totalScore, $totalWeight);
 
         $response = new ExerciseRuntimeFinish();
         $response->exerciseId = $exerciseId;

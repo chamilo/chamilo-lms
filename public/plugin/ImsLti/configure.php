@@ -286,10 +286,18 @@ $actions = Display::url(
     api_get_self().'?'.api_get_cidreq()
 );
 
-if (!empty($categories)) {
+$courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+
+if (!empty($categories) && $courseNodeId > 0) {
+    $gradebookUrl = api_get_path(WEB_PATH).'resources/gradebook/'.$courseNodeId.'/?'.api_get_cidreq().'&'.http_build_query([
+        'categoryId' => (int) $categories[0]->get_id(),
+        'source' => 'lti',
+    ]);
+
     $actions .= Display::url(
-        Display::return_icon('gradebook.png', get_lang('MakeQualifiable'), [], ICON_SIZE_MEDIUM),
-        './gradebook/add_eval.php?selectcat='.$categories[0]->get_id().'&'.api_get_cidreq()
+        Display::getMdiIcon('certificate', '', null, ICON_SIZE_MEDIUM, get_lang('MakeQualifiable')),
+        $gradebookUrl,
+        ['title' => get_lang('MakeQualifiable')]
     );
 }
 

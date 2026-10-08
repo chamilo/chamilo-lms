@@ -29,7 +29,15 @@ class FrmEdit extends FormValidator
         $attributes = [],
         ?ExternalTool $tool = null
     ) {
-        parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
+        parent::__construct(
+            $name,
+            'POST',
+            api_get_self().'?'.api_get_cidreq(),
+            '',
+            $attributes,
+            self::LAYOUT_HORIZONTAL,
+            true
+        );
 
         $this->tool = $tool;
     }

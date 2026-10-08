@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\PluginBundle\Form\FrmEdit;
 use Chamilo\PluginBundle\ImsLti\Form\FrmAdd;
@@ -44,6 +45,15 @@ if ($baseTool && null !== $baseTool->getFirstResourceLink()) {
     Display::addFlash(
         Display::return_message($plugin->get_lang('ToolNotAvailable'), 'warning')
     );
+
+    $session = Container::getSession();
+
+    if ($session && method_exists($session, 'save')) {
+
+        $session->save();
+
+    }
+
 
     header('Location: '.api_get_self().'?'.api_get_cidreq());
     exit;
@@ -117,6 +127,15 @@ switch ($action) {
                                 Display::return_message($e->getMessage(), 'error')
                             );
 
+                            $session = Container::getSession();
+
+                            if ($session && method_exists($session, 'save')) {
+
+                                $session->save();
+
+                            }
+
+
                             header('Location: '.api_get_self().'?'.api_get_cidreq());
                             exit;
                         }
@@ -165,6 +184,15 @@ switch ($action) {
             Display::addFlash(
                 Display::return_message($plugin->get_lang('ToolAdded'), 'success')
             );
+
+            $session = Container::getSession();
+
+            if ($session && method_exists($session, 'save')) {
+
+                $session->save();
+
+            }
+
 
             header('Location: '.api_get_self().'?'.api_get_cidreq());
             exit;
@@ -258,6 +286,15 @@ switch ($action) {
             Display::addFlash(
                 Display::return_message($plugin->get_lang('ToolEdited'), 'success')
             );
+
+            $session = Container::getSession();
+
+            if ($session && method_exists($session, 'save')) {
+
+                $session->save();
+
+            }
+
 
             header('Location: '.api_get_self().'?'.api_get_cidreq());
             exit;

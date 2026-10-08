@@ -72,8 +72,16 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         return $this->buildResponse($survey, $course, $session);
     }
 
-    public function buildResponse(CSurvey $survey, Course $course, ?Session $session, string $message = ''): SurveyInvitation
-    {
+    /**
+     * @param list<int> $messageParameters
+     */
+    public function buildResponse(
+        CSurvey $survey,
+        Course $course,
+        ?Session $session,
+        string $message = '',
+        array $messageParameters = [],
+    ): SurveyInvitation {
         if (!$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to manage survey invitations in this context.');
         }
@@ -85,6 +93,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         $response->surveyId = (int) $survey->getIid();
         $response->canManage = true;
         $response->message = $message;
+        $response->messageParameters = $messageParameters;
         $response->survey = $this->normalizeSurvey($survey);
         $response->settings = $this->getSettings($survey);
         $response->counts = $counts;

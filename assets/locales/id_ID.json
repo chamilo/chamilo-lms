@@ -4254,5 +4254,7 @@
     "Contacts count": "Jumlah kontak",
     "Sessions by date": "Sesi berdasarkan tanggal",
     "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ini menandai setiap migrasi yang dikirimkan versi ini sebagai sudah dijalankan. Lakukan ini hanya pada platform yang sudah mutakhir dan belum pernah mencatat riwayatnya.",
-    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Ini mencatat migrasi yang sudah ada di basis data Anda, dan membiarkan yang lebih baru tetap tertunda agar pembaruan dapat menjalankannya. Data Anda tidak diubah."
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Ini mencatat migrasi yang sudah ada di basis data Anda, dan membiarkan yang lebih baru tetap tertunda agar pembaruan dapat menjalankannya. Data Anda tidak diubah.",
+    "Course tracking details": "Detail pelacakan kursus",
+    "Learner details in course": "Detail peserta didik dalam mata kuliah"
 }

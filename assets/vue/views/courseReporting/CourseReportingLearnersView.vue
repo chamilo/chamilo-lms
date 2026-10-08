@@ -953,7 +953,7 @@ function sessionReportingRoute(sessionId) {
 
 function learnerDetailRoute(userId) {
   return {
-    name: "CourseReportingLearnerDetail",
+    name: "CourseReportingLearnerCourseDetail",
     params: { userId },
     query: contextQuery.value,
   }

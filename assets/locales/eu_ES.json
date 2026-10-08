@@ -4254,5 +4254,7 @@
     "Contacts count": "Harreman kopurua",
     "Sessions by date": "Saioak dataz",
     "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Honek bertsio honek bidalitako migrazio guztiak jada exekutatuta gisa markatzen ditu. Egin hau soilik eguneratuta dagoen eta inoiz bere historia erregistratu ez duen plataforma batean.",
-    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Honek zure datu-baseak dagoeneko dituen migrazioak erregistratzen ditu eta berriagoak zain uzten ditu, eguneratzeak exekutatu ditzan. Zure datuak ez dira aldatzen."
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Honek zure datu-baseak dagoeneko dituen migrazioak erregistratzen ditu eta berriagoak zain uzten ditu, eguneratzeak exekutatu ditzan. Zure datuak ez dira aldatzen.",
+    "Course tracking details": "Ikastaro-jarraipenaren xehetasunak",
+    "Learner details in course": "Ikaslearen xehetasunak ikastaroan"
 }

@@ -32,7 +32,10 @@
 
     <div
       v-if="successMessage"
+      ref="successMessageElement"
       class="rounded border border-green-200 bg-green-50 p-3 text-sm text-green-700"
+      role="status"
+      tabindex="-1"
     >
       {{ successMessage }}
     </div>
@@ -374,7 +377,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -407,6 +410,7 @@ const isLoading = ref(false)
 const isSaving = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
+const successMessageElement = ref(null)
 const activeTab = ref("invited")
 
 const surveyId = computed(() => Number(route.params.surveyId || 0))
@@ -626,7 +630,10 @@ async function publishSurvey() {
     if (!canRemindUnanswered.value) {
       remindUnanswered.value = false
     }
-    successMessage.value = t(response.message || "Survey published")
+    successMessage.value = t(response.message || "Survey published", response.messageParameters || [])
+    // The message sits at the top of the page, out of view on small screens after clicking Publish.
+    await nextTick()
+    successMessageElement.value?.focus()
   } catch (error) {
     console.error("Error publishing survey", error)
     errorMessage.value = error?.response?.data?.detail || t("Could not publish survey")

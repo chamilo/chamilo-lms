@@ -4254,5 +4254,7 @@
     "Contacts count": "Bilang ng contacts",
     "Sessions by date": "Mga session ayon sa petsa",
     "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Minamarkahan nito ang bawat migration na kasama sa bersyong ito bilang naisagawa na. Gawin lamang ito sa platapormang napapanahon at hindi pa naitala ang kasaysayan nito.",
-    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Ito ay nagtatala ng mga migration na dala na ng iyong database, at iniiwan ang mga mas bago bilang pending upang maisagawa ng update. Hindi binabago ang iyong data."
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Ito ay nagtatala ng mga migration na dala na ng iyong database, at iniiwan ang mga mas bago bilang pending upang maisagawa ng update. Hindi binabago ang iyong data.",
+    "Course tracking details": "Mga detalye ng pagsubaybay sa kurso",
+    "Learner details in course": "Mga detalye ng mag-aaral sa kurso"
 }

@@ -41632,3 +41632,6 @@ msgstr ""
 
 msgid "Orphan file and its physical content have been deleted definitively."
 msgstr ""
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr ""

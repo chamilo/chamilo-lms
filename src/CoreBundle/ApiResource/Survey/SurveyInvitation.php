@@ -84,6 +84,14 @@ final class SurveyInvitation
     #[Groups(['survey_invitation:read'])]
     public string $message = '';
 
+    /**
+     * Values for the placeholders of $message, which stays a translation key.
+     *
+     * @var list<int>
+     */
+    #[Groups(['survey_invitation:read'])]
+    public array $messageParameters = [];
+
     #[Groups(['survey_invitation:read'])]
     public string $anonymousLink = '';
 

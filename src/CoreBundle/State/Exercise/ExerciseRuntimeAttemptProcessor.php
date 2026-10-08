@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseNotificationManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -86,6 +87,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         private SettingsManager $settingsManager,
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
+        private ExerciseNotificationManager $exerciseNotificationManager,
     ) {}
 
     /**
@@ -238,6 +240,8 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
 
         $this->entityManager->persist($attempt);
         $this->entityManager->flush();
+
+        $this->exerciseNotificationManager->notifyOnStart($quiz, $course, $session, $user, $attempt);
 
         return $this->normalizeAttemptResponse($operation, $quiz, $course, $session, $request, $attempt, 'Attempt started');
     }

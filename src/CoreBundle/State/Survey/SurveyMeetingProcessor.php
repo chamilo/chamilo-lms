@@ -87,7 +87,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
                 $request,
                 true,
                 true,
-                'Meeting poll created.',
+                'The survey has been saved successfully',
             );
         }
 
@@ -104,7 +104,7 @@ final readonly class SurveyMeetingProcessor implements ProcessorInterface
                 $request,
                 true,
                 true,
-                'Meeting poll updated.',
+                'The survey has been saved successfully',
             );
         }
 

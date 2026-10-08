@@ -408,6 +408,8 @@ const isSaving = ref(false)
 const formSubmitted = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
+// Survives the reload triggered by the redirect after saving, which otherwise clears successMessage.
+let successMessageAfterLoad = ""
 
 const isCreateMode = computed(() => route.name === "SurveyMeetingCreate")
 const isEditorMode = computed(() => isCreateMode.value || route.name === "SurveyMeetingEdit")
@@ -488,7 +490,8 @@ function hydrateForm(data) {
 async function loadMeeting() {
   isLoading.value = true
   errorMessage.value = ""
-  successMessage.value = ""
+  successMessage.value = successMessageAfterLoad
+  successMessageAfterLoad = ""
 
   try {
     const surveyId = route.params.surveyId ? Number(route.params.surveyId) : null
@@ -593,15 +596,18 @@ async function saveMeeting() {
     meeting.value = response
     successMessage.value = response.message ? t(response.message) : t("Saved")
 
-    if (isCreateMode.value && response.surveyId) {
-      await router.replace({
-        name: "SurveyMeetingEdit",
+    if (response.surveyId) {
+      successMessageAfterLoad = successMessage.value
+      const meetingRoute = {
+        name: "SurveyMeeting",
         params: {
           node: route.params.node,
           surveyId: response.surveyId,
         },
         query: getContextParams(),
-      })
+      }
+      // Replace the create form so going back cannot submit the same poll twice.
+      await (isCreateMode.value ? router.replace(meetingRoute) : router.push(meetingRoute))
       return
     }
 

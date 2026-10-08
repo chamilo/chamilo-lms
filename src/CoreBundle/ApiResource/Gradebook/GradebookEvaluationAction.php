@@ -58,6 +58,9 @@ final class GradebookEvaluationAction
     public ?int $evaluationId = null;
 
     #[Groups(['gradebook_evaluation_action:write'])]
+    public ?int $externalToolId = null;
+
+    #[Groups(['gradebook_evaluation_action:write'])]
     public ?int $categoryId = null;
 
     #[Groups(['gradebook_evaluation_action:write'])]

@@ -4,7 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CShortcut;
+use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Entity\LineItem;
 use Chamilo\LtiBundle\Entity\Platform;
@@ -184,68 +185,43 @@ class ImsLtiPlugin extends Plugin
         }
     }
 
-    /**
-     * @return CTool
-     */
-    public function findCourseToolByLink(Course $course, ExternalTool $ltiTool)
+    public function findCourseToolByLink(Course $course, ExternalTool $ltiTool): ?CShortcut
     {
-        $em = Database::getManager();
-        $toolRepo = $em->getRepository('Chamilo\CourseBundle\Entity\CTool');
-
-        /** @var CTool $cTool */
-        $cTool = $toolRepo->findOneBy(
-            [
-                'cId' => $course,
-                'link' => self::generateToolLink($ltiTool),
-            ]
-        );
-
-        return $cTool;
-    }
-
-    /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function updateCourseTool(CTool $courseTool, ExternalTool $ltiTool)
-    {
-        $em = Database::getManager();
-
-        $courseTool->setTitle($ltiTool->getTitle());
-
-        if ('iframe' !== $ltiTool->getDocumentTarget()) {
-            $courseTool->setTarget('_blank');
-        } else {
-            $courseTool->setTarget('_self');
+        if (!$ltiTool->hasResourceNode()) {
+            return null;
         }
 
+        $em = Database::getManager();
+
+        /** @var CShortcutRepository $shortcutRepository */
+        $shortcutRepository = $em->getRepository(CShortcut::class);
+
+        return $shortcutRepository->findShortcutFromResourceInCourse($ltiTool, $course);
+    }
+
+    public function updateCourseTool(CShortcut $courseTool, ExternalTool $ltiTool): void
+    {
+        if (!$ltiTool->hasResourceNode()) {
+            throw new RuntimeException('External LTI tool has no resource node.');
+        }
+
+        $courseTool
+            ->setTitle($ltiTool->getTitle())
+            ->setShortCutNode($ltiTool->getResourceNode())
+        ;
+        $courseTool->target = 'iframe' === $ltiTool->getDocumentTarget() ? '_self' : '_blank';
+
+        $em = Database::getManager();
         $em->persist($courseTool);
         $em->flush();
     }
 
     /**
-     * Add the course tool.
-     *
-     * @param bool $isVisible
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * Add the course tool shortcut.
      */
-    public function addCourseTool(Course $course, ExternalTool $ltiTool, $isVisible = true)
+    public function addCourseTool(Course $course, ExternalTool $ltiTool, bool $isVisible = true): void
     {
-        $cTool = $this->createLinkToCourseTool(
-            $ltiTool->getTitle(),
-            $course->getId(),
-            null,
-            self::generateToolLink($ltiTool)
-        );
-        $cTool
-            ->setTarget(
-                $ltiTool->getDocumentTarget() === 'iframe' ? '_self' : '_blank'
-            )
-            ->setVisibility($isVisible);
-
-        $em = Database::getManager();
-        $em->persist($cTool);
-        $em->flush();
+        $this->addCourseShortcut($course, null, $ltiTool, $isVisible);
     }
 
     private function toolBelongsToCourse(Course $course, ExternalTool $tool): bool
@@ -255,29 +231,56 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Add the course session tool.
-     *
-     * @param bool $isVisible
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * Add the course session tool shortcut.
      */
-    public function addCourseSessionTool(Course $course, Session $session, ExternalTool $ltiTool, $isVisible = true)
-    {
-        $cTool = $this->createLinkToCourseTool(
-            $ltiTool->getTitle(),
-            $course->getId(),
-            null,
-            self::generateToolLink($ltiTool),
-            $session->getId()
-        );
-        $cTool
-            ->setTarget(
-                $ltiTool->getDocumentTarget() === 'iframe' ? '_self' : '_blank'
-            )
-            ->setVisibility($isVisible);
+    public function addCourseSessionTool(
+        Course $course,
+        Session $session,
+        ExternalTool $ltiTool,
+        bool $isVisible = true
+    ): void {
+        $this->addCourseShortcut($course, $session, $ltiTool, $isVisible);
+    }
+
+    private function addCourseShortcut(
+        Course $course,
+        ?Session $session,
+        ExternalTool $ltiTool,
+        bool $isVisible
+    ): void {
+        if (!$ltiTool->hasResourceNode()) {
+            throw new RuntimeException('External LTI tool has no resource node.');
+        }
+
+        $user = api_get_user_entity();
+        if (!$user instanceof User) {
+            throw new RuntimeException('Current user not found.');
+        }
 
         $em = Database::getManager();
-        $em->persist($cTool);
+
+        if (null === $ltiTool->getFirstResourceLinkFromCourseSession($course, $session)) {
+            $ltiTool->addCourseLink($course, $session);
+            $em->persist($ltiTool);
+        }
+
+        /** @var CShortcutRepository $shortcutRepository */
+        $shortcutRepository = $em->getRepository(CShortcut::class);
+        $shortcut = $shortcutRepository->addShortCut($ltiTool, $user, $course, $session);
+        $shortcut
+            ->setTitle($ltiTool->getTitle())
+            ->setShortCutNode($ltiTool->getResourceNode())
+        ;
+        $shortcut->target = 'iframe' === $ltiTool->getDocumentTarget() ? '_self' : '_blank';
+
+        $em->persist($shortcut);
+
+        if ($isVisible) {
+            $shortcutRepository->setVisibilityPublished($shortcut, $course, $session);
+        } else {
+            $shortcutRepository->setVisibilityDraft($shortcut, $course, $session);
+        }
+
         $em->flush();
     }
 
@@ -796,14 +799,6 @@ class ImsLtiPlugin extends Plugin
                 'type' => 'html',
             ],
         ];
-    }
-
-    /**
-     * @return string
-     */
-    private static function generateToolLink(ExternalTool $tool)
-    {
-        return 'ImsLti/start.php?id='.$tool->getId();
     }
 
     /**

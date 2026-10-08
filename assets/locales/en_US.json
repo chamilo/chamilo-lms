@@ -4255,5 +4255,6 @@
     "Contacts count": "Contacts count",
     "Sessions by date": "Sessions by date",
     "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.",
-    "You have earned a certificate for this exercise": "You have earned a certificate for this exercise"
+    "You have earned a certificate for this exercise": "You have earned a certificate for this exercise",
+    "Survey published. Created: {0}. Updated: {1}. Messages sent: {2}.": "Survey published. Created: {0}. Updated: {1}. Messages sent: {2}."
 }

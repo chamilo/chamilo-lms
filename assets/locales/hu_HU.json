@@ -4253,5 +4253,7 @@
     "Number of messages sent": "K\u00fcld\u00f6tt \u00fczenetek sz\u00e1ma",
     "Contacts count": "Kapcsolatok sz\u00e1ma",
     "Sessions by date": "\u00dcl\u00e9sek d\u00e1tum szerint",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ez minden, ebben a verzi\u00f3ban sz\u00e1ll\u00edtott migr\u00e1ci\u00f3t m\u00e1r v\u00e9grehajtottk\u00e9nt jel\u00f6l. Csak olyan platformon tegye ezt, amely naprak\u00e9sz, \u00e9s soha nem r\u00f6gz\u00edtette a t\u00f6rt\u00e9net\u00e9t."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ez minden, ebben a verzi\u00f3ban sz\u00e1ll\u00edtott migr\u00e1ci\u00f3t m\u00e1r v\u00e9grehajtottk\u00e9nt jel\u00f6l. Csak olyan platformon tegye ezt, amely naprak\u00e9sz, \u00e9s soha nem r\u00f6gz\u00edtette a t\u00f6rt\u00e9net\u00e9t.",
+    "Course tracking details": "Kurzusk\u00f6vet\u00e9s r\u00e9szletei",
+    "Learner details in course": "A kurzus tanul\u00f3inak adatai"
 }

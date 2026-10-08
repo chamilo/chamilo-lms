@@ -4253,5 +4253,7 @@
     "Number of messages sent": "Numarul de mesaje trimise",
     "Contacts count": "Numarul de contacte",
     "Sessions by date": "Sesiuni pe dat\u0103",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Aceasta marcheaz\u0103 fiecare migrare livrat\u0103 de aceast\u0103 versiune ca deja executat\u0103. Face\u021bi acest lucru doar pe o platform\u0103 actualizat\u0103 care nu \u0219i-a \u00eenregistrat niciodat\u0103 istoricul."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Aceasta marcheaz\u0103 fiecare migrare livrat\u0103 de aceast\u0103 versiune ca deja executat\u0103. Face\u021bi acest lucru doar pe o platform\u0103 actualizat\u0103 care nu \u0219i-a \u00eenregistrat niciodat\u0103 istoricul.",
+    "Course tracking details": "Detalii urm\u0103rire curs",
+    "Learner details in course": "Detaliile studentului in acest curs"
 }

@@ -4253,5 +4253,7 @@
     "Number of messages sent": "Nombre de missatges enviats",
     "Contacts count": "Nombre de contactes",
     "Sessions by date": "Sessions per data",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Aix\u00f2 marca totes les migracions incloses en aquesta versi\u00f3 com a ja executades. Feu-ho nom\u00e9s en una plataforma que estigui actualitzada i que mai no hagi registrat el seu historial."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Aix\u00f2 marca totes les migracions incloses en aquesta versi\u00f3 com a ja executades. Feu-ho nom\u00e9s en una plataforma que estigui actualitzada i que mai no hagi registrat el seu historial.",
+    "Course tracking details": "Detalls de seguiment del curs",
+    "Learner details in course": "Detalls de l'alumne en el curs"
 }

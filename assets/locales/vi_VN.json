@@ -4253,5 +4253,7 @@
     "Number of messages sent": "S\u1ed1 tin nh\u1eafn \u0111\u00e3 g\u1eedi",
     "Contacts count": "S\u1ed1 l\u01b0\u1ee3ng li\u00ean h\u1ec7",
     "Sessions by date": "Phi\u00ean theo ng\u00e0y",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Thao t\u00e1c n\u00e0y \u0111\u00e1nh d\u1ea5u m\u1ecdi migration \u0111i k\u00e8m phi\u00ean b\u1ea3n n\u00e0y l\u00e0 \u0111\u00e3 th\u1ef1c thi. Ch\u1ec9 l\u00e0m v\u1eady tr\u00ean n\u1ec1n t\u1ea3ng \u0111\u00e3 c\u1eadp nh\u1eadt v\u00e0 ch\u01b0a t\u1eebng ghi l\u1ecbch s\u1eed."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Thao t\u00e1c n\u00e0y \u0111\u00e1nh d\u1ea5u m\u1ecdi migration \u0111i k\u00e8m phi\u00ean b\u1ea3n n\u00e0y l\u00e0 \u0111\u00e3 th\u1ef1c thi. Ch\u1ec9 l\u00e0m v\u1eady tr\u00ean n\u1ec1n t\u1ea3ng \u0111\u00e3 c\u1eadp nh\u1eadt v\u00e0 ch\u01b0a t\u1eebng ghi l\u1ecbch s\u1eed.",
+    "Course tracking details": "Chi ti\u1ebft theo d\u00f5i kh\u00f3a h\u1ecdc",
+    "Learner details in course": "Chi ti\u1ebft h\u1ecdc vi\u00ean trong kh\u00f3a h\u1ecdc"
 }

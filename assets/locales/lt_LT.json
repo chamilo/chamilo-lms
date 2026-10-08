@@ -4253,5 +4253,7 @@
     "Number of messages sent": "I\u0161si\u0173st\u0173 \u017einu\u010di\u0173 skai\u010dius",
     "Contacts count": "Kontakt\u0173 skai\u010dius",
     "Sessions by date": "Sesijos pagal dat\u0105",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tai pa\u017eymi visas \u0161ios versijos migracijas kaip jau \u012fvykdytas. Darykite tai tik platformoje, kuri yra atnaujinta ir niekada neregistravo savo istorijos."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tai pa\u017eymi visas \u0161ios versijos migracijas kaip jau \u012fvykdytas. Darykite tai tik platformoje, kuri yra atnaujinta ir niekada neregistravo savo istorijos.",
+    "Course tracking details": "Kurso steb\u0117jimo detal\u0117s",
+    "Learner details in course": "Studento detal\u0117s kurse"
 }

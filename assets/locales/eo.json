@@ -4253,5 +4253,7 @@
     "Number of messages sent": "Nombro de senditaj mesa\u011doj",
     "Contacts count": "Nombro de kontaktuloj",
     "Sessions by date": "Sesioj la\u016d dato",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tio markas \u0109iun migrigon liveritan de \u0109i tiu versio kiel jam plenumitan. Faru tion nur sur platformo kiu estas \u011disdata kaj neniam registris sian historion."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tio markas \u0109iun migrigon liveritan de \u0109i tiu versio kiel jam plenumitan. Faru tion nur sur platformo kiu estas \u011disdata kaj neniam registris sian historion.",
+    "Course tracking details": "Kursaj sekvaj detaloj",
+    "Learner details in course": "Detaloj de lernanto en kurso"
 }

@@ -4253,5 +4253,7 @@
     "Number of messages sent": "Liczba wys\u0142anych wiadomo\u015bci",
     "Contacts count": "Liczba kontakt\u00f3w",
     "Sessions by date": "Sesje wed\u0142ug daty",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "To oznacza ka\u017cd\u0105 migracj\u0119 dostarczon\u0105 w tej wersji jako ju\u017c wykonan\u0105. Wykonaj to tylko na platformie, kt\u00f3ra jest aktualna i nigdy nie zapisa\u0142a swojej historii."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "To oznacza ka\u017cd\u0105 migracj\u0119 dostarczon\u0105 w tej wersji jako ju\u017c wykonan\u0105. Wykonaj to tylko na platformie, kt\u00f3ra jest aktualna i nigdy nie zapisa\u0142a swojej historii.",
+    "Course tracking details": "Szczeg\u00f3\u0142y \u015bledzenia kursu",
+    "Learner details in course": "Szczeg\u00f3\u0142y studenta w kursie"
 }

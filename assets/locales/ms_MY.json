@@ -4253,5 +4253,7 @@
     "Number of messages sent": "Bilangan mesej dihantar",
     "Contacts count": "Kiraan kenalan",
     "Sessions by date": "Sesi mengikut tarikh",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ini menandakan setiap migrasi yang dihantar oleh versi ini sebagai sudah dilaksanakan. Hanya lakukan ini pada platform yang terkini dan tidak pernah merekodkan sejarahnya."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ini menandakan setiap migrasi yang dihantar oleh versi ini sebagai sudah dilaksanakan. Hanya lakukan ini pada platform yang terkini dan tidak pernah merekodkan sejarahnya.",
+    "Course tracking details": "Butiran penjejakan kursus",
+    "Learner details in course": "Butiran pelajar dalam kursus"
 }

@@ -4253,5 +4253,7 @@
     "Number of messages sent": "Tal av sendum bo\u00f0um",
     "Contacts count": "Tal av sambondum",
     "Sessions by date": "Sessi\u00f3nir eftir dag",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Hetta merkir allar flytingar, i\u00f0 fylgja vi\u00f0 hesi \u00fatg\u00e1vu, sum longu framdar. Ger hetta bert \u00e1 einum palli, i\u00f0 er dagf\u00f8rdur og ongant\u00ed\u00f0 hevur skr\u00e1sett s\u00edna s\u00f8gu."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Hetta merkir allar flytingar, i\u00f0 fylgja vi\u00f0 hesi \u00fatg\u00e1vu, sum longu framdar. Ger hetta bert \u00e1 einum palli, i\u00f0 er dagf\u00f8rdur og ongant\u00ed\u00f0 hevur skr\u00e1sett s\u00edna s\u00f8gu.",
+    "Course tracking details": "N\u00e1greiniligar uppl\u00fdsingar um n\u00e1mskei\u00f0",
+    "Learner details in course": "L\u00e6rlingapartar \u00ed kursi"
 }

@@ -4253,5 +4253,7 @@
     "Number of messages sent": "Antal afsendte beskeder",
     "Contacts count": "Antal kontakter",
     "Sessions by date": "Sessioner efter dato",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dette markerer alle migreringer, der f\u00f8lger med denne version, som allerede udf\u00f8rt. G\u00f8r kun dette p\u00e5 en platform, der er opdateret og aldrig har registreret sin historik."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dette markerer alle migreringer, der f\u00f8lger med denne version, som allerede udf\u00f8rt. G\u00f8r kun dette p\u00e5 en platform, der er opdateret og aldrig har registreret sin historik.",
+    "Course tracking details": "Kursusopf\u00f8lgningsdetaljer",
+    "Learner details in course": "Detaljer om brugeren i relation til kursussiden"
 }

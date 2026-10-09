@@ -230,7 +230,7 @@ switch ($action) {
                     $body .= sprintf(
                             get_lang('You can now login at %s using the login and the password you have provided.'),
                             api_get_path(WEB_PATH)
-                        ).",\n\n";
+                        )."\n\n";
                     $body .= get_lang('Have fun,')."\n\n";
                     $body .= api_get_person_name(
                             api_get_setting('administratorName'),

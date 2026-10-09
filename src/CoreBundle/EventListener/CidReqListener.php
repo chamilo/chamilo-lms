@@ -149,8 +149,11 @@ class CidReqListener
             if ($sessionHandler->has('course')) {
                 /** @var Course $courseFromSession */
                 $courseFromSession = $sessionHandler->get('course');
+                // Entities restored from the PHP session can be detached from Doctrine.
+                // Re-resolve them before CourseVoter needs lazy course subscriptions.
                 if ($courseFromSession instanceof Course
                     && ($courseReference === (string) $courseFromSession->getId() || $courseReference === $courseFromSession->getCode())
+                    && $this->entityManager->contains($courseFromSession)
                 ) {
                     $course = $courseFromSession;
                     $courseInfo = (array) $sessionHandler->get('_course');

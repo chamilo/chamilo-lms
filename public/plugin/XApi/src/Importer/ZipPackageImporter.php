@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Importer;
 
+use Chamilo\CoreBundle\Framework\Container;
 use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
@@ -69,23 +70,28 @@ class ZipPackageImporter extends PackageImporter
 
         $packageDirectoryPath = $this->generatePackageDirectory($packageName);
 
-        if (!$zipFile->extractTo($packageDirectoryPath)) {
+        try {
+            $extracted = $zipFile->extractTo($packageDirectoryPath);
             $zipFile->close();
 
-            throw new Exception('Unable to extract ZIP package.');
+            if (!$extracted) {
+                throw new Exception('Unable to extract ZIP package.');
+            }
+
+            $manifestName = $this->packageType.'.xml';
+
+            if (!is_file($packageDirectoryPath.'/'.$manifestName)) {
+                throw new Exception(sprintf('Manifest file "%s" not found after extraction.', $manifestName));
+            }
+
+            $this->syncWorkspaceDirectoryToPersistentStorage($packageDirectoryPath);
+        } finally {
+            $this->removeWorkspace();
         }
 
-        $zipFile->close();
-
-        $manifestPath = $packageDirectoryPath.'/'.$this->packageType.'.xml';
-
-        if (!is_file($manifestPath)) {
-            throw new Exception(sprintf('Manifest file "%s.xml" not found after extraction.', $this->packageType));
-        }
-
-        $this->syncRuntimeDirectoryToPersistentStorage($packageDirectoryPath);
-
-        return $manifestPath;
+        return $this->buildStorageUri(
+            $this->buildPersistentPackagePrefix($this->packageType, $packageName).'/'.$manifestName
+        );
     }
 
     /**
@@ -93,8 +99,7 @@ class ZipPackageImporter extends PackageImporter
      */
     protected function validateEnoughSpace(int $packageSize): void
     {
-        $baseDirectory = dirname($this->getRuntimeStoragePath());
-        $freeSpace = @disk_free_space($baseDirectory);
+        $freeSpace = @disk_free_space(Container::getCacheDir());
 
         if (false !== $freeSpace && $packageSize > $freeSpace) {
             throw new Exception('Not enough disk space to store package.');
@@ -122,7 +127,7 @@ class ZipPackageImporter extends PackageImporter
         $directoryPath = implode(
             '/',
             [
-                rtrim($this->getRuntimeStoragePath(), '/'),
+                rtrim($this->getWorkspacePath(), '/'),
                 $this->packageType,
                 api_replace_dangerous_char($name),
             ]

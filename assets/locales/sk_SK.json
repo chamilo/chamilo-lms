@@ -4254,5 +4254,7 @@
     "Contacts count": "Po\u010det kontaktov",
     "Sessions by date": "Rel\u00e1cie pod\u013ea d\u00e1tumu",
     "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "T\u00fdmto sa v\u0161etky migr\u00e1cie dodan\u00e9 v tejto verzii ozna\u010dia ako u\u017e vykonan\u00e9. Robte to len na platforme, ktor\u00e1 je aktu\u00e1lna a nikdy nezaznamenala svoju hist\u00f3riu.",
-    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Toto zaznamen\u00e1 migr\u00e1cie, ktor\u00e9 va\u0161a datab\u00e1za u\u017e obsahuje, a nov\u0161ie ponech\u00e1 ako \u010dakaj\u00face, aby ich aktualiz\u00e1cia mohla vykona\u0165. Va\u0161e \u00fadaje sa nemenia."
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Toto zaznamen\u00e1 migr\u00e1cie, ktor\u00e9 va\u0161a datab\u00e1za u\u017e obsahuje, a nov\u0161ie ponech\u00e1 ako \u010dakaj\u00face, aby ich aktualiz\u00e1cia mohla vykona\u0165. Va\u0161e \u00fadaje sa nemenia.",
+    "Course tracking details": "Podrobnosti sledovania kurzu",
+    "Learner details in course": "Detaily \u0161tudenta v kurze"
 }

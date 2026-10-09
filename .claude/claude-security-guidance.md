@@ -1,7 +1,7 @@
-# Chamilo 2.0 — project security rules
+# Chamilo — project security rules
 
 Codebase-specific rules for the LLM diff reviewer. They supplement (do not replace) the built-in
-web-vulnerability checks. Stack: Symfony 6.4 + API Platform 3/4 + Doctrine + Vue 3, plus legacy PHP
+web-vulnerability checks. Stack: Symfony 7.4 + API Platform 4.2 + Doctrine ORM 3 + Vue 3, plus legacy PHP
 in `public/main/`.
 
 ## Authorization (API Platform & controllers)
@@ -39,10 +39,10 @@ in `public/main/`.
   echoed back in responses. Flag any secret exposed in a read group.
 
 ## CSRF
-- POST/PUT/DELETE controllers doing destructive/sensitive actions (delete, copy, anonymize, restore,
-  toggle) MUST validate `$this->isCsrfTokenValid('intent', $token)`. The token is generated with
-  `CsrfTokenManagerInterface`, returned in the data JSON, and submitted as a hidden `_token` field from
-  the Vue form.
+- Routed requests (Symfony controllers, API Platform operations, `public/main/inc/ajax/`) are guarded by
+  `CsrfProtectionListener`, which verifies the request origin; do not demand a per-endpoint token. Flag
+  instead: a state-changing action exposed as GET (the listener skips safe methods), an operation with
+  `extraProperties: ['csrf' => false]`, or a route added to the listener's `EXCLUDED_ROUTES`.
 - Legacy PHP (`public/main/`): `FormValidator` checks the CSRF token in `validate()` ONLY if
   `protect()` was called — a form without `protect()` has NO token check (trap). For raw `$_POST`/`$_GET`
   handlers without `validate()`, the idiom is a manual `Security::check_token()`.

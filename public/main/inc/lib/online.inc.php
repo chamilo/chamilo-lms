@@ -371,8 +371,8 @@ function who_is_online(
     $result = Database::query($query);
     if ($result) {
         $users_online = [];
-        while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
-            $users_online[] = $login_user_id;
+        while ($row = Database::fetch_row($result)) {
+            $users_online[] = $row[0];
         }
 
         return $users_online;
@@ -511,8 +511,8 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     $result = Database::query($query);
     if ($result) {
         $users_online = [];
-        while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
-            $users_online[] = $login_user_id;
+        while ($row = Database::fetch_row($result)) {
+            $users_online[] = $row[0];
         }
 
         return $users_online;

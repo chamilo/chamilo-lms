@@ -4,7 +4,7 @@
     {% autoescape false %}
         <div class="row">
             <div class="col-md-12">
-                {% if social_search %}
+                {% if social_search is defined and social_search %}
                     <div class="search-user">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -35,7 +35,7 @@
                             $("#link_load_more_items").html("{{ 'Loading' | trans|escape('js') }} <em class='fa fa-spinner fa-pulse fa-fw'></em>");
                         },
                         type: "GET",
-                        url: "main/inc/ajax/online.ajax.php?a=load_online_user",
+                        url: "/main/inc/ajax/online.ajax.php?a=load_online_user",
                         data: "online_page_nr=" + page,
                         success: function(data) {
                             if (data != "end") {

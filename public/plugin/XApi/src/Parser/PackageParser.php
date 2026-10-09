@@ -73,7 +73,6 @@ abstract class PackageParser
      * - absolute URLs: returned as-is
      * - files extracted under public/: mapped directly to WEB_PUBLIC_PATH
      * - files stored under the plugin filesystem: served through package_asset.php
-     * - legacy files extracted under var/plugins/XApi/: served through package_asset.php
      *
      * @throws Exception
      */
@@ -95,9 +94,12 @@ abstract class PackageParser
             $packageDirectory = $this->normalizeRelativeStoragePath(dirname($this->getStorageRelativePath($this->filePath)));
             $packageRelativePath = $this->normalizeRelativeStoragePath(trim($packageDirectory.'/'.$relativePath, '/'));
 
-            if (null === $packageRelativePath) {
+            // package_asset.php takes paths relative to the XApi directory of the plugins filesystem.
+            if (null === $packageRelativePath || !str_starts_with($packageRelativePath, 'XApi/')) {
                 throw new Exception('Invalid package URL.');
             }
+
+            $packageRelativePath = substr($packageRelativePath, strlen('XApi/'));
 
             return $this->buildPackageAssetUrl($packageRelativePath);
         }
@@ -109,18 +111,6 @@ abstract class PackageParser
             $relativeDirectory = ltrim(substr($packageDirectory, strlen($publicBasePath)), '/');
 
             return rtrim(api_get_path(WEB_PUBLIC_PATH), '/').'/'.trim($relativeDirectory.'/'.$relativePath, '/');
-        }
-
-        $pluginStorageBasePath = $this->getPluginStorageBasePath();
-        if ($this->pathStartsWith($packageDirectory, $pluginStorageBasePath)) {
-            $relativeDirectory = ltrim(substr($packageDirectory, strlen($pluginStorageBasePath)), '/');
-            $packageRelativePath = $this->normalizeRelativeStoragePath(trim($relativeDirectory.'/'.$relativePath, '/'));
-
-            if (null === $packageRelativePath) {
-                throw new Exception('Invalid package URL.');
-            }
-
-            return $this->buildPackageAssetUrl($packageRelativePath);
         }
 
         throw new Exception('Package directory is not web accessible. Unable to resolve launch URL.');
@@ -144,11 +134,6 @@ abstract class PackageParser
             '&',
             PHP_QUERY_RFC3986
         );
-    }
-
-    protected function getPluginStorageBasePath(): string
-    {
-        return $this->normalizePath(Container::getProjectDir().'/var/plugins/XApi');
     }
 
     protected function isStorageUri(string $path): bool

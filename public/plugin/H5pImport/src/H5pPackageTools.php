@@ -39,20 +39,12 @@ class H5pPackageTools
         return null === $json ? false : $json;
     }
 
-    public static function getStorageBasePath(): string
-    {
-        $basePath = Container::$container->getParameter('chamilo.plugin.storage_dir');
-        $path = rtrim((string) $basePath, '/').'/H5pImport';
-
-        $filesystem = new Filesystem();
-        $filesystem->mkdir($path, api_get_permissions_for_new_directories());
-
-        return $path;
-    }
-
+    /**
+     * Local workspace where packages are extracted before they are copied to the plugins filesystem.
+     */
     public static function getTemporaryStorageBasePath(): string
     {
-        $path = rtrim(self::getStorageBasePath(), '/').'/tmp';
+        $path = Container::getCacheDir().'plugins/H5pImport';
 
         $filesystem = new Filesystem();
         $filesystem->mkdir($path, api_get_permissions_for_new_directories());
@@ -267,13 +259,7 @@ class H5pPackageTools
             }
         }
 
-        $legacyPath = rtrim(self::getStorageBasePath(), '/').'/'.ltrim($path, '/');
-
-        if (!is_file($legacyPath) || !is_readable($legacyPath)) {
-            return false;
-        }
-
-        return file_get_contents($legacyPath);
+        return false;
     }
 
     /**
@@ -740,13 +726,11 @@ class H5pPackageTools
 
     public static function deleteH5pPackage(H5pImport $h5pImport): bool
     {
-        $packagePath = trim((string) $h5pImport->getPath());
         $relativePackagePath = self::normalizeRelativeStoragePath((string) $h5pImport->getRelativePath());
         $h5pImportId = (int) $h5pImport->getIid();
 
         $entityManager = \Database::getManager();
         $connection = $entityManager->getConnection();
-        $filesystem = new Filesystem();
 
         try {
             $connection->beginTransaction();
@@ -790,27 +774,6 @@ class H5pPackageTools
             } catch (\Throwable $e) {
                 error_log('[H5pImport][delete][cleanup][persistent] '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
                 error_log('[H5pImport][delete][cleanup][persistent][path] '.$relativePackagePath);
-            }
-        }
-
-        $legacyPackagePath = '';
-
-        if ('' !== $packagePath) {
-            if (self::isAbsolutePath($packagePath)) {
-                $legacyPackagePath = $packagePath;
-            } else {
-                $legacyPackagePath = rtrim(self::getStorageBasePath(), '/').'/'.ltrim($packagePath, '/');
-            }
-        }
-
-        if ('' !== $legacyPackagePath && $filesystem->exists($legacyPackagePath)) {
-            try {
-                $filesystem->remove($legacyPackagePath);
-            } catch (\Throwable $e) {
-                error_log(
-                    '[H5pImport][delete][cleanup] '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine()
-                );
-                error_log('[H5pImport][delete][cleanup][path] '.$legacyPackagePath);
             }
         }
 

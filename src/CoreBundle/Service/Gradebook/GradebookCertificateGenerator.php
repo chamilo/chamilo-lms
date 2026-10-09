@@ -279,31 +279,27 @@ final readonly class GradebookCertificateGenerator
      *
      * No-op, returning the existing document, when one is already attached — matching the
      * legacy function's own guard (get_default_certificate_id() short-circuit).
+     *
+     * With $source (the base course's certificate, when a session copies its gradebook), the
+     * copy takes that document's content instead of the platform template, as the legacy
+     * function did with $fromBaseCourse.
      */
     public function createDefaultCertificateDocument(
         GradebookCategory $category,
         Course $course,
         ?Session $session,
         User $creator,
+        ?CDocument $source = null,
     ): CDocument {
         $existing = $category->getDocument();
         if ($existing instanceof CDocument) {
             return $existing;
         }
 
-        $fallback = $this->projectDir.'/public/main/gradebook/certificate_template/template.html';
-        if (!is_file($fallback)) {
-            throw new RuntimeException('The default certificate template file is missing.');
+        $html = $source instanceof CDocument ? $this->documentRepository->getResourceFileContent($source) : '';
+        if ('' === trim($html)) {
+            $html = $this->getDefaultTemplateHtml();
         }
-
-        $html = file_get_contents($fallback);
-        if (false === $html) {
-            throw new RuntimeException('The default certificate template could not be read.');
-        }
-        // Only the image base path is substituted here, exactly like getTemplateHtml()'s own
-        // fallback branch: the ((...)) placeholders (course title, user name, QR code, ...)
-        // are left intact for renderTemplate() to fill in per student at generation time.
-        $html = str_replace('{IMG_PATH}', '/main/gradebook/certificate_template/', $html);
 
         $title = $this->translator->trans('Default certificate');
         $uploaded = CreateUploadedFileHelper::fromString($title.'.html', 'text/html', $html);
@@ -667,5 +663,23 @@ final readonly class GradebookCertificateGenerator
     private function escape(string $value): string
     {
         return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    private function getDefaultTemplateHtml(): string
+    {
+        $fallback = $this->projectDir.'/public/main/gradebook/certificate_template/template.html';
+        if (!is_file($fallback)) {
+            throw new RuntimeException('The default certificate template file is missing.');
+        }
+
+        $html = file_get_contents($fallback);
+        if (false === $html) {
+            throw new RuntimeException('The default certificate template could not be read.');
+        }
+
+        // Only the image base path is substituted here, exactly like getTemplateHtml()'s own
+        // fallback branch: the ((...)) placeholders (course title, user name, QR code, ...)
+        // are left intact for renderTemplate() to fill in per student at generation time.
+        return str_replace('{IMG_PATH}', '/main/gradebook/certificate_template/', $html);
     }
 }

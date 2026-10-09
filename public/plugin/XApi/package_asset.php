@@ -5,101 +5,108 @@ declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-
-$cidReset = true;
+use League\Flysystem\FilesystemException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_block_anonymous_users();
+api_protect_course_script();
 
-$relativePath = isset($_GET['path']) ? trim((string) $_GET['path']) : '';
+$httpRequest = Container::getRequest();
+
+$relativePath = $httpRequest->query->all()['path'] ?? '';
+$relativePath = is_string($relativePath) ? trim($relativePath) : '';
 
 if ('' === $relativePath) {
-    header('HTTP/1.1 400 Bad Request');
-    exit('Missing path.');
+    (new Response('Missing path.', Response::HTTP_BAD_REQUEST))->send();
+
+    exit;
 }
 
 $relativePath = normalize_relative_storage_path($relativePath);
 
 if (null === $relativePath) {
-    header('HTTP/1.1 400 Bad Request');
-    exit('Invalid path.');
-}
+    (new Response('Invalid path.', Response::HTTP_BAD_REQUEST))->send();
 
-$storageBasePath = rtrim(Container::getProjectDir().'/var/plugins/XApi', '/');
-$absolutePath = $storageBasePath.'/'.$relativePath;
-
-if (!is_file($absolutePath) || !is_readable($absolutePath)) {
-    restore_runtime_file_from_plugins_filesystem($relativePath, $absolutePath);
-}
-
-$realBasePath = realpath($storageBasePath);
-$realFilePath = realpath($absolutePath);
-
-if (false === $realBasePath || false === $realFilePath) {
-    header('HTTP/1.1 404 Not Found');
-    exit('File not found.');
-}
-
-$realBasePath = str_replace('\\', '/', $realBasePath);
-$realFilePath = str_replace('\\', '/', $realFilePath);
-
-if (0 !== strpos($realFilePath, $realBasePath.'/') && $realFilePath !== $realBasePath) {
-    header('HTTP/1.1 403 Forbidden');
-    exit('Forbidden.');
-}
-
-if (!is_file($realFilePath) || !is_readable($realFilePath)) {
-    header('HTTP/1.1 404 Not Found');
-    exit('File not found.');
-}
-
-$extension = strtolower((string) pathinfo($realFilePath, PATHINFO_EXTENSION));
-
-$finfo = new finfo(FILEINFO_MIME_TYPE);
-$contentType = $finfo->file($realFilePath) ?: 'application/octet-stream';
-
-if (is_html_file($contentType, $extension)) {
-    $content = file_get_contents($realFilePath);
-
-    if (false === $content) {
-        header('HTTP/1.1 500 Internal Server Error');
-        exit('Unable to read file.');
-    }
-
-    $content = rewrite_html_package_urls($content, $relativePath);
-
-    header('Content-Type: text/html; charset=UTF-8');
-    header('Content-Length: '.(string) strlen($content));
-    header('Cache-Control: private, max-age=3600');
-
-    echo $content;
     exit;
 }
 
-if (is_css_file($contentType, $extension)) {
-    $content = file_get_contents($realFilePath);
+// Only serve packages stored for the course the user has access to.
+if (!str_starts_with($relativePath, 'course_'.api_get_course_int_id().'/')) {
+    (new Response('Forbidden.', Response::HTTP_FORBIDDEN))->send();
 
-    if (false === $content) {
-        header('HTTP/1.1 500 Internal Server Error');
-        exit('Unable to read file.');
-    }
-
-    $content = rewrite_css_package_urls($content, $relativePath);
-
-    header('Content-Type: text/css; charset=UTF-8');
-    header('Content-Length: '.(string) strlen($content));
-    header('Cache-Control: private, max-age=3600');
-
-    echo $content;
     exit;
 }
 
-header('Content-Type: '.$contentType);
-header('Content-Length: '.(string) filesize($realFilePath));
-header('Cache-Control: private, max-age=3600');
+$pluginsFilesystem = Container::getPluginsFileSystem();
+$storagePath = 'XApi/'.$relativePath;
 
-readfile($realFilePath);
+try {
+    if (!$pluginsFilesystem->fileExists($storagePath)) {
+        (new Response('File not found.', Response::HTTP_NOT_FOUND))->send();
+
+        exit;
+    }
+
+    $contentType = $pluginsFilesystem->mimeType($storagePath);
+} catch (FilesystemException) {
+    $contentType = 'application/octet-stream';
+}
+
+$extension = strtolower(pathinfo($relativePath, \PATHINFO_EXTENSION));
+
+$isHtml = is_html_file($contentType, $extension);
+
+if ($isHtml || is_css_file($contentType, $extension)) {
+    try {
+        $content = $pluginsFilesystem->read($storagePath);
+    } catch (FilesystemException) {
+        (new Response('Unable to read file.', Response::HTTP_INTERNAL_SERVER_ERROR))->send();
+
+        exit;
+    }
+
+    $content = $isHtml
+        ? rewrite_html_package_urls($content, $relativePath)
+        : rewrite_css_package_urls($content, $relativePath);
+
+    $response = new Response(
+        $content,
+        Response::HTTP_OK,
+        [
+            'Content-Type' => ($isHtml ? 'text/html' : 'text/css').'; charset=UTF-8',
+            'Content-Length' => (string) strlen($content),
+        ]
+    );
+} else {
+    try {
+        $stream = $pluginsFilesystem->readStream($storagePath);
+        $fileSize = $pluginsFilesystem->fileSize($storagePath);
+    } catch (FilesystemException) {
+        (new Response('Unable to read file.', Response::HTTP_INTERNAL_SERVER_ERROR))->send();
+
+        exit;
+    }
+
+    $response = new StreamedResponse(
+        static function () use ($stream): void {
+            fpassthru($stream);
+            fclose($stream);
+        },
+        Response::HTTP_OK,
+        [
+            'Content-Type' => $contentType,
+            'Content-Length' => (string) $fileSize,
+        ]
+    );
+}
+
+$response->setPrivate();
+$response->setMaxAge(3600);
+$response->prepare($httpRequest);
+$response->send();
 exit;
 
 /**
@@ -153,51 +160,6 @@ function is_html_file(string $contentType, string $extension): bool
 function is_css_file(string $contentType, string $extension): bool
 {
     return 'css' === $extension || str_contains($contentType, 'text/css');
-}
-
-/**
- * Restore a runtime file from the persistent plugins filesystem when the local
- * runtime copy does not exist.
- */
-function restore_runtime_file_from_plugins_filesystem(string $relativePath, string $absolutePath): void
-{
-    $pluginsFilesystem = Container::getPluginsFileSystem();
-
-    if (null === $pluginsFilesystem) {
-        return;
-    }
-
-    $storagePath = 'XApi/'.ltrim($relativePath, '/');
-
-    try {
-        if (!$pluginsFilesystem->fileExists($storagePath)) {
-            return;
-        }
-
-        $stream = $pluginsFilesystem->readStream($storagePath);
-
-        if (!is_resource($stream)) {
-            return;
-        }
-
-        $directory = dirname($absolutePath);
-        if (!is_dir($directory)) {
-            mkdir($directory, api_get_permissions_for_new_directories(), true);
-        }
-
-        $target = @fopen($absolutePath, 'wb');
-        if (false === $target) {
-            fclose($stream);
-            return;
-        }
-
-        stream_copy_to_stream($stream, $target);
-        fclose($stream);
-        fclose($target);
-        @chmod($absolutePath, api_get_permissions_for_new_files());
-    } catch (Throwable $throwable) {
-        error_log('[XApi][package_asset][restore] '.$throwable->getMessage());
-    }
 }
 
 /**
@@ -311,7 +273,7 @@ function build_package_asset_url(string $currentRelativePath, string $assetRefer
         return $assetReference;
     }
 
-    $query = $_GET;
+    $query = Container::getRequest()->query->all();
     unset($query['path']);
     $query['path'] = $normalizedPath;
 

@@ -17077,7 +17077,7 @@ msgid "You can now login at %s using the login and the password you have provide
 msgstr "Vous pouvez vous connecter sur %s en utilisant l'identifiant et le mot de passe qui vous ont été fournis."
 
 msgid "Have fun,"
-msgstr "amusez-vous,"
+msgstr "Amusez-vous,"
 
 msgid "Are you sure to edit the user status?"
 msgstr "Voulez-vous vraiment modifier le statut de l'utilisateur ?"
@@ -43568,3 +43568,6 @@ msgstr "Ce fichier est encore utilisé par au moins une ressource et ne peut pas
 
 msgid "Orphan file and its physical content have been deleted definitively."
 msgstr "Le fichier orphelin et son contenu physique ont été supprimés définitivement."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Enquête publiée. Créées : %d. Mises à jour : %d. Messages envoyés : %d."

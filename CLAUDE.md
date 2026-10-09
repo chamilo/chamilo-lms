@@ -34,7 +34,10 @@ Do NOT use Claude for: routing, retries, deterministic transforms.
 If code can answer, code answers.
 
 ### Rule 6 — Token budgets are not advisory
-Per-task: 20,000 tokens. Per-session: 100,000 tokens.
+Budget the **work**, not the fixed context. This file plus the memory index already
+cost ~21,000 tokens before a single file is read, so a budget counting them is
+unspendable and trains you to ignore it.
+Per-task: 100,000 tokens of actual work. Per-session: 500,000.
 If approaching budget, summarize and start fresh.
 Surface the breach. Do not silently overrun.
 
@@ -51,10 +54,9 @@ Before adding code, read exports, immediate callers, shared utilities.
 Tests must encode WHY behavior matters, not just WHAT it does.
 A test that can't fail when business logic changes is wrong.
 
-### Rule 10 — Checkpoint after every significant step
-Summarize what was done, what's verified, what's left.
-Don't continue from a state you can't describe back.
-If you lose track, stop and restate.
+### Rule 10 — Know where you are
+When you report a task as done, state what was done, what is verified and what is left.
+Don't continue from a state you can't describe back; if you lose track, stop and restate.
 
 ### Rule 11 — Match the codebase's conventions, even if you disagree
 Conformance > taste inside the codebase.
@@ -80,9 +82,9 @@ Review **every** new and modified file (controller, Vue component, updated legac
 
 ### Rule 14 — Documentation for new/modified features
 
-Any new feature, and any substantially modified feature, must be documented in English in Chamilo's **docs** repository, under `3.x/en/` (the current version's English space). That repository is usually checked out at the same level as this one, under a `docs` or `chamilo-docs` folder (e.g. `../docs` or `../chamilo-docs`).
+Any new feature, and any substantially modified feature, must be documented in English in Chamilo's **docs** repository, under `3.x/en/` (the current version's English space). Where that repository is checked out differs per developer — it is **not** reliably a sibling of this one, so do not assume `../docs`. Recognise it by its contents: a `gitbook-docs.yaml` and a `CLAUDE.md` at the root, next to `1.11.x/`, `2.x/` and `3.x/` directories. It is usually added as an additional working directory for the session; if you cannot find it, ask for the path instead of guessing.
 
-**Work on the `all` branch.** The docs site moved from one branch per version+language (`3.x`, `3.x-fr`, `2.x`, `2.x-es`, ...) to a single `all` branch that holds every documented version and language as `<version>/<language>/` directories in one tree (e.g. `3.x/en/`, `3.x/fr/`, `2.x/es/`, `1.11.x/de/`), mapped by one root `gitbook-docs.yaml` — GitBook's Git Sync now expects one branch mapping every space to a directory, not one branch per space. The old per-version-language branches still exist in the repo but are superseded, read-only history; check out/edit `all`, never those. Before writing anything, **read that repository's own `CLAUDE.md`** — it defines the docs repo's own structure and conventions (space layout, `SUMMARY.md`, `.gitbook/assets/` per space, commit-message prefix) and takes precedence over guessing.
+**Work on the `all` branch.** It holds every documented version and language as `<version>/<language>/` directories (e.g. `3.x/en/`, `3.x/fr/`, `2.x/es/`, `1.11.x/de/`), mapped to GitBook spaces by the root `gitbook-docs.yaml`. Branches named after a version or language (`3.x`, `3.x-fr`, `2.x`, ...) are read-only history: never check them out to edit. Before writing anything, **read that repository's own `CLAUDE.md`** — it defines the docs repo's own structure and conventions (space layout, `SUMMARY.md`, `.gitbook/assets/` per space, commit-message prefix) and takes precedence over guessing.
 
 If the docs repository is not accessible locally, write the documentation locally instead, as a `.md` file formatted as if it were being added to the docs repository (i.e. as it would appear under `3.x/en/<guide>/...` on the `all` branch). Write it to a temporary directory outside this repository (e.g. the scratchpad) so it is never included in any commit — it must not be part of the code. As a final note once the feature is finished, tell the developer about the generated file's location and ask that it be uploaded manually on GitHub together with the PR (not committed as part of the code), so maintainers can merge it into the docs repository manually.
 
@@ -116,6 +118,34 @@ composer phpstan            # Static analysis (level 5)
 composer psalm              # Type checking
 ```
 
+**Both analysers need a warmed dev container first.** `psalm.xml` and `phpstan.neon` both read
+`var/cache/dev/Chamilo_KernelDevDebugContainer.xml`; without it Psalm aborts before analysing
+anything with `ConfigException: Container xml file(s) not found!`. This happens after every
+`composer install`, whose `post-install-cmd` wipes `var/cache`. All three parts matter:
+
+```bash
+rm -rf var/cache/dev && APP_DEBUG=1 php -d memory_limit=-1 bin/console cache:warmup --env=dev
+```
+
+`-d memory_limit=-1` because the default 128M is not enough; `APP_DEBUG=1` because a non-debug
+warmup writes `Chamilo_KernelDevContainer` instead of the `...DevDebugContainer.xml` both tools
+look for; and `rm -rf` because the XML is only written when the container is *compiled* — if the
+`.php` already exists, the warmup will not regenerate it.
+
+**A Psalm error is not real until it survives `--no-cache`.** The cache in `var/cache/psalm` goes
+stale and keeps reporting issues the current code does not have — it has produced whole families of
+phantom `MethodSignatureMismatch` on classes implementing vendor interfaces, which no docblock can
+silence because the code was already correct. Before changing anything, or adding a
+`@psalm-suppress`, re-run just that file:
+
+```bash
+vendor/bin/psalm --no-cache --no-diff --show-info=false --no-progress --output-format=text <file>
+```
+
+If it is clean there, the fix is `rm -rf var/cache/psalm`, not an annotation. Same for stray
+`/opt/Psalmtemp_folder*` directories: Psalm leaves them behind and then reports errors from those
+copies as if they were project files — delete them.
+
 ### Testing
 ```bash
 php bin/phpunit                                    # Run full test suite
@@ -137,18 +167,28 @@ It is possible to test the application through the web, as admin, by calling loc
 
 ### Documentation screenshots
 
-When you create or replace a screenshot for the English documentation in `chamilo-docs`
-(`3.x/en/.gitbook/assets/*.png` — see that repo's `.claude/commands/document-feature.md`, Step 5),
-also add or update its entry in that repo's screenshot catalogue:
-`chamilo-docs/3.x/en/.gitbook/assets/screenshot-catalogue.yaml`. Record the filename, the doc page
-it appears on, the `my.chamilo.net` URL, the account role needed, and any steps beyond plain
-navigation (opening a dialog, specific demo data, etc.). Without this, the same screenshot can't be
-faithfully reproduced in another language — that catalogue is what `chamilo-docs`'
-`/localize-screenshots` skill reads instead of re-guessing the page from scratch every time.
+All of this happens **on the `all` branch** of the `docs` repository, like every other
+documentation change (see Rule 14); `3.x/en/` below is a **directory** on that branch.
+
+When you create or replace a screenshot for the English documentation
+(`3.x/en/.gitbook/assets/*.png`), also record how to reproduce it, in that space's screenshot
+catalogue: `3.x/en/.gitbook/assets/screenshot-catalogue.yaml`. Per screenshot, record the filename,
+the doc page it appears on, the URL, the account role needed, and any steps beyond plain navigation
+(opening a dialog, specific demo data, etc.).
+
+Why it matters: assets are **not** shared between GitBook spaces, so every translated space keeps
+its own copy of the same screenshot. Without the catalogue, whoever localises `3.x/fr/` has to
+re-derive the page, the role and the steps from the image alone.
+
+Check `all` first for both of these:
+- **If the catalogue does not exist**, the first screenshot you add creates it, on `all`.
+- **If `document-feature.md` (which produces these screenshots) is missing from `all`**, recover it
+  from the `3.x` branch with `git show 3.x:.claude/commands/document-feature.md` and commit it to
+  `all`; do not check out that branch to work from it.
 
 ### Playwright (browser automation tests)
 
-The browser-driven test suite uses **Playwright** with `playwright-bdd`, so `.feature` files stay plain Gherkin — only the step definitions are TypeScript. It replaced Behat, which has been removed entirely (see the note at the end of this section). This is the only browser-driven suite: all new coverage goes here.
+The browser-driven test suite uses **Playwright** with `playwright-bdd`, so `.feature` files stay plain Gherkin — only the step definitions are TypeScript. This is the only browser-driven suite: all new coverage goes here.
 
 - Feature files: `tests/playwright/features/*.feature` (organised by domain where it matters, e.g. `admin/`).
 - Step definitions: `tests/playwright/steps/common.steps.ts` — all steps, one shared file.
@@ -196,7 +236,7 @@ Every new feature and every new interface added to an existing feature **must** 
   1. **Clicking into a client-side route change (`router.push`/`<router-link>`) never fires a real navigation event.** `"wait ... for the page to be loaded"` (`page.waitForLoadState("domcontentloaded"/"networkidle")`) resolves immediately regardless of whether the SPA has actually swapped routes — a script that clicks an edit-row icon then immediately checks `page.url()` after that wait can still show the OLD page's URL. Worse, if the old and new page happen to share a field `name` (e.g. a list page's own "Advanced search" filter having the same `name="email"` as the destination edit form), the next `"I fill in ..."` step silently fills the WRONG page's field instead of erroring. Fix: wait for an element unique to the destination page instead — `"I wait up to N seconds for the element {string} to appear"` with a selector/text only the target page has.
   2. **A component whose `onMounted` async-fetches existing data (any edit form) has a fill-before-load race.** The static template (headings, labels) renders immediately on mount, before the fetch resolves; if a test fills a field in that window, the fetch's `.then()` handler overwrites the typed value with the loaded one moments later, and the eventual save submits the ORIGINAL data — no error, because nothing was actually wrong with it. Symptom: a "wrong value should be rejected" scenario times out waiting for a validation message that never appears, because the request that went out was valid. Confirmed by inspecting the actual submitted `multipart/form-data` in the trace's network log, not by re-reading the frontend code. Fix: assert the field already holds its expected LOADED value (`"the field {string} should have value {string}"`) before overwriting it — this doubles as proof the load finished.
 
-**Behat is gone.** `tests/behat/`, `.github/workflows/behat.yml` and the `behat/*` composer dependencies have all been deleted — Playwright is the only browser-driven suite. Do not add Behat scenarios, and do not restore the directory.
+**No Behat.** Do not add Behat scenarios or restore `tests/behat/`.
 
 The old scenarios remain in git history and are still useful when writing new coverage for an area Behat once covered: `git show 98c77757ea6:tests/behat/features/<name>.feature`, or `git ls-tree -r --name-only 98c77757ea6 tests/behat` for the full list (84 files at that commit). Treat anything found there as a **hint** of intended scenarios — never as a source of truth for selectors, since field names, button labels and dialog types have all rotted since. Verify everything against the live app.
 
@@ -325,11 +365,20 @@ Adding a variable to a `*SettingsSchema.php` file (e.g. `SecuritySettingsSchema.
 So a new setting needs both:
 
 1. An entry under the right category key in `SettingsCurrentFixtures::getNewConfigurationSettings()` (`src/CoreBundle/DataFixtures/SettingsCurrentFixtures.php`) — `['name' => ..., 'title' => ..., 'comment' => ...]`.
-2. A fixtures-upsert migration that re-runs the same logic as `Version20250926174000.php`: it reads every setting from `SettingsCurrentFixtures` plus the schema-declared defaults (`SettingsManager::getSchemas()`), `UPDATE`s category/title/comment for settings that already have a row (never touching `selected_value` — an admin's configured value survives being re-synced), and `INSERT`s a row (using the schema default) for ones that don't yet exist. Its `down()` is intentionally a no-op — this is a one-way sync, not meant to be reversed.
+2. A fixtures-upsert migration: it reads every setting from `SettingsCurrentFixtures` plus the schema-declared defaults (`SettingsManager::getSchemas()`), `UPDATE`s category/title/comment for settings that already have a row (never touching `selected_value` — an admin's configured value survives being re-synced), and `INSERT`s a row (using the schema default) for ones that don't yet exist. Its `down()` is intentionally a no-op — this is a one-way sync, not meant to be reversed.
 
-**Only one such migration is needed per version** (i.e. per `Schema/V210/` directory, or whichever is current) — **check that directory first**:
-- If one already exists, **don't create a second one**. Just add the fixture entry from step 1; whoever needs the DB updated re-executes the existing migration manually (`doctrine:migrations:execute '<FQCN>' --up`), since Doctrine won't automatically re-run a migration already marked as executed. Developers/ops are expected to know this and re-run it after pulling changes that add settings.
-- Only create a **new** migration (copy `Version20250926174000.php`'s body verbatim into a freshly dated `Version<timestamp>` class, same namespace) if the current version's directory doesn't have a fixtures-upsert migration yet.
+**Only one such migration is needed per version** — i.e. per `Schema/V<nnn>/` directory. The directories registered in `config/packages/doctrine_migrations.yaml` (keep `public/main/install/migrations.php` in sync) are `V200`, `V210`, `V300` and `V310`; **`V310` is the current one**. Each version carries its own copy under its own namespace, each one derived from the previous generation and slightly grown (294 → 303 → 310 lines), so always start from the newest:
+
+| Directory | Fixtures-upsert migration |
+|-----------|---------------------------|
+| `V200`    | `Version20250926174000.php` (the original) |
+| `V210`    | `Version20260721125301.php` |
+| `V300`    | `Version20260728130000.php` (**copy this one** — most recent) |
+| `V310`    | **none yet** |
+
+**Check the current directory first**, since the table above goes stale:
+- If one already exists there, **don't create a second one**. Just add the fixture entry from step 1; whoever needs the DB updated re-executes the existing migration manually (`doctrine:migrations:execute '<FQCN>' --up`), since Doctrine won't automatically re-run a migration already marked as executed. Developers/ops are expected to know this and re-run it after pulling changes that add settings.
+- Only create a **new** migration if it doesn't. Copy the newest existing one's body verbatim into a freshly dated `Version<timestamp>` class **in the current directory, under that directory's own namespace** (`Chamilo\CoreBundle\Migrations\Schema\V310`) — not the namespace of the file you copied from.
 
 `AbstractMigrationChamilo::addSettingCurrent()` (`src/CoreBundle/Migrations/AbstractMigrationChamilo.php`) exists as a single-setting-insert helper but has zero callers repo-wide — the fixtures-upsert migration above is the actual convention to copy, not that helper.
 
@@ -378,7 +427,7 @@ round-trips it back into the same multiselect on save.
 
 ### Prod cache must be rebuilt after adding a *new* controller class, not just after editing one
 
-Extends the constructor-change gotcha above: on a box running `APP_ENV=prod` (check `.env`
+On a box running `APP_ENV=prod` (check `.env`
 before assuming `dev`), a **brand-new** `#[Route]`-attributed controller class is invisible to
 the compiled router until `cache:clear --env=prod` (+`cache:warmup` +`chmod -R 777 var/cache/prod`
 if `claude` and `www-data` both need to write there) runs — hitting the new route in the
@@ -408,8 +457,8 @@ components are globally registered (so you don't import them). When building UI,
 
 Quick essentials that apply everywhere:
 - Tables → `BaseTable` (wraps PrimeVue `DataTable`; `Column` is global, no import needed).
-- Buttons → `<BaseButton>` instead of plain `<button>`. Props: `type`, `icon` (MDI name without
-  `mdi-`), `only-icon` + `size="small"` for icon-only row actions.
+- Buttons → `<BaseButton>` instead of plain `<button>`. Props: `type`, `icon` (a key of
+  `ChamiloIcons.js`, see "Icons" below), `only-icon` + `size="small"` for icon-only row actions.
 - Every non-global component used in the template **must** be imported in `<script setup>` —
   a missing import does NOT fail the build, only warns at runtime.
 
@@ -432,9 +481,9 @@ Table row action convention:
 
 ### Icons (MDI)
 
-Always use `<BaseIcon>` instead of a plain `<icon>` element unless there is a clear reason not to. For standalone decorative icons outside of buttons, prefer `<BaseIcon icon="{name}" />` over the raw `<span class="mdi mdi-{name} ch-tool-icon" />` pattern. The `ch-tool-icon` class applies blue colouring — use it **only outside of buttons**. Never add it to icons inside `<button>` or `BaseButton` — the icon inherits the button's own text colour.
+Always use `<BaseIcon>` instead of a plain `<icon>` element unless there is a clear reason not to. For standalone decorative icons outside of buttons, prefer `<BaseIcon icon="{key}" />` over the raw `<span class="mdi mdi-{name} ch-tool-icon" />` pattern. The `icon` prop of `BaseIcon` and `BaseButton` takes a key of `assets/vue/components/basecomponents/ChamiloIcons.js` (e.g. `edit` → `mdi mdi-pencil`), not an MDI class name; `BaseIcon` rejects any other value. The `ch-tool-icon` class applies blue colouring — use it **only outside of buttons**. Never add it to icons inside `<button>` or `BaseButton` — the icon inherits the button's own text colour.
 
-Common icon names:
+Canonical MDI icons per action (pick the `ChamiloIcons.js` key that maps to each):
 - Edit: `mdi-pencil`, Delete: `mdi-delete`, Add: `mdi-plus-box`, Search: `mdi-magnify`
 - Copy: `mdi-text-box-plus`, Configure: `mdi-hammer-wrench`, Info: `mdi-information`
 - Subscribe users: `mdi-account-multiple-plus`, Add courses: `mdi-book-open-page-variant`
@@ -546,7 +595,7 @@ These roles **only exist for the current request**. They are computed and publis
 1. `User::$temporaryRoles` — visible to `Security::getUser()->getRoles()` and `ResourceNodeVoter::hasContextRole()`.
 2. The security token's `getRoleNames()` — visible to `is_granted()` and the `RoleHierarchyVoter`.
 
-The relationship logic lives in `CourseAccessResolver` (`src/CoreBundle/Security/CourseAccessResolver.php`), a pure service consumed by the listener. **Voters must never call `$user->addRole(ROLE_CURRENT_COURSE_*)`** — that pattern was removed in #8486 because Voter side-effects break Symfony's contract (non-deterministic order, short-circuit evaluation, etc.).
+The relationship logic lives in `CourseAccessResolver` (`src/CoreBundle/Security/CourseAccessResolver.php`), a pure service consumed by the listener. **Voters must never call `$user->addRole(ROLE_CURRENT_COURSE_*)`**: Voter side-effects break Symfony's contract (non-deterministic order, short-circuit evaluation, etc.).
 
 #### When the contextual-role model applies (scope)
 
@@ -595,7 +644,6 @@ security: "is_granted('ROLE_CURRENT_COURSE_TEACHER')
 - **Body-only `cid` doesn't work.** `CidReqListener` reads `Request::get('cid')`, which sees query params and route attributes but not request bodies. Endpoints that pass `cid` only inside the JSON body need either an extra `cid` query param (preferred) or post-security validation in a `StateProcessor`.
 - **`Post` (create) can't use object-level checks.** On create the `resourceNode` does not exist yet, so `is_granted('CREATE', object)` / `object.resourceNode` fails closed. Gate creation with the contextual teacher roles through an operation-own `security:` (not `securityPostDenormalize`), which also avoids inheriting a resource-level `security:` that may omit `SESSION_TEACHER` and would otherwise block session teachers. `CToolIntro` is the reference.
 - **Output format negotiation runs before security.** Endpoints with binary `outputFormats` (`zip`, `bin`) reject the request with 406 if the `Accept` header is `application/ld+json`. Regression tests must send `Accept: application/zip` (or the matching MIME type) to reach the security gate.
-- **The skill `/migrate-contextual-roles <Entity>`** automates this migration for a single entity, including Vue-caller compatibility checks and lint/test runs.
 
 ### Student view and "may this user edit here"
 

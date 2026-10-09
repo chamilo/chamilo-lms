@@ -287,7 +287,11 @@ export function useTopbarLoggedIn(props) {
 
   const hideLogoutButton = computed(() => isSettingEnabled(platformConfigStore, "display.hide_logout_button"))
 
-  const showTicketLink = computed(() => isSettingEnabled(platformConfigStore, "ticket.show_link_ticket_notification"))
+  const showTicketLink = computed(
+    () =>
+      isSettingEnabled(platformConfigStore, "ticket.show_link_ticket_notification") &&
+      isSettingEnabled(platformConfigStore, "ticket.user_allowed_in_default_project"),
+  )
 
   const displayTabs = computed(() => resolveDisplayTabsConfig(platformConfigStore, securityStore))
 

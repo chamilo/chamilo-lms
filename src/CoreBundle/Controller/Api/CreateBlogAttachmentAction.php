@@ -96,7 +96,7 @@ final class CreateBlogAttachmentAction
         $em->persist($rf);
         $em->flush();
 
-        $downloadUrl = $resourceNodeRepo->getResourceFileUrl($node);
+        $downloadUrl = $resourceNodeRepo->getResourceFileUrl($node, [], null, $rf);
 
         $att = new CBlogAttachment();
         $att->setBlog($blog);

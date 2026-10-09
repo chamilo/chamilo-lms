@@ -698,7 +698,7 @@ export function useSidebarMenu() {
     if (isMenuTabEnabled("platform_administration")) {
       if (securityStore.isGranted("ROLE_SESSION_MANAGER")) {
         const adminItems = [
-          { label: t("Administration"), route: { name: "AdminIndex" } },
+          { key: "admin_dashboard", label: t("Dashboard"), route: { name: "AdminIndex" } },
           ...(securityStore.isSessionAdmin &&
           "true" === platformConfigStore.getSetting("session.limit_session_admin_list_users")
             ? [{ label: t("Add user"), route: { name: "AdminUserAdd" } }]
@@ -709,6 +709,7 @@ export function useSidebarMenu() {
         ]
 
         items.push({
+          key: "platform_administration",
           icon: "mdi mdi-cog",
           items: adminItems,
           label: t("Administration"),

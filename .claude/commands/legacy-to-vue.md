@@ -42,9 +42,9 @@ The project enforces code style via `vendor/bin/ecs check`. Write code that pass
 
 ### Psalm static analysis rules
 
-The project runs `vendor/bin/psalm` (level 7, with Doctrine and Symfony plugins). Write code that passes from the start:
+The project runs `vendor/bin/psalm` (level set in `psalm.xml`, with Doctrine and Symfony plugins). Write code that passes from the start:
 
-- **`setParameter()` must include an explicit type** (3rd argument) for non-scalar values. Use `Types::INTEGER` for entity IDs (pass `$user->getId()`, not the entity object), `Types::DATETIME_MUTABLE` for DateTime objects, and `ArrayParameterType::INTEGER` for integer arrays. Import `Doctrine\DBAL\Types\Types` and `Doctrine\DBAL\ArrayParameterType`.
+- **`setParameter()`: pass a scalar ID, not an entity** — `(int) $user->getId()` (`getIid()` for CourseBundle entities). Doctrine infers the type, so omit the 3rd argument; add `Types::*`/`ArrayParameterType::*` only when the binding must differ from the inferred one.
 - **All methods must have return types.** All parameters must have type hints.
 - **Avoid possibly-null access** — check for null before accessing object properties or methods.
 - **No unused variables** — remove or prefix with `$_` if intentionally ignored.
@@ -72,7 +72,7 @@ Find the relevant domain router file in `assets/vue/router/` (e.g., `skill.js`, 
 {
   name: 'YourRouteName',
   path: 'your-path',
-  meta: { requiresAuth: true, showBreadcrumb: true },
+  meta: { requiresAuth: true, showBreadcrumb: true, breadcrumb: 'Your page title key' }, // see the vue-breadcrumb skill
   component: () => import('../views/your-domain/YourComponent.vue'),
 }
 ```
@@ -92,20 +92,16 @@ Create `assets/vue/views/<domain>/YourComponent.vue`.
 
 **Spacing:** Follow the 8-point grid system. Use multiples of 8px for spacing (Tailwind: `gap-2` = 8px, `p-4` = 16px, `mb-8` = 32px, etc.). Fine adjustments of 4px/6px/12px are acceptable when necessary.
 
-**Buttons:** Follow the CRUD color convention:
-- **Create** actions (add, import, save): green/success → `btn btn--primary` or Tailwind `bg-green-*`
-- **Read** actions (export, view, list): blue/primary → `btn btn--primary`
-- **Update** actions (edit, move, configure): orange/secondary → `btn btn--secondary`
-- **Delete** actions (delete, disable): red/error → `btn btn--danger`
-- **Cancel/dismiss**: gray → `btn btn--plain`
+**Buttons:** Use `<BaseButton>` with the CRUD color convention (`type` prop):
+- **Create** (add, import, save) → `type="success"`
+- **Read** (export, view, list) → `type="primary"`
+- **Update** (edit, move, configure) → `type="secondary"`
+- **Delete** (delete, disable) → `type="danger"`
+- **Cancel/dismiss** → `type="plain"`
 - Buttons are for **actions only** — never style a non-action link as a button.
 
-**Icons:** Use Material Design Icons (MDI) via `<span class="mdi mdi-{name} ch-tool-icon" />` in Vue templates.
-- Standard actions: `ch-tool-icon` class (primary color)
-- Disabled states: `ch-tool-icon-disabled` class (grayed out)
-- Large/hero icons: `ch-tool-icon-gradient` class (gradient)
-- Icon-only buttons: `ch-tool-icon-button` class
-- Follow the canonical icon names from the design guide:
+**Icons:** Use `<BaseIcon icon="{key}" />` (see CLAUDE.md "Icons"). `icon` takes a key of `assets/vue/components/basecomponents/ChamiloIcons.js` (e.g. `edit`, `delete`, `search`), not an MDI class; inside a button, use the button's `icon` prop instead.
+- Pick the key that maps to the canonical MDI icon from the design guide:
   - Edit: `mdi-pencil`, Delete: `mdi-delete`, Add: `mdi-plus-box`, Search: `mdi-magnify`
   - Copy: `mdi-text-box-plus`, Configure: `mdi-hammer-wrench`, Info: `mdi-information`
   - Subscribe users: `mdi-account-multiple-plus`, Add courses: `mdi-book-open-page-variant`
@@ -122,7 +118,7 @@ Create `assets/vue/views/<domain>/YourComponent.vue`.
 
 **Tables:** Use `BaseTable` (`components/basecomponents/BaseTable.vue`) wrapping PrimeVue `DataTable`. Key props: `:values`, `:total-items`, `:is-loading`, `:lazy`, `@page`, `@sort`. `Column` is globally registered.
 
-**Forms:** Use standard HTML `<input>`, `<select>` with Tailwind classes like `border border-gray-300 rounded px-3 py-1.5 text-sm`. Group form elements with `flex gap-4 items-end`.
+**Forms:** Use `Base*` form components (see the `use-base-components` skill), not native `<input>`/`<select>`. Group fields with `flex gap-4 items-end`.
 
 ## Step 6 — Translations
 
@@ -221,7 +217,7 @@ Review **every** new and modified file (controller, Vue component, updated legac
 
 ### Checklist
 
-- **CSRF on state-changing endpoints.** Any POST/PUT/DELETE controller that performs destructive or sensitive actions (delete, copy, anonymize, restore, status toggle, etc.) must validate a CSRF token. Use `$this->isCsrfTokenValid('intent_name', $token)` in the controller. Generate the token via `CsrfTokenManagerInterface::getToken('intent_name')`, return it in the data endpoint JSON, and include it as a hidden `_token` field in the Vue form submission.
+- **CSRF on state-changing endpoints.** Do not add a per-endpoint token: `CsrfProtectionListener` already guards every routed POST/PUT/PATCH/DELETE (see CLAUDE.md Rule 13). Verify instead that no destructive or sensitive action (delete, copy, anonymize, restore, status toggle, etc.) is a GET, and that no route was added to the listener's `EXCLUDED_ROUTES`.
 - **Broken access control.** Verify that `#[IsGranted(...)]` on the controller matches the legacy page's access checks. If the legacy page allowed both admins and session admins, use the `Expression` form. Verify that **every** destructive action inside the controller re-checks the role (e.g., session admins should not be able to delete sessions they don't manage just because they can reach the endpoint). For non-admin roles, filter actionable entity IDs to only those the current user is authorized to manage.
 - **SQL injection.** Never interpolate user input into DQL/SQL strings. Always use bound parameters (`:paramName` + `setParameter()`). The QueryBuilder already does this — verify no raw concatenation slipped in. Sort field values must use an allowlist mapping, never be passed directly into `orderBy()`.
 - **XSS.** Vue's template syntax (`{{ }}`) auto-escapes by default. Verify no `v-html` is used with user-supplied data. If linking to legacy PHP pages with query params built from data, ensure values are not attacker-controlled HTML. Check that dynamic `:href` bindings only interpolate integer IDs or known-safe strings.
@@ -230,7 +226,7 @@ Review **every** new and modified file (controller, Vue component, updated legac
 
 ## Step 12 — Handle the legacy file
 
-**Always ask the user** whether to delete the legacy file or leave a deprecation stub. In most cases (especially during RC phases), the user will prefer keeping a stub to avoid breaking external links or bookmarks.
+**Always ask the user** whether to delete the legacy file or leave a deprecation stub. The usual choice is a stub, to avoid breaking external links or bookmarks.
 
 If the user wants a stub, replace the file contents with:
 ```php

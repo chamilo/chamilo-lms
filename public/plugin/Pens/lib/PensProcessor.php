@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt. */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Service\Pens\PensRemoteException;
 use Chamilo\CoreBundle\Service\Pens\PensRemoteTransport;
+use League\Flysystem\FilesystemOperator;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -17,6 +19,7 @@ require_once __DIR__.'/pens.php';
 class PensProcessor
 {
     private const string TABLE_PENS = 'plugin_pens';
+    private const string ARCHIVE_DIRECTORY = 'Pens';
     private const array SUPPORTED_PACKAGE_TYPES = ['scorm-pif'];
     private const array SUPPORTED_PACKAGE_FORMATS = ['zip'];
 
@@ -204,33 +207,34 @@ class PensProcessor
     }
 
     /**
-     * Move the collected package into archive/pens.
+     * Move the collected package into the plugins filesystem.
      */
     private function archivePackage(PENSRequestCollect $request, string $temporaryPackagePath): string
     {
-        $archiveDirectory = rtrim(api_get_path(SYMFONY_SYS_PATH), '/').'/var/plugins/pens';
-
-        if (!is_dir($archiveDirectory)) {
-            mkdir($archiveDirectory, api_get_permissions_for_new_directories(), true);
-        }
-
         $filename = $this->sanitizeFilename($request->getFilename());
 
         if ('' === $filename) {
             $filename = 'pens_package_'.date('YmdHis').'.zip';
         }
 
-        $targetPath = $this->buildUniqueArchivePath($archiveDirectory, $filename);
+        $pluginsFilesystem = Container::getPluginsFileSystem();
+        $filename = $this->buildUniqueArchiveFilename($pluginsFilesystem, $filename);
 
-        if (!rename($temporaryPackagePath, $targetPath)) {
-            if (!copy($temporaryPackagePath, $targetPath)) {
-                throw new PENSException(1432);
-            }
+        $stream = fopen($temporaryPackagePath, 'rb');
 
-            unlink($temporaryPackagePath);
+        if (false === $stream) {
+            throw new PENSException(1432);
         }
 
-        return basename($targetPath);
+        try {
+            $pluginsFilesystem->writeStream(self::ARCHIVE_DIRECTORY.'/'.$filename, $stream);
+        } finally {
+            fclose($stream);
+        }
+
+        unlink($temporaryPackagePath);
+
+        return $filename;
     }
 
     /**
@@ -344,22 +348,19 @@ class PensProcessor
     }
 
     /**
-     * Build a unique final path inside archive/pens.
+     * Build a filename that does not exist yet in the archive directory.
      */
-    private function buildUniqueArchivePath(string $archiveDirectory, string $filename): string
+    private function buildUniqueArchiveFilename(FilesystemOperator $pluginsFilesystem, string $filename): string
     {
-        $archiveDirectory = rtrim($archiveDirectory, '/').'/';
-        $targetPath = $archiveDirectory.$filename;
-
-        if (!file_exists($targetPath)) {
-            return $targetPath;
+        if (!$pluginsFilesystem->fileExists(self::ARCHIVE_DIRECTORY.'/'.$filename)) {
+            return $filename;
         }
 
         $pathInfo = pathinfo($filename);
         $baseName = $pathInfo['filename'] ?? 'package';
         $extension = empty($pathInfo['extension']) ? '' : '.'.$pathInfo['extension'];
 
-        return $archiveDirectory.$baseName.'_'.date('YmdHis').'_'.uniqid('', false).$extension;
+        return $baseName.'_'.date('YmdHis').'_'.uniqid('', false).$extension;
     }
 
     /**

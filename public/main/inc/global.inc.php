@@ -53,19 +53,22 @@ if ($isCli) {
     $container = $kernel->getContainer();
     Container::setContainer($container);
     $session = Container::getLegacyHelper()->getSession();
-    $request = Request::create('/');
+    // --url gives the portal's public address, which a CLI run has no request to read from:
+    // build the request from it so absolute URLs (router and request alike) use that host,
+    // instead of Symfony's http://localhost default.
+    $cliOptions = getopt('', ['url:']);
+    $cliUrl = !empty($cliOptions['url']) ? rtrim($cliOptions['url'], '/').'/' : '/';
+    $request = Request::create($cliUrl);
     $request->setSession($session);
     $container->get('request_stack')->push($request);
     Container::setLegacyServices($container);
     $router = $container->get('router');
     $context = $router->getContext();
+    $context->fromRequest($request);
+    // The base URL is only the sub-folder prefix of an installation like https://host/chamilo,
+    // never the whole address, or the router prepends its default host to it.
+    $context->setBaseUrl(rtrim((string) parse_url($cliUrl, PHP_URL_PATH), '/'));
     $router->setContext($context);
-
-    $cliOptions = getopt('', ['url:']);
-    if (!empty($cliOptions['url'])) {
-        $baseUrl = $cliOptions['url'];
-        $context->setBaseUrl($baseUrl);
-    }
 } else {
     $kernel = new Chamilo\Kernel($env, $debug);
     // Loading Request from Sonata. In order to use Sonata Pages Bundle.

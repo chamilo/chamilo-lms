@@ -1,4 +1,4 @@
-Restore the legacy Chamilo 1.11.x feature described below to the current master (2.0) branch.
+Restore the legacy Chamilo 1.11.x feature described below to the current branch.
 Arguments: `$ARGUMENTS` — a URL or file path to the entry page of the feature in the 1.11.x branch,
 followed (after a space or newline) by a natural-language description of the feature or set of features
 to restore. The description may be a copy-paste from a user guide, a technical spec, or a free-form
@@ -101,8 +101,8 @@ Use this decision tree before writing the `#[ApiResource]` block:
 | Unauthenticated (truly public)                | No restriction — confirm with user first |
 | Any logged-in user (all roles)                | `"is_granted('IS_AUTHENTICATED_FULLY')"` |
 | Admins only                                   | `"is_granted('ROLE_ADMIN')"` |
-| The owner/creator of the resource only        | `"is_granted('ROLE_USER') and object.getCreator() == user"` |
-| Course members (teachers + students)          | use `CourseVoter` / `CourseSubscriptionChecker` |
+| The owner/creator of the resource only        | Voter + collection Extension + Processor, not an `object.getCreator() == user` expression (see CLAUDE.md "Securing a per-user owned `#[ApiResource]`") |
+| Course members (teachers + students)          | `"is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"` (see CLAUDE.md "Contextual roles") |
 | Session coaches or course teachers            | use appropriate voter |
 
 **When in doubt, default to `ROLE_ADMIN` and ask the user to confirm the correct access level
@@ -132,7 +132,6 @@ attribute on those properties entirely.
 Create `src/CoreBundle/Repository/{EntityName}Repository.php`.
 
 - Extend `ServiceEntityRepository`.
-- Add `#[AsEntityIdConverter(EntityName::class)]` if the entity is an API Platform resource.
 - Type all method parameters and return types.
 - Follow the same PHP code style rules as controllers (Step 5).
 - Do not add catch-all `findAll()` public methods unless the feature requires them — keep the
@@ -148,7 +147,8 @@ For every new or modified entity, create a Doctrine migration:
 php bin/console doctrine:migrations:diff --no-interaction
 ```
 
-Review the generated SQL in `src/CoreBundle/Migrations/Schema/V200/` before committing. Verify:
+The generated migration must land in the newest directory registered in `config/packages/doctrine_migrations.yaml`
+(see CLAUDE.md "Adding a new platform setting"). Review its SQL before committing. Verify:
 - Table names match the entity `#[ORM\Table]` attribute.
 - Foreign key constraints reference the correct tables.
 - Column types match the legacy schema for existing data (especially `varchar` lengths, `text` vs
@@ -198,9 +198,8 @@ Create controllers in `src/CoreBundle/Controller/` (or `.../Admin/` for admin-on
 - `(int)` not `intval()`, `(string)` not `strval()`.
 
 ### Psalm static analysis rules
-- `setParameter()` must include an explicit type (3rd arg) for non-scalar values:
-  `Types::INTEGER` for entity IDs, `Types::DATETIME_MUTABLE` for DateTime,
-  `ArrayParameterType::INTEGER` for int arrays.
+- `setParameter()`: pass a scalar ID (`(int) $e->getId()`), not an entity; Doctrine infers
+  the type, so omit the 3rd arg unless the binding must differ from the inferred one.
 - All methods must have return types. All parameters must have type hints.
 - Check for possibly-null access before using object properties or calling methods.
 
@@ -233,7 +232,7 @@ Find the relevant domain router file in `assets/vue/router/` (e.g. `skill.js`, `
 {
   name: 'YourFeatureRouteName',
   path: 'your-path',
-  meta: { requiresAuth: true, showBreadcrumb: true },
+  meta: { requiresAuth: true, showBreadcrumb: true, breadcrumb: 'Your page title key' }, // see the vue-breadcrumb skill
   component: () => import('../views/your-domain/YourFeatureView.vue'),
 }
 ```
@@ -248,7 +247,7 @@ Create `assets/vue/views/<domain>/YourFeatureView.vue` (one file per logical pag
 ### General rules
 - `<script setup>` with `useI18n`.
 - `BaseTable` + `Column` for tabular data (`Column` is globally registered — no import needed).
-- Fetch data with `baseService.get('/your/path-data')` or `useService` composable.
+- Fetch data with `baseService.get('/your/path-data')` creating or using a `useService` composable.
 - State-changing operations (create, update, delete) call `baseService.post/put/delete` and handle
   loading/error states explicitly.
 - Tailwind classes only — no inline styles, no custom CSS unless unavoidable.
@@ -256,15 +255,17 @@ Create `assets/vue/views/<domain>/YourFeatureView.vue` (one file per logical pag
 ### Design guide rules
 **Spacing:** 8-point grid (multiples of 8px). Fine adjustments of 4/6/12px are acceptable.
 
-**Buttons — CRUD color convention:**
-- Create/add/save/import → green → `btn btn--success`
-- Read/view/export/list → blue → `btn btn--primary`
-- Update/edit/configure/move → orange → `btn btn--secondary`
-- Delete/disable/remove → red → `btn btn--danger`
-- Cancel/dismiss → gray → `btn btn--plain`
+**Buttons — `<BaseButton>`, CRUD color convention (`type` prop):**
+- Create/add/save/import → `type="success"`
+- Read/view/export/list → `type="primary"`
+- Update/edit/configure/move → `type="secondary"`
+- Delete/disable/remove → `type="danger"`
+- Cancel/dismiss → `type="plain"`
 - Buttons are for actions only — never style a non-action link as a button.
 
-**Icons (MDI via `<span class="mdi mdi-{name} ch-tool-icon" />`):**
+**Icons — `<BaseIcon icon="{key}" />`** (see CLAUDE.md "Icons"). `icon` takes a key of
+`assets/vue/components/basecomponents/ChamiloIcons.js`, not an MDI class; pick the key that maps
+to the canonical MDI icon below:
 - Edit: `mdi-pencil`, Delete: `mdi-delete`, Add: `mdi-plus-box`, Search: `mdi-magnify`
 - Copy: `mdi-text-box-plus`, Configure: `mdi-hammer-wrench`, Info: `mdi-information`
 - Subscribe users: `mdi-account-multiple-plus`, Add courses: `mdi-book-open-page-variant`
@@ -281,7 +282,7 @@ Create `assets/vue/views/<domain>/YourFeatureView.vue` (one file per logical pag
 **Tables:** `BaseTable` wrapping PrimeVue `DataTable`. Key props: `:values`, `:total-items`,
 `:is-loading`, `:lazy`, `@page`, `@sort`.
 
-**Forms:** Standard HTML `<input>`, `<select>` with Tailwind: `border border-gray-300 rounded px-3 py-1.5 text-sm`. Group elements with `flex gap-4 items-end`.
+**Forms:** `Base*` form components (see the `use-base-components` skill), not native `<input>`/`<select>`. Group fields with `flex gap-4 items-end`.
 
 ---
 
@@ -345,6 +346,8 @@ For every user-visible string in new or updated Vue components and controllers:
    ```bash
    php bin/console chamilo:update_vue_translations
    ```
+   It re-serializes every locale file: keep only the new keys' lines and `git checkout --` the
+   rest (see CLAUDE.md "Translation pipeline").
 
 ---
 
@@ -372,11 +375,10 @@ change request that adds features, fixes bugs, or updates links.
 
 ### Checklist
 
-- **CSRF on state-changing endpoints.** Every POST/PUT/DELETE controller action that performs
-  destructive or sensitive operations must validate a CSRF token:
-  `$this->isCsrfTokenValid('intent_name', $token)`. Generate tokens via `CsrfTokenManagerInterface`,
-  return them in the data endpoint JSON, and include them as a hidden `_token` field in the Vue
-  form submission.
+- **CSRF on state-changing endpoints.** Do not add a per-endpoint token: `CsrfProtectionListener`
+  already guards every routed POST/PUT/PATCH/DELETE (see CLAUDE.md Rule 13). Verify instead that no
+  destructive or sensitive action is a GET, that no operation declares
+  `extraProperties: ['csrf' => false]`, and that no route was added to the listener's `EXCLUDED_ROUTES`.
 
 - **API Platform endpoint access control.** Re-verify every `#[ApiResource]` operation against the
   actual access requirements from Step 3. Ask the user to confirm any `GetCollection` or `Get`
@@ -424,7 +426,7 @@ vendor/bin/psalm --show-info=false \
 ```
 
 Common issues to watch for:
-- `QueryBuilderSetParameter`: explicit type required (3rd arg).
+- `QueryBuilderSetParameter`: pass the entity's scalar ID, not the entity.
 - Missing return types or parameter type hints.
 - Import ordering, Yoda conditions, trailing commas.
 - Unused variables or unreachable code.
@@ -434,7 +436,7 @@ Common issues to watch for:
 ## Step 15 — Handle the legacy files
 
 **Always ask the user** whether to delete each legacy PHP file or leave a deprecation stub.
-During RC phases the default is to keep a stub to avoid breaking bookmarks or external links.
+The usual choice is a stub, to avoid breaking bookmarks or external links.
 
 Stub content:
 ```php

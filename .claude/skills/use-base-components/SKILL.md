@@ -9,10 +9,7 @@ description: >
   tags to an existing Vue file, edits a Vue file containing native <input>,
   <select>, <textarea>, or <checkbox> elements, asks to refactor form fields,
   reports "Failed to resolve component" runtime warnings, or mentions
-  BaseInputText, BaseSelect, BaseTextArea, BaseCheckbox, BaseCalendar,
-  BaseColorPicker, BaseRadioButtons, BaseMultiSelect, BaseAutocomplete,
-  BaseDialog, BaseTable, BaseButton, BaseInputNumber, SectionHeader, or any
-  Base* component.
+  SectionHeader or any Base* component by name.
   Do NOT invoke for: non-Vue files, React or Angular components, styling-only
   changes inside files whose Base* imports are already complete.
 allowed-tools:
@@ -33,7 +30,7 @@ and replace every native HTML form element with the appropriate `Base*` componen
 ## ⚠ Critical rule (read first): every component used in the template must be imported
 
 In this project, Vue 3 with `<script setup>` does **NOT** auto-register most local components.
-A small set of components **is** registered globally in `assets/vue/main.js:198-207` and must
+A small set of components **is** registered globally in `assets/vue/main.js` (the `app.component(...)` calls) and must
 **NOT** be imported:
 
 - **PrimeVue (global):** `Dialog`, `ConfirmDialog`, `DataView`, `Dropdown` (alias of `Select`),
@@ -59,8 +56,7 @@ BaseDialog`, and that warning does not show in CI. So you cannot rely on `yarn b
 this — you must cross-check by hand (or via the verification command at the end of this skill).
 
 When you **create** a new Vue file or **add** a component tag to an existing one, the imports
-are part of the same change. Don't defer them. Don't rely on the file already having the
-imports from a prior edit. Verify every time.
+are part of the same change.
 
 Standard import paths (note: from `assets/vue/views/<feature>/Foo.vue` the prefix is `../../`;
 from `assets/vue/views/<feature>/<sub>/Foo.vue` it is `../../../`):
@@ -158,7 +154,7 @@ events (`@input`, `@blur`, `autocomplete`, `placeholder`, etc.) are forwarded.
   rows="3"
 />
 ```
-**Props:** `id` (required), `label` (required, raw key), `modelValue` (String, required),
+**Props:** `id` (required), `label` (required, raw key), `modelValue` (String, default `""`),
 `errorText`, `isInvalid`.
 Extra attrs (`rows`, `name`, etc.) forwarded via `v-bind="$attrs"`.
 
@@ -214,7 +210,7 @@ const compensationOptions = computed(() =>
 )
 ```
 
-Use `allow-cleared` for optional filters (adds a clear/× button). Use `:hast-empty-value="true"`
+Use `allow-clear` for optional filters (adds a clear/× button). Use `:hast-empty-value="true"`
 to prepend a `--` row when the field is required with a blank default.
 
 **For large lists (dozens/hundreds of options) or nested lists**, use `BaseAutocomplete`
@@ -735,10 +731,9 @@ It sanitizes the message, filters internal exception leakage, and prevents dupli
 
 ## Checklist
 
-Work through the target file(s) in this order:
+For each target file:
 
-1. **Read** the file before editing.
-2. For each native form element found:
+1. For each native form element found:
    a. Identify the correct Base* component from the mapping above.
    b. Note the existing `v-model`, `name`, and any event handlers (`@input`, `@change`, etc.).
    c. Apply the label translation rule (raw key for BaseTextArea, `t()` for all others).
@@ -746,11 +741,11 @@ Work through the target file(s) in this order:
    e. For `BaseCalendar` replacements, check initialization values and filter comparisons.
    f. For `BaseSelect` replacements, prepare an options computed if the source data uses
    non-standard or unsafe property names (like `@id`).
-3. Add all required imports in alphabetical order alongside existing base component imports.
-4. Remove any `<label>` elements that were paired with the replaced inputs.
-5. Remove wrapper `<div>` elements that existed only to group the label+input pair, unless they
+2. Add all required imports in alphabetical order alongside existing base component imports.
+3. Remove any `<label>` elements that were paired with the replaced inputs.
+4. Remove wrapper `<div>` elements that existed only to group the label+input pair, unless they
    carry layout classes needed by the surrounding flex/grid container.
-6. Do **not** replace:
+5. Do **not** replace:
     - `<input type="checkbox">` used in v-model array bindings (multi-value selection).
     - `<input type="color">` unless the form already imports `colorjs.io` or it is trivial to add.
     - Inputs inside third-party component slots that require a native element.
@@ -774,7 +769,7 @@ used=$(grep -oE '<(Base[A-Z][A-Za-z0-9]+|SectionHeader|Fieldset|Column)\b' "$fil
 imported=$(grep -oE '^import [A-Z][A-Za-z0-9]+ from' "$file" \
   | awk '{print $2}' | sort -u)
 
-# Globally-registered components (main.js:198-207) — never need an import.
+# Globally-registered components (app.component calls in main.js) — never need an import.
 # One per line and quoted below, so it works in both bash and zsh (zsh does NOT
 # word-split unquoted variables, so a space-separated list would break here):
 globals="BaseAppLink

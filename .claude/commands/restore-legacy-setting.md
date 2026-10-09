@@ -66,13 +66,13 @@ Read the setting in the relevant Symfony controller. Follow these conventions:
 
 - Use `SettingsManager::getSetting('category.variable')` or inject the setting via the service container.
 - Pass the resolved boolean/value in the JSON response of the data endpoint.
-- Follow all PHP code style rules (see CLAUDE.md): `declare(strict_types=1)`, Yoda conditions, no-space concatenation, trailing commas, ordered imports, explicit `setParameter()` types, etc.
+- Follow all PHP code style rules (see CLAUDE.md): `declare(strict_types=1)`, Yoda conditions, no-space concatenation, trailing commas, ordered imports, scalar IDs in `setParameter()`, etc.
 
 ### Frontend (if applicable)
 
 - Read the setting value from the data endpoint response.
 - Use `v-if` / `v-show` to conditionally render UI elements.
-- Follow Vue conventions: `<script setup>`, Tailwind classes, design guide (button CRUD colors, MDI icons with `ch-tool-icon`).
+- Follow Vue conventions: `<script setup>`, Tailwind classes, design guide (button CRUD colors, icons through `<BaseIcon>`).
 
 ### Translations
 
@@ -90,7 +90,7 @@ vendor/bin/psalm --show-info=false src/CoreBundle/Controller/Path/To/ModifiedFil
 ```
 
 Common issues to watch for:
-- `QueryBuilderSetParameter`: explicit type required (3rd arg) — `Types::INTEGER`, `Types::DATETIME_MUTABLE`, `ArrayParameterType::INTEGER`.
+- `QueryBuilderSetParameter`: pass the entity's scalar ID (`(int) $e->getId()`), not the entity; the 3rd arg is then unnecessary.
 - Import ordering, Yoda conditions, trailing commas.
 - Missing return types or parameter type hints.
 
@@ -103,7 +103,7 @@ Review every new or modified file for:
 - **SQL injection**: no raw interpolation in DQL/SQL. Always use bound parameters.
 - **XSS**: no `v-html` with user data. Dynamic `:href` bindings only interpolate safe values (integer IDs, known constants).
 - **Broken access control**: if the setting enables/disables an action, ensure the backend enforces it too — do not rely solely on hiding a frontend button.
-- **CSRF**: if the setting adds or modifies a state-changing action, validate a CSRF token.
+- **CSRF**: if the setting adds or modifies a state-changing action, make it a POST, not a GET: `CsrfProtectionListener` then guards it (see CLAUDE.md Rule 13). On a legacy page under `public/main/`, use `FormValidator` with `protect()` instead.
 
 ## Step 9 — Summary
 

@@ -8,7 +8,10 @@
       {{ errorMessage }}
     </Message>
 
-    <section class="no-print rounded-xl border border-gray-25 bg-white p-3 shadow-sm">
+    <section
+      v-if="!isCourseContext"
+      class="no-print rounded-xl border border-gray-25 bg-white p-3 shadow-sm"
+    >
       <div class="flex flex-wrap items-center gap-2">
         <BaseButton
           v-if="course.actions?.courseReportingUrl"
@@ -76,6 +79,13 @@
           only-icon
           type="primary-alternative"
           :to-url="course.actions.accessDetailsUrl"
+        />
+        <BaseButton
+          :label="t('Course tracking details')"
+          icon="file-text"
+          only-icon
+          type="primary-alternative"
+          :route="courseTrackingDetailsRoute"
         />
         <BaseButton
           v-if="report.meta.actions?.emailUrl"
@@ -646,8 +656,11 @@ const report = reactive({
   meta: {},
 })
 
+// Also mounted inside the course reporting tool, where the course comes from the cid query
+// parameter and the page must stay in the course context.
+const isCourseContext = computed(() => route.name === "CourseReportingLearnerCourseDetail")
 const userId = computed(() => Number(route.params.userId || 0))
-const courseId = computed(() => Number(route.params.courseId || 0))
+const courseId = computed(() => Number((isCourseContext.value ? route.query.cid : route.params.courseId) || 0))
 const sessionId = computed(() => Number(route.query.sid || 0))
 const user = computed(() => report.meta.user || {})
 const course = computed(() => report.meta.course || {})
@@ -659,7 +672,20 @@ const testsSection = computed(() => report.sections.find((section) => section.ke
 const assignmentsSection = computed(
   () => report.sections.find((section) => section.key === "course-assignments") || null,
 )
-const backRoute = computed(() => ({
+const courseTrackingDetailsRoute = computed(() => ({
+  name: "CourseReportingLearnerDetail",
+  params: { userId: userId.value },
+  // In the course context, keep the list query so that page's back button returns to the same list.
+  query: isCourseContext.value ? route.query : { cid: courseId.value, sid: sessionId.value, gid: 0 },
+}))
+const backRoute = computed(() => {
+  if (isCourseContext.value) {
+    return { name: "CourseReportingLearners", query: route.query }
+  }
+
+  return globalBackRoute.value
+})
+const globalBackRoute = computed(() => ({
   name: "GlobalReportingLearnerDetail",
   params: { userId: userId.value },
   query: {

@@ -4254,5 +4254,7 @@
     "Contacts count": "Tirada xiriirada",
     "Sessions by date": "Kalfadhiiga taariikhda",
     "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tani waxay calaamadinaysaa wareejin kasta oo noocan la keenay in mar hore la fuliyay. Kaliya samee tan madal cusub oo aan waligeed taariikhdeeda diiwaangelin.",
-    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Tani waxay diiwaangelisaa socdaalka kaydkaaga xogta uu horay u hayo, waxayna ka tagtaa kuwa cusub ee sugaya si cusboonaysiinta ay u fulin karto. Xogtaada lama beddelo."
+    "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Tani waxay diiwaangelisaa socdaalka kaydkaaga xogta uu horay u hayo, waxayna ka tagtaa kuwa cusub ee sugaya si cusboonaysiinta ay u fulin karto. Xogtaada lama beddelo.",
+    "Course tracking details": "Faahfaahinta dabagalka koorsada",
+    "Learner details in course": "Faahfaahinta ardayga ee koorsada"
 }

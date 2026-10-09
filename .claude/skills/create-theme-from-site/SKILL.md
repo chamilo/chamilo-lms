@@ -37,18 +37,9 @@ Ask for whichever of these are missing:
   yes only if the user has clearly asked for it (as in "set it as default
   theme"); otherwise create the theme and ask before activating.
 
-**Detect which mode applies** — don't ask the user to specify it, just check
-the source string itself:
-
-```bash
-if [[ "$SOURCE" =~ ^https?:// ]]; then
-    MODE=site
-elif [[ -f "$SOURCE" ]] && file --mime-type -b "$SOURCE" | grep -q '^image/'; then
-    MODE=logo
-else
-    echo "Not a URL and not a readable local image file: $SOURCE"
-fi
-```
+**Detect which mode applies** from the source itself rather than asking: an
+`http(s)://` URL is `site` mode, a readable local file with an `image/*` MIME
+type is `logo` mode, and anything else is reported back to the user.
 
 - **`site` mode** → follow Steps 1–3 as written below (scrape the site's CSS
   for brand colors, then locate its logo separately).
@@ -206,6 +197,8 @@ tertiary, harmonized for the four semantic colors below). (Chamilo's own
 shipped defaults use inconsistent, hand-tuned offsets, some of them
 out-of-range/negative — that's tolerated, since nothing validates these
 values, but there's no need to replicate that exact formula.)
+Compute every gradient with code (e.g. a one-line `python3 -c`), not by
+hand.
 
 ### 4a. Harmonize the semantic colors (success/info/warning/danger)
 
@@ -414,10 +407,8 @@ responds `201` even when individual fields are rejected — **inspect the
   must pass `getimagesize`. **`header_png` only** is capped at ≤190×60 —
   resize before uploading if needed (Step 3). `email_png` has no size cap.
 - `header_svg`/`email_svg`: mime `image/svg+xml` (or `.svg` extension),
-  sanitized server-side. These are also gated by the platform setting
-  `editor.enabled_support_svg` — if it's off, expect `"skipped"` for these
-  fields. That is not a failure; PNG already covers the logo. Don't try to
-  work around it (it's a deliberate anti-XSS control).
+  sanitized server-side.
+- `"skipped"` means that field was not sent in the request; it is not a failure.
 - Any other result value (`invalid_mime`, `invalid_image`,
   `invalid_dimensions_header_png`) means that specific field was rejected;
   the other fields still get processed independently.
@@ -447,7 +438,7 @@ it visually.
 
 ---
 
-## Gotchas learned the hard way
+## Gotchas
 
 - **Stale OPcache after a cache:clear.** If API calls suddenly start
   returning a generic 500 error page right after any `cache:clear`/

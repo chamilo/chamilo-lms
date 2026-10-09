@@ -18,7 +18,7 @@ updated multiple times before the release tag is actually set. Handle both cases
 
 ## Step 1: Determine the target version
 
-Ask the user: **"Which version number are we adding or updating? (e.g. 2.0.4)"**
+Ask the user: **"Which version number are we adding or updating? (e.g. 3.0.2)"**
 
 Once you have the version, check whether a section for it already exists in
 `public/documentation/changelog.html` by looking for `<a id="X.Y.Z">`.
@@ -66,7 +66,7 @@ find it depends on whether the section already exists:
 **If the section does not yet exist:**
 - Identify the most recent existing release tag on this branch via
   `git tag --merged HEAD --sort=-version:refname | grep -E '^v[0-9]'`.
-- The most recent tag is the start of the range: `git log v2.0.X..HEAD`.
+- The most recent tag is the start of the range: `git log v3.0.X..HEAD`.
 - If the tag name is ambiguous (e.g. `v2.0.2` vs `2.0.2`), ask the user to
   confirm before running the log command.
 
@@ -96,7 +96,8 @@ mismatched counts confirm the hook is interfering.
 ## Step 3: Apply the gitlog.php filtering rules
 
 Read `tests/scripts/packaging/gitlog.php` to confirm the rules are unchanged
-before processing. Then apply them in this order to each commit's subject line:
+before processing. Then apply them to each commit's subject line in the
+script's own order: 3b, the 3a text skips, 3c, the 3a `Minor` skip, 3d, 3e.
 
 > **Prefer running the real script over hand-simulating it.** `gitlog.php`
 > requires a `php-git/src/Git.php` dependency in the same directory
@@ -118,8 +119,9 @@ before processing. Then apply them in this order to each commit's subject line:
 > is not part of the clean subject line — strip it during Step 5 cleanup the
 > same as a typo.
 
-### 3a. Hard-skip entire commits whose subject starts with any of:
-- `Update language terms`
+### 3a. Hard-skip entire commits
+Skip commits whose (3b-normalised) subject contains `Update language terms`
+anywhere, or starts with any of:
 - `Update language vars`
 - `Update lang vars`
 - `Merge` (also lowercase `merge`)
@@ -127,8 +129,8 @@ before processing. Then apply them in this order to each commit's subject line:
 - `Update changelog`
 - `Fix PHP Warning`
 
-Also skip any commit whose subject starts with `Minor` (case-insensitive,
-first 5 characters — matches `Minor`, `MINOR`, `minor:`, etc.).
+After 3c, also skip any subject starting with `Minor` (case-insensitive,
+first 5 characters). This includes `[Minor]` subjects that 3c renamed to `Minor:`.
 
 > **Note:** `gitlog.php` defines a `$skipTechnicalPrefixes` array (QA, Internal,
 > Display, Fix, Refactor, Migration, UI, …) but **never uses it** — it is dead

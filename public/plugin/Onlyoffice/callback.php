@@ -273,7 +273,13 @@ function track(): array
         return ['error' => 1];
     }
 
-    syncResolvedDocumentMetadata($resolved, strlen($newContent));
+    if (2 === $status) {
+        // Status 2 closes the edited version. Advancing the C2 metadata here
+        // makes the next editor opening use a new document key. Status 6 is a
+        // force-save while the same editing session is still active, so its
+        // key must remain stable until the final status 2 callback.
+        syncResolvedDocumentMetadata($resolved, strlen($newContent));
+    }
 
     onlyofficeLog('SUCCESS', 'File saved', [
         'docId' => $docId,

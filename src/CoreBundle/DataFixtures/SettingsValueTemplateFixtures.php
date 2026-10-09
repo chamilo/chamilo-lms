@@ -337,7 +337,18 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                                 'url' => 'https://api.openai.com/v1/files',
                             ],
                         ],
-                        // resto de providers igual
+                        'grok' => [
+                            'api_key' => 'GROK_KEY',
+                            'monthly_token_limit' => 10000,
+                            'daily_token_limit' => 2000,
+                            'text' => [
+                                'url' => 'https://api.x.ai/v1/chat/completions',
+                                'model' => 'grok-4.5',
+                                'temperature' => 0.7,
+                                'max_tokens' => 1000,
+                                'timeout' => 180,
+                            ],
+                        ],
                     ],
                 ],
             ],

@@ -18,10 +18,14 @@ final readonly class ToolboxAiGenerator
     private const int MAX_CSS_LENGTH = 40000;
     private const int MAX_JAVASCRIPT_LENGTH = 70000;
     private const int MAX_OUTPUT_TOKENS = 10000;
+    private const array PROVIDER_DEFAULT_TEXT_TIMEOUTS = [
+        'grok' => 180.0,
+    ];
 
     public function __construct(
         private McpTextAiService $textAiService,
         private SettingsManager $settingsManager,
+        private ToolboxJavascriptStructureValidator $javascriptStructureValidator,
     ) {}
 
     /**
@@ -86,6 +90,7 @@ Runtime rules:
 - Put all behavior in the JavaScript field. Do not use inline HTML event handlers such as onclick/onload.
 - Keep the interface responsive and keyboard-friendly.
 - Use concise educational text and clear visual feedback.
+- Before returning, verify that the JavaScript has balanced parentheses, brackets, braces, strings, comments and template literals.
 - Never include Markdown fences or explanations outside the JSON.
 PROMPT;
 
@@ -120,8 +125,8 @@ TEXT;
             $repairResult = $this->requestJson(
                 $user,
                 $repairProvider,
-                $this->safetyRepairSystemPrompt(),
-                $this->buildSafetyRepairPrompt($title, $prompt, $generated, $violation),
+                $this->validationRepairSystemPrompt(),
+                $this->buildValidationRepairPrompt($title, $prompt, $generated, $violation),
             );
             $generated = $this->normalizeGeneratedResult($repairResult, $title, $repairProvider);
             $violation = $this->findSourceViolation(
@@ -131,7 +136,7 @@ TEXT;
             );
 
             if (null !== $violation) {
-                throw new RuntimeException('The AI-generated application still violates Toolbox safety rules after one automatic repair: '.$violation);
+                throw new RuntimeException('The AI-generated application still fails Toolbox validation after one automatic repair: '.$violation);
             }
         }
 
@@ -179,10 +184,10 @@ TEXT;
 
         if (str_contains($normalized, 'timeout') || str_contains($normalized, 'timed out')) {
             $timeout = $context['timeout'];
-            $timeoutDetail = $timeout > 0.0 ? ' Configured text timeout: '.$this->formatTimeout($timeout).' seconds.' : '';
+            $timeoutDetail = $timeout > 0.0 ? ' Provider text timeout: '.$this->formatTimeout($timeout).' seconds.' : '';
 
             return 'AI Toolbox generation timed out using text provider '.$identity.'.'.$timeoutDetail
-                .' Increase the provider text timeout or simplify the requested application.';
+                .' Review the provider and web-server timeouts, or simplify the requested application.';
         }
 
         if (str_contains($normalized, 'rate limit') || str_contains($normalized, 'too many requests')) {
@@ -245,9 +250,13 @@ TEXT;
             ];
         }
 
+        $timeout = is_numeric($textConfig['timeout'] ?? null)
+            ? max(0.0, (float) $textConfig['timeout'])
+            : (self::PROVIDER_DEFAULT_TEXT_TIMEOUTS[strtolower($provider)] ?? 0.0);
+
         return [
             'model' => trim((string) ($textConfig['model'] ?? $providerConfig['model'] ?? '')),
-            'timeout' => is_numeric($textConfig['timeout'] ?? null) ? max(0.0, (float) $textConfig['timeout']) : 0.0,
+            'timeout' => $timeout,
         ];
     }
 
@@ -298,10 +307,10 @@ TEXT;
         ];
     }
 
-    private function safetyRepairSystemPrompt(): string
+    private function validationRepairSystemPrompt(): string
     {
         return <<<'PROMPT'
-You repair a generated educational HTML/CSS/JavaScript application so it can run safely inside Chamilo Toolbox as SCORM 1.2.
+You repair a generated educational HTML/CSS/JavaScript application so it can run correctly and safely inside Chamilo Toolbox as SCORM 1.2.
 
 Return ONLY one JSON object with exactly these string fields:
 {
@@ -313,11 +322,12 @@ Return ONLY one JSON object with exactly these string fields:
   "javascript": "JavaScript only."
 }
 
-Preserve the educational behavior and visual design as much as possible, but remove the reported safety violation.
+Preserve the educational behavior and visual design as much as possible, but fix the reported Toolbox validation failure.
 Use only vanilla HTML/CSS/JavaScript and no external resources.
 Use window.API for SCORM 1.2 persistence and cmi.suspend_data / cmi.core.lesson_location for resumable state.
 Do not use fetch, XMLHttpRequest, WebSocket, WebTransport, WebRTC/RTCPeerConnection, EventSource, sendBeacon, camera/microphone APIs, cookies, localStorage, sessionStorage, indexedDB, navigation APIs, window.open, parent, top, opener, eval, the Function constructor, or dynamic imports.
 Normal JavaScript function declarations, anonymous function callbacks and arrow functions are allowed. Only the Function constructor is forbidden.
+Ensure the JavaScript has balanced parentheses, brackets, braces, strings, comments and template literals.
 Do not use SVG; use Canvas or CSS when graphics are needed.
 Do not include forbidden API names in comments or explanatory strings.
 Never include Markdown fences or prose outside the JSON.
@@ -335,7 +345,7 @@ PROMPT;
      *     provider: string
      * } $generated
      */
-    private function buildSafetyRepairPrompt(
+    private function buildValidationRepairPrompt(
         string $requestedTitle,
         string $teacherPrompt,
         array $generated,
@@ -343,7 +353,7 @@ PROMPT;
     ): string {
         return "Requested application: {$requestedTitle}\n"
             ."Teacher request:\n{$teacherPrompt}\n\n"
-            ."Safety validation failure:\n{$violation}\n\n"
+            ."Toolbox validation failure:\n{$violation}\n\n"
             ."Repair this generated candidate without changing the learning objective:\n\n"
             ."TITLE:\n".mb_substr($generated['title'], 0, 255)."\n\n"
             ."DESCRIPTION:\n".mb_substr($generated['description'], 0, 1000)."\n\n"
@@ -359,6 +369,11 @@ PROMPT;
             || mb_strlen($javascript) > self::MAX_JAVASCRIPT_LENGTH
         ) {
             return 'The generated Toolbox application is too large.';
+        }
+
+        $javascriptStructureViolation = $this->javascriptStructureValidator->findViolation($javascript);
+        if (null !== $javascriptStructureViolation) {
+            return $javascriptStructureViolation;
         }
 
         $blockedHtml = [

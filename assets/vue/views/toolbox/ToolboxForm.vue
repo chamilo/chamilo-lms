@@ -277,8 +277,8 @@ async function loadConfiguration() {
     configuration.enabled = data?.enabled === true
     configuration.canCreate = data?.canCreate === true
     configuration.providers = Array.isArray(data?.providers) ? data.providers : []
-    if (configuration.providers.length === 1) {
-      form.provider = configuration.providers[0].value
+    if (!configuration.providers.some((provider) => provider.value === form.provider)) {
+      form.provider = configuration.providers[0]?.value ?? ""
     }
   } catch (error) {
     loadError.value = true
@@ -298,6 +298,7 @@ async function generate() {
 
   generationError.value = ""
   generating.value = true
+  const startedAt = Date.now()
   try {
     const item = await toolboxService.createItem(context.value, {
       title: form.title.trim(),
@@ -312,14 +313,21 @@ async function generate() {
       query: route.query,
     })
   } catch (error) {
-    generationError.value = extractGenerationError(error)
+    generationError.value = extractGenerationError(error, Date.now() - startedAt)
     showErrorNotification(error)
   } finally {
     generating.value = false
   }
 }
 
-function extractGenerationError(error) {
+function extractGenerationError(error, elapsedMs = 0) {
+  const status = Number(error?.response?.status ?? 0)
+  if (status === 504) {
+    const elapsedSeconds = Math.max(1, Math.round(elapsedMs / 1000))
+
+    return `The web server stopped AI generation after about ${elapsedSeconds} seconds (HTTP 504). This is a server/gateway timeout and can be different from the AI provider timeout.`
+  }
+
   const data = error?.response?.data
 
   return (

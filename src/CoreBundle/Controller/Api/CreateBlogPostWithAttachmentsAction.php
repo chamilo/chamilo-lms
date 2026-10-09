@@ -64,7 +64,7 @@ final class CreateBlogPostWithAttachmentsAction
             throw new AccessDeniedHttpException('Blog is outside the current course/session context.');
         }
 
-        // Same rule as the plain post creation operation on CBlogPost.
+        // Creating a post requires EDIT on the blog.
         $node = $blog->getResourceNode();
         if (!$node || !$security->isGranted('EDIT', $node)) {
             throw new AccessDeniedHttpException('You are not allowed to write to this blog.');

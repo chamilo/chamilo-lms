@@ -318,17 +318,6 @@ async function listPostsApi({ blogId, page = 1, pageSize = 10, q = "", order = "
   return hydraMembers(collection, mapPostRow)
 }
 
-/** POST /c_blog_posts */
-async function createPostApi({ blogId, title, fullText }) {
-  const payload = {
-    title,
-    fullText,
-    blog: iri("c_blogs", blogId),
-  }
-  const data = await baseService.post(`/api/c_blog_posts`, payload, {}, { params: withCourseParams() })
-  return { id: extractId(data) }
-}
-
 /** GET /c_blog_posts/{postId} */
 async function getPostApi(postId) {
   const data = await baseService.get(`/api/c_blog_posts/${postId}`, withCourseParams())
@@ -615,7 +604,7 @@ async function createPostWithFiles({ blogId, title, fullText, files = [], commen
     fd.append("files[]", file, file.name)
     fd.append("comments[]", commentsByIndex[i] || "")
   })
-  const data = await baseService.post(`/api/c_blog_posts/with_attachments`, fd, {}, { params: courseContextParams() })
+  const data = await baseService.post(`/api/c_blog_posts`, fd, {}, { params: courseContextParams() })
 
   return { postId: extractId(data) }
 }
@@ -643,7 +632,6 @@ export default {
 
   // Posts + Ratings
   listPostsApi,
-  createPostApi,
   getPostApi,
   listPostAttachmentsApi,
   ratePostApi,

@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode)"),
         new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
-        // Attachments are only created with their post, see CBlogPost's with_attachments operation.
+        // Attachments are only created with their post, see CBlogPost's Post operation.
     ],
     normalizationContext: ['groups' => ['blog_attachment:read']],
     denormalizationContext: ['groups' => ['blog_attachment:write']]

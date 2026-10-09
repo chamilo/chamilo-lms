@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CBlogPostVoter;
 use Chamilo\CoreBundle\Service\Blog\BlogContextAccessChecker;
 use Chamilo\CourseBundle\Entity\CBlog;
 use Chamilo\CourseBundle\Entity\CBlogAttachment;
@@ -64,27 +65,26 @@ final class CreateBlogPostWithAttachmentsAction
             throw new AccessDeniedHttpException('Blog is outside the current course/session context.');
         }
 
-        // Creating a post requires EDIT on the blog.
-        $node = $blog->getResourceNode();
-        if (!$node || !$security->isGranted('EDIT', $node)) {
+        $post = (new CBlogPost())
+            ->setTitle($title)
+            ->setFullText((string) $request->request->get('fullText', ''))
+            ->setBlog($blog)
+            ->setAuthor($em->getReference(User::class, $user->getId()))
+        ;
+
+        if (!$security->isGranted(CBlogPostVoter::CREATE, $post)) {
             throw new AccessDeniedHttpException('You are not allowed to write to this blog.');
         }
 
+        $node = $blog->getResourceNode();
         $files = array_values(array_filter(
             $request->files->all('files'),
             static fn ($file): bool => $file instanceof UploadedFile
         ));
         $comments = $request->request->all('comments');
 
-        $post = $em->wrapInTransaction(
-            function () use ($em, $user, $blog, $title, $request, $files, $comments, $node, $attachRepo, $resourceNodeRepo): CBlogPost {
-                $post = (new CBlogPost())
-                    ->setTitle($title)
-                    ->setFullText((string) $request->request->get('fullText', ''))
-                    ->setBlog($blog)
-                    ->setAuthor($em->getReference(User::class, $user->getId()))
-                ;
-
+        $em->wrapInTransaction(
+            function () use ($em, $post, $blog, $files, $comments, $node, $attachRepo, $resourceNodeRepo): void {
                 $em->persist($post);
                 $em->flush();
 
@@ -113,8 +113,6 @@ final class CreateBlogPostWithAttachmentsAction
                     $em->persist($att);
                     $em->flush();
                 }
-
-                return $post;
             }
         );
 

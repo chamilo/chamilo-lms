@@ -4255,5 +4255,7 @@
     "Number of messages sent": "Bilang ng mga mensaheng ipinadala",
     "Contacts count": "Bilang ng contacts",
     "Sessions by date": "Mga session ayon sa petsa",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Minamarkahan nito ang bawat migration na kasama sa bersyong ito bilang naisagawa na. Gawin lamang ito sa platapormang napapanahon at hindi pa naitala ang kasaysayan nito."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Minamarkahan nito ang bawat migration na kasama sa bersyong ito bilang naisagawa na. Gawin lamang ito sa platapormang napapanahon at hindi pa naitala ang kasaysayan nito.",
+    "Course tracking details": "Mga detalye ng pagsubaybay sa kurso",
+    "Learner details in course": "Mga detalye ng mag-aaral sa kurso"
 }

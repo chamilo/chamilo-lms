@@ -354,6 +354,12 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
             throw new NotFoundHttpException('Forum thread not found.');
         }
 
+        // A thread is only graded from the context (base course or one session) it belongs to
+        $course = $this->getCourse($this->cidReqHelper);
+        if (!$this->isThreadInCurrentContext($thread, $course, $this->cidReqHelper->getDoctrineSessionEntity())) {
+            throw new NotFoundHttpException('Forum thread not found.');
+        }
+
         return $thread;
     }
 

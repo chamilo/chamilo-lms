@@ -140,9 +140,13 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         $this->updateSurveyCounters($survey, $course, $session);
         $this->entityManager->flush();
 
-        $message = \sprintf('Survey published. Created: %d. Updated: %d. Messages sent: %d.', $created, $updated, $sent);
-
-        return $this->surveyInvitationProvider->buildResponse($survey, $course, $session, $message);
+        return $this->surveyInvitationProvider->buildResponse(
+            $survey,
+            $course,
+            $session,
+            'Survey published. Created: {0}. Updated: {1}. Messages sent: {2}.',
+            [$created, $updated, $sent],
+        );
     }
 
     /**

@@ -29,6 +29,12 @@ export default {
       component: () => import("../views/courseReporting/CourseReportingLearnerDetailView.vue"),
     },
     {
+      name: "CourseReportingLearnerCourseDetail",
+      path: "learners/:userId(\\d+)/course-details",
+      meta: { breadcrumb: "Learner details in course" },
+      component: () => import("../views/globalReporting/GlobalReportingLearnerCourseDetailView.vue"),
+    },
+    {
       name: "CourseReportingActivity",
       path: "activity",
       meta: { breadcrumb: "Course activity statistics" },

@@ -4255,5 +4255,7 @@
     "Number of messages sent": "Inani lemiyalezo ethunyelweyo",
     "Contacts count": "Inani leqabane",
     "Sessions by date": "Iiseshini ngomhla",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Oku kuphawula yonke imfuduso ezithunyelwe yile nguqulelo njengelezi sele zenziwe. Yenza oku kuphela kwiqonga elihlaziyiweyo nelingazange libhale imbali yalo."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Oku kuphawula yonke imfuduso ezithunyelwe yile nguqulelo njengelezi sele zenziwe. Yenza oku kuphela kwiqonga elihlaziyiweyo nelingazange libhale imbali yalo.",
+    "Course tracking details": "Iinkcukacha zokulandelela ikhosi",
+    "Learner details in course": "Iinkcukacha zomfundi kwizifundo"
 }

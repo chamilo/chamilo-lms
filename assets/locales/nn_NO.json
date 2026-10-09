@@ -4255,5 +4255,7 @@
     "Number of messages sent": "Tal p\u00e5 sendingar",
     "Contacts count": "Kontaktteljing",
     "Sessions by date": "\u00d8kter etter dato",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dette merkar kvar migrasjon som f\u00f8lgjer med denne versjonen som allereie utf\u00f8rt. Gjer dette berre p\u00e5 ei plattform som er oppdatert og som aldri har registrert historia si."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dette merkar kvar migrasjon som f\u00f8lgjer med denne versjonen som allereie utf\u00f8rt. Gjer dette berre p\u00e5 ei plattform som er oppdatert og som aldri har registrert historia si.",
+    "Course tracking details": "Kurssporingsdetaljar",
+    "Learner details in course": "L\u00e6rar-detaljar i kurs"
 }

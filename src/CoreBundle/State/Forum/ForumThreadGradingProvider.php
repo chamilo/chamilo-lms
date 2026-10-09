@@ -75,6 +75,10 @@ final class ForumThreadGradingProvider implements ProviderInterface
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->gradebookLinkManager->assertSessionBelongsToCourse($course, $session);
+        // A thread is only graded from the context (base course or one session) it belongs to
+        if (!$this->isThreadInCurrentContext($thread, $course, $session)) {
+            throw new NotFoundHttpException('Forum thread not found.');
+        }
         $currentUser = $this->security->getUser();
         if (!$currentUser instanceof User) {
             throw new AccessDeniedHttpException('A valid user is required.');

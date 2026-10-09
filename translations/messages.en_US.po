@@ -41693,3 +41693,6 @@ msgstr "This file is still used by at least one resource and cannot be deleted."
 
 msgid "Orphan file and its physical content have been deleted definitively."
 msgstr "Orphan file and its physical content have been deleted definitively."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Survey published. Created: %d. Updated: %d. Messages sent: %d."

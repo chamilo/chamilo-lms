@@ -4255,5 +4255,7 @@
     "Number of messages sent": "L\u00edon teachtaireachta\u00ed seolta",
     "Contacts count": "L\u00edon teagmh\u00e1lacha",
     "Sessions by date": "Seisi\u00fain de r\u00e9ir d\u00e1ta",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Marc\u00e1lann s\u00e9 seo gach imirce a sheol an leagan seo mar a forghn\u00edomha\u00edodh cheana. N\u00e1 d\u00e9an \u00e9 seo ach ar ard\u00e1n at\u00e1 cothrom le d\u00e1ta agus n\u00e1r thaifead a stair riamh."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Marc\u00e1lann s\u00e9 seo gach imirce a sheol an leagan seo mar a forghn\u00edomha\u00edodh cheana. N\u00e1 d\u00e9an \u00e9 seo ach ar ard\u00e1n at\u00e1 cothrom le d\u00e1ta agus n\u00e1r thaifead a stair riamh.",
+    "Course tracking details": "Sonra\u00ed rianaithe an ch\u00farsa",
+    "Learner details in course": "Sonra\u00ed foghlaimeora sa ch\u00farsa"
 }

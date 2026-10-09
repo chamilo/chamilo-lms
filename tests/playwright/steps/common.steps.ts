@@ -128,6 +128,26 @@ Given("I am on the course settings page of course {string}", async ({ page }, co
   await page.waitForLoadState("domcontentloaded")
 })
 
+// The Vue course settings form (/resources/course-settings/:node/) is addressed by the course's
+// resource node, which a course code alone does not give: resolve the id the same way as
+// "I resolve the numeric id of course", then read the node from the course API.
+Given("I am on the settings form of course {string}", async ({ page }, courseCode: string) => {
+  await page.goto(`/courses/${encodeURIComponent(courseCode)}/index.php`)
+  await page.waitForLoadState("domcontentloaded")
+  const match = new URL(page.url()).pathname.match(/^\/course\/(\d+)\/home$/)
+  if (!match) {
+    throw new Error(`Could not resolve the course home URL for course ${courseCode} (got ${page.url()}).`)
+  }
+  const courseId = Number(match[1])
+  const response = await page.request.get(`/api/courses/${courseId}`, { headers: { Accept: "application/json" } })
+  const nodeId = Number((await response.json())?.resourceNode?.id || 0)
+  if (!nodeId) {
+    throw new Error(`Could not resolve the resource node of course ${courseCode}.`)
+  }
+  await gotoReliably(page, `/resources/course-settings/${nodeId}/?cid=${courseId}&sid=0&gid=0`)
+  await page.waitForLoadState("domcontentloaded")
+})
+
 Given("I am on the modern homepage of course {string}", async ({ page }, courseCode: string) => {
   await gotoReliably(page, `/course/${getResolvedCourseId(courseCode)}/home?sid=0&gid=0`)
   await page.waitForLoadState("domcontentloaded")
@@ -2233,6 +2253,16 @@ When("I press {string}", async ({ page }, label: string) => {
 Then("I click the {string} element", async ({ page }, selector: string) => {
   page.once("dialog", (dialog) => dialog.accept())
   await page.locator(`${selector}:visible`).first().click()
+})
+
+// For inputs whose id depends on the data (e.g. one autocomplete per student
+// boss, id="student-boss-<id>-learner") and that have no name: "I fill in"
+// only resolves fields by id or name. Typed key by key so autocompletes fire
+// their search on input, as they do for a real user.
+Then("I type {string} into the {string} element", async ({ page }, text: string, selector: string) => {
+  const input = page.locator(`${selector}:visible`).first()
+  await input.click()
+  await input.pressSequentially(text)
 })
 
 // Ported from FeatureContext::assertElementOnPage() as used via a raw CSS

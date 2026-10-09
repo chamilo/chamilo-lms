@@ -36,6 +36,14 @@ export default {
     return await baseService.get("/api/global-reporting/report", cleanParams({ section, ...params }))
   },
 
+  async searchStudentBossLearners(keyword) {
+    return await baseService.get("/global-reporting/student-bosses/learners-data", { q: keyword })
+  },
+
+  async addLearnerToStudentBoss(bossId, learnerId) {
+    return await baseService.post(`/global-reporting/student-bosses/${bossId}/learners`, { learnerId })
+  },
+
   async downloadSection(section, format, params = {}) {
     return await baseService.getRaw(`/api/global-reporting/export/${section}.${format}`, {
       params: cleanParams(params),

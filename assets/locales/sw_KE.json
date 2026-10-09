@@ -4255,5 +4255,7 @@
     "Number of messages sent": "Idadi ya ujumbe uliotumwa",
     "Contacts count": "Idadi ya watu wa mawasiliano",
     "Sessions by date": "Mikao kwa tarehe",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Hii huashiria kila uhamishaji ulioletwa na toleo hili kama uliotekelezwa tayari. Fanya hivi tu kwenye jukwaa lililo sasishwa na ambalo halijawahi kurekodi historia yake."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Hii huashiria kila uhamishaji ulioletwa na toleo hili kama uliotekelezwa tayari. Fanya hivi tu kwenye jukwaa lililo sasishwa na ambalo halijawahi kurekodi historia yake.",
+    "Course tracking details": "Maelezo ya ufuatiliaji wa kozi",
+    "Learner details in course": "Maelezo ya mwanafunzi katika kozi"
 }

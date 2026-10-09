@@ -4255,5 +4255,7 @@
     "Number of messages sent": "Bidalitako mezu kopurua",
     "Contacts count": "Harreman kopurua",
     "Sessions by date": "Saioak dataz",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Honek bertsio honek bidalitako migrazio guztiak jada exekutatuta gisa markatzen ditu. Egin hau soilik eguneratuta dagoen eta inoiz bere historia erregistratu ez duen plataforma batean."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Honek bertsio honek bidalitako migrazio guztiak jada exekutatuta gisa markatzen ditu. Egin hau soilik eguneratuta dagoen eta inoiz bere historia erregistratu ez duen plataforma batean.",
+    "Course tracking details": "Ikastaro-jarraipenaren xehetasunak",
+    "Learner details in course": "Ikaslearen xehetasunak ikastaroan"
 }

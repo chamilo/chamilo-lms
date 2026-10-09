@@ -309,6 +309,14 @@ watch(
 // description field stayed a plain, un-enhanced textarea for the full test
 // timeout, with zero trace of tinymce anywhere having run).
 function drainChEditors() {
+  // Until the layout renders (it waits for the platform configuration), the
+  // watchEffect below has not moved #sectionMainContent yet. Initializing now
+  // would put the editor iframe in a node that is moved right after, which
+  // reloads the iframe and leaves TinyMCE bound to a detached document (the
+  // editor shows but cannot be typed in). The watchEffect drains the queue
+  // itself once the move is done.
+  if (!legacyContainer.value) return
+
   const chEditors = window.chEditors || []
   while (chEditors.length) {
     tinymce.init(chEditors.shift())

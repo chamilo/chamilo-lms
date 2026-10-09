@@ -4255,5 +4255,7 @@
     "Number of messages sent": "Nos\u016bt\u012bto v\u0113stu\u013cu skaits",
     "Contacts count": "Kontaktu skaits",
     "Sessions by date": "Sesijas p\u0113c datuma",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tas atz\u012bm\u0113 visas \u0161\u012bs versijas pieg\u0101d\u0101t\u0101s migr\u0101cijas k\u0101 jau izpild\u012btas. Dariet to tikai platform\u0101, kas ir atjaunin\u0101ta un nekad nav re\u0123istr\u0113jusi savu v\u0113sturi."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Tas atz\u012bm\u0113 visas \u0161\u012bs versijas pieg\u0101d\u0101t\u0101s migr\u0101cijas k\u0101 jau izpild\u012btas. Dariet to tikai platform\u0101, kas ir atjaunin\u0101ta un nekad nav re\u0123istr\u0113jusi savu v\u0113sturi.",
+    "Course tracking details": "Kursa izseko\u0161anas deta\u013cas",
+    "Learner details in course": "Inform\u0101cija par kursantiem kurs\u0101"
 }

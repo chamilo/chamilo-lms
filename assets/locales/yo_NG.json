@@ -4255,5 +4255,7 @@
     "Number of messages sent": "N\u1ecd\u0301mb\u00e0 \u00ecfiw\u00e9ra t\u00ed a r\u00e1n",
     "Contacts count": "Iye aw\u1ecdn olubas\u1ecdr\u1ecd",
     "Sessions by date": "\u00c0w\u00f9j\u1ecd \u00ecp\u00e0d\u00e9 l\u1ecd\u0301j\u1ecd\u0301",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "\u00c8y\u00ed samisi gbogbo \u00eck\u00f3pad\u00e0 t\u00ed \u1eb9\u0300y\u00e0 y\u00ec\u00ed gb\u00e9 j\u00e1de g\u1eb9\u0301g\u1eb9\u0301 b\u00edi \u00e8y\u00ed t\u00ed a ti \u1e63e t\u1eb9\u0301l\u1eb9\u0300. \u1e62e \u00e8y\u00ed n\u00eckan l\u00f3r\u00ed p\u1eb9p\u1eb9 t\u00ed \u00f3 ti w\u00e0 n\u00ed \u00ecgb\u00e0l\u00f3d\u00e9 t\u00ed k\u00f2 s\u00ec t\u00ed\u00ec k\u1ecd \u00ect\u00e0n r\u1eb9\u0300 s\u00edl\u1eb9\u0300."
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "\u00c8y\u00ed samisi gbogbo \u00eck\u00f3pad\u00e0 t\u00ed \u1eb9\u0300y\u00e0 y\u00ec\u00ed gb\u00e9 j\u00e1de g\u1eb9\u0301g\u1eb9\u0301 b\u00edi \u00e8y\u00ed t\u00ed a ti \u1e63e t\u1eb9\u0301l\u1eb9\u0300. \u1e62e \u00e8y\u00ed n\u00eckan l\u00f3r\u00ed p\u1eb9p\u1eb9 t\u00ed \u00f3 ti w\u00e0 n\u00ed \u00ecgb\u00e0l\u00f3d\u00e9 t\u00ed k\u00f2 s\u00ec t\u00ed\u00ec k\u1ecd \u00ect\u00e0n r\u1eb9\u0300 s\u00edl\u1eb9\u0300.",
+    "Course tracking details": "\u00c0w\u1ecdn \u00e0l\u00e0y\u00e9 \u00ect\u1ecdpa \u1eb9\u0300k\u1ecd\u0301",
+    "Learner details in course": "\u00c0w\u00f2k\u00fanf\u1eb9\u0300 ak\u1eb9\u0301k\u1ecd\u0300\u1ecd\u0301 n\u00edn\u00fa \u1eb9\u0300k\u1ecd\u0301"
 }

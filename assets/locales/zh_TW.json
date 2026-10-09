@@ -4255,5 +4255,7 @@
     "Number of messages sent": "\u5df2\u767c\u9001\u8a0a\u606f\u6578\u91cf",
     "Contacts count": "\u806f\u7d61\u4eba\u6578\u91cf",
     "Sessions by date": "\u6309\u65e5\u671f\u7684\u8ab2\u7a0b",
-    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "\u9019\u6703\u5c07\u6b64\u7248\u672c\u96a8\u9644\u7684\u6240\u6709\u9077\u79fb\u6a19\u8a18\u70ba\u5df2\u57f7\u884c\u3002\u50c5\u5728\u5df2\u662f\u6700\u65b0\u4e14\u5f9e\u672a\u8a18\u9304\u904e\u6b77\u53f2\u7684\u5e73\u53f0\u4e0a\u57f7\u884c\u6b64\u64cd\u4f5c\u3002"
+    "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "\u9019\u6703\u5c07\u6b64\u7248\u672c\u96a8\u9644\u7684\u6240\u6709\u9077\u79fb\u6a19\u8a18\u70ba\u5df2\u57f7\u884c\u3002\u50c5\u5728\u5df2\u662f\u6700\u65b0\u4e14\u5f9e\u672a\u8a18\u9304\u904e\u6b77\u53f2\u7684\u5e73\u53f0\u4e0a\u57f7\u884c\u6b64\u64cd\u4f5c\u3002",
+    "Course tracking details": "\u8ab2\u7a0b\u8ffd\u8e64\u8a73\u60c5",
+    "Learner details in course": "\u8ab2\u7a0b\u5b78\u54e1\u8a73\u7d30\u8cc7\u6599"
 }

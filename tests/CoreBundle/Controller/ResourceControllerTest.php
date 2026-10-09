@@ -6,7 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -347,5 +350,49 @@ class ResourceControllerTest extends WebTestCase
         $url = '/r/document/files/'.$lp->getResourceNode()->getId().'/link';
         $client->request('GET', $url);
         $this->assertResponseStatusCodeSame(404);
+    }
+
+    /**
+     * Files embedded in HTML content (course introduction, documents...) are requested without
+     * cid/sid. A base-course file is shared with every session of the course, so a student
+     * enrolled in the course only through a session must still be able to load it — while a
+     * user with no enrolment in the course must not, the course being closed to visitors.
+     */
+    public function testViewBaseCourseFileWithoutContextForSessionOnlyStudent(): void
+    {
+        $client = static::createClient();
+        $admin = $this->getUser('admin');
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+
+        $course = $this->createCourse('Base course file in session');
+        $course->setVisibility(Course::REGISTERED);
+        $this->getEntityManager()->flush();
+
+        $document = (new CDocument())
+            ->setFiletype('file')
+            ->setTitle('embedded image')
+            ->setParent($course)
+            ->setCreator($admin)
+            ->addCourseLink($course)
+        ;
+        $documentRepo->create($document);
+        $documentRepo->addFile($document, $this->getUploadedFile());
+        $url = '/r/document/files/'.$document->getResourceNode()->getUuid()->toRfc4122().'/view';
+
+        $sessionStudent = $this->createUser('session_only_student');
+        $session = $this->createSession('Session sharing the base course');
+        $session->addCourse($course);
+        $sessionRepo->update($session);
+        $sessionRepo->addUserInCourse(Session::STUDENT, $sessionStudent, $course, $session);
+        $sessionRepo->update($session);
+
+        $client->loginUser($sessionStudent);
+        $client->request('GET', $url);
+        $this->assertResponseIsSuccessful();
+
+        $client->loginUser($this->createUser('not_enrolled_user'));
+        $client->request('GET', $url);
+        $this->assertResponseStatusCodeSame(403);
     }
 }

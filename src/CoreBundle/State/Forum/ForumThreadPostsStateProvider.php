@@ -143,7 +143,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         // The thread comes from the URL and the rights below are computed for the course in the
         // request, so the thread has to belong to that course — otherwise managing one course
         // would read the threads of every other one.
-        if (!$this->threadBelongsToContext($thread, $course, $session, $group)) {
+        if (!$this->isThreadInCurrentContext($thread, $course, $session)) {
             throw new NotFoundHttpException('Forum thread not found.');
         }
 
@@ -280,22 +280,23 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
     /**
      * A thread of the base course is reachable from a session of that course, hence the fallbacks.
      */
-    private function threadBelongsToContext(
-        CForumThread $thread,
-        Course $course,
-        ?Session $session,
-        ?CGroup $group
-    ): bool {
-        $resourceNode = $thread->getResourceNode();
-        if (!$resourceNode instanceof ResourceNode) {
-            return false;
+    private function resolveCourseForRequest(Request $request): Course
+    {
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        if ($course instanceof Course) {
+            return $course;
         }
 
-        $link = $resourceNode->getResourceLinkByContext($course, $session, $group)
-            ?? $resourceNode->getResourceLinkByContext($course, $session)
-            ?? $resourceNode->getResourceLinkByContext($course);
+        // This endpoint is served by a dedicated Symfony controller rather than an API Platform
+        // operation. Keep the listener-populated session as the primary source, but recover the
+        // explicitly validated request context when the session value is temporarily unavailable.
+        // The forum member check above still protects non-admin access through the contextual roles.
+        $course = $this->courseFromRequestHelper->resolveCourse($request);
+        if (!$course instanceof Course) {
+            throw new BadRequestHttpException('Missing course id.');
+        }
 
-        return null !== $link;
+        return $course;
     }
 
     private function getCurrentUser(): User

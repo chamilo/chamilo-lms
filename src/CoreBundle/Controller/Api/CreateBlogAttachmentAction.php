@@ -85,6 +85,11 @@ final class CreateBlogAttachmentAction
             throw new AccessDeniedHttpException('You are not allowed to upload files to this blog.');
         }
 
+        // Attachments are added by the post's author only, as part of creating the post.
+        if ($post->getAuthor()?->getId() !== $user->getId()) {
+            throw new AccessDeniedHttpException('You are not allowed to add attachments to this post.');
+        }
+
         $original = $file->getClientOriginalName() ?: 'upload.bin';
         $filename = $this->uniqueFilenameForAttachments($original, $attachRepo);
 

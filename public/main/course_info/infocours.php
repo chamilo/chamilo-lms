@@ -2568,9 +2568,16 @@ if ($form->validate()) {
     }
 
     // Persist main course entity
+    $courseLanguageId = (int) api_get_language_id($updateValues['course_language']);
+    $courseLanguage = $courseLanguageId > 0
+        ? Database::getManager()->find(\Chamilo\CoreBundle\Entity\Language::class, $courseLanguageId)
+        : null;
+    if ($courseLanguage instanceof \Chamilo\CoreBundle\Entity\Language) {
+        $courseEntity->setCourseLanguageEntity($courseLanguage);
+    }
+
     $courseEntity
         ->setTitle($updateValues['title'])
-        ->setCourseLanguage($updateValues['course_language'])
         ->setDepartmentName($updateValues['department_name'])
         ->setDepartmentUrl($updateValues['department_url'])
         ->setVisibility($updateValues['visibility'])

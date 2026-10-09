@@ -123,10 +123,15 @@ class CourseManager
      */
     public static function get_course_information($course_code)
     {
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+
         return Database::fetch_array(
             Database::query(
-                "SELECT *, id as real_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE code = '".Database::escape_string($course_code)."'"
+                "SELECT course.*, language.isocode AS course_language, course.id as real_id
+                FROM $courseTable course
+                INNER JOIN $languageTable language ON language.id = course.language_id
+                WHERE course.code = '".Database::escape_string($course_code)."'"
             ),
             'ASSOC'
         );
@@ -163,8 +168,10 @@ class CourseManager
         $onlyThisCourseList = []
     ) {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT course.*, course.id as real_id
-                FROM $courseTable course  ";
+        $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+        $sql = "SELECT course.*, language.isocode AS course_language, course.id as real_id
+                FROM $courseTable course
+                INNER JOIN $languageTable language ON language.id = course.language_id ";
 
         if (!empty($urlId)) {
             $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -1555,6 +1562,7 @@ class CourseManager
                         session_id,
                         user.*,
                         course.*,
+                        course_language.isocode AS course_language,
                         course.id AS c_id
                          '.$injectExtraFields.'
                         session.title as session_name
@@ -1587,6 +1595,8 @@ class CourseManager
                         INNER JOIN $course_table course
                         ON session_course_user.c_id = course.id AND
                         $courseCondition
+                        INNER JOIN ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." course_language
+                        ON course_language.id = course.language_id
                         INNER JOIN $sessionTable session
                         ON session_course_user.session_id = session.id
                     $sqlInjectJoins
@@ -3141,7 +3151,10 @@ class CourseManager
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
-                $languageCondition = " AND course.course_language = '".$userInfo['language']."' ";
+                $languageId = (int) api_get_language_id($userInfo['language']);
+                $languageCondition = $languageId > 0
+                    ? " AND course.language_id = $languageId "
+                    : ' AND 1 = 0 ';
             }
         }
 
@@ -3290,8 +3303,12 @@ class CourseManager
     public static function get_courses_info_from_visual_code($code)
     {
         $result = [];
-        $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE visual_code = '".Database::escape_string($code)."'");
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+        $sql_result = Database::query("SELECT course.*, language.isocode AS course_language
+                FROM $courseTable course
+                INNER JOIN $languageTable language ON language.id = course.language_id
+                WHERE course.visual_code = '".Database::escape_string($code)."'");
         while ($virtual_course = Database::fetch_array($sql_result)) {
             $result[] = $virtual_course;
         }
@@ -3647,7 +3664,8 @@ class CourseManager
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sessionId = (int) $sessionId;
         $user_id = (int) $user_id;
-        $select = "SELECT DISTINCT c.*, c.id as real_id ";
+        $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+        $select = "SELECT DISTINCT c.*, language.isocode AS course_language, c.id as real_id ";
 
         if ($getCount) {
             $select = "SELECT COUNT(DISTINCT c.id) as count";
@@ -3704,6 +3722,7 @@ class CourseManager
         $whereConditions .= $keywordCondition;
         $sql = "$select
                 FROM $tbl_course c
+                INNER JOIN $languageTable language ON language.id = c.language_id
                 INNER JOIN $tbl_course_rel_user cru
                 ON (cru.c_id = c.id)
                 INNER JOIN $tbl_course_rel_access_url a
@@ -3791,7 +3810,10 @@ class CourseManager
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
-                $languageCondition = " AND course_language = '".$userInfo['language']."' ";
+                $languageId = (int) api_get_language_id($userInfo['language']);
+                $languageCondition = $languageId > 0
+                    ? " AND language_id = $languageId "
+                    : ' AND 1 = 0 ';
             }
         }
 
@@ -3934,7 +3956,10 @@ class CourseManager
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
-                $languageCondition = " AND course.course_language = '".$userInfo['language']."' ";
+                $languageId = (int) api_get_language_id($userInfo['language']);
+                $languageCondition = $languageId > 0
+                    ? " AND course.language_id = $languageId "
+                    : ' AND 1 = 0 ';
             }
         }
 
@@ -6167,8 +6192,15 @@ class CourseManager
     public static function get_course_list()
     {
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 
-        return Database::store_result(Database::query("SELECT *, id as real_id FROM $table"));
+        return Database::store_result(
+            Database::query(
+                "SELECT course.*, language.isocode AS course_language, course.id as real_id
+                FROM $table course
+                INNER JOIN $languageTable language ON language.id = course.language_id"
+            )
+        );
     }
 
     /**

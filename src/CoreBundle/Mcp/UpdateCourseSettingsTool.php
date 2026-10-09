@@ -72,7 +72,7 @@ final readonly class UpdateCourseSettingsTool
                     throw new InvalidArgumentException(\sprintf('The course language "%s" is not available in Chamilo.', $language));
                 }
                 if ($resolvedLanguage->getIsocode() !== $course->getCourseLanguage()) {
-                    $course->setCourseLanguage($resolvedLanguage->getIsocode());
+                    $course->setCourseLanguageEntity($resolvedLanguage);
                     $changedFields[] = 'language';
                 }
             }

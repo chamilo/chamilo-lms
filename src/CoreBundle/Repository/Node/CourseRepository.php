@@ -230,7 +230,8 @@ class CourseRepository extends ResourceRepository
     public function findCourseAsArray($id)
     {
         $qb = $this->createQueryBuilder('c')
-            ->select('c.id, c.code, c.title, c.visualCode, c.courseLanguage, c.departmentUrl, c.departmentName')
+            ->select('c.id, c.code, c.title, c.visualCode, language.isocode AS courseLanguage, c.departmentUrl, c.departmentName')
+            ->innerJoin('c.courseLanguageEntity', 'language')
             ->where('c.id = :id')
             ->setParameter('id', $id)
         ;

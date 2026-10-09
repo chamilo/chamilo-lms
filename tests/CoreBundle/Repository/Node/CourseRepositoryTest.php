@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Repository\Node;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -60,11 +61,15 @@ class CourseRepositoryTest extends AbstractApiTest
 
         $this->assertFalse($category->hasAsset());
 
+        $languageRepo = self::getContainer()->get(LanguageRepository::class);
+        $language = $languageRepo->findByIsoCode('en_US') ?? $languageRepo->findByIsoCode('en');
+        $this->assertNotNull($language);
+
         $course = (new Course())
             ->setTitle('test julio')
             ->setCreator($this->getUser('admin'))
             ->addAccessUrl($this->getAccessUrl())
-            ->setCourseLanguage('en')
+            ->setCourseLanguageEntity($language)
             ->setDescription('desc')
             ->setShowScore(0)
             ->setDiskQuota(0)
@@ -90,6 +95,8 @@ class CourseRepositoryTest extends AbstractApiTest
         $this->assertSame('test julio (TESTJULIO)', $course->getTitleAndCode());
         $this->assertSame('TESTJULIO', $course->getCode());
         $this->assertSame(1, $course->getCategories()->count());
+        $this->assertSame($language->getId(), $course->getCourseLanguageEntity()?->getId());
+        $this->assertSame($language->getIsocode(), $course->getCourseLanguage());
         $this->assertNotNull($course->getLastVisit());
         $this->assertNotNull($course->getCreationDate());
     }
@@ -98,6 +105,11 @@ class CourseRepositoryTest extends AbstractApiTest
     {
         $course = $this->createCourse('Test course');
         $this->assertSame('TESTCOURSE', $course->getCode());
+        $this->assertNotNull($course->getCourseLanguageEntity());
+        $this->assertNotSame('', $course->getCourseLanguage());
+
+        $courseData = self::getContainer()->get(CourseRepository::class)->findCourseAsArray($course->getId());
+        $this->assertSame($course->getCourseLanguage(), $courseData['courseLanguage']);
 
         $course = $this->createCourse('Test course');
         $this->assertSame('TESTCOURSE1', $course->getCode());

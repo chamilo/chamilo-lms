@@ -829,8 +829,15 @@ if ($form->validate()) {
         }
     }
 
+    $courseLanguageId = (int) api_get_language_id($course['course_language']);
+    $courseLanguage = $courseLanguageId > 0
+        ? Database::getManager()->find(\Chamilo\CoreBundle\Entity\Language::class, $courseLanguageId)
+        : null;
+    if ($courseLanguage instanceof \Chamilo\CoreBundle\Entity\Language) {
+        $courseEntity->setCourseLanguageEntity($courseLanguage);
+    }
+
     $courseEntity
-        ->setCourseLanguage($course['course_language'])
         ->setTitle(str_replace('&amp;', '&', $course['title']))
         ->setVisualCode($visual_code)
         ->setDepartmentName($course['department_name'])

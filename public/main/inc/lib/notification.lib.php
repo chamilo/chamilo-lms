@@ -327,7 +327,8 @@ class Notification extends Model
                                 $this->adminEmail,
                                 $extraHeaders,
                                 $attachments,
-                                false
+                                false,
+                                ['locale' => $recipientLanguage]
                             );
                         }
                         $sendDate = api_get_utc_datetime();

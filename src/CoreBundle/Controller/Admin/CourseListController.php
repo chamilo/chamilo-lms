@@ -125,7 +125,7 @@ class CourseListController extends AbstractController
         $total = (int) $countQb->select('COUNT(DISTINCT c.id)')->getQuery()->getSingleScalarResult();
 
         $rows = (clone $qb)
-            ->select('DISTINCT c.id, c.title, c.code, language.isocode AS courseLanguage, c.visibility, c.subscribe, c.unsubscribe, c.creationDate, IDENTITY(c.resourceNode) AS resourceNodeId')
+            ->select('DISTINCT c.id, c.title, c.code, language.isocode AS courseLanguage, COALESCE(language.originalName, language.englishName, language.isocode) AS courseLanguageName, c.visibility, c.subscribe, c.unsubscribe, c.creationDate, IDENTITY(c.resourceNode) AS resourceNodeId')
             ->orderBy($dqlSortField, $sortOrder)
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit)
@@ -162,6 +162,7 @@ class CourseListController extends AbstractController
                 'title' => $row['title'] ?? '',
                 'code' => $row['code'] ?? '',
                 'courseLanguage' => $row['courseLanguage'] ?? '',
+                'courseLanguageName' => $row['courseLanguageName'] ?? ($row['courseLanguage'] ?? ''),
                 'visibility' => (int) $row['visibility'],
                 'visibilityLabel' => self::VISIBILITY_LABELS[(int) $row['visibility']] ?? 'Unknown',
                 'subscribe' => (bool) $row['subscribe'],

@@ -224,7 +224,8 @@
       <Column
         v-if="view === 'simple'"
         :header="t('Language')"
-        field="courseLanguage"
+        field="courseLanguageName"
+        sort-field="courseLanguage"
         sortable
       />
       <Column

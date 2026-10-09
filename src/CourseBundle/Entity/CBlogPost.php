@@ -14,8 +14,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use Chamilo\CoreBundle\Controller\Api\CreateBlogPostWithAttachmentsAction;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\State\CBlogAssignAuthorProcessor;
 use Chamilo\CourseBundle\Repository\CBlogPostRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,9 +27,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode)"),
         new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
+        // Multipart: the post and its attachments are created together; attachments cannot be added later.
         new Post(
-            securityPostDenormalize: "object.getBlog() != null and is_granted('EDIT', object.getBlog().resourceNode)",
-            processor: CBlogAssignAuthorProcessor::class
+            controller: CreateBlogPostWithAttachmentsAction::class,
+            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
+            output: false,
+            deserialize: false
         ),
         new Patch(security: "object.getBlog() != null and (is_granted('EDIT', object.getBlog().resourceNode) or (object.getAuthor() != null and object.getAuthor() === user and is_granted('VIEW', object.getBlog().resourceNode)))"),
         new Delete(security: "object.getBlog() != null and (is_granted('DELETE', object.getBlog().resourceNode) or (object.getAuthor() != null and object.getAuthor() === user and is_granted('VIEW', object.getBlog().resourceNode)))"),

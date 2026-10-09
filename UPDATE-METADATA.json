@@ -44,6 +44,7 @@
         "public/plugin/Pens/lib/tests/test_pens_request.php",
         "public/plugin/Pens/lib/tests/test_pens_response.php",
         "public/plugin/Pens/lib/tests/test_pens_server.php",
+        "src/CoreBundle/Controller/Api/CreateBlogAttachmentAction.php",
         "src/CoreBundle/Controller/Api/SurveyQuestionController.php"
     ]
 }

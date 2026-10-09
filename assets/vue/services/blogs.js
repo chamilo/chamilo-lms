@@ -318,17 +318,6 @@ async function listPostsApi({ blogId, page = 1, pageSize = 10, q = "", order = "
   return hydraMembers(collection, mapPostRow)
 }
 
-/** POST /c_blog_posts */
-async function createPostApi({ blogId, title, fullText }) {
-  const payload = {
-    title,
-    fullText,
-    blog: iri("c_blogs", blogId),
-  }
-  const data = await baseService.post(`/api/c_blog_posts`, payload, {}, { params: withCourseParams() })
-  return { id: extractId(data) }
-}
-
 /** GET /c_blog_posts/{postId} */
 async function getPostApi(postId) {
   const data = await baseService.get(`/api/c_blog_posts/${postId}`, withCourseParams())
@@ -404,20 +393,6 @@ async function getManyPostRatingsApi(blogId, postIds = []) {
     }
   }
   return out
-}
-
-/* =========================
-   Uploads (ResourceFile) + Attachments
-   ========================= */
-
-async function uploadBlogAttachmentApi({ blogId, postId, file, comment = "" }) {
-  const fd = new FormData()
-  fd.append("uploadFile", file, file.name)
-  fd.append("blog", iri("c_blogs", blogId))
-  fd.append("post", iri("c_blog_posts", postId))
-  if (comment) fd.append("comment", comment)
-  const data = await baseService.post(`/api/c_blog_attachments/upload`, fd, {}, { params: courseContextParams() })
-  return data ?? { ok: true }
 }
 
 /* =========================
@@ -617,16 +592,21 @@ async function assignTask({ taskId, userId, targetDate }, blogId = resolveBlogId
   return { ok: true }
 }
 
+/**
+ * Creates a post and its attachments in a single request; attachments cannot be added later.
+ */
 async function createPostWithFiles({ blogId, title, fullText, files = [], commentsByIndex = [] }) {
-  const { id: postId } = await createPostApi({ blogId, title, fullText })
+  const fd = new FormData()
+  fd.append("title", title)
+  fd.append("fullText", fullText ?? "")
+  fd.append("blog", iri("c_blogs", blogId))
+  files.forEach((file, i) => {
+    fd.append("files[]", file, file.name)
+    fd.append("comments[]", commentsByIndex[i] || "")
+  })
+  const data = await baseService.post(`/api/c_blog_posts`, fd, {}, { params: courseContextParams() })
 
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i]
-    const comment = commentsByIndex[i] || ""
-    await uploadBlogAttachmentApi({ blogId, postId, file, comment })
-  }
-
-  return { postId }
+  return { postId: extractId(data) }
 }
 
 async function ratePost(blogId, postId, score) {
@@ -652,7 +632,6 @@ export default {
 
   // Posts + Ratings
   listPostsApi,
-  createPostApi,
   getPostApi,
   listPostAttachmentsApi,
   ratePostApi,
@@ -666,7 +645,6 @@ export default {
   deleteComment,
 
   // Uploads / Attachments
-  uploadBlogAttachmentApi,
 
   // Comments
   async listComments(postId) {

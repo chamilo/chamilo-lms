@@ -1249,10 +1249,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     public function relateUsers(User $user1, User $user2, int $relationType): void
     {
         $em = $this->getEntityManager();
+        $relationRepository = $em->getRepository(UserRelUser::class);
 
-        $existingRelation = $em->getRepository(UserRelUser::class)->findOneBy([
+        $existingRelation = $relationRepository->findOneBy([
             'user' => $user1,
             'friend' => $user2,
+            'relationType' => $relationType,
         ]);
 
         if (!$existingRelation) {
@@ -1261,13 +1263,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $newRelation->setFriend($user2);
             $newRelation->setRelationType($relationType);
             $em->persist($newRelation);
-        } else {
-            $existingRelation->setRelationType($relationType);
         }
 
-        $existingRelationInverse = $em->getRepository(UserRelUser::class)->findOneBy([
+        $existingRelationInverse = $relationRepository->findOneBy([
             'user' => $user2,
             'friend' => $user1,
+            'relationType' => $relationType,
         ]);
 
         if (!$existingRelationInverse) {
@@ -1276,8 +1277,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $newRelationInverse->setFriend($user1);
             $newRelationInverse->setRelationType($relationType);
             $em->persist($newRelationInverse);
-        } else {
-            $existingRelationInverse->setRelationType($relationType);
         }
 
         $em->flush();

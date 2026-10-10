@@ -8,6 +8,7 @@
  */
 
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
@@ -19,11 +20,18 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(false, 'true' === api_get_setting('allow_hr_skills_management'));
 SkillModel::isAllowed();
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];
-
 /* Process data */
 $skillId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$returnToSkillWheel = 'skill-wheel' === ($_REQUEST['origin'] ?? '');
+$skillWheelUrl = Container::getRouter()->generate('skill_wheel');
+if ($skillId > 0) {
+    $skillWheelUrl .= '?'.http_build_query(['skillId' => $skillId]);
+}
+
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = $returnToSkillWheel
+    ? ['url' => $skillWheelUrl, 'name' => get_lang('Skills wheel')]
+    : ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];
 
 $objSkill = new SkillModel();
 $objGradebook = new Gradebook();
@@ -63,6 +71,10 @@ foreach ($allGradebooks as $gradebook) {
 $editForm = new FormValidator('skill_edit');
 $editForm->addHeader(get_lang('Edit skill'));
 $returnParams = $objSkill->setForm($editForm, $skillInfo);
+if ($returnToSkillWheel) {
+    $editForm->addHidden('origin', 'skill-wheel');
+    $editForm->addHidden('return_skill', $skillId);
+}
 
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
@@ -100,11 +112,31 @@ if ($editForm->validate()) {
         );
     }
 
-    header('Location: '.api_get_path(WEB_CODE_PATH).'skills/skill_list.php');
+    $redirectUrl = $returnToSkillWheel
+        ? $skillWheelUrl
+        : api_get_path(WEB_CODE_PATH).'skills/skill_list.php';
+
+    header('Location: '.$redirectUrl);
     exit;
 }
 
-$toolbar = $objSkill->getToolBar();
+if ($returnToSkillWheel) {
+    $toolbar = Display::toolbarAction('toolbar', [
+        Display::url(
+            Display::getMdiIcon(
+                ActionIcon::BACK,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Skills wheel')
+            ),
+            $skillWheelUrl,
+            ['title' => get_lang('Skills wheel')]
+        ),
+    ]);
+} else {
+    $toolbar = $objSkill->getToolBar();
+}
 
 /* view */
 $tpl = new Template(get_lang('Edit skill'));

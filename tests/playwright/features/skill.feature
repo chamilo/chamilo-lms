@@ -111,6 +111,37 @@ Feature: Skills
   # Manual skill assignment/removal is handled by the Vue + API Platform flow.
   # Skill creation/editing is still legacy and remains covered above until that
   # separate part of the Skills tool is migrated.
+  Scenario: Explore the advanced skills wheel
+    Given I am a platform administrator
+    And I am on "/skill/wheel"
+    And I wait for the page to be loaded
+    Then I should see the "[data-testid='skill-wheel-workspace'][data-focus-mode='false']" element
+    And I should see the "[data-testid='skill-wheel-graph']" element
+    And I should see the "[data-testid='skill-wheel-canvas'][data-render-mode='3d'][data-interaction-mode='overlay'][data-label-mode='adaptive'][data-tooltip-mode='rich']" element
+    And I should see the "[data-skill-interaction-layer='overlay']" element
+    And I should see the "[data-skill-id='2']" element
+    When I click the "[data-skill-id='2']" element
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-current-skill-id='2']" element
+    And I should see the "[data-skill-id='3']" element
+    When I click the "[data-skill-id='3']" element
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id='3']" element
+    And I should see the "[data-testid='skill-wheel-inspector']" element
+    And I should see the "a[href*='skill_edit.php'][href*='origin=skill-wheel']" element
+    And I should see the "a[href*='skill_create.php'][href*='origin=skill-wheel']" element
+    And I should see "skill11"
+    And I should see "description 11"
+    And I should not see an error
+
+  Scenario: Open skill profiles from the advanced skills wheel
+    Given I am a platform administrator
+    And I am on "/skill/wheel"
+    And I wait for the page to be loaded
+    Then I should see the "[data-testid='skill-wheel-profiles-button']" element
+    When I click the "[data-testid='skill-wheel-profiles-button']" element
+    Then I should see the "[data-testid='skill-wheel-profiles-dialog']" element
+    And I should see "Skill profiles"
+    And I should not see an error
+
   Scenario: Assign skill11 to user 1
     Given I am a platform administrator
     And I am on "/skill/assign/1"

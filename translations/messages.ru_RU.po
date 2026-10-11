@@ -8176,7 +8176,7 @@ msgid "Regards"
 msgstr "С наилучшими пожеланиями"
 
 msgid "You attempt for the test %s has been viewed/commented/corrected by the trainer. Click the link below to access  your account and view your Examsheet."
-msgstr "Ваша попытка ответить на тест составила %, она была просмотрена/прокомментирована/исправлена преподавателем. Щелкните по ссылке внизу, чтобы перейти к своему отчету и просмотреть свою экзаменационную тетрадь."
+msgstr "Ваша попытка ответить на тест %s была просмотрена/прокомментирована/исправлена преподавателем. Щелкните по ссылке внизу, чтобы перейти к своему отчету и просмотреть свою экзаменационную тетрадь."
 
 msgid "Dear learner,"
 msgstr "Уважаемый Студент,"
@@ -9580,10 +9580,10 @@ msgid "Remind learners inactive since"
 msgstr "Напомнить о пассивных пользователях, начиная с"
 
 msgid "Inactivity on %s"
-msgstr "Бездеятельность на %"
+msgstr "Бездеятельность на %s"
 
 msgid "Dear user,<br /><br /> you are not active on %s since more than %s days."
-msgstr "Уважаемый пользователь,<br /><br /> Вы пассивны на % более, чем % дней."
+msgstr "Уважаемый пользователь,<br /><br /> Вы неактивны более %s, чем %s дней."
 
 msgid "OpenID authentication"
 msgstr "Идентификация ID_Доступа"
@@ -11134,7 +11134,7 @@ msgid "This OpenID could not be found in our database. Please register for a new
 msgstr "Этот ID_Открытия не найден в нашей базе данных. Пожалуйста, зарегистрируйтесь для создания новой учетной записи. Если у нас уже есть Ваша учетная запись, пожалуйста, отредактируйте свой профиль внутри вашей учетной записи так, чтобы добавить этот ID_Открытия"
 
 msgid "The login needs to be maximum %s characters long"
-msgstr "Имя пользователя должно содержать максимум % символов"
+msgstr "Имя пользователя должно содержать максимум %s символов"
 
 msgid "Your picture has been uploaded"
 msgstr "Ваше изображение загружено"

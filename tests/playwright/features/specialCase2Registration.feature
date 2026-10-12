@@ -94,7 +94,7 @@
 # this exact account existing (the tutor-assignment and diagnosis scenarios
 # there act on it), so cleanup is centralized in that file's own teardown
 # scenario rather than duplicated/raced here.
-@common @long-scenario @specialcase2
+@common @long-scenario @specialcases @specialcase2
 Feature: Special case 2 — self-registration and diagnosis
   In order to validate a realistic self-registration and diagnosis flow
   As a new platform user

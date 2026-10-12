@@ -154,16 +154,26 @@ The browser-driven test suite uses **Playwright** with `playwright-bdd`, so `.fe
 - Step definitions: `tests/playwright/steps/common.steps.ts` — all steps, one shared file.
 - Config: `tests/playwright/playwright.config.ts`.
 
-Run the main suite (excludes the install/seed scenarios below, and SpecialCase1):
+Run the main suite (excludes the install/seed scenarios below, and every SpecialCase — see below):
 ```bash
 yarn test:playwright
 ```
 
-SpecialCase1 (`specialCase1PlatformSettings.feature` + `specialCase1Sessions.feature`, both tagged `@specialcase1`) runs **separately and single-threaded**, and is deliberately excluded from the command above:
+**SpecialCase files** (`specialCase1PlatformSettings.feature`, `specialCase1Sessions.feature`, `specialCase2Registration.feature`, `specialCase2TeacherTools.feature`, `specialCase2TutorWorkflow.feature`, and any future `specialCaseN*.feature`) each derive from a real customer project and run **separately and single-threaded**, deliberately excluded from the command above. Every such file carries TWO tags: a file-specific one (`@specialcase1`, `@specialcase2`, ...) and the umbrella `@specialcases` — the main suite's own `--grep-invert` excludes the umbrella tag, so adding `specialCase3*.feature` later needs no change to that exclusion, just the same two tags on the new file(s). Run the whole SpecialCase chain together:
 ```bash
-yarn test:playwright:specialcase1
+yarn test:playwright:specialcases
 ```
-Three reasons it cannot share the parallel pool: `specialCase1Sessions` depends on session extra fields and a platform setting that `specialCase1PlatformSettings` creates, and only `--workers=1` plus `fullyParallel: false` guarantees the file order that satisfies that; it mutates ~100 platform settings, several of them globally UI-visible on every page (a cookie banner that intercepts clicks, header changes), which corrupts any file running concurrently; and its scenarios are `@long-scenario` (15-minute budget), which starves other files of workers. CI runs it as its own step after the main batch.
+Or just one group, for targeted local work (`:specialcase1`, `:specialcase2`, same pattern for a future `:specialcaseN`):
+```bash
+yarn test:playwright:specialcase2
+```
+Why they can't share the main parallel pool: within a group, a later file depends on state an earlier one creates (`specialCase1Sessions` needs the session extra fields and platform setting `specialCase1PlatformSettings` creates; `specialCase2TeacherTools`/`specialCase2TutorWorkflow` need the `parkur01` account `specialCase2Registration` creates) — only `--workers=1` plus `fullyParallel: false` (plain alphabetical file-path sort) guarantees that ordering, both within a group and across groups (`specialCase1*` sorts before `specialCase2*`, and so on). `specialCase1PlatformSettings` also mutates ~100 platform settings, several of them globally UI-visible on every page (a cookie banner that intercepts clicks, header changes), which would corrupt any file running concurrently with it. And every scenario across these files is `@long-scenario` (15-minute budget), which would starve other files of workers in the shared pool.
+
+**Shared-fixture teardown ownership**: when a fixture is created in one SpecialCase file and used by another (e.g. `parkur01`, created in `specialCase2Registration.feature`, used by both `specialCase2TutorWorkflow.feature` and `specialCase2TeacherTools.feature`), its final teardown must live in whichever file **actually runs last** — i.e. sorts last alphabetically among every file that touches it — never whichever file is last in the scenario's own narrative. Confirmed live the hard way: placing `parkur01`'s deletion in `specialCase2TeacherTools.feature` (the last file to narratively use the account) broke `specialCase2TutorWorkflow.feature` the moment it ran afterward, because `"TutorWorkflow"` sorts after `"TeacherTools"` alphabetically and found the account already gone.
+
+**Soft-delete vs. permanent delete, in a SpecialCase's own teardown**: the admin user list's plain "Delete" action only soft-deletes — the username/email stays permanently reserved (`USER_SOFT_DELETED = -2`; see the DQL gotchas section), so a teardown that only does this cannot be safely re-run against the same database (only ever an issue outside CI, e.g. repeated local dev runs against one shared box — a fresh CI database never collides). A SpecialCase teardown scenario that creates its own throwaway accounts should instead use the "Deleted users" tab (`/admin/user-list?view=deleted&keyword=...`) and its real "Delete permanently" action, so the account can be recreated identically on a later run.
+
+CI runs the whole SpecialCase chain (`yarn test:playwright:specialcases`) in its own job, in **parallel** with the main batch's job (not sequentially after it) — see `.github/workflows/playwright.yml`'s own top-of-file comment and the shared provisioning composite action at `.github/actions/setup-chamilo-playwright/action.yml` for the reasoning (wall-clock time ≈ max(batches) instead of their sum, and full environment isolation since each job installs its own fresh Chamilo). Adding a `specialCase3*.feature` group needs no workflow change at all, only the two tags above and a `:specialcase3` package.json script for local targeted runs.
 
 Run/debug interactively:
 ```bash

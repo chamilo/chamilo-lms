@@ -70,7 +70,7 @@
 #   there's nothing for a text-based locator to match. Clicked by icon class
 #   instead, one fewer page than going back through survey_list.php's own
 #   row icons.
-@common @long-scenario @specialcase2
+@common @long-scenario @specialcases @specialcase2
 Feature: Special case 2 — teacher tools
   In order to validate the client's remaining SpecialCase2 workflow
   Teachers should be able to create surveys (regular and Doodle-style) and invite users to them,

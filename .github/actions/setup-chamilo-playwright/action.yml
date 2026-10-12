@@ -1,0 +1,296 @@
+name: Setup Chamilo for Playwright
+description: >
+  Provisions a fresh Chamilo install (Apache/PHP/MySQL, composer, yarn, Encore
+  build, Playwright browsers) and seeds the fixed fixtures (test users, TEMP/
+  TEMPPRIVATE courses, platform settings) the Playwright suite assumes exist.
+  Shared by every job in playwright.yml that needs to run Playwright scenarios
+  against a real install — extracted so the main batch and the SpecialCase
+  chain (which run as two separate, parallel jobs on two separate runners,
+  each needing its own install) don't duplicate ~15 steps of near-identical
+  YAML. A job using this action still owns its OWN test-running step(s)
+  afterwards — this action only gets the platform to the point where
+  `yarn test:playwright*` can run.
+
+inputs:
+  php-version:
+    description: PHP version to install (passed straight to shivammathur/setup-php).
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+      # As of PHP 8.5, opcache is compiled into core (php-src RFC "Make OPcache a
+      # non-optional part of PHP") and no longer ships as its own loadable
+      # extension/package — there's no php8.5-opcache in ondrej/php, and
+      # requesting the "opcache" extension by name would fail. Both spots below
+      # that reference it (this apt package list, and the extensions: list two
+      # steps down) skip it for 8.5 accordingly. Computed here in plain bash
+      # rather than a GitHub Actions `${{ cond && a || b }}` expression — a first
+      # attempt at that pattern broke on the classic JS-ternary-via-&&/||
+      # pitfall (the "true" branch value was '', which is falsy, so `||` fell
+      # through to the fallback branch instead — i.e. it did the opposite of
+      # what was intended, and 8.5 tried to install php8.5-opcache anyway,
+      # failing the whole apt-get install command). Extend the version check if
+      # a future PHP version keeps this behavior, since it isn't range-proofed.
+      -   name: Setup apache
+          shell: bash
+          run: |
+              PHP_VERSION="${{ inputs.php-version }}"
+              OPCACHE_PACKAGE="php${PHP_VERSION}-opcache"
+              if [ "$PHP_VERSION" = "8.5" ]; then
+                OPCACHE_PACKAGE=""
+              fi
+              sudo apt-get install software-properties-common
+              sudo add-apt-repository ppa:ondrej/php
+              sudo apt-get update
+              sudo apt-get install -y nodejs npm apache2 \
+                php${PHP_VERSION} \
+                php${PHP_VERSION}-common \
+                php${PHP_VERSION}-cli \
+                php${PHP_VERSION}-mysql \
+                php${PHP_VERSION}-bcmath \
+                php${PHP_VERSION}-curl \
+                php${PHP_VERSION}-gd \
+                php${PHP_VERSION}-intl \
+                php${PHP_VERSION}-ldap \
+                php${PHP_VERSION}-mbstring \
+                $OPCACHE_PACKAGE \
+                php${PHP_VERSION}-soap \
+                php${PHP_VERSION}-xml \
+                php${PHP_VERSION}-zip \
+                libapache2-mod-php${PHP_VERSION}
+              sudo a2enmod rewrite actions
+              sudo chmod 777 -R $HOME
+
+      -   name: Setup PHP, with composer and extensions
+          uses: shivammathur/setup-php@v2
+          with:
+              php-version: ${{ inputs.php-version }}
+              extensions: bcmath, ctype, curl, dom, gd, iconv, intl, json, ldap, mbstring, pdo_mysql, mysqli, soap, xml, zip${{ inputs.php-version != '8.5' && ', opcache' || '' }}
+              ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris, opcache.enable=1, opcache.memory_consumption=64M
+
+      -   name: Get composer cache directory
+          id: composer-cache
+          shell: bash
+          run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      -   name: Cache composer dependencies
+          uses: actions/cache@v6
+          with:
+              path: ${{ steps.composer-cache.outputs.dir }}
+              key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+              restore-keys: ${{ runner.os }}-composer-
+
+      -   name: Install dependencies with composer
+          shell: bash
+          run: composer install --no-progress
+
+      -   name: Install assets
+          shell: bash
+          run: php bin/console assets:install
+
+      # corepack plus the committed .yarn/releases binary already pin the
+      # version declared in package.json, so nothing is installed here.
+      -   name: Install Yarn
+          shell: bash
+          run: |
+              sudo corepack enable
+              yarn --version
+
+      -   name: Get yarn cache directory
+          id: yarn-cache-dir-path
+          shell: bash
+          run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      -   name: Cache yarn dependencies
+          uses: actions/cache@v6
+          with:
+              path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+              key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+              restore-keys: ${{ runner.os }}-yarn-
+
+      -   name: Install JS dependencies
+          shell: bash
+          run: yarn install
+
+      -   name: Yarn run encore
+          shell: bash
+          run: yarn run encore production
+
+      -   name: Start mysql service
+          shell: bash
+          run: sudo /etc/init.d/mysql start
+
+      # The browser binary is the single largest download of this job. The key
+      # follows yarn.lock, so it changes whenever the Playwright version does.
+      # `--with-deps` still runs on a hit: it installs the system libraries the
+      # browser needs, which apt handles in seconds.
+      -   name: Cache Playwright browsers
+          uses: actions/cache@v6
+          with:
+              path: ~/.cache/ms-playwright
+              key: ${{ runner.os }}-playwright-${{ hashFiles('yarn.lock') }}
+              restore-keys: ${{ runner.os }}-playwright-
+
+      -   name: Install Playwright browsers
+          shell: bash
+          run: yarn playwright install --with-deps chromium
+
+      # Deliberately last, right before Apache is actually needed, not
+      # right after `apt-get install apache2` back in "Setup apache".
+      # A previous run showed 000-default.conf was still the stock
+      # /var/www/html vhost by this point in the job, despite "Setup
+      # apache" copying gh-apache into it and re-enabling the site
+      # without error — something in between (most likely
+      # shivammathur/setup-php@v2, which manages the Apache/PHP
+      # integration) was resetting it. Applying the vhost swap here
+      # instead, as the last write before first use, sidesteps that
+      # regardless of which exact step was clobbering it.
+      -   name: Configure apache vhost
+          shell: bash
+          run: |
+              sudo a2dissite 000-default.conf
+              sudo cp -f ${{ github.workspace }}/.github/gh-apache /etc/apache2/sites-available/000-default.conf
+              sudo a2ensite 000-default.conf
+              sudo systemctl restart apache2
+
+      -   name: Check apache is up
+          shell: bash
+          run: |
+              sudo chmod 777 -R ${{ github.workspace }}
+              curl http://localhost/main/install/index.php
+
+      -   name: Install chamilo
+          shell: bash
+          env:
+              BASE_URL: http://localhost
+          run: |
+              yarn test:playwright:install
+              sed -i "s/APP_ENV='dev'/APP_ENV='prod'/g" .env
+              sed -i "s/APP_DEBUG='1'/APP_DEBUG='0'/g" .env
+              if grep -q "APP_ENV='prod'" .env; then
+                printf 'framework:\n    http_cache: true\n' > config/packages/prod/framework.yaml
+              fi
+              sudo php bin/console cache:clear
+              sudo chmod -R 777 var
+
+      # Seeds the fixed test accounts (mmosquera, acostea, ptook, etc.)
+      # that the rest of the suite logs in as via "I am a teacher" /
+      # "I am a student" / etc. — kept as its own step, run once,
+      # separate from the test-running step(s) each caller job owns, same
+      # reasoning as keeping "Install chamilo" separate.
+      -   name: Seed test users
+          shell: bash
+          env:
+              BASE_URL: http://localhost
+          run: yarn test:playwright:seed
+
+      # Creates the "TEMP" course (which becomes cid=3 on this fresh
+      # install) as a one-time setup fixture, same reasoning as "Seed
+      # test users" above: course_user_registration.feature and every
+      # remaining course-tool feature file (toolAgenda, toolForum,
+      # toolLp, etc. — 14 in total as of this writing) hardcode cid=3,
+      # assuming "TEMP" already exists. Left as its own step, run once,
+      # BEFORE either job's own test-running step, so every other feature
+      # file can rely on it regardless of which worker picks them up or
+      # what order they run in — a real CI failure showed course_user_
+      # registration.feature's first scenario reaching that course before
+      # course.feature's own course-creation scenario (in a different
+      # file, different worker) had even run.
+      #
+      # WHY cid=3 AND NOT cid=1 (changed 2026-08-19): the installer's
+      # own DemoCoursesFixtures (fixture group "install", loaded by the
+      # plain `doctrine:fixtures:load` the "Install chamilo" step above
+      # runs) now creates TWO demo courses before any test-suite
+      # seeding happens at all — "AI Act" (cid=1) and "Using Chamilo"
+      # (cid=2), added to the product on 2026-08-08/2026-08-11, i.e.
+      # AFTER this Playwright suite was originally written against the
+      # older "TEMP is the first course, so it gets id 1" assumption.
+      # That assumption is now permanently false, so the whole suite was
+      # migrated cid=1 -> cid=3 in one pass. Note this failed QUIETLY
+      # before the migration: cid=1 is a real, working course, so
+      # cid=1-based scenarios kept passing while silently exercising the
+      # AI Act demo course instead of TEMP.
+      #
+      # This step must create EXACTLY ONE course for cid=3 to be
+      # deterministic. `--grep "Create a course before testing"` used to
+      # match TWO scenarios — course.feature's ("TEMP") and
+      # toolExerciseTeacher.feature's ("EXTEACH") — so on a multi-worker
+      # pool whichever finished first took id 3 and the other took id 4,
+      # a genuine coin flip (observed both ways: TEMP won on real CI,
+      # EXTEACH won locally at 43.7s vs 54.6s). Fixed at the source by
+      # renaming that other scenario to "Create the exercise teacher
+      # course before testing", so this grep no longer matches it and
+      # EXTEACH is created inline as its own file's first scenario
+      # instead (it is referenced only by course CODE, never by cid, so
+      # its id is irrelevant — see that file's comment). The
+      # --workers=1 in package.json's test:playwright:seed-course is
+      # kept purely as a guard: if a future feature file ever adds a
+      # scenario matching this grep again, single-worker + the config's
+      # `fullyParallel: false` keeps creation order deterministic
+      # (sorted by file path, so "course.feature" still goes first)
+      # instead of silently reshuffling every cid=3 URL in the suite.
+      -   name: Seed test course
+          shell: bash
+          env:
+              BASE_URL: http://localhost
+          run: yarn test:playwright:seed-course
+
+      # Same reasoning as "Seed test course" above, for the OTHER course
+      # fixture: sessionAccess.feature (new) selects this course by its
+      # code, "TEMPPRIVATE", to attach to the sessions it creates.
+      # course.feature's own "Create a private course before testing"
+      # scenario is what creates it, but wasn't part of the dedicated
+      # seed step (only "Create a course before testing"/TEMP was) — the
+      # exact same cross-file race gotcha already fixed once for TEMP/
+      # cid=1 would otherwise apply here too, just for a course "TEMPPRIVATE"
+      # is looked up by code instead of by an assumed id.
+      -   name: Seed private course
+          shell: bash
+          env:
+              BASE_URL: http://localhost
+          run: yarn test:playwright:seed-private-course
+
+      # Real, confirmed root cause: GroupSettingsSchema.php's schema
+      # default for 'allow_group_categories' is 'false'. toolGroup.
+      # feature's entire category/group listing depends on it being
+      # 'true' for the whole file's run. adminSettings.feature's own
+      # "Update 'allow_group_categories' setting" scenario sets it to
+      # 'Yes', but that Feature is tagged @settings and its BeforeAll/
+      # AfterAll pair only restores it back to whatever was snapshotted
+      # BEFORE that scenario ran — 'false' on a fresh install — once
+      # its own scenarios finish. Since different feature files still
+      # run concurrently across workers, toolGroup.feature only saw
+      # 'true' during the narrow window while adminSettings.feature's
+      # own scenario had it temporarily flipped — a real CI run showed
+      # toolGroup.feature's very first scenario seeing genuinely zero
+      # categories rendered, no server error, right after creating one.
+      # Setting it here, once, before either job's own test-running step
+      # starts, closes that race for the whole run (it also makes
+      # adminSettings.feature's own snapshot see 'true' as the "current"
+      # value, so its restore-at-the-end keeps it 'true' too, not 'false').
+      -   name: Seed platform settings
+          shell: bash
+          env:
+              BASE_URL: http://localhost
+          run: yarn test:playwright:seed-settings
+
+      # NOTE (2026-08-23): a fifth seed step ("Seed course
+      # subscriptions", subscribing acostea/fapple to TEMP) briefly lived
+      # here and was REMOVED again on purpose. It is redundant now that
+      # playwright.config.ts pins `workers: 1`: file order is fixed, and
+      # course_user_registration.feature sorts before toolGroup.feature,
+      # so the subscriptions exist by the time anything needs them.
+      #
+      # It was also actively harmful. Hoisting those scenarios out of
+      # their own file broke that file's internal narrative (it
+      # subscribes amann, unsubscribes him, then re-subscribes him as a
+      # fixture): with amann pre-subscribed, its first scenario had
+      # nobody left to select, because subscribe_user.php's picker
+      # excludes already-subscribed users. And it could never have fixed
+      # the failures it targeted anyway — a seed guarantees a fixture
+      # exists at the START, but course TEMP's user list is written by
+      # four different feature files, so under parallel execution another
+      # file could still unsubscribe fapple mid-run (measured: it did).
+      # Ordering, not more seeding, is the actual fix. See
+      # playwright.config.ts's `workers: 1` comment for the full history.

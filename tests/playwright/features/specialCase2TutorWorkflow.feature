@@ -56,7 +56,7 @@
 # so every scenario below that needs parkur01 found the account already
 # gone. Whichever file the suite actually runs last is the one that must
 # own a shared fixture's final teardown.
-@common @long-scenario @specialcase2
+@common @long-scenario @specialcases @specialcase2
 Feature: Special case 2 — tutor workflow
   In order to validate the tutor/superior follow-up workflow
   As a platform administrator and a tutor

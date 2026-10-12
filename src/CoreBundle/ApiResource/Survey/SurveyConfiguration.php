@@ -123,6 +123,9 @@ final class SurveyConfiguration
     #[Groups(['survey_configuration:read'])]
     public string $mode = 'create';
 
+    #[Groups(['survey_configuration:write'])]
+    public ?int $templateId = null;
+
     #[Groups(['survey_configuration:read', 'survey_configuration:write'])]
     public string $code = '';
 
@@ -149,6 +152,12 @@ final class SurveyConfiguration
 
     #[Groups(['survey_configuration:read', 'survey_configuration:write'])]
     public int $visibleResults = 0;
+
+    #[Groups(['survey_configuration:read', 'survey_configuration:write'])]
+    public bool $resultsHiddenFromTeacher = false;
+
+    #[Groups(['survey_configuration:read'])]
+    public bool $isAdmin = false;
 
     #[Groups(['survey_configuration:read', 'survey_configuration:write'])]
     public string $introduction = '';

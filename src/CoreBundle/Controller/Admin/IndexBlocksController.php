@@ -630,6 +630,12 @@ class IndexBlocksController extends BaseController
         ];
 
         $items[] = [
+            'class' => 'item-survey-template-admin',
+            'route' => ['name' => 'SurveyTemplateList'],
+            'label' => $this->translator->trans('Survey templates'),
+        ];
+
+        $items[] = [
             'class' => 'item-system-template-admin',
             'url' => '/main/admin/settings.php?'.http_build_query(['category' => 'Templates']),
             'label' => $this->translator->trans('System templates'),

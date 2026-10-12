@@ -34,34 +34,9 @@ $userToLoadInfo = [];
 if ($userToLoad) {
     $userToLoadInfo = api_get_user_info($userToLoad);
 }
-$action = $httpRequest->query->get('action');
 
-switch ($action) {
-    case 'subscribe_user':
-        $sessionId = $httpRequest->query->getInt('session_id');
-        SessionManager::subscribeUsersToSession(
-            $sessionId,
-            [$userToLoad],
-            SESSION_VISIBLE_READ_ONLY,
-            false
-        );
-        Display::addFlash(Display::return_message(get_lang('The user has been added')));
-        header("Location: ".api_get_self().'?user_id='.$userToLoad.'#session-table');
-        break;
-    case 'unsubscribe_user':
-        $sessionId = $httpRequest->query->getInt('session_id');
-        SessionManager::unsubscribe_user_from_session($sessionId, $userToLoad);
-        Display::addFlash(Display::return_message(get_lang('User is now unsubscribed')));
-        header("Location: ".api_get_self().'?user_id='.$userToLoad.'#session-table');
-        break;
-}
-
-$em = Database::getManager();
-
-$formSearch = new FormValidator('load', 'get', api_get_self());
-$formSearch->addHeader(get_lang('Load diagnosis'));
+$users = [];
 if (!empty($userInfo)) {
-    $users = [];
     switch ($userInfo['status']) {
         case DRH:
             $users = UserManager::get_users_followed_by_drh(
@@ -94,7 +69,53 @@ if (!empty($userInfo)) {
             );
             break;
     }
+}
 
+// HR managers and student bosses only work with the users they follow.
+if ($userToLoad
+    && !api_is_platform_admin()
+    && !in_array($userToLoad, array_map('intval', array_column($users, 'user_id')), true)
+) {
+    api_not_allowed(true);
+}
+
+$action = $httpRequest->query->get('action');
+
+if (in_array($action, ['subscribe_user', 'unsubscribe_user'], true)) {
+    $sessionId = $httpRequest->query->getInt('session_id');
+
+    if (empty($userToLoad)
+        || 0 === (int) UrlManager::relation_url_session_exist($sessionId, api_get_current_access_url_id())
+    ) {
+        api_not_allowed(true);
+    }
+}
+
+switch ($action) {
+    case 'subscribe_user':
+        $sessionId = $httpRequest->query->getInt('session_id');
+        SessionManager::subscribeUsersToSession(
+            $sessionId,
+            [$userToLoad],
+            SESSION_VISIBLE_READ_ONLY,
+            false
+        );
+        Display::addFlash(Display::return_message(get_lang('The user has been added')));
+        header("Location: ".api_get_self().'?user_id='.$userToLoad.'#session-table');
+        break;
+    case 'unsubscribe_user':
+        $sessionId = $httpRequest->query->getInt('session_id');
+        SessionManager::unsubscribe_user_from_session($sessionId, $userToLoad);
+        Display::addFlash(Display::return_message(get_lang('User is now unsubscribed')));
+        header("Location: ".api_get_self().'?user_id='.$userToLoad.'#session-table');
+        break;
+}
+
+$em = Database::getManager();
+
+$formSearch = new FormValidator('load', 'get', api_get_self());
+$formSearch->addHeader(get_lang('Load diagnosis'));
+if (!empty($userInfo)) {
     // Allow access for admins.
     if (empty($users) && api_is_platform_admin()) {
         $users[] = $userToLoadInfo;

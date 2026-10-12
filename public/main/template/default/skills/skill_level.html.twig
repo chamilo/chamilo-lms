@@ -68,6 +68,9 @@
                             {{ 'Short name'|trans }}
                         </th>
                         <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            {{ 'Description'|trans }}
+                        </th>
+                        <th class="px-6 py-3 text-start text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             {{ 'Profile'|trans }}
                         </th>
                         <th class="px-6 py-3 text-end text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -80,7 +83,7 @@
                     {% for item in list %}
                         <tr class="hover:bg-gray-10">
                             <td class="px-6 py-4">
-                                <div class="text-sm font-semibold text-gray-900">{{ item.title }}</div>
+                                <div class="text-sm font-semibold text-gray-900">{{ item.title|trans }}</div>
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -88,6 +91,14 @@
                                     <span class="inline-flex items-center rounded-lg bg-gray-10 px-2 py-1 text-xs font-semibold text-gray-700">
                                         {{ item.shortTitle }}
                                     </span>
+                                {% else %}
+                                    <span class="text-sm text-gray-400">—</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {% if item.description %}
+                                    <div class="max-w-2xl text-sm text-gray-600">{{ item.description|trans }}</div>
                                 {% else %}
                                     <span class="text-sm text-gray-400">—</span>
                                 {% endif %}

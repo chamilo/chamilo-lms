@@ -22,6 +22,7 @@ readonly class SkillTreeNodeTransformer
         $skillNode->id = $object->getId();
         $skillNode->title = $object->getTitle();
         $skillNode->status = $object->getStatus();
+        $skillNode->acquirable = $object->isAcquirable();
         $skillNode->isSearched = $object->getProfiles()->count() > 0;
         $skillNode->hasGradebook = $object->getGradeBookCategories()->count() > 0;
         $skillNode->description = $object->getDescription();

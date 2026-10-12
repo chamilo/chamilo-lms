@@ -75,22 +75,43 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
     /**
      * Find existing access for a user.
      */
-    public function findExistingAccess(User $user, int $courseId, int $sessionId): ?TrackECourseAccess
+    /**
+     * The access still running for this user in this course: the latest one, started within the
+     * last hour (the legacy session lifetime, as logoutAccess() uses), and not interrupted for
+     * longer than $maximumInactiveSeconds. Any older access is closed: prolonging it would count
+     * the whole gap, up to weeks for a learner coming back to the course, as time in the course.
+     */
+    public function findExistingAccess(User $user, int $courseId, int $sessionId, int $maximumInactiveSeconds = 3600): ?TrackECourseAccess
     {
         $userRef = $this->toManagedUser($user);
         if (null === $userRef) {
             return null;
         }
 
-        return $this->findOneBy(['user' => $userRef, 'cId' => $courseId, 'sessionId' => $sessionId]);
+        $now = time();
+
+        return $this->createQueryBuilder('a')
+            ->where('a.user = :user AND a.cId = :courseId AND a.sessionId = :sessionId')
+            ->andWhere('a.loginCourseDate > :loginLimit')
+            ->andWhere('a.logoutCourseDate IS NULL OR a.logoutCourseDate >= :activityLimit')
+            ->setParameter('user', $userRef->getId())
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('loginLimit', (new DateTime())->setTimestamp($now - 3600))
+            ->setParameter('activityLimit', (new DateTime())->setTimestamp($now - $maximumInactiveSeconds))
+            ->orderBy('a.loginCourseDate', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
      * Update access record.
      */
-    public function updateAccess(TrackECourseAccess $access): void
+    public function updateAccess(TrackECourseAccess $access, ?DateTime $countableUntil = null): void
     {
-        $now = new DateTime();
+        $now = $countableUntil ?? new DateTime();
         if (
             !$access->getLogoutCourseDate()
             || $now->getTimestamp() - $access->getLogoutCourseDate()->getTimestamp() > 300
@@ -126,7 +147,11 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
     /**
      * Log out user access to a course.
      */
-    public function logoutAccess(User $user, int $courseId, int $sessionId, string $ip): void
+    /**
+     * $countableUntil caps the logout time at the last real action plus the allowed inactivity,
+     * for a course page left open: leaving the course later does not add the idle time.
+     */
+    public function logoutAccess(User $user, int $courseId, int $sessionId, string $ip, ?DateTime $countableUntil = null): void
     {
         $userRef = $this->toManagedUser($user);
         if (null === $userRef) {
@@ -151,11 +176,20 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
 
+        $logoutDate = null !== $countableUntil && $countableUntil < $now ? $countableUntil : $now;
+
         if ($access) {
-            $access->setLogoutCourseDate($now);
+            if (null === $access->getLogoutCourseDate() || $logoutDate > $access->getLogoutCourseDate()) {
+                $access->setLogoutCourseDate($logoutDate);
+            }
             $access->setCounter($access->getCounter() + 1);
             $this->getEntityManager()->flush();
 
+            return;
+        }
+
+        // Inactive for longer than allowed: there is no time left to record.
+        if ($logoutDate < $now) {
             return;
         }
 

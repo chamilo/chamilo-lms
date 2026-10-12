@@ -30,6 +30,9 @@ class SkillTreeNode
     #[Groups(['skill:tree:read'])]
     public int $status = Skill::STATUS_DISABLED;
 
+    #[Groups(['skill:tree:read'])]
+    public bool $acquirable = true;
+
     /**
      * @var array<int, SkillTreeNode>
      */

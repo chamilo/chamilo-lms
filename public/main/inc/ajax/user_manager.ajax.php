@@ -204,9 +204,19 @@ switch ($action) {
                         WHERE id = '".$user_id."'";
                 $result = Database::query($sql);
 
+                // The permission check above already loaded this user into Doctrine with the
+                // previous status. Reload it, or the message below sees an inactive recipient
+                // and is silently dropped.
+                $userEntity = api_get_user_entity($user_id);
+                if (null !== $userEntity) {
+                    Database::getManager()->refresh($userEntity);
+                }
+
                 // Send and email if account is active
                 if (1 == $status) {
                     $user_info = api_get_user_info($user_id);
+                    // Written in the language of the user being activated, not the acting administrator's.
+                    $recipientLanguage = !empty($user_info['locale']) ? $user_info['locale'] : null;
                     $recipientName = api_get_person_name(
                         $user_info['firstname'],
                         $user_info['lastname'],
@@ -214,7 +224,7 @@ switch ($action) {
                         PERSON_NAME_EMAIL_ADDRESS
                     );
 
-                    $subject = '['.api_get_setting('siteName').'] '.sprintf(get_lang('Your registration on %s'), api_get_setting('site_name'));
+                    $subject = '['.api_get_setting('siteName').'] '.sprintf(get_lang('Your registration on %s', $recipientLanguage), api_get_setting('site_name'));
                     $emailAdmin = api_get_setting('emailAdministrator');
                     $sender_name = api_get_person_name(
                         api_get_setting('administratorName'),
@@ -222,23 +232,23 @@ switch ($action) {
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $body = get_lang('Dear')." ".stripslashes($recipientName).",\n\n";
+                    $body = get_lang('Dear', $recipientLanguage)." ".stripslashes($recipientName).",\n\n";
                     $body .= sprintf(
-                            get_lang('Your account on %s has just been approved by one of our administrators.'),
+                            get_lang('Your account on %s has just been approved by one of our administrators.', $recipientLanguage),
                             api_get_setting('siteName')
                         )."\n";
                     $body .= sprintf(
-                            get_lang('You can now login at %s using the login and the password you have provided.'),
+                            get_lang('You can now login at %s using the login and the password you have provided.', $recipientLanguage),
                             api_get_path(WEB_PATH)
                         )."\n\n";
-                    $body .= get_lang('Have fun,')."\n\n";
+                    $body .= get_lang('Have fun,', $recipientLanguage)."\n\n";
                     $body .= api_get_person_name(
                             api_get_setting('administratorName'),
                             api_get_setting('administratorSurname')
                         )."\n".
-                        get_lang('Administrator')." ".
+                        get_lang('Administrator', $recipientLanguage)." ".
                         api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
-                        get_lang('E-mail')." : ".api_get_setting('emailAdministrator');
+                        get_lang('E-mail', $recipientLanguage)." : ".api_get_setting('emailAdministrator');
 
                     MessageManager::send_message_simple(
                         $user_id,

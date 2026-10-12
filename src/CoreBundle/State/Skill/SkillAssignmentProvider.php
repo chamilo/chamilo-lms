@@ -62,10 +62,10 @@ final readonly class SkillAssignmentProvider implements ProviderInterface
             'fullName' => trim($user->getFirstname().' '.$user->getLastname()),
             'username' => $user->getUsername(),
         ];
-        $result->skillOptions = $this->getSkillOptions();
+        $skillId = $request->query->getInt('skillId');
+        $result->skillOptions = $this->getSkillOptions($skillId);
         $result->showLevels = 'false' === $this->settingsManager->getSetting('skill.hide_skill_levels', true);
 
-        $skillId = $request->query->getInt('skillId');
         if ($skillId <= 0) {
             return $result;
         }
@@ -119,24 +119,43 @@ final readonly class SkillAssignmentProvider implements ProviderInterface
         return $result;
     }
 
-    private function getSkillOptions(): array
+    private function getSkillOptions(int $selectedSkillId = 0): array
     {
-        $skills = $this->entityManager->getRepository(Skill::class)->findBy(
-            ['status' => Skill::STATUS_ENABLED],
+        $repository = $this->entityManager->getRepository(Skill::class);
+        $skills = $repository->findBy(
+            [
+                'status' => Skill::STATUS_ENABLED,
+                'acquirable' => true,
+            ],
             ['title' => 'ASC'],
         );
 
-        $options = [];
+        $byId = [];
         foreach ($skills as $skill) {
             if ($skill instanceof Skill && null !== $skill->getId()) {
-                $options[] = [
+                $byId[(int) $skill->getId()] = [
                     'label' => $skill->getTitle(),
                     'value' => (int) $skill->getId(),
                 ];
             }
         }
 
-        return $options;
+        if ($selectedSkillId > 0 && !isset($byId[$selectedSkillId])) {
+            $selected = $repository->find($selectedSkillId);
+            if ($selected instanceof Skill && Skill::STATUS_ENABLED === $selected->getStatus()) {
+                $byId[$selectedSkillId] = [
+                    'label' => $selected->getTitle(),
+                    'value' => (int) $selected->getId(),
+                ];
+            }
+        }
+
+        uasort(
+            $byId,
+            static fn (array $left, array $right): int => strcasecmp($left['label'], $right['label'])
+        );
+
+        return array_values($byId);
     }
 
     private function normalizeAssignment(SkillRelUser $assignment): array

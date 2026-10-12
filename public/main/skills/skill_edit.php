@@ -53,6 +53,7 @@ $skillDefaultInfo = [
     'title' => $skill->getTitle(),
     'short_code' => $skill->getShortCode(),
     'description' => $skillInfo['description'],
+    'acquirable' => $skill->isAcquirable() ? 1 : 0,
     'parent_id' => $skillInfo['extra']['parent_id'],
     'criteria' => $skillInfo['criteria'],
     'gradebook_id' => [],

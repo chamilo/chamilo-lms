@@ -31,6 +31,7 @@ class SkillModel extends Model
         'id',
         'title',
         'description',
+        'acquirable',
         'access_url_id',
         'updated_at',
         'short_code',
@@ -338,6 +339,7 @@ class SkillModel extends Model
                 'id' => $skill->getId(),
                 'title' => $skill->getTitle(),
                 'description' => $skill->getDescription(),
+                'acquirable' => $skill->isAcquirable(),
                 'access_url_id' => $skill->getAccessUrlId(),
                 'updated_at' => $skill->getUpdatedAt()->format('Y-m-d H:i:s'),
                 'short_code' => $skill->getShortCode(),
@@ -389,6 +391,7 @@ class SkillModel extends Model
                     s.id,
                     s.title,
                     s.description,
+                    s.acquirable,
                     ss.parent_id,
                     ss.relation_type,
                     s.icon,
@@ -563,9 +566,10 @@ class SkillModel extends Model
 
         $skillRelSkill = new SkillRelSkillModel();
 
-        // Saving name, description
+        // Saving name, description and acquisition behavior.
         $params['access_url_id'] = api_get_current_access_url_id();
         $params['icon'] = '';
+        $params['acquirable'] = !empty($params['acquirable']) ? 1 : 0;
 
         $skill_id = $this->save($params);
         $em = Database::getManager();
@@ -590,7 +594,7 @@ class SkillModel extends Model
                 }
             }
 
-            if (!empty($params['gradebook_id'])) {
+            if ($skill->isAcquirable() && !empty($params['gradebook_id'])) {
                 foreach ($params['gradebook_id'] as $gradebook_id) {
                     $skillRelGradebook = (new SkillRelGradebook())
                         ->setGradeBookCategory($repoGradebook->find($gradebook_id))
@@ -635,7 +639,12 @@ class SkillModel extends Model
         $skills = $category->getSkills();
         if (!empty($skills)) {
             foreach ($skills as $skill) {
-                $skillId = $skill->getSkill()->getId();
+                $skillEntity = $skill->getSkill();
+                if (!$skillEntity instanceof Skill || !$skillEntity->isAcquirable()) {
+                    continue;
+                }
+
+                $skillId = $skillEntity->getId();
                 $hasSkill = $this->userHasSkill(
                     $userId,
                     $skillId,
@@ -657,9 +666,8 @@ class SkillModel extends Model
                     $skill_rel_user->save($params);
 
                     $user = Database::getManager()->find(User::class, (int) $userId);
-                    $skillEntity = Database::getManager()->find(Skill::class, (int) $skillId);
 
-                    if ($user instanceof User && $skillEntity instanceof Skill) {
+                    if ($user instanceof User) {
                         $this->notifySkillAssignedToUser($user, $skillEntity, (int) $userId);
                     }
                 }
@@ -693,6 +701,7 @@ class SkillModel extends Model
         }
 
         $params['gradebook_id'] = $params['gradebook_id'] ?? [];
+        $params['acquirable'] = !empty($params['acquirable']) ? 1 : 0;
 
         $skillRelSkill = new SkillRelSkillModel();
         $skillRelGradebook = new SkillRelGradebookModel();
@@ -725,7 +734,11 @@ class SkillModel extends Model
                 }
             }
 
-            $skillRelGradebook->updateGradeBookListBySkill($skillId, $params['gradebook_id']);
+            $skillRelGradebook->updateGradeBookListBySkill(
+                $skillId,
+                $params['gradebook_id'],
+                1 === $params['acquirable']
+            );
 
             return $skillId;
         }
@@ -1940,6 +1953,7 @@ class SkillModel extends Model
             ['id' => 'gradebook_id', 'multiple' => 'multiple', 'size' => 10]
         );
         $form->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
+        $form->addCheckBox('acquirable', get_lang('Acquirable'), get_lang('Yes'));
         $form->addTextarea('criteria', get_lang('Criteria to earn the badge'), ['id' => 'criteria', 'rows' => 7]);
 
         // EXTRA FIELDS
@@ -2336,7 +2350,7 @@ class SkillModel extends Model
                 foreach ($skills as $skillId) {
                     /** @var Skill $skill */
                     $skill = $em->getRepository(Skill::class)->find($skillId);
-                    if ($skill) {
+                    if ($skill instanceof Skill && $skill->isAcquirable()) {
                         if (!$skill->hasItem($typeId, $itemId)) {
                             $skillRelItem = new SkillRelItem();
                             $skillRelItem
@@ -2427,7 +2441,7 @@ class SkillModel extends Model
 
                 /** @var Skill $skill */
                 $skill = $em->getRepository(Skill::class)->find($skillId);
-                if ($skill) {
+                if ($skill instanceof Skill && $skill->isAcquirable()) {
                     if (!$skill->hasCourseAndSession($item)) {
                         $skill->addToCourse($item);
                         $em->persist($skill);
@@ -2486,6 +2500,10 @@ class SkillModel extends Model
         string $argumentation,
         int $authorId
     ): ?SkillRelUser {
+        if (!$skill->isAcquirable()) {
+            return null;
+        }
+
         $showLevels = ('false' === api_get_setting('skill.hide_skill_levels'));
 
         $entityManager = Database::getManager();

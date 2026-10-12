@@ -22,6 +22,7 @@ class SkillFixtures extends Fixture
             ->setTitle('Root')
             ->setShortCode('root')
             ->setAccessUrlId(1)
+            ->setAcquirable(false)
         ;
         $manager->persist($skill);
 

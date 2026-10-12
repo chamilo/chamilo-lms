@@ -673,6 +673,9 @@ final readonly class GradebookCategoryActionProcessor implements ProcessorInterf
             if (!$skill instanceof Skill) {
                 throw new BadRequestHttpException('One of the selected skills was not found.');
             }
+            if (!$skill->isAcquirable()) {
+                throw new BadRequestHttpException('A non-acquirable skill cannot be attached to a Gradebook category.');
+            }
 
             $relation = new SkillRelGradebook();
             $relation

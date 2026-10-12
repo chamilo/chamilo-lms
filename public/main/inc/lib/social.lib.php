@@ -543,7 +543,7 @@ class SocialManager extends UserManager
             $officialCode = '';
             if ('true' === api_get_setting('show_official_code_whoisonline')) {
                 $officialCode .= '<div class="items-user-official-code">
-                    <p style="min-height: 30px;" title="'.get_lang('Code').'">'.$user_info['official_code'].'</p></div>';
+                    <p style="min-height: 30px;" title="'.get_lang('Code').'">'.htmlspecialchars((string) $user_info['official_code'], ENT_QUOTES, 'UTF-8').'</p></div>';
             }
 
             if (true === $hide) {

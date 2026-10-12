@@ -85,6 +85,7 @@ if (in_array($action, ['subscribe_user', 'unsubscribe_user'], true)) {
     $sessionId = $httpRequest->query->getInt('session_id');
 
     if (empty($userToLoad)
+        || !Security::check_token('get')
         || 0 === (int) UrlManager::relation_url_session_exist($sessionId, api_get_current_access_url_id())
     ) {
         api_not_allowed(true);
@@ -1149,7 +1150,7 @@ $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
     var id = options.rowId.toString();
     if (sessionList.indexOf(id) == -1) {
         return \'<a href="'.api_get_self(
-    ).'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::getMdiIcon(
+    ).'?action=subscribe_user&user_id='.$userToLoad.'&sec_token='.Security::get_existing_token().'&session_id=\'+id+\'">'.Display::getMdiIcon(
         ActionIcon::ADD,
         'ch-tool-icon',
         null,
@@ -1158,7 +1159,7 @@ $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
     ).'</a>'.'\';
     } else {
         return \'<a href="'.api_get_self(
-    ).'?action=unsubscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::getMdiIcon(
+    ).'?action=unsubscribe_user&user_id='.$userToLoad.'&sec_token='.Security::get_existing_token().'&session_id=\'+id+\'">'.Display::getMdiIcon(
         ActionIcon::DELETE,
         'ch-tool-icon',
         null,

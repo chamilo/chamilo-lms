@@ -1066,7 +1066,25 @@ class MoodleExport
     }
 
     /**
-     * Get all sections from the course ordered by LP display_order.
+     * Get the rank (1, 2, ...) of each learnpath category of the course, indexed by category id.
+     */
+    private function getLearnpathCategoryRanks(): array
+    {
+        $courseInfo = api_get_course_info($this->course->code);
+        if (empty($courseInfo['real_id'])) {
+            return [];
+        }
+
+        $ranks = [];
+        foreach (\learnpath::getCategories((int) $courseInfo['real_id']) as $category) {
+            $ranks[(int) $category->getId()] = count($ranks) + 1;
+        }
+
+        return $ranks;
+    }
+
+    /**
+     * Get all sections from the course ordered as the learnpaths are displayed in Chamilo.
      * Uses the same activities list and module ids as moodle_backup.xml.
      */
     private function getSections(?array $activities = null): array
@@ -1101,15 +1119,28 @@ class MoodleExport
             'learnpaths' => count($learnpaths),
         ]);
 
-        usort($learnpaths, static function ($a, $b): int {
-            $aOrder = (int) ($a->display_order ?? 0);
-            $bOrder = (int) ($b->display_order ?? 0);
+        // Sort the learnpaths as they are displayed in Chamilo: without category first, then by category
+        // position, then by display_order (which restarts in each category and is copied with the LP).
+        $categoryRanks = $this->getLearnpathCategoryRanks();
+        usort($learnpaths, static function ($a, $b) use ($categoryRanks): int {
+            $aCategoryId = (int) ($a->categoryId ?? 0);
+            $bCategoryId = (int) ($b->categoryId ?? 0);
 
-            return $aOrder <=> $bOrder;
+            return [
+                0 === $aCategoryId ? 0 : ($categoryRanks[$aCategoryId] ?? PHP_INT_MAX),
+                (int) ($a->display_order ?? 0),
+                (string) ($a->name ?? ''),
+                (int) ($a->source_id ?? 0),
+            ] <=> [
+                0 === $bCategoryId ? 0 : ($categoryRanks[$bCategoryId] ?? PHP_INT_MAX),
+                (int) ($b->display_order ?? 0),
+                (string) ($b->name ?? ''),
+                (int) ($b->source_id ?? 0),
+            ];
         });
 
-        $isPartialExport = isset($this->course->type) && 'partial' === $this->course->type;
-        $partialSectionNumber = 0;
+        // Moodle matches sections by number, so they must be consecutive and unique.
+        $sectionNumber = 0;
 
         foreach ($learnpaths as $learnpath) {
             if ((int) $learnpath->lp_type !== 1) {
@@ -1123,10 +1154,7 @@ class MoodleExport
             ]);
 
             $sectionData = $sectionExport->getSectionData($learnpath);
-            if ($isPartialExport) {
-                $partialSectionNumber++;
-                $sectionData['number'] = $partialSectionNumber;
-            }
+            $sectionData['number'] = ++$sectionNumber;
             $sections[] = $sectionData;
 
             $this->debugLog('getSections learnpath section data exported', [

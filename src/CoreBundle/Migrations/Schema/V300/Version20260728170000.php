@@ -47,8 +47,8 @@ final class Version20260728170000 extends AbstractMigrationChamilo
 
         foreach (self::SETTINGS as $setting) {
             $this->addSql(
-                'INSERT INTO settings (variable, category, title, comment, selected_value, access_url_changeable) '
-                .'SELECT ?, ?, ?, ?, ?, 0 WHERE NOT EXISTS (SELECT 1 FROM settings WHERE variable = ?)',
+                'INSERT INTO settings (variable, category, title, comment, selected_value, access_url, access_url_changeable) '
+                .'SELECT ?, ?, ?, ?, ?, 1, 0 WHERE NOT EXISTS (SELECT 1 FROM settings WHERE variable = ?)',
                 [
                     $setting['variable'],
                     'security',

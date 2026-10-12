@@ -294,7 +294,7 @@
 # so all 6 scenarios get the 15-minute budget the Before hook in
 # common.steps.ts grants: the 4 session-creation scenarios and the teardown
 # are smaller, but each still submits several legacy full-page-reload forms.
-@common @long-scenario @specialcase1
+@common @long-scenario @specialcases @specialcase1
 Feature: Special case 1 — course/session creation
   In order to validate a realistic multi-course, multi-session platform setup
   As an administrator

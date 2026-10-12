@@ -148,6 +148,116 @@ function getResolvedCourseId(courseCode: string): number {
   return courseId
 }
 
+// Not ported — new, for specialCase2TeacherTools.feature. That file creates
+// its own throwaway course per scenario (TEMP/cid=3, which every OTHER
+// course.feature-adjacent file assumes, doesn't exist on testparkur — the
+// client platform this suite validates against — confirmed live: navigating
+// there returned a real "Course does not exist" 404, not a stale-selector
+// issue). course_add.php's own visual_code field is conditional on a
+// platform setting (course.course_creation_form_hide_course_code) and isn't
+// worth depending on either way, so this resolves the SAME numeric id every
+// other course-code step needs, but from the course's searchable TITLE via
+// the admin course list's own keyword filter instead of a known code —
+// reusing the exact "keyword-filtered admin course list" technique already
+// proven against this platform's pagination in specialCase1Sessions.feature.
+// Reads the row's own router-link href directly (CourseList.vue's `:to="{
+// name: 'CourseHome', params: { id: data.id } }"`) rather than clicking it —
+// avoids the SPA client-side-navigation timing trap documented at the top of
+// this file. Stored in the same map every other course-code-resolving step
+// already reads from (getResolvedCourseId()), so those are reusable as-is
+// once a course is resolved this way.
+Then(
+  "I resolve the numeric id of course {string} from the admin course list",
+  async ({ page }, courseTitle: string) => {
+    await gotoReliably(page, `/admin/course-list?keyword=${encodeURIComponent(courseTitle)}`)
+    await page.waitForLoadState("networkidle")
+    const href = await page.locator("a", { hasText: courseTitle }).first().getAttribute("href")
+    const match = href?.match(/\/course\/(\d+)\/home/)
+    if (!match) {
+      throw new Error(
+        `Could not resolve the numeric id of course "${courseTitle}" from the admin course list (href: ${href}).`,
+      )
+    }
+    passwordProtectedCourseIds.set(courseTitle, Number(match[1]))
+  },
+)
+
+// Not ported — new, companion to the fixed-title course-creation steps
+// above. A literal, repeated title (e.g. "SpecialCase2 Teacher Tools
+// Doodle") is fine for a single CI run, but re-running the SAME scenario
+// against this shared, persistent dev box during test-writing itself (this
+// suite's own normal iteration loop) leaves one same-titled leftover course
+// PER RETRY — and the resolver above's own `.first()` match then silently
+// grabs an OLDER course instead of the one this run just created. Confirmed
+// live: a course from an earlier failed attempt already had the test learner
+// subscribed, so the "no available users" the current run's own Subscribe
+// view showed was completely correct for THAT (wrong) course — not a
+// stale-response race, despite looking exactly like the one documented at
+// length in toolUsers.feature. A course-scoped survey_code/survey_title
+// already gets a real Date.now()-based unique value for the same reason;
+// this does the same for the course's own title, remembering the exact
+// string so a companion step can resolve it without repeating it verbatim
+// in Gherkin (which would defeat the point — the value has to be unpredictable).
+let lastUniqueCourseTitle: string | null = null
+
+When(
+  "I fill in {string} with a unique course title prefixed {string}",
+  async ({ page }, field: string, prefix: string) => {
+    lastUniqueCourseTitle = `${prefix}${Date.now() % 1_000_000}`
+    await fillReliably(await resolveField(page, field), lastUniqueCourseTitle)
+  },
+)
+
+Then("I resolve the numeric id of the just-created course from the admin course list", async ({ page }) => {
+  if (!lastUniqueCourseTitle) {
+    throw new Error('No unique course title on record — run "I fill in ... with a unique course title ..." first.')
+  }
+  await gotoReliably(page, `/admin/course-list?keyword=${encodeURIComponent(lastUniqueCourseTitle)}`)
+  await page.waitForLoadState("networkidle")
+  const href = await page.locator("a", { hasText: lastUniqueCourseTitle }).first().getAttribute("href")
+  const match = href?.match(/\/course\/(\d+)\/home/)
+  if (!match) {
+    throw new Error(
+      `Could not resolve the numeric id of course "${lastUniqueCourseTitle}" from the admin course list (href: ${href}).`,
+    )
+  }
+  passwordProtectedCourseIds.set("CURRENT", Number(match[1]))
+})
+
+// Not ported — new, teardown counterpart to the two steps above. The exact
+// generated title isn't available to plain Gherkin text (that's the whole
+// point of it being unpredictable — see the comment on lastUniqueCourseTitle),
+// so this does the full keyword-filtered-list -> delete-icon -> confirm ->
+// verify-gone sequence internally, the same sequence specialCase1Sessions.
+// feature's own teardown scenario already uses for its own known-literal
+// course titles ("/admin/course-list?keyword=...", "[title='Delete']" icon,
+// "Yes").
+Then("I delete the just-created course", async ({ page }) => {
+  if (!lastUniqueCourseTitle) {
+    throw new Error('No unique course title on record — run "I fill in ... with a unique course title ..." first.')
+  }
+  const title = lastUniqueCourseTitle
+  await gotoReliably(page, `/admin/course-list?keyword=${encodeURIComponent(title)}`)
+  await page.waitForLoadState("networkidle")
+  page.once("dialog", (dialog) => dialog.accept().catch(() => {}))
+  const row = page.locator("tr").filter({ has: page.getByText(title, { exact: true }) })
+  await row.locator("[title='Delete']").first().click()
+  await pressButton(page, "Yes")
+  await page.waitForLoadState("networkidle")
+  await expect(page.getByText(title, { exact: true })).toHaveCount(0)
+})
+
+// Not ported — new, companion to the step above and to the existing
+// "... with the resolved user id" placeholder-substitution pattern
+// (USER_ID). Lets a scenario address a legacy page by cid once the course
+// has been resolved by title, without a dedicated step per legacy page.
+Given(
+  "I am on {string} with the numeric id of course {string}",
+  async ({ page }, pathTemplate: string, courseTitle: string) => {
+    await gotoReliably(page, pathTemplate.replace("COURSE_ID", String(getResolvedCourseId(courseTitle))))
+  },
+)
+
 Given("I am on the course settings page of course {string}", async ({ page }, courseCode: string) => {
   await gotoReliably(page, `/main/course_info/infocours.php?cid=${getResolvedCourseId(courseCode)}`)
   await page.waitForLoadState("domcontentloaded")
@@ -255,7 +365,7 @@ async function acceptTermsInterstitialIfPresent(page: Page): Promise<void> {
   await page.waitForLoadState("domcontentloaded")
 }
 
-async function loginAs(page: Page, username: string) {
+async function loginAs(page: Page, username: string, password: string = username) {
   // Real CI failure: admin/fileIntegrity.feature's "Non-administrators
   // cannot access ..." scenario has a Background that logs in as admin,
   // then the scenario itself switches to "I am a student" — logging in as
@@ -383,7 +493,7 @@ async function loginAs(page: Page, username: string) {
 
   await expect(loginField).toBeVisible({ timeout: 15_000 })
   await loginField.fill(username, { timeout: 10_000 })
-  await page.locator("#password:visible").fill(username, { timeout: 10_000 })
+  await page.locator("#password:visible").fill(password, { timeout: 10_000 })
   // Scope to the login form. A broader `button:has-text('Sign in')` can race
   // a SPA redirect after fill: the form is already gone, click() then waits
   // the rest of the test timeout for a Sign in button that will never return
@@ -531,7 +641,7 @@ async function loginAs(page: Page, username: string) {
     await page.waitForLoadState("domcontentloaded")
     await expect(loginField).toBeVisible({ timeout: 15_000 })
     await loginField.fill(username, { timeout: 10_000 })
-    await page.locator("#password:visible").fill(username, { timeout: 10_000 })
+    await page.locator("#password:visible").fill(password, { timeout: 10_000 })
     await page.locator("form.login-section__form button[type='submit']:visible").click({ timeout: 15_000 })
     // Same two-outcome race + interstitial accept as the primary path above.
     // This retry branch is a near-duplicate of that flow and originally omitted
@@ -582,6 +692,16 @@ Given("I am an invitee", async ({ page }) => {
 // logs in as a user it just created, e.g. "hrm", not one of the fixed roles).
 Given("I am logged as {string}", async ({ page }, username: string) => {
   await loginAs(page, username)
+})
+
+// Not ported — new, per this file's own guidance ("Add a new named step ...
+// whenever a test user with non-standard credentials is needed"):
+// specialCase2TutorWorkflow.feature's tuteur_fr/tuteur_en accounts are
+// created with an explicit password (Chamilo's "Set password manually"
+// admin-add flow), not the username-as-password convention every other
+// fixed/created test user in this suite relies on.
+Given("I am logged as {string} with password {string}", async ({ page }, username: string, password: string) => {
+  await loginAs(page, username, password)
 })
 
 // Ported from FeatureContext::iAmNotLogged() — just visits /logout.
@@ -860,6 +980,19 @@ When("I fill in {string} for {string}", async ({ page }, value: string, field: s
 // "with" form ("I fill in 'title' with 'TEMP'").
 When("I fill in {string} with {string}", async ({ page }, field: string, value: string) => {
   await fillReliably(await resolveField(page, field), value)
+})
+
+// Not ported — new, for specialCase2TeacherTools.feature's survey_code
+// field (create_new_survey.php/create_meeting.php). A hardcoded literal
+// collides across repeated runs: survey.lib.php's own duplicate-code check
+// (code+lang) queries with no course scoping at all (confirmed live — a
+// survey created in one throwaway course blocked the identical code in a
+// LATER, unrelated throwaway course with a generic "This survey code soon
+// exists in this language" flash, silently returning id 0 rather than
+// erroring loudly), so a fixed string isn't safe to reuse across test runs
+// the way it would be for a course-scoped field.
+When("I fill in {string} with a unique value prefixed {string}", async ({ page }, field: string, prefix: string) => {
+  await fillReliably(await resolveField(page, field), `${prefix}${Date.now() % 1_000_000}`)
 })
 
 // Not ported — new. Submits a search/filter field by pressing Enter IN the
@@ -2344,6 +2477,80 @@ Then("I type {string} into the {string} element", async ({ page }, text: string,
   await input.pressSequentially(text)
 })
 
+// Not ported — new, for specialCase2TeacherTools.feature's Subscribe-view
+// "Register" click (CourseUserSubscribeView.vue — the same Vue view
+// toolUsers.feature's own extensive header comments already document as
+// prone to stale-response/re-render races). A real CI-equivalent failure
+// here (not just a guess): the plain click above retried for the FULL
+// 15-minute @long-scenario budget, its own call log showing a
+// `.p-datatable-mask` repeatedly intercepting the pointer event AND the
+// button itself getting detached from the DOM mid-retry — i.e. the table
+// kept re-rendering under the click rather than settling once. Reuses the
+// existing clickFirstOrForce() helper (a bounded plain-click attempt, then
+// a force-click past any intercepting overlay) so this same race resolves in
+// ~13s instead of hanging for the rest of the scenario's time budget.
+Then("I click the {string} element despite an overlay", async ({ page }, selector: string) => {
+  await dismissBlockingUi(page)
+  await clickFirstOrForce(page.locator(`${selector}:visible`), page)
+})
+
+// Not ported — new, diagnostic for specialCase2TeacherTools.feature's Doodle
+// invitation scenario. survey_invite.php's own "X have answered / Y were
+// invited" info message is deliberately suppressed right after ITS OWN POST
+// submit (`if ($survey->getInvited() > 0 && !isset($_POST['submit']))`), so
+// it can't be checked on the page the "Publish survey" submit itself lands
+// on — a plain re-GET of the same URL (no $_POST) is needed to see it.
+When("I reload the current page", async ({ page }) => {
+  await gotoReliably(page, page.url())
+})
+
+// Not ported — new. The message list's own search box (MessageList.vue) has
+// no `name` attribute, only a placeholder, so it isn't reachable through
+// resolveField()'s id/name/label chain.
+When("I search the inbox for {string}", async ({ page }, text: string) => {
+  const searchBox = page.getByPlaceholder("Search")
+  await searchBox.fill(text)
+  await page
+    .locator("form")
+    .filter({ has: searchBox })
+    .getByRole("button", { name: "Search", exact: true })
+    .click()
+})
+
+// Not ported — new, for specialCase2TeacherTools.feature's survey_invite.php
+// "Send mail" checkbox. survey_invite.php's own inline script hides
+// `#mail_text_wrapper` (mail_title/mail_text) until this checkbox's `change`
+// event fires. A plain native click on `input[name='send_mail']` reached the
+// real checkbox (confirmed live — no id-collision this time) but a real run
+// still showed the wrapper staying hidden and "I fill in mail_title" hanging
+// for the rest of the scenario's time budget — root cause not confirmed
+// (possibly the inline jQuery handler not yet bound at click time on this
+// particular legacy page). Rather than keep guessing at a fragile click/
+// event-timing issue, this sets the checkbox's own state AND reveals the
+// wrapper directly, so the field is fillable and the checked value is
+// submitted regardless of whether the page's own toggle script ever ran.
+When("I check the survey's \"Send mail\" option", async ({ page }) => {
+  await page.locator("input[name='send_mail']").evaluate((el) => {
+    const checkbox = el as HTMLInputElement
+    checkbox.checked = true
+    checkbox.dispatchEvent(new Event("change", { bubbles: true }))
+  })
+  await page.locator("#mail_text_wrapper").evaluate((el) => {
+    ;(el as HTMLElement).style.display = ""
+  })
+})
+
+// Not ported — new, for specialCase2Registration.feature's diagnosis-form
+// accordion. Each section header (`div.display-panel-collapse__header`) is
+// a plain, non-interactive-looking <div> shared verbatim across all 9 cards
+// — no unique class or id, only its own text tells them apart — so this
+// scopes a raw CSS selector by visible text rather than resolving a link/
+// button role the way "I follow ..." does (these headers are neither).
+When("I click element {string} containing text {string}", async ({ page }, selector: string, text: string) => {
+  await dismissBlockingUi(page)
+  await page.locator(selector, { hasText: text }).first().click()
+})
+
 // Ported from FeatureContext::assertElementOnPage() as used via a raw CSS
 // selector (Mink's "I should see the ... element" idiom) — specialCase1
 // PlatformSettings.feature's own porting is the first user of this exact
@@ -3041,6 +3248,187 @@ Given("I have a friend named {string}", async ({ page }, friendUsername: string)
   await loginAs(page, "admin")
 })
 
+// Not ported — new, for specialCase2TutorWorkflow.feature's "assign a learner
+// to a student's superior" action (My Space > Student's superior follow-up >
+// "Add learner"). Navigates straight to the legacy tc_report.php add_user
+// action instead of clicking through that reporting page's own UI: its
+// "Language" filter is a PrimeVue Select whose id (`pv_id_<n>`) is assigned
+// sequentially per page load and is NOT stable across runs — confirmed live
+// by reloading the page twice and diffing the id — so no fixed selector can
+// target it reliably, and the follow-up list already has 19+ real superiors
+// on this box, too many to scroll/guess through. The superior's numeric id is
+// resolved the same way "I have a friend named ..." resolves one above
+// (message.ajax.php's find_users, not a hardcoded literal — same reasoning:
+// ids are never stable across runs/boxes).
+When("I assign the learner {string} to the student's superior {string}", async ({ page }, learnerUsername: string, bossUsername: string) => {
+  const searchResponse = await page.request.get(
+    `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(bossUsername)}&page_limit=10`,
+  )
+  const { items } = await searchResponse.json()
+  const bossId = items?.[0]?.id
+  if (!bossId) {
+    throw new Error(`find_users returned no match for username "${bossUsername}"`)
+  }
+  const tcReportUrl = `/main/my_space/tc_report.php?a=add_user&boss_id=${encodeURIComponent(String(bossId))}`
+  const userSelect = page.locator("#add_user_user_id")
+  await gotoReliably(page, tcReportUrl)
+  await page.waitForLoadState("domcontentloaded")
+  if (!(await isSoonVisible(userSelect, 10_000))) {
+    throw new Error(
+      `${tcReportUrl} (superior "${bossUsername}") never rendered its "User" select — current URL: ${page.url()}`,
+    )
+  }
+  // This select2 is SINGLE-mode (select2-selection--single), unlike
+  // "courses"/the tag fields elsewhere in this suite (select2-selection--
+  // multiple) — confirmed live via a DOM dump after a real CI failure here.
+  // A multiple-mode select2 keeps its search `<input>` inline in the DOM at
+  // all times (which is what the generic "ajax select" step above relies
+  // on), but a single-mode one creates its search field only once you open
+  // the dropdown by clicking the visible selection box itself — looking for
+  // `.select2-search__field` beforehand just hangs waiting for an element
+  // that doesn't exist yet, no matter how long you wait.
+  const selectionBox = userSelect.locator("..").locator(".select2-selection")
+  await selectionBox.click()
+  const searchField = page.locator(".select2-search__field:visible")
+  await searchField.fill(learnerUsername)
+  const named = page.locator('[role="option"]', { hasText: learnerUsername })
+  if (await isSoonVisible(named, 3000)) {
+    await named.first().click()
+  } else {
+    await page.locator('[role="option"]').first().click()
+  }
+  await pressButton(page, "Add")
+})
+
+// Not ported — new, for specialCase2TutorWorkflow.feature. Several legacy
+// pages a tutor navigates to (myStudents.php, the "send legal agreement"
+// action, the diagnostic-finalization message link) are only reachable with
+// the LEARNER's real numeric id in the URL/query string — never "67" or any
+// other literal, which is only ever true by coincidence of one specific
+// historical seed run (same reasoning as lastFriendUserId/
+// lastCreatedAttendanceId elsewhere in this file). Resolved once via
+// find_users and remembered module-scoped, same "USER_ID" placeholder-
+// substitution pattern "I am on the attendance page ..." already uses for
+// ATTENDANCE_ID.
+let lastResolvedUserId: string | null = null
+
+When("I resolve the user id for {string}", async ({ page }, username: string) => {
+  const response = await page.request.get(
+    `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(username)}&page_limit=10`,
+  )
+  const { items } = await response.json()
+  const id = items?.[0]?.id
+  if (!id) {
+    throw new Error(`find_users returned no match for username "${username}"`)
+  }
+  lastResolvedUserId = String(id)
+})
+
+Given("I am on {string} with the resolved user id", async ({ page }, pathTemplate: string) => {
+  if (!lastResolvedUserId) {
+    throw new Error('No user id resolved — run "I resolve the user id for ..." right before this.')
+  }
+  await gotoReliably(page, pathTemplate.replace("USER_ID", lastResolvedUserId))
+})
+
+// Not ported — new, for specialCase2TutorWorkflow.feature's "generate
+// certificate" action (myStudents.php?action=generate_certificate). Unlike
+// every other legacy action addressed via the step above, this one never
+// returns a page — it's a real file download, confirmed live: page.goto()
+// on this URL throws "Download is starting" (Playwright cancels the
+// navigation itself in favor of the download), which "I am on ... with the
+// resolved user id" has no way to tolerate. Racing page.goto() against
+// waitForEvent("download") and treating that specific error as the expected
+// outcome — rather than a real failure — lets the scenario assert the
+// action succeeded (a download actually started) without saving the file
+// anywhere; the certificate's own content isn't what this scenario checks.
+When("I trigger the download at {string} with the resolved user id", async ({ page }, pathTemplate: string) => {
+  if (!lastResolvedUserId) {
+    throw new Error('No user id resolved — run "I resolve the user id for ..." right before this.')
+  }
+  const url = pathTemplate.replace("USER_ID", lastResolvedUserId)
+  const [download] = await Promise.all([
+    page.waitForEvent("download"),
+    page.goto(url).catch((error) => {
+      if (!String(error).includes("Download is starting")) {
+        throw error
+      }
+    }),
+  ])
+  await download.cancel()
+})
+
+// Not ported — new, for specialCase2TutorWorkflow.feature's "assigned
+// sessions" panel (load_search.php's own session-search jqGrid, reached
+// with ?user_id=<id>&save=&_qf__load=). Doesn't click ".first()" N times
+// the way the Behat source did ("i.mdi-plus" 5 times): confirmed live via
+// the sessions API (session_rel_users) that each click DOES subscribe the
+// learner, but the grid's own row rendering never flips that row's icon
+// from "S'inscrire" (mdi-plus-box) to a delete icon on reload — a real,
+// separately-reportable staleness bug in that grid, not something worth
+// working around by re-deriving "the next available row" client-side.
+// Collecting the first N *distinct* subscribe links up front and visiting
+// each once sidesteps it entirely: it exercises the exact same
+// subscribe_user action per session, just addressed directly.
+When(
+  "I subscribe the learner {string} to the first {int} available sessions",
+  async ({ page }, learnerUsername: string, count: number) => {
+    const searchResponse = await page.request.get(
+      `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(learnerUsername)}&page_limit=10`,
+    )
+    const { items } = await searchResponse.json()
+    const learnerId = items?.[0]?.id
+    if (!learnerId) {
+      throw new Error(`find_users returned no match for username "${learnerUsername}"`)
+    }
+    await gotoReliably(page, `/main/search/load_search.php?user_id=${learnerId}&save=&_qf__load=`)
+    await page.waitForLoadState("networkidle")
+    const hrefs = await page.evaluate(
+      () =>
+        Array.from(document.querySelectorAll('a[href*="action=subscribe_user"]'))
+          .map((a) => a.getAttribute("href"))
+          .filter((href): href is string => href !== null),
+    )
+    const uniqueHrefs = [...new Set(hrefs)].slice(0, count)
+    if (uniqueHrefs.length < count) {
+      throw new Error(
+        `Found only ${uniqueHrefs.length} distinct "subscribe" links on load_search.php, needed ${count}.`,
+      )
+    }
+    for (const href of uniqueHrefs) {
+      await gotoReliably(page, href)
+      await page.waitForLoadState("networkidle")
+    }
+  },
+)
+
+// Not ported — new, companion to the step above: the jqGrid staleness noted
+// there means the UI itself cannot confirm the subscriptions took effect,
+// so this reads the ground truth back from the API instead — the same
+// SessionRelUser collection the "assigned sessions" panel is itself backed
+// by.
+Then(
+  "the user {string} should be subscribed to at least {int} sessions",
+  async ({ page }, username: string, minCount: number) => {
+    const searchResponse = await page.request.get(
+      `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(username)}&page_limit=10`,
+    )
+    const { items } = await searchResponse.json()
+    const userId = items?.[0]?.id
+    if (!userId) {
+      throw new Error(`find_users returned no match for username "${username}"`)
+    }
+    const response = await page.request.get(`/api/session_rel_users?user=/api/users/${userId}`, {
+      headers: { Accept: "application/ld+json" },
+    })
+    const data = await response.json()
+    const total = data["hydra:totalItems"] ?? 0
+    if (total < minCount) {
+      throw new Error(`User "${username}" (id ${userId}) is subscribed to only ${total} session(s), expected >= ${minCount}.`)
+    }
+  },
+)
+
 // Not ported — new. socialGroup.feature originally hardcoded the just-created
 // group's id (assuming it's always "1", the first-ever usergroup row) — a
 // real CI run disproved that: usergroup rows are shared with class.feature's
@@ -3377,18 +3765,23 @@ When(
     const rightSelector = `#${fieldName}_to`
     await page.waitForSelector(`${leftSelector} option`)
     await page.evaluate(
-      ({ leftSelector, rightSelector, optionText }) => {
+      ({ leftSelector, rightSelector, optionText, fieldName }) => {
         const left = document.querySelector(leftSelector) as HTMLSelectElement
         const right = document.querySelector(rightSelector) as HTMLSelectElement
         const option = Array.from(left.options).find((o) => o.text.trim() === optionText)
         if (!option) {
-          throw new Error(`No option with text "${optionText}" found in the "${fieldName}" list`)
+          throw new Error(
+            `No option with text "${optionText}" found in the "${fieldName}" list. Available options: ` +
+              Array.from(left.options)
+                .map((o) => o.text.trim())
+                .join(", "),
+          )
         }
         option.selected = true
         right.appendChild(option)
         right.dispatchEvent(new Event("change", { bubbles: true }))
       },
-      { leftSelector, rightSelector, optionText },
+      { leftSelector, rightSelector, optionText, fieldName },
     )
   },
 )

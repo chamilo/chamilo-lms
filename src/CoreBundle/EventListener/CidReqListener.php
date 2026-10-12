@@ -152,7 +152,10 @@ class CidReqListener
                 if ($courseFromSession instanceof Course
                     && ($courseReference === (string) $courseFromSession->getId() || $courseReference === $courseFromSession->getCode())
                 ) {
-                    $course = $courseFromSession;
+                    // The course kept in the PHP session is a detached copy. Doctrine compares
+                    // entities by identity in loaded collections, so SessionVoter's subscription
+                    // check failed against it and denied every request after the first one.
+                    $course = $this->entityManager->find(Course::class, $courseFromSession->getId());
                     $courseInfo = (array) $sessionHandler->get('_course');
                 }
             }

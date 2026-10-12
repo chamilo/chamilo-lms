@@ -14,10 +14,12 @@ use Chamilo\CourseBundle\Entity\CBlogAttachment;
 use Chamilo\CourseBundle\Entity\CBlogPost;
 use Chamilo\CourseBundle\Repository\CBlogAttachmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -29,7 +31,8 @@ final class CreateBlogAttachmentAction
         EntityManagerInterface $em,
         UserHelper $userHelper,
         CBlogAttachmentRepository $attachRepo,
-        ResourceNodeRepository $resourceNodeRepo
+        ResourceNodeRepository $resourceNodeRepo,
+        Security $security
     ): JsonResponse {
         $user = $userHelper->getCurrent();
         if (!$user) {
@@ -67,9 +70,13 @@ final class CreateBlogAttachmentAction
             throw new BadRequestHttpException('Invalid blog/post IRI.');
         }
 
+        if ($post->getBlog()?->getIid() !== $blog->getIid()) {
+            throw new BadRequestHttpException('Post does not belong to the selected blog.');
+        }
+
         $node = $blog->getResourceNode();
-        if (!$node) {
-            throw new BadRequestHttpException('Blog has no resource node.');
+        if (!$node || !$security->isGranted('VIEW', $node)) {
+            throw new AccessDeniedHttpException('You are not allowed to upload files to this blog.');
         }
 
         // Attachments are added by the post's author only, as part of creating the post.

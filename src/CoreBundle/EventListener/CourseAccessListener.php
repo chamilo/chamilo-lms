@@ -6,14 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseAccessActivityHelper;
 use Chamilo\CoreBundle\Helpers\CourseToolAccessTracker;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
@@ -27,7 +30,8 @@ class CourseAccessListener
         private readonly EntityManagerInterface $em,
         private readonly CidReqHelper $cidReqHelper,
         private readonly UserHelper $userHelper,
-        private readonly CourseToolAccessTracker $courseToolAccessTracker
+        private readonly CourseToolAccessTracker $courseToolAccessTracker,
+        private readonly CourseAccessActivityHelper $courseAccessActivityHelper,
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void
@@ -63,13 +67,51 @@ class CourseAccessListener
         $ip = (string) ($request->getClientIp() ?? '');
 
         // --- Existing behavior: track_e_course_access ---
+        $httpSession = $request->hasSession() ? $request->getSession() : null;
+        $isBackgroundRequest = $this->courseAccessActivityHelper->isBackgroundRequest($request);
+        if (!$isBackgroundRequest) {
+            $this->courseAccessActivityHelper->markActivity($httpSession, $courseId, $sessionId);
+        }
+
+        // A course page left open keeps sending background requests: past the allowed
+        // inactivity they no longer count as time in the course.
+        if (!$isBackgroundRequest || !$this->courseAccessActivityHelper->isInactive($httpSession, $courseId, $sessionId)) {
+            $this->trackCourseAccess($user, $courseId, $sessionId, $session, $ip, $httpSession);
+        }
+
+        // track_e_access + track_e_lastaccess (C2 tools) ---
+        $this->logToolAccessIfNeeded($request);
+
+        // Set a flag on the request to indicate that access has been checked.
+        $request->attributes->set('access_checked', true);
+    }
+
+    private function trackCourseAccess(
+        User $user,
+        int $courseId,
+        int $sessionId,
+        ?Session $session,
+        string $ip,
+        ?SessionInterface $httpSession,
+    ): void {
         $accessRepository = $this->em->getRepository(TrackECourseAccess::class);
-        $access = $accessRepository->findExistingAccess($user, $courseId, $sessionId);
+        $access = $accessRepository->findExistingAccess(
+            $user,
+            $courseId,
+            $sessionId,
+            $this->courseAccessActivityHelper->getMaximumInactiveSeconds(),
+        );
 
         if ($access) {
-            $accessRepository->updateAccess($access);
+            $accessRepository->updateAccess(
+                $access,
+                $this->courseAccessActivityHelper->getCountableUntil($httpSession, $courseId, $sessionId),
+            );
         } else {
-            if (!empty($session) && $session->getDuration() > 0) {
+            // A duration-based session starts at the learner's very first access only, not at
+            // every new access to the course.
+            $isFirstAccess = null === $accessRepository->findOneBy(['user' => $user, 'cId' => $courseId, 'sessionId' => $sessionId]);
+            if ($isFirstAccess && null !== $session && $session->getDuration() > 0) {
                 $subscription = $user->getSubscriptionToSession($session);
                 if ($subscription) {
                     $duration = $session->getDuration() + $subscription->getDuration();
@@ -88,12 +130,6 @@ class CourseAccessListener
 
             $accessRepository->recordAccess($user, $courseId, $sessionId, $ip);
         }
-
-        // track_e_access + track_e_lastaccess (C2 tools) ---
-        $this->logToolAccessIfNeeded($request);
-
-        // Set a flag on the request to indicate that access has been checked.
-        $request->attributes->set('access_checked', true);
     }
 
     private function logToolAccessIfNeeded(Request $request): void

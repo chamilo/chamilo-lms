@@ -41635,3 +41635,147 @@ msgstr ""
 
 msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
 msgstr ""
+
+#: issue-8179
+msgid "Acquirable"
+msgstr ""
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr ""
+
+#: issue-8179
+msgid "Novice"
+msgstr ""
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr ""
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr ""
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr ""
+
+#: issue-8179
+msgid "Competent"
+msgstr ""
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr ""
+
+#: issue-8179
+msgid "Proficient"
+msgstr ""
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr ""
+
+#: issue-8179
+msgid "Expert"
+msgstr ""
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr ""
+
+#: issue-8179
+msgid "Remembering"
+msgstr ""
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr ""
+
+#: issue-8179
+msgid "Understanding"
+msgstr ""
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr ""
+
+#: issue-8179
+msgid "Applying"
+msgstr ""
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr ""
+
+#: issue-8179
+msgid "Analyzing"
+msgstr ""
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr ""
+
+#: issue-8179
+msgid "Evaluating"
+msgstr ""
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr ""
+
+#: issue-8179
+msgid "Creating"
+msgstr ""
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr ""
+
+#: issue-8179
+msgid "Follow"
+msgstr ""
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr ""
+
+#: issue-8179
+msgid "Assist"
+msgstr ""
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr ""
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr ""
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr ""
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr ""
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr ""
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr ""
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr ""
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr ""
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr ""

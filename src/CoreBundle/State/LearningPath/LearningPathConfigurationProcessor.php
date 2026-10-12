@@ -470,14 +470,32 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
                 $allowed[(int) $relation->getSkill()->getId()] = $relation->getSkill();
             }
         }
+        $repository = $this->entityManager->getRepository(SkillRelItem::class);
+        $existingRelations = $repository->findBy([
+            'itemId' => $lpId,
+            'itemType' => self::ITEM_TYPE_LEARNING_PATH,
+        ]);
+        $existingSkillIds = [];
+        foreach ($existingRelations as $existingRelation) {
+            if (!$existingRelation instanceof SkillRelItem || null === $existingRelation->getSkill()->getId()) {
+                continue;
+            }
+
+            $existingSkillIds[(int) $existingRelation->getSkill()->getId()] = true;
+        }
+
         foreach ($skillIds as $skillId) {
             if (!isset($allowed[$skillId])) {
                 throw new BadRequestHttpException('A selected skill is outside the current course context.');
             }
+
+            $skill = $allowed[$skillId];
+            if (!$skill->isAcquirable() && !isset($existingSkillIds[$skillId])) {
+                throw new BadRequestHttpException('A non-acquirable skill cannot be attached to a learning path.');
+            }
         }
 
-        $repository = $this->entityManager->getRepository(SkillRelItem::class);
-        foreach ($repository->findBy(['itemId' => $lpId, 'itemType' => self::ITEM_TYPE_LEARNING_PATH]) as $existing) {
+        foreach ($existingRelations as $existing) {
             $this->entityManager->remove($existing);
         }
 

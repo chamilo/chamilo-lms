@@ -127,7 +127,7 @@ foreach ($userSkills as $index => $skillRelUser) {
     if ($skillRelUser->getAcquiredLevel()) {
         $levelEntity = $skillLevelRepo->find($skillRelUser->getAcquiredLevel()->getId());
         if ($levelEntity) {
-            $currentSkillLevel = $levelEntity->getTitle();
+            $currentSkillLevel = get_lang($levelEntity->getTitle());
         }
     }
     $argumentationAuthor = api_get_user_info($skillRelUser->getArgumentationAuthorId());
@@ -211,7 +211,7 @@ foreach ($userSkills as $index => $skillRelUser) {
         ]);
 
         foreach ($levels as $level) {
-            $profileLevels[$level->getPosition()][$level->getId()] = $level->getTitle();
+            $profileLevels[$level->getPosition()][$level->getId()] = get_lang($level->getTitle());
         }
 
         ksort($profileLevels); // Sort the array by Position.

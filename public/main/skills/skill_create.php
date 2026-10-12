@@ -33,7 +33,7 @@ $interbreadcrumb[] = $returnToSkillWheel
     ? ['url' => $skillWheelUrl, 'name' => get_lang('Skills wheel')]
     : ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];
 
-$formDefaultValues = [];
+$formDefaultValues = ['acquirable' => 1];
 
 $objSkill = new SkillModel();
 if ($skillParentId > 0) {
@@ -42,6 +42,7 @@ if ($skillParentId > 0) {
     $formDefaultValues = [
         'parent_id' => $skillParentInfo['id'],
         'gradebook_id' => [],
+        'acquirable' => 1,
     ];
 
     foreach ($skillParentInfo['gradebooks'] as $gradebook) {

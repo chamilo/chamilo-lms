@@ -44,6 +44,7 @@ $formDefaultValues = [];
 if (empty($skillLevels)) {
     $skills = $skillRepo->findBy([
         'status' => Skill::STATUS_ENABLED,
+        'acquirable' => true,
     ]);
     /** @var Skill $skill */
     foreach ($skills as $skill) {
@@ -164,7 +165,7 @@ if ($profile) {
     ]);
     $profileLevels = [];
     foreach ($levels as $level) {
-        $profileLevels[$level->getPosition()][$level->getId()] = $level->getTitle();
+        $profileLevels[$level->getPosition()][$level->getId()] = get_lang($level->getTitle());
     }
 
     ksort($profileLevels); // Sort the array by Position.
@@ -301,6 +302,17 @@ if ($form->validate()) {
         );
 
         header('Location: '.api_get_self().'?'.$currentUrl);
+        exit;
+    }
+
+    if (!$skill->isAcquirable()) {
+        Container::addFlash(get_lang('This skill cannot be acquired'), 'error');
+        $session = Container::getSession();
+        if ($session && method_exists($session, 'save')) {
+            $session->save();
+        }
+
+        header('Location: '.$currentUrl);
         exit;
     }
 

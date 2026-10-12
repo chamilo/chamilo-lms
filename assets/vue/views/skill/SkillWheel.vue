@@ -125,6 +125,18 @@ async function onClickViewSkillWheel() {
   wheelEl.value?.showRoot()
 }
 
+function onClickViewSelectedSkill() {
+  const selectedSkill = foundSkills.value[foundSkills.value.length - 1]
+  if (!selectedSkill?.id) {
+    return
+  }
+
+  showSearchTools.value = false
+  showProfileMatches.value = false
+  closeSkillDetail()
+  wheelEl.value?.showSkill(selectedSkill.id)
+}
+
 async function onWheelReady() {
   const skillId = Number(route.query.skillId)
   if (!Number.isInteger(skillId) || skillId <= 0) {
@@ -450,10 +462,12 @@ onBeforeUnmount(() => {
 
       <div class="flex flex-wrap gap-2">
         <BaseButton
+          data-testid="skill-wheel-search-view-button"
+          :disabled="!foundSkills.length"
           :label="t('View skills wheel')"
           icon="wheel"
           type="secondary"
-          @click="onClickViewSkillWheel"
+          @click="onClickViewSelectedSkill"
         />
         <BaseButton
           v-if="canUseProfiles"

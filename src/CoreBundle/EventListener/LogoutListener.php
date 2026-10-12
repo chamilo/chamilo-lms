@@ -16,6 +16,7 @@ use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\LogoutEvent;
 
@@ -71,6 +72,18 @@ class LogoutListener
 
             $trackEOnlineRepository = $this->em->getRepository(TrackEOnline::class);
             $trackEOnlineRepository->removeOnlineSessionsByUser($userId);
+
+            // Logging out while impersonating ends the administrator's own session too. Without
+            // this, their online record outlived the logout, and with
+            // prevent_multiple_simultaneous_login on they could not log in again.
+            $originalUser = $token instanceof SwitchUserToken ? $token->getOriginalToken()->getUser() : null;
+            if ($originalUser instanceof User && $originalUser->getId() !== $userId) {
+                $trackELoginRepository->updateLastLoginLogoutDate(
+                    (int) $originalUser->getId(),
+                    new DateTime('now', new DateTimeZone('UTC')),
+                );
+                $trackEOnlineRepository->removeOnlineSessionsByUser((int) $originalUser->getId());
+            }
         }
 
         $login = $this->router->generate('index');

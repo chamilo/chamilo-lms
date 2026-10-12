@@ -78,6 +78,35 @@
       novalidate
       @submit.prevent="submitForm"
     >
+      <div
+        v-if="!isEditMode && templateOptions.length > 0"
+        class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm"
+      >
+        <div class="mb-5 flex items-center gap-3">
+          <BaseIcon
+            icon="copy"
+            size="small"
+          />
+          <div>
+            <h2 class="text-lg font-semibold text-gray-90">{{ t("Use template") }}</h2>
+            <p class="mt-1 text-sm text-gray-600">
+              {{ t("Create this survey from a reusable template prepared by an administrator.") }}
+            </p>
+          </div>
+        </div>
+
+        <BaseSelect
+          id="survey_template"
+          v-model="selectedTemplateId"
+          :is-loading="isApplyingTemplate"
+          :label="t('Survey template')"
+          :options="templateOptions"
+          allow-clear
+          name="survey_template"
+          @change="applySelectedTemplate"
+        />
+      </div>
+
       <div class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
         <div class="mb-6 flex items-center gap-3">
           <BaseIcon
@@ -216,6 +245,25 @@
             :min="0"
             name="duration"
           />
+        </div>
+
+        <div
+          v-if="isAdmin"
+          class="mt-5 rounded-xl border border-orange-200 bg-orange-50 p-4"
+        >
+          <BaseCheckbox
+            id="results_hidden_from_teacher"
+            v-model="form.resultsHiddenFromTeacher"
+            :label="t('Results hidden from teacher/tutor')"
+            name="results_hidden_from_teacher"
+          />
+          <p class="mt-2 text-xs text-orange-800">
+            {{
+              t(
+                "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results.",
+              )
+            }}
+          </p>
         </div>
       </div>
 
@@ -407,6 +455,7 @@ import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import ResourceLanguageSelector from "../../components/resources/ResourceLanguageSelector.vue"
 import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import surveyService from "../../services/surveyService"
+import surveyTemplateService from "../../services/surveyTemplateService"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -425,6 +474,10 @@ const questionUrl = ref("")
 const settings = ref({})
 const options = ref({})
 const showAdvancedSettings = ref(false)
+const isAdmin = ref(false)
+const surveyTemplates = ref([])
+const selectedTemplateId = ref(null)
+const isApplyingTemplate = ref(false)
 
 const form = ref(createEmptyForm())
 
@@ -443,6 +496,12 @@ const languageOptions = computed(() => translateOptions(options.value.languages 
 const parentSurveyOptions = computed(() => normalizeOptions(options.value.parentSurveys || []))
 const gradebookCategoryOptions = computed(() => normalizeOptions(options.value.gradebookCategories || []))
 const profileFieldOptions = computed(() => translateOptions(options.value.profileFields || []))
+const templateOptions = computed(() =>
+  surveyTemplates.value.map((template) => ({
+    value: Number(template.id),
+    label: template.subtitle ? `${template.title} — ${template.subtitle}` : template.title,
+  })),
+)
 
 const durationValue = computed({
   get() {
@@ -475,6 +534,7 @@ function createEmptyForm() {
     availableUntil: null,
     anonymous: false,
     visibleResults: 0,
+    resultsHiddenFromTeacher: false,
     introduction: "",
     thanks: "",
     surveyType: 0,
@@ -665,6 +725,7 @@ function normalizeForm(data) {
     availableUntil: toDate(data.availableUntil),
     anonymous: true === data.anonymous,
     visibleResults: Number(data.visibleResults || 0),
+    resultsHiddenFromTeacher: true === data.resultsHiddenFromTeacher,
     introduction: data.introduction || "",
     thanks: data.thanks || "",
     surveyType: Number(data.surveyType || 0),
@@ -682,6 +743,7 @@ function normalizeForm(data) {
 
   settings.value = data.settings || {}
   options.value = data.options || {}
+  isAdmin.value = true === data.isAdmin
   if (!form.value.gradebookCategoryId && gradebookCategoryOptions.value.length) {
     form.value.gradebookCategoryId = gradebookCategoryOptions.value[0].value
   }
@@ -703,6 +765,62 @@ async function loadConfiguration() {
     errorMessage.value = getApiErrorMessage(error, t("Could not load survey configuration"))
   } finally {
     isLoading.value = false
+  }
+}
+
+function getTemplateContextParams() {
+  return cleanQueryParams({
+    cid: getQueryValue(route.query.cid),
+    sid: getQueryValue(route.query.sid),
+  })
+}
+
+async function loadSurveyTemplates() {
+  if (isEditMode.value) {
+    return
+  }
+
+  try {
+    const data = await surveyTemplateService.getCatalog(getTemplateContextParams())
+    surveyTemplates.value = Array.isArray(data.templates) ? data.templates : []
+  } catch (error) {
+    console.error("Error loading survey templates", error)
+    surveyTemplates.value = []
+  }
+}
+
+async function applySelectedTemplate() {
+  const templateId = Number(selectedTemplateId.value || 0)
+  if (templateId <= 0 || isApplyingTemplate.value) {
+    return
+  }
+
+  errorMessage.value = ""
+  successMessage.value = ""
+  isApplyingTemplate.value = true
+
+  try {
+    const template = await surveyTemplateService.getConfiguration(templateId, getTemplateContextParams())
+    form.value = {
+      ...form.value,
+      title: template.title || "",
+      subtitle: template.subtitle || "",
+      introduction: template.introduction || "",
+      thanks: template.thanks || "",
+      anonymous: true === template.anonymous,
+      shuffle: true === template.shuffle,
+      oneQuestionPerPage: true === template.oneQuestionPerPage,
+      displayQuestionNumber: false !== template.displayQuestionNumber,
+      duration: Number(template.duration || 0) > 0 ? Number(template.duration) : null,
+    }
+    successMessage.value = t("Template applied. Review the survey settings and save to create it.")
+    await scrollToFeedback("success")
+  } catch (error) {
+    console.error("Error loading survey template", error)
+    errorMessage.value = getApiErrorMessage(error, t("Could not load survey template"))
+    await scrollToFeedback()
+  } finally {
+    isApplyingTemplate.value = false
   }
 }
 
@@ -766,6 +884,14 @@ function buildPayload() {
   if (payload.anonymous || !payload.showFormProfile) {
     payload.showFormProfile = false
     payload.selectedProfileFields = []
+  }
+
+  if (!isAdmin.value) {
+    delete payload.resultsHiddenFromTeacher
+  }
+
+  if (!isEditMode.value && Number(selectedTemplateId.value || 0) > 0) {
+    payload.templateId = Number(selectedTemplateId.value)
   }
 
   return payload
@@ -850,5 +976,8 @@ async function submitForm() {
   }
 }
 
-onMounted(loadConfiguration)
+onMounted(async () => {
+  await loadConfiguration()
+  await loadSurveyTemplates()
+})
 </script>

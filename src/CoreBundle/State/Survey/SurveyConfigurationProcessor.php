@@ -12,9 +12,11 @@ use Chamilo\CoreBundle\ApiResource\Survey\SurveyConfiguration;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\Service\Survey\SurveyTemplateInstantiationService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -23,6 +25,7 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -49,6 +52,9 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
         private SurveyHelper $surveyHelper,
+        private Security $security,
+        private SurveyTemplateConfigurationProvider $surveyTemplateConfigurationProvider,
+        private SurveyTemplateInstantiationService $surveyTemplateInstantiationService,
     ) {}
 
     /**
@@ -109,8 +115,34 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
             throw new BadRequestHttpException($this->getUnsupportedPersonalitySurveyMessage());
         }
 
+        $templateId = (int) ($data->templateId ?? 0);
+        if ($templateId > 0) {
+            $user = $this->security->getUser();
+            if (!$user instanceof User) {
+                throw new AccessDeniedHttpException('A valid user is required.');
+            }
+
+            $template = $this->surveyTemplateConfigurationProvider->getTemplate($templateId);
+            $survey = $this->surveyTemplateInstantiationService->instantiate($template, $course, $session, $user);
+            $this->applyCommonFields($survey, $data, $language);
+            $survey
+                ->setCode($code)
+                ->setLang($language)
+                ->setIsShared('0')
+                ->setTemplate('template')
+                ->setSurveyType(0)
+                ->setResultsHiddenFromTeacher(false)
+            ;
+            $this->entityManager->persist($survey);
+
+            return $survey;
+        }
+
         $survey = new CSurvey();
         $this->applyCommonFields($survey, $data, $language);
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $survey->setResultsHiddenFromTeacher($data->resultsHiddenFromTeacher);
+        }
         $survey
             ->setCode($code)
             ->setLang($language)
@@ -144,6 +176,9 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         }
 
         $this->applyCommonFields($survey, $data, $language);
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $survey->setResultsHiddenFromTeacher($data->resultsHiddenFromTeacher);
+        }
         $survey->setIsShared('0');
         $this->entityManager->persist($survey);
 

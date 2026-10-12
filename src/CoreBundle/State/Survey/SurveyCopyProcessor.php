@@ -301,6 +301,7 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
             ->setShowFormProfile($source->getShowFormProfile())
             ->setFormFields((string) $source->getFormFields())
             ->setVisibleResults((int) ($source->getVisibleResults() ?? 0))
+            ->setResultsHiddenFromTeacher($source->isResultsHiddenFromTeacher())
             ->setIsMandatory($source->isMandatory())
             ->setDisplayQuestionNumber($source->isDisplayQuestionNumber())
             ->setDuration($source->getDuration())

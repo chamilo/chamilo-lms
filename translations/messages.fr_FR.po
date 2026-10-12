@@ -43571,3 +43571,9 @@ msgstr "Le fichier orphelin et son contenu physique ont été supprimés défini
 
 msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
 msgstr "Enquête publiée. Créées : %d. Mises à jour : %d. Messages envoyés : %d."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Temps d'inactivité maximum pris en compte (minutes)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Une page de cours laissée ouverte continue d'envoyer des requêtes automatiques. Après ce nombre de minutes sans action réelle de l'utilisateur (ouverture d'une page ou d'un élément, réponse, etc.), le temps passé dans le cours n'est plus comptabilisé."

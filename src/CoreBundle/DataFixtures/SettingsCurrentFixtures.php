@@ -3750,6 +3750,13 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => "Avoid anyone making the 'users' tool visible in a public course.",
                 ],
             ],
+            'tracking' => [
+                [
+                    'name' => 'maximum_inactive_time_to_consider',
+                    'title' => 'Maximum inactive time to consider (minutes)',
+                    'comment' => 'A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted.',
+                ],
+            ],
             'workflows' => [
                 [
                     'name' => 'plugin_redirection_enabled',

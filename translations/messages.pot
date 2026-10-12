@@ -41625,3 +41625,9 @@ msgstr ""
 
 msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
 msgstr ""
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr ""
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr ""

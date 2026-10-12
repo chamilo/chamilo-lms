@@ -41696,3 +41696,9 @@ msgstr "Orphan file and its physical content have been deleted definitively."
 
 msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
 msgstr "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Maximum inactive time to consider (minutes)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."

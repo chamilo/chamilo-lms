@@ -11,7 +11,6 @@ use ApiPlatform\Metadata\Post as PostOp;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\UserHelper;
-use Chamilo\CoreBundle\Service\Blog\BlogContextAccessChecker;
 use Chamilo\CourseBundle\Entity\CBlog;
 use Chamilo\CourseBundle\Entity\CBlogComment;
 use Chamilo\CourseBundle\Entity\CBlogPost;
@@ -32,7 +31,6 @@ final readonly class CBlogAssignAuthorProcessor implements ProcessorInterface
         private UserHelper $userHelper,
         private Security $security,
         private EntityManagerInterface $entityManager,
-        private BlogContextAccessChecker $blogContextAccessChecker,
     ) {}
 
     /**
@@ -78,10 +76,6 @@ final readonly class CBlogAssignAuthorProcessor implements ProcessorInterface
 
         if (!$blog instanceof CBlog) {
             throw new AccessDeniedHttpException('Target blog is required.');
-        }
-
-        if (!$this->blogContextAccessChecker->isInCurrentContext($blog)) {
-            throw new AccessDeniedHttpException('Target blog is outside the current course/session context.');
         }
 
         $resourceNode = $blog->getResourceNode();

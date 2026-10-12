@@ -66,7 +66,7 @@ class SkillRelGradebookModel extends Model
      * @param int   $skill_id
      * @param array $gradebook_list
      */
-    public function updateGradeBookListBySkill($skill_id, $gradebook_list)
+    public function updateGradeBookListBySkill($skill_id, $gradebook_list, bool $allowNewRelations = true)
     {
         $original_gradebook_list = $this->find(
             'all',
@@ -101,7 +101,7 @@ class SkillRelGradebookModel extends Model
             }
         }
 
-        if (!empty($gradebooks_to_add)) {
+        if ($allowNewRelations && !empty($gradebooks_to_add)) {
             foreach ($gradebooks_to_add as $gradebook_id) {
                 $attributes = [
                     'skill_id' => $skill_id,

@@ -64,6 +64,10 @@ final readonly class SkillAssignmentProcessor implements ProcessorInterface
 
     private function assign(SkillAssignment $data, User $actor, User $user, Skill $skill): SkillAssignment
     {
+        if (!$skill->isAcquirable()) {
+            throw new BadRequestHttpException('The selected skill cannot be acquired.');
+        }
+
         $argumentation = trim($data->argumentation);
         if (mb_strlen($argumentation) < 10) {
             throw new BadRequestHttpException('Argumentation must contain at least 10 characters.');

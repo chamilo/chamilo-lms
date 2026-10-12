@@ -58,6 +58,7 @@ class SkillRepositoryTest extends AbstractApiTest
             ->setPosition(1)
             ->setProfile($profile)
             ->setShortTitle('level')
+            ->setDescription('level description')
         ;
         $em->persist($level);
 
@@ -75,6 +76,7 @@ class SkillRepositoryTest extends AbstractApiTest
             ->setShortCode('php')
             ->setStatus(Skill::STATUS_ENABLED)
             ->setAccessUrlId($accessUrl->getId())
+            ->setAcquirable(false)
         ;
         $skillRepo->update($subSkill);
 
@@ -152,12 +154,17 @@ class SkillRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $skill->getCourses()->count());
         $this->assertSame(1, $skill->getItems()->count());
         $this->assertSame(0, $subSkill->getSkills()->count());
+        $this->assertTrue($skill->isAcquirable());
+        $this->assertFalse($subSkill->isAcquirable());
 
         $this->assertTrue($skill->hasCourseAndSession($skillRelCourse));
 
         $this->assertSame('profile', $profile->getTitle());
         $this->assertSame('profile', (string) $profile);
         $this->assertSame(1, $profile->getLevels()->count());
+        $storedLevel = $profile->getLevels()->first();
+        $this->assertInstanceOf(Level::class, $storedLevel);
+        $this->assertSame('level description', $storedLevel->getDescription());
         $this->assertSame(1, $profile->getSkills()->count());
 
         $skillRepo->delete($skill);

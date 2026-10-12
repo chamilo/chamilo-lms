@@ -33,7 +33,7 @@ class SkillRelCourse
     protected Course $course;
 
     #[ORM\ManyToOne(targetEntity: Session::class, cascade: ['persist'], inversedBy: 'skills')]
-    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
     public function __construct()

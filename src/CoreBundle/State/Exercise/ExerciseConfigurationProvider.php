@@ -33,6 +33,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateTimeInterface;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -236,7 +237,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             'categoryOptions' => $this->getCategoryOptions($course),
             'gradebookCategoryOptions' => $this->getGradebookCategoryOptions($course, $session),
             'languageOptions' => $this->getResourceLanguageOptions(),
-            'skillOptions' => $this->getSkillOptions(),
+            'skillOptions' => $this->getSkillOptions($quiz),
             'extraFieldDefinitions' => $this->getExtraFieldDefinitions(),
             'extraNotificationOptions' => [],
             'feedbackOptions' => $this->getFeedbackOptions($quiz),
@@ -523,17 +524,32 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function getSkillOptions(): array
+    private function getSkillOptions(?CQuiz $quiz): array
     {
-        $skills = $this->entityManager->createQueryBuilder()
+        $selectedSkillIds = $quiz instanceof CQuiz ? $this->getSelectedSkillIds($quiz) : [];
+
+        $qb = $this->entityManager->createQueryBuilder()
             ->select('skill')
             ->from(Skill::class, 'skill')
             ->andWhere('skill.status = :status')
             ->setParameter('status', Skill::STATUS_ENABLED, Types::INTEGER)
             ->orderBy('skill.title', 'ASC')
-            ->getQuery()
-            ->getResult()
         ;
+
+        if ([] === $selectedSkillIds) {
+            $qb
+                ->andWhere('skill.acquirable = :acquirable')
+                ->setParameter('acquirable', true)
+            ;
+        } else {
+            $qb
+                ->andWhere('(skill.acquirable = :acquirable OR skill.id IN (:selectedSkillIds))')
+                ->setParameter('acquirable', true)
+                ->setParameter('selectedSkillIds', $selectedSkillIds, ArrayParameterType::INTEGER)
+            ;
+        }
+
+        $skills = $qb->getQuery()->getResult();
 
         $items = [];
         foreach ($skills as $skill) {

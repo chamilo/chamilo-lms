@@ -136,6 +136,10 @@ class Skill implements Stringable, Translatable
     #[ORM\Column(name: 'status', type: 'integer', nullable: false, options: ['default' => 1])]
     protected int $status;
 
+    #[Groups(['skill:read', 'skill:write'])]
+    #[ORM\Column(name: 'acquirable', type: 'boolean', options: ['default' => true])]
+    protected bool $acquirable = true;
+
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     protected DateTime $updatedAt;
@@ -247,6 +251,18 @@ class Skill implements Stringable, Translatable
     public function setStatus(int $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function isAcquirable(): bool
+    {
+        return $this->acquirable;
+    }
+
+    public function setAcquirable(bool $acquirable): self
+    {
+        $this->acquirable = $acquirable;
 
         return $this;
     }

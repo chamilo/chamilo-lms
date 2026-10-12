@@ -72,7 +72,7 @@ final class Version20250926174000 extends AbstractMigrationChamilo
                 $this->addSql($sql, $params);
             } else {
                 $defaultValue = $defaults[$variable] ?? '';
-                $sql = 'INSERT INTO settings (variable, category, title, comment, selected_value, access_url_changeable) VALUES (?, ?, ?, ?, ?, 0)';
+                $sql = 'INSERT INTO settings (variable, category, title, comment, selected_value, access_url, access_url_changeable) VALUES (?, ?, ?, ?, ?, 1, 0)';
                 $params = [$variable, $category, $title, $comment, (string) $defaultValue];
                 $this->addSql($sql, $params);
             }

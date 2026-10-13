@@ -19,8 +19,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     operations: [
         new Get(security: "object.getPublication() != null and is_granted('VIEW', object.getPublication().resourceNode)"),
-        new Delete(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"),
-        new Post(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"),
+        new Delete(security: "(is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) and object.getPublication() != null and is_granted('EDIT', object.getPublication().resourceNode)"),
+        new Post(
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            securityPostDenormalize: "object.getPublication() != null and is_granted('EDIT', object.getPublication().resourceNode) and object.getDocument() != null and is_granted('VIEW', object.getDocument().resourceNode)",
+        ),
         new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
     ],
     normalizationContext: ['groups' => ['student_publication_rel_document:read']],

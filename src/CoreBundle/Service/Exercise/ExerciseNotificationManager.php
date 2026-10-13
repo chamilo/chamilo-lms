@@ -184,8 +184,9 @@ final readonly class ExerciseNotificationManager
 
         if (null === $session) {
             foreach ($course->getTeachersSubscriptions() as $subscription) {
-                if ($subscription instanceof CourseRelUser) {
-                    $recipients[(int) $subscription->getUser()->getId()] = $subscription->getUser();
+                $user = $subscription instanceof CourseRelUser ? $subscription->getUser() : null;
+                if ($user instanceof User) {
+                    $recipients[(int) $user->getId()] = $user;
                 }
             }
 
@@ -193,8 +194,9 @@ final readonly class ExerciseNotificationManager
         }
 
         foreach ($session->getSessionRelCourseRelUsersByStatus($course, Session::COURSE_COACH) as $subscription) {
-            if ($subscription instanceof SessionRelCourseRelUser) {
-                $recipients[(int) $subscription->getUser()->getId()] = $subscription->getUser();
+            $user = $subscription instanceof SessionRelCourseRelUser ? $subscription->getUser() : null;
+            if ($user instanceof User) {
+                $recipients[(int) $user->getId()] = $user;
             }
         }
 

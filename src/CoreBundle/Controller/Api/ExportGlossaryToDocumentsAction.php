@@ -77,7 +77,7 @@ final class ExportGlossaryToDocumentsAction
         $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
         if ($category instanceof CGlossaryCategory) {
             $qb->andWhere('resource.category = :category')
-                ->setParameter('category', $category)
+                ->setParameter('category', (int) $category->getIid())
             ;
         }
 

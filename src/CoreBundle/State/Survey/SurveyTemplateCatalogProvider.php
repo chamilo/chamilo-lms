@@ -44,7 +44,7 @@ final readonly class SurveyTemplateCatalogProvider implements ProviderInterface
             ->select('template')
             ->from(CSurveyTemplate::class, 'template')
             ->andWhere('template.accessUrl = :accessUrl')
-            ->setParameter('accessUrl', $accessUrl)
+            ->setParameter('accessUrl', (int) $accessUrl->getId())
             ->orderBy('template.title', 'ASC')
         ;
 

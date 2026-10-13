@@ -475,7 +475,7 @@ final readonly class SurveyTemplateQuestionProcessor implements ProcessorInterfa
             ->select('MAX(question.sort)')
             ->from(CSurveyTemplateQuestion::class, 'question')
             ->andWhere('question.template = :template')
-            ->setParameter('template', $template)
+            ->setParameter('template', (int) $template->getId())
             ->getQuery()
             ->getSingleScalarResult()
         ;

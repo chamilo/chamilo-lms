@@ -212,7 +212,7 @@ final readonly class SurveyTemplateQuestionProvider implements ProviderInterface
             ->from(CSurveyTemplateQuestion::class, 'question')
             ->leftJoin('question.options', 'questionOption')
             ->andWhere('question.template = :template')
-            ->setParameter('template', $template)
+            ->setParameter('template', (int) $template->getId())
             ->orderBy('question.sort', 'ASC')
             ->addOrderBy('question.id', 'ASC')
             ->addOrderBy('questionOption.sort', 'ASC')

@@ -2042,13 +2042,12 @@ var loadForumThread = function(lpId, lpItemId) {
             scrolling:'yes',
             tabindex:'0',
             id:'chamilo-disqus',
-            src: '<?php echo api_get_path(WEB_CODE_PATH); ?>forum/viewthread.php?<?php echo api_get_cidreq(); ?>&' + $.param({
-                gradebook: 0,
-                origin: 'learnpath',
-                forum: forumThreadData.forumId,
-                thread: forumThreadData.threadId,
-                posts_order: 'desc'
-            })
+            src: '<?php echo api_get_path(WEB_PATH).'resources/forum/'.(int) api_get_course_entity()?->getResourceNode()?->getId(); ?>/forum/'
+                + parseInt(forumThreadData.forumId, 10) + '/thread/' + parseInt(forumThreadData.threadId, 10)
+                + '?<?php echo api_get_cidreq(); ?>&' + $.param({
+                    origin: 'learnpath',
+                    embedded: 1
+                })
         });
 
         $('#lp-view-forum').html(forumIframe);

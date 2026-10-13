@@ -286,10 +286,6 @@ class ForumThreadLink extends AbstractLink
 
                 return api_get_path(WEB_PATH).'resources/forum/'.$nodeId.'/forum/'.$forum_id.'/thread/'.$this->get_ref_id().'?'.$query;
             }
-
-            return api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
-                api_get_cidreq_params($courseId, $sessionId).
-                '&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
         }
 
         return '';

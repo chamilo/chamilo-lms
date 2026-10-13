@@ -98,19 +98,9 @@ if (empty($threadEntity)) {
     exit;
 }
 
-if (!forumBelongsToCurrentContext($threadEntity->getForum())
-    || (null !== $forumEntity && $threadEntity->getForum()->getIid() !== $forumEntity->getIid())
-) {
-    api_not_allowed(true);
-}
-
 $repoPost = Container::getForumPostRepository();
 /** @var CForumPost|null $postEntity */
 $postEntity = !empty($postId) ? $repoPost->find($postId) : null;
-
-if (null !== $postEntity && $postEntity->getThread()?->getIid() !== $threadEntity->getIid()) {
-    api_not_allowed(true);
-}
 
 $courseEntity  = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
@@ -176,7 +166,7 @@ switch ($my_action) {
         ) {
             /** @var CForumPost|null $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
-            if (null !== $postEntity && $postEntity->getThread()?->getIid() === $threadEntity->getIid()) {
+            if (null !== $postEntity) {
                 deletePost($postEntity);
             }
         }
@@ -192,10 +182,8 @@ switch ($my_action) {
         ) {
             /** @var CForumPost|null $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
-            if (null !== $postEntity && $postEntity->getThread()?->getIid() === $threadEntity->getIid()) {
-                $message = approvePost($postEntity, $_GET['action']);
-                Display::addFlash(Display::return_message(get_lang($message)));
-            }
+            $message = approvePost($postEntity, $_GET['action']);
+            Display::addFlash(Display::return_message(get_lang($message)));
         }
         header('Location: '.$currentUrl);
         exit;

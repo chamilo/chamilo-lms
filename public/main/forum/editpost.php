@@ -132,12 +132,7 @@ $sessionEntity = api_get_session_entity();
 $forumIsVisible = $forum->isVisible($courseEntity);
 $categoryIsVisible = $category->isVisible($courseEntity) && !api_get_session_id();
 
-if (empty($post)
-    || !forumBelongsToCurrentContext($forum)
-    || null === $thread
-    || $thread->getForum()?->getIid() !== $forum->getIid()
-    || $post->getThread()?->getIid() !== $thread->getIid()
-) {
+if (empty($post)) {
     api_not_allowed(true);
 }
 

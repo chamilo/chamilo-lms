@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\PluginBundle\Zoom\API\BaseMeetingTrait;
+use Chamilo\PluginBundle\Zoom\API\Client;
 use Chamilo\PluginBundle\Zoom\API\JWTClient;
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\API\MeetingRegistrant;
@@ -761,7 +762,7 @@ class ZoomPlugin extends Plugin
                                 }
                             } elseif ('CopyToCourse' === $action && $meeting->isCourseMeeting()) {
                                 try {
-                                    $this->copyFileToCourse($meeting, $file, $name);
+                                    $this->copyFileToCourse($meeting, $file, $name, $recording->getRecordingMeeting());
                                     Display::addFlash(
                                         Display::return_message($this->get_lang('FileWasCopiedToCourse'), 'confirm')
                                     );
@@ -828,7 +829,7 @@ class ZoomPlugin extends Plugin
      *
      * @throws Exception
      */
-    public function copyFileToCourse($meeting, $file, $name)
+    public function copyFileToCourse($meeting, $file, $name, $recordingMeeting)
     {
         $course = $meeting->getCourse();
         if (null === $course) {
@@ -842,7 +843,37 @@ class ZoomPlugin extends Plugin
         if (false === $tmpFile) {
             throw new Exception('tmpfile() returned false');
         }
-        $curl = curl_init($file->getFullDownloadURL($this->jwtClient->token));
+
+		// Get fresh recording URL and token from Zoom API
+		$response = Client::getInstance()->send(
+			'GET',
+			'meetings/'.$recordingMeeting->id.'/recordings',
+			['include_fields' => 'download_access_token']
+		);
+		
+		$data = json_decode($response, true);
+		
+		$downloadToken = $data['download_access_token'] ?? null;
+		
+		if (empty($downloadToken)) {
+			throw new Exception('Zoom did not provide a recording download token');
+		}
+		
+		$downloadUrl = null;
+		
+		foreach ($data['recording_files'] ?? [] as $recordingFile) {
+			if (($recordingFile['id'] ?? null) === $file->id) {
+				$downloadUrl = $recordingFile['download_url'] ?? null;
+				break;
+			}
+		}
+		
+		if (empty($downloadUrl)) {
+			throw new Exception('Could not find the recording file in Zoom');
+		}
+
+		$curl = curl_init($downloadUrl);
+
         if (false === $curl) {
             throw new Exception('Could not init curl: '.curl_error($curl));
         }
@@ -853,6 +884,7 @@ class ZoomPlugin extends Plugin
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_MAXREDIRS => 10,
                 CURLOPT_TIMEOUT => 120,
+                CURLOPT_HTTPHEADER => ['Authorization: Bearer '.$downloadToken,],
             ]
         )) {
             throw new Exception("Could not set curl options: ".curl_error($curl));

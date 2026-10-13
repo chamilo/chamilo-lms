@@ -8,8 +8,10 @@ namespace Chamilo\Tests\CourseBundle\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
@@ -148,6 +150,86 @@ final class CStudentPublicationRelDocumentSecurityTest extends AbstractApiTest
     }
 
     /**
+     * Assignments are linked either to the base course (cid) or to the course in a session
+     * (cid + sid), never to both, so each context only sees its own relations.
+     */
+    public function testCollectionIsScopedToTheSessionOfTheRequest(): void
+    {
+        $ctx = $this->bootstrapSessionScenario('session_collection');
+        $baseRelation = $this->createRelation($ctx['baseAssignment'], $ctx['baseDocument']);
+        $sessionRelation = $this->createRelation($ctx['sessionAssignment'], $ctx['sessionDocument']);
+        $iri = static fn (int $id): string => '/api/c_student_publication_rel_documents/'.$id;
+        $cid = $ctx['course']->getId();
+
+        $response = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['baseLearner']))->request(
+            'GET',
+            '/api/c_student_publication_rel_documents?cid='.$cid
+        );
+        $this->assertResponseStatusCodeSame(200);
+        $ids = array_column($response->toArray()['hydra:member'], '@id');
+        $this->assertContains($iri($baseRelation), $ids);
+        $this->assertNotContains($iri($sessionRelation), $ids);
+
+        $response = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['sessionLearner']))->request(
+            'GET',
+            '/api/c_student_publication_rel_documents?cid='.$cid.'&sid='.$ctx['session']->getId()
+        );
+        $this->assertResponseStatusCodeSame(200);
+        $ids = array_column($response->toArray()['hydra:member'], '@id');
+        $this->assertContains($iri($sessionRelation), $ids);
+        $this->assertNotContains($iri($baseRelation), $ids);
+    }
+
+    public function testRelationOfSessionAssignmentDoesNotOpenDocumentToUsersOfAnotherCourse(): void
+    {
+        $ctx = $this->bootstrapSessionScenario('session_open');
+        $this->createRelation($ctx['sessionAssignment'], $ctx['sessionDocument']);
+        $outsider = $this->createUser('rel_doc_s_outsider_session_open');
+
+        $cid = $ctx['course']->getId();
+        foreach (['?cid='.$cid.'&sid='.$ctx['session']->getId(), '?cid='.$cid, ''] as $query) {
+            $this->createClientWithCredentials($this->getUserTokenFromUser($outsider))->request(
+                'GET',
+                '/api/documents/'.$ctx['sessionDocument'].$query
+            );
+            $this->assertResponseStatusCodeSame(403);
+        }
+    }
+
+    public function testSessionCoachCanAttachSessionDocumentToSessionAssignment(): void
+    {
+        $ctx = $this->bootstrapSessionScenario('session_attach');
+
+        $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['coach']))->request(
+            'POST',
+            '/api/c_student_publication_rel_documents?cid='.$ctx['course']->getId().'&sid='.$ctx['session']->getId(),
+            ['json' => [
+                'publication' => '/api/c_student_publications/'.$ctx['sessionAssignment']->getIid(),
+                'document' => '/api/documents/'.$ctx['sessionDocument'],
+            ]]
+        );
+
+        $this->assertResponseStatusCodeSame(201);
+    }
+
+    public function testSessionCoachCannotAttachDocumentOfAnotherCourse(): void
+    {
+        $ctx = $this->bootstrapSessionScenario('session_foreign');
+
+        $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['coach']))->request(
+            'POST',
+            '/api/c_student_publication_rel_documents?cid='.$ctx['course']->getId().'&sid='.$ctx['session']->getId(),
+            ['json' => [
+                'publication' => '/api/c_student_publications/'.$ctx['sessionAssignment']->getIid(),
+                'document' => '/api/documents/'.$ctx['foreignDocument'],
+            ]]
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame(0, $this->countRelations($ctx['foreignDocument']));
+    }
+
+    /**
      * Two private courses, each with an assignment of its teacher and a draft document.
      *
      * @return array{
@@ -197,7 +279,68 @@ final class CStudentPublicationRelDocumentSecurityTest extends AbstractApiTest
         ];
     }
 
-    private function createAssignment(Course $course, User $creator, string $title): CStudentPublication
+    /**
+     * A course run in a session: its base course and the session each hold their own assignment
+     * and draft document, plus a draft document of an unrelated course.
+     *
+     * @return array{
+     *     course: Course,
+     *     session: Session,
+     *     coach: User,
+     *     baseLearner: User,
+     *     sessionLearner: User,
+     *     baseAssignment: CStudentPublication,
+     *     sessionAssignment: CStudentPublication,
+     *     baseDocument: int,
+     *     sessionDocument: int,
+     *     foreignDocument: int
+     * }
+     */
+    private function bootstrapSessionScenario(string $suffix): array
+    {
+        $_SERVER['REMOTE_ADDR'] = 'localhost';
+
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        /** @var SessionRepository $sessionRepo */
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+
+        $course = $this->createCourse('RDS '.$suffix);
+        $course->setVisibility(Course::REGISTERED);
+        $foreignCourse = $this->createCourse('RDF '.$suffix);
+        $foreignCourse->setVisibility(Course::REGISTERED);
+
+        $teacher = $this->createUser('rel_doc_s_teacher_'.$suffix);
+        $coach = $this->createUser('rel_doc_s_coach_'.$suffix);
+        $baseLearner = $this->createUser('rel_doc_s_base_'.$suffix);
+        $sessionLearner = $this->createUser('rel_doc_s_learner_'.$suffix);
+
+        $course->addUserAsTeacher($teacher);
+        $course->addUserAsStudent($baseLearner);
+        $courseRepo->update($course);
+        $courseRepo->update($foreignCourse);
+
+        $session = $this->createSession('RDS session '.$suffix);
+        $session->addCourse($course)->addGeneralCoach($coach);
+        $sessionRepo->update($session);
+        $sessionRepo->addUserInCourse(Session::STUDENT, $sessionLearner, $course, $session);
+
+        return [
+            'course' => $course,
+            'session' => $session,
+            'coach' => $coach,
+            'baseLearner' => $baseLearner,
+            'sessionLearner' => $sessionLearner,
+            'baseAssignment' => $this->createAssignment($course, $teacher, 'Base assignment '.$suffix),
+            'sessionAssignment' => $this->createAssignment($course, $teacher, 'Session assignment '.$suffix, $session),
+            'baseDocument' => $this->createDraftDocument($course),
+            'sessionDocument' => $this->createDraftDocument($course, $session),
+            'foreignDocument' => $this->createDraftDocument($foreignCourse),
+        ];
+    }
+
+    private function createAssignment(Course $course, User $creator, string $title, ?Session $session = null): CStudentPublication
     {
         $assignment = (new CStudentPublication())
             ->setTitle($title)
@@ -207,7 +350,7 @@ final class CStudentPublicationRelDocumentSecurityTest extends AbstractApiTest
             ->setUser($creator)
             ->setCreator($creator)
             ->setActive(1)
-            ->addCourseLink($course)
+            ->addCourseLink($course, $session)
         ;
 
         $em = $this->getEntityManager();
@@ -218,15 +361,20 @@ final class CStudentPublicationRelDocumentSecurityTest extends AbstractApiTest
     }
 
     /**
-     * Uploads a file document as admin, hidden from learners, and returns its iid.
+     * Uploads a file document as admin, hidden from learners, and returns its iid. In a session
+     * the document is linked to the course and the session, not to the base course.
      */
-    private function createDraftDocument(Course $course): int
+    private function createDraftDocument(Course $course, ?Session $session = null): int
     {
         $file = $this->getUploadedFile();
+        $link = ['cid' => $course->getId(), 'visibility' => ResourceLink::VISIBILITY_DRAFT];
+        if (null !== $session) {
+            $link['sid'] = $session->getId();
+        }
 
         $response = $this->createClientWithCredentials($this->getUserToken([]))->request(
             'POST',
-            '/api/documents?cid='.$course->getId(),
+            '/api/documents?cid='.$course->getId().(null !== $session ? '&sid='.$session->getId() : ''),
             [
                 'headers' => ['Content-Type' => 'multipart/form-data'],
                 'extra' => ['files' => ['uploadFile' => $file]],
@@ -234,7 +382,7 @@ final class CStudentPublicationRelDocumentSecurityTest extends AbstractApiTest
                     'filetype' => 'file',
                     'size' => $file->getSize(),
                     'parentResourceNodeId' => $course->getResourceNode()->getId(),
-                    'resourceLinkList' => [['cid' => $course->getId(), 'visibility' => ResourceLink::VISIBILITY_DRAFT]],
+                    'resourceLinkList' => [$link],
                 ],
             ]
         );

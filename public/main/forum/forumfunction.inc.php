@@ -2930,7 +2930,9 @@ function store_reply(CForum $forum, CForumThread $thread, $values, $courseId = 0
 
         if (isset($values['post_parent_id']) && !empty($values['post_parent_id'])) {
             $parent = $repo->find($values['post_parent_id']);
-            $post->setPostParent($parent);
+            if (null !== $parent && $parent->getThread()?->getIid() === $thread->getIid()) {
+                $post->setPostParent($parent);
+            }
         }
         $repo->create($post);
 
@@ -3155,6 +3157,9 @@ function show_edit_post_form(
     // Validation or display
     if ($form->validate()) {
         $values = $form->exportValues();
+        // Never trust the hidden fields: keep the post and thread already authorized by the caller.
+        $values['post_id'] = $post->getIid();
+        $values['thread_id'] = $thread->getIid();
         $values['item_id'] = $post->getIid();
         $extraFieldValues = new ExtraFieldValue('forum_post');
         $extraFieldValues->saveFieldValues($values);
@@ -5713,4 +5718,31 @@ function getCountPostsWithStatusBatch(int $status, array $forumIds): array
     }
 
     return $map;
+}
+
+/**
+ * Whether the forum is linked to the current course, either in the current session or in the base course.
+ */
+function forumBelongsToCurrentContext(?CForum $forum): bool
+{
+    $resourceNode = $forum?->getResourceNode();
+    if (null === $resourceNode) {
+        return false;
+    }
+
+    $courseId = api_get_course_int_id();
+    $sessionId = api_get_session_id();
+
+    foreach ($resourceNode->getResourceLinks() as $link) {
+        if (!$link instanceof ResourceLink || $courseId !== $link->getCourse()?->getId()) {
+            continue;
+        }
+
+        $linkSession = $link->getSession();
+        if (null === $linkSession || $sessionId === $linkSession->getId()) {
+            return true;
+        }
+    }
+
+    return false;
 }

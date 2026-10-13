@@ -8,11 +8,11 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
-use Doctrine\ORM\EntityManager;
 use PDF;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
@@ -34,25 +34,16 @@ readonly class ExportCLinksAction
         Request $request,
         CLinkRepository $repo,
         CLinkCategoryRepository $repoCategory,
-        EntityManager $em,
+        CidReqHelper $cidReqHelper,
     ): Response {
         $format = (string) $request->get('format');
-        $cid = (int) $request->request->get('cid', 0);
-        $sid = (int) $request->request->get('sid', 0);
 
         if (!\in_array($format, ['pdf'], true)) {
             throw new BadRequestHttpException('Invalid export format.');
         }
 
-        $course = null;
-        $session = null;
-
-        if ($cid > 0) {
-            $course = $em->find(Course::class, $cid);
-        }
-        if ($sid > 0) {
-            $session = $em->find(Session::class, $sid);
-        }
+        $course = $cidReqHelper->getDoctrineCourseEntity();
+        $session = $cidReqHelper->getDoctrineSessionEntity();
 
         if (!$course) {
             throw new BadRequestHttpException('Course not found.');

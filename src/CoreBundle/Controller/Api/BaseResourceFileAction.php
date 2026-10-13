@@ -265,6 +265,23 @@ class BaseResourceFileAction
     }
 
     /**
+     * A resource referenced by id from the body (e.g. a link category) must already live in
+     * the current course, otherwise a teacher could attach their content to another course's.
+     */
+    protected function assertResourceBelongsToCurrentCourse(AbstractResource $resource, CidReqHelper $cidReqHelper): void
+    {
+        $courseId = (int) $cidReqHelper->getCourseEntity()?->getId();
+
+        foreach ($resource->getResourceNode()?->getResourceLinks() ?? [] as $resourceLink) {
+            if ($courseId > 0 && $courseId === (int) $resourceLink->getCourse()?->getId()) {
+                return;
+            }
+        }
+
+        throw new AccessDeniedHttpException('The resource does not belong to the current course.');
+    }
+
+    /**
      * @todo use this function inside handleCreateFileRequest
      */
     protected function handleCreateRequest(

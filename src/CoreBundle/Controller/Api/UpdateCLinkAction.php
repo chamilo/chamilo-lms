@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UpdateCLinkAction extends BaseResourceFileAction
 {
-    public function __invoke(CLink $link, Request $request, CLinkRepository $repo, EntityManager $em, CShortcutRepository $shortcutRepository, Security $security): CLink
+    public function __invoke(CLink $link, Request $request, CLinkRepository $repo, EntityManager $em, CShortcutRepository $shortcutRepository, Security $security, CidReqHelper $cidReqHelper): CLink
     {
         $data = json_decode($request->getContent(), true);
         $url = $data['url'];
@@ -38,6 +39,7 @@ class UpdateCLinkAction extends BaseResourceFileAction
         if (0 !== $categoryId) {
             $linkCategory = $em->getRepository(CLinkCategory::class)->find($categoryId);
             if ($linkCategory) {
+                $this->assertResourceBelongsToCurrentCourse($linkCategory, $cidReqHelper);
                 $link->setCategory($linkCategory);
             }
         }

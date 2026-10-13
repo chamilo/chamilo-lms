@@ -7248,6 +7248,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $selfUrl = api_get_self();
         $courseIdReq = api_get_cidreq();
+        $createLinkUrl = api_get_path(WEB_PATH).'resources/links/'.(int) $course?->getResourceNode()?->getId().'/create?'
+            .http_build_query([
+                'cid' => api_get_course_int_id(),
+                'sid' => $sessionId,
+                'gid' => api_get_group_id(),
+                'origin' => 'learnpath',
+                'lp_id' => $this->lp_id,
+            ]);
 
         $moveEverywhereIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
 
@@ -7347,7 +7355,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <li class="list-group-item lp_resource_element border-gray-25 disable_drag lp-links-sticky-action">
                 '.Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL).'
                 <a
-                href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'"
+                href="'.$createLinkUrl.'"
                 title="'.get_lang('Add a link').'">'.
                 get_lang('Add a link').'
                 </a>

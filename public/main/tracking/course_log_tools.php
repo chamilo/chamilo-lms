@@ -368,7 +368,7 @@ echo Display::page_subheader(
         ICON_SIZE_SMALL,
         get_lang('Forum')
     ).' '.
-    get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?'.api_get_cidreq().'">'.
+    get_lang('Forum').'&nbsp;-&nbsp;<a href="'.getForumToolUrl(api_get_course_int_id(), api_get_session_id(), api_get_group_id()).'">'.
     get_lang('See detail').'</a>'
 );
 echo '<table class="data_table">';

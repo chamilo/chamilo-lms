@@ -1557,7 +1557,7 @@ class SessionManager
             $link = '<a href="'.api_get_path(WEB_PATH).'reporting/learners/'.(int) $user[0].'/courses/'.(int) $course['real_id'].'?'.http_build_query([
                 'sid' => (int) $sessionId,
             ]).'"> %s </a>';
-            $linkForum = '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
+            $linkForum = '<a href="'.getForumToolUrl((int) $course['real_id'], (int) $sessionId).'"> %s </a>';
             $linkWork = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
             // The survey tool lives at /resources/survey/{courseResourceNodeId}/; the legacy
             // list it used to point at links on to survey/reporting.php, which now denies

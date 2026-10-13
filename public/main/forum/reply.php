@@ -104,6 +104,13 @@ if (!empty($threadId)) {
     $threadEntity = $repoThread->find($threadId);
 }
 
+if (!forumBelongsToCurrentContext($forum)
+    || null === $threadEntity
+    || $threadEntity->getForum()?->getIid() !== $forum->getIid()
+) {
+    api_not_allowed(true);
+}
+
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
 $current_forum_category = $forum->getForumCategory();
@@ -229,6 +236,9 @@ Event::registerLog($logInfo);
 
 $postRepo = Container::getForumPostRepository();
 $post = $postRepo->find($my_post);
+if (null !== $post && $post->getThread()?->getIid() !== $threadEntity->getIid()) {
+    api_not_allowed(true);
+}
 
 $form = show_add_post_form(
     $forum,

@@ -67,7 +67,7 @@ class Room
     #[Groups(['room:list', 'room:read', 'room:write'])]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(name: 'title', type: 'string', length: 255)]
+    #[ORM\Column(name: 'title', type: 'text')]
     protected string $title;
 
     #[Groups(['room:read', 'room:write'])]

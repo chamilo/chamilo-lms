@@ -29,14 +29,14 @@ class SysAnnouncement
     protected DateTime $dateEnd;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected string $content;
 
-    #[ORM\Column(name: 'lang', type: 'string', length: 70, nullable: true)]
+    #[ORM\Column(name: 'lang', type: 'string', length: 255, nullable: true)]
     protected ?string $lang = null;
 
     #[ORM\ManyToOne(targetEntity: AccessUrl::class)]

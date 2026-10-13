@@ -133,7 +133,7 @@ class ResourceFile implements Stringable
     protected ?int $id = null;
     #[Assert\NotBlank]
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read'])]
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'text')]
     protected ?string $title = null;
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
     #[ORM\Column(type: 'text', nullable: true)]

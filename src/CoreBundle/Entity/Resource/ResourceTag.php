@@ -21,7 +21,7 @@ class ResourceTag
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\ManyToOne(targetEntity: User::class)]

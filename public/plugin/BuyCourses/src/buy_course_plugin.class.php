@@ -606,11 +606,11 @@ class BuyCoursesPlugin extends Plugin
         $sellerVatColumns = [
             'seller_country' => 'VARCHAR(2) DEFAULT NULL',
             'seller_postcode' => 'VARCHAR(32) DEFAULT NULL',
-            'seller_vat_number' => 'VARCHAR(64) DEFAULT NULL',
+            'seller_vat_number' => 'VARCHAR(255) DEFAULT NULL',
             'seller_vat_registered' => 'TINYINT(1) NOT NULL DEFAULT 0',
             'seller_annual_eu_tbe_turnover' => 'DECIMAL(12,2) NOT NULL DEFAULT 0.00',
             'vat_geoip_provider' => "VARCHAR(32) NOT NULL DEFAULT 'none'",
-            'vat_maxmind_account_id' => 'VARCHAR(64) DEFAULT NULL',
+            'vat_maxmind_account_id' => 'VARCHAR(255) DEFAULT NULL',
             'vat_maxmind_license_key' => 'VARCHAR(255) DEFAULT NULL',
         ];
 
@@ -791,11 +791,11 @@ class BuyCoursesPlugin extends Plugin
             'buyer_postcode' => 'VARCHAR(32) DEFAULT NULL',
             'buyer_ip' => 'VARCHAR(45) DEFAULT NULL',
             'buyer_ip_country' => 'VARCHAR(2) DEFAULT NULL',
-            'buyer_vat_number' => 'VARCHAR(64) DEFAULT NULL',
+            'buyer_vat_number' => 'VARCHAR(255) DEFAULT NULL',
             'buyer_vat_valid' => 'TINYINT(1) DEFAULT NULL',
             'buyer_business_name' => 'VARCHAR(255) DEFAULT NULL',
             'buyer_business_address' => 'TEXT DEFAULT NULL',
-            'vat_treatment' => 'VARCHAR(128) DEFAULT NULL',
+            'vat_treatment' => 'VARCHAR(255) DEFAULT NULL',
             'vat_rate' => 'DECIMAL(5,2) DEFAULT NULL',
             'vat_evidence_json' => 'LONGTEXT DEFAULT NULL',
         ];

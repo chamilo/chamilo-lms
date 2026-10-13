@@ -231,7 +231,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'student_publication_rel_user:read',
         'course_catalogue:read',
     ])]
-    #[ORM\Column(name: 'username', type: 'string', length: 100, unique: true)]
+    #[ORM\Column(name: 'username', type: 'string', length: 255, unique: true)]
     protected string $username;
     #[ORM\Column(name: 'api_token', type: 'string', unique: true, nullable: true)]
     protected ?string $apiToken = null;
@@ -248,7 +248,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'student_publication_rel_user:read',
         'course_catalogue:read',
     ])]
-    #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'firstname', type: 'string', length: 255, nullable: true)]
     protected ?string $firstname = null;
     #[Groups([
         'user:read',
@@ -262,7 +262,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'student_publication_rel_user:read',
         'course_catalogue:read',
     ])]
-    #[ORM\Column(name: 'lastname', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'lastname', type: 'string', length: 255, nullable: true)]
     protected ?string $lastname = null;
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'website', type: 'string', length: 255, nullable: true)]
@@ -277,17 +277,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $plainPassword = null;
     #[ORM\Column(name: 'password', type: 'string', length: 255)]
     protected string $password = '';
-    #[ORM\Column(name: 'username_canonical', type: 'string', length: 180)]
+    #[ORM\Column(name: 'username_canonical', type: 'string', length: 255)]
     protected string $usernameCanonical;
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
-    #[ORM\Column(name: 'timezone', type: 'string', length: 64)]
+    #[ORM\Column(name: 'timezone', type: 'string', length: 255)]
     protected string $timezone;
-    #[ORM\Column(name: 'email_canonical', type: 'string', length: 100)]
+    #[ORM\Column(name: 'email_canonical', type: 'string', length: 255)]
     protected string $emailCanonical;
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[ORM\Column(name: 'email', type: 'string', length: 100)]
+    #[ORM\Column(name: 'email', type: 'string', length: 255)]
     protected string $email;
     #[ORM\Column(name: 'locked', type: 'boolean')]
     protected bool $locked;
@@ -304,10 +304,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\Column(name: 'expires_at', type: 'datetime', nullable: true)]
     protected ?DateTime $expiresAt;
     #[Groups(['user:read', 'user:write'])]
-    #[ORM\Column(name: 'phone', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'phone', type: 'string', length: 255, nullable: true)]
     protected ?string $phone = null;
     #[Groups(['user:read', 'user:write'])]
-    #[ORM\Column(name: 'address', type: 'string', length: 250, nullable: true)]
+    #[ORM\Column(name: 'address', type: 'string', length: 255, nullable: true)]
     protected ?string $address = null;
     #[ORM\Column(type: 'string', length: 255)]
     protected string $salt;
@@ -358,15 +358,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected array $roles = [];
     #[ORM\Column(name: 'profile_completed', type: 'boolean', nullable: true)]
     protected ?bool $profileCompleted = null;
-
-    /**
-     * @var Collection<int, Group>
-     */
-    #[ORM\JoinTable(name: 'fos_user_user_group')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
-    #[ORM\InverseJoinColumn(name: 'group_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'users')]
-    protected Collection $groups;
 
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user").
@@ -652,7 +643,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected int $status;
     #[ORM\Column(name: 'official_code', type: 'string', length: 40, nullable: true)]
     protected ?string $officialCode = null;
-    #[ORM\Column(name: 'picture_uri', type: 'string', length: 250, nullable: true)]
+    #[ORM\Column(name: 'picture_uri', type: 'string', length: 255, nullable: true)]
     protected ?string $pictureUri = null;
     #[ORM\Column(name: 'creator_id', type: 'integer', unique: false, nullable: true)]
     protected ?int $creatorId = null;
@@ -664,7 +655,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $openarea = null;
     #[ORM\Column(name: 'teach', type: 'text', unique: false, nullable: true)]
     protected ?string $teach = null;
-    #[ORM\Column(name: 'productions', type: 'string', length: 250, unique: false, nullable: true)]
+    #[ORM\Column(name: 'productions', type: 'string', length: 255, unique: false, nullable: true)]
     protected ?string $productions = null;
     #[ORM\Column(name: 'expiration_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $expirationDate = null;
@@ -794,7 +785,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->portals = new ArrayCollection();
         $this->dropBoxSentFiles = new ArrayCollection();
         $this->dropBoxReceivedFiles = new ArrayCollection();
-        $this->groups = new ArrayCollection();
         $this->gradeBookCertificates = new ArrayCollection();
         $this->courseGroupsAsMember = new ArrayCollection();
         $this->courseGroupsAsTutor = new ArrayCollection();
@@ -1310,56 +1300,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function hasGroup(string $name): bool
-    {
-        return \in_array($name, $this->getGroupNames(), true);
-    }
-
-    public function getGroupNames(): array
-    {
-        $names = [];
-        foreach ($this->getGroups() as $group) {
-            $names[] = $group->getTitle();
-        }
-
-        return $names;
-    }
-
-    public function getGroups(): Collection
-    {
-        return $this->groups;
-    }
-
-    /**
-     * Sets the user groups.
-     */
-    public function setGroups(Collection $groups): self
-    {
-        foreach ($groups as $group) {
-            $this->addGroup($group);
-        }
-
-        return $this;
-    }
-
-    public function addGroup(Group $group): self
-    {
-        if (!$this->getGroups()->contains($group)) {
-            $this->getGroups()->add($group);
-        }
-
-        return $this;
-    }
-
-    public function removeGroup(Group $group): self
-    {
-        if ($this->getGroups()->contains($group)) {
-            $this->getGroups()->removeElement($group);
-        }
-
-        return $this;
-    }
-
     public function isAccountNonExpired(): bool
     {
         return true;
@@ -1638,7 +1578,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * Returns the user roles (persisted + temporary + group roles).
+     * Returns the user roles (persisted + temporary).
      */
     public function getRoles(): array
     {
@@ -1649,10 +1589,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $temporary = array_map('strtoupper', $this->temporaryRoles);
 
         $roles = array_merge($persisted, $temporary);
-
-        foreach ($this->getGroups() as $group) {
-            $roles = array_merge($roles, $group->getRoles());
-        }
 
         // Ensure baseline role.
         $roles[] = 'ROLE_USER';

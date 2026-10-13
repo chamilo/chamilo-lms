@@ -23,16 +23,16 @@ class Block
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: true)]
     protected ?string $title = null;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    #[ORM\Column(name: 'path', type: 'string', length: 190, nullable: false)]
+    #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
 
-    #[ORM\Column(name: 'controller', type: 'string', length: 100, nullable: false)]
+    #[ORM\Column(name: 'controller', type: 'string', length: 255, nullable: false)]
     protected string $controller;
 
     #[ORM\Column(name: 'active', type: 'boolean', nullable: false)]

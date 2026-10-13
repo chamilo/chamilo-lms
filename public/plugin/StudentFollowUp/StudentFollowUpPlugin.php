@@ -46,7 +46,7 @@ class StudentFollowUpPlugin extends Plugin
                 insert_user_id INT NOT NULL,
                 user_id INT NOT NULL,
                 parent_id INT DEFAULT NULL,
-                title VARCHAR(255) NOT NULL,
+                title LONGTEXT NOT NULL,
                 content LONGTEXT DEFAULT NULL,
                 external_care_id VARCHAR(255) DEFAULT NULL,
                 created_at DATETIME DEFAULT NULL,

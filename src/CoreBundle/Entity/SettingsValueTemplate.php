@@ -21,7 +21,7 @@ class SettingsValueTemplate
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'variable', type: 'string', length: 190, unique: true, nullable: false)]
+    #[ORM\Column(name: 'variable', type: 'string', length: 255, unique: true, nullable: false)]
     protected string $variable;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]

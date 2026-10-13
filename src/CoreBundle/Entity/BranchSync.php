@@ -82,7 +82,7 @@ class BranchSync
     #[Groups(['branch:list', 'branch:read', 'branch:write', 'room:list', 'room:read'])]
     #[Assert\NotBlank]
     #[Assert\Length(max: 250)]
-    #[ORM\Column(name: 'title', type: 'string', length: 250)]
+    #[ORM\Column(name: 'title', type: 'text')]
     protected string $title;
 
     #[Groups(['branch:read', 'branch:write'])]
@@ -120,18 +120,18 @@ class BranchSync
     #[Groups(['branch:read', 'branch:write'])]
     #[Assert\Email]
     #[Assert\Length(max: 250)]
-    #[ORM\Column(name: 'admin_mail', type: 'string', length: 250, nullable: true, unique: false)]
+    #[ORM\Column(name: 'admin_mail', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $adminMail = null;
 
     #[Groups(['branch:read', 'branch:write'])]
     #[Assert\Length(max: 250)]
-    #[ORM\Column(name: 'admin_name', type: 'string', length: 250, nullable: true, unique: false)]
+    #[ORM\Column(name: 'admin_name', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $adminName = null;
 
     #[Groups(['branch:read', 'branch:write'])]
     #[Assert\Length(max: 40)]
     #[Assert\Regex(pattern: '/^[\d\s\+\-\(\)\.]*$/', message: 'Only digits, spaces, +, -, (, ), and . are allowed.')]
-    #[ORM\Column(name: 'admin_phone', type: 'string', length: 250, nullable: true, unique: false)]
+    #[ORM\Column(name: 'admin_phone', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $adminPhone = null;
 
     #[Groups(['branch:read'])]
@@ -147,11 +147,11 @@ class BranchSync
     protected ?string $lastSyncType = null;
 
     #[Groups(['branch:read'])]
-    #[ORM\Column(name: 'ssl_pub_key', type: 'string', length: 250, nullable: true, unique: false)]
+    #[ORM\Column(name: 'ssl_pub_key', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $sslPubKey;
 
     #[Groups(['branch:read'])]
-    #[ORM\Column(name: 'branch_type', type: 'string', length: 250, nullable: true, unique: false)]
+    #[ORM\Column(name: 'branch_type', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $branchType = null;
 
     #[Gedmo\TreeLeft]

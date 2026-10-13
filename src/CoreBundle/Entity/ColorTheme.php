@@ -42,7 +42,7 @@ class ColorTheme
     private ?int $id = null;
 
     #[Groups(['color_theme:write', 'access_url_rel_color_theme:read'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
     private string $title;
 
     /**

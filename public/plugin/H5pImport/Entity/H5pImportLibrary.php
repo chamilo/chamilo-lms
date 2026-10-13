@@ -31,7 +31,7 @@ class H5pImportLibrary
     #[ORM\GeneratedValue]
     private ?int $iid;
 
-    #[ORM\Column(name: 'title', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: true)]
     private ?string $title;
 
     #[ORM\Column(name: 'machine_name', type: 'string')]

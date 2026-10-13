@@ -22,7 +22,7 @@ class TrackELoginRecord
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'username', type: 'string', length: 100, nullable: false)]
+    #[ORM\Column(name: 'username', type: 'string', length: 255, nullable: false)]
     protected string $username;
 
     #[ORM\Column(name: 'login_date', type: 'datetime', nullable: false)]

@@ -40,6 +40,47 @@ class CourseRequestManager
     }
 
     /**
+     * Resolve the legacy category selector value to a course category.
+     *
+     * The regular select submits the category code while the AJAX selector
+     * submits the integer ID. If a numeric value matches two different
+     * categories (one by code and another by ID), fail instead of guessing.
+     *
+     * @return array|null
+     */
+    private static function resolveCategoryReference($categoryReference)
+    {
+        $categoryReference = trim((string) $categoryReference);
+        if ('' === $categoryReference) {
+            return null;
+        }
+
+        $categoryByCode = CourseCategory::getCategory($categoryReference);
+        $categoryById = [];
+
+        if (ctype_digit($categoryReference)) {
+            $categoryById = CourseCategory::getCategoryById((int) $categoryReference);
+        }
+
+        $categoryIdByCode = !empty($categoryByCode['id']) ? (int) $categoryByCode['id'] : null;
+        $categoryIdById = !empty($categoryById['id']) ? (int) $categoryById['id'] : null;
+
+        if (null !== $categoryIdByCode && null !== $categoryIdById && $categoryIdByCode !== $categoryIdById) {
+            return null;
+        }
+
+        if (null !== $categoryIdByCode) {
+            return $categoryByCode;
+        }
+
+        if (null !== $categoryIdById) {
+            return $categoryById;
+        }
+
+        return null;
+    }
+
+    /**
      * Creates a new course request within the database.
      *
      * @param string $wanted_code     the code for the created in the future course
@@ -80,6 +121,12 @@ class CourseRequestManager
             return false;
         }
 
+        $category = self::resolveCategoryReference($category_code);
+        if ('' !== trim((string) $category_code) && null === $category) {
+            return false;
+        }
+        $categoryId = null !== $category ? (int) $category['id'] : null;
+
         $user_info = api_get_user_info($user_id);
         if (!is_array($user_info)) {
             return false;
@@ -102,12 +149,12 @@ class CourseRequestManager
         $sql = sprintf(
             'INSERT INTO %s (
                 code, user_id,
-                course_language, title, description, category_code,
+                course_language, title, description, category_id,
                 tutor_name, visual_code, request_date,
                 objetives, target_audience, status, info, exemplary_content)
             VALUES (
                 "%s", "%d", "%s", "%s",
-                "%s", "%s", "%s", "%s",
+                "%s", %s, "%s", "%s",
                 "%s", "%s", "%s",
                 "%s", "%s", "%d");',
             Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
@@ -116,7 +163,7 @@ class CourseRequestManager
             Database::escape_string($course_language),
             Database::escape_string($title),
             Database::escape_string($description),
-            Database::escape_string($category_code),
+            null === $categoryId ? 'NULL' : (string) $categoryId,
             Database::escape_string($tutor_name),
             Database::escape_string($visual_code),
             Database::escape_string($request_date),
@@ -144,7 +191,7 @@ class CourseRequestManager
 
         $email_body = get_lang('We registered the following request for a new course:', $email_language)."\n\n";
         $email_body .= get_lang('Course name', $email_language).': '.$title."\n";
-        $email_body .= get_lang('Category', $email_language).': '.$category_code."\n";
+        $email_body .= get_lang('Category', $email_language).': '.($category['code'] ?? '')."\n";
         $email_body .= get_lang('Course code', $email_language).': '.$code."\n";
         $email_body .= get_lang('Teacher', $email_language).': '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language)."\n";
         $email_body .= get_lang('E-mail', $email_language).': '.$user_info['mail']."\n";
@@ -250,6 +297,12 @@ class CourseRequestManager
             return false;
         }
 
+        $category = self::resolveCategoryReference($category_code);
+        if ('' !== trim((string) $category_code) && null === $category) {
+            return false;
+        }
+        $categoryId = null !== $category ? (int) $category['id'] : null;
+
         // Retrieve request data
         $course_request_info = self::get_course_request_info($id);
         if (!is_array($course_request_info)) {
@@ -311,7 +364,7 @@ class CourseRequestManager
         $sql = sprintf(
             'UPDATE %s SET
                 code = "%s", user_id = "%s", directory = "%s", db_name = "%s",
-                course_language = "%s", title = "%s", description = "%s", category_code = "%s",
+                course_language = "%s", title = "%s", description = "%s", category_id = %s,
                 tutor_name = "%s", visual_code = "%s", request_date = "%s",
                 objetives = "%s", target_audience = "%s", status = "%s", info = "%s", exemplary_content = "%s"
             WHERE id = '.$id,
@@ -323,7 +376,7 @@ class CourseRequestManager
             Database::escape_string($course_language),
             Database::escape_string($title),
             Database::escape_string($description),
-            Database::escape_string($category_code),
+            null === $categoryId ? 'NULL' : (string) $categoryId,
             Database::escape_string($tutor_name),
             Database::escape_string($visual_code),
             Database::escape_string($request_date),
@@ -390,9 +443,12 @@ class CourseRequestManager
     public static function get_course_request_info($id)
     {
         $id = (int) $id;
-        $sql = "SELECT *
-                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
-                WHERE id = ".$id;
+        $courseRequestTable = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
+        $courseCategoryTable = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $sql = "SELECT cr.*, cc.code AS category_code
+                FROM $courseRequestTable cr
+                LEFT JOIN $courseCategoryTable cc ON cc.id = cr.category_id
+                WHERE cr.id = ".$id;
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return Database::fetch_array($result);
@@ -467,10 +523,8 @@ class CourseRequestManager
         $params['user_id'] = $course_request_info['user_id'];
         $params['tutor_name'] = api_get_person_name($user_info['firstname'], $user_info['lastname']);
 
-        if (!empty($course_request_info['category_code'])) {
-            $category = CourseCategory::getCategory($course_request_info['category_code']);
-            $categoryId = (int) $category['id'];
-            $params['course_categories'] = [$categoryId];
+        if (!empty($course_request_info['category_id'])) {
+            $params['course_categories'] = [(int) $course_request_info['category_id']];
         }
 
         $course = CourseManager::create_course($params);

@@ -25,7 +25,7 @@ class Permission implements Stringable
     private ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'text')]
     private string $title;
 
     #[Assert\NotBlank]

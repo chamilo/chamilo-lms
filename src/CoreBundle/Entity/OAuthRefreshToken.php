@@ -41,7 +41,7 @@ class OAuthRefreshToken
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'token_hash', type: 'string', length: 64, nullable: false)]
+    #[ORM\Column(name: 'token_hash', type: 'string', length: 255, nullable: false)]
     protected string $tokenHash;
 
     #[ORM\Column(name: 'grant_id', type: 'string', length: 36, nullable: false)]

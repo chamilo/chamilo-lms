@@ -26,7 +26,7 @@ class PageLayoutTemplate
     private ?int $id = null;
 
     #[Groups(['page_layout_template:read', 'page_layout_template:write'])]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $title = null;
 
     #[Groups(['page_layout_template:read', 'page_layout_template:write'])]

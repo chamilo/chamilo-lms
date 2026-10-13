@@ -17,10 +17,10 @@ class UserRemoteService
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title = '';
 
-    #[ORM\Column(name: 'url', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'url', type: 'text', nullable: false)]
     protected string $url = '';
 
     public function getId(): ?int

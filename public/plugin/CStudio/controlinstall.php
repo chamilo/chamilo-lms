@@ -34,7 +34,7 @@ if ($oel_tools) {
     $h .= "<li>oel_tools Is <span style='font-weight:bold;color:green;' >OK</span></li>";
 
     if (!columnExistOntable('plugin_oel_tools_teachdoc', 'options')) {
-        $inSql = 'ALTER TABLE `plugin_oel_tools_teachdoc` ADD `options` VARCHAR(512) NOT NULL;';
+        $inSql = 'ALTER TABLE `plugin_oel_tools_teachdoc` ADD `options` LONGTEXT NOT NULL;';
         Database::query($inSql);
         $h .= "<li>oel_tools Is <span style='font-weight:bold;color:green;' >Options is install</span></li>";
     } else {
@@ -69,8 +69,8 @@ if (!$oel_logs) {
         id_page INT NOT NULL DEFAULT '0',
         id_project INT NOT NULL DEFAULT '0',
         type_log TINYINT NOT NULL DEFAULT '0',
-        title VARCHAR(255),
-        logs VARCHAR(1080),
+        title LONGTEXT,
+        logs LONGTEXT,
         result TINYINT NOT NULL DEFAULT '0',
         date_create INT,
         send_xapi TINYINT,

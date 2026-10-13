@@ -20,7 +20,7 @@ class BranchTransactionStatus
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false, unique: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false, unique: false)]
     protected string $title;
 
     /**

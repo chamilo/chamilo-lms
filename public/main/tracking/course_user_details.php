@@ -304,10 +304,7 @@ function buildForumThreadUrl(array $row): string
     $forumId = (int) ($row['forum_id'] ?? 0);
     $threadId = (int) ($row['thread_id'] ?? 0);
 
-    return api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'
-        .api_get_cidreq()
-        .'&forum='.$forumId
-        .'&thread='.$threadId;
+    return getForumToolUrl(api_get_course_int_id(), api_get_session_id(), api_get_group_id(), $forumId, $threadId);
 }
 
 function formatTrackingDate($value): string

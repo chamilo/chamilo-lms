@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Doctrine\ORM\EntityManager;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CreateCLinkCategoryAction extends BaseResourceFileAction
 {
-    public function __invoke(Request $request, CLinkRepository $repo, EntityManager $em): CLinkCategory
+    public function __invoke(Request $request, CLinkRepository $repo, EntityManager $em, CidReqHelper $cidReqHelper): CLinkCategory
     {
         $data = json_decode($request->getContent(), true);
         $title = $data['category_title'];
@@ -27,6 +28,7 @@ class CreateCLinkCategoryAction extends BaseResourceFileAction
         ;
 
         if (!empty($parentResourceNodeId)) {
+            $this->assertParentNodeIsInCurrentCourse($cidReqHelper, (int) $parentResourceNodeId, $em);
             $linkCategory->setParentResourceNode($parentResourceNodeId);
         }
 

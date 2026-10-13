@@ -2,8 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\SequenceResource;
-
 // Delete the globals['_cid'], we don't need it here.
 $cidReset = true;
 
@@ -585,102 +583,12 @@ switch ($action) {
         exit;
         break;
     case 'display_sessions':
-        if (!$userCanViewPage) {
-            api_not_allowed(true);
-        }
-
-        CoursesAndSessionsCatalog::sessionList($limit);
-        exit;
-        break;
     case 'subscribe_to_session':
-        if (!$userCanViewPage) {
-            api_not_allowed(true);
-        }
-
-        $userId = api_get_user_id();
-        $confirmed = isset($_GET['confirm']);
-        $sessionId = (int) $_GET['session_id'];
-
-        if (empty($userId)) {
-            api_not_allowed();
-            exit;
-        }
-
-        if (!$confirmed) {
-            $template = new Template(null, false, false, false, false, false);
-            $template->assign('session_id', $sessionId);
-            $layout = $template->get_template('auth/confirm_session_subscription.tpl');
-            echo $template->fetch($layout);
-            exit;
-        }
-
-        $registrationAllowed = api_get_setting('catalog.allow_session_auto_subscription');
-        if ('true' === $registrationAllowed) {
-            $entityManager = Database::getManager();
-            $repository = $entityManager->getRepository(SequenceResource::class);
-            $sequences = $repository->getRequirements(
-                $sessionId,
-                SequenceResource::SESSION_TYPE
-            );
-
-            if (count($sequences) > 0) {
-                $requirementsData = $repository->checkRequirementsForUser(
-                    $sequences,
-                    SequenceResource::SESSION_TYPE,
-                    $userId,
-                    $sessionId
-                );
-
-                $continueWithSubscription = $repository->checkSequenceAreCompleted($requirementsData);
-
-                if (!$continueWithSubscription) {
-                    header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php');
-                    exit;
-                }
-            }
-
-            SessionManager::subscribeUsersToSession(
-                $sessionId,
-                [$userId],
-                SESSION_VISIBLE_READ_ONLY,
-                false
-            );
-
-            $coursesList = SessionManager::get_course_list_by_session_id($sessionId);
-            $count = count($coursesList);
-            $url = '';
-
-            if ($count <= 0) {
-                // no course in session -> return to catalog
-                $url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-            } elseif (1 == $count) {
-                // only one course, so redirect directly to this course
-                foreach ($coursesList as $course) {
-                    $url = api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$sessionId;
-                }
-            } else {
-                $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
-            }
-            header('Location: '.$url);
-            exit;
-        }
-        break;
     case 'search_tag':
-        if (!$userCanViewPage) {
-            api_not_allowed(true);
-        }
-
-        CoursesAndSessionsCatalog::sessionsListByCoursesTag($limit);
-        exit;
-        break;
     case 'search_session_title':
-        if (!$userCanViewPage) {
-            api_not_allowed(true);
-        }
-
-        CoursesAndSessionsCatalog::sessionsListByName($limit);
+        // The session catalogue lives in the Vue SPA: old links land there.
+        header('Location: '.api_get_path(WEB_PATH).'catalogue/sessions');
         exit;
-        break;
 }
 
 $template = new Template($toolTitle, true, true, false, false, false);

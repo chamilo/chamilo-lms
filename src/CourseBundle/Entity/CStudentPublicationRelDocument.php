@@ -19,8 +19,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     operations: [
         new Get(security: "object.getPublication() != null and is_granted('VIEW', object.getPublication().resourceNode)"),
-        new Delete(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"),
-        new Post(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')"),
+        new Delete(security: "(is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')) and object.getPublication() != null and is_granted('EDIT', object.getPublication().resourceNode)"),
+        new Post(
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            securityPostDenormalize: "object.getPublication() != null and is_granted('EDIT', object.getPublication().resourceNode) and object.getDocument() != null and object.isDocumentInPublicationCourse()",
+        ),
         new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
     ],
     normalizationContext: ['groups' => ['student_publication_rel_document:read']],
@@ -72,6 +75,29 @@ class CStudentPublicationRelDocument
         $this->document = $document;
 
         return $this;
+    }
+
+    /**
+     * Whether the document belongs to a course the assignment is published in.
+     * Base-course documents are shared with every session of the course, so only
+     * the course is compared.
+     */
+    public function isDocumentInPublicationCourse(): bool
+    {
+        $courseIds = [];
+        foreach ($this->publication->getResourceNode()?->getResourceLinks() ?? [] as $link) {
+            if (null !== $link->getCourse()) {
+                $courseIds[] = (int) $link->getCourse()->getId();
+            }
+        }
+
+        foreach ($this->document->getResourceNode()?->getResourceLinks() ?? [] as $link) {
+            if (null !== $link->getCourse() && \in_array((int) $link->getCourse()->getId(), $courseIds, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getIid(): ?int

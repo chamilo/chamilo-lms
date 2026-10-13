@@ -209,20 +209,25 @@ class ResourceNodeVoter extends Voter
             return $this->teachesResourceCourse($resourceNode, $user);
         }
 
-        if ('files' === $resourceNode->getResourceType()->getTitle()) {
+        // A document attached to an assignment is readable by whoever can view that assignment.
+        if (self::VIEW === $attribute && 'files' === $resourceNode->getResourceType()->getTitle()) {
             $document = $this->entityManager
                 ->getRepository(CDocument::class)
                 ->findOneBy(['resourceNode' => $resourceNode])
             ;
 
             if ($document) {
-                $exists = $this->entityManager
+                $relations = $this->entityManager
                     ->getRepository(CStudentPublicationRelDocument::class)
-                    ->findOneBy(['document' => $document])
+                    ->findBy(['document' => $document])
                 ;
 
-                if (null !== $exists) {
-                    return true;
+                foreach ($relations as $relation) {
+                    $publicationNode = $relation->getPublication()->getResourceNode();
+
+                    if (null !== $publicationNode && $this->security->isGranted(self::VIEW, $publicationNode)) {
+                        return true;
+                    }
                 }
             }
         }

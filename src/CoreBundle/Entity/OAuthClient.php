@@ -29,10 +29,10 @@ class OAuthClient
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'client_id', type: 'string', length: 64, nullable: false)]
+    #[ORM\Column(name: 'client_id', type: 'string', length: 255, nullable: false)]
     protected string $clientId;
 
-    #[ORM\Column(name: 'client_secret_hash', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'client_secret_hash', type: 'string', length: 255, nullable: true)]
     protected ?string $clientSecretHash = null;
 
     #[ORM\Column(name: 'client_secret_prefix', type: 'string', length: 32, nullable: true)]
@@ -59,7 +59,7 @@ class OAuthClient
     #[ORM\Column(name: 'software_id', type: 'string', length: 255, nullable: true)]
     protected ?string $softwareId = null;
 
-    #[ORM\Column(name: 'software_version', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'software_version', type: 'string', length: 255, nullable: true)]
     protected ?string $softwareVersion = null;
 
     /**

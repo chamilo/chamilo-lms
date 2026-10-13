@@ -65,7 +65,7 @@ class SearchEngineFieldValue
     #[ApiProperty(readableLink: false)]
     protected SearchEngineField $field;
 
-    #[ORM\Column(name: 'value', type: 'string', length: 200, nullable: false)]
+    #[ORM\Column(name: 'value', type: 'string', length: 255, nullable: false)]
     #[Groups(['sefv:read'])]
     protected string $value = '';
 

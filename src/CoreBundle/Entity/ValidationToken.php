@@ -31,7 +31,7 @@ class ValidationToken
     #[ORM\Column(type: 'bigint')]
     protected int $resourceId;
 
-    #[ORM\Column(type: 'string', length: 64)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $hash;
 
     #[ORM\Column(type: 'datetime')]

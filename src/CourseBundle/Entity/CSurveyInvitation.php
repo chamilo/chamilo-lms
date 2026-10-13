@@ -44,7 +44,7 @@ class CSurveyInvitation
 
     protected string $externalEmail;
 
-    #[ORM\Column(name: 'invitation_code', type: 'string', length: 250, nullable: false)]
+    #[ORM\Column(name: 'invitation_code', type: 'string', length: 255, nullable: false)]
     protected string $invitationCode;
 
     #[ORM\Column(name: 'answered', type: 'integer', nullable: false)]

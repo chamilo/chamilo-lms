@@ -33,7 +33,7 @@ class Career
 
     #[Groups(['calendar_event:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]

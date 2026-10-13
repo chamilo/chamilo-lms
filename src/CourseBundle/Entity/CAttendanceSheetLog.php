@@ -33,7 +33,7 @@ class CAttendanceSheetLog
     protected DateTime $lasteditDate;
 
     #[Assert\NotNull]
-    #[ORM\Column(name: 'lastedit_type', type: 'string', length: 200, nullable: false)]
+    #[ORM\Column(name: 'lastedit_type', type: 'string', length: 255, nullable: false)]
     protected string $lasteditType;
 
     #[ORM\Column(name: 'calendar_date_value', type: 'datetime', nullable: true)]

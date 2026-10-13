@@ -71,7 +71,7 @@ class PageCategory
     protected ?int $id = null;
     #[Assert\NotBlank]
     #[Groups(['page_category:read', 'page_category:write', 'page:read'])]
-    #[ORM\Column(name: 'title', type: 'string', length: 255)]
+    #[ORM\Column(name: 'title', type: 'text')]
     protected string $title;
     #[Assert\NotNull]
     #[ORM\ManyToOne(targetEntity: User::class)]

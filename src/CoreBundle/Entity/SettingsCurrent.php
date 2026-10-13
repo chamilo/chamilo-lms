@@ -28,10 +28,10 @@ class SettingsCurrent
     protected AccessUrl $url;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'variable', type: 'string', length: 190, nullable: false)]
+    #[ORM\Column(name: 'variable', type: 'string', length: 255, nullable: false)]
     protected string $variable;
 
-    #[ORM\Column(name: 'subkey', type: 'string', length: 190, nullable: true)]
+    #[ORM\Column(name: 'subkey', type: 'string', length: 255, nullable: true)]
     protected ?string $subkey = null;
 
     #[ORM\Column(name: 'type', type: 'string', length: 255, nullable: true)]

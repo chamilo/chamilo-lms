@@ -30,7 +30,7 @@ $notebookTable->addColumn('session_id', 'integer', ['unsigned' => true]);
 $notebookTable->addColumn('user_id', 'integer', ['unsigned' => true]);
 $notebookTable->addColumn('student_id', 'integer', ['unsigned' => true]);
 $notebookTable->addColumn('course', 'string');
-$notebookTable->addColumn('title', 'string');
+$notebookTable->addColumn('title', 'text');
 $notebookTable->addColumn('description', 'text');
 $notebookTable->addColumn('creation_date', 'datetime');
 $notebookTable->addColumn('update_date', 'datetime');

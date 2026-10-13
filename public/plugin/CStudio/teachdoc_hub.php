@@ -25,7 +25,7 @@ class teachdoc_hub extends Plugin
         $sql = "CREATE TABLE IF NOT EXISTS plugin_oel_tools_teachdoc(
             id INT NOT NULL AUTO_INCREMENT,
             id_user INT,
-            title VARCHAR(255) NOT NULL,
+            title LONGTEXT NOT NULL,
             id_parent INT,
             order_lst INT,
             type_node INT,
@@ -36,14 +36,14 @@ class teachdoc_hub extends Plugin
             lp_id INT,
             behavior TINYINT NOT NULL DEFAULT '0',
             leveldoc TINYINT NOT NULL DEFAULT '0',
-            local_folder VARCHAR(60) NOT NULL,
+            local_folder VARCHAR(255) NOT NULL,
             date_create VARCHAR(12) NOT NULL,
             base_html LONGTEXT NOT NULL,
             base_css LONGTEXT NOT NULL,
             gpscomps LONGTEXT NOT NULL,
             gpsstyle LONGTEXT NOT NULL,
             recent_save TINYINT NOT NULL DEFAULT '0',
-            options VARCHAR(1080) NOT NULL,
+            options LONGTEXT NOT NULL,
             PRIMARY KEY (id));";
         Database::query($sql);
 

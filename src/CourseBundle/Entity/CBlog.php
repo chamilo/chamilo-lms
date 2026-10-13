@@ -104,7 +104,7 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
     protected string $title;
 
     #[Groups(['blog:read', 'blog:write'])]
-    #[ORM\Column(name: 'blog_subtitle', type: 'string', length: 250, nullable: true)]
+    #[ORM\Column(name: 'blog_subtitle', type: 'string', length: 255, nullable: true)]
     protected ?string $blogSubtitle = null;
 
     #[Groups(['blog:read'])]

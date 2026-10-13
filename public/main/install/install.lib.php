@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Installer\InstallerGate;
 use Chamilo\CoreBundle\Installer\InstallerState;
-use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\DBAL\Connection;
@@ -1526,10 +1525,6 @@ function upgradeWithContainer($container)
     Container::setLegacyServices($container);
     error_log('setLegacyServices');
     $manager = Database::getManager();
-
-    /** @var GroupRepository $repo */
-    $repo = $container->get(GroupRepository::class);
-    $repo->createDefaultGroups();
 
     // @todo check if adminId = 1
     installTools($container, $manager, true);

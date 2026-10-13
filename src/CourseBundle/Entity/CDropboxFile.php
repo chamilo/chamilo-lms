@@ -42,7 +42,7 @@ class CDropboxFile extends AbstractResource implements ResourceInterface, String
     #[ORM\Column(name: 'uploader_id', type: 'integer', nullable: false)]
     protected int $uploaderId;
 
-    #[ORM\Column(name: 'filename', type: 'string', length: 190, nullable: false)]
+    #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
     #[ORM\Column(name: 'filesize', type: 'integer', nullable: false, options: ['default' => 0])]
@@ -51,10 +51,10 @@ class CDropboxFile extends AbstractResource implements ResourceInterface, String
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    #[ORM\Column(name: 'description', type: 'string', length: 250, nullable: true)]
+    #[ORM\Column(name: 'description', type: 'string', length: 255, nullable: true)]
     protected ?string $description = null;
 
-    #[ORM\Column(name: 'author', type: 'string', length: 250, nullable: true)]
+    #[ORM\Column(name: 'author', type: 'string', length: 255, nullable: true)]
     protected ?string $author = null;
 
     #[ORM\Column(name: 'upload_date', type: 'datetime', nullable: false)]

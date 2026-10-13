@@ -26,7 +26,7 @@ class CToolbox extends AbstractResource implements ResourceInterface, ResourceSh
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title = '';
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]

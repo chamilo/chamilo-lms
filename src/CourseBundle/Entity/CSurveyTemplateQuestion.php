@@ -47,7 +47,7 @@ class CSurveyTemplateQuestion
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $comment = null;
 
-    #[ORM\Column(type: 'string', length: 250)]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $type = 'open';
 
     #[ORM\Column(type: 'string', length: 10, options: ['default' => 'vertical'])]

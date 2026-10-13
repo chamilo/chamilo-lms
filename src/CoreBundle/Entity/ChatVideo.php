@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'idx_chat_video_to_user', columns: ['to_user'])]
 #[ORM\Index(name: 'idx_chat_video_from_user', columns: ['from_user'])]
 #[ORM\Index(name: 'idx_chat_video_users', columns: ['from_user', 'to_user'])]
-#[ORM\Index(name: 'idx_chat_video_title', columns: ['title'])]
+#[ORM\Index(name: 'idx_chat_video_title', columns: ['title'], options: ['lengths' => [255]])]
 #[ORM\Entity]
 class ChatVideo
 {
@@ -31,7 +31,7 @@ class ChatVideo
     #[ORM\Column(name: 'to_user', type: 'integer', nullable: false)]
     protected int $toUser;
 
-    #[ORM\Column(name: 'title', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\Column(name: 'datetime', type: 'datetime', nullable: false)]

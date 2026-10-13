@@ -31,7 +31,7 @@ class CSurveyAnswer
     #[ORM\Column(name: 'value', type: 'integer', nullable: false)]
     protected int $value;
 
-    #[ORM\Column(name: 'user', type: 'string', length: 250, nullable: false)]
+    #[ORM\Column(name: 'user', type: 'string', length: 255, nullable: false)]
     protected string $user;
 
     #[ORM\Column(name: 'session_id', type: 'integer', nullable: true)]

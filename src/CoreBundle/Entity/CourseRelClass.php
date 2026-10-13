@@ -15,54 +15,34 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class CourseRelClass
 {
-    #[ORM\Column(name: 'course_code', type: 'string', length: 40)]
+    #[ORM\ManyToOne(targetEntity: Course::class)]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'NONE')]
-    protected string $courseCode;
+    protected Course $course;
 
     #[ORM\Column(name: 'class_id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'NONE')]
     protected int $classId;
 
-    /**
-     * Get courseCode.
-     *
-     * @return string
-     */
-    public function getCourseCode()
+    public function getCourse(): Course
     {
-        return $this->courseCode;
+        return $this->course;
     }
 
-    /**
-     * Set courseCode.
-     *
-     * @return CourseRelClass
-     */
-    public function setCourseCode(string $courseCode)
+    public function setCourse(Course $course): self
     {
-        $this->courseCode = $courseCode;
+        $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * Get classId.
-     *
-     * @return int
-     */
-    public function getClassId()
+    public function getClassId(): int
     {
         return $this->classId;
     }
 
-    /**
-     * Set classId.
-     *
-     * @return CourseRelClass
-     */
-    public function setClassId(int $classId)
+    public function setClassId(int $classId): self
     {
         $this->classId = $classId;
 

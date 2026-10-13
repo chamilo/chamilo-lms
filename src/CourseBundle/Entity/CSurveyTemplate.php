@@ -33,7 +33,7 @@ class CSurveyTemplate
     #[ORM\JoinColumn(name: 'created_by_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?User $createdBy = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'text')]
     private string $title = '';
 
     #[ORM\Column(type: 'text', nullable: true)]

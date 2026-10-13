@@ -284,14 +284,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected int $visibility;
     #[ORM\Column(name: 'show_score', type: 'integer', unique: false, nullable: true)]
     protected ?int $showScore = null;
-    #[ORM\Column(name: 'tutor_name', type: 'string', length: 200, unique: false, nullable: true)]
+    #[ORM\Column(name: 'tutor_name', type: 'string', length: 255, unique: false, nullable: true)]
     protected ?string $tutorName;
     #[Groups(['course:read'])]
     #[ORM\Column(name: 'department_name', type: 'string', length: 30, unique: false, nullable: true)]
     protected ?string $departmentName = null;
     #[Assert\Url(requireTld: false)]
     #[Groups(['course:read', 'course:write'])]
-    #[ORM\Column(name: 'department_url', type: 'string', length: 180, unique: false, nullable: true)]
+    #[ORM\Column(name: 'department_url', type: 'string', length: 255, unique: false, nullable: true)]
     protected ?string $departmentUrl = null;
     #[Assert\Url(requireTld: false)]
     #[Groups(['course:read', 'course:write'])]

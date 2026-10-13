@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'resource_type')]
-#[ORM\Index(columns: ['title'], name: 'idx_title')]
+#[ORM\Index(columns: ['title'], name: 'idx_title', options: ['lengths' => [255]])]
 #[ORM\Entity]
 class ResourceType implements Stringable
 {
@@ -28,7 +28,7 @@ class ResourceType implements Stringable
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column]
+    #[ORM\Column(type: 'text')]
     #[Groups(['resource_node:read'])]
     protected string $title;
 

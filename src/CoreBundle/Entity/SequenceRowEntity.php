@@ -26,7 +26,7 @@ class SequenceRowEntity
     #[ORM\Column(name: 'row_id', type: 'integer')]
     protected int $rowId;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\ManyToOne(targetEntity: SequenceTypeEntity::class)]

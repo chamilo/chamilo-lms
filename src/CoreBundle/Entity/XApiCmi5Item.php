@@ -33,7 +33,7 @@ class XApiCmi5Item
     #[ORM\Column]
     private array $description = [];
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $url = null;
 
     #[ORM\Column(length: 255, nullable: true)]

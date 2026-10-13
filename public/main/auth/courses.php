@@ -2,7 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\SessionCatalogueSubscriptionHelper;
 
 // Delete the globals['_cid'], we don't need it here.
 $cidReset = true;
@@ -609,34 +610,28 @@ switch ($action) {
         if (!$confirmed) {
             $template = new Template(null, false, false, false, false, false);
             $template->assign('session_id', $sessionId);
+            $template->assign('sec_token', Security::getTokenFromSession());
             $layout = $template->get_template('auth/confirm_session_subscription.tpl');
             echo $template->fetch($layout);
             exit;
         }
 
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+
         $registrationAllowed = api_get_setting('catalog.allow_session_auto_subscription');
         if ('true' === $registrationAllowed) {
-            $entityManager = Database::getManager();
-            $repository = $entityManager->getRepository(SequenceResource::class);
-            $sequences = $repository->getRequirements(
-                $sessionId,
-                SequenceResource::SESSION_TYPE
-            );
+            $sessionEntity = api_get_session_entity($sessionId);
+            $userEntity = api_get_user_entity($userId);
+            $subscriptionHelper = Container::$container->get(SessionCatalogueSubscriptionHelper::class);
 
-            if (count($sequences) > 0) {
-                $requirementsData = $repository->checkRequirementsForUser(
-                    $sequences,
-                    SequenceResource::SESSION_TYPE,
-                    $userId,
-                    $sessionId
-                );
-
-                $continueWithSubscription = $repository->checkSequenceAreCompleted($requirementsData);
-
-                if (!$continueWithSubscription) {
-                    header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php');
-                    exit;
-                }
+            if (null === $sessionEntity
+                || null === $userEntity
+                || !$subscriptionHelper->canSelfSubscribe($sessionEntity, $userEntity)
+            ) {
+                header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php');
+                exit;
             }
 
             SessionManager::subscribeUsersToSession(

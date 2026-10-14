@@ -129,8 +129,9 @@ class CourseRepositoryTest extends AbstractApiTest
 
         $this->assertSame($courseCountBefore + 1, $courseRepo->count([]));
 
-        // One CTool per entry of ToolChain::addToolsInCourse()'s hardcoded list.
-        $this->assertCount(28, $course->getTools());
+        // One CTool per entry of ToolChain::addToolsInCourse()'s hardcoded list (28), plus the
+        // 'user' handler, which the 'member' alias maps onto a second CTool.
+        $this->assertCount(29, $course->getTools());
 
         // Check resource links for each Tool
         foreach ($course->getTools() as $tool) {

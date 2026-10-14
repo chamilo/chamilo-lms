@@ -126,10 +126,17 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
 
         $canEdit = $this->canManageLearningPaths($this->security);
         $canManage = $canEdit && !$this->studentViewHelper->isActive();
+        $requestedStudentView = strtolower(trim((string) $request->query->get('isStudentView', 'true')));
+        $toolboxTeacherPreview = $canEdit
+            && \in_array($requestedStudentView, ['0', 'false', 'no', 'off'], true)
+            && CLp::SCORM_TYPE === $lp->getLpType()
+            && 'toolbox' === strtolower(trim((string) $lp->getContentMaker()));
         $this->assertRuntimeAccess($lp, $course, $session, $group, $user, $canEdit);
 
         $items = $this->getLearningPathItems($lp);
-        $latestView = $this->findLatestView($lp, $course, $session, $user);
+        $latestView = $toolboxTeacherPreview
+            ? null
+            : $this->findLatestView($lp, $course, $session, $user);
         $itemViewRows = $this->getItemViewRows($latestView);
         $itemViews = $this->indexLatestItemViews($itemViewRows);
         $itemsById = [];
@@ -247,6 +254,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             && str_starts_with(strtolower($lp->getPath()), 'teachcs-');
         $runtime->isToolboxContent = CLp::SCORM_TYPE === $lp->getLpType()
             && 'toolbox' === strtolower(trim((string) $lp->getContentMaker()));
+        $runtime->isToolboxPreview = $toolboxTeacherPreview;
         $displaySettings = $this->getDisplaySettings();
         $runtime->runtimeSupported = \in_array($lp->getLpType(), [CLp::LP_TYPE, CLp::SCORM_TYPE], true);
         $runtime->canManage = $canManage;
@@ -810,7 +818,10 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         if (CLp::SCORM_TYPE === $item->getLp()->getLpType()
             && \in_array($type, ['sco', 'asset'], true)
         ) {
-            if ('sco' === $type && !$itemView instanceof CLpItemView) {
+            $allowToolboxTeacherPreview = 'sco' === $type
+                && $canManage
+                && 'toolbox' === strtolower(trim((string) $item->getLp()->getContentMaker()));
+            if ('sco' === $type && !$itemView instanceof CLpItemView && !$allowToolboxTeacherPreview) {
                 return '';
             }
 

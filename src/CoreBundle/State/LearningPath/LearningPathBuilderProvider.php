@@ -868,7 +868,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
                     && $version->getLearningPath() instanceof CLp;
                 $row = $this->resourceRow($resource, 'toolbox', $course, $session, $group, false);
                 $row['visible'] = $published;
-                $row['canAdd'] = $published && $ready;
+                $row['canAdd'] = $ready;
                 $toolboxItems[] = $row;
             }
         }

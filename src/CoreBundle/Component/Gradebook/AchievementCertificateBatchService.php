@@ -8,20 +8,16 @@ namespace Chamilo\CoreBundle\Component\Gradebook;
 
 use Category;
 use Chamilo\CoreBundle\Component\LegacyCliBootstrapper;
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Framework\Container as LegacyContainer;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use RuntimeException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Throwable;
+use Twig\Environment;
 
 use const STUDENT;
 
@@ -54,62 +50,14 @@ final class AchievementCertificateBatchService
         private readonly EntityManagerInterface $entityManager,
         private readonly CourseCompletionRuleEvaluator $evaluator,
         private readonly TokenStorageInterface $tokenStorage,
+        private readonly Environment $twig,
     ) {}
 
     public function bootstrapLegacy(KernelInterface $kernel): void
     {
         // Re-anchors the legacy Container/Database static bridges back to this
         // command's own container/EntityManager — see LegacyCliBootstrapper for why.
-        LegacyCliBootstrapper::bootstrap($kernel, $this->entityManager);
-        $this->warmAccessUrlColorThemes();
-    }
-
-    /**
-     * Works around a cross-EntityManager Doctrine error seen only in CLI:
-     * ResourceListener::prePersist() (see AccessUrlListenerTrait) attaches the
-     * current AccessUrl to every newly-created resource, including the
-     * certificate itself. When that AccessUrl's ColorTheme relations were
-     * never loaded through the exact EntityManager instance legacy code
-     * resolves via Container::$container (a side effect of global.inc.php's
-     * CLI branch booting its own second kernel — see bootstrapLegacy() above),
-     * Doctrine's flush finds an unmanaged ColorTheme proxy through
-     * AccessUrlRelColorTheme#colorTheme, which isn't configured to cascade
-     * persist, and the whole certificate HTML upsert fails, falling back to a
-     * bare stub file (see certificate viewing returning 404).
-     *
-     * Force-loading every ColorTheme relation up front, through that same
-     * EntityManager, puts them in its identity map as already-managed before
-     * generation runs, so the flush no longer treats them as new. Best-effort
-     * only: never let a failure here block certificate generation itself.
-     */
-    private function warmAccessUrlColorThemes(): void
-    {
-        try {
-            // Must match exactly how the failing code path resolves its EntityManager:
-            // Container::getGradeBookCertificateRepository() gets it from ManagerRegistry
-            // (Doctrine's ServiceEntityRepository base class does this internally), not
-            // from the 'doctrine.orm.default_entity_manager' service id directly — the
-            // two can land on different EntityManager instances in this CLI context (see
-            // bootstrapLegacy() above).
-            $registry = LegacyContainer::$container?->get('doctrine');
-            if (!$registry instanceof ManagerRegistry) {
-                return;
-            }
-
-            $legacyEntityManager = $registry->getManagerForClass(GradebookCertificate::class);
-            if (!$legacyEntityManager instanceof EntityManagerInterface) {
-                return;
-            }
-
-            $accessUrls = $legacyEntityManager->getRepository(AccessUrl::class)->findAll();
-            foreach ($accessUrls as $accessUrl) {
-                foreach ($accessUrl->getColorThemes() as $relation) {
-                    $relation->getColorTheme()?->getId();
-                }
-            }
-        } catch (Throwable) {
-            // Best-effort warm-up; certificate generation still proceeds without it.
-        }
+        LegacyCliBootstrapper::bootstrap($kernel, $this->entityManager, $this->twig);
     }
 
     public function supports(int $courseId): bool
@@ -586,6 +534,11 @@ final class AchievementCertificateBatchService
      * (STUDENT = 5 for course_rel_user, Session::STUDENT = 0 for
      * session_rel_course_rel_user).
      *
+     * With $includeEmpty, a student whose only certificate row for that
+     * category has no resource node (the row was registered but the HTML
+     * file was never stored, e.g. after a failed generation) counts as
+     * pending too, so the certificate can be generated again.
+     *
      * @return list<int>
      */
     public function loadPendingUserIds(
@@ -594,13 +547,15 @@ final class AchievementCertificateBatchService
         int $sessionId,
         int $afterUserId,
         int $batchSize,
-        ?int $requestedUserId
+        ?int $requestedUserId,
+        bool $includeEmpty = false
     ): array {
         $params = [
             'courseId' => $courseId,
             'categoryId' => $categoryId,
             'afterUserId' => $afterUserId,
         ];
+        $completeOnly = $includeEmpty ? ' AND certificate.resource_node_id IS NOT NULL' : '';
 
         if (0 === $sessionId) {
             $params['studentStatus'] = STUDENT;
@@ -617,7 +572,8 @@ final class AchievementCertificateBatchService
                       AND selected_user.active = 1
                     LEFT JOIN gradebook_certificate certificate
                        ON certificate.cat_id = :categoryId
-                      AND certificate.user_id = course_user.user_id
+                      AND certificate.user_id = course_user.user_id'
+                .$completeOnly.'
                     WHERE course_user.c_id = :courseId
                       AND course_user.status = :studentStatus
                       AND course_user.user_id > :afterUserId
@@ -641,7 +597,8 @@ final class AchievementCertificateBatchService
                       AND selected_user.active = 1
                     LEFT JOIN gradebook_certificate certificate
                        ON certificate.cat_id = :categoryId
-                      AND certificate.user_id = session_user.user_id
+                      AND certificate.user_id = session_user.user_id'
+                .$completeOnly.'
                     WHERE session_user.c_id = :courseId
                       AND session_user.session_id = :sessionId
                       AND session_user.status = :studentStatus
@@ -658,19 +615,23 @@ final class AchievementCertificateBatchService
     }
 
     /**
+     * $regenerateEmpty lets an existing certificate row without a resource
+     * node be generated again, instead of being skipped as already existing.
+     *
      * @param array{subject: string, message: string, sender_id: int} $notification
      */
     public function generateCertificate(
         GradebookCategory $category,
         int $userId,
         bool $sendNotification,
-        array $notification
+        array $notification,
+        bool $regenerateEmpty = false
     ): bool {
         Category::generateUserCertificate(
             $category,
             $userId,
             $sendNotification,
-            true,
+            !$regenerateEmpty,
             $notification
         );
 

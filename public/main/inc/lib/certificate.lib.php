@@ -118,7 +118,7 @@ class Certificate extends Model
                     $this->certification_user_path = 'resource://user_certificate';
                 }
             } catch (\Throwable $e) {
-                error_log('[CERT::__construct] generate-on-construct failed: '.$e->getMessage());
+                error_log('[CERT::__construct] generate-on-construct failed: '.$e->getMessage().' at '.$e->getFile().':'.$e->getLine());
             }
         }
 
@@ -897,9 +897,6 @@ class Certificate extends Model
      */
     public function generateCustomCertificate(string $fileName = ''): string
     {
-        $certificateRepo = Container::getGradeBookCertificateRepository();
-        $certificateRepo->registerUserInfoAboutCertificate(0, $this->user_id, 100, $fileName);
-
         $userInfo = api_get_user_info($this->user_id);
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($this->user_id, 'legal_accept');

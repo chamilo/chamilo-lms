@@ -756,6 +756,7 @@ class BuyCoursesPlugin extends Plugin
             'gateway_checkout_session_id' => 'VARCHAR(255) DEFAULT NULL',
             'gateway_subscription_id' => 'VARCHAR(255) DEFAULT NULL',
             'gateway_last_event_id' => 'VARCHAR(255) DEFAULT NULL',
+            'gateway_transaction_id' => 'VARCHAR(255) DEFAULT NULL',
         ];
 
         foreach ($recurringServiceSaleColumns as $field => $definition) {
@@ -1169,6 +1170,149 @@ class BuyCoursesPlugin extends Plugin
                 'order' => 'audit_entry_id DESC',
             ]
         );
+    }
+
+    /**
+     * Return the last successful payment date and the total amount collected for a service sale.
+     */
+    public function getServiceSalePaymentSummary(array $serviceSale): array
+    {
+        $serviceSaleId = (int) ($serviceSale['id'] ?? 0);
+        $status = (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING);
+        $baseAmount = (float) ($serviceSale['price'] ?? 0);
+        $basePaymentCollected = self::SERVICE_STATUS_COMPLETED === $status
+            || (int) ($serviceSale['upgraded_to_sale_id'] ?? 0) > 0;
+        $initialPaymentDate = '';
+        $lastPaymentDate = '';
+        $renewalPayments = [];
+        $seenRenewalPaymentEvents = [];
+
+        if ($serviceSaleId > 0 && $this->hasPluginTable(self::TABLE_AUDIT)) {
+            $auditEntries = Database::select(
+                'action, created_at, data_json',
+                Database::get_main_table(self::TABLE_AUDIT),
+                [
+                    'where' => [
+                        'object_type = ? AND object_id = ?' => [self::AUDIT_OBJECT_SERVICE_SALE, $serviceSaleId],
+                    ],
+                    'order' => 'id ASC',
+                ]
+            );
+
+            foreach ($auditEntries as $auditEntry) {
+                $action = (string) ($auditEntry['action'] ?? '');
+                $paymentDate = trim((string) ($auditEntry['created_at'] ?? ''));
+
+                if (self::AUDIT_ACTION_SERVICE_SALE_COMPLETED === $action) {
+                    $basePaymentCollected = true;
+                    if ('' !== $paymentDate) {
+                        $initialPaymentDate = $paymentDate;
+                        if ('' === $lastPaymentDate || strtotime($paymentDate) > strtotime($lastPaymentDate)) {
+                            $lastPaymentDate = $paymentDate;
+                        }
+                    }
+
+                    continue;
+                }
+
+                if (self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED !== $action) {
+                    continue;
+                }
+
+                $auditData = [];
+                $dataJson = trim((string) ($auditEntry['data_json'] ?? ''));
+                if ('' !== $dataJson) {
+                    $decoded = json_decode($dataJson, true);
+                    if (is_array($decoded)) {
+                        $auditData = $decoded;
+                    }
+                }
+
+                $amount = null;
+                if (isset($auditData['amount_paid']) && is_numeric($auditData['amount_paid'])) {
+                    $amount = (float) $auditData['amount_paid'];
+                } elseif (isset($auditData['amount']) && is_numeric($auditData['amount'])) {
+                    $amount = (float) $auditData['amount'];
+                }
+
+                $gateway = strtolower(trim((string) ($auditData['gateway'] ?? $serviceSale['recurring_gateway'] ?? '')));
+                $paymentEventId = trim((string) (
+                    $auditData['event_id']
+                    ?? $auditData['event_key']
+                    ?? $auditData['transaction_id']
+                    ?? ''
+                ));
+                if ('' !== $paymentEventId) {
+                    $deduplicationKey = $gateway.':'.$paymentEventId;
+                    if (isset($seenRenewalPaymentEvents[$deduplicationKey])) {
+                        continue;
+                    }
+                    $seenRenewalPaymentEvents[$deduplicationKey] = true;
+                }
+
+                $renewalPayments[] = [
+                    'amount' => $amount,
+                    'billing_reason' => strtolower(trim((string) ($auditData['billing_reason'] ?? ''))),
+                    'gateway' => $gateway,
+                    'payment_date' => $paymentDate,
+                ];
+
+                if ('' !== $paymentDate
+                    && ('' === $lastPaymentDate || strtotime($paymentDate) > strtotime($lastPaymentDate))
+                ) {
+                    $lastPaymentDate = $paymentDate;
+                }
+            }
+        }
+
+        if ($basePaymentCollected && '' === $initialPaymentDate) {
+            $initialPaymentDate = trim((string) ($serviceSale['buy_date'] ?? ''));
+            if ('' !== $initialPaymentDate
+                && ('' === $lastPaymentDate || strtotime($initialPaymentDate) > strtotime($lastPaymentDate))
+            ) {
+                $lastPaymentDate = $initialPaymentDate;
+            }
+        }
+
+        $totalCollected = $basePaymentCollected ? $baseAmount : 0.0;
+        $stripeInitialChargeMatched = false;
+        $initialPaymentTimestamp = '' !== $initialPaymentDate ? strtotime($initialPaymentDate) : false;
+
+        foreach ($renewalPayments as $renewalPayment) {
+            $amount = $renewalPayment['amount'];
+            if (null === $amount) {
+                continue;
+            }
+
+            $isInitialStripeCharge = false;
+            if ($basePaymentCollected && 'stripe' === $renewalPayment['gateway']) {
+                if ('subscription_create' === $renewalPayment['billing_reason']) {
+                    $isInitialStripeCharge = true;
+                } elseif (!$stripeInitialChargeMatched
+                    && '' === $renewalPayment['billing_reason']
+                    && false !== $initialPaymentTimestamp
+                    && '' !== $renewalPayment['payment_date']
+                    && abs((float) $amount - $baseAmount) < 0.005
+                ) {
+                    $renewalTimestamp = strtotime($renewalPayment['payment_date']);
+                    $isInitialStripeCharge = false !== $renewalTimestamp
+                        && abs($renewalTimestamp - $initialPaymentTimestamp) <= 900;
+                }
+            }
+
+            if ($isInitialStripeCharge) {
+                $stripeInitialChargeMatched = true;
+
+                continue;
+            }
+
+            $totalCollected += $amount;
+        }
+
+        return [
+            'last_payment_date' => $lastPaymentDate,
+            'total_collected' => round($totalCollected, 2),
+        ];
     }
 
     public function getAuditActionLabel(string $action): string

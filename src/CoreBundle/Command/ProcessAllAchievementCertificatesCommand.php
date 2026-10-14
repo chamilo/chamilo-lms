@@ -21,6 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Throwable;
+use Twig\Environment;
 
 use const PHP_INT_MAX;
 
@@ -65,13 +66,15 @@ final class ProcessAllAchievementCertificatesCommand extends Command
         private readonly EntityManagerInterface $entityManager,
         private readonly KernelInterface $kernel,
         TokenStorageInterface $tokenStorage,
+        Environment $twig,
     ) {
         // CoreBundle Component classes are excluded from service auto-discovery.
         $this->service = new AchievementCertificateBatchService(
             $connection,
             $entityManager,
             new CourseCompletionRuleEvaluator($connection),
-            $tokenStorage
+            $tokenStorage,
+            $twig
         );
 
         parent::__construct();
@@ -146,6 +149,12 @@ final class ProcessAllAchievementCertificatesCommand extends Command
                 InputOption::VALUE_NONE,
                 'Evaluate candidates without creating certificates or sending notifications.'
             )
+            ->addOption(
+                'regenerate-empty',
+                null,
+                InputOption::VALUE_NONE,
+                'Also process students whose certificate row exists but has no stored file (resource node), e.g. after a failed generation, and generate that certificate again.'
+            )
         ;
     }
 
@@ -173,6 +182,7 @@ final class ProcessAllAchievementCertificatesCommand extends Command
             $afterCourseId = $this->boundedNonNegativeOption($input, 'after-course-id', PHP_INT_MAX);
             $dryRun = (bool) $input->getOption('dry-run');
             $sendNotification = (bool) $input->getOption('send-notification');
+            $regenerateEmpty = (bool) $input->getOption('regenerate-empty');
 
             if ($dryRun && $sendNotification) {
                 $io->note('--send-notification is ignored during --dry-run.');
@@ -207,7 +217,8 @@ final class ProcessAllAchievementCertificatesCommand extends Command
                 ['Sender ID (resource creator)' => $dryRun ? 'not used' : (string) $senderId],
                 ['Generation limit' => 0 === $limit ? 'unlimited' : (string) $limit],
                 ['Scan limit' => 0 === $scanLimit ? 'unlimited' : (string) $scanLimit],
-                ['After course ID' => (string) $afterCourseId]
+                ['After course ID' => (string) $afterCourseId],
+                ['Regenerate empty certificates' => $regenerateEmpty ? 'yes' : 'no']
             );
 
             $summary = [
@@ -257,6 +268,7 @@ final class ProcessAllAchievementCertificatesCommand extends Command
                         $batchSize,
                         $dryRun,
                         $sendNotification,
+                        $regenerateEmpty,
                         $io,
                         $summary,
                         $previewRows
@@ -294,7 +306,7 @@ final class ProcessAllAchievementCertificatesCommand extends Command
             if ($summary['failed'] > 0) {
                 $io->error(
                     'One or more certificate generations failed. '
-                    .'Review var/log/dev.log before re-running.'
+                    .'Review the [CERT] messages and log output above (written to stderr) before re-running.'
                 );
 
                 return Command::FAILURE;
@@ -319,6 +331,9 @@ final class ProcessAllAchievementCertificatesCommand extends Command
             return Command::SUCCESS;
         } catch (Throwable $exception) {
             $io->error($exception->getMessage());
+            if ($output->isVeryVerbose()) {
+                $io->writeln($exception->getTraceAsString());
+            }
 
             return Command::FAILURE;
         }
@@ -346,6 +361,7 @@ final class ProcessAllAchievementCertificatesCommand extends Command
         int $batchSize,
         bool $dryRun,
         bool $sendNotification,
+        bool $regenerateEmpty,
         SymfonyStyle $io,
         array &$summary,
         array &$previewRows
@@ -447,6 +463,7 @@ final class ProcessAllAchievementCertificatesCommand extends Command
                 $batchSize,
                 $dryRun,
                 $sendNotification,
+                $regenerateEmpty,
                 $notification,
                 $summary,
                 $previewRows
@@ -472,6 +489,7 @@ final class ProcessAllAchievementCertificatesCommand extends Command
         int $batchSize,
         bool $dryRun,
         bool $sendNotification,
+        bool $regenerateEmpty,
         array $notification,
         array &$summary,
         array &$previewRows
@@ -504,7 +522,8 @@ final class ProcessAllAchievementCertificatesCommand extends Command
                 $sessionId,
                 $lastUserId,
                 min($batchSize, $remainingScan),
-                $userId
+                $userId,
+                $regenerateEmpty
             );
             if ([] === $candidateIds) {
                 return;
@@ -548,7 +567,8 @@ final class ProcessAllAchievementCertificatesCommand extends Command
                         $categoryEntity,
                         $candidateUserId,
                         $sendNotification,
-                        $notification
+                        $notification,
+                        $regenerateEmpty
                     );
 
                     if ($created) {

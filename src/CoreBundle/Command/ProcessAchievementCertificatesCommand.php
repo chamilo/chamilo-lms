@@ -22,6 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Throwable;
+use Twig\Environment;
 
 use const PHP_INT_MAX;
 
@@ -40,13 +41,15 @@ final class ProcessAchievementCertificatesCommand extends Command
         private readonly EntityManagerInterface $entityManager,
         private readonly KernelInterface $kernel,
         TokenStorageInterface $tokenStorage,
+        Environment $twig,
     ) {
         // CoreBundle Component classes are excluded from service auto-discovery.
         $this->service = new AchievementCertificateBatchService(
             $connection,
             $entityManager,
             new CourseCompletionRuleEvaluator($connection),
-            $tokenStorage
+            $tokenStorage,
+            $twig
         );
 
         parent::__construct();
@@ -380,7 +383,7 @@ final class ProcessAchievementCertificatesCommand extends Command
             if ($summary['failed'] > 0) {
                 $io->error(
                     'One or more certificate generations failed. '
-                    .'Review var/log/dev.log before re-running.'
+                    .'Review the [CERT] messages and log output above (written to stderr) before re-running.'
                 );
 
                 return Command::FAILURE;

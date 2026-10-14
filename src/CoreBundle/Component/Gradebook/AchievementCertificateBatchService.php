@@ -20,6 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Throwable;
+use Twig\Environment;
 
 use const STUDENT;
 
@@ -46,13 +47,14 @@ final class AchievementCertificateBatchService
         private readonly EntityManagerInterface $entityManager,
         private readonly CourseCompletionRuleEvaluator $evaluator,
         private readonly TokenStorageInterface $tokenStorage,
+        private readonly Environment $twig,
     ) {}
 
     public function bootstrapLegacy(KernelInterface $kernel): void
     {
         // Re-anchors the legacy Container/Database static bridges back to this
         // command's own container/EntityManager — see LegacyCliBootstrapper for why.
-        LegacyCliBootstrapper::bootstrap($kernel, $this->entityManager);
+        LegacyCliBootstrapper::bootstrap($kernel, $this->entityManager, $this->twig);
         $this->warmAccessUrlColorThemes();
     }
 
@@ -267,6 +269,11 @@ final class AchievementCertificateBatchService
      * (STUDENT = 5 for course_rel_user, Session::STUDENT = 0 for
      * session_rel_course_rel_user).
      *
+     * With $includeEmpty, a student whose only certificate row for that
+     * category has no resource node (the row was registered but the HTML
+     * file was never stored, e.g. after a failed generation) counts as
+     * pending too, so the certificate can be generated again.
+     *
      * @return list<int>
      */
     public function loadPendingUserIds(
@@ -275,13 +282,15 @@ final class AchievementCertificateBatchService
         int $sessionId,
         int $afterUserId,
         int $batchSize,
-        ?int $requestedUserId
+        ?int $requestedUserId,
+        bool $includeEmpty = false
     ): array {
         $params = [
             'courseId' => $courseId,
             'categoryId' => $categoryId,
             'afterUserId' => $afterUserId,
         ];
+        $completeOnly = $includeEmpty ? ' AND certificate.resource_node_id IS NOT NULL' : '';
 
         if (0 === $sessionId) {
             $params['studentStatus'] = STUDENT;
@@ -298,7 +307,8 @@ final class AchievementCertificateBatchService
                       AND selected_user.active = 1
                     LEFT JOIN gradebook_certificate certificate
                        ON certificate.cat_id = :categoryId
-                      AND certificate.user_id = course_user.user_id
+                      AND certificate.user_id = course_user.user_id'
+                .$completeOnly.'
                     WHERE course_user.c_id = :courseId
                       AND course_user.status = :studentStatus
                       AND course_user.user_id > :afterUserId
@@ -322,7 +332,8 @@ final class AchievementCertificateBatchService
                       AND selected_user.active = 1
                     LEFT JOIN gradebook_certificate certificate
                        ON certificate.cat_id = :categoryId
-                      AND certificate.user_id = session_user.user_id
+                      AND certificate.user_id = session_user.user_id'
+                .$completeOnly.'
                     WHERE session_user.c_id = :courseId
                       AND session_user.session_id = :sessionId
                       AND session_user.status = :studentStatus
@@ -339,19 +350,23 @@ final class AchievementCertificateBatchService
     }
 
     /**
+     * $regenerateEmpty lets an existing certificate row without a resource
+     * node be generated again, instead of being skipped as already existing.
+     *
      * @param array{subject: string, message: string, sender_id: int} $notification
      */
     public function generateCertificate(
         GradebookCategory $category,
         int $userId,
         bool $sendNotification,
-        array $notification
+        array $notification,
+        bool $regenerateEmpty = false
     ): bool {
         Category::generateUserCertificate(
             $category,
             $userId,
             $sendNotification,
-            true,
+            !$regenerateEmpty,
             $notification
         );
 

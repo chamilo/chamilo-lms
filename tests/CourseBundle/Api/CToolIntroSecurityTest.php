@@ -233,4 +233,16 @@ final class CToolIntroSecurityTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(403);
         $this->assertSame('Original session intro', $this->freshIntroText($other['intro']));
     }
+
+    public function testSessionCoachCannotPatchTheBaseCourseIntro(): void
+    {
+        $ctx = $this->bootstrapScenario('session_coach_base');
+        $sessionCtx = $this->createSessionIntro($ctx['courseB'], 'session_coach_base');
+
+        // The coach only holds the session teacher role, which must not reach the base course intro.
+        $this->patchSessionIntro($sessionCtx['coach'], $ctx['intro'], $ctx['courseB'], $sessionCtx['session'], 'Edited by coach');
+
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame('Original intro', $this->freshIntroText($ctx['intro']));
+    }
 }

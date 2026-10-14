@@ -179,6 +179,12 @@
                         <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
                         </th>
+                        <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            {{ 'LastPayment'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </th>
+                        <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            {{ 'TotalCollected'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </th>
                         <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'CouponDiscount'|get_plugin_lang('BuyCoursesPlugin') }}
                         </th>
@@ -239,6 +245,18 @@
                                 {{ sale.total_price|default('') }}
                             </td>
 
+                            <td class="px-4 py-4 text-sm text-gray-90">
+                                {% if sale.last_payment_date|default('') %}
+                                    {{ sale.last_payment_date|api_get_local_time }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+
+                            <td class="px-4 py-4 text-end text-sm font-semibold text-gray-90">
+                                {{ sale.total_collected|default('') }}
+                            </td>
+
                             <td class="px-4 py-4 text-end text-sm text-gray-90">
                                 {{ sale.total_discount|default('') }}
                             </td>
@@ -294,7 +312,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="11" class="px-4 py-10 text-center">
+                            <td colspan="13" class="px-4 py-10 text-center">
                                 <div class="mx-auto max-w-md space-y-2">
                                     <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
                                         <em class="mdi mdi-briefcase text-xl"></em>

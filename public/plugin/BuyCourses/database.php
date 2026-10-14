@@ -396,6 +396,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
     $servicesNodeTable->addColumn('gateway_checkout_session_id', Types::STRING, ['length' => 255, 'notnull' => false]);
     $servicesNodeTable->addColumn('gateway_subscription_id', Types::STRING, ['length' => 255, 'notnull' => false]);
     $servicesNodeTable->addColumn('gateway_last_event_id', Types::STRING, ['length' => 255, 'notnull' => false]);
+    $servicesNodeTable->addColumn('gateway_transaction_id', Types::STRING, ['length' => 255, 'notnull' => false]);
     $servicesNodeTable->addColumn('buyer_country', Types::STRING, ['length' => 2, 'notnull' => false]);
     $servicesNodeTable->addColumn('buyer_postcode', Types::STRING, ['length' => 32, 'notnull' => false]);
     $servicesNodeTable->addColumn('buyer_ip', Types::STRING, ['length' => 45, 'notnull' => false]);

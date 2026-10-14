@@ -117,6 +117,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
 {
     $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : '';
     $course_request_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
+    $course_category_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;
@@ -124,21 +125,22 @@ function get_request_data($from, $number_of_items, $column, $direction)
     $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
     $sql = "SELECT
-                id AS col0,
-               code AS col1,
-               title AS col2,
-               category_code AS col3,
-               tutor_name AS col4,
-               request_date AS col5,
-               id  AS col6
-           FROM $course_request_table
-           WHERE status = ".COURSE_REQUEST_REJECTED;
+               cr.id AS col0,
+               cr.code AS col1,
+               cr.title AS col2,
+               cc.code AS col3,
+               cr.tutor_name AS col4,
+               cr.request_date AS col5,
+               cr.id AS col6
+           FROM $course_request_table cr
+           LEFT JOIN $course_category_table cc ON cc.id = cr.category_id
+           WHERE cr.status = ".COURSE_REQUEST_REJECTED;
 
     if ('' != $keyword) {
         $sql .= " AND (
-            title LIKE '%".$keyword."%' OR
-            code LIKE '%".$keyword."%' OR
-            visual_code LIKE '%".$keyword."%'
+            cr.title LIKE '%".$keyword."%' OR
+            cr.code LIKE '%".$keyword."%' OR
+            cr.visual_code LIKE '%".$keyword."%'
         )";
     }
     $sql .= " ORDER BY col$column $direction ";

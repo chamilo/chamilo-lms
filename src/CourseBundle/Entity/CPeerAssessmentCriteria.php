@@ -24,7 +24,7 @@ class CPeerAssessmentCriteria
     #[ORM\JoinColumn(name: 'peer_assessment_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?CPeerAssessment $peerAssessment = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]

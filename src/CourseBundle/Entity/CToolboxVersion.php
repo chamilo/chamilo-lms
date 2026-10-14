@@ -35,7 +35,7 @@ class CToolboxVersion
     #[ORM\Column(name: 'version_number', type: 'integer', nullable: false)]
     protected int $versionNumber = 1;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title = '';
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
@@ -44,7 +44,7 @@ class CToolboxVersion
     #[ORM\Column(name: 'prompt', type: 'text', nullable: true)]
     protected ?string $prompt = null;
 
-    #[ORM\Column(name: 'provider', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'provider', type: 'string', length: 255, nullable: true)]
     protected ?string $provider = null;
 
     #[ORM\Column(name: 'change_summary', type: 'text', nullable: true)]

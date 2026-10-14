@@ -227,6 +227,10 @@ final readonly class SurveyReportingProvider implements ProviderInterface
             throw new AccessDeniedHttpException('Survey reporting is disabled by platform settings.');
         }
 
+        if ($survey->isResultsHiddenFromTeacher() && !$this->security->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedHttpException('Survey results are hidden from teachers and tutors.');
+        }
+
         if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
             return;
         }

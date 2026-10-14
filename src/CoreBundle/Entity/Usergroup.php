@@ -125,7 +125,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     #[ORM\Column(name: 'picture', type: 'string', length: 255, nullable: true)]
     protected ?string $picture = null;
     #[Groups(['usergroup:read', 'usergroup:write'])]
-    #[ORM\Column(name: 'url', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'url', type: 'text', nullable: true)]
     protected ?string $url = null;
     #[Assert\NotBlank]
     #[Groups(['usergroup:read', 'usergroup:write'])]

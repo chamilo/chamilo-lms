@@ -23,7 +23,7 @@ class GradeComponents
     #[ORM\Column(name: 'percentage', type: 'string', length: 255, nullable: false)]
     protected string $percentage;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\Column(name: 'acronym', type: 'string', length: 255, nullable: false)]

@@ -48,7 +48,7 @@ class CBlogTask
     #[Groups(['blog_task:read', 'blog_task:write', 'task_rel_user:read'])]
     protected int $taskId = 0;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     #[Groups(['blog_task:read', 'blog_task:write', 'task_rel_user:read'])]
     protected string $title;
 

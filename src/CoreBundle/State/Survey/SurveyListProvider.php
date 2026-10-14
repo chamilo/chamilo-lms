@@ -286,7 +286,9 @@ final readonly class SurveyListProvider implements ProviderInterface
         $surveyType = $survey->getSurveyType();
         $isUnsupportedPersonality = $this->isUnsupportedPersonalitySurvey($survey);
         $canEdit = !$isEditionHidden && !$isUnsupportedPersonality;
-        $canReport = !$hideReportingButton && !$isUnsupportedPersonality;
+        $canReport = !$hideReportingButton
+            && !$isUnsupportedPersonality
+            && (!$survey->isResultsHiddenFromTeacher() || $this->security->isGranted('ROLE_ADMIN'));
 
         return [
             '@id' => '/api/surveys/'.$surveyId,

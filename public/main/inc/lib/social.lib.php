@@ -543,7 +543,7 @@ class SocialManager extends UserManager
             $officialCode = '';
             if ('true' === api_get_setting('show_official_code_whoisonline')) {
                 $officialCode .= '<div class="items-user-official-code">
-                    <p style="min-height: 30px;" title="'.get_lang('Code').'">'.$user_info['official_code'].'</p></div>';
+                    <p style="min-height: 30px;" title="'.get_lang('Code').'">'.htmlspecialchars((string) $user_info['official_code'], ENT_QUOTES, 'UTF-8').'</p></div>';
             }
 
             if (true === $hide) {
@@ -815,12 +815,14 @@ class SocialManager extends UserManager
                             //$courseInfo = api_get_course_info_by_id($post->getCId());
                             $row['post_title'] = $post->getForum()->getTitle();
                             $row['forum_title'] = $thread->getTitle();
-                            $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
-                                    //'cid' => $courseInfo['real_id'],
-                                    'forum' => $post->getForum()->getIid(),
-                                    'thread' => $post->getThread()->getIid(),
-                                    'post_id' => $post->getIid(),
-                                ]).'#post_id_'.$post->getIid();
+                            $postLink = $post->getResourceNode()?->getResourceLinks()->first();
+                            $row['thread_url'] = $postLink ? getForumToolUrl(
+                                (int) $postLink->getCourse()?->getId(),
+                                (int) $postLink->getSession()?->getId(),
+                                0,
+                                $post->getForum()->getIid(),
+                                $post->getThread()->getIid()
+                            ) : '';
                         }
                     }
 
@@ -1789,7 +1791,7 @@ class SocialManager extends UserManager
 
             $social_group_block .= Display::url(
                 get_lang('See all communities'),
-                api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$courseInfo['real_id']
+                getForumToolUrl((int) $courseInfo['real_id'])
             );
 
             if (!empty($social_group_block)) {

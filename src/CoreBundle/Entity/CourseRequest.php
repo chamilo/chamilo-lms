@@ -34,16 +34,17 @@ class CourseRequest
     #[ORM\Column(name: 'course_language', type: 'string', length: 20, nullable: false)]
     protected string $courseLanguage;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    #[ORM\Column(name: 'category_code', type: 'string', length: 40, nullable: true)]
-    protected ?string $categoryCode = null;
+    #[ORM\ManyToOne(targetEntity: CourseCategory::class)]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?CourseCategory $category = null;
 
-    #[ORM\Column(name: 'tutor_name', type: 'string', length: 200, nullable: true)]
+    #[ORM\Column(name: 'tutor_name', type: 'string', length: 255, nullable: true)]
     protected ?string $tutorName = null;
 
     #[ORM\Column(name: 'visual_code', type: 'string', length: 40, nullable: true)]
@@ -140,19 +141,14 @@ class CourseRequest
         return $this;
     }
 
-    /**
-     * Get categoryCode.
-     *
-     * @return string
-     */
-    public function getCategoryCode()
+    public function getCategory(): ?CourseCategory
     {
-        return $this->categoryCode;
+        return $this->category;
     }
 
-    public function setCategoryCode(string $categoryCode): self
+    public function setCategory(?CourseCategory $category): self
     {
-        $this->categoryCode = $categoryCode;
+        $this->category = $category;
 
         return $this;
     }

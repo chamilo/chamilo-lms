@@ -89,7 +89,7 @@ readonly class ExportCGlossaryAction
         $qb = $repo->getResourcesByCourse($course, $session);
         if ($category instanceof CGlossaryCategory) {
             $qb->andWhere('resource.category = :category')
-                ->setParameter('category', $category)
+                ->setParameter('category', (int) $category->getIid())
             ;
         }
         $glossaryItems = $qb->getQuery()->getResult();

@@ -5458,10 +5458,6 @@ class learnpath
                     (int) $path
                 );
 
-                if ('' === $forumUrl) {
-                    $forumUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$path;
-                }
-
                 $return .= Display::url(
                     get_lang('Go to the forum'),
                     $forumUrl,
@@ -7249,6 +7245,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $selfUrl = api_get_self();
         $courseIdReq = api_get_cidreq();
+        $createLinkUrl = api_get_path(WEB_PATH).'resources/links/'.(int) $course?->getResourceNode()?->getId().'/create?'
+            .http_build_query([
+                'cid' => api_get_course_int_id(),
+                'sid' => $sessionId,
+                'gid' => api_get_group_id(),
+                'origin' => 'learnpath',
+                'lp_id' => $this->lp_id,
+            ]);
 
         $moveEverywhereIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
 
@@ -7348,7 +7352,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <li class="list-group-item lp_resource_element border-gray-25 disable_drag lp-links-sticky-action">
                 '.Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL).'
                 <a
-                href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'"
+                href="'.$createLinkUrl.'"
                 title="'.get_lang('Add a link').'">'.
                 get_lang('Add a link').'
                 </a>
@@ -7534,11 +7538,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $courseResourceNode = $courseEntity?->getResourceNode();
         $isVueCreateForumUrl = false;
-        $createForumUrl = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&'.http_build_query([
-            'action' => 'add',
-            'content' => 'forum',
-            'lp_id' => $this->lp_id,
-        ]);
+        $createForumUrl = '';
 
         if (null !== $courseResourceNode && $courseResourceNode->getId() > 0) {
             $createForumQuery = [
@@ -7729,10 +7729,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 (int) $forumId
             );
 
-            if ('' === $forumPreviewUrl) {
-                $forumPreviewUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
-            }
-
             $link = Display::url(
                 Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                 $forumPreviewUrl,
@@ -7782,11 +7778,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         (int) $forumId,
                         (int) $threadId
                     );
-
-                    if ('' === $threadPreviewUrl) {
-                        $threadPreviewUrl = api_get_path(WEB_CODE_PATH).
-                            'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId;
-                    }
 
                     $link = Display::url(
                         Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
@@ -9389,11 +9380,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     (int) $id
                 );
 
-                if ('' !== $forumUrl) {
-                    return $forumUrl;
-                }
-
-                return $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&'.$extraParams;
+                return $forumUrl;
             case TOOL_THREAD:
                 if (empty($id)) {
                     return '';
@@ -9410,18 +9397,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     (int) $id
                 );
 
-                if ('' !== $threadUrl) {
-                    return $threadUrl;
-                }
-
-                // Fallback kept only when the Vue route cannot be resolved.
-                $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
-                $sql = "SELECT * FROM $tbl_topics WHERE iid=$id";
-                $result = Database::query($sql);
-                $row = Database::fetch_array($result);
-
-                return $main_dir_path.'forum/viewthread.php?thread='.$id.'&forum='.$row['forum_id'].'&lp=true&'
-                    .$extraParams;
+                return $threadUrl;
             case TOOL_POST:
                 $post = $em->getRepository(CForumPost::class)->find((int) $id);
                 $thread = $post instanceof CForumPost ? $post->getThread() : null;
@@ -9441,17 +9417,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     (int) $id
                 );
 
-                if ('' !== $postUrl) {
-                    return $postUrl;
-                }
-
-                // Fallback kept only when the Vue route cannot be resolved.
-                $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
-                $result = Database::query("SELECT * FROM $tbl_post WHERE post_id=$id");
-                $row = Database::fetch_array($result);
-
-                return $main_dir_path.'forum/viewthread.php?post='.$id.'&thread='.$row['thread_id'].'&forum='
-                    .$row['forum_id'].'&lp=true&'.$extraParams;
+                return $postUrl;
             case TOOL_READOUT_TEXT:
                 return api_get_path(WEB_CODE_PATH).
                     'lp/readout_text.php?&id='.$id.'&lp_id='.$learningPathId.'&'.$extraParams;

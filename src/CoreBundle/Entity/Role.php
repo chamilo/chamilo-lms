@@ -28,7 +28,7 @@ class Role
     private int $constantValue;
 
     #[Assert\NotBlank]
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'text')]
     private string $title;
 
     #[ORM\Column(type: 'text', nullable: true)]

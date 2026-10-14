@@ -63,7 +63,7 @@ class Page
 
     #[Assert\NotBlank]
     #[Groups(['page:read', 'page:write'])]
-    #[ORM\Column(name: 'title', type: 'string', length: 255)]
+    #[ORM\Column(name: 'title', type: 'text')]
     protected string $title;
 
     #[Groups(['page:read', 'page:write', 'adminblock:read'])]

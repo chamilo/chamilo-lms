@@ -2734,7 +2734,7 @@ Then(
 
 // Rescoped for the Vue forum tool, keeping both step phrases (toolForum.feature
 // is their only caller). The legacy Twig list these used to target is gone:
-// public/main/forum/'s own pages now deny access, and the course tool link
+// public/main/forum/'s own pages were removed or only redirect, and the course tool link
 // resolves to /resources/forum/{nodeId}/ (src/CoreBundle/Tool/Forum.php).
 //
 // The Vue list has no `.card`-style hook at all — every class on it is a

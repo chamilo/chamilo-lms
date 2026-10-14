@@ -114,13 +114,13 @@ class MessageRelUser
     #[ORM\Column(name: 'starred', type: 'boolean', nullable: false)]
     protected bool $starred;
 
-    #[ORM\Column(name: 'mail_tracking_token', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'mail_tracking_token', type: 'string', length: 255, nullable: true)]
     protected ?string $mailTrackingToken = null;
 
     #[ORM\Column(name: 'mail_opened_at', type: 'datetime', nullable: true)]
     protected ?DateTime $mailOpenedAt = null;
 
-    #[ORM\Column(name: 'mail_reply_token', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'mail_reply_token', type: 'string', length: 255, nullable: true)]
     protected ?string $mailReplyToken = null;
 
     /**

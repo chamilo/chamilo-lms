@@ -24,10 +24,10 @@ class Templates
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 100, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    #[ORM\Column(name: 'description', type: 'string', length: 250, nullable: false)]
+    #[ORM\Column(name: 'description', type: 'string', length: 255, nullable: false)]
     protected string $description;
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'templates', cascade: ['persist'])]

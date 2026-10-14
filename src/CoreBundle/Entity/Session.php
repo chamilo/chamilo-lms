@@ -198,7 +198,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN')"
 )]
 #[ORM\Table(name: 'session')]
-#[ORM\UniqueConstraint(name: 'title', columns: ['title'])]
+#[ORM\UniqueConstraint(name: 'title', columns: ['title'], options: ['lengths' => [150]])]
 #[ORM\Index(columns: ['access_end_date'], name: 'idx_session_access_end_date')]
 #[ORM\Index(columns: ['status'], name: 'idx_session_status')]
 #[ORM\Index(columns: ['parent_id'], name: 'idx_session_parent_id')]
@@ -327,6 +327,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     protected ?Course $currentCourse = null;
 
     #[Assert\NotBlank]
+    #[Assert\Length(max: 150)]
     #[Groups([
         'session:basic',
         'session:read',
@@ -339,7 +340,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'calendar_event:read',
         'user_subscriptions:sessions',
     ])]
-    #[ORM\Column(name: 'title', type: 'string', length: 150)]
+    #[ORM\Column(name: 'title', type: 'text')]
     protected string $title;
 
     #[Groups([

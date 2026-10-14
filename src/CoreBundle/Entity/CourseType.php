@@ -17,7 +17,7 @@ class CourseType
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 50, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\Column(name: 'translation_var', type: 'string', length: 40, nullable: true)]

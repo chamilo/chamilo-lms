@@ -53,7 +53,7 @@ class SessionCategory implements Stringable
         'user_subscriptions:sessions',
     ])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 100, nullable: false, unique: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false, unique: false)]
     protected string $title;
     #[ORM\Column(name: 'date_start', type: 'date', nullable: true, unique: false)]
     protected ?DateTime $dateStart = null;

@@ -30,7 +30,7 @@ class OAuthAccessToken
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'token_hash', type: 'string', length: 64, nullable: false)]
+    #[ORM\Column(name: 'token_hash', type: 'string', length: 255, nullable: false)]
     protected string $tokenHash;
 
     #[ORM\Column(name: 'token_prefix', type: 'string', length: 32, nullable: true)]

@@ -150,6 +150,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, ResourceSho
     #[ORM\Column(name: 'visible_results', type: 'integer', nullable: true)]
     protected ?int $visibleResults = null;
 
+    #[ORM\Column(name: 'results_hidden_from_teacher', type: 'boolean', options: ['default' => false])]
+    protected bool $resultsHiddenFromTeacher = false;
+
     #[ORM\Column(name: 'is_mandatory', type: 'boolean', options: ['default' => false])]
     protected bool $isMandatory = false;
 
@@ -491,6 +494,18 @@ class CSurvey extends AbstractResource implements ResourceInterface, ResourceSho
     public function setVisibleResults(int $visibleResults): self
     {
         $this->visibleResults = $visibleResults;
+
+        return $this;
+    }
+
+    public function isResultsHiddenFromTeacher(): bool
+    {
+        return $this->resultsHiddenFromTeacher;
+    }
+
+    public function setResultsHiddenFromTeacher(bool $resultsHiddenFromTeacher): self
+    {
+        $this->resultsHiddenFromTeacher = $resultsHiddenFromTeacher;
 
         return $this;
     }

@@ -48,7 +48,7 @@ class SearchEngineField
     protected string $code;
 
     #[Groups(['search_engine_field:read', 'search_engine_field:write', 'resource_node:read', 'document:read'])]
-    #[ORM\Column(name: 'title', type: 'string', length: 200, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Groups(['search_engine_field:read', 'resource_node:read', 'document:read'])]

@@ -400,11 +400,11 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
     $servicesNodeTable->addColumn('buyer_postcode', Types::STRING, ['length' => 32, 'notnull' => false]);
     $servicesNodeTable->addColumn('buyer_ip', Types::STRING, ['length' => 45, 'notnull' => false]);
     $servicesNodeTable->addColumn('buyer_ip_country', Types::STRING, ['length' => 2, 'notnull' => false]);
-    $servicesNodeTable->addColumn('buyer_vat_number', Types::STRING, ['length' => 64, 'notnull' => false]);
+    $servicesNodeTable->addColumn('buyer_vat_number', Types::STRING, ['length' => 255, 'notnull' => false]);
     $servicesNodeTable->addColumn('buyer_vat_valid', Types::BOOLEAN, ['notnull' => false]);
     $servicesNodeTable->addColumn('buyer_business_name', Types::STRING, ['length' => 255, 'notnull' => false]);
     $servicesNodeTable->addColumn('buyer_business_address', Types::TEXT, ['notnull' => false]);
-    $servicesNodeTable->addColumn('vat_treatment', Types::STRING, ['length' => 128, 'notnull' => false]);
+    $servicesNodeTable->addColumn('vat_treatment', Types::STRING, ['length' => 255, 'notnull' => false]);
     $servicesNodeTable->addColumn('vat_rate', Types::DECIMAL, ['precision' => 5, 'scale' => 2, 'notnull' => false]);
     $servicesNodeTable->addColumn('vat_evidence_json', Types::TEXT, ['notnull' => false]);
     $servicesNodeTable->addColumn('invoice', Types::INTEGER, ['default' => 0]);
@@ -493,11 +493,11 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_G
     $globalTable->addColumn('seller_address', Types::STRING);
     $globalTable->addColumn('seller_country', Types::STRING, ['length' => 2, 'notnull' => false]);
     $globalTable->addColumn('seller_postcode', Types::STRING, ['length' => 32, 'notnull' => false]);
-    $globalTable->addColumn('seller_vat_number', Types::STRING, ['length' => 64, 'notnull' => false]);
+    $globalTable->addColumn('seller_vat_number', Types::STRING, ['length' => 255, 'notnull' => false]);
     $globalTable->addColumn('seller_vat_registered', Types::BOOLEAN, ['default' => false]);
     $globalTable->addColumn('seller_annual_eu_tbe_turnover', Types::DECIMAL, ['precision' => 12, 'scale' => 2, 'default' => '0.00']);
     $globalTable->addColumn('vat_geoip_provider', Types::STRING, ['length' => 32, 'default' => 'none']);
-    $globalTable->addColumn('vat_maxmind_account_id', Types::STRING, ['length' => 64, 'notnull' => false]);
+    $globalTable->addColumn('vat_maxmind_account_id', Types::STRING, ['length' => 255, 'notnull' => false]);
     $globalTable->addColumn('vat_maxmind_license_key', Types::STRING, ['length' => 255, 'notnull' => false]);
     $globalTable->addColumn('seller_email', Types::STRING);
     $globalTable->addColumn('next_number_invoice', Types::INTEGER);
@@ -691,7 +691,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_T
     $tpvCecabankTable->addColumn('cypher', Types::STRING);
     $tpvCecabankTable->addColumn('exponent', Types::STRING);
     $tpvCecabankTable->addColumn('supported_payment', Types::STRING);
-    $tpvCecabankTable->addColumn('url', Types::STRING);
+    $tpvCecabankTable->addColumn('url', Types::TEXT);
     $tpvCecabankTable->setPrimaryKey(['id']);
 }
 

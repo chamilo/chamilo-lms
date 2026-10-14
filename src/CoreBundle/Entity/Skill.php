@@ -105,13 +105,13 @@ class Skill implements Stringable, Translatable
     #[Gedmo\Translatable]
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write', 'skill_rel_user:read'])]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Gedmo\Translatable]
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write'])]
-    #[ORM\Column(name: 'short_code', type: 'string', length: 100, nullable: false)]
+    #[ORM\Column(name: 'short_code', type: 'string', length: 255, nullable: false)]
     protected string $shortCode;
 
     #[Groups(['skill:read', 'skill:write'])]

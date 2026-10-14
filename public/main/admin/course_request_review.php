@@ -151,35 +151,38 @@ function get_request_data($from, $number_of_items, $column, $direction)
 {
     global $keyword;
     $course_request_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
+    $course_category_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;
     $column = (int) $column;
     $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     if (DELETE_ACTION_ENABLED) {
-        $sql = "SELECT id AS col0,
-                   code AS col1,
-                   title AS col2,
-                   category_code AS col3,
-                   tutor_name AS col4,
-                   request_date AS col5,
-                   id  AS col6
-               FROM $course_request_table
-               WHERE status = ".COURSE_REQUEST_PENDING;
+        $sql = "SELECT cr.id AS col0,
+                   cr.code AS col1,
+                   cr.title AS col2,
+                   cc.code AS col3,
+                   cr.tutor_name AS col4,
+                   cr.request_date AS col5,
+                   cr.id AS col6
+               FROM $course_request_table cr
+               LEFT JOIN $course_category_table cc ON cc.id = cr.category_id
+               WHERE cr.status = ".COURSE_REQUEST_PENDING;
     } else {
         $sql = "SELECT
-                   code AS col0,
-                   title AS col1,
-                   category_code AS col2,
-                   tutor_name AS col3,
-                   request_date AS col4,
-                   id  AS col5
-               FROM $course_request_table
-               WHERE status = ".COURSE_REQUEST_PENDING;
+                   cr.code AS col0,
+                   cr.title AS col1,
+                   cc.code AS col2,
+                   cr.tutor_name AS col3,
+                   cr.request_date AS col4,
+                   cr.id AS col5
+               FROM $course_request_table cr
+               LEFT JOIN $course_category_table cc ON cc.id = cr.category_id
+               WHERE cr.status = ".COURSE_REQUEST_PENDING;
     }
 
     if ('' != $keyword) {
-        $sql .= " AND (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%')";
+        $sql .= " AND (cr.title LIKE '%".$keyword."%' OR cr.code LIKE '%".$keyword."%' OR cr.visual_code LIKE '%".$keyword."%')";
     }
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";

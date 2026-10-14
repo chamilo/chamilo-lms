@@ -30,7 +30,7 @@ class OAuthAuthorizationCode
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'code_hash', type: 'string', length: 64, nullable: false)]
+    #[ORM\Column(name: 'code_hash', type: 'string', length: 255, nullable: false)]
     protected string $codeHash;
 
     #[ORM\Column(name: 'grant_id', type: 'string', length: 36, nullable: false)]
@@ -50,7 +50,7 @@ class OAuthAuthorizationCode
     #[ORM\Column(name: 'redirect_uri', type: 'text', nullable: false)]
     protected string $redirectUri;
 
-    #[ORM\Column(name: 'code_challenge', type: 'string', length: 128, nullable: false)]
+    #[ORM\Column(name: 'code_challenge', type: 'string', length: 255, nullable: false)]
     protected string $codeChallenge;
 
     #[ORM\Column(name: 'code_challenge_method', type: 'string', length: 10, nullable: false)]

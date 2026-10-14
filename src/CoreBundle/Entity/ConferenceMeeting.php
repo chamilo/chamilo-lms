@@ -62,7 +62,7 @@ class ConferenceMeeting
     #[ORM\Column(name: 'internal_meeting_id', type: 'string', nullable: true)]
     protected ?string $internalMeetingId = null;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255)]
+    #[ORM\Column(name: 'title', type: 'text')]
     protected string $title = '';
 
     #[ORM\Column(name: 'attendee_pw', type: 'string', nullable: true)]

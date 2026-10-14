@@ -129,7 +129,7 @@ const tools = computed(() => [
   { key: "forums", label: t("Forums"), icon: "comment" },
   { key: "sections", label: t("Add section"), icon: "folder-multiple-plus" },
   { key: "surveys", label: t("Create survey"), icon: "form-dropdown" },
-  ...(builder.value?.toolboxEnabled ? [{ key: "toolbox", label: t("Toolbox"), icon: "robot" }] : []),
+  ...(builder.value?.toolboxEnabled ? [{ key: "toolbox", label: t("Toolbox"), icon: "settings" }] : []),
   { key: "certificate", label: t("Certificate"), icon: "gradebook" },
 ])
 

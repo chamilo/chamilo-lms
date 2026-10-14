@@ -28,6 +28,7 @@ function iconFor(item) {
     forum: "comment",
     thread: "comment",
     survey: "form-dropdown",
+    toolbox: "settings",
   }
 
   return icons[item.resourceType] || "file-generic"

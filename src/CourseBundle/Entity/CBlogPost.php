@@ -52,7 +52,7 @@ class CBlogPost
     protected ?int $iid = null;
 
     #[Groups(['blog_post:read', 'blog_post:write'])]
-    #[ORM\Column(type: 'string', length: 250)]
+    #[ORM\Column(type: 'text')]
     protected string $title;
 
     #[Groups(['blog_post:read', 'blog_post:write'])]

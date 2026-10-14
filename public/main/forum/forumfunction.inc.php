@@ -5415,13 +5415,16 @@ function reportPost(CForumPost $post, CForum $forumInfo, CForumThread $threadInf
         return false;
     }
 
-    $postId = $post->getIid();
-
     $currentUser = api_get_user_info();
     $users = getReportRecipients();
     if (!empty($users)) {
-        $url = api_get_path(WEB_CODE_PATH).
-            'forum/viewthread.php?forum='.$forumInfo->getIid().'&thread='.$threadInfo->getIid().'&'.api_get_cidreq(true, true, false).'&post_id='.$postId.'#post_id_'.$postId;
+        $url = getForumToolUrl(
+            api_get_course_int_id(),
+            api_get_session_id(),
+            api_get_group_id(),
+            $forumInfo->getIid(),
+            $threadInfo->getIid()
+        );
         $postLink = Display::url(
             $post->getTitle(),
             $url
@@ -5551,4 +5554,32 @@ function getCountPostsWithStatusBatch(int $status, array $forumIds): array
     }
 
     return $map;
+}
+
+/**
+ * URL of the forum tool (Vue) of a course, optionally pointing to a forum or to one of its threads.
+ * Empty when the course has no resource node.
+ */
+function getForumToolUrl(
+    int $courseId,
+    int $sessionId = 0,
+    int $groupId = 0,
+    int $forumId = 0,
+    int $threadId = 0,
+    array $params = []
+): string {
+    $nodeId = (int) api_get_course_entity($courseId)?->getResourceNode()?->getId();
+    if (0 === $nodeId) {
+        return '';
+    }
+
+    $path = api_get_path(WEB_PATH).'resources/forum/'.$nodeId.'/';
+    if ($forumId > 0) {
+        $path .= 'forum/'.$forumId;
+        if ($threadId > 0) {
+            $path .= '/thread/'.$threadId;
+        }
+    }
+
+    return $path.'?'.http_build_query(['cid' => $courseId, 'sid' => $sessionId, 'gid' => $groupId] + $params);
 }

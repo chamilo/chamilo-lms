@@ -62,7 +62,7 @@ class CBlogComment
     protected int $commentId = 0;
 
     #[Groups(['blog_comment:read', 'blog_comment:write'])]
-    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title = '';
 
     #[Groups(['blog_comment:read', 'blog_comment:write'])]

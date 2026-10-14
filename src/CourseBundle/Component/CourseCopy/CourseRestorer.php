@@ -5184,6 +5184,9 @@ class CourseRestorer
                 }
 
                 $visibleResults = isset($surveyObj->visible_results) ? (int) $surveyObj->visible_results : null;
+                $resultsHiddenFromTeacher = isset($surveyObj->results_hidden_from_teacher)
+                    ? (bool) $surveyObj->results_hidden_from_teacher
+                    : false;
                 $displayQuestionNumber = isset($surveyObj->display_question_number) ? (bool) $surveyObj->display_question_number : true;
                 $surveyType = isset($surveyObj->survey_type) ? (int) $surveyObj->survey_type : null;
                 $showFormProfile = isset($surveyObj->show_form_profile) ? (int) $surveyObj->show_form_profile : null;
@@ -5258,6 +5261,7 @@ class CourseRestorer
                     ->setShuffle($shuffle)
                     ->setAnonymous($anonymous)
                     ->setDisplayQuestionNumber($displayQuestionNumber)
+                    ->setResultsHiddenFromTeacher($resultsHiddenFromTeacher)
                     ->setIsMandatory($isMandatory)
                 ;
 

@@ -2,7 +2,8 @@
 # pages under public/main/forum/ (index.php?action=add_category, newthread.php,
 # reply.php, viewthread.php); those are gone — newthread.php, reply.php,
 # editthread.php, editpost.php, forumqualify.php, forumsearch.php,
-# viewforumcategory.php and iframe_thread.php now only deny access, and the
+# viewforumcategory.php and iframe_thread.php were removed, index.php,
+# viewforum.php and viewthread.php only redirect to Vue, and the
 # course tool link resolves to /resources/forum/{courseResourceNodeId}/
 # (src/CoreBundle/Tool/Forum.php). So this is a rewrite, not a port: the old
 # field names (forum_category_comment aside) and the old flow no longer exist.

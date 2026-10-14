@@ -24,7 +24,7 @@ class Sequence implements Stringable
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string')]
+    #[ORM\Column(name: 'title', type: 'text')]
     protected string $title;
 
     #[ORM\Column(name: 'graph', type: 'text', nullable: true)]

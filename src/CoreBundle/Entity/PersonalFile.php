@@ -137,7 +137,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ],
     normalizationContext: ['groups' => ['personal_file:read', 'resource_node:read']],
-    security: "is_granted('ROLE_USER')",
+    security: "is_granted('ROLE_USER') and is_granted('VIEW', object.resourceNode)",
     processor: CopyDocumentToPersonalFileProcessor::class,
 )]
 #[ORM\Table(name: 'personal_file')]

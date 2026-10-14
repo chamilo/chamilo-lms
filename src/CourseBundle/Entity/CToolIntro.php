@@ -70,7 +70,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
         ),
         new Put(
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            security: "is_granted('EDIT', object.resourceNode)",
             parameters: [
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
@@ -90,7 +90,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
         ),
         new Patch(
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            security: "is_granted('EDIT', object.resourceNode)",
             parameters: [
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],

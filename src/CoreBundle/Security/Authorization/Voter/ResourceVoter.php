@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CToolIntro;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
@@ -75,6 +76,12 @@ class ResourceVoter extends Voter
             || $subject instanceof CCalendarEvent
             || $subject instanceof Usergroup
         ) {
+            return false;
+        }
+
+        // Editing an introduction is decided by CToolIntroVoter, from the introduction's own
+        // course and session, so this voter must abstain on it.
+        if (self::EDIT === $attribute && $subject instanceof CToolIntro) {
             return false;
         }
 

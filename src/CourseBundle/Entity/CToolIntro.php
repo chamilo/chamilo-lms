@@ -70,7 +70,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
         ),
         new Put(
-            security: "is_granted('EDIT', object.resourceNode)",
+            security: self::EDIT_SECURITY,
             parameters: [
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
@@ -90,7 +90,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
         ),
         new Patch(
-            security: "is_granted('EDIT', object.resourceNode)",
+            security: self::EDIT_SECURITY,
             parameters: [
                 'cid' => new QueryParameter(
                     schema: ['type' => 'integer'],
@@ -169,6 +169,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: SidFilter::class)]
 class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
+    /**
+     * The contextual teacher roles describe the course of the request (cid/sid), not the
+     * course the edited introduction belongs to, so the introduction's own course and
+     * session must match the request as well.
+     */
+    public const string EDIT_SECURITY = "(is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER'))
+        and object.getCourseTool().getCourse().getId() == request.query.get('cid')
+        and (object.getCourseTool().getSession() == null
+            or object.getCourseTool().getSession().getId() == request.query.get('sid'))";
+
     #[Groups(['c_tool_intro:read', 'c_tool_intro:current'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

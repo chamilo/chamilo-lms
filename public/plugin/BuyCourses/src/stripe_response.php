@@ -429,6 +429,7 @@ switch ($eventType) {
         $plugin->updateServiceSaleGatewayData($serviceSaleId, $updateData);
         $plugin->applyServiceBenefitsFromSale($serviceSaleId);
         $plugin->markGatewayEventProcessed($serviceSaleId, $eventId);
+        $billingReason = strtolower(trim((string) ($object->billing_reason ?? '')));
         $plugin->recordAudit(
             BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED,
             BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
@@ -437,6 +438,7 @@ switch ($eventType) {
                 'gateway' => 'stripe',
                 'event_id' => $eventId,
                 'event_type' => $eventType,
+                'billing_reason' => $billingReason,
                 'subscription_id' => $subscriptionId,
                 'transaction_id' => $paymentIntentId,
                 'next_charge_date' => $nextChargeDate,
@@ -447,7 +449,6 @@ switch ($eventType) {
             BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
         );
 
-        $billingReason = strtolower(trim((string) ($object->billing_reason ?? '')));
         if ('subscription_create' !== $billingReason) {
             $couponUsage = $plugin->getServiceSaleCouponUsage($serviceSaleId);
             $couponTimesApplied = max(0, (int) ($couponUsage['times_applied'] ?? 0));

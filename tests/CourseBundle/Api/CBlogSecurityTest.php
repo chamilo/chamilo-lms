@@ -439,11 +439,13 @@ final class CBlogSecurityTest extends AbstractApiTest
             'POST',
             '/api/c_blog_posts?cid='.$ctx['course']->getId(),
             [
-                'json' => [
+                // The action reads multipart form fields, not a JSON body.
+                'headers' => ['Content-Type' => 'multipart/form-data'],
+                'extra' => ['parameters' => [
                     'title' => 'legit post',
                     'fullText' => 'legit body',
                     'blog' => '/api/c_blogs/'.$ctx['blog']->getIid(),
-                ],
+                ]],
             ]
         );
 

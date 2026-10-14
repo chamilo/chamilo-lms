@@ -33,7 +33,7 @@ class SessionDuplicateApiTest extends AbstractApiTest
         $student = $this->createUser('dup_model_student');
         $course = $this->createCourse('Duplicate model course');
 
-        $model = $this->createSession('Duplicate model session');
+        $model = $this->createModelSession('Duplicate model session');
         $model
             ->addSessionAdmin($sessionAdmin)
             ->addUserInSession(Session::DRH, $drh)
@@ -92,7 +92,7 @@ class SessionDuplicateApiTest extends AbstractApiTest
     public function testSessionContentCopyKeepsHtmlDocuments(): void
     {
         $course = $this->createCourse('Duplicate content course');
-        $model = $this->createSession('Duplicate content model');
+        $model = $this->createModelSession('Duplicate content model');
         $model->addCourse($course);
         $this->getEntityManager()->flush();
 
@@ -176,5 +176,26 @@ class SessionDuplicateApiTest extends AbstractApiTest
 
         $this->assertResponseStatusCodeSame(422);
         $this->assertSame($before, $repo->count([]), 'Validation happens before copy(), so nothing is half-created.');
+    }
+
+    /**
+     * A session starts with every date set to "now". copy() only moves a date that is already
+     * in the past, so a request landing in the same second as the setup was rejected as
+     * "start >= end". A model without dates is the common case and does not depend on timing.
+     */
+    private function createModelSession(string $title): Session
+    {
+        $session = $this->createSession($title);
+        $session
+            ->setAccessStartDate(null)
+            ->setAccessEndDate(null)
+            ->setDisplayStartDate(null)
+            ->setDisplayEndDate(null)
+            ->setCoachAccessStartDate(null)
+            ->setCoachAccessEndDate(null)
+        ;
+        $this->getEntityManager()->flush();
+
+        return $session;
     }
 }

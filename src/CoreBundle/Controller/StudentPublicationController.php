@@ -36,6 +36,7 @@ use Mpdf\Output\Destination;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -729,7 +730,8 @@ class StudentPublicationController extends AbstractController
         CStudentPublicationRepository $repo,
         CStudentPublicationCorrectionRepository $correctionRepo,
         EntityManagerInterface $em,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        KernelInterface $kernel
     ): JsonResponse {
         $assignment = $repo->find($assignmentId);
         if (!$assignment) {
@@ -745,80 +747,84 @@ class StudentPublicationController extends AbstractController
         }
 
         $folder = uniqid('corrections_', true);
-        $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
+        $destinationDir = $kernel->getCacheDir().'/'.$folder;
         mkdir($destinationDir, 0777, true);
 
-        $zip = new ZipArchive();
-        $zip->open($file->getPathname());
-        $zip->extractTo($destinationDir);
-        $zip->close();
+        try {
+            $zip = new ZipArchive();
+            $zip->open($file->getPathname());
+            $zip->extractTo($destinationDir);
+            $zip->close();
 
-        [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
+            [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
 
-        $matchMap = [];
-        foreach ($submissions as $submission) {
-            $date = $submission->getSentDate()?->format('Y-m-d_H-i') ?? 'unknown';
-            $username = $submission->getUser()?->getUsername() ?? 'unknown';
-            $title = $this->cleanFilename($submission->getTitle() ?? '');
-            $title = preg_replace('/_[a-f0-9]{10,}$/', '', pathinfo($title, PATHINFO_FILENAME));
-            $key = \sprintf('%s_%s_%s', $date, $username, $title);
-            $matchMap[$key] = $submission;
-        }
+            $matchMap = [];
+            foreach ($submissions as $submission) {
+                $date = $submission->getSentDate()?->format('Y-m-d_H-i') ?? 'unknown';
+                $username = $submission->getUser()?->getUsername() ?? 'unknown';
+                $title = $this->cleanFilename($submission->getTitle() ?? '');
+                $title = preg_replace('/_[a-f0-9]{10,}$/', '', pathinfo($title, PATHINFO_FILENAME));
+                $key = \sprintf('%s_%s_%s', $date, $username, $title);
+                $matchMap[$key] = $submission;
+            }
 
-        $finder = new Finder();
-        $finder->files()->in($destinationDir);
+            $finder = new Finder();
+            $finder->files()->in($destinationDir);
 
-        $uploaded = 0;
-        $skipped = [];
+            $uploaded = 0;
+            $skipped = [];
 
-        foreach ($finder as $foundFile) {
-            $filename = $foundFile->getFilename();
-            $nameOnly = pathinfo($filename, PATHINFO_FILENAME);
-            $nameOnly = preg_replace('/_[a-f0-9]{10,}$/', '', $nameOnly);
+            foreach ($finder as $foundFile) {
+                $filename = $foundFile->getFilename();
+                $nameOnly = pathinfo($filename, PATHINFO_FILENAME);
+                $nameOnly = preg_replace('/_[a-f0-9]{10,}$/', '', $nameOnly);
 
-            $matched = false;
-            foreach ($matchMap as $prefix => $submission) {
-                if ($nameOnly === $prefix) {
-                    if ($submission->getCorrection()) {
-                        $em->remove($submission->getCorrection());
-                        $em->flush();
+                $matched = false;
+                foreach ($matchMap as $prefix => $submission) {
+                    if ($nameOnly === $prefix) {
+                        if ($submission->getCorrection()) {
+                            $em->remove($submission->getCorrection());
+                            $em->flush();
+                        }
+
+                        $uploadedFile = new UploadedFile(
+                            $foundFile->getRealPath(),
+                            $filename,
+                            null,
+                            null,
+                            true
+                        );
+
+                        $correction = new CStudentPublicationCorrection();
+                        $correction->setTitle($filename);
+                        $correction->setUploadFile($uploadedFile);
+                        $correction->setParentResourceNode($submission->getResourceNode()->getId());
+
+                        $em->persist($correction);
+
+                        $submission->setExtensions($filename);
+                        $submission->setDescription('Correction uploaded');
+                        $submission->setQualification(0);
+                        $submission->setDateOfQualification(new DateTime());
+                        $submission->setAccepted(true);
+                        $em->persist($submission);
+
+                        $uploaded++;
+                        $matched = true;
+
+                        break;
                     }
+                }
 
-                    $uploadedFile = new UploadedFile(
-                        $foundFile->getRealPath(),
-                        $filename,
-                        null,
-                        null,
-                        true
-                    );
-
-                    $correction = new CStudentPublicationCorrection();
-                    $correction->setTitle($filename);
-                    $correction->setUploadFile($uploadedFile);
-                    $correction->setParentResourceNode($submission->getResourceNode()->getId());
-
-                    $em->persist($correction);
-
-                    $submission->setExtensions($filename);
-                    $submission->setDescription('Correction uploaded');
-                    $submission->setQualification(0);
-                    $submission->setDateOfQualification(new DateTime());
-                    $submission->setAccepted(true);
-                    $em->persist($submission);
-
-                    $uploaded++;
-                    $matched = true;
-
-                    break;
+                if (!$matched) {
+                    $skipped[] = $filename;
                 }
             }
 
-            if (!$matched) {
-                $skipped[] = $filename;
-            }
+            $em->flush();
+        } finally {
+            (new Filesystem())->remove($destinationDir);
         }
-
-        $em->flush();
 
         return new JsonResponse([
             'success' => true,

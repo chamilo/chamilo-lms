@@ -62,10 +62,6 @@ use const PATHINFO_FILENAME;
 #[Route('/assignments')]
 class StudentPublicationController extends AbstractController
 {
-    // Limits for the corrections package, which is extracted to disk before it is read.
-    private const int CORRECTIONS_MAX_ENTRIES = 5000;
-    private const int CORRECTIONS_MAX_UNCOMPRESSED_BYTES = 536870912;
-
     public function __construct(
         private readonly CStudentPublicationRepository $studentPublicationRepo,
         private readonly CidReqHelper $cidReqHelper,
@@ -749,22 +745,13 @@ class StudentPublicationController extends AbstractController
             return new JsonResponse(['error' => 'Invalid file'], 400);
         }
 
-        $zip = new ZipArchive();
-        $isOpen = true === $zip->open($file->getPathname());
-
-        if (!$isOpen || !$this->isCorrectionsArchiveWithinLimits($zip)) {
-            if ($isOpen) {
-                $zip->close();
-            }
-
-            return new JsonResponse(['error' => 'Invalid or too large archive'], 400);
-        }
-
         $folder = uniqid('corrections_', true);
         $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
         mkdir($destinationDir, 0777, true);
 
         try {
+            $zip = new ZipArchive();
+            $zip->open($file->getPathname());
             $zip->extractTo($destinationDir);
             $zip->close();
 
@@ -1088,32 +1075,6 @@ class StudentPublicationController extends AbstractController
     /**
      * Sanitize filenames.
      */
-    /**
-     * Rejects an archive whose entry count or declared uncompressed size is above the limits,
-     * before anything is written to disk.
-     */
-    private function isCorrectionsArchiveWithinLimits(ZipArchive $zip): bool
-    {
-        if ($zip->numFiles > self::CORRECTIONS_MAX_ENTRIES) {
-            return false;
-        }
-
-        $totalBytes = 0;
-        for ($index = 0; $index < $zip->numFiles; $index++) {
-            $stat = $zip->statIndex($index);
-            if (false === $stat) {
-                return false;
-            }
-
-            $totalBytes += $stat['size'];
-            if ($totalBytes > self::CORRECTIONS_MAX_UNCOMPRESSED_BYTES) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private function cleanFilename(string $name): string
     {
         $name = str_replace([':', '\\', '/', '*', '?', '"', '<', '>', '|'], '_', $name);

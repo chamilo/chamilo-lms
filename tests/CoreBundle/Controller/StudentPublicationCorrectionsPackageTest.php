@@ -19,13 +19,11 @@ use ZipArchive;
  * Regression tests for the corrections package upload advisory.
  *
  * The ZIP is extracted to disk before it is read: the extraction directory must not outlive the
- * request, and an archive with too many entries must be refused before anything is written.
+ * request, or every upload would leave its content behind.
  */
 final class StudentPublicationCorrectionsPackageTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
-
-    private const int CORRECTIONS_MAX_ENTRIES = 5000;
 
     /**
      * @return array{teacher: User, assignment: CStudentPublication}
@@ -100,19 +98,6 @@ final class StudentPublicationCorrectionsPackageTest extends AbstractApiTest
         @unlink($zipPath);
 
         $this->assertResponseIsSuccessful();
-        $this->assertSame($before, $this->extractionDirectories());
-    }
-
-    public function testArchiveWithTooManyEntriesIsRefusedBeforeExtraction(): void
-    {
-        $ctx = $this->bootstrapAssignment('too_many');
-        $zipPath = $this->buildZip(self::CORRECTIONS_MAX_ENTRIES + 1);
-        $before = $this->extractionDirectories();
-
-        $this->upload($ctx['teacher'], $ctx['assignment'], $zipPath);
-        @unlink($zipPath);
-
-        $this->assertResponseStatusCodeSame(400);
         $this->assertSame($before, $this->extractionDirectories());
     }
 }

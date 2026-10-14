@@ -36,6 +36,7 @@ use Mpdf\Output\Destination;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -61,6 +62,10 @@ use const PATHINFO_FILENAME;
 #[Route('/assignments')]
 class StudentPublicationController extends AbstractController
 {
+    // Limits for the corrections package, which is extracted to disk before it is read.
+    private const int CORRECTIONS_MAX_ENTRIES = 5000;
+    private const int CORRECTIONS_MAX_UNCOMPRESSED_BYTES = 536870912;
+
     public function __construct(
         private readonly CStudentPublicationRepository $studentPublicationRepo,
         private readonly CidReqHelper $cidReqHelper,
@@ -744,81 +749,94 @@ class StudentPublicationController extends AbstractController
             return new JsonResponse(['error' => 'Invalid file'], 400);
         }
 
+        $zip = new ZipArchive();
+        $isOpen = true === $zip->open($file->getPathname());
+
+        if (!$isOpen || !$this->isCorrectionsArchiveWithinLimits($zip)) {
+            if ($isOpen) {
+                $zip->close();
+            }
+
+            return new JsonResponse(['error' => 'Invalid or too large archive'], 400);
+        }
+
         $folder = uniqid('corrections_', true);
         $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
         mkdir($destinationDir, 0777, true);
 
-        $zip = new ZipArchive();
-        $zip->open($file->getPathname());
-        $zip->extractTo($destinationDir);
-        $zip->close();
+        try {
+            $zip->extractTo($destinationDir);
+            $zip->close();
 
-        [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
+            [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
 
-        $matchMap = [];
-        foreach ($submissions as $submission) {
-            $date = $submission->getSentDate()?->format('Y-m-d_H-i') ?? 'unknown';
-            $username = $submission->getUser()?->getUsername() ?? 'unknown';
-            $title = $this->cleanFilename($submission->getTitle() ?? '');
-            $title = preg_replace('/_[a-f0-9]{10,}$/', '', pathinfo($title, PATHINFO_FILENAME));
-            $key = \sprintf('%s_%s_%s', $date, $username, $title);
-            $matchMap[$key] = $submission;
-        }
+            $matchMap = [];
+            foreach ($submissions as $submission) {
+                $date = $submission->getSentDate()?->format('Y-m-d_H-i') ?? 'unknown';
+                $username = $submission->getUser()?->getUsername() ?? 'unknown';
+                $title = $this->cleanFilename($submission->getTitle() ?? '');
+                $title = preg_replace('/_[a-f0-9]{10,}$/', '', pathinfo($title, PATHINFO_FILENAME));
+                $key = \sprintf('%s_%s_%s', $date, $username, $title);
+                $matchMap[$key] = $submission;
+            }
 
-        $finder = new Finder();
-        $finder->files()->in($destinationDir);
+            $finder = new Finder();
+            $finder->files()->in($destinationDir);
 
-        $uploaded = 0;
-        $skipped = [];
+            $uploaded = 0;
+            $skipped = [];
 
-        foreach ($finder as $foundFile) {
-            $filename = $foundFile->getFilename();
-            $nameOnly = pathinfo($filename, PATHINFO_FILENAME);
-            $nameOnly = preg_replace('/_[a-f0-9]{10,}$/', '', $nameOnly);
+            foreach ($finder as $foundFile) {
+                $filename = $foundFile->getFilename();
+                $nameOnly = pathinfo($filename, PATHINFO_FILENAME);
+                $nameOnly = preg_replace('/_[a-f0-9]{10,}$/', '', $nameOnly);
 
-            $matched = false;
-            foreach ($matchMap as $prefix => $submission) {
-                if ($nameOnly === $prefix) {
-                    if ($submission->getCorrection()) {
-                        $em->remove($submission->getCorrection());
-                        $em->flush();
+                $matched = false;
+                foreach ($matchMap as $prefix => $submission) {
+                    if ($nameOnly === $prefix) {
+                        if ($submission->getCorrection()) {
+                            $em->remove($submission->getCorrection());
+                            $em->flush();
+                        }
+
+                        $uploadedFile = new UploadedFile(
+                            $foundFile->getRealPath(),
+                            $filename,
+                            null,
+                            null,
+                            true
+                        );
+
+                        $correction = new CStudentPublicationCorrection();
+                        $correction->setTitle($filename);
+                        $correction->setUploadFile($uploadedFile);
+                        $correction->setParentResourceNode($submission->getResourceNode()->getId());
+
+                        $em->persist($correction);
+
+                        $submission->setExtensions($filename);
+                        $submission->setDescription('Correction uploaded');
+                        $submission->setQualification(0);
+                        $submission->setDateOfQualification(new DateTime());
+                        $submission->setAccepted(true);
+                        $em->persist($submission);
+
+                        $uploaded++;
+                        $matched = true;
+
+                        break;
                     }
+                }
 
-                    $uploadedFile = new UploadedFile(
-                        $foundFile->getRealPath(),
-                        $filename,
-                        null,
-                        null,
-                        true
-                    );
-
-                    $correction = new CStudentPublicationCorrection();
-                    $correction->setTitle($filename);
-                    $correction->setUploadFile($uploadedFile);
-                    $correction->setParentResourceNode($submission->getResourceNode()->getId());
-
-                    $em->persist($correction);
-
-                    $submission->setExtensions($filename);
-                    $submission->setDescription('Correction uploaded');
-                    $submission->setQualification(0);
-                    $submission->setDateOfQualification(new DateTime());
-                    $submission->setAccepted(true);
-                    $em->persist($submission);
-
-                    $uploaded++;
-                    $matched = true;
-
-                    break;
+                if (!$matched) {
+                    $skipped[] = $filename;
                 }
             }
 
-            if (!$matched) {
-                $skipped[] = $filename;
-            }
+            $em->flush();
+        } finally {
+            (new Filesystem())->remove($destinationDir);
         }
-
-        $em->flush();
 
         return new JsonResponse([
             'success' => true,
@@ -1070,6 +1088,32 @@ class StudentPublicationController extends AbstractController
     /**
      * Sanitize filenames.
      */
+    /**
+     * Rejects an archive whose entry count or declared uncompressed size is above the limits,
+     * before anything is written to disk.
+     */
+    private function isCorrectionsArchiveWithinLimits(ZipArchive $zip): bool
+    {
+        if ($zip->numFiles > self::CORRECTIONS_MAX_ENTRIES) {
+            return false;
+        }
+
+        $totalBytes = 0;
+        for ($index = 0; $index < $zip->numFiles; $index++) {
+            $stat = $zip->statIndex($index);
+            if (false === $stat) {
+                return false;
+            }
+
+            $totalBytes += $stat['size'];
+            if ($totalBytes > self::CORRECTIONS_MAX_UNCOMPRESSED_BYTES) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private function cleanFilename(string $name): string
     {
         $name = str_replace([':', '\\', '/', '*', '?', '"', '<', '>', '|'], '_', $name);

@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDropboxCategory;
 use Chamilo\CourseBundle\Entity\CDropboxFeedback;
+use Chamilo\CourseBundle\Entity\CDropboxFile;
+use Chamilo\CourseBundle\Entity\CDropboxPerson;
 use Chamilo\CourseBundle\Repository\CDropboxCategoryRepository;
 use Chamilo\CourseBundle\Repository\CDropboxFeedbackRepository;
 use Chamilo\CourseBundle\Repository\CDropboxFileRepository;
@@ -303,6 +305,10 @@ class DropboxController extends AbstractController
     public function listFeedback(int $id): JsonResponse
     {
         [$cid] = $this->context();
+        if (!$this->findFileOfCurrentUser($id, $cid)) {
+            return $this->json(['message' => 'File not found'], 404);
+        }
+
         $rows = $this->feedbackRepo->listByFile($cid, $id);
 
         return $this->json(array_map(function (CDropboxFeedback $f) {
@@ -321,6 +327,10 @@ class DropboxController extends AbstractController
     {
         [$cid] = $this->context();
         $uid = (int) $this->getUser()?->getId();
+        if (!$this->findFileOfCurrentUser($id, $cid)) {
+            return $this->json(['message' => 'File not found'], 404);
+        }
+
         $payload = json_decode($r->getContent(), true) ?: [];
         $text = trim((string) ($payload['text'] ?? ''));
 
@@ -457,8 +467,8 @@ class DropboxController extends AbstractController
         // attempts to download a file that does not belong to the authorized course.
         [$cid] = $this->context();
 
-        $file = $this->fileRepo->find($id);
-        if (!$file || (int) $file->getCId() !== $cid) {
+        $file = $this->findFileOfCurrentUser($id, $cid);
+        if (!$file) {
             throw $this->createNotFoundException('File not found');
         }
 
@@ -530,8 +540,8 @@ class DropboxController extends AbstractController
     public function getFile(int $id): JsonResponse
     {
         [$cid] = $this->context();
-        $row = $this->fileRepo->find($id);
-        if (!$row || (int) $row->getCId() !== $cid) {
+        $row = $this->findFileOfCurrentUser($id, $cid);
+        if (!$row) {
             return $this->json(['message' => 'File not found'], 404);
         }
 
@@ -765,6 +775,31 @@ class DropboxController extends AbstractController
         $resp->deleteFileAfterSend(true);
 
         return $resp;
+    }
+
+    /**
+     * Returns the file only when it belongs to the course and the current user either uploaded
+     * it or is one of its recipients, as the sent and received lists already do.
+     */
+    private function findFileOfCurrentUser(int $id, int $cid): ?CDropboxFile
+    {
+        $file = $this->fileRepo->find($id);
+        if (!$file || (int) $file->getCId() !== $cid) {
+            return null;
+        }
+
+        $uid = (int) $this->getUser()?->getId();
+        if ($file->getUploaderId() === $uid) {
+            return $file;
+        }
+
+        $recipient = $this->em->getRepository(CDropboxPerson::class)->findOneBy([
+            'cId' => $cid,
+            'fileId' => (int) $file->getIid(),
+            'userId' => $uid,
+        ]);
+
+        return null !== $recipient ? $file : null;
     }
 
     private function userFullName(int $userId): string

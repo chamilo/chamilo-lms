@@ -85,7 +85,7 @@ final class StudentPublicationCorrectionsPackageTest extends AbstractApiTest
      */
     private function extractionDirectories(): array
     {
-        return glob(api_get_path(SYS_ARCHIVE_PATH).'corrections_*') ?: [];
+        return glob(self::getContainer()->getParameter('kernel.cache_dir').'/corrections_*') ?: [];
     }
 
     public function testExtractionDirectoryIsRemovedAfterTheUpload(): void

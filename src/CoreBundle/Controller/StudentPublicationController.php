@@ -730,7 +730,8 @@ class StudentPublicationController extends AbstractController
         CStudentPublicationRepository $repo,
         CStudentPublicationCorrectionRepository $correctionRepo,
         EntityManagerInterface $em,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        KernelInterface $kernel
     ): JsonResponse {
         $assignment = $repo->find($assignmentId);
         if (!$assignment) {
@@ -746,7 +747,7 @@ class StudentPublicationController extends AbstractController
         }
 
         $folder = uniqid('corrections_', true);
-        $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
+        $destinationDir = $kernel->getCacheDir().'/'.$folder;
         mkdir($destinationDir, 0777, true);
 
         try {

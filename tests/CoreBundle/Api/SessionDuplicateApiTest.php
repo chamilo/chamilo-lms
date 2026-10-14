@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 
 /**
  * POST /api/sessions/{id}/duplicate replaces the 1.11.x create_session_from_model webservice
@@ -181,18 +182,19 @@ class SessionDuplicateApiTest extends AbstractApiTest
     /**
      * A session starts with every date set to "now". copy() only moves a date that is already
      * in the past, so a request landing in the same second as the setup was rejected as
-     * "start >= end". A model without dates is the common case and does not depend on timing.
+     * "start >= end". Dates in the past make the outcome independent of timing.
      */
     private function createModelSession(string $title): Session
     {
         $session = $this->createSession($title);
+        $past = new DateTime('2020-01-01 00:00:00');
         $session
-            ->setAccessStartDate(null)
-            ->setAccessEndDate(null)
-            ->setDisplayStartDate(null)
-            ->setDisplayEndDate(null)
-            ->setCoachAccessStartDate(null)
-            ->setCoachAccessEndDate(null)
+            ->setAccessStartDate($past)
+            ->setAccessEndDate($past)
+            ->setDisplayStartDate($past)
+            ->setDisplayEndDate($past)
+            ->setCoachAccessStartDate($past)
+            ->setCoachAccessEndDate($past)
         ;
         $this->getEntityManager()->flush();
 

@@ -67,6 +67,7 @@ final readonly class ScormPackageImporter
         string $contentProximity,
         string $contentMaker,
         bool $allowHtaccess,
+        bool $registerArchiveDocument = true,
     ): array {
         $this->assertValidUploadedPackage($package);
 
@@ -132,14 +133,16 @@ final readonly class ScormPackageImporter
                     $contentMaker,
                 );
 
-                $archiveCopy = $this->createUploadedCopy($backupPath, $originalName);
+                if ($registerArchiveDocument) {
+                    $archiveCopy = $this->createUploadedCopy($backupPath, $originalName);
 
-                try {
-                    $this->documentRepository->registerScormZip($course, $session, $lp, $archiveCopy, $group);
-                } finally {
-                    $copyPath = $archiveCopy->getPathname();
-                    if (is_file($copyPath)) {
-                        @unlink($copyPath);
+                    try {
+                        $this->documentRepository->registerScormZip($course, $session, $lp, $archiveCopy, $group);
+                    } finally {
+                        $copyPath = $archiveCopy->getPathname();
+                        if (is_file($copyPath)) {
+                            @unlink($copyPath);
+                        }
                     }
                 }
 

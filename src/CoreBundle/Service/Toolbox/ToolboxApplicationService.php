@@ -122,6 +122,7 @@ final readonly class ToolboxApplicationService
                 'local',
                 'Toolbox',
                 false,
+                registerArchiveDocument: false,
             );
         } finally {
             if (is_file($package['path'])) {

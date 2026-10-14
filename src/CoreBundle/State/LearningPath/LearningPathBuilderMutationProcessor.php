@@ -1075,9 +1075,6 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             }
 
             $version = $resource->getCurrentVersionEntity();
-            if (ResourceLink::VISIBILITY_PUBLISHED !== $resourceLink->getVisibility()) {
-                throw new BadRequestHttpException('Publish the Toolbox application before adding it to a learning path.');
-            }
             if (null === $version || !$version->hasGeneratedSource() || !$version->getLearningPath() instanceof CLp) {
                 throw new BadRequestHttpException('Generate the Toolbox application before adding it to a learning path.');
             }

@@ -29,9 +29,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(security: "is_granted('ROLE_USER')"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
-        new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
-        new Put(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
-        new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"),
+        new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
+        new Put(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
     ],
     normalizationContext: [
         'groups' => ['gradebookLink:read'],

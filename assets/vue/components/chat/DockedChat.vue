@@ -91,6 +91,25 @@
             </div>
 
             <div
+              v-if="supportBotCtx.enabled"
+              class="chd-ai"
+            >
+              <button
+                :class="{ 'is-active': Number(activePeer?.id || 0) === SUPPORT_BOT_PEER_ID }"
+                :title="t('Support bot')"
+                class="chd-ai__btn"
+                @click="openConversation({ id: SUPPORT_BOT_PEER_ID, name: supportBotCtx.title || t('Support bot'), image: '' })"
+              >
+                <i class="mdi mdi-face-agent" />
+                <span class="chd-truncate">{{ supportBotCtx.title || t("Support bot") }}</span>
+                <span
+                  aria-hidden="true"
+                  class="chd-presence on"
+                />
+              </button>
+            </div>
+
+            <div
               class="chd-contacts"
               @scroll.passive="onContactsScroll"
             >
@@ -172,10 +191,45 @@
                     class="chd-bubble"
                   >
                     <div
+                      v-if="isSupportBotMessage(msg)"
+                      class="chd-bubble__content"
+                      dir="auto"
+                    >
+                      {{ msg.message }}
+                    </div>
+                    <div
+                      v-else
                       class="chd-bubble__content"
                       dir="auto"
                       v-html="renderMessage(msg)"
                     />
+                    <div
+                      v-if="isSupportBotMessage(msg) && Array.isArray(msg.options) && msg.options.length"
+                      class="chd-support-options"
+                    >
+                      <BaseButton
+                        v-for="option in msg.options"
+                        :key="option.id"
+                        :disabled="supportBotBusy"
+                        :label="option.label"
+                        icon="next"
+                        size="small"
+                        type="secondary"
+                        @click="selectSupportBotOption(msg, option)"
+                      />
+                    </div>
+                    <div
+                      v-if="isSupportBotMessage(msg) && msg.ticketUrl"
+                      class="chd-support-options"
+                    >
+                      <BaseButton
+                        :label="t('View ticket')"
+                        :to-url="msg.ticketUrl"
+                        icon="ticket"
+                        size="small"
+                        type="primary"
+                      />
+                    </div>
                     <div class="chd-bubble__meta">
                       <span class="chd-bubble__date">{{ formatTs(msg.date) }}</span>
                       <span
@@ -218,9 +272,23 @@
               </div>
             </div>
 
+            <div
+              v-if="activePeer && isSupportBotThread && supportBotConversationEnded"
+              class="chd-support-restart"
+            >
+              <BaseButton
+                :disabled="supportBotBusy"
+                :is-loading="supportBotBusy"
+                :label="t('Start a new conversation')"
+                icon="restart"
+                type="primary"
+                @click="startSupportBotConversation(true)"
+              />
+            </div>
+
             <!-- Composer -->
             <div
-              v-if="activePeer"
+              v-if="activePeer && !isSupportBotThread"
               class="chd-composer"
             >
               <textarea
@@ -461,6 +529,8 @@ import { getCourseContext } from "../../utils/courseContext"
 import { usePlatformConfig } from "../../store/platformConfig"
 import DOMPurify from "dompurify"
 import baseService from "../../services/baseService"
+import supportBotService from "../../services/supportBotService"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 const { t } = useI18n({ useScope: "global" })
 const route = useRoute()
@@ -563,8 +633,9 @@ watch(
   },
 )
 
-/** AI peer id used across backend/services */
+/** Synthetic peer ids used by dock-only assistants. */
 const AI_PEER_ID = -1
+const SUPPORT_BOT_PEER_ID = -2
 
 const openedOnce = ref(false)
 const AUTO_OPEN_LAST_PEER = false
@@ -717,6 +788,16 @@ const tutorCtx = reactive({
   provider: "", // default provider key
   mode: null, // "course" or "global"
 })
+
+/** Platform-wide rigid Support Bot context. */
+const supportBotCtx = reactive({
+  loaded: false,
+  enabled: false,
+  title: "",
+})
+const supportBotConversationId = ref(0)
+const supportBotOutcome = ref("")
+const supportBotBusy = ref(false)
 
 /** Unread tracking */
 const unreadByPeer = reactive(new Map())
@@ -1118,6 +1199,10 @@ function renderAiMarkdown(rawMessage) {
  */
 function renderMessage(message) {
   const fromId = Number(message?.from_user_info?.id ?? message?.f ?? 0)
+
+  if (fromId === SUPPORT_BOT_PEER_ID) {
+    return escapeForHtml(String(message?.message || ""))
+  }
 
   if (fromId === AI_PEER_ID) {
     return renderAiMarkdown(message?.message)
@@ -2252,6 +2337,23 @@ async function loadTutorContext() {
   }
 }
 
+async function loadSupportBotContext() {
+  supportBotCtx.loaded = false
+  supportBotCtx.enabled = false
+  supportBotCtx.title = ""
+
+  try {
+    const data = await supportBotService.getRuntimeContext()
+    supportBotCtx.enabled = !!data?.enabled
+    supportBotCtx.title = typeof data?.title === "string" ? data.title : ""
+  } catch {
+    supportBotCtx.enabled = false
+    supportBotCtx.title = ""
+  } finally {
+    supportBotCtx.loaded = true
+  }
+}
+
 async function startSession() {
   const data = await getJSON(API.start)
   if (!data) return
@@ -2351,6 +2453,131 @@ function aiQueryParamsIfNeeded(pid) {
   return tutorCtx.provider ? { ai_provider: tutorCtx.provider } : {}
 }
 
+function isSupportBotMessage(message) {
+  return !!message?.supportBot
+}
+
+function supportBotTimestamp() {
+  return Math.floor(Date.now() / 1000)
+}
+
+function buildSupportBotMessage(content, options = [], extra = {}) {
+  return {
+    id: -Date.now() - Math.floor(Math.random() * 1000),
+    from_user_info: { id: SUPPORT_BOT_PEER_ID, complete_name: supportBotCtx.title || t("Support bot") },
+    f: SUPPORT_BOT_PEER_ID,
+    date: supportBotTimestamp(),
+    message: String(content || ""),
+    options: Array.isArray(options) ? options : [],
+    supportBot: true,
+    ...extra,
+  }
+}
+
+function appendSupportBotNode(node) {
+  if (!node || !String(node.content || "").trim()) return
+  const current = messagesByPeer.get(SUPPORT_BOT_PEER_ID) || []
+  messagesByPeer.set(SUPPORT_BOT_PEER_ID, [
+    ...current,
+    buildSupportBotMessage(node.content, node.options || []),
+  ])
+}
+
+function appendSupportBotSystemMessage(content, extra = {}) {
+  if (!String(content || "").trim()) return
+  const current = messagesByPeer.get(SUPPORT_BOT_PEER_ID) || []
+  messagesByPeer.set(SUPPORT_BOT_PEER_ID, [
+    ...current,
+    buildSupportBotMessage(content, [], extra),
+  ])
+}
+
+async function startSupportBotConversation(force = false) {
+  if (!supportBotCtx.enabled || supportBotBusy.value) return
+
+  const existing = messagesByPeer.get(SUPPORT_BOT_PEER_ID) || []
+  if (!force && supportBotConversationId.value > 0 && existing.length > 0) return
+
+  supportBotBusy.value = true
+  try {
+    const data = await supportBotService.startConversation()
+    supportBotConversationId.value = Number(data?.conversationId || 0)
+    supportBotOutcome.value = String(data?.outcome || "in_progress")
+    if (typeof data?.treeTitle === "string" && data.treeTitle) {
+      supportBotCtx.title = data.treeTitle
+      if (Number(activePeer.value?.id || 0) === SUPPORT_BOT_PEER_ID) {
+        activePeer.value = { ...activePeer.value, name: data.treeTitle }
+      }
+    }
+    messagesByPeer.set(SUPPORT_BOT_PEER_ID, [])
+    appendSupportBotNode(data?.node)
+  } catch {
+    supportBotConversationId.value = 0
+    supportBotOutcome.value = ""
+    messagesByPeer.set(SUPPORT_BOT_PEER_ID, [])
+    appendSupportBotSystemMessage(t("Support bot is currently unavailable."))
+  } finally {
+    supportBotBusy.value = false
+    requestAnimationFrame(() => {
+      const el = scrollBox.value
+      if (el) el.scrollTop = el.scrollHeight
+    })
+  }
+}
+
+async function selectSupportBotOption(message, option) {
+  if (!isSupportBotThread.value || supportBotBusy.value) return
+  if (supportBotConversationId.value <= 0 || Number(option?.id || 0) <= 0) return
+
+  const current = messagesByPeer.get(SUPPORT_BOT_PEER_ID) || []
+  messagesByPeer.set(
+    SUPPORT_BOT_PEER_ID,
+    current.map((item) => (item.id === message.id ? { ...item, options: [] } : item)),
+  )
+  const selection = {
+    id: -Date.now(),
+    from_user_info: { id: me.id, complete_name: me.name || "me" },
+    f: me.id,
+    date: supportBotTimestamp(),
+    message: String(option.label || ""),
+    supportBot: true,
+  }
+  messagesByPeer.set(SUPPORT_BOT_PEER_ID, [...(messagesByPeer.get(SUPPORT_BOT_PEER_ID) || []), selection])
+
+  supportBotBusy.value = true
+  try {
+    const data = await supportBotService.advanceConversation(supportBotConversationId.value, option.id)
+    supportBotOutcome.value = String(data?.outcome || "")
+
+    if (data?.action === "open_link" && typeof data?.targetUrl === "string" && data.targetUrl.startsWith("/")) {
+      window.open(data.targetUrl, "_blank", "noopener,noreferrer")
+    }
+
+    if (data?.node) {
+      appendSupportBotNode(data.node)
+    } else if (data?.action === "escalate_ticket") {
+      appendSupportBotSystemMessage(t("A support ticket has been created."), { ticketUrl: data?.ticketUrl || "" })
+    } else {
+      appendSupportBotSystemMessage(data?.closingMessage || t("Conversation ended."))
+    }
+  } catch {
+    const failedMessages = messagesByPeer.get(SUPPORT_BOT_PEER_ID) || []
+    messagesByPeer.set(
+      SUPPORT_BOT_PEER_ID,
+      failedMessages
+        .filter((item) => item.id !== selection.id)
+        .map((item) => (item.id === message.id ? { ...item, options: message.options || [] } : item)),
+    )
+    appendSupportBotSystemMessage(t("The support bot could not continue this conversation. Please try again."))
+  } finally {
+    supportBotBusy.value = false
+    requestAnimationFrame(() => {
+      const el = scrollBox.value
+      if (el) el.scrollTop = el.scrollHeight
+    })
+  }
+}
+
 const lastIdByPeer = reactive(new Map())
 
 function resetAiThreadCache() {
@@ -2365,16 +2592,21 @@ async function openConversation(peer) {
 
   // Backend decides whether the AI Tutor is available in course or global support mode.
   if (pid === AI_PEER_ID && (!tutorCtx.enabled || tutorCtx.inTest)) return
+  if (pid === SUPPORT_BOT_PEER_ID && !supportBotCtx.enabled) return
 
   activePeer.value = {
     id: pid,
     name: peer.name || "User",
     image: peer.image || "",
-    online: pid === AI_PEER_ID ? true : (pickOnline(pid) ?? false),
+    online: pid === AI_PEER_ID || pid === SUPPORT_BOT_PEER_ID ? true : (pickOnline(pid) ?? false),
   }
 
   const existing = messagesByPeer.get(pid)
-  if (!existing || existing.length === 0) {
+  if (pid === SUPPORT_BOT_PEER_ID) {
+    if (!existing || existing.length === 0) {
+      await startSupportBotConversation(false)
+    }
+  } else if (!existing || existing.length === 0) {
     await getPreviousMessages()
   }
 
@@ -2391,6 +2623,7 @@ async function openConversation(peer) {
 async function getPreviousMessages() {
   if (!activePeer.value) return
   const pid = activePeer.value.id
+  if (Number(pid) === SUPPORT_BOT_PEER_ID) return
   const current = messagesByPeer.get(pid) || []
   const visible = current.length
   fetchingPrev.value = true
@@ -2570,7 +2803,7 @@ async function heartbeatMinTick() {
   const presenceParam = presenceIds.length > 0 ? { presence_ids: JSON.stringify(presenceIds) } : {}
 
   const pid = activePeer.value?.id
-  if (pid) {
+  if (pid && Number(pid) !== SUPPORT_BOT_PEER_ID) {
     try {
       const since = lastKnownIdForPeer(pid)
       const params = { mode: "tiny", peer_id: pid, since_id: since, ...presenceParam }
@@ -2656,6 +2889,10 @@ async function toggleStatus() {
 }
 
 const isAiThread = computed(() => Number(activePeer.value?.id || 0) === AI_PEER_ID)
+const isSupportBotThread = computed(() => Number(activePeer.value?.id || 0) === SUPPORT_BOT_PEER_ID)
+const supportBotConversationEnded = computed(() =>
+  ["resolved", "escalated", "abandoned"].includes(String(supportBotOutcome.value || "")),
+)
 
 const composerPlaceholder = computed(() => {
   if (isAiThread.value && tutorCtx.inTest) return t("AI tutor is disabled during tests")
@@ -3251,6 +3488,7 @@ async function onNavigationChanged() {
   }
 
   await loadTutorContext()
+  await loadSupportBotContext()
 
   try {
     await loadContacts()
@@ -3296,7 +3534,7 @@ async function toggleDock(v) {
   open.value = v
 
   if (v) {
-    await loadTutorContext()
+    await Promise.all([loadTutorContext(), loadSupportBotContext()])
 
     if (!openedOnce.value) {
       await startSession()
@@ -3382,7 +3620,7 @@ onMounted(async () => {
   // Ensure cid is set on initial mount (important for /course/ID/home routes).
   readCidReqFromRouteAndLocation()
 
-  await loadTutorContext()
+  await Promise.all([loadTutorContext(), loadSupportBotContext()])
   await startSession()
 
   if (videoChatEnabled.value) startVideoSignalPolling()
@@ -3758,5 +3996,26 @@ onBeforeUnmount(() => {
   .chd-video-remote {
     min-height: 55vh;
   }
+}
+
+.chd-support-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+  align-items: stretch;
+}
+
+.chd-support-options :deep(.p-button) {
+  justify-content: flex-start;
+  text-align: left;
+  white-space: normal;
+}
+
+.chd-support-restart {
+  border-top: 1px solid var(--surface-border, #e5e7eb);
+  padding: 0.75rem;
+  display: flex;
+  justify-content: center;
 }
 </style>

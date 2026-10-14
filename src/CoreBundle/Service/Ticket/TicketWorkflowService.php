@@ -159,6 +159,34 @@ final readonly class TicketWorkflowService
     public function createTicket(User $user, array $data, array $files): Ticket
     {
         $this->assertCanCreate();
+
+        return $this->createTicketInternal($user, $data, $files);
+    }
+
+    /**
+     * Create a ticket from the Support Bot escalation flow.
+     *
+     * The Support Bot has its own feature gate and validated decision-tree action, so this
+     * deliberately bypasses only the manual ticket-creation setting while preserving every
+     * other validation performed by the normal workflow.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function createTicketFromSupportBot(User $user, array $data): Ticket
+    {
+        if ('true' !== $this->settingsManager->getSetting('ticket.ticket_support_bot_enabled')) {
+            throw new AccessDeniedHttpException('Support Bot ticket escalation is disabled.');
+        }
+
+        return $this->createTicketInternal($user, $data, []);
+    }
+
+    /**
+     * @param array<string, mixed>     $data
+     * @param array<int, UploadedFile> $files
+     */
+    private function createTicketInternal(User $user, array $data, array $files): Ticket
+    {
         $accessUrl = $this->getCurrentAccessUrl();
         $project = $this->getProject((int) ($data['projectId'] ?? 0), $accessUrl);
         $category = $this->getCategory((int) ($data['categoryId'] ?? 0), $project);

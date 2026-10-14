@@ -688,6 +688,14 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Tickets'),
         ];
 
+        if ('true' === $this->settingsManager->getSetting('ticket.ticket_support_bot_enabled')) {
+            $items[] = [
+                'class' => 'item-support-bot',
+                'route' => ['name' => 'SupportBotTreeList'],
+                'label' => $this->translator->trans('Support bot'),
+            ];
+        }
+
         return $items;
     }
 

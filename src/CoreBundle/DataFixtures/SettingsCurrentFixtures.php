@@ -3653,6 +3653,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'ticket' => [
                 [
+                    'name' => 'ticket_support_bot_enabled',
+                    'title' => 'Enable support chatbot',
+                    'comment' => 'Show a decision-tree chatbot in the chat panel that can guide users to '
+                        .'an answer or open a support ticket on their behalf.',
+                ],
+                [
                     'name' => 'ticket_project_user_roles',
                     'title' => 'Access by role to ticket projects',
                     'comment' => "Allow ticket projects to be accesses by specific user roles. Example: ['permissions' => [1 => [17]] where project_id = 1, STUDENT_BOSS = 17.",

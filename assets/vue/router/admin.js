@@ -5,6 +5,7 @@ import { activeReportLabelKey } from "../utils/statisticsReports"
 const adminCrumb = { label: "Administration", route: { name: "AdminIndex" } }
 const classesCrumbs = [adminCrumb, { label: "Classes", route: { name: "AdminUsergroupList" } }]
 const surveyTemplateCrumbs = [adminCrumb, { label: "Survey templates", route: { name: "SurveyTemplateList" } }]
+const supportBotCrumbs = [adminCrumb, { label: "Support bot", route: { name: "SupportBotTreeList" } }]
 const multiUrlCrumbs = [adminCrumb, { label: "Multi URLs", route: { name: "AdminMultiUrlList" } }]
 const accessUrlCrumbs = [
   ...multiUrlCrumbs,
@@ -66,6 +67,61 @@ export default {
         breadcrumbParents: surveyTemplateCrumbs,
       },
       component: () => import("../views/surveytemplate/SurveyTemplateQuestions.vue"),
+    },
+    {
+      name: "SupportBotTreeList",
+      path: "support-bot",
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Support bot",
+        breadcrumbParents: [adminCrumb],
+      },
+      component: () => import("../views/supportbot/SupportBotTreeList.vue"),
+    },
+    {
+      name: "SupportBotTreeCreate",
+      path: "support-bot/create",
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Create support bot tree",
+        breadcrumbParents: supportBotCrumbs,
+      },
+      component: () => import("../views/supportbot/SupportBotTreeEdit.vue"),
+    },
+    {
+      name: "SupportBotTreeEdit",
+      path: "support-bot/:id(\\d+)/edit",
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Edit support bot tree",
+        breadcrumbParents: supportBotCrumbs,
+      },
+      component: () => import("../views/supportbot/SupportBotTreeEdit.vue"),
+    },
+    {
+      name: "SupportBotConversationList",
+      path: "support-bot/:id(\\d+)/conversations",
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Support bot conversations",
+        breadcrumbParents: supportBotCrumbs,
+      },
+      component: () => import("../views/supportbot/SupportBotConversationList.vue"),
+    },
+    {
+      name: "SupportBotConversationDetail",
+      path: "support-bot/:id(\\d+)/conversations/:conversationId(\\d+)",
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Support bot conversation",
+        breadcrumbParents: supportBotCrumbs,
+      },
+      component: () => import("../views/supportbot/SupportBotConversationDetail.vue"),
     },
     {
       name: "AdminConfigurationColors",

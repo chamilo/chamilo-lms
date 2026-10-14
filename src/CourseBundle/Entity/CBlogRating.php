@@ -23,17 +23,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
-        new Get(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode)"),
+        new Get(security: "is_granted('VIEW', object)"),
         new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
         new Post(
-            securityPostDenormalize: "object.getBlog() != null and object.getPost() != null and object.getPost().getBlog() === object.getBlog() and is_granted('VIEW', object.getBlog().resourceNode)",
+            securityPostDenormalize: "is_granted('CREATE', object)",
             processor: CBlogRatingProcessor::class
         ),
         new Patch(
             denormalizationContext: ['groups' => ['blog_rating:update']],
-            security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode) and ((object.getUser() != null and object.getUser() === user) or is_granted('EDIT', object.getBlog().resourceNode))"
+            security: "is_granted('EDIT', object)"
         ),
-        new Delete(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode) and ((object.getUser() != null and object.getUser() === user) or is_granted('DELETE', object.getBlog().resourceNode))"),
+        new Delete(security: "is_granted('DELETE', object)"),
     ],
     normalizationContext: ['groups' => ['blog_rating:read']],
     denormalizationContext: ['groups' => ['blog_rating:write']],

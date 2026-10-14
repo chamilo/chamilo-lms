@@ -10,16 +10,34 @@ use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\State\CBlogRatingProcessor;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
+    operations: [
+        new Get(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode)"),
+        new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
+        new Post(
+            securityPostDenormalize: "object.getBlog() != null and object.getPost() != null and object.getPost().getBlog() === object.getBlog() and is_granted('VIEW', object.getBlog().resourceNode)",
+            processor: CBlogRatingProcessor::class
+        ),
+        new Patch(
+            denormalizationContext: ['groups' => ['blog_rating:update']],
+            security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode) and ((object.getUser() != null and object.getUser() === user) or is_granted('EDIT', object.getBlog().resourceNode))"
+        ),
+        new Delete(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode) and ((object.getUser() != null and object.getUser() === user) or is_granted('DELETE', object.getBlog().resourceNode))"),
+    ],
     normalizationContext: ['groups' => ['blog_rating:read']],
     denormalizationContext: ['groups' => ['blog_rating:write']],
     paginationEnabled: true,
-    security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'blog' => 'exact',
@@ -46,7 +64,7 @@ class CBlogRating
     #[ORM\Column(name: 'rating_type', type: 'string', length: 40, nullable: false)]
     protected string $ratingType = 'post';
 
-    #[Groups(['blog_rating:read', 'blog_rating:write'])]
+    #[Groups(['blog_rating:read', 'blog_rating:write', 'blog_rating:update'])]
     #[ORM\Column(name: 'rating', type: 'integer', nullable: false)]
     protected int $rating;
 
@@ -55,7 +73,8 @@ class CBlogRating
     #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CBlog $blog = null;
 
-    #[Groups(['blog_rating:read', 'blog_rating:write'])]
+    // Read-only: CBlogRatingProcessor sets it to the authenticated user on creation.
+    #[Groups(['blog_rating:read'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?User $user = null;

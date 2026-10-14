@@ -170,6 +170,51 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
         $this->assertNotSame(403, self::getClient()->getResponse()->getStatusCode());
     }
 
+    public function testTeacherCannotMoveTheirOwnLinkIntoTheCategoryOfAnotherCourse(): void
+    {
+        $ctx = $this->bootstrap('put_move');
+
+        $em = $this->getEntityManager();
+        $ownCategory = (new GradebookCategory())
+            ->setTitle('Link Sec Own Category put_move')
+            ->setCourse($ctx['courseA'])
+            ->setWeight(100)
+            ->setVisible(true)
+            ->setLocked(0)
+        ;
+        $em->persist($ownCategory);
+        $ownLink = (new GradebookLink())
+            ->setType(1)
+            ->setResourceNode($ctx['courseA']->getResourceNode())
+            ->setCourse($ctx['courseA'])
+            ->setCategory($ownCategory)
+            ->setWeight(10)
+            ->setVisible(1)
+            ->setLocked(0)
+            ->setCreatedAt(new DateTime())
+        ;
+        $em->persist($ownLink);
+        $em->flush();
+        $ownLinkId = $ownLink->getId();
+
+        // The teacher passes the check on the link as it is, then names a category of another course.
+        $this->request($ctx['teacherA'], 'PUT', '/api/gradebook_links/'.$ownLinkId.'?cid='.$ctx['courseA']->getId(), [
+            'type' => 1,
+            'weight' => 10,
+            'course' => '/api/courses/'.$ctx['courseB']->getId(),
+            'category' => '/api/gradebook_categories/'.$ctx['category']->getId(),
+            'resourceNode' => '/api/resource_nodes/'.$ctx['courseA']->getResourceNode()->getId(),
+        ]);
+
+        $this->assertResponseStatusCodeSame(403);
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $fresh = $em->getRepository(GradebookLink::class)->find($ownLinkId);
+        $this->assertSame($ctx['courseA']->getId(), $fresh?->getCourse()?->getId());
+        $this->assertSame($ownCategory->getId(), $fresh?->getCategory()->getId());
+    }
+
     public function testTeacherOfTheLinkCourseCanDeleteIt(): void
     {
         $ctx = $this->bootstrap('delete_own');

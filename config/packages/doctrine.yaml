@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
 parameters:
     # Fallback used only until the real DB server version is known (a fresh
     # checkout with no .env yet, or a packaging build with no reachable
@@ -10,6 +11,8 @@ parameters:
     # `bin/console chamilo:database:detect-server-version` once a DB is
     # reachable. Either one always overrides this default.
     env(DATABASE_SERVER_VERSION): '8.0.32'
+    # Suffix Doctrine appends to the database name; the session handler DSN must use the same one.
+    chamilo.dbname_suffix: ''
 
 doctrine:
     dbal:
@@ -103,10 +106,12 @@ doctrine:
                 enabled: true
 
 when@test:
+    parameters:
+        # "TEST_TOKEN" is typically set by ParaTest
+        chamilo.dbname_suffix: '_test%env(default::TEST_TOKEN)%'
     doctrine:
         dbal:
-            # "TEST_TOKEN" is typically set by ParaTest
-            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+            dbname_suffix: '%chamilo.dbname_suffix%'
             # dama/doctrine-test-bundle >=8 wraps each test in a nested transaction via savepoints
             use_savepoints: true
 

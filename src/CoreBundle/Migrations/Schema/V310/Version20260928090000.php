@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V310;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
@@ -62,18 +61,22 @@ final class Version20260928090000 extends AbstractMigrationChamilo
         $documentMimeTypesRepaired = 0;
 
         foreach (self::DEMO_LEARNING_PATHS as $courseCode => $learningPathTitle) {
-            $course = $entityManager->getRepository(Course::class)->findOneBy(['code' => $courseCode]);
-            if (!$course instanceof Course) {
+            $courseId = $this->connection->fetchOne(
+                'SELECT id FROM course WHERE code = :code',
+                ['code' => $courseCode]
+            );
+            if (false === $courseId) {
                 continue;
             }
 
-            $prerequisitesRepaired += $this->repairLearningPathPrerequisites($course, $learningPathTitle);
+            $courseId = (int) $courseId;
+            $prerequisitesRepaired += $this->repairLearningPathPrerequisites($courseId, $learningPathTitle);
             $documentsPublished += $this->publishDemoDocuments(
-                $course,
+                $courseId,
                 self::DEMO_DOCUMENTS_TO_PUBLISH[$courseCode] ?? [],
             );
             $documentMimeTypesRepaired += $this->repairDemoDocumentMimeTypes(
-                $course,
+                $courseId,
                 self::DEMO_DOCUMENT_MIME_TYPES[$courseCode] ?? [],
             );
         }
@@ -94,7 +97,7 @@ final class Version20260928090000 extends AbstractMigrationChamilo
         $this->write('Bundled demo course content repair is intentionally not reverted.');
     }
 
-    private function repairLearningPathPrerequisites(Course $course, string $learningPathTitle): int
+    private function repairLearningPathPrerequisites(int $courseId, string $learningPathTitle): int
     {
         $entityManager = $this->entityManager;
         if (null === $entityManager) {
@@ -110,7 +113,7 @@ final class Version20260928090000 extends AbstractMigrationChamilo
             ->andWhere('resourceLink.session IS NULL')
             ->andWhere('resourceLink.group IS NULL')
             ->andWhere('lp.title = :title')
-            ->setParameter('course', (int) $course->getId())
+            ->setParameter('course', $courseId)
             ->setParameter('title', $learningPathTitle)
             ->setMaxResults(1)
             ->getQuery()
@@ -180,7 +183,7 @@ final class Version20260928090000 extends AbstractMigrationChamilo
     /**
      * @param string[] $documentTitles
      */
-    private function publishDemoDocuments(Course $course, array $documentTitles): int
+    private function publishDemoDocuments(int $courseId, array $documentTitles): int
     {
         if ([] === $documentTitles) {
             return 0;
@@ -200,7 +203,7 @@ final class Version20260928090000 extends AbstractMigrationChamilo
             ->andWhere('resourceLink.session IS NULL')
             ->andWhere('resourceLink.group IS NULL')
             ->andWhere('document.title IN (:titles)')
-            ->setParameter('course', (int) $course->getId())
+            ->setParameter('course', $courseId)
             ->setParameter('titles', $documentTitles)
             ->getQuery()
             ->getResult()
@@ -217,7 +220,24 @@ final class Version20260928090000 extends AbstractMigrationChamilo
                 continue;
             }
 
-            $resourceLink = $document->getResourceNode()?->getResourceLinkByContext($course);
+            $resourceNodeId = (int) ($document->getResourceNode()?->getId() ?? 0);
+            if ($resourceNodeId <= 0) {
+                continue;
+            }
+
+            $resourceLink = $entityManager->createQueryBuilder()
+                ->select('resourceLink')
+                ->from(ResourceLink::class, 'resourceLink')
+                ->andWhere('resourceLink.resourceNode = :resourceNode')
+                ->andWhere('resourceLink.course = :course')
+                ->andWhere('resourceLink.session IS NULL')
+                ->andWhere('resourceLink.group IS NULL')
+                ->setParameter('resourceNode', $resourceNodeId)
+                ->setParameter('course', $courseId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
             if (!$resourceLink instanceof ResourceLink) {
                 continue;
             }
@@ -237,7 +257,7 @@ final class Version20260928090000 extends AbstractMigrationChamilo
     /**
      * @param array<string, string> $mimeTypesByDocumentTitle
      */
-    private function repairDemoDocumentMimeTypes(Course $course, array $mimeTypesByDocumentTitle): int
+    private function repairDemoDocumentMimeTypes(int $courseId, array $mimeTypesByDocumentTitle): int
     {
         if ([] === $mimeTypesByDocumentTitle) {
             return 0;
@@ -257,7 +277,7 @@ final class Version20260928090000 extends AbstractMigrationChamilo
             ->andWhere('resourceLink.session IS NULL')
             ->andWhere('resourceLink.group IS NULL')
             ->andWhere('document.title IN (:titles)')
-            ->setParameter('course', (int) $course->getId())
+            ->setParameter('course', $courseId)
             ->setParameter('titles', array_keys($mimeTypesByDocumentTitle))
             ->getQuery()
             ->getResult()

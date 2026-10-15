@@ -100,6 +100,40 @@ Feature: Special case 2 — self-registration and diagnosis
   As a new platform user
   I need to register, fill in the diagnosis questionnaire, and reach my sessions
 
+  # The registration form this file drives depends on platform settings that
+  # specialCase1PlatformSettings' teardown leaves in a different state (registration by
+  # approval, terms on, no registration fields), so they are set here, not assumed.
+  # Terms are off because the "Validate" button only exists then (registration.php).
+  Scenario: Configure the registration settings
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=allow_registration"
+    And I wait for the page to be loaded
+    And I select "Yes" from "form_allow_registration"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=allow_terms_conditions"
+    And I wait for the page to be loaded
+    And I select "No" from "form_allow_terms_conditions"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=allow_fields_inscription"
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | form_allow_fields_inscription | {"fields":["lastname","firstname","email","language","phone","address"],"extra_fields":["terms_nationalite","terms_numeroderue","terms_nomderue","terms_codepostal","terms_paysresidence","terms_ville","terms_datedenaissance","terms_genre","filiere_user","terms_formation_niveau","terms_villedustage","terms_adresse","gdpr","platformuseconditions","langue_cible"]} |
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=required_extra_fields_in_inscription"
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | form_required_extra_fields_in_inscription | {"options":["terms_adresse","terms_codepostal","terms_ville","terms_paysresidence","terms_datedenaissance","terms_genre","filiere_user","terms_formation_niveau","gdpr","platformuseconditions","langue_cible"]} |
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
   Scenario: New user self-registration, diagnosis form, and first navigation
     Given I am not logged
     And I am on "/home"
@@ -206,3 +240,36 @@ Feature: Special case 2 — self-registration and diagnosis
     Given I am on "/resources/messages"
     And I wait for the page to be loaded
     Then I should not see an error
+
+
+  # Back to the state specialCase1PlatformSettings' teardown leaves, which the
+  # remaining special-case files were written against.
+  Scenario: Restore the registration settings
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=required_extra_fields_in_inscription"
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | form_required_extra_fields_in_inscription |  |
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=allow_fields_inscription"
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | form_allow_fields_inscription |  |
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=allow_terms_conditions"
+    And I wait for the page to be loaded
+    And I select "Yes" from "form_allow_terms_conditions"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=allow_registration"
+    And I wait for the page to be loaded
+    And I select "Approval" from "form_allow_registration"
+    And I press "Save settings"
+    And I wait for the page to be loaded

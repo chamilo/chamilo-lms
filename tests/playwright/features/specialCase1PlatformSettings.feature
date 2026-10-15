@@ -667,7 +667,7 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
 
     Given I am on "/admin"
     And I wait for the page to be loaded
-    Then I should see "Terms and conditions"
+    Then I should see "Terms and Conditions"
 
   Scenario: Add user extra fields
     # 1) Gender (Radio buttons)

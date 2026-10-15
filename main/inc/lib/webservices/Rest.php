@@ -260,7 +260,7 @@ class Rest extends WebService
      *
      * @throws Exception
      */
-    public function setCourse($id)
+    public function setCourse($id, $sessionId = 0)
     {
         global $_course;
 
@@ -282,6 +282,10 @@ class Rest extends WebService
             throw new Exception(get_lang('NoCourse'));
         }
 
+        if (!$this->canAccessCourse($course, (int) $sessionId)) {
+            self::throwNotAllowedException();
+        }
+
         $this->course = $course;
 
         $courseInfo = api_get_course_info($course->getCode());
@@ -290,6 +294,87 @@ class Rest extends WebService
         ChamiloSession::write('_real_cid', $course->getId());
         ChamiloSession::write('_cid', $course->getCode());
         ChamiloSession::write('_course', $courseInfo);
+    }
+
+    /**
+     * Check whether the authenticated webservice user can access a course.
+     */
+    private function canAccessCourse(Course $course, int $sessionId = 0): bool
+    {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        $userId = (int) $this->user->getId();
+        $courseId = (int) $course->getId();
+        $courseCode = $course->getCode();
+        $courseInfo = api_get_course_info($courseCode);
+
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        if ($sessionId > 0 && !SessionManager::relation_session_course_exist($sessionId, $courseId)) {
+            return false;
+        }
+
+        $isCourseAdmin = CourseManager::is_course_teacher($userId, $courseCode);
+        $isCourseTutor = CourseManager::get_tutor_in_course_status($userId, $courseId);
+        $isSessionCourseCoach = false;
+
+        if ($sessionId > 0) {
+            $sessionCourseStatus = SessionManager::get_user_status_in_course_session(
+                $userId,
+                $courseId,
+                $sessionId
+            );
+            $isSessionCourseCoach = 2 === (int) $sessionCourseStatus;
+        }
+
+        // Teachers and tutors keep their normal access to closed/hidden courses and invisible sessions.
+        if ($isCourseAdmin || $isCourseTutor || $isSessionCourseCoach) {
+            return true;
+        }
+
+        $isCourseMember = CourseManager::is_user_subscribed_in_course(
+            $userId,
+            $courseCode,
+            $sessionId > 0,
+            $sessionId
+        );
+
+        if (!$isCourseMember && $sessionId > 0 && api_drh_can_access_all_session_content()) {
+            $sessionInfo = SessionManager::getSessionFollowedByDrh($userId, $sessionId);
+            if (!empty($sessionInfo['course_list'][$courseId])) {
+                $isCourseMember = true;
+            }
+        }
+
+        if ($sessionId > 0 && SESSION_INVISIBLE === api_get_session_visibility($sessionId)) {
+            return false;
+        }
+
+        // A password-protected course must not expose its contents before subscription/password validation.
+        if (!$isCourseMember && !empty($courseInfo['registration_code'])) {
+            return false;
+        }
+
+        switch ((int) $courseInfo['visibility']) {
+            case COURSE_VISIBILITY_OPEN_WORLD:
+                return true;
+            case COURSE_VISIBILITY_OPEN_PLATFORM:
+                if (api_get_configuration_value('block_registered_users_access_to_open_course_contents')) {
+                    return $isCourseMember;
+                }
+
+                return true;
+            case COURSE_VISIBILITY_REGISTERED:
+                return $isCourseMember;
+            case COURSE_VISIBILITY_CLOSED:
+            case COURSE_VISIBILITY_HIDDEN:
+            default:
+                return false;
+        }
     }
 
     /**

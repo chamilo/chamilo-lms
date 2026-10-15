@@ -61,7 +61,7 @@ try {
         LoginCheck($restApi->getUser()->getId());
         Tracking::updateUserLastLogin($restApi->getUser()->getId());
 
-        $restApi->setCourse($course);
+        $restApi->setCourse($course, $session);
         $restApi->setSession($session);
 
         if ($course) {

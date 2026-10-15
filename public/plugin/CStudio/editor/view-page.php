@@ -9,6 +9,8 @@ require_once __DIR__.'/../0_dal/dal.global_lib.php';
 require_once __DIR__.'/../0_dal/dal.vdatabase.php';
 $VDB = new VirtualDatabase();
 
+require_once __DIR__.'/../ajax/inc/functions.php';
+
 require_once __DIR__.'/../inc/tranformSource.php';
 
 require_once __DIR__.'/../0_dal/dal.save.php';
@@ -28,6 +30,12 @@ if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
 } else {
     echo 'Error';
+
+    exit;
+}
+
+if (false == oel_ctr_rights($idPage)) {
+    echo 'KO';
 
     exit;
 }

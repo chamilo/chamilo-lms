@@ -118,7 +118,6 @@ readonly class AzureAuthenticatorHelper
             ->setLastname($lastName)
             ->setEmail($email)
             ->setUsername($username)
-            ->setPlainPassword('azure')
             ->setStatus(STUDENT)
             ->addAuthSourceByAuthentication(
                 $authSource,
@@ -128,6 +127,10 @@ readonly class AzureAuthenticatorHelper
             ->setActive($active)
             ->setRoleFromStatus(STUDENT)
         ;
+
+        if (null === $existingUser) {
+            $user->setPlainPassword(bin2hex(random_bytes(32)));
+        }
 
         if ($preferredLanguage) {
             // If the language was set in the EntraID input, use it

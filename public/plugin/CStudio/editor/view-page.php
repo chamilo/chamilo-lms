@@ -20,7 +20,7 @@ if (!file_exists('files/tmp')) {
     //mkdir('files/tmp', 0777, true);
 }
 $mod = 'template';
-if (isset($_GET['mod'])) {
+if (isset($_GET['mod']) && in_array($_GET['mod'], ['template', 'page'], true)) {
     $mod = $_GET['mod'];
 }
 

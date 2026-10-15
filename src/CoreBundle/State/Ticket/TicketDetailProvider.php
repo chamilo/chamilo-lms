@@ -31,8 +31,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-use const COURSEMANAGERLOWSECURITY;
 use const DATE_ATOM;
+use const STUDENT;
 
 /**
  * @implements ProviderInterface<TicketDetail>
@@ -202,7 +202,7 @@ final readonly class TicketDetailProvider implements ProviderInterface
             'id' => (int) $row['id'],
             'code' => (string) $row['code'],
             'subject' => (string) $row['subject'],
-            'messageHtml' => (string) \Security::remove_XSS((string) ($row['message'] ?? ''), COURSEMANAGERLOWSECURITY),
+            'messageHtml' => (string) \Security::remove_XSS((string) ($row['message'] ?? ''), STUDENT),
             'createdAt' => $this->formatDate($row['createdAt'] ?? null),
             'updatedAt' => $this->formatDate($row['updatedAt'] ?? null),
             'closedAt' => $this->formatDate($row['closedAt'] ?? null),
@@ -313,7 +313,7 @@ final readonly class TicketDetailProvider implements ProviderInterface
                 'subject' => (string) ($row['subject'] ?? ''),
                 'messageHtml' => (string) \Security::remove_XSS(
                     (string) ($row['messageContent'] ?? ''),
-                    COURSEMANAGERLOWSECURITY,
+                    STUDENT,
                 ),
                 'status' => (string) $row['status'],
                 'createdAt' => $this->formatDate($row['createdAt'] ?? null),

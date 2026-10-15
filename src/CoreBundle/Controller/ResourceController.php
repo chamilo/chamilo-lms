@@ -244,6 +244,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new FileNotFoundException('Resource not found');
         }
 
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
         $this->courseToolAccessTracker->trackFromResourceRequest($request);
 
         if ('course_tool' === $tool && 'links' === $type) {
@@ -648,6 +654,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
     #[Route('/resource_files/{resourceNodeId}/variants', name: 'chamilo_core_resource_files_variants', methods: ['GET'])]
     public function getVariants(string $resourceNodeId, EntityManagerInterface $em): JsonResponse
     {
+        $resourceNode = $em->getRepository(ResourceNode::class)->find((int) $resourceNodeId);
+        if (null === $resourceNode) {
+            throw new NotFoundHttpException();
+        }
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
         $variants = $em->getRepository(ResourceFile::class)->createQueryBuilder('rf')
             ->join('rf.resourceNode', 'rn')
             ->leftJoin('rn.creator', 'creator')

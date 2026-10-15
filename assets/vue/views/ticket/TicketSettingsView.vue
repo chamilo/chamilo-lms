@@ -460,9 +460,14 @@ function getErrorMessage(error) {
   )
 }
 
+/**
+ * Returns the text of an HTML string. It is parsed in an inert document, so handlers such as
+ * <img onerror> in a stored description never run.
+ *
+ * @param {string} value HTML to convert to plain text.
+ * @returns {string} The text content.
+ */
 function plainText(value) {
-  const element = document.createElement("div")
-  element.innerHTML = String(value || "")
-  return element.textContent || element.innerText || ""
+  return new DOMParser().parseFromString(String(value || ""), "text/html").body.textContent || ""
 }
 </script>

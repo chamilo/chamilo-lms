@@ -1188,6 +1188,7 @@ class DocumentManager
                     $all_user_info = self::get_all_info_to_certificate(
                         $user_id,
                         $course_id,
+                        $sessionId,
                         $is_preview
                     );
 

@@ -659,7 +659,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $productions = null;
     #[ORM\Column(name: 'expiration_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $expirationDate = null;
-    #[Groups(['user:read', 'user_json:read'])]
+    #[Groups(['user:read', 'user:write', 'user_json:read'])]
     #[ORM\Column(name: 'active', type: 'integer')]
     protected int $active;
     #[ORM\Column(name: 'openid', type: 'string', length: 255, unique: false, nullable: true)]

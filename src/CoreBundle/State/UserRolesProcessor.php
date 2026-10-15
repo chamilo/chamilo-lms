@@ -14,12 +14,17 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Guards ROLE_GLOBAL_ADMIN grants on User create/update: only an unrestricted global admin
  * (registered in the topmost URL of a tree — AccessUrlScopeHelper::canGrantGlobalAdminRole())
  * may add the role, to themselves or to anyone else. Every other write passes through
  * unaffected; this only blocks the specific transition of newly gaining the role.
+ *
+ * Also guards the account status (active): only an admin may block or unblock an account,
+ * never their own, and only to ACTIVE or INACTIVE.
  *
  * Access-URL scoping of *who* may edit a given user at all (including their password) is
  * enforced upstream by UserVoter::EDIT (AccessUrlScopeHelper::canEditUser()) before this
@@ -35,6 +40,7 @@ final readonly class UserRolesProcessor implements ProcessorInterface
         private EntityManagerInterface $em,
         private UserHelper $userHelper,
         private AccessUrlScopeHelper $accessUrlScope,
+        private AuthorizationCheckerInterface $authorizationChecker,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
@@ -77,6 +83,37 @@ final readonly class UserRolesProcessor implements ProcessorInterface
             }
         }
 
+        $this->guardActiveChange($data);
+
         return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
+    }
+
+    /**
+     * UserVoter::EDIT also lets users edit their own account, so the status needs its own check:
+     * otherwise any user could block their own account, or an admin lock themselves out.
+     */
+    private function guardActiveChange(User $data): void
+    {
+        $activeBefore = User::ACTIVE;
+        if (null !== $data->getId()) {
+            $activeBefore = (int) ($this->em->getUnitOfWork()->getOriginalEntityData($data)['active'] ?? User::ACTIVE);
+        }
+
+        if ($data->getActive() === $activeBefore) {
+            return;
+        }
+
+        if (!\in_array($data->getActive(), [User::ACTIVE, User::INACTIVE], true)) {
+            throw new BadRequestHttpException('The account status can only be set to 1 (active) or 0 (inactive).');
+        }
+
+        if (!$this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedHttpException('Only an administrator may change the account status.');
+        }
+
+        $actor = $this->userHelper->getCurrent();
+        if (null !== $actor && (int) $actor->getId() === (int) $data->getId()) {
+            throw new AccessDeniedHttpException('You cannot change the status of your own account.');
+        }
     }
 }

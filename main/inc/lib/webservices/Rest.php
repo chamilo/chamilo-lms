@@ -1451,6 +1451,8 @@ class Rest extends WebService
      */
     public function saveForumPost(array $postValues, $forumId)
     {
+        $this->protectCourseWriteEndpoint();
+
         Event::event_access_tool(TOOL_FORUM);
 
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
@@ -1615,6 +1617,72 @@ class Rest extends WebService
     }
 
     /**
+     * Restrict course write operations to platform admins and course/session members.
+     *
+     * @throws Exception
+     */
+    private function protectCourseWriteEndpoint()
+    {
+        if (!$this->course) {
+            self::throwNotAllowedException();
+        }
+
+        if (api_is_platform_admin()) {
+            return;
+        }
+
+        $userId = (int) $this->user->getId();
+        $courseId = (int) $this->course->getId();
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? (int) $this->session->getId() : 0;
+
+        if (0 === $sessionId) {
+            if (!CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
+                self::throwNotAllowedException();
+            }
+
+            return;
+        }
+
+        if (!SessionManager::relation_session_course_exist($sessionId, $courseId)) {
+            self::throwNotAllowedException();
+        }
+
+        // Course teachers keep their normal access when working inside a session.
+        if (CourseManager::is_course_teacher($userId, $courseCode)) {
+            return;
+        }
+
+        $sessionVisibility = api_get_session_visibility($sessionId);
+        if (in_array($sessionVisibility, [SESSION_VISIBLE_READ_ONLY, SESSION_INVISIBLE], true)) {
+            self::throwNotAllowedException();
+        }
+
+        $sessionCourseStatus = SessionManager::get_user_status_in_course_session(
+            $userId,
+            $courseId,
+            $sessionId
+        );
+        if (false !== $sessionCourseStatus) {
+            return;
+        }
+
+        $sessionInfo = SessionManager::fetch($sessionId);
+        if (!empty($sessionInfo) && $userId === (int) $sessionInfo['id_coach']) {
+            return;
+        }
+
+        if (api_drh_can_access_all_session_content()) {
+            $sessionInfo = SessionManager::getSessionFollowedByDrh($userId, $sessionId);
+            if (!empty($sessionInfo['course_list'][$courseId])) {
+                return;
+            }
+        }
+
+        self::throwNotAllowedException();
+    }
+
+    /**
      * @param string $title
      * @param string $text
      *
@@ -1622,6 +1690,8 @@ class Rest extends WebService
      */
     public function saveCourseNotebook($title, $text)
     {
+        $this->protectCourseWriteEndpoint();
+
         Event::event_access_tool(TOOL_NOTEBOOK);
 
         $values = ['note_title' => $title, 'note_comment' => $text];
@@ -1646,6 +1716,8 @@ class Rest extends WebService
      */
     public function saveForumThread(array $values, $forumId)
     {
+        $this->protectCourseWriteEndpoint();
+
         Event::event_access_tool(TOOL_FORUM);
 
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';

@@ -7,11 +7,15 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V310;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Schema;
 use RuntimeException;
 
 final class Version20261012190000 extends AbstractMigrationChamilo
 {
+    private const string RESOURCE_NODE_PARENT_TITLE_INDEX = 'idx_rn_parent_title';
+    private const int RESOURCE_NODE_TITLE_INDEX_PREFIX_LENGTH = 255;
+
     private const TITLE_COLUMNS = [
         ['table' => 'asset', 'length' => 255, 'nullable' => false],
         ['table' => 'azure_sync_state', 'length' => 255, 'nullable' => false],
@@ -111,13 +115,27 @@ final class Version20261012190000 extends AbstractMigrationChamilo
             return;
         }
 
-        $this->assertTitleIsNotIndexed($tableName, $table->getIndexes());
+        $preserveResourceNodeIndex = $this->inspectTitleIndexes($tableName, $table->getIndexes());
+        if ($preserveResourceNodeIndex) {
+            $this->addSql(\sprintf(
+                'DROP INDEX `%s` ON `resource_node`',
+                self::RESOURCE_NODE_PARENT_TITLE_INDEX
+            ));
+        }
 
         $columnDefinition = 'resource_node' === $tableName
             ? "LONGTEXT NOT NULL COMMENT '(DC2Type:string)'"
             : 'LONGTEXT '.($nullable ? 'DEFAULT NULL' : 'NOT NULL');
 
         $this->addSql(\sprintf('ALTER TABLE `%s` MODIFY title %s', $tableName, $columnDefinition));
+
+        if ($preserveResourceNodeIndex) {
+            $this->addSql(\sprintf(
+                'CREATE INDEX `%s` ON `resource_node` (parent_id, title(%d))',
+                self::RESOURCE_NODE_PARENT_TITLE_INDEX,
+                self::RESOURCE_NODE_TITLE_INDEX_PREFIX_LENGTH
+            ));
+        }
     }
 
     private function restoreVarchar(Schema $schema, string $tableName, int $maxLength, bool $nullable): void
@@ -131,7 +149,14 @@ final class Version20261012190000 extends AbstractMigrationChamilo
             return;
         }
 
-        $this->assertTitleIsNotIndexed($tableName, $table->getIndexes());
+        $preserveResourceNodeIndex = $this->inspectTitleIndexes($tableName, $table->getIndexes());
+        if ($preserveResourceNodeIndex) {
+            $this->addSql(\sprintf(
+                'DROP INDEX `%s` ON `resource_node`',
+                self::RESOURCE_NODE_PARENT_TITLE_INDEX
+            ));
+        }
+
         $this->assertMaxLength($tableName, $maxLength);
 
         $this->addSql(
@@ -142,15 +167,46 @@ final class Version20261012190000 extends AbstractMigrationChamilo
                 $nullable ? 'DEFAULT NULL' : 'NOT NULL'
             )
         );
+
+        if ($preserveResourceNodeIndex) {
+            $this->addSql(\sprintf(
+                'CREATE INDEX `%s` ON `resource_node` (parent_id, title)',
+                self::RESOURCE_NODE_PARENT_TITLE_INDEX
+            ));
+        }
     }
 
-    private function assertTitleIsNotIndexed(string $tableName, array $indexes): void
+    /**
+     * Returns true only for the documented optional resource_node(parent_id, title)
+     * optimization index. Any other title index remains a hard stop because silently
+     * dropping an unknown production index would be unsafe.
+     *
+     * @param array<string, Index> $indexes
+     */
+    private function inspectTitleIndexes(string $tableName, array $indexes): bool
     {
+        $preserveResourceNodeIndex = false;
+
         foreach ($indexes as $index) {
-            if (\in_array('title', $index->getColumns(), true)) {
-                throw new RuntimeException(\sprintf('Cannot convert %s.title while index %s still references it.', $tableName, $index->getName()));
+            $columns = array_map('strtolower', $index->getColumns());
+            if (!\in_array('title', $columns, true)) {
+                continue;
             }
+
+            $isKnownResourceNodeIndex = 'resource_node' === $tableName
+                && self::RESOURCE_NODE_PARENT_TITLE_INDEX === strtolower($index->getName())
+                && ['parent_id', 'title'] === $columns;
+
+            if ($isKnownResourceNodeIndex) {
+                $preserveResourceNodeIndex = true;
+
+                continue;
+            }
+
+            throw new RuntimeException(\sprintf('Cannot convert %s.title while index %s still references it.', $tableName, $index->getName()));
         }
+
+        return $preserveResourceNodeIndex;
     }
 
     private function assertMaxLength(string $tableName, int $maxLength): void

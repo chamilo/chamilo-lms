@@ -59,6 +59,7 @@ class FacebookAuthenticator extends AbstractAuthenticator
         if (!$user) {
             $user = (new User())
                 ->setCreatorId($this->userRepository->getRootUser()->getId())
+                ->setPlainPassword(bin2hex(random_bytes(32)))
             ;
         }
 
@@ -68,7 +69,6 @@ class FacebookAuthenticator extends AbstractAuthenticator
             // ->setLocale($resourceOwner->getLocale())
             ->setEmail($resourceOwner->getEmail())
             ->setUsername($this->changeToValidChamiloLogin($resourceOwner->getEmail()))
-            ->setPlainPassword('facebook')
             ->setStatus(STUDENT)
             ->addAuthSourceByAuthentication(
                 UserAuthSource::FACEBOOK,

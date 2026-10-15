@@ -105,7 +105,7 @@ class GenericAuthenticator extends AbstractAuthenticator
                     ->setLastname('OAuth2 User default firstname')
                     ->setEmail('oauth2user_'.$resourceOwnerId.'@'.(gethostname() ?: 'localhost'))
                     ->setUsername($username)
-                    ->setPlainPassword($username)
+                    ->setPlainPassword(bin2hex(random_bytes(32)))
                     ->setStatus(STUDENT)
                     ->setCreatorId($this->userRepository->getRootUser()->getId())
                 ;

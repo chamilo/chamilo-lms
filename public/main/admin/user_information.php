@@ -39,7 +39,8 @@ if (!api_is_student_boss()) {
 }
 
 $currentUrl = api_get_self().'?user_id='.$userId;
-$tool_name = $completeName = UserManager::formatUserFullName($user);
+$completeName = UserManager::formatUserFullName($user);
+$tool_name = htmlspecialchars($completeName, ENT_QUOTES, 'UTF-8');
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $csvContent = [];
@@ -189,10 +190,10 @@ $table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('Information'));
 $csvContent[] = [get_lang('Information')];
 $data = [
-    get_lang('Name') => $completeName,
-    get_lang('E-mail') => $user->getEmail(),
-    get_lang('Phone') => $user->getPhone(),
-    get_lang('Course code') => $user->getOfficialCode(),
+    get_lang('Name') => $tool_name,
+    get_lang('E-mail') => htmlspecialchars((string) $user->getEmail(), ENT_QUOTES, 'UTF-8'),
+    get_lang('Phone') => htmlspecialchars((string) $user->getPhone(), ENT_QUOTES, 'UTF-8'),
+    get_lang('Course code') => htmlspecialchars((string) $user->getOfficialCode(), ENT_QUOTES, 'UTF-8'),
     //get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
     get_lang('Status') => api_get_status_langvars()[$user->getStatus()] ?? get_lang('Learner'),
 ];
@@ -218,7 +219,7 @@ foreach ($data as $label => $item) {
         $label = $label.': ';
     }
     $table->setCellContents($row, 0, $label.$item);
-    $csvContent[] = [$label, strip_tags($item)];
+    $csvContent[] = [$label, html_entity_decode(strip_tags($item), ENT_QUOTES, 'UTF-8')];
     $row++;
 }
 

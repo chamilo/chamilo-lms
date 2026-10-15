@@ -21282,8 +21282,8 @@ msgstr "Η νομική συμφωνία θα εμφανίζεται κατά τ
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Οι όροι και οι προϋποθέσεις σας είναι έτοιμοι για υπογραφή"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Γεια σας,<br />Ο επιβλέπων σας σας έστειλε τους όρους και τις προϋποθέσεις σας. Μπορείτε να τους υπογράψετε ακολουθώντας αυτό το URL: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Γεια σας %s,<br />Ο επιβλέπων σας σας έστειλε τους όρους και τις προϋποθέσεις σας. Μπορείτε να τους υπογράψετε ακολουθώντας αυτό το URL: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Ο χρήστης %s υπέγραψε τη συμφωνία."

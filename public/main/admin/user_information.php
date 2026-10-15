@@ -244,17 +244,9 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
         [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
         $icon = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon');
         $timeLegalAccept = api_get_local_time($legalTime);
-        $btn = Display::url(
-            get_lang('Delete legal agreement'),
-            api_get_self().'?action=delete_legal&user_id='.$userId,
-            ['class' => 'btn btn--danger btn-xs']
-        );
+        $btn = LegalManager::getAgreementActionForm($userId, true, $currentUrl, 'btn-xs');
     } else {
-        $btn = Display::url(
-            get_lang('Send legal agreement'),
-            api_get_self().'?action=send_legal&user_id='.$userId,
-            ['class' => 'btn btn--primary btn-xs']
-        );
+        $btn = LegalManager::getAgreementActionForm($userId, false, $currentUrl, 'btn-xs');
         $timeLegalAccept = get_lang('Not Registered');
     }
 
@@ -541,26 +533,6 @@ if (api_is_multiple_url_enabled()) {
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
-        case 'send_legal':
-            $subject = get_lang('Legal conditions');
-            $content = sprintf(
-                get_lang('Please accept our legal conditions here: %s'),
-                api_get_path(WEB_PATH)
-            );
-            MessageManager::send_message_simple($userId, $subject, $content);
-            Display::addFlash(Display::return_message(get_lang('Sent')));
-            break;
-        case 'delete_legal':
-            $extraFieldValue = new ExtraFieldValue('user');
-            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                $userId,
-                'legal_accept'
-            );
-            $result = $extraFieldValue->delete($value['id']);
-            if ($result) {
-                Display::addFlash(Display::return_message(get_lang('Deleted')));
-            }
-            break;
         case 'unsubscribe':
             $courseId = !empty($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
             $sessionId = !empty($_GET['id_session']) ? (int) $_GET['id_session'] : 0;

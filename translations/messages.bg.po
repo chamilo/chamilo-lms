@@ -21269,8 +21269,8 @@ msgstr "Правното споразумение ще се появи при в
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Условията ви са готови за подпис"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Здравейте,<br />Трениращият ви ви изпрати вашите условия. Можете да ги подпишете чрез тази връзка: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Здравейте %s,<br />Трениращият ви ви изпрати вашите условия. Можете да ги подпишете чрез тази връзка: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Потребителят %s подписа споразумението."

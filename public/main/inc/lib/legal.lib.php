@@ -2,6 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Controller\LegalAgreementController;
+use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
 /**
  * Class LegalManager.
  */
@@ -390,13 +394,12 @@ class LegalManager
         $completeLink   = '<a href="'.$link.'">'.$link.'</a>';
 
         $content = sprintf(
-            get_lang('Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s'),
+            get_lang('Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s'),
             $studentDetails['firstname'],
             $completeLink,
             $coachDetails['complete_name']
         );
         MessageManager::send_message_simple($userId, $subject, $content);
-        Display::addFlash(Display::return_message(get_lang('Sent')));
 
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
@@ -444,9 +447,8 @@ class LegalManager
     {
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
-        $result = $extraFieldValue->delete($value['id']);
-        if ($result) {
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        if ($value) {
+            $extraFieldValue->delete($value['id']);
         }
 
         $value = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -456,6 +458,29 @@ class LegalManager
         if ($value) {
             $extraFieldValue->delete($value['id']);
         }
+    }
+
+    /**
+     * Button sending the terms and conditions to a user, or deleting their acceptance, through
+     * LegalAgreementController. A form rather than a link, so the action needs a CSRF token;
+     * the controller redirects back to $returnTo, a path on this site.
+     */
+    public static function getAgreementActionForm(int $userId, bool $accepted, string $returnTo, string $sizeClass = ''): string
+    {
+        $route = $accepted ? 'chamilo_core_legal_agreement_delete' : 'chamilo_core_legal_agreement_send';
+        $action = Container::getRouter()->generate($route, ['userId' => $userId]);
+        $token = Container::$container->get(CsrfTokenManagerInterface::class)
+            ->getToken(LegalAgreementController::CSRF_INTENT)
+            ->getValue();
+
+        $label = $accepted ? get_lang('Delete legal agreement') : get_lang('Send legal agreement');
+        $class = trim(($accepted ? 'btn btn--danger ' : 'btn btn--primary ').$sizeClass);
+
+        return '<form method="post" action="'.htmlspecialchars($action, ENT_QUOTES).'" style="display:inline">'
+            .'<input type="hidden" name="_token" value="'.htmlspecialchars($token, ENT_QUOTES).'">'
+            .'<input type="hidden" name="returnTo" value="'.htmlspecialchars($returnTo, ENT_QUOTES).'">'
+            .'<button type="submit" class="'.$class.'">'.htmlspecialchars($label, ENT_QUOTES).'</button>'
+            .'</form>';
     }
 
     /**

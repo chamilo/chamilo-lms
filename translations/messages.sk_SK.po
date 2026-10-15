@@ -21282,8 +21282,8 @@ msgstr "Právna dohoda sa zobrazí pri prihlásení alebo pri vstupe do kurzu."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Vaše podmienky sú pripravené na podpis"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Dobrý deň,<br />Váš tutor vám poslal vaše podmienky. Môžete ich podpísať podľa tohto odkazu: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Dobrý deň %s,<br />Váš tutor vám poslal vaše podmienky. Môžete ich podpísať podľa tohto odkazu: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Používateľ %s podpísal dohodu."

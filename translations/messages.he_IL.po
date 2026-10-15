@@ -21280,8 +21280,8 @@ msgstr "ההסכם המשפטי יופיע במהלך הכניסה או בעת �
 msgid "Your terms and conditions are ready to be signed"
 msgstr "התנאים וההגבלות שלך מוכנים לחתימה"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "שלום,<br />המורה שלך שלח לך את התנאים וההגבלות שלך. אתה יכול לחתום עליו באמצעות כתובת האתר הזו: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "שלום %s,<br />המורה שלך שלח לך את התנאים וההגבלות שלך. אתה יכול לחתום עליו באמצעות כתובת האתר הזו: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "המשתמש %s חתם על ההסכם."

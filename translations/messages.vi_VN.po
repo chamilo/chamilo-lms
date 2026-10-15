@@ -21269,8 +21269,8 @@ msgstr "Thỏa thuận pháp lý sẽ xuất hiện khi đăng nhập hoặc khi
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Điều khoản và điều kiện của bạn đã sẵn sàng để ký"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Xin chào,<br />Giảng viên của bạn đã gửi điều khoản và điều kiện của bạn. Bạn có thể ký theo URL này: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Xin chào %s,<br />Giảng viên của bạn đã gửi điều khoản và điều kiện của bạn. Bạn có thể ký theo URL này: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Người dùng %s đã ký thỏa thuận."

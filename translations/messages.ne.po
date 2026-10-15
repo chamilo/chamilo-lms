@@ -21268,8 +21268,8 @@ msgstr "कानुनी सम्झौता लगइन वा कोर�
 msgid "Your terms and conditions are ready to be signed"
 msgstr "तपाईंका नियम र सर्तहरू हस्ताक्षरका लागि तयार छन्"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "नमस्ते,<br />तपाईंको ट्यूटरले तपाईंलाई तपाईंका नियम र सर्तहरू पठाउनुभयो। तपाईं यो URL पछ्याएर हस्ताक्षर गर्न सक्नुहुन्छ: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "नमस्ते %s,<br />तपाईंको ट्यूटरले तपाईंलाई तपाईंका नियम र सर्तहरू पठाउनुभयो। तपाईं यो URL पछ्याएर हस्ताक्षर गर्न सक्नुहुन्छ: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "प्रयोगकर्ता %s ले सम्झौतामा हस्ताक्षर गरे।"

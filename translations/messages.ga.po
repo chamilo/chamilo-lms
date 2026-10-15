@@ -21268,8 +21268,8 @@ msgstr "Beidh an comhaontú dlíthiúil le feiceáil le linn logáil isteach nó
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Tá do théarmaí agus coinníollí réidh le síniú"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Dia duit,<br />Sheol do theagascóir do théarmaí agus coinníollí chugat. Is féidir leat é a shíniú ag leanacht an URL seo: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Dia duit %s,<br />Sheol do theagascóir do théarmaí agus coinníollí chugat. Is féidir leat é a shíniú ag leanacht an URL seo: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Shínigh úsáideoir %s an comhaontú."

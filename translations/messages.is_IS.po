@@ -21269,8 +21269,8 @@ msgstr "Lagalegi samningurinn birtist við innskráningu eða þegar farið er i
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Skilmálar þínir eru tilbúnir til undirritunar"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Halló,<br />Leiðbeinandi þinn hefur sent þér skilmála. Þú getur undirritað þá með því að fylgja þessari slóð: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Halló %s,<br />Leiðbeinandi þinn hefur sent þér skilmála. Þú getur undirritað þá með því að fylgja þessari slóð: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Notandi %s undirritaði samninginn."

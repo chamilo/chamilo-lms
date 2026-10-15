@@ -21264,8 +21264,8 @@ msgstr "Lalabas ang legal na kasunduan sa panahon ng login o kapag pumasok sa ku
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Handa na ang iyong termino at kondisyon para sa pagpirma"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Kumusta,<br />Nagpadala ang iyong tutor ng iyong termino at kondisyon. Maaari mong pirmahan ito sa pamamagitan ng URL na ito: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Kumusta %s,<br />Nagpadala ang iyong tutor ng iyong termino at kondisyon. Maaari mong pirmahan ito sa pamamagitan ng URL na ito: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Nag-sign ang user %s sa kasunduan."

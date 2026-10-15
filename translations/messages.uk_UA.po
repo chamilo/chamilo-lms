@@ -21264,8 +21264,8 @@ msgstr "Юридична угода з'явиться під час входу �
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Ваші умови та положення готові до підписання"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Привіт,<br />Ваш викладач надіслав вам ваші умови та положення. Ви можете підписати їх за цим посиланням: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Привіт %s,<br />Ваш викладач надіслав вам ваші умови та положення. Ви можете підписати їх за цим посиланням: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Користувач %s підписав угоду."

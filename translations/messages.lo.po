@@ -21300,8 +21300,8 @@ msgstr "ຂໍ້ຕົກລົງທາງກົດໝາຍຈະປະກົ
 msgid "Your terms and conditions are ready to be signed"
 msgstr "ຂໍ້ກຳນົດ ແລະ ເງື່ອນໄຂຂອງທ່ານພ້ອມໃຫ້ເຊັນແລ້ວ"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "ສະບາຍດີ,<br />ຜູ້ສອນຂອງທ່ານໄດ້ສົ່ງຂໍ້ກຳນົດ ແລະ ເງື່ອນໄຂໃຫ້ທ່ານ. ທ່ານສາມາດເຊັນໄດ້ໂດຍການຕິດຕາມ URL ນີ້: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "ສະບາຍດີ %s,<br />ຜູ້ສອນຂອງທ່ານໄດ້ສົ່ງຂໍ້ກຳນົດ ແລະ ເງື່ອນໄຂໃຫ້ທ່ານ. ທ່ານສາມາດເຊັນໄດ້ໂດຍການຕິດຕາມ URL ນີ້: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "ຜູ້ໃຊ້ %s ໄດ້ເຊັນຂໍ້ຕົກລົງ."

@@ -21269,8 +21269,8 @@ msgstr "Il-ftehim legali jidher waqt il-login jew meta tidħol f'kors."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "It-termini u l-kundizzjonijiet tiegħek huma lesti biex jiġu ffirmati"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Hello,<br />It-tutor tiegħek bagħtilek it-termini u l-kundizzjonijiet tiegħek. Tista' tiffirmahom billi ssegwi din il-URL: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Hello %s,<br />It-tutor tiegħek bagħtilek it-termini u l-kundizzjonijiet tiegħek. Tista' tiffirmahom billi ssegwi din il-URL: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "L-utent %s iffirma l-ftehim."

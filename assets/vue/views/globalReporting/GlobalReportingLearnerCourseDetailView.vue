@@ -278,7 +278,8 @@
                     :icon="report.meta.legal.accepted ? 'delete' : 'send'"
                     :type="report.meta.legal.accepted ? 'danger' : 'primary'"
                     size="small"
-                    :to-url="report.meta.legal.actionUrl"
+                    :is-loading="legalActionLoading"
+                    @click="runLegalAction"
                   />
                 </div>
               </div>
@@ -533,6 +534,9 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import globalReportingService from "../../services/globalReportingService"
+import legalAgreementService from "../../services/legalAgreementService"
+import { useConfirmation } from "../../composables/useConfirmation"
+import { useNotification } from "../../composables/notification"
 
 const ProgressRing = defineComponent({
   name: "GlobalReportingCourseProgressRing",
@@ -825,6 +829,34 @@ async function loadReport() {
   } finally {
     loading.value = false
   }
+}
+
+const { requireConfirmation } = useConfirmation()
+const { showSuccessNotification, showErrorNotification } = useNotification()
+const legalActionLoading = ref(false)
+
+async function performLegalAction() {
+  legalActionLoading.value = true
+
+  try {
+    const response = await legalAgreementService.run(report.meta.legal.actionUrl, report.meta.legal.csrfToken)
+    showSuccessNotification(response.message)
+    await loadReport()
+  } catch (error) {
+    showErrorNotification(error)
+  } finally {
+    legalActionLoading.value = false
+  }
+}
+
+function runLegalAction() {
+  if (report.meta.legal.accepted) {
+    requireConfirmation({ accept: performLegalAction })
+
+    return
+  }
+
+  performLegalAction()
 }
 
 onMounted(loadReport)

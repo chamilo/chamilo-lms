@@ -21269,8 +21269,8 @@ msgstr "Teisinė sutartis bus rodoma prisijungiant arba įeinant į kursą."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Jūsų sąlygos ir taisyklės paruoštos pasirašymui"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Sveiki,<br />Jūsų dėstytojas atsiuntė jums sąlygas ir taisykles. Galite jas pasirašyti paspaudę šią nuorodą: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Sveiki %s,<br />Jūsų dėstytojas atsiuntė jums sąlygas ir taisykles. Galite jas pasirašyti paspaudę šią nuorodą: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Vartotojas %s pasirašė sutartį."

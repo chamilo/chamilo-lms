@@ -21334,8 +21334,8 @@ msgstr "Die rechtliche Vereinbarung wird während der Anmeldung oder beim Login 
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Ihre allgemeinen Bestimmungen und Bedingung können von Ihnen unterschrieben werden"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Guten Tag,"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Hallo %s,<br />Ihr Tutor hat Ihnen Ihre Nutzungsbedingungen gesendet. Sie können sie unter folgender URL unterzeichnen: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Benutzer %s hat die Vereinbarung unterzeichnet."

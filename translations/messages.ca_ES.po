@@ -21282,8 +21282,8 @@ msgstr "L'acord legal apareixerà durant l'inici de sessió o en accedir a un cu
 msgid "Your terms and conditions are ready to be signed"
 msgstr "El seu contracte d'aprenentatge està preparat per signar"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Hola, El seu tutor l'ha enviat els termes i condicions del contracte d'aprenentatge. Pot signar-lo seguint aquesta URL: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Hola %s,<br />El seu tutor li ha enviat els termes i condicions del contracte d'aprenentatge. Pot signar-lo seguint aquesta URL: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "L'usuari %s ha signat l'acord"

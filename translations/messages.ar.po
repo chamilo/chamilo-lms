@@ -21282,8 +21282,8 @@ msgstr "الاتفاق القانوني سوف يعرض اثناء التسجي�
 msgid "Your terms and conditions are ready to be signed"
 msgstr "الاحكام والشروط جاهزة لان يتم الموافقة عليها"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "مرحبا"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "مرحبا %s،<br />أرسل لك مدرسك الشروط والأحكام. يمكنك التوقيع عليها عبر الرابط التالي: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "المستخدم %s قد وقعك على الاتفاق."

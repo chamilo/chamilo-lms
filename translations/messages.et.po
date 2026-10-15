@@ -21269,8 +21269,8 @@ msgstr "Õiguslik kokkulepe kuvatakse sisselogimisel või kursusele sisenemisel.
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Teie tingimused ja nõuded on allkirjastamiseks valmis"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Tere,<br />Teie juhendaja saatis teile tingimused ja nõuded. Saate selle allkirjastada järgmisel URL-il: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Tere %s,<br />Teie juhendaja saatis teile tingimused ja nõuded. Saate selle allkirjastada järgmisel URL-il: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Kasutaja %s allkirjastas kokkuleppe."

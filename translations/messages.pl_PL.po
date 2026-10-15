@@ -21273,8 +21273,8 @@ msgstr "Umowa prawna pojawi się podczas logowania lub wejścia na kurs."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Twoje warunki są gotowe do podpisania"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Witaj,<br />Twój tutor przesłał Ci warunki. Możesz je podpisać pod tym linkiem: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Witaj %s,<br />Twój tutor przesłał Ci warunki. Możesz je podpisać pod tym linkiem: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Użytkownik %s podpisał umowę."

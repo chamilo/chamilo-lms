@@ -21264,8 +21264,8 @@ msgstr "L’acòrdi legal aparetirà pendent la connexion o quand intrar dins un
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Vòstres condicions generals son preparas per èsser signadas"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Adèu,<br />Vòstre tutor vos a mandat vòstres condicions generals. Podètz las signar en seguissent aqueste URL : %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Adèu %s,<br />Vòstre tutor vos a mandat vòstres condicions generals. Podètz las signar en seguissent aqueste URL : %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "L’utilizaire %s a signat l’acòrdi."

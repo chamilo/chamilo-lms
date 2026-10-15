@@ -21269,8 +21269,8 @@ msgstr "La jura interkonsento aperos dum la ensaluto aŭ kiam eniros kurzon."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Viaj kondiĉoj pretas por subskribo"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Saluton,<br />Via tutoro sendis al vi viajn kondiĉojn. Vi povas subskribi ĝin sekvante ĉi tiun URL: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Saluton %s,<br />Via tutoro sendis al vi viajn kondiĉojn. Vi povas subskribi ĝin sekvante ĉi tiun URL: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Uzanto %s subskribis la interkonsenton."

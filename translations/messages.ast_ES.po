@@ -21269,8 +21269,8 @@ msgstr "L'acordu llegal apaecerá durante l'iniciu de sesón o al entrar nun cur
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Los tos términos y condicions tan preperados pa firmase"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Hola,<br />El teu tutor envióte los tos términos y condicions. Puedes firmalu siguendo esta URL: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Hola %s,<br />El teu tutor envióte los tos términos y condicions. Puedes firmalu siguendo esta URL: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "L'usuariu %s firmó l'acordu."

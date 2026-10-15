@@ -175,12 +175,13 @@ Feature: Special case 2 — tutor workflow
     Then I should not see an error
 
     # ---- LEGAL AGREEMENT ----
-    # "Envoyer le contrat d'apprentissage" on myStudents.php — confirmed
-    # live as a plain GET link with the send_legal action baked into the
-    # query string; no separate confirmation/submit step exists (the
-    # Behat source's own "I press 'Send legal agreement'" is stale — the
-    # legacy multi-step page it targeted no longer works that way).
-    When I am on "/main/my_space/myStudents.php?action=send_legal&student=USER_ID&course=" with the resolved user id
+    # "Envoyer le contrat d'apprentissage" on myStudents.php is a small POST
+    # form (CSRF token) to /legal-agreement/{id}/send, which redirects back
+    # to the page. Targeted by its action rather than its label, which
+    # depends on the portal's language.
+    When I am on "/main/my_space/myStudents.php?student=USER_ID&course=" with the resolved user id
+    And I wait for the page to be loaded
+    And I click the "form[action$='/send'] button" element
     And I wait for the page to be loaded
     Then I should not see an error
 

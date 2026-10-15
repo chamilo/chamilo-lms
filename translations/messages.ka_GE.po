@@ -21264,8 +21264,8 @@ msgstr "იურიდიული შეთანხმება გამო�
 msgid "Your terms and conditions are ready to be signed"
 msgstr "თქვენი პირობები და პირობები მზადაა ხელმოწერისთვის"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "გამარჯობა,<br />თქვენი მასწავლებელმა გამოგიგზავნათ თქვენი პირობები და პირობები. შეგიძლიათ მოაწეროთ ხელი ამ URL-ის მიხედვით: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "გამარჯობა %s,<br />თქვენი მასწავლებელმა გამოგიგზავნათ თქვენი პირობები და პირობები. შეგიძლიათ მოაწეროთ ხელი ამ URL-ის მიხედვით: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "მომხმარებელმა %s მოაწერა ხელი შეთანხმებას."

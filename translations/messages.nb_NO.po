@@ -21269,8 +21269,8 @@ msgstr "Den juridiske avtalen vises ved pålogging eller når du går inn i et k
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Vilkårene dine er klare til å signeres"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Hei,<br />Din veileder har sendt deg vilkårene dine. Du kan signere dem ved å følge denne lenken: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Hei %s,<br />Din veileder har sendt deg vilkårene dine. Du kan signere dem ved å følge denne lenken: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Bruker %s signerte avtalen."

@@ -21264,8 +21264,8 @@ msgstr "قانوني تړون به د لاګین پر مهال یا د کورس 
 msgid "Your terms and conditions are ready to be signed"
 msgstr "ستاسو شرایط او مقررات د لاسلیکولو لپاره چمتو دي"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "سلام،<br />ستاسو ښوونکي تاسو ته ستاسو شرایط او مقررات درېدلي دي. تاسو کولی شئ دا د دې URL له مخې لاسلیک کړئ: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "سلام %s،<br />ستاسو ښوونکي تاسو ته ستاسو شرایط او مقررات درېدلي دي. تاسو کولی شئ دا د دې URL له مخې لاسلیک کړئ: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "کاروونکي %s تړون لاسلیک کړ."

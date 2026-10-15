@@ -21168,8 +21168,8 @@ msgstr "ཆོས་སྒྲིག་འབྲེལ་བ་འཛུལ་ས
 msgid "Your terms and conditions are ready to be signed"
 msgstr "ཁྱེད་ཀྱི་ཆོས་སྒྲིག་རྒྱུ་མཚན་སྦྱོར་བ་རེད།"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "བཀྲ་ཤིས་བདེ་ལེགས།<br />ཁྱེད་ཀྱི་སློབ་སྒྲོན་གྱིས་ཁྱེད་ཀྱི་ཆོས་སྒྲིག་རྒྱུ་མཚན་འབུབ་སློབ། འདི་ལ་འབྲེལ་བའི་ལམ་གྱི་གཏོང་བ %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "བཀྲ་ཤིས་བདེ་ལེགས %s།<br />ཁྱེད་ཀྱི་སློབ་སྒྲོན་གྱིས་ཁྱེད་ཀྱི་ཆོས་སྒྲིག་རྒྱུ་མཚན་འབུབ་སློབ། འདི་ལ་འབྲེལ་བའི་ལམ་གྱི་གཏོང་བ %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "མི་ཞུ %s འབྲེལ་བ་འཛིན་འབྲེལ།"

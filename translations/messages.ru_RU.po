@@ -21270,8 +21270,8 @@ msgstr "Юридическое соглашение появится при вх
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Ваши условия и правила готовы к подписи"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Здравствуйте,<br />Ваш преподаватель отправил вам ваши условия и правила. Вы можете подписать их по этой ссылке: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Здравствуйте %s,<br />Ваш преподаватель отправил вам ваши условия и правила. Вы можете подписать их по этой ссылке: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Пользователь %s подписал соглашение."

@@ -566,27 +566,6 @@ switch ($action) {
         $certificate = new Certificate(0, $studentId);
         $certificate->generatePdfFromCustomCertificate();
         exit;
-    case 'send_legal':
-        $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
-        if ($isBoss || api_is_platform_admin()) {
-            LegalManager::sendLegal($studentId, api_get_user_id());
-        }
-        header('Location: '.api_get_self().'?student='.$studentId.'&course='.$courseCode);
-        exit;
-    case 'delete_legal':
-        $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
-        if ($isBoss || api_is_platform_admin()) {
-            $extraFieldValue = new ExtraFieldValue('user');
-            $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                $studentId,
-                'legal_accept'
-            );
-            $result = $extraFieldValue->delete($value['id']);
-            if ($result) {
-                Display::addFlash(Display::return_message(get_lang('Deleted')));
-            }
-        }
-        break;
     case 'reset_lp':
         $lp_id = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : '';
         $check = true;
@@ -1230,25 +1209,15 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
         );
         $icon = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL);
         $legalTime = null;
+        $legalReturnTo = api_get_self().'?student='.$studentId.'&course='.urlencode((string) $courseCode);
 
         if (isset($value['value']) && !empty($value['value'])) {
             [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
             $icon = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL);
-            $btn = Display::url(
-                get_lang('Delete legal agreement'),
-                api_get_self().'?action=delete_legal&student='.$studentId.'&course='.$courseCode,
-                ['class' => 'btn btn--danger']
-            );
+            $btn = LegalManager::getAgreementActionForm($studentId, true, $legalReturnTo);
             $timeLegalAccept = api_get_local_time($legalTime);
         } else {
-            $btn = Display::url(
-                get_lang('Send legal agreement'),
-                api_get_self().'?action=send_legal&student='.$studentId.'&course='.$courseCode,
-                [
-                    'class' => 'btn btn--primary',
-                    'onclick' => "this.classList.add('disabled'); this.style.pointerEvents='none';",
-                ]
-            );
+            $btn = LegalManager::getAgreementActionForm($studentId, false, $legalReturnTo);
             $timeLegalAccept = get_lang('Not Registered');
         }
     }

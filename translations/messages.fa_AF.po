@@ -21264,8 +21264,8 @@ msgstr "توافق قانونی هنگام ورود یا ورود به دوره 
 msgid "Your terms and conditions are ready to be signed"
 msgstr "شرایط و ضوابط شما آماده امضا است"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "سلام،<br />مربی شما شرایط و ضوابط شما را ارسال کرده است. می‌توانید آن را با پیروی از این URL امضا کنید: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "سلام %s،<br />مربی شما شرایط و ضوابط شما را ارسال کرده است. می‌توانید آن را با پیروی از این URL امضا کنید: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "کاربر %s توافق را امضا کرد."

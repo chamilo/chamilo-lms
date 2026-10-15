@@ -21264,8 +21264,8 @@ msgstr "L'acòrd legâl a apararà durant il login o cuant che si jentrâ in un 
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Le tô condizions e termin a son pare par firmâsi"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Cjadê,<br />Il to tutor ti a mandât le to condizions e termin. Tu podês firmâlu seguind chest URL: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Cjadê %s,<br />Il to tutor ti a mandât le to condizions e termin. Tu podês firmâlu seguind chest URL: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Utint %s a a firmât l'acòrd."

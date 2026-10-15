@@ -21268,8 +21268,8 @@ msgstr "Իրավական համաձայնությունը կհայտնվի մո�
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Ձեր պայմաններն ու կանոնները պատրաստ են ստորագրման համար"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Ողջույն,<br />Ձեր դասախոսը Ձեզ ուղարկել է Ձեր պայմաններն ու կանոնները: Դուք կարող եք ստորագրել այն հետևյալ հղումով՝ %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Ողջույն %s,<br />Ձեր դասախոսը Ձեզ ուղարկել է Ձեր պայմաններն ու կանոնները: Դուք կարող եք ստորագրել այն հետևյալ հղումով՝ %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Օգտատեր %s-ն ստորագրել է համաձայնությունը:"

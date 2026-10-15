@@ -17,6 +17,7 @@ import SkillWheelGraph from "../../components/skill/SkillWheelGraph.vue"
 import SkillProfileMatches from "../../components/skill/SkillProfileMatches.vue"
 
 import { useNotification } from "../../composables/notification"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 import { useSecurityStore } from "../../store/securityStore"
 import * as skillService from "../../services/skillService"
 
@@ -272,7 +273,7 @@ async function onSearchProfile(profile) {
         <span class="font-semibold">{{ t("Description") }}:</span>
         <div
           class="mt-1"
-          v-html="skillDetail.description"
+          v-html="sanitizeHtml(skillDetail.description)"
         />
       </div>
 

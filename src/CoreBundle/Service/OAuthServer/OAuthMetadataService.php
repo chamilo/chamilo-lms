@@ -22,6 +22,7 @@ final readonly class OAuthMetadataService
     public function __construct(
         private RequestStack $requestStack,
         private SettingsManager $settingsManager,
+        private OAuthResourceRegistry $resourceRegistry,
     ) {}
 
     public function getIssuer(): string
@@ -55,9 +56,8 @@ final readonly class OAuthMetadataService
     }
 
     /**
-     * Builds the audience identifier for a given resource server path, e.g.
-     * "/mcp" -> "<issuer>/mcp". Not validated against a registry — each
-     * resource server owns its own identifier.
+     * Builds the audience identifier for a registered resource-server path,
+     * e.g. "/mcp" -> "<issuer>/mcp".
      */
     public function getResourceIdentifier(string $resourcePath): string
     {
@@ -89,7 +89,7 @@ final readonly class OAuthMetadataService
             'token_endpoint' => $this->getTokenEndpoint(),
             'registration_endpoint' => $this->getRegistrationEndpoint(),
             'revocation_endpoint' => $this->getRevocationEndpoint(),
-            'scopes_supported' => ['mcp'],
+            'scopes_supported' => $this->resourceRegistry->getSupportedScopes(),
             'response_types_supported' => ['code'],
             'response_modes_supported' => ['query'],
             'grant_types_supported' => ['authorization_code', 'refresh_token'],
@@ -105,13 +105,23 @@ final readonly class OAuthMetadataService
      */
     public function buildProtectedResourceMetadata(string $resourcePath): array
     {
+        $resourceKey = $this->resourceRegistry->resolveResourceKeyFromPath($resourcePath);
+        if (null === $resourceKey) {
+            throw new RuntimeException('Unknown OAuth protected resource.');
+        }
+
+        $registeredPath = $this->resourceRegistry->getResourcePath($resourceKey);
+        if (null === $registeredPath) {
+            throw new RuntimeException('Unknown OAuth protected resource.');
+        }
+
         $resourceName = (string) ($this->settingsManager->getSetting('platform.site_name') ?: 'Chamilo');
 
         return [
-            'resource' => $this->getResourceIdentifier($resourcePath),
+            'resource' => $this->getResourceIdentifier($registeredPath),
             'authorization_servers' => [$this->getIssuer()],
             'bearer_methods_supported' => ['header'],
-            'scopes_supported' => ['mcp'],
+            'scopes_supported' => $this->resourceRegistry->getScopesForResource($resourceKey),
             'resource_name' => $resourceName,
             'resource_documentation' => $this->getIssuer().'/documentation/',
         ];

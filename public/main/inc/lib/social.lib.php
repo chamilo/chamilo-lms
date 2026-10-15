@@ -1143,6 +1143,13 @@ class SocialManager extends UserManager
                     break;
                 }
                 $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
+                $nameHtml = htmlspecialchars($name_user, ENT_QUOTES, 'UTF-8');
+                // JS string literal for the onclick attribute: encoded for JS first, then for HTML.
+                $nameJs = htmlspecialchars(
+                    json_encode($name_user, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
+                    ENT_QUOTES,
+                    'UTF-8'
+                );
                 $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
                 $statusIcon = Display::getMdiIcon(StateIcon::OFFLINE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Offline'));
@@ -1160,7 +1167,7 @@ class SocialManager extends UserManager
                     $friend['friend_user_id'],
                     USER_IMAGE_SIZE_SMALL
                 );
-                $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" class="user-image"/>';
+                $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$nameHtml.'" class="user-image"/>';
 
                 $relation = self::get_relation_between_contacts(
                     $friend['friend_user_id'],
@@ -1168,13 +1175,13 @@ class SocialManager extends UserManager
                 );
 
                 if ($showLinkToChat) {
-                    $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);" class="list-group-item">';
-                    $friendHtml .= $friend_avatar.' <span class="username">'.$name_user.'</span>';
+                    $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', '.$nameJs.', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);" class="list-group-item">';
+                    $friendHtml .= $friend_avatar.' <span class="username">'.$nameHtml.'</span>';
                     $friendHtml .= '<span class="status">'.$statusIcon.'</span>';
                 } else {
                     $link_shared = empty($link_shared) ? '' : '&'.$link_shared;
                     $friendHtml .= '<a href="profile.php?'.'u='.$friend['friend_user_id'].$link_shared.'" class="list-group-item">';
-                    $friendHtml .= $friend_avatar.' <span class="username">'.$name_user.'</span>';
+                    $friendHtml .= $friend_avatar.' <span class="username">'.$nameHtml.'</span>';
                     $friendHtml .= '<span class="status">'.$statusIcon.'</span>';
                 }
 

@@ -676,11 +676,15 @@ function getThreadRoute(thread) {
   }
 }
 
+/**
+ * Returns the text of an HTML string. It is parsed in an inert document, so handlers such as
+ * <img onerror> of a stored post never run.
+ *
+ * @param {string} value HTML to convert to plain text.
+ * @returns {string} The text content.
+ */
 function stripTags(value) {
-  const element = document.createElement("div")
-  element.innerHTML = value || ""
-
-  return element.textContent || element.innerText || ""
+  return new DOMParser().parseFromString(value || "", "text/html").body.textContent || ""
 }
 
 function getThreadPreview(thread) {

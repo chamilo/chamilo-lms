@@ -126,9 +126,9 @@
         url: url + "&a=get_skill_info&id=" + my_id,
         success: function(json) {
           var skill = jQuery.parseJSON(json)
-          $("#name").html(skill.title)
+          $("#name").text(skill.title)
           $("#id").attr("value", skill.id)
-          $("#description").html(skill.description)
+          $("#description").text(skill.description)
           //filling parent_id
           $("#parent_id option[value='" + skill.extra.parent_id + "']").attr("selected", "selected")
           //filling the gradebook_id

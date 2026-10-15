@@ -15,6 +15,7 @@ import SkillWheelGraph from "../../components/skill/SkillWheelGraph.vue"
 import SkillWheelProfileList from "../../components/skill/SkillWheelProfileList.vue"
 
 import { useNotification } from "../../composables/notification"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 import * as skillService from "../../services/skillService"
 import { useSecurityStore } from "../../store/securityStore"
 
@@ -335,7 +336,7 @@ onBeforeUnmount(() => {
           <div
             dir="auto"
             class="leading-relaxed"
-            v-html="skillDetail.description"
+            v-html="sanitizeHtml(skillDetail.description)"
           />
         </div>
 

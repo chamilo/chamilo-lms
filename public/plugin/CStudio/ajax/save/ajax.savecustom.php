@@ -21,6 +21,13 @@ if (isset($_GET['id']) || isset($_GET['act'])) {
     require_once '../../0_dal/dal.save.php';
 
     $idTopPage = get_int_from('id');
+
+    if (false == oel_ctr_rights($idTopPage)) {
+        echo 'KO';
+
+        exit;
+    }
+
     $customcode = get_string_from('customcode');
     $act = get_string_from('act');
 

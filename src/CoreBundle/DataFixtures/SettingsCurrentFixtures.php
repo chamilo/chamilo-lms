@@ -2101,6 +2101,21 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Video player renderers',
                     'comment' => 'Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias',
                 ],
+                [
+                    'name' => 'etherpad_enabled',
+                    'title' => 'Enable Etherpad for Wiki editing',
+                    'comment' => 'Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions.',
+                ],
+                [
+                    'name' => 'etherpad_url',
+                    'title' => 'Etherpad URL',
+                    'comment' => 'Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad',
+                ],
+                [
+                    'name' => 'etherpad_api_key',
+                    'title' => 'Etherpad API key',
+                    'comment' => 'API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication.',
+                ],
             ],
             'chat' => [
                 [

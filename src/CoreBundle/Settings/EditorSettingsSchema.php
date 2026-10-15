@@ -42,6 +42,9 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             'editor_settings' => '',
             'video_context_menu_hidden' => 'false',
             'video_player_renderers' => '',
+            'etherpad_enabled' => 'false',
+            'etherpad_url' => '',
+            'etherpad_api_key' => '',
         ]);
     }
 
@@ -80,6 +83,9 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             ->add('video_player_renderers', TextareaType::class, [
                 'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
             ])
+            ->add('etherpad_enabled', YesNoType::class)
+            ->add('etherpad_url')
+            ->add('etherpad_api_key')
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\WikiHelper;
+use Chamilo\CoreBundle\Service\EtherpadClient;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
@@ -20,6 +21,7 @@ use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -27,6 +29,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Throwable;
 
 /**
@@ -46,6 +49,7 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
         private WikiPageRenderer $renderer,
         private WikiNotificationService $notificationService,
         private WikiHelper $wikiHelper,
+        private EtherpadClient $etherpadClient,
     ) {}
 
     /**
@@ -132,8 +136,21 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to restore this Wiki page.');
         }
 
-        $this->assertLockAvailable($latest, $user, $canManage);
+        $etherpadEnabled = $this->etherpadClient->isEnabled();
+        if (!$etherpadEnabled) {
+            $this->assertLockAvailable($latest, $user, $canManage);
+        }
         $this->assertAssignmentConstraints($latest, $selected, $courseId);
+
+        $etherpadId = trim((string) $latest->getEtherpadId());
+        if ($etherpadEnabled && '' !== $etherpadId) {
+            try {
+                $this->etherpadClient->assertReady($request);
+                $this->etherpadClient->setHtml($etherpadId, $selected->getContent());
+            } catch (RuntimeException $exception) {
+                throw new ServiceUnavailableHttpException(null, $exception->getMessage(), $exception);
+            }
+        }
 
         $now = new DateTime('now', new DateTimeZone('UTC'));
         $newVersion = ((int) $latest->getVersion()) + 1;
@@ -165,6 +182,7 @@ final readonly class WikiPageRestoreProcessor implements ProcessorInterface
             ->setTag($latest->getTag())
             ->setUserIp((string) ($request->getClientIp() ?? ''))
             ->setSessionId($sessionId)
+            ->setEtherpadId($etherpadEnabled && '' !== $etherpadId ? $etherpadId : null)
             ->setParent($course)
             ->addCourseLink($course, $session, $group)
         ;

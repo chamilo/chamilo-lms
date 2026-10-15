@@ -41856,3 +41856,43 @@ msgstr "Maximum inactive time to consider (minutes)"
 
 msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
 msgstr "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Collaborative Wiki editor"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Connecting to Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Save creates a new Chamilo Wiki version from the current Etherpad content."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "The collaborative editor could not be loaded."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Enable Etherpad for Wiki editing"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API key"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."

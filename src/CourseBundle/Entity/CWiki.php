@@ -111,6 +111,9 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Column(name: 'session_id', type: 'integer', nullable: true)]
     protected ?int $sessionId = null;
 
+    #[ORM\Column(name: 'etherpad_id', type: 'string', length: 255, nullable: true)]
+    protected ?string $etherpadId = null;
+
     /**
      * @var Collection<int, CWikiCategory>
      */
@@ -426,6 +429,19 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
     public function setSessionId(int $sessionId): static
     {
         $this->sessionId = $sessionId;
+
+        return $this;
+    }
+
+    public function getEtherpadId(): ?string
+    {
+        return $this->etherpadId;
+    }
+
+    public function setEtherpadId(?string $etherpadId): static
+    {
+        $etherpadId = null !== $etherpadId ? trim($etherpadId) : null;
+        $this->etherpadId = '' === $etherpadId ? null : $etherpadId;
 
         return $this;
     }

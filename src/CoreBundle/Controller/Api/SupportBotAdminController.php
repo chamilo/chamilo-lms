@@ -99,14 +99,16 @@ final readonly class SupportBotAdminController
     #[Route('/{id}/export', name: 'support_bot_admin_tree_export', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function export(int $id): JsonResponse
     {
-        return new JsonResponse(
+        $response = new JsonResponse(
             $this->adminService->exportTree($id),
             Response::HTTP_OK,
             [
                 'Content-Disposition' => 'attachment; filename="support-bot-tree-'.$id.'.json"',
             ],
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
         );
+        $response->setEncodingOptions(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        return $response;
     }
 
     #[Route('/{id}', name: 'support_bot_admin_tree_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]

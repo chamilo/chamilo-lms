@@ -110,6 +110,14 @@ export default {
     );
   },
 
+  async startEtherpadSession(pageId, params = {}) {
+    return await baseService.post(buildUrl(`/api/wiki/page/${pageId}/etherpad/session`, params), {})
+  },
+
+  async snapshotEtherpad(pageId, params = {}) {
+    return await baseService.post(buildUrl(`/api/wiki/page/${pageId}/etherpad/snapshot`, params), {})
+  },
+
   async restoreVersion(pageId, versionIid, params = {}) {
     return await baseService.post(
       buildUrl(`/api/wiki/page/${pageId}/restore`, params),

@@ -4258,5 +4258,15 @@
     "You have earned a certificate for this exercise": "You have earned a certificate for this exercise",
     "Survey published. Created: {0}. Updated: {1}. Messages sent: {2}.": "Survey published. Created: {0}. Updated: {1}. Messages sent: {2}.",
     "Course tracking details": "Course tracking details",
-    "Learner details in course": "Learner details in course"
+    "Learner details in course": "Learner details in course",
+    "Collaborative Wiki editor": "Collaborative Wiki editor",
+    "Connecting to Etherpad...": "Connecting to Etherpad...",
+    "Save creates a new Chamilo Wiki version from the current Etherpad content.": "Save creates a new Chamilo Wiki version from the current Etherpad content.",
+    "The collaborative editor could not be loaded.": "The collaborative editor could not be loaded.",
+    "Enable Etherpad for Wiki editing": "Enable Etherpad for Wiki editing",
+    "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions.": "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions.",
+    "Etherpad URL": "Etherpad URL",
+    "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad": "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad",
+    "Etherpad API key": "Etherpad API key",
+    "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication.": "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
 }

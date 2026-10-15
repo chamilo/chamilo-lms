@@ -40,3 +40,17 @@ Feature: Wiki tool
     And I press "Save"
     And I wait for the page to be loaded
     Then I should see "New Wiki"
+
+  Scenario: Admin edits a wiki through the collaborative editor
+    Given the Etherpad Wiki editor transport is mocked
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow "Wiki"
+    And I wait for the page content to settle
+    And I follow "Edit page"
+    And I wait for the page to be loaded
+    Then I should see "Collaborative Wiki editor"
+    When I fill in the collaborative Wiki editor with "Collaborative Wiki content"
+    And I press "Save"
+    And I wait for the page to be loaded
+    Then I should see "Collaborative Wiki content"

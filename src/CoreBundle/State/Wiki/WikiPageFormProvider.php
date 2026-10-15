@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\WikiHelper;
+use Chamilo\CoreBundle\Service\EtherpadClient;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
@@ -44,6 +45,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         private WikiAssignmentService $assignmentService,
         private WikiCategoryService $categoryService,
         private WikiHelper $wikiHelper,
+        private EtherpadClient $etherpadClient,
     ) {}
 
     /**
@@ -166,9 +168,12 @@ final readonly class WikiPageFormProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to edit this Wiki page.');
         }
 
+        $etherpadEnabled = $this->etherpadClient->isEnabled();
         if ($exactPage instanceof CWiki) {
             $this->assertAssignmentConstraints($exactPage, $courseId);
-            $this->assertEditLockAvailable($exactPage, $canManage);
+            if (!$etherpadEnabled) {
+                $this->assertEditLockAvailable($exactPage, $canManage);
+            }
         }
 
         $strictHtmlFiltering = $this->wikiHelper->isCourseSettingEnabled(
@@ -186,7 +191,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
         $form->isNew = !$exactPage instanceof CWiki;
         $form->isInheritedFromCourse = $isInheritedFromCourse;
         $form->canManage = $canManage;
-        $form->requiresLock = $exactPage instanceof CWiki;
+        $form->requiresLock = $exactPage instanceof CWiki && !$etherpadEnabled;
         $form->progressOptions = $this->getProgressOptions();
         $form->canConfigureAssignment = $canManage && 'index' !== ($sourcePage?->getReflink() ?? $reflink);
         $form->categoriesEnabled = $categoriesEnabled;
@@ -213,6 +218,7 @@ final readonly class WikiPageFormProvider implements ProviderInterface
             'htmlPurifierEnabled' => $this->isPlatformSettingEnabled('editor.htmlpurifier_wiki'),
             'strictHtmlFiltering' => $strictHtmlFiltering,
             'categoriesEnabled' => $categoriesEnabled,
+            'etherpadEnabled' => $etherpadEnabled,
         ];
 
         if ($sourcePage instanceof CWiki) {

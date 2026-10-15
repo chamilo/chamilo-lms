@@ -1176,6 +1176,84 @@ Then("I fill in editor field {string} with {string}", async ({ page }, field: st
 // (hasMessageContent check, content is a required field there). Firing
 // 'change' explicitly after setContent() is what actually satisfies
 // bindModelHandlers()'s listener.
+
+// Not ported — new. Exercises the Etherpad-specific Wiki UI without making
+// the browser suite depend on an external Etherpad service or on a mutable
+// platform setting. The real /api/wiki/form response is kept intact except
+// for forcing the editor branch on and disabling the legacy 20-minute lock;
+// the session and snapshot calls are replaced with a same-origin in-page
+// transport. The final Wiki save still goes to the real Chamilo endpoint, so
+// this covers the Vue session -> iframe -> snapshot -> version-save flow while
+// EtherpadClient itself remains covered by its PHP unit tests and separate
+// integration checks.
+const mockedEtherpadWikiContent = new WeakMap<Page, string>()
+
+Given("the Etherpad Wiki editor transport is mocked", async ({ page }) => {
+  mockedEtherpadWikiContent.set(page, "")
+
+  await page.route("**/api/wiki/form**", async (route) => {
+    const response = await route.fetch()
+    const payload = (await response.json()) as {
+      settings?: Record<string, unknown>
+      requiresLock?: boolean
+      lockAcquired?: boolean
+    }
+
+    payload.settings = {
+      ...(payload.settings ?? {}),
+      etherpadEnabled: true,
+    }
+    payload.requiresLock = false
+    payload.lockAcquired = false
+
+    await route.fulfill({ response, json: payload })
+  })
+
+  await page.route("**/api/wiki/page/*/etherpad/session**", async (route) => {
+    const origin = new URL(route.request().url()).origin
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        editorUrl: `${origin}/__playwright__/etherpad`,
+        expiresAt: Math.floor(Date.now() / 1000) + 3600,
+      }),
+    })
+  })
+
+  await page.route("**/api/wiki/page/*/etherpad/snapshot**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ content: mockedEtherpadWikiContent.get(page) ?? "" }),
+    })
+  })
+
+  await page.route("**/__playwright__/etherpad", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "text/html; charset=utf-8",
+      body: `<!doctype html>
+<html lang="en">
+  <body>
+    <label for="etherpad-editor">Etherpad editor</label>
+    <textarea id="etherpad-editor" aria-label="Etherpad editor"></textarea>
+  </body>
+</html>`,
+    })
+  })
+})
+
+When("I fill in the collaborative Wiki editor with {string}", async ({ page }, value: string) => {
+  const editor = page
+    .frameLocator('iframe[title="Collaborative Wiki editor"]')
+    .locator("#etherpad-editor")
+
+  await expect(editor).toBeVisible()
+  await editor.fill(value)
+  mockedEtherpadWikiContent.set(page, `<p>${value}</p>`)
+})
+
 Then("I fill in tinymce field {string} with {string}", async ({ page }, field: string, value: string) => {
   const fieldId = await (await resolveField(page, field)).getAttribute("id")
   if (!fieldId) {

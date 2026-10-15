@@ -2080,8 +2080,8 @@ class TicketManager
             $list[] = [
                 'id' => $row->getId(),
                 '0' => $row->getId(),
-                '1' => $row->getName(),
-                '2' => $row->getDescription(),
+                '1' => Security::remove_XSS($row->getName()),
+                '2' => Security::remove_XSS($row->getDescription()),
                 '3' => $row->getId(),
             ];
         }
@@ -2103,10 +2103,10 @@ class TicketManager
                 'id' => $row->getId(),
                 '0' => $row->getId(),
                 '1' => Display::url(
-                    $row->getName(),
+                    Security::remove_XSS($row->getName()),
                     api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$row->getId()
                 ),
-                '2' => $row->getDescription(),
+                '2' => Security::remove_XSS($row->getDescription()),
             ];
         }
 

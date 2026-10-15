@@ -172,7 +172,7 @@ if ('add' === $action || 'edit' === $action) {
 
     $form_title = 'add' === $action ? get_lang('Add category') : get_lang('Edit this category');
     if (!empty($categoryInfo)) {
-        $form_title .= ' '.get_lang('Into').' '.$categoryInfo['title'];
+        $form_title .= ' '.get_lang('Into').' '.htmlspecialchars($categoryInfo['title'], ENT_QUOTES, 'UTF-8');
     }
     $url = api_get_self().'?action='.Security::remove_XSS($action).'&id='.Security::remove_XSS($categoryId);
     $form = new FormValidator('course_category', 'post', $url);
@@ -214,7 +214,10 @@ if ('add' === $action || 'edit' === $action) {
     $form->addGroup($group, '', get_lang('Allow adding courses in this category?'));
     if ('add' === $action && !empty($categoryId)) {
         $form->addHidden('parent_id', $categoryId);
-        $form->addLabel(get_lang('Parent category'), $parentInfo['title'].' ('.$parentInfo['code'].')');
+        $form->addLabel(
+            get_lang('Parent category'),
+            htmlspecialchars($parentInfo['title'], ENT_QUOTES, 'UTF-8').' ('.htmlspecialchars($parentInfo['code'], ENT_QUOTES, 'UTF-8').')'
+        );
     } else {
         $allCategories = CourseCategory::getAllCategories();
         $parentOptions = ['' => get_lang('No parent')];

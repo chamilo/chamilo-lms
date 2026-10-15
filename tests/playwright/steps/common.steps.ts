@@ -714,8 +714,25 @@ Given("I am logged as {string} with password {string}", async ({ page }, usernam
 // after it. Confirmed live this was a genuine race, not a hung step: the
 // interrupted navigation's target was the PREVIOUS step's own page, not a
 // bug in "I am not logged" itself.
+//
+// The logout is verified, not assumed: a CI trace of specialCase1PlatformSettings showed
+// /logout answering 302 without invalidating the session (no cookie rotation) while the
+// settings page's own SPA requests were still in flight, so the next "/home" rendered the
+// admin dashboard and "Then I should see 'Sign up'" failed. /account/home embeds
+// `"username":"..."` only for an authenticated session (see loginAs()), so retry until it
+// stops doing so.
 Given("I am not logged", async ({ page }) => {
-  await gotoReliably(page, "/logout")
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    await gotoReliably(page, "/logout")
+    await page.waitForLoadState("load").catch(() => {})
+    const response = await page.request.get("/account/home").catch(() => null)
+    const body = response && response.ok() ? await response.text().catch(() => "") : ""
+    if (!/"username":"[^"]+"/.test(body)) {
+      return
+    }
+    await page.waitForTimeout(1000)
+  }
+  throw new Error('Still authenticated after 5 "/logout" attempts.')
 })
 
 // Mink's fillField/checkField both resolve a field by id, then name, then

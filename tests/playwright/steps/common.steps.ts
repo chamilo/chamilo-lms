@@ -1297,6 +1297,53 @@ When(
   },
 )
 
+// Not ported — new. Same silent TinyMCE init flake as "I create a ticket setting ..." above,
+// hit by the forum dialog ("forum-comment" never mounted in specialCase1Sessions): retry the
+// whole open + fill unit with a fresh dialog. Escape closes it, so no language-dependent
+// Cancel label is needed (that course runs in French).
+When(
+  "I open the forum dialog with {string} and fill title {string} and description {string}",
+  async ({ page }, openLabel: string, title: string, description: string) => {
+    const STEP_TIMEOUT = 10_000
+    const TINYMCE_READY_TIMEOUT = 20_000
+    const MAX_ATTEMPTS = 3
+    const editorId = "forum-comment"
+
+    async function openAndFill(): Promise<boolean> {
+      await page.getByRole("button", { name: openLabel, exact: true }).click({ timeout: STEP_TIMEOUT })
+      await fillReliably(page.locator("#forum-title"), title)
+      await page.locator(`#${editorId}`).waitFor({ state: "attached", timeout: STEP_TIMEOUT })
+      try {
+        await page.waitForFunction((id) => Boolean((window as any).tinymce?.get(id)), editorId, {
+          timeout: TINYMCE_READY_TIMEOUT,
+        })
+      } catch {
+        return false
+      }
+      await page.evaluate(
+        ({ id, value }) => {
+          const editor = (window as any).tinymce.get(id)
+          editor.setContent(value)
+          editor.fire("change")
+          editor.fire("input")
+          editor.save()
+        },
+        { id: editorId, value: description },
+      )
+      return true
+    }
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      if (await openAndFill().catch(() => false)) return
+      if (attempt === MAX_ATTEMPTS) {
+        throw new Error(`TinyMCE editor "${editorId}" never became ready after ${MAX_ATTEMPTS} dialog openings.`)
+      }
+      await page.keyboard.press("Escape")
+      await page.waitForTimeout(500)
+    }
+  },
+)
+
 // Not ported — new, for toolGlossary.feature's "Create glossary term"
 // scenario. Real, confirmed live flake on the shared box (reproduced
 // directly via a raw script, not just from a single test failure):

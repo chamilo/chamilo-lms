@@ -9,10 +9,12 @@ namespace Chamilo\CoreBundle\Controller\OAuthServer;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\OAuthServer\OAuthException;
+use Chamilo\CoreBundle\Repository\OAuthClientConsentRepository;
 use Chamilo\CoreBundle\Service\Mcp\McpAccessPolicy;
 use Chamilo\CoreBundle\Service\OAuthServer\OAuthAuthorizationService;
 use Chamilo\CoreBundle\Service\OAuthServer\OAuthClientResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use DateTime;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +42,7 @@ final class OAuthAuthorizeController extends BaseController
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly RateLimiterFactory $oauthAuthorizationLimiter,
         private readonly McpAccessPolicy $mcpAccessPolicy,
+        private readonly OAuthClientConsentRepository $clientConsentRepository,
     ) {}
 
     #[Route('/oauth/authorize', name: 'oauth_authorize', methods: ['GET'])]
@@ -58,7 +61,7 @@ final class OAuthAuthorizeController extends BaseController
         $redirectUri = $resolved['redirectUri'];
 
         try {
-            $authorizeRequest = $this->authorizationService->validateAuthorizeParameters($request);
+            $authorizeRequest = $this->authorizationService->validateAuthorizeParameters($request, $client);
         } catch (OAuthException $exception) {
             return new RedirectResponse($this->authorizationService->buildRedirectUrl($redirectUri, [
                 'error' => $exception->getErrorCode(),
@@ -85,11 +88,21 @@ final class OAuthAuthorizeController extends BaseController
             return $this->renderError('MCP access is disabled or not allowed for your user role.');
         }
 
+        $firstGrantedAt = null;
+        if (null !== $user->getId() && null !== $client->getId()) {
+            $firstGrantedAt = $this->clientConsentRepository->findFirstGrantedAt(
+                (int) $user->getId(),
+                (int) $client->getId(),
+            );
+        }
+
         return $this->render('@ChamiloCore/OAuthServer/consent.html.twig', [
             'client' => $client,
             'oauth_user' => $user,
             'redirect_uri' => $redirectUri,
             'resource' => $authorizeRequest->resource,
+            'client_registration_age_days' => $this->getClientRegistrationAgeDays($client->getCreatedAt()),
+            'first_granted_at' => $firstGrantedAt,
             'csrf_token' => $this->csrfTokenManager->getToken(self::CSRF_INTENT)->getValue(),
         ]);
     }
@@ -115,6 +128,12 @@ final class OAuthAuthorizeController extends BaseController
         $client = $this->clientResolver->resolveActive($authorizeRequest->clientId);
         if (null === $client || !$client->supportsRedirectUri($authorizeRequest->redirectUri)) {
             return $this->renderError('This application is no longer available. Please start again.');
+        }
+
+        try {
+            $this->authorizationService->assertAuthorizationStillAllowed($authorizeRequest, $client);
+        } catch (OAuthException $exception) {
+            return $this->renderError($exception->getMessage());
         }
 
         $user = $this->getUser();
@@ -176,6 +195,16 @@ final class OAuthAuthorizeController extends BaseController
         }
 
         return str_ends_with(rtrim($resource, '/'), '/mcp');
+    }
+
+    private function getClientRegistrationAgeDays(DateTime $createdAt): int
+    {
+        $now = new DateTime();
+        if ($createdAt > $now) {
+            return 0;
+        }
+
+        return (int) $createdAt->diff($now)->days;
     }
 
     private function renderError(string $message): Response

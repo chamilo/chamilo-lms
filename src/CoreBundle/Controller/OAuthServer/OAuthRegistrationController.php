@@ -66,7 +66,11 @@ final readonly class OAuthRegistrationController
         }
 
         try {
-            $response = $this->registrar->register($metadata, (string) $request->getClientIp());
+            $response = $this->registrar->register(
+                $metadata,
+                (string) $request->getClientIp(),
+                'true' === $this->settingsManager->getSetting('security.dynamic_client_registration'),
+            );
         } catch (OAuthException $exception) {
             return $this->errorResponse($exception->getErrorCode(), $exception->getMessage(), $exception->getHttpStatusCode());
         }

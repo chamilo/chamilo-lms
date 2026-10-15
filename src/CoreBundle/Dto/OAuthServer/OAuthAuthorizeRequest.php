@@ -27,9 +27,20 @@ final readonly class OAuthAuthorizeRequest
         public string $state,
         public string $codeChallenge,
         public string $codeChallengeMethod,
+        public string $scope,
         public ?string $resource,
         public int $createdAt,
     ) {}
+
+    /**
+     * Keeps in-flight authorize requests created just before this deployment
+     * compatible with the new scope-aware flow. Such objects can be restored
+     * from the session without the newly-added promoted property initialized.
+     */
+    public function getScope(): string
+    {
+        return isset($this->scope) && '' !== trim($this->scope) ? $this->scope : 'mcp';
+    }
 
     public function isStale(int $now, int $ttlSeconds): bool
     {

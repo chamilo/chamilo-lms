@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Repository\UserApiKeyRepository;
 use Chamilo\CoreBundle\Service\Mcp\McpAccessPolicy;
 use Chamilo\CoreBundle\Service\Mcp\McpApiKeyManager;
 use Chamilo\CoreBundle\Service\OAuthServer\OAuthMetadataService;
+use Chamilo\CoreBundle\Service\OAuthServer\OAuthResourceRegistry;
 use Chamilo\CoreBundle\Service\OAuthServer\OAuthTokenService;
 use DateTime;
 use Exception;
@@ -195,6 +196,12 @@ final class McpBearerAuthenticator extends AbstractAuthenticator implements Auth
             throw new CustomUserMessageAuthenticationException('Invalid or revoked MCP OAuth access token.');
         }
 
+        if (!$token->getClient()->allowsResource(OAuthResourceRegistry::MCP_RESOURCE)
+            || !$this->scopeContains($token->getScope(), 'mcp')
+        ) {
+            throw new CustomUserMessageAuthenticationException('Invalid or revoked MCP OAuth access token.');
+        }
+
         $user = $token->getUser();
         $this->assertUserCanAuthenticate($user, $accessUrl);
         $this->oauthAccessTokenRepository->touchLastUsed($token, $now);
@@ -227,6 +234,17 @@ final class McpBearerAuthenticator extends AbstractAuthenticator implements Auth
         return new SelfValidatingPassport(
             new UserBadge((string) $user->getId(), static fn (): User => $user),
         );
+    }
+
+    private function scopeContains(?string $scope, string $requiredScope): bool
+    {
+        if (null === $scope || '' === trim($scope)) {
+            return false;
+        }
+
+        $scopes = preg_split('/\s+/', trim($scope)) ?: [];
+
+        return \in_array($requiredScope, $scopes, true);
     }
 
     private function resolveAccessUrl(): AccessUrl

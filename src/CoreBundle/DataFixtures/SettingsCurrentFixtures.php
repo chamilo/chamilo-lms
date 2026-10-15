@@ -3216,6 +3216,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user\'s own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on.',
                 ],
                 [
+                    'name' => 'dynamic_client_registration',
+                    'title' => 'Enable OAuth Dynamic Client Registration beyond MCP',
+                    'comment' => 'Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client\'s allowed resource list.',
+                ],
+                [
                     'name' => 'mcp_enabled',
                     'title' => 'Enable MCP server',
                     'comment' => 'Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp.',

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
@@ -30,7 +31,7 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
      * Builds two courses with a teacher each, a student of the second one, and a gradebook
      * category with one link in the second course.
      *
-     * @return array{courseA: Course, courseB: Course, teacherA: User, teacherB: User, studentB: User, category: GradebookCategory, link: GradebookLink}
+     * @return array{courseA: Course, courseB: Course, quizA: CQuiz, quizB: CQuiz, teacherA: User, teacherB: User, studentB: User, category: GradebookCategory, link: GradebookLink}
      */
     private function bootstrap(string $suffix): array
     {
@@ -52,6 +53,8 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
         $courseRepo->update($courseB);
 
         $em = $this->getEntityManager();
+        $quizA = $this->createQuiz($courseA, 'A '.$suffix);
+        $quizB = $this->createQuiz($courseB, 'B '.$suffix);
 
         $category = (new GradebookCategory())
             ->setTitle('Link Sec Category '.$suffix)
@@ -64,7 +67,7 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
 
         $link = (new GradebookLink())
             ->setType(1)
-            ->setResourceNode($courseB->getResourceNode())
+            ->setRefId((int) $quizB->getIid())
             ->setCourse($courseB)
             ->setCategory($category)
             ->setWeight(10)
@@ -78,12 +81,28 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
         return [
             'courseA' => $courseA,
             'courseB' => $courseB,
+            'quizA' => $quizA,
+            'quizB' => $quizB,
             'teacherA' => $teacherA,
             'teacherB' => $teacherB,
             'studentB' => $studentB,
             'category' => $category,
             'link' => $link,
         ];
+    }
+
+    private function createQuiz(Course $course, string $title): CQuiz
+    {
+        $quiz = (new CQuiz())
+            ->setTitle('Link Sec quiz '.$title)
+            ->setParent($course)
+            ->setCreator($this->getUser('admin'))
+            ->addCourseLink($course)
+        ;
+        $this->getEntityManager()->persist($quiz);
+        $this->getEntityManager()->flush();
+
+        return $quiz;
     }
 
     /**
@@ -143,10 +162,10 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
 
         $this->request($ctx['teacherA'], 'POST', '/api/gradebook_links?cid='.$ctx['courseA']->getId(), [
             'type' => 1,
+            'refId' => $ctx['quizB']->getIid(),
             'weight' => 5,
             'course' => '/api/courses/'.$ctx['courseB']->getId(),
             'category' => '/api/gradebook_categories/'.$ctx['category']->getId(),
-            'resourceNode' => '/api/resource_nodes/'.$ctx['courseB']->getResourceNode()->getId(),
         ]);
 
         $this->assertContains(self::getClient()->getResponse()->getStatusCode(), [400, 403]);
@@ -159,10 +178,10 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
 
         $this->request($ctx['teacherB'], 'PUT', '/api/gradebook_links/'.$ctx['link']->getId().'?cid='.$ctx['courseB']->getId(), [
             'type' => 1,
+            'refId' => $ctx['quizB']->getIid(),
             'weight' => 25,
             'course' => '/api/courses/'.$ctx['courseB']->getId(),
             'category' => '/api/gradebook_categories/'.$ctx['category']->getId(),
-            'resourceNode' => '/api/resource_nodes/'.$ctx['courseB']->getResourceNode()->getId(),
         ]);
 
         // Only the security check is asserted: a PUT on this resource fails later, on an
@@ -185,7 +204,7 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
         $em->persist($ownCategory);
         $ownLink = (new GradebookLink())
             ->setType(1)
-            ->setResourceNode($ctx['courseA']->getResourceNode())
+            ->setRefId((int) $ctx['quizA']->getIid())
             ->setCourse($ctx['courseA'])
             ->setCategory($ownCategory)
             ->setWeight(10)
@@ -200,10 +219,10 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
         // The teacher passes the check on the link as it is, then names a category of another course.
         $this->request($ctx['teacherA'], 'PUT', '/api/gradebook_links/'.$ownLinkId.'?cid='.$ctx['courseA']->getId(), [
             'type' => 1,
+            'refId' => $ctx['quizA']->getIid(),
             'weight' => 10,
             'course' => '/api/courses/'.$ctx['courseB']->getId(),
             'category' => '/api/gradebook_categories/'.$ctx['category']->getId(),
-            'resourceNode' => '/api/resource_nodes/'.$ctx['courseA']->getResourceNode()->getId(),
         ]);
 
         $this->assertResponseStatusCodeSame(403);
@@ -233,5 +252,43 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
 
         $this->assertResponseStatusCodeSame(403);
         $this->assertTrue($this->linkExists($ctx['link']));
+    }
+
+    public function testTeacherCannotLinkAResourceOfAnotherCourseInTheirOwnCategory(): void
+    {
+        $ctx = $this->bootstrap('post_foreign_resource');
+
+        $em = $this->getEntityManager();
+        $ownCategory = (new GradebookCategory())
+            ->setTitle('Link Sec Own Category post_foreign_resource')
+            ->setCourse($ctx['courseA'])
+            ->setWeight(100)
+            ->setVisible(true)
+            ->setLocked(0)
+        ;
+        $em->persist($ownCategory);
+        $em->flush();
+        $countBefore = $em->getRepository(GradebookLink::class)->count([]);
+
+        $this->request($ctx['teacherA'], 'POST', '/api/gradebook_links?cid='.$ctx['courseA']->getId(), [
+            'type' => 1,
+            'refId' => $ctx['quizB']->getIid(),
+            'weight' => 5,
+            'course' => '/api/courses/'.$ctx['courseA']->getId(),
+            'category' => '/api/gradebook_categories/'.$ownCategory->getId(),
+        ]);
+
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame($countBefore, $this->getEntityManager()->getRepository(GradebookLink::class)->count([]));
+
+        $this->request($ctx['teacherA'], 'POST', '/api/gradebook_links?cid='.$ctx['courseA']->getId(), [
+            'type' => 1,
+            'refId' => $ctx['quizA']->getIid(),
+            'weight' => 5,
+            'course' => '/api/courses/'.$ctx['courseA']->getId(),
+            'category' => '/api/gradebook_categories/'.$ownCategory->getId(),
+        ]);
+
+        $this->assertResponseStatusCodeSame(201);
     }
 }

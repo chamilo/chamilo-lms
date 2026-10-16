@@ -8,7 +8,10 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Error;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -29,6 +32,7 @@ final class GradebookLinkVoter extends Voter
 
     public function __construct(
         private readonly AccessDecisionManagerInterface $accessDecisionManager,
+        private readonly GradebookLinkResourceResolver $resourceResolver,
     ) {}
 
     protected function supports(string $attribute, mixed $subject): bool
@@ -63,10 +67,22 @@ final class GradebookLinkVoter extends Voter
                 return false;
             }
 
-            return self::CREATE !== $attribute
-                || $this->accessDecisionManager->decide($token, [ResourceNodeVoter::VIEW], $subject->getResourceNode());
-        } catch (Error) {
-            // A link being created may not have its category, course or resource yet.
+            if (self::CREATE !== $attribute) {
+                return true;
+            }
+
+            // The linked resource must belong to the link's own course and session.
+            $this->resourceResolver->requireResource(
+                $subject->getType(),
+                $subject->getRefId(),
+                $category->getCourse(),
+                $category->getSession(),
+            );
+
+            return true;
+        } catch (AccessDeniedHttpException|BadRequestHttpException|Error) {
+            // A link being created may not have its category, course or resource yet, and its
+            // resource may not be available in the link's course.
             return false;
         }
     }

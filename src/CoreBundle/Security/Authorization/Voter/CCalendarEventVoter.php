@@ -6,8 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Settings\SettingsCourseManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -25,7 +31,11 @@ class CCalendarEventVoter extends Voter
     public const string DELETE = 'DELETE';
 
     public function __construct(
-        private readonly AccessDecisionManagerInterface $accessDecisionManager
+        private readonly AccessDecisionManagerInterface $accessDecisionManager,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
+        private readonly CourseAccessResolver $courseAccessResolver,
+        private readonly SettingsCourseManager $settingsCourseManager,
     ) {}
 
     protected function supports(string $attribute, $subject): bool
@@ -66,7 +76,7 @@ class CCalendarEventVoter extends Voter
         // @todo check permissions
         switch ($attribute) {
             case self::CREATE:
-                return true;
+                return $this->canAddToCourses($user, $event->getResourceLinkArray());
 
             case self::VIEW:
             case self::EDIT:
@@ -88,5 +98,46 @@ class CCalendarEventVoter extends Voter
         }
 
         return false;
+    }
+
+    /**
+     * Same rule as the agenda add button: the course editors, or anyone with access to the
+     * course when the course setting "Allow learners to edit agenda" is on. Links without a
+     * course (personal events) are not restricted here.
+     */
+    private function canAddToCourses(User $user, array $links): bool
+    {
+        foreach ($links as $link) {
+            if (empty($link['cid'])) {
+                continue;
+            }
+
+            $course = $this->entityManager->find(Course::class, (int) $link['cid']);
+            if (!$course instanceof Course) {
+                return false;
+            }
+
+            $session = null;
+            if (!empty($link['sid'])) {
+                $session = $this->entityManager->find(Session::class, (int) $link['sid']);
+                if (!$session instanceof Session) {
+                    return false;
+                }
+            }
+
+            if ($this->isAllowedToEditHelper->check(coach: true, course: $course, session: $session)) {
+                continue;
+            }
+
+            $this->settingsCourseManager->setCourse($course);
+
+            if ('1' !== $this->settingsCourseManager->getCourseSettingValue('allow_user_edit_agenda')
+                || [] === $this->courseAccessResolver->resolveCourseRoles($user, $course, $session)
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

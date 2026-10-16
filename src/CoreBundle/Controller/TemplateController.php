@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
 use Chamilo\CoreBundle\Repository\TemplatesRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -124,7 +125,7 @@ class TemplateController extends AbstractController
     }
 
     #[Route('/all-templates/{courseId}', name: 'all-templates')]
-    public function getAllTemplates($courseId, SystemTemplateRepository $systemTemplateRepository, TemplatesRepository $templatesRepository, CourseRepository $courseRepository, AssetRepository $assetRepository, CDocumentRepository $documentRepository): JsonResponse
+    public function getAllTemplates($courseId, SystemTemplateRepository $systemTemplateRepository, TemplatesRepository $templatesRepository, CourseRepository $courseRepository, AssetRepository $assetRepository, CDocumentRepository $documentRepository, SettingsManager $settingsManager, Request $request): JsonResponse
     {
         $course = $courseRepository->find($courseId);
         if (!$course) {

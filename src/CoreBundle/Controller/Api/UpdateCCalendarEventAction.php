@@ -10,12 +10,14 @@ use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Career;
 use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\Room;
+use Chamilo\CoreBundle\Helpers\AgendaHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UpdateCCalendarEventAction extends BaseResourceFileAction
@@ -26,7 +28,19 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
         CCalendarEventRepository $repo,
         EntityManager $em,
         SettingsManager $settingsManager,
+        AgendaHelper $agendaHelper,
     ): CCalendarEvent {
+        // handleUpdateRequest() adds the links without an id as they come, so they need the right to add an event there.
+        $payload = json_decode($request->getContent(), true);
+        $newLinks = array_filter(
+            \is_array($payload) ? (array) ($payload['resourceLinkListFromEntity'] ?? []) : [],
+            static fn ($link): bool => \is_array($link) && empty($link['id'])
+        );
+
+        if (!$agendaHelper->canAddLinks($newLinks)) {
+            throw new AccessDeniedHttpException();
+        }
+
         $this->handleUpdateRequest($calendarEvent, $repo, $request, $em);
 
         $result = json_decode($request->getContent(), true);

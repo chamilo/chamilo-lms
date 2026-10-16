@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AgendaHelper;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -24,7 +25,8 @@ class CCalendarEventVoter extends Voter
     public const DELETE = 'DELETE';
 
     public function __construct(
-        private readonly Security $security
+        private readonly Security $security,
+        private readonly AgendaHelper $agendaHelper,
     ) {}
 
     protected function supports(string $attribute, $subject): bool
@@ -65,7 +67,14 @@ class CCalendarEventVoter extends Voter
         // @todo check permissions
         switch ($attribute) {
             case self::CREATE:
-                return true;
+                // Global events are for administrators only, who were cleared above.
+                if ($this->agendaHelper->isGlobalEventRequest()) {
+                    return false;
+                }
+
+                return $this->agendaHelper->canAddLinks(
+                    $this->agendaHelper->getNewEventLinks($event->getResourceLinkArray())
+                );
 
             case self::VIEW:
             case self::EDIT:

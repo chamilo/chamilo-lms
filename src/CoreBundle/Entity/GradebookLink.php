@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_USER')"),
+        new Get(security: "is_granted('VIEW', object)"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
         new Put(

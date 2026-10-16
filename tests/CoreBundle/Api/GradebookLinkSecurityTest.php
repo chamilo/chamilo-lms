@@ -291,4 +291,42 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
 
         $this->assertResponseStatusCodeSame(201);
     }
+
+    public function testTeacherOfAnotherCourseCannotReadALinkOfAnotherCourse(): void
+    {
+        $ctx = $this->bootstrap('get_foreign');
+
+        $this->request($ctx['teacherA'], 'GET', '/api/gradebook_links/'.$ctx['link']->getId().'?cid='.$ctx['courseA']->getId());
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testTeacherAndStudentOfTheLinkCourseCanReadIt(): void
+    {
+        $ctx = $this->bootstrap('get_own');
+
+        foreach (['teacherB', 'studentB'] as $key) {
+            $this->request($ctx[$key], 'GET', '/api/gradebook_links/'.$ctx['link']->getId().'?cid='.$ctx['courseB']->getId());
+
+            $this->assertResponseStatusCodeSame(200);
+        }
+    }
+
+    public function testCollectionOnlyListsTheLinksOfTheCoursesOfTheUser(): void
+    {
+        $ctx = $this->bootstrap('get_collection');
+        $linkId = (int) $ctx['link']->getId();
+
+        $listedIds = function (User $user, Course $course): array {
+            $this->request($user, 'GET', '/api/gradebook_links?cid='.$course->getId());
+            $this->assertResponseStatusCodeSame(200);
+            $members = json_decode(self::getClient()->getResponse()->getContent(), true)['hydra:member'] ?? [];
+
+            return array_map(static fn (array $member): int => (int) $member['id'], $members);
+        };
+
+        $this->assertNotContains($linkId, $listedIds($ctx['teacherA'], $ctx['courseA']));
+        $this->assertContains($linkId, $listedIds($ctx['teacherB'], $ctx['courseB']));
+        $this->assertContains($linkId, $listedIds($ctx['studentB'], $ctx['courseB']));
+    }
 }

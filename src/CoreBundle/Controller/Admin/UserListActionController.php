@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Entity\User;
+use Display;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use UserManager;
 
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 class UserListActionController extends AbstractController
@@ -132,7 +134,7 @@ class UserListActionController extends AbstractController
                     break;
                 }
 
-                \UserManager::delete_user($userId);
+                UserManager::delete_user($userId);
 
                 $this->addFlash('success', 'User has been removed.');
 
@@ -143,7 +145,7 @@ class UserListActionController extends AbstractController
                     break;
                 }
 
-                \UserManager::change_active_state($userId, User::ACTIVE);
+                UserManager::change_active_state($userId, User::ACTIVE);
 
                 $this->addFlash('success', 'The user has been restored.');
 
@@ -154,7 +156,7 @@ class UserListActionController extends AbstractController
                     break;
                 }
 
-                \UserManager::delete_user($userId, true);
+                UserManager::delete_user($userId, true);
 
                 $this->addFlash('success', 'The user has been deleted permanently.');
                 $view = 'deleted';
@@ -166,9 +168,9 @@ class UserListActionController extends AbstractController
                     break;
                 }
 
-                $message = \UserManager::anonymizeUserWithVerification($userId);
+                $message = UserManager::anonymizeUserWithVerification($userId);
 
-                \Display::addFlash($message);
+                Display::addFlash($message);
 
                 break;
         }

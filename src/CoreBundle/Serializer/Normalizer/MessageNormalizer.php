@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Serializer\Normalizer;
 
 use Chamilo\CoreBundle\Entity\Message;
+use Security;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -25,7 +26,7 @@ class MessageNormalizer implements NormalizerInterface, NormalizerAwareInterface
         $data = $this->normalizer->normalize($object, $format, $context);
 
         if (isset($data['content']) && \is_string($data['content'])) {
-            $data['content'] = \Security::remove_XSS($data['content'], STUDENT);
+            $data['content'] = Security::remove_XSS($data['content'], STUDENT);
         }
 
         return $data;
@@ -44,5 +45,4 @@ class MessageNormalizer implements NormalizerInterface, NormalizerAwareInterface
     {
         return [Message::class => false];
     }
-
 }

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use CourseManager;
+use Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -82,7 +83,7 @@ class UserController extends AbstractController
 
         $url = $illustrationRepository->getIllustrationUrl($user);
 
-        $sanitize = static fn (?string $v): string => '' !== ($v ?? '') ? \Security::remove_XSS($v, STUDENT) : '';
+        $sanitize = static fn (?string $v): string => '' !== ($v ?? '') ? Security::remove_XSS($v, STUDENT) : '';
 
         return $this->render('@ChamiloCore/User/profile.html.twig', [
             'user' => $user,

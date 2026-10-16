@@ -11,6 +11,9 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
+use const COURSEMANAGER;
+use const STUDENT;
+
 /**
  * Centralized authorization policy for "login as" / Symfony switch_user impersonation.
  *
@@ -124,13 +127,13 @@ final class LoginAsAuthorizationChecker
      */
     private function canSessionAdminLoginAs(User $target): bool
     {
-        $allowed = [\STUDENT];
+        $allowed = [STUDENT];
 
         if ('true' === (string) $this->settingsManager->getSetting('session.allow_session_admin_login_as_teacher')) {
-            $allowed[] = \COURSEMANAGER;
+            $allowed[] = COURSEMANAGER;
         }
 
-        return in_array((int) $target->getStatus(), $allowed, true);
+        return \in_array((int) $target->getStatus(), $allowed, true);
     }
 
     /**

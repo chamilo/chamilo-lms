@@ -113,6 +113,12 @@ runs:
           shell: bash
           run: yarn install
 
+      # playwright-bdd auto-regeneration can leave stale compiled specs.
+      # Generate them explicitly so CI always runs the current .feature files.
+      -   name: Generate Playwright BDD specs
+          shell: bash
+          run: node_modules/.bin/bddgen --config=tests/playwright/playwright.config.ts
+
       -   name: Yarn run encore
           shell: bash
           run: yarn run encore production

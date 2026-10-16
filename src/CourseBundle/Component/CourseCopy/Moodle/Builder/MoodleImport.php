@@ -2771,6 +2771,7 @@ class MoodleImport
             // Clean technical folder suffixes like certificates-23443 => certificates
             if (!$hasExtension && preg_match('~^(.+)-\d{3,}$~', $segment, $matches)) {
                 $segments[$index] = (string) $matches[1];
+                $segments[$index] = (string) preg_replace('~[:<>"|?*]~', '-', (string) $segments[$index]);
             }
         }
 

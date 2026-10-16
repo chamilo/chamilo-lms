@@ -7,6 +7,19 @@ Feature: Legal agreement sending
   # Deleting an acceptance is not covered here: it needs the learner to accept a version of
   # the terms and conditions first, and adding one would make every other test account accept
   # it at its next login.
+  #
+  # Both send buttons only exist when allow_terms_conditions is Yes, and its default is No.
+  # Turning it on does not affect the other files running in parallel: with no terms and
+  # conditions text, the login does not ask anyone to accept them (SecurityController).
+
+  Scenario: Admin enables the terms and conditions
+    Given I am a platform administrator
+    And I am on "/admin/settings/search_settings?keyword=allow_terms_conditions"
+    And I wait for the page to be loaded
+    And I select "Yes" from "form_allow_terms_conditions"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+    Then I should not see an error
 
   Scenario: Admin creates the learner
     Given I am a platform administrator
@@ -46,7 +59,7 @@ Feature: Legal agreement sending
     When I click the "a:has-text('Your terms and conditions are ready to be signed')" element
     Then I wait up to 30 seconds for the element "text=Hello Legal," to appear
     And I should see "Your tutor sent you your terms and conditions"
-    And I should see "Playwright Admin"
+    And I should see "John Doe"
 
   Scenario: Admin sends the legal agreement from the learner reporting
     Given I am a platform administrator
@@ -83,3 +96,12 @@ Feature: Legal agreement sending
     And I press "Yes"
     And I wait for the page to be loaded
     Then I should not see "legal.learner@example.test"
+
+  Scenario: Teardown — disable the terms and conditions again
+    Given I am a platform administrator
+    When I am on "/admin/settings/search_settings?keyword=allow_terms_conditions"
+    And I wait for the page to be loaded
+    And I select "No" from "form_allow_terms_conditions"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+    Then I should not see an error

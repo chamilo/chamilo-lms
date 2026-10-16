@@ -142,15 +142,20 @@ Feature: Exercise notifications to the teacher
     And I press "Yes"
     Then I wait until I no longer see "A learner has answered an open question"
 
+  # The finished-exercise option is on by default in every course, so the teacher's inbox also
+  # gets this same subject from the exercises other files run in TEMP. The search on the
+  # message content keeps only the one about this file's exercise.
   Scenario: The teacher is told the exercise was finished and removes the notification
     Given I am a teacher
     And I am on "/resources/messages"
+    And I search the inbox for "Notification exercise"
     And I wait up to 30 seconds for the element "tr:has-text('A learner attempted an exercise')" to appear
     When I follow "A learner attempted an exercise"
     And I wait for the page content to settle
     Then I should see "Notification exercise"
     And I should see "Costea"
     And I am on "/resources/messages"
+    And I search the inbox for "Notification exercise"
     And I wait up to 30 seconds for the element "tr:has-text('A learner attempted an exercise')" to appear
     And I click the "[title='Delete']" icon in the row for "A learner attempted an exercise"
     And I press "Yes"

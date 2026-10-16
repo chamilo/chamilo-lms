@@ -15,14 +15,15 @@ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
- * Grants write access to a gradebook link through the gradebook category it belongs to, not
+ * Grants read and write access to a gradebook link through the gradebook category it belongs to, not
  * through the course carried by the request: the contextual teacher role only describes the
  * course named by cid.
  *
- * @extends Voter<'CREATE'|'EDIT'|'DELETE', GradebookLink>
+ * @extends Voter<'VIEW'|'CREATE'|'EDIT'|'DELETE', GradebookLink>
  */
 final class GradebookLinkVoter extends Voter
 {
+    public const string VIEW = 'VIEW';
     public const string CREATE = 'CREATE';
     public const string EDIT = 'EDIT';
     public const string DELETE = 'DELETE';
@@ -33,13 +34,14 @@ final class GradebookLinkVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return \in_array($attribute, [self::CREATE, self::EDIT, self::DELETE], true)
+        return \in_array($attribute, [self::VIEW, self::CREATE, self::EDIT, self::DELETE], true)
             && $subject instanceof GradebookLink;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
-        if (!$token->getUser() instanceof User) {
+        $user = $token->getUser();
+        if (!$user instanceof User) {
             return false;
         }
 
@@ -53,6 +55,10 @@ final class GradebookLinkVoter extends Voter
             // The link and its category must sit in the same course.
             if ($subject->getCourse()?->getId() !== $category->getCourse()->getId()) {
                 return false;
+            }
+
+            if (self::VIEW === $attribute) {
+                return $this->isMemberOfLinkContext($user, $subject);
             }
 
             $categoryAttribute = self::DELETE === $attribute
@@ -69,5 +75,25 @@ final class GradebookLinkVoter extends Voter
             // A link being created may not have its category, course or resource yet.
             return false;
         }
+    }
+
+    /**
+     * A link is readable by the teachers of its course and by the members of the course, or of
+     * the session when its category belongs to one. Keep in sync with GradebookLinkExtension.
+     */
+    private function isMemberOfLinkContext(User $user, GradebookLink $link): bool
+    {
+        $course = $link->getCategory()->getCourse();
+
+        if ($course->hasUserAsTeacher($user)) {
+            return true;
+        }
+
+        $session = $link->getCategory()->getSession();
+        if (null === $session) {
+            return $course->hasSubscriptionByUser($user);
+        }
+
+        return $session->hasUserInCourse($user, $course) || $session->hasUserAsGeneralCoach($user);
     }
 }

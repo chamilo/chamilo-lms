@@ -383,6 +383,7 @@ if (count($sessions) > 0) {
             ];
 
             $csvContent[] = array_map('strip_tags', $row);
+            $row[1] = htmlspecialchars($row[1], ENT_QUOTES, 'UTF-8');
             $data[] = $row;
         }
 
@@ -484,6 +485,7 @@ if (count($courseRelUserList) > 0) {
         ];
 
         $csvContent[] = array_map('strip_tags', $row);
+        $row[1] = htmlspecialchars($row[1], ENT_QUOTES, 'UTF-8');
         $data[] = $row;
     }
 

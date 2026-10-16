@@ -46,6 +46,7 @@ import glossary from "./glossary"
 import attendance from "./attendance"
 import lpRoutes from "./lp"
 import toolboxRoutes from "./toolbox"
+import teamsRoutes from "./teams"
 import dropboxRoutes from "./dropbox"
 import blogRoutes from "./blog"
 import blogAdminRoute from "./blogAdmin"
@@ -599,6 +600,7 @@ const router = createRouter({
     attendance,
     lpRoutes,
     toolboxRoutes,
+    ...teamsRoutes,
     dropboxRoutes,
     blogRoutes,
     blogAdminRoute,

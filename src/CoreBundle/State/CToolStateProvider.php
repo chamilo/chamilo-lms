@@ -134,6 +134,10 @@ final class CToolStateProvider implements ProviderInterface
             $resolvedName = $resolved['name'];
             $legacyPlugin = $resolved['plugin'] ?? null;
 
+            if ($toolModel instanceof AbstractPlugin && !$this->pluginHelper->isPluginEnabled($toolModel->getTitle())) {
+                continue;
+            }
+
             if ($this->shouldHideToolFromTeacher($cTool, $resolvedName, $hiddenToolsFromTeachers, $user)) {
                 continue;
             }

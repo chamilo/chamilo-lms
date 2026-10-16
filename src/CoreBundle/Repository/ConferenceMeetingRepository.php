@@ -6,7 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CGroup;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -149,6 +154,93 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
             ->setParameter('start', $start->format('Y-m-d 00:00:00'))
             ->setParameter('end', $end->format('Y-m-d 23:59:59'))
             ->orderBy('m.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findTeamsMeeting(int $id): ?ConferenceMeeting
+    {
+        $meeting = $this->findOneBy([
+            'id' => $id,
+            'serviceProvider' => 'teams',
+        ]);
+
+        return $meeting instanceof ConferenceMeeting ? $meeting : null;
+    }
+
+    /**
+     * @return ConferenceMeeting[]
+     */
+    public function findTeamsForCourseContext(
+        AccessUrl $accessUrl,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+    ): array {
+        $qb = $this->createQueryBuilder('m')
+            ->where('m.serviceProvider = :provider')
+            ->andWhere('m.accessUrl = :accessUrl')
+            ->andWhere('m.course = :course')
+            ->setParameter('provider', 'teams')
+            ->setParameter('accessUrl', $accessUrl)
+            ->setParameter('course', $course)
+        ;
+
+        if ($session instanceof Session) {
+            $qb->andWhere('m.session = :session')->setParameter('session', $session);
+        } else {
+            $qb->andWhere('m.session IS NULL');
+        }
+
+        if ($group instanceof CGroup) {
+            $qb->andWhere('m.group = :group')->setParameter('group', $group);
+        } else {
+            $qb->andWhere('m.group IS NULL');
+        }
+
+        return $qb
+            ->orderBy('m.startAt', 'DESC')
+            ->addOrderBy('m.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return ConferenceMeeting[]
+     */
+    public function findTeamsPersonal(AccessUrl $accessUrl, User $user): array
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.serviceProvider = :provider')
+            ->andWhere('m.accessUrl = :accessUrl')
+            ->andWhere('m.course IS NULL')
+            ->andWhere('m.user = :user')
+            ->setParameter('provider', 'teams')
+            ->setParameter('accessUrl', $accessUrl)
+            ->setParameter('user', $user)
+            ->orderBy('m.startAt', 'DESC')
+            ->addOrderBy('m.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return ConferenceMeeting[]
+     */
+    public function findTeamsGlobal(AccessUrl $accessUrl): array
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.serviceProvider = :provider')
+            ->andWhere('m.accessUrl = :accessUrl')
+            ->andWhere('m.course IS NULL')
+            ->andWhere('m.user IS NULL')
+            ->setParameter('provider', 'teams')
+            ->setParameter('accessUrl', $accessUrl)
+            ->orderBy('m.startAt', 'DESC')
+            ->addOrderBy('m.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;

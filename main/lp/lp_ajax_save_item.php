@@ -63,13 +63,12 @@ function save_item(
 ) {
     $debug = 0;
     $return = null;
+    $lp_id = (int) $lp_id;
+    $item_id = (int) $item_id;
+    $score = is_numeric($score) ? (float) $score : null;
+    $max = is_numeric($max) ? (float) $max : null;
+    $min = is_numeric($min) ? (float) $min : null;
     $courseCode = api_get_course_id();
-    if (!empty($courseId)) {
-        $courseInfo = api_get_course_info_by_id($courseId);
-        if ($courseInfo) {
-            $courseCode = $courseInfo['code'];
-        }
-    }
 
     if ($debug > 0) {
         error_log('--------------------------------------');
@@ -91,13 +90,16 @@ function save_item(
 
         return null;
     }
+
+    $view_id = $myLP->get_view_id();
+    if (empty($view_id) || empty($item_id)) {
+        return null;
+    }
+
     $prerequisitesCheck = $myLP->prerequisites_match($item_id);
 
     /** @var learnpathItem $myLPI */
-    if ($myLP->items && isset($myLP->items[$item_id])) {
-        $myLPI = $myLP->items[$item_id];
-    }
-
+    $myLPI = $myLP->getItem($item_id);
     if (empty($myLPI)) {
         if ($debug > 0) {
             error_log("item #$item_id not found in the items array: ".print_r($myLP->items, 1));

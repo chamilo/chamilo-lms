@@ -17,10 +17,16 @@ class RemoveOnAttributes extends HTMLPurifier_Filter
 
     public static function filter($html)
     {
-        // Strip null bytes before regex matching to prevent bypass via on\x00load patterns
+        // Strip null bytes before regex matching to prevent bypass via on\x00load patterns.
         $html = str_replace("\0", '', $html);
-        $pattern = '/\s+on\w+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i';
+        $pattern = '/(?:=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+))(*SKIP)(*F)|(?:\s+|\/+|(?<=["\']))on\w+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i';
 
-        return preg_replace($pattern, '', $html);
+        return preg_replace_callback(
+            '/<(?:[^>"\']+|"[^"]*"|\'[^\']*\')*>/s',
+            function ($matches) use ($pattern) {
+                return preg_replace($pattern, '', $matches[0]);
+            },
+            $html
+        );
     }
 }

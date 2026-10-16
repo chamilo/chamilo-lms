@@ -4440,6 +4440,8 @@ class Rest extends WebService
      */
     public function getGroupSubscribedUsers(int $groupId): array
     {
+        self::protectAdminEndpoint();
+
         $userGroup = new UserGroup();
 
         return $userGroup->get_all_users_by_group($groupId);
@@ -4452,6 +4454,8 @@ class Rest extends WebService
      */
     public function getGroupSubscribedCourses(int $groupId): array
     {
+        self::protectAdminEndpoint();
+
         $userGroup = new UserGroup();
 
         return $userGroup->get_courses_by_usergroup($groupId, true);
@@ -4464,6 +4468,8 @@ class Rest extends WebService
      */
     public function getGroupSubscribedSessions(int $groupId): array
     {
+        self::protectAdminEndpoint();
+
         $userGroup = new UserGroup();
 
         return $userGroup->get_sessions_by_usergroup($groupId, true);
@@ -4478,6 +4484,8 @@ class Rest extends WebService
      */
     public function addGroupSubscribedUser(int $groupId, int $userId, int $relationType = 2): array
     {
+        self::protectAdminEndpoint();
+
         $userGroup = new UserGroup();
 
         if (!$userGroup->groupExists($groupId) or !$userGroup->userExists($userId)) {
@@ -4508,6 +4516,8 @@ class Rest extends WebService
      */
     public function addGroupSubscribedCourse(int $groupId, int $courseId): array
     {
+        self::protectAdminEndpoint();
+
         $userGroup = new UserGroup();
 
         return [$userGroup->subscribe_courses_to_usergroup($groupId, [$courseId], false)];
@@ -4520,6 +4530,8 @@ class Rest extends WebService
      */
     public function addGroupSubscribedSession(int $groupId, int $sessionId): array
     {
+        self::protectAdminEndpoint();
+
         $userGroup = new UserGroup();
 
         return [$userGroup->subscribe_sessions_to_usergroup($groupId, [$sessionId], false)];
@@ -4532,6 +4544,8 @@ class Rest extends WebService
      */
     public function deleteGroupSubscribedUser(int $groupId, int $userId): array
     {
+        self::protectAdminEndpoint();
+
         $userGroup = new UserGroup();
 
         return [$userGroup->delete_user_rel_group($userId, $groupId)];
@@ -4544,6 +4558,8 @@ class Rest extends WebService
      */
     public function deleteGroupSubscribedCourse(int $groupId, int $courseId): array
     {
+        self::protectAdminEndpoint();
+
         $userGroup = new UserGroup();
 
         return [$userGroup->unsubscribe_courses_from_usergroup($groupId, [$courseId])];
@@ -4556,6 +4572,8 @@ class Rest extends WebService
      */
     public function deleteGroupSubscribedSession(int $groupId, int $sessionId): array
     {
+        self::protectAdminEndpoint();
+
         $userGroup = new UserGroup();
 
         return [$userGroup->unsubscribeSessionsFromUserGroup($groupId, [$sessionId], false)];

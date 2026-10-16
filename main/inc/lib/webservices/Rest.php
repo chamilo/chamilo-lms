@@ -2255,8 +2255,9 @@ class Rest extends WebService
         $course_code = $params['course_code'];
         $user_id = $params['user_id'];
         $status = $params['status'] ?? STUDENT;
+        $isPlatformAdmin = api_is_platform_admin();
 
-        if (!api_is_platform_admin() && $user_id != $this->user->getId()) {
+        if (!$isPlatformAdmin && $user_id != $this->user->getId()) {
             self::throwNotAllowedException();
         }
 
@@ -2265,6 +2266,30 @@ class Rest extends WebService
         }
         if (!$course_code) {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
+        }
+
+        if (!$course_code) {
+            return [false];
+        }
+
+        if (!$isPlatformAdmin) {
+            $courseInfo = api_get_course_info($course_code);
+            if (empty($courseInfo)) {
+                return [false];
+            }
+
+            if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
+                return [false];
+            }
+
+            if (!empty($courseInfo['registration_code'])) {
+                throw new Exception(get_lang('SubscribingNotAllowed'));
+            }
+
+            // Self-subscription must always create a student and respect the course subscription rules.
+            CourseManager::processAutoSubscribeToCourse($course_code, STUDENT);
+
+            return [true];
         }
 
         if (CourseManager::subscribeUser($user_id, $course_code, $status, 0, 0, false)) {

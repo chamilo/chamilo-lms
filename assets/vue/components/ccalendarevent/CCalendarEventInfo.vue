@@ -11,7 +11,7 @@
 
     <hr />
 
-    <div v-html="event.content" />
+    <div v-html="sanitizeHtml(event.content)" />
 
     <CalendarEventSubscriptionsInfo
       v-if="type.subscription === event.invitationType"
@@ -48,6 +48,7 @@ import { type } from "../../constants/entity/ccalendarevent"
 import CalendarEventSubscriptionsInfo from "./CalendarEventSubscriptionsInfo.vue"
 import CalendarEventInvitationsInfo from "./CalendarEventInvitationsInfo.vue"
 import CalendarRemindersInfo from "./CalendarRemindersInfo.vue"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { abbreviatedDatetime } = useFormatDate()
 const { t } = useI18n()

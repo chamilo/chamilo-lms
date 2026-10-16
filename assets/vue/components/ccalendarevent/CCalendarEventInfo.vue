@@ -13,7 +13,7 @@
 
     <div
       dir="auto"
-      v-html="event.content"
+      v-html="sanitizeHtml(event.content)"
     />
 
     <CalendarEventSubscriptionsInfo
@@ -62,6 +62,7 @@ import { type } from "../../constants/entity/ccalendarevent"
 import CalendarEventSubscriptionsInfo from "./CalendarEventSubscriptionsInfo.vue"
 import CalendarEventInvitationsInfo from "./CalendarEventInvitationsInfo.vue"
 import CalendarRemindersInfo from "./CalendarRemindersInfo.vue"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { abbreviatedDatetime } = useFormatDate()
 const { t } = useI18n()

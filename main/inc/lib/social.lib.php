@@ -2,10 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Http\SafeHttp;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\UriResolver;
 use Zend\Feed\Reader\Entry\Rss;
 use Zend\Feed\Reader\Reader;
 
@@ -2159,30 +2162,50 @@ class SocialManager extends UserManager
      */
     public static function verifyUrl(string $uri): bool
     {
-        if (!self::isUrlSafe($uri)) {
-            return false;
-        }
-
         $client = new Client();
+        $currentUri = $uri;
 
-        try {
-            $response = $client->request('GET', $uri, [
-                'timeout' => 10,
-                'verify' => false,
-                'allow_redirects' => ['max' => 3],
-                'headers' => [
-                    'User-Agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Chamilo',
-                ],
-            ]);
-
-            if (200 !== $response->getStatusCode()) {
+        for ($redirects = 0; $redirects <= 3; $redirects++) {
+            $safeIp = SafeHttp::resolveSafeIp($currentUri);
+            if (null === $safeIp) {
                 return false;
             }
 
-            return true;
-        } catch (Exception $e) {
-            return false;
+            try {
+                $response = $client->request('GET', $currentUri, [
+                    'timeout' => 10,
+                    'allow_redirects' => false,
+                    'curl' => SafeHttp::secureCurlOptions($currentUri, $safeIp),
+                    'headers' => [
+                        'User-Agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Chamilo',
+                    ],
+                ]);
+            } catch (Exception $e) {
+                return false;
+            }
+
+            $statusCode = $response->getStatusCode();
+            if (200 === $statusCode) {
+                return true;
+            }
+
+            if (!in_array($statusCode, [301, 302, 303, 307, 308], true) || 3 === $redirects) {
+                return false;
+            }
+
+            $location = $response->getHeaderLine('Location');
+            if (empty($location)) {
+                return false;
+            }
+
+            try {
+                $currentUri = (string) UriResolver::resolve(new Uri($currentUri), new Uri($location));
+            } catch (Exception $e) {
+                return false;
+            }
         }
+
+        return false;
     }
 
     /**
@@ -2901,6 +2924,15 @@ class SocialManager extends UserManager
                             ];
                             break;
                         case ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
+                            $profileUrlParts = parse_url($data);
+                            if (false === $profileUrlParts
+                                || empty($profileUrlParts['host'])
+                                || empty($profileUrlParts['scheme'])
+                                || !in_array(strtolower($profileUrlParts['scheme']), ['http', 'https'], true)
+                            ) {
+                                break;
+                            }
+
                             $icon_path = UserManager::get_favicon_from_url($data);
                             if (!self::verifyUrl($icon_path)) {
                                 break;
@@ -2911,7 +2943,7 @@ class SocialManager extends UserManager
                             if ($domain == 'www.hi5.com' || $domain == 'hi5.com') {
                                 $bottom = '-0.8';
                             }
-                            $data = '<a href="'.$data.'">'
+                            $data = '<a href="'.htmlspecialchars($data, ENT_QUOTES, 'UTF-8').'">'
                                 .'<img src="'.$icon_path.'" alt="icon"'
                                 .' style="margin-right:0.5em;margin-bottom:'.$bottom.'em;" />'
                                 .$extraFieldInfo['display_text']

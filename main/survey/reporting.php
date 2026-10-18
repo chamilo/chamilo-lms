@@ -70,7 +70,9 @@ if (!empty($exportReport) && !empty($format)) {
             // no break
         case 'csv':
         default:
-            $data = SurveyUtil::export_complete_report($survey_data, $userId, $compact, $lpItemId);
+            $data = Export::escapeDelimitedCsvContent(
+                SurveyUtil::export_complete_report($survey_data, $userId, $compact, $lpItemId)
+            );
             $filename = 'survey_results_'.$survey_id.($compact ? '_compact' : '').'.csv';
             header('Content-type: application/octet-stream');
             header('Content-Type: application/force-download');

@@ -23,6 +23,72 @@ class Export
     }
 
     /**
+     * Prevent CSV cells from being interpreted as spreadsheet formulas.
+     * Keep stored values unchanged; call this only at the CSV output boundary.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public static function escapeCsvCell($value)
+    {
+        if (!is_string($value) || '' === $value) {
+            return $value;
+        }
+
+        $significant = ltrim($value, " \t\r\n");
+        if (in_array($value[0], ["\t", "\r", "\n"], true) ||
+            ('' !== $significant && in_array($significant[0], ['=', '+', '-', '@'], true))
+        ) {
+            return "'".$value;
+        }
+
+        return $value;
+    }
+
+    /**
+     * @return array
+     */
+    public static function escapeCsvRow(array $row)
+    {
+        return array_map([self::class, 'escapeCsvCell'], $row);
+    }
+
+    /**
+     * Normalize manually assembled semicolon-delimited CSV before download.
+     * Unlike string replacement, this respects quoted fields and newlines.
+     */
+    public static function escapeDelimitedCsvContent($content, $delimiter = ';')
+    {
+        if ('' === $content) {
+            return $content;
+        }
+
+        $input = fopen('php://temp', 'w+');
+        $output = fopen('php://temp', 'w+');
+        if (false === $input || false === $output) {
+            throw new \RuntimeException('Unable to open CSV transformation stream.');
+        }
+
+        fwrite($input, $content);
+        rewind($input);
+        while (false !== ($row = fgetcsv($input, 0, $delimiter, '"', ''))) {
+            fputcsv($output, self::escapeCsvRow($row), $delimiter, '"', '');
+        }
+
+        rewind($output);
+        $result = stream_get_contents($output);
+        fclose($input);
+        fclose($output);
+
+        if (false === $result) {
+            throw new \RuntimeException('Unable to read CSV transformation stream.');
+        }
+
+        return $result;
+    }
+
+    /**
      * Export tabular data to CSV-file.
      *
      * @param array  $data
@@ -50,7 +116,7 @@ class Export
                 $writer->writeItem([]);
                 continue;
             }
-            $item = array_map('trim', $item);
+            $item = self::escapeCsvRow(array_map('trim', $item));
             $writer->writeItem($item);
         }
         $writer->finish();

@@ -176,7 +176,7 @@ class MySpace
                 $info .= "\r\n";
             }
 
-            fwrite($open, $info);
+            fwrite($open, \Chamilo\CoreBundle\Helpers\CsvFormulaEscaper::escapeDelimitedContent($info));
             fclose($open);
             @chmod($file_name, api_get_permissions_for_new_files());
 

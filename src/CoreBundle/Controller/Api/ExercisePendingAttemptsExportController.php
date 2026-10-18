@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\State\Exercise\ExercisePendingAttemptsProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,9 +43,9 @@ final class ExercisePendingAttemptsExportController extends AbstractController
                 return;
             }
 
-            fputcsv($handle, $headers);
+            fputcsv($handle, CsvFormulaEscaper::escapeRow($headers));
             foreach ($rows as $row) {
-                fputcsv($handle, $row);
+                fputcsv($handle, CsvFormulaEscaper::escapeRow($row));
             }
             fclose($handle);
         });

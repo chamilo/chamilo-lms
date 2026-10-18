@@ -579,7 +579,7 @@ function saveCsvFile(array $data = [], string $file = 'example', string $enclosu
             $writer->writeItem([]);
             continue;
         }
-        $item = array_map('trim', $item);
+        $item = Export::escapeCsvRow(array_map('trim', $item));
         $writer->writeItem($item);
     }
     $writer->finish();

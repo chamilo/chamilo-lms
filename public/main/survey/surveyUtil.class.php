@@ -1549,7 +1549,7 @@ class SurveyUtil
             $compact
         );
 
-        return $return;
+        return \Chamilo\CoreBundle\Helpers\CsvFormulaEscaper::escapeDelimitedContent($return);
     }
 
     /**

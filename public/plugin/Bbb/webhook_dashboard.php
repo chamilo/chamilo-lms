@@ -30,8 +30,8 @@ function csv_out(string $filename, array $rows, array $header) {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="'.$filename.'"');
     $out = fopen('php://output', 'w');
-    fputcsv($out, $header);
-    foreach ($rows as $r) { fputcsv($out, $r); }
+    fputcsv($out, \Chamilo\CoreBundle\Helpers\CsvFormulaEscaper::escapeRow($header));
+    foreach ($rows as $r) { fputcsv($out, \Chamilo\CoreBundle\Helpers\CsvFormulaEscaper::escapeRow($r)); }
     fclose($out);
     exit;
 }

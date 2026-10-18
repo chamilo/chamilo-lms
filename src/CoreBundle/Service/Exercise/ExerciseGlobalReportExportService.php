@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\Exercise;
 
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use CourseManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
@@ -58,7 +59,7 @@ final readonly class ExerciseGlobalReportExportService
             }
 
             foreach ($rows as $row) {
-                fputcsv($handle, $row);
+                fputcsv($handle, CsvFormulaEscaper::escapeRow($row));
             }
 
             fclose($handle);

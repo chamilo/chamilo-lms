@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Service\Gradebook;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookEvaluationResults;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookLearnerReport;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookReport;
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DOMDocument;
 use Mpdf\Mpdf;
@@ -313,9 +314,9 @@ final readonly class GradebookExportService
         if (false === $stream) {
             throw new RuntimeException('Failed to create the CSV export stream.');
         }
-        fputcsv($stream, array_map(fn (string $value): string => $this->sanitizeSpreadsheetValue($value), $headers), ';');
+        fputcsv($stream, CsvFormulaEscaper::escapeRow(array_map(fn (string $value): string => $this->sanitizeSpreadsheetValue($value), $headers)), ';');
         foreach ($rows as $row) {
-            fputcsv($stream, array_map(fn (string $value): string => $this->sanitizeSpreadsheetValue($value), $row), ';');
+            fputcsv($stream, CsvFormulaEscaper::escapeRow(array_map(fn (string $value): string => $this->sanitizeSpreadsheetValue($value), $row)), ';');
         }
         rewind($stream);
         $content = stream_get_contents($stream);

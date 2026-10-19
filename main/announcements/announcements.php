@@ -90,7 +90,7 @@ $announcementAttachmentIsDisabled = api_get_configuration_value('disable_announc
 
 switch ($action) {
     case 'move':
-        if (!$allowToEdit) {
+        if (!$allowToEdit || !Security::check_token('get')) {
             api_not_allowed(true);
         }
 
@@ -250,7 +250,7 @@ switch ($action) {
                 { edit: false, add: false, del: true },
                 { height:280, reloadAfterSubmit:false }, // edit options
                 { height:280, reloadAfterSubmit:false }, // add options
-                { reloadAfterSubmit:false, url: "'.$deleteUrl.'" }, // del options
+                { reloadAfterSubmit:false, url: "'.$deleteUrl.'", delData: { sec_token: "'.$token.'" } }, // del options
                 { width:500 } // search options
             );
             ';

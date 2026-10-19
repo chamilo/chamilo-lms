@@ -196,7 +196,7 @@ switch ($action) {
         echo json_encode($previewTotal);
         break;
     case 'delete_item':
-        if ($isAllowedToEdit) {
+        if ($isAllowedToEdit && Security::check_token('post')) {
             if (empty($_REQUEST['id'])) {
                 return false;
             }

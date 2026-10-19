@@ -4255,5 +4255,7 @@
     "Sessions by date": "Sessionen nach Datum",
     "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Dies markiert jede mit dieser Version ausgelieferte Migration als bereits ausgef\u00fchrt. Tun Sie dies nur auf einer Plattform, die auf dem neuesten Stand ist und ihre Historie noch nie aufgezeichnet hat.",
     "Course tracking details": "Kursverfolgungsdetails",
-    "Learner details in course": "Details zu Teilnehmern im Kurs"
+    "Learner details in course": "Details zu Teilnehmern im Kurs",
+    "Start test": "Test starten",
+    "Proceed with the test": "Mit dem Test weitermachen"
 }

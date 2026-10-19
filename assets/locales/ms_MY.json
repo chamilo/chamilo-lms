@@ -4255,5 +4255,7 @@
     "Sessions by date": "Sesi mengikut tarikh",
     "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Ini menandakan setiap migrasi yang dihantar oleh versi ini sebagai sudah dilaksanakan. Hanya lakukan ini pada platform yang terkini dan tidak pernah merekodkan sejarahnya.",
     "Course tracking details": "Butiran penjejakan kursus",
-    "Learner details in course": "Butiran pelajar dalam kursus"
+    "Learner details in course": "Butiran pelajar dalam kursus",
+    "Start test": "Mula ujian",
+    "Proceed with the test": "Teruskan dengan ujian"
 }

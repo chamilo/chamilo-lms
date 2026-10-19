@@ -11,13 +11,16 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\State\CourseDeleteProcessor;
 use Chamilo\CoreBundle\State\PublicCatalogueCourseStateProvider;
 use Chamilo\CoreBundle\State\StickyCourseStateProvider;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -42,6 +45,11 @@ use const SORT_NATURAL;
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
         new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
+        // Updating and deleting are administrator-only: they let an integration (such as an ERP) keep its courses in
+        // sync. Teachers keep editing their own course through the course settings screens. Only the course:write
+        // properties can be patched, and the course code is not one of them.
+        new Patch(security: "is_granted('ROLE_ADMIN')"),
+        new Delete(security: "is_granted('ROLE_ADMIN')", processor: CourseDeleteProcessor::class),
         new GetCollection(
             paginationClientEnabled: true,
             security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"

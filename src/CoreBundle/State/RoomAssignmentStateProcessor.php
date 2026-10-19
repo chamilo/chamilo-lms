@@ -44,7 +44,13 @@ final readonly class RoomAssignmentStateProcessor implements ProcessorInterface
         $this->roomAccessUrlHelper->assertRoomAllowed($data->getRoom());
 
         if (!$data instanceof CAttendance || !$this->hasGradebookPayload()) {
-            return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
+            $result = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
+
+            if ($data instanceof SessionRelCourse) {
+                $this->refreshSessionCourseCount($data);
+            }
+
+            return $result;
         }
 
         $this->entityManager->beginTransaction();
@@ -90,6 +96,30 @@ final readonly class RoomAssignmentStateProcessor implements ProcessorInterface
             $this->entityManager->rollback();
 
             throw $exception;
+        }
+    }
+
+    /**
+     * Session::nbrCourses is a stored counter, not a computed value. Linking a course through the API (rather than
+     * through the legacy session editor or the advanced creation endpoint) must keep it right, or lists that show the
+     * number of courses of a session read 0.
+     */
+    private function refreshSessionCourseCount(SessionRelCourse $relCourse): void
+    {
+        $session = $relCourse->getSession();
+        if (null === $session) {
+            return;
+        }
+
+        $count = (int) $this->entityManager
+            ->createQuery('SELECT COUNT(src.id) FROM '.SessionRelCourse::class.' src WHERE src.session = :session')
+            ->setParameter('session', $session)
+            ->getSingleScalarResult()
+        ;
+
+        if ($session->getNbrCourses() !== $count) {
+            $session->setNbrCourses($count);
+            $this->entityManager->flush();
         }
     }
 

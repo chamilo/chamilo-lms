@@ -4259,5 +4259,7 @@
     "Course tracking details": "D\u00e9tails du suivi du cours",
     "Learner details in course": "D\u00e9tails de l'apprenant dans le cours",
     "Default visibility for new learning paths": "Visibilit\u00e9 par d\u00e9faut des nouveaux parcours",
-    "Default visibility for new tests": "Visibilit\u00e9 par d\u00e9faut des nouveaux tests"
+    "Default visibility for new tests": "Visibilit\u00e9 par d\u00e9faut des nouveaux tests",
+    "Start test": "D\u00e9marrer le test",
+    "Proceed with the test": "Continuer l'exercice"
 }

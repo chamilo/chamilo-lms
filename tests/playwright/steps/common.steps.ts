@@ -1,6 +1,6 @@
 import fs from "node:fs"
 import path from "node:path"
-import { expect, Page, test } from "@playwright/test"
+import { expect, Page, Response, test } from "@playwright/test"
 import { createBdd, DataTable } from "playwright-bdd"
 
 const { Given, When, Then, BeforeAll, AfterAll, Before } = createBdd()
@@ -126,19 +126,16 @@ Given(
 // button"/"I press" steps rather than duplicating them in raw Playwright code.
 const passwordProtectedCourseIds = new Map<string, number>()
 
-Then(
-  "I resolve the numeric id of course {string}",
-  async ({ page }, courseCode: string) => {
-    await page.goto(`/courses/${encodeURIComponent(courseCode)}/index.php`)
-    await page.waitForLoadState("domcontentloaded")
-    const path = new URL(page.url()).pathname
-    const match = path.match(/^\/course\/(\d+)\/home$/)
-    if (!match) {
-      throw new Error(`Could not resolve the modern course home URL for course ${courseCode} (got ${path}).`)
-    }
-    passwordProtectedCourseIds.set(courseCode, Number(match[1]))
-  },
-)
+Then("I resolve the numeric id of course {string}", async ({ page }, courseCode: string) => {
+  await page.goto(`/courses/${encodeURIComponent(courseCode)}/index.php`)
+  await page.waitForLoadState("domcontentloaded")
+  const path = new URL(page.url()).pathname
+  const match = path.match(/^\/course\/(\d+)\/home$/)
+  if (!match) {
+    throw new Error(`Could not resolve the modern course home URL for course ${courseCode} (got ${path}).`)
+  }
+  passwordProtectedCourseIds.set(courseCode, Number(match[1]))
+})
 
 function getResolvedCourseId(courseCode: string): number {
   const courseId = passwordProtectedCourseIds.get(courseCode)
@@ -343,7 +340,11 @@ async function acceptTermsInterstitialIfPresent(page: Page): Promise<void> {
   // of whether navigation has settled.
   const acceptButton = page.locator('button:has-text("Accept Terms and Conditions")')
   const onInterstitial =
-    page.url().includes("/main/auth/tc.php") || (await acceptButton.first().isVisible().catch(() => false))
+    page.url().includes("/main/auth/tc.php") ||
+    (await acceptButton
+      .first()
+      .isVisible()
+      .catch(() => false))
   if (!onInterstitial) {
     return
   }
@@ -1155,10 +1156,7 @@ Then("I fill in editor field {string} with {string}", async ({ page }, field: st
     throw new Error(`Could not find an id for field with locator: ${field}`)
   }
   await waitForTinymceEditor(page, fieldId, `filling editor field "${field}"`)
-  await page.evaluate(
-    ({ id, value }) => (window as any).setContentFromEditor(id, value),
-    { id: fieldId, value },
-  )
+  await page.evaluate(({ id, value }) => (window as any).setContentFromEditor(id, value), { id: fieldId, value })
 })
 
 // Ported from FeatureContext::iFillInTinyMceOnFieldWith() — distinct from
@@ -1245,9 +1243,7 @@ Given("the Etherpad Wiki editor transport is mocked", async ({ page }) => {
 })
 
 When("I fill in the collaborative Wiki editor with {string}", async ({ page }, value: string) => {
-  const editor = page
-    .frameLocator('iframe[title="Collaborative Wiki editor"]')
-    .locator("#etherpad-editor")
+  const editor = page.frameLocator('iframe[title="Collaborative Wiki editor"]').locator("#etherpad-editor")
 
   await expect(editor).toBeVisible()
   await editor.fill(value)
@@ -1260,13 +1256,16 @@ Then("I fill in tinymce field {string} with {string}", async ({ page }, field: s
     throw new Error(`Could not find an id for field with locator: ${field}`)
   }
   await waitForTinymceEditor(page, fieldId, `filling tinymce field "${field}"`)
-  await page.evaluate(({ id, value }) => {
-    const editor = (window as any).tinymce.get(id)
-    editor.setContent(value)
-    editor.fire("change")
-    editor.fire("input")
-    editor.save()
-  }, { id: fieldId, value })
+  await page.evaluate(
+    ({ id, value }) => {
+      const editor = (window as any).tinymce.get(id)
+      editor.setContent(value)
+      editor.fire("change")
+      editor.fire("input")
+      editor.save()
+    },
+    { id: fieldId, value },
+  )
 })
 
 // Not ported — new, replaces the separate "click add" + "fill title" +
@@ -1449,7 +1448,10 @@ When(
       // path to take next.
       await Promise.race([
         page.waitForURL((url) => !url.pathname.includes("/create"), { timeout: 10_000 }).catch(() => {}),
-        page.getByText("Could not create glossary term").waitFor({ timeout: 10_000 }).catch(() => {}),
+        page
+          .getByText("Could not create glossary term")
+          .waitFor({ timeout: 10_000 })
+          .catch(() => {}),
       ])
     }
 
@@ -1600,6 +1602,93 @@ When("I fill in the score for {string} with {string}", async ({ page }, username
 // "Yes"/"No", never one meant to substring-match something else.
 When("I check the {string} radio button", async ({ page }, label: string) => {
   await page.getByLabel(label, { exact: true }).check()
+})
+
+type ExerciseAnswerHistoryResponse = {
+  exerciseId: number
+  attemptId: number
+  questionId: number
+  logOnly: boolean
+}
+
+const exerciseAnswerHistoryMonitors = new WeakMap<
+  Page,
+  { responses: ExerciseAnswerHistoryResponse[]; listener: (response: Response) => void }
+>()
+
+// ExercisePlayerView records a live choice change separately from the draft
+// save triggered by "Next question". Observe real successful API responses;
+// do not submit synthetic answers or alter the exercise's final score.
+When("I start monitoring exercise answer history", async ({ page }) => {
+  const previous = exerciseAnswerHistoryMonitors.get(page)
+  if (previous) {
+    page.off("response", previous.listener)
+  }
+
+  const responses: ExerciseAnswerHistoryResponse[] = []
+  const listener = (response: Response) => {
+    const request = response.request()
+    if (request.method() !== "POST" || !response.ok()) {
+      return
+    }
+
+    const match = new URL(response.url()).pathname.match(/^\/api\/exercise\/runtime\/(\d+)\/attempt\/(\d+)\/answer$/)
+    if (!match) {
+      return
+    }
+
+    try {
+      const body = request.postDataJSON()
+      const questionId = Number(body?.questionId)
+      if (!Number.isInteger(questionId) || questionId <= 0 || body?.reviewLaterOnly === true) {
+        return
+      }
+
+      responses.push({
+        exerciseId: Number(match[1]),
+        attemptId: Number(match[2]),
+        questionId,
+        logOnly: body?.logOnly === true,
+      })
+    } catch {
+      // Ignore unrelated requests that do not contain a JSON answer body.
+    }
+  }
+
+  page.on("response", listener)
+  exerciseAnswerHistoryMonitors.set(page, { responses, listener })
+})
+
+Then("the exercise should record a live change and a draft save for the same question", async ({ page }) => {
+  const monitor = exerciseAnswerHistoryMonitors.get(page)
+  if (!monitor) {
+    throw new Error("Exercise answer history monitoring has not been started")
+  }
+
+  try {
+    await expect
+      .poll(
+        () => {
+          const changed = monitor.responses.find((entry) => entry.logOnly)
+          const draftSaved = changed
+            ? monitor.responses.some(
+                (entry) =>
+                  !entry.logOnly &&
+                  entry.exerciseId === changed.exerciseId &&
+                  entry.attemptId === changed.attemptId &&
+                  entry.questionId === changed.questionId,
+              )
+            : false
+
+          return { liveChange: Boolean(changed), draftSaved }
+        },
+        { timeout: 20_000 },
+      )
+      .toEqual({ liveChange: true, draftSaved: true })
+  } finally {
+    page.off("response", monitor.listener)
+    exerciseAnswerHistoryMonitors.delete(page)
+  }
 })
 
 // Ported from FeatureContext::iCheckTheRadioButtonBasedInSelector(). Unlike
@@ -1843,9 +1932,9 @@ function registerSettingsGuard(tag: string, pages: { path: string; field: string
     guardPage = page
     for (const { path, field } of pages) {
       await gotoReliably(page, path)
-      const values: string[] = await page.locator(`#${field}`).evaluate((el) =>
-        Array.from((el as HTMLSelectElement).selectedOptions).map((option) => option.value),
-      )
+      const values: string[] = await page
+        .locator(`#${field}`)
+        .evaluate((el) => Array.from((el as HTMLSelectElement).selectedOptions).map((option) => option.value))
       snapshot.set(field, values)
     }
   })
@@ -1908,7 +1997,10 @@ function registerSettingsGuard(tag: string, pages: { path: string; field: string
         warnSkippedRestore(field, String(error).split("\n")[0])
       }
     }
-    await page.context().close().catch(() => {})
+    await page
+      .context()
+      .close()
+      .catch(() => {})
   })
 }
 
@@ -2017,7 +2109,10 @@ function registerTextSettingsGuard(tag: string, path: string, field: string) {
     // skip has to be announced rather than silent.
     if (teardownBudgetExhausted()) {
       warnSkippedRestore(field, "shared teardown budget exhausted")
-      await page.context().close().catch(() => {})
+      await page
+        .context()
+        .close()
+        .catch(() => {})
       return
     }
     try {
@@ -2031,7 +2126,10 @@ function registerTextSettingsGuard(tag: string, path: string, field: string) {
     } catch (error) {
       warnSkippedRestore(field, String(error).split("\n")[0])
     }
-    await page.context().close().catch(() => {})
+    await page
+      .context()
+      .close()
+      .catch(() => {})
   })
 }
 
@@ -2228,7 +2326,10 @@ async function failIfLoginPage(page: Page, action: string): Promise<void> {
 async function dismissBlockingUi(page: Page): Promise<void> {
   const toastClose = page.locator(".p-toast-close-button:visible")
   if ((await toastClose.count()) > 0) {
-    await toastClose.first().click({ timeout: 1_000 }).catch(() => {})
+    await toastClose
+      .first()
+      .click({ timeout: 1_000 })
+      .catch(() => {})
   }
   const cookieAccept = page.getByRole("button", { name: /^(Accept|Accepter)$/i })
   if (await cookieAccept.isVisible().catch(() => false)) {
@@ -2369,8 +2470,7 @@ async function pressButton(page: Page, label: string) {
   // enabled. The real submit is a BaseButton, not a tox toolbar control.
   const openDialog = page.locator(".p-dialog:visible, [role='dialog']:visible:not(.tox-dialog)").last()
   if (await openDialog.count()) {
-    const notToxOrDisabled =
-      'xpath=self::*[not(@aria-disabled="true") and not(contains(@class,"tox-tbtn"))]'
+    const notToxOrDisabled = 'xpath=self::*[not(@aria-disabled="true") and not(contains(@class,"tox-tbtn"))]'
     const dialogExact = openDialog.getByRole("button", { name: label, exact: true }).locator(notToxOrDisabled)
     if (await isSoonVisible(dialogExact, 1000)) {
       await dialogExact.first().click()
@@ -2536,7 +2636,9 @@ async function pressButton(page: Page, label: string) {
   // at all). Confirmed via a real run that even the exact getByRole tier
   // above doesn't resolve these reliably, so this targets the `title`
   // attribute directly rather than relying on accessible-name computation.
-  const byTitle = page.locator(`button[title="${label}"]:not(.tox-tbtn):not([aria-disabled="true"]), a[title="${label}"]`)
+  const byTitle = page.locator(
+    `button[title="${label}"]:not(.tox-tbtn):not([aria-disabled="true"]), a[title="${label}"]`,
+  )
   if (await isSoonVisible(byTitle)) {
     await byTitle.first().click()
     return
@@ -2660,11 +2762,7 @@ When("I search the inbox for {string}", async ({ page }, text: string) => {
   const filtered = page.waitForResponse(
     (response) => response.url().includes("/api/messages?") && response.url().includes("search="),
   )
-  await page
-    .locator("form")
-    .filter({ has: searchBox })
-    .getByRole("button", { name: "Search", exact: true })
-    .click()
+  await page.locator("form").filter({ has: searchBox }).getByRole("button", { name: "Search", exact: true }).click()
   await filtered
 })
 
@@ -2680,7 +2778,7 @@ When("I search the inbox for {string}", async ({ page }, text: string) => {
 // event-timing issue, this sets the checkbox's own state AND reveals the
 // wrapper directly, so the field is fillable and the checked value is
 // submitted regardless of whether the page's own toggle script ever ran.
-When("I check the survey's \"Send mail\" option", async ({ page }) => {
+When('I check the survey\'s "Send mail" option', async ({ page }) => {
   await page.locator("input[name='send_mail']").evaluate((el) => {
     const checkbox = el as HTMLInputElement
     checkbox.checked = true
@@ -2872,19 +2970,16 @@ Then(
 // category is a `.p-card` and each link an `<li>` INSIDE a card (its
 // category's, or the "General" one), so the category card also has its links'
 // headings and buttons. The innermost match (`.last()`) is the item itself.
-Then(
-  "I click the {string} icon in the card for {string}",
-  async ({ page }, selector: string, cardText: string) => {
-    page.once("dialog", (dialog) => dialog.accept())
-    await page
-      .locator("li, .p-card")
-      .filter({ has: page.getByRole("heading", { name: cardText, exact: true }) })
-      .last()
-      .locator(selector)
-      .first()
-      .click()
-  },
-)
+Then("I click the {string} icon in the card for {string}", async ({ page }, selector: string, cardText: string) => {
+  page.once("dialog", (dialog) => dialog.accept())
+  await page
+    .locator("li, .p-card")
+    .filter({ has: page.getByRole("heading", { name: cardText, exact: true }) })
+    .last()
+    .locator(selector)
+    .first()
+    .click()
+})
 
 // Rescoped for the Vue forum tool, keeping both step phrases (toolForum.feature
 // is their only caller). The legacy Twig list these used to target is gone:
@@ -2910,16 +3005,11 @@ Then(
 // on any row that scrolls under it — observed as
 // `<div class="sf-toolbar-icon"> ... intercepts pointer events` while driving
 // this exact list. The force retry inside that helper absorbs it.
-Then(
-  "I click the {string} icon for the forum {string}",
-  async ({ page }, selector: string, forumTitle: string) => {
-    page.once("dialog", (dialog) => dialog.accept())
-    const scope = page
-      .locator("article")
-      .filter({ has: page.getByRole("link", { name: forumTitle, exact: true }) })
-    await clickFirstOrForce(scope.locator(selector), page)
-  },
-)
+Then("I click the {string} icon for the forum {string}", async ({ page }, selector: string, forumTitle: string) => {
+  page.once("dialog", (dialog) => dialog.accept())
+  const scope = page.locator("article").filter({ has: page.getByRole("link", { name: forumTitle, exact: true }) })
+  await clickFirstOrForce(scope.locator(selector), page)
+})
 
 Then(
   "I click the {string} icon for the forum category {string}",
@@ -2973,17 +3063,14 @@ Then(
 // card/notebook-entry steps above: scope the click to the LP's own panel
 // (`.lp-panel`, LpRowItem.vue), matched by its exact title text, so this
 // scenario is correct regardless of how many other LPs already exist.
-Then(
-  "I click the {string} icon in the LP panel for {string}",
-  async ({ page }, selector: string, lpTitle: string) => {
-    await page
-      .locator(".lp-panel")
-      .filter({ has: page.getByText(lpTitle, { exact: true }) })
-      .locator(selector)
-      .first()
-      .click()
-  },
-)
+Then("I click the {string} icon in the LP panel for {string}", async ({ page }, selector: string, lpTitle: string) => {
+  await page
+    .locator(".lp-panel")
+    .filter({ has: page.getByText(lpTitle, { exact: true }) })
+    .locator(selector)
+    .first()
+    .click()
+})
 
 // Not ported — new, for toolLp.feature's "Delete a LP category" scenario.
 // Same ambiguity class as the LP-panel step above, applied to categories:
@@ -3414,45 +3501,48 @@ Given("I have a friend named {string}", async ({ page }, friendUsername: string)
 // resolved the same way "I have a friend named ..." resolves one above
 // (message.ajax.php's find_users, not a hardcoded literal — same reasoning:
 // ids are never stable across runs/boxes).
-When("I assign the learner {string} to the student's superior {string}", async ({ page }, learnerUsername: string, bossUsername: string) => {
-  const searchResponse = await page.request.get(
-    `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(bossUsername)}&page_limit=10`,
-  )
-  const { items } = await searchResponse.json()
-  const bossId = items?.[0]?.id
-  if (!bossId) {
-    throw new Error(`find_users returned no match for username "${bossUsername}"`)
-  }
-  const tcReportUrl = `/main/my_space/tc_report.php?a=add_user&boss_id=${encodeURIComponent(String(bossId))}`
-  const userSelect = page.locator("#add_user_user_id")
-  await gotoReliably(page, tcReportUrl)
-  await page.waitForLoadState("domcontentloaded")
-  if (!(await isSoonVisible(userSelect, 10_000))) {
-    throw new Error(
-      `${tcReportUrl} (superior "${bossUsername}") never rendered its "User" select — current URL: ${page.url()}`,
+When(
+  "I assign the learner {string} to the student's superior {string}",
+  async ({ page }, learnerUsername: string, bossUsername: string) => {
+    const searchResponse = await page.request.get(
+      `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(bossUsername)}&page_limit=10`,
     )
-  }
-  // This select2 is SINGLE-mode (select2-selection--single), unlike
-  // "courses"/the tag fields elsewhere in this suite (select2-selection--
-  // multiple) — confirmed live via a DOM dump after a real CI failure here.
-  // A multiple-mode select2 keeps its search `<input>` inline in the DOM at
-  // all times (which is what the generic "ajax select" step above relies
-  // on), but a single-mode one creates its search field only once you open
-  // the dropdown by clicking the visible selection box itself — looking for
-  // `.select2-search__field` beforehand just hangs waiting for an element
-  // that doesn't exist yet, no matter how long you wait.
-  const selectionBox = userSelect.locator("..").locator(".select2-selection")
-  await selectionBox.click()
-  const searchField = page.locator(".select2-search__field:visible")
-  await searchField.fill(learnerUsername)
-  const named = page.locator('[role="option"]', { hasText: learnerUsername })
-  if (await isSoonVisible(named, 3000)) {
-    await named.first().click()
-  } else {
-    await page.locator('[role="option"]').first().click()
-  }
-  await pressButton(page, "Add")
-})
+    const { items } = await searchResponse.json()
+    const bossId = items?.[0]?.id
+    if (!bossId) {
+      throw new Error(`find_users returned no match for username "${bossUsername}"`)
+    }
+    const tcReportUrl = `/main/my_space/tc_report.php?a=add_user&boss_id=${encodeURIComponent(String(bossId))}`
+    const userSelect = page.locator("#add_user_user_id")
+    await gotoReliably(page, tcReportUrl)
+    await page.waitForLoadState("domcontentloaded")
+    if (!(await isSoonVisible(userSelect, 10_000))) {
+      throw new Error(
+        `${tcReportUrl} (superior "${bossUsername}") never rendered its "User" select — current URL: ${page.url()}`,
+      )
+    }
+    // This select2 is SINGLE-mode (select2-selection--single), unlike
+    // "courses"/the tag fields elsewhere in this suite (select2-selection--
+    // multiple) — confirmed live via a DOM dump after a real CI failure here.
+    // A multiple-mode select2 keeps its search `<input>` inline in the DOM at
+    // all times (which is what the generic "ajax select" step above relies
+    // on), but a single-mode one creates its search field only once you open
+    // the dropdown by clicking the visible selection box itself — looking for
+    // `.select2-search__field` beforehand just hangs waiting for an element
+    // that doesn't exist yet, no matter how long you wait.
+    const selectionBox = userSelect.locator("..").locator(".select2-selection")
+    await selectionBox.click()
+    const searchField = page.locator(".select2-search__field:visible")
+    await searchField.fill(learnerUsername)
+    const named = page.locator('[role="option"]', { hasText: learnerUsername })
+    if (await isSoonVisible(named, 3000)) {
+      await named.first().click()
+    } else {
+      await page.locator('[role="option"]').first().click()
+    }
+    await pressButton(page, "Add")
+  },
+)
 
 // Not ported — new, for specialCase2TutorWorkflow.feature. Several legacy
 // pages a tutor navigates to (myStudents.php, the "send legal agreement"
@@ -3537,11 +3627,10 @@ When(
     }
     await gotoReliably(page, `/main/search/load_search.php?user_id=${learnerId}&save=&_qf__load=`)
     await page.waitForLoadState("networkidle")
-    const hrefs = await page.evaluate(
-      () =>
-        Array.from(document.querySelectorAll('a[href*="action=subscribe_user"]'))
-          .map((a) => a.getAttribute("href"))
-          .filter((href): href is string => href !== null),
+    const hrefs = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('a[href*="action=subscribe_user"]'))
+        .map((a) => a.getAttribute("href"))
+        .filter((href): href is string => href !== null),
     )
     const uniqueHrefs = [...new Set(hrefs)].slice(0, count)
     if (uniqueHrefs.length < count) {
@@ -3578,7 +3667,9 @@ Then(
     const data = await response.json()
     const total = data["hydra:totalItems"] ?? 0
     if (total < minCount) {
-      throw new Error(`User "${username}" (id ${userId}) is subscribed to only ${total} session(s), expected >= ${minCount}.`)
+      throw new Error(
+        `User "${username}" (id ${userId}) is subscribed to only ${total} session(s), expected >= ${minCount}.`,
+      )
     }
   },
 )
@@ -3658,10 +3749,10 @@ Then("I remember the created group id", async ({ page }) => {
 // subsequent form submit cares about.
 When("I invite the friend to the social group I just created", async ({ page }) => {
   if (!lastCreatedGroupId) {
-    throw new Error("No group id remembered — run \"I remember the created group id\" right after creating it first.")
+    throw new Error('No group id remembered — run "I remember the created group id" right after creating it first.')
   }
   if (!lastFriendUserId) {
-    throw new Error("No friend id remembered — run \"I have a friend named ...\" first.")
+    throw new Error('No friend id remembered — run "I have a friend named ..." first.')
   }
   // gotoReliably, not a bare page.goto(): the preceding "I have a friend named
   // ..." step ends with loginAs(page, "admin"), whose SPA login finishes with a
@@ -3677,7 +3768,12 @@ When("I invite the friend to the social group I just created", async ({ page }) 
     // Reused box: this group already has the friend pending, so the
     // available list is empty and the "Users already invited" panel is
     // the durable success signal the scenario asserts next.
-    if (await alreadyInvited.first().isVisible().catch(() => false)) {
+    if (
+      await alreadyInvited
+        .first()
+        .isVisible()
+        .catch(() => false)
+    ) {
       return
     }
     const bodyText = ((await page.locator("body").textContent()) || "").replace(/\s+/g, " ").trim()
@@ -3761,9 +3857,7 @@ Then("the URL should contain {string}", async ({ page }, part: string) => {
 
 Then("the URL should not contain {string}", async ({ page }, part: string) => {
   // Negative URL match: poll until the forbidden substring is gone (or timeout).
-  await expect
-    .poll(() => page.url(), { timeout: 15_000 })
-    .not.toContain(part)
+  await expect.poll(() => page.url(), { timeout: 15_000 }).not.toContain(part)
 })
 
 // Pathname-only deny check. Needed because a Vue-router access deny can land
@@ -3912,33 +4006,30 @@ When(/^(?:|I )focus "([^"]*)"$/, async ({ page }, field: string) => {
 // different match key — kept as a separate step rather than changing the
 // group-invitation one, since that one's numeric-value matching is still
 // correct for its own use and changing it isn't needed here.
-When(
-  "I select {string} from the multiselect {string}",
-  async ({ page }, optionText: string, fieldName: string) => {
-    const leftSelector = `#${fieldName}`
-    const rightSelector = `#${fieldName}_to`
-    await page.waitForSelector(`${leftSelector} option`)
-    await page.evaluate(
-      ({ leftSelector, rightSelector, optionText, fieldName }) => {
-        const left = document.querySelector(leftSelector) as HTMLSelectElement
-        const right = document.querySelector(rightSelector) as HTMLSelectElement
-        const option = Array.from(left.options).find((o) => o.text.trim() === optionText)
-        if (!option) {
-          throw new Error(
-            `No option with text "${optionText}" found in the "${fieldName}" list. Available options: ` +
-              Array.from(left.options)
-                .map((o) => o.text.trim())
-                .join(", "),
-          )
-        }
-        option.selected = true
-        right.appendChild(option)
-        right.dispatchEvent(new Event("change", { bubbles: true }))
-      },
-      { leftSelector, rightSelector, optionText, fieldName },
-    )
-  },
-)
+When("I select {string} from the multiselect {string}", async ({ page }, optionText: string, fieldName: string) => {
+  const leftSelector = `#${fieldName}`
+  const rightSelector = `#${fieldName}_to`
+  await page.waitForSelector(`${leftSelector} option`)
+  await page.evaluate(
+    ({ leftSelector, rightSelector, optionText, fieldName }) => {
+      const left = document.querySelector(leftSelector) as HTMLSelectElement
+      const right = document.querySelector(rightSelector) as HTMLSelectElement
+      const option = Array.from(left.options).find((o) => o.text.trim() === optionText)
+      if (!option) {
+        throw new Error(
+          `No option with text "${optionText}" found in the "${fieldName}" list. Available options: ` +
+            Array.from(left.options)
+              .map((o) => o.text.trim())
+              .join(", "),
+        )
+      }
+      option.selected = true
+      right.appendChild(option)
+      right.dispatchEvent(new Event("change", { bubbles: true }))
+    },
+    { leftSelector, rightSelector, optionText, fieldName },
+  )
+})
 
 // Not ported — new, for toolAttendance.feature. attendance_add's own success
 // redirect appends a real `attendance_id=<id>` query param (public/main/
@@ -3967,7 +4058,7 @@ Then("I remember the created attendance id", async ({ page }) => {
 Given("I am on the attendance page {string}", async ({ page }, pathTemplate: string) => {
   if (!lastCreatedAttendanceId) {
     throw new Error(
-      "No attendance id remembered — run \"I remember the created attendance id\" right after creating it first.",
+      'No attendance id remembered — run "I remember the created attendance id" right after creating it first.',
     )
   }
   await gotoReliably(page, pathTemplate.replace("ATTENDANCE_ID", lastCreatedAttendanceId))
@@ -4159,7 +4250,10 @@ When("I mark answer {int} as correct", async ({ page }, rowNumber: number) => {
     await indexed.check()
     return
   }
-  await page.locator('input[name="correct_answer"]').nth(rowNumber - 1).check()
+  await page
+    .locator('input[name="correct_answer"]')
+    .nth(rowNumber - 1)
+    .check()
 })
 
 // Not ported — new, for the Matching question type's own "Match them" pair-answer
@@ -4196,7 +4290,10 @@ When("I fill in matching pair {int} with {string}", async ({ page }, pairNumber:
 // one matching question is ever on screen at a time (one-question-per-page runtime), so
 // targeting by DOM order (the Nth <select> on the whole page) is unambiguous.
 When("I select {string} from matching select {int}", async ({ page }, optionLabel: string, selectNumber: number) => {
-  await page.locator("select").nth(selectNumber - 1).selectOption({ label: optionLabel })
+  await page
+    .locator("select")
+    .nth(selectNumber - 1)
+    .selectOption({ label: optionLabel })
 })
 
 // Not ported — new, for the Fill in blanks question's runtime answer inputs. Their real
@@ -4261,7 +4358,7 @@ When("I check every {string} option on the page", async ({ page }, label: string
 // resolves and get swallowed. Kept as cheap insurance even though it turned out NOT to
 // be the cause of this scenario's real scoring gap — see "I check the ... answer and let
 // it register" below for what that actually was.
-When("I press \"Next question\" until {string} appears", async ({ page }, nextTitle: string) => {
+When('I press "Next question" until {string} appears', async ({ page }, nextTitle: string) => {
   const heading = page.locator("h2").filter({ hasText: new RegExp(`^\\s*${escapeRegExp(nextTitle)}\\s*$`) })
   const saving = page.getByRole("button", { name: "Saving", exact: true })
   const nextControl = page.locator("button:not([disabled]):not([aria-disabled='true'])").filter({
@@ -4269,7 +4366,12 @@ When("I press \"Next question\" until {string} appears", async ({ page }, nextTi
   })
   const deadline = Date.now() + 50_000
   while (Date.now() < deadline) {
-    if (await heading.first().isVisible().catch(() => false)) {
+    if (
+      await heading
+        .first()
+        .isVisible()
+        .catch(() => false)
+    ) {
       return
     }
     if (await saving.isVisible().catch(() => false)) {
@@ -4387,9 +4489,6 @@ When(
     if (await minimumInput.count()) {
       await minimumInput.fill(minimumScore)
     }
-    await page
-      .getByRole("button", { name: /Save prerequisites settings|Modifier les prérequis/i })
-      .click()
+    await page.getByRole("button", { name: /Save prerequisites settings|Modifier les prérequis/i }).click()
   },
 )
-

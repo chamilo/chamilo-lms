@@ -113,7 +113,7 @@ class LoginSuccessSubscriber implements EventSubscriberInterface
 
         /*
          * Legacy eventLogin priority:
-         * session admin, teacher, DRH, otherwise student.
+         * session admin, teacher, HRM, otherwise student.
          */
         if (\in_array('ROLE_SESSION_MANAGER', $roles, true)) {
             return 'registration.sessionadmin_autosubscribe';
@@ -124,10 +124,11 @@ class LoginSuccessSubscriber implements EventSubscriberInterface
         }
 
         if (
-            \in_array('ROLE_DRH', $roles, true)
+            \in_array('ROLE_HR', $roles, true)
+            || \in_array('ROLE_DRH', $roles, true)
             || \in_array('ROLE_STUDENT_BOSS', $roles, true)
         ) {
-            return 'registration.drh_autosubscribe';
+            return 'registration.hrm_autosubscribe';
         }
 
         return 'registration.student_autosubscribe';

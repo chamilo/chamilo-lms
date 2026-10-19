@@ -41,7 +41,8 @@ class ChamiloHelper
 {
     public const int COURSE_MANAGER = 1;
     public const int SESSION_ADMIN = 3;
-    public const int DRH = 4;
+    public const int HRM = 4;
+    public const int DRH = self::HRM;
     public const int STUDENT = 5;
     public const int ANONYMOUS = 6;
 

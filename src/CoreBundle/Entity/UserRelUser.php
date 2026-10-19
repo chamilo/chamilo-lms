@@ -81,7 +81,8 @@ class UserRelUser
     // should be deprecated is useless
     // public const USER_RELATION_TYPE_ENEMY = 5; // should be deprecated is useless
     public const int USER_RELATION_TYPE_DELETED = 6;
-    public const int USER_RELATION_TYPE_RRHH = 7;
+    public const int USER_RELATION_TYPE_HRM = 7;
+    public const int USER_RELATION_TYPE_RRHH = self::USER_RELATION_TYPE_HRM;
     public const int USER_RELATION_TYPE_BOSS = 8;
     public const int USER_RELATION_TYPE_HRM_REQUEST = 9;
     public const int USER_RELATION_TYPE_FRIEND_REQUEST = 10;

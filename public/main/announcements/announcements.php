@@ -103,9 +103,9 @@ $allowToEdit = (
 );
 $allowStudentInGroupToSend = false;
 
-$drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
+$drhHasAccessToSessionContent = api_hrm_can_access_all_session_content();
 if (!empty($sessionId) && $drhHasAccessToSessionContent) {
-    $allowToEdit = $allowToEdit || api_is_drh();
+    $allowToEdit = $allowToEdit || api_is_hrm();
 }
 
 // Database Table Definitions

@@ -274,8 +274,8 @@ final readonly class CourseReportingContextResolver
             return false;
         }
 
-        foreach ($user->getDRHSessions() as $drhSession) {
-            if ($drhSession->getId() === $session->getId()) {
+        foreach ($user->getHRMSessions() as $hrmSession) {
+            if ($hrmSession->getId() === $session->getId()) {
                 return true;
             }
         }

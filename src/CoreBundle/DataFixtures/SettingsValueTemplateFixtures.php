@@ -35,7 +35,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'ADMIN' => true,
                         'COURSEMANAGER' => true,
                         'STUDENT' => false,
-                        'DRH' => false,
+                        'HRM' => false,
                         'SESSIONADMIN' => false,
                         'STUDENT_BOSS' => false,
                         'INVITEE' => false,
@@ -777,7 +777,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     'json_example' => [
                         'COURSEMANAGER' => 'courses',
                         'STUDENT' => 'courses',
-                        'DRH' => '',
+                        'HRM' => '',
                         'SESSIONADMIN' => 'admin-dashboard',
                         'STUDENT_BOSS' => 'main/my_space/student.php',
                         'INVITEE' => 'courses',

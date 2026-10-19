@@ -39,9 +39,9 @@ switch ($action) {
             (1 === (int) api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous() && $userInCourse)
         );
 
-        $drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
+        $drhHasAccessToSessionContent = api_hrm_can_access_all_session_content();
         if (!empty($sessionId) && $drhHasAccessToSessionContent) {
-            $allowToEdit = $allowToEdit || api_is_drh();
+            $allowToEdit = $allowToEdit || api_is_hrm();
         }
 
         if (false === $allowToEdit && !empty($groupId)) {
@@ -162,7 +162,7 @@ switch ($action) {
         if (isset($formParams['send_to_hrm_users']) && 1 == $formParams['send_to_hrm_users']) {
             foreach ($previewUsers as $userId) {
                 $userInfo = api_get_user_info($userId);
-                $drhList = UserManager::getDrhListFromUser($userId);
+                $drhList = UserManager::getHrmListFromUser($userId);
                 if (!empty($drhList)) {
                     foreach ($drhList as $drhInfo) {
                         $previewUsers[] = $drhInfo['id'];

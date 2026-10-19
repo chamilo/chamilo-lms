@@ -5,14 +5,14 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-$isHrm = api_is_drh();
+$isHrm = api_is_hrm();
 
 if (!$isHrm) {
     api_not_allowed(true);
 }
 
 $hrm = api_get_user_entity(api_get_user_id());
-$assignedUsers = UserManager::get_users_followed_by_drh(
+$assignedUsers = UserManager::get_users_followed_by_hrm(
     $hrm->getId(),
     applyReportingWorkflowSetting: true
 );

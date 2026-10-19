@@ -15,7 +15,7 @@ if (!isset($_REQUEST['exercise'])) {
 $exerciseId = (int) $_REQUEST['exercise'];
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
-    api_is_drh() ||
+    api_is_hrm() ||
     api_is_student_boss() ||
     api_is_session_admin();
 

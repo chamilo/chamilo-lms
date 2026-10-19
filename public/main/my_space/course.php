@@ -89,7 +89,7 @@ if (api_is_platform_admin(true, true)) {
             $courses = CourseManager::get_course_list_of_user_as_course_admin($user_id);
         } else {
             $title = get_lang('Your courses');
-            $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+            $courses = CourseManager::get_courses_followed_by_hrm(api_get_user_id());
         }
     } else {
         $session_name = api_get_session_name($sessionId);
@@ -251,8 +251,8 @@ function get_count_courses()
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
     $drhLoaded = false;
 
-    if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
+    if (api_is_hrm()) {
+        if (api_hrm_can_access_all_session_content()) {
             if (null === $session) {
                 $count = SessionManager::getAllCoursesFollowedByUser(
                     $userId,
@@ -313,8 +313,8 @@ function get_courses($from, $limit, $column, $direction)
     $follow = isset($_GET['follow']) ? true : false;
     $drhLoaded = false;
 
-    if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
+    if (api_is_hrm()) {
+        if (api_hrm_can_access_all_session_content()) {
             $courses = SessionManager::getAllCoursesFollowedByUser(
                 $userId,
                 $sessionId,

@@ -264,7 +264,7 @@ class CourseRepository extends ResourceRepository
             ->andWhere($qb->expr()->neq('cru.relationType', ':relationType'))
             ->andWhere($qb->expr()->eq('urc.url', ':url'))
             ->setParameter('user', $user->getId())
-            ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+            ->setParameter('relationType', COURSE_RELATION_TYPE_HRM)
             ->setParameter('url', $url->getId())
             ->getQuery()
             ->getResult()

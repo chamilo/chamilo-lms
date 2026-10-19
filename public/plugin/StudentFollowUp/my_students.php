@@ -28,8 +28,8 @@ $fullSessionList = [];
 
 if (!$isAdmin) {
     $status = COURSEMANAGER;
-    if (api_is_drh()) {
-        $status = DRH;
+    if (api_is_hrm()) {
+        $status = HRM;
     }
 
     $data = StudentFollowUpPlugin::getUsers(

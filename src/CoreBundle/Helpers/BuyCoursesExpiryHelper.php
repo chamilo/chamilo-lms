@@ -29,7 +29,7 @@ final class BuyCoursesExpiryHelper
     private const int SERVICE_STATUS_COMPLETED = 1;
     private const int COURSE_USER_STATUS_TEACHER = 1;
     private const int COURSE_USER_STATUS_STUDENT = 5;
-    private const int COURSE_RELATION_TYPE_RRHH = 1;
+    private const int COURSE_RELATION_TYPE_HRM = 1;
     private const int COURSE_VISIBILITY_CLOSED = 0;
     private const int COURSE_VISIBILITY_REGISTERED = 1;
 
@@ -361,7 +361,7 @@ final class BuyCoursesExpiryHelper
                 FROM '.self::TABLE_COURSE_REL_USER.'
                 WHERE user_id = :userId
                   AND status = :status
-                  AND (relation_type IS NULL OR relation_type <> :rrhhRelationType)
+                  AND (relation_type IS NULL OR relation_type <> :hrmRelationType)
                 ORDER BY c_id ASC';
 
         $result = $this->connection->executeQuery(
@@ -369,7 +369,7 @@ final class BuyCoursesExpiryHelper
             [
                 'userId' => $userId,
                 'status' => self::COURSE_USER_STATUS_TEACHER,
-                'rrhhRelationType' => self::COURSE_RELATION_TYPE_RRHH,
+                'hrmRelationType' => self::COURSE_RELATION_TYPE_HRM,
             ]
         )->fetchFirstColumn();
 
@@ -394,7 +394,7 @@ final class BuyCoursesExpiryHelper
                 FROM '.self::TABLE_COURSE_REL_USER.'
                 WHERE c_id = :courseId
                   AND status = :status
-                  AND (relation_type IS NULL OR relation_type <> :rrhhRelationType)
+                  AND (relation_type IS NULL OR relation_type <> :hrmRelationType)
                 ORDER BY user_id ASC';
 
         $result = $this->connection->executeQuery(
@@ -402,7 +402,7 @@ final class BuyCoursesExpiryHelper
             [
                 'courseId' => $courseId,
                 'status' => self::COURSE_USER_STATUS_TEACHER,
-                'rrhhRelationType' => self::COURSE_RELATION_TYPE_RRHH,
+                'hrmRelationType' => self::COURSE_RELATION_TYPE_HRM,
             ]
         )->fetchFirstColumn();
 
@@ -511,7 +511,7 @@ final class BuyCoursesExpiryHelper
                 FROM '.self::TABLE_COURSE_REL_USER.'
                 WHERE c_id = :courseId
                   AND status = :status
-                  AND (relation_type IS NULL OR relation_type <> :rrhhRelationType)
+                  AND (relation_type IS NULL OR relation_type <> :hrmRelationType)
                 ORDER BY user_id ASC';
 
         $result = $this->connection->executeQuery(
@@ -519,7 +519,7 @@ final class BuyCoursesExpiryHelper
             [
                 'courseId' => $courseId,
                 'status' => self::COURSE_USER_STATUS_STUDENT,
-                'rrhhRelationType' => self::COURSE_RELATION_TYPE_RRHH,
+                'hrmRelationType' => self::COURSE_RELATION_TYPE_HRM,
             ]
         )->fetchFirstColumn();
 

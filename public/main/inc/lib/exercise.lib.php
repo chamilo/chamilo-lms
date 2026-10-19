@@ -2145,7 +2145,7 @@ HOTSPOT;
         $is_allowedToEdit =
             api_is_allowed_to_edit(null, true) ||
             api_is_allowed_to_edit(true) ||
-            api_is_drh() ||
+            api_is_hrm() ||
             api_is_student_boss() ||
             api_is_session_admin();
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
@@ -2645,7 +2645,7 @@ HOTSPOT;
                             >';
                             $delete_link .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, addslashes(get_lang('Delete'))).'</a>';
 
-                            if (api_is_drh() && !api_is_platform_admin()) {
+                            if (api_is_hrm() && !api_is_platform_admin()) {
                                 $delete_link = null;
                             }
                             if (api_is_session_admin()) {

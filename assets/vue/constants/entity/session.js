@@ -7,7 +7,9 @@ export const SESSION_VISIBILITY_LIST_ONLY = 5
 
 // Session user roles
 export const SESSION_STUDENT = 0
-export const SESSION_DRH = 1
+export const SESSION_HRM = 1
+// Legacy alias: keep the persisted relation value unchanged.
+export const SESSION_DRH = SESSION_HRM
 export const SESSION_COURSE_COACH = 2
 export const SESSION_GENERAL_COACH = 3
 export const SESSION_ADMIN = 4

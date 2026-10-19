@@ -1877,7 +1877,7 @@ class Category implements GradebookItem
         } else {
             // All students
             // course admin
-            if ((api_is_allowed_to_edit() || api_is_drh() || api_is_session_admin()) &&
+            if ((api_is_allowed_to_edit() || api_is_hrm() || api_is_session_admin()) &&
                 !api_is_platform_admin()
             ) {
                 // root

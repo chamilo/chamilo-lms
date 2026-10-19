@@ -86,7 +86,7 @@ $isDiagnosisLoadSearch = ('get_sessions' === $action && 'load_search' === $origi
 if ($isDiagnosisLoadSearch) {
     api_block_anonymous_users();
 
-    if (!(api_is_drh() || api_is_student_boss() || api_is_platform_admin())) {
+    if (!(api_is_hrm() || api_is_student_boss() || api_is_platform_admin())) {
         api_not_allowed(true);
     }
 } elseif ('get_usergroups_users' === $action) {
@@ -484,7 +484,7 @@ switch ($action) {
         break;
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
-        $userNotAllowed = !api_is_drh()
+        $userNotAllowed = !api_is_hrm()
             && !api_is_student_boss()
             && !api_is_platform_admin(false, true);
 
@@ -498,8 +498,8 @@ switch ($action) {
         $sessionIdList = [];
         $searchByGroups = false;
 
-        if (api_is_drh()) {
-            if (api_drh_can_access_all_session_content()) {
+        if (api_is_hrm()) {
+            if (api_hrm_can_access_all_session_content()) {
                 $userList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                     'drh_all',
                     api_get_user_id()
@@ -521,7 +521,7 @@ switch ($action) {
                     }
                 }
             } else {
-                $userList = UserManager::get_users_followed_by_drh(
+                $userList = UserManager::get_users_followed_by_hrm(
                     api_get_user_id(),
                     applyReportingWorkflowSetting: true
                 );
@@ -529,7 +529,7 @@ switch ($action) {
                     $userIdList = array_keys($userList);
                 }
 
-                $courseList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+                $courseList = CourseManager::get_courses_followed_by_hrm(api_get_user_id());
                 if (!empty($courseList)) {
                     $courseCodeList = array_keys($courseList);
                 }
@@ -922,8 +922,8 @@ switch ($action) {
             $description = $keyword;
         }
 
-        if (api_is_drh() || api_is_session_admin()) {
-            $count = SessionManager::get_sessions_followed_by_drh(
+        if (api_is_hrm() || api_is_session_admin()) {
+            $count = SessionManager::get_sessions_followed_by_hrm(
                 api_get_user_id(),
                 null,
                 null,
@@ -1212,7 +1212,7 @@ if (isset($_REQUEST['oper']) && 'del' == $_REQUEST['oper']) {
     $obj->delete($_REQUEST['id']);
 }
 
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_hrm();
 
 //5. Querying the DB for the elements
 $columns = [];
@@ -1873,7 +1873,7 @@ switch ($action) {
         break;
     case 'get_exercise_results':
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
-            api_is_drh() ||
+            api_is_hrm() ||
             api_is_student_boss() ||
             api_is_session_admin();
         if ($is_allowedToEdit || api_is_student_boss()) {
@@ -2061,11 +2061,11 @@ switch ($action) {
         $sessionColumns = SessionManager::getGridColumns('my_space');
         $columns = $sessionColumns['simple_column_name'];
 
-        if (api_is_drh()) {
+        if (api_is_hrm()) {
             $orderByName = Database::escape_string($sidx);
             $orderByName = in_array($orderByName, ['title', 'access_start_date']) ? $orderByName : 'title';
             $orderBy = " ORDER BY $orderByName $sord";
-            $sessions = SessionManager::get_sessions_followed_by_drh(
+            $sessions = SessionManager::get_sessions_followed_by_hrm(
                 api_get_user_id(),
                 $start,
                 $limit,
@@ -2121,7 +2121,7 @@ switch ($action) {
             );
             foreach ($sessions as $session) {
                 $sessionEntity = api_get_session_entity($session['id']);
-                if (api_drh_can_access_all_session_content()) {
+                if (api_hrm_can_access_all_session_content()) {
                     $count_courses_in_session = SessionManager::get_course_list_by_session_id(
                         $session['id'],
                         '',

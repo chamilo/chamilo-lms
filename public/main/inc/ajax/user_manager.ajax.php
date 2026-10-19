@@ -16,7 +16,7 @@ switch ($action) {
     case 'get_user_like':
         api_block_anonymous_users(false);
 
-        if (api_is_platform_admin() || api_is_drh()) {
+        if (api_is_platform_admin() || api_is_hrm()) {
             // Close the session as we don't need it any further
             session_write_close();
             $query = $_REQUEST['q'];

@@ -85,7 +85,7 @@ class MessageHelper
         if ($sendCopyToDrhUsers) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
             if (null !== $accessUrl) {
-                $drhList = $this->userRepository->getDrhListFromUser($receiverUserId, $accessUrl->getId());
+                $drhList = $this->userRepository->getHrmListFromUser($receiverUserId, $accessUrl->getId());
                 if (!empty($drhList)) {
                     $receiverInfo = $this->userRepository->find($receiverUserId);
 

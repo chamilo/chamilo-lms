@@ -371,8 +371,15 @@ switch ($action) {
     case 'delete':
         /* Delete announcement */
         $id = (int) $_GET['id'];
+        if (!$allowToEdit || !Security::check_token('get')) {
+            api_not_allowed(true);
+        }
         if (0 != $sessionId && false == api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed();
+        }
+        $announcement = $repo->find($id);
+        if (null === $announcement || null === $announcement->getFirstResourceLinkFromCourseSession($course)) {
+            api_not_allowed(true);
         }
         $delete = false;
         if (api_is_platform_admin()) {
@@ -381,6 +388,11 @@ switch ($action) {
 
         if (!api_is_session_general_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
             $delete = true;
+        }
+
+        // Group tutors can only delete announcements of their group
+        if ($isTutor && null === $announcement->getResourceNode()?->getResourceLinkByContext($course, null, $group)) {
+            $delete = false;
         }
 
         if ($delete) {
@@ -404,8 +416,11 @@ switch ($action) {
     case 'delete_attachment':
         $id = (int) ($_GET['id_attach'] ?? 0);
 
-        if (api_is_allowed_to_edit() && $id > 0) {
-            AnnouncementManager::delete_announcement_attachment_file($id);
+        if (api_is_allowed_to_edit() && $id > 0 && Security::check_token('get')) {
+            $attachment = Container::getAnnouncementAttachmentRepository()->find($id);
+            if ($attachment && $attachment->getAnnouncement()?->getFirstResourceLinkFromCourseSession($course)) {
+                AnnouncementManager::delete_announcement_attachment_file($id);
+            }
         }
 
         $redirectUrl = announcements_get_return_url($homeUrl);
@@ -420,7 +435,12 @@ switch ($action) {
             }
 
             $status = isset($_GET['status']) ? $_GET['status'] : null;
-            if (!$allowToEdit) {
+            if (!$allowToEdit || !Security::check_token('get')) {
+                api_not_allowed(true);
+            }
+
+            $announcement = $repo->find($announcement_id);
+            if (null === $announcement || null === $announcement->getFirstResourceLinkFromCourseSession($course)) {
                 api_not_allowed(true);
             }
 

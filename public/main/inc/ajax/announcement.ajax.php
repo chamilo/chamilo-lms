@@ -217,7 +217,7 @@ switch ($action) {
                 if (!$isSessionGeneralCoach || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $itemId)) {
                     $announcement = $repo->find($itemId);
 
-                    if (!empty($announcement)) {
+                    if (!empty($announcement) && $course && $announcement->getFirstResourceLinkFromCourseSession($course)) {
                         $delete = true;
                         if (!empty($groupId) && $isTutor) {
                             /*if ($groupId != $result['to_group_id']) {

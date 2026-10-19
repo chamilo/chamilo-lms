@@ -1385,6 +1385,7 @@ class AnnouncementManager
         ?int $sessionId = null,
         ?int $groupId = null
     ): array {
+        $stok = $stok ?: Security::get_existing_token();
 
         if (null === $courseId) {
             $courseId = api_get_course_int_id();

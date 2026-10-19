@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -40,25 +39,19 @@ readonly class ExportCGlossaryAction
     public function __invoke(
         Request $request,
         CGlossaryRepository $repo,
-        EntityManager $em,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        CidReqHelper $cidReqHelper
     ): Response {
         $format = $request->get('format');
-        $cid = $request->request->get('cid');
-        $sid = $request->request->get('sid');
 
         if (!\in_array($format, ['csv', 'xls', 'pdf'], true)) {
             throw new BadRequestHttpException('Invalid export format');
         }
 
-        $course = null;
-        $session = null;
-        if (0 !== $cid) {
-            $course = $em->find(Course::class, $cid);
-        }
-        if (0 !== $sid) {
-            $session = $em->find(Session::class, $sid);
-        }
+        // The course and session come from the context that authorized the request, never from the body.
+        $course = $cidReqHelper->getDoctrineCourseEntity()
+            ?? throw new BadRequestHttpException('A valid course id is required.');
+        $session = $cidReqHelper->getDoctrineSessionEntity();
 
         $qb = $repo->getResourcesByCourse($course, $session);
         $glossaryItems = $qb->getQuery()->getResult();

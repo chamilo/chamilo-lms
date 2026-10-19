@@ -6,8 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
@@ -15,20 +14,22 @@ use Doctrine\ORM\EntityManagerInterface;
 use PDF;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
 
-final class ExportGlossaryToDocumentsAction
+final class ExportGlossaryToDocumentsAction extends BaseResourceFileAction
 {
     public function __invoke(
         Request $request,
         CGlossaryRepository $repo,
         EntityManagerInterface $em,
         KernelInterface $kernel,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        CidReqHelper $cidReqHelper
     ): string {
         $data = json_decode((string) $request->getContent(), true) ?: [];
 
@@ -40,36 +41,27 @@ final class ExportGlossaryToDocumentsAction
             $resourceLinkListRaw = json_decode($resourceLinkListRaw, true) ?: [];
         }
 
-        $resourceLinkList = $this->normalizeResourceLinks($resourceLinkListRaw);
+        $resourceLinkList = $this->buildResourceLinkListFromContext(
+            $request,
+            \is_array($resourceLinkListRaw) ? $resourceLinkListRaw : [],
+        );
 
-        // Resolve context from resource links.
-        $cid = (int) ($resourceLinkList[0]['cid'] ?? 0);
-        $sid = (int) ($resourceLinkList[0]['sid'] ?? 0);
+        // The course and session come from the context that authorized the request, never from the body.
+        $course = $cidReqHelper->getDoctrineCourseEntity()
+            ?? throw new BadRequestHttpException('A valid course id is required.');
+        $session = $cidReqHelper->getDoctrineSessionEntity();
 
-        $course = null;
-        $session = null;
-
-        if ($cid > 0) {
-            $course = $em->getRepository(Course::class)->find($cid);
-        }
-        if ($sid > 0) {
-            $session = $em->getRepository(Session::class)->find($sid);
+        if ($parentResourceNodeId > 0) {
+            $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em);
         }
 
-        // Important: export only glossary items for the current course/session context.
-        if ($course) {
-            $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
+        $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
 
-            // The alias used by getResourcesByCourse() is "resource" (as seen in GetGlossaryCollectionController).
-            $qb->orderBy('resource.title', 'ASC');
+        // The alias used by getResourcesByCourse() is "resource" (as seen in GetGlossaryCollectionController).
+        $qb->orderBy('resource.title', 'ASC');
 
-            /** @var CGlossary[] $glossaryItems */
-            $glossaryItems = $qb->getQuery()->getResult();
-        } else {
-            // Fallback to keep behavior resilient if cid is missing.
-            /** @var CGlossary[] $glossaryItems */
-            $glossaryItems = $repo->findAll();
-        }
+        /** @var CGlossary[] $glossaryItems */
+        $glossaryItems = $qb->getQuery()->getResult();
 
         $exportPath = $kernel->getCacheDir();
         $pdfFilePath = $this->generatePdfFile($glossaryItems, $exportPath, $translator);
@@ -107,33 +99,6 @@ final class ExportGlossaryToDocumentsAction
         }
 
         return $pdfFilePath;
-    }
-
-    /**
-     * @return array<int, array{cid:int,sid:int,gid:int,visibility:int}>
-     */
-    private function normalizeResourceLinks(mixed $links): array
-    {
-        if (!\is_array($links)) {
-            return [];
-        }
-
-        $normalized = [];
-
-        foreach ($links as $link) {
-            if (!\is_array($link)) {
-                continue;
-            }
-
-            $normalized[] = [
-                'cid' => (int) ($link['cid'] ?? 0),
-                'sid' => (int) ($link['sid'] ?? 0),
-                'gid' => (int) ($link['gid'] ?? 0),
-                'visibility' => (int) ($link['visibility'] ?? 0),
-            ];
-        }
-
-        return $normalized;
     }
 
     /**

@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -31,6 +32,7 @@ use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -222,6 +224,39 @@ class BaseResourceFileAction
         }
 
         return [$link];
+    }
+
+    /**
+     * The body picks where inside the current course the new node lands; it must never point
+     * the parent at another course's tree. buildResourceLinkListFromContext() already forces
+     * the link binding, so without this a teacher could nest a node under a foreign course
+     * while its link stayed in their own — the node ends up in someone else's path, quota and
+     * subtree. Callers without a course context (personal files, ...) are left untouched.
+     */
+    protected function assertParentNodeIsInCurrentCourse(
+        CidReqHelper $cidReqHelper,
+        int $parentResourceNodeId,
+        EntityManagerInterface $em
+    ): void {
+        $courseNode = $cidReqHelper->getCourseEntity()?->getResourceNode();
+        if (null === $courseNode) {
+            return;
+        }
+
+        $parentNode = $em->getRepository(ResourceNode::class)->find($parentResourceNodeId);
+        if (null === $parentNode) {
+            throw new AccessDeniedHttpException('The parent resource node does not exist.');
+        }
+
+        if ((int) $parentNode->getId() === (int) $courseNode->getId()) {
+            return;
+        }
+
+        // Materialized paths end each segment with "-<id>/", so the prefix cannot match a
+        // different course by accident.
+        if (!str_starts_with((string) $parentNode->getPath(), (string) $courseNode->getPath())) {
+            throw new AccessDeniedHttpException('The parent resource node does not belong to the current course.');
+        }
     }
 
     protected function extractResourceLinkListFromRequest(Request $request): array

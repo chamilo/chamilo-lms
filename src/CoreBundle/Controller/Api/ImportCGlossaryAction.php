@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManager;
@@ -25,23 +24,17 @@ class ImportCGlossaryAction
      * @throws NotSupported
      * @throws Exception
      */
-    public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em): Response
+    public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em, CidReqHelper $cidReqHelper): Response
     {
         $file = $request->files->get('file');
         $fileType = $request->request->get('file_type');
         $replace = $request->request->get('replace');
         $update = $request->request->get('update');
-        $cid = $request->request->get('cid');
-        $sid = $request->request->get('sid');
 
-        $course = null;
-        $session = null;
-        if (0 !== $cid) {
-            $course = $em->getRepository(Course::class)->find($cid);
-        }
-        if (0 !== $sid) {
-            $session = $em->getRepository(Session::class)->find($sid);
-        }
+        // The course and session come from the context that authorized the request, never from the body.
+        $course = $cidReqHelper->getDoctrineCourseEntity()
+            ?? throw new BadRequestHttpException('A valid course id is required.');
+        $session = $cidReqHelper->getDoctrineSessionEntity();
 
         if (!$file instanceof UploadedFile || !$file->isValid()) {
             throw new BadRequestHttpException('Invalid file');

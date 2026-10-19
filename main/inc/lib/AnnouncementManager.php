@@ -475,7 +475,7 @@ class AnnouncementManager
                 $image_visibility = 'visible';
                 $alt_visibility = get_lang('Hide');
             }
-            global $stok;
+            $stok = Security::get_existing_token();
             $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=showhide&id=".$id."&sec_token=".$stok."\">".
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
@@ -1990,6 +1990,7 @@ class AnnouncementManager
                     ($row['to_group_id'] == $group_id && $isTutor) ||
                     ($session_id && api_is_coach() && api_get_configuration_value('allow_coach_to_edit_announcements'))
                 ) {
+                    $stok = $stok ?: Security::get_existing_token();
                     if ($disableEdit === true) {
                         $modify_icons = "<a href='#'>".$editIconDisable."</a>";
                     } else {

@@ -307,6 +307,17 @@ switch ($action) {
         if ($sessionId != 0 && api_is_allowed_to_session_edit(false, true) == false) {
             api_not_allowed();
         }
+
+        if (!$allowToEdit || !Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+
+        // The announcement must belong to the current course
+        $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
+        if (empty($announcementInfo)) {
+            api_not_allowed(true);
+        }
+
         $delete = false;
         if (api_is_platform_admin()) {
             $delete = true;
@@ -314,6 +325,11 @@ switch ($action) {
 
         if (!api_is_session_general_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
             $delete = true;
+        }
+
+        // Group tutors can only delete announcements of their group
+        if ($isTutor && $group_id != $announcementInfo['to_group_id']) {
+            $delete = false;
         }
 
         if ($delete) {
@@ -341,7 +357,7 @@ switch ($action) {
     case 'delete_attachment':
         $id = (int) $_GET['id_attach'];
 
-        if (api_is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit() && Security::check_token('get')) {
             AnnouncementManager::delete_announcement_attachment_file($id);
         }
 
@@ -363,7 +379,11 @@ switch ($action) {
                     }
                 }
 
-                if (!$allowToEdit) {
+                if (!$allowToEdit || !Security::check_token('get')) {
+                    api_not_allowed(true);
+                }
+
+                if (empty(AnnouncementManager::get_by_id($courseId, $_GET['id']))) {
                     api_not_allowed(true);
                 }
 

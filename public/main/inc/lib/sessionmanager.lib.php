@@ -2936,13 +2936,16 @@ class SessionManager
                 WHERE
                     session_id = $session_id AND
                     user_id = $user_id ";
-        Database::query($sql);
+        $result = Database::query($sql);
 
-        // Update number of users
-        $sql = "UPDATE $tbl_session
-                SET nbr_users = nbr_users - 1
-                WHERE id = $session_id ";
-        Database::query($sql);
+        // Update number of users, only when a subscription was actually removed: the counter went negative when
+        // this was called for a user who was not subscribed (for example when removing a class member from a class).
+        if (Database::affected_rows($result) > 0) {
+            $sql = "UPDATE $tbl_session
+                    SET nbr_users = nbr_users - 1
+                    WHERE id = $session_id ";
+            Database::query($sql);
+        }
 
         Event::addEvent(
             LOG_SESSION_DELETE_USER,

@@ -4,6 +4,7 @@
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Sonata\Exporter\Handler;
 use Sonata\Exporter\Source\ArraySourceIterator;
 use Sonata\Exporter\Writer\CsvWriter;
@@ -57,7 +58,11 @@ class Export
         // we pass false for BOM, and $includeHeader for header toggle
         $writer = new CsvWriter($filePath, ',', $enclosure, $escapeChar, false, $includeHeader);
 
-        $source = new ArraySourceIterator($data);
+        $safeData = array_map(
+            static fn (array $row): array => CsvFormulaEscaper::escapeRow($row, $includeHeader),
+            $data
+        );
+        $source = new ArraySourceIterator($safeData);
         $handler = Handler::create($source, $writer);
         $handler->export();
 
@@ -87,11 +92,11 @@ class Export
         }
 
         if (!empty($header)) {
-            fputcsv($handle, $header, ',');
+            fputcsv($handle, CsvFormulaEscaper::escapeRow($header), ',');
         }
 
         foreach ($data as $row) {
-            fputcsv($handle, (array)$row, ',');
+            fputcsv($handle, CsvFormulaEscaper::escapeRow((array)$row), ',');
         }
 
         fclose($handle);

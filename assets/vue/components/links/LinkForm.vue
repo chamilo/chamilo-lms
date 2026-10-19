@@ -1,12 +1,16 @@
 <template>
   <form class="mt-6 flex flex-col gap-2">
     <BaseInputTextWithVuelidate
+      id="link-url"
       v-model="formData.url"
       :label="t('URL')"
       :vuelidate-property="v$.url"
+      name="url"
     />
     <BaseInputTextWithVuelidate
+      id="link-title"
       v-model="formData.title"
+      name="title"
       :label="t('Link name')"
       :vuelidate-property="v$.title"
     />
@@ -25,8 +29,10 @@
         />
 
         <BaseSelect
+          id="link-category"
           v-model="formData.category"
           :label="t('Select a category')"
+          name="category"
           :options="categories"
           hast-empty-value
           option-label="title"

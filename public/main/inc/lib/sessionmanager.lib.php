@@ -11129,7 +11129,7 @@ class SessionManager
                     continue;
                 }
                 foreach ($csvContent as $row) {
-                    fputcsv($handle, (array) $row, ',');
+                    fputcsv($handle, \Chamilo\CoreBundle\Helpers\CsvFormulaEscaper::escapeRow((array) $row), ',');
                 }
                 fclose($handle);
 

@@ -2649,14 +2649,23 @@ When("I reload the current page", async ({ page }) => {
 // Not ported — new. The message list's own search box (MessageList.vue) has
 // no `name` attribute, only a placeholder, so it isn't reachable through
 // resolveField()'s id/name/label chain.
+//
+// Waits for the filtered response: until it arrives, the unfiltered rows are
+// still on the page, so a row check right after the click can match a row the
+// search is about to remove (toolExerciseNotification.feature isolates one
+// notification among others with the same subject this way).
 When("I search the inbox for {string}", async ({ page }, text: string) => {
   const searchBox = page.getByPlaceholder("Search")
   await searchBox.fill(text)
+  const filtered = page.waitForResponse(
+    (response) => response.url().includes("/api/messages?") && response.url().includes("search="),
+  )
   await page
     .locator("form")
     .filter({ has: searchBox })
     .getByRole("button", { name: "Search", exact: true })
     .click()
+  await filtered
 })
 
 // Not ported — new, for specialCase2TeacherTools.feature's survey_invite.php
@@ -2855,19 +2864,22 @@ Then(
 )
 
 // Not ported — new, for toolLink.feature (and any other page laying its list
-// out as `<div class="card">` items rather than a `<table>`). Same row-
-// scoping intent as the step above, but matches the card by its own EXACT
-// title text (not a substring "hasText") — link.php's card layout means
-// two of this feature's own test items ("Chamilo" / "Chamilo in category
-// 1", "Category 1" / "...category 1") are substrings of each other, so a
-// plain substring match would ambiguously match more than one card.
+// out as cards rather than a `<table>`). Same row-scoping intent as the step
+// above, but matches the card by its own EXACT title (not a substring
+// "hasText"), so a card is never picked through a longer title that contains
+// it. Rescoped from link.php's `<div class="card">` to the Vue links tool
+// (LinksList.vue, confirmed live): link.php now only redirects there. Each
+// category is a `.p-card` and each link an `<li>` INSIDE a card (its
+// category's, or the "General" one), so the category card also has its links'
+// headings and buttons. The innermost match (`.last()`) is the item itself.
 Then(
   "I click the {string} icon in the card for {string}",
   async ({ page }, selector: string, cardText: string) => {
     page.once("dialog", (dialog) => dialog.accept())
     await page
-      .locator(".card")
-      .filter({ has: page.getByText(cardText, { exact: true }) })
+      .locator("li, .p-card")
+      .filter({ has: page.getByRole("heading", { name: cardText, exact: true }) })
+      .last()
       .locator(selector)
       .first()
       .click()

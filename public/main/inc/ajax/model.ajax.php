@@ -58,7 +58,6 @@ $courseActions = [
     'get_work_user_list',
     'get_work_user_list_others',
     'get_work_user_list_all',
-    'get_course_announcements',
     'course_log_events',
     'get_learning_path_calendars',
     'get_calendar_users',
@@ -137,14 +136,7 @@ if ($isDiagnosisLoadSearch) {
 } elseif (in_array($action, $courseActions, true)) {
     api_protect_course_script();
 
-    $studentAllowedActions = [
-        'get_course_announcements',
-    ];
-
-    if (
-        !in_array($action, $studentAllowedActions, true)
-        && !api_is_allowed_to_edit(null, true)
-    ) {
+    if (!api_is_allowed_to_edit(null, true)) {
         api_not_allowed(true);
     }
 } elseif (in_array($action, $adminActions, true)) {
@@ -395,24 +387,6 @@ if (!$sidx) {
     $sidx = 1;
 }
 $options = [];
-
-// Pre-compute announcement title search term from all possible sources:
-// 1. title_to_search (external PHP form, sent in the grid URL)
-// 2. searchField/searchString (jqGrid single-field toolbar search)
-// 3. filters JSON rules (jqGrid multi-field search popup)
-$announcementTitleSearch = strtolower(trim($_REQUEST['title_to_search'] ?? ''));
-if ('' === $announcementTitleSearch && 'title' === $searchField && !empty($searchString)) {
-    $announcementTitleSearch = strtolower(trim((string) $searchString));
-}
-$filtersForAnnouncement = isset($filters) ? $filters : false;
-if ('' === $announcementTitleSearch && !empty($filtersForAnnouncement) && isset($filtersForAnnouncement->rules)) {
-    foreach ($filtersForAnnouncement->rules as $rule) {
-        if ('title' === ($rule->field ?? '') && '' !== trim((string) ($rule->data ?? ''))) {
-            $announcementTitleSearch = strtolower(trim((string) $rule->data));
-            break;
-        }
-    }
-}
 
 //2. Selecting the count FIRST
 //@todo rework this
@@ -690,19 +664,6 @@ switch ($action) {
         // Close the session as we don't need it any further
         session_write_close();
         $count = Question::get_count_course_medias($course_id);
-        break;
-    case 'get_course_announcements':
-        $courseId = !empty($cid) ? $cid : api_get_course_int_id();
-        $sessionId = !empty($sid) ? $sid : api_get_session_id();
-        $groupId = !empty($gid) ? $gid : api_get_group_id();
-        if ('' !== $announcementTitleSearch) {
-            $allForCount = AnnouncementManager::getAnnouncements(null, null, $courseId, $sessionId, $groupId);
-            $count = count(array_filter($allForCount, static function (array $r) use ($announcementTitleSearch): bool {
-                return str_contains(strtolower((string) ($r['title'] ?? '')), $announcementTitleSearch);
-            }));
-        } else {
-            $count = AnnouncementManager::getNumberAnnouncements($courseId, $sessionId, $groupId);
-        }
         break;
     case 'get_work_teacher':
         $countResult = getWorkListTeacher(0, $limit, null, null, $whereCondition, true);
@@ -1585,26 +1546,6 @@ switch ($action) {
             }
         }
 
-        break;
-    case 'get_course_announcements':
-        $columns = [
-            'title',
-            'username',
-            'insert_date',
-            'actions',
-        ];
-
-        $courseId = !empty($cid) ? $cid : api_get_course_int_id();
-        $sessionId = !empty($sid) ? $sid : api_get_session_id();
-        $groupId = !empty($gid) ? $gid : api_get_group_id();
-
-        $allResults = AnnouncementManager::getAnnouncements(null, null, $courseId, $sessionId, $groupId);
-        if ('' !== $announcementTitleSearch) {
-            $allResults = array_values(array_filter($allResults, static function (array $r) use ($announcementTitleSearch): bool {
-                return str_contains(strtolower((string) ($r['title'] ?? '')), $announcementTitleSearch);
-            }));
-        }
-        $result = array_slice($allResults, $start, $limit);
         break;
     case 'get_work_teacher':
         $columns = [
@@ -2945,7 +2886,6 @@ $allowed_actions = [
     'get_user_course_report_resumed',
     'get_exercise_grade',
     'get_group_reporting',
-    'get_course_announcements',
     'get_programmed_announcements',
     'course_log_events',
     'get_learning_path_calendars',

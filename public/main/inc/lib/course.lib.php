@@ -5572,7 +5572,9 @@ class CourseManager
             'course_theme',
             //Get allow show user list
             'display_info_advance_inside_homecourse',
-            'documents_default_visibility',
+            'document_default_visibility_on_creation',
+            'exercise_default_visibility_on_creation',
+            'lp_default_visibility_on_creation',
             // Get send_mail_setting (work)from table
             'email_alert_manager_on_new_doc',
             // Get send_mail_setting (work)from table

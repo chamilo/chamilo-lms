@@ -872,11 +872,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => "The whitelist is used to filter the file extensions by removing (or renaming) any file whose extension does *NOT* figure in the whitelist below. It is generally considered as a safer but more restrictive approach to filtering. The extensions should figure without the leading dot (.) and separated by semi-column (;) such as the following:  htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter.",
                 ],
                 [
-                    'name' => 'documents_default_visibility_defined_in_course',
-                    'title' => 'Document visibility defined in course',
-                    'comment' => 'The default document visibility for all courses',
-                ],
-                [
                     'name' => 'pdf_export_watermark_by_course',
                     'title' => 'Enable watermark definition by course',
                     'comment' => 'When this option is enabled, teachers can define their own watermark for the documents in their courses.',
@@ -1956,6 +1951,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'document' => [
                 [
+                    'name' => 'document_default_visibility_on_creation',
+                    'title' => 'Default visibility of new documents',
+                    'comment' => 'Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards.',
+                ],
+                [
+                    'name' => 'document_default_visibility_can_be_modified_in_course',
+                    'title' => 'Default visibility of new documents can be changed by course',
+                    'comment' => 'When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default.',
+                ],
+                [
                     'name' => 'video_features',
                     'title' => 'Video features',
                     'comment' => "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video.",
@@ -2221,6 +2226,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'lp' => [
                 [
+                    'name' => 'lp_default_visibility_on_creation',
+                    'title' => 'Default visibility of new learning paths',
+                    'comment' => 'Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards.',
+                ],
+                [
+                    'name' => 'lp_default_visibility_can_be_modified_in_course',
+                    'title' => 'Default visibility of new learning paths can be changed by course',
+                    'comment' => 'When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default.',
+                ],
+                [
                     'name' => 'lp_show_reduced_report',
                     'title' => 'Learning paths: show reduced report',
                     'comment' => 'Inside the learning paths tool, when a user reviews his own progress (through the stats icon), show a shorten (less detailed) version of the progress report.',
@@ -2482,6 +2497,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'exercise' => [
+                [
+                    'name' => 'exercise_default_visibility_on_creation',
+                    'title' => 'Default visibility of new tests',
+                    'comment' => 'Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards.',
+                ],
+                [
+                    'name' => 'exercise_default_visibility_can_be_modified_in_course',
+                    'title' => 'Default visibility of new tests can be changed by course',
+                    'comment' => 'When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default.',
+                ],
                 [
                     'name' => 'add_exercise_best_attempt_in_report',
                     'title' => 'Enable display of best score attempt',

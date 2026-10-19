@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -633,7 +634,12 @@ class learnpath
                     ->setPublishedOn($published_on)
                     ->setExpiredOn($expired_on)
                     ->setParent($courseEntity)
-                    ->addCourseLink($courseEntity, $sessionEntity)
+                    ->addCourseLink(
+                        $courseEntity,
+                        $sessionEntity,
+                        visibility: Container::$container->get(ResourceDefaultVisibilityHelper::class)
+                            ->getResourceLinkVisibility(ResourceDefaultVisibilityHelper::LEARNING_PATH, $courseEntity)
+                    )
                 ;
                 $lpRepo->createLp($lp);
 

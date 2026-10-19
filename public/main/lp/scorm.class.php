@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathCreatedEvent;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use PhpZip\ZipFile;
@@ -297,7 +298,12 @@ class scorm extends learnpath
                 ->setUseMaxScore($userMaxScore)
                 ->setAsset($this->asset)
                 ->setParent($course)
-                ->addCourseLink($course, api_get_session_entity($sessionId))
+                ->addCourseLink(
+                    $course,
+                    api_get_session_entity($sessionId),
+                    visibility: Container::$container->get(ResourceDefaultVisibilityHelper::class)
+                        ->getResourceLinkVisibility(ResourceDefaultVisibilityHelper::LEARNING_PATH, $course)
+                )
             ;
 
             $repo->createLp($lp);

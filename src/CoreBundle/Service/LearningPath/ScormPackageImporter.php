@@ -9,10 +9,10 @@ namespace Chamilo\CoreBundle\Service\LearningPath;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathCreatedEvent;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -53,6 +53,7 @@ final readonly class ScormPackageImporter
         private CLpItemRepository $lpItemRepository,
         private ScormManifestParser $manifestParser,
         private EventDispatcherInterface $eventDispatcher,
+        private ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
     ) {}
 
     /**
@@ -976,7 +977,7 @@ final readonly class ScormPackageImporter
 
         $link = [
             'cid' => (int) $course->getId(),
-            'visibility' => ResourceLink::VISIBILITY_DRAFT,
+            'visibility' => $this->resourceDefaultVisibilityHelper->getResourceLinkVisibility(ResourceDefaultVisibilityHelper::LEARNING_PATH, $course),
         ];
         if (null !== $session) {
             $link['sid'] = (int) $session->getId();

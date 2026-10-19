@@ -41896,3 +41896,42 @@ msgstr "Etherpad API key"
 #: issue-2520
 msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
 msgstr "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Default visibility of new documents can be changed by course"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+
+msgid "Default visibility of new learning paths"
+msgstr "Default visibility of new learning paths"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Default visibility of new learning paths can be changed by course"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+
+msgid "Default visibility of new tests"
+msgstr "Default visibility of new tests"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Default visibility of new tests can be changed by course"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+
+msgid "Default visibility for new learning paths"
+msgstr "Default visibility for new learning paths"
+
+msgid "Default visibility for new tests"
+msgstr "Default visibility for new tests"

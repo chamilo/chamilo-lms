@@ -4268,5 +4268,7 @@
     "Etherpad URL": "Etherpad URL",
     "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad": "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad",
     "Etherpad API key": "Etherpad API key",
-    "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication.": "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+    "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication.": "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication.",
+    "Default visibility for new learning paths": "Default visibility for new learning paths",
+    "Default visibility for new tests": "Default visibility for new tests"
 }

@@ -43575,3 +43575,42 @@ msgstr "Temps d'inactivité maximum pris en compte (minutes)"
 
 msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
 msgstr "Une page de cours laissée ouverte continue d'envoyer des requêtes automatiques. Après ce nombre de minutes sans action réelle de l'utilisateur (ouverture d'une page ou d'un élément, réponse, etc.), le temps passé dans le cours n'est plus comptabilisé."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "La visibilité par défaut des nouveaux documents peut être modifiée par cours"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilité donnée à un nouveau document, dossier ou fichier envoyé lorsqu'un enseignant le crée dans un cours. Les enseignants peuvent ensuite modifier la visibilité de chacun."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Lorsque cette option est activée, les enseignants peuvent choisir dans les paramètres du cours la visibilité donnée aux nouveaux documents de leur cours, à la place de celle définie pour la plateforme."
+
+msgid "Default visibility of new learning paths"
+msgstr "Visibilité par défaut des nouveaux parcours"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "La visibilité par défaut des nouveaux parcours peut être modifiée par cours"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilité donnée à un nouveau parcours lorsqu'un enseignant le crée dans un cours. Les enseignants peuvent ensuite modifier la visibilité de chacun."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Lorsque cette option est activée, les enseignants peuvent choisir dans les paramètres du cours la visibilité donnée aux nouveaux parcours de leur cours, à la place de celle définie pour la plateforme."
+
+msgid "Default visibility of new tests"
+msgstr "Visibilité par défaut des nouveaux tests"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "La visibilité par défaut des nouveaux tests peut être modifiée par cours"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilité donnée à un nouveau test lorsqu'un enseignant le crée dans un cours. Les enseignants peuvent ensuite modifier la visibilité de chacun."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Lorsque cette option est activée, les enseignants peuvent choisir dans les paramètres du cours la visibilité donnée aux nouveaux tests de leur cours, à la place de celle définie pour la plateforme."
+
+msgid "Default visibility for new learning paths"
+msgstr "Visibilité par défaut des nouveaux parcours"
+
+msgid "Default visibility for new tests"
+msgstr "Visibilité par défaut des nouveaux tests"

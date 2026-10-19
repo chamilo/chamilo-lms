@@ -55,7 +55,6 @@ import { useI18n } from "vue-i18n"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import AudioRecorder from "../AudioRecorder.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import documentsService from "../../services/documents"
 
 const { t } = useI18n()
@@ -99,9 +98,8 @@ const saveAudio = async () => {
     title: fileName,
     filetype: "file",
     uploadFile: uploadFile,
+    // Course context and default visibility derived server-side from the gated session course.
     parentResourceNodeId: props.parentResourceNodeId,
-    // Course context derived server-side from the gated session course.
-    resourceLinkList: JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]),
   }
 
   try {

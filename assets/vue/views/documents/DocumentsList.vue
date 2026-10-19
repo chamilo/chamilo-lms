@@ -1336,9 +1336,8 @@ function createNewFolder() {
   if (item.value.title?.trim()) {
     if (!item.value.id) {
       item.value.filetype = "folder"
+      // Course context and default visibility derived server-side from the gated session course.
       item.value.parentResourceNodeId = route.params.node
-      // Course context derived server-side from the gated session course.
-      item.value.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
       tableLoading.value = true
       store.dispatch("documents/createWithFormData", item.value).then(() => {

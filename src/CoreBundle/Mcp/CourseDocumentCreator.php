@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Mcp\Dto\CourseDocumentInput;
 use Chamilo\CoreBundle\Mcp\Dto\ResourceFileInput;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -76,6 +77,7 @@ class CourseDocumentCreator extends BaseResourceFileAction
         private readonly CourseHelper $courseHelper,
         private readonly CidReqHelper $cidReqHelper,
         private readonly AiDisclosureHelper $aiDisclosureHelper,
+        private readonly ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
     ) {}
 
     /**
@@ -127,13 +129,18 @@ class CourseDocumentCreator extends BaseResourceFileAction
      * $course stays null here: CidReqListener already resolved the context that
      * gated the operation, and that context -- course, session and group -- is the
      * single source of truth for the link binding.
+     *
+     * A request that sends no visibility gets the default visibility of new documents.
      */
     public function createFromRequest(Request $request, ?Course $course = null): CDocument
     {
         $resourceLinkList = $this->buildResourceLinkListFromContext(
             $this->cidReqHelper,
             $this->extractResourceLinkListFromRequest($request),
-            ResourceLink::VISIBILITY_PUBLISHED,
+            $this->resourceDefaultVisibilityHelper->getResourceLinkVisibility(
+                ResourceDefaultVisibilityHelper::DOCUMENT,
+                $course ?? $this->cidReqHelper->getDoctrineCourseEntity()
+            ),
             $course
         );
 

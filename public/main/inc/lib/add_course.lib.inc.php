@@ -333,7 +333,6 @@ class AddCourse
                 'default' => 'true' === api_get_setting('certificate.allow_public_certificates') ? 1 : '',
                 'category' => 'certificates',
             ],
-            'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
             'show_course_in_user_language' => ['default' => 2, 'category' => null],
             'email_to_teachers_on_new_work_feedback' => ['default' => 1, 'category' => null],
         ];

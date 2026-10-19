@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
@@ -1637,7 +1638,12 @@ class Exercise
             $exercise
                 ->setParent($courseEntity)
                 ->setCreator(api_get_user_entity())
-                ->addCourseLink($courseEntity, api_get_session_entity());
+                ->addCourseLink(
+                    $courseEntity,
+                    api_get_session_entity(),
+                    visibility: Container::$container->get(ResourceDefaultVisibilityHelper::class)
+                        ->getResourceLinkVisibility(ResourceDefaultVisibilityHelper::EXERCISE, $courseEntity)
+                );
             $em->persist($exercise);
             $em->flush();
             $id = $exercise->getIid();

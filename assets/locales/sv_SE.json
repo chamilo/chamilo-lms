@@ -4257,5 +4257,7 @@
     "Sessions by date": "Sessioner per datum",
     "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "Detta markerar varje migrering som medf\u00f6ljer den h\u00e4r versionen som redan utf\u00f6rd. G\u00f6r detta endast p\u00e5 en plattform som \u00e4r uppdaterad och aldrig har registrerat sin historik.",
     "Course tracking details": "Kursuppf\u00f6ljningsdetaljer",
-    "Learner details in course": "Elevdetaljer i kurs"
+    "Learner details in course": "Elevdetaljer i kurs",
+    "Start test": "Starta test",
+    "Proceed with the test": "Forts\u00e4tt med testet"
 }

@@ -4257,5 +4257,7 @@
     "Sessions by date": "Seje po datumu",
     "This marks every migration shipped by this version as already executed. Only do this on a platform that is up to date and has never recorded its history.": "To ozna\u010di vsako migracijo, ki jo prina\u0161a ta razli\u010dica, kot \u017ee izvedeno. To storite samo na platformi, ki je posodobljena in nikoli ni zabele\u017eila svoje zgodovine.",
     "Course tracking details": "Podrobnosti sledenja te\u010daja",
-    "Learner details in course": "Podrobnosti o te\u010dajniku znotraj te\u010daja"
+    "Learner details in course": "Podrobnosti o te\u010dajniku znotraj te\u010daja",
+    "Start test": "Pri\u010dni test",
+    "Proceed with the test": "Nadaljuj s testom"
 }

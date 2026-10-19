@@ -9,9 +9,9 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use GuzzleHttp\Client;
 
 /**
  * Class SocialManager.
@@ -959,23 +959,16 @@ class SocialManager extends UserManager
             return false;
         }
 
-        $client = new Client();
-
         try {
-            $response = $client->request('GET', $uri, [
+            $response = SafeHttpClientHelper::create()->request('GET', $uri, [
                 'timeout' => 10,
-                'verify' => false,
-                'allow_redirects' => ['max' => 3],
+                'max_redirects' => 3,
                 'headers' => [
                     'User-Agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Chamilo',
                 ],
             ]);
 
-            if (200 !== $response->getStatusCode()) {
-                return false;
-            }
-
-            return true;
+            return 200 === $response->getStatusCode();
         } catch (Exception $e) {
             return false;
         }
@@ -1464,6 +1457,15 @@ class SocialManager extends UserManager
                             ];
                             break;
                         case ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
+                            $profileUrlParts = parse_url($data);
+                            if (false === $profileUrlParts
+                                || empty($profileUrlParts['host'])
+                                || empty($profileUrlParts['scheme'])
+                                || !in_array(strtolower($profileUrlParts['scheme']), ['http', 'https'], true)
+                            ) {
+                                break;
+                            }
+
                             $icon_path = UserManager::get_favicon_from_url($data);
                             if (false == self::verifyUrl($icon_path)) {
                                 break;
@@ -1474,7 +1476,7 @@ class SocialManager extends UserManager
                             if ('www.hi5.com' == $domain || 'hi5.com' == $domain) {
                                 $bottom = '-0.8';
                             }
-                            $data = '<a href="'.$data.'">'
+                            $data = '<a href="'.htmlspecialchars($data, ENT_QUOTES, 'UTF-8').'">'
                                 .'<img src="'.$icon_path.'" alt="icon"'
                                 .' style="margin-right:0.5em;margin-bottom:'.$bottom.'em;" />'
                                 .$extraFieldInfo['display_text']

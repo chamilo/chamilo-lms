@@ -411,7 +411,7 @@ if (is_array($extra_field_list)) {
          <option value="<?php echo $course['code']; ?>" <?php if (in_array($course['code'], $courses)) {
               echo 'selected="selected"';
           } ?>>
-             <?php echo '('.$course['visual_code'].') '.$course['title']; ?>
+             <?php echo htmlspecialchars('('.$course['visual_code'].') '.$course['title'], ENT_QUOTES, 'UTF-8'); ?>
          </option>
     <?php
       } ?>

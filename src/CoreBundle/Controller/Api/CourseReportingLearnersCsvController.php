@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingContextResolver;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingQueryService;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,7 +113,7 @@ final readonly class CourseReportingLearnersCsvController
                 $headers[] = (string) $field['label'];
             }
 
-            fputcsv($output, $headers);
+            fputcsv($output, CsvFormulaEscaper::escapeRow($headers));
 
             foreach ($rows as $row) {
                 $line = [
@@ -154,12 +155,12 @@ final readonly class CourseReportingLearnersCsvController
                     $line[] = (string) ($row['extraFields'][(string) $field['variable']] ?? '');
                 }
 
-                fputcsv($output, array_map(
+                fputcsv($output, CsvFormulaEscaper::escapeRow(array_map(
                     fn (mixed $value): mixed => \is_string($value)
                         ? $this->neutralizeSpreadsheetFormula($value)
                         : $value,
                     $line
-                ));
+                )));
             }
 
             fclose($output);

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseProgressHelper;
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CThematic;
@@ -64,7 +65,7 @@ final readonly class CourseProgressCsvManager
             }
 
             foreach ($rows as $row) {
-                fputcsv($output, $row, ',', '"', '\\');
+                fputcsv($output, CsvFormulaEscaper::escapeRow($row), ',', '"', '\\');
             }
 
             fclose($output);

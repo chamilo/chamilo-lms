@@ -5,6 +5,9 @@
 use Chamilo\CoreBundle\Component\Http\SafeHttp;
 use Chamilo\CourseBundle\Entity\CLink;
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\UriResolver;
 
 /**
  * Function library for the links tool.
@@ -1817,67 +1820,126 @@ class Link extends Model
 
     public static function checkUrl(string $url): bool
     {
-        // SSRF guard (CWE-918): reject targets that resolve to a
-        // loopback/private/reserved/link-local address (incl. the cloud
-        // metadata endpoint) or use a non-http(s) scheme before any request.
-        if (null === SafeHttp::resolveSafeIp($url)) {
+        if (!extension_loaded('curl')) {
             return false;
         }
 
-        // Re-validate every redirect hop so a 30x cannot bounce the request to
-        // an internal host after the initial check passed.
-        $onRedirect = function ($request, $response, $uri) {
-            if (null === SafeHttp::resolveSafeIp((string) $uri)) {
-                throw new \RuntimeException("Blocked redirect to a non-public host.");
+        // Force the cURL handler: the stream handler cannot honor CURLOPT_RESOLVE.
+        $client = new Client(['handler' => new CurlHandler()]);
+        $currentUrl = $url;
+
+        for ($redirects = 0; $redirects <= 5; $redirects++) {
+            if (!self::isCheckableUrl($currentUrl)) {
+                return false;
             }
-        };
 
-        $defaults = [
-            'allow_redirects' => [
-                'max' => 5, // max number of redirects allowed
-                'strict' => true, // whether to use strict redirects or not
-                'referer' => true, // whether to add the Referer header when redirecting
-                'protocols' => ['http', 'https'], // protocols allowed to be redirected to
-                'track_redirects' => true, // whether to keep track of the number of redirects
-                'on_redirect' => $onRedirect,
-            ],
-            'connect_timeout' => 4,
-            'timeout' => 4,
-        ];
+            $safeIp = SafeHttp::resolveSafeIp($currentUrl);
+            if (null === $safeIp) {
+                return false;
+            }
 
-        $proxySettings = api_get_configuration_value('proxy_settings');
+            try {
+                $response = $client->request(
+                    'GET',
+                    $currentUrl,
+                    self::buildSafeCheckOptions($currentUrl, $safeIp)
+                );
+            } catch (\Throwable $e) {
+                return false;
+            }
 
-        if (!empty($proxySettings) &&
-            isset($proxySettings['curl_setopt_array'])
-        ) {
-            $defaults['proxy'] = sprintf(
-                '%s:%s',
-                $proxySettings['curl_setopt_array']['CURLOPT_PROXY'],
-                $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT']
-            );
-        }
-
-        $client = new Client($defaults);
-
-        try {
-            $responseIpv6 = $client->get($url);
-
-            if (200 === $responseIpv6->getStatusCode()) {
+            $statusCode = $response->getStatusCode();
+            if (200 === $statusCode) {
                 return true;
             }
-        } catch (Exception $e) {
-            try {
-                $responseIpv4 = $client->request('GET', $url, ['force_ip_resolve' => 'v4']);
 
-                if (200 === $responseIpv4->getStatusCode()) {
-                    return true;
-                }
-            } catch (Exception $e) {
+            // Never let Guzzle follow redirects automatically: each new host
+            // must be validated and pinned again before the next connection.
+            if (!in_array($statusCode, [301, 302, 303, 307, 308], true) || 5 === $redirects) {
+                return false;
+            }
+
+            $location = trim($response->getHeaderLine('Location'));
+            if ('' === $location) {
+                return false;
+            }
+
+            try {
+                $currentUrl = (string) UriResolver::resolve(new Uri($currentUrl), new Uri($location));
+            } catch (\Throwable $e) {
                 return false;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Reject ambiguous URLs that cURL and PHP could parse differently.
+     */
+    private static function isCheckableUrl(string $url): bool
+    {
+        if ('' === $url || false !== strpos($url, '\\') || preg_match('/[\x00-\x1F\x7F]/', $url)) {
+            return false;
+        }
+
+        try {
+            $parts = parse_url($url);
+        } catch (\Throwable $e) {
+            return false;
+        }
+
+        if (!is_array($parts) || empty($parts['host']) || isset($parts['user']) || isset($parts['pass'])) {
+            return false;
+        }
+
+        if (!in_array(strtolower($parts['scheme'] ?? ''), ['http', 'https'], true)) {
+            return false;
+        }
+
+        $host = trim($parts['host'], '[]');
+        if (false === filter_var($host, FILTER_VALIDATE_IP)) {
+            if (!preg_match('/\A[a-z0-9.-]+\z/i', $host) ||
+                '.' === $host[0] || '.' === substr($host, -1) || false !== strpos($host, '..')) {
+                return false;
+            }
+        }
+
+        return !isset($parts['port']) || ($parts['port'] >= 1 && $parts['port'] <= 65535);
+    }
+
+    /**
+     * Keep the original hostname for Host/SNI/TLS while pinning the socket to
+     * a previously validated public IP. Never let environment proxies resolve it.
+     */
+    private static function buildSafeCheckOptions(string $url, string $safeIp): array
+    {
+        $options = SafeHttp::secureCurlOptions($url, $safeIp);
+
+        // IPv6 literals have no DNS lookup. Domain names resolving to IPv6
+        // need brackets around the pinned address in CURLOPT_RESOLVE.
+        $parts = parse_url($url);
+        $host = trim($parts['host'], '[]');
+        if (false !== filter_var($host, FILTER_VALIDATE_IP)) {
+            unset($options[CURLOPT_RESOLVE]);
+        } elseif (false !== strpos($safeIp, ':')) {
+            $port = isset($parts['port']) ? $parts['port'] : ('https' === strtolower($parts['scheme']) ? 443 : 80);
+            $options[CURLOPT_RESOLVE] = [$host.':'.$port.':['.$safeIp.']'];
+        }
+
+        $options[CURLOPT_PROXY] = '';
+        if (defined('CURLOPT_NOPROXY')) {
+            $options[CURLOPT_NOPROXY] = '*';
+        }
+
+        return [
+            'allow_redirects' => false,
+            'http_errors' => false,
+            'connect_timeout' => 4,
+            'timeout' => 4,
+            'proxy' => '',
+            'curl' => $options,
+        ];
     }
 
     /**

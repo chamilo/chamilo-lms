@@ -1310,7 +1310,7 @@ class DocumentManager
             $externalStyle = file_get_contents($externalStyleFile);
         }
         $timeInCourse = Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $sessionId);
-        $timeInCourse = api_time_to_hms($timeInCourse, ':', false, true);
+        $timeInCourse = api_time_to_hms($timeInCourse);
 
         $timeInCourseInAllSessions = 0;
         $sessions = SessionManager::get_session_by_course($course_info['real_id']);
@@ -1320,7 +1320,7 @@ class DocumentManager
                 $timeInCourseInAllSessions += Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $session['id']);
             }
         }
-        $timeInCourseInAllSessions = api_time_to_hms($timeInCourseInAllSessions, ':', false, true);
+        $timeInCourseInAllSessions = api_time_to_hms($timeInCourseInAllSessions);
 
         $first = Tracking::get_first_connection_date_on_the_course($user_id, $course_info['real_id'], $sessionId, false);
         $first = substr($first, 0, 10);
@@ -1328,7 +1328,7 @@ class DocumentManager
         $last = substr($last, 0, 10);
 
         if ($first === $last) {
-            $startDateAndEndDate = get_lang('From').' '.$first;
+            $startDateAndEndDate = get_lang('The').' '.$first;
         } else {
             $startDateAndEndDate = sprintf(
                 get_lang('From %s to %s'),

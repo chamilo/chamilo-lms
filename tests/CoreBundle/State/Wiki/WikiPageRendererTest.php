@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\State\Wiki;
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\State\Wiki\WikiPageRenderer;
 use PHPUnit\Framework\TestCase;
 
@@ -15,6 +16,10 @@ final class WikiPageRendererTest extends TestCase
 
     protected function setUp(): void
     {
+        // get_lang() reads these statics; a kernel booted by an earlier test leaves them stale.
+        Container::$container = null;
+        Container::$translator = null;
+
         $this->renderer = new WikiPageRenderer();
     }
 

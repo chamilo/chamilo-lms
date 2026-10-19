@@ -96,7 +96,7 @@ function get_users($from, $limit, $column, $direction)
     $drhLoaded = false;
     $students = [];
 
-    if (api_is_drh() && api_drh_can_access_all_session_content()) {
+    if (api_is_hrm() && api_hrm_can_access_all_session_content()) {
         $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
             'drh_all',
             api_get_user_id(),
@@ -254,7 +254,7 @@ $actionsLeft .= Display::url(
 $actionsLeft .= Display::mySpaceMenu('teachers');
 
 // 2) Extra action for DRH: skills report.
-if (api_is_drh()) {
+if (api_is_hrm()) {
     $actionsLeft .= Display::url(
         Display::getMdiIcon(
             'badge-account-horizontal',

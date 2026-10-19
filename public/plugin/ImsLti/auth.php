@@ -149,7 +149,7 @@ try {
         $jwtContent['family_name'] = $user->getLastname();
     }
 
-    if (DRH === $user->getStatus()) {
+    if (HRM === $user->getStatus()) {
         $roleScopeMentor = ImsLtiPlugin::getRoleScopeMentor($user, $tool);
 
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/role_scope_mentor'] = $roleScopeMentor;

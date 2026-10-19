@@ -1050,7 +1050,7 @@ class ReportRegistry
             $roles[] = 'ROLE_SESSION_MANAGER';
         }
 
-        if (function_exists('api_is_drh') && api_is_drh()) {
+        if (function_exists('api_is_drh') && api_is_hrm()) {
             $roles[] = 'ROLE_HR';
         }
 

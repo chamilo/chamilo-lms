@@ -71,7 +71,7 @@ final readonly class AnnouncementEmailRecipientResolver
                 continue;
             }
 
-            $hrmList = $this->userRepository->getDrhListFromUser(
+            $hrmList = $this->userRepository->getHrmListFromUser(
                 (int) $recipientUser->getId(),
                 (int) $accessUrl->getId(),
             );

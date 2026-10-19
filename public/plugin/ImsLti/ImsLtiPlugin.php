@@ -296,7 +296,7 @@ class ImsLtiPlugin extends Plugin
     {
         $roles = ['http://purl.imsglobal.org/vocab/lis/v2/system/person#User'];
 
-        if (DRH === $user->getStatus()) {
+        if (HRM === $user->getStatus()) {
             $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/membership#Mentor';
             $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/institution/person#Mentor';
 
@@ -331,7 +331,7 @@ class ImsLtiPlugin extends Plugin
      */
     public static function getUserRoles(User $user)
     {
-        if (DRH === $user->getStatus()) {
+        if (HRM === $user->getStatus()) {
             return 'urn:lti:role:ims/lis/Mentor';
         }
 
@@ -406,7 +406,7 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Tool User IDs which the user DRH can access as a mentor.
+     * Tool User IDs which the user HRM can access as a mentor.
      *
      * @param bool $generateIdForTool. Optional. Set TRUE for LTI 1.x.
      *
@@ -414,11 +414,11 @@ class ImsLtiPlugin extends Plugin
      */
     public static function getRoleScopeMentorAsArray(User $user, ExternalTool $tool, $generateIdForTool = false)
     {
-        if (DRH !== $user->getStatus()) {
+        if (HRM !== $user->getStatus()) {
             return [];
         }
 
-        $followedUsers = UserManager::get_users_followed_by_drh($user->getId(), 0, true);
+        $followedUsers = UserManager::get_users_followed_by_hrm($user->getId(), 0, true);
         $scope = [];
         /** @var array $userInfo */
         foreach ($followedUsers as $userInfo) {

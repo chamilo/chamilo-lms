@@ -153,7 +153,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         $courseIdList = [];
 
         if ($user->isHRM()
-            && 'true' === $this->settingsManager->getSetting('session.drh_can_access_all_session_content')
+            && 'true' === $this->settingsManager->getSetting('session.hrm_can_access_all_session_content')
         ) {
             $sessions = $this->sessionRepository
                 ->getUserFollowedSessionsInAccessUrl($user, $accessUrl)

@@ -27,7 +27,7 @@ class LoginRedirection
                 $redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;
             }
         }
-        if (api_is_drh() && '' == !api_get_setting('drh_page_after_login')) {
+        if (api_is_hrm() && '' == !api_get_setting('drh_page_after_login')) {
             $redirect_url = html_entity_decode(api_get_setting('drh_page_after_login'));
             if ("/" == $redirect_url[0]) {
                 $redirect_url = substr(api_get_path(WEB_PATH), 0, -1).$redirect_url;

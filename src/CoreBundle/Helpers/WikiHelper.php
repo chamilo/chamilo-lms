@@ -140,7 +140,7 @@ readonly class WikiHelper
                 || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
                 || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
                 || ($this->security->isGranted('ROLE_HR')
-                    && $this->isSettingEnabled('session.drh_can_access_all_session_content'))
+                    && $this->isSettingEnabled('session.hrm_can_access_all_session_content'))
                 || ($user->isSessionAdmin()
                     && $this->isSettingEnabled('session.session_admins_access_all_content'));
         } else {
@@ -213,7 +213,7 @@ readonly class WikiHelper
 
         return $session instanceof Session
             && $this->security->isGranted('ROLE_HR')
-            && $this->isSettingEnabled('session.drh_can_access_all_session_content');
+            && $this->isSettingEnabled('session.hrm_can_access_all_session_content');
     }
 
     public function canManageCourseSettings(Course $course): bool

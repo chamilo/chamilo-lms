@@ -637,7 +637,7 @@ if ($hrmList) {
 }
 
 if (DRH == $user->getStatus()) {
-    $usersAssigned = UserManager::get_users_followed_by_drh($userId);
+    $usersAssigned = UserManager::get_users_followed_by_hrm($userId);
     if ($usersAssigned) {
         echo Display::page_subheader(get_lang('List of users assigned to Human Resources manager'));
         echo '<div class="row">';

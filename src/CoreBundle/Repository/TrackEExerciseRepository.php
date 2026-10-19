@@ -80,9 +80,9 @@ class TrackEExerciseRepository extends ServiceEntityRepository
             $queryBuilder->setParameter('access_boss_relation', UserRelUser::USER_RELATION_TYPE_BOSS);
         }
 
-        if ($scope->mayFollowAsDrh) {
-            $terms[] = $expr->exists($this->getFollowerDql($trackExerciseAlias, 'access_drh', 'access_drh_relation'));
-            $queryBuilder->setParameter('access_drh_relation', UserRelUser::USER_RELATION_TYPE_RRHH);
+        if ($scope->mayFollowAsHrm) {
+            $terms[] = $expr->exists($this->getFollowerDql($trackExerciseAlias, 'access_hrm', 'access_hrm_relation'));
+            $queryBuilder->setParameter('access_hrm_relation', UserRelUser::USER_RELATION_TYPE_HRM);
         }
 
         if ($scope->mayAdministerSessions) {

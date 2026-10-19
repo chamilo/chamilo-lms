@@ -289,7 +289,7 @@ class NotebookTeacher
         echo '          </div>';
 
         echo '          <div class="flex flex-wrap items-center gap-2">';
-        if (!api_is_drh() && !api_is_anonymous()) {
+        if (!api_is_hrm() && !api_is_anonymous()) {
             if (empty($sessionId) || api_is_allowed_to_session_edit(false, true)) {
                 echo self::renderIconAction(
                     $currentUrl.'&action=addnote',

@@ -3024,7 +3024,7 @@ HTML;
         $items = [];
 
         $isPlatformAdmin = api_is_platform_admin();
-        $isDrh = api_is_drh();
+        $isDrh = api_is_hrm();
         if ('yourstudents' === $current) {
             $current = 'students';
         }

@@ -107,7 +107,7 @@ trait AnnouncementAccessHelperTrait
                 || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
                 || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
                 || ($security->isGranted('ROLE_HR') && $this->isSettingEnabled(
-                    $settingsManager->getSetting('session.drh_can_access_all_session_content', true),
+                    $settingsManager->getSetting('session.hrm_can_access_all_session_content', true),
                 ))
                 || ($user->isSessionAdmin() && $this->isSettingEnabled(
                     $settingsManager->getSetting('session.session_admins_access_all_content', true),
@@ -210,7 +210,7 @@ trait AnnouncementAccessHelperTrait
             }
 
             if ($security->isGranted('ROLE_HR') && $this->isSettingEnabled(
-                $settingsManager->getSetting('session.drh_can_access_all_session_content', true),
+                $settingsManager->getSetting('session.hrm_can_access_all_session_content', true),
             )) {
                 return true;
             }
@@ -258,7 +258,7 @@ trait AnnouncementAccessHelperTrait
         }
 
         if ($security->isGranted('ROLE_HR') && $this->isSettingEnabled(
-            $settingsManager->getSetting('session.drh_can_access_all_session_content', true),
+            $settingsManager->getSetting('session.hrm_can_access_all_session_content', true),
         )) {
             return true;
         }

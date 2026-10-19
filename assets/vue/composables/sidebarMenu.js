@@ -11,7 +11,8 @@ const ROLE_MAP = {
   ROLE_SESSION_MANAGER: "SESSIONADMIN",
   ROLE_TEACHER: "COURSEMANAGER",
   ROLE_STUDENT_BOSS: "STUDENT_BOSS",
-  ROLE_DRH: "DRH",
+  ROLE_HR: "HRM",
+  ROLE_DRH: "HRM",
   ROLE_INVITEE: "INVITEE",
   ROLE_STUDENT: "STUDENT",
 }
@@ -186,7 +187,10 @@ function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
   const roles = securityStore.user?.roles || []
   for (const role of roles) {
     const mappedRole = ROLE_MAP[role] || role
-    const roleValue = perRole?.[mappedRole]
+    let roleValue = perRole?.[mappedRole]
+    if (mappedRole === "HRM") {
+      roleValue = perRole?.HRM ?? perRole?.DRH
+    }
     if (!roleValue) continue
 
     // Backward compatible:

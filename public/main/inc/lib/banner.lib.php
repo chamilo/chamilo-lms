@@ -219,13 +219,13 @@ function return_navigation_array()
 
         // Reporting
         if (in_array('reporting', $tabs)) {
-            if (api_is_teacher() || api_is_drh() || api_is_session_admin() || api_is_student_boss()) {
+            if (api_is_teacher() || api_is_hrm() || api_is_session_admin() || api_is_student_boss()) {
                 $navigation['session_my_space'] = $possible_tabs['session_my_space'];
             } else {
                 $navigation['session_my_space'] = $possible_tabs['session_my_progress'];
             }
         } else {
-            if (api_is_teacher() || api_is_drh() || api_is_session_admin() || api_is_student_boss()) {
+            if (api_is_teacher() || api_is_hrm() || api_is_session_admin() || api_is_student_boss()) {
                 $menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
             } else {
                 $menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
@@ -243,7 +243,7 @@ function return_navigation_array()
 
         // Dashboard
         if (in_array('dashboard', $tabs)) {
-            if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
+            if (api_is_platform_admin() || api_is_hrm() || api_is_session_admin()) {
                 $navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
             }
         } else {
@@ -258,7 +258,7 @@ function return_navigation_array()
             if (!empty($result) && 'installed' === $result['selected_value']) {
                 // Students
                 $url = api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/posts.php';
-                if (api_is_platform_admin() || api_is_drh() || api_is_teacher()) {
+                if (api_is_platform_admin() || api_is_hrm() || api_is_teacher()) {
                     $url = api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/my_students.php';
                 }
                 $navigation['follow_up']['url'] = $url;

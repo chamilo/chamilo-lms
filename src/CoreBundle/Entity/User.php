@@ -1654,7 +1654,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return match ($status) {
             COURSEMANAGER => 'ROLE_TEACHER',
             STUDENT => 'ROLE_STUDENT',
-            DRH => 'ROLE_HR',
+            HRM => 'ROLE_HR',
             SESSIONADMIN => 'ROLE_SESSION_MANAGER',
             STUDENT_BOSS => 'ROLE_STUDENT_BOSS',
             INVITEE => 'ROLE_INVITEE',
@@ -2046,13 +2046,23 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * Retrieves this user's related DRH sessions.
+     * Retrieves this user's related HR manager sessions.
+     *
+     * @return Session[]
+     */
+    public function getHRMSessions(): array
+    {
+        return $this->getSessions(Session::HRM);
+    }
+
+    /**
+     * Legacy alias for callers outside the modern Symfony reporting layer.
      *
      * @return Session[]
      */
     public function getDRHSessions(): array
     {
-        return $this->getSessions(Session::DRH);
+        return $this->getHRMSessions();
     }
 
     /**
@@ -2249,7 +2259,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getMaxSortValue(?UserCourseCategory $userCourseCategory = null): int
     {
         $categoryCourses = $this->courses->matching(
-            Criteria::create()->where(Criteria::expr()->neq('relationType', COURSE_RELATION_TYPE_RRHH))->andWhere(
+            Criteria::create()->where(Criteria::expr()->neq('relationType', COURSE_RELATION_TYPE_HRM))->andWhere(
                 Criteria::expr()->eq('userCourseCat', $userCourseCategory)
             )
         );

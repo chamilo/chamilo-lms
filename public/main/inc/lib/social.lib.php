@@ -1288,7 +1288,7 @@ class SocialManager extends UserManager
         $template->assign('orientation', $orientation);
         $template->assign('skills', $skill->getUserSkillsTable($userId, 0, 0, false)['skills']);
         $template->assign('user_id', $userId);
-        $template->assign('show_skills_report_link', api_is_student() || api_is_student_boss() || api_is_drh());
+        $template->assign('show_skills_report_link', api_is_student() || api_is_student_boss() || api_is_hrm());
 
         $skillBlock = $template->get_template('social/skills_block.tpl');
 

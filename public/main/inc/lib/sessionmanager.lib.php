@@ -4120,6 +4120,15 @@ class SessionManager
     }
 
     /**
+     * Get the session followed by a human resources manager.
+     * The legacy method remains available for third-party consumers.
+     */
+    public static function getSessionFollowedByHrm($userId, $sessionId)
+    {
+        return self::getSessionFollowedByDrh($userId, $sessionId);
+    }
+
+    /**
      * @param int $userId
      * @param int $sessionId
      *
@@ -4183,7 +4192,7 @@ class SessionManager
      *
      * @return array sessions
      */
-    public static function get_sessions_followed_by_drh(
+    public static function get_sessions_followed_by_hrm(
         $userId,
         $start = null,
         $limit = null,
@@ -4198,6 +4207,35 @@ class SessionManager
         return self::getSessionsFollowedByUser(
             $userId,
             DRH,
+            $start,
+            $limit,
+            $getCount,
+            $getOnlySessionId,
+            $getSql,
+            $orderCondition,
+            $keyword,
+            $description,
+            $options
+        );
+    }
+
+    /**
+     * @deprecated Use get_sessions_followed_by_hrm().
+     */
+    public static function get_sessions_followed_by_drh(
+        $userId,
+        $start = null,
+        $limit = null,
+        $getCount = false,
+        $getOnlySessionId = false,
+        $getSql = false,
+        $orderCondition = null,
+        $keyword = '',
+        $description = '',
+        $options = []
+    ) {
+        return self::get_sessions_followed_by_hrm(
+            $userId,
             $start,
             $limit,
             $getCount,

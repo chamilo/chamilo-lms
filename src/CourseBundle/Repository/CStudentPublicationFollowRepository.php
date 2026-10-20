@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationFollow;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -65,7 +66,7 @@ class CStudentPublicationFollowRepository extends ServiceEntityRepository
         return $this->getEntityManager()->createQueryBuilder()
             ->select('u')
             ->from(User::class, 'u')
-            ->innerJoin(CStudentPublicationFollow::class, 'f', 'WITH', 'f.user = u')
+            ->innerJoin(CStudentPublicationFollow::class, 'f', Join::ON, 'f.user = u')
             ->where('f.publication = :publication')
             ->setParameter('publication', (int) $publication->getIid())
             ->orderBy('f.id', 'ASC')

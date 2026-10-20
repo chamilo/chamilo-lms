@@ -1374,10 +1374,10 @@ When(
   },
 )
 
-// Not ported — new. Same silent TinyMCE init flake as "I create a ticket setting ..." above,
-// hit by the forum dialog ("forum-comment" never mounted in specialCase1Sessions): retry the
-// whole open + fill unit with a fresh dialog. Escape closes it, so no language-dependent
-// Cancel label is needed (that course runs in French).
+// The forum page has two buttons with the same "Add forum" accessible name.
+// Select one explicitly; otherwise Playwright's strict-mode error is swallowed
+// by the retry and incorrectly reported as a TinyMCE initialization failure.
+// Keep a fresh-dialog retry for an actual editor initialization timeout.
 When(
   "I open the forum dialog with {string} and fill title {string} and description {string}",
   async ({ page }, openLabel: string, title: string, description: string) => {
@@ -1387,7 +1387,7 @@ When(
     const editorId = "forum-comment"
 
     async function openAndFill(): Promise<boolean> {
-      await page.getByRole("button", { name: openLabel, exact: true }).click({ timeout: STEP_TIMEOUT })
+      await page.getByRole("button", { name: openLabel, exact: true }).first().click({ timeout: STEP_TIMEOUT })
       await fillReliably(page.locator("#forum-title"), title)
       await page.locator(`#${editorId}`).waitFor({ state: "attached", timeout: STEP_TIMEOUT })
       try {

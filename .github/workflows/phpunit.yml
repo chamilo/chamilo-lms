@@ -59,10 +59,11 @@ jobs:
             - name: Install assets
               run: php bin/console assets:install
 
+            # corepack plus the committed .yarn/releases binary already pin the
+            # version declared in package.json, so nothing is installed here.
             - name: Install Yarn
               run: |
                   sudo corepack enable
-                  yarn set version stable
                   yarn --version
 
             - name: Get yarn cache directory

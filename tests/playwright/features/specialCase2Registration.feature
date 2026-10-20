@@ -103,7 +103,8 @@ Feature: Special case 2 — self-registration and diagnosis
   # The registration form this file drives depends on platform settings that
   # specialCase1PlatformSettings' teardown leaves in a different state (registration by
   # approval, terms on, no registration fields), so they are set here, not assumed.
-  # Terms are off because the "Validate" button only exists then (registration.php).
+  # Terms are disabled for this registration flow; double validation is a
+  # separate setting and must be enabled to display the "Validate" step.
   Scenario: Configure the registration settings
     Given I am a platform administrator
     And I wait for the page to be loaded
@@ -117,6 +118,12 @@ Feature: Special case 2 — self-registration and diagnosis
     Given I am on "/admin/settings/search_settings?keyword=allow_terms_conditions"
     And I wait for the page to be loaded
     And I select "No" from "form_allow_terms_conditions"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=allow_double_validation_in_registration"
+    And I wait for the page to be loaded
+    And I select "Yes" from "form_allow_double_validation_in_registration"
     And I press "Save settings"
     And I wait for the page to be loaded
 
@@ -246,6 +253,12 @@ Feature: Special case 2 — self-registration and diagnosis
   # remaining special-case files were written against.
   Scenario: Restore the registration settings
     Given I am a platform administrator
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=allow_double_validation_in_registration"
+    And I wait for the page to be loaded
+    And I select "No" from "form_allow_double_validation_in_registration"
+    And I press "Save settings"
     And I wait for the page to be loaded
 
     Given I am on "/admin/settings/search_settings?keyword=required_extra_fields_in_inscription"

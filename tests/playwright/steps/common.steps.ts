@@ -3538,7 +3538,20 @@ When(
     if (await isSoonVisible(named, 3000)) {
       await named.first().click()
     } else {
-      await page.locator('[role="option"]').first().click()
+      // The AJAX search renders full names, not usernames. Only fall back to
+      // its sole selectable result; never assign an unrelated user or wait
+      // for the entire long-scenario timeout when registration failed.
+      const choices = page.locator('.select2-results__option[role="option"][aria-selected]')
+      if (!(await isSoonVisible(choices.first(), 10_000))) {
+        throw new Error(
+          `No selectable learner was returned for "${learnerUsername}". Verify that self-registration completed and the account has the student role.`,
+        )
+      }
+      const choiceCount = await choices.count()
+      if (choiceCount !== 1) {
+        throw new Error(`Expected one learner matching "${learnerUsername}", found ${choiceCount}.`)
+      }
+      await choices.first().click({ timeout: 10_000 })
     }
     await pressButton(page, "Add")
   },

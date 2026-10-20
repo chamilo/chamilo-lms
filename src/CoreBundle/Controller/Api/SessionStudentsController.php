@@ -108,7 +108,7 @@ final class SessionStudentsController extends AbstractController
         ]);
     }
 
-    private function findSession(int $id): Session|JsonResponse
+    private function findSession(int $id): JsonResponse|Session
     {
         $session = $this->em->find(Session::class, $id);
         if (!$session instanceof Session || !$this->sessionBelongsToCurrentUrl($session)) {

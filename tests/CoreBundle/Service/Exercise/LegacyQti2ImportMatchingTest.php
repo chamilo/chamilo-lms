@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Service\Exercise;
 
+use Chamilo\CoreBundle\Service\Exercise\Qti2FillBlanksWriter;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -97,6 +98,24 @@ final class LegacyQti2ImportMatchingTest extends TestCase
         self::assertCount(2, $rows);
         self::assertSame('<a>Link</a>', $rows[0]['answer']);
         self::assertSame('<b>Bold</b><img src="x.png" alt="x.png" />', $rows[1]['answer']);
+    }
+
+    /**
+     * The legacy importer cleans fill in blanks texts the same way: scripts, event handlers and
+     * javascript: URLs are removed, formatting and the blanks are kept, and the blank lost with the
+     * <script> takes its score with it.
+     */
+    public function testFillBlanksTextHtmlIsSanitizedAndBlanksKept(): void
+    {
+        $fib = Qti2FillBlanksWriter::write('<p onclick="alert(1)"><strong>Capital</strong> of France: [Paris|London|Rome] <script>alert([2])</script><a href="javascript:alert(3)">map</a> and [a||b] <img src="x.png" onerror="alert(4)"> {kept}</p>::2,5,3:200,200,200:0@0');
+        self::assertNotNull($fib);
+        $questions = $this->parse('<assessmentItem identifier="QST_9" title="FIB" category="">'.$fib['declarations']
+            .'<itemBody>'.$fib['body'].'</itemBody></assessmentItem>');
+
+        [$answer, $score] = buildFibAnswerString($questions['QST_9']);
+
+        self::assertSame('<p><strong>Capital</strong> of France: [Paris|London|Rome] <a>map</a> and [a||b] <img src="x.png" alt="x.png" /> {kept}</p>::2,3:200,200:0@0', $answer);
+        self::assertSame(5.0, (float) $score);
     }
 
     /**

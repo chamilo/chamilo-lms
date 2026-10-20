@@ -1086,7 +1086,8 @@ function buildFibAnswerString(array $questionArray): array
 
     $existing = parseExistingFibMeta($text);
     if (null !== $existing) {
-        return $existing;
+        // The text comes from the package: clean its HTML, keeping the blanks.
+        return QtiImportHtmlSanitizer::sanitizeFillBlanksAnswer($existing[0], (float) $existing[1]);
     }
 
     // Only now do the safe cleanup for normal builds
@@ -1143,5 +1144,6 @@ function buildFibAnswerString(array $questionArray): array
     // Separator 0 means "[...]" and switchable defaults to 0
     $text .= ':0@0';
 
-    return [$text, $total];
+    // The text comes from the package: clean its HTML, keeping the blanks.
+    return QtiImportHtmlSanitizer::sanitizeFillBlanksAnswer($text, (float) $total);
 }

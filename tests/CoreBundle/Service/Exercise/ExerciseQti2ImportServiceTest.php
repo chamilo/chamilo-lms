@@ -9,6 +9,8 @@ namespace Chamilo\Tests\CoreBundle\Service\Exercise;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseQti2ExportService;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseQti2ImportService;
+use Chamilo\CoreBundle\Service\Exercise\Qti2FillBlanksWriter;
+use Chamilo\CoreBundle\Service\Exercise\QtiImportHtmlSanitizer;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
@@ -176,6 +178,44 @@ final class ExerciseQti2ImportServiceTest extends TestCase
         foreach ($answers as $answer) {
             self::assertDoesNotMatchRegularExpression('/script|onerror|onload|javascript:/i', $answer);
         }
+    }
+
+    /**
+     * Fill in blanks texts are displayed as raw HTML too: scripts, event handlers and javascript:
+     * URLs are removed, formatting and the blanks (menu, alternatives) are kept. The blank that sat
+     * inside the removed <script> is dropped with its score, so the scores still match the blanks.
+     */
+    public function testFillBlanksTextHtmlIsSanitizedAndBlanksKept(): void
+    {
+        $fib = Qti2FillBlanksWriter::write('<p onclick="alert(1)"><strong>Capital</strong> of France: [Paris|London|Rome] <script>alert([2])</script><a href="javascript:alert(3)">map</a> and [a||b] <img src="x.png" onerror="alert(4)"> {kept}</p>::2,5,3:200,200,200:0@0');
+        self::assertNotNull($fib);
+        $item = '<assessmentItem identifier="QST_9" title="FIB" category="">'.$fib['declarations']
+            .'<itemBody>'.$fib['body'].'</itemBody>'
+            .'<responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response"/></assessmentItem>';
+
+        $this->createImportService()->import($this->createZip($this->wrapItems($item)), new Course(), null);
+
+        $question = $this->getSingleQuestion();
+        $answers = array_map(static fn (CQuizAnswer $a): string => $a->getAnswer(), $this->getAnswers($question));
+        self::assertSame(['<p><strong>Capital</strong> of France: [Paris|London|Rome] <a>map</a> and [a||b] <img src="x.png" alt="x.png" /> {kept}</p>::2,3:200,200:0@0'], $answers);
+        self::assertSame(5.0, $question->getPonderation());
+        self::assertDoesNotMatchRegularExpression('/script|onclick|onerror|javascript:/i', $answers[0]);
+    }
+
+    /**
+     * Blanks written with another separator survive too, "<" inside a blank is escaped, and a blank
+     * placed inside an attribute can't close it.
+     */
+    public function testFillBlanksSanitizerKeepsOtherSeparatorsAndEscapesBlanks(): void
+    {
+        self::assertSame(
+            ['Use {word} and {a&lt;b} here <img src="x.png" alt="{q&quot; onerror=&quot;alert(1)}" />::4,1,2:150,150,150:1@0', 7.0],
+            QtiImportHtmlSanitizer::sanitizeFillBlanksAnswer('Use {word} and {a<b} here <img src="x.png" alt="{q" onerror="alert(1)}">::4,1,2:150,150,150:1@0', 7.0)
+        );
+        self::assertSame(
+            ['<b>[x]</b> &amp; [y||z]::1,1:200,200:0@0', 2.0],
+            QtiImportHtmlSanitizer::sanitizeFillBlanksAnswer('<b onmouseover="alert(1)">[x]</b> & [y||z]::1,1:200,200:0@0', 2.0)
+        );
     }
 
     private function createImportService(): ExerciseQti2ImportService

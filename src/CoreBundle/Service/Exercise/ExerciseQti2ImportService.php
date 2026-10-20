@@ -986,7 +986,8 @@ final readonly class ExerciseQti2ImportService
 
         $existing = $this->parseExistingFibMeta($text);
         if (null !== $existing) {
-            return $existing;
+            // The text comes from the package: clean its HTML, keeping the blanks.
+            return QtiImportHtmlSanitizer::sanitizeFillBlanksAnswer($existing[0], (float) $existing[1]);
         }
 
         $text = str_replace('::', '', $text);
@@ -1031,7 +1032,8 @@ final readonly class ExerciseQti2ImportService
 
         $text .= ':0@0';
 
-        return [$text, $total];
+        // The text comes from the package: clean its HTML, keeping the blanks.
+        return QtiImportHtmlSanitizer::sanitizeFillBlanksAnswer($text, (float) $total);
     }
 
     /**

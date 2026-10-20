@@ -109,6 +109,17 @@ final class Qti2FillBlanksWriter
     }
 
     /**
+     * The regular expression matching one blank, with its markers, for a Chamilo separator number
+     * (0 = [], 1 = {}, 2 = (), 3 = **, 4 = ##, 5 = %%, 6 = $$), as FillBlanks::getAnswerInfo() reads it.
+     */
+    public static function blankPattern(int $separatorNumber): string
+    {
+        [$start, $end] = self::SEPARATORS[$separatorNumber] ?? self::SEPARATORS[0];
+
+        return '/'.preg_quote($start, '/').'[^'.preg_quote($end, '/').']*'.preg_quote($end, '/').'/u';
+    }
+
+    /**
      * @return array{segments: array<int, string>, blanks: array<int, array{type: string, options: array<int, string>, score: float}>}|null
      */
     public static function parse(string $answer): ?array
@@ -125,9 +136,7 @@ final class Qti2FillBlanksWriter
         $weights = explode(',', $details[0]);
         $separatorNumber = \count($details) >= 3 ? (int) $details[2] : 0;
         [$start, $end] = self::SEPARATORS[$separatorNumber] ?? self::SEPARATORS[0];
-
-        $pattern = '/'.preg_quote($start, '/').'[^'.preg_quote($end, '/').']*'.preg_quote($end, '/').'/u';
-        if (false === preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE)) {
+        if (false === preg_match_all(self::blankPattern($separatorNumber), $text, $matches, PREG_OFFSET_CAPTURE)) {
             return null;
         }
 

@@ -2844,6 +2844,15 @@ Then("I click the {string} icon in the row for {string}", async ({ page }, selec
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
 })
 
+// Not ported — new, for toolExerciseQti2Import.feature (#1377): checks that a value sits on the
+// same <tr> as a label, e.g. that the imported matching item "France" is associated with "Paris"
+// in the question preview table. A page-wide "I should see" can't tell that apart from the list
+// of options rendered just above the table.
+Then("the row for {string} should contain {string}", async ({ page }, rowText: string, expected: string) => {
+  const row = page.locator("tr").filter({ has: page.getByText(rowText, { exact: true }) })
+  await expect(row.first()).toContainText(expected)
+})
+
 // Not ported — new, for toolGroup.feature's group_category action icons
 // (edit/create-groups/delete). Unlike a group ROW (a real `<tr>`), a
 // category's own header is a `<div class="page-header section-header">`

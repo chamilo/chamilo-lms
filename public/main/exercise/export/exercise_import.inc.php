@@ -191,8 +191,18 @@ function import_exercise($file)
                     continue;
                 }
 
-                if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, FREE_ANSWER, FIB], true)) {
+                if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, FREE_ANSWER, FIB, MATCHING], true)) {
                     continue;
+                }
+
+                $matchingRows = [];
+                if (MATCHING == $question_array['type']) {
+                    $matchingRows = buildMatchingAnswerRows($question_array);
+                    if (empty($matchingRows)) {
+                        Display::addFlash(Display::return_message('QTI import: a matching question without associations was skipped.', 'warning'));
+
+                        continue;
+                    }
                 }
 
                 // Create question
@@ -285,7 +295,19 @@ function import_exercise($file)
                 // Normalize positions 1..N
                 $pos = 1;
 
-                if (!empty($answerList) && is_array($answerList)) {
+                if (MATCHING == $question->type) {
+                    // Options first (correct = 0), then the items whose "correct" is the position of their option.
+                    // Answer::save() turns that position into the option iid.
+                    foreach ($matchingRows as $row) {
+                        $answer->new_answer[$pos] = formatText($row['answer']);
+                        $answer->new_comment[$pos] = '';
+                        $answer->new_position[$pos] = $pos;
+                        $answer->new_correct[$pos] = $row['correct'];
+                        $answer->new_weighting[$pos] = $row['weight'];
+                        $totalCorrectWeight += $row['weight'];
+                        $pos++;
+                    }
+                } elseif (!empty($answerList) && is_array($answerList)) {
                     foreach ($answerList as $key => $answers) {
                         // Answer text
                         $answerValue = isset($answers['value']) ? formatText($answers['value']) : '';
@@ -540,6 +562,7 @@ function parseQti2($xmlData)
 
                 break;
             case 'matchInteraction':
+                // QTI does not tell Matching and Matching draggable apart, so both are imported as Matching.
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = MATCHING;
 
                 break;
@@ -825,6 +848,70 @@ function parseQti2($xmlData)
         $q['response_text'] = $text;
     }
     unset($q);
+}
+
+/**
+ * Builds the answer rows of a Matching question from a parsed matchInteraction.
+ *
+ * The first simpleMatchSet holds the items to match and the second one the options. Associations come
+ * as "<item> <option>" directed pairs in correctResponse, with their score in the mapping. Chamilo stores
+ * the options first (correct = 0), then each item with "correct" set to the position of its option.
+ * Items without a correct option cannot be stored in Chamilo and are dropped.
+ *
+ * @return array<int, array{answer: string, correct: int, weight: float}> empty if no association was found
+ */
+function buildMatchingAnswerRows(array $questionArray): array
+{
+    $sets = isset($questionArray['answer']) && is_array($questionArray['answer']) ? array_values($questionArray['answer']) : [];
+    $leftChoices = isset($sets[0]) && is_array($sets[0]) ? $sets[0] : [];
+    $rightChoices = isset($sets[1]) && is_array($sets[1]) ? $sets[1] : [];
+    $weights = isset($questionArray['weighting']) && is_array($questionArray['weighting']) ? $questionArray['weighting'] : [];
+    $defaultWeight = isset($questionArray['default_weighting']) ? (float) $questionArray['default_weighting'] : 0.0;
+    $correctAnswers = isset($questionArray['correct_answers']) && is_array($questionArray['correct_answers']) ? $questionArray['correct_answers'] : [];
+
+    $matches = [];
+    foreach ($correctAnswers as $pair) {
+        $pair = (string) $pair;
+        $parts = preg_split('/\s+/', trim($pair));
+        if (!is_array($parts) || 2 !== count($parts)) {
+            continue;
+        }
+        [$source, $target] = $parts;
+        if (isset($rightChoices[$source], $leftChoices[$target])) {
+            [$source, $target] = [$target, $source];
+        }
+        if (isset($leftChoices[$source], $rightChoices[$target]) && !isset($matches[$source])) {
+            $matches[$source] = [
+                'target' => $target,
+                'weight' => isset($weights[$pair]) ? (float) $weights[$pair] : $defaultWeight,
+            ];
+        }
+    }
+
+    if (empty($matches)) {
+        return [];
+    }
+
+    $rows = [];
+    $optionPositions = [];
+    foreach ($rightChoices as $choiceId => $choiceText) {
+        $rows[] = ['answer' => (string) $choiceText, 'correct' => 0, 'weight' => 0.0];
+        $optionPositions[(string) $choiceId] = count($rows);
+    }
+
+    foreach ($leftChoices as $choiceId => $choiceText) {
+        if (!isset($matches[(string) $choiceId])) {
+            continue;
+        }
+        $match = $matches[(string) $choiceId];
+        $rows[] = [
+            'answer' => (string) $choiceText,
+            'correct' => $optionPositions[$match['target']],
+            'weight' => $match['weight'],
+        ];
+    }
+
+    return $rows;
 }
 
 /**

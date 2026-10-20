@@ -453,7 +453,8 @@ function export_question_qti($questionId, $standalone = true)
         return '';
     }
 
-    $isValid = $qst instanceof UniqueAnswer || $qst instanceof MultipleAnswer || $qst instanceof FreeAnswer;
+    $isValid = $qst instanceof UniqueAnswer || $qst instanceof MultipleAnswer || $qst instanceof FreeAnswer
+        || in_array((int) $qst->type, [MATCHING, MATCHING_DRAGGABLE], true);
     if (!$isValid) {
         return '';
     }

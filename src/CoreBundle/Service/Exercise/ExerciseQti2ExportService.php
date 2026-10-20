@@ -38,13 +38,16 @@ use const LIBXML_NOWARNING;
  * Modern IMS/QTI 2 exporter for the same exercise-level subset exported by legacy Chamilo.
  *
  * The legacy exercise QTI2 action only exported Unique answer, Multiple answer and Free answer
- * questions through export_question_qti(). Other question types were silently skipped.
+ * questions through export_question_qti(). Matching questions are exported as a matchInteraction.
+ * Other question types are skipped.
  */
 final readonly class ExerciseQti2ExportService
 {
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
+    private const MATCHING = 4;
     private const FREE_ANSWER = 5;
+    private const MATCHING_DRAGGABLE = 19;
     private const VISIBILITY_PUBLISHED = 2;
 
     public function __construct(
@@ -213,7 +216,12 @@ final readonly class ExerciseQti2ExportService
 
     private function isLegacyExportableQuestion(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::FREE_ANSWER], true);
+        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE], true);
+    }
+
+    private function isMatchingQuestion(CQuizQuestion $question): bool
+    {
+        return \in_array((int) $question->getType(), [self::MATCHING, self::MATCHING_DRAGGABLE], true);
     }
 
     private function exportQuestion(CQuizQuestion $question): string
@@ -248,6 +256,10 @@ final readonly class ExerciseQti2ExportService
             return $xml;
         }
 
+        if ($this->isMatchingQuestion($question)) {
+            return $this->exportMatchingResponseDeclaration($question, $questionIdent);
+        }
+
         $answers = $this->getSortedAnswers($question);
         $cardinality = self::MULTIPLE_ANSWER === (int) $question->getType() ? 'multiple' : 'single';
         $xml = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="'.$cardinality.'" baseType="identifier">'."\n";
@@ -278,6 +290,10 @@ final readonly class ExerciseQti2ExportService
             </extendedTextInteraction>';
         }
 
+        if ($this->isMatchingQuestion($question)) {
+            return $this->exportMatchingInteraction($question, $questionIdent);
+        }
+
         $xml = '    <choiceInteraction responseIdentifier="'.$questionIdent.'" >'."\n";
         $xml .= '      <prompt><![CDATA['.$this->escapeCdata($this->formatText($question->getQuestion())).']]></prompt>'."\n";
         foreach ($this->getSortedAnswers($question) as $answer) {
@@ -293,6 +309,60 @@ final readonly class ExerciseQti2ExportService
             $xml .= '</simpleChoice>'."\n";
         }
         $xml .= '    </choiceInteraction>'."\n";
+
+        return $xml;
+    }
+
+    /**
+     * Matching rows with correct = 0 are the options; the other rows are the items to match, their
+     * "correct" field holding the iid of the option they must be associated with.
+     */
+    private function exportMatchingResponseDeclaration(CQuizQuestion $question, string $questionIdent): string
+    {
+        $correctPairs = [];
+        foreach ($this->getSortedAnswers($question) as $answer) {
+            $optionIid = (int) ($answer->getCorrect() ?? 0);
+            if ($optionIid > 0) {
+                $correctPairs['left_'.(int) $answer->getIid().' right_'.$optionIid] = $answer->getPonderation();
+            }
+        }
+
+        $xml = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="multiple" baseType="directedPair">'."\n";
+        $xml .= "    <correctResponse>\n";
+        foreach (array_keys($correctPairs) as $pair) {
+            $xml .= '      <value>'.$pair.'</value>'."\n";
+        }
+        $xml .= "    </correctResponse>\n";
+        $xml .= "    <mapping>\n";
+        foreach ($correctPairs as $pair => $score) {
+            $xml .= ' <mapEntry mapKey="'.$pair.'" mappedValue="'.$this->formatScore($score).'" />'."\n";
+        }
+        $xml .= "    </mapping>\n";
+        $xml .= '  </responseDeclaration>'."\n";
+
+        return $xml;
+    }
+
+    private function exportMatchingInteraction(CQuizQuestion $question, string $questionIdent): string
+    {
+        $items = '';
+        $options = '';
+        $itemCount = 0;
+        foreach ($this->getSortedAnswers($question) as $answer) {
+            $text = '<![CDATA['.$this->escapeCdata($this->formatText($answer->getAnswer())).']]>';
+            if ((int) ($answer->getCorrect() ?? 0) > 0) {
+                $items .= '        <simpleAssociableChoice identifier="left_'.(int) $answer->getIid().'" matchMax="1">'.$text.'</simpleAssociableChoice>'."\n";
+                ++$itemCount;
+            } else {
+                $options .= '        <simpleAssociableChoice identifier="right_'.(int) $answer->getIid().'" matchMax="0">'.$text.'</simpleAssociableChoice>'."\n";
+            }
+        }
+
+        $xml = '    <matchInteraction responseIdentifier="'.$questionIdent.'" shuffle="false" maxAssociations="'.$itemCount.'">'."\n";
+        $xml .= '      <prompt><![CDATA['.$this->escapeCdata($this->formatText($question->getQuestion())).']]></prompt>'."\n";
+        $xml .= "      <simpleMatchSet>\n".$items."      </simpleMatchSet>\n";
+        $xml .= "      <simpleMatchSet>\n".$options."      </simpleMatchSet>\n";
+        $xml .= '    </matchInteraction>'."\n";
 
         return $xml;
     }

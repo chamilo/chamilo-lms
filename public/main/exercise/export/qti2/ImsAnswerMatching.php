@@ -22,10 +22,11 @@ class ImsAnswerMatching extends Answer implements ImsAnswerInterface
     public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
     {
         $this->answerList = $this->getAnswersList(true);
+        $this->buildMatchingLists();
         $maxAssociation = max(count($this->leftList), count($this->rightList));
 
         $out = '<matchInteraction responseIdentifier="'.$questionIdent.'" maxAssociations="'.$maxAssociation.'">'."\n";
-        $out .= $questionStatment;
+        $out .= '      <prompt><![CDATA['.formatExerciseQtiText($questionStatment).']]></prompt>'."\n";
 
         //add left column
         $out .= '  <simpleMatchSet>'."\n";
@@ -61,7 +62,8 @@ class ImsAnswerMatching extends Answer implements ImsAnswerInterface
     public function imsExportResponsesDeclaration($questionIdent, Question $question = null)
     {
         $this->answerList = $this->getAnswersList(true);
-        $out = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="single" baseType="identifier">'."\n";
+        $this->buildMatchingLists();
+        $out = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="multiple" baseType="directedPair">'."\n";
         $out .= '    <correctResponse>'."\n";
 
         $gradeArray = [];
@@ -90,5 +92,22 @@ class ImsAnswerMatching extends Answer implements ImsAnswerInterface
         $out .= '  </responseDeclaration>'."\n";
 
         return $out;
+    }
+
+    /**
+     * Split the answer rows into the items to match (left) and the options (right).
+     * Option rows have correct = 0; item rows store the iid of their option in "correct".
+     */
+    private function buildMatchingLists(): void
+    {
+        $this->leftList = [];
+        $this->rightList = [];
+        foreach ($this->answerList as $answer) {
+            if (empty($answer['correct'])) {
+                $this->rightList[] = ['answer' => $answer['answer'], 'code' => $this->selectAutoId($answer['id'])];
+            } else {
+                $this->leftList[] = ['answer' => $answer['answer'], 'match' => $answer['correct'], 'grade' => $answer['grade']];
+            }
+        }
     }
 }

@@ -116,7 +116,7 @@ final class CGlossaryCourseScopeApiTest extends AbstractApiTest
                 ['cid' => $foreignCourseId, 'sid' => 0, 'visibility' => 2],
             ],
         ]);
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(201);
 
         $this->assertSame([$this->contextKey($ctx['course'])], $this->documentContexts($title));
     }
@@ -192,7 +192,7 @@ final class CGlossaryCourseScopeApiTest extends AbstractApiTest
             'parentResourceNodeId' => $this->nodeId($ctx['course']),
             'resourceLinkList' => [['visibility' => 2]],
         ]);
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(201);
 
         $this->assertSame([$this->contextKey($ctx['course'])], $this->documentContexts($title));
     }
@@ -367,7 +367,7 @@ final class CGlossaryCourseScopeApiTest extends AbstractApiTest
 
     /**
      * The 2.0 endpoint answers with the path of the generated PDF, whose file name is the
-     * title of the created document.
+     * title of the created document. An error answers with an object instead.
      *
      * @param array<string, mixed> $payload
      */
@@ -379,7 +379,9 @@ final class CGlossaryCourseScopeApiTest extends AbstractApiTest
             ['json' => array_merge(['cid' => (int) $course->getId(), 'sid' => 0], $payload)],
         );
 
-        return basename((string) json_decode((string) $response->getContent(false), true));
+        $path = json_decode((string) $response->getContent(false), true);
+
+        return \is_string($path) ? basename($path) : '';
     }
 
     /**

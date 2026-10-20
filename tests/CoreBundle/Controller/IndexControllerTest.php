@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\SettingsCurrent;
-use Chamilo\CoreBundle\Repository\SettingsCurrentRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;

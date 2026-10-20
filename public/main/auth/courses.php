@@ -312,8 +312,8 @@ switch ($action) {
             }
         }
 
-        if (api_is_drh()) {
-            $coursesDrh = CourseManager::get_courses_followed_by_drh($userId);
+        if (api_is_hrm()) {
+            $coursesDrh = CourseManager::get_courses_followed_by_hrm($userId);
             foreach ($coursesDrh as $course) {
                 $user_coursecodes[] = $course['code'];
             }

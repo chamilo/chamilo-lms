@@ -69,7 +69,7 @@ final class LoginAsAuthorizationChecker
 
         // Rule 5: HR manager (DRH) path.
         if ($impersonator->isHRM()) {
-            return $this->canDrhLoginAs($impersonator, $target);
+            return $this->canHrmLoginAs($impersonator, $target);
         }
 
         // Rule 6: default deny.
@@ -147,9 +147,9 @@ final class LoginAsAuthorizationChecker
      * UserManager helper, so the policy no longer depends on the legacy Container being
      * bootstrapped — which the Symfony firewall has not yet done when switch_user fires.
      */
-    private function canDrhLoginAs(User $impersonator, User $target): bool
+    private function canHrmLoginAs(User $impersonator, User $target): bool
     {
-        if (!$this->userRepository->isUserFollowedByDrh((int) $target->getId(), (int) $impersonator->getId())) {
+        if (!$this->userRepository->isUserFollowedByHrm((int) $target->getId(), (int) $impersonator->getId())) {
             return false;
         }
 

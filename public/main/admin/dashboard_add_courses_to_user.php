@@ -65,7 +65,7 @@ function search_courses($needle, $type)
     if (!empty($needle) && !empty($type)) {
         // xajax send utf8 datas... datas in db can be non-utf8 datas
         $needle = Database::escape_string($needle);
-        $assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
+        $assigned_courses_to_hrm = CourseManager::get_courses_followed_by_hrm($user_id);
         $assigned_courses_code = array_keys($assigned_courses_to_hrm);
         foreach ($assigned_courses_code as &$value) {
             $value = "'".$value."'";
@@ -225,7 +225,7 @@ if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent']) && isset($_POST
         $courses_list = isset($_POST['CoursesList']) ? Security::remove_XSS($_POST['CoursesList']) : [];
     }
 
-    $affected_rows = CourseManager::subscribeCoursesToDrhManager($user_id, $courses_list);
+    $affected_rows = CourseManager::subscribeCoursesToHrmManager($user_id, $courses_list);
     if ($affected_rows || empty($courses_list)) {
         $msg = get_lang('The assigned courses have been updated');
     }
@@ -248,7 +248,7 @@ echo Display::page_header(
     'h3'
 );
 
-$assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
+$assigned_courses_to_hrm = CourseManager::get_courses_followed_by_hrm($user_id);
 $assigned_courses_code = array_keys($assigned_courses_to_hrm);
 foreach ($assigned_courses_code as &$value) {
     $value = "'".$value."'";

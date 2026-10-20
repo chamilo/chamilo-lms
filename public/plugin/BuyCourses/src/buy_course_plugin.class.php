@@ -11392,7 +11392,7 @@ class BuyCoursesPlugin extends Plugin
             FROM $table
             WHERE user_id = $userId
               AND status = ".COURSEMANAGER."
-              AND (relation_type IS NULL OR relation_type <> ".COURSE_RELATION_TYPE_RRHH.")";
+              AND (relation_type IS NULL OR relation_type <> ".COURSE_RELATION_TYPE_HRM.")";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
@@ -11425,7 +11425,7 @@ class BuyCoursesPlugin extends Plugin
                 AND sc.deleted_at IS NULL
             WHERE cru.user_id = $userId
               AND cru.status = ".COURSEMANAGER."
-              AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_RRHH.")
+              AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_HRM.")
               AND sc.id IS NULL";
 
         $result = Database::query($sql);
@@ -11468,7 +11468,7 @@ class BuyCoursesPlugin extends Plugin
                 ON cru.c_id = sc.course_id
                 AND cru.user_id = $userId
                 AND cru.status = ".COURSEMANAGER."
-                AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_RRHH.")
+                AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_HRM.")
             WHERE sc.course_id IN ($courseIdsSql)
               AND sc.status <> 'deleted'
               AND sc.deleted_at IS NULL
@@ -12128,7 +12128,7 @@ class BuyCoursesPlugin extends Plugin
             FROM $table
             WHERE user_id = $userId
               AND status = ".COURSEMANAGER."
-              AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+              AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
             ORDER BY c_id ASC";
         $result = Database::query($sql);
 
@@ -12157,7 +12157,7 @@ class BuyCoursesPlugin extends Plugin
             FROM $table
             WHERE c_id = $courseId
               AND status = ".COURSEMANAGER."
-              AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+              AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
             ORDER BY user_id ASC";
         $result = Database::query($sql);
 
@@ -12316,7 +12316,7 @@ class BuyCoursesPlugin extends Plugin
                 FROM $courseUserTable
                 WHERE c_id = $courseId
                   AND status = ".STUDENT."
-                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                  AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
                 UNION
                 SELECT user_id
                 FROM $sessionCourseUserTable
@@ -12370,7 +12370,7 @@ class BuyCoursesPlugin extends Plugin
                 SELECT user_id
                 FROM $courseUserTable
                 WHERE c_id = $courseId
-                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                  AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
                   AND user_id IN ($idList)
                 UNION
                 SELECT user_id
@@ -12513,7 +12513,7 @@ class BuyCoursesPlugin extends Plugin
             FROM $courseUserTable
             WHERE c_id = $courseId
               AND status = ".STUDENT."
-              AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+              AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
             ORDER BY user_id ASC";
         $result = Database::query($sql);
 

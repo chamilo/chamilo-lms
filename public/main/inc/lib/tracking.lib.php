@@ -1416,7 +1416,7 @@ class Tracking
         $sessionCount = 0;
         $assignedCourseCount = 0;
 
-        if (api_is_drh() && api_drh_can_access_all_session_content()) {
+        if (api_is_hrm() && api_hrm_can_access_all_session_content()) {
             $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
                 $userId,
@@ -1537,7 +1537,7 @@ class Tracking
                 }
             }
 
-            $sessions = SessionManager::get_sessions_followed_by_drh(
+            $sessions = SessionManager::get_sessions_followed_by_hrm(
                 $userId,
                 null,
                 null,

@@ -14,7 +14,9 @@ export const USER_RELATION_TYPE_GOODFRIEND = 4
 
 export const USER_RELATION_TYPE_DELETED = 6
 
-export const USER_RELATION_TYPE_RRHH = 7
+export const USER_RELATION_TYPE_HRM = 7
+// Legacy alias: existing API and database records still use relation type 7.
+export const USER_RELATION_TYPE_RRHH = USER_RELATION_TYPE_HRM
 
 export const USER_RELATION_TYPE_BOSS = 8
 

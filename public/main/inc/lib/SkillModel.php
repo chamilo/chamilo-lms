@@ -1707,7 +1707,7 @@ class SkillModel extends Model
                 }
                 break;
             case DRH:
-                return UserManager::is_user_followed_by_drh(
+                return UserManager::is_user_followed_by_hrm(
                     $toUser->getId(),
                     $fromUser->getId()
                 );
@@ -1808,8 +1808,8 @@ class SkillModel extends Model
                     );
                 }
 
-                if (api_is_drh()) {
-                    return UserManager::is_user_followed_by_drh(
+                if (api_is_hrm()) {
+                    return UserManager::is_user_followed_by_hrm(
                         $studentId,
                         $currentUserId
                     );

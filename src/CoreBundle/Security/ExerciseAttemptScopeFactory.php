@@ -39,7 +39,7 @@ final readonly class ExerciseAttemptScopeFactory
         return new ExerciseAttemptScope(
             userId: (int) $user->getId(),
             mayFollowAsStudentBoss: $this->accessDecisionManager->decide($token, ['ROLE_STUDENT_BOSS']),
-            mayFollowAsDrh: $this->accessDecisionManager->decide($token, ['ROLE_HR']),
+            mayFollowAsHrm: $this->accessDecisionManager->decide($token, ['ROLE_HR']),
             mayAdministerSessions: $this->accessDecisionManager->decide($token, ['ROLE_SESSION_MANAGER']),
         );
     }

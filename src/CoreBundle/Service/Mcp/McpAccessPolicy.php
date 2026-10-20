@@ -25,7 +25,7 @@ final readonly class McpAccessPolicy
         'ADMIN' => true,
         'COURSEMANAGER' => true,
         'STUDENT' => false,
-        'DRH' => false,
+        'HRM' => false,
         'SESSIONADMIN' => false,
         'STUDENT_BOSS' => false,
         'INVITEE' => false,
@@ -78,6 +78,11 @@ final readonly class McpAccessPolicy
         }
 
         $result = self::DEFAULT_ALLOWED_ROLES;
+        // Existing installations persist DRH. HRM takes precedence when both keys exist.
+        if (\array_key_exists('DRH', $decoded) && !\array_key_exists('HRM', $decoded)) {
+            $decoded['HRM'] = $decoded['DRH'];
+        }
+
         foreach ($result as $roleKey => $defaultValue) {
             if (\array_key_exists($roleKey, $decoded)) {
                 $result[$roleKey] = $this->toBoolean($decoded[$roleKey]);
@@ -104,7 +109,7 @@ final readonly class McpAccessPolicy
             $roleKeys[] = 'STUDENT';
         }
         if ($user->isHRM()) {
-            $roleKeys[] = 'DRH';
+            $roleKeys[] = 'HRM';
         }
         if ($user->isSessionAdmin()) {
             $roleKeys[] = 'SESSIONADMIN';

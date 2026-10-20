@@ -81,7 +81,7 @@ function search_users($needle, $type = 'multiple')
             case DRH:
             case PLATFORM_ADMIN:
             default:
-                $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
+                $assigned_users_to_hrm = UserManager::get_users_followed_by_hrm($user_id);
 
                 break;
         }
@@ -431,7 +431,7 @@ switch ($userStatus) {
     case DRH:
     case PLATFORM_ADMIN:
     default:
-        $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
+        $assigned_users_to_hrm = UserManager::get_users_followed_by_hrm($user_id);
 
         break;
 }

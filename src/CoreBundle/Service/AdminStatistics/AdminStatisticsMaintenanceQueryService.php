@@ -552,7 +552,7 @@ SQL;
         return match ($status) {
             1 => $this->trans('Teacher'),
             3 => $this->trans('SessionAdmin'),
-            4 => $this->trans('Drh'),
+            4 => $this->trans('Human Resources Manager'),
             5 => $this->trans('Student'),
             6 => $this->trans('Anonymous'),
             7 => $this->trans('Invited'),

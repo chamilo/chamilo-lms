@@ -19,7 +19,7 @@ if (!$plugin->isEnabled(true)) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-$allow = api_is_allowed_to_edit(false, true) || api_is_drh();
+$allow = api_is_allowed_to_edit(false, true) || api_is_hrm();
 if (!$allow) {
     api_not_allowed(true);
 }
@@ -64,7 +64,7 @@ switch ($action) {
         ];
 
         if ((0 != api_get_session_id() &&
-            !api_is_allowed_to_session_edit(false, true) || api_is_drh())) {
+            !api_is_allowed_to_session_edit(false, true) || api_is_hrm())) {
             api_not_allowed();
         }
         Session::write('notebook_view', 'creation_date');

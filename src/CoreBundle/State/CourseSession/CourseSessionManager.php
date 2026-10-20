@@ -32,7 +32,7 @@ use UrlManager;
 use UserManager;
 
 use const ANONYMOUS;
-use const DRH;
+use const HRM;
 
 final readonly class CourseSessionManager
 {
@@ -395,7 +395,7 @@ final readonly class CourseSessionManager
             if (!$user instanceof User
                 || User::SOFT_DELETED === $user->getActive()
                 || ANONYMOUS === $user->getStatus()
-                || DRH === $user->getStatus()
+                || HRM === $user->getStatus()
                 || !$this->userBelongsToCurrentUrl($user)
             ) {
                 throw new AccessDeniedHttpException('One or more selected users cannot be subscribed to this session.');
@@ -628,7 +628,7 @@ final readonly class CourseSessionManager
             ->andWhere('user.active <> :softDeleted')
             ->andWhere('user.status NOT IN (:excludedStatuses)')
             ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
-            ->setParameter('excludedStatuses', [ANONYMOUS, DRH], ArrayParameterType::INTEGER)
+            ->setParameter('excludedStatuses', [ANONYMOUS, HRM], ArrayParameterType::INTEGER)
         ;
 
         if (self::VIEW_REGISTERED === $view) {

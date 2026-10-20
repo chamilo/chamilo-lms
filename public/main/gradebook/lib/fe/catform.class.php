@@ -272,7 +272,7 @@ class CatForm extends FormValidator
 
         $skillsDefaults = [];
 
-        $allowSkillEdit = api_is_platform_admin() || api_is_drh();
+        $allowSkillEdit = api_is_platform_admin() || api_is_hrm();
         if ('true' === api_get_setting('skill.skills_teachers_can_assign_skills')) {
             $allowSkillEdit = $allowSkillEdit || api_is_allowed_to_edit();
         }

@@ -519,7 +519,7 @@ class MessageManager
 
         if ($sendCopyToDrhUsers) {
             $userInfo = api_get_user_info($receiverUserId);
-            $drhList = UserManager::getDrhListFromUser($receiverUserId);
+            $drhList = UserManager::getHrmListFromUser($receiverUserId);
             if (!empty($drhList)) {
                 foreach ($drhList as $drhInfo) {
                     $message = sprintf(

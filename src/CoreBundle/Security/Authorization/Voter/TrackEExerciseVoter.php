@@ -90,7 +90,7 @@ class TrackEExerciseVoter extends Voter
         }
 
         if ($this->accessDecisionManager->decide($token, ['ROLE_HR'])
-            && $this->userRepository->isUserFollowedByDrh($ownerId, $userId)
+            && $this->userRepository->isUserFollowedByHrm($ownerId, $userId)
         ) {
             return true;
         }

@@ -22,7 +22,7 @@ class BlockDaily extends Block
 {
     private $user_id;
     private $courses;
-    private $permission = [DRH];
+    private $permission = [HRM];
 
     /**
      * Constructor.
@@ -32,7 +32,7 @@ class BlockDaily extends Block
         $this->user_id = $user_id;
         $this->path = 'block_daily';
         if ($this->is_block_visible_for_user($user_id)) {
-            $this->courses = CourseManager::get_courses_followed_by_drh(
+            $this->courses = CourseManager::get_courses_followed_by_hrm(
                 $user_id
             );
         }

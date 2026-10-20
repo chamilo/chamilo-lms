@@ -23,8 +23,8 @@ $userId = $userInfo['id'];
 
 $sessions = [];
 
-if (api_is_drh()) {
-    $count = SessionManager::get_sessions_followed_by_drh($userId, null, null, true);
+if (api_is_hrm()) {
+    $count = SessionManager::get_sessions_followed_by_hrm($userId, null, null, true);
 } else {
     $count = UserManager::get_sessions_by_category($userId, false, true, true, true);
 }

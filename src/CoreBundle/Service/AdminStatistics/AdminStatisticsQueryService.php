@@ -632,7 +632,7 @@ final readonly class AdminStatisticsQueryService
             ->from(UserRelUser::class, 'relation')
             ->leftJoin('relation.user', 'user', Join::WITH, 'user.active <> :softDeleted')
             ->andWhere('relation.relationType <> :hrRelation')
-            ->setParameter('hrRelation', UserRelUser::USER_RELATION_TYPE_RRHH, Types::INTEGER)
+            ->setParameter('hrRelation', UserRelUser::USER_RELATION_TYPE_HRM, Types::INTEGER)
             ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
             ->groupBy('relation.user, user.firstname, user.lastname, user.username')
             ->orderBy('COUNT(relation.id)', 'DESC')

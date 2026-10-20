@@ -46,7 +46,7 @@ final readonly class GlobalReportingContextResolver
             $isTeacher || $isSessionAdministrator,
             $this->security->isGranted('ROLE_STUDENT_BOSS'),
             $this->isEnabled(
-                $this->settingsManager->getSetting('session.drh_can_access_all_session_content', true),
+                $this->settingsManager->getSetting('session.hrm_can_access_all_session_content', true),
             ),
             $this->isEnabled(
                 $this->settingsManager->getSetting('tracking.tracking_skip_generic_data', true),

@@ -215,7 +215,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public const int LIST_ONLY = 5;
 
     public const int STUDENT = 0;
-    public const int DRH = 1;
+    public const int HRM = 1;
+    public const int DRH = self::HRM;
     public const int COURSE_COACH = 2;
     public const int GENERAL_COACH = 3;
     public const int SESSION_ADMIN = 4;
@@ -521,7 +522,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public static function getRelationTypeList(): array
     {
-        return [self::STUDENT, self::DRH, self::COURSE_COACH, self::GENERAL_COACH, self::SESSION_ADMIN];
+        return [self::STUDENT, self::HRM, self::COURSE_COACH, self::GENERAL_COACH, self::SESSION_ADMIN];
     }
 
     public static function getStatusList(): array

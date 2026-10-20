@@ -964,9 +964,9 @@ class Agenda
                     );
                 }
 
-                if (api_is_drh() && api_drh_can_access_all_session_content()) {
+                if (api_is_hrm() && api_hrm_can_access_all_session_content()) {
                     $session_list = [];
-                    $sessionList = SessionManager::get_sessions_followed_by_drh(
+                    $sessionList = SessionManager::get_sessions_followed_by_hrm(
                         api_get_user_id(),
                         null,
                         null,
@@ -2535,7 +2535,7 @@ class Agenda
         if (api_is_platform_admin() ||
             api_is_teacher() ||
             api_is_student_boss() ||
-            api_is_drh() ||
+            api_is_hrm() ||
             api_is_session_admin() ||
             api_is_coach()
         ) {
@@ -2553,8 +2553,8 @@ class Agenda
 
                     $sessions = [];
 
-                    if (api_is_drh()) {
-                        $sessionList = SessionManager::get_sessions_followed_by_drh($currentUserId);
+                    if (api_is_hrm()) {
+                        $sessionList = SessionManager::get_sessions_followed_by_hrm($currentUserId);
                         if (!empty($sessionList)) {
                             foreach ($sessionList as $sessionItem) {
                                 $sessions[$sessionItem['id']] = strip_tags($sessionItem['name']);

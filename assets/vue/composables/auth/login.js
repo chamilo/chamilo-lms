@@ -233,14 +233,17 @@ export function useLogin() {
             if (roles.includes("ROLE_SESSION_MANAGER")) return "SESSIONADMIN"
             if (roles.includes("ROLE_TEACHER")) return "COURSEMANAGER"
             if (roles.includes("ROLE_STUDENT_BOSS")) return "STUDENT_BOSS"
-            if (roles.includes("ROLE_DRH")) return "DRH"
+            if (roles.includes("ROLE_HR") || roles.includes("ROLE_DRH")) return "HRM"
             if (roles.includes("ROLE_INVITEE")) return "INVITEE"
             if (roles.includes("ROLE_STUDENT")) return "STUDENT"
             return null
           }
 
           const profile = getProfile()
-          const value = profile && map[profile] ? map[profile] : ""
+          let value = profile && map[profile] ? map[profile] : ""
+          if (profile === "HRM") {
+            value = map?.HRM ?? map?.DRH ?? ""
+          }
 
           switch (value) {
             case "user_portal.php":

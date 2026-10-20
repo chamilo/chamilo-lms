@@ -1246,7 +1246,7 @@ class CourseManager
      *
      * @return bool|null
      */
-    public static function isUserSubscribedInCourseAsDrh($userId, $courseInfo)
+    public static function isUserSubscribedInCourseAsHrm($userId, $courseInfo)
     {
         $userId = intval($userId);
 
@@ -1273,6 +1273,14 @@ class CourseManager
             // The user has been registered in this course.
             return true;
         }
+    }
+
+    /**
+     * @deprecated Use isUserSubscribedInCourseAsHrm().
+     */
+    public static function isUserSubscribedInCourseAsDrh($userId, $courseInfo)
+    {
+        return self::isUserSubscribedInCourseAsHrm($userId, $courseInfo);
     }
 
     /**
@@ -3547,7 +3555,7 @@ class CourseManager
      *
      * @return int
      */
-    public static function subscribeCoursesToDrhManager($hr_manager_id, $courses_list)
+    public static function subscribeCoursesToHrmManager($hr_manager_id, $courses_list)
     {
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -3598,6 +3606,14 @@ class CourseManager
     }
 
     /**
+     * @deprecated Use subscribeCoursesToHrmManager().
+     */
+    public static function subscribeCoursesToDrhManager($hr_manager_id, $courses_list)
+    {
+        return self::subscribeCoursesToHrmManager($hr_manager_id, $courses_list);
+    }
+
+    /**
      * get courses followed by human resources manager.
      *
      * @param int    $user_id
@@ -3610,7 +3626,7 @@ class CourseManager
      *
      * @return array courses
      */
-    public static function get_courses_followed_by_drh(
+    public static function get_courses_followed_by_hrm(
         $user_id,
         $status = DRH,
         $from = null,
@@ -3620,6 +3636,29 @@ class CourseManager
         $getCount = false
     ) {
         return self::getCoursesFollowedByUser(
+            $user_id,
+            $status,
+            $from,
+            $limit,
+            $column,
+            $direction,
+            $getCount
+        );
+    }
+
+    /**
+     * @deprecated Use get_courses_followed_by_hrm().
+     */
+    public static function get_courses_followed_by_drh(
+        $user_id,
+        $status = DRH,
+        $from = null,
+        $limit = null,
+        $column = null,
+        $direction = null,
+        $getCount = false
+    ) {
+        return self::get_courses_followed_by_hrm(
             $user_id,
             $status,
             $from,

@@ -22,7 +22,7 @@ final class SettingsValueTemplateFixturesTest extends TestCase
                 'ADMIN' => true,
                 'COURSEMANAGER' => true,
                 'STUDENT' => false,
-                'DRH' => false,
+                'HRM' => false,
                 'SESSIONADMIN' => false,
                 'STUDENT_BOSS' => false,
                 'INVITEE' => false,

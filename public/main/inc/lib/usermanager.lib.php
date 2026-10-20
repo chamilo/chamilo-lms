@@ -4347,7 +4347,7 @@ class UserManager
      *
      * @return array
      */
-    public static function getDrhListFromUser($userId)
+    public static function getHrmListFromUser($userId)
     {
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
         $tblUserRelUser = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
@@ -4377,6 +4377,14 @@ class UserManager
     }
 
     /**
+     * @deprecated Use getHrmListFromUser().
+     */
+    public static function getDrhListFromUser($userId)
+    {
+        return self::getHrmListFromUser($userId);
+    }
+
+    /**
      * get users followed by human resource manager.
      *
      * @param int    $userId
@@ -4393,7 +4401,7 @@ class UserManager
      *
      * @return array users
      */
-    public static function get_users_followed_by_drh(
+    public static function get_users_followed_by_hrm(
         $userId,
         $userStatus = 0,
         $getOnlyUserId = false,
@@ -4422,6 +4430,39 @@ class UserManager
             DRH,
             null,
             false,
+            $applyReportingWorkflowSetting
+        );
+    }
+
+    /**
+     * @deprecated Use get_users_followed_by_hrm().
+     */
+    public static function get_users_followed_by_drh(
+        $userId,
+        $userStatus = 0,
+        $getOnlyUserId = false,
+        $getSql = false,
+        $getCount = false,
+        $from = null,
+        $numberItems = null,
+        $column = null,
+        $direction = null,
+        $active = null,
+        $lastConnectionDate = null,
+        bool $applyReportingWorkflowSetting = false
+    ) {
+        return self::get_users_followed_by_hrm(
+            $userId,
+            $userStatus,
+            $getOnlyUserId,
+            $getSql,
+            $getCount,
+            $from,
+            $numberItems,
+            $column,
+            $direction,
+            $active,
+            $lastConnectionDate,
             $applyReportingWorkflowSetting
         );
     }
@@ -4856,7 +4897,7 @@ class UserManager
      * @throws Exception
      * @throws \Doctrine\DBAL\Exception
      */
-    public static function is_user_followed_by_drh(int $user_id, int $hr_dept_id): bool
+    public static function is_user_followed_by_hrm(int $user_id, int $hr_dept_id): bool
     {
         $tbl_user_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $result = false;
@@ -4872,6 +4913,14 @@ class UserManager
         }
 
         return $result;
+    }
+
+    /**
+     * @deprecated Use is_user_followed_by_hrm().
+     */
+    public static function is_user_followed_by_drh(int $user_id, int $hr_dept_id): bool
+    {
+        return self::is_user_followed_by_hrm($user_id, $hr_dept_id);
     }
 
     /**
@@ -6556,7 +6605,7 @@ SQL;
             return false;
         }
 
-        if (!self::isWorkflowSettingEnabled('drh_allow_access_to_all_students')) {
+        if (!self::isWorkflowSettingEnabled('hrm_allow_access_to_all_students')) {
             return false;
         }
 

@@ -13,6 +13,12 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 
+// Same edit rights required by lp_controller.php for the "upload" action, as this script is also reachable directly
+// or through the main/upload/ scripts that include it before checking permissions.
+if (!api_is_allowed_to_edit(false, true, false, false)) {
+    api_not_allowed(true);
+}
+
 /**
  * Imports a Chamilo CourseBackup zip that contains LP data into the current course.
  * Returns true only if something was actually restored (basic DB verification).

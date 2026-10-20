@@ -25,6 +25,9 @@ services:
 
     Chamilo\CourseBundle\Repository\CCourseSettingRepository: ~
 
+    # Plain Doctrine repositories (not ResourceRepository): they have none of the setters below.
+    Chamilo\CourseBundle\Repository\CStudentPublicationFollowRepository: ~
+
     Chamilo\CourseBundle\Repository\:
         resource: '../../Repository/'
         tags: ['doctrine.repository_service']
@@ -35,4 +38,4 @@ services:
             - setToolChain: ['@Chamilo\CoreBundle\Tool\ToolChain']
             - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
             - setRequestStack: ['@request_stack']
-        exclude: '../../Repository/CCourseSettingRepository.php'
+        exclude: '../../Repository/{CCourseSettingRepository.php,CStudentPublicationFollowRepository.php}'

@@ -125,7 +125,7 @@
     "sabre/vobject": "~4.2",
     "simpod/doctrine-utcdatetime": "^0.1.2",
     "sonata-project/exporter": "^2.2",
-    "spomky-labs/otphp": "^10.0",
+    "spomky-labs/otphp": "^11.4",
     "stevenmaguire/oauth2-keycloak": "^6.1",
     "packbackbooks/lti-1p3-tool": "^6.4",
     "stof/doctrine-extensions-bundle": "^1.12",

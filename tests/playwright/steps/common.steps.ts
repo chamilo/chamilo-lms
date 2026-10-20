@@ -4505,3 +4505,54 @@ When(
     await page.getByRole("button", { name: /Save prerequisites settings|Modifier les prérequis/i }).click()
   },
 )
+// New, for gradebookExcelExport.feature. Legacy pages such as
+// subscribe_user.php only take the numeric course id, which differs between
+// boxes; the course is resolved by code first ("I resolve the numeric id of
+// course ...") and its id replaces COURSE_ID in the given path.
+Given(
+  "I am on {string} with the resolved id of course {string}",
+  async ({ page }, pathTemplate: string, courseCode: string) => {
+    await gotoReliably(page, pathTemplate.replace("COURSE_ID", String(getResolvedCourseId(courseCode))))
+  },
+)
+
+// New, for gradebookExcelExport.feature: export buttons are BaseButton links
+// whose label is only exposed as their title (icon-only), and the browser
+// downloads the file instead of navigating to it.
+let lastDownloadPath: string | null = null
+
+When("I download the file from the link {string}", async ({ page }, title: string) => {
+  const link = page.locator(`a[title="${title}"]:visible`).first()
+  await expect(link).toBeVisible()
+  const [download] = await Promise.all([page.waitForEvent("download"), link.click()])
+  lastDownloadPath = await download.path()
+})
+
+// Binary formats store their strings as-is (Latin-1) or as UTF-16LE (the
+// Excel BIFF8 writer always uses the latter), so both encodings are searched.
+Then("the downloaded file should contain {string}", async ({}, text: string) => {
+  if (!lastDownloadPath) {
+    throw new Error('No download recorded yet — use "I download the file from the link ..." first.')
+  }
+  const content = fs.readFileSync(lastDownloadPath)
+  const found = content.includes(Buffer.from(text, "latin1")) || content.includes(Buffer.from(text, "utf16le"))
+  expect(found, `"${text}" in the downloaded file`).toBe(true)
+})
+
+// New, for exerciseReportFilter.feature. The Vue test pages
+// (/resources/exercise/<node>/<exerciseId>/...) no longer link to the legacy
+// results page (exercise_report.php), which needs the numeric test id; it is
+// read from the current Vue URL together with the course/session context.
+When("I go to the legacy results page of the current test", async ({ page }) => {
+  // The Vue router may still be switching to the test's own page.
+  const testPage = /\/resources\/exercise\/\d+\/(\d+)(\/|$)/
+  await page.waitForURL((current) => testPage.test(current.pathname), { timeout: 15000 }).catch(() => {})
+  const url = new URL(page.url())
+  const match = url.pathname.match(testPage)
+  const cid = url.searchParams.get("cid")
+  if (!match || !cid) {
+    throw new Error(`Could not find a test id and course id in the current URL: ${page.url()}`)
+  }
+  const sid = url.searchParams.get("sid") || "0"
+  await gotoReliably(page, `/main/exercise/exercise_report.php?cid=${cid}&sid=${sid}&exerciseId=${match[1]}`)
+})

@@ -23,8 +23,14 @@ final readonly class CourseAccessActivityHelper
 
     /**
      * Sent on a timer by an open course page: they carry the course but are not an action.
+     * The docked global chat adds the course to its polling requests too.
      */
-    private const BACKGROUND_ROUTES = ['sync_learning_path_runtime'];
+    private const BACKGROUND_ROUTES = [
+        'sync_learning_path_runtime',
+        'chamilo_core_chat_api_heartbeat',
+        'chamilo_core_chat_api_history_since',
+        'chamilo_core_chat_api_video_signals',
+    ];
 
     /**
      * Sent on a timer without the course: they are neither an action nor leaving the course.

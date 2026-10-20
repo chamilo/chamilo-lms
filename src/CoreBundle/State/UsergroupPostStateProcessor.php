@@ -39,7 +39,9 @@ final class UsergroupPostStateProcessor implements ProcessorInterface
         /** @var Usergroup $usergroup */
         $usergroup = $this->processor->process($data, $operation, $uriVariables, $context);
 
-        if ($usergroup instanceof Usergroup) {
+        // A class has no moderator role: its members are the learners. Adding the creator (an administrator, or an
+        // integration's service account) as a member would enroll them with the class and list them as a member.
+        if ($usergroup instanceof Usergroup && Usergroup::NORMAL_CLASS !== $usergroup->getGroupType()) {
             $this->associateCurrentUser($usergroup);
             $this->entityManager->flush();
         }

@@ -930,6 +930,19 @@ $gridJs = Display::grid_js(
                 }
             }
             jQuery("#results").jqGrid('filterToolbar', options);
+
+            // Keep the status filter (e.g. "Not validated") when coming back to this list
+            // after correcting an attempt. The filter toolbar names its fields gs_<grid id>_<column>.
+            var statusFilterCookie = 'exercise_report_status_<?php echo $exercise_id; ?>';
+            var savedStatusFilter = Cookies.get(statusFilterCookie);
+            if (typeof savedStatusFilter !== 'undefined' &&
+                $('#gs_results_status option').filter(function () { return this.value === savedStatusFilter; }).length
+            ) {
+                $('#gs_results_status').val(savedStatusFilter);
+            }
+            $('#gs_results_status').on('change', function () {
+                Cookies.set(statusFilterCookie, $(this).val());
+            });
             sgrid.triggerToolbar();
             $('#results').on('click', 'a.exercise-recalculate', function (e) {
                 e.preventDefault();

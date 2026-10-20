@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
@@ -26,6 +27,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
+use Chamilo\CourseBundle\Repository\CStudentPublicationFollowRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -834,6 +836,45 @@ class StudentPublicationController extends AbstractController
         ]);
     }
 
+    /**
+     * Whether the current teacher follows the assignment, i.e. gets an e-mail when a
+     * learner comments on one of its submissions.
+     */
+    #[Route('/{assignmentId}/follow', name: 'chamilo_core_assignment_follow_status', requirements: ['assignmentId' => '\d+'], methods: ['GET'])]
+    public function getFollowStatus(
+        int $assignmentId,
+        CStudentPublicationFollowRepository $followRepository,
+        UserHelper $userHelper
+    ): JsonResponse {
+        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper);
+
+        return new JsonResponse(['following' => $followRepository->isFollowing($assignment, $user)]);
+    }
+
+    #[Route('/{assignmentId}/follow', name: 'chamilo_core_assignment_follow', requirements: ['assignmentId' => '\d+'], methods: ['POST'])]
+    public function followAssignment(
+        int $assignmentId,
+        CStudentPublicationFollowRepository $followRepository,
+        UserHelper $userHelper
+    ): JsonResponse {
+        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper);
+        $followRepository->follow($assignment, $user);
+
+        return new JsonResponse(['following' => true]);
+    }
+
+    #[Route('/{assignmentId}/follow', name: 'chamilo_core_assignment_unfollow', requirements: ['assignmentId' => '\d+'], methods: ['DELETE'])]
+    public function unfollowAssignment(
+        int $assignmentId,
+        CStudentPublicationFollowRepository $followRepository,
+        UserHelper $userHelper
+    ): JsonResponse {
+        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper);
+        $followRepository->unfollow($assignment, $user);
+
+        return new JsonResponse(['following' => false]);
+    }
+
     #[Route('/ai/text-providers', name: 'chamilo_core_assignment_ai_text_providers', methods: ['GET'])]
     public function getAiTextProviders(
         SettingsManager $settingsManager,
@@ -1076,6 +1117,34 @@ class StudentPublicationController extends AbstractController
     /**
      * Sanitize filenames.
      */
+    /**
+     * Only an assignment (a top-level folder, not a submission) can be followed, and only by
+     * someone allowed to edit it in the current course context: a teacher of the course, a
+     * coach of the session, the assignment's creator or an admin. The voter checks the
+     * assignment's links against the request's cid, so another course's teacher is refused.
+     *
+     * @return array{CStudentPublication, User}
+     */
+    private function resolveFollowableAssignment(int $assignmentId, UserHelper $userHelper): array
+    {
+        $assignment = $this->studentPublicationRepo->find($assignmentId);
+        if (!$assignment instanceof CStudentPublication
+            || 'folder' !== $assignment->getFiletype()
+            || null !== $assignment->getPublicationParent()
+        ) {
+            throw $this->createNotFoundException('Assignment not found.');
+        }
+
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
+        $user = $userHelper->getCurrent();
+        if (!$user instanceof User) {
+            throw new AccessDeniedHttpException();
+        }
+
+        return [$assignment, $user];
+    }
+
     private function cleanFilename(string $name): string
     {
         $name = str_replace([':', '\\', '/', '*', '?', '"', '<', '>', '|'], '_', $name);

@@ -41935,3 +41935,9 @@ msgstr "Default visibility for new learning paths"
 
 msgid "Default visibility for new tests"
 msgstr "Default visibility for new tests"
+
+msgid "Following"
+msgstr "Following"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Get an e-mail when a learner comments on a submission of this assignment"

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentFeedbackNotifier;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
@@ -39,7 +40,8 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         MessageHelper $messageHelper,
         Security $security,
         CidReqHelper $cidReqHelper,
-        AiDisclosureHelper $aiDisclosureHelper
+        AiDisclosureHelper $aiDisclosureHelper,
+        AssignmentFeedbackNotifier $feedbackNotifier
     ): CStudentPublicationComment {
         $fileExistsOption = $request->request->get('fileExistsOption', 'rename');
 
@@ -153,6 +155,25 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
                 $subject,
                 $content,
                 $senderUserId
+            );
+        }
+
+        // A learner commented: tell the teachers following the assignment, as the legacy
+        // work/view.php page does. The course comes from the submission itself, not from
+        // the request, so a cid parameter cannot redirect the notification.
+        $submissionLink = $submission->getFirstResourceLink();
+        $submissionCourse = $submissionLink?->getCourse();
+        if (($hasFile || $hasComment)
+            && $submissionCourse instanceof Course
+            && !$this->isAllowedToGrade($submission, $securityUser, $security)
+        ) {
+            $feedbackNotifier->notifyLearnerFeedback(
+                $submission,
+                $submissionCourse,
+                $submissionLink->getSession(),
+                $submissionLink->getGroup(),
+                $securityUser,
+                (string) $commentText
             );
         }
 

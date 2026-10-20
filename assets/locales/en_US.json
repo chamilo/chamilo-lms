@@ -4272,5 +4272,8 @@
     "Default visibility for new learning paths": "Default visibility for new learning paths",
     "Default visibility for new tests": "Default visibility for new tests",
     "Start test": "Start test",
-    "Proceed with the test": "Proceed with the test"
+    "Proceed with the test": "Proceed with the test",
+    "Follow": "Follow",
+    "Following": "Following",
+    "Get an e-mail when a learner comments on a submission of this assignment": "Get an e-mail when a learner comments on a submission of this assignment"
 }

@@ -22,6 +22,7 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
+use Chamilo\CourseBundle\Repository\CStudentPublicationFollowRepository;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
@@ -48,6 +49,7 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         private readonly CourseGroupManager $courseGroupManager,
         private readonly AssignmentGroupCategoryResolver $assignmentGroupCategoryResolver,
         private readonly RequestStack $requestStack,
+        private readonly CStudentPublicationFollowRepository $followRepository,
     ) {}
 
     public function process(
@@ -168,6 +170,19 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
 
             $this->saveGradebookConfig($publication, $course, $session, $payload);
             $this->entityManager->flush();
+
+            // The creator follows the new assignment, so learner comments reach them by e-mail.
+            if (!$isUpdate
+                && null !== $targetUserId
+                && 'folder' === $publication->getFiletype()
+                && null === $publication->getPublicationParent()
+            ) {
+                $this->followRepository->follow(
+                    $publication,
+                    $this->entityManager->getReference(User::class, $targetUserId)
+                );
+            }
+
             $this->entityManager->commit();
         } catch (Throwable $exception) {
             $this->entityManager->rollback();

@@ -57,6 +57,17 @@
         </template>
         <template v-else-if="isTeacherUI && !forceStudentView">
           <BaseButton
+            v-if="following !== null"
+            :label="following ? t('Following') : t('Follow')"
+            :title="t('Get an e-mail when a learner comments on a submission of this assignment')"
+            :icon="following ? 'bell' : 'bell-off-outline'"
+            :type="following ? 'primary' : 'black'"
+            size="small"
+            data-testid="assignment-follow-toggle"
+            :is-loading="followBusy"
+            @click="toggleFollow"
+          />
+          <BaseButton
             :label="t('Add document')"
             icon="file-add"
             only-icon
@@ -207,6 +218,9 @@ const assignment = ref(null)
 const addedDocuments = ref([])
 const submissionListKey = ref(0)
 const studentSubmissionCount = ref(0)
+// null until loaded: the toggle stays hidden rather than showing a wrong state.
+const following = ref(null)
+const followBusy = ref(false)
 
 const oneSubmissionPerUser = computed(
   () => platformConfigStore.getSetting("work.allow_only_one_student_publication_per_user") === "true",
@@ -248,10 +262,34 @@ async function loadAddedDocuments() {
     console.warn("[AssignmentDetail] Failed to load added documents", e)
   }
 }
+async function loadFollowStatus() {
+  if (!isTeacherUI.value) return
+  try {
+    const { following: isFollowing } = await cStudentPublicationService.getFollowStatus(assignmentId)
+    following.value = Boolean(isFollowing)
+  } catch (e) {
+    console.warn("[AssignmentDetail] Failed to load follow status", e)
+  }
+}
 onMounted(async () => {
   assignment.value = await cStudentPublicationService.getAssignmentMetadata(assignmentId, cid, sid, gid)
-  await loadAddedDocuments()
+  await Promise.all([loadAddedDocuments(), loadFollowStatus()])
 })
+
+async function toggleFollow() {
+  if (!isTeacherUI.value || followBusy.value) return
+  followBusy.value = true
+  try {
+    const { following: isFollowing } = following.value
+      ? await cStudentPublicationService.unfollowAssignment(assignmentId)
+      : await cStudentPublicationService.followAssignment(assignmentId)
+    following.value = Boolean(isFollowing)
+  } catch {
+    notification.showErrorNotification(t("An error occurred"))
+  } finally {
+    followBusy.value = false
+  }
+}
 
 function goBack() {
   router.push({ name: "AssignmentsList", query: { cid, sid, gid } })

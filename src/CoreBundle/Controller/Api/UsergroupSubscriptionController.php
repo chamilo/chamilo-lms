@@ -88,9 +88,9 @@ final class UsergroupSubscriptionController extends AbstractController
     }
 
     /**
-     * @param class-string                          $entity       Entity of the ids
-     * @param bool                                  $limitToUrl   Keep only the entities of the current access URL
-     * @param callable(Usergroup, list<int>): void  $apply        Applies the list through UsergroupHelper
+     * @param class-string                         $entity     Entity of the ids
+     * @param bool                                 $limitToUrl Keep only the entities of the current access URL
+     * @param callable(Usergroup, list<int>): void $apply      Applies the list through UsergroupHelper
      */
     private function replace(Request $request, int $id, string $key, string $entity, bool $limitToUrl, callable $apply): JsonResponse
     {
@@ -132,7 +132,7 @@ final class UsergroupSubscriptionController extends AbstractController
      * The class, or the error response to return. Social groups are refused: their membership has roles and rules that
      * differ from a class, and these routes only implement the class semantics.
      */
-    private function findClass(int $id): Usergroup|JsonResponse
+    private function findClass(int $id): JsonResponse|Usergroup
     {
         $usergroup = $this->em->find(Usergroup::class, $id);
         if (!$usergroup instanceof Usergroup || !$this->belongsToCurrentUrl($usergroup)) {

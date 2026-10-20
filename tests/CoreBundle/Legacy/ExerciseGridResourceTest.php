@@ -78,7 +78,7 @@ final class ExerciseGridResourceTest extends KernelTestCase
         $expected = array_map(static fn (int $i): string => 'Quiz '.$i, range(1, self::TOTAL));
 
         $this->setCourseContext($course, $admin, COURSEMANAGER);
-        self::assertTrue(api_is_allowed_to_edit(null, true), 'The teacher list must be built for an editor.');
+        self::assertTrue(api_is_allowed_to_edit(false, true), 'The teacher list must be built for an editor.');
         $teacherTitles = $this->getAllPageTitles($course, $admin, 1);
         self::assertSame($expected, $teacherTitles, 'The teacher tests list is not in natural title order.');
 
@@ -87,7 +87,7 @@ final class ExerciseGridResourceTest extends KernelTestCase
         $this->getEntityManager()->flush();
         $this->loginAs($student);
         $this->setCourseContext($course, $student, STUDENT);
-        self::assertFalse(api_is_allowed_to_edit(null, true), 'The learner list must be built for a learner.');
+        self::assertFalse(api_is_allowed_to_edit(false, true), 'The learner list must be built for a learner.');
 
         self::assertSame(
             $teacherTitles,

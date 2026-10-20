@@ -190,16 +190,28 @@ class Event
 
         Database::query($sql);
 
+        // "what's new" notifications are only shown to logged-in users
+        if (empty($userId)) {
+            return true;
+        }
+
         // added for "what's new" notification
-        $sql = "UPDATE $TABLETRACK_LASTACCESS  SET access_date = '$now'
+        // Look for the existing row first: UPDATE affected_rows returns 0 when
+        // access_date is unchanged (same second), which used to create duplicates
+        $sql = "SELECT access_id FROM $TABLETRACK_LASTACCESS
                 WHERE
                   access_user_id = $userId AND
                   c_id = $courseId AND
                   access_tool IS NULL AND
-                  access_session_id = $sessionId";
+                  access_session_id = $sessionId
+                LIMIT 1";
         $result = Database::query($sql);
 
-        if (Database::affected_rows($result) == 0) {
+        if ($row = Database::fetch_array($result)) {
+            $sql = "UPDATE $TABLETRACK_LASTACCESS SET access_date = '$now'
+                    WHERE access_id = ".(int) $row['access_id'];
+            Database::query($sql);
+        } else {
             $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_date, access_session_id)
                     VALUES ($userId, $courseId, '$now', $sessionId)";
             Database::query($sql);
@@ -279,17 +291,29 @@ class Event
             Database::insert($tableAccess, $params);
         }
 
+        // "what's new" notifications are only shown to logged-in users
+        if (empty($userId)) {
+            return true;
+        }
+
         // "what's new" notification
-        $sql = "UPDATE $tableLastAccess
-                SET access_date = '$reallyNow'
+        // Look for the existing row first: UPDATE affected_rows returns 0 when
+        // access_date is unchanged (same second), which used to create duplicates
+        $sql = "SELECT access_id FROM $tableLastAccess
                 WHERE
                     access_user_id = $userId AND
                     c_id = $courseId AND
                     access_tool = '$tool' AND
-                    access_session_id = $sessionId";
+                    access_session_id = $sessionId
+                LIMIT 1";
         $result = Database::query($sql);
 
-        if (Database::affected_rows($result) == 0) {
+        if ($row = Database::fetch_array($result)) {
+            $sql = "UPDATE $tableLastAccess
+                    SET access_date = '$reallyNow'
+                    WHERE access_id = ".(int) $row['access_id'];
+            Database::query($sql);
+        } else {
             $params = [
                 'access_user_id' => $userId,
                 'c_id' => $courseId,

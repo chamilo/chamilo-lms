@@ -184,20 +184,9 @@ class LtiProvider
             $resolution = 'username';
         }
 
-        // 2. Fallback to email if username was not found.
-        if (!$resolvedUser instanceof User && '' !== $email) {
-            /** @var User|null $userByEmail */
-            $userByEmail = $em
-                ->getRepository(User::class)
-                ->findOneBy(['email' => $email]);
-
-            if ($userByEmail instanceof User) {
-                $resolvedUser = $userByEmail;
-                $resolution = 'email';
-            }
-        }
-
-        // 3. Create a new shadow user only if no existing user was found.
+        // 2. Create a new shadow user only if no existing user was found.
+        // The email claim is never used to pick an existing account: the consumer does not prove
+        // it owns that address, so it would let a launch log in as any local user.
         if (!$resolvedUser instanceof User) {
             if ('' === $email) {
                 $email = $username.'@'.$authSource.'.local';

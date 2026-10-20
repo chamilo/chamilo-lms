@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -133,6 +134,15 @@ $_course = api_get_course_info();
 
 // tables used in the exercise tool.
 if (!empty($_GET['action']) && 'exportqti2' === $_GET['action'] && !empty($_GET['questionId'])) {
+    // Only export a question of the current course (and session), not any question id.
+    $questionInCourse = Container::getQuestionRepository()->findInCourseContext(
+        (int) $_GET['questionId'],
+        api_get_course_entity(),
+        api_get_session_entity()
+    );
+    if (null === $questionInCourse) {
+        api_not_allowed(true);
+    }
     require_once 'export/qti2/qti2_export.php';
     $export = export_question_qti($_GET['questionId'], true);
     $qid = (int) $_GET['questionId'];

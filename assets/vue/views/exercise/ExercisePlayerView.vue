@@ -5476,6 +5476,85 @@ function displayText(value, fallback = "") {
   return plainValue || fallback
 }
 
+function isLiveChoiceLoggable(question) {
+  return (
+    isRadioChoice(question) ||
+    isCheckboxChoice(question) ||
+    isDraftTrueFalseQuestion(question) ||
+    isMatchingQuestion(question) ||
+    isDraggableQuestion(question) ||
+    isDropdownQuestion(question)
+  )
+}
+
+const liveChoiceSnapshots = computed(() => {
+  const snapshots = {}
+  if (
+    isLoading.value ||
+    isStartingAttempt.value ||
+    canManage.value ||
+    usesLegacySubmit.value ||
+    !activeAttempt.value?.attemptId ||
+    activeAttempt.value?.status === "completed"
+  ) {
+    return snapshots
+  }
+
+  for (const question of questions.value) {
+    if (isLiveChoiceLoggable(question)) {
+      snapshots[question.id] = JSON.stringify(buildAnswerPayload(question))
+    }
+  }
+
+  return snapshots
+})
+
+let liveChoiceLogQueue = Promise.resolve()
+
+function queueLiveChoiceLog(questionId, serializedAnswer) {
+  const exerciseId = getExerciseId()
+  const attemptId = Number(activeAttempt.value?.attemptId || 0)
+  const question = questionMap.value.get(Number(questionId))
+  if (!exerciseId || !attemptId || !question) {
+    return
+  }
+
+  const answer = JSON.parse(serializedAnswer)
+  const secondsSpent = getQuestionSecondsSpent(question)
+  const contextParams = getContextParams()
+
+  liveChoiceLogQueue = liveChoiceLogQueue.then(async () => {
+    try {
+      await exerciseService.saveExerciseRuntimeAnswer(
+        {
+          exerciseId,
+          attemptId,
+          questionId: Number(questionId),
+          answer,
+          secondsSpent,
+          logOnly: true,
+        },
+        contextParams,
+        exerciseId,
+        attemptId,
+      )
+    } catch (error) {
+      console.warn("Could not record exercise answer change", error)
+    }
+  })
+}
+
+watch(liveChoiceSnapshots, (nextSnapshots, previousSnapshots) => {
+  for (const [questionId, serializedAnswer] of Object.entries(nextSnapshots)) {
+    if (
+      Object.prototype.hasOwnProperty.call(previousSnapshots, questionId) &&
+      previousSnapshots[questionId] !== serializedAnswer
+    ) {
+      queueLiveChoiceLog(questionId, serializedAnswer)
+    }
+  }
+})
+
 onBeforeUnmount(() => {
   stopCountdownTimer()
   stopQuestionCountdownTimer()

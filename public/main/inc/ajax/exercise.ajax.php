@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Event\ExerciseQuestionAnsweredEvent;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptLogService;
 use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
 use Doctrine\Persistence\ObjectRepository;
@@ -572,6 +573,18 @@ switch ($action) {
 
         Session::write('exe_id', $exeId);
 
+        $attemptLogManager = Container::getEntityManager();
+        $attemptForLog = $attemptLogManager->find(TrackEExercise::class, (int) $exeId);
+        $attemptLogService = null;
+        if ($attemptForLog instanceof TrackEExercise
+            && (int) $attemptForLog->getUser()->getId() === (int) $currentUserId
+            && (int) $attemptForLog->getCourse()->getId() === (int) $course_id
+            && (int) ($attemptForLog->getSession()?->getId() ?? 0) === (int) $session_id
+            && (int) ($attemptForLog->getQuiz()?->getIid() ?? 0) === (int) $exercise_id
+        ) {
+            $attemptLogService = new ExerciseAttemptLogService($attemptLogManager);
+        }
+
         // Updating Reminder algorithm.
         if (ONE_PER_PAGE == $objExercise->type) {
             $bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
@@ -880,12 +893,30 @@ switch ($action) {
                 Events::EXERCISE_QUESTION_ANSWERED
             );
 
+            if (null !== $attemptLogService) {
+                $attemptLogService->record(
+                    $attemptForLog,
+                    (int) $my_question_id,
+                    'saved',
+                    [
+                        'choice' => $my_choice,
+                        'degreeCertainty' => $myChoiceDegreeCertainty,
+                        'hotspot' => $hot_spot_coordinates[$my_question_id] ?? null,
+                    ],
+                    (int) $questionDuration,
+                );
+            }
+
             // Destruction of the Question object
             unset($objQuestionTmp);
             if ($debug) {
                 error_log('---------- end question ------------');
             }
         } // end foreach question_list
+        if (null !== $attemptLogService) {
+            $attemptLogManager->flush();
+        }
+
         if ($debug) {
             error_log('Finished questions loop in save_exercise_by_now');
         }

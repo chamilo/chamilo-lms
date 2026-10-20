@@ -25,6 +25,7 @@ use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptLogService;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
@@ -71,6 +72,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         private CidReqHelper $cidReqHelper,
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
+        private ExerciseAttemptLogService $attemptLogService,
     ) {}
 
     /**
@@ -180,6 +182,14 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             $attemptRow->addAttemptFile($attemptFile);
             $this->entityManager->persist($attemptFile);
         }
+
+        $this->attemptLogService->record(
+            $attempt,
+            $questionId,
+            'uploaded',
+            ['fileCount' => \count($resourceNodes)],
+            $secondsSpent,
+        );
 
         if (null !== $reviewLater) {
             $this->syncReviewQuestion($attempt, $questionId, true === $reviewLater);

@@ -419,8 +419,10 @@ Feature: Exercise tool
     And I wait for the page content to settle
     # Question 1 - Multiple choice
     Then I should see "Multiple choice"
+    And I start monitoring exercise answer history
     And I check the "Answer true" radio button
     And I press "Next question" until "Multiple answers" appears
+    And the exercise should record a live change and a draft save for the same question
     And I wait for the page content to settle
     # Question 2 - Multiple answers
     And I check the "Answer true" radio button

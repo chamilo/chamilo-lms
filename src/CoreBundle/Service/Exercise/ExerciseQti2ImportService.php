@@ -388,6 +388,12 @@ final readonly class ExerciseQti2ImportService
                         if ('' !== $answerId) {
                             $package['questions'][$currentQuestionIdent]['weighting'][$answerId] = $node->getAttribute('mappedValue');
                         }
+                        if (str_starts_with($currentAnswerId, 'fill_')) {
+                            $package['questions'][$currentQuestionIdent]['blank_weighting'][$currentAnswerId][] = $node->getAttribute('mappedValue');
+                            if ('false' === $node->getAttribute('caseSensitive')) {
+                                $package['questions'][$currentQuestionIdent]['fib_case_insensitive'] = true;
+                            }
+                        }
                     }
 
                     break;
@@ -556,6 +562,13 @@ final readonly class ExerciseQti2ImportService
                 continue;
             }
 
+            // A span without attributes only wraps text (Chamilo exports the text around the blanks that way).
+            if ('span' === $childName && !$childNode->hasAttributes()) {
+                $content .= $childNode->textContent;
+
+                continue;
+            }
+
             if (!\in_array($childName, $nonHtmlTagsToAvoid, true)) {
                 $content .= '<'.$childName;
                 foreach ($childNode->attributes ?? [] as $attribute) {
@@ -613,34 +626,46 @@ final readonly class ExerciseQti2ImportService
                 continue;
             }
 
-            $subtype = $question['subtype'] ?? null;
-            if ('LISTBOX_FILL' === $subtype) {
-                $options = \is_array($question['fib_options'] ?? null) ? $question['fib_options'] : [];
-                foreach ($options as $responseId => $data) {
-                    $correct = (string) ($data['correct'] ?? '');
-                    $wrongs = \is_array($data['wrongs'] ?? null) ? $data['wrongs'] : [];
-                    $final = [];
-                    if ('' !== $correct) {
-                        $final[] = $correct;
-                    }
-                    foreach ($wrongs as $wrong) {
-                        $wrong = trim((string) $wrong);
-                        if ('' === $wrong || $wrong === $correct) {
-                            continue;
+            // Each blank is rebuilt from its own interaction, so menus (inlineChoiceInteraction) and typed
+            // blanks (textEntryInteraction) can be mixed in one question; its score is kept in order.
+            $options = \is_array($question['fib_options'] ?? null) ? $question['fib_options'] : [];
+            $corrects = \is_array($question['correct_answers'] ?? null) ? $question['correct_answers'] : [];
+            $blankWeights = \is_array($question['blank_weighting'] ?? null) ? $question['blank_weighting'] : [];
+            $weights = [];
+            $text = preg_replace_callback(
+                '/\*\*claroline_start\*\*(.*?)\*\*claroline_end\*\*/s',
+                static function (array $match) use ($options, $corrects, $blankWeights, &$weights): string {
+                    $responseId = $match[1];
+                    if (isset($options[$responseId])) {
+                        $correct = (string) ($options[$responseId]['correct'] ?? '');
+                        $wrongs = \is_array($options[$responseId]['wrongs'] ?? null) ? $options[$responseId]['wrongs'] : [];
+                        $final = '' !== $correct ? [$correct] : [];
+                        foreach ($wrongs as $wrong) {
+                            $wrong = trim((string) $wrong);
+                            if ('' !== $wrong && $wrong !== $correct) {
+                                $final[] = $wrong;
+                            }
                         }
-                        $final[] = $wrong;
+                        $blank = '['.implode('|', $final).']';
+                    } elseif (str_starts_with($responseId, 'fill_') && isset($corrects[$responseId])) {
+                        $blank = '['.trim((string) $corrects[$responseId]).']';
+                    } elseif (str_starts_with($responseId, 'fill_')) {
+                        $blank = '[]';
+                    } else {
+                        return $match[0];
                     }
-                    $text = str_replace('**claroline_start**'.$responseId.'**claroline_end**', '['.implode('|', $final).']', $text);
-                }
-            } else {
-                $corrects = \is_array($question['correct_answers'] ?? null) ? $question['correct_answers'] : [];
-                foreach ($corrects as $responseId => $answerValue) {
-                    if (!str_starts_with((string) $responseId, 'fill_')) {
-                        continue;
-                    }
-                    $text = str_replace('**claroline_start**'.$responseId.'**claroline_end**', '['.trim((string) $answerValue).']', $text);
-                }
-            }
+
+                    $scores = array_filter(
+                        array_map(static fn (mixed $value): string => str_replace(',', '.', trim((string) $value)), (array) ($blankWeights[$responseId] ?? [])),
+                        'is_numeric'
+                    );
+                    $weights[] = [] !== $scores ? max(array_map('floatval', $scores)) : null;
+
+                    return $blank;
+                },
+                $text
+            ) ?? $text;
+            $question['blank_weights'] = $weights;
 
             $question['response_text'] = preg_replace('/\*\*claroline_start\*\*fill_[^*]+\*\*claroline_end\*\*/', '[]', $text) ?? $text;
         }
@@ -736,6 +761,9 @@ final readonly class ExerciseQti2ImportService
             if (self::FILL_IN_BLANKS === $questionType) {
                 [$answerString, $totalWeight] = $this->buildFibAnswerString($questionData);
                 $question->setPonderation($totalWeight);
+                if (true === ($questionData['fib_case_insensitive'] ?? false)) {
+                    $question->setExtra('case:false');
+                }
                 $this->createSingleAnswer($question, $answerString, 0, '', $totalWeight, 1);
             } elseif (self::FREE_ANSWER === $questionType) {
                 $question->setPonderation($this->scoreFromValue($questionData['weighting'][0] ?? 0));
@@ -969,7 +997,13 @@ final readonly class ExerciseQti2ImportService
         $sizes = [];
         $total = 0.0;
 
-        foreach ($matches[0] ?? [] as $blankRaw) {
+        // Scores read from each blank's own mapping, when they can be matched to the blanks of the text.
+        $blankWeights = \is_array($questionData['blank_weights'] ?? null) ? array_values($questionData['blank_weights']) : [];
+        if (\count($blankWeights) !== \count($matches[0])) {
+            $blankWeights = [];
+        }
+
+        foreach ($matches[0] as $blankIndex => $blankRaw) {
             $inside = trim((string) $blankRaw, '[]');
             $correct = $inside;
             if (str_contains($correct, '||')) {
@@ -981,7 +1015,9 @@ final readonly class ExerciseQti2ImportService
             }
             $correct = trim((string) $correct);
             $weight = 1.0;
-            if ('' !== $correct && \array_key_exists($correct, $weightsMap)) {
+            if (isset($blankWeights[$blankIndex]) && is_finite((float) $blankWeights[$blankIndex])) {
+                $weight = (float) $blankWeights[$blankIndex];
+            } elseif ('' !== $correct && \array_key_exists($correct, $weightsMap)) {
                 $weight = $this->scoreFromValue($weightsMap[$correct]);
             }
             $weights[] = $weight;

@@ -45,6 +45,7 @@ final readonly class ExerciseQti2ExportService
 {
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
+    private const FILL_IN_BLANKS = 3;
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
     private const MATCHING_DRAGGABLE = 19;
@@ -216,7 +217,7 @@ final readonly class ExerciseQti2ExportService
 
     private function isLegacyExportableQuestion(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE], true);
+        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::FILL_IN_BLANKS, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE], true);
     }
 
     private function isMatchingQuestion(CQuizQuestion $question): bool
@@ -235,6 +236,9 @@ final readonly class ExerciseQti2ExportService
         $xml .= '                title = "'.$this->escapeAttribute($this->formatText($question->getQuestion())).'"'."\n";
         $xml .= '                category = "'.$this->escapeAttribute($this->formatText($categoryTitle)).'"'."\n";
         $xml .= '        >'."\n";
+        if (self::FILL_IN_BLANKS === (int) $question->getType()) {
+            return $xml.$this->exportFillBlanksItem($question).'</assessmentItem>'."\n";
+        }
         $xml .= $this->exportQuestionResponseDeclaration($question, $questionIdent);
         $xml .= "  <itemBody>\n";
         $xml .= $this->exportQuestionResponses($question, $questionIdent);
@@ -309,6 +313,27 @@ final readonly class ExerciseQti2ExportService
             $xml .= '</simpleChoice>'."\n";
         }
         $xml .= '    </choiceInteraction>'."\n";
+
+        return $xml;
+    }
+
+    /**
+     * The whole Fill in blanks question is stored in its first answer row; the blanks are exported as
+     * textEntryInteraction (typed) and inlineChoiceInteraction (menus), each one scored on its own.
+     */
+    private function exportFillBlanksItem(CQuizQuestion $question): string
+    {
+        $answers = $this->getSortedAnswers($question);
+        $answer = $answers[0] ?? null;
+        $caseInsensitive = str_contains((string) $question->getExtra(), 'case:false');
+        $fillBlanks = null !== $answer ? Qti2FillBlanksWriter::write((string) $answer->getAnswer(), $caseInsensitive) : null;
+        if (null === $fillBlanks) {
+            return "  <itemBody>\n  </itemBody>\n";
+        }
+
+        $xml = $fillBlanks['declarations'];
+        $xml .= "  <itemBody>\n".$fillBlanks['body']."  </itemBody>\n";
+        $xml .= '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response"/>'."\n";
 
         return $xml;
     }

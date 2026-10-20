@@ -262,6 +262,9 @@ function import_exercise($file)
                 if (FIB == $question->type) {
                     [$fibAnswerString, $fibTotalWeight] = buildFibAnswerString($question_array);
                     $question->updateWeighting($fibTotalWeight);
+                    if (!empty($question_array['fib_case_insensitive'])) {
+                        $question->extra = 'case:false';
+                    }
                     try {
                         // Update question weighting in DB
                         $question->save($exercise);
@@ -622,6 +625,16 @@ function parseQti2($xmlData)
                     $exerciseInfo['question'][$currentQuestionIdent]['weighting'][$answer_id] = $node->getAttribute(
                         'mappedValue'
                     );
+
+                    // Score of each fill-in-the-blank response, in its own responseDeclaration.
+                    if (str_starts_with((string) $currentAnswerId, 'fill_')) {
+                        $exerciseInfo['question'][$currentQuestionIdent]['blank_weighting'][$currentAnswerId][] = $node->getAttribute(
+                            'mappedValue'
+                        );
+                        if ('false' === $node->getAttribute('caseSensitive')) {
+                            $exerciseInfo['question'][$currentQuestionIdent]['fib_case_insensitive'] = true;
+                        }
+                    }
                 }
 
                 break;
@@ -637,6 +650,12 @@ function parseQti2($xmlData)
                 /** @var DOMElement $childNode */
                 foreach ($node->childNodes as $childNode) {
                     if ('#text' === $childNode->nodeName) {
+                        continue;
+                    }
+
+                    // A span without attributes only wraps text (Chamilo exports the text around the blanks that way).
+                    if ('span' === $childNode->nodeName && !$childNode->hasAttributes()) {
+                        $currentQuestionItemBody .= $childNode->nodeValue;
                         continue;
                     }
 
@@ -806,43 +825,49 @@ function parseQti2($xmlData)
             continue;
         }
 
-        $subtype = $q['subtype'] ?? null;
-
-        if ('LISTBOX_FILL' === $subtype) {
-            $opts = $q['fib_options'] ?? [];
-            foreach ($opts as $responseId => $data) {
-                $correct = isset($data['correct']) ? (string) $data['correct'] : '';
-                $wrongs = isset($data['wrongs']) && is_array($data['wrongs']) ? $data['wrongs'] : [];
-
-                $final = [];
-                if ($correct !== '') {
-                    $final[] = $correct;
-                }
-                foreach ($wrongs as $w) {
-                    $w = trim((string) $w);
-                    if ($w === '' || $w === $correct) {
-                        continue;
+        // Each blank is rebuilt from its own interaction, so menus (inlineChoiceInteraction) and typed
+        // blanks (textEntryInteraction) can be mixed in one question; its score is kept in order.
+        $opts = isset($q['fib_options']) && is_array($q['fib_options']) ? $q['fib_options'] : [];
+        $corrects = isset($q['correct_answers']) && is_array($q['correct_answers']) ? $q['correct_answers'] : [];
+        $blankWeighting = isset($q['blank_weighting']) && is_array($q['blank_weighting']) ? $q['blank_weighting'] : [];
+        $blankWeights = [];
+        $text = preg_replace_callback(
+            '/\*\*claroline_start\*\*(.*?)\*\*claroline_end\*\*/s',
+            function ($match) use ($opts, $corrects, $blankWeighting, &$blankWeights) {
+                $responseId = $match[1];
+                if (isset($opts[$responseId])) {
+                    $correct = isset($opts[$responseId]['correct']) ? (string) $opts[$responseId]['correct'] : '';
+                    $wrongs = isset($opts[$responseId]['wrongs']) && is_array($opts[$responseId]['wrongs']) ? $opts[$responseId]['wrongs'] : [];
+                    $final = '' !== $correct ? [$correct] : [];
+                    foreach ($wrongs as $w) {
+                        $w = trim((string) $w);
+                        if ('' !== $w && $w !== $correct) {
+                            $final[] = $w;
+                        }
                     }
-                    $final[] = $w;
+                    $blank = '['.implode('|', $final).']';
+                } elseif (str_starts_with($responseId, 'fill_') && isset($corrects[$responseId])) {
+                    $blank = '['.trim((string) $corrects[$responseId]).']';
+                } elseif (str_starts_with($responseId, 'fill_')) {
+                    $blank = '[]';
+                } else {
+                    return $match[0];
                 }
 
-                $replacement = '['.implode('|', $final).']';
-                $marker = '**claroline_start**'.$responseId.'**claroline_end**';
-                $text = str_replace($marker, $replacement, $text);
-            }
-        } else {
-            // TEXTFIELD_FILL: use correct answer text
-            $corrects = $q['correct_answers'] ?? [];
-            if (is_array($corrects)) {
-                foreach ($corrects as $responseId => $answerValue) {
-                    if (0 !== strpos((string) $responseId, 'fill_')) {
-                        continue;
+                $scores = [];
+                foreach ((array) ($blankWeighting[$responseId] ?? []) as $value) {
+                    $value = str_replace(',', '.', trim((string) $value));
+                    if (is_numeric($value)) {
+                        $scores[] = (float) $value;
                     }
-                    $marker = '**claroline_start**'.$responseId.'**claroline_end**';
-                    $text = str_replace($marker, '['.trim((string) $answerValue).']', $text);
                 }
-            }
-        }
+                $blankWeights[] = !empty($scores) ? max($scores) : null;
+
+                return $blank;
+            },
+            $text
+        ) ?? $text;
+        $q['blank_weights'] = $blankWeights;
 
         // Replace any leftover markers with empty blanks to avoid broken text.
         $text = preg_replace('/\*\*claroline_start\*\*fill_[^*]+\*\*claroline_end\*\*/', '[]', $text);
@@ -1075,12 +1100,17 @@ function buildFibAnswerString(array $questionArray): array
     }
 
     $nb = preg_match_all('/\[[^\]]*\]/', $text, $m);
+    // Scores read from each blank's own mapping, when they can be matched to the blanks of the text.
+    $blankWeights = isset($questionArray['blank_weights']) && is_array($questionArray['blank_weights']) ? array_values($questionArray['blank_weights']) : [];
+    if (count($blankWeights) !== (int) $nb) {
+        $blankWeights = [];
+    }
     $weights = [];
     $sizes = [];
     $total = 0.0;
 
     if ($nb && !empty($m[0])) {
-        foreach ($m[0] as $blankRaw) {
+        foreach ($m[0] as $blankIndex => $blankRaw) {
             $inside = trim((string) $blankRaw, '[]');
 
             // For menu blanks: "Correct|Wrong1|Wrong2" (correct must be first)
@@ -1096,7 +1126,9 @@ function buildFibAnswerString(array $questionArray): array
             $correct = trim((string) $correct);
 
             $w = 1.0;
-            if ($correct !== '' && array_key_exists($correct, $weightsMap)) {
+            if (isset($blankWeights[$blankIndex]) && is_finite((float) $blankWeights[$blankIndex])) {
+                $w = (float) $blankWeights[$blankIndex];
+            } elseif ('' !== $correct && array_key_exists($correct, $weightsMap)) {
                 $w = (float) $weightsMap[$correct];
             }
 

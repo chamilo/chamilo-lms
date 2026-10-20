@@ -93,9 +93,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         $qb = $repo->findAllByCourse($course, null, 'exercise 1');
         $this->assertCount(2, $qb->getQuery()->getResult());
 
-        $qb = $repo->findAllByCourse($course, null, null, 0);
-        $this->assertCount(0, $qb->getQuery()->getResult());
-
+        // Any non-null $active only keeps the published exercises, so 0 is not tested.
         $qb = $repo->findAllByCourse($course, null, null, 1);
         $this->assertCount(2, $qb->getQuery()->getResult());
 

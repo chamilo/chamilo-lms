@@ -419,14 +419,13 @@ class UserRepositoryTest extends AbstractApiTest
         $token = $this->getUserToken([]);
 
         $this->createClientWithCredentials($token)->request(
-            'PATCH',
+            'PUT',
             '/api/users/'.$user->getId(),
             [
                 'json' => [
                     'firstname' => 'updated',
                     'lastname' => 'updated',
                 ],
-                'headers' => ['content-type' => 'application/merge-patch+json'],
             ]
         );
 

@@ -97,13 +97,12 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $token = $this->getUserToken();
         $this->createClientWithCredentials($token)->request(
-            'PATCH',
+            'PUT',
             '/api/sessions/'.$session->getId(),
             [
                 'json' => [
                     'title' => $newSessionName,
                 ],
-                'headers' => ['content-type' => 'application/merge-patch+json'],
             ]
         );
 

@@ -84,11 +84,11 @@ class Utils
      */
     public function generateRoleScopeMentor(User $currentUser)
     {
-        if (DRH !== $currentUser->getStatus()) {
+        if (HRM !== $currentUser->getStatus()) {
             return '';
         }
 
-        $followedUsers = UserManager::get_users_followed_by_drh($currentUser->getId());
+        $followedUsers = UserManager::get_users_followed_by_hrm($currentUser->getId());
         $scope = [];
 
         foreach ($followedUsers as $userInfo) {

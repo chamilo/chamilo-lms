@@ -53,7 +53,7 @@ final readonly class SkillAssignmentAccessChecker
 
             if (
                 ($hrSkillManagementEnabled || $privateSkillManagementEnabled)
-                && $this->userRepository->isUserFollowedByDrh($targetUserId, $currentUserId)
+                && $this->userRepository->isUserFollowedByHrm($targetUserId, $currentUserId)
             ) {
                 return $currentUser;
             }

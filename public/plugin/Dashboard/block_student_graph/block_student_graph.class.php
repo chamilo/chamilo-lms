@@ -22,7 +22,7 @@ class BlockStudentGraph extends Block
 {
     private $user_id;
     private $students;
-    private $permission = [DRH];
+    private $permission = [HRM];
 
     /**
      * Constructor.
@@ -34,8 +34,8 @@ class BlockStudentGraph extends Block
         if ($this->is_block_visible_for_user($user_id)) {
             /*if (api_is_platform_admin()) {
                 $this->students = UserManager::get_user_list(array('status' => STUDENT));
-            } else if (api_is_drh()) {*/
-            $this->students = UserManager::get_users_followed_by_drh($user_id, STUDENT);
+            } else if (api_is_hrm()) {*/
+            $this->students = UserManager::get_users_followed_by_hrm($user_id, STUDENT);
             //}
         }
     }

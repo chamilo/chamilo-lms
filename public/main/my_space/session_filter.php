@@ -12,7 +12,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
 
-if (!api_is_allowed_to_create_course() && !api_is_drh()) {
+if (!api_is_allowed_to_create_course() && !api_is_hrm()) {
     api_not_allowed(true);
 }
 $token = null;
@@ -35,7 +35,7 @@ $form = new FormValidator('search_user', 'GET', api_get_self());
 $innerJoinSessionRelUser = '';
 $whereCondictionDRH = '';
 $whereCondictionMultiUrl = '';
-if (api_is_drh()) {
+if (api_is_hrm()) {
     $innerJoinSessionRelUser = "INNER JOIN $tblSessionRelUser as session_rel_user
                                 ON (s.id = session_rel_user.session_id)";
     $whereCondictionDRH = "WHERE session_rel_user.user_id = ".api_get_user_id();

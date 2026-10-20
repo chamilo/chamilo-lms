@@ -35,6 +35,15 @@ use const PHP_URL_HOST;
  */
 class SettingsManager implements SettingsManagerInterface
 {
+    /**
+     * @var array<string, string> legacy setting keys mapped to canonical HRM keys
+     */
+    private const array HRM_SETTING_ALIASES = [
+        'registration.drh_autosubscribe' => 'registration.hrm_autosubscribe',
+        'session.drh_can_access_all_session_content' => 'session.hrm_can_access_all_session_content',
+        'workflows.drh_allow_access_to_all_students' => 'workflows.hrm_allow_access_to_all_students',
+    ];
+
     protected ?AccessUrl $url = null;
 
     protected ServiceRegistryInterface $schemaRegistry;
@@ -177,13 +186,25 @@ class SettingsManager implements SettingsManagerInterface
     {
         $name = $this->validateSetting($name);
 
+        // Prefer the canonical override, retaining legacy YAML overrides for existing sites.
         $overridden = $this->settingsManagerHelper->getOverride($name);
+        if (null === $overridden) {
+            $legacyName = array_search($name, self::HRM_SETTING_ALIASES, true);
+            if (false !== $legacyName) {
+                $overridden = $this->settingsManagerHelper->getOverride($legacyName);
+            }
+        }
 
         if (null !== $overridden) {
             return $overridden;
         }
 
         [$category, $variable] = explode('.', $name);
+
+        // Bypass session-cached schema data for renamed settings during rolling upgrades.
+        if (\in_array($name, self::HRM_SETTING_ALIASES, true)) {
+            $loadFromDb = true;
+        }
 
         if ($loadFromDb) {
             $settings = $this->load($category, $variable);
@@ -675,6 +696,39 @@ class SettingsManager implements SettingsManagerInterface
         return $parameters;
     }
 
+    /**
+     * Preserve custom settings until the targeted row-rename migration runs.
+     * A canonical HRM value always wins, including an explicit empty value.
+     */
+    private function normalizeHrmParameters(array $parameters, string $category): array
+    {
+        foreach (self::HRM_SETTING_ALIASES as $legacy => $canonical) {
+            [$settingCategory, $legacyVariable] = explode('.', $legacy, 2);
+            [, $canonicalVariable] = explode('.', $canonical, 2);
+            if ($settingCategory !== $category) {
+                continue;
+            }
+            if (\array_key_exists($legacyVariable, $parameters)
+                && !\array_key_exists($canonicalVariable, $parameters)
+            ) {
+                $parameters[$canonicalVariable] = $parameters[$legacyVariable];
+            }
+        }
+
+        return $parameters;
+    }
+
+    private function normalizeHrmCategoryParameters(array $parameters): array
+    {
+        foreach (['registration', 'session', 'workflows'] as $category) {
+            if (isset($parameters[$category])) {
+                $parameters[$category] = $this->normalizeHrmParameters($parameters[$category], $category);
+            }
+        }
+
+        return $parameters;
+    }
+
     private function validateSetting(string $name): string
     {
         if (!str_contains($name, '.')) {
@@ -698,7 +752,7 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
 
-        return $name;
+        return self::HRM_SETTING_ALIASES[$name] ?? $name;
     }
 
     /**
@@ -724,7 +778,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
             }
 
-            return $parameters;
+            return $this->normalizeHrmParameters($parameters, $namespace);
         }
 
         // Main URL: return only current URL rows.
@@ -736,7 +790,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
             }
 
-            return $parameters;
+            return $this->normalizeHrmParameters($parameters, $namespace);
         }
 
         // Sub-URL: merge main + current according to access_url_changeable/access_url_locked on main.
@@ -750,7 +804,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
             }
 
-            return $parameters;
+            return $this->normalizeHrmParameters($parameters, $namespace);
         }
 
         /** @var SettingsCurrent[] $mainRows */
@@ -790,7 +844,7 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
 
-        return $parameters;
+        return $this->normalizeHrmParameters($parameters, $namespace);
     }
 
     private function getAllParametersByCategory()
@@ -808,7 +862,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameters[$parameter->getCategory()][$parameter->getVariable()] = $parameter->getSelectedValue();
             }
 
-            return $parameters;
+            return $this->normalizeHrmCategoryParameters($parameters);
         }
 
         // Main URL: only return current URL rows.
@@ -820,7 +874,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameters[$parameter->getCategory()][$parameter->getVariable()] = $parameter->getSelectedValue();
             }
 
-            return $parameters;
+            return $this->normalizeHrmCategoryParameters($parameters);
         }
 
         // Sub-URL: merge main + current according to access_url_changeable/access_url_locked on main.
@@ -833,7 +887,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameters[$parameter->getCategory()][$parameter->getVariable()] = $parameter->getSelectedValue();
             }
 
-            return $parameters;
+            return $this->normalizeHrmCategoryParameters($parameters);
         }
 
         /** @var SettingsCurrent[] $mainRows */
@@ -871,7 +925,7 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
 
-        return $parameters;
+        return $this->normalizeHrmCategoryParameters($parameters);
     }
 
     /**
@@ -1149,6 +1203,7 @@ class SettingsManager implements SettingsManagerInterface
             'student_autosubscribe' => 'Platform',
             'teacher_autosubscribe' => 'Platform',
             'drh_autosubscribe' => 'Platform',
+            'hrm_autosubscribe' => 'registration',
             'sessionadmin_autosubscribe' => 'Session',
             'scorm_cumulative_session_time' => 'Course',
             'allow_hr_skills_management' => 'Gradebook',
@@ -1207,6 +1262,9 @@ class SettingsManager implements SettingsManagerInterface
             'captcha_number_mistakes_to_block_account' => 'Security',
             'captcha_time_to_block' => 'Security',
             'drh_can_access_all_session_content' => 'Session',
+            'hrm_can_access_all_session_content' => 'session',
+            'drh_allow_access_to_all_students' => 'workflows',
+            'hrm_allow_access_to_all_students' => 'workflows',
             'display_groups_forum_in_general_tool' => 'Tools',
             'allow_tutors_to_assign_students_to_session' => 'Session',
             'allow_lp_return_link' => 'Course',
@@ -1297,6 +1355,9 @@ class SettingsManager implements SettingsManagerInterface
             'administratorName' => 'administrator_name',
             'administratorTelephone' => 'administrator_phone',
             'registration.soap.php.decode_utf8' => 'decode_utf8',
+            'drh_autosubscribe' => 'hrm_autosubscribe',
+            'drh_can_access_all_session_content' => 'hrm_can_access_all_session_content',
+            'drh_allow_access_to_all_students' => 'hrm_allow_access_to_all_students',
             'profile' => 'changeable_options',
         ];
 
@@ -1339,6 +1400,7 @@ class SettingsManager implements SettingsManagerInterface
             'display_coursecode_in_courselist' => 'course',
             'display_teacher_in_courselist' => 'course',
             'drh_autosubscribe' => 'registration',
+            'hrm_autosubscribe' => 'registration',
             'drh_page_after_login' => 'registration',
             'enable_help_link' => 'display',
             'example_material_course_creation' => 'course',

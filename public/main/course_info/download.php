@@ -31,7 +31,7 @@ if (empty($extension) || !file_exists($archive_path.$archive_file)) {
 $content_type = '';
 
 if (in_array($extension, ['xml', 'csv']) &&
-    (api_is_platform_admin(true) || api_is_drh())
+    (api_is_platform_admin(true) || api_is_hrm())
 ) {
     $content_type = 'application/force-download';
 } elseif ('zip' === $extension && api_get_course_id() && (api_is_platform_admin(true) || api_is_course_admin())) {

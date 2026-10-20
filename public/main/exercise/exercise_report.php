@@ -50,7 +50,7 @@ $_course = api_get_course_info();
 //$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
-    api_is_drh() ||
+    api_is_hrm() ||
     api_is_student_boss() ||
     api_is_session_admin();
 $is_tutor = api_is_allowed_to_edit(true);

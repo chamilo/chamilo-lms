@@ -178,7 +178,7 @@ class Attendance
         $allowDelete = api_get_setting('allow_delete_attendance');
         $student_param = '';
         $studentRequestId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
-        if (api_is_drh() && !empty($studentRequestId)) {
+        if (api_is_hrm() && !empty($studentRequestId)) {
             $student_param = '&student_id='.$studentRequestId;
         }
 
@@ -194,10 +194,10 @@ class Attendance
                 $session_star = api_get_session_image($session_id, $user_info['status']);
             }*/
             if (1 == $active) {
-                $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+                $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsHrm(
                     api_get_user_id(),
                     api_get_course_info()
-                ) || api_is_drh();
+                ) || api_is_hrm();
                 if ($isDrhOfCourse || api_is_allowed_to_edit(null, true)) {
                     // Link to edit
                     $row[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$id.$student_param.'">'.$title.'</a>'.$session_star;
@@ -2468,7 +2468,7 @@ class Attendance
 
         $allowToEdit = api_is_allowed_to_edit(null, true);
 
-        $isDrhOfCourse = api_is_drh() || CourseManager::isUserSubscribedInCourseAsDrh(
+        $isDrhOfCourse = api_is_hrm() || CourseManager::isUserSubscribedInCourseAsHrm(
                 api_get_user_id(),
                 api_get_course_info()
             );
@@ -2967,7 +2967,7 @@ class Attendance
             $groupId
         );
 
-        if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
+        if (api_is_allowed_to_edit(null, true) || api_is_hrm()) {
             $data_array['users_presence'] = $this->get_users_attendance_sheet($attendance_id, 0, $groupId);
         } else {
             if (!empty($student_id)) {
@@ -3124,7 +3124,7 @@ class Attendance
             $groupId
         );
 
-        if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
+        if (api_is_allowed_to_edit(null, true) || api_is_hrm()) {
             $usersPresence = $this->get_users_attendance_sheet($attendance_id, 0, $groupId);
         } else {
             if (!empty($student_id)) {

@@ -80,7 +80,7 @@ if ($tool->isSharingEmail()) {
     $params['lis_person_contact_email_primary'] = $user->getEmail();
 }
 
-if (DRH === $user->getStatus()) {
+if (HRM === $user->getStatus()) {
     $scopeMentor = ImsLtiPlugin::getRoleScopeMentor($user, $tool);
 
     if (!empty($scopeMentor)) {

@@ -301,7 +301,7 @@ $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get
 Display::display_header(get_lang('Course sessions'));
 
 if (api_is_platform_admin(true, true)) {
-    $a_sessions = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
+    $a_sessions = SessionManager::get_sessions_followed_by_hrm(api_get_user_id());
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
@@ -347,7 +347,7 @@ if (api_is_platform_admin(true, true)) {
         );
     }
 
-    if (api_is_drh()) {
+    if (api_is_hrm()) {
         $menu_items[] = Display::url(
             Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Filter certificates in sessions')),
             api_get_path(WEB_CODE_PATH).'my_space/session_filter.php'

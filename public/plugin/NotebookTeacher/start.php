@@ -11,7 +11,7 @@ if (!$plugin->isEnabled(true)) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-if (api_is_allowed_to_edit(false, true) || api_is_drh()) {
+if (api_is_allowed_to_edit(false, true) || api_is_hrm()) {
     $url = 'src/index.php?'.api_get_cidreq();
     header('Location: '.$url);
     exit;

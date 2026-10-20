@@ -99,13 +99,13 @@ class StudentFollowUpPlugin extends Plugin
             ];
         }
 
-        $isDrh = api_is_drh();
-        $isDrhRelatedViaPost = false;
+        $isHrm = api_is_hrm();
+        $isHrmRelatedViaPost = false;
         $isCourseCoach = false;
-        $isDrhRelatedToSession = false;
+        $isHrmRelatedToSession = false;
         $isAdmin = api_is_platform_admin();
 
-        if ($isDrh) {
+        if ($isHrm) {
             $criteria = [
                 'user' => $studentId,
                 'insertUser' => $currentUserId,
@@ -113,7 +113,7 @@ class StudentFollowUpPlugin extends Plugin
             $repo = Database::getManager()->getRepository(CarePost::class);
             $post = $repo->findOneBy($criteria);
             if ($post) {
-                $isDrhRelatedViaPost = true;
+                $isHrmRelatedViaPost = true;
             }
         }
 
@@ -121,12 +121,12 @@ class StudentFollowUpPlugin extends Plugin
         if (!empty($sessions)) {
             foreach ($sessions as $session) {
                 $sessionId = (int) $session['session_id'];
-                $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
+                $sessionHrmInfo = SessionManager::getSessionFollowedByHrm(
                     $currentUserId,
                     $sessionId
                 );
-                if (!empty($sessionDrhInfo)) {
-                    $isDrhRelatedToSession = true;
+                if (!empty($sessionHrmInfo)) {
+                    $isHrmRelatedToSession = true;
 
                     break;
                 }
@@ -145,8 +145,8 @@ class StudentFollowUpPlugin extends Plugin
             }
         }
 
-        $isCareTaker = $isDrhRelatedViaPost && $isDrhRelatedToSession;
-        $isAllow = $isAdmin || $isCareTaker || $isDrhRelatedToSession || $isCourseCoach;
+        $isCareTaker = $isHrmRelatedViaPost && $isHrmRelatedToSession;
+        $isAllow = $isAdmin || $isCareTaker || $isHrmRelatedToSession || $isCourseCoach;
         $showPrivate = $isAdmin || $isCareTaker;
 
         return [
@@ -176,21 +176,21 @@ class StudentFollowUpPlugin extends Plugin
                 }
 
                 break;
-            case DRH:
-                $sessionsFull = SessionManager::get_sessions_followed_by_drh($currentUserId);
+            case HRM:
+                $sessionsFull = SessionManager::get_sessions_followed_by_hrm($currentUserId);
                 $sessions = array_column($sessionsFull, 'id');
 
                 if (!empty($sessionId)) {
                     $sessions = [$sessionId];
                 }
 
-                foreach ($sessions as $drhSessionId) {
-                    $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
+                foreach ($sessions as $hrmSessionId) {
+                    $sessionHrmInfo = SessionManager::getSessionFollowedByHrm(
                         $currentUserId,
-                        (int) $drhSessionId
+                        (int) $hrmSessionId
                     );
-                    if ($sessionDrhInfo && isset($sessionDrhInfo['course_list'])) {
-                        $courses = array_merge($courses, array_column($sessionDrhInfo['course_list'], 'id'));
+                    if ($sessionHrmInfo && isset($sessionHrmInfo['course_list'])) {
+                        $courses = array_merge($courses, array_column($sessionHrmInfo['course_list'], 'id'));
                     }
                 }
 

@@ -51,7 +51,7 @@ $workingTimeEdit = api_get_setting('workflows.allow_working_time_edition');
 $allowToQualify = api_is_allowed_to_edit(null, true) ||
     api_is_course_tutor() ||
     api_is_session_admin() ||
-    api_is_drh() ||
+    api_is_hrm() ||
     api_is_student_boss();
 
 // Access to a student's tracking is granted on two levels:
@@ -65,7 +65,7 @@ $allowToQualify = api_is_allowed_to_edit(null, true) ||
 $hasWideTrackingScope =
     api_is_platform_admin(true, true) ||
     api_is_session_admin() ||
-    api_is_drh() ||
+    api_is_hrm() ||
     api_is_student_boss();
 
 $tracksThisStudent = false;
@@ -702,7 +702,7 @@ switch ($action) {
 $courses_in_session = [];
 // See #4676
 $drh_can_access_all_courses = false;
-if (api_is_drh() || api_is_platform_admin() || api_is_student_boss() || api_is_session_admin()) {
+if (api_is_hrm() || api_is_platform_admin() || api_is_student_boss() || api_is_session_admin()) {
     $drh_can_access_all_courses = true;
 }
 
@@ -711,12 +711,12 @@ $courses_in_session_by_coach = [];
 $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_id());
 
 // DRH or session admin
-if (api_is_session_admin() || api_is_drh()) {
-    $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+if (api_is_session_admin() || api_is_hrm()) {
+    $courses = CourseManager::get_courses_followed_by_hrm(api_get_user_id());
     if (!empty($courses)) {
         $courses = array_column($courses, 'real_id');
     }
-    $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
+    $session_by_session_admin = SessionManager::get_sessions_followed_by_hrm(api_get_user_id());
 
     if (!empty($session_by_session_admin)) {
         foreach ($session_by_session_admin as $session_coached_by_user) {
@@ -777,12 +777,12 @@ while ($row = Database::fetch_assoc($rs)) {
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(api_get_user_id(), ['real_id' => $courseId]);
 
-if (api_is_drh() && !api_is_platform_admin()) {
+if (api_is_hrm() && !api_is_platform_admin()) {
     if (!empty($studentId)) {
-        if (!api_drh_can_access_all_session_content()) {
+        if (!api_hrm_can_access_all_session_content()) {
             if (!$isDrhOfCourse) {
-                if (api_is_drh() &&
-                    !UserManager::is_user_followed_by_drh($studentId, api_get_user_id())
+                if (api_is_hrm() &&
+                    !UserManager::is_user_followed_by_hrm($studentId, api_get_user_id())
                 ) {
                     api_not_allowed(true);
                 }
@@ -1458,7 +1458,7 @@ if (empty($details)) {
 
                     $attendances_faults_avg = '0/0 (0%)';
                     if (!empty($results_faults_avg['total'])) {
-                        if (api_is_drh()) {
+                        if (api_is_hrm()) {
                             $attendances_faults_avg = Display::url(
                                 $results_faults_avg['faults'].'/'.$results_faults_avg['total']
                                 .' ('.$results_faults_avg['percent'].'%)',
@@ -2437,7 +2437,7 @@ if ($allowMessages) {
 
 // ----- Message tracking -----
 $allow = ('true' === api_get_setting('message.allow_user_message_tracking'));
-if ($allow && (api_is_drh() || api_is_platform_admin())) {
+if ($allow && (api_is_hrm() || api_is_platform_admin())) {
     $users = MessageManager::getUsersThatHadConversationWithUser($studentId);
     echo '<section class="learner-card learner-section-spacing">';
     echo Display::page_subheader2(get_lang('Message tracking'));

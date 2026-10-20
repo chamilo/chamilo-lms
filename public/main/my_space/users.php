@@ -88,8 +88,8 @@ function get_users($from, $limit, $column, $direction)
     $coach_id = api_get_user_id();
     $drhLoaded = false;
 
-    if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
+    if (api_is_hrm()) {
+        if (api_hrm_can_access_all_session_content()) {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
                 api_get_user_id(),
@@ -209,7 +209,7 @@ $sort_by_first_name = api_sort_by_first_name();
 $actionsLeft = '';
 $actionsLeft .= Display::mySpaceMenu('students');
 
-if (api_is_drh()) {
+if (api_is_hrm()) {
     $menu_items = [
         Display::url(
             Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),

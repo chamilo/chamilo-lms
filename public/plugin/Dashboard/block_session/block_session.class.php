@@ -15,7 +15,7 @@ class BlockSession extends Block
 {
     private $user_id;
     private $sessions;
-    private $permission = [DRH, SESSIONADMIN];
+    private $permission = [HRM, SESSIONADMIN];
 
     /**
      * Constructor.
@@ -25,7 +25,7 @@ class BlockSession extends Block
         $this->user_id = $user_id;
         $this->path = 'block_session';
         if ($this->is_block_visible_for_user($user_id)) {
-            $this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
+            $this->sessions = SessionManager::get_sessions_followed_by_hrm($user_id);
         }
     }
 

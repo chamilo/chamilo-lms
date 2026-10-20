@@ -303,9 +303,9 @@ class SessionRepository extends ServiceEntityRepository
         }
 
         switch ($relationType) {
-            case Session::DRH:
+            case Session::HRM:
                 if ($user->isHRM()) {
-                    $session->addUserInSession(Session::DRH, $user);
+                    $session->addUserInSession(Session::HRM, $user);
                 }
 
                 break;
@@ -454,7 +454,7 @@ class SessionRepository extends ServiceEntityRepository
         $callback = fn (Session $session) => $session->getId();
 
         if ($user->isHRM()) {
-            $idList = array_map($callback, $user->getDRHSessions());
+            $idList = array_map($callback, $user->getHRMSessions());
         } elseif ($user->isTeacher() || COURSEMANAGER === $user->getStatus()) {
             $idListAsCoach = $user
                 ->getSessionsByStatusInCourseSubscription(Session::COURSE_COACH)

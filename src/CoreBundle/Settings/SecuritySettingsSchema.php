@@ -55,7 +55,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'oauth_server_enabled' => 'false',
             'dynamic_client_registration' => 'false',
             'mcp_enabled' => 'false',
-            'mcp_allowed_roles' => '{"ADMIN":true,"COURSEMANAGER":true,"STUDENT":false,"DRH":false,"SESSIONADMIN":false,"STUDENT_BOSS":false,"INVITEE":false}',
+            'mcp_allowed_roles' => '{"ADMIN":true,"COURSEMANAGER":true,"STUDENT":false,"HRM":false,"SESSIONADMIN":false,"STUDENT_BOSS":false,"INVITEE":false}',
             'external_api_enabled' => 'false',
         ]);
 

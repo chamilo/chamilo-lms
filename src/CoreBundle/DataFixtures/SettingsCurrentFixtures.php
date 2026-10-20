@@ -46,7 +46,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
      * We set them to access_url_locked = 0, but only for this candidate list.
      */
     private const array ACCESS_URL_LOCKED_NO = [
-        'drh_allow_access_to_all_students',
+        'hrm_allow_access_to_all_students',
         'ticket_allow_category_edition',
         'max_anonymous_users',
         'enable_x_sendfile_headers',
@@ -155,7 +155,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
         $redirectAfterLoginDefault = json_encode([
             'COURSEMANAGER' => 'courses',
             'STUDENT' => 'courses',
-            'DRH' => '',
+            'HRM' => '',
             'SESSIONADMIN' => 'admin-dashboard',
             'STUDENT_BOSS' => 'main/my_space/student.php',
             'INVITEE' => 'courses',
@@ -313,7 +313,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators.',
                 ],
                 [
-                    'name' => 'drh_can_access_all_session_content',
+                    'name' => 'hrm_can_access_all_session_content',
                     'title' => 'HR directors access all session content',
                     'comment' => 'If enabled, human resources directors will get access to all content and users from the sessions (s)he follows.',
                 ],
@@ -625,7 +625,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Which of the following fields of the portfolio are *required* in the user registration process? This requires that the portfolio option be enabled and that the field be also available in the registration form (see above).',
                 ],
                 [
-                    'name' => 'drh_autosubscribe',
+                    'name' => 'hrm_autosubscribe',
                     'title' => 'Human resources director autosubscribe',
                     'comment' => 'Course codes separated by "|". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role.',
                 ],
@@ -3850,7 +3850,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => '',
                 ],
                 [
-                    'name' => 'drh_allow_access_to_all_students',
+                    'name' => 'hrm_allow_access_to_all_students',
                     'title' => 'HRM can access all students from reporting pages',
                     'comment' => '',
                 ],

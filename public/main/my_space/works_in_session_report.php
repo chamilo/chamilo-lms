@@ -22,8 +22,8 @@ $em = Database::getManager();
 $session = null;
 if (api_is_platform_admin()) {
     $sessionList = SessionManager::get_sessions_list();
-} elseif (api_is_drh()) {
-    $sessionList = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
+} elseif (api_is_hrm()) {
+    $sessionList = SessionManager::get_sessions_followed_by_hrm(api_get_user_id());
 } elseif (api_is_session_admin()) {
     $sessionList = SessionManager::getSessionsFollowedByUser(api_get_user_id(), SESSIONADMIN);
 } else {

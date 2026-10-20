@@ -58,7 +58,6 @@ $courseActions = [
     'get_work_user_list',
     'get_work_user_list_others',
     'get_work_user_list_all',
-    'get_course_announcements',
     'course_log_events',
     'get_learning_path_calendars',
     'get_calendar_users',
@@ -86,7 +85,7 @@ $isDiagnosisLoadSearch = ('get_sessions' === $action && 'load_search' === $origi
 if ($isDiagnosisLoadSearch) {
     api_block_anonymous_users();
 
-    if (!(api_is_drh() || api_is_student_boss() || api_is_platform_admin())) {
+    if (!(api_is_hrm() || api_is_student_boss() || api_is_platform_admin())) {
         api_not_allowed(true);
     }
 } elseif ('get_usergroups_users' === $action) {
@@ -137,14 +136,7 @@ if ($isDiagnosisLoadSearch) {
 } elseif (in_array($action, $courseActions, true)) {
     api_protect_course_script();
 
-    $studentAllowedActions = [
-        'get_course_announcements',
-    ];
-
-    if (
-        !in_array($action, $studentAllowedActions, true)
-        && !api_is_allowed_to_edit(null, true)
-    ) {
+    if (!api_is_allowed_to_edit(null, true)) {
         api_not_allowed(true);
     }
 } elseif (in_array($action, $adminActions, true)) {
@@ -396,24 +388,6 @@ if (!$sidx) {
 }
 $options = [];
 
-// Pre-compute announcement title search term from all possible sources:
-// 1. title_to_search (external PHP form, sent in the grid URL)
-// 2. searchField/searchString (jqGrid single-field toolbar search)
-// 3. filters JSON rules (jqGrid multi-field search popup)
-$announcementTitleSearch = strtolower(trim($_REQUEST['title_to_search'] ?? ''));
-if ('' === $announcementTitleSearch && 'title' === $searchField && !empty($searchString)) {
-    $announcementTitleSearch = strtolower(trim((string) $searchString));
-}
-$filtersForAnnouncement = isset($filters) ? $filters : false;
-if ('' === $announcementTitleSearch && !empty($filtersForAnnouncement) && isset($filtersForAnnouncement->rules)) {
-    foreach ($filtersForAnnouncement->rules as $rule) {
-        if ('title' === ($rule->field ?? '') && '' !== trim((string) ($rule->data ?? ''))) {
-            $announcementTitleSearch = strtolower(trim((string) $rule->data));
-            break;
-        }
-    }
-}
-
 //2. Selecting the count FIRST
 //@todo rework this
 
@@ -484,7 +458,7 @@ switch ($action) {
         break;
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
-        $userNotAllowed = !api_is_drh()
+        $userNotAllowed = !api_is_hrm()
             && !api_is_student_boss()
             && !api_is_platform_admin(false, true);
 
@@ -498,8 +472,8 @@ switch ($action) {
         $sessionIdList = [];
         $searchByGroups = false;
 
-        if (api_is_drh()) {
-            if (api_drh_can_access_all_session_content()) {
+        if (api_is_hrm()) {
+            if (api_hrm_can_access_all_session_content()) {
                 $userList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                     'drh_all',
                     api_get_user_id()
@@ -521,7 +495,7 @@ switch ($action) {
                     }
                 }
             } else {
-                $userList = UserManager::get_users_followed_by_drh(
+                $userList = UserManager::get_users_followed_by_hrm(
                     api_get_user_id(),
                     applyReportingWorkflowSetting: true
                 );
@@ -529,7 +503,7 @@ switch ($action) {
                     $userIdList = array_keys($userList);
                 }
 
-                $courseList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+                $courseList = CourseManager::get_courses_followed_by_hrm(api_get_user_id());
                 if (!empty($courseList)) {
                     $courseCodeList = array_keys($courseList);
                 }
@@ -690,19 +664,6 @@ switch ($action) {
         // Close the session as we don't need it any further
         session_write_close();
         $count = Question::get_count_course_medias($course_id);
-        break;
-    case 'get_course_announcements':
-        $courseId = !empty($cid) ? $cid : api_get_course_int_id();
-        $sessionId = !empty($sid) ? $sid : api_get_session_id();
-        $groupId = !empty($gid) ? $gid : api_get_group_id();
-        if ('' !== $announcementTitleSearch) {
-            $allForCount = AnnouncementManager::getAnnouncements(null, null, $courseId, $sessionId, $groupId);
-            $count = count(array_filter($allForCount, static function (array $r) use ($announcementTitleSearch): bool {
-                return str_contains(strtolower((string) ($r['title'] ?? '')), $announcementTitleSearch);
-            }));
-        } else {
-            $count = AnnouncementManager::getNumberAnnouncements($courseId, $sessionId, $groupId);
-        }
         break;
     case 'get_work_teacher':
         $countResult = getWorkListTeacher(0, $limit, null, null, $whereCondition, true);
@@ -922,8 +883,8 @@ switch ($action) {
             $description = $keyword;
         }
 
-        if (api_is_drh() || api_is_session_admin()) {
-            $count = SessionManager::get_sessions_followed_by_drh(
+        if (api_is_hrm() || api_is_session_admin()) {
+            $count = SessionManager::get_sessions_followed_by_hrm(
                 api_get_user_id(),
                 null,
                 null,
@@ -1212,7 +1173,7 @@ if (isset($_REQUEST['oper']) && 'del' == $_REQUEST['oper']) {
     $obj->delete($_REQUEST['id']);
 }
 
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_hrm();
 
 //5. Querying the DB for the elements
 $columns = [];
@@ -1586,26 +1547,6 @@ switch ($action) {
         }
 
         break;
-    case 'get_course_announcements':
-        $columns = [
-            'title',
-            'username',
-            'insert_date',
-            'actions',
-        ];
-
-        $courseId = !empty($cid) ? $cid : api_get_course_int_id();
-        $sessionId = !empty($sid) ? $sid : api_get_session_id();
-        $groupId = !empty($gid) ? $gid : api_get_group_id();
-
-        $allResults = AnnouncementManager::getAnnouncements(null, null, $courseId, $sessionId, $groupId);
-        if ('' !== $announcementTitleSearch) {
-            $allResults = array_values(array_filter($allResults, static function (array $r) use ($announcementTitleSearch): bool {
-                return str_contains(strtolower((string) ($r['title'] ?? '')), $announcementTitleSearch);
-            }));
-        }
-        $result = array_slice($allResults, $start, $limit);
-        break;
     case 'get_work_teacher':
         $columns = [
             'type',
@@ -1873,7 +1814,7 @@ switch ($action) {
         break;
     case 'get_exercise_results':
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
-            api_is_drh() ||
+            api_is_hrm() ||
             api_is_student_boss() ||
             api_is_session_admin();
         if ($is_allowedToEdit || api_is_student_boss()) {
@@ -2061,11 +2002,11 @@ switch ($action) {
         $sessionColumns = SessionManager::getGridColumns('my_space');
         $columns = $sessionColumns['simple_column_name'];
 
-        if (api_is_drh()) {
+        if (api_is_hrm()) {
             $orderByName = Database::escape_string($sidx);
             $orderByName = in_array($orderByName, ['title', 'access_start_date']) ? $orderByName : 'title';
             $orderBy = " ORDER BY $orderByName $sord";
-            $sessions = SessionManager::get_sessions_followed_by_drh(
+            $sessions = SessionManager::get_sessions_followed_by_hrm(
                 api_get_user_id(),
                 $start,
                 $limit,
@@ -2121,7 +2062,7 @@ switch ($action) {
             );
             foreach ($sessions as $session) {
                 $sessionEntity = api_get_session_entity($session['id']);
-                if (api_drh_can_access_all_session_content()) {
+                if (api_hrm_can_access_all_session_content()) {
                     $count_courses_in_session = SessionManager::get_course_list_by_session_id(
                         $session['id'],
                         '',
@@ -2945,7 +2886,6 @@ $allowed_actions = [
     'get_user_course_report_resumed',
     'get_exercise_grade',
     'get_group_reporting',
-    'get_course_announcements',
     'get_programmed_announcements',
     'course_log_events',
     'get_learning_path_calendars',

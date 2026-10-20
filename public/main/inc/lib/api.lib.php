@@ -54,7 +54,9 @@ define('COURSEMANAGER', 1);
 /** global status of a user: session admin */
 define('SESSIONADMIN', 3);
 /** global status of a user: human resources manager */
-define('DRH', 4);
+define('HRM', 4);
+/** Legacy alias for the HR manager status (persisted value 4). */
+define('DRH', HRM);
 /** global status of a user: anonymous visitor */
 define('ANONYMOUS', 6);
 /** global status of a user: low security, necessary for inserting data from
@@ -372,7 +374,9 @@ define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
 define('COURSE_RELATION_TYPE_COURSE_MANAGER', 1);
 
 // Relations type with Human resources manager
-define('COURSE_RELATION_TYPE_RRHH', 1);
+define('COURSE_RELATION_TYPE_HRM', 1);
+/** Legacy alias for the HR manager course relation (persisted value 1). */
+define('COURSE_RELATION_TYPE_RRHH', COURSE_RELATION_TYPE_HRM);
 
 // User image sizes
 define('USER_IMAGE_SIZE_ORIGINAL', 1);
@@ -3250,9 +3254,17 @@ function api_is_session_admin(?User $user = null)
  *
  * @return bool True if current user is a human resources manager
  */
-function api_is_drh()
+function api_is_hrm(): bool
 {
     return api_user_has_role('ROLE_HR');
+}
+
+/**
+ * @deprecated Use api_is_hrm(). Kept for legacy plugins and integrations.
+ */
+function api_is_drh()
+{
+    return api_is_hrm();
 }
 
 /**
@@ -6874,9 +6886,17 @@ function api_get_user_blocked_by_captcha($username)
  *
  * @return bool
  */
+function api_hrm_can_access_all_session_content(): bool
+{
+    return 'true' === api_get_setting('hrm_can_access_all_session_content');
+}
+
+/**
+ * @deprecated Use api_hrm_can_access_all_session_content().
+ */
 function api_drh_can_access_all_session_content()
 {
-    return 'true' === api_get_setting('drh_can_access_all_session_content');
+    return api_hrm_can_access_all_session_content();
 }
 
 /**

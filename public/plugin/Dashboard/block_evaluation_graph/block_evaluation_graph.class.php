@@ -24,7 +24,7 @@ class BlockEvaluationGraph extends Block
     private $user_id;
     private $courses;
     private $sessions;
-    private $permission = [DRH, SESSIONADMIN];
+    private $permission = [HRM, SESSIONADMIN];
     private $bg_width;
     private $bg_height;
 
@@ -39,9 +39,9 @@ class BlockEvaluationGraph extends Block
         $this->bg_height = 350;
         if ($this->is_block_visible_for_user($user_id)) {
             if (!api_is_session_admin()) {
-                $this->courses = CourseManager::get_courses_followed_by_drh($user_id);
+                $this->courses = CourseManager::get_courses_followed_by_hrm($user_id);
             }
-            $this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
+            $this->sessions = SessionManager::get_sessions_followed_by_hrm($user_id);
         }
     }
 

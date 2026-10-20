@@ -177,7 +177,7 @@ $(function() {
 $tpl = new Template(get_lang('Attendance'));
 $student_param = '';
 $student_id = null;
-if (api_is_drh() && isset($_GET['student_id'])) {
+if (api_is_hrm() && isset($_GET['student_id'])) {
     $student_id = (int) ($_GET['student_id']);
     $student_param = '&student_id='.$student_id;
     $student_info = api_get_user_info($student_id);
@@ -769,7 +769,7 @@ switch ($action) {
 
         break;
     case 'calendar_logins':
-        if (api_is_course_admin() || api_is_drh()) {
+        if (api_is_course_admin() || api_is_hrm()) {
             $result = $attendance->getAttendanceBaseInLogin(false, true);
             $actions = '<a href="index.php?'.api_get_cidreq().'&action=calendar_list">'.
                 Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Attendance calendar')).

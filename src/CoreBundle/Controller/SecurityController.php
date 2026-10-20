@@ -687,15 +687,17 @@ class SecurityController extends AbstractController
             $profile = 'COURSEMANAGER';
         } elseif (\in_array('ROLE_STUDENT_BOSS', $roles, true)) {
             $profile = 'STUDENT_BOSS';
-        } elseif (\in_array('ROLE_DRH', $roles, true)) {
-            $profile = 'DRH';
+        } elseif (\in_array('ROLE_HR', $roles, true) || \in_array('ROLE_DRH', $roles, true)) {
+            $profile = 'HRM';
         } elseif (\in_array('ROLE_INVITEE', $roles, true)) {
             $profile = 'INVITEE';
         } elseif (\in_array('ROLE_STUDENT', $roles, true)) {
             $profile = 'STUDENT';
         }
 
-        $value = $profile && \array_key_exists($profile, $map) ? (string) $map[$profile] : '';
+        $value = 'HRM' === $profile
+            ? (string) ($map['HRM'] ?? $map['DRH'] ?? '')
+            : ($profile && \array_key_exists($profile, $map) ? (string) $map[$profile] : '');
         if ('' === trim($value)) {
             return '/home';
         }

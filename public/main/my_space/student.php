@@ -102,8 +102,8 @@ function get_users($from, $limit, $column, $direction)
     $students = [];
 
     // DRH can optionally load all users from all sessions depending on settings.
-    if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
+    if (api_is_hrm()) {
+        if (api_hrm_can_access_all_session_content()) {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
                 api_get_user_id(),
@@ -233,7 +233,7 @@ function get_users($from, $limit, $column, $direction)
         );
 
         $lostPasswordLink = '';
-        if (api_is_drh() || api_is_platform_admin()) {
+        if (api_is_hrm() || api_is_platform_admin()) {
             $lostPasswordLink = '&nbsp;'.Display::url(
                     Display::getMdiIcon(
                         ActionIcon::EDIT,
@@ -282,7 +282,7 @@ $actionsLeft .= Display::url(
 $actionsLeft .= Display::mySpaceMenu('students');
 
 // 2) Extra actions for DRH and student bosses: skills report.
-if (api_is_drh() || api_is_student_boss()) {
+if (api_is_hrm() || api_is_student_boss()) {
     $actionsLeft .= Display::url(
         Display::getMdiIcon(
             'badge-account-horizontal',

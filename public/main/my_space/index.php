@@ -26,7 +26,7 @@ $user_id = api_get_user_id();
 $session_id = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 $is_coach = api_is_coach($session_id);
 $is_platform_admin = api_is_platform_admin();
-$is_drh = api_is_drh();
+$is_drh = api_is_hrm();
 $is_session_admin = api_is_session_admin();
 $skipData = ('true' === api_get_setting('tracking.tracking_skip_generic_data'));
 

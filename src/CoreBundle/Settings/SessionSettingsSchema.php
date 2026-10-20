@@ -32,7 +32,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'session_course_ordering' => 'false',
                     'limit_session_admin_role' => 'false',
                     'allow_tutors_to_assign_students_to_session' => 'false',
-                    'drh_can_access_all_session_content' => 'true',
+                    'hrm_can_access_all_session_content' => 'true',
                     'allow_session_course_copy_for_teachers' => 'false',
                     'my_courses_view_by_session' => 'false',
                     'session_days_after_coach_access' => '',
@@ -113,7 +113,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('session_course_ordering', TextType::class)
             ->add('limit_session_admin_role', YesNoType::class)
             ->add('allow_tutors_to_assign_students_to_session', YesNoType::class)
-            ->add('drh_can_access_all_session_content', YesNoType::class)
+            ->add('hrm_can_access_all_session_content', YesNoType::class)
             ->add('allow_session_course_copy_for_teachers', YesNoType::class)
             ->add('my_courses_view_by_session', YesNoType::class)
             ->add('session_days_after_coach_access')

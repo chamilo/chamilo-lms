@@ -160,10 +160,9 @@ final class CDocumentApiTest extends AbstractApiTest
             '/api/documents?itemsPerPage=5000',
         );
 
-        // No cid context → API Platform rejects the request because `cid` is
-        // declared as a required QueryParameter on the GetCollection. The
-        // validator returns 422 Unprocessable Entity.
-        $this->assertResponseStatusCodeSame(422);
+        // API Platform 3 validates the required `cid` filter before the
+        // operation's security, so the request is rejected on the contract.
+        $this->assertResponseStatusCodeSame(400);
     }
 
     // -------------------------------------------------------------------------
@@ -270,7 +269,7 @@ final class CDocumentApiTest extends AbstractApiTest
 
         $this->createClientWithCredentials($token)->request(
             'GET',
-            '/api/documents/'.$ctx['publishedDoc']->getIid().'/lp-usage',
+            '/api/documents/'.$ctx['publishedDoc']->getIid().'/lp-usage?cid='.$ctx['course']->getId(),
         );
 
         // After the fix the endpoint must require VIEW on object.resourceNode.
@@ -291,7 +290,7 @@ final class CDocumentApiTest extends AbstractApiTest
 
         $this->createClientWithCredentials($token)->request(
             'GET',
-            '/api/documents/'.$ctx['course']->getId().'/usage',
+            '/api/documents/'.$ctx['course']->getId().'/usage?cid='.$ctx['course']->getId(),
         );
 
         // After the fix the controller must check CourseVoter::VIEW.

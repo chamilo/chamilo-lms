@@ -357,7 +357,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
         $this->createClientWithCredentials($token)->request(
             'POST',
-            '/api/c_calendar_events',
+            '/api/c_calendar_events?cid='.$course->getId(),
             [
                 'json' => [
                     'allDay' => true,

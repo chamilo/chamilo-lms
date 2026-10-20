@@ -167,6 +167,7 @@ Supported import:
 - Multiple answer questions.
 - Fill in blanks questions.
 - Free answer questions.
+- Matching questions (imported as Matching, also when exported from Matching draggable).
 
 Unsupported QTI entries are skipped, matching the previous importer behavior.
 TEXT;

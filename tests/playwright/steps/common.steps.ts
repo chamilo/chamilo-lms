@@ -2942,6 +2942,93 @@ Then("I click the {string} icon in the row for {string}", async ({ page }, selec
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
 })
 
+// Not ported — new, for toolExerciseQti2Import.feature (#1377): checks that a value sits on the
+// same <tr> as a label, e.g. that the imported matching item "France" is associated with "Paris"
+// in the question preview table. A page-wide "I should see" can't tell that apart from the list
+// of options rendered just above the table.
+Then("the row for {string} should contain {string}", async ({ page }, rowText: string, expected: string) => {
+  const row = page.locator("tr").filter({ has: page.getByText(rowText, { exact: true }) })
+  await expect(row.first()).toContainText(expected)
+})
+
+// Not ported — new, for toolExerciseQti2Import.feature (#1377): saves the file behind a link
+// of a table row (e.g. the exercise list's "Export QTI2" icon, an <a> to /api/exercise/{id}/qti2-export)
+// so a later step can upload it again. The file is fetched with the page's own session rather than
+// through a browser download, which the link (no download attribute) doesn't always trigger. The
+// path is relative to the repository root; var/test-results/ is already gitignored.
+When(
+  "I save the file linked by the {string} icon in the row for {string} as {string}",
+  async ({ page }, selector: string, rowText: string, filePath: string) => {
+    const row = page.locator("tr").filter({ has: page.getByText(rowText, { exact: true }) })
+    const href = await row.locator(selector).first().getAttribute("href")
+    expect(href, `no link "${selector}" in the row for "${rowText}"`).toBeTruthy()
+    const response = await page.request.get(new URL(href as string, page.url()).toString())
+    expect(response.status()).toBe(200)
+    const target = path.join(repoRoot, filePath)
+    fs.mkdirSync(path.dirname(target), { recursive: true })
+    fs.writeFileSync(target, await response.body())
+  },
+)
+
+// Not ported — new, for toolExerciseQti2Import.feature (#1377): checks the question preview of the
+// exercise question list for a fill in blanks question: each blank must appear in brackets in the
+// rendered text and as its own row of the "Blank" table (so 3 blanks were imported, not merged).
+Then(
+  "the fill in blanks preview should show {string}, {string} and {string}",
+  async ({ page }, first: string, second: string, third: string) => {
+    const preview = page.locator("article").filter({ has: page.getByText("Blanks: 3", { exact: true }) })
+    await expect(preview.first()).toBeVisible()
+    for (const blank of [first, second, third]) {
+      await expect(preview.first()).toContainText(`[${blank}]`)
+      await expect(preview.first().locator("code").getByText(blank, { exact: true })).toBeVisible()
+    }
+  },
+)
+
+// Not ported — new, for toolExerciseQti2Import.feature (#1377): the legacy QTI2 export entry
+// points (admin.php?action=exportqti2&questionId= and exercise.php?action=exportqti2&exerciseId=)
+// must only export a question/exercise of the current course. The ids are read from the question's
+// "Edit" link on the current question list (/resources/exercise/{node}/{exercise}/questions/{question}/edit);
+// each course code is resolved to its id through the course redirect, like "I am on course {string} homepage".
+Then(
+  "the QTI2 export of the question {string} should work in course {string} but be refused in course {string}",
+  async ({ page }, questionTitle: string, ownCourse: string, otherCourse: string) => {
+    const row = page.locator("tr").filter({ has: page.getByText(questionTitle, { exact: true }) })
+    const editHref = await row.locator("a[href*='/questions/'][href*='/edit']").first().getAttribute("href")
+    const ids = /\/resources\/exercise\/\d+\/(\d+)\/questions\/(\d+)\/edit/.exec(editHref ?? "")
+    expect(ids, `no edit link for "${questionTitle}"`).not.toBeNull()
+    const [, exerciseId, questionId] = ids as RegExpExecArray
+
+    const courseId = async (code: string): Promise<string> => {
+      await gotoReliably(page, `/main/course_home/redirect.php?cidReq=${encodeURIComponent(code)}`)
+      const match = /\/course\/(\d+)\//.exec(new URL(page.url()).pathname) ?? /[?&]cid=(\d+)/.exec(page.url())
+      expect(match, `course id of ${code} not found in ${page.url()}`).not.toBeNull()
+      return (match as RegExpExecArray)[1]
+    }
+    const exportUrls = (cid: string) => [
+      `/main/exercise/admin.php?cid=${cid}&sid=0&action=exportqti2&questionId=${questionId}`,
+      `/main/exercise/exercise.php?cid=${cid}&sid=0&action=exportqti2&exerciseId=${exerciseId}`,
+    ]
+    const isZip = (body: Buffer) => body.length > 4 && "PK" === body.subarray(0, 2).toString("latin1")
+
+    const ownId = await courseId(ownCourse)
+    for (const url of exportUrls(ownId)) {
+      const response = await page.request.get(url)
+      expect(response.status(), url).toBe(200)
+      expect(isZip(await response.body()), `${url} should return a zip`).toBe(true)
+    }
+    const otherId = await courseId(otherCourse)
+    expect(otherId).not.toBe(ownId)
+    for (const url of exportUrls(otherId)) {
+      const response = await page.request.get(url)
+      const body = await response.body()
+      expect(isZip(body), `${url} must not export another course's content`).toBe(false)
+      // api_not_allowed() renders the usual "not allowed" page.
+      expect(body.toString("utf8"), url).toContain("You are not allowed to see this page")
+    }
+  },
+)
+
 // Not ported — new, for toolGroup.feature's group_category action icons
 // (edit/create-groups/delete). Unlike a group ROW (a real `<tr>`), a
 // category's own header is a `<div class="page-header section-header">`

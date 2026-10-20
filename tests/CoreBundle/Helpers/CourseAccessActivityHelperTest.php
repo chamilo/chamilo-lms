@@ -22,6 +22,7 @@ class CourseAccessActivityHelperTest extends TestCase
         $helper = new CourseAccessActivityHelper($this->createMock(SettingsManager::class));
 
         foreach ([
+            'chamilo_core_chat_api_contacts',
             'chamilo_core_chat_api_heartbeat',
             'chamilo_core_chat_api_history_since',
             'chamilo_core_chat_api_video_signals',

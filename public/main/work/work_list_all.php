@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Repository\CStudentPublicationFollowRepository;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
@@ -204,6 +205,17 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     }
     $actionsLeft .= $editLink;
 
+    // Follow toggle (#1407): followers are e-mailed when a learner comments on a submission.
+    // The click goes to the same POST/DELETE endpoint as the Vue screen, which checks access.
+    $isFollowing = Container::$container->get(CStudentPublicationFollowRepository::class)
+        ->isFollowing($repo->find($workId), api_get_user_entity());
+    $followTitle = ($isFollowing ? get_lang('Following') : get_lang('Follow')).' - '.
+        get_lang('Get an e-mail when a learner comments on a submission of this assignment');
+    $actionsLeft .= '<a href="#" id="assignment-follow-toggle"
+        data-following="'.($isFollowing ? '1' : '0').'"
+        data-url="'.api_get_path(WEB_PATH).'assignments/'.$workId.'/follow?'.api_get_cidreq().'">'.
+        Display::getMdiIcon($isFollowing ? ActionIcon::EMAIL_ON : ActionIcon::EMAIL_OFF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $followTitle).'</a>';
+
     $count = get_count_work($workId);
     if ($count > 0) {
         $router = Container::getRouter();
@@ -226,6 +238,24 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
 }
 
 echo Display::toolbarAction('toolbar-worklist', [$actionsLeft]);
+?>
+<script>
+    document.getElementById('assignment-follow-toggle')?.addEventListener('click', function (event) {
+        event.preventDefault();
+        fetch(this.dataset.url, {
+            method: '1' === this.dataset.following ? 'DELETE' : 'POST',
+            credentials: 'same-origin',
+            headers: {Accept: 'application/json'},
+        }).then(function (response) {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert(<?php echo json_encode(get_lang('An error occurred')); ?>);
+            }
+        });
+    });
+</script>
+<?php
 
 $plagiarismListJqgridColumn = [];
 $plagiarismListJqgridLine = [];

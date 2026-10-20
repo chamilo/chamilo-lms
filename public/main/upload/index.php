@@ -2,207 +2,24 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Enums\ActionIcon;
-use ChamiloSession as Session;
-
-/**
- * Main script for the documents tool.
- *
- * This script allows the user to manage files and directories on a remote http server.
- *
- * The user can : - upload a file
- *
- * The script respects the strategical split between process and display, so the first
- * part is only processing code (init, process, display preparation) and the second
- * part is only display (HTML)
- */
+// Deprecated file left here because learning paths are imported from the Vue tool. It only redirects old links.
 require_once __DIR__.'/../inc/global.inc.php';
-
-$_course = api_get_course_info();
 
 api_protect_course_script(true);
 
-$htmlHeadXtra[] = "<script>
-function check_unzip() {
-	if (document.upload.unzip.checked) {
-        document.upload.if_exists[0].disabled=true;
-        document.upload.if_exists[1].checked=true;
-        document.upload.if_exists[2].disabled=true;
-	} else {
-        document.upload.if_exists[0].checked=true;
-        document.upload.if_exists[0].disabled=false;
-        document.upload.if_exists[2].disabled=false;
-	}
-}
-</script>";
-
-if (!api_is_allowed_to_edit(null, true)) {
-    api_not_allowed(true);
+$courseResourceNodeId = (int) (api_get_course_entity()?->getResourceNode()?->getId() ?? 0);
+if ($courseResourceNodeId <= 0) {
+    header('Location: '.api_get_path(WEB_PATH));
+    exit;
 }
 
-//what's the current path?
-$path = '/';
-if (isset($_REQUEST['curdirpath'])) {
-    $path = $_REQUEST['curdirpath'];
+$query = ['cid' => api_get_course_int_id()];
+if (api_get_session_id() > 0) {
+    $query['sid'] = api_get_session_id();
+}
+if (api_get_group_id() > 0) {
+    $query['gid'] = api_get_group_id();
 }
 
-$toolFromSession = Session::read('my_tool');
-
-// set calling tool
-if (isset($_REQUEST['tool'])) {
-    $my_tool = $_REQUEST['tool'];
-    Session::write('my_tool', $_REQUEST['tool']);
-} elseif (!empty($toolFromSession)) {
-    $my_tool = $toolFromSession;
-} else {
-    $my_tool = 'document';
-    Session::write('my_tool', $my_tool);
-}
-
-if (
-    'GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET')
-    && isset($_REQUEST['tool'])
-    && TOOL_LEARNPATH === $_REQUEST['tool']
-) {
-    $course = api_get_course_entity();
-    $nodeId = 0;
-    if ($course && $course->getResourceNode()) {
-        $nodeId = (int) $course->getResourceNode()->getId();
-    }
-    $query = ['cid' => api_get_course_int_id()];
-    $sessionId = api_get_session_id();
-    if ($sessionId > 0) {
-        $query['sid'] = $sessionId;
-    }
-    $groupId = api_get_group_id();
-    if ($groupId > 0) {
-        $query['gid'] = $groupId;
-    }
-
-    if ($nodeId > 0) {
-        $target = api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'/import?'.http_build_query($query);
-        header('Location: '.$target);
-        exit;
-    }
-}
-
-Event::event_access_tool(TOOL_UPLOAD);
-
-/**
- * Just display the form needed to upload a SCORM and give its settings.
- */
-$nameTools = get_lang('File upload');
-$interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('Learning path'),
-];
-
-Display::display_header($nameTools, 'Path');
-
-$content_origins = [
-    //'--'.get_lang('Generic SCORM').'--',
-    //'--'.get_lang('Other').'--',
-    'Accent',
-    'Accenture',
-    'ADLNet',
-    'Articulate',
-    'ATutor',
-    'Blackboard',
-    'Calfat',
-    'Captivate',
-    'Chamilo',
-    'Chamilo 2',
-    'Claroline',
-    'Commest',
-    'Coursebuilder',
-    'Docent',
-    'Dokeos',
-    'Dreamweaver',
-    'Easyquiz',
-    'e-doceo',
-    'ENI Editions',
-    'Explio',
-    'Flash',
-    'HTML',
-    'HotPotatoes',
-    'Hyperoffice',
-    'Ingenatic',
-    'Instruxion',
-    'iProgress',
-    'Kumullus',
-    'Lectora',
-    'Microsoft',
-    'Onlineformapro',
-    'Opikanoba',
-    'Plantyn',
-    'Saba',
-    'Skillsoft',
-    'Speechi',
-    'Thomson-NETg',
-    'U&I Learning',
-    'Udutu',
-    'WebCT',
-];
-
-echo Display::toolbarAction('lp', [
-    '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'">'.
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to learning paths')).'</a>',
-]);
-
-$form = new FormValidator(
-    'upload',
-    'POST',
-    api_get_path(WEB_CODE_PATH).'upload/upload.php?'.api_get_cidreq(),
-    '',
-    [
-        'id' => 'upload_form',
-        'enctype' => 'multipart/form-data',
-    ]
-);
-$form->addHeader($nameTools);
-$form->addLabel(null, Display::return_icon('scorm_logo.jpg', null, ['style' => 'width:230px;height:100px']));
-$form->addElement('hidden', 'curdirpath', $path);
-$form->addElement('hidden', 'tool', $my_tool);
-$form->addElement('file', 'user_file', get_lang('SCORM file to upload'));
-$form->addProgress();
-$form->addRule('user_file', get_lang('Required field'), 'required');
-
-if ('true' == api_get_setting('search_enabled')) {
-    $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));
-}
-
-if (api_is_platform_admin()) {
-    $form->addElement('checkbox', 'use_max_score', null, get_lang('Use default maximum score of 100'));
-}
-
-if ('true' === api_get_setting('lp.allow_htaccess_import_from_scorm')) {
-    $form->addElement('checkbox', 'allow_htaccess', null, get_lang('Allow htaccess in the SCORM import'));
-}
-
-$form->addButtonUpload(get_lang('Upload'));
-
-// the default values for the form
-$defaults = ['index_document' => 'checked="checked"', 'use_max_score' => 1];
-$form->setDefaults($defaults);
-echo Display::return_message(
-    Display::tag('strong', get_lang('SCORM Authoring tools supported')).': '.implode(', ', $content_origins),
-    'normal',
-    false
-);
-
-$quotaInfo = Session::read('quota_info');
-if (!empty($quotaInfo)) {
-    $msg = sprintf(
-        "Upload failed: file %d bytes, PHP post_max=%d, upload_max=%d, total after upload=%d, quota=%d",
-        $quotaInfo['uploaded_size'],
-        $quotaInfo['post_max'],
-        $quotaInfo['upload_max'],
-        $quotaInfo['combined'],
-        $quotaInfo['quota_bytes']
-    );
-    echo Display::return_message(htmlentities($msg), 'error');
-    Session::erase('quota_info');
-}
-$form->display();
-
-Display::display_footer();
+header('Location: '.api_get_path(WEB_PATH).'resources/lp/'.$courseResourceNodeId.'/import?'.http_build_query($query));
+exit;

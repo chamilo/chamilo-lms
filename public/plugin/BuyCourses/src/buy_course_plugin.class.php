@@ -93,6 +93,9 @@ class BuyCoursesPlugin extends Plugin
     public const SERVICE_RECURRING_PAYMENT_ENABLED = 1;
     public const SERVICE_RECURRING_PAYMENT_SUSPENDED = 2;
     public const SERVICE_RECURRING_PAYMENT_CANCELLED = -1;
+    public const INVOICE_SOURCE_SALE = 0;
+    public const INVOICE_SOURCE_SERVICE = 1;
+    public const INVOICE_SOURCE_SUBSCRIPTION = 2;
 
     public const AUDIT_OBJECT_SERVICE_SALE = 'service_sale';
 
@@ -2043,17 +2046,91 @@ class BuyCoursesPlugin extends Plugin
         return $summaries;
     }
 
+    private function getServiceSaleAuditPaymentRows(int $serviceSaleId): array
+    {
+        if ($serviceSaleId <= 0 || !$this->hasPluginTable(self::TABLE_AUDIT)) {
+            return [];
+        }
+
+        return Database::select(
+            'id, action, created_at, data_json',
+            Database::get_main_table(self::TABLE_AUDIT),
+            [
+                'where' => [
+                    'object_type = ? AND object_id = ?' => [self::AUDIT_OBJECT_SERVICE_SALE, $serviceSaleId],
+                ],
+                'order' => 'id ASC',
+            ]
+        );
+    }
+
+    private function decodeAuditData(array $auditEntry): array
+    {
+        $dataJson = trim((string) ($auditEntry['data_json'] ?? ''));
+        if ('' === $dataJson) {
+            return [];
+        }
+
+        $decoded = json_decode($dataJson, true);
+
+        return is_array($decoded) ? $decoded : [];
+    }
+
+    private function getServiceSaleEffectiveDateEnd(array $serviceSale): string
+    {
+        $effectiveDateEnd = trim((string) ($serviceSale['date_end'] ?? ''));
+        $durationDays = max(0, (int) ($serviceSale['service']['duration_days'] ?? $serviceSale['duration_days'] ?? 0));
+
+        foreach ($this->getServiceSaleAuditPaymentRows((int) ($serviceSale['id'] ?? 0)) as $auditEntry) {
+            if (self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED !== (string) ($auditEntry['action'] ?? '')) {
+                continue;
+            }
+
+            $auditData = $this->decodeAuditData($auditEntry);
+            $candidateDateEnd = trim((string) (
+                $auditData['next_charge_date']
+                ?? $auditData['new_date_end']
+                ?? ''
+            ));
+
+            if ('' === $candidateDateEnd && $durationDays > 0) {
+                $paymentDate = trim((string) ($auditEntry['created_at'] ?? ''));
+                if ('' !== $paymentDate) {
+                    $timestamp = strtotime($paymentDate);
+                    if (false !== $timestamp) {
+                        $candidateDateEnd = gmdate('Y-m-d H:i:s', strtotime('+'.$durationDays.' days', $timestamp));
+                    }
+                }
+            }
+
+            if ('' !== $candidateDateEnd
+                && ('' === $effectiveDateEnd || strtotime($candidateDateEnd) > strtotime($effectiveDateEnd))
+            ) {
+                $effectiveDateEnd = $candidateDateEnd;
+            }
+        }
+
+        return $effectiveDateEnd;
+    }
+
     public function getActiveServicesForUser(int $userId): array
     {
-        $servicesByKey = [];
+        $services = [];
 
         foreach ($this->getServiceSales($userId, self::SERVICE_STATUS_COMPLETED) as $serviceSale) {
             if ((int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING) !== self::SERVICE_STATUS_COMPLETED) {
                 continue;
             }
 
-            if (empty($serviceSale['date_end']) || strtotime((string) $serviceSale['date_end']) < time()) {
+            $effectiveDateEnd = $this->getServiceSaleEffectiveDateEnd($serviceSale);
+            if ('' === $effectiveDateEnd || strtotime($effectiveDateEnd) < time()) {
                 continue;
+            }
+
+            $serviceSale['date_end'] = $effectiveDateEnd;
+            $storedNextChargeDate = trim((string) ($serviceSale['next_charge_date'] ?? ''));
+            if ('' === $storedNextChargeDate || strtotime($effectiveDateEnd) > strtotime($storedNextChargeDate)) {
+                $serviceSale['next_charge_date'] = $effectiveDateEnd;
             }
 
             $benefitSummaries = [];
@@ -2061,7 +2138,7 @@ class BuyCoursesPlugin extends Plugin
                 $payload = $this->buildBenefitPayload(
                     $configuration['variable'],
                     (int) $configuration['granted_value'],
-                    (string) $serviceSale['date_end']
+                    $effectiveDateEnd
                 );
 
                 $benefitSummaries[] = [
@@ -2075,33 +2152,8 @@ class BuyCoursesPlugin extends Plugin
             }
 
             $serviceSale['benefit_summaries'] = $benefitSummaries;
-
-            $serviceKey = implode(':', [
-                (int) ($serviceSale['service_id'] ?? 0),
-                (int) ($serviceSale['node_type'] ?? 0),
-                (int) ($serviceSale['node_id'] ?? 0),
-            ]);
-
-            $currentService = $servicesByKey[$serviceKey] ?? null;
-            if (null !== $currentService) {
-                $currentDateEnd = (string) ($currentService['date_end'] ?? '');
-                $candidateDateEnd = (string) ($serviceSale['date_end'] ?? '');
-                $currentId = (int) ($currentService['id'] ?? 0);
-                $candidateId = (int) ($serviceSale['id'] ?? 0);
-
-                if ($candidateDateEnd < $currentDateEnd) {
-                    continue;
-                }
-
-                if ($candidateDateEnd === $currentDateEnd && $candidateId <= $currentId) {
-                    continue;
-                }
-            }
-
-            $servicesByKey[$serviceKey] = $serviceSale;
+            $services[] = $serviceSale;
         }
-
-        $services = array_values($servicesByKey);
 
         usort($services, static function (array $left, array $right): int {
             return strcmp((string) ($right['date_end'] ?? ''), (string) ($left['date_end'] ?? ''));
@@ -2131,7 +2183,6 @@ class BuyCoursesPlugin extends Plugin
                 'reference' => (string) ($sale['reference'] ?? ''),
                 'amount' => $this->getPriceWithCurrencyFromIsoCode((float) ($sale['price'] ?? 0), $this->getCurrency((int) $sale['currency_id'])['iso_code'] ?? ''),
                 'status' => (int) ($sale['status'] ?? 0),
-                'receipt_url' => !empty($sale['invoice']) ? $this->getInvoiceUrl((int) $sale['id'], 0) : null,
             ];
         }
 
@@ -2143,8 +2194,248 @@ class BuyCoursesPlugin extends Plugin
                 'reference' => (string) ($serviceSale['reference'] ?? ''),
                 'amount' => (string) ($serviceSale['service']['total_price'] ?? ''),
                 'status' => (int) ($serviceSale['status'] ?? 0),
-                'receipt_url' => !empty($serviceSale['invoice']) ? $this->getInvoiceUrl((int) $serviceSale['id'], 1) : null,
             ];
+        }
+
+        usort($history, static function (array $left, array $right): int {
+            return strcmp((string) ($right['date'] ?? ''), (string) ($left['date'] ?? ''));
+        });
+
+        return $history;
+    }
+
+    public function getServiceSalePaymentEvents(array $serviceSale): array
+    {
+        $serviceSaleId = (int) ($serviceSale['id'] ?? 0);
+        if ($serviceSaleId <= 0) {
+            return [];
+        }
+
+        $currency = $this->getCurrency((int) ($serviceSale['currency_id'] ?? 0));
+        if (empty($currency) || empty($currency['iso_code'])) {
+            $currency = $this->getSelectedCurrency();
+        }
+        $defaultCurrency = strtoupper(trim((string) ($currency['iso_code'] ?? '')));
+        $baseAmount = (float) ($serviceSale['price'] ?? 0);
+        $events = [];
+        $renewalEvents = [];
+        $seenPaymentKeys = [];
+        $initialAuditFound = false;
+        $initialEventIndex = null;
+        $initialPaymentDate = trim((string) ($serviceSale['buy_date'] ?? ''));
+        $initialPaymentTimestamp = '' !== $initialPaymentDate ? strtotime($initialPaymentDate) : false;
+
+        foreach ($this->getServiceSaleAuditPaymentRows($serviceSaleId) as $auditEntry) {
+            $action = (string) ($auditEntry['action'] ?? '');
+            $auditData = $this->decodeAuditData($auditEntry);
+            $paymentDate = trim((string) ($auditEntry['created_at'] ?? ''));
+
+            if (in_array($action, [self::AUDIT_ACTION_SERVICE_SALE_COMPLETED, self::AUDIT_ACTION_SERVICE_UPGRADE_COMPLETED], true)) {
+                if ($initialAuditFound) {
+                    continue;
+                }
+
+                $initialAuditFound = true;
+                if ('' !== $paymentDate) {
+                    $initialPaymentDate = $paymentDate;
+                    $initialPaymentTimestamp = strtotime($paymentDate);
+                }
+
+                $events[] = [
+                    'audit_id' => (int) ($auditEntry['id'] ?? 0),
+                    'kind' => 'initial',
+                    'date' => $initialPaymentDate,
+                    'amount' => $baseAmount,
+                    'currency' => strtoupper(trim((string) ($auditData['currency'] ?? $defaultCurrency))),
+                    'transaction_id' => trim((string) (
+                        $auditData['transaction_id']
+                        ?? $auditData['charge_id']
+                        ?? ''
+                    )),
+                    'gateway' => strtolower(trim((string) ($auditData['gateway'] ?? $serviceSale['recurring_gateway'] ?? ''))),
+                ];
+                $initialEventIndex = array_key_last($events);
+
+                continue;
+            }
+
+            if (self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED !== $action) {
+                continue;
+            }
+
+            $amount = null;
+            if (isset($auditData['amount_paid']) && is_numeric($auditData['amount_paid'])) {
+                $amount = (float) $auditData['amount_paid'];
+            } elseif (isset($auditData['amount']) && is_numeric($auditData['amount'])) {
+                $amount = (float) $auditData['amount'];
+            }
+
+            if (null === $amount) {
+                $amount = (float) ($serviceSale['recurring_amount'] ?? $baseAmount);
+            }
+
+            $gateway = strtolower(trim((string) ($auditData['gateway'] ?? $serviceSale['recurring_gateway'] ?? '')));
+            $transactionId = trim((string) ($auditData['transaction_id'] ?? ''));
+            $eventKey = trim((string) (
+                $auditData['event_id']
+                ?? $auditData['event_key']
+                ?? $transactionId
+            ));
+            $deduplicationKey = '' !== $eventKey
+                ? $gateway.':'.$eventKey
+                : 'audit:'.(int) ($auditEntry['id'] ?? 0);
+
+            if (isset($seenPaymentKeys[$deduplicationKey])) {
+                continue;
+            }
+            $seenPaymentKeys[$deduplicationKey] = true;
+
+            $billingReason = strtolower(trim((string) ($auditData['billing_reason'] ?? '')));
+            $renewalEvents[] = [
+                'audit_id' => (int) ($auditEntry['id'] ?? 0),
+                'kind' => 'renewal',
+                'date' => $paymentDate,
+                'amount' => $amount,
+                'currency' => strtoupper(trim((string) ($auditData['currency'] ?? $defaultCurrency))),
+                'transaction_id' => $transactionId,
+                'gateway' => $gateway,
+                'billing_reason' => $billingReason,
+            ];
+        }
+
+        $basePaymentCollected = self::SERVICE_STATUS_COMPLETED === (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING)
+            || (int) ($serviceSale['upgraded_to_sale_id'] ?? 0) > 0
+            || $initialAuditFound;
+
+        if ($basePaymentCollected && !$initialAuditFound) {
+            $events[] = [
+                'audit_id' => 0,
+                'kind' => 'initial',
+                'date' => $initialPaymentDate,
+                'amount' => $baseAmount,
+                'currency' => $defaultCurrency,
+                'transaction_id' => trim((string) ($serviceSale['gateway_transaction_id'] ?? '')),
+                'gateway' => strtolower(trim((string) ($serviceSale['recurring_gateway'] ?? ''))),
+            ];
+            $initialEventIndex = array_key_last($events);
+        }
+
+        $stripeInitialChargeMatched = false;
+        foreach ($renewalEvents as $renewalEvent) {
+            $isInitialStripeCharge = false;
+
+            if ($basePaymentCollected && 'stripe' === $renewalEvent['gateway']) {
+                if ('subscription_create' === $renewalEvent['billing_reason']) {
+                    $isInitialStripeCharge = true;
+                } elseif (!$stripeInitialChargeMatched
+                    && '' === $renewalEvent['billing_reason']
+                    && false !== $initialPaymentTimestamp
+                    && '' !== $renewalEvent['date']
+                    && abs((float) $renewalEvent['amount'] - $baseAmount) < 0.005
+                ) {
+                    $renewalTimestamp = strtotime($renewalEvent['date']);
+                    $isInitialStripeCharge = false !== $renewalTimestamp
+                        && abs($renewalTimestamp - $initialPaymentTimestamp) <= 900;
+                }
+            }
+
+            if ($isInitialStripeCharge) {
+                $stripeInitialChargeMatched = true;
+
+                if (null !== $initialEventIndex && isset($events[$initialEventIndex])) {
+                    $events[$initialEventIndex]['transaction_id'] = (string) ($renewalEvent['transaction_id'] ?? $events[$initialEventIndex]['transaction_id']);
+                    $events[$initialEventIndex]['gateway'] = (string) ($renewalEvent['gateway'] ?? $events[$initialEventIndex]['gateway']);
+                    $events[$initialEventIndex]['currency'] = (string) ($renewalEvent['currency'] ?? $events[$initialEventIndex]['currency']);
+                    if (isset($renewalEvent['amount']) && is_numeric($renewalEvent['amount'])) {
+                        $events[$initialEventIndex]['amount'] = (float) $renewalEvent['amount'];
+                    }
+                    if (0 === (int) ($events[$initialEventIndex]['audit_id'] ?? 0)) {
+                        $events[$initialEventIndex]['audit_id'] = (int) ($renewalEvent['audit_id'] ?? 0);
+                    }
+                }
+
+                continue;
+            }
+
+            unset($renewalEvent['billing_reason']);
+            $events[] = $renewalEvent;
+        }
+
+        usort($events, static function (array $left, array $right): int {
+            return strcmp((string) ($right['date'] ?? ''), (string) ($left['date'] ?? ''));
+        });
+
+        return $events;
+    }
+
+    public function getServiceSalePaymentEvent(int $serviceSaleId, int $auditId): array
+    {
+        $serviceSale = $this->getServiceSale($serviceSaleId);
+        if (empty($serviceSale)) {
+            return [];
+        }
+
+        foreach ($this->getServiceSalePaymentEvents($serviceSale) as $event) {
+            if ((int) ($event['audit_id'] ?? 0) === $auditId) {
+                return $event;
+            }
+        }
+
+        return [];
+    }
+
+    public function getPaymentHistoryForUser(int $userId): array
+    {
+        $history = [];
+        $paymentTypeLabels = $this->getPaymentTypes();
+
+        $sales = Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SALE),
+            [
+                'where' => [
+                    'user_id = ? AND status = ?' => [$userId, self::SALE_STATUS_COMPLETED],
+                ],
+                'order' => 'date DESC',
+            ]
+        );
+
+        foreach ($sales as $sale) {
+            $currency = $this->getCurrency((int) ($sale['currency_id'] ?? 0));
+            $isoCode = (string) ($currency['iso_code'] ?? '');
+            $history[] = [
+                'date' => (string) ($sale['date'] ?? ''),
+                'type' => (int) ($sale['product_type'] ?? 0) === self::PRODUCT_TYPE_SESSION ? get_lang('Session') : get_lang('Course'),
+                'product_name' => (string) ($sale['product_name'] ?? ''),
+                'reference' => (string) ($sale['reference'] ?? ''),
+                'amount' => $this->getPriceWithCurrencyFromIsoCode((float) ($sale['price'] ?? 0), $isoCode),
+                'payment_method' => (string) ($paymentTypeLabels[(int) ($sale['payment_type'] ?? 0)] ?? ''),
+                'receipt_url' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/receipt.php?sale_id='.(int) ($sale['id'] ?? 0).'&is_service=0',
+            ];
+        }
+
+        foreach ($this->getServiceSales($userId) as $serviceSale) {
+            $paymentMethod = (string) ($paymentTypeLabels[(int) ($serviceSale['payment_type'] ?? 0)] ?? '');
+
+            foreach ($this->getServiceSalePaymentEvents($serviceSale) as $paymentEvent) {
+                $auditId = (int) ($paymentEvent['audit_id'] ?? 0);
+                $amount = (float) ($paymentEvent['amount'] ?? 0);
+                $currencyCode = (string) ($paymentEvent['currency'] ?? '');
+                $receiptUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/receipt.php?sale_id='.(int) $serviceSale['id'].'&is_service=1';
+                if ($auditId > 0) {
+                    $receiptUrl .= '&payment_audit_id='.$auditId;
+                }
+
+                $history[] = [
+                    'date' => (string) ($paymentEvent['date'] ?? ''),
+                    'type' => $this->get_lang('Service'),
+                    'product_name' => (string) ($serviceSale['service']['name'] ?? ''),
+                    'reference' => (string) ($serviceSale['reference'] ?? ''),
+                    'amount' => $this->getPriceWithCurrencyFromIsoCode($amount, $currencyCode),
+                    'payment_method' => $paymentMethod,
+                    'receipt_url' => $receiptUrl,
+                ];
+            }
         }
 
         usort($history, static function (array $left, array $right): int {
@@ -5699,12 +5990,23 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $dateEnd = (string) ($serviceSale['date_end'] ?? '');
-
-        if ('' === $dateEnd) {
+        if ('' === $dateEnd || strtotime($dateEnd) >= time()) {
             return true;
         }
 
-        return strtotime($dateEnd) >= time();
+        if (self::SERVICE_STATUS_COMPLETED !== $status) {
+            return false;
+        }
+
+        $recurringPayment = (int) ($serviceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED);
+        $recurringProfileId = trim((string) ($serviceSale['recurring_profile_id'] ?? ''));
+        $gatewaySubscriptionId = trim((string) ($serviceSale['gateway_subscription_id'] ?? ''));
+        $cancelledAt = trim((string) ($serviceSale['cancelled_at'] ?? ''));
+        $hasRecurringReference = '' !== $recurringProfileId || '' !== $gatewaySubscriptionId;
+
+        return '' === $cancelledAt
+            && self::SERVICE_RECURRING_PAYMENT_CANCELLED !== $recurringPayment
+            && $hasRecurringReference;
     }
 
     private function hasBlockingActiveServiceSale(
@@ -5751,7 +6053,17 @@ class BuyCoursesPlugin extends Plugin
 
             $dateEnd = (string) ($serviceSale['date_end'] ?? '');
             if ('' !== $dateEnd && strtotime($dateEnd) < time()) {
-                continue;
+                $recurringPayment = (int) ($serviceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED);
+                $hasRecurringReference = '' !== trim((string) ($serviceSale['recurring_profile_id'] ?? ''))
+                    || '' !== trim((string) ($serviceSale['gateway_subscription_id'] ?? ''));
+                $cancelledAt = trim((string) ($serviceSale['cancelled_at'] ?? ''));
+
+                if (!$hasRecurringReference
+                    || self::SERVICE_RECURRING_PAYMENT_CANCELLED === $recurringPayment
+                    || '' !== $cancelledAt
+                ) {
+                    continue;
+                }
             }
 
             return true;
@@ -8069,6 +8381,12 @@ class BuyCoursesPlugin extends Plugin
 
         if ($this->hasBlockingActiveServiceSale($userId, $serviceId, $nodeType, $nodeId)) {
             $this->lastServiceSaleError = get_lang('Active service');
+
+            return false;
+        }
+
+        if ($this->hasPendingServiceSale($userId, $serviceId, $nodeType, $nodeId)) {
+            $this->lastServiceSaleError = $this->get_lang('PendingServicePurchaseAlreadyExists');
 
             return false;
         }

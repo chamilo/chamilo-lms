@@ -127,7 +127,7 @@
                     :disabled="isCancellingRenewal || isRestoringRenewal"
                     @click="openCancelRenewalModal(service)"
                   >
-                    {{ service.cancelRenewalButtonLabel || t("Cancel renewal") }}
+                    {{ service.cancelRenewalButtonLabel || t("Cancel service") }}
                   </button>
                 </div>
               </div>
@@ -211,7 +211,6 @@
                 <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Product") }}</th>
                 <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Reference") }}</th>
                 <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Amount") }}</th>
-                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Documents") }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-20">
@@ -224,43 +223,71 @@
                 <td class="px-4 py-3 text-gray-90">{{ purchase.productName || purchase.product_name || "—" }}</td>
                 <td class="whitespace-nowrap px-4 py-3 text-gray-50">{{ purchase.reference || "—" }}</td>
                 <td class="whitespace-nowrap px-4 py-3 font-medium text-gray-90">{{ purchase.amount || "—" }}</td>
-                <td class="whitespace-nowrap px-4 py-3 space-x-3">
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-semibold text-gray-90">
+        {{ t("Payment history") }}
+      </h2>
+
+      <div
+        v-if="isLoading"
+        class="rounded-2xl border border-gray-20 bg-support-2 px-5 py-4 text-body-2 text-gray-50"
+      >
+        {{ t("Loading") }}…
+      </div>
+
+      <div
+        v-else-if="paymentHistory.length === 0"
+        class="rounded-2xl border border-gray-20 bg-support-2 px-5 py-4 text-body-2 text-gray-50"
+      >
+        {{ t("No payments yet") }}
+      </div>
+
+      <div
+        v-else
+        class="overflow-hidden rounded-3xl border border-gray-20 bg-white shadow-sm"
+      >
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-start text-sm">
+            <thead class="bg-support-2">
+              <tr>
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Date") }}</th>
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Type") }}</th>
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Product") }}</th>
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Reference") }}</th>
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Payment method") }}</th>
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Amount") }}</th>
+                <th class="whitespace-nowrap px-4 py-3 font-semibold text-gray-50">{{ t("Receipt") }}</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-20">
+              <tr
+                v-for="payment in paymentHistory"
+                :key="getPaymentKey(payment)"
+              >
+                <td class="whitespace-nowrap px-4 py-3 text-gray-50">{{ formatDateTime(payment.date) }}</td>
+                <td class="whitespace-nowrap px-4 py-3 text-gray-90">{{ payment.type || "—" }}</td>
+                <td class="px-4 py-3 text-gray-90">{{ payment.productName || payment.product_name || "—" }}</td>
+                <td class="whitespace-nowrap px-4 py-3 text-gray-50">{{ payment.reference || "—" }}</td>
+                <td class="whitespace-nowrap px-4 py-3 text-gray-90">{{ payment.paymentMethod || payment.payment_method || "—" }}</td>
+                <td class="whitespace-nowrap px-4 py-3 font-medium text-gray-90">{{ payment.amount || "—" }}</td>
+                <td class="whitespace-nowrap px-4 py-3">
                   <a
-                    v-if="purchase.receiptUrl || purchase.receipt_url"
-                    :href="purchase.receiptUrl || purchase.receipt_url"
+                    v-if="payment.receiptUrl || payment.receipt_url"
+                    :href="payment.receiptUrl || payment.receipt_url"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-sm font-semibold text-primary transition hover:underline"
                   >
                     {{ t("Receipt") }}
                   </a>
-                  <a
-                    v-if="purchase.invoiceUrl || purchase.invoice_url"
-                    :href="purchase.invoiceUrl || purchase.invoice_url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-sm font-semibold text-primary transition hover:underline"
-                  >
-                    {{ t("Invoice") }}
-                  </a>
-                  <a
-                    v-else-if="purchase.requestInvoiceUrl || purchase.request_invoice_url"
-                    :href="purchase.requestInvoiceUrl || purchase.request_invoice_url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-sm font-semibold text-primary transition hover:underline"
-                  >
-                    {{ t("Request invoice") }}
-                  </a>
-                  <span
-                    v-if="
-                      !(purchase.receiptUrl || purchase.receipt_url) &&
-                      !(purchase.invoiceUrl || purchase.invoice_url) &&
-                      !(purchase.requestInvoiceUrl || purchase.request_invoice_url)
-                    "
-                    class="text-gray-50"
-                    >—</span
-                  >
+                  <span v-else class="text-gray-50">—</span>
                 </td>
               </tr>
             </tbody>
@@ -318,7 +345,7 @@
               :disabled="isCancellingRenewal"
               @click="confirmCancelRenewal"
             >
-              {{ cancelRenewalService.cancelRenewalButtonLabel || t("Cancel renewal") }}
+              {{ cancelRenewalService.cancelRenewalButtonLabel || t("Cancel service") }}
             </button>
           </div>
         </div>
@@ -343,6 +370,7 @@ const loadError = ref("")
 const actionMessage = ref("")
 const activeServices = ref([])
 const purchaseHistory = ref([])
+const paymentHistory = ref([])
 const hasResolvedPluginState = ref(false)
 const cancelRenewalService = ref(null)
 const cancelRenewalError = ref("")
@@ -373,6 +401,7 @@ async function loadMyServicesData() {
     const data = await buyCoursesService.getMyServices()
     activeServices.value = Array.isArray(data?.activeServices) ? data.activeServices : []
     purchaseHistory.value = Array.isArray(data?.purchaseHistory) ? data.purchaseHistory : []
+    paymentHistory.value = Array.isArray(data?.paymentHistory) ? data.paymentHistory : []
     loadError.value = typeof data?.error === "string" ? data.error : ""
   } catch (error) {
     if ((error?.response?.status ?? 0) === 404) {
@@ -381,6 +410,7 @@ async function loadMyServicesData() {
     }
     activeServices.value = []
     purchaseHistory.value = []
+    paymentHistory.value = []
     loadError.value = t("Unable to load your services right now.")
   } finally {
     isLoading.value = false
@@ -448,6 +478,10 @@ function formatBenefitValue(benefit) {
 
 function getPurchaseKey(purchase) {
   return [purchase.date ?? "", purchase.reference ?? "", purchase.productName ?? purchase.product_name ?? "", purchase.type ?? ""].join("-")
+}
+
+function getPaymentKey(payment) {
+  return [payment.date ?? "", payment.reference ?? "", payment.productName ?? payment.product_name ?? "", payment.amount ?? ""].join("-")
 }
 
 function isRenewableService(service) {

@@ -807,6 +807,8 @@ $strings['ExportReportPreviewLimited'] = 'Aquí solo se muestran las primeras %s
 $strings['ExportReportTotalAmount'] = 'Importe total';
 $strings['NoSalesFoundForExport'] = 'No se encontraron ventas para los filtros de exportación seleccionados.';
 $strings['GatewaySubscription'] = 'Suscripción del gateway';
+$strings['CancelService'] = 'Cancelar servicio';
+$strings['PendingServicePurchaseAlreadyExists'] = 'Ya existe una compra pendiente para este servicio. Complétala o cancélala antes de iniciar otra compra.';
 
 $strings['BtcPaySetupHelp'] = 'Configure BUYCOURSES_BTCPAY_URL, BUYCOURSES_BTCPAY_STORE_ID, BUYCOURSES_BTCPAY_API_KEY y BUYCOURSES_BTCPAY_WEBHOOK_SECRET en el entorno del servidor. Configure el webhook InvoiceSettled de BTCPay para llamar a /plugin/BuyCourses/src/btcpay_webhook.php. Disponible solo para comprar cursos y sesiones.';
 $strings['BtcPayReady'] = 'La configuración de BTCPay Server está lista.';

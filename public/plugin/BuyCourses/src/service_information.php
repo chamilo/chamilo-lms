@@ -129,8 +129,10 @@ if (!empty($service['description'])) {
 
 $canCurrentUserBuyService = $plugin->canCurrentUserBuyService($service);
 $hasBlockingSale = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
+$hasPendingSale = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
 $canBuyService = $canCurrentUserBuyService
     && !$hasBlockingSale
+    && !$hasPendingSale
     && null === $purchaseUpsaleChainBlock
     && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
 $buyerRoleNotice = null;
@@ -162,6 +164,7 @@ $template->assign('price_display', $priceDisplay);
 $template->assign('is_purchased_context', $isPurchasedContext);
 $template->assign('can_buy_service', $canBuyService);
 $template->assign('has_blocking_sale', $hasBlockingSale);
+$template->assign('has_pending_sale', $hasPendingSale);
 $template->assign('purchase_blocked_by_active_upsale_chain', null !== $purchaseUpsaleChainBlock);
 $template->assign('purchase_block_notice', $purchaseBlockNotice);
 $template->assign('upgrade_offer', $upgradeOffer);

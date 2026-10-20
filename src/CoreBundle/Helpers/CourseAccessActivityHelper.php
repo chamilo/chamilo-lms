@@ -27,6 +27,7 @@ final readonly class CourseAccessActivityHelper
      */
     private const BACKGROUND_ROUTES = [
         'sync_learning_path_runtime',
+        'chamilo_core_chat_api_contacts',
         'chamilo_core_chat_api_heartbeat',
         'chamilo_core_chat_api_history_since',
         'chamilo_core_chat_api_video_signals',

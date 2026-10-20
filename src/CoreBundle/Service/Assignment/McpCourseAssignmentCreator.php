@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
+use Chamilo\CourseBundle\Repository\CStudentPublicationFollowRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
@@ -25,6 +26,7 @@ final readonly class McpCourseAssignmentCreator
     public function __construct(
         private CStudentPublicationRepository $publicationRepository,
         private EntityManagerInterface $entityManager,
+        private CStudentPublicationFollowRepository $followRepository,
     ) {}
 
     /**
@@ -115,6 +117,9 @@ final readonly class McpCourseAssignmentCreator
         $publication->setAssignment($assignment);
 
         $this->publicationRepository->create($publication);
+
+        // The creator follows the new assignment, so learner comments reach them by e-mail.
+        $this->followRepository->follow($publication, $user);
 
         return $this->normalize($publication, $course, true, false);
     }

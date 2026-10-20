@@ -41864,3 +41864,18 @@ msgstr ""
 
 msgid "Default visibility for new tests"
 msgstr ""
+
+msgid "Following"
+msgstr ""
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr ""
+
+msgid "Payment history"
+msgstr ""
+
+msgid "No payments yet"
+msgstr ""
+
+msgid "Cancel service"
+msgstr ""

@@ -207,6 +207,19 @@ async function getPublication(publicationId, params = {}) {
 }
 
 /** Creates a publication (assignment). */
+/** Whether the current teacher follows the assignment (gets e-mailed about learners' comments). */
+async function getFollowStatus(assignmentId) {
+  return baseService.get(`/assignments/${assignmentId}/follow`, buildCidParams())
+}
+
+async function followAssignment(assignmentId) {
+  return baseService.post(`/assignments/${assignmentId}/follow`, {}, {}, { params: buildCidParams() })
+}
+
+async function unfollowAssignment(assignmentId) {
+  return baseService.delete(`/assignments/${assignmentId}/follow`, { params: buildCidParams() })
+}
+
 async function createPublication(payload) {
   return baseService.post(`/api/c_student_publications`, payload)
 }
@@ -280,6 +293,9 @@ export default {
   getAiTaskGradeCapabilities,
   getPublication,
   createPublication,
+  getFollowStatus,
+  followAssignment,
+  unfollowAssignment,
   getRelUsers,
   addRelUser,
   removeRelUser,

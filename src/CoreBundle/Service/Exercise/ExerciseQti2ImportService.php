@@ -895,7 +895,7 @@ final readonly class ExerciseQti2ImportService
         $options = [];
         $optionPositions = [];
         foreach ($rightChoices as $choiceId => $choiceText) {
-            $options[] = $this->formatHtml((string) $choiceText);
+            $options[] = QtiImportHtmlSanitizer::sanitize($this->formatHtml((string) $choiceText));
             $optionPositions[(string) $choiceId] = \count($options);
         }
 
@@ -907,7 +907,7 @@ final readonly class ExerciseQti2ImportService
                 continue;
             }
             $items[] = [
-                'answer' => $this->formatHtml((string) $choiceText),
+                'answer' => QtiImportHtmlSanitizer::sanitize($this->formatHtml((string) $choiceText)),
                 'option' => $optionPositions[$match['target']],
                 'weight' => $match['weight'],
             ];

@@ -153,6 +153,31 @@ final class ExerciseQti2ImportServiceTest extends TestCase
         self::assertSame(['QTI question QST_2 skipped because it has no matching associations.'], $result['errors']);
     }
 
+    /**
+     * Matching answers are displayed without filtering, so scripts, event handlers and javascript:
+     * URLs from an uploaded package must not reach the database.
+     */
+    public function testMatchingAnswerHtmlIsSanitized(): void
+    {
+        $xml = str_replace(
+            ['<![CDATA[France]]>', '<![CDATA[Paris]]>'],
+            [
+                '<![CDATA[<b>France</b><img src="x.png" onerror="alert(1)"><script>alert(2)</script>]]>',
+                '&lt;a href="javascript:alert(3)"&gt;Paris&lt;/a&gt;&lt;svg onload=alert(4)&gt;',
+            ],
+            $this->buildLegacyMatchingItem('multiple', 'directedPair')
+        );
+
+        $this->createImportService()->import($this->createZip($this->wrapItems($xml)), new Course(), null);
+
+        $answers = array_map(static fn (CQuizAnswer $a): string => $a->getAnswer(), $this->getAnswers($this->getSingleQuestion()));
+        self::assertSame('<a>Paris</a>', $answers[1]);
+        self::assertSame('<b>France</b><img src="x.png" alt="x.png" />', $answers[4]);
+        foreach ($answers as $answer) {
+            self::assertDoesNotMatchRegularExpression('/script|onerror|onload|javascript:/i', $answer);
+        }
+    }
+
     private function createImportService(): ExerciseQti2ImportService
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);

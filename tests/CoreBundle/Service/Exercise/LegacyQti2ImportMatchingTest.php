@@ -79,6 +79,27 @@ final class LegacyQti2ImportMatchingTest extends TestCase
     }
 
     /**
+     * Matching answers are displayed without filtering, so scripts, event handlers and javascript:
+     * URLs from an uploaded package must not reach the database.
+     */
+    public function testMatchingAnswerHtmlIsSanitized(): void
+    {
+        $questions = $this->parse($this->buildMatchingItem('QST_1', 'XSS', [
+            'left_0' => '<b>Bold</b><img src="x.png" onerror="alert(1)"><script>alert(2)</script>',
+        ], [
+            'right_0' => '&lt;a href="javascript:alert(3)"&gt;Link&lt;/a&gt;&lt;svg onload=alert(4)&gt;',
+        ], [
+            'left_0 right_0' => 1,
+        ]));
+
+        $rows = buildMatchingAnswerRows($questions['QST_1']);
+
+        self::assertCount(2, $rows);
+        self::assertSame('<a>Link</a>', $rows[0]['answer']);
+        self::assertSame('<b>Bold</b><img src="x.png" alt="x.png" />', $rows[1]['answer']);
+    }
+
+    /**
      * @return array<string, array<string, mixed>>
      */
     private function parse(string $items): array

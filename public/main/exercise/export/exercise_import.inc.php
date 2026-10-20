@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CoreBundle\Service\Exercise\QtiImportHtmlSanitizer;
 use PhpZip\ZipFile;
 
 /**
@@ -299,7 +300,8 @@ function import_exercise($file)
                     // Options first (correct = 0), then the items whose "correct" is the position of their option.
                     // Answer::save() turns that position into the option iid.
                     foreach ($matchingRows as $row) {
-                        $answer->new_answer[$pos] = formatText($row['answer']);
+                        // Already decoded and sanitized by buildMatchingAnswerRows(): matching answers are rendered unfiltered.
+                        $answer->new_answer[$pos] = $row['answer'];
                         $answer->new_comment[$pos] = '';
                         $answer->new_position[$pos] = $pos;
                         $answer->new_correct[$pos] = $row['correct'];
@@ -857,6 +859,7 @@ function parseQti2($xmlData)
  * as "<item> <option>" directed pairs in correctResponse, with their score in the mapping. Chamilo stores
  * the options first (correct = 0), then each item with "correct" set to the position of its option.
  * Items without a correct option cannot be stored in Chamilo and are dropped.
+ * The texts are entity-decoded and sanitized, because matching answers are displayed without filtering.
  *
  * @return array<int, array{answer: string, correct: int, weight: float}> empty if no association was found
  */
@@ -895,7 +898,7 @@ function buildMatchingAnswerRows(array $questionArray): array
     $rows = [];
     $optionPositions = [];
     foreach ($rightChoices as $choiceId => $choiceText) {
-        $rows[] = ['answer' => (string) $choiceText, 'correct' => 0, 'weight' => 0.0];
+        $rows[] = ['answer' => QtiImportHtmlSanitizer::sanitize(formatText((string) $choiceText)), 'correct' => 0, 'weight' => 0.0];
         $optionPositions[(string) $choiceId] = count($rows);
     }
 
@@ -905,7 +908,7 @@ function buildMatchingAnswerRows(array $questionArray): array
         }
         $match = $matches[(string) $choiceId];
         $rows[] = [
-            'answer' => (string) $choiceText,
+            'answer' => QtiImportHtmlSanitizer::sanitize(formatText((string) $choiceText)),
             'correct' => $optionPositions[$match['target']],
             'weight' => $match['weight'],
         ];

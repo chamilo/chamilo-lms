@@ -43,8 +43,11 @@ if (!empty($courseInfo['real_id'])) {
         if (empty($item_info)) {
             exit;
         }
-        if ($courseInfo['show_score'] == 0 || $item_info['visibility'] == 1 && $row['accepted'] == 1 &&
-            ($row['user_id'] == api_get_user_id() || api_is_allowed_to_edit())
+        // Same rule as downloadFile() in main/work/work.lib.php
+        $workIsVisible = $item_info['visibility'] == 1 && $row['accepted'] == 1;
+        if (api_is_allowed_to_edit() ||
+            $row['user_id'] == api_get_user_id() ||
+            ($courseInfo['show_score'] == 0 && $workIsVisible)
         ) {
             $title = str_replace(' ', '_', $row['title']);
             Event::event_download($title);

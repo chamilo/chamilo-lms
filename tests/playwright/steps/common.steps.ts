@@ -4426,3 +4426,21 @@ Then("the downloaded file should contain {string}", async ({}, text: string) => 
   const found = content.includes(Buffer.from(text, "latin1")) || content.includes(Buffer.from(text, "utf16le"))
   expect(found, `"${text}" in the downloaded file`).toBe(true)
 })
+
+// New, for exerciseReportFilter.feature. The Vue test pages
+// (/resources/exercise/<node>/<exerciseId>/...) no longer link to the legacy
+// results page (exercise_report.php), which needs the numeric test id; it is
+// read from the current Vue URL together with the course/session context.
+When("I go to the legacy results page of the current test", async ({ page }) => {
+  // The Vue router may still be switching to the test's own page.
+  const testPage = /\/resources\/exercise\/\d+\/(\d+)(\/|$)/
+  await page.waitForURL((current) => testPage.test(current.pathname), { timeout: 15000 }).catch(() => {})
+  const url = new URL(page.url())
+  const match = url.pathname.match(testPage)
+  const cid = url.searchParams.get("cid")
+  if (!match || !cid) {
+    throw new Error(`Could not find a test id and course id in the current URL: ${page.url()}`)
+  }
+  const sid = url.searchParams.get("sid") || "0"
+  await gotoReliably(page, `/main/exercise/exercise_report.php?cid=${cid}&sid=${sid}&exerciseId=${match[1]}`)
+})

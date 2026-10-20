@@ -412,6 +412,7 @@ final class ExerciseQti2ImportServiceTest extends TestCase
     private function createZip(string $xml): UploadedFile
     {
         $path = tempnam(sys_get_temp_dir(), 'qti2-test-');
+        self::assertIsString($path);
         $this->tempFiles[] = $path;
         $zip = new ZipArchive();
         $zip->open($path, ZipArchive::OVERWRITE);

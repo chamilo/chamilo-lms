@@ -15,6 +15,8 @@ use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use DOMDocument;
+use DOMElement;
+use DOMNode;
 use DOMXPath;
 use FillBlanks;
 use ImsAnswerFillInBlanks;
@@ -173,7 +175,7 @@ final class ExerciseQti2FillBlanksExportTest extends TestCase
         self::assertSame(['a"b<c>&amp;', 'd'], \array_slice($this->attributes($xpath, '//q:mapEntry', 'mapKey'), 0, 2));
         self::assertSame(
             '&lt;p onclick=&quot;x()&quot;&gt;]]&gt;&lt;script&gt;alert(1)&lt;/script&gt; ]]&gt; ',
-            $xpath->query('//q:itemBody/q:p/q:span')->item(0)->textContent.$xpath->query('//q:itemBody/q:p/q:span')->item(1)->textContent
+            implode('', \array_slice($this->texts($xpath, '//q:itemBody/q:p/q:span'), 0, 2))
         );
         self::assertSame(['m&quot;1', '&lt;i&gt;m2&lt;/i&gt;'], $this->texts($xpath, '//q:inlineChoice'));
         self::assertCount(0, $xpath->query('//q:itemBody//q:script|//q:itemBody//q:i'));
@@ -254,7 +256,6 @@ final class ExerciseQti2FillBlanksExportTest extends TestCase
      */
     private function importWithApiService(string $xml): array
     {
-        $this->persisted = [];
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->method('persist')->willReturnCallback(function (object $entity): void {
             $this->persisted[] = $entity;
@@ -285,6 +286,8 @@ final class ExerciseQti2FillBlanksExportTest extends TestCase
         $exerciseInfo = ['name' => 'test', 'question' => []];
 
         self::assertTrue(qti_parse_file($xml));
+
+        /** @var array<int, array<string, mixed>> $questions filled in by qti_parse_file() */
         $questions = array_values($exerciseInfo['question']);
         self::assertCount(1, $questions);
         self::assertSame(FIB, $questions[0]['type']);
@@ -327,6 +330,7 @@ final class ExerciseQti2FillBlanksExportTest extends TestCase
     {
         $values = [];
         foreach ($xpath->query($query) as $node) {
+            self::assertInstanceOf(DOMElement::class, $node);
             $values[] = $node->getAttribute($attribute);
         }
 
@@ -340,6 +344,7 @@ final class ExerciseQti2FillBlanksExportTest extends TestCase
     {
         $values = [];
         foreach ($xpath->query($query) as $node) {
+            self::assertInstanceOf(DOMNode::class, $node);
             $values[] = $node->textContent;
         }
 
@@ -355,6 +360,7 @@ final class ExerciseQti2FillBlanksExportTest extends TestCase
     private function createZip(string $xml): UploadedFile
     {
         $path = tempnam(sys_get_temp_dir(), 'qti2-fib-test-');
+        self::assertIsString($path);
         $this->tempFiles[] = $path;
         $zip = new ZipArchive();
         $zip->open($path, ZipArchive::OVERWRITE);

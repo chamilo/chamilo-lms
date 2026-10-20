@@ -174,14 +174,12 @@ class LtiProvider
         $em = Database::getManager();
 
         $resolvedUser = null;
-        $resolution = 'none';
 
         // 1. First try the stable LTI username.
         $userInfo = api_get_user_info_from_username($username, $authSource);
 
         if (!empty($userInfo['user_id'])) {
             $resolvedUser = $em->find(User::class, (int) $userInfo['user_id']);
-            $resolution = 'username';
         }
 
         // 2. Create a new shadow user only if no existing user was found.
@@ -227,8 +225,6 @@ class LtiProvider
 
                 return null;
             }
-
-            $resolution = 'created';
         }
 
         $userId = (int) $resolvedUser->getId();

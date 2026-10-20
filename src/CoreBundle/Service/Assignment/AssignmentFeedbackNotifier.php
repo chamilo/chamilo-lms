@@ -37,6 +37,7 @@ final class AssignmentFeedbackNotifier
         private readonly CStudentPublicationFollowRepository $followRepository,
         private readonly CCourseSettingRepository $courseSettingRepository,
         private readonly TranslatorInterface $translator,
+        private readonly AssignmentSessionCoachAccess $sessionCoachAccess,
     ) {}
 
     /**
@@ -76,7 +77,7 @@ final class AssignmentFeedbackNotifier
                 continue;
             }
 
-            if ($this->mayReceive($follower, $course, $session)) {
+            if ($this->mayReceive($assignment, $follower, $course, $session)) {
                 $recipientIds[] = (int) $follower->getId();
             }
         }
@@ -127,7 +128,7 @@ final class AssignmentFeedbackNotifier
         return $recipientIds;
     }
 
-    private function mayReceive(User $follower, Course $course, ?Session $session): bool
+    private function mayReceive(CStudentPublication $assignment, User $follower, Course $course, ?Session $session): bool
     {
         // Recipient eligibility of a third party, not an authorization of the current
         // request: there is no token to ask isGranted() about, so read the role itself.
@@ -135,7 +136,8 @@ final class AssignmentFeedbackNotifier
             return true;
         }
 
+        // A session coach hears about comments made in the session they coach only.
         return $session instanceof Session
-            && ($session->hasCourseCoachInCourse($follower, $course) || $session->hasUserAsGeneralCoach($follower));
+            && $this->sessionCoachAccess->isCoachInSession($assignment, $follower, $course, $session);
     }
 }

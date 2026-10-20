@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentSessionCoachAccess;
 use Chamilo\CoreBundle\Service\Assignment\MobileAssignmentSubmissionAccess;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -844,9 +845,10 @@ class StudentPublicationController extends AbstractController
     public function getFollowStatus(
         int $assignmentId,
         CStudentPublicationFollowRepository $followRepository,
-        UserHelper $userHelper
+        UserHelper $userHelper,
+        AssignmentSessionCoachAccess $sessionCoachAccess
     ): JsonResponse {
-        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper);
+        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper, $sessionCoachAccess);
 
         return new JsonResponse(['following' => $followRepository->isFollowing($assignment, $user)]);
     }
@@ -855,9 +857,10 @@ class StudentPublicationController extends AbstractController
     public function followAssignment(
         int $assignmentId,
         CStudentPublicationFollowRepository $followRepository,
-        UserHelper $userHelper
+        UserHelper $userHelper,
+        AssignmentSessionCoachAccess $sessionCoachAccess
     ): JsonResponse {
-        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper);
+        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper, $sessionCoachAccess);
         $followRepository->follow($assignment, $user);
 
         return new JsonResponse(['following' => true]);
@@ -867,9 +870,10 @@ class StudentPublicationController extends AbstractController
     public function unfollowAssignment(
         int $assignmentId,
         CStudentPublicationFollowRepository $followRepository,
-        UserHelper $userHelper
+        UserHelper $userHelper,
+        AssignmentSessionCoachAccess $sessionCoachAccess
     ): JsonResponse {
-        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper);
+        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper, $sessionCoachAccess);
         $followRepository->unfollow($assignment, $user);
 
         return new JsonResponse(['following' => false]);
@@ -1115,18 +1119,19 @@ class StudentPublicationController extends AbstractController
     }
 
     /**
-     * Sanitize filenames.
-     */
-    /**
      * Only an assignment (a top-level folder, not a submission) can be followed, and only by
-     * someone allowed to edit it in the current course context: a teacher of the course, a
-     * coach of the session, the assignment's creator or an admin. The voter checks the
-     * assignment's links against the request's cid, so another course's teacher is refused.
+     * someone allowed to edit it (a teacher of its course, its creator or an admin, through the
+     * EDIT vote) or by a coach of the request's session (sid) on the request's course (cid),
+     * when that session holds the course and the assignment is available in it. A coach of
+     * another session, or a teacher of another course, is refused.
      *
      * @return array{CStudentPublication, User}
      */
-    private function resolveFollowableAssignment(int $assignmentId, UserHelper $userHelper): array
-    {
+    private function resolveFollowableAssignment(
+        int $assignmentId,
+        UserHelper $userHelper,
+        AssignmentSessionCoachAccess $sessionCoachAccess
+    ): array {
         $assignment = $this->studentPublicationRepo->find($assignmentId);
         if (!$assignment instanceof CStudentPublication
             || 'folder' !== $assignment->getFiletype()
@@ -1135,16 +1140,30 @@ class StudentPublicationController extends AbstractController
             throw $this->createNotFoundException('Assignment not found.');
         }
 
-        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
-
         $user = $userHelper->getCurrent();
         if (!$user instanceof User) {
             throw new AccessDeniedHttpException();
         }
 
-        return [$assignment, $user];
+        if ($this->isGranted('EDIT', $assignment->getResourceNode())) {
+            return [$assignment, $user];
+        }
+
+        if ($sessionCoachAccess->isCoachInSessionById(
+            $assignment,
+            $user,
+            (int) $this->cidReqHelper->getCourseId(),
+            (int) $this->cidReqHelper->getSessionId()
+        )) {
+            return [$assignment, $user];
+        }
+
+        throw $this->createAccessDeniedException();
     }
 
+    /**
+     * Sanitize filenames.
+     */
     private function cleanFilename(string $name): string
     {
         $name = str_replace([':', '\\', '/', '*', '?', '"', '<', '>', '|'], '_', $name);

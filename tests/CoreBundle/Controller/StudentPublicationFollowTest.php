@@ -8,8 +8,10 @@ namespace Chamilo\Tests\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentFeedbackNotifier;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -115,11 +117,11 @@ final class StudentPublicationFollowTest extends AbstractApiTest
     /**
      * @return array<string, mixed>
      */
-    private function callFollow(User $user, string $method, int $assignmentId, int $courseId): array
+    private function callFollow(User $user, string $method, int $assignmentId, int $courseId, int $sessionId = 0): array
     {
         $response = $this->createClientWithCredentials($this->getUserTokenFromUser($user))->request(
             $method,
-            '/assignments/'.$assignmentId.'/follow?cid='.$courseId,
+            '/assignments/'.$assignmentId.'/follow?cid='.$courseId.($sessionId > 0 ? '&sid='.$sessionId : ''),
         );
 
         return $response->toArray(false);
@@ -264,6 +266,148 @@ final class StudentPublicationFollowTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(201);
         // Followers hear about learners' comments, not about their colleagues' feedback.
         $this->assertSame(0, $this->countMessagesReceivedBy($ctx['creator']));
+    }
+
+    /**
+     * A session holding the course, with one course coach.
+     */
+    private function createSessionWithCoach(Course $course, string $suffix): array
+    {
+        /** @var SessionRepository $sessionRepo */
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+
+        $session = $this->createSession('Follow Api Session '.$suffix);
+        $session->addCourse($course);
+        $sessionRepo->update($session);
+
+        // Only a teacher account can be made a course coach.
+        $coach = $this->createUser('follow_api_coach_'.$suffix, '', '', 'ROLE_TEACHER');
+        $sessionRepo->addUserInCourse(Session::COURSE_COACH, $coach, $course, $session);
+
+        return [$session, $coach];
+    }
+
+    public function testCoachOfTheSessionCanFollowAndUnfollow(): void
+    {
+        $ctx = $this->bootstrap('coach');
+        [$session, $coach] = $this->createSessionWithCoach($ctx['course'], 'coach');
+        $id = (int) $ctx['assignment']->getIid();
+        $cid = (int) $ctx['course']->getId();
+        $sid = (int) $session->getId();
+
+        // The base-course assignment is shown in the session the coach coaches.
+        $this->assertSame(['following' => false], $this->callFollow($coach, 'GET', $id, $cid, $sid));
+        $this->assertResponseStatusCodeSame(200);
+
+        $this->assertSame(['following' => true], $this->callFollow($coach, 'POST', $id, $cid, $sid));
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertTrue($this->isFollowing($ctx['assignment'], $coach));
+
+        $this->assertSame(['following' => false], $this->callFollow($coach, 'DELETE', $id, $cid, $sid));
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertFalse($this->isFollowing($ctx['assignment'], $coach));
+    }
+
+    public function testCoachOfAnotherSessionCannotFollow(): void
+    {
+        $ctx = $this->bootstrap('other_coach');
+        [$session] = $this->createSessionWithCoach($ctx['course'], 'other_coach_a');
+        [$otherSession, $otherCoach] = $this->createSessionWithCoach($ctx['course'], 'other_coach_b');
+        $id = (int) $ctx['assignment']->getIid();
+        $cid = (int) $ctx['course']->getId();
+
+        // Coaching session B does not open session A's context...
+        $this->callFollow($otherCoach, 'POST', $id, $cid, (int) $session->getId());
+        $this->assertResponseStatusCodeSame(403);
+
+        // ...nor the course outside any session.
+        $this->callFollow($otherCoach, 'POST', $id, $cid);
+        $this->assertResponseStatusCodeSame(403);
+
+        // An assignment published in session A only is not available in session B.
+        $em = $this->getEntityManager();
+        $em->clear();
+        $course = $em->find(Course::class, $cid);
+        $creator = $em->find(User::class, $ctx['creator']->getId());
+        $sessionAssignment = (new CStudentPublication())
+            ->setTitle('Follow Api Session A Assignment')
+            ->setParent($course)
+            ->setFiletype('folder')
+            ->setWeight(100)
+            ->setCreator($creator)
+            ->setUser($creator)
+            ->setActive(1)
+            ->addCourseLink($course, $em->find(Session::class, $session->getId()))
+        ;
+        $em->persist($sessionAssignment);
+        $em->flush();
+
+        $this->callFollow($otherCoach, 'POST', (int) $sessionAssignment->getIid(), $cid, (int) $otherSession->getId());
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->assertFalse($this->isFollowing($ctx['assignment'], $otherCoach));
+        $this->assertFalse($this->isFollowing($sessionAssignment, $otherCoach));
+    }
+
+    public function testCoachFollowerIsNotifiedOfALearnerCommentInTheirSession(): void
+    {
+        $ctx = $this->bootstrap('coach_comment');
+        [$session, $coach] = $this->createSessionWithCoach($ctx['course'], 'coach_comment_a');
+        [, $otherCoach] = $this->createSessionWithCoach($ctx['course'], 'coach_comment_b');
+
+        /** @var SessionRepository $sessionRepo */
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+        $learner = $this->createUser('follow_api_session_learner');
+        $sessionRepo->addUserInCourse(Session::STUDENT, $learner, $ctx['course'], $session);
+
+        $em = $this->getEntityManager();
+        $submission = (new CStudentPublication())
+            ->setTitle('Follow Api Session Submission')
+            ->setDescription('session learner work')
+            ->setPublicationParent($ctx['assignment'])
+            ->setParent($ctx['assignment'])
+            ->setFiletype('file')
+            ->setWeight(100)
+            ->setCreator($learner)
+            ->setUser($learner)
+            ->setActive(1)
+            ->setAccepted(true)
+            ->setSentDate(new DateTime())
+            ->setQualification(0.0)
+            ->setQualificatorId(0)
+            ->addCourseLink($ctx['course'], $em->find(Session::class, $session->getId()))
+        ;
+        $em->persist($submission);
+        $em->flush();
+
+        // A coach of another session who follows the same assignment.
+        $this->followRepository()->follow($ctx['assignment'], $otherCoach);
+
+        $cid = (int) $ctx['course']->getId();
+        $sid = (int) $session->getId();
+        $this->callFollow($coach, 'POST', (int) $ctx['assignment']->getIid(), $cid, $sid);
+        $this->assertResponseStatusCodeSame(200);
+
+        $this->createClientWithCredentials($this->getUserTokenFromUser($learner))->request(
+            'POST',
+            '/api/c_student_publication_comments/upload?cid='.$cid.'&sid='.$sid,
+            [
+                'headers' => ['Content-Type' => 'multipart/form-data'],
+                'extra' => [
+                    'parameters' => [
+                        'submissionId' => (string) $submission->getIid(),
+                        'comment' => 'Session learner comment',
+                        'parentResourceNodeId' => (string) $submission->getResourceNode()->getId(),
+                        'filetype' => 'file',
+                    ],
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(201);
+        $this->assertSame(1, $this->countMessagesReceivedBy($coach));
+        // Comments made in session A are none of session B's coach's business.
+        $this->assertSame(0, $this->countMessagesReceivedBy($otherCoach));
     }
 
     private function countMessagesReceivedBy(User $user): int

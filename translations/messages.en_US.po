@@ -41941,3 +41941,12 @@ msgstr "Following"
 
 msgid "Get an e-mail when a learner comments on a submission of this assignment"
 msgstr "Get an e-mail when a learner comments on a submission of this assignment"
+
+msgid "Payment history"
+msgstr "Payment history"
+
+msgid "No payments yet"
+msgstr "No payments yet"
+
+msgid "Cancel service"
+msgstr "Cancel service"

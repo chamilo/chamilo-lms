@@ -806,3 +806,5 @@ $strings['ExportReportPreviewLimited'] = 'Only the first %s rows are shown here;
 $strings['ExportReportTotalAmount'] = 'Total amount';
 $strings['NoSalesFoundForExport'] = 'No sales were found for the selected export filters.';
 $strings['GatewaySubscription'] = 'Gateway subscription';
+$strings['CancelService'] = 'Cancel service';
+$strings['PendingServicePurchaseAlreadyExists'] = 'A pending purchase already exists for this service. Complete or cancel it before starting another purchase.';

@@ -143,6 +143,19 @@ if ($plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId)) {
     exit;
 }
 
+if ($plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId)) {
+    Display::addFlash(
+        Display::return_message(
+            $plugin->get_lang('PendingServicePurchaseAlreadyExists'),
+            'warning',
+            false
+        )
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+    exit;
+}
+
 $userInfo = api_get_user_info($currentUserId);
 
 $form = new FormValidator('confirm_sale');

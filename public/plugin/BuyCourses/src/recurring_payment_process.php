@@ -72,8 +72,14 @@ if ($orderId <= 0 || '' === $action) {
 }
 
 $serviceSale = $plugin->getServiceSale($orderId);
+$serviceSaleBuyerId = (int) ($serviceSale['buyer']['id'] ?? 0);
+$isSaleOwner = $serviceSaleBuyerId > 0 && $serviceSaleBuyerId === $currentUserId;
+$isPlatformAdmin = api_is_platform_admin();
+$auditSource = $isPlatformAdmin && !$isSaleOwner
+    ? BuyCoursesPlugin::AUDIT_SOURCE_ADMIN
+    : BuyCoursesPlugin::AUDIT_SOURCE_USER;
 
-if (empty($serviceSale) || (int) ($serviceSale['buyer']['id'] ?? 0) !== $currentUserId) {
+if (empty($serviceSale) || (!$isSaleOwner && !$isPlatformAdmin)) {
     $respondWithError($plugin->get_lang('RecurringPaymentAccessDenied'), 403);
 }
 
@@ -254,7 +260,7 @@ switch ($action) {
                     'next_charge_date' => $billingStart->format('Y-m-d H:i:s'),
                 ],
                 $currentUserId,
-                BuyCoursesPlugin::AUDIT_SOURCE_USER
+                $auditSource
             );
         }
 
@@ -370,7 +376,7 @@ switch ($action) {
                     'cancel_at_period_end' => false,
                 ],
                 $currentUserId,
-                BuyCoursesPlugin::AUDIT_SOURCE_USER
+                $auditSource
             );
         } catch (Throwable $exception) {
             error_log(
@@ -399,7 +405,14 @@ switch ($action) {
             $respondWithSuccess($plugin->get_lang('RenewalAlreadyCancelled'));
         }
 
-        if (BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED !== $recurringPayment) {
+        if (!in_array(
+            $recurringPayment,
+            [
+                BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,
+                BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED,
+            ],
+            true
+        )) {
             $respondWithError($plugin->get_lang('RecurringPaymentIsNotEnabled'));
         }
 
@@ -477,7 +490,7 @@ switch ($action) {
                         'cancel_at_period_end' => true,
                     ],
                     $currentUserId,
-                    BuyCoursesPlugin::AUDIT_SOURCE_USER
+                    $auditSource
                 );
             } catch (Throwable $exception) {
                 error_log(
@@ -549,7 +562,7 @@ switch ($action) {
                     'planned_renewal_date' => $plannedRenewalDate,
                 ],
                 $currentUserId,
-                BuyCoursesPlugin::AUDIT_SOURCE_USER
+                $auditSource
             );
 
             $respondWithSuccess($plugin->get_lang('RenewalCancelledSuccessfully'));

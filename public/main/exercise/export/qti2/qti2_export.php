@@ -130,7 +130,9 @@ class ImsAssessmentItem
                 $this->questionIdent,
                 $this->question->question,
                 $this->question->description,
-                $this->question->getPictureFilename()
+                // Question::getPictureFilename() no longer exists in 3.x (the call was a fatal error);
+                // the media argument is only read by the hotspot answer, which isn't exported.
+                ''
             )
             .$this->end_item_body()
             .$this->add_response_processing()

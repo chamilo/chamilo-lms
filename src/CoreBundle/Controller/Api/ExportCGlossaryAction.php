@@ -25,6 +25,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 readonly class ExportCGlossaryAction
 {
@@ -69,6 +70,8 @@ readonly class ExportCGlossaryAction
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $response->getFile()->getFilename()
         );
+        // The file name only depends on the course code, so a leftover file breaks the next export.
+        $response->deleteFileAfterSend(true);
 
         return $response;
     }
@@ -125,8 +128,8 @@ readonly class ExportCGlossaryAction
         /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
             $html .= '<tr>';
-            $html .= '<td>'.$item->getTitle().'</td>';
-            $html .= '<td>'.$item->getDescription().'</td>';
+            $html .= '<td>'.htmlspecialchars($item->getTitle(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</td>';
+            $html .= '<td>'.htmlspecialchars((string) $item->getDescription(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</td>';
             $html .= '</tr>';
         }
         $html .= '</table>';

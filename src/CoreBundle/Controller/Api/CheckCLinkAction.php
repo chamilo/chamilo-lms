@@ -256,6 +256,14 @@ final class CheckCLinkAction extends AbstractController
 
     private function isAllowedPublicIp(string $ip): bool
     {
+        // PHP 8.2 does not treat IPv4-mapped IPv6 (::ffff:127.0.0.1) as reserved: check the IPv4 inside.
+        $packed = @inet_pton($ip);
+        if (\is_string($packed) && 16 === \strlen($packed) && str_repeat("\0", 10)."\xff\xff" === substr($packed, 0, 12)) {
+            $ipv4 = inet_ntop(substr($packed, 12));
+
+            return \is_string($ipv4) && $this->isAllowedPublicIp($ipv4);
+        }
+
         // First pass: reject private and reserved ranges using built-in filters.
         $flags = FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE;
         if (false === filter_var($ip, FILTER_VALIDATE_IP, $flags)) {

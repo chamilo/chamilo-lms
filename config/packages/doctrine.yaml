@@ -6,6 +6,8 @@ doctrine:
         host: '%env(DATABASE_HOST)%'
         port: '%env(DATABASE_PORT)%'
         driver: 'pdo_mysql'
+        # Unset means auto-detect on connect; CI sets it to boot without a database.
+        server_version: '%env(default::DATABASE_SERVER_VERSION)%'
         charset: utf8mb4
         options:
             1002: "SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))"

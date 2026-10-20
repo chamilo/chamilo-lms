@@ -2,6 +2,13 @@ name: PHP static analysis ✨
 
 on: [push, pull_request]
 
+# Lets the kernel boot without a database (see config/packages/doctrine.yaml).
+env:
+  DATABASE_SERVER_VERSION: '8.0.32'
+  # Psalm reads the dev debug container; .env.dist defaults to prod.
+  APP_ENV: 'dev'
+  APP_DEBUG: '1'
+
 jobs:
     build:
         name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}

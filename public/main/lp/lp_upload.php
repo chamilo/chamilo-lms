@@ -17,6 +17,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
+
+// Same edit rights required by lp_controller.php for the "upload" action, as this script is also reachable directly
+// or through the main/upload/ scripts that include it before checking permissions.
+if (!api_is_allowed_to_edit(false, true, false, false)) {
+    api_not_allowed(true);
+}
+
 if (empty($_POST['current_dir'])) {
     $current_dir = '';
 } else {

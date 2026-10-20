@@ -19,12 +19,12 @@ class CalendarEventNormalizer implements NormalizerInterface, NormalizerAwareInt
 
     private const ALREADY_CALLED = 'CALENDAR_EVENT_NORMALIZER_ALREADY_CALLED';
 
-    public function normalize($data, ?string $format = null, array $context = []): array
+    public function normalize($object, ?string $format = null, array $context = []): array
     {
         $context[self::ALREADY_CALLED] = true;
 
         /** @var array<string, mixed> $result */
-        $result = $this->normalizer->normalize($data, $format, $context);
+        $result = $this->normalizer->normalize($object, $format, $context);
 
         if (isset($result['content']) && \is_string($result['content'])) {
             $result['content'] = Security::remove_XSS($result['content'], STUDENT);

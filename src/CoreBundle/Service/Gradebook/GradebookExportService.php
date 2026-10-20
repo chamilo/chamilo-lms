@@ -16,6 +16,7 @@ use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpWord\PhpWord;
 use RuntimeException;
@@ -41,7 +42,7 @@ final readonly class GradebookExportService
 
         return match ($format) {
             'csv' => $this->createCsvResponse($headers, $rows, $baseName.'.csv'),
-            'xls' => $this->createXlsResponse($headers, $rows, $baseName.'.xls'),
+            'xls' => $this->createFlatXlsResponse($report, $baseName.'.xls'),
             'docx' => $this->createDocxResponse($headers, $rows, $baseName.'.docx', $courseTitle),
             'pdf' => $this->createPdfTableResponse(
                 $headers,
@@ -248,6 +249,100 @@ final readonly class GradebookExportService
     }
 
     /**
+     * Excel flavour of the list view: every score column (and the total) is split into
+     * percentage, score and maximum score cells holding real numbers, so that the
+     * spreadsheet can compute with them instead of receiving "18 / 20 (90%)" as text.
+     */
+    private function createFlatXlsResponse(GradebookReport $report, string $fileName): Response
+    {
+        [$headers, $rows] = $this->buildFlatTable($report);
+        $identityColumnCount = 4 + \count($report->extraFieldColumns);
+        $scoreColumns = array_map(
+            static fn (array $column): string => (string) ($column['title'] ?? ''),
+            $report->columns,
+        );
+        $scoreColumns[] = $this->translator->trans('Total');
+        $splitLabels = [
+            $this->translator->trans('Percentage'),
+            $this->translator->trans('Score'),
+            $this->translator->trans('Max score'),
+        ];
+        $hasRanking = true === ($report->settings['customScoreStandalone'] ?? false);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $xlsHeaders = \array_slice($headers, 0, $identityColumnCount);
+        foreach ($scoreColumns as $title) {
+            foreach ($splitLabels as $label) {
+                $xlsHeaders[] = $title.' ('.$label.')';
+            }
+        }
+        if ($hasRanking) {
+            $xlsHeaders[] = $this->translator->trans('Ranking');
+        }
+        foreach ($xlsHeaders as $columnIndex => $header) {
+            $this->setXlsTextCell($sheet, $columnIndex + 1, 1, $header);
+        }
+
+        $rowIndex = 2;
+        foreach (array_values($report->rows) as $position => $row) {
+            // Name, username, official code and extra fields are text: reuse the list view's own cells.
+            $columnIndex = 1;
+            foreach (\array_slice($rows[$position], 0, $identityColumnCount) as $value) {
+                $this->setXlsTextCell($sheet, $columnIndex++, $rowIndex, $value);
+            }
+
+            $scores = \is_array($row['scores'] ?? null) ? $row['scores'] : [];
+            $results = array_map(
+                static fn (array $column): mixed => $scores[(string) ($column['key'] ?? '')] ?? null,
+                $report->columns,
+            );
+            $results[] = $row['total'] ?? null;
+            foreach ($results as $result) {
+                $hasResult = \is_array($result) && true === ($result['hasResult'] ?? false);
+                $percentage = $hasResult && is_numeric($result['percentage'] ?? null) ? (float) $result['percentage'] / 100 : null;
+                $this->setXlsNumberCell($sheet, $columnIndex++, $rowIndex, $percentage, '0.00%');
+                $this->setXlsNumberCell($sheet, $columnIndex++, $rowIndex, $hasResult ? $result['score'] ?? null : null);
+                $this->setXlsNumberCell($sheet, $columnIndex++, $rowIndex, $hasResult ? $result['maxScore'] ?? null : null);
+            }
+
+            if ($hasRanking) {
+                $this->setXlsTextCell($sheet, $columnIndex, $rowIndex, (string) ($row['customScore'] ?? ''));
+            }
+            ++$rowIndex;
+        }
+
+        $writer = new Xls($spreadsheet);
+        ob_start();
+        $writer->save('php://output');
+        $content = ob_get_clean();
+        $spreadsheet->disconnectWorksheets();
+        if (false === $content) {
+            throw new RuntimeException('Failed to generate the XLS export.');
+        }
+
+        return $this->downloadResponse($content, 'application/vnd.ms-excel', $fileName);
+    }
+
+    private function setXlsTextCell(Worksheet $sheet, int $column, int $row, string $value): void
+    {
+        $sheet->setCellValueExplicit([$column, $row], $this->sanitizeSpreadsheetValue($value), DataType::TYPE_STRING);
+    }
+
+    private function setXlsNumberCell(Worksheet $sheet, int $column, int $row, mixed $value, ?string $format = null): void
+    {
+        if (!is_numeric($value)) {
+            return;
+        }
+
+        $sheet->setCellValueExplicit([$column, $row], (float) $value, DataType::TYPE_NUMERIC);
+        if (null !== $format) {
+            $sheet->getStyle([$column, $row])->getNumberFormat()->setFormatCode($format);
+        }
+    }
+
+    /**
      * @return array{0: list<string>, 1: list<list<string>>}
      */
     private function buildEvaluationTable(GradebookEvaluationResults $results): array
@@ -326,36 +421,6 @@ final readonly class GradebookExportService
         }
 
         return $this->downloadResponse($content, 'text/csv; charset=UTF-8', $fileName);
-    }
-
-    /**
-     * @param list<string>       $headers
-     * @param list<list<string>> $rows
-     */
-    private function createXlsResponse(array $headers, array $rows, string $fileName): Response
-    {
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $allRows = [$headers, ...$rows];
-        foreach ($allRows as $rowIndex => $row) {
-            foreach ($row as $columnIndex => $value) {
-                $sheet->setCellValueExplicit(
-                    [$columnIndex + 1, $rowIndex + 1],
-                    $this->sanitizeSpreadsheetValue((string) $value),
-                    DataType::TYPE_STRING,
-                );
-            }
-        }
-        $writer = new Xls($spreadsheet);
-        ob_start();
-        $writer->save('php://output');
-        $content = ob_get_clean();
-        $spreadsheet->disconnectWorksheets();
-        if (false === $content) {
-            throw new RuntimeException('Failed to generate the XLS export.');
-        }
-
-        return $this->downloadResponse($content, 'application/vnd.ms-excel', $fileName);
     }
 
     /**

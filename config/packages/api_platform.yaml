@@ -42,8 +42,8 @@ api_platform:
         # default api platform https://api-platform.com/docs/core/errors/#converting-php-exceptions-to-http-errors
         Symfony\Component\Serializer\Exception\ExceptionInterface: 400
         # Or with a constant defined in the 'Symfony\Component\HttpFoundation\Response' class.
-        ApiPlatform\Core\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
-        ApiPlatform\Core\Exception\FilterValidationException: 400
+        ApiPlatform\Metadata\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+        ApiPlatform\ParameterValidator\Exception\ValidationExceptionInterface: 400
         Doctrine\ORM\OptimisticLockException: 409
         Doctrine\DBAL\Exception\UniqueConstraintViolationException: 409
 

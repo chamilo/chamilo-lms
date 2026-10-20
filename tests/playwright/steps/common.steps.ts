@@ -2853,6 +2853,40 @@ Then("the row for {string} should contain {string}", async ({ page }, rowText: s
   await expect(row.first()).toContainText(expected)
 })
 
+// Not ported — new, for toolExerciseQti2Import.feature (#1377): saves the file behind a link
+// of a table row (e.g. the exercise list's "Export QTI2" icon, an <a> to /api/exercise/{id}/qti2-export)
+// so a later step can upload it again. The file is fetched with the page's own session rather than
+// through a browser download, which the link (no download attribute) doesn't always trigger. The
+// path is relative to the repository root; var/test-results/ is already gitignored.
+When(
+  "I save the file linked by the {string} icon in the row for {string} as {string}",
+  async ({ page }, selector: string, rowText: string, filePath: string) => {
+    const row = page.locator("tr").filter({ has: page.getByText(rowText, { exact: true }) })
+    const href = await row.locator(selector).first().getAttribute("href")
+    expect(href, `no link "${selector}" in the row for "${rowText}"`).toBeTruthy()
+    const response = await page.request.get(new URL(href as string, page.url()).toString())
+    expect(response.status()).toBe(200)
+    const target = path.join(repoRoot, filePath)
+    fs.mkdirSync(path.dirname(target), { recursive: true })
+    fs.writeFileSync(target, await response.body())
+  },
+)
+
+// Not ported — new, for toolExerciseQti2Import.feature (#1377): checks the question preview of the
+// exercise question list for a fill in blanks question: each blank must appear in brackets in the
+// rendered text and as its own row of the "Blank" table (so 3 blanks were imported, not merged).
+Then(
+  "the fill in blanks preview should show {string}, {string} and {string}",
+  async ({ page }, first: string, second: string, third: string) => {
+    const preview = page.locator("article").filter({ has: page.getByText("Blanks: 3", { exact: true }) })
+    await expect(preview.first()).toBeVisible()
+    for (const blank of [first, second, third]) {
+      await expect(preview.first()).toContainText(`[${blank}]`)
+      await expect(preview.first().locator("code").getByText(blank, { exact: true })).toBeVisible()
+    }
+  },
+)
+
 // Not ported — new, for toolGroup.feature's group_category action icons
 // (edit/create-groups/delete). Unlike a group ROW (a real `<tr>`), a
 // category's own header is a `<div class="page-header section-header">`

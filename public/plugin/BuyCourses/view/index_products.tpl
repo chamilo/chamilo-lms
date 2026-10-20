@@ -254,18 +254,20 @@
                 </a>
 
                 {% if service.has_blocking_sale|default(false) %}
-                    <span class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary/15 px-4 py-2.5 text-sm font-semibold text-primary">
+                    <button
+                        type="button"
+                        class="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-primary/15 px-4 py-2.5 text-sm font-semibold text-primary opacity-80"
+                        disabled
+                    >
                         <em class="mdi mdi-check-circle"></em>
-                        {{ 'Already purchased'|get_lang }}
+                        {{ 'Active'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </button>
+                {% elseif service.has_pending_sale|default(false) %}
+                    <span class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-warning/15 px-4 py-2.5 text-sm font-semibold text-warning">
+                        <em class="mdi mdi-clock-outline"></em>
+                        {{ 'PayoutStatusPending'|get_plugin_lang('BuyCoursesPlugin') }}
                     </span>
                 {% else %}
-                    {% if service.has_pending_sale|default(false) %}
-                        <span class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-warning/15 px-4 py-2.5 text-sm font-semibold text-warning">
-                            <em class="mdi mdi-clock-outline"></em>
-                            {{ 'PayoutStatusPending'|get_plugin_lang('BuyCoursesPlugin') }}
-                        </span>
-                    {% endif %}
-
                     {% set canBuyThisService = service.can_buy is defined ? service.can_buy : can_buy|default(false) %}
                     {% if canBuyThisService %}
                         <a

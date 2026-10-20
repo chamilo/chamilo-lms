@@ -211,6 +211,8 @@ foreach ($serviceList as &$service) {
     $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
     $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
     $service['can_buy'] = $plugin->canCurrentUserBuyService($service)
+        && !$service['has_blocking_sale']
+        && !$service['has_pending_sale']
         && null === $purchaseUpsaleChainBlock
         && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
 }

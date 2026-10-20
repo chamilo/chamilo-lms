@@ -43614,3 +43614,12 @@ msgstr "Visibilité par défaut des nouveaux parcours"
 
 msgid "Default visibility for new tests"
 msgstr "Visibilité par défaut des nouveaux tests"
+
+msgid "Payment history"
+msgstr "Historique des paiements"
+
+msgid "No payments yet"
+msgstr "Aucun paiement pour l'instant"
+
+msgid "Cancel service"
+msgstr "Annuler le service"

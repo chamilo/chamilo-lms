@@ -52,6 +52,7 @@ class MyServicesController extends AbstractController
                     $csrfToken
                 ),
                 'purchaseHistory' => $this->normalizePurchaseHistory($plugin->getPurchaseHistoryForUser($userId)),
+                'paymentHistory' => $this->normalizePaymentHistory($plugin->getPaymentHistoryForUser($userId)),
             ]);
         } catch (Throwable $exception) {
             $this->logger->error('Unable to load my services data.', [
@@ -63,6 +64,7 @@ class MyServicesController extends AbstractController
             return new JsonResponse([
                 'activeServices' => [],
                 'purchaseHistory' => [],
+                'paymentHistory' => [],
                 'error' => 'Unable to load your services right now.',
             ]);
         }
@@ -102,7 +104,14 @@ class MyServicesController extends AbstractController
 
             $canCancelRecurringPayment = $isRenewable
                 && !$isCancellationAlreadyScheduled
-                && BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED === $recurringPayment
+                && \in_array(
+                    $recurringPayment,
+                    [
+                        BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,
+                        BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED,
+                    ],
+                    true
+                )
                 && $hasRecurringReference
                 && $isSupportedCancellationGateway;
 
@@ -158,7 +167,7 @@ class MyServicesController extends AbstractController
                     $plugin->get_lang('RestoreRenewalConfirmation'),
                     $formattedRenewalDate
                 ),
-                'cancelRenewalButtonLabel' => $plugin->get_lang('CancelRenewal'),
+                'cancelRenewalButtonLabel' => $plugin->get_lang('CancelService'),
                 'cancelRenewalDismissLabel' => $plugin->get_lang('IChangedMyMind'),
                 'cancelRenewalTitle' => $plugin->get_lang('CancelRenewalTitle'),
                 'cancelRenewalMessage' => \sprintf(
@@ -193,9 +202,21 @@ class MyServicesController extends AbstractController
                 'reference' => (string) ($row['reference'] ?? ''),
                 'amount' => (string) ($row['amount'] ?? ''),
                 'status' => (int) ($row['status'] ?? 0),
+            ];
+        }, $rows);
+    }
+
+    private function normalizePaymentHistory(array $rows): array
+    {
+        return array_map(static function (array $row): array {
+            return [
+                'date' => (string) ($row['date'] ?? ''),
+                'type' => (string) ($row['type'] ?? ''),
+                'productName' => (string) ($row['product_name'] ?? ''),
+                'reference' => (string) ($row['reference'] ?? ''),
+                'amount' => (string) ($row['amount'] ?? ''),
+                'paymentMethod' => (string) ($row['payment_method'] ?? ''),
                 'receiptUrl' => $row['receipt_url'] ?? null,
-                'invoiceUrl' => $row['invoice_url'] ?? null,
-                'requestInvoiceUrl' => $row['request_invoice_url'] ?? null,
             ];
         }, $rows);
     }

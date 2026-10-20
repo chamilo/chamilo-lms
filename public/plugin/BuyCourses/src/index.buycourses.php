@@ -163,6 +163,8 @@ if (!api_is_platform_admin()) {
                 $service['has_blocking_sale'] = $plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId);
                 $service['has_pending_sale'] = $plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId);
                 $service['can_buy'] = $canBuyServices
+                    && !$service['has_blocking_sale']
+                    && !$service['has_pending_sale']
                     && null === $purchaseUpsaleChainBlock
                     && (null === $upgradeOffer || !empty($upgradeOffer['purchasable']));
 

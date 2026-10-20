@@ -26,6 +26,7 @@ if (api_is_anonymous()) {
 
 $saleId = isset($_GET['sale_id']) ? (int) $_GET['sale_id'] : 0;
 $isService = isset($_GET['is_service']) ? (int) $_GET['is_service'] : 0;
+$paymentAuditId = isset($_GET['payment_audit_id']) ? (int) $_GET['payment_audit_id'] : 0;
 
 if ($saleId <= 0
     || !in_array($isService, [BuyCoursesPlugin::INVOICE_SOURCE_SALE, BuyCoursesPlugin::INVOICE_SOURCE_SERVICE], true)
@@ -55,11 +56,41 @@ $taxAmount = isset($infoSale['tax_amount']) && null !== $infoSale['tax_amount']
 $taxRate = isset($infoSale['vat_rate']) && null !== $infoSale['vat_rate']
     ? (float) $infoSale['vat_rate']
     : (float) ($infoSale['tax_perc'] ?? 0);
-$totalPrice = $plugin->getPriceWithCurrencyFromIsoCode((float) $infoSale['price'], $isoCode);
+$paymentAmount = (float) $infoSale['price'];
+$paymentDate = (string) $infoSale['date'];
+$receiptReference = (string) $infoSale['reference'];
 
 $paymentTypeLabels = $plugin->getPaymentTypes();
 $paymentMethod = $paymentTypeLabels[(int) ($infoSale['payment_type'] ?? 0)] ?? buycourses_invoice_label($plugin, 'Unknown', 'Unknown');
 $gatewayTransactionId = trim((string) ($infoSale['gateway_transaction_id'] ?? ''));
+
+if (BuyCoursesPlugin::INVOICE_SOURCE_SERVICE === $isService && $paymentAuditId > 0) {
+    $paymentEvent = $plugin->getServiceSalePaymentEvent($saleId, $paymentAuditId);
+    if (empty($paymentEvent)) {
+        api_not_allowed(true);
+    }
+
+    $paymentAmount = (float) ($paymentEvent['amount'] ?? 0);
+    $paymentDate = (string) ($paymentEvent['date'] ?? $paymentDate);
+    $eventCurrency = trim((string) ($paymentEvent['currency'] ?? ''));
+    if ('' !== $eventCurrency) {
+        $isoCode = $eventCurrency;
+    }
+    $gatewayTransactionId = trim((string) ($paymentEvent['transaction_id'] ?? ''));
+    $receiptReference .= '-P'.$paymentAuditId;
+
+    if ('renewal' === (string) ($paymentEvent['kind'] ?? '')) {
+        if ($taxRate > 0) {
+            $priceWithoutTax = round($paymentAmount / (1 + ($taxRate / 100)), 2);
+            $taxAmount = round($paymentAmount - $priceWithoutTax, 2);
+        } else {
+            $priceWithoutTax = $paymentAmount;
+            $taxAmount = 0.0;
+        }
+    }
+}
+
+$totalPrice = $plugin->getPriceWithCurrencyFromIsoCode($paymentAmount, $isoCode);
 
 $htmlText = '<html>';
 $htmlText .= '<link rel="stylesheet" type="text/css" href="plugin.css">';
@@ -106,9 +137,9 @@ $htmlText .= '</table>';
 $htmlText .= '<br><br>';
 $htmlText .= '<p>';
 $htmlText .= buycourses_invoice_label($plugin, 'PurchaseDate', 'Purchase date').': <span style="font-weight:bold;">'
-    .api_convert_and_format_date($infoSale['date'], DATE_TIME_FORMAT_LONG_24H).'</span><br>';
+    .api_convert_and_format_date($paymentDate, DATE_TIME_FORMAT_LONG_24H).'</span><br>';
 $htmlText .= buycourses_invoice_label($plugin, 'ReceiptNumber', 'Receipt number').': <span style="font-weight:bold;">'
-    .buycourses_invoice_escape($infoSale['reference']).'</span><br>';
+    .buycourses_invoice_escape($receiptReference).'</span><br>';
 $htmlText .= buycourses_invoice_label($plugin, 'PaymentMethod', 'Payment method').': <span style="font-weight:bold;">'
     .buycourses_invoice_escape($paymentMethod).'</span><br>';
 if ('' !== $gatewayTransactionId) {
@@ -127,7 +158,7 @@ $header = [
 ];
 
 $row = [
-    buycourses_invoice_escape($infoSale['reference']),
+    buycourses_invoice_escape($receiptReference),
     buycourses_invoice_escape($infoSale['product_name']),
     $plugin->getPriceWithCurrencyFromIsoCode($priceWithoutTax, $isoCode),
     $plugin->getPriceWithCurrencyFromIsoCode($taxAmount, $isoCode).' ('.number_format($taxRate, 2).'%)',
@@ -146,7 +177,7 @@ $htmlText .= Display::table($header, $data, $attr);
 
 $htmlText .= '</body></html>';
 
-$fileName = api_replace_dangerous_char((string) $infoSale['reference']);
+$fileName = api_replace_dangerous_char($receiptReference);
 $params = [
     'filename' => $fileName,
     'pdf_title' => buycourses_invoice_label($plugin, 'Receipt', 'Receipt'),

@@ -905,6 +905,41 @@ switch ($action) {
             ];
         }
 
+        $recurringPayment = (int) ($serviceSale['recurring_payment'] ?? BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_DISABLED);
+        $recurringGateway = strtolower(trim((string) ($serviceSale['recurring_gateway'] ?? '')));
+        if ('' === $recurringGateway) {
+            $recurringGateway = match ((int) ($serviceSale['payment_type'] ?? 0)) {
+                BuyCoursesPlugin::PAYMENT_TYPE_STRIPE => 'stripe',
+                BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL => 'paypal',
+                default => '',
+            };
+        }
+        $hasRecurringReference = '' !== trim((string) ($serviceSale['gateway_subscription_id'] ?? ''))
+            || '' !== trim((string) ($serviceSale['recurring_profile_id'] ?? ''));
+        $isRenewalCancelled = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED === $recurringPayment
+            || '' !== trim((string) ($serviceSale['cancelled_at'] ?? ''));
+        $canCancelServiceRenewal = BuyCoursesPlugin::SERVICE_STATUS_COMPLETED === $status
+            && !empty($serviceSale['service']['renewable'])
+            && !$isRenewalCancelled
+            && in_array(
+                $recurringPayment,
+                [
+                    BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,
+                    BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED,
+                ],
+                true
+            )
+            && $hasRecurringReference
+            && in_array($recurringGateway, ['stripe', 'paypal'], true);
+        $plannedRenewalDate = trim((string) ($serviceSale['next_charge_date'] ?? $serviceSale['date_end'] ?? ''));
+        $formattedRenewalDate = '' !== $plannedRenewalDate
+            ? api_format_date(api_get_local_time($plannedRenewalDate), DATE_TIME_FORMAT_LONG_24H)
+            : '—';
+        $csrfToken = (string) Security::get_existing_token();
+        if ('' === $csrfToken) {
+            $csrfToken = (string) Security::get_token();
+        }
+
         header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'imageUrl' => (string) ($serviceSale['service']['image'] ?: Display::get_icon_path('session_default.png')),
@@ -914,6 +949,19 @@ switch ($action) {
                 ['title' => $plugin->get_lang('SaleInfo'), 'rows' => $saleRows],
                 ['title' => $plugin->get_lang('AuditHistory'), 'rows' => $auditRows],
             ],
+            'actions' => $canCancelServiceRenewal ? [[
+                'type' => 'cancel_service',
+                'label' => $plugin->get_lang('CancelService'),
+                'url' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/recurring_payment_process.php',
+                'saleId' => (int) $serviceSale['id'],
+                'token' => $csrfToken,
+                'confirmation' => sprintf(
+                    $plugin->get_lang('CancelRenewalConfirmation'),
+                    $formattedRenewalDate,
+                    12,
+                    $formattedRenewalDate
+                ),
+            ]] : [],
         ], \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
 
         break;

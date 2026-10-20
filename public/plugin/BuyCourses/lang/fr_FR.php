@@ -806,3 +806,5 @@ $strings['ExportReportPreviewLimited'] = 'Seules les %s premières lignes sont a
 $strings['ExportReportTotalAmount'] = 'Montant total';
 $strings['NoSalesFoundForExport'] = 'Aucune vente trouvée pour les filtres d’export sélectionnés.';
 $strings['GatewaySubscription'] = 'Abonnement gateway';
+$strings['CancelService'] = 'Annuler le service';
+$strings['PendingServicePurchaseAlreadyExists'] = 'Un achat en attente existe déjà pour ce service. Terminez-le ou annulez-le avant de commencer un nouvel achat.';

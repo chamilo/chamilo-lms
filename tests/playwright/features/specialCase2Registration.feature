@@ -32,28 +32,22 @@
 #   substance, but several details had rotted:
 #   - "pass1"/"pass2" are real ids (confirmed live), matched by resolveField's
 #     id tier — no change needed there.
-#   - extra_terms_ville (City) is the Geolocalization-type field that hit the
-#     bug above. It renders as a plain text input beside "Search for this
-#     location"/"My location" buttons; filling the visible text field alone
-#     (no need to trigger the map widget) is enough to pass validation —
-#     confirmed live, no coordinates required server-side.
-#   - extra_langue_cible ("Langue cible d'apprentissage") is a real <select>,
-#     but its options are NOT "french"/"german" as the Behat source assumed —
-#     confirmed live via the rendered <option> list: "French2" and "German2"
-#     (a platform-specific naming quirk, not a typo in this port).
+#   - extra_terms_ville (City) is a Geolocalization-type field. The CI form
+#     currently omits it despite the registration settings referencing it;
+#     the test intentionally still requires it until setup is corrected.
+#   - extra_langue_cible ("Langue cible d'apprentissage") is a native select.
+#     The current CI form offers "french" and "english", not "French2".
 #   - extra_filiere_user (sector) genuinely still has an "art et culture"
 #     option with value "art-et-culture", matching the Behat source exactly.
 #   - extra_terms_genre's "homme" (Monsieur) value also still matches.
-# - Radio-group and checkbox ids (genre, filiere_user, gdpr,
+# - Radio-group and checkbox ids (genre, filiere_user,
 #   platformuseconditions) are SERVER-GENERATED PER PAGE LOAD
 #   (FormValidator's `qf_<random>` scheme) — confirmed live by reloading the
 #   page twice and diffing the ids. Never hardcode one; always target by
 #   `[name="..."][value="..."]`, which is what the Behat source already did
-#   for the radios (kept as-is) and what this port adds for the two
-#   checkboxes (the source only clicked platformuseconditions; gdpr is
-#   checked too here since nothing in the source explains omitting it and
-#   leaving a real consent checkbox unchecked is not a meaningful test of
-#   the form).
+#   for the radios (kept as-is) and the platformuseconditions checkbox.
+#   The referenced gdpr extra field is not created by this suite and is
+#   absent from the current CI registration form.
 #
 # DIAGNOSIS FORM — STRUCTURE CONFIRMED STILL ACCURATE, SELECTORS KEPT:
 # - /main/search/search.php renders one legacy FormValidator form
@@ -103,7 +97,8 @@ Feature: Special case 2 — self-registration and diagnosis
   # The registration form this file drives depends on platform settings that
   # specialCase1PlatformSettings' teardown leaves in a different state (registration by
   # approval, terms on, no registration fields), so they are set here, not assumed.
-  # Terms are off because the "Validate" button only exists then (registration.php).
+  # Terms are disabled for this registration flow; double validation is a
+  # separate setting and must be enabled to display the "Validate" step.
   Scenario: Configure the registration settings
     Given I am a platform administrator
     And I wait for the page to be loaded
@@ -117,6 +112,12 @@ Feature: Special case 2 — self-registration and diagnosis
     Given I am on "/admin/settings/search_settings?keyword=allow_terms_conditions"
     And I wait for the page to be loaded
     And I select "No" from "form_allow_terms_conditions"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=allow_double_validation_in_registration"
+    And I wait for the page to be loaded
+    And I select "Yes" from "form_allow_double_validation_in_registration"
     And I press "Save settings"
     And I wait for the page to be loaded
 
@@ -160,8 +161,7 @@ Feature: Special case 2 — self-registration and diagnosis
     And I click the "input[name='extra_terms_genre[extra_terms_genre]'][value='homme']" element
     And I set hidden field "extra_terms_datedenaissance" to "1990-01-01"
     And I click the "input[name='extra_filiere_user[extra_filiere_user]'][value='art-et-culture']" element
-    And I select "French2" from "extra_langue_cible"
-    And I click the "input[name='extra_gdpr[extra_gdpr]']" element
+    And I select "french" from "extra_langue_cible"
     And I click the "input[name='extra_platformuseconditions[extra_platformuseconditions]']" element
     # Two clicks, not one: "Validate" is a plain <a href="javascript:void">
     # that only runs client-side field validation and, once everything
@@ -246,6 +246,12 @@ Feature: Special case 2 — self-registration and diagnosis
   # remaining special-case files were written against.
   Scenario: Restore the registration settings
     Given I am a platform administrator
+    And I wait for the page to be loaded
+
+    Given I am on "/admin/settings/search_settings?keyword=allow_double_validation_in_registration"
+    And I wait for the page to be loaded
+    And I select "No" from "form_allow_double_validation_in_registration"
+    And I press "Save settings"
     And I wait for the page to be loaded
 
     Given I am on "/admin/settings/search_settings?keyword=required_extra_fields_in_inscription"

@@ -999,7 +999,12 @@ final readonly class ExerciseQti2ImportService
         $total = 0.0;
 
         // Scores read from each blank's own mapping, when they can be matched to the blanks of the text.
-        $blankWeights = \is_array($questionData['blank_weights'] ?? null) ? array_values($questionData['blank_weights']) : [];
+        $blankWeights = [];
+        if (\is_array($questionData['blank_weights'] ?? null)) {
+            foreach ($questionData['blank_weights'] as $blankWeight) {
+                $blankWeights[] = is_numeric($blankWeight) ? (float) $blankWeight : null;
+            }
+        }
         if (\count($blankWeights) !== \count($matches[0])) {
             $blankWeights = [];
         }
@@ -1016,8 +1021,8 @@ final readonly class ExerciseQti2ImportService
             }
             $correct = trim((string) $correct);
             $weight = 1.0;
-            if (isset($blankWeights[$blankIndex]) && is_finite((float) $blankWeights[$blankIndex])) {
-                $weight = (float) $blankWeights[$blankIndex];
+            if (isset($blankWeights[$blankIndex]) && is_finite($blankWeights[$blankIndex])) {
+                $weight = $blankWeights[$blankIndex];
             } elseif ('' !== $correct && \array_key_exists($correct, $weightsMap)) {
                 $weight = $this->scoreFromValue($weightsMap[$correct]);
             }

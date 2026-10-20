@@ -74,6 +74,7 @@ Feature: Exercise QTI2 import
     Then I should see "1 questions, for a total score (all questions) of 6."
     When I click the "[title='Preview']" icon in the row for "Complete the sentence about Chamilo"
     Then the fill in blanks preview should show "PHP", "Linux|Windows|macOS" and "1.11||1.11.x"
+    And the QTI2 export of the question "Complete the sentence about Chamilo" should work in course "TEMP" but be refused in course "AIACT"
 
   Scenario: Export the fill in blanks exercise to QTI2 and import it again
     Given I am on course "TEMP" homepage

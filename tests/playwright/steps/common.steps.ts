@@ -2887,6 +2887,50 @@ Then(
   },
 )
 
+// Not ported — new, for toolExerciseQti2Import.feature (#1377): the legacy QTI2 export entry
+// points (admin.php?action=exportqti2&questionId= and exercise.php?action=exportqti2&exerciseId=)
+// must only export a question/exercise of the current course. The ids are read from the question's
+// "Edit" link on the current question list (/resources/exercise/{node}/{exercise}/questions/{question}/edit);
+// each course code is resolved to its id through the course redirect, like "I am on course {string} homepage".
+Then(
+  "the QTI2 export of the question {string} should work in course {string} but be refused in course {string}",
+  async ({ page }, questionTitle: string, ownCourse: string, otherCourse: string) => {
+    const row = page.locator("tr").filter({ has: page.getByText(questionTitle, { exact: true }) })
+    const editHref = await row.locator("a[href*='/questions/'][href*='/edit']").first().getAttribute("href")
+    const ids = /\/resources\/exercise\/\d+\/(\d+)\/questions\/(\d+)\/edit/.exec(editHref ?? "")
+    expect(ids, `no edit link for "${questionTitle}"`).not.toBeNull()
+    const [, exerciseId, questionId] = ids as RegExpExecArray
+
+    const courseId = async (code: string): Promise<string> => {
+      await gotoReliably(page, `/main/course_home/redirect.php?cidReq=${encodeURIComponent(code)}`)
+      const match = /\/course\/(\d+)\//.exec(new URL(page.url()).pathname) ?? /[?&]cid=(\d+)/.exec(page.url())
+      expect(match, `course id of ${code} not found in ${page.url()}`).not.toBeNull()
+      return (match as RegExpExecArray)[1]
+    }
+    const exportUrls = (cid: string) => [
+      `/main/exercise/admin.php?cid=${cid}&sid=0&action=exportqti2&questionId=${questionId}`,
+      `/main/exercise/exercise.php?cid=${cid}&sid=0&action=exportqti2&exerciseId=${exerciseId}`,
+    ]
+    const isZip = (body: Buffer) => body.length > 4 && "PK" === body.subarray(0, 2).toString("latin1")
+
+    const ownId = await courseId(ownCourse)
+    for (const url of exportUrls(ownId)) {
+      const response = await page.request.get(url)
+      expect(response.status(), url).toBe(200)
+      expect(isZip(await response.body()), `${url} should return a zip`).toBe(true)
+    }
+    const otherId = await courseId(otherCourse)
+    expect(otherId).not.toBe(ownId)
+    for (const url of exportUrls(otherId)) {
+      const response = await page.request.get(url)
+      const body = await response.body()
+      expect(isZip(body), `${url} must not export another course's content`).toBe(false)
+      // api_not_allowed() renders the usual "not allowed" page.
+      expect(body.toString("utf8"), url).toContain("You are not allowed to see this page")
+    }
+  },
+)
+
 // Not ported — new, for toolGroup.feature's group_category action icons
 // (edit/create-groups/delete). Unlike a group ROW (a real `<tr>`), a
 // category's own header is a `<div class="page-header section-header">`

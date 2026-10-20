@@ -247,6 +247,15 @@ if ($is_allowedToEdit && !empty($action)) {
             if ($limitTeacherAccess && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }
+            // Only export an exercise of the current course (and session), not any exercise id.
+            $exerciseInCourse = Container::getQuizRepository()->findInCourseContext(
+                (int) $exerciseId,
+                api_get_course_entity(),
+                api_get_session_entity()
+            );
+            if (null === $exerciseInCourse) {
+                api_not_allowed(true);
+            }
             require_once __DIR__.'/export/qti2/qti2_export.php';
             $export = export_exercise_to_qti($exerciseId, true);
 

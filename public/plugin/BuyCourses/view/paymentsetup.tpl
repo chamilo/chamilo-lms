@@ -157,6 +157,12 @@
             </a>
             {% endif %}
 
+            {% if btcpay_enable %}
+            <a href="#btcpay-config" class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:bg-support-2 hover:text-primary">
+                BTCPay Server
+            </a>
+            {% endif %}
+
             {% if cecabank_enable %}
             <a href="#cecabank-config" class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:bg-support-2 hover:text-primary">
                 Cecabank
@@ -411,6 +417,22 @@
             <div>
                 {{ stripe_form }}
             </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if btcpay_enable %}
+    <section id="btcpay-config" class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm">
+        <div class="border-b border-gray-25 bg-gray-15 px-6 py-4">
+            <h2 class="text-lg font-semibold text-gray-90">BTCPay Server</h2>
+        </div>
+        <div class="space-y-4 p-6">
+            <p class="text-sm leading-6 text-gray-90">
+                {{ 'BtcPaySetupHelp'|get_plugin_lang('BuyCoursesPlugin') }}
+            </p>
+            <p class="text-sm font-semibold {{ btcpay_configured ? 'text-success' : 'text-danger' }}">
+                {{ (btcpay_configured ? 'BtcPayReady' : 'BtcPayNotReady')|get_plugin_lang('BuyCoursesPlugin') }}
+            </p>
         </div>
     </section>
     {% endif %}

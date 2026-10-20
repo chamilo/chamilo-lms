@@ -408,7 +408,10 @@ $tpvRedsysEnable = 'true' === $plugin->get('tpv_redsys_enable');
 $commissionsEnable = 'true' === $plugin->get('commissions_enable');
 $culqiEnable = 'true' === $plugin->get('culqi_enable');
 $stripeEnable = 'true' === $plugin->get('stripe_enable');
+$btcpayEnable = 'true' === $plugin->get('btcpay_enable');
 $cecabankEnable = 'true' === $plugin->get('cecabank_enable');
+require_once __DIR__.'/btcpay_client.php';
+$btcpayConfigured = BuyCoursesBtcPayClient::isConfigured();
 $taxEnable = 'true' === $plugin->get('tax_enable');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
@@ -1027,6 +1030,7 @@ $enabledPaymentMethods = array_filter([
     'TPV Redsys' => $tpvRedsysEnable,
     'Culqi' => $culqiEnable,
     'Stripe' => $stripeEnable,
+    'BTCPay Server' => $btcpayEnable,
     'Cecabank' => $cecabankEnable,
 ]);
 
@@ -1084,6 +1088,8 @@ $tpl->assign('transfer_enable', $transferEnable);
 $tpl->assign('culqi_enable', $culqiEnable);
 $tpl->assign('tpv_redsys_enable', $tpvRedsysEnable);
 $tpl->assign('stripe_enable', $stripeEnable);
+$tpl->assign('btcpay_enable', $btcpayEnable);
+$tpl->assign('btcpay_configured', $btcpayConfigured);
 $tpl->assign('cecabank_enable', $cecabankEnable);
 
 $content = $tpl->fetch('BuyCourses/view/paymentsetup.tpl');

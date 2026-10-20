@@ -72,6 +72,7 @@ class BuyCoursesPlugin extends Plugin
     public const PAYMENT_TYPE_TPV_REDSYS = 4;
     public const PAYMENT_TYPE_STRIPE = 5;
     public const PAYMENT_TYPE_TPV_CECABANK = 6;
+    public const PAYMENT_TYPE_BTCPAY = 7;
     public const PAYOUT_STATUS_CANCELED = 2;
     public const PAYOUT_STATUS_PENDING = 0;
     public const PAYOUT_STATUS_COMPLETED = 1;
@@ -179,6 +180,7 @@ class BuyCoursesPlugin extends Plugin
                 'use_currency_symbol' => 'boolean',
                 'tpv_redsys_enable' => 'boolean',
                 'stripe_enable' => 'boolean',
+                'btcpay_enable' => 'boolean',
                 'cecabank_enable' => 'boolean',
             ]
         );
@@ -528,7 +530,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function isEnabled(): bool
     {
-        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable');
+        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable') || 'true' === $this->get('btcpay_enable');
     }
 
     /**
@@ -2191,12 +2193,18 @@ class BuyCoursesPlugin extends Plugin
         $paypal = 'true' === $this->get('paypal_enable');
         $transfer = 'true' === $this->get('transfer_enable');
         $stripe = 'true' === $this->get('stripe_enable');
+        $btcpay = 'true' === $this->get('btcpay_enable');
+
+        if ($btcpay) {
+            require_once __DIR__.'/btcpay_client.php';
+            $btcpay = BuyCoursesBtcPayClient::isConfigured();
+        }
         $culqi = 'true' === $this->get('culqi_enable');
         $cecabank = 'true' === $this->get('cecabank_enable');
         $tpv_redsys = 'true' === $this->get('tpv_redsys_enable');
         $hideFree = 'true' === $this->get('hide_free_text');
 
-        if ($paypal || $transfer || $stripe || $culqi || $cecabank || $tpv_redsys) {
+        if ($paypal || $transfer || $stripe || $btcpay || $culqi || $cecabank || $tpv_redsys) {
             $item = $this->getItemByProduct($productId, $productType);
             $html = '<div class="buycourses-price">';
             if ($item) {
@@ -3295,6 +3303,7 @@ class BuyCoursesPlugin extends Plugin
                 self::PAYMENT_TYPE_TPV_REDSYS,
                 self::PAYMENT_TYPE_STRIPE,
                 self::PAYMENT_TYPE_TPV_CECABANK,
+                self::PAYMENT_TYPE_BTCPAY,
             ]
         )
         ) {
@@ -3306,6 +3315,14 @@ class BuyCoursesPlugin extends Plugin
 
         if (empty($item)) {
             return null;
+        }
+
+        if (self::PAYMENT_TYPE_BTCPAY === $paymentType) {
+            require_once __DIR__.'/btcpay_client.php';
+
+            if ('true' !== $this->get('btcpay_enable') || !BuyCoursesBtcPayClient::isConfigured()) {
+                return null;
+            }
         }
 
         $productName = '';
@@ -3612,7 +3629,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get payment types.
      */
-    public function getPaymentTypes(bool $onlyActive = false): array
+    public function getPaymentTypes(bool $onlyActive = false, bool $includeBtcPay = false): array
     {
         $types = [
             self::PAYMENT_TYPE_PAYPAL => 'PayPal',
@@ -3621,6 +3638,7 @@ class BuyCoursesPlugin extends Plugin
             self::PAYMENT_TYPE_TPV_REDSYS => $this->get_lang('TpvPayment'),
             self::PAYMENT_TYPE_STRIPE => 'Stripe',
             self::PAYMENT_TYPE_TPV_CECABANK => $this->get_lang('TpvCecabank'),
+            self::PAYMENT_TYPE_BTCPAY => 'BTCPay Server',
         ];
 
         if (!$onlyActive) {
@@ -3651,6 +3669,16 @@ class BuyCoursesPlugin extends Plugin
 
         if ('true' !== $this->get('cecabank_enable')) {
             unset($types[self::PAYMENT_TYPE_TPV_CECABANK]);
+        }
+
+        if (!$includeBtcPay || 'true' !== $this->get('btcpay_enable')) {
+            unset($types[self::PAYMENT_TYPE_BTCPAY]);
+        } else {
+            require_once __DIR__.'/btcpay_client.php';
+
+            if (!BuyCoursesBtcPayClient::isConfigured()) {
+                unset($types[self::PAYMENT_TYPE_BTCPAY]);
+            }
         }
 
         return $types;

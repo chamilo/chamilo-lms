@@ -20,6 +20,7 @@ $transferEnabled = 'true' === $plugin->get('transfer_enable');
 $culqiEnabled = 'true' === $plugin->get('culqi_enable');
 $tpvRedsysEnable = 'true' === $plugin->get('tpv_redsys_enable');
 $stripeEnable = 'true' === $plugin->get('stripe_enable');
+$btcpayEnable = 'true' === $plugin->get('btcpay_enable');
 $tpvCecabankEnable = 'true' === $plugin->get('cecabank_enable');
 
 $registrationUrl = api_get_path(WEB_CODE_PATH).'auth/registration.php';
@@ -41,6 +42,7 @@ if (
     !$culqiEnabled &&
     !$tpvRedsysEnable &&
     !$stripeEnable &&
+    !$btcpayEnable &&
     !$tpvCecabankEnable
 ) {
     api_not_allowed(true);
@@ -135,7 +137,7 @@ if ($form->validate()) {
     $paymentType = isset($formValues['payment_type']) ? (int) $formValues['payment_type'] : 0;
     $submittedCouponId = isset($formValues['c']) ? (int) $formValues['c'] : null;
 
-    if ($paymentType <= 0) {
+    if (!array_key_exists($paymentType, $plugin->getPaymentTypes(true, true))) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('NeedToSelectPaymentType'), 'error', false)
         );
@@ -177,7 +179,7 @@ if ($form->validate()) {
     exit;
 }
 
-$paymentTypesOptions = $plugin->getPaymentTypes(true);
+$paymentTypesOptions = $plugin->getPaymentTypes(true, true);
 
 $count = count($paymentTypesOptions);
 if (0 === $count) {

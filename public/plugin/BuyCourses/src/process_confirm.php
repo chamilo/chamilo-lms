@@ -549,6 +549,119 @@ switch ($sale['payment_type']) {
 
         break;
 
+    case BuyCoursesPlugin::PAYMENT_TYPE_BTCPAY:
+        require_once __DIR__.'/btcpay_client.php';
+
+        if (
+            'true' !== $plugin->get('btcpay_enable')
+            || !BuyCoursesBtcPayClient::isConfigured()
+            || BuyCoursesPlugin::SALE_STATUS_PENDING !== (int) $sale['status']
+            || !in_array(
+                (int) $sale['product_type'],
+                [BuyCoursesPlugin::PRODUCT_TYPE_COURSE, BuyCoursesPlugin::PRODUCT_TYPE_SESSION],
+                true
+            )
+        ) {
+            api_not_allowed(true);
+        }
+
+        $btcpayForm = new FormValidator('btcpay_confirm', 'POST', api_get_self());
+        $terms = (string) ($globalParameters['terms_and_conditions'] ?? '');
+
+        if ('' !== trim($terms)) {
+            $btcpayForm->addCheckBox('accept_terms', null, $plugin->get_lang('IConfirmIReadAndAcceptTermsAndCondition'));
+        }
+
+        $btcpayForm->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
+        $btcpayForm->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
+
+        if (!$btcpayForm->validate()) {
+            $template = new Template();
+            $template->assign('sale', $sale);
+            $template->assign('currency', $currency);
+            $template->assign('terms', $terms);
+            $template->assign('form', $btcpayForm->returnForm());
+            $template->assign('content', $template->fetch('BuyCourses/view/btcpay_confirm.tpl'));
+            $template->display_one_col_template();
+            break;
+        }
+
+        $formValues = $btcpayForm->getSubmitValues();
+
+        if (isset($formValues['cancel'])) {
+            if (!str_starts_with((string) $sale['reference'], 'btcpay:')) {
+                $plugin->cancelSale($saleId);
+            }
+            unset($_SESSION['bc_sale_id'], $_SESSION['bc_coupon_id']);
+            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
+            exit;
+        }
+
+        if ('' !== trim($terms) && empty($formValues['accept_terms'])) {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('IConfirmIReadAndAcceptTermsAndCondition'), 'error', false)
+            );
+            header('Location: '.api_get_self());
+            exit;
+        }
+
+        try {
+            $btcpay = BuyCoursesBtcPayClient::fromEnvironment();
+            $connection = Database::getManager()->getConnection();
+            $lockName = 'bc_btcpay_sale_'.$saleId;
+
+            if ('1' !== (string) $connection->fetchOne('SELECT GET_LOCK(?, 5)', [$lockName])) {
+                throw new RuntimeException('BTCPay checkout is already starting for this sale.');
+            }
+
+            try {
+                $sale = $plugin->getSale($saleId);
+
+                if (
+                    empty($sale)
+                    || (int) $sale['user_id'] !== (int) api_get_user_id()
+                    || BuyCoursesPlugin::SALE_STATUS_PENDING !== (int) $sale['status']
+                ) {
+                    throw new RuntimeException('This sale cannot start a BTCPay checkout.');
+                }
+
+                $existingReference = (string) $sale['reference'];
+
+                if (str_starts_with($existingReference, 'btcpay:')) {
+                    $invoice = $btcpay->getInvoice(substr($existingReference, 7));
+
+                    if (!in_array((string) ($invoice['status'] ?? ''), ['New', 'Processing', 'Settled'], true)) {
+                        throw new RuntimeException('Existing BTCPay invoice is no longer payable.');
+                    }
+                } else {
+                    $returnUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/btcpay_return.php?sale_id='.$saleId;
+                    $invoice = $btcpay->createInvoice($sale, (string) $currency['iso_code'], $returnUrl);
+
+                    if (!$plugin->updateSaleReference($saleId, 'btcpay:'.$invoice['id'])) {
+                        throw new RuntimeException('Could not save the BTCPay invoice reference.');
+                    }
+                }
+            } finally {
+                $connection->fetchOne('SELECT RELEASE_LOCK(?)', [$lockName]);
+            }
+
+            $checkoutLink = (string) ($invoice['checkoutLink'] ?? '');
+
+            if (!$btcpay->isTrustedCheckoutLink($checkoutLink)) {
+                throw new RuntimeException('BTCPay returned an invalid checkout link.');
+            }
+
+            header('Location: '.$checkoutLink, true, 303);
+            exit;
+        } catch (Throwable $exception) {
+            error_log('[BuyCourses][BTCPay] Checkout failed for sale '.$saleId.': '.$exception->getMessage());
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('BtcPayCheckoutError'), 'error', false)
+            );
+            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
+            exit;
+        }
+
     case BuyCoursesPlugin::PAYMENT_TYPE_TPV_CECABANK:
         $buyingCourse = false;
         $buyingSession = false;

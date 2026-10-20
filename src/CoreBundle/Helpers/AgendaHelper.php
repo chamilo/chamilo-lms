@@ -8,9 +8,13 @@ namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Security\CourseAccessResolver;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 readonly class AgendaHelper
@@ -23,13 +27,15 @@ readonly class AgendaHelper
         private CidReqHelper $cidReqHelper,
         private UserHelper $userHelper,
         private RequestStack $requestStack,
+        private Security $security,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
      * Whether the current user may add an event with these resource links to the agenda of
      * each course they name: the course editors, or anyone with access to the course when the
      * course setting "Allow learners to edit agenda" is on (the rule of the agenda add button).
-     * Links without a course (personal events and their invitations) are not restricted here.
+     * A user link is an invitation, see canInviteUser().
      */
     public function canAddLinks(array $links): bool
     {
@@ -47,6 +53,10 @@ readonly class AgendaHelper
             if (empty($link['cid'])) {
                 // A session or group link always belongs to a course.
                 if (!empty($link['sid']) || !empty($link['gid'])) {
+                    return false;
+                }
+
+                if (!empty($link['uid']) && !$this->canInviteUser($user, (int) $link['uid'])) {
                     return false;
                 }
 
@@ -80,6 +90,39 @@ readonly class AgendaHelper
         }
 
         return true;
+    }
+
+    /**
+     * An invitation shows the event in the invitee's own calendar, so it is limited to the
+     * contacts the invitation picker offers, unless the platform lets users message everyone.
+     * A pending request is not a contact yet.
+     */
+    private function canInviteUser(User $user, int $inviteeId): bool
+    {
+        if ($inviteeId === $user->getId()
+            || $this->security->isGranted('ROLE_ADMIN')
+            || 'true' === $this->settingsManager->getSetting('message.allow_send_message_to_all_platform_users')
+        ) {
+            return true;
+        }
+
+        $relations = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(relation.id)')
+            ->from(UserRelUser::class, 'relation')
+            ->where('(relation.user = :user AND relation.friend = :invitee) OR (relation.user = :invitee AND relation.friend = :user)')
+            ->andWhere('relation.relationType NOT IN (:excludedTypes)')
+            ->setParameter('user', (int) $user->getId())
+            ->setParameter('invitee', $inviteeId)
+            ->setParameter('excludedTypes', [
+                UserRelUser::USER_RELATION_TYPE_DELETED,
+                UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST,
+                UserRelUser::USER_RELATION_TYPE_HRM_REQUEST,
+            ])
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $relations > 0;
     }
 
     /**

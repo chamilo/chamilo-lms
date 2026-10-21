@@ -556,9 +556,12 @@ switch ($action) {
         // Getting information of the current exercise.
         $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
 
-        // The attempt must belong to the current user.
-        if (!empty($exercise_stat_info) && (int) $exercise_stat_info['exe_user_id'] !== (int) $currentUserId) {
+        // The attempt must exist and belong to the current user.
+        if (empty($exercise_stat_info) || (int) $exercise_stat_info['exe_user_id'] !== (int) $currentUserId) {
             echo json_encode(['error' => true]);
+            if ($debug) {
+                error_log("User $currentUserId cannot save attempt #$exeId: not found or not the owner");
+            }
             exit;
         }
 

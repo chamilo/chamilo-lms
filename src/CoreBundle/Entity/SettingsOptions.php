@@ -21,10 +21,10 @@ class SettingsOptions
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'variable', type: 'string', length: 190, nullable: false)]
+    #[ORM\Column(name: 'variable', type: 'string', length: 255, nullable: false)]
     protected string $variable;
 
-    #[ORM\Column(name: 'value', type: 'string', length: 190, nullable: true)]
+    #[ORM\Column(name: 'value', type: 'string', length: 255, nullable: true)]
     protected ?string $value = null;
 
     #[ORM\Column(name: 'display_text', type: 'string', length: 255, nullable: false)]

@@ -90,6 +90,10 @@ final readonly class GradebookLearnerSkillActionProcessor implements ProcessorIn
         if ($existing instanceof SkillRelUser) {
             $this->entityManager->remove($existing);
         } else {
+            if (!$skill->isAcquirable()) {
+                throw new BadRequestHttpException('The selected skill cannot be acquired.');
+            }
+
             $issue = (new SkillRelUser())
                 ->setUser($learner)
                 ->setSkill($skill)

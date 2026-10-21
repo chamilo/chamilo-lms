@@ -17,15 +17,18 @@ use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentSessionCoachAccess;
 use Chamilo\CoreBundle\Service\Assignment\MobileAssignmentSubmissionAccess;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
+use Chamilo\CourseBundle\Repository\CStudentPublicationFollowRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -36,6 +39,7 @@ use Mpdf\Output\Destination;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -729,7 +733,8 @@ class StudentPublicationController extends AbstractController
         CStudentPublicationRepository $repo,
         CStudentPublicationCorrectionRepository $correctionRepo,
         EntityManagerInterface $em,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        KernelInterface $kernel
     ): JsonResponse {
         $assignment = $repo->find($assignmentId);
         if (!$assignment) {
@@ -745,80 +750,84 @@ class StudentPublicationController extends AbstractController
         }
 
         $folder = uniqid('corrections_', true);
-        $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
+        $destinationDir = $kernel->getCacheDir().'/'.$folder;
         mkdir($destinationDir, 0777, true);
 
-        $zip = new ZipArchive();
-        $zip->open($file->getPathname());
-        $zip->extractTo($destinationDir);
-        $zip->close();
+        try {
+            $zip = new ZipArchive();
+            $zip->open($file->getPathname());
+            $zip->extractTo($destinationDir);
+            $zip->close();
 
-        [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
+            [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
 
-        $matchMap = [];
-        foreach ($submissions as $submission) {
-            $date = $submission->getSentDate()?->format('Y-m-d_H-i') ?? 'unknown';
-            $username = $submission->getUser()?->getUsername() ?? 'unknown';
-            $title = $this->cleanFilename($submission->getTitle() ?? '');
-            $title = preg_replace('/_[a-f0-9]{10,}$/', '', pathinfo($title, PATHINFO_FILENAME));
-            $key = \sprintf('%s_%s_%s', $date, $username, $title);
-            $matchMap[$key] = $submission;
-        }
+            $matchMap = [];
+            foreach ($submissions as $submission) {
+                $date = $submission->getSentDate()?->format('Y-m-d_H-i') ?? 'unknown';
+                $username = $submission->getUser()?->getUsername() ?? 'unknown';
+                $title = $this->cleanFilename($submission->getTitle() ?? '');
+                $title = preg_replace('/_[a-f0-9]{10,}$/', '', pathinfo($title, PATHINFO_FILENAME));
+                $key = \sprintf('%s_%s_%s', $date, $username, $title);
+                $matchMap[$key] = $submission;
+            }
 
-        $finder = new Finder();
-        $finder->files()->in($destinationDir);
+            $finder = new Finder();
+            $finder->files()->in($destinationDir);
 
-        $uploaded = 0;
-        $skipped = [];
+            $uploaded = 0;
+            $skipped = [];
 
-        foreach ($finder as $foundFile) {
-            $filename = $foundFile->getFilename();
-            $nameOnly = pathinfo($filename, PATHINFO_FILENAME);
-            $nameOnly = preg_replace('/_[a-f0-9]{10,}$/', '', $nameOnly);
+            foreach ($finder as $foundFile) {
+                $filename = $foundFile->getFilename();
+                $nameOnly = pathinfo($filename, PATHINFO_FILENAME);
+                $nameOnly = preg_replace('/_[a-f0-9]{10,}$/', '', $nameOnly);
 
-            $matched = false;
-            foreach ($matchMap as $prefix => $submission) {
-                if ($nameOnly === $prefix) {
-                    if ($submission->getCorrection()) {
-                        $em->remove($submission->getCorrection());
-                        $em->flush();
+                $matched = false;
+                foreach ($matchMap as $prefix => $submission) {
+                    if ($nameOnly === $prefix) {
+                        if ($submission->getCorrection()) {
+                            $em->remove($submission->getCorrection());
+                            $em->flush();
+                        }
+
+                        $uploadedFile = new UploadedFile(
+                            $foundFile->getRealPath(),
+                            $filename,
+                            null,
+                            null,
+                            true
+                        );
+
+                        $correction = new CStudentPublicationCorrection();
+                        $correction->setTitle($filename);
+                        $correction->setUploadFile($uploadedFile);
+                        $correction->setParentResourceNode($submission->getResourceNode()->getId());
+
+                        $em->persist($correction);
+
+                        $submission->setExtensions($filename);
+                        $submission->setDescription('Correction uploaded');
+                        $submission->setQualification(0);
+                        $submission->setDateOfQualification(new DateTime());
+                        $submission->setAccepted(true);
+                        $em->persist($submission);
+
+                        $uploaded++;
+                        $matched = true;
+
+                        break;
                     }
+                }
 
-                    $uploadedFile = new UploadedFile(
-                        $foundFile->getRealPath(),
-                        $filename,
-                        null,
-                        null,
-                        true
-                    );
-
-                    $correction = new CStudentPublicationCorrection();
-                    $correction->setTitle($filename);
-                    $correction->setUploadFile($uploadedFile);
-                    $correction->setParentResourceNode($submission->getResourceNode()->getId());
-
-                    $em->persist($correction);
-
-                    $submission->setExtensions($filename);
-                    $submission->setDescription('Correction uploaded');
-                    $submission->setQualification(0);
-                    $submission->setDateOfQualification(new DateTime());
-                    $submission->setAccepted(true);
-                    $em->persist($submission);
-
-                    $uploaded++;
-                    $matched = true;
-
-                    break;
+                if (!$matched) {
+                    $skipped[] = $filename;
                 }
             }
 
-            if (!$matched) {
-                $skipped[] = $filename;
-            }
+            $em->flush();
+        } finally {
+            (new Filesystem())->remove($destinationDir);
         }
-
-        $em->flush();
 
         return new JsonResponse([
             'success' => true,
@@ -826,6 +835,48 @@ class StudentPublicationController extends AbstractController
             'skipped' => \count($skipped),
             'skipped_files' => $skipped,
         ]);
+    }
+
+    /**
+     * Whether the current teacher follows the assignment, i.e. gets an e-mail when a
+     * learner comments on one of its submissions.
+     */
+    #[Route('/{assignmentId}/follow', name: 'chamilo_core_assignment_follow_status', requirements: ['assignmentId' => '\d+'], methods: ['GET'])]
+    public function getFollowStatus(
+        int $assignmentId,
+        CStudentPublicationFollowRepository $followRepository,
+        UserHelper $userHelper,
+        AssignmentSessionCoachAccess $sessionCoachAccess
+    ): JsonResponse {
+        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper, $sessionCoachAccess);
+
+        return new JsonResponse(['following' => $followRepository->isFollowing($assignment, $user)]);
+    }
+
+    #[Route('/{assignmentId}/follow', name: 'chamilo_core_assignment_follow', requirements: ['assignmentId' => '\d+'], methods: ['POST'])]
+    public function followAssignment(
+        int $assignmentId,
+        CStudentPublicationFollowRepository $followRepository,
+        UserHelper $userHelper,
+        AssignmentSessionCoachAccess $sessionCoachAccess
+    ): JsonResponse {
+        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper, $sessionCoachAccess);
+        $followRepository->follow($assignment, $user);
+
+        return new JsonResponse(['following' => true]);
+    }
+
+    #[Route('/{assignmentId}/follow', name: 'chamilo_core_assignment_unfollow', requirements: ['assignmentId' => '\d+'], methods: ['DELETE'])]
+    public function unfollowAssignment(
+        int $assignmentId,
+        CStudentPublicationFollowRepository $followRepository,
+        UserHelper $userHelper,
+        AssignmentSessionCoachAccess $sessionCoachAccess
+    ): JsonResponse {
+        [$assignment, $user] = $this->resolveFollowableAssignment($assignmentId, $userHelper, $sessionCoachAccess);
+        $followRepository->unfollow($assignment, $user);
+
+        return new JsonResponse(['following' => false]);
     }
 
     #[Route('/ai/text-providers', name: 'chamilo_core_assignment_ai_text_providers', methods: ['GET'])]
@@ -1065,6 +1116,49 @@ class StudentPublicationController extends AbstractController
             'suggestedScore' => $result['suggestedScore'] ?? null,
             'mode' => (string) ($result['mode'] ?? $requestedMode),
         ]);
+    }
+
+    /**
+     * Only an assignment (a top-level folder, not a submission) can be followed, and only by
+     * someone allowed to edit it (a teacher of its course, its creator or an admin, through the
+     * EDIT vote) or by a coach of the request's session (sid) on the request's course (cid),
+     * when that session holds the course and the assignment is available in it. A coach of
+     * another session, or a teacher of another course, is refused.
+     *
+     * @return array{CStudentPublication, User}
+     */
+    private function resolveFollowableAssignment(
+        int $assignmentId,
+        UserHelper $userHelper,
+        AssignmentSessionCoachAccess $sessionCoachAccess
+    ): array {
+        $assignment = $this->studentPublicationRepo->find($assignmentId);
+        if (!$assignment instanceof CStudentPublication
+            || 'folder' !== $assignment->getFiletype()
+            || null !== $assignment->getPublicationParent()
+        ) {
+            throw $this->createNotFoundException('Assignment not found.');
+        }
+
+        $user = $userHelper->getCurrent();
+        if (!$user instanceof User) {
+            throw new AccessDeniedHttpException();
+        }
+
+        if ($this->isGranted('EDIT', $assignment->getResourceNode())) {
+            return [$assignment, $user];
+        }
+
+        if ($sessionCoachAccess->isCoachInSessionById(
+            $assignment,
+            $user,
+            (int) $this->cidReqHelper->getCourseId(),
+            (int) $this->cidReqHelper->getSessionId()
+        )) {
+            return [$assignment, $user];
+        }
+
+        throw $this->createAccessDeniedException();
     }
 
     /**

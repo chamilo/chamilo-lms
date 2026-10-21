@@ -21264,8 +21264,8 @@ msgstr "Isivumelwano semthetho siya kuvela ngexesha lokungena okanye xa ungena k
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Imigaqo yakho nemiqathango ilungilele ukutyikitywa"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Molo,<br />Umfundisi wakho ukuthumelele imigaqo yakho nemiqathango. Ungayityikitya ngokulandela le URL: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Molo %s,<br />Umfundisi wakho ukuthumelele imigaqo yakho nemiqathango. Ungayityikitya ngokulandela le URL: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Umsebenzisi %s utyikitye isivumelwano."

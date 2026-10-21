@@ -44,9 +44,9 @@ final readonly class ConfigurableSessionHandler implements SessionHandlerInterfa
         return $this->getHandler()->destroy($id);
     }
 
-    public function gc(int $maxLifetime): false|int
+    public function gc(int $max_lifetime): false|int
     {
-        return $this->getHandler()->gc($maxLifetime);
+        return $this->getHandler()->gc($max_lifetime);
     }
 
     public function validateId(#[SensitiveParameter] string $id): bool

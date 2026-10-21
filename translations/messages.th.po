@@ -21269,8 +21269,8 @@ msgstr "ข้อตกลงทางกฎหมายจะปรากฏร
 msgid "Your terms and conditions are ready to be signed"
 msgstr "เงื่อนไขข้อกำหนดของคุณพร้อมสำหรับการลงนาม"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "สวัสดี,<br />ติวเตอร์ของคุณส่งเงื่อนไขข้อกำหนดให้คุณ คุณสามารถลงนามได้ตาม URL นี้: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "สวัสดี %s,<br />ติวเตอร์ของคุณส่งเงื่อนไขข้อกำหนดให้คุณ คุณสามารถลงนามได้ตาม URL นี้: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "ผู้ใช้ %s ลงนามข้อตกลงแล้ว"

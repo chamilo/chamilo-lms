@@ -630,6 +630,12 @@ class IndexBlocksController extends BaseController
         ];
 
         $items[] = [
+            'class' => 'item-survey-template-admin',
+            'route' => ['name' => 'SurveyTemplateList'],
+            'label' => $this->translator->trans('Survey templates'),
+        ];
+
+        $items[] = [
             'class' => 'item-system-template-admin',
             'url' => '/main/admin/settings.php?'.http_build_query(['category' => 'Templates']),
             'label' => $this->translator->trans('System templates'),
@@ -681,6 +687,14 @@ class IndexBlocksController extends BaseController
             'url' => '/tickets',
             'label' => $this->translator->trans('Tickets'),
         ];
+
+        if ('true' === $this->settingsManager->getSetting('ticket.ticket_support_bot_enabled')) {
+            $items[] = [
+                'class' => 'item-support-bot',
+                'route' => ['name' => 'SupportBotTreeList'],
+                'label' => $this->translator->trans('Support bot'),
+            ];
+        }
 
         return $items;
     }

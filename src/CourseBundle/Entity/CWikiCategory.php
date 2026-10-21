@@ -24,7 +24,7 @@ class CWikiCategory
     #[ORM\Column(name: 'id', type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string')]
+    #[ORM\Column(name: 'title', type: 'text')]
     private string $title;
 
     #[ORM\ManyToMany(targetEntity: CWiki::class, mappedBy: 'categories')]

@@ -33,7 +33,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     #[ORM\Column(name: 'id', type: 'integer')]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string')]
+    #[ORM\Column(name: 'title', type: 'text')]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]

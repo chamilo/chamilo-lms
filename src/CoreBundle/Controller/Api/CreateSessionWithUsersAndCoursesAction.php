@@ -15,12 +15,16 @@ use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Throwable;
 
 #[AsController]
 class CreateSessionWithUsersAndCoursesAction
@@ -29,7 +33,10 @@ class CreateSessionWithUsersAndCoursesAction
         private EntityManagerInterface $em,
         private ValidatorInterface $validator,
         private UserRepository $userRepo,
-        private CourseRepository $courseRepo
+        private CourseRepository $courseRepo,
+        private GradebookCertificateGenerator $certificateGenerator,
+        private UserHelper $userHelper,
+        private LoggerInterface $logger,
     ) {}
 
     public function __invoke(CreateSessionWithUsersAndCoursesInput $data): Session
@@ -77,6 +84,7 @@ class CreateSessionWithUsersAndCoursesAction
 
         $relCourses = [];
         $courses = [];
+        $copiedGradebooks = [];
         foreach ($data->getCourseIds() as $courseId) {
             $course = $this->courseRepo->find($courseId);
             if (!$course) {
@@ -94,7 +102,7 @@ class CreateSessionWithUsersAndCoursesAction
             $relCourses[$courseId] = $relCourse;
 
             if ($data->getCopyEvaluation()) {
-                $this->copyGradebookFromBaseCourse($course, $session);
+                $copiedGradebooks[$courseId] = $this->copyGradebookFromBaseCourse($course, $session);
             }
         }
 
@@ -153,6 +161,20 @@ class CreateSessionWithUsersAndCoursesAction
 
         $this->em->flush();
 
+        foreach ($copiedGradebooks as $courseId => $categories) {
+            // The session is already saved: a failed certificate copy must not turn it into an
+            // error the caller retries, which would create the same session twice.
+            try {
+                $this->copyCertificateFromBaseCourse($courses[$courseId], $session, $categories);
+            } catch (Throwable $exception) {
+                $this->logger->error('Unable to copy the base course certificate into the new session.', [
+                    'sessionId' => $session->getId(),
+                    'courseId' => $courseId,
+                    'exception' => $exception,
+                ]);
+            }
+        }
+
         return $session;
     }
 
@@ -161,13 +183,17 @@ class CreateSessionWithUsersAndCoursesAction
      * into the given session, mirroring the "Import gradebook from base course"
      * checkbox in add_courses_to_session.php.
      */
-    private function copyGradebookFromBaseCourse(Course $course, Session $session): void
+    /**
+     * @return array<int, array{base: GradebookCategory, copy: GradebookCategory}>
+     */
+    private function copyGradebookFromBaseCourse(Course $course, Session $session): array
     {
         $categories = $this->em->getRepository(GradebookCategory::class)
             ->findBy(['course' => $course->getId(), 'session' => null])
         ;
 
         $newCategories = [];
+        $copies = [];
         foreach ($categories as $category) {
             $newCategory = new GradebookCategory();
             $newCategory
@@ -183,6 +209,7 @@ class CreateSessionWithUsersAndCoursesAction
             ;
             $this->em->persist($newCategory);
             $newCategories[$category->getId()] = $newCategory;
+            $copies[] = ['base' => $category, 'copy' => $newCategory];
 
             foreach ($category->getLinks() as $link) {
                 $newLink = clone $link;
@@ -204,5 +231,49 @@ class CreateSessionWithUsersAndCoursesAction
                 $newCategories[$category->getId()]->setParent($newCategories[$parentId]);
             }
         }
+
+        return $copies;
+    }
+
+    /**
+     * The session's gradebook gets its own copy of the base course's certificate, as the
+     * legacy "Import gradebook from base course" did through
+     * DocumentManager::generateDefaultCertificate($courseInfo, true, $sessionId): the copy is
+     * attached to every gradebook category of the course in the session.
+     *
+     * @param array<int, array{base: GradebookCategory, copy: GradebookCategory}> $categories
+     */
+    private function copyCertificateFromBaseCourse(Course $course, Session $session, array $categories): void
+    {
+        if ([] === $categories) {
+            return;
+        }
+
+        $creator = $this->userHelper->getCurrent();
+        if (null === $creator) {
+            return;
+        }
+
+        $root = $categories[0];
+        foreach ($categories as $category) {
+            if (null === $category['base']->getParent()) {
+                $root = $category;
+
+                break;
+            }
+        }
+
+        $document = $this->certificateGenerator->createDefaultCertificateDocument(
+            $root['copy'],
+            $course,
+            $session,
+            $creator,
+            $root['base']->getDocument(),
+        );
+
+        foreach ($categories as $category) {
+            $category['copy']->setDocument($document);
+        }
+        $this->em->flush();
     }
 }

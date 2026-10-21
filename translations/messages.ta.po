@@ -21268,8 +21268,8 @@ msgstr "சட்ட ஒப்பந்தம் உள்நுழைவின�
 msgid "Your terms and conditions are ready to be signed"
 msgstr "உங்கள் பொருள் நிபந்தனைகள் கையெழுத்திட தயார்"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "வணக்கம்,<br />உங்கள் பயிற்றுவிப்பர் உங்கள் பொருள் நிபந்தனைகளை அனுப்பினார். இந்த URL-ஐ பின்பற்றி கையெழுத்திடலாம்: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "வணக்கம் %s,<br />உங்கள் பயிற்றுவிப்பர் உங்கள் பொருள் நிபந்தனைகளை அனுப்பினார். இந்த URL-ஐ பின்பற்றி கையெழுத்திடலாம்: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "பயனர் %s ஒப்பந்தத்தை கையெழுத்திட்டார்."

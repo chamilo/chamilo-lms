@@ -39,6 +39,7 @@ use Chamilo\CoreBundle\Event\CourseDeletedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -93,6 +94,7 @@ class CourseHelper
         private readonly CourseRepository $courseRepository,
         private readonly Security $security,
         private readonly CourseCategoryRepository $courseCategoryRepository,
+        private readonly LanguageRepository $languageRepository,
         private readonly UserRepository $userRepository,
         private readonly SettingsManager $settingsManager,
         private readonly TranslatorInterface $translator,
@@ -252,12 +254,17 @@ class CourseHelper
             $params['_exemplary_content_request'] = !empty($rawParams['exemplary_content']);
 
             $accessUrl = $this->accessUrlHelper->getCurrent();
+            $language = $this->languageRepository->findByIsoCode((string) $params['courseLanguage']);
+            if (null === $language) {
+                throw new InvalidArgumentException(\sprintf('Invalid course language "%s".', $params['courseLanguage']));
+            }
+
             $course = new Course();
             $course
                 ->setTitle($params['title'])
                 ->setCode($params['code'])
                 ->setVisualCode($params['visualCode'])
-                ->setCourseLanguage($params['courseLanguage'])
+                ->setCourseLanguageEntity($language)
                 ->setDescription($this->translator->trans('Course Description'))
                 ->setVisibility((int) $params['visibility'])
                 ->setShowScore(1)
@@ -512,7 +519,6 @@ class CourseHelper
                 'default' => 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true) ? 1 : '',
                 'category' => 'certificates',
             ],
-            'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
             'show_course_in_user_language' => ['default' => 2, 'category' => null],
             'email_to_teachers_on_new_work_feedback' => ['default' => 1, 'category' => null],
         ];
@@ -1423,9 +1429,9 @@ class CourseHelper
             ->select('IDENTITY(cru.course) AS courseId, COUNT(DISTINCT cru.user) AS total')
             ->from(CourseRelUser::class, 'cru')
             ->where('cru.course IN (:courseIds)')
-            ->andWhere('cru.relationType <> :rrhhRelationType')
+            ->andWhere('cru.relationType <> :hrmRelationType')
             ->setParameter('courseIds', $courseIds)
-            ->setParameter('rrhhRelationType', COURSE_RELATION_TYPE_RRHH)
+            ->setParameter('hrmRelationType', COURSE_RELATION_TYPE_HRM)
             ->groupBy('cru.course')
             ->getQuery()
             ->getArrayResult()

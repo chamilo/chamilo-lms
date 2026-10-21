@@ -521,7 +521,7 @@ class CourseCategory
                         null,
                         ICON_SIZE_SMALL,
                         get_lang('Open this category')
-                    ).' '.$category->getTitle().' ('.$code.')',
+                    ).' '.htmlspecialchars($category->getTitle(), ENT_QUOTES, 'UTF-8').' ('.htmlspecialchars((string) $code, ENT_QUOTES, 'UTF-8').')',
                     $url
                 );
 

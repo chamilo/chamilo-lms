@@ -724,7 +724,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 $qb->expr()->eq('scu.user', $user->getId())
             )
             ->andWhere(
-                $qb->expr()->eq('su.relationType', Session::DRH)
+                $qb->expr()->eq('su.relationType', Session::HRM)
             )
         ;
 
@@ -732,25 +732,32 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Whether $targetUserId is followed by the HR manager $drhId through the UserRelUser
-     * RRHH relation. Native replacement for UserManager::is_user_followed_by_drh().
+     * Whether the target user is followed by this HR manager through the user relation.
      */
-    public function isUserFollowedByDrh(int $targetUserId, int $drhId): bool
+    public function isUserFollowedByHrm(int $targetUserId, int $hrmId): bool
     {
         $count = (int) $this->getEntityManager()->createQueryBuilder()
             ->select('COUNT(uru.id)')
             ->from(UserRelUser::class, 'uru')
             ->where('uru.user = :target')
-            ->andWhere('uru.friend = :drh')
+            ->andWhere('uru.friend = :hrm')
             ->andWhere('uru.relationType = :relationType')
             ->setParameter('target', $targetUserId)
-            ->setParameter('drh', $drhId)
-            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_RRHH)
+            ->setParameter('hrm', $hrmId)
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_HRM)
             ->getQuery()
             ->getSingleScalarResult()
         ;
 
         return $count > 0;
+    }
+
+    /**
+     * Legacy alias for existing PHP callers.
+     */
+    public function isUserFollowedByDrh(int $targetUserId, int $drhId): bool
+    {
+        return $this->isUserFollowedByHrm($targetUserId, $drhId);
     }
 
     /**
@@ -905,7 +912,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $qb = $this->createQueryBuilder('u');
         $this->addAccessUrlQueryBuilder($urlId, $qb);
         $this->addActiveAndNotAnonUserQueryBuilder($qb);
-        $this->addUserRelUserQueryBuilder($userId, UserRelUser::USER_RELATION_TYPE_RRHH, $qb);
+        $this->addUserRelUserQueryBuilder($userId, UserRelUser::USER_RELATION_TYPE_HRM, $qb);
 
         return $qb->getQuery()->getResult();
     }
@@ -1023,7 +1030,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->andWhere(
                 $qb->expr()->notIn(
                     'relations.relationType',
-                    [UserRelUser::USER_RELATION_TYPE_DELETED, UserRelUser::USER_RELATION_TYPE_RRHH]
+                    [UserRelUser::USER_RELATION_TYPE_DELETED, UserRelUser::USER_RELATION_TYPE_HRM]
                 )
             )
             ->andWhere('relations.user = :user AND relations.friend <> :user')
@@ -1249,10 +1256,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     public function relateUsers(User $user1, User $user2, int $relationType): void
     {
         $em = $this->getEntityManager();
+        $relationRepository = $em->getRepository(UserRelUser::class);
 
-        $existingRelation = $em->getRepository(UserRelUser::class)->findOneBy([
+        $existingRelation = $relationRepository->findOneBy([
             'user' => $user1,
             'friend' => $user2,
+            'relationType' => $relationType,
         ]);
 
         if (!$existingRelation) {
@@ -1261,13 +1270,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $newRelation->setFriend($user2);
             $newRelation->setRelationType($relationType);
             $em->persist($newRelation);
-        } else {
-            $existingRelation->setRelationType($relationType);
         }
 
-        $existingRelationInverse = $em->getRepository(UserRelUser::class)->findOneBy([
+        $existingRelationInverse = $relationRepository->findOneBy([
             'user' => $user2,
             'friend' => $user1,
+            'relationType' => $relationType,
         ]);
 
         if (!$existingRelationInverse) {
@@ -1276,8 +1284,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $newRelationInverse->setFriend($user1);
             $newRelationInverse->setRelationType($relationType);
             $em->persist($newRelationInverse);
-        } else {
-            $existingRelationInverse->setRelationType($relationType);
         }
 
         $em->flush();
@@ -1335,9 +1341,9 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Retrieves the list of DRH (HR) users related to a specific user and access URL.
+     * Retrieves HR managers related to a user and an access URL.
      */
-    public function getDrhListFromUser(int $userId, int $accessUrlId): array
+    public function getHrmListFromUser(int $userId, int $accessUrlId): array
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -1348,7 +1354,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->where('uru.user = :userId')
             ->andWhere('uru.relationType = :relationType')
             ->setParameter('userId', $userId)
-            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_RRHH)
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_HRM)
         ;
 
         $qb->orderBy('u.lastname', 'ASC')
@@ -1356,6 +1362,14 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Legacy alias for existing PHP callers.
+     */
+    public function getDrhListFromUser(int $userId, int $accessUrlId): array
+    {
+        return $this->getHrmListFromUser($userId, $accessUrlId);
     }
 
     public function findUsersByContext(int $courseId, ?int $sessionId = null, ?int $groupId = null): array

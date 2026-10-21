@@ -9,17 +9,21 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V310;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\Query;
+use RuntimeException;
+use Throwable;
 
 final class Version20260922123000 extends AbstractMigrationChamilo
 {
     private const string SETTING_VARIABLE = 'toolbox';
     private const string TOOL_TITLE = 'toolbox';
     private const int FLUSH_BATCH_SIZE = 200;
+    private const string TEMP_SLUG_INDEX = 'idx_migration_toolbox_resource_node_slug';
 
     private const array REQUIRED_SETTING_COLUMNS = [
         'access_url',
@@ -103,54 +107,75 @@ final class Version20260922123000 extends AbstractMigrationChamilo
         }
 
         $toolId = (int) $toolId;
-        $created = 0;
-        $query = $this->entityManager->createQuery('SELECT c.id FROM Chamilo\CoreBundle\Entity\Course c');
+        $courseRows = $this->connection->fetchAllAssociative(
+            <<<'SQL'
+SELECT c.id, c.resource_node_id, course_node.creator_id
+FROM course c
+LEFT JOIN resource_node course_node ON course_node.id = c.resource_node_id
+LEFT JOIN c_tool existing_tool
+    ON existing_tool.c_id = c.id
+   AND existing_tool.title = :title
+WHERE existing_tool.iid IS NULL
+ORDER BY c.id
+SQL,
+            ['title' => self::TOOL_TITLE]
+        );
 
-        foreach ($query->toIterable([], Query::HYDRATE_SCALAR) as $row) {
-            $courseId = (int) $row['id'];
-            $courseRef = $this->entityManager->getReference(Course::class, $courseId);
-
-            $exists = (int) $this->entityManager
-                ->createQuery(
-                    'SELECT COUNT(ct.iid)
-                       FROM Chamilo\CourseBundle\Entity\CTool ct
-                      WHERE ct.title = :title
-                        AND ct.course = :course'
-                )
-                ->setParameter('title', self::TOOL_TITLE)
-                ->setParameter('course', $courseRef)
-                ->getSingleScalarResult()
-            ;
-
-            if ($exists > 0) {
-                continue;
-            }
-
-            $toolRef = $this->entityManager->getReference(Tool::class, $toolId);
-            $course = $this->entityManager->find(Course::class, $courseId);
-            if (!$course instanceof Course) {
-                continue;
-            }
-
-            $courseTool = (new CTool())
-                ->setTool($toolRef)
-                ->setTitle(self::TOOL_TITLE)
-                ->setCourse($course)
-                ->setParent($course)
-                ->setCreator($course->getCreator())
-                ->addCourseLink($course, null, null, ResourceLink::VISIBILITY_DRAFT)
-            ;
-            $this->entityManager->persist($courseTool);
-
-            ++$created;
-            if (0 === $created % self::FLUSH_BATCH_SIZE) {
-                $this->entityManager->flush();
-                $this->entityManager->clear();
-            }
+        if ([] === $courseRows) {
+            return;
         }
 
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+        $dropTemporarySlugIndex = $this->ensureTemporarySlugIndex();
+        $created = 0;
+
+        try {
+            foreach ($courseRows as $row) {
+                $courseId = (int) $row['id'];
+                $courseResourceNodeId = (int) $row['resource_node_id'];
+                $creatorId = (int) $row['creator_id'];
+
+                if ($courseResourceNodeId <= 0 || $creatorId <= 0) {
+                    throw new RuntimeException(\sprintf('Course %d has no valid resource node/creator; AI Toolbox seeding cannot continue safely.', $courseId));
+                }
+
+                $courseRef = $this->entityManager->getReference(Course::class, $courseId);
+                $toolRef = $this->entityManager->getReference(Tool::class, $toolId);
+                $creatorRef = $this->entityManager->getReference(User::class, $creatorId);
+
+                $courseTool = (new CTool())
+                    ->setTool($toolRef)
+                    ->setTitle(self::TOOL_TITLE)
+                    ->setCourse($courseRef)
+                    ->setParent($courseRef)
+                    ->setParentResourceNode($courseResourceNodeId)
+                    ->setCreator($creatorRef)
+                    ->addCourseLink($courseRef, null, null, ResourceLink::VISIBILITY_DRAFT)
+                ;
+                $this->entityManager->persist($courseTool);
+
+                $resourceNode = $courseTool->getResourceNode();
+                if (null === $resourceNode) {
+                    throw new RuntimeException(\sprintf('AI Toolbox resource node was not created for course %d.', $courseId));
+                }
+
+                // Keep the user-facing title unchanged, but make the generated slug
+                // course-specific so Gedmo never has to load every existing toolbox slug.
+                $resourceNode->setSlug(self::TOOL_TITLE.'-'.$courseId);
+
+                ++$created;
+                if (0 === $created % self::FLUSH_BATCH_SIZE) {
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
+                }
+            }
+
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+        } finally {
+            if ($dropTemporarySlugIndex) {
+                $this->dropTemporarySlugIndex();
+            }
+        }
     }
 
     public function down(Schema $schema): void
@@ -180,6 +205,56 @@ final class Version20260922123000 extends AbstractMigrationChamilo
         }
 
         // Course-tool/resource-node cleanup is intentionally not automated in down().
+    }
+
+    private function ensureTemporarySlugIndex(): bool
+    {
+        try {
+            $indexes = $this->connection->createSchemaManager()->listTableIndexes('resource_node');
+
+            foreach ($indexes as $index) {
+                $name = strtolower($index->getName());
+                $columns = array_map('strtolower', $index->getColumns());
+
+                if (strtolower(self::TEMP_SLUG_INDEX) === $name) {
+                    return true;
+                }
+
+                if ('slug' === ($columns[0] ?? null)) {
+                    return false;
+                }
+            }
+
+            $this->connection->executeStatement(
+                'CREATE INDEX '.self::TEMP_SLUG_INDEX.' ON resource_node (slug(191))'
+            );
+
+            return true;
+        } catch (Throwable $exception) {
+            $this->write('Could not create the temporary resource_node.slug index: '.$exception->getMessage());
+
+            return false;
+        }
+    }
+
+    private function dropTemporarySlugIndex(): void
+    {
+        try {
+            $indexes = $this->connection->createSchemaManager()->listTableIndexes('resource_node');
+            foreach ($indexes as $index) {
+                if (strtolower(self::TEMP_SLUG_INDEX) !== strtolower($index->getName())) {
+                    continue;
+                }
+
+                $this->connection->executeStatement(
+                    'DROP INDEX '.self::TEMP_SLUG_INDEX.' ON resource_node'
+                );
+
+                return;
+            }
+        } catch (Throwable $exception) {
+            $this->write('Could not remove the temporary resource_node.slug index: '.$exception->getMessage());
+        }
     }
 
     private function supportsSettingInsert(Schema $schema, string $table): bool

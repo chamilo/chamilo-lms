@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\WikiHelper;
+use Chamilo\CoreBundle\Service\EtherpadClient;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiConf;
@@ -23,6 +24,8 @@ use Chamilo\CourseBundle\Entity\CWikiMailcue;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -45,6 +48,8 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
         private Security $security,
         private WikiNotificationService $notificationService,
         private WikiHelper $wikiHelper,
+        private EtherpadClient $etherpadClient,
+        private LoggerInterface $logger,
     ) {}
 
     /**
@@ -291,6 +296,7 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
             $sessionId,
         );
         $watchers = $this->getWatcherUserIds($courseId, $sessionId, $groupId, 'watch:'.$reflink);
+        $etherpadIds = $this->getEtherpadPadIds($versions);
         $connection = $this->entityManager->getConnection();
         $connection->beginTransaction();
 
@@ -306,6 +312,8 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
 
             throw $throwable;
         }
+
+        $this->deleteEtherpadPads($etherpadIds);
 
         $this->notificationService->notifyPageDeleted(
             $course,
@@ -397,6 +405,7 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
             static fn (CWiki $wiki): int => (int) $wiki->getPageId(),
             $versions,
         )));
+        $etherpadIds = $this->getEtherpadPadIds($versions);
         $connection = $this->entityManager->getConnection();
         $connection->beginTransaction();
 
@@ -411,6 +420,8 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
 
             throw $throwable;
         }
+
+        $this->deleteEtherpadPads($etherpadIds);
 
         $result = new WikiPageAction();
         $result->contextDeleted = true;
@@ -466,6 +477,46 @@ final readonly class WikiPageActionProcessor implements ProcessorInterface
         $result->addLocked = 0 === $this->wikiRepository->findContextAddLock($courseId, $groupId, $sessionId);
 
         return $result;
+    }
+
+    /**
+     * @param array<int, CWiki> $versions
+     *
+     * @return array<int, string>
+     */
+    private function getEtherpadPadIds(array $versions): array
+    {
+        $padIds = [];
+
+        foreach ($versions as $version) {
+            $padId = trim((string) $version->getEtherpadId());
+            if ('' !== $padId) {
+                $padIds[$padId] = true;
+            }
+        }
+
+        return array_keys($padIds);
+    }
+
+    /**
+     * @param array<int, string> $padIds
+     */
+    private function deleteEtherpadPads(array $padIds): void
+    {
+        if ([] === $padIds || !$this->etherpadClient->isConfigured()) {
+            return;
+        }
+
+        foreach ($padIds as $padId) {
+            try {
+                $this->etherpadClient->deletePad($padId);
+            } catch (RuntimeException $exception) {
+                $this->logger->warning('Unable to delete Etherpad pad after deleting a Wiki page.', [
+                    'pad_id' => $padId,
+                    'exception' => $exception,
+                ]);
+            }
+        }
     }
 
     /**

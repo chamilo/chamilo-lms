@@ -24,7 +24,7 @@ class BlockTeacherGraph extends Block
 {
     private $user_id;
     private $teachers;
-    private $permission = [DRH];
+    private $permission = [HRM];
 
     /**
      * Controller.
@@ -34,7 +34,7 @@ class BlockTeacherGraph extends Block
         $this->user_id = $user_id;
         $this->path = 'block_teacher_graph';
         if ($this->is_block_visible_for_user($user_id)) {
-            $this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
+            $this->teachers = UserManager::get_users_followed_by_hrm($user_id, COURSEMANAGER);
         }
     }
 

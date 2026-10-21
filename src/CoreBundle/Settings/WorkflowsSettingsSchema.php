@@ -22,7 +22,7 @@ class WorkflowsSettingsSchema extends AbstractSettingsSchema
             'usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe' => 'false',
             'usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe' => 'false',
             'usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe' => 'false',
-            'drh_allow_access_to_all_students' => 'false',
+            'hrm_allow_access_to_all_students' => 'false',
             'send_all_emails_to' => '',
             'go_to_course_after_login' => 'false',
             'allow_users_to_create_courses' => 'false',
@@ -52,7 +52,7 @@ class WorkflowsSettingsSchema extends AbstractSettingsSchema
             ->add('usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe', YesNoType::class)
             ->add('usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe', YesNoType::class)
             ->add('usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe', YesNoType::class)
-            ->add('drh_allow_access_to_all_students', YesNoType::class)
+            ->add('hrm_allow_access_to_all_students', YesNoType::class)
             ->add('send_all_emails_to', TextareaType::class, [
                 'attr' => ['rows' => 5, 'style' => 'font-family: monospace;'],
             ])

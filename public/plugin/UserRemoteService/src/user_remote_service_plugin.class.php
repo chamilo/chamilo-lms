@@ -34,8 +34,8 @@ class UserRemoteServicePlugin extends Plugin
             sprintf(
                 'CREATE TABLE IF NOT EXISTS %s (
                     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    title VARCHAR(255) NOT NULL,
-                    url VARCHAR(255) NOT NULL
+                    title LONGTEXT NOT NULL,
+                    url LONGTEXT NOT NULL
                 )',
                 Database::get_main_table(self::TABLE)
             )
@@ -356,7 +356,7 @@ class UserRemoteServicePlugin extends Plugin
         $html .= '<label class="block"><span class="mb-1 block text-sm font-semibold text-gray-70">'.$this->escape($this->get_lang('ServiceTitle')).'</span>';
         $html .= '<input class="w-full rounded-lg border border-gray-25 px-3 py-2 text-sm" type="text" name="title" required maxlength="255"></label>';
         $html .= '<label class="block"><span class="mb-1 block text-sm font-semibold text-gray-70">'.$this->escape($this->get_lang('ServiceURL')).'</span>';
-        $html .= '<input class="w-full rounded-lg border border-gray-25 px-3 py-2 text-sm" type="url" name="url" required maxlength="255" placeholder="https://example.org/service"></label>';
+        $html .= '<input class="w-full rounded-lg border border-gray-25 px-3 py-2 text-sm" type="url" name="url" required placeholder="https://example.org/service"></label>';
         $html .= '<button class="btn btn--primary inline-flex items-center gap-2" type="submit">'.
             '<span class="mdi mdi-plus-box ch-tool-icon" aria-hidden="true"></span>'.$this->escape($this->get_lang('CreateService')).'</button>';
         $html .= '</form>';

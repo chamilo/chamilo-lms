@@ -21264,8 +21264,8 @@ msgstr "Tað løgfrøðiliga samtykkjanin verður vísin undir innskrift ella t�
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Tín kotumál eru tilreið at verða undirskrivað"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Halló,<br />Tín lærarar sendi tær tín kotumál. Tú kanst undirskriva tað við at fylgja hesi leinkju: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Halló %s,<br />Tín lærarar sendi tær tín kotumál. Tú kanst undirskriva tað við at fylgja hesi leinkju: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Brúkarin %s undirskrivaði samtykkjanina."

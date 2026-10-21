@@ -21268,8 +21268,8 @@ msgstr "Marrëveshja ligjore do të shfaqet gjatë hyrjes ose kur të hyjë në 
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Kushtet tuaja dhe rregulloret janë gati për t'u nënshkruar"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Tungjatjeta,<br />Tutor-i juaj ju dërgoi kushtet dhe rregulloret tuaja. Mund ta nënshkruani duke ndjekur këtë URL: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Tungjatjeta %s,<br />Tutor-i juaj ju dërgoi kushtet dhe rregulloret tuaja. Mund ta nënshkruani duke ndjekur këtë URL: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Përdoruesi %s nënshkroi marrëveshjen."

@@ -2326,7 +2326,7 @@ class GroupManager
                 return true;
             }
 
-            if (api_is_drh()) {
+            if (api_is_hrm()) {
                 if (SessionManager::isUserSubscribedAsHRM($sessionId, $userId)) {
                     return true;
                 }

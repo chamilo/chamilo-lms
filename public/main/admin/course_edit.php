@@ -829,8 +829,15 @@ if ($form->validate()) {
         }
     }
 
+    $courseLanguageId = (int) api_get_language_id($course['course_language']);
+    $courseLanguage = $courseLanguageId > 0
+        ? Database::getManager()->find(\Chamilo\CoreBundle\Entity\Language::class, $courseLanguageId)
+        : null;
+    if ($courseLanguage instanceof \Chamilo\CoreBundle\Entity\Language) {
+        $courseEntity->setCourseLanguageEntity($courseLanguage);
+    }
+
     $courseEntity
-        ->setCourseLanguage($course['course_language'])
         ->setTitle(str_replace('&amp;', '&', $course['title']))
         ->setVisualCode($visual_code)
         ->setDepartmentName($course['department_name'])
@@ -929,7 +936,7 @@ if ($form->validate()) {
     }
 
     $courseInfo = api_get_course_info($courseInfo['code']);
-    $message = Display::url($courseInfo['title'], $courseInfo['course_public_url']);
+    $message = Display::url(htmlspecialchars($courseInfo['title'], ENT_QUOTES, 'UTF-8'), $courseInfo['course_public_url']);
     Display::addFlash(Display::return_message(get_lang('Item updated').': '.$message, 'info', false));
     if ($visual_code_is_used) {
         Display::addFlash(Display::return_message($warn));

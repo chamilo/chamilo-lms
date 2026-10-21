@@ -40,6 +40,7 @@ if (!empty($id)) {
 $form = new FormValidator('level', 'GET', api_get_self().'?action='.$action.'&id='.$id);
 $form->addText('title', get_lang('Name'));
 $form->addText('short_title', get_lang('Short name'));
+$form->addTextarea('description', get_lang('Description'), ['rows' => 5]);
 $form->addSelectFromCollection('profile_id', get_lang('Profile'), $profiles);
 $form->addHidden('action', $action);
 $form->addHidden('id', $id);
@@ -49,6 +50,7 @@ if (!empty($item)) {
     $form->setDefaults([
         'title' => $item->getTitle(),
         'short_title' => $item->getShortTitle(),
+        'description' => $item->getDescription(),
         'profile_id' => $item->getProfile()->getId(),
     ]);
 }
@@ -74,6 +76,7 @@ switch ($action) {
                     $item = new Level();
                     $item->setTitle($values['title']);
                     $item->setShortTitle($values['short_title']);
+                    $item->setDescription((string) ($values['description'] ?? ''));
                     $item->setProfile($profile);
                     $em->persist($item);
                     $em->flush();
@@ -106,6 +109,7 @@ switch ($action) {
 
             $item->setTitle($values['title']);
             $item->setShortTitle($values['short_title']);
+            $item->setDescription((string) ($values['description'] ?? ''));
             $profile = $em->getRepository(SkillLevelProfile::class)->find($values['profile_id']);
             if ($profile) {
                 $item->setProfile($profile);

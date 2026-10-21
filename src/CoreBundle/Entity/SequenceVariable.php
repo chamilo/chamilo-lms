@@ -19,7 +19,7 @@ class SequenceVariable
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: true)]
     protected ?string $title = null;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]

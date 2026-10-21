@@ -283,7 +283,6 @@ import Loading from "../../components/Loading.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import documentsService from "../../services/documents"
 import { useNotification } from "../../composables/notification"
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 
 const SVG_WIDTH = 1000
 const SVG_HEIGHT = 600
@@ -1294,9 +1293,8 @@ async function saveSvg() {
         contentFile: svg,
         contentFileExtension: "svg",
         contentFileMimeType: "image/svg+xml",
+        // Course context and default visibility derived server-side from the gated session course.
         parentResourceNodeId: getParentResourceNodeId(),
-        // Course context derived server-side from the gated session course.
-        resourceLinkList: JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]),
         indexDocumentContent: false,
         language: language.value || "",
       })

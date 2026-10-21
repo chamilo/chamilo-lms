@@ -21,7 +21,7 @@ class TopLink
     #[ORM\GeneratedValue]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string')]
+    #[ORM\Column(name: 'title', type: 'text')]
     private string $title = '';
 
     #[ORM\Column(name: 'url', type: 'text')]

@@ -15,7 +15,7 @@ class BlockStudent extends Block
 {
     private $user_id;
     private $students;
-    private $permission = [DRH];
+    private $permission = [HRM];
 
     /**
      * Constructor.
@@ -25,7 +25,7 @@ class BlockStudent extends Block
         $this->user_id = $user_id;
         $this->path = 'block_student';
         if ($this->is_block_visible_for_user($user_id)) {
-            $this->students = UserManager::get_users_followed_by_drh($user_id, STUDENT);
+            $this->students = UserManager::get_users_followed_by_hrm($user_id, STUDENT);
         }
     }
 

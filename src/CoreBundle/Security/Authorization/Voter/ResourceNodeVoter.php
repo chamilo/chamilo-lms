@@ -250,20 +250,25 @@ class ResourceNodeVoter extends Voter
             return $this->teachesResourceCourse($resourceNode, $user);
         }
 
-        if ('files' === $resourceNode->getResourceType()->getTitle()) {
+        // A document attached to an assignment is readable by whoever can view that assignment.
+        if (self::VIEW === $attribute && 'files' === $resourceNode->getResourceType()->getTitle()) {
             $document = $this->entityManager
                 ->getRepository(CDocument::class)
                 ->findOneBy(['resourceNode' => $resourceNode])
             ;
 
             if ($document) {
-                $exists = $this->entityManager
+                $relations = $this->entityManager
                     ->getRepository(CStudentPublicationRelDocument::class)
-                    ->findOneBy(['document' => $document])
+                    ->findBy(['document' => $document])
                 ;
 
-                if (null !== $exists) {
-                    return true;
+                foreach ($relations as $relation) {
+                    $publicationNode = $relation->getPublication()->getResourceNode();
+
+                    if (null !== $publicationNode && $this->accessDecisionManager->decide($token, [self::VIEW], $publicationNode)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -434,12 +439,8 @@ class ResourceNodeVoter extends Voter
             }
 
             // If student.
-            // Normal case: resource must be published.
-            // Exception: when the resource is being opened from a learning path item,
-            // allow VIEW even if the underlying ResourceLink visibility is hidden in the tool.
             if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_STUDENT)
-                && (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
-                    || $this->isLearningPathItemForResource($resourceNode, $lpId, $lpItemId))
+                && $this->isReadableByLearners($link, $resourceNode, $lpId, $lpItemId)
             ) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
@@ -469,7 +470,9 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
 
-            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
+                && $this->isReadableByLearners($link, $resourceNode, $lpId, $lpItemId)
+            ) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
@@ -487,7 +490,9 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
 
-            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)) {
+            if ($this->hasContextRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
+                && $this->isReadableByLearners($link, $resourceNode, $lpId, $lpItemId)
+            ) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
@@ -995,6 +1000,17 @@ class ResourceNodeVoter extends Voter
         }
 
         return false;
+    }
+
+    /**
+     * A learner reads a resource only while its link is published. Exception: when the resource
+     * is being opened from a learning path item, VIEW is allowed even if the link is hidden in
+     * the tool.
+     */
+    private function isReadableByLearners(ResourceLink $link, ResourceNode $resourceNode, int $lpId, int $lpItemId): bool
+    {
+        return ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
+            || $this->isLearningPathItemForResource($resourceNode, $lpId, $lpItemId);
     }
 
     /**

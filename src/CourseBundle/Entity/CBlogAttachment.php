@@ -11,8 +11,6 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use Chamilo\CoreBundle\Controller\Api\CreateBlogAttachmentAction;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -22,13 +20,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(security: "object.getBlog() != null and is_granted('VIEW', object.getBlog().resourceNode)"),
         new GetCollection(security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')"),
-        new Post(
-            uriTemplate: '/c_blog_attachments/upload',
-            controller: CreateBlogAttachmentAction::class,
-            security: "is_granted('ROLE_CURRENT_COURSE_STUDENT') or is_granted('ROLE_CURRENT_COURSE_SESSION_STUDENT')",
-            output: false,
-            deserialize: false
-        ),
+        // Attachments are only created with their post, see CBlogPost's Post operation.
     ],
     normalizationContext: ['groups' => ['blog_attachment:read']],
     denormalizationContext: ['groups' => ['blog_attachment:write']]

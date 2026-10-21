@@ -294,7 +294,7 @@
 # so all 6 scenarios get the 15-minute budget the Before hook in
 # common.steps.ts grants: the 4 session-creation scenarios and the teardown
 # are smaller, but each still submits several legacy full-page-reload forms.
-@common @long-scenario @specialcase1
+@common @long-scenario @specialcases @specialcase1
 Feature: Special case 1 — course/session creation
   In order to validate a realistic multi-course, multi-session platform setup
   As an administrator
@@ -457,21 +457,9 @@ Feature: Special case 1 — course/session creation
     And I wait for the page to be loaded
     Then I should see "Course discussions"
 
-    When I press "Ajouter un forum"
-    And I fill in the following:
-      | forum_title | General forum |
-    # "forum-comment" with a HYPHEN, not the legacy "forum_comment" with an
-    # underscore: the Vue forum tool's "Ajouter un forum" DIALOG names its
-    # description editor `id="forum-comment"` (and sets no `name` attribute at
-    # all, so the id is the only way in) — confirmed live by dumping every
-    # textarea plus `window.tinymce.editors` with the dialog open. The
-    # underscore form belongs to the LEGACY full-page route
-    # /main/forum/index.php?action=add_forum, which toolForum.feature uses
-    # instead (and which is also why that file uses the different "I fill in
-    # editor field ..." step). Getting this wrong fails as "Could not find an
-    # id for field with locator: forum_comment", because resolveField()'s
-    # getByLabel("Description") tier matches a wrapper element that has no id.
-    And I fill in tinymce field "forum-comment" with "General discussion forum"
+    # Title + description in one retriable unit: TinyMCE's init silently stalls on loaded CI runners
+    # (see the step in common.steps.ts); the dialog id is "forum-comment" (hyphen), not the legacy "forum_comment".
+    When I open the forum dialog with "Ajouter un forum" and fill title "General forum" and description "General discussion forum"
     And I press "Créer ce forum"
     And I wait for the page to be loaded
     Then I should see "General forum"
@@ -554,15 +542,11 @@ Feature: Special case 1 — course/session creation
     # UI and passes in CI, so its field ids are reused verbatim here rather than
     # re-derived: gradebook-evaluation-title / -weight / -max-score.
     #
-    # The control is clicked by ICON CLASS (mdi-certificate), NOT by the label
-    # "Add classroom activity" that toolAssessments.feature can use: this
-    # scenario works inside "Testing course fr", where the whole interface
-    # renders in French, so an English button label cannot match. Verified live
-    # that the Assessments toolbar buttons are icon-only with a localized
-    # `title` and a locale-independent icon class —
-    # `<button title="Add a category">` is mdi-folder-plus and
-    # `<button title="Add classroom activity">` is mdi-certificate.
-    And I click the "span.mdi-certificate" element
+    # Pressed by its ENGLISH label even in this French course: the button's title is one of the
+    # strings the app does not translate (the sibling "Add a category" one is "Ajouter une
+    # catégorie"). The old `span.mdi-certificate` click is ambiguous: the certificate link in
+    # the same page renders the same icon, and the CI run never opened the dialog.
+    And I press "Add classroom activity"
     And I wait for the page content to settle
     And I fill in the following:
       | gradebook-evaluation-title     | Course validation |

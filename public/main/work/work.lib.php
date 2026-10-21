@@ -9,10 +9,12 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentFeedbackNotifier;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
+use Chamilo\CourseBundle\Repository\CStudentPublicationFollowRepository;
 use ChamiloSession as Session;
 
 /**
@@ -4376,55 +4378,36 @@ function addWorkComment($courseInfo, $userId, $parentWork, CStudentPublication $
         $em->flush();
     }
 
-    $userIdListToSend = [];
     if (api_is_allowed_to_edit()) {
         if (isset($data['send_email']) && $data['send_email']) {
             // Teacher sends a feedback
-            $userIdListToSend = [$studentPublication->getUser()->getId()];
-        }
-    } else {
-        $sessionId = api_get_session_id();
-        if (empty($sessionId)) {
-            $teachers = CourseManager::get_teacher_list_from_course_code(
-                $courseInfo['code']
-            );
-            if (!empty($teachers)) {
-                $userIdListToSend = array_keys($teachers);
+            $id = $studentPublication->getIid();
+            $title = $studentPublication->getTitle();
+            $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$id;
+            $subject = sprintf(get_lang("There's a new feedback in work: %s"), $parentWork['title']);
+            $content = sprintf(get_lang("There's a new feedback in work: %s <a href='%s'>Click here</a> to see it."), $title, $url);
+
+            if (!empty($data['comment'])) {
+                $content .= '<br /><b>'.get_lang('Comment').':</b><br />'.$data['comment'];
             }
-        } else {
-            $teachers = SessionManager::getCoachesByCourseSession(
-                $sessionId,
-                $courseInfo['real_id']
-            );
 
-            if (!empty($teachers)) {
-                $userIdListToSend = array_values($teachers);
-            }
-        }
-
-        $sendNotification = api_get_course_setting('email_to_teachers_on_new_work_feedback');
-        if (1 != $sendNotification) {
-            $userIdListToSend = [];
-        }
-    }
-    $id = $studentPublication->getIid();
-    $title = $studentPublication->getTitle();
-    $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$id;
-    $subject = sprintf(get_lang("There's a new feedback in work: %s"), $parentWork['title']);
-    $content = sprintf(get_lang("There's a new feedback in work: %s <a href='%s'>Click here</a> to see it."), $title, $url);
-
-    if (!empty($data['comment'])) {
-        $content .= '<br /><b>'.get_lang('Comment').':</b><br />'.$data['comment'];
-    }
-
-    if (!empty($userIdListToSend)) {
-        foreach ($userIdListToSend as $userIdToSend) {
             MessageManager::send_message_simple(
-                $userIdToSend,
+                $studentPublication->getUser()->getId(),
                 $subject,
                 $content
             );
         }
+    } else {
+        // A learner commented: only the teachers following the assignment are told,
+        // and only while the course setting allows it (see AssignmentFeedbackNotifier).
+        Container::$container->get(AssignmentFeedbackNotifier::class)->notifyLearnerFeedback(
+            $studentPublication,
+            $courseEntity,
+            api_get_session_entity(),
+            api_get_group_entity(),
+            api_get_user_entity($userId),
+            (string) ($data['comment'] ?? '')
+        );
     }
 
     /*if (!empty($commentId) && !empty($fileData)) {
@@ -5169,6 +5152,10 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 
     $repo = Container::getStudentPublicationRepository();
     $repo->create($studentPublication);
+
+    // The creator follows the new assignment, so learner comments reach them by e-mail.
+    Container::$container->get(CStudentPublicationFollowRepository::class)
+        ->follow($studentPublication, api_get_user_entity($user_id));
 
     // Folder created
     /*api_item_property_update(

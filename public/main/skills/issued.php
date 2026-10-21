@@ -99,7 +99,7 @@ if (null !== $currentUser) {
 $skillRelUserDate = api_get_local_time($skillRelUser->getAcquiredSkillAt());
 $currentSkillLevel = get_lang('No level acquired yet');
 if ($skillRelUser->getAcquiredLevel()) {
-    $currentSkillLevel = $skillLevelRepo->find(['id' => $skillRelUser->getAcquiredLevel()])->getTitle();
+    $currentSkillLevel = get_lang($skillLevelRepo->find(['id' => $skillRelUser->getAcquiredLevel()])->getTitle());
 }
 
 $author = api_get_user_info($skillRelUser->getArgumentationAuthorId());
@@ -183,7 +183,7 @@ if ($profile) {
 
     $profileLevels = [];
     foreach ($levels as $level) {
-        $profileLevels[$level->getPosition()][$level->getId()] = $level->getTitle();
+        $profileLevels[$level->getPosition()][$level->getId()] = get_lang($level->getTitle());
     }
 
     ksort($profileLevels); // Sort the array by Position.

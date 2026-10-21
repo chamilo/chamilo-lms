@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -225,6 +226,10 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
         if ($this->isReportingHidden() && !$this->security->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedHttpException('Survey reporting is disabled by platform settings.');
+        }
+
+        if ($survey->isResultsHiddenFromTeacher() && !$this->security->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedHttpException('Survey results are hidden from teachers and tutors.');
         }
 
         if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
@@ -855,7 +860,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
         fwrite($handle, "\xEF\xBB\xBF");
         foreach ($matrix as $row) {
-            fputcsv($handle, $row, ';');
+            fputcsv($handle, CsvFormulaEscaper::escapeRow($row), ';');
         }
 
         rewind($handle);

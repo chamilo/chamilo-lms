@@ -21264,8 +21264,8 @@ msgstr "Pravni sporazum će se pojaviti tijekom prijave ili prilikom ulaska u ku
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Vaši uvjeti korišćenja su spremni za potpisivanje"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Zdravo,<br />Vaš tutor vam je poslao vaše uvjete korišćenja. Možete ih potpisati slijedeći ovu vezu: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Zdravo %s,<br />Vaš tutor vam je poslao vaše uvjete korišćenja. Možete ih potpisati slijedeći ovu vezu: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Korisnik %s je potpisao sporazum."

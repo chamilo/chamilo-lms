@@ -6,6 +6,10 @@
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
+
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -15,12 +19,21 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(false, 'true' === api_get_setting('allow_hr_skills_management'));
 SkillModel::isAllowed();
 
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
-$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];
-
 /* Process data */
-$skillParentId = isset($_GET['parent']) ? intval($_GET['parent']) : 0;
-$formDefaultValues = [];
+$skillParentId = isset($_GET['parent']) ? (int) $_GET['parent'] : 0;
+$returnToSkillWheel = 'skill-wheel' === ($_REQUEST['origin'] ?? '');
+$returnSkillId = isset($_REQUEST['return_skill']) ? (int) $_REQUEST['return_skill'] : $skillParentId;
+$skillWheelUrl = Container::getRouter()->generate('skill_wheel');
+if ($returnSkillId > 0) {
+    $skillWheelUrl .= '?'.http_build_query(['skillId' => $returnSkillId]);
+}
+
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = $returnToSkillWheel
+    ? ['url' => $skillWheelUrl, 'name' => get_lang('Skills wheel')]
+    : ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];
+
+$formDefaultValues = ['acquirable' => 1];
 
 $objSkill = new SkillModel();
 if ($skillParentId > 0) {
@@ -29,10 +42,11 @@ if ($skillParentId > 0) {
     $formDefaultValues = [
         'parent_id' => $skillParentInfo['id'],
         'gradebook_id' => [],
+        'acquirable' => 1,
     ];
 
     foreach ($skillParentInfo['gradebooks'] as $gradebook) {
-        $formDefaultValues['gradebook_id'][] = intval($gradebook['id']);
+        $formDefaultValues['gradebook_id'][] = (int) $gradebook['id'];
     }
 }
 
@@ -40,6 +54,11 @@ if ($skillParentId > 0) {
 $createForm = new FormValidator('skill_create');
 $createForm->addHeader(get_lang('Create skill'));
 $returnParams = $objSkill->setForm($createForm, []);
+if ($returnToSkillWheel) {
+    $createForm->addHidden('origin', 'skill-wheel');
+    $createForm->addHidden('return_skill', $returnSkillId);
+}
+
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
@@ -72,11 +91,37 @@ if ($createForm->validate()) {
         );
     }
 
-    header('Location: '.api_get_path(WEB_CODE_PATH).'skills/skill_list.php');
+    if ($returnToSkillWheel) {
+        $destinationSkillId = $created ? (int) $created : $returnSkillId;
+        $redirectUrl = api_get_path(WEB_PATH).'skill/wheel';
+        if ($destinationSkillId > 0) {
+            $redirectUrl .= '?'.http_build_query(['skillId' => $destinationSkillId]);
+        }
+    } else {
+        $redirectUrl = api_get_path(WEB_CODE_PATH).'skills/skill_list.php';
+    }
+
+    header('Location: '.$redirectUrl);
     exit;
 }
 
-$toolbar = $objSkill->getToolbar();
+if ($returnToSkillWheel) {
+    $toolbar = Display::toolbarAction('toolbar', [
+        Display::url(
+            Display::getMdiIcon(
+                ActionIcon::BACK,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Skills wheel')
+            ),
+            $skillWheelUrl,
+            ['title' => get_lang('Skills wheel')]
+        ),
+    ]);
+} else {
+    $toolbar = $objSkill->getToolbar();
+}
 
 $tpl = new Template(get_lang('Create skill'));
 $tpl->assign('content', $toolbar.$createForm->returnForm());

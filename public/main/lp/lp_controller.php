@@ -1133,35 +1133,6 @@ switch ($action) {
             require 'lp_view_item.php';
         }
         break;
-    case 'upload':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-        $cwdir = getcwd();
-        ob_start();
-        require 'lp_upload.php';
-        chdir($cwdir);
-        $html = ob_get_clean();
-
-        $hasUploadedFile = false;
-        foreach ($_FILES as $f) {
-            if (is_array($f) && isset($f['error'])) {
-                if (is_array($f['error'])) {
-                    foreach ($f['error'] as $err) {
-                        if ((int)$err === UPLOAD_ERR_OK) { $hasUploadedFile = true; break 2; }
-                    }
-                } else {
-                    if ((int)$f['error'] === UPLOAD_ERR_OK) { $hasUploadedFile = true; break; }
-                }
-            }
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $hasUploadedFile) {
-            api_location(api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq());
-        }
-
-        echo $html;
-        break;
     case 'copy':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

@@ -143,7 +143,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
 
     #[Assert\NotBlank]
     #[Groups(['access_url:read', 'access_url:write', 'user_access_url:read'])]
-    #[ORM\Column(name: 'url', type: 'string', length: 255)]
+    #[ORM\Column(name: 'url', type: 'text')]
     protected string $url;
 
     #[Groups(['user_access_url:read'])]

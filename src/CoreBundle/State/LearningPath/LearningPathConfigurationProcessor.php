@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathCreatedEvent;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -83,6 +84,7 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
         private FilesystemOperator $themesFilesystem,
         private CidReqHelper $cidReqHelper,
+        private ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): LearningPathConfiguration
@@ -190,7 +192,10 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
             throw new BadRequestHttpException('Course resource node is missing.');
         }
 
-        $link = ['cid' => (int) $course->getId(), 'visibility' => 0];
+        $link = [
+            'cid' => (int) $course->getId(),
+            'visibility' => $this->resourceDefaultVisibilityHelper->getResourceLinkVisibility(ResourceDefaultVisibilityHelper::LEARNING_PATH, $course),
+        ];
         if (null !== $session) {
             $link['sid'] = (int) $session->getId();
         }
@@ -470,14 +475,32 @@ final readonly class LearningPathConfigurationProcessor implements ProcessorInte
                 $allowed[(int) $relation->getSkill()->getId()] = $relation->getSkill();
             }
         }
+        $repository = $this->entityManager->getRepository(SkillRelItem::class);
+        $existingRelations = $repository->findBy([
+            'itemId' => $lpId,
+            'itemType' => self::ITEM_TYPE_LEARNING_PATH,
+        ]);
+        $existingSkillIds = [];
+        foreach ($existingRelations as $existingRelation) {
+            if (!$existingRelation instanceof SkillRelItem || null === $existingRelation->getSkill()->getId()) {
+                continue;
+            }
+
+            $existingSkillIds[(int) $existingRelation->getSkill()->getId()] = true;
+        }
+
         foreach ($skillIds as $skillId) {
             if (!isset($allowed[$skillId])) {
                 throw new BadRequestHttpException('A selected skill is outside the current course context.');
             }
+
+            $skill = $allowed[$skillId];
+            if (!$skill->isAcquirable() && !isset($existingSkillIds[$skillId])) {
+                throw new BadRequestHttpException('A non-acquirable skill cannot be attached to a learning path.');
+            }
         }
 
-        $repository = $this->entityManager->getRepository(SkillRelItem::class);
-        foreach ($repository->findBy(['itemId' => $lpId, 'itemType' => self::ITEM_TYPE_LEARNING_PATH]) as $existing) {
+        foreach ($existingRelations as $existing) {
             $this->entityManager->remove($existing);
         }
 

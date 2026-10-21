@@ -352,8 +352,8 @@ async function load() {
     ])
     item.value = itemData
     providers.value = Array.isArray(collectionData?.providers) ? collectionData.providers : []
-    if (!improvement.provider && providers.value.length === 1) {
-      improvement.provider = providers.value[0].value
+    if (!providers.value.some((provider) => provider.value === improvement.provider)) {
+      improvement.provider = providers.value[0]?.value ?? ""
     }
   } catch (error) {
     loadError.value = true
@@ -367,6 +367,7 @@ async function generateVersion() {
   if (!improvement.prompt.trim()) return
   generationError.value = ""
   generating.value = true
+  const startedAt = Date.now()
   try {
     await toolboxService.generateVersion(route.params.itemId, context.value, {
       prompt: improvement.prompt.trim(),
@@ -376,14 +377,21 @@ async function generateVersion() {
     showSuccessNotification(t("A new version was generated."))
     await load()
   } catch (error) {
-    generationError.value = extractGenerationError(error)
+    generationError.value = extractGenerationError(error, Date.now() - startedAt)
     showErrorNotification(error)
   } finally {
     generating.value = false
   }
 }
 
-function extractGenerationError(error) {
+function extractGenerationError(error, elapsedMs = 0) {
+  const status = Number(error?.response?.status ?? 0)
+  if (status === 504) {
+    const elapsedSeconds = Math.max(1, Math.round(elapsedMs / 1000))
+
+    return `The web server stopped AI generation after about ${elapsedSeconds} seconds (HTTP 504). This is a server/gateway timeout and can be different from the AI provider timeout.`
+  }
+
   const data = error?.response?.data
 
   return (

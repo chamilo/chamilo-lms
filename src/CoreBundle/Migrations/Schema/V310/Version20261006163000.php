@@ -39,6 +39,18 @@ final class Version20261006163000 extends AbstractMigrationChamilo
         // Defaults from SettingsManager schemas
         $defaults = $this->buildDefaultsFromSchemas();
 
+        // Earlier runs of this migration inserted settings without access_url. SettingsManager
+        // only reads the settings of an access URL, so those rows were ignored: the schema
+        // default always applied and the setting could not be changed. Attach them to the main
+        // URL, unless it already has its own row for the same setting.
+        $this->addSql(
+            'UPDATE settings s
+                LEFT JOIN (SELECT variable, subkey FROM settings WHERE access_url = 1) main
+                    ON main.variable = s.variable AND main.subkey <=> s.subkey
+                SET s.access_url = 1
+                WHERE s.access_url IS NULL AND main.variable IS NULL'
+        );
+
         foreach ($byVariable as $variable => $row) {
             if (!$this->isValidIdentifier($variable)) {
                 error_log(\sprintf('[SKIP] Invalid variable name: "%s".', $variable));
@@ -72,7 +84,7 @@ final class Version20261006163000 extends AbstractMigrationChamilo
                 $this->addSql($sql, $params);
             } else {
                 $defaultValue = $defaults[$variable] ?? '';
-                $sql = 'INSERT INTO settings (variable, category, title, comment, selected_value, access_url_changeable) VALUES (?, ?, ?, ?, ?, 0)';
+                $sql = 'INSERT INTO settings (variable, category, title, comment, selected_value, access_url, access_url_changeable) VALUES (?, ?, ?, ?, ?, 1, 0)';
                 $params = [$variable, $category, $title, $comment, (string) $defaultValue];
                 $this->addSql($sql, $params);
             }

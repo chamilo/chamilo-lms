@@ -9,10 +9,10 @@ namespace Chamilo\CoreBundle\Service\LearningPath;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathCreatedEvent;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -53,6 +53,7 @@ final readonly class ScormPackageImporter
         private CLpItemRepository $lpItemRepository,
         private ScormManifestParser $manifestParser,
         private EventDispatcherInterface $eventDispatcher,
+        private ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
     ) {}
 
     /**
@@ -67,6 +68,7 @@ final readonly class ScormPackageImporter
         string $contentProximity,
         string $contentMaker,
         bool $allowHtaccess,
+        bool $registerArchiveDocument = true,
     ): array {
         $this->assertValidUploadedPackage($package);
 
@@ -132,14 +134,16 @@ final readonly class ScormPackageImporter
                     $contentMaker,
                 );
 
-                $archiveCopy = $this->createUploadedCopy($backupPath, $originalName);
+                if ($registerArchiveDocument) {
+                    $archiveCopy = $this->createUploadedCopy($backupPath, $originalName);
 
-                try {
-                    $this->documentRepository->registerScormZip($course, $session, $lp, $archiveCopy, $group);
-                } finally {
-                    $copyPath = $archiveCopy->getPathname();
-                    if (is_file($copyPath)) {
-                        @unlink($copyPath);
+                    try {
+                        $this->documentRepository->registerScormZip($course, $session, $lp, $archiveCopy, $group);
+                    } finally {
+                        $copyPath = $archiveCopy->getPathname();
+                        if (is_file($copyPath)) {
+                            @unlink($copyPath);
+                        }
                     }
                 }
 
@@ -973,7 +977,7 @@ final readonly class ScormPackageImporter
 
         $link = [
             'cid' => (int) $course->getId(),
-            'visibility' => ResourceLink::VISIBILITY_DRAFT,
+            'visibility' => $this->resourceDefaultVisibilityHelper->getResourceLinkVisibility(ResourceDefaultVisibilityHelper::LEARNING_PATH, $course),
         ];
         if (null !== $session) {
             $link['sid'] = (int) $session->getId();

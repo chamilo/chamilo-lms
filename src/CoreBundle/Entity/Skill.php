@@ -105,13 +105,13 @@ class Skill implements Stringable, Translatable
     #[Gedmo\Translatable]
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write', 'skill_rel_user:read'])]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Gedmo\Translatable]
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write'])]
-    #[ORM\Column(name: 'short_code', type: 'string', length: 100, nullable: false)]
+    #[ORM\Column(name: 'short_code', type: 'string', length: 255, nullable: false)]
     protected string $shortCode;
 
     #[Groups(['skill:read', 'skill:write'])]
@@ -135,6 +135,10 @@ class Skill implements Stringable, Translatable
 
     #[ORM\Column(name: 'status', type: 'integer', nullable: false, options: ['default' => 1])]
     protected int $status;
+
+    #[Groups(['skill:read', 'skill:write'])]
+    #[ORM\Column(name: 'acquirable', type: 'boolean', options: ['default' => true])]
+    protected bool $acquirable = true;
 
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
@@ -247,6 +251,18 @@ class Skill implements Stringable, Translatable
     public function setStatus(int $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function isAcquirable(): bool
+    {
+        return $this->acquirable;
+    }
+
+    public function setAcquirable(bool $acquirable): self
+    {
+        $this->acquirable = $acquirable;
 
         return $this;
     }

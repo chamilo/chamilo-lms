@@ -941,7 +941,20 @@
         class="flex flex-col gap-4"
         @submit.prevent="saveEvaluation"
       >
+        <BaseSelect
+          v-if="isLtiEvaluationFlow && !editingEvaluationId"
+          id="gradebook-evaluation-lti-tool"
+          v-model="evaluationForm.externalToolId"
+          :disabled="isLoadingLtiOptions"
+          :label="t('Tool')"
+          name="gradebook_lti_tool"
+          :options="ltiToolOptions"
+          option-label="label"
+          option-value="value"
+        />
+
         <BaseInputText
+          v-else
           id="gradebook-evaluation-title"
           v-model="evaluationForm.title"
           :form-submitted="evaluationFormSubmitted"
@@ -997,7 +1010,7 @@
         />
 
         <BaseCheckbox
-          v-if="!editingEvaluationId"
+          v-if="!editingEvaluationId && !isLtiEvaluationFlow"
           id="gradebook-evaluation-grade-learners"
           v-model="evaluationForm.gradeLearners"
           :label="t('Grade learners')"
@@ -1007,7 +1020,7 @@
 
       <template #footer>
         <BaseButton
-          :disabled="isSavingEvaluation"
+          :disabled="isSavingEvaluation || (isLtiEvaluationFlow && !evaluationForm.externalToolId)"
           :is-loading="isSavingEvaluation"
           :label="editingEvaluationId ? t('Save') : t('Add classroom activity')"
           icon="save"
@@ -1227,6 +1240,9 @@ const editingEvaluationId = ref(null)
 const movingEvaluation = ref(null)
 const moveEvaluationTargetCategoryId = ref(null)
 const evaluationFormSubmitted = ref(false)
+const isLtiEvaluationFlow = ref(false)
+const isLoadingLtiOptions = ref(false)
+const ltiToolOptions = ref([])
 const isLinkDialogVisible = ref(false)
 const isMoveLinkDialogVisible = ref(false)
 const isSavingLink = ref(false)
@@ -1253,6 +1269,7 @@ const categoryForm = reactive({
 })
 
 const evaluationForm = reactive({
+  externalToolId: null,
   title: "",
   description: "",
   categoryId: null,
@@ -1806,6 +1823,7 @@ async function loadOverview(allowInitialize = true) {
     }
 
     await syncAchievementsIfNeeded()
+    await openLtiEvaluationFromQuery()
   } catch (error) {
     console.error("Error loading Gradebook overview", error)
     overview.value = null
@@ -2174,6 +2192,7 @@ async function moveCategory() {
 }
 
 function resetEvaluationForm() {
+  evaluationForm.externalToolId = null
   evaluationForm.title = ""
   evaluationForm.description = ""
   evaluationForm.categoryId = Number(overview.value?.currentCategory?.id || 0)
@@ -2192,9 +2211,61 @@ function startCreateEvaluation() {
     return
   }
 
+  isLtiEvaluationFlow.value = false
+  ltiToolOptions.value = []
   editingEvaluationId.value = null
   resetEvaluationForm()
   isEvaluationDialogVisible.value = true
+}
+
+async function openLtiEvaluationFromQuery() {
+  if ("lti" !== String(getQueryValue(route.query.source) || "").toLowerCase()) {
+    return
+  }
+
+  const query = { ...route.query }
+  delete query.source
+  await router.replace({
+    name: route.name,
+    params: route.params,
+    query,
+  })
+
+  if (
+    !canManage.value ||
+    !overview.value?.hasGradebook ||
+    currentCategoryLockedForTeacher.value ||
+    true === overview.value?.currentCategory?.hasGradeModel
+  ) {
+    return
+  }
+
+  isLoadingLtiOptions.value = true
+  errorMessage.value = ""
+  infoMessage.value = ""
+
+  try {
+    const data = await gradebookService.getLtiOptions(getContextParams(false))
+    ltiToolOptions.value = Array.isArray(data?.tools) ? data.tools : []
+
+    if (!ltiToolOptions.value.length) {
+      infoMessage.value = t("No data available")
+
+      return
+    }
+
+    editingEvaluationId.value = null
+    resetEvaluationForm()
+    isLtiEvaluationFlow.value = true
+    evaluationForm.externalToolId = Number(ltiToolOptions.value[0].value || 0) || null
+    evaluationForm.title = ltiToolOptions.value[0].label || ""
+    isEvaluationDialogVisible.value = true
+  } catch (error) {
+    console.error("Error loading LTI tools for Gradebook", error)
+    errorMessage.value = extractErrorMessage(error)
+  } finally {
+    isLoadingLtiOptions.value = false
+  }
 }
 
 function startEditEvaluation(evaluation) {
@@ -2202,6 +2273,8 @@ function startEditEvaluation(evaluation) {
     return
   }
 
+  isLtiEvaluationFlow.value = false
+  ltiToolOptions.value = []
   editingEvaluationId.value = Number(evaluation.id || 0)
   evaluationForm.title = evaluation.title || ""
   evaluationForm.description = evaluation.description || ""
@@ -2218,7 +2291,14 @@ function startEditEvaluation(evaluation) {
 
 async function saveEvaluation() {
   evaluationFormSubmitted.value = true
-  if (!evaluationForm.title.trim() || !evaluationForm.categoryId || isSavingEvaluation.value) {
+  const isCreate = !editingEvaluationId.value
+
+  if (
+    !evaluationForm.title.trim() ||
+    !evaluationForm.categoryId ||
+    (isCreate && isLtiEvaluationFlow.value && !evaluationForm.externalToolId) ||
+    isSavingEvaluation.value
+  ) {
     return
   }
 
@@ -2227,11 +2307,11 @@ async function saveEvaluation() {
   infoMessage.value = ""
 
   try {
-    const isCreate = !editingEvaluationId.value
     const response = await gradebookService.runEvaluationAction(
       {
         action: isCreate ? "create" : "update",
         evaluationId: editingEvaluationId.value,
+        ...(isCreate && isLtiEvaluationFlow.value ? { externalToolId: Number(evaluationForm.externalToolId) } : {}),
         categoryId: Number(evaluationForm.categoryId),
         title: evaluationForm.title,
         description: evaluationForm.description,
@@ -2246,6 +2326,8 @@ async function saveEvaluation() {
       getContextParams(false),
     )
     isEvaluationDialogVisible.value = false
+    isLtiEvaluationFlow.value = false
+    ltiToolOptions.value = []
 
     if (isCreate && evaluationForm.gradeLearners && Number(response?.evaluationId || 0) > 0) {
       await router.push(buildEvaluationResultsRoute({ id: Number(response.evaluationId) }))
@@ -2607,6 +2689,18 @@ async function moveLink() {
     isSavingLink.value = false
   }
 }
+
+watch(
+  () => evaluationForm.externalToolId,
+  (toolId) => {
+    if (!isLtiEvaluationFlow.value) {
+      return
+    }
+
+    const selectedTool = ltiToolOptions.value.find((tool) => Number(tool.value) === Number(toolId || 0))
+    evaluationForm.title = selectedTool?.label || ""
+  },
+)
 
 watch(
   () => linkForm.type,

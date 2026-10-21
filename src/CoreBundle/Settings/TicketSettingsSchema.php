@@ -18,6 +18,7 @@ class TicketSettingsSchema extends AbstractSettingsSchema
         $builder->setDefaults([
             'ticket_allow_category_edition' => 'false',
             'ticket_allow_student_add' => 'false',
+            'ticket_support_bot_enabled' => 'false',
             'ticket_send_warning_to_all_admins' => 'false',
             'ticket_warn_admin_no_user_in_category' => 'false',
             'ticket_project_user_roles' => '',
@@ -34,6 +35,7 @@ class TicketSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('ticket_allow_category_edition', YesNoType::class)
             ->add('ticket_allow_student_add', YesNoType::class)
+            ->add('ticket_support_bot_enabled', YesNoType::class)
             ->add('ticket_send_warning_to_all_admins', YesNoType::class)
             ->add('ticket_warn_admin_no_user_in_category', YesNoType::class)
             ->add('ticket_project_user_roles', TextareaType::class)

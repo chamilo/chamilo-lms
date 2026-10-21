@@ -179,6 +179,12 @@
                         <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
                         </th>
+                        <th class="px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            {{ 'LastPayment'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </th>
+                        <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
+                            {{ 'TotalCollected'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </th>
                         <th class="px-4 py-3 text-end text-xs font-semibold uppercase tracking-wide text-gray-50">
                             {{ 'CouponDiscount'|get_plugin_lang('BuyCoursesPlugin') }}
                         </th>
@@ -239,6 +245,18 @@
                                 {{ sale.total_price|default('') }}
                             </td>
 
+                            <td class="px-4 py-4 text-sm text-gray-90">
+                                {% if sale.last_payment_date|default('') %}
+                                    {{ sale.last_payment_date|api_get_local_time }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+
+                            <td class="px-4 py-4 text-end text-sm font-semibold text-gray-90">
+                                {{ sale.total_collected|default('') }}
+                            </td>
+
                             <td class="px-4 py-4 text-end text-sm text-gray-90">
                                 {{ sale.total_discount|default('') }}
                             </td>
@@ -294,7 +312,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="11" class="px-4 py-10 text-center">
+                            <td colspan="13" class="px-4 py-10 text-center">
                                 <div class="mx-auto max-w-md space-y-2">
                                     <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
                                         <em class="mdi mdi-briefcase text-xl"></em>
@@ -352,7 +370,9 @@
     const buyCoursesErrorLabel = '{{ 'Error'|get_lang|e('js') }}'
     const buyCoursesConfirmOrderLabel = '{{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin')|e('js') }}'
     const buyCoursesCancelOrderLabel = '{{ 'CancelOrder'|get_plugin_lang('BuyCoursesPlugin')|e('js') }}'
+    const buyCoursesCancelServiceLabel = '{{ 'CancelService'|get_plugin_lang('BuyCoursesPlugin')|e('js') }}'
     const buyCoursesCloseLabel = '{{ 'Close'|get_lang|e('js') }}'
+    let buyCoursesCurrentServiceSaleActions = []
 
     function escapeHtml(value) {
         return String(value ?? '')
@@ -456,11 +476,30 @@
             `
         }
 
+        buyCoursesCurrentServiceSaleActions = Array.isArray(data.actions) ? data.actions : []
+        const actionButtons = buyCoursesCurrentServiceSaleActions.map((action, index) => {
+            if ('cancel_service' !== action.type) {
+                return ''
+            }
+
+            return `
+                <button
+                    type="button"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-danger px-3 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-danger/30 focus:ring-offset-2"
+                    onclick="cancelServiceRenewalFromReport(${index})"
+                >
+                    <em class="mdi mdi-cancel"></em>
+                    ${escapeHtml(action.label || buyCoursesCancelServiceLabel)}
+                </button>
+            `
+        }).join('')
+
         return `
             <div class="space-y-4">
                 ${imageHtml}
                 ${sections.join('')}
-                <div class="flex justify-end pt-2">
+                <div class="flex flex-wrap justify-end gap-2 pt-2">
+                    ${actionButtons}
                     <button
                         type="button"
                         class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-3 py-2 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
@@ -503,8 +542,54 @@
     function closeServiceSaleModal() {
         const modal = document.getElementById('service-sale-modal')
 
+        buyCoursesCurrentServiceSaleActions = []
         modal.classList.add('hidden')
         modal.classList.remove('flex')
+    }
+
+    function cancelServiceRenewalFromReport(actionIndex) {
+        const action = buyCoursesCurrentServiceSaleActions[actionIndex]
+        if (!action || 'cancel_service' !== action.type || !action.url || !action.saleId || !action.token) {
+            return
+        }
+
+        if (!window.confirm(action.confirmation || buyCoursesCancelServiceLabel + '?')) {
+            return
+        }
+
+        const modal = document.getElementById('service-sale-modal')
+        const body = document.getElementById('service-sale-modal-body')
+        const requestBody = new URLSearchParams()
+
+        requestBody.append('order', String(action.saleId))
+        requestBody.append('action', 'cancel_recurring_payment')
+        requestBody.append('sec_token', String(action.token))
+        body.innerHTML = buyCoursesLoadingLabel
+
+        fetch(action.url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+            body: requestBody.toString(),
+        })
+            .then(async (response) => {
+                const data = await response.json().catch(() => ({}))
+                if (!response.ok || true !== data.success) {
+                    throw new Error(data.message || buyCoursesErrorLabel)
+                }
+
+                return data
+            })
+            .then((data) => {
+                body.innerHTML = '<div class="rounded-2xl border border-success bg-support-3 px-4 py-3 text-sm text-gray-90">' + escapeHtml(data.message || buyCoursesCancelServiceLabel) + '</div>'
+                window.setTimeout(() => window.location.reload(), 1200)
+            })
+            .catch((error) => {
+                body.innerHTML = '<div class="rounded-2xl border border-danger bg-support-6 px-4 py-3 text-sm text-gray-90">' + escapeHtml(error.message || buyCoursesErrorLabel) + '</div>'
+            })
     }
 
     function runServiceSaleAction(action, saleId) {

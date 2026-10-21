@@ -12,7 +12,7 @@
 	  <script src="js/amplify.min.js"></script>
     <?php
       if (isset($_GET['id'])) {
-          $idPage = $_GET['id'];
+          $idPage = (int) $_GET['id'];
           echo '<script>var idPageHtml = '.$idPage.';</script>';
       }
     ?>

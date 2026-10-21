@@ -62,6 +62,7 @@ class BuyCoursesPlugin extends Plugin
     public const TABLE_COUPON_SERVICE_SALE = 'plugin_buycourses_coupon_rel_service_sale';
     public const TABLE_COUPON_SUBSCRIPTION_SALE = 'plugin_buycourses_coupon_rel_subscription_sale';
     public const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
+    public const TABLE_BTCPAY = 'plugin_buycourses_btcpay_account';
     public const TABLE_TPV_CECABANK = 'plugin_buycourses_cecabank_account';
     public const PRODUCT_TYPE_COURSE = 1;
     public const PRODUCT_TYPE_SESSION = 2;
@@ -72,6 +73,7 @@ class BuyCoursesPlugin extends Plugin
     public const PAYMENT_TYPE_TPV_REDSYS = 4;
     public const PAYMENT_TYPE_STRIPE = 5;
     public const PAYMENT_TYPE_TPV_CECABANK = 6;
+    public const PAYMENT_TYPE_BTCPAY = 7;
     public const PAYOUT_STATUS_CANCELED = 2;
     public const PAYOUT_STATUS_PENDING = 0;
     public const PAYOUT_STATUS_COMPLETED = 1;
@@ -92,6 +94,9 @@ class BuyCoursesPlugin extends Plugin
     public const SERVICE_RECURRING_PAYMENT_ENABLED = 1;
     public const SERVICE_RECURRING_PAYMENT_SUSPENDED = 2;
     public const SERVICE_RECURRING_PAYMENT_CANCELLED = -1;
+    public const INVOICE_SOURCE_SALE = 0;
+    public const INVOICE_SOURCE_SERVICE = 1;
+    public const INVOICE_SOURCE_SUBSCRIPTION = 2;
 
     public const AUDIT_OBJECT_SERVICE_SALE = 'service_sale';
 
@@ -179,6 +184,7 @@ class BuyCoursesPlugin extends Plugin
                 'use_currency_symbol' => 'boolean',
                 'tpv_redsys_enable' => 'boolean',
                 'stripe_enable' => 'boolean',
+                'btcpay_enable' => 'boolean',
                 'cecabank_enable' => 'boolean',
             ]
         );
@@ -471,6 +477,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_COUPON_SERVICE_SALE,
             self::TABLE_COUPON_SUBSCRIPTION_SALE,
             self::TABLE_STRIPE,
+            self::TABLE_BTCPAY,
             self::TABLE_TPV_CECABANK,
         ];
     }
@@ -528,7 +535,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function isEnabled(): bool
     {
-        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable');
+        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable') || 'true' === $this->get('btcpay_enable');
     }
 
     /**
@@ -606,11 +613,11 @@ class BuyCoursesPlugin extends Plugin
         $sellerVatColumns = [
             'seller_country' => 'VARCHAR(2) DEFAULT NULL',
             'seller_postcode' => 'VARCHAR(32) DEFAULT NULL',
-            'seller_vat_number' => 'VARCHAR(64) DEFAULT NULL',
+            'seller_vat_number' => 'VARCHAR(255) DEFAULT NULL',
             'seller_vat_registered' => 'TINYINT(1) NOT NULL DEFAULT 0',
             'seller_annual_eu_tbe_turnover' => 'DECIMAL(12,2) NOT NULL DEFAULT 0.00',
             'vat_geoip_provider' => "VARCHAR(32) NOT NULL DEFAULT 'none'",
-            'vat_maxmind_account_id' => 'VARCHAR(64) DEFAULT NULL',
+            'vat_maxmind_account_id' => 'VARCHAR(255) DEFAULT NULL',
             'vat_maxmind_license_key' => 'VARCHAR(255) DEFAULT NULL',
         ];
 
@@ -756,6 +763,7 @@ class BuyCoursesPlugin extends Plugin
             'gateway_checkout_session_id' => 'VARCHAR(255) DEFAULT NULL',
             'gateway_subscription_id' => 'VARCHAR(255) DEFAULT NULL',
             'gateway_last_event_id' => 'VARCHAR(255) DEFAULT NULL',
+            'gateway_transaction_id' => 'VARCHAR(255) DEFAULT NULL',
         ];
 
         foreach ($recurringServiceSaleColumns as $field => $definition) {
@@ -791,11 +799,11 @@ class BuyCoursesPlugin extends Plugin
             'buyer_postcode' => 'VARCHAR(32) DEFAULT NULL',
             'buyer_ip' => 'VARCHAR(45) DEFAULT NULL',
             'buyer_ip_country' => 'VARCHAR(2) DEFAULT NULL',
-            'buyer_vat_number' => 'VARCHAR(64) DEFAULT NULL',
+            'buyer_vat_number' => 'VARCHAR(255) DEFAULT NULL',
             'buyer_vat_valid' => 'TINYINT(1) DEFAULT NULL',
             'buyer_business_name' => 'VARCHAR(255) DEFAULT NULL',
             'buyer_business_address' => 'TEXT DEFAULT NULL',
-            'vat_treatment' => 'VARCHAR(128) DEFAULT NULL',
+            'vat_treatment' => 'VARCHAR(255) DEFAULT NULL',
             'vat_rate' => 'DECIMAL(5,2) DEFAULT NULL',
             'vat_evidence_json' => 'LONGTEXT DEFAULT NULL',
         ];
@@ -1020,6 +1028,27 @@ class BuyCoursesPlugin extends Plugin
             ]);
         }
 
+        $table = Database::get_main_table(self::TABLE_BTCPAY);
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            server_url varchar(2048) NOT NULL,
+            store_id varchar(255) NOT NULL,
+            api_key varchar(512) NOT NULL,
+            webhook_secret varchar(255) NOT NULL,
+            PRIMARY KEY (id)
+        )";
+        Database::query($sql);
+
+        $res = Database::query("SELECT id FROM $table LIMIT 1");
+        if (0 === Database::num_rows($res)) {
+            Database::insert($table, [
+                'server_url' => '',
+                'store_id' => '',
+                'api_key' => '',
+                'webhook_secret' => '',
+            ]);
+        }
+
         $table = Database::get_main_table(self::TABLE_TPV_CECABANK);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
@@ -1169,6 +1198,149 @@ class BuyCoursesPlugin extends Plugin
                 'order' => 'audit_entry_id DESC',
             ]
         );
+    }
+
+    /**
+     * Return the last successful payment date and the total amount collected for a service sale.
+     */
+    public function getServiceSalePaymentSummary(array $serviceSale): array
+    {
+        $serviceSaleId = (int) ($serviceSale['id'] ?? 0);
+        $status = (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING);
+        $baseAmount = (float) ($serviceSale['price'] ?? 0);
+        $basePaymentCollected = self::SERVICE_STATUS_COMPLETED === $status
+            || (int) ($serviceSale['upgraded_to_sale_id'] ?? 0) > 0;
+        $initialPaymentDate = '';
+        $lastPaymentDate = '';
+        $renewalPayments = [];
+        $seenRenewalPaymentEvents = [];
+
+        if ($serviceSaleId > 0 && $this->hasPluginTable(self::TABLE_AUDIT)) {
+            $auditEntries = Database::select(
+                'action, created_at, data_json',
+                Database::get_main_table(self::TABLE_AUDIT),
+                [
+                    'where' => [
+                        'object_type = ? AND object_id = ?' => [self::AUDIT_OBJECT_SERVICE_SALE, $serviceSaleId],
+                    ],
+                    'order' => 'id ASC',
+                ]
+            );
+
+            foreach ($auditEntries as $auditEntry) {
+                $action = (string) ($auditEntry['action'] ?? '');
+                $paymentDate = trim((string) ($auditEntry['created_at'] ?? ''));
+
+                if (self::AUDIT_ACTION_SERVICE_SALE_COMPLETED === $action) {
+                    $basePaymentCollected = true;
+                    if ('' !== $paymentDate) {
+                        $initialPaymentDate = $paymentDate;
+                        if ('' === $lastPaymentDate || strtotime($paymentDate) > strtotime($lastPaymentDate)) {
+                            $lastPaymentDate = $paymentDate;
+                        }
+                    }
+
+                    continue;
+                }
+
+                if (self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED !== $action) {
+                    continue;
+                }
+
+                $auditData = [];
+                $dataJson = trim((string) ($auditEntry['data_json'] ?? ''));
+                if ('' !== $dataJson) {
+                    $decoded = json_decode($dataJson, true);
+                    if (is_array($decoded)) {
+                        $auditData = $decoded;
+                    }
+                }
+
+                $amount = null;
+                if (isset($auditData['amount_paid']) && is_numeric($auditData['amount_paid'])) {
+                    $amount = (float) $auditData['amount_paid'];
+                } elseif (isset($auditData['amount']) && is_numeric($auditData['amount'])) {
+                    $amount = (float) $auditData['amount'];
+                }
+
+                $gateway = strtolower(trim((string) ($auditData['gateway'] ?? $serviceSale['recurring_gateway'] ?? '')));
+                $paymentEventId = trim((string) (
+                    $auditData['event_id']
+                    ?? $auditData['event_key']
+                    ?? $auditData['transaction_id']
+                    ?? ''
+                ));
+                if ('' !== $paymentEventId) {
+                    $deduplicationKey = $gateway.':'.$paymentEventId;
+                    if (isset($seenRenewalPaymentEvents[$deduplicationKey])) {
+                        continue;
+                    }
+                    $seenRenewalPaymentEvents[$deduplicationKey] = true;
+                }
+
+                $renewalPayments[] = [
+                    'amount' => $amount,
+                    'billing_reason' => strtolower(trim((string) ($auditData['billing_reason'] ?? ''))),
+                    'gateway' => $gateway,
+                    'payment_date' => $paymentDate,
+                ];
+
+                if ('' !== $paymentDate
+                    && ('' === $lastPaymentDate || strtotime($paymentDate) > strtotime($lastPaymentDate))
+                ) {
+                    $lastPaymentDate = $paymentDate;
+                }
+            }
+        }
+
+        if ($basePaymentCollected && '' === $initialPaymentDate) {
+            $initialPaymentDate = trim((string) ($serviceSale['buy_date'] ?? ''));
+            if ('' !== $initialPaymentDate
+                && ('' === $lastPaymentDate || strtotime($initialPaymentDate) > strtotime($lastPaymentDate))
+            ) {
+                $lastPaymentDate = $initialPaymentDate;
+            }
+        }
+
+        $totalCollected = $basePaymentCollected ? $baseAmount : 0.0;
+        $stripeInitialChargeMatched = false;
+        $initialPaymentTimestamp = '' !== $initialPaymentDate ? strtotime($initialPaymentDate) : false;
+
+        foreach ($renewalPayments as $renewalPayment) {
+            $amount = $renewalPayment['amount'];
+            if (null === $amount) {
+                continue;
+            }
+
+            $isInitialStripeCharge = false;
+            if ($basePaymentCollected && 'stripe' === $renewalPayment['gateway']) {
+                if ('subscription_create' === $renewalPayment['billing_reason']) {
+                    $isInitialStripeCharge = true;
+                } elseif (!$stripeInitialChargeMatched
+                    && '' === $renewalPayment['billing_reason']
+                    && false !== $initialPaymentTimestamp
+                    && '' !== $renewalPayment['payment_date']
+                    && abs((float) $amount - $baseAmount) < 0.005
+                ) {
+                    $renewalTimestamp = strtotime($renewalPayment['payment_date']);
+                    $isInitialStripeCharge = false !== $renewalTimestamp
+                        && abs($renewalTimestamp - $initialPaymentTimestamp) <= 900;
+                }
+            }
+
+            if ($isInitialStripeCharge) {
+                $stripeInitialChargeMatched = true;
+
+                continue;
+            }
+
+            $totalCollected += $amount;
+        }
+
+        return [
+            'last_payment_date' => $lastPaymentDate,
+            'total_collected' => round($totalCollected, 2),
+        ];
     }
 
     public function getAuditActionLabel(string $action): string
@@ -1897,17 +2069,91 @@ class BuyCoursesPlugin extends Plugin
         return $summaries;
     }
 
+    private function getServiceSaleAuditPaymentRows(int $serviceSaleId): array
+    {
+        if ($serviceSaleId <= 0 || !$this->hasPluginTable(self::TABLE_AUDIT)) {
+            return [];
+        }
+
+        return Database::select(
+            'id, action, created_at, data_json',
+            Database::get_main_table(self::TABLE_AUDIT),
+            [
+                'where' => [
+                    'object_type = ? AND object_id = ?' => [self::AUDIT_OBJECT_SERVICE_SALE, $serviceSaleId],
+                ],
+                'order' => 'id ASC',
+            ]
+        );
+    }
+
+    private function decodeAuditData(array $auditEntry): array
+    {
+        $dataJson = trim((string) ($auditEntry['data_json'] ?? ''));
+        if ('' === $dataJson) {
+            return [];
+        }
+
+        $decoded = json_decode($dataJson, true);
+
+        return is_array($decoded) ? $decoded : [];
+    }
+
+    private function getServiceSaleEffectiveDateEnd(array $serviceSale): string
+    {
+        $effectiveDateEnd = trim((string) ($serviceSale['date_end'] ?? ''));
+        $durationDays = max(0, (int) ($serviceSale['service']['duration_days'] ?? $serviceSale['duration_days'] ?? 0));
+
+        foreach ($this->getServiceSaleAuditPaymentRows((int) ($serviceSale['id'] ?? 0)) as $auditEntry) {
+            if (self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED !== (string) ($auditEntry['action'] ?? '')) {
+                continue;
+            }
+
+            $auditData = $this->decodeAuditData($auditEntry);
+            $candidateDateEnd = trim((string) (
+                $auditData['next_charge_date']
+                ?? $auditData['new_date_end']
+                ?? ''
+            ));
+
+            if ('' === $candidateDateEnd && $durationDays > 0) {
+                $paymentDate = trim((string) ($auditEntry['created_at'] ?? ''));
+                if ('' !== $paymentDate) {
+                    $timestamp = strtotime($paymentDate);
+                    if (false !== $timestamp) {
+                        $candidateDateEnd = gmdate('Y-m-d H:i:s', strtotime('+'.$durationDays.' days', $timestamp));
+                    }
+                }
+            }
+
+            if ('' !== $candidateDateEnd
+                && ('' === $effectiveDateEnd || strtotime($candidateDateEnd) > strtotime($effectiveDateEnd))
+            ) {
+                $effectiveDateEnd = $candidateDateEnd;
+            }
+        }
+
+        return $effectiveDateEnd;
+    }
+
     public function getActiveServicesForUser(int $userId): array
     {
-        $servicesByKey = [];
+        $services = [];
 
         foreach ($this->getServiceSales($userId, self::SERVICE_STATUS_COMPLETED) as $serviceSale) {
             if ((int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING) !== self::SERVICE_STATUS_COMPLETED) {
                 continue;
             }
 
-            if (empty($serviceSale['date_end']) || strtotime((string) $serviceSale['date_end']) < time()) {
+            $effectiveDateEnd = $this->getServiceSaleEffectiveDateEnd($serviceSale);
+            if ('' === $effectiveDateEnd || strtotime($effectiveDateEnd) < time()) {
                 continue;
+            }
+
+            $serviceSale['date_end'] = $effectiveDateEnd;
+            $storedNextChargeDate = trim((string) ($serviceSale['next_charge_date'] ?? ''));
+            if ('' === $storedNextChargeDate || strtotime($effectiveDateEnd) > strtotime($storedNextChargeDate)) {
+                $serviceSale['next_charge_date'] = $effectiveDateEnd;
             }
 
             $benefitSummaries = [];
@@ -1915,7 +2161,7 @@ class BuyCoursesPlugin extends Plugin
                 $payload = $this->buildBenefitPayload(
                     $configuration['variable'],
                     (int) $configuration['granted_value'],
-                    (string) $serviceSale['date_end']
+                    $effectiveDateEnd
                 );
 
                 $benefitSummaries[] = [
@@ -1929,33 +2175,8 @@ class BuyCoursesPlugin extends Plugin
             }
 
             $serviceSale['benefit_summaries'] = $benefitSummaries;
-
-            $serviceKey = implode(':', [
-                (int) ($serviceSale['service_id'] ?? 0),
-                (int) ($serviceSale['node_type'] ?? 0),
-                (int) ($serviceSale['node_id'] ?? 0),
-            ]);
-
-            $currentService = $servicesByKey[$serviceKey] ?? null;
-            if (null !== $currentService) {
-                $currentDateEnd = (string) ($currentService['date_end'] ?? '');
-                $candidateDateEnd = (string) ($serviceSale['date_end'] ?? '');
-                $currentId = (int) ($currentService['id'] ?? 0);
-                $candidateId = (int) ($serviceSale['id'] ?? 0);
-
-                if ($candidateDateEnd < $currentDateEnd) {
-                    continue;
-                }
-
-                if ($candidateDateEnd === $currentDateEnd && $candidateId <= $currentId) {
-                    continue;
-                }
-            }
-
-            $servicesByKey[$serviceKey] = $serviceSale;
+            $services[] = $serviceSale;
         }
-
-        $services = array_values($servicesByKey);
 
         usort($services, static function (array $left, array $right): int {
             return strcmp((string) ($right['date_end'] ?? ''), (string) ($left['date_end'] ?? ''));
@@ -1985,7 +2206,6 @@ class BuyCoursesPlugin extends Plugin
                 'reference' => (string) ($sale['reference'] ?? ''),
                 'amount' => $this->getPriceWithCurrencyFromIsoCode((float) ($sale['price'] ?? 0), $this->getCurrency((int) $sale['currency_id'])['iso_code'] ?? ''),
                 'status' => (int) ($sale['status'] ?? 0),
-                'receipt_url' => !empty($sale['invoice']) ? $this->getInvoiceUrl((int) $sale['id'], 0) : null,
             ];
         }
 
@@ -1997,8 +2217,248 @@ class BuyCoursesPlugin extends Plugin
                 'reference' => (string) ($serviceSale['reference'] ?? ''),
                 'amount' => (string) ($serviceSale['service']['total_price'] ?? ''),
                 'status' => (int) ($serviceSale['status'] ?? 0),
-                'receipt_url' => !empty($serviceSale['invoice']) ? $this->getInvoiceUrl((int) $serviceSale['id'], 1) : null,
             ];
+        }
+
+        usort($history, static function (array $left, array $right): int {
+            return strcmp((string) ($right['date'] ?? ''), (string) ($left['date'] ?? ''));
+        });
+
+        return $history;
+    }
+
+    public function getServiceSalePaymentEvents(array $serviceSale): array
+    {
+        $serviceSaleId = (int) ($serviceSale['id'] ?? 0);
+        if ($serviceSaleId <= 0) {
+            return [];
+        }
+
+        $currency = $this->getCurrency((int) ($serviceSale['currency_id'] ?? 0));
+        if (empty($currency) || empty($currency['iso_code'])) {
+            $currency = $this->getSelectedCurrency();
+        }
+        $defaultCurrency = strtoupper(trim((string) ($currency['iso_code'] ?? '')));
+        $baseAmount = (float) ($serviceSale['price'] ?? 0);
+        $events = [];
+        $renewalEvents = [];
+        $seenPaymentKeys = [];
+        $initialAuditFound = false;
+        $initialEventIndex = null;
+        $initialPaymentDate = trim((string) ($serviceSale['buy_date'] ?? ''));
+        $initialPaymentTimestamp = '' !== $initialPaymentDate ? strtotime($initialPaymentDate) : false;
+
+        foreach ($this->getServiceSaleAuditPaymentRows($serviceSaleId) as $auditEntry) {
+            $action = (string) ($auditEntry['action'] ?? '');
+            $auditData = $this->decodeAuditData($auditEntry);
+            $paymentDate = trim((string) ($auditEntry['created_at'] ?? ''));
+
+            if (in_array($action, [self::AUDIT_ACTION_SERVICE_SALE_COMPLETED, self::AUDIT_ACTION_SERVICE_UPGRADE_COMPLETED], true)) {
+                if ($initialAuditFound) {
+                    continue;
+                }
+
+                $initialAuditFound = true;
+                if ('' !== $paymentDate) {
+                    $initialPaymentDate = $paymentDate;
+                    $initialPaymentTimestamp = strtotime($paymentDate);
+                }
+
+                $events[] = [
+                    'audit_id' => (int) ($auditEntry['id'] ?? 0),
+                    'kind' => 'initial',
+                    'date' => $initialPaymentDate,
+                    'amount' => $baseAmount,
+                    'currency' => strtoupper(trim((string) ($auditData['currency'] ?? $defaultCurrency))),
+                    'transaction_id' => trim((string) (
+                        $auditData['transaction_id']
+                        ?? $auditData['charge_id']
+                        ?? ''
+                    )),
+                    'gateway' => strtolower(trim((string) ($auditData['gateway'] ?? $serviceSale['recurring_gateway'] ?? ''))),
+                ];
+                $initialEventIndex = array_key_last($events);
+
+                continue;
+            }
+
+            if (self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED !== $action) {
+                continue;
+            }
+
+            $amount = null;
+            if (isset($auditData['amount_paid']) && is_numeric($auditData['amount_paid'])) {
+                $amount = (float) $auditData['amount_paid'];
+            } elseif (isset($auditData['amount']) && is_numeric($auditData['amount'])) {
+                $amount = (float) $auditData['amount'];
+            }
+
+            if (null === $amount) {
+                $amount = (float) ($serviceSale['recurring_amount'] ?? $baseAmount);
+            }
+
+            $gateway = strtolower(trim((string) ($auditData['gateway'] ?? $serviceSale['recurring_gateway'] ?? '')));
+            $transactionId = trim((string) ($auditData['transaction_id'] ?? ''));
+            $eventKey = trim((string) (
+                $auditData['event_id']
+                ?? $auditData['event_key']
+                ?? $transactionId
+            ));
+            $deduplicationKey = '' !== $eventKey
+                ? $gateway.':'.$eventKey
+                : 'audit:'.(int) ($auditEntry['id'] ?? 0);
+
+            if (isset($seenPaymentKeys[$deduplicationKey])) {
+                continue;
+            }
+            $seenPaymentKeys[$deduplicationKey] = true;
+
+            $billingReason = strtolower(trim((string) ($auditData['billing_reason'] ?? '')));
+            $renewalEvents[] = [
+                'audit_id' => (int) ($auditEntry['id'] ?? 0),
+                'kind' => 'renewal',
+                'date' => $paymentDate,
+                'amount' => $amount,
+                'currency' => strtoupper(trim((string) ($auditData['currency'] ?? $defaultCurrency))),
+                'transaction_id' => $transactionId,
+                'gateway' => $gateway,
+                'billing_reason' => $billingReason,
+            ];
+        }
+
+        $basePaymentCollected = self::SERVICE_STATUS_COMPLETED === (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING)
+            || (int) ($serviceSale['upgraded_to_sale_id'] ?? 0) > 0
+            || $initialAuditFound;
+
+        if ($basePaymentCollected && !$initialAuditFound) {
+            $events[] = [
+                'audit_id' => 0,
+                'kind' => 'initial',
+                'date' => $initialPaymentDate,
+                'amount' => $baseAmount,
+                'currency' => $defaultCurrency,
+                'transaction_id' => trim((string) ($serviceSale['gateway_transaction_id'] ?? '')),
+                'gateway' => strtolower(trim((string) ($serviceSale['recurring_gateway'] ?? ''))),
+            ];
+            $initialEventIndex = array_key_last($events);
+        }
+
+        $stripeInitialChargeMatched = false;
+        foreach ($renewalEvents as $renewalEvent) {
+            $isInitialStripeCharge = false;
+
+            if ($basePaymentCollected && 'stripe' === $renewalEvent['gateway']) {
+                if ('subscription_create' === $renewalEvent['billing_reason']) {
+                    $isInitialStripeCharge = true;
+                } elseif (!$stripeInitialChargeMatched
+                    && '' === $renewalEvent['billing_reason']
+                    && false !== $initialPaymentTimestamp
+                    && '' !== $renewalEvent['date']
+                    && abs((float) $renewalEvent['amount'] - $baseAmount) < 0.005
+                ) {
+                    $renewalTimestamp = strtotime($renewalEvent['date']);
+                    $isInitialStripeCharge = false !== $renewalTimestamp
+                        && abs($renewalTimestamp - $initialPaymentTimestamp) <= 900;
+                }
+            }
+
+            if ($isInitialStripeCharge) {
+                $stripeInitialChargeMatched = true;
+
+                if (null !== $initialEventIndex && isset($events[$initialEventIndex])) {
+                    $events[$initialEventIndex]['transaction_id'] = (string) ($renewalEvent['transaction_id'] ?? $events[$initialEventIndex]['transaction_id']);
+                    $events[$initialEventIndex]['gateway'] = (string) ($renewalEvent['gateway'] ?? $events[$initialEventIndex]['gateway']);
+                    $events[$initialEventIndex]['currency'] = (string) ($renewalEvent['currency'] ?? $events[$initialEventIndex]['currency']);
+                    if (isset($renewalEvent['amount']) && is_numeric($renewalEvent['amount'])) {
+                        $events[$initialEventIndex]['amount'] = (float) $renewalEvent['amount'];
+                    }
+                    if (0 === (int) ($events[$initialEventIndex]['audit_id'] ?? 0)) {
+                        $events[$initialEventIndex]['audit_id'] = (int) ($renewalEvent['audit_id'] ?? 0);
+                    }
+                }
+
+                continue;
+            }
+
+            unset($renewalEvent['billing_reason']);
+            $events[] = $renewalEvent;
+        }
+
+        usort($events, static function (array $left, array $right): int {
+            return strcmp((string) ($right['date'] ?? ''), (string) ($left['date'] ?? ''));
+        });
+
+        return $events;
+    }
+
+    public function getServiceSalePaymentEvent(int $serviceSaleId, int $auditId): array
+    {
+        $serviceSale = $this->getServiceSale($serviceSaleId);
+        if (empty($serviceSale)) {
+            return [];
+        }
+
+        foreach ($this->getServiceSalePaymentEvents($serviceSale) as $event) {
+            if ((int) ($event['audit_id'] ?? 0) === $auditId) {
+                return $event;
+            }
+        }
+
+        return [];
+    }
+
+    public function getPaymentHistoryForUser(int $userId): array
+    {
+        $history = [];
+        $paymentTypeLabels = $this->getPaymentTypes();
+
+        $sales = Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_SALE),
+            [
+                'where' => [
+                    'user_id = ? AND status = ?' => [$userId, self::SALE_STATUS_COMPLETED],
+                ],
+                'order' => 'date DESC',
+            ]
+        );
+
+        foreach ($sales as $sale) {
+            $currency = $this->getCurrency((int) ($sale['currency_id'] ?? 0));
+            $isoCode = (string) ($currency['iso_code'] ?? '');
+            $history[] = [
+                'date' => (string) ($sale['date'] ?? ''),
+                'type' => (int) ($sale['product_type'] ?? 0) === self::PRODUCT_TYPE_SESSION ? get_lang('Session') : get_lang('Course'),
+                'product_name' => (string) ($sale['product_name'] ?? ''),
+                'reference' => (string) ($sale['reference'] ?? ''),
+                'amount' => $this->getPriceWithCurrencyFromIsoCode((float) ($sale['price'] ?? 0), $isoCode),
+                'payment_method' => (string) ($paymentTypeLabels[(int) ($sale['payment_type'] ?? 0)] ?? ''),
+                'receipt_url' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/receipt.php?sale_id='.(int) ($sale['id'] ?? 0).'&is_service=0',
+            ];
+        }
+
+        foreach ($this->getServiceSales($userId) as $serviceSale) {
+            $paymentMethod = (string) ($paymentTypeLabels[(int) ($serviceSale['payment_type'] ?? 0)] ?? '');
+
+            foreach ($this->getServiceSalePaymentEvents($serviceSale) as $paymentEvent) {
+                $auditId = (int) ($paymentEvent['audit_id'] ?? 0);
+                $amount = (float) ($paymentEvent['amount'] ?? 0);
+                $currencyCode = (string) ($paymentEvent['currency'] ?? '');
+                $receiptUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/receipt.php?sale_id='.(int) $serviceSale['id'].'&is_service=1';
+                if ($auditId > 0) {
+                    $receiptUrl .= '&payment_audit_id='.$auditId;
+                }
+
+                $history[] = [
+                    'date' => (string) ($paymentEvent['date'] ?? ''),
+                    'type' => $this->get_lang('Service'),
+                    'product_name' => (string) ($serviceSale['service']['name'] ?? ''),
+                    'reference' => (string) ($serviceSale['reference'] ?? ''),
+                    'amount' => $this->getPriceWithCurrencyFromIsoCode($amount, $currencyCode),
+                    'payment_method' => $paymentMethod,
+                    'receipt_url' => $receiptUrl,
+                ];
+            }
         }
 
         usort($history, static function (array $left, array $right): int {
@@ -2047,12 +2507,18 @@ class BuyCoursesPlugin extends Plugin
         $paypal = 'true' === $this->get('paypal_enable');
         $transfer = 'true' === $this->get('transfer_enable');
         $stripe = 'true' === $this->get('stripe_enable');
+        $btcpay = 'true' === $this->get('btcpay_enable');
+
+        if ($btcpay) {
+            require_once __DIR__.'/btcpay_client.php';
+            $btcpay = BuyCoursesBtcPayClient::isConfigured($this);
+        }
         $culqi = 'true' === $this->get('culqi_enable');
         $cecabank = 'true' === $this->get('cecabank_enable');
         $tpv_redsys = 'true' === $this->get('tpv_redsys_enable');
         $hideFree = 'true' === $this->get('hide_free_text');
 
-        if ($paypal || $transfer || $stripe || $culqi || $cecabank || $tpv_redsys) {
+        if ($paypal || $transfer || $stripe || $btcpay || $culqi || $cecabank || $tpv_redsys) {
             $item = $this->getItemByProduct($productId, $productType);
             $html = '<div class="buycourses-price">';
             if ($item) {
@@ -2262,6 +2728,95 @@ class BuyCoursesPlugin extends Plugin
             ['id = ?' => 1],
             'first'
         );
+    }
+
+    /**
+     * Save BTCPay Server configuration params.
+     *
+     * Empty secret fields keep the currently stored value so administrators do
+     * not need to re-enter credentials when changing only the URL or Store ID.
+     */
+    public function saveBtcPayParameters(array $params): int
+    {
+        $this->ensureBtcPayAccountTable();
+        $current = $this->getBtcPayParams();
+
+        $apiKey = trim((string) ($params['api_key'] ?? ''));
+        $webhookSecret = trim((string) ($params['webhook_secret'] ?? ''));
+
+        if ('' === $apiKey) {
+            $apiKey = trim((string) ($current['api_key'] ?? ''));
+        }
+
+        if ('' === $webhookSecret) {
+            $webhookSecret = trim((string) ($current['webhook_secret'] ?? ''));
+        }
+
+        return Database::update(
+            Database::get_main_table(self::TABLE_BTCPAY),
+            [
+                'server_url' => rtrim(trim((string) ($params['server_url'] ?? '')), '/'),
+                'store_id' => trim((string) ($params['store_id'] ?? '')),
+                'api_key' => $apiKey,
+                'webhook_secret' => $webhookSecret,
+            ],
+            ['id = ?' => 1]
+        );
+    }
+
+    /**
+     * Gets the stored BTCPay Server params.
+     */
+    public function getBtcPayParams(): array
+    {
+        if (!$this->hasPluginTable(self::TABLE_BTCPAY)) {
+            return [
+                'id' => 0,
+                'server_url' => '',
+                'store_id' => '',
+                'api_key' => '',
+                'webhook_secret' => '',
+            ];
+        }
+
+        $params = Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_BTCPAY),
+            ['id = ?' => 1],
+            'first'
+        );
+
+        return is_array($params) ? $params : [];
+    }
+
+    private function ensureBtcPayAccountTable(): void
+    {
+        $table = Database::get_main_table(self::TABLE_BTCPAY);
+        $connection = Database::getManager()->getConnection();
+        $schemaManager = $connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist($table)) {
+            Database::query(
+                "CREATE TABLE $table (
+                    id int unsigned NOT NULL AUTO_INCREMENT,
+                    server_url varchar(2048) NOT NULL,
+                    store_id varchar(255) NOT NULL,
+                    api_key varchar(512) NOT NULL,
+                    webhook_secret varchar(255) NOT NULL,
+                    PRIMARY KEY (id)
+                )"
+            );
+        }
+
+        $res = Database::query("SELECT id FROM $table LIMIT 1");
+        if (0 === Database::num_rows($res)) {
+            Database::insert($table, [
+                'server_url' => '',
+                'store_id' => '',
+                'api_key' => '',
+                'webhook_secret' => '',
+            ]);
+        }
     }
 
     /**
@@ -3151,6 +3706,7 @@ class BuyCoursesPlugin extends Plugin
                 self::PAYMENT_TYPE_TPV_REDSYS,
                 self::PAYMENT_TYPE_STRIPE,
                 self::PAYMENT_TYPE_TPV_CECABANK,
+                self::PAYMENT_TYPE_BTCPAY,
             ]
         )
         ) {
@@ -3162,6 +3718,14 @@ class BuyCoursesPlugin extends Plugin
 
         if (empty($item)) {
             return null;
+        }
+
+        if (self::PAYMENT_TYPE_BTCPAY === $paymentType) {
+            require_once __DIR__.'/btcpay_client.php';
+
+            if ('true' !== $this->get('btcpay_enable') || !BuyCoursesBtcPayClient::isConfigured($this)) {
+                return null;
+            }
         }
 
         $productName = '';
@@ -3428,7 +3992,15 @@ class BuyCoursesPlugin extends Plugin
         switch ($sale['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
                 $course = api_get_course_info_by_id($sale['product_id']);
-                $saleIsCompleted = CourseManager::subscribeUser($sale['user_id'], $course['code']);
+
+                if (empty($course) || empty($course['real_id'])) {
+                    return false;
+                }
+
+                $saleIsCompleted = CourseManager::subscribeUser(
+                    (int) $sale['user_id'],
+                    (int) $course['real_id']
+                );
 
                 break;
 
@@ -3468,7 +4040,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get payment types.
      */
-    public function getPaymentTypes(bool $onlyActive = false): array
+    public function getPaymentTypes(bool $onlyActive = false, bool $includeBtcPay = false): array
     {
         $types = [
             self::PAYMENT_TYPE_PAYPAL => 'PayPal',
@@ -3477,6 +4049,7 @@ class BuyCoursesPlugin extends Plugin
             self::PAYMENT_TYPE_TPV_REDSYS => $this->get_lang('TpvPayment'),
             self::PAYMENT_TYPE_STRIPE => 'Stripe',
             self::PAYMENT_TYPE_TPV_CECABANK => $this->get_lang('TpvCecabank'),
+            self::PAYMENT_TYPE_BTCPAY => 'BTCPay Server',
         ];
 
         if (!$onlyActive) {
@@ -3507,6 +4080,16 @@ class BuyCoursesPlugin extends Plugin
 
         if ('true' !== $this->get('cecabank_enable')) {
             unset($types[self::PAYMENT_TYPE_TPV_CECABANK]);
+        }
+
+        if (!$includeBtcPay || 'true' !== $this->get('btcpay_enable')) {
+            unset($types[self::PAYMENT_TYPE_BTCPAY]);
+        } else {
+            require_once __DIR__.'/btcpay_client.php';
+
+            if (!BuyCoursesBtcPayClient::isConfigured($this)) {
+                unset($types[self::PAYMENT_TYPE_BTCPAY]);
+            }
         }
 
         return $types;
@@ -5527,12 +6110,23 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $dateEnd = (string) ($serviceSale['date_end'] ?? '');
-
-        if ('' === $dateEnd) {
+        if ('' === $dateEnd || strtotime($dateEnd) >= time()) {
             return true;
         }
 
-        return strtotime($dateEnd) >= time();
+        if (self::SERVICE_STATUS_COMPLETED !== $status) {
+            return false;
+        }
+
+        $recurringPayment = (int) ($serviceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED);
+        $recurringProfileId = trim((string) ($serviceSale['recurring_profile_id'] ?? ''));
+        $gatewaySubscriptionId = trim((string) ($serviceSale['gateway_subscription_id'] ?? ''));
+        $cancelledAt = trim((string) ($serviceSale['cancelled_at'] ?? ''));
+        $hasRecurringReference = '' !== $recurringProfileId || '' !== $gatewaySubscriptionId;
+
+        return '' === $cancelledAt
+            && self::SERVICE_RECURRING_PAYMENT_CANCELLED !== $recurringPayment
+            && $hasRecurringReference;
     }
 
     private function hasBlockingActiveServiceSale(
@@ -5579,7 +6173,17 @@ class BuyCoursesPlugin extends Plugin
 
             $dateEnd = (string) ($serviceSale['date_end'] ?? '');
             if ('' !== $dateEnd && strtotime($dateEnd) < time()) {
-                continue;
+                $recurringPayment = (int) ($serviceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED);
+                $hasRecurringReference = '' !== trim((string) ($serviceSale['recurring_profile_id'] ?? ''))
+                    || '' !== trim((string) ($serviceSale['gateway_subscription_id'] ?? ''));
+                $cancelledAt = trim((string) ($serviceSale['cancelled_at'] ?? ''));
+
+                if (!$hasRecurringReference
+                    || self::SERVICE_RECURRING_PAYMENT_CANCELLED === $recurringPayment
+                    || '' !== $cancelledAt
+                ) {
+                    continue;
+                }
             }
 
             return true;
@@ -7897,6 +8501,12 @@ class BuyCoursesPlugin extends Plugin
 
         if ($this->hasBlockingActiveServiceSale($userId, $serviceId, $nodeType, $nodeId)) {
             $this->lastServiceSaleError = get_lang('Active service');
+
+            return false;
+        }
+
+        if ($this->hasPendingServiceSale($userId, $serviceId, $nodeType, $nodeId)) {
+            $this->lastServiceSaleError = $this->get_lang('PendingServicePurchaseAlreadyExists');
 
             return false;
         }
@@ -11248,7 +11858,7 @@ class BuyCoursesPlugin extends Plugin
             FROM $table
             WHERE user_id = $userId
               AND status = ".COURSEMANAGER."
-              AND (relation_type IS NULL OR relation_type <> ".COURSE_RELATION_TYPE_RRHH.")";
+              AND (relation_type IS NULL OR relation_type <> ".COURSE_RELATION_TYPE_HRM.")";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
@@ -11281,7 +11891,7 @@ class BuyCoursesPlugin extends Plugin
                 AND sc.deleted_at IS NULL
             WHERE cru.user_id = $userId
               AND cru.status = ".COURSEMANAGER."
-              AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_RRHH.")
+              AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_HRM.")
               AND sc.id IS NULL";
 
         $result = Database::query($sql);
@@ -11324,7 +11934,7 @@ class BuyCoursesPlugin extends Plugin
                 ON cru.c_id = sc.course_id
                 AND cru.user_id = $userId
                 AND cru.status = ".COURSEMANAGER."
-                AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_RRHH.")
+                AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_HRM.")
             WHERE sc.course_id IN ($courseIdsSql)
               AND sc.status <> 'deleted'
               AND sc.deleted_at IS NULL
@@ -11984,7 +12594,7 @@ class BuyCoursesPlugin extends Plugin
             FROM $table
             WHERE user_id = $userId
               AND status = ".COURSEMANAGER."
-              AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+              AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
             ORDER BY c_id ASC";
         $result = Database::query($sql);
 
@@ -12013,7 +12623,7 @@ class BuyCoursesPlugin extends Plugin
             FROM $table
             WHERE c_id = $courseId
               AND status = ".COURSEMANAGER."
-              AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+              AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
             ORDER BY user_id ASC";
         $result = Database::query($sql);
 
@@ -12172,7 +12782,7 @@ class BuyCoursesPlugin extends Plugin
                 FROM $courseUserTable
                 WHERE c_id = $courseId
                   AND status = ".STUDENT."
-                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                  AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
                 UNION
                 SELECT user_id
                 FROM $sessionCourseUserTable
@@ -12226,7 +12836,7 @@ class BuyCoursesPlugin extends Plugin
                 SELECT user_id
                 FROM $courseUserTable
                 WHERE c_id = $courseId
-                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                  AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
                   AND user_id IN ($idList)
                 UNION
                 SELECT user_id
@@ -12369,7 +12979,7 @@ class BuyCoursesPlugin extends Plugin
             FROM $courseUserTable
             WHERE c_id = $courseId
               AND status = ".STUDENT."
-              AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+              AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
             ORDER BY user_id ASC";
         $result = Database::query($sql);
 

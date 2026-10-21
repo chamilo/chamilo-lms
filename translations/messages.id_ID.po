@@ -21267,8 +21267,8 @@ msgstr "Perjanjian hukum akan muncul saat login atau saat memasuki mata kuliah."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Syarat dan ketentuan Anda siap untuk ditandatangani"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Halo,<br />Tutor Anda mengirimkan syarat dan ketentuan Anda. Anda dapat menandatanganinya melalui URL ini: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Halo %s,<br />Tutor Anda mengirimkan syarat dan ketentuan Anda. Anda dapat menandatanganinya melalui URL ini: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Pengguna %s menandatangani perjanjian."

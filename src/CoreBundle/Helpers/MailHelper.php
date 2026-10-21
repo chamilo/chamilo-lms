@@ -253,7 +253,12 @@ final class MailHelper
                 }
             }
 
-            $automaticEmailText = '<br />'.get_lang('This is an automatic email message. Please do not reply to it.');
+            // In the recipient's language when the caller knows it: a CLI run or a message sent
+            // by someone else would otherwise use the current interface language.
+            $automaticEmailText = '<br />'.get_lang(
+                'This is an automatic email message. Please do not reply to it.',
+                $additionalParameters['locale'] ?? null,
+            );
             $charset = $this->getMailerCharset();
             $excludeJson = $this->shouldExcludeJsonLd();
 

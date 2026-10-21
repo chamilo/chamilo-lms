@@ -455,7 +455,14 @@ class CourseRestorer
         $src = $this->course->info ?? [];
 
         if (!empty($src['language'])) {
-            $courseEntity->setCourseLanguage((string) $src['language']);
+            $language = Database::getManager()->getRepository(Language::class)->findOneBy([
+                'isocode' => (string) $src['language'],
+            ]);
+            if ($language instanceof Language) {
+                $courseEntity->setCourseLanguageEntity($language);
+            } else {
+                $this->dlog('Unknown source course language, keeping destination language: '.(string) $src['language']);
+            }
         }
         if (isset($src['visibility']) && '' !== $src['visibility']) {
             $courseEntity->setVisibility((int) $src['visibility']);
@@ -5177,6 +5184,9 @@ class CourseRestorer
                 }
 
                 $visibleResults = isset($surveyObj->visible_results) ? (int) $surveyObj->visible_results : null;
+                $resultsHiddenFromTeacher = isset($surveyObj->results_hidden_from_teacher)
+                    ? (bool) $surveyObj->results_hidden_from_teacher
+                    : false;
                 $displayQuestionNumber = isset($surveyObj->display_question_number) ? (bool) $surveyObj->display_question_number : true;
                 $surveyType = isset($surveyObj->survey_type) ? (int) $surveyObj->survey_type : null;
                 $showFormProfile = isset($surveyObj->show_form_profile) ? (int) $surveyObj->show_form_profile : null;
@@ -5251,6 +5261,7 @@ class CourseRestorer
                     ->setShuffle($shuffle)
                     ->setAnonymous($anonymous)
                     ->setDisplayQuestionNumber($displayQuestionNumber)
+                    ->setResultsHiddenFromTeacher($resultsHiddenFromTeacher)
                     ->setIsMandatory($isMandatory)
                 ;
 

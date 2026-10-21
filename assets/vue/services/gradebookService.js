@@ -200,6 +200,15 @@ export default {
   },
 
   /**
+   * Fetches LTI tools available to be linked to a Gradebook evaluation.
+   * @param {Object} params Course context.
+   * @returns {Promise<Object>} Available LTI tools.
+   */
+  async getLtiOptions(params) {
+    return await baseService.get("/api/gradebook/lti-options", params)
+  },
+
+  /**
    * Runs a manual Gradebook evaluation action.
    * @param {Object} payload Evaluation action payload.
    * @param {Object} params Course context.

@@ -21267,8 +21267,8 @@ msgstr "법적 계약은 로그인 중 또는 과정 진입 시 표시됩니다.
 msgid "Your terms and conditions are ready to be signed"
 msgstr "약관이 서명할 준비가 되었습니다"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "안녕하세요,<br />튜터가 약관을 보냈습니다. 다음 URL을 통해 서명할 수 있습니다: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "%s님, 안녕하세요.<br />튜터가 약관을 보냈습니다. 다음 URL을 통해 서명할 수 있습니다: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "사용자 %s가 계약에 서명했습니다."

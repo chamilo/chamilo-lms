@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Controller\ErrorController;
 use Chamilo\CoreBundle\EventListener\ExceptionListener;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
+use Chamilo\CoreBundle\Component\LegacyCliBootstrapper;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
@@ -52,20 +53,7 @@ if ($isCli) {
 
     $container = $kernel->getContainer();
     Container::setContainer($container);
-    $session = Container::getLegacyHelper()->getSession();
-    $request = Request::create('/');
-    $request->setSession($session);
-    $container->get('request_stack')->push($request);
-    Container::setLegacyServices($container);
-    $router = $container->get('router');
-    $context = $router->getContext();
-    $router->setContext($context);
-
-    $cliOptions = getopt('', ['url:']);
-    if (!empty($cliOptions['url'])) {
-        $baseUrl = $cliOptions['url'];
-        $context->setBaseUrl($baseUrl);
-    }
+    LegacyCliBootstrapper::prepareCliRequest($container);
 } else {
     $kernel = new Chamilo\Kernel($env, $debug);
     // Loading Request from Sonata. In order to use Sonata Pages Bundle.

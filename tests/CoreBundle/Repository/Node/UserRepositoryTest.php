@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\Group;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
@@ -167,8 +166,6 @@ class UserRepositoryTest extends AbstractApiTest
         $admin = $this->createUser('admin2');
         $userRepo = self::getContainer()->get(UserRepository::class);
 
-        $em = $this->getEntityManager();
-
         $this->assertHasNoEntityViolations($admin);
         $admin->addUserAsAdmin();
         $userRepo->update($admin);
@@ -181,25 +178,6 @@ class UserRepositoryTest extends AbstractApiTest
         $this->assertTrue($admin->isCredentialsNonExpired());
         $this->assertFalse($admin->getCredentialsExpired());
         $this->assertFalse($admin->getLocked());
-
-        // Group.
-        $this->assertEmpty($admin->getGroupNames());
-        $this->assertFalse($admin->hasGroup('test'));
-
-        $group = (new Group('test'))
-            ->setCode('test')
-        ;
-        $em->persist($group);
-        $em->flush();
-
-        $admin->addGroup($group);
-        $userRepo->update($admin);
-
-        /** @var User $admin */
-        $admin = $userRepo->find($admin->getId());
-
-        $this->assertTrue($admin->hasGroup('test'));
-        $this->assertCount(2, $admin->getRoles());
     }
 
     public function testCreateUserSkipResourceNode(): void
@@ -243,7 +221,7 @@ class UserRepositoryTest extends AbstractApiTest
             ->setOfficialCode('ADMIN')
             ->setCreatorId(1)
             ->setSkipResourceNode(true)
-            ->addUserAsAdmin()// ->addGroup($group)
+            ->addUserAsAdmin()
         ;
 
         $user->setRoleFromStatus(COURSEMANAGER);

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CoreBundle\Service\Exercise\QtiImportHtmlSanitizer;
 use PhpZip\ZipFile;
 
 /**
@@ -191,8 +192,18 @@ function import_exercise($file)
                     continue;
                 }
 
-                if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, FREE_ANSWER, FIB], true)) {
+                if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, FREE_ANSWER, FIB, MATCHING], true)) {
                     continue;
+                }
+
+                $matchingRows = [];
+                if (MATCHING == $question_array['type']) {
+                    $matchingRows = buildMatchingAnswerRows($question_array);
+                    if (empty($matchingRows)) {
+                        Display::addFlash(Display::return_message('QTI import: a matching question without associations was skipped.', 'warning'));
+
+                        continue;
+                    }
                 }
 
                 // Create question
@@ -251,6 +262,9 @@ function import_exercise($file)
                 if (FIB == $question->type) {
                     [$fibAnswerString, $fibTotalWeight] = buildFibAnswerString($question_array);
                     $question->updateWeighting($fibTotalWeight);
+                    if (!empty($question_array['fib_case_insensitive'])) {
+                        $question->extra = 'case:false';
+                    }
                     try {
                         // Update question weighting in DB
                         $question->save($exercise);
@@ -285,7 +299,20 @@ function import_exercise($file)
                 // Normalize positions 1..N
                 $pos = 1;
 
-                if (!empty($answerList) && is_array($answerList)) {
+                if (MATCHING == $question->type) {
+                    // Options first (correct = 0), then the items whose "correct" is the position of their option.
+                    // Answer::save() turns that position into the option iid.
+                    foreach ($matchingRows as $row) {
+                        // Already decoded and sanitized by buildMatchingAnswerRows(): matching answers are rendered unfiltered.
+                        $answer->new_answer[$pos] = $row['answer'];
+                        $answer->new_comment[$pos] = '';
+                        $answer->new_position[$pos] = $pos;
+                        $answer->new_correct[$pos] = $row['correct'];
+                        $answer->new_weighting[$pos] = $row['weight'];
+                        $totalCorrectWeight += $row['weight'];
+                        $pos++;
+                    }
+                } elseif (!empty($answerList) && is_array($answerList)) {
                     foreach ($answerList as $key => $answers) {
                         // Answer text
                         $answerValue = isset($answers['value']) ? formatText($answers['value']) : '';
@@ -540,6 +567,7 @@ function parseQti2($xmlData)
 
                 break;
             case 'matchInteraction':
+                // QTI does not tell Matching and Matching draggable apart, so both are imported as Matching.
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = MATCHING;
 
                 break;
@@ -597,6 +625,16 @@ function parseQti2($xmlData)
                     $exerciseInfo['question'][$currentQuestionIdent]['weighting'][$answer_id] = $node->getAttribute(
                         'mappedValue'
                     );
+
+                    // Score of each fill-in-the-blank response, in its own responseDeclaration.
+                    if (str_starts_with((string) $currentAnswerId, 'fill_')) {
+                        $exerciseInfo['question'][$currentQuestionIdent]['blank_weighting'][$currentAnswerId][] = $node->getAttribute(
+                            'mappedValue'
+                        );
+                        if ('false' === $node->getAttribute('caseSensitive')) {
+                            $exerciseInfo['question'][$currentQuestionIdent]['fib_case_insensitive'] = true;
+                        }
+                    }
                 }
 
                 break;
@@ -612,6 +650,12 @@ function parseQti2($xmlData)
                 /** @var DOMElement $childNode */
                 foreach ($node->childNodes as $childNode) {
                     if ('#text' === $childNode->nodeName) {
+                        continue;
+                    }
+
+                    // A span without attributes only wraps text (Chamilo exports the text around the blanks that way).
+                    if ('span' === $childNode->nodeName && !$childNode->hasAttributes()) {
+                        $currentQuestionItemBody .= $childNode->nodeValue;
                         continue;
                     }
 
@@ -781,43 +825,49 @@ function parseQti2($xmlData)
             continue;
         }
 
-        $subtype = $q['subtype'] ?? null;
-
-        if ('LISTBOX_FILL' === $subtype) {
-            $opts = $q['fib_options'] ?? [];
-            foreach ($opts as $responseId => $data) {
-                $correct = isset($data['correct']) ? (string) $data['correct'] : '';
-                $wrongs = isset($data['wrongs']) && is_array($data['wrongs']) ? $data['wrongs'] : [];
-
-                $final = [];
-                if ($correct !== '') {
-                    $final[] = $correct;
-                }
-                foreach ($wrongs as $w) {
-                    $w = trim((string) $w);
-                    if ($w === '' || $w === $correct) {
-                        continue;
+        // Each blank is rebuilt from its own interaction, so menus (inlineChoiceInteraction) and typed
+        // blanks (textEntryInteraction) can be mixed in one question; its score is kept in order.
+        $opts = isset($q['fib_options']) && is_array($q['fib_options']) ? $q['fib_options'] : [];
+        $corrects = isset($q['correct_answers']) && is_array($q['correct_answers']) ? $q['correct_answers'] : [];
+        $blankWeighting = isset($q['blank_weighting']) && is_array($q['blank_weighting']) ? $q['blank_weighting'] : [];
+        $blankWeights = [];
+        $text = preg_replace_callback(
+            '/\*\*claroline_start\*\*(.*?)\*\*claroline_end\*\*/s',
+            function ($match) use ($opts, $corrects, $blankWeighting, &$blankWeights) {
+                $responseId = $match[1];
+                if (isset($opts[$responseId])) {
+                    $correct = isset($opts[$responseId]['correct']) ? (string) $opts[$responseId]['correct'] : '';
+                    $wrongs = isset($opts[$responseId]['wrongs']) && is_array($opts[$responseId]['wrongs']) ? $opts[$responseId]['wrongs'] : [];
+                    $final = '' !== $correct ? [$correct] : [];
+                    foreach ($wrongs as $w) {
+                        $w = trim((string) $w);
+                        if ('' !== $w && $w !== $correct) {
+                            $final[] = $w;
+                        }
                     }
-                    $final[] = $w;
+                    $blank = '['.implode('|', $final).']';
+                } elseif (str_starts_with($responseId, 'fill_') && isset($corrects[$responseId])) {
+                    $blank = '['.trim((string) $corrects[$responseId]).']';
+                } elseif (str_starts_with($responseId, 'fill_')) {
+                    $blank = '[]';
+                } else {
+                    return $match[0];
                 }
 
-                $replacement = '['.implode('|', $final).']';
-                $marker = '**claroline_start**'.$responseId.'**claroline_end**';
-                $text = str_replace($marker, $replacement, $text);
-            }
-        } else {
-            // TEXTFIELD_FILL: use correct answer text
-            $corrects = $q['correct_answers'] ?? [];
-            if (is_array($corrects)) {
-                foreach ($corrects as $responseId => $answerValue) {
-                    if (0 !== strpos((string) $responseId, 'fill_')) {
-                        continue;
+                $scores = [];
+                foreach ((array) ($blankWeighting[$responseId] ?? []) as $value) {
+                    $value = str_replace(',', '.', trim((string) $value));
+                    if (is_numeric($value)) {
+                        $scores[] = (float) $value;
                     }
-                    $marker = '**claroline_start**'.$responseId.'**claroline_end**';
-                    $text = str_replace($marker, '['.trim((string) $answerValue).']', $text);
                 }
-            }
-        }
+                $blankWeights[] = !empty($scores) ? max($scores) : null;
+
+                return $blank;
+            },
+            $text
+        ) ?? $text;
+        $q['blank_weights'] = $blankWeights;
 
         // Replace any leftover markers with empty blanks to avoid broken text.
         $text = preg_replace('/\*\*claroline_start\*\*fill_[^*]+\*\*claroline_end\*\*/', '[]', $text);
@@ -825,6 +875,71 @@ function parseQti2($xmlData)
         $q['response_text'] = $text;
     }
     unset($q);
+}
+
+/**
+ * Builds the answer rows of a Matching question from a parsed matchInteraction.
+ *
+ * The first simpleMatchSet holds the items to match and the second one the options. Associations come
+ * as "<item> <option>" directed pairs in correctResponse, with their score in the mapping. Chamilo stores
+ * the options first (correct = 0), then each item with "correct" set to the position of its option.
+ * Items without a correct option cannot be stored in Chamilo and are dropped.
+ * The texts are entity-decoded and sanitized, because matching answers are displayed without filtering.
+ *
+ * @return array<int, array{answer: string, correct: int, weight: float}> empty if no association was found
+ */
+function buildMatchingAnswerRows(array $questionArray): array
+{
+    $sets = isset($questionArray['answer']) && is_array($questionArray['answer']) ? array_values($questionArray['answer']) : [];
+    $leftChoices = isset($sets[0]) && is_array($sets[0]) ? $sets[0] : [];
+    $rightChoices = isset($sets[1]) && is_array($sets[1]) ? $sets[1] : [];
+    $weights = isset($questionArray['weighting']) && is_array($questionArray['weighting']) ? $questionArray['weighting'] : [];
+    $defaultWeight = isset($questionArray['default_weighting']) ? (float) $questionArray['default_weighting'] : 0.0;
+    $correctAnswers = isset($questionArray['correct_answers']) && is_array($questionArray['correct_answers']) ? $questionArray['correct_answers'] : [];
+
+    $matches = [];
+    foreach ($correctAnswers as $pair) {
+        $pair = (string) $pair;
+        $parts = preg_split('/\s+/', trim($pair));
+        if (!is_array($parts) || 2 !== count($parts)) {
+            continue;
+        }
+        [$source, $target] = $parts;
+        if (isset($rightChoices[$source], $leftChoices[$target])) {
+            [$source, $target] = [$target, $source];
+        }
+        if (isset($leftChoices[$source], $rightChoices[$target]) && !isset($matches[$source])) {
+            $matches[$source] = [
+                'target' => $target,
+                'weight' => isset($weights[$pair]) ? (float) $weights[$pair] : $defaultWeight,
+            ];
+        }
+    }
+
+    if (empty($matches)) {
+        return [];
+    }
+
+    $rows = [];
+    $optionPositions = [];
+    foreach ($rightChoices as $choiceId => $choiceText) {
+        $rows[] = ['answer' => QtiImportHtmlSanitizer::sanitize(formatText((string) $choiceText)), 'correct' => 0, 'weight' => 0.0];
+        $optionPositions[(string) $choiceId] = count($rows);
+    }
+
+    foreach ($leftChoices as $choiceId => $choiceText) {
+        if (!isset($matches[(string) $choiceId])) {
+            continue;
+        }
+        $match = $matches[(string) $choiceId];
+        $rows[] = [
+            'answer' => QtiImportHtmlSanitizer::sanitize(formatText((string) $choiceText)),
+            'correct' => $optionPositions[$match['target']],
+            'weight' => $match['weight'],
+        ];
+    }
+
+    return $rows;
 }
 
 /**
@@ -971,7 +1086,8 @@ function buildFibAnswerString(array $questionArray): array
 
     $existing = parseExistingFibMeta($text);
     if (null !== $existing) {
-        return $existing;
+        // The text comes from the package: clean its HTML, keeping the blanks.
+        return QtiImportHtmlSanitizer::sanitizeFillBlanksAnswer($existing[0], (float) $existing[1]);
     }
 
     // Only now do the safe cleanup for normal builds
@@ -985,12 +1101,17 @@ function buildFibAnswerString(array $questionArray): array
     }
 
     $nb = preg_match_all('/\[[^\]]*\]/', $text, $m);
+    // Scores read from each blank's own mapping, when they can be matched to the blanks of the text.
+    $blankWeights = isset($questionArray['blank_weights']) && is_array($questionArray['blank_weights']) ? array_values($questionArray['blank_weights']) : [];
+    if (count($blankWeights) !== (int) $nb) {
+        $blankWeights = [];
+    }
     $weights = [];
     $sizes = [];
     $total = 0.0;
 
     if ($nb && !empty($m[0])) {
-        foreach ($m[0] as $blankRaw) {
+        foreach ($m[0] as $blankIndex => $blankRaw) {
             $inside = trim((string) $blankRaw, '[]');
 
             // For menu blanks: "Correct|Wrong1|Wrong2" (correct must be first)
@@ -1006,7 +1127,9 @@ function buildFibAnswerString(array $questionArray): array
             $correct = trim((string) $correct);
 
             $w = 1.0;
-            if ($correct !== '' && array_key_exists($correct, $weightsMap)) {
+            if (isset($blankWeights[$blankIndex]) && is_finite((float) $blankWeights[$blankIndex])) {
+                $w = (float) $blankWeights[$blankIndex];
+            } elseif ('' !== $correct && array_key_exists($correct, $weightsMap)) {
                 $w = (float) $weightsMap[$correct];
             }
 
@@ -1021,5 +1144,6 @@ function buildFibAnswerString(array $questionArray): array
     // Separator 0 means "[...]" and switchable defaults to 0
     $text .= ':0@0';
 
-    return [$text, $total];
+    // The text comes from the package: clean its HTML, keeping the blanks.
+    return QtiImportHtmlSanitizer::sanitizeFillBlanksAnswer($text, (float) $total);
 }

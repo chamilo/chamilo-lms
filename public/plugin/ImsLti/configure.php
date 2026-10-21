@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\PluginBundle\Form\FrmEdit;
 use Chamilo\PluginBundle\ImsLti\Form\FrmAdd;
@@ -44,6 +45,15 @@ if ($baseTool && null !== $baseTool->getFirstResourceLink()) {
     Display::addFlash(
         Display::return_message($plugin->get_lang('ToolNotAvailable'), 'warning')
     );
+
+    $session = Container::getSession();
+
+    if ($session && method_exists($session, 'save')) {
+
+        $session->save();
+
+    }
+
 
     header('Location: '.api_get_self().'?'.api_get_cidreq());
     exit;
@@ -117,6 +127,15 @@ switch ($action) {
                                 Display::return_message($e->getMessage(), 'error')
                             );
 
+                            $session = Container::getSession();
+
+                            if ($session && method_exists($session, 'save')) {
+
+                                $session->save();
+
+                            }
+
+
                             header('Location: '.api_get_self().'?'.api_get_cidreq());
                             exit;
                         }
@@ -165,6 +184,15 @@ switch ($action) {
             Display::addFlash(
                 Display::return_message($plugin->get_lang('ToolAdded'), 'success')
             );
+
+            $session = Container::getSession();
+
+            if ($session && method_exists($session, 'save')) {
+
+                $session->save();
+
+            }
+
 
             header('Location: '.api_get_self().'?'.api_get_cidreq());
             exit;
@@ -259,6 +287,15 @@ switch ($action) {
                 Display::return_message($plugin->get_lang('ToolEdited'), 'success')
             );
 
+            $session = Container::getSession();
+
+            if ($session && method_exists($session, 'save')) {
+
+                $session->save();
+
+            }
+
+
             header('Location: '.api_get_self().'?'.api_get_cidreq());
             exit;
         }
@@ -286,10 +323,18 @@ $actions = Display::url(
     api_get_self().'?'.api_get_cidreq()
 );
 
-if (!empty($categories)) {
+$courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+
+if (!empty($categories) && $courseNodeId > 0) {
+    $gradebookUrl = api_get_path(WEB_PATH).'resources/gradebook/'.$courseNodeId.'/?'.api_get_cidreq().'&'.http_build_query([
+        'categoryId' => (int) $categories[0]->get_id(),
+        'source' => 'lti',
+    ]);
+
     $actions .= Display::url(
-        Display::return_icon('gradebook.png', get_lang('MakeQualifiable'), [], ICON_SIZE_MEDIUM),
-        './gradebook/add_eval.php?selectcat='.$categories[0]->get_id().'&'.api_get_cidreq()
+        Display::getMdiIcon('certificate', '', null, ICON_SIZE_MEDIUM, get_lang('MakeQualifiable')),
+        $gradebookUrl,
+        ['title' => get_lang('MakeQualifiable')]
     );
 }
 

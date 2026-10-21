@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CourseAccessActivityHelper;
 use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\RequestExpectsJsonHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -76,6 +77,7 @@ class CidReqListener
         private readonly SettingsManager $settingsManager,
         private readonly LegalRepository $legalRepository,
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
+        private readonly CourseAccessActivityHelper $courseAccessActivityHelper,
     ) {}
 
     /**
@@ -155,7 +157,10 @@ class CidReqListener
                     && ($courseReference === (string) $courseFromSession->getId() || $courseReference === $courseFromSession->getCode())
                     && $this->entityManager->contains($courseFromSession)
                 ) {
-                    $course = $courseFromSession;
+                    // The course kept in the PHP session is a detached copy. Doctrine compares
+                    // entities by identity in loaded collections, so SessionVoter's subscription
+                    // check failed against it and denied every request after the first one.
+                    $course = $this->entityManager->find(Course::class, $courseFromSession->getId());
                     $courseInfo = (array) $sessionHandler->get('_course');
                 }
             }
@@ -377,7 +382,10 @@ class CidReqListener
         $ip = (string) ($request->getClientIp() ?? '');
 
         // Track course logout only when we have a valid course context and a valid Chamilo User entity.
-        if (0 !== $courseId) {
+        // A timer request without the course (presence signal, exercise keep-alive) is not the
+        // learner leaving the course: recording it as a logout extended the course time every
+        // minute while a course page stayed open.
+        if (0 !== $courseId && !$this->courseAccessActivityHelper->isNonNavigationRequest($request)) {
             $token = $this->tokenStorage->getToken();
             if (null !== $token) {
                 $tokenUser = $token->getUser();
@@ -388,7 +396,13 @@ class CidReqListener
                     try {
                         $this->entityManager
                             ->getRepository(TrackECourseAccess::class)
-                            ->logoutAccess($tokenUser, $courseId, $sessionId, $ip)
+                            ->logoutAccess(
+                                $tokenUser,
+                                $courseId,
+                                $sessionId,
+                                $ip,
+                                $this->courseAccessActivityHelper->getCountableUntil($sessionHandler, $courseId, $sessionId),
+                            )
                         ;
                     } catch (Throwable) {
                         // Tracking must never break the current request.

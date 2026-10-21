@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Mcp;
 
 use Chamilo\CoreBundle\Mcp\CreateCourseDocumentTool;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use InvalidArgumentException;
 use ReflectionMethod;
@@ -25,9 +26,13 @@ final class CreateCourseDocumentToolLanguageTest extends KernelTestCase
         $reflection = new ReflectionMethod($tool, 'resolveLanguageIsoCode');
         $reflection->setAccessible(true);
 
+        $languageRepository = self::getContainer()->get(LanguageRepository::class);
+
         foreach (['es', 'en_US', 'fr_FR'] as $courseLanguage) {
             $course = $this->createCourse('Language '.$courseLanguage);
-            $course->setCourseLanguage($courseLanguage);
+            $language = $languageRepository->findByIsoCode($courseLanguage);
+            self::assertNotNull($language);
+            $course->setCourseLanguageEntity($language);
             $this->getEntityManager()->flush();
 
             // No language requested: falls back to the course's own language.

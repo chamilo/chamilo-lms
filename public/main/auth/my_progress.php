@@ -210,7 +210,7 @@ $myProgressIcon = Display::getMdiIcon(
     get_lang('View my progress')
 );
 
-if (api_is_drh()) {
+if (api_is_hrm()) {
     // DRH / managers: full reporting navigation.
     $menuItems = [
         Display::url($followUpIcon, api_get_path(WEB_PATH).'reporting'),

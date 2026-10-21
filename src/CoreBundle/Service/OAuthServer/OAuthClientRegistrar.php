@@ -31,6 +31,7 @@ final readonly class OAuthClientRegistrar
     public function __construct(
         private EntityManagerInterface $entityManager,
         private AccessUrlHelper $accessUrlHelper,
+        private OAuthResourceRegistry $resourceRegistry,
     ) {}
 
     /**
@@ -38,12 +39,13 @@ final readonly class OAuthClientRegistrar
      *
      * @return array<string, mixed>
      */
-    public function register(array $metadata, string $clientIp): array
+    public function register(array $metadata, string $clientIp, bool $dynamicClientRegistration = false): array
     {
         $redirectUris = $this->validateRedirectUris($metadata['redirect_uris'] ?? null);
         $grantTypes = $this->validateSubset($metadata['grant_types'] ?? null, self::ALLOWED_GRANT_TYPES, self::ALLOWED_GRANT_TYPES);
         $responseTypes = $this->validateSubset($metadata['response_types'] ?? null, self::ALLOWED_RESPONSE_TYPES, self::ALLOWED_RESPONSE_TYPES);
         $authMethod = $this->validateAuthMethod($metadata['token_endpoint_auth_method'] ?? 'none');
+        $scope = $this->validateScope($metadata['scope'] ?? null, $dynamicClientRegistration);
 
         $accessUrl = $this->accessUrlHelper->getCurrent();
         if (!$accessUrl instanceof AccessUrl || null === $accessUrl->getId()) {
@@ -66,7 +68,11 @@ final readonly class OAuthClientRegistrar
             ->setRedirectUris($redirectUris)
             ->setGrantTypes($grantTypes)
             ->setResponseTypes($responseTypes)
-            ->setScope('mcp')
+            ->setScope($scope)
+            // Self-registration never grants a new protected resource by itself.
+            // MCP remains the backwards-compatible default; future resource
+            // servers require an administrator to expand this allowlist.
+            ->setAllowedResources([OAuthResourceRegistry::MCP_RESOURCE])
             ->setAccessUrlId((int) $accessUrl->getId())
             ->setRegistrationIp($clientIp)
             ->setCreatedAt($now)
@@ -91,7 +97,7 @@ final readonly class OAuthClientRegistrar
             'grant_types' => $grantTypes,
             'response_types' => $responseTypes,
             'token_endpoint_auth_method' => $authMethod,
-            'scope' => 'mcp',
+            'scope' => $scope,
         ];
 
         foreach (['client_name', 'client_uri', 'logo_uri', 'policy_uri', 'tos_uri', 'software_id', 'software_version'] as $field) {
@@ -175,6 +181,33 @@ final readonly class OAuthClientRegistrar
         }
 
         return array_values(array_unique($value));
+    }
+
+    private function validateScope(mixed $value, bool $dynamicClientRegistration): string
+    {
+        $mcpScopes = $this->resourceRegistry->getScopesForResource(OAuthResourceRegistry::MCP_RESOURCE);
+        $allowedScopes = $dynamicClientRegistration
+            ? $this->resourceRegistry->getSupportedScopes()
+            : $mcpScopes;
+
+        if (null === $value) {
+            return implode(' ', $mcpScopes);
+        }
+
+        if (!\is_string($value) || '' === trim($value)) {
+            throw OAuthException::invalidClientMetadata('scope must be a non-empty space-delimited string.');
+        }
+
+        $requested = preg_split('/\s+/', trim($value)) ?: [];
+        $requested = array_values(array_unique($requested));
+
+        foreach ($requested as $scope) {
+            if (!\in_array($scope, $allowedScopes, true)) {
+                throw OAuthException::invalidClientMetadata(\sprintf('The scope "%s" is not supported.', $scope));
+            }
+        }
+
+        return implode(' ', $requested);
     }
 
     private function validateAuthMethod(mixed $value): string

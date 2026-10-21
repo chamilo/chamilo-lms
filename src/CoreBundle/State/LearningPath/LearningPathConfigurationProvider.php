@@ -118,8 +118,10 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
         $result->showFlow = $lp instanceof CLp && $this->settingEnabled('lp.lp_enable_flow');
         $result->showMinimumTime = $lp instanceof CLp && $this->minimumTimeAvailable((int) $course->getId(), $session?->getId());
         $result->showSkills = $this->settingEnabled('skill.allow_skill_rel_items');
-        $result->skillOptions = $result->showSkills ? $this->getSkillOptions($course, $session) : [];
         $result->skillIds = $lp instanceof CLp ? $this->getSelectedSkillIds($lp) : [];
+        $result->skillOptions = $result->showSkills
+            ? $this->getSkillOptions($course, $session, $result->skillIds)
+            : [];
 
         if ($lp instanceof CLp) {
             $result->prerequisiteOptions = $this->getLearningPathOptions($course, $session, $group, $lp);
@@ -390,7 +392,10 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
         return $definitions;
     }
 
-    private function getSkillOptions(Course $course, ?Session $session): array
+    /**
+     * @param list<int> $selectedSkillIds
+     */
+    private function getSkillOptions(Course $course, ?Session $session, array $selectedSkillIds = []): array
     {
         $relations = $this->entityManager->getRepository(SkillRelCourse::class)->findBy([
             'course' => $course,
@@ -402,7 +407,12 @@ final readonly class LearningPathConfigurationProvider implements ProviderInterf
                 continue;
             }
             $skill = $relation->getSkill();
-            $options[] = ['label' => $skill->getTitle(), 'value' => (int) $skill->getId()];
+            $skillId = (int) $skill->getId();
+            if (!$skill->isAcquirable() && !\in_array($skillId, $selectedSkillIds, true)) {
+                continue;
+            }
+
+            $options[] = ['label' => $skill->getTitle(), 'value' => $skillId];
         }
         usort($options, static fn (array $a, array $b): int => strcasecmp((string) $a['label'], (string) $b['label']));
 

@@ -108,9 +108,72 @@ Feature: Skills
     And wait for the page to be loaded
     Then I should not see an error
 
+  Scenario: Structural skill is not available for manual assignment
+    Given I am a platform administrator
+    And I am on "main/skills/skill_create.php"
+    And wait very long for the page to be loaded
+    When I fill in the following:
+      | title | skillcat |
+      | short_code | scat |
+      | description | Structural skill category |
+    And I uncheck "acquirable"
+    And I press "submit"
+    And wait for the page to be loaded
+    Then I should see "skillcat"
+    And I am on "/skill/assign/1"
+    And I wait for the page to be loaded
+    When I click the "[name='skillId']" element
+    Then I should not see "skillcat"
+    And I should not see an error
+
+  Scenario: Structural skill can still be located in the skills wheel
+    Given I am a platform administrator
+    And I am on "/skill/wheel"
+    And I wait for the page to be loaded
+    When I click the "[aria-label='What skills are you looking for?']" element
+    Then I should see the "[data-testid='skill-wheel-search-dialog']" element
+    When I type "skillcat" into the "#skill_id" element
+    And I wait for the element ".p-autocomplete-option" to appear
+    And I click the ".p-autocomplete-option" element
+    And I click the "[data-testid='skill-wheel-search-view-button']" element
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id='5']" element
+    And I should see "skillcat"
+    And I should not see an error
+
   # Manual skill assignment/removal is handled by the Vue + API Platform flow.
   # Skill creation/editing is still legacy and remains covered above until that
   # separate part of the Skills tool is migrated.
+  Scenario: Explore the advanced skills wheel
+    Given I am a platform administrator
+    And I am on "/skill/wheel"
+    And I wait for the page to be loaded
+    Then I should see the "[data-testid='skill-wheel-workspace'][data-focus-mode='false']" element
+    And I should see the "[data-testid='skill-wheel-graph']" element
+    And I should see the "[data-testid='skill-wheel-canvas'][data-render-mode='3d'][data-interaction-mode='overlay'][data-label-mode='adaptive'][data-tooltip-mode='rich']" element
+    And I should see the "[data-skill-interaction-layer='overlay']" element
+    And I should see the "[data-skill-id='2']" element
+    When I click the "[data-skill-id='2']" element
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-current-skill-id='2']" element
+    And I should see the "[data-skill-id='3']" element
+    When I click the "[data-skill-id='3']" element
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id='3']" element
+    And I should see the "[data-testid='skill-wheel-inspector']" element
+    And I should see the "a[href*='skill_edit.php'][href*='origin=skill-wheel']" element
+    And I should see the "a[href*='skill_create.php'][href*='origin=skill-wheel']" element
+    And I should see "skill11"
+    And I should see "description 11"
+    And I should not see an error
+
+  Scenario: Open skill profiles from the advanced skills wheel
+    Given I am a platform administrator
+    And I am on "/skill/wheel"
+    And I wait for the page to be loaded
+    Then I should see the "[data-testid='skill-wheel-profiles-button']" element
+    When I click the "[data-testid='skill-wheel-profiles-button']" element
+    Then I should see the "[data-testid='skill-wheel-profiles-dialog']" element
+    And I should see "Skill profiles"
+    And I should not see an error
+
   Scenario: Assign skill11 to user 1
     Given I am a platform administrator
     And I am on "/skill/assign/1"

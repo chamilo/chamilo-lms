@@ -24,6 +24,7 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -52,6 +53,7 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
         private SurveyHelper $surveyHelper,
+        private Security $security,
     ) {}
 
     /**
@@ -92,6 +94,8 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         ;
         $configuration->anonymous = false;
         $configuration->visibleResults = self::VISIBLE_TUTOR;
+        $configuration->resultsHiddenFromTeacher = false;
+        $configuration->isAdmin = $this->security->isGranted('ROLE_ADMIN');
         $configuration->displayQuestionNumber = true;
         $configuration->canCreate = true;
         $configuration->canEdit = true;
@@ -120,6 +124,9 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         $configuration->availableUntil = $this->formatDate($survey->getAvailTill());
         $configuration->anonymous = $this->isTruthy($survey->getAnonymous());
         $configuration->visibleResults = (int) ($survey->getVisibleResults() ?? self::VISIBLE_TUTOR);
+        $configuration->isAdmin = $this->security->isGranted('ROLE_ADMIN');
+        $configuration->resultsHiddenFromTeacher = $configuration->isAdmin
+            && $survey->isResultsHiddenFromTeacher();
         $configuration->introduction = (string) $survey->getIntro();
         $configuration->thanks = (string) $survey->getSurveythanks();
         $configuration->surveyType = $survey->getSurveyType();

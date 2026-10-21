@@ -40,6 +40,8 @@ final readonly class OAuthTokenService
         private EntityManagerInterface $entityManager,
         private AccessUrlHelper $accessUrlHelper,
         private AccessUrlRepository $accessUrlRepository,
+        private OAuthMetadataService $metadataService,
+        private OAuthResourceRegistry $resourceRegistry,
     ) {}
 
     public static function isAccessToken(string $plainToken): bool
@@ -99,6 +101,8 @@ final readonly class OAuthTokenService
             throw OAuthException::invalidGrant();
         }
 
+        $this->assertClientMayUseTarget($client, $code->getScope(), $code->getResource());
+
         return $this->issueTokenPair(
             client: $client,
             user: $user,
@@ -152,6 +156,8 @@ final readonly class OAuthTokenService
         if (!$this->isUserActiveOnCurrentPortal($user)) {
             throw OAuthException::invalidGrant();
         }
+
+        $this->assertClientMayUseTarget($client, $refreshToken->getScope(), $refreshToken->getResource());
 
         if (!$this->refreshTokenRepository->rotateAtomically((int) $refreshToken->getId(), $now)) {
             // Lost a race against another refresh attempt on the same token.
@@ -221,6 +227,49 @@ final readonly class OAuthTokenService
         $computed = rtrim(strtr(base64_encode(hash('sha256', $verifier, true)), '+/', '-_'), '=');
 
         return hash_equals($challenge, $computed);
+    }
+
+    private function assertClientMayUseTarget(OAuthClient $client, ?string $scope, ?string $resource): void
+    {
+        if (null === $resource || '' === trim($resource)) {
+            return;
+        }
+
+        $resourceKey = $this->resourceRegistry->resolveResourceKey($resource, $this->metadataService->getIssuer());
+        if (null === $resourceKey || !$client->allowsResource($resourceKey)) {
+            throw OAuthException::invalidTarget('This client is not allowed to use the requested resource.');
+        }
+
+        $clientScopes = $this->parseScope($client->getScope());
+        if ([] === $clientScopes) {
+            $clientScopes = $this->resourceRegistry->getScopesForResource(OAuthResourceRegistry::MCP_RESOURCE);
+        }
+
+        $resourceScopes = $this->resourceRegistry->getScopesForResource($resourceKey);
+        $requestedScopes = $this->parseScope($scope);
+        if ([] === $requestedScopes) {
+            throw OAuthException::invalidScope('The token does not carry a scope valid for this resource.');
+        }
+
+        foreach ($requestedScopes as $requestedScope) {
+            if (!\in_array($requestedScope, $clientScopes, true)
+                || !\in_array($requestedScope, $resourceScopes, true)
+            ) {
+                throw OAuthException::invalidScope('The token scope is no longer allowed for this client and resource.');
+            }
+        }
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function parseScope(?string $scope): array
+    {
+        if (null === $scope || '' === trim($scope)) {
+            return [];
+        }
+
+        return array_values(array_unique(preg_split('/\s+/', trim($scope)) ?: []));
     }
 
     private function isUserActiveOnCurrentPortal(User $user): bool
@@ -309,7 +358,7 @@ final readonly class OAuthTokenService
             'token_type' => 'Bearer',
             'expires_in' => self::ACCESS_TOKEN_TTL_SECONDS,
             'refresh_token' => $plainRefreshToken,
-            'scope' => $scope ?? 'mcp',
+            'scope' => $scope ?? implode(' ', $this->resourceRegistry->getScopesForResource(OAuthResourceRegistry::MCP_RESOURCE)),
         ];
     }
 

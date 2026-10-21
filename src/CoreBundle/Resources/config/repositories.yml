@@ -26,6 +26,17 @@ services:
             - setRequestStack: ['@request_stack']
         tags: ['doctrine.repository_service']
 
+    # Extends ResourceRepository but lives outside Node/, so it needs the same calls
+    Chamilo\CoreBundle\Repository\GradebookCertificateRepository:
+        calls:
+            - setAuthorizationChecker: ['@security.authorization_checker']
+            - setRouter: ['@router']
+            - setSlugify: ['@cocur_slugify']
+            - setToolChain: ['@Chamilo\CoreBundle\Tool\ToolChain']
+            - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
+            - setRequestStack: ['@request_stack']
+        tags: ['doctrine.repository_service']
+
     # User repository
     Chamilo\CoreBundle\Repository\Node\UserRepository:
         calls:

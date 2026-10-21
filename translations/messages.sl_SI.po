@@ -21283,8 +21283,8 @@ msgstr "Pogoji rabe se pojavijo med prijavo v portal ali pri vstopu v tečaj."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Vaši pogoji rabe so pripravljeni na potrditev oz. podpis."
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Pozdravljeni. Vaš učitelj/tutor vam pošilja pogoje rabe. Sprejemete jih tako, do obiščete naslednji spletni naslov: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Pozdravljeni %s,<br />Vaš učitelj/tutor vam pošilja pogoje rabe. Sprejmete jih tako, da obiščete naslednji spletni naslov: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Uporabnik %s je sprejel pogoje rabe."

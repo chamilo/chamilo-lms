@@ -21269,8 +21269,8 @@ msgstr "Oikeudellinen sopimus näkyy kirjautuessa tai kurssille mentäessä."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Käyttöehiosi ovat valmiita allekirjoitettavaksi"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Hei,<br />opettajasi on lähettänyt sinulle käyttöehdot. Voit allekirjoittaa ne seuraavan URL-osoitteen kautta: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Hei %s,<br />opettajasi on lähettänyt sinulle käyttöehdot. Voit allekirjoittaa ne seuraavan URL-osoitteen kautta: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Käyttäjä %s allekirjoitti sopimuksen."

@@ -129,7 +129,51 @@
             }}
           </div>
 
+          <div
+            v-if="usesEtherpadEditor"
+            class="space-y-3"
+          >
+            <div class="flex items-center gap-2">
+              <BaseIcon
+                icon="edit"
+                size="normal"
+              />
+              <h2 class="text-base font-semibold text-gray-90">
+                {{ t("Collaborative Wiki editor") }}
+              </h2>
+            </div>
+
+            <div
+              v-if="isEtherpadLoading"
+              class="rounded-lg border border-gray-20 bg-gray-10 p-6 text-center text-sm text-gray-600"
+              role="status"
+            >
+              {{ t("Connecting to Etherpad...") }}
+            </div>
+
+            <div
+              v-else-if="etherpadErrorMessage"
+              class="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+              role="alert"
+            >
+              {{ etherpadErrorMessage }}
+            </div>
+
+            <iframe
+              v-else-if="etherpadEditorUrl"
+              :src="etherpadEditorUrl"
+              :title="t('Collaborative Wiki editor')"
+              class="h-[36rem] w-full rounded-lg border border-gray-20 bg-white"
+              referrerpolicy="same-origin"
+            ></iframe>
+
+            <p class="text-sm text-gray-600">
+              {{ t("Save creates a new Chamilo Wiki version from the current Etherpad content.") }}
+            </p>
+          </div>
+
           <BaseTinyEditor
+            v-else
             v-model="form.content"
             editor-id="wiki_page_content"
             :editor-config="editorConfig"
@@ -423,6 +467,9 @@ const isSaving = ref(false);
 const formSubmitted = ref(false);
 const loadErrorMessage = ref("");
 const formErrorMessage = ref("");
+const etherpadEditorUrl = ref("")
+const etherpadErrorMessage = ref("")
+const isEtherpadLoading = ref(false)
 const showAdvancedSettings = ref(false);
 const isLeavingAfterSave = ref(false);
 const useStartDate = ref(false);
@@ -431,6 +478,8 @@ const startDateValue = ref(null);
 const endDateValue = ref(null);
 
 const form = ref(createEmptyForm());
+
+const usesEtherpadEditor = computed(() => !form.value.isNew && Boolean(form.value.settings?.etherpadEnabled))
 
 const editorConfig = computed(() => ({
   height: 360,
@@ -622,6 +671,30 @@ function hasAssignmentConfiguration() {
   );
 }
 
+async function startEtherpadSession() {
+  if (!usesEtherpadEditor.value || !form.value.pageId) {
+    return
+  }
+
+  isEtherpadLoading.value = true
+  etherpadEditorUrl.value = ""
+  etherpadErrorMessage.value = ""
+
+  try {
+    const response = await wikiService.startEtherpadSession(form.value.pageId, getContextParams())
+    const editorUrl = String(response?.editorUrl || "").trim()
+    if (!editorUrl) {
+      throw new Error("Etherpad editor URL is missing")
+    }
+    etherpadEditorUrl.value = editorUrl
+  } catch (error) {
+    console.error("Error starting Etherpad Wiki editor", error)
+    etherpadErrorMessage.value = getErrorMessage(error)
+  } finally {
+    isEtherpadLoading.value = false
+  }
+}
+
 async function acquireLock() {
   if (!form.value.requiresLock || !form.value.pageId) {
     return;
@@ -684,7 +757,11 @@ async function loadForm() {
     useStartDate.value = startDateValue.value instanceof Date;
     useEndDate.value = endDateValue.value instanceof Date;
     showAdvancedSettings.value = hasAssignmentConfiguration();
-    await acquireLock();
+    if (usesEtherpadEditor.value) {
+      await startEtherpadSession()
+    } else {
+      await acquireLock()
+    }
   } catch (error) {
     console.error("Error loading Wiki page form", error);
     loadErrorMessage.value = getErrorMessage(error);
@@ -763,38 +840,49 @@ async function savePage() {
     return;
   }
 
-  isSaving.value = true;
+  if (usesEtherpadEditor.value && !etherpadEditorUrl.value) {
+    formErrorMessage.value = t("The collaborative editor could not be loaded.")
+    return
+  }
 
-  const payload = {
-    pageId: form.value.pageId,
-    reflink: form.value.reflink,
-    title: form.value.title,
-    content: form.value.content,
-    comment: form.value.comment,
-    progress: Number(form.value.progress || 0),
-    language: form.value.language,
-    baseVersion: Number(form.value.baseVersion || 0),
-    createAssignment: Boolean(form.value.createAssignment),
-    task: form.value.task || "",
-    feedback1: form.value.feedback1 || "",
-    feedback2: form.value.feedback2 || "",
-    feedback3: form.value.feedback3 || "",
-    feedbackProgress1: Number(form.value.feedbackProgress1 || 0),
-    feedbackProgress2: Number(form.value.feedbackProgress2 || 0),
-    feedbackProgress3: Number(form.value.feedbackProgress3 || 0),
-    startDate: useStartDate.value ? serializeDate(startDateValue.value) : null,
-    endDate: useEndDate.value ? serializeDate(endDateValue.value) : null,
-    delayedSubmit: Boolean(form.value.delayedSubmit),
-    maxWords: Math.max(0, Number(form.value.maxWords || 0)),
-    maxVersions: Math.max(0, Number(form.value.maxVersions || 0)),
-    categoryIds: Array.isArray(form.value.categoryIds)
-      ? form.value.categoryIds
-          .map(Number)
-          .filter((categoryId) => categoryId > 0)
-      : [],
-  };
+  isSaving.value = true
 
   try {
+    if (usesEtherpadEditor.value) {
+      const snapshot = await wikiService.snapshotEtherpad(form.value.pageId, getContextParams())
+      if (typeof snapshot?.content !== "string") {
+        throw new Error("Etherpad snapshot content is missing")
+      }
+      form.value.content = snapshot.content
+    }
+
+    const payload = {
+      pageId: form.value.pageId,
+      reflink: form.value.reflink,
+      title: form.value.title,
+      content: form.value.content,
+      comment: form.value.comment,
+      progress: Number(form.value.progress || 0),
+      language: form.value.language,
+      baseVersion: Number(form.value.baseVersion || 0),
+      createAssignment: Boolean(form.value.createAssignment),
+      task: form.value.task || "",
+      feedback1: form.value.feedback1 || "",
+      feedback2: form.value.feedback2 || "",
+      feedback3: form.value.feedback3 || "",
+      feedbackProgress1: Number(form.value.feedbackProgress1 || 0),
+      feedbackProgress2: Number(form.value.feedbackProgress2 || 0),
+      feedbackProgress3: Number(form.value.feedbackProgress3 || 0),
+      startDate: useStartDate.value ? serializeDate(startDateValue.value) : null,
+      endDate: useEndDate.value ? serializeDate(endDateValue.value) : null,
+      delayedSubmit: Boolean(form.value.delayedSubmit),
+      maxWords: Math.max(0, Number(form.value.maxWords || 0)),
+      maxVersions: Math.max(0, Number(form.value.maxVersions || 0)),
+      categoryIds: Array.isArray(form.value.categoryIds)
+        ? form.value.categoryIds.map(Number).filter((categoryId) => categoryId > 0)
+        : [],
+    }
+
     const response = form.value.isNew
       ? await wikiService.createPage(getContextParams(), payload)
       : await wikiService.updatePage(

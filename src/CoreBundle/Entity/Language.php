@@ -174,7 +174,7 @@ class Language
         return $this;
     }
 
-    public function getParent(): ?static
+    public function getParent(): ?self
     {
         return $this->parent;
     }

@@ -21264,8 +21264,8 @@ msgstr "Heshiiska sharci wuxuu ka muuqan doonaa inta lagu jiro gelitaanka ama ma
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Shuruudahaaga iyo xaaladahaagu diyaar yihiin in la saxeexo"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Salaan,<br />Macallinkaagu wuxuu kuu soo diray shuruudahaaga iyo xaaladahaaga. Waxaad ku saxiixi kartaa adigoo raacaya URLkan: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Salaan %s,<br />Macallinkaagu wuxuu kuu soo diray shuruudahaaga iyo xaaladahaaga. Waxaad ku saxiixi kartaa adigoo raacaya URLkan: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Isticmaale %s wuu saxeexay heshiiska."

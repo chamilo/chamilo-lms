@@ -22,7 +22,7 @@ class Level implements Stringable
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Gedmo\SortablePosition]
@@ -31,6 +31,9 @@ class Level implements Stringable
 
     #[ORM\Column(name: 'short_title', type: 'string', length: 255, nullable: false)]
     protected string $shortTitle;
+
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
+    protected string $description = '';
 
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: SkillLevelProfile::class, inversedBy: 'levels')]
@@ -85,6 +88,18 @@ class Level implements Stringable
     public function setShortTitle(string $shortTitle): self
     {
         $this->shortTitle = $shortTitle;
+
+        return $this;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

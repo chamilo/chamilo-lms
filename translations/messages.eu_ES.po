@@ -21274,8 +21274,8 @@ msgstr "Akordio legalak login-a edo ikastaro batera sartzen denean agertuko da."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Zure baldintza eta条款 sinatzeko prest daude"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Kaixo,<br />Zure irakasleak bidali dizu zure baldintza eta条款. Sinatzeko URL hau jarraitu dezakezu: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Kaixo %s,<br />Zure irakasleak bidali dizu zure baldintza eta条款. Sinatzeko URL hau jarraitu dezakezu: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Erabiltzaileak %s sinatu du akordioa."

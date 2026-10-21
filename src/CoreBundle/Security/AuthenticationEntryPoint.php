@@ -16,17 +16,22 @@ use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 {
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly ForcedLoginRedirectHelper $forcedLoginRedirectHelper,
+        private readonly TranslatorInterface $translator,
     ) {}
 
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
-        $message = $authException?->getMessage() ?? 'Authentication required.';
+        // Symfony's own text ("Full authentication is required...") has no translation anywhere.
+        // The visitor is not logged in, so the request locale is the one LocaleSubscriber chose
+        // for anonymous visitors: the platform language, or the browser's when allowed.
+        $message = $this->translator->trans('Please try to login again using the form below');
 
         // XHR/JSON consumers get a status code they can act on. Redirecting them
         // would answer 200 with the login page, which they cannot tell apart from

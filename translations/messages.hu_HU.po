@@ -21267,8 +21267,8 @@ msgstr "A jogi megállapodás a bejelentkezéskor vagy a kurzusba lépéskor jel
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Szerződési feltételei készen állnak az aláírásra"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Helló,<br />Oktatója elküldte szerződési feltételeit. Aláírhatja ezt a linket követve: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Helló %s,<br />Oktatója elküldte szerződési feltételeit. Aláírhatja ezt a linket követve: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "A %s felhasználó aláírta a megállapodást."

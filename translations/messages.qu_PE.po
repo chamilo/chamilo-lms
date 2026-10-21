@@ -21269,8 +21269,8 @@ msgstr "Kamachikuy qillqay rirqinpi uturunchaypi ukhu qhawaypi."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Kamachikuykuna qillqaykuna qhatun rimaq"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Allin pacha,<br />Yachachiynikam kamachikuykuna qillqaykuna qhatun. Kay URLwan rimaq kanki: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Allin pacha %s,<br />Yachachiynikam kamachikuykuna qillqaykuna qhatun. Kay URLwan rimaq kanki: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Runa %s qillqayta qhatun."

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
+use Chamilo\CoreBundle\Component\LegacyCliBootstrapper;
 use Chamilo\CoreBundle\Search\Xapian\CourseDescriptionXapianIndexer;
 use Chamilo\CoreBundle\Search\Xapian\DocumentXapianIndexer;
 use Chamilo\CoreBundle\Search\Xapian\LpXapianIndexer;
@@ -27,6 +28,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Process\Process;
 use Throwable;
 use XapianWritableDatabase;
@@ -50,6 +52,7 @@ final class XapianRebuildCommand extends Command
         private readonly QuizXapianIndexer $quizIndexer,
         private readonly QuestionXapianIndexer $questionIndexer,
         private readonly LpXapianIndexer $lpIndexer,
+        private readonly KernelInterface $kernel,
     ) {
         parent::__construct();
     }
@@ -140,6 +143,13 @@ HELP
 
             return Command::SUCCESS;
         }
+
+        // Text extraction asks AiFeatureAccessHelper whether AI media extraction is enabled
+        // for each course, which can reach the legacy BuyCourses plugin and the legacy
+        // Container::$container — never anchored to this command's own container otherwise.
+        // Kept outside the try below: a failure there would make restoreIndexDirectory()
+        // remove the live index before a backup exists. See LegacyCliBootstrapper.
+        LegacyCliBootstrapper::bootstrap($this->kernel, $this->entityManager);
 
         $backupPath = null;
 

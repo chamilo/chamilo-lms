@@ -18,11 +18,11 @@ class DocumentCourseSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults([
                 'enabled' => 1,
-                'documents_default_visibility' => '',
+                'document_default_visibility_on_creation' => '',
             ])
         ;
         $allowedTypes = [
-            'documents_default_visibility' => ['string'],
+            'document_default_visibility_on_creation' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -31,7 +31,7 @@ class DocumentCourseSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('enabled', YesNoNumericType::class)
-            ->add('documents_default_visibility')
+            ->add('document_default_visibility_on_creation')
         ;
     }
 }

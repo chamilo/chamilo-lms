@@ -146,7 +146,7 @@ class Message
 
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Assert\NotBlank]
@@ -157,7 +157,7 @@ class Message
     #[ORM\Column(name: 'mail_answer', type: 'boolean', options: ['default' => false])]
     protected bool $mailAnswer = false;
 
-    #[ORM\Column(name: 'mail_inbound_id', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'mail_inbound_id', type: 'string', length: 255, nullable: true)]
     protected ?string $mailInboundId = null;
 
     #[Groups(['message:read', 'message:write'])]

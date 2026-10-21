@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -1188,6 +1189,7 @@ class DocumentManager
                     $all_user_info = self::get_all_info_to_certificate(
                         $user_id,
                         $course_id,
+                        $sessionId,
                         $is_preview
                     );
 
@@ -1310,7 +1312,7 @@ class DocumentManager
             $externalStyle = file_get_contents($externalStyleFile);
         }
         $timeInCourse = Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $sessionId);
-        $timeInCourse = api_time_to_hms($timeInCourse, ':', false, true);
+        $timeInCourse = api_time_to_hms($timeInCourse);
 
         $timeInCourseInAllSessions = 0;
         $sessions = SessionManager::get_session_by_course($course_info['real_id']);
@@ -1320,7 +1322,7 @@ class DocumentManager
                 $timeInCourseInAllSessions += Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $session['id']);
             }
         }
-        $timeInCourseInAllSessions = api_time_to_hms($timeInCourseInAllSessions, ':', false, true);
+        $timeInCourseInAllSessions = api_time_to_hms($timeInCourseInAllSessions);
 
         $first = Tracking::get_first_connection_date_on_the_course($user_id, $course_info['real_id'], $sessionId, false);
         $first = substr($first, 0, 10);
@@ -1328,7 +1330,7 @@ class DocumentManager
         $last = substr($last, 0, 10);
 
         if ($first === $last) {
-            $startDateAndEndDate = get_lang('From').' '.$first;
+            $startDateAndEndDate = get_lang('The').' '.$first;
         } else {
             $startDateAndEndDate = sprintf(
                 get_lang('From %s to %s'),
@@ -2917,26 +2919,10 @@ jQuery(function ($) {
      */
     public static function getDocumentDefaultVisibility($courseCode)
     {
-        $settings = api_get_setting('tool_visible_by_default_at_creation');
-        $defaultVisibility = 'visible';
+        $course = Container::getCourseRepository()->findOneByCode((string) $courseCode);
 
-        if (isset($settings['documents'])) {
-            $portalDefaultVisibility = 'invisible';
-            if ('true' == $settings['documents']) {
-                $portalDefaultVisibility = 'visible';
-            }
-
-            $defaultVisibility = $portalDefaultVisibility;
-        }
-
-        if ('true' === api_get_setting('documents_default_visibility_defined_in_course')) {
-            $courseVisibility = api_get_course_setting('documents_default_visibility', $courseCode);
-            if (!empty($courseVisibility) && in_array($courseVisibility, ['visible', 'invisible'])) {
-                $defaultVisibility = $courseVisibility;
-            }
-        }
-
-        return $defaultVisibility;
+        return Container::$container->get(ResourceDefaultVisibilityHelper::class)
+            ->getVisibility(ResourceDefaultVisibilityHelper::DOCUMENT, $course);
     }
 
     /**

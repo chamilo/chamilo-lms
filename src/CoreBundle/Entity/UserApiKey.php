@@ -32,7 +32,7 @@ class UserApiKey
     #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
     protected int $userId;
 
-    #[ORM\Column(name: 'api_key', type: 'string', length: 64, nullable: false)]
+    #[ORM\Column(name: 'api_key', type: 'string', length: 255, nullable: false)]
     protected string $apiKey;
 
     #[ORM\Column(name: 'api_service', type: 'string', length: 10, nullable: false)]

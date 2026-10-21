@@ -29,7 +29,7 @@ class CLpItem implements Stringable
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 511, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[Assert\NotBlank]
@@ -40,7 +40,7 @@ class CLpItem implements Stringable
     #[ORM\Column(name: 'ref', type: 'text', nullable: false)]
     protected string $ref;
 
-    #[ORM\Column(name: 'description', type: 'string', length: 511, nullable: true)]
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
     #[ORM\Column(name: 'path', type: 'text', nullable: false)]
@@ -76,7 +76,7 @@ class CLpItem implements Stringable
     #[ORM\Column(name: 'search_did', type: 'integer', nullable: true)]
     protected ?int $searchDid = null;
 
-    #[ORM\Column(name: 'audio', type: 'string', length: 250, nullable: true)]
+    #[ORM\Column(name: 'audio', type: 'string', length: 255, nullable: true)]
     protected ?string $audio = null;
 
     #[ORM\Column(name: 'prerequisite_min_score', type: 'float', precision: 10, scale: 0, nullable: true)]

@@ -36,7 +36,7 @@ class MobilePushInstallation
     #[ORM\Column(name: 'token', type: 'text')]
     private string $token;
 
-    #[ORM\Column(name: 'token_hash', type: 'string', length: 64)]
+    #[ORM\Column(name: 'token_hash', type: 'string', length: 255)]
     private string $tokenHash;
 
     #[ORM\Column(name: 'platform', type: 'string', length: 20)]

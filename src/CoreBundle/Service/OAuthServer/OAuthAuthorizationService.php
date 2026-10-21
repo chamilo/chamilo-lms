@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\OAuthServer\OAuthException;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\OAuthClientConsentRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
@@ -29,13 +30,15 @@ final readonly class OAuthAuthorizationService
     public const int CODE_TTL_SECONDS = 120;
     public const int PENDING_REQUEST_TTL_SECONDS = 600;
     public const string SESSION_KEY = '_oauth_authorize_request';
-    public const string SCOPE = 'mcp';
 
     public function __construct(
         private OAuthClientResolver $clientResolver,
         private EntityManagerInterface $entityManager,
         private AccessUrlHelper $accessUrlHelper,
         private AccessUrlRepository $accessUrlRepository,
+        private OAuthClientConsentRepository $clientConsentRepository,
+        private OAuthMetadataService $metadataService,
+        private OAuthResourceRegistry $resourceRegistry,
     ) {}
 
     /**
@@ -70,7 +73,7 @@ final readonly class OAuthAuthorizationService
      * Phase 2: everything else. Once the client/redirect_uri are trusted,
      * failures here ARE reported by redirecting with ?error=...&state=....
      */
-    public function validateAuthorizeParameters(Request $request): OAuthAuthorizeRequest
+    public function validateAuthorizeParameters(Request $request, OAuthClient $client): OAuthAuthorizeRequest
     {
         $state = (string) $request->query->get('state', '');
 
@@ -89,7 +92,10 @@ final readonly class OAuthAuthorizationService
         }
 
         $resource = $request->query->get('resource');
-        $resource = \is_string($resource) && '' !== $resource ? $resource : null;
+        $resource = \is_string($resource) && '' !== trim($resource) ? trim($resource) : null;
+        [$resource, $resourceKey] = $this->normalizeResourceForClient($resource, $client);
+
+        $scope = $this->resolveScope($request->query->get('scope'), $client, $resourceKey);
 
         return new OAuthAuthorizeRequest(
             clientId: (string) $request->query->get('client_id', ''),
@@ -97,6 +103,7 @@ final readonly class OAuthAuthorizationService
             state: $state,
             codeChallenge: $codeChallenge,
             codeChallengeMethod: $codeChallengeMethod,
+            scope: $scope,
             resource: $resource,
             createdAt: time(),
         );
@@ -114,6 +121,12 @@ final readonly class OAuthAuthorizationService
         $session->remove(self::SESSION_KEY);
 
         return $pending instanceof OAuthAuthorizeRequest ? $pending : null;
+    }
+
+    public function assertAuthorizationStillAllowed(OAuthAuthorizeRequest $authorizeRequest, OAuthClient $client): void
+    {
+        [, $resourceKey] = $this->normalizeResourceForClient($authorizeRequest->resource, $client);
+        $this->resolveScope($authorizeRequest->getScope(), $client, $resourceKey);
     }
 
     public function assertUserActiveOnCurrentPortal(User $user): bool
@@ -154,7 +167,7 @@ final readonly class OAuthAuthorizationService
             ->setRedirectUri($authorizeRequest->redirectUri)
             ->setCodeChallenge($authorizeRequest->codeChallenge)
             ->setCodeChallengeMethod($authorizeRequest->codeChallengeMethod)
-            ->setScope(self::SCOPE)
+            ->setScope($authorizeRequest->getScope())
             ->setResource($authorizeRequest->resource)
             // Captured now, at the real browser consent moment, so the
             // eventual OAuthRefreshToken "connected app" record reflects who
@@ -167,9 +180,83 @@ final readonly class OAuthAuthorizationService
         ;
 
         $this->entityManager->persist($code);
+        $this->clientConsentRepository->recordFirstGrant($user, $client, $now);
+        $client->setLastUsedAt($now);
         $this->entityManager->flush();
 
         return $plainCode;
+    }
+
+    /**
+     * @return array{0: ?string, 1: ?string}
+     */
+    private function normalizeResourceForClient(?string $resource, OAuthClient $client): array
+    {
+        if (null === $resource || '' === trim($resource)) {
+            return [null, null];
+        }
+
+        $resourceKey = $this->resourceRegistry->resolveResourceKey($resource, $this->metadataService->getIssuer());
+        if (null === $resourceKey || !$client->allowsResource($resourceKey)) {
+            throw OAuthException::invalidTarget('This client is not allowed to use the requested resource.');
+        }
+
+        $resourcePath = $this->resourceRegistry->getResourcePath($resourceKey);
+        if (null === $resourcePath) {
+            throw OAuthException::invalidTarget();
+        }
+
+        return [$this->metadataService->getResourceIdentifier($resourcePath), $resourceKey];
+    }
+
+    private function resolveScope(mixed $requestedScope, OAuthClient $client, ?string $resourceKey): string
+    {
+        $clientScopes = $this->parseScope($client->getScope());
+        if ([] === $clientScopes) {
+            $clientScopes = $this->resourceRegistry->getScopesForResource(OAuthResourceRegistry::MCP_RESOURCE);
+        }
+
+        $resourceScopes = null !== $resourceKey
+            ? $this->resourceRegistry->getScopesForResource($resourceKey)
+            : [];
+
+        if (null === $requestedScope) {
+            $requestedScopes = null !== $resourceKey
+                ? array_values(array_intersect($clientScopes, $resourceScopes))
+                : $clientScopes;
+        } else {
+            if (!\is_string($requestedScope) || '' === trim($requestedScope)) {
+                throw OAuthException::invalidScope();
+            }
+            $requestedScopes = $this->parseScope($requestedScope);
+        }
+
+        if ([] === $requestedScopes) {
+            throw OAuthException::invalidScope('No allowed scope is available for the requested resource.');
+        }
+
+        foreach ($requestedScopes as $scope) {
+            if (!\in_array($scope, $clientScopes, true)) {
+                throw OAuthException::invalidScope('The requested scope was not registered for this client.');
+            }
+            if (null !== $resourceKey && !\in_array($scope, $resourceScopes, true)) {
+                throw OAuthException::invalidScope('The requested scope is not valid for this resource.');
+            }
+        }
+
+        return implode(' ', $requestedScopes);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function parseScope(?string $scope): array
+    {
+        if (null === $scope || '' === trim($scope)) {
+            return [];
+        }
+
+        return array_values(array_unique(preg_split('/\s+/', trim($scope)) ?: []));
     }
 
     /**

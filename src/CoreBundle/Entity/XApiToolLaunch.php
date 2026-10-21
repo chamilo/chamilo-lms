@@ -23,7 +23,7 @@ class XApiToolLaunch
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

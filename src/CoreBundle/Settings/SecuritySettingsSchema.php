@@ -53,8 +53,9 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'hide_breadcrumb_if_not_allowed' => 'false',
             'file_integrity_check_notify_admins' => '',
             'oauth_server_enabled' => 'false',
+            'dynamic_client_registration' => 'false',
             'mcp_enabled' => 'false',
-            'mcp_allowed_roles' => '{"ADMIN":true,"COURSEMANAGER":true,"STUDENT":false,"DRH":false,"SESSIONADMIN":false,"STUDENT_BOSS":false,"INVITEE":false}',
+            'mcp_allowed_roles' => '{"ADMIN":true,"COURSEMANAGER":true,"STUDENT":false,"HRM":false,"SESSIONADMIN":false,"STUDENT_BOSS":false,"INVITEE":false}',
             'external_api_enabled' => 'false',
         ]);
 
@@ -102,6 +103,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('hide_breadcrumb_if_not_allowed', YesNoType::class)
             ->add('file_integrity_check_notify_admins', TextareaType::class)
             ->add('oauth_server_enabled', YesNoType::class)
+            ->add('dynamic_client_registration', YesNoType::class)
             ->add('mcp_enabled', YesNoType::class)
             ->add('mcp_allowed_roles', TextareaType::class, [
                 'constraints' => [new Json()],

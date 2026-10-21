@@ -18,8 +18,12 @@ if (empty($course)) {
 }
 
 $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : null;
+$sessionId = !empty($sessionId) ? $sessionId : null;
 
-$url = api_get_self().'?course_id='.$courseId.'&session_id='.$sessionId;
+$url = api_get_self().'?course_id='.$courseId;
+if (null !== $sessionId) {
+    $url .= '&session_id='.$sessionId;
+}
 $form = new FormValidator('skills', 'post', $url);
 
 $sessionName = $course->getTitleAndCode();

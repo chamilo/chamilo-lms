@@ -78,6 +78,11 @@ final class OAuthException extends RuntimeException
         return new self('invalid_target', $description, 400);
     }
 
+    public static function invalidScope(string $description = 'The requested scope is invalid.'): self
+    {
+        return new self('invalid_scope', $description, 400);
+    }
+
     /**
      * @param array<string, string> $extraHeaders
      */

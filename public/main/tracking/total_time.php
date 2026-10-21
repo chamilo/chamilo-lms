@@ -34,9 +34,9 @@ if (!$is_allowedToTrack) {
 }
 
 // If the user is a HR director (drh)
-if (api_is_drh()) {
+if (api_is_hrm()) {
     // Blocking course for drh
-    if (api_drh_can_access_all_session_content()) {
+    if (api_hrm_can_access_all_session_content()) {
         // If the drh has been configured to be allowed to see all session content,
         // give him access to the session courses
         $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(
@@ -51,7 +51,7 @@ if (api_is_drh()) {
             }
         }
 
-        $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+        $coursesFollowedList = CourseManager::get_courses_followed_by_hrm(api_get_user_id());
 
         if (!empty($coursesFollowedList)) {
             $coursesFollowedList = array_keys($coursesFollowedList);
@@ -65,7 +65,7 @@ if (api_is_drh()) {
     } else {
         // If the drh has *not* been configured to be allowed to see all session content,
         // then check if he has also been given access to the corresponding courses
-        $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+        $coursesFollowedList = CourseManager::get_courses_followed_by_hrm(api_get_user_id());
         $coursesFollowedList = array_keys($coursesFollowedList);
         if (!in_array(api_get_course_id(), $coursesFollowedList)) {
             api_not_allowed(true);

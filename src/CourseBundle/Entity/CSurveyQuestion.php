@@ -58,7 +58,7 @@ class CSurveyQuestion
     #[ORM\Column(name: 'survey_question_comment', type: 'text', nullable: false)]
     protected ?string $surveyQuestionComment = null;
 
-    #[ORM\Column(name: 'type', type: 'string', length: 250, nullable: false)]
+    #[ORM\Column(name: 'type', type: 'string', length: 255, nullable: false)]
     protected string $type;
 
     #[ORM\Column(name: 'display', type: 'string', length: 10, nullable: false)]

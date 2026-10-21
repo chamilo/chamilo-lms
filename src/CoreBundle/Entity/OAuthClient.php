@@ -29,10 +29,10 @@ class OAuthClient
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'client_id', type: 'string', length: 64, nullable: false)]
+    #[ORM\Column(name: 'client_id', type: 'string', length: 255, nullable: false)]
     protected string $clientId;
 
-    #[ORM\Column(name: 'client_secret_hash', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'client_secret_hash', type: 'string', length: 255, nullable: true)]
     protected ?string $clientSecretHash = null;
 
     #[ORM\Column(name: 'client_secret_prefix', type: 'string', length: 32, nullable: true)]
@@ -59,7 +59,7 @@ class OAuthClient
     #[ORM\Column(name: 'software_id', type: 'string', length: 255, nullable: true)]
     protected ?string $softwareId = null;
 
-    #[ORM\Column(name: 'software_version', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'software_version', type: 'string', length: 255, nullable: true)]
     protected ?string $softwareVersion = null;
 
     /**
@@ -82,6 +82,14 @@ class OAuthClient
 
     #[ORM\Column(name: 'scope', type: 'string', length: 255, nullable: true)]
     protected ?string $scope = null;
+
+    /**
+     * Stable OAuthResourceRegistry keys this client is allowed to target.
+     *
+     * @var array<int, string>
+     */
+    #[ORM\Column(name: 'allowed_resources', type: 'json', nullable: false)]
+    protected array $allowedResources = [];
 
     #[ORM\Column(name: 'access_url_id', type: 'integer', nullable: true)]
     protected ?int $accessUrlId = null;
@@ -299,6 +307,41 @@ class OAuthClient
         $this->scope = $scope;
 
         return $this;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getAllowedResources(): array
+    {
+        return $this->allowedResources;
+    }
+
+    /**
+     * @param array<int, string> $allowedResources
+     */
+    public function setAllowedResources(array $allowedResources): self
+    {
+        $normalized = [];
+        foreach ($allowedResources as $resource) {
+            if (!\is_string($resource)) {
+                continue;
+            }
+
+            $resource = trim($resource);
+            if ('' !== $resource) {
+                $normalized[$resource] = true;
+            }
+        }
+
+        $this->allowedResources = array_keys($normalized);
+
+        return $this;
+    }
+
+    public function allowsResource(string $resourceKey): bool
+    {
+        return \in_array($resourceKey, $this->allowedResources, true);
     }
 
     public function getAccessUrlId(): ?int

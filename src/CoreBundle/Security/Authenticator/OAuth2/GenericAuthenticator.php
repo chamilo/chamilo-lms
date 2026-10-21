@@ -123,7 +123,7 @@ class GenericAuthenticator extends AbstractAuthenticator
                     ->setLastname('OAuth2 User default firstname')
                     ->setEmail('oauth2user_'.$resourceOwnerId.'@'.(gethostname() ?: 'localhost'))
                     ->setUsername($username)
-                    ->setPlainPassword($username)
+                    ->setPlainPassword(bin2hex(random_bytes(32)))
                     ->setStatus(STUDENT)
                     ->setCreatorId($this->userRepository->getRootUser()->getId())
                 ;
@@ -224,8 +224,8 @@ class GenericAuthenticator extends AbstractAuthenticator
             $responseStatus[SESSIONADMIN] = $sessAdminStatus;
         }
 
-        if ($drhStatus = $providerParams['resource_owner_hr_status_field']) {
-            $responseStatus[DRH] = $drhStatus;
+        if ($hrmStatus = $providerParams['resource_owner_hr_status_field']) {
+            $responseStatus[HRM] = $hrmStatus;
         }
 
         if ($studentStatus = $providerParams['resource_owner_student_status_field']) {

@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\WikiHelper;
+use Chamilo\CoreBundle\Service\EtherpadClient;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\CourseBundle\Entity\CWikiCategory;
@@ -56,6 +57,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         private WikiAssignmentService $assignmentService,
         private WikiCategoryService $categoryService,
         private WikiHelper $wikiHelper,
+        private EtherpadClient $etherpadClient,
     ) {}
 
     /**
@@ -102,6 +104,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
             $session,
             $group,
         );
+        $etherpadEnabled = $this->etherpadClient->isEnabled();
         $isUpdate = (int) ($uriVariables['pageId'] ?? 0) > 0;
         $latest = null;
         $templatePage = null;
@@ -134,7 +137,13 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
                 throw new AccessDeniedHttpException('You are not allowed to edit this Wiki page.');
             }
 
-            $this->assertVersionAndLock($latest, $data->baseVersion, $user, $canManage);
+            $this->assertVersionAndLock(
+                $latest,
+                $data->baseVersion,
+                $user,
+                $canManage,
+                $etherpadEnabled,
+            );
             $templatePage = $latest;
         }
 
@@ -280,6 +289,7 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
             ->setTag('')
             ->setUserIp((string) ($request->getClientIp() ?? ''))
             ->setSessionId($sessionId)
+            ->setEtherpadId($etherpadEnabled && $latest instanceof CWiki ? $latest->getEtherpadId() : null)
             ->setParent($course)
             ->addCourseLink($course, $session, $group)
         ;
@@ -501,14 +511,19 @@ final readonly class WikiPageFormProcessor implements ProcessorInterface
         }
     }
 
-    private function assertVersionAndLock(CWiki $wiki, int $baseVersion, User $user, bool $canManage): void
-    {
+    private function assertVersionAndLock(
+        CWiki $wiki,
+        int $baseVersion,
+        User $user,
+        bool $canManage,
+        bool $etherpadEnabled,
+    ): void {
         $currentVersion = (int) $wiki->getVersion();
         if ($baseVersion <= 0 || $baseVersion !== $currentVersion) {
             throw new ConflictHttpException('This Wiki page was modified by another user. Reload the editor before saving.');
         }
 
-        if ($canManage) {
+        if ($canManage || $etherpadEnabled) {
             return;
         }
 

@@ -967,14 +967,20 @@ class Statistics
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
-            $sql = "SELECT course_language, count( c.code ) AS number_of_courses
-                    FROM $table as c, $access_url_rel_course_table as u
-                    WHERE u.c_id = c.id AND access_url_id = $urlId
-                    GROUP BY course_language
+            $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+            $sql = "SELECT l.isocode AS course_language, count(c.code) AS number_of_courses
+                    FROM $table c
+                    INNER JOIN $languageTable l ON l.id = c.language_id
+                    INNER JOIN $access_url_rel_course_table u ON u.c_id = c.id
+                    WHERE access_url_id = $urlId
+                    GROUP BY l.id, l.isocode
                     ORDER BY number_of_courses DESC";
         } else {
-            $sql = "SELECT course_language, count( code ) AS number_of_courses
-                   FROM $table GROUP BY course_language
+            $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+            $sql = "SELECT l.isocode AS course_language, count(c.code) AS number_of_courses
+                   FROM $table c
+                   INNER JOIN $languageTable l ON l.id = c.language_id
+                   GROUP BY l.id, l.isocode
                    ORDER BY number_of_courses DESC";
         }
         $res = Database::query($sql);

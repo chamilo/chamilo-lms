@@ -52,48 +52,6 @@ function lti_provider_get_signing_secret(): string
 }
 
 /**
- * Resolve the effective Chamilo user after validateUser() completed.
- *
- * Resolution order:
- * 1. Stable LTI username (issuer + subject)
- * 2. Existing user by email
- */
-function lti_provider_resolve_user_entity(array $launchData): ?User
-{
-    $issuer = trim((string) ($launchData['iss'] ?? ''));
-    $subject = trim((string) ($launchData['sub'] ?? ''));
-    $email = trim((string) ($launchData['email'] ?? ''));
-    $authSource = defined('IMS_LTI_SOURCE') ? IMS_LTI_SOURCE : 'lti_provider';
-
-    if ('' === $issuer || '' === $subject) {
-        return null;
-    }
-
-    $username = md5($issuer.'_'.$subject);
-
-    $userInfo = api_get_user_info_from_username($username, $authSource);
-    if (!empty($userInfo['user_id'])) {
-        $user = api_get_user_entity((int) $userInfo['user_id']);
-
-        if ($user instanceof User) {
-            return $user;
-        }
-    }
-
-    if ('' !== $email) {
-        $userByEmail = Database::getManager()
-            ->getRepository(User::class)
-            ->findOneBy(['email' => $email]);
-
-        if ($userByEmail instanceof User) {
-            return $userByEmail;
-        }
-    }
-
-    return null;
-}
-
-/**
  * Create a Symfony security token and legacy course context in session.
  */
 function lti_provider_store_authenticated_user_in_session(User $user, array $courseInfo): void
@@ -142,14 +100,9 @@ if (empty($courseInfo) || empty($courseInfo['real_id'])) {
     throw new RuntimeException('The target course could not be resolved.');
 }
 
-$login = $provider->validateUser($launchData, $courseCode, $toolName);
-if (!$login) {
-    throw new RuntimeException('LTI user validation/login failed.');
-}
-
-$resolvedUser = lti_provider_resolve_user_entity($launchData);
+$resolvedUser = $provider->validateUser($launchData, $courseCode, $toolName);
 if (!$resolvedUser instanceof User) {
-    throw new RuntimeException('The LTI user could not be resolved after validation.');
+    throw new RuntimeException('LTI user validation/login failed.');
 }
 
 $provider->logout($toolName);

@@ -7,10 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Service\OAuthServer;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\OAuthClient;
 use Chamilo\CoreBundle\Exception\OAuthServer\OAuthException;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Service\OAuthServer\OAuthClientRegistrar;
+use Chamilo\CoreBundle\Service\OAuthServer\OAuthResourceRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -102,6 +104,47 @@ final class OAuthClientRegistrarTest extends TestCase
         );
     }
 
+    public function testItDefaultsToMcpScope(): void
+    {
+        $response = $this->register(['redirect_uris' => ['https://client.example/callback']]);
+
+        self::assertSame('mcp', $response['scope']);
+    }
+
+    public function testItAcceptsExplicitMcpScope(): void
+    {
+        $response = $this->register([
+            'redirect_uris' => ['https://client.example/callback'],
+            'scope' => 'mcp',
+        ]);
+
+        self::assertSame('mcp', $response['scope']);
+    }
+
+    public function testItRejectsUnknownScope(): void
+    {
+        $this->expectRegistrationError(
+            [
+                'redirect_uris' => ['https://client.example/callback'],
+                'scope' => 'mcp storefront',
+            ],
+            'invalid_client_metadata',
+        );
+    }
+
+    public function testSelfRegisteredClientIsAllowlistedOnlyForMcp(): void
+    {
+        $capturedClient = null;
+        $this->register(
+            ['redirect_uris' => ['https://client.example/callback']],
+            false,
+            $capturedClient,
+        );
+
+        self::assertNotNull($capturedClient);
+        self::assertSame([OAuthResourceRegistry::MCP_RESOURCE], $capturedClient->getAllowedResources());
+    }
+
     /**
      * @param array<string, mixed> $metadata
      */
@@ -120,7 +163,7 @@ final class OAuthClientRegistrarTest extends TestCase
      *
      * @return array<string, mixed>
      */
-    private function register(array $metadata): array
+    private function register(array $metadata, bool $dynamicClientRegistration = false, ?OAuthClient &$capturedClient = null): array
     {
         $accessUrl = new AccessUrl();
         (new ReflectionProperty(AccessUrl::class, 'id'))->setValue($accessUrl, 1);
@@ -131,9 +174,14 @@ final class OAuthClientRegistrarTest extends TestCase
         $accessUrlHelper = new AccessUrlHelper($accessUrlRepository, new RequestStack());
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->method('persist')->willReturnCallback(static function (object $entity) use (&$capturedClient): void {
+            if ($entity instanceof OAuthClient) {
+                $capturedClient = $entity;
+            }
+        });
 
-        $registrar = new OAuthClientRegistrar($entityManager, $accessUrlHelper);
+        $registrar = new OAuthClientRegistrar($entityManager, $accessUrlHelper, new OAuthResourceRegistry());
 
-        return $registrar->register($metadata, '127.0.0.1');
+        return $registrar->register($metadata, '127.0.0.1', $dynamicClientRegistration);
     }
 }

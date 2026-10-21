@@ -535,6 +535,7 @@ class SurveyManager
                     ->setSurveyThanks($surveyData['surveythanks'])
                     ->setAnonymous($surveyData['anonymous'])
                     ->setVisibleResults($surveyData['visible_results'])
+                    ->setResultsHiddenFromTeacher((bool) ($surveyData['results_hidden_from_teacher'] ?? false))
                     ->setShuffle($surveyData['shuffle'])
                     ->setOneQuestionPerPage($surveyData['one_question_per_page'])
                     ->setShowFormProfile($surveyData['show_form_profile'])

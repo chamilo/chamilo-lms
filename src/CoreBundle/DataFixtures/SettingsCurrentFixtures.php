@@ -46,7 +46,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
      * We set them to access_url_locked = 0, but only for this candidate list.
      */
     private const array ACCESS_URL_LOCKED_NO = [
-        'drh_allow_access_to_all_students',
+        'hrm_allow_access_to_all_students',
         'ticket_allow_category_edition',
         'max_anonymous_users',
         'enable_x_sendfile_headers',
@@ -155,7 +155,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
         $redirectAfterLoginDefault = json_encode([
             'COURSEMANAGER' => 'courses',
             'STUDENT' => 'courses',
-            'DRH' => '',
+            'HRM' => '',
             'SESSIONADMIN' => 'admin-dashboard',
             'STUDENT_BOSS' => 'main/my_space/student.php',
             'INVITEE' => 'courses',
@@ -313,7 +313,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'When enabled, course tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators.',
                 ],
                 [
-                    'name' => 'drh_can_access_all_session_content',
+                    'name' => 'hrm_can_access_all_session_content',
                     'title' => 'HR directors access all session content',
                     'comment' => 'If enabled, human resources directors will get access to all content and users from the sessions (s)he follows.',
                 ],
@@ -625,7 +625,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Which of the following fields of the portfolio are *required* in the user registration process? This requires that the portfolio option be enabled and that the field be also available in the registration form (see above).',
                 ],
                 [
-                    'name' => 'drh_autosubscribe',
+                    'name' => 'hrm_autosubscribe',
                     'title' => 'Human resources director autosubscribe',
                     'comment' => 'Course codes separated by "|". When a human resources director logs in, the user is automatically subscribed to these courses. Example: COURSE001|COURSE002. This does not change the user role.',
                 ],
@@ -870,11 +870,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'upload_extensions_whitelist',
                     'title' => 'Whitelist - setting',
                     'comment' => "The whitelist is used to filter the file extensions by removing (or renaming) any file whose extension does *NOT* figure in the whitelist below. It is generally considered as a safer but more restrictive approach to filtering. The extensions should figure without the leading dot (.) and separated by semi-column (;) such as the following:  htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter.",
-                ],
-                [
-                    'name' => 'documents_default_visibility_defined_in_course',
-                    'title' => 'Document visibility defined in course',
-                    'comment' => 'The default document visibility for all courses',
                 ],
                 [
                     'name' => 'pdf_export_watermark_by_course',
@@ -1956,6 +1951,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'document' => [
                 [
+                    'name' => 'document_default_visibility_on_creation',
+                    'title' => 'Default visibility of new documents',
+                    'comment' => 'Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards.',
+                ],
+                [
+                    'name' => 'document_default_visibility_can_be_modified_in_course',
+                    'title' => 'Default visibility of new documents can be changed by course',
+                    'comment' => 'When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default.',
+                ],
+                [
                     'name' => 'video_features',
                     'title' => 'Video features',
                     'comment' => "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video.",
@@ -2101,6 +2106,21 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Video player renderers',
                     'comment' => 'Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias',
                 ],
+                [
+                    'name' => 'etherpad_enabled',
+                    'title' => 'Enable Etherpad for Wiki editing',
+                    'comment' => 'Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions.',
+                ],
+                [
+                    'name' => 'etherpad_url',
+                    'title' => 'Etherpad URL',
+                    'comment' => 'Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad',
+                ],
+                [
+                    'name' => 'etherpad_api_key',
+                    'title' => 'Etherpad API key',
+                    'comment' => 'API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication.',
+                ],
             ],
             'chat' => [
                 [
@@ -2205,6 +2225,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'lp' => [
+                [
+                    'name' => 'lp_default_visibility_on_creation',
+                    'title' => 'Default visibility of new learning paths',
+                    'comment' => 'Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards.',
+                ],
+                [
+                    'name' => 'lp_default_visibility_can_be_modified_in_course',
+                    'title' => 'Default visibility of new learning paths can be changed by course',
+                    'comment' => 'When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default.',
+                ],
                 [
                     'name' => 'lp_show_reduced_report',
                     'title' => 'Learning paths: show reduced report',
@@ -2467,6 +2497,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'exercise' => [
+                [
+                    'name' => 'exercise_default_visibility_on_creation',
+                    'title' => 'Default visibility of new tests',
+                    'comment' => 'Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards.',
+                ],
+                [
+                    'name' => 'exercise_default_visibility_can_be_modified_in_course',
+                    'title' => 'Default visibility of new tests can be changed by course',
+                    'comment' => 'When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default.',
+                ],
                 [
                     'name' => 'add_exercise_best_attempt_in_report',
                     'title' => 'Enable display of best score attempt',
@@ -3216,6 +3256,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Allows external applications (e.g. the Claude.ai MCP connector) to register via OAuth 2.1 Dynamic Client Registration and connect using each user\'s own Chamilo account and permissions. Disabled by default: the discovery, registration, authorization and token endpoints all return 404 until this is turned on.',
                 ],
                 [
+                    'name' => 'dynamic_client_registration',
+                    'title' => 'Enable OAuth Dynamic Client Registration beyond MCP',
+                    'comment' => 'Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client\'s allowed resource list.',
+                ],
+                [
                     'name' => 'mcp_enabled',
                     'title' => 'Enable MCP server',
                     'comment' => 'Enables the Chamilo MCP endpoint and the personal MCP API key interface. When disabled, existing API keys, OAuth access tokens and JWT credentials cannot be used on /mcp.',
@@ -3653,6 +3698,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'ticket' => [
                 [
+                    'name' => 'ticket_support_bot_enabled',
+                    'title' => 'Enable support chatbot',
+                    'comment' => 'Show a decision-tree chatbot in the chat panel that can guide users to '
+                        .'an answer or open a support ticket on their behalf.',
+                ],
+                [
                     'name' => 'ticket_project_user_roles',
                     'title' => 'Access by role to ticket projects',
                     'comment' => "Allow ticket projects to be accesses by specific user roles. Example: ['permissions' => [1 => [17]] where project_id = 1, STUDENT_BOSS = 17.",
@@ -3770,6 +3821,13 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => "Avoid anyone making the 'users' tool visible in a public course.",
                 ],
             ],
+            'tracking' => [
+                [
+                    'name' => 'maximum_inactive_time_to_consider',
+                    'title' => 'Maximum inactive time to consider (minutes)',
+                    'comment' => 'A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted.',
+                ],
+            ],
             'workflows' => [
                 [
                     'name' => 'plugin_redirection_enabled',
@@ -3792,7 +3850,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => '',
                 ],
                 [
-                    'name' => 'drh_allow_access_to_all_students',
+                    'name' => 'hrm_allow_access_to_all_students',
                     'title' => 'HRM can access all students from reporting pages',
                     'comment' => '',
                 ],

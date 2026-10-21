@@ -118,7 +118,7 @@ class UserCollectionController extends AbstractScimController
                 $this->scimConfig['auth_source'],
                 $currentAccessUrl
             )
-            ->setPlainPassword('scim')
+            ->setPlainPassword(bin2hex(random_bytes(32)))
             ->setStatus(STUDENT)
             ->setRoleFromStatus(STUDENT)
         ;

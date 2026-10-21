@@ -1,15 +1,18 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Service\Exercise\Qti2FillBlanksWriter;
+
 /**
- * Class.
+ * Exports a Fill in blanks question: typed blanks as textEntryInteraction and drop-down menus as
+ * inlineChoiceInteraction, each blank with its own "fill_N" response and score.
+ * The markup is shared with the API exporter (Qti2FillBlanksWriter).
  */
 class ImsAnswerFillInBlanks extends Answer implements ImsAnswerInterface
 {
-    private $answerList = [];
-    private $gradeList = [];
-
     /**
-     * Export the text with missing words.
+     * Export the text with the blanks as interactions.
      *
      * @param string $questionIdent
      * @param string $questionStatment
@@ -20,55 +23,29 @@ class ImsAnswerFillInBlanks extends Answer implements ImsAnswerInterface
      */
     public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
     {
-        $this->answerList = $this->getAnswersList(true);
+        $fillBlanks = $this->getFillBlanks();
 
-        // Keep legacy behavior: prefer $this->answerText (it usually contains the [..] placeholders).
-        // Fallback to the provided statement if answerText is empty.
-        $text = isset($this->answerText) ? (string) $this->answerText : '';
-        if ($text === '') {
-            $text = (string) $questionStatment;
-        }
-
-        if (is_array($this->answerList)) {
-            foreach ($this->answerList as $key => $answer) {
-                $key = $answer['id'];
-                $answer = $answer['answer'];
-                $len = api_strlen($answer);
-
-                $text = str_replace(
-                    '['.$answer.']',
-                    '<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.api_strlen($answer).'"/>',
-                    $text
-                );
-            }
-        }
-
-        return $text;
+        return null !== $fillBlanks ? $fillBlanks['body'] : '';
     }
 
     public function imsExportResponsesDeclaration($questionIdent, Question $question = null)
     {
-        $this->answerList = $this->getAnswersList(true);
-        $this->gradeList = $this->getGradesList();
-        $out = '';
-        if (is_array($this->answerList)) {
-            foreach ($this->answerList as $answer) {
-                $answerKey = $answer['id'];
-                $answer = $answer['answer'];
-                $out .= '  <responseDeclaration identifier="fill_'.$answerKey.'" cardinality="single" baseType="identifier">'."\n";
-                $out .= '    <correctResponse>'."\n";
-                $out .= '      <value><![CDATA['.formatExerciseQtiText($answer).']]></value>'."\n";
-                $out .= '    </correctResponse>'."\n";
-                if (isset($this->gradeList[$answerKey])) {
-                    $out .= '    <mapping>'."\n";
-                    $out .= '      <mapEntry mapKey="'.$answer.'" mappedValue="'.$this->gradeList[$answerKey].'"/>'."\n";
-                    $out .= '    </mapping>'."\n";
-                }
+        $caseInsensitive = null !== $question && 'case:false' === $question->extra;
+        $fillBlanks = $this->getFillBlanks($caseInsensitive);
 
-                $out .= '  </responseDeclaration>'."\n";
-            }
+        return null !== $fillBlanks ? $fillBlanks['declarations'] : '';
+    }
+
+    /**
+     * @return array{declarations: string, body: string, blankCount: int}|null
+     */
+    private function getFillBlanks(bool $caseInsensitive = false): ?array
+    {
+        // The whole question (text, blanks and scores) is stored in its first answer row.
+        foreach ($this->getAnswersList(true) as $answer) {
+            return Qti2FillBlanksWriter::write((string) $answer['answer'], $caseInsensitive);
         }
 
-        return $out;
+        return null;
     }
 }

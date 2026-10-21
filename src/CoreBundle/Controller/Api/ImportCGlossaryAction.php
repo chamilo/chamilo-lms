@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CGlossaryCategory;
 use Chamilo\CourseBundle\Repository\CGlossaryCategoryRepository;
@@ -24,23 +25,17 @@ final class ImportCGlossaryAction
         CGlossaryRepository $repository,
         CGlossaryCategoryRepository $categoryRepository,
         EntityManagerInterface $entityManager,
+        CidReqHelper $cidReqHelper,
     ): JsonResponse {
         $file = $request->files->get('file');
         $fileType = (string) $request->request->get('file_type', '');
         $replace = 'true' === (string) $request->request->get('replace', 'false');
         $update = 'true' === (string) $request->request->get('update', 'false');
-        $courseId = (int) $request->request->get('cid', '0');
-        $sessionId = (int) $request->request->get('sid', '0');
 
-        $course = $courseId > 0 ? $entityManager->find(Course::class, $courseId) : null;
-        $session = $sessionId > 0 ? $entityManager->find(Session::class, $sessionId) : null;
+        // The course and session come from the context that authorized the request, never from the body.
+        $course = $cidReqHelper->requireDoctrineCourseEntity();
+        $session = $cidReqHelper->getDoctrineSessionEntity();
 
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('Course not found.');
-        }
-        if ($sessionId > 0 && !$session instanceof Session) {
-            throw new BadRequestHttpException('Session not found.');
-        }
         if (!$file instanceof UploadedFile || !$file->isValid()) {
             throw new BadRequestHttpException('Invalid file.');
         }

@@ -198,7 +198,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN')"
 )]
 #[ORM\Table(name: 'session')]
-#[ORM\UniqueConstraint(name: 'title', columns: ['title'])]
+#[ORM\UniqueConstraint(name: 'title', columns: ['title'], options: ['lengths' => [150]])]
 #[ORM\Index(columns: ['access_end_date'], name: 'idx_session_access_end_date')]
 #[ORM\Index(columns: ['status'], name: 'idx_session_status')]
 #[ORM\Index(columns: ['parent_id'], name: 'idx_session_parent_id')]
@@ -215,7 +215,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public const int LIST_ONLY = 5;
 
     public const int STUDENT = 0;
-    public const int DRH = 1;
+    public const int HRM = 1;
+    public const int DRH = self::HRM;
     public const int COURSE_COACH = 2;
     public const int GENERAL_COACH = 3;
     public const int SESSION_ADMIN = 4;
@@ -327,6 +328,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     protected ?Course $currentCourse = null;
 
     #[Assert\NotBlank]
+    #[Assert\Length(max: 150)]
     #[Groups([
         'session:basic',
         'session:read',
@@ -339,7 +341,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'calendar_event:read',
         'user_subscriptions:sessions',
     ])]
-    #[ORM\Column(name: 'title', type: 'string', length: 150)]
+    #[ORM\Column(name: 'title', type: 'text')]
     protected string $title;
 
     #[Groups([
@@ -520,7 +522,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public static function getRelationTypeList(): array
     {
-        return [self::STUDENT, self::DRH, self::COURSE_COACH, self::GENERAL_COACH, self::SESSION_ADMIN];
+        return [self::STUDENT, self::HRM, self::COURSE_COACH, self::GENERAL_COACH, self::SESSION_ADMIN];
     }
 
     public static function getStatusList(): array

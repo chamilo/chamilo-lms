@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller\OAuthServer;
 
 use Chamilo\CoreBundle\Service\OAuthServer\OAuthMetadataService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -44,9 +45,13 @@ final readonly class OAuthDiscoveryController
     {
         $this->assertEnabled();
 
-        return $this->cached(
-            new JsonResponse($this->metadata->buildProtectedResourceMetadata($resourcePath)),
-        );
+        try {
+            $metadata = $this->metadata->buildProtectedResourceMetadata($resourcePath);
+        } catch (RuntimeException) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->cached(new JsonResponse($metadata));
     }
 
     #[Route(

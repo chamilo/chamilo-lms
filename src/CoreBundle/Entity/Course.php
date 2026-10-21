@@ -11,13 +11,16 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\State\CourseDeleteProcessor;
 use Chamilo\CoreBundle\State\PublicCatalogueCourseStateProvider;
 use Chamilo\CoreBundle\State\StickyCourseStateProvider;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -42,6 +45,11 @@ use const SORT_NATURAL;
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
         new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
+        // Updating and deleting are administrator-only: they let an integration (such as an ERP) keep its courses in
+        // sync. Teachers keep editing their own course through the course settings screens. Only the course:write
+        // properties can be patched, and the course code is not one of them.
+        new Patch(security: "is_granted('ROLE_ADMIN')"),
+        new Delete(security: "is_granted('ROLE_ADMIN')", processor: CourseDeleteProcessor::class),
         new GetCollection(
             paginationClientEnabled: true,
             security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"
@@ -245,15 +253,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected Collection $templates;
     #[ORM\Column(name: 'directory', type: 'string', length: 40, unique: false, nullable: true)]
     protected ?string $directory = null;
-    #[Groups([
-        'course:read',
-        'session:read',
-        'course_catalogue:read',
-        'course_rel_user:read',
-    ])]
-    #[Assert\NotBlank]
-    #[ORM\Column(name: 'course_language', type: 'string', length: 20, unique: false, nullable: false)]
-    protected string $courseLanguage;
+    #[ORM\ManyToOne(targetEntity: Language::class)]
+    #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id', nullable: false)]
+    protected ?Language $courseLanguageEntity = null;
     #[Groups([
         'course:read',
         'course_rel_user:read',
@@ -290,14 +292,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected int $visibility;
     #[ORM\Column(name: 'show_score', type: 'integer', unique: false, nullable: true)]
     protected ?int $showScore = null;
-    #[ORM\Column(name: 'tutor_name', type: 'string', length: 200, unique: false, nullable: true)]
+    #[ORM\Column(name: 'tutor_name', type: 'string', length: 255, unique: false, nullable: true)]
     protected ?string $tutorName;
     #[Groups(['course:read'])]
     #[ORM\Column(name: 'department_name', type: 'string', length: 30, unique: false, nullable: true)]
     protected ?string $departmentName = null;
     #[Assert\Url(requireTld: false)]
     #[Groups(['course:read', 'course:write'])]
-    #[ORM\Column(name: 'department_url', type: 'string', length: 180, unique: false, nullable: true)]
+    #[ORM\Column(name: 'department_url', type: 'string', length: 255, unique: false, nullable: true)]
     protected ?string $departmentUrl = null;
     #[Assert\Url(requireTld: false)]
     #[Groups(['course:read', 'course:write'])]
@@ -392,7 +394,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->addTeachersToSessionsCourses = false;
         $this->courseTypeId = null;
         $this->room = null;
-        $this->courseLanguage = 'en';
         $this->subscribe = true;
         $this->unsubscribe = false;
         $this->sticky = false;
@@ -635,14 +636,25 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->directory;
     }
 
+    #[Groups([
+        'course:read',
+        'session:read',
+        'course_catalogue:read',
+        'course_rel_user:read',
+    ])]
     public function getCourseLanguage(): string
     {
-        return $this->courseLanguage;
+        return $this->courseLanguageEntity?->getIsocode() ?? '';
     }
 
-    public function setCourseLanguage(string $courseLanguage): self
+    public function getCourseLanguageEntity(): ?Language
     {
-        $this->courseLanguage = $courseLanguage;
+        return $this->courseLanguageEntity;
+    }
+
+    public function setCourseLanguageEntity(Language $language): self
+    {
+        $this->courseLanguageEntity = $language;
 
         return $this;
     }

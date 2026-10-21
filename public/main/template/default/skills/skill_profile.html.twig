@@ -95,8 +95,15 @@
                                 <ul class="divide-y divide-gray-100">
                                     {% for level in profile.levels %}
                                         <li class="flex items-center justify-between py-2">
-                                            <div class="text-sm font-medium text-gray-800">
-                                                {{ level }}
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-800">
+                                                    {{ level.title|trans }}
+                                                </div>
+                                                {% if level.description %}
+                                                    <div class="mt-1 text-xs text-gray-500">
+                                                        {{ level.description|trans }}
+                                                    </div>
+                                                {% endif %}
                                             </div>
 
                                             <div class="flex items-center gap-2">

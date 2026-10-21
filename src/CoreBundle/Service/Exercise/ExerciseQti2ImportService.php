@@ -40,6 +40,7 @@ final readonly class ExerciseQti2ImportService
     private const UNIQUE_ANSWER = 1;
     private const MULTIPLE_ANSWER = 2;
     private const FILL_IN_BLANKS = 3;
+    private const MATCHING = 4;
     private const FREE_ANSWER = 5;
 
     /**
@@ -50,6 +51,7 @@ final readonly class ExerciseQti2ImportService
         self::MULTIPLE_ANSWER => 'Multiple answer',
         self::FREE_ANSWER => 'Free answer',
         self::FILL_IN_BLANKS => 'Fill in blanks',
+        self::MATCHING => 'Matching',
     ];
 
     public function __construct(
@@ -330,8 +332,8 @@ final readonly class ExerciseQti2ImportService
 
                 case 'matchInteraction':
                     if ($this->hasCurrentQuestion($package, $currentQuestionIdent)) {
-                        // The legacy importer detected matching but did not save it in the supported list.
-                        $package['questions'][$currentQuestionIdent]['type'] = 4;
+                        // QTI does not tell Matching and Matching draggable apart, so both are imported as Matching.
+                        $package['questions'][$currentQuestionIdent]['type'] = self::MATCHING;
                     }
 
                     break;
@@ -385,6 +387,12 @@ final readonly class ExerciseQti2ImportService
                         $answerId = $node->getAttribute('mapKey');
                         if ('' !== $answerId) {
                             $package['questions'][$currentQuestionIdent]['weighting'][$answerId] = $node->getAttribute('mappedValue');
+                        }
+                        if (str_starts_with($currentAnswerId, 'fill_')) {
+                            $package['questions'][$currentQuestionIdent]['blank_weighting'][$currentAnswerId][] = $node->getAttribute('mappedValue');
+                            if ('false' === $node->getAttribute('caseSensitive')) {
+                                $package['questions'][$currentQuestionIdent]['fib_case_insensitive'] = true;
+                            }
                         }
                     }
 
@@ -554,6 +562,13 @@ final readonly class ExerciseQti2ImportService
                 continue;
             }
 
+            // A span without attributes only wraps text (Chamilo exports the text around the blanks that way).
+            if ('span' === $childName && !$childNode->hasAttributes()) {
+                $content .= $childNode->textContent;
+
+                continue;
+            }
+
             if (!\in_array($childName, $nonHtmlTagsToAvoid, true)) {
                 $content .= '<'.$childName;
                 foreach ($childNode->attributes ?? [] as $attribute) {
@@ -611,34 +626,46 @@ final readonly class ExerciseQti2ImportService
                 continue;
             }
 
-            $subtype = $question['subtype'] ?? null;
-            if ('LISTBOX_FILL' === $subtype) {
-                $options = \is_array($question['fib_options'] ?? null) ? $question['fib_options'] : [];
-                foreach ($options as $responseId => $data) {
-                    $correct = (string) ($data['correct'] ?? '');
-                    $wrongs = \is_array($data['wrongs'] ?? null) ? $data['wrongs'] : [];
-                    $final = [];
-                    if ('' !== $correct) {
-                        $final[] = $correct;
-                    }
-                    foreach ($wrongs as $wrong) {
-                        $wrong = trim((string) $wrong);
-                        if ('' === $wrong || $wrong === $correct) {
-                            continue;
+            // Each blank is rebuilt from its own interaction, so menus (inlineChoiceInteraction) and typed
+            // blanks (textEntryInteraction) can be mixed in one question; its score is kept in order.
+            $options = \is_array($question['fib_options'] ?? null) ? $question['fib_options'] : [];
+            $corrects = \is_array($question['correct_answers'] ?? null) ? $question['correct_answers'] : [];
+            $blankWeights = \is_array($question['blank_weighting'] ?? null) ? $question['blank_weighting'] : [];
+            $weights = [];
+            $text = preg_replace_callback(
+                '/\*\*claroline_start\*\*(.*?)\*\*claroline_end\*\*/s',
+                static function (array $match) use ($options, $corrects, $blankWeights, &$weights): string {
+                    $responseId = $match[1];
+                    if (isset($options[$responseId])) {
+                        $correct = (string) ($options[$responseId]['correct'] ?? '');
+                        $wrongs = \is_array($options[$responseId]['wrongs'] ?? null) ? $options[$responseId]['wrongs'] : [];
+                        $final = '' !== $correct ? [$correct] : [];
+                        foreach ($wrongs as $wrong) {
+                            $wrong = trim((string) $wrong);
+                            if ('' !== $wrong && $wrong !== $correct) {
+                                $final[] = $wrong;
+                            }
                         }
-                        $final[] = $wrong;
+                        $blank = '['.implode('|', $final).']';
+                    } elseif (str_starts_with($responseId, 'fill_') && isset($corrects[$responseId])) {
+                        $blank = '['.trim((string) $corrects[$responseId]).']';
+                    } elseif (str_starts_with($responseId, 'fill_')) {
+                        $blank = '[]';
+                    } else {
+                        return $match[0];
                     }
-                    $text = str_replace('**claroline_start**'.$responseId.'**claroline_end**', '['.implode('|', $final).']', $text);
-                }
-            } else {
-                $corrects = \is_array($question['correct_answers'] ?? null) ? $question['correct_answers'] : [];
-                foreach ($corrects as $responseId => $answerValue) {
-                    if (!str_starts_with((string) $responseId, 'fill_')) {
-                        continue;
-                    }
-                    $text = str_replace('**claroline_start**'.$responseId.'**claroline_end**', '['.trim((string) $answerValue).']', $text);
-                }
-            }
+
+                    $scores = array_filter(
+                        array_map(static fn (mixed $value): string => str_replace(',', '.', trim((string) $value)), (array) ($blankWeights[$responseId] ?? [])),
+                        'is_numeric'
+                    );
+                    $weights[] = [] !== $scores ? max(array_map('floatval', $scores)) : null;
+
+                    return $blank;
+                },
+                $text
+            ) ?? $text;
+            $question['blank_weights'] = $weights;
 
             $question['response_text'] = preg_replace('/\*\*claroline_start\*\*fill_[^*]+\*\*claroline_end\*\*/', '[]', $text) ?? $text;
         }
@@ -713,6 +740,17 @@ final readonly class ExerciseQti2ImportService
                 continue;
             }
 
+            $matchingRows = null;
+            if (self::MATCHING === $questionType) {
+                $matchingRows = $this->buildMatchingAnswerRows($questionData);
+                if ([] === $matchingRows['items']) {
+                    ++$skippedCount;
+                    $errors[] = \sprintf('QTI question %s skipped because it has no matching associations.', (string) $identifier);
+
+                    continue;
+                }
+            }
+
             $description = (string) ($questionData['description'] ?? '');
             $question = $this->createQuestion($quiz, $course, $session, $title, $description, $questionType, 0.0, $questionOrder);
             $category = $this->findOrCreateQuestionCategory((string) ($questionData['category'] ?? ''), $course, $session);
@@ -723,9 +761,14 @@ final readonly class ExerciseQti2ImportService
             if (self::FILL_IN_BLANKS === $questionType) {
                 [$answerString, $totalWeight] = $this->buildFibAnswerString($questionData);
                 $question->setPonderation($totalWeight);
+                if (true === ($questionData['fib_case_insensitive'] ?? false)) {
+                    $question->setExtra('case:false');
+                }
                 $this->createSingleAnswer($question, $answerString, 0, '', $totalWeight, 1);
             } elseif (self::FREE_ANSWER === $questionType) {
                 $question->setPonderation($this->scoreFromValue($questionData['weighting'][0] ?? 0));
+            } elseif (null !== $matchingRows) {
+                $this->createMatchingAnswers($question, $matchingRows);
             } else {
                 $this->createChoiceAnswers($question, $questionData);
             }
@@ -812,7 +855,96 @@ final readonly class ExerciseQti2ImportService
         $question->setPonderation($totalCorrectWeight);
     }
 
-    private function createSingleAnswer(CQuizQuestion $question, string $answerText, int $correct, string $comment, float $weight, int $position): void
+    /**
+     * Stores a matchInteraction the way Chamilo stores Matching questions: one row per option
+     * (second simpleMatchSet, correct = 0) followed by one row per item to match (first simpleMatchSet),
+     * whose "correct" field holds the iid of the option it must be associated with.
+     *
+     * @param array{options: array<int, string>, items: array<int, array{answer: string, option: int, weight: float}>} $rows
+     */
+    private function createMatchingAnswers(CQuizQuestion $question, array $rows): void
+    {
+        $optionAnswers = [];
+        $position = 1;
+
+        foreach ($rows['options'] as $optionText) {
+            $optionAnswers[$position] = $this->createSingleAnswer($question, $optionText, 0, '', 0.0, $position);
+            ++$position;
+        }
+
+        // The items reference the options by iid, so the options must have one first.
+        $this->entityManager->flush();
+
+        $totalWeight = 0.0;
+        foreach ($rows['items'] as $item) {
+            $optionIid = (int) $optionAnswers[$item['option']]->getIid();
+            $this->createSingleAnswer($question, $item['answer'], $optionIid, '', $item['weight'], $position);
+            $totalWeight += $item['weight'];
+            ++$position;
+        }
+
+        $question->setPonderation($totalWeight);
+    }
+
+    /**
+     * @param array<string, mixed> $questionData
+     *
+     * @return array{options: array<int, string>, items: array<int, array{answer: string, option: int, weight: float}>}
+     */
+    private function buildMatchingAnswerRows(array $questionData): array
+    {
+        $sets = \is_array($questionData['answer'] ?? null) ? array_values($questionData['answer']) : [];
+        $leftChoices = \is_array($sets[0] ?? null) ? $sets[0] : [];
+        $rightChoices = \is_array($sets[1] ?? null) ? $sets[1] : [];
+        $weights = \is_array($questionData['weighting'] ?? null) ? $questionData['weighting'] : [];
+        $defaultWeight = $this->scoreFromValue($questionData['default_weighting'] ?? 0);
+
+        // Associations are "<source> <target>" directed pairs, the source being an item of the first set.
+        $matches = [];
+        $correctAnswers = \is_array($questionData['correct_answers'] ?? null) ? $questionData['correct_answers'] : [];
+        foreach ($correctAnswers as $pair) {
+            $pair = (string) $pair;
+            $parts = preg_split('/\s+/', trim($pair)) ?: [];
+            if (2 !== \count($parts)) {
+                continue;
+            }
+            [$source, $target] = $parts;
+            if (isset($rightChoices[$source], $leftChoices[$target])) {
+                [$source, $target] = [$target, $source];
+            }
+            if (isset($leftChoices[$source], $rightChoices[$target]) && !isset($matches[$source])) {
+                $matches[$source] = [
+                    'target' => $target,
+                    'weight' => \array_key_exists($pair, $weights) ? $this->scoreFromValue($weights[$pair]) : $defaultWeight,
+                ];
+            }
+        }
+
+        $options = [];
+        $optionPositions = [];
+        foreach ($rightChoices as $choiceId => $choiceText) {
+            $options[] = QtiImportHtmlSanitizer::sanitize($this->formatHtml((string) $choiceText));
+            $optionPositions[(string) $choiceId] = \count($options);
+        }
+
+        $items = [];
+        foreach ($leftChoices as $choiceId => $choiceText) {
+            // Chamilo cannot store an item without a correct option, so such distractors are dropped.
+            $match = $matches[(string) $choiceId] ?? null;
+            if (null === $match) {
+                continue;
+            }
+            $items[] = [
+                'answer' => QtiImportHtmlSanitizer::sanitize($this->formatHtml((string) $choiceText)),
+                'option' => $optionPositions[$match['target']],
+                'weight' => $match['weight'],
+            ];
+        }
+
+        return ['options' => $options, 'items' => $items];
+    }
+
+    private function createSingleAnswer(CQuizQuestion $question, string $answerText, int $correct, string $comment, float $weight, int $position): CQuizAnswer
     {
         $answer = new CQuizAnswer();
         $answer
@@ -824,6 +956,8 @@ final readonly class ExerciseQti2ImportService
             ->setPosition($position)
         ;
         $this->entityManager->persist($answer);
+
+        return $answer;
     }
 
     /**
@@ -852,7 +986,8 @@ final readonly class ExerciseQti2ImportService
 
         $existing = $this->parseExistingFibMeta($text);
         if (null !== $existing) {
-            return $existing;
+            // The text comes from the package: clean its HTML, keeping the blanks.
+            return QtiImportHtmlSanitizer::sanitizeFillBlanksAnswer($existing[0], (float) $existing[1]);
         }
 
         $text = str_replace('::', '', $text);
@@ -863,7 +998,18 @@ final readonly class ExerciseQti2ImportService
         $sizes = [];
         $total = 0.0;
 
-        foreach ($matches[0] ?? [] as $blankRaw) {
+        // Scores read from each blank's own mapping, when they can be matched to the blanks of the text.
+        $blankWeights = [];
+        if (\is_array($questionData['blank_weights'] ?? null)) {
+            foreach ($questionData['blank_weights'] as $blankWeight) {
+                $blankWeights[] = is_numeric($blankWeight) ? (float) $blankWeight : null;
+            }
+        }
+        if (\count($blankWeights) !== \count($matches[0])) {
+            $blankWeights = [];
+        }
+
+        foreach ($matches[0] as $blankIndex => $blankRaw) {
             $inside = trim((string) $blankRaw, '[]');
             $correct = $inside;
             if (str_contains($correct, '||')) {
@@ -875,7 +1021,9 @@ final readonly class ExerciseQti2ImportService
             }
             $correct = trim((string) $correct);
             $weight = 1.0;
-            if ('' !== $correct && \array_key_exists($correct, $weightsMap)) {
+            if (isset($blankWeights[$blankIndex]) && is_finite($blankWeights[$blankIndex])) {
+                $weight = $blankWeights[$blankIndex];
+            } elseif ('' !== $correct && \array_key_exists($correct, $weightsMap)) {
                 $weight = $this->scoreFromValue($weightsMap[$correct]);
             }
             $weights[] = $weight;
@@ -889,7 +1037,8 @@ final readonly class ExerciseQti2ImportService
 
         $text .= ':0@0';
 
-        return [$text, $total];
+        // The text comes from the package: clean its HTML, keeping the blanks.
+        return QtiImportHtmlSanitizer::sanitizeFillBlanksAnswer($text, (float) $total);
     }
 
     /**

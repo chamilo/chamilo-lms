@@ -127,7 +127,7 @@ class MySpace
         }
 
         // Admin view: only for platform admins and DRH
-        if (api_is_platform_admin() || api_is_drh()) {
+        if (api_is_platform_admin() || api_is_hrm()) {
             $menuItems[] = Display::url(
                 Display::getMdiIcon('star', 'ch-tool-icon', null, 32, get_lang('Admin view')),
                 '/reporting/admin'
@@ -135,7 +135,7 @@ class MySpace
         }
 
         // Exam tracking
-        if (api_is_platform_admin() || api_is_drh() || api_is_allowed_to_edit(null, true)) {
+        if (api_is_platform_admin() || api_is_hrm() || api_is_allowed_to_edit(null, true)) {
             $menuItems[] = Display::url(
                 Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('Exam tracking')),
                 '/reporting/exams'
@@ -176,7 +176,7 @@ class MySpace
                 $info .= "\r\n";
             }
 
-            fwrite($open, $info);
+            fwrite($open, \Chamilo\CoreBundle\Helpers\CsvFormulaEscaper::escapeDelimitedContent($info));
             fclose($open);
             @chmod($file_name, api_get_permissions_for_new_files());
 

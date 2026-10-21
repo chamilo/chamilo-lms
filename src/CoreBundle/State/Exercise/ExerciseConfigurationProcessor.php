@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -68,6 +69,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         private SettingsManager $settingsManager,
         private GradebookLinkManager $gradebookLinkManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
     ) {}
 
     /**
@@ -164,7 +166,11 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $this->applyCommonFields($quiz, $data, $course);
         $quiz
             ->setParent($course)
-            ->addCourseLink($course, $session)
+            ->addCourseLink(
+                $course,
+                $session,
+                visibility: $this->resourceDefaultVisibilityHelper->getResourceLinkVisibility(ResourceDefaultVisibilityHelper::EXERCISE, $course),
+            )
         ;
 
         $this->quizRepository->create($quiz);
@@ -943,7 +949,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             ],
             'categoryOptions' => $this->getCategoryOptions($course),
             'languageOptions' => $this->getResourceLanguageOptions(),
-            'skillOptions' => $this->getSkillOptions(),
+            'skillOptions' => $this->getSkillOptions($quiz),
             'extraFieldDefinitions' => $this->getExtraFieldDefinitions(),
             'extraNotificationOptions' => [],
             'feedbackOptions' => $this->getFeedbackOptions($quiz),
@@ -1107,17 +1113,32 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function getSkillOptions(): array
+    private function getSkillOptions(?CQuiz $quiz): array
     {
-        $skills = $this->entityManager->createQueryBuilder()
+        $selectedSkillIds = $quiz instanceof CQuiz ? $this->getSelectedSkillIds($quiz) : [];
+
+        $qb = $this->entityManager->createQueryBuilder()
             ->select('skill')
             ->from(Skill::class, 'skill')
             ->andWhere('skill.status = :status')
             ->setParameter('status', Skill::STATUS_ENABLED, Types::INTEGER)
             ->orderBy('skill.title', 'ASC')
-            ->getQuery()
-            ->getResult()
         ;
+
+        if ([] === $selectedSkillIds) {
+            $qb
+                ->andWhere('skill.acquirable = :acquirable')
+                ->setParameter('acquirable', true)
+            ;
+        } else {
+            $qb
+                ->andWhere('(skill.acquirable = :acquirable OR skill.id IN (:selectedSkillIds))')
+                ->setParameter('acquirable', true)
+                ->setParameter('selectedSkillIds', $selectedSkillIds, ArrayParameterType::INTEGER)
+            ;
+        }
+
+        $skills = $qb->getQuery()->getResult();
 
         $items = [];
         foreach ($skills as $skill) {
@@ -1187,17 +1208,24 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             static fn (int $value): bool => $value > 0
         )));
 
-        $this->entityManager->createQueryBuilder()
-            ->delete(SkillRelItem::class, 'relation')
-            ->andWhere('relation.itemType = :itemType')
-            ->andWhere('relation.itemId = :itemId')
-            ->setParameter('itemType', self::SKILL_ITEM_TYPE_EXERCISE, Types::INTEGER)
-            ->setParameter('itemId', $exerciseId, Types::INTEGER)
-            ->getQuery()
-            ->execute()
-        ;
+        $existingRelations = $this->entityManager->getRepository(SkillRelItem::class)->findBy([
+            'itemType' => self::SKILL_ITEM_TYPE_EXERCISE,
+            'itemId' => $exerciseId,
+        ]);
+        $existingSkillIds = [];
+        foreach ($existingRelations as $existingRelation) {
+            if (!$existingRelation instanceof SkillRelItem || null === $existingRelation->getSkill()->getId()) {
+                continue;
+            }
+
+            $existingSkillIds[(int) $existingRelation->getSkill()->getId()] = true;
+        }
 
         if ([] === $skillIds) {
+            foreach ($existingRelations as $existingRelation) {
+                $this->entityManager->remove($existingRelation);
+            }
+
             return;
         }
 
@@ -1211,6 +1239,19 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             ->getQuery()
             ->getResult()
         ;
+
+        foreach ($skills as $skill) {
+            if (!$skill instanceof Skill || null === $skill->getId()) {
+                continue;
+            }
+            if (!$skill->isAcquirable() && !isset($existingSkillIds[(int) $skill->getId()])) {
+                throw new BadRequestHttpException('A non-acquirable skill cannot be attached to an exercise.');
+            }
+        }
+
+        foreach ($existingRelations as $existingRelation) {
+            $this->entityManager->remove($existingRelation);
+        }
 
         $userId = $this->getCurrentUserId();
         foreach ($skills as $skill) {

@@ -46,7 +46,7 @@
                   <strong>{{ $t("Course language") }}</strong>
                 </td>
                 <td>
-                  {{ item["courseLanguage"] }}
+                  {{ getOriginalLanguageName(item["courseLanguage"]) }}
                 </td>
 
                 <td>
@@ -104,6 +104,7 @@
 import { mapActions, mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import Loading from "../../components/Loading.vue"
+import { useLocale } from "../../composables/locale"
 import ShowMixin from "../../mixins/ShowMixin"
 import Toolbar from "../../components/Toolbar.vue"
 
@@ -117,6 +118,11 @@ export default {
     Toolbar,
   },
   mixins: [ShowMixin],
+  setup() {
+    const { getOriginalLanguageName } = useLocale()
+
+    return { getOriginalLanguageName }
+  },
   computed: {
     ...mapFields("course", {
       isLoading: "isLoading",

@@ -412,6 +412,16 @@ if ($hasSearch) {
     $servicesSales = array_slice($servicesSales, $first, $pageSize);
 }
 
+foreach ($servicesSales as &$sale) {
+    $paymentSummary = $plugin->getServiceSalePaymentSummary($sale);
+    $sale['last_payment_date'] = (string) ($paymentSummary['last_payment_date'] ?? '');
+    $sale['total_collected'] = $plugin->getPriceWithCurrencyFromIsoCode(
+        (float) ($paymentSummary['total_collected'] ?? 0),
+        (string) ($sale['service']['currency'] ?? '')
+    );
+}
+unset($sale);
+
 $interbreadcrumb[] = [
     'url' => '../index.php',
     'name' => $plugin->get_lang('plugin_title'),

@@ -21780,10 +21780,8 @@ msgid "Your terms and conditions are ready to be signed"
 msgstr "Uw algemene voorwaarden zijn klaar om ondertekend te worden"
 
 #, fuzzy
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr ""
-"Hallo,<br />Uw tutor heeft u de algemene voorwaarden gestuurd. U kunt deze "
-"ondertekenen via de volgende URL: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Hallo %s,<br />Uw tutor heeft u de algemene voorwaarden gestuurd. U kunt deze ondertekenen via de volgende URL: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Gebruiker %s heeft de overeenkomst ondertekend."

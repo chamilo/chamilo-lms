@@ -21264,8 +21264,8 @@ msgstr "আইনি চুক্তিটি লগইনের সময় �
 msgid "Your terms and conditions are ready to be signed"
 msgstr "আপনার শর্তাদি স্বাক্ষরের জন্য প্রস্তুত"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "হ্যালো,<br />আপনার টিউটর আপনার শর্তাদি পাঠিয়েছেন। আপনি এই URL অনুসরণ করে এটি স্বাক্ষর করতে পারেন: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "হ্যালো %s,<br />আপনার টিউটর আপনার শর্তাদি পাঠিয়েছেন। আপনি এই URL অনুসরণ করে এটি স্বাক্ষর করতে পারেন: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "ব্যবহারকারী %s চুক্তি স্বাক্ষর করেছেন।"

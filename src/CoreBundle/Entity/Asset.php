@@ -44,7 +44,7 @@ class Asset implements Stringable
     protected Uuid $id;
 
     #[Assert\NotBlank]
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'text')]
     protected ?string $title = null;
 
     #[Assert\NotBlank]

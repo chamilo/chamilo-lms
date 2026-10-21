@@ -21264,8 +21264,8 @@ msgstr " Ìwòye òfin yóò han lakoko ìwọlé tabi nigbati o ba wọ ẹ̀k�
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Àwùjọ ìlànà àti ìpinnu ìdílé rẹ ti ṣetan láti fowọ́wọ́"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Hello,<br />Olùkọ́ rẹ ràn ṣe ìlànà àti ìpinnu ìdílé rẹ. O le fowọ́wọ́ lọ́nà yìí: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Hello %s,<br />Olùkọ́ rẹ ràn ṣe ìlànà àti ìpinnu ìdílé rẹ. O le fowọ́wọ́ lọ́nà yìí: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Olòpàlù %s ti fowọ́wọ́ ìwòye òfin."

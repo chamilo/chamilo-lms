@@ -19,7 +19,6 @@ import DocumentsForm from "../../components/documents/Form.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
 import CreateMixin from "../../mixins/CreateMixin"
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 
 const servicePrefix = "Documents"
 
@@ -49,10 +48,9 @@ export default {
     ...mapFields(["error", "isLoading", "created", "violations"]),
   },
   created() {
+    // Course context (cid/sid/gid) and the default visibility of new documents are
+    // derived server-side from the gated session course.
     this.item.parentResourceNodeId = this.$route.params.node
-    // Course context (cid/sid/gid) is derived server-side from the gated
-    // session course; only the visibility needs to travel in the body.
-    this.item.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
   },
   methods: {
     ...mapActions("documents", ["createWithFormData", "reset"]),

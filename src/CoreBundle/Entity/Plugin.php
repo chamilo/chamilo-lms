@@ -10,9 +10,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'plugin')]
+#[ORM\UniqueConstraint(name: 'UNIQ_E96E27942B36786B', columns: ['title'], options: ['lengths' => [255]])]
 class Plugin
 {
     public const string SOURCE_THIRD_PARTY = 'third_party';
@@ -23,7 +25,8 @@ class Plugin
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\Length(max: 255)]
+    #[ORM\Column(type: 'text')]
     private string $title;
 
     #[ORM\Column(type: 'boolean')]

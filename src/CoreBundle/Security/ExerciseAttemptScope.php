@@ -17,7 +17,7 @@ final readonly class ExerciseAttemptScope
     public function __construct(
         public int $userId,
         public bool $mayFollowAsStudentBoss = false,
-        public bool $mayFollowAsDrh = false,
+        public bool $mayFollowAsHrm = false,
         public bool $mayAdministerSessions = false,
     ) {}
 }

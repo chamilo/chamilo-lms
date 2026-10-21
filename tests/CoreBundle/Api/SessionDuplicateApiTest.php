@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 
 /**
  * POST /api/sessions/{id}/duplicate replaces the 1.11.x create_session_from_model webservice
@@ -33,7 +34,7 @@ class SessionDuplicateApiTest extends AbstractApiTest
         $student = $this->createUser('dup_model_student');
         $course = $this->createCourse('Duplicate model course');
 
-        $model = $this->createSession('Duplicate model session');
+        $model = $this->createModelSession('Duplicate model session');
         $model
             ->addSessionAdmin($sessionAdmin)
             ->addUserInSession(Session::DRH, $drh)
@@ -92,7 +93,7 @@ class SessionDuplicateApiTest extends AbstractApiTest
     public function testSessionContentCopyKeepsHtmlDocuments(): void
     {
         $course = $this->createCourse('Duplicate content course');
-        $model = $this->createSession('Duplicate content model');
+        $model = $this->createModelSession('Duplicate content model');
         $model->addCourse($course);
         $this->getEntityManager()->flush();
 
@@ -176,5 +177,27 @@ class SessionDuplicateApiTest extends AbstractApiTest
 
         $this->assertResponseStatusCodeSame(422);
         $this->assertSame($before, $repo->count([]), 'Validation happens before copy(), so nothing is half-created.');
+    }
+
+    /**
+     * A session starts with every date set to "now". copy() only moves a date that is already
+     * in the past, so a request landing in the same second as the setup was rejected as
+     * "start >= end". Dates in the past make the outcome independent of timing.
+     */
+    private function createModelSession(string $title): Session
+    {
+        $session = $this->createSession($title);
+        $past = new DateTime('2020-01-01 00:00:00');
+        $session
+            ->setAccessStartDate($past)
+            ->setAccessEndDate($past)
+            ->setDisplayStartDate($past)
+            ->setDisplayEndDate($past)
+            ->setCoachAccessStartDate($past)
+            ->setCoachAccessEndDate($past)
+        ;
+        $this->getEntityManager()->flush();
+
+        return $session;
     }
 }

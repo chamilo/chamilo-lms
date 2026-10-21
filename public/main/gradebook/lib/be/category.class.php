@@ -1877,7 +1877,7 @@ class Category implements GradebookItem
         } else {
             // All students
             // course admin
-            if ((api_is_allowed_to_edit() || api_is_drh() || api_is_session_admin()) &&
+            if ((api_is_allowed_to_edit() || api_is_hrm() || api_is_session_admin()) &&
                 !api_is_platform_admin()
             ) {
                 // root
@@ -2166,7 +2166,7 @@ class Category implements GradebookItem
 
             $scoreForCertificate = (float) $configuredEvaluation['score'];
         } elseif ($catObj) {
-            $scoreForCertificate = (float) self::calculateFlatViewTotalPercent($catObj, $user_id);
+            $scoreForCertificate = (float) self::calculateFlatViewTotalPercent($catObj, $user_id, $courseId, $sessionId);
         }
 
         // Guard: never generate certificate OR award skills if the global certificate threshold is not met.
@@ -2337,10 +2337,8 @@ class Category implements GradebookItem
         return false;
     }
 
-    private static function calculateFlatViewTotalPercent(Category $cat, int $userId): float
+    private static function calculateFlatViewTotalPercent(Category $cat, int $userId, int $courseId, int $sessionId): float
     {
-        $sessionId = api_get_session_id();
-        $courseId  = api_get_course_int_id();
 
         $parentId = (int) $cat->get_parent_id();
         $allcat   = $cat->get_subcategories(null, $courseId, $sessionId, 'ORDER BY id');
@@ -2363,7 +2361,7 @@ class Category implements GradebookItem
                     continue;
                 }
 
-                $score = $subCat->calc_score($userId);
+                $score = $subCat->calc_score($userId, null, $courseId, $sessionId);
                 if (!is_array($score)) {
                     $score = [0, 0];
                 }
@@ -2383,7 +2381,7 @@ class Category implements GradebookItem
         }
 
         // Fallback: use category calc_score for non-root or no-subcat cases.
-        $total = $cat->calc_score($userId);
+        $total = $cat->calc_score($userId, null, $courseId, $sessionId);
         if (!is_array($total)) {
             $total = [0, 0];
         }

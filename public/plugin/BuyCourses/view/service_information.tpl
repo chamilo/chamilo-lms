@@ -48,7 +48,9 @@
             {% else %}
                 <a href="service_catalog.php" class="bc-info-button">{{ 'ListOfServicesOnSale'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                 {% if has_blocking_sale|default(false) %}
-                    <span class="bc-info-button bc-info-button--disabled">{{ 'Active service'|get_lang }}</span>
+                    <span class="bc-info-button bc-info-button--disabled">{{ 'Active'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                {% elseif has_pending_sale|default(false) %}
+                    <span class="bc-info-button bc-info-button--disabled">{{ 'PayoutStatusPending'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                 {% elseif can_buy_service|default(false) %}
                     <a href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}" class="bc-info-button bc-info-button--success">{{ (is_upgrade|default(false) ? 'Upgrade' : 'Buy')|get_plugin_lang('BuyCoursesPlugin') }}</a>
                 {% elseif not purchase_blocked_by_active_upsale_chain|default(false) %}
@@ -99,7 +101,9 @@
                 <div class="bc-summary-box"><div class="bc-summary-box__label">{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</div><div class="bc-summary-box__value">{{ service_sale.reference|default('')|e }}</div></div>
             {% else %}
                 {% if has_blocking_sale|default(false) %}
-                    <span class="bc-info-button bc-info-button--disabled" style="width: 100%; margin-top: 16px;">{{ 'Active service'|get_lang }}</span>
+                    <span class="bc-info-button bc-info-button--disabled" style="width: 100%; margin-top: 16px;">{{ 'Active'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                {% elseif has_pending_sale|default(false) %}
+                    <span class="bc-info-button bc-info-button--disabled" style="width: 100%; margin-top: 16px;">{{ 'PayoutStatusPending'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                 {% elseif can_buy_service|default(false) %}
                     <a href="service_process.php?i={{ service.id }}&t={{ service.applies_to|default(0) }}" class="bc-info-button bc-info-button--success" style="width: 100%; margin-top: 16px;">{{ (is_upgrade|default(false) ? 'Upgrade' : 'Buy')|get_plugin_lang('BuyCoursesPlugin') }}</a>
                 {% elseif not purchase_blocked_by_active_upsale_chain|default(false) %}

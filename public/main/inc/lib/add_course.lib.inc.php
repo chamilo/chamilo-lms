@@ -333,7 +333,6 @@ class AddCourse
                 'default' => 'true' === api_get_setting('certificate.allow_public_certificates') ? 1 : '',
                 'category' => 'certificates',
             ],
-            'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
             'show_course_in_user_language' => ['default' => 2, 'category' => null],
             'email_to_teachers_on_new_work_feedback' => ['default' => 1, 'category' => null],
         ];
@@ -851,11 +850,21 @@ class AddCourse
             $repo = Container::getCourseRepository();
             $categoryRepo = Container::getCourseCategoryRepository();
 
+            $languageId = (int) api_get_language_id($course_language);
+            $language = $languageId > 0
+                ? Database::getManager()->find(\Chamilo\CoreBundle\Entity\Language::class, $languageId)
+                : null;
+            if (!$language instanceof \Chamilo\CoreBundle\Entity\Language) {
+                $error_msg[] = 'courseLanguage is invalid';
+
+                return null;
+            }
+
             $course = new Course();
             $course
                 ->setTitle($title)
                 ->setCode($code)
-                ->setCourseLanguage($course_language)
+                ->setCourseLanguageEntity($language)
                 ->setDescription(get_lang('Course Description'))
                 ->setVisibility($visibility)
                 ->setShowScore(1)

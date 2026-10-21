@@ -21268,8 +21268,8 @@ msgstr "ဥပဒေရေးရာသဘောတူညီချက်သည်
 msgid "Your terms and conditions are ready to be signed"
 msgstr "သင့်စည်းမျဉ်းစည်းကမ်းများသည် လက်မှတ်ထိုးရန် အသင့်ဖြစ်နေသည်"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "မင်္ဂလာပါ၊<br />သင့်ဆရာမှ သင့်စည်းမျဉ်းစည်းကမ်းများကို ပေးပို့ထားသည်။ သင်သည် ဤ URL ကို လိုက်နာ၍ လက်မှတ်ထိုးနိုင်သည်- %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "မင်္ဂလာပါ %s၊<br />သင့်ဆရာမှ သင့်စည်းမျဉ်းစည်းကမ်းများကို ပေးပို့ထားသည်။ သင်သည် ဤ URL ကို လိုက်နာ၍ လက်မှတ်ထိုးနိုင်သည်- %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "အသုံးပြုသူ %s သည် သဘောတူညီချက်ကို လက်မှတ်ထိုးပြီးဖြစ်သည်။"

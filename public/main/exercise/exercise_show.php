@@ -99,7 +99,7 @@ $is_allowedToEdit =
     api_is_allowed_to_edit(null, true) ||
     api_is_course_tutor() ||
     api_is_session_admin() ||
-    api_is_drh() ||
+    api_is_hrm() ||
     api_is_student_boss() ||
     $exportTypeAllResults;
 
@@ -621,7 +621,7 @@ foreach ($questionList as $questionId) {
 
     $comnt = null;
     if ($show_results) {
-        if ($is_allowedToEdit && false == $locked && !api_is_drh() && $isCoachAllowedToEdit) {
+        if ($is_allowedToEdit && false == $locked && !api_is_hrm() && $isCoachAllowedToEdit) {
             $isFeedbackAllowed = true;
         } elseif (!$isCoachAllowedToEdit && $allowCoachFeedbackExercises) {
             $isFeedbackAllowed = true;

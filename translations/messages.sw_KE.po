@@ -21264,8 +21264,8 @@ msgstr "Makubaliano ya kisheria yanaonekana wakati wa kuingia au wakati wa kuing
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Masharti yako na hali ziko tayari kusainiwa"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Habari,<br />Mwalimu wako amekutumia masharti yako na hali. Unaweza kuyasaini kufuata URL hii: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Habari %s,<br />Mwalimu wako amekutumia masharti yako na hali. Unaweza kuyasaini kufuata URL hii: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "Mtumiaji %s alisaini makubaliano."

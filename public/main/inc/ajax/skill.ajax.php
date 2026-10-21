@@ -24,7 +24,7 @@ $userId = api_get_user_id();
 
 switch ($action) {
     case 'add':
-        if (api_is_platform_admin() || api_is_drh()) {
+        if (api_is_platform_admin() || api_is_hrm()) {
             if (false === Security::check_token('get')) {
                 exit;
             }
@@ -39,7 +39,7 @@ switch ($action) {
         echo $skillId;
         break;
     case 'delete_skill':
-        if (api_is_platform_admin() || api_is_drh()) {
+        if (api_is_platform_admin() || api_is_hrm()) {
             // Close the session as we don't need it any further
             session_write_close();
             echo $skill->delete($_REQUEST['skill_id']);
@@ -336,7 +336,7 @@ switch ($action) {
         break;
     case 'delete_gradebook_from_skill':
     case 'remove_skill':
-        if (api_is_platform_admin() || api_is_drh()) {
+        if (api_is_platform_admin() || api_is_hrm()) {
             if (false === Security::check_token('get')) {
                 exit;
             }
@@ -365,7 +365,7 @@ switch ($action) {
         echo json_encode($profile);
         break;
     case 'save_profile':
-        if (api_is_platform_admin() || api_is_drh()) {
+        if (api_is_platform_admin() || api_is_hrm()) {
             if (false === Security::check_token('get')) {
                 exit;
             }
@@ -393,7 +393,7 @@ switch ($action) {
         }
         break;
     case 'delete_profile':
-        if (api_is_platform_admin() || api_is_drh()) {
+        if (api_is_platform_admin() || api_is_hrm()) {
             if (false === Security::check_token('get')) {
                 exit;
             }

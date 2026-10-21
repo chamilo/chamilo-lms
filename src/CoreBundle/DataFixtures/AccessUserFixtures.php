@@ -46,7 +46,6 @@ class AccessUserFixtures extends Fixture
             ->setTimezone($timezone)
             ->addUserAsAdmin()
             ->addRole('ROLE_GLOBAL_ADMIN') // Only for the first user
-            // ->addGroup($group)
         ;
 
         $manager->persist($admin);

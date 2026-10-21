@@ -28,7 +28,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 'allow_terms_conditions' => 'false',
                 'student_autosubscribe' => '',
                 'teacher_autosubscribe' => '',
-                'drh_autosubscribe' => '',
+                'hrm_autosubscribe' => '',
                 'sessionadmin_autosubscribe' => '',
                 'platform_unsubscribe_allowed' => 'false',
                 'required_extra_fields_in_inscription' => '',
@@ -97,7 +97,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             ->add('allow_terms_conditions', YesNoType::class)
             ->add('student_autosubscribe')
             ->add('teacher_autosubscribe')
-            ->add('drh_autosubscribe')
+            ->add('hrm_autosubscribe')
             ->add('sessionadmin_autosubscribe')
             ->add('platform_unsubscribe_allowed', YesNoType::class)
             ->add('required_extra_fields_in_inscription', TextareaType::class)

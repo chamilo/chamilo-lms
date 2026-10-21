@@ -66,6 +66,9 @@ final class ExerciseRuntimeAnswer
     #[Groups(['exercise_runtime_answer:write'])]
     public mixed $answer = null;
 
+    #[Groups(['exercise_runtime_answer:write'])]
+    public bool $logOnly = false;
+
     #[Groups(['exercise_runtime_answer:read', 'exercise_runtime_answer:write'])]
     public ?bool $reviewLater = null;
 

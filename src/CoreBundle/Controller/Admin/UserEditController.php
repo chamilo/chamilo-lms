@@ -228,7 +228,7 @@ final class UserEditController extends AbstractController
         }
         $newStatus = api_status_from_roles($roles);
 
-        if (DRH === $newStatus && CourseManager::is_user_subscribed_in_course($userId)) {
+        if (HRM === $newStatus && CourseManager::is_user_subscribed_in_course($userId)) {
             return $this->json([
                 'error' => $this->translator->trans('The status of this user cannot be changed to human resources manager.'),
             ], Response::HTTP_CONFLICT);

@@ -415,9 +415,10 @@ final readonly class AdminStatisticsQueryService
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
         $queryBuilder
-            ->select('course.courseLanguage AS language', 'COUNT(course.id) AS total')
+            ->select('language.isocode AS language', 'COUNT(course.id) AS total')
             ->from(Course::class, 'course')
-            ->groupBy('course.courseLanguage')
+            ->innerJoin('course.courseLanguageEntity', 'language')
+            ->groupBy('language.id, language.isocode')
             ->orderBy('COUNT(course.id)', 'DESC')
         ;
 
@@ -631,7 +632,7 @@ final readonly class AdminStatisticsQueryService
             ->from(UserRelUser::class, 'relation')
             ->leftJoin('relation.user', 'user', Join::WITH, 'user.active <> :softDeleted')
             ->andWhere('relation.relationType <> :hrRelation')
-            ->setParameter('hrRelation', UserRelUser::USER_RELATION_TYPE_RRHH, Types::INTEGER)
+            ->setParameter('hrRelation', UserRelUser::USER_RELATION_TYPE_HRM, Types::INTEGER)
             ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
             ->groupBy('relation.user, user.firstname, user.lastname, user.username')
             ->orderBy('COUNT(relation.id)', 'DESC')

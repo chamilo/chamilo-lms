@@ -9,9 +9,9 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use GuzzleHttp\Client;
 
 /**
  * Class SocialManager.
@@ -543,7 +543,7 @@ class SocialManager extends UserManager
             $officialCode = '';
             if ('true' === api_get_setting('show_official_code_whoisonline')) {
                 $officialCode .= '<div class="items-user-official-code">
-                    <p style="min-height: 30px;" title="'.get_lang('Code').'">'.$user_info['official_code'].'</p></div>';
+                    <p style="min-height: 30px;" title="'.get_lang('Code').'">'.htmlspecialchars((string) $user_info['official_code'], ENT_QUOTES, 'UTF-8').'</p></div>';
             }
 
             if (true === $hide) {
@@ -815,12 +815,14 @@ class SocialManager extends UserManager
                             //$courseInfo = api_get_course_info_by_id($post->getCId());
                             $row['post_title'] = $post->getForum()->getTitle();
                             $row['forum_title'] = $thread->getTitle();
-                            $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
-                                    //'cid' => $courseInfo['real_id'],
-                                    'forum' => $post->getForum()->getIid(),
-                                    'thread' => $post->getThread()->getIid(),
-                                    'post_id' => $post->getIid(),
-                                ]).'#post_id_'.$post->getIid();
+                            $postLink = $post->getResourceNode()?->getResourceLinks()->first();
+                            $row['thread_url'] = $postLink ? getForumToolUrl(
+                                (int) $postLink->getCourse()?->getId(),
+                                (int) $postLink->getSession()?->getId(),
+                                0,
+                                $post->getForum()->getIid(),
+                                $post->getThread()->getIid()
+                            ) : '';
                         }
                     }
 
@@ -957,23 +959,16 @@ class SocialManager extends UserManager
             return false;
         }
 
-        $client = new Client();
-
         try {
-            $response = $client->request('GET', $uri, [
+            $response = SafeHttpClientHelper::create()->request('GET', $uri, [
                 'timeout' => 10,
-                'verify' => false,
-                'allow_redirects' => ['max' => 3],
+                'max_redirects' => 3,
                 'headers' => [
                     'User-Agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Chamilo',
                 ],
             ]);
 
-            if (200 !== $response->getStatusCode()) {
-                return false;
-            }
-
-            return true;
+            return 200 === $response->getStatusCode();
         } catch (Exception $e) {
             return false;
         }
@@ -1141,6 +1136,13 @@ class SocialManager extends UserManager
                     break;
                 }
                 $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
+                $nameHtml = htmlspecialchars($name_user, ENT_QUOTES, 'UTF-8');
+                // JS string literal for the onclick attribute: encoded for JS first, then for HTML.
+                $nameJs = htmlspecialchars(
+                    json_encode($name_user, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
+                    ENT_QUOTES,
+                    'UTF-8'
+                );
                 $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
                 $statusIcon = Display::getMdiIcon(StateIcon::OFFLINE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Offline'));
@@ -1158,7 +1160,7 @@ class SocialManager extends UserManager
                     $friend['friend_user_id'],
                     USER_IMAGE_SIZE_SMALL
                 );
-                $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" class="user-image"/>';
+                $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$nameHtml.'" class="user-image"/>';
 
                 $relation = self::get_relation_between_contacts(
                     $friend['friend_user_id'],
@@ -1166,13 +1168,13 @@ class SocialManager extends UserManager
                 );
 
                 if ($showLinkToChat) {
-                    $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);" class="list-group-item">';
-                    $friendHtml .= $friend_avatar.' <span class="username">'.$name_user.'</span>';
+                    $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', '.$nameJs.', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);" class="list-group-item">';
+                    $friendHtml .= $friend_avatar.' <span class="username">'.$nameHtml.'</span>';
                     $friendHtml .= '<span class="status">'.$statusIcon.'</span>';
                 } else {
                     $link_shared = empty($link_shared) ? '' : '&'.$link_shared;
                     $friendHtml .= '<a href="profile.php?'.'u='.$friend['friend_user_id'].$link_shared.'" class="list-group-item">';
-                    $friendHtml .= $friend_avatar.' <span class="username">'.$name_user.'</span>';
+                    $friendHtml .= $friend_avatar.' <span class="username">'.$nameHtml.'</span>';
                     $friendHtml .= '<span class="status">'.$statusIcon.'</span>';
                 }
 
@@ -1286,7 +1288,7 @@ class SocialManager extends UserManager
         $template->assign('orientation', $orientation);
         $template->assign('skills', $skill->getUserSkillsTable($userId, 0, 0, false)['skills']);
         $template->assign('user_id', $userId);
-        $template->assign('show_skills_report_link', api_is_student() || api_is_student_boss() || api_is_drh());
+        $template->assign('show_skills_report_link', api_is_student() || api_is_student_boss() || api_is_hrm());
 
         $skillBlock = $template->get_template('social/skills_block.tpl');
 
@@ -1455,6 +1457,15 @@ class SocialManager extends UserManager
                             ];
                             break;
                         case ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
+                            $profileUrlParts = parse_url($data);
+                            if (false === $profileUrlParts
+                                || empty($profileUrlParts['host'])
+                                || empty($profileUrlParts['scheme'])
+                                || !in_array(strtolower($profileUrlParts['scheme']), ['http', 'https'], true)
+                            ) {
+                                break;
+                            }
+
                             $icon_path = UserManager::get_favicon_from_url($data);
                             if (false == self::verifyUrl($icon_path)) {
                                 break;
@@ -1465,7 +1476,7 @@ class SocialManager extends UserManager
                             if ('www.hi5.com' == $domain || 'hi5.com' == $domain) {
                                 $bottom = '-0.8';
                             }
-                            $data = '<a href="'.$data.'">'
+                            $data = '<a href="'.htmlspecialchars($data, ENT_QUOTES, 'UTF-8').'">'
                                 .'<img src="'.$icon_path.'" alt="icon"'
                                 .' style="margin-inline-end:0.5em;margin-bottom:'.$bottom.'em;" />'
                                 .$extraFieldInfo['display_text']
@@ -1789,7 +1800,7 @@ class SocialManager extends UserManager
 
             $social_group_block .= Display::url(
                 get_lang('See all communities'),
-                api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$courseInfo['real_id']
+                getForumToolUrl((int) $courseInfo['real_id'])
             );
 
             if (!empty($social_group_block)) {

@@ -544,13 +544,7 @@ class SessionManager
                                INNER JOIN $tableCourse c ON (sc.c_id = c.id)";
             $language = Database::escape_string($language);
 
-            // Get the isoCode to filter course_language
-            $isoCode = '';
-            $languageId = api_get_language_id($language);
-            if (!empty($languageId)) {
-                $languageInfo = api_get_language_info($languageId);
-                $isoCode = $languageInfo['isocode'];
-            }
+            $languageId = (int) api_get_language_id($language);
             if ('true' === api_get_setting('language.allow_course_multiple_languages')) {
                 $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
                 $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -560,12 +554,20 @@ class SessionManager
                 if (Database::num_rows($rs) > 0) {
                     $fieldId = Database::result($rs, 0, 0);
                     $sqlInjectJoins .= " LEFT JOIN $tblExtraFieldValue cfv ON (c.id = cfv.item_id AND cfv.field_id = $fieldId)";
-                    $where .= " AND (c.course_language = '$isoCode' OR cfv.field_value LIKE '%$language%')";
+                    if ($languageId > 0) {
+                        $where .= " AND (c.language_id = $languageId OR cfv.field_value LIKE '%$language%')";
+                    } else {
+                        $where .= " AND cfv.field_value LIKE '%$language%'";
+                    }
+                } elseif ($languageId > 0) {
+                    $where .= " AND c.language_id = $languageId ";
                 } else {
-                    $where .= " AND c.course_language = '$isoCode' ";
+                    $where .= ' AND 1 = 0 ';
                 }
+            } elseif ($languageId > 0) {
+                $where .= " AND c.language_id = $languageId ";
             } else {
-                $where .= " AND c.course_language = '$isoCode' ";
+                $where .= ' AND 1 = 0 ';
             }
         }
 
@@ -1555,7 +1557,7 @@ class SessionManager
             $link = '<a href="'.api_get_path(WEB_PATH).'reporting/learners/'.(int) $user[0].'/courses/'.(int) $course['real_id'].'?'.http_build_query([
                 'sid' => (int) $sessionId,
             ]).'"> %s </a>';
-            $linkForum = '<a href="'.api_get_path(WEB_CODE_PATH).'forum/index.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
+            $linkForum = '<a href="'.getForumToolUrl((int) $course['real_id'], (int) $sessionId).'"> %s </a>';
             $linkWork = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?cid='.$course['real_id'].'&sid='.$sessionId.'"> %s </a>';
             // The survey tool lives at /resources/survey/{courseResourceNodeId}/; the legacy
             // list it used to point at links on to survey/reporting.php, which now denies
@@ -2934,13 +2936,16 @@ class SessionManager
                 WHERE
                     session_id = $session_id AND
                     user_id = $user_id ";
-        Database::query($sql);
+        $result = Database::query($sql);
 
-        // Update number of users
-        $sql = "UPDATE $tbl_session
-                SET nbr_users = nbr_users - 1
-                WHERE id = $session_id ";
-        Database::query($sql);
+        // Update number of users, only when a subscription was actually removed: the counter went negative when
+        // this was called for a user who was not subscribed (for example when removing a class member from a class).
+        if (Database::affected_rows($result) > 0) {
+            $sql = "UPDATE $tbl_session
+                    SET nbr_users = nbr_users - 1
+                    WHERE id = $session_id ";
+            Database::query($sql);
+        }
 
         Event::addEvent(
             LOG_SESSION_DELETE_USER,
@@ -4118,6 +4123,15 @@ class SessionManager
     }
 
     /**
+     * Get the session followed by a human resources manager.
+     * The legacy method remains available for third-party consumers.
+     */
+    public static function getSessionFollowedByHrm($userId, $sessionId)
+    {
+        return self::getSessionFollowedByDrh($userId, $sessionId);
+    }
+
+    /**
      * @param int $userId
      * @param int $sessionId
      *
@@ -4181,7 +4195,7 @@ class SessionManager
      *
      * @return array sessions
      */
-    public static function get_sessions_followed_by_drh(
+    public static function get_sessions_followed_by_hrm(
         $userId,
         $start = null,
         $limit = null,
@@ -4196,6 +4210,35 @@ class SessionManager
         return self::getSessionsFollowedByUser(
             $userId,
             DRH,
+            $start,
+            $limit,
+            $getCount,
+            $getOnlySessionId,
+            $getSql,
+            $orderCondition,
+            $keyword,
+            $description,
+            $options
+        );
+    }
+
+    /**
+     * @deprecated Use get_sessions_followed_by_hrm().
+     */
+    public static function get_sessions_followed_by_drh(
+        $userId,
+        $start = null,
+        $limit = null,
+        $getCount = false,
+        $getOnlySessionId = false,
+        $getSql = false,
+        $orderCondition = null,
+        $keyword = '',
+        $description = '',
+        $options = []
+    ) {
+        return self::get_sessions_followed_by_hrm(
+            $userId,
             $start,
             $limit,
             $getCount,
@@ -4514,12 +4557,13 @@ class SessionManager
         }
 
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         if ($getCount) {
             $select = "SELECT COUNT(DISTINCT(c.code)) as count ";
         } else {
-            $select = "SELECT DISTINCT c.* ";
+            $select = "SELECT DISTINCT c.*, language.isocode AS course_language ";
         }
 
         $keywordCondition = null;
@@ -4531,6 +4575,7 @@ class SessionManager
         // Select the courses
         $sql = "$select
                 FROM $tbl_course c
+                INNER JOIN $tbl_language language ON language.id = c.language_id
                 INNER JOIN $tbl_session_rel_course src
                 ON c.id = src.c_id
 		        WHERE
@@ -11125,7 +11170,7 @@ class SessionManager
                     continue;
                 }
                 foreach ($csvContent as $row) {
-                    fputcsv($handle, (array) $row, ',');
+                    fputcsv($handle, \Chamilo\CoreBundle\Helpers\CsvFormulaEscaper::escapeRow((array) $row), ',');
                 }
                 fclose($handle);
 

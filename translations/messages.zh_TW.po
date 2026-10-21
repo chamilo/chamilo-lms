@@ -21269,8 +21269,8 @@ msgstr "法律協議將在登入或進入課程時出現。"
 msgid "Your terms and conditions are ready to be signed"
 msgstr "您的條款和條件已準備好簽署"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "您好，<br />您的導師已傳送條款與條件給您。您可以透過此連結簽署：%s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "%s，您好：<br />您的導師已傳送條款與條件給您。您可以透過此連結簽署：%s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "使用者 %s 已簽署協議。"

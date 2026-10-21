@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\State\RoomAssignmentStateProcessor;
+use Chamilo\CoreBundle\State\SessionRelCourseDeleteProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -28,7 +29,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Patch(security: "is_granted('ROLE_ADMIN')", processor: RoomAssignmentStateProcessor::class),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(security: "is_granted('ROLE_ADMIN')", processor: RoomAssignmentStateProcessor::class),
-        new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('DELETE', object)"),
+        new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('DELETE', object)", processor: SessionRelCourseDeleteProcessor::class),
     ],
     normalizationContext: [
         'groups' => ['session_rel_course:read'],

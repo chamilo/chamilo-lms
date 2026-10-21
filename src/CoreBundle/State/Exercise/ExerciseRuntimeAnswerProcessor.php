@@ -26,6 +26,7 @@ use Chamilo\CoreBundle\Helpers\ExerciseHotspotGeometryHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptLogService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -95,6 +96,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
         private ExerciseHotspotGeometryHelper $exerciseHotspotGeometryHelper,
+        private ExerciseAttemptLogService $attemptLogService,
     ) {}
 
     /**
@@ -151,6 +153,40 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
         $navigationAction = strtolower(trim((string) $data->navigationAction));
         $this->assertAttemptAcceptsAnswer($attempt, $quiz, $questionId, $navigationAction);
+
+        if ($data->logOnly) {
+            $questionType = (int) $question->getType();
+            if (!\in_array($questionType, [
+                ...self::UNIQUE_TYPES,
+                ...self::MULTIPLE_TYPES,
+                ...self::TRUE_FALSE_TYPES,
+                ...self::TRUE_FALSE_DEGREE_CERTAINTY_TYPES,
+                ...self::MATCHING_TYPES,
+                ...self::DRAGGABLE_TYPES,
+                ...self::DROPDOWN_TYPES,
+            ], true)) {
+                throw new BadRequestHttpException('Live answer tracking is not supported for this question type.');
+            }
+
+            $this->buildDraftRows($question, $data->answer, 0);
+            $this->attemptLogService->record(
+                $attempt,
+                $questionId,
+                'changed',
+                $data->answer,
+                max(0, $data->secondsSpent),
+            );
+            $this->entityManager->flush();
+
+            $response = new ExerciseRuntimeAnswer();
+            $response->exerciseId = $exerciseId;
+            $response->attemptId = $attemptId;
+            $response->questionId = $questionId;
+            $response->success = true;
+            $response->message = 'Answer change recorded';
+
+            return $response;
+        }
 
         if (true === $data->reviewLaterOnly) {
             if (null !== $data->reviewLater) {
@@ -225,6 +261,14 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             ;
             $this->entityManager->persist($attemptRow);
         }
+
+        $this->attemptLogService->record(
+            $attempt,
+            $questionId,
+            [] === $rows ? 'cleared' : 'saved',
+            $data->answer,
+            max(0, $data->secondsSpent),
+        );
 
         if (null !== $data->reviewLater) {
             $this->syncReviewQuestion($attempt, $questionId, true === $data->reviewLater);

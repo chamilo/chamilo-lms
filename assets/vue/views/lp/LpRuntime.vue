@@ -81,7 +81,7 @@
             @click.prevent="leaveRuntime(runtimeHomeUrl)"
           >
             <BaseIcon
-              :icon="isToolboxContent ? 'robot' : isCStudioContent ? 'learning-paths' : 'home'"
+              :icon="isToolboxContent ? 'settings' : isCStudioContent ? 'learning-paths' : 'home'"
               size="small"
             />
             <span>{{ homeLabel }}</span>
@@ -272,9 +272,25 @@
           {
             'lp-runtime-content--impress': isImpressMode,
             'lp-runtime-content--reporting': isReportingMode,
+            'lp-runtime-content--toolbox-preview': isToolboxTeacherPreview && !isReportingMode,
           },
         ]"
       >
+        <div
+          v-if="isToolboxTeacherPreview && !isReportingMode"
+          class="lp-toolbox-preview-notice"
+          role="status"
+        >
+          <BaseIcon
+            icon="information"
+            size="small"
+          />
+          <div>
+            <strong>{{ t("Preview mode") }}</strong>
+            <span>— {{ t("Progress and score are not saved in preview mode.") }}</span>
+          </div>
+        </div>
+
         <div
           v-if="!isReportingMode && !isImpressMode && !runtime.hideArrowNavigation && !isCStudioContent"
           class="lp-runtime-navigation"
@@ -602,6 +618,7 @@ const hasCStudioEditorContext = computed(() => String(route.query.teachdoc || ""
 const isCStudioContent = computed(() => Boolean(runtime.value?.isCStudioContent) || hasCStudioEditorContext.value)
 const isToolboxContent = computed(() => Boolean(runtime.value?.isToolboxContent))
 const isToolboxItem = computed(() => String(currentItem.value?.itemType || "").toLowerCase() === "toolbox")
+const isToolboxTeacherPreview = computed(() => Boolean(runtime.value?.isToolboxPreview))
 const isCStudioPreview = computed(() => {
   const previewValue = String(route.query.cstudio_preview || "").toLowerCase()
 
@@ -815,22 +832,31 @@ function handlePreviewImageError() {
  * backend would let toggle are asked, so a learner never triggers a 403.
  * @returns {Promise<void>}
  */
-async function enterStudentViewForRuntime() {
-  if (!wantsStudentView.value || !securityStore.isCourseAdmin || platformConfig.isStudentViewActive) {
+async function syncRequestedStudentViewForRuntime() {
+  if (!securityStore.isCourseAdmin) {
     return
   }
 
   try {
+    const configuration = await platformConfigService.list()
+    const sessionStudentViewActive = "studentview" === String(configuration?.studentview || "").toLowerCase()
+    platformConfig.setStudentViewEnabled(sessionStudentViewActive)
+
+    if (sessionStudentViewActive === wantsStudentView.value) {
+      return
+    }
+
     const nextView = await permissionService.toogleStudentView({
       cid: contextParams.value.cid,
       sid: contextParams.value.sid,
-      isStudentView: true,
+      isStudentView: wantsStudentView.value,
     })
 
     platformConfig.setStudentViewEnabled("studentview" === String(nextView || "").toLowerCase())
   } catch (error) {
-    // Not fatal: the runtime still renders, just with the teacher's own rights.
-    console.error("Unable to enter the student view for the learning path runtime.", error)
+    // The backend still decides whether Toolbox is an untracked teacher preview
+    // from the authenticated user's permissions and the explicit runtime intent.
+    console.error("Unable to synchronize the student view for the learning path runtime.", error)
   }
 }
 
@@ -1670,6 +1696,7 @@ function applyRuntime(data, { contentChanged = false } = {}) {
 async function fetchRuntime(itemId = 0) {
   return await lpService.getRuntime(lpId.value, {
     ...contextParams.value,
+    isStudentView: wantsStudentView.value ? "true" : "false",
     itemId: Number(itemId || 0) > 0 ? Number(itemId) : undefined,
   })
 }
@@ -1677,6 +1704,7 @@ async function fetchRuntime(itemId = 0) {
 async function syncRuntimeState() {
   if (
     !runtime.value ||
+    isToolboxTeacherPreview.value ||
     isReportingMode.value ||
     isChangingItem.value ||
     isSyncingRuntime.value ||
@@ -1735,7 +1763,9 @@ async function loadRuntime({ recordCurrent = true } = {}) {
       return
     }
 
-    if (recordCurrent && data.runtimeSupported && data.currentItemId > 0) {
+    const toolboxTeacherPreview = Boolean(data.isToolboxContent && data.canManage)
+
+    if (recordCurrent && !toolboxTeacherPreview && data.runtimeSupported && data.currentItemId > 0) {
       await lpService.openRuntimeItem(lpId.value, contextParams.value, {
         itemId: data.currentItemId,
         allowNewAttempt: false,
@@ -1847,7 +1877,7 @@ async function handleRuntimeMessage(event) {
     const version = String(config.version || "")
 
     if (
-      route.query.isStudentView === "false" ||
+      isToolboxTeacherPreview.value ||
       !values ||
       typeof values !== "object" ||
       Array.isArray(values) ||
@@ -1904,7 +1934,13 @@ function handlePageHide() {
   const now = Date.now()
   flushPendingToolboxCommitBeacon("pagehide")
   scormRuntimeContext?.flushBeacon("pagehide")
-  if (isSyncingRuntime.value || now - lastBeaconAt < 1000 || !runtime.value || !runtime.value.currentItemId) {
+  if (
+    isToolboxTeacherPreview.value ||
+    isSyncingRuntime.value ||
+    now - lastBeaconAt < 1000 ||
+    !runtime.value ||
+    !runtime.value.currentItemId
+  ) {
     return
   }
 
@@ -1937,7 +1973,7 @@ onMounted(() => {
   trackingTimer = window.setInterval(() => {
     void syncRuntimeState()
   }, 30000)
-  void enterStudentViewForRuntime().then(loadRuntime)
+  void syncRequestedStudentViewForRuntime().then(loadRuntime)
 })
 
 onBeforeUnmount(() => {
@@ -1970,6 +2006,46 @@ body.lp-runtime-document {
 </style>
 
 <style scoped>
+.lp-toolbox-preview-notice {
+  z-index: 30;
+  display: flex;
+  width: fit-content;
+  max-width: calc(100% - 6rem);
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.625rem;
+  border: 1px solid rgb(var(--color-primary-base) / 0.22);
+  border-radius: 0.5rem;
+  background: rgb(var(--color-primary-base) / 0.06);
+  padding: 0.4375rem 0.625rem;
+  color: #475467;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+}
+
+.lp-toolbox-preview-notice div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.lp-toolbox-preview-notice strong {
+  color: #344054;
+}
+
+.lp-runtime-content--toolbox-preview {
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-runtime-content--toolbox-preview .lp-runtime-content-stage {
+  height: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 #cstudio-preview-back-button {
   position: fixed;
   top: 14px;

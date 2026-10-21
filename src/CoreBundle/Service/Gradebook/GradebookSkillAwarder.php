@@ -57,7 +57,7 @@ final readonly class GradebookSkillAwarder
             }
 
             $skill = $relation->getSkill();
-            if (!$skill instanceof Skill || null === $skill->getId()) {
+            if (!$skill instanceof Skill || null === $skill->getId() || !$skill->isAcquirable()) {
                 continue;
             }
 

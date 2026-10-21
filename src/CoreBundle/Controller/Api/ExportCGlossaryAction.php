@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CGlossaryCategory;
 use Chamilo\CourseBundle\Repository\CGlossaryCategoryRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -50,33 +49,18 @@ readonly class ExportCGlossaryAction
         Request $request,
         CGlossaryRepository $repo,
         CGlossaryCategoryRepository $categoryRepository,
-        EntityManager $em,
+        CidReqHelper $cidReqHelper,
     ): Response {
         $format = (string) $request->request->get('format', '');
-        $cid = $request->request->getInt('cid');
-        // sid is sent as an empty string when no session is selected; getInt()
-        // rejects that (FILTER_VALIDATE_INT has no FILTER_NULL_ON_FAILURE here),
-        // so cast the raw value instead of using the strict accessor.
-        $sid = (int) $request->request->get('sid', '0');
         $categoryId = (int) $request->request->get('categoryId', '0');
 
         if (!\in_array($format, ['csv', 'xls', 'pdf'], true)) {
             throw new BadRequestHttpException('Invalid export format.');
         }
 
-        $course = null;
-        $session = null;
-
-        if ($cid > 0) {
-            $course = $em->find(Course::class, $cid);
-        }
-        if ($sid > 0) {
-            $session = $em->find(Session::class, $sid);
-        }
-
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('Course not found.');
-        }
+        // The course and session come from the context that authorized the request, never from the body.
+        $course = $cidReqHelper->requireDoctrineCourseEntity();
+        $session = $cidReqHelper->getDoctrineSessionEntity();
 
         $category = null;
         if ($categoryId > 0) {
@@ -89,7 +73,7 @@ readonly class ExportCGlossaryAction
         $qb = $repo->getResourcesByCourse($course, $session);
         if ($category instanceof CGlossaryCategory) {
             $qb->andWhere('resource.category = :category')
-                ->setParameter('category', $category)
+                ->setParameter('category', (int) $category->getIid())
             ;
         }
         $glossaryItems = $qb->getQuery()->getResult();

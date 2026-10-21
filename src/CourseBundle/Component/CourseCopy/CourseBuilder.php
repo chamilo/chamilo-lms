@@ -2206,6 +2206,7 @@ class CourseBuilder
                 'one_question_per_page' => (bool) $s->getOneQuestionPerPage(),
                 'survey_version' => (string) ($s->getSurveyVersion() ?? ''),
                 'visible_results' => $s->getVisibleResults(),
+                'results_hidden_from_teacher' => $s->isResultsHiddenFromTeacher(),
                 'is_mandatory' => (bool) $s->isMandatory(),
                 'display_question_number' => (bool) $s->isDisplayQuestionNumber(),
                 'survey_type' => (int) $s->getSurveyType(),

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\GlobalReporting;
 
+use Chamilo\CoreBundle\Controller\LegalAgreementController;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -1493,8 +1494,12 @@ final readonly class GlobalReportingSectionQueryService
             'acceptedAt' => $acceptedAt,
             'canManage' => $canManageLearner,
             'actionLabel' => $accepted ? 'Delete legal agreement' : 'Send legal agreement',
+            // POST target of LegalAgreementController, with its CSRF token.
             'actionUrl' => $canManageLearner
-                ? '/main/my_space/myStudents.php?action='.($accepted ? 'delete_legal' : 'send_legal').'&student='.$userId
+                ? '/legal-agreement/'.$userId.'/'.($accepted ? 'delete' : 'send')
+                : null,
+            'csrfToken' => $canManageLearner
+                ? $this->csrfTokenManager->getToken(LegalAgreementController::CSRF_INTENT)->getValue()
                 : null,
         ];
     }

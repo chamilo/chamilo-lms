@@ -217,6 +217,8 @@ final readonly class GradebookAdvancedSettingsProvider implements ProviderInterf
         $qb = $this->entityManager->createQueryBuilder()
             ->select('skill')
             ->from(Skill::class, 'skill')
+            ->andWhere('skill.acquirable = :acquirable')
+            ->setParameter('acquirable', true)
             ->orderBy('skill.title', 'ASC')
             ->setMaxResults(self::SKILL_RESULT_LIMIT)
         ;

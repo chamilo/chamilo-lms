@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookLtiToolResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -56,6 +57,7 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         private SettingsManager $settingsManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private GradebookLtiToolResolver $ltiToolResolver,
     ) {}
 
     /**
@@ -93,6 +95,21 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         }
 
         $action = strtolower(trim($data->action));
+        $externalTool = null;
+
+        if (null !== $data->externalToolId) {
+            if (self::ACTION_CREATE !== $action) {
+                throw new BadRequestHttpException('An LTI tool can only be linked when creating an evaluation.');
+            }
+
+            $externalTool = $this->ltiToolResolver->requireAvailableTool(
+                $data->externalToolId,
+                $course,
+                $session,
+            );
+            $data->title = $externalTool->getTitle();
+        }
+
         $evaluation = match ($action) {
             self::ACTION_CREATE => $this->createEvaluation($data, $rootCategory, $course, $session),
             self::ACTION_UPDATE => $this->updateEvaluation($data, $rootCategory, $course, $session, $user),
@@ -103,6 +120,11 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
             self::ACTION_UNLOCK => $this->setEvaluationLock($data, $rootCategory, $course, $session, false),
             default => throw new BadRequestHttpException('Unsupported Gradebook evaluation action.'),
         };
+
+        if (null !== $externalTool && $evaluation instanceof GradebookEvaluation) {
+            $externalTool->setGradebookEval($evaluation);
+            $this->entityManager->persist($externalTool);
+        }
 
         $this->entityManager->flush();
 

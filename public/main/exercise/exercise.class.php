@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
@@ -1637,7 +1638,12 @@ class Exercise
             $exercise
                 ->setParent($courseEntity)
                 ->setCreator(api_get_user_entity())
-                ->addCourseLink($courseEntity, api_get_session_entity());
+                ->addCourseLink(
+                    $courseEntity,
+                    api_get_session_entity(),
+                    visibility: Container::$container->get(ResourceDefaultVisibilityHelper::class)
+                        ->getResourceLinkVisibility(ResourceDefaultVisibilityHelper::EXERCISE, $courseEntity)
+                );
             $em->persist($exercise);
             $em->flush();
             $id = $exercise->getIid();
@@ -9328,23 +9334,19 @@ class Exercise
                 }
             }
             $exerciseListAll = array_values($merged);
-
-            // Sort by title to keep a stable list (similar to ORDER BY title).
-            usort($exerciseListAll, static function ($a, $b) {
-                $ta = method_exists($a, 'getTitle') ? (string) $a->getTitle() : '';
-                $tb = method_exists($b, 'getTitle') ? (string) $b->getTitle() : '';
-                return strnatcasecmp($ta, $tb);
-            });
-
-            $exerciseList = array_slice($exerciseListAll, $from, $limit);
-            $total = count($exerciseListAll);
         } else {
-            $qb->setFirstResult($from);
-            $qb->setMaxResults($limit);
-
-            $exerciseList = $qb->getQuery()->getResult();
-            $total = $repo->getCount($qb);
+            $exerciseListAll = $qb->getQuery()->getResult();
         }
+
+        // Sort by title to keep a stable list (similar to ORDER BY title).
+        usort($exerciseListAll, static function ($a, $b) {
+            $ta = method_exists($a, 'getTitle') ? (string) $a->getTitle() : '';
+            $tb = method_exists($b, 'getTitle') ? (string) $b->getTitle() : '';
+            return strnatcasecmp($ta, $tb);
+        });
+
+        $exerciseList = array_slice($exerciseListAll, $from, $limit);
+        $total = count($exerciseListAll);
 
         $webPath = api_get_path(WEB_CODE_PATH);
         if (!empty($exerciseList)) {

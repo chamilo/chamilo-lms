@@ -21269,8 +21269,8 @@ msgstr "Yasal anlaşma giriş sırasında veya bir derse girerken görünecek."
 msgid "Your terms and conditions are ready to be signed"
 msgstr "Şartlarınız imzalanmaya hazır"
 
-msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
-msgstr "Merhaba,<br />Öğretmeniniz size şartlarınızı gönderdi. Şu URL’yi takip ederek imzalayabilirsiniz: %s"
+msgid "Hello %s,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s<br /><br />%s"
+msgstr "Merhaba %s,<br />Öğretmeniniz size şartlarınızı gönderdi. Şu URL’yi takip ederek imzalayabilirsiniz: %s<br /><br />%s"
 
 msgid "User %s signed the agreement."
 msgstr "%s kullanıcısı anlaşmayı imzaladı."

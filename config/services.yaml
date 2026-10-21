@@ -95,7 +95,7 @@ services:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
         lazy: true
         arguments:
-            $pdoOrDsn: 'mysql:host=%env(DATABASE_HOST)%;port=%env(DATABASE_PORT)%;dbname=%env(DATABASE_NAME)%;charset=utf8mb4'
+            $pdoOrDsn: 'mysql:host=%env(DATABASE_HOST)%;port=%env(DATABASE_PORT)%;dbname=%env(DATABASE_NAME)%%chamilo.dbname_suffix%;charset=utf8mb4'
             $options:
                 db_table: 'php_session'
                 db_username: '%env(DATABASE_USER)%'

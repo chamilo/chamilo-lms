@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Platform tools.
  */
 #[ORM\Table(name: 'tool')]
+#[ORM\UniqueConstraint(name: 'UNIQ_20F33ED12B36786B', columns: ['title'], options: ['lengths' => [255]])]
 #[ORM\Entity]
 class Tool implements Stringable
 {
@@ -27,8 +28,9 @@ class Tool implements Stringable
     protected ?int $id = null;
 
     #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     #[Groups(['tool:read'])]
-    #[ORM\Column(name: 'title', type: 'string', nullable: false, unique: true)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     /**

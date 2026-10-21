@@ -71,146 +71,159 @@
     <div class="border-b border-gray-20" />
 
     <div
-      v-if="errorMessage"
+      v-if="reportAccessDenied"
+      class="rounded-xl border border-blue-200 bg-blue-50 p-5 text-sm text-blue-800"
+      role="alert"
+    >
+      <p class="font-semibold">{{ t("Survey results are hidden from teachers and tutors.") }}</p>
+      <p class="mt-2">
+        {{ t("You can still use the invitations page to see response counts and send reminders.") }}
+      </p>
+    </div>
+
+    <div
+      v-else-if="errorMessage"
       class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
     >
       {{ errorMessage }}
     </div>
 
-    <div class="grid gap-4 md:grid-cols-4">
-      <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
-        <p class="text-sm text-gray-500">{{ t("Invited") }}</p>
-        <p class="mt-2 text-3xl font-bold text-gray-90">{{ report.counts?.invited || 0 }}</p>
+    <template v-if="!reportAccessDenied">
+      <div class="grid gap-4 md:grid-cols-4">
+        <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
+          <p class="text-sm text-gray-500">{{ t("Invited") }}</p>
+          <p class="mt-2 text-3xl font-bold text-gray-90">{{ report.counts?.invited || 0 }}</p>
+        </div>
+        <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
+          <p class="text-sm text-gray-500">{{ t("Answered") }}</p>
+          <p class="mt-2 text-3xl font-bold text-gray-90">{{ report.counts?.answered || 0 }}</p>
+        </div>
+        <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
+          <p class="text-sm text-gray-500">{{ t("Pending") }}</p>
+          <p class="mt-2 text-3xl font-bold text-gray-90">{{ report.counts?.pending || 0 }}</p>
+        </div>
+        <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
+          <p class="text-sm text-gray-500">{{ t("Questions") }}</p>
+          <p class="mt-2 text-3xl font-bold text-gray-90">{{ report.counts?.questions || 0 }}</p>
+        </div>
       </div>
-      <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
-        <p class="text-sm text-gray-500">{{ t("Answered") }}</p>
-        <p class="mt-2 text-3xl font-bold text-gray-90">{{ report.counts?.answered || 0 }}</p>
-      </div>
-      <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
-        <p class="text-sm text-gray-500">{{ t("Pending") }}</p>
-        <p class="mt-2 text-3xl font-bold text-gray-90">{{ report.counts?.pending || 0 }}</p>
-      </div>
-      <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
-        <p class="text-sm text-gray-500">{{ t("Questions") }}</p>
-        <p class="mt-2 text-3xl font-bold text-gray-90">{{ report.counts?.questions || 0 }}</p>
-      </div>
-    </div>
 
-    <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
-      <div class="flex flex-wrap gap-2">
-        <BaseButton
-          v-for="item in reportTypes"
-          :key="item.key"
-          :label="t(item.label)"
-          :type="activeReport === item.key ? 'primary' : 'plain'"
-          @click="activeReport = item.key"
-        />
-      </div>
-      <p class="mt-3 text-sm text-gray-500">
-        {{ activeReportDescription }}
-      </p>
-    </div>
-
-    <section
-      v-if="activeReport === 'overview'"
-      class="space-y-4"
-    >
       <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
-        <h2 class="text-xl font-semibold text-gray-90">{{ t("Results summary") }}</h2>
-        <p class="mt-2 text-sm text-gray-600">
-          {{ t("This view shows the migrated reporting data for this survey.") }}
+        <div class="flex flex-wrap gap-2">
+          <BaseButton
+            v-for="item in reportTypes"
+            :key="item.key"
+            :label="t(item.label)"
+            :type="activeReport === item.key ? 'primary' : 'plain'"
+            @click="activeReport = item.key"
+          />
+        </div>
+        <p class="mt-3 text-sm text-gray-500">
+          {{ activeReportDescription }}
         </p>
       </div>
-      <QuestionReportList :items="report.questionReports || []" />
-    </section>
 
-    <section
-      v-if="activeReport === 'question'"
-      class="space-y-4"
-    >
-      <QuestionReportList :items="report.questionReports || []" />
-    </section>
+      <section
+        v-if="activeReport === 'overview'"
+        class="space-y-4"
+      >
+        <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
+          <h2 class="text-xl font-semibold text-gray-90">{{ t("Results summary") }}</h2>
+          <p class="mt-2 text-sm text-gray-600">
+            {{ t("This view shows the migrated reporting data for this survey.") }}
+          </p>
+        </div>
+        <QuestionReportList :items="report.questionReports || []" />
+      </section>
 
-    <section
-      v-if="activeReport === 'user'"
-      class="space-y-4"
-    >
-      <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
-        <label
-          class="mb-2 block text-sm font-semibold text-gray-700"
-          for="survey-report-user"
-        >
-          {{ t("Select user who filled the survey") }}
-        </label>
-        <select
-          id="survey-report-user"
-          v-model="selectedUser"
-          class="w-full rounded border border-gray-300 px-3 py-2 text-sm md:w-96"
-          name="survey_report_user"
-          @change="reloadForUser"
-        >
-          <option value="">{{ t("Select user") }}</option>
-          <option
-            v-for="user in report.users || []"
-            :key="user.key"
-            :value="user.key"
+      <section
+        v-if="activeReport === 'question'"
+        class="space-y-4"
+      >
+        <QuestionReportList :items="report.questionReports || []" />
+      </section>
+
+      <section
+        v-if="activeReport === 'user'"
+        class="space-y-4"
+      >
+        <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
+          <label
+            class="mb-2 block text-sm font-semibold text-gray-700"
+            for="survey-report-user"
           >
-            {{ user.label }}
-          </option>
-        </select>
-      </div>
+            {{ t("Select user who filled the survey") }}
+          </label>
+          <select
+            id="survey-report-user"
+            v-model="selectedUser"
+            class="w-full rounded border border-gray-300 px-3 py-2 text-sm md:w-96"
+            name="survey_report_user"
+            @change="reloadForUser"
+          >
+            <option value="">{{ t("Select user") }}</option>
+            <option
+              v-for="user in report.users || []"
+              :key="user.key"
+              :value="user.key"
+            >
+              {{ user.label }}
+            </option>
+          </select>
+        </div>
 
-      <BaseTable
-        :text-for-empty="t('No answers found')"
-        :total-items="report.userAnswers?.length || 0"
-        :values="report.userAnswers || []"
-        data-key="questionId"
-      >
-        <Column
-          :header="t('Question')"
-          field="question"
+        <BaseTable
+          :text-for-empty="t('No answers found')"
+          :total-items="report.userAnswers?.length || 0"
+          :values="report.userAnswers || []"
+          data-key="questionId"
         >
-          <template #body="{ data }">
-            <span>{{ displayText(data.question) }}</span>
-          </template>
-        </Column>
-        <Column :header="t('Answer')">
-          <template #body="{ data }">
-            <span>{{ data.answer || '-' }}</span>
-          </template>
-        </Column>
-      </BaseTable>
-    </section>
+          <Column
+            :header="t('Question')"
+            field="question"
+          >
+            <template #body="{ data }">
+              <span>{{ displayText(data.question) }}</span>
+            </template>
+          </Column>
+          <Column :header="t('Answer')">
+            <template #body="{ data }">
+              <span>{{ data.answer || "-" }}</span>
+            </template>
+          </Column>
+        </BaseTable>
+      </section>
 
-    <section
-      v-if="activeReport === 'complete'"
-      class="space-y-4"
-    >
-      <BaseTable
-        :text-for-empty="t('No answers found')"
-        :total-items="report.completeRows?.length || 0"
-        :values="report.completeRows || []"
-        data-key="userKey"
+      <section
+        v-if="activeReport === 'complete'"
+        class="space-y-4"
       >
-        <Column
-          :header="t('User')"
-          field="userLabel"
-        />
-        <Column :header="t('Answers')">
-          <template #body="{ data }">
-            <div class="space-y-1 text-sm">
-              <div
-                v-for="question in report.questionReports || []"
-                :key="question.id"
-              >
-                <span class="font-semibold">{{ displayText(question.title) }}:</span>
-                <span>{{ data.answers?.[question.id] || '-' }}</span>
+        <BaseTable
+          :text-for-empty="t('No answers found')"
+          :total-items="report.completeRows?.length || 0"
+          :values="report.completeRows || []"
+          data-key="userKey"
+        >
+          <Column
+            :header="t('User')"
+            field="userLabel"
+          />
+          <Column :header="t('Answers')">
+            <template #body="{ data }">
+              <div class="space-y-1 text-sm">
+                <div
+                  v-for="question in report.questionReports || []"
+                  :key="question.id"
+                >
+                  <span class="font-semibold">{{ displayText(question.title) }}:</span>
+                  <span>{{ data.answers?.[question.id] || "-" }}</span>
+                </div>
               </div>
-            </div>
-          </template>
-        </Column>
-      </BaseTable>
-    </section>
+            </template>
+          </Column>
+        </BaseTable>
+      </section>
+    </template>
   </section>
 </template>
 
@@ -261,6 +274,7 @@ const activeReport = ref(reportTypeFromQuery())
 const selectedUser = ref(route.query.user ? String(route.query.user) : "")
 const isLoading = ref(false)
 const errorMessage = ref("")
+const reportAccessDenied = ref(false)
 
 const reportTypes = computed(() => report.value.reportTypes || [])
 const activeReportDescription = computed(() => {
@@ -269,9 +283,15 @@ const activeReportDescription = computed(() => {
   return item ? t(item.description) : ""
 })
 const csvExportUrl = computed(() => surveyService.buildSurveyReportingCsvUrl(getContextParams(), route.params.surveyId))
-const compactCsvExportUrl = computed(() => surveyService.buildSurveyReportingCompactCsvUrl(getContextParams(), route.params.surveyId))
-const xlsxExportUrl = computed(() => surveyService.buildSurveyReportingXlsxUrl(getContextParams(), route.params.surveyId))
-const byClassXlsxExportUrl = computed(() => surveyService.buildSurveyReportingByClassXlsxUrl(getContextParams(), route.params.surveyId))
+const compactCsvExportUrl = computed(() =>
+  surveyService.buildSurveyReportingCompactCsvUrl(getContextParams(), route.params.surveyId),
+)
+const xlsxExportUrl = computed(() =>
+  surveyService.buildSurveyReportingXlsxUrl(getContextParams(), route.params.surveyId),
+)
+const byClassXlsxExportUrl = computed(() =>
+  surveyService.buildSurveyReportingByClassXlsxUrl(getContextParams(), route.params.surveyId),
+)
 const zipExportUrl = computed(() => surveyService.buildSurveyReportingZipUrl(getContextParams(), route.params.surveyId))
 
 const QuestionReportList = defineComponent({
@@ -294,7 +314,11 @@ const QuestionReportList = defineComponent({
               h("div", null, [
                 h("h3", { class: "text-lg font-semibold text-gray-90" }, displayText(question.title)),
                 question.comment ? h("p", { class: "text-sm text-gray-500" }, displayText(question.comment)) : null,
-                h("p", { class: "text-xs text-gray-500" }, `${question.typeLabel} · ${question.totalAnswers} ${t("answers")}`),
+                h(
+                  "p",
+                  { class: "text-xs text-gray-500" },
+                  `${question.typeLabel} · ${question.totalAnswers} ${t("answers")}`,
+                ),
               ]),
             ]),
             renderQuestionBody(question),
@@ -380,12 +404,21 @@ function buildListRoute() {
 async function loadReporting() {
   isLoading.value = true
   errorMessage.value = ""
+  reportAccessDenied.value = false
 
   try {
     report.value = await surveyService.getSurveyReporting(getContextParams(), route.params.surveyId)
   } catch (error) {
     console.error("Error loading survey reporting", error)
-    errorMessage.value = error?.response?.data?.["hydra:description"] || t("Could not load survey reporting")
+    const status = Number(error?.response?.status || 0)
+    const detail = String(error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || "")
+
+    if (status === 403 && detail.includes("hidden from teachers and tutors")) {
+      reportAccessDenied.value = true
+      return
+    }
+
+    errorMessage.value = detail || t("Could not load survey reporting")
   } finally {
     isLoading.value = false
   }

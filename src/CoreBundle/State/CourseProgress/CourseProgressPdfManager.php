@@ -215,7 +215,7 @@ final readonly class CourseProgressPdfManager
         $planLabel = $this->escapeText($this->translator->trans('Thematic plan'));
         $advanceLabel = $this->escapeText($this->translator->trans('Thematic advance'));
         $hoursLabel = $this->escapeText($this->translator->trans('hours'));
-        $drhLabel = $this->escapeText($this->translator->trans('Drh'));
+        $drhLabel = $this->escapeText($this->translator->trans('Human Resources Manager'));
         $teacherLabel = $this->escapeText($this->translator->trans('Teacher'));
         $dateLabel = $this->escapeText($this->translator->trans('Date'));
 

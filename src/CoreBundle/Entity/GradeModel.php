@@ -20,7 +20,7 @@ class GradeModel
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
@@ -32,7 +32,7 @@ class GradeModel
     #[ORM\Column(name: 'default_external_eval', type: 'boolean', nullable: true)]
     protected ?bool $defaultExternalEval = null;
 
-    #[ORM\Column(name: 'default_external_eval_prefix', type: 'string', length: 140, nullable: true)]
+    #[ORM\Column(name: 'default_external_eval_prefix', type: 'string', length: 255, nullable: true)]
     protected ?string $defaultExternalEvalPrefix = null;
 
     /**

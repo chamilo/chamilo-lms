@@ -63,6 +63,7 @@ class UpdateCLinkAction extends BaseResourceFileAction
         if (0 !== $categoryId) {
             $linkCategory = $em->getRepository(CLinkCategory::class)->find($categoryId);
             if ($linkCategory) {
+                $this->assertResourceBelongsToCurrentCourse($linkCategory, $cidReqHelper);
                 $link->setCategory($linkCategory);
             }
         }

@@ -787,7 +787,7 @@ class ScormApi
             "olms.suspend_data='".$mysuspend_data."';".
             "olms.total_time = '".$mytotal_time."';".
             "olms.mastery_score = '".$mymastery_score."';".
-            "olms.max_time_allowed = '".$mymax_time_allowed."';".
+            "olms.max_time_allowed = ".json_encode((string) $mymax_time_allowed).";".
             "olms.launch_data = '".$mylaunch_data."';".
             "olms.interactions = new Array(".$myistring.");".
             "olms.item_objectives = new Array();".

@@ -24,6 +24,7 @@ final readonly class OAuthClientRegistrar
     public const string CLIENT_ID_PREFIX = 'chamilo_oauth_client_';
     public const int MAX_REDIRECT_URIS = 5;
     private const int MAX_URI_LENGTH = 512;
+    private const array INFORMATION_URI_FIELDS = ['client_uri', 'logo_uri', 'policy_uri', 'tos_uri'];
     private const array ALLOWED_GRANT_TYPES = ['authorization_code', 'refresh_token'];
     private const array ALLOWED_RESPONSE_TYPES = ['code'];
     private const array ALLOWED_AUTH_METHODS = ['none', 'client_secret_post', 'client_secret_basic'];
@@ -55,14 +56,19 @@ final readonly class OAuthClientRegistrar
         $now = new DateTime();
         $clientId = self::CLIENT_ID_PREFIX.$this->randomToken();
 
+        $informationUris = [];
+        foreach (self::INFORMATION_URI_FIELDS as $field) {
+            $informationUris[$field] = $this->filterHttpsUri($metadata[$field] ?? null);
+        }
+
         $client = (new OAuthClient())
             ->setClientId($clientId)
             ->setTokenEndpointAuthMethod($authMethod)
             ->setClientName($this->truncate($metadata['client_name'] ?? null, 255))
-            ->setClientUri($this->truncate($metadata['client_uri'] ?? null, self::MAX_URI_LENGTH))
-            ->setLogoUri($this->truncate($metadata['logo_uri'] ?? null, self::MAX_URI_LENGTH))
-            ->setPolicyUri($this->truncate($metadata['policy_uri'] ?? null, self::MAX_URI_LENGTH))
-            ->setTosUri($this->truncate($metadata['tos_uri'] ?? null, self::MAX_URI_LENGTH))
+            ->setClientUri($informationUris['client_uri'])
+            ->setLogoUri($informationUris['logo_uri'])
+            ->setPolicyUri($informationUris['policy_uri'])
+            ->setTosUri($informationUris['tos_uri'])
             ->setSoftwareId($this->truncate($metadata['software_id'] ?? null, 255))
             ->setSoftwareVersion($this->truncate($metadata['software_version'] ?? null, 64))
             ->setRedirectUris($redirectUris)
@@ -100,9 +106,17 @@ final readonly class OAuthClientRegistrar
             'scope' => $scope,
         ];
 
-        foreach (['client_name', 'client_uri', 'logo_uri', 'policy_uri', 'tos_uri', 'software_id', 'software_version'] as $field) {
+        foreach (['client_name', 'software_id', 'software_version'] as $field) {
             if (isset($metadata[$field])) {
                 $response[$field] = $metadata[$field];
+            }
+        }
+
+        // RFC 7591 §3.2.1: return the values actually registered, so a client
+        // knows when an information URI was not accepted.
+        foreach ($informationUris as $field => $uri) {
+            if (null !== $uri) {
+                $response[$field] = $uri;
             }
         }
 
@@ -214,6 +228,25 @@ final readonly class OAuthClientRegistrar
     {
         if (!\is_string($value) || !\in_array($value, self::ALLOWED_AUTH_METHODS, true)) {
             throw OAuthException::invalidClientMetadata('Unsupported token_endpoint_auth_method.');
+        }
+
+        return $value;
+    }
+
+    /**
+     * Informational client URIs may end up rendered as links, so only
+     * absolute https URLs are kept; anything else is ignored rather than
+     * failing the whole registration.
+     */
+    private function filterHttpsUri(mixed $value): ?string
+    {
+        if (!\is_string($value) || '' === $value || mb_strlen($value) > self::MAX_URI_LENGTH) {
+            return null;
+        }
+
+        $parts = parse_url($value);
+        if (false === $parts || 'https' !== strtolower($parts['scheme'] ?? '') || '' === ($parts['host'] ?? '')) {
+            return null;
         }
 
         return $value;

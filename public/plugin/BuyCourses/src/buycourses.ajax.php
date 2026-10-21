@@ -714,6 +714,11 @@ switch ($action) {
             break;
         }
 
+        // Opening the sale details is also a safe reconciliation point for old
+        // Stripe subscriptions created before renewal invoices were audited locally.
+        $plugin->reconcileStripeRecurringServiceSale($id, true);
+        $serviceSale = $plugin->getServiceSale($id);
+
         $globalParameters = $plugin->getGlobalParameters();
         $paymentTypeLabels = $plugin->getPaymentTypes();
 
@@ -837,6 +842,55 @@ switch ($action) {
 
         $saleRows[] = ['label' => $plugin->get_lang('Status'), 'value' => (string) $statusLabel];
 
+        $paymentRows = [];
+        $paymentSummary = $plugin->getServiceSalePaymentSummary($serviceSale);
+        $paymentRows[] = [
+            'label' => $plugin->get_lang('TotalCollected'),
+            'value' => $plugin->getPriceWithCurrencyFromIsoCode(
+                (float) ($paymentSummary['total_collected'] ?? 0),
+                $isoCode
+            ),
+        ];
+
+        foreach ($plugin->getServiceSalePaymentEvents($serviceSale) as $paymentEvent) {
+            $paymentGateway = strtolower(trim((string) ($paymentEvent['gateway'] ?? '')));
+            $paymentGatewayLabel = match ($paymentGateway) {
+                'stripe' => 'Stripe',
+                'paypal' => 'PayPal',
+                default => $paymentMethodLabel,
+            };
+            $transactionId = trim((string) ($paymentEvent['transaction_id'] ?? ''));
+            $invoiceId = trim((string) ($paymentEvent['invoice_id'] ?? ''));
+            $paymentCurrency = strtoupper(trim((string) ($paymentEvent['currency'] ?? $isoCode)));
+            $paymentDate = trim((string) ($paymentEvent['date'] ?? ''));
+            $paymentDetails = [
+                [
+                    'label' => $plugin->get_lang('OrderPrice'),
+                    'value' => $plugin->getPriceWithCurrencyFromIsoCode(
+                        (float) ($paymentEvent['amount'] ?? 0),
+                        $paymentCurrency
+                    ),
+                ],
+                ['label' => $plugin->get_lang('PaymentMethod'), 'value' => $paymentGatewayLabel],
+            ];
+
+            if ('' !== $invoiceId) {
+                $paymentDetails[] = ['label' => $plugin->get_lang('Invoice'), 'value' => $invoiceId];
+            }
+
+            if ('' !== $transactionId) {
+                $paymentDetails[] = ['label' => $plugin->get_lang('PaymentId'), 'value' => $transactionId];
+            }
+
+            $paymentRows[] = [
+                'label' => 'initial' === (string) ($paymentEvent['kind'] ?? '')
+                    ? $plugin->get_lang('InitialPayment')
+                    : $plugin->get_lang('AuditActionRenewalPaymentSucceeded'),
+                'meta' => '' !== $paymentDate ? (string) api_get_local_time($paymentDate) : '',
+                'details' => $paymentDetails,
+            ];
+        }
+
         $auditRows = [];
         $auditEntries = $plugin->getAuditEntries(
             BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
@@ -947,6 +1001,7 @@ switch ($action) {
             'sections' => [
                 ['title' => $plugin->get_lang('ServiceInformation'), 'rows' => $serviceRows],
                 ['title' => $plugin->get_lang('SaleInfo'), 'rows' => $saleRows],
+                ['title' => $plugin->get_lang('PaymentHistory'), 'rows' => $paymentRows],
                 ['title' => $plugin->get_lang('AuditHistory'), 'rows' => $auditRows],
             ],
             'actions' => $canCancelServiceRenewal ? [[

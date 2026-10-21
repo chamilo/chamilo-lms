@@ -1,3 +1,14 @@
+v7.14 - 2026-10-21
+
+### Recurring service payment history reconciliation
+
+- Added Stripe invoice-history reconciliation for recurring service sales created before renewal payments were recorded in the BuyCourses audit log.
+- My Services now refreshes Stripe-backed recurring sales before rendering active services and payment history, restoring valid services whose local end date had become stale.
+- The service sales report reconciles stale Stripe recurring sales before calculating Last payment and Total collected.
+- The service-sale administration popup now shows the complete locally known payment history and total collected amount.
+- Reconciliation is idempotent and deduplicates invoices against existing gateway event and transaction identifiers.
+- Historical Stripe payment dates are preserved in the audit log and the current subscription period is synchronized back to the service sale.
+
 v7.13 - 2026-10-20
 
 ### BTCPay Server payments

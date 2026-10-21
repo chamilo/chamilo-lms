@@ -45,6 +45,11 @@ class MyServicesController extends AbstractController
                 $csrfToken = (string) Security::get_token();
             }
 
+            // Legacy recurring subscriptions may have renewals in Stripe that predate
+            // the local payment audit. Reconcile them before building My Services so
+            // active periods and payment history reflect the gateway truth.
+            $plugin->reconcileStripeRecurringServiceSalesForUser($userId);
+
             return new JsonResponse([
                 'activeServices' => $this->normalizeActiveServices(
                     $plugin,

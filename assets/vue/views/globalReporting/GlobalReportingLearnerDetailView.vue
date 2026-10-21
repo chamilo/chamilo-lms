@@ -256,13 +256,26 @@
               :key="skill.id"
               class="rounded-lg border border-gray-25 p-3"
             >
-              <div class="font-semibold text-gray-90">{{ skill.title }}</div>
-              <div
-                v-if="skill.shortCode"
-                class="mt-1 text-sm text-gray-50"
+              <a
+                :href="skillDetailUrl(skill)"
+                :data-testid="`learner-skill-link-${skill.id}`"
+                class="flex items-center gap-3 text-gray-90 hover:text-primary"
               >
-                {{ skill.shortCode }}
-              </div>
+                <img
+                  :src="skill.image"
+                  :alt="skill.title"
+                  class="h-16 w-16 shrink-0 rounded object-contain"
+                />
+                <span class="min-w-0">
+                  <span class="block font-semibold underline">{{ skill.title }}</span>
+                  <span
+                    v-if="skill.shortCode"
+                    class="mt-1 block text-sm text-gray-50"
+                  >
+                    {{ skill.shortCode }}
+                  </span>
+                </span>
+              </a>
               <div
                 v-if="skill.acquiredAt"
                 class="mt-2 text-xs text-gray-50"
@@ -395,6 +408,11 @@ const userId = computed(() => Number(route.params.userId || 0))
 const user = computed(() => report.meta.user || {})
 const bosses = computed(() => report.meta.bosses || [])
 const skills = computed(() => report.meta.skills || [])
+
+function skillDetailUrl(skill) {
+  const origin = `/reporting/learners/${userId.value}`
+  return `/badge/${Number(skill.id)}/user/${userId.value}?origin=${encodeURIComponent(origin)}`
+}
 const backRoute = computed(() => {
   if (route.query.returnTo === "global-reporting-admin-users") {
     return {

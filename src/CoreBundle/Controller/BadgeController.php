@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -25,10 +26,14 @@ class BadgeController extends AbstractController
 
     #[Route('/badge/{skillId}/user/{userId}')]
     #[Route('/skill/{skillId}/user/{userId}', name: 'badge_issued_all')]
-    public function issuedAll(int $skillId, int $userId): Response
+    public function issuedAll(int $skillId, int $userId, Request $request): Response
     {
-        return $this->redirect(
-            '/main/skills/issued_all.php?'.http_build_query(['skill' => $skillId, 'user' => $userId])
-        );
+        $params = ['skill' => $skillId, 'user' => $userId];
+        $reportUrl = '/reporting/learners/'.$userId;
+        if ($reportUrl === $request->query->get('origin')) {
+            $params['origin'] = $reportUrl;
+        }
+
+        return $this->redirect('/main/skills/issued_all.php?'.http_build_query($params));
     }
 }

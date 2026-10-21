@@ -69,6 +69,8 @@ $currentUser = api_get_user_entity();
 
 $allowDownloadExport = false;
 $allowComment = false;
+$showAssignmentAction = api_is_platform_admin(false, true)
+    || (api_is_student_boss() && UserManager::userIsBossOfStudent($currentUserId, $userId));
 if (null !== $currentUser) {
     $allowDownloadExport = $currentUser->getId() === $user->getId() || api_is_platform_admin();
     $allowComment = SkillModel::userCanAddFeedbackToUser($currentUser, $user);
@@ -288,6 +290,9 @@ foreach ($userSkills as $index => $skillRelUser) {
     }
 
     $allUserBadges[$index]['issue_info'] = $skillRelUserInfo;
+    $allUserBadges[$index]['assignment_url'] = $showAssignmentAction && $skillRelUser->isManualAssignment()
+        ? '/skill/assign/'.$userId.'?'.http_build_query(['skillId' => $skillId])
+        : null;
     $allUserBadges[$index]['allow_comment'] = $allowComment;
     $allUserBadges[$index]['allow_download_export'] = $allowDownloadExport;
     $allUserBadges[$index]['comment_form'] = $form->returnForm();

@@ -132,7 +132,16 @@ watch(
 
 <template>
   <div class="flex flex-col gap-6">
-    <SectionHeader :title="t('Assign skill')" />
+    <div class="flex items-center gap-3">
+      <BaseButton
+        :label="t('Back')"
+        icon="back"
+        only-icon
+        type="primary"
+        :route="{ name: 'GlobalReportingLearnerDetail', params: { userId } }"
+      />
+      <SectionHeader :title="t('Assign skill')" />
+    </div>
 
     <BaseCard v-if="context?.user">
       <template #title>

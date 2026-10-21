@@ -7,11 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\GlobalReporting;
 
 use Chamilo\CoreBundle\Controller\LegalAgreementController;
+use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Security\Authorization\LoginAsAuthorizationChecker;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -106,6 +109,8 @@ final readonly class GlobalReportingSectionQueryService
         private UserRepository $userRepository,
         private LoginAsAuthorizationChecker $loginAsAuthorizationChecker,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private SkillRepository $skillRepository,
+        private AssetRepository $assetRepository,
     ) {}
 
     /**
@@ -1426,7 +1431,7 @@ final readonly class GlobalReportingSectionQueryService
             ? ' AND relation_table.status = 1'
             : '';
 
-        return $this->connection->fetchAllAssociative(
+        $rows = $this->connection->fetchAllAssociative(
             'SELECT skill.id,
                     skill.title,
                     skill.short_code AS shortCode,
@@ -1440,6 +1445,39 @@ final readonly class GlobalReportingSectionQueryService
             ['userId' => $userId, 'accessUrlId' => $context->accessUrlId],
             ['userId' => Types::INTEGER, 'accessUrlId' => Types::INTEGER],
         );
+
+        if ([] === $rows) {
+            return [];
+        }
+
+        $skillIds = array_values(array_unique(array_map(static fn (array $row): int => (int) $row['id'], $rows)));
+        $skills = $this->skillRepository->createQueryBuilder('skill')
+            ->leftJoin('skill.asset', 'asset')
+            ->addSelect('asset')
+            ->where('skill.id IN (:ids)')
+            ->setParameter('ids', $skillIds)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $badgeUrls = [];
+        foreach ($skills as $skill) {
+            if (!$skill instanceof Skill) {
+                continue;
+            }
+
+            $asset = $skill->getAsset();
+            if (null !== $asset && $this->assetRepository->assetFileExists($asset)) {
+                $badgeUrls[(int) $skill->getId()] = $this->assetRepository->getAssetUrl($asset);
+            }
+        }
+
+        foreach ($rows as &$row) {
+            $row['image'] = $badgeUrls[(int) $row['id']] ?? '/img/icons/32/badges-default.png';
+        }
+        unset($row);
+
+        return $rows;
     }
 
     /**

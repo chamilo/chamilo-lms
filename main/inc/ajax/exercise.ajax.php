@@ -381,6 +381,13 @@ switch ($action) {
             exit;
         }
 
+        // The attempt must belong to the current user.
+        $reminderStatInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
+        if (empty($reminderStatInfo) || (int) $reminderStatInfo['exe_user_id'] !== (int) api_get_user_id()) {
+            echo 0;
+            exit;
+        }
+
         $option = isset($_GET['option']) ? $_GET['option'] : '';
         switch ($option) {
             case 'add_all':
@@ -555,6 +562,18 @@ switch ($action) {
 
         // Getting information of the current exercise.
         $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
+
+        // The attempt must exist and belong to the current user.
+        if (empty($exercise_stat_info)
+            || (int) $exercise_stat_info['exe_user_id'] !== (int) api_get_user_id()
+        ) {
+            echo json_encode(['error' => true]);
+            if ($debug) {
+                error_log("User ".api_get_user_id()." cannot save attempt #$exeId: not found or not the owner");
+            }
+            exit;
+        }
+
         $exercise_id = $exercise_stat_info['exe_exo_id'];
         $attemptList = [];
         // First time here we create an attempt (getting the exe_id).

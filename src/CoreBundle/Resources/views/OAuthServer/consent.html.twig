@@ -27,6 +27,7 @@
 
             <form method="post" class="mt-6 flex gap-3">
                 <input type="hidden" name="_token" value="{{ csrf_token }}">
+                <input type="hidden" name="request_id" value="{{ request_id }}">
 
                 <button
                         type="submit"

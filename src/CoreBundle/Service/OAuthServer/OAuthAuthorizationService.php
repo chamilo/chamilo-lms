@@ -19,6 +19,8 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
+use const ARRAY_FILTER_USE_BOTH;
+
 /**
  * /oauth/authorize request validation, session stash/pop, and one-time code
  * issuance. Consent is always shown — there is no auto-approve path anywhere
@@ -28,8 +30,9 @@ final readonly class OAuthAuthorizationService
 {
     public const int CODE_TTL_SECONDS = 120;
     public const int PENDING_REQUEST_TTL_SECONDS = 600;
-    public const string SESSION_KEY = '_oauth_authorize_request';
+    public const string SESSION_KEY = '_oauth_authorize_requests';
     public const string SCOPE = 'mcp';
+    public const int MAX_PENDING_REQUESTS = 10;
 
     public function __construct(
         private OAuthClientResolver $clientResolver,
@@ -102,18 +105,44 @@ final readonly class OAuthAuthorizationService
         );
     }
 
-    public function stashInSession(Request $request, OAuthAuthorizeRequest $authorizeRequest): void
+    /**
+     * Stores the pending request under a fresh random identifier and returns
+     * it. The consent form must send that identifier back, so the approval
+     * only ever applies to the request that was displayed, even when several
+     * authorize requests are pending in the same session.
+     */
+    public function stashInSession(Request $request, OAuthAuthorizeRequest $authorizeRequest): string
     {
-        $request->getSession()->set(self::SESSION_KEY, $authorizeRequest);
+        $now = time();
+        $pending = array_filter(
+            $this->getPendingRequests($request),
+            static fn (OAuthAuthorizeRequest $item): bool => !$item->isStale($now, self::PENDING_REQUEST_TTL_SECONDS),
+        );
+
+        $requestId = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
+        $pending[$requestId] = $authorizeRequest;
+
+        $request->getSession()->set(
+            self::SESSION_KEY,
+            \array_slice($pending, -self::MAX_PENDING_REQUESTS, null, true),
+        );
+
+        return $requestId;
     }
 
-    public function popFromSession(Request $request): ?OAuthAuthorizeRequest
+    public function popFromSession(Request $request, string $requestId): ?OAuthAuthorizeRequest
     {
-        $session = $request->getSession();
-        $pending = $session->get(self::SESSION_KEY);
-        $session->remove(self::SESSION_KEY);
+        $pending = $this->getPendingRequests($request);
+        $authorizeRequest = $pending[$requestId] ?? null;
 
-        return $pending instanceof OAuthAuthorizeRequest ? $pending : null;
+        if (null === $authorizeRequest) {
+            return null;
+        }
+
+        unset($pending[$requestId]);
+        $request->getSession()->set(self::SESSION_KEY, $pending);
+
+        return $authorizeRequest;
     }
 
     public function assertUserActiveOnCurrentPortal(User $user): bool
@@ -170,6 +199,23 @@ final readonly class OAuthAuthorizationService
         $this->entityManager->flush();
 
         return $plainCode;
+    }
+
+    /**
+     * @return array<string, OAuthAuthorizeRequest>
+     */
+    private function getPendingRequests(Request $request): array
+    {
+        $pending = $request->getSession()->get(self::SESSION_KEY);
+        if (!\is_array($pending)) {
+            return [];
+        }
+
+        return array_filter(
+            $pending,
+            static fn (mixed $item, mixed $key): bool => \is_string($key) && $item instanceof OAuthAuthorizeRequest,
+            ARRAY_FILTER_USE_BOTH,
+        );
     }
 
     /**

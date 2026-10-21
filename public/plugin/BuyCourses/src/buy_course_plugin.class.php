@@ -62,6 +62,7 @@ class BuyCoursesPlugin extends Plugin
     public const TABLE_COUPON_SERVICE_SALE = 'plugin_buycourses_coupon_rel_service_sale';
     public const TABLE_COUPON_SUBSCRIPTION_SALE = 'plugin_buycourses_coupon_rel_subscription_sale';
     public const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
+    public const TABLE_BTCPAY = 'plugin_buycourses_btcpay_account';
     public const TABLE_TPV_CECABANK = 'plugin_buycourses_cecabank_account';
     public const PRODUCT_TYPE_COURSE = 1;
     public const PRODUCT_TYPE_SESSION = 2;
@@ -476,6 +477,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_COUPON_SERVICE_SALE,
             self::TABLE_COUPON_SUBSCRIPTION_SALE,
             self::TABLE_STRIPE,
+            self::TABLE_BTCPAY,
             self::TABLE_TPV_CECABANK,
         ];
     }
@@ -1023,6 +1025,27 @@ class BuyCoursesPlugin extends Plugin
                 'account_id' => '',
                 'secret_key' => '',
                 'endpoint_secret' => '',
+            ]);
+        }
+
+        $table = Database::get_main_table(self::TABLE_BTCPAY);
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            server_url varchar(2048) NOT NULL,
+            store_id varchar(255) NOT NULL,
+            api_key varchar(512) NOT NULL,
+            webhook_secret varchar(255) NOT NULL,
+            PRIMARY KEY (id)
+        )";
+        Database::query($sql);
+
+        $res = Database::query("SELECT id FROM $table LIMIT 1");
+        if (0 === Database::num_rows($res)) {
+            Database::insert($table, [
+                'server_url' => '',
+                'store_id' => '',
+                'api_key' => '',
+                'webhook_secret' => '',
             ]);
         }
 
@@ -2488,7 +2511,7 @@ class BuyCoursesPlugin extends Plugin
 
         if ($btcpay) {
             require_once __DIR__.'/btcpay_client.php';
-            $btcpay = BuyCoursesBtcPayClient::isConfigured();
+            $btcpay = BuyCoursesBtcPayClient::isConfigured($this);
         }
         $culqi = 'true' === $this->get('culqi_enable');
         $cecabank = 'true' === $this->get('cecabank_enable');
@@ -2705,6 +2728,95 @@ class BuyCoursesPlugin extends Plugin
             ['id = ?' => 1],
             'first'
         );
+    }
+
+    /**
+     * Save BTCPay Server configuration params.
+     *
+     * Empty secret fields keep the currently stored value so administrators do
+     * not need to re-enter credentials when changing only the URL or Store ID.
+     */
+    public function saveBtcPayParameters(array $params): int
+    {
+        $this->ensureBtcPayAccountTable();
+        $current = $this->getBtcPayParams();
+
+        $apiKey = trim((string) ($params['api_key'] ?? ''));
+        $webhookSecret = trim((string) ($params['webhook_secret'] ?? ''));
+
+        if ('' === $apiKey) {
+            $apiKey = trim((string) ($current['api_key'] ?? ''));
+        }
+
+        if ('' === $webhookSecret) {
+            $webhookSecret = trim((string) ($current['webhook_secret'] ?? ''));
+        }
+
+        return Database::update(
+            Database::get_main_table(self::TABLE_BTCPAY),
+            [
+                'server_url' => rtrim(trim((string) ($params['server_url'] ?? '')), '/'),
+                'store_id' => trim((string) ($params['store_id'] ?? '')),
+                'api_key' => $apiKey,
+                'webhook_secret' => $webhookSecret,
+            ],
+            ['id = ?' => 1]
+        );
+    }
+
+    /**
+     * Gets the stored BTCPay Server params.
+     */
+    public function getBtcPayParams(): array
+    {
+        if (!$this->hasPluginTable(self::TABLE_BTCPAY)) {
+            return [
+                'id' => 0,
+                'server_url' => '',
+                'store_id' => '',
+                'api_key' => '',
+                'webhook_secret' => '',
+            ];
+        }
+
+        $params = Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_BTCPAY),
+            ['id = ?' => 1],
+            'first'
+        );
+
+        return is_array($params) ? $params : [];
+    }
+
+    private function ensureBtcPayAccountTable(): void
+    {
+        $table = Database::get_main_table(self::TABLE_BTCPAY);
+        $connection = Database::getManager()->getConnection();
+        $schemaManager = $connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist($table)) {
+            Database::query(
+                "CREATE TABLE $table (
+                    id int unsigned NOT NULL AUTO_INCREMENT,
+                    server_url varchar(2048) NOT NULL,
+                    store_id varchar(255) NOT NULL,
+                    api_key varchar(512) NOT NULL,
+                    webhook_secret varchar(255) NOT NULL,
+                    PRIMARY KEY (id)
+                )"
+            );
+        }
+
+        $res = Database::query("SELECT id FROM $table LIMIT 1");
+        if (0 === Database::num_rows($res)) {
+            Database::insert($table, [
+                'server_url' => '',
+                'store_id' => '',
+                'api_key' => '',
+                'webhook_secret' => '',
+            ]);
+        }
     }
 
     /**
@@ -3611,7 +3723,7 @@ class BuyCoursesPlugin extends Plugin
         if (self::PAYMENT_TYPE_BTCPAY === $paymentType) {
             require_once __DIR__.'/btcpay_client.php';
 
-            if ('true' !== $this->get('btcpay_enable') || !BuyCoursesBtcPayClient::isConfigured()) {
+            if ('true' !== $this->get('btcpay_enable') || !BuyCoursesBtcPayClient::isConfigured($this)) {
                 return null;
             }
         }
@@ -3880,7 +3992,15 @@ class BuyCoursesPlugin extends Plugin
         switch ($sale['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
                 $course = api_get_course_info_by_id($sale['product_id']);
-                $saleIsCompleted = CourseManager::subscribeUser($sale['user_id'], $course['code']);
+
+                if (empty($course) || empty($course['real_id'])) {
+                    return false;
+                }
+
+                $saleIsCompleted = CourseManager::subscribeUser(
+                    (int) $sale['user_id'],
+                    (int) $course['real_id']
+                );
 
                 break;
 
@@ -3967,7 +4087,7 @@ class BuyCoursesPlugin extends Plugin
         } else {
             require_once __DIR__.'/btcpay_client.php';
 
-            if (!BuyCoursesBtcPayClient::isConfigured()) {
+            if (!BuyCoursesBtcPayClient::isConfigured($this)) {
                 unset($types[self::PAYMENT_TYPE_BTCPAY]);
             }
         }

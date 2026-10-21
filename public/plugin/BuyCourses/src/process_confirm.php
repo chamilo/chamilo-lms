@@ -554,7 +554,7 @@ switch ($sale['payment_type']) {
 
         if (
             'true' !== $plugin->get('btcpay_enable')
-            || !BuyCoursesBtcPayClient::isConfigured()
+            || !BuyCoursesBtcPayClient::isConfigured($plugin)
             || BuyCoursesPlugin::SALE_STATUS_PENDING !== (int) $sale['status']
             || !in_array(
                 (int) $sale['product_type'],
@@ -589,6 +589,9 @@ switch ($sale['payment_type']) {
         $formValues = $btcpayForm->getSubmitValues();
 
         if (isset($formValues['cancel'])) {
+            // Once an external BTCPay invoice exists it may still receive a payment,
+            // so do not mark the local sale as cancelled merely because the user
+            // closed the confirmation page.
             if (!str_starts_with((string) $sale['reference'], 'btcpay:')) {
                 $plugin->cancelSale($saleId);
             }
@@ -606,15 +609,17 @@ switch ($sale['payment_type']) {
         }
 
         try {
-            $btcpay = BuyCoursesBtcPayClient::fromEnvironment();
+            $btcpay = BuyCoursesBtcPayClient::fromPlugin($plugin);
             $connection = Database::getManager()->getConnection();
             $lockName = 'bc_btcpay_sale_'.$saleId;
-
-            if ('1' !== (string) $connection->fetchOne('SELECT GET_LOCK(?, 5)', [$lockName])) {
-                throw new RuntimeException('BTCPay checkout is already starting for this sale.');
-            }
+            $locked = false;
 
             try {
+                $locked = '1' === (string) $connection->fetchOne('SELECT GET_LOCK(?, 5)', [$lockName]);
+                if (!$locked) {
+                    throw new RuntimeException('BTCPay checkout is already starting for this sale.');
+                }
+
                 $sale = $plugin->getSale($saleId);
 
                 if (
@@ -630,8 +635,8 @@ switch ($sale['payment_type']) {
                 if (str_starts_with($existingReference, 'btcpay:')) {
                     $invoice = $btcpay->getInvoice(substr($existingReference, 7));
 
-                    if (!in_array((string) ($invoice['status'] ?? ''), ['New', 'Processing', 'Settled'], true)) {
-                        throw new RuntimeException('Existing BTCPay invoice is no longer payable.');
+                    if (!$btcpay->invoiceBelongsToSale($invoice, $sale, (string) $currency['iso_code'])) {
+                        throw new RuntimeException('Existing BTCPay invoice does not match the local sale.');
                     }
                 } else {
                     $returnUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/btcpay_return.php?sale_id='.$saleId;
@@ -640,9 +645,49 @@ switch ($sale['payment_type']) {
                     if (!$plugin->updateSaleReference($saleId, 'btcpay:'.$invoice['id'])) {
                         throw new RuntimeException('Could not save the BTCPay invoice reference.');
                     }
+
+                    $sale['reference'] = 'btcpay:'.$invoice['id'];
                 }
             } finally {
-                $connection->fetchOne('SELECT RELEASE_LOCK(?)', [$lockName]);
+                if ($locked) {
+                    $connection->fetchOne('SELECT RELEASE_LOCK(?)', [$lockName]);
+                }
+            }
+
+            if ($btcpay->isInvoiceReadyForFulfillment($invoice)) {
+                if (!$btcpay->fulfillSale($plugin, $sale, $invoice, (string) $currency['iso_code'])) {
+                    error_log('[BuyCourses][BTCPay] Settled invoice could not be fulfilled for sale '.$saleId.'.');
+                    Display::addFlash(
+                        Display::return_message($plugin->get_lang('BtcPayNeedsReviewMessage'), 'warning', false)
+                    );
+                    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
+                    exit;
+                }
+
+                header(
+                    'Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/btcpay_return.php?sale_id='.$saleId,
+                    true,
+                    303
+                );
+                exit;
+            }
+
+            if ($btcpay->isInvoiceExpiredWithoutPayment($invoice)) {
+                $plugin->cancelSale($saleId);
+                unset($_SESSION['bc_sale_id'], $_SESSION['bc_coupon_id']);
+                Display::addFlash(
+                    Display::return_message($plugin->get_lang('BtcPayExpiredMessage'), 'warning', false)
+                );
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
+                exit;
+            }
+
+            if (!$btcpay->isInvoicePayableOrProcessing($invoice)) {
+                Display::addFlash(
+                    Display::return_message($plugin->get_lang('BtcPayNeedsReviewMessage'), 'warning', false)
+                );
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
+                exit;
             }
 
             $checkoutLink = (string) ($invoice['checkoutLink'] ?? '');

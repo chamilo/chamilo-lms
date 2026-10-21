@@ -21,6 +21,10 @@ $culqiEnabled = 'true' === $plugin->get('culqi_enable');
 $tpvRedsysEnable = 'true' === $plugin->get('tpv_redsys_enable');
 $stripeEnable = 'true' === $plugin->get('stripe_enable');
 $btcpayEnable = 'true' === $plugin->get('btcpay_enable');
+if ($btcpayEnable) {
+    require_once __DIR__.'/btcpay_client.php';
+    $btcpayEnable = BuyCoursesBtcPayClient::isConfigured($plugin);
+}
 $tpvCecabankEnable = 'true' === $plugin->get('cecabank_enable');
 
 $registrationUrl = api_get_path(WEB_CODE_PATH).'auth/registration.php';
@@ -310,9 +314,10 @@ $tpl->assign('form_coupon', $formCoupon->returnForm());
 $tpl->assign('form', $form->returnForm());
 
 if ($buyingCourse) {
-    $tpl->assign('course', $courseInfo);
+    // Avoid overriding the global `course` template variable used by the core layout.
+    $tpl->assign('buy_course', $courseInfo);
 } elseif ($buyingSession) {
-    $tpl->assign('session', $sessionInfo);
+    $tpl->assign('buy_session', $sessionInfo);
 }
 
 $content = $tpl->fetch('BuyCourses/view/process.tpl');

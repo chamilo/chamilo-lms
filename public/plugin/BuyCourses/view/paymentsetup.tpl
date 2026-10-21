@@ -424,17 +424,89 @@
     {% if btcpay_enable %}
     <section id="btcpay-config" class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm">
         <div class="border-b border-gray-25 bg-gray-15 px-6 py-4">
-            <h2 class="text-lg font-semibold text-gray-90">BTCPay Server</h2>
+            <div class="space-y-1">
+                <h2 class="text-lg font-semibold text-gray-90">BTCPay Server</h2>
+                <p class="text-sm text-gray-50">
+                    {{ 'BtcPaySetupHelp'|get_plugin_lang('BuyCoursesPlugin') }}
+                </p>
+            </div>
         </div>
-        <div class="space-y-4 p-6">
-            <p class="text-sm leading-6 text-gray-90">
-                {{ 'BtcPaySetupHelp'|get_plugin_lang('BuyCoursesPlugin') }}
-            </p>
-            <p class="text-sm font-semibold {{ btcpay_configured ? 'text-success' : 'text-danger' }}">
-                {{ (btcpay_configured ? 'BtcPayReady' : 'BtcPayNotReady')|get_plugin_lang('BuyCoursesPlugin') }}
-            </p>
+
+        <div class="grid gap-6 p-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+            <aside class="space-y-4 rounded-2xl border border-gray-25 bg-support-2 p-5 text-sm leading-6 text-gray-90">
+                <p>{{ 'BtcPayPermissionsHelp'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+
+                <div>
+                    <div class="font-semibold text-gray-90">
+                        {{ 'BtcPayWebhookUrl'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </div>
+                    <div class="mt-2 flex items-start gap-2">
+                        <code id="btcpay-webhook-url" class="min-w-0 flex-1 break-all rounded-xl border border-gray-25 bg-white px-3 py-2 text-xs text-gray-70">{{ btcpay_webhook_url|e }}</code>
+                        <button
+                            type="button"
+                            id="btcpay-copy-webhook"
+                            class="inline-flex shrink-0 items-center justify-center rounded-xl border border-gray-25 bg-white px-3 py-2 text-sm font-semibold text-gray-90 transition hover:bg-gray-15"
+                        >
+                            {{ 'BtcPayCopyWebhookUrl'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </button>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-50">
+                        {{ 'BtcPayWebhookPublicHelp'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </p>
+                </div>
+
+                {% if btcpay_connection_test_result %}
+                    <div class="rounded-xl border p-3 {{ btcpay_connection_test_result.type == 'success' ? 'border-success/30 bg-success/5 text-success' : 'border-danger/30 bg-danger/5 text-danger' }}">
+                        <div class="font-semibold">
+                            {{ btcpay_connection_test_result.message|e }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="rounded-xl border border-gray-25 bg-white p-3">
+                    <span class="font-semibold {{ btcpay_configured ? 'text-success' : 'text-danger' }}">
+                        {{ (btcpay_configured ? 'BtcPayReady' : 'BtcPayNotReady')|get_plugin_lang('BuyCoursesPlugin') }}
+                    </span>
+                </div>
+            </aside>
+
+            <div class="space-y-3">
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <span class="rounded-full border px-3 py-1 font-semibold {{ btcpay_api_key_saved ? 'border-success/30 bg-success/5 text-success' : 'border-gray-25 bg-gray-15 text-gray-50' }}">
+                        {{ (btcpay_api_key_saved ? 'BtcPayApiKeySaved' : 'BtcPayApiKeyNotSaved')|get_plugin_lang('BuyCoursesPlugin') }}
+                    </span>
+                    <span class="rounded-full border px-3 py-1 font-semibold {{ btcpay_webhook_secret_saved ? 'border-success/30 bg-success/5 text-success' : 'border-gray-25 bg-gray-15 text-gray-50' }}">
+                        {{ (btcpay_webhook_secret_saved ? 'BtcPayWebhookSecretSaved' : 'BtcPayWebhookSecretNotSaved')|get_plugin_lang('BuyCoursesPlugin') }}
+                    </span>
+                </div>
+                {{ btcpay_form }}
+            </div>
         </div>
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const button = document.getElementById('btcpay-copy-webhook');
+            const value = document.getElementById('btcpay-webhook-url');
+
+            if (!button || !value || !navigator.clipboard) {
+                return;
+            }
+
+            button.addEventListener('click', async function () {
+                try {
+                    await navigator.clipboard.writeText(value.textContent.trim());
+                    const originalText = button.textContent;
+                    button.textContent = {{ 'BtcPayWebhookUrlCopied'|get_plugin_lang('BuyCoursesPlugin')|json_encode|raw }};
+                    window.setTimeout(function () {
+                        button.textContent = originalText;
+                    }, 1800);
+                } catch (error) {
+                    // The URL remains visible so it can still be copied manually.
+                }
+            });
+        });
+    </script>
     {% endif %}
 
     {% if cecabank_enable %}

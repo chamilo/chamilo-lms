@@ -48,20 +48,20 @@
                     {% if buying_course %}
                     <a
                             class="ajax block h-full w-full"
-                            data-title="{{ course.title }}"
-                            href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}"
+                            data-title="{{ buy_course.title }}"
+                            href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': buy_course.code}|url_encode() }}"
                     >
                         <img
-                                alt="{{ course.title }}"
+                                alt="{{ buy_course.title }}"
                                 class="h-full w-full object-cover"
-                                src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}"
+                                src="{{ buy_course.course_img ? buy_course.course_img : 'session_default.png'|icon() }}"
                         >
                     </a>
                     {% elseif buying_session %}
                     <img
-                            alt="{{ session.title }}"
+                            alt="{{ buy_session.title }}"
                             class="h-full w-full object-cover"
-                            src="{{ session.image ? session.image : 'session_default.png'|icon() }}"
+                            src="{{ buy_session.image ? buy_session.image : 'session_default.png'|icon() }}"
                     >
                     {% endif %}
                 </div>
@@ -69,33 +69,33 @@
                 <div class="space-y-4 p-6">
                     <div class="grid gap-3">
                         {% if buying_course %}
-                        {% if course.tax_enable %}
+                        {% if buy_course.tax_enable %}
                         <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
                             <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
                                 {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
                             <div class="mt-1 text-base font-semibold text-gray-90">
-                                {{ course.item.price_formatted }}
+                                {{ buy_course.item.price_formatted }}
                             </div>
                         </div>
 
                         <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
                             <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
-                                {{ course.tax_name }}
+                                {{ buy_course.tax_name }}
                             </div>
                             <div class="mt-1 text-base font-semibold text-gray-90">
-                                {{ course.item.tax_amount_formatted }} ({{ course.item.tax_perc_show }}%)
+                                {{ buy_course.item.tax_amount_formatted }} ({{ buy_course.item.tax_perc_show }}%)
                             </div>
                         </div>
                         {% endif %}
 
-                        {% if course.item.has_coupon %}
+                        {% if buy_course.item.has_coupon %}
                         <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
                             <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
                                 {{ 'DiscountAmount'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
                             <div class="mt-1 text-base font-semibold text-gray-90">
-                                {{ course.item.discount_amount_formatted }}
+                                {{ buy_course.item.discount_amount_formatted }}
                             </div>
                         </div>
                         {% endif %}
@@ -105,37 +105,37 @@
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
                             <div class="mt-1 text-xl font-semibold text-gray-90">
-                                {{ course.item.total_price_formatted }}
+                                {{ buy_course.item.total_price_formatted }}
                             </div>
                         </div>
                         {% elseif buying_session %}
-                        {% if session.tax_enable %}
+                        {% if buy_session.tax_enable %}
                         <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
                             <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
                                 {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
                             <div class="mt-1 text-base font-semibold text-gray-90">
-                                {{ session.item.price_formatted }}
+                                {{ buy_session.item.price_formatted }}
                             </div>
                         </div>
 
                         <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
                             <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
-                                {{ session.tax_name }}
+                                {{ buy_session.tax_name }}
                             </div>
                             <div class="mt-1 text-base font-semibold text-gray-90">
-                                {{ session.item.tax_amount_formatted }} ({{ session.item.tax_perc_show }}%)
+                                {{ buy_session.item.tax_amount_formatted }} ({{ buy_session.item.tax_perc_show }}%)
                             </div>
                         </div>
                         {% endif %}
 
-                        {% if session.item.has_coupon %}
+                        {% if buy_session.item.has_coupon %}
                         <div class="rounded-2xl border border-gray-25 bg-support-2 p-4">
                             <div class="text-xs font-semibold uppercase tracking-wide text-gray-50">
                                 {{ 'DiscountAmount'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
                             <div class="mt-1 text-base font-semibold text-gray-90">
-                                {{ session.item.discount_amount_formatted }}
+                                {{ buy_session.item.discount_amount_formatted }}
                             </div>
                         </div>
                         {% endif %}
@@ -145,7 +145,7 @@
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
                             <div class="mt-1 text-xl font-semibold text-gray-90">
-                                {{ session.item.total_price_formatted }}
+                                {{ buy_session.item.total_price_formatted }}
                             </div>
                         </div>
                         {% endif %}
@@ -185,22 +185,22 @@
                                 <h3 class="text-2xl font-semibold tracking-tight text-gray-90">
                                     <a
                                             class="ajax transition hover:text-primary"
-                                            data-title="{{ course.title }}"
-                                            href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}"
+                                            data-title="{{ buy_course.title }}"
+                                            href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': buy_course.code}|url_encode() }}"
                                     >
-                                        {{ course.title }}
+                                        {{ buy_course.title }}
                                     </a>
                                 </h3>
 
                                 <div class="flex flex-wrap gap-2">
-                                    {% if course.code %}
+                                    {% if buy_course.code %}
                                     <span class="inline-flex items-center rounded-full bg-support-1 px-3 py-1 text-xs font-semibold text-support-4">
-                                                {{ course.code }}
+                                                {{ buy_course.code }}
                                             </span>
                                     {% endif %}
-                                    {% if course.visual_code %}
+                                    {% if buy_course.visual_code %}
                                     <span class="inline-flex items-center rounded-full bg-gray-20 px-3 py-1 text-xs font-semibold text-gray-90">
-                                                {{ course.visual_code }}
+                                                {{ buy_course.visual_code }}
                                             </span>
                                     {% endif %}
                                 </div>
@@ -211,19 +211,19 @@
                                 </span>
                         </div>
 
-                        {% if course.description %}
+                        {% if buy_course.description %}
                         <div class="rounded-2xl border border-gray-25 bg-white p-5 text-sm leading-6 text-gray-90 shadow-sm">
-                            {{ course.description }}
+                            {{ buy_course.description }}
                         </div>
                         {% endif %}
 
-                        {% if course.teachers %}
+                        {% if buy_course.teachers %}
                         <div class="rounded-2xl border border-gray-25 bg-support-2 p-5">
                             <div class="mb-3 text-sm font-semibold text-gray-90">
                                 {{ 'Teachers'|get_plugin_lang('BuyCoursesPlugin') }}
                             </div>
                             <div class="flex flex-wrap gap-2">
-                                {% for teacher in course.teachers %}
+                                {% for teacher in buy_course.teachers %}
                                 <a
                                         href="{{ url('index') ~ 'main/social/profile.php?u=' ~ teacher.id }}"
                                         class="inline-flex items-center gap-2 rounded-full border border-gray-25 bg-white px-3 py-2 text-sm font-medium text-gray-90 transition hover:border-primary/30 hover:text-primary"
@@ -241,13 +241,13 @@
                         <div class="flex flex-wrap items-start justify-between gap-4">
                             <div class="space-y-2">
                                 <h3 class="text-2xl font-semibold tracking-tight text-gray-90">
-                                    {{ session.title }}
+                                    {{ buy_session.title }}
                                 </h3>
 
-                                {% if session.dates.display %}
+                                {% if buy_session.dates.display %}
                                 <div class="inline-flex items-center gap-2 rounded-full bg-support-1 px-3 py-1 text-sm font-medium text-support-4">
                                     <em class="mdi mdi-calendar"></em>
-                                    {{ session.dates.display }}
+                                    {{ buy_session.dates.display }}
                                 </div>
                                 {% endif %}
                             </div>
@@ -257,20 +257,20 @@
                                 </span>
                         </div>
 
-                        {% if session.description %}
+                        {% if buy_session.description %}
                         <div class="rounded-2xl border border-gray-25 bg-white p-5 text-sm leading-6 text-gray-90 shadow-sm">
-                            {{ session.description }}
+                            {{ buy_session.description }}
                         </div>
                         {% endif %}
 
-                        {% if session.courses %}
+                        {% if buy_session.courses %}
                         <div class="rounded-2xl border border-gray-25 bg-support-2 p-5">
                             <div class="mb-4 text-sm font-semibold text-gray-90">
                                 {{ 'Courses'|get_lang }}
                             </div>
 
                             <div class="space-y-4">
-                                {% for course in session.courses %}
+                                {% for session_course in buy_session.courses %}
                                 <div class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">
                                     <div class="flex items-start gap-3">
                                         <div class="mt-1 text-primary">
@@ -278,12 +278,12 @@
                                         </div>
                                         <div class="min-w-0 flex-1 space-y-2">
                                             <div class="text-base font-semibold text-gray-90">
-                                                {{ course.title }}
+                                                {{ session_course.title }}
                                             </div>
 
-                                            {% if course.coaches|length %}
+                                            {% if session_course.coaches|length %}
                                             <div class="flex flex-wrap gap-2">
-                                                {% for coach in course.coaches %}
+                                                {% for coach in session_course.coaches %}
                                                 <a
                                                         href="{{ url('index') ~ 'main/social/profile.php?u=' ~ coach.id }}"
                                                         class="inline-flex items-center gap-2 rounded-full border border-gray-25 bg-support-2 px-3 py-2 text-sm font-medium text-gray-90 transition hover:border-primary/30 hover:text-primary"

@@ -1,3 +1,16 @@
+v7.13 - 2026-10-20
+
+### BTCPay Server payments
+
+- Added BTCPay Server as an optional payment gateway for course and session purchases.
+- BTCPay credentials are configured from the BuyCourses payments page, like the existing Stripe/PayPal gateways.
+- Added a connection test, webhook URL helper, signed webhook verification, invoice reconciliation and idempotent fulfillment.
+- Settled payments grant access only after the invoice amount, currency, store and BuyCourses order metadata match.
+- Explicit BTCPay administrator settlement (`Settled` + `Marked`) is accepted after the same store/order/amount/currency verification; late and partial payments remain manual-review cases.
+- Expired/invalid invoices are reconciled without granting access, and exceptional late-payment states require manual review.
+
+ACTION REQUIRED for installations updated from an earlier version: run the BuyCourses update procedure once so the new `plugin_buycourses_btcpay_account` table is created. Either load `[your-host]/plugin/BuyCourses/update.php` as a platform administrator or save the BTCPay configuration from the payments page (which also ensures the table exists).
+
 v7.12 - 2026-08-20
 
 ### Reports and export UI cleanup

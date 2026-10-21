@@ -114,7 +114,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
             "olms.suspend_data='".$mysuspend_data."';".
             "olms.total_time = '".$mytotal_time."';".
             "olms.mastery_score = '".$mymastery_score."';".
-            "olms.max_time_allowed = '".$mymax_time_allowed."';".
+            "olms.max_time_allowed = ".json_encode((string) $mymax_time_allowed, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT).";".
             "olms.launch_data = '".$mylaunch_data."';".
             "olms.interactions = new Array(".$myistring.");".
             //"olms.item_objectives = new Array();" .

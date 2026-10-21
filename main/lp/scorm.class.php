@@ -473,52 +473,51 @@ class scorm extends learnpath
                     }
                 }
                 $level = $item['level'];
-                $field_add = '';
-                $value_add = '';
+                $params = [];
 
                 if (!empty($item['masteryscore'])) {
-                    $field_add .= 'mastery_score, ';
-                    $value_add .= $item['masteryscore'].',';
+                    $params['mastery_score'] = (float) $item['masteryscore'];
                 }
 
                 if (!empty($item['maxtimeallowed'])) {
-                    $field_add .= 'max_time_allowed, ';
-                    $value_add .= "'".$item['maxtimeallowed']."',";
+                    $params['max_time_allowed'] = $item['maxtimeallowed'];
                 }
-                $title = Database::escape_string($item['title']);
-                $title = api_utf8_decode($title);
+
+                $title = api_utf8_decode($item['title']);
                 $max_score = (int) $item['max_score'];
 
                 if ($max_score === 0) {
                     // If max score is not set The use_max_score parameter
                     // is check in order to use 100 (chamilo style) or '' (strict scorm)
-                    $max_score = 'NULL';
-                    if ($userMaxScore) {
-                        $max_score = 100;
-                    }
-                } else {
-                    // Otherwise save the max score.
-                    $max_score = "'$max_score'";
+                    $max_score = $userMaxScore ? 100 : null;
                 }
-
-                $identifier = Database::escape_string($item['identifier']);
 
                 if (empty($title)) {
                     $title = get_lang('Untitled');
                 }
 
-                $prereq = Database::escape_string($item['prerequisites']);
-                $item['datafromlms'] = Database::escape_string($item['datafromlms']);
-                $item['parameters'] = Database::escape_string($item['parameters']);
+                $params = array_merge(
+                    [
+                        'c_id' => $courseId,
+                        'lp_id' => $newScorm->getIid(),
+                        'item_type' => $type,
+                        'ref' => $item['identifier'],
+                        'title' => $title,
+                        'path' => $path,
+                        'min_score' => 0,
+                        'max_score' => $max_score,
+                        'parent_item_id' => (int) $parent,
+                        'previous_item_id' => (int) $previous,
+                        'next_item_id' => 0,
+                        'prerequisite' => $item['prerequisites'],
+                        'display_order' => (int) $item['rel_order'],
+                        'launch_data' => $item['datafromlms'],
+                        'parameters' => $item['parameters'],
+                    ],
+                    $params
+                );
 
-                $sql = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters)
-                        VALUES ($courseId, {$newScorm->getIid()}, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'].", '".$item['datafromlms']."', '".$item['parameters']."' )";
-
-                Database::query($sql);
-                if ($this->debug > 1) {
-                    error_log('New LP - In import_manifest(), inserting item : '.$sql);
-                }
-                $item_id = Database::insert_id();
+                $item_id = Database::insert($new_lp_item, $params);
 
                 if ($item_id) {
                     $sql = "UPDATE $new_lp_item SET id = iid WHERE iid = $item_id";

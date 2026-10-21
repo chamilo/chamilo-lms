@@ -5,22 +5,6 @@
       :title="t('Microsoft Teams')"
     >
       <BaseButton
-        v-if="isCourseScope && collection.personalEnabled"
-        :label="t('Personal conferences')"
-        icon="account"
-        only-icon
-        :route="{ name: 'TeamsHubList', query: { scope: 'personal' } }"
-        type="black"
-      />
-      <BaseButton
-        v-if="isCourseScope && collection.globalEnabled"
-        :label="t('Global conferences')"
-        icon="globe"
-        only-icon
-        :route="{ name: 'TeamsHubList', query: { scope: 'global' } }"
-        type="black"
-      />
-      <BaseButton
         v-if="canCreate"
         :label="t('Start meeting')"
         icon="camera"
@@ -78,7 +62,7 @@
         <div>
           <h2 class="text-lg font-semibold text-gray-90">{{ t("Upcoming conferences") }}</h2>
           <p class="text-sm text-gray-50">
-            {{ t("{0} conference(s)", [collection.totalUpcoming]) }}
+            {{ conferenceCountLabel(collection.totalUpcoming) }}
           </p>
         </div>
       </div>
@@ -193,7 +177,7 @@
       <div>
         <h2 class="text-lg font-semibold text-gray-90">{{ t("Past conferences") }}</h2>
         <p class="text-sm text-gray-50">
-          {{ t("{0} conference(s)", [collection.totalPast]) }}
+          {{ conferenceCountLabel(collection.totalPast) }}
         </p>
       </div>
 
@@ -431,6 +415,10 @@ function switchScope(nextScope) {
     name: "TeamsHubList",
     query: { ...route.query, scope: nextScope },
   })
+}
+
+function conferenceCountLabel(count) {
+  return count === 1 ? t("{0} conference", [count]) : t("{0} conferences", [count])
 }
 
 function formatMeetingDate(value) {

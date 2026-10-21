@@ -41950,3 +41950,117 @@ msgstr "No payments yet"
 
 msgid "Cancel service"
 msgstr "Cancel service"
+
+msgid "A valid start and end date are required."
+msgstr "A valid start and end date are required."
+
+msgid "Are you sure you want to cancel \"%s\"?"
+msgstr "Are you sure you want to cancel \"%s\"?"
+
+msgid "Cancel meeting"
+msgstr "Cancel meeting"
+
+msgid "Copy meeting link"
+msgstr "Copy meeting link"
+
+msgid "Create a course announcement for this meeting"
+msgstr "Create a course announcement for this meeting"
+
+msgid "Edit Microsoft Teams meeting"
+msgstr "Edit Microsoft Teams meeting"
+
+msgid "Global conferences"
+msgstr "Global conferences"
+
+msgid "Join Microsoft Teams meeting"
+msgstr "Join Microsoft Teams meeting"
+
+msgid "Join meeting"
+msgstr "Join meeting"
+
+msgid "Meeting details"
+msgstr "Meeting details"
+
+msgid "Meeting link copied."
+msgstr "Meeting link copied."
+
+msgid "Microsoft Teams"
+msgstr "Microsoft Teams"
+
+msgid "Microsoft Teams integration is not configured."
+msgstr "Microsoft Teams integration is not configured."
+
+msgid "Microsoft Teams meeting"
+msgstr "Microsoft Teams meeting"
+
+msgid "Microsoft sign-in could not be completed. Please try joining the meeting again."
+msgstr "Microsoft sign-in could not be completed. Please try joining the meeting again."
+
+msgid "No past conferences."
+msgstr "No past conferences."
+
+msgid "No upcoming conferences."
+msgstr "No upcoming conferences."
+
+msgid "Organizer"
+msgstr "Organizer"
+
+msgid "Past conferences"
+msgstr "Past conferences"
+
+msgid "Personal conferences"
+msgstr "Personal conferences"
+
+msgid "Schedule Microsoft Teams meeting"
+msgstr "Schedule Microsoft Teams meeting"
+
+msgid "Schedule meeting"
+msgstr "Schedule meeting"
+
+msgid "Sign in to Microsoft with the same account used by this meeting organizer, then try again."
+msgstr "Sign in to Microsoft with the same account used by this meeting organizer, then try again."
+
+msgid "Start Microsoft Teams meeting"
+msgstr "Start Microsoft Teams meeting"
+
+msgid "Start meeting"
+msgstr "Start meeting"
+
+msgid "The meeting join link is not available."
+msgstr "The meeting join link is not available."
+
+msgid "The meeting starts immediately and is created with a one-hour duration."
+msgstr "The meeting starts immediately and is created with a one-hour duration."
+
+msgid "The meeting was cancelled."
+msgstr "The meeting was cancelled."
+
+msgid "The meeting was created, but its announcement could not be created because the join link is missing."
+msgstr "The meeting was created, but its announcement could not be created because the join link is missing."
+
+msgid "The meeting was created, but the course announcement could not be created."
+msgstr "The meeting was created, but the course announcement could not be created."
+
+msgid "The meeting was created."
+msgstr "The meeting was created."
+
+msgid "The meeting was scheduled."
+msgstr "The meeting was scheduled."
+
+msgid "The meeting was updated."
+msgstr "The meeting was updated."
+
+msgid "Upcoming"
+msgstr "Upcoming"
+
+msgid "Upcoming conferences"
+msgstr "Upcoming conferences"
+
+msgid "You are not allowed to manage Microsoft Teams meetings in this context."
+msgstr "You are not allowed to manage Microsoft Teams meetings in this context."
+
+msgid "%s conference"
+msgstr "%s conference"
+
+msgid "%s conferences"
+msgstr "%s conferences"

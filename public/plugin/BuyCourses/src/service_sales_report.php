@@ -413,6 +413,10 @@ if ($hasSearch) {
 }
 
 foreach ($servicesSales as &$sale) {
+    if ($plugin->shouldReconcileStripeRecurringServiceSale($sale)) {
+        $plugin->reconcileStripeRecurringServiceSale((int) ($sale['id'] ?? 0));
+    }
+
     $paymentSummary = $plugin->getServiceSalePaymentSummary($sale);
     $sale['last_payment_date'] = (string) ($paymentSummary['last_payment_date'] ?? '');
     $sale['total_collected'] = $plugin->getPriceWithCurrencyFromIsoCode(

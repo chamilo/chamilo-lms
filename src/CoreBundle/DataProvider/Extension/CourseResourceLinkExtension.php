@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -30,6 +31,7 @@ final readonly class CourseResourceLinkExtension implements QueryCollectionExten
     private const array LINK_OWNERS = [
         CForumPost::class => null,
         CForumAttachment::class => 'post',
+        CStudentPublicationComment::class => 'publication',
     ];
 
     public function __construct(

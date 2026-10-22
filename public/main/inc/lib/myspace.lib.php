@@ -2384,25 +2384,13 @@ class MySpace
         $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
 
         // the values of the sortable table
-        if ($_GET['tracking_user_overview_page_nr']) {
-            $from = $_GET['tracking_user_overview_page_nr'];
-        } else {
-            $from = 0;
-        }
-        if ($_GET['tracking_user_overview_column']) {
-            $orderby = $_GET['tracking_user_overview_column'];
-        } else {
-            $orderby = 0;
-        }
+        $from = (int) ($_GET['tracking_user_overview_page_nr'] ?? 0);
+        $orderby = (int) ($_GET['tracking_user_overview_column'] ?? 0);
         if ($is_western_name_order != api_is_western_name_order() && (1 == $orderby || 2 == $orderby)) {
             // Swapping the sorting column if name order for export is different than the common name order.
             $orderby = 3 - $orderby;
         }
-        if ($_GET['tracking_user_overview_direction']) {
-            $direction = $_GET['tracking_user_overview_direction'];
-        } else {
-            $direction = 'ASC';
-        }
+        $direction = 'DESC' === strtoupper((string) ($_GET['tracking_user_overview_direction'] ?? '')) ? 'DESC' : 'ASC';
 
         $user_data = self::get_user_data_tracking_overview(
             $from,

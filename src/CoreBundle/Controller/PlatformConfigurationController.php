@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Service\Conference\TeamsPluginConfigurationInterface;
 use Chamilo\CoreBundle\Service\Mcp\McpAccessPolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
@@ -56,6 +57,7 @@ class PlatformConfigurationController extends AbstractController
         PluginHelper $pluginHelper,
         ForcedLoginRedirectHelper $forcedLoginRedirectHelper,
         TicketProjectHelper $ticketProjectHelper,
+        TeamsPluginConfigurationInterface $teamsPluginConfiguration,
         Request $request,
     ): Response {
         $requestSession = $request->getSession();
@@ -265,6 +267,14 @@ class PlatformConfigurationController extends AbstractController
             // Like the legacy header, the ticket icon is only offered to users allowed in the
             // default project (1) by ticket.ticket_project_user_roles.
             $configuration['settings']['ticket.user_allowed_in_default_project'] = $ticketProjectHelper->userIsAllowInProject(1);
+
+            // Expose only feature availability. Microsoft credentials stay server-side.
+            $teamsEnabled = $teamsPluginConfiguration->isEnabled();
+            $configuration['plugins']['teams'] = [
+                'enabled' => $teamsEnabled,
+                'personalEnabled' => $teamsEnabled && $teamsPluginConfiguration->isPersonalConferenceEnabled(),
+                'globalEnabled' => $teamsEnabled && $teamsPluginConfiguration->isGlobalConferenceEnabled(),
+            ];
 
             $configuration['plugins']['bbb'] = [
                 'show_global_conference_link' => Bbb::showGlobalConferenceLink([

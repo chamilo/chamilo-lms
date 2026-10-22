@@ -70,6 +70,15 @@ services:
         # fetching services directly from the container via $container->get() won't work.
         # The best practice is to be explicit about your dependencies anyway.
 
+
+    Chamilo\CoreBundle\Service\Conference\MicrosoftTeamsGraphClientInterface:
+        alias: Chamilo\CoreBundle\Service\Conference\MicrosoftTeamsGraphClient
+        public: true
+
+    Chamilo\CoreBundle\Service\Conference\TeamsPluginConfigurationInterface:
+        alias: Chamilo\CoreBundle\Service\Conference\TeamsPluginConfiguration
+        public: true
+
     Vich\UploaderBundle\Naming\SubdirDirectoryNamer:
         public: true
 

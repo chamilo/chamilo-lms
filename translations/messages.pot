@@ -41879,3 +41879,117 @@ msgstr ""
 
 msgid "Cancel service"
 msgstr ""
+
+msgid "A valid start and end date are required."
+msgstr ""
+
+msgid "Are you sure you want to cancel \"%s\"?"
+msgstr ""
+
+msgid "Cancel meeting"
+msgstr ""
+
+msgid "Copy meeting link"
+msgstr ""
+
+msgid "Create a course announcement for this meeting"
+msgstr ""
+
+msgid "Edit Microsoft Teams meeting"
+msgstr ""
+
+msgid "Global conferences"
+msgstr ""
+
+msgid "Join Microsoft Teams meeting"
+msgstr ""
+
+msgid "Join meeting"
+msgstr ""
+
+msgid "Meeting details"
+msgstr ""
+
+msgid "Meeting link copied."
+msgstr ""
+
+msgid "Microsoft Teams"
+msgstr ""
+
+msgid "Microsoft Teams integration is not configured."
+msgstr ""
+
+msgid "Microsoft Teams meeting"
+msgstr ""
+
+msgid "Microsoft sign-in could not be completed. Please try joining the meeting again."
+msgstr ""
+
+msgid "No past conferences."
+msgstr ""
+
+msgid "No upcoming conferences."
+msgstr ""
+
+msgid "Organizer"
+msgstr ""
+
+msgid "Past conferences"
+msgstr ""
+
+msgid "Personal conferences"
+msgstr ""
+
+msgid "Schedule Microsoft Teams meeting"
+msgstr ""
+
+msgid "Schedule meeting"
+msgstr ""
+
+msgid "Sign in to Microsoft with the same account used by this meeting organizer, then try again."
+msgstr ""
+
+msgid "Start Microsoft Teams meeting"
+msgstr ""
+
+msgid "Start meeting"
+msgstr ""
+
+msgid "The meeting join link is not available."
+msgstr ""
+
+msgid "The meeting starts immediately and is created with a one-hour duration."
+msgstr ""
+
+msgid "The meeting was cancelled."
+msgstr ""
+
+msgid "The meeting was created, but its announcement could not be created because the join link is missing."
+msgstr ""
+
+msgid "The meeting was created, but the course announcement could not be created."
+msgstr ""
+
+msgid "The meeting was created."
+msgstr ""
+
+msgid "The meeting was scheduled."
+msgstr ""
+
+msgid "The meeting was updated."
+msgstr ""
+
+msgid "Upcoming"
+msgstr ""
+
+msgid "Upcoming conferences"
+msgstr ""
+
+msgid "You are not allowed to manage Microsoft Teams meetings in this context."
+msgstr ""
+
+msgid "%s conference"
+msgstr ""
+
+msgid "%s conferences"
+msgstr ""

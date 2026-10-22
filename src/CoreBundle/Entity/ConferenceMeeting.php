@@ -98,6 +98,15 @@ class ConferenceMeeting
     #[ORM\Column(name: 'closed_at', type: 'datetime', nullable: true)]
     protected ?DateTime $closedAt = null;
 
+    #[ORM\Column(name: 'start_at', type: 'datetime', nullable: true)]
+    protected ?DateTime $startAt = null;
+
+    #[ORM\Column(name: 'end_at', type: 'datetime', nullable: true)]
+    protected ?DateTime $endAt = null;
+
+    #[ORM\Column(name: 'join_url', type: 'text', nullable: true)]
+    protected ?string $joinUrl = null;
+
     #[ORM\Column(name: 'meeting_list_item', type: 'text', nullable: true)]
     protected ?string $meetingListItem = null;
 
@@ -271,6 +280,42 @@ class ConferenceMeeting
     public function setClosedAt(?DateTime $closedAt): self
     {
         $this->closedAt = $closedAt;
+
+        return $this;
+    }
+
+    public function getStartAt(): ?DateTime
+    {
+        return $this->startAt;
+    }
+
+    public function setStartAt(?DateTime $startAt): self
+    {
+        $this->startAt = $startAt;
+
+        return $this;
+    }
+
+    public function getEndAt(): ?DateTime
+    {
+        return $this->endAt;
+    }
+
+    public function setEndAt(?DateTime $endAt): self
+    {
+        $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function getJoinUrl(): ?string
+    {
+        return $this->joinUrl;
+    }
+
+    public function setJoinUrl(?string $joinUrl): self
+    {
+        $this->joinUrl = $joinUrl;
 
         return $this;
     }

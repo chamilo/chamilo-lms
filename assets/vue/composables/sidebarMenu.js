@@ -11,8 +11,7 @@ const ROLE_MAP = {
   ROLE_SESSION_MANAGER: "SESSIONADMIN",
   ROLE_TEACHER: "COURSEMANAGER",
   ROLE_STUDENT_BOSS: "STUDENT_BOSS",
-  ROLE_HR: "HRM",
-  ROLE_DRH: "HRM",
+  ROLE_DRH: "DRH",
   ROLE_INVITEE: "INVITEE",
   ROLE_STUDENT: "STUDENT",
 }
@@ -187,10 +186,7 @@ function resolveDisplayTabsConfig(platformConfigStore, securityStore) {
   const roles = securityStore.user?.roles || []
   for (const role of roles) {
     const mappedRole = ROLE_MAP[role] || role
-    let roleValue = perRole?.[mappedRole]
-    if (mappedRole === "HRM") {
-      roleValue = perRole?.HRM ?? perRole?.DRH
-    }
+    const roleValue = perRole?.[mappedRole]
     if (!roleValue) continue
 
     // Backward compatible:
@@ -592,17 +588,27 @@ export function useSidebarMenu() {
       }
     }
 
-    if (
-      isMenuTabEnabled("videoconference") &&
-      platformConfigStore.plugins?.bbb?.show_global_conference_link &&
-      platformConfigStore.plugins?.bbb?.listingURL
-    ) {
-      const conferenceItems = [
-        {
+    if (isMenuTabEnabled("videoconference")) {
+      const conferenceItems = []
+      const bbb = platformConfigStore.plugins?.bbb
+      const teams = platformConfigStore.plugins?.teams
+
+      if (bbb?.show_global_conference_link && bbb?.listingURL) {
+        conferenceItems.push({
           label: t("Conference Room"),
-          url: platformConfigStore.plugins.bbb.listingURL,
-        },
-      ]
+          url: bbb.listingURL,
+        })
+      }
+
+      if (teams?.enabled && (teams.personalEnabled || teams.globalEnabled)) {
+        conferenceItems.push({
+          label: t("Microsoft Teams"),
+          route: {
+            name: "TeamsHubList",
+            query: { scope: teams.personalEnabled ? "personal" : "global" },
+          },
+        })
+      }
 
       if (conferenceItems.length > 0) {
         items.push(

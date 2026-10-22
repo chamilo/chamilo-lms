@@ -1,4 +1,8 @@
 {
     "format": 1,
-    "remove": []
+    "remove": [
+        "public/main/lp/lp_edit_item.php",
+        "public/main/lp/lp_edit_item_prereq.php",
+        "public/main/lp/lp_move_item.php"
+    ]
 }

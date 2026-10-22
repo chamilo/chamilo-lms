@@ -113,6 +113,7 @@ function renderReportsCatalog(): void
         echo '<div class="overflow-x-auto">';
         echo '<table class="data_table w-full">';
         echo '<thead><tr>';
+        echo '<th>'.get_lang('ID').'</th>';
         echo '<th>'.get_lang('Report').'</th>';
         echo '<th>'.get_lang('Description').'</th>';
         echo '<th>'.get_lang('Canonical URL').'</th>';
@@ -127,6 +128,7 @@ function renderReportsCatalog(): void
             $roles = renderRoleBadges($report['roles'] ?? []);
 
             echo '<tr>';
+            echo '<td><code>'.Security::remove_XSS((string) $report['id']).'</code></td>';
             echo '<td class="font-semibold">'.Security::remove_XSS($report['title']).'</td>';
             echo '<td>'.Security::remove_XSS($report['description'] ?? '').'</td>';
             $canonicalLinkAttributes = '';

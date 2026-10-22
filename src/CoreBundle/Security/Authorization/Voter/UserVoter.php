@@ -58,12 +58,20 @@ class UserVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
         /** @var User $user */
         $user = $subject;
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            // Another global admin may only be edited or deleted by a global admin.
+            if (\in_array($attribute, [self::EDIT, self::DELETE], true)
+                && (int) $currentUser->getId() !== (int) $user->getId()
+                && $user->hasRole('ROLE_GLOBAL_ADMIN')
+            ) {
+                return $this->security->isGranted('ROLE_GLOBAL_ADMIN');
+            }
+
+            return true;
+        }
 
         if (self::EDIT === $attribute) {
             // Only the owner can edit private data

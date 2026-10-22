@@ -10,6 +10,7 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -36,6 +37,7 @@ final readonly class CourseResourceLinkExtension implements QueryCollectionExten
         CStudentPublicationComment::class => 'publication',
         CGroup::class => null,
         CLinkCategory::class => null,
+        CAttendanceCalendar::class => 'attendance',
     ];
 
     public function __construct(

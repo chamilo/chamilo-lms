@@ -5,6 +5,7 @@ import { usePlatformConfig } from "../store/platformConfig"
 import { useEnrolledStore } from "../store/enrolledStore"
 import { useRoute } from "vue-router"
 import { useSocialMenuItems } from "./useSocialMenuItems"
+import { useWelfareAvailability } from "./useWelfareAvailability"
 
 const ROLE_MAP = {
   ROLE_ADMIN: "ADMIN",
@@ -214,6 +215,7 @@ export function useSidebarMenu() {
   const platformConfigStore = usePlatformConfig()
   const enrolledStore = useEnrolledStore()
   const { items: socialItems } = useSocialMenuItems()
+  const { available: welfareAvailable, canInvestigate: welfareCanInvestigate } = useWelfareAvailability()
 
   const allowSocialTool = computed(() => platformConfigStore.getSetting("social.allow_social_tool") !== "false")
   const allowSearchFeature = computed(() => platformConfigStore.getSetting("search.search_enabled") === "true")
@@ -473,6 +475,13 @@ export function useSidebarMenu() {
 
   const menuItemsAfterMyCourse = computed(() => {
     const items = []
+    if (securityStore.isAuthenticated && welfareAvailable.value && welfareCanInvestigate.value) {
+      items.push({
+        icon: "mdi mdi-shield-key-outline",
+        label: t("Confidential investigations"),
+        route: { name: "WelfareList", query: { view: "investigations" } },
+      })
+    }
 
     if (allowStudentCatalogue.value && isMenuTabEnabled("catalogue")) {
       if (showCatalogue === 0 || showCatalogue === 2) {

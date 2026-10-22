@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
@@ -49,6 +50,19 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
 
     #[ORM\Column(name: 'publish', type: 'boolean', options: ['default' => false])]
     protected bool $publish = false;
+
+    /**
+     * Explicit approval for future public verification publication.
+     * This does not publish anything by itself, and is independent of `publish`.
+     */
+    #[ORM\Column(name: 'user_publication_approval_date', type: 'datetime_immutable', nullable: true)]
+    protected ?DateTimeImmutable $userPublicationApprovalDate = null;
+
+    /**
+     * Last withdrawal of the publication approval, for operational audit.
+     */
+    #[ORM\Column(name: 'user_publication_revocation_date', type: 'datetime_immutable', nullable: true)]
+    protected ?DateTimeImmutable $userPublicationRevocationDate = null;
 
     /**
      * Calendar date the certificate stops being valid, or null if it never expires
@@ -169,6 +183,45 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
     public function setPublish(bool $publish): self
     {
         $this->publish = $publish;
+
+        return $this;
+    }
+
+    #[ORM\Column(name: 'user_publication_consent_scope', length: 40, nullable: true)]
+    protected ?string $userPublicationConsentScope = null;
+
+    public function getUserPublicationConsentScope(): ?string
+    {
+        return $this->userPublicationConsentScope;
+    }
+
+    public function setUserPublicationConsentScope(?string $scope): self
+    {
+        $this->userPublicationConsentScope = $scope;
+
+        return $this;
+    }
+
+    public function getUserPublicationApprovalDate(): ?DateTimeImmutable
+    {
+        return $this->userPublicationApprovalDate;
+    }
+
+    public function setUserPublicationApprovalDate(?DateTimeImmutable $date): self
+    {
+        $this->userPublicationApprovalDate = $date;
+
+        return $this;
+    }
+
+    public function getUserPublicationRevocationDate(): ?DateTimeImmutable
+    {
+        return $this->userPublicationRevocationDate;
+    }
+
+    public function setUserPublicationRevocationDate(?DateTimeImmutable $date): self
+    {
+        $this->userPublicationRevocationDate = $date;
 
         return $this;
     }

@@ -1,6 +1,14 @@
 <template>
   <section class="space-y-6">
     <div
+      v-if="infoMessage"
+      class="rounded-xl border border-success/30 bg-success/10 p-4 text-sm text-success"
+      role="status"
+    >
+      {{ infoMessage }}
+    </div>
+
+    <div
       v-if="errorMessage"
       class="rounded-xl border border-danger/30 bg-danger/10 p-4 text-sm text-danger"
       role="alert"
@@ -31,6 +39,9 @@
     </div>
 
     <template v-else>
+      <div class="rounded-xl border border-gray-20 bg-white p-4 text-sm text-gray-600 shadow-sm">
+        {{ t("Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time.") }}
+      </div>
       <section class="space-y-3">
         <h2 class="text-lg font-semibold text-gray-90">{{ t("Courses") }}</h2>
         <BaseTable
@@ -50,6 +61,36 @@
           </Column>
           <Column :header="t('Date')">
             <template #body="{ data }">{{ formatDate(data.issuedAt) }}</template>
+          </Column>
+          <Column :header="t('Publication consent')">
+            <template #body="{ data }">
+              <div v-if="data.certificate" class="flex items-center gap-2">
+                <span class="text-xs text-gray-600">
+                  {{ data.certificate.publicationApprovedAt ? t("Approved") : t("Not approved") }}
+                  <span v-if="data.certificate.publicationApprovedAt" class="block">
+                    {{ formatDate(data.certificate.publicationApprovedAt) }}
+                  </span>
+                </span>
+                <BaseButton
+                  :label="data.certificate.publicationApprovedAt ? t('Withdraw consent') : t('Approve publication')"
+                  :icon="data.certificate.publicationApprovedAt ? 'delete' : 'pencil'"
+                  only-icon
+                  size="small"
+                  :type="data.certificate.publicationApprovedAt ? 'danger-text' : 'secondary-text'"
+                  :disabled="isUpdatingConsent"
+                  :data-testid="`certificate-consent-${data.id}`"
+                  @click="confirmPublicationConsent(data)"
+                />
+                <a
+                  v-if="data.certificate.credentialVerificationUrl"
+                  :href="data.certificate.credentialVerificationUrl"
+                  class="text-xs underline text-primary"
+                  :data-testid="`certificate-credential-${data.id}`"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >{{ t("Verify") }}</a>
+              </div>
+            </template>
           </Column>
           <Column :header="t('Actions')">
             <template #body="{ data }">
@@ -101,6 +142,36 @@
           <Column :header="t('Date')">
             <template #body="{ data }">{{ formatDate(data.issuedAt) }}</template>
           </Column>
+          <Column :header="t('Publication consent')">
+            <template #body="{ data }">
+              <div v-if="data.certificate" class="flex items-center gap-2">
+                <span class="text-xs text-gray-600">
+                  {{ data.certificate.publicationApprovedAt ? t("Approved") : t("Not approved") }}
+                  <span v-if="data.certificate.publicationApprovedAt" class="block">
+                    {{ formatDate(data.certificate.publicationApprovedAt) }}
+                  </span>
+                </span>
+                <BaseButton
+                  :label="data.certificate.publicationApprovedAt ? t('Withdraw consent') : t('Approve publication')"
+                  :icon="data.certificate.publicationApprovedAt ? 'delete' : 'pencil'"
+                  only-icon
+                  size="small"
+                  :type="data.certificate.publicationApprovedAt ? 'danger-text' : 'secondary-text'"
+                  :disabled="isUpdatingConsent"
+                  :data-testid="`certificate-consent-${data.id}`"
+                  @click="confirmPublicationConsent(data)"
+                />
+                <a
+                  v-if="data.certificate.credentialVerificationUrl"
+                  :href="data.certificate.credentialVerificationUrl"
+                  class="text-xs underline text-primary"
+                  :data-testid="`certificate-credential-${data.id}`"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >{{ t("Verify") }}</a>
+              </div>
+            </template>
+          </Column>
           <Column :header="t('Actions')">
             <template #body="{ data }">
               <div class="flex justify-end gap-1">
@@ -137,11 +208,15 @@ import { useI18n } from "vue-i18n"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import gradebookService from "../../services/gradebookService"
+import { useConfirmation } from "../../composables/useConfirmation"
 
 const { t } = useI18n()
+const { requireConfirmation } = useConfirmation()
 const certificates = ref(null)
 const isLoading = ref(false)
 const errorMessage = ref("")
+const infoMessage = ref("")
+const isUpdatingConsent = ref(false)
 
 const courseCertificates = computed(() => certificates.value?.courseCertificates || [])
 const sessionCertificates = computed(() => certificates.value?.sessionCertificates || [])
@@ -156,6 +231,36 @@ async function loadCertificates() {
     errorMessage.value = getErrorMessage(error)
   } finally {
     isLoading.value = false
+  }
+}
+
+function confirmPublicationConsent(row) {
+  if (!row?.certificate || isUpdatingConsent.value) {
+    return
+  }
+
+  const approve = !row.certificate.publicationApprovedAt
+  requireConfirmation({
+    message: approve
+      ? t("I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?")
+      : t("Withdraw the publication approval for this certificate?"),
+    accept: () => updatePublicationConsent(row.id, approve),
+  })
+}
+
+async function updatePublicationConsent(certificateId, approve) {
+  isUpdatingConsent.value = true
+  errorMessage.value = ""
+  infoMessage.value = ""
+
+  try {
+    await gradebookService.setCertificatePublicationConsent(certificateId, approve)
+    await loadCertificates()
+    infoMessage.value = approve ? t("Publication approval recorded") : t("Publication approval withdrawn")
+  } catch (error) {
+    errorMessage.value = getErrorMessage(error)
+  } finally {
+    isUpdatingConsent.value = false
   }
 }
 

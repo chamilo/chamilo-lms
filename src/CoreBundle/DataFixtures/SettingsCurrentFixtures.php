@@ -1766,6 +1766,61 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'certificate' => [
                 [
+                    'name' => 'transcript_enabled',
+                    'title' => 'Academic transcripts',
+                    'comment' => 'Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user.',
+                ],
+                [
+                    'name' => 'transcript_program_title',
+                    'title' => 'Transcript program title',
+                    'comment' => 'Program title printed on every transcript, for example the name of the diploma prepared on this platform.',
+                ],
+                [
+                    'name' => 'transcript_course_code_source',
+                    'title' => 'Transcript course code',
+                    'comment' => 'Which course field fills the course code column of transcripts: the course code or the department name.',
+                ],
+                [
+                    'name' => 'transcript_hours_extra_field',
+                    'title' => 'Transcript course hours field',
+                    'comment' => 'Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course.',
+                ],
+                [
+                    'name' => 'transcript_completed_hours_are_required_hours',
+                    'title' => 'Transcript completed hours are the required hours',
+                    'comment' => 'Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course.',
+                ],
+                [
+                    'name' => 'transcript_student_number_extra_field',
+                    'title' => 'Transcript student number field',
+                    'comment' => 'Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none.',
+                ],
+                [
+                    'name' => 'transcript_address_extra_fields',
+                    'title' => 'Transcript address fields',
+                    'comment' => 'Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code.',
+                ],
+                [
+                    'name' => 'transcript_grading_scale',
+                    'title' => 'Transcript grading scale',
+                    'comment' => 'JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA.',
+                ],
+                [
+                    'name' => 'transcript_gpa_note',
+                    'title' => 'Transcript GPA note',
+                    'comment' => 'Explanation of how the GPA is computed, printed under the GPA on transcripts.',
+                ],
+                [
+                    'name' => 'transcript_signatory_name',
+                    'title' => 'Transcript signatory name',
+                    'comment' => 'Name of the school official who signs the official transcripts.',
+                ],
+                [
+                    'name' => 'transcript_signatory_title',
+                    'title' => 'Transcript signatory title',
+                    'comment' => 'Title of the school official who signs the official transcripts.',
+                ],
+                [
                     'name' => 'add_certificate_pdf_footer',
                     'title' => 'Add footer to PDF certificate exports',
                     'comment' => '',

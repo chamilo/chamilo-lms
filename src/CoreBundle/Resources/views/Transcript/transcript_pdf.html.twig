@@ -1,0 +1,133 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: sans-serif; font-size: 9.5pt; color: #1f2933; }
+        .header td { vertical-align: middle; }
+        .institution { text-align: center; }
+        .institution .name { font-size: 15pt; font-weight: bold; }
+        .institution .kind { font-size: 13pt; font-weight: bold; letter-spacing: 1pt; margin-bottom: 4pt; }
+        .institution .details { font-size: 8.5pt; color: #52606d; }
+        .student { width: 100%; margin: 14pt 0 10pt; border-collapse: collapse; }
+        .student td { padding: 3pt 4pt; vertical-align: top; }
+        .label { color: #52606d; font-size: 8pt; text-transform: uppercase; }
+        .value { font-weight: bold; }
+        table.courses { width: 100%; border-collapse: collapse; }
+        table.courses th, table.courses td { border: 0.5pt solid #9aa5b1; padding: 3pt 4pt; }
+        table.courses th { background-color: #e4e7eb; font-size: 8pt; }
+        .center { text-align: center; }
+        .right { text-align: right; }
+        .summary { width: 100%; margin-top: 12pt; border-collapse: collapse; }
+        .summary td { vertical-align: top; padding: 4pt; }
+        .total { font-size: 14pt; font-weight: bold; }
+        .note { font-size: 8pt; color: #52606d; }
+        table.scale { border-collapse: collapse; }
+        table.scale th, table.scale td { border: 0.5pt solid #9aa5b1; padding: 2pt 6pt; font-size: 8pt; }
+        .signature { width: 100%; margin-top: 22pt; border-collapse: collapse; }
+        .signature td { vertical-align: bottom; padding: 4pt; }
+        .line { border-top: 0.5pt solid #52606d; padding-top: 2pt; font-size: 8pt; color: #52606d; }
+        .verification { margin-top: 16pt; font-size: 8pt; color: #52606d; }
+    </style>
+</head>
+<body>
+<table class="header" width="100%">
+    <tr>
+        <td width="22%">{% if logo %}<img src="{{ logo }}" style="max-width: 120pt; max-height: 60pt;">{% endif %}</td>
+        <td class="institution">
+            <div class="kind">{{ (official ? 'Official transcript' : 'Unofficial transcript')|trans|upper }}</div>
+            <div class="name">{{ transcript.institution.name }}</div>
+            <div class="details">
+                {{ transcript.institution.address }}
+                {% if transcript.institution.url %}<br>{{ transcript.institution.url }}{% endif %}
+            </div>
+        </td>
+        <td width="22%"></td>
+    </tr>
+</table>
+
+<table class="student">
+    <tr>
+        <td width="50%"><div class="label">{{ 'Student name'|trans }}</div><div class="value">{{ transcript.student.fullName }}</div></td>
+        <td width="50%"><div class="label">{{ 'Student number'|trans }}</div><div class="value">{{ transcript.student.studentNumber|default('—') }}</div></td>
+    </tr>
+    <tr>
+        <td><div class="label">{{ 'Address'|trans }}</div><div class="value">{{ transcript.student.address|join(', ')|default('—') }}</div></td>
+        <td><div class="label">{{ 'Program title'|trans }}</div><div class="value">{{ transcript.programTitle|default('—') }}</div></td>
+    </tr>
+</table>
+
+<table class="courses">
+    <thead>
+    <tr>
+        <th>{{ 'Course'|trans }}</th>
+        <th>{{ 'Description'|trans }}</th>
+        <th>{{ 'Enrollment'|trans }}</th>
+        <th>{{ 'Required hours'|trans }}</th>
+        <th>{{ 'Completion date'|trans }}</th>
+        <th>{{ 'Hours completed'|trans }}</th>
+        <th>{{ 'Final grade'|trans }}</th>
+        <th>{{ 'Grade'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for course in transcript.courses %}
+        <tr>
+            <td>{{ course.code }}</td>
+            <td>{{ course.title }}{% if course.sessionTitle %}<br><span class="note">{{ course.sessionTitle }}</span>{% endif %}</td>
+            <td class="center">{{ course.enrolledAt|default('—') }}</td>
+            <td class="right">{{ course.requiredHours ?? '—' }}</td>
+            <td class="center">{{ course.completedAt }}</td>
+            <td class="right">{{ course.completedHours ?? '—' }}</td>
+            <td class="right">{{ course.score|round }}%</td>
+            <td class="center">{{ course.letter }}</td>
+        </tr>
+    {% else %}
+        <tr><td colspan="8" class="center">{{ 'No completed course yet.'|trans }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<table class="summary">
+    <tr>
+        <td width="22%"><div class="label">{{ 'Final grade'|trans }}</div><div class="total">{{ transcript.finalGrade is not null ? transcript.finalGrade ~ '%' : '—' }}</div></td>
+        <td width="22%"><div class="label">GPA</div><div class="total">{{ transcript.gpa is not null ? transcript.gpa|number_format(2) : '—' }}</div></td>
+        <td>
+            <table class="scale">
+                <tr><th colspan="2">{{ 'Grading scale'|trans }}</th></tr>
+                {% for grade in transcript.gradingScale %}
+                    <tr><td>{{ grade.min }}% → {{ grade.letter }}</td><td class="right">{{ grade.points|number_format(1) }}</td></tr>
+                {% endfor %}
+            </table>
+        </td>
+    </tr>
+    {% if transcript.gpaNote %}
+        <tr><td colspan="3" class="note">{{ transcript.gpaNote }}</td></tr>
+    {% endif %}
+</table>
+
+{% if official %}
+    <table class="signature">
+        <tr>
+            <td width="34%">
+                {% if signatureImage %}<img src="{{ signatureImage }}" style="max-height: 45pt; max-width: 150pt;"><br>{% endif %}
+                <div class="line">{{ 'Signature of school official'|trans }}</div>
+            </td>
+            <td width="24%"><div class="value">{{ transcript.signatory.name }}</div><div class="line">{{ 'School official'|trans }}</div></td>
+            <td width="24%"><div class="value">{{ transcript.signatory.title }}</div><div class="line">{{ "Official's title"|trans }}</div></td>
+            <td width="18%"><div class="value">{{ transcript.issuedAt|date('Y-m-d') }}</div><div class="line">{{ 'Date'|trans }}</div></td>
+        </tr>
+    </table>
+    <table class="verification" width="100%">
+        <tr>
+            <td>
+                {{ 'Verify this transcript at'|trans }} {{ verificationUrl }}<br>
+                {{ 'Verification code'|trans }}: {{ verificationCode }}
+            </td>
+            <td width="70" class="right">{% if qrCode %}<img src="{{ qrCode }}" style="width: 60pt; height: 60pt;">{% endif %}</td>
+        </tr>
+    </table>
+{% else %}
+    <p class="verification">{{ 'This unofficial transcript is not signed. Ask an administrator for an official transcript.'|trans }}</p>
+{% endif %}
+</body>
+</html>

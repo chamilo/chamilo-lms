@@ -41950,3 +41950,93 @@ msgstr "No payments yet"
 
 msgid "Cancel service"
 msgstr "Cancel service"
+
+msgid "Official transcript"
+msgstr "Official transcript"
+
+msgid "Unofficial transcript"
+msgstr "Unofficial transcript"
+
+msgid "Student name"
+msgstr "Student name"
+
+msgid "Student number"
+msgstr "Student number"
+
+msgid "Program title"
+msgstr "Program title"
+
+msgid "Required hours"
+msgstr "Required hours"
+
+msgid "Completion date"
+msgstr "Completion date"
+
+msgid "Hours completed"
+msgstr "Hours completed"
+
+msgid "Final grade"
+msgstr "Final grade"
+
+msgid "Grade"
+msgstr "Grade"
+
+msgid "No completed course yet."
+msgstr "No completed course yet."
+
+msgid "Grading scale"
+msgstr "Grading scale"
+
+msgid "Signature of school official"
+msgstr "Signature of school official"
+
+msgid "School official"
+msgstr "School official"
+
+msgid "Official's title"
+msgstr "Official's title"
+
+msgid "Verify this transcript at"
+msgstr "Verify this transcript at"
+
+msgid "Verification code"
+msgstr "Verification code"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+
+msgid "Transcript verification"
+msgstr "Transcript verification"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+
+msgid "Valid"
+msgstr "Valid"
+
+msgid "Invalid signature"
+msgstr "Invalid signature"
+
+msgid "Transcript not found"
+msgstr "Transcript not found"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "The signature of the institution is valid and this transcript has not been revoked."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "This transcript cannot be verified as valid. Its details are not displayed."
+
+msgid "Transcript details"
+msgstr "Transcript details"
+
+msgid "Institution"
+msgstr "Institution"
+
+msgid "Issued on"
+msgstr "Issued on"
+
+msgid "Download verification JSON"
+msgstr "Download verification JSON"
+
+msgid "Transcript"
+msgstr "Transcript"

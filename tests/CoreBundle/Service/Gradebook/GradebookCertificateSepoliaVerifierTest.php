@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\GradebookCertificateCredential;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateCredentialSigner;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateSepoliaVerifier;
+use Chamilo\CoreBundle\Service\Gradebook\IssuerSigningKey;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -37,8 +38,7 @@ final class GradebookCertificateSepoliaVerifierTest extends TestCase
             str_repeat('b', 64),
         );
         $signer = new GradebookCertificateCredentialSigner(
-            __DIR__,
-            $this->createMock(EntityManagerInterface::class),
+            new IssuerSigningKey(__DIR__.'/var/certificate-issuer', $this->createMock(EntityManagerInterface::class)),
             $this->createMock(GradebookCertificateRepository::class),
         );
         $sender = '0x'.str_repeat('1', 40);

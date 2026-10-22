@@ -62,6 +62,20 @@ $actions = [
     ),
 ];
 
+if (api_is_platform_admin() && 'true' === api_get_setting('certificate.transcript_enabled')) {
+    $actions[] = Display::url(
+        Display::getMdiIcon(
+            ObjectIcon::CERTIFICATE,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Transcript')
+        ),
+        api_get_path(WEB_PATH).'transcript?'.http_build_query(['userId' => $userId]),
+        ['title' => get_lang('Transcript')]
+    );
+}
+
 if (api_can_login_as($userId)) {
     // Using get_token() is safe here because it generates the token if missing.
     $secToken = Security::get_token();

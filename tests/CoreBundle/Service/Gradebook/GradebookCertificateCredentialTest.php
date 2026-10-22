@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\GradebookCertificateCredential;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateCredentialSigner;
+use Chamilo\CoreBundle\Service\Gradebook\IssuerSigningKey;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -58,8 +59,7 @@ final class GradebookCertificateCredentialTest extends TestCase
         file_put_contents($root.'/var/certificate-issuer/ed25519.seed', bin2hex(substr(sodium_crypto_sign_secretkey($keypair), 0, SODIUM_CRYPTO_SIGN_SEEDBYTES)));
 
         return new GradebookCertificateCredentialSigner(
-            $root,
-            $this->createMock(EntityManagerInterface::class),
+            new IssuerSigningKey($root.'/var/certificate-issuer', $this->createMock(EntityManagerInterface::class)),
             $this->createMock(GradebookCertificateRepository::class)
         );
     }

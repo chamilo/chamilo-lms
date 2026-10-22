@@ -415,6 +415,7 @@ export function useTopbarLoggedIn(props) {
   const certificatesSearchAllowed = computed(() =>
     isSettingEnabled(platformConfigStore, "certificate.allow_certificates_search"),
   )
+  const transcriptEnabled = computed(() => isSettingEnabled(platformConfigStore, "certificate.transcript_enabled"))
 
   const skillsManagementAllowed = computed(() =>
     isSettingEnabled(platformConfigStore, "skill.allow_hr_skills_management"),
@@ -532,6 +533,13 @@ export function useTopbarLoggedIn(props) {
       items[0].items.push({
         label: t("My certificates"),
         url: "/my-certificates",
+      })
+    }
+
+    if (!isAnonymous.value && transcriptEnabled.value) {
+      items[0].items.push({
+        label: t("My transcript"),
+        url: "/transcript",
       })
     }
 

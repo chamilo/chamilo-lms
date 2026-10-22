@@ -379,6 +379,18 @@
               type="primary-text"
             />
 
+            <!-- Transcript -->
+            <BaseButton
+              v-if="transcriptEnabled && (viewer.isPlatformAdmin || viewer.isSessionAdmin)"
+              :disabled="data.isAnonymous"
+              :label="t('Transcript')"
+              :route="data.isAnonymous ? null : { name: 'Transcript', query: { userId: data.id } }"
+              icon="certificate-selected"
+              only-icon
+              size="small"
+              type="primary-text"
+            />
+
             <!-- Edit -->
             <BaseButton
               v-if="viewer.isPlatformAdmin || viewer.isSessionAdmin"
@@ -524,7 +536,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { useNotification } from "../../composables/notification"
@@ -534,11 +546,14 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import baseService from "../../services/baseService"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const { requireConfirmation } = useConfirmation()
 const { showWarningNotification, showErrorNotification } = useNotification()
 const route = useRoute()
+const platformConfigStore = usePlatformConfig()
+const transcriptEnabled = computed(() => "true" === platformConfigStore.getSetting("certificate.transcript_enabled"))
 
 const urlParams = new URLSearchParams(window.location.search)
 

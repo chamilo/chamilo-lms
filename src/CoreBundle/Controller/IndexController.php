@@ -66,6 +66,7 @@ class IndexController extends BaseController
     #[Route('/tickets/{vueRouting}', name: 'tickets_vue_nested_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/survey/pending', name: 'survey_pending_vue_entrypoint', methods: ['GET'])]
     #[Route('/my-certificates', name: 'my_certificates_vue_entrypoint', methods: ['GET'])]
+    #[Route('/transcript', name: 'transcript_vue_entrypoint', methods: ['GET'])]
     #[Route('/certificates/search', name: 'certificate_search_vue_entrypoint', methods: ['GET'])]
     #[Route('/resources/accessurl/{id}/delete', name: 'access_url_delete', methods: ['GET'])]
     #[Route('/account/home', name: 'chamilo_core_account_home', options: ['expose' => true])]

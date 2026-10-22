@@ -245,6 +245,7 @@ class PlatformConfigurationController extends AbstractController
                 'exercise.my_courses_show_pending_exercise_attempts',
                 'certificate.allow_public_certificates',
                 'certificate.allow_certificates_search',
+                'certificate.transcript_enabled',
             ];
 
             foreach ($variables as $variable) {

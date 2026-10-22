@@ -993,6 +993,9 @@ switch ($action) {
         if (!$is_allowed_to_edit || !$lp_found) {
             api_not_allowed(true);
         }
+        if (null !== $lpItem && (int) $lpItem->getLp()->getIid() !== (int) $oLP->get_id()) {
+            api_not_allowed(true);
+        }
 
         Session::write('refresh', 1);
         if (isset($_POST['submit_button']) && !empty($post_title)) {
@@ -1009,7 +1012,7 @@ switch ($action) {
             $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
             $url = isset($_POST['url']) ? $_POST['url'] : '';
 
-            $oLP->edit_item(
+            $updated = $oLP->edit_item(
                 $_REQUEST['id'],
                 $_POST['parent'],
                 $previous,
@@ -1020,6 +1023,9 @@ switch ($action) {
                 $maxTimeAllowed,
                 $url
             );
+            if (true !== $updated) {
+                api_not_allowed(true);
+            }
             if (isset($_POST['content_lp'])) {
                 $oLP->edit_document($courseInfo);
             }
@@ -1037,7 +1043,7 @@ switch ($action) {
 
             $is_success = true;
             $extraFieldValues = new ExtraFieldValue('lp_item');
-            $extraFieldValues->saveFieldValues($_POST);
+            $extraFieldValues->saveFieldValues(array_merge($_POST, ['item_id' => (int) $_REQUEST['id']]));
 
             Display::addFlash(Display::return_message(get_lang('Updated')));
             $fallback = $isBuildView
@@ -1058,6 +1064,9 @@ switch ($action) {
         break;
     case 'edit_item_prereq':
         if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if ($lp_found && null !== $lpItem && (int) $lpItem->getLp()->getIid() !== (int) $oLP->get_id()) {
             api_not_allowed(true);
         }
         if (!$lp_found) {

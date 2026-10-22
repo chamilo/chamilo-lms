@@ -249,7 +249,6 @@ html.cstudio-lp-redirecting body::after {
 </style>
 HTML;
 }
-$isBuildView = isset($_REQUEST['view']) && 'build' === $_REQUEST['view'];
 if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && 'upload' === $action && $nodeId > 0) {
     header('Location: '.$importUrl);
     exit;
@@ -262,33 +261,11 @@ if ('POST' === $_SERVER['REQUEST_METHOD']
     && isset($_POST['submit_button'], $_POST['title'])
 ) {
     $action = 'edit_item';
-    $isBuildView = true;
 }
 
 if ($debug) {
     error_log('Entered lp_controller.php -+- (action: '.$action.')');
 }
-
-$__returnTo = $_GET['returnTo'] ?? '';
-$redirectToReturnToOr = static function (string $fallback) use ($__returnTo): void {
-    $returnTo = (string) ($_REQUEST['returnTo'] ?? $__returnTo ?? '');
-    if ($returnTo !== '') {
-        $parts = parse_url($returnTo);
-
-        $isRelative = is_array($parts)
-            && !isset($parts['scheme'], $parts['host'])
-            && str_starts_with($returnTo, '/');
-
-        // Security: allow only same-site relative paths.
-        if ($isRelative) {
-            header('Location: '.$returnTo);
-            exit;
-        }
-    }
-
-    header('Location: '.$fallback);
-    exit;
-};
 
 $goList = static function () use ($listUrl) {
     header('Location: '.$listUrl);
@@ -404,6 +381,34 @@ if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && $nodeId > 0) {
             $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/settings'));
             break;
     }
+}
+
+// Learning path items are edited, moved and deleted in the learning path
+// builder. The former item actions only redirect there and change nothing.
+$builderItemPanels = [
+    'edit_item' => 'edit',
+    'edit_item_prereq' => 'prerequisite',
+    'move_item' => '',
+    'delete_item' => '',
+    'deleteitem' => '',
+];
+if (isset($builderItemPanels[$action])) {
+    if (!$is_allowed_to_edit) {
+        api_not_allowed(true);
+    }
+    if (!$lp_found || $lpId <= 0 || $nodeId <= 0) {
+        $goList();
+    }
+
+    $extra = [];
+    if ($lpItemId > 0) {
+        $extra['item_id'] = $lpItemId;
+        if ('' !== $builderItemPanels[$action]) {
+            $extra['panel'] = $builderItemPanels[$action];
+        }
+    }
+
+    $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder', $extra));
 }
 
 $isAdvancedAccessAllowed = static function (
@@ -993,148 +998,6 @@ switch ($action) {
             exit;
         }
         break;
-    case 'edit_item':
-        if (!$is_allowed_to_edit || !$lp_found) {
-            api_not_allowed(true);
-        }
-        if (null !== $lpItem && (int) $lpItem->getLp()->getIid() !== (int) $oLP->get_id()) {
-            api_not_allowed(true);
-        }
-
-        Session::write('refresh', 1);
-        if (isset($_POST['submit_button']) && !empty($post_title)) {
-            $validateLpItemPrerequisiteDates();
-            // TODO: mp3 edit
-            $audio = [];
-            if (isset($_FILES['mp3'])) {
-                $audio = $_FILES['mp3'];
-            }
-
-            $previous = isset($_POST['previous']) ? $_POST['previous'] : '';
-            $description = isset($_POST['description']) ? $_POST['description'] : '';
-            $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
-            $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
-            $url = isset($_POST['url']) ? $_POST['url'] : '';
-
-            $updated = $oLP->edit_item(
-                $_REQUEST['id'],
-                $_POST['parent'],
-                $previous,
-                $post_title,
-                $description,
-                $prerequisites,
-                $audio,
-                $maxTimeAllowed,
-                $url
-            );
-            if (true !== $updated) {
-                api_not_allowed(true);
-            }
-            if (isset($_POST['content_lp'])) {
-                $oLP->edit_document($courseInfo);
-            }
-
-            $exportAllowed = (isset($_POST['export_allowed']) && '1' === $_POST['export_allowed']);
-            $repo = Container::getLpItemRepository();
-            /** @var CLpItem $item */
-            $item = $repo->find((int) $_REQUEST['id']);
-            if ($item) {
-                $item->setExportAllowed($exportAllowed);
-                $em = Database::getManager();
-                $em->persist($item);
-                $em->flush();
-            }
-
-            $is_success = true;
-            $extraFieldValues = new ExtraFieldValue('lp_item');
-            $extraFieldValues->saveFieldValues(array_merge($_POST, ['item_id' => (int) $_REQUEST['id']]));
-
-            Display::addFlash(Display::return_message(get_lang('Updated')));
-            $fallback = $isBuildView
-                ? api_get_self()
-                .'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)
-                .'&'.api_get_cidreq()
-                .'&isStudentView=false'
-                : api_get_self()
-                .'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)
-                .'&'.api_get_cidreq();
-            $redirectToReturnToOr($fallback);
-        }
-        if (isset($_GET['view']) && 'build' === $_GET['view']) {
-            require 'lp_edit_item.php';
-        } else {
-            require 'lp_admin_view.php';
-        }
-        break;
-    case 'edit_item_prereq':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-        if ($lp_found && null !== $lpItem && (int) $lpItem->getLp()->getIid() !== (int) $oLP->get_id()) {
-            api_not_allowed(true);
-        }
-        if (!$lp_found) {
-            $goList();
-        } else {
-            if (isset($_POST['submit_button'])) {
-                // Updating the lp.modified_on
-                $oLP->set_modified_on();
-                Session::write('refresh', 1);
-                $min = isset($_POST['min_'.$_POST['prerequisites']]) ? $_POST['min_'.$_POST['prerequisites']] : '';
-                $max = isset($_POST['max_'.$_POST['prerequisites']]) ? $_POST['max_'.$_POST['prerequisites']] : '';
-
-                $editPrerequisite = $oLP->edit_item_prereq(
-                    $_GET['id'],
-                    $_POST['prerequisites'],
-                    $min,
-                    $max
-                );
-
-                Display::addFlash(Display::return_message(get_lang('Update successful')));
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
-                header('Location: '.$url);
-                exit;
-            } else {
-                require 'lp_edit_item_prereq.php';
-            }
-        }
-        break;
-    case 'move_item':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-
-        if (!$lp_found) {
-            $goList();
-        } else {
-            Session::write('refresh', 1);
-            if (isset($_POST['submit_button'])) {
-                //Updating the lp.modified_on
-                $oLP->set_modified_on();
-                $oLP->edit_item(
-                    $_GET['id'],
-                    $_POST['parent'],
-                    $_POST['previous'],
-                    $post_title,
-                    $_POST['description']
-                );
-                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
-                header('Location: '.$url);
-                exit;
-            }
-            if (isset($_GET['view']) && 'build' === $_GET['view']) {
-                require 'lp_move_item.php';
-            } else {
-                // Avoids weird behaviours see CT#967.
-                $check = Security::check_token('get');
-                if ($check) {
-                    $oLP->move_item($_GET['id'], $_GET['direction']);
-                }
-                Security::clear_token();
-                require 'lp_admin_view.php';
-            }
-        }
-        break;
     case 'view_item':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -1327,22 +1190,6 @@ switch ($action) {
             } else {
                 require 'lp_admin_view.php';
             }
-        }
-        break;
-    case 'deleteitem':
-    case 'delete_item':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-        if (!$lp_found) {
-            $goList();
-        } else {
-            if (!empty($_REQUEST['id'])) {
-                $oLP->delete_item($_REQUEST['id']);
-            }
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_REQUEST['lp_id']).'&'.api_get_cidreq();
-            header('Location: '.$url);
-            exit;
         }
         break;
     case 'restart':

@@ -56,6 +56,25 @@ final class CourseResourceCollectionSecurityTest extends AbstractApiTest
         $this->assertNotContains('/api/forum_attachments/'.$attachmentB->getIid(), $ids);
     }
 
+    public function testCourseContextFromLegacyCidReqStillScopesTheCollection(): void
+    {
+        // The course context can also come from the legacy cidReq (course code) parameter, so
+        // the scoping must not depend on the presence of the "cid" query parameter.
+        $ctx = $this->bootstrapScenario('cidreq');
+        $postA = $this->createForumPost($ctx['courseA'], $ctx['teacherA'], 'A cidReq');
+        $postB = $this->createForumPost($ctx['courseB'], $ctx['teacherB'], 'B cidReq');
+        $attachmentA = $this->createForumAttachment($ctx['courseA'], $postA);
+        $this->createForumAttachment($ctx['courseB'], $postB);
+        $client = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['studentA']));
+        $cidReq = 'cidReq='.$ctx['courseA']->getCode();
+
+        $ids = $this->getIds($client, '/api/forum_attachments?'.$cidReq.'&post=/api/forum_posts/'.$postB->getIid());
+        $this->assertSame([], $ids);
+
+        $ids = $this->getIds($client, '/api/forum_attachments?'.$cidReq);
+        $this->assertSame(['/api/forum_attachments/'.$attachmentA->getIid()], $ids);
+    }
+
     public function testAssignmentCommentsOfAnotherCourseAreNotListed(): void
     {
         $ctx = $this->bootstrapScenario('comments');

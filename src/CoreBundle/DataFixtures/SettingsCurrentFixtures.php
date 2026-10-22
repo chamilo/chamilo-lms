@@ -3220,6 +3220,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'security' => [
                 [
+                    'name' => 'remember_me_days',
+                    'title' => 'Remember me duration (days)',
+                    'comment' => 'Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony.',
+                    'selected_value' => '14',
+                ],
+                [
                     'name' => 'session_expiration_warning_enabled',
                     'title' => 'Enable session expiration warning',
                     'comment' => 'Show a warning to authenticated users before their server-side session expires.',

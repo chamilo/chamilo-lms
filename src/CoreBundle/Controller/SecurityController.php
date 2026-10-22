@@ -26,6 +26,7 @@ use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
 use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
 use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
+use Chamilo\CoreBundle\Security\RememberMeLifetime;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeImmutable;
@@ -48,6 +49,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const FILTER_VALIDATE_BOOLEAN;
 use const OPENSSL_RAW_DATA;
 
 class SecurityController extends AbstractController
@@ -73,6 +75,7 @@ class SecurityController extends AbstractController
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
         private readonly AccessUrlRepository $accessUrlRepo,
+        private readonly RememberMeLifetime $rememberMeLifetime,
     ) {}
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]
@@ -94,7 +97,7 @@ class SecurityController extends AbstractController
             $dataRequest = [];
         }
 
-        $rememberRequested = (bool) ($dataRequest['_remember_me'] ?? false);
+        $rememberRequested = filter_var($dataRequest['_remember_me'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
         $user = $this->userHelper->getCurrent();
 
@@ -233,9 +236,12 @@ class SecurityController extends AbstractController
         );
 
         if (null !== $redirectUrl) {
-            return $this->json([
-                'redirect' => $redirectUrl,
-            ]);
+            return $this->withRememberMeCookie(
+                $this->json(['redirect' => $redirectUrl]),
+                $request,
+                $user,
+                $rememberRequested
+            );
         }
 
         $data = null;
@@ -245,10 +251,24 @@ class SecurityController extends AbstractController
 
         $response = new JsonResponse($data, Response::HTTP_OK, [], true);
 
-        // Remember Me: only on HTTPS.
-        if ($rememberRequested && $request->isSecure()) {
-            $ttlSeconds = 1209600; // 14 days
+        return $this->withRememberMeCookie($response, $request, $user, $rememberRequested);
+    }
 
+    /**
+     * Add a persistent cookie to successful login responses, including
+     * course-based redirects. Do not call before MFA, terms or password checks.
+     */
+    private function withRememberMeCookie(
+        Response $response,
+        Request $request,
+        User $user,
+        bool $rememberRequested,
+    ): Response {
+        // Remember Me: only on HTTPS and only when enabled in Security settings.
+        $ttlSeconds = $rememberRequested && $request->isSecure()
+            ? $this->rememberMeLifetime->getSeconds()
+            : 0;
+        if ($ttlSeconds > 0) {
             // Opportunistic cleanup of expired remember-me tokens.
             /** @var ValidationTokenRepository $validationTokenRepo */
             $validationTokenRepo = $this->entityManager->getRepository(ValidationToken::class);

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
+use Chamilo\CoreBundle\Security\RememberMeLifetime;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -45,6 +46,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'security_session_cookie_samesite_none' => 'false',
             'session_expiration_warning_enabled' => 'false',
             'session_expiration_warning_seconds' => '180',
+            'remember_me_days' => '14',
             'anonymous_autoprovisioning' => 'false',
             'access_to_personal_file_for_all' => 'false',
             'password_rotation_days' => '0',
@@ -99,6 +101,9 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('security_session_cookie_samesite_none', YesNoType::class)
             ->add('session_expiration_warning_enabled', YesNoType::class)
             ->add('session_expiration_warning_seconds', TextType::class)
+            ->add('remember_me_days', IntegerType::class, [
+                'constraints' => [new Range(min: 0, max: RememberMeLifetime::MAX_DAYS)],
+            ])
             ->add('anonymous_autoprovisioning', YesNoType::class)
             ->add('access_to_personal_file_for_all', YesNoType::class)
             ->add('password_rotation_days', TextType::class)

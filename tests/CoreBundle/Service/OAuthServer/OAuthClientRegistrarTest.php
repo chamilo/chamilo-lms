@@ -145,6 +145,32 @@ final class OAuthClientRegistrarTest extends TestCase
         self::assertSame([OAuthResourceRegistry::MCP_RESOURCE], $capturedClient->getAllowedResources());
     }
 
+    public function testItKeepsOnlyHttpsInformationUris(): void
+    {
+        $capturedClient = null;
+        $response = $this->register(
+            [
+                'redirect_uris' => ['https://client.example/callback'],
+                'client_uri' => 'https://client.example/',
+                'logo_uri' => 'http://client.example/logo.png',
+                'policy_uri' => 'data:text/html,policy',
+                'tos_uri' => '//client.example/tos',
+            ],
+            false,
+            $capturedClient,
+        );
+
+        self::assertNotNull($capturedClient);
+        self::assertSame('https://client.example/', $capturedClient->getClientUri());
+        self::assertNull($capturedClient->getLogoUri());
+        self::assertNull($capturedClient->getPolicyUri());
+        self::assertNull($capturedClient->getTosUri());
+        self::assertSame('https://client.example/', $response['client_uri']);
+        self::assertArrayNotHasKey('logo_uri', $response);
+        self::assertArrayNotHasKey('policy_uri', $response);
+        self::assertArrayNotHasKey('tos_uri', $response);
+    }
+
     /**
      * @param array<string, mixed> $metadata
      */

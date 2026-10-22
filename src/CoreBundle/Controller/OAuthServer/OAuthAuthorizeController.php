@@ -70,8 +70,6 @@ final class OAuthAuthorizeController extends BaseController
             ]));
         }
 
-        $this->authorizationService->stashInSession($request, $authorizeRequest);
-
         $user = $this->getUser();
         if (!$user instanceof User) {
             $queryString = $request->getQueryString();
@@ -103,6 +101,7 @@ final class OAuthAuthorizeController extends BaseController
             'resource' => $authorizeRequest->resource,
             'client_registration_age_days' => $this->getClientRegistrationAgeDays($client->getCreatedAt()),
             'first_granted_at' => $firstGrantedAt,
+            'request_id' => $this->authorizationService->stashInSession($request, $authorizeRequest),
             'csrf_token' => $this->csrfTokenManager->getToken(self::CSRF_INTENT)->getValue(),
         ]);
     }
@@ -118,7 +117,10 @@ final class OAuthAuthorizeController extends BaseController
             throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
-        $authorizeRequest = $this->authorizationService->popFromSession($request);
+        $authorizeRequest = $this->authorizationService->popFromSession(
+            $request,
+            (string) $request->request->get('request_id', ''),
+        );
         if (null === $authorizeRequest
             || $authorizeRequest->isStale(time(), OAuthAuthorizationService::PENDING_REQUEST_TTL_SECONDS)
         ) {

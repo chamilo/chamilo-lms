@@ -50,6 +50,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
     use ForumExtraFieldHelperTrait;
     use ForumGradebookGuardTrait;
     use ForumStateHelperTrait;
+    use ForumThreadParticipationHelperTrait;
     private const DEFAULT_ITEMS_PER_PAGE = 25;
     private const MAX_ITEMS_PER_PAGE = 100;
 
@@ -141,6 +142,9 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $canManage = $this->isAllowedToEditHelper->check(coach: true);
         $user = $this->getCurrentUser();
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
+        $userPostCount = $this->countUserPostsInThread($this->entityManager, $thread, $user);
+        $repliesHidden = 0 === $userPostCount
+            && $this->areThreadRepliesHiddenUntilParticipation($this->settingsManager, $this->security);
 
         // The thread comes from the URL and the rights below are computed for the course in the
         // request, so the thread has to belong to that course — otherwise managing one course
@@ -164,7 +168,10 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             max(1, $request->query->getInt('itemsPerPage', self::DEFAULT_ITEMS_PER_PAGE)),
         );
 
-        $totalItems = (int) $this->createPostsQueryBuilder($thread, $forum, $canManage)
+        // Until the user posts in the thread, only its opening post is returned.
+        $openingPostId = $repliesHidden ? $this->getOpeningPostId($thread, $forum, $canManage) : 0;
+
+        $totalItems = (int) $this->createPostsQueryBuilder($thread, $forum, $canManage, $openingPostId)
             ->select('COUNT(p.iid)')
             ->getQuery()
             ->getSingleScalarResult()
@@ -173,7 +180,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $isLearningPathContext = 'learnpath' === strtolower((string) $request->query->get('origin', ''));
         $sortDirection = $isLearningPathContext ? 'DESC' : 'ASC';
 
-        $postIdRows = $this->createPostsQueryBuilder($thread, $forum, $canManage)
+        $postIdRows = $this->createPostsQueryBuilder($thread, $forum, $canManage, $openingPostId)
             ->select('p.iid')
             ->orderBy('p.postDate', $sortDirection)
             ->addOrderBy('p.iid', $sortDirection)
@@ -221,16 +228,20 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
         return [
             'forum' => $this->serializeForum($forum),
-            'thread' => $this->serializeThread(
-                $thread,
-                $course,
-                $session,
-                $canManage,
-                $canSubscribe && $this->isSubscribedToThread($course, $user, (int) $thread->getIid()),
-                $canSubscribe,
-                $lockedByGradebook,
-                $group,
-            ),
+            'thread' => [
+                ...$this->serializeThread(
+                    $thread,
+                    $course,
+                    $session,
+                    $canManage,
+                    $canSubscribe && $this->isSubscribedToThread($course, $user, (int) $thread->getIid()),
+                    $canSubscribe,
+                    $lockedByGradebook,
+                    $group,
+                ),
+                'repliesHiddenUntilParticipation' => $repliesHidden,
+                'participationProgress' => $this->getParticipationProgress($userPostCount),
+            ],
             'canReply' => $this->canReply($forum, $thread),
             'canManageThread' => $canManage,
             'posts' => array_map(
@@ -260,6 +271,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         CForumThread $thread,
         CForum $forum,
         bool $canManage,
+        int $onlyPostId = 0,
     ): QueryBuilder {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->from(CForumPost::class, 'p')
@@ -268,6 +280,13 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             ->setParameter('threadId', $thread->getIid(), Types::INTEGER)
             ->setParameter('forumId', $forum->getIid(), Types::INTEGER)
         ;
+
+        if ($onlyPostId > 0) {
+            $queryBuilder
+                ->andWhere('p.iid = :onlyPostId')
+                ->setParameter('onlyPostId', $onlyPostId, Types::INTEGER)
+            ;
+        }
 
         if (!$canManage) {
             $queryBuilder
@@ -279,6 +298,41 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         }
 
         return $queryBuilder;
+    }
+
+    private function getOpeningPostId(CForumThread $thread, CForum $forum, bool $canManage): int
+    {
+        $rows = $this->createPostsQueryBuilder($thread, $forum, $canManage)
+            ->select('p.iid')
+            ->orderBy('p.postDate', 'ASC')
+            ->addOrderBy('p.iid', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return [] === $rows ? 0 : (int) $rows[0]['iid'];
+    }
+
+    /**
+     * @return array{postCount: int, requiredPosts: int, percent: int}|null
+     */
+    private function getParticipationProgress(int $userPostCount): ?array
+    {
+        $requiredPosts = max(
+            0,
+            (int) ($this->settingsManager->getSetting('forum.thread_participation_progress_posts', true) ?? 0),
+        );
+
+        if (0 === $requiredPosts || $this->isTeacher($this->security)) {
+            return null;
+        }
+
+        return [
+            'postCount' => $userPostCount,
+            'requiredPosts' => $requiredPosts,
+            'percent' => (int) floor(min($userPostCount, $requiredPosts) * 100 / $requiredPosts),
+        ];
     }
 
     private function assertResourceIsVisible(?ResourceNode $resourceNode): void
@@ -369,6 +423,27 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'startTime' => $this->formatDate($forum->getStartTime()),
             'endTime' => $this->formatDate($forum->getEndTime()),
             'availabilityStatus' => $this->getForumAvailabilityStatus($forum),
+            'category' => $this->serializeCategoryDescription($forum),
+        ];
+    }
+
+    /**
+     * @return array{title: string, comment: string}|null
+     */
+    private function serializeCategoryDescription(CForum $forum): ?array
+    {
+        if ('true' !== $this->settingsManager->getSetting('forum.show_category_description_in_thread', true)) {
+            return null;
+        }
+
+        $category = $forum->getForumCategory();
+        if (null === $category || '' === trim((string) $category->getCatComment())) {
+            return null;
+        }
+
+        return [
+            'title' => $category->getTitle(),
+            'comment' => (string) $category->getCatComment(),
         ];
     }
 

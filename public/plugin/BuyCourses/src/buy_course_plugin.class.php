@@ -62,6 +62,7 @@ class BuyCoursesPlugin extends Plugin
     public const TABLE_COUPON_SERVICE_SALE = 'plugin_buycourses_coupon_rel_service_sale';
     public const TABLE_COUPON_SUBSCRIPTION_SALE = 'plugin_buycourses_coupon_rel_subscription_sale';
     public const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
+    public const TABLE_BTCPAY = 'plugin_buycourses_btcpay_account';
     public const TABLE_TPV_CECABANK = 'plugin_buycourses_cecabank_account';
     public const PRODUCT_TYPE_COURSE = 1;
     public const PRODUCT_TYPE_SESSION = 2;
@@ -72,6 +73,7 @@ class BuyCoursesPlugin extends Plugin
     public const PAYMENT_TYPE_TPV_REDSYS = 4;
     public const PAYMENT_TYPE_STRIPE = 5;
     public const PAYMENT_TYPE_TPV_CECABANK = 6;
+    public const PAYMENT_TYPE_BTCPAY = 7;
     public const PAYOUT_STATUS_CANCELED = 2;
     public const PAYOUT_STATUS_PENDING = 0;
     public const PAYOUT_STATUS_COMPLETED = 1;
@@ -182,6 +184,7 @@ class BuyCoursesPlugin extends Plugin
                 'use_currency_symbol' => 'boolean',
                 'tpv_redsys_enable' => 'boolean',
                 'stripe_enable' => 'boolean',
+                'btcpay_enable' => 'boolean',
                 'cecabank_enable' => 'boolean',
             ]
         );
@@ -474,6 +477,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_COUPON_SERVICE_SALE,
             self::TABLE_COUPON_SUBSCRIPTION_SALE,
             self::TABLE_STRIPE,
+            self::TABLE_BTCPAY,
             self::TABLE_TPV_CECABANK,
         ];
     }
@@ -531,7 +535,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function isEnabled(): bool
     {
-        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable');
+        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable') || 'true' === $this->get('btcpay_enable');
     }
 
     /**
@@ -1024,6 +1028,27 @@ class BuyCoursesPlugin extends Plugin
             ]);
         }
 
+        $table = Database::get_main_table(self::TABLE_BTCPAY);
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            server_url varchar(2048) NOT NULL,
+            store_id varchar(255) NOT NULL,
+            api_key varchar(512) NOT NULL,
+            webhook_secret varchar(255) NOT NULL,
+            PRIMARY KEY (id)
+        )";
+        Database::query($sql);
+
+        $res = Database::query("SELECT id FROM $table LIMIT 1");
+        if (0 === Database::num_rows($res)) {
+            Database::insert($table, [
+                'server_url' => '',
+                'store_id' => '',
+                'api_key' => '',
+                'webhook_secret' => '',
+            ]);
+        }
+
         $table = Database::get_main_table(self::TABLE_TPV_CECABANK);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
             id int unsigned NOT NULL AUTO_INCREMENT,
@@ -1086,7 +1111,8 @@ class BuyCoursesPlugin extends Plugin
         array $data = [],
         ?int $subjectUserId = null,
         ?string $source = null,
-        ?string $ipAddress = null
+        ?string $ipAddress = null,
+        ?string $createdAt = null
     ): bool {
         $action = trim($action);
         $objectType = trim($objectType);
@@ -1098,6 +1124,8 @@ class BuyCoursesPlugin extends Plugin
         if (null === $subjectUserId) {
             $currentUserId = api_get_user_id();
             $subjectUserId = $currentUserId > 0 ? $currentUserId : null;
+        } elseif ($subjectUserId <= 0) {
+            $subjectUserId = null;
         }
 
         if (null === $source || '' === trim($source)) {
@@ -1137,6 +1165,14 @@ class BuyCoursesPlugin extends Plugin
             }
         }
 
+        $auditCreatedAt = api_get_utc_datetime();
+        if (null !== $createdAt && '' !== trim($createdAt)) {
+            $createdAtTimestamp = strtotime($createdAt);
+            if (false !== $createdAtTimestamp) {
+                $auditCreatedAt = gmdate('Y-m-d H:i:s', $createdAtTimestamp);
+            }
+        }
+
         return false !== Database::insert(
             Database::get_main_table(self::TABLE_AUDIT),
             [
@@ -1145,7 +1181,7 @@ class BuyCoursesPlugin extends Plugin
                 'object_type' => mb_substr($objectType, 0, 64),
                 'object_id' => $objectId,
                 'source' => mb_substr($source, 0, 32),
-                'created_at' => api_get_utc_datetime(),
+                'created_at' => $auditCreatedAt,
                 'ip_address' => '' !== trim((string) $ipAddress) ? mb_substr((string) $ipAddress, 0, 45) : null,
                 'data_json' => $dataJson,
             ]
@@ -2074,6 +2110,486 @@ class BuyCoursesPlugin extends Plugin
         return is_array($decoded) ? $decoded : [];
     }
 
+    private function getStripeRecurringSubscriptionId(array $serviceSale): string
+    {
+        $gateway = strtolower(trim((string) ($serviceSale['recurring_gateway'] ?? '')));
+        $paymentType = (int) ($serviceSale['payment_type'] ?? 0);
+
+        if ('' === $gateway && self::PAYMENT_TYPE_STRIPE === $paymentType) {
+            $gateway = 'stripe';
+        }
+
+        if ('stripe' !== $gateway) {
+            return '';
+        }
+
+        return trim((string) (
+            $serviceSale['gateway_subscription_id']
+            ?? $serviceSale['recurring_profile_id']
+            ?? ''
+        ));
+    }
+
+    private function getStripeObjectId(mixed $value): string
+    {
+        if (is_string($value) || is_numeric($value)) {
+            return trim((string) $value);
+        }
+
+        if (is_object($value) && isset($value->id)) {
+            return trim((string) $value->id);
+        }
+
+        if (is_array($value) && isset($value['id'])) {
+            return trim((string) $value['id']);
+        }
+
+        return '';
+    }
+
+    private function getStripeInvoiceTransactionId(object $invoice): string
+    {
+        foreach (['payment_intent', 'charge'] as $property) {
+            if (!isset($invoice->{$property})) {
+                continue;
+            }
+
+            $id = $this->getStripeObjectId($invoice->{$property});
+            if ('' !== $id) {
+                return $id;
+            }
+        }
+
+        $payments = $invoice->payments->data ?? [];
+        foreach (is_iterable($payments) ? $payments : [] as $payment) {
+            $paymentObject = $payment->payment ?? null;
+            if (null === $paymentObject) {
+                continue;
+            }
+
+            foreach (['payment_intent', 'charge'] as $property) {
+                if (!isset($paymentObject->{$property})) {
+                    continue;
+                }
+
+                $id = $this->getStripeObjectId($paymentObject->{$property});
+                if ('' !== $id) {
+                    return $id;
+                }
+            }
+
+            $id = $this->getStripeObjectId($paymentObject);
+            if ('' !== $id) {
+                return $id;
+            }
+        }
+
+        return '';
+    }
+
+    private function getStripeInvoicePaidDate(object $invoice): string
+    {
+        $paidAt = (int) ($invoice->status_transitions->paid_at ?? 0);
+        if ($paidAt <= 0) {
+            $paidAt = (int) ($invoice->created ?? 0);
+        }
+
+        return $paidAt > 0 ? gmdate('Y-m-d H:i:s', $paidAt) : api_get_utc_datetime();
+    }
+
+    private function getStripeInvoicePeriodEnd(object $invoice): string
+    {
+        $latestPeriodEnd = 0;
+        $lines = $invoice->lines->data ?? [];
+
+        foreach (is_iterable($lines) ? $lines : [] as $line) {
+            $periodEnd = (int) ($line->period->end ?? 0);
+            if ($periodEnd > $latestPeriodEnd) {
+                $latestPeriodEnd = $periodEnd;
+            }
+        }
+
+        return $latestPeriodEnd > 0 ? gmdate('Y-m-d H:i:s', $latestPeriodEnd) : '';
+    }
+
+    private function getStripeSubscriptionPeriodEnd(object $subscription): string
+    {
+        $latestPeriodEnd = (int) ($subscription->current_period_end ?? 0);
+        $items = $subscription->items->data ?? [];
+
+        foreach (is_iterable($items) ? $items : [] as $item) {
+            $itemPeriodEnd = (int) ($item->current_period_end ?? 0);
+            if ($itemPeriodEnd > $latestPeriodEnd) {
+                $latestPeriodEnd = $itemPeriodEnd;
+            }
+        }
+
+        return $latestPeriodEnd > 0 ? gmdate('Y-m-d H:i:s', $latestPeriodEnd) : '';
+    }
+
+    private function getExistingStripePaymentAuditFingerprints(int $serviceSaleId): array
+    {
+        $identifiers = [];
+        $signatures = [];
+
+        foreach ($this->getServiceSaleAuditPaymentRows($serviceSaleId) as $auditEntry) {
+            if (self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED !== (string) ($auditEntry['action'] ?? '')) {
+                continue;
+            }
+
+            $auditData = $this->decodeAuditData($auditEntry);
+
+            foreach (['invoice_id', 'event_id', 'event_key', 'transaction_id'] as $key) {
+                $value = trim((string) ($auditData[$key] ?? ''));
+                if ('' !== $value) {
+                    $identifiers[$value] = true;
+                }
+            }
+
+            $amount = null;
+            if (isset($auditData['amount_paid']) && is_numeric($auditData['amount_paid'])) {
+                $amount = (float) $auditData['amount_paid'];
+            } elseif (isset($auditData['amount']) && is_numeric($auditData['amount'])) {
+                $amount = (float) $auditData['amount'];
+            }
+
+            $currency = strtoupper(trim((string) ($auditData['currency'] ?? '')));
+            $billingReason = strtolower(trim((string) ($auditData['billing_reason'] ?? '')));
+            $paymentTimestamp = strtotime((string) ($auditEntry['created_at'] ?? ''));
+
+            if (null !== $amount && '' !== $currency && false !== $paymentTimestamp) {
+                $signatures[] = [
+                    'amount' => $amount,
+                    'currency' => $currency,
+                    'billing_reason' => $billingReason,
+                    'timestamp' => $paymentTimestamp,
+                ];
+            }
+        }
+
+        return [
+            'identifiers' => $identifiers,
+            'signatures' => $signatures,
+        ];
+    }
+
+    private function stripePaymentAuditSignatureExists(
+        array $fingerprints,
+        float $amount,
+        string $currency,
+        string $billingReason,
+        string $paymentDate
+    ): bool {
+        $paymentTimestamp = strtotime($paymentDate);
+        if (false === $paymentTimestamp) {
+            return false;
+        }
+
+        foreach ($fingerprints['signatures'] ?? [] as $signature) {
+            if (abs((float) ($signature['amount'] ?? 0) - $amount) >= 0.005) {
+                continue;
+            }
+
+            if ($currency !== strtoupper(trim((string) ($signature['currency'] ?? '')))) {
+                continue;
+            }
+
+            $existingBillingReason = strtolower(trim((string) ($signature['billing_reason'] ?? '')));
+            if ('' !== $billingReason && '' !== $existingBillingReason && $billingReason !== $existingBillingReason) {
+                continue;
+            }
+
+            $existingTimestamp = (int) ($signature['timestamp'] ?? 0);
+            if ($existingTimestamp > 0 && abs($existingTimestamp - $paymentTimestamp) <= 1800) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function shouldReconcileStripeRecurringServiceSale(array $serviceSale): bool
+    {
+        $subscriptionId = $this->getStripeRecurringSubscriptionId($serviceSale);
+        if ('' === $subscriptionId) {
+            return false;
+        }
+
+        $dateEnd = trim((string) ($serviceSale['date_end'] ?? ''));
+        $dateEndTimestamp = '' !== $dateEnd ? strtotime($dateEnd) : false;
+        if (false === $dateEndTimestamp || $dateEndTimestamp < time()) {
+            return true;
+        }
+
+        $durationDays = max(0, (int) ($serviceSale['service']['duration_days'] ?? $serviceSale['duration_days'] ?? 0));
+        $buyDate = trim((string) ($serviceSale['buy_date'] ?? ''));
+        $buyTimestamp = '' !== $buyDate ? strtotime($buyDate) : false;
+
+        if ($durationDays <= 0 || false === $buyTimestamp) {
+            return false;
+        }
+
+        $expectedFirstRenewalTimestamp = strtotime('+'.$durationDays.' days', $buyTimestamp);
+        if (false === $expectedFirstRenewalTimestamp || time() < $expectedFirstRenewalTimestamp) {
+            return false;
+        }
+
+        $firstRenewalTimestamp = null;
+        foreach ($this->getServiceSaleAuditPaymentRows((int) ($serviceSale['id'] ?? 0)) as $auditEntry) {
+            if (self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED !== (string) ($auditEntry['action'] ?? '')) {
+                continue;
+            }
+
+            $auditData = $this->decodeAuditData($auditEntry);
+            if ('subscription_create' === strtolower(trim((string) ($auditData['billing_reason'] ?? '')))) {
+                continue;
+            }
+
+            $auditTimestamp = strtotime((string) ($auditEntry['created_at'] ?? ''));
+            if (false !== $auditTimestamp && (null === $firstRenewalTimestamp || $auditTimestamp < $firstRenewalTimestamp)) {
+                $firstRenewalTimestamp = $auditTimestamp;
+            }
+        }
+
+        if (null === $firstRenewalTimestamp) {
+            return true;
+        }
+
+        // A renewal recorded much later than the first expected period usually
+        // means older Stripe invoices predate the local audit implementation.
+        return $firstRenewalTimestamp > strtotime('+7 days', $expectedFirstRenewalTimestamp);
+    }
+
+    public function reconcileStripeRecurringServiceSale(int $serviceSaleId, bool $force = false): array
+    {
+        $serviceSale = $this->getServiceSale($serviceSaleId);
+        if (empty($serviceSale)) {
+            return ['success' => false, 'imported' => 0, 'error' => 'Service sale not found.'];
+        }
+
+        $subscriptionId = $this->getStripeRecurringSubscriptionId($serviceSale);
+        if ('' === $subscriptionId) {
+            return ['success' => true, 'imported' => 0, 'skipped' => true];
+        }
+
+        if (!$force && !$this->shouldReconcileStripeRecurringServiceSale($serviceSale)) {
+            return ['success' => true, 'imported' => 0, 'skipped' => true];
+        }
+
+        try {
+            $stripeParams = $this->getStripeParams();
+            $secretKey = trim((string) ($stripeParams['secret_key'] ?? ''));
+            if ('' === $secretKey) {
+                return ['success' => false, 'imported' => 0, 'error' => 'Stripe secret key is not configured.'];
+            }
+
+            \Stripe\Stripe::setApiKey($secretKey);
+            \Stripe\Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+
+            $subscription = \Stripe\Subscription::retrieve($subscriptionId);
+            $subscriptionPeriodEnd = $this->getStripeSubscriptionPeriodEnd($subscription);
+            $fingerprints = $this->getExistingStripePaymentAuditFingerprints($serviceSaleId);
+            $existingIdentifiers = $fingerprints['identifiers'] ?? [];
+
+            $latestPaymentDate = '';
+            $latestPeriodEnd = '';
+            $latestTransactionId = '';
+            $imported = 0;
+            $params = [
+                'subscription' => $subscriptionId,
+                'limit' => 100,
+            ];
+            $pageCount = 0;
+
+            do {
+                $invoiceCollection = \Stripe\Invoice::all($params);
+                $invoices = $invoiceCollection->data ?? [];
+
+                foreach (is_iterable($invoices) ? $invoices : [] as $invoice) {
+                    $invoiceId = trim((string) ($invoice->id ?? ''));
+                    if ('' === $invoiceId) {
+                        continue;
+                    }
+
+                    $isPaid = true === (bool) ($invoice->paid ?? false)
+                        || 'paid' === strtolower(trim((string) ($invoice->status ?? '')));
+                    if (!$isPaid) {
+                        continue;
+                    }
+
+                    $amountPaid = isset($invoice->amount_paid) && is_numeric($invoice->amount_paid)
+                        ? ((float) $invoice->amount_paid / 100)
+                        : 0.0;
+                    $currency = strtoupper(trim((string) ($invoice->currency ?? '')));
+                    $billingReason = strtolower(trim((string) ($invoice->billing_reason ?? '')));
+                    $transactionId = $this->getStripeInvoiceTransactionId($invoice);
+                    $paymentDate = $this->getStripeInvoicePaidDate($invoice);
+                    $periodEnd = $this->getStripeInvoicePeriodEnd($invoice);
+
+                    if ('' !== $paymentDate
+                        && ('' === $latestPaymentDate || strtotime($paymentDate) > strtotime($latestPaymentDate))
+                    ) {
+                        $latestPaymentDate = $paymentDate;
+                        $latestTransactionId = $transactionId;
+                    }
+
+                    if ('' !== $periodEnd
+                        && ('' === $latestPeriodEnd || strtotime($periodEnd) > strtotime($latestPeriodEnd))
+                    ) {
+                        $latestPeriodEnd = $periodEnd;
+                    }
+
+                    if (isset($existingIdentifiers[$invoiceId])
+                        || ('' !== $transactionId && isset($existingIdentifiers[$transactionId]))
+                        || $this->stripePaymentAuditSignatureExists(
+                            $fingerprints,
+                            $amountPaid,
+                            $currency,
+                            $billingReason,
+                            $paymentDate
+                        )
+                    ) {
+                        continue;
+                    }
+
+                    $auditData = [
+                        'gateway' => 'stripe',
+                        'event_id' => $invoiceId,
+                        'event_type' => 'invoice.paid',
+                        'invoice_id' => $invoiceId,
+                        'billing_reason' => $billingReason,
+                        'subscription_id' => $subscriptionId,
+                        'transaction_id' => $transactionId,
+                        'next_charge_date' => '' !== $periodEnd ? $periodEnd : null,
+                        'amount_paid' => $amountPaid,
+                        'currency' => $currency,
+                        'reconciled_from_gateway' => true,
+                    ];
+
+                    if ($this->recordAudit(
+                        self::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED,
+                        self::AUDIT_OBJECT_SERVICE_SALE,
+                        $serviceSaleId,
+                        $auditData,
+                        0,
+                        self::AUDIT_SOURCE_GATEWAY,
+                        null,
+                        $paymentDate
+                    )) {
+                        ++$imported;
+                        $existingIdentifiers[$invoiceId] = true;
+                        if ('' !== $transactionId) {
+                            $existingIdentifiers[$transactionId] = true;
+                        }
+                    }
+                }
+
+                $pageCount++;
+                $hasMore = !empty($invoiceCollection->has_more);
+                $lastInvoice = is_array($invoices) && [] !== $invoices ? end($invoices) : null;
+                $lastInvoiceId = is_object($lastInvoice) ? trim((string) ($lastInvoice->id ?? '')) : '';
+
+                if ($hasMore && '' !== $lastInvoiceId) {
+                    $params['starting_after'] = $lastInvoiceId;
+                } else {
+                    $hasMore = false;
+                }
+            } while ($hasMore && $pageCount < 10);
+
+            $candidateDateEnd = $subscriptionPeriodEnd;
+            if ('' !== $latestPeriodEnd
+                && ('' === $candidateDateEnd || strtotime($latestPeriodEnd) > strtotime($candidateDateEnd))
+            ) {
+                $candidateDateEnd = $latestPeriodEnd;
+            }
+
+            $gatewayData = [
+                'recurring_gateway' => 'stripe',
+                'gateway_subscription_id' => $subscriptionId,
+                'recurring_profile_id' => $subscriptionId,
+            ];
+
+            $customerId = $this->getStripeObjectId($subscription->customer ?? null);
+            if ('' !== $customerId) {
+                $gatewayData['gateway_customer_id'] = $customerId;
+            }
+
+            if ('' !== $candidateDateEnd) {
+                $storedDateEnd = trim((string) ($serviceSale['date_end'] ?? ''));
+                if ('' === $storedDateEnd || strtotime($candidateDateEnd) > strtotime($storedDateEnd)) {
+                    $gatewayData['date_end'] = $candidateDateEnd;
+                    $gatewayData['next_charge_date'] = $candidateDateEnd;
+                }
+            }
+
+            if ('' !== $latestTransactionId) {
+                $gatewayData['gateway_transaction_id'] = $latestTransactionId;
+            }
+
+            $subscriptionStatus = strtolower(trim((string) ($subscription->status ?? '')));
+            $cancelAtPeriodEnd = !empty($subscription->cancel_at_period_end);
+
+            if ($cancelAtPeriodEnd || 'canceled' === $subscriptionStatus) {
+                $gatewayData['recurring_payment'] = self::SERVICE_RECURRING_PAYMENT_CANCELLED;
+
+                $cancelledTimestamp = (int) (
+                    $subscription->canceled_at
+                    ?? $subscription->cancel_at
+                    ?? 0
+                );
+                if ($cancelledTimestamp > 0) {
+                    $gatewayData['cancelled_at'] = gmdate('Y-m-d H:i:s', $cancelledTimestamp);
+                } elseif ('' === trim((string) ($serviceSale['cancelled_at'] ?? ''))) {
+                    $gatewayData['cancelled_at'] = api_get_utc_datetime();
+                }
+            } elseif (in_array($subscriptionStatus, ['past_due', 'unpaid', 'incomplete'], true)) {
+                $gatewayData['recurring_payment'] = self::SERVICE_RECURRING_PAYMENT_SUSPENDED;
+            } elseif (in_array($subscriptionStatus, ['active', 'trialing'], true)) {
+                $gatewayData['recurring_payment'] = self::SERVICE_RECURRING_PAYMENT_ENABLED;
+                $gatewayData['cancelled_at'] = null;
+            }
+
+            $this->updateServiceSaleGatewayData($serviceSaleId, $gatewayData);
+
+            return [
+                'success' => true,
+                'imported' => $imported,
+                'date_end' => $gatewayData['date_end'] ?? (string) ($serviceSale['date_end'] ?? ''),
+                'last_payment_date' => $latestPaymentDate,
+            ];
+        } catch (Throwable $exception) {
+            error_log(
+                '[BuyCourses][Stripe] Could not reconcile recurring service payment history. service_sale_id='.
+                $serviceSaleId.
+                ' subscription_id='.
+                $subscriptionId.
+                ' error='.
+                $exception->getMessage()
+            );
+
+            return [
+                'success' => false,
+                'imported' => 0,
+                'error' => $exception->getMessage(),
+            ];
+        }
+    }
+
+    public function reconcileStripeRecurringServiceSalesForUser(int $userId): void
+    {
+        if ($userId <= 0) {
+            return;
+        }
+
+        foreach ($this->getServiceSales($userId) as $serviceSale) {
+            if ('' === $this->getStripeRecurringSubscriptionId($serviceSale)) {
+                continue;
+            }
+
+            $this->reconcileStripeRecurringServiceSale((int) ($serviceSale['id'] ?? 0));
+        }
+    }
+
     private function getServiceSaleEffectiveDateEnd(array $serviceSale): string
     {
         $effectiveDateEnd = trim((string) ($serviceSale['date_end'] ?? ''));
@@ -2250,6 +2766,7 @@ class BuyCoursesPlugin extends Plugin
                         ?? $auditData['charge_id']
                         ?? ''
                     )),
+                    'invoice_id' => trim((string) ($auditData['invoice_id'] ?? '')),
                     'gateway' => strtolower(trim((string) ($auditData['gateway'] ?? $serviceSale['recurring_gateway'] ?? ''))),
                 ];
                 $initialEventIndex = array_key_last($events);
@@ -2296,6 +2813,7 @@ class BuyCoursesPlugin extends Plugin
                 'amount' => $amount,
                 'currency' => strtoupper(trim((string) ($auditData['currency'] ?? $defaultCurrency))),
                 'transaction_id' => $transactionId,
+                'invoice_id' => trim((string) ($auditData['invoice_id'] ?? '')),
                 'gateway' => $gateway,
                 'billing_reason' => $billingReason,
             ];
@@ -2313,6 +2831,7 @@ class BuyCoursesPlugin extends Plugin
                 'amount' => $baseAmount,
                 'currency' => $defaultCurrency,
                 'transaction_id' => trim((string) ($serviceSale['gateway_transaction_id'] ?? '')),
+                'invoice_id' => '',
                 'gateway' => strtolower(trim((string) ($serviceSale['recurring_gateway'] ?? ''))),
             ];
             $initialEventIndex = array_key_last($events);
@@ -2342,6 +2861,7 @@ class BuyCoursesPlugin extends Plugin
 
                 if (null !== $initialEventIndex && isset($events[$initialEventIndex])) {
                     $events[$initialEventIndex]['transaction_id'] = (string) ($renewalEvent['transaction_id'] ?? $events[$initialEventIndex]['transaction_id']);
+                    $events[$initialEventIndex]['invoice_id'] = (string) ($renewalEvent['invoice_id'] ?? $events[$initialEventIndex]['invoice_id']);
                     $events[$initialEventIndex]['gateway'] = (string) ($renewalEvent['gateway'] ?? $events[$initialEventIndex]['gateway']);
                     $events[$initialEventIndex]['currency'] = (string) ($renewalEvent['currency'] ?? $events[$initialEventIndex]['currency']);
                     if (isset($renewalEvent['amount']) && is_numeric($renewalEvent['amount'])) {
@@ -2482,12 +3002,18 @@ class BuyCoursesPlugin extends Plugin
         $paypal = 'true' === $this->get('paypal_enable');
         $transfer = 'true' === $this->get('transfer_enable');
         $stripe = 'true' === $this->get('stripe_enable');
+        $btcpay = 'true' === $this->get('btcpay_enable');
+
+        if ($btcpay) {
+            require_once __DIR__.'/btcpay_client.php';
+            $btcpay = BuyCoursesBtcPayClient::isConfigured($this);
+        }
         $culqi = 'true' === $this->get('culqi_enable');
         $cecabank = 'true' === $this->get('cecabank_enable');
         $tpv_redsys = 'true' === $this->get('tpv_redsys_enable');
         $hideFree = 'true' === $this->get('hide_free_text');
 
-        if ($paypal || $transfer || $stripe || $culqi || $cecabank || $tpv_redsys) {
+        if ($paypal || $transfer || $stripe || $btcpay || $culqi || $cecabank || $tpv_redsys) {
             $item = $this->getItemByProduct($productId, $productType);
             $html = '<div class="buycourses-price">';
             if ($item) {
@@ -2697,6 +3223,95 @@ class BuyCoursesPlugin extends Plugin
             ['id = ?' => 1],
             'first'
         );
+    }
+
+    /**
+     * Save BTCPay Server configuration params.
+     *
+     * Empty secret fields keep the currently stored value so administrators do
+     * not need to re-enter credentials when changing only the URL or Store ID.
+     */
+    public function saveBtcPayParameters(array $params): int
+    {
+        $this->ensureBtcPayAccountTable();
+        $current = $this->getBtcPayParams();
+
+        $apiKey = trim((string) ($params['api_key'] ?? ''));
+        $webhookSecret = trim((string) ($params['webhook_secret'] ?? ''));
+
+        if ('' === $apiKey) {
+            $apiKey = trim((string) ($current['api_key'] ?? ''));
+        }
+
+        if ('' === $webhookSecret) {
+            $webhookSecret = trim((string) ($current['webhook_secret'] ?? ''));
+        }
+
+        return Database::update(
+            Database::get_main_table(self::TABLE_BTCPAY),
+            [
+                'server_url' => rtrim(trim((string) ($params['server_url'] ?? '')), '/'),
+                'store_id' => trim((string) ($params['store_id'] ?? '')),
+                'api_key' => $apiKey,
+                'webhook_secret' => $webhookSecret,
+            ],
+            ['id = ?' => 1]
+        );
+    }
+
+    /**
+     * Gets the stored BTCPay Server params.
+     */
+    public function getBtcPayParams(): array
+    {
+        if (!$this->hasPluginTable(self::TABLE_BTCPAY)) {
+            return [
+                'id' => 0,
+                'server_url' => '',
+                'store_id' => '',
+                'api_key' => '',
+                'webhook_secret' => '',
+            ];
+        }
+
+        $params = Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_BTCPAY),
+            ['id = ?' => 1],
+            'first'
+        );
+
+        return is_array($params) ? $params : [];
+    }
+
+    private function ensureBtcPayAccountTable(): void
+    {
+        $table = Database::get_main_table(self::TABLE_BTCPAY);
+        $connection = Database::getManager()->getConnection();
+        $schemaManager = $connection->createSchemaManager();
+
+        if (!$schemaManager->tablesExist($table)) {
+            Database::query(
+                "CREATE TABLE $table (
+                    id int unsigned NOT NULL AUTO_INCREMENT,
+                    server_url varchar(2048) NOT NULL,
+                    store_id varchar(255) NOT NULL,
+                    api_key varchar(512) NOT NULL,
+                    webhook_secret varchar(255) NOT NULL,
+                    PRIMARY KEY (id)
+                )"
+            );
+        }
+
+        $res = Database::query("SELECT id FROM $table LIMIT 1");
+        if (0 === Database::num_rows($res)) {
+            Database::insert($table, [
+                'server_url' => '',
+                'store_id' => '',
+                'api_key' => '',
+                'webhook_secret' => '',
+            ]);
+        }
     }
 
     /**
@@ -3586,6 +4201,7 @@ class BuyCoursesPlugin extends Plugin
                 self::PAYMENT_TYPE_TPV_REDSYS,
                 self::PAYMENT_TYPE_STRIPE,
                 self::PAYMENT_TYPE_TPV_CECABANK,
+                self::PAYMENT_TYPE_BTCPAY,
             ]
         )
         ) {
@@ -3597,6 +4213,14 @@ class BuyCoursesPlugin extends Plugin
 
         if (empty($item)) {
             return null;
+        }
+
+        if (self::PAYMENT_TYPE_BTCPAY === $paymentType) {
+            require_once __DIR__.'/btcpay_client.php';
+
+            if ('true' !== $this->get('btcpay_enable') || !BuyCoursesBtcPayClient::isConfigured($this)) {
+                return null;
+            }
         }
 
         $productName = '';
@@ -3863,7 +4487,15 @@ class BuyCoursesPlugin extends Plugin
         switch ($sale['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
                 $course = api_get_course_info_by_id($sale['product_id']);
-                $saleIsCompleted = CourseManager::subscribeUser($sale['user_id'], $course['code']);
+
+                if (empty($course) || empty($course['real_id'])) {
+                    return false;
+                }
+
+                $saleIsCompleted = CourseManager::subscribeUser(
+                    (int) $sale['user_id'],
+                    (int) $course['real_id']
+                );
 
                 break;
 
@@ -3903,7 +4535,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get payment types.
      */
-    public function getPaymentTypes(bool $onlyActive = false): array
+    public function getPaymentTypes(bool $onlyActive = false, bool $includeBtcPay = false): array
     {
         $types = [
             self::PAYMENT_TYPE_PAYPAL => 'PayPal',
@@ -3912,6 +4544,7 @@ class BuyCoursesPlugin extends Plugin
             self::PAYMENT_TYPE_TPV_REDSYS => $this->get_lang('TpvPayment'),
             self::PAYMENT_TYPE_STRIPE => 'Stripe',
             self::PAYMENT_TYPE_TPV_CECABANK => $this->get_lang('TpvCecabank'),
+            self::PAYMENT_TYPE_BTCPAY => 'BTCPay Server',
         ];
 
         if (!$onlyActive) {
@@ -3942,6 +4575,16 @@ class BuyCoursesPlugin extends Plugin
 
         if ('true' !== $this->get('cecabank_enable')) {
             unset($types[self::PAYMENT_TYPE_TPV_CECABANK]);
+        }
+
+        if (!$includeBtcPay || 'true' !== $this->get('btcpay_enable')) {
+            unset($types[self::PAYMENT_TYPE_BTCPAY]);
+        } else {
+            require_once __DIR__.'/btcpay_client.php';
+
+            if (!BuyCoursesBtcPayClient::isConfigured($this)) {
+                unset($types[self::PAYMENT_TYPE_BTCPAY]);
+            }
         }
 
         return $types;

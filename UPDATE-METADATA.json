@@ -42,6 +42,7 @@
         "public/main/lp/aiccResource.class.php",
         "public/main/lp/aicc_api.php",
         "public/main/lp/lp_upload.php",
+        "public/main/plagiarism/compilatio/download.php",
         "public/main/portfolio/add_category.php",
         "public/main/portfolio/add_item.php",
         "public/main/portfolio/edit_category.php",

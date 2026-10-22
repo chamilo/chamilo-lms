@@ -430,6 +430,10 @@ switch ($eventType) {
         $plugin->applyServiceBenefitsFromSale($serviceSaleId);
         $plugin->markGatewayEventProcessed($serviceSaleId, $eventId);
         $billingReason = strtolower(trim((string) ($object->billing_reason ?? '')));
+        $paymentAuditDate = $timestampToDateTime(
+            $getStripeObjectValue($object, 'status_transitions.paid_at')
+            ?? $getStripeObjectValue($object, 'created')
+        );
         $plugin->recordAudit(
             BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_PAYMENT_SUCCEEDED,
             BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
@@ -438,6 +442,7 @@ switch ($eventType) {
                 'gateway' => 'stripe',
                 'event_id' => $eventId,
                 'event_type' => $eventType,
+                'invoice_id' => trim((string) ($object->id ?? '')),
                 'billing_reason' => $billingReason,
                 'subscription_id' => $subscriptionId,
                 'transaction_id' => $paymentIntentId,
@@ -446,7 +451,9 @@ switch ($eventType) {
                 'currency' => isset($object->currency) ? strtoupper((string) $object->currency) : null,
             ],
             null,
-            BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+            BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY,
+            null,
+            $paymentAuditDate
         );
 
         if ('subscription_create' !== $billingReason) {
@@ -543,6 +550,7 @@ switch ($eventType) {
                     'gateway' => 'stripe',
                     'event_id' => $eventId,
                     'event_type' => $eventType,
+                    'invoice_id' => trim((string) ($object->id ?? '')),
                     'subscription_id' => $subscriptionId,
                 ],
                 null,

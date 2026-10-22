@@ -4275,5 +4275,9 @@
     "Proceed with the test": "Proceed with the test",
     "Follow": "Follow",
     "Following": "Following",
-    "Get an e-mail when a learner comments on a submission of this assignment": "Get an e-mail when a learner comments on a submission of this assignment"
+    "Get an e-mail when a learner comments on a submission of this assignment": "Get an e-mail when a learner comments on a submission of this assignment",
+    "Read more": "Read more",
+    "Participation: {0} of {1} posts": "Participation: {0} of {1} posts",
+    "Post your contribution to see the replies of the other participants.": "Post your contribution to see the replies of the other participants.",
+    "This email is already in use on the platform.": "This email is already in use on the platform."
 }

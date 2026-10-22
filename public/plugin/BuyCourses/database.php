@@ -678,6 +678,20 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
     $stripeTable->setPrimaryKey(['id']);
 }
 
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_BTCPAY))) {
+    $btcpayTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_BTCPAY));
+    $btcpayTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $btcpayTable->addColumn('server_url', Types::STRING, ['length' => 2048]);
+    $btcpayTable->addColumn('store_id', Types::STRING, ['length' => 255]);
+    $btcpayTable->addColumn('api_key', Types::STRING, ['length' => 512]);
+    $btcpayTable->addColumn('webhook_secret', Types::STRING, ['length' => 255]);
+    $btcpayTable->setPrimaryKey(['id']);
+}
+
 if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_TPV_CECABANK))) {
     $tpvCecabankTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_TPV_CECABANK));
     $tpvCecabankTable->addColumn(
@@ -777,6 +791,7 @@ $culqiTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI);
 $globalTable = Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
 $tpvRedsysTable = Database::get_main_table(BuyCoursesPlugin::TABLE_TPV_REDSYS);
 $stripeTable = Database::get_main_table(BuyCoursesPlugin::TABLE_STRIPE);
+$btcpayTable = Database::get_main_table(BuyCoursesPlugin::TABLE_BTCPAY);
 
 $paypalExtraField = Database::select(
     '*',
@@ -859,6 +874,18 @@ if (!buycourses_plugin_table_has_rows($stripeTable)) {
             'account_id' => '',
             'secret_key' => '',
             'endpoint_secret' => '',
+        ]
+    );
+}
+
+if (!buycourses_plugin_table_has_rows($btcpayTable)) {
+    Database::insert(
+        $btcpayTable,
+        [
+            'server_url' => '',
+            'store_id' => '',
+            'api_key' => '',
+            'webhook_secret' => '',
         ]
     );
 }

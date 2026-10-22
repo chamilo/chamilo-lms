@@ -150,12 +150,13 @@ trait ChamiloTestTrait
 
     public function getAccessUrl(string $url = ''): ?AccessUrl
     {
-        if (empty($url)) {
-            $url = AccessUrl::DEFAULT_ACCESS_URL;
-        }
-
         /** @var AccessUrlRepository $repo */
         $repo = static::getContainer()->get(AccessUrlRepository::class);
+
+        if (empty($url)) {
+            // A database installed outside the fixtures has its own main URL instead of the default one.
+            return $repo->findOneBy(['url' => AccessUrl::DEFAULT_ACCESS_URL]) ?? $repo->find($repo->getFirstId());
+        }
 
         return $repo->findOneBy(['url' => $url]);
     }

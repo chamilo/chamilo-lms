@@ -4258,5 +4258,6 @@
     "Course tracking details": "\uac15\uc758 \ucd94\uc801 \uc0c1\uc138 \uc815\ubcf4",
     "Learner details in course": "\ucf54\uc2a4 \ub0b4 \ud559\uc2b5\uc790 \uc0c1\uc138 \uc815\ubcf4",
     "Start test": "\uc2dc\ud5d8 \uc2dc\uc791",
-    "Proceed with the test": "\uc2dc\ud5d8 \uc9c4\ud589"
+    "Proceed with the test": "\uc2dc\ud5d8 \uc9c4\ud589",
+    "This email is already in use on the platform.": "\uc774 \uc774\uba54\uc77c\uc740 \ud50c\ub7ab\ud3fc\uc5d0\uc11c \uc774\ubbf8 \uc0ac\uc6a9 \uc911\uc785\ub2c8\ub2e4."
 }

@@ -233,37 +233,125 @@
         </template>
       </Column>
 
+      <Column
+        v-if="showCredentialStatusColumn"
+        :header="t('Signed credential')"
+      >
+        <template #body="{ data }">
+          <span
+            v-if="data.certificate"
+            class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium"
+            :class="credentialStatus(data.certificate).className"
+          >
+            {{ credentialStatus(data.certificate).label }}
+          </span>
+          <span v-else class="text-gray-500">—</span>
+        </template>
+      </Column>
+
       <Column :header="t('Actions')">
         <template #body="{ data }">
-          <div class="flex flex-wrap justify-start gap-1">
-            <BaseButton
-              v-if="data.certificate?.viewUrl"
-              :label="t('View')"
-              icon="preview"
-              only-icon
-              size="small"
-              type="primary-text"
-              @click="openCertificatePreview(data)"
-            />
-            <BaseButton
-              v-if="data.certificate?.downloadUrl"
-              :label="t('Download')"
-              :to-url="data.certificate.downloadUrl"
-              icon="download"
-              only-icon
-              size="small"
-              type="primary-text"
-            />
-            <BaseButton
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Certificate actions: original file, not the signed credential. -->
+            <div
+              class="flex items-center gap-1"
+              role="group"
+              :aria-label="t('Certificate')"
+            >
+              <BaseButton
+                v-if="data.certificate?.viewUrl"
+                :label="t('View certificate')"
+                icon="preview"
+                only-icon
+                size="small"
+                type="primary-text"
+                @click="openCertificatePreview(data)"
+              />
+              <BaseButton
+                v-if="data.certificate?.downloadUrl"
+                :label="t('Download certificate')"
+                :to-url="data.certificate.downloadUrl"
+                icon="download"
+                only-icon
+                size="small"
+                type="primary-text"
+              />
+            </div>
+
+            <!-- Digital credential actions: these never delete the original certificate. -->
+            <div
+              v-if="certificates?.settings?.credentialActionsEnabled || data.certificate?.credentialUrl"
+              class="flex flex-wrap items-center gap-1 border-s border-gray-20 ps-2"
+              role="group"
+              :aria-label="t('Signed credential')"
+            >
+              <BaseButton
+                v-if="certificates?.settings?.credentialActionsEnabled && data.certificate?.consentForCredential && (!data.certificate.credentialUrl || data.certificate.credentialRevoked)"
+                :label="t('Issue signed credential')"
+                icon="shield-star"
+                only-icon
+                size="small"
+                type="secondary-text"
+                :disabled="isRunningAction"
+                @click="confirmCredentialAction(data, 'issue')"
+              />
+              <BaseButton
+                v-if="data.certificate?.credentialUrl"
+                :label="t('Verify credential')"
+                icon="shield-check"
+                only-icon
+                size="small"
+                type="primary-text"
+                :to-url="data.certificate.credentialUrl"
+              />
+              <BaseButton
+                v-if="certificates?.settings?.credentialActionsEnabled && data.certificate?.consentForCredential && data.certificate?.credentialUrl && !data.certificate.credentialRevoked && !data.certificate.credentialTxHash"
+                :label="t('Anchor on Sepolia testnet')"
+                icon="link-add"
+                only-icon
+                size="small"
+                type="secondary-text"
+                :disabled="isRunningAction"
+                @click="confirmCredentialAction(data, 'anchor')"
+              />
+              <BaseButton
+                v-if="certificates?.settings?.credentialActionsEnabled && data.certificate?.consentForCredential && data.certificate?.credentialUrl && !data.certificate.credentialRevoked && !data.certificate.credentialTxHash"
+                :label="t('Confirm existing Sepolia transaction')"
+                icon="check"
+                only-icon
+                size="small"
+                type="secondary-text"
+                :disabled="isRunningAction"
+                @click="openAnchorRetry(data)"
+              />
+              <BaseButton
+                v-if="certificates?.settings?.credentialActionsEnabled && data.certificate?.credentialUrl && !data.certificate.credentialRevoked"
+                :label="t('Revoke signed credential')"
+                icon="xmark"
+                only-icon
+                size="small"
+                type="danger-text"
+                :disabled="isRunningAction"
+                @click="confirmCredentialAction(data, 'revoke')"
+              />
+            </div>
+
+            <div
               v-if="certificates?.canManage && data.certificate"
-              :disabled="isRunningAction"
-              :label="t('Delete')"
-              icon="delete"
-              only-icon
-              size="small"
-              type="danger-text"
-              @click="confirmDeleteOne(data)"
-            />
+              class="border-s border-gray-20 ps-2"
+              role="group"
+              :aria-label="t('Delete certificate')"
+            >
+              <BaseButton
+                :disabled="isRunningAction"
+                :label="t('Delete certificate')"
+                icon="delete"
+                only-icon
+                size="small"
+                type="danger-text"
+                @click="confirmDeleteOne(data)"
+              />
+            </div>
           </div>
         </template>
       </Column>
@@ -284,6 +372,27 @@
           sandbox="allow-same-origin"
         />
       </div>
+    </BaseDialog>
+
+    <BaseDialog
+      v-model:is-visible="isAnchorRetryVisible"
+      :title="t('Confirm an existing Sepolia transaction')"
+      header-icon="check"
+    >
+      <BaseInputText
+        v-model="retryAnchorHash"
+        name="certificate_sepolia_transaction_hash"
+        :label="t('Sepolia transaction hash')"
+      />
+      <template #footer>
+        <BaseButton
+          :label="t('Verify transaction')"
+          icon="check"
+          type="primary"
+          :disabled="isRunningAction || !/^0x[0-9a-fA-F]{64}$/.test(retryAnchorHash)"
+          @click="retryAnchorConfirmation"
+        />
+      </template>
     </BaseDialog>
 
     <BaseDialog
@@ -356,12 +465,17 @@ import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import gradebookService from "../../services/gradebookService"
 
 const { t } = useI18n()
 const route = useRoute()
 const { requireConfirmation } = useConfirmation()
+
+// A fixed, non-internal recipient lets MetaMask attach certificate fingerprint data.
+// No ether is transferred. Keep in sync with GradebookCertificateSepoliaVerifier.
+const SEPOLIA_ANCHOR_RECEIVER = "0x000000000000000000000000000000000000dEaD"
 
 const certificates = ref(null)
 const officialCode = ref("")
@@ -373,6 +487,9 @@ const infoMessage = ref("")
 const isNotificationDialogVisible = ref(false)
 const isPreviewDialogVisible = ref(false)
 const isExpiryDialogVisible = ref(false)
+const isAnchorRetryVisible = ref(false)
+const retryAnchorRow = ref(null)
+const retryAnchorHash = ref("")
 const expiryDateForm = ref(null)
 const expiryDialogRow = ref(null)
 const previewUrl = ref("")
@@ -420,6 +537,30 @@ const categorySubtitle = computed(() => {
 
   return String(certificates.value?.category?.title || "").trim()
 })
+// Display a meaningful, non-interactive status so users do not need to guess from icons.
+// The API deliberately omits credential details for non-admin users; do not infer
+// a credential's state from a missing property in that context.
+const showCredentialStatusColumn = computed(() =>
+  Boolean(certificates.value?.settings?.credentialActionsEnabled) ||
+  (certificates.value?.learners || []).some((row) => Boolean(row?.certificate?.credentialUrl)),
+)
+
+function credentialStatus(certificate) {
+  if (certificate?.credentialUrl) {
+    if (certificate.credentialRevoked) {
+      return { label: t("Revoked"), className: "border-danger/30 bg-danger/10 text-danger" }
+    }
+    if (certificate.credentialTxHash) {
+      return { label: t("Anchored"), className: "border-success/30 bg-success/10 text-success" }
+    }
+    return { label: t("Issued"), className: "border-info/30 bg-info/10 text-info" }
+  }
+  if (certificate?.consentForCredential) {
+    return { label: t("Not issued"), className: "border-gray-30 bg-gray-10 text-gray-700" }
+  }
+  return { label: t("Consent required"), className: "border-gray-30 bg-gray-10 text-gray-700" }
+}
+
 const officialCodeOptions = computed(() => [
   { label: t("All"), value: "" },
   ...(certificates.value?.officialCodeOptions || []),
@@ -537,6 +678,100 @@ async function runAction(action, userId = null, extra = {}) {
     await loadCertificates()
   } catch (error) {
     errorMessage.value = getErrorMessage(error)
+  } finally {
+    isRunningAction.value = false
+    currentAction.value = ""
+  }
+}
+
+function openAnchorRetry(row) {
+  retryAnchorRow.value = row
+  retryAnchorHash.value = ""
+  isAnchorRetryVisible.value = true
+}
+
+async function retryAnchorConfirmation() {
+  const id = Number(retryAnchorRow.value?.certificate?.id || 0)
+  if (!id || !/^0x[0-9a-fA-F]{64}$/.test(retryAnchorHash.value)) return
+  isAnchorRetryVisible.value = false
+  isRunningAction.value = true
+  errorMessage.value = ""
+  try {
+    await gradebookService.runCertificateCredentialAction({
+      certificateId: id, action: "confirm_anchor", txHash: retryAnchorHash.value,
+    })
+    infoMessage.value = t("Sepolia transaction confirmed and verified")
+    await loadCertificates()
+  } catch (error) {
+    errorMessage.value = getErrorMessage(error)
+  } finally {
+    isRunningAction.value = false
+  }
+}
+
+function confirmCredentialAction(row, action) {
+  const certificateId = Number(row?.certificate?.id || 0)
+  if (certificateId <= 0 || isRunningAction.value) return
+  requireConfirmation({
+    message: action === "anchor"
+      ? t("The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?")
+      : action === "revoke"
+        ? t("Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation.")
+        : t("Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."),
+    accept: () => runCredentialAction(certificateId, action, row.certificate),
+  })
+}
+
+async function runCredentialAction(certificateId, action, certificate) {
+  let submittedTxHash = null
+  isRunningAction.value = true
+  currentAction.value = `credential_${action}`
+  errorMessage.value = ""
+  infoMessage.value = ""
+  try {
+    if (action === "anchor") {
+      if (!window.ethereum?.request) {
+        throw new Error(t("An EVM-compatible browser wallet is required for Sepolia."))
+      }
+      const chainId = String(await window.ethereum.request({ method: "eth_chainId" })).toLowerCase()
+      if (chainId !== "0xaa36a7") {
+        throw new Error(t("Select Sepolia testnet (chain ID 11155111) in your wallet."))
+      }
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" })
+      const sender = accounts?.[0]
+      const data = String(certificate?.credentialAnchorData || "")
+      if (!/^0x[0-9a-fA-F]+$/.test(data) || !/^0x[0-9a-fA-F]{40}$/.test(sender || "")) {
+        throw new Error(t("Invalid wallet address or certificate fingerprint."))
+      }
+      submittedTxHash = await window.ethereum.request({
+        method: "eth_sendTransaction",
+        params: [{ from: sender, to: SEPOLIA_ANCHOR_RECEIVER, value: "0x0", data }],
+      })
+      const txHash = submittedTxHash
+      // A wallet returns before the transaction is mined. Wait for a receipt.
+      let receipt = null
+      for (let attempt = 0; attempt < 15; attempt++) {
+        receipt = await window.ethereum.request({
+          method: "eth_getTransactionReceipt", params: [txHash],
+        })
+        if (receipt?.blockNumber) break
+        await new Promise((resolve) => setTimeout(resolve, 4000))
+      }
+      if (!receipt?.blockNumber) {
+        throw new Error(`${t("Transaction pending")}: ${txHash}. ${t("Use Confirm existing Sepolia transaction later.")}`)
+      }
+      await gradebookService.runCertificateCredentialAction({ certificateId, action: "confirm_anchor", txHash })
+      infoMessage.value = t("Sepolia transaction confirmed and verified")
+    } else {
+      await gradebookService.runCertificateCredentialAction({ certificateId, action })
+      infoMessage.value = action === "issue" ? t("Signed credential issued") : t("Credential revoked")
+    }
+    await loadCertificates()
+  } catch (error) {
+    errorMessage.value = getErrorMessage(error)
+    if (action === "anchor" && submittedTxHash) {
+      errorMessage.value += ` ${t("Transaction hash")}: ${submittedTxHash}. ${t("Use Confirm existing Sepolia transaction later.")}`
+    }
   } finally {
     isRunningAction.value = false
     currentAction.value = ""

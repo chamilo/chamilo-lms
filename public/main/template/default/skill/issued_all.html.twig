@@ -75,7 +75,16 @@
             </div>
         </div>
         <div class="w-full md:w-4/5 px-4">
-            <h3 class="text-xl font-bold">{{ 'Recipient details'|trans }}</h3>
+            {% if badge.assignment_url %}
+                <a
+                        href="{{ badge.assignment_url }}"
+                        class="btn btn--danger inline-flex items-center gap-2"
+                >
+                    <i class="mdi mdi-delete" aria-hidden="true"></i>
+                    {{ 'Remove'|trans }}
+                </a>
+            {% endif %}
+            <h3 class="text-xl font-bold mt-4">{{ 'Recipient details'|trans }}</h3>
             <p class="text-lg font-semibold">{{ badge.issue_info.user_complete_name }}</p>
 
             <h4 class="mt-4 font-bold">{{ 'Skill acquired at'|trans }}</h4>

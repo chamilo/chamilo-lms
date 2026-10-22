@@ -1781,6 +1781,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'If enabled, session administrators can download certificates even if they are not publicly published.',
                 ],
                 [
+                    'name' => 'blockchain_verification_enabled',
+                    'title' => 'Enable signed certificates and optional Sepolia testnet anchoring',
+                    'comment' => 'Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain.',
+                    'selected_value' => 'false',
+                ],
+                [
                     'name' => 'allow_public_certificates',
                     'title' => 'Allow public certificates',
                     'comment' => 'User certificates can be view by unregistered users.',
@@ -2814,6 +2820,21 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Forum notifications from base course as well',
                     'comment' => 'Enable this option to enable notifications coming from the base course forum, even if following the course through a session.',
                 ],
+                [
+                    'name' => 'show_thread_replies_after_participation',
+                    'title' => 'Show thread replies only after participating',
+                    'comment' => 'Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post.',
+                ],
+                [
+                    'name' => 'show_category_description_in_thread',
+                    'title' => 'Show the forum category description in threads',
+                    'comment' => 'Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description.',
+                ],
+                [
+                    'name' => 'thread_participation_progress_posts',
+                    'title' => 'Posts required to complete a forum thread',
+                    'comment' => 'Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar.',
+                ],
             ],
             'gradebook' => [
                 [
@@ -3269,6 +3290,26 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'mcp_allowed_roles',
                     'title' => 'Allow MCP by roles',
                     'comment' => 'JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections.',
+                ],
+                [
+                    'name' => 'confidential_reporting_enabled',
+                    'title' => 'Enable confidential welfare reporting',
+                    'comment' => 'Enable confidential incident reports. The module requires a protected encryption key and investigator permission.',
+                ],
+                [
+                    'name' => 'confidential_reporting_min_reporters',
+                    'title' => 'Minimum distinct reporters for an investigation',
+                    'comment' => 'Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators.',
+                ],
+                [
+                    'name' => 'confidential_reporting_attachments_enabled',
+                    'title' => 'Allow confidential evidence attachments',
+                    'comment' => 'Allow images, audio and short video evidence. Existing attachments remain readable when disabled.',
+                ],
+                [
+                    'name' => 'confidential_reporting_notifications_enabled',
+                    'title' => 'Show confidential investigation notifications',
+                    'comment' => 'Display an internal indication of eligible investigations. Does not send emails or external notifications.',
                 ],
                 [
                     'name' => 'external_api_enabled',

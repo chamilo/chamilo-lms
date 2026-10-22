@@ -10,10 +10,16 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookCertificates;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookCertificate;
+use Chamilo\CoreBundle\Entity\GradebookCertificateCredential;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateCredentialSigner;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
+use Chamilo\CoreBundle\Settings\SettingsManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -30,6 +36,10 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
         private GradebookContextResolver $contextResolver,
         private GradebookCertificateGenerator $certificateGenerator,
         private CsrfTokenManagerInterface $csrfTokenManager,
+        private EntityManagerInterface $entityManager,
+        private SettingsManager $settingsManager,
+        private Security $security,
+        private GradebookCertificateCredentialSigner $credentialSigner,
     ) {}
 
     /**
@@ -96,6 +106,25 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
                 continue;
             }
 
+            if ($resolved->canManage && $this->security->getUser() instanceof User
+                && $this->security->getUser()->isAdmin() && !$this->security->isGranted('IS_IMPERSONATOR')) {
+                $certificateEntity = $this->entityManager->getRepository(GradebookCertificate::class)->find((int) $certificate['id']);
+                if ($certificateEntity instanceof GradebookCertificate) {
+                    $proof = $this->entityManager->getRepository(GradebookCertificateCredential::class)
+                        ->findOneBy(['certificate' => $certificateEntity], ['issuedAt' => 'DESC'])
+                    ;
+                    $certificate['consentForCredential'] = null !== $certificateEntity->getUserPublicationApprovalDate()
+                        && 'sepolia-hash-only-v1' === $certificateEntity->getUserPublicationConsentScope();
+                    $certificate['credentialUrl'] = $proof instanceof GradebookCertificateCredential
+                        ? '/certificates/verify/'.$proof->getToken() : '';
+                    $certificate['credentialAnchorData'] = $proof instanceof GradebookCertificateCredential
+                        ? $this->credentialSigner->anchorData($proof) : '';
+                    $certificate['credentialRevoked'] = $proof instanceof GradebookCertificateCredential
+                        && null !== $proof->getRevokedAt();
+                    $certificate['credentialTxHash'] = $proof instanceof GradebookCertificateCredential ? $proof->getTxHash() : null;
+                }
+            }
+
             $rows[] = [
                 'user' => [
                     'id' => (int) $student->getId(),
@@ -139,6 +168,11 @@ final readonly class GradebookCertificatesProvider implements ProviderInterface
                 'certificate.certificate_filter_by_official_code',
             ),
             'hideExport' => $hideExport,
+            'credentialActionsEnabled' => $resolved->canManage
+                && $this->security->getUser() instanceof User
+                && $this->security->getUser()->isAdmin()
+                && !$this->security->isGranted('IS_IMPERSONATOR')
+                && \in_array(strtolower((string) $this->settingsManager->getSetting('certificate.blockchain_verification_enabled')), ['1', 'true'], true),
             'customCertificateFallback' => $useCustomCertificateFallback,
         ];
         $resource->officialCodeOptions = $officialCodeOptions;

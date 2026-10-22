@@ -408,7 +408,13 @@ $tpvRedsysEnable = 'true' === $plugin->get('tpv_redsys_enable');
 $commissionsEnable = 'true' === $plugin->get('commissions_enable');
 $culqiEnable = 'true' === $plugin->get('culqi_enable');
 $stripeEnable = 'true' === $plugin->get('stripe_enable');
+$btcpayEnable = 'true' === $plugin->get('btcpay_enable');
 $cecabankEnable = 'true' === $plugin->get('cecabank_enable');
+require_once __DIR__.'/btcpay_client.php';
+$btcpayParams = $plugin->getBtcPayParams();
+$btcpayConfigured = BuyCoursesBtcPayClient::isConfigured($plugin);
+$btcpayConnectionTestResult = $_SESSION['buycourses_btcpay_connection_test_result'] ?? null;
+unset($_SESSION['buycourses_btcpay_connection_test_result']);
 $taxEnable = 'true' === $plugin->get('tax_enable');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
@@ -954,6 +960,130 @@ $stripeForm->addText(
 $stripeForm->addButtonSave(get_lang('Save'));
 $stripeForm->setDefaults($plugin->getStripeParams());
 
+$btcpayForm = new FormValidator('btcpay_config');
+
+if ($btcpayForm->validate()) {
+    $btcpayFormValues = $btcpayForm->getSubmitValues();
+    $storedBtcPayParams = $plugin->getBtcPayParams();
+
+    $resolvedBtcPayParams = [
+        'server_url' => trim((string) ($btcpayFormValues['server_url'] ?? '')),
+        'store_id' => trim((string) ($btcpayFormValues['store_id'] ?? '')),
+        'api_key' => trim((string) ($btcpayFormValues['api_key'] ?? '')),
+        'webhook_secret' => trim((string) ($btcpayFormValues['webhook_secret'] ?? '')),
+    ];
+
+    if ('' === $resolvedBtcPayParams['api_key']) {
+        $resolvedBtcPayParams['api_key'] = trim((string) ($storedBtcPayParams['api_key'] ?? ''));
+    }
+
+    if ('' === $resolvedBtcPayParams['webhook_secret']) {
+        $resolvedBtcPayParams['webhook_secret'] = trim((string) ($storedBtcPayParams['webhook_secret'] ?? ''));
+    }
+
+    $testingBtcPayConnection = isset($btcpayFormValues['test_connection']);
+
+    try {
+        if ($testingBtcPayConnection) {
+            // Validate the submitted API settings first, then persist them before
+            // the remote request. This keeps the administrator's credentials even
+            // when BTCPay rejects the connection test (for example with HTTP 403).
+            $btcpayClient = BuyCoursesBtcPayClient::fromApiSettings($resolvedBtcPayParams);
+            $plugin->saveBtcPayParameters($resolvedBtcPayParams);
+            $store = $btcpayClient->testConnection();
+
+            $storeName = trim((string) ($store['name'] ?? ''));
+            $storeLabel = '' !== $storeName
+                ? $storeName.' ('.$resolvedBtcPayParams['store_id'].')'
+                : $resolvedBtcPayParams['store_id'];
+            $messageText = sprintf(
+                $plugin->get_lang('BtcPayConnectionTestSuccess'),
+                $storeLabel
+            );
+            $_SESSION['buycourses_btcpay_connection_test_result'] = [
+                'type' => 'success',
+                'message' => $messageText,
+            ];
+            $message = null;
+        } else {
+            if (
+                '' !== $resolvedBtcPayParams['server_url']
+                && !BuyCoursesBtcPayClient::isValidServerUrl($resolvedBtcPayParams['server_url'])
+            ) {
+                throw new RuntimeException($plugin->get_lang('BtcPayServerUrlHelp'));
+            }
+
+            $plugin->saveBtcPayParameters($resolvedBtcPayParams);
+            $message = Display::return_message(get_lang('Saved'), 'success');
+        }
+    } catch (Throwable $exception) {
+        $messageKey = $testingBtcPayConnection
+            ? 'BtcPayConnectionTestFailed'
+            : 'BtcPayConfigurationSaveFailed';
+        $messageText = sprintf(
+            $plugin->get_lang($messageKey),
+            $exception->getMessage()
+        );
+
+        if ($testingBtcPayConnection) {
+            $_SESSION['buycourses_btcpay_connection_test_result'] = [
+                'type' => 'error',
+                'message' => $messageText,
+            ];
+            $message = null;
+        } else {
+            $message = Display::return_message(
+                htmlspecialchars($messageText, ENT_QUOTES, 'UTF-8'),
+                'error'
+            );
+        }
+    }
+
+    if (null !== $message) {
+        Display::addFlash($message);
+    }
+    header('Location:'.api_get_self().'#btcpay-config');
+    exit;
+}
+
+$btcpayForm->addText(
+    'server_url',
+    [$plugin->get_lang('BtcPayServerUrl'), $plugin->get_lang('BtcPayServerUrlHelp')],
+    false,
+    ['cols-size' => [3, 8, 1], 'placeholder' => 'https://btcpay.example.org']
+);
+$btcpayForm->addText(
+    'store_id',
+    $plugin->get_lang('BtcPayStoreId'),
+    false,
+    ['cols-size' => [3, 8, 1], 'autocomplete' => 'off']
+);
+$btcpayForm->addElement(
+    'password',
+    'api_key',
+    [$plugin->get_lang('BtcPayApiKey'), $plugin->get_lang('BtcPaySecretKeepHelp')],
+    ['maxlength' => 512, 'autocomplete' => 'new-password']
+);
+$btcpayForm->addElement(
+    'password',
+    'webhook_secret',
+    [$plugin->get_lang('BtcPayWebhookSecret'), $plugin->get_lang('BtcPaySecretKeepHelp')],
+    ['maxlength' => 255, 'autocomplete' => 'new-password']
+);
+$btcpayForm->addButtonSave(get_lang('Save'));
+$btcpayForm->addButton(
+    'test_connection',
+    $plugin->get_lang('BtcPayTestConnection'),
+    'sync',
+    'info'
+);
+$btcpayForm->setDefaults([
+    'server_url' => (string) ($btcpayParams['server_url'] ?? ''),
+    'store_id' => (string) ($btcpayParams['store_id'] ?? ''),
+    'api_key' => '',
+    'webhook_secret' => '',
+]);
+
 $cecabankForm = new FormValidator('cecabank_config');
 
 if ($cecabankForm->validate()) {
@@ -1027,6 +1157,7 @@ $enabledPaymentMethods = array_filter([
     'TPV Redsys' => $tpvRedsysEnable,
     'Culqi' => $culqiEnable,
     'Stripe' => $stripeEnable,
+    'BTCPay Server' => $btcpayEnable,
     'Cecabank' => $cecabankEnable,
 ]);
 
@@ -1074,6 +1205,7 @@ $tpl->assign('transfer_info_form', $transferInfoForm->returnForm());
 $tpl->assign('culqi_form', styleBuyCoursesFormHtml($culqiForm->returnForm()));
 $tpl->assign('tpv_redsys_form', styleBuyCoursesFormHtml($htmlTpvRedsys));
 $tpl->assign('stripe_form', styleBuyCoursesFormHtml($stripeForm->returnForm()));
+$tpl->assign('btcpay_form', styleBuyCoursesFormHtml($btcpayForm->returnForm()));
 $tpl->assign('cecabank_form', styleBuyCoursesFormHtml($cecabankForm->returnForm()));
 
 $tpl->assign('transfer_accounts', $transferAccounts);
@@ -1084,6 +1216,12 @@ $tpl->assign('transfer_enable', $transferEnable);
 $tpl->assign('culqi_enable', $culqiEnable);
 $tpl->assign('tpv_redsys_enable', $tpvRedsysEnable);
 $tpl->assign('stripe_enable', $stripeEnable);
+$tpl->assign('btcpay_enable', $btcpayEnable);
+$tpl->assign('btcpay_configured', $btcpayConfigured);
+$tpl->assign('btcpay_api_key_saved', '' !== trim((string) ($btcpayParams['api_key'] ?? '')));
+$tpl->assign('btcpay_webhook_secret_saved', '' !== trim((string) ($btcpayParams['webhook_secret'] ?? '')));
+$tpl->assign('btcpay_connection_test_result', $btcpayConnectionTestResult);
+$tpl->assign('btcpay_webhook_url', api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/btcpay_webhook.php');
 $tpl->assign('cecabank_enable', $cecabankEnable);
 
 $content = $tpl->fetch('BuyCourses/view/paymentsetup.tpl');

@@ -91,8 +91,24 @@ export default {
    * Fetches certificates achieved by the authenticated user.
    * @returns {Promise<Object>} User certificate lists.
    */
+  /** Manually issue/revoke a signed credential or confirm a real Sepolia transaction. */
+  async runCertificateCredentialAction(payload) {
+    return await baseService.post("/api/gradebook/certificates/credential-action", payload)
+  },
+
   async getMyCertificates() {
     return await baseService.get("/api/gradebook/my-certificates")
+  },
+
+  /**
+   * Records or withdraws the authenticated certificate owner's publication approval.
+   * This endpoint does not publish a credential or submit a blockchain transaction.
+   */
+  async setCertificatePublicationConsent(certificateId, approve) {
+    return await baseService.post("/api/gradebook/certificates/publication-consent", {
+      certificateId,
+      approve,
+    })
   },
 
   /**

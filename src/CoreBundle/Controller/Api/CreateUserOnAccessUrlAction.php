@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
@@ -47,12 +48,14 @@ readonly class CreateUserOnAccessUrlAction
         private UserRepository $userRepository,
         private ResetPasswordHelperInterface $resetPasswordHelper,
         private Security $security,
+        private AccessUrlScopeHelper $accessUrlScope,
     ) {}
 
     public function __invoke(AccessUrl $url, CreateUserOnAccessUrlInput $data): User
     {
         $this->validator->validate($data);
 
+        $this->denyUnlessCallerWorksOnUrl($url);
         $status = $this->resolveStatus($data->getStatus());
 
         if (null !== $this->userRepository->findByUsernameCaseInsensitive($data->getUsername())) {
@@ -216,6 +219,27 @@ readonly class CreateUserOnAccessUrlAction
         }
 
         return $user;
+    }
+
+    /**
+     * The access URL comes from the request path, so it has to be one the caller works on: a
+     * global admin within their managed URLs, anyone else only on a URL they are registered on.
+     */
+    private function denyUnlessCallerWorksOnUrl(AccessUrl $url): void
+    {
+        $caller = $this->userHelper->getCurrent();
+
+        if (null === $caller) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $allowed = $this->security->isGranted('ROLE_GLOBAL_ADMIN')
+            ? $this->accessUrlScope->isUrlManaged($caller, (int) $url->getId())
+            : $url->hasUser($caller);
+
+        if (!$allowed) {
+            throw new AccessDeniedHttpException('You cannot create users on this access URL.');
+        }
     }
 
     /**

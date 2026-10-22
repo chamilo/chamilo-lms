@@ -187,6 +187,8 @@ onMounted(async () => {
     const requestedPanel = String(route.query.panel || "")
     if ("edit" === requestedPanel) {
       panelMode.value = "edit"
+    } else if ("prerequisite" === requestedPanel && !requestedItem.isSection) {
+      panelMode.value = "prerequisite"
     } else if ("audio" === requestedPanel && !requestedItem.isSection && !requestedItem.isFinal) {
       panelMode.value = "audio"
     }

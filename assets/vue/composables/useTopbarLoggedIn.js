@@ -8,6 +8,7 @@ import { useCidReqStore } from "../store/cidReq"
 import { useSecurityStore } from "../store/securityStore"
 import { useNotification } from "./notification"
 import baseService from "../services/baseService"
+import { useWelfareAvailability } from "./useWelfareAvailability"
 
 const ROLE_MAP = {
   ROLE_ADMIN: "ADMIN",
@@ -275,6 +276,7 @@ export function useTopbarLoggedIn(props) {
   const notification = useNotification()
   const cidReqStore = useCidReqStore()
   const securityStore = useSecurityStore()
+  const { available: welfareAvailable } = useWelfareAvailability()
   const { isTeacher, isAdmin, isHRM } = storeToRefs(securityStore)
 
   const loginUrl = "/login"
@@ -525,6 +527,13 @@ export function useTopbarLoggedIn(props) {
       items[0].items.push({
         label: t("My services"),
         url: myServicesUrl.value,
+      })
+    }
+
+    if (!isAnonymous.value && welfareAvailable.value) {
+      items[0].items.push({
+        label: t("My confidential reports"),
+        route: { name: "WelfareList", query: { view: "mine" } },
       })
     }
 

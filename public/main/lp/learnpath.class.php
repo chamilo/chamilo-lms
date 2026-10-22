@@ -894,15 +894,16 @@ class learnpath
     public function delete_item($id)
     {
         $course_id = api_get_course_int_id();
+        $lpId = (int) $this->get_id();
         $id = (int) $id;
         // TODO: Implement the resource removal.
-        if (empty($id) || empty($course_id)) {
+        if (empty($id) || empty($course_id) || empty($lpId)) {
             return false;
         }
 
         $repo = Container::getLpItemRepository();
         $item = $repo->find($id);
-        if (null === $item) {
+        if (null === $item || (int) $item->getLp()->getIid() !== $lpId) {
             return false;
         }
 
@@ -974,11 +975,26 @@ class learnpath
         if (empty($id) || empty($_course)) {
             return false;
         }
+        $lpId = (int) $this->get_id();
         $repo = Container::getLpItemRepository();
         /** @var CLpItem $item */
         $item = $repo->find($id);
-        if (null === $item) {
+        if (null === $item || (int) $item->getLp()->getIid() !== $lpId) {
             return false;
+        }
+
+        if (!empty($parent)) {
+            $parent = $repo->find($parent);
+            if (null === $parent || (int) $parent->getLp()->getIid() !== $lpId) {
+                return false;
+            }
+        }
+
+        if (!empty($previous)) {
+            $previous = $repo->find($previous);
+            if (null === $previous || (int) $previous->getLp()->getIid() !== $lpId) {
+                return false;
+            }
         }
 
         $item
@@ -990,14 +1006,12 @@ class learnpath
 
         $em = Database::getManager();
         if (!empty($parent)) {
-            $parent = $repo->find($parent);
             $item->setParent($parent);
         } else {
             $item->setParent(null);
         }
 
         if (!empty($previous)) {
-            $previous = $repo->find($previous);
             $repo->persistAsNextSiblingOf( $item, $previous);
         } else {
             $em->persist($item);
@@ -1010,6 +1024,8 @@ class learnpath
             $linkId = $item->getPath();
             $link->updateLink($linkId, $url);
         }
+
+        return true;
     }
 
     /**
@@ -1029,6 +1045,12 @@ class learnpath
         if (empty($id)) {
             return false;
         }
+
+        $item = Container::getLpItemRepository()->find($id);
+        if (null === $item || (int) $item->getLp()->getIid() !== (int) $this->get_id()) {
+            return false;
+        }
+
         $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($minScore) || $minScore < 0) {

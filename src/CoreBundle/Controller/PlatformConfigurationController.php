@@ -111,6 +111,7 @@ class PlatformConfigurationController extends AbstractController
             ];
         }
 
+        $configuration['settings']['security.remember_me_days'] = $settingsManager->getSetting('security.remember_me_days', true);
         $configuration['settings']['registration.allow_registration'] = $settingsManager->getSetting('registration.allow_registration', true);
         $configuration['settings']['catalog.course_catalog_published'] = $settingsManager->getSetting('catalog.course_catalog_published', true);
         $configuration['settings']['catalog.hide_public_link'] = $settingsManager->getSetting('catalog.hide_public_link', true);

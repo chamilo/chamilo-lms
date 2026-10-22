@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
+use Chamilo\CoreBundle\Security\RememberMeLifetime;
 use DateTime;
 use DateTimeImmutable;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -25,17 +26,13 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
 {
     private const string COOKIE_NAME = 'ch_remember_me';
 
-    /**
-     * 14 days.
-     */
-    private const int TTL_SECONDS = 1209600;
-
     public function __construct(
         private readonly ValidationTokenRepository $tokenRepository,
         private readonly UserRepository $userRepository,
         private readonly TokenStorageInterface $tokenStorage,
         #[Autowire('%env(APP_SECRET)%')]
         private readonly string $appSecret,
+        private readonly RememberMeLifetime $rememberMeLifetime,
     ) {}
 
     public function supports(Request $request): ?bool
@@ -53,11 +50,19 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
 
         $cookieValue = $request->cookies->get(self::COOKIE_NAME);
 
-        return \is_string($cookieValue) && '' !== $cookieValue;
+        return $request->isSecure()
+            && \is_string($cookieValue)
+            && '' !== $cookieValue
+            && $this->rememberMeLifetime->getSeconds() > 0;
     }
 
     public function authenticate(Request $request): SelfValidatingPassport
     {
+        $ttlSeconds = $this->rememberMeLifetime->getSeconds();
+        if (0 === $ttlSeconds || !$request->isSecure()) {
+            throw new AuthenticationException('Remember-me login is disabled.');
+        }
+
         $cookieValue = (string) $request->cookies->get(self::COOKIE_NAME);
 
         $parsed = $this->parseCookieValue($cookieValue);
@@ -72,7 +77,7 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
         $hash = hash('sha256', $rawToken);
 
         // Opportunistic cleanup.
-        $cutoff = (new DateTimeImmutable())->modify('-'.self::TTL_SECONDS.' seconds');
+        $cutoff = (new DateTimeImmutable())->modify('-'.$ttlSeconds.' seconds');
         $this->tokenRepository->deleteExpiredRememberMeTokens($cutoff);
 
         $tokenEntity = $this->tokenRepository->findRememberMeToken($userId, $hash);
@@ -82,7 +87,7 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
             throw new AuthenticationException('Remember-me token not found.');
         }
 
-        if ($this->isExpired($tokenEntity)) {
+        if ($this->isExpired($tokenEntity, $ttlSeconds)) {
             $this->tokenRepository->remove($tokenEntity, true);
             $request->attributes->set('_remember_me_clear', true);
 
@@ -150,11 +155,11 @@ final class RememberMeCookieAuthenticator extends AbstractAuthenticator
             || str_starts_with($path, '/_profiler');
     }
 
-    private function isExpired(ValidationToken $token): bool
+    private function isExpired(ValidationToken $token, int $ttlSeconds): bool
     {
         $createdTs = $token->getCreatedAt()->getTimestamp();
 
-        return ($createdTs + self::TTL_SECONDS) < time();
+        return ($createdTs + $ttlSeconds) < time();
     }
 
     private function parseCookieValue(string $value): ?array

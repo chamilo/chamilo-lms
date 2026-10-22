@@ -92,7 +92,7 @@
       </div>
 
       <div
-        v-if="isHttps"
+        v-if="isHttps && rememberMeEnabled"
         class="field login-section__remember-me"
       >
         <ToggleSwitch
@@ -203,6 +203,9 @@ const allowRegistration = computed(() => {
   return "false" !== platformConfigStore.getSetting("registration.allow_registration")
 })
 
+// No setting during a rolling upgrade means the previous 14-day behavior.
+const rememberMeEnabled = computed(() => String(platformConfigStore.getSetting("security.remember_me_days")) !== "0")
+
 const {
   redirectNotAuthenticated,
   submitLogin,
@@ -262,7 +265,7 @@ async function onSubmitLoginForm() {
     login: login.value,
     password: password.value,
     totp: requires2FA.value ? totp.value : null,
-    _remember_me: isHttps ? remember.value : false,
+    _remember_me: isHttps && rememberMeEnabled.value ? remember.value : false,
     isLoginLdap: ldapAuth.value,
   })
 }

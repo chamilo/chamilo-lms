@@ -2668,11 +2668,10 @@ class MySpace
     {
         $isWestern = api_is_western_name_order();
 
-        switch ($column) {
-            case '0':
-                $column = $isWestern ? 'firstname' : 'lastname';
-                break;
-        }
+        // ORDER BY is an identifier context: escaping is not enough, only a whitelist is safe.
+        // The table has a single sortable column: the user name.
+        $column = $isWestern ? 'firstname' : 'lastname';
+        $direction = 'DESC' === strtoupper((string) $direction) ? 'DESC' : 'ASC';
 
         $order = [
             " `$column` $direction",

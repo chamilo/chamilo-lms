@@ -1228,6 +1228,11 @@ class learnpath
         if (empty($id) || empty($course_id)) {
             return false;
         }
+
+        if (!$this->isItemInLp($id)) {
+            return false;
+        }
+
         // First select item to get previous, next, and display order.
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql_sel = "SELECT * FROM $lp_item WHERE iid = $id";
@@ -1328,6 +1333,17 @@ class learnpath
         }
 
         if (empty($id) || empty($_course)) {
+            return false;
+        }
+
+        $parent = (int) $parent;
+        $previous = (int) $previous;
+        $prerequisites = Database::escape_string($prerequisites);
+
+        if (!$this->isItemInLp($id)
+            || (!empty($parent) && !$this->isItemInLp($parent))
+            || (!empty($previous) && !$this->isItemInLp($previous))
+        ) {
             return false;
         }
 
@@ -1544,6 +1560,31 @@ class learnpath
             $linkId = $row_select['path'];
             $link->updateLink($linkId, $url);
         }
+
+        return true;
+    }
+
+    /**
+     * Checks that an item belongs to this learning path, in the current course.
+     *
+     * @param int $itemId
+     *
+     * @return bool
+     */
+    public function isItemInLp($itemId)
+    {
+        $itemId = (int) $itemId;
+        $courseId = api_get_course_int_id();
+
+        if (empty($itemId) || empty($courseId) || empty($this->lp_id)) {
+            return false;
+        }
+
+        $table = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT iid FROM $table
+                WHERE iid = $itemId AND c_id = $courseId AND lp_id = ".(int) $this->lp_id;
+
+        return Database::num_rows(Database::query($sql)) > 0;
     }
 
     /**
@@ -1565,6 +1606,10 @@ class learnpath
         $id = (int) $id;
 
         if (empty($id)) {
+            return false;
+        }
+
+        if (!$this->isItemInLp($id)) {
             return false;
         }
 

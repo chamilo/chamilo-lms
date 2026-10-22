@@ -926,6 +926,9 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
+            if (!empty($_REQUEST['id']) && !$_SESSION['oLP']->isItemInLp($_REQUEST['id'])) {
+                api_not_allowed(true);
+            }
             Session::write('refresh', 1);
             if (isset($_POST) && !empty($post_title)) {
                 // Updating the lp.modified_on
@@ -968,7 +971,7 @@ switch ($action) {
                     exit;
                 }
 
-                $_SESSION['oLP']->edit_item(
+                $updated = $_SESSION['oLP']->edit_item(
                     $_REQUEST['id'],
                     $_POST['parent'],
                     $_POST['previous'],
@@ -979,13 +982,19 @@ switch ($action) {
                     $maxTimeAllowed,
                     $url
                 );
+                if (true !== $updated) {
+                    api_not_allowed(true);
+                }
 
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
                 $is_success = true;
                 $extraFieldValues = new ExtraFieldValue('lp_item');
-                $extraFieldValues->saveFieldValues($_POST, true);
+                $extraFieldValues->saveFieldValues(
+                    array_merge($_POST, ['item_id' => (int) $_REQUEST['id']]),
+                    true
+                );
 
                 Display::addFlash(Display::return_message(get_lang('Updated')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
@@ -1006,6 +1015,9 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
+            if (!empty($_GET['id']) && !$_SESSION['oLP']->isItemInLp($_GET['id'])) {
+                api_not_allowed(true);
+            }
             if (isset($_POST['submit_button'])) {
                 // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();

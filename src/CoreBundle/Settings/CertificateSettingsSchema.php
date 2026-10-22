@@ -20,6 +20,7 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             'add_certificate_pdf_footer' => 'false',
             'session_admin_can_download_all_certificates' => 'false',
             'allow_public_certificates' => 'false',
+            'blockchain_verification_enabled' => 'false',
             'allow_certificates_search' => 'false',
             'certificate_pdf_orientation' => 'landscape',
             'allow_general_certificate' => 'false',
@@ -47,6 +48,7 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             ->add('session_admin_can_download_all_certificates', YesNoType::class)
 
             ->add('allow_public_certificates', YesNoType::class)
+            ->add('blockchain_verification_enabled', YesNoType::class)
             ->add('allow_certificates_search', YesNoType::class)
             ->add('certificate_pdf_orientation', ChoiceType::class, [
                 'choices' => [

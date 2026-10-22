@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
+use Chamilo\CoreBundle\Entity\GradebookCertificateCredential;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
@@ -35,6 +36,7 @@ use Throwable;
 use const DIRECTORY_SEPARATOR;
 use const ENT_HTML5;
 use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 use const PHP_URL_HOST;
 
 #[Route('/certificates')]
@@ -127,7 +129,7 @@ SQL,
     }
 
     #[Route('/{hash}.html', name: 'chamilo_certificate_public_view', methods: ['GET'])]
-    public function view(string $hash): Response
+    public function view(string $hash, Request $request): Response
     {
         // Resolve certificate row (keeps legacy path logic working)
         [$certificate] = $this->resolveCertificateByHash($hash);
@@ -137,6 +139,7 @@ SQL,
 
         // Read HTML from resource storage (new) or personal-file (legacy)
         $html = $this->readCertificateHtml($certificate, $hash);
+        $html = $this->appendCredentialMetadata($certificate, $html, $request);
         $html = str_replace(' media="screen"', '', $html);
 
         return new Response('<!DOCTYPE html>'.$html, 200, [
@@ -155,9 +158,37 @@ SQL,
 
         // Read HTML and render PDF
         $html = $this->readCertificateHtml($certificate, $hash);
+        $html = $this->appendCredentialMetadata($certificate, $html, $request);
         $html = str_replace(' media="screen"', '', $html);
 
         return $this->renderCertificatePdfFromHtml($html, $request);
+    }
+
+    private function appendCredentialMetadata(GradebookCertificate $certificate, string $html, Request $request): string
+    {
+        if (null === $certificate->getUserPublicationApprovalDate()
+            || 'sepolia-hash-only-v1' !== $certificate->getUserPublicationConsentScope()) {
+            return $html;
+        }
+        $proof = $this->entityManager->getRepository(GradebookCertificateCredential::class)->findOneBy(
+            ['certificate' => $certificate],
+            ['issuedAt' => 'DESC']
+        );
+        if (!$proof instanceof GradebookCertificateCredential || null !== $proof->getRevokedAt()) {
+            return $html;
+        }
+        $url = htmlspecialchars($request->getSchemeAndHttpHost().'/certificates/verify/'.$proof->getToken(), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $meta = '<meta name="chamilo-credential-verification" content="'.$url.'">';
+        $link = '<div style="font-size:10px;text-align:center"><a href="'.$url.'">Verify signed certificate credential</a></div>';
+        // PDF generators do not universally retain custom metadata; include a link as well.
+        if (false !== stripos($html, '</head>')) {
+            $html = preg_replace('~</head>~i', $meta.'</head>', $html, 1) ?? $html;
+        }
+        if (false !== stripos($html, '</body>')) {
+            return preg_replace('~</body>~i', $link.'</body>', $html, 1) ?? $html;
+        }
+
+        return $html.$link;
     }
 
     private function renderCertificatePdfFromHtml(

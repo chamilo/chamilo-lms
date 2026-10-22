@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
+use Chamilo\CoreBundle\Entity\GradebookCertificateCredential;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
@@ -106,6 +107,19 @@ final readonly class GradebookMyCertificatesProvider implements ProviderInterfac
             }
 
             $summary = $this->certificateGenerator->normalizeCertificate($certificate, !$allowExport);
+            // Consent is private account metadata; never add it to public certificate search responses.
+            $summary['publicationApprovedAt'] = 'sepolia-hash-only-v1' === $certificate->getUserPublicationConsentScope()
+                ? $certificate->getUserPublicationApprovalDate()?->format(DATE_ATOM) : null;
+            $summary['publicationRevokedAt'] = $certificate->getUserPublicationRevocationDate()?->format(DATE_ATOM);
+            $proof = $this->entityManager->getRepository(GradebookCertificateCredential::class)->findOneBy(
+                ['certificate' => $certificate],
+                ['issuedAt' => 'DESC']
+            );
+            $summary['credentialVerificationUrl'] = $proof instanceof GradebookCertificateCredential
+                ? '/certificates/verify/'.$proof->getToken() : '';
+            $summary['credentialStatus'] = $proof instanceof GradebookCertificateCredential
+                ? (null !== $proof->getRevokedAt() ? 'revoked' : (null === $certificate->getUserPublicationApprovalDate() ? 'consent_withdrawn' : 'issued')) : '';
+            $summary['credentialTxHash'] = $proof instanceof GradebookCertificateCredential ? $proof->getTxHash() : null;
             $row = [
                 'id' => (int) $certificate->getId(),
                 'course' => [

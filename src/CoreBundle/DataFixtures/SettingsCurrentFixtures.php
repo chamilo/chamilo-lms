@@ -1781,6 +1781,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'If enabled, session administrators can download certificates even if they are not publicly published.',
                 ],
                 [
+                    'name' => 'blockchain_verification_enabled',
+                    'title' => 'Enable signed certificates and optional Sepolia testnet anchoring',
+                    'comment' => 'Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain.',
+                    'selected_value' => 'false',
+                ],
+                [
                     'name' => 'allow_public_certificates',
                     'title' => 'Allow public certificates',
                     'comment' => 'User certificates can be view by unregistered users.',

@@ -3347,6 +3347,26 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'JSON map of Chamilo user roles allowed to use MCP. A user must match at least one enabled role. This restriction also applies to previously generated API keys and existing OAuth connections.',
                 ],
                 [
+                    'name' => 'confidential_reporting_enabled',
+                    'title' => 'Enable confidential welfare reporting',
+                    'comment' => 'Enable confidential incident reports. The module requires a protected encryption key and investigator permission.',
+                ],
+                [
+                    'name' => 'confidential_reporting_min_reporters',
+                    'title' => 'Minimum distinct reporters for an investigation',
+                    'comment' => 'Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators.',
+                ],
+                [
+                    'name' => 'confidential_reporting_attachments_enabled',
+                    'title' => 'Allow confidential evidence attachments',
+                    'comment' => 'Allow images, audio and short video evidence. Existing attachments remain readable when disabled.',
+                ],
+                [
+                    'name' => 'confidential_reporting_notifications_enabled',
+                    'title' => 'Show confidential investigation notifications',
+                    'comment' => 'Display an internal indication of eligible investigations. Does not send emails or external notifications.',
+                ],
+                [
                     'name' => 'external_api_enabled',
                     'title' => 'Enable external API keys',
                     'comment' => 'Allows trusted server-to-server integrations (e.g. the WordPress storefront plugin) to authenticate against the general /api endpoint using a per-user external API key, generated via the "chamilo:security:generate-external-api-key" console command. Disabled by default: existing keys cannot be used until this is turned on.',

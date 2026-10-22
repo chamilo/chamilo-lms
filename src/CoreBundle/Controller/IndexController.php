@@ -62,6 +62,8 @@ class IndexController extends BaseController
     #[Route('/reporting/{vueRouting}', name: 'global_reporting_vue_nested_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/course-users/{vueRouting}', name: 'resources_course_users_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/resources/announcement/{vueRouting}', name: 'resources_announcement_vue_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
+    #[Route('/welfare', name: 'welfare_vue_entrypoint', methods: ['GET'])]
+    #[Route('/welfare/{vueRouting}', name: 'welfare_vue_nested_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/tickets', name: 'tickets_vue_entrypoint', methods: ['GET'])]
     #[Route('/tickets/{vueRouting}', name: 'tickets_vue_nested_entrypoint', requirements: ['vueRouting' => '.+'], methods: ['GET'])]
     #[Route('/survey/pending', name: 'survey_pending_vue_entrypoint', methods: ['GET'])]

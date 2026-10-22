@@ -42,6 +42,7 @@ import courseSession from "./courseSession"
 import myClass from "./myClass"
 import announcement from "./announcement"
 import ticket from "./ticket"
+import welfare from "./welfare"
 import glossary from "./glossary"
 import attendance from "./attendance"
 import lpRoutes from "./lp"
@@ -605,6 +606,7 @@ const router = createRouter({
     myClass,
     announcement,
     ticket,
+    welfare,
     glossary,
     attendance,
     lpRoutes,

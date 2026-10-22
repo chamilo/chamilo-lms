@@ -8,10 +8,12 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Json;
+use Symfony\Component\Validator\Constraints\Range;
 
 class SecuritySettingsSchema extends AbstractSettingsSchema
 {
@@ -57,6 +59,10 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'mcp_enabled' => 'false',
             'mcp_allowed_roles' => '{"ADMIN":true,"COURSEMANAGER":true,"STUDENT":false,"HRM":false,"SESSIONADMIN":false,"STUDENT_BOSS":false,"INVITEE":false}',
             'external_api_enabled' => 'false',
+            'confidential_reporting_enabled' => 'false',
+            'confidential_reporting_min_reporters' => '2',
+            'confidential_reporting_attachments_enabled' => 'true',
+            'confidential_reporting_notifications_enabled' => 'false',
         ]);
 
         $allowedTypes = [
@@ -109,6 +115,12 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'constraints' => [new Json()],
             ])
             ->add('external_api_enabled', YesNoType::class)
+            ->add('confidential_reporting_enabled', YesNoType::class)
+            ->add('confidential_reporting_min_reporters', IntegerType::class, [
+                'constraints' => [new Range(min: 2, max: 10)],
+            ])
+            ->add('confidential_reporting_attachments_enabled', YesNoType::class)
+            ->add('confidential_reporting_notifications_enabled', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

@@ -224,7 +224,7 @@ final class TranscriptApiTest extends AbstractApiTest
     private function request(?User $user, string $method, string $uri, ?array $json = null): array
     {
         $client = null === $user
-            ? static::createClient()
+            ? self::createClient()
             : $this->createClientWithCredentials($this->getUserTokenFromUser($user));
         $response = $client->request($method, $uri, null === $json ? [] : ['json' => $json]);
 

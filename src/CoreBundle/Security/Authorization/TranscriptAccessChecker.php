@@ -96,6 +96,7 @@ final readonly class TranscriptAccessChecker
             ->setParameter('learnerRelation', Session::STUDENT, Types::INTEGER)
             ->setParameter('url', $url->getId(), Types::INTEGER)
             ->getQuery()
-            ->getSingleScalarResult() > 0;
+            ->getSingleScalarResult() > 0
+        ;
     }
 }

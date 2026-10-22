@@ -167,6 +167,10 @@ if (!empty($lpItemId)) {
 if ($lpId) {
     /** @var CLp $lp */
     $lp = $lpRepo->find($lpId);
+    // Ignore a learning path that is not linked to the current course.
+    if ($lp && (null === $course || null === $lp->getFirstResourceLinkFromCourseSession($course))) {
+        $lp = null;
+    }
     // Regenerate a new lp object? Not always as some pages don't need the object (like upload?)
     if ($lp) {
         $logInfo = [

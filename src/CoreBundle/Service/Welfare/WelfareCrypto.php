@@ -93,7 +93,7 @@ final class WelfareCrypto
             substr($data, 0, $nonceLength),
             $this->key(),
         );
-        if (false === $plaintext) {
+        if (!\is_string($plaintext)) {
             throw new RuntimeException('Confidential content authentication failed.');
         }
 

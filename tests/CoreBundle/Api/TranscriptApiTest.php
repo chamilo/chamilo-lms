@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\Settings\CertificateSettingsSchema;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -31,6 +32,22 @@ use DateTime;
 final class TranscriptApiTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
+
+    /**
+     * The expected grades and hours below depend on these settings, so they must not come from
+     * the configuration of the database the tests run on. A test changes them after this.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->updateSetting('certificate.transcript_enabled', 'true');
+        $this->updateSetting('certificate.transcript_program_title', 'Fire Science');
+        $this->updateSetting('certificate.transcript_course_code_source', 'visual_code');
+        $this->updateSetting('certificate.transcript_hours_extra_field', '');
+        $this->updateSetting('certificate.transcript_completed_hours_are_required_hours', 'false');
+        $this->updateSetting('certificate.transcript_grading_scale', CertificateSettingsSchema::DEFAULT_TRANSCRIPT_GRADING_SCALE);
+    }
 
     public function testLearnerReadsTheirTranscriptWithGradesAndGpa(): void
     {
@@ -241,9 +258,6 @@ final class TranscriptApiTest extends AbstractApiTest
      */
     private function bootstrapScenario(string $suffix): array
     {
-        $this->updateSetting('certificate.transcript_enabled', 'true');
-        $this->updateSetting('certificate.transcript_program_title', 'Fire Science');
-
         $admin = $this->createUser('transcript_admin_'.$suffix, '', '', 'ROLE_ADMIN');
         $learner = $this->createUser('transcript_learner_'.$suffix);
         $course = $this->addCertificate($learner, strtoupper('TR'.$suffix).'1', 'RR'.$suffix.'1', 36000, 92.4, '2026-01-15');

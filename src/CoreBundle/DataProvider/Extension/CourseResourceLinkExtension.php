@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Doctrine\ORM\QueryBuilder;
 
@@ -34,6 +35,7 @@ final readonly class CourseResourceLinkExtension implements QueryCollectionExten
         CForumAttachment::class => 'post',
         CStudentPublicationComment::class => 'publication',
         CGroup::class => null,
+        CLinkCategory::class => null,
     ];
 
     public function __construct(

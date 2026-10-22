@@ -134,10 +134,28 @@ final class UserRolesApiSecurityTest extends AbstractApiTest
 
     public function testUnrelatedEditToAnExistingGlobalAdminIsNotBlocked(): void
     {
-        // The guard must only trigger on newly ADDING the role -- an admin who already has it
-        // must still be freely editable on unrelated fields, including by a plain ROLE_ADMIN.
-        $plainAdmin = $this->createUserOnUrl('roles_sec_editor', $this->getAccessUrl(), 'ROLE_ADMIN');
+        // The role guard must only trigger on newly ADDING the role -- an admin who already has
+        // it must still be editable on unrelated fields by someone allowed to edit global admins.
+        $rootAdmin = $this->createUserOnUrl('roles_sec_editor', $this->getAccessUrl(), 'ROLE_GLOBAL_ADMIN');
         $existingGlobalAdmin = $this->createUserOnUrl('roles_sec_existing_ga', $this->getAccessUrl(), 'ROLE_GLOBAL_ADMIN');
+
+        $token = $this->getUserTokenFromUser($rootAdmin);
+        $this->createClientWithCredentials($token)->request(
+            'PATCH',
+            '/api/users/'.$existingGlobalAdmin->getId(),
+            [
+                'headers' => ['content-type' => ['application/merge-patch+json']],
+                'json' => ['firstname' => 'RenamedByTest'],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testPlainAdminCannotEditAnExistingGlobalAdmin(): void
+    {
+        $plainAdmin = $this->createUserOnUrl('roles_sec_plain_editor', $this->getAccessUrl(), 'ROLE_ADMIN');
+        $existingGlobalAdmin = $this->createUserOnUrl('roles_sec_protected_ga', $this->getAccessUrl(), 'ROLE_GLOBAL_ADMIN');
 
         $token = $this->getUserTokenFromUser($plainAdmin);
         $this->createClientWithCredentials($token)->request(
@@ -149,6 +167,6 @@ final class UserRolesApiSecurityTest extends AbstractApiTest
             ]
         );
 
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(403);
     }
 }

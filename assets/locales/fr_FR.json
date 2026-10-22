@@ -4261,5 +4261,8 @@
     "Default visibility for new learning paths": "Visibilit\u00e9 par d\u00e9faut des nouveaux parcours",
     "Default visibility for new tests": "Visibilit\u00e9 par d\u00e9faut des nouveaux tests",
     "Start test": "D\u00e9marrer le test",
-    "Proceed with the test": "Continuer l'exercice"
+    "Proceed with the test": "Continuer l'exercice",
+    "Read more": "Lire la suite",
+    "Participation: {0} of {1} posts": "Participation : {0} message(s) sur {1}",
+    "Post your contribution to see the replies of the other participants.": "Publiez votre contribution pour voir les r\u00e9ponses des autres participants."
 }

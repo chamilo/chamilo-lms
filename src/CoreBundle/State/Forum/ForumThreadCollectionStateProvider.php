@@ -43,6 +43,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
     use ForumCourseSettingHelperTrait;
     use ForumGradebookGuardTrait;
     use ForumStateHelperTrait;
+    use ForumThreadParticipationHelperTrait;
 
     /**
      * @var array<int, string>
@@ -120,6 +121,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         $showPosterAvatar = $this->arePosterImagesAllowed($course);
         $user = $this->getCurrentUser();
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
+        $repliesHidden = $this->areThreadRepliesHiddenUntilParticipation($this->settingsManager, $this->security);
         $threadQueryBuilder = $this->entityManager->createQueryBuilder()
             ->select('t')
             ->from(CForumThread::class, 't')
@@ -156,6 +158,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
                 $course,
                 $session,
                 $group,
+                $repliesHidden && 0 === $this->countUserPostsInThread($this->entityManager, $thread, $user),
             );
         }
 
@@ -211,6 +214,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         Course $course,
         ?Session $session,
         ?CGroup $group,
+        bool $hideLastPostContent,
     ): array {
         $canMutate = $canManage && !$lockedByGradebook;
         $lastPost = $thread->getThreadLastPost();
@@ -255,8 +259,8 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
             'posterRoleLabel' => $this->getPosterRoleLabel($posterRole),
             'posterIsTeacher' => 'teacher' === $posterRole,
             'lastPostId' => $lastPost instanceof CForumPost ? $lastPost->getIid() : null,
-            'lastPostTitle' => $lastPost instanceof CForumPost ? $lastPost->getTitle() : '',
-            'lastPostText' => $lastPost instanceof CForumPost ? $lastPost->getPostText() : '',
+            'lastPostTitle' => $lastPost instanceof CForumPost && !$hideLastPostContent ? $lastPost->getTitle() : '',
+            'lastPostText' => $lastPost instanceof CForumPost && !$hideLastPostContent ? $lastPost->getPostText() : '',
             'lastPostDate' => $this->formatDate($lastPostDate),
             'lastPostCreatedAt' => $this->formatDate($lastPostDate),
             'lastPostDateIso' => $this->formatDateIso($lastPostDate),

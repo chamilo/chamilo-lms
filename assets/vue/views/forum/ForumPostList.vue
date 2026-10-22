@@ -116,6 +116,61 @@
     </div>
 
     <div
+      v-if="forum?.category"
+      class="mb-4 rounded-lg border border-gray-20 bg-white p-4"
+    >
+      <h3 class="mb-1 text-base font-semibold text-gray-90">{{ forum.category.title }}</h3>
+      <div
+        v-if="isCategoryDescriptionExpanded || !isCategoryDescriptionTruncated"
+        class="prose prose-sm max-w-none text-sm leading-5 text-gray-600"
+        dir="auto"
+        v-html="sanitizePostText(forum.category.comment)"
+      />
+      <p
+        v-else
+        class="text-sm leading-5 text-gray-600"
+        dir="auto"
+      >
+        {{ categoryDescriptionPreview }}…
+      </p>
+      <BaseButton
+        v-if="isCategoryDescriptionTruncated"
+        :label="isCategoryDescriptionExpanded ? t('Show less') : t('Read more')"
+        :icon="isCategoryDescriptionExpanded ? 'fold' : 'unfold'"
+        class="mt-2"
+        size="small"
+        type="primary-text"
+        @click="isCategoryDescriptionExpanded = !isCategoryDescriptionExpanded"
+      />
+    </div>
+
+    <div
+      v-if="thread?.participationProgress"
+      class="mb-4 rounded-lg border border-gray-20 bg-white p-4"
+    >
+      <p class="mb-2 text-sm font-semibold text-gray-90">
+        {{
+          t("Participation: {0} of {1} posts", [
+            thread.participationProgress.postCount,
+            thread.participationProgress.requiredPosts,
+          ])
+        }}
+      </p>
+      <ProgressBar
+        :value="thread.participationProgress.percent"
+        :show-value="true"
+        class="h-5"
+      />
+    </div>
+
+    <div
+      v-if="thread?.repliesHiddenUntilParticipation"
+      class="mb-4 rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm text-gray-700"
+    >
+      {{ t("Post your contribution to see the replies of the other participants.") }}
+    </div>
+
+    <div
       v-if="isLoading"
       class="rounded-xl border border-gray-20 bg-white p-4 text-sm text-gray-600"
     >
@@ -475,6 +530,7 @@
 </template>
 
 <script setup>
+import ProgressBar from "primevue/progressbar"
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
@@ -562,6 +618,20 @@ const viewTypeOptions = computed(() => [
   { label: t("Nested"), value: "nested" },
 ])
 const displayedPosts = computed(() => buildDisplayedPosts(posts.value, viewType.value))
+const CATEGORY_DESCRIPTION_PREVIEW_WORDS = 10
+const isCategoryDescriptionExpanded = ref(false)
+const categoryDescriptionWords = computed(() =>
+  new DOMParser()
+    .parseFromString(forum.value?.category?.comment || "", "text/html")
+    .body.textContent.split(/\s+/)
+    .filter(Boolean),
+)
+const isCategoryDescriptionTruncated = computed(
+  () => categoryDescriptionWords.value.length > CATEGORY_DESCRIPTION_PREVIEW_WORDS,
+)
+const categoryDescriptionPreview = computed(() =>
+  categoryDescriptionWords.value.slice(0, CATEGORY_DESCRIPTION_PREVIEW_WORDS).join(" "),
+)
 const hasMorePosts = computed(() => currentPage.value < totalPages.value && posts.value.length < totalItems.value)
 
 function sanitizePostText(value) {

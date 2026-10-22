@@ -2820,6 +2820,21 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Forum notifications from base course as well',
                     'comment' => 'Enable this option to enable notifications coming from the base course forum, even if following the course through a session.',
                 ],
+                [
+                    'name' => 'show_thread_replies_after_participation',
+                    'title' => 'Show thread replies only after participating',
+                    'comment' => 'Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post.',
+                ],
+                [
+                    'name' => 'show_category_description_in_thread',
+                    'title' => 'Show the forum category description in threads',
+                    'comment' => 'Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description.',
+                ],
+                [
+                    'name' => 'thread_participation_progress_posts',
+                    'title' => 'Posts required to complete a forum thread',
+                    'comment' => 'Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar.',
+                ],
             ],
             'gradebook' => [
                 [

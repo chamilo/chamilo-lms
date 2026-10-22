@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\ApiResource\Forum\ForumSearchResult;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -27,6 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @implements ProviderInterface<ForumSearchResult>
@@ -34,6 +36,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 final class ForumSearchStateProvider implements ProviderInterface
 {
     use ForumStateHelperTrait;
+    use ForumThreadParticipationHelperTrait;
 
     private const int MIN_SEARCH_LENGTH = 3;
     private const int MAX_TERMS = 8;
@@ -292,6 +295,9 @@ final class ForumSearchStateProvider implements ProviderInterface
             ;
         }
 
+        $repliesHidden = $this->areThreadRepliesHiddenUntilParticipation($this->settingsManager, $this->security);
+        $user = $this->security->getUser();
+
         $items = [];
         foreach ($queryBuilder->getQuery()->getResult() as $post) {
             if (!$post instanceof CForumPost || !$this->canReadPost($post, $course, $session, $showHidden)) {
@@ -304,6 +310,10 @@ final class ForumSearchStateProvider implements ProviderInterface
                 || !$thread instanceof CForumThread
                 || !$this->canListForumWithCurrentSettings($forum, $this->cidReqHelper, $displayGroupForums)
             ) {
+                continue;
+            }
+
+            if ($repliesHidden && !$this->isPostReadableBeforeParticipation($post, $thread, $user)) {
                 continue;
             }
 
@@ -422,6 +432,34 @@ final class ForumSearchStateProvider implements ProviderInterface
         }
 
         return false;
+    }
+
+    /**
+     * Until the user posted in a thread, only its opening post can be found.
+     */
+    private function isPostReadableBeforeParticipation(CForumPost $post, CForumThread $thread, ?UserInterface $user): bool
+    {
+        if ($user instanceof User && $this->countUserPostsInThread($this->entityManager, $thread, $user) > 0) {
+            return true;
+        }
+
+        $openingPostIds = $this->entityManager->createQueryBuilder()
+            ->select('p.iid')
+            ->from(CForumPost::class, 'p')
+            ->andWhere('IDENTITY(p.thread) = :threadId')
+            ->andWhere('p.visible = :visible')
+            ->andWhere('(p.status = :validatedStatus OR p.status IS NULL)')
+            ->setParameter('threadId', $thread->getIid(), Types::INTEGER)
+            ->setParameter('visible', true, Types::BOOLEAN)
+            ->setParameter('validatedStatus', CForumPost::STATUS_VALIDATED, Types::INTEGER)
+            ->orderBy('p.postDate', 'ASC')
+            ->addOrderBy('p.iid', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleColumnResult()
+        ;
+
+        return [] !== $openingPostIds && (int) $openingPostIds[0] === $post->getIid();
     }
 
     private function countVisiblePosts(CForumThread $thread): int

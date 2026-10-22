@@ -31,6 +31,9 @@ class ForumSettingsSchema extends AbstractSettingsSchema
                     'community_managers_user_list' => '',
                     'first_reply_min_words' => '0',
                     'subsequent_reply_min_words' => '0',
+                    'show_thread_replies_after_participation' => 'false',
+                    'show_category_description_in_thread' => 'false',
+                    'thread_participation_progress_posts' => '0',
                 ]
             )
         ;
@@ -65,6 +68,9 @@ class ForumSettingsSchema extends AbstractSettingsSchema
             ->add('community_managers_user_list', TextareaType::class)
             ->add('first_reply_min_words', TextType::class)
             ->add('subsequent_reply_min_words', TextType::class)
+            ->add('show_thread_replies_after_participation', YesNoType::class)
+            ->add('show_category_description_in_thread', YesNoType::class)
+            ->add('thread_participation_progress_posts', TextType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

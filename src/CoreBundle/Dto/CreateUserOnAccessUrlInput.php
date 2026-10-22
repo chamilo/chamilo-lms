@@ -44,6 +44,13 @@ class CreateUserOnAccessUrlInput
     #[Groups(['user:write'])]
     private bool $sendEmail = true;
 
+    /**
+     * Off by default, like check_email_duplicates in the 1.11 save_user_json webservice: the
+     * platform lets several accounts share an e-mail address.
+     */
+    #[Groups(['user:write'])]
+    private bool $checkEmailDuplicates = false;
+
     public function getUsername(): string
     {
         return $this->username;
@@ -124,5 +131,15 @@ class CreateUserOnAccessUrlInput
     public function setSendEmail(bool $sendEmail): void
     {
         $this->sendEmail = $sendEmail;
+    }
+
+    public function getCheckEmailDuplicates(): bool
+    {
+        return $this->checkEmailDuplicates;
+    }
+
+    public function setCheckEmailDuplicates(bool $checkEmailDuplicates): void
+    {
+        $this->checkEmailDuplicates = $checkEmailDuplicates;
     }
 }

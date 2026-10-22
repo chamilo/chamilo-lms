@@ -53,7 +53,9 @@ readonly class CreateUserOnAccessUrlAction
             throw new ConflictHttpException('username_already_exists');
         }
 
-        if (null !== $this->userRepository->findByEmailCaseInsensitive($data->getEmail())) {
+        if ($data->getCheckEmailDuplicates()
+            && null !== $this->userRepository->findByEmailCaseInsensitive($data->getEmail())
+        ) {
             throw new ConflictHttpException('email_already_exists');
         }
 

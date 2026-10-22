@@ -426,6 +426,7 @@ async function handleCreateUser() {
     lastname: createForm.value.lastname,
     password: pwd,
     sendEmail: createForm.value.sendEmail,
+    checkEmailDuplicates: true,
   }
 
   if (extraFieldKey && createForm.value[extraFieldKey]) {
@@ -452,8 +453,10 @@ async function handleCreateUser() {
   } catch (e) {
     console.error(e)
     const errorKey = e?.response?.data?.error ?? e?.response?.data?.detail ?? ""
-    if (errorKey === "username_already_exists" || errorKey === "email_already_exists") {
+    if (errorKey === "username_already_exists") {
       showErrorNotification(t("A user with this username already exists"))
+    } else if (errorKey === "email_already_exists") {
+      showErrorNotification(t("This email is already in use on the platform."))
     } else {
       showErrorNotification(t("Could not create user"))
     }

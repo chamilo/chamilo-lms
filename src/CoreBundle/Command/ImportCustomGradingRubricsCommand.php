@@ -34,8 +34,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * validated for existence and course; anything not found, or found in another
  * course, is logged and skipped instead of creating a wrong link. Existing
  * evaluations are moved into the rubric category with their results.
- * A course that already has its rubric category is skipped, so the command can
- * be run again safely. Always run --dry-run first and confirm the report.
+ *
+ * The rubric goes into the course's existing root category (no session), so the
+ * certificate settings, template and issued certificates keep applying to it.
+ * The root's previous content is moved to a hidden zero-weight "Legacy gradebook"
+ * subcategory, which also marks the course as imported: a course that already has
+ * it is skipped, so the command can be run again safely.
+ * Always run --dry-run first and confirm the report.
  */
 #[AsCommand(
     name: 'chamilo:import-custom-grading-rubrics',
@@ -46,6 +51,7 @@ class ImportCustomGradingRubricsCommand extends Command
     private const LINK_EXERCISE = 1;
     private const LINK_STUDENTPUBLICATION = 3;
     private const LINK_FORUM_PARTICIPATION = 11;
+    private const LEGACY_SUBCATEGORY_TITLE = 'Legacy gradebook';
 
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -106,29 +112,40 @@ class ImportCustomGradingRubricsCommand extends Command
                 continue;
             }
 
-            $title = \sprintf('%s rubric', $courseCode);
+            $categoryRepo = $this->em->getRepository(GradebookCategory::class);
 
-            // A second run would duplicate the category and move the evaluations again.
-            $existing = $this->em->getRepository(GradebookCategory::class)->findOneBy([
-                'course' => $courseEntity,
-                'title' => $title,
-            ]);
-            if (null !== $existing) {
-                $skipped[] = \sprintf('Course "%s": rubric category #%d already exists; whole rubric skipped.', $courseCode, $existing->getId());
+            // Same root the gradebook view and the certificate pick: lowest id, no session.
+            $category = $categoryRepo->findOneBy(
+                ['course' => $courseEntity, 'session' => null, 'parent' => null],
+                ['id' => 'ASC'],
+            );
+
+            // A second run would move the rubric itself into the legacy subcategory.
+            if (null !== $category
+                && null !== $categoryRepo->findOneBy(['parent' => $category, 'title' => self::LEGACY_SUBCATEGORY_TITLE])
+            ) {
+                $skipped[] = \sprintf('Course "%s": rubric already imported into category #%d; whole rubric skipped.', $courseCode, $category->getId());
 
                 continue;
             }
 
-            $category = new GradebookCategory();
-            $category->setTitle($title);
-            $category->setUser($owner);
-            $category->setCourse($courseEntity);
-            $category->setWeight(100.0);
-            $category->setVisible(true);
-            $category->setCalculationMode(GradebookCalculationMode::POINTS_SUM);
+            if (null === $category) {
+                $category = new GradebookCategory();
+                $category->setTitle($courseCode);
+                $category->setUser($owner);
+                $category->setCourse($courseEntity);
+                $category->setWeight(100.0);
+                $category->setVisible(true);
+
+                if (!$dryRun) {
+                    $this->em->persist($category);
+                }
+            }
+
+            $this->moveToLegacySubCategory($category, $owner, $courseEntity, $dryRun);
 
             if (!$dryRun) {
-                $this->em->persist($category);
+                $category->setCalculationMode(GradebookCalculationMode::POINTS_SUM);
             }
             $createdCategories++;
 
@@ -155,6 +172,39 @@ class ImportCustomGradingRubricsCommand extends Command
         ));
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Moves the root's links, evaluations and subcategories into a hidden zero-weight subcategory.
+     * In POINTS_SUM the subcategory then adds 0 points, and its data stays in place for reference.
+     */
+    private function moveToLegacySubCategory(GradebookCategory $root, User $owner, Course $course, bool $dryRun): void
+    {
+        if ($dryRun) {
+            return;
+        }
+
+        $legacy = new GradebookCategory();
+        $legacy->setTitle(self::LEGACY_SUBCATEGORY_TITLE);
+        $legacy->setUser($owner);
+        $legacy->setCourse($course);
+        $legacy->setParent($root);
+        $legacy->setWeight(0.0);
+        $legacy->setVisible(false);
+        $legacy->setCalculationMode($root->getCalculationMode());
+        $this->em->persist($legacy);
+
+        foreach ([...$root->getLinks()] as $link) {
+            $link->setCategory($legacy);
+        }
+
+        foreach ([...$root->getEvaluations()] as $evaluation) {
+            $evaluation->setCategory($legacy);
+        }
+
+        foreach ([...$root->getSubCategories()] as $subCategory) {
+            $subCategory->setParent($legacy);
+        }
     }
 
     /**

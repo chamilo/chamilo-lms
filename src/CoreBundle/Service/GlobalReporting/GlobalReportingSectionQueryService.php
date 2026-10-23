@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Security\Authorization\LoginAsAuthorizationChecker;
+use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\ArrayParameterType;
@@ -111,6 +112,7 @@ final readonly class GlobalReportingSectionQueryService
         private CsrfTokenManagerInterface $csrfTokenManager,
         private SkillRepository $skillRepository,
         private AssetRepository $assetRepository,
+        private ReportIpVisibility $reportIpVisibility,
     ) {}
 
     /**
@@ -3859,7 +3861,7 @@ final readonly class GlobalReportingSectionQueryService
             ['key' => 'username', 'label' => 'Username', 'type' => 'text'],
             ['key' => 'firstname', 'label' => 'First name', 'type' => 'text'],
             ['key' => 'lastname', 'label' => 'Last name', 'type' => 'text'],
-            ['key' => 'ip', 'label' => 'IP', 'type' => 'text'],
+            ...($this->reportIpVisibility->isHidden() ? [] : [['key' => 'ip', 'label' => 'IP', 'type' => 'text']]),
             ['key' => 'durationSeconds', 'label' => 'Time connected (hh:mm)', 'type' => 'duration'],
         ];
 
@@ -3952,6 +3954,9 @@ final readonly class GlobalReportingSectionQueryService
         );
         foreach ($rows as &$row) {
             $row['id'] = (int) $row['id'];
+            if ($this->reportIpVisibility->isHidden()) {
+                unset($row['ip']);
+            }
             $row['durationSeconds'] = (int) $row['durationSeconds'];
         }
         unset($row);

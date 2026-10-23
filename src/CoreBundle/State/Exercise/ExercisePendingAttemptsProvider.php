@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Exercise;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExercisePendingAttempts;
+use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
 use Doctrine\DBAL\ArrayParameterType;
@@ -46,6 +47,7 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
         private Connection $connection,
         private Security $security,
         private SettingsManager $settingsManager,
+        private ReportIpVisibility $reportIpVisibility,
     ) {}
 
     /**
@@ -79,6 +81,7 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
         $response->settings = [
             'showOfficialCode' => $this->isSettingEnabled('exercise.show_official_code_exercise_result_list'),
             'showUsername' => $this->isSettingEnabled('exercise.exercise_attempts_report_show_username'),
+            'showIp' => !$this->reportIpVisibility->isExerciseHidden(),
             'includeSessions' => $includeSessions,
         ];
         $response->actionUrls = [
@@ -120,7 +123,7 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
             'Start date',
             'End date',
             'Score',
-            'IP',
+            ...(true === ($settings['showIp'] ?? false) ? ['IP'] : []),
             'Status',
             'Corrector',
             'Correction date',
@@ -163,7 +166,9 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
             $row[] = (string) ($item['startDate'] ?? '');
             $row[] = (string) ($item['endDate'] ?? '');
             $row[] = (string) ($item['scoreLabel'] ?? '');
-            $row[] = (string) ($item['userIp'] ?? '');
+            if (true === ($settings['showIp'] ?? false)) {
+                $row[] = (string) ($item['userIp'] ?? '');
+            }
             $row[] = (string) ($item['statusLabel'] ?? '');
             $row[] = (string) ($item['qualificatorFullName'] ?? '');
             $row[] = (string) ($item['qualificationDate'] ?? '');
@@ -485,7 +490,7 @@ SQL;
             'score' => $score,
             'maxScore' => $maxScore,
             'scoreLabel' => $this->formatScore($score).' / '.$this->formatScore($maxScore),
-            'userIp' => (string) ($row['user_ip'] ?? ''),
+            'userIp' => $this->reportIpVisibility->isExerciseHidden() ? '' : (string) ($row['user_ip'] ?? ''),
             'status' => $revised,
             'statusLabel' => $statusLabel,
             'qualificatorFullName' => (string) ($row['qualificator_fullname'] ?? ''),

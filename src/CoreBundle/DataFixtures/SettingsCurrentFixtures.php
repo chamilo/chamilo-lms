@@ -1399,6 +1399,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'tracking' => [
                 [
+                    'name' => 'hide_ip_address',
+                    'title' => 'Hide IP address from reports',
+                    'comment' => 'Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures.',
+                ],
+                [
                     'name' => 'my_progress_course_tools_order',
                     'title' => "Order of tools on 'My progress' page",
                     'comment' => "Change the order of tools shown on the 'My progress' page for learners. Options include 'quizzes', 'learning_paths' and 'skills'.",

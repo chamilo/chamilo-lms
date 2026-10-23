@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use DateInterval;
@@ -54,6 +55,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private CQuizRepository $quizRepository,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private ReportIpVisibility $reportIpVisibility,
     ) {}
 
     /**
@@ -249,7 +251,7 @@ final readonly class ExerciseLiveResultsProvider implements ProviderInterface
             'score' => $score,
             'maxScore' => $maxScore,
             'percentage' => $percentage,
-            'ip' => $attempt->getUserIp(),
+            'ip' => $this->reportIpVisibility->isExerciseHidden() ? '' : $attempt->getUserIp(),
             'status' => $status,
             'statusLabel' => $statusLabel,
         ];

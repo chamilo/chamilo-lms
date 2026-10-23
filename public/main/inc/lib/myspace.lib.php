@@ -894,7 +894,7 @@ class MySpace
                     'logout' => $row['logout_course_date'],
                     'duration' => $row['duration'],
                 ];
-                if ($addUserIp) {
+                if ($addUserIp && 'true' !== api_get_setting('tracking.hide_ip_address')) {
                     $item['user_ip'] = $row['user_ip'];
                 }
                 $connections[] = $item;

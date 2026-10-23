@@ -483,12 +483,14 @@ class Statistics
                     ]
                 );
 
-                $row[6] = Tracking::get_ip_from_user_event(
+                $row[6] = 'true' === api_get_setting('tracking.hide_ip_address')
+                    ? ''
+                    : Tracking::get_ip_from_user_event(
                     $row[6],
                     $row[7],
                     true
                 );
-                if (empty($row[6])) {
+                if (empty($row[6]) && 'true' !== api_get_setting('tracking.hide_ip_address')) {
                     $row[6] = get_lang('Unknown');
                 }
             }

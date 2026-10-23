@@ -405,7 +405,10 @@ switch ($action) {
                 null
             );
             $supervisorStudents = array_column($supervisorStudents, 'user_id');
-
+            if (empty($supervisorStudents)) {
+                $count = 0;
+                break;
+            }
             //get students with course or session
             $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'admin',

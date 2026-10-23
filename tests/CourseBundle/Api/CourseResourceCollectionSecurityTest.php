@@ -137,6 +137,22 @@ final class CourseResourceCollectionSecurityTest extends AbstractApiTest
         $this->assertNotContains('/api/c_attendance_calendars/'.$calendarB->getIid(), $ids);
     }
 
+    public function testAttendancesOfAnotherCourseAreNotListed(): void
+    {
+        $ctx = $this->bootstrapScenario('attendances');
+        $attendanceA = $this->createAttendanceCalendar($ctx['courseA'], $ctx['teacherA'], 'Attendance list A')->getAttendance();
+        $attendanceB = $this->createAttendanceCalendar($ctx['courseB'], $ctx['teacherB'], 'Attendance list B')->getAttendance();
+        $client = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacherA']));
+
+        $ids = $this->getIds($client, '/api/attendances?cid='.$ctx['courseA']->getId());
+        $this->assertContains('/api/attendances/'.$attendanceA->getIid(), $ids);
+        $this->assertNotContains('/api/attendances/'.$attendanceB->getIid(), $ids);
+
+        // The course-scoped collection above is the only attendance list.
+        $client->request('GET', '/attendance/list_with_done_count?cid='.$ctx['courseA']->getId());
+        $this->assertResponseStatusCodeSame(404);
+    }
+
     public function testSessionCourseListIsReservedToAdmins(): void
     {
         $ctx = $this->bootstrapScenario('session_courses');

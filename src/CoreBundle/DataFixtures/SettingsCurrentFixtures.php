@@ -2893,7 +2893,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'thread_max_posts_for_non_admins',
                     'title' => 'Maximum posts shown in a forum thread',
-                    'comment' => 'Show only the first posts of each forum thread, up to this number, to every user who is not a platform administrator, teachers included. Set to 0 to show every post.',
+                    'comment' => 'Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post.',
                 ],
                 [
                     'name' => 'thread_participation_progress_posts',

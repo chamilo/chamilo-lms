@@ -48,6 +48,54 @@ final class ForumThreadParticipationTest extends AbstractApiTest
     }
 
     /**
+     * Inside a learning path, Chamilo 1.11 showed the opening post first, then the latest replies of
+     * each level, so that a learner sees their reply right under the opening post. A post without a
+     * shown parent goes under the opening post.
+     */
+    public function testLearningPathShowsTheOpeningPostThenTheLatestReplies(): void
+    {
+        $ctx = $this->bootstrapTreeScenario('lptree');
+        $learningPath = '&origin=learnpath&view=nested';
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx, $learningPath);
+        $this->assertSame(
+            ['Opening question lptree', 'Learner answer lptree', 'Classmate answer lptree', 'Teacher answer lptree', 'Reply to teacher lptree'],
+            $this->getPostTitles($data),
+        );
+        $displayParents = array_column($data['posts'], 'displayParentId', 'title');
+        $this->assertSame($ctx['opening']->getIid(), $displayParents['Classmate answer lptree'], 'A post without parent goes under the opening post.');
+
+        $this->assertSame(
+            ['Opening question lptree', 'Teacher answer lptree', 'Reply to teacher lptree', 'Classmate answer lptree', 'Learner answer lptree'],
+            $this->getPostTitles($this->getThreadPosts($ctx['learner'], $ctx, '&view=nested')),
+        );
+    }
+
+    /**
+     * The limit applies to each reply level, in the order of the view: inside a learning path it
+     * keeps the latest replies, for administrators too, as Chamilo 1.11 did for Ricky Rescue.
+     */
+    public function testPostLimitKeepsTheLatestRepliesInsideALearningPath(): void
+    {
+        $this->updateSetting('forum.thread_max_posts_for_non_admins', '2');
+        $ctx = $this->bootstrapTreeScenario('lplimit');
+        $admin = $this->createUser('forum_part_admin_lplimit', '', '', 'ROLE_ADMIN');
+
+        foreach ([$ctx['learner'], $admin] as $user) {
+            $this->assertSame(
+                ['Opening question lplimit', 'Learner answer lplimit', 'Classmate answer lplimit'],
+                $this->getPostTitles($this->getThreadPosts($user, $ctx, '&origin=learnpath&view=nested')),
+            );
+        }
+
+        $this->assertSame(
+            ['Opening question lplimit', 'Teacher answer lplimit', 'Reply to teacher lplimit', 'Classmate answer lplimit'],
+            $this->getPostTitles($this->getThreadPosts($ctx['learner'], $ctx, '&view=nested')),
+        );
+        $this->assertCount(5, $this->getThreadPosts($admin, $ctx, '&view=nested')['posts'], 'Outside a learning path, administrators see every post.');
+    }
+
+    /**
      * Ricky Rescue only showed the first 49 posts of a thread to everyone but platform administrators.
      */
     public function testOnlyPlatformAdministratorsSeeThePostsBeyondTheLimit(): void
@@ -278,6 +326,24 @@ final class ForumThreadParticipationTest extends AbstractApiTest
     }
 
     /**
+     * The opening post, a reply of the teacher to it and a reply to that reply, the classmate answer
+     * left without parent (as a post migrated from Chamilo 1.11 can be), and the latest reply of the
+     * learner to the opening post.
+     *
+     * @return array<string, mixed>
+     */
+    private function bootstrapTreeScenario(string $suffix): array
+    {
+        $ctx = $this->bootstrapScenario($suffix);
+        $ctx['opening'] = $this->getEntityManager()->getRepository(CForumPost::class)->findOneBy(['title' => 'Opening question '.$suffix]);
+        $teacherAnswer = $this->createPost($ctx, $ctx['teacher'], 'Teacher answer '.$suffix, CForumPost::STATUS_VALIDATED, 'Answer', '-90 minutes', $ctx['opening']);
+        $this->createPost($ctx, $ctx['learner'], 'Reply to teacher '.$suffix, CForumPost::STATUS_VALIDATED, 'Answer', '-30 minutes', $teacherAnswer);
+        $this->createPost($ctx, $ctx['learner'], 'Learner answer '.$suffix, CForumPost::STATUS_VALIDATED, 'Answer', 'now', $ctx['opening']);
+
+        return $ctx;
+    }
+
+    /**
      * @param array<string, mixed> $ctx
      */
     private function setCourseSetting(array $ctx, string $variable, string $value): void
@@ -320,12 +386,12 @@ final class ForumThreadParticipationTest extends AbstractApiTest
      *
      * @return array<string, mixed>
      */
-    private function getThreadPosts(User $user, array $ctx): array
+    private function getThreadPosts(User $user, array $ctx, string $query = ''): array
     {
         $client = $this->createClientWithCredentials($this->getUserTokenFromUser($user));
         $response = $client->request(
             'GET',
-            '/api/forum_threads/'.$ctx['thread']->getIid().'/posts?forumId='.$ctx['forum']->getIid().'&cid='.$ctx['course']->getId(),
+            '/api/forum_threads/'.$ctx['thread']->getIid().'/posts?forumId='.$ctx['forum']->getIid().'&cid='.$ctx['course']->getId().$query,
         );
         $this->assertResponseIsSuccessful();
 
@@ -434,6 +500,7 @@ final class ForumThreadParticipationTest extends AbstractApiTest
         int $status,
         string $text = 'Answer',
         string $date = 'now',
+        ?CForumPost $parent = null,
     ): CForumPost {
         $em = $this->getEntityManager();
 
@@ -451,6 +518,7 @@ final class ForumThreadParticipationTest extends AbstractApiTest
             ->setVisible(CForumPost::STATUS_VALIDATED === $status)
             ->setStatus($status)
             ->setParent($thread)
+            ->setPostParent(null === $parent ? null : $em->getReference(CForumPost::class, $parent->getIid()))
             ->addCourseLink($em->getReference(Course::class, $ctx['course']->getId()))
         ;
         $em->persist($post);

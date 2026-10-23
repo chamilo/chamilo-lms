@@ -16,7 +16,6 @@ use Chamilo\CoreBundle\Enums\GradebookCalculationMode;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -33,7 +32,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * across the 1.11.x -> 2.0 migration. Resource references (exerciseId, parentId,
  * evaluationId, thread ids) are taken from the seed as 2.x identifiers and
  * validated for existence and course; anything not found, or found in another
- * course, is logged and skipped instead of creating a wrong link.
+ * course, is logged and skipped instead of creating a wrong link. Existing
+ * evaluations are moved into the rubric category with their results.
  * Always run --dry-run first and confirm the report.
  */
 #[AsCommand(
@@ -184,11 +184,13 @@ class ImportCustomGradingRubricsCommand extends Command
                 $skipped,
                 $dryRun
             ),
-            'gradebook_result' => $this->createEvaluation(
+            'gradebook_result' => $this->moveEvaluation(
                 (int) ($component['evaluationId'] ?? 0),
-                $this->weightToPoints($component['weight'] ?? 0),
+                (float) ($component['weight'] ?? 0),
                 $course,
                 $category,
+                $courseCode,
+                $skipped,
                 $dryRun
             ),
             'forum' => $this->createForumItems($component, $course, $category, $courseCode, $skipped, $dryRun),
@@ -313,29 +315,35 @@ class ImportCustomGradingRubricsCommand extends Command
     }
 
     /**
-     * Creates a native gradebook evaluation. The score scale assumed for the points weight is 0-100
-     * (max = 100), so score/max × weight reproduces the client's "score × multiplier" arithmetic.
+     * Moves the existing evaluation, with its gradebook_result rows, into the rubric category.
+     * The weight is multiplier × max, so score/max × weight reproduces the client's "score × multiplier".
+     *
+     * @param string[] $skipped
      */
-    private function createEvaluation(
+    private function moveEvaluation(
         int $evaluationId,
-        float $weight,
+        float $multiplier,
         Course $course,
         GradebookCategory $category,
+        string $courseCode,
+        array &$skipped,
         bool $dryRun
     ): int {
-        $evaluation = new GradebookEvaluation();
-        $evaluation->setTitle(\sprintf('Evaluation %d', $evaluationId));
-        $evaluation->setCourse($course);
-        $evaluation->setCategory($category);
-        $evaluation->setWeight($weight);
-        $evaluation->setMax(100.0);
-        $evaluation->setVisible(1);
-        $evaluation->setType('evaluation');
-        $evaluation->setLocked(0);
-        $evaluation->setCreatedAt(new DateTime());
+        $evaluation = $evaluationId > 0 ? $this->em->getRepository(GradebookEvaluation::class)->find($evaluationId) : null;
+        if (null === $evaluation) {
+            return $this->skip($skipped, \sprintf('Course "%s": evaluation #%d not found, skipped.', $courseCode, $evaluationId));
+        }
+
+        if ($evaluation->getCourse()->getId() !== $course->getId()) {
+            return $this->skip(
+                $skipped,
+                \sprintf('Course "%s": evaluation #%d belongs to another course, skipped.', $courseCode, $evaluationId)
+            );
+        }
 
         if (!$dryRun) {
-            $this->em->persist($evaluation);
+            $evaluation->setCategory($category);
+            $evaluation->setWeight(round($multiplier * (float) $evaluation->getMax(), 4));
         }
 
         return 1;

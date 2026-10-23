@@ -2891,6 +2891,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings.',
                 ],
                 [
+                    'name' => 'thread_max_posts_for_non_admins',
+                    'title' => 'Maximum posts shown in a forum thread',
+                    'comment' => 'Show only the first posts of each forum thread, up to this number, to every user who is not a platform administrator, teachers included. Set to 0 to show every post.',
+                ],
+                [
                     'name' => 'thread_participation_progress_posts',
                     'title' => 'Posts required to complete a forum thread',
                     'comment' => 'Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar.',

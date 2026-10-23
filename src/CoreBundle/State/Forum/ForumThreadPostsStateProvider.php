@@ -170,10 +170,15 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             max(1, $request->query->getInt('itemsPerPage', self::DEFAULT_ITEMS_PER_PAGE)),
         );
 
-        // Until the user posts in the thread, only its opening post is returned.
-        $openingPostId = $repliesHidden ? $this->getOpeningPostId($thread, $forum, $canManage) : 0;
+        // Until the user posts in the thread, only its opening post is returned. Otherwise, a platform
+        // may only show the first posts of a thread to whoever is not an administrator.
+        $shownPostIds = null;
+        $maxShownPosts = $repliesHidden ? 1 : $this->getMaxShownPosts();
+        if ($maxShownPosts > 0) {
+            $shownPostIds = $this->getFirstPostIds($thread, $forum, $canManage, $maxShownPosts) ?: null;
+        }
 
-        $totalItems = (int) $this->createPostsQueryBuilder($thread, $forum, $canManage, $openingPostId)
+        $totalItems = (int) $this->createPostsQueryBuilder($thread, $forum, $canManage, $shownPostIds)
             ->select('COUNT(p.iid)')
             ->getQuery()
             ->getSingleScalarResult()
@@ -182,7 +187,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $isLearningPathContext = 'learnpath' === strtolower((string) $request->query->get('origin', ''));
         $sortDirection = $isLearningPathContext ? 'DESC' : 'ASC';
 
-        $postIdRows = $this->createPostsQueryBuilder($thread, $forum, $canManage, $openingPostId)
+        $postIdRows = $this->createPostsQueryBuilder($thread, $forum, $canManage, $shownPostIds)
             ->select('p.iid')
             ->orderBy('p.postDate', $sortDirection)
             ->addOrderBy('p.iid', $sortDirection)
@@ -269,11 +274,14 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         ];
     }
 
+    /**
+     * @param int[]|null $onlyPostIds restricts the posts to these ones, unless null
+     */
     private function createPostsQueryBuilder(
         CForumThread $thread,
         CForum $forum,
         bool $canManage,
-        int $onlyPostId = 0,
+        ?array $onlyPostIds = null,
     ): QueryBuilder {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->from(CForumPost::class, 'p')
@@ -283,10 +291,10 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             ->setParameter('forumId', $forum->getIid(), Types::INTEGER)
         ;
 
-        if ($onlyPostId > 0) {
+        if (null !== $onlyPostIds) {
             $queryBuilder
-                ->andWhere('p.iid = :onlyPostId')
-                ->setParameter('onlyPostId', $onlyPostId, Types::INTEGER)
+                ->andWhere('p.iid IN (:onlyPostIds)')
+                ->setParameter('onlyPostIds', $onlyPostIds)
             ;
         }
 
@@ -302,18 +310,35 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         return $queryBuilder;
     }
 
-    private function getOpeningPostId(CForumThread $thread, CForum $forum, bool $canManage): int
+    /**
+     * The first posts of the thread the user can see, in chronological order.
+     *
+     * @return int[]
+     */
+    private function getFirstPostIds(CForumThread $thread, CForum $forum, bool $canManage, int $limit): array
     {
         $rows = $this->createPostsQueryBuilder($thread, $forum, $canManage)
             ->select('p.iid')
             ->orderBy('p.postDate', 'ASC')
             ->addOrderBy('p.iid', 'ASC')
-            ->setMaxResults(1)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getArrayResult()
         ;
 
-        return [] === $rows ? 0 : (int) $rows[0]['iid'];
+        return array_map(static fn (array $row): int => (int) $row['iid'], $rows);
+    }
+
+    /**
+     * How many posts of a thread a user who is not a platform administrator sees, 0 for all of them.
+     */
+    private function getMaxShownPosts(): int
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return 0;
+        }
+
+        return max(0, (int) $this->settingsManager->getSetting('forum.thread_max_posts_for_non_admins', true));
     }
 
     /**

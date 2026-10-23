@@ -44,6 +44,29 @@ final class ForumThreadParticipationTest extends AbstractApiTest
         $this->updateSetting('forum.show_category_description_in_thread', 'false');
         $this->updateSetting('forum.thread_participation_progress_posts', '0');
         $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'false');
+        $this->updateSetting('forum.thread_max_posts_for_non_admins', '0');
+    }
+
+    /**
+     * Ricky Rescue only showed the first 49 posts of a thread to everyone but platform administrators.
+     */
+    public function testOnlyPlatformAdministratorsSeeThePostsBeyondTheLimit(): void
+    {
+        $this->updateSetting('forum.thread_max_posts_for_non_admins', '2');
+        $ctx = $this->bootstrapScenario('postlimit');
+        $this->createPost($ctx, $ctx['learner'], 'Learner answer postlimit', CForumPost::STATUS_VALIDATED);
+        $admin = $this->createUser('forum_part_admin_postlimit', '', '', 'ROLE_ADMIN');
+
+        foreach ([$ctx['learner'], $ctx['teacher']] as $user) {
+            $data = $this->getThreadPosts($user, $ctx);
+            $this->assertSame(['Opening question postlimit', 'Classmate answer postlimit'], $this->getPostTitles($data));
+            $this->assertSame(2, $data['totalItems']);
+        }
+
+        $this->assertSame(
+            ['Opening question postlimit', 'Classmate answer postlimit', 'Learner answer postlimit'],
+            $this->getPostTitles($this->getThreadPosts($admin, $ctx)),
+        );
     }
 
     public function testCourseTurnsOnTheRestrictionThePlatformLeavesOff(): void

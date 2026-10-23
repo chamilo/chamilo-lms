@@ -35,6 +35,7 @@ class ForumSettingsSchema extends AbstractSettingsSchema
                     'show_category_description_in_thread' => 'false',
                     'thread_participation_progress_posts' => '0',
                     'forum_participation_can_be_modified_in_course' => 'false',
+                    'thread_max_posts_for_non_admins' => '0',
                 ]
             )
         ;
@@ -73,6 +74,7 @@ class ForumSettingsSchema extends AbstractSettingsSchema
             ->add('show_category_description_in_thread', YesNoType::class)
             ->add('thread_participation_progress_posts', TextType::class)
             ->add('forum_participation_can_be_modified_in_course', YesNoType::class)
+            ->add('thread_max_posts_for_non_admins', TextType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

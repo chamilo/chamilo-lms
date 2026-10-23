@@ -3,12 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForum;
-use Chamilo\CourseBundle\Entity\CForumCategory;
-use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
-use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -58,88 +54,6 @@ switch ($action) {
             }
         }
         echo json_encode($data);
-        break;
-    case 'get_forum_thread':
-        $forumCategoryRepo = Container::getForumCategoryRepository();
-        $lpRepo = Container::getLpRepository();
-        $forumRepo = Container::getForumRepository();
-        $lpItemRepo = Container::getLpItemRepository();
-        $forumThreadRepo = Container::getForumThreadRepository();
-
-        $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
-        $sessionId = api_get_session_id();
-        $course = api_get_course_entity();
-        $session = api_get_session_entity();
-        // Close the session as we don't need it any further
-        session_write_close();
-
-        /** @var CLpItem $lpItem */
-        $lpItem = $lpItemRepo->find($lpItemId);
-
-        if (empty($lpId) || empty($lpItemId)) {
-            echo json_encode([
-                'error' => true,
-            ]);
-
-            break;
-        }
-
-        $lp = $lpRepo->find($lpId);
-        $forum = $lpRepo->findForumByCourse($lp, $course);
-
-        if (null === $forum) {
-            /** @var CForumCategory|null $forumCategory */
-            $forumCategory = $forumCategoryRepo->getForumCategoryByTitle(
-                get_lang('Learning paths'),
-                $course,
-                $session
-            );
-
-            if (null === $forumCategory) {
-                $forumCategory = new CForumCategory();
-                $forumCategory
-                    ->setTitle(get_lang('Learning paths'))
-                    ->setParent($course)
-                    ->addCourseLink($course, $session)
-                ;
-                $forumCategoryRepo->create($forumCategory);
-            }
-
-            $forum = new CForum();
-            $forum
-                ->setTitle('forum2')
-                ->setForumCategory($forumCategory)
-                ->setParent($course)
-                ->setLp($lp)
-                ->setCreator(api_get_user_entity())
-                ->addCourseLink($course, $session)
-            ;
-            $forumRepo->create($forum);
-        }
-
-        $title = $lpItem->getTitle().' '.$lpItem->getIid();
-        $thread = $forumThreadRepo->getForumThread($title, $course);
-
-        if (null === $thread) {
-            $thread = new CForumThread();
-            $thread
-                ->setTitle($title)
-                ->setForum($forum)
-                ->setUser(api_get_user_entity())
-                ->setParent($forum)
-                ->setItem($lpItem)
-                ->addCourseLink($course, $session)
-            ;
-            $forumThreadRepo->create($thread);
-        }
-
-        $forumThreadId = $thread->getIid();
-
-        echo json_encode([
-            'error' => false,
-            'forumId' => $forum->getIid(),
-            'threadId' => $forumThreadId,
-        ]);
         break;
     case 'update_gamification':
         // moved inside lp_nav.php

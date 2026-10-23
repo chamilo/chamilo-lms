@@ -22,3 +22,25 @@
 # Remove this entry once the minimum PHP is 8.4 and native lazy objects are on,
 # then pass true at every Criteria::create() call site.
 %^Not enabling raw field value access for .+ is deprecated\. Raw field access will be the only supported method in 3\.0%
+
+# ---------------------------------------------------------------------------
+# doctrine/orm 3.7: string sort directions in the QueryBuilder and Expr\OrderBy.
+#
+# ORM 3.7 asks for the SortDirection enum (polyfilled by symfony/polyfill-php86)
+# instead of 'ASC'/'DESC'. The codebase passes strings at several hundred call
+# sites, in src/ and in the legacy code under public/main/.
+#
+# Remove this entry once every call site passes SortDirection, and in any case
+# before upgrading to doctrine/orm 4.0, which drops string directions.
+%^Passing string as \$order to Doctrine\\ORM\\.+ is deprecated, use an instance of SortDirection instead%
+
+# ---------------------------------------------------------------------------
+# api-platform/core 4.4: custom filters that extend the Doctrine ORM AbstractFilter.
+#
+# The filters under src/CoreBundle/Filter/ extend AbstractFilter, which 4.4
+# deprecates in favour of MetadataFilterInterface and the QueryParameter-based
+# filters.
+#
+# Remove this entry once those filters are migrated, and in any case before
+# upgrading to api-platform/core 6.0, which removes AbstractFilter.
+%^The "Chamilo\\.+" class extends "ApiPlatform\\Doctrine\\Orm\\Filter\\AbstractFilter" that is deprecated since API Platform 4\.4%

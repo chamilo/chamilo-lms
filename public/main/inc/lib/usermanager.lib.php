@@ -1367,6 +1367,59 @@ class UserManager
     }
 
     /**
+     * Roles the current user may choose in the user add and edit forms: only a platform admin
+     * may grant the administrator role, and only a global admin the global admin role. Roles the
+     * edited user already holds stay available, so saving the form does not drop them.
+     *
+     * @param array $currentRoles roles of the edited user (empty when creating one)
+     */
+    public static function getRoleOptionsForUserForm(array $currentRoles = []): array
+    {
+        $currentRoles = array_map('api_normalize_role_code', $currentRoles);
+        $options = [];
+
+        foreach (api_get_roles() as $code => $label) {
+            $role = api_normalize_role_code((string) $code);
+
+            if (!in_array($role, $currentRoles, true)) {
+                if ('ROLE_GLOBAL_ADMIN' === $role && !api_is_global_platform_admin()) {
+                    continue;
+                }
+
+                if (in_array($role, ['ROLE_ADMIN', 'ROLE_PLATFORM_ADMIN'], true) && !api_is_platform_admin()) {
+                    continue;
+                }
+            }
+
+            $options[$code] = $label;
+        }
+
+        return $options;
+    }
+
+    /**
+     * Whether every submitted role is one the current user may choose in the user forms.
+     *
+     * @param array $roles        submitted roles
+     * @param array $currentRoles roles of the edited user (empty when creating one)
+     */
+    public static function areRolesAllowedInUserForm(array $roles, array $currentRoles = []): bool
+    {
+        $allowed = array_map(
+            'api_normalize_role_code',
+            array_map('strval', array_keys(self::getRoleOptionsForUserForm($currentRoles)))
+        );
+
+        foreach ($roles as $role) {
+            if (!in_array(api_normalize_role_code((string) $role), $allowed, true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Creates a username using person's names, i.e. creates jmontoya from Julio Montoya.
      *
      * @param string $firstname the first name of the user

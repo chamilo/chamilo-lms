@@ -19,8 +19,11 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
@@ -37,11 +40,14 @@ readonly class CreateUserOnAccessUrlAction
         private RequestStack $requestStack,
         private SettingsManager $settingsManager,
         private UserRepository $userRepository,
+        private Security $security,
     ) {}
 
     public function __invoke(AccessUrl $url, CreateUserOnAccessUrlInput $data): User
     {
         $this->validator->validate($data);
+
+        $this->denyUnlessCallerWorksOnUrl($url);
 
         $locale = $data->getLocale();
         if (empty($locale)) {
@@ -53,7 +59,7 @@ readonly class CreateUserOnAccessUrlAction
             $timezone = (string) ($this->settingsManager->getSetting('platform.timezone', true) ?: 'Europe/Paris');
         }
 
-        $status = $data->getStatus() ?? 5;
+        $status = $this->resolveStatus($data->getStatus());
 
         $user = new User();
         $user
@@ -148,5 +154,42 @@ readonly class CreateUserOnAccessUrlAction
         }
 
         return $user;
+    }
+
+    /**
+     * The access URL comes from the request path, so it has to be one the caller works on: a
+     * global admin on any URL, anyone else only on a URL they are registered on.
+     */
+    private function denyUnlessCallerWorksOnUrl(AccessUrl $url): void
+    {
+        $caller = $this->userHelper->getCurrent();
+
+        if (null === $caller) {
+            throw new AccessDeniedHttpException();
+        }
+
+        if (!$this->security->isGranted('ROLE_GLOBAL_ADMIN') && !$url->hasUser($caller)) {
+            throw new AccessDeniedHttpException('You cannot create users on this access URL.');
+        }
+    }
+
+    /**
+     * Only a known status is accepted, and only an admin may create anything other than a
+     * learner: session managers use this endpoint to register learners, and must not be able
+     * to create accounts with rights they could not grant otherwise.
+     */
+    private function resolveStatus(?int $status): int
+    {
+        $status ??= STUDENT;
+
+        if (!\in_array($status, [COURSEMANAGER, SESSIONADMIN, DRH, STUDENT, STUDENT_BOSS, INVITEE], true)) {
+            throw new BadRequestHttpException('Invalid status.');
+        }
+
+        if (STUDENT !== $status && !$this->security->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedHttpException('You cannot create users with this status.');
+        }
+
+        return $status;
     }
 }

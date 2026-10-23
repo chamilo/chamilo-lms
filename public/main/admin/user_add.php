@@ -224,7 +224,7 @@ $form->addElement(
     'select',
     'roles',
     get_lang('Roles'),
-    api_get_roles(),
+    UserManager::getRoleOptionsForUserForm(),
     [
         'multiple' => 'multiple',
         'size' => 9,
@@ -375,6 +375,9 @@ if ($form->validate()) {
         $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
 
         $roles = $user['roles'] ?? [];
+        if (!UserManager::areRolesAllowedInUserForm($roles)) {
+            api_not_allowed(true);
+        }
         $roles = array_values(array_unique(array_map('api_normalize_role_code', $roles)));
         $status = api_status_from_roles($roles);
 

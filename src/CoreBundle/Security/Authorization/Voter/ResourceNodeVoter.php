@@ -116,8 +116,8 @@ class ResourceNodeVoter extends Voter
         $resourceNode = $subject;
         $resourceTypeName = $resourceNode->getResourceType()->getTitle();
 
-        // Illustrations are always visible, nothing to check.
-        if ('illustrations' === $resourceTypeName) {
+        // Illustrations are always visible, nothing to check. Changing them follows the rules below.
+        if (self::VIEW === $attribute && 'illustrations' === $resourceTypeName) {
             return true;
         }
 

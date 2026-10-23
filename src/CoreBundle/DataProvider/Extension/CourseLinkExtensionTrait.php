@@ -12,16 +12,35 @@ use Doctrine\ORM\QueryBuilder;
  */
 trait CourseLinkExtensionTrait
 {
-    protected function addCourseLinkWithVisibilityConditions(QueryBuilder $queryBuilder, bool $checkVisibility): void
-    {
+    /**
+     * @param string|null $linkOwner relation from the root to the resource that holds the course
+     *                               links, for a root entity without its own (e.g. an attachment
+     *                               and its post); null when the root holds them
+     */
+    protected function addCourseLinkWithVisibilityConditions(
+        QueryBuilder $queryBuilder,
+        bool $checkVisibility,
+        ?string $linkOwner = null
+    ): void {
         $rootAlias = $queryBuilder->getRootAliases()[0];
 
         $joins = $queryBuilder->getDQLPart('join');
+        $nodeOwnerAlias = $rootAlias;
+
+        if (null !== $linkOwner) {
+            if (empty($joins[$rootAlias])
+                || !array_filter($joins[$rootAlias], fn ($j) => 'link_owner' === $j->getAlias())
+            ) {
+                $queryBuilder->innerJoin("$rootAlias.$linkOwner", 'link_owner');
+            }
+
+            $nodeOwnerAlias = 'link_owner';
+        }
 
         if (empty($joins[$rootAlias])
             || !array_filter($joins[$rootAlias], fn ($j) => 'node' === $j->getAlias())
         ) {
-            $queryBuilder->innerJoin("$rootAlias.resourceNode", 'node');
+            $queryBuilder->innerJoin("$nodeOwnerAlias.resourceNode", 'node');
         }
 
         if (empty($joins[$rootAlias])

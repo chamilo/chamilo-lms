@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)"),
         new Put(security: "is_granted('ROLE_ADMIN')", processor: RoomAssignmentStateProcessor::class),
         new Patch(security: "is_granted('ROLE_ADMIN')", processor: RoomAssignmentStateProcessor::class),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(security: "is_granted('ROLE_ADMIN')", processor: RoomAssignmentStateProcessor::class),
         new Delete(security: "is_granted('ROLE_ADMIN') or is_granted('DELETE', object)"),
     ],

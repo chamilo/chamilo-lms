@@ -11,18 +11,23 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\DataProvider\Extension\CourseLinkExtensionTrait;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
-use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
-use ReflectionClass;
-use ReflectionException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
+/**
+ * Limits a course resource collection to the session of the request: the session's own
+ * resources, plus the base course ones for resources shown in sessions.
+ *
+ * Like CidFilter, it reads the context resolved by CidReqListener, not the "sid" query
+ * parameter, which it only documents. Without a course context it does nothing: CidFilter
+ * decides that case.
+ */
 class SidFilter extends AbstractFilter
 {
     use CourseLinkExtensionTrait;
@@ -31,10 +36,12 @@ class SidFilter extends AbstractFilter
         protected RequestStack $requestStack,
         protected EntityManagerInterface $entityManager,
         protected Security $security,
+        private readonly CidReqHelper $cidReqHelper,
         ManagerRegistry $managerRegistry,
         ?LoggerInterface $logger = null,
         ?array $properties = null,
-        ?NameConverterInterface $nameConverter = null
+        ?NameConverterInterface $nameConverter = null,
+        private readonly ?string $linkOwner = null,
     ) {
         parent::__construct($managerRegistry, $logger, $properties, $nameConverter);
     }
@@ -50,11 +57,49 @@ class SidFilter extends AbstractFilter
         ];
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @throws ReflectionException
-     */
+    public function apply(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        ?Operation $operation = null,
+        array $context = []
+    ): void {
+        if ((int) ($this->cidReqHelper->getCourseId() ?? 0) <= 0) {
+            return;
+        }
+
+        $sessionId = (int) ($this->cidReqHelper->getSessionId() ?? 0);
+
+        $this->addCourseLinkWithVisibilityConditions($queryBuilder, false, $this->linkOwner);
+
+        if ($sessionId <= 0) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->orX(
+                    'resource_links.session IS NULL',
+                    'resource_links.session = 0'
+                )
+            );
+
+            return;
+        }
+
+        if (is_subclass_of($resourceClass, ResourceShowCourseResourcesInSessionInterface::class)) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->orX(
+                    'resource_links.session = :session',
+                    'resource_links.session IS NULL'
+                )
+            )->setParameter('session', $sessionId);
+
+            return;
+        }
+
+        $queryBuilder
+            ->andWhere('resource_links.session = :session')
+            ->setParameter('session', $sessionId)
+        ;
+    }
+
     protected function filterProperty(
         string $property,
         $value,
@@ -64,44 +109,6 @@ class SidFilter extends AbstractFilter
         ?Operation $operation = null,
         array $context = []
     ): void {
-        if ('sid' !== $property) {
-            return;
-        }
-
-        $session = $this->entityManager->find(Session::class, $value);
-
-        if ($value && !$session) {
-            throw new NotFoundHttpException('Session not found');
-        }
-
-        $reflection = new ReflectionClass($resourceClass);
-        $loadBaseSessionContent = \in_array(
-            ResourceShowCourseResourcesInSessionInterface::class,
-            $reflection->getInterfaceNames(),
-            true
-        );
-
-        $this->addCourseLinkWithVisibilityConditions($queryBuilder, false);
-
-        if (null === $session) {
-            $queryBuilder->andWhere(
-                $queryBuilder->expr()->orX(
-                    'resource_links.session IS NULL',
-                    'resource_links.session = 0'
-                )
-            );
-        } elseif ($loadBaseSessionContent) {
-            $queryBuilder->andWhere(
-                $queryBuilder->expr()->orX(
-                    'resource_links.session = :session',
-                    'resource_links.session IS NULL'
-                )
-            )->setParameter('session', $session->getId());
-        } else {
-            $queryBuilder
-                ->andWhere('resource_links.session = :session')
-                ->setParameter('session', $session->getId())
-            ;
-        }
+        // The session does not come from the query string, see apply().
     }
 }

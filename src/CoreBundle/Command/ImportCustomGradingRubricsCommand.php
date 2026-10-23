@@ -32,8 +32,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Each course is resolved by its course CODE (the JSON key), which is stable
  * across the 1.11.x -> 2.0 migration. Resource references (exerciseId, parentId,
  * evaluationId, thread ids) are taken from the seed as 2.x identifiers and
- * validated for existence; anything not found is logged and skipped instead of
- * creating a dangling link. Always run --dry-run first and confirm the report.
+ * validated for existence and course; anything not found, or found in another
+ * course, is logged and skipped instead of creating a wrong link.
+ * Always run --dry-run first and confirm the report.
  */
 #[AsCommand(
     name: 'chamilo:import-custom-grading-rubrics',
@@ -228,6 +229,14 @@ class ImportCustomGradingRubricsCommand extends Command
             );
         }
 
+        // The seed may hold per-course ids from 1.11.x, which find() resolves to another course's resource.
+        if (null === $resource->getResourceNode()->getResourceLinkByContext($course)) {
+            return $this->skip(
+                $skipped,
+                \sprintf('Course "%s": %s #%d belongs to another course, link skipped.', $courseCode, $resourceClass, $refId)
+            );
+        }
+
         $link = new GradebookLink();
         $link->setType($type);
         $link->setResourceNode($resource->getResourceNode());
@@ -271,6 +280,12 @@ class ImportCustomGradingRubricsCommand extends Command
             $thread = $threadId > 0 ? $this->em->getRepository(CForumThread::class)->find($threadId) : null;
             if (!$thread instanceof CForumThread || null === $thread->getResourceNode()) {
                 $this->skip($skipped, \sprintf('Course "%s": forum thread #%d not found or has no resource node, skipped.', $courseCode, $threadId));
+
+                continue;
+            }
+
+            if (null === $thread->getResourceNode()->getResourceLinkByContext($course)) {
+                $this->skip($skipped, \sprintf('Course "%s": forum thread #%d belongs to another course, skipped.', $courseCode, $threadId));
 
                 continue;
             }

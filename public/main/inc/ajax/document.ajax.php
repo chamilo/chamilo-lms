@@ -130,7 +130,8 @@ switch ($action) {
 
         if ($lpAutoAdd && $lpId > 0) {
             $lp = Container::getLpRepository()->find($lpId);
-            if ($lp) {
+            // Ignore a learning path that is not linked to the current course.
+            if ($lp && null !== $course && null !== $lp->getFirstResourceLinkFromCourseSession($course)) {
                 $oLP = new learnpath($lp, $courseInfo, $userId);
             }
         }

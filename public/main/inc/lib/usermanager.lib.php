@@ -6478,11 +6478,17 @@ SQL;
         // ROLE_GLOBAL_ADMIN -- for anyone else the option is left off the form entirely,
         // not merely rejected on submit (areRolesAllowedInUserForm() re-checks this too).
         $canGrantGlobalAdmin = api_can_grant_global_admin_role();
+        // Session managers reach the user forms too; only an administrator may grant ROLE_ADMIN.
+        $canGrantAdmin = api_is_platform_admin();
 
         foreach ($roleOptions as $roleCode => $label) {
             $normalizedRole = api_normalize_role_code((string) $roleCode);
 
             if ('ROLE_GLOBAL_ADMIN' === $normalizedRole && !$canGrantGlobalAdmin) {
+                continue;
+            }
+
+            if ('ROLE_ADMIN' === $normalizedRole && !$canGrantAdmin) {
                 continue;
             }
 

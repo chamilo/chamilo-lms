@@ -48,6 +48,7 @@
         "public/main/lp/lp_build.php",
         "public/main/lp/lp_edit_item.php",
         "public/main/lp/lp_edit_item_prereq.php",
+        "public/main/lp/lp_list.php",
         "public/main/lp/lp_move_item.php",
         "public/main/lp/lp_upload.php",
         "public/main/plagiarism/compilatio/download.php",

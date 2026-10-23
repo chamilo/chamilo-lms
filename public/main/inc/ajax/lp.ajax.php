@@ -25,6 +25,11 @@ if (!empty($lpId)) {
     $lpId = (int) $lpId;
     /** @var CLp $lp */
     $lp = $lpRepo->find($lpId);
+    // Reject a learning path that is not linked to the current course.
+    $course = api_get_course_entity();
+    if ($lp && (null === $course || null === $lp->getFirstResourceLinkFromCourseSession($course))) {
+        exit;
+    }
 }
 
 $courseId = api_get_course_int_id();

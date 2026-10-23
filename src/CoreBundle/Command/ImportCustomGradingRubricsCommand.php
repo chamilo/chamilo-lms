@@ -34,7 +34,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * validated for existence and course; anything not found, or found in another
  * course, is logged and skipped instead of creating a wrong link. Existing
  * evaluations are moved into the rubric category with their results.
- * Always run --dry-run first and confirm the report.
+ * A course that already has its rubric category is skipped, so the command can
+ * be run again safely. Always run --dry-run first and confirm the report.
  */
 #[AsCommand(
     name: 'chamilo:import-custom-grading-rubrics',
@@ -105,8 +106,21 @@ class ImportCustomGradingRubricsCommand extends Command
                 continue;
             }
 
+            $title = \sprintf('%s rubric', $courseCode);
+
+            // A second run would duplicate the category and move the evaluations again.
+            $existing = $this->em->getRepository(GradebookCategory::class)->findOneBy([
+                'course' => $courseEntity,
+                'title' => $title,
+            ]);
+            if (null !== $existing) {
+                $skipped[] = \sprintf('Course "%s": rubric category #%d already exists; whole rubric skipped.', $courseCode, $existing->getId());
+
+                continue;
+            }
+
             $category = new GradebookCategory();
-            $category->setTitle(\sprintf('%s rubric', $courseCode));
+            $category->setTitle($title);
             $category->setUser($owner);
             $category->setCourse($courseEntity);
             $category->setWeight(100.0);

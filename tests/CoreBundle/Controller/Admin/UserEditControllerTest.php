@@ -471,4 +471,40 @@ class UserEditControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(403);
     }
+
+    /**
+     * Editing your own account is allowed, so the role list must not let a session manager
+     * promote themselves to administrator.
+     */
+    public function testSessionManagerCannotGrantThemselvesTheAdministratorRole(): void
+    {
+        $client = static::createClient();
+        $sessionManager = $this->createUser('user_edit_ctrl_sm_self', '', '', 'ROLE_SESSION_MANAGER');
+        $client->loginUser($sessionManager);
+
+        $client->request(
+            'POST',
+            '/admin/user-edit-action',
+            [
+                'user_id' => $sessionManager->getId(),
+                'firstname' => $sessionManager->getFirstname(),
+                'lastname' => $sessionManager->getLastname(),
+                'email' => $sessionManager->getEmail(),
+                'username' => $sessionManager->getUsername(),
+                'authSource' => ['platform'],
+                'roles' => ['ROLE_SESSION_MANAGER', 'ROLE_ADMIN'],
+                'locale' => 'en_US',
+                'sendMail' => '0',
+                'active' => '1',
+                'resetPassword' => '0',
+            ],
+            [],
+            ['HTTP_SEC_FETCH_SITE' => 'same-origin']
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+        $em = static::getContainer()->get('doctrine')->getManager();
+        $em->clear();
+        $this->assertNotContains('ROLE_ADMIN', $em->getRepository(User::class)->find($sessionManager->getId())->getRoles());
+    }
 }

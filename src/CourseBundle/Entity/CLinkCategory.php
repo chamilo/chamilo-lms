@@ -28,6 +28,8 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -140,6 +142,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_link_category')]
 #[ORM\Entity(repositoryClass: CLinkCategoryRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class])]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 class CLinkCategory extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ApiProperty(identifier: true)]

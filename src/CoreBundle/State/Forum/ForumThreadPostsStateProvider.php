@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
+use Chamilo\CoreBundle\Helpers\ForumParticipationSettingsHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
@@ -73,6 +74,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         private readonly CidReqHelper $cidReqHelper,
         private readonly CourseFromRequestHelper $courseFromRequestHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
+        private readonly ForumParticipationSettingsHelper $participationSettings,
     ) {}
 
     /**
@@ -144,7 +146,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
         $userPostCount = $this->countUserPostsInThread($this->entityManager, $thread, $user);
         $repliesHidden = 0 === $userPostCount
-            && $this->areThreadRepliesHiddenUntilParticipation($this->settingsManager, $this->security);
+            && $this->areThreadRepliesHiddenUntilParticipation($this->participationSettings, $this->security, $course);
 
         // The thread comes from the URL and the rights below are computed for the course in the
         // request, so the thread has to belong to that course — otherwise managing one course
@@ -227,7 +229,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         );
 
         return [
-            'forum' => $this->serializeForum($forum),
+            'forum' => $this->serializeForum($forum, $course),
             'thread' => [
                 ...$this->serializeThread(
                     $thread,
@@ -240,7 +242,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                     $group,
                 ),
                 'repliesHiddenUntilParticipation' => $repliesHidden,
-                'participationProgress' => $this->getParticipationProgress($userPostCount),
+                'participationProgress' => $this->getParticipationProgress($userPostCount, $course),
             ],
             'canReply' => $this->canReply($forum, $thread),
             'canManageThread' => $canManage,
@@ -317,12 +319,9 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
     /**
      * @return array{postCount: int, requiredPosts: int, percent: int}|null
      */
-    private function getParticipationProgress(int $userPostCount): ?array
+    private function getParticipationProgress(int $userPostCount, Course $course): ?array
     {
-        $requiredPosts = max(
-            0,
-            (int) ($this->settingsManager->getSetting('forum.thread_participation_progress_posts', true) ?? 0),
-        );
+        $requiredPosts = $this->participationSettings->getProgressRequiredPosts($course);
 
         if (0 === $requiredPosts || $this->isTeacher($this->security)) {
             return null;
@@ -408,7 +407,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function serializeForum(CForum $forum): array
+    private function serializeForum(CForum $forum, Course $course): array
     {
         return [
             'iid' => $forum->getIid(),
@@ -423,16 +422,16 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'startTime' => $this->formatDate($forum->getStartTime()),
             'endTime' => $this->formatDate($forum->getEndTime()),
             'availabilityStatus' => $this->getForumAvailabilityStatus($forum),
-            'category' => $this->serializeCategoryDescription($forum),
+            'category' => $this->serializeCategoryDescription($forum, $course),
         ];
     }
 
     /**
      * @return array{title: string, comment: string}|null
      */
-    private function serializeCategoryDescription(CForum $forum): ?array
+    private function serializeCategoryDescription(CForum $forum, Course $course): ?array
     {
-        if ('true' !== $this->settingsManager->getSetting('forum.show_category_description_in_thread', true)) {
+        if (!$this->participationSettings->isCategoryDescriptionShown($course)) {
             return null;
         }
 

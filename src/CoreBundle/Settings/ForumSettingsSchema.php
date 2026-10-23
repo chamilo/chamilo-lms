@@ -34,6 +34,7 @@ class ForumSettingsSchema extends AbstractSettingsSchema
                     'show_thread_replies_after_participation' => 'false',
                     'show_category_description_in_thread' => 'false',
                     'thread_participation_progress_posts' => '0',
+                    'forum_participation_can_be_modified_in_course' => 'false',
                 ]
             )
         ;
@@ -71,6 +72,7 @@ class ForumSettingsSchema extends AbstractSettingsSchema
             ->add('show_thread_replies_after_participation', YesNoType::class)
             ->add('show_category_description_in_thread', YesNoType::class)
             ->add('thread_participation_progress_posts', TextType::class)
+            ->add('forum_participation_can_be_modified_in_course', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

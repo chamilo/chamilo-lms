@@ -4309,5 +4309,10 @@
     "Select a PNG or JPEG image first.": "Select a PNG or JPEG image first.",
     "Valid": "Valid",
     "Invalid signature": "Invalid signature",
-    "Transcript": "Transcript"
+    "Transcript": "Transcript",
+    "Show thread replies only after participating": "Show thread replies only after participating",
+    "Show the forum category description in threads": "Show the forum category description in threads",
+    "Posts required to complete a forum thread": "Posts required to complete a forum thread",
+    "Use the platform setting": "Use the platform setting",
+    "Leave empty to use the platform setting, or set 0 to hide the participation progress bar.": "Leave empty to use the platform setting, or set 0 to hide the participation progress bar."
 }

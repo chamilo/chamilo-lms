@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ForumParticipationSettingsHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -50,6 +51,7 @@ final class ForumSearchStateProvider implements ProviderInterface
         private readonly SettingsManager $settingsManager,
         private readonly CidReqHelper $cidReqHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
+        private readonly ForumParticipationSettingsHelper $participationSettings,
     ) {}
 
     /**
@@ -295,7 +297,7 @@ final class ForumSearchStateProvider implements ProviderInterface
             ;
         }
 
-        $repliesHidden = $this->areThreadRepliesHiddenUntilParticipation($this->settingsManager, $this->security);
+        $repliesHidden = $this->areThreadRepliesHiddenUntilParticipation($this->participationSettings, $this->security, $course);
         $user = $this->security->getUser();
 
         $items = [];

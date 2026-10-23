@@ -13,12 +13,12 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ForumParticipationSettingsHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumNotification;
@@ -55,12 +55,12 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         private readonly EntityManagerInterface $entityManager,
         private readonly CForumRepository $forumRepository,
         private readonly Security $security,
-        private readonly SettingsManager $settingsManager,
         private readonly GradebookLinkManager $gradebookLinkManager,
         private readonly IllustrationRepository $illustrationRepository,
         private readonly CourseAccessResolver $courseAccessResolver,
         private readonly CidReqHelper $cidReqHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
+        private readonly ForumParticipationSettingsHelper $participationSettings,
     ) {}
 
     /**
@@ -121,7 +121,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         $showPosterAvatar = $this->arePosterImagesAllowed($course);
         $user = $this->getCurrentUser();
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
-        $repliesHidden = $this->areThreadRepliesHiddenUntilParticipation($this->settingsManager, $this->security);
+        $repliesHidden = $this->areThreadRepliesHiddenUntilParticipation($this->participationSettings, $this->security, $course);
         $threadQueryBuilder = $this->entityManager->createQueryBuilder()
             ->select('t')
             ->from(CForumThread::class, 't')

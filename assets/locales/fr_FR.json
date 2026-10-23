@@ -4295,5 +4295,10 @@
     "Select a PNG or JPEG image first.": "S\u00e9lectionnez d'abord une image PNG ou JPEG.",
     "Valid": "Valide",
     "Invalid signature": "Signature invalide",
-    "Transcript": "Relev\u00e9 de notes"
+    "Transcript": "Relev\u00e9 de notes",
+    "Show thread replies only after participating": "Afficher les r\u00e9ponses d'un fil seulement apr\u00e8s participation",
+    "Show the forum category description in threads": "Afficher la description de la cat\u00e9gorie de forum dans les fils",
+    "Posts required to complete a forum thread": "Messages requis pour compl\u00e9ter un fil de forum",
+    "Use the platform setting": "Utiliser le param\u00e8tre de la plateforme",
+    "Leave empty to use the platform setting, or set 0 to hide the participation progress bar.": "Laissez vide pour utiliser le param\u00e8tre de la plateforme, ou indiquez 0 pour masquer la barre de progression de participation."
 }

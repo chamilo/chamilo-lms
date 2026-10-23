@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\EventLoggerHelper;
+use Chamilo\CoreBundle\Helpers\ForumParticipationSettingsHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
@@ -94,6 +95,9 @@ final readonly class CourseSettingsManager
         'exercise_invisible_in_session' => 'exercise',
         'exercise_default_visibility_on_creation' => 'exercise',
         'lp_default_visibility_on_creation' => 'learning_path',
+        ForumParticipationSettingsHelper::REPLIES_AFTER_PARTICIPATION => 'forum',
+        ForumParticipationSettingsHelper::CATEGORY_DESCRIPTION => 'forum',
+        ForumParticipationSettingsHelper::PROGRESS_POSTS => 'forum',
         'display_info_advance_inside_homecourse' => 'thematic_advance',
         'allow_public_certificates' => 'certificates',
         'customcertificate_course_enable' => '',
@@ -310,6 +314,7 @@ final readonly class CourseSettingsManager
         private MailerInterface $mailer,
         private EventLoggerHelper $eventLoggerHelper,
         private ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
+        private ForumParticipationSettingsHelper $forumParticipationSettingsHelper,
         private LoggerInterface $logger,
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
         private FilesystemOperator $themesFilesystem,
@@ -453,6 +458,11 @@ final readonly class CourseSettingsManager
         // Without a choice of the course, the form shows the platform default it applies.
         foreach (self::DEFAULT_VISIBILITY_SETTINGS as $variable => $tool) {
             $values[$variable] = $this->resourceDefaultVisibilityHelper->getVisibility($tool, $course);
+        }
+
+        // An empty value means the course follows the platform setting.
+        foreach (ForumParticipationSettingsHelper::SETTINGS as $variable) {
+            $values[$variable] = $this->forumParticipationSettingsHelper->getCourseValue($variable, $course);
         }
 
         foreach (self::COURSE_BLOCK_SETTINGS as $variable) {
@@ -805,10 +815,21 @@ final readonly class CourseSettingsManager
             ], collapsed: true);
         }
 
-        $sections[] = $this->section('forum', 'Forum', 'add-topic', [
+        $forumFields = [
             $this->field('hide_forum_notifications', 'Hide forum notifications', 'radio', options: $this->yesNoOptions(1, 2)),
             $this->field('subscribe_users_to_forum_notifications', 'Automatically subscribe users to forum notifications', 'radio', options: $this->yesNoOptions(1, 2)),
-        ], collapsed: true);
+        ];
+        if ($this->forumParticipationSettingsHelper->canBeModifiedInCourse()) {
+            $forumFields[] = $this->platformDefaultYesNoField(ForumParticipationSettingsHelper::REPLIES_AFTER_PARTICIPATION, 'Show thread replies only after participating');
+            $forumFields[] = $this->platformDefaultYesNoField(ForumParticipationSettingsHelper::CATEGORY_DESCRIPTION, 'Show the forum category description in threads');
+            $forumFields[] = $this->field(
+                ForumParticipationSettingsHelper::PROGRESS_POSTS,
+                'Posts required to complete a forum thread',
+                'text',
+                help: 'Leave empty to use the platform setting, or set 0 to hide the participation progress bar.',
+            );
+        }
+        $sections[] = $this->section('forum', 'Forum', 'add-topic', $forumFields, collapsed: true);
 
         $sections[] = $this->section('assignments', 'Assignments', 'file-text', [
             $this->field('show_score', 'Default setting for the visibility of newly posted files', 'radio', options: [
@@ -1005,6 +1026,13 @@ final readonly class CourseSettingsManager
 
         foreach (self::DEFAULT_VISIBILITY_SETTINGS as $variable => $tool) {
             $normalized[$variable] = $this->normalizeDefaultVisibility($values[$variable] ?? '', $tool);
+        }
+        $progressPosts = trim((string) ($values[ForumParticipationSettingsHelper::PROGRESS_POSTS] ?? ''));
+        if ('' !== $progressPosts && !ctype_digit($progressPosts)) {
+            throw new BadRequestHttpException('The number of posts required to complete a forum thread must be a whole number.');
+        }
+        foreach (ForumParticipationSettingsHelper::SETTINGS as $variable) {
+            $normalized[$variable] = ForumParticipationSettingsHelper::normalizeCourseValue($variable, $values[$variable] ?? '');
         }
         $normalized['email_alert_manager_on_new_quiz'] = $this->normalizeStringList(
             $values['email_alert_manager_on_new_quiz'] ?? [],
@@ -1830,6 +1858,9 @@ final readonly class CourseSettingsManager
             'document_default_visibility_on_creation' => $this->resourceDefaultVisibilityHelper->canBeModifiedInCourse(ResourceDefaultVisibilityHelper::DOCUMENT),
             'exercise_default_visibility_on_creation' => $this->resourceDefaultVisibilityHelper->canBeModifiedInCourse(ResourceDefaultVisibilityHelper::EXERCISE),
             'lp_default_visibility_on_creation' => $this->resourceDefaultVisibilityHelper->canBeModifiedInCourse(ResourceDefaultVisibilityHelper::LEARNING_PATH),
+            ForumParticipationSettingsHelper::REPLIES_AFTER_PARTICIPATION,
+            ForumParticipationSettingsHelper::CATEGORY_DESCRIPTION,
+            ForumParticipationSettingsHelper::PROGRESS_POSTS => $this->forumParticipationSettingsHelper->canBeModifiedInCourse(),
             'show_system_folders' => $this->settingEnabled('show_default_folders'),
             'course_theme', 'allow_learning_path_theme' => $this->settingEnabled('allow_course_theme'),
             'lp_return_link' => $this->settingEnabled('lp.allow_lp_return_link'),
@@ -1856,6 +1887,20 @@ final readonly class CourseSettingsManager
         return $this->field($name, $label, 'radio', options: [
             ['label' => 'Visible', 'value' => ResourceDefaultVisibilityHelper::VISIBLE],
             ['label' => 'Invisible', 'value' => ResourceDefaultVisibilityHelper::INVISIBLE],
+        ]);
+    }
+
+    /**
+     * A yes/no choice whose empty value keeps the platform setting.
+     *
+     * @return array<string, mixed>
+     */
+    private function platformDefaultYesNoField(string $name, string $label): array
+    {
+        return $this->field($name, $label, 'radio', options: [
+            ['label' => 'Use the platform setting', 'value' => ''],
+            ['label' => 'Yes', 'value' => 'true'],
+            ['label' => 'No', 'value' => 'false'],
         ]);
     }
 

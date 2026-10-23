@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -23,11 +24,125 @@ use DateTime;
  * others: with forum.show_thread_replies_after_participation, a learner only gets the opening
  * post of a thread until they posted in it, from every endpoint that returns post content. The
  * people who moderate the forum always read everything. forum.thread_participation_progress_posts
- * tells learners how far they are from the number of posts expected in a thread.
+ * tells learners how far they are from the number of posts expected in a thread. When the platform
+ * allows it (forum.forum_participation_can_be_modified_in_course), a course turns these settings on
+ * or off for itself, so that they apply to some courses only.
  */
 final class ForumThreadParticipationTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
+
+    /**
+     * The expectations below depend on these settings, so they must not come from the configuration
+     * of the database the tests run on. A test changes them after this.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->updateSetting('forum.show_thread_replies_after_participation', 'false');
+        $this->updateSetting('forum.show_category_description_in_thread', 'false');
+        $this->updateSetting('forum.thread_participation_progress_posts', '0');
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'false');
+    }
+
+    public function testCourseTurnsOnTheRestrictionThePlatformLeavesOff(): void
+    {
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'true');
+        $ctx = $this->bootstrapScenario('courseon');
+        $this->setCourseSetting($ctx, 'show_thread_replies_after_participation', 'true');
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx);
+
+        $this->assertSame(['Opening question courseon'], $this->getPostTitles($data));
+        $this->assertTrue($data['thread']['repliesHiddenUntilParticipation']);
+    }
+
+    public function testCourseTurnsOffTheRestrictionThePlatformTurnsOn(): void
+    {
+        $this->updateSetting('forum.show_thread_replies_after_participation', 'true');
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'true');
+        $ctx = $this->bootstrapScenario('courseoff');
+        $this->setCourseSetting($ctx, 'show_thread_replies_after_participation', 'false');
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx);
+
+        $this->assertSame(['Opening question courseoff', 'Classmate answer courseoff'], $this->getPostTitles($data));
+    }
+
+    public function testCourseWithoutChoiceFollowsThePlatform(): void
+    {
+        $this->updateSetting('forum.show_thread_replies_after_participation', 'true');
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'true');
+        $ctx = $this->bootstrapScenario('coursedefault');
+        $this->setCourseSetting($ctx, 'show_thread_replies_after_participation', '');
+
+        $this->assertSame(['Opening question coursedefault'], $this->getPostTitles($this->getThreadPosts($ctx['learner'], $ctx)));
+    }
+
+    public function testCourseChoiceIsIgnoredWhenCoursesCannotOverrideThePlatform(): void
+    {
+        $ctx = $this->bootstrapScenario('courseignored');
+        $this->setCourseSetting($ctx, 'show_thread_replies_after_participation', 'true');
+        $this->setCourseSetting($ctx, 'thread_participation_progress_posts', '2');
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx);
+
+        $this->assertSame(['Opening question courseignored', 'Classmate answer courseignored'], $this->getPostTitles($data));
+        $this->assertNull($data['thread']['participationProgress']);
+    }
+
+    public function testCourseSetsTheProgressBarAndTheCategoryDescription(): void
+    {
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'true');
+        $ctx = $this->bootstrapScenario('courseextras');
+        $this->setCourseSetting($ctx, 'thread_participation_progress_posts', '3');
+        $this->setCourseSetting($ctx, 'show_category_description_in_thread', 'true');
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx);
+
+        $this->assertSame(3, $data['thread']['participationProgress']['requiredPosts']);
+        $this->assertSame('Category courseextras', $data['forum']['category']['title']);
+    }
+
+    public function testTeacherChoosesTheForumParticipationSettingsOfTheirCourse(): void
+    {
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'true');
+        $ctx = $this->bootstrapScenario('teacherset');
+        $courseSettingsUrl = '/api/course-settings?cid='.$ctx['course']->getId();
+
+        $teacher = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']));
+        $response = $teacher->request('GET', $courseSettingsUrl);
+        $this->assertResponseIsSuccessful();
+        $this->assertContains('show_thread_replies_after_participation', $this->getFieldKeys($response->toArray(), 'forum'));
+
+        $teacher->request('POST', $courseSettingsUrl, ['json' => ['values' => [
+            'show_thread_replies_after_participation' => 'true',
+            'thread_participation_progress_posts' => '2',
+        ]]]);
+        $this->assertResponseIsSuccessful();
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx);
+        $this->assertSame(['Opening question teacherset'], $this->getPostTitles($data));
+        $this->assertSame(2, $data['thread']['participationProgress']['requiredPosts']);
+
+        $teacher = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']));
+        $teacher->request('POST', $courseSettingsUrl, ['json' => ['values' => [
+            'thread_participation_progress_posts' => 'two',
+        ]]]);
+        $this->assertResponseStatusCodeSame(400);
+    }
+
+    public function testCourseSettingsHideTheChoiceWhenCoursesCannotOverrideThePlatform(): void
+    {
+        $ctx = $this->bootstrapScenario('coursehidden');
+
+        $teacher = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']));
+        $response = $teacher->request('GET', '/api/course-settings?cid='.$ctx['course']->getId());
+        $this->assertResponseIsSuccessful();
+
+        $this->assertNotContains('show_thread_replies_after_participation', $this->getFieldKeys($response->toArray(), 'forum'));
+    }
 
     public function testLearnerOnlyReadsTheOpeningPostUntilTheyPost(): void
     {
@@ -137,6 +252,39 @@ final class ForumThreadParticipationTest extends AbstractApiTest
 
         $this->updateSetting('forum.show_category_description_in_thread', 'false');
         $this->assertNull($this->getThreadPosts($ctx['learner'], $ctx)['forum']['category']);
+    }
+
+    /**
+     * @param array<string, mixed> $ctx
+     */
+    private function setCourseSetting(array $ctx, string $variable, string $value): void
+    {
+        $em = $this->getEntityManager();
+        $em->persist(
+            (new CCourseSetting())
+                ->setCId((int) $ctx['course']->getId())
+                ->setVariable($variable)
+                ->setTitle($variable)
+                ->setCategory('forum')
+                ->setValue($value)
+        );
+        $em->flush();
+    }
+
+    /**
+     * @param array<string, mixed> $configuration
+     *
+     * @return string[]
+     */
+    private function getFieldKeys(array $configuration, string $sectionKey): array
+    {
+        foreach ($configuration['sections'] as $section) {
+            if ($sectionKey === $section['key']) {
+                return array_column($section['fields'], 'key');
+            }
+        }
+
+        return [];
     }
 
     private function updateSetting(string $name, string $value): void

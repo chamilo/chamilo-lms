@@ -141,37 +141,6 @@ class AttendanceController extends AbstractController
         return $this->json($formattedUsers, 200);
     }
 
-    #[Route('/list_with_done_count', name: 'attendance_list_with_done_count', methods: ['GET'])]
-    public function listWithDoneCount(Request $request): JsonResponse
-    {
-        $courseId = (int) $request->query->get('cid', '0');
-        $sessionId = $request->query->get('sid') ? (int) $request->query->get('sid') : null;
-        $groupId = $request->query->get('gid') ? (int) $request->query->get('gid') : null;
-        $parentNode = (int) $request->query->get('resourceNode.parent', '0');
-
-        $attendances = $this->em->getRepository(CAttendance::class)->findBy([
-            'active' => 1,
-        ]);
-
-        $result = [];
-        foreach ($attendances as $attendance) {
-            $doneCount = $this->attendanceCalendarRepository->countDoneAttendanceByAttendanceAndGroup($attendance->getIid(), $groupId);
-
-            $result[] = [
-                'id' => $attendance->getIid(),
-                'title' => $attendance->getTitle(),
-                'description' => $attendance->getDescription(),
-                'attendanceWeight' => $attendance->getAttendanceWeight(),
-                'attendanceQualifyTitle' => $attendance->getAttendanceQualifyTitle(),
-                'requireUnique' => $attendance->isRequireUnique(),
-                'resourceLinkListFromEntity' => $attendance->getResourceLinkListFromEntity(),
-                'doneCalendars' => $doneCount,
-            ];
-        }
-
-        return $this->json($result);
-    }
-
     #[Route('/{id}/export/pdf', name: 'attendance_export_pdf', methods: ['GET'])]
     public function exportToPdf(int $id, Request $request): Response
     {

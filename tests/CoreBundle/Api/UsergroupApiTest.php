@@ -78,7 +78,7 @@ class UsergroupApiTest extends AbstractApiTest
         ;
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
 
         $payload = $response->toArray();
         $this->assertArrayHasKey('hydra:member', $payload);

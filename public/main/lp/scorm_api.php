@@ -1848,58 +1848,6 @@ var checkCurrentItemPosition = function(lpItemId) {
 }
 
 /**
- * Get a forum info when the learning path item has a associated forum
- */
-var loadForumThread = function(lpId, lpItemId) {
-    var loadForum = $.getJSON(
-        '<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php' + courseUrl, {
-            a: 'get_forum_thread',
-            lp: lpId,
-            lp_item: lpItemId
-        }
-    );
-
-    $.when(loadForum).done(function(forumThreadData) {
-        var tabForumLink = $('.lp-view-tabs a[href="#lp-view-forum"]'),
-            tabForum = tabForumLink.parent();
-            $("#navTabs").show();
-            $("#tab-iframe").removeClass("tab-none-forum");
-            $("#btn-menu-float").removeClass("none-forum");
-
-        if (forumThreadData.error) {
-            tabForumLink.removeAttr('data-toggle');
-            tabForum.addClass('disabled');
-            $("#navTabs").hide();
-            $("#tab-iframe").addClass("tab-none-forum");
-            $("#btn-menu-float").addClass("none-forum");
-            $('#lp-view-forum').html('');
-
-            return;
-        }
-
-        tabForumLink.attr('data-toggle', 'tab');
-        tabForum.removeClass('disabled');
-
-        var forumIframe = $('<iframe>').attr({
-            width:'100%',
-            frameborder:'0',
-            scrolling:'yes',
-            tabindex:'0',
-            id:'chamilo-disqus',
-            src: '<?php echo api_get_path(WEB_CODE_PATH); ?>forum/viewthread.php?<?php echo api_get_cidreq(); ?>&' + $.param({
-                gradebook: 0,
-                origin: 'learnpath',
-                forum: forumThreadData.forumId,
-                thread: forumThreadData.threadId,
-                posts_order: 'desc'
-            })
-        });
-
-        $('#lp-view-forum').html(forumIframe);
-    });
-};
-
-/**
  * Save a specific item (with its interactions, if any) into the LMS through
  * an AJAX call to lp_ajax_save_item.php.
  * Because of the need to pass an array, we have to build the parameters

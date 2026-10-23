@@ -1,8 +1,14 @@
 {
     "format": 1,
     "remove": [
+        "public/main/lp/lp_add_audio.php",
+        "public/main/lp/lp_add_author.php",
+        "public/main/lp/lp_add_item.php",
+        "public/main/lp/lp_admin_view.php",
+        "public/main/lp/lp_build.php",
         "public/main/lp/lp_edit_item.php",
         "public/main/lp/lp_edit_item_prereq.php",
+        "public/main/lp/lp_list.php",
         "public/main/lp/lp_move_item.php"
     ]
 }

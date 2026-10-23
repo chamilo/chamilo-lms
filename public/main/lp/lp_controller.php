@@ -566,35 +566,13 @@ switch ($action) {
         header('Location: '.$buildModernLpUrl('/'.$lpId.'/reporting', ['studentId' => $userId]));
         exit;
     case 'author_view':
-        $teachers = [];
-        $field = new ExtraField('user');
-        $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
-        $idExtraField = isset($authorLp['id']) ? (int) $authorLp['id'] : 0;
-        if (0 != $idExtraField) {
-            $extraFieldValueUser = new ExtraFieldValue('user');
-            $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
-                'authorlp',
-                1,
-                true,
-                false,
-                true
-            );
-            if (!empty($arrayExtraFieldValueUser)) {
-                foreach ($arrayExtraFieldValueUser as $item) {
-                    $teacher = api_get_user_info($item['item_id']);
-                    $teachers[] = $teacher;
-                }
-            }
-        }
-        if (!$is_allowed_to_edit) {
+        if (!api_is_platform_admin()) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
-            // Check if the learnpath ID was defined, otherwise send back to list
             $goList();
-        } else {
-            require 'lp_add_author.php';
         }
+        $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder', ['panel' => 'author-price']));
         break;
     case 'send_notify_teacher':
         // Send notification to the teacher
@@ -853,7 +831,7 @@ switch ($action) {
             header('Location: '.$url);
             exit;
         } else {
-            require 'lp_add_item.php';
+            $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder'));
         }
 
         break;
@@ -902,10 +880,13 @@ switch ($action) {
                     Display::addFlash(Display::return_message(get_lang('Updated')));
                     api_location($url);
                 }
-                require 'lp_add_audio.php';
-            } else {
-                require 'lp_add_audio.php';
             }
+
+            $extra = ['panel' => 'audio'];
+            if (isset($_REQUEST['id'])) {
+                $extra['item_id'] = (int) $_REQUEST['id'];
+            }
+            $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder', $extra));
         }
         break;
     case 'add_lp_category':
@@ -962,10 +943,8 @@ switch ($action) {
         }
         if (!$lp_found) {
             $goList();
-        } else {
-            Session::write('refresh', 1);
-            require 'lp_admin_view.php';
         }
+        $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder'));
         break;
     case 'auto_launch':
         // Redirect to a specific LP
@@ -1217,7 +1196,7 @@ switch ($action) {
                 $_SESSION['from_learnpath'] = 'yes';
                 $_SESSION['origintoolurl'] = 'lp_controller.php?action=admin_view&lp_id='.intval($_REQUEST['lp_id']);
             } else {
-                require 'lp_admin_view.php';
+                $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder'));
             }
         }
         break;
@@ -1519,34 +1498,8 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        Session::write('refresh', 1);
-        $htmlHeadXtra[] = '<style>
-      .lp-finalitem-wrap { padding-left: 24px; }
-      .lp-finalitem-title { font-size: 18px; font-weight: 600; margin: 0 0 12px 0; }
-    </style>';
-
-        $finalItemTitle = get_lang('Final item');
-        if (method_exists($oLP, 'getFinalItem')) {
-            $finalItem = $oLP->getFinalItem();
-            if ($finalItem && method_exists($finalItem, 'get_title')) {
-                $t = trim(strip_tags((string) $finalItem->get_title()));
-                if ($t !== '') {
-                    $finalItemTitle = $t;
-                }
-            }
-        }
-
-        $right = '<div class="lp-finalitem-wrap">'
-            . '<div class="lp-finalitem-title">'.Security::remove_XSS($finalItemTitle).'</div>'
-            . $oLP->getFinalItemForm()
-            . '</div>';
-
-        $tpl = new Template();
-        $tpl->assign('actions', $oLP->build_action_menu(true));
-        $tpl->assign('left', $oLP->showBuildSideBar(null, true, 'step'));
-        $tpl->assign('right', $right);
-        $tpl->displayTwoColTemplate();
-        exit;
+        $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder'));
+        break;
     default:
         $goList();
         break;

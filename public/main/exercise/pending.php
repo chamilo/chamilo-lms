@@ -19,6 +19,8 @@ if ('true' !== api_get_setting('exercise.my_courses_show_pending_exercise_attemp
 }
 
 $userId = api_get_user_id();
+$hideIp = 'true' === api_get_setting('tracking.hide_ip_address')
+    || 'true' === api_get_setting('exercise.exercise_hide_ip');
 
 $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
 $userTable = Database::get_main_table(TABLE_MAIN_USER);
@@ -166,7 +168,7 @@ $hasOfficialCode = pending_exercise_table_has_column($userTable, 'official_code'
 $scoreSelect = $hasScore ? 'te.score' : ($hasExeResult ? 'te.exe_result' : '0');
 $maxScoreSelect = $hasMaxScore ? 'te.max_score' : ($hasExeWeighting ? 'te.exe_weighting' : '0');
 $durationSelect = $hasDuration ? 'te.exe_duration' : '0';
-$userIpSelect = $hasUserIp ? 'te.user_ip' : "''";
+$userIpSelect = $hasUserIp && !$hideIp ? 'te.user_ip' : "''";
 $officialCodeSelect = $hasOfficialCode ? 'u.official_code' : "''";
 
 $revisedSelect = "
@@ -358,7 +360,9 @@ if ($exportCsv) {
     $headers[] = get_lang('StartDate');
     $headers[] = get_lang('EndDate');
     $headers[] = get_lang('Score');
-    $headers[] = get_lang('IP');
+    if (!$hideIp) {
+        $headers[] = get_lang('IP');
+    }
     $headers[] = get_lang('Status');
     $headers[] = get_lang('Corrector');
     $headers[] = get_lang('CorrectionDate');
@@ -386,7 +390,9 @@ if ($exportCsv) {
         $line[] = $row['start_date'];
         $line[] = $row['end_date'];
         $line[] = $row['score'].' / '.$row['max_score'];
-        $line[] = $row['user_ip'];
+        if (!$hideIp) {
+            $line[] = $row['user_ip'];
+        }
         $line[] = ((int) $row['revised']) === 1 ? get_lang('Validated') : get_lang('NotValidated');
         $line[] = $row['qualificator_fullname'];
         $line[] = $row['date_of_qualification'];
@@ -542,7 +548,9 @@ Display::display_header(get_lang('PendingAttempts'));
                             <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('StartDate')); ?></th>
                             <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('EndDate')); ?></th>
                             <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('Score')); ?></th>
-                            <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('IP')); ?></th>
+                            <?php if (!$hideIp) { ?>
+                                <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('IP')); ?></th>
+                            <?php } ?>
                             <th class="px-4 py-3"><?php echo pending_exercise_h(get_lang('Status')); ?></th>
                             <th class="px-4 py-3 text-end"><?php echo pending_exercise_h(get_lang('Actions')); ?></th>
                         </tr>
@@ -589,7 +597,9 @@ Display::display_header(get_lang('PendingAttempts'));
                                 <td class="px-4 py-3"><?php echo pending_exercise_h($row['start_date']); ?></td>
                                 <td class="px-4 py-3"><?php echo pending_exercise_h($row['end_date']); ?></td>
                                 <td class="px-4 py-3"><?php echo pending_exercise_h($row['score'].' / '.$row['max_score']); ?></td>
-                                <td class="px-4 py-3"><?php echo pending_exercise_h($row['user_ip']); ?></td>
+                                <?php if (!$hideIp) { ?>
+                                    <td class="px-4 py-3"><?php echo pending_exercise_h($row['user_ip']); ?></td>
+                                <?php } ?>
                                 <td class="px-4 py-3"><?php echo pending_exercise_h($statusLabel); ?></td>
                                 <td class="px-4 py-3 text-end">
                                     <a href="<?php echo pending_exercise_h($reportUrl); ?>" class="btn btn--primary btn--sm">

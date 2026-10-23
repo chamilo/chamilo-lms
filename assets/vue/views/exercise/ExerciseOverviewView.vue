@@ -161,7 +161,7 @@
               {{ formatDate(data.startDate) }}
             </template>
           </Column>
-          <Column :header="t('IP')">
+          <Column v-if="overview.currentUserAttempts.some((attempt) => attempt.userIp)" :header="t('IP')">
             <template #body="{ data }">
               {{ data.userIp || "-" }}
             </template>

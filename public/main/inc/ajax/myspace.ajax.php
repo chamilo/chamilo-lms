@@ -154,7 +154,7 @@ switch ($action) {
                 $item = [
                     api_get_local_time($data['login']),
                     api_time_to_hms(api_strtotime($data['logout']) - api_strtotime($data['login'])),
-                    $data['user_ip'],
+                    'true' === api_get_setting('tracking.hide_ip_address') ? '' : ($data['user_ip'] ?? ''),
                 ];
                 $tableData[] = $item;
             }
@@ -169,7 +169,7 @@ switch ($action) {
             );
             $table->set_header(1, get_lang('Login date'), false);
             $table->set_header(2, get_lang('Duration'), false);
-            $table->set_header(3, get_lang('IP'), false);
+            $table->set_header(3, 'true' === api_get_setting('tracking.hide_ip_address') ? '' : get_lang('IP'), false);
             $result['result'] = $table->return_table();
 
             if ($export) {

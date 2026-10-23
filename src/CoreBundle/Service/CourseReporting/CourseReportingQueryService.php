@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Service\CourseReporting;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
+use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CoreBundle\Service\StudentSuccess\StudentSuccessAnalysisStorage;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
@@ -33,6 +34,7 @@ final class CourseReportingQueryService
         private readonly Connection $connection,
         private readonly ExtraFieldRepository $extraFieldRepository,
         private readonly AiFeatureAccessHelper $aiFeatureAccessHelper,
+        private readonly ReportIpVisibility $reportIpVisibility,
     ) {}
 
     /**
@@ -659,6 +661,17 @@ final class CourseReportingQueryService
             $parameters,
             ['limit' => ParameterType::INTEGER]
         );
+
+        if ($this->reportIpVisibility->isHidden()) {
+            foreach ($courseAccess as &$access) {
+                unset($access['user_ip']);
+            }
+            unset($access);
+            foreach ($resourceAccess as &$access) {
+                unset($access['user_ip']);
+            }
+            unset($access);
+        }
 
         return [
             'user' => [

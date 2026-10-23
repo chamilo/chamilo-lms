@@ -6834,7 +6834,8 @@ class Exercise
         }
         */
 
-        $hideIp = 'true' === api_get_setting('exercise.exercise_hide_ip');
+        $hideIp = 'true' === api_get_setting('tracking.hide_ip_address')
+            || 'true' === api_get_setting('exercise.exercise_hide_ip');
         $data['start_date'] = $start_date;
         $data['duration'] = $duration;
         $data['ip'] = '';

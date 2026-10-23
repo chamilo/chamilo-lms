@@ -26,6 +26,7 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
                     'meta_twitter_site' => '',
                     'meta_twitter_creator' => '',
                     'tracking_skip_generic_data' => 'false',
+                    'hide_ip_address' => 'true',
                     'block_my_progress_page' => 'false',
                     'my_progress_course_tools_order' => '',
                     'maximum_inactive_time_to_consider' => '15',
@@ -45,6 +46,7 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
             ->add('meta_twitter_site')
             ->add('meta_twitter_creator')
             ->add('tracking_skip_generic_data', YesNoType::class)
+            ->add('hide_ip_address', YesNoType::class)
             ->add('block_my_progress_page', YesNoType::class)
             ->add('my_progress_course_tools_order', TextareaType::class)
             ->add('maximum_inactive_time_to_consider')

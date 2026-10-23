@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -53,6 +54,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
         private Security $security,
         private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
+        private ReportIpVisibility $reportIpVisibility,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
@@ -495,7 +497,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
 
     private function shouldShowIp(): bool
     {
-        return !$this->isSettingEnabled('exercise.exercise_hide_ip');
+        return !$this->reportIpVisibility->isExerciseHidden();
     }
 
     /**

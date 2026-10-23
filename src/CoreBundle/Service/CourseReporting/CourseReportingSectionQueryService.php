@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\CourseReporting;
 
+use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use DateTimeImmutable;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
@@ -46,6 +47,7 @@ final class CourseReportingSectionQueryService
 
     public function __construct(
         private readonly Connection $connection,
+        private readonly ReportIpVisibility $reportIpVisibility,
     ) {}
 
     /**
@@ -462,7 +464,11 @@ final class CourseReportingSectionQueryService
             $row['tool'] = self::RESOURCE_TYPE_LABELS[(string) $row['resourceType']] ?? (string) $row['resourceType'];
             $row['eventType'] = 'Created';
             $row['session'] = (string) ($row['session'] ?? '');
-            $row['userIp'] = (string) ($row['userIp'] ?? 'Unknown');
+            if ($this->reportIpVisibility->isHidden()) {
+                unset($row['userIp']);
+            } else {
+                $row['userIp'] = (string) ($row['userIp'] ?? 'Unknown');
+            }
         }
         unset($row);
 
@@ -478,7 +484,7 @@ final class CourseReportingSectionQueryService
                 ['key' => 'eventType', 'label' => 'Event type', 'type' => 'text', 'sortable' => true],
                 ['key' => 'session', 'label' => 'Session', 'type' => 'text', 'sortable' => true],
                 ['key' => 'username', 'label' => 'Username', 'type' => 'text', 'sortable' => true],
-                ['key' => 'userIp', 'label' => 'IP address', 'type' => 'text'],
+                ...($this->reportIpVisibility->isHidden() ? [] : [['key' => 'userIp', 'label' => 'IP address', 'type' => 'text']]),
                 ['key' => 'document', 'label' => 'Document', 'type' => 'text', 'sortable' => true],
                 ['key' => 'date', 'label' => 'Date', 'type' => 'datetime', 'sortable' => true],
             ],
@@ -1027,7 +1033,11 @@ final class CourseReportingSectionQueryService
             $row['sessionId'] = (int) $row['sessionId'];
             $row['course'] = $context->course->getTitle();
             $row['session'] = (string) ($row['session'] ?? '');
-            $row['userIp'] = (string) ($row['userIp'] ?? 'Unknown');
+            if ($this->reportIpVisibility->isHidden()) {
+                unset($row['userIp']);
+            } else {
+                $row['userIp'] = (string) ($row['userIp'] ?? 'Unknown');
+            }
             $row['value'] = $this->normalizeAuditValue((string) ($row['value'] ?? ''));
         }
         unset($row);
@@ -1046,7 +1056,7 @@ final class CourseReportingSectionQueryService
                 ['key' => 'course', 'label' => 'Course', 'type' => 'text'],
                 ['key' => 'session', 'label' => 'Session', 'type' => 'text'],
                 ['key' => 'username', 'label' => 'Username', 'type' => 'text', 'sortable' => true],
-                ['key' => 'userIp', 'label' => 'IP address', 'type' => 'text'],
+                ...($this->reportIpVisibility->isHidden() ? [] : [['key' => 'userIp', 'label' => 'IP address', 'type' => 'text']]),
                 ['key' => 'date', 'label' => 'Date', 'type' => 'datetime', 'sortable' => true],
             ],
             $rows

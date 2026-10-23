@@ -103,7 +103,8 @@ foreach ($results as $result) {
     ];
     $data[] = [
         get_lang('IP'),
-        $result['exe']->getUserIp(),
+        ('true' === api_get_setting('tracking.hide_ip_address')
+            || 'true' === api_get_setting('exercise.exercise_hide_ip')) ? '' : $result['exe']->getUserIp(),
     ];
     $data[] = [
         $plugin->get_lang('Motive'),

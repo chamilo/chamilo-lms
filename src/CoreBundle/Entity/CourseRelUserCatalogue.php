@@ -23,11 +23,11 @@ class CourseRelUserCatalogue implements Stringable
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courses', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?User $user = null;
 
-    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected ?Course $course = null;
 

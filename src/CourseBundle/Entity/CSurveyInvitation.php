@@ -26,7 +26,7 @@ class CSurveyInvitation
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
-    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'resourceLinks')]
+    #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 

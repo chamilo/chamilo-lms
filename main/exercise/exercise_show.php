@@ -49,6 +49,11 @@ if (!$exportTypeAllResults) {
         }
     } else {
         api_protect_course_script($printHeaders, false, true);
+
+        // The access checks below apply to the current course, so the attempt must belong to it.
+        if ((int) $track_exercise_info['c_id'] !== (int) api_get_course_int_id()) {
+            api_not_allowed($printHeaders);
+        }
     }
 }
 

@@ -16,6 +16,8 @@ use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -52,6 +54,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: ['resourceNode.parent' => 'exact'])]
 #[ORM\Table(name: 'c_group_info')]
 #[ORM\Entity(repositoryClass: CGroupRepository::class)]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 class CGroup extends AbstractResource implements ResourceInterface, Stringable
 {
     public const TOOL_NOT_AVAILABLE = 0;

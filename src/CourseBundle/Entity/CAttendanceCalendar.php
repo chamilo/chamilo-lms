@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -13,6 +14,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,6 +37,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Table(name: 'c_attendance_calendar')]
 #[ORM\Index(columns: ['done_attendance'], name: 'done_attendance')]
 #[ORM\Entity]
+#[ApiFilter(filterClass: CidFilter::class, arguments: ['linkOwner' => 'attendance'])]
+#[ApiFilter(filterClass: SidFilter::class, arguments: ['linkOwner' => 'attendance'])]
 class CAttendanceCalendar
 {
     #[ORM\Column(name: 'iid', type: 'integer')]

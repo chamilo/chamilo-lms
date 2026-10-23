@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Helpers\LpAdvancedAccessHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
-use Chamilo\CourseBundle\Entity\CSurvey;
 use ChamiloSession as Session;
 
 /**
@@ -352,25 +351,18 @@ if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && $nodeId > 0) {
             break;
 
         case 'add_item':
-            $requestType = (string) ($_GET['type'] ?? '');
-            $surveyId = (int) ($_GET['survey_id'] ?? 0);
-
-            // Survey links can still perform a legacy add operation and must not
-            // be converted into a passive page redirect.
-            if ($surveyId <= 0 && in_array($requestType, ['', 'step'], true)) {
-                if (!$lp_found || $lpId <= 0) {
-                    $goList();
-                }
-
-                $extra = [];
-                if (isset($_GET['parent'])) {
-                    $extra['parent'] = (int) $_GET['parent'];
-                }
-
-                $redirectToModernTeacherPage(
-                    $buildModernLpUrl('/'.$lpId.'/builder', $extra)
-                );
+            if (!$lp_found || $lpId <= 0) {
+                $goList();
             }
+
+            $extra = [];
+            if (isset($_GET['parent'])) {
+                $extra['parent'] = (int) $_GET['parent'];
+            }
+
+            $redirectToModernTeacherPage(
+                $buildModernLpUrl('/'.$lpId.'/builder', $extra)
+            );
             break;
 
         case 'edit':
@@ -501,46 +493,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-// format title to be displayed correctly if QUIZ
-$post_title = '';
-if (isset($_POST['title'])) {
-    $post_title = Security::remove_XSS($_POST['title']);
-    if (isset($_POST['type']) &&
-        isset($_POST['title']) &&
-        TOOL_QUIZ === $_POST['type'] &&
-        !empty($_POST['title'])
-    ) {
-        $post_title = Exercise::format_title_variable($_POST['title']);
-        if ('true' === api_get_setting('editor.save_titles_as_html')) {
-            $post_title = $_POST['title'];
-        }
-    }
-}
-
 $redirectTo = '';
-$validateLpItemPrerequisiteDates = static function (): void {
-    if ('true' !== api_get_setting('lp.lp_item_prerequisite_dates')) {
-        return;
-    }
-
-    $extraStartDate = $_POST['extra_start_date'] ?? '';
-    $extraEndDate = $_POST['extra_end_date'] ?? '';
-
-    if (empty($extraStartDate) || empty($extraEndDate)) {
-        return;
-    }
-
-    if (strtotime((string) $extraEndDate) >= strtotime((string) $extraStartDate)) {
-        return;
-    }
-
-    Display::addFlash(
-        Display::return_message(get_lang('StartDateMustBeBeforeTheEndDate'), 'error')
-    );
-
-    header('Location: '.api_request_uri());
-    exit;
-};
 switch ($action) {
     case 'recalculate':
         // Recalculation is now a protected POST operation in the Vue reporting page.
@@ -619,221 +572,7 @@ switch ($action) {
         if (!$is_allowed_to_edit || !$lp_found) {
             api_not_allowed(true);
         }
-
-        Session::write('refresh', 1);
-
-        $requestType = isset($_REQUEST['type']) ? (string) $_REQUEST['type'] : '';
-        $surveyId = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : 0;
-
-        if ('GET' === $_SERVER['REQUEST_METHOD'] && TOOL_SURVEY === $requestType && $surveyId > 0) {
-            $survey = Container::getSurveyRepository()->find($surveyId);
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
-
-            if (!$survey instanceof CSurvey) {
-                Display::addFlash(Display::return_message(get_lang('Survey not found'), 'error'));
-                header('Location: '.$url);
-                exit;
-            }
-
-            if ($survey->getQuestions()->isEmpty()) {
-                Display::addFlash(Display::return_message(get_lang('You must add at least one question'), 'warning'));
-                header('Location: '.$url);
-                exit;
-            }
-
-            if (!empty($_REQUEST['parent'])) {
-                $parent = $lpItemRepo->find((int) $_REQUEST['parent']);
-            } else {
-                $parent = $lpItemRepo->getRootItem((int) $oLP->lp_id);
-            }
-
-            $previous = !empty($_REQUEST['previous']) ? (int) $_REQUEST['previous'] : $oLP->getLastInFirstLevel();
-            $surveyTitle = trim(strip_tags($survey->getTitle()));
-            if ('' === $surveyTitle) {
-                $surveyTitle = get_lang('Survey');
-            }
-
-            $createdItemId = $oLP->add_item(
-                $parent,
-                $previous,
-                TOOL_SURVEY,
-                $surveyId,
-                $surveyTitle
-            );
-
-            if (!empty($createdItemId)) {
-                Display::addFlash(Display::return_message(get_lang('Added'), 'confirmation', false));
-            } else {
-                Display::addFlash(Display::return_message(get_lang('Unable to add the survey to the learning path'), 'error'));
-            }
-
-            header('Location: '.$url);
-            exit;
-        }
-
-        if (isset($_POST['submit_button']) && !empty($post_title)) {
-            $validateLpItemPrerequisiteDates();
-            Session::write('post_time', $_POST['post_time']);
-            $directoryParentId = $_POST['directory_parent_id'] ?? 0;
-
-            if (empty($directoryParentId) || '/' === $directoryParentId) {
-                $result = $oLP->generate_lp_folder($courseInfo);
-                $directoryParentId = $result->getIid();
-            }
-
-            $parent = $_POST['parent'] ?? null;
-            $em = Database::getManager();
-            if (!empty($parent)) {
-                $parent = $lpItemRepo->find($parent);
-            } else {
-                $parent = null;
-            }
-
-            $previous       = $_POST['previous'] ?? '';
-            $type           = $_POST['type'] ?? '';
-            $path           = $_POST['path'] ?? '';
-            $description    = $_POST['description'] ?? '';
-            $prerequisites  = $_POST['prerequisites'] ?? '';
-            $maxTimeAllowed = $_POST['maxTimeAllowed'] ?? '';
-            $exportAllowed  = (isset($_POST['export_allowed']) && $_POST['export_allowed'] === '1');
-
-            $saveExportFlag = static function (int $itemId) use ($exportAllowed) {
-                if (empty($itemId)) {
-                    return;
-                }
-
-                $em   = Database::getManager();
-                $repo = Container::getLpItemRepository();
-                /** @var CLpItem|null $it */
-                $it = $repo->find($itemId);
-                if (!$it) {
-                    return;
-                }
-
-                $allowed = false;
-                if ($it->getItemType() === TOOL_DOCUMENT) {
-                    $docRepo = Container::getDocumentRepository();
-                    $docId   = (int) $it->getPath();
-                    /** @var CDocument|null $doc */
-                    $doc = $docRepo->find($docId);
-                    if ($doc) {
-                        $node = $doc->getResourceNode();
-                        $file = $node?->getFirstResourceFile();
-                        $mime = (string) $file?->getMimeType();
-                        $isHtmlEditable = $node->hasEditableTextContent()
-                            || in_array($mime, ['text/html', 'application/xhtml+xml'], true);
-                        $allowed = $isHtmlEditable && (bool) $exportAllowed;
-                    }
-                }
-
-                $it->setExportAllowed($allowed);
-                $em->persist($it);
-                $em->flush();
-            };
-
-            $saveLpItemExtraFields = static function (int $itemId): void {
-                if (empty($itemId)) {
-                    return;
-                }
-                $extraFieldValue = new ExtraFieldValue('lp_item');
-                $extraFieldValue->saveFieldValues($_POST, $itemId);
-            };
-
-            if (in_array($_POST['type'], [TOOL_DOCUMENT, 'video'], true)) {
-                $document_id = 0;
-                $contentLp = isset($_POST['content_lp']) ? (string) $_POST['content_lp'] : '';
-
-                if (isset($_POST['path']) && !empty($_GET['id'])) {
-                    $document_id = (int) $_POST['path'];
-                } else {
-                    $document_id = (int) $oLP->create_document(
-                        $courseInfo,
-                        $contentLp,
-                        $_POST['title'],
-                        'html',
-                        $directoryParentId
-                    );
-                }
-
-                if (empty($document_id)) {
-                    Display::addFlash(Display::return_message(get_lang('Error while creating the document'), 'error'));
-                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
-                    header('Location: '.$url);
-                    exit;
-                }
-
-                $documentRepo = Database::getManager()->getRepository(CDocument::class);
-                $document = $documentRepo->find($document_id);
-                if ($document && $document->getFiletype() === 'video') {
-                    $type = 'video';
-                }
-
-                $createdItemId = $oLP->add_item(
-                    $parent,
-                    $previous,
-                    $type,
-                    $document_id,
-                    $post_title,
-                    $description,
-                    $prerequisites
-                );
-                $saveExportFlag($createdItemId);
-                $saveLpItemExtraFields($createdItemId);
-            } elseif (TOOL_READOUT_TEXT == $_POST['type']) {
-                $document_id = 0;
-                $contentLp = isset($_POST['content_lp']) ? (string) $_POST['content_lp'] : '';
-
-                if (isset($_POST['path']) && 'true' != ($_GET['edit'] ?? '')) {
-                    $document_id = (int) $_POST['path'];
-                } else {
-                    $document_id = (int) $oLP->createReadOutText(
-                        $courseInfo,
-                        $contentLp,
-                        $_POST['title'],
-                        $directoryParentId
-                    );
-                }
-
-                if (empty($document_id)) {
-                    Display::addFlash(Display::return_message(get_lang('Error while creating the document'), 'error'));
-                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
-                    header('Location: '.$url);
-                    exit;
-                }
-
-                $createdItemId = $oLP->add_item(
-                    $parent,
-                    $previous,
-                    TOOL_READOUT_TEXT,
-                    $document_id,
-                    $post_title,
-                    $description,
-                    $prerequisites
-                );
-                $saveExportFlag($createdItemId);
-                $saveLpItemExtraFields($createdItemId);
-
-            } else {
-                $createdItemId = $oLP->add_item(
-                    $parent,
-                    $previous,
-                    $type,
-                    $path,
-                    $post_title,
-                    $description,
-                    $prerequisites,
-                    $maxTimeAllowed
-                );
-                $saveExportFlag($createdItemId);
-                $saveLpItemExtraFields($createdItemId);
-            }
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
-            header('Location: '.$url);
-            exit;
-        } else {
-            $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder'));
-        }
-
+        $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder'));
         break;
     case 'add_users_to_category':
         if (!$is_allowed_to_edit) {

@@ -438,6 +438,25 @@ class learnpath
         if (empty($maxTimeAllowed)) {
             $maxTimeAllowed = 0;
         }
+
+        // The parent item must be part of this learning path, and the resource part of its course.
+        if (null !== $parent && (int) $parent->getLp()->getIid() !== (int) $this->get_id()) {
+            return false;
+        }
+        $resourceRepo = match ($type) {
+            TOOL_QUIZ => Container::getQuizRepository(),
+            TOOL_SURVEY => Container::getSurveyRepository(),
+            TOOL_DOCUMENT, 'video', TOOL_READOUT_TEXT => Container::getDocumentRepository(),
+            default => null,
+        };
+        if (null !== $resourceRepo && $id) {
+            $resource = $resourceRepo->find($id);
+            $course = api_get_course_entity($course_id);
+            if (null === $resource || null === $course || null === $resource->getFirstResourceLinkFromCourseSession($course)) {
+                return false;
+            }
+        }
+
         $maxScore = 100;
         if ('quiz' === $type && $id) {
             // Disabling the exercise if we add it inside a LP
@@ -9448,16 +9467,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 continue;
             }
             $parentId = $item->parent_id ?? 0;
+            $lpId = (int) $rootItem->getLp()->getIid();
             $parent = $rootItem;
             if (!empty($parentId)) {
                 $parentExists = $lpItemRepo->find($parentId);
-                if (null !== $parentExists) {
+                if (null !== $parentExists && (int) $parentExists->getLp()->getIid() === $lpId) {
                     $parent = $parentExists;
                 }
             }
 
-            /** @var CLpItem $itemEntity */
+            /** @var CLpItem|null $itemEntity */
             $itemEntity = $lpItemRepo->find($itemId);
+            // Only items of the root item's learning path can be reordered.
+            if (null === $itemEntity || (int) $itemEntity->getLp()->getIid() !== $lpId) {
+                continue;
+            }
             $itemEntity->setParent($parent);
             $itemEntity->setPreviousItemId(null);
             $itemEntity->setNextItemId(null);

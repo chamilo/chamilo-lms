@@ -200,6 +200,57 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
         $this->assertCount(1, $repo->findWorksByTeacher($teacher, $course));
     }
 
+    public function testFindAllSubmissionsByAssignmentOnlySortsByAllowedFields(): void
+    {
+        $em = $this->getEntityManager();
+        $repo = self::getContainer()->get(CStudentPublicationRepository::class);
+
+        $course = $this->createCourse('new');
+        $teacher = $this->createUser('teacher');
+        $student = $this->createUser('student');
+
+        $assignment = (new CStudentPublication())
+            ->setTitle('assignment')
+            ->setParent($course)
+            ->setFiletype('folder')
+            ->setWeight(100)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $em->persist($assignment);
+
+        foreach (['A work', 'B work'] as $title) {
+            $submission = (new CStudentPublication())
+                ->setTitle($title)
+                ->setPublicationParent($assignment)
+                ->setParent($assignment)
+                ->setFiletype('file')
+                ->setWeight(100)
+                ->setCreator($student)
+                ->setActive(1)
+                ->addCourseLink($course)
+            ;
+            $em->persist($submission);
+        }
+        $em->flush();
+
+        $assignmentId = $assignment->getIid();
+
+        // Allowed fields keep sorting as the teacher list requests.
+        [$items] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10, ['title' => 'desc']);
+        $this->assertSame('B work', $items[0]->getTitle());
+
+        [$items] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10, ['title' => 'asc']);
+        $this->assertSame('A work', $items[0]->getTitle());
+
+        // Client-supplied fields and directions must never reach the query as-is.
+        [$items, $total] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10, ['unknownField' => 'asc']);
+        $this->assertSame(2, $total);
+
+        [$items] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10, ['title' => 'sideways']);
+        $this->assertSame('B work', $items[0]->getTitle());
+    }
+
     public function testGetStudentPublicationByUser(): void
     {
         $em = $this->getEntityManager();

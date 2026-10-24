@@ -7,15 +7,20 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Branch;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Helpers\RoomAccessUrlHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Security\FloorPlanSvgValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,22 +38,24 @@ use const IMAGETYPE_PNG;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class BranchFloorPlanController extends AbstractController
 {
-    private const array ALLOWED_TYPES = ['image/png', 'image/jpeg'];
+    private const array ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/svg+xml'];
 
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly RoomAccessUrlHelper $roomAccessUrlHelper,
         private readonly ResourceFileHelper $resourceFileHelper,
         private readonly ResourceNodeRepository $nodes,
+        private readonly IsAllowedToEditHelper $allowedToEdit,
+        private readonly FloorPlanSvgValidator $svgValidator,
     ) {}
 
-    // Direct branch image access is administrative; learners use the course/attendance
-    // endpoints that authorize access to the specific resource context.
+    // Direct branch image access is administrative, or restricted to an editable
+    // course context. Learners use the course/attendance-scoped image endpoints.
     #[Route('/api/branches/{id}/floor-plan', name: 'branch_floor_plan_show', requirements: ['id' => '\d+'], methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function show(int $id): Response
+    public function show(int $id, Request $request): Response
     {
         $branch = $this->branch($id);
+        $this->assertCanViewPlan($branch, $request);
         $node = $branch->getFloorPlan();
         if (null === $node) {
             throw $this->createNotFoundException('No floor plan.');
@@ -69,6 +76,9 @@ final class BranchFloorPlanController extends AbstractController
         $response->headers->set('Cache-Control', 'private, no-store');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Content-Disposition', 'inline');
+        if ('image/svg+xml' === $file->getMimeType()) {
+            $response->headers->set('Content-Security-Policy', "sandbox; default-src 'none'; style-src 'none'");
+        }
 
         return $response;
     }
@@ -116,7 +126,7 @@ final class BranchFloorPlanController extends AbstractController
 
             try {
                 $this->imageFile($node, $branch);
-            } catch (AccessDeniedHttpException|BadRequestHttpException) {
+            } catch (AccessDeniedHttpException|BadRequestHttpException|FileNotFoundException) {
                 continue;
             }
 
@@ -131,7 +141,7 @@ final class BranchFloorPlanController extends AbstractController
             try {
                 $this->imageFile($current, $branch);
                 $items[] = ['id' => $current->getId(), 'name' => $current->getTitle()];
-            } catch (AccessDeniedHttpException|BadRequestHttpException) {
+            } catch (AccessDeniedHttpException|BadRequestHttpException|FileNotFoundException) {
                 // The existing link must not bypass resource visibility rules.
             }
         }
@@ -190,13 +200,22 @@ final class BranchFloorPlanController extends AbstractController
         if (null === $size || $size < 1 || $size > 10485760) {
             throw new BadRequestHttpException('The floor plan must not exceed 10 MB.');
         }
-        // Examine file contents, not the client-controlled extension or MIME type.
-        $imageInfo = @getimagesize($file->getPathname());
-        if (false === $imageInfo
-            || !\in_array($imageInfo[2] ?? null, [IMAGETYPE_PNG, IMAGETYPE_JPEG], true)
-            || ($imageInfo[0] ?? 0) * ($imageInfo[1] ?? 0) > 50000000
-        ) {
-            throw new BadRequestHttpException('Only PNG/JPEG images up to 50 megapixels are supported.');
+        // Verify content, not the extension provided by the client. Only static SVG
+        // graphics are allowed; reject active XML before persisting any bytes.
+        $svg = 'svg' === strtolower($file->getClientOriginalExtension());
+        if ($svg) {
+            $contents = file_get_contents($file->getPathname());
+            if (false === $contents || !$this->svgValidator->isSafe($contents)) {
+                throw new BadRequestHttpException('The SVG must contain only static floor-plan graphics.');
+            }
+        } else {
+            $imageInfo = @getimagesize($file->getPathname());
+            if (false === $imageInfo
+                || !\in_array($imageInfo[2] ?? null, [IMAGETYPE_PNG, IMAGETYPE_JPEG], true)
+                || ($imageInfo[0] ?? 0) * ($imageInfo[1] ?? 0) > 50000000
+            ) {
+                throw new BadRequestHttpException('Only PNG, JPEG and safe static SVG floor plans are supported.');
+            }
         }
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -229,6 +248,9 @@ final class BranchFloorPlanController extends AbstractController
             ->setFile($file)
             ->setResourceNode($node)
         ;
+        if ($svg) {
+            $resourceFile->setMimeType('image/svg+xml');
+        }
         $node->addResourceFile($resourceFile);
         $this->em->persist($node);
         $this->em->persist($resourceFile);
@@ -249,6 +271,46 @@ final class BranchFloorPlanController extends AbstractController
         $this->em->flush();
 
         return $this->json(['floorPlanId' => null]);
+    }
+
+    /**
+     * A teacher may view a plan only while editing one of their courses.
+     * Admins retain direct branch access; learners use course/attendance image URLs.
+     */
+    private function assertCanViewPlan(Branch $branch, Request $request): void
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+        $courseId = $request->query->getInt('cid');
+        $course = $courseId > 0 ? $this->em->find(Course::class, $courseId) : null;
+        if (!$course instanceof Course) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $portalId = $branch->getUrl()?->getId();
+        $belongsToPortal = false;
+        foreach ($course->getUrls() as $relation) {
+            if ($relation->getUrl()?->getId() === $portalId) {
+                $belongsToPortal = true;
+
+                break;
+            }
+        }
+        if (!$belongsToPortal) {
+            throw new AccessDeniedHttpException();
+        }
+
+        if ($this->isGranted('EDIT', $course)) {
+            return;
+        }
+        $sessionId = $request->query->getInt('sid');
+        $session = $sessionId > 0 ? $this->em->find(Session::class, $sessionId) : null;
+        if (!$session instanceof Session || !$session->hasCourse($course)
+            || !$this->allowedToEdit->check(coach: true, course: $course, session: $session)
+        ) {
+            throw new AccessDeniedHttpException();
+        }
     }
 
     private function branch(int $id): Branch
@@ -290,7 +352,22 @@ final class BranchFloorPlanController extends AbstractController
         }
         if (!\in_array($file->getMimeType(), self::ALLOWED_TYPES, true)
             || null === $file->getSize() || $file->getSize() > 10485760) {
-            throw new BadRequestHttpException('Only PNG/JPEG images up to 10MB are supported.');
+            throw new BadRequestHttpException('Only PNG/JPEG and safe SVG images up to 10MB are supported.');
+        }
+        if ('image/svg+xml' === $file->getMimeType()) {
+            $stream = $this->nodes->getResourceNodeFileStream($node, $file);
+            if (!\is_resource($stream)) {
+                throw new BadRequestHttpException('SVG file unavailable.');
+            }
+
+            try {
+                $contents = stream_get_contents($stream, 10485761);
+            } finally {
+                fclose($stream);
+            }
+            if (false === $contents || !$this->svgValidator->isSafe($contents)) {
+                throw new BadRequestHttpException('SVG file is not safe for display.');
+            }
         }
 
         return $file;

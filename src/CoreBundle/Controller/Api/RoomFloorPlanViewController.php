@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Helpers\RoomAccessUrlHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Security\FloorPlanSvgValidator;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,6 +34,7 @@ final class RoomFloorPlanViewController extends AbstractController
         private readonly RoomAccessUrlHelper $roomAccessUrlHelper,
         private readonly ResourceFileHelper $resourceFiles,
         private readonly ResourceNodeRepository $nodes,
+        private readonly FloorPlanSvgValidator $svgValidator,
     ) {}
 
     #[Route('/api/room-floor-plans/courses/{id}', name: 'room_floor_plan_course_data', requirements: ['id' => '\d+'], methods: ['GET'])]
@@ -114,11 +116,26 @@ final class RoomFloorPlanViewController extends AbstractController
         }
         $file = $this->resourceFiles->resolveResourceFileByAccessUrl($node);
         if (null === $file
-            || !\in_array($file->getMimeType(), ['image/png', 'image/jpeg'], true)
+            || !\in_array($file->getMimeType(), ['image/png', 'image/jpeg', 'image/svg+xml'], true)
             || null === $file->getSize() || $file->getSize() > 10485760
             || (null !== $file->getAccessUrl() && $file->getAccessUrl()->getId() !== $branch->getUrl()?->getId())
         ) {
             throw $this->createNotFoundException('Floor plan file unavailable.');
+        }
+        if ('image/svg+xml' === $file->getMimeType()) {
+            $check = $this->nodes->getResourceNodeFileStream($node, $file);
+            if (!\is_resource($check)) {
+                throw $this->createNotFoundException('Floor plan file unavailable.');
+            }
+
+            try {
+                $contents = stream_get_contents($check, 10485761);
+            } finally {
+                fclose($check);
+            }
+            if (false === $contents || !$this->svgValidator->isSafe($contents)) {
+                throw $this->createNotFoundException('Floor plan file unavailable.');
+            }
         }
         $stream = $this->nodes->getResourceNodeFileStream($node, $file);
         if (!\is_resource($stream)) {
@@ -135,6 +152,9 @@ final class RoomFloorPlanViewController extends AbstractController
         $response->headers->set('Cache-Control', 'private, no-store');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Content-Disposition', 'inline');
+        if ('image/svg+xml' === $file->getMimeType()) {
+            $response->headers->set('Content-Security-Policy', "sandbox; default-src 'none'; style-src 'none'");
+        }
 
         return $response;
     }

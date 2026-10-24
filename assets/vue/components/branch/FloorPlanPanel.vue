@@ -2,18 +2,22 @@
   <section class="mt-5 rounded border p-4">
     <h3 class="font-semibold">{{ t("Floor plan") }}</h3>
     <p class="mt-1 text-sm text-gray-600">
-      {{ t("Upload a PNG/JPEG floor plan, or select an existing image from Documents.") }}
+      {{ t("Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents.") }}
     </p>
 
     <div class="mt-4 flex flex-wrap items-end gap-3 rounded border p-3">
       <div class="min-w-52 flex-1">
-        <label for="branch_floor_plan_upload" class="mb-1 block text-sm">{{ t("Upload floor plan") }}</label>
+        <label
+          for="branch_floor_plan_upload"
+          class="mb-1 block text-sm"
+          >{{ t("Upload floor plan") }}</label
+        >
         <input
           id="branch_floor_plan_upload"
           ref="uploadInput"
           name="branch_floor_plan_upload"
           type="file"
-          accept="image/png,image/jpeg,.png,.jpg,.jpeg"
+          accept="image/png,image/jpeg,image/svg+xml,.png,.jpg,.jpeg,.svg"
           class="block w-full text-sm"
           :disabled="busy || searching"
           @change="onFileSelected"
@@ -27,12 +31,15 @@
         :disabled="!selectedFile || busy || searching"
         @click="uploadPlan"
       />
-      <p class="w-full text-xs text-gray-600">{{ t("PNG or JPEG, maximum 10 MB") }}</p>
+      <p class="w-full text-xs text-gray-600">{{ t("PNG, JPEG or static SVG, maximum 10 MB") }}</p>
     </div>
 
     <div class="mt-4 flex flex-wrap items-end gap-2">
       <div class="min-w-48 flex-1">
-        <label for="floor_plan_search" class="mb-1 block text-sm">
+        <label
+          for="floor_plan_search"
+          class="mb-1 block text-sm"
+        >
           {{ t("Search images by name") }}
         </label>
         <input
@@ -80,15 +87,25 @@
       />
     </div>
 
-    <p v-if="error" role="alert" class="mt-2 text-sm text-red-600">{{ error }}</p>
-    <p v-if="!searching && !options.length" class="mt-2 text-sm text-gray-600">
+    <p
+      v-if="error"
+      role="alert"
+      class="mt-2 text-sm text-red-600"
+    >
+      {{ error }}
+    </p>
+    <p
+      v-if="!searching && !options.length"
+      class="mt-2 text-sm text-gray-600"
+    >
       {{ t("No matching images found in Documents.") }}
     </p>
 
-    <div v-if="planId" class="mt-4">
-      <p class="mb-2 text-sm text-gray-600">
-        {{ t("Current floor plan") }}: {{ currentPlanName }}
-      </p>
+    <div
+      v-if="planId"
+      class="mt-4"
+    >
+      <p class="mb-2 text-sm text-gray-600">{{ t("Current floor plan") }}: {{ currentPlanName }}</p>
       <img
         :key="previewUrl"
         :src="previewUrl"
@@ -134,7 +151,15 @@ const planId = ref(null)
 const refresh = ref(0)
 const selectedFile = ref(null)
 const uploadInput = ref(null)
-const id = computed(() => Number(props.branch.id || String(props.branch["@id"] || "").split("/").pop() || 0))
+const id = computed(() =>
+  Number(
+    props.branch.id ||
+      String(props.branch["@id"] || "")
+        .split("/")
+        .pop() ||
+      0,
+  ),
+)
 const url = computed(() => `/api/branches/${id.value}/floor-plan`)
 // The attached resource changes behind one endpoint. Give every revision a distinct image URL.
 const previewUrl = computed(() => `${url.value}?node=${planId.value || 0}&revision=${refresh.value}`)
@@ -143,11 +168,21 @@ const currentPlanName = computed(() => {
   return current?.name || `#${planId.value}`
 })
 
-watch(() => props.branch.floorPlanId, (value) => {
-  nodeId.value = value || null
-  planId.value = value || null
-}, { immediate: true })
-watch(id, (value) => { if (value > 0) loadOptions() }, { immediate: true })
+watch(
+  () => props.branch.floorPlanId,
+  (value) => {
+    nodeId.value = value || null
+    planId.value = value || null
+  },
+  { immediate: true },
+)
+watch(
+  id,
+  (value) => {
+    if (value > 0) loadOptions()
+  },
+  { immediate: true },
+)
 
 async function loadOptions() {
   if (!id.value) return
@@ -187,8 +222,8 @@ async function uploadPlan() {
   if (!id.value || !selectedFile.value || busy.value) return
   error.value = ""
   const file = selectedFile.value
-  if (!(["image/png", "image/jpeg"].includes(file.type)) || file.size > 10485760 || file.size < 1) {
-    error.value = t("Only PNG/JPEG images up to 10MB are supported.")
+  if (!["image/png", "image/jpeg", "image/svg+xml"].includes(file.type) || file.size > 10485760 || file.size < 1) {
+    error.value = t("Only PNG/JPEG and safe static SVG images up to 10MB are supported.")
     return
   }
   busy.value = true

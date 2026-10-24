@@ -375,14 +375,20 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->setParameter('filetype', 'file')
         ;
 
+        $allowedOrderFields = [
+            'user.fullName' => ['user.lastname', 'user.firstname'],
+            'title' => ['submission.title'],
+            'sentDate' => ['submission.sentDate'],
+            'qualification' => ['submission.qualification'],
+        ];
         foreach ($order as $field => $direction) {
-            if ('user.fullName' === $field) {
-                $qb->addOrderBy('user.lastname', $direction);
-                $qb->addOrderBy('user.firstname', $direction);
-            } elseif (str_starts_with($field, 'user.')) {
-                $qb->addOrderBy($field, $direction);
-            } else {
-                $qb->addOrderBy('submission.'.$field, $direction);
+            if (!isset($allowedOrderFields[$field])) {
+                continue;
+            }
+
+            $sortDirection = 'asc' === strtolower((string) $direction) ? 'ASC' : 'DESC';
+            foreach ($allowedOrderFields[$field] as $column) {
+                $qb->addOrderBy($column, $sortDirection);
             }
         }
 

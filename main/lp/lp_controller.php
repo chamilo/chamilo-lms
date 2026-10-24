@@ -1018,6 +1018,11 @@ switch ($action) {
             if (!empty($_GET['id']) && !$_SESSION['oLP']->isItemInLp($_GET['id'])) {
                 api_not_allowed(true);
             }
+            if ('POST' === $_SERVER['REQUEST_METHOD'] &&
+                !Security::check_token('post', null, 'lp_item')
+            ) {
+                api_not_allowed(true);
+            }
             if (isset($_POST['submit_button'])) {
                 // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
@@ -1480,6 +1485,11 @@ switch ($action) {
     case 'deleteitem':
     case 'delete_item':
         if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if ('POST' !== $_SERVER['REQUEST_METHOD'] ||
+            !Security::check_token('post', null, 'lp_item')
+        ) {
             api_not_allowed(true);
         }
         if (!$lp_found) {

@@ -314,8 +314,14 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->setParameter('user', $user)
         ;
 
+        $allowedOrderFields = ['title', 'sentDate', 'qualification'];
         foreach ($order as $field => $direction) {
-            $qb->addOrderBy('submission.'.$field, $direction);
+            if (!\in_array($field, $allowedOrderFields, true)) {
+                continue;
+            }
+
+            $sortDirection = 'asc' === strtolower((string) $direction) ? 'ASC' : 'DESC';
+            $qb->addOrderBy('submission.'.$field, $sortDirection);
         }
 
         $qb->setFirstResult(($page - 1) * $itemsPerPage)
@@ -347,8 +353,21 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->setParameter('filetype', 'file')
         ;
 
+        $allowedOrderFields = [
+            'user.fullName' => ['user.lastname', 'user.firstname'],
+            'title' => ['submission.title'],
+            'sentDate' => ['submission.sentDate'],
+            'qualification' => ['submission.qualification'],
+        ];
         foreach ($order as $field => $direction) {
-            $qb->addOrderBy('submission.'.$field, $direction);
+            if (!isset($allowedOrderFields[$field])) {
+                continue;
+            }
+
+            $sortDirection = 'asc' === strtolower((string) $direction) ? 'ASC' : 'DESC';
+            foreach ($allowedOrderFields[$field] as $column) {
+                $qb->addOrderBy($column, $sortDirection);
+            }
         }
 
         $qb->setFirstResult(($page - 1) * $itemsPerPage)

@@ -155,11 +155,15 @@ switch ($action) {
                 ->select('d')
                 ->from(CDocument::class, 'd')
                 ->innerJoin('d.resourceNode', 'n')
+                // Only a document of the current course can be replaced.
+                ->innerJoin('n.resourceLinks', 'l')
                 ->andWhere('d.title = :title')
                 ->andWhere('n.parent = :parentNodeId')
+                ->andWhere('l.course = :courseId')
                 ->setParameters([
                     'title'        => $filename,
-                    'parentNodeId' => $directoryParentId
+                    'parentNodeId' => $directoryParentId,
+                    'courseId'     => (int) $course->getId(),
                 ])
                 ->setMaxResults(1);
             $existing = $qb->getQuery()->getOneOrNullResult();

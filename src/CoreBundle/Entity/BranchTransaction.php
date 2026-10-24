@@ -52,9 +52,9 @@ class BranchTransaction
     #[ORM\Column(name: 'failed_attempts', type: 'integer')]
     protected int $failedAttempts;
 
-    #[ORM\ManyToOne(targetEntity: BranchSync::class)]
+    #[ORM\ManyToOne(targetEntity: Branch::class)]
     #[ORM\JoinColumn(name: 'branch_id', referencedColumnName: 'id')]
-    protected BranchSync $branch;
+    protected Branch $branch;
 
     /**
      * Get id.
@@ -226,7 +226,7 @@ class BranchTransaction
     }
 
     /**
-     * @return BranchSync
+     * @return Branch
      */
     public function getBranch()
     {
@@ -236,7 +236,7 @@ class BranchTransaction
     /**
      * @return $this
      */
-    public function setBranch(BranchSync $branch)
+    public function setBranch(Branch $branch)
     {
         $this->branch = $branch;
 

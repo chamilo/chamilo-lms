@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Form;
 
-use Chamilo\CoreBundle\Entity\BranchSync;
+use Chamilo\CoreBundle\Entity\Branch;
 use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -14,7 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @template-extends  AbstractType<BranchSync>
+ * @template-extends  AbstractType<Branch>
  */
 class BranchType extends AbstractType
 {
@@ -57,11 +57,9 @@ class BranchType extends AbstractType
             )
             // ->add('parent_id', 'choice', array('choices'=> array(1 => 'jjaa',2=>'ddd'), 'required' => false))
             ->add('branch_ip', 'text')
-            ->add('latitude', 'text')
-            ->add('longitude', 'text')
+            ->add('coordinates', 'text')
             ->add('dwn_speed', 'text')
             ->add('up_speed', 'text')
-            ->add('longitude', 'text')
             ->add('delay', 'text')
             ->add('admin_mail', EmailType::class)
             ->add('admin_name', 'text')
@@ -88,7 +86,7 @@ class BranchType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => BranchSync::class,
+                'data_class' => Branch::class,
             ]
         );
     }

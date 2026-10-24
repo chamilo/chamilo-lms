@@ -66,6 +66,8 @@
       name="room"
     />
 
+    <RoomFloorPlanPicker v-if="showRoomField" v-model="item.room" :rooms="roomOptions" />
+
     <BaseSelect
       v-if="showCareerPromotionFields && normalizedCareerOptions.length > 0"
       id="calendar-career"
@@ -117,6 +119,7 @@ import CalendarRemindersEditor from "./CalendarRemindersEditor.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
 import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import roomService from "../../services/roomService"
+import RoomFloorPlanPicker from "../room/RoomFloorPlanPicker.vue"
 import baseService from "../../services/baseService"
 
 const { t } = useI18n()
@@ -439,7 +442,7 @@ onMounted(async () => {
           const branch = r.branch
           const branchTitle = branch && typeof branch === "object" ? branch.title : null
           const label = branchTitle ? `${branchTitle} - ${r.title}` : r.title
-          return { name: label, id: r["@id"] }
+          return { name: label, id: r["@id"], branch: r.branch, roomMap: r.roomMap }
         })
       }
     } catch (e) {

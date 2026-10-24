@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\State\RoomStateProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Room.
@@ -86,8 +87,13 @@ class Room
 
     #[Groups(['room:read', 'room:write'])]
     #[Assert\Length(max: 255)]
-    #[ORM\Column(name: 'geolocation', type: 'string', length: 255, nullable: true, unique: false)]
-    protected ?string $geolocation = null;
+    #[ORM\Column(name: 'coordinates', type: 'string', length: 255, nullable: true, unique: false)]
+    protected ?string $coordinates = null;
+
+    // Coordinates are normalized to [0, 1] relative to the branch's floor-plan image.
+    #[Groups(['room:list', 'room:read', 'room:write'])]
+    #[ORM\Column(name: 'room_map', type: 'json', nullable: true)]
+    protected ?array $roomMap = null;
 
     #[Groups(['room:read', 'room:write'])]
     #[Assert\Length(max: 45)]
@@ -102,9 +108,9 @@ class Room
 
     #[Groups(['room:list', 'room:read', 'room:write'])]
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: BranchSync::class)]
+    #[ORM\ManyToOne(targetEntity: Branch::class)]
     #[ORM\JoinColumn(name: 'branch_id', referencedColumnName: 'id')]
-    protected ?BranchSync $branch = null;
+    protected ?Branch $branch = null;
 
     /**
      * Get id.
@@ -169,16 +175,94 @@ class Room
         return $this;
     }
 
-    public function getGeolocation(): ?string
+    #[Assert\Callback]
+    public function validateCoordinates(ExecutionContextInterface $context): void
     {
-        return $this->geolocation;
+        if (null === $this->coordinates || '' === trim($this->coordinates)) {
+            return;
+        }
+
+        if (1 !== preg_match('/^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$/', $this->coordinates, $matches)
+            || (float) $matches[1] < -90 || (float) $matches[1] > 90
+            || (float) $matches[2] < -180 || (float) $matches[2] > 180) {
+            $context->buildViolation('Coordinates must be a valid latitude and longitude pair.')
+                ->atPath('coordinates')
+                ->addViolation()
+            ;
+        }
     }
 
-    public function setGeolocation(?string $geolocation): self
+    public function getCoordinates(): ?string
     {
-        $this->geolocation = $geolocation;
+        return $this->coordinates;
+    }
+
+    public function setCoordinates(?string $coordinates): self
+    {
+        $this->coordinates = $coordinates;
 
         return $this;
+    }
+
+    public function getRoomMap(): ?array
+    {
+        return $this->roomMap;
+    }
+
+    public function setRoomMap(?array $roomMap): self
+    {
+        $this->roomMap = $roomMap;
+
+        return $this;
+    }
+
+    #[Assert\Callback]
+    public function validateRoomMap(ExecutionContextInterface $context): void
+    {
+        if (null === $this->roomMap) {
+            return;
+        }
+
+        // The format is shared by the image overlay editor and the student viewer.
+        // Reject arbitrary JSON to avoid persistent invalid or oversized geometries.
+        $map = $this->roomMap;
+        if (2 !== \count($map) || 'polygon' !== ($map['type'] ?? null)
+            || !isset($map['points']) || !\is_array($map['points'])
+            || !array_is_list($map['points'])
+            || \count($map['points']) < 3 || \count($map['points']) > 100) {
+            $context->buildViolation('Room map must be a polygon with 3 to 100 points.')
+                ->atPath('roomMap')
+                ->addViolation()
+            ;
+
+            return;
+        }
+
+        foreach ($map['points'] as $point) {
+            if (!\is_array($point) || !array_is_list($point) || 2 !== \count($point)) {
+                $this->addRoomMapPointViolation($context);
+
+                return;
+            }
+
+            foreach ($point as $coordinate) {
+                if ((!\is_int($coordinate) && !\is_float($coordinate))
+                    || !is_finite((float) $coordinate)
+                    || $coordinate < 0 || $coordinate > 1) {
+                    $this->addRoomMapPointViolation($context);
+
+                    return;
+                }
+            }
+        }
+    }
+
+    private function addRoomMapPointViolation(ExecutionContextInterface $context): void
+    {
+        $context->buildViolation('Room map points must contain normalized numeric coordinates between 0 and 1.')
+            ->atPath('roomMap')
+            ->addViolation()
+        ;
     }
 
     public function getIp(): ?string
@@ -205,12 +289,12 @@ class Room
         return $this;
     }
 
-    public function getBranch(): ?BranchSync
+    public function getBranch(): ?Branch
     {
         return $this->branch;
     }
 
-    public function setBranch(?BranchSync $branch): self
+    public function setBranch(?Branch $branch): self
     {
         $this->branch = $branch;
 

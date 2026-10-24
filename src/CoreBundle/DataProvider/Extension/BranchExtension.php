@@ -9,11 +9,11 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-use Chamilo\CoreBundle\Entity\BranchSync;
+use Chamilo\CoreBundle\Entity\Branch;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\QueryBuilder;
 
-final readonly class BranchSyncExtension implements QueryCollectionExtensionInterface
+final readonly class BranchExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private AccessUrlHelper $accessUrlHelper,
@@ -26,7 +26,7 @@ final readonly class BranchSyncExtension implements QueryCollectionExtensionInte
         ?Operation $operation = null,
         array $context = []
     ): void {
-        if (BranchSync::class !== $resourceClass) {
+        if (Branch::class !== $resourceClass) {
             return;
         }
 

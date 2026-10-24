@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\BranchSync;
+use Chamilo\CoreBundle\Entity\Branch;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\BranchSyncRepository;
+use Chamilo\CoreBundle\Repository\BranchRepository;
 use Chamilo\CoreBundle\Service\Update\InstalledChamiloVersionProvider;
 use Chamilo\CoreBundle\Service\Update\UpdateAvailabilityChecker;
 use Chamilo\CoreBundle\Service\Update\UpdateConfiguration;
@@ -233,13 +233,13 @@ function check_system_version()
         $uniqueId = '';
         $entityManager = Database::getManager();
 
-        /** @var BranchSyncRepository $repository */
-        $repository = $entityManager->getRepository(BranchSync::class);
+        /** @var BranchRepository $repository */
+        $repository = $entityManager->getRepository(Branch::class);
 
-        /** @var BranchSync $branch */
+        /** @var Branch $branch */
         $branch = $repository->getTopBranch();
 
-        if (is_a($branch, BranchSync::class)) {
+        if (is_a($branch, Branch::class)) {
             $uniqueId = $branch->getUniqueId();
         }
 

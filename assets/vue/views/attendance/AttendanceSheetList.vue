@@ -126,6 +126,7 @@
               >
                 {{ t("Room") }}: {{ formatRoom(date.effectiveRoom) }}
               </span>
+              <RoomFloorPlanViewer v-if="date.effectiveRoom" :calendar-id="date.id" />
             </div>
           </div>
           <div class="flex gap-2">
@@ -557,6 +558,7 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceService"
+import RoomFloorPlanViewer from "../../components/room/RoomFloorPlanViewer.vue"
 import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"

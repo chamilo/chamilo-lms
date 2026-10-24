@@ -1142,7 +1142,7 @@ class CourseController extends ToolBaseController
             return null;
         }
 
-        $geolocation = trim((string) $room->getGeolocation());
+        $geolocation = trim((string) $room->getCoordinates());
         if ('' === $geolocation) {
             return null;
         }

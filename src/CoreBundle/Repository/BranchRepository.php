@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\BranchSync;
+use Chamilo\CoreBundle\Entity\Branch;
 use Chamilo\CoreBundle\Traits\Repository\ORM\NestedTreeRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
@@ -14,18 +14,18 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 
-class BranchSyncRepository extends ServiceEntityRepository
+class BranchRepository extends ServiceEntityRepository
 {
     use NestedTreeRepositoryTrait;
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, BranchSync::class);
+        parent::__construct($registry, Branch::class);
         $this->initializeTreeRepository($this->getEntityManager(), $this->getClassMetadata());
     }
 
     /**
-     * @return BranchSync[]|Collection
+     * @return Branch[]|Collection
      */
     public function searchByKeyword(string $keyword)
     {
@@ -34,7 +34,7 @@ class BranchSyncRepository extends ServiceEntityRepository
         // Selecting user info
         $qb->select('DISTINCT b');
 
-        $qb->from(BranchSync::class, 'b');
+        $qb->from(Branch::class, 'b');
 
         // Selecting courses for users
         // $qb->innerJoin('u.courses', 'c');
@@ -51,14 +51,14 @@ class BranchSyncRepository extends ServiceEntityRepository
     /**
      * Gets the first branch with parent_id = NULL.
      */
-    public function getTopBranch(): ?BranchSync
+    public function getTopBranch(): ?Branch
     {
         $qb = $this->createQueryBuilder('a');
 
         // Selecting user info
         $qb->select('DISTINCT b');
 
-        $qb->from(BranchSync::class, 'b');
+        $qb->from(Branch::class, 'b');
         $qb->where('b.parent IS NULL');
         $qb->orderBy('b.id', Criteria::ASC);
         $qb->setMaxResults(1);

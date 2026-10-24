@@ -43,7 +43,7 @@ class JuryType extends AbstractType
             'branch',
             'entity',
             [
-                'class' => 'Entity\BranchSync',
+                'class' => 'Entity\Branch',
                 'property' => 'title',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
-use Chamilo\CoreBundle\Entity\BranchSync;
+use Chamilo\CoreBundle\Entity\Branch;
 use Chamilo\CoreBundle\Entity\Room;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -16,7 +16,7 @@ final readonly class RoomAccessUrlHelper
         private AccessUrlHelper $accessUrlHelper,
     ) {}
 
-    public function isBranchAllowed(?BranchSync $branch): bool
+    public function isBranchAllowed(?Branch $branch): bool
     {
         $currentAccessUrlId = $this->accessUrlHelper->getCurrent()?->getId();
         $branchAccessUrlId = $branch?->getUrl()?->getId();
@@ -29,7 +29,7 @@ final readonly class RoomAccessUrlHelper
         return null === $room || $this->isBranchAllowed($room->getBranch());
     }
 
-    public function assertBranchAllowed(?BranchSync $branch): void
+    public function assertBranchAllowed(?Branch $branch): void
     {
         if (!$this->isBranchAllowed($branch)) {
             throw new AccessDeniedHttpException('The selected branch does not belong to the current access URL.');

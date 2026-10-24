@@ -4643,3 +4643,162 @@ When("I go to the legacy results page of the current test", async ({ page }) => 
   const sid = url.searchParams.get("sid") || "0"
   await gotoReliably(page, `/main/exercise/exercise_report.php?cid=${cid}&sid=${sid}&exerciseId=${match[1]}`)
 })
+
+
+// Use the configured administrator for issue #8954 only. Do not replace the
+// shared `I am a platform administrator` step: other suites depend on admin/admin.
+// Never store local credentials in source or in a .feature file.
+Given("I am an administrator for issue 8954", async ({ page }) => {
+  const username = process.env.ISSUE8954_ADMIN_USER?.trim() || "admin"
+  const password = process.env.ISSUE8954_ADMIN_PASSWORD ?? (username === "admin" ? "admin" : "")
+  if (!password) {
+    throw new Error("Set ISSUE8954_ADMIN_PASSWORD for the selected issue #8954 administrator")
+  }
+  await loginAs(page, username, password)
+})
+
+// Issue #8954: floor-plan access checks and isolated API CRUD regression tests.
+// These scenarios target the dedicated Playwright test database only. Never run
+// the mutating scenario against a real or shared Chamilo installation.
+// A specific branch can be supplied for read-only tests on an existing installation.
+// This also keeps negative authorization tests independent of GET /api/branches,
+// which a teacher or student may legitimately be unable to list.
+async function floorPlanTestBranchId(page: Page): Promise<number> {
+  const configuredId = process.env.ISSUE8954_BRANCH_ID?.trim()
+  if (configuredId) {
+    const id = Number(configuredId)
+    if (!Number.isSafeInteger(id) || id < 1) {
+      throw new Error("ISSUE8954_BRANCH_ID must be a positive integer")
+    }
+    return id
+  }
+
+  // Same-origin fetch uses the browser's trusted HTTPS connection. Node's
+  // APIRequestContext rejects development certificates even when Chromium can
+  // navigate the very same site successfully.
+  const { status, data } = await page.evaluate(async () => {
+    const response = await fetch("/api/branches?itemsPerPage=1", {
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: { Accept: "application/ld+json" },
+    })
+    return { status: response.status, data: response.ok ? await response.json() : null }
+  })
+  expect(status, "The current user must be able to list branches, or ISSUE8954_BRANCH_ID must be set").toBe(200)
+  const items = Array.isArray(data) ? data : data?.member ?? data?.["hydra:member"] ?? []
+  expect(items.length, "The Playwright installer must seed one branch").toBeGreaterThan(0)
+  const entry = items[0]
+  const id = Number(entry.id ?? String(entry["@id"] ?? "").split("/").pop())
+  expect(Number.isSafeInteger(id) && id > 0, "Invalid seeded branch ID").toBeTruthy()
+  return id
+}
+
+Then("the floor-plan API {string} returns HTTP {int}", async ({ page }, path: string, expectedStatus: number) => {
+  const id = await floorPlanTestBranchId(page)
+  const url = path.replace("{branchId}", String(id))
+  // A browser-origin request carries the same-origin context expected by
+  // Chamilo's central CSRF listener; credentials are the logged-in test role.
+  const status = await page.evaluate(async (target) => {
+    const response = await fetch(target, { credentials: "same-origin", cache: "no-store" })
+    return response.status
+  }, url)
+  expect(status, `GET ${url} must return HTTP ${expectedStatus}`).toBe(expectedStatus)
+})
+
+Then("the floor-plan upload without a file returns HTTP {int}", async ({ page }, expectedStatus: number) => {
+  const id = await floorPlanTestBranchId(page)
+  const url = `/api/branches/${id}/floor-plan/upload`
+  const status = await page.evaluate(async (target) => {
+    const response = await fetch(target, { method: "POST", credentials: "same-origin", body: new FormData() })
+    return response.status
+  }, url)
+  expect(status, `POST ${url} without a file`).toBe(expectedStatus)
+})
+
+When("I open the floor-plan editor of a branch in this portal", async ({ page }) => {
+  const id = await floorPlanTestBranchId(page)
+  await gotoReliably(page, `/resources/branches/edit?id=${encodeURIComponent(`/api/branches/${id}`)}`)
+  await expect(page.locator('input[name="branch_floor_plan_upload"]')).toBeVisible()
+  await expect(page.locator('input[name="floor_plan_search"]')).toBeVisible()
+})
+
+When("I exercise temporary branch and room polygon CRUD", async ({ page }) => {
+  // Only disposable resources are touched. finally cleans up on failures, too.
+  // No fixture reset/migration is involved; do not run against shared databases.
+  const result = await page.evaluate(async () => {
+    type Payload = Record<string, unknown>
+    let branchId: number | null = null
+    let roomId: number | null = null
+    const problems: string[] = []
+    const request = async (path: string, method: string, body?: Payload) => {
+      const response = await fetch(path, {
+        method,
+        credentials: "same-origin",
+        headers: body ? { "Content-Type": "application/ld+json", Accept: "application/ld+json" } : { Accept: "application/ld+json" },
+        body: body ? JSON.stringify(body) : undefined,
+      })
+      const raw = await response.text()
+      let data: Payload = {}
+      try { data = JSON.parse(raw) as Payload } catch { /* a 204 has no body */ }
+      return { status: response.status, data, detail: raw.slice(0, 400) }
+    }
+    const entityId = (obj: Payload): number => Number(obj.id ?? String(obj["@id"] ?? "").split("/").pop())
+    const check = (ok: boolean, message: string): void => { if (!ok) throw new Error(message) }
+    const original = { type: "polygon", points: [[0.12, 0.18], [0.78, 0.2], [0.66, 0.72]] }
+    const updated = { type: "polygon", points: [[0.14, 0.19], [0.8, 0.22], [0.65, 0.7]] }
+    const title = `Issue8954 PW ${Date.now()}`
+    try {
+      const branch = await request("/api/branches", "POST", { title, description: "Temporary floor plan regression branch" })
+      check(branch.status === 201, `Branch POST: ${branch.status} ${branch.detail}`)
+      branchId = entityId(branch.data)
+      check(Number.isInteger(branchId) && branchId > 0, "Branch response had no ID")
+      const room = await request("/api/rooms", "POST", {
+        title: `${title} room`, branch: `/api/branches/${branchId}`, floorNumber: 1, capacity: 8, roomMap: original,
+      })
+      check(room.status === 201, `Room POST: ${room.status} ${room.detail}`)
+      roomId = entityId(room.data)
+      check(Number.isInteger(roomId) && roomId > 0, "Room response had no ID")
+      const read = await request(`/api/rooms/${roomId}`, "GET")
+      check(read.status === 200, `Room GET: ${read.status} ${read.detail}`)
+      check(JSON.stringify(read.data.roomMap) === JSON.stringify(original), "Created polygon was not saved")
+      const edit = await request(`/api/rooms/${roomId}`, "PUT", {
+        title: `${title} room edited`, description: "", branch: `/api/branches/${branchId}`,
+        floorNumber: 1, capacity: 8, roomMap: updated,
+      })
+      check(edit.status === 200, `Room PUT: ${edit.status} ${edit.detail}`)
+      const reread = await request(`/api/rooms/${roomId}`, "GET")
+      check(reread.status === 200 && JSON.stringify(reread.data.roomMap) === JSON.stringify(updated), "Updated polygon was not persisted")
+      const invalid = await request(`/api/rooms/${roomId}`, "PUT", {
+        title: `${title} invalid`, branch: `/api/branches/${branchId}`,
+        roomMap: { type: "polygon", points: [[0, 0], [5, 0], [0, 1]] },
+      })
+      check(invalid.status === 422, `Out-of-bounds polygon should be rejected with 422; got ${invalid.status}`)
+      const unchanged = await request(`/api/rooms/${roomId}`, "GET")
+      check(unchanged.status === 200 && JSON.stringify(unchanged.data.roomMap) === JSON.stringify(updated), "Invalid update changed the stored polygon")
+      const clear = await request(`/api/rooms/${roomId}`, "PUT", {
+        title: `${title} room edited`, description: "", branch: `/api/branches/${branchId}`,
+        roomMap: null,
+      })
+      check(clear.status === 200, `Clear polygon PUT: ${clear.status} ${clear.detail}`)
+      const cleared = await request(`/api/rooms/${roomId}`, "GET")
+      check(cleared.status === 200 && cleared.data.roomMap === null, "Cleared polygon remains stored")
+    } catch (error) {
+      problems.push(String(error))
+    } finally {
+      if (roomId !== null) {
+        const deleted = await request(`/api/rooms/${roomId}`, "DELETE")
+        if (deleted.status !== 204) problems.push(`Room cleanup: HTTP ${deleted.status} ${deleted.detail}`)
+        else {
+          const gone = await request(`/api/rooms/${roomId}`, "GET")
+          if (gone.status !== 404) problems.push(`Deleted room still reachable: HTTP ${gone.status}`)
+        }
+      }
+      if (branchId !== null) {
+        const deleted = await request(`/api/branches/${branchId}`, "DELETE")
+        if (deleted.status !== 204) problems.push(`Branch cleanup: HTTP ${deleted.status} ${deleted.detail}`)
+      }
+    }
+    return { problems }
+  })
+  expect(result.problems, result.problems.join("\n")).toEqual([])
+})

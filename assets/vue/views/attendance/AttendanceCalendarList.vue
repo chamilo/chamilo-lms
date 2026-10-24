@@ -60,6 +60,7 @@
             >
               {{ t("Room") }}: {{ formatRoom(event.effectiveRoom) }}
             </span>
+            <RoomFloorPlanViewer v-if="event.effectiveRoom" :calendar-id="event.id" />
           </div>
         </div>
         <div class="calendar-actions flex gap-2">
@@ -115,6 +116,7 @@
           :label="t('Room')"
           :options="roomOptions"
         />
+        <RoomFloorPlanPicker v-model="selectedEventRoom" :rooms="floorPlanRooms" />
       </div>
       <div class="dialog-actions mt-4">
         <BaseButton
@@ -158,7 +160,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue"
+import { computed, ref, onMounted } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import attendanceService from "../../services/attendanceService"
@@ -168,6 +170,8 @@ import Dialog from "primevue/dialog"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import roomService from "../../services/roomService"
+import RoomFloorPlanPicker from "../../components/room/RoomFloorPlanPicker.vue"
+import RoomFloorPlanViewer from "../../components/room/RoomFloorPlanViewer.vue"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -182,6 +186,12 @@ const selectedEventDate = ref(null)
 const selectedEventDuration = ref(null)
 const selectedEventRoom = ref(null)
 const roomOptions = ref([])
+const floorPlanRooms = computed(() => roomOptions.value.filter((option) => option.room).map((option) => ({
+  id: option.value,
+  name: option.label,
+  branch: option.room.branch,
+  roomMap: option.room.roomMap,
+})))
 
 const eventIdToDelete = ref(null)
 

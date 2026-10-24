@@ -57,7 +57,8 @@ async function updateItem(formData) {
       branch: formData.branch,
       floorNumber: formData.floorNumber ?? null,
       capacity: formData.capacity ?? null,
-      geolocation: formData.geolocation || null,
+      coordinates: formData.coordinates || null,
+      roomMap: formData.roomMap ?? null,
       ip: formData.ip || null,
       ipMask: formData.ipMask || null,
     })

@@ -24,6 +24,7 @@
       :label="t('Default room')"
       :options="roomOptions"
     />
+    <RoomFloorPlanPicker v-model="formData.room" :rooms="floorPlanRooms" />
 
     <!-- Advanced Settings (create + edit) -->
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
@@ -123,6 +124,7 @@ import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { getCourseContext } from "../../utils/courseContext"
 import gradebookService from "../../services/gradebookService"
 import roomService from "../../services/roomService"
+import RoomFloorPlanPicker from "../room/RoomFloorPlanPicker.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -155,6 +157,12 @@ const formData = reactive({
 
 const gradebookOptions = ref([])
 const roomOptions = ref([])
+const floorPlanRooms = computed(() => roomOptions.value.filter((option) => option.room).map((option) => ({
+  id: option.value,
+  name: option.label,
+  branch: option.room.branch,
+  roomMap: option.room.roomMap,
+})))
 
 const rules = {
   title: { required },

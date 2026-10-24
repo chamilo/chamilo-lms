@@ -12,7 +12,9 @@
     <BranchForm
       v-model="item"
       @submit="updateItem"
-    />
+    >
+      <FloorPlanPanel v-if="item.id" :branch="item" />
+    </BranchForm>
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -23,6 +25,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import BranchForm from "../../components/branch/Form.vue"
+import FloorPlanPanel from "../../components/branch/FloorPlanPanel.vue"
 import Loading from "../../components/Loading.vue"
 import baseService from "../../services/baseService"
 
@@ -56,8 +59,7 @@ async function updateItem(formData) {
       description: formData.description,
       parent: formData.parent || null,
       branchIp: formData.branchIp || null,
-      latitude: formData.latitude || null,
-      longitude: formData.longitude || null,
+      coordinates: formData.coordinates || null,
       dwnSpeed: formData.dwnSpeed ?? null,
       upSpeed: formData.upSpeed ?? null,
       delay: formData.delay ?? null,

@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use Chamilo\CoreBundle\Entity\BranchSync;
+use Chamilo\CoreBundle\Entity\Branch;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\RoomAccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,9 +16,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * @implements ProcessorInterface<BranchSync, BranchSync>
+ * @implements ProcessorInterface<Branch, Branch>
  */
-final readonly class BranchSyncStateProcessor implements ProcessorInterface
+final readonly class BranchStateProcessor implements ProcessorInterface
 {
     public function __construct(
         #[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]
@@ -28,11 +28,11 @@ final readonly class BranchSyncStateProcessor implements ProcessorInterface
         private EntityManagerInterface $em,
     ) {}
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): BranchSync
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Branch
     {
-        \assert($data instanceof BranchSync);
+        \assert($data instanceof Branch);
 
-        // Put/Patch denormalize onto a fresh, unmanaged BranchSync instead of
+        // Put/Patch denormalize onto a fresh, unmanaged Branch instead of
         // the fetched one (object_to_populate isn't taking effect for this
         // resource), so anything the request didn't submit -- including the
         // Gedmo tree bookkeeping columns -- would otherwise be wiped, and
@@ -40,16 +40,15 @@ final readonly class BranchSyncStateProcessor implements ProcessorInterface
         // manually"). Re-attach the submitted branch:write values onto the
         // real, managed entity before persisting.
         if (isset($uriVariables['id'])) {
-            $existing = $this->em->getRepository(BranchSync::class)->find($uriVariables['id']);
+            $existing = $this->em->getRepository(Branch::class)->find($uriVariables['id']);
 
-            if ($existing instanceof BranchSync && $existing !== $data) {
+            if ($existing instanceof Branch && $existing !== $data) {
                 $existing
                     ->setTitle($data->getTitle())
                     ->setDescription($data->getDescription())
                     ->setParent($data->getParent())
                     ->setBranchIp($data->getBranchIp())
-                    ->setLatitude($data->getLatitude())
-                    ->setLongitude($data->getLongitude())
+                    ->setCoordinates($data->getCoordinates())
                     ->setDwnSpeed($data->getDwnSpeed())
                     ->setUpSpeed($data->getUpSpeed())
                     ->setDelay($data->getDelay())

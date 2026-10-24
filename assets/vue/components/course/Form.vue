@@ -232,6 +232,7 @@
           option-label="name"
           option-value="id"
         />
+        <RoomFloorPlanPicker v-model="courseRoom" :rooms="roomOptions" />
       </div>
     </div>
 
@@ -263,6 +264,7 @@ import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import languageService from "../../services/languageService"
 import roomService from "../../services/roomService"
+import RoomFloorPlanPicker from "../room/RoomFloorPlanPicker.vue"
 import baseService from "../../services/baseService"
 import CourseCategorySelect from "../coursecategory/CourseCategorySelect.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
@@ -653,7 +655,7 @@ onMounted(async () => {
         const branch = r.branch
         const branchTitle = branch && typeof branch === "object" ? branch.title : null
         const label = branchTitle ? `${branchTitle} - ${r.title}` : r.title
-        return { name: label, id: r["@id"] }
+        return { name: label, id: r["@id"], branch: r.branch, roomMap: r.roomMap }
       })
     }
   } catch (error) {

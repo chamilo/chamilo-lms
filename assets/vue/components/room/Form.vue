@@ -62,19 +62,19 @@
         class="mt-4 flex flex-col gap-2 border-s-2 border-gray-200 ps-4"
       >
         <BaseInputText
-          id="item_geolocation"
-          v-model="v$.item.geolocation.$model"
-          :error-text="v$.item.geolocation.$errors.map((error) => error.$message).join('<br>')"
-          :is-invalid="v$.item.geolocation.$error"
-          :label="t('Geolocation')"
+          id="item_coordinates"
+          v-model="v$.item.coordinates.$model"
+          :error-text="v$.item.coordinates.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.coordinates.$error"
+          :label="t('Coordinates')"
           :maxlength="255"
           :placeholder="t('Latitude, Longitude (e.g. 48.8566, 2.3522)')"
         />
 
         <BaseLeafletMap
           draggable
-          :latitude="parsedGeolocation.latitude"
-          :longitude="parsedGeolocation.longitude"
+          :latitude="parsedCoordinates.latitude"
+          :longitude="parsedCoordinates.longitude"
           @marker-moved="onMarkerMoved"
         />
 
@@ -100,6 +100,7 @@
       </div>
     </div>
 
+    <RoomFloorPlanEditor :branch="props.modelValue.branch" :model-value="props.modelValue.roomMap" @update:model-value="updateRoomMap" />
     <div class="flex justify-end mt-2">
       <Button
         :disabled="v$.item.$invalid"
@@ -118,6 +119,7 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseLeafletMap from "../basecomponents/BaseLeafletMap.vue"
+import RoomFloorPlanEditor from "./RoomFloorPlanEditor.vue"
 import useVuelidate from "@vuelidate/core"
 import { required, maxLength, helpers, integer, minValue } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
@@ -158,7 +160,7 @@ const validations = {
     branch: { required },
     floorNumber: { integer },
     capacity: { integer, minValue: minValue(1) },
-    geolocation: { maxLength: maxLength(255) },
+    coordinates: { maxLength: maxLength(255), validCoordinates: (value) => !value || parseCoordinates(value).valid },
     ip: { maxLength: maxLength(45) },
     ipMask: { maxLength: maxLength(6), ipMaskFormat },
   },
@@ -166,27 +168,21 @@ const validations = {
 
 const v$ = useVuelidate(validations, { item: computed(() => props.modelValue) })
 
-// Geolocation is stored as a single combined "lat, lng" string (unlike
-// branches, which use two separate fields) -- see Room::$geolocation.
-function parseGeolocation(value) {
-  const parts = (value || "").split(",").map((part) => parseFloat(part.trim()))
-
-  if (2 !== parts.length || parts.some((part) => Number.isNaN(part))) {
-    return { latitude: null, longitude: null }
+// Store coordinates as a "latitude, longitude" string in both branches and rooms.
+function parseCoordinates(value) {
+  const parts = (value || "").split(",").map((part) => part.trim())
+  if (parts.length !== 2 || parts.some((part) => !/^-?\d+(?:\.\d+)?$/.test(part))) {
+    return { latitude: null, longitude: null, valid: false }
   }
-
-  const [latitude, longitude] = parts
-  if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
-    return { latitude: null, longitude: null }
-  }
-
-  return { latitude, longitude }
+  const [latitude, longitude] = parts.map(Number)
+  const valid = latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180
+  return { latitude: valid ? latitude : null, longitude: valid ? longitude : null, valid }
 }
 
-const parsedGeolocation = computed(() => parseGeolocation(v$.value.item.geolocation.$model))
+const parsedCoordinates = computed(() => parseCoordinates(v$.value.item.coordinates.$model))
 
 function onMarkerMoved({ latitude, longitude }) {
-  v$.value.item.geolocation.$model = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
+  v$.value.item.coordinates.$model = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
 }
 
 watch(
@@ -199,12 +195,14 @@ watch(
       emit("update:modelValue", { ...newValue, branch: newValue.branch["@id"] })
     }
 
-    if (newValue.geolocation || newValue.ip || newValue.ipMask) {
+    if (newValue.coordinates || newValue.ip || newValue.ipMask) {
       showAdvanced.value = true
     }
   },
   { immediate: true },
 )
+
+function updateRoomMap(roomMap) { emit("update:modelValue", { ...props.modelValue, roomMap }) }
 
 function btnSaveOnClick() {
   const item = { ...props.modelValue, ...v$.value.item.$model }

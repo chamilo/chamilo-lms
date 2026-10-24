@@ -61,27 +61,19 @@
         />
 
         <BaseInputText
-          id="item_latitude"
-          v-model="v$.item.latitude.$model"
-          :error-text="v$.item.latitude.$errors.map((error) => error.$message).join('<br>')"
-          :is-invalid="v$.item.latitude.$error"
-          :label="t('Latitude')"
-          :placeholder="t('e.g. 48.8566')"
-        />
-
-        <BaseInputText
-          id="item_longitude"
-          v-model="v$.item.longitude.$model"
-          :error-text="v$.item.longitude.$errors.map((error) => error.$message).join('<br>')"
-          :is-invalid="v$.item.longitude.$error"
-          :label="t('Longitude')"
-          :placeholder="t('e.g. 2.3522')"
+          id="item_coordinates"
+          v-model="v$.item.coordinates.$model"
+          :error-text="v$.item.coordinates.$errors.map((error) => error.$message).join('<br>')"
+          :is-invalid="v$.item.coordinates.$error"
+          :label="t('Coordinates')"
+          :maxlength="255"
+          :placeholder="t('Latitude, Longitude (e.g. 48.8566, 2.3522)')"
         />
 
         <BaseLeafletMap
           draggable
-          :latitude="parsedLatitude"
-          :longitude="parsedLongitude"
+          :latitude="parsedCoordinates.latitude"
+          :longitude="parsedCoordinates.longitude"
           @marker-moved="onMarkerMoved"
         />
 
@@ -173,6 +165,8 @@
       </div>
     </div>
 
+    <slot />
+
     <div class="flex justify-end mt-2">
       <Button
         :disabled="v$.item.$invalid"
@@ -192,7 +186,7 @@ import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseLeafletMap from "../basecomponents/BaseLeafletMap.vue"
 import useVuelidate from "@vuelidate/core"
-import { required, maxLength, email, decimal, integer, between } from "@vuelidate/validators"
+import { required, maxLength, email, integer } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
 import baseService from "../../services/baseService"
 
@@ -224,7 +218,7 @@ const parentOptions = computed(() =>
   allBranches.value.filter((b) => b["@id"] !== props.modelValue["@id"]).map((b) => ({ name: b.title, id: b["@id"] })),
 )
 
-const advancedFields = ["branchIp", "latitude", "longitude", "dwnSpeed", "upSpeed", "delay", "adminMail", "adminName", "adminPhone", "parent"]
+const advancedFields = ["branchIp", "coordinates", "dwnSpeed", "upSpeed", "delay", "adminMail", "adminName", "adminPhone", "parent"]
 
 const phoneRegex = /^[\d\s+\-().]*$/
 
@@ -234,8 +228,7 @@ const validations = {
     description: { maxLength: maxLength(2000) },
     parent: {},
     branchIp: { maxLength: maxLength(40) },
-    latitude: { decimal, between: between(-90, 90) },
-    longitude: { decimal, between: between(-180, 180) },
+    coordinates: { maxLength: maxLength(255), validCoordinates: (value) => !value || parseCoordinates(value).valid },
     dwnSpeed: { integer },
     upSpeed: { integer },
     delay: { integer },
@@ -250,18 +243,20 @@ const validations = {
 
 const v$ = useVuelidate(validations, { item: computed(() => props.modelValue) })
 
-function parseCoordinate(value, min, max) {
-  const number = parseFloat(value)
-
-  return Number.isFinite(number) && number >= min && number <= max ? number : null
+function parseCoordinates(value) {
+  const parts = (value || "").split(",").map((part) => part.trim())
+  if (parts.length !== 2 || parts.some((part) => !/^-?\d+(?:\.\d+)?$/.test(part))) {
+    return { latitude: null, longitude: null, valid: false }
+  }
+  const [latitude, longitude] = parts.map(Number)
+  const valid = latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180
+  return { latitude: valid ? latitude : null, longitude: valid ? longitude : null, valid }
 }
 
-const parsedLatitude = computed(() => parseCoordinate(v$.value.item.latitude.$model, -90, 90))
-const parsedLongitude = computed(() => parseCoordinate(v$.value.item.longitude.$model, -180, 180))
+const parsedCoordinates = computed(() => parseCoordinates(v$.value.item.coordinates.$model))
 
 function onMarkerMoved({ latitude, longitude }) {
-  v$.value.item.latitude.$model = latitude.toFixed(8)
-  v$.value.item.longitude.$model = longitude.toFixed(8)
+  v$.value.item.coordinates.$model = `${latitude.toFixed(8)}, ${longitude.toFixed(8)}`
 }
 
 watch(

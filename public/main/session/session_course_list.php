@@ -75,7 +75,7 @@ $sql = "SELECT
         FROM $sessionRelCourseTable src
         INNER JOIN $courseTable c ON src.c_id = c.id
         LEFT JOIN room r ON src.room_id = r.id
-        LEFT JOIN branch_sync b ON r.branch_id = b.id
+        LEFT JOIN branch b ON r.branch_id = b.id
         WHERE src.session_id = $sessionId
         ORDER BY $sortColumn
         LIMIT $from, ".($limit + 1);

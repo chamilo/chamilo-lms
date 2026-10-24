@@ -135,7 +135,7 @@ class ConvertToMultiUrlCommand extends Command
         $trackOnline = $T('track_e_online');         // access_url_id
         $sysAnnouncement = $T('sys_announcement');       // access_url_id
         $skill = $T('skill');                  // access_url_id
-        $branchSync = $T('branch_sync');            // access_url_id
+        $branch = $T('branch');            // access_url_id
         $sessionCategory = $T('session_category');       // access_url_id
         $userAuthSource = $T('user_auth_source');       // url_id, user_id, authentication
 
@@ -568,7 +568,7 @@ class ConvertToMultiUrlCommand extends Command
                 $move($relSession, 'access_url_id');
                 $move($relUser, 'access_url_id');
                 $move($relUsergroup, 'access_url_id');
-                $move($branchSync, 'access_url_id');
+                $move($branch, 'access_url_id');
                 $move($sessionCategory, 'access_url_id');
 
                 if ($exists($systemCalendar)) {

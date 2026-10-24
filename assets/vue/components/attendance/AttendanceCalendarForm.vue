@@ -61,6 +61,7 @@
       :label="t('Room')"
       :options="roomOptions"
     />
+    <RoomFloorPlanPicker v-model="formData.room" :rooms="floorPlanRooms" />
 
     <!-- Group -->
     <BaseSelect
@@ -88,12 +89,13 @@
   </form>
 </template>
 <script setup>
-import { onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { DateTime } from "luxon"
 import attendanceService from "../../services/attendanceService"
 import roomService from "../../services/roomService"
+import RoomFloorPlanPicker from "../room/RoomFloorPlanPicker.vue"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
@@ -139,6 +141,12 @@ const repeatTypeOptions = [
 
 const groupOptions = ref([])
 const roomOptions = ref([])
+const floorPlanRooms = computed(() => roomOptions.value.filter((option) => option.room).map((option) => ({
+  id: option.value,
+  name: option.label,
+  branch: option.room.branch,
+  roomMap: option.room.roomMap,
+})))
 
 const pad2 = (n) => String(n).padStart(2, "0")
 

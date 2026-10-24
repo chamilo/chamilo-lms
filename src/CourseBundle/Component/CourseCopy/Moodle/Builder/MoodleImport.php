@@ -1023,7 +1023,7 @@ class MoodleImport
                 continue;
             }
 
-            $name = (string) ($f->getElementsByTagName('filename')->item(0)?->nodeValue ?? '');
+            $name = basename(str_replace('\\', '/', (string) ($f->getElementsByTagName('filename')->item(0)?->nodeValue ?? '')));
             $fp = (string) ($f->getElementsByTagName('filepath')->item(0)?->nodeValue ?? '/');
             $comp = (string) ($f->getElementsByTagName('component')->item(0)?->nodeValue ?? '');
             $fa = (string) ($f->getElementsByTagName('filearea')->item(0)?->nodeValue ?? '');
@@ -6153,7 +6153,7 @@ class MoodleImport
         $out = [];
         foreach ($list as $f) {
             /** @var \DOMElement $f */
-            $filename = (string) ($f->getElementsByTagName('filename')->item(0)?->nodeValue ?? '');
+            $filename = basename(str_replace('\\', '/', (string) ($f->getElementsByTagName('filename')->item(0)?->nodeValue ?? '')));
             if ($filename === '' || $filename === '.') { continue; } // skip directories
 
             $contenthash = (string) ($f->getElementsByTagName('contenthash')->item(0)?->nodeValue ?? '');

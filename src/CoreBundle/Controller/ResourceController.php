@@ -1259,23 +1259,24 @@ class ResourceController extends AbstractResourceController implements CourseCon
             || $request->query->has('learnpath_item_id')
             || ('learnpath' === $origin);
 
-        // Only inject for LP when the mode allows it
         if ($isLpContext) {
-            if (!\in_array($mode, ['true', 'lp', 'exercise_and_lp'], true)) {
+            if (!\in_array($mode, [
+                'true', 'lp', 'exercise_and_lp', 'document_and_lp', 'document_and_exercise_and_lp',
+            ], true)) {
                 return $content;
             }
-        } else {
-            // Do not inject in the standalone Documents tool (prevents unwanted highlights outside LP/exercises)
+        } elseif (!\in_array($mode, [
+            'document', 'document_and_exercise', 'document_and_lp', 'document_and_exercise_and_lp',
+        ], true)) {
             return $content;
         }
 
         $course = $this->getCourse();
         $session = $this->getSession();
 
-        $resourceNodeParentId = null;
-        if ($resourceNode && $resourceNode->getParent()) {
-            $resourceNodeParentId = $resourceNode->getParent()->getId();
-        }
+        // Glossary entries belong to the course, not to the document's folder.
+        $resourceNodeParentId = $course?->getResourceNode()?->getId()
+            ?? $resourceNode?->getParent()?->getId();
 
         $jsConfig = $this->renderView(
             '@ChamiloCore/Glossary/glossary_auto.html.twig',

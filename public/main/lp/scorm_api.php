@@ -429,21 +429,15 @@ function LMSInitialize() {
         <?php
         $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
         $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
-        $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
+        $showGlossary = in_array(
+            $glossaryExtraTools,
+            ['true', 'lp', 'exercise_and_lp', 'document_and_lp', 'document_and_exercise_and_lp'],
+            true
+        );
         if ($showGlossary) {
-            if ('ismanual' === api_get_setting('show_glossary_in_documents')) {
-                ?>
-                if (olms.lms_item_type == 'sco') {
-                    attach_glossary_into_scorm('automatic');
-                } else {
-                    attach_glossary_into_scorm('manual');
-                }
-                <?php
-            } elseif ('isautomatic' === api_get_setting('show_glossary_in_documents')) {
-                ?>
-                attach_glossary_into_scorm('automatic');
-            <?php
-            }
+            ?>
+            attach_glossary_into_scorm('automatic');
+        <?php
         }
         if ($fixLinkSetting) {
             ?>

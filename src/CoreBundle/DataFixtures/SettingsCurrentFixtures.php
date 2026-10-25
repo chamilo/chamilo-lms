@@ -1199,7 +1199,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'show_glossary_in_extra_tools',
                     'title' => 'Show the glossary terms in extra tools',
-                    'comment' => 'From here you can configure how to add the glossary terms in extra tools as learning path and exercice tool',
+                    'comment' => 'Select where glossary terms are highlighted automatically: documents, exercises and learning paths.',
                 ],
             ],
             'chat' => [

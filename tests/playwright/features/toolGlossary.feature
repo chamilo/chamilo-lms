@@ -124,6 +124,22 @@ Feature: Glossary tool
     And I wait for the page to be loaded
     Then I should not see an error
 
+  Scenario Outline: Select documents glossary modes in platform settings
+    Given I am on "/admin/settings/glossary"
+    And I wait for the page to be loaded
+    When I select "<mode>" from "form_show_glossary_in_extra_tools"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+    Then I should not see an error
+
+    Examples:
+      | mode                                  |
+      | None                                  |
+      | Documents                             |
+      | Documents and exercise                |
+      | Documents and learning path           |
+      | Documents, exercise and learning path |
+
   # @skip 2026-08-05: kept failing in real CI even after a real fix (an unbounded
   # `networkidle` wait in "I delete the learning path I just created", common.
   # steps.ts, was bounded — see that step's own comment). Confirmed passing

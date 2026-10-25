@@ -352,7 +352,10 @@ if (('course_select_form' === $action) ||
     }
 } elseif (isset($_POST['copy_option']) && 'select_items' == $_POST['copy_option']) {
     // Else, if a CourseSelectForm is requested, show it
-    if ('none' != api_get_setting('show_glossary_in_documents')) {
+    if (in_array(api_get_setting('glossary.show_glossary_in_extra_tools'), [
+        'true', '1', 'yes', 'exercise', 'lp', 'exercise_and_lp',
+        'document', 'document_and_exercise', 'document_and_lp', 'document_and_exercise_and_lp',
+    ], true)) {
         echo Display::return_message(
             get_lang('To export a document that has glossary terms with its references to the glossary, you have to make sure you include the glossary tool in the export'),
             'normal'

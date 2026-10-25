@@ -63,18 +63,21 @@ $showGlossary = false;
 
 switch ($glossaryExtraTools) {
     case 'exercise':
+    case 'document_and_exercise':
         // Only show in standalone exercises, not when launched from LP
         $showGlossary = ('learnpath' !== $origin);
 
         break;
 
     case 'lp':
+    case 'document_and_lp':
         // Only show when the exercise is launched from a learning path
         $showGlossary = ('learnpath' === $origin);
 
         break;
 
     case 'exercise_and_lp':
+    case 'document_and_exercise_and_lp':
     case 'true':
         // Show in both standalone exercises and LP context
         $showGlossary = true;

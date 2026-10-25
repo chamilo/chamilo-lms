@@ -695,7 +695,10 @@ if (Security::check_token('post') && (
     ]);
 
     // Notices for selective copy page (displayed below the back button).
-    if ('none' != api_get_setting('show_glossary_in_documents')) {
+    if (in_array(api_get_setting('glossary.show_glossary_in_extra_tools'), [
+        'true', '1', 'yes', 'exercise', 'lp', 'exercise_and_lp',
+        'document', 'document_and_exercise', 'document_and_lp', 'document_and_exercise_and_lp',
+    ], true)) {
         course_copy_push_notice(Display::return_message(
             get_lang('To export a document that has glossary terms with its references to the glossary, you have to make sure you include the glossary tool in the export'),
             'info'

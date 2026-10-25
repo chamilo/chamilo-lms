@@ -20,7 +20,7 @@
    *   [{ term: "AFP", definition: "..." }, ...]
    */
   function normalizeTermsPayload(data) {
-    let items = []
+    let items
 
     if (Array.isArray(data)) {
       items = data
@@ -39,16 +39,9 @@
           return null
         }
 
-        const term =
-          item.term ||
-          item.title ||
-          item.name ||
-          null
+        const term = item.term || item.title || item.name || null
 
-        const definition =
-          item.definition ||
-          item.description ||
-          ""
+        const definition = item.definition || item.description || ""
 
         if (!term) {
           return null
@@ -91,10 +84,7 @@
       params.append("sid", cfg.sessionId)
     }
 
-    const url =
-      cfg.termsEndpoint +
-      (cfg.termsEndpoint.includes("?") ? "&" : "?") +
-      params.toString()
+    const url = cfg.termsEndpoint + (cfg.termsEndpoint.includes("?") ? "&" : "?") + params.toString()
 
     try {
       const response = await fetch(url, {
@@ -133,19 +123,10 @@
             return NodeFilter.FILTER_REJECT
           }
 
-          const tagName = parent.nodeName.toLowerCase()
-
           if (
-            tagName === "script" ||
-            tagName === "style" ||
-            tagName === "noscript" ||
-            tagName === "textarea" ||
-            tagName === "iframe"
+            parent.closest &&
+            parent.closest(".glossary-term, a, button, input, select, textarea, script, style, noscript, iframe, svg")
           ) {
-            return NodeFilter.FILTER_REJECT
-          }
-
-          if (parent.classList && parent.classList.contains("glossary-term")) {
             return NodeFilter.FILTER_REJECT
           }
 
@@ -177,13 +158,19 @@
         return
       }
 
-      const term = String(item.term)
+      const term = String(item.term).trim()
+      if (term.length < 2) {
+        return
+      }
+
       const normalized = term.toLowerCase()
+      if (!map.has(normalized)) {
+        patternParts.push(term)
+      }
       map.set(normalized, {
         term,
         definition: item.definition || "",
       })
-      patternParts.push(escapeRegExp(term))
     })
 
     if (!patternParts.length) {
@@ -191,8 +178,13 @@
       return
     }
 
-    const pattern = "\\b(" + patternParts.join("|") + ")\\b"
-    const regex = new RegExp(pattern, "gi")
+    // Unicode-aware boundaries also match terms beginning or ending with accented letters.
+    // Match longer terms first when glossary entries overlap.
+    const pattern = patternParts
+      .sort((a, b) => b.length - a.length)
+      .map(escapeRegExp)
+      .join("|")
+    const regex = new RegExp(`(^|[^\\p{L}\\p{N}_])(${pattern})(?=$|[^\\p{L}\\p{N}_])`, "giu")
 
     console.log("[Glossary] Applying glossary with pattern:", regex)
 
@@ -210,13 +202,12 @@
       let match
 
       while ((match = regex.exec(text)) !== null) {
-        const matchText = match[0]
-        const index = match.index
+        const leadingText = match[1] || ""
+        const matchText = match[2] || ""
+        const index = match.index + leadingText.length
 
         if (index > lastIndex) {
-          fragment.appendChild(
-            document.createTextNode(text.slice(lastIndex, index)),
-          )
+          fragment.appendChild(document.createTextNode(text.slice(lastIndex, index)))
         }
 
         const normalized = matchText.toLowerCase()
@@ -246,8 +237,9 @@
       }
     })
 
-    if (window.jQuery && jQuery.fn && typeof jQuery.fn.qtip === "function") {
-      jQuery(".glossary-term[title]").qtip({
+    const jquery = window.jQuery
+    if (jquery && jquery.fn && typeof jquery.fn.qtip === "function") {
+      jquery(".glossary-term[title]").qtip({
         content: {
           attr: "title",
         },

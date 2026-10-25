@@ -2961,7 +2961,7 @@ function isEmbeddedInLearnpath() {
         referrer.includes("/main/newscorm/")
       )
     }
-  } catch (error) {
+  } catch {
     return (
       (document.referrer || "").includes("/resources/lp/") ||
       (document.referrer || "").includes("/main/lp/") ||
@@ -2989,10 +2989,10 @@ function syncLearnpathParentFromFinish(response) {
     return
   }
 
-  let parentWindow = null
+  let parentWindow
   try {
     parentWindow = window.parent && window.parent !== window ? window.parent : null
-  } catch (error) {
+  } catch {
     parentWindow = null
   }
 
@@ -5312,7 +5312,7 @@ function handleRuntimeContentClick(event) {
 }
 
 function scheduleRuntimeHtmlEnhancement() {
-  if (typeof document === "undefined") {
+  if (typeof document === "undefined" || isLoading.value) {
     return
   }
 
@@ -5394,6 +5394,12 @@ function wrapGlossaryTermsInContainer(container, expression, descriptions) {
     acceptNode(node) {
       const parent = node.parentElement
       if (!parent || parent.closest(".glossary-term, a, button, input, select, textarea, script, style, svg")) {
+        return NodeFilter.FILTER_REJECT
+      }
+
+      // Avoid revealing glossary terms in words still blurred by the reading timer.
+      const readingWord = parent.closest(".exercise-reading-word")
+      if (readingWord && !readingWord.classList.contains("exercise-reading-word-active")) {
         return NodeFilter.FILTER_REJECT
       }
 
@@ -5583,6 +5589,8 @@ watch(
 
 watch(
   () => [
+    isLoading.value,
+    readingProgress.value,
     currentQuestionIndex.value,
     reviewQueueIndex.value,
     isFeedbackDialogVisible.value,

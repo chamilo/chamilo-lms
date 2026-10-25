@@ -89,19 +89,12 @@ $buildContentPdfUrl = static function (int $targetLpId, array $itemIds = []) use
 $buildChamiloBackupUrl = static function (int $targetLpId) use ($qs): string {
     return api_get_path(WEB_PATH).'api/learning_paths/'.$targetLpId.'/chamilo-backup.zip?'.http_build_query($qs);
 };
-$glossaryExtraTools        = api_get_setting('glossary.show_glossary_in_extra_tools');
-$glossaryDocumentsMode     = api_get_setting('document.show_glossary_in_documents');
-$glossaryDocumentsEnabled  = in_array(
-    $glossaryDocumentsMode,
-    ['ismanual', 'isautomatic'],
+$glossaryExtraTools = api_get_setting('glossary.show_glossary_in_extra_tools');
+$showGlossary = in_array(
+    $glossaryExtraTools,
+    ['true', 'lp', 'exercise_and_lp', 'document_and_lp', 'document_and_exercise_and_lp'],
     true
 );
-
-$showGlossary = $glossaryDocumentsEnabled && in_array(
-        $glossaryExtraTools,
-        ['true', 'lp', 'exercise_and_lp'],
-        true
-    );
 
 if ($showGlossary) {
     $htmlHeadXtra[] = api_get_glossary_auto_snippet(

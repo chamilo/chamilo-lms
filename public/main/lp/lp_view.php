@@ -610,7 +610,9 @@ if ($fixLinkSetting) {
 }
 
 $template->assign('fix_link', $fixLink);
-$template->assign('glossary_tool_available_list', ['true', 'lp', 'exercise_and_lp']);
+$template->assign('glossary_tool_available_list', [
+    'true', 'lp', 'exercise_and_lp', 'document_and_lp', 'document_and_exercise_and_lp',
+]);
 
 // If the global gamification mode is enabled...
 $gamificationMode = api_get_setting('workflows.gamification_mode');
@@ -619,7 +621,6 @@ $gamificationMode = $gamificationMode && $lp->getSeriousgameMode();
 
 $template->assign('gamification_mode', $gamificationMode);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
-$template->assign('show_glossary_in_documents', api_get_setting('show_glossary_in_documents'));
 $template->assign('jquery_web_path', api_get_jquery_web_path());
 $template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());
 $template->assign('jquery_ui_css_web_path', api_get_jquery_ui_css_web_path());

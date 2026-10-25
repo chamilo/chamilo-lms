@@ -81,12 +81,7 @@ class TestQuestionDescription extends Basic
      */
     public function getConditionalPlugins()
     {
-        $plugins = [];
-        if ('ismanual' === api_get_setting('show_glossary_in_documents')) {
-            $plugins[] = 'glossary';
-        }
-
-        return $plugins;
+        return [];
     }
 
     /**

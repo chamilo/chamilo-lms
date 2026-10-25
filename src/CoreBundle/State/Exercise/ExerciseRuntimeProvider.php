@@ -739,9 +739,9 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         $isLearnpathContext = $this->isLearnpathRuntimeContext();
 
         return match ($value) {
-            'exercise' => !$isLearnpathContext,
-            'lp' => $isLearnpathContext,
-            'exercise_and_lp', 'true', '1', 'yes' => true,
+            'exercise', 'document_and_exercise' => !$isLearnpathContext,
+            'lp', 'document_and_lp' => $isLearnpathContext,
+            'exercise_and_lp', 'document_and_exercise_and_lp', 'true', '1', 'yes' => true,
             default => false,
         };
     }

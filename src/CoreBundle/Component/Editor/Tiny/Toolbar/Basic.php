@@ -29,10 +29,6 @@ class Basic extends Toolbar
         // Build the candidate list based on platform settings (we will filter by availability later)
         $candidates = [];
 
-        if ('ismanual' === api_get_setting('show_glossary_in_documents')) {
-            $candidates[] = 'glossary'; // custom; requires external plugin mapping or core file
-        }
-
         // IMPORTANT: 'youtube' removed to avoid 404; use TinyMCE 'media' for YouTube/Vimeo
         // $candidates[] = 'youtube';
 

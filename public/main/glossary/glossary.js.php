@@ -12,17 +12,18 @@ $tpl = new Template('', false, false, false, true, false, false);
 
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 
-if ('learnpath' == $origin) {
-    $showGlossary = in_array($glossaryExtraTools, ['lp', 'exercise_and_lp']);
+if ('learnpath' === $origin) {
+    $showGlossary = in_array($glossaryExtraTools, [
+        'lp', 'exercise_and_lp', 'document_and_lp', 'document_and_exercise_and_lp',
+    ], true);
 } else {
-    $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
+    $showGlossary = in_array($glossaryExtraTools, [
+        'true', 'lp', 'exercise_and_lp', 'document_and_lp', 'document_and_exercise_and_lp',
+    ], true);
 }
 
 if ($showGlossary) {
     $templateName = 'glossary/glossary_auto.js.tpl';
-    if ('ismanual' == api_get_setting('show_glossary_in_documents')) {
-        $templateName = 'glossary/glossary_manual.js.tpl';
-    }
 
     $addReady = isset($_GET['add_ready']) ? true : false;
     $tpl->assign('add_ready', $addReady);

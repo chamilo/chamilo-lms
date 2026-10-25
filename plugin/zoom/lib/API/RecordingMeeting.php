@@ -60,8 +60,8 @@ class RecordingMeeting
     /** @var RecordingFile[] List of recording file. */
     public $recording_files;
 
-	/** @var string|null Recording playback passcode. */
-	public $recording_play_passcode;
+    /** @var string|null Recording playback passcode. */
+    public $recording_play_passcode;
 
     /**
      * RecordingMeeting constructor.

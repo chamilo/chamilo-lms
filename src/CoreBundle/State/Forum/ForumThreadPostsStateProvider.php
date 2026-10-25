@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
+use Chamilo\CoreBundle\Helpers\ForumParticipationSettingsHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
@@ -73,6 +74,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         private readonly CidReqHelper $cidReqHelper,
         private readonly CourseFromRequestHelper $courseFromRequestHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
+        private readonly ForumParticipationSettingsHelper $participationSettings,
     ) {}
 
     /**
@@ -144,7 +146,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);
         $userPostCount = $this->countUserPostsInThread($this->entityManager, $thread, $user);
         $repliesHidden = 0 === $userPostCount
-            && $this->areThreadRepliesHiddenUntilParticipation($this->settingsManager, $this->security);
+            && $this->areThreadRepliesHiddenUntilParticipation($this->participationSettings, $this->security, $course);
 
         // The thread comes from the URL and the rights below are computed for the course in the
         // request, so the thread has to belong to that course — otherwise managing one course
@@ -168,31 +170,27 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             max(1, $request->query->getInt('itemsPerPage', self::DEFAULT_ITEMS_PER_PAGE)),
         );
 
-        // Until the user posts in the thread, only its opening post is returned.
-        $openingPostId = $repliesHidden ? $this->getOpeningPostId($thread, $forum, $canManage) : 0;
-
-        $totalItems = (int) $this->createPostsQueryBuilder($thread, $forum, $canManage, $openingPostId)
-            ->select('COUNT(p.iid)')
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
-        $totalPages = $totalItems > 0 ? (int) ceil($totalItems / $itemsPerPage) : 0;
         $isLearningPathContext = 'learnpath' === strtolower((string) $request->query->get('origin', ''));
+        // Inside a learning path, the latest posts come first, so that a learner sees their reply.
         $sortDirection = $isLearningPathContext ? 'DESC' : 'ASC';
 
-        $postIdRows = $this->createPostsQueryBuilder($thread, $forum, $canManage, $openingPostId)
-            ->select('p.iid')
-            ->orderBy('p.postDate', $sortDirection)
-            ->addOrderBy('p.iid', $sortDirection)
-            ->setFirstResult(($page - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage)
-            ->getQuery()
-            ->getArrayResult()
-        ;
-        $postIds = array_map(
-            static fn (array $row): int => (int) $row['iid'],
-            $postIdRows,
+        $ordering = $this->orderThreadPosts(
+            $thread,
+            $forum,
+            $canManage,
+            'DESC' === $sortDirection,
+            'flat' !== $this->getViewType($request, $forum),
+            $this->getMaxShownPosts($isLearningPathContext),
         );
+        $orderedPostIds = $ordering['postIds'];
+        // Until the user posts in the thread, only its opening post is returned.
+        if ($repliesHidden) {
+            $orderedPostIds = null === $ordering['openingPostId'] ? [] : [$ordering['openingPostId']];
+        }
+
+        $totalItems = \count($orderedPostIds);
+        $totalPages = $totalItems > 0 ? (int) ceil($totalItems / $itemsPerPage) : 0;
+        $postIds = \array_slice($orderedPostIds, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
         $posts = [];
         if ([] !== $postIds) {
@@ -202,21 +200,14 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                 ->leftJoin('p.attachments', 'a')
                 ->andWhere('p.iid IN (:postIds)')
                 ->setParameter('postIds', $postIds)
-                ->orderBy('p.postDate', $sortDirection)
-                ->addOrderBy('p.iid', $sortDirection)
                 ->getQuery()
                 ->getResult()
             ;
+            $positions = array_flip($postIds);
+            usort($posts, static fn (CForumPost $a, CForumPost $b): int => $positions[$a->getIid()] <=> $positions[$b->getIid()]);
         }
 
-        $firstPostId = 0;
-        if ([] !== $postIds) {
-            if (!$isLearningPathContext && 1 === $page) {
-                $firstPostId = $postIds[0];
-            } elseif ($isLearningPathContext && $page === $totalPages) {
-                $firstPostId = $postIds[array_key_last($postIds)];
-            }
-        }
+        $firstPostId = (int) $ordering['openingPostId'];
 
         $showPosterAvatar = $this->arePosterImagesAllowed($course);
         $lockedByGradebook = $this->isForumThreadLockedByGradebook(
@@ -227,7 +218,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         );
 
         return [
-            'forum' => $this->serializeForum($forum),
+            'forum' => $this->serializeForum($forum, $course),
             'thread' => [
                 ...$this->serializeThread(
                     $thread,
@@ -240,7 +231,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                     $group,
                 ),
                 'repliesHiddenUntilParticipation' => $repliesHidden,
-                'participationProgress' => $this->getParticipationProgress($userPostCount),
+                'participationProgress' => $this->getParticipationProgress($userPostCount, $course),
             ],
             'canReply' => $this->canReply($forum, $thread),
             'canManageThread' => $canManage,
@@ -256,6 +247,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
                     $session,
                     $group,
                     $firstPostId,
+                    $ordering['displayParentIds'][$post->getIid()] ?? null,
                 ),
                 $posts,
             ),
@@ -271,7 +263,6 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         CForumThread $thread,
         CForum $forum,
         bool $canManage,
-        int $onlyPostId = 0,
     ): QueryBuilder {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->from(CForumPost::class, 'p')
@@ -280,13 +271,6 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             ->setParameter('threadId', $thread->getIid(), Types::INTEGER)
             ->setParameter('forumId', $forum->getIid(), Types::INTEGER)
         ;
-
-        if ($onlyPostId > 0) {
-            $queryBuilder
-                ->andWhere('p.iid = :onlyPostId')
-                ->setParameter('onlyPostId', $onlyPostId, Types::INTEGER)
-            ;
-        }
 
         if (!$canManage) {
             $queryBuilder
@@ -300,29 +284,118 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         return $queryBuilder;
     }
 
-    private function getOpeningPostId(CForumThread $thread, CForum $forum, bool $canManage): int
-    {
+    /**
+     * The posts of the thread the user can see, in the order of the view, as Chamilo 1.11 shows them.
+     *
+     * The flat view lists them by date. The threaded and nested views walk the thread from its
+     * opening post (its oldest post) down to the replies of each post, each reply level sorted by
+     * date; a post whose parent is not shown (none, or a parent the user cannot see) is shown as a
+     * reply to the opening post. A maximum number of shown posts applies to each reply level of
+     * those views, and to the whole flat list, in the order of the view: the latest posts are kept
+     * when they come first.
+     *
+     * @return array{postIds: int[], openingPostId: int|null, displayParentIds: array<int, int|null>}
+     */
+    private function orderThreadPosts(
+        CForumThread $thread,
+        CForum $forum,
+        bool $canManage,
+        bool $latestFirst,
+        bool $asTree,
+        int $maxShownPosts,
+    ): array {
         $rows = $this->createPostsQueryBuilder($thread, $forum, $canManage)
-            ->select('p.iid')
+            ->select('p.iid', 'IDENTITY(p.postParent) AS parentId')
             ->orderBy('p.postDate', 'ASC')
             ->addOrderBy('p.iid', 'ASC')
-            ->setMaxResults(1)
             ->getQuery()
             ->getArrayResult()
         ;
+        $chronologicalIds = array_map(static fn (array $row): int => (int) $row['iid'], $rows);
+        $openingPostId = $chronologicalIds[0] ?? null;
 
-        return [] === $rows ? 0 : (int) $rows[0]['iid'];
+        if (!$asTree) {
+            $postIds = $latestFirst ? array_reverse($chronologicalIds) : $chronologicalIds;
+
+            return [
+                'postIds' => $maxShownPosts > 0 ? \array_slice($postIds, 0, $maxShownPosts) : $postIds,
+                'openingPostId' => $openingPostId,
+                'displayParentIds' => [],
+            ];
+        }
+
+        $shown = array_flip($chronologicalIds);
+        $displayParentIds = [];
+        $replies = [];
+        foreach ($rows as $row) {
+            $postId = (int) $row['iid'];
+            $parentId = null === $row['parentId'] ? null : (int) $row['parentId'];
+            if (null === $parentId || $parentId === $postId || !isset($shown[$parentId])) {
+                $parentId = $postId === $openingPostId ? null : $openingPostId;
+            }
+            $displayParentIds[$postId] = $parentId;
+            if (null !== $parentId) {
+                $replies[$parentId][] = $postId;
+            }
+        }
+
+        $postIds = [];
+        $visited = [];
+        $walk = function (int $postId) use (&$walk, &$postIds, &$visited, $replies, $latestFirst, $maxShownPosts): void {
+            $visited[$postId] = true;
+            $postIds[] = $postId;
+            $children = $replies[$postId] ?? [];
+            if ($latestFirst) {
+                $children = array_reverse($children);
+            }
+            if ($maxShownPosts > 0) {
+                $children = \array_slice($children, 0, $maxShownPosts);
+            }
+            foreach ($children as $childId) {
+                if (!isset($visited[$childId])) {
+                    $walk($childId);
+                }
+            }
+        };
+        if (null !== $openingPostId) {
+            $walk($openingPostId);
+        }
+
+        return ['postIds' => $postIds, 'openingPostId' => $openingPostId, 'displayParentIds' => $displayParentIds];
+    }
+
+    /**
+     * The view the posts are shown in: the one the user chose, or the default view of the forum.
+     */
+    private function getViewType(Request $request, CForum $forum): string
+    {
+        $view = (string) $request->query->get('view', '');
+        if (!\in_array($view, ['flat', 'threaded', 'nested'], true)) {
+            $view = (string) $forum->getDefaultView();
+        }
+
+        return \in_array($view, ['flat', 'threaded', 'nested'], true) ? $view : 'flat';
+    }
+
+    /**
+     * How many posts of a thread (or of each reply level) the user sees, 0 for all of them. Like
+     * Chamilo 1.11, platform administrators see every post, except inside a learning path.
+     */
+    private function getMaxShownPosts(bool $isLearningPathContext): int
+    {
+        if (!$isLearningPathContext && $this->security->isGranted('ROLE_ADMIN')) {
+            return 0;
+        }
+
+        return max(0, (int) $this->settingsManager->getSetting('forum.thread_max_posts_for_non_admins', true));
     }
 
     /**
      * @return array{postCount: int, requiredPosts: int, percent: int}|null
      */
-    private function getParticipationProgress(int $userPostCount): ?array
+    private function getParticipationProgress(int $userPostCount, Course $course): ?array
     {
-        $requiredPosts = max(
-            0,
-            (int) ($this->settingsManager->getSetting('forum.thread_participation_progress_posts', true) ?? 0),
-        );
+        $requiredPosts = $this->participationSettings->getProgressRequiredPosts($course);
 
         if (0 === $requiredPosts || $this->isTeacher($this->security)) {
             return null;
@@ -408,7 +481,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function serializeForum(CForum $forum): array
+    private function serializeForum(CForum $forum, Course $course): array
     {
         return [
             'iid' => $forum->getIid(),
@@ -423,16 +496,16 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'startTime' => $this->formatDate($forum->getStartTime()),
             'endTime' => $this->formatDate($forum->getEndTime()),
             'availabilityStatus' => $this->getForumAvailabilityStatus($forum),
-            'category' => $this->serializeCategoryDescription($forum),
+            'category' => $this->serializeCategoryDescription($forum, $course),
         ];
     }
 
     /**
      * @return array{title: string, comment: string}|null
      */
-    private function serializeCategoryDescription(CForum $forum): ?array
+    private function serializeCategoryDescription(CForum $forum, Course $course): ?array
     {
-        if ('true' !== $this->settingsManager->getSetting('forum.show_category_description_in_thread', true)) {
+        if (!$this->participationSettings->isCategoryDescriptionShown($course)) {
             return null;
         }
 
@@ -511,6 +584,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         ?Session $session,
         ?CGroup $group,
         int $firstPostId,
+        ?int $displayParentId,
     ): array {
         $canEdit = !$lockedByGradebook && $this->canEditPost($post, $forum, $thread, $canManage);
         $canModerate = $canManage && !$lockedByGradebook;
@@ -553,6 +627,8 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
             'createdAtTimestamp' => $postDate?->getTimestamp(),
             'postRelativeTime' => $this->formatRelativeTimeLabel($postDate),
             'postParentId' => $post->getPostParent()?->getIid(),
+            // The post the threaded and nested views show this post under.
+            'displayParentId' => $displayParentId,
             'visible' => $post->getVisible(),
             'status' => $status,
             'statusLabel' => $this->getPostStatusLabel($status),

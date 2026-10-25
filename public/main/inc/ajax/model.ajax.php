@@ -1785,6 +1785,10 @@ switch ($action) {
             'status',
             'actions',
         ];
+        if ('true' === api_get_setting('tracking.hide_ip_address')
+            || 'true' === api_get_setting('exercise.exercise_hide_ip')) {
+            $columns = array_values(array_diff($columns, ['user_ip']));
+        }
         $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
         if ('true' === $officialCodeInList) {
             $columns = array_merge(['official_code'], $columns);
@@ -1832,7 +1836,11 @@ switch ($action) {
                 'lp',
                 'actions',
             ];
-            $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
+            if ('true' === api_get_setting('tracking.hide_ip_address')
+            || 'true' === api_get_setting('exercise.exercise_hide_ip')) {
+            $columns = array_values(array_diff($columns, ['user_ip']));
+        }
+        $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
             if ('true' === $officialCodeInList) {
                 $columns = array_merge(['official_code'], $columns);
             }

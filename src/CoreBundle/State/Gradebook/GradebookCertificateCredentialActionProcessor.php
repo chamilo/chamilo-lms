@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateSepoliaVerifier;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTimeImmutable;
 use DateTimeZone;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -128,7 +129,7 @@ final readonly class GradebookCertificateCredentialActionProcessor implements Pr
                     ->select('COUNT(p.id)')
                     ->from(GradebookCertificateCredential::class, 'p')
                     ->where('p.anchoredAt >= :today')
-                    ->setParameter('today', $today)
+                    ->setParameter('today', $today, Types::DATETIME_IMMUTABLE)
                     ->getQuery()->getSingleScalarResult()
                 ;
                 if ($anchorCount >= 5) {

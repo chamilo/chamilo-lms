@@ -209,6 +209,7 @@
         </template>
       </Column>
       <Column
+        v-if="attempts.some((attempt) => attempt.ip)"
         :header="t('IP')"
         field="ip"
       >

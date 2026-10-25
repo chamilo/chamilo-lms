@@ -124,6 +124,11 @@
         </p>
       </BaseCard>
     </div>
+
+    <RoomFloorPlanViewer
+      v-if="courseId"
+      :course-id="courseId"
+    />
   </section>
 </template>
 
@@ -139,6 +144,7 @@ import courseDescriptionService from "../../services/courseDescriptionService"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import RoomFloorPlanViewer from "../../components/room/RoomFloorPlanViewer.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -153,6 +159,7 @@ const successMessage = ref("")
 const canManage = ref(false)
 const types = ref([])
 const deletingId = ref(null)
+const courseId = ref(null)
 
 const descriptionTypeLabels = {
   1: "Description",
@@ -195,7 +202,6 @@ function getContextParams() {
   if (gid > 0) {
     params.gid = gid
   }
-
 
   return params
 }
@@ -294,12 +300,15 @@ async function loadDescriptions() {
   errorMessage.value = ""
   actionErrorMessage.value = ""
   successMessage.value = ""
+  courseId.value = null
 
   try {
     const response = await courseDescriptionService.getList(getContextParams())
     descriptions.value = Array.isArray(response.items) ? response.items : []
     canManage.value = Boolean(response.canManage)
     types.value = Array.isArray(response.types) ? response.types : []
+    // Reuse the authorized course ID returned by the description provider.
+    courseId.value = Number(response.courseId) || null
   } catch (error) {
     console.error("Error loading course descriptions", error)
     errorMessage.value =

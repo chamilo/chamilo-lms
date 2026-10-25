@@ -31,6 +31,9 @@ parameters:
     # to store sessions in the shared php_session table instead.
     env(SESSION_STORED_IN_DB): '0'
     chamilo.session.stored_in_db: '%env(bool:SESSION_STORED_IN_DB)%'
+    # Ed25519 issuer key of signed certificate credentials and official transcripts.
+    # Outside public/ and to be backed up: losing it loses the institution identity.
+    chamilo.certificate_issuer_dir: '%kernel.project_dir%/var/certificate-issuer'
     .container.dumper.inline_factories: true
     twig:
         form:

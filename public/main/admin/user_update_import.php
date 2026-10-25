@@ -108,6 +108,12 @@ function updateUsers(
             }
 
             $user_id = $userInfo['user_id'];
+
+            // Skip accounts the current user is not allowed to edit (e.g. a global admin).
+            if (!api_global_admin_can_edit_admin($user_id, null, true)) {
+                continue;
+            }
+
             $firstName = isset($user['FirstName']) ? $user['FirstName'] : $userInfo['firstname'];
             $lastName = isset($user['LastName']) ? $user['LastName'] : $userInfo['lastname'];
             $userName = isset($user['NewUserName']) ? $user['NewUserName'] : $userInfo['username'];

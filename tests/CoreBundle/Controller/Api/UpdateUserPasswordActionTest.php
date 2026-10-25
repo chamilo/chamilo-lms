@@ -133,6 +133,37 @@ class UpdateUserPasswordActionTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testPlainAdminCannotEditAGlobalAdmin(): void
+    {
+        $client = static::createClient();
+        $root = $this->getAccessUrl();
+
+        $plainAdmin = $this->createUserOnUrl('update_pwd_plain_root_admin_'.uniqid(), $root, 'ROLE_ADMIN');
+        $globalAdmin = $this->createUserOnUrl('update_pwd_global_target_'.uniqid(), $root, 'ROLE_GLOBAL_ADMIN');
+
+        $client->loginUser($plainAdmin);
+
+        $this->patchJson($client, '/api/users/'.$globalAdmin->getId().'/password', ['password' => 'Brand-New-Pass-1!']);
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->patchJson($client, '/api/users/'.$globalAdmin->getId(), ['email' => 'changed_'.uniqid().'@example.com']);
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testUnrestrictedGlobalAdminCanResetPasswordOfAnotherGlobalAdmin(): void
+    {
+        $client = static::createClient();
+        $root = $this->getAccessUrl();
+
+        $rootGlobalAdmin = $this->createUserOnUrl('update_pwd_root_global_'.uniqid(), $root, 'ROLE_GLOBAL_ADMIN');
+        $otherGlobalAdmin = $this->createUserOnUrl('update_pwd_other_global_'.uniqid(), $root, 'ROLE_GLOBAL_ADMIN');
+
+        $client->loginUser($rootGlobalAdmin);
+        $this->patchJson($client, '/api/users/'.$otherGlobalAdmin->getId().'/password', ['password' => 'Brand-New-Pass-1!']);
+
+        $this->assertResponseIsSuccessful();
+    }
+
     public function testUserCanAlwaysResetTheirOwnPasswordViaDedicatedEndpoint(): void
     {
         $client = static::createClient();

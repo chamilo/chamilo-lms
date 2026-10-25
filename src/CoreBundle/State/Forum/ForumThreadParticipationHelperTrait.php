@@ -6,8 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State\Forum;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\ForumParticipationSettingsHelper;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Doctrine\DBAL\Types\Types;
@@ -20,12 +21,16 @@ use Symfony\Bundle\SecurityBundle\Security;
 trait ForumThreadParticipationHelperTrait
 {
     /**
-     * Whether the current user only sees the first post of a thread until they posted in it.
-     * Admins, teachers, session coaches and group tutors moderate the forum, so they are never restricted.
+     * Whether the current user only sees the first post of the threads of this course until they
+     * posted in them. Admins, teachers, session coaches and group tutors moderate the forum, so they
+     * are never restricted.
      */
-    private function areThreadRepliesHiddenUntilParticipation(SettingsManager $settingsManager, Security $security): bool
-    {
-        if ('true' !== $settingsManager->getSetting('forum.show_thread_replies_after_participation', true)) {
+    private function areThreadRepliesHiddenUntilParticipation(
+        ForumParticipationSettingsHelper $participationSettings,
+        Security $security,
+        Course $course,
+    ): bool {
+        if (!$participationSettings->areRepliesHiddenUntilParticipation($course)) {
             return false;
         }
 

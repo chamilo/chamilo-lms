@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -23,11 +24,196 @@ use DateTime;
  * others: with forum.show_thread_replies_after_participation, a learner only gets the opening
  * post of a thread until they posted in it, from every endpoint that returns post content. The
  * people who moderate the forum always read everything. forum.thread_participation_progress_posts
- * tells learners how far they are from the number of posts expected in a thread.
+ * tells learners how far they are from the number of posts expected in a thread. When the platform
+ * allows it (forum.forum_participation_can_be_modified_in_course), a course turns these settings on
+ * or off for itself, so that they apply to some courses only.
  */
 final class ForumThreadParticipationTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
+
+    /**
+     * The expectations below depend on these settings, so they must not come from the configuration
+     * of the database the tests run on. A test changes them after this.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->updateSetting('forum.show_thread_replies_after_participation', 'false');
+        $this->updateSetting('forum.show_category_description_in_thread', 'false');
+        $this->updateSetting('forum.thread_participation_progress_posts', '0');
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'false');
+        $this->updateSetting('forum.thread_max_posts_for_non_admins', '0');
+    }
+
+    /**
+     * Inside a learning path, Chamilo 1.11 showed the opening post first, then the latest replies of
+     * each level, so that a learner sees their reply right under the opening post. A post without a
+     * shown parent goes under the opening post.
+     */
+    public function testLearningPathShowsTheOpeningPostThenTheLatestReplies(): void
+    {
+        $ctx = $this->bootstrapTreeScenario('lptree');
+        $learningPath = '&origin=learnpath&view=nested';
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx, $learningPath);
+        $this->assertSame(
+            ['Opening question lptree', 'Learner answer lptree', 'Classmate answer lptree', 'Teacher answer lptree', 'Reply to teacher lptree'],
+            $this->getPostTitles($data),
+        );
+        $displayParents = array_column($data['posts'], 'displayParentId', 'title');
+        $this->assertSame($ctx['opening']->getIid(), $displayParents['Classmate answer lptree'], 'A post without parent goes under the opening post.');
+
+        $this->assertSame(
+            ['Opening question lptree', 'Teacher answer lptree', 'Reply to teacher lptree', 'Classmate answer lptree', 'Learner answer lptree'],
+            $this->getPostTitles($this->getThreadPosts($ctx['learner'], $ctx, '&view=nested')),
+        );
+    }
+
+    /**
+     * The limit applies to each reply level, in the order of the view: inside a learning path it
+     * keeps the latest replies, for administrators too, as Chamilo 1.11 did for Ricky Rescue.
+     */
+    public function testPostLimitKeepsTheLatestRepliesInsideALearningPath(): void
+    {
+        $this->updateSetting('forum.thread_max_posts_for_non_admins', '2');
+        $ctx = $this->bootstrapTreeScenario('lplimit');
+        $admin = $this->createUser('forum_part_admin_lplimit', '', '', 'ROLE_ADMIN');
+
+        foreach ([$ctx['learner'], $admin] as $user) {
+            $this->assertSame(
+                ['Opening question lplimit', 'Learner answer lplimit', 'Classmate answer lplimit'],
+                $this->getPostTitles($this->getThreadPosts($user, $ctx, '&origin=learnpath&view=nested')),
+            );
+        }
+
+        $this->assertSame(
+            ['Opening question lplimit', 'Teacher answer lplimit', 'Reply to teacher lplimit', 'Classmate answer lplimit'],
+            $this->getPostTitles($this->getThreadPosts($ctx['learner'], $ctx, '&view=nested')),
+        );
+        $this->assertCount(5, $this->getThreadPosts($admin, $ctx, '&view=nested')['posts'], 'Outside a learning path, administrators see every post.');
+    }
+
+    /**
+     * Ricky Rescue only showed the first 49 posts of a thread to everyone but platform administrators.
+     */
+    public function testOnlyPlatformAdministratorsSeeThePostsBeyondTheLimit(): void
+    {
+        $this->updateSetting('forum.thread_max_posts_for_non_admins', '2');
+        $ctx = $this->bootstrapScenario('postlimit');
+        $this->createPost($ctx, $ctx['learner'], 'Learner answer postlimit', CForumPost::STATUS_VALIDATED);
+        $admin = $this->createUser('forum_part_admin_postlimit', '', '', 'ROLE_ADMIN');
+
+        foreach ([$ctx['learner'], $ctx['teacher']] as $user) {
+            $data = $this->getThreadPosts($user, $ctx);
+            $this->assertSame(['Opening question postlimit', 'Classmate answer postlimit'], $this->getPostTitles($data));
+            $this->assertSame(2, $data['totalItems']);
+        }
+
+        $this->assertSame(
+            ['Opening question postlimit', 'Classmate answer postlimit', 'Learner answer postlimit'],
+            $this->getPostTitles($this->getThreadPosts($admin, $ctx)),
+        );
+    }
+
+    public function testCourseTurnsOnTheRestrictionThePlatformLeavesOff(): void
+    {
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'true');
+        $ctx = $this->bootstrapScenario('courseon');
+        $this->setCourseSetting($ctx, 'show_thread_replies_after_participation', 'true');
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx);
+
+        $this->assertSame(['Opening question courseon'], $this->getPostTitles($data));
+        $this->assertTrue($data['thread']['repliesHiddenUntilParticipation']);
+    }
+
+    public function testCourseTurnsOffTheRestrictionThePlatformTurnsOn(): void
+    {
+        $this->updateSetting('forum.show_thread_replies_after_participation', 'true');
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'true');
+        $ctx = $this->bootstrapScenario('courseoff');
+        $this->setCourseSetting($ctx, 'show_thread_replies_after_participation', 'false');
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx);
+
+        $this->assertSame(['Opening question courseoff', 'Classmate answer courseoff'], $this->getPostTitles($data));
+    }
+
+    public function testCourseWithoutChoiceFollowsThePlatform(): void
+    {
+        $this->updateSetting('forum.show_thread_replies_after_participation', 'true');
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'true');
+        $ctx = $this->bootstrapScenario('coursedefault');
+        $this->setCourseSetting($ctx, 'show_thread_replies_after_participation', '');
+
+        $this->assertSame(['Opening question coursedefault'], $this->getPostTitles($this->getThreadPosts($ctx['learner'], $ctx)));
+    }
+
+    public function testCourseChoiceIsIgnoredWhenCoursesCannotOverrideThePlatform(): void
+    {
+        $ctx = $this->bootstrapScenario('courseignored');
+        $this->setCourseSetting($ctx, 'show_thread_replies_after_participation', 'true');
+        $this->setCourseSetting($ctx, 'thread_participation_progress_posts', '2');
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx);
+
+        $this->assertSame(['Opening question courseignored', 'Classmate answer courseignored'], $this->getPostTitles($data));
+        $this->assertNull($data['thread']['participationProgress']);
+    }
+
+    public function testCourseSetsTheProgressBarAndTheCategoryDescription(): void
+    {
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'true');
+        $ctx = $this->bootstrapScenario('courseextras');
+        $this->setCourseSetting($ctx, 'thread_participation_progress_posts', '3');
+        $this->setCourseSetting($ctx, 'show_category_description_in_thread', 'true');
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx);
+
+        $this->assertSame(3, $data['thread']['participationProgress']['requiredPosts']);
+        $this->assertSame('Category courseextras', $data['forum']['category']['title']);
+    }
+
+    public function testTeacherChoosesTheForumParticipationSettingsOfTheirCourse(): void
+    {
+        $this->updateSetting('forum.forum_participation_can_be_modified_in_course', 'true');
+        $ctx = $this->bootstrapScenario('teacherset');
+        $courseSettingsUrl = '/api/course-settings?cid='.$ctx['course']->getId();
+
+        $teacher = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']));
+        $response = $teacher->request('GET', $courseSettingsUrl);
+        $this->assertResponseIsSuccessful();
+        $this->assertContains('show_thread_replies_after_participation', $this->getFieldKeys($response->toArray(), 'forum'));
+
+        $teacher->request('POST', $courseSettingsUrl, ['json' => ['values' => [
+            'show_thread_replies_after_participation' => 'true',
+            'thread_participation_progress_posts' => '2',
+        ]]]);
+        $this->assertResponseIsSuccessful();
+
+        $data = $this->getThreadPosts($ctx['learner'], $ctx);
+        $this->assertSame(['Opening question teacherset'], $this->getPostTitles($data));
+        $this->assertSame(2, $data['thread']['participationProgress']['requiredPosts']);
+
+        $teacher = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']));
+        $teacher->request('POST', $courseSettingsUrl, ['json' => ['values' => [
+            'thread_participation_progress_posts' => 'two',
+        ]]]);
+        $this->assertResponseStatusCodeSame(400);
+    }
+
+    public function testCourseSettingsHideTheChoiceWhenCoursesCannotOverrideThePlatform(): void
+    {
+        $ctx = $this->bootstrapScenario('coursehidden');
+
+        $teacher = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']));
+        $response = $teacher->request('GET', '/api/course-settings?cid='.$ctx['course']->getId());
+        $this->assertResponseIsSuccessful();
+
+        $this->assertNotContains('show_thread_replies_after_participation', $this->getFieldKeys($response->toArray(), 'forum'));
+    }
 
     public function testLearnerOnlyReadsTheOpeningPostUntilTheyPost(): void
     {
@@ -139,6 +325,57 @@ final class ForumThreadParticipationTest extends AbstractApiTest
         $this->assertNull($this->getThreadPosts($ctx['learner'], $ctx)['forum']['category']);
     }
 
+    /**
+     * The opening post, a reply of the teacher to it and a reply to that reply, the classmate answer
+     * left without parent (as a post migrated from Chamilo 1.11 can be), and the latest reply of the
+     * learner to the opening post.
+     *
+     * @return array<string, mixed>
+     */
+    private function bootstrapTreeScenario(string $suffix): array
+    {
+        $ctx = $this->bootstrapScenario($suffix);
+        $ctx['opening'] = $this->getEntityManager()->getRepository(CForumPost::class)->findOneBy(['title' => 'Opening question '.$suffix]);
+        $teacherAnswer = $this->createPost($ctx, $ctx['teacher'], 'Teacher answer '.$suffix, CForumPost::STATUS_VALIDATED, 'Answer', '-90 minutes', $ctx['opening']);
+        $this->createPost($ctx, $ctx['learner'], 'Reply to teacher '.$suffix, CForumPost::STATUS_VALIDATED, 'Answer', '-30 minutes', $teacherAnswer);
+        $this->createPost($ctx, $ctx['learner'], 'Learner answer '.$suffix, CForumPost::STATUS_VALIDATED, 'Answer', 'now', $ctx['opening']);
+
+        return $ctx;
+    }
+
+    /**
+     * @param array<string, mixed> $ctx
+     */
+    private function setCourseSetting(array $ctx, string $variable, string $value): void
+    {
+        $em = $this->getEntityManager();
+        $em->persist(
+            (new CCourseSetting())
+                ->setCId((int) $ctx['course']->getId())
+                ->setVariable($variable)
+                ->setTitle($variable)
+                ->setCategory('forum')
+                ->setValue($value)
+        );
+        $em->flush();
+    }
+
+    /**
+     * @param array<string, mixed> $configuration
+     *
+     * @return string[]
+     */
+    private function getFieldKeys(array $configuration, string $sectionKey): array
+    {
+        foreach ($configuration['sections'] as $section) {
+            if ($sectionKey === $section['key']) {
+                return array_column($section['fields'], 'key');
+            }
+        }
+
+        return [];
+    }
+
     private function updateSetting(string $name, string $value): void
     {
         self::getContainer()->get(SettingsManager::class)->updateSetting($name, $value);
@@ -149,12 +386,12 @@ final class ForumThreadParticipationTest extends AbstractApiTest
      *
      * @return array<string, mixed>
      */
-    private function getThreadPosts(User $user, array $ctx): array
+    private function getThreadPosts(User $user, array $ctx, string $query = ''): array
     {
         $client = $this->createClientWithCredentials($this->getUserTokenFromUser($user));
         $response = $client->request(
             'GET',
-            '/api/forum_threads/'.$ctx['thread']->getIid().'/posts?forumId='.$ctx['forum']->getIid().'&cid='.$ctx['course']->getId(),
+            '/api/forum_threads/'.$ctx['thread']->getIid().'/posts?forumId='.$ctx['forum']->getIid().'&cid='.$ctx['course']->getId().$query,
         );
         $this->assertResponseIsSuccessful();
 
@@ -263,6 +500,7 @@ final class ForumThreadParticipationTest extends AbstractApiTest
         int $status,
         string $text = 'Answer',
         string $date = 'now',
+        ?CForumPost $parent = null,
     ): CForumPost {
         $em = $this->getEntityManager();
 
@@ -280,6 +518,7 @@ final class ForumThreadParticipationTest extends AbstractApiTest
             ->setVisible(CForumPost::STATUS_VALIDATED === $status)
             ->setStatus($status)
             ->setParent($thread)
+            ->setPostParent(null === $parent ? null : $em->getReference(CForumPost::class, $parent->getIid()))
             ->addCourseLink($em->getReference(Course::class, $ctx['course']->getId()))
         ;
         $em->persist($post);

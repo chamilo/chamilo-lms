@@ -209,7 +209,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
 
         // Asserts that the returned content type is JSON-LD (the default)
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
 
         // Asserts that the returned JSON is a superset of this one
         $this->assertJsonContains([
@@ -254,7 +254,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains([
             '@context' => '/api/contexts/CToolIntro',
             '@type' => 'CToolIntro',
@@ -319,7 +319,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
         );
 
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains([
             '@context' => '/api/contexts/CToolIntro',
             '@type' => 'CToolIntro',

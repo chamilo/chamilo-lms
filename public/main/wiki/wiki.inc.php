@@ -2549,7 +2549,7 @@ final class WikiManager
                 if ($ui !== false) {
                     echo UserManager::getUserProfileLink($ui);
                 } else {
-                    echo $username.' ('.api_htmlentities((string)$w->getUserIp()).')';
+                    echo $username.('true' === api_get_setting('tracking.hide_ip_address') ? '' : ' ('.api_htmlentities((string)$w->getUserIp()).')');
                 }
                 echo ' ( '.get_lang('Progress').': '.api_htmlentities((string)$w->getProgress()).'%, ';
                 echo get_lang('Comments').': '.$commentShort.$needsDots.' )';
@@ -3323,7 +3323,7 @@ final class WikiManager
             $ui = api_get_user_info((int)$obj->getUserId());
             $authorCell = $ui
                 ? UserManager::getUserProfileLink($ui)
-                : get_lang('Anonymous').' ('.$obj->getUserIp().')';
+                : get_lang('Anonymous').('true' === api_get_setting('tracking.hide_ip_address') ? '' : ' ('.$obj->getUserIp().')');
 
             $icon = '';
             if ((int)$obj->getAssignment() === 1) {
@@ -3922,7 +3922,7 @@ final class WikiManager
 
             $authorPack = json_encode([
                 'userId' => (int) $w->getUserId(),
-                'ip'     => (string) $w->getUserIp(),
+                'ip'     => 'true' === api_get_setting('tracking.hide_ip_address') ? '' : (string) $w->getUserIp(),
             ], JSON_UNESCAPED_UNICODE);
 
             $rows[] = [
@@ -4404,7 +4404,7 @@ final class WikiManager
         if ($ui !== false) {
             return UserManager::getUserProfileLink($ui);
         }
-        return get_lang('Anonymous').' ('.api_htmlentities($userIp).')';
+        return get_lang('Anonymous').('true' === api_get_setting('tracking.hide_ip_address') ? '' : ' ('.api_htmlentities($userIp).')');
     }
 
     /** Course-wide watchers toggle for "Recent Changes". Returns 1 if subscribed, else 0 (and processes GET toggles). */
@@ -5266,7 +5266,7 @@ final class WikiManager
             $userinfo = api_get_user_info($w->getUserId());
             $author   = $userinfo !== false
                 ? UserManager::getUserProfileLink($userinfo)
-                : get_lang('Anonymous').' ('.api_htmlentities((string)$w->getUserIp()).')';
+                : get_lang('Anonymous').('true' === api_get_setting('tracking.hide_ip_address') ? '' : ' ('.api_htmlentities((string)$w->getUserIp()).')');
 
             $rows[] = [
                 self::assignmentIcon((int)$w->getAssignment()),
@@ -5462,7 +5462,7 @@ final class WikiManager
                     $userInfo['complete_name_with_username'],
                     $this->wikiUrl(['action' => 'usercontrib', 'user_id' => $userId])
                 )
-                : get_lang('Anonymous').' ('.api_htmlentities($userIp).')';
+                : get_lang('Anonymous').('true' === api_get_setting('tracking.hide_ip_address') ? '' : ' ('.api_htmlentities($userIp).')');
 
             $rows[] = [
                 $authorCell,

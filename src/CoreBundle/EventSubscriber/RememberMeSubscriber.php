@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
+use Chamilo\CoreBundle\Security\RememberMeLifetime;
 use DateTime;
 use DateTimeImmutable;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -29,12 +30,6 @@ final class RememberMeSubscriber implements EventSubscriberInterface
 {
     private const string COOKIE_NAME = 'ch_remember_me';
 
-    /**
-     * Extended session lifetime (seconds).
-     * 14 days = 14 * 24 * 60 * 60 = 1209600.
-     */
-    private const int TTL_SECONDS = 1209600;
-
     // Toggle to debug quickly via PHP error log.
     private const bool DEBUG = false;
 
@@ -44,6 +39,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
         private readonly TokenStorageInterface $tokenStorage,
         private readonly SessionAuthenticationStrategyInterface $sessionStrategy,
         private readonly string $appSecret,
+        private readonly RememberMeLifetime $rememberMeLifetime,
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -67,11 +63,16 @@ final class RememberMeSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (!$this->isRememberMeRequested($request)) {
+        if (!$this->isRememberMeRequested($request) || !$this->isRequestSecure($request)) {
             return;
         }
 
-        $secure = $this->isRequestSecure($request);
+        $ttlSeconds = $this->rememberMeLifetime->getSeconds();
+        if (0 === $ttlSeconds) {
+            return;
+        }
+
+        $secure = true;
 
         $userId = (int) $user->getId();
         $raw = $this->generateRawToken();
@@ -84,7 +85,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
         $tokenEntity = new ValidationToken(ValidationTokenHelper::TYPE_REMEMBER_ME, $userId, $hash);
         $this->tokenRepository->save($tokenEntity, true);
 
-        $expiresAt = (new DateTimeImmutable())->modify('+'.self::TTL_SECONDS.' seconds');
+        $expiresAt = (new DateTimeImmutable())->modify('+'.$ttlSeconds.' seconds');
         $event->getResponse()->headers->setCookie($this->makeRememberMeCookie($cookieValue, $expiresAt, $secure));
 
         $this->debug('Issued remember-me cookie on login success', [
@@ -118,6 +119,13 @@ final class RememberMeSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $ttlSeconds = $this->rememberMeLifetime->getSeconds();
+        if (0 === $ttlSeconds || !$this->isRequestSecure($request)) {
+            $request->attributes->set('_remember_me_clear', true);
+
+            return;
+        }
+
         $parsed = $this->parseCookieValue($cookieValue);
         if (null === $parsed) {
             $request->attributes->set('_remember_me_clear', true);
@@ -131,7 +139,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
         $hash = hash('sha256', $rawToken);
 
         // Opportunistic cleanup.
-        $cutoff = (new DateTimeImmutable())->modify('-'.self::TTL_SECONDS.' seconds');
+        $cutoff = (new DateTimeImmutable())->modify('-'.$ttlSeconds.' seconds');
         $this->tokenRepository->deleteExpiredRememberMeTokens($cutoff);
 
         $tokenEntity = $this->tokenRepository->findRememberMeToken($userId, $hash);
@@ -142,7 +150,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($this->isExpired($tokenEntity)) {
+        if ($this->isExpired($tokenEntity, $ttlSeconds)) {
             $this->tokenRepository->remove($tokenEntity, true);
             $request->attributes->set('_remember_me_clear', true);
             $this->debug('Remember-me token expired', ['userId' => $userId]);
@@ -232,6 +240,13 @@ final class RememberMeSubscriber implements EventSubscriberInterface
         $userId = (int) ($rotate['userId'] ?? 0);
         $newHash = (string) ($rotate['newHash'] ?? '');
         $newCookie = (string) ($rotate['newCookie'] ?? '');
+        $ttlSeconds = $this->rememberMeLifetime->getSeconds();
+
+        if (0 === $ttlSeconds || !$secure) {
+            $response->headers->setCookie($this->makeExpiredCookie($secure));
+
+            return;
+        }
 
         if ($oldId <= 0 || $userId <= 0 || '' === $newHash || '' === $newCookie) {
             return;
@@ -243,7 +258,7 @@ final class RememberMeSubscriber implements EventSubscriberInterface
 
         $this->tokenRepository->deleteRememberMeTokenById($oldId);
 
-        $expiresAt = (new DateTimeImmutable())->modify('+'.self::TTL_SECONDS.' seconds');
+        $expiresAt = (new DateTimeImmutable())->modify('+'.$ttlSeconds.' seconds');
         $response->headers->setCookie($this->makeRememberMeCookie($newCookie, $expiresAt, $secure));
     }
 
@@ -282,11 +297,11 @@ final class RememberMeSubscriber implements EventSubscriberInterface
             || str_starts_with($path, '/_profiler');
     }
 
-    private function isExpired(ValidationToken $token): bool
+    private function isExpired(ValidationToken $token, int $ttlSeconds): bool
     {
         $createdTs = $token->getCreatedAt()->getTimestamp();
 
-        return ($createdTs + self::TTL_SECONDS) < time();
+        return ($createdTs + $ttlSeconds) < time();
     }
 
     private function guessFirewallName(Request $request): string
@@ -381,14 +396,8 @@ final class RememberMeSubscriber implements EventSubscriberInterface
 
     private function isRequestSecure(Request $request): bool
     {
-        if ($request->isSecure()) {
-            return true;
-        }
-
-        // Helps when behind a reverse proxy and trusted proxies aren't configured.
-        $xfp = strtolower((string) $request->headers->get('x-forwarded-proto', ''));
-
-        return str_contains($xfp, 'https');
+        // Symfony trusts forwarded scheme only when the reverse proxy is configured.
+        return $request->isSecure();
     }
 
     private function debug(string $message, array $context = []): void

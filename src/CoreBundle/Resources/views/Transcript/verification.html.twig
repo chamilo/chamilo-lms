@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="{{ app.request.locale|default('en')|slice(0, 2) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ 'Transcript verification'|trans }}</title>
+    <style>
+        :root { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #18324d; background: #f4f7fb; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body { margin: 0; line-height: 1.5; }
+        a { color: #0e5d93; }
+        .shell { width: min(100% - 32px, 900px); margin: 0 auto; }
+        main { padding: 48px 0 64px; }
+        h1 { margin: 0 0 8px; font-size: 2rem; color: #102c46; }
+        .lead { margin: 0 0 24px; color: #63758a; }
+        .panel { background: #fff; border: 1px solid #dce5ed; border-radius: 12px; overflow: hidden; }
+        .verdict { padding: 24px 28px; }
+        .verdict h2 { margin: 0 0 6px; font-size: 1.6rem; }
+        .verdict p { margin: 0; color: #597085; }
+        .tone-valid { color: #187344; }
+        .tone-danger { color: #a32f36; }
+        .tone-neutral { color: #4c6276; }
+        .section { border-top: 1px solid #ecf0f4; padding: 20px 28px; }
+        .section h3 { margin: 0 0 14px; font-size: .95rem; }
+        dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; margin: 0; }
+        dt { color: #697e90; font-size: .75rem; font-weight: 700; text-transform: uppercase; }
+        dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+        table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+        th, td { padding: 8px; border-bottom: 1px solid #ecf0f4; text-align: left; }
+        th { color: #697e90; font-size: .75rem; text-transform: uppercase; }
+        .actions { border-top: 1px solid #ecf0f4; padding: 18px 28px; }
+        [id^="sfwdt"], .sf-toolbar { display: none !important; }
+        @media (max-width: 620px) {
+            dl { grid-template-columns: 1fr; }
+            .verdict, .section, .actions { padding-left: 16px; padding-right: 16px; }
+            .table-wrap { overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+<main class="shell">
+    <h1>{{ 'Transcript verification'|trans }}</h1>
+    <p class="lead">{{ 'Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked.'|trans }}</p>
+
+    <article class="panel">
+        <div class="verdict">
+            <h2 class="tone-{{ statusTone }}">{{ statusLabel|trans }}</h2>
+            {% if valid %}
+                <p>{{ 'The signature of the institution is valid and this transcript has not been revoked.'|trans }}</p>
+            {% else %}
+                <p>{{ 'This transcript cannot be verified as valid. Its details are not displayed.'|trans }}</p>
+            {% endif %}
+        </div>
+
+        {% if valid and transcript is iterable %}
+            <div class="section">
+                <h3>{{ 'Transcript details'|trans }}</h3>
+                <dl>
+                    <div><dt>{{ 'Student name'|trans }}</dt><dd>{{ transcript.student.fullName|default('—') }}</dd></div>
+                    <div><dt>{{ 'Institution'|trans }}</dt><dd>{{ transcript.institution.name|default('—') }}</dd></div>
+                    <div><dt>{{ 'Program title'|trans }}</dt><dd>{{ transcript.programTitle|default('—') }}</dd></div>
+                    <div><dt>{{ 'Issued on'|trans }}</dt><dd>{{ transcript.issuedAt|date('Y-m-d') }}</dd></div>
+                    <div><dt>{{ 'Final grade'|trans }}</dt><dd>{{ transcript.finalGrade is not null ? transcript.finalGrade ~ '%' : '—' }}</dd></div>
+                    <div><dt>GPA</dt><dd>{{ transcript.gpa is not null ? transcript.gpa|number_format(2) : '—' }}</dd></div>
+                </dl>
+            </div>
+            <div class="section table-wrap">
+                <h3>{{ 'Courses'|trans }}</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>{{ 'Course'|trans }}</th>
+                        <th>{{ 'Description'|trans }}</th>
+                        <th>{{ 'Completion date'|trans }}</th>
+                        <th>{{ 'Final grade'|trans }}</th>
+                        <th>{{ 'Grade'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for course in transcript.courses %}
+                        <tr>
+                            <td>{{ course.code }}</td>
+                            <td>{{ course.title }}</td>
+                            <td>{{ course.completedAt }}</td>
+                            <td>{{ course.score|round }}%</td>
+                            <td>{{ course.letter }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        <div class="actions">
+            <a href="{{ jsonUrl }}" rel="nofollow" referrerpolicy="no-referrer">{{ 'Download verification JSON'|trans }}</a>
+        </div>
+    </article>
+</main>
+</body>
+</html>

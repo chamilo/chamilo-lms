@@ -68,7 +68,7 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/Message',
@@ -378,7 +378,7 @@ class MessageRepositoryTest extends AbstractApiTest
         );
 
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/ResourceFile',
@@ -413,7 +413,7 @@ class MessageRepositoryTest extends AbstractApiTest
         );
 
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/Message',

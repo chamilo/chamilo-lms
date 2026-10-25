@@ -43623,3 +43623,93 @@ msgstr "Aucun paiement pour l'instant"
 
 msgid "Cancel service"
 msgstr "Annuler le service"
+
+msgid "Official transcript"
+msgstr "Relevé de notes officiel"
+
+msgid "Unofficial transcript"
+msgstr "Relevé de notes non officiel"
+
+msgid "Student name"
+msgstr "Nom de l'apprenant"
+
+msgid "Student number"
+msgstr "Numéro d'apprenant"
+
+msgid "Program title"
+msgstr "Intitulé du programme"
+
+msgid "Required hours"
+msgstr "Heures requises"
+
+msgid "Completion date"
+msgstr "Date d'achèvement"
+
+msgid "Hours completed"
+msgstr "Heures effectuées"
+
+msgid "Final grade"
+msgstr "Note finale"
+
+msgid "Grade"
+msgstr "Mention"
+
+msgid "No completed course yet."
+msgstr "Aucun cours terminé pour l'instant."
+
+msgid "Grading scale"
+msgstr "Barème"
+
+msgid "Signature of school official"
+msgstr "Signature du responsable de l'établissement"
+
+msgid "School official"
+msgstr "Responsable de l'établissement"
+
+msgid "Official's title"
+msgstr "Fonction du responsable"
+
+msgid "Verify this transcript at"
+msgstr "Vérifiez ce relevé sur"
+
+msgid "Verification code"
+msgstr "Code de vérification"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Ce relevé non officiel n'est pas signé. Demandez un relevé officiel à un administrateur."
+
+msgid "Transcript verification"
+msgstr "Vérification d'un relevé de notes"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Vérifiez que ce relevé officiel a été émis et signé par l'établissement, qu'il n'a pas été modifié et qu'il n'est pas révoqué."
+
+msgid "Valid"
+msgstr "Valide"
+
+msgid "Invalid signature"
+msgstr "Signature invalide"
+
+msgid "Transcript not found"
+msgstr "Relevé introuvable"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "La signature de l'établissement est valide et ce relevé n'a pas été révoqué."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Ce relevé ne peut pas être vérifié comme valide. Son contenu n'est pas affiché."
+
+msgid "Transcript details"
+msgstr "Contenu du relevé"
+
+msgid "Institution"
+msgstr "Établissement"
+
+msgid "Issued on"
+msgstr "Émis le"
+
+msgid "Download verification JSON"
+msgstr "Télécharger le JSON de vérification"
+
+msgid "Transcript"
+msgstr "Relevé de notes"

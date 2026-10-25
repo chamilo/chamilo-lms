@@ -41,6 +41,14 @@
           @click="downloadExport('xlsx')"
         />
         <BaseButton
+          v-if="canOpenTranscript"
+          :label="t('Transcript')"
+          icon="certificate-selected"
+          only-icon
+          type="primary-alternative"
+          :route="{ name: 'Transcript', query: { userId } }"
+        />
+        <BaseButton
           v-if="report.meta.actions?.accessDetailsUrl"
           :label="t('Access details')"
           icon="tracking"
@@ -370,6 +378,8 @@ import globalReportingService from "../../services/globalReportingService"
 import legalAgreementService from "../../services/legalAgreementService"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useNotification } from "../../composables/notification"
+import { usePlatformConfig } from "../../store/platformConfig"
+import { useSecurityStore } from "../../store/securityStore"
 
 const InfoCard = defineComponent({
   name: "GlobalReportingLearnerInfoCard",
@@ -405,6 +415,14 @@ const report = reactive({
 })
 
 const userId = computed(() => Number(route.params.userId || 0))
+const platformConfigStore = usePlatformConfig()
+const securityStore = useSecurityStore()
+// Only the people who issue official transcripts open the transcript of a learner.
+const canOpenTranscript = computed(
+  () =>
+    "true" === platformConfigStore.getSetting("certificate.transcript_enabled") &&
+    (securityStore.isAdmin || securityStore.isHRM || securityStore.isSessionAdmin),
+)
 const user = computed(() => report.meta.user || {})
 const bosses = computed(() => report.meta.bosses || [])
 const skills = computed(() => report.meta.skills || [])

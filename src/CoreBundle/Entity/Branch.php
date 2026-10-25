@@ -15,8 +15,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use Chamilo\CoreBundle\Repository\BranchSyncRepository;
-use Chamilo\CoreBundle\State\BranchSyncStateProcessor;
+use Chamilo\CoreBundle\Repository\BranchRepository;
+use Chamilo\CoreBundle\State\BranchStateProcessor;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,9 +24,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * BranchSync.
+ * Branch.
  */
 #[ApiResource(
     shortName: 'Branch',
@@ -42,17 +43,17 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             denormalizationContext: ['groups' => ['branch:write']],
             security: "is_granted('ROLE_ADMIN')",
-            processor: BranchSyncStateProcessor::class,
+            processor: BranchStateProcessor::class,
         ),
         new Put(
             denormalizationContext: ['groups' => ['branch:write']],
             security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
-            processor: BranchSyncStateProcessor::class,
+            processor: BranchStateProcessor::class,
         ),
         new Patch(
             denormalizationContext: ['groups' => ['branch:write']],
             security: "is_granted('ROLE_ADMIN') and is_granted('EDIT', object)",
-            processor: BranchSyncStateProcessor::class,
+            processor: BranchStateProcessor::class,
         ),
         new Delete(
             security: "is_granted('ROLE_ADMIN') and is_granted('DELETE', object)",
@@ -60,10 +61,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
-#[ORM\Table(name: 'branch_sync')]
-#[ORM\Entity(repositoryClass: BranchSyncRepository::class)]
+#[ORM\Table(name: 'branch')]
+#[ORM\Entity(repositoryClass: BranchRepository::class)]
 #[Gedmo\Tree(type: 'nested')]
-class BranchSync
+class Branch
 {
     #[Groups(['branch:list', 'branch:read', 'room:list', 'room:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -96,14 +97,16 @@ class BranchSync
     protected ?string $branchIp = null;
 
     #[Groups(['branch:read', 'branch:write'])]
-    #[Assert\Range(min: -90, max: 90)]
-    #[ORM\Column(name: 'latitude', type: 'decimal', precision: 10, scale: 8, nullable: true, unique: false)]
-    protected ?string $latitude = null;
+    #[Assert\Length(max: 255)]
+    #[ORM\Column(name: 'coordinates', type: 'string', length: 255, nullable: true)]
+    protected ?string $coordinates = null;
 
-    #[Groups(['branch:read', 'branch:write'])]
-    #[Assert\Range(min: -180, max: 180)]
-    #[ORM\Column(name: 'longitude', type: 'decimal', precision: 11, scale: 8, nullable: true, unique: false)]
-    protected ?string $longitude = null;
+    // Uploaded image is associated by the dedicated floor-plan workflow (stage 3).
+    // Do not expose this relation for generic branch writes: resource ownership and
+    // image type must be verified before attaching it.
+    #[ORM\ManyToOne(targetEntity: ResourceNode::class)]
+    #[ORM\JoinColumn(name: 'floor_plan_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?ResourceNode $floorPlan = null;
 
     #[Groups(['branch:read', 'branch:write'])]
     #[ORM\Column(name: 'dwn_speed', type: 'integer', nullable: true, unique: false)]
@@ -174,10 +177,10 @@ class BranchSync
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    protected ?BranchSync $parent = null;
+    protected ?Branch $parent = null;
 
     /**
-     * @var BranchSync[]|Collection
+     * @var Branch[]|Collection
      */
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['lft' => 'ASC'])]
@@ -231,32 +234,49 @@ class BranchSync
         return $this;
     }
 
-    /**
-     * Get latitude.
-     */
-    public function getLatitude(): ?string
+    #[Assert\Callback]
+    public function validateCoordinates(ExecutionContextInterface $context): void
     {
-        return $this->latitude;
+        if (null === $this->coordinates || '' === trim($this->coordinates)) {
+            return;
+        }
+
+        if (1 !== preg_match('/^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$/', $this->coordinates, $matches)
+            || (float) $matches[1] < -90 || (float) $matches[1] > 90
+            || (float) $matches[2] < -180 || (float) $matches[2] > 180) {
+            $context->buildViolation('Coordinates must be a valid latitude and longitude pair.')
+                ->atPath('coordinates')
+                ->addViolation()
+            ;
+        }
     }
 
-    public function setLatitude(?string $latitude): self
+    public function getCoordinates(): ?string
     {
-        $this->latitude = $latitude;
+        return $this->coordinates;
+    }
+
+    public function setCoordinates(?string $coordinates): self
+    {
+        $this->coordinates = $coordinates;
 
         return $this;
     }
 
-    /**
-     * Get longitude.
-     */
-    public function getLongitude(): ?string
+    #[Groups(['branch:read'])]
+    public function getFloorPlanId(): ?int
     {
-        return $this->longitude;
+        return $this->floorPlan?->getId();
     }
 
-    public function setLongitude(?string $longitude): self
+    public function getFloorPlan(): ?ResourceNode
     {
-        $this->longitude = $longitude;
+        return $this->floorPlan;
+    }
+
+    public function setFloorPlan(?ResourceNode $floorPlan): self
+    {
+        $this->floorPlan = $floorPlan;
 
         return $this;
     }
@@ -346,7 +366,7 @@ class BranchSync
     /**
      * Set lastSyncTransId.
      *
-     * @return BranchSync
+     * @return Branch
      */
     public function setLastSyncTransId(?int $lastSyncTransId)
     {
@@ -368,7 +388,7 @@ class BranchSync
     /**
      * Set sslPubKey.
      *
-     * @return BranchSync
+     * @return Branch
      */
     public function setSslPubKey(?string $sslPubKey)
     {
@@ -390,7 +410,7 @@ class BranchSync
     /**
      * Set sslPubKey.
      *
-     * @return BranchSync
+     * @return Branch
      */
     public function setBranchType(?string $branchType)
     {
@@ -412,7 +432,7 @@ class BranchSync
     /**
      * Set lastSyncTransDate.
      *
-     * @return BranchSync
+     * @return Branch
      */
     public function setLastSyncTransDate(?DateTime $lastSyncTransDate)
     {
@@ -434,7 +454,7 @@ class BranchSync
     /**
      * Set lastSyncType.
      *
-     * @return BranchSync
+     * @return Branch
      */
     public function setLastSyncType(?string $lastSyncType)
     {
@@ -456,7 +476,7 @@ class BranchSync
     /**
      * Set lft.
      *
-     * @return BranchSync
+     * @return Branch
      */
     public function setLft(int $lft)
     {
@@ -478,7 +498,7 @@ class BranchSync
     /**
      * Set rgt.
      *
-     * @return BranchSync
+     * @return Branch
      */
     public function setRgt(int $rgt)
     {
@@ -500,7 +520,7 @@ class BranchSync
     /**
      * Set lvl.
      *
-     * @return BranchSync
+     * @return Branch
      */
     public function setLvl(int $lvl)
     {
@@ -522,7 +542,7 @@ class BranchSync
     /**
      * Set root.
      *
-     * @return BranchSync
+     * @return Branch
      */
     public function setRoot(int $root)
     {
@@ -580,7 +600,7 @@ class BranchSync
     }
 
     /**
-     * @return BranchSync[]|Collection
+     * @return Branch[]|Collection
      */
     public function getChildren(): array|Collection
     {

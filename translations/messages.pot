@@ -41879,3 +41879,93 @@ msgstr ""
 
 msgid "Cancel service"
 msgstr ""
+
+msgid "Official transcript"
+msgstr ""
+
+msgid "Unofficial transcript"
+msgstr ""
+
+msgid "Student name"
+msgstr ""
+
+msgid "Student number"
+msgstr ""
+
+msgid "Program title"
+msgstr ""
+
+msgid "Required hours"
+msgstr ""
+
+msgid "Completion date"
+msgstr ""
+
+msgid "Hours completed"
+msgstr ""
+
+msgid "Final grade"
+msgstr ""
+
+msgid "Grade"
+msgstr ""
+
+msgid "No completed course yet."
+msgstr ""
+
+msgid "Grading scale"
+msgstr ""
+
+msgid "Signature of school official"
+msgstr ""
+
+msgid "School official"
+msgstr ""
+
+msgid "Official's title"
+msgstr ""
+
+msgid "Verify this transcript at"
+msgstr ""
+
+msgid "Verification code"
+msgstr ""
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr ""
+
+msgid "Transcript verification"
+msgstr ""
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr ""
+
+msgid "Valid"
+msgstr ""
+
+msgid "Invalid signature"
+msgstr ""
+
+msgid "Transcript not found"
+msgstr ""
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr ""
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr ""
+
+msgid "Transcript details"
+msgstr ""
+
+msgid "Institution"
+msgstr ""
+
+msgid "Issued on"
+msgstr ""
+
+msgid "Download verification JSON"
+msgstr ""
+
+msgid "Transcript"
+msgstr ""

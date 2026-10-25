@@ -53,6 +53,7 @@
           v-model="viewType"
           class="rounded border border-gray-30 bg-white px-2 py-1 text-xs"
           name="forum_view_type"
+          @change="changeViewType"
         >
           <option
             v-for="option in viewTypeOptions"
@@ -604,9 +605,14 @@ const baseQuery = computed(() => ({
   sid: sid.value || null,
   gid: gid.value || null,
 }))
+// The view the user chose. Without one, the server orders the posts for the default view of the forum.
+const chosenViewType = ref(
+  ["flat", "threaded", "nested"].includes(String(route.query.view || "")) ? String(route.query.view) : null,
+)
 const threadPostsQuery = computed(() => ({
   ...baseQuery.value,
   origin: isLearningPathContext.value ? "learnpath" : null,
+  view: chosenViewType.value,
 }))
 const hasEditMessage = computed(() => stripTags(editForm.text).trim().length > 0)
 const viewType = ref(
@@ -645,6 +651,25 @@ function stripTags(value) {
   return element.textContent || element.innerText || ""
 }
 
+/**
+ * The post a post is shown under in the threaded and nested views: the server tells it, as a post
+ * without a shown parent goes under the opening post of the thread.
+ *
+ * @param {Object} post Forum post.
+ * @returns {number} Parent post id, or 0 for the opening post.
+ */
+function getDisplayParentId(post) {
+  return Number(("displayParentId" in post ? post.displayParentId : post.postParentId) || 0)
+}
+
+/**
+ * The server orders the posts for the chosen view, so changing view reloads them.
+ */
+function changeViewType() {
+  chosenViewType.value = viewType.value
+  loadPosts()
+}
+
 function buildDisplayedPosts(items, mode) {
   if ("flat" === mode) {
     return items.map((post) => ({ ...post, level: 0 }))
@@ -655,7 +680,7 @@ function buildDisplayedPosts(items, mode) {
 
   items.forEach((post) => {
     const postId = Number(post.iid || 0)
-    const parentId = Number(post.postParentId || 0)
+    const parentId = getDisplayParentId(post)
     byId.set(postId, post)
 
     if (!byParent.has(parentId)) {
@@ -684,7 +709,7 @@ function buildDisplayedPosts(items, mode) {
 
   items.forEach((post) => {
     const postId = Number(post.iid || 0)
-    const parentId = Number(post.postParentId || 0)
+    const parentId = getDisplayParentId(post)
     if (parentId && byId.has(parentId)) {
       return
     }

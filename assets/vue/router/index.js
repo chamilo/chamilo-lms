@@ -562,6 +562,16 @@ const router = createRouter({
       },
     },
     {
+      path: "/transcript",
+      name: "Transcript",
+      component: () => import("../views/gradebook/TranscriptView.vue"),
+      meta: {
+        requiresAuth: true,
+        showBreadcrumb: true,
+        breadcrumb: "Transcript",
+      },
+    },
+    {
       path: "/certificates/search",
       name: "CertificateSearch",
       component: () => import("../views/gradebook/CertificateSearchView.vue"),

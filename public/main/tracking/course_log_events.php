@@ -26,6 +26,8 @@ $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : ''
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=course_log_events&'
     .api_get_cidreq().'&keyword='.$keyword;
 
+$hideIp = 'true' === api_get_setting('tracking.hide_ip_address');
+
 // Columns.
 $columns = [
     get_lang('Event type'),
@@ -34,7 +36,7 @@ $columns = [
     get_lang('Course'),
     get_lang('Session'),
     get_lang('Username'),
-    get_lang('IP address'),
+    ...($hideIp ? [] : [get_lang('IP address')]),
     get_lang('Date'),
 ];
 
@@ -46,7 +48,7 @@ $columnModel = [
     ['name' => 'col3', 'index' => 'col3', 'width' => '80',  'align' => 'left', 'sortable' => 'false', 'hidden' => 'true'],
     ['name' => 'col4', 'index' => 'col4', 'width' => '80',  'align' => 'left', 'sortable' => 'false', 'hidden' => 'true'],
     ['name' => 'col5', 'index' => 'col5', 'width' => '110', 'align' => 'left', 'sortable' => 'false'],
-    ['name' => 'col6', 'index' => 'col6', 'width' => '120', 'align' => 'left', 'sortable' => 'false'],
+    ...($hideIp ? [] : [['name' => 'col6', 'index' => 'col6', 'width' => '120', 'align' => 'left', 'sortable' => 'false']]),
     ['name' => 'col7', 'index' => 'col7', 'width' => '130', 'align' => 'left'],
 ];
 

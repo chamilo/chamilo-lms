@@ -2155,7 +2155,8 @@ HOTSPOT;
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
 
-        $hideIp = 'true' === api_get_setting('exercise.exercise_hide_ip');
+        $hideIp = 'true' === api_get_setting('tracking.hide_ip_address')
+            || 'true' === api_get_setting('exercise.exercise_hide_ip');
         $session_id_and = '';
         $sessionCondition = '';
         if (!$showSessionField) {

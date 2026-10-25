@@ -250,7 +250,7 @@ function renderCourseAccessTable(array $rows): string
         .'<th>'.get_lang('Logout date').'</th>'
         .'<th>'.get_lang('Time').'</th>'
         .'<th>'.get_lang('Visits').'</th>'
-        .'<th>'.get_lang('IP address').'</th>'
+        .('true' === api_get_setting('tracking.hide_ip_address') ? '' : '<th>'.get_lang('IP address').'</th>')
         .'</tr></thead><tbody>';
 
     foreach ($rows as $row) {
@@ -259,7 +259,7 @@ function renderCourseAccessTable(array $rows): string
             .'<td>'.formatTrackingDate($row['logout_course_date'] ?? null).'</td>'
             .'<td>'.formatTrackingDuration($row['login_course_date'] ?? null, $row['logout_course_date'] ?? null).'</td>'
             .'<td>'.(int) ($row['counter'] ?? 0).'</td>'
-            .'<td>'.Security::remove_XSS((string) ($row['user_ip'] ?? '')).'</td>'
+            .('true' === api_get_setting('tracking.hide_ip_address') ? '' : '<td>'.Security::remove_XSS((string) ($row['user_ip'] ?? '')).'</td>')
             .'</tr>';
     }
 
@@ -275,14 +275,14 @@ function renderResourceAccessTable(array $rows): string
     $html = '<table class="data_table"><thead><tr>'
         .'<th>'.get_lang('Tool').'</th>'
         .'<th>'.get_lang('Date').'</th>'
-        .'<th>'.get_lang('IP address').'</th>'
+        .('true' === api_get_setting('tracking.hide_ip_address') ? '' : '<th>'.get_lang('IP address').'</th>')
         .'</tr></thead><tbody>';
 
     foreach ($rows as $row) {
         $html .= '<tr>'
             .'<td>'.Security::remove_XSS((string) ($row['access_tool'] ?? '')).'</td>'
             .'<td>'.formatTrackingDate($row['access_date'] ?? null).'</td>'
-            .'<td>'.Security::remove_XSS((string) ($row['user_ip'] ?? '')).'</td>'
+            .('true' === api_get_setting('tracking.hide_ip_address') ? '' : '<td>'.Security::remove_XSS((string) ($row['user_ip'] ?? '')).'</td>')
             .'</tr>';
     }
 

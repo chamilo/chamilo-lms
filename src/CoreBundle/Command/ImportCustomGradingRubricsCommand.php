@@ -16,7 +16,6 @@ use Chamilo\CoreBundle\Enums\GradebookCalculationMode;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -32,8 +31,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Each course is resolved by its course CODE (the JSON key), which is stable
  * across the 1.11.x -> 2.0 migration. Resource references (exerciseId, parentId,
  * evaluationId, thread ids) are taken from the seed as 2.x identifiers and
- * validated for existence; anything not found is logged and skipped instead of
- * creating a dangling link. Always run --dry-run first and confirm the report.
+ * validated for existence and course; anything not found, or found in another
+ * course, is logged and skipped instead of creating a wrong link. Existing
+ * evaluations are moved into the rubric category with their results.
+ *
+ * The rubric goes into the course's existing root category (no session), so the
+ * certificate settings, template and issued certificates keep applying to it.
+ * The root's previous content is moved to a hidden zero-weight "Legacy gradebook"
+ * subcategory, which also marks the course as imported: a course that already has
+ * it is skipped, so the command can be run again safely.
+ * Always run --dry-run first and confirm the report.
  */
 #[AsCommand(
     name: 'chamilo:import-custom-grading-rubrics',
@@ -44,6 +51,7 @@ class ImportCustomGradingRubricsCommand extends Command
     private const LINK_EXERCISE = 1;
     private const LINK_STUDENTPUBLICATION = 3;
     private const LINK_FORUM_PARTICIPATION = 11;
+    private const LEGACY_SUBCATEGORY_TITLE = 'Legacy gradebook';
 
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -104,16 +112,40 @@ class ImportCustomGradingRubricsCommand extends Command
                 continue;
             }
 
-            $category = new GradebookCategory();
-            $category->setTitle(\sprintf('%s rubric', $courseCode));
-            $category->setUser($owner);
-            $category->setCourse($courseEntity);
-            $category->setWeight(100.0);
-            $category->setVisible(true);
-            $category->setCalculationMode(GradebookCalculationMode::POINTS_SUM);
+            $categoryRepo = $this->em->getRepository(GradebookCategory::class);
+
+            // Same root the gradebook view and the certificate pick: lowest id, no session.
+            $category = $categoryRepo->findOneBy(
+                ['course' => $courseEntity, 'session' => null, 'parent' => null],
+                ['id' => 'ASC'],
+            );
+
+            // A second run would move the rubric itself into the legacy subcategory.
+            if (null !== $category
+                && null !== $categoryRepo->findOneBy(['parent' => $category, 'title' => self::LEGACY_SUBCATEGORY_TITLE])
+            ) {
+                $skipped[] = \sprintf('Course "%s": rubric already imported into category #%d; whole rubric skipped.', $courseCode, $category->getId());
+
+                continue;
+            }
+
+            if (null === $category) {
+                $category = new GradebookCategory();
+                $category->setTitle($courseCode);
+                $category->setUser($owner);
+                $category->setCourse($courseEntity);
+                $category->setWeight(100.0);
+                $category->setVisible(true);
+
+                if (!$dryRun) {
+                    $this->em->persist($category);
+                }
+            }
+
+            $this->moveToLegacySubCategory($category, $owner, $courseEntity, $dryRun);
 
             if (!$dryRun) {
-                $this->em->persist($category);
+                $category->setCalculationMode(GradebookCalculationMode::POINTS_SUM);
             }
             $createdCategories++;
 
@@ -140,6 +172,39 @@ class ImportCustomGradingRubricsCommand extends Command
         ));
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Moves the root's links, evaluations and subcategories into a hidden zero-weight subcategory.
+     * In POINTS_SUM the subcategory then adds 0 points, and its data stays in place for reference.
+     */
+    private function moveToLegacySubCategory(GradebookCategory $root, User $owner, Course $course, bool $dryRun): void
+    {
+        if ($dryRun) {
+            return;
+        }
+
+        $legacy = new GradebookCategory();
+        $legacy->setTitle(self::LEGACY_SUBCATEGORY_TITLE);
+        $legacy->setUser($owner);
+        $legacy->setCourse($course);
+        $legacy->setParent($root);
+        $legacy->setWeight(0.0);
+        $legacy->setVisible(false);
+        $legacy->setCalculationMode($root->getCalculationMode());
+        $this->em->persist($legacy);
+
+        foreach ([...$root->getLinks()] as $link) {
+            $link->setCategory($legacy);
+        }
+
+        foreach ([...$root->getEvaluations()] as $evaluation) {
+            $evaluation->setCategory($legacy);
+        }
+
+        foreach ([...$root->getSubCategories()] as $subCategory) {
+            $subCategory->setParent($legacy);
+        }
     }
 
     /**
@@ -183,11 +248,13 @@ class ImportCustomGradingRubricsCommand extends Command
                 $skipped,
                 $dryRun
             ),
-            'gradebook_result' => $this->createEvaluation(
+            'gradebook_result' => $this->moveEvaluation(
                 (int) ($component['evaluationId'] ?? 0),
-                $this->weightToPoints($component['weight'] ?? 0),
+                (float) ($component['weight'] ?? 0),
                 $course,
                 $category,
+                $courseCode,
+                $skipped,
                 $dryRun
             ),
             'forum' => $this->createForumItems($component, $course, $category, $courseCode, $skipped, $dryRun),
@@ -225,6 +292,14 @@ class ImportCustomGradingRubricsCommand extends Command
             return $this->skip(
                 $skipped,
                 \sprintf('Course "%s": %s #%d not found or has no resource node, link skipped.', $courseCode, $resourceClass, $refId)
+            );
+        }
+
+        // The seed may hold per-course ids from 1.11.x, which find() resolves to another course's resource.
+        if (null === $resource->getResourceNode()->getResourceLinkByContext($course)) {
+            return $this->skip(
+                $skipped,
+                \sprintf('Course "%s": %s #%d belongs to another course, link skipped.', $courseCode, $resourceClass, $refId)
             );
         }
 
@@ -275,6 +350,12 @@ class ImportCustomGradingRubricsCommand extends Command
                 continue;
             }
 
+            if (null === $thread->getResourceNode()->getResourceLinkByContext($course)) {
+                $this->skip($skipped, \sprintf('Course "%s": forum thread #%d belongs to another course, skipped.', $courseCode, $threadId));
+
+                continue;
+            }
+
             $link = new GradebookLink();
             $link->setType(self::LINK_FORUM_PARTICIPATION);
             $link->setResourceNode($thread->getResourceNode());
@@ -298,29 +379,35 @@ class ImportCustomGradingRubricsCommand extends Command
     }
 
     /**
-     * Creates a native gradebook evaluation. The score scale assumed for the points weight is 0-100
-     * (max = 100), so score/max × weight reproduces the client's "score × multiplier" arithmetic.
+     * Moves the existing evaluation, with its gradebook_result rows, into the rubric category.
+     * The weight is multiplier × max, so score/max × weight reproduces the client's "score × multiplier".
+     *
+     * @param string[] $skipped
      */
-    private function createEvaluation(
+    private function moveEvaluation(
         int $evaluationId,
-        float $weight,
+        float $multiplier,
         Course $course,
         GradebookCategory $category,
+        string $courseCode,
+        array &$skipped,
         bool $dryRun
     ): int {
-        $evaluation = new GradebookEvaluation();
-        $evaluation->setTitle(\sprintf('Evaluation %d', $evaluationId));
-        $evaluation->setCourse($course);
-        $evaluation->setCategory($category);
-        $evaluation->setWeight($weight);
-        $evaluation->setMax(100.0);
-        $evaluation->setVisible(1);
-        $evaluation->setType('evaluation');
-        $evaluation->setLocked(0);
-        $evaluation->setCreatedAt(new DateTime());
+        $evaluation = $evaluationId > 0 ? $this->em->getRepository(GradebookEvaluation::class)->find($evaluationId) : null;
+        if (null === $evaluation) {
+            return $this->skip($skipped, \sprintf('Course "%s": evaluation #%d not found, skipped.', $courseCode, $evaluationId));
+        }
+
+        if ($evaluation->getCourse()->getId() !== $course->getId()) {
+            return $this->skip(
+                $skipped,
+                \sprintf('Course "%s": evaluation #%d belongs to another course, skipped.', $courseCode, $evaluationId)
+            );
+        }
 
         if (!$dryRun) {
-            $this->em->persist($evaluation);
+            $evaluation->setCategory($category);
+            $evaluation->setWeight(round($multiplier * (float) $evaluation->getMax(), 4));
         }
 
         return 1;

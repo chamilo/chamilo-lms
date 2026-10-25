@@ -27,7 +27,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
 
         // Asserts that the returned content type is JSON-LD (the default)
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
 
         // Asserts that the returned JSON is a superset of this one
         $this->assertJsonContains([
@@ -116,7 +116,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains([
             '@context' => '/api/contexts/CCalendarEvent',
             '@type' => 'CCalendarEvent',
@@ -374,7 +374,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains([
             '@context' => '/api/contexts/CCalendarEvent',
             '@type' => 'CCalendarEvent',

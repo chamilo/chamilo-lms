@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -51,6 +52,7 @@ final readonly class ExerciseRuntimeReportExportService
         private SettingsManager $settingsManager,
         private CidReqHelper $cidReqHelper,
         private UserHelper $userHelper,
+        private ReportIpVisibility $reportIpVisibility,
     ) {}
 
     public function exportCsv(int $exerciseId, Request $request): StreamedResponse
@@ -238,6 +240,10 @@ final readonly class ExerciseRuntimeReportExportService
             'Learning path',
         ];
 
+        if ($this->reportIpVisibility->isExerciseHidden()) {
+            array_splice($headers, 10, 1);
+        }
+
         if ($showOfficialCode) {
             array_unshift($headers, 'Official code');
         }
@@ -283,6 +289,10 @@ final readonly class ExerciseRuntimeReportExportService
             $this->formatLearningPath($attempt),
         ];
 
+        if ($this->reportIpVisibility->isExerciseHidden()) {
+            array_splice($row, 10, 1);
+        }
+
         if ($showOfficialCode) {
             array_unshift($row, (string) ($user->getOfficialCode() ?? ''));
         }
@@ -320,6 +330,10 @@ final readonly class ExerciseRuntimeReportExportService
             'Not attempted',
             '-',
         ];
+
+        if ($this->reportIpVisibility->isExerciseHidden()) {
+            array_splice($row, 10, 1);
+        }
 
         if ($showOfficialCode) {
             array_unshift($row, (string) ($user->getOfficialCode() ?? ''));

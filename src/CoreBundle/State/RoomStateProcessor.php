@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Helpers\RoomAccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Throwable;
 
 /**
  * @implements ProcessorInterface<Room, Room>
@@ -23,6 +25,7 @@ final readonly class RoomStateProcessor implements ProcessorInterface
         private ProcessorInterface $persistProcessor,
         private RoomAccessUrlHelper $roomAccessUrlHelper,
         private EntityManagerInterface $em,
+        private RequestStack $requestStack,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Room
@@ -31,7 +34,7 @@ final readonly class RoomStateProcessor implements ProcessorInterface
 
         // Put/Patch denormalize onto a fresh, unmanaged Room instead of the
         // fetched one (object_to_populate isn't taking effect for this
-        // resource -- same issue as BranchSyncStateProcessor), so anything
+        // resource -- same issue as BranchStateProcessor), so anything
         // the request didn't submit would otherwise be wiped (e.g. "branch"
         // reset to null, failing its NotNull constraint). Re-attach the
         // submitted room:write values onto the real, managed entity first.
@@ -44,11 +47,16 @@ final readonly class RoomStateProcessor implements ProcessorInterface
                     ->setDescription($data->getDescription())
                     ->setFloorNumber($data->getFloorNumber())
                     ->setCapacity($data->getCapacity())
-                    ->setGeolocation($data->getGeolocation())
+                    ->setCoordinates($data->getCoordinates())
                     ->setIp($data->getIp())
                     ->setIpMask($data->getIpMask())
                     ->setBranch($data->getBranch())
                 ;
+                // Preserve polygon when legacy/other clients omit roomMap.
+                // An explicit JSON null is allowed to clear it.
+                if ($this->roomMapWasSubmitted()) {
+                    $existing->setRoomMap($data->getRoomMap());
+                }
                 $data = $existing;
             }
         }
@@ -56,5 +64,18 @@ final readonly class RoomStateProcessor implements ProcessorInterface
         $this->roomAccessUrlHelper->assertBranchAllowed($data->getBranch());
 
         return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
+    }
+    private function roomMapWasSubmitted(): bool
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
+        }
+
+        try {
+            return \array_key_exists('roomMap', $request->toArray());
+        } catch (Throwable) {
+            return false;
+        }
     }
 }

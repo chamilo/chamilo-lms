@@ -1748,6 +1748,9 @@ class SessionManager
         }
 
         foreach ($return as $key => $info) {
+            if ('true' === api_get_setting('tracking.hide_ip_address')) {
+                continue;
+            }
             //Search for ip, we do less querys if we iterate the final array
             $sql = sprintf(
                 "SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date < '%s' ORDER BY login_date DESC LIMIT 1",

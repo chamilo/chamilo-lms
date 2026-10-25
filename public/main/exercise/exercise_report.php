@@ -779,7 +779,9 @@ if ($is_allowedToEdit || $is_tutor) {
         ['name' => 'start_date', 'index' => 'start_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         ['name' => 'score', 'index' => 'score', 'width' => '120', 'align' => 'center', 'search' => 'true'],
-        ['name' => 'ip', 'index' => 'user_ip', 'width' => '120', 'align' => 'center', 'search' => 'true'],
+        ...(('true' === api_get_setting('tracking.hide_ip_address')
+            || 'true' === api_get_setting('exercise.exercise_hide_ip'))
+            ? [] : [['name' => 'ip', 'index' => 'user_ip', 'width' => '120', 'align' => 'center', 'search' => 'true']]),
         [
             'name' => 'status',
             'index' => 'revised',

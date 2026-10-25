@@ -20,7 +20,7 @@ class CCalendarEventRepeatNot
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[ORM\ManyToOne(targetEntity: CCalendarEvent::class, inversedBy: 'repeatEvents')]
+    #[ORM\ManyToOne(targetEntity: CCalendarEvent::class)]
     #[ORM\JoinColumn(name: 'cal_id', referencedColumnName: 'iid')]
     protected CCalendarEvent $event;
 

@@ -6,24 +6,23 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\BranchSync;
-use Chamilo\CoreBundle\Repository\BranchSyncRepository;
+use Chamilo\CoreBundle\Entity\Branch;
+use Chamilo\CoreBundle\Repository\BranchRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
-class BranchSyncRepositoryTest extends AbstractApiTest
+class BranchRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
     public function testCoordinatesKeepDecimalPrecision(): void
     {
         $em = $this->getEntityManager();
-        $repo = self::getContainer()->get(BranchSyncRepository::class);
+        $repo = self::getContainer()->get(BranchRepository::class);
 
-        $item = (new BranchSync())
+        $item = (new Branch())
             ->setTitle('Precise coordinates branch')
-            ->setLatitude('50.84655731')
-            ->setLongitude('4.35169742')
+            ->setCoordinates('50.84655731, 4.35169742')
         ;
 
         $this->assertHasNoEntityViolations($item);
@@ -34,17 +33,16 @@ class BranchSyncRepositoryTest extends AbstractApiTest
 
         $stored = $repo->find($id);
 
-        $this->assertInstanceOf(BranchSync::class, $stored);
-        $this->assertSame('50.84655731', $stored->getLatitude());
-        $this->assertSame('4.35169742', $stored->getLongitude());
+        $this->assertInstanceOf(Branch::class, $stored);
+        $this->assertSame('50.84655731, 4.35169742', $stored->getCoordinates());
     }
 
     public function testSearchByKeyword(): void
     {
-        $repo = self::getContainer()->get(BranchSyncRepository::class);
+        $repo = self::getContainer()->get(BranchRepository::class);
 
         $em = $this->getEntityManager();
-        $item = (new BranchSync())
+        $item = (new Branch())
             ->setTitle('Branch')
             ->setAdminName('Julio')
         ;

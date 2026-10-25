@@ -49,7 +49,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
 
         // Asserts that the returned content type is JSON-LD (the default)
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
 
         // Asserts that the returned JSON is a superset of this one
         $this->assertJsonContains([
@@ -93,7 +93,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains([
             '@context' => '/api/contexts/Document',
             '@type' => 'Document',
@@ -395,7 +395,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         // Check uploaded file.
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains([
             '@context' => '/api/contexts/Document',
             '@type' => 'Document',
@@ -419,7 +419,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
             ]
         );
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/Document',
@@ -624,7 +624,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
             ]
         );
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/Document',
@@ -704,7 +704,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains([
             '@context' => '/api/contexts/Document',
             '@type' => 'Document',

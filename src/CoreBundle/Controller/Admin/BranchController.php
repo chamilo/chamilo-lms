@@ -26,7 +26,7 @@ class BranchController extends BaseController
         }
         $qb = $em->createQueryBuilder();
         $qb->select('b.id, b.title, b.description, COUNT(r.id) AS roomCount')
-            ->from('Chamilo\CoreBundle\Entity\BranchSync', 'b')
+            ->from('Chamilo\CoreBundle\Entity\Branch', 'b')
             ->leftJoin('Chamilo\CoreBundle\Entity\Room', 'r', Join::ON, 'r.branch = b.id')
             ->where('IDENTITY(b.url) = :accessUrlId')
             ->setParameter('accessUrlId', $accessUrlId)

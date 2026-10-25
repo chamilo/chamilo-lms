@@ -1399,6 +1399,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'tracking' => [
                 [
+                    'name' => 'hide_ip_address',
+                    'title' => 'Hide IP address from reports',
+                    'comment' => 'Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures.',
+                ],
+                [
                     'name' => 'my_progress_course_tools_order',
                     'title' => "Order of tools on 'My progress' page",
                     'comment' => "Change the order of tools shown on the 'My progress' page for learners. Options include 'quizzes', 'learning_paths' and 'skills'.",
@@ -1765,6 +1770,61 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'certificate' => [
+                [
+                    'name' => 'transcript_enabled',
+                    'title' => 'Academic transcripts',
+                    'comment' => 'Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user.',
+                ],
+                [
+                    'name' => 'transcript_program_title',
+                    'title' => 'Transcript program title',
+                    'comment' => 'Program title printed on every transcript, for example the name of the diploma prepared on this platform.',
+                ],
+                [
+                    'name' => 'transcript_course_code_source',
+                    'title' => 'Transcript course code',
+                    'comment' => 'Which course field fills the course code column of transcripts: the course code or the department name.',
+                ],
+                [
+                    'name' => 'transcript_hours_extra_field',
+                    'title' => 'Transcript course hours field',
+                    'comment' => 'Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course.',
+                ],
+                [
+                    'name' => 'transcript_completed_hours_are_required_hours',
+                    'title' => 'Transcript completed hours are the required hours',
+                    'comment' => 'Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course.',
+                ],
+                [
+                    'name' => 'transcript_student_number_extra_field',
+                    'title' => 'Transcript student number field',
+                    'comment' => 'Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none.',
+                ],
+                [
+                    'name' => 'transcript_address_extra_fields',
+                    'title' => 'Transcript address fields',
+                    'comment' => 'Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code.',
+                ],
+                [
+                    'name' => 'transcript_grading_scale',
+                    'title' => 'Transcript grading scale',
+                    'comment' => 'JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA.',
+                ],
+                [
+                    'name' => 'transcript_gpa_note',
+                    'title' => 'Transcript GPA note',
+                    'comment' => 'Explanation of how the GPA is computed, printed under the GPA on transcripts.',
+                ],
+                [
+                    'name' => 'transcript_signatory_name',
+                    'title' => 'Transcript signatory name',
+                    'comment' => 'Name of the school official who signs the official transcripts.',
+                ],
+                [
+                    'name' => 'transcript_signatory_title',
+                    'title' => 'Transcript signatory title',
+                    'comment' => 'Title of the school official who signs the official transcripts.',
+                ],
                 [
                     'name' => 'add_certificate_pdf_footer',
                     'title' => 'Add footer to PDF certificate exports',
@@ -2831,6 +2891,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description.',
                 ],
                 [
+                    'name' => 'forum_participation_can_be_modified_in_course',
+                    'title' => 'Forum participation settings can be changed by course',
+                    'comment' => 'When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings.',
+                ],
+                [
+                    'name' => 'thread_max_posts_for_non_admins',
+                    'title' => 'Maximum posts shown in a forum thread',
+                    'comment' => 'Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post.',
+                ],
+                [
                     'name' => 'thread_participation_progress_posts',
                     'title' => 'Posts required to complete a forum thread',
                     'comment' => 'Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar.',
@@ -3164,6 +3234,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'security' => [
+                [
+                    'name' => 'remember_me_days',
+                    'title' => 'Remember me duration (days)',
+                    'comment' => 'Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony.',
+                    'selected_value' => '14',
+                ],
                 [
                     'name' => 'session_expiration_warning_enabled',
                     'title' => 'Enable session expiration warning',

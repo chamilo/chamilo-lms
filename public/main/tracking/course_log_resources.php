@@ -26,6 +26,7 @@ if ('myspace' === $from) {
 // -----------------------------------------------------------------------------
 // Access restrictions
 // -----------------------------------------------------------------------------
+$hideIp = 'true' === api_get_setting('tracking.hide_ip_address');
 $is_allowedToTrack = Tracking::isAllowToTrack($session_id);
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
@@ -41,12 +42,16 @@ if ($export_csv || $exportXls) {
     // Clean HTML and internal columns before export.
     array_walk(
         $csvData,
-        function (&$item) {
+        function (&$item) use ($hideIp) {
             // Remove HTML tags and convert <br> to new lines on value column.
             $item[0] = strip_tags($item[0]);
             $item[2] = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', PHP_EOL, $item[2]));
             $item[3] = strip_tags($item[3]);
             $item[4] = strip_tags($item[4]);
+
+            if ($hideIp) {
+                unset($item[4]);
+            }
 
             // Remove internal columns that should not be exported.
             unset(
@@ -69,7 +74,7 @@ if ($export_csv || $exportXls) {
             get_lang('Event type'),
             get_lang('Session'),
             get_lang('Username'),
-            get_lang('IP address'),
+            ...($hideIp ? [] : [get_lang('IP address')]),
             get_lang('Document'),
             get_lang('Date'),
         ]
@@ -215,7 +220,7 @@ $table->set_header(0, get_lang('Tool'));
 $table->set_header(1, get_lang('Event type'));
 $table->set_header(2, get_lang('Session'), false);
 $table->set_header(3, get_lang('Username'), true, 'width=65px');
-$table->set_header(4, get_lang('IP address'), true, 'width=100px');
+$table->set_header(4, $hideIp ? '' : get_lang('IP address'), !$hideIp, 'width=100px');
 $table->set_header(5, get_lang('Document'), false);
 $table->set_header(6, get_lang('Date'), true, 'width=190px');
 

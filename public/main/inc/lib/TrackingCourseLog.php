@@ -240,15 +240,16 @@ class TrackingCourseLog
             }
 
             // Column 4: IP address.
+            $hideIp = 'true' === api_get_setting('tracking.hide_ip_address');
             $ip = '';
-            if (!empty($displayRow['user_id']) && !empty($displayRow['col6'])) {
+            if (!$hideIp && !empty($displayRow['user_id']) && !empty($displayRow['col6'])) {
                 $ip = Tracking::get_ip_from_user_event(
                     (int) $displayRow['user_id'],
                     $displayRow['col6'],
                     true
                 );
             }
-            if (empty($ip)) {
+            if (empty($ip) && !$hideIp) {
                 $ip = get_lang('Unknown');
             }
             $displayRow[4] = $ip;

@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\State\CourseDeleteProcessor;
+use Chamilo\CoreBundle\State\CourseRoomAssignmentProcessor;
 use Chamilo\CoreBundle\State\PublicCatalogueCourseStateProvider;
 use Chamilo\CoreBundle\State\StickyCourseStateProvider;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -48,7 +49,7 @@ use const SORT_NATURAL;
         // Updating and deleting are administrator-only: they let an integration (such as an ERP) keep its courses in
         // sync. Teachers keep editing their own course through the course settings screens. Only the course:write
         // properties can be patched, and the course code is not one of them.
-        new Patch(security: "is_granted('ROLE_ADMIN')"),
+        new Patch(security: "is_granted('ROLE_ADMIN')", processor: CourseRoomAssignmentProcessor::class),
         new Delete(security: "is_granted('ROLE_ADMIN')", processor: CourseDeleteProcessor::class),
         new GetCollection(
             paginationClientEnabled: true,

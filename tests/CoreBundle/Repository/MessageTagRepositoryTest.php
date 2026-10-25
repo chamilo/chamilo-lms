@@ -142,7 +142,7 @@ class MessageTagRepositoryTest extends AbstractApiTest
             '/api/message_tags',
         );
         $this->assertResponseStatusCodeSame(200);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/MessageTag',
@@ -210,7 +210,7 @@ class MessageTagRepositoryTest extends AbstractApiTest
             '/api/message_tags',
         );
         $this->assertResponseStatusCodeSame(200);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/MessageTag',

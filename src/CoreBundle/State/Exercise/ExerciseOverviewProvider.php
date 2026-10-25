@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
@@ -66,6 +67,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
         private CQuizRepository $quizRepository,
+        private ReportIpVisibility $reportIpVisibility,
     ) {}
 
     /**
@@ -339,7 +341,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
                 'attemptId' => (int) $attempt->getExeId(),
                 'number' => $total - $index,
                 'startDate' => $this->formatDate($attempt->getStartDate()),
-                'userIp' => $attempt->getUserIp(),
+                'userIp' => $this->reportIpVisibility->isExerciseHidden() ? '' : $attempt->getUserIp(),
                 'score' => round($attempt->getScore(), 2),
                 'maxScore' => round($maxScore, 2),
                 'percentage' => $maxScore > 0 ? round(($attempt->getScore() / $maxScore) * 100, 2) : 0.0,

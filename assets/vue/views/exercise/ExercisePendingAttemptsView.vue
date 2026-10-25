@@ -254,6 +254,7 @@
       </Column>
 
       <Column
+        v-if="settings.showIp"
         :header="t('IP')"
         field="userIp"
       />

@@ -1,3 +1,7 @@
+parameters:
+    # Tests must not create the institution issuer key of the installation.
+    chamilo.certificate_issuer_dir: '%kernel.cache_dir%/certificate-issuer'
+
 services:
     _defaults:
         public: true

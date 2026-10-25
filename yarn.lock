@@ -4763,6 +4763,7 @@ __metadata:
     jspdf: "npm:^4.2.1"
     jsplumb: "npm:^2.15.6"
     leaflet: "npm:^1.9.4"
+    leaflet-draw: "npm:1.0.4"
     linkifyjs: "npm:4.3.3"
     litepicker: "npm:^2.0.12"
     lodash: "npm:^4.18.1"
@@ -7773,6 +7774,13 @@ __metadata:
     picocolors: "npm:^1.1.1"
     shell-quote: "npm:^1.8.4"
   checksum: 10c0/bb0ab182086afaf1c391abd38d6fc9d5391cb43d0c2da1d96176f79e9995635cdf34dcfd8df3f756bb82d7bbbb7d37014d5eb312f337350889c0cff92db53dab
+  languageName: node
+  linkType: hard
+
+"leaflet-draw@npm:1.0.4":
+  version: 1.0.4
+  resolution: "leaflet-draw@npm:1.0.4"
+  checksum: 10c0/9e700b7e5e7d70c0f9d66efe2fec282f635eff63699e5f2f4eb733b140188058cc7cb2a5d3c6889c300958ec9e415fd5c0a02a08db0e1fc13a063d4710cff004
   languageName: node
   linkType: hard
 

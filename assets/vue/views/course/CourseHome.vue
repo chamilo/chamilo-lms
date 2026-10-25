@@ -193,6 +193,8 @@
         />
       </div>
 
+      <RoomFloorPlanViewer v-if="course?.id" :course-id="course.id" />
+
       <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div class="min-w-0">
           <PluginRegion region="footer_left" />
@@ -211,6 +213,7 @@
 <script setup>
 import { computed, onMounted, provide, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
+import RoomFloorPlanViewer from "../../components/room/RoomFloorPlanViewer.vue"
 import CourseTool from "../../components/course/CourseTool"
 import ShortCutList from "../../components/course/ShortCutList.vue"
 import Skeleton from "primevue/skeleton"

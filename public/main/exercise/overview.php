@@ -373,7 +373,8 @@ if (!empty($attempts)) {
         $row = [
             'count' => $i,
             'date' => api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG),
-            'userIp' => $attempt_result['user_ip'],
+            'userIp' => ('true' === api_get_setting('tracking.hide_ip_address')
+                || 'true' === api_get_setting('exercise.exercise_hide_ip')) ? '' : $attempt_result['user_ip'],
         ];
         $attempt_link .= PHP_EOL.$teacher_revised;
 

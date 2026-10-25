@@ -154,7 +154,7 @@
               <th class="px-3 py-2 font-semibold">{{ t("Logout date") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Time") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Visits") }}</th>
-              <th class="px-3 py-2 font-semibold">{{ t("IP address") }}</th>
+              <th v-if="showCourseIp" class="px-3 py-2 font-semibold">{{ t("IP address") }}</th>
             </tr>
           </thead>
           <tbody>
@@ -167,7 +167,7 @@
               <td class="px-3 py-2">{{ formatDateTime(row.logout_course_date) }}</td>
               <td class="px-3 py-2">{{ formatAccessDuration(row) }}</td>
               <td class="px-3 py-2">{{ Number(row.counter || 0) }}</td>
-              <td class="px-3 py-2">{{ row.user_ip || "-" }}</td>
+              <td v-if="detail.courseAccess.some((access) => Object.hasOwn(access, 'user_ip'))" class="px-3 py-2">{{ row.user_ip || "-" }}</td>
             </tr>
           </tbody>
         </table>
@@ -183,7 +183,7 @@
             <tr class="border-b border-gray-25 text-start">
               <th class="px-3 py-2 font-semibold">{{ t("Tool") }}</th>
               <th class="px-3 py-2 font-semibold">{{ t("Date") }}</th>
-              <th class="px-3 py-2 font-semibold">{{ t("IP address") }}</th>
+              <th v-if="showResourceIp" class="px-3 py-2 font-semibold">{{ t("IP address") }}</th>
             </tr>
           </thead>
           <tbody>
@@ -194,7 +194,7 @@
             >
               <td class="px-3 py-2">{{ row.access_tool || "-" }}</td>
               <td class="px-3 py-2">{{ formatDateTime(row.access_date) }}</td>
-              <td class="px-3 py-2">{{ row.user_ip || "-" }}</td>
+              <td v-if="detail.resourceAccess.some((access) => Object.hasOwn(access, 'user_ip'))" class="px-3 py-2">{{ row.user_ip || "-" }}</td>
             </tr>
           </tbody>
         </table>
@@ -255,6 +255,9 @@ const detail = reactive({
   courseAccess: [],
   resourceAccess: [],
 })
+
+const showCourseIp = computed(() => detail.courseAccess.some((row) => Object.hasOwn(row, "user_ip")))
+const showResourceIp = computed(() => detail.resourceAccess.some((row) => Object.hasOwn(row, "user_ip")))
 
 const backRoute = computed(() => {
   if (route.query.returnTo === "global-reporting-learner-detail") {

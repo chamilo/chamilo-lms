@@ -37,7 +37,7 @@ use Throwable;
 final class DocumentCollectionStateProvider implements ProviderInterface
 {
     /**
-     * Lazily resolved installation prefix (first 8 chars of branch_sync.unique_id).
+     * Lazily resolved installation prefix (first 8 chars of branch.unique_id).
      * Null until first use; initialised at most once per PHP process.
      */
     private ?string $installationPrefix = null;
@@ -496,7 +496,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         // Build a stable cache key from every value that affects the result set.
         // Settings-derived booleans are already folded into $hiddenSystemTypes.
         // The key is scoped to:
-        //   - the Chamilo installation (branch_sync.unique_id prefix) so that
+        //   - the Chamilo installation (branch.unique_id prefix) so that
         //     multiple Chamilo instances on the same server never share APCu entries;
         //   - the access_url ID so that multi-portal setups within one installation
         //     are also isolated.
@@ -638,7 +638,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
 
     /**
      * Returns the first 8 hex characters of the installation-unique identifier
-     * stored in branch_sync.unique_id (a SHA1 generated at install/migration time).
+     * stored in branch.unique_id (a SHA1 generated at install/migration time).
      * This prefix distinguishes cache entries between different Chamilo installations
      * that share the same APCu memory on a single server.
      *
@@ -658,7 +658,7 @@ final class DocumentCollectionStateProvider implements ProviderInterface
 
         try {
             $uniqueId = (string) $this->entityManager->getConnection()->fetchOne(
-                'SELECT unique_id FROM branch_sync ORDER BY id ASC LIMIT 1'
+                'SELECT unique_id FROM branch ORDER BY id ASC LIMIT 1'
             );
         } catch (Throwable) {
             // Table may not exist during a fresh install — fall through to fallback.

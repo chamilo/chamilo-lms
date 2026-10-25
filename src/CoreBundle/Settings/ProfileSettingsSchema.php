@@ -23,6 +23,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 'changeable_options' => ['name', 'officialcode', 'email', 'picture', 'login', 'password', 'language', 'phone', 'theme'],
                 'extended_profile' => 'false',
                 'account_valid_duration' => '3660',
+                // Keep the legacy layout value for upgrades and old upload-path callers.
                 'split_users_upload_directory' => 'true',
                 'user_selected_theme' => 'false',
                 'use_users_timezone' => 'true',
@@ -95,7 +96,6 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ])
             ->add('extended_profile', YesNoType::class)
             ->add('account_valid_duration')
-            ->add('split_users_upload_directory', YesNoType::class)
             ->add('user_selected_theme', YesNoType::class)
             ->add('use_users_timezone', YesNoType::class)
             ->add('allow_users_to_change_email_with_no_password', YesNoType::class)
@@ -124,5 +124,11 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
+    }
+
+    public function getHiddenSettings(): array
+    {
+        // Deprecated in 3.1: search must not expose the internal legacy layout option.
+        return ['split_users_upload_directory'];
     }
 }

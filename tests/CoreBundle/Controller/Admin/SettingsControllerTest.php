@@ -75,6 +75,36 @@ class SettingsControllerTest extends WebTestCase
         $this->assertStringContainsString('Chamilo modified 123', $client->getResponse()->getContent());
     }
 
+    /**
+     * The /admin block list is cached per admin for 120 s, and an admin lands on /admin right
+     * after login. Without clearing that cache on save, a setting that adds a block link
+     * (here Terms and Conditions) stays invisible for up to 2 minutes after being enabled,
+     * which is what broke SpecialCase1's "Verify settings that require creating courses and users".
+     */
+    public function testSavingSettingsRefreshesTheCachedAdminBlocks(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->getUser('admin'));
+        $cache = static::getContainer()->get('chamilo.admin_index_blocks');
+        $cache->clear();
+
+        $client->request('GET', '/admin/index');
+        $this->assertResponseIsSuccessful();
+        $this->assertStringNotContainsString('item-terms-and-conditions', $client->getResponse()->getContent());
+
+        $client->request('GET', '/admin/settings/registration');
+        $client->submitForm('Save settings', [
+            'form[allow_terms_conditions]' => 'true',
+        ]);
+
+        $client->request('GET', '/admin/index');
+        $content = $client->getResponse()->getContent();
+        // The cache lives outside the rolled-back test transaction; don't leak it to other tests.
+        $cache->clear();
+
+        $this->assertStringContainsString('item-terms-and-conditions', $content);
+    }
+
     public function testListSettings(): void
     {
         $client = static::createClient();

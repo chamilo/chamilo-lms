@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Repository\CCourseSettingRepository;
@@ -33,6 +34,7 @@ final readonly class ForumParticipationSettingsHelper
     public function __construct(
         private SettingsManager $settingsManager,
         private CCourseSettingRepository $courseSettingRepository,
+        private ?CourseSettingPolicyManager $courseSettingPolicyManager = null,
     ) {}
 
     public function areRepliesHiddenUntilParticipation(Course $course): bool
@@ -91,13 +93,17 @@ final readonly class ForumParticipationSettingsHelper
 
     private function getValue(string $setting, Course $course): string
     {
+        $courseValue = null;
         if ($this->canBeModifiedInCourse()) {
-            $courseValue = $this->getCourseValue($setting, $course);
-            if ('' !== $courseValue) {
-                return $courseValue;
-            }
+            $value = $this->getCourseValue($setting, $course);
+            $courseValue = '' !== $value ? $value : null;
         }
 
-        return trim((string) $this->settingsManager->getSetting('forum.'.$setting, true));
+        $platformValue = $this->settingsManager->getSetting('forum.'.$setting, true);
+        $effective = null !== $this->courseSettingPolicyManager
+            ? $this->courseSettingPolicyManager->effectiveValue($setting, $courseValue, $platformValue, 'forum')
+            : ($courseValue ?? $platformValue);
+
+        return trim((string) $effective);
     }
 }

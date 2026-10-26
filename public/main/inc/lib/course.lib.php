@@ -5681,6 +5681,13 @@ class CourseManager
     {
         $settingList = self::getCourseSettingVariables($appPlugin);
 
+        $policyManager = \Chamilo\CoreBundle\Framework\Container::$container->get(
+            \Chamilo\CoreBundle\Settings\CourseSettingPolicyManager::class
+        );
+        if (!$policyManager->isEditable((string) $variable)) {
+            return false;
+        }
+
         if (!in_array($variable, $settingList)) {
             return false;
         }

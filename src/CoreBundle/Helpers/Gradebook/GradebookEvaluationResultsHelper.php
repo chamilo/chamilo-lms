@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookEvaluationImportProcessor;
 use Chamilo\CoreBundle\State\Gradebook\GradebookEvaluationResultActionProcessor;
@@ -44,6 +45,7 @@ final readonly class GradebookEvaluationResultsHelper
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CourseSettingPolicyManager $courseSettingPolicyManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private ExtraFieldValuesRepository $extraFieldValuesRepository,
         private UserRepository $userRepository,
@@ -334,6 +336,12 @@ final readonly class GradebookEvaluationResultsHelper
 
             break;
         }
+
+        $modelId = (int) $this->courseSettingPolicyManager->effectiveValue(
+            'score_model_id',
+            -1 === $modelId ? null : (string) $modelId,
+            '-1',
+        );
 
         $selectedModel = $setting['models'][0];
         if (-1 !== $modelId) {

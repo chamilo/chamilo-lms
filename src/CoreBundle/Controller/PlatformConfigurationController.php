@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Service\Mcp\McpAccessPolicy;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -45,6 +46,7 @@ class PlatformConfigurationController extends AbstractController
         private readonly UserHelper $userHelper,
         private readonly ThemeHelper $themeHelper,
         private readonly StudentViewHelper $studentViewHelper,
+        private readonly CourseSettingPolicyManager $courseSettingPolicyManager,
     ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
@@ -385,7 +387,7 @@ class PlatformConfigurationController extends AbstractController
         ]);
 
         if ($categorized instanceof CCourseSetting) {
-            return $categorized->getValue();
+            return (string) $this->courseSettingPolicyManager->effectiveValue($variable, $categorized->getValue(), null, $category);
         }
 
         /**
@@ -400,7 +402,7 @@ class PlatformConfigurationController extends AbstractController
         ]);
 
         if ($legacyNullCategory instanceof CCourseSetting) {
-            return $legacyNullCategory->getValue();
+            return (string) $this->courseSettingPolicyManager->effectiveValue($variable, $legacyNullCategory->getValue(), null, $category);
         }
 
         /** @var CCourseSetting|null $legacyEmptyCategory */
@@ -411,10 +413,12 @@ class PlatformConfigurationController extends AbstractController
         ]);
 
         if ($legacyEmptyCategory instanceof CCourseSetting) {
-            return $legacyEmptyCategory->getValue();
+            return (string) $this->courseSettingPolicyManager->effectiveValue($variable, $legacyEmptyCategory->getValue(), null, $category);
         }
 
-        return null;
+        $value = $this->courseSettingPolicyManager->effectiveValue($variable, null, null, $category);
+
+        return null === $value ? null : (string) $value;
     }
 
     /**

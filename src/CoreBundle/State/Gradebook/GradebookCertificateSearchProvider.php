@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\DBAL\Types\Types;
@@ -38,6 +39,7 @@ final readonly class GradebookCertificateSearchProvider implements ProviderInter
         private RequestStack $requestStack,
         private AccessUrlHelper $accessUrlHelper,
         private SettingsManager $settingsManager,
+        private CourseSettingPolicyManager $courseSettingPolicyManager,
         private GradebookCertificateGenerator $certificateGenerator,
         private Security $security,
     ) {}
@@ -271,22 +273,24 @@ final readonly class GradebookCertificateSearchProvider implements ProviderInter
             ['iid' => 'ASC'],
         );
 
+        $courseValue = null;
         foreach ($settings as $setting) {
-            if (!$setting instanceof CCourseSetting || null === $setting->getValue()) {
-                continue;
-            }
+            if ($setting instanceof CCourseSetting && null !== $setting->getValue()
+                && '-1' !== $setting->getValue()) {
+                $courseValue = $setting->getValue();
 
-            $value = strtolower(trim((string) $setting->getValue()));
-            if ('-1' === $value) {
-                continue;
+                break;
             }
-
-            return !\in_array($value, ['', '0', 'false', 'no', 'off'], true);
         }
 
-        // Legacy api_get_course_setting() returns -1 when no course override exists.
-        // Public certificate visibility only rejects an explicit disabled course setting.
-        return true;
+        // Historically, a missing course override leaves public certificates enabled.
+        $value = strtolower(trim((string) $this->courseSettingPolicyManager->effectiveValue(
+            'allow_public_certificates',
+            $courseValue,
+            '1',
+        )));
+
+        return !\in_array($value, ['', '0', 'false', 'no', 'off'], true);
     }
 
     private function isSettingEnabled(string $name): bool

@@ -126,6 +126,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'course_creation_user_course_extra_field_relation_to_prefill' => '',
                     'show_course_duration' => 'false',
                     'profiling_filter_adding_users' => 'false',
+                    CourseSettingPolicy::SETTING => '{}',
                 ]
             )
             ->setTransformer(
@@ -151,6 +152,11 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
+    }
+
+    public function getHiddenSettings(): array
+    {
+        return [CourseSettingPolicy::SETTING];
     }
 
     public function buildForm(FormBuilderInterface $builder): void

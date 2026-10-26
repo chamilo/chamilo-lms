@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\FormatHelper;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Chamilo\CoreBundle\Entity\Course;
@@ -163,6 +164,9 @@ if (!function_exists('customcertificate_save_course_setting')) {
     function customcertificate_save_course_setting(string $variable, int $value, int $courseId): void
     {
         $courseId = (int) $courseId;
+        if (!Container::$container->get(CourseSettingPolicyManager::class)->isEditable($variable)) {
+            return;
+        }
 
         if ($courseId <= 0 || !\in_array($variable, ['customcertificate_course_enable', 'use_certificate_default'], true)) {
             return;
@@ -1904,6 +1908,22 @@ if ($enableAiHelpers) {
     foreach ($configurableAiOptions as $key => $label) {
         $v = api_get_course_setting($key);
         $values[$key] = ('-1' === (string) $v || $v === null || $v === '') ? 'false' : (string) $v;
+    }
+}
+
+// Globally locked course settings are read-only, not merely protected on POST.
+$courseSettingPolicyManager = Container::$container->get(CourseSettingPolicyManager::class);
+foreach ($courseSettings as $setting) {
+    if (!$courseSettingPolicyManager->isEditable($setting) && $form->elementExists($setting)) {
+        $form->removeElement($setting);
+    }
+}
+if ($form->elementExists('auto_launch_option')) {
+    foreach (['enable_document_auto_launch', 'enable_lp_auto_launch', 'enable_exercise_auto_launch', 'enable_forum_auto_launch'] as $setting) {
+        if (!$courseSettingPolicyManager->isEditable($setting)) {
+            $form->removeElement('auto_launch_option');
+            break;
+        }
     }
 }
 

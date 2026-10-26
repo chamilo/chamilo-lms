@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLtiToolResolver;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -55,6 +56,7 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CourseSettingPolicyManager $courseSettingPolicyManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
         private GradebookLtiToolResolver $ltiToolResolver,
@@ -346,6 +348,12 @@ final readonly class GradebookEvaluationActionProcessor implements ProcessorInte
 
             break;
         }
+
+        $modelId = (int) $this->courseSettingPolicyManager->effectiveValue(
+            'score_model_id',
+            -1 === $modelId ? null : (string) $modelId,
+            '-1',
+        );
 
         $selectedModel = $setting['models'][0];
         if (-1 !== $modelId) {

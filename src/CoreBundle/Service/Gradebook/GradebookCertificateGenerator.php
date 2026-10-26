@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookScoreCalculator;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -53,6 +54,7 @@ final readonly class GradebookCertificateGenerator
         private CDocumentRepository $documentRepository,
         private SystemTemplateRepository $systemTemplateRepository,
         private SettingsManager $settingsManager,
+        private CourseSettingPolicyManager $courseSettingPolicyManager,
         private PluginHelper $pluginHelper,
         private GradebookSkillAwarder $skillAwarder,
         private LegacyGradebookCertificateBridge $legacyCertificateBridge,
@@ -631,26 +633,22 @@ final readonly class GradebookCertificateGenerator
     private function isCourseSettingEnabled(Course $course, string $variable): bool
     {
         $settings = $this->entityManager->getRepository(CCourseSetting::class)->findBy(
-            [
-                'cId' => (int) $course->getId(),
-                'variable' => $variable,
-            ],
+            ['cId' => (int) $course->getId(), 'variable' => $variable],
             ['iid' => 'ASC'],
         );
+        $courseValue = null;
         foreach ($settings as $setting) {
-            if (!$setting instanceof CCourseSetting || null === $setting->getValue()) {
-                continue;
-            }
+            if ($setting instanceof CCourseSetting && null !== $setting->getValue()
+                && '-1' !== $setting->getValue()) {
+                $courseValue = $setting->getValue();
 
-            $value = trim($setting->getValue());
-            if ('-1' === $value) {
-                continue;
+                break;
             }
-
-            return '1' === $value || 'true' === strtolower($value);
         }
 
-        return false;
+        $value = trim((string) $this->courseSettingPolicyManager->effectiveValue($variable, $courseValue, '0'));
+
+        return '1' === $value || 'true' === strtolower($value);
     }
 
     private function getSettingString(string $name): string

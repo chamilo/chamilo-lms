@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Repository\CCourseSettingRepository;
@@ -42,6 +43,7 @@ final readonly class ResourceDefaultVisibilityHelper
     public function __construct(
         private SettingsManager $settingsManager,
         private CCourseSettingRepository $courseSettingRepository,
+        private ?CourseSettingPolicyManager $courseSettingPolicyManager = null,
     ) {}
 
     public static function visibilitySetting(string $tool): string
@@ -77,14 +79,17 @@ final readonly class ResourceDefaultVisibilityHelper
      */
     public function getVisibility(string $tool, ?Course $course = null): string
     {
+        $variable = self::visibilitySetting($tool);
+        $courseValue = null;
         if (null !== $course && $this->canBeModifiedInCourse($tool)) {
             $courseValue = $this->getCourseVisibility($tool, $course);
-            if (null !== $courseValue) {
-                return $courseValue;
-            }
         }
+        $platformValue = $this->getPlatformVisibility($tool);
+        $effective = null !== $this->courseSettingPolicyManager
+            ? $this->courseSettingPolicyManager->effectiveValue($variable, $courseValue, $platformValue, $tool)
+            : ($courseValue ?? $platformValue);
 
-        return $this->getPlatformVisibility($tool);
+        return self::normalize($effective) ?? $this->getPlatformVisibility($tool);
     }
 
     /**

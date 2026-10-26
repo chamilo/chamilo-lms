@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,6 +27,7 @@ readonly class CourseDescriptionHelper
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CourseSettingPolicyManager $courseSettingPolicyManager,
         private UserHelper $userHelper,
     ) {}
 
@@ -98,7 +100,7 @@ readonly class CourseDescriptionHelper
             $value = $setting->getValue();
 
             if ('course_description' === $category) {
-                return $this->resolveEnabledValue($value);
+                return $this->resolveEnabledValue($this->courseSettingPolicyManager->effectiveValue('enabled', $value, '1', 'course_description'));
             }
 
             if ('' === $category && null === $legacyValue) {
@@ -107,10 +109,10 @@ readonly class CourseDescriptionHelper
         }
 
         if (null === $legacyValue || '' === trim((string) $legacyValue)) {
-            return true;
+            return $this->resolveEnabledValue($this->courseSettingPolicyManager->effectiveValue('enabled', null, '1', 'course_description'));
         }
 
-        return $this->resolveEnabledValue($legacyValue);
+        return $this->resolveEnabledValue($this->courseSettingPolicyManager->effectiveValue('enabled', $legacyValue, '1', 'course_description'));
     }
 
     private function isSettingEnabled(string $name): bool

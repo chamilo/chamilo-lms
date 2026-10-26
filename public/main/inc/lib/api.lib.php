@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Helpers\PermissionHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
@@ -1906,7 +1907,7 @@ function api_get_course_int_id(?string $code = null): int
  *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($settingName, $courseInfo = null, $force = false)
+function api_get_course_setting($settingName, $courseInfo = null, $force = false, ?string $category = null)
 {
     if (empty($courseInfo)) {
         $courseInfo = api_get_course_info();
@@ -1953,11 +1954,16 @@ function api_get_course_setting($settingName, $courseInfo = null, $force = false
         }
     }
 
-    if (isset($courseSettingInfo[$courseId]) && isset($courseSettingInfo[$courseId][$settingName])) {
-        return $courseSettingInfo[$courseId][$settingName];
+    $courseValue = $courseSettingInfo[$courseId][$settingName] ?? null;
+    $policyManager = Container::$container->get(CourseSettingPolicyManager::class);
+    $effective = $policyManager->effectiveValue($settingName, $courseValue, -1, $category);
+
+    if ('email_alert_manager_on_new_quiz' === $settingName && \is_string($effective)
+        && '-1' !== $effective && '' !== $effective) {
+        return explode(',', $effective);
     }
 
-    return -1;
+    return $effective;
 }
 
 function api_get_course_plugin_setting($plugin, $settingName, $courseInfo = [])

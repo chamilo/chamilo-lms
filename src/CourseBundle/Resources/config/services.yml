@@ -16,6 +16,8 @@ services:
             - '@Chamilo\CourseBundle\Repository\CCourseSettingRepository'
             - '@event_dispatcher'
             - '@request_stack'
+        calls:
+            - setCourseSettingPolicyManager: ['@Chamilo\CoreBundle\Settings\CourseSettingPolicyManager']
 
     Chamilo\CourseBundle\Settings\SettingsFormFactory:
         arguments:

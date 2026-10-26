@@ -1685,6 +1685,8 @@ final readonly class GlobalReportingSectionQueryService
             ? ' AND relation_table.status = 1'
             : '';
 
+        // A skill without a portal (access_url_id 0, e.g. migrated from 1.11) belongs to every portal,
+        // as in main/my_space/myStudents.php, which does not filter skills by portal at all.
         $rows = $this->connection->fetchAllAssociative(
             'SELECT skill.id,
                     skill.title,
@@ -1693,7 +1695,7 @@ final readonly class GlobalReportingSectionQueryService
                FROM skill_rel_user relation_table
                INNER JOIN skill ON skill.id = relation_table.skill_id
               WHERE relation_table.user_id = :userId
-                AND skill.access_url_id = :accessUrlId
+                AND skill.access_url_id IN (0, :accessUrlId)
                 AND skill.status = 1'.$relationStatusCondition.'
            ORDER BY skill.title, skill.id',
             ['userId' => $userId, 'accessUrlId' => $context->accessUrlId],

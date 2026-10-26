@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "مع التقدير"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نموذج الصيغة: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نموذج الصيغة: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "مدى المتغير"
@@ -28782,6 +28782,9 @@ msgstr "المستخدم الحالي غير موجود."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "مرحبا %s،<br><br>أنت مسجل في %s.<br>يمكنك الوصول إلى حسابك من <a href=\"%s\">هنا</a>.<br><br>بيانات تسجيل الدخول الخاصة بك هي:<br>اسم المستخدم: <strong>%s</strong><br>كلمة المرور: <strong>%s</strong><br><br>مع أطيب التحيات،<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "مرحباً %s،<br><br>لقد تم تسجيلك في %s.<br>اسم المستخدم: <strong>%s</strong><br><br>يرجى النقر على الرابط أدناه لتعيين كلمة المرور والوصول إلى حسابك:<br><a href=\"%s\">تعيين كلمة المرور</a><br><br>مع أطيب التحيات،<br>%s"
+
 msgid "You are registered on %s"
 msgstr "أنت مسجل في %s"
 
@@ -41585,4 +41588,1616 @@ msgstr "تم تسجيل سجل الترحيلات"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s موجود في جذر المشروع: احذفه لإغلاق نقاط نهاية الترقية"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "لقد حصلت على شهادة لهذا التمرين"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "يجب إكمال مسار التعلم \"%s\" قبل أن تتمكن من الوصول إلى هذا المسار."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "هل أنت متأكد أنك تريد حذف هذا الملف نهائياً؟"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "هل أنت متأكد أنك تريد فصل هذا الملف عن المقرر المحدد؟"
+
+msgid "Attach this file to another course"
+msgstr "إرفاق هذا الملف بمقرر آخر"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "إرفاق بالمقرر(ات) المحددة (مخفي)"
+
+msgid "Course(s):"
+msgstr "المقرر(ات):"
+
+msgid "Delete definitively"
+msgstr "حذف نهائياً"
+
+msgid "Detach from this course"
+msgstr "فصل عن هذا المقرر"
+
+msgid "File actions"
+msgstr "إجراءات الملف"
+
+msgid "File Information"
+msgstr "معلومات الملف"
+
+msgid "File Link:"
+msgstr "رابط الملف:"
+
+msgid "File Path:"
+msgstr "مسار الملف:"
+
+msgid "Filter courses..."
+msgstr "تصفية المقررات..."
+
+msgid "MIME Type:"
+msgstr "نوع MIME:"
+
+msgid "N/A"
+msgstr "غير متوفر"
+
+msgid "No results found."
+msgstr "لم يتم العثور على نتائج."
+
+msgid "Original Name"
+msgstr "الاسم الأصلي"
+
+msgid "Original Name:"
+msgstr "الاسم الأصلي:"
+
+msgid "Orphan"
+msgstr "يتيم"
+
+msgid "Resource File ID:"
+msgstr "معرّف ملف المورد:"
+
+msgid "Resource Node ID:"
+msgstr "معرّف عقدة المورد:"
+
+msgid "Search..."
+msgstr "بحث..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "لفصل هذا الملف عن مقرر محدد، انقر على أيقونة \"×\" على وسم المقرر المقابل أعلاه."
+
+msgid "User:"
+msgstr "المستخدم:"
+
+msgid "View file information"
+msgstr "عرض معلومات الملف"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "يمكنك إرفاق هذا الملف بمقرر واحد أو أكثر (مخفي في جذر المستندات). إذا لم يعد الملف مستخدماً وأصبح يتيماً، يمكنك أيضاً حذفه نهائياً."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "يمكنك تحديد مقرر واحد أو أكثر (استخدم Ctrl/Cmd + النقر)."
+
+msgid "bytes"
+msgstr "بايت"
+
+msgid "Failed to copy:"
+msgstr "فشل النسخ:"
+
+msgid "Missing resource file identifier."
+msgstr "معرّف ملف المورد مفقود."
+
+msgid "Please select at least one course."
+msgstr "يرجى تحديد مقرر واحد على الأقل."
+
+msgid "Resource file not found."
+msgstr "ملف المورد غير موجود."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "تم إرفاق الملف \"%s\" بـ %d مقرر(ات): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "تم تخطي بعض المقررات: %s."
+
+msgid "Missing file or course identifier."
+msgstr "معرّف الملف أو المقرر مفقود."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "ملف المورد هذا ليس له عقدة مورد ولا يمكن فصله."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "تم فصل الملف عن %d رابط(ات) مقرر."
+
+msgid "This file is not attached to the selected course."
+msgstr "هذا الملف غير مرفق بالمقرر المحدد."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "لا يزال هذا الملف مستخدماً من قبل مورد واحد على الأقل ولا يمكن حذفه."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "تم حذف الملف اليتيم ومحتواه الفعلي نهائياً."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "تم نشر الاستبيان. تم الإنشاء: %d. تم التحديث: %d. الرسائل المرسلة: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "قابل للاكتساب"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "لا يمكن اكتساب هذه المهارة"
+
+#: issue-8179
+msgid "Novice"
+msgstr "مبتدئ"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "التزام صارم بالقواعد والتعليمات المجردة عن السياق؛ حكم ظرفي ضئيل."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "مبتدئ متقدم"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "يبدأ في التعرف على الجوانب الظرفية والأنماط لكنه لا يزال بحاجة إلى إرشادات."
+
+#: issue-8179
+msgid "Competent"
+msgstr "مختص"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "يطوّر التخطيط والنماذج الذهنية؛ يتحمل مسؤولية النتائج لكنه قد يشعر بالإرهاق بسبب التعقيد."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "بارع"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "يرى \"الصورة الكبيرة\"، ويحدد الأولويات بشكل حدسي، ويتعلم من التجربة."
+
+#: issue-8179
+msgid "Expert"
+msgstr "خبير"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "أداء حدسي وسلس؛ يعتمد على معرفة ضمنية عميقة؛ يستطيع الابتكار أو التعامل مع المواقف الجديدة بسهولة."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "التذكر"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "استرجاع أو تذكر أو التعرف على المعرفة ذات الصلة من الذاكرة طويلة المدى."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "الفهم"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "بناء المعنى من الرسائل التعليمية، بما في ذلك التواصل الشفهي والكتابي والرسوم. إظهار الاستيعاب من خلال التفسير أو التمثيل أو التصنيف أو التلخيص أو الاستنتاج أو المقارنة أو الشرح."
+
+#: issue-8179
+msgid "Applying"
+msgstr "التطبيق"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "تنفيذ إجراء أو استخدامه من خلال تنفيذه في موقف معين. استخدام المعرفة أو المهارات في مواقف جديدة أو ملموسة."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "التحليل"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "تفكيك المادة إلى أجزائها المكونة وتحديد كيفية ارتباط الأجزاء ببعضها وبالبنية أو الغرض العام. تحديد الدوافع أو الأسباب أو العلاقات."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "التقييم"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "إصدار أحكام بناءً على معايير ومقاييس. التحقق أو النقد أو تبرير القرارات أو مسارات العمل."
+
+#: issue-8179
+msgid "Creating"
+msgstr "الإبداع"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "تجميع العناصر لتشكيل كل متماسك أو وظيفي؛ إعادة تنظيم العناصر في نمط أو بنية جديدة. إنتاج عمل أصلي أو توليد أفكار جديدة."
+
+#: issue-8179
+msgid "Follow"
+msgstr "يتبع"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "يعمل تحت إشراف وتوجيه وثيقين. يؤدي مهام روتينية بسلطة تقديرية محدودة. يركز على اتباع التعليمات والتنفيذ الأساسي."
+
+#: issue-8179
+msgid "Assist"
+msgstr "يساعد"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "يعمل تحت إشراف روتيني. يقدم المساعدة للآخرين، ويساهم في مهام الفريق، ويبدأ في اتخاذ بعض المبادرات ضمن حدود محددة."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "يعمل تحت إشراف عام. يطبق المعرفة والمهارات على مجموعة من الأنشطة الروتينية وغير الروتينية. يمارس بعض التقدير والحكم."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "يعمل تحت توجيه واسع. يمكّن الآخرين من خلال تقديم إرشاد متخصص أو دعم أو خدمات. يتحمل مسؤولية عمله وقد يشرف على فرق أو مهام صغيرة."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "يضمن ويقدم المشورة"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "يعمل تحت توجيه واسع لكن باستقلالية كبيرة. يضمن أن العمل يحقق الأهداف ويقدم المشورة في المسائل المعقدة. غالباً ما يقود فرقاً أو مشاريع ويؤثر في القرارات."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "يبادر ويؤثر"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "لديه سلطة ومسؤولية محددة في مجال عمل مهم. يبادر بالإجراءات، ويؤثر في الاستراتيجية والسياسة في مجاله، ويقود مشاريع أو فرقاً كبيرة."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "يضع الاستراتيجية، يُلهم، يعبّئ"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "يملك السلطة على أعلى مستوى تنظيمي في مجال عمل رئيسي. يضع الاستراتيجية طويلة الأمد، ويُلهم الآخرين ويُعبّئهم، ويتخذ قرارات حاسمة لنجاح المنظمة. يؤثر على مستوى الصناعة أو المستويات الخارجية."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "أقصى وقت خمول يُؤخذ في الاعتبار (بالدقائق)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "صفحة المقرر المفتوحة تستمر في إرسال طلبات تلقائية. بعد هذا العدد من الدقائق دون إجراء حقيقي من المستخدم (فتح صفحة أو عنصر، الإجابة، إلخ)، يتوقف احتساب الوقت المستغرق في المقرر."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "محرر الويكي التعاوني"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "جارٍ الاتصال بـ Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "الحفظ ينشئ إصداراً جديداً من ويكي شاميلو من محتوى Etherpad الحالي."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "تعذر تحميل المحرر التعاوني."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "تفعيل Etherpad لتحرير الويكي"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "استخدام Etherpad كمحرر تعاوني لصفحات الويكي الحالية. يجب أن يكون Etherpad متاحاً على نفس الأصل مثل شاميلو لجلسات مضمّنة آمنة."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "عنوان URL لـ Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "عنوان URL الأساسي لمثيل Etherpad، بما في ذلك مسار وكيل عكسي اختياري. مثال: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "مفتاح واجهة برمجة تطبيقات Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "مفتاح واجهة برمجة التطبيقات الذي يستخدمه شاميلو لإنشاء اللوحات والجلسات ومزامنة محتوى الويكي. قم بتهيئة Etherpad لقبول المصادقة بمفتاح واجهة برمجة التطبيقات."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "يمكن تغيير الرؤية الافتراضية للمستندات الجديدة حسب المقرر"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "الرؤية المعطاة لمستند أو مجلد أو ملف مرفوع جديد عندما ينشئه المعلم في مقرر. يمكن للمعلمين تغيير رؤية كل منها لاحقاً."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "عند التفعيل، يمكن للمعلمين اختيار رؤية المستندات الجديدة لمقررهم في إعدادات المقرر، بدلاً من الإعداد الافتراضي للمنصة."
+
+msgid "Default visibility of new learning paths"
+msgstr "الرؤية الافتراضية لمسارات التعلم الجديدة"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "يمكن تغيير الرؤية الافتراضية لمسارات التعلم الجديدة حسب المقرر"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "الرؤية المعطاة لمسار تعلم جديد عندما ينشئه المعلم في مقرر. يمكن للمعلمين تغيير رؤية كل منها لاحقاً."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "عند التفعيل، يمكن للمعلمين اختيار رؤية مسارات التعلم الجديدة لمقررهم في إعدادات المقرر، بدلاً من الإعداد الافتراضي للمنصة."
+
+msgid "Default visibility of new tests"
+msgstr "الرؤية الافتراضية للاختبارات الجديدة"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "يمكن تغيير الظهور الافتراضي للاختبارات الجديدة حسب المقرر"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "الظهور الممنوح لاختبار جديد عندما ينشئه المعلم في مقرر. يمكن للمعلمين تغيير ظهور كل اختبار لاحقًا."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "عند التمكين، يمكن للمعلمين اختيار ظهور الاختبارات الجديدة لمقررهم في إعدادات المقرر، بدلًا من الإعداد الافتراضي للمنصة."
+
+msgid "Default visibility for new learning paths"
+msgstr "الظهور الافتراضي لمسارات التعلم الجديدة"
+
+msgid "Default visibility for new tests"
+msgstr "الظهور الافتراضي للاختبارات الجديدة"
+
+msgid "Following"
+msgstr "متابعة"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "تلقي رسالة بريد إلكتروني عندما يعلق متعلم على تسليم لهذه المهمة"
+
+msgid "Payment history"
+msgstr "سجل المدفوعات"
+
+msgid "No payments yet"
+msgstr "لا توجد مدفوعات بعد"
+
+msgid "Cancel service"
+msgstr "إلغاء الخدمة"
+
+msgid "Official transcript"
+msgstr "كشف الدرجات الرسمي"
+
+msgid "Unofficial transcript"
+msgstr "كشف الدرجات غير الرسمي"
+
+msgid "Student name"
+msgstr "اسم الطالب"
+
+msgid "Student number"
+msgstr "رقم الطالب"
+
+msgid "Program title"
+msgstr "عنوان البرنامج"
+
+msgid "Required hours"
+msgstr "الساعات المطلوبة"
+
+msgid "Completion date"
+msgstr "تاريخ الإكمال"
+
+msgid "Hours completed"
+msgstr "الساعات المكتملة"
+
+msgid "Final grade"
+msgstr "الدرجة النهائية"
+
+msgid "Grade"
+msgstr "الدرجة"
+
+msgid "No completed course yet."
+msgstr "لا يوجد مقرر مكتمل بعد."
+
+msgid "Grading scale"
+msgstr "سلم التقديرات"
+
+msgid "Signature of school official"
+msgstr "توقيع المسؤول المدرسي"
+
+msgid "School official"
+msgstr "المسؤول المدرسي"
+
+msgid "Official's title"
+msgstr "المسمى الوظيفي للمسؤول"
+
+msgid "Verify this transcript at"
+msgstr "تحقق من كشف الدرجات هذا على"
+
+msgid "Verification code"
+msgstr "رمز التحقق"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "كشف الدرجات غير الرسمي هذا غير موقّع. اطلب من المسؤول كشف درجات رسميًا."
+
+msgid "Transcript verification"
+msgstr "التحقق من كشف الدرجات"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "تحقق من أن كشف الدرجات الرسمي هذا صادر وموقّع من المؤسسة، ولم يُعدَّل ولم يُلغَ."
+
+msgid "Valid"
+msgstr "صالح"
+
+msgid "Invalid signature"
+msgstr "توقيع غير صالح"
+
+msgid "Transcript not found"
+msgstr "كشف الدرجات غير موجود"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "توقيع المؤسسة صالح ولم يُلغَ كشف الدرجات هذا."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "لا يمكن التحقق من صلاحية كشف الدرجات هذا. لا تُعرض تفاصيله."
+
+msgid "Transcript details"
+msgstr "تفاصيل كشف الدرجات"
+
+msgid "Institution"
+msgstr "المؤسسة"
+
+msgid "Issued on"
+msgstr "تاريخ الإصدار"
+
+msgid "Download verification JSON"
+msgstr "تنزيل JSON للتحقق"
+
+msgid "Transcript"
+msgstr "كشف الدرجات"
+
+msgid "My confidential reports"
+msgstr "تقاريري السرية"
+
+msgid "My transcript"
+msgstr "كشف درجاتي"
+
+msgid "Confidential investigations"
+msgstr "تحقيقات سرية"
+
+msgid "Floor plan"
+msgstr "مخطط الطابق"
+
+msgid "Click a highlighted room to select it"
+msgstr "انقر على غرفة مميزة لتحديدها"
+
+msgid "Select room"
+msgstr "اختيار غرفة"
+
+msgid "Room on floor plan"
+msgstr "غرفة على مخطط الطابق"
+
+msgid "Select a branch first"
+msgstr "اختر فرعًا أولًا"
+
+msgid "The branch has no attached floor plan"
+msgstr "لا يوجد مخطط طابق مرفق بالفرع"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "استخدم أداة المضلع لتحديد حدود الغرفة؛ استخدم تحرير لتحريك الزوايا"
+
+msgid "Save room area"
+msgstr "حفظ منطقة الغرفة"
+
+msgid "Clear room area"
+msgstr "مسح منطقة الغرفة"
+
+msgid "Save the room form to persist the area"
+msgstr "احفظ نموذج الغرفة لحفظ المنطقة"
+
+msgid "Floor plan unavailable"
+msgstr "مخطط الطابق غير متوفر"
+
+msgid "Room map points must be within the floor plan"
+msgstr "يجب أن تكون نقاط خريطة الغرفة ضمن مخطط الطابق"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "هل أنت متأكد من أنك تريد مسح منطقة الغرفة؟"
+
+msgid "View room on floor plan"
+msgstr "عرض الغرفة على مخطط الطابق"
+
+msgid "No floor plan available"
+msgstr "لا يوجد مخطط طابق متاح"
+
+msgid "This is an assignment by groups"
+msgstr "هذا واجب حسب المجموعات"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "ارفع مخطط طابق بصيغة PNG أو JPEG أو SVG ثابت آمن، أو اختر صورة موجودة من المستندات."
+
+msgid "Upload floor plan"
+msgstr "رفع مخطط الطابق"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG أو JPEG أو SVG ثابت، بحد أقصى 10 ميغابايت"
+
+msgid "Search images by name"
+msgstr "البحث عن الصور بالاسم"
+
+msgid "Image name"
+msgstr "اسم الصورة"
+
+msgid "Select an image"
+msgstr "اختر صورة"
+
+msgid "Change floor plan"
+msgstr "تغيير مخطط الطابق"
+
+msgid "Attach floor plan"
+msgstr "إرفاق مخطط الطابق"
+
+msgid "No matching images found in Documents."
+msgstr "لم يتم العثور على صور مطابقة في المستندات."
+
+msgid "Current floor plan"
+msgstr "مخطط الطابق الحالي"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "يتم حفظ تغييرات مخطط الطابق تلقائيًا."
+
+msgid "Remove floor plan"
+msgstr "إزالة مخطط الطابق"
+
+msgid "Cannot load images"
+msgstr "تعذر تحميل الصور"
+
+msgid "Floor plan saved"
+msgstr "تم حفظ مخطط الطابق"
+
+msgid "Cannot attach floor plan"
+msgstr "تعذر إرفاق مخطط الطابق"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "يُدعم فقط صور PNG/JPEG وSVG الثابت الآمن حتى 10 ميغابايت."
+
+msgid "Cannot upload floor plan"
+msgstr "تعذر رفع مخطط الطابق"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "هل أنت متأكد من أنك تريد إزالة مخطط الطابق؟"
+
+msgid "Floor plan removed"
+msgstr "تمت إزالة مخطط الطابق"
+
+msgid "Cannot remove floor plan"
+msgstr "تعذر إزالة مخطط الطابق"
+
+msgid "Support bot"
+msgstr "روبوت الدعم"
+
+msgid "Connected"
+msgstr "متصل"
+
+msgid "Not connected"
+msgstr "غير متصل"
+
+msgid "View ticket"
+msgstr "عرض التذكرة"
+
+msgid "Start a new conversation"
+msgstr "بدء محادثة جديدة"
+
+msgid "Video call"
+msgstr "مكالمة فيديو"
+
+msgid "Incoming video call"
+msgstr "مكالمة فيديو واردة"
+
+msgid "Decline"
+msgstr "رفض"
+
+msgid "Mute microphone"
+msgstr "كتم الميكروفون"
+
+msgid "Unmute microphone"
+msgstr "إلغاء كتم الميكروفون"
+
+msgid "Turn camera off"
+msgstr "إيقاف الكاميرا"
+
+msgid "Turn camera on"
+msgstr "تشغيل الكاميرا"
+
+msgid "Hang up"
+msgstr "إنهاء المكالمة"
+
+msgid "Calling..."
+msgstr "جارٍ الاتصال..."
+
+msgid "Connecting..."
+msgstr "جارٍ التوصيل..."
+
+msgid "Your contact is busy."
+msgstr "جهة الاتصال مشغولة."
+
+msgid "Your contact did not answer the call."
+msgstr "لم يرد جهة الاتصال على المكالمة."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "تعذر على جهة الاتصال الوصول إلى الكاميرا أو الميكروفون."
+
+msgid "Your contact could not prepare the video call."
+msgstr "تعذر على جهة الاتصال تجهيز مكالمة الفيديو."
+
+msgid "Your contact refused the call."
+msgstr "رفضت جهة الاتصال المكالمة."
+
+msgid "The call timed out."
+msgstr "انتهت مهلة المكالمة."
+
+msgid "Your contact cancelled the call."
+msgstr "ألغى جهة الاتصال المكالمة."
+
+msgid "The video connection was lost."
+msgstr "فُقد الاتصال بالفيديو."
+
+msgid "Your contact could not establish the video connection."
+msgstr "تعذّر على جهة الاتصال إنشاء اتصال الفيديو."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "تعذّر على جهة الاتصال إكمال إعداد مكالمة الفيديو."
+
+msgid "Your contact hung up."
+msgstr "أنهى جهة الاتصال المكالمة."
+
+msgid "Video call could not be started"
+msgstr "تعذّر بدء مكالمة الفيديو"
+
+msgid "Camera or microphone permission was denied."
+msgstr "رُفض الإذن بالكاميرا أو الميكروفون."
+
+msgid "No camera or microphone was found."
+msgstr "لم يُعثر على كاميرا أو ميكروفون."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "الكاميرا أو الميكروفون قيد الاستخدام بالفعل أو غير متاح."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "الكاميرا أو الميكروفون لا يدعم الإعدادات المطلوبة."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "تعذّر الحصول على الوصول إلى الكاميرا أو الميكروفون."
+
+msgid "The video call could not be prepared."
+msgstr "تعذّر تجهيز مكالمة الفيديو."
+
+msgid "The video call request could not be sent."
+msgstr "تعذّر إرسال طلب مكالمة الفيديو."
+
+msgid "The incoming video call could not be processed."
+msgstr "تعذّر معالجة مكالمة الفيديو الواردة."
+
+msgid "The video call answer could not be prepared."
+msgstr "تعذّر تجهيز الرد على مكالمة الفيديو."
+
+msgid "The video call answer could not be sent."
+msgstr "تعذّر إرسال الرد على مكالمة الفيديو."
+
+msgid "The video call answer could not be processed."
+msgstr "تعذّر معالجة الرد على مكالمة الفيديو."
+
+msgid "The video connection failed"
+msgstr "فشل اتصال الفيديو"
+
+msgid "The video connection could not be established."
+msgstr "تعذّر إنشاء اتصال الفيديو."
+
+msgid "No answer was received."
+msgstr "لم يُستلم أي رد."
+
+msgid "You refused the call."
+msgstr "رفضت المكالمة."
+
+msgid "You cancelled the call."
+msgstr "ألغيت المكالمة."
+
+msgid "You hung up."
+msgstr "أنهيت المكالمة."
+
+msgid "You missed the call."
+msgstr "فاتتك المكالمة."
+
+msgid "Support bot is currently unavailable."
+msgstr "روبوت الدعم غير متاح حالياً."
+
+msgid "A support ticket has been created."
+msgstr "تم إنشاء تذكرة دعم."
+
+msgid "Conversation ended."
+msgstr "انتهت المحادثة."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "تعذّر على روبوت الدعم متابعة هذه المحادثة. يُرجى المحاولة مرة أخرى."
+
+msgid "Add your first term glossary to this course"
+msgstr "أضف أول مصطلح في المسرد إلى هذه الدورة"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "هل أنت متأكد أنك تريد حذف قالب الاستبيان هذا؟"
+
+msgid "The survey template has been deleted."
+msgstr "تم حذف قالب الاستبيان."
+
+msgid "Please select a course."
+msgstr "يُرجى اختيار دورة."
+
+msgid "Please select a session for this course."
+msgstr "يُرجى اختيار جلسة لهذه الدورة."
+
+msgid "The survey has been created from the template."
+msgstr "تم إنشاء الاستبيان من القالب."
+
+msgid "Survey templates"
+msgstr "قوالب الاستبيانات"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "أنشئ قوالب استبيانات قابلة لإعادة الاستخدام للمعلمين وعيّنها مباشرة إلى دورة أو جلسة."
+
+msgid "Subtitle"
+msgstr "عنوان فرعي"
+
+msgid "Assign to course"
+msgstr "تعيين إلى الدورة"
+
+msgid "Assign template to course"
+msgstr "تعيين القالب إلى الدورة"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "اترك الجلسة فارغة لإنشاء الاستبيان مباشرة في الدورة."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "هذه الدورة متاحة عبر جلسة على هذه البوابة، لذا يلزم اختيار جلسة."
+
+msgid "Survey template questions"
+msgstr "أسئلة قالب الاستبيان"
+
+msgid "Back to survey templates"
+msgstr "العودة إلى قوالب الاستبيانات"
+
+msgid "Could not load survey template"
+msgstr "تعذّر تحميل قالب الاستبيان"
+
+msgid "Could not load survey template questions"
+msgstr "تعذّر تحميل أسئلة قالب الاستبيان"
+
+msgid "Could not save survey template question"
+msgstr "تعذّر حفظ سؤال قالب الاستبيان"
+
+msgid "Could not delete survey template question"
+msgstr "تعذّر حذف سؤال قالب الاستبيان"
+
+msgid "Could not move survey template question"
+msgstr "تعذّر نقل سؤال قالب الاستبيان"
+
+msgid "Could not copy survey template question"
+msgstr "تعذّر نسخ سؤال قالب الاستبيان"
+
+msgid "The survey template has been saved."
+msgstr "تم حفظ قالب الاستبيان."
+
+msgid "Edit survey template"
+msgstr "تعديل قالب الاستبيان"
+
+msgid "Create survey template"
+msgstr "إنشاء قالب استبيان"
+
+msgid "The survey template title is required."
+msgstr "عنوان قالب الاستبيان مطلوب."
+
+msgid "Visible as template"
+msgstr "ظاهر كقالب"
+
+msgid "Create satisfaction survey"
+msgstr "إنشاء استبيان رضا"
+
+msgid "Training satisfaction survey"
+msgstr "استبيان رضا عن التدريب"
+
+msgid "Could not create satisfaction survey"
+msgstr "تعذر إنشاء استبيان الرضا"
+
+msgid "Use template"
+msgstr "استخدام قالب"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "أنشئ هذا الاستبيان من قالب قابل لإعادة الاستخدام أعدّه المسؤول."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "النتائج مخفية عن المعلم/المدرّس"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "يمكن للمعلمين والمدرّسين الاطلاع على عدد الإجابات وإرسال التذكيرات، لكن لا يمكنهم فتح نتائج الاستبيان أو تصديرها."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "تم تطبيق القالب. راجع إعدادات الاستبيان واحفظ لإنشائه."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "نتائج الاستبيان مخفية عن المعلمين والمدرّسين."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "لا يزال بإمكانك استخدام صفحة الدعوات لعرض عدد الإجابات وإرسال التذكيرات."
+
+msgid "Payment method"
+msgstr "طريقة الدفع"
+
+msgid "Preview mode"
+msgstr "وضع المعاينة"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "لا يُحفظ التقدم والدرجة في وضع المعاينة."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "لا يمكن عرض هذا الرابط داخل مسار التعلم."
+
+msgid "Open it in a new tab to view the page."
+msgstr "افتحه في علامة تبويب جديدة لعرض الصفحة."
+
+msgid "Report a problem with this question"
+msgstr "الإبلاغ عن مشكلة في هذا السؤال"
+
+msgid "Your report was sent to the teacher."
+msgstr "تم إرسال بلاغك إلى المعلم."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "صف الخطأ أو المشكلة التي وجدتها. سيُرسل بلاغك إلى المعلم."
+
+msgid "A comment is required."
+msgstr "التعليق مطلوب."
+
+msgid "Could not send the report."
+msgstr "تعذر إرسال البلاغ."
+
+msgid "Learner reports"
+msgstr "بلاغات المتعلمين"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "لم تُقدَّم أي بلاغات من المتعلمين لهذا السؤال."
+
+msgid "View attempt"
+msgstr "عرض المحاولة"
+
+msgid "Could not load learner reports."
+msgstr "تعذر تحميل بلاغات المتعلمين."
+
+msgid "Allow learners to report issues in questions"
+msgstr "السماح للمتعلمين بالإبلاغ عن مشكلات في الأسئلة"
+
+msgid "Skill acquired"
+msgstr "مهارة مكتسبة"
+
+msgid "AI Toolbox"
+msgstr "صندوق أدوات الذكاء الاصطناعي"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "أنشئ تطبيقات تعليمية تفاعلية بالذكاء الاصطناعي وتتبع تقدم المتعلمين عبر SCORM."
+
+msgid "No published applications are available yet."
+msgstr "لا توجد تطبيقات منشورة بعد."
+
+msgid "Interactive applications"
+msgstr "تطبيقات تفاعلية"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "أنشئ وحسّن وانشر وراجع الإصدارات من مكان واحد."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "افتح تطبيقاً للمتابعة من آخر تقدم وصلت إليه."
+
+msgid "Interactive learning application"
+msgstr "تطبيق تعلم تفاعلي"
+
+msgid "Create an interactive learning app"
+msgstr "إنشاء تطبيق تعلم تفاعلي"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "صف النشاط. سينشئ Chamilo تطبيقاً بنظام SCORM بإصدارات مع تتبع التقدم والدرجة."
+
+msgid "Idea"
+msgstr "الفكرة"
+
+msgid "Application"
+msgstr "التطبيق"
+
+msgid "What should the application do?"
+msgstr "ماذا يجب أن يفعل التطبيق؟"
+
+msgid "How it works"
+msgstr "كيف يعمل"
+
+msgid "AI generation"
+msgstr "التوليد بالذكاء الاصطناعي"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "يُنشأ التطبيق من تعليماتك ويُحفظ كإصدار 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "يُبلَّغ Chamilo بتقدم المتعلم والدرجة وبيانات الاستئناف."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "التحسينات المستقبلية تنشئ إصدارات جديدة دون حذف السابقة."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "أدرج هدف التعلم والقواعد والمستويات والتقييم وما يحدث عند إنهاء المتعلم."
+
+msgid "You are not allowed to create content in this context."
+msgstr "غير مسموح لك بإنشاء محتوى في هذا السياق."
+
+msgid "The application was generated successfully."
+msgstr "تم إنشاء التطبيق بنجاح."
+
+msgid "Open in student view"
+msgstr "فتح في عرض الطالب"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "أنشئ التطبيق لتمكين المعاينة والنشر."
+
+msgid "Improve with AI"
+msgstr "تحسين بالذكاء الاصطناعي"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "صف التغيير. سيتم إنشاء إصدار جديد وستبقى الإصدارات السابقة متاحة."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "صف النشاط التفاعلي الكامل الذي تريد إنشاءه."
+
+msgid "What should be improved?"
+msgstr "ما الذي ينبغي تحسينه؟"
+
+msgid "Generate new version"
+msgstr "إنشاء إصدار جديد"
+
+msgid "Version history"
+msgstr "سجل الإصدارات"
+
+msgid "Preview, download or restore any generated version."
+msgstr "معاينة أي إصدار مُنشأ أو تنزيله أو استعادته."
+
+msgid "A new version was generated."
+msgstr "تم إنشاء إصدار جديد."
+
+msgid "Version restored"
+msgstr "تم استعادة الإصدار"
+
+msgid "The support bot tree has been published."
+msgstr "تم نشر شجرة روبوت الدعم."
+
+msgid "The support bot tree has been archived."
+msgstr "تم أرشفة شجرة روبوت الدعم."
+
+msgid "The support bot tree has been duplicated."
+msgstr "تم تكرار شجرة روبوت الدعم."
+
+msgid "The support bot tree has been deleted."
+msgstr "تم حذف شجرة روبوت الدعم."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "هل أنت متأكد أنك تريد حذف شجرة روبوت الدعم هذه؟"
+
+msgid "The support bot tree has been imported."
+msgstr "تم استيراد شجرة روبوت الدعم."
+
+msgid "Create support bot tree"
+msgstr "إنشاء شجرة روبوت الدعم"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "أنشئ شجرة قرارات ثابتة توجّه المستخدمين عبر أسئلة الدعم ويمكنها التصعيد إلى التذاكر."
+
+msgid "Portal scope"
+msgstr "نطاق البوابة"
+
+msgid "Duplicate"
+msgstr "تكرار"
+
+msgid "Archive"
+msgstr "أرشفة"
+
+msgid "View conversations"
+msgstr "عرض المحادثات"
+
+msgid "Import support bot tree"
+msgstr "استيراد شجرة روبوت الدعم"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "استورد تصدير JSON أو شجرة قرارات CSV. تُنشأ الشجرة المستوردة دائمًا كمسودة جديدة."
+
+msgid "Resolved"
+msgstr "تم الحل"
+
+msgid "Escalated"
+msgstr "تم التصعيد"
+
+msgid "Abandoned"
+msgstr "متروك"
+
+msgid "Support bot conversations"
+msgstr "محادثات روبوت الدعم"
+
+msgid "Outcome"
+msgstr "النتيجة"
+
+msgid "Started at"
+msgstr "بدأت في"
+
+msgid "Ended at"
+msgstr "انتهت في"
+
+msgid "View conversation"
+msgstr "عرض المحادثة"
+
+msgid "Go to node"
+msgstr "الانتقال إلى العقدة"
+
+msgid "Create support ticket"
+msgstr "إنشاء تذكرة دعم"
+
+msgid "End conversation"
+msgstr "إنهاء المحادثة"
+
+msgid "Node"
+msgstr "عقدة"
+
+msgid "A support bot tree requires at least one node."
+msgstr "تتطلب شجرة روبوت الدعم عقدة واحدة على الأقل."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "هل أنت متأكد أنك تريد حذف هذه العقدة؟ سيتم مسح الروابط إليها."
+
+msgid "Every support bot node requires at least one option."
+msgstr "تتطلب كل عقدة في روبوت الدعم خيارًا واحدًا على الأقل."
+
+msgid "The support bot tree title is required."
+msgstr "عنوان شجرة روبوت الدعم مطلوب."
+
+msgid "A support bot entry node is required."
+msgstr "عقدة الدخول لروبوت الدعم مطلوبة."
+
+msgid "Every support bot node requires content."
+msgstr "تتطلب كل عقدة في روبوت الدعم محتوى."
+
+msgid "Every support bot option requires a label."
+msgstr "يتطلب كل خيار في روبوت الدعم تسمية."
+
+msgid "Select a target node for every go-to option."
+msgstr "حدد عقدة هدف لكل خيار انتقال."
+
+msgid "Enter a relative URL for every link option."
+msgstr "أدخل عنوان URL نسبيًا لكل خيار رابط."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "حدد فئة تذكرة لكل خيار تصعيد."
+
+msgid "The support bot tree has been saved."
+msgstr "تم حفظ شجرة روبوت الدعم."
+
+msgid "Edit support bot tree"
+msgstr "تحرير شجرة روبوت الدعم"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "إصدارات روبوت الدعم المنشورة والمؤرشفة للقراءة فقط. كرّر هذه الشجرة من القائمة لتحرير مسودة إصدار جديدة."
+
+msgid "Default ticket project"
+msgstr "مشروع التذاكر الافتراضي"
+
+msgid "Decision tree rules"
+msgstr "قواعد شجرة القرار"
+
+msgid "Every node must contain at least one option."
+msgstr "يجب أن تحتوي كل عقدة على خيار واحد على الأقل."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "يجب أن تنهي العقدة النهائية المحادثة أو تنشئ تذكرة دعم."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "يجب ألا تنشئ روابط الانتقال دورات في الإصدار 1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "عناوين URL الخارجية غير مسموح بها في الإصدار 1؛ يجب أن تستخدم إجراءات الروابط مسار Chamilo نسبيًا."
+
+msgid "Nodes"
+msgstr "العقد"
+
+msgid "Add node"
+msgstr "إضافة عقدة"
+
+msgid "Entry node"
+msgstr "عقدة الدخول"
+
+msgid "Set as entry node"
+msgstr "تعيين كعقدة دخول"
+
+msgid "Target node"
+msgstr "العقدة المستهدفة"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "استخدم مسار Chamilo نسبيًا، على سبيل المثال /tickets."
+
+msgid "Ticket category"
+msgstr "فئة التذكرة"
+
+msgid "Select a default ticket project first."
+msgstr "حدد مشروع التذاكر الافتراضي أولاً."
+
+msgid "Closing message"
+msgstr "رسالة الإغلاق"
+
+msgid "Select a node to edit it."
+msgstr "حدد عقدة لتعديلها."
+
+msgid "Support bot conversation"
+msgstr "محادثة روبوت الدعم"
+
+msgid "Transcript of %s"
+msgstr "كشف درجات %s"
+
+msgid "Download unofficial transcript"
+msgstr "تنزيل كشف درجات غير رسمي"
+
+msgid "Issue official transcript"
+msgstr "إصدار كشف درجات رسمي"
+
+msgid "Official transcripts"
+msgstr "كشوف الدرجات الرسمية"
+
+msgid "No official transcript has been issued yet."
+msgstr "لم يُصدر أي كشف درجات رسمي بعد."
+
+msgid "Issued by"
+msgstr "صادر عن"
+
+msgid "Verify"
+msgstr "تحقق"
+
+msgid "Signature of official transcripts"
+msgstr "توقيع كشوف الدرجات الرسمية"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "تُطبع هذه الصورة على كشوف الدرجات الرسمية لهذه البوابة، فوق اسم الموقّع ولقبه المحددين في إعدادات الشهادة."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "هل تريد إصدار كشف درجات رسمي موقّع بالمقررات والدرجات المدرجة في هذه الصفحة؟ يمكن التحقق منه عبر الإنترنت حتى يتم إلغاؤه."
+
+msgid "Official transcript issued"
+msgstr "تم إصدار كشف الدرجات الرسمي"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "هل تريد إلغاء كشف الدرجات الرسمي هذا؟ ستظهر صفحة التحقق بعد ذلك أنه ملغى."
+
+msgid "Official transcript revoked"
+msgstr "تم إلغاء كشف الدرجات الرسمي"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "حدد صورة PNG أو JPEG أولاً."
+
+msgid "Signed credential"
+msgstr "اعتماد موقّع"
+
+msgid "Issue signed credential"
+msgstr "إصدار اعتماد موقّع"
+
+msgid "Verify credential"
+msgstr "التحقق من الاعتماد"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "تثبيت على شبكة اختبار Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "تأكيد معاملة Sepolia الحالية"
+
+msgid "Revoke signed credential"
+msgstr "إلغاء الاعتماد الموقّع"
+
+msgid "Delete certificate"
+msgstr "حذف الشهادة"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "تأكيد معاملة Sepolia موجودة"
+
+msgid "Sepolia transaction hash"
+msgstr "تجزئة معاملة Sepolia"
+
+msgid "Verify transaction"
+msgstr "التحقق من المعاملة"
+
+msgid "Anchored"
+msgstr "مثبت"
+
+msgid "Issued"
+msgstr "صادر"
+
+msgid "Not issued"
+msgstr "غير صادر"
+
+msgid "Consent required"
+msgstr "الموافقة مطلوبة"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "تم تأكيد معاملة Sepolia والتحقق منها"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "سيطلب منك محفظة شبكة اختبار Sepolia توقيع معاملة. سيتم تثبيت بصمة الشهادة فقط. هل تريد المتابعة؟"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "هل تريد إلغاء هذا الاعتماد الموقّع؟ تبقى أي معاملة على سلسلة الكتل دائمة، لكن صفحة التحقق ستُبلغ بالإلغاء."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "هل تريد إصدار اعتماد شهادة موقّع لهذا المتعلم؟ يجعل ذلك التفاصيل الشخصية المعتمدة قابلة للتحقق عبر رابط خاص."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "يلزم وجود محفظة متصفح متوافقة مع EVM لـ Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "حدد شبكة اختبار Sepolia (معرّف السلسلة 11155111) في محفظتك."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "عنوان محفظة أو بصمة شهادة غير صالحين."
+
+msgid "Transaction pending"
+msgstr "المعاملة قيد الانتظار"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "استخدم تأكيد معاملة Sepolia الحالية لاحقًا."
+
+msgid "Signed credential issued"
+msgstr "تم إصدار بيانات اعتماد موقّعة"
+
+msgid "Credential revoked"
+msgstr "تم إلغاء بيانات الاعتماد"
+
+msgid "Transaction hash"
+msgstr "تجزئة المعاملة"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "يسمح موافقة النشر للمسؤول بإصدار بيانات اعتماد شهادة موقّعة واختياريًا تثبيت بصمتها SHA-256 على شبكة اختبار Sepolia. لا يُرسل أي اسم أو بيانات شخصية على السلسلة. يمكنك سحب الموافقة في أي وقت."
+
+msgid "Publication consent"
+msgstr "موافقة النشر"
+
+msgid "Not approved"
+msgstr "غير موافق عليه"
+
+msgid "Withdraw consent"
+msgstr "سحب الموافقة"
+
+msgid "Approve publication"
+msgstr "الموافقة على النشر"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "أُصرّح بإصدار بيانات اعتماد موقّعة وقابلة للتحقق علنًا تُظهر اسمي والدورة والدرجة وتاريخ الإصدار. يجوز للمسؤول أيضًا نشر بصمتها SHA-256 فقط على شبكة اختبار Sepolia. البصمة دائمة حتى إذا سحبتُ الموافقة لاحقًا. هل تريد المتابعة؟"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "سحب الموافقة على نشر هذه الشهادة؟"
+
+msgid "Publication approval recorded"
+msgstr "تم تسجيل الموافقة على النشر"
+
+msgid "Publication approval withdrawn"
+msgstr "تم سحب الموافقة على النشر"
+
+msgid "Read more"
+msgstr "اقرأ المزيد"
+
+msgid "Participation: %s of %s posts"
+msgstr "المشاركة: %s من %s منشورات"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "انشر مساهمتك لرؤية ردود المشاركين الآخرين."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "يمكن للمحققين المصرّح لهم فقط مراجعة البلاغات المؤهلة. تبقى هويات المبلّغين سرية افتراضيًا."
+
+msgid "New confidential report"
+msgstr "بلاغ سري جديد"
+
+msgid "Reported user"
+msgstr "المستخدم المُبلَّغ عنه"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "توجد بلاغات سرية مؤهلة بانتظار المراجعة."
+
+msgid "Eligible investigations"
+msgstr "تحقيقات مؤهلة"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "تظهر الحالة هنا فقط بعد أن يُبلّغ %s مستخدمين مختلفين على الأقل عن الشخص نفسه."
+
+msgid "Distinct reporters"
+msgstr "مبلّغون متميزون"
+
+msgid "Reports for selected user"
+msgstr "بلاغات عن المستخدم المحدد"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "الإبلاغ السري غير متاح حاليًا."
+
+msgid "The investigation could not be loaded."
+msgstr "تعذّر تحميل التحقيق."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "هويتك محمية من المحققين افتراضيًا، لكن تجنّب تضمين تفاصيل تعريفية في نص البلاغ أو المرفقات. هذه ليست خدمة طوارئ."
+
+msgid "Find the user involved"
+msgstr "ابحث عن المستخدم المعني"
+
+msgid "Name or username"
+msgstr "الاسم أو اسم المستخدم"
+
+msgid "Describe the situation"
+msgstr "صف الموقف"
+
+msgid "Evidence (optional)"
+msgstr "أدلة (اختياري)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "حتى ثلاثة ملفات، بحد أقصى 8 ميبيبايت لكل ملف. صور أو صوت أو مقاطع فيديو قصيرة."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "أوافق على أن يرى المحققون المصرّح لهم اسمي وبريدي الإلكتروني لهذا البلاغ تحديدًا. يمكنني سحب هذا الإذن لاحقًا."
+
+msgid "Send confidential report"
+msgstr "إرسال بلاغ سري"
+
+msgid "Could not search users"
+msgstr "تعذّر البحث عن المستخدمين"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "حتى ثلاثة ملفات، بحد أقصى 8 ميبيبايت لكل ملف."
+
+msgid "The confidential report could not be saved."
+msgstr "تعذّر حفظ البلاغ السري."
+
+msgid "Confidential report"
+msgstr "بلاغ سري"
+
+msgid "Confidential conversation"
+msgstr "محادثة سرية"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "يمكن للمحققين التواصل عبر هذه المحادثة دون رؤية هوية المبلّغ ما لم يتم تفعيل مشاركة جهة الاتصال."
+
+msgid "Reporter"
+msgstr "المبلّغ"
+
+msgid "Investigator"
+msgstr "المحقق"
+
+msgid "Additional evidence (optional)"
+msgstr "أدلة إضافية (اختياري)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "حتى ثلاثة ملفات، بحد أقصى 8 ميبيبايت لكل ملف؛ عشرة ملفات لكل بلاغ."
+
+msgid "Contact shared voluntarily"
+msgstr "تمت مشاركة جهة الاتصال طوعًا"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "السماح للمحققين برؤية اسمي وبريدي الإلكتروني لهذا البلاغ"
+
+msgid "This confidential report is not available."
+msgstr "هذا البلاغ السري غير متاح."
+
+msgid "Your message could not be saved."
+msgstr "تعذر حفظ رسالتك."
+
+msgid "Contact sharing could not be updated."
+msgstr "تعذر تحديث مشاركة جهات الاتصال."
+
+msgid "Evidence could not be downloaded."
+msgstr "تعذر تنزيل الدليل."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>مثال نشاط تعبئة النموذج: حساب مؤشر كتلة الجسم</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>العمر</strong></td>            <td width=\"75%\" style=\"\">[25] سنة</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>الجنس</strong></td>            <td style=\"\" text-align:=\"\">[M] (M أو F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>الوزن</strong></td>            <td style=\"\" text-align:=\"\">95 كغ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>الطول</strong></td>            <td style=\"vertical-align: top;\">1.81 م</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>مؤشر كتلة الجسم</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =الوزن/الطول<sup>2</sup> (راجع <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> مقالة ويكيبيديا</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>مثال نشاط تعبئة النموذج: حساب مؤشر كتلة الجسم</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>العمر</strong></td>            <td width=\"75%\" style=\"\">[25] سنة</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>الجنس</strong></td>            <td style=\"\" text-align:=\"\">[M] (M أو F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>الوزن</strong></td>            <td style=\"\" text-align:=\"\">95 كغ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>الطول</strong></td>            <td style=\"vertical-align: top;\">1.81 م</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>مؤشر كتلة الجسم</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =الوزن/الطول<sup>2</sup> (راجع <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> مقالة ويكيبيديا</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "إخفاء عنوان IP من التقارير"
+
+msgid "Course settings policies"
+msgstr "سياسات إعدادات المقرر"
+
+msgid "Academic transcripts"
+msgstr "كشوف الدرجات الأكاديمية"
+
+msgid "Transcript program title"
+msgstr "عنوان البرنامج في الكشف"
+
+msgid "Transcript course code"
+msgstr "رمز المقرر في الكشف"
+
+msgid "Transcript course hours field"
+msgstr "حقل ساعات المقرر في الكشف"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "الساعات المكتملة في الكشف هي الساعات المطلوبة"
+
+msgid "Transcript student number field"
+msgstr "حقل رقم الطالب في الكشف"
+
+msgid "Transcript address fields"
+msgstr "حقول العنوان في الكشف"
+
+msgid "Transcript grading scale"
+msgstr "مقياس التقدير في الكشف"
+
+msgid "Transcript GPA note"
+msgstr "ملاحظة المعدل التراكمي في الكشف"
+
+msgid "Transcript signatory name"
+msgstr "اسم الموقّع على الكشف"
+
+msgid "Transcript signatory title"
+msgstr "المسمى الوظيفي للموقّع على الكشف"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "تفعيل الشهادات الموقّعة والربط الاختياري بشبكة اختبار Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "إظهار ردود الموضوع فقط بعد المشاركة"
+
+msgid "Show the forum category description in threads"
+msgstr "إظهار وصف فئة المنتدى في المواضيع"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "يمكن تغيير إعدادات المشاركة في المنتدى حسب المقرر"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "الحد الأقصى للمنشورات المعروضة في موضوع المنتدى"
+
+msgid "Posts required to complete a forum thread"
+msgstr "المنشورات المطلوبة لإكمال موضوع المنتدى"
+
+msgid "Track e-mail openings"
+msgstr "تتبع فتح الرسائل الإلكترونية"
+
+msgid "Allow e-mail replies to messages"
+msgstr "السماح بالرد على الرسائل عبر البريد الإلكتروني"
+
+msgid "Inbound e-mail address"
+msgstr "عنوان البريد الوارد"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN لصندوق البريد الوارد"
+
+msgid "Remember me duration (days)"
+msgstr "مدة تذكرني (أيام)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "تفعيل تسجيل عميل OAuth الديناميكي خارج MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "تفعيل الإبلاغ السري عن الرفاه"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "الحد الأدنى للمبلّغين المختلفين للتحقيق"
+
+msgid "Allow confidential evidence attachments"
+msgstr "السماح بمرفقات الأدلة السرية"
+
+msgid "Show confidential investigation notifications"
+msgstr "إظهار إشعارات التحقيق السري"
+
+msgid "Enable support chatbot"
+msgstr "تفعيل روبوت الدردشة للدعم"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "حدد أين تُبرز مصطلحات المسرد تلقائيًا: المستندات والتمارين ومسارات التعلم."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "إخفاء عناوين IP في التقارير المرئية وتصدير التقارير. تبقى عناوين IP مخزّنة ويمكن الوصول إليها عبر إجراءات البيانات الشخصية المصرّح بها."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "الإعدادات الافتراضية للمنصة وصلاحيات تعديل المقرر؛ تُدار في إعدادات المقرر."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "السماح للمستخدمين بتنزيل كشف غير رسمي للمقررات التي أكملوها، والسماح للمسؤولين ومسؤولي الجلسات ومديري الموارد البشرية بإصدار كشوف رسمية موقّعة للمستخدمين الذين يديرونهم. تُرفع صورة التوقيع من صفحة كشف المستخدم."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "عنوان البرنامج المطبوع على كل كشف، على سبيل المثال اسم الدبلوم المعدّ على هذه المنصة."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "أي حقل مقرر يملأ عمود رمز المقرر في الكشوف: رمز المقرر أو اسم القسم."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "متغير الحقل الإضافي للمقرر الذي يحتوي عدد ساعات المقرر. اتركه فارغًا لاستخدام مدة المقرر."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "طباعة الساعات المطلوبة للمقرر كساعات أكملها المتعلم. عند التعطيل، تكون الساعات المكتملة هي الوقت الذي قضاه المتعلم في المقرر."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "متغير الحقل الإضافي للمستخدم الذي يحتوي رقم الطالب المطبوع على الكشوف. اتركه فارغًا لعدم الطباعة."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "متغيرات مفصولة بفواصل للحقول الإضافية للمستخدم تُطبع بعد عنوان المستخدم على الكشوف، على سبيل المثال المدينة والولاية والرمز البريدي."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "قائمة JSON لأحرف التقدير، من أعلى حد أدنى للدرجة نزولاً: لكل عنصر الحد الأدنى للنسبة المئوية (min) والحرف ونقاط التقدير المستخدمة لحساب المعدل التراكمي."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "شرح كيفية حساب المعدل التراكمي، يُطبع تحت المعدل التراكمي على الكشوف."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "اسم المسؤول المدرسي الذي يوقّع الكشوف الرسمية."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "المسمى الوظيفي للمسؤول المدرسي الذي يوقّع الكشوف الرسمية."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "يتطلب موافقة صريحة من المالك وإجراءات يدوية من المسؤول. تُرسل بصمات SHA-256 فقط إلى السلسلة."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "لا يرى المتعلمون سوى المنشور الأول في موضوع المنتدى حتى ينشروا فيه بأنفسهم. يرى المسؤولون والمعلمون والمدربون ومشرفو المجموعات جميع المنشورات دائمًا."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "عرض عنوان وصف مختصر لفئة المنتدى أعلى كل موضوع، مع رابط لقراءة الوصف الكامل."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "عند التفعيل، يمكن للمعلمين اختيار في قسم المنتدى ضمن إعدادات المقرر ما إذا كان المقرر يخفي ردود الموضوع حتى ينشر المتعلم، ويعرض وصف الفئة في المواضيع، وعدد المنشورات التي يتوقعها شريط تقدم المشاركة، بدل اتباع إعدادات المنصة."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "عرض هذا العدد فقط من منشورات كل موضوع منتدى لكل مستخدم ليس مسؤول منصة، بما في ذلك المعلمون، ولكل من داخل مسار تعلّم. في العرض المتسلسل والمتداخل، ينطبق الحد على ردود كل منشور. تُحفظ المنشورات بترتيب العرض: الأولى، أو الأحدث داخل مسار التعلّم حيث تأتي أحدث المنشورات أولاً. عيّن القيمة إلى 0 لعرض كل المنشورات."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "إظهار شريط تقدم للمتعلمين في كل موضوع منتدى يصل إلى 100% بعد نشر هذا العدد من الرسائل فيه. تُحتسب المنشورات قيد الاعتدال. عيّن القيمة إلى 0 لإخفاء شريط التقدم."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "يضيف صورة تتبع صغيرة إلى رسائل إشعار البريد الإلكتروني ويسجّل وقت طلبها. يشير ذلك فقط إلى احتمال فتح الرسالة؛ ولا يثبت أنها قُرئت."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "السماح لمستلمي إشعارات الرسائل المباشرة بالرد عبر البريد الإلكتروني. يجب توجيه الرسائل الواردة إلى أمر البريد الوارد في شاميلو عبر بنية البريد."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "العنوان الأساسي المستخدم لتوجيه الردود، على سبيل المثال replies@example.com. يضيف شاميلو رمز مستلم فريدًا باستخدام العنونة بعلامة الزائد."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "اتصال صندوق البريد المستخدم لجمع الردود الواردة، على سبيل المثال imaps://user:password@imap.example.com:993/INBOX. قم بترميز الأحرف المحجوزة في بيانات الاعتماد وفق URL."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "عدد الأيام التي يبقى فيها المستخدم مسجّل الدخول عند اختيار تذكّرني. عيّن القيمة إلى 0 للتعطيل. يتطلب HTTPS. النطاق المسموح: من 0 إلى 90. مهلة الجلسة العادية تُضبط بشكل منفصل في PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "يسمح لتسجيل العميل الديناميكي بطلب أي نطاق مسجّل لدى خادم موارد OAuth في شاميلو. عند التعطيل، يبقى التسجيل الذاتي مقتصرًا على MCP. يظل الوصول إلى الموارد مقيدًا دائمًا بشكل منفصل بقائمة الموارد المسموحة لكل عميل."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "تفعيل تقارير الحوادث السرية. تتطلب الوحدة مفتاح تشفير محميًا وصلاحية محقق."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "يجب أن يبلّغ بين 2 و10 مبلّغين مختلفين عن المستخدم نفسه قبل أن تصبح الحالة مرئية للمحققين."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "السماح بصور وصوت وفيديو قصير كأدلة. تبقى المرفقات الحالية قابلة للقراءة عند التعطيل."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "عرض إشارة داخلية للتحقيقات المؤهلة. لا يرسل رسائل بريد إلكتروني أو إشعارات خارجية."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "إظهار روبوت محادثة بشجرة قرارات في لوحة الدردشة يمكنه توجيه المستخدمين إلى "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "يسمح للمعلمين بإنشاء وإصدار تطبيقات تعليمية بمساعدة الذكاء الاصطناعي داخل المقررات."
+
+msgid "Department name"
+msgstr "اسم القسم"
+
+msgid "Documents and exercise"
+msgstr "المستندات والتمرين"
+
+msgid "Documents and learning path"
+msgstr "المستندات ومسار التعلّم"
+
+msgid "Documents, exercise and learning path"
+msgstr "المستندات والتمرين ومسار التعلّم"
+
+msgid "session"
+msgstr "جلسة"
+
+msgid "course"
+msgstr "مقرر"
+
+msgid "You have been enrolled in %s"
+msgstr "تم تسجيلك في %s"
 

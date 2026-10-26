@@ -41969,3 +41969,1155 @@ msgstr ""
 
 msgid "Transcript"
 msgstr ""
+
+msgid "My confidential reports"
+msgstr ""
+
+msgid "My transcript"
+msgstr ""
+
+msgid "Confidential investigations"
+msgstr ""
+
+msgid "Floor plan"
+msgstr ""
+
+msgid "Click a highlighted room to select it"
+msgstr ""
+
+msgid "Select room"
+msgstr ""
+
+msgid "Room on floor plan"
+msgstr ""
+
+msgid "Select a branch first"
+msgstr ""
+
+msgid "The branch has no attached floor plan"
+msgstr ""
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr ""
+
+msgid "Save room area"
+msgstr ""
+
+msgid "Clear room area"
+msgstr ""
+
+msgid "Save the room form to persist the area"
+msgstr ""
+
+msgid "Floor plan unavailable"
+msgstr ""
+
+msgid "Room map points must be within the floor plan"
+msgstr ""
+
+msgid "Are you sure you want to clear the room area?"
+msgstr ""
+
+msgid "View room on floor plan"
+msgstr ""
+
+msgid "No floor plan available"
+msgstr ""
+
+msgid "This is an assignment by groups"
+msgstr ""
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr ""
+
+msgid "Upload floor plan"
+msgstr ""
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr ""
+
+msgid "Search images by name"
+msgstr ""
+
+msgid "Image name"
+msgstr ""
+
+msgid "Select an image"
+msgstr ""
+
+msgid "Change floor plan"
+msgstr ""
+
+msgid "Attach floor plan"
+msgstr ""
+
+msgid "No matching images found in Documents."
+msgstr ""
+
+msgid "Current floor plan"
+msgstr ""
+
+msgid "Floor plan changes are saved automatically."
+msgstr ""
+
+msgid "Remove floor plan"
+msgstr ""
+
+msgid "Cannot load images"
+msgstr ""
+
+msgid "Floor plan saved"
+msgstr ""
+
+msgid "Cannot attach floor plan"
+msgstr ""
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr ""
+
+msgid "Cannot upload floor plan"
+msgstr ""
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr ""
+
+msgid "Floor plan removed"
+msgstr ""
+
+msgid "Cannot remove floor plan"
+msgstr ""
+
+msgid "Support bot"
+msgstr ""
+
+msgid "Connected"
+msgstr ""
+
+msgid "Not connected"
+msgstr ""
+
+msgid "View ticket"
+msgstr ""
+
+msgid "Start a new conversation"
+msgstr ""
+
+msgid "Video call"
+msgstr ""
+
+msgid "Incoming video call"
+msgstr ""
+
+msgid "Decline"
+msgstr ""
+
+msgid "Mute microphone"
+msgstr ""
+
+msgid "Unmute microphone"
+msgstr ""
+
+msgid "Turn camera off"
+msgstr ""
+
+msgid "Turn camera on"
+msgstr ""
+
+msgid "Hang up"
+msgstr ""
+
+msgid "Calling..."
+msgstr ""
+
+msgid "Connecting..."
+msgstr ""
+
+msgid "Your contact is busy."
+msgstr ""
+
+msgid "Your contact did not answer the call."
+msgstr ""
+
+msgid "Your contact could not access the camera or microphone."
+msgstr ""
+
+msgid "Your contact could not prepare the video call."
+msgstr ""
+
+msgid "Your contact refused the call."
+msgstr ""
+
+msgid "The call timed out."
+msgstr ""
+
+msgid "Your contact cancelled the call."
+msgstr ""
+
+msgid "The video connection was lost."
+msgstr ""
+
+msgid "Your contact could not establish the video connection."
+msgstr ""
+
+msgid "Your contact could not complete the video call setup."
+msgstr ""
+
+msgid "Your contact hung up."
+msgstr ""
+
+msgid "Video call could not be started"
+msgstr ""
+
+msgid "Camera or microphone permission was denied."
+msgstr ""
+
+msgid "No camera or microphone was found."
+msgstr ""
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr ""
+
+msgid "The camera or microphone does not support the required settings."
+msgstr ""
+
+msgid "Camera or microphone access could not be obtained."
+msgstr ""
+
+msgid "The video call could not be prepared."
+msgstr ""
+
+msgid "The video call request could not be sent."
+msgstr ""
+
+msgid "The incoming video call could not be processed."
+msgstr ""
+
+msgid "The video call answer could not be prepared."
+msgstr ""
+
+msgid "The video call answer could not be sent."
+msgstr ""
+
+msgid "The video call answer could not be processed."
+msgstr ""
+
+msgid "The video connection failed"
+msgstr ""
+
+msgid "The video connection could not be established."
+msgstr ""
+
+msgid "No answer was received."
+msgstr ""
+
+msgid "You refused the call."
+msgstr ""
+
+msgid "You cancelled the call."
+msgstr ""
+
+msgid "You hung up."
+msgstr ""
+
+msgid "You missed the call."
+msgstr ""
+
+msgid "Support bot is currently unavailable."
+msgstr ""
+
+msgid "A support ticket has been created."
+msgstr ""
+
+msgid "Conversation ended."
+msgstr ""
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr ""
+
+msgid "Add your first term glossary to this course"
+msgstr ""
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr ""
+
+msgid "The survey template has been deleted."
+msgstr ""
+
+msgid "Please select a course."
+msgstr ""
+
+msgid "Please select a session for this course."
+msgstr ""
+
+msgid "The survey has been created from the template."
+msgstr ""
+
+msgid "Survey templates"
+msgstr ""
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr ""
+
+msgid "Subtitle"
+msgstr ""
+
+msgid "Assign to course"
+msgstr ""
+
+msgid "Assign template to course"
+msgstr ""
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr ""
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr ""
+
+msgid "Survey template questions"
+msgstr ""
+
+msgid "Back to survey templates"
+msgstr ""
+
+msgid "Could not load survey template"
+msgstr ""
+
+msgid "Could not load survey template questions"
+msgstr ""
+
+msgid "Could not save survey template question"
+msgstr ""
+
+msgid "Could not delete survey template question"
+msgstr ""
+
+msgid "Could not move survey template question"
+msgstr ""
+
+msgid "Could not copy survey template question"
+msgstr ""
+
+msgid "The survey template has been saved."
+msgstr ""
+
+msgid "Edit survey template"
+msgstr ""
+
+msgid "Create survey template"
+msgstr ""
+
+msgid "The survey template title is required."
+msgstr ""
+
+msgid "Visible as template"
+msgstr ""
+
+msgid "Create satisfaction survey"
+msgstr ""
+
+msgid "Training satisfaction survey"
+msgstr ""
+
+msgid "Could not create satisfaction survey"
+msgstr ""
+
+msgid "Use template"
+msgstr ""
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr ""
+
+msgid "Results hidden from teacher/tutor"
+msgstr ""
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr ""
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr ""
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr ""
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr ""
+
+msgid "Payment method"
+msgstr ""
+
+msgid "Preview mode"
+msgstr ""
+
+msgid "Progress and score are not saved in preview mode."
+msgstr ""
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr ""
+
+msgid "Open it in a new tab to view the page."
+msgstr ""
+
+msgid "Report a problem with this question"
+msgstr ""
+
+msgid "Your report was sent to the teacher."
+msgstr ""
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr ""
+
+msgid "A comment is required."
+msgstr ""
+
+msgid "Could not send the report."
+msgstr ""
+
+msgid "Learner reports"
+msgstr ""
+
+msgid "No learner reports have been submitted for this question."
+msgstr ""
+
+msgid "View attempt"
+msgstr ""
+
+msgid "Could not load learner reports."
+msgstr ""
+
+msgid "Allow learners to report issues in questions"
+msgstr ""
+
+msgid "Skill acquired"
+msgstr ""
+
+msgid "AI Toolbox"
+msgstr ""
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr ""
+
+msgid "No published applications are available yet."
+msgstr ""
+
+msgid "Interactive applications"
+msgstr ""
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr ""
+
+msgid "Open an application to continue from your latest progress."
+msgstr ""
+
+msgid "Interactive learning application"
+msgstr ""
+
+msgid "Create an interactive learning app"
+msgstr ""
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr ""
+
+msgid "Idea"
+msgstr ""
+
+msgid "Application"
+msgstr ""
+
+msgid "What should the application do?"
+msgstr ""
+
+msgid "How it works"
+msgstr ""
+
+msgid "AI generation"
+msgstr ""
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr ""
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr ""
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr ""
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr ""
+
+msgid "You are not allowed to create content in this context."
+msgstr ""
+
+msgid "The application was generated successfully."
+msgstr ""
+
+msgid "Open in student view"
+msgstr ""
+
+msgid "Generate the application to enable preview and publishing."
+msgstr ""
+
+msgid "Improve with AI"
+msgstr ""
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr ""
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr ""
+
+msgid "What should be improved?"
+msgstr ""
+
+msgid "Generate new version"
+msgstr ""
+
+msgid "Version history"
+msgstr ""
+
+msgid "Preview, download or restore any generated version."
+msgstr ""
+
+msgid "A new version was generated."
+msgstr ""
+
+msgid "Version restored"
+msgstr ""
+
+msgid "The support bot tree has been published."
+msgstr ""
+
+msgid "The support bot tree has been archived."
+msgstr ""
+
+msgid "The support bot tree has been duplicated."
+msgstr ""
+
+msgid "The support bot tree has been deleted."
+msgstr ""
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr ""
+
+msgid "The support bot tree has been imported."
+msgstr ""
+
+msgid "Create support bot tree"
+msgstr ""
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr ""
+
+msgid "Portal scope"
+msgstr ""
+
+msgid "Duplicate"
+msgstr ""
+
+msgid "Archive"
+msgstr ""
+
+msgid "View conversations"
+msgstr ""
+
+msgid "Import support bot tree"
+msgstr ""
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr ""
+
+msgid "Resolved"
+msgstr ""
+
+msgid "Escalated"
+msgstr ""
+
+msgid "Abandoned"
+msgstr ""
+
+msgid "Support bot conversations"
+msgstr ""
+
+msgid "Outcome"
+msgstr ""
+
+msgid "Started at"
+msgstr ""
+
+msgid "Ended at"
+msgstr ""
+
+msgid "View conversation"
+msgstr ""
+
+msgid "Go to node"
+msgstr ""
+
+msgid "Create support ticket"
+msgstr ""
+
+msgid "End conversation"
+msgstr ""
+
+msgid "Node"
+msgstr ""
+
+msgid "A support bot tree requires at least one node."
+msgstr ""
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr ""
+
+msgid "Every support bot node requires at least one option."
+msgstr ""
+
+msgid "The support bot tree title is required."
+msgstr ""
+
+msgid "A support bot entry node is required."
+msgstr ""
+
+msgid "Every support bot node requires content."
+msgstr ""
+
+msgid "Every support bot option requires a label."
+msgstr ""
+
+msgid "Select a target node for every go-to option."
+msgstr ""
+
+msgid "Enter a relative URL for every link option."
+msgstr ""
+
+msgid "Select a ticket category for every escalation option."
+msgstr ""
+
+msgid "The support bot tree has been saved."
+msgstr ""
+
+msgid "Edit support bot tree"
+msgstr ""
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr ""
+
+msgid "Default ticket project"
+msgstr ""
+
+msgid "Decision tree rules"
+msgstr ""
+
+msgid "Every node must contain at least one option."
+msgstr ""
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr ""
+
+msgid "Go-to links must not create cycles in v1."
+msgstr ""
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr ""
+
+msgid "Nodes"
+msgstr ""
+
+msgid "Add node"
+msgstr ""
+
+msgid "Entry node"
+msgstr ""
+
+msgid "Set as entry node"
+msgstr ""
+
+msgid "Target node"
+msgstr ""
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr ""
+
+msgid "Ticket category"
+msgstr ""
+
+msgid "Select a default ticket project first."
+msgstr ""
+
+msgid "Closing message"
+msgstr ""
+
+msgid "Select a node to edit it."
+msgstr ""
+
+msgid "Support bot conversation"
+msgstr ""
+
+msgid "Transcript of %s"
+msgstr ""
+
+msgid "Download unofficial transcript"
+msgstr ""
+
+msgid "Issue official transcript"
+msgstr ""
+
+msgid "Official transcripts"
+msgstr ""
+
+msgid "No official transcript has been issued yet."
+msgstr ""
+
+msgid "Issued by"
+msgstr ""
+
+msgid "Verify"
+msgstr ""
+
+msgid "Signature of official transcripts"
+msgstr ""
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr ""
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr ""
+
+msgid "Official transcript issued"
+msgstr ""
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr ""
+
+msgid "Official transcript revoked"
+msgstr ""
+
+msgid "Select a PNG or JPEG image first."
+msgstr ""
+
+msgid "Signed credential"
+msgstr ""
+
+msgid "Issue signed credential"
+msgstr ""
+
+msgid "Verify credential"
+msgstr ""
+
+msgid "Anchor on Sepolia testnet"
+msgstr ""
+
+msgid "Confirm existing Sepolia transaction"
+msgstr ""
+
+msgid "Revoke signed credential"
+msgstr ""
+
+msgid "Delete certificate"
+msgstr ""
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr ""
+
+msgid "Sepolia transaction hash"
+msgstr ""
+
+msgid "Verify transaction"
+msgstr ""
+
+msgid "Anchored"
+msgstr ""
+
+msgid "Issued"
+msgstr ""
+
+msgid "Not issued"
+msgstr ""
+
+msgid "Consent required"
+msgstr ""
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr ""
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr ""
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr ""
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr ""
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr ""
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr ""
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr ""
+
+msgid "Transaction pending"
+msgstr ""
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr ""
+
+msgid "Signed credential issued"
+msgstr ""
+
+msgid "Credential revoked"
+msgstr ""
+
+msgid "Transaction hash"
+msgstr ""
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr ""
+
+msgid "Publication consent"
+msgstr ""
+
+msgid "Not approved"
+msgstr ""
+
+msgid "Withdraw consent"
+msgstr ""
+
+msgid "Approve publication"
+msgstr ""
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr ""
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr ""
+
+msgid "Publication approval recorded"
+msgstr ""
+
+msgid "Publication approval withdrawn"
+msgstr ""
+
+msgid "Read more"
+msgstr ""
+
+msgid "Participation: %s of %s posts"
+msgstr ""
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr ""
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr ""
+
+msgid "New confidential report"
+msgstr ""
+
+msgid "Reported user"
+msgstr ""
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr ""
+
+msgid "Eligible investigations"
+msgstr ""
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr ""
+
+msgid "Distinct reporters"
+msgstr ""
+
+msgid "Reports for selected user"
+msgstr ""
+
+msgid "Confidential reporting is currently unavailable."
+msgstr ""
+
+msgid "The investigation could not be loaded."
+msgstr ""
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr ""
+
+msgid "Find the user involved"
+msgstr ""
+
+msgid "Name or username"
+msgstr ""
+
+msgid "Describe the situation"
+msgstr ""
+
+msgid "Evidence (optional)"
+msgstr ""
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr ""
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr ""
+
+msgid "Send confidential report"
+msgstr ""
+
+msgid "Could not search users"
+msgstr ""
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr ""
+
+msgid "The confidential report could not be saved."
+msgstr ""
+
+msgid "Confidential report"
+msgstr ""
+
+msgid "Confidential conversation"
+msgstr ""
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr ""
+
+msgid "Reporter"
+msgstr ""
+
+msgid "Investigator"
+msgstr ""
+
+msgid "Additional evidence (optional)"
+msgstr ""
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr ""
+
+msgid "Contact shared voluntarily"
+msgstr ""
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr ""
+
+msgid "This confidential report is not available."
+msgstr ""
+
+msgid "Your message could not be saved."
+msgstr ""
+
+msgid "Contact sharing could not be updated."
+msgstr ""
+
+msgid "Evidence could not be downloaded."
+msgstr ""
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr ""
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr ""
+
+msgid "Hide IP address from reports"
+msgstr ""
+
+msgid "Course settings policies"
+msgstr ""
+
+msgid "Academic transcripts"
+msgstr ""
+
+msgid "Transcript program title"
+msgstr ""
+
+msgid "Transcript course code"
+msgstr ""
+
+msgid "Transcript course hours field"
+msgstr ""
+
+msgid "Transcript completed hours are the required hours"
+msgstr ""
+
+msgid "Transcript student number field"
+msgstr ""
+
+msgid "Transcript address fields"
+msgstr ""
+
+msgid "Transcript grading scale"
+msgstr ""
+
+msgid "Transcript GPA note"
+msgstr ""
+
+msgid "Transcript signatory name"
+msgstr ""
+
+msgid "Transcript signatory title"
+msgstr ""
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr ""
+
+msgid "Show thread replies only after participating"
+msgstr ""
+
+msgid "Show the forum category description in threads"
+msgstr ""
+
+msgid "Forum participation settings can be changed by course"
+msgstr ""
+
+msgid "Maximum posts shown in a forum thread"
+msgstr ""
+
+msgid "Posts required to complete a forum thread"
+msgstr ""
+
+msgid "Track e-mail openings"
+msgstr ""
+
+msgid "Allow e-mail replies to messages"
+msgstr ""
+
+msgid "Inbound e-mail address"
+msgstr ""
+
+msgid "Inbound mailbox DSN"
+msgstr ""
+
+msgid "Remember me duration (days)"
+msgstr ""
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr ""
+
+msgid "Enable confidential welfare reporting"
+msgstr ""
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr ""
+
+msgid "Allow confidential evidence attachments"
+msgstr ""
+
+msgid "Show confidential investigation notifications"
+msgstr ""
+
+msgid "Enable support chatbot"
+msgstr ""
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr ""
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr ""
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr ""
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr ""
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr ""
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr ""
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr ""
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr ""
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr ""
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr ""
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr ""
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr ""
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr ""
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr ""
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr ""
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr ""
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr ""
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr ""
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr ""
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr ""
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr ""
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr ""
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr ""
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr ""
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr ""
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr ""
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr ""
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr ""
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr ""
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr ""
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr ""
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr ""
+
+msgid "Department name"
+msgstr ""
+
+msgid "Documents and exercise"
+msgstr ""
+
+msgid "Documents and learning path"
+msgstr ""
+
+msgid "Documents, exercise and learning path"
+msgstr ""
+
+msgid "session"
+msgstr ""
+
+msgid "course"
+msgstr ""
+
+msgid "You have been enrolled in %s"
+msgstr ""

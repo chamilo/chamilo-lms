@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Հարգանքով"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Բանաձևի օրինակ՝ sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Բանաձևի օրինակ՝ sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Փոփոխականների տիրույթներ"
@@ -28768,6 +28768,9 @@ msgstr "Ընթացիկ օգտատերը չի գտնվել:"
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Ողջույն %s,<br><br>Դուք գրանցված եք %s-ում:<br>Դուք կարող եք մուտք գործել Ձեր հաշիվը <a href=\"%s\">այստեղից</a>:<br><br>Ձեր մուտքի տվյալները հետևյալն են.<br>Օգտանուն՝ <strong>%s</strong><br>Գաղտնաբառ՝ <strong>%s</strong><br><br>Շնորհակալություն,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Բարև %s,<br><br>Դուք գրանցված եք %s համակարգում։<br>Օգտանուն՝ <strong>%s</strong><br><br>Խնդրում ենք սեղմել ստորև նշված հղումը՝ գաղտնաբառը սահմանելու և հաշիվ մուտք գործելու համար՝<br><a href=\"%s\">Սահմանել գաղտնաբառը</a><br><br>Հարգանքով՝<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Դուք գրանցված եք %s-ում"
 
@@ -41571,4 +41574,1616 @@ msgstr "Միգրացիայի պատմությունը գրանցված է"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s առկա է նախագծի արմատում․ ջնջեք այն՝ թարմացման վերջնակետերը փակելու համար"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Դուք ստացել եք վկայական այս վարժության համար"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Այս ուսումնական ուղին մուտք գործելուց առաջ պետք է ավարտեք «%s» ուսումնական ուղին։"
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Վստա՞հ եք, որ ցանկանում եք վերջնականապես ջնջել այս ֆայլը։"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Վստա՞հ եք, որ ցանկանում եք անջատել այս ֆայլը ընտրված դասընթացից։"
+
+msgid "Attach this file to another course"
+msgstr "Կցել այս ֆայլը մեկ այլ դասընթացին"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Կցել ընտրված դասընթաց(ներ)ին (թաքնված)"
+
+msgid "Course(s):"
+msgstr "Դասընթաց(ներ)՝"
+
+msgid "Delete definitively"
+msgstr "Ջնջել վերջնականապես"
+
+msgid "Detach from this course"
+msgstr "Անջատել այս դասընթացից"
+
+msgid "File actions"
+msgstr "Ֆայլի գործողություններ"
+
+msgid "File Information"
+msgstr "Ֆայլի տեղեկություններ"
+
+msgid "File Link:"
+msgstr "Ֆայլի հղում՝"
+
+msgid "File Path:"
+msgstr "Ֆայլի ուղի՝"
+
+msgid "Filter courses..."
+msgstr "Զտել դասընթացները..."
+
+msgid "MIME Type:"
+msgstr "MIME տեսակ՝"
+
+msgid "N/A"
+msgstr "Ա/Ա"
+
+msgid "No results found."
+msgstr "Արդյունքներ չեն գտնվել։"
+
+msgid "Original Name"
+msgstr "Սկզբնական անուն"
+
+msgid "Original Name:"
+msgstr "Սկզբնական անուն՝"
+
+msgid "Orphan"
+msgstr "Որբ"
+
+msgid "Resource File ID:"
+msgstr "Ռեսուրսի ֆայլի ID՝"
+
+msgid "Resource Node ID:"
+msgstr "Ռեսուրսի հանգույցի ID՝"
+
+msgid "Search..."
+msgstr "Որոնել..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Ֆայլը կոնկրետ դասընթացից անջատելու համար սեղմեք վերևում համապատասխան դասընթացի պիտակի վրա գտնվող «×» պատկերակը։"
+
+msgid "User:"
+msgstr "Օգտատեր՝"
+
+msgid "View file information"
+msgstr "Դիտել ֆայլի տեղեկությունները"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Կարող եք այս ֆայլը կցել մեկ կամ մի քանի դասընթացների (թաքնված փաստաթղթերի արմատում)։ Եթե ֆայլն այլևս չի օգտագործվում և դառնում է որբ, կարող եք նաև վերջնականապես ջնջել այն։"
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Կարող եք ընտրել մեկ կամ մի քանի դասընթաց (օգտագործեք Ctrl/Cmd + սեղմում)։"
+
+msgid "bytes"
+msgstr "բայթ"
+
+msgid "Failed to copy:"
+msgstr "Չհաջողվեց պատճենել՝"
+
+msgid "Missing resource file identifier."
+msgstr "Բացակայում է ռեսուրսի ֆայլի նույնացուցիչը։"
+
+msgid "Please select at least one course."
+msgstr "Խնդրում ենք ընտրել առնվազն մեկ դասընթաց։"
+
+msgid "Resource file not found."
+msgstr "Ռեսուրսի ֆայլը չի գտնվել։"
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "«%s» ֆայլը կցվել է %d դասընթաց(ներ)ին՝ %s։"
+
+msgid "Some courses were skipped: %s."
+msgstr "Որոշ դասընթացներ բաց են թողնվել՝ %s։"
+
+msgid "Missing file or course identifier."
+msgstr "Բացակայում է ֆայլի կամ դասընթացի նույնացուցիչը։"
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Այս ռեսուրսի ֆայլը չունի ռեսուրսի հանգույց և չի կարող անջատվել։"
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Ֆայլը անջատվել է %d դասընթացի հղում(ներ)ից։"
+
+msgid "This file is not attached to the selected course."
+msgstr "Այս ֆայլը կցված չէ ընտրված դասընթացին։"
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Այս ֆայլը դեռ օգտագործվում է առնվազն մեկ ռեսուրսի կողմից և չի կարող ջնջվել։"
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Որբ ֆայլը և դրա ֆիզիկական բովանդակությունը վերջնականապես ջնջվել են։"
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Հարցումը հրապարակված է։ Ստեղծված՝ %d։ Թարմացված՝ %d։ Ուղարկված հաղորդագրություններ՝ %d։"
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Ձեռքբերելի"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Այս հմտությունը չի կարող ձեռք բերվել"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Նորեկ"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Կանոններին և համատեքստից անկախ հրահանգներին կոշտ հետևում. քիչ իրավիճակային դատողություն։"
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Ընդլայնված սկսնակ"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Սկսում է ճանաչել իրավիճակային ասպեկտներ և օրինաչափություններ, բայց դեռ կարիք ունի ուղեցույցների։"
+
+#: issue-8179
+msgid "Competent"
+msgstr "Կոմպետենտ"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Մշակում է պլանավորում և մտավոր մոդելներ. ստանձնում է պատասխանատվություն արդյունքների համար, բայց կարող է ճնշված զգալ բարդությունից։"
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Հմուտ"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Տեսնում է \"ընդհանուր պատկերը,\" ինտուիտիվ առաջնահերթություն է տալիս և սովորում փորձից։"
+
+#: issue-8179
+msgid "Expert"
+msgstr "Փորձագետ"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Ինտուիտիվ, սահուն կատարում. հենվում է խորը անուղղակի գիտելիքի վրա. կարող է նորարարել կամ առանց ջանքերի կարգավորել նոր իրավիճակներ։"
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Հիշել"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Վերականգնել, հիշել կամ ճանաչել համապատասխան գիտելիքը երկարաժամկետ հիշողությունից։"
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Հասկանալ"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Կառուցել իմաստ ուսումնական հաղորդագրություններից, ներառյալ բանավոր, գրավոր և գրաֆիկական հաղորդակցությունը։ Ցուցադրել ըմբռնում մեկնաբանելով, օրինակներով, դասակարգելով, ամփոփելով, եզրակացնելով, համեմատելով կամ բացատրելով։"
+
+#: issue-8179
+msgid "Applying"
+msgstr "Կիրառել"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Կատարել կամ օգտագործել ընթացակարգ՝ այն իրականացնելով տվյալ իրավիճակում։ Օգտագործել գիտելիք կամ հմտություններ նոր կամ կոնկրետ իրավիճակներում։"
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Վերլուծել"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Բաժանել նյութը իր բաղադրիչ մասերի և որոշել, թե ինչպես են մասերը կապված միմյանց և ընդհանուր կառուցվածքի կամ նպատակի հետ։ Բացահայտել շարժառիթներ, պատճառներ կամ հարաբերություններ։"
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Գնահատել"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Դատողություններ անել չափանիշների և ստանդարտների հիման վրա։ Ստուգել, քննադատել կամ հիմնավորել որոշումներ կամ գործողությունների ընթացք։"
+
+#: issue-8179
+msgid "Creating"
+msgstr "Ստեղծել"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Միավորել տարրերը՝ կազմելով համահունչ կամ գործուն ամբողջություն. վերակազմակերպել տարրերը նոր օրինաչափության կամ կառուցվածքի մեջ։ Ստեղծել ինքնատիպ աշխատանք կամ նոր գաղափարներ։"
+
+#: issue-8179
+msgid "Follow"
+msgstr "Հետևել"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Աշխատում է սերտ վերահսկողության և ուղղորդման ներքո։ Կատարում է սովորական առաջադրանքներ սահմանափակ հայեցողությամբ։ Կենտրոնանում է հրահանգներին հետևելու և հիմնական կատարման վրա։"
+
+#: issue-8179
+msgid "Assist"
+msgstr "Օգնել"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Աշխատում է սովորական վերահսկողության ներքո։ Օգնություն է տրամադրում ուրիշներին, նպաստում թիմային առաջադրանքներին և սկսում որոշակի նախաձեռնություն սահմանված սահմաններում։"
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Աշխատում է ընդհանուր վերահսկողության ներքո։ Կիրառում է գիտելիք և հմտություններ սովորական և ոչ սովորական գործունեության շրջանակում։ Ցուցաբերում է որոշակի հայեցողություն և դատողություն։"
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Աշխատում է լայն ուղղորդման ներքո։ Հնարավորություն է տալիս ուրիշներին՝ տրամադրելով մասնագիտական ուղղորդում, աջակցություն կամ ծառայություններ։ Ստանձնում է պատասխանատվություն սեփական աշխատանքի համար և կարող է վերահսկել փոքր թիմեր կամ առաջադրանքներ։"
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Ապահովել և խորհրդատվություն տալ"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Աշխատում է լայն ուղղորդման ներքո, բայց զգալի ինքնավարությամբ։ Ապահովում է, որ աշխատանքը համապատասխանի նպատակներին, և խորհուրդ է տալիս բարդ հարցերում։ Հաճախ ղեկավարում է թիմեր կամ նախագծեր և ազդում որոշումների վրա։"
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Նախաձեռնել և ազդել"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Ունի սահմանված լիազորություն և պատասխանատվություն աշխատանքի նշանակալի ոլորտի համար։ Նախաձեռնում է գործողություններ, ազդում է ռազմավարության և քաղաքականության վրա իր ոլորտում և ղեկավարում է էական նախագծեր կամ թիմեր։"
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Սահմանել ռազմավարություն, ոգեշնչել, մոբիլիզացնել"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Ունի լիազորություն կազմակերպության ամենաբարձր մակարդակում աշխատանքի հիմնական ոլորտի համար։ Սահմանում է երկարաժամկետ ռազմավարություն, ոգեշնչում և մոբիլիզացնում է ուրիշներին և կայացնում որոշումներ, որոնք կարևոր են կազմակերպության հաջողության համար։ Ազդում է ոլորտային կամ արտաքին մակարդակներում։"
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Անգործության առավելագույն ժամանակը հաշվի առնելու համար (րոպե)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Դասընթացի բաց էջը շարունակում է ավտոմատ հարցումներ ուղարկել։ Այսքան րոպե օգտատիրոջ իրական գործողությունից հետո (էջ կամ տարր բացել, պատասխանել և այլն) դասընթացում անցկացրած ժամանակը այլևս չի հաշվվում։"
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Համագործակցային Wiki խմբագիր"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Միացում Etherpad-ին..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Պահպանումը ստեղծում է նոր Chamilo Wiki տարբերակ ընթացիկ Etherpad բովանդակությունից։"
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Համագործակցային խմբագիրը չհաջողվեց բեռնել։"
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Միացնել Etherpad-ը Wiki խմբագրման համար"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Օգտագործել Etherpad-ը որպես համագործակցային խմբագիր գոյություն ունեցող Wiki էջերի համար։ Etherpad-ը պետք է հասանելի լինի նույն origin-ում, ինչ Chamilo-ն՝ անվտանգ ներկառուցված նիստերի համար։"
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpad օրինակի բազային URL, ներառյալ կամընտիր reverse-proxy ուղի։ Օրինակ՝ https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API բանալի"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API բանալի, որն օգտագործում է Chamilo-ն pad-եր, նիստեր ստեղծելու և Wiki բովանդակությունը համաժամեցնելու համար։ Կարգավորեք Etherpad-ը՝ API-բանալիով նույնականացում ընդունելու համար։"
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Նոր փաստաթղթերի լռելյայն տեսանելիությունը կարող է փոխվել դասընթացի կողմից"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Տեսանելիություն, որը տրվում է նոր փաստաթղթին, թղթապանակին կամ վերբեռնված ֆայլին, երբ ուսուցիչը այն ստեղծում է դասընթացում։ Ուսուցիչները հետագայում կարող են փոխել յուրաքանչյուրի տեսանելիությունը։"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Երբ միացված է, ուսուցիչները կարող են դասընթացի կարգավորումներում ընտրել իրենց դասընթացի նոր փաստաթղթերի տեսանելիությունը՝ հարթակի լռելյայնի փոխարեն։"
+
+msgid "Default visibility of new learning paths"
+msgstr "Նոր ուսումնական ուղիների լռելյայն տեսանելիություն"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Նոր ուսումնական ուղիների լռելյայն տեսանելիությունը կարող է փոխվել դասընթացի կողմից"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Տեսանելիություն, որը տրվում է նոր ուսումնական ուղուն, երբ ուսուցիչը այն ստեղծում է դասընթացում։ Ուսուցիչները հետագայում կարող են փոխել յուրաքանչյուրի տեսանելիությունը։"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Երբ միացված է, ուսուցիչները կարող են դասընթացի կարգավորումներում ընտրել իրենց դասընթացի նոր ուսումնական ուղիների տեսանելիությունը՝ հարթակի լռելյայնի փոխարեն։"
+
+msgid "Default visibility of new tests"
+msgstr "Նոր թեստերի լռելյայն տեսանելիություն"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Նոր թեստերի լռելյայն տեսանելիությունը կարող է փոխվել դասընթացով"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Տեսանելիությունը, որը տրվում է նոր թեստին, երբ ուսուցիչը ստեղծում է այն դասընթացում։ Ուսուցիչները հետագայում կարող են փոխել յուրաքանչյուրի տեսանելիությունը։"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Երբ միացված է, ուսուցիչները կարող են դասընթացի կարգավորումներում ընտրել իրենց դասընթացի նոր թեստերին տրվող տեսանելիությունը՝ հարթակի լռելյայնի փոխարեն։"
+
+msgid "Default visibility for new learning paths"
+msgstr "Նոր ուսումնական ուղիների լռելյայն տեսանելիություն"
+
+msgid "Default visibility for new tests"
+msgstr "Նոր թեստերի լռելյայն տեսանելիություն"
+
+msgid "Following"
+msgstr "Հետևում"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Ստանալ էլ. նամակ, երբ սովորողը մեկնաբանում է այս առաջադրանքի ներկայացումը"
+
+msgid "Payment history"
+msgstr "Վճարումների պատմություն"
+
+msgid "No payments yet"
+msgstr "Դեռ վճարումներ չկան"
+
+msgid "Cancel service"
+msgstr "Չեղարկել ծառայությունը"
+
+msgid "Official transcript"
+msgstr "Պաշտոնական ակադեմիական տեղեկանք"
+
+msgid "Unofficial transcript"
+msgstr "Ոչ պաշտոնական ակադեմիական տեղեկանք"
+
+msgid "Student name"
+msgstr "Ուսանողի անուն"
+
+msgid "Student number"
+msgstr "Ուսանողի համար"
+
+msgid "Program title"
+msgstr "Ծրագրի անվանում"
+
+msgid "Required hours"
+msgstr "Պահանջվող ժամեր"
+
+msgid "Completion date"
+msgstr "Ավարտման ամսաթիվ"
+
+msgid "Hours completed"
+msgstr "Ավարտված ժամեր"
+
+msgid "Final grade"
+msgstr "Վերջնական գնահատական"
+
+msgid "Grade"
+msgstr "Գնահատական"
+
+msgid "No completed course yet."
+msgstr "Դեռ ավարտված դասընթաց չկա։"
+
+msgid "Grading scale"
+msgstr "Գնահատման սանդղակ"
+
+msgid "Signature of school official"
+msgstr "Դպրոցի պաշտոնյայի ստորագրություն"
+
+msgid "School official"
+msgstr "Դպրոցի պաշտոնյա"
+
+msgid "Official's title"
+msgstr "Պաշտոնյայի պաշտոն"
+
+msgid "Verify this transcript at"
+msgstr "Ստուգել այս տեղեկանքը այստեղ՝"
+
+msgid "Verification code"
+msgstr "Ստուգման կոդ"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Այս ոչ պաշտոնական տեղեկանքը ստորագրված չէ։ Պաշտոնական տեղեկանքի համար դիմեք ադմինիստրատորին։"
+
+msgid "Transcript verification"
+msgstr "Տեղեկանքի ստուգում"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Ստուգեք, որ այս պաշտոնական տեղեկանքը տրվել և ստորագրվել է հաստատության կողմից, չի փոփոխվել և չեղարկված չէ։"
+
+msgid "Valid"
+msgstr "Վավեր"
+
+msgid "Invalid signature"
+msgstr "Անվավեր ստորագրություն"
+
+msgid "Transcript not found"
+msgstr "Տեղեկանքը չի գտնվել"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Հաստատության ստորագրությունը վավեր է, և այս տեղեկանքը չեղարկված չէ։"
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Այս տեղեկանքը չի կարող հաստատվել որպես վավեր։ Մանրամասները չեն ցուցադրվում։"
+
+msgid "Transcript details"
+msgstr "Տեղեկանքի մանրամասներ"
+
+msgid "Institution"
+msgstr "Հաստատություն"
+
+msgid "Issued on"
+msgstr "Տրված է"
+
+msgid "Download verification JSON"
+msgstr "Ներբեռնել ստուգման JSON"
+
+msgid "Transcript"
+msgstr "Ակադեմիական տեղեկանք"
+
+msgid "My confidential reports"
+msgstr "Իմ գաղտնի հաշվետվությունները"
+
+msgid "My transcript"
+msgstr "Իմ տեղեկանքը"
+
+msgid "Confidential investigations"
+msgstr "Գաղտնի քննություններ"
+
+msgid "Floor plan"
+msgstr "Հարկի հատակագիծ"
+
+msgid "Click a highlighted room to select it"
+msgstr "Սեղմեք ընդգծված սենյակի վրա՝ այն ընտրելու համար"
+
+msgid "Select room"
+msgstr "Ընտրել սենյակ"
+
+msgid "Room on floor plan"
+msgstr "Սենյակ հատակագծում"
+
+msgid "Select a branch first"
+msgstr "Նախ ընտրեք մասնաճյուղը"
+
+msgid "The branch has no attached floor plan"
+msgstr "Մասնաճյուղը կցված հատակագիծ չունի"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Օգտագործեք բազմանկյունի գործիքը սենյակը ուրվագծելու համար; օգտագործեք Խմբագրել՝ անկյունները տեղափոխելու համար"
+
+msgid "Save room area"
+msgstr "Պահպանել սենյակի տարածքը"
+
+msgid "Clear room area"
+msgstr "Մաքրել սենյակի տարածքը"
+
+msgid "Save the room form to persist the area"
+msgstr "Պահպանեք սենյակի ձևը՝ տարածքը պահպանելու համար"
+
+msgid "Floor plan unavailable"
+msgstr "Հատակագիծը հասանելի չէ"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Սենյակի քարտեզի կետերը պետք է լինեն հատակագծի սահմաններում"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Վստա՞հ եք, որ ցանկանում եք մաքրել սենյակի տարածքը։"
+
+msgid "View room on floor plan"
+msgstr "Դիտել սենյակը հատակագծի վրա"
+
+msgid "No floor plan available"
+msgstr "Հատակագիծը հասանելի չէ"
+
+msgid "This is an assignment by groups"
+msgstr "Սա խմբերով առաջադրանք է"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Վերբեռնեք PNG, JPEG կամ անվտանգ ստատիկ SVG հատակագիծ, կամ ընտրեք առկա պատկեր Փաստաթղթերից։"
+
+msgid "Upload floor plan"
+msgstr "Վերբեռնել հատակագիծ"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG կամ ստատիկ SVG, առավելագույնը 10 ՄԲ"
+
+msgid "Search images by name"
+msgstr "Որոնել պատկերներ ըստ անվան"
+
+msgid "Image name"
+msgstr "Պատկերի անուն"
+
+msgid "Select an image"
+msgstr "Ընտրել պատկեր"
+
+msgid "Change floor plan"
+msgstr "Փոխել հատակագիծը"
+
+msgid "Attach floor plan"
+msgstr "Կցել հատակագիծ"
+
+msgid "No matching images found in Documents."
+msgstr "Փաստաթղթերում համապատասխան պատկերներ չեն գտնվել։"
+
+msgid "Current floor plan"
+msgstr "Ընթացիկ հատակագիծ"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Հատակագծի փոփոխությունները պահպանվում են ավտոմատ։"
+
+msgid "Remove floor plan"
+msgstr "Հեռացնել հատակագիծը"
+
+msgid "Cannot load images"
+msgstr "Հնարավոր չէ բեռնել պատկերները"
+
+msgid "Floor plan saved"
+msgstr "Հատակագիծը պահպանված է"
+
+msgid "Cannot attach floor plan"
+msgstr "Հնարավոր չէ կցել հատակագիծը"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Աջակցվում են միայն PNG/JPEG և անվտանգ ստատիկ SVG պատկերներ՝ մինչև 10ՄԲ։"
+
+msgid "Cannot upload floor plan"
+msgstr "Հնարավոր չէ վերբեռնել հատակագիծը"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Վստա՞հ եք, որ ցանկանում եք հեռացնել հատակագիծը։"
+
+msgid "Floor plan removed"
+msgstr "Հատակագիծը հեռացված է"
+
+msgid "Cannot remove floor plan"
+msgstr "Հնարավոր չէ հեռացնել հատակագիծը"
+
+msgid "Support bot"
+msgstr "Աջակցման բոտ"
+
+msgid "Connected"
+msgstr "Միացված"
+
+msgid "Not connected"
+msgstr "Չմիացված"
+
+msgid "View ticket"
+msgstr "Դիտել տոմսը"
+
+msgid "Start a new conversation"
+msgstr "Սկսել նոր զրույց"
+
+msgid "Video call"
+msgstr "Տեսազանգ"
+
+msgid "Incoming video call"
+msgstr "Մուտքային տեսազանգ"
+
+msgid "Decline"
+msgstr "Մերժել"
+
+msgid "Mute microphone"
+msgstr "Անջատել խոսափողը"
+
+msgid "Unmute microphone"
+msgstr "Միացնել խոսափողը"
+
+msgid "Turn camera off"
+msgstr "Անջատել տեսախցիկը"
+
+msgid "Turn camera on"
+msgstr "Միացնել տեսախցիկը"
+
+msgid "Hang up"
+msgstr "Ավարտել զանգը"
+
+msgid "Calling..."
+msgstr "Զանգում է..."
+
+msgid "Connecting..."
+msgstr "Միանում է..."
+
+msgid "Your contact is busy."
+msgstr "Ձեր կոնտակտը զբաղված է։"
+
+msgid "Your contact did not answer the call."
+msgstr "Ձեր կոնտակտը չպատասխանեց զանգին։"
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Ձեր կոնտակտը չկարողացավ մուտք գործել տեսախցիկ կամ խոսափող։"
+
+msgid "Your contact could not prepare the video call."
+msgstr "Ձեր կոնտակտը չկարողացավ պատրաստել տեսազանգը։"
+
+msgid "Your contact refused the call."
+msgstr "Ձեր կոնտակտը մերժեց զանգը։"
+
+msgid "The call timed out."
+msgstr "Զանգի ժամանակը սպառվեց։"
+
+msgid "Your contact cancelled the call."
+msgstr "Ձեր կոնտակտը չեղարկեց զանգը։"
+
+msgid "The video connection was lost."
+msgstr "Տեսակապը կորել է։"
+
+msgid "Your contact could not establish the video connection."
+msgstr "Ձեր կոնտակտը չկարողացավ հաստատել տեսակապը։"
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Ձեր կոնտակտը չկարողացավ ավարտել տեսազանգի կարգավորումը։"
+
+msgid "Your contact hung up."
+msgstr "Ձեր կոնտակտը կախեց խոսափողը։"
+
+msgid "Video call could not be started"
+msgstr "Տեսազանգը չհաջողվեց սկսել"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Տեսախցիկի կամ խոսափողի թույլտվությունը մերժվել է։"
+
+msgid "No camera or microphone was found."
+msgstr "Տեսախցիկ կամ խոսափող չի գտնվել։"
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Տեսախցիկը կամ խոսափողը արդեն օգտագործվում է կամ անհասանելի է։"
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Տեսախցիկը կամ խոսափողը չի աջակցում պահանջվող կարգավորումները։"
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Չհաջողվեց ստանալ տեսախցիկի կամ խոսափողի հասանելիություն։"
+
+msgid "The video call could not be prepared."
+msgstr "Տեսազանգը չհաջողվեց պատրաստել։"
+
+msgid "The video call request could not be sent."
+msgstr "Տեսազանգի հարցումը չհաջողվեց ուղարկել։"
+
+msgid "The incoming video call could not be processed."
+msgstr "Մուտքային տեսազանգը չհաջողվեց մշակել։"
+
+msgid "The video call answer could not be prepared."
+msgstr "Տեսազանգի պատասխանը չհաջողվեց պատրաստել։"
+
+msgid "The video call answer could not be sent."
+msgstr "Տեսազանգի պատասխանը չհաջողվեց ուղարկել։"
+
+msgid "The video call answer could not be processed."
+msgstr "Տեսազանգի պատասխանը չհաջողվեց մշակել։"
+
+msgid "The video connection failed"
+msgstr "Տեսակապը ձախողվեց"
+
+msgid "The video connection could not be established."
+msgstr "Տեսակապը չհաջողվեց հաստատել։"
+
+msgid "No answer was received."
+msgstr "Պատասխան չի ստացվել։"
+
+msgid "You refused the call."
+msgstr "Դուք մերժեցիք զանգը։"
+
+msgid "You cancelled the call."
+msgstr "Դուք չեղարկեցիք զանգը։"
+
+msgid "You hung up."
+msgstr "Դուք կախեցիք խոսափողը։"
+
+msgid "You missed the call."
+msgstr "Դուք բաց թողեցիք զանգը։"
+
+msgid "Support bot is currently unavailable."
+msgstr "Աջակցման բոտը ներկայումս անհասանելի է։"
+
+msgid "A support ticket has been created."
+msgstr "Աջակցման տոմսը ստեղծվել է։"
+
+msgid "Conversation ended."
+msgstr "Զրույցն ավարտվել է։"
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Աջակցման բոտը չկարողացավ շարունակել այս զրույցը։ Խնդրում ենք կրկին փորձել։"
+
+msgid "Add your first term glossary to this course"
+msgstr "Ավելացրեք այս դասընթացի առաջին տերմինների բառարանը"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Վստա՞հ եք, որ ցանկանում եք ջնջել այս հարցման ձևանմուշը։"
+
+msgid "The survey template has been deleted."
+msgstr "Հարցման ձևանմուշը ջնջվել է։"
+
+msgid "Please select a course."
+msgstr "Խնդրում ենք ընտրել դասընթաց։"
+
+msgid "Please select a session for this course."
+msgstr "Խնդրում ենք ընտրել սեսիա այս դասընթացի համար։"
+
+msgid "The survey has been created from the template."
+msgstr "Հարցումը ստեղծվել է ձևանմուշից։"
+
+msgid "Survey templates"
+msgstr "Հարցման ձևանմուշներ"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Ստեղծեք վերօգտագործելի հարցման ձևանմուշներ ուսուցիչների համար և դրանք ուղղակիորեն նշանակեք դասընթացին կամ սեսիային։"
+
+msgid "Subtitle"
+msgstr "Ենթավերնագիր"
+
+msgid "Assign to course"
+msgstr "Նշանակել դասընթացին"
+
+msgid "Assign template to course"
+msgstr "Նշանակել ձևանմուշը դասընթացին"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Թողեք սեսիան դատարկ՝ հարցումը ուղղակիորեն դասընթացում ստեղծելու համար։"
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Այս դասընթացը հասանելի է այս պորտալում սեսիայի միջոցով, ուստի սեսիան պարտադիր է։"
+
+msgid "Survey template questions"
+msgstr "Հարցման ձևանմուշի հարցեր"
+
+msgid "Back to survey templates"
+msgstr "Վերադառնալ հարցման ձևանմուշներին"
+
+msgid "Could not load survey template"
+msgstr "Չհաջողվեց բեռնել հարցման ձևանմուշը"
+
+msgid "Could not load survey template questions"
+msgstr "Չհաջողվեց բեռնել հարցման ձևանմուշի հարցերը"
+
+msgid "Could not save survey template question"
+msgstr "Չհաջողվեց պահպանել հարցման ձևանմուշի հարցը"
+
+msgid "Could not delete survey template question"
+msgstr "Չհաջողվեց ջնջել հարցման ձևանմուշի հարցը"
+
+msgid "Could not move survey template question"
+msgstr "Չհաջողվեց տեղափոխել հարցման ձևանմուշի հարցը"
+
+msgid "Could not copy survey template question"
+msgstr "Չհաջողվեց պատճենել հարցման ձևանմուշի հարցը"
+
+msgid "The survey template has been saved."
+msgstr "Հարցման ձևանմուշը պահպանվել է։"
+
+msgid "Edit survey template"
+msgstr "Խմբագրել հարցման ձևանմուշը"
+
+msgid "Create survey template"
+msgstr "Ստեղծել հարցման ձևանմուշ"
+
+msgid "The survey template title is required."
+msgstr "Հարցման ձևանմուշի վերնագիրը պարտադիր է։"
+
+msgid "Visible as template"
+msgstr "Տեսանելի որպես ձևանմուշ"
+
+msgid "Create satisfaction survey"
+msgstr "Ստեղծել բավարարվածության հարցում"
+
+msgid "Training satisfaction survey"
+msgstr "Ուսուցման բավարարվածության հարցում"
+
+msgid "Could not create satisfaction survey"
+msgstr "Չհաջողվեց ստեղծել բավարարվածության հարցում"
+
+msgid "Use template"
+msgstr "Օգտագործել ձևանմուշ"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Ստեղծել այս հարցումը ադմինիստրատորի պատրաստած վերօգտագործելի ձևանմուշից։"
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Արդյունքները թաքցված են ուսուցչից/դասավարից"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Ուսուցիչներն ու դասավարները դեռ կարող են տեսնել պատասխանների քանակը և ուղարկել հիշեցումներ, բայց չեն կարող բացել կամ արտահանել հարցման արդյունքները։"
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Ձևանմուշը կիրառված է։ Ստուգեք հարցման կարգավորումները և պահպանեք՝ այն ստեղծելու համար։"
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Հարցման արդյունքները թաքցված են ուսուցիչներից և դասավարներից։"
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Դուք դեռ կարող եք օգտագործել հրավերների էջը՝ պատասխանների քանակը տեսնելու և հիշեցումներ ուղարկելու համար։"
+
+msgid "Payment method"
+msgstr "Վճարման եղանակ"
+
+msgid "Preview mode"
+msgstr "Նախադիտման ռեժիմ"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Նախադիտման ռեժիմում առաջընթացը և միավորը չեն պահպանվում։"
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Այս հղումը չի կարող ցուցադրվել ուսումնական ուղու ներսում։"
+
+msgid "Open it in a new tab to view the page."
+msgstr "Բացեք այն նոր ներդիրում՝ էջը դիտելու համար։"
+
+msgid "Report a problem with this question"
+msgstr "Հաղորդել այս հարցի խնդրի մասին"
+
+msgid "Your report was sent to the teacher."
+msgstr "Ձեր հաղորդումը ուղարկվել է ուսուցչին։"
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Նկարագրեք հայտնաբերած սխալը կամ խնդիրը։ Ձեր հաղորդումը կուղարկվի ուսուցչին։"
+
+msgid "A comment is required."
+msgstr "Մեկնաբանությունը պարտադիր է։"
+
+msgid "Could not send the report."
+msgstr "Չհաջողվեց ուղարկել հաղորդումը։"
+
+msgid "Learner reports"
+msgstr "Սովորողների հաղորդումներ"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Այս հարցի համար սովորողների հաղորդումներ չեն ներկայացվել։"
+
+msgid "View attempt"
+msgstr "Դիտել փորձը"
+
+msgid "Could not load learner reports."
+msgstr "Չհաջողվեց բեռնել սովորողների հաղորդումները։"
+
+msgid "Allow learners to report issues in questions"
+msgstr "Թույլատրել սովորողներին հաղորդել հարցերի խնդիրների մասին"
+
+msgid "Skill acquired"
+msgstr "Հմտությունը ձեռք է բերվել"
+
+msgid "AI Toolbox"
+msgstr "ԱԲ գործիքակազմ"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Ստեղծեք ինտերակտիվ կրթական հավելվածներ ԱԲ-ով և հետևեք սովորողների առաջընթացին SCORM-ով։"
+
+msgid "No published applications are available yet."
+msgstr "Հրապարակված հավելվածներ դեռ հասանելի չեն։"
+
+msgid "Interactive applications"
+msgstr "Ինտերակտիվ հավելվածներ"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Ստեղծեք, բարելավեք, հրապարակեք և վերանայեք տարբերակները մեկ տեղից։"
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Բացեք հավելվածը՝ շարունակելու վերջին առաջընթացից։"
+
+msgid "Interactive learning application"
+msgstr "Ինտերակտիվ ուսումնական հավելված"
+
+msgid "Create an interactive learning app"
+msgstr "Ստեղծել ինտերակտիվ ուսումնական հավելված"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Նկարագրեք գործունեությունը։ Chamilo-ն կստեղծի տարբերակավորված SCORM հավելված՝ առաջընթացի և միավորի հետևումով։"
+
+msgid "Idea"
+msgstr "Գաղափար"
+
+msgid "Application"
+msgstr "Հավելված"
+
+msgid "What should the application do?"
+msgstr "Ի՞նչ պետք է անի հավելվածը։"
+
+msgid "How it works"
+msgstr "Ինչպես է աշխատում"
+
+msgid "AI generation"
+msgstr "ԱԲ ստեղծում"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Հավելվածը ստեղծվում է ձեր հրահանգներից և պահվում է որպես 1-ին տարբերակ։"
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Սովորողի առաջընթացը, միավորը և շարունակման տվյալները հաղորդվում են Chamilo-ին։"
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Ապագա բարելավումները ստեղծում են նոր տարբերակներ՝ առանց նախորդները ջնջելու։"
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Ներառեք ուսումնական նպատակը, կանոնները, մակարդակները, գնահատումը և այն, ինչ պետք է տեղի ունենա, երբ սովորողը ավարտի։"
+
+msgid "You are not allowed to create content in this context."
+msgstr "Այս համատեքստում բովանդակություն ստեղծելու թույլտվություն չունեք։"
+
+msgid "The application was generated successfully."
+msgstr "Հավելվածը հաջողությամբ ստեղծվեց։"
+
+msgid "Open in student view"
+msgstr "Բացել ուսանողի տեսքով"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Ստեղծեք հավելվածը՝ նախադիտումը և հրապարակումը միացնելու համար։"
+
+msgid "Improve with AI"
+msgstr "Բարելավել ԱԲ-ով"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Նկարագրեք փոփոխությունը։ Կստեղծվի նոր տարբերակ, իսկ նախորդ տարբերակները կմնան հասանելի։"
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Նկարագրեք ամբողջական ինտերակտիվ գործունեությունը, որը ցանկանում եք ստեղծել։"
+
+msgid "What should be improved?"
+msgstr "Ի՞նչը պետք է բարելավել։"
+
+msgid "Generate new version"
+msgstr "Ստեղծել նոր տարբերակ"
+
+msgid "Version history"
+msgstr "Տարբերակների պատմություն"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Նախադիտեք, ներբեռնեք կամ վերականգնեք ցանկացած ստեղծված տարբերակ։"
+
+msgid "A new version was generated."
+msgstr "Ստեղծվել է նոր տարբերակ։"
+
+msgid "Version restored"
+msgstr "Տարբերակը վերականգնված է"
+
+msgid "The support bot tree has been published."
+msgstr "Աջակցության բոտի ծառը հրապարակվել է։"
+
+msgid "The support bot tree has been archived."
+msgstr "Աջակցության բոտի ծառը արխիվացվել է։"
+
+msgid "The support bot tree has been duplicated."
+msgstr "Աջակցության բոտի ծառը կրկնօրինակվել է։"
+
+msgid "The support bot tree has been deleted."
+msgstr "Աջակցության բոտի ծառը ջնջվել է։"
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Վստա՞հ եք, որ ցանկանում եք ջնջել այս աջակցության բոտի ծառը։"
+
+msgid "The support bot tree has been imported."
+msgstr "Աջակցության բոտի ծառը ներմուծվել է։"
+
+msgid "Create support bot tree"
+msgstr "Ստեղծել աջակցության բոտի ծառ"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Կառուցեք ֆիքսված որոշումների ծառ, որը ուղղորդում է օգտատերերին աջակցության հարցերով և կարող է բարձրացնել դեպի տոմսեր։"
+
+msgid "Portal scope"
+msgstr "Պորտալի շրջանակ"
+
+msgid "Duplicate"
+msgstr "Կրկնօրինակել"
+
+msgid "Archive"
+msgstr "Արխիվացնել"
+
+msgid "View conversations"
+msgstr "Դիտել զրույցները"
+
+msgid "Import support bot tree"
+msgstr "Ներմուծել աջակցության բոտի ծառ"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Ներմուծեք JSON արտահանում կամ CSV որոշումների ծառ։ Ներմուծված ծառը միշտ ստեղծվում է որպես նոր սևագիր։"
+
+msgid "Resolved"
+msgstr "Լուծված"
+
+msgid "Escalated"
+msgstr "Բարձրացված"
+
+msgid "Abandoned"
+msgstr "Լքված"
+
+msgid "Support bot conversations"
+msgstr "Աջակցության բոտի զրույցներ"
+
+msgid "Outcome"
+msgstr "Արդյունք"
+
+msgid "Started at"
+msgstr "Սկսվել է"
+
+msgid "Ended at"
+msgstr "Ավարտվել է"
+
+msgid "View conversation"
+msgstr "Դիտել զրույցը"
+
+msgid "Go to node"
+msgstr "Անցնել հանգույց"
+
+msgid "Create support ticket"
+msgstr "Ստեղծել աջակցության տոմս"
+
+msgid "End conversation"
+msgstr "Ավարտել զրույցը"
+
+msgid "Node"
+msgstr "Հանգույց"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Աջակցության բոտի ծառը պահանջում է առնվազն մեկ հանգույց։"
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Վստա՞հ եք, որ ցանկանում եք ջնջել այս հանգույցը։ Դեպի այն հղումները կմաքրվեն։"
+
+msgid "Every support bot node requires at least one option."
+msgstr "Աջակցության բոտի յուրաքանչյուր հանգույց պահանջում է առնվազն մեկ տարբերակ։"
+
+msgid "The support bot tree title is required."
+msgstr "Աջակցության բոտի ծառի վերնագիրը պարտադիր է։"
+
+msgid "A support bot entry node is required."
+msgstr "Աջակցության բոտի մուտքի հանգույցը պարտադիր է։"
+
+msgid "Every support bot node requires content."
+msgstr "Աջակցության բոտի յուրաքանչյուր հանգույց պահանջում է բովանդակություն։"
+
+msgid "Every support bot option requires a label."
+msgstr "Աջակցության բոտի յուրաքանչյուր տարբերակ պահանջում է պիտակ։"
+
+msgid "Select a target node for every go-to option."
+msgstr "Ընտրեք նպատակային հանգույց յուրաքանչյուր անցման տարբերակի համար։"
+
+msgid "Enter a relative URL for every link option."
+msgstr "Մուտքագրեք հարաբերական URL յուրաքանչյուր հղման տարբերակի համար։"
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Ընտրեք տոմսի կատեգորիա յուրաքանչյուր բարձրացման տարբերակի համար։"
+
+msgid "The support bot tree has been saved."
+msgstr "Աջակցության բոտի ծառը պահպանվել է։"
+
+msgid "Edit support bot tree"
+msgstr "Խմբագրել աջակցության բոտի ծառը"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Հրապարակված և արխիվացված աջակցության բոտի տարբերակները միայն կարդալու համար են։ Կրկնօրինակեք այս ծառը ցանկից՝ նոր սևագրի տարբերակը խմբագրելու համար։"
+
+msgid "Default ticket project"
+msgstr "Լռելյայն տոմսերի նախագիծ"
+
+msgid "Decision tree rules"
+msgstr "Որոշումների ծառի կանոններ"
+
+msgid "Every node must contain at least one option."
+msgstr "Յուրաքանչյուր հանգույց պետք է պարունակի առնվազն մեկ տարբերակ։"
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Վերջնական հանգույցը պետք է ավարտի զրույցը կամ ստեղծի աջակցության տոմս։"
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Go-to հղումները v1-ում չպետք է ստեղծեն ցիկլեր։"
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Արտաքին URL-ները v1-ում թույլատրված չեն. հղման գործողությունները պետք է օգտագործեն Chamilo-ի հարաբերական ուղի։"
+
+msgid "Nodes"
+msgstr "Հանգույցներ"
+
+msgid "Add node"
+msgstr "Ավելացնել հանգույց"
+
+msgid "Entry node"
+msgstr "Մուտքի հանգույց"
+
+msgid "Set as entry node"
+msgstr "Նշել որպես մուտքի հանգույց"
+
+msgid "Target node"
+msgstr "Նպատակային հանգույց"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Օգտագործեք Chamilo-ի հարաբերական ուղի, օրինակ՝ /tickets։"
+
+msgid "Ticket category"
+msgstr "Տոմսի կատեգորիա"
+
+msgid "Select a default ticket project first."
+msgstr "Նախ ընտրեք լռելյայն տոմսերի նախագիծ։"
+
+msgid "Closing message"
+msgstr "Ավարտի հաղորդագրություն"
+
+msgid "Select a node to edit it."
+msgstr "Ընտրեք հանգույց՝ այն խմբագրելու համար։"
+
+msgid "Support bot conversation"
+msgstr "Աջակցության բոտի զրույց"
+
+msgid "Transcript of %s"
+msgstr "%s-ի արձանագրություն"
+
+msgid "Download unofficial transcript"
+msgstr "Ներբեռնել ոչ պաշտոնական արձանագրություն"
+
+msgid "Issue official transcript"
+msgstr "Տրամադրել պաշտոնական արձանագրություն"
+
+msgid "Official transcripts"
+msgstr "Պաշտոնական արձանագրություններ"
+
+msgid "No official transcript has been issued yet."
+msgstr "Պաշտոնական արձանագրություն դեռ չի տրամադրվել։"
+
+msgid "Issued by"
+msgstr "Տրամադրել է"
+
+msgid "Verify"
+msgstr "Ստուգել"
+
+msgid "Signature of official transcripts"
+msgstr "Պաշտոնական արձանագրությունների ստորագրություն"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Այս պատկերը տպվում է այս պորտալի պաշտոնական արձանագրությունների վրա՝ վկայագրի կարգավորումներում նշված ստորագրողի անվան և պաշտոնի վերևում։"
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Տրամադրե՞լ ստորագրված պաշտոնական արձանագրություն այս էջում նշված դասընթացներով և գնահատականներով։ Այն կարող է ստուգվել առցանց մինչև չեղարկումը։"
+
+msgid "Official transcript issued"
+msgstr "Պաշտոնական արձանագրությունը տրամադրված է"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Չեղարկե՞լ այս պաշտոնական արձանագրությունը։ Ստուգման էջը այնուհետև կցուցադրի այն որպես չեղարկված։"
+
+msgid "Official transcript revoked"
+msgstr "Պաշտոնական արձանագրությունը չեղարկված է"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Նախ ընտրեք PNG կամ JPEG պատկեր։"
+
+msgid "Signed credential"
+msgstr "Ստորագրված հավաստագիր"
+
+msgid "Issue signed credential"
+msgstr "Տրամադրել ստորագրված հավաստագիր"
+
+msgid "Verify credential"
+msgstr "Ստուգել հավաստագիրը"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Ամրագրել Sepolia թեստային ցանցում"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Հաստատել առկա Sepolia գործարքը"
+
+msgid "Revoke signed credential"
+msgstr "Չեղարկել ստորագրված հավաստագիրը"
+
+msgid "Delete certificate"
+msgstr "Ջնջել վկայագիրը"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Հաստատել առկա Sepolia գործարքը"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia գործարքի հեշ"
+
+msgid "Verify transaction"
+msgstr "Ստուգել գործարքը"
+
+msgid "Anchored"
+msgstr "Ամրագրված"
+
+msgid "Issued"
+msgstr "Տրամադրված"
+
+msgid "Not issued"
+msgstr "Չի տրամադրվել"
+
+msgid "Consent required"
+msgstr "Պահանջվում է համաձայնություն"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia գործարքը հաստատված և ստուգված է"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia թեստային ցանցի դրամապանակը կխնդրի ստորագրել գործարքը։ Ամրագրվելու է միայն վկայագրի մատնահետքը։ Շարունակե՞լ։"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Չեղարկե՞լ այս ստորագրված հավաստագիրը։ Բլոկչեյնի ցանկացած գործարք մնում է մշտական, սակայն ստուգման էջը կհայտնի չեղարկման մասին։"
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Տրամադրե՞լ ստորագրված վկայագրի հավաստագիր այս սովորողի համար։ Սա հաստատված անձնական տվյալները դարձնում է ստուգելի մասնավոր հղումով։"
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia-ի համար պահանջվում է EVM-համատեղելի զննարկչի դրամապանակ։"
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Ընտրեք Sepolia թեստային ցանցը (շղթայի ID 11155111) ձեր դրամապանակում։"
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Անվավեր դրամապանակի հասցե կամ վկայագրի մատնահետք։"
+
+msgid "Transaction pending"
+msgstr "Գործարքը սպասման մեջ է"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Ավելի ուշ օգտագործեք «Հաստատել առկա Sepolia գործարքը»։"
+
+msgid "Signed credential issued"
+msgstr "Ստորագրված հավատարմագիրը տրված է"
+
+msgid "Credential revoked"
+msgstr "Հավատարմագիրը չեղարկված է"
+
+msgid "Transaction hash"
+msgstr "Գործարքի հեշ"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Հրապարակման համաձայնությունը թույլ է տալիս ադմինիստրատորին տալ ստորագրված վկայագրի հավատարմագիր և կամընտիր կերպով ամրագրել դրա SHA-256 մատնահետքը Sepolia թեստային ցանցում։ Շղթայում անուն կամ անձնական տվյալներ չեն ուղարկվում։ Համաձայնությունը կարող եք ցանկացած պահի հետ վերցնել։"
+
+msgid "Publication consent"
+msgstr "Հրապարակման համաձայնություն"
+
+msgid "Not approved"
+msgstr "Հաստատված չէ"
+
+msgid "Withdraw consent"
+msgstr "Հետ վերցնել համաձայնությունը"
+
+msgid "Approve publication"
+msgstr "Հաստատել հրապարակումը"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Ես թույլատրում եմ ստորագրված, հանրայնորեն ստուգելի հավատարմագիր, որը ցույց է տալիս իմ անունը, դասընթացը, գնահատականը և տրման ամսաթիվը։ Ադմինիստրատորը կարող է նաև հրապարակել միայն դրա SHA-256 մատնահետքը Sepolia թեստային ցանցում։ Մատնահետքը մշտական է, նույնիսկ եթե հետագայում հետ վերցնեմ համաձայնությունը։ Շարունակե՞լ։"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Հետ վերցնե՞լ այս վկայագրի հրապարակման հաստատումը։"
+
+msgid "Publication approval recorded"
+msgstr "Հրապարակման հաստատումը գրանցված է"
+
+msgid "Publication approval withdrawn"
+msgstr "Հրապարակման հաստատումը հետ է վերցված"
+
+msgid "Read more"
+msgstr "Կարդալ ավելին"
+
+msgid "Participation: %s of %s posts"
+msgstr "Մասնակցություն. %s գրառում %s-ից"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Հրապարակեք ձեր ներդրումը՝ մյուս մասնակիցների պատասխանները տեսնելու համար։"
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Միայն լիազորված քննիչները կարող են վերանայել իրավասու զեկույցները։ Զեկուցողների ինքնությունը լռելյայն գաղտնի է մնում։"
+
+msgid "New confidential report"
+msgstr "Նոր գաղտնի զեկույց"
+
+msgid "Reported user"
+msgstr "Զեկուցված օգտատեր"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Կան վերանայման սպասող իրավասու գաղտնի զեկույցներ։"
+
+msgid "Eligible investigations"
+msgstr "Իրավասու քննություններ"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Գործը այստեղ հայտնվում է միայն այն բանից հետո, երբ նույն անձին զեկուցում են առնվազն %s տարբեր օգտատերեր։"
+
+msgid "Distinct reporters"
+msgstr "Տարբեր զեկուցողներ"
+
+msgid "Reports for selected user"
+msgstr "Ընտրված օգտատիրոջ զեկույցներ"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Գաղտնի զեկուցումը ներկայումս հասանելի չէ։"
+
+msgid "The investigation could not be loaded."
+msgstr "Քննությունը չհաջողվեց բեռնել։"
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Ձեր ինքնությունը լռելյայն պաշտպանված է քննիչներից, սակայն խուսափեք զեկույցի տեքստում կամ կցորդներում նույնականացնող մանրամասներ ներառելուց։ Սա արտակարգ ծառայություն չէ։"
+
+msgid "Find the user involved"
+msgstr "Գտեք ներգրավված օգտատիրոջը"
+
+msgid "Name or username"
+msgstr "Անուն կամ օգտանուն"
+
+msgid "Describe the situation"
+msgstr "Նկարագրեք իրավիճակը"
+
+msgid "Evidence (optional)"
+msgstr "Ապացույցներ (ըստ ցանկության)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Մինչև երեք ֆայլ, յուրաքանչյուրը առավելագույնը 8 Միբ։ Պատկերներ, աուդիո կամ կարճ տեսանյութեր։"
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Համաձայն եմ, որ լիազորված քննիչները կարող են տեսնել իմ անունը և էլ. փոստը այս կոնկրետ զեկույցի համար։ Այս թույլտվությունը կարող եմ հետագայում հետ վերցնել։"
+
+msgid "Send confidential report"
+msgstr "Ուղարկել գաղտնի զեկույց"
+
+msgid "Could not search users"
+msgstr "Չհաջողվեց որոնել օգտատերերին"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Մինչև երեք ֆայլ, յուրաքանչյուրը առավելագույնը 8 Միբ։"
+
+msgid "The confidential report could not be saved."
+msgstr "Գաղտնի զեկույցը չհաջողվեց պահպանել։"
+
+msgid "Confidential report"
+msgstr "Գաղտնի զեկույց"
+
+msgid "Confidential conversation"
+msgstr "Գաղտնի զրույց"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Քննիչները կարող են շփվել այս զրույցի միջոցով՝ առանց տեսնելու զեկուցողի ինքնությունը, եթե կոնտակտի փոխանակումը միացված չէ։"
+
+msgid "Reporter"
+msgstr "Զեկուցող"
+
+msgid "Investigator"
+msgstr "Քննիչ"
+
+msgid "Additional evidence (optional)"
+msgstr "Լրացուցիչ ապացույցներ (ըստ ցանկության)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Մինչև երեք ֆայլ, յուրաքանչյուրը առավելագույնը 8 Միբ. տասը ֆայլ մեկ զեկույցի համար։"
+
+msgid "Contact shared voluntarily"
+msgstr "Կոնտակտը կամավոր կիսված է"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Թույլատրել քննիչներին տեսնել իմ անունը և էլ. փոստը այս զեկույցի համար"
+
+msgid "This confidential report is not available."
+msgstr "Այս գաղտնի զեկույցը հասանելի չէ։"
+
+msgid "Your message could not be saved."
+msgstr "Ձեր հաղորդագրությունը չհաջողվեց պահպանել։"
+
+msgid "Contact sharing could not be updated."
+msgstr "Կոնտակտների համօգտագործումը չհաջողվեց թարմացնել։"
+
+msgid "Evidence could not be downloaded."
+msgstr "Ապացույցը չհաջողվեց ներբեռնել։"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Օրինակ՝ լրացնել ձևի գործունեությունը. հաշվարկել մարմնի զանգվածի ինդեքսը</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Տարիք</strong></td>            <td width=\"75%\" style=\"\">[25] տարեկան</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Սեռ</strong></td>            <td style=\"\" text-align:=\"\">[M] (M կամ F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Քաշ</strong></td>            <td style=\"\" text-align:=\"\">95 կգ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Հասակ</strong></td>            <td style=\"vertical-align: top;\">1.81 մ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Մարմնի զանգվածի ինդեքս</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Քաշ/Հասակ<sup>2</sup> (տես՝ <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Վիքիպեդիայի հոդվածը</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Օրինակ՝ լրացնել ձևի գործունեությունը. հաշվարկել մարմնի զանգվածի ինդեքսը</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Տարիք</strong></td>            <td width=\"75%\" style=\"\">[25] տարեկան</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Սեռ</strong></td>            <td style=\"\" text-align:=\"\">[M] (M կամ F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Քաշ</strong></td>            <td style=\"\" text-align:=\"\">95 կգ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Հասակ</strong></td>            <td style=\"vertical-align: top;\">1.81 մ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Մարմնի զանգվածի ինդեքս</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Քաշ/Հասակ<sup>2</sup> (տես՝ <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Վիքիպեդիայի հոդվածը</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Թաքցնել IP հասցեն հաշվետվություններից"
+
+msgid "Course settings policies"
+msgstr "Դասընթացի կարգավորումների քաղաքականություններ"
+
+msgid "Academic transcripts"
+msgstr "Ակադեմիական քաղվածքներ"
+
+msgid "Transcript program title"
+msgstr "Քաղվածքի ծրագրի վերնագիր"
+
+msgid "Transcript course code"
+msgstr "Քաղվածքի դասընթացի կոդ"
+
+msgid "Transcript course hours field"
+msgstr "Քաղվածքի դասընթացի ժամերի դաշտ"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Քաղվածքում ավարտված ժամերը պահանջվող ժամերն են"
+
+msgid "Transcript student number field"
+msgstr "Քաղվածքի ուսանողի համարի դաշտ"
+
+msgid "Transcript address fields"
+msgstr "Քաղվածքի հասցեի դաշտեր"
+
+msgid "Transcript grading scale"
+msgstr "Քաղվածքի գնահատման սանդղակ"
+
+msgid "Transcript GPA note"
+msgstr "Քաղվածքի GPA նշում"
+
+msgid "Transcript signatory name"
+msgstr "Քաղվածքը ստորագրողի անուն"
+
+msgid "Transcript signatory title"
+msgstr "Քաղվածքը ստորագրողի պաշտոն"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Միացնել ստորագրված վկայականները և կամընտիր Sepolia թեստային ցանցի խարսխումը"
+
+msgid "Show thread replies only after participating"
+msgstr "Ցույց տալ թեմայի պատասխանները միայն մասնակցելուց հետո"
+
+msgid "Show the forum category description in threads"
+msgstr "Ցույց տալ ֆորումի կատեգորիայի նկարագրությունը թեմաներում"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Ֆորումի մասնակցության կարգավորումները կարող են փոխվել ըստ դասընթացի"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Ֆորումի թեմայում ցուցադրվող գրառումների առավելագույն քանակ"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Ֆորումի թեման ավարտելու համար պահանջվող գրառումներ"
+
+msgid "Track e-mail openings"
+msgstr "Հետևել էլ. նամակների բացումներին"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Թույլատրել էլ. նամակով պատասխանել հաղորդագրություններին"
+
+msgid "Inbound e-mail address"
+msgstr "Մուտքային էլ. փոստի հասցե"
+
+msgid "Inbound mailbox DSN"
+msgstr "Մուտքային փոստարկղի DSN"
+
+msgid "Remember me duration (days)"
+msgstr "«Հիշել ինձ» տևողությունը (օրեր)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Միացնել OAuth դինամիկ հաճախորդի գրանցումը MCP-ից դուրս"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Միացնել գաղտնի բարեկեցության հաշվետվությունը"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Քննության համար նվազագույն տարբեր հաղորդողներ"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Թույլատրել գաղտնի ապացույցների կցումներ"
+
+msgid "Show confidential investigation notifications"
+msgstr "Ցույց տալ գաղտնի քննության ծանուցումները"
+
+msgid "Enable support chatbot"
+msgstr "Միացնել աջակցության չաթբոտը"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Ընտրեք, թե որտեղ են բառարանի տերմինները ավտոմատ ընդգծվում՝ փաստաթղթեր, վարժություններ և ուսումնական ուղիներ։"
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Թաքցնել IP հասցեները տեսողական հաշվետվություններում և հաշվետվությունների արտահանումներում։ IP հասցեները մնում են պահված և հասանելի են լիազորված անձնական տվյալների ընթացակարգերով։"
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Հարթակի լռելյայն արժեքներ և դասընթացի խմբագրման թույլտվություններ. կառավարվում են «Դասընթացի կարգավորումներում»։"
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Թույլ տալ օգտատերերին ներբեռնել իրենց ավարտած դասընթացների ոչ պաշտոնական քաղվածքը և թույլ տալ ադմինիստրատորներին, նիստերի ադմինիստրատորներին և HR մենեջերներին տրամադրել ստորագրված պաշտոնական քաղվածքներ իրենց կառավարած օգտատերերի համար։ Ստորագրության պատկերը վերբեռնվում է օգտատիրոջ քաղվածքի էջից։"
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Յուրաքանչյուր քաղվածքի վրա տպվող ծրագրի վերնագիր, օրինակ՝ այս հարթակում պատրաստվող դիպլոմի անունը։"
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Որ դասընթացի դաշտն է լրացնում քաղվածքների դասընթացի կոդի սյունակը՝ դասընթացի կոդը, թե բաժնի անունը։"
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Դասընթացի լրացուցիչ դաշտի փոփոխականը, որը պահում է դասընթացի ժամերի քանակը։ Թողեք դատարկ՝ դասընթացի տևողությունն օգտագործելու համար։"
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Տպել դասընթացի պահանջվող ժամերը որպես սովորողի կողմից ավարտված ժամեր։ Անջատված լինելու դեպքում ավարտված ժամերը սովորողի դասընթացում անցկացրած ժամանակն են։"
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Օգտատիրոջ լրացուցիչ դաշտի փոփոխականը, որը պահում է քաղվածքների վրա տպվող ուսանողի համարը։ Թողեք դատարկ՝ ոչինչ չտպելու համար։"
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Օգտատիրոջ լրացուցիչ դաշտերի ստորակետով առանձնացված փոփոխականներ, որոնք տպվում են քաղվածքներում օգտատիրոջ հասցեից հետո, օրինակ՝ քաղաքը, նահանգը և փոստային ինդեքսը։"
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Գնահատականի տառերի JSON ցանկ՝ ամենաբարձր նվազագույն միավորից ներքև. յուրաքանչյուր տարր ունի նվազագույն միավորը տոկոսով (min), տառը և GPA-ն հաշվարկելու համար օգտագործվող գնահատման միավորները։"
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "GPA-ի հաշվարկման բացատրություն, որը տպվում է քաղվածքներում GPA-ի տակ։"
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Դպրոցի պաշտոնյայի անունը, ով ստորագրում է պաշտոնական քաղվածքները։"
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Դպրոցի պաշտոնյայի պաշտոնը, ով ստորագրում է պաշտոնական քաղվածքները։"
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Պահանջում է սեփականատիրոջ հստակ համաձայնություն և ադմինիստրատորի ձեռքով գործողություններ։ Շղթայում ուղարկվում են միայն SHA-256 մատնահետքերը։"
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Սովորողները ֆորումի թեմայում տեսնում են միայն առաջին գրառումը, մինչև իրենք չգրեն այդ թեմայում։ Ադմինիստրատորները, ուսուցիչները, մարզիչները և խմբի խորհրդատուները միշտ տեսնում են բոլոր գրառումները։"
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Ցուցադրել ֆորումի կատեգորիայի վերնագիրը և կրճատ նկարագրությունը յուրաքանչյուր թեմայի վերևում՝ ամբողջական նկարագրությունը կարդալու հղումով։"
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Երբ միացված է, ուսուցիչները կարող են դասընթացի կարգավորումների Ֆորում բաժնում ընտրել՝ արդյոք դասընթացը թաքցնում է թեմայի պատասխանները մինչև սովորողը գրառում անի, ցուցադրում է կատեգորիայի նկարագրությունը թեմաներում և քանի գրառում է սպասում մասնակցության առաջընթացի գոտին՝ հարթակի կարգավորումների փոխարեն։"
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Ցուցադրել յուրաքանչյուր ֆորումի թեմայի միայն այս թվով գրառումները բոլոր այն օգտատերերին, ովքեր հարթակի ադմինիստրատոր չեն, ներառյալ ուսուցիչներին, և ուսումնական ուղու ներսում բոլորին։ Թելային և ներդրված տեսքերում սահմանափակումը կիրառվում է յուրաքանչյուր գրառման պատասխանների վրա։ Գրառումները պահվում են տեսքի կարգով՝ առաջինները, կամ վերջինները ուսումնական ուղու ներսում, որտեղ վերջին գրառումները գալիս են առաջինը։ Սահմանեք 0՝ բոլոր գրառումները ցուցադրելու համար։"
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Սովորողներին ցուցադրել առաջընթացի գոտի յուրաքանչյուր ֆորումի թեմայում, որը հասնում է 100%-ի, երբ նրանք այդ թեմայում գրել են այս թվով հաղորդագրություններ։ Մոդերացիայի սպասող գրառումները հաշվվում են։ Սահմանեք 0՝ առաջընթացի գոտին թաքցնելու համար։"
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Ավելացնում է փոքր հետևող պատկեր հաղորդագրությունների ծանուցման էլ. նամակներին և գրանցում, երբ այն հարցվում է։ Սա միայն ցույց է տալիս, որ էլ. նամակը հնարավոր է բացվել է. չի ապացուցում, որ այն կարդացվել է։"
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Թույլատրել ուղիղ հաղորդագրությունների ծանուցումների ստացողներին պատասխանել էլ. փոստով։ Մուտքային հաղորդագրությունները պետք է ուղղորդվեն Chamilo-ի inbound-mail հրամանին փոստային ենթակառուցվածքի կողմից։"
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Պատասխանների ուղղորդման հիմնական հասցե, օրինակ replies@example.com։ Chamilo-ն ավելացնում է եզակի ստացողի նշան plus addressing-ի միջոցով։"
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Փոստարկղի միացում մուտքային պատասխանները հավաքելու համար, օրինակ imaps:\/\/user:password@imap.example.com:993\/INBOX։ Հավատարմագրերում վերապահված նիշերը URL-կոդավորեք։"
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Օրերի թիվը, որոնց ընթացքում օգտատերը մնում է մուտք գործած, երբ ընտրված է «Հիշել ինձ»։ Սահմանեք 0՝ անջատելու համար։ Պահանջում է HTTPS։ Թույլատրելի միջակայք՝ 0-ից 90։ Սովորական նիստի ժամանակի սպառումը կարգավորվում է առանձին PHP\/Symfony-ում։"
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Թույլ է տալիս Dynamic Client Registration-ին պահանջել ցանկացած շրջանակ, որը գրանցված է Chamilo OAuth ռեսուրսային սերվերի կողմից։ Երբ անջատված է, ինքնագրանցումը մնում է սահմանափակված MCP-ով։ Ռեսուրսների մուտքը միշտ առանձին սահմանափակվում է յուրաքանչյուր հաճախորդի թույլատրված ռեսուրսների ցանկով։"
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Միացնել գաղտնի միջադեպերի հաշվետվությունները։ Մոդուլը պահանջում է պաշտպանված գաղտնագրման բանալի և հետաքննողի թույլտվություն։"
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Նույն օգտատիրոջ մասին պետք է հաղորդեն 2-ից 10 տարբեր հաղորդողներ, նախքան գործը տեսանելի կդառնա հետաքննողներին։"
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Թույլատրել պատկերներ, աուդիո և կարճ տեսանյութեր որպես ապացույց։ Անջատված լինելու դեպքում առկա կցորդները մնում են ընթեռնելի։"
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Ցուցադրել ներքին նշում իրավասու հետաքննությունների մասին։ Չի ուղարկում էլ. նամակներ կամ արտաքին ծանուցումներ։"
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Ցուցադրել որոշումների ծառի չաթբոտ չաթի վահանակում, որը կարող է ուղղորդել օգտատերերին դեպի "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Թույլ է տալիս ուսուցիչներին ստեղծել և տարբերակել ԱԲ-ով աջակցվող կրթական հավելվածներ դասընթացների ներսում։"
+
+msgid "Department name"
+msgstr "Բաժնի անուն"
+
+msgid "Documents and exercise"
+msgstr "Փաստաթղթեր և վարժություն"
+
+msgid "Documents and learning path"
+msgstr "Փաստաթղթեր և ուսումնական ուղի"
+
+msgid "Documents, exercise and learning path"
+msgstr "Փաստաթղթեր, վարժություն և ուսումնական ուղի"
+
+msgid "session"
+msgstr "սեսիա"
+
+msgid "course"
+msgstr "դասընթաց"
+
+msgid "You have been enrolled in %s"
+msgstr "Դուք գրանցվել եք %s-ում"
 

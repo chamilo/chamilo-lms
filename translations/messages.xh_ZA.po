@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Nceda uchwethezele isicatshulwa sakho apha ezantsi"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo womsebenzi wokuzalisa ifomu : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>I-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Bhala idilesi"
@@ -28764,6 +28764,9 @@ msgstr "Umsebenzisi wangoku akafunyanwanga."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Molo %s,<br><br>Ubuyelwe kwirejista ku %s.<br>Unokufikelela i-akhawunti yakho <a href=\"%s\">apha</a>.<br><br>Iinombolelo zokungena zakho zii:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Ngobulumko,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Molo %s,<br><br>Ubhalisile ku-%s.<br>Igama lomsebenzisi: <strong>%s</strong><br><br>Nceda ucofe ikhonkco elingezantsi ukuseta iphasiwedi yakho kwaye ungene kwiakhawunti yakho:<br><a href=\"%s\">Seta iphasiwedi yakho</a><br><br>Ozithobileyo,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Ubuyelwe kwirejista ku %s"
 
@@ -35605,7 +35608,7 @@ msgid "%s results"
 msgstr "%s iziphumo"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo womsebenzi wokuzalisa ifomu : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>I-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo wokuzalisa umsebenzi wefomu: bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>i-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Kususiwe"
@@ -41567,4 +41570,1616 @@ msgstr "Imbali yemfuduso irekhodiwe"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s ikhona kwingcambu yeprojekthi: yicime ukuvala iindawo zokuphucula"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Ufumene isatifikethi kulo msebenzi"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Kufuneka ugqibe indlela yokufunda \"%s\" ngaphambi kokuba ungene kule."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Uqinisekile ukuba ufuna ukucima le fayile ngokupheleleyo?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Uqinisekile ukuba ufuna ukuyikhulula le fayile kwikhosi ekhethiweyo?"
+
+msgid "Attach this file to another course"
+msgstr "Qhoboshela le fayile kwenye ikhosi"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Qhoboshela kwikhosi(i) ekhethiweyo (efihliweyo)"
+
+msgid "Course(s):"
+msgstr "Ikhosi(i):"
+
+msgid "Delete definitively"
+msgstr "Cima ngokupheleleyo"
+
+msgid "Detach from this course"
+msgstr "Khulula kule khosi"
+
+msgid "File actions"
+msgstr "Izenzo zefayile"
+
+msgid "File Information"
+msgstr "Ulwazi lwefayile"
+
+msgid "File Link:"
+msgstr "Ikhonkco lefayile:"
+
+msgid "File Path:"
+msgstr "Indlela yefayile:"
+
+msgid "Filter courses..."
+msgstr "Hluza iikhosi..."
+
+msgid "MIME Type:"
+msgstr "Uhlobo lwe-MIME:"
+
+msgid "N/A"
+msgstr "Ayifumaneki"
+
+msgid "No results found."
+msgstr "Akukho ziphumo zifunyenweyo."
+
+msgid "Original Name"
+msgstr "Igama lokuqala"
+
+msgid "Original Name:"
+msgstr "Igama lokuqala:"
+
+msgid "Orphan"
+msgstr "Inkedama"
+
+msgid "Resource File ID:"
+msgstr "I-ID yefayile yesixhobo:"
+
+msgid "Resource Node ID:"
+msgstr "I-ID yenodi yesixhobo:"
+
+msgid "Search..."
+msgstr "Khangela..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Ukukhulula le fayile kwikhosi ethile, cofa i-aykhoni \"×\" kwithegi yekhosi efanelekileyo ngasentla."
+
+msgid "User:"
+msgstr "Umsebenzisi:"
+
+msgid "View file information"
+msgstr "Jonga ulwazi lwefayile"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Ungaqhoboshela le fayile kwikhosi enye okanye ezininzi (efihliweyo kwingcambu yamaxwebhu). Ukuba ifayile ayisasetyenziswa kwaye iba yinkedama, ungayicima ngokupheleleyo."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Ungakhetha ikhosi enye okanye ezininzi (sebenzisa i-Ctrl/Cmd + cofa)."
+
+msgid "bytes"
+msgstr "iibhayithi"
+
+msgid "Failed to copy:"
+msgstr "Akuphumelelanga ukukopa:"
+
+msgid "Missing resource file identifier."
+msgstr "Isichongi sefayile yesixhobo asikho."
+
+msgid "Please select at least one course."
+msgstr "Nceda ukhethe ubuncinane ikhosi enye."
+
+msgid "Resource file not found."
+msgstr "Ifayile yesixhobo ayifunyenwanga."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Ifayile \"%s\" iqhotyoshelwe kwiikhosi ezi-%d: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Ezinye iikhosi zitsityiwe: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Ifayile okanye isichongi sekhosi asikho."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Le fayile yesixhobo ayinayo inodi yesixhobo kwaye ayinakukhululwa."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Ifayile ikhululwe kwiikhonkco zekhosi ezi-%d."
+
+msgid "This file is not attached to the selected course."
+msgstr "Le fayile ayiqhotyoshelwanga kwikhosi ekhethiweyo."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Le fayile isasetyenziswa sisixhobo esinye ubuncinane kwaye ayinakucinywa."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Ifayile eyinkedama nomxholo wayo womzimba icinywe ngokupheleleyo."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Uphando lupapashiwe. Kudalwe: %d. Kuhlaziywe: %d. Imiyalezo ethunyelweyo: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Inokufunyanwa"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Esi sakhono asinakufunyanwa"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Umqalayo"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Ukubambelela ngokungaguqukiyo kwimithetho nemiyalelo engenamxholo; ukugweba okuncinci ngokweemeko."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Umqalayo ophambili"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Uqala ukuqaphela iinkalo zeemeko neepateni kodwa usafuna izikhokelo."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Onobuchule"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Uphuhlisa ukucwangcisa neemodeli zengqondo; uthatha uxanduva lweziphumo kodwa unokuziva edinwe yintsonkotha."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Onobuchule obuphezulu"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Uyabona \"umfanekiso omkhulu,\" ubeka phambili ngokwengqondo, kwaye ufunda kumava."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Ingcali"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Ukusebenza okunengqiqo, okuguquguqukayo; uxhomekeke kulwazi olunzulu olungathethwayo; unokwenza izinto ezintsha okanye uphathe iimeko ezintsha ngokungenamzamo."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Ukukhumbula"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Fumana, khumbula, okanye qaphela ulwazi olufanelekileyo kwinkumbulo yexesha elide."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Ukuqonda"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Yakha intsingiselo kwimiyalezo yokufundisa, kuquka unxibelelwano lomlomo, olubhaliweyo, nolwemifanekiso. Bonisa ukuqonda ngokutolika, ukunika imizekelo, ukuhlela, ukushwankathela, ukuqikelela, ukuthelekisa, okanye ukucacisa."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Ukusebenzisa"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Yenza okanye sebenzisa inkqubo ngokuyiphumeza okanye ukuyisebenzisa kwimeko enikiweyo. Sebenzisa ulwazi okanye izakhono kwiimeko ezintsha okanye ezicacileyo."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Ukuhlalutya"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Yahlula izinto zibe ziinxalenye zazo kwaye umisele indlela iinxalenye ezinxulumene ngayo enye kwenye nakwisakhiwo okanye injongo iyonke. Chonga iinjongo, izizathu, okanye ubudlelwane."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Ukuvavanya"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Yenza izigwebo ngokusekelwe kwimigangatho nemigangatho. Jonga, gxeka, okanye thethelela izigqibo okanye iindlela zokwenza."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Ukudala"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Hlanganisa izinto ukuze zenze into ehambelanayo okanye esebenzayo; hlengahlengisa izinto zibe yipateni okanye isakhiwo esitsha. Velisa umsebenzi wokuqala okanye uvelise iingcamango ezintsha."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Landela"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Usebenza phantsi kweliso elisondeleyo nesikhokelo. Wenza imisebenzi eqhelekileyo ngokukhetha okulinganiselweyo. Ugxila ekulandeleni imiyalelo nasekuphumezeni okusisiseko."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Ncedisa"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Usebenza phantsi kweliso eliqhelekileyo. Unika uncedo kwabanye, unegalelo kwimisebenzi yeqela, kwaye uqala ukuthatha inyathelo ngaphakathi kwimida echaziweyo."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Usebenza phantsi kweliso eliqhelekileyo. Usebenzisa ulwazi nezakhono kuluhlu lwemisebenzi eqhelekileyo nengeqhelekanga. Usebenzisa ukukhetha nokugweba okuthile."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Usebenza phantsi kwesikhokelo esibanzi. Unika abanye isikhokelo sobuchwephesha, inkxaso, okanye iinkonzo. Uthatha uxanduva lomsebenzi wakhe kwaye unokongamela amaqela amancinci okanye imisebenzi."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Qinisekisa kwaye ceba"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Usebenza phantsi kwesikhokelo esibanzi kodwa ngokuzimela okukhulu. Uqinisekisa ukuba umsebenzi uhlangabezana neenjongo kwaye ucebisa ngemiba entsonkothileyo. Uhlala ekhokela amaqela okanye iiprojekthi kwaye uphembelela izigqibo."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Qalisa kwaye phembelela"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Unegunya elichaziweyo noxanduva lwendawo ebalulekileyo yomsebenzi. Uqalisa izenzo, uphembelela isicwangciso-qhinga nomgaqo-nkqubo kwindawo yakhe, kwaye ukhokela iiprojekthi ezinkulu okanye amaqela."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Seta isicwangciso-qhinga, khuthaza, hlanganisa"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Unegunya kwinqanaba eliphezulu lombutho kwindawo enkulu yomsebenzi. Ubeka isicwangciso-qhinga sexesha elide, ukhuthaza kwaye uhlanganisa abanye, kwaye wenza izigqibo ezibalulekileyo kwimpumelelo yombutho. Uphembelela kwinqanaba loshishino okanye langaphandle."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Ixesha eliphezulu lokungasebenzi elinokuqwalaselwa (imizuzu)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Iphepha lekhosi elishiywe livuliwe lihlala lithumela izicelo ezizenzekelayo. Emva kweli nani lemizuzu ngaphandle kwesenzo sokwenene somsebenzisi (ukuvula iphepha okanye into, ukuphendula, njl.), ixesha elichithwe kwikhosi liyeka ukubalwa."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Umhleli weWiki wentsebenziswano"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Iqhagamshela kwi-Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Ukugcina kudala inguqulelo entsha ye-Chamilo Wiki kususela kumxholo wangoku we-Etherpad."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Umhleli wentsebenziswano awukwazanga kulayishwa."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Vumela i-Etherpad yokuhlela iWiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Sebenzisa i-Etherpad njengomhleli wentsebenziswano wamaphepha eWiki akhoyo. I-Etherpad kufuneka ivezwe kumvelaphi efanayo ne-Chamilo kwiiseshoni ezifakelweyo ezikhuselekileyo."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "I-URL ye-Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "I-URL yesiseko yomzekelo we-Etherpad, kuquka indlela yokubuyisela umva yokumela. Umzekelo: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Isitshixo se-API se-Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Isitshixo se-API esisetyenziswa yi-Chamilo ukudala iipadi, iiseshoni nokuvumelanisa umxholo weWiki. Qwalasela i-Etherpad ukuba yamkele ukuqinisekiswa ngesitshixo se-API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Ukubonakala okungagqibekanga kwamaxwebhu amatsha kunokutshintshwa ngekhosi"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Ukubonakala okunikezelwe kuxwebhu olutsha, ifolda okanye ifayile elayishiwe xa utitshala eyidala kwikhosi. Ootitshala basenokutshintsha ukubonakala komnye ngamnye emva koko."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Xa ivuliwe, ootitshala banokukhetha kwiisetingi zekhosi ukubonakala okunikezelwe kumaxwebhu amatsha ekhosi yabo, endaweni yokungagqibekanga kweqonga."
+
+msgid "Default visibility of new learning paths"
+msgstr "Ukubonakala okungagqibekanga kweendlela zokufunda ezintsha"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Ukubonakala okungagqibekanga kweendlela zokufunda ezintsha kunokutshintshwa ngekhosi"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Ukubonakala okunikwa indlela yokufunda entsha xa utitshala eyidala kwikhosi. Ootitshala basenokutshintsha ukubonakala kwayo nganye emva koko."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Xa ivuliwe, ootitshala banokukhetha kwiisetingi zekhosi ukubonakala okunikwa iindlela zokufunda ezintsha zekhosi yabo, endaweni yendlela yesiseko seqonga."
+
+msgid "Default visibility of new tests"
+msgstr "Ukubonakala okumiselweyo kweemvavanyo ezintsha"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Ukubonakala okumiselweyo kweemvavanyo ezintsha kunokutshintshwa ngekhosi"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Ukubonakala okunikwa imvavanyo entsha xa utitshala eyidala kwikhosi. Ootitshala basenokutshintsha ukubonakala kwayo nganye emva koko."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Xa ivuliwe, ootitshala banokukhetha kwiisetingi zekhosi ukubonakala okunikwa iimvavanyo ezintsha zekhosi yabo, endaweni yendlela yesiseko seqonga."
+
+msgid "Default visibility for new learning paths"
+msgstr "Ukubonakala okumiselweyo kweendlela zokufunda ezintsha"
+
+msgid "Default visibility for new tests"
+msgstr "Ukubonakala okumiselweyo kweemvavanyo ezintsha"
+
+msgid "Following"
+msgstr "Ukulandela"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Fumana i-imeyile xa umfundi ephawula kungeniso lwalo msebenzi"
+
+msgid "Payment history"
+msgstr "Imbali yentlawulo"
+
+msgid "No payments yet"
+msgstr "Akukho ntlawulo okwangoku"
+
+msgid "Cancel service"
+msgstr "Rhoxisa inkonzo"
+
+msgid "Official transcript"
+msgstr "Itranskripti esemthethweni"
+
+msgid "Unofficial transcript"
+msgstr "Itranskripti engekho semthethweni"
+
+msgid "Student name"
+msgstr "Igama lomfundi"
+
+msgid "Student number"
+msgstr "Inombolo yomfundi"
+
+msgid "Program title"
+msgstr "Isihloko senkqubo"
+
+msgid "Required hours"
+msgstr "Iiyure ezifunekayo"
+
+msgid "Completion date"
+msgstr "Umhla wokugqiba"
+
+msgid "Hours completed"
+msgstr "Iiyure ezigqityiweyo"
+
+msgid "Final grade"
+msgstr "Ibanga lokugqibela"
+
+msgid "Grade"
+msgstr "Ibanga"
+
+msgid "No completed course yet."
+msgstr "Akukho khosi igqityiweyo okwangoku."
+
+msgid "Grading scale"
+msgstr "Isikali sokubeka amabanga"
+
+msgid "Signature of school official"
+msgstr "Utyikityo lwegosa lesikolo"
+
+msgid "School official"
+msgstr "Igosa lesikolo"
+
+msgid "Official's title"
+msgstr "Isihloko segosa"
+
+msgid "Verify this transcript at"
+msgstr "Qinisekisa le transkripti ku"
+
+msgid "Verification code"
+msgstr "Ikhowudi yokuqinisekisa"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Le transkripti engekho semthethweni ayityikitywanga. Cela umlawuli itranskripti esemthethweni."
+
+msgid "Transcript verification"
+msgstr "Ukuqinisekiswa kwetranskripti"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Jonga ukuba le transkripti esemthethweni yakhutshwa yaza yatyikitywa liziko, ayitshintshwanga kwaye ayirhoxiswanga."
+
+msgid "Valid"
+msgstr "Iyasebenza"
+
+msgid "Invalid signature"
+msgstr "Utyikityo olungasebenziyo"
+
+msgid "Transcript not found"
+msgstr "Itranskripti ayifunyenwanga"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Utyikityo lweziko luyasebenza kwaye le transkripti ayirhoxiswanga."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Le transkripti ayinakho ukuqinisekiswa njengeyasebenzayo. Iinkcukacha zayo aziboniswa."
+
+msgid "Transcript details"
+msgstr "Iinkcukacha zetranskripti"
+
+msgid "Institution"
+msgstr "Iziko"
+
+msgid "Issued on"
+msgstr "Ikhutshwe ngo"
+
+msgid "Download verification JSON"
+msgstr "Khuphela i-JSON yokuqinisekisa"
+
+msgid "Transcript"
+msgstr "Itranskripti"
+
+msgid "My confidential reports"
+msgstr "Iingxelo zam ezimfihlo"
+
+msgid "My transcript"
+msgstr "Itranskripti yam"
+
+msgid "Confidential investigations"
+msgstr "Uphando oluyimfihlo"
+
+msgid "Floor plan"
+msgstr "Icebo lomgangatho"
+
+msgid "Click a highlighted room to select it"
+msgstr "Cofa igumbi eliqaqambileyo ukuze ulikhethe"
+
+msgid "Select room"
+msgstr "Khetha igumbi"
+
+msgid "Room on floor plan"
+msgstr "Igumbi kwicebo lomgangatho"
+
+msgid "Select a branch first"
+msgstr "Khetha isebe kuqala"
+
+msgid "The branch has no attached floor plan"
+msgstr "Isebe alinayo ipulani yomgangatho eqhotyoshelweyo"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Sebenzisa isixhobo sepoligon ukubonisa igumbi; sebenzisa Hlela ukuhambisa iikona"
+
+msgid "Save room area"
+msgstr "Gcina indawo yegumbi"
+
+msgid "Clear room area"
+msgstr "Sula indawo yegumbi"
+
+msgid "Save the room form to persist the area"
+msgstr "Gcina ifomu yegumbi ukuze kugcinwe indawo"
+
+msgid "Floor plan unavailable"
+msgstr "Ipulani yomgangatho ayifumaneki"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Amanqaku emephu yegumbi kufuneka abe ngaphakathi kwepulani yomgangatho"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Uqinisekile ukuba ufuna ukusula indawo yegumbi?"
+
+msgid "View room on floor plan"
+msgstr "Jonga igumbi kwipulani yomgangatho"
+
+msgid "No floor plan available"
+msgstr "Akukho pulani yomgangatho ifumanekayo"
+
+msgid "This is an assignment by groups"
+msgstr "Oku kukusabela ngokwamaqela"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Layisha ipulani yomgangatho ye-PNG, JPEG okanye i-SVG emileyo ekhuselekileyo, okanye khetha umfanekiso okhoyo kumaXwebhu."
+
+msgid "Upload floor plan"
+msgstr "Layisha ipulani yomgangatho"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG okanye i-SVG emileyo, ubuninzi 10 MB"
+
+msgid "Search images by name"
+msgstr "Khangela imifanekiso ngegama"
+
+msgid "Image name"
+msgstr "Igama lomfanekiso"
+
+msgid "Select an image"
+msgstr "Khetha umfanekiso"
+
+msgid "Change floor plan"
+msgstr "Tshintsha ipulani yomgangatho"
+
+msgid "Attach floor plan"
+msgstr "Qhoboshela ipulani yomgangatho"
+
+msgid "No matching images found in Documents."
+msgstr "Akukho mifanekiso ihambelanayo ifunyenwe kumaXwebhu."
+
+msgid "Current floor plan"
+msgstr "Ipulani yomgangatho yangoku"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Utshintsho lwepulani yomgangatho lugcinwa ngokuzenzekelayo."
+
+msgid "Remove floor plan"
+msgstr "Susa ipulani yomgangatho"
+
+msgid "Cannot load images"
+msgstr "Ayikwazi ukulayisha imifanekiso"
+
+msgid "Floor plan saved"
+msgstr "Ipulani yomgangatho igciniwe"
+
+msgid "Cannot attach floor plan"
+msgstr "Ayikwazi ukuqhoboshela ipulani yomgangatho"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Kuphela imifanekiso ye-PNG/JPEG ne-SVG emileyo ekhuselekileyo ukuya kutsho kwi-10MB eyamkelwayo."
+
+msgid "Cannot upload floor plan"
+msgstr "Ayikwazi ukulayisha ipulani yomgangatho"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Uqinisekile ukuba ufuna ukususa ipulani yomgangatho?"
+
+msgid "Floor plan removed"
+msgstr "Ipulani yomgangatho isusiwe"
+
+msgid "Cannot remove floor plan"
+msgstr "Ayikwazi ukususa ipulani yomgangatho"
+
+msgid "Support bot"
+msgstr "Ibhothi yenkxaso"
+
+msgid "Connected"
+msgstr "Iqhagamshelwe"
+
+msgid "Not connected"
+msgstr "Ayiqhagamshelwanga"
+
+msgid "View ticket"
+msgstr "Jonga itikiti"
+
+msgid "Start a new conversation"
+msgstr "Qala incoko entsha"
+
+msgid "Video call"
+msgstr "Umnxeba wevidiyo"
+
+msgid "Incoming video call"
+msgstr "Umnxeba wevidiyo ongenayo"
+
+msgid "Decline"
+msgstr "Khaba"
+
+msgid "Mute microphone"
+msgstr "Thulisa imakrofoni"
+
+msgid "Unmute microphone"
+msgstr "Vula imakrofoni"
+
+msgid "Turn camera off"
+msgstr "Cima ikhamera"
+
+msgid "Turn camera on"
+msgstr "Vula ikhamera"
+
+msgid "Hang up"
+msgstr "Nqumamisa"
+
+msgid "Calling..."
+msgstr "Iyafowuna..."
+
+msgid "Connecting..."
+msgstr "Iyaqhagamshela..."
+
+msgid "Your contact is busy."
+msgstr "Umntu oqhagamshelanayo uxakekile."
+
+msgid "Your contact did not answer the call."
+msgstr "Umntu oqhagamshelanayo akaphendulanga umnxeba."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Umntu oqhagamshelanayo akakwazanga ukufikelela kwikhamera okanye kwimakrofoni."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Umqhagamshelane wakho akakwazanga ukulungiselela umnxeba wevidiyo."
+
+msgid "Your contact refused the call."
+msgstr "Umqhagamshelane wakho wawala umnxeba."
+
+msgid "The call timed out."
+msgstr "Umnxeba uphelelwe lixesha."
+
+msgid "Your contact cancelled the call."
+msgstr "Umqhagamshelane wakho uwurhoxisile umnxeba."
+
+msgid "The video connection was lost."
+msgstr "Unxibelelwano lwevidiyo lulahlekile."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Umqhagamshelane wakho akakwazanga ukuseka unxibelelwano lwevidiyo."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Umqhagamshelane wakho akakwazanga ukugqibezela ukuseta umnxeba wevidiyo."
+
+msgid "Your contact hung up."
+msgstr "Umqhagamshelane wakho uqhomile."
+
+msgid "Video call could not be started"
+msgstr "Umnxeba wevidiyo awukwazanga ukuqaliswa"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Imvume yekhamera okanye yemayikhrofowuni yaliwe."
+
+msgid "No camera or microphone was found."
+msgstr "Akukho khamera okanye mayikhrofowuni ifunyenweyo."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Ikhamera okanye imayikhrofowuni sele isetyenziswa okanye ayifumaneki."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Ikhamera okanye imayikhrofowuni ayixhasi iisetingi ezifunekayo."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Ukufikelela kwikhamera okanye kwimayikhrofowuni akukwazanga ukufunyanwa."
+
+msgid "The video call could not be prepared."
+msgstr "Umnxeba wevidiyo awukwazanga ukulungiselelwa."
+
+msgid "The video call request could not be sent."
+msgstr "Isicelo somnxeba wevidiyo asikwazanga ukuthunyelwa."
+
+msgid "The incoming video call could not be processed."
+msgstr "Umnxeba wevidiyo ongenayo awukwazanga ukusetyenzwa."
+
+msgid "The video call answer could not be prepared."
+msgstr "Impendulo yomnxeba wevidiyo ayikwazanga ukulungiselelwa."
+
+msgid "The video call answer could not be sent."
+msgstr "Impendulo yomnxeba wevidiyo ayikwazanga ukuthunyelwa."
+
+msgid "The video call answer could not be processed."
+msgstr "Impendulo yomnxeba wevidiyo ayikwazanga ukusetyenzwa."
+
+msgid "The video connection failed"
+msgstr "Unxibelelwano lwevidiyo aluphumelelanga"
+
+msgid "The video connection could not be established."
+msgstr "Unxibelelwano lwevidiyo alukwazanga ukusekwa."
+
+msgid "No answer was received."
+msgstr "Akukho mpendulo ifunyenweyo."
+
+msgid "You refused the call."
+msgstr "Uwalile umnxeba."
+
+msgid "You cancelled the call."
+msgstr "Uwurhoxisile umnxeba."
+
+msgid "You hung up."
+msgstr "Uqhomile."
+
+msgid "You missed the call."
+msgstr "Uphoswe ngumnxeba."
+
+msgid "Support bot is currently unavailable."
+msgstr "Ibhothi yenkxaso ayifumaneki ngoku."
+
+msgid "A support ticket has been created."
+msgstr "Ithikethi yenkxaso yenziwe."
+
+msgid "Conversation ended."
+msgstr "Incoko iphelile."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Ibhothi yenkxaso ayikwazanga ukuqhubeka nale ncoko. Nceda uzame kwakhona."
+
+msgid "Add your first term glossary to this course"
+msgstr "Yongeza iglosari yegama lakho lokuqala kwesi khosi"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Uqinisekile ukuba ufuna ukucima le template yophando?"
+
+msgid "The survey template has been deleted."
+msgstr "Itemplate yophando icinyiwe."
+
+msgid "Please select a course."
+msgstr "Nceda ukhethe ikhosi."
+
+msgid "Please select a session for this course."
+msgstr "Nceda ukhethe iseshoni yale khosi."
+
+msgid "The survey has been created from the template."
+msgstr "Uphando lwenziwe kwi-template."
+
+msgid "Survey templates"
+msgstr "Iitemplate zophando"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Yenza iitemplate zophando ezinokusetyenziswa kwakhona kootitshala uze uzinikezele ngqo kwikhosi okanye kwiseshoni."
+
+msgid "Subtitle"
+msgstr "Isihlokwana"
+
+msgid "Assign to course"
+msgstr "Nika kwikhosi"
+
+msgid "Assign template to course"
+msgstr "Nika itemplate kwikhosi"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Shiya iseshoni ingenanto ukuze wenze uphando ngqo kwikhosi."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Le khosi iyafumaneka ngeseshoni kule portal, ngoko ke iseshoni iyafuneka."
+
+msgid "Survey template questions"
+msgstr "Imibuzo yetemplate yophando"
+
+msgid "Back to survey templates"
+msgstr "Buyela kwii-template zophando"
+
+msgid "Could not load survey template"
+msgstr "Ayikwazanga ukulayisha itemplate yophando"
+
+msgid "Could not load survey template questions"
+msgstr "Ayikwazanga ukulayisha imibuzo yetemplate yophando"
+
+msgid "Could not save survey template question"
+msgstr "Ayikwazanga ukugcina umbuzo wetemplate yophando"
+
+msgid "Could not delete survey template question"
+msgstr "Ayikwazanga ukucima umbuzo wetemplate yophando"
+
+msgid "Could not move survey template question"
+msgstr "Ayikwazanga ukuhambisa umbuzo wethempilethi yophando"
+
+msgid "Could not copy survey template question"
+msgstr "Ayikwazanga ukukopa umbuzo wethempilethi yophando"
+
+msgid "The survey template has been saved."
+msgstr "Ithempilethi yophando igciniwe."
+
+msgid "Edit survey template"
+msgstr "Hlela itempilethi yophando"
+
+msgid "Create survey template"
+msgstr "Yenza itempilethi yophando"
+
+msgid "The survey template title is required."
+msgstr "Isihloko sethempilethi yophando siyafuneka."
+
+msgid "Visible as template"
+msgstr "Ibonakala njengentempilethi"
+
+msgid "Create satisfaction survey"
+msgstr "Yenza uphando lwaneliseko"
+
+msgid "Training satisfaction survey"
+msgstr "Uphando lwaneliseko loqeqesho"
+
+msgid "Could not create satisfaction survey"
+msgstr "Ayikwazanga ukwenza uphando lwaneliseko"
+
+msgid "Use template"
+msgstr "Sebenzisa itempilethi"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Yenza olu phando kwi-thempilethi ephinda isetyenziswe elungiselelwe ngumlawuli."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Iziphumo zifihliwe kutitshala/umqeqeshi"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Ootitshala nabaqeqeshi basenokubona amanani eempendulo kwaye bathumele izikhumbuzi, kodwa abanakuvula okanye bakhuphele iziphumo zophando."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Ithempilethi isetyenzisiwe. Hlola iisetingi zophando uze ugcine ukuze uyenze."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Iziphumo zophando zifihliwe kootitshala nabaqeqeshi."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Usenokusebenzisa iphepha lezimemo ukuze ubone amanani eempendulo kwaye uthumele izikhumbuzi."
+
+msgid "Payment method"
+msgstr "Indlela yokuhlawula"
+
+msgid "Preview mode"
+msgstr "Imowudi yokujonga kuqala"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Inkqubela namanqaku azigcinwa kwimowudi yokujonga kuqala."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Eli khonkco alinakuboniswa ngaphakathi kwendlela yokufunda."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Yivule kwithebhu entsha ukuze ubone iphepha."
+
+msgid "Report a problem with this question"
+msgstr "Xela ingxaki ngalo mbuzo"
+
+msgid "Your report was sent to the teacher."
+msgstr "Ingxelo yakho ithunyelwe kutitshala."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Chaza impazamo okanye ingxaki oyifumeneyo. Ingxelo yakho iya kuthunyelwa kutitshala."
+
+msgid "A comment is required."
+msgstr "Izimvo ziyafuneka."
+
+msgid "Could not send the report."
+msgstr "Ayikwazanga ukuthumela ingxelo."
+
+msgid "Learner reports"
+msgstr "Iingxelo zabafundi"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Akukho zingxelo zabafundi ezingenisiweyo kulo mbuzo."
+
+msgid "View attempt"
+msgstr "Jonga ilinge"
+
+msgid "Could not load learner reports."
+msgstr "Ayikwazanga ukulayisha iingxelo zabafundi."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Vumela abafundi baxele iingxaki kwimibuzo"
+
+msgid "Skill acquired"
+msgstr "Isakhono sifunyenwe"
+
+msgid "AI Toolbox"
+msgstr "Ibhokisi yezixhobo ze-AI"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Yenza izicelo zemfundo ezisebenzisanayo nge-AI kwaye ulandelele inkqubela yomfundi nge-SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Akukho zicelo zipapashiweyo ezikhoyo okwangoku."
+
+msgid "Interactive applications"
+msgstr "Izicelo ezisebenzisanayo"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Yenza, phucula, papasha kwaye uhlolisise iinguqulelo kwindawo enye."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Vula isicelo ukuze uqhubeke ukusuka kwinkqubela yakho yamva nje."
+
+msgid "Interactive learning application"
+msgstr "Isicelo sokufunda esisebenzisanayo"
+
+msgid "Create an interactive learning app"
+msgstr "Yenza i-app yokufunda esisebenzisanayo"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Chaza umsebenzi. I-Chamilo iya kwenza isicelo se-SCORM esineenguqulelo esinokulandelela inkqubela namanqaku."
+
+msgid "Idea"
+msgstr "Ingcamango"
+
+msgid "Application"
+msgstr "Isicelo"
+
+msgid "What should the application do?"
+msgstr "Isicelo kufuneka senze ntoni?"
+
+msgid "How it works"
+msgstr "Indlela esebenza ngayo"
+
+msgid "AI generation"
+msgstr "Ukuveliswa kwe-AI"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "I-app yenziwa ngokwemiyalelo yakho kwaye igcinwe njengenguqulelo 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Inkqubela yomfundi, amanqaku nedatha yokuqhubeka kuxelwa kwi-Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Uphuculo lwexesha elizayo lwenza iinguqulelo ezintsha ngaphandle kokucima ezangaphambili."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Faka injongo yokufunda, imithetho, amanqanaba, ukufumana amanqaku nento emayenzeke xa umfundi egqiba."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Awuvunyelwe ukudala umxholo kule meko."
+
+msgid "The application was generated successfully."
+msgstr "Isicelo senziwe ngempumelelo."
+
+msgid "Open in student view"
+msgstr "Vula ngokujonga komfundi"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Yenza isicelo ukuze uvule ukujonga kuqala nokupapasha."
+
+msgid "Improve with AI"
+msgstr "Phucula nge-AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Chaza utshintsho. Iguqulelo entsha iya kwenziwa kwaye iinguqulelo zangaphambili ziya kuhlala zifumaneka."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Chaza umsebenzi opheleleyo osebenzisanayo ofuna ukuwenza."
+
+msgid "What should be improved?"
+msgstr "Yintoni emayiphuculwe?"
+
+msgid "Generate new version"
+msgstr "Yenza inguqulelo entsha"
+
+msgid "Version history"
+msgstr "Imbali yenguqulelo"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Jonga kuqala, khuphela okanye buyisela nayiphi na inguqulelo eyenziweyo."
+
+msgid "A new version was generated."
+msgstr "Iguqulelo entsha yenziwe."
+
+msgid "Version restored"
+msgstr "Inguqulelo ibuyiselwe"
+
+msgid "The support bot tree has been published."
+msgstr "Umthi webhothi yenkxaso upapashiwe."
+
+msgid "The support bot tree has been archived."
+msgstr "Umthi webhothi yenkxaso ugciniwe."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Umthi webhothi yenkxaso uphindwe."
+
+msgid "The support bot tree has been deleted."
+msgstr "Umthi webhothi yenkxaso ucinyiwe."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Uqinisekile ukuba ufuna ukucima lo mthi webhothi yenkxaso?"
+
+msgid "The support bot tree has been imported."
+msgstr "Umthi webhothi yenkxaso ungenisiwe."
+
+msgid "Create support bot tree"
+msgstr "Yenza umthi webhothi yenkxaso"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Yakha umthi wezigqibo omiselweyo okhokela abasebenzisi kwimibuzo yenkxaso kwaye unokunyusela kumaTikiti."
+
+msgid "Portal scope"
+msgstr "Umda wephothali"
+
+msgid "Duplicate"
+msgstr "Phinda"
+
+msgid "Archive"
+msgstr "Gcina"
+
+msgid "View conversations"
+msgstr "Jonga iincoko"
+
+msgid "Import support bot tree"
+msgstr "Ngenisa umthi webhothi yenkxaso"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Ngenisa ukukhuphela kwe-JSON okanye umthi wezigqibo we-CSV. Umthi ongenisiweyo usoloko usenziwa njengoyilo olutsha."
+
+msgid "Resolved"
+msgstr "Kusonjululwe"
+
+msgid "Escalated"
+msgstr "Kunyuselwe"
+
+msgid "Abandoned"
+msgstr "Kuyekwe"
+
+msgid "Support bot conversations"
+msgstr "Iincoko zebhothi yenkxaso"
+
+msgid "Outcome"
+msgstr "Isiphumo"
+
+msgid "Started at"
+msgstr "Iqale ngo"
+
+msgid "Ended at"
+msgstr "Iggibe ngo"
+
+msgid "View conversation"
+msgstr "Jonga incoko"
+
+msgid "Go to node"
+msgstr "Yiya kwindawo"
+
+msgid "Create support ticket"
+msgstr "Yenza itikiti lenkxaso"
+
+msgid "End conversation"
+msgstr "Gqiba incoko"
+
+msgid "Node"
+msgstr "Indawo"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Umthi webhothi yenkxaso ufuna ubuncinane indawo enye."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Uqinisekile ukuba ufuna ukucima le ndawo? Amakhonkco ayo aya kucinywa."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Yonke indawo yebhothi yenkxaso ifuna ubuncinane ukhetho olunye."
+
+msgid "The support bot tree title is required."
+msgstr "Isihloko somthi webhothi yenkxaso siyafuneka."
+
+msgid "A support bot entry node is required."
+msgstr "Indawo yokungena yebhothi yenkxaso iyafuneka."
+
+msgid "Every support bot node requires content."
+msgstr "Yonke indawo yebhothi yenkxaso ifuna umxholo."
+
+msgid "Every support bot option requires a label."
+msgstr "Lonke ukhetho lwebhothi yenkxaso lufuna ileyibhile."
+
+msgid "Select a target node for every go-to option."
+msgstr "Khetha indawo ekujoliswe kuyo kulo lonke ukhetho lokuya."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Faka i-URL enxulumeneyo kulo lonke ukhetho lwekhonkco."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Khetha udidi lwetikiti kulo lonke ukhetho lokunyusela."
+
+msgid "The support bot tree has been saved."
+msgstr "Umthi webhothi yenkxaso ugciniwe."
+
+msgid "Edit support bot tree"
+msgstr "Hlela umthi webhothi yenkxaso"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Iinguqulelo zebhothi yenkxaso ezipapashiweyo nezifakwe kwindawo yogcino zifundeka kuphela. Phinda lo mthi kuluhlu ukuze uhlele inguqulelo entsha eyidrafti."
+
+msgid "Default ticket project"
+msgstr "Iprojekthi yetikiti emiselweyo"
+
+msgid "Decision tree rules"
+msgstr "Imithetho yomthi wesigqibo"
+
+msgid "Every node must contain at least one option."
+msgstr "Yonke indawo kufuneka ibe nenketho enye ubuncinane."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Indawo yokugqibela kufuneka iyiphelise incoko okanye yenze itikiti yenkxaso."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Amakhonkco e-Go-to akufuneki enze imijikelezo ku-v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Ii-URL zangaphandle azivunyelwa ku-v1; izenzo zekhonkco kufuneka zisebenzise indlela ye-Chamilo ehambelana nayo."
+
+msgid "Nodes"
+msgstr "Iindawo"
+
+msgid "Add node"
+msgstr "Yongeza indawo"
+
+msgid "Entry node"
+msgstr "Indawo yokungena"
+
+msgid "Set as entry node"
+msgstr "Yimise njengendawo yokungena"
+
+msgid "Target node"
+msgstr "Indawo ekujoliswe kuyo"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Sebenzisa indlela ye-Chamilo ehambelana nayo, umzekelo /tickets."
+
+msgid "Ticket category"
+msgstr "Udidi lwetikiti"
+
+msgid "Select a default ticket project first."
+msgstr "Khetha iprojekthi yetikiti emiselweyo kuqala."
+
+msgid "Closing message"
+msgstr "Umyalezo wokuvala"
+
+msgid "Select a node to edit it."
+msgstr "Khetha indawo ukuze uyihlele."
+
+msgid "Support bot conversation"
+msgstr "Incoko yebhothi yenkxaso"
+
+msgid "Transcript of %s"
+msgstr "Ingxelo ka-%s"
+
+msgid "Download unofficial transcript"
+msgstr "Khuphela ingxelo engekho semthethweni"
+
+msgid "Issue official transcript"
+msgstr "Khupha ingxelo esemthethweni"
+
+msgid "Official transcripts"
+msgstr "Iingxelo ezisemthethweni"
+
+msgid "No official transcript has been issued yet."
+msgstr "Akukho ngxelo isemthethweni ikhutshelweyo okwangoku."
+
+msgid "Issued by"
+msgstr "Ikhutshwe ngu"
+
+msgid "Verify"
+msgstr "Qinisekisa"
+
+msgid "Signature of official transcripts"
+msgstr "Utyikityo lweengxelo ezisemthethweni"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Lo mfanekiso ushicilelwa kwiingxelo ezisemthethweni zale portal, ngaphezu kwegama nomxholo wotyikityo omiselwe kwiisetingi zesatifikethi."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Khupha ingxelo esemthethweni etyikityiweyo enezifundo namabakala adweliswe kweli phepha? Inokuqinisekiswa kwi-intanethi de irhoxiswe."
+
+msgid "Official transcript issued"
+msgstr "Ingxelo esemthethweni ikhutshiwe"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Rhoxisa le ngxelo isemthethweni? Iphepha lokuqinisekisa liya kuyibonisa njengerhoxisiweyo."
+
+msgid "Official transcript revoked"
+msgstr "Ingxelo esemthethweni irhoxisiwe"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Khetha umfanekiso we-PNG okanye we-JPEG kuqala."
+
+msgid "Signed credential"
+msgstr "Isiqinisekiso esityikityiweyo"
+
+msgid "Issue signed credential"
+msgstr "Khupha isiqinisekiso esityikityiweyo"
+
+msgid "Verify credential"
+msgstr "Qinisekisa isiqinisekiso"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Misa kwi-Sepolia testnet"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Qinisekisa intengiselwano ye-Sepolia ekhoyo"
+
+msgid "Revoke signed credential"
+msgstr "Rhoxisa isiqinisekiso esityikityiweyo"
+
+msgid "Delete certificate"
+msgstr "Cima isatifikethi"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Qinisekisa intengiselwano ye-Sepolia ekhoyo"
+
+msgid "Sepolia transaction hash"
+msgstr "Ihashi yentengiselwano ye-Sepolia"
+
+msgid "Verify transaction"
+msgstr "Qinisekisa intengiselwano"
+
+msgid "Anchored"
+msgstr "Imisiwe"
+
+msgid "Issued"
+msgstr "Ikhutshiwe"
+
+msgid "Not issued"
+msgstr "Ayikhutshelwanga"
+
+msgid "Consent required"
+msgstr "Kufuneka imvume"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Intengiselwano ye-Sepolia iqinisekisiwe yaza yaqinisekiswa"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Iwalethi ye-Sepolia testnet iya kukucela ukuba utyikitye intengiselwano. Kuphela umkhondo wesatifikethi oya kumiswa. Qhubeka?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Urhoxise esi siqinisekiso esisayiniweyo? Nayiphi na intengiselwano ye-blockchain ihlala ingunaphakade, kodwa iphepha lokuqinisekisa liza kuxela ukurhoxiswa."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Khupha isiqinisekiso sesatifikethi esisayiniweyo kulo mfundi? Oku kwenza iinkcukacha zobuqu ezivunyiweyo ziqinisekiswe ngekhonkco labucala."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Kufuneka i-wallet yebhrawuza ehambelana ne-EVM kwi-Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Khetha i-Sepolia testnet (i-chain ID 11155111) kwi-wallet yakho."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Idilesi ye-wallet okanye umkhondo wesatifikethi awuchanekanga."
+
+msgid "Transaction pending"
+msgstr "Intengiselwano ilindile"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Sebenzisa Qinisekisa intengiselwano ye-Sepolia ekhoyo kamva."
+
+msgid "Signed credential issued"
+msgstr "Isiqinisekiso esisayiniweyo sikhutshiwe"
+
+msgid "Credential revoked"
+msgstr "Isiqinisekiso sirhoxisiwe"
+
+msgid "Transaction hash"
+msgstr "Ihashi yentengiselwano"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Imvume yokupapasha ivumela umlawuli ukuba akhuphe isiqinisekiso sesatifikethi esisayiniweyo kwaye ngokukhetha aqinise umkhondo we-SHA-256 kwi-Sepolia testnet. Akukho gama okanye idatha yobuqu ithunyelwa kwi-chain. Ungarhoxisa imvume nanini na."
+
+msgid "Publication consent"
+msgstr "Imvume yokupapasha"
+
+msgid "Not approved"
+msgstr "Ayivunyiwanga"
+
+msgid "Withdraw consent"
+msgstr "Rhoxisa imvume"
+
+msgid "Approve publication"
+msgstr "Vuma ukupapasha"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Ndigunyazisa isiqinisekiso esisayiniweyo, esinokuqinisekiswa esidlangalaleni esibonisa igama lam, ikhosi, amanqaku nomhla wokukhutshwa. Umlawuli unokupapasha kuphela umkhondo we-SHA-256 kwi-Sepolia testnet. Umkhondo ungunaphakade, nokuba ndirhoxisa kamva. Qhubeka?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Urhoxise ukuvunywa kokupapasha kwesi satifikethi?"
+
+msgid "Publication approval recorded"
+msgstr "Ukuvunywa kokupapasha kurekhodiwe"
+
+msgid "Publication approval withdrawn"
+msgstr "Ukuvunywa kokupapasha kurhoxisiwe"
+
+msgid "Read more"
+msgstr "Funda ngakumbi"
+
+msgid "Participation: %s of %s posts"
+msgstr "Ukuthatha inxaxheba: iiposti ezingu-%s kwezi-%s"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Thumela igalelo lakho ukuze ubone iimpendulo zabanye abathathi-nxaxheba."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Kuphela abaphandi abagunyazisiweyo abanokuhlola iingxelo ezifanelekileyo. Izazisi zabaxeli zihlala ziyimfihlo ngokwendalo."
+
+msgid "New confidential report"
+msgstr "Ingxelo entsha eyimfihlo"
+
+msgid "Reported user"
+msgstr "Umsebenzisi oxeliweyo"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Kukho iingxelo ezimfihlo ezifanelekileyo ezilinde ukuhlolwa."
+
+msgid "Eligible investigations"
+msgstr "Uphando olufanelekileyo"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Ityala livela apha kuphela emva kokuba abasebenzisi abahlukeneyo abangu-%s bexele umntu omnye."
+
+msgid "Distinct reporters"
+msgstr "Abaxeli abahlukeneyo"
+
+msgid "Reports for selected user"
+msgstr "Iingxelo zomsebenzisi okhethiweyo"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Ukuxela ngokuyimfihlo akufumaneki ngoku."
+
+msgid "The investigation could not be loaded."
+msgstr "Uphando alukwazanga kulayishwa."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Isazisi sakho sikhuselwe kubaphandi ngokwendalo, kodwa phepha ukufaka iinkcukacha ezichaza umntu kumbhalo wengxelo okanye kwizihlomelo. Oku asiyonkonzo yongxamiseko."
+
+msgid "Find the user involved"
+msgstr "Fumana umsebenzisi obandakanyekayo"
+
+msgid "Name or username"
+msgstr "Igama okanye igama lomsebenzisi"
+
+msgid "Describe the situation"
+msgstr "Chaza imeko"
+
+msgid "Evidence (optional)"
+msgstr "Ubungqina (okukhethiweyo)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Iifayile ezide zibe ntathu, ubuninzi buyi-8 MiB nganye. Imifanekiso, isandi okanye iividiyo ezimfutshane."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Ndiyavuma ukuba abaphandi abagunyazisiweyo bangabona igama lam ne-imeyile yale ngxelo ithile. Ndingarhoxisa le mvume kamva."
+
+msgid "Send confidential report"
+msgstr "Thumela ingxelo eyimfihlo"
+
+msgid "Could not search users"
+msgstr "Akukwazanga kukhangela abasebenzisi"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Iifayile ezide zibe ntathu, ubuninzi buyi-8 MiB nganye."
+
+msgid "The confidential report could not be saved."
+msgstr "Ingxelo eyimfihlo ayikwazanga kugcinwa."
+
+msgid "Confidential report"
+msgstr "Ingxelo eyimfihlo"
+
+msgid "Confidential conversation"
+msgstr "Incoko eyimfihlo"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Abaphandi banokunxibelelana ngale ncoko bengaboni isazisi somxeli ngaphandle kokuba ukwabelana ngoqhagamshelwano kuvuliwe."
+
+msgid "Reporter"
+msgstr "Umxeli"
+
+msgid "Investigator"
+msgstr "Umphandi"
+
+msgid "Additional evidence (optional)"
+msgstr "Ubungqina obongezelelweyo (okukhethiweyo)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Iifayile ezide zibe ntathu, ubuninzi buyi-8 MiB nganye; iifayile ezilishumi ngengxelo nganye."
+
+msgid "Contact shared voluntarily"
+msgstr "Unxibelelwano lwabelwe ngokuzithandela"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Vumela abaphandi ukuba babone igama lam ne-imeyile yale ngxelo"
+
+msgid "This confidential report is not available."
+msgstr "Le ngxelo eyimfihlo ayifumaneki."
+
+msgid "Your message could not be saved."
+msgstr "Umyalezo wakho awukwazanga ukugcinwa."
+
+msgid "Contact sharing could not be updated."
+msgstr "Ukwabelana ngonxibelelwano akukwazanga ukuhlaziywa."
+
+msgid "Evidence could not be downloaded."
+msgstr "Ubungqina abukwazanga ukukhutshelwa."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo womsebenzi wokuzalisa ifomu : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>I-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Umzekelo womsebenzi wokuzalisa ifomu : bala i-Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Ubudala</strong></td>            <td width=\"75%\" style=\"\">[25] iminyaka ubudala</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Isini</strong></td>            <td style=\"\" text-align:=\"\">[M] (M okanye F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Ubunzima</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Ubude</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>I-Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Ubunzima/Ubude<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> inqaku le-Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Fihla idilesi ye-IP kwiingxelo"
+
+msgid "Course settings policies"
+msgstr "Imigaqo-nkqubo yeziCwangciso zekhosi"
+
+msgid "Academic transcripts"
+msgstr "Iitranskripthi zemfundo"
+
+msgid "Transcript program title"
+msgstr "Isihloko senkqubo yetranskripthi"
+
+msgid "Transcript course code"
+msgstr "Ikhowudi yekhosi yetranskripthi"
+
+msgid "Transcript course hours field"
+msgstr "Intsimi yeeyure zekhosi yetranskripthi"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Iiyure ezigqityiweyo zetranskripthi ziiyure ezifunekayo"
+
+msgid "Transcript student number field"
+msgstr "Intsimi yenombolo yomfundi yetranskripthi"
+
+msgid "Transcript address fields"
+msgstr "Iintsimi zedilesi yetranskripthi"
+
+msgid "Transcript grading scale"
+msgstr "Isikali sokulinganisa samanqaku etranskripthi"
+
+msgid "Transcript GPA note"
+msgstr "Inqaku le-GPA yetranskripthi"
+
+msgid "Transcript signatory name"
+msgstr "Igama lomtyikityi wetranskripthi"
+
+msgid "Transcript signatory title"
+msgstr "Isihloko somtyikityi wetranskripthi"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Vumela izatifikethi ezityikityiweyo kunye nokuncamathiselwa okukhethiweyo kwe-Sepolia testnet"
+
+msgid "Show thread replies only after participating"
+msgstr "Bonisa iimpendulo zomcu kuphela emva kokuthatha inxaxheba"
+
+msgid "Show the forum category description in threads"
+msgstr "Bonisa inkcazo yodidi lweforam kwimicu"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Izicwangciso zokuthatha inxaxheba kwiforam zinokutshintshwa ngekhosi"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Ubuninzi bezithuba eziboniswayo kumcu weforam"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Izithuba ezifunekayo ukugqiba umcu weforam"
+
+msgid "Track e-mail openings"
+msgstr "Landela ukuvulwa kwee-imeyile"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Vumela iimpendulo ze-imeyile kwimiyalezo"
+
+msgid "Inbound e-mail address"
+msgstr "Idilesi ye-imeyile engenayo"
+
+msgid "Inbound mailbox DSN"
+msgstr "I-DSN yebhokisi yeposi engenayo"
+
+msgid "Remember me duration (days)"
+msgstr "Ubude bexesha lokundikhumbula (iintsuku)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Vumela ubhaliso lweKlayenti eguquguqukayo ye-OAuth ngaphaya kwe-MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Vumela ukunika ingxelo ngemfihlo ngentlalontle"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Ubuncinane babaxeli abahlukeneyo bophando"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Vumela iziqhoboshelo zobungqina obuyimfihlo"
+
+msgid "Show confidential investigation notifications"
+msgstr "Bonisa izaziso zophando oluyimfihlo"
+
+msgid "Enable support chatbot"
+msgstr "Vumela i-chatbot yenkxaso"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Khetha apho amagama eglosari aqaqanjelwa khona ngokuzenzekelayo: amaxwebhu, imithambo kunye neendlela zokufunda."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Fihla iidilesi ze-IP kwiingxelo ezibonakalayo nakwiimpahla zengxelo. Iidilesi ze-IP zihlala zigciniwe kwaye zifikeleleka ngeenkqubo ezinegunya zedatha yobuqu."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Iziseko zeplatifomu kunye neemvume zokuhlela ikhosi; zilawulwa kwiziCwangciso zekhosi."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Vumela abasebenzisi ukukhuphela itranskripthi engekho semthethweni yeekhosi abazigqibileyo, kwaye vumela abalawuli, abalawuli beeseshoni nabaphathi be-HR ukuba bakhuphe iitranskripthi ezisemthethweni ezityikityiweyo zabasebenzisi ababalawulayo. Umfanekiso wotyikityo ulayishwa kwiphepha letranskripthi lomsebenzisi."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Isihloko senkqubo esishicilelwe kuyo yonke itranskripthi, umzekelo igama lediploma elungiselelwe kule platifomu."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Yeyiphi intsimi yekhosi egcwalisa ikholam yekhowudi yekhosi kwiitranskripthi: ikhowudi yekhosi okanye igama lesebe."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Iguquguquko yentsimi eyongezelelweyo yekhosi ephethe inani leeyure zekhosi. Shiyela ingenanto ukuze usebenzise ubude bexesha bekhosi."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Shicilela iiyure ezifunekayo zekhosi njengeeyure ezigqityiweyo ngumfundi. Xa icinyiwe, iiyure ezigqityiweyo lixesha umfundi alichithele kwikhosi."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Iguquguquko yentsimi eyongezelelweyo yomsebenzisi ephethe inombolo yomfundi eshicilelwe kwiitranskripthi. Shiyela ingenanto ukuze ungashicileli nanye."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Iinguquguquko ezahlulwe ngeekoma zeentsimi ezongezelelweyo zomsebenzisi ezishicilelwe emva kwedilesi yomsebenzisi kwiitranskripthi, umzekelo isixeko, iphondo nekhowudi yeposi."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Uluhlu lwe-JSON lweeleta zamanqaku, ukusuka kwinqaku eliphantsi eliphezulu ukuya ezantsi: into nganye inenqaku eliphantsi ngeepesenti (min), ileta kunye namanqaku asetshenziswa ukubala i-GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Inkcazo yendlela i-GPA ebalwa ngayo, eshicilelwe phantsi kwe-GPA kwiitranskripthi."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Igama leqosa lesikolo elityikitya iitranskripthi ezisemthethweni."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Isihloko seqosa lesikolo elityikitya iitranskripthi ezisemthethweni."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Ifuna imvume ecacileyo yomnini kunye nezenzo zomlawuli ezenziwa ngesandla. Kuphela iifingaprinti ze-SHA-256 ezithunyelwa kwi-chain."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Abafundi babona kuphela iposti yokuqala yomxholo weforamu de babe beposile ngokwabo. Abalawuli, ootitshala, abaqeqeshi kunye nabacebisi beqela bahlala bebona yonke iposti."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Bonisa isihloko nenkcazo emfutshane yodidi lweforamu encotsheni yomxholo ngamnye, kunye nelinki yokufunda inkcazo epheleleyo."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Xa ivuliwe, ootitshala banokukhetha kwicandelo leForamu leesetingi zekhosi ukuba ikhosi yabo iyafihla iimpendulo zomxholo de umfundi apose, ibonise inkcazo yodidi kwimixholo kunye nokuba zingaphi iiposti ibha yenqanaba lokuthatha inxaxheba elilindele, endaweni yokulandela iisetingi zeqonga."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Bonisa kuphela eli nani leeposti zomxholo weforamu ngamnye kuwo wonke umsebenzisi ongekho ngumlawuli weqonga, kuquka ootitshala, nakuye wonke umntu ngaphakathi kwendlela yokufunda. Kwiimbono ezinemixholo nezidibeneyo, umda usebenza kwiimpendulo zeposti nganye. Iiposti zigcinwa ngokulandelelana kwembono: ezokuqala, okanye ezokugqibela ngaphakathi kwendlela yokufunda, apho iiposti zokugqibela ziza kuqala. Seta ku-0 ukubonisa yonke iposti."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Bonisa abafundi ibha yenqanaba kumxholo weforamu ngamnye, efikelela ku-100% xa sebeposile eli nani lemiyalezo kuwo. Iiposti ezilindele ukuhlolwa ziyabalwa. Seta ku-0 ukufihla ibha yenqanaba."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Yongeza umfanekiso omncinci wokulandelela kwi-imeyile zezaziso zemiyalezo kwaye irekhode xa iceliwe. Oku kubonisa kuphela ukuba i-imeyile isenokuba ivuliwe; akuqinisekisi ukuba ifundiwe."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Vumela abamkeli bezaziso zemiyalezo ethe ngqo ukuba baphendule nge-imeyile. Imiyalezo engenayo kufuneka ihanjiswe kumyalelo we-imeyile engenayo we-Chamilo ngezixhobo ze-imeyile."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Idilesi esisiseko esetyenziselwa ukuhambisa iimpendulo, umzekelo replies@example.com. I-Chamilo yongeza ithokheni yomamkeli eyodwa usebenzisa i-plus addressing."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Unxibelelwano lwebhokisi yeposi olusetyenziselwa ukuqokelela iimpendulo ezingenayo, umzekelo imaps://user:password@imap.example.com:993/INBOX. URL-encode iimpawu ezigciniweyo kwiziqinisekiso."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Inani leentsuku zokugcina umsebenzisi engenile xa kukhethwe Ndikhumbule. Seta ku-0 ukuvala. Ifuna i-HTTPS. Uluhlu oluvunyelweyo: 0 ukuya ku-90. Ixesha lokuphela kweseshoni eqhelekileyo liqwalaselwa ngokwahlukileyo kwi-PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Ivumela uBhaliso loMxhasi oGuqukayo ukuba licele nawuphi na umda obhalisiweyo yiseva yemithombo ye-OAuth ye-Chamilo. Xa ivaliwe, ukuzibhalisa kuhlala kulinganiselwe kwi-MCP. Ukufikelela kwimithombo kuhlala kuthintelwe ngokwahlukileyo luluhlu lwemithombo evunyelweyo yomxhasi ngamnye."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Vula iingxelo zezehlo eziyimfihlo. Imodyuli ifuna isitshixo sokubhala ngokufihlakeleyo esikhuselweyo kunye nemvume yomphandi."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Phakathi kwe-2 ne-10 abaniki-ngxelo abahlukeneyo kufuneka banike ingxelo ngomsebenzisi omnye ngaphambi kokuba ityala libonakale kubaphandi."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Vumela imifanekiso, isandi nobungqina bevidiyo emfutshane. Izihlomelo ezikhoyo zihlala zifundeka xa zivaliwe."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Bonisa isalathiso sangaphakathi sophando olufanelekileyo. Ayithumeli ii-imeyile okanye izaziso zangaphandle."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Bonisa i-chatbot yomthi wezigqibo kwiphaneli yencoko enokukhokela abasebenzisi kwi-"
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Ivumela ootitshala ukuba badale kwaye benze iinguqu kwiinkqubo zemfundo ezincediswa yi-AI ngaphakathi kweekhosi."
+
+msgid "Department name"
+msgstr "Igama lesebe"
+
+msgid "Documents and exercise"
+msgstr "Amaxwebhu nomsebenzi"
+
+msgid "Documents and learning path"
+msgstr "Amaxwebhu nendlela yokufunda"
+
+msgid "Documents, exercise and learning path"
+msgstr "Amaxwebhu, umsebenzi nendlela yokufunda"
+
+msgid "session"
+msgstr "iseshoni"
+
+msgid "course"
+msgstr "ikhosi"
+
+msgid "You have been enrolled in %s"
+msgstr "Ubhaliwe kwi-%s"
 

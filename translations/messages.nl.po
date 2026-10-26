@@ -2048,7 +2048,7 @@ msgid ":yes:copyright,, no:no copyright"
 msgstr ":yes:copyright,, no:geen copyright"
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octetstream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Map,, application/msword:MsWord,, application/octet-stream:Octet-stroom,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
 msgstr ":exercise:oefening,,      simulation:simulatie,,      questionnaire:enquête,,      diagram:diagram,,      figure:figuur,,      graph:grafiek,,      index:index,,      slide:dia,,      table:tabel,,      narrative text:vertellende tekst,,      exam:examen,,      experiment:experiment,,      problem statement:probleemstelling,,      self assessment:zelftest,,      lecture:voordracht"
@@ -30844,6 +30844,9 @@ msgstr "Huidige gebruiker niet gevonden."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Hallo %s,<br><br>Je bent geregistreerd op %s.<br>Je kunt je account bereiken via <a href=\"%s\">hier</a>.<br><br>Je inloggegevens zijn:<br>Gebruikersnaam: <strong>%s</strong><br>Wachtwoord: <strong>%s</strong><br><br>Met vriendelijke groet,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Hallo %s,<br><br>U bent geregistreerd op %s.<br>Gebruikersnaam: <strong>%s</strong><br><br>Klik op de onderstaande link om uw wachtwoord in te stellen en toegang te krijgen tot uw account:<br><a href=\"%s\">Wachtwoord instellen</a><br><br>Met vriendelijke groet,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Je bent geregistreerd op %s"
 
@@ -37685,7 +37688,7 @@ msgid "%s results"
 msgstr "%s resultaten"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invulformulieractiviteit: bereken de Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Gewicht/Lengte<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invuloefening: bereken de Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Gewicht/Lengte<sup>2</sup> (zie <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\">Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Verwijderd"
@@ -43647,4 +43650,1616 @@ msgstr "Migratiegeschiedenis is vastgelegd"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s is aanwezig in de projectroot: verwijder het om de upgrade-eindpunten te sluiten"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "U heeft een certificaat verdiend voor deze oefening"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "U moet het leerpad \"%s\" voltooien voordat u toegang krijgt tot dit leerpad."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Weet u zeker dat u dit bestand definitief wilt verwijderen?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Weet u zeker dat u dit bestand wilt loskoppelen van de geselecteerde cursus?"
+
+msgid "Attach this file to another course"
+msgstr "Dit bestand aan een andere cursus koppelen"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Koppelen aan geselecteerde cursus(sen) (verborgen)"
+
+msgid "Course(s):"
+msgstr "Cursus(sen):"
+
+msgid "Delete definitively"
+msgstr "Definitief verwijderen"
+
+msgid "Detach from this course"
+msgstr "Loskoppelen van deze cursus"
+
+msgid "File actions"
+msgstr "Bestandsacties"
+
+msgid "File Information"
+msgstr "Bestandsinformatie"
+
+msgid "File Link:"
+msgstr "Bestandslink:"
+
+msgid "File Path:"
+msgstr "Bestandspad:"
+
+msgid "Filter courses..."
+msgstr "Cursussen filteren..."
+
+msgid "MIME Type:"
+msgstr "MIME-type:"
+
+msgid "N/A"
+msgstr "n.v.t."
+
+msgid "No results found."
+msgstr "Geen resultaten gevonden."
+
+msgid "Original Name"
+msgstr "Oorspronkelijke naam"
+
+msgid "Original Name:"
+msgstr "Oorspronkelijke naam:"
+
+msgid "Orphan"
+msgstr "Wees"
+
+msgid "Resource File ID:"
+msgstr "Resourcebestand-ID:"
+
+msgid "Resource Node ID:"
+msgstr "Resourcenode-ID:"
+
+msgid "Search..."
+msgstr "Zoeken..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Om dit bestand van een specifieke cursus los te koppelen, klikt u op het pictogram \"×\" op de bijbehorende cursustag hierboven."
+
+msgid "User:"
+msgstr "Gebruiker:"
+
+msgid "View file information"
+msgstr "Bestandsinformatie bekijken"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "U kunt dit bestand aan een of meer cursussen koppelen (verborgen in de documentenroot). Als het bestand niet meer wordt gebruikt en wees wordt, kunt u het ook definitief verwijderen."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "U kunt een of meer cursussen selecteren (gebruik Ctrl/Cmd + klik)."
+
+msgid "bytes"
+msgstr "bytes"
+
+msgid "Failed to copy:"
+msgstr "Kopiëren mislukt:"
+
+msgid "Missing resource file identifier."
+msgstr "Ontbrekende identifier van resourcebestand."
+
+msgid "Please select at least one course."
+msgstr "Selecteer ten minste één cursus."
+
+msgid "Resource file not found."
+msgstr "Resourcebestand niet gevonden."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Bestand \"%s\" is gekoppeld aan %d cursus(sen): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Sommige cursussen zijn overgeslagen: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Ontbrekende bestands- of cursusidentifier."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Dit resourcebestand heeft geen resourcenode en kan niet worden losgekoppeld."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Bestand is losgekoppeld van %d cursuskoppeling(en)."
+
+msgid "This file is not attached to the selected course."
+msgstr "Dit bestand is niet gekoppeld aan de geselecteerde cursus."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Dit bestand wordt nog door minstens één resource gebruikt en kan niet worden verwijderd."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Weesbestand en de fysieke inhoud zijn definitief verwijderd."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Enquête gepubliceerd. Aangemaakt: %d. Bijgewerkt: %d. Berichten verzonden: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Verwerfbaar"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Deze vaardigheid kan niet worden verworven"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Novice"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Rigide naleving van regels en contextvrije instructies; weinig situationeel oordeel."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Gevorderde beginner"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Begint situationele aspecten en patronen te herkennen, maar heeft nog richtlijnen nodig."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Competent"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Ontwikkelt planning en mentale modellen; neemt verantwoordelijkheid voor resultaten, maar kan overweldigd raken door complexiteit."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Bekwaam"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Ziet het \"grote geheel,\" prioriteert intuïtief en leert van ervaring."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Expert"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Intuïtieve, vloeiende prestatie; vertrouwt op diepe impliciete kennis; kan innoveren of nieuwe situaties moeiteloos hanteren."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Onthouden"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Relevante kennis ophalen, herinneren of herkennen uit het langetermijngeheugen."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Begrijpen"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Betekenis construeren uit instructieberichten, waaronder mondelinge, schriftelijke en grafische communicatie. Begrip aantonen door te interpreteren, exemplificeren, classificeren, samenvatten, afleiden, vergelijken of uitleggen."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Toepassen"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Een procedure uitvoeren of gebruiken door deze in een gegeven situatie uit te voeren of te implementeren. Kennis of vaardigheden gebruiken in nieuwe of concrete situaties."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Analyseren"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Materiaal opsplitsen in samenstellende delen en bepalen hoe de delen zich tot elkaar en tot een overkoepelende structuur of doel verhouden. Motieven, oorzaken of relaties identificeren."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Evalueren"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Oordelen vellen op basis van criteria en standaarden. Beslissingen of handelwijzen controleren, bekritiseren of rechtvaardigen."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Creëren"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Elementen samenvoegen tot een samenhangend of functioneel geheel; elementen reorganiseren tot een nieuw patroon of een nieuwe structuur. Origineel werk produceren of nieuwe ideeën genereren."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Volgen"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Werkt onder nauw toezicht en leiding. Voert routineuze taken uit met beperkte discretionaire bevoegdheid. Richt zich op het volgen van instructies en basale uitvoering."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Assisteren"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Werkt onder routineus toezicht. Biedt hulp aan anderen, draagt bij aan teamtaken en neemt binnen vastgestelde grenzen enig initiatief."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Werkt onder algemeen toezicht. Past kennis en vaardigheden toe op een reeks routineuze en niet-routineuze activiteiten. Oefent enige discretionaire bevoegdheid en oordeel uit."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Werkt onder ruime leiding. Stelt anderen in staat door specialistische begeleiding, ondersteuning of diensten te bieden. Neemt verantwoordelijkheid voor eigen werk en kan kleine teams of taken begeleiden."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Waarborgen en adviseren"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Werkt onder ruime leiding maar met aanzienlijke autonomie. Zorgt ervoor dat werk aan doelstellingen voldoet en adviseert over complexe zaken. Leidt vaak teams of projecten en beïnvloedt beslissingen."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Initiëren en beïnvloeden"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Heeft vastgelegde bevoegdheid en verantwoordelijkheid voor een significant werkgebied. Initieert acties, beïnvloedt strategie en beleid in het eigen domein, en leidt omvangrijke projecten of teams."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Strategie bepalen, inspireren, mobiliseren"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Heeft bevoegdheid op het hoogste organisatieniveau voor een belangrijk werkgebied. Bepaalt langetermijnstrategie, inspireert en mobiliseert anderen, en neemt beslissingen die cruciaal zijn voor organisatiesucces. Beïnvloedt op brancheniveau of extern."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Maximale inactieve tijd om mee te rekenen (minuten)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Een openstaande cursuspagina blijft automatische verzoeken sturen. Na dit aantal minuten zonder echte actie van de gebruiker (een pagina of item openen, antwoorden, enz.) stopt het tellen van de in de cursus doorgebrachte tijd."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Collaboratieve wiki-editor"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Verbinden met Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Opslaan maakt een nieuwe Chamilo-wiki-versie van de huidige Etherpad-inhoud."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "De collaboratieve editor kon niet worden geladen."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Etherpad inschakelen voor wiki-bewerking"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Gebruik Etherpad als collaboratieve editor voor bestaande wikipagina's. Etherpad moet op dezelfde origin als Chamilo beschikbaar zijn voor beveiligde ingesloten sessies."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad-URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Basis-URL van de Etherpad-instantie, inclusief een optioneel reverse-proxypad. Voorbeeld: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad-API-sleutel"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API-sleutel die Chamilo gebruikt om pads en sessies te maken en wiki-inhoud te synchroniseren. Configureer Etherpad om authenticatie met API-sleutel te accepteren."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Standaardzichtbaarheid van nieuwe documenten kan per cursus worden gewijzigd"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Zichtbaarheid die aan een nieuw document, map of geüpload bestand wordt gegeven wanneer een docent het in een cursus aanmaakt. Docenten kunnen de zichtbaarheid van elk item daarna nog wijzigen."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Indien ingeschakeld kunnen docenten in de cursusinstellingen de zichtbaarheid van nieuwe documenten van hun cursus kiezen, in plaats van de platformstandaard."
+
+msgid "Default visibility of new learning paths"
+msgstr "Standaardzichtbaarheid van nieuwe leerpaden"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Standaardzichtbaarheid van nieuwe leerpaden kan per cursus worden gewijzigd"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Zichtbaarheid die aan een nieuw leerpad wordt gegeven wanneer een docent het in een cursus aanmaakt. Docenten kunnen de zichtbaarheid van elk leerpad daarna nog wijzigen."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Indien ingeschakeld kunnen docenten in de cursusinstellingen de zichtbaarheid van nieuwe leerpaden van hun cursus kiezen, in plaats van de platformstandaard."
+
+msgid "Default visibility of new tests"
+msgstr "Standaardzichtbaarheid van nieuwe toetsen"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Standaardzichtbaarheid van nieuwe toetsen kan per cursus worden gewijzigd"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Zichtbaarheid die een nieuwe toets krijgt wanneer een docent deze in een cursus aanmaakt. Docenten kunnen de zichtbaarheid van elke toets daarna nog wijzigen."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Indien ingeschakeld kunnen docenten in de cursusinstellingen de zichtbaarheid van nieuwe toetsen in hun cursus kiezen, in plaats van de platformstandaard."
+
+msgid "Default visibility for new learning paths"
+msgstr "Standaardzichtbaarheid voor nieuwe leerpaden"
+
+msgid "Default visibility for new tests"
+msgstr "Standaardzichtbaarheid voor nieuwe toetsen"
+
+msgid "Following"
+msgstr "Volgend"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Ontvang een e-mail wanneer een cursist commentaar geeft op een inzending van deze opdracht"
+
+msgid "Payment history"
+msgstr "Betalingsgeschiedenis"
+
+msgid "No payments yet"
+msgstr "Nog geen betalingen"
+
+msgid "Cancel service"
+msgstr "Dienst annuleren"
+
+msgid "Official transcript"
+msgstr "Officieel cijferoverzicht"
+
+msgid "Unofficial transcript"
+msgstr "Niet-officieel cijferoverzicht"
+
+msgid "Student name"
+msgstr "Naam student"
+
+msgid "Student number"
+msgstr "Studentnummer"
+
+msgid "Program title"
+msgstr "Programmatitel"
+
+msgid "Required hours"
+msgstr "Vereiste uren"
+
+msgid "Completion date"
+msgstr "Afrondingsdatum"
+
+msgid "Hours completed"
+msgstr "Voltooide uren"
+
+msgid "Final grade"
+msgstr "Eindcijfer"
+
+msgid "Grade"
+msgstr "Cijfer"
+
+msgid "No completed course yet."
+msgstr "Nog geen voltooide cursus."
+
+msgid "Grading scale"
+msgstr "Beoordelingsschaal"
+
+msgid "Signature of school official"
+msgstr "Handtekening van schoolfunctionaris"
+
+msgid "School official"
+msgstr "Schoolfunctionaris"
+
+msgid "Official's title"
+msgstr "Functie van de functionaris"
+
+msgid "Verify this transcript at"
+msgstr "Verifieer dit cijferoverzicht op"
+
+msgid "Verification code"
+msgstr "Verificatiecode"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Dit niet-officiële cijferoverzicht is niet ondertekend. Vraag een beheerder om een officieel cijferoverzicht."
+
+msgid "Transcript verification"
+msgstr "Verificatie van cijferoverzicht"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Controleer of dit officiële cijferoverzicht is uitgegeven en ondertekend door de instelling, niet is gewijzigd en niet is ingetrokken."
+
+msgid "Valid"
+msgstr "Geldig"
+
+msgid "Invalid signature"
+msgstr "Ongeldige handtekening"
+
+msgid "Transcript not found"
+msgstr "Cijferoverzicht niet gevonden"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "De handtekening van de instelling is geldig en dit cijferoverzicht is niet ingetrokken."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Dit cijferoverzicht kan niet als geldig worden geverifieerd. De details worden niet weergegeven."
+
+msgid "Transcript details"
+msgstr "Details cijferoverzicht"
+
+msgid "Institution"
+msgstr "Instelling"
+
+msgid "Issued on"
+msgstr "Uitgegeven op"
+
+msgid "Download verification JSON"
+msgstr "Verificatie-JSON downloaden"
+
+msgid "Transcript"
+msgstr "Cijferoverzicht"
+
+msgid "My confidential reports"
+msgstr "Mijn vertrouwelijke rapporten"
+
+msgid "My transcript"
+msgstr "Mijn cijferoverzicht"
+
+msgid "Confidential investigations"
+msgstr "Vertrouwelijke onderzoeken"
+
+msgid "Floor plan"
+msgstr "Plattegrond"
+
+msgid "Click a highlighted room to select it"
+msgstr "Klik op een gemarkeerde ruimte om deze te selecteren"
+
+msgid "Select room"
+msgstr "Ruimte selecteren"
+
+msgid "Room on floor plan"
+msgstr "Ruimte op plattegrond"
+
+msgid "Select a branch first"
+msgstr "Selecteer eerst een vestiging"
+
+msgid "The branch has no attached floor plan"
+msgstr "De vestiging heeft geen gekoppelde plattegrond"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Gebruik het polygoonhulpmiddel om de ruimte te omlijnen; gebruik Bewerken om hoeken te verplaatsen"
+
+msgid "Save room area"
+msgstr "Ruimtegebied opslaan"
+
+msgid "Clear room area"
+msgstr "Ruimtegebied wissen"
+
+msgid "Save the room form to persist the area"
+msgstr "Sla het ruimteformulier op om het gebied te bewaren"
+
+msgid "Floor plan unavailable"
+msgstr "Plattegrond niet beschikbaar"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Punten van de ruimtkaart moeten binnen de plattegrond liggen"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Weet u zeker dat u het ruimtegebied wilt wissen?"
+
+msgid "View room on floor plan"
+msgstr "Ruimte op plattegrond bekijken"
+
+msgid "No floor plan available"
+msgstr "Geen plattegrond beschikbaar"
+
+msgid "This is an assignment by groups"
+msgstr "Dit is een groepsopdracht"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Upload een PNG-, JPEG- of veilige statische SVG-plattegrond, of selecteer een bestaande afbeelding uit Documenten."
+
+msgid "Upload floor plan"
+msgstr "Plattegrond uploaden"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG of statische SVG, maximaal 10 MB"
+
+msgid "Search images by name"
+msgstr "Afbeeldingen zoeken op naam"
+
+msgid "Image name"
+msgstr "Afbeeldingsnaam"
+
+msgid "Select an image"
+msgstr "Selecteer een afbeelding"
+
+msgid "Change floor plan"
+msgstr "Plattegrond wijzigen"
+
+msgid "Attach floor plan"
+msgstr "Plattegrond bijvoegen"
+
+msgid "No matching images found in Documents."
+msgstr "Geen overeenkomende afbeeldingen gevonden in Documenten."
+
+msgid "Current floor plan"
+msgstr "Huidige plattegrond"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Wijzigingen aan de plattegrond worden automatisch opgeslagen."
+
+msgid "Remove floor plan"
+msgstr "Plattegrond verwijderen"
+
+msgid "Cannot load images"
+msgstr "Kan afbeeldingen niet laden"
+
+msgid "Floor plan saved"
+msgstr "Plattegrond opgeslagen"
+
+msgid "Cannot attach floor plan"
+msgstr "Kan plattegrond niet bijvoegen"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Alleen PNG/JPEG en veilige statische SVG-afbeeldingen tot 10MB worden ondersteund."
+
+msgid "Cannot upload floor plan"
+msgstr "Kan plattegrond niet uploaden"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Weet u zeker dat u de plattegrond wilt verwijderen?"
+
+msgid "Floor plan removed"
+msgstr "Plattegrond verwijderd"
+
+msgid "Cannot remove floor plan"
+msgstr "Kan plattegrond niet verwijderen"
+
+msgid "Support bot"
+msgstr "Ondersteuningsbot"
+
+msgid "Connected"
+msgstr "Verbonden"
+
+msgid "Not connected"
+msgstr "Niet verbonden"
+
+msgid "View ticket"
+msgstr "Ticket bekijken"
+
+msgid "Start a new conversation"
+msgstr "Nieuw gesprek starten"
+
+msgid "Video call"
+msgstr "Videogesprek"
+
+msgid "Incoming video call"
+msgstr "Inkomend videogesprek"
+
+msgid "Decline"
+msgstr "Weigeren"
+
+msgid "Mute microphone"
+msgstr "Microfoon dempen"
+
+msgid "Unmute microphone"
+msgstr "Microfoon inschakelen"
+
+msgid "Turn camera off"
+msgstr "Camera uitschakelen"
+
+msgid "Turn camera on"
+msgstr "Camera inschakelen"
+
+msgid "Hang up"
+msgstr "Ophangen"
+
+msgid "Calling..."
+msgstr "Bellen..."
+
+msgid "Connecting..."
+msgstr "Verbinden..."
+
+msgid "Your contact is busy."
+msgstr "Uw contactpersoon is bezet."
+
+msgid "Your contact did not answer the call."
+msgstr "Uw contactpersoon nam de oproep niet op."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Uw contactpersoon kon geen toegang krijgen tot de camera of microfoon."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Uw contactpersoon kon het videogesprek niet voorbereiden."
+
+msgid "Your contact refused the call."
+msgstr "Uw contactpersoon weigerde de oproep."
+
+msgid "The call timed out."
+msgstr "De oproep is verlopen."
+
+msgid "Your contact cancelled the call."
+msgstr "Uw contact heeft de oproep geannuleerd."
+
+msgid "The video connection was lost."
+msgstr "De videoverbinding is verbroken."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Uw contact kon de videoverbinding niet tot stand brengen."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Uw contact kon de videogesprekinstelling niet voltooien."
+
+msgid "Your contact hung up."
+msgstr "Uw contact heeft opgehangen."
+
+msgid "Video call could not be started"
+msgstr "Videogesprek kon niet worden gestart"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Toegang tot camera of microfoon is geweigerd."
+
+msgid "No camera or microphone was found."
+msgstr "Er is geen camera of microfoon gevonden."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Camera of microfoon is al in gebruik of niet beschikbaar."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "De camera of microfoon ondersteunt de vereiste instellingen niet."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Toegang tot camera of microfoon kon niet worden verkregen."
+
+msgid "The video call could not be prepared."
+msgstr "Het videogesprek kon niet worden voorbereid."
+
+msgid "The video call request could not be sent."
+msgstr "Het verzoek voor het videogesprek kon niet worden verzonden."
+
+msgid "The incoming video call could not be processed."
+msgstr "Het inkomende videogesprek kon niet worden verwerkt."
+
+msgid "The video call answer could not be prepared."
+msgstr "Het antwoord op het videogesprek kon niet worden voorbereid."
+
+msgid "The video call answer could not be sent."
+msgstr "Het antwoord op het videogesprek kon niet worden verzonden."
+
+msgid "The video call answer could not be processed."
+msgstr "Het antwoord op het videogesprek kon niet worden verwerkt."
+
+msgid "The video connection failed"
+msgstr "De videoverbinding is mislukt"
+
+msgid "The video connection could not be established."
+msgstr "De videoverbinding kon niet tot stand worden gebracht."
+
+msgid "No answer was received."
+msgstr "Er is geen antwoord ontvangen."
+
+msgid "You refused the call."
+msgstr "U hebt de oproep geweigerd."
+
+msgid "You cancelled the call."
+msgstr "U hebt de oproep geannuleerd."
+
+msgid "You hung up."
+msgstr "U hebt opgehangen."
+
+msgid "You missed the call."
+msgstr "U hebt de oproep gemist."
+
+msgid "Support bot is currently unavailable."
+msgstr "De supportbot is momenteel niet beschikbaar."
+
+msgid "A support ticket has been created."
+msgstr "Er is een supportticket aangemaakt."
+
+msgid "Conversation ended."
+msgstr "Gesprek beëindigd."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "De supportbot kon dit gesprek niet voortzetten. Probeer het opnieuw."
+
+msgid "Add your first term glossary to this course"
+msgstr "Voeg uw eerste begrippenlijst toe aan deze cursus"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Weet u zeker dat u dit enquête-sjabloon wilt verwijderen?"
+
+msgid "The survey template has been deleted."
+msgstr "Het enquête-sjabloon is verwijderd."
+
+msgid "Please select a course."
+msgstr "Selecteer een cursus."
+
+msgid "Please select a session for this course."
+msgstr "Selecteer een sessie voor deze cursus."
+
+msgid "The survey has been created from the template."
+msgstr "De enquête is aangemaakt op basis van het sjabloon."
+
+msgid "Survey templates"
+msgstr "Enquête-sjablonen"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Maak herbruikbare enquête-sjablonen voor docenten en wijs ze rechtstreeks toe aan een cursus of sessie."
+
+msgid "Subtitle"
+msgstr "Ondertitel"
+
+msgid "Assign to course"
+msgstr "Toewijzen aan cursus"
+
+msgid "Assign template to course"
+msgstr "Sjabloon toewijzen aan cursus"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Laat de sessie leeg om de enquête rechtstreeks in de cursus aan te maken."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Deze cursus is via een sessie op dit portaal beschikbaar, dus een sessie is vereist."
+
+msgid "Survey template questions"
+msgstr "Vragen van enquête-sjabloon"
+
+msgid "Back to survey templates"
+msgstr "Terug naar enquête-sjablonen"
+
+msgid "Could not load survey template"
+msgstr "Enquête-sjabloon kon niet worden geladen"
+
+msgid "Could not load survey template questions"
+msgstr "Vragen van enquête-sjabloon konden niet worden geladen"
+
+msgid "Could not save survey template question"
+msgstr "Vraag van enquête-sjabloon kon niet worden opgeslagen"
+
+msgid "Could not delete survey template question"
+msgstr "Vraag van enquête-sjabloon kon niet worden verwijderd"
+
+msgid "Could not move survey template question"
+msgstr "Vraag van enquête-sjabloon kon niet worden verplaatst"
+
+msgid "Could not copy survey template question"
+msgstr "Vraag van enquête-sjabloon kon niet worden gekopieerd"
+
+msgid "The survey template has been saved."
+msgstr "Het enquêtesjabloon is opgeslagen."
+
+msgid "Edit survey template"
+msgstr "Enquêtesjabloon bewerken"
+
+msgid "Create survey template"
+msgstr "Enquêtesjabloon aanmaken"
+
+msgid "The survey template title is required."
+msgstr "De titel van het enquêtesjabloon is verplicht."
+
+msgid "Visible as template"
+msgstr "Zichtbaar als sjabloon"
+
+msgid "Create satisfaction survey"
+msgstr "Tevredenheidsenquête aanmaken"
+
+msgid "Training satisfaction survey"
+msgstr "Tevredenheidsenquête over de training"
+
+msgid "Could not create satisfaction survey"
+msgstr "Tevredenheidsenquête kon niet worden aangemaakt"
+
+msgid "Use template"
+msgstr "Sjabloon gebruiken"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Maak deze enquête aan op basis van een herbruikbaar sjabloon dat door een beheerder is voorbereid."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Resultaten verborgen voor docent/tutor"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Docenten en tutors kunnen nog steeds het aantal antwoorden zien en herinneringen versturen, maar kunnen de enquêteresultaten niet openen of exporteren."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Sjabloon toegepast. Controleer de enquête-instellingen en sla op om deze aan te maken."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Enquêteresultaten zijn verborgen voor docenten en tutors."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "U kunt de uitnodigingspagina nog steeds gebruiken om het aantal antwoorden te zien en herinneringen te versturen."
+
+msgid "Payment method"
+msgstr "Betaalmethode"
+
+msgid "Preview mode"
+msgstr "Voorbeeldmodus"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Voortgang en score worden in de voorbeeldmodus niet opgeslagen."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Deze link kan niet in het leerpad worden weergegeven."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Open deze in een nieuw tabblad om de pagina te bekijken."
+
+msgid "Report a problem with this question"
+msgstr "Een probleem met deze vraag melden"
+
+msgid "Your report was sent to the teacher."
+msgstr "Uw melding is naar de docent verzonden."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Beschrijf de fout of het probleem dat u hebt gevonden. Uw melding wordt naar de docent verzonden."
+
+msgid "A comment is required."
+msgstr "Een opmerking is verplicht."
+
+msgid "Could not send the report."
+msgstr "De melding kon niet worden verzonden."
+
+msgid "Learner reports"
+msgstr "Meldingen van cursisten"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Er zijn geen meldingen van cursisten voor deze vraag ingediend."
+
+msgid "View attempt"
+msgstr "Poging bekijken"
+
+msgid "Could not load learner reports."
+msgstr "Meldingen van cursisten konden niet worden geladen."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Cursisten toestaan problemen in vragen te melden"
+
+msgid "Skill acquired"
+msgstr "Vaardigheid verworven"
+
+msgid "AI Toolbox"
+msgstr "AI-toolbox"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Genereer interactieve educatieve toepassingen met AI en volg de voortgang van cursisten met SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Er zijn nog geen gepubliceerde toepassingen beschikbaar."
+
+msgid "Interactive applications"
+msgstr "Interactieve toepassingen"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Genereer, verbeter, publiceer en beoordeel versies vanuit één plek."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Open een toepassing om verder te gaan vanaf uw laatste voortgang."
+
+msgid "Interactive learning application"
+msgstr "Interactieve leertoepassing"
+
+msgid "Create an interactive learning app"
+msgstr "Een interactieve leerapp aanmaken"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Beschrijf de activiteit. Chamilo genereert een versiebeheerde SCORM-toepassing met voortgangs- en scoretracking."
+
+msgid "Idea"
+msgstr "Idee"
+
+msgid "Application"
+msgstr "Toepassing"
+
+msgid "What should the application do?"
+msgstr "Wat moet de toepassing doen?"
+
+msgid "How it works"
+msgstr "Hoe het werkt"
+
+msgid "AI generation"
+msgstr "AI-generatie"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "De app wordt gegenereerd op basis van uw instructies en opgeslagen als versie 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Voortgang, score en hervattingsgegevens van de cursist worden aan Chamilo gerapporteerd."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Toekomstige verbeteringen maken nieuwe versies aan zonder de vorige te verwijderen."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Vermeld het leerdoel, de regels, niveaus, scoring en wat er moet gebeuren wanneer de cursist klaar is."
+
+msgid "You are not allowed to create content in this context."
+msgstr "U mag in deze context geen inhoud aanmaken."
+
+msgid "The application was generated successfully."
+msgstr "De toepassing is succesvol gegenereerd."
+
+msgid "Open in student view"
+msgstr "Openen in studentweergave"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Genereer de toepassing om voorbeeldweergave en publicatie in te schakelen."
+
+msgid "Improve with AI"
+msgstr "Verbeteren met AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Beschrijf de wijziging. Er wordt een nieuwe versie gemaakt en eerdere versies blijven beschikbaar."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Beschrijf de volledige interactieve activiteit die u wilt genereren."
+
+msgid "What should be improved?"
+msgstr "Wat moet er verbeterd worden?"
+
+msgid "Generate new version"
+msgstr "Nieuwe versie genereren"
+
+msgid "Version history"
+msgstr "Versiegeschiedenis"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Bekijk, download of herstel elke gegenereerde versie."
+
+msgid "A new version was generated."
+msgstr "Er is een nieuwe versie gegenereerd."
+
+msgid "Version restored"
+msgstr "Versie hersteld"
+
+msgid "The support bot tree has been published."
+msgstr "De supportbotboom is gepubliceerd."
+
+msgid "The support bot tree has been archived."
+msgstr "De supportbotboom is gearchiveerd."
+
+msgid "The support bot tree has been duplicated."
+msgstr "De supportbotboom is gedupliceerd."
+
+msgid "The support bot tree has been deleted."
+msgstr "De supportbotboom is verwijderd."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Weet u zeker dat u deze supportbotboom wilt verwijderen?"
+
+msgid "The support bot tree has been imported."
+msgstr "De supportbotboom is geïmporteerd."
+
+msgid "Create support bot tree"
+msgstr "Supportbotboom maken"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Bouw een vaste beslissingsboom die gebruikers door supportvragen leidt en kan escaleren naar tickets."
+
+msgid "Portal scope"
+msgstr "Portaalbereik"
+
+msgid "Duplicate"
+msgstr "Dupliceren"
+
+msgid "Archive"
+msgstr "Archiveren"
+
+msgid "View conversations"
+msgstr "Gesprekken bekijken"
+
+msgid "Import support bot tree"
+msgstr "Supportbotboom importeren"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importeer een JSON-export of een CSV-beslissingsboom. De geïmporteerde boom wordt altijd als nieuw concept aangemaakt."
+
+msgid "Resolved"
+msgstr "Opgelost"
+
+msgid "Escalated"
+msgstr "Geëscaleerd"
+
+msgid "Abandoned"
+msgstr "Afgebroken"
+
+msgid "Support bot conversations"
+msgstr "Supportbotgesprekken"
+
+msgid "Outcome"
+msgstr "Uitkomst"
+
+msgid "Started at"
+msgstr "Gestart op"
+
+msgid "Ended at"
+msgstr "Beëindigd op"
+
+msgid "View conversation"
+msgstr "Gesprek bekijken"
+
+msgid "Go to node"
+msgstr "Ga naar knooppunt"
+
+msgid "Create support ticket"
+msgstr "Supportticket maken"
+
+msgid "End conversation"
+msgstr "Gesprek beëindigen"
+
+msgid "Node"
+msgstr "Knooppunt"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Een supportbotboom vereist minstens één knooppunt."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Weet u zeker dat u dit knooppunt wilt verwijderen? Koppelingen ernaartoe worden gewist."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Elk supportbotknooppunt vereist minstens één optie."
+
+msgid "The support bot tree title is required."
+msgstr "De titel van de supportbotboom is verplicht."
+
+msgid "A support bot entry node is required."
+msgstr "Een startknooppunt voor de supportbot is verplicht."
+
+msgid "Every support bot node requires content."
+msgstr "Elk supportbotknooppunt vereist inhoud."
+
+msgid "Every support bot option requires a label."
+msgstr "Elke supportbotoptie vereist een label."
+
+msgid "Select a target node for every go-to option."
+msgstr "Selecteer een doelknooppunt voor elke ga-naar-optie."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Voer een relatieve URL in voor elke koppelingsoptie."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Selecteer een ticketcategorie voor elke escalatieoptie."
+
+msgid "The support bot tree has been saved."
+msgstr "De supportbotboom is opgeslagen."
+
+msgid "Edit support bot tree"
+msgstr "Supportbotboom bewerken"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Gepubliceerde en gearchiveerde versies van de supportbot zijn alleen-lezen. Dupliceer deze boom vanuit de lijst om een nieuwe conceptversie te bewerken."
+
+msgid "Default ticket project"
+msgstr "Standaardticketproject"
+
+msgid "Decision tree rules"
+msgstr "Regels voor de beslissingsboom"
+
+msgid "Every node must contain at least one option."
+msgstr "Elke knoop moet minstens één optie bevatten."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Een eindknoop moet het gesprek beëindigen of een supportticket aanmaken."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Ga-naar-koppelingen mogen in v1 geen cycli veroorzaken."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Externe URL's zijn niet toegestaan in v1; koppelacties moeten een relatief Chamilo-pad gebruiken."
+
+msgid "Nodes"
+msgstr "Knopen"
+
+msgid "Add node"
+msgstr "Knoop toevoegen"
+
+msgid "Entry node"
+msgstr "Ingangsknoop"
+
+msgid "Set as entry node"
+msgstr "Instellen als ingangsknoop"
+
+msgid "Target node"
+msgstr "Doelknoop"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Gebruik een relatief Chamilo-pad, bijvoorbeeld /tickets."
+
+msgid "Ticket category"
+msgstr "Ticketcategorie"
+
+msgid "Select a default ticket project first."
+msgstr "Selecteer eerst een standaardticketproject."
+
+msgid "Closing message"
+msgstr "Afsluitbericht"
+
+msgid "Select a node to edit it."
+msgstr "Selecteer een knoop om deze te bewerken."
+
+msgid "Support bot conversation"
+msgstr "Supportbotgesprek"
+
+msgid "Transcript of %s"
+msgstr "Transcript van %s"
+
+msgid "Download unofficial transcript"
+msgstr "Onofficieel transcript downloaden"
+
+msgid "Issue official transcript"
+msgstr "Officieel transcript uitgeven"
+
+msgid "Official transcripts"
+msgstr "Officiële transcripts"
+
+msgid "No official transcript has been issued yet."
+msgstr "Er is nog geen officieel transcript uitgegeven."
+
+msgid "Issued by"
+msgstr "Uitgegeven door"
+
+msgid "Verify"
+msgstr "Verifiëren"
+
+msgid "Signature of official transcripts"
+msgstr "Handtekening van officiële transcripts"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Deze afbeelding wordt afgedrukt op de officiële transcripts van dit portaal, boven de naam en functie van de ondertekenaar zoals ingesteld in de certificaatinstellingen."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Een ondertekend officieel transcript uitgeven met de cursussen en cijfers op deze pagina? Het kan online worden geverifieerd tot het wordt ingetrokken."
+
+msgid "Official transcript issued"
+msgstr "Officieel transcript uitgegeven"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Dit officiële transcript intrekken? De verificatiepagina toont het dan als ingetrokken."
+
+msgid "Official transcript revoked"
+msgstr "Officieel transcript ingetrokken"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Selecteer eerst een PNG- of JPEG-afbeelding."
+
+msgid "Signed credential"
+msgstr "Ondertekende credential"
+
+msgid "Issue signed credential"
+msgstr "Ondertekende credential uitgeven"
+
+msgid "Verify credential"
+msgstr "Credential verifiëren"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Verankeren op Sepolia-testnet"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Bestaande Sepolia-transactie bevestigen"
+
+msgid "Revoke signed credential"
+msgstr "Ondertekende credential intrekken"
+
+msgid "Delete certificate"
+msgstr "Certificaat verwijderen"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Een bestaande Sepolia-transactie bevestigen"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia-transactiehash"
+
+msgid "Verify transaction"
+msgstr "Transactie verifiëren"
+
+msgid "Anchored"
+msgstr "Verankerd"
+
+msgid "Issued"
+msgstr "Uitgegeven"
+
+msgid "Not issued"
+msgstr "Niet uitgegeven"
+
+msgid "Consent required"
+msgstr "Toestemming vereist"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia-transactie bevestigd en geverifieerd"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "De Sepolia-testnetwallet vraagt u een transactie te ondertekenen. Alleen de vingerafdruk van het certificaat wordt verankerd. Doorgaan?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Deze ondertekende credential intrekken? Elke blockchaintransactie blijft permanent, maar de verificatiepagina meldt intrekking."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Een ondertekende certificaatcredential voor deze cursist uitgeven? Daarmee worden de goedgekeurde persoonsgegevens verifieerbaar via een privélink."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Een EVM-compatibele browserwallet is vereist voor Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Selecteer het Sepolia-testnet (chain-ID 11155111) in uw wallet."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Ongeldig walletadres of certificaatvingerafdruk."
+
+msgid "Transaction pending"
+msgstr "Transactie in behandeling"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Gebruik later Bestaande Sepolia-transactie bevestigen."
+
+msgid "Signed credential issued"
+msgstr "Ondertekende credential uitgegeven"
+
+msgid "Credential revoked"
+msgstr "Credential ingetrokken"
+
+msgid "Transaction hash"
+msgstr "Transactiehash"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Publicatietoestemming staat een beheerder toe een ondertekende certificaatcredential uit te geven en optioneel de SHA-256-vingerafdruk ervan op het Sepolia-testnet te verankeren. Er worden geen naam of persoonsgegevens on-chain verzonden. U kunt de toestemming op elk moment intrekken."
+
+msgid "Publication consent"
+msgstr "Publicatietoestemming"
+
+msgid "Not approved"
+msgstr "Niet goedgekeurd"
+
+msgid "Withdraw consent"
+msgstr "Toestemming intrekken"
+
+msgid "Approve publication"
+msgstr "Publicatie goedkeuren"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Ik geef toestemming voor een ondertekende, openbaar verifieerbare credential met mijn naam, cursus, score en uitgiftedatum. Een beheerder mag ook alleen de SHA-256-vingerafdruk op het Sepolia-testnet publiceren. De vingerafdruk is permanent, ook als ik later intrek. Doorgaan?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "De publicatiegoedkeuring voor dit certificaat intrekken?"
+
+msgid "Publication approval recorded"
+msgstr "Publicatiegoedkeuring vastgelegd"
+
+msgid "Publication approval withdrawn"
+msgstr "Publicatiegoedkeuring ingetrokken"
+
+msgid "Read more"
+msgstr "Meer lezen"
+
+msgid "Participation: %s of %s posts"
+msgstr "Deelname: %s van %s berichten"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Plaats uw bijdrage om de antwoorden van de andere deelnemers te zien."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Alleen gemachtigde onderzoekers kunnen in aanmerking komende meldingen beoordelen. Identiteiten van melders blijven standaard vertrouwelijk."
+
+msgid "New confidential report"
+msgstr "Nieuwe vertrouwelijke melding"
+
+msgid "Reported user"
+msgstr "Gemelde gebruiker"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Er zijn in aanmerking komende vertrouwelijke meldingen die op beoordeling wachten."
+
+msgid "Eligible investigations"
+msgstr "In aanmerking komende onderzoeken"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Een zaak verschijnt hier pas nadat minstens %s verschillende gebruikers dezelfde persoon hebben gemeld."
+
+msgid "Distinct reporters"
+msgstr "Unieke melders"
+
+msgid "Reports for selected user"
+msgstr "Meldingen voor geselecteerde gebruiker"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Vertrouwelijk melden is momenteel niet beschikbaar."
+
+msgid "The investigation could not be loaded."
+msgstr "Het onderzoek kon niet worden geladen."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Uw identiteit is standaard beschermd tegen onderzoekers, maar vermijd identificerende details in de meldingstekst of bijlagen. Dit is geen nooddienst."
+
+msgid "Find the user involved"
+msgstr "Zoek de betrokken gebruiker"
+
+msgid "Name or username"
+msgstr "Naam of gebruikersnaam"
+
+msgid "Describe the situation"
+msgstr "Beschrijf de situatie"
+
+msgid "Evidence (optional)"
+msgstr "Bewijs (optioneel)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Maximaal drie bestanden, elk maximaal 8 MiB. Afbeeldingen, audio of korte video's."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Ik ga ermee akkoord dat gemachtigde onderzoekers mijn naam en e-mail voor deze specifieke melding mogen zien. Ik kan deze toestemming later intrekken."
+
+msgid "Send confidential report"
+msgstr "Vertrouwelijke melding verzenden"
+
+msgid "Could not search users"
+msgstr "Gebruikers zoeken mislukt"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Maximaal drie bestanden, elk maximaal 8 MiB."
+
+msgid "The confidential report could not be saved."
+msgstr "De vertrouwelijke melding kon niet worden opgeslagen."
+
+msgid "Confidential report"
+msgstr "Vertrouwelijke melding"
+
+msgid "Confidential conversation"
+msgstr "Vertrouwelijk gesprek"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Onderzoekers kunnen via dit gesprek communiceren zonder de identiteit van de melder te zien, tenzij het delen van contactgegevens is ingeschakeld."
+
+msgid "Reporter"
+msgstr "Melder"
+
+msgid "Investigator"
+msgstr "Onderzoeker"
+
+msgid "Additional evidence (optional)"
+msgstr "Aanvullend bewijs (optioneel)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Maximaal drie bestanden, elk maximaal 8 MiB; tien bestanden per melding."
+
+msgid "Contact shared voluntarily"
+msgstr "Contactgegevens vrijwillig gedeeld"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Onderzoekers toestaan mijn naam en e-mail voor deze melding te zien"
+
+msgid "This confidential report is not available."
+msgstr "Dit vertrouwelijke rapport is niet beschikbaar."
+
+msgid "Your message could not be saved."
+msgstr "Uw bericht kon niet worden opgeslagen."
+
+msgid "Contact sharing could not be updated."
+msgstr "Het delen van contacten kon niet worden bijgewerkt."
+
+msgid "Evidence could not be downloaded."
+msgstr "Bewijsmateriaal kon niet worden gedownload."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invulformulieractiviteit: bereken de Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Gewicht/Lengte<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Voorbeeld invulformulieractiviteit: bereken de Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Leeftijd</strong></td>            <td width=\"75%\" style=\"\">[25] jaar</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Geslacht</strong></td>            <td style=\"\" text-align:=\"\">[M] (M of V)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Gewicht</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Lengte</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Gewicht/Lengte<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "IP-adres verbergen in rapporten"
+
+msgid "Course settings policies"
+msgstr "Beleid voor cursusinstellingen"
+
+msgid "Academic transcripts"
+msgstr "Academische cijferlijsten"
+
+msgid "Transcript program title"
+msgstr "Programmatitel op cijferlijst"
+
+msgid "Transcript course code"
+msgstr "Cursuscode op cijferlijst"
+
+msgid "Transcript course hours field"
+msgstr "Veld voor cursusuren op cijferlijst"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Voltooide uren op cijferlijst zijn de vereiste uren"
+
+msgid "Transcript student number field"
+msgstr "Veld studentnummer op cijferlijst"
+
+msgid "Transcript address fields"
+msgstr "Adresvelden op cijferlijst"
+
+msgid "Transcript grading scale"
+msgstr "Beoordelingsschaal op cijferlijst"
+
+msgid "Transcript GPA note"
+msgstr "GPA-toelichting op cijferlijst"
+
+msgid "Transcript signatory name"
+msgstr "Naam ondertekenaar cijferlijst"
+
+msgid "Transcript signatory title"
+msgstr "Functie ondertekenaar cijferlijst"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Ondertekende certificaten en optionele Sepolia-testnetverankering inschakelen"
+
+msgid "Show thread replies only after participating"
+msgstr "Antwoorden in discussies alleen tonen na deelname"
+
+msgid "Show the forum category description in threads"
+msgstr "Beschrijving van forumcategorie tonen in discussies"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Forumdeelname-instellingen kunnen per cursus worden gewijzigd"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Maximum aantal berichten in een forumdiscussie"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Vereiste berichten om een forumdiscussie te voltooien"
+
+msgid "Track e-mail openings"
+msgstr "Openen van e-mails bijhouden"
+
+msgid "Allow e-mail replies to messages"
+msgstr "E-mailantwoorden op berichten toestaan"
+
+msgid "Inbound e-mail address"
+msgstr "Inkomend e-mailadres"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN van inkomende mailbox"
+
+msgid "Remember me duration (days)"
+msgstr "Duur ‘Onthoud mij’ (dagen)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "OAuth Dynamic Client Registration buiten MCP inschakelen"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Vertrouwelijke welzijnsrapportage inschakelen"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Minimum aantal verschillende melders voor een onderzoek"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Vertrouwelijke bijlagen als bewijs toestaan"
+
+msgid "Show confidential investigation notifications"
+msgstr "Meldingen over vertrouwelijke onderzoeken tonen"
+
+msgid "Enable support chatbot"
+msgstr "Ondersteuningschatbot inschakelen"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Selecteer waar begrippen uit de woordenlijst automatisch worden gemarkeerd: documenten, oefeningen en leerpaden."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "IP-adressen verbergen in visuele rapporten en rapportexports. IP-adressen blijven opgeslagen en toegankelijk via geautoriseerde procedures voor persoonsgegevens."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Platformstandaarden en bewerkingsrechten voor cursussen; beheerd in Cursusinstellingen."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Laat gebruikers een onofficiële cijferlijst downloaden van de cursussen die zij hebben voltooid, en laat beheerders, sessiebeheerders en HR-managers ondertekende officiële cijferlijsten uitgeven voor de gebruikers die zij beheren. De handtekeningafbeelding wordt geüpload vanaf de cijferlijstpagina van een gebruiker."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Programmatitel die op elke cijferlijst wordt afgedrukt, bijvoorbeeld de naam van het diploma dat op dit platform wordt voorbereid."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Welk cursusveld de kolom cursuscode op cijferlijsten vult: de cursuscode of de afdelingsnaam."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Variabele van het extra cursusveld met het aantal uren van een cursus. Laat leeg om de duur van de cursus te gebruiken."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Druk de vereiste uren van een cursus af als de door de lerende voltooide uren. Indien uitgeschakeld, zijn de voltooide uren de tijd die de lerende in de cursus heeft doorgebracht."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Variabele van het extra gebruikersveld met het studentnummer dat op cijferlijsten wordt afgedrukt. Laat leeg om niets af te drukken."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Door komma’s gescheiden variabelen van extra gebruikersvelden die na het adres van de gebruiker op cijferlijsten worden afgedrukt, bijvoorbeeld stad, provincie en postcode."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "JSON-lijst van de cijferletters, van de hoogste minimumscore naar beneden: elk item heeft de minimumscore in procent (min), de letter en de cijferpunten die worden gebruikt om de GPA te berekenen."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Uitleg over hoe de GPA wordt berekend, afgedrukt onder de GPA op cijferlijsten."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Naam van de schoolfunctionaris die de officiële cijferlijsten ondertekent."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Functie van de schoolfunctionaris die de officiële cijferlijsten ondertekent."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Vereist uitdrukkelijke toestemming van de eigenaar en handmatige acties van de beheerder. Alleen SHA-256-vingerafdrukken worden on-chain verzonden."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Leerlingen zien alleen het eerste bericht van een forumonderwerp totdat ze zelf een bericht hebben geplaatst. Beheerders, docenten, coaches en groepsbegeleiders zien altijd alle berichten."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Toon de titel en een verkorte beschrijving van de forumcategorie bovenaan elk onderwerp, met een link om de volledige beschrijving te lezen."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Indien ingeschakeld kunnen docenten in de forumsectie van de cursusinstellingen kiezen of hun cursus antwoorden in onderwerpen verbergt tot de leerling een bericht plaatst, de categoriebeschrijving in onderwerpen toont en hoeveel berichten de voortgangsbalk voor deelname verwacht, in plaats van de platforminstellingen te volgen."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Toon alleen dit aantal berichten van elk forumonderwerp aan elke gebruiker die geen platformbeheerder is, inclusief docenten, en aan iedereen in een leerpad. In de onderwerp- en geneste weergaven geldt de limiet voor de antwoorden op elk bericht. De berichten blijven in de volgorde van de weergave: de eerste, of de nieuwste in een leerpad, waar de nieuwste berichten eerst komen. Stel in op 0 om alle berichten te tonen."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Toon leerlingen een voortgangsbalk in elk forumonderwerp, die 100% bereikt wanneer ze dit aantal berichten erin hebben geplaatst. Berichten die wachten op moderatie worden meegeteld. Stel in op 0 om de voortgangsbalk te verbergen."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Voegt een kleine trackingafbeelding toe aan e-mailmeldingen van berichten en registreert wanneer deze wordt opgevraagd. Dit geeft alleen aan dat de e-mail mogelijk is geopend; het bewijst niet dat deze is gelezen."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Sta ontvangers van meldingen van directe berichten toe per e-mail te antwoorden. Inkomende berichten moeten door de e-mailinfrastructuur naar het Chamilo-commando voor inkomende e-mail worden gerouteerd."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Basisadres voor het routeren van antwoorden, bijvoorbeeld replies@example.com. Chamilo voegt een uniek ontvangerstoken toe via plus-adressering."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Mailboxverbinding om inkomende antwoorden op te halen, bijvoorbeeld imaps://user:password@imap.example.com:993/INBOX. URL-encodeer gereserveerde tekens in inloggegevens."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Aantal dagen dat een gebruiker ingelogd blijft wanneer Onthoud mij is geselecteerd. Stel in op 0 om uit te schakelen. Vereist HTTPS. Toegestaan bereik: 0 tot 90. De normale sessietime-out wordt afzonderlijk geconfigureerd in PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Staat Dynamic Client Registration toe om elke scope aan te vragen die door een Chamilo OAuth-resourceserver is geregistreerd. Indien uitgeschakeld blijft zelfregistratie beperkt tot MCP. Toegang tot resources wordt altijd afzonderlijk beperkt door de toegestane resourcelijst van elke client."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Schakel vertrouwelijke incidentmeldingen in. De module vereist een beveiligde encryptiesleutel en onderzoeksbevoegdheid."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Tussen 2 en 10 verschillende melders moeten dezelfde gebruiker melden voordat de zaak zichtbaar wordt voor onderzoekers."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Sta afbeeldingen, audio en kort videobewijs toe. Bestaande bijlagen blijven leesbaar wanneer dit is uitgeschakeld."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Toon een interne indicatie van in aanmerking komende onderzoeken. Verstuurt geen e-mails of externe meldingen."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Toon een beslissingsboom-chatbot in het chatpaneel die gebruikers kan begeleiden naar "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Staat docenten toe AI-ondersteunde educatieve toepassingen in cursussen te maken en te versiebeheren."
+
+msgid "Department name"
+msgstr "Afdelingsnaam"
+
+msgid "Documents and exercise"
+msgstr "Documenten en oefening"
+
+msgid "Documents and learning path"
+msgstr "Documenten en leerpad"
+
+msgid "Documents, exercise and learning path"
+msgstr "Documenten, oefening en leerpad"
+
+msgid "session"
+msgstr "sessie"
+
+msgid "course"
+msgstr "cursus"
+
+msgid "You have been enrolled in %s"
+msgstr "U bent ingeschreven in %s"
 

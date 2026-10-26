@@ -28768,6 +28768,9 @@ msgstr "လက်ရှိအသုံးပြုသူ မတွေ့ရှ�
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "မင်္ဂလာပါ %s၊<br><br>သင်သည် %s တွင် မှတ်ပုံတင်ထားပြီးဖြစ်သည်။<br>သင့်အကောင့်ကို <a href=\"%s\">ဤနေရာ</a> မှ ဝင်ရောက်နိုင်သည်။<br><br>သင့်ဝင်ရောက်မှုအထောက်အထားများမှာ-<br>အသုံးပြုသူအမည်- <strong>%s</strong><br>စကားဝှက်- <strong>%s</strong><br><br>အကောင်းဆုံး နှုတ်ဆက်စကားဖြင့်၊<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "မင်္ဂလာပါ %s၊<br><br>သင်သည် %s တွင် မှတ်ပုံတင်ထားပါသည်။<br>အသုံးပြုသူအမည်: <strong>%s</strong><br><br>စကားဝှက်သတ်မှတ်ပြီး သင့်အကောင့်သို့ ဝင်ရောက်ရန် အောက်ပါလင့်ခ်ကို နှိပ်ပါ:<br><a href=\"%s\">စကားဝှက်သတ်မှတ်ရန်</a><br><br>လေးစားစွာဖြင့်၊<br>%s"
+
 msgid "You are registered on %s"
 msgstr "သင်သည် %s တွင် မှတ်ပုံတင်ထားပြီးဖြစ်သည်"
 
@@ -41571,4 +41574,1616 @@ msgstr "ရွှေ့ပြောင်းမှု သမိုင်း မ�
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "ပရောဂျက် အမြစ်တွင် %s ရှိနေသည်: အဆင့်မြှင့် အဆုံးမှတ်များကို ပိတ်ရန် ၎င်းကို ဖျက်ပါ"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "ဤလေ့ကျင့်ခန်းအတွက် သင်သည် လက်မှတ်ရရှိထားပါသည်"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "ဤသင်ယူမှုလမ်းကြောင်းကို ဝင်ရောက်နိုင်ရန် မတိုင်မီ \"%s\" ကို ပြီးမြောက်ရပါမည်။"
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "ဤဖိုင်ကို အပြီးအပိုင် ဖျက်လိုသည်မှာ သေချာပါသလား?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "ရွေးချယ်ထားသော သင်တန်းမှ ဤဖိုင်ကို ခွာထုတ်လိုသည်မှာ သေချာပါသလား?"
+
+msgid "Attach this file to another course"
+msgstr "ဤဖိုင်ကို အခြားသင်တန်းသို့ ချိတ်တွဲပါ"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "ရွေးချယ်ထားသော သင်တန်း(များ)သို့ ချိတ်တွဲပါ (ဝှက်ထား)"
+
+msgid "Course(s):"
+msgstr "သင်တန်း(များ):"
+
+msgid "Delete definitively"
+msgstr "အပြီးအပိုင် ဖျက်ရန်"
+
+msgid "Detach from this course"
+msgstr "ဤသင်တန်းမှ ခွာထုတ်ရန်"
+
+msgid "File actions"
+msgstr "ဖိုင်လုပ်ဆောင်ချက်များ"
+
+msgid "File Information"
+msgstr "ဖိုင်အချက်အလက်"
+
+msgid "File Link:"
+msgstr "ဖိုင်လင့်ခ်:"
+
+msgid "File Path:"
+msgstr "ဖိုင်လမ်းကြောင်း:"
+
+msgid "Filter courses..."
+msgstr "သင်တန်းများ စစ်ထုတ်ရန်..."
+
+msgid "MIME Type:"
+msgstr "MIME အမျိုးအစား:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "ရလဒ်များ မတွေ့ပါ။"
+
+msgid "Original Name"
+msgstr "မူလအမည်"
+
+msgid "Original Name:"
+msgstr "မူလအမည်:"
+
+msgid "Orphan"
+msgstr "မိဘမဲ့"
+
+msgid "Resource File ID:"
+msgstr "အရင်းအမြစ်ဖိုင် ID:"
+
+msgid "Resource Node ID:"
+msgstr "အရင်းအမြစ်နုတ် ID:"
+
+msgid "Search..."
+msgstr "ရှာဖွေရန်..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "သီးခြားသင်တန်းတစ်ခုမှ ဤဖိုင်ကို ခွာထုတ်ရန် အထက်ရှိ သက်ဆိုင်ရာ သင်တန်းတဂ်ပေါ်ရှိ \"×\" အိုင်ကွန်ကို နှိပ်ပါ။"
+
+msgid "User:"
+msgstr "အသုံးပြုသူ:"
+
+msgid "View file information"
+msgstr "ဖိုင်အချက်အလက်ကြည့်ရန်"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "ဤဖိုင်ကို သင်တန်းတစ်ခု သို့မဟုတ် တစ်ခုထက်ပို၍ ချိတ်တွဲနိုင်သည် (စာရွက်စာတမ်းများ အမြစ်တွင် ဝှက်ထားသည်)။ ဖိုင်ကို ဆက်လက်အသုံးမပြုတော့ဘဲ မိဘမဲ့ဖြစ်လာပါက အပြီးအပိုင် ဖျက်နိုင်သည်။"
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "သင်တန်းတစ်ခု သို့မဟုတ် တစ်ခုထက်ပို၍ ရွေးချယ်နိုင်သည် (Ctrl/Cmd + နှိပ်သုံးပါ)။"
+
+msgid "bytes"
+msgstr "ဘိုက်"
+
+msgid "Failed to copy:"
+msgstr "ကူးယူရန် မအောင်မြင်ပါ:"
+
+msgid "Missing resource file identifier."
+msgstr "အရင်းအမြစ်ဖိုင် သတ်မှတ်ချက် ပျောက်နေသည်။"
+
+msgid "Please select at least one course."
+msgstr "သင်တန်းအနည်းဆုံး တစ်ခု ရွေးချယ်ပါ။"
+
+msgid "Resource file not found."
+msgstr "အရင်းအမြစ်ဖိုင် မတွေ့ပါ။"
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "ဖိုင် \"%s\" ကို သင်တန်း %d ခုသို့ ချိတ်တွဲပြီးပါပြီ: %s။"
+
+msgid "Some courses were skipped: %s."
+msgstr "အချို့သင်တန်းများကို ကျော်သွားခဲ့သည်: %s။"
+
+msgid "Missing file or course identifier."
+msgstr "ဖိုင် သို့မဟုတ် သင်တန်း သတ်မှတ်ချက် ပျောက်နေသည်။"
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "ဤအရင်းအမြစ်ဖိုင်တွင် အရင်းအမြစ်နုတ် မရှိသောကြောင့် ခွာထုတ်၍ မရပါ။"
+
+msgid "File has been detached from %d course link(s)."
+msgstr "ဖိုင်ကို သင်တန်းလင့်ခ် %d ခုမှ ခွာထုတ်ပြီးပါပြီ။"
+
+msgid "This file is not attached to the selected course."
+msgstr "ဤဖိုင်သည် ရွေးချယ်ထားသော သင်တန်းနှင့် ချိတ်တွဲမထားပါ။"
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "ဤဖိုင်ကို အရင်းအမြစ်အနည်းဆုံး တစ်ခုက ဆက်လက်အသုံးပြုနေသောကြောင့် ဖျက်၍ မရပါ။"
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "မိဘမဲ့ဖိုင်နှင့် ၎င်း၏ ရုပ်ပိုင်းဆိုင်ရာ အကြောင်းအရာကို အပြီးအပိုင် ဖျက်ပြီးပါပြီ။"
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "စစ်တမ်း ထုတ်ဝေပြီး။ ဖန်တီးခဲ့သည်: %d။ အပ်ဒိတ်လုပ်ခဲ့သည်: %d။ ပို့ခဲ့သော မက်ဆေ့ချ်များ: %d။"
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "ရယူနိုင်သည်"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "ဤကျွမ်းကျင်မှုကို ရယူ၍ မရပါ"
+
+#: issue-8179
+msgid "Novice"
+msgstr "အစပြုသူ"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "စည်းမျဉ်းများနှင့် အကြောင်းအရာမကင်းသော ညွှန်ကြားချက်များကို တင်းကျပ်စွာ လိုက်နာခြင်း၊ အခြေအနေအလိုက် ဆုံးဖြတ်ချက် နည်းပါးခြင်း။"
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "အဆင့်မြင့် အစပြုသူ"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "အခြေအနေဆိုင်ရာ ရှုထောင့်များနှင့် ပုံစံများကို စတင်သိရှိသော်လည်း လမ်းညွှန်ချက်များ လိုအပ်နေဆဲ။"
+
+#: issue-8179
+msgid "Competent"
+msgstr "ကျွမ်းကျင်သော"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "စီမံကိန်းနှင့် စိတ်ပိုင်းဆိုင်ရာ ပုံစံများကို ဖော်ဆောင်သည်။ ရလဒ်များအတွက် တာဝန်ယူသော်လည်း ရှုပ်ထွေးမှုကြောင့် လွှမ်းမိုးခံရနိုင်သည်။"
+
+#: issue-8179
+msgid "Proficient"
+msgstr "ကျွမ်းကျင်ပြည့်ဝသော"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "\"ကြီးမားသော ရုပ်ပုံ\" ကို မြင်နိုင်ပြီး အလိုလို ဦးစားပေးကာ အတွေ့အကြုံမှ သင်ယူသည်။"
+
+#: issue-8179
+msgid "Expert"
+msgstr "ကျွမ်းကျင်ပညာရှင်"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "အလိုလိုသိမြင်ပြီး ချောမွေ့သော စွမ်းဆောင်ရည်။ နက်ရှိုင်းသော ကိုယ်ပိုင်အသိပညာကို အားကိုးသည်။ ဆန်းသစ်တီထွင်နိုင် သို့မဟုတ် အသစ်အဆန်း အခြေအနေများကို အလွယ်တကူ ကိုင်တွယ်နိုင်သည်။"
+
+#: issue-8179
+msgid "Remembering"
+msgstr "မှတ်မိခြင်း"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "ရေရှည်မှတ်ဉာဏ်မှ သက်ဆိုင်ရာ အသိပညာကို ပြန်လည်ရယူ၊ ပြန်လည်သတိရ သို့မဟုတ် အသိအမှတ်ပြုသည်။"
+
+#: issue-8179
+msgid "Understanding"
+msgstr "နားလည်ခြင်း"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "သင်ကြားရေး သတင်းစကားများမှ အဓိပ္ပာယ်ကို တည်ဆောက်သည်။ နှုတ်၊ စာရေးနှင့် ဂရပ်ဖစ် ဆက်သွယ်မှုများ အပါအဝင်။ အဓိပ္ပာယ်ဖွင့်ဆိုခြင်း၊ ဥပမာပေးခြင်း၊ အမျိုးအစားခွဲခြင်း၊ အကျဉ်းချုပ်ခြင်း၊ ကောက်ချက်ချခြင်း၊ နှိုင်းယှဉ်ခြင်း သို့မဟုတ် ရှင်းပြခြင်းဖြင့် နားလည်မှုကို ပြသသည်။"
+
+#: issue-8179
+msgid "Applying"
+msgstr "အသုံးချခြင်း"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "ပေးထားသော အခြေအနေတွင် လုပ်ထုံးလုပ်နည်းကို အကောင်အထည်ဖော်ခြင်း သို့မဟုတ် အသုံးပြုခြင်းဖြင့် ဆောင်ရွက်သည်။ အသစ် သို့မဟုတ် တိကျသော အခြေအနေများတွင် အသိပညာ သို့မဟုတ် ကျွမ်းကျင်မှုများကို အသုံးပြုသည်။"
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "ခွဲခြမ်းစိတ်ဖြာခြင်း"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "ပစ္စည်းကို ၎င်း၏ အစိတ်အပိုင်းများအဖြစ် ခွဲထုတ်ပြီး အစိတ်အပိုင်းများ အချင်းချင်းနှင့် အလုံးစုံ ဖွဲ့စည်းပုံ သို့မဟုတ် ရည်ရွယ်ချက်နှင့် မည်သို့ ဆက်စပ်သည်ကို ဆုံးဖြတ်သည်။ ရည်ရွယ်ချက်များ၊ အကြောင်းရင်းများ သို့မဟုတ် ဆက်နွယ်မှုများကို ဖော်ထုတ်သည်။"
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "အကဲဖြတ်ခြင်း"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "စံနှုန်းများနှင့် စံချိန်စံညွှန်းများအပေါ် အခြေခံ၍ စီရင်ဆုံးဖြတ်သည်။ ဆုံးဖြတ်ချက်များ သို့မဟုတ် လုပ်ဆောင်ချက်များကို စစ်ဆေး၊ ဝေဖန် သို့မဟုတ် တရားမျှတအောင် ပြောဆိုသည်။"
+
+#: issue-8179
+msgid "Creating"
+msgstr "ဖန်တီးခြင်း"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "အစိတ်အပိုင်းများကို စုစည်း၍ တစ်ခုလုံး ညီညွတ်သော သို့မဟုတ် လုပ်ဆောင်နိုင်သော ပုံစံဖြစ်အောင် ပြုလုပ်သည်။ အစိတ်အပိုင်းများကို ပုံစံအသစ် သို့မဟုတ် ဖွဲ့စည်းပုံအသစ်အဖြစ် ပြန်လည်စီစဉ်သည်။ မူရင်းအလုပ် ထုတ်လုပ် သို့မဟုတ် အကြံဉာဏ်အသစ်များ ဖန်တီးသည်။"
+
+#: issue-8179
+msgid "Follow"
+msgstr "လိုက်နာသည်"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "နီးကပ်သော ကြီးကြပ်မှုနှင့် လမ်းညွှန်မှုအောက်တွင် လုပ်ကိုင်သည်။ ကန့်သတ်ထားသော ဆုံးဖြတ်ခွင့်ဖြင့် ပုံမှန်လုပ်ငန်းများကို ဆောင်ရွက်သည်။ ညွှန်ကြားချက်များကို လိုက်နာခြင်းနှင့် အခြေခံ အကောင်အထည်ဖော်ခြင်းကို အာရုံစိုက်သည်။"
+
+#: issue-8179
+msgid "Assist"
+msgstr "ကူညီသည်"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "ပုံမှန် ကြီးကြပ်မှုအောက်တွင် လုပ်ကိုင်သည်။ အခြားသူများကို အကူအညီပေးပြီး အဖွဲ့လုပ်ငန်းများတွင် ပါဝင်ကာ သတ်မှတ်ထားသော နယ်နိမိတ်အတွင်း အစပျိုးမှု အချို့ စတင်ယူသည်။"
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "အထွေထွေ ကြီးကြပ်မှုအောက်တွင် လုပ်ကိုင်သည်။ ပုံမှန်နှင့် ပုံမှန်မဟုတ်သော လုပ်ငန်းများစွာတွင် အသိပညာနှင့် ကျွမ်းကျင်မှုများကို အသုံးချသည်။ ဆုံးဖြတ်ခွင့်နှင့် စီရင်ချက် အချို့ ကျင့်သုံးသည်။"
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "ကျယ်ပြန့်သော လမ်းညွှန်မှုအောက်တွင် လုပ်ကိုင်သည်။ အထူးပြု လမ်းညွှန်မှု၊ ပံ့ပိုးမှု သို့မဟုတ် ဝန်ဆောင်မှုများ ပေးခြင်းဖြင့် အခြားသူများကို ကူညီပံ့ပိုးသည်။ ကိုယ်ပိုင်အလုပ်အတွက် တာဝန်ယူပြီး အဖွဲ့ငယ်များ သို့မဟုတ် လုပ်ငန်းများကို ကြီးကြပ်နိုင်သည်။"
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "သေချာစေပြီး အကြံပေးသည်"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "ကျယ်ပြန့်သော လမ်းညွှန်မှုအောက်တွင် သို့သော် သိသာသော ကိုယ်ပိုင်ဆုံးဖြတ်ခွင့်ဖြင့် လုပ်ကိုင်သည်။ အလုပ်သည် ရည်မှန်းချက်များနှင့် ကိုက်ညီကြောင်း သေချာစေပြီး ရှုပ်ထွေးသော ကိစ္စများတွင် အကြံပေးသည်။ မကြာခဏ အဖွဲ့များ သို့မဟုတ် စီမံကိန်းများကို ဦးဆောင်ပြီး ဆုံးဖြတ်ချက်များကို လွှမ်းမိုးသည်။"
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "စတင်ဆောင်ရွက်ပြီး လွှမ်းမိုးသည်"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "အလုပ်နယ်ပယ် အရေးပါသော နေရာအတွက် သတ်မှတ်ထားသော အာဏာနှင့် တာဝန်ရှိသည်။ လုပ်ဆောင်ချက်များကို စတင်ပြီး ၎င်းတို့၏ နယ်ပယ်တွင် မဟာဗျူဟာနှင့် မူဝါဒကို လွှမ်းမိုးကာ ကြီးမားသော စီမံကိန်းများ သို့မဟုတ် အဖွဲ့များကို ဦးဆောင်သည်။"
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "မဟာဗျူဟာ သတ်မှတ်၊ လှုံ့ဆော်၊ စုစည်းမောင်းနှင်သည်"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "အဓိက အလုပ်နယ်ပယ်အတွက် အဖွဲ့အစည်းအဆင့် အမြင့်ဆုံးတွင် အာဏာရှိသည်။ ရေရှည် မဟာဗျူဟာ သတ်မှတ်ပြီး အခြားသူများကို လှုံ့ဆော် စုစည်းမောင်းနှင်ကာ အဖွဲ့အစည်း အောင်မြင်မှုအတွက် အရေးပါသော ဆုံးဖြတ်ချက်များ ချမှတ်သည်။ စက်မှုလုပ်ငန်း သို့မဟုတ် ပြင်ပအဆင့်တွင် လွှမ်းမိုးသည်။"
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "ထည့်သွင်းစဉ်းစားရမည့် အများဆုံး အလုပ်မလုပ်ချိန် (မိနစ်)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "ဖွင့်ထားသော သင်တန်းစာမျက်နှာသည် အလိုအလျောက် တောင်းဆိုမှုများ ဆက်လက်ပို့သည်။ အသုံးပြုသူထံမှ တကယ့် လုပ်ဆောင်ချက် (စာမျက်နှာ သို့မဟုတ် အရာတစ်ခု ဖွင့်ခြင်း၊ ဖြေဆိုခြင်း စသည်) မရှိဘဲ ဤမိနစ်အရေအတွက် ကျော်လွန်ပြီးနောက် သင်တန်းတွင် ကုန်ဆုံးသော အချိန်ကို ရေတွက်ခြင်း ရပ်တန့်သည်။"
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "ပူးပေါင်းဆောင်ရွက်သော Wiki တည်းဖြတ်ကိရိယာ"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Etherpad သို့ ချိတ်ဆက်နေသည်..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "သိမ်းဆည်းခြင်းသည် လက်ရှိ Etherpad အကြောင်းအရာမှ Chamilo Wiki ဗားရှင်းအသစ်ကို ဖန်တီးသည်။"
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "ပူးပေါင်းဆောင်ရွက်သော တည်းဖြတ်ကိရိယာကို ဖွင့်၍မရပါ။"
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Wiki တည်းဖြတ်ရန် Etherpad ကို ဖွင့်ပါ"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "ရှိပြီးသား Wiki စာမျက်နှာများအတွက် ပူးပေါင်းဆောင်ရွက်သော တည်းဖြတ်ကိရိယာအဖြစ် Etherpad ကို အသုံးပြုပါ။ လုံခြုံသော ထည့်သွင်းထားသော ဆက်ရှင်များအတွက် Etherpad ကို Chamilo နှင့် တူညီသော origin တွင် ဖော်ပြထားရမည်။"
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpad instance ၏ အခြေခံ URL၊ ရွေးချယ်နိုင်သော reverse-proxy လမ်းကြောင်း အပါအဝင်။ ဥပမာ: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API သော့"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Chamilo က pads၊ ဆက်ရှင်များ ဖန်တီးရန်နှင့် Wiki အကြောင်းအရာကို ထပ်တူပြုရန် အသုံးပြုသော API သော့။ API-key စစ်မှန်ကြောင်းအထောက်အထားကို လက်ခံရန် Etherpad ကို ပြင်ဆင်ပါ။"
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "စာရွက်စာတမ်းအသစ်များ၏ ပုံသေ မြင်နိုင်မှုကို သင်တန်းအလိုက် ပြောင်းလဲနိုင်သည်"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "ဆရာက သင်တန်းတွင် ဖန်တီးသောအခါ စာရွက်စာတမ်းအသစ်၊ ဖိုလ်ဒါ သို့မဟုတ် အပ်လုဒ်လုပ်သော ဖိုင်ကို ပေးသော မြင်နိုင်မှု။ ဆရာများသည် နောက်မှ တစ်ခုချင်းစီ၏ မြင်နိုင်မှုကို ပြောင်းလဲနိုင်သေးသည်။"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "ဖွင့်ထားသောအခါ ဆရာများသည် ပလက်ဖောင်း ပုံသေအစား ၎င်းတို့သင်တန်း၏ စာရွက်စာတမ်းအသစ်များအတွက် မြင်နိုင်မှုကို သင်တန်းဆက်တင်များတွင် ရွေးချယ်နိုင်သည်။"
+
+msgid "Default visibility of new learning paths"
+msgstr "သင်ယူမှုလမ်းကြောင်းအသစ်များ၏ ပုံသေ မြင်နိုင်မှု"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "သင်ယူမှုလမ်းကြောင်းအသစ်များ၏ ပုံသေ မြင်နိုင်မှုကို သင်တန်းအလိုက် ပြောင်းလဲနိုင်သည်"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "ဆရာက သင်တန်းတွင် ဖန်တီးသောအခါ သင်ယူမှုလမ်းကြောင်းအသစ်ကို ပေးသော မြင်နိုင်မှု။ ဆရာများသည် နောက်မှ တစ်ခုချင်းစီ၏ မြင်နိုင်မှုကို ပြောင်းလဲနိုင်သေးသည်။"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "ဖွင့်ထားသောအခါ ဆရာများသည် ပလက်ဖောင်း ပုံသေအစား ၎င်းတို့သင်တန်း၏ သင်ယူမှုလမ်းကြောင်းအသစ်များအတွက် မြင်နိုင်မှုကို သင်တန်းဆက်တင်များတွင် ရွေးချယ်နိုင်သည်။"
+
+msgid "Default visibility of new tests"
+msgstr "စမ်းသပ်မှုအသစ်များ၏ ပုံသေ မြင်နိုင်မှု"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "သင်တန်းအလိုက် စမ်းသပ်မှုအသစ်များ၏ မူလမြင်နိုင်မှုကို ပြောင်းလဲနိုင်သည်"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "ဆရာတစ်ဦးက သင်တန်းတွင် စမ်းသပ်မှုအသစ် ဖန်တီးသည့်အခါ ပေးသော မြင်နိုင်မှု။ ဆရာများသည် နောက်မှ တစ်ခုချင်းစီ၏ မြင်နိုင်မှုကို ပြောင်းလဲနိုင်သေးသည်။"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "ဖွင့်ထားပါက ဆရာများသည် ပလက်ဖောင်း မူလသတ်မှတ်ချက်အစား သင်တန်းဆက်တင်တွင် သင်တန်း၏ စမ်းသပ်မှုအသစ်များအတွက် မြင်နိုင်မှုကို ရွေးချယ်နိုင်သည်။"
+
+msgid "Default visibility for new learning paths"
+msgstr "သင်ယူမှုလမ်းကြောင်းအသစ်များအတွက် မူလမြင်နိုင်မှု"
+
+msgid "Default visibility for new tests"
+msgstr "စမ်းသပ်မှုအသစ်များအတွက် မူလမြင်နိုင်မှု"
+
+msgid "Following"
+msgstr "လိုက်နေသည်"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "ဤအလုပ်တင်သွင်းမှုအပေါ် သင်ယူသူက မှတ်ချက်ပေးသည့်အခါ အီးမေးလ်ရယူရန်"
+
+msgid "Payment history"
+msgstr "ငွေပေးချေမှုမှတ်တမ်း"
+
+msgid "No payments yet"
+msgstr "ငွေပေးချေမှု မရှိသေးပါ"
+
+msgid "Cancel service"
+msgstr "ဝန်ဆောင်မှု ပယ်ဖျက်ရန်"
+
+msgid "Official transcript"
+msgstr "တရားဝင် အမှတ်စာရင်း"
+
+msgid "Unofficial transcript"
+msgstr "တရားဝင်မဟုတ်သော အမှတ်စာရင်း"
+
+msgid "Student name"
+msgstr "ကျောင်းသားအမည်"
+
+msgid "Student number"
+msgstr "ကျောင်းသားနံပါတ်"
+
+msgid "Program title"
+msgstr "အစီအစဉ်ခေါင်းစဉ်"
+
+msgid "Required hours"
+msgstr "လိုအပ်သော နာရီ"
+
+msgid "Completion date"
+msgstr "ပြီးဆုံးသည့်ရက်စွဲ"
+
+msgid "Hours completed"
+msgstr "ပြီးစီးသော နာရီ"
+
+msgid "Final grade"
+msgstr "နောက်ဆုံးအဆင့်"
+
+msgid "Grade"
+msgstr "အဆင့်"
+
+msgid "No completed course yet."
+msgstr "ပြီးစီးသော သင်တန်း မရှိသေးပါ။"
+
+msgid "Grading scale"
+msgstr "အဆင့်သတ်မှတ်စကေး"
+
+msgid "Signature of school official"
+msgstr "ကျောင်းအရာရှိ၏ လက်မှတ်"
+
+msgid "School official"
+msgstr "ကျောင်းအရာရှိ"
+
+msgid "Official's title"
+msgstr "အရာရှိ၏ ရာထူး"
+
+msgid "Verify this transcript at"
+msgstr "ဤအမှတ်စာရင်းကို ဤနေရာတွင် စစ်ဆေးပါ"
+
+msgid "Verification code"
+msgstr "စစ်ဆေးကုဒ်"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "ဤတရားဝင်မဟုတ်သော အမှတ်စာရင်းတွင် လက်မှတ်မထိုးထားပါ။ တရားဝင် အမှတ်စာရင်းအတွက် စီမံခန့်ခွဲသူကို တောင်းဆိုပါ။"
+
+msgid "Transcript verification"
+msgstr "အမှတ်စာရင်း စစ်ဆေးခြင်း"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "ဤတရားဝင် အမှတ်စာရင်းကို အဖွဲ့အစည်းက ထုတ်ပေးပြီး လက်မှတ်ထိုးထားကြောင်း၊ ပြင်ဆင်မထားကြောင်းနှင့် ရုပ်သိမ်းမထားကြောင်း စစ်ဆေးပါ။"
+
+msgid "Valid"
+msgstr "တရားဝင်"
+
+msgid "Invalid signature"
+msgstr "မမှန်ကန်သော လက်မှတ်"
+
+msgid "Transcript not found"
+msgstr "အမှတ်စာရင်း မတွေ့ပါ"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "အဖွဲ့အစည်း၏ လက်မှတ်သည် တရားဝင်ပြီး ဤအမှတ်စာရင်းကို ရုပ်သိမ်းမထားပါ။"
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "ဤအမှတ်စာရင်းကို တရားဝင်ဟု စစ်ဆေး၍မရပါ။ အသေးစိတ်များကို ပြသမည်မဟုတ်ပါ။"
+
+msgid "Transcript details"
+msgstr "အမှတ်စာရင်း အသေးစိတ်"
+
+msgid "Institution"
+msgstr "အဖွဲ့အစည်း"
+
+msgid "Issued on"
+msgstr "ထုတ်ပေးသည့်ရက်"
+
+msgid "Download verification JSON"
+msgstr "စစ်ဆေး JSON ဒေါင်းလုဒ်လုပ်ရန်"
+
+msgid "Transcript"
+msgstr "အမှတ်စာရင်း"
+
+msgid "My confidential reports"
+msgstr "ကျွန်ုပ်၏ လျှို့ဝှက်အစီရင်ခံစာများ"
+
+msgid "My transcript"
+msgstr "ကျွန်ုပ်၏ အမှတ်စာရင်း"
+
+msgid "Confidential investigations"
+msgstr "လျှို့ဝှက် စုံစမ်းစစ်ဆေးမှုများ"
+
+msgid "Floor plan"
+msgstr "ကြမ်းပြင်ပုံစံ"
+
+msgid "Click a highlighted room to select it"
+msgstr "မီးမောင်းထိုးထားသော အခန်းကို နှိပ်၍ ရွေးချယ်ပါ"
+
+msgid "Select room"
+msgstr "အခန်းရွေးချယ်ရန်"
+
+msgid "Room on floor plan"
+msgstr "ကြမ်းပြင်ပုံစံပေါ်ရှိ အခန်း"
+
+msgid "Select a branch first"
+msgstr "ဌာနခွဲကို အရင်ရွေးချယ်ပါ"
+
+msgid "The branch has no attached floor plan"
+msgstr "ဌာနခွဲတွင် ကြမ်းပြင်ပုံစံ မတွဲထားပါ"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "အခန်းကို မျဉ်းကြောင်းဆွဲရန် ဗဟုဂံကိရိယာကို သုံးပါ။ ထောင့်များကို ရွှေ့ရန် တည်းဖြတ်ကို သုံးပါ"
+
+msgid "Save room area"
+msgstr "အခန်းဧရိယာ သိမ်းမည်"
+
+msgid "Clear room area"
+msgstr "အခန်းဧရိယာ ရှင်းမည်"
+
+msgid "Save the room form to persist the area"
+msgstr "ဧရိယာကို သိမ်းရန် အခန်းဖောင်ကို သိမ်းပါ"
+
+msgid "Floor plan unavailable"
+msgstr "ကြမ်းပြင်ပုံစံ မရရှိနိုင်ပါ"
+
+msgid "Room map points must be within the floor plan"
+msgstr "အခန်းမြေပုံ အမှတ်များသည် ကြမ်းပြင်ပုံစံအတွင်း ရှိရမည်"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "အခန်းဧရိယာကို ရှင်းလိုသည်မှာ သေချာပါသလား။"
+
+msgid "View room on floor plan"
+msgstr "ကြမ်းပြင်ပုံစံပေါ်တွင် အခန်းကို ကြည့်မည်"
+
+msgid "No floor plan available"
+msgstr "ကြမ်းပြင်ပုံစံ မရှိပါ"
+
+msgid "This is an assignment by groups"
+msgstr "ဤသည်မှာ အုပ်စုလိုက် တာဝန်ပေးချက်ဖြစ်သည်"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "PNG၊ JPEG သို့မဟုတ် လုံခြုံသော static SVG ကြမ်းပြင်ပုံစံကို တင်ပါ၊ သို့မဟုတ် စာရွက်စာတမ်းများမှ ရှိပြီးသား ပုံကို ရွေးပါ။"
+
+msgid "Upload floor plan"
+msgstr "ကြမ်းပြင်ပုံစံ တင်မည်"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG၊ JPEG သို့မဟုတ် static SVG၊ အများဆုံး 10 MB"
+
+msgid "Search images by name"
+msgstr "အမည်ဖြင့် ပုံများ ရှာမည်"
+
+msgid "Image name"
+msgstr "ပုံအမည်"
+
+msgid "Select an image"
+msgstr "ပုံတစ်ပုံ ရွေးပါ"
+
+msgid "Change floor plan"
+msgstr "ကြမ်းပြင်ပုံစံ ပြောင်းမည်"
+
+msgid "Attach floor plan"
+msgstr "ကြမ်းပြင်ပုံစံ ပူးတွဲမည်"
+
+msgid "No matching images found in Documents."
+msgstr "စာရွက်စာတမ်းများတွင် ကိုက်ညီသော ပုံများ မတွေ့ပါ။"
+
+msgid "Current floor plan"
+msgstr "လက်ရှိ ကြမ်းပြင်ပုံစံ"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "ကြမ်းပြင်ပုံစံ ပြောင်းလဲမှုများကို အလိုအလျောက် သိမ်းပါသည်။"
+
+msgid "Remove floor plan"
+msgstr "ကြမ်းပြင်ပုံစံ ဖယ်ရှားမည်"
+
+msgid "Cannot load images"
+msgstr "ပုံများ ဖွင့်၍မရပါ"
+
+msgid "Floor plan saved"
+msgstr "ကြမ်းပြင်ပုံစံ သိမ်းပြီးပါပြီ"
+
+msgid "Cannot attach floor plan"
+msgstr "ကြမ်းပြင်ပုံစံ ပူးတွဲ၍မရပါ"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "PNG/JPEG နှင့် လုံခြုံသော static SVG ပုံများသာ 10MB အထိ ပံ့ပိုးသည်။"
+
+msgid "Cannot upload floor plan"
+msgstr "ကြမ်းပြင်ပုံစံ တင်၍မရပါ"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "ကြမ်းပြင်ပုံစံကို ဖယ်ရှားလိုသည်မှာ သေချာပါသလား။"
+
+msgid "Floor plan removed"
+msgstr "ကြမ်းပြင်ပုံစံ ဖယ်ရှားပြီးပါပြီ"
+
+msgid "Cannot remove floor plan"
+msgstr "ကြမ်းပြင်ပုံစံ ဖယ်ရှား၍မရပါ"
+
+msgid "Support bot"
+msgstr "အကူအညီ ဘော့တ်"
+
+msgid "Connected"
+msgstr "ချိတ်ဆက်ပြီး"
+
+msgid "Not connected"
+msgstr "မချိတ်ဆက်ရသေး"
+
+msgid "View ticket"
+msgstr "လက်မှတ် ကြည့်မည်"
+
+msgid "Start a new conversation"
+msgstr "စကားပြောသစ် စတင်မည်"
+
+msgid "Video call"
+msgstr "ဗီဒီယိုခေါ်ဆိုမှု"
+
+msgid "Incoming video call"
+msgstr "ဝင်လာသော ဗီဒီယိုခေါ်ဆိုမှု"
+
+msgid "Decline"
+msgstr "ငြင်းပယ်မည်"
+
+msgid "Mute microphone"
+msgstr "မိုက်ခရိုဖုန်း ပိတ်မည်"
+
+msgid "Unmute microphone"
+msgstr "မိုက်ခရိုဖုန်း ဖွင့်မည်"
+
+msgid "Turn camera off"
+msgstr "ကင်မရာ ပိတ်မည်"
+
+msgid "Turn camera on"
+msgstr "ကင်မရာ ဖွင့်မည်"
+
+msgid "Hang up"
+msgstr "ခေါ်ဆိုမှု ဖြတ်မည်"
+
+msgid "Calling..."
+msgstr "ခေါ်နေသည်..."
+
+msgid "Connecting..."
+msgstr "ချိတ်ဆက်နေသည်..."
+
+msgid "Your contact is busy."
+msgstr "သင့်အဆက်အသွယ် မအားပါ။"
+
+msgid "Your contact did not answer the call."
+msgstr "သင့်အဆက်အသွယ် ခေါ်ဆိုမှုကို မဖြေပါ။"
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "သင့်အဆက်အသွယ် ကင်မရာ သို့မဟုတ် မိုက်ခရိုဖုန်းကို အသုံးပြု၍မရပါ။"
+
+msgid "Your contact could not prepare the video call."
+msgstr "သင့်အဆက်အသွယ် ဗီဒီယိုခေါ်ဆိုမှုကို ပြင်ဆင်၍မရပါ။"
+
+msgid "Your contact refused the call."
+msgstr "သင့်အဆက်အသွယ် ခေါ်ဆိုမှုကို ငြင်းပယ်ခဲ့သည်။"
+
+msgid "The call timed out."
+msgstr "ခေါ်ဆိုမှု အချိန်ကုန်သွားသည်။"
+
+msgid "Your contact cancelled the call."
+msgstr "သင့်အဆက်အသွယ်က ဖုန်းခေါ်ဆိုမှုကို ပယ်ဖျက်လိုက်ပါသည်။"
+
+msgid "The video connection was lost."
+msgstr "ဗီဒီယိုချိတ်ဆက်မှု ပျောက်ဆုံးသွားပါသည်။"
+
+msgid "Your contact could not establish the video connection."
+msgstr "သင့်အဆက်အသွယ်သည် ဗီဒီယိုချိတ်ဆက်မှုကို တည်ဆောက်နိုင်ခြင်း မရှိပါ။"
+
+msgid "Your contact could not complete the video call setup."
+msgstr "သင့်အဆက်အသွယ်သည် ဗီဒီယိုခေါ်ဆိုမှု စတင်ပြင်ဆင်မှုကို ပြီးမြောက်အောင် မလုပ်နိုင်ပါ။"
+
+msgid "Your contact hung up."
+msgstr "သင့်အဆက်အသွယ်က ဖုန်းချလိုက်ပါသည်။"
+
+msgid "Video call could not be started"
+msgstr "ဗီဒီယိုခေါ်ဆိုမှုကို စတင်နိုင်ခြင်း မရှိပါ"
+
+msgid "Camera or microphone permission was denied."
+msgstr "ကင်မရာ သို့မဟုတ် မိုက်ခရိုဖုန်း ခွင့်ပြုချက်ကို ငြင်းပယ်ထားပါသည်။"
+
+msgid "No camera or microphone was found."
+msgstr "ကင်မရာ သို့မဟုတ် မိုက်ခရိုဖုန်း မတွေ့ရှိပါ။"
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "ကင်မရာ သို့မဟုတ် မိုက်ခရိုဖုန်းကို အသုံးပြုနေပြီး သို့မဟုတ် မရရှိနိုင်ပါ။"
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "ကင်မရာ သို့မဟုတ် မိုက်ခရိုဖုန်းသည် လိုအပ်သော ဆက်တင်များကို မပံ့ပိုးပါ။"
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "ကင်မရာ သို့မဟုတ် မိုက်ခရိုဖုန်း အသုံးပြုခွင့်ကို ရယူနိုင်ခြင်း မရှိပါ။"
+
+msgid "The video call could not be prepared."
+msgstr "ဗီဒီယိုခေါ်ဆိုမှုကို ပြင်ဆင်နိုင်ခြင်း မရှိပါ။"
+
+msgid "The video call request could not be sent."
+msgstr "ဗီဒီယိုခေါ်ဆိုမှု တောင်းဆိုချက်ကို ပို့နိုင်ခြင်း မရှိပါ။"
+
+msgid "The incoming video call could not be processed."
+msgstr "ဝင်လာသော ဗီဒီယိုခေါ်ဆိုမှုကို စီမံနိုင်ခြင်း မရှိပါ။"
+
+msgid "The video call answer could not be prepared."
+msgstr "ဗီဒီယိုခေါ်ဆိုမှု အဖြေကို ပြင်ဆင်နိုင်ခြင်း မရှိပါ။"
+
+msgid "The video call answer could not be sent."
+msgstr "ဗီဒီယိုခေါ်ဆိုမှု အဖြေကို ပို့နိုင်ခြင်း မရှိပါ။"
+
+msgid "The video call answer could not be processed."
+msgstr "ဗီဒီယိုခေါ်ဆိုမှု အဖြေကို စီမံနိုင်ခြင်း မရှိပါ။"
+
+msgid "The video connection failed"
+msgstr "ဗီဒီယိုချိတ်ဆက်မှု မအောင်မြင်ပါ"
+
+msgid "The video connection could not be established."
+msgstr "ဗီဒီယိုချိတ်ဆက်မှုကို တည်ဆောက်နိုင်ခြင်း မရှိပါ။"
+
+msgid "No answer was received."
+msgstr "အဖြေ မရရှိပါ။"
+
+msgid "You refused the call."
+msgstr "သင်က ဖုန်းခေါ်ဆိုမှုကို ငြင်းပယ်လိုက်ပါသည်။"
+
+msgid "You cancelled the call."
+msgstr "သင်က ဖုန်းခေါ်ဆိုမှုကို ပယ်ဖျက်လိုက်ပါသည်။"
+
+msgid "You hung up."
+msgstr "သင်က ဖုန်းချလိုက်ပါသည်။"
+
+msgid "You missed the call."
+msgstr "သင်က ဖုန်းခေါ်ဆိုမှုကို လွတ်သွားပါသည်။"
+
+msgid "Support bot is currently unavailable."
+msgstr "အကူအညီပေး ဘော့တ်ကို လက်ရှိတွင် မရရှိနိုင်ပါ။"
+
+msgid "A support ticket has been created."
+msgstr "အကူအညီ တောင်းခံလွှာတစ်စောင် ဖန်တီးပြီးပါပြီ။"
+
+msgid "Conversation ended."
+msgstr "စကားဝိုင်း ပြီးဆုံးပါပြီ။"
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "အကူအညီပေး ဘော့တ်သည် ဤစကားဝိုင်းကို ဆက်လက်မလုပ်နိုင်ပါ။ ထပ်မံကြိုးစားပါ။"
+
+msgid "Add your first term glossary to this course"
+msgstr "ဤသင်တန်းတွင် သင့်ပထမဆုံး ဝေါဟာရအဘိဓာန်ကို ထည့်ပါ"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "ဤစစ်တမ်းပုံစံကို ဖျက်ရန် သေချာပါသလား။"
+
+msgid "The survey template has been deleted."
+msgstr "စစ်တမ်းပုံစံကို ဖျက်ပြီးပါပြီ။"
+
+msgid "Please select a course."
+msgstr "သင်တန်းတစ်ခုကို ရွေးချယ်ပါ။"
+
+msgid "Please select a session for this course."
+msgstr "ဤသင်တန်းအတွက် ဆက်ရှင်တစ်ခုကို ရွေးချယ်ပါ။"
+
+msgid "The survey has been created from the template."
+msgstr "ပုံစံမှ စစ်တမ်းကို ဖန်တီးပြီးပါပြီ။"
+
+msgid "Survey templates"
+msgstr "စစ်တမ်းပုံစံများ"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "ဆရာများအတွက် ပြန်လည်အသုံးပြုနိုင်သော စစ်တမ်းပုံစံများ ဖန်တီးပြီး သင်တန်း သို့မဟုတ် ဆက်ရှင်သို့ တိုက်ရိုက်သတ်မှတ်ပေးပါ။"
+
+msgid "Subtitle"
+msgstr "ခေါင်းစဉ်ခွဲ"
+
+msgid "Assign to course"
+msgstr "သင်တန်းသို့ သတ်မှတ်ရန်"
+
+msgid "Assign template to course"
+msgstr "ပုံစံကို သင်တန်းသို့ သတ်မှတ်ရန်"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "သင်တန်းတွင် စစ်တမ်းကို တိုက်ရိုက်ဖန်တီးရန် ဆက်ရှင်ကို ဗလာထားပါ။"
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "ဤသင်တန်းကို ဤပေါ်တယ်ရှိ ဆက်ရှင်မှတဆင့် ရရှိနိုင်သောကြောင့် ဆက်ရှင် လိုအပ်ပါသည်။"
+
+msgid "Survey template questions"
+msgstr "စစ်တမ်းပုံစံ မေးခွန်းများ"
+
+msgid "Back to survey templates"
+msgstr "စစ်တမ်းပုံစံများသို့ ပြန်သွားရန်"
+
+msgid "Could not load survey template"
+msgstr "စစ်တမ်းပုံစံကို ဖွင့်နိုင်ခြင်း မရှိပါ"
+
+msgid "Could not load survey template questions"
+msgstr "စစ်တမ်းပုံစံ မေးခွန်းများကို ဖွင့်နိုင်ခြင်း မရှိပါ"
+
+msgid "Could not save survey template question"
+msgstr "စစ်တမ်းပုံစံ မေးခွန်းကို သိမ်းနိုင်ခြင်း မရှိပါ"
+
+msgid "Could not delete survey template question"
+msgstr "စစ်တမ်းပုံစံ မေးခွန်းကို ဖျက်နိုင်ခြင်း မရှိပါ"
+
+msgid "Could not move survey template question"
+msgstr "စစ်တမ်းပုံစံ မေးခွန်းကို ရွှေ့နိုင်ခြင်း မရှိပါ"
+
+msgid "Could not copy survey template question"
+msgstr "စစ်တမ်းပုံစံ မေးခွန်းကို ကူးယူနိုင်ခြင်း မရှိပါ"
+
+msgid "The survey template has been saved."
+msgstr "စစ်တမ်းပုံစံကို သိမ်းပြီးပါပြီ။"
+
+msgid "Edit survey template"
+msgstr "စစ်တမ်းပုံစံခွက်ကို တည်းဖြတ်ရန်"
+
+msgid "Create survey template"
+msgstr "စစ်တမ်းပုံစံခွက် ဖန်တီးရန်"
+
+msgid "The survey template title is required."
+msgstr "စစ်တမ်းပုံစံခွက် ခေါင်းစဉ် လိုအပ်ပါသည်။"
+
+msgid "Visible as template"
+msgstr "ပုံစံခွက်အဖြစ် မြင်နိုင်သည်"
+
+msgid "Create satisfaction survey"
+msgstr "ကျေနပ်မှုစစ်တမ်း ဖန်တီးရန်"
+
+msgid "Training satisfaction survey"
+msgstr "သင်တန်းကျေနပ်မှုစစ်တမ်း"
+
+msgid "Could not create satisfaction survey"
+msgstr "ကျေနပ်မှုစစ်တမ်းကို ဖန်တီး၍မရပါ"
+
+msgid "Use template"
+msgstr "ပုံစံခွက်ကို အသုံးပြုရန်"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "စီမံခန့်ခွဲသူက ပြင်ဆင်ထားသော ပြန်လည်အသုံးပြုနိုင်သည့် ပုံစံခွက်မှ ဤစစ်တမ်းကို ဖန်တီးပါ။"
+
+msgid "Results hidden from teacher/tutor"
+msgstr "ဆရာ/နည်းပြထံမှ ရလဒ်များကို ဖုံးကွယ်ထားသည်"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "ဆရာများနှင့် နည်းပြများသည် တုံ့ပြန်မှုအရေအတွက်ကို ကြည့်ရှုပြီး သတိပေးချက်များ ပို့နိုင်သေးသော်လည်း စစ်တမ်းရလဒ်များကို ဖွင့်ကြည့်ခြင်း သို့မဟုတ် ထုတ်ယူခြင်း မပြုနိုင်ပါ။"
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "ပုံစံခွက်ကို အသုံးပြုပြီးပါပြီ။ စစ်တမ်းဆက်တင်များကို စစ်ဆေးပြီး သိမ်းဆည်း၍ ဖန်တီးပါ။"
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "စစ်တမ်းရလဒ်များကို ဆရာများနှင့် နည်းပြများထံမှ ဖုံးကွယ်ထားသည်။"
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "တုံ့ပြန်မှုအရေအတွက်ကို ကြည့်ရှုရန်နှင့် သတိပေးချက်များ ပို့ရန် ဖိတ်ကြားချက်စာမျက်နှာကို ဆက်လက်အသုံးပြုနိုင်ပါသည်။"
+
+msgid "Payment method"
+msgstr "ငွေပေးချေမှုနည်းလမ်း"
+
+msgid "Preview mode"
+msgstr "ကြိုတင်ကြည့်ရှုမုဒ်"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "ကြိုတင်ကြည့်ရှုမုဒ်တွင် တိုးတက်မှုနှင့် ရမှတ်ကို မသိမ်းဆည်းပါ။"
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "ဤလင့်ခ်ကို သင်ယူလမ်းကြောင်းအတွင်း ပြသ၍မရပါ။"
+
+msgid "Open it in a new tab to view the page."
+msgstr "စာမျက်နှာကို ကြည့်ရန် တက်ဘ်အသစ်တွင် ဖွင့်ပါ။"
+
+msgid "Report a problem with this question"
+msgstr "ဤမေးခွန်းနှင့် ပတ်သက်၍ ပြဿနာ တင်ပြရန်"
+
+msgid "Your report was sent to the teacher."
+msgstr "သင့်တင်ပြချက်ကို ဆရာထံ ပို့ပြီးပါပြီ။"
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "တွေ့ရှိသော အမှား သို့မဟုတ် ပြဿနာကို ဖော်ပြပါ။ သင့်တင်ပြချက်ကို ဆရာထံ ပို့ပါမည်။"
+
+msgid "A comment is required."
+msgstr "မှတ်ချက် လိုအပ်ပါသည်။"
+
+msgid "Could not send the report."
+msgstr "တင်ပြချက်ကို ပို့၍မရပါ။"
+
+msgid "Learner reports"
+msgstr "သင်ယူသူ တင်ပြချက်များ"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "ဤမေးခွန်းအတွက် သင်ယူသူ တင်ပြချက် မရှိသေးပါ။"
+
+msgid "View attempt"
+msgstr "ကြိုးစားမှုကို ကြည့်ရန်"
+
+msgid "Could not load learner reports."
+msgstr "သင်ယူသူ တင်ပြချက်များကို ဖွင့်၍မရပါ။"
+
+msgid "Allow learners to report issues in questions"
+msgstr "မေးခွန်းများတွင် ပြဿနာ တင်ပြခွင့် သင်ယူသူများကို ပေးရန်"
+
+msgid "Skill acquired"
+msgstr "ကျွမ်းကျင်မှု ရရှိပြီး"
+
+msgid "AI Toolbox"
+msgstr "AI ကိရိယာစု"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "AI ဖြင့် အပြန်အလှန် ပညာရေးအက်ပ်များ ဖန်တီးပြီး SCORM ဖြင့် သင်ယူသူ တိုးတက်မှုကို ခြေရာခံပါ။"
+
+msgid "No published applications are available yet."
+msgstr "ထုတ်ဝေထားသော အက်ပ်များ မရှိသေးပါ။"
+
+msgid "Interactive applications"
+msgstr "အပြန်အလှန် အက်ပ်များ"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "တစ်နေရာတည်းမှ ဖန်တီး၊ တိုးတက်အောင်လုပ်၊ ထုတ်ဝေပြီး ဗားရှင်းများကို ပြန်လည်သုံးသပ်ပါ။"
+
+msgid "Open an application to continue from your latest progress."
+msgstr "နောက်ဆုံး တိုးတက်မှုမှ ဆက်လုပ်ရန် အက်ပ်တစ်ခု ဖွင့်ပါ။"
+
+msgid "Interactive learning application"
+msgstr "အပြန်အလှန် သင်ယူမှုအက်ပ်"
+
+msgid "Create an interactive learning app"
+msgstr "အပြန်အလှန် သင်ယူမှုအက်ပ် ဖန်တီးရန်"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "လှုပ်ရှားမှုကို ဖော်ပြပါ။ Chamilo က တိုးတက်မှုနှင့် ရမှတ်ခြေရာခံမှုပါသော ဗားရှင်းခွဲ SCORM အက်ပ်ကို ဖန်တီးပါမည်။"
+
+msgid "Idea"
+msgstr "အကြံဉာဏ်"
+
+msgid "Application"
+msgstr "အက်ပ်"
+
+msgid "What should the application do?"
+msgstr "အက်ပ်က ဘာလုပ်သင့်သလဲ။"
+
+msgid "How it works"
+msgstr "အလုပ်လုပ်ပုံ"
+
+msgid "AI generation"
+msgstr "AI ဖန်တီးမှု"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "အက်ပ်ကို သင့်ညွှန်ကြားချက်များမှ ဖန်တီးပြီး ဗားရှင်း ၁ အဖြစ် သိမ်းဆည်းပါသည်။"
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "သင်ယူသူ တိုးတက်မှု၊ ရမှတ်နှင့် ပြန်လည်စတင်မှု ဒေတာကို Chamilo သို့ အစီရင်ခံပါသည်။"
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "နောင် တိုးတက်မှုများသည် ယခင်ဗားရှင်းများကို မဖျက်ဘဲ ဗားရှင်းအသစ်များ ဖန်တီးပါသည်။"
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "သင်ယူရည်မှန်းချက်၊ စည်းမျဉ်းများ၊ အဆင့်များ၊ ရမှတ်ပေးပုံနှင့် သင်ယူသူ ပြီးဆုံးသည့်အခါ ဖြစ်သင့်သည်များကို ထည့်သွင်းပါ။"
+
+msgid "You are not allowed to create content in this context."
+msgstr "ဤအခြေအနေတွင် အကြောင်းအရာ ဖန်တီးခွင့် မရှိပါ။"
+
+msgid "The application was generated successfully."
+msgstr "အက်ပ်ကို အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ။"
+
+msgid "Open in student view"
+msgstr "ကျောင်းသားမြင်ကွင်းတွင် ဖွင့်ရန်"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "ကြိုတင်ကြည့်ရှုခြင်းနှင့် ထုတ်ဝေခြင်းကို ဖွင့်ရန် အပလီကေးရှင်းကို ထုတ်လုပ်ပါ။"
+
+msgid "Improve with AI"
+msgstr "AI ဖြင့် တိုးတက်အောင်လုပ်ရန်"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "ပြောင်းလဲမှုကို ဖော်ပြပါ။ ဗားရှင်းအသစ်ကို ဖန်တီးမည်ဖြစ်ပြီး ယခင်ဗားရှင်းများ ဆက်လက်ရရှိနိုင်ပါမည်။"
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "ထုတ်လုပ်လိုသော အပြည့်အစုံ အပြန်အလှန်လှုပ်ရှားမှုကို ဖော်ပြပါ။"
+
+msgid "What should be improved?"
+msgstr "မည်သည့်အရာကို တိုးတက်အောင်လုပ်သင့်သနည်း။"
+
+msgid "Generate new version"
+msgstr "ဗားရှင်းအသစ် ထုတ်လုပ်ရန်"
+
+msgid "Version history"
+msgstr "ဗားရှင်းမှတ်တမ်း"
+
+msgid "Preview, download or restore any generated version."
+msgstr "ထုတ်လုပ်ထားသော ဗားရှင်းများကို ကြိုတင်ကြည့်ရှု၊ ဒေါင်းလုဒ် သို့မဟုတ် ပြန်လည်ရယူပါ။"
+
+msgid "A new version was generated."
+msgstr "ဗားရှင်းအသစ်ကို ထုတ်လုပ်ပြီးပါပြီ။"
+
+msgid "Version restored"
+msgstr "ဗားရှင်းကို ပြန်လည်ရယူပြီးပါပြီ"
+
+msgid "The support bot tree has been published."
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင်ကို ထုတ်ဝေပြီးပါပြီ။"
+
+msgid "The support bot tree has been archived."
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင်ကို မော်ကွန်းတင်ပြီးပါပြီ။"
+
+msgid "The support bot tree has been duplicated."
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင်ကို မိတ္တူကူးပြီးပါပြီ။"
+
+msgid "The support bot tree has been deleted."
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင်ကို ဖျက်ပြီးပါပြီ။"
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "ဤပံ့ပိုးမှုဘော့သစ်ပင်ကို ဖျက်ရန် သေချာပါသလား။"
+
+msgid "The support bot tree has been imported."
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင်ကို တင်သွင်းပြီးပါပြီ။"
+
+msgid "Create support bot tree"
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင် ဖန်တီးရန်"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "အသုံးပြုသူများကို ပံ့ပိုးမေးခွန်းများမှတစ်ဆင့် လမ်းညွှန်ပြီး လက်မှတ်များသို့ တိုးမြှင့်နိုင်သော ပုံသေဆုံးဖြတ်ချက်သစ်ပင်ကို တည်ဆောက်ပါ။"
+
+msgid "Portal scope"
+msgstr "ပေါ်တယ်အကျယ်အဝန်း"
+
+msgid "Duplicate"
+msgstr "မိတ္တူကူးရန်"
+
+msgid "Archive"
+msgstr "မော်ကွန်းတင်ရန်"
+
+msgid "View conversations"
+msgstr "စကားဝိုင်းများ ကြည့်ရန်"
+
+msgid "Import support bot tree"
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင် တင်သွင်းရန်"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "JSON ထုတ်ယူမှု သို့မဟုတ် CSV ဆုံးဖြတ်ချက်သစ်ပင်ကို တင်သွင်းပါ။ တင်သွင်းသောသစ်ပင်ကို အမြဲတမ်း မူကြမ်းအသစ်အဖြစ် ဖန်တီးပါသည်။"
+
+msgid "Resolved"
+msgstr "ဖြေရှင်းပြီး"
+
+msgid "Escalated"
+msgstr "တိုးမြှင့်ပြီး"
+
+msgid "Abandoned"
+msgstr "စွန့်လွှတ်ပြီး"
+
+msgid "Support bot conversations"
+msgstr "ပံ့ပိုးမှုဘော့ စကားဝိုင်းများ"
+
+msgid "Outcome"
+msgstr "ရလဒ်"
+
+msgid "Started at"
+msgstr "စတင်ချိန်"
+
+msgid "Ended at"
+msgstr "ပြီးဆုံးချိန်"
+
+msgid "View conversation"
+msgstr "စကားဝိုင်း ကြည့်ရန်"
+
+msgid "Go to node"
+msgstr "နိုဒ်သို့ သွားရန်"
+
+msgid "Create support ticket"
+msgstr "ပံ့ပိုးမှုလက်မှတ် ဖန်တီးရန်"
+
+msgid "End conversation"
+msgstr "စကားဝိုင်း အဆုံးသတ်ရန်"
+
+msgid "Node"
+msgstr "နိုဒ်"
+
+msgid "A support bot tree requires at least one node."
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင်တွင် အနည်းဆုံး နိုဒ်တစ်ခု လိုအပ်သည်။"
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "ဤနိုဒ်ကို ဖျက်ရန် သေချာပါသလား။ ၎င်းသို့ ချိတ်ဆက်မှုများကို ရှင်းလင်းပါမည်။"
+
+msgid "Every support bot node requires at least one option."
+msgstr "ပံ့ပိုးမှုဘော့နိုဒ်တိုင်းတွင် အနည်းဆုံး ရွေးချယ်မှုတစ်ခု လိုအပ်သည်။"
+
+msgid "The support bot tree title is required."
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင် ခေါင်းစဉ် လိုအပ်သည်။"
+
+msgid "A support bot entry node is required."
+msgstr "ပံ့ပိုးမှုဘော့ ဝင်ရောက်နိုဒ် လိုအပ်သည်။"
+
+msgid "Every support bot node requires content."
+msgstr "ပံ့ပိုးမှုဘော့နိုဒ်တိုင်းတွင် အကြောင်းအရာ လိုအပ်သည်။"
+
+msgid "Every support bot option requires a label."
+msgstr "ပံ့ပိုးမှုဘော့ ရွေးချယ်မှုတိုင်းတွင် အညွှန်း လိုအပ်သည်။"
+
+msgid "Select a target node for every go-to option."
+msgstr "သွားရန် ရွေးချယ်မှုတိုင်းအတွက် ပစ်မှတ်နိုဒ်ကို ရွေးချယ်ပါ။"
+
+msgid "Enter a relative URL for every link option."
+msgstr "လင့်ခ်ရွေးချယ်မှုတိုင်းအတွက် ဆက်စပ် URL ကို ထည့်သွင်းပါ။"
+
+msgid "Select a ticket category for every escalation option."
+msgstr "တိုးမြှင့်ရွေးချယ်မှုတိုင်းအတွက် လက်မှတ်အမျိုးအစားကို ရွေးချယ်ပါ။"
+
+msgid "The support bot tree has been saved."
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင်ကို သိမ်းဆည်းပြီးပါပြီ။"
+
+msgid "Edit support bot tree"
+msgstr "ပံ့ပိုးမှုဘော့သစ်ပင် တည်းဖြတ်ရန်"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "ထုတ်ဝေပြီးနှင့် မော်ကွန်းတင်ပြီး ပံ့ပိုးမှုဘော့ဗားရှင်းများသည် ဖတ်ရန်သာဖြစ်သည်။ မူကြမ်းဗားရှင်းအသစ်ကို တည်းဖြတ်ရန် စာရင်းမှ ဤသစ်ပင်ကို မိတ္တူကူးပါ။"
+
+msgid "Default ticket project"
+msgstr "ပုံသေ လက်မှတ်ပရောဂျက်"
+
+msgid "Decision tree rules"
+msgstr "ဆုံးဖြတ်ချက်သစ်ပင် စည်းမျဉ်းများ"
+
+msgid "Every node must contain at least one option."
+msgstr "node တစ်ခုစီတွင် ရွေးချယ်စရာ အနည်းဆုံး တစ်ခု ပါရမည်။"
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "နောက်ဆုံး node သည် စကားပြောဆိုမှုကို အဆုံးသတ်ရမည် သို့မဟုတ် ပံ့ပိုးမှုလက်မှတ် ဖန်တီးရမည်။"
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Go-to လင့်များသည် v1 တွင် စက်ဝိုင်းများ မဖန်တီးရ။"
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "ပြင်ပ URL များကို v1 တွင် ခွင့်မပြုပါ။ လင့်လုပ်ဆောင်ချက်များသည် Chamilo ၏ ဆက်စပ်လမ်းကြောင်းကို အသုံးပြုရမည်။"
+
+msgid "Nodes"
+msgstr "Nodes"
+
+msgid "Add node"
+msgstr "Node ထည့်ရန်"
+
+msgid "Entry node"
+msgstr "ဝင်ရောက်မှု node"
+
+msgid "Set as entry node"
+msgstr "ဝင်ရောက်မှု node အဖြစ် သတ်မှတ်ရန်"
+
+msgid "Target node"
+msgstr "ပစ်မှတ် node"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Chamilo ၏ ဆက်စပ်လမ်းကြောင်းကို အသုံးပြုပါ၊ ဥပမာ /tickets။"
+
+msgid "Ticket category"
+msgstr "လက်မှတ် အမျိုးအစား"
+
+msgid "Select a default ticket project first."
+msgstr "ပုံသေ လက်မှတ်ပရောဂျက်ကို ဦးစွာ ရွေးချယ်ပါ။"
+
+msgid "Closing message"
+msgstr "ပိတ်သိမ်း စာတို"
+
+msgid "Select a node to edit it."
+msgstr "တည်းဖြတ်ရန် node တစ်ခုကို ရွေးချယ်ပါ။"
+
+msgid "Support bot conversation"
+msgstr "ပံ့ပိုးမှုဘော့ စကားပြောဆိုမှု"
+
+msgid "Transcript of %s"
+msgstr "%s ၏ မှတ်တမ်း"
+
+msgid "Download unofficial transcript"
+msgstr "တရားဝင်မဟုတ်သော မှတ်တမ်းကို ဒေါင်းလုဒ်လုပ်ရန်"
+
+msgid "Issue official transcript"
+msgstr "တရားဝင် မှတ်တမ်း ထုတ်ပေးရန်"
+
+msgid "Official transcripts"
+msgstr "တရားဝင် မှတ်တမ်းများ"
+
+msgid "No official transcript has been issued yet."
+msgstr "တရားဝင် မှတ်တမ်းကို မထုတ်ပေးရသေးပါ။"
+
+msgid "Issued by"
+msgstr "ထုတ်ပေးသူ"
+
+msgid "Verify"
+msgstr "စစ်ဆေးရန်"
+
+msgid "Signature of official transcripts"
+msgstr "တရားဝင် မှတ်တမ်းများ၏ လက်မှတ်"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "ဤပုံကို ဤပေါ်တယ်၏ တရားဝင် မှတ်တမ်းများတွင် အသိအမှတ်ပြုလက်မှတ် ဆက်တင်များတွင် သတ်မှတ်ထားသော လက်မှတ်ထိုးသူ အမည်နှင့် ရာထူးအထက်တွင် ပုံနှိပ်ပါသည်။"
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "ဤစာမျက်နှာတွင် ဖော်ပြထားသော သင်တန်းများနှင့် အဆင့်များဖြင့် လက်မှတ်ထိုးထားသော တရားဝင် မှတ်တမ်းကို ထုတ်ပေးမည်လား။ ရုပ်သိမ်းသည်အထိ အွန်လိုင်းတွင် စစ်ဆေးနိုင်သည်။"
+
+msgid "Official transcript issued"
+msgstr "တရားဝင် မှတ်တမ်း ထုတ်ပေးပြီး"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "ဤတရားဝင် မှတ်တမ်းကို ရုပ်သိမ်းမည်လား။ ထို့နောက် စစ်ဆေးရေးစာမျက်နှာတွင် ရုပ်သိမ်းပြီးဟု ပြသမည်။"
+
+msgid "Official transcript revoked"
+msgstr "တရားဝင် မှတ်တမ်း ရုပ်သိမ်းပြီး"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "PNG သို့မဟုတ် JPEG ပုံကို ဦးစွာ ရွေးချယ်ပါ။"
+
+msgid "Signed credential"
+msgstr "လက်မှတ်ထိုးထားသော အထောက်အထား"
+
+msgid "Issue signed credential"
+msgstr "လက်မှတ်ထိုးထားသော အထောက်အထား ထုတ်ပေးရန်"
+
+msgid "Verify credential"
+msgstr "အထောက်အထား စစ်ဆေးရန်"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Sepolia စမ်းသပ်ကွန်ရက်တွင် ချိတ်ရန်"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "ရှိပြီးသား Sepolia ငွေလွှဲမှုကို အတည်ပြုရန်"
+
+msgid "Revoke signed credential"
+msgstr "လက်မှတ်ထိုးထားသော အထောက်အထား ရုပ်သိမ်းရန်"
+
+msgid "Delete certificate"
+msgstr "အသိအမှတ်ပြုလက်မှတ် ဖျက်ရန်"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "ရှိပြီးသား Sepolia ငွေလွှဲမှုကို အတည်ပြုရန်"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia ငွေလွှဲမှု ဟက်ရှ်"
+
+msgid "Verify transaction"
+msgstr "ငွေလွှဲမှု စစ်ဆေးရန်"
+
+msgid "Anchored"
+msgstr "ချိတ်ပြီး"
+
+msgid "Issued"
+msgstr "ထုတ်ပေးပြီး"
+
+msgid "Not issued"
+msgstr "မထုတ်ပေးရသေး"
+
+msgid "Consent required"
+msgstr "သဘောတူညီချက် လိုအပ်သည်"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia ငွေလွှဲမှု အတည်ပြုပြီး စစ်ဆေးပြီး"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia စမ်းသပ်ကွန်ရက် ပိုက်ဆံအိတ်က ငွေလွှဲမှုကို လက်မှတ်ထိုးရန် တောင်းဆိုမည်။ အသိအမှတ်ပြုလက်မှတ် လက်ဗွေကိုသာ ချိတ်မည်။ ဆက်လုပ်မည်လား။"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "ဤလက်မှတ်ထိုးထားသော အထောက်အထားကို ရုပ်သိမ်းမည်လား။ ဘလော့ခ်ချိန်း ငွေလွှဲမှုသည် အမြဲတမ်း ကျန်ရှိနေမည်ဖြစ်သော်လည်း စစ်ဆေးရေးစာမျက်နှာတွင် ရုပ်သိမ်းမှုကို ဖော်ပြမည်။"
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "ဤသင်ယူသူအတွက် လက်မှတ်ထိုးထားသော အသိအမှတ်ပြုလက်မှတ် အထောက်အထား ထုတ်ပေးမည်လား။ ၎င်းသည် အတည်ပြုထားသော ကိုယ်ရေးအချက်အလက်များကို သီးသန့်လင့်ဖြင့် စစ်ဆေးနိုင်စေသည်။"
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia အတွက် EVM နှင့် ကိုက်ညီသော ဘရောက်ဇာ ပိုက်ဆံအိတ် လိုအပ်သည်။"
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "သင့်ပိုက်ဆံအိတ်တွင် Sepolia စမ်းသပ်ကွန်ရက် (chain ID 11155111) ကို ရွေးချယ်ပါ။"
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "ပိုက်ဆံအိတ်လိပ်စာ သို့မဟုတ် လက်မှတ်လက်ဗွေရာ မမှန်ကန်ပါ။"
+
+msgid "Transaction pending"
+msgstr "ငွေလွှဲမှု ဆိုင်းငံ့နေသည်"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "ရှိပြီးသား Sepolia ငွေလွှဲမှုကို နောက်မှ အတည်ပြုရန် သုံးပါ။"
+
+msgid "Signed credential issued"
+msgstr "လက်မှတ်ထိုးထားသော အထောက်အထား ထုတ်ပေးပြီး"
+
+msgid "Credential revoked"
+msgstr "အထောက်အထား ပယ်ဖျက်ပြီး"
+
+msgid "Transaction hash"
+msgstr "ငွေလွှဲမှု ဟက်ရှ်"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "ထုတ်ဝေခွင့်ပြုချက်သည် စီမံခန့်ခွဲသူအား လက်မှတ်ထိုးထားသော လက်မှတ်အထောက်အထား ထုတ်ပေးရန်နှင့် ၎င်း၏ SHA-256 လက်ဗွေရာကို Sepolia စမ်းသပ်ကွန်ရက်တွင် ချိတ်တွဲရန် ရွေးချယ်ခွင့်ပေးသည်။ အမည် သို့မဟုတ် ကိုယ်ရေးကိုယ်တာအချက်အလက်များကို ကွင်းဆက်ပေါ်သို့ မပို့ပါ။ သင်သည် ခွင့်ပြုချက်ကို အချိန်မရွေး ရုပ်သိမ်းနိုင်သည်။"
+
+msgid "Publication consent"
+msgstr "ထုတ်ဝေခွင့်ပြုချက်"
+
+msgid "Not approved"
+msgstr "အတည်မပြုရသေးပါ"
+
+msgid "Withdraw consent"
+msgstr "ခွင့်ပြုချက် ရုပ်သိမ်းရန်"
+
+msgid "Approve publication"
+msgstr "ထုတ်ဝေမှု အတည်ပြုရန်"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "ကျွန်ုပ်၏အမည်၊ သင်တန်း၊ ရမှတ်နှင့် ထုတ်ပေးသည့်ရက်စွဲကို ပြသသည့် လက်မှတ်ထိုးထားသော၊ အများပြည်သူ စစ်ဆေးနိုင်သော အထောက်အထားကို ခွင့်ပြုပါသည်။ စီမံခန့်ခွဲသူသည် ၎င်း၏ SHA-256 လက်ဗွေရာကိုသာ Sepolia စမ်းသပ်ကွန်ရက်တွင် ထုတ်ဝေနိုင်သည်။ နောက်မှ ရုပ်သိမ်းသော်လည်း လက်ဗွေရာသည် အမြဲတမ်းဖြစ်သည်။ ဆက်လုပ်မည်လား။"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "ဤလက်မှတ်အတွက် ထုတ်ဝေအတည်ပြုချက်ကို ရုပ်သိမ်းမည်လား။"
+
+msgid "Publication approval recorded"
+msgstr "ထုတ်ဝေအတည်ပြုချက် မှတ်တမ်းတင်ပြီး"
+
+msgid "Publication approval withdrawn"
+msgstr "ထုတ်ဝေအတည်ပြုချက် ရုပ်သိမ်းပြီး"
+
+msgid "Read more"
+msgstr "ပိုမိုဖတ်ရန်"
+
+msgid "Participation: %s of %s posts"
+msgstr "ပါဝင်မှု: ပို့စ် %s မှ %s"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "အခြားပါဝင်သူများ၏ ပြန်ကြားချက်များကို ကြည့်ရန် သင့်ပံ့ပိုးမှုကို ပို့စ်တင်ပါ။"
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "ခွင့်ပြုထားသော စုံစမ်းသူများသာ သင့်လျော်သော အစီရင်ခံစာများကို ပြန်လည်သုံးသပ်နိုင်သည်။ အစီရင်ခံသူ၏ အထောက်အထားများသည် ပုံမှန်အားဖြင့် လျှို့ဝှက်ထားသည်။"
+
+msgid "New confidential report"
+msgstr "လျှို့ဝှက်အစီရင်ခံစာအသစ်"
+
+msgid "Reported user"
+msgstr "အစီရင်ခံခံရသူ"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "ပြန်လည်သုံးသပ်ရန် စောင့်ဆိုင်းနေသော သင့်လျော်သော လျှို့ဝှက်အစီရင်ခံစာများ ရှိသည်။"
+
+msgid "Eligible investigations"
+msgstr "သင့်လျော်သော စုံစမ်းမှုများ"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "အနည်းဆုံး မတူညီသော အသုံးပြုသူ %s ဦးက တူညီသောသူကို အစီရင်ခံပြီးမှသာ အမှုတစ်ခု ဤနေရာတွင် ပေါ်လာသည်။"
+
+msgid "Distinct reporters"
+msgstr "မတူညီသော အစီရင်ခံသူများ"
+
+msgid "Reports for selected user"
+msgstr "ရွေးချယ်ထားသော အသုံးပြုသူအတွက် အစီရင်ခံစာများ"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "လျှို့ဝှက်အစီရင်ခံခြင်းကို လက်ရှိတွင် မရရှိနိုင်ပါ။"
+
+msgid "The investigation could not be loaded."
+msgstr "စုံစမ်းမှုကို ဖွင့်၍မရပါ။"
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "သင့်အထောက်အထားကို စုံစမ်းသူများထံမှ ပုံမှန်အားဖြင့် ကာကွယ်ထားသော်လည်း အစီရင်ခံစာစာသား သို့မဟုတ် ပူးတွဲဖိုင်များတွင် ဖော်ထုတ်နိုင်သော အသေးစိတ်များကို ထည့်ခြင်းမှ ရှောင်ကြဉ်ပါ။ ဤသည် အရေးပေါ်ဝန်ဆောင်မှု မဟုတ်ပါ။"
+
+msgid "Find the user involved"
+msgstr "ပါဝင်သော အသုံးပြုသူကို ရှာပါ"
+
+msgid "Name or username"
+msgstr "အမည် သို့မဟုတ် အသုံးပြုသူအမည်"
+
+msgid "Describe the situation"
+msgstr "အခြေအနေကို ဖော်ပြပါ"
+
+msgid "Evidence (optional)"
+msgstr "အထောက်အထား (ရွေးချယ်နိုင်သည်)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "ဖိုင် သုံးဖိုင်အထိ၊ တစ်ဖိုင်လျှင် အများဆုံး 8 MiB။ ပုံများ၊ အသံ သို့မဟုတ် ဗီဒီယိုတိုများ။"
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "ဤအစီရင်ခံစာအတွက် ခွင့်ပြုထားသော စုံစမ်းသူများက ကျွန်ုပ်၏အမည်နှင့် အီးမေးလ်ကို ကြည့်ရှုနိုင်သည်ဟု သဘောတူပါသည်။ ဤခွင့်ပြုချက်ကို နောက်မှ ရုပ်သိမ်းနိုင်သည်။"
+
+msgid "Send confidential report"
+msgstr "လျှို့ဝှက်အစီရင်ခံစာ ပို့ရန်"
+
+msgid "Could not search users"
+msgstr "အသုံးပြုသူများကို ရှာ၍မရပါ"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "ဖိုင် သုံးဖိုင်အထိ၊ တစ်ဖိုင်လျှင် အများဆုံး 8 MiB။"
+
+msgid "The confidential report could not be saved."
+msgstr "လျှို့ဝှက်အစီရင်ခံစာကို သိမ်း၍မရပါ။"
+
+msgid "Confidential report"
+msgstr "လျှို့ဝှက်အစီရင်ခံစာ"
+
+msgid "Confidential conversation"
+msgstr "လျှို့ဝှက်စကားပြောဆိုမှု"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "ဆက်သွယ်ရေးမျှဝေခြင်းကို ဖွင့်မထားပါက စုံစမ်းသူများသည် အစီရင်ခံသူ၏ အထောက်အထားကို မမြင်ဘဲ ဤစကားပြောဆိုမှုမှတစ်ဆင့် ဆက်သွယ်နိုင်သည်။"
+
+msgid "Reporter"
+msgstr "အစီရင်ခံသူ"
+
+msgid "Investigator"
+msgstr "စုံစမ်းသူ"
+
+msgid "Additional evidence (optional)"
+msgstr "ထပ်ဆောင်းအထောက်အထား (ရွေးချယ်နိုင်သည်)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "ဖိုင် သုံးဖိုင်အထိ၊ တစ်ဖိုင်လျှင် အများဆုံး 8 MiB၊ အစီရင်ခံစာတစ်ခုလျှင် ဖိုင်ဆယ်ဖိုင်။"
+
+msgid "Contact shared voluntarily"
+msgstr "ဆက်သွယ်ရေးကို စိတ်ကြိုက်မျှဝေပြီး"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "ဤအစီရင်ခံစာအတွက် စုံစမ်းသူများက ကျွန်ုပ်၏အမည်နှင့် အီးမေးလ်ကို ကြည့်ရှုခွင့်ပေးရန်"
+
+msgid "This confidential report is not available."
+msgstr "ဤလျှို့ဝှက်အစီရင်ခံစာကို မရရှိနိုင်ပါ။"
+
+msgid "Your message could not be saved."
+msgstr "သင့်မက်ဆေ့ချ်ကို သိမ်းဆည်း၍မရပါ။"
+
+msgid "Contact sharing could not be updated."
+msgstr "အဆက်အသွယ်မျှဝေခြင်းကို အပ်ဒိတ်လုပ်၍မရပါ။"
+
+msgid "Evidence could not be downloaded."
+msgstr "အထောက်အထားကို ဒေါင်းလုဒ်လုပ်၍မရပါ။"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ပုံစံဖြည့် လှုပ်ရှားမှု ဥပမာ : ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း တွက်ချက်ခြင်း</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =အလေးချိန်/အရပ်<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ပုံစံဖြည့် လှုပ်ရှားမှု ဥပမာ : ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း တွက်ချက်ခြင်း</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>အသက်</strong></td>            <td width=\"75%\" style=\"\">[25] နှစ်</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>လိင်</strong></td>            <td style=\"\" text-align:=\"\">[M] (M သို့မဟုတ် F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>အလေးချိန်</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>အရပ်</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>ခန္ဓာကိုယ်ထုထည်ညွှန်းကိန်း</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =အလေးချိန်/အရပ်<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia ဆောင်းပါး</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "အစီရင်ခံစာများမှ IP လိပ်စာကို ဖုံးကွယ်ရန်"
+
+msgid "Course settings policies"
+msgstr "သင်တန်းဆက်တင် မူဝါဒများ"
+
+msgid "Academic transcripts"
+msgstr "ပညာရေးမှတ်တမ်းများ"
+
+msgid "Transcript program title"
+msgstr "မှတ်တမ်း ပရိုဂရမ်ခေါင်းစဉ်"
+
+msgid "Transcript course code"
+msgstr "မှတ်တမ်း သင်တန်းကုဒ်"
+
+msgid "Transcript course hours field"
+msgstr "မှတ်တမ်း သင်တန်းနာရီ ကွက်လပ်"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "မှတ်တမ်းတွင် ပြီးစီးနာရီများသည် လိုအပ်နာရီများဖြစ်သည်"
+
+msgid "Transcript student number field"
+msgstr "မှတ်တမ်း ကျောင်းသားနံပါတ် ကွက်လပ်"
+
+msgid "Transcript address fields"
+msgstr "မှတ်တမ်း လိပ်စာကွက်လပ်များ"
+
+msgid "Transcript grading scale"
+msgstr "မှတ်တမ်း အဆင့်သတ်မှတ်စကေး"
+
+msgid "Transcript GPA note"
+msgstr "မှတ်တမ်း GPA မှတ်ချက်"
+
+msgid "Transcript signatory name"
+msgstr "မှတ်တမ်း လက်မှတ်ထိုးသူအမည်"
+
+msgid "Transcript signatory title"
+msgstr "မှတ်တမ်း လက်မှတ်ထိုးသူရာထူး"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "လက်မှတ်ထိုးထားသော လက်မှတ်များနှင့် ရွေးချယ်နိုင်သော Sepolia စမ်းသပ်ကွန်ရက် ချိတ်ဆက်မှုကို ဖွင့်ရန်"
+
+msgid "Show thread replies only after participating"
+msgstr "ပါဝင်ပြီးမှသာ ကြိုးချည် ပြန်ကြားချက်များကို ပြရန်"
+
+msgid "Show the forum category description in threads"
+msgstr "ကြိုးချည်များတွင် ဖိုရမ်အမျိုးအစား ဖော်ပြချက်ကို ပြရန်"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "ဖိုရမ်ပါဝင်မှု ဆက်တင်များကို သင်တန်းအလိုက် ပြောင်းလဲနိုင်သည်"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "ဖိုရမ်ကြိုးချည်တစ်ခုတွင် ပြသမည့် ပို့စ်အများဆုံးအရေအတွက်"
+
+msgid "Posts required to complete a forum thread"
+msgstr "ဖိုရမ်ကြိုးချည်တစ်ခု ပြီးစီးရန် လိုအပ်သော ပို့စ်များ"
+
+msgid "Track e-mail openings"
+msgstr "အီးမေးလ်ဖွင့်ခြင်းများကို ခြေရာခံရန်"
+
+msgid "Allow e-mail replies to messages"
+msgstr "မက်ဆေ့ချ်များသို့ အီးမေးလ်ဖြင့် ပြန်ကြားခွင့်ပြုရန်"
+
+msgid "Inbound e-mail address"
+msgstr "ဝင်ရောက်အီးမေးလ်လိပ်စာ"
+
+msgid "Inbound mailbox DSN"
+msgstr "ဝင်ရောက်စာတိုက်ပုံး DSN"
+
+msgid "Remember me duration (days)"
+msgstr "ကျွန်ုပ်ကို မှတ်ထားရန် ကာလ (ရက်)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "MCP ကျော်လွန်၍ OAuth Dynamic Client Registration ကို ဖွင့်ရန်"
+
+msgid "Enable confidential welfare reporting"
+msgstr "လျှို့ဝှက် သုခချမ်းသာ အစီရင်ခံခြင်းကို ဖွင့်ရန်"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "စုံစမ်းစစ်ဆေးမှုအတွက် ကွဲပြားသော အနည်းဆုံး အစီရင်ခံသူများ"
+
+msgid "Allow confidential evidence attachments"
+msgstr "လျှို့ဝှက် အထောက်အထား ပူးတွဲဖိုင်များကို ခွင့်ပြုရန်"
+
+msgid "Show confidential investigation notifications"
+msgstr "လျှို့ဝှက် စုံစမ်းစစ်ဆေးမှု အကြောင်းကြားချက်များကို ပြရန်"
+
+msgid "Enable support chatbot"
+msgstr "အထောက်အကူ chatbot ကို ဖွင့်ရန်"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "ဝေါဟာရစကားလုံးများကို အလိုအလျောက် မီးမောင်းထိုးပြမည့်နေရာကို ရွေးပါ- စာရွက်စာတမ်းများ၊ လေ့ကျင့်ခန်းများနှင့် သင်ယူလမ်းကြောင်းများ။"
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "မြင်ကွင်းအစီရင်ခံခြင်းနှင့် အစီရင်ခံစာ ထုတ်ယူမှုများတွင် IP လိပ်စာများကို ဖုံးကွယ်ပါ။ IP လိပ်စာများကို သိမ်းဆည်းထားပြီး ခွင့်ပြုထားသော ကိုယ်ရေးကိုယ်တာဒေတာ လုပ်ထုံးလုပ်နည်းများမှတစ်ဆင့် ဝင်ရောက်နိုင်ပါသည်။"
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "ပလက်ဖောင်း ပုံသေများနှင့် သင်တန်းတည်းဖြတ်ခွင့်များ၊ သင်တန်းဆက်တင်တွင် စီမံသည်။"
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "အသုံးပြုသူများသည် ပြီးစီးခဲ့သော သင်တန်းများ၏ တရားဝင်မဟုတ်သော မှတ်တမ်းကို ဒေါင်းလုဒ်လုပ်ခွင့်ပြုပြီး စီမံခန့်ခွဲသူများ၊ ဆက်ရှင်စီမံခန့်ခွဲသူများနှင့် HR မန်နေဂျာများသည် ၎င်းတို့စီမံသော အသုံးပြုသူများအတွက် လက်မှတ်ထိုးထားသော တရားဝင်မှတ်တမ်းများ ထုတ်ပေးခွင့်ပြုပါ။ လက်မှတ်ပုံကို အသုံးပြုသူ၏ မှတ်တမ်းစာမျက်နှာမှ အပ်လုဒ်လုပ်သည်။"
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "မှတ်တမ်းတိုင်းတွင် ပုံနှိပ်မည့် ပရိုဂရမ်ခေါင်းစဉ်၊ ဥပမာ ဤပလက်ဖောင်းတွင် ပြင်ဆင်သော ဒီပလိုမာအမည်။"
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "မှတ်တမ်းများ၏ သင်တန်းကုဒ်ကော်လံကို ဖြည့်မည့် သင်တန်းကွက်လပ်- သင်တန်းကုဒ် သို့မဟုတ် ဌာနအမည်။"
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "သင်တန်းနာရီအရေအတွက်ကို သိမ်းထားသော သင်တန်းအပိုကွက်လပ်၏ ကိန်းရှင်။ သင်တန်းကြာချိန်ကို အသုံးပြုရန် ဗလာထားပါ။"
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "သင်တန်း၏ လိုအပ်နာရီများကို သင်ယူသူ ပြီးစီးသော နာရီအဖြစ် ပုံနှိပ်ပါ။ ပိတ်ထားပါက ပြီးစီးနာရီများသည် သင်ယူသူ သင်တန်းတွင် ကုန်ဆုံးသော အချိန်ဖြစ်သည်။"
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "မှတ်တမ်းများတွင် ပုံနှိပ်မည့် ကျောင်းသားနံပါတ်ကို သိမ်းထားသော အသုံးပြုသူအပိုကွက်လပ်၏ ကိန်းရှင်။ မပုံနှိပ်ရန် ဗလာထားပါ။"
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "မှတ်တမ်းများတွင် အသုံးပြုသူလိပ်စာနောက်တွင် ပုံနှိပ်မည့် အသုံးပြုသူအပိုကွက်လပ်များ၏ ကော်မာခွဲကိန်းရှင်များ၊ ဥပမာ မြို့၊ ပြည်နယ်နှင့် စာပို့ကုဒ်။"
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "အဆင့်အက္ခရာများ၏ JSON စာရင်း၊ အမြင့်ဆုံး အနည်းဆုံးရမှတ်မှ အောက်သို့- ပစ္စည်းတစ်ခုစီတွင် ရာခိုင်နှုန်းအနည်းဆုံးရမှတ် (min)၊ အက္ခရာနှင့် GPA တွက်ချက်ရန် အသုံးပြုသော အဆင့်အမှတ်များ ပါရှိသည်။"
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "GPA တွက်ချက်ပုံ ရှင်းလင်းချက်၊ မှတ်တမ်းများတွင် GPA အောက်တွင် ပုံနှိပ်သည်။"
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "တရားဝင်မှတ်တမ်းများကို လက်မှတ်ထိုးသော ကျောင်းအရာရှိ၏ အမည်။"
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "တရားဝင်မှတ်တမ်းများကို လက်မှတ်ထိုးသော ကျောင်းအရာရှိ၏ ရာထူး။"
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "ပိုင်ရှင်၏ ရှင်းလင်းသော သဘောတူညီချက်နှင့် စီမံခန့်ခွဲသူ၏ လက်ဖြင့် လုပ်ဆောင်ချက်များ လိုအပ်သည်။ SHA-256 လက်ဗွေရာများကိုသာ ကွင်းဆက်ပေါ်သို့ ပို့သည်။"
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "သင်ယူသူများသည် ဖိုရမ်ကြိုးတစ်ခုတွင် ကိုယ်တိုင်မပို့မချင်း ပထမဆုံးပို့စ်ကိုသာ မြင်ရသည်။ စီမံခန့်ခွဲသူများ၊ ဆရာများ၊ နည်းပြများနှင့် အုပ်စုနည်းပြများသည် ပို့စ်အားလုံးကို အမြဲမြင်ရသည်။"
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "ဖိုရမ်အမျိုးအစား၏ ခေါင်းစဉ်နှင့် အတိုချုံးဖော်ပြချက်ကို ကြိုးတစ်ခုစီ၏ ထိပ်တွင် ပြသပြီး အပြည့်အစုံဖတ်ရန် လင့်ခ်ပါရှိသည်။"
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "ဖွင့်ထားပါက ဆရာများသည် သင်တန်းဆက်တင်များ၏ ဖိုရမ်ကဏ္ဍတွင် သင်ယူသူမပို့မချင်း ကြိုးပြန်ကြားချက်များကို ဖုံးကွယ်မည်၊ ကြိုးများတွင် အမျိုးအစားဖော်ပြချက်ကို ပြမည်နှင့် ပါဝင်မှုတိုးတက်မှုဘားက မျှော်လင့်သည့် ပို့စ်အရေအတွက်ကို ပလက်ဖောင်းဆက်တင်များအစား ရွေးချယ်နိုင်သည်။"
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "ပလက်ဖောင်းစီမံခန့်ခွဲသူမဟုတ်သူတိုင်း (ဆရာများအပါအဝင်) နှင့် သင်ယူလမ်းကြောင်းအတွင်းရှိ လူတိုင်းအား ဖိုရမ်ကြိုးတစ်ခုစီ၏ ပို့စ်ဤအရေအတွက်သာ ပြပါ။ ကြိုးနှင့် nested မြင်ကွင်းများတွင် ကန့်သတ်ချက်သည် ပို့စ်တစ်ခုစီ၏ ပြန်ကြားချက်များအပေါ် သက်ရောက်သည်။ ပို့စ်များကို မြင်ကွင်းအစီအစဉ်အတိုင်း ထားရှိသည်- ပထမဆုံးများ၊ သို့မဟုတ် သင်ယူလမ်းကြောင်းအတွင်း နောက်ဆုံးများ (နောက်ဆုံးပို့စ်များ ရှေ့ဆုံးတွင်)။ ပို့စ်အားလုံးပြရန် 0 သတ်မှတ်ပါ။"
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "သင်ယူသူများအား ဖိုရမ်ကြိုးတစ်ခုစီတွင် တိုးတက်မှုဘားပြပါ၊ ထိုကြိုးတွင် ဤအရေအတွက်စာတိုများ ပို့ပြီးသောအခါ 100% ရောက်ရှိသည်။ စိစစ်ရန်စောင့်ဆိုင်းနေသော ပို့စ်များကို ရေတွက်သည်။ တိုးတက်မှုဘားဖုံးကွယ်ရန် 0 သတ်မှတ်ပါ။"
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "မက်ဆေ့ချ်အကြောင်းကြားအီးမေးလ်များတွင် သေးငယ်သော ခြေရာခံပုံထည့်ပြီး တောင်းဆိုသည့်အခါ မှတ်တမ်းတင်သည်။ ဤသည်မှာ အီးမေးလ်ဖွင့်ထားနိုင်ကြောင်းသာ ညွှန်ပြပြီး ဖတ်ရှုပြီးကြောင်း သက်သေမပြပါ။"
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "တိုက်ရိုက်မက်ဆေ့ချ်အကြောင်းကြားချက် လက်ခံသူများအား အီးမေးလ်ဖြင့် ပြန်ကြားခွင့်ပြုပါ။ ဝင်လာသော မက်ဆေ့ချ်များကို မေးလ်အခြေခံအဆောက်အအုံက Chamilo inbound-mail command သို့ လမ်းကြောင်းပေးရမည်။"
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "ပြန်ကြားလမ်းကြောင်းအတွက် အခြေခံလိပ်စာ၊ ဥပမာ replies@example.com။ Chamilo သည် plus addressing ဖြင့် ထူးခြားသော လက်ခံသူတိုကင် ထည့်သည်။"
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "ဝင်လာသော ပြန်ကြားချက်များ စုဆောင်းရန် မေးလ်ဘောက်စ်ချိတ်ဆက်မှု၊ ဥပမာ imaps://user:password@imap.example.com:993/INBOX။ အထောက်အထားများတွင် သီးသန့်အက္ခရာများကို URL-encode လုပ်ပါ။"
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Remember me ရွေးချယ်သည့်အခါ အသုံးပြုသူ လက်မှတ်ထိုးဝင်ထားရန် ရက်အရေအတွက်။ ပိတ်ရန် 0 သတ်မှတ်ပါ။ HTTPS လိုအပ်သည်။ ခွင့်ပြုအပိုင်း: 0 မှ 90။ ပုံမှန် session timeout ကို PHP/Symfony တွင် သီးခြားစီ စီစဉ်သည်။"
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Dynamic Client Registration သည် Chamilo OAuth resource server မှ မှတ်ပုံတင်ထားသော scope မည်သည့်အရာကိုမဆို တောင်းဆိုခွင့်ပြုသည်။ ပိတ်ထားပါက ကိုယ်တိုင်မှတ်ပုံတင်ခြင်းသည် MCP သို့သာ ကန့်သတ်ထားသည်။ အရင်းအမြစ်ဝင်ရောက်မှုကို ဖောက်သည်တစ်ဦးစီ၏ ခွင့်ပြုအရင်းအမြစ်စာရင်းဖြင့် အမြဲသီးခြားကန့်သတ်ထားသည်။"
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "လျှို့ဝှက်ဖြစ်ရပ်အစီရင်ခံစာများ ဖွင့်ပါ။ မော်ဂျူးသည် ကာကွယ်ထားသော စာဝှက်ကီးနှင့် စုံစမ်းသူခွင့်ပြုချက် လိုအပ်သည်။"
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "အမှုသည် စုံစမ်းသူများထံ မြင်နိုင်မဖြစ်မီ ကွဲပြားသော သတင်းပို့သူ ၂ ဦးမှ ၁၀ ဦးအထိ တူညီသော အသုံးပြုသူကို သတင်းပို့ရမည်။"
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "ပုံများ၊ အသံနှင့် ဗီဒီယိုအတို အထောက်အထား ခွင့်ပြုပါ။ ပိတ်ထားသည့်အခါ ရှိပြီးသား ပူးတွဲဖိုင်များ ဖတ်ရှုနိုင်ဆဲဖြစ်သည်။"
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "အရည်အချင်းပြည့် စုံစမ်းမှုများ၏ အတွင်းညွှန်ပြချက် ပြသပါ။ အီးမေးလ် သို့မဟုတ် ပြင်ပအကြောင်းကြားချက်များ မပို့ပါ။"
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "ချတ်ပန်နယ်တွင် အသုံးပြုသူများကို လမ်းညွှန်နိုင်သော ဆုံးဖြတ်ချက်သစ်ပင် ချတ်ဘော့ ပြသပါ "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "ဆရာများအား သင်တန်းများအတွင်း AI အကူအညီပေးသော ပညာရေးအပလီကေးရှင်းများ ဖန်တီးပြီး ဗားရှင်းခွဲခွင့်ပြုသည်။"
+
+msgid "Department name"
+msgstr "ဌာနအမည်"
+
+msgid "Documents and exercise"
+msgstr "စာရွက်စာတမ်းများနှင့် လေ့ကျင့်ခန်း"
+
+msgid "Documents and learning path"
+msgstr "စာရွက်စာတမ်းများနှင့် သင်ယူလမ်းကြောင်း"
+
+msgid "Documents, exercise and learning path"
+msgstr "စာရွက်စာတမ်းများ၊ လေ့ကျင့်ခန်းနှင့် သင်ယူလမ်းကြောင်း"
+
+msgid "session"
+msgstr "ဆက်ရှင်"
+
+msgid "course"
+msgstr "သင်တန်း"
+
+msgid "You have been enrolled in %s"
+msgstr "သင့်အား %s တွင် စာရင်းသွင်းပြီးပါပြီ"
 

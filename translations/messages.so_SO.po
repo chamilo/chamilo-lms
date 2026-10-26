@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Si sax ah"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Tusaalaha qaaciddada: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Tusaale qaacido: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kala duwanaanshaha doorsoomaha"
@@ -28764,6 +28764,9 @@ msgstr "Isticmaalaha hadda lama helin."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Salaan %s,<br><br>Waxaad ka diiwaan gashan tahay %s.<br>Waxaad ka heli kartaa akoonkaaga <a href=\"%s\">halkan</a>.<br><br>Faahfaahintaada gelitaanka waa:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Tekeeley,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Salaan %s,<br><br>Waxaad ku diiwaangashan tahay %s.<br>Magaca isticmaalaha: <strong>%s</strong><br><br>Fadlan riix xiriirka hoose si aad u dejiso eraygaaga sirta ah oo aad u gasho akoonkaaga:<br><a href=\"%s\">Deji eraygaaga sirta ah</a><br><br>Ixtiraam,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Waxaad ka diiwaan gashan tahay %s"
 
@@ -41567,4 +41570,1616 @@ msgstr "Taariikhda wareejinta waa la diiwaangeliyay"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s wuxuu ku jiraa xididka mashruuca: tirtir si aad u xirto dhammaadka casriyeynta"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Waxaad heshay shahaado layligaakan"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Waa inaad dhammaystirtaa waddada waxbarashada \"%s\" ka hor intaadan helin kan."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Ma hubtaa inaad rabto inaad si kama dambays ah u tirtirto faylkan?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Ma hubtaa inaad rabto inaad faylkan ka soocdo koorsada la doortay?"
+
+msgid "Attach this file to another course"
+msgstr "Ku xidh faylkan koorso kale"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Ku xidh koorsada(ha) la doortay (qarsoon)"
+
+msgid "Course(s):"
+msgstr "Koorso(oyin):"
+
+msgid "Delete definitively"
+msgstr "Tirtir si kama dambays ah"
+
+msgid "Detach from this course"
+msgstr "Ka sooc koorsadan"
+
+msgid "File actions"
+msgstr "Ficillada faylka"
+
+msgid "File Information"
+msgstr "Macluumaadka faylka"
+
+msgid "File Link:"
+msgstr "Xiriirka faylka:"
+
+msgid "File Path:"
+msgstr "Jidka faylka:"
+
+msgid "Filter courses..."
+msgstr "Shaandhee koorsooyinka..."
+
+msgid "MIME Type:"
+msgstr "Nooca MIME:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Natiijo lama helin."
+
+msgid "Original Name"
+msgstr "Magaca asalka ah"
+
+msgid "Original Name:"
+msgstr "Magaca asalka ah:"
+
+msgid "Orphan"
+msgstr "Agoon"
+
+msgid "Resource File ID:"
+msgstr "Aqoonsiga faylka kheyraadka:"
+
+msgid "Resource Node ID:"
+msgstr "Aqoonsiga noodhka kheyraadka:"
+
+msgid "Search..."
+msgstr "Raadi..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Si aad faylkan uga soocdo koorso gaar ah, riix calaamadda \"×\" ee ku taal sumadda koorsada u dhiganta ee kore."
+
+msgid "User:"
+msgstr "Isticmaale:"
+
+msgid "View file information"
+msgstr "Eeg macluumaadka faylka"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Waxaad faylkan ku xiri kartaa koorso ama in ka badan (qarsoon xididka dukumentiyada). Haddii faylka aan mar dambe la isticmaalin oo uu noqdo agoon, waxaad sidoo kale si kama dambays ah u tirtiri kartaa."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Waxaad dooran kartaa koorso ama in ka badan (isticmaal Ctrl/Cmd + riix)."
+
+msgid "bytes"
+msgstr "bytes"
+
+msgid "Failed to copy:"
+msgstr "Kopeyntu way fashilantay:"
+
+msgid "Missing resource file identifier."
+msgstr "Aqoonsiga faylka kheyraadka ayaa maqan."
+
+msgid "Please select at least one course."
+msgstr "Fadlan dooro ugu yaraan koorso keliya."
+
+msgid "Resource file not found."
+msgstr "Faylka kheyraadka lama helin."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Faylka \"%s\" waxaa lagu xidhay %d koorso(oyin): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Koorsooyin qaar waa la dhaafay: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Aqoonsiga faylka ama koorsada ayaa maqan."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Faylkan kheyraadka ma laha noodh kheyraad oo lama sooci karo."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Faylka waxaa laga soocay %d xiriir(o) koorso."
+
+msgid "This file is not attached to the selected course."
+msgstr "Faylkan kuma xidhan koorsada la doortay."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Faylkan wali waxaa isticmaalaya ugu yaraan kheyraad keliya oo lama tirtiri karo."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Faylka agoonka ah iyo nuxurkiisa jireed si kama dambays ah ayaa loo tirtiray."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Sahanka waa la daabacay. La abuuray: %d. La cusboonaysiiyay: %d. Fariimo la diray: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "La heli karo"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Xirfaddan lama heli karo"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Bilow"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "U hoggaansamida adag ee xeerarka iyo tilmaamaha aan xaaladda ku xirnayn; xukun xaaladeed oo yar."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Bilow horumarsan"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Wuxuu bilaabaa inuu aqoonsado dhinacyada xaaladda iyo qaababka laakiin wali wuxuu u baahan yahay hagitaan."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kartid leh"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Wuxuu horumariyaa qorsheynta iyo moodooyinka maskaxda; wuxuu qaataa mas'uuliyadda natiijooyinka laakiin waxaa laga yaabaa inuu dareemo culeys ka yimaada kakanaanta."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Xirfad leh"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Wuxuu arkaa \"sawirka weyn,\" wuxuu mudnaanta siiyaa si dareen ah, wuxuuna wax ka bartaa khibradda."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Khabiir"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Waxqabad dareen leh oo socda; wuxuu ku tiirsadaa aqoonta qoto dheer ee qarsoon; wuxuu hal-abuur sameyn karaa ama xaaladaha cusub si fudud u maarayn karaa."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Xusuusasho"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Soo celinta, xusuusashada, ama aqoonsiga aqoonta khuseeya xusuusta muddada dheer."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Faham"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Dhisidda macnaha fariimaha waxbarashada, oo ay ku jiraan wada-hadalka afka, qoraalka, iyo sawirka. Muuji fahamka adigoo tarjumaya, tusaale u keenaya, kala saaraya, soo koobaya, soo saaraya, isbarbardhigaya, ama sharraxaya."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Adeegsi"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Fulinta ama isticmaalka habraac iyadoo la fulinayo ama la dhaqangelinayo xaalad la siiyay. Isticmaal aqoonta ama xirfadaha xaaladaha cusub ama kuwa la taaban karo."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Falanqayn"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Qaybinta walxaha qaybahooda asalka ah iyo go'aaminta sida qaybaha ula xiriiraan midba midka kale iyo qaab-dhismeedka ama ujeeddada guud. Aqoonsi ujeeddooyinka, sababaha, ama xiriirada."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Qiimeyn"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Samee xukunno ku saleysan shuruudaha iyo heerarka. Hubi, naqdi, ama caddee go'aamada ama hababka ficilka."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Abuurid"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Isku dar qaybaha si loo sameeyo wax dhamaystiran ama shaqeynaya; dib u habeey qaybaha qaab ama qaab-dhismeed cusub. Soo saar shaqo asal ah ama soo saar fikrado cusub."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Raac"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Wuxuu ka shaqeeyaa kormeer iyo hagitaan dhow. Wuxuu qabtaa hawlaha caadiga ah iyadoo xorriyad xaddidan. Wuxuu diiradda saaraa raacitaanka tilmaamaha iyo fulinta aasaasiga ah."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Caawi"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Wuxuu ka shaqeeyaa kormeer caadi ah. Wuxuu caawimaad siiyaa kuwa kale, wuxuu ku darsadaa hawlaha kooxda, wuxuuna bilaabaa inuu qaato hindise xuduudaha la qeexay dhexdooda."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Wuxuu ka shaqeeyaa kormeer guud. Wuxuu ku dabaqaa aqoonta iyo xirfadaha dhaqdhaqaaqyo kala duwan oo caadi ah iyo kuwa aan caadi ahayn. Wuxuu isticmaalaa xoogaa xorriyad iyo xukun."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Wuxuu ka shaqeeyaa hagitaan ballaadhan. Wuxuu awood u siiyaa kuwa kale isagoo bixinaya hagitaan, taageero, ama adeegyo khaas ah. Wuxuu qaataa mas'uuliyadda shaqadiisa wuxuuna kormeeri karaa kooxo yaryar ama hawlo."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Hubi oo talo bixi"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Wuxuu ka shaqeeyaa hagitaan ballaadhan laakiin madax-bannaani weyn. Wuxuu hubiyaa in shaqadu ujeedooyinka gaarto oo wuxuu talo ka bixiyaa arrimaha adag. Inta badan wuxuu hoggaamiyaa kooxo ama mashruucyo wuxuuna saameyn ku yeeshaa go'aamada."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Bilow oo saamee"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Wuxuu leeyahay awood iyo mas'uuliyad qeexan oo ku saabsan qayb shaqo oo muhiim ah. Wuxuu bilaabaa ficillo, wuxuu saameyn ku yeeshaa istiraatiijiyadda iyo siyaasadda qaybtiisa, wuxuuna hoggaamiyaa mashruucyo ama kooxo waaweyn."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Deji istiraatiijiyad, dhiirri geli, abaabul"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Wuxuu haystaa awood heerka ugu sarreeya ee ururka ee qayb shaqo weyn. Wuxuu dejiyaa istiraatiijiyad muddada dheer, wuxuu dhiirri geliyaa oo abaabulaa kuwa kale, wuxuuna sameeyaa go'aamo muhiim u ah guusha ururka. Wuxuu saameyn ku yeeshaa heer warshad ama dibadda."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Waqtiga ugu badan ee aan firfircoonayn ee la tixgelinayo (daqiiqado)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Bogga koorsada oo furan ayaa sii wada dirista codsiyo toos ah. Kadib tiradan daqiiqado ah oo aan ficil dhab ah ka iman isticmaalaha (furitaanka bog ama shay, jawaab, iwm.), waqtiga lagu qaatay koorsada lama sii xisaabiyo."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Tifatire Wiki wada-shaqeyn"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Ku xiraya Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Kaydintu waxay abuurtaa nooc Wiki Chamilo cusub oo ka yimid nuxurka Etherpad ee hadda."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Tifatiraha wada-shaqeynta lama soo rarayn."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Daarul Etherpad tafatirka Wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Isticmaal Etherpad tifatire wada-shaqeyn ee bogagga Wiki ee jira. Etherpad waa in lagu soo bandhigaa isla asalka Chamilo si loo helo kalfadhiyo la dhex-geliyey oo ammaan ah."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL-ka Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "URL-ka aasaasiga ah ee tusaalaha Etherpad, oo ay ku jirto waddo reverse-proxy ikhtiyaari ah. Tusaale: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Furaha API ee Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Furaha API ee Chamilo u isticmaasho abuurista pads, kalfadhiyo iyo isku-dubarid nuxurka Wiki. Habee Etherpad si uu u aqbalo xaqiijinta furaha-API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Muujinta caadiga ah ee dukumentiyada cusub waxaa lagu beddeli karaa koorsada"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Muujinta la siiyo dukumenti, galka ama faylka la soo geliyey cusub marka macallinku ku abuuro koorsada. Macallimiintu weli way beddeli karaan muujinta mid kasta kadib."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Marka la daaro, macallimiintu waxay dooran karaan goobaha koorsada muujinta la siiyo dukumentiyada cusub ee koorsadooda, halkii ay ka ahaan lahaayeen kuwa caadiga ah ee platform-ka."
+
+msgid "Default visibility of new learning paths"
+msgstr "Muujinta caadiga ah ee waddooyinka waxbarasho ee cusub"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Muujinta caadiga ah ee waddooyinka waxbarasho ee cusub waxaa lagu beddeli karaa koorsada"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Muujinta la siiyo waddo waxbarasho cusub marka macallinku ku abuuro koorsada. Macallimiintu weli way beddeli karaan muujinta mid kasta kadib."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Marka la daaro, macallimiintu waxay dooran karaan goobaha koorsada muujinta la siiyo waddooyinka waxbarasho ee cusub ee koorsadooda, halkii ay ka ahaan lahaayeen kuwa caadiga ah ee platform-ka."
+
+msgid "Default visibility of new tests"
+msgstr "Muujinta caadiga ah ee imtixaannada cusub"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Muujinta asalka ah ee imtixaannada cusub waxaa lagu beddeli karaa koorsada"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Muujinta la siiyo imtixaan cusub marka macallinku ku abuuro koorso. Macallimiintu weli way beddeli karaan muujinta mid kasta ka dib."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Marka la daaro, macallimiintu waxay dooran karaan goobaha koorsada muujinta la siiyo imtixaannada cusub ee koorsadooda, halkii ay ka ahaan lahaayeen asalka madal."
+
+msgid "Default visibility for new learning paths"
+msgstr "Muujinta asalka ah ee waddooyinka waxbarasho ee cusub"
+
+msgid "Default visibility for new tests"
+msgstr "Muujinta asalka ah ee imtixaannada cusub"
+
+msgid "Following"
+msgstr "Raacaya"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Hel iimayl marka ardaygu ka faallooto soo-gudbinta shaqadan"
+
+msgid "Payment history"
+msgstr "Taariikhda lacag-bixinta"
+
+msgid "No payments yet"
+msgstr "Weli lacag-bixin ma jirto"
+
+msgid "Cancel service"
+msgstr "Jooji adeegga"
+
+msgid "Official transcript"
+msgstr "Shahaadada rasmiga ah"
+
+msgid "Unofficial transcript"
+msgstr "Shahaadada aan rasmiga ahayn"
+
+msgid "Student name"
+msgstr "Magaca ardayga"
+
+msgid "Student number"
+msgstr "Lambarka ardayga"
+
+msgid "Program title"
+msgstr "Cinwaanka barnaamijka"
+
+msgid "Required hours"
+msgstr "Saacadaha loo baahan yahay"
+
+msgid "Completion date"
+msgstr "Taariikhda dhammaystirka"
+
+msgid "Hours completed"
+msgstr "Saacadaha la dhammeeyay"
+
+msgid "Final grade"
+msgstr "Darajada ugu dambaysa"
+
+msgid "Grade"
+msgstr "Darajo"
+
+msgid "No completed course yet."
+msgstr "Weli koorso la dhammeeyay ma jirto."
+
+msgid "Grading scale"
+msgstr "Miisaanka darajaynta"
+
+msgid "Signature of school official"
+msgstr "Saxiixa masuulka dugsiga"
+
+msgid "School official"
+msgstr "Masuulka dugsiga"
+
+msgid "Official's title"
+msgstr "Cinwaanka masuulka"
+
+msgid "Verify this transcript at"
+msgstr "Xaqiiji shahaadadan at"
+
+msgid "Verification code"
+msgstr "Koodhka xaqiijinta"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Shahaadadan aan rasmiga ahayn lama saxiixin. Weydii maamule shahaado rasmi ah."
+
+msgid "Transcript verification"
+msgstr "Xaqiijinta shahaadada"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Hubi in shahaadadan rasmiga ah ay soo saartay oo saxiixday hay'adda, aan la beddelin oo aan la burin."
+
+msgid "Valid"
+msgstr "Sax"
+
+msgid "Invalid signature"
+msgstr "Saxiix aan sax ahayn"
+
+msgid "Transcript not found"
+msgstr "Shahaadada lama helin"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Saxiixa hay'adda waa sax oo shahaadadan lama burin."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Shahaadadan looma xaqiijin karo inay sax tahay. Faahfaahinteeda lama soo bandhigo."
+
+msgid "Transcript details"
+msgstr "Faahfaahinta shahaadada"
+
+msgid "Institution"
+msgstr "Hay'adda"
+
+msgid "Issued on"
+msgstr "La soo saaray"
+
+msgid "Download verification JSON"
+msgstr "Soo deji JSON-ka xaqiijinta"
+
+msgid "Transcript"
+msgstr "Shahaado"
+
+msgid "My confidential reports"
+msgstr "Warbixinnadayda qarsoodiga ah"
+
+msgid "My transcript"
+msgstr "Shahaadadayda"
+
+msgid "Confidential investigations"
+msgstr "Baaritaanno qarsoodi ah"
+
+msgid "Floor plan"
+msgstr "Qorshaha dabaqa"
+
+msgid "Click a highlighted room to select it"
+msgstr "Guji qolka iftiimay si aad u doorato"
+
+msgid "Select room"
+msgstr "Dooro qol"
+
+msgid "Room on floor plan"
+msgstr "Qolka qorshaha dabaqa"
+
+msgid "Select a branch first"
+msgstr "Marka hore dooro laan"
+
+msgid "The branch has no attached floor plan"
+msgstr "Laanta ma laha qorshe dabaq oo ku xidhan"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Isticmaal qalabka geesaha si aad u xadiddo qolka; isticmaal Tafatir si aad u dhaqaajiso geesaha"
+
+msgid "Save room area"
+msgstr "Kaydi aagga qolka"
+
+msgid "Clear room area"
+msgstr "Nadiifi aagga qolka"
+
+msgid "Save the room form to persist the area"
+msgstr "Kaydi foomka qolka si aagga loo sii hayo"
+
+msgid "Floor plan unavailable"
+msgstr "Naqshadda dabaqa lama heli karo"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Dhibcaha khariidadda qolka waa inay ku jiraan naqshadda dabaqa"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Ma hubtaa inaad rabto inaad nadiifiso aagga qolka?"
+
+msgid "View room on floor plan"
+msgstr "Fiiri qolka naqshadda dabaqa"
+
+msgid "No floor plan available"
+msgstr "Naqshad dabaq lama heli karo"
+
+msgid "This is an assignment by groups"
+msgstr "Tani waa shaqo kooxeed"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Soo rar naqshad dabaq PNG, JPEG ama SVG taagan oo ammaan ah, ama dooro sawir jira oo ka yimid Dukumentiyada."
+
+msgid "Upload floor plan"
+msgstr "Soo rar naqshadda dabaqa"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG ama SVG taagan, ugu badnaan 10 MB"
+
+msgid "Search images by name"
+msgstr "Raadi sawirro magac ahaan"
+
+msgid "Image name"
+msgstr "Magaca sawirka"
+
+msgid "Select an image"
+msgstr "Dooro sawir"
+
+msgid "Change floor plan"
+msgstr "Beddel naqshadda dabaqa"
+
+msgid "Attach floor plan"
+msgstr "Ku lifaaq naqshadda dabaqa"
+
+msgid "No matching images found in Documents."
+msgstr "Sawirro isku mid ah lagama helin Dukumentiyada."
+
+msgid "Current floor plan"
+msgstr "Naqshadda dabaqa hadda"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Isbeddellada naqshadda dabaqa si toos ah ayaa loo kaydiyaa."
+
+msgid "Remove floor plan"
+msgstr "Ka saar naqshadda dabaqa"
+
+msgid "Cannot load images"
+msgstr "Sawirrada lama soo rarayn karo"
+
+msgid "Floor plan saved"
+msgstr "Naqshadda dabaqa waa la kaydiyay"
+
+msgid "Cannot attach floor plan"
+msgstr "Naqshadda dabaqa lama lifaaqi karo"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Kaliya sawirrada PNG/JPEG iyo SVG taagan oo ammaan ah ilaa 10MB ayaa la taageeraa."
+
+msgid "Cannot upload floor plan"
+msgstr "Naqshadda dabaqa lama soo rari karo"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Ma hubtaa inaad rabto inaad ka saarto naqshadda dabaqa?"
+
+msgid "Floor plan removed"
+msgstr "Naqshadda dabaqa waa la saaray"
+
+msgid "Cannot remove floor plan"
+msgstr "Naqshadda dabaqa lama saari karo"
+
+msgid "Support bot"
+msgstr "Botka taageerada"
+
+msgid "Connected"
+msgstr "Ku xiran"
+
+msgid "Not connected"
+msgstr "Lama xirin"
+
+msgid "View ticket"
+msgstr "Fiiri tigidhka"
+
+msgid "Start a new conversation"
+msgstr "Bilow wada hadal cusub"
+
+msgid "Video call"
+msgstr "Wicitaan muuqaal"
+
+msgid "Incoming video call"
+msgstr "Wicitaan muuqaal soo galaya"
+
+msgid "Decline"
+msgstr "Diid"
+
+msgid "Mute microphone"
+msgstr "Aamus mikrofoonka"
+
+msgid "Unmute microphone"
+msgstr "Fur mikrofoonka"
+
+msgid "Turn camera off"
+msgstr "Dami kamarada"
+
+msgid "Turn camera on"
+msgstr "Shid kamarada"
+
+msgid "Hang up"
+msgstr "Dhag"
+
+msgid "Calling..."
+msgstr "Wacayaa..."
+
+msgid "Connecting..."
+msgstr "Isku xirayaa..."
+
+msgid "Your contact is busy."
+msgstr "Xiriirkaagu wuu mashquulsan yahay."
+
+msgid "Your contact did not answer the call."
+msgstr "Xiriirkaagu wicitaanka kama jawaabin."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Xiriirkaagu kamarada ama mikrofoonka ma heli karin."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Xiriirkaagu wicitaanka muuqaalka diyaarin kari waayay."
+
+msgid "Your contact refused the call."
+msgstr "Xiriirkaagu wicitaanka wuu diiday."
+
+msgid "The call timed out."
+msgstr "Wicitaanku waqtigiisii wuu dhammaaday."
+
+msgid "Your contact cancelled the call."
+msgstr "Xiriirkaagu wuu joojiyay wicitaanka."
+
+msgid "The video connection was lost."
+msgstr "Isku xirka fiidiyowga waa lumay."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Xiriirkaagu ma awoodin inuu sameeyo isku xirka fiidiyowga."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Xiriirkaagu ma dhammayn karin dejinta wicitaanka fiidiyowga."
+
+msgid "Your contact hung up."
+msgstr "Xiriirkaagu wuu xidhay."
+
+msgid "Video call could not be started"
+msgstr "Wicitaanka fiidiyowga lama bilaabi karin"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Oggolaanshaha kamarada ama makarafoonka waa la diiday."
+
+msgid "No camera or microphone was found."
+msgstr "Kamarad ama makarafoon lama helin."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Kamarada ama makarafoonka mar hore ayaa la isticmaalayaa ama lama heli karo."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Kamarada ama makarafoonka ma taageeraan dejinta loo baahan yahay."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Gelitaanka kamarada ama makarafoonka lama helin."
+
+msgid "The video call could not be prepared."
+msgstr "Wicitaanka fiidiyowga lama diyaarin karin."
+
+msgid "The video call request could not be sent."
+msgstr "Codsiga wicitaanka fiidiyowga lama diri karin."
+
+msgid "The incoming video call could not be processed."
+msgstr "Wicitaanka fiidiyowga soo galaya lama habayn karin."
+
+msgid "The video call answer could not be prepared."
+msgstr "Jawaabta wicitaanka fiidiyowga lama diyaarin karin."
+
+msgid "The video call answer could not be sent."
+msgstr "Jawaabta wicitaanka fiidiyowga lama diri karin."
+
+msgid "The video call answer could not be processed."
+msgstr "Jawaabta wicitaanka fiidiyowga lama habayn karin."
+
+msgid "The video connection failed"
+msgstr "Isku xirka fiidiyowga wuu fashilmay"
+
+msgid "The video connection could not be established."
+msgstr "Isku xirka fiidiyowga lama sameyn karin."
+
+msgid "No answer was received."
+msgstr "Jawaab lama helin."
+
+msgid "You refused the call."
+msgstr "Waad diiday wicitaanka."
+
+msgid "You cancelled the call."
+msgstr "Waad joojisay wicitaanka."
+
+msgid "You hung up."
+msgstr "Waad xidhay."
+
+msgid "You missed the call."
+msgstr "Wicitaanka waad seegtay."
+
+msgid "Support bot is currently unavailable."
+msgstr "Bot-ka taageerada hadda lama heli karo."
+
+msgid "A support ticket has been created."
+msgstr "Tigidh taageero ayaa la sameeyay."
+
+msgid "Conversation ended."
+msgstr "Wadahadalku wuu dhammaaday."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Bot-ka taageerada ma sii wadi karin wadahadalkan. Fadlan isku day mar kale."
+
+msgid "Add your first term glossary to this course"
+msgstr "Ku dar ereygaaga ugu horreeya ee qaamuuska koorsadan"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Ma hubtaa inaad tirtirto qaabkan sahanka?"
+
+msgid "The survey template has been deleted."
+msgstr "Qaabka sahanka waa la tirtiray."
+
+msgid "Please select a course."
+msgstr "Fadlan dooro koorso."
+
+msgid "Please select a session for this course."
+msgstr "Fadlan dooro kalfadhi koorsadan."
+
+msgid "The survey has been created from the template."
+msgstr "Sahanka waxaa laga sameeyay qaabka."
+
+msgid "Survey templates"
+msgstr "Qaababka sahanka"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Samee qaabab sahan oo dib loo isticmaali karo macallimiinta oo si toos ah ugu qoondee koorso ama kalfadhi."
+
+msgid "Subtitle"
+msgstr "Cinwaan hoose"
+
+msgid "Assign to course"
+msgstr "U qoondee koorso"
+
+msgid "Assign template to course"
+msgstr "Qaabka u qoondee koorso"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Kalfadhiga ka tag madhan si aad sahanka ugu abuurto toos koorsada dhexdeeda."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Koorsadan waxaa laga heli karaa kalfadhi portal-kan, sidaas darteed kalfadhi ayaa loo baahan yahay."
+
+msgid "Survey template questions"
+msgstr "Su'aalaha qaabka sahanka"
+
+msgid "Back to survey templates"
+msgstr "Ku noqo qaababka sahanka"
+
+msgid "Could not load survey template"
+msgstr "Lama soo rarayn karin qaabka sahanka"
+
+msgid "Could not load survey template questions"
+msgstr "Lama soo rarayn karin su'aalaha qaabka sahanka"
+
+msgid "Could not save survey template question"
+msgstr "Lama kaydin karin su'aasha qaabka sahanka"
+
+msgid "Could not delete survey template question"
+msgstr "Lama tirtiri karin su'aasha qaabka sahanka"
+
+msgid "Could not move survey template question"
+msgstr "Lama dhaqaajin karin su'aasha qaabka sahanka"
+
+msgid "Could not copy survey template question"
+msgstr "Lama koobiyeeyn karin su'aasha qaabka sahanka"
+
+msgid "The survey template has been saved."
+msgstr "Qaabka sahanka waa la kaydiyay."
+
+msgid "Edit survey template"
+msgstr "Tafatir qaabka sahanka"
+
+msgid "Create survey template"
+msgstr "Samee qaabka sahanka"
+
+msgid "The survey template title is required."
+msgstr "Cinwaanka qaabka sahanka waa loo baahan yahay."
+
+msgid "Visible as template"
+msgstr "Muujin sidii qaab"
+
+msgid "Create satisfaction survey"
+msgstr "Samee sahanka qanacsanaanta"
+
+msgid "Training satisfaction survey"
+msgstr "Sahanka qanacsanaanta tababarka"
+
+msgid "Could not create satisfaction survey"
+msgstr "Lama sameyn karin sahanka qanacsanaanta"
+
+msgid "Use template"
+msgstr "Isticmaal qaabka"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Samee sahankan ka soo qaab dib loo isticmaali karo oo uu diyaariyey maamule."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Natiijooyinka waa laga qariyey macallinka/tababaraha"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Macallimiinta iyo tababarayaashu wali way arki karaan tirada jawaabaha oo xasuusin dir karaan, laakiin ma furi karaan ama dhoofin karaan natiijooyinka sahanka."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Qaabka waa la dabaqay. Dib u eeg dejinta sahanka oo kaydi si aad u sameyso."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Natiijooyinka sahanka waa laga qariyey macallimiinta iyo tababarayaasha."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Weli waxaad isticmaali kartaa bogga casuumaadaha si aad u aragto tirada jawaabaha oo aad u dirto xasuusin."
+
+msgid "Payment method"
+msgstr "Habka lacag-bixinta"
+
+msgid "Preview mode"
+msgstr "Habka horudhaca"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Horumarka iyo dhibcaha lama kaydiyo habka horudhaca."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Xiriirkan lama soo bandhigi karo gudaha waddada waxbarashada."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Ku fur tab cusub si aad bogga u aragto."
+
+msgid "Report a problem with this question"
+msgstr "Soo sheeg dhibaato ku saabsan su'aashan"
+
+msgid "Your report was sent to the teacher."
+msgstr "Warbixintaada waxaa loo diray macallinka."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Sharax khaladka ama dhibaatada aad heshay. Warbixintaada waxaa loo diri doonaa macallinka."
+
+msgid "A comment is required."
+msgstr "Faallo waa loo baahan yahay."
+
+msgid "Could not send the report."
+msgstr "Lama diri karin warbixinta."
+
+msgid "Learner reports"
+msgstr "Warbixinada ardayda"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Warbixin arday lama soo gudbin su'aashan."
+
+msgid "View attempt"
+msgstr "Eeg isku dayga"
+
+msgid "Could not load learner reports."
+msgstr "Lama soo rarayn karin warbixinada ardayda."
+
+msgid "Allow learners to report issues in questions"
+msgstr "U oggolow ardayda inay soo sheegaan arrimaha su'aalaha"
+
+msgid "Skill acquired"
+msgstr "Xirfad la helay"
+
+msgid "AI Toolbox"
+msgstr "Sanduuqa qalabka AI"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Samee barnaamijyo waxbarasho is-dhexgal ah AI iyo la soco horumarka ardayga SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Weli ma jiraan barnaamijyo la daabacay."
+
+msgid "Interactive applications"
+msgstr "Barnaamijyo is-dhexgal ah"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Samee, horumari, daabac oo dib u eeg noocyada hal meel."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Fur barnaamij si aad uga sii wadato horumarkaaga ugu dambeeyay."
+
+msgid "Interactive learning application"
+msgstr "Barnaamijka waxbarashada is-dhexgalka"
+
+msgid "Create an interactive learning app"
+msgstr "Samee barnaamij waxbarasho is-dhexgal ah"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Sharax hawsha. Chamilo wuxuu sameyn doonaa barnaamij SCORM nooc leh oo leh la socodka horumarka iyo dhibcaha."
+
+msgid "Idea"
+msgstr "Fikrad"
+
+msgid "Application"
+msgstr "Barnaamij"
+
+msgid "What should the application do?"
+msgstr "Maxay tahay in barnaamijku sameeyo?"
+
+msgid "How it works"
+msgstr "Sida uu u shaqeeyo"
+
+msgid "AI generation"
+msgstr "Abuurista AI"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Barnaamijka waxaa laga sameeyaa tilmaamahaaga waxaana loo kaydiyaa nooca 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Horumarka ardayga, dhibcaha iyo xogta dib u bilaabista waxaa loo soo sheegaa Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Horumarinta mustaqbalka waxay sameeyaan noocyo cusub iyaga oo aan tirtirin kuwii hore."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Ku dar ujeeddada waxbarashada, xeerarka, heerarka, dhibcaha iyo waxa dhici kara marka ardaygu dhammeeyo."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Lama oggola inaad nuxur ku abuurto xaaladdan."
+
+msgid "The application was generated successfully."
+msgstr "Barnaamijka si guul leh ayaa loo sameeyay."
+
+msgid "Open in student view"
+msgstr "Ku fur aragtida ardayga"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Abuur barnaamijka si aad u awoodsiiso horudhaca iyo daabacaadda."
+
+msgid "Improve with AI"
+msgstr "Ku hagaaji AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Sharax isbeddelka. Nooc cusub ayaa la abuuri doonaa, noocyadii horeina weli waa la heli doonaa."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Sharax dhammaan dhaqdhaqaaqa isdhexgalka ah ee aad rabto in la abuuro."
+
+msgid "What should be improved?"
+msgstr "Maxaa la hagaajinayaa?"
+
+msgid "Generate new version"
+msgstr "Abuur nooc cusub"
+
+msgid "Version history"
+msgstr "Taariikhda noocyada"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Horudhac, soo deji ama soo celi nooc kasta oo la abuuray."
+
+msgid "A new version was generated."
+msgstr "Nooc cusub ayaa la abuuray."
+
+msgid "Version restored"
+msgstr "Nooca waa la soo celiyay"
+
+msgid "The support bot tree has been published."
+msgstr "Geedka bot-ka taageerada waa la daabacay."
+
+msgid "The support bot tree has been archived."
+msgstr "Geedka bot-ka taageerada waa la gelay kaydka."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Geedka bot-ka taageerada waa la nuqulay."
+
+msgid "The support bot tree has been deleted."
+msgstr "Geedka bot-ka taageerada waa la tirtiray."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Ma hubtaa inaad rabto inaad tirtirto geedkan bot-ka taageerada?"
+
+msgid "The support bot tree has been imported."
+msgstr "Geedka bot-ka taageerada waa la soo dejiyay."
+
+msgid "Create support bot tree"
+msgstr "Abuur geedka bot-ka taageerada"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Dhis geed go'aan oo go'an oo hagaya isticmaalayaasha su'aalaha taageerada una kordhin kara Tigidhada."
+
+msgid "Portal scope"
+msgstr "Baaxadda portal-ka"
+
+msgid "Duplicate"
+msgstr "Nuqul"
+
+msgid "Archive"
+msgstr "Kaydi"
+
+msgid "View conversations"
+msgstr "Eeg wadahadallada"
+
+msgid "Import support bot tree"
+msgstr "Soo deji geedka bot-ka taageerada"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Soo deji dhoofin JSON ama geed go'aan CSV. Geedka la soo dejiyay mar walba waxaa loo abuuraa qoraal cusub."
+
+msgid "Resolved"
+msgstr "La xalliyay"
+
+msgid "Escalated"
+msgstr "La kordhiyay"
+
+msgid "Abandoned"
+msgstr "Laga tagay"
+
+msgid "Support bot conversations"
+msgstr "Wadahadallada bot-ka taageerada"
+
+msgid "Outcome"
+msgstr "Natiijo"
+
+msgid "Started at"
+msgstr "Bilowday"
+
+msgid "Ended at"
+msgstr "Dhammaatay"
+
+msgid "View conversation"
+msgstr "Eeg wadahadalka"
+
+msgid "Go to node"
+msgstr "Tag noodhka"
+
+msgid "Create support ticket"
+msgstr "Abuur tigidh taageero"
+
+msgid "End conversation"
+msgstr "Jooji wadahadalka"
+
+msgid "Node"
+msgstr "Noodh"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Geedka bot-ka taageerada wuxuu u baahan yahay ugu yaraan hal noodh."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Ma hubtaa inaad rabto inaad tirtirto noodhkan? Xiriirada ku xiran waa la nadiifin doonaa."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Noodh kasta oo bot-ka taageerada wuxuu u baahan yahay ugu yaraan hal doorasho."
+
+msgid "The support bot tree title is required."
+msgstr "Cinwaanka geedka bot-ka taageerada waa loo baahan yahay."
+
+msgid "A support bot entry node is required."
+msgstr "Noodhka gelitaanka bot-ka taageerada waa loo baahan yahay."
+
+msgid "Every support bot node requires content."
+msgstr "Noodh kasta oo bot-ka taageerada wuxuu u baahan yahay nuxur."
+
+msgid "Every support bot option requires a label."
+msgstr "Doorasho kasta oo bot-ka taageerada waxay u baahan tahay calaamad."
+
+msgid "Select a target node for every go-to option."
+msgstr "Dooro noodh bartilmaameed ah doorasho kasta oo tag-halkaas."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Geli URL qaraabo ah doorasho kasta oo xiriir ah."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Dooro qaybta tigidhka doorasho kasta oo kordhin ah."
+
+msgid "The support bot tree has been saved."
+msgstr "Geedka bot-ka taageerada waa la kaydiyay."
+
+msgid "Edit support bot tree"
+msgstr "Wax ka beddel geedka bot-ka taageerada"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Noocyada bot-ka taageerada ee la daabacay iyo kuwa la gelay kaydka waa akhris-kaliya. Nuqul ka samee geedkan liiska si aad u wax ka beddesho nooc qoraal cusub."
+
+msgid "Default ticket project"
+msgstr "Mashruuca tigidhka caadiga ah"
+
+msgid "Decision tree rules"
+msgstr "Xeerarka geedka go'aanka"
+
+msgid "Every node must contain at least one option."
+msgstr "Nod kasta waa inuu ka koobnaadaa ugu yaraan hal doorasho."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Nodka ugu dambeeya waa inuu dhammeeyaa wada hadalka ama uu abuuraa tigidh taageero."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Xiriiriyada Go-to waa inaysan abuurin wareegyo v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "URL-yada dibadda looma oggola v1; falalka xiriiriyada waa inay isticmaalaan waddo Chamilo ah oo qaraabo ah."
+
+msgid "Nodes"
+msgstr "Nodyo"
+
+msgid "Add node"
+msgstr "Ku dar nod"
+
+msgid "Entry node"
+msgstr "Nodka gelitaanka"
+
+msgid "Set as entry node"
+msgstr "U deji nodka gelitaanka"
+
+msgid "Target node"
+msgstr "Nodka bartilmaameedka"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Isticmaal waddo Chamilo ah oo qaraabo ah, tusaale ahaan /tickets."
+
+msgid "Ticket category"
+msgstr "Qaybta tigidhka"
+
+msgid "Select a default ticket project first."
+msgstr "Marka hore dooro mashruuca tigidhka caadiga ah."
+
+msgid "Closing message"
+msgstr "Fariinta xiritaanka"
+
+msgid "Select a node to edit it."
+msgstr "Door nod si aad u tafatirto."
+
+msgid "Support bot conversation"
+msgstr "Wada hadalka botka taageerada"
+
+msgid "Transcript of %s"
+msgstr "Nuqulka %s"
+
+msgid "Download unofficial transcript"
+msgstr "Soo deji nuqulka aan rasmiga ahayn"
+
+msgid "Issue official transcript"
+msgstr "Soo saar nuqul rasmi ah"
+
+msgid "Official transcripts"
+msgstr "Nuqullada rasmiga ah"
+
+msgid "No official transcript has been issued yet."
+msgstr "Weli lama soo saarin nuqul rasmi ah."
+
+msgid "Issued by"
+msgstr "Waxaa soo saaray"
+
+msgid "Verify"
+msgstr "Xaqiiji"
+
+msgid "Signature of official transcripts"
+msgstr "Saxiixa nuqullada rasmiga ah"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Sawirkan waxaa lagu daabacaa nuqullada rasmiga ah ee portal-kan, korka magaca iyo cinwaanka saxiixaha ee lagu dejiyay dejimaha shahaadada."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Ma soo saartaa nuqul rasmi ah oo saxiixan oo leh koorsooyinka iyo darajooyinka ku taxan boggan? Waxaa lagu xaqiijin karaa khadka tooska ah ilaa laga noqdo."
+
+msgid "Official transcript issued"
+msgstr "Nuqul rasmi ah ayaa la soo saaray"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Ma ka noqotaa nuqulkan rasmi ah? Bogga xaqiijintiisa ayaa markaas u muujin doona in laga noqday."
+
+msgid "Official transcript revoked"
+msgstr "Nuqul rasmi ah ayaa laga noqday"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Marka hore dooro sawir PNG ama JPEG ah."
+
+msgid "Signed credential"
+msgstr "Shahaado saxiixan"
+
+msgid "Issue signed credential"
+msgstr "Soo saar shahaado saxiixan"
+
+msgid "Verify credential"
+msgstr "Xaqiiji shahaadada"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Ku xidh Sepolia testnet"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Xaqiiji macaamilka Sepolia ee jira"
+
+msgid "Revoke signed credential"
+msgstr "Ka noqo shahaadada saxiixan"
+
+msgid "Delete certificate"
+msgstr "Tirtir shahaadada"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Xaqiiji macaamil Sepolia oo jira"
+
+msgid "Sepolia transaction hash"
+msgstr "Hash-ka macaamilka Sepolia"
+
+msgid "Verify transaction"
+msgstr "Xaqiiji macaamilka"
+
+msgid "Anchored"
+msgstr "La xidh"
+
+msgid "Issued"
+msgstr "La soo saaray"
+
+msgid "Not issued"
+msgstr "Lama soo saarin"
+
+msgid "Consent required"
+msgstr "Oggolaansho ayaa loo baahan yahay"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Macaamilka Sepolia waa la xaqiijiyay oo la xaqiijiyay"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Boorsada Sepolia testnet ayaa kaa weydiisan doonta inaad saxiixdo macaamil. Kaliya raadka faraha shahaadada ayaa la xidhayaa. Ma sii wadtaa?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Ma ka noqotaa shahaadadan saxiixan? Macaamil kasta oo blockchain ah wuu sii jiraa, laakiin bogga xaqiijinta ayaa soo sheegi doona ka noqoshada."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Ma soo saartaa shahaado saxiixan oo loogu talagalay ardaygan? Tani waxay ka dhigaysaa faahfaahinta shakhsiyeed ee la ansixiyay mid la xaqiijin karo xiriir gaar ah."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Boorso biraawsar ah oo EVM la jaanqaadda ayaa loo baahan yahay Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Dooro Sepolia testnet (chain ID 11155111) jeebkaaga."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Cinwaanka jeebka ama faraha shahaadada waa khaldan."
+
+msgid "Transaction pending"
+msgstr "Wax kala iibsigu wuu sugayaa"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Isticmaal Xaqiiji wax kala iibsiga Sepolia ee jira mar dambe."
+
+msgid "Signed credential issued"
+msgstr "Aqoonsi saxeexan ayaa la soo saaray"
+
+msgid "Credential revoked"
+msgstr "Aqoonsiga waa la buriyay"
+
+msgid "Transaction hash"
+msgstr "Hash-ka wax kala iibsiga"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Oggolaanshaha daabacaadda wuxuu u oggolaanayaa maamule inuu soo saaro aqoonsi shahaadeed saxeexan oo ikhtiyaar ahaan ku xiro faraha SHA-256 ee Sepolia testnet. Magac ama xog shakhsi ah laguma diro silsiladda. Waxaad ka noqon kartaa oggolaanshaha wakhti kasta."
+
+msgid "Publication consent"
+msgstr "Oggolaanshaha daabacaadda"
+
+msgid "Not approved"
+msgstr "Lama oggola"
+
+msgid "Withdraw consent"
+msgstr "Ka noqo oggolaanshaha"
+
+msgid "Approve publication"
+msgstr "Oggolow daabacaadda"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Waxaan oggolaaday aqoonsi saxeexan oo si dadweynaha loo xaqiijin karo oo muujinaya magacayga, koorsada, dhibcaha iyo taariikhda soo saarista. Maamule ayaa sidoo kale daabici kara kaliya faraha SHA-256 ee Sepolia testnet. Faraha waa joogto, xitaa haddii aan ka noqdo mar dambe. Sii wad?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Ka noqo oggolaanshaha daabacaadda ee shahaadadan?"
+
+msgid "Publication approval recorded"
+msgstr "Oggolaanshaha daabacaadda waa la diiwaangeliyay"
+
+msgid "Publication approval withdrawn"
+msgstr "Oggolaanshaha daabacaadda waa laga noqday"
+
+msgid "Read more"
+msgstr "Akhri wax dheeraad ah"
+
+msgid "Participation: %s of %s posts"
+msgstr "Ka qaybgalka: %s ka mid ah %s qoraal"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Soo dhig wax ku darsigaaga si aad u aragto jawaabaha ka qaybgalayaasha kale."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Kaliya baarayaasha la oggolaaday ayaa dib u eegi kara warbixinnada u qalma. Aqoonsiga warbixiyayaasha wuxuu ahaanayaa qarsoodi sida caadiga ah."
+
+msgid "New confidential report"
+msgstr "Warbixin qarsoodi ah oo cusub"
+
+msgid "Reported user"
+msgstr "Isticmaalaha la soo sheegay"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Waxaa jira warbixino qarsoodi ah oo u qalma oo sugaya dib u eegis."
+
+msgid "Eligible investigations"
+msgstr "Baaritaanno u qalma"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Kiis halkan wuxuu ka soo muuqdaa kaliya ka dib marka ugu yaraan %s isticmaale oo kala duwan ay soo sheegaan isla qofka."
+
+msgid "Distinct reporters"
+msgstr "Warbixiyayaal kala duwan"
+
+msgid "Reports for selected user"
+msgstr "Warbixinnada isticmaalaha la doortay"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Warbixinta qarsoodiga ah hadda lama heli karo."
+
+msgid "The investigation could not be loaded."
+msgstr "Baaritaanka lama soo rarayn karin."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Aqoonsigaaga waa laga ilaaliyaa baarayaasha sida caadiga ah, laakiin ka fogow ku darista faahfaahin aqoonsi qoraalka warbixinta ama lifaaqyada. Tani ma aha adeeg degdeg ah."
+
+msgid "Find the user involved"
+msgstr "Raadi isticmaalaha ku lug leh"
+
+msgid "Name or username"
+msgstr "Magaca ama magaca isticmaalaha"
+
+msgid "Describe the situation"
+msgstr "Sharax xaaladda"
+
+msgid "Evidence (optional)"
+msgstr "Caddayn (ikhtiyaar)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Ilaa saddex fayl, ugu badnaan 8 MiB midkiiba. Sawirro, maqal ama fiidiyowyo gaagaaban."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Waxaan oggolahay in baarayaasha la oggolaaday ay arki karaan magacayga iyo iimaylkayga warbixintan gaarka ah. Waxaan ka noqon karaa oggolaanshahan mar dambe."
+
+msgid "Send confidential report"
+msgstr "Dir warbixin qarsoodi ah"
+
+msgid "Could not search users"
+msgstr "Isticmaalayaasha lama baadhi karin"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Ilaa saddex fayl, ugu badnaan 8 MiB midkiiba."
+
+msgid "The confidential report could not be saved."
+msgstr "Warbixinta qarsoodiga ah lama kaydin karin."
+
+msgid "Confidential report"
+msgstr "Warbixin qarsoodi ah"
+
+msgid "Confidential conversation"
+msgstr "Wadahadal qarsoodi ah"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Baarayaashu waxay ku wada xiriiri karaan wadahadalkan iyaga oo aan arkin aqoonsiga warbixiyaha illaa wadaagista xiriirka la daaro."
+
+msgid "Reporter"
+msgstr "Warbixiyaha"
+
+msgid "Investigator"
+msgstr "Baaraha"
+
+msgid "Additional evidence (optional)"
+msgstr "Caddayn dheeraad ah (ikhtiyaar)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Ilaa saddex fayl, ugu badnaan 8 MiB midkiiba; toban fayl warbixin kasta."
+
+msgid "Contact shared voluntarily"
+msgstr "Xiriir si ikhtiyaari ah loo wadaagay"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "U oggolow baarayaasha inay arkaan magacayga iyo iimaylkayga warbixintan"
+
+msgid "This confidential report is not available."
+msgstr "Warbixintan qarsoodiga ah lama heli karo."
+
+msgid "Your message could not be saved."
+msgstr "Fariintaada lama kaydin karin."
+
+msgid "Contact sharing could not be updated."
+msgstr "Wadaagista xiriirka lama cusboonaysiin karin."
+
+msgid "Evidence could not be downloaded."
+msgstr "Caddaynta lama soo dejin karin."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale buuxi howsha foomka : xisaabi Tusaha Cufnaanta Jidhka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Jinsiga</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Tusaha Cufnaanta Jidhka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Miisaanka/Dhererka<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Tusaale buuxi howsha foomka : xisaabi Tusaha Cufnaanta Jidhka</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Da'da</strong></td>            <td width=\"75%\" style=\"\">[25] sano</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Jinsiga</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ama F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Miisaanka</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Dhererka</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Tusaha Cufnaanta Jidhka</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Miisaanka/Dhererka<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Maqaalka Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Qari cinwaanka IP-ga warbixinnada"
+
+msgid "Course settings policies"
+msgstr "Siyaasadaha dejinta koorsada"
+
+msgid "Academic transcripts"
+msgstr "Diiwaannada tacliinta"
+
+msgid "Transcript program title"
+msgstr "Cinwaanka barnaamijka diiwaanka"
+
+msgid "Transcript course code"
+msgstr "Koodhka koorsada diiwaanka"
+
+msgid "Transcript course hours field"
+msgstr "Goobta saacadaha koorsada diiwaanka"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Saacadaha dhammaystiran ee diiwaanka waa saacadaha loo baahan yahay"
+
+msgid "Transcript student number field"
+msgstr "Goobta lambarka ardayga ee diiwaanka"
+
+msgid "Transcript address fields"
+msgstr "Goobaha cinwaanka diiwaanka"
+
+msgid "Transcript grading scale"
+msgstr "Miisaanka qiimaynta diiwaanka"
+
+msgid "Transcript GPA note"
+msgstr "Qoraalka GPA ee diiwaanka"
+
+msgid "Transcript signatory name"
+msgstr "Magaca saxiixaha diiwaanka"
+
+msgid "Transcript signatory title"
+msgstr "Darajada saxiixaha diiwaanka"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Daar shahaadooyinka saxiixan iyo xidhitaanka ikhtiyaariga ah ee Sepolia testnet"
+
+msgid "Show thread replies only after participating"
+msgstr "Muuji jawaabaha xadhigga kaliya ka dib ka-qaybgalka"
+
+msgid "Show the forum category description in threads"
+msgstr "Muuji sharraxaadda qaybta fagaaraha xadhigyada"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Dejinta ka-qaybgalka fagaaraha waxaa lagu beddeli karaa koorsada"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Ugu badnaan qoraallada lagu muujiyo xadhigga fagaaraha"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Qoraallada loo baahan yahay si loo dhammeeyo xadhigga fagaaraha"
+
+msgid "Track e-mail openings"
+msgstr "La soco furitaanka iimaylka"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Oggolow jawaabaha iimaylka ee fariimaha"
+
+msgid "Inbound e-mail address"
+msgstr "Cinwaanka iimaylka soo gelaya"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN-ka sanduuqa iimaylka soo gelaya"
+
+msgid "Remember me duration (days)"
+msgstr "Mudada i xusuuso (maalmo)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Daar Diiwaangelinta Macmiilka Dynamic ee OAuth ka baxsan MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Daar warbixinta sirta ah ee daryeelka"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Ugu yaraan wariyayaal kala duwan baaritaanka"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Oggolow lifaaqyada caddaynta sirta ah"
+
+msgid "Show confidential investigation notifications"
+msgstr "Muuji ogeysiisyada baaritaanka sirta ah"
+
+msgid "Enable support chatbot"
+msgstr "Daar chatbot-ka taageerada"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Dooro meesha ereyada qaamuuska si toos ah loogu iftiimiyo: dukumentiyada, jimicsiyada iyo waddooyinka waxbarashada."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Qari cinwaannada IP-ga warbixinta muuqaalka iyo dhoofinta warbixinta. Cinwaannada IP-ga weli waa la kaydiyaa oo laga heli karaa nidaamyada xogta shakhsiyeed ee la oggolaaday."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Asalada barxadda iyo oggolaanshaha tafatirka koorsada; waxaa lagu maamulaa Dejinta koorsada."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "U oggolow isticmaalayaasha inay soo dejiyaan diiwaan aan rasmi ahayn oo ku saabsan koorsooyinkii ay dhammeeyeen, una oggolow maamulayaasha, maamulayaasha kalfadhiga iyo maareeyayaasha HR inay soo saaraan diiwaanno rasmi ah oo saxiixan isticmaalayaasha ay maamulaan. Sawirka saxiixa waxaa laga soo rarayaa bogga diiwaanka isticmaale."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Cinwaanka barnaamijka lagu daabaco diiwaan kasta, tusaale ahaan magaca shahaadada lagu diyaariyo barxaddan."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Goobta koorsada ee buuxisa tiirka koodhka koorsada ee diiwaannada: koodhka koorsada ama magaca waaxda."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Doorsoomaha goobta dheeraadka ah ee koorsada ee haynta tirada saacadaha koorsada. Ka tag madhan si loo isticmaalo muddada koorsada."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Daabac saacadaha loo baahan yahay ee koorsada sidii saacadaha ardaygu dhammeeyay. Marka la damiyo, saacadaha dhammaystiran waa wakhtiga ardaygu ku qaatay koorsada."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Doorsoomaha goobta dheeraadka ah ee isticmaalaha ee haynta lambarka ardayga ee lagu daabaco diiwaannada. Ka tag madhan si aan waxba loo daabicin."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Doorsoomayaasha kala go'an ee goobaha dheeraadka ah ee isticmaalaha ee lagu daabaco ka dib cinwaanka isticmaalaha diiwaannada, tusaale ahaan magaalada, gobolka iyo koodhka boostada."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Liiska JSON ee xarfaha darajada, laga bilaabo dhibcaha ugu hooseeya ee ugu sarreeya hoos: shay kasta wuxuu leeyahay dhibcaha ugu hooseeya boqolkiiba (min), xarafka iyo dhibcaha darajada ee loo isticmaalo xisaabinta GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Sharraxaadda sida GPA loo xisaabiyo, oo lagu daabaco hoosta GPA ee diiwaannada."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Magaca sarkaalka dugsiga ee saxiixa diiwaannada rasmiga ah."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Darajada sarkaalka dugsiga ee saxiixa diiwaannada rasmiga ah."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Wuxuu u baahan yahay oggolaansho cad oo milkiile iyo falal gacanta ah oo maamule. Kaliya raadadka SHA-256 ayaa silsiladda loo diraa."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Ardaydu waxay arkaan oo keliya qoraalka ugu horreeya ee mowduuca gole-falanqaynta ilaa ay iyagu ku qoraan. Maamulayaasha, macallimiinta, tababarayaasha iyo macallimiinta kooxda had iyo jeer waxay arkaan dhammaan qoraallada."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Muuji cinwaanka iyo sharraxaad gaaban oo qaybta gole-falanqaynta ah dusha sare ee mowduuc kasta, iyadoo leh xiriir si loo akhriyo sharraxaadda buuxda."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Marka la daaro, macallimiintu waxay dooran karaan qaybta Gole-falanqaynta ee dejinta koorsada in koorsadoodu qarisay jawaabaha mowduuca ilaa ardaygu qoro, muujiso sharraxaadda qaybta mowduucyada iyo inta qoraal ee baarka horumarka ka-qaybgalka filayo, halkii ay raaci lahaayeen dejinta madal."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Muuji kaliya tiradan qoraallada mowduuc kasta oo gole-falanqayn ah isticmaale kasta oo aan ahayn maamulaha madal, macallimiinta ku jira, iyo qof kasta oo ku jira dariiqa waxbarashada. Aragtida mowduucyada iyo kuwa is-daba-jooga, xadku wuxuu khuseeyaa jawaabaha qoraal kasta. Qoraallada waxaa lagu hayaa kala-horreynta aragtida: kuwa ugu horreeya, ama kuwa ugu dambeeya gudaha dariiqa waxbarashada, halkaasoo qoraallada ugu dambeeya ay horreeyaan. Dhig 0 si loo muujiyo qoraal kasta."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Tus ardayda baar horumar mowduuc kasta oo gole-falanqayn ah, kaasoo gaara 100% marka ay ku qoraan tiradan fariimaha. Qoraallada sugaya kormeerka waa la tiriyaa. Dhig 0 si loo qariyo baarka horumarka."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Waxay ku daraa sawir yar oo raad-raac ah iimaylada ogeysiinta fariimaha oo diiwaangelisa marka la codsado. Tani waxay kaliya muujinaysaa in iimaylka laga yaabo in la furay; ma caddaynaysa in la akhriyay."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "U oggolow qaataha ogeysiinta fariimaha tooska ah inay uga jawaabaan iimayl. Fariimaha soo gala waa in loo wareejiyo amarka iimaylka soo-galista ee Chamilo iyadoo la adeegsanayo kaabayaasha boostada."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Cinwaanka aasaasiga ah ee loo isticmaalo wareejinta jawaabaha, tusaale replies@example.com. Chamilo waxay ku daraa calaamad qaataha gaar ah iyadoo la isticmaalayo cinwaan plus."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Xiriirka sanduuqa boostada ee loo isticmaalo ururinta jawaabaha soo-galaya, tusaale imaps://user:password@imap.example.com:993/INBOX. URL-encode xarfaha la ilaaliyo ee aqoonsiga."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Tirada maalmaha lagu hayo isticmaalaha oo galay marka la doorto I xasuuso. Dhig 0 si loo joojiyo. Wuxuu u baahan yahay HTTPS. Xadka la oggol yahay: 0 ilaa 90. Wakhtiga dhammaadka kalfadhiga caadiga ah si gaar ah ayaa looga habeeyaa PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Waxay u oggolaanaysaa Diiwaangelinta Macmiilka Dhaqdhaqaaqa inuu codsado baaxad kasta oo uu diiwaangeliyay serverka kheyraadka OAuth ee Chamilo. Marka la damiyo, is-diiwaangelintu waxay ku xaddidan tahay MCP. Helitaanka kheyraadka had iyo jeer si gaar ah ayaa loo xaddidaa liiska kheyraadka la oggol yahay ee macmiil kasta."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Daar warbixinnada dhacdooyinka qarsoodiga ah. Qaybtu waxay u baahan tahay furaha sirta ee la ilaaliyo iyo oggolaanshaha baaraha."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Inta u dhaxaysa 2 iyo 10 wariye oo kala duwan waa inay soo sheegaan isticmaalaha isku midka ah ka hor inta kiisku u muuqan baarayaasha."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "U oggolow caddaynta sawirrada, maqalka iyo muuqaalka gaaban. Lifaaqyada jira weli waa la akhriyi karaa marka la damiyo."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Muuji tilmaanta gudaha ee baaritaannada u qalma. Ma dirto iimayl ama ogeysiis dibadda ah."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Muuji chatbot geedka go'aanka ah gudaha qaybta sheekada oo ku hagaya isticmaalayaasha "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Waxay u oggolaanaysaa macallimiinta inay abuuraan oo nooc ka sameeyaan codsiyada waxbarasho ee AI-ka caawimaadda ku jira koorsooyinka."
+
+msgid "Department name"
+msgstr "Magaca waaxda"
+
+msgid "Documents and exercise"
+msgstr "Dukumentiyada iyo jimicsiga"
+
+msgid "Documents and learning path"
+msgstr "Dukumentiyada iyo dariiqa waxbarashada"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dukumentiyada, jimicsiga iyo dariiqa waxbarashada"
+
+msgid "session"
+msgstr "kalfadhi"
+
+msgid "course"
+msgstr "koorso"
+
+msgid "You have been enrolled in %s"
+msgstr "Waxaa laguu diiwaangeliyay %s"
 

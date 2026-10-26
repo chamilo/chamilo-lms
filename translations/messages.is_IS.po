@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Með kveðju"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Dæmi um formúlu: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Dæmi um formúlu: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Breytusvið"
@@ -28769,6 +28769,9 @@ msgstr "Núverandi notandi fannst ekki."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Halló %s,<br><br>Þú ert skráður á %s.<br>Þú getur fengið aðgang að reikningnum þínum <a href=\"%s\">hér</a>.<br><br>Innskráningarupplýsingar þínar eru:<br>Notendanafn: <strong>%s</strong><br>Lykilorð: <strong>%s</strong><br><br>Með kveðju,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Halló %s,<br><br>Þú ert skráð(ur) á %s.<br>Notandanafn: <strong>%s</strong><br><br>Smelltu á tengilinn hér að neðan til að stilla lykilorðið og fá aðgang að reikningnum þínum:<br><a href=\"%s\">Stilltu lykilorðið þitt</a><br><br>Bestu kveðjur,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Þú ert skráður á %s"
 
@@ -41572,4 +41575,1616 @@ msgstr "Flutningssaga er skráð"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s er til staðar í rót verkefnisins: eyða henni til að loka uppfærsluslóðum"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Þú hefur fengið vottorð fyrir þessa æfingu"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Þú verður að ljúka námsleiðinni \"%s\" áður en þú getur fengið aðgang að þessari."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Ertu viss um að þú viljir eyða þessari skrá endanlega?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Ertu viss um að þú viljir aftengja þessa skrá frá völdu námskeiði?"
+
+msgid "Attach this file to another course"
+msgstr "Tengja þessa skrá við annað námskeið"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Tengja við valin námskeið (falið)"
+
+msgid "Course(s):"
+msgstr "Námskeið:"
+
+msgid "Delete definitively"
+msgstr "Eyða endanlega"
+
+msgid "Detach from this course"
+msgstr "Aftengja frá þessu námskeiði"
+
+msgid "File actions"
+msgstr "Skráaraðgerðir"
+
+msgid "File Information"
+msgstr "Skráarupplýsingar"
+
+msgid "File Link:"
+msgstr "Skráartengill:"
+
+msgid "File Path:"
+msgstr "Skráarslóð:"
+
+msgid "Filter courses..."
+msgstr "Sía námskeið..."
+
+msgid "MIME Type:"
+msgstr "MIME-gerð:"
+
+msgid "N/A"
+msgstr "Á ekki við"
+
+msgid "No results found."
+msgstr "Engar niðurstöður fundust."
+
+msgid "Original Name"
+msgstr "Upprunalegt heiti"
+
+msgid "Original Name:"
+msgstr "Upprunalegt heiti:"
+
+msgid "Orphan"
+msgstr "Munaðarlaus"
+
+msgid "Resource File ID:"
+msgstr "Auðkenni auðlindaskrár:"
+
+msgid "Resource Node ID:"
+msgstr "Auðkenni auðlindahnúts:"
+
+msgid "Search..."
+msgstr "Leita..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Til að aftengja þessa skrá frá tilteknu námskeiði skaltu smella á \"×\"-táknið á samsvarandi námskeiðsmerki hér að ofan."
+
+msgid "User:"
+msgstr "Notandi:"
+
+msgid "View file information"
+msgstr "Skoða skráarupplýsingar"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Þú getur tengt þessa skrá við eitt eða fleiri námskeið (falið í rót skjala). Ef skráin er ekki lengur notuð og verður munaðarlaus geturðu einnig eytt henni endanlega."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Þú getur valið eitt eða fleiri námskeið (notaðu Ctrl/Cmd + smell)."
+
+msgid "bytes"
+msgstr "bæti"
+
+msgid "Failed to copy:"
+msgstr "Mistókst að afrita:"
+
+msgid "Missing resource file identifier."
+msgstr "Auðkenni auðlindaskrár vantar."
+
+msgid "Please select at least one course."
+msgstr "Veldu að minnsta kosti eitt námskeið."
+
+msgid "Resource file not found."
+msgstr "Auðlindaskrá fannst ekki."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Skráin \"%s\" hefur verið tengd við %d námskeið: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Sum námskeið voru sleppt: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Auðkenni skrár eða námskeiðs vantar."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Þessi auðlindaskrá hefur engan auðlindahnút og er ekki hægt að aftengja hana."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Skráin hefur verið aftengd frá %d námskeiðstenglum."
+
+msgid "This file is not attached to the selected course."
+msgstr "Þessi skrá er ekki tengd við valið námskeið."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Þessi skrá er enn notuð af að minnsta kosti einni auðlind og er ekki hægt að eyða henni."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Munaðarlausri skrá og efnislegu innihaldi hennar hefur verið eytt endanlega."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Könnun birt. Búið til: %d. Uppfært: %d. Skilaboð send: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Öðlast"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Ekki er hægt að öðlast þessa hæfni"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Nýliði"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Stíf fylgni við reglur og leiðbeiningar án samhengis; lítið aðstæðumat."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Þróaður byrjandi"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Byrjar að þekkja aðstæðuþætti og mynstur en þarf enn leiðbeiningar."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Hæfur"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Þróar áætlanagerð og hugræn líkön; tekur ábyrgð á niðurstöðum en getur fundið fyrir yfirþyrmandi flækjustigi."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Fær"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Sér \"heildarmyndina,\" forgangsraðar innsæislega og lærir af reynslu."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Sérfræðingur"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Innsæisleg, flæðandi frammistaða; treystir á djúpa þegjandi þekkingu; getur nýsköpun eða tekist á við nýjar aðstæður án erfiðleika."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Að muna"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Sækja, rifja upp eða þekkja viðeigandi þekkingu úr langtímaminni."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Að skilja"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Byggja merkingu út frá kennsluskilaboðum, þ. á m. munnlegum, skriflegum og myndrænum samskiptum. Sýna skilning með túlkun, dæmum, flokkun, samantekt, ályktun, samanburði eða skýringu."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Að beita"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Framkvæma eða nota aðferð með því að keyra hana eða innleiða hana í tiltekinni aðstæðu. Nota þekkingu eða færni í nýjum eða áþreifanlegum aðstæðum."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Að greina"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Skipta efni niður í efnisþætti og ákvarða hvernig hlutarnir tengjast hver öðrum og heildarbyggingu eða tilgangi. Greina hvatir, orsakir eða tengsl."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Að meta"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Taka ákvarðanir út frá viðmiðum og stöðlum. Athuga, gagnrýna eða rökstyðja ákvarðanir eða aðgerðir."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Að skapa"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Setja þætti saman í samhangandi eða virka heild; endurskipuleggja þætti í nýtt mynstur eða byggingu. Búa til frumlegt verk eða nýjar hugmyndir."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Fylgja"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Vinnur undir nánu eftirliti og leiðsögn. Framkvæmir venjubundin verkefni með takmarkaðri svigrúmi. Einbeitir sér að því að fylgja leiðbeiningum og grunnframkvæmd."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Aðstoða"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Vinnur undir venjubundnu eftirliti. Veitir öðrum aðstoð, leggur til liðsverkefna og byrjar að sýna frumkvæði innan skilgreindra marka."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Vinnur undir almennu eftirliti. Beitir þekkingu og færni við ýmis venjubundin og óvenjubundin verkefni. Beitir einhverju svigrúmi og dómgreind."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Vinnur undir víðtækri leiðsögn. Gerir öðrum kleift með sérfræðileiðsögn, stuðningi eða þjónustu. Tekur ábyrgð á eigin vinnu og getur stýrt litlum teymum eða verkefnum."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Tryggja og ráðleggja"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Vinnur undir víðtækri leiðsögn en með umtalsverðu sjálfstæði. Tryggir að vinna nái markmiðum og ráðleggur um flókin mál. Leiðir oft teymi eða verkefni og hefur áhrif á ákvarðanir."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Hefja og hafa áhrif"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Hefur skilgreint vald og ábyrgð á mikilvægu sviði. Hefur aðgerðir, hefur áhrif á stefnu og reglur á sínu sviði og leiðir umfangsmikil verkefni eða teymi."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Setja stefnu, hvetja, virkja"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Hefur vald á hæsta skipulagsstigi fyrir stórt sviði. Setur langtímastefnu, hvetur og virkjar aðra og tekur ákvarðanir sem skipta sköpum fyrir árangur stofnunarinnar. Hefur áhrif á iðnaðar- eða ytri stigum."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Hámarks óvirkur tími til að taka tillit til (mínútur)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Námskeiðssíða sem er opin sendir áfram sjálfvirkar beiðnir. Eftir þennan fjölda mínútna án raunverulegrar aðgerðar notanda (opnun síðu eða atriðis, svörun o.s.frv.) hættir tíminn sem eytt er á námskeiðinu að vera talinn."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Samvinnu Wiki-ritill"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Tengist Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Vista býr til nýja Chamilo Wiki-útgáfu úr núverandi Etherpad-efni."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Ekki tókst að hlaða samvinnuritlinum."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Virkja Etherpad fyrir Wiki-ritun"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Nota Etherpad sem samvinnuritil fyrir núverandi Wiki-síður. Etherpad verður að vera aðgengilegt á sama uppruna og Chamilo fyrir öruggar innfelldar lotur."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad-slóð"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Grunnslóð Etherpad-tilviksins, þ. á m. valfrjáls slóð bakvið öfugt umboð. Dæmi: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API-lykill"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API-lykill sem Chamilo notar til að búa til púða, lotur og samstilla Wiki-efni. Stilltu Etherpad til að samþykkja auðkenningu með API-lykli."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Sjálfgefna sýnileika nýrra skjala má breyta eftir námskeiði"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Sýnileiki sem nýtt skjal, mappa eða hlaðið skrá fær þegar kennari býr það til á námskeiði. Kennarar geta samt breytt sýnileika hvers og eins síðar."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Þegar virkt geta kennarar valið í námskeiðsstillingum sýnileika nýrra skjala á námskeiði sínu, í stað sjálfgefins gildis kerfisins."
+
+msgid "Default visibility of new learning paths"
+msgstr "Sjálfgefinn sýnileiki nýrra námsleiða"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Sjálfgefna sýnileika nýrra námsleiða má breyta eftir námskeiði"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Sýnileiki sem ný námsleið fær þegar kennari býr hana til á námskeiði. Kennarar geta samt breytt sýnileika hverrar og einnar síðar."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Þegar virkt geta kennarar valið í námskeiðsstillingum sýnileika nýrra námsleiða á námskeiði sínu, í stað sjálfgefins gildis kerfisins."
+
+msgid "Default visibility of new tests"
+msgstr "Sjálfgefinn sýnileiki nýrra prófa"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Sjálfgefinn sýnileiki nýrra prófa má breyta eftir námskeiði"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Sýnileiki sem nýtt próf fær þegar kennari býr það til í námskeiði. Kennarar geta samt breytt sýnileika hvers og eins síðar."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Þegar þetta er virkt geta kennarar valið í stillingum námskeiðsins sýnileika sem ný próf námskeiðsins fá, í stað sjálfgefins gildis kerfisins."
+
+msgid "Default visibility for new learning paths"
+msgstr "Sjálfgefinn sýnileiki fyrir nýjar námsleiðir"
+
+msgid "Default visibility for new tests"
+msgstr "Sjálfgefinn sýnileiki fyrir ný próf"
+
+msgid "Following"
+msgstr "Fylgist með"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Fá tölvupóst þegar nemandi skrifar athugasemd við innsendingu þessa verkefnis"
+
+msgid "Payment history"
+msgstr "Greiðslusaga"
+
+msgid "No payments yet"
+msgstr "Engar greiðslur enn"
+
+msgid "Cancel service"
+msgstr "Hætta við þjónustu"
+
+msgid "Official transcript"
+msgstr "Opinbert einkunnayfirlit"
+
+msgid "Unofficial transcript"
+msgstr "Óopinbert einkunnayfirlit"
+
+msgid "Student name"
+msgstr "Nafn nemanda"
+
+msgid "Student number"
+msgstr "Nemendanúmer"
+
+msgid "Program title"
+msgstr "Heiti námsleiðar"
+
+msgid "Required hours"
+msgstr "Áskildar klukkustundir"
+
+msgid "Completion date"
+msgstr "Lokadagsetning"
+
+msgid "Hours completed"
+msgstr "Klukkustundir lokið"
+
+msgid "Final grade"
+msgstr "Lokaeinkunn"
+
+msgid "Grade"
+msgstr "Einkunn"
+
+msgid "No completed course yet."
+msgstr "Ekkert námskeið lokið enn."
+
+msgid "Grading scale"
+msgstr "Einkunnaskali"
+
+msgid "Signature of school official"
+msgstr "Undirskrift skólastjórnanda"
+
+msgid "School official"
+msgstr "Skólastjórnandi"
+
+msgid "Official's title"
+msgstr "Titill fulltrúa"
+
+msgid "Verify this transcript at"
+msgstr "Staðfestu þetta einkunnayfirlit á"
+
+msgid "Verification code"
+msgstr "Staðfestingarkóði"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Þetta óopinbera einkunnayfirlit er ekki undirritað. Biddu stjórnanda um opinbert einkunnayfirlit."
+
+msgid "Transcript verification"
+msgstr "Staðfesting einkunnayfirlits"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Athugaðu að þetta opinbera einkunnayfirlit hafi verið gefið út og undirritað af stofnuninni, hafi ekki verið breytt og sé ekki afturkallað."
+
+msgid "Valid"
+msgstr "Gilt"
+
+msgid "Invalid signature"
+msgstr "Ógild undirskrift"
+
+msgid "Transcript not found"
+msgstr "Einkunnayfirlit fannst ekki"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Undirskrift stofnunarinnar er gild og þetta einkunnayfirlit hefur ekki verið afturkallað."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Ekki er hægt að staðfesta að þetta einkunnayfirlit sé gilt. Upplýsingar þess eru ekki sýndar."
+
+msgid "Transcript details"
+msgstr "Upplýsingar um einkunnayfirlit"
+
+msgid "Institution"
+msgstr "Stofnun"
+
+msgid "Issued on"
+msgstr "Útgefið þann"
+
+msgid "Download verification JSON"
+msgstr "Sækja staðfestingu JSON"
+
+msgid "Transcript"
+msgstr "Einkunnayfirlit"
+
+msgid "My confidential reports"
+msgstr "Mínar trúnaðarskýrslur"
+
+msgid "My transcript"
+msgstr "Mitt einkunnayfirlit"
+
+msgid "Confidential investigations"
+msgstr "Trúnaðarrannsóknir"
+
+msgid "Floor plan"
+msgstr "Grunnmynd"
+
+msgid "Click a highlighted room to select it"
+msgstr "Smelltu á auðkennt herbergi til að velja það"
+
+msgid "Select room"
+msgstr "Velja herbergi"
+
+msgid "Room on floor plan"
+msgstr "Herbergi á grunnmynd"
+
+msgid "Select a branch first"
+msgstr "Veldu fyrst útibú"
+
+msgid "The branch has no attached floor plan"
+msgstr "Útibúið hefur enga tengda grunnmynd"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Notaðu fjölhyrningsverkfærið til að teikna útlínur herbergisins; notaðu Breyta til að færa horn"
+
+msgid "Save room area"
+msgstr "Vista herbergissvæði"
+
+msgid "Clear room area"
+msgstr "Hreinsa herbergissvæði"
+
+msgid "Save the room form to persist the area"
+msgstr "Vista herbergiseyðublaðið til að varðveita svæðið"
+
+msgid "Floor plan unavailable"
+msgstr "Grunnmynd ekki tiltæk"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Kortapunktar herbergis verða að vera innan grunnmyndar"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Ertu viss um að þú viljir hreinsa herbergissvæðið?"
+
+msgid "View room on floor plan"
+msgstr "Skoða herbergi á grunnmynd"
+
+msgid "No floor plan available"
+msgstr "Engin grunnmynd tiltæk"
+
+msgid "This is an assignment by groups"
+msgstr "Þetta er verkefni eftir hópum"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Hladdu upp PNG, JPEG eða öruggri kyrrstæðri SVG grunnmynd, eða veldu fyrirliggjandi mynd úr Skjölum."
+
+msgid "Upload floor plan"
+msgstr "Hlaða upp grunnmynd"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG eða kyrrstætt SVG, hámark 10 MB"
+
+msgid "Search images by name"
+msgstr "Leita að myndum eftir nafni"
+
+msgid "Image name"
+msgstr "Myndheiti"
+
+msgid "Select an image"
+msgstr "Velja mynd"
+
+msgid "Change floor plan"
+msgstr "Breyta grunnmynd"
+
+msgid "Attach floor plan"
+msgstr "Tengja grunnmynd"
+
+msgid "No matching images found in Documents."
+msgstr "Engar samsvarandi myndir fundust í Skjölum."
+
+msgid "Current floor plan"
+msgstr "Núverandi grunnmynd"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Breytingar á grunnmynd eru vistaðar sjálfkrafa."
+
+msgid "Remove floor plan"
+msgstr "Fjarlægja grunnmynd"
+
+msgid "Cannot load images"
+msgstr "Ekki tókst að hlaða myndum"
+
+msgid "Floor plan saved"
+msgstr "Grunnmynd vistuð"
+
+msgid "Cannot attach floor plan"
+msgstr "Ekki tókst að tengja grunnmynd"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Aðeins PNG/JPEG og öruggar kyrrstæðar SVG myndir allt að 10MB eru studdar."
+
+msgid "Cannot upload floor plan"
+msgstr "Ekki tókst að hlaða upp grunnmynd"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Ertu viss um að þú viljir fjarlægja grunnmyndina?"
+
+msgid "Floor plan removed"
+msgstr "Grunnmynd fjarlægð"
+
+msgid "Cannot remove floor plan"
+msgstr "Ekki tókst að fjarlægja grunnmynd"
+
+msgid "Support bot"
+msgstr "Stuðningsbot"
+
+msgid "Connected"
+msgstr "Tengdur"
+
+msgid "Not connected"
+msgstr "Ekki tengdur"
+
+msgid "View ticket"
+msgstr "Skoða miða"
+
+msgid "Start a new conversation"
+msgstr "Byrja nýtt samtal"
+
+msgid "Video call"
+msgstr "Myndsímtal"
+
+msgid "Incoming video call"
+msgstr "Innhringing myndsímtal"
+
+msgid "Decline"
+msgstr "Hafna"
+
+msgid "Mute microphone"
+msgstr "Slökkva á hljóðnema"
+
+msgid "Unmute microphone"
+msgstr "Kveikja á hljóðnema"
+
+msgid "Turn camera off"
+msgstr "Slökkva á myndavél"
+
+msgid "Turn camera on"
+msgstr "Kveikja á myndavél"
+
+msgid "Hang up"
+msgstr "Leggja á"
+
+msgid "Calling..."
+msgstr "Hringir..."
+
+msgid "Connecting..."
+msgstr "Tengist..."
+
+msgid "Your contact is busy."
+msgstr "Tengiliðurinn þinn er upptekinn."
+
+msgid "Your contact did not answer the call."
+msgstr "Tengiliðurinn þinn svaraði ekki símtalinu."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Tengiliðurinn þinn gat ekki nálgast myndavélina eða hljóðnemann."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Tengiliðurinn þinn gat ekki undirbúið myndsímtalið."
+
+msgid "Your contact refused the call."
+msgstr "Tengiliðurinn þinn hafnaði símtalinu."
+
+msgid "The call timed out."
+msgstr "Símtalið rann út á tíma."
+
+msgid "Your contact cancelled the call."
+msgstr "Tengiliðurinn þinn hætti við símtalið."
+
+msgid "The video connection was lost."
+msgstr "Myndbandstengingin rofnaði."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Tengiliðurinn þinn gat ekki stofnað myndbandstenginguna."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Tengiliðurinn þinn gat ekki lokið uppsetningu myndbandssímtalssins."
+
+msgid "Your contact hung up."
+msgstr "Tengiliðurinn þinn lagði á."
+
+msgid "Video call could not be started"
+msgstr "Ekki tókst að hefja myndbandssímtal"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Aðgangur að myndavél eða hljóðnema var hafnað."
+
+msgid "No camera or microphone was found."
+msgstr "Engin myndavél eða hljóðnemi fannst."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Myndavél eða hljóðnemi er þegar í notkun eða ekki tiltækur."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Myndavélin eða hljóðneminn styður ekki nauðsynlegar stillingar."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Ekki tókst að fá aðgang að myndavél eða hljóðnema."
+
+msgid "The video call could not be prepared."
+msgstr "Ekki tókst að undirbúa myndbandssímtalið."
+
+msgid "The video call request could not be sent."
+msgstr "Ekki tókst að senda beiðni um myndbandssímtal."
+
+msgid "The incoming video call could not be processed."
+msgstr "Ekki tókst að vinna úr innkomandi myndbandssímtali."
+
+msgid "The video call answer could not be prepared."
+msgstr "Ekki tókst að undirbúa svar við myndbandssímtali."
+
+msgid "The video call answer could not be sent."
+msgstr "Ekki tókst að senda svar við myndbandssímtali."
+
+msgid "The video call answer could not be processed."
+msgstr "Ekki tókst að vinna úr svari við myndbandssímtali."
+
+msgid "The video connection failed"
+msgstr "Myndbandstengingin mistókst"
+
+msgid "The video connection could not be established."
+msgstr "Ekki tókst að stofna myndbandstenginguna."
+
+msgid "No answer was received."
+msgstr "Ekkert svar barst."
+
+msgid "You refused the call."
+msgstr "Þú hafnaðir símtalinu."
+
+msgid "You cancelled the call."
+msgstr "Þú hættir við símtalið."
+
+msgid "You hung up."
+msgstr "Þú lagðir á."
+
+msgid "You missed the call."
+msgstr "Þú misstir af símtalinu."
+
+msgid "Support bot is currently unavailable."
+msgstr "Stuðningsbotinn er ekki tiltækur sem stendur."
+
+msgid "A support ticket has been created."
+msgstr "Stuðningsbeiðni hefur verið stofnuð."
+
+msgid "Conversation ended."
+msgstr "Samtali lokið."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Stuðningsbotinn gat ekki haldið þessu samtali áfram. Vinsamlegast reyndu aftur."
+
+msgid "Add your first term glossary to this course"
+msgstr "Bættu fyrsta hugtakinu við orðasafn þessa námskeiðs"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Ertu viss um að þú viljir eyða þessu könnunarsniðmáti?"
+
+msgid "The survey template has been deleted."
+msgstr "Könnunarsniðmátinu hefur verið eytt."
+
+msgid "Please select a course."
+msgstr "Vinsamlegast veldu námskeið."
+
+msgid "Please select a session for this course."
+msgstr "Vinsamlegast veldu lotu fyrir þetta námskeið."
+
+msgid "The survey has been created from the template."
+msgstr "Könnunin hefur verið búin til út frá sniðmátinu."
+
+msgid "Survey templates"
+msgstr "Könnunarsniðmát"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Búðu til endurnýtanleg könnunarsniðmát fyrir kennara og úthlutaðu þeim beint á námskeið eða lotu."
+
+msgid "Subtitle"
+msgstr "Undirtitill"
+
+msgid "Assign to course"
+msgstr "Úthluta á námskeið"
+
+msgid "Assign template to course"
+msgstr "Úthluta sniðmáti á námskeið"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Skildu lotuna eftir tóma til að búa könnunina til beint á námskeiðinu."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Þetta námskeið er aðgengilegt í gegnum lotu á þessari gátt, svo lota er nauðsynleg."
+
+msgid "Survey template questions"
+msgstr "Spurningar könnunarsniðmáts"
+
+msgid "Back to survey templates"
+msgstr "Til baka í könnunarsniðmát"
+
+msgid "Could not load survey template"
+msgstr "Ekki tókst að hlaða könnunarsniðmáti"
+
+msgid "Could not load survey template questions"
+msgstr "Ekki tókst að hlaða spurningum könnunarsniðmáts"
+
+msgid "Could not save survey template question"
+msgstr "Ekki tókst að vista spurningu könnunarsniðmáts"
+
+msgid "Could not delete survey template question"
+msgstr "Ekki tókst að eyða spurningu könnunarsniðmáts"
+
+msgid "Could not move survey template question"
+msgstr "Ekki tókst að færa spurningu könnunarsniðmáts"
+
+msgid "Could not copy survey template question"
+msgstr "Ekki tókst að afrita spurningu könnunarsniðmáts"
+
+msgid "The survey template has been saved."
+msgstr "Könnunarsniðmátið hefur verið vistað."
+
+msgid "Edit survey template"
+msgstr "Breyta könnunarsniðmáti"
+
+msgid "Create survey template"
+msgstr "Búa til könnunarsniðmát"
+
+msgid "The survey template title is required."
+msgstr "Titill könnunarsniðmáts er nauðsynlegur."
+
+msgid "Visible as template"
+msgstr "Sýnilegt sem sniðmát"
+
+msgid "Create satisfaction survey"
+msgstr "Búa til ánægjukönnun"
+
+msgid "Training satisfaction survey"
+msgstr "Ánægjukönnun námskeiðs"
+
+msgid "Could not create satisfaction survey"
+msgstr "Gat ekki búið til ánægjukönnun"
+
+msgid "Use template"
+msgstr "Nota sniðmát"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Búa til þessa könnun úr endurnýtanlegu sniðmáti sem stjórnandi hefur útbúið."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Niðurstöður faldar fyrir kennara/leiðbeinanda"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Kennarar og leiðbeinendur geta enn séð fjölda svara og sent áminningar, en geta ekki opnað eða flutt út niðurstöður könnunarinnar."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Sniðmát notað. Farðu yfir stillingar könnunarinnar og vistaðu til að búa hana til."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Niðurstöður könnunar eru faldar fyrir kennurum og leiðbeinendum."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Þú getur enn notað boðsíðuna til að sjá fjölda svara og senda áminningar."
+
+msgid "Payment method"
+msgstr "Greiðslumáti"
+
+msgid "Preview mode"
+msgstr "Forskoðunarhamur"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Framvinda og einkunn eru ekki vistaðar í forskoðunarham."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Þessi tengill er ekki hægt að sýna inni í námsleiðinni."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Opnaðu hann í nýjum flipa til að skoða síðuna."
+
+msgid "Report a problem with this question"
+msgstr "Tilkynna vandamál með þessa spurningu"
+
+msgid "Your report was sent to the teacher."
+msgstr "Tilkynningin þín var send til kennarans."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Lýstu villunni eða vandamálinu sem þú fannst. Tilkynningin verður send til kennarans."
+
+msgid "A comment is required."
+msgstr "Athugasemd er nauðsynleg."
+
+msgid "Could not send the report."
+msgstr "Gat ekki sent tilkynninguna."
+
+msgid "Learner reports"
+msgstr "Tilkynningar nemenda"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Engar tilkynningar nemenda hafa verið sendar inn fyrir þessa spurningu."
+
+msgid "View attempt"
+msgstr "Skoða tilraun"
+
+msgid "Could not load learner reports."
+msgstr "Gat ekki hlaðið tilkynningum nemenda."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Leyfa nemendum að tilkynna vandamál í spurningum"
+
+msgid "Skill acquired"
+msgstr "Hæfni öðlast"
+
+msgid "AI Toolbox"
+msgstr "Gervigreindartólakista"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Búðu til gagnvirk fræðsluforrit með gervigreind og fylgstu með framvindu nemenda með SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Engin birt forrit eru enn tiltæk."
+
+msgid "Interactive applications"
+msgstr "Gagnvirk forrit"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Búðu til, bættu, birtu og skoðaðu útgáfur á einum stað."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Opnaðu forrit til að halda áfram frá nýjustu framvindu."
+
+msgid "Interactive learning application"
+msgstr "Gagnvirkt námsforrit"
+
+msgid "Create an interactive learning app"
+msgstr "Búa til gagnvirkt námsforrit"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Lýstu virkninni. Chamilo býr til útgáfumerkt SCORM-forrit með rakningu framvindu og einkunnar."
+
+msgid "Idea"
+msgstr "Hugmynd"
+
+msgid "Application"
+msgstr "Forrit"
+
+msgid "What should the application do?"
+msgstr "Hvað á forritið að gera?"
+
+msgid "How it works"
+msgstr "Hvernig það virkar"
+
+msgid "AI generation"
+msgstr "Gervigreindarframleiðsla"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Forritið er búið til út frá leiðbeiningum þínum og vistað sem útgáfa 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Framvinda nemanda, einkunn og áframhaldsgögn eru tilkynnt til Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Framtíðarbætur búa til nýjar útgáfur án þess að eyða fyrri."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Taktu með námsmarkmið, reglur, stig, einkunnagjöf og hvað eigi að gerast þegar nemandinn lýkur."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Þú hefur ekki leyfi til að búa til efni í þessu samhengi."
+
+msgid "The application was generated successfully."
+msgstr "Forritið var búið til með góðum árangri."
+
+msgid "Open in student view"
+msgstr "Opna í nemendasýn"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Búðu til forritið til að virkja forskoðun og birtingu."
+
+msgid "Improve with AI"
+msgstr "Bæta með gervigreind"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Lýstu breytingunni. Ný útgáfa verður búin til og fyrri útgáfur verða áfram aðgengilegar."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Lýstu allri gagnvirku æfingunni sem þú vilt búa til."
+
+msgid "What should be improved?"
+msgstr "Hvað ætti að bæta?"
+
+msgid "Generate new version"
+msgstr "Búa til nýja útgáfu"
+
+msgid "Version history"
+msgstr "Útgáfusaga"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Forskoða, sækja eða endurheimta hvaða útgáfu sem er."
+
+msgid "A new version was generated."
+msgstr "Ný útgáfa var búin til."
+
+msgid "Version restored"
+msgstr "Útgáfa endurheimt"
+
+msgid "The support bot tree has been published."
+msgstr "Stuðningsbottréið hefur verið birt."
+
+msgid "The support bot tree has been archived."
+msgstr "Stuðningsbottréið hefur verið sett í geymslu."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Stuðningsbottréið hefur verið afritað."
+
+msgid "The support bot tree has been deleted."
+msgstr "Stuðningsbottréið hefur verið eytt."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Ertu viss um að þú viljir eyða þessu stuðningsbottréi?"
+
+msgid "The support bot tree has been imported."
+msgstr "Stuðningsbottréið hefur verið flutt inn."
+
+msgid "Create support bot tree"
+msgstr "Búa til stuðningsbottré"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Byggðu fast ákvörðunartré sem leiðir notendur í gegnum stuðningsspurningar og getur vísað á miða."
+
+msgid "Portal scope"
+msgstr "Gildissvið gáttar"
+
+msgid "Duplicate"
+msgstr "Afrita"
+
+msgid "Archive"
+msgstr "Setja í geymslu"
+
+msgid "View conversations"
+msgstr "Skoða samtöl"
+
+msgid "Import support bot tree"
+msgstr "Flytja inn stuðningsbottré"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Flyttu inn JSON-útflutning eða CSV-ákvörðunartré. Innflutta tréið er alltaf búið til sem nýtt drög."
+
+msgid "Resolved"
+msgstr "Leyst"
+
+msgid "Escalated"
+msgstr "Vísað áfram"
+
+msgid "Abandoned"
+msgstr "Yfirgefið"
+
+msgid "Support bot conversations"
+msgstr "Samtöl stuðningsbots"
+
+msgid "Outcome"
+msgstr "Niðurstaða"
+
+msgid "Started at"
+msgstr "Hófst"
+
+msgid "Ended at"
+msgstr "Lauk"
+
+msgid "View conversation"
+msgstr "Skoða samtal"
+
+msgid "Go to node"
+msgstr "Fara á hnút"
+
+msgid "Create support ticket"
+msgstr "Búa til stuðningsmiða"
+
+msgid "End conversation"
+msgstr "Ljúka samtali"
+
+msgid "Node"
+msgstr "Hnút"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Stuðningsbottré krefst að minnsta kosti eins hnúts."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Ertu viss um að þú viljir eyða þessum hnút? Tenglar á hann verða hreinsaðir."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Hver hnút stuðningsbots krefst að minnsta kosti eins valkosts."
+
+msgid "The support bot tree title is required."
+msgstr "Titill stuðningsbottrés er nauðsynlegur."
+
+msgid "A support bot entry node is required."
+msgstr "Inngangshnútur stuðningsbots er nauðsynlegur."
+
+msgid "Every support bot node requires content."
+msgstr "Hver hnút stuðningsbots krefst efnis."
+
+msgid "Every support bot option requires a label."
+msgstr "Hver valkostur stuðningsbots krefst merkingar."
+
+msgid "Select a target node for every go-to option."
+msgstr "Veldu markhnút fyrir hvern „fara á“ valkost."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Sláðu inn hlutfallslegt slóð fyrir hvern tenglavalkost."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Veldu miðaflokk fyrir hvern áframsendingarvalkost."
+
+msgid "The support bot tree has been saved."
+msgstr "Stuðningsbottréið hefur verið vistað."
+
+msgid "Edit support bot tree"
+msgstr "Breyta stuðningsbottréi"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Birtar og geymdar útgáfur stuðningsbots eru aðeins til lestrar. Afritaðu þetta tré af listanum til að breyta nýrri drögum."
+
+msgid "Default ticket project"
+msgstr "Sjálfgefið miðaverkefni"
+
+msgid "Decision tree rules"
+msgstr "Reglur ákvörðunartrés"
+
+msgid "Every node must contain at least one option."
+msgstr "Hver hnútur verður að innihalda að minnsta kosti einn valkost."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Loka-hnútur verður að ljúka samtalinu eða búa til stuðningsmiða."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Fara-til tenglar mega ekki búa til lykkjur í v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Ytri vefslóðir eru ekki leyfðar í v1; tenglaaðgerðir verða að nota afstæða Chamilo-slóð."
+
+msgid "Nodes"
+msgstr "Hnútar"
+
+msgid "Add node"
+msgstr "Bæta við hnút"
+
+msgid "Entry node"
+msgstr "Inngangshnútur"
+
+msgid "Set as entry node"
+msgstr "Setja sem inngangshnút"
+
+msgid "Target node"
+msgstr "Markhnútur"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Notaðu afstæða Chamilo-slóð, til dæmis /tickets."
+
+msgid "Ticket category"
+msgstr "Flokkur miða"
+
+msgid "Select a default ticket project first."
+msgstr "Veldu fyrst sjálfgefið miðaverkefni."
+
+msgid "Closing message"
+msgstr "Lokaskilaboð"
+
+msgid "Select a node to edit it."
+msgstr "Veldu hnút til að breyta honum."
+
+msgid "Support bot conversation"
+msgstr "Samtal stuðningsbots"
+
+msgid "Transcript of %s"
+msgstr "Afrit af %s"
+
+msgid "Download unofficial transcript"
+msgstr "Sækja óopinbert einkunnayfirlit"
+
+msgid "Issue official transcript"
+msgstr "Gefa út opinbert einkunnayfirlit"
+
+msgid "Official transcripts"
+msgstr "Opinber einkunnayfirlit"
+
+msgid "No official transcript has been issued yet."
+msgstr "Ekkert opinbert einkunnayfirlit hefur verið gefið út enn."
+
+msgid "Issued by"
+msgstr "Gefið út af"
+
+msgid "Verify"
+msgstr "Staðfesta"
+
+msgid "Signature of official transcripts"
+msgstr "Undirskrift opinberra einkunnayfirlita"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Þessi mynd er prentuð á opinber einkunnayfirlit þessa gáttar, ofan við nafn og titil undirritanda sem stillt er í stillingum vottorðs."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Gefa út undirritað opinbert einkunnayfirlit með námskeiðum og einkunnum sem taldar eru upp á þessari síðu? Það er hægt að staðfesta það á netinu uns því er afturkallað."
+
+msgid "Official transcript issued"
+msgstr "Opinbert einkunnayfirlit gefið út"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Afturkalla þetta opinbera einkunnayfirlit? Staðfestingarsíðan mun þá sýna það sem afturkallað."
+
+msgid "Official transcript revoked"
+msgstr "Opinbert einkunnayfirlit afturkallað"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Veldu fyrst PNG- eða JPEG-mynd."
+
+msgid "Signed credential"
+msgstr "Undirritað skírteini"
+
+msgid "Issue signed credential"
+msgstr "Gefa út undirritað skírteini"
+
+msgid "Verify credential"
+msgstr "Staðfesta skírteini"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Festa á Sepolia-prufuneti"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Staðfesta fyrirliggjandi Sepolia-færslu"
+
+msgid "Revoke signed credential"
+msgstr "Afturkalla undirritað skírteini"
+
+msgid "Delete certificate"
+msgstr "Eyða vottorði"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Staðfesta fyrirliggjandi Sepolia-færslu"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia-færsluhash"
+
+msgid "Verify transaction"
+msgstr "Staðfesta færslu"
+
+msgid "Anchored"
+msgstr "Fest"
+
+msgid "Issued"
+msgstr "Gefið út"
+
+msgid "Not issued"
+msgstr "Ekki gefið út"
+
+msgid "Consent required"
+msgstr "Samþykki krafist"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia-færsla staðfest og sannreynd"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Veski Sepolia-prufunetsins mun biðja þig um að undirrita færslu. Aðeins fingrafar vottorðsins verður fest. Halda áfram?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Afturkalla þetta undirritaða skírteini? Allar bálkakeðjufærslur eru varanlegar, en staðfestingarsíðan mun tilkynna afturköllun."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Gefa út undirritað vottorðsskírteini fyrir þennan nemanda? Þetta gerir samþykktar persónuupplýsingar sannreynanlegar með einkatengli."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "EVM-samhæft vafra-veski er nauðsynlegt fyrir Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Veldu Sepolia-prufunet (keðjuauðkenni 11155111) í veskinu þínu."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Ógilt veskisfang eða fingrafar vottorðs."
+
+msgid "Transaction pending"
+msgstr "Færsla í bið"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Notaðu Staðfesta fyrirliggjandi Sepolia-færslu síðar."
+
+msgid "Signed credential issued"
+msgstr "Undirritað skilríki gefið út"
+
+msgid "Credential revoked"
+msgstr "Skilríki afturkallað"
+
+msgid "Transaction hash"
+msgstr "Færsluhash"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Samþykki fyrir birtingu gerir stjórnanda kleift að gefa út undirritað vottorðsskilríki og valkvætt festa SHA-256 fingrafar þess á Sepolia-prufunetinu. Ekkert nafn eða persónuupplýsingar eru sendar á keðjuna. Þú getur dregið samþykki til baka hvenær sem er."
+
+msgid "Publication consent"
+msgstr "Samþykki fyrir birtingu"
+
+msgid "Not approved"
+msgstr "Ekki samþykkt"
+
+msgid "Withdraw consent"
+msgstr "Draga samþykki til baka"
+
+msgid "Approve publication"
+msgstr "Samþykkja birtingu"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Ég heimila undirritað, opinberlega sannreynanlegt skilríki sem sýnir nafn mitt, námskeið, einkunn og útgáfudag. Stjórnandi má einnig birta aðeins SHA-256 fingrafar þess á Sepolia-prufunetinu. Fingrafarið er varanlegt, jafnvel þótt ég dragi samþykki til baka síðar. Halda áfram?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Draga birtingarsamþykki fyrir þetta vottorð til baka?"
+
+msgid "Publication approval recorded"
+msgstr "Birtingarsamþykki skráð"
+
+msgid "Publication approval withdrawn"
+msgstr "Birtingarsamþykki dregið til baka"
+
+msgid "Read more"
+msgstr "Lesa meira"
+
+msgid "Participation: %s of %s posts"
+msgstr "Þátttaka: %s af %s færslum"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Sendu innlag þitt til að sjá svör annarra þátttakenda."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Aðeins viðurkenndir rannsakendur geta skoðað hæfar tilkynningar. Auðkenni tilkynnenda eru trúnaðarmál sjálfgefið."
+
+msgid "New confidential report"
+msgstr "Ný trúnaðartilkynning"
+
+msgid "Reported user"
+msgstr "Tilkynntur notandi"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Það eru hæfar trúnaðartilkynningar sem bíða yfirferðar."
+
+msgid "Eligible investigations"
+msgstr "Hæfar rannsóknir"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Mál birtist hér aðeins eftir að minnsta kosti %s ólíkir notendur tilkynna sama einstakling."
+
+msgid "Distinct reporters"
+msgstr "Ólíkir tilkynnendur"
+
+msgid "Reports for selected user"
+msgstr "Tilkynningar um valinn notanda"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Trúnaðartilkynningar eru ekki í boði sem stendur."
+
+msgid "The investigation could not be loaded."
+msgstr "Ekki tókst að hlaða rannsókninni."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Auðkenni þitt er sjálfgefið varið gagnvart rannsakendum, en forðastu auðkennanlegar upplýsingar í texta tilkynningarinnar eða viðhengjum. Þetta er ekki neyðarþjónusta."
+
+msgid "Find the user involved"
+msgstr "Finndu viðkomandi notanda"
+
+msgid "Name or username"
+msgstr "Nafn eða notandanafn"
+
+msgid "Describe the situation"
+msgstr "Lýstu aðstæðunum"
+
+msgid "Evidence (optional)"
+msgstr "Sönnunargögn (valfrjálst)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Allt að þrjár skrár, að hámarki 8 MiB hver. Myndir, hljóð eða stutt myndbönd."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Ég samþykki að viðurkenndir rannsakendur megi sjá nafn mitt og netfang vegna þessarar tilteknu tilkynningar. Ég get dregið þessa heimild til baka síðar."
+
+msgid "Send confidential report"
+msgstr "Senda trúnaðartilkynningu"
+
+msgid "Could not search users"
+msgstr "Gat ekki leitað að notendum"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Allt að þrjár skrár, að hámarki 8 MiB hver."
+
+msgid "The confidential report could not be saved."
+msgstr "Ekki tókst að vista trúnaðartilkynninguna."
+
+msgid "Confidential report"
+msgstr "Trúnaðartilkynning"
+
+msgid "Confidential conversation"
+msgstr "Trúnaðarsamtal"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Rannsakendur geta átt samskipti í þessu samtali án þess að sjá auðkenni tilkynnanda nema deiling tengiliðaupplýsinga sé virkjuð."
+
+msgid "Reporter"
+msgstr "Tilkynnandi"
+
+msgid "Investigator"
+msgstr "Rannsakandi"
+
+msgid "Additional evidence (optional)"
+msgstr "Viðbótar sönnunargögn (valfrjálst)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Allt að þrjár skrár, að hámarki 8 MiB hver; tíu skrár á tilkynningu."
+
+msgid "Contact shared voluntarily"
+msgstr "Tengiliðaupplýsingum deilt af fúsum og frjálsum vilja"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Leyfa rannsakendum að sjá nafn mitt og netfang vegna þessarar tilkynningar"
+
+msgid "This confidential report is not available."
+msgstr "Þessi trúnaðartilkynning er ekki tiltæk."
+
+msgid "Your message could not be saved."
+msgstr "Ekki tókst að vista skilaboðin þín."
+
+msgid "Contact sharing could not be updated."
+msgstr "Ekki tókst að uppfæra deilingu tengiliða."
+
+msgid "Evidence could not be downloaded."
+msgstr "Ekki tókst að sækja sönnunargögn."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dæmi um eyðublaðsverkefni: reiknaðu líkamsþyngdarstuðul</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Aldur</strong></td>            <td width=\"75%\" style=\"\">[25] ára</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Kyn</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eða F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Þyngd</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Hæð</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Líkamsþyngdarstuðull</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Þyngd/Hæð<sup>2</sup> (Sjá <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-grein</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Dæmi um eyðublaðsverkefni: reiknaðu líkamsþyngdarstuðul</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Aldur</strong></td>            <td width=\"75%\" style=\"\">[25] ára</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Kyn</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eða F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Þyngd</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Hæð</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Líkamsþyngdarstuðull</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Þyngd/Hæð<sup>2</sup> (Sjá <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-grein</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Fela IP-tölu í skýrslum"
+
+msgid "Course settings policies"
+msgstr "Stefna námskeiðsstillinga"
+
+msgid "Academic transcripts"
+msgstr "Námsferilsskrár"
+
+msgid "Transcript program title"
+msgstr "Heiti námsleiðar á námsferilsskrá"
+
+msgid "Transcript course code"
+msgstr "Námskeiðskóði á námsferilsskrá"
+
+msgid "Transcript course hours field"
+msgstr "Reitur fyrir námskeiðsstundir á námsferilsskrá"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Lokið stundafjöldi á námsferilsskrá er krafinn stundafjöldi"
+
+msgid "Transcript student number field"
+msgstr "Reitur fyrir nemendanúmer á námsferilsskrá"
+
+msgid "Transcript address fields"
+msgstr "Heimilisfangsreitir á námsferilsskrá"
+
+msgid "Transcript grading scale"
+msgstr "Einkunnaskali á námsferilsskrá"
+
+msgid "Transcript GPA note"
+msgstr "Athugasemd um GPA á námsferilsskrá"
+
+msgid "Transcript signatory name"
+msgstr "Nafn undirritanda á námsferilsskrá"
+
+msgid "Transcript signatory title"
+msgstr "Titill undirritanda á námsferilsskrá"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Virkja undirrituð vottorð og valkvæma festingu á Sepolia-prófunarneti"
+
+msgid "Show thread replies only after participating"
+msgstr "Sýna svör í þræði aðeins eftir þátttöku"
+
+msgid "Show the forum category description in threads"
+msgstr "Sýna lýsingu umræðuflokks í þráðum"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Hægt er að breyta stillingum um þátttöku á spjallborði eftir námskeiði"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Hámarksfjöldi færslna sem sýndar eru í spjallþræði"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Færslur sem krafist er til að ljúka spjallþræði"
+
+msgid "Track e-mail openings"
+msgstr "Rekja opnun tölvupósts"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Leyfa svör við skilaboðum með tölvupósti"
+
+msgid "Inbound e-mail address"
+msgstr "Innkomandi tölvupóstfang"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN innkomandi pósthólfs"
+
+msgid "Remember me duration (days)"
+msgstr "Gildistími „Muna eftir mér“ (dagar)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Virkja OAuth Dynamic Client Registration umfram MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Virkja trúnaðarskýrslur um velferð"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Lágmarksfjöldi ólíkra tilkynnenda fyrir rannsókn"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Leyfa trúnaðarviðhengi sem sönnunargögn"
+
+msgid "Show confidential investigation notifications"
+msgstr "Sýna tilkynningar um trúnaðarrannsóknir"
+
+msgid "Enable support chatbot"
+msgstr "Virkja spjallbot fyrir stuðning"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Veldu hvar hugtök í orðalista eru auðkennd sjálfkrafa: skjöl, æfingar og námsleiðir."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Fela IP-tölur í sjónrænum skýrslum og útflutningi skýrslna. IP-tölur eru áfram vistaðar og aðgengilegar samkvæmt viðurkenndum ferlum um persónuupplýsingar."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Sjálfgefnar stillingar kerfis og heimildir til að breyta námskeiðum; stjórnað í Námskeiðsstillingum."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Leyfa notendum að sækja óopinbera námsferilsskrá yfir námskeið sem þeir hafa lokið og leyfa stjórnendum, lotustjórnendum og mannauðsstjórum að gefa út undirritaðar opinberar námsferilsskrár fyrir notendur sem þeir stjórna. Undirskriftarmynd er hlaðið inn af námsferilssíðu notanda."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Heiti námsleiðar sem prentað er á hverja námsferilsskrá, til dæmis nafn diplómunnar sem unnið er að á þessu kerfi."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Hvaða námskeiðsreitur fyllir dálkinn fyrir námskeiðskóða á námsferilsskrám: námskeiðskóði eða heiti deildar."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Breyta aukareits námskeiðs sem inniheldur stundafjölda námskeiðs. Skildu eftir autt til að nota lengd námskeiðsins."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Prenta krafinn stundafjölda námskeiðs sem stundir sem nemandi hefur lokið. Þegar slökkt er á þessu eru loknar stundir sá tími sem nemandi eyddi í námskeiðinu."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Breyta aukareits notanda sem inniheldur nemendanúmer sem prentað er á námsferilsskrár. Skildu eftir autt til að prenta ekkert."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Breyturnar, aðskildar með kommu, fyrir aukareiti notanda sem prentaðir eru á eftir heimilisfangi notanda á námsferilsskrám, til dæmis borg, fylki og póstnúmer."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "JSON-listi yfir einkunnastafi, frá hæsta lágmarkseinkunn og niður: hvert atriði hefur lágmarkseinkunn í prósentum (min), stafinn og einkunnastig sem notuð eru til að reikna GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Útskýring á því hvernig GPA er reiknað, prentuð undir GPA á námsferilsskrám."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Nafn skólastjórnanda sem undirritar opinberar námsferilsskrár."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Titill skólastjórnanda sem undirritar opinberar námsferilsskrár."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Krefst skýrs samþykkis eiganda og handvirkra aðgerða stjórnanda. Aðeins SHA-256 fingraför eru send á keðju."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Nemendur sjá aðeins fyrstu færslu umræðuþráðar uns þeir hafa sjálfir sent inn færslu. Stjórnendur, kennarar, þjálfarar og hóptutorar sjá alltaf allar færslur."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Birta titil og stytta lýsingu spjallflokksins efst á hverjum þræði, með tengli til að lesa alla lýsinguna."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Þegar þetta er virkt geta kennarar valið í spjallhluta námskeiðsstillinganna hvort námskeiðið feli svör við þræði uns nemandinn sendir inn færslu, sýni lýsingu flokksins í þráðum og hversu margar færslur þátttökustikan gerir ráð fyrir, í stað þess að fylgja stillingum kerfisins."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Sýna aðeins þennan fjölda færslna úr hverjum umræðuþræði fyrir hvern notanda sem er ekki kerfisstjóri, þar á meðal kennara, og fyrir alla inni í námsleið. Í þráða- og innfelldu sýninni gildir takmörkunin um svör við hverri færslu. Færslurnar eru í sömu röð og sýnin: þær fyrstu, eða þær nýjustu inni í námsleið, þar sem nýjustu færslurnar koma fyrst. Setjið 0 til að sýna allar færslur."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Sýna nemendum framvindustiku í hverjum umræðuþræði sem nær 100% þegar þeir hafa sent inn þennan fjölda skilaboða. Færslur sem bíða rýni eru taldar með. Setjið 0 til að fela framvindustikuna."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Bætir lítilli rekjamynd við tilkynningatölvupósta um skilaboð og skráir hvenær hún er sótt. Þetta gefur aðeins til kynna að tölvupósturinn hafi mögulega verið opnaður; það sanna ekki að hann hafi verið lesinn."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Leyfa viðtakendum tilkynninga um bein skilaboð að svara með tölvupósti. Innkomin skilaboð verða að vera send á innkomandi-póstskipun Chamilo af póstinnviðum."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Grunnfang notað til að beina svörum, til dæmis replies@example.com. Chamilo bætir við einstökum viðtakandaauðkenni með plús-áritun."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Pósthólfstenging sem notuð er til að sækja innkomin svör, til dæmis imaps://user:password@imap.example.com:993/INBOX. URL-kóðið frátekin tákn í auðkennum."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Fjöldi daga sem notandi er áfram innskráður þegar Muna eftir mér er valið. Setjið 0 til að slökkva. Krefst HTTPS. Leyfilegt bil: 0 til 90. Venjulegur lotutími er stilltur sérstaklega í PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Leyfir Dynamic Client Registration að biðja um hvaða umfang sem er skráð af OAuth-auðlindamiðlara Chamilo. Þegar slökkt er á þessu er sjálfskráning áfram takmörkuð við MCP. Aðgangur að auðlindum er alltaf takmarkaður sérstaklega af leyfðum auðlindalista hvers biðlara."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Virkja trúnaðarskýrslur um atvik. Einingin krefst verndaðs dulkóðunarlykils og rannsóknarheimildar."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Milli 2 og 10 ólíkir tilkynnendur verða að tilkynna sama notanda áður en málið verður sýnilegt rannsakendum."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Leyfa myndir, hljóð og stutt myndbandssönnunargögn. Fyrirliggjandi viðhengi eru áfram lesanleg þegar slökkt er á þessu."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Birta innri vísbendingu um hæfar rannsóknir. Sendir hvorki tölvupóst né ytri tilkynningar."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Sýna ákvörðunartré-spjallbot í spjallborðinu sem getur leiðbeint notendum að "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Leyfir kennurum að búa til og útgáfustýra gervigreindaraðstoðuðum námsforritum inni í námskeiðum."
+
+msgid "Department name"
+msgstr "Deildarheiti"
+
+msgid "Documents and exercise"
+msgstr "Skjöl og æfing"
+
+msgid "Documents and learning path"
+msgstr "Skjöl og námsleið"
+
+msgid "Documents, exercise and learning path"
+msgstr "Skjöl, æfing og námsleið"
+
+msgid "session"
+msgstr "lota"
+
+msgid "course"
+msgstr "námskeið"
+
+msgid "You have been enrolled in %s"
+msgstr "Þú hefur verið skráð(ur) í %s"
 

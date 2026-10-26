@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Hormat kami"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Contoh rumus: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Contoh rumus: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rentang variabel"
@@ -28768,6 +28768,9 @@ msgstr "Pengguna saat ini tidak ditemukan."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Halo %s,<br><br>Anda terdaftar di %s.<br>Anda dapat mengakses akun Anda dari <a href=\"%s\">sini</a>.<br><br>Kredensial login Anda adalah:<br>Nama pengguna: <strong>%s</strong><br>Kata sandi: <strong>%s</strong><br><br>Salam hangat,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Halo %s,<br><br>Anda terdaftar di %s.<br>Nama pengguna: <strong>%s</strong><br><br>Silakan klik tautan di bawah ini untuk mengatur kata sandi dan mengakses akun Anda:<br><a href=\"%s\">Atur kata sandi Anda</a><br><br>Salam hormat,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Anda terdaftar di %s"
 
@@ -41571,4 +41574,1616 @@ msgstr "Riwayat migrasi tercatat"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s ada di akar proyek: hapus untuk menutup titik akhir peningkatan"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Anda telah memperoleh sertifikat untuk latihan ini"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Anda harus menyelesaikan jalur pembelajaran \"%s\" sebelum dapat mengakses yang ini."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Apakah Anda yakin ingin menghapus berkas ini secara definitif?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Apakah Anda yakin ingin melepaskan berkas ini dari kursus yang dipilih?"
+
+msgid "Attach this file to another course"
+msgstr "Lampirkan berkas ini ke kursus lain"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Lampirkan ke kursus yang dipilih (tersembunyi)"
+
+msgid "Course(s):"
+msgstr "Kursus:"
+
+msgid "Delete definitively"
+msgstr "Hapus secara definitif"
+
+msgid "Detach from this course"
+msgstr "Lepaskan dari kursus ini"
+
+msgid "File actions"
+msgstr "Tindakan berkas"
+
+msgid "File Information"
+msgstr "Informasi berkas"
+
+msgid "File Link:"
+msgstr "Tautan berkas:"
+
+msgid "File Path:"
+msgstr "Jalur berkas:"
+
+msgid "Filter courses..."
+msgstr "Saring kursus..."
+
+msgid "MIME Type:"
+msgstr "Tipe MIME:"
+
+msgid "N/A"
+msgstr "T/A"
+
+msgid "No results found."
+msgstr "Tidak ada hasil ditemukan."
+
+msgid "Original Name"
+msgstr "Nama asli"
+
+msgid "Original Name:"
+msgstr "Nama asli:"
+
+msgid "Orphan"
+msgstr "Yatim"
+
+msgid "Resource File ID:"
+msgstr "ID berkas sumber daya:"
+
+msgid "Resource Node ID:"
+msgstr "ID simpul sumber daya:"
+
+msgid "Search..."
+msgstr "Cari..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Untuk melepaskan berkas ini dari kursus tertentu, klik ikon \"×\" pada tag kursus yang sesuai di atas."
+
+msgid "User:"
+msgstr "Pengguna:"
+
+msgid "View file information"
+msgstr "Lihat informasi berkas"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Anda dapat melampirkan berkas ini ke satu atau lebih kursus (tersembunyi di akar dokumen). Jika berkas tidak lagi digunakan dan menjadi yatim, Anda juga dapat menghapusnya secara definitif."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Anda dapat memilih satu atau lebih kursus (gunakan Ctrl/Cmd + klik)."
+
+msgid "bytes"
+msgstr "byte"
+
+msgid "Failed to copy:"
+msgstr "Gagal menyalin:"
+
+msgid "Missing resource file identifier."
+msgstr "Pengidentifikasi berkas sumber daya tidak ada."
+
+msgid "Please select at least one course."
+msgstr "Silakan pilih setidaknya satu kursus."
+
+msgid "Resource file not found."
+msgstr "Berkas sumber daya tidak ditemukan."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Berkas \"%s\" telah dilampirkan ke %d kursus: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Beberapa kursus dilewati: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Pengidentifikasi berkas atau kursus tidak ada."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Berkas sumber daya ini tidak memiliki simpul sumber daya dan tidak dapat dilepaskan."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Berkas telah dilepaskan dari %d tautan kursus."
+
+msgid "This file is not attached to the selected course."
+msgstr "Berkas ini tidak dilampirkan ke kursus yang dipilih."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Berkas ini masih digunakan oleh setidaknya satu sumber daya dan tidak dapat dihapus."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Berkas yatim dan konten fisiknya telah dihapus secara definitif."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Survei diterbitkan. Dibuat: %d. Diperbarui: %d. Pesan terkirim: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Dapat diperoleh"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Keterampilan ini tidak dapat diperoleh"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Pemula"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Kepatuhan kaku terhadap aturan dan instruksi tanpa konteks; sedikit penilaian situasional."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Pemula lanjutan"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Mulai mengenali aspek situasional dan pola tetapi masih membutuhkan pedoman."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kompeten"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Mengembangkan perencanaan dan model mental; bertanggung jawab atas hasil tetapi mungkin merasa kewalahan oleh kompleksitas."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Mahir"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Melihat \"gambaran besar,\" memprioritaskan secara intuitif, dan belajar dari pengalaman."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Ahli"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Kinerja intuitif dan lancar; mengandalkan pengetahuan tacit yang mendalam; dapat berinovasi atau menangani situasi baru dengan mudah."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Mengingat"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Mengambil, mengingat, atau mengenali pengetahuan relevan dari memori jangka panjang."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Memahami"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Membangun makna dari pesan instruksional, termasuk komunikasi lisan, tertulis, dan grafis. Menunjukkan pemahaman dengan menafsirkan, memberi contoh, mengklasifikasikan, merangkum, menyimpulkan, membandingkan, atau menjelaskan."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Menerapkan"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Melaksanakan atau menggunakan prosedur dengan menjalankannya atau mengimplementasikannya dalam situasi tertentu. Menggunakan pengetahuan atau keterampilan dalam situasi baru atau konkret."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Menganalisis"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Memecah materi menjadi bagian-bagian penyusunnya dan menentukan bagaimana bagian-bagian itu berhubungan satu sama lain serta dengan struktur atau tujuan keseluruhan. Mengidentifikasi motif, penyebab, atau hubungan."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Mengevaluasi"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Membuat penilaian berdasarkan kriteria dan standar. Memeriksa, mengkritik, atau membenarkan keputusan atau tindakan."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Mencipta"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Menggabungkan elemen untuk membentuk keseluruhan yang koheren atau fungsional; menata ulang elemen menjadi pola atau struktur baru. Menghasilkan karya asli atau ide baru."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Mengikuti"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Bekerja di bawah pengawasan dan arahan ketat. Melakukan tugas rutin dengan diskresi terbatas. Berfokus pada mengikuti instruksi dan pelaksanaan dasar."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Membantu"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Bekerja di bawah pengawasan rutin. Memberikan bantuan kepada orang lain, berkontribusi pada tugas tim, dan mulai mengambil inisiatif dalam batas yang ditentukan."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Bekerja di bawah pengawasan umum. Menerapkan pengetahuan dan keterampilan pada berbagai kegiatan rutin dan nonrutin. Menggunakan beberapa diskresi dan pertimbangan."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Bekerja di bawah arahan luas. Memungkinkan orang lain dengan memberikan panduan, dukungan, atau layanan spesialis. Bertanggung jawab atas pekerjaan sendiri dan mungkin mengawasi tim atau tugas kecil."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Memastikan dan menasihati"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Bekerja di bawah arahan luas tetapi dengan otonomi signifikan. Memastikan pekerjaan memenuhi tujuan dan menasihati tentang hal-hal kompleks. Sering memimpin tim atau proyek dan memengaruhi keputusan."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Memulai dan memengaruhi"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Memiliki wewenang dan tanggung jawab yang ditetapkan untuk area kerja yang signifikan. Memulai tindakan, memengaruhi strategi dan kebijakan di domainnya, dan memimpin proyek atau tim substansial."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Menetapkan strategi, menginspirasi, memobilisasi"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Memegang wewenang di tingkat organisasi tertinggi untuk area kerja utama. Menetapkan strategi jangka panjang, menginspirasi dan memobilisasi orang lain, serta membuat keputusan yang krusial bagi keberhasilan organisasi. Memengaruhi di tingkat industri atau eksternal."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Waktu tidak aktif maksimum yang dipertimbangkan (menit)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Halaman kursus yang dibiarkan terbuka terus mengirim permintaan otomatis. Setelah sejumlah menit ini tanpa tindakan nyata dari pengguna (membuka halaman atau item, menjawab, dll.), waktu yang dihabiskan di kursus berhenti dihitung."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Editor Wiki kolaboratif"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Menghubungkan ke Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Menyimpan membuat versi Wiki Chamilo baru dari konten Etherpad saat ini."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Editor kolaboratif tidak dapat dimuat."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Aktifkan Etherpad untuk pengeditan Wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Gunakan Etherpad sebagai editor kolaboratif untuk halaman Wiki yang ada. Etherpad harus diekspos pada origin yang sama dengan Chamilo untuk sesi tertanam yang aman."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "URL dasar instans Etherpad, termasuk jalur reverse-proxy opsional. Contoh: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Kunci API Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Kunci API yang digunakan Chamilo untuk membuat pad, sesi, dan menyinkronkan konten Wiki. Konfigurasikan Etherpad agar menerima autentikasi kunci API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Visibilitas default dokumen baru dapat diubah per kursus"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilitas yang diberikan kepada dokumen, folder, atau file unggahan baru ketika pengajar membuatnya di kursus. Pengajar masih dapat mengubah visibilitas masing-masing setelahnya."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Jika diaktifkan, pengajar dapat memilih di pengaturan kursus visibilitas yang diberikan kepada dokumen baru kursus mereka, alih-alih default platform."
+
+msgid "Default visibility of new learning paths"
+msgstr "Visibilitas default jalur pembelajaran baru"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Visibilitas default jalur pembelajaran baru dapat diubah per kursus"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilitas yang diberikan kepada jalur pembelajaran baru ketika pengajar membuatnya di kursus. Pengajar masih dapat mengubah visibilitas masing-masing setelahnya."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Jika diaktifkan, pengajar dapat memilih di pengaturan kursus visibilitas yang diberikan kepada jalur pembelajaran baru kursus mereka, alih-alih default platform."
+
+msgid "Default visibility of new tests"
+msgstr "Visibilitas default tes baru"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Visibilitas default tes baru dapat diubah per kursus"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilitas yang diberikan pada tes baru saat pengajar membuatnya di kursus. Pengajar masih dapat mengubah visibilitas masing-masing setelahnya."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Jika diaktifkan, pengajar dapat memilih di pengaturan kursus visibilitas yang diberikan pada tes baru kursus mereka, alih-alih default platform."
+
+msgid "Default visibility for new learning paths"
+msgstr "Visibilitas default untuk jalur pembelajaran baru"
+
+msgid "Default visibility for new tests"
+msgstr "Visibilitas default untuk tes baru"
+
+msgid "Following"
+msgstr "Mengikuti"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Terima e-mail saat peserta didik berkomentar pada pengumpulan tugas ini"
+
+msgid "Payment history"
+msgstr "Riwayat pembayaran"
+
+msgid "No payments yet"
+msgstr "Belum ada pembayaran"
+
+msgid "Cancel service"
+msgstr "Batalkan layanan"
+
+msgid "Official transcript"
+msgstr "Transkrip resmi"
+
+msgid "Unofficial transcript"
+msgstr "Transkrip tidak resmi"
+
+msgid "Student name"
+msgstr "Nama siswa"
+
+msgid "Student number"
+msgstr "Nomor siswa"
+
+msgid "Program title"
+msgstr "Judul program"
+
+msgid "Required hours"
+msgstr "Jam yang diwajibkan"
+
+msgid "Completion date"
+msgstr "Tanggal penyelesaian"
+
+msgid "Hours completed"
+msgstr "Jam yang diselesaikan"
+
+msgid "Final grade"
+msgstr "Nilai akhir"
+
+msgid "Grade"
+msgstr "Nilai"
+
+msgid "No completed course yet."
+msgstr "Belum ada kursus yang diselesaikan."
+
+msgid "Grading scale"
+msgstr "Skala penilaian"
+
+msgid "Signature of school official"
+msgstr "Tanda tangan pejabat sekolah"
+
+msgid "School official"
+msgstr "Pejabat sekolah"
+
+msgid "Official's title"
+msgstr "Jabatan pejabat"
+
+msgid "Verify this transcript at"
+msgstr "Verifikasi transkrip ini di"
+
+msgid "Verification code"
+msgstr "Kode verifikasi"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Transkrip tidak resmi ini tidak ditandatangani. Minta transkrip resmi kepada administrator."
+
+msgid "Transcript verification"
+msgstr "Verifikasi transkrip"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Periksa bahwa transkrip resmi ini diterbitkan dan ditandatangani oleh institusi, tidak diubah, dan tidak dicabut."
+
+msgid "Valid"
+msgstr "Valid"
+
+msgid "Invalid signature"
+msgstr "Tanda tangan tidak valid"
+
+msgid "Transcript not found"
+msgstr "Transkrip tidak ditemukan"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Tanda tangan institusi valid dan transkrip ini tidak dicabut."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Transkrip ini tidak dapat diverifikasi sebagai valid. Detailnya tidak ditampilkan."
+
+msgid "Transcript details"
+msgstr "Detail transkrip"
+
+msgid "Institution"
+msgstr "Institusi"
+
+msgid "Issued on"
+msgstr "Diterbitkan pada"
+
+msgid "Download verification JSON"
+msgstr "Unduh JSON verifikasi"
+
+msgid "Transcript"
+msgstr "Transkrip"
+
+msgid "My confidential reports"
+msgstr "Laporan rahasia saya"
+
+msgid "My transcript"
+msgstr "Transkrip saya"
+
+msgid "Confidential investigations"
+msgstr "Investigasi rahasia"
+
+msgid "Floor plan"
+msgstr "Denah lantai"
+
+msgid "Click a highlighted room to select it"
+msgstr "Klik ruangan yang disorot untuk memilihnya"
+
+msgid "Select room"
+msgstr "Pilih ruangan"
+
+msgid "Room on floor plan"
+msgstr "Ruangan pada denah lantai"
+
+msgid "Select a branch first"
+msgstr "Pilih cabang terlebih dahulu"
+
+msgid "The branch has no attached floor plan"
+msgstr "Cabang tidak memiliki denah lantai terlampir"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Gunakan alat poligon untuk menguraikan ruangan; gunakan Edit untuk memindahkan sudut"
+
+msgid "Save room area"
+msgstr "Simpan area ruangan"
+
+msgid "Clear room area"
+msgstr "Hapus area ruangan"
+
+msgid "Save the room form to persist the area"
+msgstr "Simpan formulir ruangan untuk mempertahankan area"
+
+msgid "Floor plan unavailable"
+msgstr "Denah lantai tidak tersedia"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Titik peta ruangan harus berada dalam denah lantai"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Yakin ingin menghapus area ruangan?"
+
+msgid "View room on floor plan"
+msgstr "Lihat ruangan pada denah lantai"
+
+msgid "No floor plan available"
+msgstr "Tidak ada denah lantai tersedia"
+
+msgid "This is an assignment by groups"
+msgstr "Ini adalah tugas berdasarkan kelompok"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Unggah denah lantai PNG, JPEG, atau SVG statis yang aman, atau pilih gambar yang sudah ada dari Dokumen."
+
+msgid "Upload floor plan"
+msgstr "Unggah denah lantai"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG, atau SVG statis, maksimum 10 MB"
+
+msgid "Search images by name"
+msgstr "Cari gambar berdasarkan nama"
+
+msgid "Image name"
+msgstr "Nama gambar"
+
+msgid "Select an image"
+msgstr "Pilih gambar"
+
+msgid "Change floor plan"
+msgstr "Ubah denah lantai"
+
+msgid "Attach floor plan"
+msgstr "Lampirkan denah lantai"
+
+msgid "No matching images found in Documents."
+msgstr "Tidak ada gambar yang cocok di Dokumen."
+
+msgid "Current floor plan"
+msgstr "Denah lantai saat ini"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Perubahan denah lantai disimpan secara otomatis."
+
+msgid "Remove floor plan"
+msgstr "Hapus denah lantai"
+
+msgid "Cannot load images"
+msgstr "Tidak dapat memuat gambar"
+
+msgid "Floor plan saved"
+msgstr "Denah lantai disimpan"
+
+msgid "Cannot attach floor plan"
+msgstr "Tidak dapat melampirkan denah lantai"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Hanya gambar PNG/JPEG dan SVG statis yang aman hingga 10MB yang didukung."
+
+msgid "Cannot upload floor plan"
+msgstr "Tidak dapat mengunggah denah lantai"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Yakin ingin menghapus denah lantai?"
+
+msgid "Floor plan removed"
+msgstr "Denah lantai dihapus"
+
+msgid "Cannot remove floor plan"
+msgstr "Tidak dapat menghapus denah lantai"
+
+msgid "Support bot"
+msgstr "Bot dukungan"
+
+msgid "Connected"
+msgstr "Terhubung"
+
+msgid "Not connected"
+msgstr "Tidak terhubung"
+
+msgid "View ticket"
+msgstr "Lihat tiket"
+
+msgid "Start a new conversation"
+msgstr "Mulai percakapan baru"
+
+msgid "Video call"
+msgstr "Panggilan video"
+
+msgid "Incoming video call"
+msgstr "Panggilan video masuk"
+
+msgid "Decline"
+msgstr "Tolak"
+
+msgid "Mute microphone"
+msgstr "Bisukan mikrofon"
+
+msgid "Unmute microphone"
+msgstr "Nyalakan mikrofon"
+
+msgid "Turn camera off"
+msgstr "Matikan kamera"
+
+msgid "Turn camera on"
+msgstr "Nyalakan kamera"
+
+msgid "Hang up"
+msgstr "Tutup panggilan"
+
+msgid "Calling..."
+msgstr "Memanggil..."
+
+msgid "Connecting..."
+msgstr "Menghubungkan..."
+
+msgid "Your contact is busy."
+msgstr "Kontak Anda sedang sibuk."
+
+msgid "Your contact did not answer the call."
+msgstr "Kontak Anda tidak menjawab panggilan."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Kontak Anda tidak dapat mengakses kamera atau mikrofon."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Kontak Anda tidak dapat menyiapkan panggilan video."
+
+msgid "Your contact refused the call."
+msgstr "Kontak Anda menolak panggilan."
+
+msgid "The call timed out."
+msgstr "Panggilan habis waktu."
+
+msgid "Your contact cancelled the call."
+msgstr "Kontak Anda membatalkan panggilan."
+
+msgid "The video connection was lost."
+msgstr "Koneksi video terputus."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Kontak Anda tidak dapat membuat koneksi video."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Kontak Anda tidak dapat menyelesaikan pengaturan panggilan video."
+
+msgid "Your contact hung up."
+msgstr "Kontak Anda menutup panggilan."
+
+msgid "Video call could not be started"
+msgstr "Panggilan video tidak dapat dimulai"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Izin kamera atau mikrofon ditolak."
+
+msgid "No camera or microphone was found."
+msgstr "Kamera atau mikrofon tidak ditemukan."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Kamera atau mikrofon sedang digunakan atau tidak tersedia."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Kamera atau mikrofon tidak mendukung pengaturan yang diperlukan."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Akses kamera atau mikrofon tidak dapat diperoleh."
+
+msgid "The video call could not be prepared."
+msgstr "Panggilan video tidak dapat disiapkan."
+
+msgid "The video call request could not be sent."
+msgstr "Permintaan panggilan video tidak dapat dikirim."
+
+msgid "The incoming video call could not be processed."
+msgstr "Panggilan video masuk tidak dapat diproses."
+
+msgid "The video call answer could not be prepared."
+msgstr "Jawaban panggilan video tidak dapat disiapkan."
+
+msgid "The video call answer could not be sent."
+msgstr "Jawaban panggilan video tidak dapat dikirim."
+
+msgid "The video call answer could not be processed."
+msgstr "Jawaban panggilan video tidak dapat diproses."
+
+msgid "The video connection failed"
+msgstr "Koneksi video gagal"
+
+msgid "The video connection could not be established."
+msgstr "Koneksi video tidak dapat dibuat."
+
+msgid "No answer was received."
+msgstr "Tidak ada jawaban yang diterima."
+
+msgid "You refused the call."
+msgstr "Anda menolak panggilan."
+
+msgid "You cancelled the call."
+msgstr "Anda membatalkan panggilan."
+
+msgid "You hung up."
+msgstr "Anda menutup panggilan."
+
+msgid "You missed the call."
+msgstr "Anda melewatkan panggilan."
+
+msgid "Support bot is currently unavailable."
+msgstr "Bot dukungan saat ini tidak tersedia."
+
+msgid "A support ticket has been created."
+msgstr "Tiket dukungan telah dibuat."
+
+msgid "Conversation ended."
+msgstr "Percakapan berakhir."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Bot dukungan tidak dapat melanjutkan percakapan ini. Silakan coba lagi."
+
+msgid "Add your first term glossary to this course"
+msgstr "Tambahkan istilah glosarium pertama Anda ke kursus ini"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Apakah Anda yakin ingin menghapus templat survei ini?"
+
+msgid "The survey template has been deleted."
+msgstr "Templat survei telah dihapus."
+
+msgid "Please select a course."
+msgstr "Silakan pilih kursus."
+
+msgid "Please select a session for this course."
+msgstr "Silakan pilih sesi untuk kursus ini."
+
+msgid "The survey has been created from the template."
+msgstr "Survei telah dibuat dari templat."
+
+msgid "Survey templates"
+msgstr "Templat survei"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Buat templat survei yang dapat digunakan ulang untuk pengajar dan tetapkan langsung ke kursus atau sesi."
+
+msgid "Subtitle"
+msgstr "Subjudul"
+
+msgid "Assign to course"
+msgstr "Tetapkan ke kursus"
+
+msgid "Assign template to course"
+msgstr "Tetapkan templat ke kursus"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Biarkan sesi kosong untuk membuat survei langsung di kursus."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Kursus ini tersedia melalui sesi di portal ini, jadi sesi diperlukan."
+
+msgid "Survey template questions"
+msgstr "Pertanyaan templat survei"
+
+msgid "Back to survey templates"
+msgstr "Kembali ke templat survei"
+
+msgid "Could not load survey template"
+msgstr "Tidak dapat memuat templat survei"
+
+msgid "Could not load survey template questions"
+msgstr "Tidak dapat memuat pertanyaan templat survei"
+
+msgid "Could not save survey template question"
+msgstr "Tidak dapat menyimpan pertanyaan templat survei"
+
+msgid "Could not delete survey template question"
+msgstr "Tidak dapat menghapus pertanyaan templat survei"
+
+msgid "Could not move survey template question"
+msgstr "Tidak dapat memindahkan pertanyaan templat survei"
+
+msgid "Could not copy survey template question"
+msgstr "Tidak dapat menyalin pertanyaan templat survei"
+
+msgid "The survey template has been saved."
+msgstr "Templat survei telah disimpan."
+
+msgid "Edit survey template"
+msgstr "Sunting templat survei"
+
+msgid "Create survey template"
+msgstr "Buat templat survei"
+
+msgid "The survey template title is required."
+msgstr "Judul templat survei wajib diisi."
+
+msgid "Visible as template"
+msgstr "Tampil sebagai templat"
+
+msgid "Create satisfaction survey"
+msgstr "Buat survei kepuasan"
+
+msgid "Training satisfaction survey"
+msgstr "Survei kepuasan pelatihan"
+
+msgid "Could not create satisfaction survey"
+msgstr "Tidak dapat membuat survei kepuasan"
+
+msgid "Use template"
+msgstr "Gunakan templat"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Buat survei ini dari templat yang dapat digunakan ulang yang disiapkan oleh administrator."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Hasil disembunyikan dari guru/tutor"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Guru dan tutor masih dapat melihat jumlah tanggapan dan mengirim pengingat, tetapi tidak dapat membuka atau mengekspor hasil survei."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Templat diterapkan. Tinjau pengaturan survei dan simpan untuk membuatnya."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Hasil survei disembunyikan dari guru dan tutor."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Anda masih dapat menggunakan halaman undangan untuk melihat jumlah tanggapan dan mengirim pengingat."
+
+msgid "Payment method"
+msgstr "Metode pembayaran"
+
+msgid "Preview mode"
+msgstr "Mode pratinjau"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Progres dan skor tidak disimpan dalam mode pratinjau."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Tautan ini tidak dapat ditampilkan di dalam jalur pembelajaran."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Buka di tab baru untuk melihat halaman."
+
+msgid "Report a problem with this question"
+msgstr "Laporkan masalah pada pertanyaan ini"
+
+msgid "Your report was sent to the teacher."
+msgstr "Laporan Anda telah dikirim ke guru."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Jelaskan kesalahan atau masalah yang Anda temukan. Laporan Anda akan dikirim ke guru."
+
+msgid "A comment is required."
+msgstr "Komentar wajib diisi."
+
+msgid "Could not send the report."
+msgstr "Tidak dapat mengirim laporan."
+
+msgid "Learner reports"
+msgstr "Laporan peserta didik"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Belum ada laporan peserta didik yang dikirim untuk pertanyaan ini."
+
+msgid "View attempt"
+msgstr "Lihat percobaan"
+
+msgid "Could not load learner reports."
+msgstr "Tidak dapat memuat laporan peserta didik."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Izinkan peserta didik melaporkan masalah pada pertanyaan"
+
+msgid "Skill acquired"
+msgstr "Keterampilan diperoleh"
+
+msgid "AI Toolbox"
+msgstr "Kotak Peralatan AI"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Hasilkan aplikasi pendidikan interaktif dengan AI dan lacak progres peserta didik dengan SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Belum ada aplikasi yang dipublikasikan."
+
+msgid "Interactive applications"
+msgstr "Aplikasi interaktif"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Hasilkan, perbaiki, publikasikan, dan tinjau versi dari satu tempat."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Buka aplikasi untuk melanjutkan dari progres terakhir Anda."
+
+msgid "Interactive learning application"
+msgstr "Aplikasi pembelajaran interaktif"
+
+msgid "Create an interactive learning app"
+msgstr "Buat aplikasi pembelajaran interaktif"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Jelaskan aktivitasnya. Chamilo akan menghasilkan aplikasi SCORM berversi dengan pelacakan progres dan skor."
+
+msgid "Idea"
+msgstr "Ide"
+
+msgid "Application"
+msgstr "Aplikasi"
+
+msgid "What should the application do?"
+msgstr "Apa yang harus dilakukan aplikasi ini?"
+
+msgid "How it works"
+msgstr "Cara kerjanya"
+
+msgid "AI generation"
+msgstr "Pembuatan AI"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Aplikasi dihasilkan dari instruksi Anda dan disimpan sebagai versi 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Progres, skor, dan data lanjutan peserta didik dilaporkan ke Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Perbaikan di masa depan membuat versi baru tanpa menghapus yang sebelumnya."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Sertakan tujuan pembelajaran, aturan, tingkat, penilaian, dan apa yang harus terjadi ketika peserta didik selesai."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Anda tidak diizinkan membuat konten dalam konteks ini."
+
+msgid "The application was generated successfully."
+msgstr "Aplikasi berhasil dihasilkan."
+
+msgid "Open in student view"
+msgstr "Buka dalam tampilan siswa"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Buat aplikasi untuk mengaktifkan pratinjau dan penerbitan."
+
+msgid "Improve with AI"
+msgstr "Perbaiki dengan AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Jelaskan perubahannya. Versi baru akan dibuat dan versi sebelumnya tetap tersedia."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Jelaskan aktivitas interaktif lengkap yang ingin Anda hasilkan."
+
+msgid "What should be improved?"
+msgstr "Apa yang harus diperbaiki?"
+
+msgid "Generate new version"
+msgstr "Buat versi baru"
+
+msgid "Version history"
+msgstr "Riwayat versi"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Pratinjau, unduh, atau pulihkan versi yang dihasilkan."
+
+msgid "A new version was generated."
+msgstr "Versi baru telah dibuat."
+
+msgid "Version restored"
+msgstr "Versi dipulihkan"
+
+msgid "The support bot tree has been published."
+msgstr "Pohon bot dukungan telah diterbitkan."
+
+msgid "The support bot tree has been archived."
+msgstr "Pohon bot dukungan telah diarsipkan."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Pohon bot dukungan telah diduplikasi."
+
+msgid "The support bot tree has been deleted."
+msgstr "Pohon bot dukungan telah dihapus."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Yakin ingin menghapus pohon bot dukungan ini?"
+
+msgid "The support bot tree has been imported."
+msgstr "Pohon bot dukungan telah diimpor."
+
+msgid "Create support bot tree"
+msgstr "Buat pohon bot dukungan"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Buat pohon keputusan tetap yang memandu pengguna melalui pertanyaan dukungan dan dapat ditingkatkan ke Tiket."
+
+msgid "Portal scope"
+msgstr "Cakupan portal"
+
+msgid "Duplicate"
+msgstr "Duplikat"
+
+msgid "Archive"
+msgstr "Arsipkan"
+
+msgid "View conversations"
+msgstr "Lihat percakapan"
+
+msgid "Import support bot tree"
+msgstr "Impor pohon bot dukungan"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Impor ekspor JSON atau pohon keputusan CSV. Pohon yang diimpor selalu dibuat sebagai draf baru."
+
+msgid "Resolved"
+msgstr "Terselesaikan"
+
+msgid "Escalated"
+msgstr "Ditingkatkan"
+
+msgid "Abandoned"
+msgstr "Ditinggalkan"
+
+msgid "Support bot conversations"
+msgstr "Percakapan bot dukungan"
+
+msgid "Outcome"
+msgstr "Hasil"
+
+msgid "Started at"
+msgstr "Dimulai pada"
+
+msgid "Ended at"
+msgstr "Berakhir pada"
+
+msgid "View conversation"
+msgstr "Lihat percakapan"
+
+msgid "Go to node"
+msgstr "Pergi ke simpul"
+
+msgid "Create support ticket"
+msgstr "Buat tiket dukungan"
+
+msgid "End conversation"
+msgstr "Akhiri percakapan"
+
+msgid "Node"
+msgstr "Simpul"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Pohon bot dukungan memerlukan setidaknya satu simpul."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Yakin ingin menghapus simpul ini? Tautan ke simpul ini akan dihapus."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Setiap simpul bot dukungan memerlukan setidaknya satu opsi."
+
+msgid "The support bot tree title is required."
+msgstr "Judul pohon bot dukungan wajib diisi."
+
+msgid "A support bot entry node is required."
+msgstr "Simpul entri bot dukungan wajib ada."
+
+msgid "Every support bot node requires content."
+msgstr "Setiap simpul bot dukungan memerlukan konten."
+
+msgid "Every support bot option requires a label."
+msgstr "Setiap opsi bot dukungan memerlukan label."
+
+msgid "Select a target node for every go-to option."
+msgstr "Pilih simpul tujuan untuk setiap opsi pergi ke."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Masukkan URL relatif untuk setiap opsi tautan."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Pilih kategori tiket untuk setiap opsi eskalasi."
+
+msgid "The support bot tree has been saved."
+msgstr "Pohon bot dukungan telah disimpan."
+
+msgid "Edit support bot tree"
+msgstr "Edit pohon bot dukungan"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Versi bot dukungan yang diterbitkan dan diarsipkan bersifat hanya baca. Duplikatkan pohon ini dari daftar untuk mengedit versi draf baru."
+
+msgid "Default ticket project"
+msgstr "Proyek tiket default"
+
+msgid "Decision tree rules"
+msgstr "Aturan pohon keputusan"
+
+msgid "Every node must contain at least one option."
+msgstr "Setiap simpul harus berisi setidaknya satu opsi."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Simpul akhir harus mengakhiri percakapan atau membuat tiket dukungan."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Tautan go-to tidak boleh membuat siklus di v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "URL eksternal tidak diizinkan di v1; tindakan tautan harus menggunakan jalur Chamilo relatif."
+
+msgid "Nodes"
+msgstr "Simpul"
+
+msgid "Add node"
+msgstr "Tambah simpul"
+
+msgid "Entry node"
+msgstr "Simpul masuk"
+
+msgid "Set as entry node"
+msgstr "Tetapkan sebagai simpul masuk"
+
+msgid "Target node"
+msgstr "Simpul target"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Gunakan jalur Chamilo relatif, misalnya /tickets."
+
+msgid "Ticket category"
+msgstr "Kategori tiket"
+
+msgid "Select a default ticket project first."
+msgstr "Pilih proyek tiket default terlebih dahulu."
+
+msgid "Closing message"
+msgstr "Pesan penutup"
+
+msgid "Select a node to edit it."
+msgstr "Pilih simpul untuk mengeditnya."
+
+msgid "Support bot conversation"
+msgstr "Percakapan bot dukungan"
+
+msgid "Transcript of %s"
+msgstr "Transkrip %s"
+
+msgid "Download unofficial transcript"
+msgstr "Unduh transkrip tidak resmi"
+
+msgid "Issue official transcript"
+msgstr "Terbitkan transkrip resmi"
+
+msgid "Official transcripts"
+msgstr "Transkrip resmi"
+
+msgid "No official transcript has been issued yet."
+msgstr "Belum ada transkrip resmi yang diterbitkan."
+
+msgid "Issued by"
+msgstr "Diterbitkan oleh"
+
+msgid "Verify"
+msgstr "Verifikasi"
+
+msgid "Signature of official transcripts"
+msgstr "Tanda tangan transkrip resmi"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Gambar ini dicetak pada transkrip resmi portal ini, di atas nama dan gelar penandatangan yang diatur di pengaturan sertifikat."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Terbitkan transkrip resmi bertanda tangan dengan kursus dan nilai yang tercantum di halaman ini? Transkrip dapat diverifikasi daring hingga dicabut."
+
+msgid "Official transcript issued"
+msgstr "Transkrip resmi diterbitkan"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Cabut transkrip resmi ini? Halaman verifikasinya kemudian akan menampilkannya sebagai dicabut."
+
+msgid "Official transcript revoked"
+msgstr "Transkrip resmi dicabut"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Pilih gambar PNG atau JPEG terlebih dahulu."
+
+msgid "Signed credential"
+msgstr "Kredensial bertanda tangan"
+
+msgid "Issue signed credential"
+msgstr "Terbitkan kredensial bertanda tangan"
+
+msgid "Verify credential"
+msgstr "Verifikasi kredensial"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Jangkar di testnet Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Konfirmasi transaksi Sepolia yang ada"
+
+msgid "Revoke signed credential"
+msgstr "Cabut kredensial bertanda tangan"
+
+msgid "Delete certificate"
+msgstr "Hapus sertifikat"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Konfirmasi transaksi Sepolia yang ada"
+
+msgid "Sepolia transaction hash"
+msgstr "Hash transaksi Sepolia"
+
+msgid "Verify transaction"
+msgstr "Verifikasi transaksi"
+
+msgid "Anchored"
+msgstr "Dijangkarkan"
+
+msgid "Issued"
+msgstr "Diterbitkan"
+
+msgid "Not issued"
+msgstr "Belum diterbitkan"
+
+msgid "Consent required"
+msgstr "Persetujuan diperlukan"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Transaksi Sepolia dikonfirmasi dan diverifikasi"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Dompet testnet Sepolia akan meminta Anda menandatangani transaksi. Hanya sidik jari sertifikat yang akan dijangkar. Lanjutkan?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Cabut kredensial bertanda tangan ini? Transaksi blockchain tetap permanen, tetapi halaman verifikasi akan melaporkan pencabutan."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Terbitkan kredensial sertifikat bertanda tangan untuk peserta didik ini? Ini membuat detail pribadi yang disetujui dapat diverifikasi dengan tautan pribadi."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Dompet browser yang kompatibel dengan EVM diperlukan untuk Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Pilih testnet Sepolia (chain ID 11155111) di dompet Anda."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Alamat dompet atau sidik jari sertifikat tidak valid."
+
+msgid "Transaction pending"
+msgstr "Transaksi tertunda"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Gunakan Konfirmasi transaksi Sepolia yang sudah ada nanti."
+
+msgid "Signed credential issued"
+msgstr "Kredensial bertanda tangan diterbitkan"
+
+msgid "Credential revoked"
+msgstr "Kredensial dicabut"
+
+msgid "Transaction hash"
+msgstr "Hash transaksi"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Persetujuan publikasi memungkinkan administrator menerbitkan kredensial sertifikat bertanda tangan dan secara opsional menambatkan sidik jari SHA-256-nya di testnet Sepolia. Tidak ada nama atau data pribadi yang dikirim on-chain. Anda dapat menarik persetujuan kapan saja."
+
+msgid "Publication consent"
+msgstr "Persetujuan publikasi"
+
+msgid "Not approved"
+msgstr "Tidak disetujui"
+
+msgid "Withdraw consent"
+msgstr "Tarik persetujuan"
+
+msgid "Approve publication"
+msgstr "Setujui publikasi"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Saya mengizinkan kredensial bertanda tangan yang dapat diverifikasi secara publik yang menampilkan nama, kursus, skor, dan tanggal penerbitan saya. Administrator juga boleh memublikasikan hanya sidik jari SHA-256-nya di testnet Sepolia. Sidik jari bersifat permanen, meskipun saya menarik persetujuan nanti. Lanjutkan?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Tarik persetujuan publikasi untuk sertifikat ini?"
+
+msgid "Publication approval recorded"
+msgstr "Persetujuan publikasi tercatat"
+
+msgid "Publication approval withdrawn"
+msgstr "Persetujuan publikasi ditarik"
+
+msgid "Read more"
+msgstr "Baca selengkapnya"
+
+msgid "Participation: %s of %s posts"
+msgstr "Partisipasi: %s dari %s pos"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Kirim kontribusi Anda untuk melihat balasan peserta lain."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Hanya investigator yang berwenang yang dapat meninjau laporan yang memenuhi syarat. Identitas pelapor tetap rahasia secara default."
+
+msgid "New confidential report"
+msgstr "Laporan rahasia baru"
+
+msgid "Reported user"
+msgstr "Pengguna yang dilaporkan"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Ada laporan rahasia yang memenuhi syarat menunggu tinjauan."
+
+msgid "Eligible investigations"
+msgstr "Investigasi yang memenuhi syarat"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Kasus muncul di sini hanya setelah setidaknya %s pengguna berbeda melaporkan orang yang sama."
+
+msgid "Distinct reporters"
+msgstr "Pelapor berbeda"
+
+msgid "Reports for selected user"
+msgstr "Laporan untuk pengguna yang dipilih"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Pelaporan rahasia saat ini tidak tersedia."
+
+msgid "The investigation could not be loaded."
+msgstr "Investigasi tidak dapat dimuat."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Identitas Anda dilindungi dari investigator secara default, tetapi hindari menyertakan detail pengenal dalam teks laporan atau lampiran. Ini bukan layanan darurat."
+
+msgid "Find the user involved"
+msgstr "Cari pengguna yang terlibat"
+
+msgid "Name or username"
+msgstr "Nama atau nama pengguna"
+
+msgid "Describe the situation"
+msgstr "Jelaskan situasinya"
+
+msgid "Evidence (optional)"
+msgstr "Bukti (opsional)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Hingga tiga berkas, maksimum 8 MiB masing-masing. Gambar, audio, atau video pendek."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Saya setuju bahwa investigator yang berwenang boleh melihat nama dan email saya untuk laporan khusus ini. Saya dapat menarik izin ini nanti."
+
+msgid "Send confidential report"
+msgstr "Kirim laporan rahasia"
+
+msgid "Could not search users"
+msgstr "Tidak dapat mencari pengguna"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Hingga tiga berkas, maksimum 8 MiB masing-masing."
+
+msgid "The confidential report could not be saved."
+msgstr "Laporan rahasia tidak dapat disimpan."
+
+msgid "Confidential report"
+msgstr "Laporan rahasia"
+
+msgid "Confidential conversation"
+msgstr "Percakapan rahasia"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Investigator dapat berkomunikasi melalui percakapan ini tanpa melihat identitas pelapor kecuali berbagi kontak diaktifkan."
+
+msgid "Reporter"
+msgstr "Pelapor"
+
+msgid "Investigator"
+msgstr "Investigator"
+
+msgid "Additional evidence (optional)"
+msgstr "Bukti tambahan (opsional)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Hingga tiga berkas, maksimum 8 MiB masing-masing; sepuluh berkas per laporan."
+
+msgid "Contact shared voluntarily"
+msgstr "Kontak dibagikan secara sukarela"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Izinkan investigator melihat nama dan email saya untuk laporan ini"
+
+msgid "This confidential report is not available."
+msgstr "Laporan rahasia ini tidak tersedia."
+
+msgid "Your message could not be saved."
+msgstr "Pesan Anda tidak dapat disimpan."
+
+msgid "Contact sharing could not be updated."
+msgstr "Berbagi kontak tidak dapat diperbarui."
+
+msgid "Evidence could not be downloaded."
+msgstr "Bukti tidak dapat diunduh."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Contoh mengisi aktivitas formulir : hitung Indeks Massa Tubuh</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Usia</strong></td>            <td width=\"75%\" style=\"\">[25] tahun</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Jenis kelamin</strong></td>            <td style=\"\" text-align:=\"\">[M] (M atau F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Berat</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Tinggi</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Indeks Massa Tubuh</strong></td>            <td style=\"vertical-align: top;\">[29] IMT =Berat/Tinggi<sup>2</sup> (Lihat <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikel Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Contoh mengisi aktivitas formulir : hitung Indeks Massa Tubuh</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Usia</strong></td>            <td width=\"75%\" style=\"\">[25] tahun</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Jenis kelamin</strong></td>            <td style=\"\" text-align:=\"\">[M] (M atau F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Berat</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Tinggi</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Indeks Massa Tubuh</strong></td>            <td style=\"vertical-align: top;\">[29] IMT =Berat/Tinggi<sup>2</sup> (Lihat <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikel Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Sembunyikan alamat IP dari laporan"
+
+msgid "Course settings policies"
+msgstr "Kebijakan pengaturan kursus"
+
+msgid "Academic transcripts"
+msgstr "Transkrip akademik"
+
+msgid "Transcript program title"
+msgstr "Judul program transkrip"
+
+msgid "Transcript course code"
+msgstr "Kode kursus transkrip"
+
+msgid "Transcript course hours field"
+msgstr "Bidang jam kursus transkrip"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Jam selesai transkrip adalah jam yang diwajibkan"
+
+msgid "Transcript student number field"
+msgstr "Bidang nomor mahasiswa transkrip"
+
+msgid "Transcript address fields"
+msgstr "Bidang alamat transkrip"
+
+msgid "Transcript grading scale"
+msgstr "Skala penilaian transkrip"
+
+msgid "Transcript GPA note"
+msgstr "Catatan IPK transkrip"
+
+msgid "Transcript signatory name"
+msgstr "Nama penandatangan transkrip"
+
+msgid "Transcript signatory title"
+msgstr "Jabatan penandatangan transkrip"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Aktifkan sertifikat bertanda tangan dan penambatan opsional di testnet Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Tampilkan balasan utas hanya setelah berpartisipasi"
+
+msgid "Show the forum category description in threads"
+msgstr "Tampilkan deskripsi kategori forum di utas"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Pengaturan partisipasi forum dapat diubah per kursus"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Jumlah pos maksimum yang ditampilkan dalam utas forum"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Pos yang diperlukan untuk menyelesaikan utas forum"
+
+msgid "Track e-mail openings"
+msgstr "Lacak pembukaan e-mail"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Izinkan balasan e-mail ke pesan"
+
+msgid "Inbound e-mail address"
+msgstr "Alamat e-mail masuk"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN kotak surat masuk"
+
+msgid "Remember me duration (days)"
+msgstr "Durasi ingat saya (hari)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Aktifkan Pendaftaran Klien Dinamis OAuth di luar MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Aktifkan pelaporan kesejahteraan rahasia"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Jumlah pelapor berbeda minimum untuk investigasi"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Izinkan lampiran bukti rahasia"
+
+msgid "Show confidential investigation notifications"
+msgstr "Tampilkan notifikasi investigasi rahasia"
+
+msgid "Enable support chatbot"
+msgstr "Aktifkan chatbot dukungan"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Pilih di mana istilah glosarium disorot secara otomatis: dokumen, latihan, dan jalur pembelajaran."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Sembunyikan alamat IP dalam pelaporan visual dan ekspor laporan. Alamat IP tetap disimpan dan dapat diakses melalui prosedur data pribadi yang berwenang."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Nilai default platform dan izin pengeditan kursus; dikelola di Pengaturan kursus."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Izinkan pengguna mengunduh transkrip tidak resmi dari kursus yang telah mereka selesaikan, dan izinkan administrator, administrator sesi, serta manajer SDM menerbitkan transkrip resmi bertanda tangan untuk pengguna yang mereka kelola. Gambar tanda tangan diunggah dari halaman transkrip pengguna."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Judul program yang dicetak pada setiap transkrip, misalnya nama diploma yang disiapkan di platform ini."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Bidang kursus mana yang mengisi kolom kode kursus pada transkrip: kode kursus atau nama departemen."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Variabel bidang ekstra kursus yang menyimpan jumlah jam suatu kursus. Biarkan kosong untuk menggunakan durasi kursus."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Cetak jam yang diwajibkan suatu kursus sebagai jam yang diselesaikan peserta didik. Jika dinonaktifkan, jam yang diselesaikan adalah waktu yang dihabiskan peserta didik di kursus."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Variabel bidang ekstra pengguna yang menyimpan nomor mahasiswa yang dicetak pada transkrip. Biarkan kosong agar tidak dicetak."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Variabel bidang ekstra pengguna yang dipisahkan koma, dicetak setelah alamat pengguna pada transkrip, misalnya kota, provinsi, dan kode pos."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Daftar JSON huruf nilai, dari skor minimum tertinggi ke bawah: setiap item memiliki skor minimum dalam persen (min), huruf, dan poin nilai yang digunakan untuk menghitung IPK."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Penjelasan cara penghitungan IPK, dicetak di bawah IPK pada transkrip."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Nama pejabat sekolah yang menandatangani transkrip resmi."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Jabatan pejabat sekolah yang menandatangani transkrip resmi."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Memerlukan persetujuan eksplisit pemilik dan tindakan administrator secara manual. Hanya sidik jari SHA-256 yang dikirim ke rantai."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Peserta didik hanya melihat kiriman pertama dari sebuah utas forum sampai mereka sendiri mengirim di dalamnya. Administrator, pengajar, pelatih, dan tutor kelompok selalu melihat setiap kiriman."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Tampilkan judul dan deskripsi singkat kategori forum di bagian atas setiap utas, dengan tautan untuk membaca deskripsi lengkap."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Jika diaktifkan, pengajar dapat memilih di bagian Forum pada pengaturan kursus apakah kursus mereka menyembunyikan balasan utas sampai peserta didik mengirim, menampilkan deskripsi kategori di utas, dan berapa banyak kiriman yang diharapkan bilah kemajuan partisipasi, alih-alih mengikuti pengaturan platform."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Tampilkan hanya sejumlah kiriman ini dari setiap utas forum kepada setiap pengguna yang bukan administrator platform, termasuk pengajar, dan kepada semua orang di dalam jalur pembelajaran. Dalam tampilan berutas dan bersarang, batas berlaku untuk balasan setiap kiriman. Kiriman dipertahankan sesuai urutan tampilan: yang pertama, atau yang terbaru di dalam jalur pembelajaran, di mana kiriman terbaru muncul lebih dulu. Atur ke 0 untuk menampilkan setiap kiriman."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Tampilkan bilah kemajuan kepada peserta didik di setiap utas forum, yang mencapai 100% setelah mereka mengirim sejumlah pesan ini di dalamnya. Kiriman yang menunggu moderasi dihitung. Atur ke 0 untuk menyembunyikan bilah kemajuan."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Menambahkan gambar pelacakan kecil ke e-mail notifikasi pesan dan mencatat saat gambar tersebut diminta. Ini hanya menunjukkan bahwa e-mail mungkin telah dibuka; tidak membuktikan bahwa e-mail itu dibaca."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Izinkan penerima notifikasi pesan langsung membalas melalui e-mail. Pesan masuk harus diarahkan ke perintah inbound-mail Chamilo oleh infrastruktur surat."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Alamat dasar yang digunakan untuk perutean balasan, misalnya replies@example.com. Chamilo menambahkan token penerima unik menggunakan plus addressing."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Koneksi kotak surat yang digunakan untuk mengumpulkan balasan masuk, misalnya imaps://user:password@imap.example.com:993/INBOX. Enkode URL karakter cadangan dalam kredensial."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Jumlah hari pengguna tetap masuk saat Ingat saya dipilih. Atur ke 0 untuk menonaktifkan. Memerlukan HTTPS. Rentang yang diizinkan: 0 hingga 90. Batas waktu sesi normal dikonfigurasi terpisah di PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Mengizinkan Dynamic Client Registration meminta cakupan apa pun yang didaftarkan oleh server sumber daya OAuth Chamilo. Jika dinonaktifkan, pendaftaran mandiri tetap terbatas pada MCP. Akses sumber daya selalu dibatasi secara terpisah oleh daftar sumber daya yang diizinkan setiap klien."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Aktifkan laporan insiden rahasia. Modul ini memerlukan kunci enkripsi terlindungi dan izin investigator."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Antara 2 dan 10 pelapor berbeda harus melaporkan pengguna yang sama sebelum kasus terlihat oleh investigator."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Izinkan bukti gambar, audio, dan video singkat. Lampiran yang sudah ada tetap dapat dibaca saat dinonaktifkan."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Tampilkan indikasi internal investigasi yang memenuhi syarat. Tidak mengirim email atau notifikasi eksternal."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Tampilkan chatbot pohon keputusan di panel obrolan yang dapat memandu pengguna ke "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Mengizinkan pengajar membuat dan membuat versi aplikasi pendidikan berbantuan AI di dalam kursus."
+
+msgid "Department name"
+msgstr "Nama departemen"
+
+msgid "Documents and exercise"
+msgstr "Dokumen dan latihan"
+
+msgid "Documents and learning path"
+msgstr "Dokumen dan jalur pembelajaran"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokumen, latihan, dan jalur pembelajaran"
+
+msgid "session"
+msgstr "sesi"
+
+msgid "course"
+msgstr "kursus"
+
+msgid "You have been enrolled in %s"
+msgstr "Anda telah didaftarkan di %s"
 

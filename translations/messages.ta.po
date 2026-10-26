@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "உண்மையாகவே"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "சூத்திர மாதிரி: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "சூத்திர மாதிரி: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "மாறியின் வரம்புகள்"
@@ -28768,6 +28768,9 @@ msgstr "தற்போதைய பயனர் கிடைக்கவில�
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "வணக்கம் %s,<br><br>நீங்கள் %s இல் பதிவு செய்யப்பட்டுள்ளீர்.<br>உங்கள் கணக்கை <a href=\"%s\">இங்கிருந்து</a> அணுகலாம்.<br><br>உங்கள் உள்நுழைவு சான்றுகள்:<br>பயனர்பெயர்: <strong>%s</strong><br>பாஸ்வர்ட்: <strong>%s</strong><br><br>சிறந்த வாழ்த்துக்கள்,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "வணக்கம் %s,<br><br>நீங்கள் %s இல் பதிவு செய்யப்பட்டுள்ளீர்கள்.<br>பயனர்பெயர்: <strong>%s</strong><br><br>உங்கள் கடவுச்சொல்லை அமைத்து உங்கள் கணக்கை அணுக கீழே உள்ள இணைப்பைக் கிளிக் செய்யவும்:<br><a href=\"%s\">கடவுச்சொல்லை அமைக்கவும்</a><br><br>இதழ் வாழ்த்துகளுடன்,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "நீங்கள் %s இல் பதிவு செய்யப்பட்டுள்ளீர்"
 
@@ -41571,4 +41574,1616 @@ msgstr "இடப்பெயர்வு வரலாறு பதிவு ச
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "திட்ட வேரில் %s உள்ளது: மேம்படுத்தல் முனைப்புள்ளிகளை மூட அதை நீக்கவும்"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "இந்தப் பயிற்சிக்காக நீங்கள் சான்றிதழ் பெற்றுள்ளீர்கள்"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "இந்தக் கற்றல் பாதையை அணுகுவதற்கு முன் நீங்கள் கற்றல் பாதை \"%s\" ஐ முடிக்க வேண்டும்."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "இந்தக் கோப்பை நிரந்தரமாக நீக்க விரும்புகிறீர்களா?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பாடத்திட்டத்திலிருந்து இந்தக் கோப்பைப் பிரிக்க விரும்புகிறீர்களா?"
+
+msgid "Attach this file to another course"
+msgstr "இந்தக் கோப்பை மற்றொரு பாடத்திட்டத்துடன் இணைக்கவும்"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பாடத்திட்டம்(களுடன்) இணைக்கவும் (மறைக்கப்பட்டது)"
+
+msgid "Course(s):"
+msgstr "பாடத்திட்டம்(கள்):"
+
+msgid "Delete definitively"
+msgstr "நிரந்தரமாக நீக்கு"
+
+msgid "Detach from this course"
+msgstr "இந்தப் பாடத்திட்டத்திலிருந்து பிரிக்கவும்"
+
+msgid "File actions"
+msgstr "கோப்பு செயல்கள்"
+
+msgid "File Information"
+msgstr "கோப்பு தகவல்"
+
+msgid "File Link:"
+msgstr "கோப்பு இணைப்பு:"
+
+msgid "File Path:"
+msgstr "கோப்பு பாதை:"
+
+msgid "Filter courses..."
+msgstr "பாடத்திட்டங்களை வடிகட்டவும்..."
+
+msgid "MIME Type:"
+msgstr "MIME வகை:"
+
+msgid "N/A"
+msgstr "பொருந்தாது"
+
+msgid "No results found."
+msgstr "முடிவுகள் எதுவும் கிடைக்கவில்லை."
+
+msgid "Original Name"
+msgstr "அசல் பெயர்"
+
+msgid "Original Name:"
+msgstr "அசல் பெயர்:"
+
+msgid "Orphan"
+msgstr "அனாதை"
+
+msgid "Resource File ID:"
+msgstr "வளக் கோப்பு ID:"
+
+msgid "Resource Node ID:"
+msgstr "வள முனை ID:"
+
+msgid "Search..."
+msgstr "தேடு..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "ஒரு குறிப்பிட்ட பாடத்திட்டத்திலிருந்து இந்தக் கோப்பைப் பிரிக்க, மேலே உள்ள தொடர்புடைய பாடத்திட்டக் குறியில் உள்ள \"×\" சின்னத்தைக் கிளிக் செய்யவும்."
+
+msgid "User:"
+msgstr "பயனர்:"
+
+msgid "View file information"
+msgstr "கோப்பு தகவலைப் பார்க்கவும்"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "இந்தக் கோப்பை ஒன்று அல்லது அதற்கு மேற்பட்ட பாடத்திட்டங்களுடன் இணைக்கலாம் (ஆவணங்கள் மூலத்தில் மறைக்கப்பட்டது). கோப்பு இனி பயன்படுத்தப்படாமல் அனாதையாக மாறினால், அதை நிரந்தரமாக நீக்கவும் முடியும்."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "ஒன்று அல்லது அதற்கு மேற்பட்ட பாடத்திட்டங்களைத் தேர்ந்தெடுக்கலாம் (Ctrl/Cmd + கிளிக் பயன்படுத்தவும்)."
+
+msgid "bytes"
+msgstr "பைட்டுகள்"
+
+msgid "Failed to copy:"
+msgstr "நகலெடுக்கத் தவறியது:"
+
+msgid "Missing resource file identifier."
+msgstr "வளக் கோப்பு அடையாளங்காட்டி இல்லை."
+
+msgid "Please select at least one course."
+msgstr "குறைந்தது ஒரு பாடத்திட்டத்தைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Resource file not found."
+msgstr "வளக் கோப்பு கிடைக்கவில்லை."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "கோப்பு \"%s\" %d பாடத்திட்டம்(களுடன்) இணைக்கப்பட்டுள்ளது: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "சில பாடத்திட்டங்கள் தவிர்க்கப்பட்டன: %s."
+
+msgid "Missing file or course identifier."
+msgstr "கோப்பு அல்லது பாடத்திட்ட அடையாளங்காட்டி இல்லை."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "இந்த வளக் கோப்பிற்கு வள முனை இல்லை, எனவே பிரிக்க முடியாது."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "கோப்பு %d பாடத்திட்ட இணைப்பு(களிலிருந்து) பிரிக்கப்பட்டுள்ளது."
+
+msgid "This file is not attached to the selected course."
+msgstr "இந்தக் கோப்பு தேர்ந்தெடுக்கப்பட்ட பாடத்திட்டத்துடன் இணைக்கப்படவில்லை."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "இந்தக் கோப்பு இன்னும் குறைந்தது ஒரு வளத்தால் பயன்படுத்தப்படுகிறது, எனவே நீக்க முடியாது."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "அனாதைக் கோப்பும் அதன் இயற்பியல் உள்ளடக்கமும் நிரந்தரமாக நீக்கப்பட்டுள்ளன."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "கருத்துக்கணிப்பு வெளியிடப்பட்டது. உருவாக்கப்பட்டவை: %d. புதுப்பிக்கப்பட்டவை: %d. அனுப்பப்பட்ட செய்திகள்: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "பெறக்கூடியது"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "இந்தத் திறனைப் பெற முடியாது"
+
+#: issue-8179
+msgid "Novice"
+msgstr "புதியவர்"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "விதிகள் மற்றும் சூழல்-சுதந்திர வழிமுறைகளுக்கு கடுமையான பின்பற்றுதல்; சிறிய சூழ்நிலைத் தீர்ப்பு."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "மேம்பட்ட தொடக்கநிலையாளர்"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "சூழ்நிலை அம்சங்களையும் வடிவங்களையும் அடையாளம் காணத் தொடங்குகிறார், ஆனால் இன்னும் வழிகாட்டுதல்கள் தேவை."
+
+#: issue-8179
+msgid "Competent"
+msgstr "திறன்மிக்க"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "திட்டமிடல் மற்றும் மன மாதிரிகளை உருவாக்குகிறார்; விளைவுகளுக்குப் பொறுப்பேற்கிறார் ஆனால் சிக்கலால் அதிகமாக உணரலாம்."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "தேர்ச்சிபெற்ற"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "\"பெரிய படத்தை\" காண்கிறார், உள்ளுணர்வாக முன்னுரிமை அளிக்கிறார், அனுபவத்திலிருந்து கற்றுக்கொள்கிறார்."
+
+#: issue-8179
+msgid "Expert"
+msgstr "நிபுணர்"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "உள்ளுணர்வுடன், சரளமான செயல்திறன்; ஆழமான மறைமுக அறிவை நம்பியிருக்கிறார்; புதுமை செய்ய அல்லது புதிய சூழல்களை எளிதாகக் கையாள முடியும்."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "நினைவுகூர்தல்"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "நீண்டகால நினைவிலிருந்து தொடர்புடைய அறிவை மீட்டெடுத்தல், நினைவுகூர்தல் அல்லது அடையாளம் காணுதல்."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "புரிதல்"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "வாய்மொழி, எழுத்து மற்றும் வரைகலை தொடர்பு உள்ளிட்ட கற்பித்தல் செய்திகளிலிருந்து பொருள் உருவாக்குதல். விளக்குதல், எடுத்துக்காட்டுதல், வகைப்படுத்துதல், சுருக்குதல், அனுமானித்தல், ஒப்பிடுதல் அல்லது விளக்குதல் மூலம் புரிதலைக் காட்டுதல்."
+
+#: issue-8179
+msgid "Applying"
+msgstr "பயன்படுத்துதல்"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "கொடுக்கப்பட்ட சூழலில் ஒரு நடைமுறையை செயல்படுத்துதல் அல்லது நடைமுறைப்படுத்துதல். புதிய அல்லது உறுதியான சூழல்களில் அறிவு அல்லது திறன்களைப் பயன்படுத்துதல்."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "பகுப்பாய்வு செய்தல்"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "பொருளை அதன் கூறுகளாகப் பிரித்து, பகுதிகள் ஒன்றுக்கொன்று மற்றும் ஒட்டுமொத்த அமைப்பு அல்லது நோக்கத்துடன் எவ்வாறு தொடர்புடையவை என்பதைத் தீர்மானித்தல். நோக்கங்கள், காரணங்கள் அல்லது உறவுகளை அடையாளம் காணுதல்."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "மதிப்பிடுதல்"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "அளவுகோல்கள் மற்றும் தரநிலைகளின் அடிப்படையில் தீர்ப்புகள் வழங்குதல். முடிவுகள் அல்லது செயல்பாடுகளைச் சரிபார்த்தல், விமர்சித்தல் அல்லது நியாயப்படுத்துதல்."
+
+#: issue-8179
+msgid "Creating"
+msgstr "உருவாக்குதல்"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "ஒத்திசைவான அல்லது செயல்பாட்டு முழுமை உருவாக்க கூறுகளை இணைத்தல்; புதிய வடிவம் அல்லது அமைப்பாக மறுசீரமைத்தல். அசல் படைப்பு உருவாக்குதல் அல்லது புதிய கருத்துகளை உருவாக்குதல்."
+
+#: issue-8179
+msgid "Follow"
+msgstr "பின்பற்றுதல்"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "நெருக்கமான மேற்பார்வை மற்றும் வழிகாட்டுதலின் கீழ் பணிபுரிகிறார். வரையறுக்கப்பட்ட தனிப்பட்ட முடிவுடன் வழக்கமான பணிகளைச் செய்கிறார். வழிமுறைகளைப் பின்பற்றுதல் மற்றும் அடிப்படை செயல்பாட்டில் கவனம்."
+
+#: issue-8179
+msgid "Assist"
+msgstr "உதவுதல்"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "வழக்கமான மேற்பார்வையின் கீழ் பணிபுரிகிறார். மற்றவர்களுக்கு உதவி வழங்குகிறார், குழுப் பணிகளுக்குப் பங்களிக்கிறார், வரையறுக்கப்பட்ட எல்லைகளுக்குள் சில முன்முயற்சி எடுக்கத் தொடங்குகிறார்."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "பொதுவான மேற்பார்வையின் கீழ் பணிபுரிகிறார். வழக்கமான மற்றும் வழக்கமற்ற செயல்பாடுகளுக்கு அறிவு மற்றும் திறன்களைப் பயன்படுத்துகிறார். சில தனிப்பட்ட முடிவு மற்றும் தீர்ப்பைப் பயன்படுத்துகிறார்."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "பரந்த வழிகாட்டுதலின் கீழ் பணிபுரிகிறார். சிறப்பு வழிகாட்டுதல், ஆதரவு அல்லது சேவைகள் வழங்குவதன் மூலம் மற்றவர்களுக்கு உதவுகிறார். சொந்தப் பணிக்குப் பொறுப்பேற்கிறார் மற்றும் சிறிய குழுக்கள் அல்லது பணிகளை மேற்பார்வையிடலாம்."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "உறுதிசெய்தல் மற்றும் ஆலோசனை வழங்குதல்"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "பரந்த வழிகாட்டுதலின் கீழ் ஆனால் குறிப்பிடத்தக்க தன்னாட்சியுடன் பணிபுரிகிறார். பணி இலக்குகளை அடைவதை உறுதிசெய்கிறார் மற்றும் சிக்கலான விஷயங்களில் ஆலோசனை வழங்குகிறார். பெரும்பாலும் குழுக்கள் அல்லது திட்டங்களை வழிநடத்தி முடிவுகளைப் பாதிக்கிறார்."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "தொடங்குதல் மற்றும் தாக்கம் செலுத்துதல்"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "குறிப்பிடத்தக்க பணிப் பகுதிக்கு வரையறுக்கப்பட்ட அதிகாரம் மற்றும் பொறுப்பு உண்டு. செயல்களைத் தொடங்குகிறார், தனது துறையில் உத்தி மற்றும் கொள்கையைப் பாதிக்கிறார், பெரிய திட்டங்கள் அல்லது குழுக்களை வழிநடத்துகிறார்."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "உத்தி வகுத்தல், ஊக்குவித்தல், திரட்டுதல்"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "முக்கிய பணிப் பகுதிக்கு மிக உயர்ந்த நிறுவன மட்டத்தில் அதிகாரம் உண்டு. நீண்டகால உத்தி வகுக்கிறார், மற்றவர்களை ஊக்குவித்து திரட்டுகிறார், நிறுவன வெற்றிக்கு முக்கியமான முடிவுகளை எடுக்கிறார். தொழில் அல்லது வெளிப்புற மட்டங்களில் தாக்கம் செலுத்துகிறார்."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "கருத்தில் கொள்ள வேண்டிய அதிகபட்ச செயலற்ற நேரம் (நிமிடங்கள்)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "திறந்திருக்கும் பாடநெறிப் பக்கம் தானியங்கி கோரிக்கைகளை அனுப்பிக்கொண்டே இருக்கும். பயனரிடமிருந்து உண்மையான செயல் இல்லாமல் (பக்கம் அல்லது உருப்படியைத் திறத்தல், பதிலளித்தல் போன்றவை) இந்த நிமிடங்களுக்குப் பிறகு, பாடநெறியில் செலவிட்ட நேரம் கணக்கிடப்படுவது நிறுத்தப்படும்."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "கூட்டு விக்கி தொகுப்பான்"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Etherpad-உடன் இணைக்கிறது..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "சேமித்தல் தற்போதைய Etherpad உள்ளடக்கத்திலிருந்து புதிய Chamilo விக்கி பதிப்பை உருவாக்குகிறது."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "கூட்டுத் தொகுப்பானை ஏற்ற முடியவில்லை."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "விக்கி தொகுப்பிற்கு Etherpad-ஐ இயக்கு"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "ஏற்கனவே உள்ள விக்கி பக்கங்களுக்கு கூட்டுத் தொகுப்பானாக Etherpad-ஐப் பயன்படுத்துக. பாதுகாப்பான உட்பொதிக்கப்பட்ட அமர்வுகளுக்கு Etherpad Chamilo-வின் அதே origin-இல் வெளிப்படுத்தப்பட வேண்டும்."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpad நிகழ்வின் அடிப்படை URL, விருப்பமான reverse-proxy பாதை உட்பட. எடுத்துக்காட்டு: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API விசை"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "பேட்கள், அமர்வுகளை உருவாக்கவும் விக்கி உள்ளடக்கத்தை ஒத்திசைக்கவும் Chamilo பயன்படுத்தும் API விசை. API-விசை அங்கீகாரத்தை ஏற்க Etherpad-ஐ உள்ளமைக்கவும்."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "புதிய ஆவணங்களின் இயல்புநிலை தெரிவுநிலையை பாடநெறி மாற்றலாம்"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "ஆசிரியர் பாடநெறியில் புதிய ஆவணம், கோப்புறை அல்லது பதிவேற்றிய கோப்பை உருவாக்கும்போது வழங்கப்படும் தெரிவுநிலை. ஆசிரியர்கள் பின்னர் ஒவ்வொன்றின் தெரிவுநிலையையும் மாற்றலாம்."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "இயக்கப்பட்டால், ஆசிரியர்கள் தள இயல்புநிலைக்குப் பதிலாக தங்கள் பாடநெறியின் புதிய ஆவணங்களுக்கு வழங்கப்படும் தெரிவுநிலையை பாடநெறி அமைப்புகளில் தேர்வு செய்யலாம்."
+
+msgid "Default visibility of new learning paths"
+msgstr "புதிய கற்றல் பாதைகளின் இயல்புநிலை தெரிவுநிலை"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "புதிய கற்றல் பாதைகளின் இயல்புநிலை தெரிவுநிலையை பாடநெறி மாற்றலாம்"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "ஆசிரியர் பாடநெறியில் புதிய கற்றல் பாதையை உருவாக்கும்போது வழங்கப்படும் தெரிவுநிலை. ஆசிரியர்கள் பின்னர் ஒவ்வொன்றின் தெரிவுநிலையையும் மாற்றலாம்."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "இயக்கப்பட்டால், ஆசிரியர்கள் தள இயல்புநிலைக்குப் பதிலாக தங்கள் பாடநெறியின் புதிய கற்றல் பாதைகளுக்கு வழங்கப்படும் தெரிவுநிலையை பாடநெறி அமைப்புகளில் தேர்வு செய்யலாம்."
+
+msgid "Default visibility of new tests"
+msgstr "புதிய சோதனைகளின் இயல்புநிலை தெரிவுநிலை"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "புதிய சோதனைகளின் இயல்புநிலை தெரிவுநிலையை பாடத்திட்டம் மாற்றலாம்"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "ஆசிரியர் பாடத்திட்டத்தில் புதிய சோதனையை உருவாக்கும்போது அதற்கு வழங்கப்படும் தெரிவுநிலை. ஆசிரியர்கள் பின்னர் ஒவ்வொன்றின் தெரிவுநிலையையும் மாற்றலாம்."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "இயக்கப்பட்டால், ஆசிரியர்கள் தள இயல்புநிலைக்குப் பதிலாக தங்கள் பாடத்திட்டத்தின் புதிய சோதனைகளுக்கு வழங்கப்படும் தெரிவுநிலையை பாடத்திட்ட அமைப்புகளில் தேர்வு செய்யலாம்."
+
+msgid "Default visibility for new learning paths"
+msgstr "புதிய கற்றல் பாதைகளுக்கான இயல்புநிலை தெரிவுநிலை"
+
+msgid "Default visibility for new tests"
+msgstr "புதிய சோதனைகளுக்கான இயல்புநிலை தெரிவுநிலை"
+
+msgid "Following"
+msgstr "பின்தொடர்தல்"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "இந்த பணியின் சமர்ப்பிப்பில் கற்றவர் கருத்து தெரிவிக்கும்போது மின்னஞ்சல் பெறுக"
+
+msgid "Payment history"
+msgstr "கட்டண வரலாறு"
+
+msgid "No payments yet"
+msgstr "இன்னும் கட்டணங்கள் இல்லை"
+
+msgid "Cancel service"
+msgstr "சேவையை ரத்து செய்"
+
+msgid "Official transcript"
+msgstr "அதிகாரப்பூர்வ மதிப்பெண் சான்றிதழ்"
+
+msgid "Unofficial transcript"
+msgstr "அதிகாரப்பூர்வமற்ற மதிப்பெண் சான்றிதழ்"
+
+msgid "Student name"
+msgstr "மாணவர் பெயர்"
+
+msgid "Student number"
+msgstr "மாணவர் எண்"
+
+msgid "Program title"
+msgstr "திட்டத் தலைப்பு"
+
+msgid "Required hours"
+msgstr "தேவையான மணிநேரங்கள்"
+
+msgid "Completion date"
+msgstr "நிறைவு தேதி"
+
+msgid "Hours completed"
+msgstr "நிறைவு செய்யப்பட்ட மணிநேரங்கள்"
+
+msgid "Final grade"
+msgstr "இறுதி தரம்"
+
+msgid "Grade"
+msgstr "தரம்"
+
+msgid "No completed course yet."
+msgstr "இன்னும் நிறைவு செய்யப்பட்ட பாடத்திட்டம் இல்லை."
+
+msgid "Grading scale"
+msgstr "தர அளவுகோல்"
+
+msgid "Signature of school official"
+msgstr "பள்ளி அதிகாரியின் கையொப்பம்"
+
+msgid "School official"
+msgstr "பள்ளி அதிகாரி"
+
+msgid "Official's title"
+msgstr "அதிகாரியின் பதவி"
+
+msgid "Verify this transcript at"
+msgstr "இந்த மதிப்பெண் சான்றிதழை இங்கே சரிபார்க்கவும்"
+
+msgid "Verification code"
+msgstr "சரிபார்ப்பு குறியீடு"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "இந்த அதிகாரப்பூர்வமற்ற மதிப்பெண் சான்றிதழ் கையொப்பமிடப்படவில்லை. அதிகாரப்பூர்வ மதிப்பெண் சான்றிதழுக்கு நிர்வாகியிடம் கேளுங்கள்."
+
+msgid "Transcript verification"
+msgstr "மதிப்பெண் சான்றிதழ் சரிபார்ப்பு"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "இந்த அதிகாரப்பூர்வ மதிப்பெண் சான்றிதழ் நிறுவனத்தால் வழங்கப்பட்டு கையொப்பமிடப்பட்டது, மாற்றப்படவில்லை மற்றும் ரத்து செய்யப்படவில்லை என்பதை சரிபார்க்கவும்."
+
+msgid "Valid"
+msgstr "செல்லுபடியாகும்"
+
+msgid "Invalid signature"
+msgstr "செல்லாத கையொப்பம்"
+
+msgid "Transcript not found"
+msgstr "மதிப்பெண் சான்றிதழ் கிடைக்கவில்லை"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "நிறுவனத்தின் கையொப்பம் செல்லுபடியாகும் மற்றும் இந்த மதிப்பெண் சான்றிதழ் ரத்து செய்யப்படவில்லை."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "இந்த மதிப்பெண் சான்றிதழை செல்லுபடியாகும் என சரிபார்க்க முடியாது. அதன் விவரங்கள் காட்டப்படவில்லை."
+
+msgid "Transcript details"
+msgstr "மதிப்பெண் சான்றிதழ் விவரங்கள்"
+
+msgid "Institution"
+msgstr "நிறுவனம்"
+
+msgid "Issued on"
+msgstr "வழங்கப்பட்ட தேதி"
+
+msgid "Download verification JSON"
+msgstr "சரிபார்ப்பு JSON பதிவிறக்குக"
+
+msgid "Transcript"
+msgstr "மதிப்பெண் சான்றிதழ்"
+
+msgid "My confidential reports"
+msgstr "என் இரகசிய அறிக்கைகள்"
+
+msgid "My transcript"
+msgstr "என் மதிப்பெண் சான்றிதழ்"
+
+msgid "Confidential investigations"
+msgstr "இரகசிய விசாரணைகள்"
+
+msgid "Floor plan"
+msgstr "தரைத் திட்டம்"
+
+msgid "Click a highlighted room to select it"
+msgstr "தேர்ந்தெடுக்க முன்னிலைப்படுத்தப்பட்ட அறையைக் கிளிக் செய்யவும்"
+
+msgid "Select room"
+msgstr "அறையைத் தேர்ந்தெடுக்கவும்"
+
+msgid "Room on floor plan"
+msgstr "தரைத் திட்டத்தில் அறை"
+
+msgid "Select a branch first"
+msgstr "முதலில் ஒரு கிளையைத் தேர்ந்தெடுக்கவும்"
+
+msgid "The branch has no attached floor plan"
+msgstr "கிளைக்கு இணைக்கப்பட்ட தரைத் திட்டம் இல்லை"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "அறையை வரையறுக்க பலகோணக் கருவியைப் பயன்படுத்தவும்; மூலைகளை நகர்த்த திருத்து பயன்படுத்தவும்"
+
+msgid "Save room area"
+msgstr "அறைப் பகுதியைச் சேமி"
+
+msgid "Clear room area"
+msgstr "அறைப் பகுதியை அழி"
+
+msgid "Save the room form to persist the area"
+msgstr "பகுதியை நிலைநிறுத்த அறைப் படிவத்தைச் சேமிக்கவும்"
+
+msgid "Floor plan unavailable"
+msgstr "தளத் திட்டம் கிடைக்கவில்லை"
+
+msgid "Room map points must be within the floor plan"
+msgstr "அறை வரைபடப் புள்ளிகள் தளத் திட்டத்திற்குள் இருக்க வேண்டும்"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "அறைப் பகுதியை அழிக்க விரும்புகிறீர்களா?"
+
+msgid "View room on floor plan"
+msgstr "தளத் திட்டத்தில் அறையைப் பார்க்க"
+
+msgid "No floor plan available"
+msgstr "தளத் திட்டம் இல்லை"
+
+msgid "This is an assignment by groups"
+msgstr "இது குழுக்கள் வாரியான பணி"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "PNG, JPEG அல்லது பாதுகாப்பான நிலையான SVG தளத் திட்டத்தைப் பதிவேற்றவும், அல்லது ஆவணங்களிலிருந்து ஏற்கனவே உள்ள படத்தைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Upload floor plan"
+msgstr "தளத் திட்டத்தைப் பதிவேற்று"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG அல்லது நிலையான SVG, அதிகபட்சம் 10 MB"
+
+msgid "Search images by name"
+msgstr "பெயரால் படங்களைத் தேடு"
+
+msgid "Image name"
+msgstr "படத்தின் பெயர்"
+
+msgid "Select an image"
+msgstr "ஒரு படத்தைத் தேர்ந்தெடு"
+
+msgid "Change floor plan"
+msgstr "தளத் திட்டத்தை மாற்று"
+
+msgid "Attach floor plan"
+msgstr "தளத் திட்டத்தை இணை"
+
+msgid "No matching images found in Documents."
+msgstr "ஆவணங்களில் பொருந்தும் படங்கள் இல்லை."
+
+msgid "Current floor plan"
+msgstr "தற்போதைய தளத் திட்டம்"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "தளத் திட்ட மாற்றங்கள் தானாகவே சேமிக்கப்படும்."
+
+msgid "Remove floor plan"
+msgstr "தளத் திட்டத்தை அகற்று"
+
+msgid "Cannot load images"
+msgstr "படங்களை ஏற்ற முடியவில்லை"
+
+msgid "Floor plan saved"
+msgstr "தளத் திட்டம் சேமிக்கப்பட்டது"
+
+msgid "Cannot attach floor plan"
+msgstr "தளத் திட்டத்தை இணைக்க முடியவில்லை"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "10MB வரை PNG\/JPEG மற்றும் பாதுகாப்பான நிலையான SVG படங்கள் மட்டுமே ஆதரிக்கப்படும்."
+
+msgid "Cannot upload floor plan"
+msgstr "தளத் திட்டத்தைப் பதிவேற்ற முடியவில்லை"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "தளத் திட்டத்தை அகற்ற விரும்புகிறீர்களா?"
+
+msgid "Floor plan removed"
+msgstr "தளத் திட்டம் அகற்றப்பட்டது"
+
+msgid "Cannot remove floor plan"
+msgstr "தளத் திட்டத்தை அகற்ற முடியவில்லை"
+
+msgid "Support bot"
+msgstr "ஆதரவு போட்"
+
+msgid "Connected"
+msgstr "இணைக்கப்பட்டது"
+
+msgid "Not connected"
+msgstr "இணைக்கப்படவில்லை"
+
+msgid "View ticket"
+msgstr "டிக்கெட்டைப் பார்க்க"
+
+msgid "Start a new conversation"
+msgstr "புதிய உரையாடலைத் தொடங்கு"
+
+msgid "Video call"
+msgstr "வீடியோ அழைப்பு"
+
+msgid "Incoming video call"
+msgstr "வரும் வீடியோ அழைப்பு"
+
+msgid "Decline"
+msgstr "நிராகரி"
+
+msgid "Mute microphone"
+msgstr "மைக்ரோஃபோனை முடக்கு"
+
+msgid "Unmute microphone"
+msgstr "மைக்ரோஃபோன் முடக்கத்தை நீக்கு"
+
+msgid "Turn camera off"
+msgstr "கேமராவை அணை"
+
+msgid "Turn camera on"
+msgstr "கேமராவை இயக்கு"
+
+msgid "Hang up"
+msgstr "அழைப்பை முடி"
+
+msgid "Calling..."
+msgstr "அழைக்கிறது..."
+
+msgid "Connecting..."
+msgstr "இணைக்கிறது..."
+
+msgid "Your contact is busy."
+msgstr "உங்கள் தொடர்பாளர் பிஸியாக உள்ளார்."
+
+msgid "Your contact did not answer the call."
+msgstr "உங்கள் தொடர்பாளர் அழைப்பை எடுக்கவில்லை."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "உங்கள் தொடர்பாளரால் கேமரா அல்லது மைக்ரோஃபோனை அணுக முடியவில்லை."
+
+msgid "Your contact could not prepare the video call."
+msgstr "உங்கள் தொடர்பாளரால் வீடியோ அழைப்பைத் தயாரிக்க முடியவில்லை."
+
+msgid "Your contact refused the call."
+msgstr "உங்கள் தொடர்பாளர் அழைப்பை மறுத்தார்."
+
+msgid "The call timed out."
+msgstr "அழைப்பு நேரம் முடிந்தது."
+
+msgid "Your contact cancelled the call."
+msgstr "உங்கள் தொடர்பாளர் அழைப்பை ரத்து செய்தார்."
+
+msgid "The video connection was lost."
+msgstr "வீடியோ இணைப்பு துண்டிக்கப்பட்டது."
+
+msgid "Your contact could not establish the video connection."
+msgstr "உங்கள் தொடர்பாளர் வீடியோ இணைப்பை ஏற்படுத்த முடியவில்லை."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "உங்கள் தொடர்பாளர் வீடியோ அழைப்பு அமைப்பை முடிக்க முடியவில்லை."
+
+msgid "Your contact hung up."
+msgstr "உங்கள் தொடர்பாளர் அழைப்பை துண்டித்தார்."
+
+msgid "Video call could not be started"
+msgstr "வீடியோ அழைப்பைத் தொடங்க முடியவில்லை"
+
+msgid "Camera or microphone permission was denied."
+msgstr "கேமரா அல்லது மைக்ரோஃபோன் அனுமதி மறுக்கப்பட்டது."
+
+msgid "No camera or microphone was found."
+msgstr "கேமரா அல்லது மைக்ரோஃபோன் கிடைக்கவில்லை."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "கேமரா அல்லது மைக்ரோஃபோன் ஏற்கனவே பயன்பாட்டில் உள்ளது அல்லது கிடைக்கவில்லை."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "கேமரா அல்லது மைக்ரோஃபோன் தேவையான அமைப்புகளை ஆதரிக்கவில்லை."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "கேமரா அல்லது மைக்ரோஃபோன் அணுகலைப் பெற முடியவில்லை."
+
+msgid "The video call could not be prepared."
+msgstr "வீடியோ அழைப்பைத் தயாரிக்க முடியவில்லை."
+
+msgid "The video call request could not be sent."
+msgstr "வீடியோ அழைப்பு கோரிக்கையை அனுப்ப முடியவில்லை."
+
+msgid "The incoming video call could not be processed."
+msgstr "உள்வரும் வீடியோ அழைப்பைச் செயலாக்க முடியவில்லை."
+
+msgid "The video call answer could not be prepared."
+msgstr "வீடியோ அழைப்பு பதிலைத் தயாரிக்க முடியவில்லை."
+
+msgid "The video call answer could not be sent."
+msgstr "வீடியோ அழைப்பு பதிலை அனுப்ப முடியவில்லை."
+
+msgid "The video call answer could not be processed."
+msgstr "வீடியோ அழைப்பு பதிலைச் செயலாக்க முடியவில்லை."
+
+msgid "The video connection failed"
+msgstr "வீடியோ இணைப்பு தோல்வியடைந்தது"
+
+msgid "The video connection could not be established."
+msgstr "வீடியோ இணைப்பை ஏற்படுத்த முடியவில்லை."
+
+msgid "No answer was received."
+msgstr "பதில் எதுவும் கிடைக்கவில்லை."
+
+msgid "You refused the call."
+msgstr "நீங்கள் அழைப்பை மறுத்தீர்கள்."
+
+msgid "You cancelled the call."
+msgstr "நீங்கள் அழைப்பை ரத்து செய்தீர்கள்."
+
+msgid "You hung up."
+msgstr "நீங்கள் அழைப்பை துண்டித்தீர்கள்."
+
+msgid "You missed the call."
+msgstr "நீங்கள் அழைப்பைத் தவறவிட்டீர்கள்."
+
+msgid "Support bot is currently unavailable."
+msgstr "ஆதரவு பாட் தற்போது கிடைக்கவில்லை."
+
+msgid "A support ticket has been created."
+msgstr "ஆதரவு டிக்கெட் உருவாக்கப்பட்டுள்ளது."
+
+msgid "Conversation ended."
+msgstr "உரையாடல் முடிந்தது."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "ஆதரவு பாட் இந்த உரையாடலைத் தொடர முடியவில்லை. மீண்டும் முயலவும்."
+
+msgid "Add your first term glossary to this course"
+msgstr "இந்த பாடத்திட்டத்திற்கு உங்கள் முதல் சொல் அகராதியைச் சேர்க்கவும்"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "இந்த கணக்கெடுப்பு வார்ப்புருவை நீக்க விரும்புகிறீர்களா?"
+
+msgid "The survey template has been deleted."
+msgstr "கணக்கெடுப்பு வார்ப்புரு நீக்கப்பட்டது."
+
+msgid "Please select a course."
+msgstr "ஒரு பாடத்திட்டத்தைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Please select a session for this course."
+msgstr "இந்த பாடத்திட்டத்திற்கான அமர்வைத் தேர்ந்தெடுக்கவும்."
+
+msgid "The survey has been created from the template."
+msgstr "வார்ப்புருவிலிருந்து கணக்கெடுப்பு உருவாக்கப்பட்டது."
+
+msgid "Survey templates"
+msgstr "கணக்கெடுப்பு வார்ப்புருக்கள்"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "ஆசிரியர்களுக்கான மீண்டும் பயன்படுத்தக்கூடிய கணக்கெடுப்பு வார்ப்புருக்களை உருவாக்கி, அவற்றை நேரடியாக ஒரு பாடத்திட்டம் அல்லது அமர்வுக்கு ஒதுக்கவும்."
+
+msgid "Subtitle"
+msgstr "துணைத்தலைப்பு"
+
+msgid "Assign to course"
+msgstr "பாடத்திட்டத்திற்கு ஒதுக்கு"
+
+msgid "Assign template to course"
+msgstr "வார்ப்புருவை பாடத்திட்டத்திற்கு ஒதுக்கு"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "கணக்கெடுப்பை நேரடியாக பாடத்திட்டத்தில் உருவாக்க அமர்வை காலியாக விடவும்."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "இந்த பாடத்திட்டம் இந்த போர்ட்டலில் ஒரு அமர்வு வழியாக கிடைக்கிறது, எனவே அமர்வு தேவை."
+
+msgid "Survey template questions"
+msgstr "கணக்கெடுப்பு வார்ப்புரு கேள்விகள்"
+
+msgid "Back to survey templates"
+msgstr "கணக்கெடுப்பு வார்ப்புருக்களுக்குத் திரும்பு"
+
+msgid "Could not load survey template"
+msgstr "கணக்கெடுப்பு வார்ப்புருவை ஏற்ற முடியவில்லை"
+
+msgid "Could not load survey template questions"
+msgstr "கணக்கெடுப்பு வார்ப்புரு கேள்விகளை ஏற்ற முடியவில்லை"
+
+msgid "Could not save survey template question"
+msgstr "கணக்கெடுப்பு வார்ப்புரு கேள்வியை சேமிக்க முடியவில்லை"
+
+msgid "Could not delete survey template question"
+msgstr "கணக்கெடுப்பு வார்ப்புரு கேள்வியை நீக்க முடியவில்லை"
+
+msgid "Could not move survey template question"
+msgstr "கணக்கெடுப்பு வார்ப்புரு கேள்வியை நகர்த்த முடியவில்லை"
+
+msgid "Could not copy survey template question"
+msgstr "கணக்கெடுப்பு வார்ப்புரு கேள்வியை நகலெடுக்க முடியவில்லை"
+
+msgid "The survey template has been saved."
+msgstr "கணக்கெடுப்பு வார்ப்புரு சேமிக்கப்பட்டது."
+
+msgid "Edit survey template"
+msgstr "கணக்கெடுப்பு வார்ப்புருவைத் திருத்து"
+
+msgid "Create survey template"
+msgstr "கணக்கெடுப்பு வார்ப்புருவை உருவாக்கு"
+
+msgid "The survey template title is required."
+msgstr "கணக்கெடுப்பு வார்ப்புரு தலைப்பு தேவை."
+
+msgid "Visible as template"
+msgstr "வார்ப்புருவாக காணும்படி"
+
+msgid "Create satisfaction survey"
+msgstr "திருப்தி கணக்கெடுப்பை உருவாக்கு"
+
+msgid "Training satisfaction survey"
+msgstr "பயிற்சி திருப்தி கணக்கெடுப்பு"
+
+msgid "Could not create satisfaction survey"
+msgstr "திருப்தி கணக்கெடுப்பை உருவாக்க முடியவில்லை"
+
+msgid "Use template"
+msgstr "வார்ப்புருவைப் பயன்படுத்து"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "நிர்வாகி தயாரித்த மீண்டும் பயன்படுத்தக்கூடிய வார்ப்புருவிலிருந்து இந்தக் கணக்கெடுப்பை உருவாக்குக."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "ஆசிரியர்/பயிற்றுநரிடமிருந்து முடிவுகள் மறைக்கப்பட்டுள்ளன"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "ஆசிரியர்களும் பயிற்றுநர்களும் பதில் எண்ணிக்கையைப் பார்த்து நினைவூட்டல்களை அனுப்பலாம், ஆனால் கணக்கெடுப்பு முடிவுகளைத் திறக்கவோ ஏற்றுமதி செய்யவோ முடியாது."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "வார்ப்புரு பயன்படுத்தப்பட்டது. கணக்கெடுப்பு அமைப்புகளை மதிப்பாய்வு செய்து சேமித்து உருவாக்கவும்."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "கணக்கெடுப்பு முடிவுகள் ஆசிரியர்களுக்கும் பயிற்றுநர்களுக்கும் மறைக்கப்பட்டுள்ளன."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "பதில் எண்ணிக்கையைப் பார்க்கவும் நினைவூட்டல்களை அனுப்பவும் அழைப்புகள் பக்கத்தை இன்னும் பயன்படுத்தலாம்."
+
+msgid "Payment method"
+msgstr "கட்டண முறை"
+
+msgid "Preview mode"
+msgstr "முன்னோட்ட முறை"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "முன்னோட்ட முறையில் முன்னேற்றமும் மதிப்பெண்ணும் சேமிக்கப்படாது."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "இந்த இணைப்பைக் கற்றல் பாதையில் காட்ட முடியாது."
+
+msgid "Open it in a new tab to view the page."
+msgstr "பக்கத்தைப் பார்க்க புதிய தாவலில் திறக்கவும்."
+
+msgid "Report a problem with this question"
+msgstr "இந்தக் கேள்வியில் சிக்கலைப் புகாரளிக்கவும்"
+
+msgid "Your report was sent to the teacher."
+msgstr "உங்கள் புகார் ஆசிரியருக்கு அனுப்பப்பட்டது."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "நீங்கள் கண்ட பிழை அல்லது சிக்கலை விவரிக்கவும். உங்கள் புகார் ஆசிரியருக்கு அனுப்பப்படும்."
+
+msgid "A comment is required."
+msgstr "கருத்து தேவை."
+
+msgid "Could not send the report."
+msgstr "புகாரை அனுப்ப முடியவில்லை."
+
+msgid "Learner reports"
+msgstr "கற்பவர் புகார்கள்"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "இந்தக் கேள்விக்கு கற்பவர் புகார்கள் எதுவும் சமர்ப்பிக்கப்படவில்லை."
+
+msgid "View attempt"
+msgstr "முயற்சியைப் பார்"
+
+msgid "Could not load learner reports."
+msgstr "கற்பவர் புகார்களை ஏற்ற முடியவில்லை."
+
+msgid "Allow learners to report issues in questions"
+msgstr "கேள்விகளில் சிக்கல்களைப் புகாரளிக்க கற்பவர்களை அனுமதி"
+
+msgid "Skill acquired"
+msgstr "திறன் பெறப்பட்டது"
+
+msgid "AI Toolbox"
+msgstr "AI கருவிப்பெட்டி"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "AI மூலம் ஊடாடும் கல்விப் பயன்பாடுகளை உருவாக்கி SCORM மூலம் கற்பவர் முன்னேற்றத்தைக் கண்காணிக்கவும்."
+
+msgid "No published applications are available yet."
+msgstr "இன்னும் வெளியிடப்பட்ட பயன்பாடுகள் எதுவும் இல்லை."
+
+msgid "Interactive applications"
+msgstr "ஊடாடும் பயன்பாடுகள்"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "ஒரே இடத்திலிருந்து உருவாக்கி, மேம்படுத்தி, வெளியிட்டு, பதிப்புகளை மதிப்பாய்வு செய்யவும்."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "உங்கள் சமீபத்திய முன்னேற்றத்திலிருந்து தொடர ஒரு பயன்பாட்டைத் திறக்கவும்."
+
+msgid "Interactive learning application"
+msgstr "ஊடாடும் கற்றல் பயன்பாடு"
+
+msgid "Create an interactive learning app"
+msgstr "ஊடாடும் கற்றல் பயன்பாட்டை உருவாக்கு"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "செயல்பாட்டை விவரிக்கவும். Chamilo முன்னேற்றம் மற்றும் மதிப்பெண் கண்காணிப்புடன் பதிப்பு செய்யப்பட்ட SCORM பயன்பாட்டை உருவாக்கும்."
+
+msgid "Idea"
+msgstr "யோசனை"
+
+msgid "Application"
+msgstr "பயன்பாடு"
+
+msgid "What should the application do?"
+msgstr "பயன்பாடு என்ன செய்ய வேண்டும்?"
+
+msgid "How it works"
+msgstr "இது எப்படி வேலை செய்கிறது"
+
+msgid "AI generation"
+msgstr "AI உருவாக்கம்"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "பயன்பாடு உங்கள் அறிவுறுத்தல்களிலிருந்து உருவாக்கப்பட்டு பதிப்பு 1 ஆக சேமிக்கப்படுகிறது."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "கற்பவர் முன்னேற்றம், மதிப்பெண் மற்றும் மீண்டும் தொடங்கும் தரவு Chamilo-க்கு அறிவிக்கப்படும்."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "எதிர்கால மேம்பாடுகள் முந்தையவற்றை நீக்காமல் புதிய பதிப்புகளை உருவாக்கும்."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "கற்றல் நோக்கம், விதிகள், நிலைகள், மதிப்பெண் மற்றும் கற்பவர் முடித்ததும் என்ன நடக்க வேண்டும் என்பதைச் சேர்க்கவும்."
+
+msgid "You are not allowed to create content in this context."
+msgstr "இந்தச் சூழலில் உள்ளடக்கத்தை உருவாக்க உங்களுக்கு அனுமதி இல்லை."
+
+msgid "The application was generated successfully."
+msgstr "பயன்பாடு வெற்றிகரமாக உருவாக்கப்பட்டது."
+
+msgid "Open in student view"
+msgstr "மாணவர் பார்வையில் திற"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "முன்னோட்டம் மற்றும் வெளியீட்டை இயக்க பயன்பாட்டை உருவாக்கவும்."
+
+msgid "Improve with AI"
+msgstr "AI மூலம் மேம்படுத்து"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "மாற்றத்தை விவரிக்கவும். புதிய பதிப்பு உருவாக்கப்படும்; முந்தைய பதிப்புகள் கிடைக்கும்."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "நீங்கள் உருவாக்க விரும்பும் முழு ஊடாடும் செயல்பாட்டை விவரிக்கவும்."
+
+msgid "What should be improved?"
+msgstr "எதை மேம்படுத்த வேண்டும்?"
+
+msgid "Generate new version"
+msgstr "புதிய பதிப்பை உருவாக்கு"
+
+msgid "Version history"
+msgstr "பதிப்பு வரலாறு"
+
+msgid "Preview, download or restore any generated version."
+msgstr "உருவாக்கப்பட்ட எந்தப் பதிப்பையும் முன்னோட்டமிடவும், பதிவிறக்கவும் அல்லது மீட்டமைக்கவும்."
+
+msgid "A new version was generated."
+msgstr "புதிய பதிப்பு உருவாக்கப்பட்டது."
+
+msgid "Version restored"
+msgstr "பதிப்பு மீட்டமைக்கப்பட்டது"
+
+msgid "The support bot tree has been published."
+msgstr "ஆதரவு பாட் மரம் வெளியிடப்பட்டது."
+
+msgid "The support bot tree has been archived."
+msgstr "ஆதரவு பாட் மரம் காப்பகப்படுத்தப்பட்டது."
+
+msgid "The support bot tree has been duplicated."
+msgstr "ஆதரவு பாட் மரம் நகலெடுக்கப்பட்டது."
+
+msgid "The support bot tree has been deleted."
+msgstr "ஆதரவு பாட் மரம் நீக்கப்பட்டது."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "இந்த ஆதரவு பாட் மரத்தை நீக்க விரும்புகிறீர்களா?"
+
+msgid "The support bot tree has been imported."
+msgstr "ஆதரவு பாட் மரம் இறக்குமதி செய்யப்பட்டது."
+
+msgid "Create support bot tree"
+msgstr "ஆதரவு பாட் மரத்தை உருவாக்கு"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "பயனர்களை ஆதரவு கேள்விகள் வழியாக வழிநடத்தி டிக்கெட்டுகளுக்கு உயர்த்தக்கூடிய நிலையான முடிவு மரத்தை உருவாக்கவும்."
+
+msgid "Portal scope"
+msgstr "போர்டல் வரம்பு"
+
+msgid "Duplicate"
+msgstr "நகலெடு"
+
+msgid "Archive"
+msgstr "காப்பகம்"
+
+msgid "View conversations"
+msgstr "உரையாடல்களைப் பார்"
+
+msgid "Import support bot tree"
+msgstr "ஆதரவு பாட் மரத்தை இறக்குமதி செய்"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "JSON ஏற்றுமதி அல்லது CSV முடிவு மரத்தை இறக்குமதி செய்யவும். இறக்குமதி செய்யப்பட்ட மரம் எப்போதும் புதிய வரைவாக உருவாக்கப்படும்."
+
+msgid "Resolved"
+msgstr "தீர்க்கப்பட்டது"
+
+msgid "Escalated"
+msgstr "உயர்த்தப்பட்டது"
+
+msgid "Abandoned"
+msgstr "கைவிடப்பட்டது"
+
+msgid "Support bot conversations"
+msgstr "ஆதரவு பாட் உரையாடல்கள்"
+
+msgid "Outcome"
+msgstr "முடிவு"
+
+msgid "Started at"
+msgstr "தொடங்கிய நேரம்"
+
+msgid "Ended at"
+msgstr "முடிந்த நேரம்"
+
+msgid "View conversation"
+msgstr "உரையாடலைப் பார்"
+
+msgid "Go to node"
+msgstr "முனைக்குச் செல்"
+
+msgid "Create support ticket"
+msgstr "ஆதரவு டிக்கெட்டை உருவாக்கு"
+
+msgid "End conversation"
+msgstr "உரையாடலை முடி"
+
+msgid "Node"
+msgstr "முனை"
+
+msgid "A support bot tree requires at least one node."
+msgstr "ஆதரவு பாட் மரத்திற்கு குறைந்தது ஒரு முனை தேவை."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "இந்த முனையை நீக்க விரும்புகிறீர்களா? இதற்கான இணைப்புகள் அழிக்கப்படும்."
+
+msgid "Every support bot node requires at least one option."
+msgstr "ஒவ்வொரு ஆதரவு பாட் முனைக்கும் குறைந்தது ஒரு விருப்பம் தேவை."
+
+msgid "The support bot tree title is required."
+msgstr "ஆதரவு பாட் மரத் தலைப்பு தேவை."
+
+msgid "A support bot entry node is required."
+msgstr "ஆதரவு பாட் நுழைவு முனை தேவை."
+
+msgid "Every support bot node requires content."
+msgstr "ஒவ்வொரு ஆதரவு பாட் முனைக்கும் உள்ளடக்கம் தேவை."
+
+msgid "Every support bot option requires a label."
+msgstr "ஒவ்வொரு ஆதரவு பாட் விருப்பத்திற்கும் ஒரு லேபிள் தேவை."
+
+msgid "Select a target node for every go-to option."
+msgstr "ஒவ்வொரு செல்-முனை விருப்பத்திற்கும் இலக்கு முனையைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Enter a relative URL for every link option."
+msgstr "ஒவ்வொரு இணைப்பு விருப்பத்திற்கும் தொடர்புடைய URL ஐ உள்ளிடவும்."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "ஒவ்வொரு உயர்த்தல் விருப்பத்திற்கும் டிக்கெட் வகையைத் தேர்ந்தெடுக்கவும்."
+
+msgid "The support bot tree has been saved."
+msgstr "ஆதரவு பாட் மரம் சேமிக்கப்பட்டது."
+
+msgid "Edit support bot tree"
+msgstr "ஆதரவு பாட் மரத்தைத் திருத்து"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "வெளியிடப்பட்ட மற்றும் காப்பகப்படுத்தப்பட்ட ஆதரவு பாட் பதிப்புகள் படிக்க மட்டும். புதிய வரைவுப் பதிப்பைத் திருத்த பட்டியலிலிருந்து இந்த மரத்தை நகலெடுக்கவும்."
+
+msgid "Default ticket project"
+msgstr "இயல்புநிலை டிக்கெட் திட்டம்"
+
+msgid "Decision tree rules"
+msgstr "முடிவு மர விதிகள்"
+
+msgid "Every node must contain at least one option."
+msgstr "ஒவ்வொரு முனையிலும் குறைந்தது ஒரு விருப்பம் இருக்க வேண்டும்."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "இறுதி முனை உரையாடலை முடிக்க வேண்டும் அல்லது ஆதரவு டிக்கெட்டை உருவாக்க வேண்டும்."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "v1 இல் செல்-இணைப்புகள் சுழற்சிகளை உருவாக்கக் கூடாது."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "v1 இல் வெளிப்புற URLகள் அனுமதிக்கப்படாது; இணைப்பு செயல்கள் தொடர்புடைய Chamilo பாதையைப் பயன்படுத்த வேண்டும்."
+
+msgid "Nodes"
+msgstr "முனைகள்"
+
+msgid "Add node"
+msgstr "முனையைச் சேர்"
+
+msgid "Entry node"
+msgstr "நுழைவு முனை"
+
+msgid "Set as entry node"
+msgstr "நுழைவு முனையாக அமை"
+
+msgid "Target node"
+msgstr "இலக்கு முனை"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "தொடர்புடைய Chamilo பாதையைப் பயன்படுத்தவும், எடுத்துக்காட்டாக /tickets."
+
+msgid "Ticket category"
+msgstr "டிக்கெட் வகை"
+
+msgid "Select a default ticket project first."
+msgstr "முதலில் இயல்புநிலை டிக்கெட் திட்டத்தைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Closing message"
+msgstr "முடிவு செய்தி"
+
+msgid "Select a node to edit it."
+msgstr "திருத்த ஒரு முனையைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Support bot conversation"
+msgstr "ஆதரவு பாட் உரையாடல்"
+
+msgid "Transcript of %s"
+msgstr "%s இன் பதிவு"
+
+msgid "Download unofficial transcript"
+msgstr "அதிகாரப்பூர்வமற்ற பதிவைப் பதிவிறக்கு"
+
+msgid "Issue official transcript"
+msgstr "அதிகாரப்பூர்வ பதிவை வழங்கு"
+
+msgid "Official transcripts"
+msgstr "அதிகாரப்பூர்வ பதிவுகள்"
+
+msgid "No official transcript has been issued yet."
+msgstr "இன்னும் அதிகாரப்பூர்வ பதிவு வழங்கப்படவில்லை."
+
+msgid "Issued by"
+msgstr "வழங்கியவர்"
+
+msgid "Verify"
+msgstr "சரிபார்"
+
+msgid "Signature of official transcripts"
+msgstr "அதிகாரப்பூர்வ பதிவுகளின் கையொப்பம்"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "இந்தப் படம் இந்த போர்டலின் அதிகாரப்பூர்வ பதிவுகளில், சான்றிதழ் அமைப்புகளில் அமைக்கப்பட்ட கையொப்பமிடுபவரின் பெயர் மற்றும் பதவிக்கு மேலே அச்சிடப்படும்."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "இந்தப் பக்கத்தில் பட்டியலிடப்பட்ட பாடங்கள் மற்றும் மதிப்பெண்களுடன் கையொப்பமிடப்பட்ட அதிகாரப்பூர்வ பதிவை வழங்கவா? அது ரத்து செய்யப்படும் வரை ஆன்லைனில் சரிபார்க்கலாம்."
+
+msgid "Official transcript issued"
+msgstr "அதிகாரப்பூர்வ பதிவு வழங்கப்பட்டது"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "இந்த அதிகாரப்பூர்வ பதிவை ரத்து செய்யவா? அதன் சரிபார்ப்புப் பக்கம் பின்னர் அதை ரத்து செய்யப்பட்டதாகக் காட்டும்."
+
+msgid "Official transcript revoked"
+msgstr "அதிகாரப்பூர்வ பதிவு ரத்து செய்யப்பட்டது"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "முதலில் PNG அல்லது JPEG படத்தைத் தேர்ந்தெடுக்கவும்."
+
+msgid "Signed credential"
+msgstr "கையொப்பமிடப்பட்ட சான்று"
+
+msgid "Issue signed credential"
+msgstr "கையொப்பமிடப்பட்ட சான்றை வழங்கு"
+
+msgid "Verify credential"
+msgstr "சான்றைச் சரிபார்"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Sepolia சோதனை வலையில் நங்கூரம்"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "இருக்கும் Sepolia பரிவர்த்தனையை உறுதிப்படுத்து"
+
+msgid "Revoke signed credential"
+msgstr "கையொப்பமிடப்பட்ட சான்றை ரத்து செய்"
+
+msgid "Delete certificate"
+msgstr "சான்றிதழை நீக்கு"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "இருக்கும் Sepolia பரிவர்த்தனையை உறுதிப்படுத்து"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia பரிவர்த்தனை ஹாஷ்"
+
+msgid "Verify transaction"
+msgstr "பரிவர்த்தனையைச் சரிபார்"
+
+msgid "Anchored"
+msgstr "நங்கூரமிடப்பட்டது"
+
+msgid "Issued"
+msgstr "வழங்கப்பட்டது"
+
+msgid "Not issued"
+msgstr "வழங்கப்படவில்லை"
+
+msgid "Consent required"
+msgstr "ஒப்புதல் தேவை"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia பரிவர்த்தனை உறுதிப்படுத்தப்பட்டு சரிபார்க்கப்பட்டது"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia சோதனை வலை பணப்பை ஒரு பரிவர்த்தனையில் கையொப்பமிடக் கேட்கும். சான்றிதழ் கைரேகை மட்டுமே நங்கூரமிடப்படும். தொடரவா?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "இந்தக் கையொப்பமிடப்பட்ட சான்றை ரத்து செய்யவா? எந்த பிளாக்செயின் பரிவர்த்தனையும் நிரந்தரமாக இருக்கும், ஆனால் சரிபார்ப்புப் பக்கம் ரத்துசெய்தலை அறிவிக்கும்."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "இந்தக் கற்றலருக்கான கையொப்பமிடப்பட்ட சான்றிதழ் சான்றை வழங்கவா? இது அங்கீகரிக்கப்பட்ட தனிப்பட்ட விவரங்களை தனிப்பட்ட இணைப்புடன் சரிபார்க்கக்கூடியதாக ஆக்குகிறது."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia க்கு EVM-இணக்க உலாவி பணப்பை தேவை."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "உங்கள் வாலட்டில் Sepolia சோதனை வலையை (சங்கிலி ஐடி 11155111) தேர்ந்தெடுக்கவும்."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "தவறான வாலட் முகவரி அல்லது சான்றிதழ் கைரேகை."
+
+msgid "Transaction pending"
+msgstr "பரிவர்த்தனை நிலுவையில் உள்ளது"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "பின்னர் இருக்கும் Sepolia பரிவர்த்தனையை உறுதிப்படுத்தவும்."
+
+msgid "Signed credential issued"
+msgstr "கையொப்பமிடப்பட்ட சான்று வழங்கப்பட்டது"
+
+msgid "Credential revoked"
+msgstr "சான்று ரத்து செய்யப்பட்டது"
+
+msgid "Transaction hash"
+msgstr "பரிவர்த்தனை ஹாஷ்"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "வெளியீட்டு ஒப்புதல் ஒரு நிர்வாகி கையொப்பமிடப்பட்ட சான்றிதழ் சான்றை வழங்கவும், விருப்பமாக அதன் SHA-256 கைரேகையை Sepolia சோதனை வலையில் நங்கூரமிடவும் அனுமதிக்கிறது. பெயர் அல்லது தனிப்பட்ட தரவு சங்கிலியில் அனுப்பப்படாது. நீங்கள் எந்த நேரத்திலும் ஒப்புதலை திரும்பப் பெறலாம்."
+
+msgid "Publication consent"
+msgstr "வெளியீட்டு ஒப்புதல்"
+
+msgid "Not approved"
+msgstr "அங்கீகரிக்கப்படவில்லை"
+
+msgid "Withdraw consent"
+msgstr "ஒப்புதலை திரும்பப் பெறுக"
+
+msgid "Approve publication"
+msgstr "வெளியீட்டை அங்கீகரிக்கவும்"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "என் பெயர், பாடநெறி, மதிப்பெண் மற்றும் வழங்கல் தேதியைக் காட்டும் கையொப்பமிடப்பட்ட, பொதுவில் சரிபார்க்கக்கூடிய சான்றை நான் அங்கீகரிக்கிறேன். ஒரு நிர்வாகி அதன் SHA-256 கைரேகையை மட்டும் Sepolia சோதனை வலையில் வெளியிடலாம். நான் பின்னர் திரும்பப் பெற்றாலும் கைரேகை நிரந்தரமானது. தொடரவா?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "இந்த சான்றிதழுக்கான வெளியீட்டு அங்கீகாரத்தை திரும்பப் பெறவா?"
+
+msgid "Publication approval recorded"
+msgstr "வெளியீட்டு அங்கீகாரம் பதிவு செய்யப்பட்டது"
+
+msgid "Publication approval withdrawn"
+msgstr "வெளியீட்டு அங்கீகாரம் திரும்பப் பெறப்பட்டது"
+
+msgid "Read more"
+msgstr "மேலும் படிக்க"
+
+msgid "Participation: %s of %s posts"
+msgstr "பங்கேற்பு: %s இல் %s இடுகைகள்"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "மற்ற பங்கேற்பாளர்களின் பதில்களைக் காண உங்கள் பங்களிப்பை இடுகையிடவும்."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "அங்கீகரிக்கப்பட்ட விசாரணையாளர்கள் மட்டுமே தகுதியான அறிக்கைகளை மதிப்பாய்வு செய்யலாம். அறிக்கையிடுபவர் அடையாளங்கள் இயல்பாகவே இரகசியமாக இருக்கும்."
+
+msgid "New confidential report"
+msgstr "புதிய இரகசிய அறிக்கை"
+
+msgid "Reported user"
+msgstr "அறிக்கையிடப்பட்ட பயனர்"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "மதிப்பாய்வுக்காக காத்திருக்கும் தகுதியான இரகசிய அறிக்கைகள் உள்ளன."
+
+msgid "Eligible investigations"
+msgstr "தகுதியான விசாரணைகள்"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "குறைந்தது %s வெவ்வேறு பயனர்கள் அதே நபரை அறிக்கையிட்ட பிறகே ஒரு வழக்கு இங்கே தோன்றும்."
+
+msgid "Distinct reporters"
+msgstr "தனித்துவமான அறிக்கையிடுபவர்கள்"
+
+msgid "Reports for selected user"
+msgstr "தேர்ந்தெடுக்கப்பட்ட பயனருக்கான அறிக்கைகள்"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "இரகசிய அறிக்கையிடல் தற்போது கிடைக்கவில்லை."
+
+msgid "The investigation could not be loaded."
+msgstr "விசாரணையை ஏற்ற முடியவில்லை."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "உங்கள் அடையாளம் இயல்பாகவே விசாரணையாளர்களிடமிருந்து பாதுகாக்கப்படுகிறது, ஆனால் அறிக்கை உரை அல்லது இணைப்புகளில் அடையாள விவரங்களைச் சேர்க்க வேண்டாம். இது அவசர சேவை அல்ல."
+
+msgid "Find the user involved"
+msgstr "தொடர்புடைய பயனரைக் கண்டறியவும்"
+
+msgid "Name or username"
+msgstr "பெயர் அல்லது பயனர்பெயர்"
+
+msgid "Describe the situation"
+msgstr "சூழ்நிலையை விவரிக்கவும்"
+
+msgid "Evidence (optional)"
+msgstr "சான்று (விருப்பத்தேர்வு)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "மூன்று கோப்புகள் வரை, ஒவ்வொன்றும் அதிகபட்சம் 8 MiB. படங்கள், ஒலி அல்லது குறுகிய வீடியோக்கள்."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "இந்த குறிப்பிட்ட அறிக்கைக்கு அங்கீகரிக்கப்பட்ட விசாரணையாளர்கள் என் பெயர் மற்றும் மின்னஞ்சலைப் பார்க்கலாம் என நான் ஒப்புக்கொள்கிறேன். இந்த அனுமதியை நான் பின்னர் திரும்பப் பெறலாம்."
+
+msgid "Send confidential report"
+msgstr "இரகசிய அறிக்கையை அனுப்புக"
+
+msgid "Could not search users"
+msgstr "பயனர்களைத் தேட முடியவில்லை"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "மூன்று கோப்புகள் வரை, ஒவ்வொன்றும் அதிகபட்சம் 8 MiB."
+
+msgid "The confidential report could not be saved."
+msgstr "இரகசிய அறிக்கையை சேமிக்க முடியவில்லை."
+
+msgid "Confidential report"
+msgstr "இரகசிய அறிக்கை"
+
+msgid "Confidential conversation"
+msgstr "இரகசிய உரையாடல்"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "தொடர்பு பகிர்வு இயக்கப்பட்டிருந்தால் தவிர, விசாரணையாளர்கள் அறிக்கையிடுபவரின் அடையாளத்தைப் பார்க்காமல் இந்த உரையாடல் மூலம் தொடர்பு கொள்ளலாம்."
+
+msgid "Reporter"
+msgstr "அறிக்கையிடுபவர்"
+
+msgid "Investigator"
+msgstr "விசாரணையாளர்"
+
+msgid "Additional evidence (optional)"
+msgstr "கூடுதல் சான்று (விருப்பத்தேர்வு)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "மூன்று கோப்புகள் வரை, ஒவ்வொன்றும் அதிகபட்சம் 8 MiB; அறிக்கைக்கு பத்து கோப்புகள்."
+
+msgid "Contact shared voluntarily"
+msgstr "தொடர்பு தன்னார்வமாக பகிரப்பட்டது"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "இந்த அறிக்கைக்கு விசாரணையாளர்கள் என் பெயர் மற்றும் மின்னஞ்சலைப் பார்க்க அனுமதிக்கவும்"
+
+msgid "This confidential report is not available."
+msgstr "இந்த இரகசிய அறிக்கை கிடைக்கவில்லை."
+
+msgid "Your message could not be saved."
+msgstr "உங்கள் செய்தியை சேமிக்க முடியவில்லை."
+
+msgid "Contact sharing could not be updated."
+msgstr "தொடர்பு பகிர்வை புதுப்பிக்க முடியவில்லை."
+
+msgid "Evidence could not be downloaded."
+msgstr "சான்றை பதிவிறக்க முடியவில்லை."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>படிவம் நிரப்பும் செயல்பாட்டு எடுத்துக்காட்டு : உடல் நிறை குறியீட்டை கணக்கிடுதல்</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>வயது</strong></td>            <td width=\"75%\" style=\"\">[25] ஆண்டுகள்</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>பாலினம்</strong></td>            <td style=\"\" text-align:=\"\">[M] (M அல்லது F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>எடை</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>உயரம்</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>உடல் நிறை குறியீடு</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =எடை/உயரம்<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> விக்கிப்பீடியா கட்டுரை</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>படிவம் நிரப்பும் செயல்பாட்டு எடுத்துக்காட்டு : உடல் நிறை குறியீட்டை கணக்கிடுதல்</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>வயது</strong></td>            <td width=\"75%\" style=\"\">[25] ஆண்டுகள்</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>பாலினம்</strong></td>            <td style=\"\" text-align:=\"\">[M] (M அல்லது F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>எடை</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>உயரம்</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>உடல் நிறை குறியீடு</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =எடை/உயரம்<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> விக்கிப்பீடியா கட்டுரை</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "அறிக்கைகளில் IP முகவரியை மறைக்கவும்"
+
+msgid "Course settings policies"
+msgstr "பாட அமைப்புக் கொள்கைகள்"
+
+msgid "Academic transcripts"
+msgstr "கல்வி மதிப்பெண் பட்டியல்கள்"
+
+msgid "Transcript program title"
+msgstr "மதிப்பெண் பட்டியல் நிரல் தலைப்பு"
+
+msgid "Transcript course code"
+msgstr "மதிப்பெண் பட்டியல் பாடக் குறியீடு"
+
+msgid "Transcript course hours field"
+msgstr "மதிப்பெண் பட்டியல் பாட நேரங்கள் புலம்"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "மதிப்பெண் பட்டியலில் முடிக்கப்பட்ட நேரங்கள் தேவையான நேரங்களாகும்"
+
+msgid "Transcript student number field"
+msgstr "மதிப்பெண் பட்டியல் மாணவர் எண் புலம்"
+
+msgid "Transcript address fields"
+msgstr "மதிப்பெண் பட்டியல் முகவரி புலங்கள்"
+
+msgid "Transcript grading scale"
+msgstr "மதிப்பெண் பட்டியல் தர அளவுகோல்"
+
+msgid "Transcript GPA note"
+msgstr "மதிப்பெண் பட்டியல் GPA குறிப்பு"
+
+msgid "Transcript signatory name"
+msgstr "மதிப்பெண் பட்டியல் கையொப்பமிடுபவர் பெயர்"
+
+msgid "Transcript signatory title"
+msgstr "மதிப்பெண் பட்டியல் கையொப்பமிடுபவர் பதவி"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "கையொப்பமிடப்பட்ட சான்றிதழ்கள் மற்றும் விருப்ப Sepolia சோதனை வலை நங்கூரத்தை இயக்குக"
+
+msgid "Show thread replies only after participating"
+msgstr "பங்கேற்ற பிறகே நூல் பதில்களைக் காட்டுக"
+
+msgid "Show the forum category description in threads"
+msgstr "நூல்களில் மன்ற வகை விளக்கத்தைக் காட்டுக"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "மன்ற பங்கேற்பு அமைப்புகளை பாடத்தின்படி மாற்றலாம்"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "ஒரு மன்ற நூலில் காட்டப்படும் அதிகபட்ச இடுகைகள்"
+
+msgid "Posts required to complete a forum thread"
+msgstr "ஒரு மன்ற நூலை முடிக்க தேவையான இடுகைகள்"
+
+msgid "Track e-mail openings"
+msgstr "மின்னஞ்சல் திறப்புகளைக் கண்காணிக்கவும்"
+
+msgid "Allow e-mail replies to messages"
+msgstr "செய்திகளுக்கு மின்னஞ்சல் பதில்களை அனுமதிக்கவும்"
+
+msgid "Inbound e-mail address"
+msgstr "உள்வரும் மின்னஞ்சல் முகவரி"
+
+msgid "Inbound mailbox DSN"
+msgstr "உள்வரும் அஞ்சல் பெட்டி DSN"
+
+msgid "Remember me duration (days)"
+msgstr "என்னை நினைவில் கொள் காலம் (நாட்கள்)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "MCP-க்கு அப்பால் OAuth இயங்குநிலை கிளையன்ட் பதிவை இயக்குக"
+
+msgid "Enable confidential welfare reporting"
+msgstr "இரகசிய நல அறிக்கையை இயக்குக"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "விசாரணைக்கு குறைந்தபட்ச தனித்துவமான அறிக்கையாளர்கள்"
+
+msgid "Allow confidential evidence attachments"
+msgstr "இரகசிய சான்று இணைப்புகளை அனுமதிக்கவும்"
+
+msgid "Show confidential investigation notifications"
+msgstr "இரகசிய விசாரணை அறிவிப்புகளைக் காட்டுக"
+
+msgid "Enable support chatbot"
+msgstr "ஆதரவு அரட்டைப் பொறியை இயக்குக"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "சொற்களஞ்சிய சொற்கள் தானாக முன்னிலைப்படுத்தப்படும் இடத்தைத் தேர்ந்தெடுக்கவும்: ஆவணங்கள், பயிற்சிகள் மற்றும் கற்றல் பாதைகள்."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "காட்சி அறிக்கையிலும் அறிக்கை ஏற்றுமதிகளிலும் IP முகவரிகளை மறைக்கவும். IP முகவரிகள் சேமிக்கப்பட்டு அங்கீகரிக்கப்பட்ட தனிப்பட்ட தரவு நடைமுறைகள் மூலம் அணுகக்கூடியவை."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "தள இயல்புநிலைகள் மற்றும் பாட திருத்த அனுமதிகள்; பாட அமைப்புகளில் நிர்வகிக்கப்படுகிறது."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "பயனர்கள் முடித்த பாடங்களின் அதிகாரப்பூர்வமற்ற மதிப்பெண் பட்டியலைப் பதிவிறக்க அனுமதிக்கவும், நிர்வாகிகள், அமர்வு நிர்வாகிகள் மற்றும் மனிதவள மேலாளர்கள் தாங்கள் நிர்வகிக்கும் பயனர்களுக்கு கையொப்பமிடப்பட்ட அதிகாரப்பூர்வ மதிப்பெண் பட்டியல்களை வழங்க அனுமதிக்கவும். கையொப்பப் படம் ஒரு பயனரின் மதிப்பெண் பட்டியல் பக்கத்திலிருந்து பதிவேற்றப்படுகிறது."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "ஒவ்வொரு மதிப்பெண் பட்டியலிலும் அச்சிடப்படும் நிரல் தலைப்பு, எடுத்துக்காட்டாக இந்த தளத்தில் தயாரிக்கப்படும் பட்டத்தின் பெயர்."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "மதிப்பெண் பட்டியல்களின் பாடக் குறியீடு நெடுவரிசையை நிரப்பும் பாடப் புலம்: பாடக் குறியீடு அல்லது துறை பெயர்."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "ஒரு பாடத்தின் மணிநேர எண்ணிக்கையை வைத்திருக்கும் பாட கூடுதல் புலத்தின் மாறி. பாட கால அளவைப் பயன்படுத்த காலியாக விடவும்."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "ஒரு பாடத்தின் தேவையான மணிநேரங்களை கற்றவர் முடித்த மணிநேரங்களாக அச்சிடவும். முடக்கப்பட்டால், முடிக்கப்பட்ட மணிநேரங்கள் கற்றவர் பாடத்தில் செலவிட்ட நேரமாகும்."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "மதிப்பெண் பட்டியல்களில் அச்சிடப்படும் மாணவர் எண்ணை வைத்திருக்கும் பயனர் கூடுதல் புலத்தின் மாறி. எதையும் அச்சிட காலியாக விடவும்."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "மதிப்பெண் பட்டியல்களில் பயனரின் முகவரிக்குப் பிறகு அச்சிடப்படும் பயனர் கூடுதல் புலங்களின் காற்புள்ளியால் பிரிக்கப்பட்ட மாறிகள், எடுத்துக்காட்டாக நகரம், மாநிலம் மற்றும் அஞ்சல் குறியீடு."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "தர எழுத்துகளின் JSON பட்டியல், உயர்ந்த குறைந்தபட்ச மதிப்பெண்ணிலிருந்து கீழே: ஒவ்வொரு உருப்படியிலும் சதவீதத்தில் குறைந்தபட்ச மதிப்பெண் (min), எழுத்து மற்றும் GPA கணக்கிடப் பயன்படும் தரப் புள்ளிகள் உள்ளன."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "GPA எவ்வாறு கணக்கிடப்படுகிறது என்பதன் விளக்கம், மதிப்பெண் பட்டியல்களில் GPA-க்கு கீழே அச்சிடப்படும்."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "அதிகாரப்பூர்வ மதிப்பெண் பட்டியல்களில் கையொப்பமிடும் பள்ளி அதிகாரியின் பெயர்."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "அதிகாரப்பூர்வ மதிப்பெண் பட்டியல்களில் கையொப்பமிடும் பள்ளி அதிகாரியின் பதவி."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "உரிமையாளரின் வெளிப்படையான ஒப்புதலும் நிர்வாகியின் கைமுறை செயல்களும் தேவை. சங்கிலியில் SHA-256 கைரேகைகள் மட்டுமே அனுப்பப்படும்."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "கற்றவர்கள் ஒரு மன்றத் தொடரில் தாங்களே இடுகையிடும் வரை முதல் இடுகையை மட்டுமே காண்கின்றனர். நிர்வாகிகள், ஆசிரியர்கள், பயிற்சியாளர்கள் மற்றும் குழு வழிகாட்டிகள் எப்போதும் அனைத்து இடுகைகளையும் காண்கின்றனர்."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "ஒவ்வொரு தொடரின் மேற்புறத்திலும் மன்ற வகையின் தலைப்பையும் சுருக்கமான விளக்கத்தையும் காட்டு, முழு விளக்கத்தைப் படிக்க இணைப்புடன்."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "இயக்கப்பட்டால், ஆசிரியர்கள் பாடநெறி அமைப்புகளின் மன்றப் பிரிவில், கற்றவர் இடுகையிடும் வரை தொடர் பதில்களை மறைக்கலாமா, தொடர்களில் வகை விளக்கத்தைக் காட்டலாமா, பங்கேற்பு முன்னேற்றப் பட்டியில் எத்தனை இடுகைகள் எதிர்பார்க்கப்படுகின்றன என்பதைத் தள அமைப்புகளுக்குப் பதிலாகத் தேர்வு செய்யலாம்."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "தள நிர்வாகி அல்லாத ஒவ்வொரு பயனருக்கும், ஆசிரியர்கள் உட்பட, மற்றும் கற்றல் பாதையில் உள்ள அனைவருக்கும் ஒவ்வொரு மன்றத் தொடரின் இந்த எண்ணிக்கையிலான இடுகைகளை மட்டும் காட்டு. தொடர் மற்றும் உள்ளமைந்த காட்சிகளில், வரம்பு ஒவ்வொரு இடுகையின் பதில்களுக்கும் பொருந்தும். இடுகைகள் காட்சியின் வரிசையில் வைக்கப்படும்: முதலாவவை, அல்லது கற்றல் பாதையில் சமீபத்தியவை, அங்கு சமீபத்திய இடுகைகள் முதலில் வரும். அனைத்து இடுகைகளையும் காட்ட 0 என அமைக்கவும்."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "ஒவ்வொரு மன்றத் தொடரிலும் கற்றவர்களுக்கு முன்னேற்றப் பட்டியைக் காட்டு, அதில் இந்த எண்ணிக்கையிலான செய்திகளை இடுகையிட்ட பின் 100% அடையும். மதிப்பீட்டிற்காகக் காத்திருக்கும் இடுகைகள் கணக்கிடப்படும். முன்னேற்றப் பட்டியை மறைக்க 0 என அமைக்கவும்."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "செய்தி அறிவிப்பு மின்னஞ்சல்களுக்கு சிறிய கண்காணிப்புப் படத்தைச் சேர்த்து, அது கோரப்படும்போது பதிவு செய்கிறது. இது மின்னஞ்சல் திறக்கப்பட்டிருக்கலாம் என்பதை மட்டுமே குறிக்கிறது; படிக்கப்பட்டது என்பதை நிரூபிக்காது."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "நேரடி செய்தி அறிவிப்புகளைப் பெறுபவர்கள் மின்னஞ்சல் மூலம் பதிலளிக்க அனுமதி. உள்வரும் செய்திகள் அஞ்சல் உள்கட்டமைப்பால் Chamilo inbound-mail கட்டளைக்கு வழிநடத்தப்பட வேண்டும்."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "பதில் வழித்தடத்திற்குப் பயன்படுத்தப்படும் அடிப்படை முகவரி, எடுத்துக்காட்டாக replies@example.com. Chamilo பிளஸ் முகவரியிடலைப் பயன்படுத்தி தனித்துவமான பெறுநர் டோக்கனைச் சேர்க்கிறது."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "உள்வரும் பதில்களைச் சேகரிக்கப் பயன்படும் அஞ்சல் பெட்டி இணைப்பு, எடுத்துக்காட்டாக imaps:\/\/user:password@imap.example.com:993\/INBOX. சான்றுகளில் உள்ள ஒதுக்கப்பட்ட எழுத்துகளை URL-encode செய்யவும்."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "என்னை நினைவில் கொள் தேர்ந்தெடுக்கப்படும்போது பயனர் உள்நுழைந்திருக்கும் நாட்களின் எண்ணிக்கை. முடக்க 0 என அமைக்கவும். HTTPS தேவை. அனுமதிக்கப்பட்ட வரம்பு: 0 முதல் 90. சாதாரண அமர்வு நேரம் PHP\/Symfony இல் தனியாக அமைக்கப்படுகிறது."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "டைனமிக் கிளையன்ட் பதிவு, Chamilo OAuth வள சேவையகத்தால் பதிவு செய்யப்பட்ட எந்த நோக்கத்தையும் கோர அனுமதிக்கிறது. முடக்கப்பட்டால், சுய-பதிவு MCPக்கு மட்டுமே வரம்பிடப்படும். வள அணுகல் ஒவ்வொரு கிளையண்டின் அனுமதிக்கப்பட்ட வளப் பட்டியலால் தனியாகக் கட்டுப்படுத்தப்படும்."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "ரகசிய சம்பவ அறிக்கைகளை இயக்கு. தொகுதிக்கு பாதுகாக்கப்பட்ட குறியாக்க விசை மற்றும் விசாரணையாளர் அனுமதி தேவை."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "ஒரே பயனரை 2 முதல் 10 வெவ்வேறு அறிக்கையாளர்கள் அறிக்கையிட்ட பிறகே வழக்கு விசாரணையாளர்களுக்குத் தெரியும்."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "படங்கள், ஒலி மற்றும் குறுகிய வீடியோ சான்றுகளை அனுமதி. முடக்கப்பட்டாலும் இருக்கும் இணைப்புகள் படிக்கக்கூடியவை."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "தகுதியான விசாரணைகளின் உள் குறிப்பைக் காட்டு. மின்னஞ்சல்கள் அல்லது வெளிப்புற அறிவிப்புகளை அனுப்பாது."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "அரட்டைப் பலகத்தில் பயனர்களை வழிநடத்தக்கூடிய முடிவு-மர அரட்டைப் போட்டைக் காட்டு "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "ஆசிரியர்கள் பாடநெறிகளுக்குள் AI உதவியுடன் கல்விப் பயன்பாடுகளை உருவாக்கவும் பதிப்பு செய்யவும் அனுமதிக்கிறது."
+
+msgid "Department name"
+msgstr "துறை பெயர்"
+
+msgid "Documents and exercise"
+msgstr "ஆவணங்கள் மற்றும் பயிற்சி"
+
+msgid "Documents and learning path"
+msgstr "ஆவணங்கள் மற்றும் கற்றல் பாதை"
+
+msgid "Documents, exercise and learning path"
+msgstr "ஆவணங்கள், பயிற்சி மற்றும் கற்றல் பாதை"
+
+msgid "session"
+msgstr "அமர்வு"
+
+msgid "course"
+msgstr "பாடநெறி"
+
+msgid "You have been enrolled in %s"
+msgstr "நீங்கள் %s இல் சேர்க்கப்பட்டுள்ளீர்கள்"
 

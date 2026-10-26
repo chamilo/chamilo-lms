@@ -371,7 +371,7 @@ msgid "Sincerely"
 msgstr "敬具"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "数式の例: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "数式の例: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "変数範囲"
@@ -28834,6 +28834,9 @@ msgstr "現在のユーザーが見つかりません。"
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "こんにちは %s、<br><br>%s に登録されました。<br><a href=\"%s\">こちら</a>からアカウントにアクセスできます。<br><br>ログイン情報は以下の通りです：<br>ユーザー名： <strong>%s</strong><br>パスワード： <strong>%s</strong><br><br>よろしくお願いいたします、<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "%s 様、<br><br>%s に登録されました。<br>ユーザー名: <strong>%s</strong><br><br>以下のリンクをクリックしてパスワードを設定し、アカウントにアクセスしてください:<br><a href=\"%s\">パスワードを設定する</a><br><br>よろしくお願いいたします。<br>%s"
+
 msgid "You are registered on %s"
 msgstr "%s に登録されました"
 
@@ -41637,4 +41640,1616 @@ msgstr "マイグレーション履歴が記録されています"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "プロジェクトルートに %s があります: アップグレード用エンドポイントを閉じるには削除してください"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "この演習の修了証を取得しました"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "このラーニングパスにアクセスする前に、ラーニングパス「%s」を完了する必要があります。"
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "このファイルを完全に削除してもよろしいですか？"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "選択したコースからこのファイルの関連付けを解除してもよろしいですか？"
+
+msgid "Attach this file to another course"
+msgstr "このファイルを別のコースに関連付ける"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "選択したコースに関連付ける（非表示）"
+
+msgid "Course(s):"
+msgstr "コース:"
+
+msgid "Delete definitively"
+msgstr "完全に削除"
+
+msgid "Detach from this course"
+msgstr "このコースから関連付けを解除"
+
+msgid "File actions"
+msgstr "ファイル操作"
+
+msgid "File Information"
+msgstr "ファイル情報"
+
+msgid "File Link:"
+msgstr "ファイルリンク:"
+
+msgid "File Path:"
+msgstr "ファイルパス:"
+
+msgid "Filter courses..."
+msgstr "コースを絞り込む..."
+
+msgid "MIME Type:"
+msgstr "MIME タイプ:"
+
+msgid "N/A"
+msgstr "該当なし"
+
+msgid "No results found."
+msgstr "結果が見つかりません。"
+
+msgid "Original Name"
+msgstr "元の名前"
+
+msgid "Original Name:"
+msgstr "元の名前:"
+
+msgid "Orphan"
+msgstr "孤立"
+
+msgid "Resource File ID:"
+msgstr "リソースファイル ID:"
+
+msgid "Resource Node ID:"
+msgstr "リソースノード ID:"
+
+msgid "Search..."
+msgstr "検索..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "特定のコースからこのファイルの関連付けを解除するには、上の該当するコースタグの「×」アイコンをクリックしてください。"
+
+msgid "User:"
+msgstr "ユーザー:"
+
+msgid "View file information"
+msgstr "ファイル情報を表示"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "このファイルを1つ以上のコースに関連付けることができます（ドキュメントのルートでは非表示）。ファイルが使用されなくなり孤立した場合は、完全に削除することもできます。"
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "1つ以上のコースを選択できます（Ctrl/Cmd キーを押しながらクリック）。"
+
+msgid "bytes"
+msgstr "バイト"
+
+msgid "Failed to copy:"
+msgstr "コピーに失敗しました:"
+
+msgid "Missing resource file identifier."
+msgstr "リソースファイルの識別子がありません。"
+
+msgid "Please select at least one course."
+msgstr "少なくとも1つのコースを選択してください。"
+
+msgid "Resource file not found."
+msgstr "リソースファイルが見つかりません。"
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "ファイル「%s」を %d 件のコースに関連付けました: %s。"
+
+msgid "Some courses were skipped: %s."
+msgstr "一部のコースはスキップされました: %s。"
+
+msgid "Missing file or course identifier."
+msgstr "ファイルまたはコースの識別子がありません。"
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "このリソースファイルにはリソースノードがないため、関連付けを解除できません。"
+
+msgid "File has been detached from %d course link(s)."
+msgstr "ファイルを %d 件のコースリンクから関連付け解除しました。"
+
+msgid "This file is not attached to the selected course."
+msgstr "このファイルは選択したコースに関連付けられていません。"
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "このファイルは少なくとも1つのリソースで使用されているため、削除できません。"
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "孤立ファイルとその物理コンテンツを完全に削除しました。"
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "アンケートを公開しました。作成: %d。更新: %d。送信メッセージ: %d。"
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "習得可能"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "このスキルは習得できません"
+
+#: issue-8179
+msgid "Novice"
+msgstr "初心者"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "規則や文脈に依存しない指示に厳密に従い、状況判断はほとんどできない。"
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "上級初心者"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "状況の側面やパターンを認識し始めるが、まだガイドラインが必要。"
+
+#: issue-8179
+msgid "Competent"
+msgstr "一人前"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "計画とメンタルモデルを構築し、結果に責任を持つが、複雑さに圧倒されることがある。"
+
+#: issue-8179
+msgid "Proficient"
+msgstr "熟練"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "「全体像」を把握し、直感的に優先順位を付け、経験から学ぶ。"
+
+#: issue-8179
+msgid "Expert"
+msgstr "専門家"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "直感的で流れるような遂行。深い暗黙知に依拠し、革新や未知の状況にも無理なく対応できる。"
+
+#: issue-8179
+msgid "Remembering"
+msgstr "記憶"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "長期記憶から関連する知識を取り出す、思い出す、または認識する。"
+
+#: issue-8179
+msgid "Understanding"
+msgstr "理解"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "口頭、書面、図によるものを含む教材メッセージから意味を構成する。解釈、例示、分類、要約、推論、比較、説明により理解を示す。"
+
+#: issue-8179
+msgid "Applying"
+msgstr "応用"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "与えられた状況で手順を実行または実施して用いる。新しい、または具体的な状況で知識や技能を使う。"
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "分析"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "教材を構成要素に分解し、各部分同士および全体の構造や目的との関係を明らかにする。動機、原因、関係を特定する。"
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "評価"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "基準と標準に基づいて判断する。決定や行動方針を確認、批評、または正当化する。"
+
+#: issue-8179
+msgid "Creating"
+msgstr "創造"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "要素を組み合わせて一貫した、または機能する全体を形成する。要素を新しいパターンや構造に再編成する。独創的な成果を生み出す、または新しいアイデアを創出する。"
+
+#: issue-8179
+msgid "Follow"
+msgstr "従う"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "密接な監督と指示の下で働く。裁量は限られ、定型的な作業を行う。指示に従うことと基本的な実行に重点を置く。"
+
+#: issue-8179
+msgid "Assist"
+msgstr "支援する"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "日常的な監督の下で働く。他者を支援し、チーム作業に貢献し、定められた範囲内で主体性を発揮し始める。"
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "一般的な監督の下で働く。定型・非定型の幅広い活動に知識と技能を適用する。ある程度の裁量と判断を行う。"
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "広い方針の下で働く。専門的な指導、支援、またはサービスを提供して他者を支える。自身の業務に責任を持ち、小規模なチームや作業を監督することがある。"
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "確保し助言する"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "広い方針の下で、かなりの自律性をもって働く。業務が目標を満たすことを確保し、複雑な事柄について助言する。しばしばチームやプロジェクトを率い、意思決定に影響を与える。"
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "主導し影響を与える"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "重要な業務領域について明確な権限と責任を持つ。行動を起こし、担当領域の戦略と方針に影響を与え、大規模なプロジェクトやチームを率いる。"
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "戦略を定め、鼓舞し、動員する"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "主要な業務領域について組織の最高レベルで権限を持つ。長期戦略を定め、他者を鼓舞・動員し、組織の成功に不可欠な意思決定を行う。業界または外部レベルでも影響力を持つ。"
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "考慮する最大非活動時間（分）"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "コースページを開いたままにすると、自動リクエストが送られ続けます。ユーザーによる実際の操作（ページや項目の開く、回答など）がないこの分数を過ぎると、コースでの滞在時間の計測が停止します。"
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "共同Wikiエディター"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Etherpadに接続しています..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "保存すると、現在のEtherpadの内容から新しいChamilo Wikiバージョンが作成されます。"
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "共同エディターを読み込めませんでした。"
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Wiki編集にEtherpadを有効にする"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "既存のWikiページの共同エディターとしてEtherpadを使用します。安全な埋め込みセッションのため、EtherpadはChamiloと同じオリジンで公開されている必要があります。"
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "EtherpadインスタンスのベースURL。任意のリバースプロキシパスを含みます。例: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad APIキー"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "パッドやセッションの作成、Wiki内容の同期にChamiloが使用するAPIキーです。EtherpadでAPIキー認証を受け入れるよう設定してください。"
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "新しい文書の既定の公開設定はコースごとに変更できる"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "教師がコース内で新しい文書、フォルダー、またはアップロードファイルを作成したときに付与される公開設定です。教師はその後も個別に公開設定を変更できます。"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "有効にすると、教師はプラットフォームの既定ではなく、コース設定で自コースの新しい文書に付与する公開設定を選べます。"
+
+msgid "Default visibility of new learning paths"
+msgstr "新しい学習パスの既定の公開設定"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "新しい学習パスの既定の公開設定はコースごとに変更できる"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "教師がコース内で新しい学習パスを作成したときに付与される公開設定です。教師はその後も個別に公開設定を変更できます。"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "有効にすると、教師はプラットフォームの既定ではなく、コース設定で自コースの新しい学習パスに付与する公開設定を選べます。"
+
+msgid "Default visibility of new tests"
+msgstr "新しいテストの既定の公開設定"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "新しいテストのデフォルト公開設定はコースごとに変更できる"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "教師がコース内で新しいテストを作成したときに付与される公開設定です。教師は後から各テストの公開設定を変更できます。"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "有効にすると、教師はプラットフォームのデフォルトではなく、コース設定で自コースの新しいテストに付与する公開設定を選択できます。"
+
+msgid "Default visibility for new learning paths"
+msgstr "新しい学習パスのデフォルト公開設定"
+
+msgid "Default visibility for new tests"
+msgstr "新しいテストのデフォルト公開設定"
+
+msgid "Following"
+msgstr "フォロー中"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "学習者がこの課題の提出物にコメントしたときにメールを受信する"
+
+msgid "Payment history"
+msgstr "支払い履歴"
+
+msgid "No payments yet"
+msgstr "まだ支払いはありません"
+
+msgid "Cancel service"
+msgstr "サービスをキャンセル"
+
+msgid "Official transcript"
+msgstr "正式な成績証明書"
+
+msgid "Unofficial transcript"
+msgstr "非公式の成績証明書"
+
+msgid "Student name"
+msgstr "学生氏名"
+
+msgid "Student number"
+msgstr "学籍番号"
+
+msgid "Program title"
+msgstr "プログラム名"
+
+msgid "Required hours"
+msgstr "必要時間数"
+
+msgid "Completion date"
+msgstr "修了日"
+
+msgid "Hours completed"
+msgstr "修了時間数"
+
+msgid "Final grade"
+msgstr "最終成績"
+
+msgid "Grade"
+msgstr "成績"
+
+msgid "No completed course yet."
+msgstr "まだ修了したコースはありません。"
+
+msgid "Grading scale"
+msgstr "成績評価尺度"
+
+msgid "Signature of school official"
+msgstr "学校関係者の署名"
+
+msgid "School official"
+msgstr "学校関係者"
+
+msgid "Official's title"
+msgstr "役職"
+
+msgid "Verify this transcript at"
+msgstr "この成績証明書を次で確認"
+
+msgid "Verification code"
+msgstr "確認コード"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "この非公式の成績証明書には署名がありません。正式な成績証明書は管理者に依頼してください。"
+
+msgid "Transcript verification"
+msgstr "成績証明書の確認"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "この正式な成績証明書が機関によって発行・署名され、改ざんされておらず、取り消されていないことを確認します。"
+
+msgid "Valid"
+msgstr "有効"
+
+msgid "Invalid signature"
+msgstr "無効な署名"
+
+msgid "Transcript not found"
+msgstr "成績証明書が見つかりません"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "機関の署名は有効であり、この成績証明書は取り消されていません。"
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "この成績証明書は有効と確認できません。詳細は表示されません。"
+
+msgid "Transcript details"
+msgstr "成績証明書の詳細"
+
+msgid "Institution"
+msgstr "機関"
+
+msgid "Issued on"
+msgstr "発行日"
+
+msgid "Download verification JSON"
+msgstr "確認用JSONをダウンロード"
+
+msgid "Transcript"
+msgstr "成績証明書"
+
+msgid "My confidential reports"
+msgstr "自分の機密レポート"
+
+msgid "My transcript"
+msgstr "自分の成績証明書"
+
+msgid "Confidential investigations"
+msgstr "機密調査"
+
+msgid "Floor plan"
+msgstr "フロアプラン"
+
+msgid "Click a highlighted room to select it"
+msgstr "ハイライトされた部屋をクリックして選択"
+
+msgid "Select room"
+msgstr "部屋を選択"
+
+msgid "Room on floor plan"
+msgstr "フロアプラン上の部屋"
+
+msgid "Select a branch first"
+msgstr "先にブランチを選択してください"
+
+msgid "The branch has no attached floor plan"
+msgstr "このブランチにはフロアプランが添付されていません"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "ポリゴンツールで部屋の輪郭を描き、編集で角を移動してください"
+
+msgid "Save room area"
+msgstr "部屋エリアを保存"
+
+msgid "Clear room area"
+msgstr "部屋エリアをクリア"
+
+msgid "Save the room form to persist the area"
+msgstr "エリアを保存するには部屋フォームを保存してください"
+
+msgid "Floor plan unavailable"
+msgstr "フロアプランは利用できません"
+
+msgid "Room map points must be within the floor plan"
+msgstr "部屋のマップポイントはフロアプラン内である必要があります"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "部屋エリアをクリアしてもよろしいですか？"
+
+msgid "View room on floor plan"
+msgstr "フロアプランで部屋を表示"
+
+msgid "No floor plan available"
+msgstr "利用可能なフロアプランはありません"
+
+msgid "This is an assignment by groups"
+msgstr "これはグループ課題です"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "PNG、JPEG、または安全な静的SVGのフロアプランをアップロードするか、ドキュメントから既存の画像を選択してください。"
+
+msgid "Upload floor plan"
+msgstr "フロアプランをアップロード"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG、JPEG、または静的SVG、最大10 MB"
+
+msgid "Search images by name"
+msgstr "名前で画像を検索"
+
+msgid "Image name"
+msgstr "画像名"
+
+msgid "Select an image"
+msgstr "画像を選択"
+
+msgid "Change floor plan"
+msgstr "フロアプランを変更"
+
+msgid "Attach floor plan"
+msgstr "フロアプランを添付"
+
+msgid "No matching images found in Documents."
+msgstr "ドキュメントに一致する画像が見つかりません。"
+
+msgid "Current floor plan"
+msgstr "現在のフロアプラン"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "フロアプランの変更は自動的に保存されます。"
+
+msgid "Remove floor plan"
+msgstr "フロアプランを削除"
+
+msgid "Cannot load images"
+msgstr "画像を読み込めません"
+
+msgid "Floor plan saved"
+msgstr "フロアプランを保存しました"
+
+msgid "Cannot attach floor plan"
+msgstr "フロアプランを添付できません"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "10MBまでのPNG/JPEGおよび安全な静的SVG画像のみ対応しています。"
+
+msgid "Cannot upload floor plan"
+msgstr "フロアプランをアップロードできません"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "フロアプランを削除してもよろしいですか？"
+
+msgid "Floor plan removed"
+msgstr "フロアプランを削除しました"
+
+msgid "Cannot remove floor plan"
+msgstr "フロアプランを削除できません"
+
+msgid "Support bot"
+msgstr "サポートボット"
+
+msgid "Connected"
+msgstr "接続済み"
+
+msgid "Not connected"
+msgstr "未接続"
+
+msgid "View ticket"
+msgstr "チケットを表示"
+
+msgid "Start a new conversation"
+msgstr "新しい会話を開始"
+
+msgid "Video call"
+msgstr "ビデオ通話"
+
+msgid "Incoming video call"
+msgstr "着信ビデオ通話"
+
+msgid "Decline"
+msgstr "拒否"
+
+msgid "Mute microphone"
+msgstr "マイクをミュート"
+
+msgid "Unmute microphone"
+msgstr "マイクのミュートを解除"
+
+msgid "Turn camera off"
+msgstr "カメラをオフ"
+
+msgid "Turn camera on"
+msgstr "カメラをオン"
+
+msgid "Hang up"
+msgstr "通話終了"
+
+msgid "Calling..."
+msgstr "発信中..."
+
+msgid "Connecting..."
+msgstr "接続中..."
+
+msgid "Your contact is busy."
+msgstr "相手は話し中です。"
+
+msgid "Your contact did not answer the call."
+msgstr "相手が通話に応答しませんでした。"
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "相手がカメラまたはマイクにアクセスできませんでした。"
+
+msgid "Your contact could not prepare the video call."
+msgstr "相手がビデオ通話の準備できませんでした。"
+
+msgid "Your contact refused the call."
+msgstr "相手が通話を拒否しました。"
+
+msgid "The call timed out."
+msgstr "通話がタイムアウトしました。"
+
+msgid "Your contact cancelled the call."
+msgstr "相手が通話をキャンセルしました。"
+
+msgid "The video connection was lost."
+msgstr "ビデオ接続が切断されました。"
+
+msgid "Your contact could not establish the video connection."
+msgstr "相手がビデオ接続を確立できませんでした。"
+
+msgid "Your contact could not complete the video call setup."
+msgstr "相手がビデオ通話のセットアップを完了できませんでした。"
+
+msgid "Your contact hung up."
+msgstr "相手が通話を終了しました。"
+
+msgid "Video call could not be started"
+msgstr "ビデオ通話を開始できませんでした"
+
+msgid "Camera or microphone permission was denied."
+msgstr "カメラまたはマイクの許可が拒否されました。"
+
+msgid "No camera or microphone was found."
+msgstr "カメラまたはマイクが見つかりませんでした。"
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "カメラまたはマイクは使用中か、利用できません。"
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "カメラまたはマイクが必要な設定に対応していません。"
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "カメラまたはマイクへのアクセスを取得できませんでした。"
+
+msgid "The video call could not be prepared."
+msgstr "ビデオ通話を準備できませんでした。"
+
+msgid "The video call request could not be sent."
+msgstr "ビデオ通話のリクエストを送信できませんでした。"
+
+msgid "The incoming video call could not be processed."
+msgstr "着信したビデオ通話を処理できませんでした。"
+
+msgid "The video call answer could not be prepared."
+msgstr "ビデオ通話の応答を準備できませんでした。"
+
+msgid "The video call answer could not be sent."
+msgstr "ビデオ通話の応答を送信できませんでした。"
+
+msgid "The video call answer could not be processed."
+msgstr "ビデオ通話の応答を処理できませんでした。"
+
+msgid "The video connection failed"
+msgstr "ビデオ接続に失敗しました"
+
+msgid "The video connection could not be established."
+msgstr "ビデオ接続を確立できませんでした。"
+
+msgid "No answer was received."
+msgstr "応答がありませんでした。"
+
+msgid "You refused the call."
+msgstr "通話を拒否しました。"
+
+msgid "You cancelled the call."
+msgstr "通話をキャンセルしました。"
+
+msgid "You hung up."
+msgstr "通話を終了しました。"
+
+msgid "You missed the call."
+msgstr "通話を見逃しました。"
+
+msgid "Support bot is currently unavailable."
+msgstr "サポートボットは現在利用できません。"
+
+msgid "A support ticket has been created."
+msgstr "サポートチケットが作成されました。"
+
+msgid "Conversation ended."
+msgstr "会話が終了しました。"
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "サポートボットはこの会話を続行できませんでした。もう一度お試しください。"
+
+msgid "Add your first term glossary to this course"
+msgstr "このコースに最初の用語集項目を追加する"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "このアンケートテンプレートを削除してもよろしいですか？"
+
+msgid "The survey template has been deleted."
+msgstr "アンケートテンプレートが削除されました。"
+
+msgid "Please select a course."
+msgstr "コースを選択してください。"
+
+msgid "Please select a session for this course."
+msgstr "このコースのセッションを選択してください。"
+
+msgid "The survey has been created from the template."
+msgstr "テンプレートからアンケートが作成されました。"
+
+msgid "Survey templates"
+msgstr "アンケートテンプレート"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "教員向けの再利用可能なアンケートテンプレートを作成し、コースまたはセッションに直接割り当てます。"
+
+msgid "Subtitle"
+msgstr "サブタイトル"
+
+msgid "Assign to course"
+msgstr "コースに割り当てる"
+
+msgid "Assign template to course"
+msgstr "テンプレートをコースに割り当てる"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "セッションを空のままにすると、コース内に直接アンケートが作成されます。"
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "このコースはこのポータル上のセッション経由で利用できるため、セッションが必要です。"
+
+msgid "Survey template questions"
+msgstr "アンケートテンプレートの質問"
+
+msgid "Back to survey templates"
+msgstr "アンケートテンプレートに戻る"
+
+msgid "Could not load survey template"
+msgstr "アンケートテンプレートを読み込めませんでした"
+
+msgid "Could not load survey template questions"
+msgstr "アンケートテンプレートの質問を読み込めませんでした"
+
+msgid "Could not save survey template question"
+msgstr "アンケートテンプレートの質問を保存できませんでした"
+
+msgid "Could not delete survey template question"
+msgstr "アンケートテンプレートの質問を削除できませんでした"
+
+msgid "Could not move survey template question"
+msgstr "アンケートテンプレートの質問を移動できませんでした"
+
+msgid "Could not copy survey template question"
+msgstr "アンケートテンプレートの質問をコピーできませんでした"
+
+msgid "The survey template has been saved."
+msgstr "アンケートテンプレートが保存されました。"
+
+msgid "Edit survey template"
+msgstr "アンケートテンプレートを編集"
+
+msgid "Create survey template"
+msgstr "アンケートテンプレートを作成"
+
+msgid "The survey template title is required."
+msgstr "アンケートテンプレートのタイトルは必須です。"
+
+msgid "Visible as template"
+msgstr "テンプレートとして表示"
+
+msgid "Create satisfaction survey"
+msgstr "満足度調査を作成"
+
+msgid "Training satisfaction survey"
+msgstr "研修満足度調査"
+
+msgid "Could not create satisfaction survey"
+msgstr "満足度調査を作成できませんでした"
+
+msgid "Use template"
+msgstr "テンプレートを使用"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "管理者が用意した再利用可能なテンプレートからこのアンケートを作成します。"
+
+msgid "Results hidden from teacher/tutor"
+msgstr "教師／チューターから結果を非表示"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "教師とチューターは回答数の確認とリマインダー送信はできますが、アンケート結果を開いたりエクスポートしたりすることはできません。"
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "テンプレートを適用しました。アンケート設定を確認し、保存して作成してください。"
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "アンケート結果は教師とチューターには非表示です。"
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "招待ページでは、引き続き回答数の確認とリマインダー送信ができます。"
+
+msgid "Payment method"
+msgstr "支払い方法"
+
+msgid "Preview mode"
+msgstr "プレビューモード"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "プレビューモードでは進捗と得点は保存されません。"
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "このリンクはラーニングパス内に表示できません。"
+
+msgid "Open it in a new tab to view the page."
+msgstr "新しいタブで開いてページを表示してください。"
+
+msgid "Report a problem with this question"
+msgstr "この問題の不具合を報告"
+
+msgid "Your report was sent to the teacher."
+msgstr "報告を教師に送信しました。"
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "見つかった誤りや問題を説明してください。報告は教師に送信されます。"
+
+msgid "A comment is required."
+msgstr "コメントは必須です。"
+
+msgid "Could not send the report."
+msgstr "報告を送信できませんでした。"
+
+msgid "Learner reports"
+msgstr "学習者からの報告"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "この問題に対する学習者からの報告はありません。"
+
+msgid "View attempt"
+msgstr "受験を表示"
+
+msgid "Could not load learner reports."
+msgstr "学習者からの報告を読み込めませんでした。"
+
+msgid "Allow learners to report issues in questions"
+msgstr "学習者が問題の不具合を報告できるようにする"
+
+msgid "Skill acquired"
+msgstr "スキル習得"
+
+msgid "AI Toolbox"
+msgstr "AIツールボックス"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "AIでインタラクティブな教育アプリケーションを生成し、SCORMで学習者の進捗を追跡します。"
+
+msgid "No published applications are available yet."
+msgstr "公開済みのアプリケーションはまだありません。"
+
+msgid "Interactive applications"
+msgstr "インタラクティブアプリケーション"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "生成、改善、公開、バージョン確認を一箇所で行います。"
+
+msgid "Open an application to continue from your latest progress."
+msgstr "アプリケーションを開いて、最新の進捗から続けます。"
+
+msgid "Interactive learning application"
+msgstr "インタラクティブ学習アプリケーション"
+
+msgid "Create an interactive learning app"
+msgstr "インタラクティブ学習アプリを作成"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "アクティビティを説明してください。Chamiloは進捗と得点の追跡付きのバージョン管理されたSCORMアプリケーションを生成します。"
+
+msgid "Idea"
+msgstr "アイデア"
+
+msgid "Application"
+msgstr "アプリケーション"
+
+msgid "What should the application do?"
+msgstr "アプリケーションは何をするべきですか？"
+
+msgid "How it works"
+msgstr "仕組み"
+
+msgid "AI generation"
+msgstr "AI生成"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "アプリは指示から生成され、バージョン1として保存されます。"
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "学習者の進捗、得点、再開データはChamiloに報告されます。"
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "今後の改善では、以前のバージョンを削除せずに新しいバージョンが作成されます。"
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "学習目標、ルール、レベル、採点、学習者が終了したときに起こることを含めてください。"
+
+msgid "You are not allowed to create content in this context."
+msgstr "このコンテキストでコンテンツを作成する権限がありません。"
+
+msgid "The application was generated successfully."
+msgstr "アプリケーションは正常に生成されました。"
+
+msgid "Open in student view"
+msgstr "学生ビューで開く"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "プレビューと公開を有効にするには、アプリケーションを生成してください。"
+
+msgid "Improve with AI"
+msgstr "AIで改善"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "変更内容を説明してください。新しいバージョンが作成され、以前のバージョンは引き続き利用できます。"
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "生成したいインタラクティブなアクティビティの全体を説明してください。"
+
+msgid "What should be improved?"
+msgstr "何を改善しますか？"
+
+msgid "Generate new version"
+msgstr "新しいバージョンを生成"
+
+msgid "Version history"
+msgstr "バージョン履歴"
+
+msgid "Preview, download or restore any generated version."
+msgstr "生成された任意のバージョンをプレビュー、ダウンロード、または復元できます。"
+
+msgid "A new version was generated."
+msgstr "新しいバージョンが生成されました。"
+
+msgid "Version restored"
+msgstr "バージョンを復元しました"
+
+msgid "The support bot tree has been published."
+msgstr "サポートボットツリーが公開されました。"
+
+msgid "The support bot tree has been archived."
+msgstr "サポートボットツリーがアーカイブされました。"
+
+msgid "The support bot tree has been duplicated."
+msgstr "サポートボットツリーが複製されました。"
+
+msgid "The support bot tree has been deleted."
+msgstr "サポートボットツリーが削除されました。"
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "このサポートボットツリーを削除してもよろしいですか？"
+
+msgid "The support bot tree has been imported."
+msgstr "サポートボットツリーがインポートされました。"
+
+msgid "Create support bot tree"
+msgstr "サポートボットツリーを作成"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "サポートの質問を案内し、チケットにエスカレーションできる固定の決定木を構築します。"
+
+msgid "Portal scope"
+msgstr "ポータル範囲"
+
+msgid "Duplicate"
+msgstr "複製"
+
+msgid "Archive"
+msgstr "アーカイブ"
+
+msgid "View conversations"
+msgstr "会話を表示"
+
+msgid "Import support bot tree"
+msgstr "サポートボットツリーをインポート"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "JSONエクスポートまたはCSVの決定木をインポートします。インポートしたツリーは常に新しい下書きとして作成されます。"
+
+msgid "Resolved"
+msgstr "解決済み"
+
+msgid "Escalated"
+msgstr "エスカレーション済み"
+
+msgid "Abandoned"
+msgstr "中断"
+
+msgid "Support bot conversations"
+msgstr "サポートボットの会話"
+
+msgid "Outcome"
+msgstr "結果"
+
+msgid "Started at"
+msgstr "開始日時"
+
+msgid "Ended at"
+msgstr "終了日時"
+
+msgid "View conversation"
+msgstr "会話を表示"
+
+msgid "Go to node"
+msgstr "ノードへ移動"
+
+msgid "Create support ticket"
+msgstr "サポートチケットを作成"
+
+msgid "End conversation"
+msgstr "会話を終了"
+
+msgid "Node"
+msgstr "ノード"
+
+msgid "A support bot tree requires at least one node."
+msgstr "サポートボットツリーには少なくとも1つのノードが必要です。"
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "このノードを削除してもよろしいですか？このノードへのリンクは解除されます。"
+
+msgid "Every support bot node requires at least one option."
+msgstr "すべてのサポートボットノードには少なくとも1つのオプションが必要です。"
+
+msgid "The support bot tree title is required."
+msgstr "サポートボットツリーのタイトルは必須です。"
+
+msgid "A support bot entry node is required."
+msgstr "サポートボットのエントリーノードが必要です。"
+
+msgid "Every support bot node requires content."
+msgstr "すべてのサポートボットノードにはコンテンツが必要です。"
+
+msgid "Every support bot option requires a label."
+msgstr "すべてのサポートボットオプションにはラベルが必要です。"
+
+msgid "Select a target node for every go-to option."
+msgstr "すべての移動オプションに対して対象ノードを選択してください。"
+
+msgid "Enter a relative URL for every link option."
+msgstr "すべてのリンクオプションに相対URLを入力してください。"
+
+msgid "Select a ticket category for every escalation option."
+msgstr "すべてのエスカレーションオプションにチケットカテゴリを選択してください。"
+
+msgid "The support bot tree has been saved."
+msgstr "サポートボットツリーが保存されました。"
+
+msgid "Edit support bot tree"
+msgstr "サポートボットツリーを編集"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "公開済みおよびアーカイブ済みのサポートボットバージョンは読み取り専用です。新しい下書きバージョンを編集するには、一覧からこのツリーを複製してください。"
+
+msgid "Default ticket project"
+msgstr "デフォルトのチケットプロジェクト"
+
+msgid "Decision tree rules"
+msgstr "決定木のルール"
+
+msgid "Every node must contain at least one option."
+msgstr "各ノードには少なくとも1つの選択肢が必要です。"
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "最終ノードは会話を終了するか、サポートチケットを作成する必要があります。"
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "v1では、移動リンクで循環を作成してはなりません。"
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "v1では外部URLは使用できません。リンク操作には相対的なChamiloパスを使用してください。"
+
+msgid "Nodes"
+msgstr "ノード"
+
+msgid "Add node"
+msgstr "ノードを追加"
+
+msgid "Entry node"
+msgstr "開始ノード"
+
+msgid "Set as entry node"
+msgstr "開始ノードに設定"
+
+msgid "Target node"
+msgstr "対象ノード"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "相対的なChamiloパスを使用してください（例: /tickets）。"
+
+msgid "Ticket category"
+msgstr "チケットカテゴリ"
+
+msgid "Select a default ticket project first."
+msgstr "先にデフォルトのチケットプロジェクトを選択してください。"
+
+msgid "Closing message"
+msgstr "終了メッセージ"
+
+msgid "Select a node to edit it."
+msgstr "編集するノードを選択してください。"
+
+msgid "Support bot conversation"
+msgstr "サポートボットの会話"
+
+msgid "Transcript of %s"
+msgstr "%sの成績証明書"
+
+msgid "Download unofficial transcript"
+msgstr "非公式成績証明書をダウンロード"
+
+msgid "Issue official transcript"
+msgstr "公式成績証明書を発行"
+
+msgid "Official transcripts"
+msgstr "公式成績証明書"
+
+msgid "No official transcript has been issued yet."
+msgstr "公式成績証明書はまだ発行されていません。"
+
+msgid "Issued by"
+msgstr "発行者"
+
+msgid "Verify"
+msgstr "検証"
+
+msgid "Signature of official transcripts"
+msgstr "公式成績証明書の署名"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "この画像は、本ポータルの公式成績証明書に、証明書設定で指定した署名者の氏名と役職の上に印刷されます。"
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "このページに記載されたコースと成績で、署名付き公式成績証明書を発行しますか？取り消されるまでオンラインで検証できます。"
+
+msgid "Official transcript issued"
+msgstr "公式成績証明書を発行しました"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "この公式成績証明書を取り消しますか？検証ページには取り消されたと表示されます。"
+
+msgid "Official transcript revoked"
+msgstr "公式成績証明書を取り消しました"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "先にPNGまたはJPEG画像を選択してください。"
+
+msgid "Signed credential"
+msgstr "署名付き資格証明"
+
+msgid "Issue signed credential"
+msgstr "署名付き資格証明を発行"
+
+msgid "Verify credential"
+msgstr "資格証明を検証"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Sepoliaテストネットにアンカー"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "既存のSepoliaトランザクションを確認"
+
+msgid "Revoke signed credential"
+msgstr "署名付き資格証明を取り消し"
+
+msgid "Delete certificate"
+msgstr "証明書を削除"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "既存のSepoliaトランザクションを確認"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepoliaトランザクションハッシュ"
+
+msgid "Verify transaction"
+msgstr "トランザクションを検証"
+
+msgid "Anchored"
+msgstr "アンカー済み"
+
+msgid "Issued"
+msgstr "発行済み"
+
+msgid "Not issued"
+msgstr "未発行"
+
+msgid "Consent required"
+msgstr "同意が必要です"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepoliaトランザクションを確認し、検証しました"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepoliaテストネットのウォレットがトランザクションへの署名を求めます。アンカーされるのは証明書のフィンガープリントのみです。続行しますか？"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "この署名付き資格証明を取り消しますか？ブロックチェーントランザクションは永続しますが、検証ページには取り消しと表示されます。"
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "この学習者に署名付き証明書の資格証明を発行しますか？承認済みの個人情報が非公開リンクで検証可能になります。"
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "SepoliaにはEVM互換のブラウザウォレットが必要です。"
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "ウォレットでSepoliaテストネット（チェーンID 11155111）を選択してください。"
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "ウォレットアドレスまたは証明書フィンガープリントが無効です。"
+
+msgid "Transaction pending"
+msgstr "トランザクション処理中"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "既存のSepoliaトランザクションは後で確認を使用してください。"
+
+msgid "Signed credential issued"
+msgstr "署名済み資格情報を発行しました"
+
+msgid "Credential revoked"
+msgstr "資格情報を取り消しました"
+
+msgid "Transaction hash"
+msgstr "トランザクションハッシュ"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "公開同意により、管理者は署名済みの証明書資格情報を発行し、任意でそのSHA-256フィンガープリントをSepoliaテストネットに記録できます。氏名や個人データはチェーン上に送信されません。同意はいつでも撤回できます。"
+
+msgid "Publication consent"
+msgstr "公開同意"
+
+msgid "Not approved"
+msgstr "未承認"
+
+msgid "Withdraw consent"
+msgstr "同意を撤回"
+
+msgid "Approve publication"
+msgstr "公開を承認"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "氏名、コース、得点、発行日を示す、署名済みで公開検証可能な資格情報の発行を許可します。管理者は、そのSHA-256フィンガープリントのみをSepoliaテストネットに公開することもできます。フィンガープリントは、後で撤回しても永続します。続行しますか？"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "この証明書の公開承認を撤回しますか？"
+
+msgid "Publication approval recorded"
+msgstr "公開承認を記録しました"
+
+msgid "Publication approval withdrawn"
+msgstr "公開承認を撤回しました"
+
+msgid "Read more"
+msgstr "詳細を読む"
+
+msgid "Participation: %s of %s posts"
+msgstr "参加：投稿 %s / %s"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "他の参加者の返信を見るには、自分の投稿をしてください。"
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "対象となる報告を確認できるのは、権限のある調査担当者のみです。報告者の身元は既定で機密です。"
+
+msgid "New confidential report"
+msgstr "新しい機密報告"
+
+msgid "Reported user"
+msgstr "報告対象ユーザー"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "確認待ちの対象機密報告があります。"
+
+msgid "Eligible investigations"
+msgstr "対象の調査"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "同じ人物を少なくとも %s 人の異なるユーザーが報告した場合にのみ、ここに案件が表示されます。"
+
+msgid "Distinct reporters"
+msgstr "異なる報告者"
+
+msgid "Reports for selected user"
+msgstr "選択したユーザーへの報告"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "機密報告は現在利用できません。"
+
+msgid "The investigation could not be loaded."
+msgstr "調査を読み込めませんでした。"
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "身元は既定で調査担当者から保護されますが、報告本文や添付ファイルに特定につながる情報を含めないでください。これは緊急サービスではありません。"
+
+msgid "Find the user involved"
+msgstr "関係するユーザーを探す"
+
+msgid "Name or username"
+msgstr "氏名またはユーザー名"
+
+msgid "Describe the situation"
+msgstr "状況を説明する"
+
+msgid "Evidence (optional)"
+msgstr "証拠（任意）"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "最大3ファイル、各最大8 MiB。画像、音声、または短い動画。"
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "この報告について、権限のある調査担当者が氏名とメールアドレスを閲覧することを許可します。この許可は後で撤回できます。"
+
+msgid "Send confidential report"
+msgstr "機密報告を送信"
+
+msgid "Could not search users"
+msgstr "ユーザーを検索できませんでした"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "最大3ファイル、各最大8 MiB。"
+
+msgid "The confidential report could not be saved."
+msgstr "機密報告を保存できませんでした。"
+
+msgid "Confidential report"
+msgstr "機密報告"
+
+msgid "Confidential conversation"
+msgstr "機密会話"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "連絡先の共有が有効でない限り、調査担当者はこの会話で報告者の身元を見ずに連絡できます。"
+
+msgid "Reporter"
+msgstr "報告者"
+
+msgid "Investigator"
+msgstr "調査担当者"
+
+msgid "Additional evidence (optional)"
+msgstr "追加の証拠（任意）"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "最大3ファイル、各最大8 MiB。報告あたり10ファイルまで。"
+
+msgid "Contact shared voluntarily"
+msgstr "連絡先を任意で共有済み"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "この報告について、調査担当者に氏名とメールアドレスの閲覧を許可する"
+
+msgid "This confidential report is not available."
+msgstr "この機密報告は利用できません。"
+
+msgid "Your message could not be saved."
+msgstr "メッセージを保存できませんでした。"
+
+msgid "Contact sharing could not be updated."
+msgstr "連絡先の共有を更新できませんでした。"
+
+msgid "Evidence could not be downloaded."
+msgstr "証拠をダウンロードできませんでした。"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>フォーム記入アクティビティの例：体格指数（BMI）の計算</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>年齢</strong></td>            <td width=\"75%\" style=\"\">[25] 歳</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>性別</strong></td>            <td style=\"\" text-align:=\"\">[M]（M または F）</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>体重</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>身長</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>体格指数</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup>（参照：<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipediaの記事</a>）</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>フォーム記入アクティビティの例：体格指数（BMI）の計算</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>年齢</strong></td>            <td width=\"75%\" style=\"\">[25] 歳</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>性別</strong></td>            <td style=\"\" text-align:=\"\">[M]（M または F）</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>体重</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>身長</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>体格指数</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup>（参照：<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipediaの記事</a>）</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "レポートからIPアドレスを非表示にする"
+
+msgid "Course settings policies"
+msgstr "コース設定ポリシー"
+
+msgid "Academic transcripts"
+msgstr "成績証明書"
+
+msgid "Transcript program title"
+msgstr "成績証明書のプログラム名"
+
+msgid "Transcript course code"
+msgstr "成績証明書のコースコード"
+
+msgid "Transcript course hours field"
+msgstr "成績証明書のコース時間フィールド"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "成績証明書の修了時間は必要時間とする"
+
+msgid "Transcript student number field"
+msgstr "成績証明書の学籍番号フィールド"
+
+msgid "Transcript address fields"
+msgstr "成績証明書の住所フィールド"
+
+msgid "Transcript grading scale"
+msgstr "成績証明書の評定尺度"
+
+msgid "Transcript GPA note"
+msgstr "成績証明書のGPA注記"
+
+msgid "Transcript signatory name"
+msgstr "成績証明書の署名者名"
+
+msgid "Transcript signatory title"
+msgstr "成績証明書の署名者役職"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "署名付き証明書と任意のSepoliaテストネットへのアンカリングを有効にする"
+
+msgid "Show thread replies only after participating"
+msgstr "参加後にのみスレッドの返信を表示する"
+
+msgid "Show the forum category description in threads"
+msgstr "スレッドにフォーラムカテゴリの説明を表示する"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "フォーラム参加設定はコースごとに変更できる"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "フォーラムスレッドに表示する投稿の最大数"
+
+msgid "Posts required to complete a forum thread"
+msgstr "フォーラムスレッド完了に必要な投稿数"
+
+msgid "Track e-mail openings"
+msgstr "メール開封を追跡する"
+
+msgid "Allow e-mail replies to messages"
+msgstr "メッセージへのメール返信を許可する"
+
+msgid "Inbound e-mail address"
+msgstr "受信メールアドレス"
+
+msgid "Inbound mailbox DSN"
+msgstr "受信メールボックスDSN"
+
+msgid "Remember me duration (days)"
+msgstr "ログイン状態の保持期間（日）"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "MCP以外でもOAuth動的クライアント登録を有効にする"
+
+msgid "Enable confidential welfare reporting"
+msgstr "機密の福祉報告を有効にする"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "調査に必要な最小の異なる報告者数"
+
+msgid "Allow confidential evidence attachments"
+msgstr "機密の証拠添付を許可する"
+
+msgid "Show confidential investigation notifications"
+msgstr "機密調査の通知を表示する"
+
+msgid "Enable support chatbot"
+msgstr "サポートチャットボットを有効にする"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "用語集の用語を自動ハイライトする場所を選択：ドキュメント、演習、ラーニングパス。"
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "視覚的レポートとレポートのエクスポートでIPアドレスを非表示にします。IPアドレスは保存され、認可された個人データ手続きを通じてアクセスできます。"
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "プラットフォームの既定値とコース編集権限。コース設定で管理します。"
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "ユーザーが修了したコースの非公式成績証明書をダウンロードできるようにし、管理者、セッション管理者、HRマネージャーが管理対象ユーザーに署名付き公式成績証明書を発行できるようにします。署名画像はユーザーの成績証明書ページからアップロードします。"
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "すべての成績証明書に印刷するプログラム名。例：このプラットフォームで準備する学位の名称。"
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "成績証明書のコースコード列に使用するコースフィールド：コースコードまたは部署名。"
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "コースの時間数を保持するコース追加フィールドの変数。空の場合はコースの所要時間を使用します。"
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "学習者が修了した時間としてコースの必要時間を印刷します。無効の場合、修了時間は学習者がコースで過ごした時間です。"
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "成績証明書に印刷する学籍番号を保持するユーザー追加フィールドの変数。空の場合は印刷しません。"
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "成績証明書でユーザーの住所の後に印刷するユーザー追加フィールドの変数（カンマ区切り）。例：市区町村、都道府県、郵便番号。"
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "評定文字のJSONリスト（最低点が高い順）：各項目はパーセントの最低点（min）、文字、GPA計算に使う評点を持ちます。"
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "GPAの計算方法の説明。成績証明書のGPAの下に印刷されます。"
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "公式成績証明書に署名する学校関係者の氏名。"
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "公式成績証明書に署名する学校関係者の役職。"
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "所有者の明示的な同意と管理者の手動操作が必要です。オンチェーンに送信されるのはSHA-256フィンガープリントのみです。"
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "学習者は、フォーラムスレッドに自分で投稿するまで、最初の投稿のみが表示されます。管理者、教師、コーチ、グループチューターは常にすべての投稿を見ることができます。"
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "各スレッドの上部にフォーラムカテゴリのタイトルと短縮説明を表示し、全文を読むためのリンクを付けます。"
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "有効にすると、教師はコース設定のフォーラムセクションで、学習者が投稿するまでスレッドの返信を非表示にするか、スレッドにカテゴリ説明を表示するか、参加進捗バーが期待する投稿数を、プラットフォーム設定に従う代わりに選択できます。"
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "プラットフォーム管理者以外のすべてのユーザー（教師を含む）およびラーニングパス内の全員に対し、各フォーラムスレッドの投稿をこの件数だけ表示します。スレッド表示および入れ子表示では、制限は各投稿の返信に適用されます。投稿は表示順に保持されます。最初の投稿、またはラーニングパス内では最新の投稿が先に来る最新の投稿です。すべての投稿を表示するには0に設定します。"
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "各フォーラムスレッドで学習者に進捗バーを表示し、この件数のメッセージを投稿すると100%になります。モデレーション待ちの投稿もカウントされます。進捗バーを非表示にするには0に設定します。"
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "メッセージ通知メールに小さなトラッキング画像を追加し、リクエストされたときに記録します。これはメールが開かれた可能性があることを示すだけで、読まれたことを証明するものではありません。"
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "ダイレクトメッセージ通知の受信者がメールで返信できるようにします。受信メッセージは、メールインフラストラクチャによってChamiloの受信メールコマンドにルーティングされる必要があります。"
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "返信ルーティングに使用するベースアドレス。例: replies@example.com。Chamiloはプラスアドレッシングで一意の受信者トークンを追加します。"
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "受信返信を収集するためのメールボックス接続。例: imaps:\/\/user:password@imap.example.com:993\/INBOX。認証情報内の予約文字はURLエンコードしてください。"
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "「ログイン状態を保持」が選択されたときにユーザーをサインインしたままにする日数。無効にするには0に設定します。HTTPSが必要です。許可範囲: 0〜90。通常のセッションタイムアウトはPHP\/Symfonyで別途設定されます。"
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "動的クライアント登録が、Chamilo OAuthリソースサーバーによって登録された任意のスコープを要求できるようにします。無効の場合、自己登録はMCPに限定されます。リソースアクセスは常に各クライアントの許可リソースリストによって別途制限されます。"
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "機密インシデント報告を有効にします。このモジュールには保護された暗号化キーと調査者権限が必要です。"
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "調査者にケースが表示される前に、2〜10人の異なる報告者が同じユーザーを報告する必要があります。"
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "画像、音声、短い動画の証拠を許可します。無効にしても既存の添付ファイルは閲覧できます。"
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "対象となる調査の内部表示を表示します。メールや外部通知は送信しません。"
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "チャットパネルに、ユーザーを案内できるデシジョンツリーチャットボットを表示します。"
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "教師がコース内でAI支援の教育アプリケーションを作成し、バージョン管理できるようにします。"
+
+msgid "Department name"
+msgstr "部署名"
+
+msgid "Documents and exercise"
+msgstr "ドキュメントと演習"
+
+msgid "Documents and learning path"
+msgstr "ドキュメントとラーニングパス"
+
+msgid "Documents, exercise and learning path"
+msgstr "ドキュメント、演習、ラーニングパス"
+
+msgid "session"
+msgstr "セッション"
+
+msgid "course"
+msgstr "コース"
+
+msgid "You have been enrolled in %s"
+msgstr "%sに登録されました"
 

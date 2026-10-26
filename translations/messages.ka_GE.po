@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "პატივისცემით"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ფორმულის ნიმუში: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ფორმულის ნიმუში: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ცვლადის დიაპაზონები"
@@ -28764,6 +28764,9 @@ msgstr "მიმდინარე მომხმარებელი ვე�
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "გამარჯობა %s,<br><br>თქვენ რეგისტრირებული ხართ %s-ზე.<br>თქვენ შეგიძლიათ შეხვიდეთ თქვენს ანგარიშზე <a href=\"%s\">აქედან</a>.<br><br>თქვენი შესვლის მონაცემებია:<br>მომხმარებლის სახელი: <strong>%s</strong><br>პაროლი: <strong>%s</strong><br><br>საუკეთესო პატივისცემით,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "გამარჯობა %s,<br><br>თქვენ დარეგისტრირებული ხართ %s-ზე.<br>მომხმარებლის სახელი: <strong>%s</strong><br><br>გთხოვთ, დააჭიროთ ქვემოთ მოცემულ ბმულს პაროლის დასაყენებლად და ანგარიშზე შესასვლელად:<br><a href=\"%s\">პაროლის დაყენება</a><br><br>პატივისცემით,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "თქვენ რეგისტრირებული ხართ %s-ზე"
 
@@ -41567,4 +41570,1616 @@ msgstr "მიგრაციის ისტორია ჩაწერილ�
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s არის პროექტის ძირში: წაშალეთ ის განახლების ბოლო წერტილების დასახურად"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "თქვენ მიიღეთ სერტიფიკატი ამ სავარჯიშოსთვის"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "ამ სასწავლო გზაზე წვდომამდე უნდა დაასრულოთ სასწავლო გზა \"%s\"."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ ფაილის საბოლოოდ წაშლა?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ ფაილის მოხსნა არჩეული კურსიდან?"
+
+msgid "Attach this file to another course"
+msgstr "ამ ფაილის მიმაგრება სხვა კურსზე"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "მიმაგრება არჩეულ კურს(ებ)ზე (დამალული)"
+
+msgid "Course(s):"
+msgstr "კურს(ებ)ი:"
+
+msgid "Delete definitively"
+msgstr "საბოლოოდ წაშლა"
+
+msgid "Detach from this course"
+msgstr "ამ კურსიდან მოხსნა"
+
+msgid "File actions"
+msgstr "ფაილის მოქმედებები"
+
+msgid "File Information"
+msgstr "ფაილის ინფორმაცია"
+
+msgid "File Link:"
+msgstr "ფაილის ბმული:"
+
+msgid "File Path:"
+msgstr "ფაილის გზა:"
+
+msgid "Filter courses..."
+msgstr "კურსების გაფილტვრა..."
+
+msgid "MIME Type:"
+msgstr "MIME ტიპი:"
+
+msgid "N/A"
+msgstr "არ არის"
+
+msgid "No results found."
+msgstr "შედეგები ვერ მოიძებნა."
+
+msgid "Original Name"
+msgstr "ორიგინალური სახელი"
+
+msgid "Original Name:"
+msgstr "ორიგინალური სახელი:"
+
+msgid "Orphan"
+msgstr "ობოლი"
+
+msgid "Resource File ID:"
+msgstr "რესურსის ფაილის ID:"
+
+msgid "Resource Node ID:"
+msgstr "რესურსის კვანძის ID:"
+
+msgid "Search..."
+msgstr "ძიება..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "ფაილის კონკრეტული კურსიდან მოსახსნელად დააჭირეთ ზემოთ შესაბამისი კურსის ტეგზე ხატულას \"×\"."
+
+msgid "User:"
+msgstr "მომხმარებელი:"
+
+msgid "View file information"
+msgstr "ფაილის ინფორმაციის ნახვა"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "შეგიძლიათ ამ ფაილის მიმაგრება ერთ ან რამდენიმე კურსზე (დამალული დოკუმენტების ძირში). თუ ფაილი აღარ გამოიყენება და ობოლი გახდება, შეგიძლიათ მისი საბოლოოდ წაშლაც."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "შეგიძლიათ აირჩიოთ ერთი ან რამდენიმე კურსი (გამოიყენეთ Ctrl/Cmd + დაწკაპუნება)."
+
+msgid "bytes"
+msgstr "ბაიტი"
+
+msgid "Failed to copy:"
+msgstr "კოპირება ვერ მოხერხდა:"
+
+msgid "Missing resource file identifier."
+msgstr "რესურსის ფაილის იდენტიფიკატორი აკლია."
+
+msgid "Please select at least one course."
+msgstr "გთხოვთ, აირჩიოთ მინიმუმ ერთი კურსი."
+
+msgid "Resource file not found."
+msgstr "რესურსის ფაილი ვერ მოიძებნა."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "ფაილი \"%s\" მიება %d კურსს: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "ზოგიერთი კურსი გამოტოვებულია: %s."
+
+msgid "Missing file or course identifier."
+msgstr "ფაილის ან კურსის იდენტიფიკატორი აკლია."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "ამ რესურსის ფაილს არ აქვს რესურსის კვანძი და მისი მოხსნა შეუძლებელია."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "ფაილი მოხსნილია %d კურსის ბმულიდან."
+
+msgid "This file is not attached to the selected course."
+msgstr "ეს ფაილი არ არის მიმაგრებული არჩეულ კურსზე."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "ეს ფაილი ჯერ კიდევ გამოიყენება მინიმუმ ერთი რესურსის მიერ და მისი წაშლა შეუძლებელია."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "ობოლი ფაილი და მისი ფიზიკური შიგთავსი საბოლოოდ წაიშალა."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "გამოკითხვა გამოქვეყნდა. შექმნილია: %d. განახლებულია: %d. გაგზავნილი შეტყობინებები: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "შესაძენი"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "ამ უნარის შეძენა შეუძლებელია"
+
+#: issue-8179
+msgid "Novice"
+msgstr "დამწყები"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "წესებისა და კონტექსტისგან დამოუკიდებელი ინსტრუქციების მკაცრი დაცვა; სიტუაციური განსჯა მცირეა."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "განვითარებული დამწყები"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "იწყებს სიტუაციური ასპექტებისა და ნიმუშების ამოცნობას, მაგრამ ჯერ კიდევ სჭირდება სახელმძღვანელოები."
+
+#: issue-8179
+msgid "Competent"
+msgstr "კომპეტენტური"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "ავითარებს დაგეგმვასა და გონებრივ მოდელებს; იღებს პასუხისმგებლობას შედეგებზე, მაგრამ სირთულემ შეიძლება გადატვირთოს."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "პროფიციენტი"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "ხედავს „დიდ სურათს“, ინტუიციურად ანიჭებს პრიორიტეტებს და სწავლობს გამოცდილებიდან."
+
+#: issue-8179
+msgid "Expert"
+msgstr "ექსპერტი"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "ინტუიციური, თავისუფალი შესრულება; ეყრდნობა ღრმა იმპლიციტურ ცოდნას; შეუძლია ინოვაცია ან ახალი სიტუაციების უპრობლემოდ მართვა."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "დამახსოვრება"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "შესაბამისი ცოდნის ამოღება, გახსენება ან ამოცნობა გრძელვადიანი მეხსიერებიდან."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "გაგება"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "სასწავლო შეტყობინებებიდან მნიშვნელობის აგება, მათ შორის ზეპირი, წერილობითი და გრაფიკული კომუნიკაცია. გააზრების დემონსტრირება ინტერპრეტაციით, მაგალითებით, კლასიფიკაციით, შეჯამებით, დასკვნით, შედარებით ან ახსნით."
+
+#: issue-8179
+msgid "Applying"
+msgstr "გამოყენება"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "პროცედურის შესრულება ან გამოყენება მოცემულ სიტუაციაში. ცოდნის ან უნარების გამოყენება ახალ ან კონკრეტულ სიტუაციებში."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "ანალიზი"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "მასალის დაშლა შემადგენელ ნაწილებად და იმის განსაზღვრა, როგორ უკავშირდება ნაწილები ერთმანეთს და საერთო სტრუქტურას ან მიზანს. მოტივების, მიზეზების ან ურთიერთობების იდენტიფიცირება."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "შეფასება"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "განსჯა კრიტერიუმებსა და სტანდარტებზე დაყრდნობით. გადაწყვეტილებების ან მოქმედების კურსების შემოწმება, კრიტიკა ან დასაბუთება."
+
+#: issue-8179
+msgid "Creating"
+msgstr "შექმნა"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "ელემენტების გაერთიანება თანმიმდევრულ ან ფუნქციურ მთლიანობად; ელემენტების რეორგანიზაცია ახალ ნიმუშად ან სტრუქტურად. ორიგინალური ნამუშევრის შექმნა ან ახალი იდეების გენერირება."
+
+#: issue-8179
+msgid "Follow"
+msgstr "მიყოლა"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "მუშაობს მჭიდრო ზედამხედველობისა და მითითებების ქვეშ. ასრულებს რუტინულ ამოცანებს შეზღუდული დისკრეციით. ფოკუსირებულია ინსტრუქციების შესრულებასა და ძირითად შესრულებაზე."
+
+#: issue-8179
+msgid "Assist"
+msgstr "დახმარება"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "მუშაობს რუტინული ზედამხედველობის ქვეშ. უწევს დახმარებას სხვებს, წვლილი შეაქვს გუნდურ ამოცანებში და იწყებს ინიციატივის გამოვლენას განსაზღვრულ ფარგლებში."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "მუშაობს ზოგადი ზედამხედველობის ქვეშ. იყენებს ცოდნასა და უნარებს რუტინულ და არარუტინულ აქტივობებში. ახორციელებს გარკვეულ დისკრეციასა და განსჯას."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "მუშაობს ფართო მიმართულების ქვეშ. უწყობს ხელს სხვებს სპეციალისტური ხელმძღვანელობის, მხარდაჭერის ან სერვისების მიწოდებით. იღებს პასუხისმგებლობას საკუთარ სამუშაოზე და შეიძლება ზედამხედველობდეს მცირე გუნდებს ან ამოცანებს."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "უზრუნველყოფა და კონსულტაცია"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "მუშაობს ფართო მიმართულების ქვეშ, მაგრამ მნიშვნელოვანი ავტონომიით. უზრუნველყოფს, რომ სამუშაო შეესაბამებოდეს მიზნებს და კონსულტაციას უწევს რთულ საკითხებზე. ხშირად ხელმძღვანელობს გუნდებს ან პროექტებს და გავლენას ახდენს გადაწყვეტილებებზე."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "ინიცირება და გავლენა"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "აქვს განსაზღვრული უფლებამოსილება და პასუხისმგებლობა სამუშაოს მნიშვნელოვან სფეროზე. იწყებს მოქმედებებს, გავლენას ახდენს სტრატეგიასა და პოლიტიკაზე თავის სფეროში და ხელმძღვანელობს მნიშვნელოვან პროექტებს ან გუნდებს."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "სტრატეგიის განსაზღვრა, შთაგონება, მობილიზება"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "აქვს უფლებამოსილება ორგანიზაციის უმაღლეს დონეზე სამუშაოს მთავარ სფეროზე. ადგენს გრძელვადიან სტრატეგიას, შთააგონებს და მობილიზებს სხვებს და იღებს გადაწყვეტილებებს, რომლებიც კრიტიკულია ორგანიზაციის წარმატებისთვის. გავლენას ახდენს ინდუსტრიის ან გარე დონეებზე."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "გასათვალისწინებელი მაქსიმალური უმოქმედობის დრო (წუთები)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "ღია დატოვებული კურსის გვერდი აგრძელებს ავტომატური მოთხოვნების გაგზავნას. ამ წუთების რაოდენობის შემდეგ მომხმარებლის რეალური მოქმედების გარეშე (გვერდის ან ელემენტის გახსნა, პასუხი და ა.შ.) კურსში გატარებული დრო აღარ ითვლება."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "ვიკის კოლაბორაციული რედაქტორი"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Etherpad-თან დაკავშირება..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "შენახვა ქმნის Chamilo Wiki-ის ახალ ვერსიას მიმდინარე Etherpad-ის შინაარსიდან."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "კოლაბორაციული რედაქტორის ჩატვირთვა ვერ მოხერხდა."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Etherpad-ის ჩართვა ვიკის რედაქტირებისთვის"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "გამოიყენეთ Etherpad არსებული ვიკი გვერდების კოლაბორაციულ რედაქტორად. Etherpad უნდა იყოს ხელმისაწვდომი იმავე origin-ზე, რაც Chamilo, უსაფრთხო ჩაშენებული სესიებისთვის."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad-ის URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpad ინსტანციის საბაზისო URL, მათ შორის სურვილისამებრ reverse-proxy გზა. მაგალითი: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad-ის API გასაღები"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API გასაღები, რომელსაც Chamilo იყენებს პადების, სესიების შესაქმნელად და ვიკის შინაარსის სინქრონიზაციისთვის. დააკონფიგურირეთ Etherpad, რომ მიიღოს API-გასაღებით ავთენტიფიკაცია."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "ახალი დოკუმენტების ნაგულისხმევი ხილვადობა შეიძლება შეიცვალოს კურსის მიხედვით"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "ხილვადობა, რომელიც ენიჭება ახალ დოკუმენტს, საქაღალდეს ან ატვირთულ ფაილს, როცა მასწავლებელი ქმნის მას კურსში. მასწავლებლებს შემდეგ მაინც შეუძლიათ თითოეულის ხილვადობის შეცვლა."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "ჩართვისას მასწავლებლებს შეუძლიათ კურსის პარამეტრებში აირჩიონ თავიანთი კურსის ახალი დოკუმენტების ხილვადობა პლატფორმის ნაგულისხმევის ნაცვლად."
+
+msgid "Default visibility of new learning paths"
+msgstr "ახალი სასწავლო ბილიკების ნაგულისხმევი ხილვადობა"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "ახალი სასწავლო ბილიკების ნაგულისხმევი ხილვადობა შეიძლება შეიცვალოს კურსის მიხედვით"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "ხილვადობა, რომელიც ენიჭება ახალ სასწავლო ბილიკს, როცა მასწავლებელი ქმნის მას კურსში. მასწავლებლებს შემდეგ მაინც შეუძლიათ თითოეულის ხილვადობის შეცვლა."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "ჩართვისას მასწავლებლებს შეუძლიათ კურსის პარამეტრებში აირჩიონ თავიანთი კურსის ახალი სასწავლო ბილიკების ხილვადობა პლატფორმის ნაგულისხმევის ნაცვლად."
+
+msgid "Default visibility of new tests"
+msgstr "ახალი ტესტების ნაგულისხმევი ხილვადობა"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "ახალი ტესტების ნაგულისხმევი ხილვადობა შეიძლება შეიცვალოს კურსის მიხედვით"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "ხილვადობა, რომელიც ენიჭება ახალ ტესტს, როცა მასწავლებელი ქმნის მას კურსში. მასწავლებლებს შემდეგ მაინც შეუძლიათ თითოეულის ხილვადობის შეცვლა."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "როცა ჩართულია, მასწავლებლებს შეუძლიათ კურსის პარამეტრებში აირჩიონ მათი კურსის ახალი ტესტების ხილვადობა პლატფორმის ნაგულისხმევის ნაცვლად."
+
+msgid "Default visibility for new learning paths"
+msgstr "ახალი სასწავლო ბილიკების ნაგულისხმევი ხილვადობა"
+
+msgid "Default visibility for new tests"
+msgstr "ახალი ტესტების ნაგულისხმევი ხილვადობა"
+
+msgid "Following"
+msgstr "მიყოლები"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "მიიღეთ ელფოსტა, როცა მოსწავლე კომენტარს დატოვებს ამ დავალების ჩაბარებაზე"
+
+msgid "Payment history"
+msgstr "გადახდების ისტორია"
+
+msgid "No payments yet"
+msgstr "გადახდები ჯერ არ არის"
+
+msgid "Cancel service"
+msgstr "სერვისის გაუქმება"
+
+msgid "Official transcript"
+msgstr "ოფიციალური ტრანსკრიპტი"
+
+msgid "Unofficial transcript"
+msgstr "არაოფიციალური ტრანსკრიპტი"
+
+msgid "Student name"
+msgstr "სტუდენტის სახელი"
+
+msgid "Student number"
+msgstr "სტუდენტის ნომერი"
+
+msgid "Program title"
+msgstr "პროგრამის დასახელება"
+
+msgid "Required hours"
+msgstr "სავალდებულო საათები"
+
+msgid "Completion date"
+msgstr "დასრულების თარიღი"
+
+msgid "Hours completed"
+msgstr "შესრულებული საათები"
+
+msgid "Final grade"
+msgstr "საბოლოო შეფასება"
+
+msgid "Grade"
+msgstr "შეფასება"
+
+msgid "No completed course yet."
+msgstr "დასრულებული კურსი ჯერ არ არის."
+
+msgid "Grading scale"
+msgstr "შეფასების სკალა"
+
+msgid "Signature of school official"
+msgstr "სასწავლო დაწესებულების წარმომადგენლის ხელმოწერა"
+
+msgid "School official"
+msgstr "სასწავლო დაწესებულების წარმომადგენელი"
+
+msgid "Official's title"
+msgstr "წარმომადგენლის თანამდებობა"
+
+msgid "Verify this transcript at"
+msgstr "შეამოწმეთ ეს ტრანსკრიპტი მისამართზე"
+
+msgid "Verification code"
+msgstr "დადასტურების კოდი"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "ეს არაოფიციალური ტრანსკრიპტი ხელმოწერილი არ არის. ოფიციალური ტრანსკრიპტისთვის მიმართეთ ადმინისტრატორს."
+
+msgid "Transcript verification"
+msgstr "ტრანსკრიპტის შემოწმება"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "შეამოწმეთ, რომ ეს ოფიციალური ტრანსკრიპტი გაცემული და ხელმოწერილია დაწესებულების მიერ, არ არის შეცვლილი და არ არის გაუქმებული."
+
+msgid "Valid"
+msgstr "მოქმედი"
+
+msgid "Invalid signature"
+msgstr "არასწორი ხელმოწერა"
+
+msgid "Transcript not found"
+msgstr "ტრანსკრიპტი ვერ მოიძებნა"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "დაწესებულების ხელმოწერა მოქმედია და ეს ტრანსკრიპტი არ არის გაუქმებული."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "ამ ტრანსკრიპტის მოქმედება ვერ დასტურდება. მისი დეტალები არ ჩანს."
+
+msgid "Transcript details"
+msgstr "ტრანსკრიპტის დეტალები"
+
+msgid "Institution"
+msgstr "დაწესებულება"
+
+msgid "Issued on"
+msgstr "გაცემის თარიღი"
+
+msgid "Download verification JSON"
+msgstr "შემოწმების JSON-ის ჩამოტვირთვა"
+
+msgid "Transcript"
+msgstr "ტრანსკრიპტი"
+
+msgid "My confidential reports"
+msgstr "ჩემი კონფიდენციალური ანგარიშები"
+
+msgid "My transcript"
+msgstr "ჩემი ტრანსკრიპტი"
+
+msgid "Confidential investigations"
+msgstr "კონფიდენციალური გამოძიებები"
+
+msgid "Floor plan"
+msgstr "სართულის გეგმა"
+
+msgid "Click a highlighted room to select it"
+msgstr "დააწკაპუნეთ გამოკვეთილ ოთახზე მის ასარჩევად"
+
+msgid "Select room"
+msgstr "ოთახის არჩევა"
+
+msgid "Room on floor plan"
+msgstr "ოთახი სართულის გეგმაზე"
+
+msgid "Select a branch first"
+msgstr "ჯერ აირჩიეთ ფილიალი"
+
+msgid "The branch has no attached floor plan"
+msgstr "ფილიალს არ აქვს მიმაგრებული სართულის გეგმა"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "გამოიყენეთ პოლიგონის ხელსაწყო ოთახის კონტურისთვის; კუთხეების გადასაადგილებლად გამოიყენეთ რედაქტირება"
+
+msgid "Save room area"
+msgstr "ოთახის არეალის შენახვა"
+
+msgid "Clear room area"
+msgstr "ოთახის არეალის გასუფთავება"
+
+msgid "Save the room form to persist the area"
+msgstr "შეინახეთ ოთახის ფორმა არეალის შესანარჩუნებლად"
+
+msgid "Floor plan unavailable"
+msgstr "სართულის გეგმა მიუწვდომელია"
+
+msgid "Room map points must be within the floor plan"
+msgstr "ოთახის რუკის წერტილები უნდა იყოს სართულის გეგმის ფარგლებში"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ოთახის არეალის გასუფთავება?"
+
+msgid "View room on floor plan"
+msgstr "ოთახის ნახვა სართულის გეგმაზე"
+
+msgid "No floor plan available"
+msgstr "სართულის გეგმა არ არის ხელმისაწვდომი"
+
+msgid "This is an assignment by groups"
+msgstr "ეს არის ჯგუფური დავალება"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "ატვირთეთ PNG, JPEG ან უსაფრთხო სტატიკური SVG სართულის გეგმა, ან აირჩიეთ არსებული სურათი დოკუმენტებიდან."
+
+msgid "Upload floor plan"
+msgstr "სართულის გეგმის ატვირთვა"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG ან სტატიკური SVG, მაქსიმუმ 10 მბ"
+
+msgid "Search images by name"
+msgstr "სურათების ძიება სახელით"
+
+msgid "Image name"
+msgstr "სურათის სახელი"
+
+msgid "Select an image"
+msgstr "სურათის არჩევა"
+
+msgid "Change floor plan"
+msgstr "სართულის გეგმის შეცვლა"
+
+msgid "Attach floor plan"
+msgstr "სართულის გეგმის მიმაგრება"
+
+msgid "No matching images found in Documents."
+msgstr "დოკუმენტებში შესაბამისი სურათები ვერ მოიძებნა."
+
+msgid "Current floor plan"
+msgstr "მიმდინარე სართულის გეგმა"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "სართულის გეგმის ცვლილებები ავტომატურად ინახება."
+
+msgid "Remove floor plan"
+msgstr "სართულის გეგმის წაშლა"
+
+msgid "Cannot load images"
+msgstr "სურათების ჩატვირთვა შეუძლებელია"
+
+msgid "Floor plan saved"
+msgstr "სართულის გეგმა შენახულია"
+
+msgid "Cannot attach floor plan"
+msgstr "სართულის გეგმის მიმაგრება შეუძლებელია"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "მხარდაჭერილია მხოლოდ PNG/JPEG და უსაფრთხო სტატიკური SVG სურათები 10 მბ-მდე."
+
+msgid "Cannot upload floor plan"
+msgstr "სართულის გეგმის ატვირთვა შეუძლებელია"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ სართულის გეგმის წაშლა?"
+
+msgid "Floor plan removed"
+msgstr "სართულის გეგმა წაშლილია"
+
+msgid "Cannot remove floor plan"
+msgstr "სართულის გეგმის წაშლა შეუძლებელია"
+
+msgid "Support bot"
+msgstr "მხარდაჭერის ბოტი"
+
+msgid "Connected"
+msgstr "დაკავშირებულია"
+
+msgid "Not connected"
+msgstr "არ არის დაკავშირებული"
+
+msgid "View ticket"
+msgstr "ბილეთის ნახვა"
+
+msgid "Start a new conversation"
+msgstr "ახალი საუბრის დაწყება"
+
+msgid "Video call"
+msgstr "ვიდეოზარი"
+
+msgid "Incoming video call"
+msgstr "შემომავალი ვიდეოზარი"
+
+msgid "Decline"
+msgstr "უარყოფა"
+
+msgid "Mute microphone"
+msgstr "მიკროფონის დადუმება"
+
+msgid "Unmute microphone"
+msgstr "მიკროფონის ჩართვა"
+
+msgid "Turn camera off"
+msgstr "კამერის გამორთვა"
+
+msgid "Turn camera on"
+msgstr "კამერის ჩართვა"
+
+msgid "Hang up"
+msgstr "დაკიდება"
+
+msgid "Calling..."
+msgstr "ირეკება..."
+
+msgid "Connecting..."
+msgstr "დაკავშირება..."
+
+msgid "Your contact is busy."
+msgstr "თქვენი კონტაქტი დაკავებულია."
+
+msgid "Your contact did not answer the call."
+msgstr "თქვენმა კონტაქტმა არ უპასუხა ზარს."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "თქვენს კონტაქტს არ ჰქონდა წვდომა კამერაზე ან მიკროფონზე."
+
+msgid "Your contact could not prepare the video call."
+msgstr "თქვენმა კონტაქტმა ვერ მოამზადა ვიდეოზარი."
+
+msgid "Your contact refused the call."
+msgstr "თქვენმა კონტაქტმა უარყო ზარი."
+
+msgid "The call timed out."
+msgstr "ზარის დრო ამოიწურა."
+
+msgid "Your contact cancelled the call."
+msgstr "თქვენმა კონტაქტმა გააუქმა ზარი."
+
+msgid "The video connection was lost."
+msgstr "ვიდეოკავშირი დაიკარგა."
+
+msgid "Your contact could not establish the video connection."
+msgstr "თქვენმა კონტაქტმა ვერ დაამყარა ვიდეოკავშირი."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "თქვენმა კონტაქტმა ვერ დაასრულა ვიდეოზარის დაყენება."
+
+msgid "Your contact hung up."
+msgstr "თქვენმა კონტაქტმა დახურა ზარი."
+
+msgid "Video call could not be started"
+msgstr "ვიდეოზარი ვერ დაიწყო"
+
+msgid "Camera or microphone permission was denied."
+msgstr "კამერის ან მიკროფონის ნებართვა უარყოფილია."
+
+msgid "No camera or microphone was found."
+msgstr "კამერა ან მიკროფონი ვერ მოიძებნა."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "კამერა ან მიკროფონი უკვე გამოიყენება ან მიუწვდომელია."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "კამერა ან მიკროფონი არ უჭერს მხარს საჭირო პარამეტრებს."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "კამერაზე ან მიკროფონზე წვდომა ვერ მოხერხდა."
+
+msgid "The video call could not be prepared."
+msgstr "ვიდეოზარი ვერ მომზადდა."
+
+msgid "The video call request could not be sent."
+msgstr "ვიდეოზარის მოთხოვნა ვერ გაიგზავნა."
+
+msgid "The incoming video call could not be processed."
+msgstr "შემომავალი ვიდეოზარი ვერ დამუშავდა."
+
+msgid "The video call answer could not be prepared."
+msgstr "ვიდეოზარის პასუხი ვერ მომზადდა."
+
+msgid "The video call answer could not be sent."
+msgstr "ვიდეოზარის პასუხი ვერ გაიგზავნა."
+
+msgid "The video call answer could not be processed."
+msgstr "ვიდეოზარის პასუხი ვერ დამუშავდა."
+
+msgid "The video connection failed"
+msgstr "ვიდეოკავშირი ვერ შედგა"
+
+msgid "The video connection could not be established."
+msgstr "ვიდეოკავშირი ვერ დამყარდა."
+
+msgid "No answer was received."
+msgstr "პასუხი არ მიღებულა."
+
+msgid "You refused the call."
+msgstr "თქვენ უარყავით ზარი."
+
+msgid "You cancelled the call."
+msgstr "თქვენ გააუქმეთ ზარი."
+
+msgid "You hung up."
+msgstr "თქვენ დახურეთ ზარი."
+
+msgid "You missed the call."
+msgstr "თქვენ გამოტოვეთ ზარი."
+
+msgid "Support bot is currently unavailable."
+msgstr "მხარდაჭერის ბოტი ამჟამად მიუწვდომელია."
+
+msgid "A support ticket has been created."
+msgstr "მხარდაჭერის ბილეთი შეიქმნა."
+
+msgid "Conversation ended."
+msgstr "საუბარი დასრულდა."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "მხარდაჭერის ბოტმა ვერ გააგრძელა ეს საუბარი. გთხოვთ, სცადოთ ხელახლა."
+
+msgid "Add your first term glossary to this course"
+msgstr "დაამატეთ პირველი ტერმინების ლექსიკონი ამ კურსს"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ გამოკითხვის შაბლონის წაშლა?"
+
+msgid "The survey template has been deleted."
+msgstr "გამოკითხვის შაბლონი წაიშალა."
+
+msgid "Please select a course."
+msgstr "გთხოვთ, აირჩიოთ კურსი."
+
+msgid "Please select a session for this course."
+msgstr "გთხოვთ, აირჩიოთ სესია ამ კურსისთვის."
+
+msgid "The survey has been created from the template."
+msgstr "გამოკითხვა შეიქმნა შაბლონიდან."
+
+msgid "Survey templates"
+msgstr "გამოკითხვის შაბლონები"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "შექმენით ხელახლა გამოსაყენებელი გამოკითხვის შაბლონები მასწავლებლებისთვის და მიანიჭეთ ისინი პირდაპირ კურსს ან სესიას."
+
+msgid "Subtitle"
+msgstr "ქვესათაური"
+
+msgid "Assign to course"
+msgstr "მინიჭება კურსზე"
+
+msgid "Assign template to course"
+msgstr "შაბლონის მინიჭება კურსზე"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "დატოვეთ სესია ცარიელი, რომ გამოკითხვა პირდაპირ კურსში შეიქმნას."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "ეს კურსი ხელმისაწვდომია სესიის მეშვეობით ამ პორტალზე, ამიტომ სესია აუცილებელია."
+
+msgid "Survey template questions"
+msgstr "გამოკითხვის შაბლონის კითხვები"
+
+msgid "Back to survey templates"
+msgstr "უკან გამოკითხვის შაბლონებთან"
+
+msgid "Could not load survey template"
+msgstr "გამოკითხვის შაბლონის ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Could not load survey template questions"
+msgstr "გამოკითხვის შაბლონის კითხვების ჩატვირთვა ვერ მოხერხდა"
+
+msgid "Could not save survey template question"
+msgstr "გამოკითხვის შაბლონის კითხვის შენახვა ვერ მოხერხდა"
+
+msgid "Could not delete survey template question"
+msgstr "გამოკითხვის შაბლონის კითხვის წაშლა ვერ მოხერხდა"
+
+msgid "Could not move survey template question"
+msgstr "გამოკითხვის შაბლონის კითხვის გადაადგილება ვერ მოხერხდა"
+
+msgid "Could not copy survey template question"
+msgstr "გამოკითხვის შაბლონის კითხვის კოპირება ვერ მოხერხდა"
+
+msgid "The survey template has been saved."
+msgstr "გამოკითხვის შაბლონი შენახულია."
+
+msgid "Edit survey template"
+msgstr "გამოკითხვის შაბლონის რედაქტირება"
+
+msgid "Create survey template"
+msgstr "გამოკითხვის შაბლონის შექმნა"
+
+msgid "The survey template title is required."
+msgstr "გამოკითხვის შაბლონის სათაური სავალდებულოა."
+
+msgid "Visible as template"
+msgstr "ხილული როგორც შაბლონი"
+
+msgid "Create satisfaction survey"
+msgstr "კმაყოფილების გამოკითხვის შექმნა"
+
+msgid "Training satisfaction survey"
+msgstr "ტრენინგის კმაყოფილების გამოკითხვა"
+
+msgid "Could not create satisfaction survey"
+msgstr "კმაყოფილების გამოკითხვის შექმნა ვერ მოხერხდა"
+
+msgid "Use template"
+msgstr "შაბლონის გამოყენება"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "შექმენით ეს გამოკითხვა ადმინისტრატორის მიერ მომზადებული მრავალჯერადი შაბლონიდან."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "შედეგები დამალულია მასწავლებლის/ტუტორისთვის"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "მასწავლებლებსა და ტუტორებს კვლავ შეუძლიათ პასუხების რაოდენობის ნახვა და შეხსენებების გაგზავნა, მაგრამ ვერ გახსნიან ან გაიტანენ გამოკითხვის შედეგებს."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "შაბლონი გამოყენებულია. გადახედეთ გამოკითხვის პარამეტრებს და შეინახეთ შესაქმნელად."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "გამოკითხვის შედეგები დამალულია მასწავლებლებისა და ტუტორებისთვის."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "კვლავ შეგიძლიათ მოწვევების გვერდის გამოყენება პასუხების რაოდენობის სანახავად და შეხსენებების გასაგზავნად."
+
+msgid "Payment method"
+msgstr "გადახდის მეთოდი"
+
+msgid "Preview mode"
+msgstr "გადახედვის რეჟიმი"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "პროგრესი და ქულა არ ინახება გადახედვის რეჟიმში."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "ეს ბმული ვერ გამოჩნდება სასწავლო გზაში."
+
+msgid "Open it in a new tab to view the page."
+msgstr "გახსენით ახალ ჩანართში გვერდის სანახავად."
+
+msgid "Report a problem with this question"
+msgstr "ამ კითხვასთან დაკავშირებული პრობლემის შეტყობინება"
+
+msgid "Your report was sent to the teacher."
+msgstr "თქვენი შეტყობინება გაიგზავნა მასწავლებელთან."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "აღწერეთ ნაპოვნი შეცდომა ან პრობლემა. თქვენი შეტყობინება გაიგზავნება მასწავლებელთან."
+
+msgid "A comment is required."
+msgstr "კომენტარი სავალდებულოა."
+
+msgid "Could not send the report."
+msgstr "შეტყობინების გაგზავნა ვერ მოხერხდა."
+
+msgid "Learner reports"
+msgstr "მოსწავლეთა შეტყობინებები"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "ამ კითხვაზე მოსწავლეთა შეტყობინებები არ არის წარდგენილი."
+
+msgid "View attempt"
+msgstr "მცდელობის ნახვა"
+
+msgid "Could not load learner reports."
+msgstr "მოსწავლეთა შეტყობინებების ჩატვირთვა ვერ მოხერხდა."
+
+msgid "Allow learners to report issues in questions"
+msgstr "მოსწავლეებს კითხვებში პრობლემების შეტყობინების უფლება"
+
+msgid "Skill acquired"
+msgstr "უნარი შეძენილია"
+
+msgid "AI Toolbox"
+msgstr "ხელოვნური ინტელექტის ხელსაწყოები"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "შექმენით ინტერაქტიული საგანმანათლებლო აპლიკაციები ხელოვნური ინტელექტით და თვალყური ადევნეთ მოსწავლის პროგრესს SCORM-ით."
+
+msgid "No published applications are available yet."
+msgstr "გამოქვეყნებული აპლიკაციები ჯერ არ არის ხელმისაწვდომი."
+
+msgid "Interactive applications"
+msgstr "ინტერაქტიული აპლიკაციები"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "შექმენით, გააუმჯობესეთ, გამოაქვეყნეთ და გადახედეთ ვერსიებს ერთი ადგილიდან."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "გახსენით აპლიკაცია ბოლო პროგრესიდან გასაგრძელებლად."
+
+msgid "Interactive learning application"
+msgstr "ინტერაქტიული სასწავლო აპლიკაცია"
+
+msgid "Create an interactive learning app"
+msgstr "ინტერაქტიული სასწავლო აპის შექმნა"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "აღწერეთ აქტივობა. Chamilo შექმნის ვერსიირებულ SCORM აპლიკაციას პროგრესისა და ქულის თვალყურის დევნებით."
+
+msgid "Idea"
+msgstr "იდეა"
+
+msgid "Application"
+msgstr "აპლიკაცია"
+
+msgid "What should the application do?"
+msgstr "რა უნდა აკეთოს აპლიკაციამ?"
+
+msgid "How it works"
+msgstr "როგორ მუშაობს"
+
+msgid "AI generation"
+msgstr "ხელოვნური ინტელექტით გენერირება"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "აპი იქმნება თქვენი ინსტრუქციებიდან და ინახება როგორც ვერსია 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "მოსწავლის პროგრესი, ქულა და განახლების მონაცემები იგზავნება Chamilo-ში."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "მომავალი გაუმჯობესებები ქმნის ახალ ვერსიებს წინა ვერსიების წაშლის გარეშე."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "მიუთითეთ სასწავლო მიზანი, წესები, დონეები, შეფასება და რა უნდა მოხდეს, როცა მოსწავლე დაასრულებს."
+
+msgid "You are not allowed to create content in this context."
+msgstr "ამ კონტექსტში კონტენტის შექმნის უფლება არ გაქვთ."
+
+msgid "The application was generated successfully."
+msgstr "აპლიკაცია წარმატებით შეიქმნა."
+
+msgid "Open in student view"
+msgstr "სტუდენტის ხედში გახსნა"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "აპლიკაციის გენერირება წინასწარი ნახვისა და გამოქვეყნებისთვის."
+
+msgid "Improve with AI"
+msgstr "გაუმჯობესება AI-ით"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "აღწერეთ ცვლილება. შეიქმნება ახალი ვერსია და წინა ვერსიები ხელმისაწვდომი დარჩება."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "აღწერეთ სრული ინტერაქტიული აქტივობა, რომლის გენერირებაც გსურთ."
+
+msgid "What should be improved?"
+msgstr "რა უნდა გაუმჯობესდეს?"
+
+msgid "Generate new version"
+msgstr "ახალი ვერსიის გენერირება"
+
+msgid "Version history"
+msgstr "ვერსიების ისტორია"
+
+msgid "Preview, download or restore any generated version."
+msgstr "ნებისმიერი გენერირებული ვერსიის წინასწარი ნახვა, ჩამოტვირთვა ან აღდგენა."
+
+msgid "A new version was generated."
+msgstr "ახალი ვერსია გენერირდა."
+
+msgid "Version restored"
+msgstr "ვერსია აღდგენილია"
+
+msgid "The support bot tree has been published."
+msgstr "მხარდაჭერის ბოტის ხე გამოქვეყნდა."
+
+msgid "The support bot tree has been archived."
+msgstr "მხარდაჭერის ბოტის ხე დაარქივდა."
+
+msgid "The support bot tree has been duplicated."
+msgstr "მხარდაჭერის ბოტის ხე დუბლირდა."
+
+msgid "The support bot tree has been deleted."
+msgstr "მხარდაჭერის ბოტის ხე წაიშალა."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ მხარდაჭერის ბოტის ხის წაშლა?"
+
+msgid "The support bot tree has been imported."
+msgstr "მხარდაჭერის ბოტის ხე იმპორტირდა."
+
+msgid "Create support bot tree"
+msgstr "მხარდაჭერის ბოტის ხის შექმნა"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "შექმენით ფიქსირებული გადაწყვეტილებების ხე, რომელიც მომხმარებლებს მხარდაჭერის კითხვებში გაუძღვება და შეიძლება ბილეთებამდე აიყვანოს."
+
+msgid "Portal scope"
+msgstr "პორტალის ფარგლები"
+
+msgid "Duplicate"
+msgstr "დუბლირება"
+
+msgid "Archive"
+msgstr "დაარქივება"
+
+msgid "View conversations"
+msgstr "საუბრების ნახვა"
+
+msgid "Import support bot tree"
+msgstr "მხარდაჭერის ბოტის ხის იმპორტი"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "JSON ექსპორტის ან CSV გადაწყვეტილებების ხის იმპორტი. იმპორტირებული ხე ყოველთვის იქმნება როგორც ახალი მონახაზი."
+
+msgid "Resolved"
+msgstr "გადაწყვეტილი"
+
+msgid "Escalated"
+msgstr "ესკალირებული"
+
+msgid "Abandoned"
+msgstr "მიტოვებული"
+
+msgid "Support bot conversations"
+msgstr "მხარდაჭერის ბოტის საუბრები"
+
+msgid "Outcome"
+msgstr "შედეგი"
+
+msgid "Started at"
+msgstr "დაწყების დრო"
+
+msgid "Ended at"
+msgstr "დასრულების დრო"
+
+msgid "View conversation"
+msgstr "საუბრის ნახვა"
+
+msgid "Go to node"
+msgstr "კვანძზე გადასვლა"
+
+msgid "Create support ticket"
+msgstr "მხარდაჭერის ბილეთის შექმნა"
+
+msgid "End conversation"
+msgstr "საუბრის დასრულება"
+
+msgid "Node"
+msgstr "კვანძი"
+
+msgid "A support bot tree requires at least one node."
+msgstr "მხარდაჭერის ბოტის ხეს სჭირდება მინიმუმ ერთი კვანძი."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამ კვანძის წაშლა? მასზე ბმულები გაიწმინდება."
+
+msgid "Every support bot node requires at least one option."
+msgstr "თითოეულ მხარდაჭერის ბოტის კვანძს სჭირდება მინიმუმ ერთი ვარიანტი."
+
+msgid "The support bot tree title is required."
+msgstr "მხარდაჭერის ბოტის ხის სათაური სავალდებულოა."
+
+msgid "A support bot entry node is required."
+msgstr "მხარდაჭერის ბოტის შესვლის კვანძი სავალდებულოა."
+
+msgid "Every support bot node requires content."
+msgstr "თითოეულ მხარდაჭერის ბოტის კვანძს სჭირდება შინაარსი."
+
+msgid "Every support bot option requires a label."
+msgstr "თითოეულ მხარდაჭერის ბოტის ვარიანტს სჭირდება წარწერა."
+
+msgid "Select a target node for every go-to option."
+msgstr "აირჩიეთ სამიზნე კვანძი ყოველი გადასვლის ვარიანტისთვის."
+
+msgid "Enter a relative URL for every link option."
+msgstr "შეიყვანეთ ფარდობითი URL ყოველი ბმულის ვარიანტისთვის."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "აირჩიეთ ბილეთის კატეგორია ყოველი ესკალაციის ვარიანტისთვის."
+
+msgid "The support bot tree has been saved."
+msgstr "მხარდაჭერის ბოტის ხე შენახულია."
+
+msgid "Edit support bot tree"
+msgstr "მხარდაჭერის ბოტის ხის რედაქტირება"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "გამოქვეყნებული და დაარქივებული მხარდაჭერის ბოტის ვერსიები მხოლოდ წასაკითხია. დაადუბლირეთ ეს ხე სიიდან ახალი მონახაზის ვერსიის რედაქტირებისთვის."
+
+msgid "Default ticket project"
+msgstr "ნაგულისხმევი ბილეთის პროექტი"
+
+msgid "Decision tree rules"
+msgstr "გადაწყვეტილების ხის წესები"
+
+msgid "Every node must contain at least one option."
+msgstr "ყოველ კვანძს უნდა ჰქონდეს მინიმუმ ერთი ვარიანტი."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "საბოლოო კვანძმა უნდა დაასრულოს საუბარი ან შექმნას მხარდაჭერის ბილეთი."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Go-to ბმულებმა v1-ში არ უნდა შექმნან ციკლები."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "გარე URL-ები v1-ში დაუშვებელია; ბმულის მოქმედებებმა უნდა გამოიყენონ Chamilo-ს შედარებითი გზა."
+
+msgid "Nodes"
+msgstr "კვანძები"
+
+msgid "Add node"
+msgstr "კვანძის დამატება"
+
+msgid "Entry node"
+msgstr "შესვლის კვანძი"
+
+msgid "Set as entry node"
+msgstr "შესვლის კვანძად დაყენება"
+
+msgid "Target node"
+msgstr "სამიზნე კვანძი"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "გამოიყენეთ Chamilo-ს შედარებითი გზა, მაგალითად /tickets."
+
+msgid "Ticket category"
+msgstr "ბილეთის კატეგორია"
+
+msgid "Select a default ticket project first."
+msgstr "ჯერ აირჩიეთ ნაგულისხმევი ბილეთის პროექტი."
+
+msgid "Closing message"
+msgstr "დასკვნითი შეტყობინება"
+
+msgid "Select a node to edit it."
+msgstr "აირჩიეთ კვანძი რედაქტირებისთვის."
+
+msgid "Support bot conversation"
+msgstr "მხარდაჭერის ბოტის საუბარი"
+
+msgid "Transcript of %s"
+msgstr "%s-ის ტრანსკრიპტი"
+
+msgid "Download unofficial transcript"
+msgstr "არაოფიციალური ტრანსკრიპტის ჩამოტვირთვა"
+
+msgid "Issue official transcript"
+msgstr "ოფიციალური ტრანსკრიპტის გაცემა"
+
+msgid "Official transcripts"
+msgstr "ოფიციალური ტრანსკრიპტები"
+
+msgid "No official transcript has been issued yet."
+msgstr "ოფიციალური ტრანსკრიპტი ჯერ არ გაცემულა."
+
+msgid "Issued by"
+msgstr "გამცემი"
+
+msgid "Verify"
+msgstr "შემოწმება"
+
+msgid "Signature of official transcripts"
+msgstr "ოფიციალური ტრანსკრიპტების ხელმოწერა"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "ეს სურათი იბეჭდება ამ პორტალის ოფიციალურ ტრანსკრიპტებზე, სერტიფიკატის პარამეტრებში მითითებული ხელმომწერის სახელისა და თანამდებობის ზემოთ."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "გავცეთ ხელმოწერილი ოფიციალური ტრანსკრიპტი ამ გვერდზე ჩამოთვლილი კურსებითა და შეფასებებით? მისი შემოწმება შესაძლებელია ონლაინ, სანამ არ გაუქმდება."
+
+msgid "Official transcript issued"
+msgstr "ოფიციალური ტრანსკრიპტი გაცემულია"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "გავაუქმოთ ეს ოფიციალური ტრანსკრიპტი? შემოწმების გვერდი მას გაუქმებულად აჩვენებს."
+
+msgid "Official transcript revoked"
+msgstr "ოფიციალური ტრანსკრიპტი გაუქმებულია"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "ჯერ აირჩიეთ PNG ან JPEG სურათი."
+
+msgid "Signed credential"
+msgstr "ხელმოწერილი სერტიფიკატი"
+
+msgid "Issue signed credential"
+msgstr "ხელმოწერილი სერტიფიკატის გაცემა"
+
+msgid "Verify credential"
+msgstr "სერტიფიკატის შემოწმება"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "დამაგრება Sepolia ტესტქსელზე"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "არსებული Sepolia ტრანზაქციის დადასტურება"
+
+msgid "Revoke signed credential"
+msgstr "ხელმოწერილი სერტიფიკატის გაუქმება"
+
+msgid "Delete certificate"
+msgstr "სერტიფიკატის წაშლა"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "არსებული Sepolia ტრანზაქციის დადასტურება"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia ტრანზაქციის ჰეში"
+
+msgid "Verify transaction"
+msgstr "ტრანზაქციის შემოწმება"
+
+msgid "Anchored"
+msgstr "დამაგრებული"
+
+msgid "Issued"
+msgstr "გაცემული"
+
+msgid "Not issued"
+msgstr "არ არის გაცემული"
+
+msgid "Consent required"
+msgstr "საჭიროა თანხმობა"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia ტრანზაქცია დადასტურებულია და შემოწმებულია"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia ტესტქსელის საფულე მოგთხოვთ ტრანზაქციის ხელმოწერას. დამაგრდება მხოლოდ სერტიფიკატის ანაბეჭდი. გავაგრძელოთ?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "გავაუქმოთ ეს ხელმოწერილი სერტიფიკატი? ნებისმიერი ბლოკჩეინ ტრანზაქცია რჩება მუდმივი, მაგრამ შემოწმების გვერდი აჩვენებს გაუქმებას."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "გავცეთ ხელმოწერილი სერტიფიკატი ამ მსმენელისთვის? ეს დამტკიცებულ პირად მონაცემებს კერძო ბმულით შესამოწმებელს ხდის."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia-სთვის საჭიროა EVM-თან თავსებადი ბრაუზერის საფულე."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "აირჩიეთ Sepolia ტესტნეტი (chain ID 11155111) თქვენს საფულეში."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "არასწორი საფულის მისამართი ან სერტიფიკატის ანაბეჭდი."
+
+msgid "Transaction pending"
+msgstr "ტრანზაქცია მოლოდინშია"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "გამოიყენეთ არსებული Sepolia ტრანზაქციის დადასტურება მოგვიანებით."
+
+msgid "Signed credential issued"
+msgstr "ხელმოწერილი სერტიფიკატი გაცემულია"
+
+msgid "Credential revoked"
+msgstr "სერტიფიკატი გაუქმებულია"
+
+msgid "Transaction hash"
+msgstr "ტრანზაქციის ჰეში"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "გამოქვეყნების თანხმობა ადმინისტრატორს საშუალებას აძლევს გასცეს ხელმოწერილი სერტიფიკატის სერტიფიკატი და სურვილისამებრ დაამაგროს მისი SHA-256 ანაბეჭდი Sepolia ტესტნეტზე. ჯაჭვზე სახელი ან პერსონალური მონაცემები არ იგზავნება. თანხმობის გაუქმება ნებისმიერ დროს შეგიძლიათ."
+
+msgid "Publication consent"
+msgstr "გამოქვეყნების თანხმობა"
+
+msgid "Not approved"
+msgstr "არ არის დამტკიცებული"
+
+msgid "Withdraw consent"
+msgstr "თანხმობის გაუქმება"
+
+msgid "Approve publication"
+msgstr "გამოქვეყნების დამტკიცება"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "ვაძლევ უფლებას გაცემულ იქნას ხელმოწერილი, საჯაროდ გადამოწმებადი სერტიფიკატი ჩემი სახელით, კურსით, ქულით და გაცემის თარიღით. ადმინისტრატორს ასევე შეუძლია გამოაქვეყნოს მხოლოდ მისი SHA-256 ანაბეჭდი Sepolia ტესტნეტზე. ანაბეჭდი მუდმივია, თუნდაც მოგვიანებით გავაუქმო თანხმობა. გავაგრძელო?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "გააუქმოთ ამ სერტიფიკატის გამოქვეყნების დამტკიცება?"
+
+msgid "Publication approval recorded"
+msgstr "გამოქვეყნების დამტკიცება ჩაიწერა"
+
+msgid "Publication approval withdrawn"
+msgstr "გამოქვეყნების დამტკიცება გაუქმდა"
+
+msgid "Read more"
+msgstr "წაიკითხეთ მეტი"
+
+msgid "Participation: %s of %s posts"
+msgstr "მონაწილეობა: %s / %s პოსტი"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "გამოაქვეყნეთ თქვენი წვლილი, რომ დაინახოთ სხვა მონაწილეების პასუხები."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "შესაბამისი ანგარიშების განხილვა მხოლოდ უფლებამოსილ გამომძიებლებს შეუძლიათ. მომხსენებლის ვინაობა ნაგულისხმევად კონფიდენციალურია."
+
+msgid "New confidential report"
+msgstr "ახალი კონფიდენციალური ანგარიში"
+
+msgid "Reported user"
+msgstr "შეტყობინებული მომხმარებელი"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "განხილვის მოლოდინშია შესაბამისი კონფიდენციალური ანგარიშები."
+
+msgid "Eligible investigations"
+msgstr "შესაბამისი გამოძიებები"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "საქმე აქ მხოლოდ მაშინ ჩნდება, როცა ერთსა და იმავე პირზე მინიმუმ %s სხვადასხვა მომხმარებელი აცხადებს."
+
+msgid "Distinct reporters"
+msgstr "განსხვავებული მომხსენებლები"
+
+msgid "Reports for selected user"
+msgstr "არჩეული მომხმარებლის ანგარიშები"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "კონფიდენციალური შეტყობინება ამჟამად მიუწვდომელია."
+
+msgid "The investigation could not be loaded."
+msgstr "გამოძიების ჩატვირთვა ვერ მოხერხდა."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "თქვენი ვინაობა ნაგულისხმევად დაცულია გამომძიებლებისგან, მაგრამ ანგარიშის ტექსტში ან დანართებში საიდენტიფიკაციო დეტალები არ შეიტანოთ. ეს არ არის სასწრაფო დახმარების სერვისი."
+
+msgid "Find the user involved"
+msgstr "იპოვეთ ჩართული მომხმარებელი"
+
+msgid "Name or username"
+msgstr "სახელი ან მომხმარებლის სახელი"
+
+msgid "Describe the situation"
+msgstr "აღწერეთ სიტუაცია"
+
+msgid "Evidence (optional)"
+msgstr "მტკიცებულება (არასავალდებულო)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "მაქსიმუმ სამი ფაილი, თითოეული 8 MiB-მდე. სურათები, აუდიო ან მოკლე ვიდეოები."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "ვეთანხმები, რომ ამ კონკრეტული ანგარიშისთვის უფლებამოსილმა გამომძიებლებმა იხილონ ჩემი სახელი და ელფოსტა. ამ ნებართვის გაუქმება მოგვიანებით შემიძლია."
+
+msgid "Send confidential report"
+msgstr "კონფიდენციალური ანგარიშის გაგზავნა"
+
+msgid "Could not search users"
+msgstr "მომხმარებლების ძებნა ვერ მოხერხდა"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "მაქსიმუმ სამი ფაილი, თითოეული 8 MiB-მდე."
+
+msgid "The confidential report could not be saved."
+msgstr "კონფიდენციალური ანგარიშის შენახვა ვერ მოხერხდა."
+
+msgid "Confidential report"
+msgstr "კონფიდენციალური ანგარიში"
+
+msgid "Confidential conversation"
+msgstr "კონფიდენციალური საუბარი"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "გამომძიებლებს შეუძლიათ ამ საუბრით კომუნიკაცია მომხსენებლის ვინაობის დანახვის გარეშე, თუ კონტაქტის გაზიარება ჩართული არ არის."
+
+msgid "Reporter"
+msgstr "მომხსენებელი"
+
+msgid "Investigator"
+msgstr "გამომძიებელი"
+
+msgid "Additional evidence (optional)"
+msgstr "დამატებითი მტკიცებულება (არასავალდებულო)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "მაქსიმუმ სამი ფაილი, თითოეული 8 MiB-მდე; ათი ფაილი ანგარიშზე."
+
+msgid "Contact shared voluntarily"
+msgstr "კონტაქტი ნებაყოფლობით გაზიარებულია"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "ნება დართეთ გამომძიებლებს ამ ანგარიშისთვის იხილონ ჩემი სახელი და ელფოსტა"
+
+msgid "This confidential report is not available."
+msgstr "ეს კონფიდენციალური ანგარიში მიუწვდომელია."
+
+msgid "Your message could not be saved."
+msgstr "თქვენი შეტყობინება ვერ შეინახა."
+
+msgid "Contact sharing could not be updated."
+msgstr "კონტაქტების გაზიარება ვერ განახლდა."
+
+msgid "Evidence could not be downloaded."
+msgstr "მტკიცებულება ვერ ჩამოიტვირთა."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>მაგალითი ფორმის შევსების აქტივობა: სხეულის მასის ინდექსის გამოთვლა</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>ასაკი</strong></td>            <td width=\"75%\" style=\"\">[25] წლის</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>სქესი</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ან F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>წონა</strong></td>            <td style=\"\" text-align:=\"\">95 კგ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>სიმაღლე</strong></td>            <td style=\"vertical-align: top;\">1.81 მ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>სხეულის მასის ინდექსი</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =წონა/სიმაღლე<sup>2</sup> (იხ.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ვიკიპედიის სტატია</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>მაგალითი ფორმის შევსების აქტივობა: სხეულის მასის ინდექსის გამოთვლა</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>ასაკი</strong></td>            <td width=\"75%\" style=\"\">[25] წლის</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>სქესი</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ან F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>წონა</strong></td>            <td style=\"\" text-align:=\"\">95 კგ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>სიმაღლე</strong></td>            <td style=\"vertical-align: top;\">1.81 მ</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>სხეულის მასის ინდექსი</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =წონა/სიმაღლე<sup>2</sup> (იხ.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ვიკიპედიის სტატია</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "IP მისამართის დამალვა ანგარიშებიდან"
+
+msgid "Course settings policies"
+msgstr "კურსის პარამეტრების პოლიტიკები"
+
+msgid "Academic transcripts"
+msgstr "აკადემიური ტრანსკრიპტები"
+
+msgid "Transcript program title"
+msgstr "ტრანსკრიპტის პროგრამის სათაური"
+
+msgid "Transcript course code"
+msgstr "ტრანსკრიპტის კურსის კოდი"
+
+msgid "Transcript course hours field"
+msgstr "ტრანსკრიპტის კურსის საათების ველი"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "ტრანსკრიპტში დასრულებული საათები არის საჭირო საათები"
+
+msgid "Transcript student number field"
+msgstr "ტრანსკრიპტის სტუდენტის ნომრის ველი"
+
+msgid "Transcript address fields"
+msgstr "ტრანსკრიპტის მისამართის ველები"
+
+msgid "Transcript grading scale"
+msgstr "ტრანსკრიპტის შეფასების სკალა"
+
+msgid "Transcript GPA note"
+msgstr "ტრანსკრიპტის GPA შენიშვნა"
+
+msgid "Transcript signatory name"
+msgstr "ტრანსკრიპტის ხელმომწერის სახელი"
+
+msgid "Transcript signatory title"
+msgstr "ტრანსკრიპტის ხელმომწერის თანამდებობა"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "ხელმოწერილი სერტიფიკატების და სურვილისამებრ Sepolia ტესტნეტზე დამაგრების ჩართვა"
+
+msgid "Show thread replies only after participating"
+msgstr "თემის პასუხების ჩვენება მხოლოდ მონაწილეობის შემდეგ"
+
+msgid "Show the forum category description in threads"
+msgstr "ფორუმის კატეგორიის აღწერის ჩვენება თემებში"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "ფორუმში მონაწილეობის პარამეტრების შეცვლა შესაძლებელია კურსის მიხედვით"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "ფორუმის თემაში ნაჩვენები პოსტების მაქსიმალური რაოდენობა"
+
+msgid "Posts required to complete a forum thread"
+msgstr "ფორუმის თემის დასასრულებლად საჭირო პოსტები"
+
+msgid "Track e-mail openings"
+msgstr "ელფოსტის გახსნის თვალყურის დევნება"
+
+msgid "Allow e-mail replies to messages"
+msgstr "შეტყობინებებზე ელფოსტით პასუხის დაშვება"
+
+msgid "Inbound e-mail address"
+msgstr "შემომავალი ელფოსტის მისამართი"
+
+msgid "Inbound mailbox DSN"
+msgstr "შემომავალი საფოსტო ყუთის DSN"
+
+msgid "Remember me duration (days)"
+msgstr "„დამიმახსოვრე“ ხანგრძლივობა (დღეები)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "OAuth დინამიკური კლიენტის რეგისტრაციის ჩართვა MCP-ს მიღმა"
+
+msgid "Enable confidential welfare reporting"
+msgstr "კონფიდენციალური კეთილდღეობის ანგარიშგების ჩართვა"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "გამოძიებისთვის საჭირო მინიმალური განსხვავებული მომხსენებლები"
+
+msgid "Allow confidential evidence attachments"
+msgstr "კონფიდენციალური მტკიცებულებების დანართების დაშვება"
+
+msgid "Show confidential investigation notifications"
+msgstr "კონფიდენციალური გამოძიების შეტყობინებების ჩვენება"
+
+msgid "Enable support chatbot"
+msgstr "მხარდაჭერის ჩატბოტის ჩართვა"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "აირჩიეთ, სად ხაზგასმულია გლოსარის ტერმინები ავტომატურად: დოკუმენტები, სავარჯიშოები და სასწავლო ბილიკები."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "IP მისამართების დამალვა ვიზუალურ ანგარიშგებასა და ანგარიშების ექსპორტში. IP მისამართები რჩება შენახული და ხელმისაწვდომია უფლებამოსილი პერსონალური მონაცემების პროცედურებით."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "პლატფორმის ნაგულისხმევი პარამეტრები და კურსის რედაქტირების უფლებები; იმართება კურსის პარამეტრებში."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "მიეცით მომხმარებლებს არაოფიციალური ტრანსკრიპტის ჩამოტვირთვის საშუალება დასრულებული კურსებისთვის და ადმინისტრატორებს, სესიის ადმინისტრატორებსა და HR მენეჯერებს — ხელმოწერილი ოფიციალური ტრანსკრიპტების გაცემის საშუალება მათ მიერ მართული მომხმარებლებისთვის. ხელმოწერის სურათი იტვირთება მომხმარებლის ტრანსკრიპტის გვერდიდან."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "პროგრამის სათაური, რომელიც იბეჭდება ყველა ტრანსკრიპტზე, მაგალითად ამ პლატფორმაზე მომზადებული დიპლომის სახელი."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "რომელი კურსის ველი ავსებს ტრანსკრიპტების კურსის კოდის სვეტს: კურსის კოდი თუ დეპარტამენტის სახელი."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "კურსის დამატებითი ველის ცვლადი, რომელიც ინახავს კურსის საათების რაოდენობას. დატოვეთ ცარიელი კურსის ხანგრძლივობის გამოსაყენებლად."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "კურსის საჭირო საათების დაბეჭდვა როგორც მოსწავლის მიერ დასრულებული საათები. გამორთვისას დასრულებული საათები არის დრო, რომელიც მოსწავლემ გაატარა კურსში."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "მომხმარებლის დამატებითი ველის ცვლადი, რომელიც ინახავს ტრანსკრიპტზე დაბეჭდილ სტუდენტის ნომერს. დატოვეთ ცარიელი, რომ არ დაიბეჭდოს."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "მომხმარებლის დამატებითი ველების მძიმით გამოყოფილი ცვლადები, რომლებიც იბეჭდება მომხმარებლის მისამართის შემდეგ ტრანსკრიპტებზე, მაგალითად ქალაქი, შტატი და საფოსტო ინდექსი."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "შეფასების ასოების JSON სია, უმაღლესი მინიმალური ქულიდან ქვემოთ: თითოეულ ელემენტს აქვს მინიმალური ქულა პროცენტებში (min), ასო და ქულები, რომლებიც გამოიყენება GPA-ს გამოსათვლელად."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "ახსნა, როგორ იანგარიშება GPA, იბეჭდება GPA-ს ქვემოთ ტრანსკრიპტებზე."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "სასკოლო თანამდებობის პირის სახელი, რომელიც ხელს აწერს ოფიციალურ ტრანსკრიპტებს."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "სასკოლო თანამდებობის პირის თანამდებობა, რომელიც ხელს აწერს ოფიციალურ ტრანსკრიპტებს."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "საჭიროებს მფლობელის აშკარა თანხმობას და ადმინისტრატორის ხელით მოქმედებებს. ჯაჭვზე იგზავნება მხოლოდ SHA-256 ანაბეჭდები."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "მოსწავლეები ფორუმის თემის მხოლოდ პირველ პოსტს ხედავენ, სანამ თავად არ გამოაქვეყნებენ მასში. ადმინისტრატორები, მასწავლებლები, მწვრთნელები და ჯგუფის ტუტორები ყოველთვის ხედავენ ყველა პოსტს."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "თითოეული თემის ზედა ნაწილში აჩვენეთ ფორუმის კატეგორიის სათაური და შემოკლებული აღწერა, სრული აღწერის წასაკითხად ბმულით."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "ჩართვისას მასწავლებლებს შეუძლიათ კურსის პარამეტრების ფორუმის განყოფილებაში აირჩიონ, მალავს თუ არა მათი კურსი თემის პასუხებს მოსწავლის გამოქვეყნებამდე, აჩვენებს თუ არა კატეგორიის აღწერას თემებში და რამდენ პოსტს ელის მონაწილეობის პროგრესის ზოლი, პლატფორმის პარამეტრების ნაცვლად."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "თითოეული ფორუმის თემის მხოლოდ ამ რაოდენობის პოსტი აჩვენეთ ყველა მომხმარებელს, ვინც არ არის პლატფორმის ადმინისტრატორი, მასწავლებლების ჩათვლით, და ყველას სასწავლო ბილიკში. ძაფოვან და ჩადგმულ ხედებში ლიმიტი ვრცელდება თითოეული პოსტის პასუხებზე. პოსტები ინახება ხედის თანმიმდევრობით: პირველები, ან უახლესები სასწავლო ბილიკში, სადაც უახლესი პოსტები პირველებია. ყველა პოსტის საჩვენებლად დააყენეთ 0."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "მოსწავლეებს თითოეულ ფორუმის თემაში აჩვენეთ პროგრესის ზოლი, რომელიც 100%-ს აღწევს, როცა მასში ამ რაოდენობის შეტყობინებას გამოაქვეყნებენ. მოდერაციის მოლოდინში მყოფი პოსტებიც ითვლება. პროგრესის ზოლის დასამალად დააყენეთ 0."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "შეტყობინების შეტყობინების ელფოსტებს ამატებს მცირე თვალთვალის სურათს და აღრიცხავს, როდის მოითხოვება იგი. ეს მხოლოდ იმაზე მიუთითებს, რომ ელფოსტა შესაძლოა გაიხსნა; არ ადასტურებს, რომ წაიკითხეს."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "პირდაპირი შეტყობინების შეტყობინებების მიმღებებს მიეცით ელფოსტით პასუხის უფლება. შემომავალი შეტყობინებები ფოსტის ინფრასტრუქტურამ უნდა გადაამისამართოს Chamilo-ს შემომავალი ფოსტის ბრძანებაზე."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "პასუხის მარშრუტიზაციის საბაზისო მისამართი, მაგალითად replies@example.com. Chamilo უნიკალურ მიმღების ტოკენს ამატებს პლუს-მისამართებით."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "საფოსტო ყუთის კავშირი შემომავალი პასუხების შესაგროვებლად, მაგალითად imaps://user:password@imap.example.com:993/INBOX. რწმუნებებში დაცული სიმბოლოები URL-კოდირებით გადააკეთეთ."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "დღეების რაოდენობა, რამდენ ხანს დარჩეს მომხმარებელი შესული, როცა არჩეულია „დამიმახსოვრე“. გამოსართავად დააყენეთ 0. საჭიროა HTTPS. დასაშვები დიაპაზონი: 0-დან 90-მდე. ჩვეულებრივი სესიის ვადა ცალკე კონფიგურირდება PHP/Symfony-ში."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "საშუალებას აძლევს Dynamic Client Registration-ს მოითხოვოს ნებისმიერი scope, რომელიც რეგისტრირებულია Chamilo OAuth რესურსის სერვერის მიერ. გამორთვისას თვითრეგისტრაცია რჩება შეზღუდული MCP-ით. რესურსზე წვდომა ყოველთვის ცალკე იზღუდება თითოეული კლიენტის ნებადართული რესურსების სიით."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "ჩართეთ კონფიდენციალური ინციდენტების ანგარიშები. მოდული მოითხოვს დაცულ დაშიფვრის გასაღებს და გამომძიებლის ნებართვას."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "იგივე მომხმარებელი 2-დან 10-მდე სხვადასხვა მომხსენებელმა უნდა შეატყობინოს, სანამ საქმე გამომძიებლებისთვის ხილული გახდება."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "დაუშვით სურათების, აუდიოს და მოკლე ვიდეო მტკიცებულებების. გამორთვისას არსებული დანართები კითხვადი რჩება."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "აჩვენეთ შიდა მითითება უფლებამოსილ გამოძიებებზე. არ აგზავნის ელფოსტას ან გარე შეტყობინებებს."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "ჩატის პანელში აჩვენეთ გადაწყვეტილების ხის ჩატბოტი, რომელსაც შეუძლია მომხმარებლების გაძღოლა "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "საშუალებას აძლევს მასწავლებლებს კურსებში შექმნან და ვერსიონირონ AI-დახმარებული საგანმანათლებლო აპლიკაციები."
+
+msgid "Department name"
+msgstr "დეპარტამენტის სახელი"
+
+msgid "Documents and exercise"
+msgstr "დოკუმენტები და სავარჯიშო"
+
+msgid "Documents and learning path"
+msgstr "დოკუმენტები და სასწავლო ბილიკი"
+
+msgid "Documents, exercise and learning path"
+msgstr "დოკუმენტები, სავარჯიშო და სასწავლო ბილიკი"
+
+msgid "session"
+msgstr "სესია"
+
+msgid "course"
+msgstr "კურსი"
+
+msgid "You have been enrolled in %s"
+msgstr "თქვენ ჩაირიცხეთ %s-ში"
 

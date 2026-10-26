@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "ด้วยความเคารพ"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "ตัวอย่างสูตร: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "ตัวอย่างสูตร: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ช่วงตัวแปร"
@@ -28770,6 +28770,9 @@ msgstr "ไม่พบผู้ใช้ปัจจุบัน"
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "สวัสดี %s,<br><br>คุณได้ลงทะเบียนใน %s แล้ว<br>คุณสามารถเข้าถึงบัญชีของคุณได้จาก <a href=\"%s\">ที่นี่</a><br><br>ข้อมูลการเข้าสู่ระบบของคุณคือ:<br>ชื่อผู้ใช้: <strong>%s</strong><br>รหัสผ่าน: <strong>%s</strong><br><br>ด้วยความเคารพ,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "สวัสดี %s,<br><br>คุณได้ลงทะเบียนบน %s<br>ชื่อผู้ใช้: <strong>%s</strong><br><br>โปรดคลิกลิงก์ด้านล่างเพื่อตั้งรหัสผ่านและเข้าสู่บัญชีของคุณ:<br><a href=\"%s\">ตั้งรหัสผ่านของคุณ</a><br><br>ขอแสดงความนับถือ<br>%s"
+
 msgid "You are registered on %s"
 msgstr "คุณได้ลงทะเบียนใน %s แล้ว"
 
@@ -41573,4 +41576,1616 @@ msgstr "บันทึกประวัติการโยกย้ายแ
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "พบ %s ที่รากโปรเจกต์: ลบออกเพื่อปิดจุดสิ้นสุดการอัปเกรด"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "คุณได้รับใบรับรองสำหรับแบบฝึกหัดนี้"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "คุณต้องทำเส้นทางการเรียนรู้ \"%s\" ให้เสร็จก่อนจึงจะเข้าถึงเส้นทางนี้ได้"
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบไฟล์นี้อย่างถาวร?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการถอดไฟล์นี้ออกจากรายวิชาที่เลือก?"
+
+msgid "Attach this file to another course"
+msgstr "แนบไฟล์นี้กับรายวิชาอื่น"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "แนบกับรายวิชาที่เลือก (ซ่อน)"
+
+msgid "Course(s):"
+msgstr "รายวิชา:"
+
+msgid "Delete definitively"
+msgstr "ลบอย่างถาวร"
+
+msgid "Detach from this course"
+msgstr "ถอดออกจากรายวิชานี้"
+
+msgid "File actions"
+msgstr "การดำเนินการไฟล์"
+
+msgid "File Information"
+msgstr "ข้อมูลไฟล์"
+
+msgid "File Link:"
+msgstr "ลิงก์ไฟล์:"
+
+msgid "File Path:"
+msgstr "เส้นทางไฟล์:"
+
+msgid "Filter courses..."
+msgstr "กรองรายวิชา..."
+
+msgid "MIME Type:"
+msgstr "ประเภท MIME:"
+
+msgid "N/A"
+msgstr "ไม่มีข้อมูล"
+
+msgid "No results found."
+msgstr "ไม่พบผลลัพธ์"
+
+msgid "Original Name"
+msgstr "ชื่อต้นฉบับ"
+
+msgid "Original Name:"
+msgstr "ชื่อต้นฉบับ:"
+
+msgid "Orphan"
+msgstr "ไฟล์กำพร้า"
+
+msgid "Resource File ID:"
+msgstr "รหัสไฟล์ทรัพยากร:"
+
+msgid "Resource Node ID:"
+msgstr "รหัสโหนดทรัพยากร:"
+
+msgid "Search..."
+msgstr "ค้นหา..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "หากต้องการถอดไฟล์นี้ออกจากรายวิชาเฉพาะ ให้คลิกไอคอน \"×\" บนแท็กรายวิชาที่เกี่ยวข้องด้านบน"
+
+msgid "User:"
+msgstr "ผู้ใช้:"
+
+msgid "View file information"
+msgstr "ดูข้อมูลไฟล์"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "คุณสามารถแนบไฟล์นี้กับรายวิชาหนึ่งรายวิชาหรือมากกว่า (ซ่อนที่รากเอกสาร) หากไฟล์ไม่ได้ใช้งานอีกต่อไปและกลายเป็นไฟล์กำพร้า คุณยังสามารถลบได้อย่างถาวร"
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "คุณสามารถเลือกหนึ่งรายวิชาหรือมากกว่า (ใช้ Ctrl/Cmd + คลิก)"
+
+msgid "bytes"
+msgstr "ไบต์"
+
+msgid "Failed to copy:"
+msgstr "คัดลอกไม่สำเร็จ:"
+
+msgid "Missing resource file identifier."
+msgstr "ไม่มีตัวระบุไฟล์ทรัพยากร"
+
+msgid "Please select at least one course."
+msgstr "โปรดเลือกอย่างน้อยหนึ่งรายวิชา"
+
+msgid "Resource file not found."
+msgstr "ไม่พบไฟล์ทรัพยากร"
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "ไฟล์ \"%s\" ถูกแนบกับ %d รายวิชา: %s"
+
+msgid "Some courses were skipped: %s."
+msgstr "ข้ามบางรายวิชา: %s"
+
+msgid "Missing file or course identifier."
+msgstr "ไม่มีตัวระบุไฟล์หรือรายวิชา"
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "ไฟล์ทรัพยากรนี้ไม่มีโหนดทรัพยากรและไม่สามารถถอดออกได้"
+
+msgid "File has been detached from %d course link(s)."
+msgstr "ไฟล์ถูกถอดออกจากลิงก์รายวิชา %d รายการ"
+
+msgid "This file is not attached to the selected course."
+msgstr "ไฟล์นี้ไม่ได้แนบกับรายวิชาที่เลือก"
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "ไฟล์นี้ยังถูกใช้โดยอย่างน้อยหนึ่งทรัพยากรและไม่สามารถลบได้"
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "ไฟล์กำพร้าและเนื้อหาทางกายภาพถูกลบอย่างถาวรแล้ว"
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "เผยแพร่แบบสำรวจแล้ว สร้าง: %d อัปเดต: %d ส่งข้อความ: %d"
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "สามารถได้รับ"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "ทักษะนี้ไม่สามารถได้รับ"
+
+#: issue-8179
+msgid "Novice"
+msgstr "ผู้เริ่มต้น"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "ยึดกฎและคำสั่งที่ไม่ขึ้นกับบริบทอย่างเคร่งครัด มีการตัดสินตามสถานการณ์น้อย"
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "ผู้เริ่มต้นขั้นสูง"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "เริ่มจำแนกแง่มุมและรูปแบบของสถานการณ์ได้ แต่ยังต้องการแนวทาง"
+
+#: issue-8179
+msgid "Competent"
+msgstr "ผู้มีความสามารถ"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "พัฒนาการวางแผนและแบบจำลองทางความคิด รับผิดชอบต่อผลลัพธ์ แต่อาจรู้สึกท่วมท้นกับความซับซ้อน"
+
+#: issue-8179
+msgid "Proficient"
+msgstr "ผู้ชำนาญ"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "มองเห็น \"ภาพรวม\" จัดลำดับความสำคัญโดยสัญชาตญาณ และเรียนรู้จากประสบการณ์"
+
+#: issue-8179
+msgid "Expert"
+msgstr "ผู้เชี่ยวชาญ"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "ปฏิบัติงานลื่นไหลตามสัญชาตญาณ พึ่งพาความรู้ฝังลึก สามารถคิดค้นหรือรับมือสถานการณ์ใหม่ได้อย่างง่ายดาย"
+
+#: issue-8179
+msgid "Remembering"
+msgstr "การจำ"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "ดึง ค้นคืน หรือจดจำความรู้ที่เกี่ยวข้องจากความจำระยะยาว"
+
+#: issue-8179
+msgid "Understanding"
+msgstr "ความเข้าใจ"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "สร้างความหมายจากข้อความการสอน รวมถึงการสื่อสารด้วยวาจา ลายลักษณ์อักษร และกราฟิก แสดงความเข้าใจโดยการตีความ ยกตัวอย่าง จัดประเภท สรุป อนุมาน เปรียบเทียบ หรืออธิบาย"
+
+#: issue-8179
+msgid "Applying"
+msgstr "การประยุกต์ใช้"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "ดำเนินการหรือใช้ขั้นตอนโดยการปฏิบัติหรือนำไปใช้ในสถานการณ์ที่กำหนด ใช้ความรู้หรือทักษะในสถานการณ์ใหม่หรือรูปธรรม"
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "การวิเคราะห์"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "แยกเนื้อหาเป็นส่วนประกอบ และพิจารณาว่าส่วนต่างๆ สัมพันธ์กันอย่างไร และสัมพันธ์กับโครงสร้างหรือจุดประสงค์โดยรวม ระบุแรงจูงใจ สาเหตุ หรือความสัมพันธ์"
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "การประเมิน"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "ตัดสินตามเกณฑ์และมาตรฐาน ตรวจสอบ วิพากษ์ หรือให้เหตุผลต่อการตัดสินใจหรือแนวทางปฏิบัติ"
+
+#: issue-8179
+msgid "Creating"
+msgstr "การสร้างสรรค์"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "รวมองค์ประกอบเข้าด้วยกันเป็นส่วนรวมที่สอดคล้องหรือใช้งานได้ จัดระเบียบองค์ประกอบใหม่เป็นรูปแบบหรือโครงสร้างใหม่ สร้างผลงานต้นฉบับหรือสร้างแนวคิดใหม่"
+
+#: issue-8179
+msgid "Follow"
+msgstr "ปฏิบัติตาม"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "ทำงานภายใต้การกำกับดูแลอย่างใกล้ชิด ปฏิบัติงานประจำโดยมีดุลยพินิจจำกัด มุ่งเน้นการปฏิบัติตามคำสั่งและการดำเนินการพื้นฐาน"
+
+#: issue-8179
+msgid "Assist"
+msgstr "ช่วยเหลือ"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "ทำงานภายใต้การกำกับดูแลตามปกติ ให้ความช่วยเหลือผู้อื่น มีส่วนร่วมในงานทีม และเริ่มริเริ่มภายในขอบเขตที่กำหนด"
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "ทำงานภายใต้การกำกับดูแลทั่วไป นำความรู้และทักษะไปใช้กับกิจกรรมประจำและไม่ประจำ ใช้ดุลยพินิจและการตัดสินใจในระดับหนึ่ง"
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "ทำงานภายใต้ทิศทางกว้าง ช่วยผู้อื่นโดยให้คำแนะนำเฉพาะทาง การสนับสนุน หรือบริการ รับผิดชอบงานของตนเอง และอาจกำกับทีมเล็กหรืองานย่อย"
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "รับประกันและให้คำปรึกษา"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "ทำงานภายใต้ทิศทางกว้างแต่มีอิสระสูง รับประกันว่างานบรรลุวัตถุประสงค์ และให้คำปรึกษาในเรื่องซับซ้อน มักนำทีมหรือโครงการและมีอิทธิพลต่อการตัดสินใจ"
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "ริเริ่มและมีอิทธิพล"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "มีอำนาจและความรับผิดชอบที่กำหนดสำหรับงานสำคัญ ริเริ่มการกระทำ มีอิทธิพลต่อกลยุทธ์และนโยบายในขอบเขตของตน และนำโครงการหรือทีมขนาดใหญ่"
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "กำหนดกลยุทธ์ สร้างแรงบันดาลใจ ระดมกำลัง"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "มีอำนาจในระดับองค์กรสูงสุดสำหรับงานหลัก กำหนดกลยุทธ์ระยะยาว สร้างแรงบันดาลใจและระดมผู้อื่น และตัดสินใจที่สำคัญต่อความสำเร็จขององค์กร มีอิทธิพลในระดับอุตสาหกรรมหรือภายนอก"
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "เวลาไม่มีการใช้งานสูงสุดที่นำมาพิจารณา (นาที)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "หน้าหลักสูตรที่เปิดทิ้งไว้จะส่งคำขออัตโนมัติต่อไป หลังจากจำนวนนาทีนี้โดยไม่มีการกระทำจริงจากผู้ใช้ (เปิดหน้าหรือรายการ ตอบคำถาม ฯลฯ) เวลาที่ใช้ในหลักสูตรจะหยุดนับ"
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "ตัวแก้ไขวิกิแบบร่วมมือ"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "กำลังเชื่อมต่อกับ Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "การบันทึกจะสร้างเวอร์ชันวิกิของ Chamilo ใหม่จากเนื้อหา Etherpad ปัจจุบัน"
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "ไม่สามารถโหลดตัวแก้ไขแบบร่วมมือได้"
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "เปิดใช้ Etherpad สำหรับการแก้ไขวิกิ"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "ใช้ Etherpad เป็นตัวแก้ไขแบบร่วมมือสำหรับหน้าวิกิที่มีอยู่ Etherpad ต้องเปิดเผยบน origin เดียวกันกับ Chamilo สำหรับเซสชันฝังตัวที่ปลอดภัย"
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "URL ฐานของอินสแตนซ์ Etherpad รวมถึงพาธรีเวิร์สพร็อกซีที่เป็นทางเลือก ตัวอย่าง: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "คีย์ API ของ Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "คีย์ API ที่ Chamilo ใช้เพื่อสร้างแพด เซสชัน และซิงโครไนซ์เนื้อหาวิกิ กำหนดค่า Etherpad ให้ยอมรับการยืนยันตัวตนด้วยคีย์ API"
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "สามารถเปลี่ยนการมองเห็นเริ่มต้นของเอกสารใหม่ได้ตามหลักสูตร"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "การมองเห็นที่กำหนดให้เอกสาร โฟลเดอร์ หรือไฟล์ที่อัปโหลดใหม่เมื่อครูสร้างในหลักสูตร ครูยังสามารถเปลี่ยนการมองเห็นของแต่ละรายการในภายหลังได้"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "เมื่อเปิดใช้ ครูสามารถเลือกในการตั้งค่าหลักสูตรว่าการมองเห็นของเอกสารใหม่ในหลักสูตรของตนเป็นอย่างไร แทนค่าเริ่มต้นของแพลตฟอร์ม"
+
+msgid "Default visibility of new learning paths"
+msgstr "การมองเห็นเริ่มต้นของเส้นทางการเรียนรู้ใหม่"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "สามารถเปลี่ยนการมองเห็นเริ่มต้นของเส้นทางการเรียนรู้ใหม่ได้ตามหลักสูตร"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "การมองเห็นที่กำหนดให้เส้นทางการเรียนรู้ใหม่เมื่อครูสร้างในหลักสูตร ครูยังสามารถเปลี่ยนการมองเห็นของแต่ละรายการในภายหลังได้"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "เมื่อเปิดใช้ ครูสามารถเลือกในการตั้งค่าหลักสูตรว่าการมองเห็นของเส้นทางการเรียนรู้ใหม่ในหลักสูตรของตนเป็นอย่างไร แทนค่าเริ่มต้นของแพลตฟอร์ม"
+
+msgid "Default visibility of new tests"
+msgstr "การมองเห็นเริ่มต้นของการทดสอบใหม่"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "การมองเห็นเริ่มต้นของแบบทดสอบใหม่สามารถเปลี่ยนได้ตามรายวิชา"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "การมองเห็นที่กำหนดให้แบบทดสอบใหม่เมื่อครูสร้างในรายวิชา ครูยังสามารถเปลี่ยนการมองเห็นของแต่ละรายการได้ในภายหลัง"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "เมื่อเปิดใช้งาน ครูสามารถเลือกในการตั้งค่ารายวิชาว่าการมองเห็นที่กำหนดให้แบบทดสอบใหม่ของรายวิชา แทนค่าเริ่มต้นของแพลตฟอร์ม"
+
+msgid "Default visibility for new learning paths"
+msgstr "การมองเห็นเริ่มต้นสำหรับเส้นทางการเรียนใหม่"
+
+msgid "Default visibility for new tests"
+msgstr "การมองเห็นเริ่มต้นสำหรับแบบทดสอบใหม่"
+
+msgid "Following"
+msgstr "กำลังติดตาม"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "รับอีเมลเมื่อผู้เรียนแสดงความคิดเห็นต่อการส่งงานของงานนี้"
+
+msgid "Payment history"
+msgstr "ประวัติการชำระเงิน"
+
+msgid "No payments yet"
+msgstr "ยังไม่มีการชำระเงิน"
+
+msgid "Cancel service"
+msgstr "ยกเลิกบริการ"
+
+msgid "Official transcript"
+msgstr "ใบแสดงผลการเรียนอย่างเป็นทางการ"
+
+msgid "Unofficial transcript"
+msgstr "ใบแสดงผลการเรียนอย่างไม่เป็นทางการ"
+
+msgid "Student name"
+msgstr "ชื่อนักเรียน"
+
+msgid "Student number"
+msgstr "รหัสนักเรียน"
+
+msgid "Program title"
+msgstr "ชื่อหลักสูตร"
+
+msgid "Required hours"
+msgstr "ชั่วโมงที่ต้องเรียน"
+
+msgid "Completion date"
+msgstr "วันที่สำเร็จการศึกษา"
+
+msgid "Hours completed"
+msgstr "ชั่วโมงที่เรียนครบ"
+
+msgid "Final grade"
+msgstr "เกรดสุดท้าย"
+
+msgid "Grade"
+msgstr "เกรด"
+
+msgid "No completed course yet."
+msgstr "ยังไม่มีรายวิชาที่เรียนจบ"
+
+msgid "Grading scale"
+msgstr "มาตราส่วนการให้เกรด"
+
+msgid "Signature of school official"
+msgstr "ลายเซ็นเจ้าหน้าที่โรงเรียน"
+
+msgid "School official"
+msgstr "เจ้าหน้าที่โรงเรียน"
+
+msgid "Official's title"
+msgstr "ตำแหน่งเจ้าหน้าที่"
+
+msgid "Verify this transcript at"
+msgstr "ตรวจสอบใบแสดงผลการเรียนนี้ที่"
+
+msgid "Verification code"
+msgstr "รหัสยืนยัน"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "ใบแสดงผลการเรียนอย่างไม่เป็นทางการนี้ไม่ได้ลงนาม ขอใบแสดงผลการเรียนอย่างเป็นทางการจากผู้ดูแลระบบ"
+
+msgid "Transcript verification"
+msgstr "การตรวจสอบใบแสดงผลการเรียน"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "ตรวจสอบว่าใบแสดงผลการเรียนอย่างเป็นทางการนี้ได้ออกและลงนามโดยสถาบัน ไม่ถูกแก้ไข และไม่ถูกเพิกถอน"
+
+msgid "Valid"
+msgstr "ถูกต้อง"
+
+msgid "Invalid signature"
+msgstr "ลายเซ็นไม่ถูกต้อง"
+
+msgid "Transcript not found"
+msgstr "ไม่พบใบแสดงผลการเรียน"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "ลายเซ็นของสถาบันถูกต้องและใบแสดงผลการเรียนนี้ไม่ถูกเพิกถอน"
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "ไม่สามารถยืนยันว่าใบแสดงผลการเรียนนี้ถูกต้องได้ ไม่แสดงรายละเอียด"
+
+msgid "Transcript details"
+msgstr "รายละเอียดใบแสดงผลการเรียน"
+
+msgid "Institution"
+msgstr "สถาบัน"
+
+msgid "Issued on"
+msgstr "ออกเมื่อ"
+
+msgid "Download verification JSON"
+msgstr "ดาวน์โหลด JSON สำหรับการตรวจสอบ"
+
+msgid "Transcript"
+msgstr "ใบแสดงผลการเรียน"
+
+msgid "My confidential reports"
+msgstr "รายงานลับของฉัน"
+
+msgid "My transcript"
+msgstr "ใบแสดงผลการเรียนของฉัน"
+
+msgid "Confidential investigations"
+msgstr "การสอบสวนลับ"
+
+msgid "Floor plan"
+msgstr "แผนผังชั้น"
+
+msgid "Click a highlighted room to select it"
+msgstr "คลิกห้องที่ไฮไลต์เพื่อเลือก"
+
+msgid "Select room"
+msgstr "เลือกห้อง"
+
+msgid "Room on floor plan"
+msgstr "ห้องบนแผนผังชั้น"
+
+msgid "Select a branch first"
+msgstr "เลือกสาขาก่อน"
+
+msgid "The branch has no attached floor plan"
+msgstr "สาขานี้ไม่มีแผนผังชั้นแนบมา"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "ใช้เครื่องมือรูปหลายเหลี่ยมเพื่อวาดขอบห้อง ใช้แก้ไขเพื่อย้ายมุม"
+
+msgid "Save room area"
+msgstr "บันทึกพื้นที่ห้อง"
+
+msgid "Clear room area"
+msgstr "ล้างพื้นที่ห้อง"
+
+msgid "Save the room form to persist the area"
+msgstr "บันทึกแบบฟอร์มห้องเพื่อคงพื้นที่ไว้"
+
+msgid "Floor plan unavailable"
+msgstr "ไม่มีผังชั้น"
+
+msgid "Room map points must be within the floor plan"
+msgstr "จุดบนแผนที่ห้องต้องอยู่ภายในผังชั้น"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการล้างพื้นที่ห้อง?"
+
+msgid "View room on floor plan"
+msgstr "ดูห้องบนผังชั้น"
+
+msgid "No floor plan available"
+msgstr "ไม่มีผังชั้นที่ใช้ได้"
+
+msgid "This is an assignment by groups"
+msgstr "นี่เป็นการมอบหมายงานแบบกลุ่ม"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "อัปโหลดผังชั้นเป็น PNG, JPEG หรือ SVG แบบคงที่ที่ปลอดภัย หรือเลือกภาพที่มีอยู่จากเอกสาร"
+
+msgid "Upload floor plan"
+msgstr "อัปโหลดผังชั้น"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG หรือ SVG แบบคงที่ สูงสุด 10 MB"
+
+msgid "Search images by name"
+msgstr "ค้นหาภาพตามชื่อ"
+
+msgid "Image name"
+msgstr "ชื่อภาพ"
+
+msgid "Select an image"
+msgstr "เลือกภาพ"
+
+msgid "Change floor plan"
+msgstr "เปลี่ยนผังชั้น"
+
+msgid "Attach floor plan"
+msgstr "แนบผังชั้น"
+
+msgid "No matching images found in Documents."
+msgstr "ไม่พบภาพที่ตรงกันในเอกสาร"
+
+msgid "Current floor plan"
+msgstr "ผังชั้นปัจจุบัน"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "การเปลี่ยนแปลงผังชั้นจะถูกบันทึกโดยอัตโนมัติ"
+
+msgid "Remove floor plan"
+msgstr "ลบผังชั้น"
+
+msgid "Cannot load images"
+msgstr "ไม่สามารถโหลดภาพได้"
+
+msgid "Floor plan saved"
+msgstr "บันทึกผังชั้นแล้ว"
+
+msgid "Cannot attach floor plan"
+msgstr "ไม่สามารถแนบผังชั้นได้"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "รองรับเฉพาะภาพ PNG/JPEG และ SVG แบบคงที่ที่ปลอดภัย ขนาดไม่เกิน 10MB"
+
+msgid "Cannot upload floor plan"
+msgstr "ไม่สามารถอัปโหลดผังชั้นได้"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบผังชั้น?"
+
+msgid "Floor plan removed"
+msgstr "ลบผังชั้นแล้ว"
+
+msgid "Cannot remove floor plan"
+msgstr "ไม่สามารถลบผังชั้นได้"
+
+msgid "Support bot"
+msgstr "บอทรองรับ"
+
+msgid "Connected"
+msgstr "เชื่อมต่อแล้ว"
+
+msgid "Not connected"
+msgstr "ไม่ได้เชื่อมต่อ"
+
+msgid "View ticket"
+msgstr "ดูตั๋ว"
+
+msgid "Start a new conversation"
+msgstr "เริ่มการสนทนาใหม่"
+
+msgid "Video call"
+msgstr "วิดีโอคอล"
+
+msgid "Incoming video call"
+msgstr "สายวิดีโอขาเข้า"
+
+msgid "Decline"
+msgstr "ปฏิเสธ"
+
+msgid "Mute microphone"
+msgstr "ปิดไมโครโฟน"
+
+msgid "Unmute microphone"
+msgstr "เปิดไมโครโฟน"
+
+msgid "Turn camera off"
+msgstr "ปิดกล้อง"
+
+msgid "Turn camera on"
+msgstr "เปิดกล้อง"
+
+msgid "Hang up"
+msgstr "วางสาย"
+
+msgid "Calling..."
+msgstr "กำลังโทร..."
+
+msgid "Connecting..."
+msgstr "กำลังเชื่อมต่อ..."
+
+msgid "Your contact is busy."
+msgstr "ผู้ติดต่อของคุณไม่ว่าง"
+
+msgid "Your contact did not answer the call."
+msgstr "ผู้ติดต่อของคุณไม่รับสาย"
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "ผู้ติดต่อของคุณไม่สามารถเข้าถึงกล้องหรือไมโครโฟนได้"
+
+msgid "Your contact could not prepare the video call."
+msgstr "ผู้ติดต่อของคุณไม่สามารถเตรียมวิดีโอคอลได้"
+
+msgid "Your contact refused the call."
+msgstr "ผู้ติดต่อของคุณปฏิเสธสาย"
+
+msgid "The call timed out."
+msgstr "สายหมดเวลา"
+
+msgid "Your contact cancelled the call."
+msgstr "ผู้ติดต่อของคุณยกเลิกการโทรแล้ว"
+
+msgid "The video connection was lost."
+msgstr "การเชื่อมต่อวิดีโอขาดหาย"
+
+msgid "Your contact could not establish the video connection."
+msgstr "ผู้ติดต่อของคุณไม่สามารถสร้างการเชื่อมต่อวิดีโอได้"
+
+msgid "Your contact could not complete the video call setup."
+msgstr "ผู้ติดต่อของคุณไม่สามารถตั้งค่าการโทรวิดีโอให้เสร็จสิ้นได้"
+
+msgid "Your contact hung up."
+msgstr "ผู้ติดต่อของคุณวางสายแล้ว"
+
+msgid "Video call could not be started"
+msgstr "ไม่สามารถเริ่มการโทรวิดีโอได้"
+
+msgid "Camera or microphone permission was denied."
+msgstr "ถูกปฏิเสธสิทธิ์การใช้กล้องหรือไมโครโฟน"
+
+msgid "No camera or microphone was found."
+msgstr "ไม่พบกล้องหรือไมโครโฟน"
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "กล้องหรือไมโครโฟนกำลังถูกใช้งานอยู่หรือไม่พร้อมใช้งาน"
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "กล้องหรือไมโครโฟนไม่รองรับการตั้งค่าที่ต้องการ"
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "ไม่สามารถเข้าถึงกล้องหรือไมโครโฟนได้"
+
+msgid "The video call could not be prepared."
+msgstr "ไม่สามารถเตรียมการโทรวิดีโอได้"
+
+msgid "The video call request could not be sent."
+msgstr "ไม่สามารถส่งคำขอโทรวิดีโอได้"
+
+msgid "The incoming video call could not be processed."
+msgstr "ไม่สามารถประมวลผลการโทรวิดีโอขาเข้าได้"
+
+msgid "The video call answer could not be prepared."
+msgstr "ไม่สามารถเตรียมคำตอบการโทรวิดีโอได้"
+
+msgid "The video call answer could not be sent."
+msgstr "ไม่สามารถส่งคำตอบการโทรวิดีโอได้"
+
+msgid "The video call answer could not be processed."
+msgstr "ไม่สามารถประมวลผลคำตอบการโทรวิดีโอได้"
+
+msgid "The video connection failed"
+msgstr "การเชื่อมต่อวิดีโอล้มเหลว"
+
+msgid "The video connection could not be established."
+msgstr "ไม่สามารถสร้างการเชื่อมต่อวิดีโอได้"
+
+msgid "No answer was received."
+msgstr "ไม่ได้รับการตอบรับ"
+
+msgid "You refused the call."
+msgstr "คุณปฏิเสธการโทร"
+
+msgid "You cancelled the call."
+msgstr "คุณยกเลิกการโทร"
+
+msgid "You hung up."
+msgstr "คุณวางสายแล้ว"
+
+msgid "You missed the call."
+msgstr "คุณพลาดการโทร"
+
+msgid "Support bot is currently unavailable."
+msgstr "บอทฝ่ายสนับสนุนไม่พร้อมใช้งานในขณะนี้"
+
+msgid "A support ticket has been created."
+msgstr "สร้างตั๋วสนับสนุนแล้ว"
+
+msgid "Conversation ended."
+msgstr "สิ้นสุดการสนทนาแล้ว"
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "บอทฝ่ายสนับสนุนไม่สามารถดำเนินการสนทนานี้ต่อได้ กรุณาลองอีกครั้ง"
+
+msgid "Add your first term glossary to this course"
+msgstr "เพิ่มคำศัพท์อภิธานศัพท์แรกในรายวิชานี้"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบแม่แบบแบบสำรวจนี้?"
+
+msgid "The survey template has been deleted."
+msgstr "ลบแม่แบบแบบสำรวจแล้ว"
+
+msgid "Please select a course."
+msgstr "กรุณาเลือกรายวิชา"
+
+msgid "Please select a session for this course."
+msgstr "กรุณาเลือกเซสชันสำหรับรายวิชานี้"
+
+msgid "The survey has been created from the template."
+msgstr "สร้างแบบสำรวจจากแม่แบบแล้ว"
+
+msgid "Survey templates"
+msgstr "แม่แบบแบบสำรวจ"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "สร้างแม่แบบแบบสำรวจที่ใช้ซ้ำได้สำหรับผู้สอน และกำหนดไปยังรายวิชาหรือเซสชันโดยตรง"
+
+msgid "Subtitle"
+msgstr "คำบรรยาย"
+
+msgid "Assign to course"
+msgstr "กำหนดให้รายวิชา"
+
+msgid "Assign template to course"
+msgstr "กำหนดแม่แบบให้รายวิชา"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "เว้นเซสชันว่างไว้เพื่อสร้างแบบสำรวจในรายวิชาโดยตรง"
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "รายวิชานี้มีให้ผ่านเซสชันบนพอร์ทัลนี้ จึงต้องระบุเซสชัน"
+
+msgid "Survey template questions"
+msgstr "คำถามแม่แบบแบบสำรวจ"
+
+msgid "Back to survey templates"
+msgstr "กลับไปยังแม่แบบแบบสำรวจ"
+
+msgid "Could not load survey template"
+msgstr "ไม่สามารถโหลดแม่แบบแบบสำรวจได้"
+
+msgid "Could not load survey template questions"
+msgstr "ไม่สามารถโหลดคำถามแม่แบบแบบสำรวจได้"
+
+msgid "Could not save survey template question"
+msgstr "ไม่สามารถบันทึกคำถามแม่แบบแบบสำรวจได้"
+
+msgid "Could not delete survey template question"
+msgstr "ไม่สามารถลบคำถามแม่แบบแบบสำรวจได้"
+
+msgid "Could not move survey template question"
+msgstr "ไม่สามารถย้ายคำถามแม่แบบแบบสำรวจได้"
+
+msgid "Could not copy survey template question"
+msgstr "ไม่สามารถคัดลอกคำถามแม่แบบแบบสำรวจได้"
+
+msgid "The survey template has been saved."
+msgstr "บันทึกแม่แบบแบบสำรวจแล้ว"
+
+msgid "Edit survey template"
+msgstr "แก้ไขแม่แบบแบบสำรวจ"
+
+msgid "Create survey template"
+msgstr "สร้างแม่แบบแบบสำรวจ"
+
+msgid "The survey template title is required."
+msgstr "ต้องระบุชื่อแม่แบบแบบสำรวจ"
+
+msgid "Visible as template"
+msgstr "แสดงเป็นแม่แบบ"
+
+msgid "Create satisfaction survey"
+msgstr "สร้างแบบสำรวจความพึงพอใจ"
+
+msgid "Training satisfaction survey"
+msgstr "แบบสำรวจความพึงพอใจต่อการอบรม"
+
+msgid "Could not create satisfaction survey"
+msgstr "ไม่สามารถสร้างแบบสำรวจความพึงพอใจได้"
+
+msgid "Use template"
+msgstr "ใช้แม่แบบ"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "สร้างแบบสำรวจนี้จากแม่แบบที่ใช้ซ้ำได้ซึ่งผู้ดูแลระบบจัดเตรียมไว้"
+
+msgid "Results hidden from teacher/tutor"
+msgstr "ซ่อนผลจากครู/ติวเตอร์"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "ครูและติวเตอร์ยังเห็นจำนวนคำตอบและส่งการเตือนได้ แต่ไม่สามารถเปิดหรือส่งออกผลแบบสำรวจได้"
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "ใช้แม่แบบแล้ว ตรวจสอบการตั้งค่าแบบสำรวจแล้วบันทึกเพื่อสร้าง"
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "ผลแบบสำรวจถูกซ่อนจากครูและติวเตอร์"
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "คุณยังใช้หน้าคำเชิญเพื่อดูจำนวนคำตอบและส่งการเตือนได้"
+
+msgid "Payment method"
+msgstr "วิธีการชำระเงิน"
+
+msgid "Preview mode"
+msgstr "โหมดตัวอย่าง"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "ความคืบหน้าและคะแนนจะไม่ถูกบันทึกในโหมดตัวอย่าง"
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "ไม่สามารถแสดงลิงก์นี้ภายในเส้นทางการเรียนรู้ได้"
+
+msgid "Open it in a new tab to view the page."
+msgstr "เปิดในแท็บใหม่เพื่อดูหน้า"
+
+msgid "Report a problem with this question"
+msgstr "รายงานปัญหาเกี่ยวกับคำถามนี้"
+
+msgid "Your report was sent to the teacher."
+msgstr "ส่งรายงานถึงครูแล้ว"
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "อธิบายข้อผิดพลาดหรือปัญหาที่พบ รายงานจะถูกส่งถึงครู"
+
+msgid "A comment is required."
+msgstr "ต้องระบุความคิดเห็น"
+
+msgid "Could not send the report."
+msgstr "ไม่สามารถส่งรายงานได้"
+
+msgid "Learner reports"
+msgstr "รายงานจากผู้เรียน"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "ยังไม่มีรายงานจากผู้เรียนสำหรับคำถามนี้"
+
+msgid "View attempt"
+msgstr "ดูความพยายาม"
+
+msgid "Could not load learner reports."
+msgstr "ไม่สามารถโหลดรายงานจากผู้เรียนได้"
+
+msgid "Allow learners to report issues in questions"
+msgstr "อนุญาตให้ผู้เรียนรายงานปัญหาในคำถาม"
+
+msgid "Skill acquired"
+msgstr "ได้ทักษะแล้ว"
+
+msgid "AI Toolbox"
+msgstr "กล่องเครื่องมือ AI"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "สร้างแอปพลิเคชันการศึกษาแบบโต้ตอบด้วย AI และติดตามความคืบหน้าของผู้เรียนด้วย SCORM"
+
+msgid "No published applications are available yet."
+msgstr "ยังไม่มีแอปพลิเคชันที่เผยแพร่"
+
+msgid "Interactive applications"
+msgstr "แอปพลิเคชันแบบโต้ตอบ"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "สร้าง ปรับปรุง เผยแพร่ และตรวจทานเวอร์ชันจากที่เดียว"
+
+msgid "Open an application to continue from your latest progress."
+msgstr "เปิดแอปพลิเคชันเพื่อทำต่อจากความคืบหน้าล่าสุดของคุณ"
+
+msgid "Interactive learning application"
+msgstr "แอปพลิเคชันการเรียนรู้แบบโต้ตอบ"
+
+msgid "Create an interactive learning app"
+msgstr "สร้างแอปการเรียนรู้แบบโต้ตอบ"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "อธิบายกิจกรรม Chamilo จะสร้างแอปพลิเคชัน SCORM แบบมีเวอร์ชันพร้อมการติดตามความคืบหน้าและคะแนน"
+
+msgid "Idea"
+msgstr "ไอเดีย"
+
+msgid "Application"
+msgstr "แอปพลิเคชัน"
+
+msgid "What should the application do?"
+msgstr "แอปพลิเคชันควรทำอะไร?"
+
+msgid "How it works"
+msgstr "วิธีการทำงาน"
+
+msgid "AI generation"
+msgstr "การสร้างด้วย AI"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "แอปถูกสร้างจากคำสั่งของคุณและจัดเก็บเป็นเวอร์ชัน 1"
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "ความคืบหน้า คะแนน และข้อมูลการทำต่อของผู้เรียนจะถูกรายงานไปยัง Chamilo"
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "การปรับปรุงในอนาคตจะสร้างเวอร์ชันใหม่โดยไม่ลบเวอร์ชันก่อนหน้า"
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "ระบุวัตถุประสงค์การเรียนรู้ กฎ ระดับ การให้คะแนน และสิ่งที่ควรเกิดขึ้นเมื่อผู้เรียนทำเสร็จ"
+
+msgid "You are not allowed to create content in this context."
+msgstr "คุณไม่มีสิทธิ์สร้างเนื้อหาในบริบทนี้"
+
+msgid "The application was generated successfully."
+msgstr "สร้างแอปพลิเคชันสำเร็จแล้ว"
+
+msgid "Open in student view"
+msgstr "เปิดในมุมมองผู้เรียน"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "สร้างแอปพลิเคชันเพื่อเปิดใช้การดูตัวอย่างและการเผยแพร่"
+
+msgid "Improve with AI"
+msgstr "ปรับปรุงด้วย AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "อธิบายการเปลี่ยนแปลง จะสร้างเวอร์ชันใหม่ และเวอร์ชันก่อนหน้าจะยังคงใช้งานได้"
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "อธิบายกิจกรรมเชิงโต้ตอบทั้งหมดที่ต้องการให้สร้าง"
+
+msgid "What should be improved?"
+msgstr "ควรปรับปรุงอะไร?"
+
+msgid "Generate new version"
+msgstr "สร้างเวอร์ชันใหม่"
+
+msgid "Version history"
+msgstr "ประวัติเวอร์ชัน"
+
+msgid "Preview, download or restore any generated version."
+msgstr "ดูตัวอย่าง ดาวน์โหลด หรือกู้คืนเวอร์ชันที่สร้างไว้"
+
+msgid "A new version was generated."
+msgstr "สร้างเวอร์ชันใหม่แล้ว"
+
+msgid "Version restored"
+msgstr "กู้คืนเวอร์ชันแล้ว"
+
+msgid "The support bot tree has been published."
+msgstr "เผยแพร่แผนผังบอทสนับสนุนแล้ว"
+
+msgid "The support bot tree has been archived."
+msgstr "เก็บถาวรแผนผังบอทสนับสนุนแล้ว"
+
+msgid "The support bot tree has been duplicated."
+msgstr "ทำสำเนาแผนผังบอทสนับสนุนแล้ว"
+
+msgid "The support bot tree has been deleted."
+msgstr "ลบแผนผังบอทสนับสนุนแล้ว"
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบแผนผังบอทสนับสนุนนี้?"
+
+msgid "The support bot tree has been imported."
+msgstr "นำเข้าแผนผังบอทสนับสนุนแล้ว"
+
+msgid "Create support bot tree"
+msgstr "สร้างแผนผังบอทสนับสนุน"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "สร้างแผนผังการตัดสินใจแบบคงที่เพื่อแนะนำผู้ใช้ผ่านคำถามสนับสนุน และสามารถส่งต่อไปยังทิกเก็ตได้"
+
+msgid "Portal scope"
+msgstr "ขอบเขตพอร์ทัล"
+
+msgid "Duplicate"
+msgstr "ทำสำเนา"
+
+msgid "Archive"
+msgstr "เก็บถาวร"
+
+msgid "View conversations"
+msgstr "ดูการสนทนา"
+
+msgid "Import support bot tree"
+msgstr "นำเข้าแผนผังบอทสนับสนุน"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "นำเข้าไฟล์ส่งออก JSON หรือแผนผังการตัดสินใจ CSV แผนผังที่นำเข้าจะถูกสร้างเป็นฉบับร่างใหม่เสมอ"
+
+msgid "Resolved"
+msgstr "แก้ไขแล้ว"
+
+msgid "Escalated"
+msgstr "ส่งต่อแล้ว"
+
+msgid "Abandoned"
+msgstr "ยกเลิกกลางคัน"
+
+msgid "Support bot conversations"
+msgstr "การสนทนาบอทสนับสนุน"
+
+msgid "Outcome"
+msgstr "ผลลัพธ์"
+
+msgid "Started at"
+msgstr "เริ่มเมื่อ"
+
+msgid "Ended at"
+msgstr "สิ้นสุดเมื่อ"
+
+msgid "View conversation"
+msgstr "ดูการสนทนา"
+
+msgid "Go to node"
+msgstr "ไปที่โหนด"
+
+msgid "Create support ticket"
+msgstr "สร้างทิกเก็ตสนับสนุน"
+
+msgid "End conversation"
+msgstr "สิ้นสุดการสนทนา"
+
+msgid "Node"
+msgstr "โหนด"
+
+msgid "A support bot tree requires at least one node."
+msgstr "แผนผังบอทสนับสนุนต้องมีอย่างน้อยหนึ่งโหนด"
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบโหนดนี้? ลิงก์ที่ชี้มายังโหนดนี้จะถูกล้าง"
+
+msgid "Every support bot node requires at least one option."
+msgstr "ทุกโหนดของบอทสนับสนุนต้องมีอย่างน้อยหนึ่งตัวเลือก"
+
+msgid "The support bot tree title is required."
+msgstr "ต้องระบุชื่อแผนผังบอทสนับสนุน"
+
+msgid "A support bot entry node is required."
+msgstr "ต้องมีโหนดเริ่มต้นของบอทสนับสนุน"
+
+msgid "Every support bot node requires content."
+msgstr "ทุกโหนดของบอทสนับสนุนต้องมีเนื้อหา"
+
+msgid "Every support bot option requires a label."
+msgstr "ทุกตัวเลือกของบอทสนับสนุนต้องมีป้ายกำกับ"
+
+msgid "Select a target node for every go-to option."
+msgstr "เลือกโหนดปลายทางสำหรับทุกตัวเลือกไปที่"
+
+msgid "Enter a relative URL for every link option."
+msgstr "ป้อน URL แบบสัมพัทธ์สำหรับทุกตัวเลือกลิงก์"
+
+msgid "Select a ticket category for every escalation option."
+msgstr "เลือกหมวดหมู่ทิกเก็ตสำหรับทุกตัวเลือกการส่งต่อ"
+
+msgid "The support bot tree has been saved."
+msgstr "บันทึกแผนผังบอทสนับสนุนแล้ว"
+
+msgid "Edit support bot tree"
+msgstr "แก้ไขแผนผังบอทสนับสนุน"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "เวอร์ชันบอทสนับสนุนที่เผยแพร่และเก็บถาวรเป็นแบบอ่านอย่างเดียว ทำสำเนาแผนผังนี้จากรายการเพื่อแก้ไขเป็นฉบับร่างใหม่"
+
+msgid "Default ticket project"
+msgstr "โครงการตั๋วเริ่มต้น"
+
+msgid "Decision tree rules"
+msgstr "กฎต้นไม้การตัดสินใจ"
+
+msgid "Every node must contain at least one option."
+msgstr "ทุกโหนดต้องมีอย่างน้อยหนึ่งตัวเลือก"
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "โหนดสุดท้ายต้องจบการสนทนาหรือสร้างตั๋วสนับสนุน"
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "ลิงก์ไปยังต้องไม่สร้างวงจรใน v1"
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "ไม่อนุญาต URL ภายนอกใน v1 การดำเนินการลิงก์ต้องใช้พาธ Chamilo แบบสัมพัทธ์"
+
+msgid "Nodes"
+msgstr "โหนด"
+
+msgid "Add node"
+msgstr "เพิ่มโหนด"
+
+msgid "Entry node"
+msgstr "โหนดเริ่มต้น"
+
+msgid "Set as entry node"
+msgstr "ตั้งเป็นโหนดเริ่มต้น"
+
+msgid "Target node"
+msgstr "โหนดเป้าหมาย"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "ใช้พาธ Chamilo แบบสัมพัทธ์ เช่น \/tickets"
+
+msgid "Ticket category"
+msgstr "หมวดหมู่ตั๋ว"
+
+msgid "Select a default ticket project first."
+msgstr "เลือกโครงการตั๋วเริ่มต้นก่อน"
+
+msgid "Closing message"
+msgstr "ข้อความปิด"
+
+msgid "Select a node to edit it."
+msgstr "เลือกโหนดเพื่อแก้ไข"
+
+msgid "Support bot conversation"
+msgstr "การสนทนาบอทสนับสนุน"
+
+msgid "Transcript of %s"
+msgstr "ใบแสดงผลการเรียนของ %s"
+
+msgid "Download unofficial transcript"
+msgstr "ดาวน์โหลดใบแสดงผลการเรียนไม่เป็นทางการ"
+
+msgid "Issue official transcript"
+msgstr "ออกใบแสดงผลการเรียนอย่างเป็นทางการ"
+
+msgid "Official transcripts"
+msgstr "ใบแสดงผลการเรียนอย่างเป็นทางการ"
+
+msgid "No official transcript has been issued yet."
+msgstr "ยังไม่ได้ออกใบแสดงผลการเรียนอย่างเป็นทางการ"
+
+msgid "Issued by"
+msgstr "ออกโดย"
+
+msgid "Verify"
+msgstr "ตรวจสอบ"
+
+msgid "Signature of official transcripts"
+msgstr "ลายเซ็นของใบแสดงผลการเรียนอย่างเป็นทางการ"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "รูปภาพนี้จะพิมพ์บนใบแสดงผลการเรียนอย่างเป็นทางการของพอร์ทัลนี้ เหนือชื่อและตำแหน่งผู้ลงนามที่ตั้งไว้ในการตั้งค่าใบรับรอง"
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "ออกใบแสดงผลการเรียนอย่างเป็นทางการที่มีลายเซ็นพร้อมรายวิชาและเกรดที่แสดงในหน้านี้หรือไม่ สามารถตรวจสอบออนไลน์ได้จนกว่าจะถูกเพิกถอน"
+
+msgid "Official transcript issued"
+msgstr "ออกใบแสดงผลการเรียนอย่างเป็นทางการแล้ว"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "เพิกถอนใบแสดงผลการเรียนอย่างเป็นทางการนี้หรือไม่ หน้าตรวจสอบจะแสดงว่าถูกเพิกถอน"
+
+msgid "Official transcript revoked"
+msgstr "เพิกถอนใบแสดงผลการเรียนอย่างเป็นทางการแล้ว"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "เลือกภาพ PNG หรือ JPEG ก่อน"
+
+msgid "Signed credential"
+msgstr "หนังสือรับรองที่มีลายเซ็น"
+
+msgid "Issue signed credential"
+msgstr "ออกหนังสือรับรองที่มีลายเซ็น"
+
+msgid "Verify credential"
+msgstr "ตรวจสอบหนังสือรับรอง"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "ยึดบนเครือข่ายทดสอบ Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "ยืนยันธุรกรรม Sepolia ที่มีอยู่"
+
+msgid "Revoke signed credential"
+msgstr "เพิกถอนหนังสือรับรองที่มีลายเซ็น"
+
+msgid "Delete certificate"
+msgstr "ลบใบรับรอง"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "ยืนยันธุรกรรม Sepolia ที่มีอยู่"
+
+msgid "Sepolia transaction hash"
+msgstr "แฮชธุรกรรม Sepolia"
+
+msgid "Verify transaction"
+msgstr "ตรวจสอบธุรกรรม"
+
+msgid "Anchored"
+msgstr "ยึดแล้ว"
+
+msgid "Issued"
+msgstr "ออกแล้ว"
+
+msgid "Not issued"
+msgstr "ยังไม่ออก"
+
+msgid "Consent required"
+msgstr "ต้องได้รับความยินยอม"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "ยืนยันและตรวจสอบธุรกรรม Sepolia แล้ว"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "กระเป๋าเงินเครือข่ายทดสอบ Sepolia จะขอให้คุณลงนามธุรกรรม จะยึดเฉพาะลายนิ้วมือใบรับรองเท่านั้น ดำเนินการต่อหรือไม่"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "เพิกถอนหนังสือรับรองที่มีลายเซ็นนี้หรือไม่ ธุรกรรมบล็อกเชนยังคงถาวร แต่หน้าตรวจสอบจะรายงานการเพิกถอน"
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "ออกหนังสือรับรองใบรับรองที่มีลายเซ็นสำหรับผู้เรียนคนนี้หรือไม่ ทำให้รายละเอียดส่วนบุคคลที่อนุมัติแล้วสามารถตรวจสอบได้ด้วยลิงก์ส่วนตัว"
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "ต้องใช้กระเป๋าเงินเบราว์เซอร์ที่เข้ากันได้กับ EVM สำหรับ Sepolia"
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "เลือกเครือข่ายทดสอบ Sepolia (chain ID 11155111) ในกระเป๋าเงินของคุณ"
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "ที่อยู่กระเป๋าเงินหรือลายนิ้วมือใบรับรองไม่ถูกต้อง"
+
+msgid "Transaction pending"
+msgstr "ธุรกรรมอยู่ระหว่างดำเนินการ"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "ใช้ยืนยันธุรกรรม Sepolia ที่มีอยู่ภายหลัง"
+
+msgid "Signed credential issued"
+msgstr "ออกหนังสือรับรองที่ลงนามแล้ว"
+
+msgid "Credential revoked"
+msgstr "เพิกถอนหนังสือรับรองแล้ว"
+
+msgid "Transaction hash"
+msgstr "แฮชธุรกรรม"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "ความยินยอมในการเผยแพร่ให้อนุญาตผู้ดูแลระบบออกหนังสือรับรองที่ลงนามแล้ว และอาจยึดลายนิ้วมือ SHA-256 บนเครือข่ายทดสอบ Sepolia ได้ ไม่มีการส่งชื่อหรือข้อมูลส่วนบุคคลขึ้นเชน คุณสามารถถอนความยินยอมได้ทุกเมื่อ"
+
+msgid "Publication consent"
+msgstr "ความยินยอมในการเผยแพร่"
+
+msgid "Not approved"
+msgstr "ยังไม่อนุมัติ"
+
+msgid "Withdraw consent"
+msgstr "ถอนความยินยอม"
+
+msgid "Approve publication"
+msgstr "อนุมัติการเผยแพร่"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "ข้าพเจ้าอนุญาตให้มีหนังสือรับรองที่ลงนามและตรวจสอบได้ต่อสาธารณะ ซึ่งแสดงชื่อ หลักสูตร คะแนน และวันที่ออก ผู้ดูแลระบบอาจเผยแพร่เฉพาะลายนิ้วมือ SHA-256 บนเครือข่ายทดสอบ Sepolia ได้ ลายนิ้วมือจะคงอยู่ถาวรแม้ข้าพเจ้าจะถอนในภายหลัง ดำเนินการต่อหรือไม่?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "ถอนการอนุมัติเผยแพร่สำหรับใบรับรองนี้หรือไม่?"
+
+msgid "Publication approval recorded"
+msgstr "บันทึกการอนุมัติเผยแพร่แล้ว"
+
+msgid "Publication approval withdrawn"
+msgstr "ถอนการอนุมัติเผยแพร่แล้ว"
+
+msgid "Read more"
+msgstr "อ่านเพิ่มเติม"
+
+msgid "Participation: %s of %s posts"
+msgstr "การมีส่วนร่วม: %s จาก %s โพสต์"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "โพสต์ผลงานของคุณเพื่อดูการตอบกลับของผู้เข้าร่วมคนอื่น"
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "เฉพาะผู้สอบสวนที่ได้รับอนุญาตเท่านั้นที่สามารถตรวจสอบรายงานที่มีสิทธิ์ ตัวตนของผู้รายงานยังคงเป็นความลับตามค่าเริ่มต้น"
+
+msgid "New confidential report"
+msgstr "รายงานลับใหม่"
+
+msgid "Reported user"
+msgstr "ผู้ใช้ที่ถูกรายงาน"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "มีรายงานลับที่มีสิทธิ์รอการตรวจสอบ"
+
+msgid "Eligible investigations"
+msgstr "การสอบสวนที่มีสิทธิ์"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "คดีจะปรากฏที่นี่เมื่อมีผู้ใช้ต่างกันอย่างน้อย %s คนรายงานบุคคลเดียวกัน"
+
+msgid "Distinct reporters"
+msgstr "ผู้รายงานที่แตกต่างกัน"
+
+msgid "Reports for selected user"
+msgstr "รายงานสำหรับผู้ใช้ที่เลือก"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "ขณะนี้การรายงานแบบลับไม่พร้อมใช้งาน"
+
+msgid "The investigation could not be loaded."
+msgstr "ไม่สามารถโหลดการสอบสวนได้"
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "ตัวตนของคุณได้รับการปกป้องจากผู้สอบสวนตามค่าเริ่มต้น แต่หลีกเลี่ยงการใส่รายละเอียดที่ระบุตัวตนในข้อความรายงานหรือไฟล์แนบ นี่ไม่ใช่บริการฉุกเฉิน"
+
+msgid "Find the user involved"
+msgstr "ค้นหาผู้ใช้ที่เกี่ยวข้อง"
+
+msgid "Name or username"
+msgstr "ชื่อหรือชื่อผู้ใช้"
+
+msgid "Describe the situation"
+msgstr "อธิบายสถานการณ์"
+
+msgid "Evidence (optional)"
+msgstr "หลักฐาน (ไม่บังคับ)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "ได้สูงสุดสามไฟล์ ขนาดไม่เกิน 8 MiB ต่อไฟล์ รูปภาพ เสียง หรือวิดีโอสั้น"
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "ข้าพเจ้ายินยอมให้ผู้สอบสวนที่ได้รับอนุญาตเห็นชื่อและอีเมลของข้าพเจ้าสำหรับรายงานนี้โดยเฉพาะ ข้าพเจ้าสามารถถอนสิทธิ์นี้ในภายหลังได้"
+
+msgid "Send confidential report"
+msgstr "ส่งรายงานลับ"
+
+msgid "Could not search users"
+msgstr "ไม่สามารถค้นหาผู้ใช้ได้"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "ได้สูงสุดสามไฟล์ ขนาดไม่เกิน 8 MiB ต่อไฟล์"
+
+msgid "The confidential report could not be saved."
+msgstr "ไม่สามารถบันทึกรายงานลับได้"
+
+msgid "Confidential report"
+msgstr "รายงานลับ"
+
+msgid "Confidential conversation"
+msgstr "การสนทนาลับ"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "ผู้สอบสวนสามารถสื่อสารผ่านการสนทนานี้โดยไม่เห็นตัวตนของผู้รายงาน เว้นแต่จะเปิดการแชร์ข้อมูลติดต่อ"
+
+msgid "Reporter"
+msgstr "ผู้รายงาน"
+
+msgid "Investigator"
+msgstr "ผู้สอบสวน"
+
+msgid "Additional evidence (optional)"
+msgstr "หลักฐานเพิ่มเติม (ไม่บังคับ)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "ได้สูงสุดสามไฟล์ ขนาดไม่เกิน 8 MiB ต่อไฟล์ สูงสุดสิบไฟล์ต่อรายงาน"
+
+msgid "Contact shared voluntarily"
+msgstr "แชร์ข้อมูลติดต่อโดยสมัครใจ"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "อนุญาตให้ผู้สอบสวนเห็นชื่อและอีเมลของฉันสำหรับรายงานนี้"
+
+msgid "This confidential report is not available."
+msgstr "รายงานลับนี้ไม่พร้อมใช้งาน"
+
+msgid "Your message could not be saved."
+msgstr "ไม่สามารถบันทึกข้อความของคุณได้"
+
+msgid "Contact sharing could not be updated."
+msgstr "ไม่สามารถอัปเดตการแชร์รายชื่อติดต่อได้"
+
+msgid "Evidence could not be downloaded."
+msgstr "ไม่สามารถดาวน์โหลดหลักฐานได้"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ตัวอย่างกิจกรรมกรอกแบบฟอร์ม : คำนวณดัชนีมวลกาย</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>อายุ</strong></td>            <td width=\"75%\" style=\"\">[25] ปี</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>เพศ</strong></td>            <td style=\"\" text-align:=\"\">[M] (M หรือ F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>น้ำหนัก</strong></td>            <td style=\"\" text-align:=\"\">95 กก.</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>ส่วนสูง</strong></td>            <td style=\"vertical-align: top;\">1.81 ม.</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>ดัชนีมวลกาย</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =น้ำหนัก/ส่วนสูง<sup>2</sup> (ดู<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> บทความวิกิพีเดีย</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ตัวอย่างกิจกรรมกรอกแบบฟอร์ม : คำนวณดัชนีมวลกาย</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>อายุ</strong></td>            <td width=\"75%\" style=\"\">[25] ปี</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>เพศ</strong></td>            <td style=\"\" text-align:=\"\">[M] (M หรือ F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>น้ำหนัก</strong></td>            <td style=\"\" text-align:=\"\">95 กก.</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>ส่วนสูง</strong></td>            <td style=\"vertical-align: top;\">1.81 ม.</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>ดัชนีมวลกาย</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =น้ำหนัก/ส่วนสูง<sup>2</sup> (ดู<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> บทความวิกิพีเดีย</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "ซ่อนที่อยู่ IP จากรายงาน"
+
+msgid "Course settings policies"
+msgstr "นโยบายการตั้งค่าหลักสูตร"
+
+msgid "Academic transcripts"
+msgstr "ใบแสดงผลการเรียน"
+
+msgid "Transcript program title"
+msgstr "ชื่อโปรแกรมบนใบแสดงผลการเรียน"
+
+msgid "Transcript course code"
+msgstr "รหัสหลักสูตรบนใบแสดงผลการเรียน"
+
+msgid "Transcript course hours field"
+msgstr "ช่องจำนวนชั่วโมงหลักสูตรบนใบแสดงผลการเรียน"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "ชั่วโมงที่เรียนจบบนใบแสดงผลการเรียนคือชั่วโมงที่กำหนด"
+
+msgid "Transcript student number field"
+msgstr "ช่องรหัสนักศึกษาบนใบแสดงผลการเรียน"
+
+msgid "Transcript address fields"
+msgstr "ช่องที่อยู่บนใบแสดงผลการเรียน"
+
+msgid "Transcript grading scale"
+msgstr "มาตราส่วนเกรดบนใบแสดงผลการเรียน"
+
+msgid "Transcript GPA note"
+msgstr "หมายเหตุ GPA บนใบแสดงผลการเรียน"
+
+msgid "Transcript signatory name"
+msgstr "ชื่อผู้ลงนามบนใบแสดงผลการเรียน"
+
+msgid "Transcript signatory title"
+msgstr "ตำแหน่งผู้ลงนามบนใบแสดงผลการเรียน"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "เปิดใช้ใบรับรองที่มีลายเซ็นและการยึดโยงบน Sepolia testnet (ไม่บังคับ)"
+
+msgid "Show thread replies only after participating"
+msgstr "แสดงการตอบกลับในกระทู้เฉพาะหลังเข้าร่วมแล้ว"
+
+msgid "Show the forum category description in threads"
+msgstr "แสดงคำอธิบายหมวดหมู่ฟอรัมในกระทู้"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "สามารถเปลี่ยนการตั้งค่าการมีส่วนร่วมในฟอรัมได้ตามหลักสูตร"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "จำนวนโพสต์สูงสุดที่แสดงในกระทู้ฟอรัม"
+
+msgid "Posts required to complete a forum thread"
+msgstr "จำนวนโพสต์ที่ต้องมีเพื่อทำกระทู้ฟอรัมให้เสร็จ"
+
+msgid "Track e-mail openings"
+msgstr "ติดตามการเปิดอีเมล"
+
+msgid "Allow e-mail replies to messages"
+msgstr "อนุญาตให้ตอบข้อความทางอีเมล"
+
+msgid "Inbound e-mail address"
+msgstr "ที่อยู่อีเมลขาเข้า"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN ของกล่องจดหมายขาเข้า"
+
+msgid "Remember me duration (days)"
+msgstr "ระยะเวลาจดจำฉัน (วัน)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "เปิดใช้การลงทะเบียนไคลเอนต์ OAuth แบบไดนามิกนอกเหนือจาก MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "เปิดใช้การรายงานสวัสดิการแบบลับ"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "จำนวนผู้รายงานที่แตกต่างกันขั้นต่ำสำหรับการสอบสวน"
+
+msgid "Allow confidential evidence attachments"
+msgstr "อนุญาตไฟล์หลักฐานแนบแบบลับ"
+
+msgid "Show confidential investigation notifications"
+msgstr "แสดงการแจ้งเตือนการสอบสวนแบบลับ"
+
+msgid "Enable support chatbot"
+msgstr "เปิดใช้แชตบอทสนับสนุน"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "เลือกตำแหน่งที่ไฮไลต์คำศัพท์อภิธานศัพท์โดยอัตโนมัติ: เอกสาร แบบฝึกหัด และเส้นทางการเรียนรู้"
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "ซ่อนที่อยู่ IP ในรายงานภาพและการส่งออกรายงาน ที่อยู่ IP ยังคงถูกจัดเก็บและเข้าถึงได้ผ่านขั้นตอนข้อมูลส่วนบุคคลที่ได้รับอนุญาต"
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "ค่าเริ่มต้นของแพลตฟอร์มและสิทธิ์แก้ไขหลักสูตร จัดการในการตั้งค่าหลักสูตร"
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "ให้ผู้ใช้ดาวน์โหลดใบแสดงผลการเรียนอย่างไม่เป็นทางการของหลักสูตรที่เรียนจบ และให้นักบริหาร นักบริหารเซสชัน และผู้จัดการทรัพยากรบุคคลออกใบแสดงผลการเรียนอย่างเป็นทางการที่มีลายเซ็นสำหรับผู้ใช้ที่ตนดูแล รูปภาพลายเซ็นอัปโหลดจากหน้าใบแสดงผลการเรียนของผู้ใช้"
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "ชื่อโปรแกรมที่พิมพ์บนใบแสดงผลการเรียนทุกฉบับ เช่น ชื่อประกาศนียบัตรที่จัดเตรียมบนแพลตฟอร์มนี้"
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "ช่องหลักสูตรใดที่ใช้เติมคอลัมน์รหัสหลักสูตรบนใบแสดงผลการเรียน: รหัสหลักสูตรหรือชื่อแผนก"
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "ตัวแปรของช่องเพิ่มเติมของหลักสูตรที่เก็บจำนวนชั่วโมงของหลักสูตร เว้นว่างเพื่อใช้ระยะเวลาของหลักสูตร"
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "พิมพ์ชั่วโมงที่กำหนดของหลักสูตรเป็นชั่วโมงที่ผู้เรียนเรียนจบ เมื่อปิดใช้ ชั่วโมงที่เรียนจบคือเวลาที่ผู้เรียนใช้ในหลักสูตร"
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "ตัวแปรของช่องเพิ่มเติมของผู้ใช้ที่เก็บรหัสนักศึกษาที่พิมพ์บนใบแสดงผลการเรียน เว้นว่างเพื่อไม่พิมพ์"
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "ตัวแปรของช่องเพิ่มเติมของผู้ใช้ คั่นด้วยจุลภาค ที่พิมพ์ต่อจากที่อยู่ของผู้ใช้บนใบแสดงผลการเรียน เช่น เมือง รัฐ และรหัสไปรษณีย์"
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "รายการ JSON ของตัวอักษรเกรด จากคะแนนขั้นต่ำสูงสุดลงมา: แต่ละรายการมีคะแนนขั้นต่ำเป็นเปอร์เซ็นต์ (min) ตัวอักษร และแต้มเกรดที่ใช้คำนวณ GPA"
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "คำอธิบายวิธีคำนวณ GPA พิมพ์ใต้ GPA บนใบแสดงผลการเรียน"
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "ชื่อเจ้าหน้าที่ของสถาบันที่ลงนามใบแสดงผลการเรียนอย่างเป็นทางการ"
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "ตำแหน่งเจ้าหน้าที่ของสถาบันที่ลงนามใบแสดงผลการเรียนอย่างเป็นทางการ"
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "ต้องได้รับความยินยอมอย่างชัดเจนจากเจ้าของและการดำเนินการด้วยตนเองของนักบริหาร ส่งเฉพาะลายนิ้วมือ SHA-256 ขึ้นเชน"
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "ผู้เรียนจะเห็นเฉพาะโพสต์แรกของกระทู้ในฟอรัมจนกว่าจะโพสต์ในกระทู้นั้นเอง ผู้ดูแลระบบ ครู โค้ช และติวเตอร์กลุ่มจะเห็นทุกโพสต์เสมอ"
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "แสดงชื่อและคำอธิบายย่อของหมวดหมู่ฟอรัมที่ด้านบนของแต่ละกระทู้ พร้อมลิงก์เพื่ออ่านคำอธิบายฉบับเต็ม"
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "เมื่อเปิดใช้งาน ครูสามารถเลือกในส่วนฟอรัมของการตั้งค่าหลักสูตรได้ว่าหลักสูตรจะซ่อนการตอบกลับกระทู้จนกว่าผู้เรียนจะโพสต์ แสดงคำอธิบายหมวดหมู่ในกระทู้ และจำนวนโพสต์ที่แถบความคืบหน้าการมีส่วนร่วมคาดหวัง แทนที่จะใช้การตั้งค่าของแพลตฟอร์ม"
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "แสดงเฉพาะจำนวนโพสต์นี้ของแต่ละกระทู้ฟอรัมแก่ผู้ใช้ทุกคนที่ไม่ใช่ผู้ดูแลแพลตฟอร์ม รวมถึงครู และแก่ทุกคนภายในเส้นทางการเรียนรู้ ในมุมมองแบบกระทู้และแบบซ้อน ขีดจำกัดจะใช้กับการตอบกลับของแต่ละโพสต์ โพสต์จะคงลำดับตามมุมมอง: โพสต์แรก หรือโพสต์ล่าสุดภายในเส้นทางการเรียนรู้ ซึ่งโพสต์ล่าสุดจะมาก่อน ตั้งเป็น 0 เพื่อแสดงทุกโพสต์"
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "แสดงแถบความคืบหน้าแก่ผู้เรียนในแต่ละกระทู้ฟอรัม ซึ่งจะถึง 100% เมื่อโพสต์ครบจำนวนข้อความนี้ในกระทู้นั้น โพสต์ที่รอการกลั่นกรองจะถูกนับด้วย ตั้งเป็น 0 เพื่อซ่อนแถบความคืบหน้า"
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "เพิ่มรูปภาพติดตามขนาดเล็กในอีเมลแจ้งเตือนข้อความ และบันทึกเมื่อมีการร้องขอ วิธีนี้บ่งชี้เพียงว่าอีเมลอาจถูกเปิด ไม่ได้พิสูจน์ว่าได้อ่านแล้ว"
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "อนุญาตให้ผู้รับการแจ้งเตือนข้อความโดยตรงตอบกลับทางอีเมล ข้อความขาเข้าต้องถูกส่งต่อไปยังคำสั่งอีเมลขาเข้าของ Chamilo โดยโครงสร้างพื้นฐานของเมล"
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "ที่อยู่ฐานที่ใช้สำหรับกำหนดเส้นทางตอบกลับ เช่น replies@example.com Chamilo จะเพิ่มโทเค็นผู้รับที่ไม่ซ้ำกันโดยใช้ plus addressing"
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "การเชื่อมต่อกล่องจดหมายที่ใช้รวบรวมการตอบกลับขาเข้า เช่น imaps://user:password@imap.example.com:993/INBOX เข้ารหัสอักขระสงวนในข้อมูลรับรองด้วย URL-encode"
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "จำนวนวันที่ให้ผู้ใช้ลงชื่อเข้าใช้ค้างไว้เมื่อเลือก จดจำฉัน ตั้งเป็น 0 เพื่อปิดใช้งาน ต้องใช้ HTTPS ช่วงที่อนุญาต: 0 ถึง 90 ระยะหมดเวลาเซสชันปกติตั้งค่าแยกต่างหากใน PHP/Symfony"
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "อนุญาตให้ Dynamic Client Registration ขอขอบเขตใดก็ได้ที่ลงทะเบียนโดยเซิร์ฟเวอร์ทรัพยากร OAuth ของ Chamilo เมื่อปิดใช้งาน การลงทะเบียนด้วยตนเองจะจำกัดอยู่ที่ MCP การเข้าถึงทรัพยากรจะถูกจำกัดแยกต่างหากเสมอตามรายการทรัพยากรที่อนุญาตของแต่ละไคลเอนต์"
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "เปิดใช้งานรายงานเหตุการณ์ที่เป็นความลับ โมดูลนี้ต้องมีคีย์เข้ารหัสที่ได้รับการป้องกันและสิทธิ์ของผู้สอบสวน"
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "ต้องมีผู้รายงานที่แตกต่างกันระหว่าง 2 ถึง 10 คนรายงานผู้ใช้คนเดียวกันก่อนที่คดีจะปรากฏต่อผู้สอบสวน"
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "อนุญาตหลักฐานเป็นรูปภาพ เสียง และวิดีโอสั้น ไฟล์แนบที่มีอยู่ยังอ่านได้เมื่อปิดใช้งาน"
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "แสดงตัวบ่งชี้ภายในของการสอบสวนที่มีสิทธิ์ ไม่ส่งอีเมลหรือการแจ้งเตือนภายนอก"
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "แสดงแชตบอตแบบต้นไม้การตัดสินใจในแผงแชตที่สามารถแนะนำผู้ใช้ไปยัง "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "อนุญาตให้ครูสร้างและทำเวอร์ชันแอปพลิเคชันการศึกษาที่ช่วยด้วย AI ภายในหลักสูตร"
+
+msgid "Department name"
+msgstr "ชื่อแผนก"
+
+msgid "Documents and exercise"
+msgstr "เอกสารและแบบฝึกหัด"
+
+msgid "Documents and learning path"
+msgstr "เอกสารและเส้นทางการเรียนรู้"
+
+msgid "Documents, exercise and learning path"
+msgstr "เอกสาร แบบฝึกหัด และเส้นทางการเรียนรู้"
+
+msgid "session"
+msgstr "เซสชัน"
+
+msgid "course"
+msgstr "หลักสูตร"
+
+msgid "You have been enrolled in %s"
+msgstr "คุณได้ลงทะเบียนใน %s"
 

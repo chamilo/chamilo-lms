@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Pagarbiai"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulės pavyzdys: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulės pavyzdys: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Kintamųjų ribos"
@@ -28769,6 +28769,9 @@ msgstr "Dabartinis naudotojas nerastas."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Sveiki %s,<br><br>Jūs užsiregistravote %s.<br>Jūs galite prisijungti prie savo paskyros <a href=\"%s\">čia</a>.<br><br>Jūsų prisijungimo duomenys:<br>Naudotojo vardas: <strong>%s</strong><br>Slaptažodis: <strong>%s</strong><br><br>Geriausiais linkėjimais,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Sveiki, %s,<br><br>Jūs esate užregistruoti sistemoje %s.<br>Naudotojo vardas: <strong>%s</strong><br><br>Spustelėkite toliau esančią nuorodą, kad nustatytumėte slaptažodį ir prisijungtumėte prie paskyros:<br><a href=\"%s\">Nustatyti slaptažodį</a><br><br>Pagarbiai,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Jūs užsiregistravote %s"
 
@@ -41572,4 +41575,1616 @@ msgstr "Migracijų istorija užregistruota"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s yra projekto šakniniame kataloge: ištrinkite jį, kad uždarytumėte atnaujinimo galinius taškus"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Už šį pratimą gavote pažymėjimą"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Prieš pasiekdami šį mokymosi kelią turite užbaigti mokymosi kelią „%s“."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Ar tikrai norite visam laikui ištrinti šį failą?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Ar tikrai norite atskirti šį failą nuo pasirinkto kurso?"
+
+msgid "Attach this file to another course"
+msgstr "Pridėti šį failą prie kito kurso"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Pridėti prie pasirinkto kurso (-ų) (paslėpta)"
+
+msgid "Course(s):"
+msgstr "Kursas (-ai):"
+
+msgid "Delete definitively"
+msgstr "Ištrinti visam laikui"
+
+msgid "Detach from this course"
+msgstr "Atskirti nuo šio kurso"
+
+msgid "File actions"
+msgstr "Failo veiksmai"
+
+msgid "File Information"
+msgstr "Failo informacija"
+
+msgid "File Link:"
+msgstr "Failo nuoroda:"
+
+msgid "File Path:"
+msgstr "Failo kelias:"
+
+msgid "Filter courses..."
+msgstr "Filtruoti kursus..."
+
+msgid "MIME Type:"
+msgstr "MIME tipas:"
+
+msgid "N/A"
+msgstr "Nėra"
+
+msgid "No results found."
+msgstr "Rezultatų nerasta."
+
+msgid "Original Name"
+msgstr "Originalus pavadinimas"
+
+msgid "Original Name:"
+msgstr "Originalus pavadinimas:"
+
+msgid "Orphan"
+msgstr "Našlaitis"
+
+msgid "Resource File ID:"
+msgstr "Ištekliaus failo ID:"
+
+msgid "Resource Node ID:"
+msgstr "Ištekliaus mazgo ID:"
+
+msgid "Search..."
+msgstr "Ieškoti..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Norėdami atskirti šį failą nuo konkretaus kurso, spustelėkite atitinkamos kurso žymės piktogramą „×“ aukščiau."
+
+msgid "User:"
+msgstr "Naudotojas:"
+
+msgid "View file information"
+msgstr "Peržiūrėti failo informaciją"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Šį failą galite pridėti prie vieno ar kelių kursų (paslėpta dokumentų šaknyje). Jei failas nebenaudojamas ir tampa našlaičiu, galite jį ir visam laikui ištrinti."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Galite pasirinkti vieną ar kelis kursus (naudokite Ctrl/Cmd + spustelėjimą)."
+
+msgid "bytes"
+msgstr "baitai"
+
+msgid "Failed to copy:"
+msgstr "Nepavyko nukopijuoti:"
+
+msgid "Missing resource file identifier."
+msgstr "Trūksta ištekliaus failo identifikatoriaus."
+
+msgid "Please select at least one course."
+msgstr "Pasirinkite bent vieną kursą."
+
+msgid "Resource file not found."
+msgstr "Ištekliaus failas nerastas."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Failas „%s“ pridėtas prie %d kurso (-ų): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Kai kurie kursai praleisti: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Trūksta failo arba kurso identifikatoriaus."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Šis ištekliaus failas neturi ištekliaus mazgo ir negali būti atskirtas."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Failas atskirtas nuo %d kurso nuorodos (-ų)."
+
+msgid "This file is not attached to the selected course."
+msgstr "Šis failas nėra pridėtas prie pasirinkto kurso."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Šis failas vis dar naudojamas bent vieno ištekliaus ir negali būti ištrintas."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Našlaičio failas ir jo fizinis turinys visam laikui ištrinti."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Apklausa paskelbta. Sukurta: %d. Atnaujinta: %d. Išsiųsta žinučių: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Įgyjama"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Šio gebėjimo negalima įgyti"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Naujokas"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Griežtas taisyklių ir nuo konteksto nepriklausomų nurodymų laikymasis; menkas situacijos vertinimas."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Pažengęs pradedantysis"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Pradeda atpažinti situacijos aspektus ir dėsningumus, bet vis dar reikia gairių."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kompetentingas"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Kuria planavimą ir mentalinius modelius; prisiima atsakomybę už rezultatus, bet gali jaustis priblokštas sudėtingumo."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Įgudęs"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Mato „bendrą vaizdą“, intuityviai nustato prioritetus ir mokosi iš patirties."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Ekspertas"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Intuityvus, sklandus atlikimas; remiasi giliomis neišreikštomis žiniomis; gali inovuoti arba lengvai spręsti naujas situacijas."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Įsiminimas"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Išgauti, prisiminti arba atpažinti aktualias žinias iš ilgalaikės atminties."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Supratimas"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Kurti prasmę iš mokymo pranešimų, įskaitant žodinę, rašytinę ir grafinę komunikaciją. Demonstruoti supratimą interpretuojant, pateikiant pavyzdžius, klasifikuojant, apibendrinant, darant išvadas, lyginant ar aiškinant."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Taikymas"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Atlikti arba naudoti procedūrą ją vykdant ar įgyvendinant duotoje situacijoje. Naudoti žinias ar įgūdžius naujose ar konkrečiose situacijose."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Analizavimas"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Suskaidyti medžiagą į sudedamąsias dalis ir nustatyti, kaip dalys susijusios tarpusavyje ir su bendra struktūra ar tikslu. Nustatyti motyvus, priežastis ar ryšius."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Vertinimas"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Priimti sprendimus pagal kriterijus ir standartus. Tikrinti, kritikuoti ar pagrįsti sprendimus ar veiksmų eigą."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Kūrimas"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Sudėti elementus į darnią ar funkcinę visumą; pertvarkyti elementus į naują modelį ar struktūrą. Kurti originalų darbą ar generuoti naujas idėjas."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Sekti"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Dirba glaudžiai prižiūrimas ir vadovaujamas. Atlieka rutinines užduotis su ribota diskrecija. Dėmesys instrukcijų laikymuisi ir pagrindiniam vykdymui."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Padėti"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Dirba įprastai prižiūrimas. Teikia pagalbą kitiems, prisideda prie komandos užduočių ir pradeda imtis iniciatyvos nustatytose ribose."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Dirba bendrai prižiūrimas. Taiko žinias ir įgūdžius įvairioms rutinoms ir nerutininėms veikloms. Naudoja tam tikrą diskreciją ir sprendimą."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Dirba pagal plačią kryptį. Įgalina kitus teikdamas specialisto gaires, palaikymą ar paslaugas. Prisiima atsakomybę už savo darbą ir gali prižiūrėti mažas komandas ar užduotis."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Užtikrinti ir patarti"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Dirba pagal plačią kryptį, bet su didele autonomija. Užtikrina, kad darbas atitiktų tikslus, ir pataria sudėtingais klausimais. Dažnai vadovauja komandoms ar projektams ir daro įtaką sprendimams."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Inicijuoti ir daryti įtaką"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Turi apibrėžtą įgaliojimą ir atsakomybę už reikšmingą darbo sritį. Inicijuoja veiksmus, daro įtaką strategijai ir politikai savo srityje ir vadovauja dideliems projektams ar komandoms."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Nustatyti strategiją, įkvėpti, mobilizuoti"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Turi įgaliojimus aukščiausiu organizacijos lygiu svarbioje darbo srityje. Nustato ilgalaikę strategiją, įkvepia ir mobilizuoja kitus ir priima sprendimus, kritiškus organizacijos sėkmei. Daro įtaką pramonės ar išoriniu lygiu."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Maksimalus neaktyvumo laikas, į kurį atsižvelgiama (minutėmis)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Kursų puslapis paliktas atidarytas toliau siunčia automatines užklausas. Po šio minučių skaičiaus be tikro naudotojo veiksmo (puslapio ar elemento atidarymo, atsakymo ir pan.) laikas, praleistas kurse, nustoja būti skaičiuojamas."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Bendradarbiavimo viki redaktorius"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Jungiamasi prie Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Išsaugojimas sukuria naują Chamilo viki versiją iš dabartinio Etherpad turinio."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Bendradarbiavimo redaktoriaus nepavyko įkelti."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Įjungti Etherpad viki redagavimui"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Naudoti Etherpad kaip bendradarbiavimo redaktorių esamiems viki puslapiams. Etherpad turi būti pasiekiamas tame pačiame originyje kaip Chamilo, kad būtų saugios įterptos sesijos."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpad instancijos bazinis URL, įskaitant pasirenkamą atvirkštinio tarpinio serverio kelią. Pavyzdys: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API raktas"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API raktas, kurį Chamilo naudoja padams, sesijoms kurti ir viki turiniui sinchronizuoti. Sukonfigūruokite Etherpad priimti autentifikavimą API raktu."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Numatytąjį naujų dokumentų matomumą galima keisti pagal kursą"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Matomumas, suteikiamas naujam dokumentui, aplankui ar įkeltam failui, kai mokytojas jį sukuria kurse. Mokytojai vis tiek gali vėliau keisti kiekvieno matomumą."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Kai įjungta, mokytojai gali kurso nustatymuose pasirinkti matomumą, suteikiamą naujiems savo kurso dokumentams, vietoj platformos numatytojo."
+
+msgid "Default visibility of new learning paths"
+msgstr "Numatytasis naujų mokymosi takų matomumas"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Numatytąjį naujų mokymosi takų matomumą galima keisti pagal kursą"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Matomumas, suteikiamas naujam mokymosi takui, kai mokytojas jį sukuria kurse. Mokytojai vis tiek gali vėliau keisti kiekvieno matomumą."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Kai įjungta, mokytojai gali kurso nustatymuose pasirinkti matomumą, suteikiamą naujiems savo kurso mokymosi takams, vietoj platformos numatytojo."
+
+msgid "Default visibility of new tests"
+msgstr "Numatytasis naujų testų matomumas"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Numatytąjį naujų testų matomumą galima keisti pagal kursą"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Matomumas, suteikiamas naujam testui, kai mokytojas jį sukuria kurse. Mokytojai vis tiek gali vėliau pakeisti kiekvieno testo matomumą."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Kai įjungta, mokytojai kurso nustatymuose gali pasirinkti savo kurso naujų testų matomumą, o ne platformos numatytąjį."
+
+msgid "Default visibility for new learning paths"
+msgstr "Numatytasis naujų mokymosi takų matomumas"
+
+msgid "Default visibility for new tests"
+msgstr "Numatytasis naujų testų matomumas"
+
+msgid "Following"
+msgstr "Sekami"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Gauti el. laišką, kai mokinys komentuoja šios užduoties pateikimą"
+
+msgid "Payment history"
+msgstr "Mokėjimų istorija"
+
+msgid "No payments yet"
+msgstr "Mokėjimų dar nėra"
+
+msgid "Cancel service"
+msgstr "Atšaukti paslaugą"
+
+msgid "Official transcript"
+msgstr "Oficialus transkriptas"
+
+msgid "Unofficial transcript"
+msgstr "Neoficialus transkriptas"
+
+msgid "Student name"
+msgstr "Studento vardas"
+
+msgid "Student number"
+msgstr "Studento numeris"
+
+msgid "Program title"
+msgstr "Programos pavadinimas"
+
+msgid "Required hours"
+msgstr "Reikalingos valandos"
+
+msgid "Completion date"
+msgstr "Baigimo data"
+
+msgid "Hours completed"
+msgstr "Atliktos valandos"
+
+msgid "Final grade"
+msgstr "Galutinis pažymys"
+
+msgid "Grade"
+msgstr "Pažymys"
+
+msgid "No completed course yet."
+msgstr "Dar nėra baigto kurso."
+
+msgid "Grading scale"
+msgstr "Vertinimo skalė"
+
+msgid "Signature of school official"
+msgstr "Mokyklos atstovo parašas"
+
+msgid "School official"
+msgstr "Mokyklos atstovas"
+
+msgid "Official's title"
+msgstr "Atstovo pareigos"
+
+msgid "Verify this transcript at"
+msgstr "Patikrinkite šį transkriptą adresu"
+
+msgid "Verification code"
+msgstr "Patvirtinimo kodas"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Šis neoficialus transkriptas nėra pasirašytas. Paprašykite administratoriaus oficialaus transkripto."
+
+msgid "Transcript verification"
+msgstr "Transkripto patikra"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Patikrinkite, kad šis oficialus transkriptas buvo išduotas ir pasirašytas institucijos, nebuvo pakeistas ir nėra atšauktas."
+
+msgid "Valid"
+msgstr "Galioja"
+
+msgid "Invalid signature"
+msgstr "Neteisingas parašas"
+
+msgid "Transcript not found"
+msgstr "Transkriptas nerastas"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Institucijos parašas galioja ir šis transkriptas nėra atšauktas."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Šio transkripto negalima patvirtinti kaip galiojančio. Jo duomenys nerodomi."
+
+msgid "Transcript details"
+msgstr "Transkripto duomenys"
+
+msgid "Institution"
+msgstr "Institucija"
+
+msgid "Issued on"
+msgstr "Išduota"
+
+msgid "Download verification JSON"
+msgstr "Atsisiųsti patikros JSON"
+
+msgid "Transcript"
+msgstr "Transkriptas"
+
+msgid "My confidential reports"
+msgstr "Mano konfidencialios ataskaitos"
+
+msgid "My transcript"
+msgstr "Mano transkriptas"
+
+msgid "Confidential investigations"
+msgstr "Konfidencialūs tyrimai"
+
+msgid "Floor plan"
+msgstr "Aukšto planas"
+
+msgid "Click a highlighted room to select it"
+msgstr "Spustelėkite paryškintą kambarį, kad jį pasirinktumėte"
+
+msgid "Select room"
+msgstr "Pasirinkti kambarį"
+
+msgid "Room on floor plan"
+msgstr "Kambarys aukšto plane"
+
+msgid "Select a branch first"
+msgstr "Pirmiausia pasirinkite filialą"
+
+msgid "The branch has no attached floor plan"
+msgstr "Filialas neturi pridėto aukšto plano"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Naudokite daugiakampio įrankį kambariui apibrėžti; naudokite Redaguoti kampams perkelti"
+
+msgid "Save room area"
+msgstr "Išsaugoti kambario plotą"
+
+msgid "Clear room area"
+msgstr "Išvalyti kambario plotą"
+
+msgid "Save the room form to persist the area"
+msgstr "Išsaugokite kambario formą, kad plotas būtų išsaugotas"
+
+msgid "Floor plan unavailable"
+msgstr "Aukšto planas nepasiekiamas"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Kambario žemėlapio taškai turi būti aukšto plane"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Ar tikrai norite išvalyti kambario plotą?"
+
+msgid "View room on floor plan"
+msgstr "Peržiūrėti kambarį aukšto plane"
+
+msgid "No floor plan available"
+msgstr "Aukšto plano nėra"
+
+msgid "This is an assignment by groups"
+msgstr "Tai užduotis grupėms"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Įkelkite PNG, JPEG arba saugų statinį SVG aukšto planą arba pasirinkite esamą vaizdą iš Dokumentų."
+
+msgid "Upload floor plan"
+msgstr "Įkelti aukšto planą"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG arba statinis SVG, daugiausia 10 MB"
+
+msgid "Search images by name"
+msgstr "Ieškoti vaizdų pagal pavadinimą"
+
+msgid "Image name"
+msgstr "Vaizdo pavadinimas"
+
+msgid "Select an image"
+msgstr "Pasirinkti vaizdą"
+
+msgid "Change floor plan"
+msgstr "Keisti aukšto planą"
+
+msgid "Attach floor plan"
+msgstr "Pridėti aukšto planą"
+
+msgid "No matching images found in Documents."
+msgstr "Dokumentuose nerasta atitinkančių vaizdų."
+
+msgid "Current floor plan"
+msgstr "Dabartinis aukšto planas"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Aukšto plano pakeitimai išsaugomi automatiškai."
+
+msgid "Remove floor plan"
+msgstr "Pašalinti aukšto planą"
+
+msgid "Cannot load images"
+msgstr "Nepavyksta įkelti vaizdų"
+
+msgid "Floor plan saved"
+msgstr "Aukšto planas išsaugotas"
+
+msgid "Cannot attach floor plan"
+msgstr "Nepavyksta pridėti aukšto plano"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Palaikomi tik PNG/JPEG ir saugūs statiniai SVG vaizdai iki 10 MB."
+
+msgid "Cannot upload floor plan"
+msgstr "Nepavyksta įkelti aukšto plano"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Ar tikrai norite pašalinti aukšto planą?"
+
+msgid "Floor plan removed"
+msgstr "Aukšto planas pašalintas"
+
+msgid "Cannot remove floor plan"
+msgstr "Nepavyksta pašalinti aukšto plano"
+
+msgid "Support bot"
+msgstr "Pagalbos robotas"
+
+msgid "Connected"
+msgstr "Prisijungta"
+
+msgid "Not connected"
+msgstr "Neprisijungta"
+
+msgid "View ticket"
+msgstr "Peržiūrėti užklausą"
+
+msgid "Start a new conversation"
+msgstr "Pradėti naują pokalbį"
+
+msgid "Video call"
+msgstr "Vaizdo skambutis"
+
+msgid "Incoming video call"
+msgstr "Įeinantis vaizdo skambutis"
+
+msgid "Decline"
+msgstr "Atmesti"
+
+msgid "Mute microphone"
+msgstr "Išjungti mikrofoną"
+
+msgid "Unmute microphone"
+msgstr "Įjungti mikrofoną"
+
+msgid "Turn camera off"
+msgstr "Išjungti kamerą"
+
+msgid "Turn camera on"
+msgstr "Įjungti kamerą"
+
+msgid "Hang up"
+msgstr "Baigti pokalbį"
+
+msgid "Calling..."
+msgstr "Skambinama..."
+
+msgid "Connecting..."
+msgstr "Jungiamasi..."
+
+msgid "Your contact is busy."
+msgstr "Jūsų kontaktas užimtas."
+
+msgid "Your contact did not answer the call."
+msgstr "Jūsų kontaktas neatsiliepė."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Jūsų kontaktas negalėjo pasiekti kameros ar mikrofono."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Jūsų kontaktas negalėjo paruošti vaizdo skambučio."
+
+msgid "Your contact refused the call."
+msgstr "Jūsų kontaktas atsisakė skambučio."
+
+msgid "The call timed out."
+msgstr "Skambutis baigėsi dėl laiko limito."
+
+msgid "Your contact cancelled the call."
+msgstr "Jūsų kontaktas atšaukė skambutį."
+
+msgid "The video connection was lost."
+msgstr "Vaizdo ryšys nutrūko."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Jūsų kontaktas negalėjo užmegzti vaizdo ryšio."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Jūsų kontaktas negalėjo užbaigti vaizdo skambučio nustatymo."
+
+msgid "Your contact hung up."
+msgstr "Jūsų kontaktas padėjo ragelį."
+
+msgid "Video call could not be started"
+msgstr "Nepavyko pradėti vaizdo skambučio"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Kameros arba mikrofono leidimas buvo atmestas."
+
+msgid "No camera or microphone was found."
+msgstr "Kamera arba mikrofonas nerastas."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Kamera arba mikrofonas jau naudojamas arba nepasiekiamas."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Kamera arba mikrofonas nepalaiko reikiamų nustatymų."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Nepavyko gauti prieigos prie kameros arba mikrofono."
+
+msgid "The video call could not be prepared."
+msgstr "Nepavyko paruošti vaizdo skambučio."
+
+msgid "The video call request could not be sent."
+msgstr "Nepavyko išsiųsti vaizdo skambučio užklausos."
+
+msgid "The incoming video call could not be processed."
+msgstr "Nepavyko apdoroti įeinančio vaizdo skambučio."
+
+msgid "The video call answer could not be prepared."
+msgstr "Nepavyko paruošti vaizdo skambučio atsakymo."
+
+msgid "The video call answer could not be sent."
+msgstr "Nepavyko išsiųsti vaizdo skambučio atsakymo."
+
+msgid "The video call answer could not be processed."
+msgstr "Nepavyko apdoroti vaizdo skambučio atsakymo."
+
+msgid "The video connection failed"
+msgstr "Vaizdo ryšys nepavyko"
+
+msgid "The video connection could not be established."
+msgstr "Nepavyko užmegzti vaizdo ryšio."
+
+msgid "No answer was received."
+msgstr "Atsakymas negautas."
+
+msgid "You refused the call."
+msgstr "Jūs atsisakėte skambučio."
+
+msgid "You cancelled the call."
+msgstr "Jūs atšaukėte skambutį."
+
+msgid "You hung up."
+msgstr "Jūs padėjote ragelį."
+
+msgid "You missed the call."
+msgstr "Jūs praleidote skambutį."
+
+msgid "Support bot is currently unavailable."
+msgstr "Pagalbos robotas šiuo metu nepasiekiamas."
+
+msgid "A support ticket has been created."
+msgstr "Pagalbos užklausa sukurta."
+
+msgid "Conversation ended."
+msgstr "Pokalbis baigtas."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Pagalbos robotas negalėjo tęsti šio pokalbio. Bandykite dar kartą."
+
+msgid "Add your first term glossary to this course"
+msgstr "Pridėkite pirmąjį terminų žodynėlį prie šio kurso"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Ar tikrai norite ištrinti šį apklausos šabloną?"
+
+msgid "The survey template has been deleted."
+msgstr "Apklausos šablonas ištrintas."
+
+msgid "Please select a course."
+msgstr "Pasirinkite kursą."
+
+msgid "Please select a session for this course."
+msgstr "Pasirinkite sesiją šiam kursui."
+
+msgid "The survey has been created from the template."
+msgstr "Apklausa sukurta pagal šabloną."
+
+msgid "Survey templates"
+msgstr "Apklausų šablonai"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Kurkite pakartotinai naudojamus apklausų šablonus mokytojams ir priskirkite juos tiesiogiai kursui arba sesijai."
+
+msgid "Subtitle"
+msgstr "Paantraštė"
+
+msgid "Assign to course"
+msgstr "Priskirti kursui"
+
+msgid "Assign template to course"
+msgstr "Priskirti šabloną kursui"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Palikite sesiją tuščią, kad apklausa būtų sukurta tiesiogiai kurse."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Šis kursas portale pasiekiamas per sesiją, todėl sesija privaloma."
+
+msgid "Survey template questions"
+msgstr "Apklausos šablono klausimai"
+
+msgid "Back to survey templates"
+msgstr "Grįžti prie apklausų šablonų"
+
+msgid "Could not load survey template"
+msgstr "Nepavyko įkelti apklausos šablono"
+
+msgid "Could not load survey template questions"
+msgstr "Nepavyko įkelti apklausos šablono klausimų"
+
+msgid "Could not save survey template question"
+msgstr "Nepavyko išsaugoti apklausos šablono klausimo"
+
+msgid "Could not delete survey template question"
+msgstr "Nepavyko ištrinti apklausos šablono klausimo"
+
+msgid "Could not move survey template question"
+msgstr "Nepavyko perkelti apklausos šablono klausimo"
+
+msgid "Could not copy survey template question"
+msgstr "Nepavyko nukopijuoti apklausos šablono klausimo"
+
+msgid "The survey template has been saved."
+msgstr "Apklausos šablonas išsaugotas."
+
+msgid "Edit survey template"
+msgstr "Redaguoti apklausos šabloną"
+
+msgid "Create survey template"
+msgstr "Kurti apklausos šabloną"
+
+msgid "The survey template title is required."
+msgstr "Apklausos šablono pavadinimas yra privalomas."
+
+msgid "Visible as template"
+msgstr "Matomas kaip šablonas"
+
+msgid "Create satisfaction survey"
+msgstr "Kurti pasitenkinimo apklausą"
+
+msgid "Training satisfaction survey"
+msgstr "Mokymų pasitenkinimo apklausa"
+
+msgid "Could not create satisfaction survey"
+msgstr "Nepavyko sukurti pasitenkinimo apklausos"
+
+msgid "Use template"
+msgstr "Naudoti šabloną"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Sukurti šią apklausą iš administratoriaus parengto pakartotinai naudojamo šablono."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Rezultatai paslėpti nuo mokytojo/tutoriaus"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Mokytojai ir tutoriai vis tiek gali matyti atsakymų skaičių ir siųsti priminimus, bet negali atidaryti ar eksportuoti apklausos rezultatų."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Šablonas pritaikytas. Peržiūrėkite apklausos nustatymus ir išsaugokite, kad ją sukurtumėte."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Apklausos rezultatai paslėpti nuo mokytojų ir tutorių."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Kvietimų puslapyje vis tiek galite matyti atsakymų skaičių ir siųsti priminimus."
+
+msgid "Payment method"
+msgstr "Mokėjimo būdas"
+
+msgid "Preview mode"
+msgstr "Peržiūros režimas"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Peržiūros režime pažanga ir įvertinimas neišsaugomi."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Šios nuorodos negalima rodyti mokymosi kelyje."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Atidarykite ją naujame skirtuke, kad peržiūrėtumėte puslapį."
+
+msgid "Report a problem with this question"
+msgstr "Pranešti apie problemą su šiuo klausimu"
+
+msgid "Your report was sent to the teacher."
+msgstr "Jūsų pranešimas išsiųstas mokytojui."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Aprašykite rastą klaidą ar problemą. Jūsų pranešimas bus išsiųstas mokytojui."
+
+msgid "A comment is required."
+msgstr "Komentaras yra privalomas."
+
+msgid "Could not send the report."
+msgstr "Nepavyko išsiųsti pranešimo."
+
+msgid "Learner reports"
+msgstr "Besimokančiųjų pranešimai"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Šiam klausimui nėra pateiktų besimokančiųjų pranešimų."
+
+msgid "View attempt"
+msgstr "Peržiūrėti bandymą"
+
+msgid "Could not load learner reports."
+msgstr "Nepavyko įkelti besimokančiųjų pranešimų."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Leisti besimokantiesiems pranešti apie problemas klausimuose"
+
+msgid "Skill acquired"
+msgstr "Įgytas gebėjimas"
+
+msgid "AI Toolbox"
+msgstr "DI įrankių rinkinys"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Kurkite interaktyvias edukacines programas su DI ir stebėkite besimokančiųjų pažangą su SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Dar nėra paskelbtų programų."
+
+msgid "Interactive applications"
+msgstr "Interaktyvios programos"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Generuokite, tobulinkite, skelbkite ir peržiūrėkite versijas vienoje vietoje."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Atidarykite programą, kad tęstumėte nuo paskutinės pažangos."
+
+msgid "Interactive learning application"
+msgstr "Interaktyvi mokymosi programa"
+
+msgid "Create an interactive learning app"
+msgstr "Sukurti interaktyvią mokymosi programą"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Aprašykite veiklą. Chamilo sugeneruos versijuotą SCORM programą su pažangos ir įvertinimo stebėjimu."
+
+msgid "Idea"
+msgstr "Idėja"
+
+msgid "Application"
+msgstr "Programa"
+
+msgid "What should the application do?"
+msgstr "Ką turėtų daryti programa?"
+
+msgid "How it works"
+msgstr "Kaip tai veikia"
+
+msgid "AI generation"
+msgstr "DI generavimas"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Programa sugeneruojama pagal jūsų nurodymus ir išsaugoma kaip 1 versija."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Besimokančiojo pažanga, įvertinimas ir tęsimo duomenys perduodami į Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Būsimi patobulinimai sukuria naujas versijas neištrinant ankstesnių."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Nurodykite mokymosi tikslą, taisykles, lygius, vertinimą ir ką daryti, kai besimokantysis baigia."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Šiame kontekste jums neleidžiama kurti turinio."
+
+msgid "The application was generated successfully."
+msgstr "Programa sėkmingai sugeneruota."
+
+msgid "Open in student view"
+msgstr "Atidaryti mokinio rodinyje"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Sugeneruokite programėlę, kad būtų galima peržiūrėti ir publikuoti."
+
+msgid "Improve with AI"
+msgstr "Tobulinti su DI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Aprašykite pakeitimą. Bus sukurta nauja versija, o ankstesnės versijos liks prieinamos."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Aprašykite visą interaktyvią veiklą, kurią norite sugeneruoti."
+
+msgid "What should be improved?"
+msgstr "Ką reikėtų patobulinti?"
+
+msgid "Generate new version"
+msgstr "Generuoti naują versiją"
+
+msgid "Version history"
+msgstr "Versijų istorija"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Peržiūrėkite, atsisiųskite arba atkurkite bet kurią sugeneruotą versiją."
+
+msgid "A new version was generated."
+msgstr "Sugeneruota nauja versija."
+
+msgid "Version restored"
+msgstr "Versija atkurta"
+
+msgid "The support bot tree has been published."
+msgstr "Pagalbos robotų medis publikuotas."
+
+msgid "The support bot tree has been archived."
+msgstr "Pagalbos robotų medis archyvuotas."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Pagalbos robotų medis dubliuotas."
+
+msgid "The support bot tree has been deleted."
+msgstr "Pagalbos robotų medis ištrintas."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Ar tikrai norite ištrinti šį pagalbos robotų medį?"
+
+msgid "The support bot tree has been imported."
+msgstr "Pagalbos robotų medis importuotas."
+
+msgid "Create support bot tree"
+msgstr "Kurti pagalbos robotų medį"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Sukurkite fiksuotą sprendimų medį, kuris veda naudotojus per pagalbos klausimus ir gali perduoti užklausas į bilietus."
+
+msgid "Portal scope"
+msgstr "Portalo apimtis"
+
+msgid "Duplicate"
+msgstr "Dubliuoti"
+
+msgid "Archive"
+msgstr "Archyvuoti"
+
+msgid "View conversations"
+msgstr "Peržiūrėti pokalbius"
+
+msgid "Import support bot tree"
+msgstr "Importuoti pagalbos robotų medį"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importuokite JSON eksportą arba CSV sprendimų medį. Importuotas medis visada sukuriamas kaip naujas juodraštis."
+
+msgid "Resolved"
+msgstr "Išspręsta"
+
+msgid "Escalated"
+msgstr "Perduota"
+
+msgid "Abandoned"
+msgstr "Nutraukta"
+
+msgid "Support bot conversations"
+msgstr "Pagalbos robotų pokalbiai"
+
+msgid "Outcome"
+msgstr "Rezultatas"
+
+msgid "Started at"
+msgstr "Pradėta"
+
+msgid "Ended at"
+msgstr "Baigta"
+
+msgid "View conversation"
+msgstr "Peržiūrėti pokalbį"
+
+msgid "Go to node"
+msgstr "Eiti į mazgą"
+
+msgid "Create support ticket"
+msgstr "Kurti pagalbos bilietą"
+
+msgid "End conversation"
+msgstr "Baigti pokalbį"
+
+msgid "Node"
+msgstr "Mazgas"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Pagalbos robotų medis turi turėti bent vieną mazgą."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Ar tikrai norite ištrinti šį mazgą? Nuorodos į jį bus pašalintos."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Kiekvienas pagalbos robotų mazgas turi turėti bent vieną parinktį."
+
+msgid "The support bot tree title is required."
+msgstr "Pagalbos robotų medžio pavadinimas yra privalomas."
+
+msgid "A support bot entry node is required."
+msgstr "Reikalingas pagalbos robotų pradžios mazgas."
+
+msgid "Every support bot node requires content."
+msgstr "Kiekvienas pagalbos robotų mazgas turi turėti turinį."
+
+msgid "Every support bot option requires a label."
+msgstr "Kiekviena pagalbos robotų parinktis turi turėti etiketę."
+
+msgid "Select a target node for every go-to option."
+msgstr "Kiekvienai „eiti į“ parinkčiai pasirinkite tikslinį mazgą."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Kiekvienai nuorodos parinkčiai įveskite santykinį URL."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Kiekvienai perdavimo parinkčiai pasirinkite bilieto kategoriją."
+
+msgid "The support bot tree has been saved."
+msgstr "Pagalbos robotų medis išsaugotas."
+
+msgid "Edit support bot tree"
+msgstr "Redaguoti pagalbos robotų medį"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Publikuotos ir archyvuotos pagalbos robotų versijos yra tik skaitymui. Dubliuokite šį medį iš sąrašo, kad redaguotumėte naują juodraščio versiją."
+
+msgid "Default ticket project"
+msgstr "Numatytasis užklausų projektas"
+
+msgid "Decision tree rules"
+msgstr "Sprendimų medžio taisyklės"
+
+msgid "Every node must contain at least one option."
+msgstr "Kiekviename mazge turi būti bent viena parinktis."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Galutinis mazgas turi baigti pokalbį arba sukurti palaikymo užklausą."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "„Eiti į“ nuorodos 1 versijoje negali sukurti ciklų."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Išoriniai URL 1 versijoje neleidžiami; nuorodų veiksmai turi naudoti santykinį Chamilo kelią."
+
+msgid "Nodes"
+msgstr "Mazgai"
+
+msgid "Add node"
+msgstr "Pridėti mazgą"
+
+msgid "Entry node"
+msgstr "Įėjimo mazgas"
+
+msgid "Set as entry node"
+msgstr "Nustatyti kaip įėjimo mazgą"
+
+msgid "Target node"
+msgstr "Tikslinis mazgas"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Naudokite santykinį Chamilo kelią, pavyzdžiui /tickets."
+
+msgid "Ticket category"
+msgstr "Užklausos kategorija"
+
+msgid "Select a default ticket project first."
+msgstr "Pirmiausia pasirinkite numatytąjį užklausų projektą."
+
+msgid "Closing message"
+msgstr "Baigiamasis pranešimas"
+
+msgid "Select a node to edit it."
+msgstr "Pasirinkite mazgą, kad jį redaguotumėte."
+
+msgid "Support bot conversation"
+msgstr "Palaikymo roboto pokalbis"
+
+msgid "Transcript of %s"
+msgstr "%s transkriptas"
+
+msgid "Download unofficial transcript"
+msgstr "Atsisiųsti neoficialų transkriptą"
+
+msgid "Issue official transcript"
+msgstr "Išduoti oficialų transkriptą"
+
+msgid "Official transcripts"
+msgstr "Oficialūs transkriptai"
+
+msgid "No official transcript has been issued yet."
+msgstr "Oficialus transkriptas dar neišduotas."
+
+msgid "Issued by"
+msgstr "Išdavė"
+
+msgid "Verify"
+msgstr "Patikrinti"
+
+msgid "Signature of official transcripts"
+msgstr "Oficialių transkriptų parašas"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Šis vaizdas spausdinamas šio portalo oficialiuose transkriptuose, virš pasirašančiojo vardo ir pareigų, nustatytų pažymėjimo nustatymuose."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Išduoti pasirašytą oficialų transkriptą su šiame puslapyje nurodytais kursais ir pažymiais? Jį galima patikrinti internetu, kol jis nebus atšauktas."
+
+msgid "Official transcript issued"
+msgstr "Oficialus transkriptas išduotas"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Atšaukti šį oficialų transkriptą? Tada jo patikros puslapyje jis bus rodomas kaip atšauktas."
+
+msgid "Official transcript revoked"
+msgstr "Oficialus transkriptas atšauktas"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Pirmiausia pasirinkite PNG arba JPEG vaizdą."
+
+msgid "Signed credential"
+msgstr "Pasirašytas kredencialas"
+
+msgid "Issue signed credential"
+msgstr "Išduoti pasirašytą kredencialą"
+
+msgid "Verify credential"
+msgstr "Patikrinti kredencialą"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Įtvirtinti Sepolia testiniame tinkle"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Patvirtinti esamą Sepolia transakciją"
+
+msgid "Revoke signed credential"
+msgstr "Atšaukti pasirašytą kredencialą"
+
+msgid "Delete certificate"
+msgstr "Ištrinti pažymėjimą"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Patvirtinti esamą Sepolia transakciją"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia transakcijos maiša"
+
+msgid "Verify transaction"
+msgstr "Patikrinti transakciją"
+
+msgid "Anchored"
+msgstr "Įtvirtinta"
+
+msgid "Issued"
+msgstr "Išduota"
+
+msgid "Not issued"
+msgstr "Neišduota"
+
+msgid "Consent required"
+msgstr "Reikalingas sutikimas"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia transakcija patvirtinta ir patikrinta"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia testinio tinklo piniginė paprašys pasirašyti transakciją. Bus įtvirtintas tik pažymėjimo pirštų atspaudas. Tęsti?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Atšaukti šį pasirašytą kredencialą? Bet kokia blokų grandinės transakcija lieka visam laikui, tačiau patikros puslapyje bus nurodytas atšaukimas."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Išduoti šiam besimokančiajam pasirašytą pažymėjimo kredencialą? Taip patvirtinti asmeniniai duomenys tampa patikrinami privačia nuoroda."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia reikalinga su EVM suderinama naršyklės piniginė."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Piniginėje pasirinkite Sepolia testinį tinklą (grandinės ID 11155111)."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Neteisingas piniginės adresas arba sertifikato piršto atspaudas."
+
+msgid "Transaction pending"
+msgstr "Sandoris laukia"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Vėliau naudokite „Patvirtinti esamą Sepolia sandorį“."
+
+msgid "Signed credential issued"
+msgstr "Pasirašytas kredencialas išduotas"
+
+msgid "Credential revoked"
+msgstr "Kredencialas atšauktas"
+
+msgid "Transaction hash"
+msgstr "Sandorio maiša"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Publikavimo sutikimas leidžia administratoriui išduoti pasirašytą sertifikato kredencialą ir pasirinktinai įtvirtinti jo SHA-256 piršto atspaudą Sepolia testiniame tinkle. Į blokų grandinę nesiunčiamas vardas ar asmens duomenys. Sutikimą galite atšaukti bet kada."
+
+msgid "Publication consent"
+msgstr "Publikavimo sutikimas"
+
+msgid "Not approved"
+msgstr "Nepatvirtinta"
+
+msgid "Withdraw consent"
+msgstr "Atšaukti sutikimą"
+
+msgid "Approve publication"
+msgstr "Patvirtinti publikavimą"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Įgalioju pasirašytą, viešai patikrinamą kredencialą, kuriame nurodomas mano vardas, kursas, įvertinimas ir išdavimo data. Administratorius taip pat gali paskelbti tik jo SHA-256 piršto atspaudą Sepolia testiniame tinkle. Piršto atspaudas yra nuolatinis, net jei vėliau atšauksiu sutikimą. Tęsti?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Atšaukti šio sertifikato publikavimo patvirtinimą?"
+
+msgid "Publication approval recorded"
+msgstr "Publikavimo patvirtinimas įrašytas"
+
+msgid "Publication approval withdrawn"
+msgstr "Publikavimo patvirtinimas atšauktas"
+
+msgid "Read more"
+msgstr "Skaityti daugiau"
+
+msgid "Participation: %s of %s posts"
+msgstr "Dalyvavimas: %s iš %s pranešimų"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Paskelbkite savo indėlį, kad pamatytumėte kitų dalyvių atsakymus."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Tinkamus pranešimus peržiūrėti gali tik įgalioti tyrėjai. Pranešėjų tapatybės pagal numatytuosius nustatymus lieka konfidencialios."
+
+msgid "New confidential report"
+msgstr "Naujas konfidencialus pranešimas"
+
+msgid "Reported user"
+msgstr "Praneštas naudotojas"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Yra tinkamų konfidencialių pranešimų, laukiančių peržiūros."
+
+msgid "Eligible investigations"
+msgstr "Tinkami tyrimai"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Atvejis čia rodomas tik tada, kai tą patį asmenį praneša bent %s skirtingi naudotojai."
+
+msgid "Distinct reporters"
+msgstr "Skirtingi pranešėjai"
+
+msgid "Reports for selected user"
+msgstr "Pasirinkto naudotojo pranešimai"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Konfidencialus pranešimas šiuo metu nepasiekiamas."
+
+msgid "The investigation could not be loaded."
+msgstr "Tyrimo nepavyko įkelti."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Jūsų tapatybė pagal numatytuosius nustatymus apsaugota nuo tyrėjų, tačiau pranešimo tekste ar prieduose venkite identifikuojančių detalių. Tai nėra skubios pagalbos tarnyba."
+
+msgid "Find the user involved"
+msgstr "Rasti susijusį naudotoją"
+
+msgid "Name or username"
+msgstr "Vardas arba naudotojo vardas"
+
+msgid "Describe the situation"
+msgstr "Aprašykite situaciją"
+
+msgid "Evidence (optional)"
+msgstr "Įrodymai (neprivaloma)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Iki trijų failų, kiekvienas ne daugiau kaip 8 MiB. Vaizdai, garsas arba trumpi vaizdo įrašai."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Sutinku, kad įgalioti tyrėjai šiam konkrečiam pranešimui matytų mano vardą ir el. paštą. Šį leidimą vėliau galiu atšaukti."
+
+msgid "Send confidential report"
+msgstr "Siųsti konfidencialų pranešimą"
+
+msgid "Could not search users"
+msgstr "Nepavyko ieškoti naudotojų"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Iki trijų failų, kiekvienas ne daugiau kaip 8 MiB."
+
+msgid "The confidential report could not be saved."
+msgstr "Konfidencialaus pranešimo nepavyko išsaugoti."
+
+msgid "Confidential report"
+msgstr "Konfidencialus pranešimas"
+
+msgid "Confidential conversation"
+msgstr "Konfidencialus pokalbis"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Tyrėjai gali bendrauti per šį pokalbį nematydami pranešėjo tapatybės, nebent įjungtas kontaktų dalijimasis."
+
+msgid "Reporter"
+msgstr "Pranešėjas"
+
+msgid "Investigator"
+msgstr "Tyrėjas"
+
+msgid "Additional evidence (optional)"
+msgstr "Papildomi įrodymai (neprivaloma)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Iki trijų failų, kiekvienas ne daugiau kaip 8 MiB; dešimt failų vienam pranešimui."
+
+msgid "Contact shared voluntarily"
+msgstr "Kontaktas pasidalytas savanoriškai"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Leisti tyrėjams matyti mano vardą ir el. paštą šiam pranešimui"
+
+msgid "This confidential report is not available."
+msgstr "Šis konfidencialus pranešimas nepasiekiamas."
+
+msgid "Your message could not be saved."
+msgstr "Jūsų žinutės nepavyko išsaugoti."
+
+msgid "Contact sharing could not be updated."
+msgstr "Kontaktų dalijimosi nepavyko atnaujinti."
+
+msgid "Evidence could not be downloaded."
+msgstr "Įrodymų nepavyko atsisiųsti."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Pavyzdys: užpildykite formos veiklą: apskaičiuokite kūno masės indeksą</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Amžius</strong></td>            <td width=\"75%\" style=\"\">[25] metai</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Lytis</strong></td>            <td style=\"\" text-align:=\"\">[V] (V arba M)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Svoris</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Ūgis</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Kūno masės indeksas</strong></td>            <td style=\"vertical-align: top;\">[29] KMI = Svoris/Ūgis<sup>2</sup> (žr. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Vikipedijos straipsnį</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Pavyzdys: užpildykite formos veiklą: apskaičiuokite kūno masės indeksą</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Amžius</strong></td>            <td width=\"75%\" style=\"\">[25] metai</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Lytis</strong></td>            <td style=\"\" text-align:=\"\">[V] (V arba M)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Svoris</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Ūgis</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Kūno masės indeksas</strong></td>            <td style=\"vertical-align: top;\">[29] KMI = Svoris/Ūgis<sup>2</sup> (žr. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Vikipedijos straipsnį</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Slėpti IP adresą ataskaitose"
+
+msgid "Course settings policies"
+msgstr "Kurso nustatymų taisyklės"
+
+msgid "Academic transcripts"
+msgstr "Akademiniai transkriptai"
+
+msgid "Transcript program title"
+msgstr "Transkripto programos pavadinimas"
+
+msgid "Transcript course code"
+msgstr "Transkripto kurso kodas"
+
+msgid "Transcript course hours field"
+msgstr "Transkripto kurso valandų laukas"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Transkripte baigtos valandos yra privalomos valandos"
+
+msgid "Transcript student number field"
+msgstr "Transkripto studento numerio laukas"
+
+msgid "Transcript address fields"
+msgstr "Transkripto adreso laukai"
+
+msgid "Transcript grading scale"
+msgstr "Transkripto vertinimo skalė"
+
+msgid "Transcript GPA note"
+msgstr "Transkripto GPA pastaba"
+
+msgid "Transcript signatory name"
+msgstr "Transkripto pasirašančiojo vardas"
+
+msgid "Transcript signatory title"
+msgstr "Transkripto pasirašančiojo pareigos"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Įjungti pasirašytus sertifikatus ir pasirenkamą Sepolia testinio tinklo tvirtinimą"
+
+msgid "Show thread replies only after participating"
+msgstr "Rodyti gijos atsakymus tik po dalyvavimo"
+
+msgid "Show the forum category description in threads"
+msgstr "Rodyti forumo kategorijos aprašymą gijose"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Forumo dalyvavimo nustatymus galima keisti pagal kursą"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Maksimalus pranešimų skaičius forumo gijoje"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Pranešimai, reikalingi forumo gijai užbaigti"
+
+msgid "Track e-mail openings"
+msgstr "Stebėti el. laiškų atidarymus"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Leisti atsakyti į žinutes el. paštu"
+
+msgid "Inbound e-mail address"
+msgstr "Įeinančio el. pašto adresas"
+
+msgid "Inbound mailbox DSN"
+msgstr "Įeinančios pašto dėžutės DSN"
+
+msgid "Remember me duration (days)"
+msgstr "„Prisiminti mane“ trukmė (dienomis)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Įjungti OAuth dinaminę kliento registraciją už MCP ribų"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Įjungti konfidencialų gerovės pranešimą"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Minimalus skirtingų pranešėjų skaičius tyrimui"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Leisti konfidencialius įrodymų priedus"
+
+msgid "Show confidential investigation notifications"
+msgstr "Rodyti konfidencialių tyrimų pranešimus"
+
+msgid "Enable support chatbot"
+msgstr "Įjungti palaikymo pokalbių robotą"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Pasirinkite, kur žodyno terminai paryškinami automatiškai: dokumentuose, pratimuose ir mokymosi keliuose."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Slėpti IP adresus vaizdinėse ataskaitose ir ataskaitų eksportuose. IP adresai vis tiek saugomi ir prieinami per įgaliotas asmens duomenų procedūras."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Platformos numatytosios reikšmės ir kurso redagavimo teisės; valdoma kurso nustatymuose."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Leisti naudotojams atsisiųsti neoficialų baigtų kursų transkriptą, o administratoriams, sesijų administratoriams ir HR vadovams – išduoti pasirašytus oficialius transkriptus jų valdomiems naudotojams. Parašo paveikslėlis įkeliamas iš naudotojo transkripto puslapio."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Programos pavadinimas, spausdinamas kiekviename transkripte, pavyzdžiui, šioje platformoje rengiamo diplomo pavadinimas."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Kurio kurso lauko reikšmė pildoma transkriptų kurso kodo stulpelyje: kurso kodas ar skyriaus pavadinimas."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Kurso papildomo lauko kintamasis, kuriame nurodomas kurso valandų skaičius. Palikite tuščią, kad būtų naudojama kurso trukmė."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Spausdinti privalomas kurso valandas kaip besimokančiojo baigtas valandas. Jei išjungta, baigtos valandos yra laikas, kurį besimokantysis praleido kurse."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Naudotojo papildomo lauko kintamasis, kuriame nurodomas transkriptuose spausdinamas studento numeris. Palikite tuščią, kad nebūtų spausdinama."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Kableliais atskirti naudotojo papildomų laukų kintamieji, spausdinami po naudotojo adreso transkriptuose, pavyzdžiui, miestas, valstija ir pašto kodas."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "JSON sąrašas pažymių raidžių, nuo didžiausio minimalaus balo žemyn: kiekvienas elementas turi minimalų balą procentais (min), raidę ir pažymio taškus, naudojamus GPA skaičiuoti."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "GPA skaičiavimo paaiškinimas, spausdinamas transkriptuose po GPA."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Mokyklos pareigūno, pasirašančio oficialius transkriptus, vardas."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Mokyklos pareigūno, pasirašančio oficialius transkriptus, pareigos."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Reikalingas aiškus savininko sutikimas ir rankiniai administratoriaus veiksmai. Į blokų grandinę siunčiami tik SHA-256 pirštų atspaudai."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Besimokantieji mato tik pirmą forumo temos įrašą, kol patys neparašo. Administratoriai, mokytojai, treneriai ir grupių tutoriai visada mato visus įrašus."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Kiekvienos temos viršuje rodyti forumo kategorijos pavadinimą ir sutrumpintą aprašymą su nuoroda į visą aprašymą."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Įjungus mokytojai kurso nustatymų Forumo skiltyje gali pasirinkti, ar kursas slepia temos atsakymus, kol besimokantysis neparašo, ar temose rodyti kategorijos aprašymą ir kiek įrašų tikimasi dalyvavimo progreso juostoje, užuot laikęsi platformos nustatymų."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Kiekvienam naudotojui, kuris nėra platformos administratorius, įskaitant mokytojus, ir visiems mokymosi kelyje rodyti tik šį kiekvienos forumo temos įrašų skaičių. Gijų ir įdėtųjų rodiniuose riba taikoma kiekvieno įrašo atsakymams. Įrašai paliekami rodinio tvarka: pirmieji arba naujausi mokymosi kelyje, kur naujausi įrašai rodomi pirmi. Nustatykite 0, kad būtų rodomi visi įrašai."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Kiekvienoje forumo temoje besimokantiesiems rodyti progreso juostą, kuri pasiekia 100 %, kai jie joje paskelbia šį skaičių žinučių. Įskaitomi įrašai, laukiantys moderavimo. Nustatykite 0, kad progreso juosta būtų paslėpta."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Prideda mažą stebėjimo paveikslėlį žinučių pranešimų el. laiškams ir įrašo, kada jis užklausiamas. Tai tik rodo, kad el. laiškas galėjo būti atidarytas; tai neįrodo, kad jis buvo perskaitytas."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Leisti tiesioginių žinučių pranešimų gavėjams atsakyti el. paštu. Gaunamos žinutės turi būti nukreiptos į Chamilo inbound-mail komandą pašto infrastruktūros."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Bazinis adresas atsakymų maršrutizavimui, pavyzdžiui, replies@example.com. Chamilo prideda unikalų gavėjo žetoną naudodamas plus adresavimą."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Pašto dėžutės ryšys gaunamiems atsakymams rinkti, pavyzdžiui, imaps:\/\/user:password@imap.example.com:993\/INBOX. Kredencialuose rezervuotus simbolius koduokite URL kodavimu."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Dienų skaičius, kiek naudotojas lieka prisijungęs, kai pasirinkta „Prisiminti mane“. Nustatykite 0, kad išjungtumėte. Reikalingas HTTPS. Leistinas intervalas: 0–90. Įprastas seanso skirtasis laikas konfigūruojamas atskirai PHP\/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Leidžia dinaminei kliento registracijai prašyti bet kokios Chamilo OAuth išteklių serverio registruotos apimties. Išjungus saviregistracija lieka apribota MCP. Prieiga prie išteklių visada ribojama atskirai pagal kiekvieno kliento leistinų išteklių sąrašą."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Įjungti konfidencialius incidentų pranešimus. Moduliui reikalingas apsaugotas šifravimo raktas ir tyrėjo teisė."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Tą patį naudotoją turi pranešti nuo 2 iki 10 skirtingų pranešėjų, kol atvejis taps matomas tyrėjams."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Leisti vaizdų, garso ir trumpų vaizdo įrašų įrodymus. Esami priedai lieka skaitomi, kai išjungta."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Rodyti vidinį tinkamų tyrimų požymį. Nesiunčia el. laiškų ar išorinių pranešimų."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Pokalbių skydelyje rodyti sprendimų medžio pokalbių robotą, kuris gali nukreipti naudotojus į "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Leidžia mokytojams kurti ir versijuoti dirbtinio intelekto padedamas edukacines programas kursuose."
+
+msgid "Department name"
+msgstr "Skyriaus pavadinimas"
+
+msgid "Documents and exercise"
+msgstr "Dokumentai ir pratimas"
+
+msgid "Documents and learning path"
+msgstr "Dokumentai ir mokymosi kelias"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokumentai, pratimas ir mokymosi kelias"
+
+msgid "session"
+msgstr "sesija"
+
+msgid "course"
+msgstr "kursas"
+
+msgid "You have been enrolled in %s"
+msgstr "Jūs buvote užregistruotas į %s"
 

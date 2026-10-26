@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "З повагою"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Приклад формули: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Приклад формули: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Діапазони змінних"
@@ -28764,6 +28764,9 @@ msgstr "Поточного користувача не знайдено."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Привіт %s,<br><br>Ви зареєстровані на %s.<br>Ви можете отримати доступ до свого облікового запису <a href=\"%s\">тут</a>.<br><br>Ваші облікові дані:<br>Ім'я користувача: <strong>%s</strong><br>Пароль: <strong>%s</strong><br><br>З найкращими побажаннями,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Вітаємо, %s,<br><br>Вас зареєстровано на %s.<br>Ім'я користувача: <strong>%s</strong><br><br>Будь ласка, натисніть посилання нижче, щоб встановити пароль і отримати доступ до облікового запису:<br><a href=\"%s\">Встановити пароль</a><br><br>З повагою,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Ви зареєстровані на %s"
 
@@ -41567,4 +41570,1616 @@ msgstr "Історію міграцій записано"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s присутній у корені проєкту: видаліть його, щоб закрити кінцеві точки оновлення"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Ви отримали сертифікат за цю вправу"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Ви повинні завершити навчальний шлях \"%s\" перш ніж отримати доступ до цього."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Ви впевнені, що хочете остаточно видалити цей файл?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Ви впевнені, що хочете від’єднати цей файл від вибраного курсу?"
+
+msgid "Attach this file to another course"
+msgstr "Приєднати цей файл до іншого курсу"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Приєднати до вибраного курсу(ів) (приховано)"
+
+msgid "Course(s):"
+msgstr "Курс(и):"
+
+msgid "Delete definitively"
+msgstr "Видалити остаточно"
+
+msgid "Detach from this course"
+msgstr "Від’єднати від цього курсу"
+
+msgid "File actions"
+msgstr "Дії з файлом"
+
+msgid "File Information"
+msgstr "Інформація про файл"
+
+msgid "File Link:"
+msgstr "Посилання на файл:"
+
+msgid "File Path:"
+msgstr "Шлях до файлу:"
+
+msgid "Filter courses..."
+msgstr "Фільтрувати курси..."
+
+msgid "MIME Type:"
+msgstr "Тип MIME:"
+
+msgid "N/A"
+msgstr "Н/Д"
+
+msgid "No results found."
+msgstr "Результатів не знайдено."
+
+msgid "Original Name"
+msgstr "Оригінальна назва"
+
+msgid "Original Name:"
+msgstr "Оригінальна назва:"
+
+msgid "Orphan"
+msgstr "Сирота"
+
+msgid "Resource File ID:"
+msgstr "ID файлу ресурсу:"
+
+msgid "Resource Node ID:"
+msgstr "ID вузла ресурсу:"
+
+msgid "Search..."
+msgstr "Пошук..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Щоб від’єднати цей файл від певного курсу, натисніть піктограму \"×\" на відповідній мітці курсу вище."
+
+msgid "User:"
+msgstr "Користувач:"
+
+msgid "View file information"
+msgstr "Переглянути інформацію про файл"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Ви можете приєднати цей файл до одного або кількох курсів (приховано в корені документів). Якщо файл більше не використовується і стає сиротою, ви також можете видалити його остаточно."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Ви можете вибрати один або кілька курсів (використовуйте Ctrl/Cmd + клацання)."
+
+msgid "bytes"
+msgstr "байт"
+
+msgid "Failed to copy:"
+msgstr "Не вдалося скопіювати:"
+
+msgid "Missing resource file identifier."
+msgstr "Відсутній ідентифікатор файлу ресурсу."
+
+msgid "Please select at least one course."
+msgstr "Будь ласка, виберіть принаймні один курс."
+
+msgid "Resource file not found."
+msgstr "Файл ресурсу не знайдено."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Файл \"%s\" приєднано до %d курсу(ів): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Деякі курси пропущено: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Відсутній ідентифікатор файлу або курсу."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Цей файл ресурсу не має вузла ресурсу і не може бути від’єднаний."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Файл від’єднано від %d посилання(нь) курсу."
+
+msgid "This file is not attached to the selected course."
+msgstr "Цей файл не приєднано до вибраного курсу."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Цей файл досі використовується принаймні одним ресурсом і не може бути видалений."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Файл-сирота та його фізичний вміст остаточно видалено."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Опитування опубліковано. Створено: %d. Оновлено: %d. Надіслано повідомлень: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Можна набути"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Цю навичку не можна набути"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Новачок"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Жорстке дотримання правил і інструкцій без контексту; слабке ситуаційне судження."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Досвідчений початківець"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Починає розпізнавати ситуаційні аспекти та закономірності, але все ще потребує настанов."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Компетентний"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Розробляє планування та ментальні моделі; бере відповідальність за результати, але може почуватися перевантаженим складністю."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Досвідчений"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Бачить «загальну картину», інтуїтивно розставляє пріоритети та вчиться на досвіді."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Експерт"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Інтуїтивна, вільна робота; спирається на глибокі неявні знання; може інноваційно діяти або легко справлятися з новими ситуаціями."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Запам'ятовування"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Відтворювати, пригадувати або розпізнавати відповідні знання з довготривалої пам'яті."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Розуміння"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Конструювати значення з навчальних повідомлень, включно з усною, письмовою та графічною комунікацією. Демонструвати розуміння через інтерпретацію, наведення прикладів, класифікацію, узагальнення, висновки, порівняння або пояснення."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Застосування"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Виконувати або використовувати процедуру через її виконання чи впровадження в заданій ситуації. Використовувати знання чи навички в нових або конкретних ситуаціях."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Аналіз"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Розбивати матеріал на складові частини та визначати, як частини пов'язані між собою та із загальною структурою чи метою. Визначати мотиви, причини або взаємозв'язки."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Оцінювання"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Формувати судження на основі критеріїв і стандартів. Перевіряти, критикувати або обґрунтовувати рішення чи напрями дій."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Створення"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Поєднувати елементи в узгоджене або функціональне ціле; реорганізовувати елементи в нову схему чи структуру. Створювати оригінальну роботу або генерувати нові ідеї."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Дотримуватися"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Працює під пильним наглядом і керівництвом. Виконує рутинні завдання з обмеженою свободою дій. Зосереджується на дотриманні інструкцій і базовому виконанні."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Допомагати"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Працює під звичайним наглядом. Надає допомогу іншим, сприяє командним завданням і починає проявляти ініціативу в межах визначених рамок."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Працює під загальним наглядом. Застосовує знання та навички до низки рутинних і нерутинних видів діяльності. Виявляє певну свободу дій і судження."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Працює під широким керівництвом. Допомагає іншим, надаючи спеціалізовані поради, підтримку чи послуги. Бере відповідальність за власну роботу і може керувати невеликими командами чи завданнями."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Забезпечувати та консультувати"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Працює під широким керівництвом, але зі значною автономією. Забезпечує досягнення цілей роботи та консультує зі складних питань. Часто очолює команди чи проєкти та впливає на рішення."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Ініціювати та впливати"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Має визначені повноваження та відповідальність за значну сферу роботи. Ініціює дії, впливає на стратегію та політику у своїй галузі та очолює значні проєкти чи команди."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Визначати стратегію, надихати, мобілізувати"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Має повноваження на найвищому організаційному рівні щодо важливої сфери роботи. Визначає довгострокову стратегію, надихає та мобілізує інших і приймає рішення, критичні для успіху організації. Впливає на галузевому або зовнішньому рівні."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Максимальний час бездіяльності для врахування (хвилини)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Сторінка курсу, залишена відкритою, продовжує надсилати автоматичні запити. Після цієї кількості хвилин без реальної дії користувача (відкриття сторінки чи елемента, відповіді тощо) час, проведений у курсі, більше не враховується."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Спільний редактор Wiki"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Підключення до Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Збереження створює нову версію Wiki Chamilo з поточного вмісту Etherpad."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Не вдалося завантажити спільний редактор."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Увімкнути Etherpad для редагування Wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Використовувати Etherpad як спільний редактор для наявних сторінок Wiki. Etherpad має бути доступний на тому ж origin, що й Chamilo, для безпечних вбудованих сесій."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Базова URL-адреса екземпляра Etherpad, включно з необов'язковим шляхом зворотного проксі. Приклад: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Ключ API Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Ключ API, який Chamilo використовує для створення pad-ів, сесій і синхронізації вмісту Wiki. Налаштуйте Etherpad на прийняття автентифікації за ключем API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Типову видимість нових документів можна змінювати в курсі"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Видимість, яку отримує новий документ, папка чи завантажений файл, коли викладач створює його в курсі. Викладачі можуть згодом змінити видимість кожного з них."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Якщо ввімкнено, викладачі можуть у налаштуваннях курсу обирати видимість нових документів свого курсу замість типової для платформи."
+
+msgid "Default visibility of new learning paths"
+msgstr "Типова видимість нових навчальних шляхів"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Типову видимість нових навчальних шляхів можна змінювати в курсі"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Видимість, яку отримує новий навчальний шлях, коли викладач створює його в курсі. Викладачі можуть згодом змінити видимість кожного з них."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Якщо ввімкнено, викладачі можуть у налаштуваннях курсу обирати видимість нових навчальних шляхів свого курсу замість типової для платформи."
+
+msgid "Default visibility of new tests"
+msgstr "Типова видимість нових тестів"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Типову видимість нових тестів можна змінювати в курсі"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Видимість, яку отримує новий тест, коли викладач створює його в курсі. Пізніше викладачі можуть змінити видимість кожного тесту."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Якщо увімкнено, викладачі можуть у налаштуваннях курсу обирати видимість нових тестів свого курсу замість типової для платформи."
+
+msgid "Default visibility for new learning paths"
+msgstr "Типова видимість нових навчальних шляхів"
+
+msgid "Default visibility for new tests"
+msgstr "Типова видимість нових тестів"
+
+msgid "Following"
+msgstr "Підписки"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Отримувати електронний лист, коли учень коментує здану роботу з цього завдання"
+
+msgid "Payment history"
+msgstr "Історія платежів"
+
+msgid "No payments yet"
+msgstr "Платежів ще немає"
+
+msgid "Cancel service"
+msgstr "Скасувати послугу"
+
+msgid "Official transcript"
+msgstr "Офіційна академічна довідка"
+
+msgid "Unofficial transcript"
+msgstr "Неофіційна академічна довідка"
+
+msgid "Student name"
+msgstr "Ім’я студента"
+
+msgid "Student number"
+msgstr "Номер студента"
+
+msgid "Program title"
+msgstr "Назва програми"
+
+msgid "Required hours"
+msgstr "Необхідні години"
+
+msgid "Completion date"
+msgstr "Дата завершення"
+
+msgid "Hours completed"
+msgstr "Виконані години"
+
+msgid "Final grade"
+msgstr "Підсумкова оцінка"
+
+msgid "Grade"
+msgstr "Оцінка"
+
+msgid "No completed course yet."
+msgstr "Ще немає завершених курсів."
+
+msgid "Grading scale"
+msgstr "Шкала оцінювання"
+
+msgid "Signature of school official"
+msgstr "Підпис посадової особи закладу"
+
+msgid "School official"
+msgstr "Посадова особа закладу"
+
+msgid "Official's title"
+msgstr "Посада посадової особи"
+
+msgid "Verify this transcript at"
+msgstr "Перевірити цю довідку за адресою"
+
+msgid "Verification code"
+msgstr "Код перевірки"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Ця неофіційна довідка не підписана. Зверніться до адміністратора по офіційну довідку."
+
+msgid "Transcript verification"
+msgstr "Перевірка довідки"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Перевірте, що цю офіційну довідку видано та підписано закладом, її не змінювали і її не відкликано."
+
+msgid "Valid"
+msgstr "Дійсна"
+
+msgid "Invalid signature"
+msgstr "Недійсний підпис"
+
+msgid "Transcript not found"
+msgstr "Довідку не знайдено"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Підпис закладу дійсний, і цю довідку не відкликано."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Цю довідку не можна підтвердити як дійсну. Її дані не відображаються."
+
+msgid "Transcript details"
+msgstr "Дані довідки"
+
+msgid "Institution"
+msgstr "Заклад"
+
+msgid "Issued on"
+msgstr "Видано"
+
+msgid "Download verification JSON"
+msgstr "Завантажити JSON перевірки"
+
+msgid "Transcript"
+msgstr "Довідка"
+
+msgid "My confidential reports"
+msgstr "Мої конфіденційні звіти"
+
+msgid "My transcript"
+msgstr "Моя довідка"
+
+msgid "Confidential investigations"
+msgstr "Конфіденційні розслідування"
+
+msgid "Floor plan"
+msgstr "План поверху"
+
+msgid "Click a highlighted room to select it"
+msgstr "Клацніть підсвічену кімнату, щоб вибрати її"
+
+msgid "Select room"
+msgstr "Вибрати кімнату"
+
+msgid "Room on floor plan"
+msgstr "Кімната на плані поверху"
+
+msgid "Select a branch first"
+msgstr "Спочатку виберіть філію"
+
+msgid "The branch has no attached floor plan"
+msgstr "До філії не прикріплено план поверху"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Використовуйте інструмент багатокутника, щоб окреслити кімнату; за допомогою «Редагувати» переміщуйте кути"
+
+msgid "Save room area"
+msgstr "Зберегти зону кімнати"
+
+msgid "Clear room area"
+msgstr "Очистити зону кімнати"
+
+msgid "Save the room form to persist the area"
+msgstr "Збережіть форму кімнати, щоб зафіксувати зону"
+
+msgid "Floor plan unavailable"
+msgstr "План поверху недоступний"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Точки карти кімнати мають бути в межах плану поверху"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Ви впевнені, що хочете очистити зону кімнати?"
+
+msgid "View room on floor plan"
+msgstr "Переглянути кімнату на плані поверху"
+
+msgid "No floor plan available"
+msgstr "План поверху недоступний"
+
+msgid "This is an assignment by groups"
+msgstr "Це завдання для груп"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Завантажте план поверху у форматі PNG, JPEG або безпечний статичний SVG, або виберіть наявне зображення з Документів."
+
+msgid "Upload floor plan"
+msgstr "Завантажити план поверху"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG або статичний SVG, максимум 10 МБ"
+
+msgid "Search images by name"
+msgstr "Шукати зображення за назвою"
+
+msgid "Image name"
+msgstr "Назва зображення"
+
+msgid "Select an image"
+msgstr "Вибрати зображення"
+
+msgid "Change floor plan"
+msgstr "Змінити план поверху"
+
+msgid "Attach floor plan"
+msgstr "Прикріпити план поверху"
+
+msgid "No matching images found in Documents."
+msgstr "У Документах не знайдено відповідних зображень."
+
+msgid "Current floor plan"
+msgstr "Поточний план поверху"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Зміни плану поверху зберігаються автоматично."
+
+msgid "Remove floor plan"
+msgstr "Видалити план поверху"
+
+msgid "Cannot load images"
+msgstr "Не вдалося завантажити зображення"
+
+msgid "Floor plan saved"
+msgstr "План поверху збережено"
+
+msgid "Cannot attach floor plan"
+msgstr "Не вдалося прикріпити план поверху"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Підтримуються лише зображення PNG/JPEG і безпечні статичні SVG розміром до 10 МБ."
+
+msgid "Cannot upload floor plan"
+msgstr "Не вдалося завантажити план поверху"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Ви впевнені, що хочете видалити план поверху?"
+
+msgid "Floor plan removed"
+msgstr "План поверху видалено"
+
+msgid "Cannot remove floor plan"
+msgstr "Не вдалося видалити план поверху"
+
+msgid "Support bot"
+msgstr "Бот підтримки"
+
+msgid "Connected"
+msgstr "Підключено"
+
+msgid "Not connected"
+msgstr "Не підключено"
+
+msgid "View ticket"
+msgstr "Переглянути заявку"
+
+msgid "Start a new conversation"
+msgstr "Почати нову розмову"
+
+msgid "Video call"
+msgstr "Відеодзвінок"
+
+msgid "Incoming video call"
+msgstr "Вхідний відеодзвінок"
+
+msgid "Decline"
+msgstr "Відхилити"
+
+msgid "Mute microphone"
+msgstr "Вимкнути мікрофон"
+
+msgid "Unmute microphone"
+msgstr "Увімкнути мікрофон"
+
+msgid "Turn camera off"
+msgstr "Вимкнути камеру"
+
+msgid "Turn camera on"
+msgstr "Увімкнути камеру"
+
+msgid "Hang up"
+msgstr "Завершити дзвінок"
+
+msgid "Calling..."
+msgstr "Виклик..."
+
+msgid "Connecting..."
+msgstr "Підключення..."
+
+msgid "Your contact is busy."
+msgstr "Ваш контакт зайнятий."
+
+msgid "Your contact did not answer the call."
+msgstr "Ваш контакт не відповів на дзвінок."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Ваш контакт не зміг отримати доступ до камери або мікрофона."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Ваш контакт не зміг підготувати відеодзвінок."
+
+msgid "Your contact refused the call."
+msgstr "Ваш контакт відхилив дзвінок."
+
+msgid "The call timed out."
+msgstr "Час очікування дзвінка минув."
+
+msgid "Your contact cancelled the call."
+msgstr "Ваш контакт скасував виклик."
+
+msgid "The video connection was lost."
+msgstr "Відеоз’єднання втрачено."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Ваш контакт не зміг установити відеоз’єднання."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Ваш контакт не зміг завершити налаштування відеовиклику."
+
+msgid "Your contact hung up."
+msgstr "Ваш контакт поклав слухавку."
+
+msgid "Video call could not be started"
+msgstr "Не вдалося розпочати відеовиклик"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Доступ до камери або мікрофона відхилено."
+
+msgid "No camera or microphone was found."
+msgstr "Камеру або мікрофон не знайдено."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Камера або мікрофон уже використовуються або недоступні."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Камера або мікрофон не підтримують потрібні параметри."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Не вдалося отримати доступ до камери або мікрофона."
+
+msgid "The video call could not be prepared."
+msgstr "Не вдалося підготувати відеовиклик."
+
+msgid "The video call request could not be sent."
+msgstr "Не вдалося надіслати запит на відеовиклик."
+
+msgid "The incoming video call could not be processed."
+msgstr "Не вдалося обробити вхідний відеовиклик."
+
+msgid "The video call answer could not be prepared."
+msgstr "Не вдалося підготувати відповідь на відеовиклик."
+
+msgid "The video call answer could not be sent."
+msgstr "Не вдалося надіслати відповідь на відеовиклик."
+
+msgid "The video call answer could not be processed."
+msgstr "Не вдалося обробити відповідь на відеовиклик."
+
+msgid "The video connection failed"
+msgstr "Відеоз’єднання не вдалося"
+
+msgid "The video connection could not be established."
+msgstr "Не вдалося встановити відеоз’єднання."
+
+msgid "No answer was received."
+msgstr "Відповіді не отримано."
+
+msgid "You refused the call."
+msgstr "Ви відхилили виклик."
+
+msgid "You cancelled the call."
+msgstr "Ви скасували виклик."
+
+msgid "You hung up."
+msgstr "Ви поклали слухавку."
+
+msgid "You missed the call."
+msgstr "Ви пропустили виклик."
+
+msgid "Support bot is currently unavailable."
+msgstr "Бот підтримки зараз недоступний."
+
+msgid "A support ticket has been created."
+msgstr "Створено заявку в службу підтримки."
+
+msgid "Conversation ended."
+msgstr "Розмову завершено."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Бот підтримки не зміг продовжити цю розмову. Спробуйте ще раз."
+
+msgid "Add your first term glossary to this course"
+msgstr "Додайте перший термін глосарія до цього курсу"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Ви впевнені, що хочете видалити цей шаблон опитування?"
+
+msgid "The survey template has been deleted."
+msgstr "Шаблон опитування видалено."
+
+msgid "Please select a course."
+msgstr "Будь ласка, виберіть курс."
+
+msgid "Please select a session for this course."
+msgstr "Будь ласка, виберіть сесію для цього курсу."
+
+msgid "The survey has been created from the template."
+msgstr "Опитування створено з шаблону."
+
+msgid "Survey templates"
+msgstr "Шаблони опитувань"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Створюйте повторно використовувані шаблони опитувань для викладачів і призначайте їх безпосередньо курсу або сесії."
+
+msgid "Subtitle"
+msgstr "Підзаголовок"
+
+msgid "Assign to course"
+msgstr "Призначити курсу"
+
+msgid "Assign template to course"
+msgstr "Призначити шаблон курсу"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Залиште сесію порожньою, щоб створити опитування безпосередньо в курсі."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Цей курс доступний через сесію на цьому порталі, тому сесія обов’язкова."
+
+msgid "Survey template questions"
+msgstr "Питання шаблону опитування"
+
+msgid "Back to survey templates"
+msgstr "Назад до шаблонів опитувань"
+
+msgid "Could not load survey template"
+msgstr "Не вдалося завантажити шаблон опитування"
+
+msgid "Could not load survey template questions"
+msgstr "Не вдалося завантажити питання шаблону опитування"
+
+msgid "Could not save survey template question"
+msgstr "Не вдалося зберегти питання шаблону опитування"
+
+msgid "Could not delete survey template question"
+msgstr "Не вдалося видалити питання шаблону опитування"
+
+msgid "Could not move survey template question"
+msgstr "Не вдалося перемістити питання шаблону опитування"
+
+msgid "Could not copy survey template question"
+msgstr "Не вдалося скопіювати питання шаблону опитування"
+
+msgid "The survey template has been saved."
+msgstr "Шаблон опитування збережено."
+
+msgid "Edit survey template"
+msgstr "Редагувати шаблон опитування"
+
+msgid "Create survey template"
+msgstr "Створити шаблон опитування"
+
+msgid "The survey template title is required."
+msgstr "Назва шаблону опитування є обов'язковою."
+
+msgid "Visible as template"
+msgstr "Видимий як шаблон"
+
+msgid "Create satisfaction survey"
+msgstr "Створити опитування задоволеності"
+
+msgid "Training satisfaction survey"
+msgstr "Опитування задоволеності навчанням"
+
+msgid "Could not create satisfaction survey"
+msgstr "Не вдалося створити опитування задоволеності"
+
+msgid "Use template"
+msgstr "Використати шаблон"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Створити це опитування з повторно використовуваного шаблону, підготовленого адміністратором."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Результати приховано від викладача/тьютора"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Викладачі та тьютори все ще можуть бачити кількість відповідей і надсилати нагадування, але не можуть відкривати чи експортувати результати опитування."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Шаблон застосовано. Перегляньте налаштування опитування та збережіть, щоб створити його."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Результати опитування приховано від викладачів і тьюторів."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Ви все ще можете використовувати сторінку запрошень, щоб бачити кількість відповідей і надсилати нагадування."
+
+msgid "Payment method"
+msgstr "Спосіб оплати"
+
+msgid "Preview mode"
+msgstr "Режим попереднього перегляду"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Прогрес і оцінка не зберігаються в режимі попереднього перегляду."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Це посилання не можна відобразити всередині навчального шляху."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Відкрийте його в новій вкладці, щоб переглянути сторінку."
+
+msgid "Report a problem with this question"
+msgstr "Повідомити про проблему з цим запитанням"
+
+msgid "Your report was sent to the teacher."
+msgstr "Ваше повідомлення надіслано викладачу."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Опишіть знайдену помилку або проблему. Ваше повідомлення буде надіслано викладачу."
+
+msgid "A comment is required."
+msgstr "Коментар є обов'язковим."
+
+msgid "Could not send the report."
+msgstr "Не вдалося надіслати повідомлення."
+
+msgid "Learner reports"
+msgstr "Повідомлення учнів"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Для цього запитання не надіслано жодних повідомлень учнів."
+
+msgid "View attempt"
+msgstr "Переглянути спробу"
+
+msgid "Could not load learner reports."
+msgstr "Не вдалося завантажити повідомлення учнів."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Дозволити учням повідомляти про проблеми в запитаннях"
+
+msgid "Skill acquired"
+msgstr "Навичку здобуто"
+
+msgid "AI Toolbox"
+msgstr "Інструменти ШІ"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Створюйте інтерактивні навчальні застосунки за допомогою ШІ та відстежуйте прогрес учнів за допомогою SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Опублікованих застосунків ще немає."
+
+msgid "Interactive applications"
+msgstr "Інтерактивні застосунки"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Створюйте, вдосконалюйте, публікуйте та переглядайте версії в одному місці."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Відкрийте застосунок, щоб продовжити з останнього прогресу."
+
+msgid "Interactive learning application"
+msgstr "Інтерактивний навчальний застосунок"
+
+msgid "Create an interactive learning app"
+msgstr "Створити інтерактивний навчальний застосунок"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Опишіть діяльність. Chamilo згенерує версіонований застосунок SCORM із відстеженням прогресу та оцінки."
+
+msgid "Idea"
+msgstr "Ідея"
+
+msgid "Application"
+msgstr "Застосунок"
+
+msgid "What should the application do?"
+msgstr "Що має робити застосунок?"
+
+msgid "How it works"
+msgstr "Як це працює"
+
+msgid "AI generation"
+msgstr "Генерація ШІ"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Застосунок генерується з ваших інструкцій і зберігається як версія 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Прогрес учня, оцінка та дані відновлення надсилаються до Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Майбутні вдосконалення створюють нові версії, не видаляючи попередні."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Вкажіть навчальну мету, правила, рівні, оцінювання та що має статися, коли учень завершить."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Вам не дозволено створювати вміст у цьому контексті."
+
+msgid "The application was generated successfully."
+msgstr "Застосунок успішно згенеровано."
+
+msgid "Open in student view"
+msgstr "Відкрити у режимі студента"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Згенеруйте застосунок, щоб увімкнути попередній перегляд і публікацію."
+
+msgid "Improve with AI"
+msgstr "Покращити за допомогою ШІ"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Опишіть зміну. Буде створено нову версію, а попередні версії залишаться доступними."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Опишіть повну інтерактивну активність, яку потрібно згенерувати."
+
+msgid "What should be improved?"
+msgstr "Що потрібно покращити?"
+
+msgid "Generate new version"
+msgstr "Згенерувати нову версію"
+
+msgid "Version history"
+msgstr "Історія версій"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Перегляньте, завантажте або відновіть будь-яку згенеровану версію."
+
+msgid "A new version was generated."
+msgstr "Згенеровано нову версію."
+
+msgid "Version restored"
+msgstr "Версію відновлено"
+
+msgid "The support bot tree has been published."
+msgstr "Дерево бота підтримки опубліковано."
+
+msgid "The support bot tree has been archived."
+msgstr "Дерево бота підтримки архівовано."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Дерево бота підтримки дубльовано."
+
+msgid "The support bot tree has been deleted."
+msgstr "Дерево бота підтримки видалено."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Ви впевнені, що хочете видалити це дерево бота підтримки?"
+
+msgid "The support bot tree has been imported."
+msgstr "Дерево бота підтримки імпортовано."
+
+msgid "Create support bot tree"
+msgstr "Створити дерево бота підтримки"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Побудуйте фіксоване дерево рішень, яке проводить користувачів через питання підтримки і може ескалювати до тікетів."
+
+msgid "Portal scope"
+msgstr "Обсяг порталу"
+
+msgid "Duplicate"
+msgstr "Дублювати"
+
+msgid "Archive"
+msgstr "Архівувати"
+
+msgid "View conversations"
+msgstr "Переглянути розмови"
+
+msgid "Import support bot tree"
+msgstr "Імпортувати дерево бота підтримки"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Імпортуйте JSON-експорт або CSV-дерево рішень. Імпортоване дерево завжди створюється як нова чернетка."
+
+msgid "Resolved"
+msgstr "Вирішено"
+
+msgid "Escalated"
+msgstr "Ескальовано"
+
+msgid "Abandoned"
+msgstr "Покинуто"
+
+msgid "Support bot conversations"
+msgstr "Розмови бота підтримки"
+
+msgid "Outcome"
+msgstr "Результат"
+
+msgid "Started at"
+msgstr "Почато о"
+
+msgid "Ended at"
+msgstr "Завершено о"
+
+msgid "View conversation"
+msgstr "Переглянути розмову"
+
+msgid "Go to node"
+msgstr "Перейти до вузла"
+
+msgid "Create support ticket"
+msgstr "Створити заявку підтримки"
+
+msgid "End conversation"
+msgstr "Завершити розмову"
+
+msgid "Node"
+msgstr "Вузол"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Дерево бота підтримки потребує принаймні одного вузла."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Ви впевнені, що хочете видалити цей вузол? Посилання на нього буде очищено."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Кожен вузол бота підтримки потребує принаймні одного варіанта."
+
+msgid "The support bot tree title is required."
+msgstr "Назва дерева бота підтримки обов’язкова."
+
+msgid "A support bot entry node is required."
+msgstr "Потрібен вхідний вузол бота підтримки."
+
+msgid "Every support bot node requires content."
+msgstr "Кожен вузол бота підтримки потребує вмісту."
+
+msgid "Every support bot option requires a label."
+msgstr "Кожен варіант бота підтримки потребує мітки."
+
+msgid "Select a target node for every go-to option."
+msgstr "Виберіть цільовий вузол для кожного варіанта переходу."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Введіть відносну URL-адресу для кожного варіанта посилання."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Виберіть категорію заявки для кожного варіанта ескалації."
+
+msgid "The support bot tree has been saved."
+msgstr "Дерево бота підтримки збережено."
+
+msgid "Edit support bot tree"
+msgstr "Редагувати дерево бота підтримки"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Опубліковані та архівовані версії бота підтримки доступні лише для читання. Дублюйте це дерево зі списку, щоб редагувати нову чернетку."
+
+msgid "Default ticket project"
+msgstr "Проєкт заявок за замовчуванням"
+
+msgid "Decision tree rules"
+msgstr "Правила дерева рішень"
+
+msgid "Every node must contain at least one option."
+msgstr "Кожен вузол має містити принаймні один варіант."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Кінцевий вузол має завершити розмову або створити заявку підтримки."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Посилання «перейти до» не повинні створювати цикли у v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Зовнішні URL у v1 не дозволені; дії з посиланнями мають використовувати відносний шлях Chamilo."
+
+msgid "Nodes"
+msgstr "Вузли"
+
+msgid "Add node"
+msgstr "Додати вузол"
+
+msgid "Entry node"
+msgstr "Вхідний вузол"
+
+msgid "Set as entry node"
+msgstr "Встановити як вхідний вузол"
+
+msgid "Target node"
+msgstr "Цільовий вузол"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Використовуйте відносний шлях Chamilo, наприклад /tickets."
+
+msgid "Ticket category"
+msgstr "Категорія заявки"
+
+msgid "Select a default ticket project first."
+msgstr "Спочатку виберіть проєкт заявок за замовчуванням."
+
+msgid "Closing message"
+msgstr "Завершальне повідомлення"
+
+msgid "Select a node to edit it."
+msgstr "Виберіть вузол, щоб редагувати його."
+
+msgid "Support bot conversation"
+msgstr "Розмова бота підтримки"
+
+msgid "Transcript of %s"
+msgstr "Транскрипт %s"
+
+msgid "Download unofficial transcript"
+msgstr "Завантажити неофіційний транскрипт"
+
+msgid "Issue official transcript"
+msgstr "Видати офіційний транскрипт"
+
+msgid "Official transcripts"
+msgstr "Офіційні транскрипти"
+
+msgid "No official transcript has been issued yet."
+msgstr "Офіційний транскрипт ще не видано."
+
+msgid "Issued by"
+msgstr "Видав"
+
+msgid "Verify"
+msgstr "Перевірити"
+
+msgid "Signature of official transcripts"
+msgstr "Підпис офіційних транскриптів"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Це зображення друкується на офіційних транскриптах цього порталу над ім’ям і посадою підписанта, заданими в налаштуваннях сертифіката."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Видати підписаний офіційний транскрипт із курсами та оцінками, зазначеними на цій сторінці? Його можна перевіряти онлайн, доки його не буде відкликано."
+
+msgid "Official transcript issued"
+msgstr "Офіційний транскрипт видано"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Відкликати цей офіційний транскрипт? Сторінка перевірки тоді покаже його як відкликаний."
+
+msgid "Official transcript revoked"
+msgstr "Офіційний транскрипт відкликано"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Спочатку виберіть зображення PNG або JPEG."
+
+msgid "Signed credential"
+msgstr "Підписаний документ"
+
+msgid "Issue signed credential"
+msgstr "Видати підписаний документ"
+
+msgid "Verify credential"
+msgstr "Перевірити документ"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Закріпити в тестовій мережі Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Підтвердити наявну транзакцію Sepolia"
+
+msgid "Revoke signed credential"
+msgstr "Відкликати підписаний документ"
+
+msgid "Delete certificate"
+msgstr "Видалити сертифікат"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Підтвердити наявну транзакцію Sepolia"
+
+msgid "Sepolia transaction hash"
+msgstr "Хеш транзакції Sepolia"
+
+msgid "Verify transaction"
+msgstr "Перевірити транзакцію"
+
+msgid "Anchored"
+msgstr "Закріплено"
+
+msgid "Issued"
+msgstr "Видано"
+
+msgid "Not issued"
+msgstr "Не видано"
+
+msgid "Consent required"
+msgstr "Потрібна згода"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Транзакцію Sepolia підтверджено та перевірено"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Гаманець тестової мережі Sepolia запропонує підписати транзакцію. Буде закріплено лише відбиток сертифіката. Продовжити?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Відкликати цей підписаний документ? Будь-яка блокчейн-транзакція залишається незмінною, але сторінка перевірки повідомить про відкликання."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Видати підписаний сертифікатний документ для цього учня? Це зробить затверджені персональні дані перевірюваними за приватним посиланням."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Для Sepolia потрібен сумісний з EVM гаманець у браузері."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Виберіть тестову мережу Sepolia (ідентифікатор ланцюга 11155111) у своєму гаманці."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Недійсна адреса гаманця або відбиток сертифіката."
+
+msgid "Transaction pending"
+msgstr "Транзакція очікує"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Пізніше скористайтеся підтвердженням наявної транзакції Sepolia."
+
+msgid "Signed credential issued"
+msgstr "Підписаний обліковий запис видано"
+
+msgid "Credential revoked"
+msgstr "Обліковий запис відкликано"
+
+msgid "Transaction hash"
+msgstr "Хеш транзакції"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Згода на публікацію дозволяє адміністратору видати підписаний обліковий запис сертифіката та за бажанням закріпити його відбиток SHA-256 у тестовій мережі Sepolia. Ім’я чи персональні дані в ланцюг не надсилаються. Ви можете відкликати згоду будь-коли."
+
+msgid "Publication consent"
+msgstr "Згода на публікацію"
+
+msgid "Not approved"
+msgstr "Не затверджено"
+
+msgid "Withdraw consent"
+msgstr "Відкликати згоду"
+
+msgid "Approve publication"
+msgstr "Затвердити публікацію"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Я дозволяю видати підписаний, загальнодоступний для перевірки обліковий запис із моїм ім’ям, курсом, оцінкою та датою видачі. Адміністратор також може опублікувати лише його відбиток SHA-256 у тестовій мережі Sepolia. Відбиток залишається постійним, навіть якщо я пізніше відкличу згоду. Продовжити?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Відкликати затвердження публікації для цього сертифіката?"
+
+msgid "Publication approval recorded"
+msgstr "Затвердження публікації записано"
+
+msgid "Publication approval withdrawn"
+msgstr "Затвердження публікації відкликано"
+
+msgid "Read more"
+msgstr "Читати далі"
+
+msgid "Participation: %s of %s posts"
+msgstr "Участь: %s з %s дописів"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Опублікуйте свій внесок, щоб побачити відповіді інших учасників."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Лише уповноважені слідчі можуть переглядати відповідні повідомлення. Особистість заявників за замовчуванням залишається конфіденційною."
+
+msgid "New confidential report"
+msgstr "Нове конфіденційне повідомлення"
+
+msgid "Reported user"
+msgstr "Користувач, на якого поскаржилися"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Є відповідні конфіденційні повідомлення, що очікують розгляду."
+
+msgid "Eligible investigations"
+msgstr "Відповідні розслідування"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Справа з’являється тут лише після того, як щонайменше %s різних користувачів повідомлять про ту саму особу."
+
+msgid "Distinct reporters"
+msgstr "Різні заявники"
+
+msgid "Reports for selected user"
+msgstr "Повідомлення щодо вибраного користувача"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Конфіденційне повідомлення наразі недоступне."
+
+msgid "The investigation could not be loaded."
+msgstr "Не вдалося завантажити розслідування."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Ваша особа за замовчуванням захищена від слідчих, але уникайте ідентифікаційних даних у тексті повідомлення чи вкладеннях. Це не служба екстреної допомоги."
+
+msgid "Find the user involved"
+msgstr "Знайдіть причетного користувача"
+
+msgid "Name or username"
+msgstr "Ім’я або ім’я користувача"
+
+msgid "Describe the situation"
+msgstr "Опишіть ситуацію"
+
+msgid "Evidence (optional)"
+msgstr "Докази (необов’язково)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "До трьох файлів, максимум 8 МіБ кожен. Зображення, аудіо або короткі відео."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Я погоджуюся, що уповноважені слідчі можуть бачити моє ім’я та електронну пошту для цього конкретного повідомлення. Я можу пізніше відкликати цей дозвіл."
+
+msgid "Send confidential report"
+msgstr "Надіслати конфіденційне повідомлення"
+
+msgid "Could not search users"
+msgstr "Не вдалося знайти користувачів"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "До трьох файлів, максимум 8 МіБ кожен."
+
+msgid "The confidential report could not be saved."
+msgstr "Не вдалося зберегти конфіденційне повідомлення."
+
+msgid "Confidential report"
+msgstr "Конфіденційне повідомлення"
+
+msgid "Confidential conversation"
+msgstr "Конфіденційна розмова"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Слідчі можуть спілкуватися через цю розмову, не бачачи особу заявника, якщо не ввімкнено обмін контактами."
+
+msgid "Reporter"
+msgstr "Заявник"
+
+msgid "Investigator"
+msgstr "Слідчий"
+
+msgid "Additional evidence (optional)"
+msgstr "Додаткові докази (необов’язково)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "До трьох файлів, максимум 8 МіБ кожен; десять файлів на повідомлення."
+
+msgid "Contact shared voluntarily"
+msgstr "Контакт надано добровільно"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Дозволити слідчим бачити моє ім’я та електронну пошту для цього повідомлення"
+
+msgid "This confidential report is not available."
+msgstr "Це конфіденційне повідомлення недоступне."
+
+msgid "Your message could not be saved."
+msgstr "Ваше повідомлення не вдалося зберегти."
+
+msgid "Contact sharing could not be updated."
+msgstr "Спільний доступ до контактів не вдалося оновити."
+
+msgid "Evidence could not be downloaded."
+msgstr "Доказ не вдалося завантажити."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Приклад заповнення форми: розрахунок індексу маси тіла</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Вік</strong></td>            <td width=\"75%\" style=\"\">[25] років</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Стать</strong></td>            <td style=\"\" text-align:=\"\">[M] (M або F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Вага</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Зріст</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Індекс маси тіла</strong></td>            <td style=\"vertical-align: top;\">[29] ІМТ =Вага/Зріст<sup>2</sup> (див.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> статтю у Вікіпедії</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Приклад заповнення форми: розрахунок індексу маси тіла</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Вік</strong></td>            <td width=\"75%\" style=\"\">[25] років</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Стать</strong></td>            <td style=\"\" text-align:=\"\">[M] (M або F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Вага</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Зріст</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Індекс маси тіла</strong></td>            <td style=\"vertical-align: top;\">[29] ІМТ =Вага/Зріст<sup>2</sup> (див.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> статтю у Вікіпедії</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Приховати IP-адресу зі звітів"
+
+msgid "Course settings policies"
+msgstr "Політики налаштувань курсу"
+
+msgid "Academic transcripts"
+msgstr "Академічні виписки"
+
+msgid "Transcript program title"
+msgstr "Назва програми у виписці"
+
+msgid "Transcript course code"
+msgstr "Код курсу у виписці"
+
+msgid "Transcript course hours field"
+msgstr "Поле годин курсу у виписці"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Завершені години у виписці дорівнюють обов’язковим годинам"
+
+msgid "Transcript student number field"
+msgstr "Поле номера студента у виписці"
+
+msgid "Transcript address fields"
+msgstr "Поля адреси у виписці"
+
+msgid "Transcript grading scale"
+msgstr "Шкала оцінювання у виписці"
+
+msgid "Transcript GPA note"
+msgstr "Примітка про GPA у виписці"
+
+msgid "Transcript signatory name"
+msgstr "Ім’я підписанта виписки"
+
+msgid "Transcript signatory title"
+msgstr "Посада підписанта виписки"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Увімкнути підписані сертифікати та додаткове закріплення в тестовій мережі Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Показувати відповіді в темі лише після участі"
+
+msgid "Show the forum category description in threads"
+msgstr "Показувати опис категорії форуму в темах"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Налаштування участі у форумі можна змінювати для курсу"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Максимальна кількість повідомлень у темі форуму"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Кількість повідомлень для завершення теми форуму"
+
+msgid "Track e-mail openings"
+msgstr "Відстежувати відкриття електронних листів"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Дозволити відповіді на повідомлення електронною поштою"
+
+msgid "Inbound e-mail address"
+msgstr "Адреса вхідної електронної пошти"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN вхідної поштової скриньки"
+
+msgid "Remember me duration (days)"
+msgstr "Тривалість «Запам’ятати мене» (дні)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Увімкнути динамічну реєстрацію клієнтів OAuth поза MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Увімкнути конфіденційні повідомлення про добробут"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Мінімальна кількість різних заявників для розслідування"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Дозволити конфіденційні вкладення доказів"
+
+msgid "Show confidential investigation notifications"
+msgstr "Показувати сповіщення про конфіденційні розслідування"
+
+msgid "Enable support chatbot"
+msgstr "Увімкнути чат-бота підтримки"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Виберіть, де терміни глосарія підсвічуються автоматично: документи, вправи та навчальні шляхи."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Приховувати IP-адреси у візуальних звітах і експорті звітів. IP-адреси зберігаються і доступні через авторизовані процедури роботи з персональними даними."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Типові значення платформи та права редагування курсу; керуються в налаштуваннях курсу."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Дозволити користувачам завантажувати неофіційну виписку про завершені курси, а адміністраторам, адміністраторам сесій і HR-менеджерам — видавати підписані офіційні виписки для користувачів, якими вони керують. Зображення підпису завантажується зі сторінки виписки користувача."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Назва програми, що друкується на кожній виписці, наприклад назва диплома, який готують на цій платформі."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Яке поле курсу заповнює стовпець коду курсу у виписці: код курсу чи назва кафедри."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Змінна додаткового поля курсу з кількістю годин курсу. Залиште порожнім, щоб використовувати тривалість курсу."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Друкувати обов’язкові години курсу як години, завершені слухачем. Якщо вимкнено, завершені години — це час, проведений слухачем у курсі."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Змінна додаткового поля користувача з номером студента, що друкується у виписці. Залиште порожнім, щоб нічого не друкувати."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Змінні додаткових полів користувача через кому, що друкуються після адреси користувача у виписці, наприклад місто, область і поштовий індекс."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "JSON-список літер оцінок від найвищого мінімального бала вниз: кожен елемент містить мінімальний бал у відсотках (min), літеру та бали оцінки для обчислення GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Пояснення способу обчислення GPA, що друкується під GPA у виписці."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Ім’я посадової особи закладу, яка підписує офіційні виписки."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Посада посадової особи закладу, яка підписує офіційні виписки."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Потрібна явна згода власника та ручні дії адміністратора. У блокчейн надсилаються лише відбитки SHA-256."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Учні бачать лише перше повідомлення теми форуму, доки самі не опублікують у ній. Адміністратори, викладачі, тренери та тьютори груп завжди бачать усі повідомлення."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Показувати назву та скорочений опис категорії форуму вгорі кожної теми з посиланням на повний опис."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Якщо увімкнено, викладачі можуть у розділі «Форум» налаштувань курсу вибрати, чи приховувати відповіді в темах, доки учень не опублікує повідомлення, чи показувати опис категорії в темах і скільки повідомлень очікує індикатор прогресу участі, замість платформених налаштувань."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Показувати лише цю кількість повідомлень кожної теми форуму кожному користувачу, який не є адміністратором платформи, включно з викладачами, і всім у навчальному шляху. У режимах «гілки» та «вкладені» обмеження стосується відповідей на кожне повідомлення. Повідомлення зберігаються в порядку перегляду: перші або найновіші в навчальному шляху, де спочатку йдуть найновіші. Встановіть 0, щоб показувати всі повідомлення."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Показувати учням індикатор прогресу в кожній темі форуму, який досягає 100%, коли вони опублікували в ній цю кількість повідомлень. Повідомлення, що очікують модерації, враховуються. Встановіть 0, щоб приховати індикатор."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Додає невелике зображення відстеження до електронних листів із сповіщеннями про повідомлення та фіксує, коли його запитують. Це лише вказує, що лист міг бути відкритий; це не доводить, що його прочитали."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Дозволити одержувачам сповіщень про прямі повідомлення відповідати електронною поштою. Вхідні повідомлення має спрямовувати поштова інфраструктура до команди Chamilo для вхідної пошти."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Базова адреса для маршрутизації відповідей, наприклад replies@example.com. Chamilo додає унікальний токен одержувача за допомогою plus-адресації."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Підключення до поштової скриньки для збору вхідних відповідей, наприклад imaps://user:password@imap.example.com:993/INBOX. Зарезервовані символи в облікових даних кодуйте в URL."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Кількість днів, протягом яких користувач залишається в системі, якщо вибрано «Запам’ятати мене». Встановіть 0, щоб вимкнути. Потрібен HTTPS. Дозволений діапазон: від 0 до 90. Звичайний час очікування сесії налаштовується окремо в PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Дозволяє динамічній реєстрації клієнтів запитувати будь-який scope, зареєстрований сервером ресурсів OAuth Chamilo. Якщо вимкнено, самореєстрація обмежена MCP. Доступ до ресурсів завжди окремо обмежується списком дозволених ресурсів кожного клієнта."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Увімкнути конфіденційні повідомлення про інциденти. Модуль потребує захищеного ключа шифрування та дозволу слідчого."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Від 2 до 10 різних заявників мають повідомити про того самого користувача, перш ніж справа стане видимою слідчим."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Дозволити зображення, аудіо та короткі відеодокази. Існуючі вкладення залишаються доступними для читання, якщо вимкнено."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Показувати внутрішню позначку прийнятних розслідувань. Не надсилає електронні листи чи зовнішні сповіщення."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Показати в панелі чату чат-бота з деревом рішень, який може спрямовувати користувачів до "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Дозволяє викладачам створювати та версіонувати освітні застосунки з підтримкою ШІ в курсах."
+
+msgid "Department name"
+msgstr "Назва підрозділу"
+
+msgid "Documents and exercise"
+msgstr "Документи та вправа"
+
+msgid "Documents and learning path"
+msgstr "Документи та навчальний шлях"
+
+msgid "Documents, exercise and learning path"
+msgstr "Документи, вправа та навчальний шлях"
+
+msgid "session"
+msgstr "сесія"
+
+msgid "course"
+msgstr "курс"
+
+msgid "You have been enrolled in %s"
+msgstr "Вас зараховано до %s"
 

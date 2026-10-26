@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Ειλικρινά"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Δείγμα τύπου: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Δείγμα τύπου: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Μεταβλητά όρια"
@@ -28783,6 +28783,9 @@ msgstr "Τρέχων χρήστης δεν βρέθηκε."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Γεια σου %s,<br><br>Είσαι εγγεγραμμένος στο %s.<br>Μπορείς να αποκτήσεις πρόσβαση στον λογαριασμό σου <a href=\"%s\">εδώ</a>.<br><br>Τα διαπιστευτήριά σου είναι:<br>Όνομα χρήστη: <strong>%s</strong><br>Κωδικός: <strong>%s</strong><br><br>Με εκτίμηση,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Γεια σας %s,<br><br>Έχετε εγγραφεί στο %s.<br>Όνομα χρήστη: <strong>%s</strong><br><br>Κάντε κλικ στον παρακάτω σύνδεσμο για να ορίσετε τον κωδικό πρόσβασης και να αποκτήσετε πρόσβαση στον λογαριασμό σας:<br><a href=\"%s\">Ορισμός κωδικού πρόσβασης</a><br><br>Με εκτίμηση,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Είσαι εγγεγραμμένος στο %s"
 
@@ -41586,4 +41589,1616 @@ msgstr "Το ιστορικό μετεγκατάστασης έχει καταγ
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "Το %s υπάρχει στη ρίζα του έργου: διαγράψτε το για να κλείσετε τα σημεία πρόσβασης αναβάθμισης"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Έχετε αποκτήσει πιστοποιητικό για αυτή την άσκηση"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Πρέπει να ολοκληρώσετε τη διαδρομή μάθησης \"%s\" πριν αποκτήσετε πρόσβαση σε αυτή."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε οριστικά αυτό το αρχείο;"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αποσυνδέσετε αυτό το αρχείο από το επιλεγμένο μάθημα;"
+
+msgid "Attach this file to another course"
+msgstr "Επισύναψη αυτού του αρχείου σε άλλο μάθημα"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Επισύναψη στα επιλεγμένα μαθήματα (κρυφό)"
+
+msgid "Course(s):"
+msgstr "Μάθημα(-τα):"
+
+msgid "Delete definitively"
+msgstr "Οριστική διαγραφή"
+
+msgid "Detach from this course"
+msgstr "Αποσύνδεση από αυτό το μάθημα"
+
+msgid "File actions"
+msgstr "Ενέργειες αρχείου"
+
+msgid "File Information"
+msgstr "Πληροφορίες αρχείου"
+
+msgid "File Link:"
+msgstr "Σύνδεσμος αρχείου:"
+
+msgid "File Path:"
+msgstr "Διαδρομή αρχείου:"
+
+msgid "Filter courses..."
+msgstr "Φιλτράρισμα μαθημάτων..."
+
+msgid "MIME Type:"
+msgstr "Τύπος MIME:"
+
+msgid "N/A"
+msgstr "Μ/Δ"
+
+msgid "No results found."
+msgstr "Δεν βρέθηκαν αποτελέσματα."
+
+msgid "Original Name"
+msgstr "Αρχικό όνομα"
+
+msgid "Original Name:"
+msgstr "Αρχικό όνομα:"
+
+msgid "Orphan"
+msgstr "Ορφανό"
+
+msgid "Resource File ID:"
+msgstr "Αναγνωριστικό αρχείου πόρου:"
+
+msgid "Resource Node ID:"
+msgstr "Αναγνωριστικό κόμβου πόρου:"
+
+msgid "Search..."
+msgstr "Αναζήτηση..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Για να αποσυνδέσετε αυτό το αρχείο από συγκεκριμένο μάθημα, κάντε κλικ στο εικονίδιο \"×\" στην αντίστοιχη ετικέτα μαθήματος παραπάνω."
+
+msgid "User:"
+msgstr "Χρήστης:"
+
+msgid "View file information"
+msgstr "Προβολή πληροφοριών αρχείου"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Μπορείτε να επισυνάψετε αυτό το αρχείο σε ένα ή περισσότερα μαθήματα (κρυφό στη ρίζα των εγγράφων). Αν το αρχείο δεν χρησιμοποιείται πλέον και γίνει ορφανό, μπορείτε επίσης να το διαγράψετε οριστικά."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Μπορείτε να επιλέξετε ένα ή περισσότερα μαθήματα (χρησιμοποιήστε Ctrl/Cmd + κλικ)."
+
+msgid "bytes"
+msgstr "bytes"
+
+msgid "Failed to copy:"
+msgstr "Αποτυχία αντιγραφής:"
+
+msgid "Missing resource file identifier."
+msgstr "Λείπει το αναγνωριστικό αρχείου πόρου."
+
+msgid "Please select at least one course."
+msgstr "Επιλέξτε τουλάχιστον ένα μάθημα."
+
+msgid "Resource file not found."
+msgstr "Το αρχείο πόρου δεν βρέθηκε."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Το αρχείο \"%s\" επισυνάφθηκε σε %d μάθημα(-τα): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Ορισμένα μαθήματα παραλείφθηκαν: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Λείπει το αναγνωριστικό αρχείου ή μαθήματος."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Αυτό το αρχείο πόρου δεν έχει κόμβο πόρου και δεν μπορεί να αποσυνδεθεί."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Το αρχείο αποσυνδέθηκε από %d σύνδεσμο(-ους) μαθήματος."
+
+msgid "This file is not attached to the selected course."
+msgstr "Αυτό το αρχείο δεν είναι επισυναπτόμενο στο επιλεγμένο μάθημα."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Αυτό το αρχείο χρησιμοποιείται ακόμη από τουλάχιστον έναν πόρο και δεν μπορεί να διαγραφεί."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Το ορφανό αρχείο και το φυσικό του περιεχόμενο διαγράφηκαν οριστικά."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Η έρευνα δημοσιεύτηκε. Δημιουργήθηκαν: %d. Ενημερώθηκαν: %d. Μηνύματα που στάλθηκαν: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Αποκτήσιμο"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Αυτή η δεξιότητα δεν μπορεί να αποκτηθεί"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Αρχάριος"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Άκαμπτη προσήλωση σε κανόνες και οδηγίες χωρίς πλαίσιο· περιορισμένη περιστασιακή κρίση."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Προχωρημένος αρχάριος"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Αρχίζει να αναγνωρίζει περιστασιακές πτυχές και μοτίβα, αλλά εξακολουθεί να χρειάζεται κατευθυντήριες γραμμές."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Ικανός"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Αναπτύσσει σχεδιασμό και νοητικά μοντέλα· αναλαμβάνει ευθύνη για τα αποτελέσματα, αλλά μπορεί να αισθάνεται καταβεβλημένος από την πολυπλοκότητα."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Επαρκής"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Βλέπει τη \"μεγάλη εικόνα\", ιεραρχεί διαισθητικά και μαθαίνει από την εμπειρία."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Ειδικός"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Διαισθητική, ρευστή απόδοση· βασίζεται σε βαθιά άρρητη γνώση· μπορεί να καινοτομεί ή να χειρίζεται νέες καταστάσεις χωρίς προσπάθεια."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Απομνημόνευση"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Ανάκτηση, ανάκληση ή αναγνώριση σχετικής γνώσης από τη μακροπρόθεσμη μνήμη."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Κατανόηση"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Κατασκευή νοήματος από διδακτικά μηνύματα, συμπεριλαμβανομένης προφορικής, γραπτής και γραφικής επικοινωνίας. Απόδειξη κατανόησης με ερμηνεία, παραδείγματα, ταξινόμηση, σύνοψη, συμπερασμό, σύγκριση ή εξήγηση."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Εφαρμογή"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Εκτέλεση ή χρήση μιας διαδικασίας μέσω εφαρμογής της σε δεδομένη κατάσταση. Χρήση γνώσεων ή δεξιοτήτων σε νέες ή συγκεκριμένες καταστάσεις."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Ανάλυση"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Διάσπαση του υλικού στα συστατικά του μέρη και προσδιορισμός του τρόπου με τον οποίο τα μέρη σχετίζονται μεταξύ τους και με μια συνολική δομή ή σκοπό. Εντοπισμός κινήτρων, αιτιών ή σχέσεων."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Αξιολόγηση"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Διατύπωση κρίσεων βάσει κριτηρίων και προτύπων. Έλεγχος, κριτική ή αιτιολόγηση αποφάσεων ή πορειών δράσης."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Δημιουργία"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Συνδυασμός στοιχείων ώστε να σχηματιστεί ένα συνεκτικό ή λειτουργικό σύνολο· αναδιοργάνωση στοιχείων σε νέο μοτίβο ή δομή. Παραγωγή πρωτότυπου έργου ή δημιουργία νέων ιδεών."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Ακολουθώ"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Εργάζεται υπό στενή εποπτεία και καθοδήγηση. Εκτελεί συνήθεις εργασίες με περιορισμένη διακριτική ευχέρεια. Εστιάζει στην τήρηση οδηγιών και στη βασική εκτέλεση."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Βοηθώ"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Εργάζεται υπό συνήθη εποπτεία. Παρέχει βοήθεια σε άλλους, συμβάλλει σε ομαδικές εργασίες και αρχίζει να αναλαμβάνει κάποια πρωτοβουλία εντός καθορισμένων ορίων."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Εργάζεται υπό γενική εποπτεία. Εφαρμόζει γνώσεις και δεξιότητες σε εύρος συνήθων και μη συνήθων δραστηριοτήτων. Ασκεί κάποια διακριτική ευχέρεια και κρίση."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Εργάζεται υπό ευρεία καθοδήγηση. Ενισχύει άλλους παρέχοντας εξειδικευμένη καθοδήγηση, υποστήριξη ή υπηρεσίες. Αναλαμβάνει ευθύνη για τη δική του εργασία και μπορεί να εποπτεύει μικρές ομάδες ή εργασίες."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Διασφάλιση και συμβουλευτική"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Εργάζεται υπό ευρεία καθοδήγηση αλλά με σημαντική αυτονομία. Διασφαλίζει ότι η εργασία πληροί τους στόχους και συμβουλεύει σε σύνθετα θέματα. Συχνά ηγείται ομάδων ή έργων και επηρεάζει αποφάσεις."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Έναρξη και επιρροή"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Έχει καθορισμένη εξουσία και ευθύνη για σημαντικό τομέα εργασίας. Αναλαμβάνει ενέργειες, επηρεάζει στρατηγική και πολιτική στον τομέα του και ηγείται σημαντικών έργων ή ομάδων."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Καθορισμός στρατηγικής, έμπνευση, κινητοποίηση"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Κατέχει εξουσία στο υψηλότερο οργανωτικό επίπεδο για σημαντικό τομέα εργασίας. Καθορίζει μακροπρόθεσμη στρατηγική, εμπνέει και κινητοποιεί άλλους και λαμβάνει αποφάσεις κρίσιμες για την επιτυχία του οργανισμού. Ασκεί επιρροή σε επίπεδο κλάδου ή εξωτερικά."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Μέγιστος χρόνος αδράνειας προς εξέταση (λεπτά)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Μια σελίδα μαθήματος που μένει ανοιχτή συνεχίζει να στέλνει αυτόματα αιτήματα. Μετά από αυτόν τον αριθμό λεπτών χωρίς πραγματική ενέργεια από τον χρήστη (άνοιγμα σελίδας ή στοιχείου, απάντηση κ.λπ.), ο χρόνος που δαπανάται στο μάθημα παύει να μετράται."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Συνεργατικός επεξεργαστής Wiki"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Σύνδεση στο Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Η αποθήκευση δημιουργεί νέα έκδοση Wiki του Chamilo από το τρέχον περιεχόμενο του Etherpad."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Δεν ήταν δυνατή η φόρτωση του συνεργατικού επεξεργαστή."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Ενεργοποίηση Etherpad για επεξεργασία Wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Χρήση του Etherpad ως συνεργατικού επεξεργαστή για υπάρχουσες σελίδες Wiki. Το Etherpad πρέπει να είναι διαθέσιμο στην ίδια προέλευση με το Chamilo για ασφαλείς ενσωματωμένες συνεδρίες."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Βασικό URL της εγκατάστασης Etherpad, συμπεριλαμβανομένης προαιρετικής διαδρομής reverse-proxy. Παράδειγμα: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Κλειδί API Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Κλειδί API που χρησιμοποιεί το Chamilo για δημιουργία pads, συνεδριών και συγχρονισμό περιεχομένου Wiki. Ρυθμίστε το Etherpad ώστε να δέχεται έλεγχο ταυτότητας με κλειδί API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Η προεπιλεγμένη ορατότητα νέων εγγράφων μπορεί να αλλάξει ανά μάθημα"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Ορατότητα που δίνεται σε νέο έγγραφο, φάκελο ή μεταφορτωμένο αρχείο όταν το δημιουργεί ένας εκπαιδευτής σε μάθημα. Οι εκπαιδευτές μπορούν στη συνέχεια να αλλάξουν την ορατότητα καθενός."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Όταν είναι ενεργό, οι εκπαιδευτές μπορούν να επιλέξουν στις ρυθμίσεις μαθήματος την ορατότητα που δίνεται στα νέα έγγραφα του μαθήματός τους, αντί της προεπιλογής της πλατφόρμας."
+
+msgid "Default visibility of new learning paths"
+msgstr "Προεπιλεγμένη ορατότητα νέων μαθησιακών διαδρομών"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Η προεπιλεγμένη ορατότητα νέων μαθησιακών διαδρομών μπορεί να αλλάξει ανά μάθημα"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Ορατότητα που δίνεται σε νέα μαθησιακή διαδρομή όταν τη δημιουργεί ένας εκπαιδευτής σε μάθημα. Οι εκπαιδευτές μπορούν στη συνέχεια να αλλάξουν την ορατότητα καθεμιάς."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Όταν είναι ενεργό, οι εκπαιδευτές μπορούν να επιλέξουν στις ρυθμίσεις μαθήματος την ορατότητα που δίνεται στις νέες μαθησιακές διαδρομές του μαθήματός τους, αντί της προεπιλογής της πλατφόρμας."
+
+msgid "Default visibility of new tests"
+msgstr "Προεπιλεγμένη ορατότητα νέων τεστ"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Η προεπιλεγμένη ορατότητα νέων τεστ μπορεί να αλλάξει ανά μάθημα"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Ορατότητα που δίνεται σε ένα νέο τεστ όταν ένας εκπαιδευτής το δημιουργεί σε ένα μάθημα. Οι εκπαιδευτές μπορούν να αλλάξουν την ορατότητα καθενός στη συνέχεια."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Όταν ενεργοποιηθεί, οι εκπαιδευτές μπορούν να επιλέξουν στις ρυθμίσεις του μαθήματος την ορατότητα που δίνεται στα νέα τεστ του μαθήματός τους, αντί της προεπιλογής της πλατφόρμας."
+
+msgid "Default visibility for new learning paths"
+msgstr "Προεπιλεγμένη ορατότητα για νέα μονοπάτια μάθησης"
+
+msgid "Default visibility for new tests"
+msgstr "Προεπιλεγμένη ορατότητα για νέα τεστ"
+
+msgid "Following"
+msgstr "Ακολουθώ"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Λήψη e-mail όταν ένας εκπαιδευόμενος σχολιάζει μια υποβολή αυτής της εργασίας"
+
+msgid "Payment history"
+msgstr "Ιστορικό πληρωμών"
+
+msgid "No payments yet"
+msgstr "Δεν υπάρχουν πληρωμές ακόμη"
+
+msgid "Cancel service"
+msgstr "Ακύρωση υπηρεσίας"
+
+msgid "Official transcript"
+msgstr "Επίσημη αναλυτική βαθμολογία"
+
+msgid "Unofficial transcript"
+msgstr "Ανεπίσημη αναλυτική βαθμολογία"
+
+msgid "Student name"
+msgstr "Όνομα μαθητή"
+
+msgid "Student number"
+msgstr "Αριθμός μητρώου μαθητή"
+
+msgid "Program title"
+msgstr "Τίτλος προγράμματος"
+
+msgid "Required hours"
+msgstr "Απαιτούμενες ώρες"
+
+msgid "Completion date"
+msgstr "Ημερομηνία ολοκλήρωσης"
+
+msgid "Hours completed"
+msgstr "Ολοκληρωμένες ώρες"
+
+msgid "Final grade"
+msgstr "Τελικός βαθμός"
+
+msgid "Grade"
+msgstr "Βαθμός"
+
+msgid "No completed course yet."
+msgstr "Δεν υπάρχει ολοκληρωμένο μάθημα ακόμη."
+
+msgid "Grading scale"
+msgstr "Κλίμακα βαθμολόγησης"
+
+msgid "Signature of school official"
+msgstr "Υπογραφή υπευθύνου σχολής"
+
+msgid "School official"
+msgstr "Υπεύθυνος σχολής"
+
+msgid "Official's title"
+msgstr "Τίτλος υπευθύνου"
+
+msgid "Verify this transcript at"
+msgstr "Επαληθεύστε αυτή την αναλυτική βαθμολογία στο"
+
+msgid "Verification code"
+msgstr "Κωδικός επαλήθευσης"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Αυτή η ανεπίσημη αναλυτική βαθμολογία δεν είναι υπογεγραμμένη. Ζητήστε από έναν διαχειριστή επίσημη αναλυτική βαθμολογία."
+
+msgid "Transcript verification"
+msgstr "Επαλήθευση αναλυτικής βαθμολογίας"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Ελέγξτε ότι αυτή η επίσημη αναλυτική βαθμολογία εκδόθηκε και υπογράφηκε από το ίδρυμα, δεν έχει αλλοιωθεί και δεν έχει ανακληθεί."
+
+msgid "Valid"
+msgstr "Έγκυρο"
+
+msgid "Invalid signature"
+msgstr "Μη έγκυρη υπογραφή"
+
+msgid "Transcript not found"
+msgstr "Η αναλυτική βαθμολογία δεν βρέθηκε"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Η υπογραφή του ιδρύματος είναι έγκυρη και αυτή η αναλυτική βαθμολογία δεν έχει ανακληθεί."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Αυτή η αναλυτική βαθμολογία δεν μπορεί να επαληθευτεί ως έγκυρη. Τα στοιχεία της δεν εμφανίζονται."
+
+msgid "Transcript details"
+msgstr "Στοιχεία αναλυτικής βαθμολογίας"
+
+msgid "Institution"
+msgstr "Ίδρυμα"
+
+msgid "Issued on"
+msgstr "Εκδόθηκε στις"
+
+msgid "Download verification JSON"
+msgstr "Λήψη JSON επαλήθευσης"
+
+msgid "Transcript"
+msgstr "Αναλυτική βαθμολογία"
+
+msgid "My confidential reports"
+msgstr "Οι εμπιστευτικές μου αναφορές"
+
+msgid "My transcript"
+msgstr "Η αναλυτική μου βαθμολογία"
+
+msgid "Confidential investigations"
+msgstr "Εμπιστευτικές έρευνες"
+
+msgid "Floor plan"
+msgstr "Κάτοψη"
+
+msgid "Click a highlighted room to select it"
+msgstr "Κάντε κλικ σε ένα επισημασμένο δωμάτιο για να το επιλέξετε"
+
+msgid "Select room"
+msgstr "Επιλογή δωματίου"
+
+msgid "Room on floor plan"
+msgstr "Δωμάτιο στην κάτοψη"
+
+msgid "Select a branch first"
+msgstr "Επιλέξτε πρώτα ένα παράρτημα"
+
+msgid "The branch has no attached floor plan"
+msgstr "Το παράρτημα δεν έχει συνημμένη κάτοψη"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Χρησιμοποιήστε το εργαλείο πολυγώνου για να περιγράψετε το δωμάτιο· χρησιμοποιήστε Επεξεργασία για να μετακινήσετε τις γωνίες"
+
+msgid "Save room area"
+msgstr "Αποθήκευση περιοχής αίθουσας"
+
+msgid "Clear room area"
+msgstr "Εκκαθάριση περιοχής αίθουσας"
+
+msgid "Save the room form to persist the area"
+msgstr "Αποθηκεύστε τη φόρμα αίθουσας για να διατηρηθεί η περιοχή"
+
+msgid "Floor plan unavailable"
+msgstr "Το κάτοψη δεν είναι διαθέσιμο"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Τα σημεία του χάρτη αίθουσας πρέπει να βρίσκονται εντός του κατόψεως"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Είστε βέβαιοι ότι θέλετε να εκκαθαρίσετε την περιοχή της αίθουσας;"
+
+msgid "View room on floor plan"
+msgstr "Προβολή αίθουσας στο κάτοψη"
+
+msgid "No floor plan available"
+msgstr "Δεν υπάρχει διαθέσιμο κάτοψη"
+
+msgid "This is an assignment by groups"
+msgstr "Αυτή είναι μια εργασία ανά ομάδες"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Ανεβάστε κάτοψη PNG, JPEG ή ασφαλή στατικό SVG, ή επιλέξτε υπάρχουσα εικόνα από τα Έγγραφα."
+
+msgid "Upload floor plan"
+msgstr "Μεταφόρτωση κατόψεως"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG ή στατικό SVG, μέγιστο 10 MB"
+
+msgid "Search images by name"
+msgstr "Αναζήτηση εικόνων κατά όνομα"
+
+msgid "Image name"
+msgstr "Όνομα εικόνας"
+
+msgid "Select an image"
+msgstr "Επιλογή εικόνας"
+
+msgid "Change floor plan"
+msgstr "Αλλαγή κατόψεως"
+
+msgid "Attach floor plan"
+msgstr "Επισύναψη κατόψεως"
+
+msgid "No matching images found in Documents."
+msgstr "Δεν βρέθηκαν αντίστοιχες εικόνες στα Έγγραφα."
+
+msgid "Current floor plan"
+msgstr "Τρέχον κάτοψη"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Οι αλλαγές κατόψεως αποθηκεύονται αυτόματα."
+
+msgid "Remove floor plan"
+msgstr "Αφαίρεση κατόψεως"
+
+msgid "Cannot load images"
+msgstr "Αδυναμία φόρτωσης εικόνων"
+
+msgid "Floor plan saved"
+msgstr "Το κάτοψη αποθηκεύτηκε"
+
+msgid "Cannot attach floor plan"
+msgstr "Αδυναμία επισύναψης κατόψεως"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Υποστηρίζονται μόνο εικόνες PNG/JPEG και ασφαλή στατικά SVG έως 10MB."
+
+msgid "Cannot upload floor plan"
+msgstr "Αδυναμία μεταφόρτωσης κατόψεως"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε το κάτοψη;"
+
+msgid "Floor plan removed"
+msgstr "Το κάτοψη αφαιρέθηκε"
+
+msgid "Cannot remove floor plan"
+msgstr "Αδυναμία αφαίρεσης κατόψεως"
+
+msgid "Support bot"
+msgstr "Bot υποστήριξης"
+
+msgid "Connected"
+msgstr "Συνδεδεμένο"
+
+msgid "Not connected"
+msgstr "Μη συνδεδεμένο"
+
+msgid "View ticket"
+msgstr "Προβολή δελτίου"
+
+msgid "Start a new conversation"
+msgstr "Έναρξη νέας συνομιλίας"
+
+msgid "Video call"
+msgstr "Βιντεοκλήση"
+
+msgid "Incoming video call"
+msgstr "Εισερχόμενη βιντεοκλήση"
+
+msgid "Decline"
+msgstr "Απόρριψη"
+
+msgid "Mute microphone"
+msgstr "Σίγαση μικροφώνου"
+
+msgid "Unmute microphone"
+msgstr "Κατάργηση σίγασης μικροφώνου"
+
+msgid "Turn camera off"
+msgstr "Απενεργοποίηση κάμερας"
+
+msgid "Turn camera on"
+msgstr "Ενεργοποίηση κάμερας"
+
+msgid "Hang up"
+msgstr "Τερματισμός"
+
+msgid "Calling..."
+msgstr "Κλήση..."
+
+msgid "Connecting..."
+msgstr "Σύνδεση..."
+
+msgid "Your contact is busy."
+msgstr "Η επαφή σας είναι απασχολημένη."
+
+msgid "Your contact did not answer the call."
+msgstr "Η επαφή σας δεν απάντησε στην κλήση."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Η επαφή σας δεν μπόρεσε να αποκτήσει πρόσβαση στην κάμερα ή το μικρόφωνο."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Η επαφή σας δεν μπόρεσε να προετοιμάσει τη βιντεοκλήση."
+
+msgid "Your contact refused the call."
+msgstr "Η επαφή σας αρνήθηκε την κλήση."
+
+msgid "The call timed out."
+msgstr "Η κλήση έληξε λόγω χρονικού ορίου."
+
+msgid "Your contact cancelled the call."
+msgstr "Η επαφή σας ακύρωσε την κλήση."
+
+msgid "The video connection was lost."
+msgstr "Η σύνδεση βίντεο χάθηκε."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Η επαφή σας δεν μπόρεσε να δημιουργήσει τη σύνδεση βίντεο."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Η επαφή σας δεν μπόρεσε να ολοκληρώσει τη ρύθμιση της βιντεοκλήσης."
+
+msgid "Your contact hung up."
+msgstr "Η επαφή σας έκλεισε το τηλέφωνο."
+
+msgid "Video call could not be started"
+msgstr "Δεν ήταν δυνατή η έναρξη της βιντεοκλήσης"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Απορρίφθηκε η άδεια για κάμερα ή μικρόφωνο."
+
+msgid "No camera or microphone was found."
+msgstr "Δεν βρέθηκε κάμερα ή μικρόφωνο."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Η κάμερα ή το μικρόφωνο χρησιμοποιείται ήδη ή δεν είναι διαθέσιμο."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Η κάμερα ή το μικρόφωνο δεν υποστηρίζει τις απαιτούμενες ρυθμίσεις."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Δεν ήταν δυνατή η πρόσβαση στην κάμερα ή το μικρόφωνο."
+
+msgid "The video call could not be prepared."
+msgstr "Δεν ήταν δυνατή η προετοιμασία της βιντεοκλήσης."
+
+msgid "The video call request could not be sent."
+msgstr "Δεν ήταν δυνατή η αποστολή του αιτήματος βιντεοκλήσης."
+
+msgid "The incoming video call could not be processed."
+msgstr "Δεν ήταν δυνατή η επεξεργασία της εισερχόμενης βιντεοκλήσης."
+
+msgid "The video call answer could not be prepared."
+msgstr "Δεν ήταν δυνατή η προετοιμασία της απάντησης στη βιντεοκλήση."
+
+msgid "The video call answer could not be sent."
+msgstr "Δεν ήταν δυνατή η αποστολή της απάντησης στη βιντεοκλήση."
+
+msgid "The video call answer could not be processed."
+msgstr "Δεν ήταν δυνατή η επεξεργασία της απάντησης στη βιντεοκλήση."
+
+msgid "The video connection failed"
+msgstr "Η σύνδεση βίντεο απέτυχε"
+
+msgid "The video connection could not be established."
+msgstr "Δεν ήταν δυνατή η δημιουργία της σύνδεσης βίντεο."
+
+msgid "No answer was received."
+msgstr "Δεν ελήφθη απάντηση."
+
+msgid "You refused the call."
+msgstr "Απορρίψατε την κλήση."
+
+msgid "You cancelled the call."
+msgstr "Ακυρώσατε την κλήση."
+
+msgid "You hung up."
+msgstr "Κλείσατε το τηλέφωνο."
+
+msgid "You missed the call."
+msgstr "Χάσατε την κλήση."
+
+msgid "Support bot is currently unavailable."
+msgstr "Το bot υποστήριξης δεν είναι διαθέσιμο αυτή τη στιγμή."
+
+msgid "A support ticket has been created."
+msgstr "Δημιουργήθηκε ένα δελτίο υποστήριξης."
+
+msgid "Conversation ended."
+msgstr "Η συνομιλία έληξε."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Το bot υποστήριξης δεν μπόρεσε να συνεχίσει αυτή τη συνομιλία. Παρακαλώ δοκιμάστε ξανά."
+
+msgid "Add your first term glossary to this course"
+msgstr "Προσθέστε τον πρώτο όρο γλωσσαρίου σε αυτό το μάθημα"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το πρότυπο έρευνας;"
+
+msgid "The survey template has been deleted."
+msgstr "Το πρότυπο έρευνας διαγράφηκε."
+
+msgid "Please select a course."
+msgstr "Παρακαλώ επιλέξτε ένα μάθημα."
+
+msgid "Please select a session for this course."
+msgstr "Παρακαλώ επιλέξτε μια συνεδρία για αυτό το μάθημα."
+
+msgid "The survey has been created from the template."
+msgstr "Η έρευνα δημιουργήθηκε από το πρότυπο."
+
+msgid "Survey templates"
+msgstr "Πρότυπα ερευνών"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Δημιουργήστε επαναχρησιμοποιήσιμα πρότυπα ερευνών για εκπαιδευτικούς και αντιστοιχίστε τα απευθείας σε μάθημα ή συνεδρία."
+
+msgid "Subtitle"
+msgstr "Υπότιτλος"
+
+msgid "Assign to course"
+msgstr "Αντιστοίχιση σε μάθημα"
+
+msgid "Assign template to course"
+msgstr "Αντιστοίχιση προτύπου σε μάθημα"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Αφήστε τη συνεδρία κενή για να δημιουργηθεί η έρευνα απευθείας στο μάθημα."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Αυτό το μάθημα είναι διαθέσιμο μέσω συνεδρίας σε αυτή την πύλη, επομένως απαιτείται συνεδρία."
+
+msgid "Survey template questions"
+msgstr "Ερωτήσεις προτύπου έρευνας"
+
+msgid "Back to survey templates"
+msgstr "Επιστροφή στα πρότυπα ερευνών"
+
+msgid "Could not load survey template"
+msgstr "Δεν ήταν δυνατή η φόρτωση του προτύπου έρευνας"
+
+msgid "Could not load survey template questions"
+msgstr "Δεν ήταν δυνατή η φόρτωση των ερωτήσεων του προτύπου έρευνας"
+
+msgid "Could not save survey template question"
+msgstr "Δεν ήταν δυνατή η αποθήκευση της ερώτησης του προτύπου έρευνας"
+
+msgid "Could not delete survey template question"
+msgstr "Δεν ήταν δυνατή η διαγραφή της ερώτησης του προτύπου έρευνας"
+
+msgid "Could not move survey template question"
+msgstr "Δεν ήταν δυνατή η μετακίνηση της ερώτησης του προτύπου έρευνας"
+
+msgid "Could not copy survey template question"
+msgstr "Δεν ήταν δυνατή η αντιγραφή της ερώτησης του προτύπου έρευνας"
+
+msgid "The survey template has been saved."
+msgstr "Το πρότυπο έρευνας αποθηκεύτηκε."
+
+msgid "Edit survey template"
+msgstr "Επεξεργασία προτύπου έρευνας"
+
+msgid "Create survey template"
+msgstr "Δημιουργία προτύπου έρευνας"
+
+msgid "The survey template title is required."
+msgstr "Ο τίτλος του προτύπου έρευνας είναι υποχρεωτικός."
+
+msgid "Visible as template"
+msgstr "Ορατό ως πρότυπο"
+
+msgid "Create satisfaction survey"
+msgstr "Δημιουργία έρευνας ικανοποίησης"
+
+msgid "Training satisfaction survey"
+msgstr "Έρευνα ικανοποίησης κατάρτισης"
+
+msgid "Could not create satisfaction survey"
+msgstr "Δεν ήταν δυνατή η δημιουργία έρευνας ικανοποίησης"
+
+msgid "Use template"
+msgstr "Χρήση προτύπου"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Δημιουργήστε αυτή την έρευνα από επαναχρησιμοποιήσιμο πρότυπο που έχει προετοιμάσει διαχειριστής."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Αποτελέσματα κρυφά από τον εκπαιδευτή/καθηγητή"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Οι εκπαιδευτές και οι καθηγητές μπορούν να βλέπουν τον αριθμό απαντήσεων και να στέλνουν υπενθυμίσεις, αλλά δεν μπορούν να ανοίξουν ή να εξαγάγουν τα αποτελέσματα της έρευνας."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Το πρότυπο εφαρμόστηκε. Ελέγξτε τις ρυθμίσεις της έρευνας και αποθηκεύστε για να τη δημιουργήσετε."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Τα αποτελέσματα της έρευνας είναι κρυφά από εκπαιδευτές και καθηγητές."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Μπορείτε ακόμα να χρησιμοποιήσετε τη σελίδα προσκλήσεων για να δείτε τον αριθμό απαντήσεων και να στείλετε υπενθυμίσεις."
+
+msgid "Payment method"
+msgstr "Τρόπος πληρωμής"
+
+msgid "Preview mode"
+msgstr "Λειτουργία προεπισκόπησης"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Η πρόοδος και η βαθμολογία δεν αποθηκεύονται στη λειτουργία προεπισκόπησης."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Αυτός ο σύνδεσμος δεν μπορεί να εμφανιστεί μέσα στη διαδρομή μάθησης."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Ανοίξτε τον σε νέα καρτέλα για να δείτε τη σελίδα."
+
+msgid "Report a problem with this question"
+msgstr "Αναφορά προβλήματος σε αυτή την ερώτηση"
+
+msgid "Your report was sent to the teacher."
+msgstr "Η αναφορά σας στάλθηκε στον εκπαιδευτή."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Περιγράψτε το σφάλμα ή το πρόβλημα που εντοπίσατε. Η αναφορά θα σταλεί στον εκπαιδευτή."
+
+msgid "A comment is required."
+msgstr "Απαιτείται σχόλιο."
+
+msgid "Could not send the report."
+msgstr "Δεν ήταν δυνατή η αποστολή της αναφοράς."
+
+msgid "Learner reports"
+msgstr "Αναφορές εκπαιδευομένων"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Δεν έχουν υποβληθεί αναφορές εκπαιδευομένων για αυτή την ερώτηση."
+
+msgid "View attempt"
+msgstr "Προβολή προσπάθειας"
+
+msgid "Could not load learner reports."
+msgstr "Δεν ήταν δυνατή η φόρτωση των αναφορών εκπαιδευομένων."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Να επιτρέπεται στους εκπαιδευόμενους να αναφέρουν προβλήματα στις ερωτήσεις"
+
+msgid "Skill acquired"
+msgstr "Αποκτημένη δεξιότητα"
+
+msgid "AI Toolbox"
+msgstr "Εργαλειοθήκη ΤΝ"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Δημιουργήστε διαδραστικές εκπαιδευτικές εφαρμογές με ΤΝ και παρακολουθήστε την πρόοδο των εκπαιδευομένων με SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Δεν υπάρχουν ακόμη διαθέσιμες δημοσιευμένες εφαρμογές."
+
+msgid "Interactive applications"
+msgstr "Διαδραστικές εφαρμογές"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Δημιουργήστε, βελτιώστε, δημοσιεύστε και ελέγξτε εκδόσεις από ένα σημείο."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Ανοίξτε μια εφαρμογή για να συνεχίσετε από την τελευταία σας πρόοδο."
+
+msgid "Interactive learning application"
+msgstr "Διαδραστική εφαρμογή μάθησης"
+
+msgid "Create an interactive learning app"
+msgstr "Δημιουργία διαδραστικής εφαρμογής μάθησης"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Περιγράψτε τη δραστηριότητα. Το Chamilo θα δημιουργήσει εφαρμογή SCORM με εκδόσεις και παρακολούθηση προόδου και βαθμολογίας."
+
+msgid "Idea"
+msgstr "Ιδέα"
+
+msgid "Application"
+msgstr "Εφαρμογή"
+
+msgid "What should the application do?"
+msgstr "Τι πρέπει να κάνει η εφαρμογή;"
+
+msgid "How it works"
+msgstr "Πώς λειτουργεί"
+
+msgid "AI generation"
+msgstr "Δημιουργία με ΤΝ"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Η εφαρμογή δημιουργείται από τις οδηγίες σας και αποθηκεύεται ως έκδοση 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Η πρόοδος, η βαθμολογία και τα δεδομένα συνέχισης του εκπαιδευόμενου αναφέρονται στο Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Οι μελλοντικές βελτιώσεις δημιουργούν νέες εκδόσεις χωρίς να διαγράφουν τις προηγούμενες."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Συμπεριλάβετε τον μαθησιακό στόχο, τους κανόνες, τα επίπεδα, τη βαθμολόγηση και τι πρέπει να συμβεί όταν ολοκληρώσει ο εκπαιδευόμενος."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Δεν επιτρέπεται να δημιουργήσετε περιεχόμενο σε αυτό το πλαίσιο."
+
+msgid "The application was generated successfully."
+msgstr "Η εφαρμογή δημιουργήθηκε με επιτυχία."
+
+msgid "Open in student view"
+msgstr "Άνοιγμα σε προβολή μαθητή"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Δημιουργήστε την εφαρμογή για να ενεργοποιήσετε την προεπισκόπηση και τη δημοσίευση."
+
+msgid "Improve with AI"
+msgstr "Βελτίωση με ΤΝ"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Περιγράψτε την αλλαγή. Θα δημιουργηθεί νέα έκδοση και οι προηγούμενες εκδόσεις θα παραμείνουν διαθέσιμες."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Περιγράψτε την πλήρη διαδραστική δραστηριότητα που θέλετε να δημιουργήσετε."
+
+msgid "What should be improved?"
+msgstr "Τι πρέπει να βελτιωθεί;"
+
+msgid "Generate new version"
+msgstr "Δημιουργία νέας έκδοσης"
+
+msgid "Version history"
+msgstr "Ιστορικό εκδόσεων"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Προεπισκόπηση, λήψη ή επαναφορά οποιασδήποτε δημιουργημένης έκδοσης."
+
+msgid "A new version was generated."
+msgstr "Δημιουργήθηκε νέα έκδοση."
+
+msgid "Version restored"
+msgstr "Η έκδοση επαναφέρθηκε"
+
+msgid "The support bot tree has been published."
+msgstr "Το δέντρο του ρομπότ υποστήριξης δημοσιεύτηκε."
+
+msgid "The support bot tree has been archived."
+msgstr "Το δέντρο του ρομπότ υποστήριξης αρχειοθετήθηκε."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Το δέντρο του ρομπότ υποστήριξης αντιγράφηκε."
+
+msgid "The support bot tree has been deleted."
+msgstr "Το δέντρο του ρομπότ υποστήριξης διαγράφηκε."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το δέντρο ρομπότ υποστήριξης;"
+
+msgid "The support bot tree has been imported."
+msgstr "Το δέντρο του ρομπότ υποστήριξης εισήχθη."
+
+msgid "Create support bot tree"
+msgstr "Δημιουργία δέντρου ρομπότ υποστήριξης"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Δημιουργήστε ένα σταθερό δέντρο αποφάσεων που καθοδηγεί τους χρήστες μέσω ερωτήσεων υποστήριξης και μπορεί να κλιμακωθεί σε Αιτήματα."
+
+msgid "Portal scope"
+msgstr "Εμβέλεια πύλης"
+
+msgid "Duplicate"
+msgstr "Αντιγραφή"
+
+msgid "Archive"
+msgstr "Αρχειοθέτηση"
+
+msgid "View conversations"
+msgstr "Προβολή συνομιλιών"
+
+msgid "Import support bot tree"
+msgstr "Εισαγωγή δέντρου ρομπότ υποστήριξης"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Εισαγάγετε εξαγωγή JSON ή δέντρο αποφάσεων CSV. Το εισαγόμενο δέντρο δημιουργείται πάντα ως νέο πρόχειρο."
+
+msgid "Resolved"
+msgstr "Επιλύθηκε"
+
+msgid "Escalated"
+msgstr "Κλιμακώθηκε"
+
+msgid "Abandoned"
+msgstr "Εγκαταλείφθηκε"
+
+msgid "Support bot conversations"
+msgstr "Συνομιλίες ρομπότ υποστήριξης"
+
+msgid "Outcome"
+msgstr "Αποτέλεσμα"
+
+msgid "Started at"
+msgstr "Έναρξη"
+
+msgid "Ended at"
+msgstr "Λήξη"
+
+msgid "View conversation"
+msgstr "Προβολή συνομιλίας"
+
+msgid "Go to node"
+msgstr "Μετάβαση σε κόμβο"
+
+msgid "Create support ticket"
+msgstr "Δημιουργία αιτήματος υποστήριξης"
+
+msgid "End conversation"
+msgstr "Τερματισμός συνομιλίας"
+
+msgid "Node"
+msgstr "Κόμβος"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Ένα δέντρο ρομπότ υποστήριξης απαιτεί τουλάχιστον έναν κόμβο."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτόν τον κόμβο; Οι σύνδεσμοι προς αυτόν θα διαγραφούν."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Κάθε κόμβος ρομπότ υποστήριξης απαιτεί τουλάχιστον μία επιλογή."
+
+msgid "The support bot tree title is required."
+msgstr "Ο τίτλος του δέντρου ρομπότ υποστήριξης είναι υποχρεωτικός."
+
+msgid "A support bot entry node is required."
+msgstr "Απαιτείται κόμβος εισόδου για το ρομπότ υποστήριξης."
+
+msgid "Every support bot node requires content."
+msgstr "Κάθε κόμβος ρομπότ υποστήριξης απαιτεί περιεχόμενο."
+
+msgid "Every support bot option requires a label."
+msgstr "Κάθε επιλογή ρομπότ υποστήριξης απαιτεί ετικέτα."
+
+msgid "Select a target node for every go-to option."
+msgstr "Επιλέξτε κόμβο προορισμού για κάθε επιλογή μετάβασης."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Εισαγάγετε σχετική διεύθυνση URL για κάθε επιλογή συνδέσμου."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Επιλέξτε κατηγορία αιτήματος για κάθε επιλογή κλιμάκωσης."
+
+msgid "The support bot tree has been saved."
+msgstr "Το δέντρο του ρομπότ υποστήριξης αποθηκεύτηκε."
+
+msgid "Edit support bot tree"
+msgstr "Επεξεργασία δέντρου ρομπότ υποστήριξης"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Οι δημοσιευμένες και αρχειοθετημένες εκδόσεις ρομπότ υποστήριξης είναι μόνο για ανάγνωση. Αντιγράψτε αυτό το δέντρο από τη λίστα για να επεξεργαστείτε μια νέα έκδοση πρόχειρου."
+
+msgid "Default ticket project"
+msgstr "Προεπιλεγμένο έργο αιτημάτων"
+
+msgid "Decision tree rules"
+msgstr "Κανόνες δέντρου αποφάσεων"
+
+msgid "Every node must contain at least one option."
+msgstr "Κάθε κόμβος πρέπει να περιέχει τουλάχιστον μία επιλογή."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Ένας τελικός κόμβος πρέπει να τερματίζει τη συνομιλία ή να δημιουργεί αίτημα υποστήριξης."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Οι σύνδεσμοι μετάβασης δεν πρέπει να δημιουργούν κύκλους στην έκδοση v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Δεν επιτρέπονται εξωτερικά URL στην έκδοση v1· οι ενέργειες συνδέσμου πρέπει να χρησιμοποιούν σχετική διαδρομή Chamilo."
+
+msgid "Nodes"
+msgstr "Κόμβοι"
+
+msgid "Add node"
+msgstr "Προσθήκη κόμβου"
+
+msgid "Entry node"
+msgstr "Κόμβος εισόδου"
+
+msgid "Set as entry node"
+msgstr "Ορισμός ως κόμβος εισόδου"
+
+msgid "Target node"
+msgstr "Κόμβος προορισμού"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Χρησιμοποιήστε σχετική διαδρομή Chamilo, για παράδειγμα /tickets."
+
+msgid "Ticket category"
+msgstr "Κατηγορία αιτήματος"
+
+msgid "Select a default ticket project first."
+msgstr "Επιλέξτε πρώτα ένα προεπιλεγμένο έργο αιτημάτων."
+
+msgid "Closing message"
+msgstr "Μήνυμα κλεισίματος"
+
+msgid "Select a node to edit it."
+msgstr "Επιλέξτε έναν κόμβο για επεξεργασία."
+
+msgid "Support bot conversation"
+msgstr "Συνομιλία ρομπότ υποστήριξης"
+
+msgid "Transcript of %s"
+msgstr "Αναλυτική βαθμολογία του %s"
+
+msgid "Download unofficial transcript"
+msgstr "Λήψη ανεπίσημης αναλυτικής βαθμολογίας"
+
+msgid "Issue official transcript"
+msgstr "Έκδοση επίσημης αναλυτικής βαθμολογίας"
+
+msgid "Official transcripts"
+msgstr "Επίσημες αναλυτικές βαθμολογίες"
+
+msgid "No official transcript has been issued yet."
+msgstr "Δεν έχει εκδοθεί ακόμη επίσημη αναλυτική βαθμολογία."
+
+msgid "Issued by"
+msgstr "Εκδόθηκε από"
+
+msgid "Verify"
+msgstr "Επαλήθευση"
+
+msgid "Signature of official transcripts"
+msgstr "Υπογραφή επίσημων αναλυτικών βαθμολογιών"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Αυτή η εικόνα εκτυπώνεται στις επίσημες αναλυτικές βαθμολογίες αυτής της πύλης, πάνω από το όνομα και τον τίτλο του υπογράφοντος που ορίζονται στις ρυθμίσεις πιστοποιητικού."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Να εκδοθεί υπογεγραμμένη επίσημη αναλυτική βαθμολογία με τα μαθήματα και τους βαθμούς αυτής της σελίδας; Μπορεί να επαληθευτεί διαδικτυακά μέχρι να ανακληθεί."
+
+msgid "Official transcript issued"
+msgstr "Εκδόθηκε επίσημη αναλυτική βαθμολογία"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Να ανακληθεί αυτή η επίσημη αναλυτική βαθμολογία; Η σελίδα επαλήθευσης θα την εμφανίζει ως ανακληθείσα."
+
+msgid "Official transcript revoked"
+msgstr "Η επίσημη αναλυτική βαθμολογία ανακλήθηκε"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Επιλέξτε πρώτα εικόνα PNG ή JPEG."
+
+msgid "Signed credential"
+msgstr "Υπογεγραμμένο διαπιστευτήριο"
+
+msgid "Issue signed credential"
+msgstr "Έκδοση υπογεγραμμένου διαπιστευτηρίου"
+
+msgid "Verify credential"
+msgstr "Επαλήθευση διαπιστευτηρίου"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Αγκύρωση στο δίκτυο δοκιμών Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Επιβεβαίωση υπάρχουσας συναλλαγής Sepolia"
+
+msgid "Revoke signed credential"
+msgstr "Ανάκληση υπογεγραμμένου διαπιστευτηρίου"
+
+msgid "Delete certificate"
+msgstr "Διαγραφή πιστοποιητικού"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Επιβεβαίωση υπάρχουσας συναλλαγής Sepolia"
+
+msgid "Sepolia transaction hash"
+msgstr "Κατακερματισμός συναλλαγής Sepolia"
+
+msgid "Verify transaction"
+msgstr "Επαλήθευση συναλλαγής"
+
+msgid "Anchored"
+msgstr "Αγκυρωμένο"
+
+msgid "Issued"
+msgstr "Εκδόθηκε"
+
+msgid "Not issued"
+msgstr "Δεν εκδόθηκε"
+
+msgid "Consent required"
+msgstr "Απαιτείται συγκατάθεση"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Η συναλλαγή Sepolia επιβεβαιώθηκε και επαληθεύτηκε"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Το πορτοφόλι του δικτύου δοκιμών Sepolia θα σας ζητήσει να υπογράψετε μια συναλλαγή. Θα αγκυρωθεί μόνο το αποτύπωμα του πιστοποιητικού. Συνέχεια;"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Να ανακληθεί αυτό το υπογεγραμμένο διαπιστευτήριο; Οποιαδήποτε συναλλαγή στο blockchain παραμένει μόνιμη, αλλά η σελίδα επαλήθευσης θα αναφέρει ανάκληση."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Να εκδοθεί υπογεγραμμένο διαπιστευτήριο πιστοποιητικού για αυτόν τον εκπαιδευόμενο; Αυτό καθιστά τα εγκεκριμένα προσωπικά στοιχεία επαληθεύσιμα με ιδιωτικό σύνδεσμο."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Για το Sepolia απαιτείται πορτοφόλι προγράμματος περιήγησης συμβατό με EVM."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Επιλέξτε το δίκτυο δοκιμών Sepolia (chain ID 11155111) στο πορτοφόλι σας."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Μη έγκυρη διεύθυνση πορτοφολιού ή αποτύπωμα πιστοποιητικού."
+
+msgid "Transaction pending"
+msgstr "Συναλλαγή σε εκκρεμότητα"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Χρησιμοποιήστε την επιβεβαίωση υπάρχουσας συναλλαγής Sepolia αργότερα."
+
+msgid "Signed credential issued"
+msgstr "Εκδόθηκε υπογεγραμμένο διαπιστευτήριο"
+
+msgid "Credential revoked"
+msgstr "Το διαπιστευτήριο ανακλήθηκε"
+
+msgid "Transaction hash"
+msgstr "Hash συναλλαγής"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Η συγκατάθεση δημοσίευσης επιτρέπει σε έναν διαχειριστή να εκδώσει υπογεγραμμένο διαπιστευτήριο πιστοποιητικού και προαιρετικά να αγκυρώσει το αποτύπωμα SHA-256 στο δίκτυο δοκιμών Sepolia. Δεν αποστέλλονται όνομα ή προσωπικά δεδομένα στην αλυσίδα. Μπορείτε να αποσύρετε τη συγκατάθεση ανά πάσα στιγμή."
+
+msgid "Publication consent"
+msgstr "Συγκατάθεση δημοσίευσης"
+
+msgid "Not approved"
+msgstr "Δεν έχει εγκριθεί"
+
+msgid "Withdraw consent"
+msgstr "Απόσυρση συγκατάθεσης"
+
+msgid "Approve publication"
+msgstr "Έγκριση δημοσίευσης"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Εξουσιοδοτώ ένα υπογεγραμμένο, δημόσια επαληθεύσιμο διαπιστευτήριο που εμφανίζει το όνομά μου, το μάθημα, τη βαθμολογία και την ημερομηνία έκδοσης. Ένας διαχειριστής μπορεί επίσης να δημοσιεύσει μόνο το αποτύπωμα SHA-256 στο δίκτυο δοκιμών Sepolia. Το αποτύπωμα είναι μόνιμο, ακόμη και αν αποσύρω αργότερα. Συνέχεια;"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Απόσυρση της έγκρισης δημοσίευσης για αυτό το πιστοποιητικό;"
+
+msgid "Publication approval recorded"
+msgstr "Η έγκριση δημοσίευσης καταγράφηκε"
+
+msgid "Publication approval withdrawn"
+msgstr "Η έγκριση δημοσίευσης αποσύρθηκε"
+
+msgid "Read more"
+msgstr "Διαβάστε περισσότερα"
+
+msgid "Participation: %s of %s posts"
+msgstr "Συμμετοχή: %s από %s δημοσιεύσεις"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Δημοσιεύστε τη συνεισφορά σας για να δείτε τις απαντήσεις των άλλων συμμετεχόντων."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Μόνο εξουσιοδοτημένοι ερευνητές μπορούν να εξετάσουν επιλέξιμες αναφορές. Οι ταυτότητες των αναφερόντων παραμένουν εμπιστευτικές από προεπιλογή."
+
+msgid "New confidential report"
+msgstr "Νέα εμπιστευτική αναφορά"
+
+msgid "Reported user"
+msgstr "Αναφερόμενος χρήστης"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Υπάρχουν επιλέξιμες εμπιστευτικές αναφορές που αναμένουν εξέταση."
+
+msgid "Eligible investigations"
+msgstr "Επιλέξιμες έρευνες"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Μια υπόθεση εμφανίζεται εδώ μόνο αφού τουλάχιστον %s διαφορετικοί χρήστες αναφέρουν το ίδιο άτομο."
+
+msgid "Distinct reporters"
+msgstr "Διακριτοί αναφέροντες"
+
+msgid "Reports for selected user"
+msgstr "Αναφορές για τον επιλεγμένο χρήστη"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Η εμπιστευτική αναφορά δεν είναι διαθέσιμη αυτή τη στιγμή."
+
+msgid "The investigation could not be loaded."
+msgstr "Δεν ήταν δυνατή η φόρτωση της έρευνας."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Η ταυτότητά σας προστατεύεται από τους ερευνητές από προεπιλογή, αλλά αποφύγετε να συμπεριλάβετε στοιχεία ταυτοποίησης στο κείμενο της αναφοράς ή στα συνημμένα. Δεν πρόκειται για υπηρεσία έκτακτης ανάγκης."
+
+msgid "Find the user involved"
+msgstr "Βρείτε τον εμπλεκόμενο χρήστη"
+
+msgid "Name or username"
+msgstr "Όνομα ή όνομα χρήστη"
+
+msgid "Describe the situation"
+msgstr "Περιγράψτε την κατάσταση"
+
+msgid "Evidence (optional)"
+msgstr "Αποδεικτικά στοιχεία (προαιρετικά)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Έως τρία αρχεία, μέγιστο 8 MiB το καθένα. Εικόνες, ήχος ή σύντομα βίντεο."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Συμφωνώ ότι εξουσιοδοτημένοι ερευνητές μπορούν να δουν το όνομα και το email μου για αυτή τη συγκεκριμένη αναφορά. Μπορώ να αποσύρω αυτή την άδεια αργότερα."
+
+msgid "Send confidential report"
+msgstr "Αποστολή εμπιστευτικής αναφοράς"
+
+msgid "Could not search users"
+msgstr "Δεν ήταν δυνατή η αναζήτηση χρηστών"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Έως τρία αρχεία, μέγιστο 8 MiB το καθένα."
+
+msgid "The confidential report could not be saved."
+msgstr "Δεν ήταν δυνατή η αποθήκευση της εμπιστευτικής αναφοράς."
+
+msgid "Confidential report"
+msgstr "Εμπιστευτική αναφορά"
+
+msgid "Confidential conversation"
+msgstr "Εμπιστευτική συνομιλία"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Οι ερευνητές μπορούν να επικοινωνούν μέσω αυτής της συνομιλίας χωρίς να βλέπουν την ταυτότητα του αναφέροντος, εκτός εάν έχει ενεργοποιηθεί η κοινοποίηση στοιχείων επικοινωνίας."
+
+msgid "Reporter"
+msgstr "Αναφέρων"
+
+msgid "Investigator"
+msgstr "Ερευνητής"
+
+msgid "Additional evidence (optional)"
+msgstr "Πρόσθετα αποδεικτικά στοιχεία (προαιρετικά)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Έως τρία αρχεία, μέγιστο 8 MiB το καθένα· δέκα αρχεία ανά αναφορά."
+
+msgid "Contact shared voluntarily"
+msgstr "Στοιχεία επικοινωνίας κοινοποιήθηκαν οικειοθελώς"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Να επιτρέπεται στους ερευνητές να δουν το όνομα και το email μου για αυτή την αναφορά"
+
+msgid "This confidential report is not available."
+msgstr "Αυτή η εμπιστευτική αναφορά δεν είναι διαθέσιμη."
+
+msgid "Your message could not be saved."
+msgstr "Το μήνυμά σας δεν μπόρεσε να αποθηκευτεί."
+
+msgid "Contact sharing could not be updated."
+msgstr "Η κοινοποίηση επαφών δεν μπόρεσε να ενημερωθεί."
+
+msgid "Evidence could not be downloaded."
+msgstr "Τα αποδεικτικά στοιχεία δεν μπόρεσαν να ληφθούν."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Παράδειγμα δραστηριότητας συμπλήρωσης φόρμας: υπολογισμός του Δείκτη Μάζας Σώματος</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Ηλικία</strong></td>            <td width=\"75%\" style=\"\">[25] ετών</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Φύλο</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ή F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Βάρος</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Ύψος</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Δείκτης Μάζας Σώματος</strong></td>            <td style=\"vertical-align: top;\">[29] ΔΜΣ =Βάρος/Ύψος<sup>2</sup> (Βλ.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> άρθρο Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Παράδειγμα δραστηριότητας συμπλήρωσης φόρμας: υπολογισμός του Δείκτη Μάζας Σώματος</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Ηλικία</strong></td>            <td width=\"75%\" style=\"\">[25] ετών</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Φύλο</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ή F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Βάρος</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Ύψος</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Δείκτης Μάζας Σώματος</strong></td>            <td style=\"vertical-align: top;\">[29] ΔΜΣ =Βάρος/Ύψος<sup>2</sup> (Βλ.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> άρθρο Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Απόκρυψη διεύθυνσης IP από τις αναφορές"
+
+msgid "Course settings policies"
+msgstr "Πολιτικές ρυθμίσεων μαθήματος"
+
+msgid "Academic transcripts"
+msgstr "Ακαδημαϊκά πιστοποιητικά σπουδών"
+
+msgid "Transcript program title"
+msgstr "Τίτλος προγράμματος στο πιστοποιητικό"
+
+msgid "Transcript course code"
+msgstr "Κωδικός μαθήματος στο πιστοποιητικό"
+
+msgid "Transcript course hours field"
+msgstr "Πεδίο ωρών μαθήματος στο πιστοποιητικό"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Οι ολοκληρωμένες ώρες στο πιστοποιητικό είναι οι απαιτούμενες ώρες"
+
+msgid "Transcript student number field"
+msgstr "Πεδίο αριθμού φοιτητή στο πιστοποιητικό"
+
+msgid "Transcript address fields"
+msgstr "Πεδία διεύθυνσης στο πιστοποιητικό"
+
+msgid "Transcript grading scale"
+msgstr "Κλίμακα βαθμολογίας πιστοποιητικού"
+
+msgid "Transcript GPA note"
+msgstr "Σημείωση GPA στο πιστοποιητικό"
+
+msgid "Transcript signatory name"
+msgstr "Όνομα υπογράφοντος στο πιστοποιητικό"
+
+msgid "Transcript signatory title"
+msgstr "Τίτλος υπογράφοντος στο πιστοποιητικό"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Ενεργοποίηση υπογεγραμμένων πιστοποιητικών και προαιρετική αγκύρωση στο δίκτυο δοκιμών Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Εμφάνιση απαντήσεων νήματος μόνο μετά από συμμετοχή"
+
+msgid "Show the forum category description in threads"
+msgstr "Εμφάνιση περιγραφής κατηγορίας φόρουμ στα νήματα"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Οι ρυθμίσεις συμμετοχής στο φόρουμ μπορούν να αλλάζουν ανά μάθημα"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Μέγιστος αριθμός δημοσιεύσεων που εμφανίζονται σε νήμα φόρουμ"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Απαιτούμενες δημοσιεύσεις για ολοκλήρωση νήματος φόρουμ"
+
+msgid "Track e-mail openings"
+msgstr "Παρακολούθηση ανοίγματος μηνυμάτων ηλεκτρονικού ταχυδρομείου"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Να επιτρέπονται απαντήσεις μέσω ηλεκτρονικού ταχυδρομείου στα μηνύματα"
+
+msgid "Inbound e-mail address"
+msgstr "Διεύθυνση εισερχόμενου ηλεκτρονικού ταχυδρομείου"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN γραμματοκιβωτίου εισερχομένων"
+
+msgid "Remember me duration (days)"
+msgstr "Διάρκεια «Να με θυμάσαι» (ημέρες)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Ενεργοποίηση δυναμικής εγγραφής πελάτη OAuth πέρα από το MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Ενεργοποίηση εμπιστευτικών αναφορών ευημερίας"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Ελάχιστος αριθμός διαφορετικών αναφερόντων για έρευνα"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Να επιτρέπονται συνημμένα εμπιστευτικών αποδεικτικών"
+
+msgid "Show confidential investigation notifications"
+msgstr "Εμφάνιση ειδοποιήσεων εμπιστευτικής έρευνας"
+
+msgid "Enable support chatbot"
+msgstr "Ενεργοποίηση chatbot υποστήριξης"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Επιλέξτε πού επισημαίνονται αυτόματα οι όροι γλωσσαρίου: έγγραφα, ασκήσεις και μαθησιακές διαδρομές."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Απόκρυψη διευθύνσεων IP στις οπτικές αναφορές και στις εξαγωγές αναφορών. Οι διευθύνσεις IP παραμένουν αποθηκευμένες και προσβάσιμες μέσω εξουσιοδοτημένων διαδικασιών προσωπικών δεδομένων."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Προεπιλογές πλατφόρμας και δικαιώματα επεξεργασίας μαθήματος· διαχείριση στις Ρυθμίσεις μαθήματος."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Να επιτρέπεται στους χρήστες η λήψη ανεπίσημου πιστοποιητικού των μαθημάτων που ολοκλήρωσαν και στους διαχειριστές, διαχειριστές συνεδριών και υπευθύνους ανθρώπινου δυναμικού η έκδοση υπογεγραμμένων επίσημων πιστοποιητικών για τους χρήστες που διαχειρίζονται. Η εικόνα υπογραφής μεταφορτώνεται από τη σελίδα πιστοποιητικού ενός χρήστη."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Τίτλος προγράμματος που εκτυπώνεται σε κάθε πιστοποιητικό, για παράδειγμα το όνομα του διπλώματος που προετοιμάζεται σε αυτή την πλατφόρμα."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Ποιο πεδίο μαθήματος συμπληρώνει τη στήλη κωδικού μαθήματος των πιστοποιητικών: ο κωδικός μαθήματος ή το όνομα τμήματος."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Μεταβλητή του επιπλέον πεδίου μαθήματος που περιέχει τον αριθμό ωρών ενός μαθήματος. Αφήστε κενό για να χρησιμοποιηθεί η διάρκεια του μαθήματος."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Εκτύπωση των απαιτούμενων ωρών ενός μαθήματος ως ωρών που ολοκλήρωσε ο εκπαιδευόμενος. Όταν είναι απενεργοποιημένο, οι ολοκληρωμένες ώρες είναι ο χρόνος που πέρασε ο εκπαιδευόμενος στο μάθημα."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Μεταβλητή του επιπλέον πεδίου χρήστη που περιέχει τον αριθμό φοιτητή που εκτυπώνεται στα πιστοποιητικά. Αφήστε κενό για να μην εκτυπώνεται τίποτα."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Μεταβλητές επιπλέον πεδίων χρήστη, διαχωρισμένες με κόμμα, που εκτυπώνονται μετά τη διεύθυνση του χρήστη στα πιστοποιητικά, για παράδειγμα πόλη, πολιτεία και ταχυδρομικός κώδικας."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Λίστα JSON των γραμμάτων βαθμού, από την υψηλότερη ελάχιστη βαθμολογία προς τα κάτω: κάθε στοιχείο έχει την ελάχιστη βαθμολογία σε ποσοστό (min), το γράμμα και τους βαθμούς που χρησιμοποιούνται για τον υπολογισμό του GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Επεξήγηση του τρόπου υπολογισμού του GPA, που εκτυπώνεται κάτω από το GPA στα πιστοποιητικά."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Όνομα του υπευθύνου του ιδρύματος που υπογράφει τα επίσημα πιστοποιητικά."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Τίτλος του υπευθύνου του ιδρύματος που υπογράφει τα επίσημα πιστοποιητικά."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Απαιτεί ρητή συγκατάθεση του κατόχου και χειροκίνητες ενέργειες διαχειριστή. Στην αλυσίδα αποστέλλονται μόνο αποτυπώματα SHA-256."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Οι εκπαιδευόμενοι βλέπουν μόνο την πρώτη δημοσίευση ενός νήματος φόρουμ μέχρι να δημοσιεύσουν οι ίδιοι σε αυτό. Οι διαχειριστές, οι εκπαιδευτές, οι προπονητές και οι καθηγητές ομάδων βλέπουν πάντα κάθε δημοσίευση."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Εμφάνιση του τίτλου και μιας συντομευμένης περιγραφής της κατηγορίας φόρουμ στην κορυφή κάθε νήματος, με σύνδεσμο για ανάγνωση της πλήρους περιγραφής."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Όταν είναι ενεργοποιημένο, οι εκπαιδευτές μπορούν να επιλέξουν στην ενότητα Φόρουμ των ρυθμίσεων μαθήματος αν το μάθημά τους αποκρύπτει τις απαντήσεις νήματος μέχρι να δημοσιεύσει ο εκπαιδευόμενος, εμφανίζει την περιγραφή κατηγορίας στα νήματα και πόσες δημοσιεύσεις αναμένει η γραμμή προόδου συμμετοχής, αντί να ακολουθούν τις ρυθμίσεις πλατφόρμας."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Εμφάνιση μόνο αυτού του αριθμού δημοσιεύσεων κάθε νήματος φόρουμ σε κάθε χρήστη που δεν είναι διαχειριστής πλατφόρμας, συμπεριλαμβανομένων των εκπαιδευτών, και σε όλους μέσα σε μια διαδρομή μάθησης. Στις προβολές νήματος και ένθετες, το όριο ισχύει για τις απαντήσεις κάθε δημοσίευσης. Οι δημοσιεύσεις διατηρούνται στη σειρά της προβολής: οι πρώτες, ή οι πιο πρόσφατες μέσα σε μια διαδρομή μάθησης, όπου οι πιο πρόσφατες δημοσιεύσεις εμφανίζονται πρώτες. Ορίστε σε 0 για εμφάνιση κάθε δημοσίευσης."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Εμφάνιση στους εκπαιδευόμενους γραμμής προόδου σε κάθε νήμα φόρουμ, η οποία φτάνει στο 100% όταν έχουν δημοσιεύσει αυτόν τον αριθμό μηνυμάτων σε αυτό. Οι δημοσιεύσεις σε αναμονή εποπτείας υπολογίζονται. Ορίστε σε 0 για απόκρυψη της γραμμής προόδου."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Προσθέτει μια μικρή εικόνα παρακολούθησης στα μηνύματα ειδοποίησης e-mail και καταγράφει πότε ζητείται. Αυτό υποδεικνύει μόνο ότι το e-mail ενδέχεται να έχει ανοιχτεί· δεν αποδεικνύει ότι διαβάστηκε."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Να επιτρέπεται στους παραλήπτες ειδοποιήσεων άμεσων μηνυμάτων να απαντούν μέσω e-mail. Τα εισερχόμενα μηνύματα πρέπει να δρομολογούνται στην εντολή εισερχόμενης αλληλογραφίας του Chamilo από την υποδομή αλληλογραφίας."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Βασική διεύθυνση που χρησιμοποιείται για δρομολόγηση απαντήσεων, για παράδειγμα replies@example.com. Το Chamilo προσθέτει μοναδικό διακριτικό παραλήπτη με plus addressing."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Σύνδεση γραμματοκιβωτίου για συλλογή εισερχόμενων απαντήσεων, για παράδειγμα imaps://user:password@imap.example.com:993/INBOX. Κωδικοποιήστε με URL τους δεσμευμένους χαρακτήρες στα διαπιστευτήρια."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Αριθμός ημερών που ο χρήστης παραμένει συνδεδεμένος όταν επιλέγεται το «Να με θυμάσαι». Ορίστε σε 0 για απενεργοποίηση. Απαιτείται HTTPS. Επιτρεπτό εύρος: 0 έως 90. Το κανονικό χρονικό όριο συνεδρίας ρυθμίζεται ξεχωριστά σε PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Επιτρέπει στην Dynamic Client Registration να ζητά οποιοδήποτε πεδίο εφαρμογής (scope) που έχει καταχωρίσει διακομιστής πόρων OAuth του Chamilo. Όταν είναι απενεργοποιημένο, η αυτοεγγραφή περιορίζεται στο MCP. Η πρόσβαση σε πόρους περιορίζεται πάντα ξεχωριστά από τη λίστα επιτρεπόμενων πόρων κάθε πελάτη."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Ενεργοποίηση εμπιστευτικών αναφορών περιστατικών. Η ενότητα απαιτεί προστατευμένο κλειδί κρυπτογράφησης και δικαίωμα ερευνητή."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Μεταξύ 2 και 10 διαφορετικών αναφερόντων πρέπει να αναφέρουν τον ίδιο χρήστη πριν η υπόθεση γίνει ορατή στους ερευνητές."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Να επιτρέπονται εικόνες, ήχος και σύντομα βίντεο ως αποδεικτικά. Τα υπάρχοντα συνημμένα παραμένουν αναγνώσιμα όταν είναι απενεργοποιημένο."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Εμφάνιση εσωτερικής ένδειξης επιλέξιμων ερευνών. Δεν αποστέλλονται e-mail ή εξωτερικές ειδοποιήσεις."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Εμφάνιση chatbot δέντρου αποφάσεων στον πίνακα συνομιλίας που μπορεί να καθοδηγήσει τους χρήστες προς "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Επιτρέπει στους εκπαιδευτές να δημιουργούν και να εκδίδουν εκδόσεις εκπαιδευτικών εφαρμογών με υποστήριξη ΤΝ μέσα στα μαθήματα."
+
+msgid "Department name"
+msgstr "Όνομα τμήματος"
+
+msgid "Documents and exercise"
+msgstr "Έγγραφα και άσκηση"
+
+msgid "Documents and learning path"
+msgstr "Έγγραφα και διαδρομή μάθησης"
+
+msgid "Documents, exercise and learning path"
+msgstr "Έγγραφα, άσκηση και διαδρομή μάθησης"
+
+msgid "session"
+msgstr "συνεδρία"
+
+msgid "course"
+msgstr "μάθημα"
+
+msgid "You have been enrolled in %s"
+msgstr "Έχετε εγγραφεί στο %s"
 

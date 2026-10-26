@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Med vänliga hälsningar,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formel-exempel: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formelprov: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Variabelintervall"
@@ -28770,6 +28770,9 @@ msgstr "Nuvarande användare hittades inte."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Hej %s,<br><br>Du är registrerad på %s.<br>Du kan komma åt ditt konto från <a href=\"%s\">här</a>.<br><br>Dina inloggningsuppgifter är:<br>Användarnamn: <strong>%s</strong><br>Lösenord: <strong>%s</strong><br><br>Med vänliga hälsningar,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Hej %s,<br><br>Du är registrerad på %s.<br>Användarnamn: <strong>%s</strong><br><br>Klicka på länken nedan för att ange ditt lösenord och komma åt ditt konto:<br><a href=\"%s\">Ange ditt lösenord</a><br><br>Med vänliga hälsningar,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Du är registrerad på %s"
 
@@ -41573,4 +41576,1616 @@ msgstr "Migreringshistorik är registrerad"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s finns i projektets rot: ta bort den för att stänga uppgraderingsändpunkterna"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Du har fått ett intyg för den här övningen"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Du måste slutföra lärstigen \"%s\" innan du kan komma åt den här."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Är du säker på att du vill ta bort den här filen definitivt?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Är du säker på att du vill koppla loss den här filen från den valda kursen?"
+
+msgid "Attach this file to another course"
+msgstr "Koppla den här filen till en annan kurs"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Koppla till valda kurser (dold)"
+
+msgid "Course(s):"
+msgstr "Kurs(er):"
+
+msgid "Delete definitively"
+msgstr "Ta bort definitivt"
+
+msgid "Detach from this course"
+msgstr "Koppla loss från den här kursen"
+
+msgid "File actions"
+msgstr "Filåtgärder"
+
+msgid "File Information"
+msgstr "Filinformation"
+
+msgid "File Link:"
+msgstr "Fillänk:"
+
+msgid "File Path:"
+msgstr "Filsökväg:"
+
+msgid "Filter courses..."
+msgstr "Filtrera kurser..."
+
+msgid "MIME Type:"
+msgstr "MIME-typ:"
+
+msgid "N/A"
+msgstr "Ej tillämpligt"
+
+msgid "No results found."
+msgstr "Inga resultat hittades."
+
+msgid "Original Name"
+msgstr "Ursprungligt namn"
+
+msgid "Original Name:"
+msgstr "Ursprungligt namn:"
+
+msgid "Orphan"
+msgstr "Övergiven"
+
+msgid "Resource File ID:"
+msgstr "Resursfil-ID:"
+
+msgid "Resource Node ID:"
+msgstr "Resursnod-ID:"
+
+msgid "Search..."
+msgstr "Sök..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "För att koppla loss den här filen från en viss kurs klickar du på ikonen \"×\" på motsvarande kursetikett ovan."
+
+msgid "User:"
+msgstr "Användare:"
+
+msgid "View file information"
+msgstr "Visa filinformation"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Du kan koppla den här filen till en eller flera kurser (dold i dokumentroten). Om filen inte längre används och blir övergiven kan du också ta bort den definitivt."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Du kan välja en eller flera kurser (använd Ctrl/Cmd + klick)."
+
+msgid "bytes"
+msgstr "byte"
+
+msgid "Failed to copy:"
+msgstr "Kunde inte kopiera:"
+
+msgid "Missing resource file identifier."
+msgstr "Saknar identifierare för resursfil."
+
+msgid "Please select at least one course."
+msgstr "Välj minst en kurs."
+
+msgid "Resource file not found."
+msgstr "Resursfilen hittades inte."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Filen \"%s\" har kopplats till %d kurs(er): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Vissa kurser hoppades över: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Saknar fil- eller kursidentifierare."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Den här resursfilen har ingen resursnod och kan inte kopplas loss."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Filen har kopplats loss från %d kurslänk(ar)."
+
+msgid "This file is not attached to the selected course."
+msgstr "Den här filen är inte kopplad till den valda kursen."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Den här filen används fortfarande av minst en resurs och kan inte tas bort."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Den övergivna filen och dess fysiska innehåll har tagits bort definitivt."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Enkät publicerad. Skapade: %d. Uppdaterade: %d. Meddelanden skickade: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Förvärvbar"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Den här färdigheten kan inte förvärvas"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Nybörjare"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Strikt följsamhet mot regler och kontextfria instruktioner; lite situationsbedömning."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Avancerad nybörjare"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Börjar känna igen situationsaspekter och mönster men behöver fortfarande riktlinjer."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kompetent"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Utvecklar planering och mentala modeller; tar ansvar för resultat men kan känna sig överväldigad av komplexitet."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Skicklig"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Ser \"helheten\", prioriterar intuitivt och lär av erfarenhet."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Expert"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Intuitiv, flytande prestation; förlitar sig på djup tyst kunskap; kan förnya eller hantera nya situationer utan ansträngning."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Komma ihåg"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Hämta, återkalla eller känna igen relevant kunskap från långtidsminnet."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Förstå"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Konstruera mening från instruktionsmeddelanden, inklusive muntlig, skriftlig och grafisk kommunikation. Visa förståelse genom att tolka, exemplifiera, klassificera, sammanfatta, dra slutsatser, jämföra eller förklara."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Tillämpa"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Utföra eller använda en procedur genom att genomföra eller implementera den i en given situation. Använda kunskap eller färdigheter i nya eller konkreta situationer."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Analysera"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Bryta ner material i dess beståndsdelar och avgöra hur delarna relaterar till varandra och till en övergripande struktur eller ett syfte. Identifiera motiv, orsaker eller samband."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Utvärdera"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Göra bedömningar baserade på kriterier och standarder. Kontrollera, kritisera eller motivera beslut eller handlingsvägar."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Skapa"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Sätta samman element till en sammanhängande eller funktionell helhet; omorganisera element till ett nytt mönster eller en ny struktur. Producera originalarbete eller generera nya idéer."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Följa"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Arbetar under nära handledning och styrning. Utför rutinuppgifter med begränsat handlingsutrymme. Fokusera på att följa instruktioner och grundläggande utförande."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Assistera"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Arbetar under rutinmässig handledning. Ger stöd till andra, bidrar till teamuppgifter och börjar ta visst initiativ inom definierade ramar."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Arbetar under allmän handledning. Tillämpar kunskap och färdigheter på en rad rutinmässiga och icke-rutinmässiga aktiviteter. Utövar visst omdöme och bedömning."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Arbetar under bred styrning. Möjliggör för andra genom att ge specialistvägledning, stöd eller tjänster. Tar ansvar för eget arbete och kan handleda små team eller uppgifter."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Säkerställa och ge råd"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Arbetar under bred styrning men med betydande autonomi. Säkerställer att arbetet uppfyller målen och ger råd i komplexa frågor. Leder ofta team eller projekt och påverkar beslut."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Initiera och påverka"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Har definierad befogenhet och ansvar för ett betydande arbetsområde. Initierar åtgärder, påverkar strategi och policy inom sitt område och leder omfattande projekt eller team."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Sätta strategi, inspirera, mobilisera"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Har befogenhet på högsta organisationsnivå för ett stort arbetsområde. Sätter långsiktig strategi, inspirerar och mobiliserar andra och fattar beslut som är avgörande för organisationens framgång. Påverkar på bransch- eller extern nivå."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Maximal inaktiv tid att beakta (minuter)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "En kurssida som lämnas öppen fortsätter att skicka automatiska förfrågningar. Efter detta antal minuter utan en verklig åtgärd från användaren (öppna en sida eller ett objekt, svara osv.) slutar tiden i kursen att räknas."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Samarbetsbaserad wiki-redigerare"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Ansluter till Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Spara skapar en ny Chamilo Wiki-version från det aktuella Etherpad-innehållet."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Den samarbetsbaserade redigeraren kunde inte läsas in."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Aktivera Etherpad för wiki-redigering"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Använd Etherpad som samarbetsredigerare för befintliga wikisidor. Etherpad måste exponeras på samma ursprung som Chamilo för säkra inbäddade sessioner."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad-URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Bas-URL för Etherpad-instansen, inklusive en valfri reverse-proxy-sökväg. Exempel: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API-nyckel"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API-nyckel som Chamilo använder för att skapa pads, sessioner och synkronisera wiki-innehåll. Konfigurera Etherpad att acceptera autentisering med API-nyckel."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Standardvisibilitet för nya dokument kan ändras per kurs"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilitet som ges till ett nytt dokument, en mapp eller en uppladdad fil när en lärare skapar den i en kurs. Lärare kan fortfarande ändra visibiliteten för varje objekt efteråt."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "När funktionen är aktiverad kan lärare i kursinställningarna välja visibilitet för nya dokument i sin kurs, i stället för plattformens standard."
+
+msgid "Default visibility of new learning paths"
+msgstr "Standardvisibilitet för nya lärstigar"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Standardvisibilitet för nya lärstigar kan ändras per kurs"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilitet som ges till en ny lärstig när en lärare skapar den i en kurs. Lärare kan fortfarande ändra visibiliteten för varje lärstig efteråt."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "När funktionen är aktiverad kan lärare i kursinställningarna välja visibilitet för nya lärstigar i sin kurs, i stället för plattformens standard."
+
+msgid "Default visibility of new tests"
+msgstr "Standardvisibilitet för nya test"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Standardvisibilitet för nya test kan ändras per kurs"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilitet som ges till ett nytt test när en lärare skapar det i en kurs. Lärare kan fortfarande ändra visibiliteten för varje test efteråt."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "När detta är aktiverat kan lärare i kursinställningarna välja visibilitet för nya test i sin kurs, i stället för plattformens standard."
+
+msgid "Default visibility for new learning paths"
+msgstr "Standardvisibilitet för nya lärstigar"
+
+msgid "Default visibility for new tests"
+msgstr "Standardvisibilitet för nya test"
+
+msgid "Following"
+msgstr "Följer"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Få e-post när en deltagare kommenterar en inlämning av denna uppgift"
+
+msgid "Payment history"
+msgstr "Betalningshistorik"
+
+msgid "No payments yet"
+msgstr "Inga betalningar ännu"
+
+msgid "Cancel service"
+msgstr "Avbryt tjänst"
+
+msgid "Official transcript"
+msgstr "Officiellt betygutdrag"
+
+msgid "Unofficial transcript"
+msgstr "Inofficiellt betygutdrag"
+
+msgid "Student name"
+msgstr "Studentnamn"
+
+msgid "Student number"
+msgstr "Studentnummer"
+
+msgid "Program title"
+msgstr "Programnamn"
+
+msgid "Required hours"
+msgstr "Obligatoriska timmar"
+
+msgid "Completion date"
+msgstr "Slutförandedatum"
+
+msgid "Hours completed"
+msgstr "Genomförda timmar"
+
+msgid "Final grade"
+msgstr "Slutbetyg"
+
+msgid "Grade"
+msgstr "Betyg"
+
+msgid "No completed course yet."
+msgstr "Ingen avslutad kurs ännu."
+
+msgid "Grading scale"
+msgstr "Betygsskala"
+
+msgid "Signature of school official"
+msgstr "Underskrift av skolansvarig"
+
+msgid "School official"
+msgstr "Skolansvarig"
+
+msgid "Official's title"
+msgstr "Befattning"
+
+msgid "Verify this transcript at"
+msgstr "Verifiera detta betygutdrag på"
+
+msgid "Verification code"
+msgstr "Verifieringskod"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Detta inofficiella betygutdrag är inte undertecknat. Be en administratör om ett officiellt betygutdrag."
+
+msgid "Transcript verification"
+msgstr "Verifiering av betygutdrag"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Kontrollera att detta officiella betygutdrag har utfärdats och undertecknats av institutionen, inte har ändrats och inte har återkallats."
+
+msgid "Valid"
+msgstr "Giltigt"
+
+msgid "Invalid signature"
+msgstr "Ogiltig underskrift"
+
+msgid "Transcript not found"
+msgstr "Betygutdraget hittades inte"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Institutionens underskrift är giltig och detta betygutdrag har inte återkallats."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Detta betygutdrag kan inte verifieras som giltigt. Dess uppgifter visas inte."
+
+msgid "Transcript details"
+msgstr "Uppgifter om betygutdrag"
+
+msgid "Institution"
+msgstr "Institution"
+
+msgid "Issued on"
+msgstr "Utfärdat den"
+
+msgid "Download verification JSON"
+msgstr "Ladda ner verifierings-JSON"
+
+msgid "Transcript"
+msgstr "Betygutdrag"
+
+msgid "My confidential reports"
+msgstr "Mina konfidentiella rapporter"
+
+msgid "My transcript"
+msgstr "Mitt betygutdrag"
+
+msgid "Confidential investigations"
+msgstr "Konfidentiella utredningar"
+
+msgid "Floor plan"
+msgstr "Planritning"
+
+msgid "Click a highlighted room to select it"
+msgstr "Klicka på ett markerat rum för att välja det"
+
+msgid "Select room"
+msgstr "Välj rum"
+
+msgid "Room on floor plan"
+msgstr "Rum på planritning"
+
+msgid "Select a branch first"
+msgstr "Välj först en filial"
+
+msgid "The branch has no attached floor plan"
+msgstr "Filialen har ingen kopplad planritning"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Använd polygonverktyget för att rita rummets kontur; använd Redigera för att flytta hörn"
+
+msgid "Save room area"
+msgstr "Spara rumsyta"
+
+msgid "Clear room area"
+msgstr "Rensa rumsyta"
+
+msgid "Save the room form to persist the area"
+msgstr "Spara rumsformuläret för att behålla ytan"
+
+msgid "Floor plan unavailable"
+msgstr "Planritning saknas"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Rummets kartpunkter måste ligga inom planritningen"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Är du säker på att du vill rensa rumsytan?"
+
+msgid "View room on floor plan"
+msgstr "Visa rum på planritning"
+
+msgid "No floor plan available"
+msgstr "Ingen planritning tillgänglig"
+
+msgid "This is an assignment by groups"
+msgstr "Detta är en gruppuppgift"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Ladda upp en PNG-, JPEG- eller säker statisk SVG-planritning, eller välj en befintlig bild från Dokument."
+
+msgid "Upload floor plan"
+msgstr "Ladda upp planritning"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG eller statisk SVG, högst 10 MB"
+
+msgid "Search images by name"
+msgstr "Sök bilder efter namn"
+
+msgid "Image name"
+msgstr "Bildnamn"
+
+msgid "Select an image"
+msgstr "Välj en bild"
+
+msgid "Change floor plan"
+msgstr "Byt planritning"
+
+msgid "Attach floor plan"
+msgstr "Bifoga planritning"
+
+msgid "No matching images found in Documents."
+msgstr "Inga matchande bilder hittades i Dokument."
+
+msgid "Current floor plan"
+msgstr "Aktuell planritning"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Ändringar av planritningen sparas automatiskt."
+
+msgid "Remove floor plan"
+msgstr "Ta bort planritning"
+
+msgid "Cannot load images"
+msgstr "Kan inte läsa in bilder"
+
+msgid "Floor plan saved"
+msgstr "Planritning sparad"
+
+msgid "Cannot attach floor plan"
+msgstr "Kan inte bifoga planritning"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Endast PNG/JPEG och säkra statiska SVG-bilder upp till 10 MB stöds."
+
+msgid "Cannot upload floor plan"
+msgstr "Kan inte ladda upp planritning"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Är du säker på att du vill ta bort planritningen?"
+
+msgid "Floor plan removed"
+msgstr "Planritning borttagen"
+
+msgid "Cannot remove floor plan"
+msgstr "Kan inte ta bort planritning"
+
+msgid "Support bot"
+msgstr "Supportbot"
+
+msgid "Connected"
+msgstr "Ansluten"
+
+msgid "Not connected"
+msgstr "Inte ansluten"
+
+msgid "View ticket"
+msgstr "Visa ärende"
+
+msgid "Start a new conversation"
+msgstr "Starta en ny konversation"
+
+msgid "Video call"
+msgstr "Videosamtal"
+
+msgid "Incoming video call"
+msgstr "Inkommande videosamtal"
+
+msgid "Decline"
+msgstr "Avböj"
+
+msgid "Mute microphone"
+msgstr "Stäng av mikrofon"
+
+msgid "Unmute microphone"
+msgstr "Slå på mikrofon"
+
+msgid "Turn camera off"
+msgstr "Stäng av kamera"
+
+msgid "Turn camera on"
+msgstr "Slå på kamera"
+
+msgid "Hang up"
+msgstr "Lägg på"
+
+msgid "Calling..."
+msgstr "Ringer..."
+
+msgid "Connecting..."
+msgstr "Ansluter..."
+
+msgid "Your contact is busy."
+msgstr "Din kontakt är upptagen."
+
+msgid "Your contact did not answer the call."
+msgstr "Din kontakt svarade inte på samtalet."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Din kontakt kunde inte komma åt kameran eller mikrofonen."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Din kontakt kunde inte förbereda videosamtalet."
+
+msgid "Your contact refused the call."
+msgstr "Din kontakt avböjde samtalet."
+
+msgid "The call timed out."
+msgstr "Samtalet tidsgränsen överskreds."
+
+msgid "Your contact cancelled the call."
+msgstr "Din kontakt avbröt samtalet."
+
+msgid "The video connection was lost."
+msgstr "Videoförbindelsen bröts."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Din kontakt kunde inte upprätta videoförbindelsen."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Din kontakt kunde inte slutföra inställningen av videosamtalet."
+
+msgid "Your contact hung up."
+msgstr "Din kontakt lade på."
+
+msgid "Video call could not be started"
+msgstr "Videosamtalet kunde inte startas"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Behörighet till kamera eller mikrofon nekades."
+
+msgid "No camera or microphone was found."
+msgstr "Ingen kamera eller mikrofon hittades."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Kamera eller mikrofon används redan eller är inte tillgänglig."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Kameran eller mikrofonen stöder inte de nödvändiga inställningarna."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Åtkomst till kamera eller mikrofon kunde inte erhållas."
+
+msgid "The video call could not be prepared."
+msgstr "Videosamtalet kunde inte förberedas."
+
+msgid "The video call request could not be sent."
+msgstr "Förfrågan om videosamtal kunde inte skickas."
+
+msgid "The incoming video call could not be processed."
+msgstr "Det inkommande videosamtalet kunde inte behandlas."
+
+msgid "The video call answer could not be prepared."
+msgstr "Svaret på videosamtalet kunde inte förberedas."
+
+msgid "The video call answer could not be sent."
+msgstr "Svaret på videosamtalet kunde inte skickas."
+
+msgid "The video call answer could not be processed."
+msgstr "Svaret på videosamtalet kunde inte behandlas."
+
+msgid "The video connection failed"
+msgstr "Videoförbindelsen misslyckades"
+
+msgid "The video connection could not be established."
+msgstr "Videoförbindelsen kunde inte upprättas."
+
+msgid "No answer was received."
+msgstr "Inget svar mottogs."
+
+msgid "You refused the call."
+msgstr "Du avvisade samtalet."
+
+msgid "You cancelled the call."
+msgstr "Du avbröt samtalet."
+
+msgid "You hung up."
+msgstr "Du lade på."
+
+msgid "You missed the call."
+msgstr "Du missade samtalet."
+
+msgid "Support bot is currently unavailable."
+msgstr "Supportboten är för närvarande inte tillgänglig."
+
+msgid "A support ticket has been created."
+msgstr "Ett supportärende har skapats."
+
+msgid "Conversation ended."
+msgstr "Konversationen avslutades."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Supportboten kunde inte fortsätta den här konversationen. Försök igen."
+
+msgid "Add your first term glossary to this course"
+msgstr "Lägg till din första ordlista i den här kursen"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Är du säker på att du vill ta bort den här enkätmallen?"
+
+msgid "The survey template has been deleted."
+msgstr "Enkätmallen har tagits bort."
+
+msgid "Please select a course."
+msgstr "Välj en kurs."
+
+msgid "Please select a session for this course."
+msgstr "Välj en session för den här kursen."
+
+msgid "The survey has been created from the template."
+msgstr "Enkäten har skapats från mallen."
+
+msgid "Survey templates"
+msgstr "Enkätmallar"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Skapa återanvändbara enkätmallar för lärare och tilldela dem direkt till en kurs eller session."
+
+msgid "Subtitle"
+msgstr "Underrubrik"
+
+msgid "Assign to course"
+msgstr "Tilldela till kurs"
+
+msgid "Assign template to course"
+msgstr "Tilldela mall till kurs"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Lämna sessionen tom för att skapa enkäten direkt i kursen."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Den här kursen är tillgänglig via en session på den här portalen, så en session krävs."
+
+msgid "Survey template questions"
+msgstr "Frågor i enkätmall"
+
+msgid "Back to survey templates"
+msgstr "Tillbaka till enkätmallar"
+
+msgid "Could not load survey template"
+msgstr "Kunde inte läsa in enkätmall"
+
+msgid "Could not load survey template questions"
+msgstr "Kunde inte läsa in frågor i enkätmall"
+
+msgid "Could not save survey template question"
+msgstr "Kunde inte spara fråga i enkätmall"
+
+msgid "Could not delete survey template question"
+msgstr "Kunde inte ta bort fråga i enkätmall"
+
+msgid "Could not move survey template question"
+msgstr "Kunde inte flytta fråga i enkätmall"
+
+msgid "Could not copy survey template question"
+msgstr "Kunde inte kopiera fråga i enkätmall"
+
+msgid "The survey template has been saved."
+msgstr "Enkätmallen har sparats."
+
+msgid "Edit survey template"
+msgstr "Redigera enkätmall"
+
+msgid "Create survey template"
+msgstr "Skapa enkätmall"
+
+msgid "The survey template title is required."
+msgstr "Enkätmallens titel är obligatorisk."
+
+msgid "Visible as template"
+msgstr "Synlig som mall"
+
+msgid "Create satisfaction survey"
+msgstr "Skapa nöjdhetsenkät"
+
+msgid "Training satisfaction survey"
+msgstr "Nöjdhetsenkät för utbildning"
+
+msgid "Could not create satisfaction survey"
+msgstr "Kunde inte skapa nöjdhetsenkät"
+
+msgid "Use template"
+msgstr "Använd mall"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Skapa den här enkäten från en återanvändbar mall som en administratör har förberett."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Resultat dolda för lärare/handledare"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Lärare och handledare kan fortfarande se antal svar och skicka påminnelser, men kan inte öppna eller exportera enkätresultaten."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Mallen har tillämpats. Granska enkätinställningarna och spara för att skapa den."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Enkätresultaten är dolda för lärare och handledare."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Du kan fortfarande använda inbjudningssidan för att se antal svar och skicka påminnelser."
+
+msgid "Payment method"
+msgstr "Betalningsmetod"
+
+msgid "Preview mode"
+msgstr "Förhandsgranskningsläge"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Framsteg och poäng sparas inte i förhandsgranskningsläge."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Den här länken kan inte visas inuti lärstigen."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Öppna den i en ny flik för att visa sidan."
+
+msgid "Report a problem with this question"
+msgstr "Rapportera ett problem med den här frågan"
+
+msgid "Your report was sent to the teacher."
+msgstr "Din rapport har skickats till läraren."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Beskriv felet eller problemet du hittade. Din rapport skickas till läraren."
+
+msgid "A comment is required."
+msgstr "En kommentar är obligatorisk."
+
+msgid "Could not send the report."
+msgstr "Kunde inte skicka rapporten."
+
+msgid "Learner reports"
+msgstr "Deltagarrapporter"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Inga deltagarrapporter har skickats in för den här frågan."
+
+msgid "View attempt"
+msgstr "Visa försök"
+
+msgid "Could not load learner reports."
+msgstr "Kunde inte läsa in deltagarrapporter."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Tillåt deltagare att rapportera problem i frågor"
+
+msgid "Skill acquired"
+msgstr "Färdighet förvärvad"
+
+msgid "AI Toolbox"
+msgstr "AI-verktygslåda"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Generera interaktiva pedagogiska applikationer med AI och följ deltagarnas framsteg med SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Inga publicerade applikationer är tillgängliga ännu."
+
+msgid "Interactive applications"
+msgstr "Interaktiva applikationer"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Generera, förbättra, publicera och granska versioner från ett ställe."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Öppna en applikation för att fortsätta från ditt senaste framsteg."
+
+msgid "Interactive learning application"
+msgstr "Interaktiv lärapplikation"
+
+msgid "Create an interactive learning app"
+msgstr "Skapa en interaktiv lärapp"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Beskriv aktiviteten. Chamilo genererar en versionshanterad SCORM-applikation med spårning av framsteg och poäng."
+
+msgid "Idea"
+msgstr "Idé"
+
+msgid "Application"
+msgstr "Applikation"
+
+msgid "What should the application do?"
+msgstr "Vad ska applikationen göra?"
+
+msgid "How it works"
+msgstr "Så fungerar det"
+
+msgid "AI generation"
+msgstr "AI-generering"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Appen genereras utifrån dina instruktioner och sparas som version 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Deltagarens framsteg, poäng och återupptagningsdata rapporteras till Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Framtida förbättringar skapar nya versioner utan att ta bort tidigare."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Ange lärandemålet, regler, nivåer, poängsättning och vad som ska hända när deltagaren är klar."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Du har inte behörighet att skapa innehåll i det här sammanhanget."
+
+msgid "The application was generated successfully."
+msgstr "Applikationen genererades."
+
+msgid "Open in student view"
+msgstr "Öppna i studentvy"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Generera applikationen för att aktivera förhandsgranskning och publicering."
+
+msgid "Improve with AI"
+msgstr "Förbättra med AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Beskriv ändringen. En ny version skapas och tidigare versioner förblir tillgängliga."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Beskriv den kompletta interaktiva aktiviteten du vill generera."
+
+msgid "What should be improved?"
+msgstr "Vad ska förbättras?"
+
+msgid "Generate new version"
+msgstr "Generera ny version"
+
+msgid "Version history"
+msgstr "Versionshistorik"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Förhandsgranska, ladda ner eller återställ valfri genererad version."
+
+msgid "A new version was generated."
+msgstr "En ny version har genererats."
+
+msgid "Version restored"
+msgstr "Version återställd"
+
+msgid "The support bot tree has been published."
+msgstr "Supportbottens träd har publicerats."
+
+msgid "The support bot tree has been archived."
+msgstr "Supportbottens träd har arkiverats."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Supportbottens träd har duplicerats."
+
+msgid "The support bot tree has been deleted."
+msgstr "Supportbottens träd har raderats."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Är du säker på att du vill radera detta supportbotträd?"
+
+msgid "The support bot tree has been imported."
+msgstr "Supportbottens träd har importerats."
+
+msgid "Create support bot tree"
+msgstr "Skapa supportbotträd"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Bygg ett fast beslutsträd som guidar användare genom supportfrågor och kan eskalera till ärenden."
+
+msgid "Portal scope"
+msgstr "Portalomfattning"
+
+msgid "Duplicate"
+msgstr "Duplicera"
+
+msgid "Archive"
+msgstr "Arkivera"
+
+msgid "View conversations"
+msgstr "Visa konversationer"
+
+msgid "Import support bot tree"
+msgstr "Importera supportbotträd"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importera en JSON-export eller ett CSV-beslutsträd. Det importerade trädet skapas alltid som ett nytt utkast."
+
+msgid "Resolved"
+msgstr "Löst"
+
+msgid "Escalated"
+msgstr "Eskalerat"
+
+msgid "Abandoned"
+msgstr "Övergivet"
+
+msgid "Support bot conversations"
+msgstr "Supportbotkonversationer"
+
+msgid "Outcome"
+msgstr "Utfall"
+
+msgid "Started at"
+msgstr "Startad"
+
+msgid "Ended at"
+msgstr "Avslutad"
+
+msgid "View conversation"
+msgstr "Visa konversation"
+
+msgid "Go to node"
+msgstr "Gå till nod"
+
+msgid "Create support ticket"
+msgstr "Skapa supportärende"
+
+msgid "End conversation"
+msgstr "Avsluta konversation"
+
+msgid "Node"
+msgstr "Nod"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Ett supportbotträd kräver minst en nod."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Är du säker på att du vill radera denna nod? Länkar till den kommer att rensas."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Varje supportbotnod kräver minst ett alternativ."
+
+msgid "The support bot tree title is required."
+msgstr "Titeln på supportbotträdet är obligatorisk."
+
+msgid "A support bot entry node is required."
+msgstr "En startnod för supportboten krävs."
+
+msgid "Every support bot node requires content."
+msgstr "Varje supportbotnod kräver innehåll."
+
+msgid "Every support bot option requires a label."
+msgstr "Varje supportbotalternativ kräver en etikett."
+
+msgid "Select a target node for every go-to option."
+msgstr "Välj en målnod för varje gå-till-alternativ."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Ange en relativ URL för varje länkalternativ."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Välj en ärendekategori för varje eskaleringsalternativ."
+
+msgid "The support bot tree has been saved."
+msgstr "Supportbottens träd har sparats."
+
+msgid "Edit support bot tree"
+msgstr "Redigera supportbotträd"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Publicerade och arkiverade supportbotversioner är skrivskyddade. Duplicera detta träd från listan för att redigera en ny utkastversion."
+
+msgid "Default ticket project"
+msgstr "Standardärendeprojekt"
+
+msgid "Decision tree rules"
+msgstr "Regler för beslutsträd"
+
+msgid "Every node must contain at least one option."
+msgstr "Varje nod måste innehålla minst ett alternativ."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "En slutsatsnod måste avsluta konversationen eller skapa ett supportärende."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Gå-till-länkar får inte skapa cykler i v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Externa URL:er tillåts inte i v1; länkåtgärder måste använda en relativ Chamilo-sökväg."
+
+msgid "Nodes"
+msgstr "Noder"
+
+msgid "Add node"
+msgstr "Lägg till nod"
+
+msgid "Entry node"
+msgstr "Ingångsnod"
+
+msgid "Set as entry node"
+msgstr "Ange som ingångsnod"
+
+msgid "Target node"
+msgstr "Målnod"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Använd en relativ Chamilo-sökväg, till exempel /tickets."
+
+msgid "Ticket category"
+msgstr "Ärendekategori"
+
+msgid "Select a default ticket project first."
+msgstr "Välj först ett standardärendeprojekt."
+
+msgid "Closing message"
+msgstr "Avslutningsmeddelande"
+
+msgid "Select a node to edit it."
+msgstr "Välj en nod för att redigera den."
+
+msgid "Support bot conversation"
+msgstr "Supportbotkonversation"
+
+msgid "Transcript of %s"
+msgstr "Transkript av %s"
+
+msgid "Download unofficial transcript"
+msgstr "Ladda ner inofficiellt transkript"
+
+msgid "Issue official transcript"
+msgstr "Utfärda officiellt betygsutdrag"
+
+msgid "Official transcripts"
+msgstr "Officiella betygsutdrag"
+
+msgid "No official transcript has been issued yet."
+msgstr "Inget officiellt betygsutdrag har utfärdats ännu."
+
+msgid "Issued by"
+msgstr "Utfärdat av"
+
+msgid "Verify"
+msgstr "Verifiera"
+
+msgid "Signature of official transcripts"
+msgstr "Underskrift för officiella betygsutdrag"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Den här bilden skrivs ut på portalens officiella betygsutdrag, ovanför undertecknarens namn och titel som anges i certifikatinställningarna."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Utfärda ett signerat officiellt betygsutdrag med kurserna och betygen som listas på den här sidan? Det kan verifieras online tills det återkallas."
+
+msgid "Official transcript issued"
+msgstr "Officiellt betygsutdrag utfärdat"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Återkalla detta officiella betygsutdrag? Verifieringssidan kommer då att visa det som återkallat."
+
+msgid "Official transcript revoked"
+msgstr "Officiellt betygsutdrag återkallat"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Välj först en PNG- eller JPEG-bild."
+
+msgid "Signed credential"
+msgstr "Signerat intyg"
+
+msgid "Issue signed credential"
+msgstr "Utfärda signerat intyg"
+
+msgid "Verify credential"
+msgstr "Verifiera intyg"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Förankra på Sepolia-testnätet"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Bekräfta befintlig Sepolia-transaktion"
+
+msgid "Revoke signed credential"
+msgstr "Återkalla signerat intyg"
+
+msgid "Delete certificate"
+msgstr "Ta bort certifikat"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Bekräfta en befintlig Sepolia-transaktion"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia-transaktionshash"
+
+msgid "Verify transaction"
+msgstr "Verifiera transaktion"
+
+msgid "Anchored"
+msgstr "Förankrad"
+
+msgid "Issued"
+msgstr "Utfärdad"
+
+msgid "Not issued"
+msgstr "Inte utfärdad"
+
+msgid "Consent required"
+msgstr "Samtycke krävs"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia-transaktionen bekräftad och verifierad"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia-testnätets plånbok kommer att be dig signera en transaktion. Endast certifikatets fingeravtryck kommer att förankras. Fortsätt?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Återkalla detta signerade intyg? Eventuell blockkedjetransaktion förblir permanent, men verifieringssidan kommer att rapportera återkallelse."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Utfärda ett signerat certifikatsintyg för den här deltagaren? Detta gör de godkända personuppgifterna verifierbara med en privat länk."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "En EVM-kompatibel webbläsarplånbok krävs för Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Välj Sepolia-testnätet (kedje-ID 11155111) i din plånbok."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Ogiltig plånboksadress eller certifikatfingeravtryck."
+
+msgid "Transaction pending"
+msgstr "Transaktion väntar"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Använd Bekräfta befintlig Sepolia-transaktion senare."
+
+msgid "Signed credential issued"
+msgstr "Signerad merit utfärdad"
+
+msgid "Credential revoked"
+msgstr "Merit återkallad"
+
+msgid "Transaction hash"
+msgstr "Transaktionshash"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Publiceringsmedgivande tillåter en administratör att utfärda en signerad certifikatmerit och valfritt förankra dess SHA-256-fingeravtryck på Sepolia-testnätet. Inget namn eller personuppgifter skickas on-chain. Du kan återkalla medgivandet när som helst."
+
+msgid "Publication consent"
+msgstr "Publiceringsmedgivande"
+
+msgid "Not approved"
+msgstr "Ej godkänt"
+
+msgid "Withdraw consent"
+msgstr "Återkalla medgivande"
+
+msgid "Approve publication"
+msgstr "Godkänn publicering"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Jag godkänner en signerad, offentligt verifierbar merit som visar mitt namn, kurs, resultat och utfärdandedatum. En administratör får också publicera endast dess SHA-256-fingeravtryck på Sepolia-testnätet. Fingeravtrycket är permanent, även om jag återkallar senare. Fortsätta?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Återkalla publiceringsgodkännandet för detta certifikat?"
+
+msgid "Publication approval recorded"
+msgstr "Publiceringsgodkännande registrerat"
+
+msgid "Publication approval withdrawn"
+msgstr "Publiceringsgodkännande återkallat"
+
+msgid "Read more"
+msgstr "Läs mer"
+
+msgid "Participation: %s of %s posts"
+msgstr "Deltagande: %s av %s inlägg"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Publicera ditt bidrag för att se de andra deltagarnas svar."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Endast behöriga utredare kan granska berättigade rapporter. Rapportörers identiteter förblir konfidentiella som standard."
+
+msgid "New confidential report"
+msgstr "Ny konfidentiell rapport"
+
+msgid "Reported user"
+msgstr "Rapporterad användare"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Det finns berättigade konfidentiella rapporter som väntar på granskning."
+
+msgid "Eligible investigations"
+msgstr "Berättigade utredningar"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Ett ärende visas här först när minst %s olika användare rapporterar samma person."
+
+msgid "Distinct reporters"
+msgstr "Unika rapportörer"
+
+msgid "Reports for selected user"
+msgstr "Rapporter för vald användare"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Konfidentiell rapportering är för närvarande inte tillgänglig."
+
+msgid "The investigation could not be loaded."
+msgstr "Utredningen kunde inte läsas in."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Din identitet skyddas från utredare som standard, men undvik att inkludera identifierande uppgifter i rapporttexten eller bilagor. Detta är inte en nödjänst."
+
+msgid "Find the user involved"
+msgstr "Hitta den berörda användaren"
+
+msgid "Name or username"
+msgstr "Namn eller användarnamn"
+
+msgid "Describe the situation"
+msgstr "Beskriv situationen"
+
+msgid "Evidence (optional)"
+msgstr "Bevis (valfritt)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Upp till tre filer, högst 8 MiB vardera. Bilder, ljud eller korta videor."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Jag samtycker till att behöriga utredare får se mitt namn och min e-post för denna specifika rapport. Jag kan återkalla detta tillstånd senare."
+
+msgid "Send confidential report"
+msgstr "Skicka konfidentiell rapport"
+
+msgid "Could not search users"
+msgstr "Kunde inte söka användare"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Upp till tre filer, högst 8 MiB vardera."
+
+msgid "The confidential report could not be saved."
+msgstr "Den konfidentiella rapporten kunde inte sparas."
+
+msgid "Confidential report"
+msgstr "Konfidentiell rapport"
+
+msgid "Confidential conversation"
+msgstr "Konfidentiell konversation"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Utredare kan kommunicera via denna konversation utan att se rapportörens identitet om inte kontaktuppgifter delas."
+
+msgid "Reporter"
+msgstr "Rapportör"
+
+msgid "Investigator"
+msgstr "Utredare"
+
+msgid "Additional evidence (optional)"
+msgstr "Ytterligare bevis (valfritt)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Upp till tre filer, högst 8 MiB vardera; tio filer per rapport."
+
+msgid "Contact shared voluntarily"
+msgstr "Kontakt delad frivilligt"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Tillåt utredare att se mitt namn och min e-post för denna rapport"
+
+msgid "This confidential report is not available."
+msgstr "Denna konfidentiella rapport är inte tillgänglig."
+
+msgid "Your message could not be saved."
+msgstr "Ditt meddelande kunde inte sparas."
+
+msgid "Contact sharing could not be updated."
+msgstr "Kontaktdelning kunde inte uppdateras."
+
+msgid "Evidence could not be downloaded."
+msgstr "Beviset kunde inte laddas ner."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel: fyll i formuläret – beräkna kroppsmasseindex</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Kroppsmasseindex</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = vikt/längd<sup>2</sup> (jfr <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exempel: fyll i formuläret – beräkna kroppsmasseindex</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Ålder</strong></td>            <td width=\"75%\" style=\"\">[25] år</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Kön</strong></td>            <td style=\"\" text-align:=\"\">[M] (M eller F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Vikt</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Längd</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Kroppsmasseindex</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = vikt/längd<sup>2</sup> (jfr <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia-artikel</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Dölj IP-adress i rapporter"
+
+msgid "Course settings policies"
+msgstr "Policyer för kursinställningar"
+
+msgid "Academic transcripts"
+msgstr "Akademiska intyg"
+
+msgid "Transcript program title"
+msgstr "Programtitel på intyg"
+
+msgid "Transcript course code"
+msgstr "Kurskod på intyg"
+
+msgid "Transcript course hours field"
+msgstr "Fält för kurstimmar på intyg"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Fullgjorda timmar på intyg är de krävda timmarna"
+
+msgid "Transcript student number field"
+msgstr "Fält för studentnummer på intyg"
+
+msgid "Transcript address fields"
+msgstr "Adressfält på intyg"
+
+msgid "Transcript grading scale"
+msgstr "Betygsskala på intyg"
+
+msgid "Transcript GPA note"
+msgstr "GPA-notering på intyg"
+
+msgid "Transcript signatory name"
+msgstr "Namn på undertecknare på intyg"
+
+msgid "Transcript signatory title"
+msgstr "Titel på undertecknare på intyg"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Aktivera signerade certifikat och valfri förankring på Sepolia-testnätet"
+
+msgid "Show thread replies only after participating"
+msgstr "Visa trådsvar först efter deltagande"
+
+msgid "Show the forum category description in threads"
+msgstr "Visa forumkategorins beskrivning i trådar"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Inställningar för forumdeltagande kan ändras per kurs"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Maximalt antal inlägg som visas i en forumtråd"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Antal inlägg som krävs för att slutföra en forumtråd"
+
+msgid "Track e-mail openings"
+msgstr "Spåra öppningar av e-post"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Tillåt e-postsvar på meddelanden"
+
+msgid "Inbound e-mail address"
+msgstr "Inkommande e-postadress"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN för inkommande brevlåda"
+
+msgid "Remember me duration (days)"
+msgstr "Varaktighet för Kom ihåg mig (dagar)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Aktivera dynamisk OAuth-klientregistrering utöver MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Aktivera konfidentiell välfärdsrapportering"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Minsta antal distinkta rapportörer för en utredning"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Tillåt konfidentiella bevisbilagor"
+
+msgid "Show confidential investigation notifications"
+msgstr "Visa aviseringar om konfidentiella utredningar"
+
+msgid "Enable support chatbot"
+msgstr "Aktivera supportchattbot"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Välj var ordlistetermer ska markeras automatiskt: dokument, övningar och lärstigar."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Dölj IP-adresser i visuell rapportering och reportexporter. IP-adresser lagras fortfarande och är tillgängliga via behöriga personuppgiftsförfaranden."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Plattformens standardvärden och behörigheter att redigera kurser; hanteras i Kursinställningar."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Låt användare ladda ner ett inofficiellt intyg över de kurser de slutfört, och låt administratörer, sessionsadministratörer och HR-chefer utfärda signerade officiella intyg för de användare de hanterar. Signaturbilden laddas upp från en användares intygssida."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Programtitel som skrivs ut på varje intyg, till exempel namnet på den examen som förbereds på denna plattform."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Vilket kursfält som fyller kolumnen för kurskod på intyg: kurskoden eller avdelningsnamnet."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Variabel för kursens extrafält som innehåller antalet timmar för en kurs. Lämna tomt för att använda kursens varaktighet."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Skriv ut de krävda timmarna för en kurs som de timmar eleven har fullgjort. När detta är inaktiverat är de fullgjorda timmarna den tid eleven tillbringat i kursen."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Variabel för användarens extrafält som innehåller studentnumret som skrivs ut på intyg. Lämna tomt för att inte skriva ut något."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Kommaseparerade variabler för användarens extrafält som skrivs ut efter användarens adress på intyg, till exempel stad, län och postnummer."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "JSON-lista över betygsbokstäver, från högsta minimipoäng och nedåt: varje objekt har minimipoäng i procent (min), bokstaven och betygsvärdena som används för att beräkna GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Förklaring av hur GPA beräknas, som skrivs ut under GPA på intyg."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Namn på den skolansvariga som undertecknar de officiella intygen."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Titel på den skolansvariga som undertecknar de officiella intygen."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Kräver uttryckligt samtycke från ägaren och manuella administratörsåtgärder. Endast SHA-256-fingeravtryck skickas till kedjan."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Elever ser endast det första inlägget i en forumtråd tills de själva har skrivit ett inlägg. Administratörer, lärare, coacher och grupphandledare ser alltid alla inlägg."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Visa titeln och en förkortad beskrivning av forumkategorin högst upp i varje tråd, med en länk för att läsa hela beskrivningen."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "När detta är aktiverat kan lärare i avsnittet Forum i kursinställningarna välja om deras kurs döljer trådsvar tills eleven skriver, visar kategoribeskrivningen i trådar och hur många inlägg deltagandets förloppsindikator förväntar sig, i stället för att följa plattformens inställningar."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Visa endast detta antal inlägg i varje forumtråd för varje användare som inte är plattformsadministratör, inklusive lärare, och för alla i en lärstig. I trådad och nästlad vy gäller gränsen för svaren på varje inlägg. Inläggen behålls i visningens ordning: de första, eller de senaste i en lärstig, där de senaste inläggen kommer först. Ange 0 för att visa alla inlägg."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Visa en förloppsindikator för elever i varje forumtråd, som når 100 % när de har skrivit detta antal meddelanden i den. Inlägg som väntar på moderering räknas. Ange 0 för att dölja förloppsindikatorn."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Lägger till en liten spårningsbild i e-postaviseringar om meddelanden och registrerar när den begärs. Detta indikerar bara att e-postmeddelandet kan ha öppnats; det bevisar inte att det lästes."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Tillåt mottagare av aviseringar om direktmeddelanden att svara via e-post. Inkommande meddelanden måste dirigeras till Chamilos kommando för inkommande e-post av e-postinfrastrukturen."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Basadress som används för svarsdirigering, till exempel replies@example.com. Chamilo lägger till en unik mottagartoken med plusadressering."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Postlådeanslutning som används för att hämta inkommande svar, till exempel imaps://user:password@imap.example.com:993/INBOX. URL-koda reserverade tecken i inloggningsuppgifter."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Antal dagar som en användare förblir inloggad när Kom ihåg mig är valt. Ange 0 för att inaktivera. Kräver HTTPS. Tillåtet intervall: 0 till 90. Den vanliga sessionstimeouten konfigureras separat i PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Tillåter dynamisk klientregistrering att begära vilket som helst omfång som registrerats av en Chamilo OAuth-resursserver. När det är inaktiverat förblir självregistrering begränsad till MCP. Resursåtkomst begränsas alltid separat av varje klients tillåtna resurslista."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Aktivera konfidentiella incidentrapporter. Modulen kräver en skyddad krypteringsnyckel och utredarbehörighet."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Mellan 2 och 10 olika rapportörer måste rapportera samma användare innan ärendet blir synligt för utredare."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Tillåt bilder, ljud och kort videobevis. Befintliga bilagor förblir läsbara när funktionen är inaktiverad."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Visa en intern indikation på berättigade utredningar. Skickar inte e-post eller externa aviseringar."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Visa en beslutsträdsbaserad chattbot i chattpanelen som kan vägleda användare till "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Tillåter lärare att skapa och versionshantera AI-assisterade pedagogiska applikationer i kurser."
+
+msgid "Department name"
+msgstr "Avdelningsnamn"
+
+msgid "Documents and exercise"
+msgstr "Dokument och övning"
+
+msgid "Documents and learning path"
+msgstr "Dokument och lärstig"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokument, övning och lärstig"
+
+msgid "session"
+msgstr "session"
+
+msgid "course"
+msgstr "kurs"
+
+msgid "You have been enrolled in %s"
+msgstr "Du har blivit inskriven i %s"
 

@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Karule"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ekzemplo de formulo: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulo-ekzemplo: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Intervaloj de variabloj"
@@ -28770,6 +28770,9 @@ msgstr "Nuna uzanto ne trovita."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Saluton %s,<br><br>Vi estas registrita en %s.<br>Vi povas aliri vian konton de <a href=\"%s\">ĉi tie</a>.<br><br>Viaj ensalutaj kredencialoj estas:<br>Uzernomo: <strong>%s</strong><br>Pasvorto: <strong>%s</strong><br><br>Ĝis revido,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Saluton %s,<br><br>Vi estas registrita ĉe %s.<br>Uzantnomo: <strong>%s</strong><br><br>Bonvolu alklaki la suban ligilon por agordi vian pasvorton kaj aliri vian konton:<br><a href=\"%s\">Agordu vian pasvorton</a><br><br>Kun salutoj,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Vi estas registrita en %s"
 
@@ -41573,4 +41576,1616 @@ msgstr "Historio de migrigo estas registrita"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s ĉeestas en la projekta radiko: forigu ĝin por fermi la ĝisdatigajn finpunktojn"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Vi gajnis atestilon por ĉi tiu ekzerco"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Vi devas kompletigi la lernvojon \"%s\" antaŭ ol vi povas aliri ĉi tiun."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Ĉu vi certas, ke vi volas definitive forigi ĉi tiun dosieron?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Ĉu vi certas, ke vi volas malligi ĉi tiun dosieron de la elektita kurso?"
+
+msgid "Attach this file to another course"
+msgstr "Alligi ĉi tiun dosieron al alia kurso"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Alligi al elektita(j) kurso(j) (kaŝita)"
+
+msgid "Course(s):"
+msgstr "Kurso(j):"
+
+msgid "Delete definitively"
+msgstr "Forigi definitive"
+
+msgid "Detach from this course"
+msgstr "Malligi de ĉi tiu kurso"
+
+msgid "File actions"
+msgstr "Dosieraj agoj"
+
+msgid "File Information"
+msgstr "Dosieraj informoj"
+
+msgid "File Link:"
+msgstr "Dosiera ligilo:"
+
+msgid "File Path:"
+msgstr "Dosiera vojo:"
+
+msgid "Filter courses..."
+msgstr "Filtri kursojn..."
+
+msgid "MIME Type:"
+msgstr "MIME-tipo:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Neniuj rezultoj trovitaj."
+
+msgid "Original Name"
+msgstr "Origina nomo"
+
+msgid "Original Name:"
+msgstr "Origina nomo:"
+
+msgid "Orphan"
+msgstr "Orfo"
+
+msgid "Resource File ID:"
+msgstr "ID de risurca dosiero:"
+
+msgid "Resource Node ID:"
+msgstr "ID de risurca nodo:"
+
+msgid "Search..."
+msgstr "Serĉi..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Por malligi ĉi tiun dosieron de specifa kurso, alklaku la piktogramon \"×\" sur la koresponda kursa etikedo supre."
+
+msgid "User:"
+msgstr "Uzanto:"
+
+msgid "View file information"
+msgstr "Vidi dosierajn informojn"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Vi povas alligi ĉi tiun dosieron al unu aŭ pluraj kursoj (kaŝita en la radiko de dokumentoj). Se la dosiero ne plu estas uzata kaj fariĝas orfo, vi ankaŭ povas forigi ĝin definitive."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Vi povas elekti unu aŭ plurajn kursojn (uzu Ctrl/Cmd + alklako)."
+
+msgid "bytes"
+msgstr "bajtoj"
+
+msgid "Failed to copy:"
+msgstr "Kopiado malsukcesis:"
+
+msgid "Missing resource file identifier."
+msgstr "Mankas identigilo de risurca dosiero."
+
+msgid "Please select at least one course."
+msgstr "Bonvolu elekti almenaŭ unu kurson."
+
+msgid "Resource file not found."
+msgstr "Risurca dosiero ne trovita."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Dosiero \"%s\" estis alligita al %d kurso(j): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Kelkaj kursoj estis preterlasitaj: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Mankas identigilo de dosiero aŭ kurso."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Ĉi tiu risurca dosiero ne havas risurcan nodon kaj ne povas esti malligita."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Dosiero estis malligita de %d kursa(j) ligilo(j)."
+
+msgid "This file is not attached to the selected course."
+msgstr "Ĉi tiu dosiero ne estas alligita al la elektita kurso."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Ĉi tiu dosiero ankoraŭ estas uzata de almenaŭ unu risurco kaj ne povas esti forigita."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Orfa dosiero kaj ĝia fizika enhavo estis definitive forigitaj."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Enketo publikigita. Kreitaj: %d. Ĝisdatigitaj: %d. Mesaĝoj senditaj: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Akirebla"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Ĉi tiu kapablo ne povas esti akirita"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Novulo"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Rigida aliĝo al reguloj kaj kuntekst-liberaj instrukcioj; malmulte da situacia juĝo."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Progresinta komencanto"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Komencas rekoni situaciajn aspektojn kaj ŝablonojn, sed ankoraŭ bezonas gvidliniojn."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kompetenta"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Disvolvas planadon kaj mensajn modelojn; prenas respondecon pri rezultoj, sed eble sentas sin superŝutita de komplekseco."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Lerta"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Vidas la \"grandan bildon\", intuicie prioritatigas kaj lernas el sperto."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Eksperto"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Intuicia, fluida agado; fidas je profunda tacita scio; povas novigi aŭ trakti novajn situaciojn senpene."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Memorado"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Reakiri, rememori aŭ rekoni rilatan scion el longdaŭra memoro."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Kompreno"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Konstrui signifon el instruaj mesaĝoj, inkluzive de parola, skriba kaj grafika komunikado. Pruvi komprenon per interpretado, ekzempligo, klasifiko, resumo, inferenco, komparo aŭ klarigo."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Aplikado"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Plenumi aŭ uzi proceduron per efektivigo aŭ implemento en donita situacio. Uzi scion aŭ kapablojn en novaj aŭ konkretaj situacioj."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Analizado"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Disigi materialon en ĝiajn konsistigajn partojn kaj determini kiel la partoj rilatas unu al alia kaj al ĝenerala strukturo aŭ celo. Identigi motivojn, kaŭzojn aŭ rilatojn."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Taksado"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Fari juĝojn surbaze de kriterioj kaj normoj. Kontroli, kritiki aŭ pravigi decidojn aŭ agmanierojn."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Kreado"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Kunigi elementojn por formi koheran aŭ funkcian tuton; reorganizi elementojn en novan ŝablonon aŭ strukturon. Produkti originalan verkon aŭ generi novajn ideojn."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Sekvi"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Laboras sub strikta supervizado kaj direkto. Plenumas rutinajn taskojn kun limigita diskreteco. Fokusas pri sekvado de instrukcioj kaj baza efektivigo."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Helpi"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Laboras sub rutina supervizado. Donas helpon al aliaj, kontribuas al teamaj taskoj kaj komencas preni iom da iniciato ene de difinitaj limoj."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Laboras sub ĝenerala supervizado. Aplikas scion kaj kapablojn al gamo da rutinaj kaj nerutinaj agadoj. Ekzercas iom da diskreteco kaj juĝo."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Laboras sub larĝa direkto. Ebligas aliajn per specialista gvidado, subteno aŭ servoj. Prenas respondecon pri propra laboro kaj eble supervizas malgrandajn teamojn aŭ taskojn."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Certigi kaj konsili"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Laboras sub larĝa direkto sed kun signifa aŭtonomio. Certigas, ke laboro atingas celojn, kaj konsilas pri kompleksaj aferoj. Ofte gvidas teamojn aŭ projektojn kaj influas decidojn."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Inicii kaj influi"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Havas difinitan aŭtoritaton kaj respondecon por signifa laborareo. Inicias agojn, influas strategion kaj politikon en sia kampo, kaj gvidas substancajn projektojn aŭ teamojn."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Difini strategion, inspiri, mobilizi"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Havas aŭtoritaton ĉe la plej alta organiza nivelo por grava laborareo. Difinas longdaŭran strategion, inspiras kaj mobilizas aliajn, kaj faras decidojn kritikajn por organiza sukceso. Influas ĉe industria aŭ ekstera nivelo."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Maksimuma neaktiva tempo konsiderenda (minutoj)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Kurspaĝo lasita malferma daŭre sendas aŭtomatajn petojn. Post tiu nombro da minutoj sen vera ago de la uzanto (malfermo de paĝo aŭ ero, respondado ktp.), la tempo pasigita en la kurso ĉesas esti kalkulata."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Kunlabora vikia redaktilo"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Konektiĝas al Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Konservo kreas novan vikian version de Chamilo el la nuna enhavo de Etherpad."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "La kunlabora redaktilo ne povis esti ŝargita."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Ebligi Etherpad por vikia redaktado"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Uzi Etherpad kiel kunlaboran redaktilon por ekzistantaj vikiaj paĝoj. Etherpad devas esti elmontrita ĉe la sama origino kiel Chamilo por sekuraj enkorpigitaj seancoj."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL de Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Baza URL de la Etherpad-instanco, inkluzive de laŭvola vojo de inversa prokurilo. Ekzemplo: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "API-ŝlosilo de Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API-ŝlosilo uzata de Chamilo por krei pad-ojn, seancojn kaj sinkronigi vikian enhavon. Agordu Etherpad por akcepti aŭtentigon per API-ŝlosilo."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Defaŭlta videbleco de novaj dokumentoj povas esti ŝanĝita laŭ kurso"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Videbleco donita al nova dokumento, dosierujo aŭ alŝutita dosiero kiam instruisto kreas ĝin en kurso. Instruistoj tamen povas poste ŝanĝi la videblecon de ĉiu."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Kiam ŝaltita, instruistoj povas elekti en la kursagordoj la videblecon donitan al novaj dokumentoj de sia kurso, anstataŭ la platforman defaŭlton."
+
+msgid "Default visibility of new learning paths"
+msgstr "Defaŭlta videbleco de novaj lernovojoj"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Defaŭlta videbleco de novaj lernovojoj povas esti ŝanĝita laŭ kurso"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Videbleco donita al nova lernovojo kiam instruisto kreas ĝin en kurso. Instruistoj tamen povas poste ŝanĝi la videblecon de ĉiu."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Kiam ŝaltita, instruistoj povas elekti en la kursagordoj la videblecon donitan al novaj lernovojoj de sia kurso, anstataŭ la platforman defaŭlton."
+
+msgid "Default visibility of new tests"
+msgstr "Defaŭlta videbleco de novaj testoj"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Defaŭlta videbleco de novaj testoj povas esti ŝanĝita laŭ kurso"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Videbleco donita al nova testo kiam instruisto kreas ĝin en kurso. Instruistoj tamen povas poste ŝanĝi la videblecon de ĉiu."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Kiam ŝaltita, instruistoj povas elekti en la kursaj agordoj la videblecon donitan al novaj testoj de sia kurso, anstataŭ la platforma defaŭlto."
+
+msgid "Default visibility for new learning paths"
+msgstr "Defaŭlta videbleco por novaj lernovojoj"
+
+msgid "Default visibility for new tests"
+msgstr "Defaŭlta videbleco por novaj testoj"
+
+msgid "Following"
+msgstr "Sekvado"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Ricevi retpoŝton kiam lernanto komentas sendaĵon de ĉi tiu tasko"
+
+msgid "Payment history"
+msgstr "Paga historio"
+
+msgid "No payments yet"
+msgstr "Ankoraŭ neniuj pagoj"
+
+msgid "Cancel service"
+msgstr "Nuligi servon"
+
+msgid "Official transcript"
+msgstr "Oficiala transskribo"
+
+msgid "Unofficial transcript"
+msgstr "Neoficiala transskribo"
+
+msgid "Student name"
+msgstr "Nomo de studento"
+
+msgid "Student number"
+msgstr "Studentnumero"
+
+msgid "Program title"
+msgstr "Titolo de programo"
+
+msgid "Required hours"
+msgstr "Postulataj horoj"
+
+msgid "Completion date"
+msgstr "Dato de kompletigo"
+
+msgid "Hours completed"
+msgstr "Kompletigitaj horoj"
+
+msgid "Final grade"
+msgstr "Fina noto"
+
+msgid "Grade"
+msgstr "Noto"
+
+msgid "No completed course yet."
+msgstr "Ankoraŭ neniuj kompletigitaj kursoj."
+
+msgid "Grading scale"
+msgstr "Notskalo"
+
+msgid "Signature of school official"
+msgstr "Subskribo de lerneja oficisto"
+
+msgid "School official"
+msgstr "Lerneja oficisto"
+
+msgid "Official's title"
+msgstr "Titolo de la oficisto"
+
+msgid "Verify this transcript at"
+msgstr "Kontrolu ĉi tiun transskribon ĉe"
+
+msgid "Verification code"
+msgstr "Kontrola kodo"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Ĉi tiu neoficiala transskribo ne estas subskribita. Petu administranton pri oficiala transskribo."
+
+msgid "Transcript verification"
+msgstr "Kontrolo de transskribo"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Kontrolu ke ĉi tiu oficiala transskribo estis eldonita kaj subskribita de la institucio, ne estis ŝanĝita kaj ne estas revokita."
+
+msgid "Valid"
+msgstr "Valida"
+
+msgid "Invalid signature"
+msgstr "Nevalida subskribo"
+
+msgid "Transcript not found"
+msgstr "Transskribo ne trovita"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "La subskribo de la institucio estas valida kaj ĉi tiu transskribo ne estas revokita."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Ĉi tiu transskribo ne povas esti kontrolita kiel valida. Ĝiaj detaloj ne estas montrataj."
+
+msgid "Transcript details"
+msgstr "Detaloj de transskribo"
+
+msgid "Institution"
+msgstr "Institucio"
+
+msgid "Issued on"
+msgstr "Eldonita je"
+
+msgid "Download verification JSON"
+msgstr "Elŝuti kontrolan JSON"
+
+msgid "Transcript"
+msgstr "Transskribo"
+
+msgid "My confidential reports"
+msgstr "Miaj konfidencaj raportoj"
+
+msgid "My transcript"
+msgstr "Mia transskribo"
+
+msgid "Confidential investigations"
+msgstr "Konfidencaj enketoj"
+
+msgid "Floor plan"
+msgstr "Etaĝoplano"
+
+msgid "Click a highlighted room to select it"
+msgstr "Klaku elstarigitan ĉambron por elekti ĝin"
+
+msgid "Select room"
+msgstr "Elekti ĉambron"
+
+msgid "Room on floor plan"
+msgstr "Ĉambro sur etaĝoplano"
+
+msgid "Select a branch first"
+msgstr "Unue elektu filion"
+
+msgid "The branch has no attached floor plan"
+msgstr "La filio ne havas ligitan etaĝoplanon"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Uzu la poligonan ilon por konturi la ĉambron; uzu Redakti por movi angulojn"
+
+msgid "Save room area"
+msgstr "Konservi ĉambran areon"
+
+msgid "Clear room area"
+msgstr "Viŝi ĉambran areon"
+
+msgid "Save the room form to persist the area"
+msgstr "Konservu la ĉambran formularon por persistigi la areon"
+
+msgid "Floor plan unavailable"
+msgstr "Etaĝoplano ne havebla"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Punktoj de ĉambra mapo devas esti ene de la etaĝoplano"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Ĉu vi certas, ke vi volas viŝi la ĉambran areon?"
+
+msgid "View room on floor plan"
+msgstr "Vidi ĉambron sur etaĝoplano"
+
+msgid "No floor plan available"
+msgstr "Neniu etaĝoplano havebla"
+
+msgid "This is an assignment by groups"
+msgstr "Ĉi tio estas tasko laŭ grupoj"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Alŝutu PNG-, JPEG- aŭ sekuran statikan SVG-etaĝoplanon, aŭ elektu ekzistantan bildon el Dokumentoj."
+
+msgid "Upload floor plan"
+msgstr "Alŝuti etaĝoplanon"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG aŭ statika SVG, maksimume 10 MB"
+
+msgid "Search images by name"
+msgstr "Serĉi bildojn laŭ nomo"
+
+msgid "Image name"
+msgstr "Bildnomo"
+
+msgid "Select an image"
+msgstr "Elektu bildon"
+
+msgid "Change floor plan"
+msgstr "Ŝanĝi etaĝoplanon"
+
+msgid "Attach floor plan"
+msgstr "Alkroĉi etaĝoplanon"
+
+msgid "No matching images found in Documents."
+msgstr "Neniuj kongruaj bildoj trovitaj en Dokumentoj."
+
+msgid "Current floor plan"
+msgstr "Nuna etaĝoplano"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Ŝanĝoj de etaĝoplano estas konservataj aŭtomate."
+
+msgid "Remove floor plan"
+msgstr "Forigi etaĝoplanon"
+
+msgid "Cannot load images"
+msgstr "Ne eblas ŝargi bildojn"
+
+msgid "Floor plan saved"
+msgstr "Etaĝoplano konservita"
+
+msgid "Cannot attach floor plan"
+msgstr "Ne eblas alkroĉi etaĝoplanon"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Nur PNG/JPEG kaj sekuraj statikaj SVG-bildoj ĝis 10MB estas subtenataj."
+
+msgid "Cannot upload floor plan"
+msgstr "Ne eblas alŝuti etaĝoplanon"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Ĉu vi certas, ke vi volas forigi la etaĝoplanon?"
+
+msgid "Floor plan removed"
+msgstr "Etaĝoplano forigita"
+
+msgid "Cannot remove floor plan"
+msgstr "Ne eblas forigi etaĝoplanon"
+
+msgid "Support bot"
+msgstr "Subtena roboto"
+
+msgid "Connected"
+msgstr "Konektita"
+
+msgid "Not connected"
+msgstr "Ne konektita"
+
+msgid "View ticket"
+msgstr "Vidi bileton"
+
+msgid "Start a new conversation"
+msgstr "Komenci novan konversacion"
+
+msgid "Video call"
+msgstr "Videovoko"
+
+msgid "Incoming video call"
+msgstr "Envenanta videovoko"
+
+msgid "Decline"
+msgstr "Rifuzi"
+
+msgid "Mute microphone"
+msgstr "Silentigi mikrofonon"
+
+msgid "Unmute microphone"
+msgstr "Malsilentigi mikrofonon"
+
+msgid "Turn camera off"
+msgstr "Malŝalti kameraon"
+
+msgid "Turn camera on"
+msgstr "Ŝalti kameraon"
+
+msgid "Hang up"
+msgstr "Fini vokon"
+
+msgid "Calling..."
+msgstr "Vokas..."
+
+msgid "Connecting..."
+msgstr "Konektas..."
+
+msgid "Your contact is busy."
+msgstr "Via kontakto estas okupata."
+
+msgid "Your contact did not answer the call."
+msgstr "Via kontakto ne respondis la vokon."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Via kontakto ne povis aliri la kameraon aŭ mikrofonon."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Via kontakto ne povis pretigi la videovokon."
+
+msgid "Your contact refused the call."
+msgstr "Via kontakto rifuzis la vokon."
+
+msgid "The call timed out."
+msgstr "La voko eltempiĝis."
+
+msgid "Your contact cancelled the call."
+msgstr "Via kontakto nuligis la vokon."
+
+msgid "The video connection was lost."
+msgstr "La videokonekto perdiĝis."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Via kontakto ne povis establi la videokonekton."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Via kontakto ne povis kompletigi la agordon de la videovoko."
+
+msgid "Your contact hung up."
+msgstr "Via kontakto metis la kornon."
+
+msgid "Video call could not be started"
+msgstr "Videovoko ne povis esti komencita"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Permeso por fotilo aŭ mikrofono estis rifuzita."
+
+msgid "No camera or microphone was found."
+msgstr "Neniu fotilo aŭ mikrofono estis trovita."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Fotilo aŭ mikrofono jam estas uzata aŭ ne havebla."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "La fotilo aŭ mikrofono ne subtenas la postulatajn agordojn."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Aliro al fotilo aŭ mikrofono ne povis esti akirita."
+
+msgid "The video call could not be prepared."
+msgstr "La videovoko ne povis esti pretigita."
+
+msgid "The video call request could not be sent."
+msgstr "La peto pri videovoko ne povis esti sendita."
+
+msgid "The incoming video call could not be processed."
+msgstr "La envenanta videovoko ne povis esti prilaborita."
+
+msgid "The video call answer could not be prepared."
+msgstr "La respondo al la videovoko ne povis esti pretigita."
+
+msgid "The video call answer could not be sent."
+msgstr "La respondo al la videovoko ne povis esti sendita."
+
+msgid "The video call answer could not be processed."
+msgstr "La respondo al la videovoko ne povis esti prilaborita."
+
+msgid "The video connection failed"
+msgstr "La videokonekto malsukcesis"
+
+msgid "The video connection could not be established."
+msgstr "La videokonekto ne povis esti establita."
+
+msgid "No answer was received."
+msgstr "Neniu respondo estis ricevita."
+
+msgid "You refused the call."
+msgstr "Vi rifuzis la vokon."
+
+msgid "You cancelled the call."
+msgstr "Vi nuligis la vokon."
+
+msgid "You hung up."
+msgstr "Vi metis la kornon."
+
+msgid "You missed the call."
+msgstr "Vi maltrafis la vokon."
+
+msgid "Support bot is currently unavailable."
+msgstr "Subtena roboto nuntempe ne haveblas."
+
+msgid "A support ticket has been created."
+msgstr "Subtena bileto estis kreita."
+
+msgid "Conversation ended."
+msgstr "Konversacio finiĝis."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "La subtena roboto ne povis daŭrigi ĉi tiun konversacion. Bonvolu reprovi."
+
+msgid "Add your first term glossary to this course"
+msgstr "Aldonu vian unuan terminaron al ĉi tiu kurso"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Ĉu vi certas, ke vi volas forigi ĉi tiun enketŝablonon?"
+
+msgid "The survey template has been deleted."
+msgstr "La enketŝablono estis forigita."
+
+msgid "Please select a course."
+msgstr "Bonvolu elekti kurson."
+
+msgid "Please select a session for this course."
+msgstr "Bonvolu elekti sesion por ĉi tiu kurso."
+
+msgid "The survey has been created from the template."
+msgstr "La enketo estis kreita el la ŝablono."
+
+msgid "Survey templates"
+msgstr "Enketŝablonoj"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Krei reuzeblajn enketŝablonojn por instruistoj kaj asigni ilin rekte al kurso aŭ sesio."
+
+msgid "Subtitle"
+msgstr "Subtitolo"
+
+msgid "Assign to course"
+msgstr "Asigni al kurso"
+
+msgid "Assign template to course"
+msgstr "Asigni ŝablonon al kurso"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Lasu la sesion malplena por krei la enketon rekte en la kurso."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Ĉi tiu kurso haveblas per sesio en ĉi tiu portalo, do sesio estas postulata."
+
+msgid "Survey template questions"
+msgstr "Demandoj de enketŝablono"
+
+msgid "Back to survey templates"
+msgstr "Reen al enketŝablonoj"
+
+msgid "Could not load survey template"
+msgstr "Ne eblis ŝargi enketŝablonon"
+
+msgid "Could not load survey template questions"
+msgstr "Ne eblis ŝargi demandojn de enketŝablono"
+
+msgid "Could not save survey template question"
+msgstr "Ne eblis konservi demandon de enketŝablono"
+
+msgid "Could not delete survey template question"
+msgstr "Ne eblis forigi demandon de enketŝablono"
+
+msgid "Could not move survey template question"
+msgstr "Ne eblis movi demandon de enketŝablono"
+
+msgid "Could not copy survey template question"
+msgstr "Ne eblis kopii demandon de enketŝablono"
+
+msgid "The survey template has been saved."
+msgstr "La enketŝablono estis konservita."
+
+msgid "Edit survey template"
+msgstr "Redakti enketan ŝablonon"
+
+msgid "Create survey template"
+msgstr "Krei enketan ŝablonon"
+
+msgid "The survey template title is required."
+msgstr "La titolo de la enketo-ŝablono estas deviga."
+
+msgid "Visible as template"
+msgstr "Videbla kiel ŝablono"
+
+msgid "Create satisfaction survey"
+msgstr "Krei kontentigan enketon"
+
+msgid "Training satisfaction survey"
+msgstr "Enketo pri kontento pri trejnado"
+
+msgid "Could not create satisfaction survey"
+msgstr "Ne eblis krei kontentigan enketon"
+
+msgid "Use template"
+msgstr "Uzi ŝablonon"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Krei ĉi tiun enketon el reuzebla ŝablono preparita de administranto."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Rezultoj kaŝitaj de instruisto/tutoro"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Instruistoj kaj tutoroj ankoraŭ povas vidi la nombron de respondoj kaj sendi memorigilojn, sed ne povas malfermi aŭ eksporti la enketajn rezultojn."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Ŝablono aplikita. Kontrolu la enketajn agordojn kaj konservu por krei ĝin."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Enketaj rezultoj estas kaŝitaj de instruistoj kaj tutoroj."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Vi ankoraŭ povas uzi la paĝon de invitoj por vidi la nombron de respondoj kaj sendi memorigilojn."
+
+msgid "Payment method"
+msgstr "Pagometodo"
+
+msgid "Preview mode"
+msgstr "Antaŭrigarda reĝimo"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Progreso kaj poentaro ne estas konservitaj en antaŭrigarda reĝimo."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Ĉi tiu ligilo ne povas esti montrata ene de la lernovojo."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Malfermu ĝin en nova langeto por vidi la paĝon."
+
+msgid "Report a problem with this question"
+msgstr "Raporti problemon pri ĉi tiu demando"
+
+msgid "Your report was sent to the teacher."
+msgstr "Via raporto estis sendita al la instruisto."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Priskribu la eraron aŭ problemon, kiun vi trovis. Via raporto estos sendita al la instruisto."
+
+msgid "A comment is required."
+msgstr "Komento estas deviga."
+
+msgid "Could not send the report."
+msgstr "Ne eblis sendi la raporton."
+
+msgid "Learner reports"
+msgstr "Raportoj de lernantoj"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Neniuj raportoj de lernantoj estis senditaj por ĉi tiu demando."
+
+msgid "View attempt"
+msgstr "Vidi provon"
+
+msgid "Could not load learner reports."
+msgstr "Ne eblis ŝargi raportojn de lernantoj."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Permesi al lernantoj raporti problemojn en demandoj"
+
+msgid "Skill acquired"
+msgstr "Kapablo akirita"
+
+msgid "AI Toolbox"
+msgstr "AI-ilujo"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Generi interaktivajn edukajn aplikaĵojn per AI kaj spuri la progreson de lernantoj per SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Ankoraŭ neniuj publikigitaj aplikaĵoj estas haveblaj."
+
+msgid "Interactive applications"
+msgstr "Interaktivaj aplikaĵoj"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Generi, plibonigi, publikigi kaj revizii versiojn el unu loko."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Malfermu aplikaĵon por daŭrigi de via lasta progreso."
+
+msgid "Interactive learning application"
+msgstr "Interaktiva lerna aplikaĵo"
+
+msgid "Create an interactive learning app"
+msgstr "Krei interaktivan lernan aplikaĵon"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Priskribu la agadon. Chamilo generos versian SCORM-aplikaĵon kun spurado de progreso kaj poentaro."
+
+msgid "Idea"
+msgstr "Ideo"
+
+msgid "Application"
+msgstr "Aplikaĵo"
+
+msgid "What should the application do?"
+msgstr "Kion la aplikaĵo faru?"
+
+msgid "How it works"
+msgstr "Kiel ĝi funkcias"
+
+msgid "AI generation"
+msgstr "AI-generado"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "La aplikaĵo estas generita el viaj instrukcioj kaj konservita kiel versio 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Progreso, poentaro kaj daŭrigaj datumoj de lernantoj estas raportitaj al Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Estontaj plibonigoj kreas novajn versiojn sen forigi la antaŭajn."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Inkluzivu la lernocelon, regulojn, nivelojn, poentadojn kaj kio okazu kiam la lernanto finas."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Vi ne rajtas krei enhavon en ĉi tiu kunteksto."
+
+msgid "The application was generated successfully."
+msgstr "La aplikaĵo estis sukcese generita."
+
+msgid "Open in student view"
+msgstr "Malfermi en studenta vido"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Generu la aplikaĵon por ebligi antaŭrigardon kaj publikigon."
+
+msgid "Improve with AI"
+msgstr "Plibonigi per AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Priskribu la ŝanĝon. Nova versio estos kreita kaj antaŭaj versioj restos disponeblaj."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Priskribu la kompletan interagan agadon, kiun vi volas generi."
+
+msgid "What should be improved?"
+msgstr "Kio estu plibonigita?"
+
+msgid "Generate new version"
+msgstr "Generi novan version"
+
+msgid "Version history"
+msgstr "Versiohistorio"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Antaŭrigardi, elŝuti aŭ restarigi iun ajn generitan version."
+
+msgid "A new version was generated."
+msgstr "Nova versio estis generita."
+
+msgid "Version restored"
+msgstr "Versio restarigita"
+
+msgid "The support bot tree has been published."
+msgstr "La subtena bota arbo estis publikigita."
+
+msgid "The support bot tree has been archived."
+msgstr "La subtena bota arbo estis arĥivigita."
+
+msgid "The support bot tree has been duplicated."
+msgstr "La subtena bota arbo estis duplikatita."
+
+msgid "The support bot tree has been deleted."
+msgstr "La subtena bota arbo estis forigita."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Ĉu vi certas, ke vi volas forigi ĉi tiun subtenan botan arbon?"
+
+msgid "The support bot tree has been imported."
+msgstr "La subtena bota arbo estis importita."
+
+msgid "Create support bot tree"
+msgstr "Krei subtenan botan arbon"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Konstruu fiksan decidaarbon, kiu gvidas uzantojn tra subtenaj demandoj kaj povas eskaladi al Biletoj."
+
+msgid "Portal scope"
+msgstr "Portala amplekso"
+
+msgid "Duplicate"
+msgstr "Duplikati"
+
+msgid "Archive"
+msgstr "Arĥivigi"
+
+msgid "View conversations"
+msgstr "Vidi konversaciojn"
+
+msgid "Import support bot tree"
+msgstr "Importi subtenan botan arbon"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importu JSON-eksporton aŭ CSV-decidaarbon. La importita arbo ĉiam kreiĝas kiel nova malneto."
+
+msgid "Resolved"
+msgstr "Solvita"
+
+msgid "Escalated"
+msgstr "Eskaladita"
+
+msgid "Abandoned"
+msgstr "Forlasita"
+
+msgid "Support bot conversations"
+msgstr "Konversacioj de subtena boto"
+
+msgid "Outcome"
+msgstr "Rezulto"
+
+msgid "Started at"
+msgstr "Komenciĝis je"
+
+msgid "Ended at"
+msgstr "Finiĝis je"
+
+msgid "View conversation"
+msgstr "Vidi konversacion"
+
+msgid "Go to node"
+msgstr "Iri al nodo"
+
+msgid "Create support ticket"
+msgstr "Krei subtenan bileton"
+
+msgid "End conversation"
+msgstr "Fini konversacion"
+
+msgid "Node"
+msgstr "Nodo"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Subtena bota arbo postulas almenaŭ unu nodon."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Ĉu vi certas, ke vi volas forigi ĉi tiun nodon? Ligiloj al ĝi estos malplenigitaj."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Ĉiu nodo de subtena boto postulas almenaŭ unu opcion."
+
+msgid "The support bot tree title is required."
+msgstr "La titolo de la subtena bota arbo estas deviga."
+
+msgid "A support bot entry node is required."
+msgstr "Enira nodo de subtena boto estas deviga."
+
+msgid "Every support bot node requires content."
+msgstr "Ĉiu nodo de subtena boto postulas enhavon."
+
+msgid "Every support bot option requires a label."
+msgstr "Ĉiu opcio de subtena boto postulas etikedon."
+
+msgid "Select a target node for every go-to option."
+msgstr "Elektu celan nodon por ĉiu iri-al opcio."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Enigu relativan URL-on por ĉiu ligila opcio."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Elektu biletkategorion por ĉiu eskalada opcio."
+
+msgid "The support bot tree has been saved."
+msgstr "La subtena bota arbo estis konservita."
+
+msgid "Edit support bot tree"
+msgstr "Redakti subtenan botan arbon"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Publikigitaj kaj arĥivigitaj versioj de subtena boto estas nurlegeblaj. Duplikatu ĉi tiun arbon el la listo por redakti novan malnetan version."
+
+msgid "Default ticket project"
+msgstr "Defaŭlta bileta projekto"
+
+msgid "Decision tree rules"
+msgstr "Reguloj de decida arbo"
+
+msgid "Every node must contain at least one option."
+msgstr "Ĉiu nodo devas enhavi almenaŭ unu opcion."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Fina nodo devas fini la konversacion aŭ krei subtenan bileton."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Iru-al ligiloj ne devas krei ciklojn en v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Eksteraj URL-oj ne estas permesataj en v1; ligilaj agoj devas uzi relativan Chamilo-vojon."
+
+msgid "Nodes"
+msgstr "Nodoj"
+
+msgid "Add node"
+msgstr "Aldoni nodon"
+
+msgid "Entry node"
+msgstr "Enira nodo"
+
+msgid "Set as entry node"
+msgstr "Agordi kiel eniran nodon"
+
+msgid "Target node"
+msgstr "Cela nodo"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Uzu relativan Chamilo-vojon, ekzemple /tickets."
+
+msgid "Ticket category"
+msgstr "Bileta kategorio"
+
+msgid "Select a default ticket project first."
+msgstr "Unue elektu defaŭltan biletan projekton."
+
+msgid "Closing message"
+msgstr "Fina mesaĝo"
+
+msgid "Select a node to edit it."
+msgstr "Elektu nodon por redakti ĝin."
+
+msgid "Support bot conversation"
+msgstr "Konversacio kun subtena roboto"
+
+msgid "Transcript of %s"
+msgstr "Transskribo de %s"
+
+msgid "Download unofficial transcript"
+msgstr "Elŝuti neoficialan transskribon"
+
+msgid "Issue official transcript"
+msgstr "Eligi oficialan transskribon"
+
+msgid "Official transcripts"
+msgstr "Oficialaj transskriboj"
+
+msgid "No official transcript has been issued yet."
+msgstr "Neniu oficiala transskribo estas eligita ankoraŭ."
+
+msgid "Issued by"
+msgstr "Eligita de"
+
+msgid "Verify"
+msgstr "Kontroli"
+
+msgid "Signature of official transcripts"
+msgstr "Subskribo de oficialaj transskriboj"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Ĉi tiu bildo estas presita sur la oficialaj transskriboj de ĉi tiu portalo, super la nomo kaj titolo de la subskribinto agorditaj en la atestilaj agordoj."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Ĉu eligi subskribitan oficialan transskribon kun la kursoj kaj notoj listigitaj sur ĉi tiu paĝo? Ĝi povas esti kontrolita interrete ĝis ĝi estas revokita."
+
+msgid "Official transcript issued"
+msgstr "Oficiala transskribo eligita"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Ĉu revoki ĉi tiun oficialan transskribon? Ĝia kontrolpaĝo tiam montros ĝin kiel revokitan."
+
+msgid "Official transcript revoked"
+msgstr "Oficiala transskribo revokita"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Unue elektu PNG- aŭ JPEG-bildon."
+
+msgid "Signed credential"
+msgstr "Subskribita akreditaĵo"
+
+msgid "Issue signed credential"
+msgstr "Eligi subskribitan akreditaĵon"
+
+msgid "Verify credential"
+msgstr "Kontroli akreditaĵon"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Ankri sur la testa reto Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Konfirmi ekzistantan Sepolia-transakcion"
+
+msgid "Revoke signed credential"
+msgstr "Revoki subskribitan akreditaĵon"
+
+msgid "Delete certificate"
+msgstr "Forigi atestilon"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Konfirmi ekzistantan Sepolia-transakcion"
+
+msgid "Sepolia transaction hash"
+msgstr "Hash de Sepolia-transakcio"
+
+msgid "Verify transaction"
+msgstr "Kontroli transakcion"
+
+msgid "Anchored"
+msgstr "Ankrita"
+
+msgid "Issued"
+msgstr "Eligita"
+
+msgid "Not issued"
+msgstr "Ne eligita"
+
+msgid "Consent required"
+msgstr "Konsento bezonata"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia-transakcio konfirmita kaj kontrolita"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "La monujo de la testa reto Sepolia petos vin subskribi transakcion. Nur la fingrospuro de la atestilo estos ankrita. Ĉu daŭrigi?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Ĉu revoki ĉi tiun subskribitan akreditaĵon? Ĉiu blokĉena transakcio restas permanenta, sed la kontrolpaĝo raportos revokon."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Ĉu eligi subskribitan atestilan akreditaĵon por ĉi tiu lernanto? Tio faras la aprobitajn personajn detalojn kontroleblaj per privata ligilo."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "EVM-kongrua retumila monujo estas bezonata por Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Elektu la testreton Sepolia (ĉen-ID 11155111) en via monujo."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Nevalida monuja adreso aŭ atestila fingrospuro."
+
+msgid "Transaction pending"
+msgstr "Transakcio atendanta"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Uzu Konfirmi ekzistantan Sepolia-transakcion poste."
+
+msgid "Signed credential issued"
+msgstr "Subskribita akreditaĵo eldonita"
+
+msgid "Credential revoked"
+msgstr "Akreditaĵo revokita"
+
+msgid "Transaction hash"
+msgstr "Transakcia haketo"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Konsento pri publikigo permesas al administranto eldoni subskribitan atestilan akreditaĵon kaj laŭvole ankri ĝian SHA-256-fingrospuron sur la testreto Sepolia. Neniu nomo aŭ personaj datumoj estas senditaj en la ĉeno. Vi povas retiri la konsenton iam ajn."
+
+msgid "Publication consent"
+msgstr "Konsento pri publikigo"
+
+msgid "Not approved"
+msgstr "Ne aprobita"
+
+msgid "Withdraw consent"
+msgstr "Retiri konsenton"
+
+msgid "Approve publication"
+msgstr "Aprobi publikigon"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Mi rajtigas subskribitan, publike kontroleblan akreditaĵon kiu montras mian nomon, kurson, poentaron kaj eldon-daton. Administranto ankaŭ povas publikigi nur ĝian SHA-256-fingrospuron sur la testreto Sepolia. La fingrospuro estas permanenta, eĉ se mi retiras poste. Ĉu daŭrigi?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Ĉu retiri la aprobon de publikigo por ĉi tiu atestilo?"
+
+msgid "Publication approval recorded"
+msgstr "Aprobo de publikigo registrita"
+
+msgid "Publication approval withdrawn"
+msgstr "Aprobo de publikigo retirita"
+
+msgid "Read more"
+msgstr "Legi pli"
+
+msgid "Participation: %s of %s posts"
+msgstr "Partopreno: %s el %s afiŝoj"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Afiŝu vian kontribuon por vidi la respondojn de la aliaj partoprenantoj."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Nur rajtigitaj enketistoj povas revizii kvalifikajn raportojn. Identecoj de raportantoj restas konfidencaj defaŭlte."
+
+msgid "New confidential report"
+msgstr "Nova konfidenca raporto"
+
+msgid "Reported user"
+msgstr "Raportita uzanto"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Estas kvalifikaj konfidencaj raportoj atendantaj revizion."
+
+msgid "Eligible investigations"
+msgstr "Kvalifikaj enketoj"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Kazo aperas ĉi tie nur post kiam almenaŭ %s malsamaj uzantoj raportas la saman personon."
+
+msgid "Distinct reporters"
+msgstr "Malsamaj raportantoj"
+
+msgid "Reports for selected user"
+msgstr "Raportoj por elektita uzanto"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Konfidenca raportado nuntempe ne haveblas."
+
+msgid "The investigation could not be loaded."
+msgstr "La enketo ne povis esti ŝarĝita."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Via identeco estas protektita de enketistoj defaŭlte, sed evitu inkluzivi identigajn detalojn en la raportoteksto aŭ aldonaĵoj. Ĉi tio ne estas urĝa servo."
+
+msgid "Find the user involved"
+msgstr "Trovi la implikitan uzanton"
+
+msgid "Name or username"
+msgstr "Nomo aŭ uzantnomo"
+
+msgid "Describe the situation"
+msgstr "Priskribi la situacion"
+
+msgid "Evidence (optional)"
+msgstr "Pruvo (laŭvola)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Ĝis tri dosieroj, maksimume 8 MiB ĉiu. Bildoj, aŭdio aŭ mallongaj videoj."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Mi konsentas ke rajtigitaj enketistoj povas vidi mian nomon kaj retpoŝton por ĉi tiu specifa raporto. Mi povas retiri ĉi tiun permeson poste."
+
+msgid "Send confidential report"
+msgstr "Sendi konfidencan raporton"
+
+msgid "Could not search users"
+msgstr "Ne eblis serĉi uzantojn"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Ĝis tri dosieroj, maksimume 8 MiB ĉiu."
+
+msgid "The confidential report could not be saved."
+msgstr "La konfidenca raporto ne povis esti konservita."
+
+msgid "Confidential report"
+msgstr "Konfidenca raporto"
+
+msgid "Confidential conversation"
+msgstr "Konfidenca konversacio"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Enketistoj povas komuniki per ĉi tiu konversacio sen vidi la identecon de la raportanto krom se kunhavigo de kontakto estas ŝaltita."
+
+msgid "Reporter"
+msgstr "Raportanto"
+
+msgid "Investigator"
+msgstr "Enketisto"
+
+msgid "Additional evidence (optional)"
+msgstr "Plia pruvo (laŭvola)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Ĝis tri dosieroj, maksimume 8 MiB ĉiu; dek dosieroj por raporto."
+
+msgid "Contact shared voluntarily"
+msgstr "Kontakto kunhavigita volonte"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Permesi al enketistoj vidi mian nomon kaj retpoŝton por ĉi tiu raporto"
+
+msgid "This confidential report is not available."
+msgstr "Ĉi tiu konfidenca raporto ne haveblas."
+
+msgid "Your message could not be saved."
+msgstr "Via mesaĝo ne povis esti konservita."
+
+msgid "Contact sharing could not be updated."
+msgstr "Kontaktodividado ne povis esti ĝisdatigita."
+
+msgid "Evidence could not be downloaded."
+msgstr "Evidenco ne povis esti elŝutita."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Ekzemplo de formulara agado: kalkuli la Korpan Masan Indekson</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Aĝo</strong></td>            <td width=\"75%\" style=\"\">[25] jaroj</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sekso</strong></td>            <td style=\"\" text-align:=\"\">[M] (V aŭ I)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Pezo</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Alto</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Korpa Masa Indekso</strong></td>            <td style=\"vertical-align: top;\">[29] KMI =Pezo/Alto<sup>2</sup> (Vd.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikolo de Vikipedio</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Ekzemplo de formulara agado: kalkuli la Korpan Masan Indekson</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Aĝo</strong></td>            <td width=\"75%\" style=\"\">[25] jaroj</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sekso</strong></td>            <td style=\"\" text-align:=\"\">[M] (V aŭ I)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Pezo</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Alto</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Korpa Masa Indekso</strong></td>            <td style=\"vertical-align: top;\">[29] KMI =Pezo/Alto<sup>2</sup> (Vd.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikolo de Vikipedio</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Kaŝi IP-adreson el raportoj"
+
+msgid "Course settings policies"
+msgstr "Politikoj de kursaj agordoj"
+
+msgid "Academic transcripts"
+msgstr "Akademiaj transskribaĵoj"
+
+msgid "Transcript program title"
+msgstr "Programtitolo de transskribaĵo"
+
+msgid "Transcript course code"
+msgstr "Kurskodo de transskribaĵo"
+
+msgid "Transcript course hours field"
+msgstr "Kampo de kursaj horoj en transskribaĵo"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Kompletigitaj horoj en transskribaĵo estas la postulataj horoj"
+
+msgid "Transcript student number field"
+msgstr "Kampo de studentnumero en transskribaĵo"
+
+msgid "Transcript address fields"
+msgstr "Adreskampoj de transskribaĵo"
+
+msgid "Transcript grading scale"
+msgstr "Notskalo de transskribaĵo"
+
+msgid "Transcript GPA note"
+msgstr "Noto pri GPA en transskribaĵo"
+
+msgid "Transcript signatory name"
+msgstr "Nomo de subskribanto de transskribaĵo"
+
+msgid "Transcript signatory title"
+msgstr "Titolo de subskribanto de transskribaĵo"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Ebligi subskribitajn atestilojn kaj laŭvolan ankron en la testreto Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Montri fadenajn respondojn nur post partopreno"
+
+msgid "Show the forum category description in threads"
+msgstr "Montri la priskribon de forumkategorio en fadenoj"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Agordoj de foruma partopreno povas esti ŝanĝitaj laŭ kurso"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Maksimumaj afiŝoj montrataj en foruma fadeno"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Afiŝoj postulataj por kompletigi foruman fadenon"
+
+msgid "Track e-mail openings"
+msgstr "Spuri malfermojn de retpoŝtoj"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Permesi retpoŝtajn respondojn al mesaĝoj"
+
+msgid "Inbound e-mail address"
+msgstr "Envena retpoŝtadreso"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN de envena poŝtkesto"
+
+msgid "Remember me duration (days)"
+msgstr "Daŭro de «memoru min» (tagoj)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Ebligi dinamikan klientregistradon de OAuth preter MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Ebligi konfidencan raportadon pri bonfarto"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Minimumo da malsamaj raportantoj por enketo"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Permesi konfidencajn atestaĵajn kunsendaĵojn"
+
+msgid "Show confidential investigation notifications"
+msgstr "Montri sciigojn pri konfidencaj enketoj"
+
+msgid "Enable support chatbot"
+msgstr "Ebligi subtenan babileton"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Elektu kie vortaraj terminoj estas aŭtomate emfazitaj: dokumentoj, ekzercoj kaj lernovojoj."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Kaŝi IP-adresojn en vida raportado kaj raportaj eksportaĵoj. IP-adresoj restas konservitaj kaj alireblaj per rajtigitaj proceduroj pri personaj datumoj."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Platformaj defaŭltoj kaj permesoj por redakti kursojn; administrataj en Kursaj agordoj."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Permesi al uzantoj elŝuti neoficialan transskribaĵon de la kursoj, kiujn ili kompletigis, kaj permesi al administrantoj, sesiaj administrantoj kaj HR-manaĝeroj eldoni subskribitajn oficialajn transskribaĵojn por la uzantoj, kiujn ili administras. La subskriba bildo estas alŝutita el la transskribaĵa paĝo de uzanto."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Programtitolo presita sur ĉiu transskribaĵo, ekzemple la nomo de la diplomo pretigata sur ĉi tiu platformo."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Kiu kursa kampo plenigas la kolumnon de kurskodo en transskribaĵoj: la kurskodo aŭ la nomo de la fako."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Variablo de la kursa ekstrakampo, kiu enhavas la nombron da horoj de kurso. Lasu malplena por uzi la daŭron de la kurso."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Presi la postulatajn horojn de kurso kiel la horojn kompletigitajn de la lernanto. Kiam malŝaltite, la kompletigitaj horoj estas la tempo, kiun la lernanto pasigis en la kurso."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Variablo de la uzanta ekstrakampo, kiu enhavas la studentnumeron presitan sur transskribaĵoj. Lasu malplena por presi neniun."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Kome apartigitaj variabloj de uzantaj ekstrakampoj presitaj post la adreso de la uzanto sur transskribaĵoj, ekzemple la urbo, ŝtato kaj poŝtkodo."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "JSON-listo de la notleteroj, de la plej alta minimuma poentaro malsupren: ĉiu ero havas la minimuman poentaron en procentoj (min), la leteron kaj la notpoentojn uzatajn por kalkuli la GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Klarigo pri kiel la GPA estas kalkulata, presita sub la GPA sur transskribaĵoj."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Nomo de la lerneja oficisto, kiu subskribas la oficialajn transskribaĵojn."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Titolo de la lerneja oficisto, kiu subskribas la oficialajn transskribaĵojn."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Postulas eksplicitan konsenton de la posedanto kaj manajn agojn de administranto. Nur SHA-256-fingrospuroj estas senditaj ĉenon."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Lernantoj vidas nur la unuan afiŝon de foruma fadeno ĝis ili mem afiŝis en ĝi. Administrantoj, instruistoj, trejnistoj kaj grupaj tutoroj ĉiam vidas ĉiun afiŝon."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Montri la titolon kaj mallongigitan priskribon de la foruma kategorio ĉe la supro de ĉiu fadeno, kun ligilo por legi la plenan priskribon."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Kiam ŝaltite, instruistoj povas elekti en la Forum-sekcio de la kursaj agordoj ĉu ilia kurso kaŝas fadeno-respondojn ĝis la lernanto afiŝas, montras la kategorian priskribon en fadenoj kaj kiom da afiŝoj la partoprena progresbreto atendas, anstataŭ sekvi la platformajn agordojn."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Montri nur tiun nombron da afiŝoj de ĉiu foruma fadeno al ĉiu uzanto kiu ne estas platforma administranto, inkluzive de instruistoj, kaj al ĉiuj ene de lernovojo. En la fadenaj kaj nestitaj vidoj, la limo validas por la respondoj de ĉiu afiŝo. La afiŝoj restas en la ordo de la vido: la unuaj, aŭ la lastaj ene de lernovojo, kie la lastaj afiŝoj venas unue. Agordu al 0 por montri ĉiun afiŝon."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Montri al lernantoj progresbreton en ĉiu foruma fadeno, kiu atingas 100% kiam ili afiŝis tiun nombron da mesaĝoj en ĝi. Afiŝoj atendantaj moderadon estas kalkulitaj. Agordu al 0 por kaŝi la progresbreton."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Aldonas malgrandan spuran bildon al mesaĝaj sciigaj retpoŝtoj kaj registras kiam ĝi estas petita. Tio nur indikas ke la retpoŝto eble estis malfermita; ĝi ne pruvas ke ĝi estis legita."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Permesi al ricevantoj de rektaj mesaĝaj sciigoj respondi per retpoŝto. Envenantaj mesaĝoj devas esti direktitaj al la Chamilo-envena-poŝta komando de la poŝta infrastrukturo."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Baza adreso uzata por respond-direktado, ekzemple replies@example.com. Chamilo aldonas unikan ricevanto-ĵetonon per plus-adresado."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Poŝtkesta konekto uzata por kolekti envenantajn respondojn, ekzemple imaps://user:password@imap.example.com:993/INBOX. URL-kodigu rezervitajn signojn en akreditiloj."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Nombro da tagoj por teni uzanton ensalutinta kiam «Memoru min» estas elektita. Agordu al 0 por malŝalti. Postulas HTTPS. Permesita intervalo: 0 ĝis 90. La normala seanca tempolimo estas agordita aparte en PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Permesas al Dynamic Client Registration peti ajnan amplekson registritan de Chamilo OAuth-risurca servilo. Kiam malŝaltite, mem-registrado restas limigita al MCP. Risurca aliro ĉiam estas limigita aparte de la permesita risurca listo de ĉiu kliento."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Ŝalti konfidencajn incidentajn raportojn. La modulo postulas protektitan ĉifran ŝlosilon kaj esploristan permeson."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Inter 2 kaj 10 malsamaj raportantoj devas raporti la saman uzanton antaŭ ol la kazo fariĝas videbla al esploristoj."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Permesi bildojn, aŭdion kaj mallongan videan pruvon. Ekzistantaj aldonaĵoj restas legeblaj kiam malŝaltite."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Montri internan indikon de elekteblaj esploroj. Ne sendas retpoŝtojn aŭ eksterajn sciigojn."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Montri decidarbo-babileton en la babileja panelo kiu povas gvidi uzantojn al "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Permesas al instruistoj krei kaj versiigi AI-helpatajn edukajn aplikojn ene de kursoj."
+
+msgid "Department name"
+msgstr "Nomo de fako"
+
+msgid "Documents and exercise"
+msgstr "Dokumentoj kaj ekzerco"
+
+msgid "Documents and learning path"
+msgstr "Dokumentoj kaj lernovojo"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokumentoj, ekzerco kaj lernovojo"
+
+msgid "session"
+msgstr "sesio"
+
+msgid "course"
+msgstr "kurso"
+
+msgid "You have been enrolled in %s"
+msgstr "Vi estas enskribita en %s"
 

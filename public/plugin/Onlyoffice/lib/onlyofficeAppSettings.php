@@ -203,18 +203,13 @@ class OnlyofficeAppsettings extends SettingsManager
             // 3) Special cases / defaults
             switch ($settingName) {
                 case $this->jwtHeader:
-                    // Legacy platform aggregated setting (array by plugin name)
-                    $settings = api_get_setting($settingName);
-                    $val = is_array($settings) && array_key_exists($this->plugin->get_name(), $settings)
-                        ? $settings[$this->plugin->get_name()]
-                        : null;
-                    return $val ?: 'Authorization';
+                    // Not in the saved configuration: use the default header.
+                    // (api_get_setting() throws on these bare plugin names.)
+                    return 'Authorization';
 
                 case $this->documentServerInternalUrl:
-                    // Legacy platform aggregated setting (array by plugin name)
-                    $settings = api_get_setting($settingName);
-                    $val = is_array($settings) ? ($settings[$this->plugin->get_name()] ?? null) : null;
-                    return $val;
+                    // Not in the saved configuration: no internal URL is set.
+                    return null;
 
                 case $this->useDemoName:
                     // Explicit fallback from per-URL configuration

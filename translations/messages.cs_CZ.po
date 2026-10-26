@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "S pozdravem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Ukázka vzorce: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Příklad vzorce: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rozsahy proměnných"
@@ -28764,6 +28764,9 @@ msgstr "Aktuální uživatel nenalezen."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Ahoj %s,<br><br>jste registrován na %s.<br>Můžete přistupovat k účtu <a href=\"%s\">zde</a>.<br><br>Vaše přihlašovací údaje jsou:<br>Uživatelské jméno: <strong>%s</strong><br>Heslo: <strong>%s</strong><br><br>S pozdravem,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Dobrý den %s,<br><br>jste registrováni na %s.<br>Uživatelské jméno: <strong>%s</strong><br><br>Klikněte na odkaz níže a nastavte si heslo a přístup k účtu:<br><a href=\"%s\">Nastavit heslo</a><br><br>S pozdravem,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Jste registrován na %s"
 
@@ -41567,4 +41570,1616 @@ msgstr "Historie migrací je zaznamenána"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s je přítomen v kořenovém adresáři projektu: odstraňte jej, abyste uzavřeli koncové body aktualizace"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Za toto cvičení jste získali certifikát"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Než budete moci přistoupit k této výukové cestě, musíte dokončit výukovou cestu \"%s\"."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Opravdu chcete tento soubor trvale smazat?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Opravdu chcete tento soubor odpojit od vybraného kurzu?"
+
+msgid "Attach this file to another course"
+msgstr "Připojit tento soubor k jinému kurzu"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Připojit k vybraným kurzům (skryté)"
+
+msgid "Course(s):"
+msgstr "Kurz(y):"
+
+msgid "Delete definitively"
+msgstr "Trvale smazat"
+
+msgid "Detach from this course"
+msgstr "Odpojit od tohoto kurzu"
+
+msgid "File actions"
+msgstr "Akce se souborem"
+
+msgid "File Information"
+msgstr "Informace o souboru"
+
+msgid "File Link:"
+msgstr "Odkaz na soubor:"
+
+msgid "File Path:"
+msgstr "Cesta k souboru:"
+
+msgid "Filter courses..."
+msgstr "Filtrovat kurzy..."
+
+msgid "MIME Type:"
+msgstr "Typ MIME:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Nebyly nalezeny žádné výsledky."
+
+msgid "Original Name"
+msgstr "Původní název"
+
+msgid "Original Name:"
+msgstr "Původní název:"
+
+msgid "Orphan"
+msgstr "Osiřelý"
+
+msgid "Resource File ID:"
+msgstr "ID souboru zdroje:"
+
+msgid "Resource Node ID:"
+msgstr "ID uzlu zdroje:"
+
+msgid "Search..."
+msgstr "Hledat..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Chcete-li tento soubor odpojit od konkrétního kurzu, klikněte na ikonu \"×\" u příslušné značky kurzu výše."
+
+msgid "User:"
+msgstr "Uživatel:"
+
+msgid "View file information"
+msgstr "Zobrazit informace o souboru"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Tento soubor můžete připojit k jednomu nebo více kurzům (skrytý v kořenovém adresáři dokumentů). Pokud se soubor již nepoužívá a stane se osiřelým, můžete jej také trvale smazat."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Můžete vybrat jeden nebo více kurzů (použijte Ctrl/Cmd + kliknutí)."
+
+msgid "bytes"
+msgstr "bajtů"
+
+msgid "Failed to copy:"
+msgstr "Kopírování se nezdařilo:"
+
+msgid "Missing resource file identifier."
+msgstr "Chybí identifikátor souboru zdroje."
+
+msgid "Please select at least one course."
+msgstr "Vyberte alespoň jeden kurz."
+
+msgid "Resource file not found."
+msgstr "Soubor zdroje nebyl nalezen."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Soubor \"%s\" byl připojen k %d kurzům: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Některé kurzy byly přeskočeny: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Chybí identifikátor souboru nebo kurzu."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Tento soubor zdroje nemá uzel zdroje a nelze jej odpojit."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Soubor byl odpojen od %d odkazů na kurzy."
+
+msgid "This file is not attached to the selected course."
+msgstr "Tento soubor není připojen k vybranému kurzu."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Tento soubor je stále používán alespoň jedním zdrojem a nelze jej smazat."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Osiřelý soubor a jeho fyzický obsah byly trvale smazány."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Průzkum zveřejněn. Vytvořeno: %d. Aktualizováno: %d. Odesláno zpráv: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Získatelné"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Tuto dovednost nelze získat"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Začátečník"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Striktní dodržování pravidel a pokynů bez kontextu; malá situační úsudek."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Pokročilý začátečník"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Začíná rozpoznávat situační aspekty a vzorce, ale stále potřebuje pokyny."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kompetentní"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Rozvíjí plánování a mentální modely; přebírá odpovědnost za výsledky, ale složitost ho může přemáhat."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Zdatný"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Vidí „celkový obraz“, intuitivně stanovuje priority a učí se ze zkušenosti."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Expert"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Intuitivní, plynulý výkon; opírá se o hluboké tacitní znalosti; dokáže inovovat nebo bez námahy zvládat nové situace."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Zapamatování"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Vyhledat, vybavit si nebo rozpoznat relevantní znalosti z dlouhodobé paměti."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Porozumění"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Konstruovat význam z výukových sdělení, včetně ústní, písemné a grafické komunikace. Prokázat porozumění interpretací, uváděním příkladů, klasifikací, shrnutím, odvozováním, porovnáváním nebo vysvětlováním."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Aplikování"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Provádět nebo použít postup jeho vykonáním nebo implementací v dané situaci. Použít znalosti nebo dovednosti v nových nebo konkrétních situacích."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Analyzování"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Rozložit materiál na části a určit, jak spolu souvisejí a jak se vztahují k celkové struktuře nebo účelu. Identifikovat motivy, příčiny nebo vztahy."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Hodnocení"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Vynášet soudy na základě kritérií a norem. Kontrolovat, kritizovat nebo zdůvodňovat rozhodnutí či postupy."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Tvoření"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Skládat prvky do soudržného nebo funkčního celku; reorganizovat prvky do nového vzorce nebo struktury. Vytvářet originální práci nebo generovat nové nápady."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Sledovat"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Pracuje pod pečlivým dohledem a vedením. Provádí rutinní úkoly s omezenou volností. Zaměřuje se na dodržování pokynů a základní provádění."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Pomáhat"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Pracuje pod běžným dohledem. Poskytuje pomoc ostatním, přispívá k týmovým úkolům a začíná projevovat iniciativu v daných mezích."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Pracuje pod obecným dohledem. Aplikuje znalosti a dovednosti na řadu rutinních i nerutinních činností. Uplatňuje určitou volnost a úsudek."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Pracuje pod širokým vedením. Umožňuje ostatním poskytováním specializovaného vedení, podpory nebo služeb. Přebírá odpovědnost za vlastní práci a může dohlížet na malé týmy nebo úkoly."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Zajišťovat a radit"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Pracuje pod širokým vedením, ale s významnou autonomií. Zajišťuje, že práce splňuje cíle, a radí v komplexních záležitostech. Často vede týmy nebo projekty a ovlivňuje rozhodnutí."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Iniciovat a ovlivňovat"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Má definovanou pravomoc a odpovědnost za významnou oblast práce. Iniciuje akce, ovlivňuje strategii a politiku ve své oblasti a vede podstatné projekty nebo týmy."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Stanovovat strategii, inspirovat, mobilizovat"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Má pravomoc na nejvyšší organizační úrovni pro hlavní oblast práce. Stanovuje dlouhodobou strategii, inspiruje a mobilizuje ostatní a činí rozhodnutí kritická pro úspěch organizace. Ovlivňuje na úrovni odvětví nebo vně organizace."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Maximální doba nečinnosti k zohlednění (minuty)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Stránka kurzu ponechaná otevřená stále odesílá automatické požadavky. Po tomto počtu minut bez skutečné akce uživatele (otevření stránky nebo položky, odpověď atd.) se čas strávený v kurzu přestane počítat."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Kolaborativní editor wiki"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Připojování k Etherpadu..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Uložení vytvoří novou verzi wiki Chamilo z aktuálního obsahu Etherpadu."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Kolaborativní editor se nepodařilo načíst."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Povolit Etherpad pro úpravy wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Použít Etherpad jako kolaborativní editor pro existující stránky wiki. Etherpad musí být dostupný na stejném originu jako Chamilo kvůli zabezpečeným vloženým relacím."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL Etherpadu"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Základní URL instance Etherpadu, včetně volitelné cesty reverse proxy. Příklad: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "API klíč Etherpadu"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API klíč, který Chamilo používá k vytváření padů, relací a synchronizaci obsahu wiki. Nakonfigurujte Etherpad tak, aby přijímal autentizaci pomocí API klíče."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Výchozí viditelnost nových dokumentů lze měnit podle kurzu"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Viditelnost přiřazená novému dokumentu, složce nebo nahranému souboru, když jej učitel vytvoří v kurzu. Učitelé mohou viditelnost každé položky později změnit."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Je-li povoleno, mohou učitelé v nastavení kurzu zvolit viditelnost nových dokumentů svého kurzu namísto výchozí hodnoty platformy."
+
+msgid "Default visibility of new learning paths"
+msgstr "Výchozí viditelnost nových výukových cest"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Výchozí viditelnost nových výukových cest lze měnit podle kurzu"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Viditelnost přiřazená nové výukové cestě, když ji učitel vytvoří v kurzu. Učitelé mohou viditelnost každé z nich později změnit."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Je-li povoleno, mohou učitelé v nastavení kurzu zvolit viditelnost nových výukových cest svého kurzu namísto výchozí hodnoty platformy."
+
+msgid "Default visibility of new tests"
+msgstr "Výchozí viditelnost nových testů"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Výchozí viditelnost nových testů lze změnit podle kurzu"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Viditelnost přiřazená novému testu, když jej učitel vytvoří v kurzu. Učitelé mohou viditelnost každého testu později změnit."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Pokud je povoleno, mohou učitelé v nastavení kurzu zvolit viditelnost nových testů svého kurzu namísto výchozího nastavení platformy."
+
+msgid "Default visibility for new learning paths"
+msgstr "Výchozí viditelnost nových výukových cest"
+
+msgid "Default visibility for new tests"
+msgstr "Výchozí viditelnost nových testů"
+
+msgid "Following"
+msgstr "Sleduji"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Dostávat e-mail, když student okomentuje odevzdání tohoto úkolu"
+
+msgid "Payment history"
+msgstr "Historie plateb"
+
+msgid "No payments yet"
+msgstr "Zatím žádné platby"
+
+msgid "Cancel service"
+msgstr "Zrušit službu"
+
+msgid "Official transcript"
+msgstr "Oficiální výpis"
+
+msgid "Unofficial transcript"
+msgstr "Neoficiální výpis"
+
+msgid "Student name"
+msgstr "Jméno studenta"
+
+msgid "Student number"
+msgstr "Číslo studenta"
+
+msgid "Program title"
+msgstr "Název programu"
+
+msgid "Required hours"
+msgstr "Požadované hodiny"
+
+msgid "Completion date"
+msgstr "Datum dokončení"
+
+msgid "Hours completed"
+msgstr "Dokončené hodiny"
+
+msgid "Final grade"
+msgstr "Závěrečná známka"
+
+msgid "Grade"
+msgstr "Známka"
+
+msgid "No completed course yet."
+msgstr "Zatím žádný dokončený kurz."
+
+msgid "Grading scale"
+msgstr "Klasifikační stupnice"
+
+msgid "Signature of school official"
+msgstr "Podpis zástupce školy"
+
+msgid "School official"
+msgstr "Zástupce školy"
+
+msgid "Official's title"
+msgstr "Funkce zástupce"
+
+msgid "Verify this transcript at"
+msgstr "Ověřte tento výpis na"
+
+msgid "Verification code"
+msgstr "Ověřovací kód"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Tento neoficiální výpis není podepsán. Požádejte administrátora o oficiální výpis."
+
+msgid "Transcript verification"
+msgstr "Ověření výpisu"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Ověřte, že tento oficiální výpis byl vydán a podepsán institucí, nebyl změněn a nebyl zrušen."
+
+msgid "Valid"
+msgstr "Platný"
+
+msgid "Invalid signature"
+msgstr "Neplatný podpis"
+
+msgid "Transcript not found"
+msgstr "Výpis nenalezen"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Podpis instituce je platný a tento výpis nebyl zrušen."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Tento výpis nelze ověřit jako platný. Jeho podrobnosti se nezobrazují."
+
+msgid "Transcript details"
+msgstr "Podrobnosti výpisu"
+
+msgid "Institution"
+msgstr "Instituce"
+
+msgid "Issued on"
+msgstr "Vydáno dne"
+
+msgid "Download verification JSON"
+msgstr "Stáhnout ověřovací JSON"
+
+msgid "Transcript"
+msgstr "Výpis"
+
+msgid "My confidential reports"
+msgstr "Moje důvěrné zprávy"
+
+msgid "My transcript"
+msgstr "Můj výpis"
+
+msgid "Confidential investigations"
+msgstr "Důvěrná šetření"
+
+msgid "Floor plan"
+msgstr "Půdorys"
+
+msgid "Click a highlighted room to select it"
+msgstr "Kliknutím na zvýrazněnou místnost ji vyberte"
+
+msgid "Select room"
+msgstr "Vybrat místnost"
+
+msgid "Room on floor plan"
+msgstr "Místnost na půdorysu"
+
+msgid "Select a branch first"
+msgstr "Nejprve vyberte pobočku"
+
+msgid "The branch has no attached floor plan"
+msgstr "Pobočka nemá připojený půdorys"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Použijte nástroj polygon k vyznačení místnosti; pomocí Upravit posouvejte rohy"
+
+msgid "Save room area"
+msgstr "Uložit oblast místnosti"
+
+msgid "Clear room area"
+msgstr "Vymazat oblast místnosti"
+
+msgid "Save the room form to persist the area"
+msgstr "Uložte formulář místnosti, aby se oblast zachovala"
+
+msgid "Floor plan unavailable"
+msgstr "Půdorys není k dispozici"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Body mapy místnosti musí ležet v půdorysu"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Opravdu chcete vymazat oblast místnosti?"
+
+msgid "View room on floor plan"
+msgstr "Zobrazit místnost na půdorysu"
+
+msgid "No floor plan available"
+msgstr "Žádný půdorys není k dispozici"
+
+msgid "This is an assignment by groups"
+msgstr "Toto je skupinové zadání"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Nahrajte půdorys ve formátu PNG, JPEG nebo bezpečném statickém SVG, nebo vyberte existující obrázek z Dokumentů."
+
+msgid "Upload floor plan"
+msgstr "Nahrát půdorys"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG nebo statické SVG, maximálně 10 MB"
+
+msgid "Search images by name"
+msgstr "Hledat obrázky podle názvu"
+
+msgid "Image name"
+msgstr "Název obrázku"
+
+msgid "Select an image"
+msgstr "Vybrat obrázek"
+
+msgid "Change floor plan"
+msgstr "Změnit půdorys"
+
+msgid "Attach floor plan"
+msgstr "Připojit půdorys"
+
+msgid "No matching images found in Documents."
+msgstr "V Dokumentech nebyly nalezeny žádné odpovídající obrázky."
+
+msgid "Current floor plan"
+msgstr "Aktuální půdorys"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Změny půdorysu se ukládají automaticky."
+
+msgid "Remove floor plan"
+msgstr "Odebrat půdorys"
+
+msgid "Cannot load images"
+msgstr "Nelze načíst obrázky"
+
+msgid "Floor plan saved"
+msgstr "Půdorys uložen"
+
+msgid "Cannot attach floor plan"
+msgstr "Nelze připojit půdorys"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Podporovány jsou pouze obrázky PNG/JPEG a bezpečné statické SVG do 10 MB."
+
+msgid "Cannot upload floor plan"
+msgstr "Nelze nahrát půdorys"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Opravdu chcete odebrat půdorys?"
+
+msgid "Floor plan removed"
+msgstr "Půdorys odebrán"
+
+msgid "Cannot remove floor plan"
+msgstr "Nelze odebrat půdorys"
+
+msgid "Support bot"
+msgstr "Podpůrný bot"
+
+msgid "Connected"
+msgstr "Připojeno"
+
+msgid "Not connected"
+msgstr "Nepřipojeno"
+
+msgid "View ticket"
+msgstr "Zobrazit tiket"
+
+msgid "Start a new conversation"
+msgstr "Zahájit novou konverzaci"
+
+msgid "Video call"
+msgstr "Videohovor"
+
+msgid "Incoming video call"
+msgstr "Příchozí videohovor"
+
+msgid "Decline"
+msgstr "Odmítnout"
+
+msgid "Mute microphone"
+msgstr "Ztlumit mikrofon"
+
+msgid "Unmute microphone"
+msgstr "Zapnout mikrofon"
+
+msgid "Turn camera off"
+msgstr "Vypnout kameru"
+
+msgid "Turn camera on"
+msgstr "Zapnout kameru"
+
+msgid "Hang up"
+msgstr "Zavěsit"
+
+msgid "Calling..."
+msgstr "Volání..."
+
+msgid "Connecting..."
+msgstr "Připojování..."
+
+msgid "Your contact is busy."
+msgstr "Váš kontakt je zaneprázdněn."
+
+msgid "Your contact did not answer the call."
+msgstr "Váš kontakt hovor nepřijal."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Váš kontakt nemohl získat přístup ke kameře nebo mikrofonu."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Váš kontakt nemohl připravit videohovor."
+
+msgid "Your contact refused the call."
+msgstr "Váš kontakt hovor odmítl."
+
+msgid "The call timed out."
+msgstr "Hovor vypršel."
+
+msgid "Your contact cancelled the call."
+msgstr "Váš kontakt zrušil hovor."
+
+msgid "The video connection was lost."
+msgstr "Video spojení bylo ztraceno."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Váš kontakt nemohl navázat video spojení."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Váš kontakt nemohl dokončit nastavení videohovoru."
+
+msgid "Your contact hung up."
+msgstr "Váš kontakt zavěsil."
+
+msgid "Video call could not be started"
+msgstr "Videohovor se nepodařilo spustit"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Přístup ke kameře nebo mikrofonu byl odepřen."
+
+msgid "No camera or microphone was found."
+msgstr "Nebyla nalezena kamera ani mikrofon."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Kamera nebo mikrofon se již používá nebo není k dispozici."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Kamera nebo mikrofon nepodporuje požadovaná nastavení."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Přístup ke kameře nebo mikrofonu se nepodařilo získat."
+
+msgid "The video call could not be prepared."
+msgstr "Videohovor se nepodařilo připravit."
+
+msgid "The video call request could not be sent."
+msgstr "Žádost o videohovor se nepodařilo odeslat."
+
+msgid "The incoming video call could not be processed."
+msgstr "Příchozí videohovor se nepodařilo zpracovat."
+
+msgid "The video call answer could not be prepared."
+msgstr "Odpověď na videohovor se nepodařilo připravit."
+
+msgid "The video call answer could not be sent."
+msgstr "Odpověď na videohovor se nepodařilo odeslat."
+
+msgid "The video call answer could not be processed."
+msgstr "Odpověď na videohovor se nepodařilo zpracovat."
+
+msgid "The video connection failed"
+msgstr "Video spojení selhalo"
+
+msgid "The video connection could not be established."
+msgstr "Video spojení se nepodařilo navázat."
+
+msgid "No answer was received."
+msgstr "Nebyla přijata žádná odpověď."
+
+msgid "You refused the call."
+msgstr "Odmítli jste hovor."
+
+msgid "You cancelled the call."
+msgstr "Zrušili jste hovor."
+
+msgid "You hung up."
+msgstr "Zavěsili jste."
+
+msgid "You missed the call."
+msgstr "Zmeškali jste hovor."
+
+msgid "Support bot is currently unavailable."
+msgstr "Podpůrný bot je momentálně nedostupný."
+
+msgid "A support ticket has been created."
+msgstr "Byl vytvořen tiket podpory."
+
+msgid "Conversation ended."
+msgstr "Konverzace skončila."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Podpůrný bot nemohl v této konverzaci pokračovat. Zkuste to prosím znovu."
+
+msgid "Add your first term glossary to this course"
+msgstr "Přidejte do tohoto kurzu první termín slovníku"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Opravdu chcete smazat tuto šablonu dotazníku?"
+
+msgid "The survey template has been deleted."
+msgstr "Šablona dotazníku byla smazána."
+
+msgid "Please select a course."
+msgstr "Vyberte prosím kurz."
+
+msgid "Please select a session for this course."
+msgstr "Vyberte prosím relaci pro tento kurz."
+
+msgid "The survey has been created from the template."
+msgstr "Dotazník byl vytvořen ze šablony."
+
+msgid "Survey templates"
+msgstr "Šablony dotazníků"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Vytvářejte znovu použitelné šablony dotazníků pro učitele a přiřazujte je přímo ke kurzu nebo relaci."
+
+msgid "Subtitle"
+msgstr "Titulek"
+
+msgid "Assign to course"
+msgstr "Přiřadit ke kurzu"
+
+msgid "Assign template to course"
+msgstr "Přiřadit šablonu ke kurzu"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Ponechte relaci prázdnou, chcete-li vytvořit dotazník přímo v kurzu."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Tento kurz je na tomto portálu dostupný prostřednictvím relace, proto je relace povinná."
+
+msgid "Survey template questions"
+msgstr "Otázky šablony dotazníku"
+
+msgid "Back to survey templates"
+msgstr "Zpět na šablony dotazníků"
+
+msgid "Could not load survey template"
+msgstr "Šablonu dotazníku se nepodařilo načíst"
+
+msgid "Could not load survey template questions"
+msgstr "Otázky šablony dotazníku se nepodařilo načíst"
+
+msgid "Could not save survey template question"
+msgstr "Otázku šablony dotazníku se nepodařilo uložit"
+
+msgid "Could not delete survey template question"
+msgstr "Otázku šablony dotazníku se nepodařilo smazat"
+
+msgid "Could not move survey template question"
+msgstr "Otázku šablony dotazníku se nepodařilo přesunout"
+
+msgid "Could not copy survey template question"
+msgstr "Otázku šablony dotazníku se nepodařilo zkopírovat"
+
+msgid "The survey template has been saved."
+msgstr "Šablona dotazníku byla uložena."
+
+msgid "Edit survey template"
+msgstr "Upravit šablonu dotazníku"
+
+msgid "Create survey template"
+msgstr "Vytvořit šablonu dotazníku"
+
+msgid "The survey template title is required."
+msgstr "Název šablony dotazníku je povinný."
+
+msgid "Visible as template"
+msgstr "Viditelné jako šablona"
+
+msgid "Create satisfaction survey"
+msgstr "Vytvořit průzkum spokojenosti"
+
+msgid "Training satisfaction survey"
+msgstr "Průzkum spokojenosti se školením"
+
+msgid "Could not create satisfaction survey"
+msgstr "Průzkum spokojenosti se nepodařilo vytvořit"
+
+msgid "Use template"
+msgstr "Použít šablonu"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Vytvořit tento dotazník z opakovaně použitelné šablony připravené administrátorem."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Výsledky skryté před učitelem/tutorem"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Učitelé a tutoři stále vidí počet odpovědí a mohou odesílat připomínky, ale nemohou otevřít ani exportovat výsledky dotazníku."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Šablona byla použita. Zkontrolujte nastavení dotazníku a uložte jej, abyste jej vytvořili."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Výsledky dotazníku jsou skryté před učiteli a tutory."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Stále můžete použít stránku pozvánek k zobrazení počtu odpovědí a odesílání připomínek."
+
+msgid "Payment method"
+msgstr "Způsob platby"
+
+msgid "Preview mode"
+msgstr "Režim náhledu"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Průběh a skóre se v režimu náhledu neukládají."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Tento odkaz nelze zobrazit uvnitř výukové cesty."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Otevřete jej na nové kartě pro zobrazení stránky."
+
+msgid "Report a problem with this question"
+msgstr "Nahlásit problém s touto otázkou"
+
+msgid "Your report was sent to the teacher."
+msgstr "Vaše hlášení bylo odesláno učiteli."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Popište chybu nebo problém, který jste našli. Vaše hlášení bude odesláno učiteli."
+
+msgid "A comment is required."
+msgstr "Komentář je povinný."
+
+msgid "Could not send the report."
+msgstr "Hlášení se nepodařilo odeslat."
+
+msgid "Learner reports"
+msgstr "Hlášení studentů"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Pro tuto otázku nebyla odeslána žádná hlášení studentů."
+
+msgid "View attempt"
+msgstr "Zobrazit pokus"
+
+msgid "Could not load learner reports."
+msgstr "Hlášení studentů se nepodařilo načíst."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Povolit studentům hlásit problémy v otázkách"
+
+msgid "Skill acquired"
+msgstr "Dovednost získána"
+
+msgid "AI Toolbox"
+msgstr "Nástroje AI"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Generujte interaktivní vzdělávací aplikace pomocí AI a sledujte pokrok studentů pomocí SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Zatím nejsou k dispozici žádné zveřejněné aplikace."
+
+msgid "Interactive applications"
+msgstr "Interaktivní aplikace"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Generujte, vylepšujte, zveřejňujte a kontrolujte verze z jednoho místa."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Otevřete aplikaci a pokračujte od posledního pokroku."
+
+msgid "Interactive learning application"
+msgstr "Interaktivní výuková aplikace"
+
+msgid "Create an interactive learning app"
+msgstr "Vytvořit interaktivní výukovou aplikaci"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Popište aktivitu. Chamilo vygeneruje verzovanou SCORM aplikaci se sledováním pokroku a skóre."
+
+msgid "Idea"
+msgstr "Nápad"
+
+msgid "Application"
+msgstr "Aplikace"
+
+msgid "What should the application do?"
+msgstr "Co by měla aplikace dělat?"
+
+msgid "How it works"
+msgstr "Jak to funguje"
+
+msgid "AI generation"
+msgstr "Generování AI"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Aplikace je vygenerována podle vašich pokynů a uložena jako verze 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Pokrok studenta, skóre a data pro pokračování se hlásí do Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Budoucí vylepšení vytvářejí nové verze bez mazání předchozích."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Zahrňte výukový cíl, pravidla, úrovně, bodování a co se má stát, když student dokončí."
+
+msgid "You are not allowed to create content in this context."
+msgstr "V tomto kontextu nemáte oprávnění vytvářet obsah."
+
+msgid "The application was generated successfully."
+msgstr "Aplikace byla úspěšně vygenerována."
+
+msgid "Open in student view"
+msgstr "Otevřít v zobrazení studenta"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Vygenerujte aplikaci, abyste umožnili náhled a publikování."
+
+msgid "Improve with AI"
+msgstr "Vylepšit pomocí AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Popište změnu. Bude vytvořena nová verze a předchozí verze zůstanou k dispozici."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Popište kompletní interaktivní aktivitu, kterou chcete vygenerovat."
+
+msgid "What should be improved?"
+msgstr "Co by se mělo vylepšit?"
+
+msgid "Generate new version"
+msgstr "Vygenerovat novou verzi"
+
+msgid "Version history"
+msgstr "Historie verzí"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Náhled, stažení nebo obnovení libovolné vygenerované verze."
+
+msgid "A new version was generated."
+msgstr "Byla vygenerována nová verze."
+
+msgid "Version restored"
+msgstr "Verze obnovena"
+
+msgid "The support bot tree has been published."
+msgstr "Strom podpůrného bota byl publikován."
+
+msgid "The support bot tree has been archived."
+msgstr "Strom podpůrného bota byl archivován."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Strom podpůrného bota byl zduplikován."
+
+msgid "The support bot tree has been deleted."
+msgstr "Strom podpůrného bota byl smazán."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Opravdu chcete smazat tento strom podpůrného bota?"
+
+msgid "The support bot tree has been imported."
+msgstr "Strom podpůrného bota byl importován."
+
+msgid "Create support bot tree"
+msgstr "Vytvořit strom podpůrného bota"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Vytvořte pevný rozhodovací strom, který uživatele provede podpůrnými otázkami a může eskalovat na tikety."
+
+msgid "Portal scope"
+msgstr "Rozsah portálu"
+
+msgid "Duplicate"
+msgstr "Duplikovat"
+
+msgid "Archive"
+msgstr "Archivovat"
+
+msgid "View conversations"
+msgstr "Zobrazit konverzace"
+
+msgid "Import support bot tree"
+msgstr "Importovat strom podpůrného bota"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importujte JSON export nebo CSV rozhodovací strom. Importovaný strom je vždy vytvořen jako nový koncept."
+
+msgid "Resolved"
+msgstr "Vyřešeno"
+
+msgid "Escalated"
+msgstr "Eskalováno"
+
+msgid "Abandoned"
+msgstr "Opuštěno"
+
+msgid "Support bot conversations"
+msgstr "Konverzace podpůrného bota"
+
+msgid "Outcome"
+msgstr "Výsledek"
+
+msgid "Started at"
+msgstr "Zahájeno"
+
+msgid "Ended at"
+msgstr "Ukončeno"
+
+msgid "View conversation"
+msgstr "Zobrazit konverzaci"
+
+msgid "Go to node"
+msgstr "Přejít na uzel"
+
+msgid "Create support ticket"
+msgstr "Vytvořit podpůrný tiket"
+
+msgid "End conversation"
+msgstr "Ukončit konverzaci"
+
+msgid "Node"
+msgstr "Uzel"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Strom podpůrného bota vyžaduje alespoň jeden uzel."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Opravdu chcete smazat tento uzel? Odkazy na něj budou vymazány."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Každý uzel podpůrného bota vyžaduje alespoň jednu možnost."
+
+msgid "The support bot tree title is required."
+msgstr "Název stromu podpůrného bota je povinný."
+
+msgid "A support bot entry node is required."
+msgstr "Vstupní uzel podpůrného bota je povinný."
+
+msgid "Every support bot node requires content."
+msgstr "Každý uzel podpůrného bota vyžaduje obsah."
+
+msgid "Every support bot option requires a label."
+msgstr "Každá možnost podpůrného bota vyžaduje popisek."
+
+msgid "Select a target node for every go-to option."
+msgstr "Vyberte cílový uzel pro každou možnost přechodu."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Zadejte relativní URL pro každou možnost odkazu."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Vyberte kategorii tiketu pro každou možnost eskalace."
+
+msgid "The support bot tree has been saved."
+msgstr "Strom podpůrného bota byl uložen."
+
+msgid "Edit support bot tree"
+msgstr "Upravit strom podpůrného bota"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Publikované a archivované verze podpůrného bota jsou pouze pro čtení. Duplikujte tento strom ze seznamu, abyste upravili novou konceptovou verzi."
+
+msgid "Default ticket project"
+msgstr "Výchozí projekt ticketů"
+
+msgid "Decision tree rules"
+msgstr "Pravidla rozhodovacího stromu"
+
+msgid "Every node must contain at least one option."
+msgstr "Každý uzel musí obsahovat alespoň jednu možnost."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Koncový uzel musí ukončit konverzaci nebo vytvořit ticket podpory."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Odkazy typu „přejít na“ nesmí ve verzi v1 vytvářet cykly."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Externí adresy URL nejsou ve verzi v1 povoleny; akce odkazů musí používat relativní cestu Chamilo."
+
+msgid "Nodes"
+msgstr "Uzly"
+
+msgid "Add node"
+msgstr "Přidat uzel"
+
+msgid "Entry node"
+msgstr "Vstupní uzel"
+
+msgid "Set as entry node"
+msgstr "Nastavit jako vstupní uzel"
+
+msgid "Target node"
+msgstr "Cílový uzel"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Použijte relativní cestu Chamilo, například /tickets."
+
+msgid "Ticket category"
+msgstr "Kategorie ticketu"
+
+msgid "Select a default ticket project first."
+msgstr "Nejprve vyberte výchozí projekt ticketů."
+
+msgid "Closing message"
+msgstr "Závěrečná zpráva"
+
+msgid "Select a node to edit it."
+msgstr "Vyberte uzel, který chcete upravit."
+
+msgid "Support bot conversation"
+msgstr "Konverzace s podpůrným botem"
+
+msgid "Transcript of %s"
+msgstr "Přepis %s"
+
+msgid "Download unofficial transcript"
+msgstr "Stáhnout neoficiální přepis"
+
+msgid "Issue official transcript"
+msgstr "Vydat oficiální přepis"
+
+msgid "Official transcripts"
+msgstr "Oficiální přepisy"
+
+msgid "No official transcript has been issued yet."
+msgstr "Zatím nebyl vydán žádný oficiální přepis."
+
+msgid "Issued by"
+msgstr "Vydal"
+
+msgid "Verify"
+msgstr "Ověřit"
+
+msgid "Signature of official transcripts"
+msgstr "Podpis oficiálních přepisů"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Tento obrázek se tiskne na oficiální přepisy tohoto portálu nad jménem a titulem podepisující osoby nastavenými v nastavení certifikátu."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Vydat podepsaný oficiální přepis s kurzy a známkami uvedenými na této stránce? Lze jej ověřit online, dokud nebude zrušen."
+
+msgid "Official transcript issued"
+msgstr "Oficiální přepis vydán"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Zrušit tento oficiální přepis? Stránka ověření jej poté zobrazí jako zrušený."
+
+msgid "Official transcript revoked"
+msgstr "Oficiální přepis zrušen"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Nejprve vyberte obrázek PNG nebo JPEG."
+
+msgid "Signed credential"
+msgstr "Podepsaná pověření"
+
+msgid "Issue signed credential"
+msgstr "Vydat podepsaná pověření"
+
+msgid "Verify credential"
+msgstr "Ověřit pověření"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Ukotvit v testovací síti Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Potvrdit existující transakci Sepolia"
+
+msgid "Revoke signed credential"
+msgstr "Zrušit podepsaná pověření"
+
+msgid "Delete certificate"
+msgstr "Odstranit certifikát"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Potvrdit existující transakci Sepolia"
+
+msgid "Sepolia transaction hash"
+msgstr "Hash transakce Sepolia"
+
+msgid "Verify transaction"
+msgstr "Ověřit transakci"
+
+msgid "Anchored"
+msgstr "Ukotveno"
+
+msgid "Issued"
+msgstr "Vydáno"
+
+msgid "Not issued"
+msgstr "Nevydáno"
+
+msgid "Consent required"
+msgstr "Vyžadován souhlas"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Transakce Sepolia potvrzena a ověřena"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Peněženka testovací sítě Sepolia vás požádá o podepsání transakce. Ukotven bude pouze otisk certifikátu. Pokračovat?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Zrušit tato podepsaná pověření? Jakákoli blockchainová transakce zůstane trvalá, ale stránka ověření nahlásí zrušení."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Vydat podepsaná certifikační pověření pro tohoto studenta? Schválené osobní údaje tak budou ověřitelné pomocí soukromého odkazu."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Pro síť Sepolia je vyžadována prohlížečová peněženka kompatibilní s EVM."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "V peněžence vyberte testovací síť Sepolia (chain ID 11155111)."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Neplatná adresa peněženky nebo otisk certifikátu."
+
+msgid "Transaction pending"
+msgstr "Transakce čeká"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Později použijte Potvrdit existující transakci Sepolia."
+
+msgid "Signed credential issued"
+msgstr "Podepsaný doklad vydán"
+
+msgid "Credential revoked"
+msgstr "Doklad odvolán"
+
+msgid "Transaction hash"
+msgstr "Hash transakce"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Souhlas s publikací umožňuje administrátorovi vydat podepsaný certifikační doklad a volitelně ukotvit jeho otisk SHA-256 v testovací síti Sepolia. Na řetězec se neodesílá jméno ani osobní údaje. Souhlas můžete kdykoli odvolat."
+
+msgid "Publication consent"
+msgstr "Souhlas s publikací"
+
+msgid "Not approved"
+msgstr "Neschváleno"
+
+msgid "Withdraw consent"
+msgstr "Odvolat souhlas"
+
+msgid "Approve publication"
+msgstr "Schválit publikaci"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Opravňuji vydání podepsaného, veřejně ověřitelného dokladu s mým jménem, kurzem, skóre a datem vydání. Administrátor může také zveřejnit pouze jeho otisk SHA-256 v testovací síti Sepolia. Otisk je trvalý, i když souhlas později odvolám. Pokračovat?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Odvolat schválení publikace tohoto certifikátu?"
+
+msgid "Publication approval recorded"
+msgstr "Schválení publikace zaznamenáno"
+
+msgid "Publication approval withdrawn"
+msgstr "Schválení publikace odvoláno"
+
+msgid "Read more"
+msgstr "Číst více"
+
+msgid "Participation: %s of %s posts"
+msgstr "Účast: %s z %s příspěvků"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Přidejte svůj příspěvek, abyste viděli odpovědi ostatních účastníků."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Způsobilá hlášení mohou posuzovat pouze oprávnění vyšetřovatelé. Identita oznamovatelů zůstává ve výchozím nastavení důvěrná."
+
+msgid "New confidential report"
+msgstr "Nové důvěrné hlášení"
+
+msgid "Reported user"
+msgstr "Nahlášený uživatel"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Čekají způsobilá důvěrná hlášení k posouzení."
+
+msgid "Eligible investigations"
+msgstr "Způsobilá šetření"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Případ se zde zobrazí až poté, co tutéž osobu nahlásí alespoň %s různých uživatelů."
+
+msgid "Distinct reporters"
+msgstr "Různí oznamovatelé"
+
+msgid "Reports for selected user"
+msgstr "Hlášení k vybranému uživateli"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Důvěrné hlášení je momentálně nedostupné."
+
+msgid "The investigation could not be loaded."
+msgstr "Šetření se nepodařilo načíst."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Vaše identita je před vyšetřovateli ve výchozím nastavení chráněna, ale v textu hlášení ani v přílohách neuvádějte identifikační údaje. Toto není tísňová služba."
+
+msgid "Find the user involved"
+msgstr "Najít zúčastněného uživatele"
+
+msgid "Name or username"
+msgstr "Jméno nebo uživatelské jméno"
+
+msgid "Describe the situation"
+msgstr "Popište situaci"
+
+msgid "Evidence (optional)"
+msgstr "Důkazy (volitelné)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Až tři soubory, maximálně 8 MiB každý. Obrázky, zvuk nebo krátká videa."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Souhlasím, že oprávnění vyšetřovatelé mohou u tohoto konkrétního hlášení vidět mé jméno a e-mail. Toto oprávnění mohu později odvolat."
+
+msgid "Send confidential report"
+msgstr "Odeslat důvěrné hlášení"
+
+msgid "Could not search users"
+msgstr "Uživatele se nepodařilo vyhledat"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Až tři soubory, maximálně 8 MiB každý."
+
+msgid "The confidential report could not be saved."
+msgstr "Důvěrné hlášení se nepodařilo uložit."
+
+msgid "Confidential report"
+msgstr "Důvěrné hlášení"
+
+msgid "Confidential conversation"
+msgstr "Důvěrná konverzace"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Vyšetřovatelé mohou komunikovat prostřednictvím této konverzace, aniž by viděli identitu oznamovatele, pokud není povoleno sdílení kontaktu."
+
+msgid "Reporter"
+msgstr "Oznamovatel"
+
+msgid "Investigator"
+msgstr "Vyšetřovatel"
+
+msgid "Additional evidence (optional)"
+msgstr "Další důkazy (volitelné)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Až tři soubory, maximálně 8 MiB každý; deset souborů na hlášení."
+
+msgid "Contact shared voluntarily"
+msgstr "Kontakt sdílen dobrovolně"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Povolit vyšetřovatelům vidět mé jméno a e-mail u tohoto hlášení"
+
+msgid "This confidential report is not available."
+msgstr "Toto důvěrné hlášení není k dispozici."
+
+msgid "Your message could not be saved."
+msgstr "Vaši zprávu se nepodařilo uložit."
+
+msgid "Contact sharing could not be updated."
+msgstr "Sdílení kontaktů se nepodařilo aktualizovat."
+
+msgid "Evidence could not be downloaded."
+msgstr "Důkaz se nepodařilo stáhnout."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Příklad vyplnění formuláře: výpočet indexu tělesné hmotnosti</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Věk</strong></td>            <td width=\"75%\" style=\"\">[25] let</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Pohlaví</strong></td>            <td style=\"\" text-align:=\"\">[M] (M nebo F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Hmotnost</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Výška</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Index tělesné hmotnosti</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = hmotnost/výška<sup>2</sup> (viz <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> článek na Wikipedii</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Příklad vyplnění formuláře: výpočet indexu tělesné hmotnosti</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Věk</strong></td>            <td width=\"75%\" style=\"\">[25] let</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Pohlaví</strong></td>            <td style=\"\" text-align:=\"\">[M] (M nebo F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Hmotnost</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Výška</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Index tělesné hmotnosti</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = hmotnost/výška<sup>2</sup> (viz <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> článek na Wikipedii</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Skrýt IP adresu v reportech"
+
+msgid "Course settings policies"
+msgstr "Zásady nastavení kurzů"
+
+msgid "Academic transcripts"
+msgstr "Akademické výpisy"
+
+msgid "Transcript program title"
+msgstr "Název programu na výpisu"
+
+msgid "Transcript course code"
+msgstr "Kód kurzu na výpisu"
+
+msgid "Transcript course hours field"
+msgstr "Pole hodin kurzu na výpisu"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Dokončené hodiny na výpisu jsou požadované hodiny"
+
+msgid "Transcript student number field"
+msgstr "Pole studentského čísla na výpisu"
+
+msgid "Transcript address fields"
+msgstr "Pole adresy na výpisu"
+
+msgid "Transcript grading scale"
+msgstr "Klasifikační stupnice na výpisu"
+
+msgid "Transcript GPA note"
+msgstr "Poznámka k GPA na výpisu"
+
+msgid "Transcript signatory name"
+msgstr "Jméno podepisující osoby na výpisu"
+
+msgid "Transcript signatory title"
+msgstr "Titul podepisující osoby na výpisu"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Povolit podepsané certifikáty a volitelné ukotvení na testnetu Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Zobrazit odpovědi ve vlákně až po zapojení"
+
+msgid "Show the forum category description in threads"
+msgstr "Zobrazit popis kategorie fóra ve vláknech"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Nastavení účasti ve fóru lze měnit podle kurzu"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Maximální počet příspěvků zobrazených ve vlákně fóra"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Počet příspěvků potřebných k dokončení vlákna fóra"
+
+msgid "Track e-mail openings"
+msgstr "Sledovat otevření e-mailů"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Povolit odpovědi na zprávy e-mailem"
+
+msgid "Inbound e-mail address"
+msgstr "Příchozí e-mailová adresa"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN příchozí schránky"
+
+msgid "Remember me duration (days)"
+msgstr "Doba trvání „zapamatovat si mě“ (dny)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Povolit dynamickou registraci OAuth klientů mimo MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Povolit důvěrné hlášení o blahu"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Minimální počet různých oznamovatelů pro šetření"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Povolit důvěrné přílohy důkazů"
+
+msgid "Show confidential investigation notifications"
+msgstr "Zobrazit oznámení o důvěrném šetření"
+
+msgid "Enable support chatbot"
+msgstr "Povolit chatbot podpory"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Vyberte, kde se mají termíny slovníku automaticky zvýrazňovat: dokumenty, cvičení a výukové cesty."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Skrýt IP adresy ve vizuálních reportech a exportech reportů. IP adresy zůstávají uložené a dostupné prostřednictvím autorizovaných postupů pro osobní údaje."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Výchozí nastavení platformy a oprávnění k úpravám kurzů; spravuje se v Nastavení kurzu."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Umožněte uživatelům stáhnout neoficiální výpis kurzů, které dokončili, a administrátorům, administrátorům relací a personalistům vydávat podepsané oficiální výpisy pro uživatele, které spravují. Obrázek podpisu se nahrává ze stránky výpisu uživatele."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Název programu tištěný na každém výpisu, například název diplomu připravovaného na této platformě."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Které pole kurzu vyplní sloupec kódu kurzu na výpisech: kód kurzu nebo název oddělení."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Proměnná extra pole kurzu obsahující počet hodin kurzu. Ponechte prázdné pro použití trvání kurzu."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Tisknout požadované hodiny kurzu jako hodiny dokončené studentem. Je-li vypnuto, dokončené hodiny odpovídají času strávenému studentem v kurzu."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Proměnná extra pole uživatele obsahující studentské číslo tištěné na výpisech. Ponechte prázdné, aby se nic netisklo."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Proměnné extra polí uživatele oddělené čárkami, tištěné za adresou uživatele na výpisech, například město, kraj a PSČ."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Seznam JSON písmen známek od nejvyššího minimálního skóre dolů: každá položka má minimální skóre v procentech (min), písmeno a body známky použité k výpočtu GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Vysvětlení výpočtu GPA, tištěné pod GPA na výpisech."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Jméno školního představitele, který podepisuje oficiální výpisy."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Titul školního představitele, který podepisuje oficiální výpisy."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Vyžaduje výslovný souhlas vlastníka a ruční akce administrátora. Na řetězec se odesílají pouze otisky SHA-256."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Studenti vidí pouze první příspěvek vlákna fóra, dokud do něj sami nepřispějí. Administrátoři, učitelé, koučové a tutoři skupin vidí vždy všechny příspěvky."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Zobrazit název a zkrácený popis kategorie fóra v horní části každého vlákna s odkazem na celé znění popisu."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Pokud je zapnuto, učitelé mohou v sekci Fórum nastavení kurzu zvolit, zda kurz skryje odpovědi ve vláknech, dokud student nepřispěje, zda zobrazí popis kategorie ve vláknech a kolik příspěvků očekává ukazatel účasti, místo použití nastavení platformy."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Zobrazit každému uživateli, který není administrátorem platformy, včetně učitelů, a všem uvnitř výukové cesty pouze tento počet příspěvků každého vlákna fóra. Ve vláknovém a vnořeném zobrazení se limit vztahuje na odpovědi každého příspěvku. Příspěvky zůstávají v pořadí zobrazení: první, nebo nejnovější uvnitř výukové cesty, kde jsou nejnovější příspěvky první. Nastavte na 0 pro zobrazení všech příspěvků."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Zobrazit studentům v každém vlákně fóra ukazatel průběhu, který dosáhne 100 %, jakmile v něm zveřejní tento počet zpráv. Příspěvky čekající na moderaci se započítávají. Nastavte na 0 pro skrytí ukazatele."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Přidá malý sledovací obrázek do e-mailů s oznámením o zprávách a zaznamená, kdy je vyžádán. To pouze naznačuje, že e-mail mohl být otevřen; neprokazuje, že byl přečten."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Umožnit příjemcům oznámení o přímých zprávách odpovědět e-mailem. Příchozí zprávy musí poštovní infrastruktura směrovat na příkaz Chamilo pro příchozí poštu."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Základní adresa pro směrování odpovědí, například replies@example.com. Chamilo přidá jedinečný token příjemce pomocí plus addressing."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Připojení k poštovní schránce pro sběr příchozích odpovědí, například imaps://user:password@imap.example.com:993/INBOX. Vyhrazené znaky v přihlašovacích údajích zakódujte pomocí URL."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Počet dní, po které zůstane uživatel přihlášen při výběru Zapamatovat si mě. Nastavte na 0 pro vypnutí. Vyžaduje HTTPS. Povolený rozsah: 0 až 90. Běžný časový limit relace se nastavuje samostatně v PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Umožňuje Dynamic Client Registration požádat o jakýkoli rozsah registrovaný OAuth resource serverem Chamilo. Pokud je vypnuto, samoregistrace zůstává omezena na MCP. Přístup ke zdrojům je vždy omezen samostatně seznamem povolených zdrojů každého klienta."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Povolit důvěrná hlášení incidentů. Modul vyžaduje chráněný šifrovací klíč a oprávnění vyšetřovatele."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Stejného uživatele musí nahlásit 2 až 10 různých oznamovatelů, než se případ stane viditelným pro vyšetřovatele."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Povolit obrázky, zvuk a krátká videa jako důkazy. Stávající přílohy zůstanou čitelné i po vypnutí."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Zobrazit interní označení způsobilých vyšetřování. Neodesílá e-maily ani externí oznámení."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Zobrazit v panelu chatu chatbot s rozhodovacím stromem, který může uživatele navést k "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Umožňuje učitelům vytvářet a verzovat vzdělávací aplikace s podporou AI uvnitř kurzů."
+
+msgid "Department name"
+msgstr "Název oddělení"
+
+msgid "Documents and exercise"
+msgstr "Dokumenty a cvičení"
+
+msgid "Documents and learning path"
+msgstr "Dokumenty a výuková cesta"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokumenty, cvičení a výuková cesta"
+
+msgid "session"
+msgstr "relace"
+
+msgid "course"
+msgstr "kurz"
+
+msgid "You have been enrolled in %s"
+msgstr "Byli jste zapsáni do %s"
 

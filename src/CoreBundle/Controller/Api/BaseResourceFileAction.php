@@ -273,6 +273,68 @@ class BaseResourceFileAction
     }
 
     /**
+     * Resource links from the body may only bind the resource to the course, session and group
+     * that gated the request.
+     *
+     * @param array<int, mixed> $links
+     */
+    protected function assertResourceLinksInCurrentContext(array $links, CidReqHelper $cidReqHelper): void
+    {
+        $courseId = (int) $cidReqHelper->getCourseEntity()?->getId();
+        $sessionId = (int) $cidReqHelper->getSessionEntity()?->getId();
+        $groupId = (int) $cidReqHelper->getGroupEntity()?->getIid();
+
+        foreach ($links as $link) {
+            if (!\is_array($link)
+                || 0 === $courseId
+                || $courseId !== (int) ($link['cid'] ?? 0)
+                || $sessionId !== (int) ($link['sid'] ?? 0)
+                || $groupId !== (int) ($link['gid'] ?? 0)
+                || !empty($link['uid'])
+                || !empty($link['ugid'])
+            ) {
+                throw new AccessDeniedHttpException('The resource link is outside the current course context.');
+            }
+        }
+    }
+
+    /**
+     * A personal file is only ever shared with other users, never published into a course.
+     *
+     * @param array<int, mixed> $links
+     */
+    protected function assertResourceLinksAreUserShares(array $links): void
+    {
+        foreach ($links as $link) {
+            if (!\is_array($link)
+                || empty($link['uid'])
+                || !empty($link['cid'])
+                || !empty($link['sid'])
+                || !empty($link['gid'])
+                || !empty($link['ugid'])
+            ) {
+                throw new AccessDeniedHttpException('A personal file can only be shared with users.');
+            }
+        }
+    }
+
+    /**
+     * A move keeps the node inside the course or user tree it already belongs to.
+     */
+    protected function assertParentNodeIsInSameTree(ResourceNode $resourceNode, ResourceNode $newParent): void
+    {
+        $root = $resourceNode->getParent();
+        while (null !== $root && !\in_array($root->getResourceType()->getTitle(), ['courses', 'users'], true)) {
+            $root = $root->getParent();
+        }
+
+        // Materialized paths end each segment with "-<id>/", so the prefix cannot match another tree.
+        if (null === $root || !str_starts_with((string) $newParent->getPath(), (string) $root->getPath())) {
+            throw new AccessDeniedHttpException('The parent resource node is outside the resource tree.');
+        }
+    }
+
+    /**
      * @todo use this function inside handleCreateFileRequest
      */
     protected function handleCreateRequest(
@@ -780,10 +842,17 @@ class BaseResourceFileAction
     /**
      * @template TResource of object
      *
-     * @param ResourceRepository<TResource> $repo
+     * @param ResourceRepository<TResource>                    $repo
+     * @param callable(array<int, array<string, mixed>>): void $assertNewLinksAllowed throws when the caller may not add these links
      */
-    protected function handleUpdateRequest(AbstractResource $resource, ResourceRepository $repo, Request $request, EntityManager $em): AbstractResource
-    {
+    protected function handleUpdateRequest(
+        AbstractResource $resource,
+        ResourceRepository $repo,
+        Request $request,
+        EntityManager $em,
+        callable $assertNewLinksAllowed,
+        bool $keepParentInTree = true,
+    ): AbstractResource {
         $contentData = $request->getContent();
         $resourceLinkList = [];
         $parentResourceNodeId = 0;
@@ -869,11 +938,19 @@ class BaseResourceFileAction
                     if ($candidate instanceof ResourceLink) {
                         $link = $candidate;
                         $link->setVisibility((int) $linkArray['visibility']);
-                        unset($resourceLinkList[$key]);
 
                         $em->persist($link);
                     }
+
+                    // An id that is not one of this node's links never becomes a new link.
+                    unset($resourceLinkList[$key]);
                 }
+            }
+            unset($linkArray);
+
+            $resourceLinkList = array_values($resourceLinkList);
+            if (!empty($resourceLinkList)) {
+                $assertNewLinksAllowed($resourceLinkList);
             }
 
             $resource->setResourceLinkArray($resourceLinkList);
@@ -889,6 +966,9 @@ class BaseResourceFileAction
             $parentResourceNode = $em->getRepository(ResourceNode::class)->find($parentResourceNodeId);
 
             if ($parentResourceNode instanceof ResourceNode) {
+                if ($keepParentInTree) {
+                    $this->assertParentNodeIsInSameTree($resourceNode, $parentResourceNode);
+                }
                 $resourceNode->setParent($parentResourceNode);
             }
 

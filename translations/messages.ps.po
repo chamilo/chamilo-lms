@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "په درناوي سره"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "د فورمول نمونه: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "د فورمول بېلګه: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "متغیر حدود"
@@ -28764,6 +28764,9 @@ msgstr "عملي کاروونکی ونه موندل شو."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "سلام %s،<br><br>تاسو په %s کې ثبت شوي یاست.<br>تاسو کولی شئ خپل حساب له <a href=\"%s\">دلته</a> لاسرسی وکړئ.<br><br>ستاسو د ورود اعتبارونه دي:<br>کارن نوم: <strong>%s</strong><br>پاسورډ: <strong>%s</strong><br><br>غواړم ښه وي،<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "سلام %s،<br><br>تاسو په %s کې ثبت شوي یاست.<br>کارن‌نوم: <strong>%s</strong><br><br>مهرباني وکړئ لاندې لینک کلیک کړئ ترڅو خپل پټنوم وټاکئ او خپل حساب ته لاسرسی ومومئ:<br><a href=\"%s\">خپل پټنوم وټاکئ</a><br><br>په درنښت،<br>%s"
+
 msgid "You are registered on %s"
 msgstr "تاسو په %s کې ثبت شوي یاست"
 
@@ -41567,4 +41570,1616 @@ msgstr "د مهاجرت تاریخ ثبت شوی دی"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s د پروژې په ریښه کې شتون لري: د لوړولو پای ټکي بندولو لپاره یې حذف کړئ"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "تاسو د دې تمرین لپاره سند ترلاسه کړی دی"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "تاسو باید د زده‌کړې لاره \"%s\" بشپړه کړئ مخکې له دې چې دې ته لاسرسی ومومئ."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "ایا تاسو ډاډه یاست چې غواړئ دا دوتنه په بشپړ ډول حذف کړئ؟"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "ایا تاسو ډاډه یاست چې غواړئ دا دوتنه له ټاکل شوې کورس څخه جلا کړئ؟"
+
+msgid "Attach this file to another course"
+msgstr "دا دوتنه بلې کورس ته ونښلوئ"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "ټاکل شوې کورس(ونو) ته ونښلوئ (پټ)"
+
+msgid "Course(s):"
+msgstr "کورس(ونه):"
+
+msgid "Delete definitively"
+msgstr "په بشپړ ډول حذف کړئ"
+
+msgid "Detach from this course"
+msgstr "له دې کورس څخه جلا کړئ"
+
+msgid "File actions"
+msgstr "د دوتنې کړنې"
+
+msgid "File Information"
+msgstr "د دوتنې معلومات"
+
+msgid "File Link:"
+msgstr "د دوتنې لینک:"
+
+msgid "File Path:"
+msgstr "د دوتنې لار:"
+
+msgid "Filter courses..."
+msgstr "کورسونه فلټر کړئ..."
+
+msgid "MIME Type:"
+msgstr "MIME ډول:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "هیڅ پایلې ونه موندل شوې."
+
+msgid "Original Name"
+msgstr "اصلي نوم"
+
+msgid "Original Name:"
+msgstr "اصلي نوم:"
+
+msgid "Orphan"
+msgstr "یتیم"
+
+msgid "Resource File ID:"
+msgstr "د سرچینې دوتنې پېژند:"
+
+msgid "Resource Node ID:"
+msgstr "د سرچینې نوډ پېژند:"
+
+msgid "Search..."
+msgstr "لټون..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "د دې دوتنې له ځانګړې کورس څخه جلا کولو لپاره، پورته د اړوند کورس ټګ باندې د \"×\" نښه کلیک کړئ."
+
+msgid "User:"
+msgstr "کارن:"
+
+msgid "View file information"
+msgstr "د دوتنې معلومات وګورئ"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "تاسو کولی شئ دا دوتنه یوې یا څو کورسونو ته ونښلوئ (په اسنادو ریښه کې پټه). که دوتنه نوره نه کارول کېږي او یتیمه شي، تاسو کولی شئ هغه په بشپړ ډول هم حذف کړئ."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "تاسو کولی شئ یوه یا څو کورسونه وټاکئ (Ctrl/Cmd + کلیک وکاروئ)."
+
+msgid "bytes"
+msgstr "بایټونه"
+
+msgid "Failed to copy:"
+msgstr "کاپي ناکامه شوه:"
+
+msgid "Missing resource file identifier."
+msgstr "د سرچینې دوتنې پېژند ورک دی."
+
+msgid "Please select at least one course."
+msgstr "مهرباني وکړئ لږ تر لږه یوه کورس وټاکئ."
+
+msgid "Resource file not found."
+msgstr "د سرچینې دوتنه ونه موندل شوه."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "دوتنه \"%s\" %d کورس(ونو) ته ونښلول شوه: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "ځینې کورسونه پرېښودل شوې: %s."
+
+msgid "Missing file or course identifier."
+msgstr "د دوتنې یا کورس پېژند ورک دی."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "دا د سرچینې دوتنه هیڅ سرچینې نوډ نلري او نشي جلا کېدای."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "دوتنه له %d کورس لینک(ونو) څخه جلا شوې ده."
+
+msgid "This file is not attached to the selected course."
+msgstr "دا دوتنه ټاکل شوې کورس ته نه ده نښلول شوې."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "دا دوتنه لا هم لږ تر لږه یوې سرچینې لخوا کارول کېږي او نشي حذف کېدای."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "یتیمة دوتنه او د هغې فزیکي محتوا په بشپړ ډول حذف شوې ده."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "سروې خپره شوه. جوړ شوي: %d. تازه شوي: %d. استول شوي پیغامونه: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "ترلاسه کېدونکی"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "دا مهارت نشي ترلاسه کېدای"
+
+#: issue-8179
+msgid "Novice"
+msgstr "نوی زده‌کوونکی"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "قواعدو او له شرایطو خالي لارښوونو ته کلک تړاو؛ لږ وضعیتیز قضاوت."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "پرمختللی پیل‌کوونکی"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "د وضعیت اړخونه او نمونې پېژندل پیلوي خو لا هم لارښوونو ته اړتیا لري."
+
+#: issue-8179
+msgid "Competent"
+msgstr "وړ"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "پلان جوړونه او ذهني ماډلونه رامنځته کوي؛ د پایلو مسؤلیت په غاړه اخلي خو ممکن د پیچلتیا له امله ډېر بار احساس کړي."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "ماهر"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "«لویه انځور» ویني، په طبیعي ډول لومړیتوب ورکوي، او له تجربې زده کوي."
+
+#: issue-8179
+msgid "Expert"
+msgstr "متخصص"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "طبیعي، روان فعالیت؛ په ژور ضمني پوهه تکیه کوي؛ کولی شي نوښت وکړي یا نوي حالات په اسانۍ اداره کړي."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "یادول"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "د اوږدمهاله حافظې څخه اړونده پوهه راوباسئ، یاد کړئ یا وپیژنئ."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "پوهیدل"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "د تدریسي پیغامونو څخه معنی جوړه کړئ، په شمول شفاهي، لیکل شوي او ګرافیکي اړیکه. د تفسیر، بېلګې ورکولو، طبقه بندي، لنډیز، استنباط، پرتله یا تشریح له لارې پوهه وښایئ."
+
+#: issue-8179
+msgid "Applying"
+msgstr "پلي کول"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "په ورکړل شوي حالت کې د اجرا یا پلي کولو له لارې یوه پروسه ترسره کړئ یا وکاروئ. په نوي یا مشخص حالاتو کې پوهه یا مهارتونه وکاروئ."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "تحلیل"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "مواد په برخو وویشئ او وټاکئ چې برخې څنګه له یو بل او له ټولیز جوړښت یا هدف سره تړاو لري. انګیزې، لاملونه یا اړیکې وپیژنئ."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "ارزونه"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "د معیارونو او معیارونو پر بنسټ قضاوت وکړئ. پریکړې یا د عمل لارې وګورئ، نقد کړئ یا توجیه کړئ."
+
+#: issue-8179
+msgid "Creating"
+msgstr "جوړول"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "عناصر سره یوځای کړئ ترڅو یو همغږی یا فعال کل جوړ شي؛ عناصر په نوي بڼه یا جوړښت کې بیا تنظیم کړئ. اصلي کار تولید کړئ یا نوي نظرونه رامنځته کړئ."
+
+#: issue-8179
+msgid "Follow"
+msgstr "تعقیب"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "د نږدې څارنې او لارښوونې لاندې کار کوي. محدود اختیار سره عادي دندې ترسره کوي. په لارښوونو تعقیب او بنسټیز اجرا تمرکز کوي."
+
+#: issue-8179
+msgid "Assist"
+msgstr "مرسته"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "د عادي څارنې لاندې کار کوي. نورو ته مرسته وړاندې کوي، د ټیم دندو کې ونډه اخلي، او په ټاکل شویو حدودو کې ځینې نوښت پیلوي."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "د عمومي څارنې لاندې کار کوي. پوهه او مهارتونه په یو لړ عادي او غیرعادي فعالیتونو کې پلي کوي. ځینې اختیار او قضاوت کاروي."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "د پراخ لارښوونې لاندې کار کوي. د متخصص لارښوونې، ملاتړ یا خدماتو له لارې نورو ته توان ورکوي. د خپل کار مسؤلیت په غاړه اخلي او ممکن کوچني ټیمونه یا دندې څاري."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "ډاډ او مشوره"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "د پراخ لارښوونې لاندې خو د پام وړ خپلواکۍ سره کار کوي. ډاډ ورکوي چې کار موخو ته رسېږي او په پیچلو چارو مشوره ورکوي. ډېر ځله ټیمونه یا پروژې رهبري کوي او پر پریکړو اغېز کوي."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "پیل او اغېز"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "د کار د پام وړ برخې لپاره ټاکل شوې واک او مسؤلیت لري. اقدامات پیلوي، په خپله برخه کې پر ستراتیژۍ او تګلاره اغېز کوي، او لویې پروژې یا ټیمونه رهبري کوي."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "ستراتیژي ټاکل، الهام، متحرک کول"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "د کار د لویې برخې لپاره د سازمان په لوړه کچه واک لري. اوږدمهاله ستراتیژي ټاکي، نورو ته الهام ورکوي او متحرک کوي، او د سازمان بریالیتوب لپاره مهمې پریکړې کوي. په صنعتي یا بهرنیو کچو اغېز کوي."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "د پام وړ اعظمي غیر فعال وخت (دقیقې)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "د کورس یوه پرانیستې پاڼه اتوماتیک غوښتنې لیږي. د دې دقیقو وروسته پرته له دې چې کارن ریښتینی عمل وکړي (پاڼه یا توکي پرانیستل، ځواب ورکول او نور)، په کورس کې تېر شوی وخت نور نه شمېرل کېږي."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "ګډ Wiki ایډیټر"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "له Etherpad سره نښلول..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "ساتل د اوسني Etherpad محتوا څخه د Chamilo Wiki نوې نسخه جوړوي."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "ګډ ایډیټر نه شو بارېدلی."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "د Wiki ایډیټ لپاره Etherpad فعال کړئ"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "د موجودو Wiki پاڼو لپاره Etherpad د ګډ ایډیټر په توګه وکاروئ. د خوندي ځای پر ځای شویو ناستو لپاره باید Etherpad د Chamilo په ورته اصل کې ښکاره شي."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "د Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "د Etherpad بېلګې بنسټیز URL، په شمول اختیاري ریورس-پراکسي لاره. بېلګه: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "د Etherpad API کیلي"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "هغه API کیلي چې Chamilo یې د پیډونو، ناستو جوړولو او د Wiki محتوا همغږي کولو لپاره کاروي. Etherpad داسې تنظیم کړئ چې د API-کیلي تصدیق ومني."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "د نویو اسنادو ډیفالټ لیدل کېدنه د کورس له خوا بدلېدای شي"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "هغه لیدل کېدنه چې نوي سند، فولډر یا پورته شوي فایل ته ورکول کېږي کله چې ښوونکی یې په کورس کې جوړوي. ښوونکي وروسته هم د هر یوه لیدل کېدنه بدلولی شي."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "کله چې فعال وي، ښوونکي کولی شي په د کورس تنظیماتو کې د خپل کورس نویو اسنادو ته ورکړل شوې لیدل کېدنه وټاکي، د پلیټفارم ډیفالټ پر ځای."
+
+msgid "Default visibility of new learning paths"
+msgstr "د نویو زده‌کړیزو لارو ډیفالټ لیدل کېدنه"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "د نویو زده‌کړیزو لارو ډیفالټ لیدل کېدنه د کورس له خوا بدلېدای شي"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "هغه لیدل کېدنه چې نوې زده‌کړیزه لار ته ورکول کېږي کله چې ښوونکی یې په کورس کې جوړوي. ښوونکي وروسته هم د هر یوه لیدل کېدنه بدلولی شي."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "کله چې فعال وي، ښوونکي کولی شي په د کورس تنظیماتو کې د خپل کورس نویو زده‌کړیزو لارو ته ورکړل شوې لیدل کېدنه وټاکي، د پلیټفارم ډیفالټ پر ځای."
+
+msgid "Default visibility of new tests"
+msgstr "د نویو ازموینو ډیفالټ لیدل کېدنه"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "د نوي ازموینو ډیفالټ لیدل کېدنه د کورس له خوا بدلېدای شي"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "هغه لیدل کېدنه چې نوي ازموینې ته ورکول کېږي کله چې ښوونکی په کورس کې یې جوړوي. ښوونکي وروسته هم د هرې یوې لیدل کېدنه بدلولی شي."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "کله چې فعال وي، ښوونکي کولی شي په د کورس تنظیماتو کې د خپل کورس د نوي ازموینو لیدل کېدنه وټاکي، د پلیټفارم ډیفالټ پر ځای."
+
+msgid "Default visibility for new learning paths"
+msgstr "د نوي زده‌کړې لارو لپاره ډیفالټ لیدل کېدنه"
+
+msgid "Default visibility for new tests"
+msgstr "د نوي ازموینو لپاره ډیفالټ لیدل کېدنه"
+
+msgid "Following"
+msgstr "تعقیب"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "کله چې زده‌کوونکی د دې دندې په سپارنه تبصره وکړي، برېښنالیک ترلاسه کړئ"
+
+msgid "Payment history"
+msgstr "د تادیې تاریخچه"
+
+msgid "No payments yet"
+msgstr "تر اوسه هېڅ تادیه نشته"
+
+msgid "Cancel service"
+msgstr "خدمت لغوه کړئ"
+
+msgid "Official transcript"
+msgstr "رسمي تحصیلي سند"
+
+msgid "Unofficial transcript"
+msgstr "غیر رسمي تحصیلي سند"
+
+msgid "Student name"
+msgstr "د زده‌کوونکي نوم"
+
+msgid "Student number"
+msgstr "د زده‌کوونکي شمېره"
+
+msgid "Program title"
+msgstr "د پروګرام سرلیک"
+
+msgid "Required hours"
+msgstr "اړین ساعتونه"
+
+msgid "Completion date"
+msgstr "د بشپړېدو نېټه"
+
+msgid "Hours completed"
+msgstr "بشپړ شوي ساعتونه"
+
+msgid "Final grade"
+msgstr "وروستۍ نمره"
+
+msgid "Grade"
+msgstr "نمره"
+
+msgid "No completed course yet."
+msgstr "تر اوسه هېڅ بشپړ شوی کورس نشته."
+
+msgid "Grading scale"
+msgstr "د نمرې ورکولو پیمانه"
+
+msgid "Signature of school official"
+msgstr "د ښوونځي د چارواکي لاسلیک"
+
+msgid "School official"
+msgstr "د ښوونځي چارواکی"
+
+msgid "Official's title"
+msgstr "د چارواکي لقب"
+
+msgid "Verify this transcript at"
+msgstr "دا تحصیلي سند دلته تایید کړئ"
+
+msgid "Verification code"
+msgstr "د تایید کوډ"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "دا غیر رسمي تحصیلي سند لاسلیک شوی نه دی. د رسمي سند لپاره له مدیر څخه وغواړئ."
+
+msgid "Transcript verification"
+msgstr "د تحصیلي سند تایید"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "وګورئ چې دا رسمي تحصیلي سند د ادارې له خوا صادر او لاسلیک شوی، بدل شوی نه دی او لغوه شوی نه دی."
+
+msgid "Valid"
+msgstr "معتبر"
+
+msgid "Invalid signature"
+msgstr "ناسم لاسلیک"
+
+msgid "Transcript not found"
+msgstr "تحصیلي سند ونه موندل شو"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "د ادارې لاسلیک معتبر دی او دا تحصیلي سند لغوه شوی نه دی."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "دا تحصیلي سند د معتبر په توګه تایید کېدای نشي. تفصیلات یې نه ښودل کېږي."
+
+msgid "Transcript details"
+msgstr "د تحصیلي سند تفصیلات"
+
+msgid "Institution"
+msgstr "اداره"
+
+msgid "Issued on"
+msgstr "صادر شوی په"
+
+msgid "Download verification JSON"
+msgstr "د تایید JSON ډاونلوډ کړئ"
+
+msgid "Transcript"
+msgstr "تحصیلي سند"
+
+msgid "My confidential reports"
+msgstr "زما محرم راپورونه"
+
+msgid "My transcript"
+msgstr "زما تحصیلي سند"
+
+msgid "Confidential investigations"
+msgstr "محرمې څېړنې"
+
+msgid "Floor plan"
+msgstr "د پوړ پلان"
+
+msgid "Click a highlighted room to select it"
+msgstr "د ټاکلو لپاره په روښانه شوې خونه کلیک وکړئ"
+
+msgid "Select room"
+msgstr "خونه وټاکئ"
+
+msgid "Room on floor plan"
+msgstr "په د پوړ پلان کې خونه"
+
+msgid "Select a branch first"
+msgstr "لومړی څانګه وټاکئ"
+
+msgid "The branch has no attached floor plan"
+msgstr "څانګه تړلی د پوړ پلان نلري"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "د خونې د پوله کولو لپاره د څو ضلعي وسیله وکاروئ؛ د کونجونو د حرکت لپاره سمون وکاروئ"
+
+msgid "Save room area"
+msgstr "د خونې ساحه خوندي کړئ"
+
+msgid "Clear room area"
+msgstr "د خونې ساحه پاک کړئ"
+
+msgid "Save the room form to persist the area"
+msgstr "د ساحې د ساتلو لپاره د خونې فورمه خوندي کړئ"
+
+msgid "Floor plan unavailable"
+msgstr "د پوړ پلان شتون نلري"
+
+msgid "Room map points must be within the floor plan"
+msgstr "د خونې د نقشې نقطې باید د پوړ پلان دننه وي"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "ایا تاسو ډاډه یاست چې د خونې ساحه پاک کړئ؟"
+
+msgid "View room on floor plan"
+msgstr "خونه په پوړ پلان کې وګورئ"
+
+msgid "No floor plan available"
+msgstr "هیڅ پوړ پلان شتون نلري"
+
+msgid "This is an assignment by groups"
+msgstr "دا د ډلو له خوا یوه دنده ده"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "د PNG، JPEG یا خوندي ثابت SVG پوړ پلان پورته کړئ، یا له اسنادو څخه موجوده انځور وټاکئ."
+
+msgid "Upload floor plan"
+msgstr "پوړ پلان پورته کړئ"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG، JPEG یا ثابت SVG، اعظمي ۱۰ مېګابایټ"
+
+msgid "Search images by name"
+msgstr "انځورونه د نوم له مخې ولټوئ"
+
+msgid "Image name"
+msgstr "د انځور نوم"
+
+msgid "Select an image"
+msgstr "یو انځور وټاکئ"
+
+msgid "Change floor plan"
+msgstr "پوړ پلان بدل کړئ"
+
+msgid "Attach floor plan"
+msgstr "پوړ پلان ضمیمه کړئ"
+
+msgid "No matching images found in Documents."
+msgstr "په اسنادو کې هیڅ سمون لرونکي انځورونه ونه موندل شول."
+
+msgid "Current floor plan"
+msgstr "اوسنی پوړ پلان"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "د پوړ پلان بدلونونه په اتومات ډول خوندي کیږي."
+
+msgid "Remove floor plan"
+msgstr "پوړ پلان لرې کړئ"
+
+msgid "Cannot load images"
+msgstr "انځورونه نشي پورته کېدای"
+
+msgid "Floor plan saved"
+msgstr "پوړ پلان خوندي شو"
+
+msgid "Cannot attach floor plan"
+msgstr "پوړ پلان نشي ضمیمه کېدای"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "یوازې PNG/JPEG او خوندي ثابت SVG انځورونه تر ۱۰ مېګابایټ پورې ملاتړ کیږي."
+
+msgid "Cannot upload floor plan"
+msgstr "پوړ پلان نشي پورته کېدای"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "ایا تاسو ډاډه یاست چې پوړ پلان لرې کړئ؟"
+
+msgid "Floor plan removed"
+msgstr "پوړ پلان لرې شو"
+
+msgid "Cannot remove floor plan"
+msgstr "پوړ پلان نشي لرې کېدای"
+
+msgid "Support bot"
+msgstr "د ملاتړ بوټ"
+
+msgid "Connected"
+msgstr "وصل شوی"
+
+msgid "Not connected"
+msgstr "نه دی وصل شوی"
+
+msgid "View ticket"
+msgstr "ټکټ وګورئ"
+
+msgid "Start a new conversation"
+msgstr "نوې خبرې پیل کړئ"
+
+msgid "Video call"
+msgstr "ویډیو زنګ"
+
+msgid "Incoming video call"
+msgstr "راتلونکی ویډیو زنګ"
+
+msgid "Decline"
+msgstr "رد کړئ"
+
+msgid "Mute microphone"
+msgstr "مایکروفون خاموش کړئ"
+
+msgid "Unmute microphone"
+msgstr "مایکروفون فعال کړئ"
+
+msgid "Turn camera off"
+msgstr "کیمره بند کړئ"
+
+msgid "Turn camera on"
+msgstr "کیمره روښانه کړئ"
+
+msgid "Hang up"
+msgstr "زنګ پرې کړئ"
+
+msgid "Calling..."
+msgstr "زنګ وهل کیږي..."
+
+msgid "Connecting..."
+msgstr "وصل کیږي..."
+
+msgid "Your contact is busy."
+msgstr "ستاسو اړیکه بوخت دی."
+
+msgid "Your contact did not answer the call."
+msgstr "ستاسو اړیکې زنګ ته ځواب ونه ورکړ."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "ستاسو اړیکه کیمرې یا مایکروفون ته لاسرسی ونه کړ."
+
+msgid "Your contact could not prepare the video call."
+msgstr "ستاسو اړیکه ویډیو زنګ چمتو نکړای شو."
+
+msgid "Your contact refused the call."
+msgstr "ستاسو اړیکې زنګ رد کړ."
+
+msgid "The call timed out."
+msgstr "د زنګ وخت پای ته ورسېد."
+
+msgid "Your contact cancelled the call."
+msgstr "ستاسو اړیکه زنګ لغوه کړ."
+
+msgid "The video connection was lost."
+msgstr "ویډیو اړیکه له لاسه ولاړه."
+
+msgid "Your contact could not establish the video connection."
+msgstr "ستاسو اړیکه نشو کولی ویډیو اړیکه جوړه کړي."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "ستاسو اړیکه نشو کولی د ویډیو زنګ تنظیم بشپړ کړي."
+
+msgid "Your contact hung up."
+msgstr "ستاسو اړیکه زنګ پرې کړ."
+
+msgid "Video call could not be started"
+msgstr "ویډیو زنګ پیل نشو"
+
+msgid "Camera or microphone permission was denied."
+msgstr "د کیمرې یا مایکروفون اجازه رد شوه."
+
+msgid "No camera or microphone was found."
+msgstr "هیڅ کیمره یا مایکروفون ونه موندل شو."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "کیمره یا مایکروفون دمخه په کار کې دی یا شتون نلري."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "کیمره یا مایکروفون اړین تنظیمات نه ملاتړ کوي."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "د کیمرې یا مایکروفون لاسرسی ترلاسه نشو."
+
+msgid "The video call could not be prepared."
+msgstr "ویډیو زنګ چمتو نشو."
+
+msgid "The video call request could not be sent."
+msgstr "د ویډیو زنګ غوښتنه واستول نشوه."
+
+msgid "The incoming video call could not be processed."
+msgstr "راتلونکی ویډیو زنګ پروسس نشو."
+
+msgid "The video call answer could not be prepared."
+msgstr "د ویډیو زنګ ځواب چمتو نشو."
+
+msgid "The video call answer could not be sent."
+msgstr "د ویډیو زنګ ځواب واستول نشو."
+
+msgid "The video call answer could not be processed."
+msgstr "د ویډیو زنګ ځواب پروسس نشو."
+
+msgid "The video connection failed"
+msgstr "ویډیو اړیکه ناکامه شوه"
+
+msgid "The video connection could not be established."
+msgstr "ویډیو اړیکه جوړه نشوه."
+
+msgid "No answer was received."
+msgstr "هیڅ ځواب ترلاسه نشو."
+
+msgid "You refused the call."
+msgstr "تاسو زنګ رد کړ."
+
+msgid "You cancelled the call."
+msgstr "تاسو زنګ لغوه کړ."
+
+msgid "You hung up."
+msgstr "تاسو زنګ پرې کړ."
+
+msgid "You missed the call."
+msgstr "تاسو زنګ له لاسه ورکړ."
+
+msgid "Support bot is currently unavailable."
+msgstr "د ملاتړ بوټ اوس مهال شتون نلري."
+
+msgid "A support ticket has been created."
+msgstr "د ملاتړ ټکټ جوړ شو."
+
+msgid "Conversation ended."
+msgstr "خبرې اترې پای ته ورسېدې."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "د ملاتړ بوټ نشو کولی دا خبرې اترې دوام ورکړي. مهرباني وکړئ بیا هڅه وکړئ."
+
+msgid "Add your first term glossary to this course"
+msgstr "دې کورس ته خپل لومړی اصطلاحاتو قاموس اضافه کړئ"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "ایا تاسو ډاډه یاست چې دا د سروې کينډۍ حذف کړئ؟"
+
+msgid "The survey template has been deleted."
+msgstr "د سروې کينډۍ حذف شوه."
+
+msgid "Please select a course."
+msgstr "مهرباني وکړئ یو کورس وټاکئ."
+
+msgid "Please select a session for this course."
+msgstr "مهرباني وکړئ د دې کورس لپاره یوه ناسته وټاکئ."
+
+msgid "The survey has been created from the template."
+msgstr "سروې له کينډۍ څخه جوړه شوه."
+
+msgid "Survey templates"
+msgstr "د سروې کينډۍ"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "د ښوونکو لپاره د بیا کارولو وړ د سروې کينډۍ جوړې کړئ او هغه مستقیم یوه کورس یا ناستې ته وټاکئ."
+
+msgid "Subtitle"
+msgstr "فرعي سرلیک"
+
+msgid "Assign to course"
+msgstr "کورس ته وټاکئ"
+
+msgid "Assign template to course"
+msgstr "کينډۍ کورس ته وټاکئ"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "ناسته خالي پرېږدئ ترڅو سروې مستقیم په کورس کې جوړه شي."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "دا کورس په دې پورټل کې د یوې ناستې له لارې شتون لري، نو ناسته اړینه ده."
+
+msgid "Survey template questions"
+msgstr "د سروې کينډۍ پوښتنې"
+
+msgid "Back to survey templates"
+msgstr "بیرته د سروې کينډیو ته"
+
+msgid "Could not load survey template"
+msgstr "د سروې کينډۍ بار نشوه"
+
+msgid "Could not load survey template questions"
+msgstr "د سروې کينډۍ پوښتنې بار نشوې"
+
+msgid "Could not save survey template question"
+msgstr "د سروې کينډۍ پوښتنه خوندي نشوه"
+
+msgid "Could not delete survey template question"
+msgstr "د سروې کينډۍ پوښتنه حذف نشوه"
+
+msgid "Could not move survey template question"
+msgstr "د سروې کينډۍ پوښتنه حرکت ونه کړای شوه"
+
+msgid "Could not copy survey template question"
+msgstr "د سروې کينډۍ پوښتنه کاپي نشوه"
+
+msgid "The survey template has been saved."
+msgstr "د سروې کينډۍ خوندي شوه."
+
+msgid "Edit survey template"
+msgstr "د سروې کينډۍ سمون"
+
+msgid "Create survey template"
+msgstr "د سروې کينډۍ جوړول"
+
+msgid "The survey template title is required."
+msgstr "د سروې کينډۍ سرلیک اړین دی."
+
+msgid "Visible as template"
+msgstr "د کينډۍ په توګه ښکاره"
+
+msgid "Create satisfaction survey"
+msgstr "د رضایت سروې جوړول"
+
+msgid "Training satisfaction survey"
+msgstr "د روزنې د رضایت سروې"
+
+msgid "Could not create satisfaction survey"
+msgstr "د رضایت سروې جوړه نه شوه"
+
+msgid "Use template"
+msgstr "کينډۍ وکاروئ"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "دا سروې له یوې بیا کارېدونکې کينډۍ څخه جوړه کړئ چې د مدیر لخوا چمتو شوې ده."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "پایلې له ښوونکي/استاد څخه پټې دي"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "ښوونکي او استادان لا هم د ځوابونو شمېر لیدلی او یادونې لېږلی شي، خو د سروې پایلې نه شي پرانیستلی یا صادرولی."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "کينډۍ پلي شوه. د سروې تنظیمات وګورئ او د جوړولو لپاره یې خوندي کړئ."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "د سروې پایلې له ښوونکو او استادانو څخه پټې دي."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "تاسو لا هم د بلنو پاڼه کارولی شئ ترڅو د ځوابونو شمېر وګورئ او یادونې ولېږئ."
+
+msgid "Payment method"
+msgstr "د تادیې طریقه"
+
+msgid "Preview mode"
+msgstr "د مخکتنې حالت"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "پرمختګ او نمره په مخکتنې حالت کې نه خوندي کېږي."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "دا لینک د زده‌کړې په لاره کې نه ښودل کېږي."
+
+msgid "Open it in a new tab to view the page."
+msgstr "پاڼه د لیدلو لپاره په نوې ټب کې پرانیزئ."
+
+msgid "Report a problem with this question"
+msgstr "د دې پوښتنې ستونزه راپور کړئ"
+
+msgid "Your report was sent to the teacher."
+msgstr "ستاسو راپور ښوونکي ته ولېږل شو."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "هغه تېروتنه یا ستونزه بیان کړئ چې موندلې مو ده. ستاسو راپور به ښوونکي ته ولېږل شي."
+
+msgid "A comment is required."
+msgstr "تبصره اړینه ده."
+
+msgid "Could not send the report."
+msgstr "راپور ونه لېږل شو."
+
+msgid "Learner reports"
+msgstr "د زده‌کوونکو راپورونه"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "د دې پوښتنې لپاره د زده‌کوونکو هیڅ راپور نه دی سپارل شوی."
+
+msgid "View attempt"
+msgstr "هڅه وګورئ"
+
+msgid "Could not load learner reports."
+msgstr "د زده‌کوونکو راپورونه پورته نه شول."
+
+msgid "Allow learners to report issues in questions"
+msgstr "زده‌کوونکو ته اجازه ورکړئ چې په پوښتنو کې ستونزې راپور کړي"
+
+msgid "Skill acquired"
+msgstr "مهارت ترلاسه شو"
+
+msgid "AI Toolbox"
+msgstr "د مصنوعي هوښیارۍ توکي"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "د مصنوعي هوښیارۍ سره متقابلې زده‌کړیزې غوښتنلیکونه جوړ کړئ او د SCORM سره د زده‌کوونکي پرمختګ تعقیب کړئ."
+
+msgid "No published applications are available yet."
+msgstr "تر اوسه هیڅ خپاره شوي غوښتنلیکونه شتون نلري."
+
+msgid "Interactive applications"
+msgstr "متقابل غوښتنلیکونه"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "نسخې له یوه ځایه جوړې، ښې، خپرې او بیاکتنه وکړئ."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "یو غوښتنلیک پرانیزئ ترڅو له خپل وروستي پرمختګ څخه دوام ورکړئ."
+
+msgid "Interactive learning application"
+msgstr "متقابل زده‌کړیز غوښتنلیک"
+
+msgid "Create an interactive learning app"
+msgstr "یو متقابل زده‌کړیز اپ جوړ کړئ"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "فعالیت بیان کړئ. چامیلو به یو نسخه‌لرونکی SCORM غوښتنلیک د پرمختګ او نمرې تعقیب سره جوړ کړي."
+
+msgid "Idea"
+msgstr "نظر"
+
+msgid "Application"
+msgstr "غوښتنلیک"
+
+msgid "What should the application do?"
+msgstr "غوښتنلیک باید څه وکړي؟"
+
+msgid "How it works"
+msgstr "څنګه کار کوي"
+
+msgid "AI generation"
+msgstr "د مصنوعي هوښیارۍ تولید"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "اپ له ستاسو لارښوونو څخه جوړېږي او د ۱ نسخې په توګه خوندي کېږي."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "د زده‌کوونکي پرمختګ، نمره او د بیا پیل معلومات چامیلو ته راپور کېږي."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "راتلونکي ښه والی نوي نسخې جوړوي پرته له دې چې پخوانۍ ړنګې کړي."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "د زده‌کړې موخه، قواعد، کچې، نمره‌ ورکول او هغه څه شامل کړئ چې کله زده‌کوونکی پای ته ورسېږي باید وشي."
+
+msgid "You are not allowed to create content in this context."
+msgstr "تاسو ته په دې شرایطو کې د منځپانګې جوړولو اجازه نشته."
+
+msgid "The application was generated successfully."
+msgstr "غوښتنلیک په بریالیتوب سره جوړ شو."
+
+msgid "Open in student view"
+msgstr "د زده‌کوونکي په لید کې پرانیستل"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "د مخکتنې او خپرولو د فعالولو لپاره غوښتنلیک جوړ کړئ."
+
+msgid "Improve with AI"
+msgstr "د مصنوعي هوښیارتیا سره ښه کړئ"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "بدلون بیان کړئ. یوه نوې نسخه به جوړه شي او پخوانۍ نسخې به شتون ولري."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "هغه بشپړ متقابل فعالیت بیان کړئ چې غواړئ یې جوړ کړئ."
+
+msgid "What should be improved?"
+msgstr "څه باید ښه شي؟"
+
+msgid "Generate new version"
+msgstr "نوې نسخه جوړه کړئ"
+
+msgid "Version history"
+msgstr "د نسخې تاریخچه"
+
+msgid "Preview, download or restore any generated version."
+msgstr "هره جوړه شوې نسخه مخکتنه، ډاونلوډ یا بیا رغول کړئ."
+
+msgid "A new version was generated."
+msgstr "یوه نوې نسخه جوړه شوه."
+
+msgid "Version restored"
+msgstr "نسخه بیا ورغول شوه"
+
+msgid "The support bot tree has been published."
+msgstr "د ملاتړ بوټ ونه خپره شوه."
+
+msgid "The support bot tree has been archived."
+msgstr "د ملاتړ بوټ ونه آرشیف شوه."
+
+msgid "The support bot tree has been duplicated."
+msgstr "د ملاتړ بوټ ونه نقل شوه."
+
+msgid "The support bot tree has been deleted."
+msgstr "د ملاتړ بوټ ونه ړنګه شوه."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "ایا تاسو ډاډه یاست چې دا د ملاتړ بوټ ونه ړنګه کړئ؟"
+
+msgid "The support bot tree has been imported."
+msgstr "د ملاتړ بوټ ونه وارد شوه."
+
+msgid "Create support bot tree"
+msgstr "د ملاتړ بوټ ونه جوړه کړئ"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "یوه ثابته پریکړه ونه جوړه کړئ چې کاروونکي د ملاتړ پوښتنو له لارې لارښوونه کوي او کولی شي ټکټونو ته لوړه کړي."
+
+msgid "Portal scope"
+msgstr "د پورټل ساحه"
+
+msgid "Duplicate"
+msgstr "نقل"
+
+msgid "Archive"
+msgstr "آرشیف"
+
+msgid "View conversations"
+msgstr "خبرې وګورئ"
+
+msgid "Import support bot tree"
+msgstr "د ملاتړ بوټ ونه وارد کړئ"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "د JSON صادرات یا د CSV پریکړه ونه وارد کړئ. وارد شوې ونه تل د نوي مسودې په توګه جوړیږي."
+
+msgid "Resolved"
+msgstr "حل شوی"
+
+msgid "Escalated"
+msgstr "لوړ شوی"
+
+msgid "Abandoned"
+msgstr "پریښودل شوی"
+
+msgid "Support bot conversations"
+msgstr "د ملاتړ بوټ خبرې"
+
+msgid "Outcome"
+msgstr "پایله"
+
+msgid "Started at"
+msgstr "پیل شوی په"
+
+msgid "Ended at"
+msgstr "پای ته رسیدلی په"
+
+msgid "View conversation"
+msgstr "خبره وګورئ"
+
+msgid "Go to node"
+msgstr "نوډ ته لاړ شئ"
+
+msgid "Create support ticket"
+msgstr "د ملاتړ ټکټ جوړ کړئ"
+
+msgid "End conversation"
+msgstr "خبره پای ته ورسوئ"
+
+msgid "Node"
+msgstr "نوډ"
+
+msgid "A support bot tree requires at least one node."
+msgstr "د ملاتړ بوټ ونه لږ تر لږه یو نوډ ته اړتیا لري."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "ایا تاسو ډاډه یاست چې دا نوډ ړنګ کړئ؟ ورسره تړلي لینکونه به پاک شي."
+
+msgid "Every support bot node requires at least one option."
+msgstr "هر د ملاتړ بوټ نوډ لږ تر لږه یو اختیار ته اړتیا لري."
+
+msgid "The support bot tree title is required."
+msgstr "د ملاتړ بوټ ونې سرلیک اړین دی."
+
+msgid "A support bot entry node is required."
+msgstr "د ملاتړ بوټ د ننوتلو نوډ اړین دی."
+
+msgid "Every support bot node requires content."
+msgstr "هر د ملاتړ بوټ نوډ منځپانګې ته اړتیا لري."
+
+msgid "Every support bot option requires a label."
+msgstr "هر د ملاتړ بوټ اختیار لیبل ته اړتیا لري."
+
+msgid "Select a target node for every go-to option."
+msgstr "د هر لاړ-شئ اختیار لپاره یو هدف نوډ وټاکئ."
+
+msgid "Enter a relative URL for every link option."
+msgstr "د هر لینک اختیار لپاره نسبي URL داخل کړئ."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "د هر لوړولو اختیار لپاره د ټکټ کټګوري وټاکئ."
+
+msgid "The support bot tree has been saved."
+msgstr "د ملاتړ بوټ ونه خوندي شوه."
+
+msgid "Edit support bot tree"
+msgstr "د ملاتړ بوټ ونه سمه کړئ"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "خپرې شوې او آرشیف شوې د ملاتړ بوټ نسخې یوازې لوستل کېږي. د نوي مسودې نسخې د سمولو لپاره دا ونه له لیست څخه نقل کړئ."
+
+msgid "Default ticket project"
+msgstr "د ټکټ اصلي پروژه"
+
+msgid "Decision tree rules"
+msgstr "د پریکړې ونې قواعد"
+
+msgid "Every node must contain at least one option."
+msgstr "هر نوډ باید لږ تر لږه یوه اختیار ولري."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "وروستی نوډ باید خبرې پای ته ورسوي یا د ملاتړ ټکټ جوړ کړي."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "د تګ لینکونه باید په v1 کې حلقې جوړې نه کړي."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "بهرني URLونه په v1 کې اجازه نه لري؛ د لینک کړنې باید د چامیلو نسبي لار وکاروي."
+
+msgid "Nodes"
+msgstr "نوډونه"
+
+msgid "Add node"
+msgstr "نوډ اضافه کړئ"
+
+msgid "Entry node"
+msgstr "د ننوتلو نوډ"
+
+msgid "Set as entry node"
+msgstr "د ننوتلو نوډ په توګه وټاکئ"
+
+msgid "Target node"
+msgstr "هدف نوډ"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "د چامیلو نسبي لار وکاروئ، د بېلګې په توګه /tickets."
+
+msgid "Ticket category"
+msgstr "د ټکټ کټګوري"
+
+msgid "Select a default ticket project first."
+msgstr "لومړی د ټکټ اصلي پروژه وټاکئ."
+
+msgid "Closing message"
+msgstr "د تړلو پیغام"
+
+msgid "Select a node to edit it."
+msgstr "د سمون لپاره یو نوډ وټاکئ."
+
+msgid "Support bot conversation"
+msgstr "د ملاتړ بوټ خبرې"
+
+msgid "Transcript of %s"
+msgstr "د %s نقل"
+
+msgid "Download unofficial transcript"
+msgstr "غیر رسمي نقل ډاونلوډ کړئ"
+
+msgid "Issue official transcript"
+msgstr "رسمي نقل صادر کړئ"
+
+msgid "Official transcripts"
+msgstr "رسمي نقلونه"
+
+msgid "No official transcript has been issued yet."
+msgstr "تر اوسه هیڅ رسمي نقل صادر شوی نه دی."
+
+msgid "Issued by"
+msgstr "صادرونکی"
+
+msgid "Verify"
+msgstr "تایید"
+
+msgid "Signature of official transcripts"
+msgstr "د رسمي نقلونو لاسلیک"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "دا انځور د دې پورټل په رسمي نقلونو کې چاپېږي، د سند په تنظیماتو کې د لاسلیک کوونکي نوم او لقب څخه پورته."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "د دې پاڼې په کورسونو او نمرو سره لاسلیک شوی رسمي نقل صادر کړئ؟ تر هغه چې لغوه شي، آنلاین تایید کېدای شي."
+
+msgid "Official transcript issued"
+msgstr "رسمي نقل صادر شو"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "دا رسمي نقل لغوه کړئ؟ د تایید پاڼه به یې بیا د لغوه شوي په توګه وښيي."
+
+msgid "Official transcript revoked"
+msgstr "رسمي نقل لغوه شو"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "لومړی د PNG یا JPEG انځور وټاکئ."
+
+msgid "Signed credential"
+msgstr "لاسلیک شوی سند"
+
+msgid "Issue signed credential"
+msgstr "لاسلیک شوی سند صادر کړئ"
+
+msgid "Verify credential"
+msgstr "سند تایید کړئ"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "په سپولیا ټیسټ‌نېټ لنگر کړئ"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "موجوده سپولیا معامله تایید کړئ"
+
+msgid "Revoke signed credential"
+msgstr "لاسلیک شوی سند لغوه کړئ"
+
+msgid "Delete certificate"
+msgstr "سند حذف کړئ"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "موجوده سپولیا معامله تایید کړئ"
+
+msgid "Sepolia transaction hash"
+msgstr "د سپولیا د معاملې هش"
+
+msgid "Verify transaction"
+msgstr "معامله تایید کړئ"
+
+msgid "Anchored"
+msgstr "لنگر شوی"
+
+msgid "Issued"
+msgstr "صادر شوی"
+
+msgid "Not issued"
+msgstr "صادر شوی نه دی"
+
+msgid "Consent required"
+msgstr "رضایت اړین دی"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "د سپولیا معامله تایید او تصدیق شوه"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "د سپولیا ټیسټ‌نېټ والټ به له تاسو څخه د معاملې لاسلیک وغواړي. یوازې د سند ګوتې نښه به لنگر شي. دوام ورکړئ؟"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "دا لاسلیک شوی سند لغوه کړئ؟ هر بلاک‌چین معامله دایمي پاتې کېږي، خو د تایید پاڼه به لغوه کول راپور کړي."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "د دې زده‌کوونکي لپاره لاسلیک شوی سند صادر کړئ؟ دا تصویب شوي شخصي معلومات د خصوصي لینک سره تایید وړ کوي."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "د سپولیا لپاره د EVM سره مطابقت لرونکی براوزر والټ اړین دی."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "په خپل والټ کې د سیپولیا ټیسټ‌نېټ (چین ID 11155111) وټاکئ."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "ناسم والټ پته یا د سند ګوتې نښه."
+
+msgid "Transaction pending"
+msgstr "معامله په انتظار کې"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "وروسته د موجوده سیپولیا معاملې تایید وکاروئ."
+
+msgid "Signed credential issued"
+msgstr "لاسلیک شوی اعتبار صادر شو"
+
+msgid "Credential revoked"
+msgstr "اعتبار لغوه شو"
+
+msgid "Transaction hash"
+msgstr "د معاملې هش"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "د خپرونې رضایت مدیر ته اجازه ورکوي چې لاسلیک شوی د سند اعتبار صادر کړي او په اختیاري ډول یې د SHA-256 ګوتې نښه په سیپولیا ټیسټ‌نېټ کې لنگر کړي. هیڅ نوم یا شخصي معلومات په زنځیر نه لیږل کیږي. تاسو کولی شئ هر وخت رضایت بیرته واخلئ."
+
+msgid "Publication consent"
+msgstr "د خپرونې رضایت"
+
+msgid "Not approved"
+msgstr "نه تصویب شوی"
+
+msgid "Withdraw consent"
+msgstr "رضایت بیرته اخیستل"
+
+msgid "Approve publication"
+msgstr "خپرونه تصویب کړئ"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "زه اجازه ورکوم چې یو لاسلیک شوی، په عامه توګه د تایید وړ اعتبار زما نوم، کورس، نمره او د صدور نېټه وښيي. یو مدیر ممکن یوازې د هغې SHA-256 ګوتې نښه په سیپولیا ټیسټ‌نېټ کې خپره کړي. ګوتې نښه دایمي ده، حتی که وروسته رضایت بیرته واخلم. دوام ورکړئ؟"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "د دې سند لپاره د خپرونې تصویب بیرته واخلئ؟"
+
+msgid "Publication approval recorded"
+msgstr "د خپرونې تصویب ثبت شو"
+
+msgid "Publication approval withdrawn"
+msgstr "د خپرونې تصویب بیرته واخیستل شو"
+
+msgid "Read more"
+msgstr "نور ولولئ"
+
+msgid "Participation: %s of %s posts"
+msgstr "ګډون: د %s له %s پوسټونو"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "خپل ونډه پوسټ کړئ ترڅو د نورو ګډونوالو ځوابونه وګورئ."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "یوازې مجاز څېړونکي کولی شي وړ راپورونه وګوري. د راپور ورکوونکو هویتونه په ډیفالټ محرم پاتې کیږي."
+
+msgid "New confidential report"
+msgstr "نوی محرم راپور"
+
+msgid "Reported user"
+msgstr "راپور شوی کارن"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "وړ محرم راپورونه د بیاکتنې په انتظار دي."
+
+msgid "Eligible investigations"
+msgstr "وړ څېړنې"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "یوه قضیه دلته یوازې وروسته ښکاري چې لږترلږه %s بېلابېل کارنان ورته کس راپور کړي."
+
+msgid "Distinct reporters"
+msgstr "جلا راپور ورکوونکي"
+
+msgid "Reports for selected user"
+msgstr "د ټاکل شوي کارن لپاره راپورونه"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "محرم راپور ورکول اوس مهال شتون نلري."
+
+msgid "The investigation could not be loaded."
+msgstr "څېړنه پورته نشوه."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "ستاسو هویت په ډیفالټ له څېړونکو ساتل کیږي، خو په راپور متن یا ضمیمو کې د پېژندنې جزئیات مه شاملوئ. دا د بیړني خدمت نه دی."
+
+msgid "Find the user involved"
+msgstr "ښکېل کارن ومومئ"
+
+msgid "Name or username"
+msgstr "نوم یا کارن‌نوم"
+
+msgid "Describe the situation"
+msgstr "وضعیت تشریح کړئ"
+
+msgid "Evidence (optional)"
+msgstr "شواهد (اختیاري)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "تر دریو فایلونو، هر یو اعظمي 8 MiB. انځورونه، غږ یا لنډ ویډیوګانې."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "زه موافق یم چې مجاز څېړونکي زما نوم او برېښنالیک د دې ځانګړي راپور لپاره وګوري. زه کولی شم وروسته دا اجازه بیرته واخلم."
+
+msgid "Send confidential report"
+msgstr "محرم راپور واستوئ"
+
+msgid "Could not search users"
+msgstr "کارنان لټول نشول"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "تر دریو فایلونو، هر یو اعظمي 8 MiB."
+
+msgid "The confidential report could not be saved."
+msgstr "محرم راپور خوندي نشو."
+
+msgid "Confidential report"
+msgstr "محرم راپور"
+
+msgid "Confidential conversation"
+msgstr "محرم خبرې اترې"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "څېړونکي کولی شي له دې خبرو اترو له لارې اړیکه ونیسي پرته له دې چې د راپور ورکوونکي هویت وګوري پرته له دې چې د اړیکې شریکول فعال وي."
+
+msgid "Reporter"
+msgstr "راپور ورکوونکی"
+
+msgid "Investigator"
+msgstr "څېړونکی"
+
+msgid "Additional evidence (optional)"
+msgstr "اضافي شواهد (اختیاري)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "تر دریو فایلونو، هر یو اعظمي 8 MiB؛ په هر راپور کې لس فایلونه."
+
+msgid "Contact shared voluntarily"
+msgstr "اړیکه په خپله خوښه شریکه شوې"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "څېړونکو ته اجازه ورکړئ چې زما نوم او برېښنالیک د دې راپور لپاره وګوري"
+
+msgid "This confidential report is not available."
+msgstr "دا محرم راپور شتون نلري."
+
+msgid "Your message could not be saved."
+msgstr "ستاسو پیغام خوندي نه شو."
+
+msgid "Contact sharing could not be updated."
+msgstr "د اړیکو شریکول تازه نه شول."
+
+msgid "Evidence could not be downloaded."
+msgstr "شواهد ډاونلوډ نه شول."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>د فورم ډکولو د فعالیت بېلګه: د بدن د کتلې شاخص محاسبه کړئ</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>عمر</strong></td>            <td width=\"75%\" style=\"\">[25] کلن</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>جنس</strong></td>            <td style=\"\" text-align:=\"\">[M] (M یا F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>وزن</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>قد</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>د بدن د کتلې شاخص</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =وزن/قد<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> د ویکیپیډیا مقاله</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>د فورم ډکولو د فعالیت بېلګه: د بدن د کتلې شاخص محاسبه کړئ</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>عمر</strong></td>            <td width=\"75%\" style=\"\">[25] کلن</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>جنس</strong></td>            <td style=\"\" text-align:=\"\">[M] (M یا F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>وزن</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>قد</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>د بدن د کتلې شاخص</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =وزن/قد<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> د ویکیپیډیا مقاله</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "له راپورونو څخه IP پته پټه کړئ"
+
+msgid "Course settings policies"
+msgstr "د کورس د تنظیماتو تګلارې"
+
+msgid "Academic transcripts"
+msgstr "اکاډمیک ټرانسکرېپټونه"
+
+msgid "Transcript program title"
+msgstr "د ټرانسکرېپټ د پروګرام سرلیک"
+
+msgid "Transcript course code"
+msgstr "د ټرانسکرېپټ د کورس کوډ"
+
+msgid "Transcript course hours field"
+msgstr "د ټرانسکرېپټ د کورس د ساعتونو ساحه"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "د ټرانسکرېپټ بشپړ شوي ساعتونه اړین ساعتونه دي"
+
+msgid "Transcript student number field"
+msgstr "د ټرانسکرېپټ د زده‌کوونکي د شمېرې ساحه"
+
+msgid "Transcript address fields"
+msgstr "د ټرانسکرېپټ د پتې ساحې"
+
+msgid "Transcript grading scale"
+msgstr "د ټرانسکرېپټ د نمرې کچه"
+
+msgid "Transcript GPA note"
+msgstr "د ټرانسکرېپټ د GPA یادښت"
+
+msgid "Transcript signatory name"
+msgstr "د ټرانسکرېپټ د لاسلیک کوونکي نوم"
+
+msgid "Transcript signatory title"
+msgstr "د ټرانسکرېپټ د لاسلیک کوونکي لقب"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "لاسلیک شوي سندونه او اختیاري د Sepolia ازمایښتي شبکې لنگر کول فعال کړئ"
+
+msgid "Show thread replies only after participating"
+msgstr "د تار ځوابونه یوازې د ګډون وروسته وښایئ"
+
+msgid "Show the forum category description in threads"
+msgstr "په تارونو کې د فورم د کټګورۍ تشریح وښایئ"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "د فورم د ګډون تنظیمات د کورس له مخې بدلېدای شي"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "په یوه فورم تار کې ښودل شوي اعظمي پوسټونه"
+
+msgid "Posts required to complete a forum thread"
+msgstr "د فورم تار بشپړولو لپاره اړین پوسټونه"
+
+msgid "Track e-mail openings"
+msgstr "د برېښنالیک پرانیستل تعقیب کړئ"
+
+msgid "Allow e-mail replies to messages"
+msgstr "پیغامونو ته د برېښنالیک ځوابونو اجازه ورکړئ"
+
+msgid "Inbound e-mail address"
+msgstr "د راتلونکي برېښنالیک پته"
+
+msgid "Inbound mailbox DSN"
+msgstr "د راتلونکي برېښنالیک صندوق DSN"
+
+msgid "Remember me duration (days)"
+msgstr "ما په یاد وساته موده (ورځې)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "د MCP هاخوا د OAuth متحرک پیرودونکي ثبت فعال کړئ"
+
+msgid "Enable confidential welfare reporting"
+msgstr "محرم د هوساینې راپور ورکول فعال کړئ"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "د څېړنې لپاره لږترلږه بېلابېل راپور ورکوونکي"
+
+msgid "Allow confidential evidence attachments"
+msgstr "د محرم شواهدو ضمیمو اجازه ورکړئ"
+
+msgid "Show confidential investigation notifications"
+msgstr "د محرم څېړنې خبرتیاوې وښایئ"
+
+msgid "Enable support chatbot"
+msgstr "د ملاتړ چټ‌بوټ فعال کړئ"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "وټاکئ چې د ګلوسري اصطلاحات چیرې په اتومات ډول روښانه شي: اسناد، تمرینونه او د زده‌کړې لارې."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "په لیدیز راپور ورکولو او د راپور صادراتو کې IP پتې پټې کړئ. IP پتې خوندي پاتې کېږي او د مجاز شخصي معلوماتو پروسیجرونو له لارې لاسرسی وړ دي."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "د پلیټفارم پېش‌فرضونه او د کورس د سمون اجازې؛ په د کورس تنظیماتو کې اداره کېږي."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "کاروونکو ته اجازه ورکړئ چې د هغو کورسونو غیر رسمي ټرانسکرېپټ ډاونلوډ کړي چې بشپړ کړي یې دي، او مدیرانو، د ناستې مدیرانو او د بشري منابعو مدیرانو ته اجازه ورکړئ چې د هغو کاروونکو لپاره لاسلیک شوي رسمي ټرانسکرېپټونه صادر کړي چې اداره یې کوي. د لاسلیک انځور د کاروونکي د ټرانسکرېپټ پاڼې څخه پورته کېږي."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "د پروګرام سرلیک چې په هر ټرانسکرېپټ کې چاپېږي، د بېلګې په توګه د دې پلیټفارم پر سر چمتو شوي ډیپلوم نوم."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "کومه د کورس ساحه د ټرانسکرېپټونو د کورس کوډ کالم ډکوي: د کورس کوډ یا د څانګې نوم."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "د کورس د اضافي ساحې متغیر چې د کورس د ساعتونو شمېر لري. د کورس مودې کارولو لپاره تش پرېږدئ."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "د کورس اړین ساعتونه د زده‌کوونکي لخوا بشپړ شوي ساعتونه چاپ کړئ. کله چې غیر فعال وي، بشپړ شوي ساعتونه هغه وخت دی چې زده‌کوونکي په کورس کې تېر کړی."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "د کاروونکي د اضافي ساحې متغیر چې په ټرانسکرېپټونو کې چاپېدونکې د زده‌کوونکي شمېره لري. د نه چاپولو لپاره تش پرېږدئ."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "د کاروونکي د اضافي ساحو په کاما جلا شوي متغیرونه چې په ټرانسکرېپټونو کې د کاروونکي د پتې وروسته چاپېږي، د بېلګې په توګه ښار، ولایت او پوستي کوډ."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "د نمرې تورو JSON لېست، له لوړې لږترلږه نمرې څخه ښکته: هر توکی لږترلږه نمره په سلنه کې (min)، توری او د GPA محاسبې لپاره کارول شوي د نمرې ټکي لري."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "د GPA د محاسبې تشریح، چې په ټرانسکرېپټونو کې د GPA لاندې چاپېږي."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "د ښوونځي د هغه چارواکي نوم چې رسمي ټرانسکرېپټونه لاسلیکوي."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "د ښوونځي د هغه چارواکي لقب چې رسمي ټرانسکرېپټونه لاسلیکوي."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "د مالک څرګند رضایت او د مدیر لاسي کړنې اړینې دي. یوازې SHA-256 ګوتې‌نښې په زنځیر کې لېږل کېږي."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "زده‌کوونکي یوازې د فورم د تار لومړی پوسټ ویني تر هغه چې پخپله په کې پوسټ وکړي. مدیران، ښوونکي، روزونکي او د ډلې ښوونکي تل ټول پوسټونه ویني."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "د هر تار په سر د فورم د کټګورۍ سرلیک او لنډه تشریح ښکاره کړئ، د بشپړې تشریح لوستلو لینک سره."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "کله چې فعال وي، ښوونکي کولی شي د کورس په تنظیماتو کې د فورم په برخه کې وټاکي چې ایا کورس یې د تار ځوابونه تر هغه پټوي چې زده‌کوونکی پوسټ وکړي، په تارونو کې د کټګورۍ تشریح ښکاره کوي او د ګډون پرمختګ پټه څومره پوسټونه تمه لري، پر ځای د پلیټفارم تنظیماتو."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "د هر فورم تار یوازې دا شمېر پوسټونه هر هغه کارونکي ته ښکاره کړئ چې د پلیټفارم مدیر نه وي، په شمول د ښوونکو، او د زده‌کړې لارې دننه هر چا ته. په تار او تو در تو لیدونو کې حد د هر پوسټ ځوابونو ته پلي کیږي. پوسټونه د لید په ترتیب ساتل کیږي: لومړني، یا د زده‌کړې لارې دننه وروستي، چې وروستي پوسټونه لومړي راځي. د ټولو پوسټونو ښودلو لپاره ۰ وټاکئ."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "زده‌کوونکو ته په هر فورم تار کې د پرمختګ پټه ښکاره کړئ، چې ۱۰۰٪ ته رسیږي کله چې په کې دا شمېر پیغامونه پوسټ کړي. د منځګړیتوب په تمه پوسټونه شمېرل کیږي. د پرمختګ پټې پټولو لپاره ۰ وټاکئ."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "د پیغام خبرتیا برېښنالیکونو ته یو کوچنی تعقیبي انځور اضافه کوي او ثبتوي کله چې غوښتل شي. دا یوازې ښيي چې برېښنالیک ممکن خلاص شوی وي؛ دا نه ثابتوي چې لوستل شوی دی."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "د مستقیم پیغام خبرتیاوو ترلاسه کوونکو ته اجازه ورکړئ چې د برېښنالیک له لارې ځواب ورکړي. راتلونکي پیغامونه باید د برېښنالیک زیربنا له خوا د چامیلو inbound-mail امر ته لارښوونه شي."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "د ځواب لارښوونې لپاره بنسټیز پته، د بېلګې په توګه replies@example.com. چامیلو د پلس ادرس کولو په کارولو سره ځانګړی ترلاسه کوونکی ټوکن اضافه کوي."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "د راتلونکو ځوابونو راټولولو لپاره د میل‌باکس اتصال، د بېلګې په توګه imaps://user:password@imap.example.com:993/INBOX. په اعتبارنامو کې خوندي توري URL-encode کړئ."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "د ورځو شمېر چې کارونکی لاسلیک پاتې وي کله چې «ما په یاد وساته» غوره شي. د غیر فعالولو لپاره ۰ وټاکئ. HTTPS ته اړتیا لري. اجازه ورکړل شوې محدوده: ۰ تر ۹۰. عادي د ناستې پای ته رسیدل په PHP/Symfony کې جلا تنظیم کیږي."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "د Dynamic Client Registration ته اجازه ورکوي چې هر هغه ساحه وغواړي چې د چامیلو OAuth سرچینې سرور لخوا ثبت شوې وي. کله چې غیر فعال وي، ځان ثبتول یوازې MCP ته محدود پاتې کیږي. د سرچینې لاسرسی تل د هر پیرودونکي د اجازه ورکړل شوې سرچینو لیست له خوا جلا محدود دی."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "محرم د پیښو راپورونه فعال کړئ. ماډل خوندي کوډ شوي کیلي او د څېړونکي اجازه ته اړتیا لري."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "د ۲ او ۱۰ ترمنځ مختلف راپور ورکوونکي باید ورته کارونکی راپور کړي مخکې له دې چې قضیه څېړونکو ته ښکاره شي."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "د انځورونو، غږ او لنډ ویډیو شواهدو اجازه ورکړئ. موجود ضمیمې د غیر فعالولو پر مهال لوستل کېدونکي پاتې کیږي."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "د وړ څېړنو داخلي نښه ښکاره کړئ. برېښنالیکونه یا بهرنۍ خبرتیاوې نه لیږي."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "په چټ پینل کې د پریکړې ونې چټ‌بوټ ښکاره کړئ چې کاروونکي لارښوونه کولی شي "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "ښوونکو ته اجازه ورکوي چې په کورسونو کې د AI مرسته شوې زده‌کړیزې غوښتنلیکونه جوړ او نسخه کړي."
+
+msgid "Department name"
+msgstr "د څانګې نوم"
+
+msgid "Documents and exercise"
+msgstr "اسناد او تمرین"
+
+msgid "Documents and learning path"
+msgstr "اسناد او د زده‌کړې لار"
+
+msgid "Documents, exercise and learning path"
+msgstr "اسناد، تمرین او د زده‌کړې لار"
+
+msgid "session"
+msgstr "ناسته"
+
+msgid "course"
+msgstr "کورس"
+
+msgid "You have been enrolled in %s"
+msgstr "تاسو په %s کې نوم لیکنه شوي یاست"
 

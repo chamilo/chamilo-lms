@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "আন্তরিকতার সাথে"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "সূত্রের নমুনা: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "সূত্রের নমুনা: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "ভেরিয়েবলের পরিসর"
@@ -28764,6 +28764,9 @@ msgstr "বর্তমান ব্যবহারকারী পাওয়�
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "হ্যালো %s,<br><br>আপনি %s এ নিবন্ধিত।<br>আপনার অ্যাকাউন্টে প্রবেশ করতে <a href=\"%s\">এখানে</a> যান।<br><br>আপনার লগইন তথ্য:<br>ব্যবহারকারীর নাম: <strong>%s</strong><br>পাসওয়ার্ড: <strong>%s</strong><br><br>শুভেচ্ছান্তে,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "হ্যালো %s,<br><br>আপনি %s-এ নিবন্ধিত।<br>ব্যবহারকারীর নাম: <strong>%s</strong><br><br>আপনার পাসওয়ার্ড সেট করতে এবং অ্যাকাউন্টে প্রবেশ করতে নিচের লিঙ্কে ক্লিক করুন:<br><a href=\"%s\">পাসওয়ার্ড সেট করুন</a><br><br>শুভেচ্ছা সহ,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "আপনি %s এ নিবন্ধিত"
 
@@ -41567,4 +41570,1616 @@ msgstr "মাইগ্রেশন ইতিহাস রেকর্ড কর
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "প্রকল্পের রুটে %s রয়েছে: আপগ্রেড এন্ডপয়েন্ট বন্ধ করতে এটি মুছুন"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "এই অনুশীলনের জন্য আপনি একটি সনদপত্র অর্জন করেছেন"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "এই শেখার পথে প্রবেশের আগে আপনাকে অবশ্যই \"%s\" শেখার পথ সম্পন্ন করতে হবে।"
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "আপনি কি নিশ্চিত যে এই ফাইলটি স্থায়ীভাবে মুছে ফেলতে চান?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "আপনি কি নিশ্চিত যে নির্বাচিত কোর্স থেকে এই ফাইলটি বিচ্ছিন্ন করতে চান?"
+
+msgid "Attach this file to another course"
+msgstr "এই ফাইলটি অন্য কোর্সে সংযুক্ত করুন"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "নির্বাচিত কোর্স(গুলো)তে সংযুক্ত করুন (লুকানো)"
+
+msgid "Course(s):"
+msgstr "কোর্স(গুলো):"
+
+msgid "Delete definitively"
+msgstr "স্থায়ীভাবে মুছুন"
+
+msgid "Detach from this course"
+msgstr "এই কোর্স থেকে বিচ্ছিন্ন করুন"
+
+msgid "File actions"
+msgstr "ফাইলের কাজ"
+
+msgid "File Information"
+msgstr "ফাইলের তথ্য"
+
+msgid "File Link:"
+msgstr "ফাইল লিঙ্ক:"
+
+msgid "File Path:"
+msgstr "ফাইল পথ:"
+
+msgid "Filter courses..."
+msgstr "কোর্স ফিল্টার করুন..."
+
+msgid "MIME Type:"
+msgstr "MIME ধরন:"
+
+msgid "N/A"
+msgstr "প্রযোজ্য নয়"
+
+msgid "No results found."
+msgstr "কোনো ফলাফল পাওয়া যায়নি।"
+
+msgid "Original Name"
+msgstr "মূল নাম"
+
+msgid "Original Name:"
+msgstr "মূল নাম:"
+
+msgid "Orphan"
+msgstr "অনাথ"
+
+msgid "Resource File ID:"
+msgstr "রিসোর্স ফাইল আইডি:"
+
+msgid "Resource Node ID:"
+msgstr "রিসোর্স নোড আইডি:"
+
+msgid "Search..."
+msgstr "অনুসন্ধান..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "কোনো নির্দিষ্ট কোর্স থেকে এই ফাইলটি বিচ্ছিন্ন করতে উপরের সংশ্লিষ্ট কোর্স ট্যাগে \"×\" আইকনে ক্লিক করুন।"
+
+msgid "User:"
+msgstr "ব্যবহারকারী:"
+
+msgid "View file information"
+msgstr "ফাইলের তথ্য দেখুন"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "আপনি এই ফাইলটি এক বা একাধিক কোর্সে সংযুক্ত করতে পারেন (নথিপত্রের মূল স্থানে লুকানো)। ফাইলটি আর ব্যবহৃত না হলে এবং অনাথ হয়ে গেলে আপনি এটি স্থায়ীভাবে মুছেও ফেলতে পারেন।"
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "আপনি এক বা একাধিক কোর্স নির্বাচন করতে পারেন (Ctrl/Cmd + ক্লিক ব্যবহার করুন)।"
+
+msgid "bytes"
+msgstr "বাইট"
+
+msgid "Failed to copy:"
+msgstr "কপি করতে ব্যর্থ:"
+
+msgid "Missing resource file identifier."
+msgstr "রিসোর্স ফাইল শনাক্তকারী অনুপস্থিত।"
+
+msgid "Please select at least one course."
+msgstr "অনুগ্রহ করে অন্তত একটি কোর্স নির্বাচন করুন।"
+
+msgid "Resource file not found."
+msgstr "রিসোর্স ফাইল পাওয়া যায়নি।"
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "ফাইল \"%s\" %dটি কোর্সে সংযুক্ত করা হয়েছে: %s।"
+
+msgid "Some courses were skipped: %s."
+msgstr "কিছু কোর্স বাদ দেওয়া হয়েছে: %s।"
+
+msgid "Missing file or course identifier."
+msgstr "ফাইল বা কোর্স শনাক্তকারী অনুপস্থিত।"
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "এই রিসোর্স ফাইলের কোনো রিসোর্স নোড নেই এবং এটি বিচ্ছিন্ন করা যায় না।"
+
+msgid "File has been detached from %d course link(s)."
+msgstr "ফাইলটি %dটি কোর্স লিঙ্ক থেকে বিচ্ছিন্ন করা হয়েছে।"
+
+msgid "This file is not attached to the selected course."
+msgstr "এই ফাইলটি নির্বাচিত কোর্সে সংযুক্ত নয়।"
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "এই ফাইলটি এখনও অন্তত একটি রিসোর্স দ্বারা ব্যবহৃত হচ্ছে এবং মুছে ফেলা যায় না।"
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "অনাথ ফাইল এবং তার ভৌত বিষয়বস্তু স্থায়ীভাবে মুছে ফেলা হয়েছে।"
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "জরিপ প্রকাশিত হয়েছে। তৈরি: %d। হালনাগাদ: %d। পাঠানো বার্তা: %d।"
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "অর্জনযোগ্য"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "এই দক্ষতা অর্জন করা যায় না"
+
+#: issue-8179
+msgid "Novice"
+msgstr "নবীন"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "নিয়ম ও প্রসঙ্গ-নিরপেক্ষ নির্দেশনার কঠোর অনুসরণ; পরিস্থিতিগত বিচার সামান্য।"
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "উন্নত শিক্ষানবিস"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "পরিস্থিতিগত দিক ও ধরন চিনতে শুরু করে কিন্তু এখনও নির্দেশিকা প্রয়োজন।"
+
+#: issue-8179
+msgid "Competent"
+msgstr "দক্ষ"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "পরিকল্পনা ও মানসিক মডেল তৈরি করে; ফলাফলের দায়িত্ব নেয় কিন্তু জটিলতায় অভিভূত হতে পারে।"
+
+#: issue-8179
+msgid "Proficient"
+msgstr "পারদর্শী"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "\"বৃহত্তর চিত্র\" দেখে, স্বজ্ঞাতভাবে অগ্রাধিকার দেয় এবং অভিজ্ঞতা থেকে শেখে।"
+
+#: issue-8179
+msgid "Expert"
+msgstr "বিশেষজ্ঞ"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "স্বজ্ঞাত, সাবলীল কর্মক্ষমতা; গভীর অন্তর্নিহিত জ্ঞানের উপর নির্ভর করে; নতুন পরিস্থিতি সহজে মোকাবেলা বা উদ্ভাবন করতে পারে।"
+
+#: issue-8179
+msgid "Remembering"
+msgstr "স্মরণ"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "দীর্ঘমেয়াদি স্মৃতি থেকে প্রাসঙ্গিক জ্ঞান পুনরুদ্ধার, স্মরণ বা চিনতে পারা।"
+
+#: issue-8179
+msgid "Understanding"
+msgstr "বোঝা"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "মৌখিক, লিখিত ও চিত্রগত যোগাযোগসহ নির্দেশনামূলক বার্তা থেকে অর্থ নির্মাণ। ব্যাখ্যা, উদাহরণ, শ্রেণিবিন্যাস, সারাংশ, অনুমান, তুলনা বা ব্যাখ্যা করে বোধগম্যতা প্রদর্শন।"
+
+#: issue-8179
+msgid "Applying"
+msgstr "প্রয়োগ"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "নির্দিষ্ট পরিস্থিতিতে পদ্ধতি সম্পাদন বা বাস্তবায়ন। নতুন বা বাস্তব পরিস্থিতিতে জ্ঞান বা দক্ষতা ব্যবহার।"
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "বিশ্লেষণ"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "উপাদানকে অংশগুলিতে ভাগ করে অংশগুলোর পারস্পরিক ও সামগ্রিক কাঠামো বা উদ্দেশ্যের সাথে সম্পর্ক নির্ধারণ। উদ্দেশ্য, কারণ বা সম্পর্ক চিহ্নিত করা।"
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "মূল্যায়ন"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "মানদণ্ড ও মানের ভিত্তিতে বিচার। সিদ্ধান্ত বা পদক্ষেপ যাচাই, সমালোচনা বা ন্যায্যতা প্রদান।"
+
+#: issue-8179
+msgid "Creating"
+msgstr "সৃষ্টি"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "উপাদানগুলোকে একত্র করে সুসংগত বা কার্যকর সমগ্র গঠন; নতুন ধরন বা কাঠামোয় পুনর্বিন্যাস। মৌলিক কাজ তৈরি বা নতুন ধারণা উৎপাদন।"
+
+#: issue-8179
+msgid "Follow"
+msgstr "অনুসরণ"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "ঘনিষ্ঠ তত্ত্বাবধান ও নির্দেশনায় কাজ করে। সীমিত বিবেচনায় রুটিন কাজ সম্পাদন। নির্দেশ অনুসরণ ও মৌলিক সম্পাদনে মনোযোগ।"
+
+#: issue-8179
+msgid "Assist"
+msgstr "সহায়তা"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "নিয়মিত তত্ত্বাবধানে কাজ করে। অন্যদের সহায়তা, দলীয় কাজে অবদান এবং নির্ধারিত সীমার মধ্যে কিছু উদ্যোগ নেয়।"
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "সাধারণ তত্ত্বাবধানে কাজ করে। রুটিন ও অ-রুটিন কার্যক্রমে জ্ঞান ও দক্ষতা প্রয়োগ। কিছু বিবেচনা ও বিচার প্রয়োগ করে।"
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "ব্যাপক নির্দেশনায় কাজ করে। বিশেষজ্ঞ নির্দেশনা, সহায়তা বা সেবা দিয়ে অন্যদের সক্ষম করে। নিজের কাজের দায়িত্ব নেয় এবং ছোট দল বা কাজ তত্ত্বাবধান করতে পারে।"
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "নিশ্চিত করা ও পরামর্শ দেওয়া"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "ব্যাপক নির্দেশনায় কিন্তু উল্লেখযোগ্য স্বায়ত্তশাসনে কাজ করে। কাজ যেন উদ্দেশ্য পূরণ করে তা নিশ্চিত করে এবং জটিল বিষয়ে পরামর্শ দেয়। প্রায়ই দল বা প্রকল্প নেতৃত্ব দেয় এবং সিদ্ধান্তে প্রভাব রাখে।"
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "সূচনা ও প্রভাব"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "উল্লেখযোগ্য কাজের ক্ষেত্রে নির্ধারিত কর্তৃত্ব ও দায়িত্ব। পদক্ষেপ শুরু করে, নিজ ক্ষেত্রে কৌশল ও নীতিতে প্রভাব রাখে এবং বড় প্রকল্প বা দল নেতৃত্ব দেয়।"
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "কৌশল নির্ধারণ, অনুপ্রাণিত করা, সংগঠিত করা"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "প্রধান কাজের ক্ষেত্রে সর্বোচ্চ সাংগঠনিক স্তরে কর্তৃত্ব। দীর্ঘমেয়াদি কৌশল নির্ধারণ, অন্যদের অনুপ্রাণিত ও সংগঠিত করে এবং সাংগঠনিক সাফল্যের জন্য গুরুত্বপূর্ণ সিদ্ধান্ত নেয়। শিল্প বা বাহ্যিক স্তরে প্রভাব রাখে।"
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "বিবেচনার জন্য সর্বোচ্চ নিষ্ক্রিয় সময় (মিনিট)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "খোলা কোর্স পৃষ্ঠা স্বয়ংক্রিয় অনুরোধ পাঠাতে থাকে। ব্যবহারকারীর প্রকৃত কাজ (পৃষ্ঠা বা আইটেম খোলা, উত্তর দেওয়া ইত্যাদি) ছাড়া এই মিনিট সংখ্যার পর কোর্সে ব্যয়িত সময় গণনা বন্ধ হয়।"
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "সহযোগিতামূলক উইকি সম্পাদক"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "ইথারপ্যাডে সংযোগ করা হচ্ছে..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "সংরক্ষণ বর্তমান ইথারপ্যাড বিষয়বস্তু থেকে নতুন চামিলো উইকি সংস্করণ তৈরি করে।"
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "সহযোগিতামূলক সম্পাদক লোড করা যায়নি।"
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "উইকি সম্পাদনার জন্য ইথারপ্যাড সক্রিয় করুন"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "বিদ্যমান উইকি পৃষ্ঠার জন্য সহযোগিতামূলক সম্পাদক হিসেবে ইথারপ্যাড ব্যবহার করুন। নিরাপদ এমবেডেড সেশনের জন্য ইথারপ্যাড চামিলোর একই অরিজিনে উন্মুক্ত থাকতে হবে।"
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "ইথারপ্যাড URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "ঐচ্ছিক রিভার্স-প্রক্সি পাথসহ ইথারপ্যাড ইনস্ট্যান্সের বেস URL। উদাহরণ: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "ইথারপ্যাড API কী"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "প্যাড, সেশন তৈরি ও উইকি বিষয়বস্তু সিঙ্ক করতে চামিলো যে API কী ব্যবহার করে। API-কী প্রমাণীকরণ গ্রহণ করতে ইথারপ্যাড কনফিগার করুন।"
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "নতুন নথির ডিফল্ট দৃশ্যমানতা কোর্স অনুযায়ী পরিবর্তন করা যায়"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "শিক্ষক কোর্সে নতুন নথি, ফোল্ডার বা আপলোড করা ফাইল তৈরি করলে যে দৃশ্যমানতা দেওয়া হয়। পরে শিক্ষক প্রতিটির দৃশ্যমানতা পরিবর্তন করতে পারেন।"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "সক্রিয় থাকলে, শিক্ষকরা প্ল্যাটফর্ম ডিফল্টের পরিবর্তে কোর্স সেটিংসে তাদের কোর্সের নতুন নথির দৃশ্যমানতা বেছে নিতে পারেন।"
+
+msgid "Default visibility of new learning paths"
+msgstr "নতুন লার্নিং পাথের ডিফল্ট দৃশ্যমানতা"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "নতুন লার্নিং পাথের ডিফল্ট দৃশ্যমানতা কোর্স অনুযায়ী পরিবর্তন করা যায়"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "শিক্ষক কোর্সে নতুন লার্নিং পাথ তৈরি করলে যে দৃশ্যমানতা দেওয়া হয়। পরে শিক্ষক প্রতিটির দৃশ্যমানতা পরিবর্তন করতে পারেন।"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "সক্রিয় থাকলে, শিক্ষকরা প্ল্যাটফর্ম ডিফল্টের পরিবর্তে কোর্স সেটিংসে তাদের কোর্সের নতুন লার্নিং পাথের দৃশ্যমানতা বেছে নিতে পারেন।"
+
+msgid "Default visibility of new tests"
+msgstr "নতুন পরীক্ষার ডিফল্ট দৃশ্যমানতা"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "নতুন পরীক্ষার ডিফল্ট দৃশ্যমানতা কোর্স অনুসারে পরিবর্তন করা যায়"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "একজন শিক্ষক কোর্সে নতুন পরীক্ষা তৈরি করলে যে দৃশ্যমানতা দেওয়া হয়। শিক্ষকরা পরে প্রতিটির দৃশ্যমানতা পরিবর্তন করতে পারেন।"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "সক্রিয় থাকলে, শিক্ষকরা প্ল্যাটফর্মের ডিফল্টের পরিবর্তে তাদের কোর্সের নতুন পরীক্ষাগুলোর দৃশ্যমানতা কোর্স সেটিংসে বেছে নিতে পারেন।"
+
+msgid "Default visibility for new learning paths"
+msgstr "নতুন শেখার পথের জন্য ডিফল্ট দৃশ্যমানতা"
+
+msgid "Default visibility for new tests"
+msgstr "নতুন পরীক্ষার জন্য ডিফল্ট দৃশ্যমানতা"
+
+msgid "Following"
+msgstr "অনুসরণ করছেন"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "এই অ্যাসাইনমেন্টের জমায় শিক্ষার্থী মন্তব্য করলে ই-মেইল পান"
+
+msgid "Payment history"
+msgstr "পেমেন্ট ইতিহাস"
+
+msgid "No payments yet"
+msgstr "এখনো কোনো পেমেন্ট নেই"
+
+msgid "Cancel service"
+msgstr "সেবা বাতিল করুন"
+
+msgid "Official transcript"
+msgstr "অফিসিয়াল ট্রান্সক্রিপ্ট"
+
+msgid "Unofficial transcript"
+msgstr "অনঅফিসিয়াল ট্রান্সক্রিপ্ট"
+
+msgid "Student name"
+msgstr "শিক্ষার্থীর নাম"
+
+msgid "Student number"
+msgstr "শিক্ষার্থী নম্বর"
+
+msgid "Program title"
+msgstr "প্রোগ্রামের শিরোনাম"
+
+msgid "Required hours"
+msgstr "প্রয়োজনীয় ঘণ্টা"
+
+msgid "Completion date"
+msgstr "সমাপ্তির তারিখ"
+
+msgid "Hours completed"
+msgstr "সম্পন্ন ঘণ্টা"
+
+msgid "Final grade"
+msgstr "চূড়ান্ত গ্রেড"
+
+msgid "Grade"
+msgstr "গ্রেড"
+
+msgid "No completed course yet."
+msgstr "এখনো কোনো সম্পন্ন কোর্স নেই।"
+
+msgid "Grading scale"
+msgstr "গ্রেডিং স্কেল"
+
+msgid "Signature of school official"
+msgstr "স্কুল কর্মকর্তার স্বাক্ষর"
+
+msgid "School official"
+msgstr "স্কুল কর্মকর্তা"
+
+msgid "Official's title"
+msgstr "কর্মকর্তার পদবি"
+
+msgid "Verify this transcript at"
+msgstr "এই ট্রান্সক্রিপ্ট যাচাই করুন"
+
+msgid "Verification code"
+msgstr "যাচাইকরণ কোড"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "এই অনঅফিসিয়াল ট্রান্সক্রিপ্ট স্বাক্ষরিত নয়। অফিসিয়াল ট্রান্সক্রিপ্টের জন্য প্রশাসকের কাছে অনুরোধ করুন।"
+
+msgid "Transcript verification"
+msgstr "ট্রান্সক্রিপ্ট যাচাইকরণ"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "যাচাই করুন যে এই অফিসিয়াল ট্রান্সক্রিপ্ট প্রতিষ্ঠান কর্তৃক ইস্যু ও স্বাক্ষরিত হয়েছে, পরিবর্তিত হয়নি এবং বাতিল হয়নি।"
+
+msgid "Valid"
+msgstr "বৈধ"
+
+msgid "Invalid signature"
+msgstr "অবৈধ স্বাক্ষর"
+
+msgid "Transcript not found"
+msgstr "ট্রান্সক্রিপ্ট পাওয়া যায়নি"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "প্রতিষ্ঠানের স্বাক্ষর বৈধ এবং এই ট্রান্সক্রিপ্ট বাতিল হয়নি।"
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "এই ট্রান্সক্রিপ্ট বৈধ হিসেবে যাচাই করা যায় না। এর বিবরণ প্রদর্শিত হয় না।"
+
+msgid "Transcript details"
+msgstr "ট্রান্সক্রিপ্টের বিবরণ"
+
+msgid "Institution"
+msgstr "প্রতিষ্ঠান"
+
+msgid "Issued on"
+msgstr "ইস্যুর তারিখ"
+
+msgid "Download verification JSON"
+msgstr "যাচাইকরণ JSON ডাউনলোড করুন"
+
+msgid "Transcript"
+msgstr "ট্রান্সক্রিপ্ট"
+
+msgid "My confidential reports"
+msgstr "আমার গোপনীয় প্রতিবেদন"
+
+msgid "My transcript"
+msgstr "আমার ট্রান্সক্রিপ্ট"
+
+msgid "Confidential investigations"
+msgstr "গোপনীয় তদন্ত"
+
+msgid "Floor plan"
+msgstr "ফ্লোর প্ল্যান"
+
+msgid "Click a highlighted room to select it"
+msgstr "হাইলাইট করা কক্ষে ক্লিক করে নির্বাচন করুন"
+
+msgid "Select room"
+msgstr "কক্ষ নির্বাচন করুন"
+
+msgid "Room on floor plan"
+msgstr "ফ্লোর প্ল্যানে কক্ষ"
+
+msgid "Select a branch first"
+msgstr "প্রথমে একটি শাখা নির্বাচন করুন"
+
+msgid "The branch has no attached floor plan"
+msgstr "শাখার সাথে কোনো ফ্লোর প্ল্যান সংযুক্ত নেই"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "কক্ষের রূপরেখা দিতে পলিগন টুল ব্যবহার করুন; কোণা সরাতে সম্পাদনা ব্যবহার করুন"
+
+msgid "Save room area"
+msgstr "কক্ষ এলাকা সংরক্ষণ করুন"
+
+msgid "Clear room area"
+msgstr "কক্ষ এলাকা মুছুন"
+
+msgid "Save the room form to persist the area"
+msgstr "এলাকা স্থায়ী করতে কক্ষ ফর্ম সংরক্ষণ করুন"
+
+msgid "Floor plan unavailable"
+msgstr "ফ্লোর প্ল্যান পাওয়া যায়নি"
+
+msgid "Room map points must be within the floor plan"
+msgstr "কক্ষ মানচিত্রের বিন্দুগুলো ফ্লোর প্ল্যানের মধ্যে থাকতে হবে"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "আপনি কি নিশ্চিত যে কক্ষ এলাকা মুছতে চান?"
+
+msgid "View room on floor plan"
+msgstr "ফ্লোর প্ল্যানে কক্ষ দেখুন"
+
+msgid "No floor plan available"
+msgstr "কোনো ফ্লোর প্ল্যান নেই"
+
+msgid "This is an assignment by groups"
+msgstr "এটি গ্রুপভিত্তিক একটি অ্যাসাইনমেন্ট"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "একটি PNG, JPEG বা নিরাপদ স্ট্যাটিক SVG ফ্লোর প্ল্যান আপলোড করুন, অথবা ডকুমেন্টস থেকে বিদ্যমান একটি ছবি নির্বাচন করুন।"
+
+msgid "Upload floor plan"
+msgstr "ফ্লোর প্ল্যান আপলোড করুন"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG বা স্ট্যাটিক SVG, সর্বোচ্চ ১০ MB"
+
+msgid "Search images by name"
+msgstr "নাম দিয়ে ছবি খুঁজুন"
+
+msgid "Image name"
+msgstr "ছবির নাম"
+
+msgid "Select an image"
+msgstr "একটি ছবি নির্বাচন করুন"
+
+msgid "Change floor plan"
+msgstr "ফ্লোর প্ল্যান পরিবর্তন করুন"
+
+msgid "Attach floor plan"
+msgstr "ফ্লোর প্ল্যান সংযুক্ত করুন"
+
+msgid "No matching images found in Documents."
+msgstr "ডকুমেন্টসে মিলযুক্ত কোনো ছবি পাওয়া যায়নি।"
+
+msgid "Current floor plan"
+msgstr "বর্তমান ফ্লোর প্ল্যান"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "ফ্লোর প্ল্যানের পরিবর্তন স্বয়ংক্রিয়ভাবে সংরক্ষিত হয়।"
+
+msgid "Remove floor plan"
+msgstr "ফ্লোর প্ল্যান সরান"
+
+msgid "Cannot load images"
+msgstr "ছবি লোড করা যায়নি"
+
+msgid "Floor plan saved"
+msgstr "ফ্লোর প্ল্যান সংরক্ষিত হয়েছে"
+
+msgid "Cannot attach floor plan"
+msgstr "ফ্লোর প্ল্যান সংযুক্ত করা যায়নি"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "শুধুমাত্র PNG/JPEG এবং নিরাপদ স্ট্যাটিক SVG ছবি, সর্বোচ্চ ১০MB সমর্থিত।"
+
+msgid "Cannot upload floor plan"
+msgstr "ফ্লোর প্ল্যান আপলোড করা যায়নি"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "আপনি কি নিশ্চিত যে ফ্লোর প্ল্যান সরাতে চান?"
+
+msgid "Floor plan removed"
+msgstr "ফ্লোর প্ল্যান সরানো হয়েছে"
+
+msgid "Cannot remove floor plan"
+msgstr "ফ্লোর প্ল্যান সরানো যায়নি"
+
+msgid "Support bot"
+msgstr "সহায়তা বট"
+
+msgid "Connected"
+msgstr "সংযুক্ত"
+
+msgid "Not connected"
+msgstr "সংযুক্ত নয়"
+
+msgid "View ticket"
+msgstr "টিকিট দেখুন"
+
+msgid "Start a new conversation"
+msgstr "নতুন কথোপকথন শুরু করুন"
+
+msgid "Video call"
+msgstr "ভিডিও কল"
+
+msgid "Incoming video call"
+msgstr "আগত ভিডিও কল"
+
+msgid "Decline"
+msgstr "প্রত্যাখ্যান"
+
+msgid "Mute microphone"
+msgstr "মাইক্রোফোন নিঃশব্দ করুন"
+
+msgid "Unmute microphone"
+msgstr "মাইক্রোফোন চালু করুন"
+
+msgid "Turn camera off"
+msgstr "ক্যামেরা বন্ধ করুন"
+
+msgid "Turn camera on"
+msgstr "ক্যামেরা চালু করুন"
+
+msgid "Hang up"
+msgstr "কল কেটে দিন"
+
+msgid "Calling..."
+msgstr "কল করা হচ্ছে..."
+
+msgid "Connecting..."
+msgstr "সংযোগ হচ্ছে..."
+
+msgid "Your contact is busy."
+msgstr "আপনার পরিচিতি ব্যস্ত।"
+
+msgid "Your contact did not answer the call."
+msgstr "আপনার পরিচিতি কলের উত্তর দেননি।"
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "আপনার পরিচিতি ক্যামেরা বা মাইক্রোফোনে প্রবেশ করতে পারেননি।"
+
+msgid "Your contact could not prepare the video call."
+msgstr "আপনার পরিচিতি ভিডিও কল প্রস্তুত করতে পারেননি।"
+
+msgid "Your contact refused the call."
+msgstr "আপনার পরিচিতি কল প্রত্যাখ্যান করেছেন।"
+
+msgid "The call timed out."
+msgstr "কলের সময় শেষ হয়েছে।"
+
+msgid "Your contact cancelled the call."
+msgstr "আপনার পরিচিতজন কলটি বাতিল করেছেন।"
+
+msgid "The video connection was lost."
+msgstr "ভিডিও সংযোগ বিচ্ছিন্ন হয়ে গেছে।"
+
+msgid "Your contact could not establish the video connection."
+msgstr "আপনার পরিচিতজন ভিডিও সংযোগ স্থাপন করতে পারেননি।"
+
+msgid "Your contact could not complete the video call setup."
+msgstr "আপনার পরিচিতজন ভিডিও কল সেটআপ সম্পন্ন করতে পারেননি।"
+
+msgid "Your contact hung up."
+msgstr "আপনার পরিচিতজন কল কেটে দিয়েছেন।"
+
+msgid "Video call could not be started"
+msgstr "ভিডিও কল শুরু করা যায়নি"
+
+msgid "Camera or microphone permission was denied."
+msgstr "ক্যামেরা বা মাইক্রোফোনের অনুমতি প্রত্যাখ্যান করা হয়েছে।"
+
+msgid "No camera or microphone was found."
+msgstr "কোনো ক্যামেরা বা মাইক্রোফোন পাওয়া যায়নি।"
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "ক্যামেরা বা মাইক্রোফোন ইতিমধ্যে ব্যবহৃত হচ্ছে বা অনুপলব্ধ।"
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "ক্যামেরা বা মাইক্রোফোন প্রয়োজনীয় সেটিংস সমর্থন করে না।"
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "ক্যামেরা বা মাইক্রোফোনে প্রবেশাধিকার পাওয়া যায়নি।"
+
+msgid "The video call could not be prepared."
+msgstr "ভিডিও কল প্রস্তুত করা যায়নি।"
+
+msgid "The video call request could not be sent."
+msgstr "ভিডিও কলের অনুরোধ পাঠানো যায়নি।"
+
+msgid "The incoming video call could not be processed."
+msgstr "আগত ভিডিও কল প্রক্রিয়া করা যায়নি।"
+
+msgid "The video call answer could not be prepared."
+msgstr "ভিডিও কলের উত্তর প্রস্তুত করা যায়নি।"
+
+msgid "The video call answer could not be sent."
+msgstr "ভিডিও কলের উত্তর পাঠানো যায়নি।"
+
+msgid "The video call answer could not be processed."
+msgstr "ভিডিও কলের উত্তর প্রক্রিয়া করা যায়নি।"
+
+msgid "The video connection failed"
+msgstr "ভিডিও সংযোগ ব্যর্থ হয়েছে"
+
+msgid "The video connection could not be established."
+msgstr "ভিডিও সংযোগ স্থাপন করা যায়নি।"
+
+msgid "No answer was received."
+msgstr "কোনো উত্তর পাওয়া যায়নি।"
+
+msgid "You refused the call."
+msgstr "আপনি কলটি প্রত্যাখ্যান করেছেন।"
+
+msgid "You cancelled the call."
+msgstr "আপনি কলটি বাতিল করেছেন।"
+
+msgid "You hung up."
+msgstr "আপনি কল কেটে দিয়েছেন।"
+
+msgid "You missed the call."
+msgstr "আপনি কলটি মিস করেছেন।"
+
+msgid "Support bot is currently unavailable."
+msgstr "সহায়তা বট বর্তমানে অনুপলব্ধ।"
+
+msgid "A support ticket has been created."
+msgstr "একটি সহায়তা টিকিট তৈরি করা হয়েছে।"
+
+msgid "Conversation ended."
+msgstr "কথোপকথন শেষ হয়েছে।"
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "সহায়তা বট এই কথোপকথন চালিয়ে যেতে পারেনি। অনুগ্রহ করে আবার চেষ্টা করুন।"
+
+msgid "Add your first term glossary to this course"
+msgstr "এই কোর্সে আপনার প্রথম শব্দকোষ যোগ করুন"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "আপনি কি নিশ্চিত যে এই জরিপ টেমপ্লেট মুছে ফেলতে চান?"
+
+msgid "The survey template has been deleted."
+msgstr "জরিপ টেমপ্লেট মুছে ফেলা হয়েছে।"
+
+msgid "Please select a course."
+msgstr "অনুগ্রহ করে একটি কোর্স নির্বাচন করুন।"
+
+msgid "Please select a session for this course."
+msgstr "এই কোর্সের জন্য অনুগ্রহ করে একটি সেশন নির্বাচন করুন।"
+
+msgid "The survey has been created from the template."
+msgstr "টেমপ্লেট থেকে জরিপ তৈরি করা হয়েছে।"
+
+msgid "Survey templates"
+msgstr "জরিপ টেমপ্লেট"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "শিক্ষকদের জন্য পুনর্ব্যবহারযোগ্য জরিপ টেমপ্লেট তৈরি করুন এবং সেগুলো সরাসরি কোনো কোর্স বা সেশনে বরাদ্দ করুন।"
+
+msgid "Subtitle"
+msgstr "সাবটাইটেল"
+
+msgid "Assign to course"
+msgstr "কোর্সে বরাদ্দ করুন"
+
+msgid "Assign template to course"
+msgstr "কোর্সে টেমপ্লেট বরাদ্দ করুন"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "কোর্সে সরাসরি জরিপ তৈরি করতে সেশন খালি রাখুন।"
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "এই কোর্সটি এই পোর্টালে একটি সেশনের মাধ্যমে উপলব্ধ, তাই একটি সেশন প্রয়োজন।"
+
+msgid "Survey template questions"
+msgstr "জরিপ টেমপ্লেটের প্রশ্ন"
+
+msgid "Back to survey templates"
+msgstr "জরিপ টেমপ্লেটে ফিরে যান"
+
+msgid "Could not load survey template"
+msgstr "জরিপ টেমপ্লেট লোড করা যায়নি"
+
+msgid "Could not load survey template questions"
+msgstr "জরিপ টেমপ্লেটের প্রশ্ন লোড করা যায়নি"
+
+msgid "Could not save survey template question"
+msgstr "জরিপ টেমপ্লেটের প্রশ্ন সংরক্ষণ করা যায়নি"
+
+msgid "Could not delete survey template question"
+msgstr "জরিপ টেমপ্লেটের প্রশ্ন মুছে ফেলা যায়নি"
+
+msgid "Could not move survey template question"
+msgstr "জরিপ টেমপ্লেটের প্রশ্ন সরানো যায়নি"
+
+msgid "Could not copy survey template question"
+msgstr "জরিপ টেমপ্লেটের প্রশ্ন অনুলিপি করা যায়নি"
+
+msgid "The survey template has been saved."
+msgstr "জরিপ টেমপ্লেট সংরক্ষণ করা হয়েছে।"
+
+msgid "Edit survey template"
+msgstr "জরিপ টেমপ্লেট সম্পাদনা করুন"
+
+msgid "Create survey template"
+msgstr "জরিপ টেমপ্লেট তৈরি করুন"
+
+msgid "The survey template title is required."
+msgstr "জরিপ টেমপ্লেটের শিরোনাম আবশ্যক।"
+
+msgid "Visible as template"
+msgstr "টেমপ্লেট হিসেবে দৃশ্যমান"
+
+msgid "Create satisfaction survey"
+msgstr "সন্তুষ্টি জরিপ তৈরি করুন"
+
+msgid "Training satisfaction survey"
+msgstr "প্রশিক্ষণ সন্তুষ্টি জরিপ"
+
+msgid "Could not create satisfaction survey"
+msgstr "সন্তুষ্টি জরিপ তৈরি করা যায়নি"
+
+msgid "Use template"
+msgstr "টেমপ্লেট ব্যবহার করুন"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "প্রশাসক কর্তৃক প্রস্তুত পুনর্ব্যবহারযোগ্য টেমপ্লেট থেকে এই জরিপ তৈরি করুন।"
+
+msgid "Results hidden from teacher/tutor"
+msgstr "শিক্ষক/টিউটরের কাছ থেকে ফলাফল লুকানো"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "শিক্ষক ও টিউটররা এখনও উত্তরের সংখ্যা দেখতে এবং অনুস্মারক পাঠাতে পারবেন, কিন্তু জরিপের ফলাফল খুলতে বা রপ্তানি করতে পারবেন না।"
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "টেমপ্লেট প্রয়োগ করা হয়েছে। জরিপ সেটিংস পর্যালোচনা করুন এবং তৈরি করতে সংরক্ষণ করুন।"
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "জরিপের ফলাফল শিক্ষক ও টিউটরদের কাছ থেকে লুকানো আছে।"
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "আপনি এখনও আমন্ত্রণ পাতা ব্যবহার করে উত্তরের সংখ্যা দেখতে এবং অনুস্মারক পাঠাতে পারেন।"
+
+msgid "Payment method"
+msgstr "পেমেন্ট পদ্ধতি"
+
+msgid "Preview mode"
+msgstr "প্রিভিউ মোড"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "প্রিভিউ মোডে অগ্রগতি ও স্কোর সংরক্ষণ হয় না।"
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "এই লিঙ্কটি শেখার পথের ভিতরে প্রদর্শন করা যায় না।"
+
+msgid "Open it in a new tab to view the page."
+msgstr "পাতাটি দেখতে নতুন ট্যাবে খুলুন।"
+
+msgid "Report a problem with this question"
+msgstr "এই প্রশ্নে সমস্যা রিপোর্ট করুন"
+
+msgid "Your report was sent to the teacher."
+msgstr "আপনার রিপোর্ট শিক্ষকের কাছে পাঠানো হয়েছে।"
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "আপনি যে ত্রুটি বা সমস্যা পেয়েছেন তা বর্ণনা করুন। আপনার রিপোর্ট শিক্ষকের কাছে পাঠানো হবে।"
+
+msgid "A comment is required."
+msgstr "একটি মন্তব্য আবশ্যক।"
+
+msgid "Could not send the report."
+msgstr "রিপোর্ট পাঠানো যায়নি।"
+
+msgid "Learner reports"
+msgstr "শিক্ষার্থীর রিপোর্ট"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "এই প্রশ্নের জন্য কোনো শিক্ষার্থীর রিপোর্ট জমা হয়নি।"
+
+msgid "View attempt"
+msgstr "চেষ্টা দেখুন"
+
+msgid "Could not load learner reports."
+msgstr "শিক্ষার্থীর রিপোর্ট লোড করা যায়নি।"
+
+msgid "Allow learners to report issues in questions"
+msgstr "শিক্ষার্থীদের প্রশ্নে সমস্যা রিপোর্ট করার অনুমতি দিন"
+
+msgid "Skill acquired"
+msgstr "দক্ষতা অর্জিত"
+
+msgid "AI Toolbox"
+msgstr "এআই টুলবক্স"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "এআই দিয়ে ইন্টারঅ্যাকটিভ শিক্ষামূলক অ্যাপ্লিকেশন তৈরি করুন এবং SCORM দিয়ে শিক্ষার্থীর অগ্রগতি ট্র্যাক করুন।"
+
+msgid "No published applications are available yet."
+msgstr "এখনও কোনো প্রকাশিত অ্যাপ্লিকেশন উপলব্ধ নেই।"
+
+msgid "Interactive applications"
+msgstr "ইন্টারঅ্যাকটিভ অ্যাপ্লিকেশন"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "এক জায়গা থেকে সংস্করণ তৈরি, উন্নত, প্রকাশ ও পর্যালোচনা করুন।"
+
+msgid "Open an application to continue from your latest progress."
+msgstr "আপনার সর্বশেষ অগ্রগতি থেকে চালিয়ে যেতে একটি অ্যাপ্লিকেশন খুলুন।"
+
+msgid "Interactive learning application"
+msgstr "ইন্টারঅ্যাকটিভ শেখার অ্যাপ্লিকেশন"
+
+msgid "Create an interactive learning app"
+msgstr "একটি ইন্টারঅ্যাকটিভ শেখার অ্যাপ তৈরি করুন"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "কার্যক্রমটি বর্ণনা করুন। চামিলো অগ্রগতি ও স্কোর ট্র্যাকিংসহ একটি সংস্করণযুক্ত SCORM অ্যাপ্লিকেশন তৈরি করবে।"
+
+msgid "Idea"
+msgstr "ধারণা"
+
+msgid "Application"
+msgstr "অ্যাপ্লিকেশন"
+
+msgid "What should the application do?"
+msgstr "অ্যাপ্লিকেশনটি কী করবে?"
+
+msgid "How it works"
+msgstr "এটি কীভাবে কাজ করে"
+
+msgid "AI generation"
+msgstr "এআই জেনারেশন"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "অ্যাপটি আপনার নির্দেশনা থেকে তৈরি হয় এবং সংস্করণ ১ হিসেবে সংরক্ষিত হয়।"
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "শিক্ষার্থীর অগ্রগতি, স্কোর ও পুনরায় শুরুর তথ্য চামিলোতে রিপোর্ট করা হয়।"
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "ভবিষ্যতের উন্নতি পূর্ববর্তী সংস্করণ মুছে না ফেলে নতুন সংস্করণ তৈরি করে।"
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "শেখার উদ্দেশ্য, নিয়ম, স্তর, স্কোরিং এবং শিক্ষার্থী শেষ করলে কী হবে তা অন্তর্ভুক্ত করুন।"
+
+msgid "You are not allowed to create content in this context."
+msgstr "এই প্রসঙ্গে বিষয়বস্তু তৈরি করার অনুমতি আপনার নেই।"
+
+msgid "The application was generated successfully."
+msgstr "অ্যাপ্লিকেশনটি সফলভাবে তৈরি হয়েছে।"
+
+msgid "Open in student view"
+msgstr "শিক্ষার্থী দৃশ্যে খুলুন"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "প্রিভিউ ও প্রকাশনা সক্রিয় করতে অ্যাপ্লিকেশন তৈরি করুন।"
+
+msgid "Improve with AI"
+msgstr "এআই দিয়ে উন্নত করুন"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "পরিবর্তনটি বর্ণনা করুন। একটি নতুন সংস্করণ তৈরি হবে এবং পূর্ববর্তী সংস্করণগুলো উপলব্ধ থাকবে।"
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "আপনি যে সম্পূর্ণ ইন্টারঅ্যাকটিভ কার্যক্রম তৈরি করতে চান তা বর্ণনা করুন।"
+
+msgid "What should be improved?"
+msgstr "কী উন্নত করা উচিত?"
+
+msgid "Generate new version"
+msgstr "নতুন সংস্করণ তৈরি করুন"
+
+msgid "Version history"
+msgstr "সংস্করণ ইতিহাস"
+
+msgid "Preview, download or restore any generated version."
+msgstr "যেকোনো তৈরি করা সংস্করণ প্রিভিউ, ডাউনলোড বা পুনরুদ্ধার করুন।"
+
+msgid "A new version was generated."
+msgstr "একটি নতুন সংস্করণ তৈরি হয়েছে।"
+
+msgid "Version restored"
+msgstr "সংস্করণ পুনরুদ্ধার করা হয়েছে"
+
+msgid "The support bot tree has been published."
+msgstr "সাপোর্ট বট ট্রি প্রকাশিত হয়েছে।"
+
+msgid "The support bot tree has been archived."
+msgstr "সাপোর্ট বট ট্রি আর্কাইভ করা হয়েছে।"
+
+msgid "The support bot tree has been duplicated."
+msgstr "সাপোর্ট বট ট্রি নকল করা হয়েছে।"
+
+msgid "The support bot tree has been deleted."
+msgstr "সাপোর্ট বট ট্রি মুছে ফেলা হয়েছে।"
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "আপনি কি নিশ্চিত যে এই সাপোর্ট বট ট্রি মুছে ফেলতে চান?"
+
+msgid "The support bot tree has been imported."
+msgstr "সাপোর্ট বট ট্রি আমদানি করা হয়েছে।"
+
+msgid "Create support bot tree"
+msgstr "সাপোর্ট বট ট্রি তৈরি করুন"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "একটি নির্দিষ্ট সিদ্ধান্ত ট্রি তৈরি করুন যা ব্যবহারকারীদের সাপোর্ট প্রশ্নের মাধ্যমে নির্দেশনা দেয় এবং টিকেটে উন্নীত করতে পারে।"
+
+msgid "Portal scope"
+msgstr "পোর্টাল পরিধি"
+
+msgid "Duplicate"
+msgstr "নকল করুন"
+
+msgid "Archive"
+msgstr "আর্কাইভ করুন"
+
+msgid "View conversations"
+msgstr "কথোপকথন দেখুন"
+
+msgid "Import support bot tree"
+msgstr "সাপোর্ট বট ট্রি আমদানি করুন"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "একটি JSON এক্সপোর্ট বা CSV সিদ্ধান্ত ট্রি আমদানি করুন। আমদানি করা ট্রি সর্বদা নতুন খসড়া হিসেবে তৈরি হয়।"
+
+msgid "Resolved"
+msgstr "সমাধান হয়েছে"
+
+msgid "Escalated"
+msgstr "উন্নীত করা হয়েছে"
+
+msgid "Abandoned"
+msgstr "পরিত্যক্ত"
+
+msgid "Support bot conversations"
+msgstr "সাপোর্ট বট কথোপকথন"
+
+msgid "Outcome"
+msgstr "ফলাফল"
+
+msgid "Started at"
+msgstr "শুরু হয়েছে"
+
+msgid "Ended at"
+msgstr "শেষ হয়েছে"
+
+msgid "View conversation"
+msgstr "কথোপকথন দেখুন"
+
+msgid "Go to node"
+msgstr "নোডে যান"
+
+msgid "Create support ticket"
+msgstr "সাপোর্ট টিকেট তৈরি করুন"
+
+msgid "End conversation"
+msgstr "কথোপকথন শেষ করুন"
+
+msgid "Node"
+msgstr "নোড"
+
+msgid "A support bot tree requires at least one node."
+msgstr "একটি সাপোর্ট বট ট্রির জন্য অন্তত একটি নোড প্রয়োজন।"
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "আপনি কি নিশ্চিত যে এই নোড মুছে ফেলতে চান? এর সাথে সংযুক্ত লিঙ্কগুলো মুছে যাবে।"
+
+msgid "Every support bot node requires at least one option."
+msgstr "প্রতিটি সাপোর্ট বট নোডের জন্য অন্তত একটি অপশন প্রয়োজন।"
+
+msgid "The support bot tree title is required."
+msgstr "সাপোর্ট বট ট্রির শিরোনাম প্রয়োজন।"
+
+msgid "A support bot entry node is required."
+msgstr "একটি সাপোর্ট বট এন্ট্রি নোড প্রয়োজন।"
+
+msgid "Every support bot node requires content."
+msgstr "প্রতিটি সাপোর্ট বট নোডের জন্য বিষয়বস্তু প্রয়োজন।"
+
+msgid "Every support bot option requires a label."
+msgstr "প্রতিটি সাপোর্ট বট অপশনের জন্য একটি লেবেল প্রয়োজন।"
+
+msgid "Select a target node for every go-to option."
+msgstr "প্রতিটি গো-টু অপশনের জন্য একটি লক্ষ্য নোড নির্বাচন করুন।"
+
+msgid "Enter a relative URL for every link option."
+msgstr "প্রতিটি লিঙ্ক অপশনের জন্য একটি আপেক্ষিক URL লিখুন।"
+
+msgid "Select a ticket category for every escalation option."
+msgstr "প্রতিটি এস্কেলেশন অপশনের জন্য একটি টিকেট বিভাগ নির্বাচন করুন।"
+
+msgid "The support bot tree has been saved."
+msgstr "সাপোর্ট বট ট্রি সংরক্ষণ করা হয়েছে।"
+
+msgid "Edit support bot tree"
+msgstr "সাপোর্ট বট ট্রি সম্পাদনা করুন"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "প্রকাশিত এবং আর্কাইভ করা সাপোর্ট বট সংস্করণগুলো শুধুমাত্র পঠনযোগ্য। নতুন খসড়া সংস্করণ সম্পাদনা করতে তালিকা থেকে এই ট্রি নকল করুন।"
+
+msgid "Default ticket project"
+msgstr "ডিফল্ট টিকিট প্রকল্প"
+
+msgid "Decision tree rules"
+msgstr "সিদ্ধান্ত বৃক্ষের নিয়মাবলি"
+
+msgid "Every node must contain at least one option."
+msgstr "প্রতিটি নোডে অন্তত একটি অপশন থাকতে হবে।"
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "একটি চূড়ান্ত নোডকে কথোপকথন শেষ করতে হবে অথবা একটি সাপোর্ট টিকিট তৈরি করতে হবে।"
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "v1-এ গো-টু লিংক চক্র তৈরি করতে পারবে না।"
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "v1-এ বাহ্যিক URL অনুমোদিত নয়; লিংক অ্যাকশনগুলো আপেক্ষিক Chamilo পাথ ব্যবহার করতে হবে।"
+
+msgid "Nodes"
+msgstr "নোডসমূহ"
+
+msgid "Add node"
+msgstr "নোড যোগ করুন"
+
+msgid "Entry node"
+msgstr "এন্ট্রি নোড"
+
+msgid "Set as entry node"
+msgstr "এন্ট্রি নোড হিসেবে সেট করুন"
+
+msgid "Target node"
+msgstr "টার্গেট নোড"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "আপেক্ষিক Chamilo পাথ ব্যবহার করুন, উদাহরণস্বরূপ \/tickets।"
+
+msgid "Ticket category"
+msgstr "টিকিট বিভাগ"
+
+msgid "Select a default ticket project first."
+msgstr "প্রথমে একটি ডিফল্ট টিকিট প্রকল্প নির্বাচন করুন।"
+
+msgid "Closing message"
+msgstr "সমাপ্তি বার্তা"
+
+msgid "Select a node to edit it."
+msgstr "সম্পাদনা করতে একটি নোড নির্বাচন করুন।"
+
+msgid "Support bot conversation"
+msgstr "সাপোর্ট বট কথোপকথন"
+
+msgid "Transcript of %s"
+msgstr "%s-এর ট্রান্সক্রিপ্ট"
+
+msgid "Download unofficial transcript"
+msgstr "অনানুষ্ঠানিক ট্রান্সক্রিপ্ট ডাউনলোড করুন"
+
+msgid "Issue official transcript"
+msgstr "অফিসিয়াল ট্রান্সক্রিপ্ট ইস্যু করুন"
+
+msgid "Official transcripts"
+msgstr "অফিসিয়াল ট্রান্সক্রিপ্টসমূহ"
+
+msgid "No official transcript has been issued yet."
+msgstr "এখনো কোনো অফিসিয়াল ট্রান্সক্রিপ্ট ইস্যু করা হয়নি।"
+
+msgid "Issued by"
+msgstr "ইস্যুকারী"
+
+msgid "Verify"
+msgstr "যাচাই করুন"
+
+msgid "Signature of official transcripts"
+msgstr "অফিসিয়াল ট্রান্সক্রিপ্টের স্বাক্ষর"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "এই ছবিটি এই পোর্টালের অফিসিয়াল ট্রান্সক্রিপ্টে মুদ্রিত হয়, সার্টিফিকেট সেটিংসে নির্ধারিত স্বাক্ষরকারীর নাম ও পদের উপরে।"
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "এই পৃষ্ঠায় তালিকাভুক্ত কোর্স ও গ্রেডসহ একটি স্বাক্ষরিত অফিসিয়াল ট্রান্সক্রিপ্ট ইস্যু করবেন? এটি বাতিল না হওয়া পর্যন্ত অনলাইনে যাচাই করা যাবে।"
+
+msgid "Official transcript issued"
+msgstr "অফিসিয়াল ট্রান্সক্রিপ্ট ইস্যু করা হয়েছে"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "এই অফিসিয়াল ট্রান্সক্রিপ্ট বাতিল করবেন? এর যাচাই পৃষ্ঠা তখন এটিকে বাতিল হিসেবে দেখাবে।"
+
+msgid "Official transcript revoked"
+msgstr "অফিসিয়াল ট্রান্সক্রিপ্ট বাতিল করা হয়েছে"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "প্রথমে একটি PNG বা JPEG ছবি নির্বাচন করুন।"
+
+msgid "Signed credential"
+msgstr "স্বাক্ষরিত ক্রেডেনশিয়াল"
+
+msgid "Issue signed credential"
+msgstr "স্বাক্ষরিত ক্রেডেনশিয়াল ইস্যু করুন"
+
+msgid "Verify credential"
+msgstr "ক্রেডেনশিয়াল যাচাই করুন"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Sepolia টেস্টনেটে অ্যাঙ্কর করুন"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "বিদ্যমান Sepolia লেনদেন নিশ্চিত করুন"
+
+msgid "Revoke signed credential"
+msgstr "স্বাক্ষরিত ক্রেডেনশিয়াল বাতিল করুন"
+
+msgid "Delete certificate"
+msgstr "সার্টিফিকেট মুছুন"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "একটি বিদ্যমান Sepolia লেনদেন নিশ্চিত করুন"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia লেনদেনের হ্যাশ"
+
+msgid "Verify transaction"
+msgstr "লেনদেন যাচাই করুন"
+
+msgid "Anchored"
+msgstr "অ্যাঙ্কর করা হয়েছে"
+
+msgid "Issued"
+msgstr "ইস্যু করা হয়েছে"
+
+msgid "Not issued"
+msgstr "ইস্যু করা হয়নি"
+
+msgid "Consent required"
+msgstr "সম্মতি প্রয়োজন"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia লেনদেন নিশ্চিত ও যাচাই করা হয়েছে"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia টেস্টনেট ওয়ালেট আপনাকে একটি লেনদেনে স্বাক্ষর করতে বলবে। শুধুমাত্র সার্টিফিকেট ফিঙ্গারপ্রিন্ট অ্যাঙ্কর করা হবে। এগিয়ে যাবেন?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "এই স্বাক্ষরিত ক্রেডেনশিয়াল বাতিল করবেন? যেকোনো ব্লকচেইন লেনদেন স্থায়ী থাকবে, তবে যাচাই পৃষ্ঠা বাতিলের তথ্য দেখাবে।"
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "এই শিক্ষার্থীর জন্য একটি স্বাক্ষরিত সার্টিফিকেট ক্রেডেনশিয়াল ইস্যু করবেন? এতে অনুমোদিত ব্যক্তিগত তথ্য একটি ব্যক্তিগত লিংক দিয়ে যাচাইযোগ্য হবে।"
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia-এর জন্য একটি EVM-সামঞ্জস্যপূর্ণ ব্রাউজার ওয়ালেট প্রয়োজন।"
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "আপনার ওয়ালেটে সেপোলিয়া টেস্টনেট (চেইন আইডি 11155111) নির্বাচন করুন।"
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "অবৈধ ওয়ালেট ঠিকানা বা সার্টিফিকেট ফিঙ্গারপ্রিন্ট।"
+
+msgid "Transaction pending"
+msgstr "লেনদেন অপেক্ষমাণ"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "পরে বিদ্যমান সেপোলিয়া লেনদেন নিশ্চিত করুন ব্যবহার করুন।"
+
+msgid "Signed credential issued"
+msgstr "স্বাক্ষরিত ক্রেডেনশিয়াল ইস্যু করা হয়েছে"
+
+msgid "Credential revoked"
+msgstr "ক্রেডেনশিয়াল বাতিল করা হয়েছে"
+
+msgid "Transaction hash"
+msgstr "লেনদেনের হ্যাশ"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "প্রকাশনার সম্মতি একজন প্রশাসককে স্বাক্ষরিত সার্টিফিকেট ক্রেডেনশিয়াল ইস্যু করতে এবং ঐচ্ছিকভাবে এর SHA-256 ফিঙ্গারপ্রিন্ট সেপোলিয়া টেস্টনেটে অ্যাঙ্কর করতে দেয়। চেইনে কোনো নাম বা ব্যক্তিগত তথ্য পাঠানো হয় না। আপনি যেকোনো সময় সম্মতি প্রত্যাহার করতে পারেন।"
+
+msgid "Publication consent"
+msgstr "প্রকাশনার সম্মতি"
+
+msgid "Not approved"
+msgstr "অনুমোদিত নয়"
+
+msgid "Withdraw consent"
+msgstr "সম্মতি প্রত্যাহার"
+
+msgid "Approve publication"
+msgstr "প্রকাশনা অনুমোদন করুন"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "আমি আমার নাম, কোর্স, স্কোর ও ইস্যুর তারিখ দেখানো একটি স্বাক্ষরিত, সর্বজনীনভাবে যাচাইযোগ্য ক্রেডেনশিয়াল অনুমোদন করছি। একজন প্রশাসক শুধু এর SHA-256 ফিঙ্গারপ্রিন্ট সেপোলিয়া টেস্টনেটে প্রকাশ করতে পারেন। পরে প্রত্যাহার করলেও ফিঙ্গারপ্রিন্ট স্থায়ী থাকে। চালিয়ে যাবেন?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "এই সার্টিফিকেটের প্রকাশনা অনুমোদন প্রত্যাহার করবেন?"
+
+msgid "Publication approval recorded"
+msgstr "প্রকাশনা অনুমোদন রেকর্ড করা হয়েছে"
+
+msgid "Publication approval withdrawn"
+msgstr "প্রকাশনা অনুমোদন প্রত্যাহার করা হয়েছে"
+
+msgid "Read more"
+msgstr "আরও পড়ুন"
+
+msgid "Participation: %s of %s posts"
+msgstr "অংশগ্রহণ: %s-এর মধ্যে %s পোস্ট"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "অন্য অংশগ্রহণকারীদের উত্তর দেখতে আপনার অবদান পোস্ট করুন।"
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "শুধু অনুমোদিত তদন্তকারীরা যোগ্য রিপোর্ট পর্যালোচনা করতে পারেন। রিপোর্টকারীর পরিচয় ডিফল্টভাবে গোপন থাকে।"
+
+msgid "New confidential report"
+msgstr "নতুন গোপনীয় রিপোর্ট"
+
+msgid "Reported user"
+msgstr "রিপোর্টকৃত ব্যবহারকারী"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "পর্যালোচনার অপেক্ষায় যোগ্য গোপনীয় রিপোর্ট রয়েছে।"
+
+msgid "Eligible investigations"
+msgstr "যোগ্য তদন্ত"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "কমপক্ষে %s জন ভিন্ন ব্যবহারকারী একই ব্যক্তিকে রিপোর্ট করলেই এখানে একটি কেস দেখা যায়।"
+
+msgid "Distinct reporters"
+msgstr "স্বতন্ত্র রিপোর্টকারী"
+
+msgid "Reports for selected user"
+msgstr "নির্বাচিত ব্যবহারকারীর রিপোর্ট"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "গোপনীয় রিপোর্টিং বর্তমানে অনুপলব্ধ।"
+
+msgid "The investigation could not be loaded."
+msgstr "তদন্ত লোড করা যায়নি।"
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "ডিফল্টভাবে তদন্তকারীদের কাছ থেকে আপনার পরিচয় সুরক্ষিত, তবে রিপোর্টের লেখা বা সংযুক্তিতে পরিচয়মূলক বিবরণ এড়িয়ে চলুন। এটি জরুরি সেবা নয়।"
+
+msgid "Find the user involved"
+msgstr "জড়িত ব্যবহারকারী খুঁজুন"
+
+msgid "Name or username"
+msgstr "নাম বা ব্যবহারকারীর নাম"
+
+msgid "Describe the situation"
+msgstr "পরিস্থিতি বর্ণনা করুন"
+
+msgid "Evidence (optional)"
+msgstr "প্রমাণ (ঐচ্ছিক)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "সর্বোচ্চ তিনটি ফাইল, প্রতিটি সর্বোচ্চ ৮ MiB। ছবি, অডিও বা সংক্ষিপ্ত ভিডিও।"
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "আমি সম্মত যে এই নির্দিষ্ট রিপোর্টের জন্য অনুমোদিত তদন্তকারীরা আমার নাম ও ইমেইল দেখতে পারেন। পরে এই অনুমতি প্রত্যাহার করতে পারি।"
+
+msgid "Send confidential report"
+msgstr "গোপনীয় রিপোর্ট পাঠান"
+
+msgid "Could not search users"
+msgstr "ব্যবহারকারী খোঁজা যায়নি"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "সর্বোচ্চ তিনটি ফাইল, প্রতিটি সর্বোচ্চ ৮ MiB।"
+
+msgid "The confidential report could not be saved."
+msgstr "গোপনীয় রিপোর্ট সংরক্ষণ করা যায়নি।"
+
+msgid "Confidential report"
+msgstr "গোপনীয় রিপোর্ট"
+
+msgid "Confidential conversation"
+msgstr "গোপনীয় কথোপকথন"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "যোগাযোগ ভাগাভাগি সক্রিয় না থাকলে তদন্তকারীরা রিপোর্টকারীর পরিচয় না দেখে এই কথোপকথনের মাধ্যমে যোগাযোগ করতে পারেন।"
+
+msgid "Reporter"
+msgstr "রিপোর্টকারী"
+
+msgid "Investigator"
+msgstr "তদন্তকারী"
+
+msgid "Additional evidence (optional)"
+msgstr "অতিরিক্ত প্রমাণ (ঐচ্ছিক)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "সর্বোচ্চ তিনটি ফাইল, প্রতিটি সর্বোচ্চ ৮ MiB; প্রতি রিপোর্টে দশটি ফাইল।"
+
+msgid "Contact shared voluntarily"
+msgstr "স্বেচ্ছায় যোগাযোগ ভাগ করা হয়েছে"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "এই রিপোর্টের জন্য তদন্তকারীদের আমার নাম ও ইমেইল দেখতে দিন"
+
+msgid "This confidential report is not available."
+msgstr "এই গোপনীয় রিপোর্ট উপলব্ধ নয়।"
+
+msgid "Your message could not be saved."
+msgstr "আপনার বার্তা সংরক্ষণ করা যায়নি।"
+
+msgid "Contact sharing could not be updated."
+msgstr "যোগাযোগ শেয়ারিং হালনাগাদ করা যায়নি।"
+
+msgid "Evidence could not be downloaded."
+msgstr "প্রমাণ ডাউনলোড করা যায়নি।"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ফর্ম পূরণ কার্যক্রমের উদাহরণ : বডি মাস ইনডেক্স হিসাব করুন</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>বয়স</strong></td>            <td width=\"75%\" style=\"\">[25] বছর</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>লিঙ্গ</strong></td>            <td style=\"\" text-align:=\"\">[M] (M বা F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>ওজন</strong></td>            <td style=\"\" text-align:=\"\">৯৫ কেজি</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>উচ্চতা</strong></td>            <td style=\"vertical-align: top;\">১.৮১ মি</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>বডি মাস ইনডেক্স</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =ওজন/উচ্চতা<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> উইকিপিডিয়া নিবন্ধ</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>ফর্ম পূরণ কার্যক্রমের উদাহরণ : বডি মাস ইনডেক্স হিসাব করুন</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>বয়স</strong></td>            <td width=\"75%\" style=\"\">[25] বছর</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>লিঙ্গ</strong></td>            <td style=\"\" text-align:=\"\">[M] (M বা F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>ওজন</strong></td>            <td style=\"\" text-align:=\"\">৯৫ কেজি</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>উচ্চতা</strong></td>            <td style=\"vertical-align: top;\">১.৮১ মি</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>বডি মাস ইনডেক্স</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =ওজন/উচ্চতা<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> উইকিপিডিয়া নিবন্ধ</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "প্রতিবেদন থেকে আইপি ঠিকানা লুকান"
+
+msgid "Course settings policies"
+msgstr "কোর্স সেটিংস নীতিমালা"
+
+msgid "Academic transcripts"
+msgstr "একাডেমিক ট্রান্সক্রিপ্ট"
+
+msgid "Transcript program title"
+msgstr "ট্রান্সক্রিপ্ট প্রোগ্রামের শিরোনাম"
+
+msgid "Transcript course code"
+msgstr "ট্রান্সক্রিপ্ট কোর্স কোড"
+
+msgid "Transcript course hours field"
+msgstr "ট্রান্সক্রিপ্ট কোর্স ঘণ্টার ক্ষেত্র"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "ট্রান্সক্রিপ্টে সম্পন্ন ঘণ্টা হলো প্রয়োজনীয় ঘণ্টা"
+
+msgid "Transcript student number field"
+msgstr "ট্রান্সক্রিপ্ট শিক্ষার্থী নম্বর ক্ষেত্র"
+
+msgid "Transcript address fields"
+msgstr "ট্রান্সক্রিপ্ট ঠিকানা ক্ষেত্রসমূহ"
+
+msgid "Transcript grading scale"
+msgstr "ট্রান্সক্রিপ্ট গ্রেডিং স্কেল"
+
+msgid "Transcript GPA note"
+msgstr "ট্রান্সক্রিপ্ট জিপিএ টীকা"
+
+msgid "Transcript signatory name"
+msgstr "ট্রান্সক্রিপ্ট স্বাক্ষরকারীর নাম"
+
+msgid "Transcript signatory title"
+msgstr "ট্রান্সক্রিপ্ট স্বাক্ষরকারীর পদবি"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "স্বাক্ষরিত সনদ এবং ঐচ্ছিক সেপোলিয়া টেস্টনেট অ্যাঙ্করিং সক্রিয় করুন"
+
+msgid "Show thread replies only after participating"
+msgstr "অংশগ্রহণের পরেই থ্রেডের উত্তর দেখান"
+
+msgid "Show the forum category description in threads"
+msgstr "থ্রেডে ফোরাম বিভাগের বিবরণ দেখান"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "ফোরাম অংশগ্রহণ সেটিংস কোর্স অনুযায়ী পরিবর্তন করা যায়"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "একটি ফোরাম থ্রেডে সর্বোচ্চ পোস্ট সংখ্যা"
+
+msgid "Posts required to complete a forum thread"
+msgstr "একটি ফোরাম থ্রেড সম্পন্ন করতে প্রয়োজনীয় পোস্ট"
+
+msgid "Track e-mail openings"
+msgstr "ই-মেইল খোলা ট্র্যাক করুন"
+
+msgid "Allow e-mail replies to messages"
+msgstr "বার্তার ই-মেইল উত্তর অনুমোদন করুন"
+
+msgid "Inbound e-mail address"
+msgstr "ইনবাউন্ড ই-মেইল ঠিকানা"
+
+msgid "Inbound mailbox DSN"
+msgstr "ইনবাউন্ড মেইলবক্স ডিএসএন"
+
+msgid "Remember me duration (days)"
+msgstr "আমাকে মনে রাখুন সময়কাল (দিন)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "এমসিপির বাইরে ওঅথ ডায়নামিক ক্লায়েন্ট রেজিস্ট্রেশন সক্রিয় করুন"
+
+msgid "Enable confidential welfare reporting"
+msgstr "গোপনীয় কল্যাণ প্রতিবেদন সক্রিয় করুন"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "তদন্তের জন্য ন্যূনতম ভিন্ন প্রতিবেদক"
+
+msgid "Allow confidential evidence attachments"
+msgstr "গোপনীয় প্রমাণ সংযুক্তি অনুমোদন করুন"
+
+msgid "Show confidential investigation notifications"
+msgstr "গোপনীয় তদন্ত বিজ্ঞপ্তি দেখান"
+
+msgid "Enable support chatbot"
+msgstr "সহায়তা চ্যাটবট সক্রিয় করুন"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "শব্দকোষের শব্দগুলো স্বয়ংক্রিয়ভাবে কোথায় হাইলাইট হবে তা নির্বাচন করুন: নথি, অনুশীলন এবং শিখন পথ।"
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "দৃশ্যমান প্রতিবেদন ও প্রতিবেদন রপ্তানিতে আইপি ঠিকানা লুকান। আইপি ঠিকানা সংরক্ষিত থাকে এবং অনুমোদিত ব্যক্তিগত-তথ্য প্রক্রিয়ার মাধ্যমে অ্যাক্সেসযোগ্য থাকে।"
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "প্ল্যাটফর্মের ডিফল্ট ও কোর্স সম্পাদনার অনুমতি; কোর্স সেটিংসে পরিচালিত।"
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "ব্যবহারকারীদের সম্পন্ন কোর্সের অনানুষ্ঠানিক ট্রান্সক্রিপ্ট ডাউনলোড করতে দিন, এবং প্রশাসক, সেশন প্রশাসক ও এইচআর ম্যানেজারদের তাদের পরিচালিত ব্যবহারকারীদের জন্য স্বাক্ষরিত অফিসিয়াল ট্রান্সক্রিপ্ট ইস্যু করতে দিন। স্বাক্ষরের ছবি ব্যবহারকারীর ট্রান্সক্রিপ্ট পাতা থেকে আপলোড করা হয়।"
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "প্রতিটি ট্রান্সক্রিপ্টে মুদ্রিত প্রোগ্রামের শিরোনাম, উদাহরণস্বরূপ এই প্ল্যাটফর্মে প্রস্তুত ডিপ্লোমার নাম।"
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "ট্রান্সক্রিপ্টের কোর্স কোড কলাম কোন কোর্স ক্ষেত্রে পূরণ করবে: কোর্স কোড না বিভাগের নাম।"
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "কোর্সের ঘণ্টার সংখ্যা ধারণকারী কোর্স অতিরিক্ত ক্ষেত্রের ভেরিয়েবল। কোর্সের সময়কাল ব্যবহার করতে খালি রাখুন।"
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "শিক্ষার্থীর সম্পন্ন ঘণ্টা হিসেবে কোর্সের প্রয়োজনীয় ঘণ্টা মুদ্রণ করুন। নিষ্ক্রিয় থাকলে, সম্পন্ন ঘণ্টা হলো শিক্ষার্থী কোর্সে যে সময় ব্যয় করেছে।"
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "ট্রান্সক্রিপ্টে মুদ্রিত শিক্ষার্থী নম্বর ধারণকারী ব্যবহারকারী অতিরিক্ত ক্ষেত্রের ভেরিয়েবল। কিছুই মুদ্রণ না করতে খালি রাখুন।"
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "ট্রান্সক্রিপ্টে ব্যবহারকারীর ঠিকানার পরে মুদ্রিত ব্যবহারকারী অতিরিক্ত ক্ষেত্রের কমা-বিচ্ছিন্ন ভেরিয়েবল, উদাহরণস্বরূপ শহর, রাজ্য ও জিপ কোড।"
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "গ্রেড অক্ষরের জেসন তালিকা, সর্বোচ্চ ন্যূনতম স্কোর থেকে নিচে: প্রতিটি আইটেমে শতাংশে ন্যূনতম স্কোর (min), অক্ষর এবং জিপিএ হিসাবের গ্রেড পয়েন্ট থাকে।"
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "জিপিএ কীভাবে হিসাব হয় তার ব্যাখ্যা, ট্রান্সক্রিপ্টে জিপিএর নিচে মুদ্রিত।"
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "অফিসিয়াল ট্রান্সক্রিপ্টে স্বাক্ষর করা স্কুল কর্মকর্তার নাম।"
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "অফিসিয়াল ট্রান্সক্রিপ্টে স্বাক্ষর করা স্কুল কর্মকর্তার পদবি।"
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "মালিকের স্পষ্ট সম্মতি ও প্রশাসকের ম্যানুয়াল পদক্ষেপ প্রয়োজন। চেইনে শুধু এসএইচএ-২৫৬ ফিঙ্গারপ্রিন্ট পাঠানো হয়।"
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "শিক্ষার্থীরা একটি ফোরাম থ্রেডে নিজেরা পোস্ট না করা পর্যন্ত শুধুমাত্র প্রথম পোস্ট দেখতে পায়। প্রশাসক, শিক্ষক, কোচ এবং গ্রুপ টিউটর সবসময় প্রতিটি পোস্ট দেখতে পান।"
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "প্রতিটি থ্রেডের উপরে ফোরাম বিভাগের শিরোনাম এবং সংক্ষিপ্ত বিবরণ প্রদর্শন করুন, সম্পূর্ণ বিবরণ পড়ার লিঙ্কসহ।"
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "সক্রিয় থাকলে, শিক্ষকরা কোর্স সেটিংসের ফোরাম বিভাগে বেছে নিতে পারেন যে তাদের কোর্স শিক্ষার্থী পোস্ট না করা পর্যন্ত থ্রেডের উত্তর লুকিয়ে রাখবে কিনা, থ্রেডে বিভাগের বিবরণ দেখাবে কিনা এবং অংশগ্রহণের অগ্রগতি বার কতগুলো পোস্ট আশা করে, প্ল্যাটফর্ম সেটিংসের পরিবর্তে।"
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "প্ল্যাটফর্ম প্রশাসক নন এমন প্রতিটি ব্যবহারকারীকে (শিক্ষকসহ) এবং লার্নিং পাথের ভিতরে সবাইকে প্রতিটি ফোরাম থ্রেডের শুধুমাত্র এই সংখ্যক পোস্ট দেখান। থ্রেডেড এবং নেস্টেড ভিউতে সীমা প্রতিটি পোস্টের উত্তরের উপর প্রযোজ্য। পোস্টগুলো ভিউয়ের ক্রমে রাখা হয়: প্রথমগুলো, অথবা লার্নিং পাথের ভিতরে সর্বশেষগুলো, যেখানে সর্বশেষ পোস্ট আগে আসে। সব পোস্ট দেখাতে ০ সেট করুন।"
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "প্রতিটি ফোরাম থ্রেডে শিক্ষার্থীদের একটি অগ্রগতি বার দেখান, যা তারা সেখানে এই সংখ্যক বার্তা পোস্ট করলে ১০০% হয়। মডারেশনের অপেক্ষায় থাকা পোস্ট গণনা করা হয়। অগ্রগতি বার লুকাতে ০ সেট করুন।"
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "বার্তা বিজ্ঞপ্তি ই-মেইলে একটি ছোট ট্র্যাকিং ছবি যোগ করে এবং এটি অনুরোধ করা হলে রেকর্ড করে। এটি শুধু নির্দেশ করে যে ই-মেইল খোলা হয়ে থাকতে পারে; এটি পড়া হয়েছে তা প্রমাণ করে না।"
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "সরাসরি বার্তা বিজ্ঞপ্তির প্রাপকদের ই-মেইলের মাধ্যমে উত্তর দেওয়ার অনুমতি দিন। ইনকামিং বার্তাগুলো মেইল অবকাঠামো দ্বারা চামিলো ইনবাউন্ড-মেইল কমান্ডে রাউট করতে হবে।"
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "উত্তর রাউটিংয়ের জন্য ব্যবহৃত বেস ঠিকানা, উদাহরণস্বরূপ replies@example.com। চামিলো প্লাস অ্যাড্রেসিং ব্যবহার করে একটি অনন্য প্রাপক টোকেন যোগ করে।"
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "ইনবাউন্ড উত্তর সংগ্রহের জন্য ব্যবহৃত মেইলবক্স সংযোগ, উদাহরণস্বরূপ imaps:\/\/user:password@imap.example.com:993\/INBOX। শংসাপত্রে সংরক্ষিত অক্ষর URL-এনকোড করুন।"
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Remember me নির্বাচিত থাকলে ব্যবহারকারীকে সাইন ইন রাখার দিনের সংখ্যা। নিষ্ক্রিয় করতে ০ সেট করুন। HTTPS প্রয়োজন। অনুমোদিত পরিসর: ০ থেকে ৯০। সাধারণ সেশন টাইমআউট PHP\/Symfony-তে আলাদাভাবে কনফিগার করা হয়।"
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "ডায়নামিক ক্লায়েন্ট রেজিস্ট্রেশনকে চামিলো OAuth রিসোর্স সার্ভার দ্বারা নিবন্ধিত যেকোনো স্কোপ অনুরোধ করার অনুমতি দেয়। নিষ্ক্রিয় থাকলে, স্ব-নিবন্ধন MCP-তে সীমাবদ্ধ থাকে। রিসোর্স অ্যাক্সেস সর্বদা প্রতিটি ক্লায়েন্টের অনুমোদিত রিসোর্স তালিকা দ্বারা আলাদাভাবে সীমাবদ্ধ।"
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "গোপনীয় ঘটনা রিপোর্ট সক্রিয় করুন। মডিউলের জন্য একটি সুরক্ষিত এনক্রিপশন কী এবং তদন্তকারীর অনুমতি প্রয়োজন।"
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "তদন্তকারীদের কাছে কেস দৃশ্যমান হওয়ার আগে ২ থেকে ১০ জন ভিন্ন রিপোর্টারকে একই ব্যবহারকারীকে রিপোর্ট করতে হবে।"
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "ছবি, অডিও এবং সংক্ষিপ্ত ভিডিও প্রমাণের অনুমতি দিন। নিষ্ক্রিয় থাকলে বিদ্যমান সংযুক্তিগুলো পড়া যায়।"
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "যোগ্য তদন্তের একটি অভ্যন্তরীণ ইঙ্গিত প্রদর্শন করুন। ইমেইল বা বাহ্যিক বিজ্ঞপ্তি পাঠায় না।"
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "চ্যাট প্যানেলে একটি সিদ্ধান্ত-বৃক্ষ চ্যাটবট দেখান যা ব্যবহারকারীদের গাইড করতে পারে "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "শিক্ষকদের কোর্সের ভিতরে AI-সহায়ক শিক্ষামূলক অ্যাপ্লিকেশন তৈরি ও সংস্করণ করার অনুমতি দেয়।"
+
+msgid "Department name"
+msgstr "বিভাগের নাম"
+
+msgid "Documents and exercise"
+msgstr "নথি ও অনুশীলন"
+
+msgid "Documents and learning path"
+msgstr "নথি ও লার্নিং পাথ"
+
+msgid "Documents, exercise and learning path"
+msgstr "নথি, অনুশীলন ও লার্নিং পাথ"
+
+msgid "session"
+msgstr "সেশন"
+
+msgid "course"
+msgstr "কোর্স"
+
+msgid "You have been enrolled in %s"
+msgstr "আপনাকে %s-এ নথিভুক্ত করা হয়েছে"
 

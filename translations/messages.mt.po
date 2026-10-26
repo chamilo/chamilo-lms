@@ -28769,6 +28769,9 @@ msgstr "L-utent attwali ma nstabx."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Hello %s,<br><br>Int irreġistrat fuq %s.<br>Tista' taċċessa l-kont tiegħek minn <a href=\"%s\">hawn</a>.<br><br>Id-dettalji tal-login tiegħek huma:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Dejjem tiegħek,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Hello %s,<br><br>Inti rreġistrat/a fuq %s.<br>Username: <strong>%s</strong><br><br>Jekk jogħġbok ikklikkja l-link hawn taħt biex tissettja l-password tiegħek u taċċessa l-kont tiegħek:<br><a href=\"%s\">Issettja l-password tiegħek</a><br><br>Tislijiet,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Int irreġistrat fuq %s"
 
@@ -41572,4 +41575,1616 @@ msgstr "L-istorja tal-migrazzjoni hija rreġistrata"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s huwa preżenti fl-għerq tal-proġett: ħassru biex tagħlaq l-endpoints tal-aġġornament"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Kisibt ċertifikat għal dan l-eżerċizzju"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Trid tlesti l-mogħdija tat-tagħlim \"%s\" qabel ma tkun tista' taċċessa din."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Żgur li trid tħassar dan il-fajl b'mod definittiv?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Żgur li trid tneħħi dan il-fajl mill-kors magħżul?"
+
+msgid "Attach this file to another course"
+msgstr "Ehmeż dan il-fajl ma' kors ieħor"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Ehmeż mal-kors(ijiet) magħżul(a) (moħbi)"
+
+msgid "Course(s):"
+msgstr "Kors(ijiet):"
+
+msgid "Delete definitively"
+msgstr "Ħassar b'mod definittiv"
+
+msgid "Detach from this course"
+msgstr "Neħħi minn dan il-kors"
+
+msgid "File actions"
+msgstr "Azzjonijiet tal-fajl"
+
+msgid "File Information"
+msgstr "Informazzjoni tal-fajl"
+
+msgid "File Link:"
+msgstr "Link tal-fajl:"
+
+msgid "File Path:"
+msgstr "Mogħdija tal-fajl:"
+
+msgid "Filter courses..."
+msgstr "Iffiltra l-korsijiet..."
+
+msgid "MIME Type:"
+msgstr "Tip MIME:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Ma nstabu l-ebda riżultati."
+
+msgid "Original Name"
+msgstr "Isem oriġinali"
+
+msgid "Original Name:"
+msgstr "Isem oriġinali:"
+
+msgid "Orphan"
+msgstr "Orfni"
+
+msgid "Resource File ID:"
+msgstr "ID tal-fajl tar-riżorsa:"
+
+msgid "Resource Node ID:"
+msgstr "ID tan-nodu tar-riżorsa:"
+
+msgid "Search..."
+msgstr "Fittex..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Biex tneħħi dan il-fajl minn kors speċifiku, ikklikkja l-ikona \"×\" fuq it-tikketta tal-kors korrispondenti hawn fuq."
+
+msgid "User:"
+msgstr "Utent:"
+
+msgid "View file information"
+msgstr "Ara l-informazzjoni tal-fajl"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Tista' tehmeż dan il-fajl ma' kors wieħed jew aktar (moħbi fl-għerq tad-dokumenti). Jekk il-fajl ma jibqax jintuża u jsir orfni, tista' wkoll tħassru b'mod definittiv."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Tista' tagħżel kors wieħed jew aktar (uża Ctrl/Cmd + klikk)."
+
+msgid "bytes"
+msgstr "bytes"
+
+msgid "Failed to copy:"
+msgstr "Falliet il-kopja:"
+
+msgid "Missing resource file identifier."
+msgstr "Identifikatur tal-fajl tar-riżorsa nieqes."
+
+msgid "Please select at least one course."
+msgstr "Jekk jogħġbok agħżel mill-inqas kors wieħed."
+
+msgid "Resource file not found."
+msgstr "Il-fajl tar-riżorsa ma nstabx."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Il-fajl \"%s\" ġie mwaħħal ma' %d kors(ijiet): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Xi korsijiet tqabżu: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Identifikatur tal-fajl jew tal-kors nieqes."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Dan il-fajl tar-riżorsa m'għandux nodu tar-riżorsa u ma jistax jitneħħa."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Il-fajl ġie mneħħi minn %d rabta(t) tal-kors."
+
+msgid "This file is not attached to the selected course."
+msgstr "Dan il-fajl mhuwiex imwaħħal mal-kors magħżul."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Dan il-fajl għadu jintuża minn mill-inqas riżorsa waħda u ma jistax jitħassar."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Il-fajl orfni u l-kontenut fiżiku tiegħu ġew imħassra b'mod definittiv."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Stħarriġ ippubblikat. Maħluqa: %d. Aġġornati: %d. Messaġġi mibgħuta: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Akkwiżibbli"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Din il-ħila ma tistax tigi akkwiżita"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Novizzi"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Aderenza riġida mar-regoli u struzzjonijiet mingħajr kuntest; ftit ġudizzju sitwazzjonali."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Prinċipjant avvanzat"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Jibda jagħraf aspetti sitwazzjonali u mudelli iżda xorta jeħtieġ linji gwida."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kompetenti"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Jiżviluppa l-ippjanar u mudelli mentali; jieħu r-responsabbiltà għar-riżultati iżda jista' jħossu mgħobbi mill-kumplessità."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Kompetenti"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Jara l-\"istampa l-kbira,\" jipprijoritizza b'mod intuwittiv, u jitgħallem mill-esperjenza."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Espert"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Prestazzjoni intuwittiva u fluwida; jiddependi fuq għarfien taċitu profond; jista' jinnova jew jimmaniġġja sitwazzjonijiet ġodda mingħajr sforz."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Tiftakar"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Irkupra, ftakar, jew irrikonoxxi għarfien relevanti mill-memorja fit-tul."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Tifhem"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Ibni tifsira minn messaġġi ta' struzzjoni, inkluż komunikazzjoni orali, miktuba u grafika. Uri l-fehim billi tinterpreta, tagħti eżempji, tikklassifika, taqsar, tinferixxi, tqabbel jew tispjega."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Tapplika"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Wettaq jew uża proċedura billi tesegwiha jew timplimentaha f'sitwazzjoni mogħtija. Uża għarfien jew ħiliet f'sitwazzjonijiet ġodda jew konkreti."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Tanalizza"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Aqsam il-materjal fil-partijiet kostitwenti tiegħu u ddetermina kif il-partijiet jirrelataw ma' xulxin u ma' struttura jew skop ġenerali. Identifika motivi, kawżi jew relazzjonijiet."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Tevalwa"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Agħmel ġudizzji bbażati fuq kriterji u standards. Iċċekkja, ikkritika jew iġġustifika deċiżjonijiet jew linji ta' azzjoni."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Toħloq"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Poġġi elementi flimkien biex tifforma sħiħ koerenti jew funzjonali; riorganizza elementi f'mudell jew struttura ġdida. Ipproduċi xogħol oriġinali jew iġġenera ideat ġodda."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Segwi"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Jaħdem taħt superviżjoni u direzzjoni mill-qrib. Iwettaq kompiti ta' rutina b'diskrezzjoni limitata. Jiffoka fuq is-segwitu tal-istruzzjonijiet u l-eżekuzzjoni bażika."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Assisti"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Jaħdem taħt superviżjoni ta' rutina. Jipprovdi assistenza lill-oħrajn, jikkontribwixxi għal kompiti tat-tim, u jibda jieħu xi inizjattiva fi ħdan limiti definiti."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Jaħdem taħt superviżjoni ġenerali. Japplika għarfien u ħiliet għal firxa ta' attivitajiet ta' rutina u mhux ta' rutina. Jeżerċita xi diskrezzjoni u ġudizzju."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Jaħdem taħt direzzjoni wiesgħa. Jagħti s-setgħa lill-oħrajn billi jipprovdi gwida speċjalizzata, appoġġ jew servizzi. Jieħu r-responsabbiltà għax-xogħol tiegħu stess u jista' jissorvelja timijiet żgħar jew kompiti."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Żgura u agħti parir"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Jaħdem taħt direzzjoni wiesgħa iżda b'awtonomija sinifikanti. Jiżgura li x-xogħol jilħaq l-objettivi u jagħti parir dwar kwistjonijiet kumplessi. Spiss imexxi timijiet jew proġetti u jinfluwenza d-deċiżjonijiet."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Inizja u influwenza"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Għandu awtorità u responsabbiltà definiti għal qasam sinifikanti ta' xogħol. Jinizja azzjonijiet, jinfluwenza l-istrateġija u l-politika fil-qasam tiegħu, u jmexxi proġetti jew timijiet sostanzjali."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Issettja strateġija, ispirazzjoni, mobilizza"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Iżomm awtorità fl-ogħla livell organizzattiv għal qasam ewlieni ta' xogħol. Jissettja strateġija fit-tul, jispiraw u jimmobilizza lill-oħrajn, u jieħu deċiżjonijiet kritiċi għas-suċċess organizzattiv. Jinfluwenza fil-livell tal-industrija jew estern."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Ħin massimu ta' inattività li għandu jitqies (minuti)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Paġna ta' kors miftuħa tkompli tibgħat talbiet awtomatiċi. Wara dan in-numru ta' minuti mingħajr azzjoni vera mill-utent (ftuħ ta' paġna jew oġġett, tweġiba, eċċ.), il-ħin mgħoddi fil-kors jieqaf jiġi magħdud."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Editur Wiki kollaborattiv"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Qed nikkonnettja ma' Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Is-salvataġġ joħloq verżjoni ġdida tal-Wiki ta' Chamilo mill-kontenut attwali ta' Etherpad."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "L-editur kollaborattiv ma setax jiġi mgħobbi."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Attiva Etherpad għall-editjar tal-Wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Uża Etherpad bħala l-editur kollaborattiv għal paġni Wiki eżistenti. Etherpad irid ikun espost fuq l-istess oriġini bħal Chamilo għal sessjonijiet inkorporati siguri."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL ta' Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "URL bażi tal-istanza Etherpad, inkluż mogħdija fakultattiva ta' reverse-proxy. Eżempju: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Ċavetta API ta' Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Ċavetta API użata minn Chamilo biex joħloq pads, sessjonijiet u jissinkronizza l-kontenut tal-Wiki. Ikkonfigura Etherpad biex jaċċetta awtentikazzjoni b'ċavetta API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Il-viżibilità default tad-dokumenti ġodda tista' tinbidel mill-kors"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Viżibilità mogħtija lil dokument, folder jew fajl imtella' ġdid meta għalliem joħloqh f'kors. L-għalliema xorta jistgħu jibdlu l-viżibilità ta' kull wieħed wara."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Meta tkun attivata, l-għalliema jistgħu jagħżlu fis-settings tal-kors il-viżibilità mogħtija lid-dokumenti ġodda tal-kors tagħhom, minflok id-default tal-pjattaforma."
+
+msgid "Default visibility of new learning paths"
+msgstr "Viżibilità default ta' mogħdijiet ta' tagħlim ġodda"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Il-viżibilità default ta' mogħdijiet ta' tagħlim ġodda tista' tinbidel mill-kors"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Viżibilità mogħtija lil mogħdija ta' tagħlim ġdida meta għalliem joħloqha f'kors. L-għalliema xorta jistgħu jibdlu l-viżibilità ta' kull waħda wara."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Meta tkun attivata, l-għalliema jistgħu jagħżlu fis-settings tal-kors il-viżibilità mogħtija lill-mogħdijiet ta' tagħlim ġodda tal-kors tagħhom, minflok id-default tal-pjattaforma."
+
+msgid "Default visibility of new tests"
+msgstr "Viżibilità default ta' testijiet ġodda"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Il-viżibilità default ta' testijiet ġodda tista' tinbidel mill-kors"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Viżibilità mogħtija lil test ġdid meta għalliem joħolqu f'kors. L-għalliema xorta jistgħu jibdlu l-viżibilità ta' kull wieħed wara."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Meta attivata, l-għalliema jistgħu jagħżlu fis-settings tal-kors il-viżibilità mogħtija lit-testijiet ġodda tal-kors tagħhom, minflok id-default tal-pjattaforma."
+
+msgid "Default visibility for new learning paths"
+msgstr "Viżibilità default għal mogħdijiet ta' tagħlim ġodda"
+
+msgid "Default visibility for new tests"
+msgstr "Viżibilità default għal testijiet ġodda"
+
+msgid "Following"
+msgstr "Segwenti"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Irċievi e-mail meta student jikkummenta fuq sottomissjoni ta' dan l-inkarigu"
+
+msgid "Payment history"
+msgstr "Storja tal-ħlasijiet"
+
+msgid "No payments yet"
+msgstr "Għad m'hemmx ħlasijiet"
+
+msgid "Cancel service"
+msgstr "Ikkanċella s-servizz"
+
+msgid "Official transcript"
+msgstr "Traskrizzjoni uffiċjali"
+
+msgid "Unofficial transcript"
+msgstr "Traskrizzjoni mhux uffiċjali"
+
+msgid "Student name"
+msgstr "Isem l-istudent"
+
+msgid "Student number"
+msgstr "Numru tal-istudent"
+
+msgid "Program title"
+msgstr "Titolu tal-programm"
+
+msgid "Required hours"
+msgstr "Sigħat meħtieġa"
+
+msgid "Completion date"
+msgstr "Data tat-tlestija"
+
+msgid "Hours completed"
+msgstr "Sigħat kompluti"
+
+msgid "Final grade"
+msgstr "Grad finali"
+
+msgid "Grade"
+msgstr "Grad"
+
+msgid "No completed course yet."
+msgstr "Għad m'hemmx kors komplut."
+
+msgid "Grading scale"
+msgstr "Skala tal-marki"
+
+msgid "Signature of school official"
+msgstr "Firma tal-uffiċjal tal-iskola"
+
+msgid "School official"
+msgstr "Uffiċjal tal-iskola"
+
+msgid "Official's title"
+msgstr "Titolu tal-uffiċjal"
+
+msgid "Verify this transcript at"
+msgstr "Ivverifika din it-traskrizzjoni fi"
+
+msgid "Verification code"
+msgstr "Kodiċi ta' verifika"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Din it-traskrizzjoni mhux uffiċjali mhix iffirmata. Staqsi amministratur għal traskrizzjoni uffiċjali."
+
+msgid "Transcript verification"
+msgstr "Verifika tat-traskrizzjoni"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Iċċekkja li din it-traskrizzjoni uffiċjali ħarġet u ġiet iffirmata mill-istituzzjoni, ma ġietx mibdula u mhix revokata."
+
+msgid "Valid"
+msgstr "Validu"
+
+msgid "Invalid signature"
+msgstr "Firma invalida"
+
+msgid "Transcript not found"
+msgstr "Traskrizzjoni ma nstabitx"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Il-firma tal-istituzzjoni hija valida u din it-traskrizzjoni ma ġietx revokata."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Din it-traskrizzjoni ma tistax tiġi vverifikata bħala valida. Id-dettalji tagħha mhumiex murija."
+
+msgid "Transcript details"
+msgstr "Dettalji tat-traskrizzjoni"
+
+msgid "Institution"
+msgstr "Istituzzjoni"
+
+msgid "Issued on"
+msgstr "Maħruġa fi"
+
+msgid "Download verification JSON"
+msgstr "Niżżel JSON tal-verifika"
+
+msgid "Transcript"
+msgstr "Traskrizzjoni"
+
+msgid "My confidential reports"
+msgstr "Ir-rapporti kunfidenzjali tiegħi"
+
+msgid "My transcript"
+msgstr "It-traskrizzjoni tiegħi"
+
+msgid "Confidential investigations"
+msgstr "Investigazzjonijiet kunfidenzjali"
+
+msgid "Floor plan"
+msgstr "Pjanta tal-art"
+
+msgid "Click a highlighted room to select it"
+msgstr "Ikklikkja kamra enfasizzata biex tagħżilha"
+
+msgid "Select room"
+msgstr "Agħżel kamra"
+
+msgid "Room on floor plan"
+msgstr "Kamra fuq il-pjanta"
+
+msgid "Select a branch first"
+msgstr "Agħżel fergħa l-ewwel"
+
+msgid "The branch has no attached floor plan"
+msgstr "Il-fergħa m'għandhiex pjanta marbuta"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Uża l-għodda tal-poligonu biex tpinġi l-kamra; uża Edit biex iċċaqlaq il-kantunieri"
+
+msgid "Save room area"
+msgstr "Issejvja ż-żona tal-kamra"
+
+msgid "Clear room area"
+msgstr "Neħħi ż-żona tal-kamra"
+
+msgid "Save the room form to persist the area"
+msgstr "Issejvja l-formola tal-kamra biex iżżomm iż-żona"
+
+msgid "Floor plan unavailable"
+msgstr "Il-pjanta tal-art mhix disponibbli"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Il-punti tal-mappa tal-kamra jridu jkunu fi ħdan il-pjanta tal-art"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Żgur li trid tneħħi ż-żona tal-kamra?"
+
+msgid "View room on floor plan"
+msgstr "Ara l-kamra fuq il-pjanta tal-art"
+
+msgid "No floor plan available"
+msgstr "M'hemmx pjanta tal-art disponibbli"
+
+msgid "This is an assignment by groups"
+msgstr "Din hija assenjazzjoni skont il-gruppi"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Tella' pjanta tal-art PNG, JPEG jew SVG statiku sikur, jew agħżel stampa eżistenti mid-Dokumenti."
+
+msgid "Upload floor plan"
+msgstr "Tella' pjanta tal-art"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG jew SVG statiku, massimu 10 MB"
+
+msgid "Search images by name"
+msgstr "Fittex stampi skont l-isem"
+
+msgid "Image name"
+msgstr "Isem l-istampa"
+
+msgid "Select an image"
+msgstr "Agħżel stampa"
+
+msgid "Change floor plan"
+msgstr "Ibdel il-pjanta tal-art"
+
+msgid "Attach floor plan"
+msgstr "Waħħal pjanta tal-art"
+
+msgid "No matching images found in Documents."
+msgstr "Ma nstabu l-ebda stampi korrispondenti fid-Dokumenti."
+
+msgid "Current floor plan"
+msgstr "Il-pjanta tal-art attwali"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Il-bidliet fil-pjanta tal-art jiġu ssejvjati awtomatikament."
+
+msgid "Remove floor plan"
+msgstr "Neħħi l-pjanta tal-art"
+
+msgid "Cannot load images"
+msgstr "Ma jistgħux jittellgħu l-istampi"
+
+msgid "Floor plan saved"
+msgstr "Il-pjanta tal-art ġiet issejvjata"
+
+msgid "Cannot attach floor plan"
+msgstr "Ma tistax titwaħħal il-pjanta tal-art"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Jintużaw biss stampi PNG/JPEG u SVG statiku sikur sa 10MB."
+
+msgid "Cannot upload floor plan"
+msgstr "Ma tistax titla' l-pjanta tal-art"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Żgur li trid tneħħi l-pjanta tal-art?"
+
+msgid "Floor plan removed"
+msgstr "Il-pjanta tal-art tneħħiet"
+
+msgid "Cannot remove floor plan"
+msgstr "Ma tistax titneħħa l-pjanta tal-art"
+
+msgid "Support bot"
+msgstr "Bot tal-appoġġ"
+
+msgid "Connected"
+msgstr "Konness"
+
+msgid "Not connected"
+msgstr "Mhux konness"
+
+msgid "View ticket"
+msgstr "Ara t-ticket"
+
+msgid "Start a new conversation"
+msgstr "Ibda konverżazzjoni ġdida"
+
+msgid "Video call"
+msgstr "Videoċempel"
+
+msgid "Incoming video call"
+msgstr "Videoċempel deħlin"
+
+msgid "Decline"
+msgstr "Irrifjuta"
+
+msgid "Mute microphone"
+msgstr "Agħlaq il-mikrofonu"
+
+msgid "Unmute microphone"
+msgstr "Iftaħ il-mikrofonu"
+
+msgid "Turn camera off"
+msgstr "Itfi l-kamera"
+
+msgid "Turn camera on"
+msgstr "Ixgħel l-kamera"
+
+msgid "Hang up"
+msgstr "Agħlaq"
+
+msgid "Calling..."
+msgstr "Qed iċempel..."
+
+msgid "Connecting..."
+msgstr "Qed jikkonnetti..."
+
+msgid "Your contact is busy."
+msgstr "Il-kuntatt tiegħek huwa okkupat."
+
+msgid "Your contact did not answer the call."
+msgstr "Il-kuntatt tiegħek ma weġibx iċ-ċempila."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Il-kuntatt tiegħek ma setax jaċċessa l-kamera jew il-mikrofonu."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Il-kuntatt tiegħek ma setax iħejji l-videoċempel."
+
+msgid "Your contact refused the call."
+msgstr "Il-kuntatt tiegħek irrifjuta ċ-ċempila."
+
+msgid "The call timed out."
+msgstr "Iċ-ċempila skadiet."
+
+msgid "Your contact cancelled the call."
+msgstr "Il-kuntatt tiegħek ħassar iċ-ċempila."
+
+msgid "The video connection was lost."
+msgstr "Il-konnessjoni tal-vidjo ntilfet."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Il-kuntatt tiegħek ma setax jistabbilixxi l-konnessjoni tal-vidjo."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Il-kuntatt tiegħek ma setax itemm it-twaqqif tas-sejħa tal-vidjo."
+
+msgid "Your contact hung up."
+msgstr "Il-kuntatt tiegħek qata' s-sejħa."
+
+msgid "Video call could not be started"
+msgstr "Is-sejħa tal-vidjo ma setgħetx tinbeda"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Il-permess tal-kamera jew tal-mikrofonu ġie miċħud."
+
+msgid "No camera or microphone was found."
+msgstr "Ma nstabitx kamera jew mikrofonu."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Il-kamera jew il-mikrofonu diġà qed jintuża jew mhux disponibbli."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Il-kamera jew il-mikrofonu ma jappoġġjax is-settings meħtieġa."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "L-aċċess għall-kamera jew għall-mikrofonu ma setax jinkiseb."
+
+msgid "The video call could not be prepared."
+msgstr "Is-sejħa tal-vidjo ma setgħetx titħejja."
+
+msgid "The video call request could not be sent."
+msgstr "It-talba tas-sejħa tal-vidjo ma setgħetx tintbagħat."
+
+msgid "The incoming video call could not be processed."
+msgstr "Is-sejħa tal-vidjo deħlin ma setgħetx tiġi pproċessata."
+
+msgid "The video call answer could not be prepared."
+msgstr "It-tweġiba tas-sejħa tal-vidjo ma setgħetx titħejja."
+
+msgid "The video call answer could not be sent."
+msgstr "It-tweġiba tas-sejħa tal-vidjo ma setgħetx tintbagħat."
+
+msgid "The video call answer could not be processed."
+msgstr "It-tweġiba tas-sejħa tal-vidjo ma setgħetx tiġi pproċessata."
+
+msgid "The video connection failed"
+msgstr "Il-konnessjoni tal-vidjo falliet"
+
+msgid "The video connection could not be established."
+msgstr "Il-konnessjoni tal-vidjo ma setgħetx tiġi stabbilita."
+
+msgid "No answer was received."
+msgstr "Ma waslet l-ebda tweġiba."
+
+msgid "You refused the call."
+msgstr "Irrifjutajt is-sejħa."
+
+msgid "You cancelled the call."
+msgstr "Ikkanċellajt is-sejħa."
+
+msgid "You hung up."
+msgstr "Qatajt is-sejħa."
+
+msgid "You missed the call."
+msgstr "Tlift is-sejħa."
+
+msgid "Support bot is currently unavailable."
+msgstr "Il-bot tal-appoġġ bħalissa mhux disponibbli."
+
+msgid "A support ticket has been created."
+msgstr "Inħoloq ticket ta' appoġġ."
+
+msgid "Conversation ended."
+msgstr "Il-konversazzjoni ntemmet."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Il-bot tal-appoġġ ma setax ikompli din il-konversazzjoni. Jekk jogħġbok erġa' pprova."
+
+msgid "Add your first term glossary to this course"
+msgstr "Żid l-ewwel glossarju tat-termini ma' dan il-kors"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Żgur li trid tħassar dan il-mudell tal-istħarriġ?"
+
+msgid "The survey template has been deleted."
+msgstr "Il-mudell tal-istħarriġ tħassar."
+
+msgid "Please select a course."
+msgstr "Jekk jogħġbok agħżel kors."
+
+msgid "Please select a session for this course."
+msgstr "Jekk jogħġbok agħżel sessjoni għal dan il-kors."
+
+msgid "The survey has been created from the template."
+msgstr "L-istħarriġ inħoloq mill-mudell."
+
+msgid "Survey templates"
+msgstr "Mudelli tal-istħarriġ"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Oħloq mudelli tal-istħarriġ li jistgħu jerġgħu jintużaw għall-għalliema u assenjahom direttament lil kors jew sessjoni."
+
+msgid "Subtitle"
+msgstr "Sottotitlu"
+
+msgid "Assign to course"
+msgstr "Assenja lill-kors"
+
+msgid "Assign template to course"
+msgstr "Assenja l-mudell lill-kors"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Ħalli s-sessjoni vojta biex toħloq l-istħarriġ direttament fil-kors."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Dan il-kors huwa disponibbli permezz ta' sessjoni f'dan il-portal, għalhekk sessjoni hija meħtieġa."
+
+msgid "Survey template questions"
+msgstr "Mistoqsijiet tal-mudell tal-istħarriġ"
+
+msgid "Back to survey templates"
+msgstr "Lura għall-mudelli tal-istħarriġ"
+
+msgid "Could not load survey template"
+msgstr "Ma setax jitgħabba l-mudell tal-istħarriġ"
+
+msgid "Could not load survey template questions"
+msgstr "Ma setgħux jitgħabbew il-mistoqsijiet tal-mudell tal-istħarriġ"
+
+msgid "Could not save survey template question"
+msgstr "Ma setgħetx tiġi salvata l-mistoqsija tal-mudell tal-istħarriġ"
+
+msgid "Could not delete survey template question"
+msgstr "Ma setgħetx titħassar il-mistoqsija tal-mudell tal-istħarriġ"
+
+msgid "Could not move survey template question"
+msgstr "Ma setgħetx titmexxa l-mistoqsija tal-mudell tal-istħarriġ"
+
+msgid "Could not copy survey template question"
+msgstr "Ma setgħetx tiġi kkupjata l-mistoqsija tal-mudell tal-istħarriġ"
+
+msgid "The survey template has been saved."
+msgstr "Il-mudell tal-istħarriġ ġie salvat."
+
+msgid "Edit survey template"
+msgstr "Editja l-mudell tal-istħarriġ"
+
+msgid "Create survey template"
+msgstr "Oħloq mudell ta' stħarriġ"
+
+msgid "The survey template title is required."
+msgstr "It-titlu tal-mudell ta' stħarriġ huwa meħtieġ."
+
+msgid "Visible as template"
+msgstr "Viżibbli bħala mudell"
+
+msgid "Create satisfaction survey"
+msgstr "Oħloq stħarriġ ta' sodisfazzjon"
+
+msgid "Training satisfaction survey"
+msgstr "Stħarriġ ta' sodisfazzjon tat-taħriġ"
+
+msgid "Could not create satisfaction survey"
+msgstr "Ma setax jinħoloq stħarriġ ta' sodisfazzjon"
+
+msgid "Use template"
+msgstr "Uża mudell"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Oħloq dan l-istħarriġ minn mudell li jista' jerġa' jintuża ppreparat minn amministratur."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Riżultati moħbija mill-għalliem/tutor"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "L-għalliema u t-tuturi xorta jistgħu jaraw l-għadd tar-risposti u jibagħtu tfakkiriet, iżda ma jistgħux jiftħu jew jesportaw ir-riżultati tal-istħarriġ."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Mudell applikat. Irrevedi s-settings tal-istħarriġ u ssejvja biex toħloqu."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Ir-riżultati tal-istħarriġ huma moħbija mill-għalliema u t-tuturi."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Xorta tista' tuża l-paġna tal-istediniet biex tara l-għadd tar-risposti u tibgħat tfakkiriet."
+
+msgid "Payment method"
+msgstr "Metodu ta' ħlas"
+
+msgid "Preview mode"
+msgstr "Modalità ta' previżjoni"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Il-progress u l-punteġġ ma jiġux issejvjati fil-modalità ta' previżjoni."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Din il-link ma tistax tintwera ġewwa l-mogħdija tat-tagħlim."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Iftaħha f'tab ġdida biex tara l-paġna."
+
+msgid "Report a problem with this question"
+msgstr "Irrapporta problema b'din il-mistoqsija"
+
+msgid "Your report was sent to the teacher."
+msgstr "Ir-rapport tiegħek intbagħat lill-għalliem."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Iddeskrivi l-iżball jew il-problema li sibt. Ir-rapport tiegħek se jintbagħat lill-għalliem."
+
+msgid "A comment is required."
+msgstr "Kumment huwa meħtieġ."
+
+msgid "Could not send the report."
+msgstr "Ma setax jintbagħat ir-rapport."
+
+msgid "Learner reports"
+msgstr "Rapporti tal-istudenti"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Ma ġewx sottomessi rapporti tal-istudenti għal din il-mistoqsija."
+
+msgid "View attempt"
+msgstr "Ara t-tentattiv"
+
+msgid "Could not load learner reports."
+msgstr "Ma setgħux jitgħabbew ir-rapporti tal-istudenti."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Ħalli l-istudenti jirrappurtaw problemi fil-mistoqsijiet"
+
+msgid "Skill acquired"
+msgstr "Ħila miksuba"
+
+msgid "AI Toolbox"
+msgstr "Għodda tal-IA"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Iġġenera applikazzjonijiet edukattivi interattivi bl-IA u ssegwi l-progress tal-istudent b'SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Għadhom m'hemmx applikazzjonijiet ippubblikati disponibbli."
+
+msgid "Interactive applications"
+msgstr "Applikazzjonijiet interattivi"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Iġġenera, ittejjeb, ippubblika u rrevedi verżjonijiet minn post wieħed."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Iftaħ applikazzjoni biex tkompli mill-aħħar progress tiegħek."
+
+msgid "Interactive learning application"
+msgstr "Applikazzjoni ta' tagħlim interattiv"
+
+msgid "Create an interactive learning app"
+msgstr "Oħloq app ta' tagħlim interattiv"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Iddeskrivi l-attività. Chamilo se jiġġenera applikazzjoni SCORM bil-verżjonijiet bi traċċar tal-progress u l-punteġġ."
+
+msgid "Idea"
+msgstr "Idea"
+
+msgid "Application"
+msgstr "Applikazzjoni"
+
+msgid "What should the application do?"
+msgstr "X'għandha tagħmel l-applikazzjoni?"
+
+msgid "How it works"
+msgstr "Kif taħdem"
+
+msgid "AI generation"
+msgstr "Ġenerazzjoni bl-IA"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "L-app tiġi ġġenerata mill-istruzzjonijiet tiegħek u maħżuna bħala verżjoni 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Il-progress tal-istudent, il-punteġġ u d-data tar-resume jiġu rrappurtati lil Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Titjib futur joħloq verżjonijiet ġodda mingħajr ma tħassar dawk preċedenti."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Inkludi l-għan tat-tagħlim, ir-regoli, il-livelli, il-punteġġ u x'għandu jiġri meta l-istudent itemm."
+
+msgid "You are not allowed to create content in this context."
+msgstr "M'intix permess toħloq kontenut f'dan il-kuntest."
+
+msgid "The application was generated successfully."
+msgstr "L-applikazzjoni ġiet ġġenerata b'suċċess."
+
+msgid "Open in student view"
+msgstr "Iftaħ fil-veduta tal-istudent"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Iġġenera l-applikazzjoni biex tippermetti l-previżjoni u l-pubblikazzjoni."
+
+msgid "Improve with AI"
+msgstr "Ittejjeb bl-IA"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Iddeskrivi l-bidla. Se tinħoloq verżjoni ġdida u l-verżjonijiet preċedenti jibqgħu disponibbli."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Iddeskrivi l-attività interattiva sħiħa li trid tiġġenera."
+
+msgid "What should be improved?"
+msgstr "X'għandu jitjieb?"
+
+msgid "Generate new version"
+msgstr "Iġġenera verżjoni ġdida"
+
+msgid "Version history"
+msgstr "Storja tal-verżjonijiet"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Ara minn qabel, niżżel jew irrestawra kwalunkwe verżjoni ġġenerata."
+
+msgid "A new version was generated."
+msgstr "Ġiet iġġenerata verżjoni ġdida."
+
+msgid "Version restored"
+msgstr "Verżjoni rrestawrata"
+
+msgid "The support bot tree has been published."
+msgstr "Is-siġra tal-bot tal-appoġġ ġiet ippubblikata."
+
+msgid "The support bot tree has been archived."
+msgstr "Is-siġra tal-bot tal-appoġġ ġiet arkivjata."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Is-siġra tal-bot tal-appoġġ ġiet duplikata."
+
+msgid "The support bot tree has been deleted."
+msgstr "Is-siġra tal-bot tal-appoġġ ġiet imħassra."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Żgur li trid tħassar din is-siġra tal-bot tal-appoġġ?"
+
+msgid "The support bot tree has been imported."
+msgstr "Is-siġra tal-bot tal-appoġġ ġiet importata."
+
+msgid "Create support bot tree"
+msgstr "Oħloq siġra tal-bot tal-appoġġ"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Ibni siġra tad-deċiżjonijiet fissa li tiggwida lill-utenti permezz ta' mistoqsijiet ta' appoġġ u tista' teskalata għal Tickets."
+
+msgid "Portal scope"
+msgstr "Ambitu tal-portal"
+
+msgid "Duplicate"
+msgstr "Duplika"
+
+msgid "Archive"
+msgstr "Arkivja"
+
+msgid "View conversations"
+msgstr "Ara l-konversazzjonijiet"
+
+msgid "Import support bot tree"
+msgstr "Importa siġra tal-bot tal-appoġġ"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importa esportazzjoni JSON jew siġra tad-deċiżjonijiet CSV. Is-siġra importata dejjem tinħoloq bħala abbozz ġdid."
+
+msgid "Resolved"
+msgstr "Riżolta"
+
+msgid "Escalated"
+msgstr "Eskalata"
+
+msgid "Abandoned"
+msgstr "Abbandonata"
+
+msgid "Support bot conversations"
+msgstr "Konversazzjonijiet tal-bot tal-appoġġ"
+
+msgid "Outcome"
+msgstr "Riżultat"
+
+msgid "Started at"
+msgstr "Bdiet fi"
+
+msgid "Ended at"
+msgstr "Spiċċat fi"
+
+msgid "View conversation"
+msgstr "Ara l-konversazzjoni"
+
+msgid "Go to node"
+msgstr "Mur għan-nodu"
+
+msgid "Create support ticket"
+msgstr "Oħloq biljett ta' appoġġ"
+
+msgid "End conversation"
+msgstr "Temm il-konversazzjoni"
+
+msgid "Node"
+msgstr "Nodu"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Siġra tal-bot tal-appoġġ teħtieġ mill-inqas nodu wieħed."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Żgur li trid tħassar dan in-nodu? Il-links lejh se jitneħħew."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Kull nodu tal-bot tal-appoġġ jeħtieġ mill-inqas għażla waħda."
+
+msgid "The support bot tree title is required."
+msgstr "It-titlu tas-siġra tal-bot tal-appoġġ huwa meħtieġ."
+
+msgid "A support bot entry node is required."
+msgstr "Nodu tad-dħul tal-bot tal-appoġġ huwa meħtieġ."
+
+msgid "Every support bot node requires content."
+msgstr "Kull nodu tal-bot tal-appoġġ jeħtieġ kontenut."
+
+msgid "Every support bot option requires a label."
+msgstr "Kull għażla tal-bot tal-appoġġ teħtieġ tikketta."
+
+msgid "Select a target node for every go-to option."
+msgstr "Agħżel nodu fil-mira għal kull għażla ta' mur-għal."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Daħħal URL relattiv għal kull għażla ta' link."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Agħżel kategorija ta' biljett għal kull għażla ta' eskalazzjoni."
+
+msgid "The support bot tree has been saved."
+msgstr "Is-siġra tal-bot tal-appoġġ ġiet salvata."
+
+msgid "Edit support bot tree"
+msgstr "Editja s-siġra tal-bot tal-appoġġ"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Il-verżjonijiet ippubblikati u arkivjati tal-bot tal-appoġġ huma għall-qari biss. Duplika din is-siġra mil-lista biex teditja verżjoni abbozz ġdida."
+
+msgid "Default ticket project"
+msgstr "Proġett tal-biljetti awtomatiku"
+
+msgid "Decision tree rules"
+msgstr "Regoli tas-siġra tad-deċiżjonijiet"
+
+msgid "Every node must contain at least one option."
+msgstr "Kull nodu jrid ikun fih mill-inqas għażla waħda."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Nodu finali jrid itemm il-konversazzjoni jew joħloq ticket ta’ appoġġ."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Il-links go-to ma jistgħux joħolqu ċikli fil-v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "URLs esterni mhumiex permessi fil-v1; l-azzjonijiet tal-link iridu jużaw triq relattiva ta’ Chamilo."
+
+msgid "Nodes"
+msgstr "Nodi"
+
+msgid "Add node"
+msgstr "Żid nodu"
+
+msgid "Entry node"
+msgstr "Nodu tad-dħul"
+
+msgid "Set as entry node"
+msgstr "Issettja bħala nodu tad-dħul"
+
+msgid "Target node"
+msgstr "Nodu fil-mira"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Uża triq relattiva ta’ Chamilo, pereżempju /tickets."
+
+msgid "Ticket category"
+msgstr "Kategorija tat-ticket"
+
+msgid "Select a default ticket project first."
+msgstr "L-ewwel agħżel proġett ta’ tickets default."
+
+msgid "Closing message"
+msgstr "Messaġġ tal-għeluq"
+
+msgid "Select a node to edit it."
+msgstr "Agħżel nodu biex teditjah."
+
+msgid "Support bot conversation"
+msgstr "Konversazzjoni tal-bot tal-appoġġ"
+
+msgid "Transcript of %s"
+msgstr "Traskrizzjoni ta’ %s"
+
+msgid "Download unofficial transcript"
+msgstr "Niżżel traskrizzjoni mhux uffiċjali"
+
+msgid "Issue official transcript"
+msgstr "Ħruġ traskrizzjoni uffiċjali"
+
+msgid "Official transcripts"
+msgstr "Traskrizzjonijiet uffiċjali"
+
+msgid "No official transcript has been issued yet."
+msgstr "Għadha ma ħarġet l-ebda traskrizzjoni uffiċjali."
+
+msgid "Issued by"
+msgstr "Maħruġa minn"
+
+msgid "Verify"
+msgstr "Ivverifika"
+
+msgid "Signature of official transcripts"
+msgstr "Firma tat-traskrizzjonijiet uffiċjali"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Din l-immaġni tiġi stampata fuq it-traskrizzjonijiet uffiċjali ta’ dan il-portal, fuq l-isem u t-titolu tal-firmatarju stabbiliti fl-issettjar taċ-ċertifikat."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Ħruġ traskrizzjoni uffiċjali ffirmata bil-korsijiet u l-gradi elenkati f’din il-paġna? Tista’ tiġi vverifikata online sakemm tiġi revokata."
+
+msgid "Official transcript issued"
+msgstr "Traskrizzjoni uffiċjali maħruġa"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Revoka din it-traskrizzjoni uffiċjali? Il-paġna tal-verifika mbagħad turiha bħala revokata."
+
+msgid "Official transcript revoked"
+msgstr "Traskrizzjoni uffiċjali revokata"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "L-ewwel agħżel immaġni PNG jew JPEG."
+
+msgid "Signed credential"
+msgstr "Kredenzjal iffirmat"
+
+msgid "Issue signed credential"
+msgstr "Ħruġ kredenzjal iffirmat"
+
+msgid "Verify credential"
+msgstr "Ivverifika kredenzjal"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Ankra fuq in-netwerk tat-test Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Ikkonferma transazzjoni eżistenti ta’ Sepolia"
+
+msgid "Revoke signed credential"
+msgstr "Revoka kredenzjal iffirmat"
+
+msgid "Delete certificate"
+msgstr "Ħassar ċertifikat"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Ikkonferma transazzjoni eżistenti ta’ Sepolia"
+
+msgid "Sepolia transaction hash"
+msgstr "Hash tat-transazzjoni ta’ Sepolia"
+
+msgid "Verify transaction"
+msgstr "Ivverifika transazzjoni"
+
+msgid "Anchored"
+msgstr "Ankrat"
+
+msgid "Issued"
+msgstr "Maħruġ"
+
+msgid "Not issued"
+msgstr "Mhux maħruġ"
+
+msgid "Consent required"
+msgstr "Meħtieġ kunsens"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Transazzjoni ta’ Sepolia kkonfermata u vverifikata"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Il-wallet tan-netwerk tat-test Sepolia se jitolbok tiffirma transazzjoni. Se jiġi ankrat biss il-marka tas-swaba’ taċ-ċertifikat. Ipproċedi?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Revoka dan il-kredenzjal iffirmat? Kull transazzjoni blockchain tibqa’ permanenti, iżda l-paġna tal-verifika se tirrapporta r-revoka."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Ħruġ kredenzjal ta’ ċertifikat iffirmat għal dan l-istudent? Dan jagħmel id-dettalji personali approvati verifikabbli b’link privat."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Għal Sepolia huwa meħtieġ wallet tal-browser kompatibbli mal-EVM."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Agħżel in-netwerk tat-test Sepolia (chain ID 11155111) fil-wallet tiegħek."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Indirizz tal-wallet jew fingerprint taċ-ċertifikat invalidu."
+
+msgid "Transaction pending"
+msgstr "Transazzjoni pendenti"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Uża Ikkonferma transazzjoni eżistenti ta' Sepolia aktar tard."
+
+msgid "Signed credential issued"
+msgstr "Kredenzjal iffirmat maħruġ"
+
+msgid "Credential revoked"
+msgstr "Kredenzjal revokat"
+
+msgid "Transaction hash"
+msgstr "Hash tat-transazzjoni"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Il-kunsens għall-pubblikazzjoni jippermetti lil amministratur joħroġ kredenzjal ta' ċertifikat iffirmat u, fakultattivament, jankra l-fingerprint SHA-256 tiegħu fuq in-netwerk tat-test Sepolia. L-ebda isem jew data personali ma jintbagħat on-chain. Tista' tirtira l-kunsens fi kwalunkwe ħin."
+
+msgid "Publication consent"
+msgstr "Kunsens għall-pubblikazzjoni"
+
+msgid "Not approved"
+msgstr "Mhux approvat"
+
+msgid "Withdraw consent"
+msgstr "Irtira l-kunsens"
+
+msgid "Approve publication"
+msgstr "Approva l-pubblikazzjoni"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Nawtorizza kredenzjal iffirmat, verifikabbli pubblikament, li juri ismi, il-kors, il-punteġġ u d-data tal-ħruġ. Amministratur jista' wkoll jippubblika biss il-fingerprint SHA-256 tiegħu fuq in-netwerk tat-test Sepolia. Il-fingerprint huwa permanenti, anke jekk nirtira aktar tard. Kompli?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Tirtira l-approvazzjoni tal-pubblikazzjoni għal dan iċ-ċertifikat?"
+
+msgid "Publication approval recorded"
+msgstr "Approvazzjoni tal-pubblikazzjoni rreġistrata"
+
+msgid "Publication approval withdrawn"
+msgstr "Approvazzjoni tal-pubblikazzjoni irtirata"
+
+msgid "Read more"
+msgstr "Aqra aktar"
+
+msgid "Participation: %s of %s posts"
+msgstr "Parteċipazzjoni: %s minn %s posts"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Ipposta l-kontribut tiegħek biex tara t-tweġibiet tal-parteċipanti l-oħra."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Investigaturi awtorizzati biss jistgħu jirrevedu rapporti eliġibbli. L-identitajiet tar-rapportaturi jibqgħu kunfidenzjali b'mod awtomatiku."
+
+msgid "New confidential report"
+msgstr "Rapport kunfidenzjali ġdid"
+
+msgid "Reported user"
+msgstr "Utent irrappurtat"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Hemm rapporti kunfidenzjali eliġibbli li jistennew reviżjoni."
+
+msgid "Eligible investigations"
+msgstr "Investigazzjonijiet eliġibbli"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Każ jidher hawn biss wara li mill-inqas %s utenti differenti jirrappurtaw l-istess persuna."
+
+msgid "Distinct reporters"
+msgstr "Rapportaturi distinti"
+
+msgid "Reports for selected user"
+msgstr "Rapporti għall-utent magħżul"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Ir-rappurtar kunfidenzjali bħalissa mhux disponibbli."
+
+msgid "The investigation could not be loaded."
+msgstr "L-investigazzjoni ma setgħetx titgħabba."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "L-identità tiegħek hija protetta mill-investigaturi b'mod awtomatiku, iżda evita li tinkludi dettalji identifikabbli fit-test tar-rapport jew fl-annessi. Dan mhuwiex servizz ta' emerġenza."
+
+msgid "Find the user involved"
+msgstr "Sib l-utent involut"
+
+msgid "Name or username"
+msgstr "Isem jew username"
+
+msgid "Describe the situation"
+msgstr "Iddeskrivi s-sitwazzjoni"
+
+msgid "Evidence (optional)"
+msgstr "Evidenza (fakultattiva)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Sa tliet fajls, massimu ta' 8 MiB kull wieħed. Stampi, awdjo jew vidjows qosra."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Naqbel li investigaturi awtorizzati jistgħu jaraw ismi u l-email tiegħi għal dan ir-rapport speċifiku. Nista' nirtira din il-permess aktar tard."
+
+msgid "Send confidential report"
+msgstr "Ibgħat rapport kunfidenzjali"
+
+msgid "Could not search users"
+msgstr "Ma setgħux jinstabu utenti"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Sa tliet fajls, massimu ta' 8 MiB kull wieħed."
+
+msgid "The confidential report could not be saved."
+msgstr "Ir-rapport kunfidenzjali ma setax jiġi ssejvjat."
+
+msgid "Confidential report"
+msgstr "Rapport kunfidenzjali"
+
+msgid "Confidential conversation"
+msgstr "Konversazzjoni kunfidenzjali"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "L-investigaturi jistgħu jikkomunikaw permezz ta' din il-konversazzjoni mingħajr ma jaraw l-identità tar-rapportatur sakemm il-qsim tal-kuntatt ma jkunx attivat."
+
+msgid "Reporter"
+msgstr "Rapportatur"
+
+msgid "Investigator"
+msgstr "Investigatur"
+
+msgid "Additional evidence (optional)"
+msgstr "Evidenza addizzjonali (fakultattiva)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Sa tliet fajls, massimu ta' 8 MiB kull wieħed; għaxar fajls għal kull rapport."
+
+msgid "Contact shared voluntarily"
+msgstr "Kuntatt maqsum b'mod volontarju"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Ħalli lill-investigaturi jaraw ismi u l-email tiegħi għal dan ir-rapport"
+
+msgid "This confidential report is not available."
+msgstr "Dan ir-rapport kunfidenzjali mhuwiex disponibbli."
+
+msgid "Your message could not be saved."
+msgstr "Il-messaġġ tiegħek ma setax jiġi ssejvjat."
+
+msgid "Contact sharing could not be updated."
+msgstr "Il-qsim tal-kuntatti ma setax jiġi aġġornat."
+
+msgid "Evidence could not be downloaded."
+msgstr "L-evidenza ma setgħetx titniżżel."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Eżempju ta’ attività biex timla l-formola: ikkalkula l-Indiċi tal-Massa tal-Ġisem</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Età</strong></td>            <td width=\"75%\" style=\"\">[25] sena</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sess</strong></td>            <td style=\"\" text-align:=\"\">[M] (M jew F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Piż</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Għoli</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Indiċi tal-Massa tal-Ġisem</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Piż/Għoli<sup>2</sup> (Ara <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> l-artiklu ta’ Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Eżempju ta’ attività biex timla l-formola: ikkalkula l-Indiċi tal-Massa tal-Ġisem</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Età</strong></td>            <td width=\"75%\" style=\"\">[25] sena</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sess</strong></td>            <td style=\"\" text-align:=\"\">[M] (M jew F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Piż</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Għoli</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Indiċi tal-Massa tal-Ġisem</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Piż/Għoli<sup>2</sup> (Ara <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> l-artiklu ta’ Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Aħbi l-indirizz IP mir-rapporti"
+
+msgid "Course settings policies"
+msgstr "Politiki tas-settings tal-kors"
+
+msgid "Academic transcripts"
+msgstr "Traskrizzjonijiet akkademiċi"
+
+msgid "Transcript program title"
+msgstr "Titlu tal-programm fuq it-traskrizzjoni"
+
+msgid "Transcript course code"
+msgstr "Kodiċi tal-kors fuq it-traskrizzjoni"
+
+msgid "Transcript course hours field"
+msgstr "Qasam tas-sigħat tal-kors fuq it-traskrizzjoni"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Is-sigħat kompluti fuq it-traskrizzjoni huma s-sigħat meħtieġa"
+
+msgid "Transcript student number field"
+msgstr "Qasam tan-numru tal-istudent fuq it-traskrizzjoni"
+
+msgid "Transcript address fields"
+msgstr "Oqsma tal-indirizz fuq it-traskrizzjoni"
+
+msgid "Transcript grading scale"
+msgstr "Skala tal-marki fuq it-traskrizzjoni"
+
+msgid "Transcript GPA note"
+msgstr "Nota tal-GPA fuq it-traskrizzjoni"
+
+msgid "Transcript signatory name"
+msgstr "Isem tal-firmatarju fuq it-traskrizzjoni"
+
+msgid "Transcript signatory title"
+msgstr "Titlu tal-firmatarju fuq it-traskrizzjoni"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Attiva ċertifikati ffirmati u ankrar fakultattiv fuq it-testnet Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Uri r-risposti tal-ħajt biss wara l-parteċipazzjoni"
+
+msgid "Show the forum category description in threads"
+msgstr "Uri d-deskrizzjoni tal-kategorija tal-forum fil-ħjut"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Is-settings tal-parteċipazzjoni fil-forum jistgħu jinbidlu skont il-kors"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Massimu ta’ posts murija f’ħajt tal-forum"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Posts meħtieġa biex jitlesta ħajt tal-forum"
+
+msgid "Track e-mail openings"
+msgstr "Traċċa l-ftuħ tal-e-mails"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Ħalli r-risposti bl-e-mail għall-messaġġi"
+
+msgid "Inbound e-mail address"
+msgstr "Indirizz tal-e-mail deħlin"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN tal-kaxxa tal-posta deħlin"
+
+msgid "Remember me duration (days)"
+msgstr "Tul ta’ “Ftakar fija” (jiem)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Attiva r-Reġistrazzjoni Dinamika tal-Klijent OAuth lil hinn mill-MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Attiva r-rappurtar kunfidenzjali tal-benesseri"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Minimu ta’ rapportaturi distinti għal investigazzjoni"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Ħalli annessi ta’ evidenza kunfidenzjali"
+
+msgid "Show confidential investigation notifications"
+msgstr "Uri notifiki ta’ investigazzjonijiet kunfidenzjali"
+
+msgid "Enable support chatbot"
+msgstr "Attiva l-chatbot tal-appoġġ"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Agħżel fejn it-termini tal-glossarju jiġu enfasizzati awtomatikament: dokumenti, eżerċizzji u mogħdijiet ta’ tagħlim."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Aħbi l-indirizzi IP fir-rappurtar viżwali u fl-esportazzjonijiet tar-rapporti. L-indirizzi IP jibqgħu maħżuna u aċċessibbli permezz ta’ proċeduri awtorizzati tad-data personali."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Defaults tal-pjattaforma u permessi ta’ editjar tal-kors; immaniġġjati f’Settings tal-kors."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Ħalli lill-utenti jniżżlu traskrizzjoni mhux uffiċjali tal-korsijiet li temmew, u ħalli lill-amministraturi, amministraturi tas-sessjonijiet u maniġers tar-riżorsi umani joħorġu traskrizzjonijiet uffiċjali ffirmati għall-utenti li jimmaniġġjaw. L-immaġni tal-firma tittella’ mill-paġna tat-traskrizzjoni ta’ utent."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Titlu tal-programm stampat fuq kull traskrizzjoni, pereżempju l-isem tad-diploma ppreparata fuq din il-pjattaforma."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Liema qasam tal-kors jimla l-kolonna tal-kodiċi tal-kors fit-traskrizzjonijiet: il-kodiċi tal-kors jew l-isem tad-dipartiment."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Varjabbli tal-qasam żejjed tal-kors li jżomm in-numru ta’ sigħat ta’ kors. Ħalli vojt biex tuża t-tul tal-kors."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Istampa s-sigħat meħtieġa ta’ kors bħala s-sigħat kompluti mill-istudent. Meta tkun diżattivata, is-sigħat kompluti huma l-ħin li l-istudent qatta’ fil-kors."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Varjabbli tal-qasam żejjed tal-utent li jżomm in-numru tal-istudent stampat fuq it-traskrizzjonijiet. Ħalli vojt biex ma tistampax xejn."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Varjabbli, separati b’virgola, ta’ oqsma żejda tal-utent stampati wara l-indirizz tal-utent fuq it-traskrizzjonijiet, pereżempju l-belt, l-istat u l-kodiċi postali."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Lista JSON tal-ittri tal-marki, mill-ogħla punteġġ minimu 'l isfel: kull element għandu l-punteġġ minimu f’persentaġġ (min), l-ittra u l-punti tal-marka użati biex jiġi kkalkulat il-GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Spjegazzjoni ta’ kif jiġi kkalkulat il-GPA, stampata taħt il-GPA fuq it-traskrizzjonijiet."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Isem tal-uffiċjal tal-iskola li jiffirma t-traskrizzjonijiet uffiċjali."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Titlu tal-uffiċjal tal-iskola li jiffirma t-traskrizzjonijiet uffiċjali."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Jeħtieġ kunsens espliċitu tas-sid u azzjonijiet manwali tal-amministratur. Fuq il-katina jintbagħtu biss fingerprints SHA-256."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "L-istudenti jaraw biss l-ewwel post ta’ ħajt tal-forum sakemm jippostjaw fih huma stess. L-amministraturi, l-għalliema, il-kowċis u t-tuturi tal-gruppi jaraw dejjem kull post."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Uri t-titlu u deskrizzjoni mqassra tal-kategorija tal-forum fil-quċċata ta’ kull thread, b’link biex taqra d-deskrizzjoni sħiħa."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Meta tkun attivata, l-għalliema jistgħu jagħżlu fis-sezzjoni Forum tas-settings tal-kors jekk il-kors jaħbix it-tweġibiet tat-thread sakemm l-istudent jippubblika, juri d-deskrizzjoni tal-kategorija fit-threads u kemm postijiet il-progress bar tal-parteċipazzjoni tistenna, minflok isegwu s-settings tal-pjattaforma."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Uri biss dan in-numru ta’ postijiet ta’ kull thread tal-forum lil kull utent li mhuwiex amministratur tal-pjattaforma, inklużi l-għalliema, u lil kulħadd ġewwa mogħdija tat-tagħlim. Fil-veduti threaded u nested, il-limitu japplika għat-tweġibiet ta’ kull post. Il-postijiet jinżammu fl-ordni tal-veduta: l-ewwel, jew l-aktar reċenti ġewwa mogħdija tat-tagħlim, fejn l-aħħar postijiet jiġu l-ewwel. Issettja għal 0 biex turi kull post."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Uri lill-istudenti progress bar f’kull thread tal-forum, li tilħaq 100% ladarba jkunu ppubblikaw dan in-numru ta’ messaġġi fih. Il-postijiet li qed jistennew moderazzjoni jingħaddu. Issettja għal 0 biex taħbi l-progress bar."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Iżżid stampa żgħira ta’ tracking mal-emails ta’ notifika tal-messaġġi u tirreġistra meta tintalab. Dan jindika biss li l-email setgħet infetħet; ma jippruvax li nqrat."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Ħalli r-riċevituri tan-notifiki ta’ messaġġi diretti jwieġbu bl-email. Il-messaġġi deħlin iridu jiġu rrotati lejn il-kmand inbound-mail ta’ Chamilo mill-infrastruttura tal-posta."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Indirizz bażi użat għar-rotta tat-tweġibiet, pereżempju replies@example.com. Chamilo iżżid token uniku tar-riċevitur billi tuża plus addressing."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Konnessjoni tal-mailbox użata biex tinġabar tweġibiet deħlin, pereżempju imaps://user:password@imap.example.com:993/INBOX. Ikkodifika URL karattri riżervati fil-kredenzjali."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Numru ta’ jiem biex utent jibqa’ ffirmat meta jintgħażel Remember me. Issettja għal 0 biex tiddiżattiva. Teħtieġ HTTPS. Firxa permessa: 0 sa 90. It-timeout normali tas-sessjoni huwa kkonfigurat separatament f’PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Tippermetti lid-Dynamic Client Registration jitlob kwalunkwe scope irreġistrat minn server tar-riżorsi OAuth ta’ Chamilo. Meta tkun diżattivata, l-awto-reġistrazzjoni tibqa’ limitata għal MCP. L-aċċess għar-riżorsi huwa dejjem ristrett separatament mil-lista tar-riżorsi permessi ta’ kull klijent."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Attiva rapporti kunfidenzjali ta’ inċidenti. Il-modulu jeħtieġ ċavetta ta’ encryption protetta u permess ta’ investigatur."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Bejn 2 u 10 reporters differenti jridu jirrappurtaw l-istess utent qabel il-każ isir viżibbli għall-investigaturi."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Ħalli stampi, awdjo u evidenza qasira tal-vidjo. L-annessi eżistenti jibqgħu jinqraw meta tkun diżattivata."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Uri indikazzjoni interna ta’ investigazzjonijiet eliġibbli. Ma tibgħatx emails jew notifiki esterni."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Uri chatbot ta’ siġra tad-deċiżjonijiet fil-pannell tal-chat li jista’ jiggwida lill-utenti lejn "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Tippermetti lill-għalliema joħolqu u jagħmlu verżjonijiet ta’ applikazzjonijiet edukattivi assistiti mill-IA ġewwa l-korsijiet."
+
+msgid "Department name"
+msgstr "Isem id-dipartiment"
+
+msgid "Documents and exercise"
+msgstr "Dokumenti u eżerċizzju"
+
+msgid "Documents and learning path"
+msgstr "Dokumenti u mogħdija tat-tagħlim"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokumenti, eżerċizzju u mogħdija tat-tagħlim"
+
+msgid "session"
+msgstr "sessjoni"
+
+msgid "course"
+msgstr "kors"
+
+msgid "You have been enrolled in %s"
+msgstr "Ġejt irreġistrat/a f’%s"
 

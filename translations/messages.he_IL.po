@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "בכנות"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "דוגמת נוסחה: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "דוגמת נוסחה: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "טווחים משתנים"
@@ -28781,6 +28781,9 @@ msgstr "משתמש נוכחי לא נמצא."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "שלום %s,<br><br>אתה רשום ב-%s.<br>תוכל לגשת לחשבון שלך מ-<a href=\"%s\">כאן</a>.<br><br>פרטי הכניסה שלך הם:<br>שם משתמש: <strong>%s</strong><br>סיסמה: <strong>%s</strong><br><br>בברכה,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "שלום %s,<br><br>נרשמת ב-%s.<br>שם משתמש: <strong>%s</strong><br><br>אנא לחץ על הקישור למטה כדי להגדיר את הסיסמה שלך ולגשת לחשבון:<br><a href=\"%s\">הגדר את הסיסמה שלך</a><br><br>בברכה,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "אתה רשום ב-%s"
 
@@ -41584,4 +41587,1616 @@ msgstr "היסטוריית המיגרציות מתועדת"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s קיים בשורש הפרויקט: מחקו אותו כדי לסגור את נקודות הקצה של השדרוג"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "הרווחת תעודה עבור תרגיל זה"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "עליך להשלים את מסלול הלמידה \"%s\" לפני שתוכל לגשת לזה."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "האם אתה בטוח שברצונך למחוק קובץ זה לצמיתות?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "האם אתה בטוח שברצונך לנתק קובץ זה מהקורס שנבחר?"
+
+msgid "Attach this file to another course"
+msgstr "צרף קובץ זה לקורס אחר"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "צרף לקורס(ים) שנבחרו (מוסתר)"
+
+msgid "Course(s):"
+msgstr "קורס(ים):"
+
+msgid "Delete definitively"
+msgstr "מחק לצמיתות"
+
+msgid "Detach from this course"
+msgstr "נתק מקורס זה"
+
+msgid "File actions"
+msgstr "פעולות קובץ"
+
+msgid "File Information"
+msgstr "מידע על הקובץ"
+
+msgid "File Link:"
+msgstr "קישור לקובץ:"
+
+msgid "File Path:"
+msgstr "נתיב הקובץ:"
+
+msgid "Filter courses..."
+msgstr "סנן קורסים..."
+
+msgid "MIME Type:"
+msgstr "סוג MIME:"
+
+msgid "N/A"
+msgstr "לא זמין"
+
+msgid "No results found."
+msgstr "לא נמצאו תוצאות."
+
+msgid "Original Name"
+msgstr "שם מקורי"
+
+msgid "Original Name:"
+msgstr "שם מקורי:"
+
+msgid "Orphan"
+msgstr "יתום"
+
+msgid "Resource File ID:"
+msgstr "מזהה קובץ משאב:"
+
+msgid "Resource Node ID:"
+msgstr "מזהה צומת משאב:"
+
+msgid "Search..."
+msgstr "חיפוש..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "כדי לנתק קובץ זה מקורס מסוים, לחץ על סמל \"×\" בתג הקורס המתאים למעלה."
+
+msgid "User:"
+msgstr "משתמש:"
+
+msgid "View file information"
+msgstr "הצג מידע על הקובץ"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "ניתן לצרף קובץ זה לקורס אחד או יותר (מוסתר בשורש המסמכים). אם הקובץ אינו בשימוש יותר והופך ליתום, ניתן גם למחוק אותו לצמיתות."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "ניתן לבחור קורס אחד או יותר (השתמש ב-Ctrl/Cmd + לחיצה)."
+
+msgid "bytes"
+msgstr "בתים"
+
+msgid "Failed to copy:"
+msgstr "ההעתקה נכשלה:"
+
+msgid "Missing resource file identifier."
+msgstr "חסר מזהה קובץ משאב."
+
+msgid "Please select at least one course."
+msgstr "אנא בחר לפחות קורס אחד."
+
+msgid "Resource file not found."
+msgstr "קובץ המשאב לא נמצא."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "הקובץ \"%s\" צורף ל-%d קורס(ים): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "חלק מהקורסים דולגו: %s."
+
+msgid "Missing file or course identifier."
+msgstr "חסר מזהה קובץ או קורס."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "לקובץ משאב זה אין צומת משאב ולא ניתן לנתק אותו."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "הקובץ נותק מ-%d קישור(י) קורס."
+
+msgid "This file is not attached to the selected course."
+msgstr "קובץ זה אינו מצורף לקורס שנבחר."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "קובץ זה עדיין בשימוש על ידי משאב אחד לפחות ולא ניתן למחוק אותו."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "קובץ יתום והתוכן הפיזי שלו נמחקו לצמיתות."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "הסקר פורסם. נוצרו: %d. עודכנו: %d. הודעות שנשלחו: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "ניתן לרכישה"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "לא ניתן לרכוש מיומנות זו"
+
+#: issue-8179
+msgid "Novice"
+msgstr "מתחיל"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "הקפדה נוקשה על כללים והוראות ללא הקשר; שיפוט מצבי מועט."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "מתחיל מתקדם"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "מתחיל לזהות היבטים מצביים ודפוסים אך עדיין זקוק להנחיות."
+
+#: issue-8179
+msgid "Competent"
+msgstr "מוכשר"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "מפתח תכנון ומודלים מנטליים; נוטל אחריות על התוצאות אך עלול להרגיש מוצף מהמורכבות."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "מיומן"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "רואה את \"התמונה הגדולה\", מתעדף באופן אינטואיטיבי ולומד מהניסיון."
+
+#: issue-8179
+msgid "Expert"
+msgstr "מומחה"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "ביצוע אינטואיטיבי ושוטף; מסתמך על ידע סמוי עמוק; יכול לחדש או להתמודד עם מצבים חדשים ללא מאמץ."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "זכירה"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "אחזור, היזכרות או זיהוי של ידע רלוונטי מהזיכרון לטווח ארוך."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "הבנה"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "בניית משמעות ממסרים הוראתיים, כולל תקשורת בעל פה, בכתב וגרפית. הפגנת הבנה באמצעות פרשנות, מתן דוגמאות, סיווג, סיכום, הסקה, השוואה או הסבר."
+
+#: issue-8179
+msgid "Applying"
+msgstr "יישום"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "ביצוע או שימוש בהליך באמצעות הרצה או יישום במצב נתון. שימוש בידע או במיומנויות במצבים חדשים או מוחשיים."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "ניתוח"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "פירוק החומר לחלקיו המרכיבים וקביעת הקשר בין החלקים למבנה או למטרה כוללת. זיהוי מניעים, סיבות או קשרים."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "הערכה"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "מתן שיפוטים על סמך קריטריונים וסטנדרטים. בדיקה, ביקורת או הצדקה של החלטות או דרכי פעולה."
+
+#: issue-8179
+msgid "Creating"
+msgstr "יצירה"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "חיבור אלמנטים ליצירת שלם קוהרנטי או פונקציונלי; ארגון מחדש של אלמנטים לדפוס או מבנה חדש. הפקת עבודה מקורית או יצירת רעיונות חדשים."
+
+#: issue-8179
+msgid "Follow"
+msgstr "מעקב"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "עובד תחת פיקוח והנחיה צמודים. מבצע משימות שגרתיות עם שיקול דעת מוגבל. מתמקד בביצוע הוראות ובביצוע בסיסי."
+
+#: issue-8179
+msgid "Assist"
+msgstr "סיוע"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "עובד תחת פיקוח שגרתי. מעניק סיוע לאחרים, תורם למשימות צוות ומתחיל ליזום בתוך גבולות מוגדרים."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "עובד תחת פיקוח כללי. מיישם ידע ומיומנויות במגוון פעילויות שגרתיות ולא שגרתיות. מפעיל שיקול דעת מסוים."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "עובד תחת הנחיה רחבה. מאפשר לאחרים באמצעות מתן הנחיה מקצועית, תמיכה או שירותים. נוטל אחריות על עבודתו ועשוי לפקח על צוותים קטנים או משימות."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "להבטיח ולייעץ"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "עובד תחת הנחיה רחבה אך עם אוטונומיה משמעותית. מבטיח שהעבודה עומדת ביעדים ומייעץ בנושאים מורכבים. לעיתים קרובות מוביל צוותים או פרויקטים ומשפיע על החלטות."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "ליזום ולהשפיע"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "בעל סמכות ואחריות מוגדרות לתחום עבודה משמעותי. יוזם פעולות, משפיע על אסטרטגיה ומדיניות בתחומו ומוביל פרויקטים או צוותים מהותיים."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "לקבוע אסטרטגיה, להשרות השראה ולגייס"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "נושא סמכות ברמה הארגונית הגבוהה ביותר לתחום עבודה מרכזי. קובע אסטרטגיה ארוכת טווח, מעורר השראה ומגייס אחרים, ומקבל החלטות קריטיות להצלחת הארגון. משפיע ברמת הענף או ברמה חיצונית."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "זמן חוסר פעילות מרבי להתחשבות (דקות)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "דף קורס שנשאר פתוח ממשיך לשלוח בקשות אוטומטיות. לאחר מספר דקות זה ללא פעולה אמיתית מצד המשתמש (פתיחת דף או פריט, מענה וכו'), הזמן ששהה בקורס מפסיק להיספר."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "עורך ויקי שיתופי"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "מתחבר ל-Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "שמירה יוצרת גרסת ויקי חדשה ב-Chamilo מתוכן Etherpad הנוכחי."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "לא ניתן היה לטעון את העורך השיתופי."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "הפעלת Etherpad לעריכת ויקי"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "שימוש ב-Etherpad כעורך השיתופי לדפי ויקי קיימים. יש לחשוף את Etherpad באותו מקור כמו Chamilo לצורך הפעלות מוטמעות מאובטחות."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "כתובת URL של Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "כתובת הבסיס של מופע Etherpad, כולל נתיב פרוקסי הפוך אופציונלי. דוגמה: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "מפתח API של Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "מפתח API שבו Chamilo משתמש ליצירת pads, הפעלות וסנכרון תוכן ויקי. יש להגדיר את Etherpad לקבל אימות באמצעות מפתח API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "ניתן לשנות לפי קורס את נראות ברירת המחדל של מסמכים חדשים"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "הנראות שניתנת למסמך, לתיקייה או לקובץ שהועלה כאשר מורה יוצר אותו בקורס. המורים עדיין יכולים לשנות לאחר מכן את הנראות של כל אחד מהם."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "כאשר האפשרות מופעלת, מורים יכולים לבחור בהגדרות הקורס את הנראות שתינתן למסמכים חדשים בקורס שלהם, במקום ברירת המחדל של הפלטפורמה."
+
+msgid "Default visibility of new learning paths"
+msgstr "נראות ברירת מחדל של נתיבי למידה חדשים"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "ניתן לשנות לפי קורס את נראות ברירת המחדל של נתיבי למידה חדשים"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "הנראות שניתנת לנתיב למידה חדש כאשר מורה יוצר אותו בקורס. המורים עדיין יכולים לשנות לאחר מכן את הנראות של כל אחד מהם."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "כאשר האפשרות מופעלת, מורים יכולים לבחור בהגדרות הקורס את הנראות שתינתן לנתיבי למידה חדשים בקורס שלהם, במקום ברירת המחדל של הפלטפורמה."
+
+msgid "Default visibility of new tests"
+msgstr "נראות ברירת מחדל של מבחנים חדשים"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "ניתן לשנות לפי קורס את נראות ברירת המחדל של מבחנים חדשים"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "הנראות שניתנת למבחן חדש כאשר מורה יוצר אותו בקורס. המורים יכולים עדיין לשנות את הנראות של כל מבחן לאחר מכן."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "כאשר מופעל, מורים יכולים לבחור בהגדרות הקורס את הנראות שתינתן למבחנים חדשים בקורס שלהם, במקום ברירת המחדל של הפלטפורמה."
+
+msgid "Default visibility for new learning paths"
+msgstr "נראות ברירת מחדל לנתיבי למידה חדשים"
+
+msgid "Default visibility for new tests"
+msgstr "נראות ברירת מחדל למבחנים חדשים"
+
+msgid "Following"
+msgstr "עוקב"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "קבל דוא\"ל כאשר לומד מגיב על הגשה במטלה זו"
+
+msgid "Payment history"
+msgstr "היסטוריית תשלומים"
+
+msgid "No payments yet"
+msgstr "אין תשלומים עדיין"
+
+msgid "Cancel service"
+msgstr "ביטול שירות"
+
+msgid "Official transcript"
+msgstr "גיליון ציונים רשמי"
+
+msgid "Unofficial transcript"
+msgstr "גיליון ציונים לא רשמי"
+
+msgid "Student name"
+msgstr "שם הסטודנט"
+
+msgid "Student number"
+msgstr "מספר סטודנט"
+
+msgid "Program title"
+msgstr "שם התוכנית"
+
+msgid "Required hours"
+msgstr "שעות נדרשות"
+
+msgid "Completion date"
+msgstr "תאריך השלמה"
+
+msgid "Hours completed"
+msgstr "שעות שהושלמו"
+
+msgid "Final grade"
+msgstr "ציון סופי"
+
+msgid "Grade"
+msgstr "ציון"
+
+msgid "No completed course yet."
+msgstr "עדיין אין קורס שהושלם."
+
+msgid "Grading scale"
+msgstr "סולם ציונים"
+
+msgid "Signature of school official"
+msgstr "חתימת נציג המוסד"
+
+msgid "School official"
+msgstr "נציג המוסד"
+
+msgid "Official's title"
+msgstr "תפקיד הנציג"
+
+msgid "Verify this transcript at"
+msgstr "אמת גיליון ציונים זה בכתובת"
+
+msgid "Verification code"
+msgstr "קוד אימות"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "גיליון ציונים לא רשמי זה אינו חתום. בקש ממנהל גיליון ציונים רשמי."
+
+msgid "Transcript verification"
+msgstr "אימות גיליון ציונים"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "ודא שגיליון ציונים רשמי זה הונפק ונחתם על ידי המוסד, לא שונה ואינו מבוטל."
+
+msgid "Valid"
+msgstr "תקף"
+
+msgid "Invalid signature"
+msgstr "חתימה לא תקפה"
+
+msgid "Transcript not found"
+msgstr "גיליון הציונים לא נמצא"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "חתימת המוסד תקפה וגיליון ציונים זה לא בוטל."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "לא ניתן לאמת שגיליון ציונים זה תקף. פרטיו אינם מוצגים."
+
+msgid "Transcript details"
+msgstr "פרטי גיליון הציונים"
+
+msgid "Institution"
+msgstr "מוסד"
+
+msgid "Issued on"
+msgstr "הונפק בתאריך"
+
+msgid "Download verification JSON"
+msgstr "הורדת JSON לאימות"
+
+msgid "Transcript"
+msgstr "גיליון ציונים"
+
+msgid "My confidential reports"
+msgstr "הדוחות החסויים שלי"
+
+msgid "My transcript"
+msgstr "גיליון הציונים שלי"
+
+msgid "Confidential investigations"
+msgstr "חקירות חסויות"
+
+msgid "Floor plan"
+msgstr "תוכנית קומה"
+
+msgid "Click a highlighted room to select it"
+msgstr "לחץ על חדר מודגש כדי לבחור אותו"
+
+msgid "Select room"
+msgstr "בחירת חדר"
+
+msgid "Room on floor plan"
+msgstr "חדר בתוכנית הקומה"
+
+msgid "Select a branch first"
+msgstr "יש לבחור תחילה סניף"
+
+msgid "The branch has no attached floor plan"
+msgstr "לסניף אין תוכנית קומה מצורפת"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "השתמש בכלי המצולע כדי לסמן את החדר; השתמש בעריכה כדי להזיז פינות"
+
+msgid "Save room area"
+msgstr "שמור אזור חדר"
+
+msgid "Clear room area"
+msgstr "נקה אזור חדר"
+
+msgid "Save the room form to persist the area"
+msgstr "שמור את טופס החדר כדי לשמור את האזור"
+
+msgid "Floor plan unavailable"
+msgstr "תוכנית קומה אינה זמינה"
+
+msgid "Room map points must be within the floor plan"
+msgstr "נקודות מפת החדר חייבות להיות בתוך תוכנית הקומה"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "האם אתה בטוח שברצונך לנקות את אזור החדר?"
+
+msgid "View room on floor plan"
+msgstr "הצג חדר בתוכנית הקומה"
+
+msgid "No floor plan available"
+msgstr "אין תוכנית קומה זמינה"
+
+msgid "This is an assignment by groups"
+msgstr "זו משימה לפי קבוצות"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "העלה תוכנית קומה בפורמט PNG, JPEG או SVG סטטי בטוח, או בחר תמונה קיימת ממסמכים."
+
+msgid "Upload floor plan"
+msgstr "העלה תוכנית קומה"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG או SVG סטטי, מקסימום 10 מ״ב"
+
+msgid "Search images by name"
+msgstr "חפש תמונות לפי שם"
+
+msgid "Image name"
+msgstr "שם תמונה"
+
+msgid "Select an image"
+msgstr "בחר תמונה"
+
+msgid "Change floor plan"
+msgstr "שנה תוכנית קומה"
+
+msgid "Attach floor plan"
+msgstr "צרף תוכנית קומה"
+
+msgid "No matching images found in Documents."
+msgstr "לא נמצאו תמונות תואמות במסמכים."
+
+msgid "Current floor plan"
+msgstr "תוכנית קומה נוכחית"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "שינויים בתוכנית הקומה נשמרים אוטומטית."
+
+msgid "Remove floor plan"
+msgstr "הסר תוכנית קומה"
+
+msgid "Cannot load images"
+msgstr "לא ניתן לטעון תמונות"
+
+msgid "Floor plan saved"
+msgstr "תוכנית הקומה נשמרה"
+
+msgid "Cannot attach floor plan"
+msgstr "לא ניתן לצרף תוכנית קומה"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "נתמכות רק תמונות PNG/JPEG ו-SVG סטטי בטוח עד 10 מ״ב."
+
+msgid "Cannot upload floor plan"
+msgstr "לא ניתן להעלות תוכנית קומה"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "האם אתה בטוח שברצונך להסיר את תוכנית הקומה?"
+
+msgid "Floor plan removed"
+msgstr "תוכנית הקומה הוסרה"
+
+msgid "Cannot remove floor plan"
+msgstr "לא ניתן להסיר תוכנית קומה"
+
+msgid "Support bot"
+msgstr "בוט תמיכה"
+
+msgid "Connected"
+msgstr "מחובר"
+
+msgid "Not connected"
+msgstr "לא מחובר"
+
+msgid "View ticket"
+msgstr "הצג כרטיס"
+
+msgid "Start a new conversation"
+msgstr "התחל שיחה חדשה"
+
+msgid "Video call"
+msgstr "שיחת וידאו"
+
+msgid "Incoming video call"
+msgstr "שיחת וידאו נכנסת"
+
+msgid "Decline"
+msgstr "דחה"
+
+msgid "Mute microphone"
+msgstr "השתק מיקרופון"
+
+msgid "Unmute microphone"
+msgstr "בטל השתקת מיקרופון"
+
+msgid "Turn camera off"
+msgstr "כבה מצלמה"
+
+msgid "Turn camera on"
+msgstr "הפעל מצלמה"
+
+msgid "Hang up"
+msgstr "נתק"
+
+msgid "Calling..."
+msgstr "מתקשר..."
+
+msgid "Connecting..."
+msgstr "מתחבר..."
+
+msgid "Your contact is busy."
+msgstr "איש הקשר שלך עסוק."
+
+msgid "Your contact did not answer the call."
+msgstr "איש הקשר שלך לא ענה לשיחה."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "איש הקשר שלך לא הצליח לגשת למצלמה או למיקרופון."
+
+msgid "Your contact could not prepare the video call."
+msgstr "איש הקשר שלך לא הצליח להכין את שיחת הווידאו."
+
+msgid "Your contact refused the call."
+msgstr "איש הקשר שלך דחה את השיחה."
+
+msgid "The call timed out."
+msgstr "פג הזמן לשיחה."
+
+msgid "Your contact cancelled the call."
+msgstr "איש הקשר שלך ביטל את השיחה."
+
+msgid "The video connection was lost."
+msgstr "חיבור הווידאו אבד."
+
+msgid "Your contact could not establish the video connection."
+msgstr "איש הקשר שלך לא הצליח ליצור את חיבור הווידאו."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "איש הקשר שלך לא הצליח להשלים את הגדרת שיחת הווידאו."
+
+msgid "Your contact hung up."
+msgstr "איש הקשר שלך ניתק."
+
+msgid "Video call could not be started"
+msgstr "לא ניתן היה להתחיל את שיחת הווידאו"
+
+msgid "Camera or microphone permission was denied."
+msgstr "הרשאת מצלמה או מיקרופון נדחתה."
+
+msgid "No camera or microphone was found."
+msgstr "לא נמצאה מצלמה או מיקרופון."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "המצלמה או המיקרופון כבר בשימוש או אינם זמינים."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "המצלמה או המיקרופון אינם תומכים בהגדרות הנדרשות."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "לא ניתן היה לקבל גישה למצלמה או למיקרופון."
+
+msgid "The video call could not be prepared."
+msgstr "לא ניתן היה להכין את שיחת הווידאו."
+
+msgid "The video call request could not be sent."
+msgstr "לא ניתן היה לשלוח את בקשת שיחת הווידאו."
+
+msgid "The incoming video call could not be processed."
+msgstr "לא ניתן היה לעבד את שיחת הווידאו הנכנסת."
+
+msgid "The video call answer could not be prepared."
+msgstr "לא ניתן היה להכין את מענה שיחת הווידאו."
+
+msgid "The video call answer could not be sent."
+msgstr "לא ניתן היה לשלוח את מענה שיחת הווידאו."
+
+msgid "The video call answer could not be processed."
+msgstr "לא ניתן היה לעבד את מענה שיחת הווידאו."
+
+msgid "The video connection failed"
+msgstr "חיבור הווידאו נכשל"
+
+msgid "The video connection could not be established."
+msgstr "לא ניתן היה ליצור את חיבור הווידאו."
+
+msgid "No answer was received."
+msgstr "לא התקבלה תשובה."
+
+msgid "You refused the call."
+msgstr "סירבת לשיחה."
+
+msgid "You cancelled the call."
+msgstr "ביטלת את השיחה."
+
+msgid "You hung up."
+msgstr "ניתקת."
+
+msgid "You missed the call."
+msgstr "פספסת את השיחה."
+
+msgid "Support bot is currently unavailable."
+msgstr "בוט התמיכה אינו זמין כרגע."
+
+msgid "A support ticket has been created."
+msgstr "נוצר כרטיס תמיכה."
+
+msgid "Conversation ended."
+msgstr "השיחה הסתיימה."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "בוט התמיכה לא יכול היה להמשיך בשיחה זו. אנא נסה שוב."
+
+msgid "Add your first term glossary to this course"
+msgstr "הוסף את מונח המילון הראשון שלך לקורס זה"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "האם אתה בטוח שברצונך למחוק תבנית סקר זו?"
+
+msgid "The survey template has been deleted."
+msgstr "תבנית הסקר נמחקה."
+
+msgid "Please select a course."
+msgstr "אנא בחר קורס."
+
+msgid "Please select a session for this course."
+msgstr "אנא בחר מחזור לקורס זה."
+
+msgid "The survey has been created from the template."
+msgstr "הסקר נוצר מהתבנית."
+
+msgid "Survey templates"
+msgstr "תבניות סקרים"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "צור תבניות סקרים לשימוש חוזר למורים והקצה אותן ישירות לקורס או למחזור."
+
+msgid "Subtitle"
+msgstr "כותרת משנה"
+
+msgid "Assign to course"
+msgstr "הקצה לקורס"
+
+msgid "Assign template to course"
+msgstr "הקצה תבנית לקורס"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "השאר את המחזור ריק כדי ליצור את הסקר ישירות בקורס."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "קורס זה זמין דרך מחזור בפורטל זה, ולכן נדרש מחזור."
+
+msgid "Survey template questions"
+msgstr "שאלות תבנית סקר"
+
+msgid "Back to survey templates"
+msgstr "חזרה לתבניות סקרים"
+
+msgid "Could not load survey template"
+msgstr "לא ניתן היה לטעון את תבנית הסקר"
+
+msgid "Could not load survey template questions"
+msgstr "לא ניתן היה לטעון את שאלות תבנית הסקר"
+
+msgid "Could not save survey template question"
+msgstr "לא ניתן היה לשמור את שאלת תבנית הסקר"
+
+msgid "Could not delete survey template question"
+msgstr "לא ניתן היה למחוק את שאלת תבנית הסקר"
+
+msgid "Could not move survey template question"
+msgstr "לא ניתן היה להעביר את שאלת תבנית הסקר"
+
+msgid "Could not copy survey template question"
+msgstr "לא ניתן היה להעתיק את שאלת תבנית הסקר"
+
+msgid "The survey template has been saved."
+msgstr "תבנית הסקר נשמרה."
+
+msgid "Edit survey template"
+msgstr "עריכת תבנית סקר"
+
+msgid "Create survey template"
+msgstr "יצירת תבנית סקר"
+
+msgid "The survey template title is required."
+msgstr "כותרת תבנית הסקר נדרשת."
+
+msgid "Visible as template"
+msgstr "גלוי כתבנית"
+
+msgid "Create satisfaction survey"
+msgstr "יצירת סקר שביעות רצון"
+
+msgid "Training satisfaction survey"
+msgstr "סקר שביעות רצון מההכשרה"
+
+msgid "Could not create satisfaction survey"
+msgstr "לא ניתן ליצור סקר שביעות רצון"
+
+msgid "Use template"
+msgstr "שימוש בתבנית"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "יצירת סקר זה מתבנית לשימוש חוזר שהוכנה על ידי מנהל."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "תוצאות מוסתרות ממורה/מדריך"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "מורים ומדריכים עדיין יכולים לראות את מספר התשובות ולשלוח תזכורות, אך לא יכולים לפתוח או לייצא את תוצאות הסקר."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "התבנית הוחלה. עיינו בהגדרות הסקר ושמרו כדי ליצור אותו."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "תוצאות הסקר מוסתרות ממורים וממדריכים."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "עדיין ניתן להשתמש בדף ההזמנות כדי לראות את מספר התשובות ולשלוח תזכורות."
+
+msgid "Payment method"
+msgstr "אמצעי תשלום"
+
+msgid "Preview mode"
+msgstr "מצב תצוגה מקדימה"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "התקדמות וציון אינם נשמרים במצב תצוגה מקדימה."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "לא ניתן להציג קישור זה בתוך מסלול הלמידה."
+
+msgid "Open it in a new tab to view the page."
+msgstr "פתחו אותו בכרטיסייה חדשה כדי לצפות בדף."
+
+msgid "Report a problem with this question"
+msgstr "דיווח על בעיה בשאלה זו"
+
+msgid "Your report was sent to the teacher."
+msgstr "הדיווח נשלח למורה."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "תארו את השגיאה או הבעיה שמצאתם. הדיווח יישלח למורה."
+
+msgid "A comment is required."
+msgstr "נדרשת הערה."
+
+msgid "Could not send the report."
+msgstr "לא ניתן לשלוח את הדיווח."
+
+msgid "Learner reports"
+msgstr "דיווחי לומדים"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "לא הוגשו דיווחי לומדים לשאלה זו."
+
+msgid "View attempt"
+msgstr "צפייה בניסיון"
+
+msgid "Could not load learner reports."
+msgstr "לא ניתן לטעון דיווחי לומדים."
+
+msgid "Allow learners to report issues in questions"
+msgstr "אפשר ללומדים לדווח על בעיות בשאלות"
+
+msgid "Skill acquired"
+msgstr "מיומנות נרכשה"
+
+msgid "AI Toolbox"
+msgstr "ארגז כלים של בינה מלאכותית"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "יצירת יישומים חינוכיים אינטראקטיביים באמצעות בינה מלאכותית ומעקב אחר התקדמות הלומדים עם SCORM."
+
+msgid "No published applications are available yet."
+msgstr "אין עדיין יישומים שפורסמו."
+
+msgid "Interactive applications"
+msgstr "יישומים אינטראקטיביים"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "יצירה, שיפור, פרסום וסקירת גרסאות ממקום אחד."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "פתחו יישום כדי להמשיך מההתקדמות האחרונה שלכם."
+
+msgid "Interactive learning application"
+msgstr "יישום למידה אינטראקטיבי"
+
+msgid "Create an interactive learning app"
+msgstr "יצירת יישום למידה אינטראקטיבי"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "תארו את הפעילות. Chamilo ייצור יישום SCORM בגרסאות עם מעקב אחר התקדמות וציון."
+
+msgid "Idea"
+msgstr "רעיון"
+
+msgid "Application"
+msgstr "יישום"
+
+msgid "What should the application do?"
+msgstr "מה היישום צריך לעשות?"
+
+msgid "How it works"
+msgstr "איך זה עובד"
+
+msgid "AI generation"
+msgstr "יצירה באמצעות בינה מלאכותית"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "היישום נוצר לפי ההוראות שלכם ונשמר כגרסה 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "התקדמות הלומד, ציון ונתוני המשך מדווחים ל-Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "שיפורים עתידיים יוצרים גרסאות חדשות מבלי למחוק את הקודמות."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "כללו את מטרת הלמידה, כללים, רמות, ניקוד ומה אמור לקרות כשהלומד מסיים."
+
+msgid "You are not allowed to create content in this context."
+msgstr "אינכם מורשים ליצור תוכן בהקשר זה."
+
+msgid "The application was generated successfully."
+msgstr "היישום נוצר בהצלחה."
+
+msgid "Open in student view"
+msgstr "פתח בתצוגת תלמיד"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "צור את היישום כדי לאפשר תצוגה מקדימה ופרסום."
+
+msgid "Improve with AI"
+msgstr "שפר באמצעות בינה מלאכותית"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "תאר את השינוי. תיווצר גרסה חדשה והגרסאות הקודמות יישארו זמינות."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "תאר את הפעילות האינטראקטיבית המלאה שברצונך ליצור."
+
+msgid "What should be improved?"
+msgstr "מה יש לשפר?"
+
+msgid "Generate new version"
+msgstr "צור גרסה חדשה"
+
+msgid "Version history"
+msgstr "היסטוריית גרסאות"
+
+msgid "Preview, download or restore any generated version."
+msgstr "תצוגה מקדימה, הורדה או שחזור של כל גרסה שנוצרה."
+
+msgid "A new version was generated."
+msgstr "נוצרה גרסה חדשה."
+
+msgid "Version restored"
+msgstr "הגרסה שוחזרה"
+
+msgid "The support bot tree has been published."
+msgstr "עץ בוט התמיכה פורסם."
+
+msgid "The support bot tree has been archived."
+msgstr "עץ בוט התמיכה הועבר לארכיון."
+
+msgid "The support bot tree has been duplicated."
+msgstr "עץ בוט התמיכה שוכפל."
+
+msgid "The support bot tree has been deleted."
+msgstr "עץ בוט התמיכה נמחק."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "האם אתה בטוח שברצונך למחוק את עץ בוט התמיכה הזה?"
+
+msgid "The support bot tree has been imported."
+msgstr "עץ בוט התמיכה יובא."
+
+msgid "Create support bot tree"
+msgstr "יצירת עץ בוט תמיכה"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "בנה עץ החלטות קבוע המנחה משתמשים בשאלות תמיכה ויכול להסלים לכרטיסים."
+
+msgid "Portal scope"
+msgstr "היקף הפורטל"
+
+msgid "Duplicate"
+msgstr "שכפל"
+
+msgid "Archive"
+msgstr "העבר לארכיון"
+
+msgid "View conversations"
+msgstr "הצג שיחות"
+
+msgid "Import support bot tree"
+msgstr "ייבוא עץ בוט תמיכה"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "ייבא ייצוא JSON או עץ החלטות CSV. העץ המיובא תמיד נוצר כטיוטה חדשה."
+
+msgid "Resolved"
+msgstr "נפתר"
+
+msgid "Escalated"
+msgstr "הוסלם"
+
+msgid "Abandoned"
+msgstr "ננטש"
+
+msgid "Support bot conversations"
+msgstr "שיחות בוט תמיכה"
+
+msgid "Outcome"
+msgstr "תוצאה"
+
+msgid "Started at"
+msgstr "התחיל ב-"
+
+msgid "Ended at"
+msgstr "הסתיים ב-"
+
+msgid "View conversation"
+msgstr "הצג שיחה"
+
+msgid "Go to node"
+msgstr "עבור לצומת"
+
+msgid "Create support ticket"
+msgstr "יצירת כרטיס תמיכה"
+
+msgid "End conversation"
+msgstr "סיים שיחה"
+
+msgid "Node"
+msgstr "צומת"
+
+msgid "A support bot tree requires at least one node."
+msgstr "עץ בוט תמיכה דורש לפחות צומת אחד."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "האם אתה בטוח שברצונך למחוק צומת זה? הקישורים אליו ינוקו."
+
+msgid "Every support bot node requires at least one option."
+msgstr "כל צומת בבוט התמיכה דורש לפחות אפשרות אחת."
+
+msgid "The support bot tree title is required."
+msgstr "כותרת עץ בוט התמיכה נדרשת."
+
+msgid "A support bot entry node is required."
+msgstr "נדרש צומת כניסה לבוט התמיכה."
+
+msgid "Every support bot node requires content."
+msgstr "כל צומת בבוט התמיכה דורש תוכן."
+
+msgid "Every support bot option requires a label."
+msgstr "כל אפשרות בבוט התמיכה דורשת תווית."
+
+msgid "Select a target node for every go-to option."
+msgstr "בחר צומת יעד לכל אפשרות מעבר."
+
+msgid "Enter a relative URL for every link option."
+msgstr "הזן כתובת URL יחסית לכל אפשרות קישור."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "בחר קטגוריית כרטיס לכל אפשרות הסלמה."
+
+msgid "The support bot tree has been saved."
+msgstr "עץ בוט התמיכה נשמר."
+
+msgid "Edit support bot tree"
+msgstr "עריכת עץ בוט תמיכה"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "גרסאות בוט תמיכה שפורסמו והועברו לארכיון הן לקריאה בלבד. שכפל עץ זה מהרשימה כדי לערוך גרסת טיוטה חדשה."
+
+msgid "Default ticket project"
+msgstr "פרויקט כרטיסים ברירת מחדל"
+
+msgid "Decision tree rules"
+msgstr "כללי עץ החלטות"
+
+msgid "Every node must contain at least one option."
+msgstr "כל צומת חייב להכיל לפחות אפשרות אחת."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "צומת סופי חייב לסיים את השיחה או ליצור כרטיס תמיכה."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "קישורי מעבר לא יכולים ליצור מעגלים בגרסה 1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "כתובות URL חיצוניות אינן מותרות בגרסה 1; פעולות קישור חייבות להשתמש בנתיב Chamilo יחסי."
+
+msgid "Nodes"
+msgstr "צמתים"
+
+msgid "Add node"
+msgstr "הוסף צומת"
+
+msgid "Entry node"
+msgstr "צומת כניסה"
+
+msgid "Set as entry node"
+msgstr "הגדר כצומת כניסה"
+
+msgid "Target node"
+msgstr "צומת יעד"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "השתמש בנתיב Chamilo יחסי, לדוגמה /tickets."
+
+msgid "Ticket category"
+msgstr "קטגוריית כרטיס"
+
+msgid "Select a default ticket project first."
+msgstr "בחר תחילה פרויקט כרטיסים ברירת מחדל."
+
+msgid "Closing message"
+msgstr "הודעת סיום"
+
+msgid "Select a node to edit it."
+msgstr "בחר צומת כדי לערוך אותו."
+
+msgid "Support bot conversation"
+msgstr "שיחת בוט תמיכה"
+
+msgid "Transcript of %s"
+msgstr "תמליל של %s"
+
+msgid "Download unofficial transcript"
+msgstr "הורד תמליל לא רשמי"
+
+msgid "Issue official transcript"
+msgstr "הנפק תמליל רשמי"
+
+msgid "Official transcripts"
+msgstr "תמלילים רשמיים"
+
+msgid "No official transcript has been issued yet."
+msgstr "עדיין לא הונפק תמליל רשמי."
+
+msgid "Issued by"
+msgstr "הונפק על ידי"
+
+msgid "Verify"
+msgstr "אמת"
+
+msgid "Signature of official transcripts"
+msgstr "חתימת תמלילים רשמיים"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "תמונה זו מודפסת על התמלילים הרשמיים של פורטל זה, מעל שם החותם והתפקיד שהוגדרו בהגדרות התעודה."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "להנפיק תמליל רשמי חתום עם הקורסים והציונים המופיעים בדף זה? ניתן לאמת אותו באופן מקוון עד לביטולו."
+
+msgid "Official transcript issued"
+msgstr "תמליל רשמי הונפק"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "לבטל תמליל רשמי זה? דף האימות שלו יציג אותו לאחר מכן כמבוטל."
+
+msgid "Official transcript revoked"
+msgstr "תמליל רשמי בוטל"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "בחר תחילה תמונת PNG או JPEG."
+
+msgid "Signed credential"
+msgstr "אישור חתום"
+
+msgid "Issue signed credential"
+msgstr "הנפק אישור חתום"
+
+msgid "Verify credential"
+msgstr "אמת אישור"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "עגן ברשת הבדיקה Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "אשר עסקת Sepolia קיימת"
+
+msgid "Revoke signed credential"
+msgstr "בטל אישור חתום"
+
+msgid "Delete certificate"
+msgstr "מחק תעודה"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "אשר עסקת Sepolia קיימת"
+
+msgid "Sepolia transaction hash"
+msgstr "גיבוב עסקת Sepolia"
+
+msgid "Verify transaction"
+msgstr "אמת עסקה"
+
+msgid "Anchored"
+msgstr "מעוגן"
+
+msgid "Issued"
+msgstr "הונפק"
+
+msgid "Not issued"
+msgstr "לא הונפק"
+
+msgid "Consent required"
+msgstr "נדרשת הסכמה"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "עסקת Sepolia אושרה ואומתה"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "ארנק רשת הבדיקה Sepolia יבקש ממך לחתום על עסקה. רק טביעת האצבע של התעודה תעוגן. להמשיך?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "לבטל אישור חתום זה? כל עסקת בלוקצ'יין נשארת קבועה, אך דף האימות ידווח על הביטול."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "להנפיק אישור תעודה חתום עבור לומד זה? פעולה זו הופכת את הפרטים האישיים המאושרים לניתנים לאימות באמצעות קישור פרטי."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "נדרש ארנק דפדפן תואם EVM עבור Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "בחרו ברשת הבדיקות Sepolia (מזהה שרשרת 11155111) בארנק שלכם."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "כתובת ארנק או טביעת אצבע של תעודה לא תקינות."
+
+msgid "Transaction pending"
+msgstr "העסקה ממתינה"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "השתמשו באישור עסקת Sepolia קיימת מאוחר יותר."
+
+msgid "Signed credential issued"
+msgstr "אישור חתום הונפק"
+
+msgid "Credential revoked"
+msgstr "האישור בוטל"
+
+msgid "Transaction hash"
+msgstr "גיבוב עסקה"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "הסכמה לפרסום מאפשרת למנהל להנפיק אישור חתום ולעגן אופציונלית את טביעת האצבע SHA-256 שלו ברשת הבדיקות Sepolia. אין שליחה של שם או נתונים אישיים לשרשרת. ניתן לבטל את ההסכמה בכל עת."
+
+msgid "Publication consent"
+msgstr "הסכמה לפרסום"
+
+msgid "Not approved"
+msgstr "לא אושר"
+
+msgid "Withdraw consent"
+msgstr "ביטול הסכמה"
+
+msgid "Approve publication"
+msgstr "אישור פרסום"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "אני מאשר/ת אישור חתום וניתן לאימות ציבורי הכולל את שמי, הקורס, הציון ותאריך ההנפקה. מנהל רשאי גם לפרסם רק את טביעת האצבע SHA-256 ברשת הבדיקות Sepolia. טביעת האצבע קבועה, גם אם אבטל מאוחר יותר. להמשיך?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "לבטל את אישור הפרסום לתעודה זו?"
+
+msgid "Publication approval recorded"
+msgstr "אישור הפרסום נרשם"
+
+msgid "Publication approval withdrawn"
+msgstr "אישור הפרסום בוטל"
+
+msgid "Read more"
+msgstr "קראו עוד"
+
+msgid "Participation: %s of %s posts"
+msgstr "השתתפות: %s מתוך %s פוסטים"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "פרסמו את תרומתכם כדי לראות את תגובות שאר המשתתפים."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "רק חוקרים מורשים יכולים לבדוק דיווחים זכאים. זהות המדווחים נשארת חסויה כברירת מחדל."
+
+msgid "New confidential report"
+msgstr "דיווח חסוי חדש"
+
+msgid "Reported user"
+msgstr "משתמש מדווח"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "יש דיווחים חסויים זכאים הממתינים לבדיקה."
+
+msgid "Eligible investigations"
+msgstr "חקירות זכאות"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "תיק מופיע כאן רק לאחר שלפחות %s משתמשים שונים מדווחים על אותו אדם."
+
+msgid "Distinct reporters"
+msgstr "מדווחים ייחודיים"
+
+msgid "Reports for selected user"
+msgstr "דיווחים עבור המשתמש שנבחר"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "דיווח חסוי אינו זמין כרגע."
+
+msgid "The investigation could not be loaded."
+msgstr "לא ניתן היה לטעון את החקירה."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "זהותכם מוגנת מפני חוקרים כברירת מחדל, אך הימנעו מפרטים מזהים בטקסט הדיווח או בקבצים המצורפים. זה אינו שירות חירום."
+
+msgid "Find the user involved"
+msgstr "מצאו את המשתמש המעורב"
+
+msgid "Name or username"
+msgstr "שם או שם משתמש"
+
+msgid "Describe the situation"
+msgstr "תארו את המצב"
+
+msgid "Evidence (optional)"
+msgstr "ראיות (אופציונלי)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "עד שלושה קבצים, לכל היותר 8 MiB כל אחד. תמונות, שמע או סרטונים קצרים."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "אני מסכים/ה שחוקרים מורשים יוכלו לראות את שמי ואת כתובת הדוא\"ל שלי עבור דיווח זה בלבד. אוכל לבטל הרשאה זו מאוחר יותר."
+
+msgid "Send confidential report"
+msgstr "שליחת דיווח חסוי"
+
+msgid "Could not search users"
+msgstr "לא ניתן היה לחפש משתמשים"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "עד שלושה קבצים, לכל היותר 8 MiB כל אחד."
+
+msgid "The confidential report could not be saved."
+msgstr "לא ניתן היה לשמור את הדיווח החסוי."
+
+msgid "Confidential report"
+msgstr "דיווח חסוי"
+
+msgid "Confidential conversation"
+msgstr "שיחה חסויה"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "חוקרים יכולים לתקשר דרך שיחה זו בלי לראות את זהות המדווח, אלא אם שיתוף פרטי הקשר מופעל."
+
+msgid "Reporter"
+msgstr "מדווח"
+
+msgid "Investigator"
+msgstr "חוקר"
+
+msgid "Additional evidence (optional)"
+msgstr "ראיות נוספות (אופציונלי)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "עד שלושה קבצים, לכל היותר 8 MiB כל אחד; עשרה קבצים לדיווח."
+
+msgid "Contact shared voluntarily"
+msgstr "פרטי קשר שותפו מרצון"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "אפשרו לחוקרים לראות את שמי ואת כתובת הדוא\"ל שלי עבור דיווח זה"
+
+msgid "This confidential report is not available."
+msgstr "דיווח חסוי זה אינו זמין."
+
+msgid "Your message could not be saved."
+msgstr "לא ניתן היה לשמור את ההודעה שלך."
+
+msgid "Contact sharing could not be updated."
+msgstr "לא ניתן היה לעדכן את שיתוף אנשי הקשר."
+
+msgid "Evidence could not be downloaded."
+msgstr "לא ניתן היה להוריד את הראיה."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>דוגמה למילוי פעילות טופס: חישוב מדד מסת הגוף</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>גיל</strong></td>            <td width=\"75%\" style=\"\">[25] שנים</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>מין</strong></td>            <td style=\"\" text-align:=\"\">[M] (M או F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>משקל</strong></td>            <td style=\"\" text-align:=\"\">95 ק\"ג</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>גובה</strong></td>            <td style=\"vertical-align: top;\">1.81 מ'</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>מדד מסת הגוף</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =משקל/גובה<sup>2</sup> (ראו <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ערך בוויקיפדיה</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>דוגמה למילוי פעילות טופס: חישוב מדד מסת הגוף</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>גיל</strong></td>            <td width=\"75%\" style=\"\">[25] שנים</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>מין</strong></td>            <td style=\"\" text-align:=\"\">[M] (M או F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>משקל</strong></td>            <td style=\"\" text-align:=\"\">95 ק\"ג</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>גובה</strong></td>            <td style=\"vertical-align: top;\">1.81 מ'</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>מדד מסת הגוף</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =משקל/גובה<sup>2</sup> (ראו <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> ערך בוויקיפדיה</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "הסתרת כתובת IP מהדוחות"
+
+msgid "Course settings policies"
+msgstr "מדיניות הגדרות קורס"
+
+msgid "Academic transcripts"
+msgstr "גיליונות ציונים אקדמיים"
+
+msgid "Transcript program title"
+msgstr "כותרת התוכנית בגיליון הציונים"
+
+msgid "Transcript course code"
+msgstr "קוד הקורס בגיליון הציונים"
+
+msgid "Transcript course hours field"
+msgstr "שדה שעות הקורס בגיליון הציונים"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "השעות שהושלמו בגיליון הציונים הן השעות הנדרשות"
+
+msgid "Transcript student number field"
+msgstr "שדה מספר הסטודנט בגיליון הציונים"
+
+msgid "Transcript address fields"
+msgstr "שדות כתובת בגיליון הציונים"
+
+msgid "Transcript grading scale"
+msgstr "סולם ציונים בגיליון הציונים"
+
+msgid "Transcript GPA note"
+msgstr "הערת ממוצע (GPA) בגיליון הציונים"
+
+msgid "Transcript signatory name"
+msgstr "שם החותם בגיליון הציונים"
+
+msgid "Transcript signatory title"
+msgstr "תפקיד החותם בגיליון הציונים"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "הפעלת תעודות חתומות ועיגון אופציונלי ברשת הבדיקות Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "הצגת תגובות בשרשור רק לאחר השתתפות"
+
+msgid "Show the forum category description in threads"
+msgstr "הצגת תיאור קטגוריית הפורום בשרשורים"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "ניתן לשנות את הגדרות ההשתתפות בפורום לפי קורס"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "מספר ההודעות המרבי המוצג בשרשור פורום"
+
+msgid "Posts required to complete a forum thread"
+msgstr "מספר ההודעות הנדרש להשלמת שרשור פורום"
+
+msgid "Track e-mail openings"
+msgstr "מעקב אחר פתיחת הודעות דוא\"ל"
+
+msgid "Allow e-mail replies to messages"
+msgstr "אפשר תשובות בדוא\"ל להודעות"
+
+msgid "Inbound e-mail address"
+msgstr "כתובת דוא\"ל נכנסת"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN של תיבת הדואר הנכנס"
+
+msgid "Remember me duration (days)"
+msgstr "משך \"זכור אותי\" (ימים)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "הפעלת רישום דינמי של לקוח OAuth מעבר ל-MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "הפעלת דיווח רווחה חסוי"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "מספר מדווחים שונים מינימלי לחקירה"
+
+msgid "Allow confidential evidence attachments"
+msgstr "אפשר צירוף ראיות חסויות"
+
+msgid "Show confidential investigation notifications"
+msgstr "הצגת התראות על חקירות חסויות"
+
+msgid "Enable support chatbot"
+msgstr "הפעלת צ'אטבוט תמיכה"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "בחרו היכן יודגשו מונחי מילון המונחים באופן אוטומטי: מסמכים, תרגילים ומסלולי למידה."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "הסתרת כתובות IP בדוחות חזותיים ובייצוא דוחות. כתובות IP נשמרות ונגישות באמצעות הליכי נתונים אישיים מורשים."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "ברירות מחדל של הפלטפורמה והרשאות עריכת קורס; מנוהלות בהגדרות הקורס."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "אפשר למשתמשים להוריד גיליון ציונים לא רשמי של הקורסים שהשלימו, ולאפשר למנהלים, למנהלי מושבים ולמנהלי משאבי אנוש להנפיק גיליונות ציונים רשמיים חתומים למשתמשים שהם מנהלים. תמונת החתימה מועלית מדף גיליון הציונים של המשתמש."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "כותרת התוכנית המודפסת בכל גיליון ציונים, למשל שם התעודה המוכנה בפלטפורמה זו."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "איזה שדה קורס ממלא את עמודת קוד הקורס בגיליונות הציונים: קוד הקורס או שם המחלקה."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "משתנה של שדה נוסף של הקורס המכיל את מספר שעות הקורס. השאירו ריק כדי להשתמש במשך הקורס."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "הדפסת השעות הנדרשות של הקורס כשעות שהלומד השלים. כאשר האפשרות כבויה, השעות שהושלמו הן הזמן שהלומד בילה בקורס."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "משתנה של שדה נוסף של המשתמש המכיל את מספר הסטודנט המודפס בגיליונות הציונים. השאירו ריק כדי לא להדפיס."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "משתנים מופרדים בפסיקים של שדות נוספים של המשתמש המודפסים אחרי כתובת המשתמש בגיליונות הציונים, למשל עיר, מדינה ומיקוד."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "רשימת JSON של אותיות הציון, מהציון המינימלי הגבוה ביותר כלפי מטה: לכל פריט יש ציון מינימלי באחוזים (min), האות ונקודות הציון המשמשות לחישוב ה-GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "הסבר כיצד מחושב ה-GPA, המודפס מתחת ל-GPA בגיליונות הציונים."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "שם נציג המוסד החותם על גיליונות הציונים הרשמיים."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "תפקיד נציג המוסד החותם על גיליונות הציונים הרשמיים."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "דורש הסכמה מפורשת של הבעלים ופעולות ידניות של מנהל. רק טביעות אצבע SHA-256 נשלחות לשרשרת."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "לומדים רואים רק את ההודעה הראשונה בשרשור בפורום עד שהם עצמם מפרסמים בו. מנהלים, מורים, מאמנים ומדריכי קבוצות רואים תמיד את כל ההודעות."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "הצגת הכותרת ותיאור מקוצר של קטגוריית הפורום בראש כל שרשור, עם קישור לקריאת התיאור המלא."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "כאשר מופעל, מורים יכולים לבחור במקטע הפורום בהגדרות הקורס אם הקורס מסתיר תגובות בשרשור עד שהלומד מפרסם, מציג את תיאור הקטגוריה בשרשורים וכמה הודעות סרגל התקדמות ההשתתפות מצפה, במקום לעקוב אחר הגדרות הפלטפורמה."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "הצג רק מספר זה של הודעות מכל שרשור בפורום לכל משתמש שאינו מנהל פלטפורמה, כולל מורים, ולכולם בתוך מסלול למידה. בתצוגות שרשוריות ומקוננות, המגבלה חלה על התגובות של כל הודעה. ההודעות נשמרות בסדר התצוגה: הראשונות, או האחרונות בתוך מסלול למידה, שבו ההודעות האחרונות מופיעות ראשונות. הגדר ל-0 כדי להציג כל הודעה."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "הצג ללומדים סרגל התקדמות בכל שרשור בפורום, שמגיע ל-100% לאחר שפרסמו מספר זה של הודעות בו. הודעות הממתינות לפיקוח נספרות. הגדר ל-0 כדי להסתיר את סרגל ההתקדמות."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "מוסיף תמונת מעקב קטנה להודעות דוא\"ל של התראות ומקליט מתי היא מבוקשת. זה מציין רק שהדוא\"ל אולי נפתח; זה לא מוכיח שהוא נקרא."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "אפשר לנמענים של התראות הודעות ישירות להשיב בדוא\"ל. הודעות נכנסות חייבות להיות מנותבות לפקודת הדואר הנכנס של Chamilo על ידי תשתית הדואר."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "כתובת בסיס המשמשת לניתוב תשובות, לדוגמה replies@example.com. Chamilo מוסיף אסימון נמען ייחודי באמצעות כתובת פלוס."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "חיבור תיבת דואר המשמש לאיסוף תשובות נכנסות, לדוגמה imaps://user:password@imap.example.com:993/INBOX. קודד ב-URL תווים שמורים בפרטי ההתחברות."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "מספר הימים להשאיר משתמש מחובר כאשר נבחר \"זכור אותי\". הגדר ל-0 כדי להשבית. דורש HTTPS. טווח מותר: 0 עד 90. פסק הזמן הרגיל של הסשן מוגדר בנפרד ב-PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "מאפשר לרישום לקוח דינמי לבקש כל היקף הרשום על ידי שרת משאבי OAuth של Chamilo. כאשר מושבת, הרישום העצמי נשאר מוגבל ל-MCP. גישה למשאבים מוגבלת תמיד בנפרד לפי רשימת המשאבים המותרת של כל לקוח."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "הפעל דוחות אירועים חסויים. המודול דורש מפתח הצפנה מוגן והרשאת חוקר."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "בין 2 ל-10 מדווחים שונים חייבים לדווח על אותו משתמש לפני שהמקרה הופך לגלוי לחוקרים."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "אפשר ראיות של תמונות, שמע ווידאו קצר. קבצים מצורפים קיימים נשארים קריאים כאשר מושבת."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "הצג אינדיקציה פנימית של חקירות זכאיות. אינו שולח דוא\"ל או התראות חיצוניות."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "הצג צ'אטבוט עץ החלטות בחלונית הצ'אט שיכול להנחות משתמשים אל "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "מאפשר למורים ליצור ולנהל גרסאות של יישומים חינוכיים בסיוע בינה מלאכותית בתוך קורסים."
+
+msgid "Department name"
+msgstr "שם המחלקה"
+
+msgid "Documents and exercise"
+msgstr "מסמכים ותרגיל"
+
+msgid "Documents and learning path"
+msgstr "מסמכים ומסלול למידה"
+
+msgid "Documents, exercise and learning path"
+msgstr "מסמכים, תרגיל ומסלול למידה"
+
+msgid "session"
+msgstr "מפגש"
+
+msgid "course"
+msgstr "קורס"
+
+msgid "You have been enrolled in %s"
+msgstr "נרשמת ל-%s"
 

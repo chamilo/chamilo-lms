@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "با احترام"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "نمونه فرمول: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "نمونه فرمول: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "محدوده متغیرها"
@@ -28768,6 +28768,9 @@ msgstr "کاربر فعلی یافت نشد."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "سلام %s،<br><br>شما در %s ثبت‌نام شده‌اید.<br>می‌توانید حساب خود را از <a href=\"%s\">اینجا</a> دسترسی پیدا کنید.<br><br>اطلاعات ورود شما عبارتند از:<br>نام کاربری: <strong>%s</strong><br>رمز عبور: <strong>%s</strong><br><br>با احترام،<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "سلام %s،<br><br>شما در %s ثبت‌نام شده‌اید.<br>نام کاربری: <strong>%s</strong><br><br>لطفاً برای تعیین گذرواژه و دسترسی به حساب خود روی پیوند زیر کلیک کنید:<br><a href=\"%s\">تعیین گذرواژه</a><br><br>با احترام،<br>%s"
+
 msgid "You are registered on %s"
 msgstr "شما در %s ثبت‌نام شده‌اید"
 
@@ -41571,4 +41574,1616 @@ msgstr "تاریخچه مهاجرت ثبت شده است"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s در ریشه پروژه وجود دارد: آن را حذف کنید تا نقاط پایانی ارتقا بسته شوند"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "شما برای این تمرین گواهینامه دریافت کرده‌اید"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "باید مسیر یادگیری «%s» را تکمیل کنید تا بتوانید به این مسیر دسترسی داشته باشید."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "آیا مطمئنید که می‌خواهید این پرونده را به‌طور قطعی حذف کنید؟"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "آیا مطمئنید که می‌خواهید این پرونده را از درس انتخاب‌شده جدا کنید؟"
+
+msgid "Attach this file to another course"
+msgstr "پیوست این پرونده به درس دیگر"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "پیوست به درس(های) انتخاب‌شده (پنهان)"
+
+msgid "Course(s):"
+msgstr "درس(ها):"
+
+msgid "Delete definitively"
+msgstr "حذف قطعی"
+
+msgid "Detach from this course"
+msgstr "جدا کردن از این درس"
+
+msgid "File actions"
+msgstr "اقدامات پرونده"
+
+msgid "File Information"
+msgstr "اطلاعات پرونده"
+
+msgid "File Link:"
+msgstr "پیوند پرونده:"
+
+msgid "File Path:"
+msgstr "مسیر پرونده:"
+
+msgid "Filter courses..."
+msgstr "فیلتر درس‌ها..."
+
+msgid "MIME Type:"
+msgstr "نوع MIME:"
+
+msgid "N/A"
+msgstr "ناموجود"
+
+msgid "No results found."
+msgstr "نتیجه‌ای یافت نشد."
+
+msgid "Original Name"
+msgstr "نام اصلی"
+
+msgid "Original Name:"
+msgstr "نام اصلی:"
+
+msgid "Orphan"
+msgstr "یتیم"
+
+msgid "Resource File ID:"
+msgstr "شناسه پرونده منبع:"
+
+msgid "Resource Node ID:"
+msgstr "شناسه گره منبع:"
+
+msgid "Search..."
+msgstr "جستجو..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "برای جدا کردن این پرونده از یک درس خاص، روی نماد «×» روی برچسب درس مربوطه در بالا کلیک کنید."
+
+msgid "User:"
+msgstr "کاربر:"
+
+msgid "View file information"
+msgstr "مشاهده اطلاعات پرونده"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "می‌توانید این پرونده را به یک یا چند درس پیوست کنید (پنهان در ریشه اسناد). اگر پرونده دیگر استفاده نشود و یتیم شود، می‌توانید آن را نیز به‌طور قطعی حذف کنید."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "می‌توانید یک یا چند درس انتخاب کنید (از Ctrl/Cmd + کلیک استفاده کنید)."
+
+msgid "bytes"
+msgstr "بایت"
+
+msgid "Failed to copy:"
+msgstr "کپی ناموفق:"
+
+msgid "Missing resource file identifier."
+msgstr "شناسه پرونده منبع موجود نیست."
+
+msgid "Please select at least one course."
+msgstr "لطفاً حداقل یک درس انتخاب کنید."
+
+msgid "Resource file not found."
+msgstr "پرونده منبع یافت نشد."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "پرونده «%s» به %d درس پیوست شد: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "برخی درس‌ها نادیده گرفته شدند: %s."
+
+msgid "Missing file or course identifier."
+msgstr "شناسه پرونده یا درس موجود نیست."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "این پرونده منبع گره منبع ندارد و نمی‌توان آن را جدا کرد."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "پرونده از %d پیوند درس جدا شد."
+
+msgid "This file is not attached to the selected course."
+msgstr "این پرونده به درس انتخاب‌شده پیوست نشده است."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "این پرونده هنوز توسط حداقل یک منبع استفاده می‌شود و نمی‌توان آن را حذف کرد."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "پرونده یتیم و محتوای فیزیکی آن به‌طور قطعی حذف شد."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "نظرسنجی منتشر شد. ایجادشده: %d. به‌روزرسانی‌شده: %d. پیام‌های ارسال‌شده: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "قابل کسب"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "این مهارت قابل کسب نیست"
+
+#: issue-8179
+msgid "Novice"
+msgstr "تازه‌کار"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "پایبندی سخت به قوانین و دستورالعمل‌های بدون زمینه؛ قضاوت موقعیتی اندک."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "مبتدی پیشرفته"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "شروع به تشخیص جنبه‌ها و الگوهای موقعیتی می‌کند اما همچنان به راهنمایی نیاز دارد."
+
+#: issue-8179
+msgid "Competent"
+msgstr "شایسته"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "برنامه‌ریزی و مدل‌های ذهنی را توسعه می‌دهد؛ مسئولیت نتایج را می‌پذیرد اما ممکن است از پیچیدگی احساس فشار کند."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "ماهر"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "«تصویر کلی» را می‌بیند، به‌صورت شهودی اولویت‌بندی می‌کند و از تجربه می‌آموزد."
+
+#: issue-8179
+msgid "Expert"
+msgstr "خبره"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "عملکرد شهودی و روان؛ متکی بر دانش ضمنی عمیق؛ می‌تواند نوآوری کند یا موقعیت‌های بدیع را به‌آسانی مدیریت کند."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "به خاطر سپردن"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "بازیابی، یادآوری یا بازشناسی دانش مرتبط از حافظه بلندمدت."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "درک کردن"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "ساخت معنا از پیام‌های آموزشی، شامل ارتباط شفاهی، نوشتاری و گرافیکی. نشان دادن درک با تفسیر، مثال زدن، طبقه‌بندی، خلاصه‌سازی، استنباط، مقایسه یا توضیح."
+
+#: issue-8179
+msgid "Applying"
+msgstr "به‌کار بستن"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "اجرای یک رویه از طریق اجرا یا پیاده‌سازی آن در موقعیت داده‌شده. استفاده از دانش یا مهارت‌ها در موقعیت‌های جدید یا عینی."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "تحلیل کردن"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "شکستن مطالب به اجزای تشکیل‌دهنده و تعیین نحوه ارتباط اجزا با یکدیگر و با ساختار یا هدف کلی. شناسایی انگیزه‌ها، علل یا روابط."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "ارزیابی کردن"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "قضاوت بر اساس معیارها و استانداردها. بررسی، نقد یا توجیه تصمیمات یا مسیرهای اقدام."
+
+#: issue-8179
+msgid "Creating"
+msgstr "خلق کردن"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "کنار هم گذاشتن عناصر برای تشکیل یک کل منسجم یا کارکردی؛ سازمان‌دهی مجدد عناصر در الگوی یا ساختار جدید. تولید کار اصیل یا ایده‌های جدید."
+
+#: issue-8179
+msgid "Follow"
+msgstr "پیروی"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "تحت نظارت و هدایت نزدیک کار می‌کند. وظایف روتین را با اختیار محدود انجام می‌دهد. بر پیروی از دستورالعمل‌ها و اجرای پایه تمرکز دارد."
+
+#: issue-8179
+msgid "Assist"
+msgstr "کمک"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "تحت نظارت روتین کار می‌کند. به دیگران کمک می‌کند، در وظایف تیمی مشارکت می‌کند و شروع به ابتکار در محدوده‌های تعریف‌شده می‌کند."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "تحت نظارت کلی کار می‌کند. دانش و مهارت‌ها را در طیف فعالیت‌های روتین و غیرروتین به کار می‌برد. مقداری اختیار و قضاوت اعمال می‌کند."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "تحت هدایت گسترده کار می‌کند. با ارائه راهنمایی تخصصی، پشتیبانی یا خدمات، دیگران را توانمند می‌سازد. مسئولیت کار خود را می‌پذیرد و ممکن است تیم‌ها یا وظایف کوچک را سرپرستی کند."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "اطمینان و مشاوره"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "تحت هدایت گسترده اما با استقلال قابل توجه کار می‌کند. اطمینان می‌دهد کار با اهداف مطابقت دارد و در امور پیچیده مشاوره می‌دهد. اغلب تیم‌ها یا پروژه‌ها را رهبری می‌کند و بر تصمیمات تأثیر می‌گذارد."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "آغاز و تأثیرگذاری"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "اختیار و مسئولیت تعریف‌شده برای حوزه کاری قابل توجه دارد. اقدامات را آغاز می‌کند، بر راهبرد و سیاست در حوزه خود تأثیر می‌گذارد و پروژه‌ها یا تیم‌های عمده را رهبری می‌کند."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "تعیین راهبرد، الهام‌بخشی، بسیج"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "در بالاترین سطح سازمانی برای حوزه کاری عمده اختیار دارد. راهبرد بلندمدت تعیین می‌کند، دیگران را الهام می‌بخشد و بسیج می‌کند و تصمیمات حیاتی برای موفقیت سازمان می‌گیرد. در سطح صنعت یا خارجی تأثیر می‌گذارد."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "حداکثر زمان غیرفعال برای در نظر گرفتن (دقیقه)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "صفحه درس بازمانده درخواست‌های خودکار می‌فرستد. پس از این تعداد دقیقه بدون اقدام واقعی کاربر (باز کردن صفحه یا مورد، پاسخ دادن و غیره)، زمان سپری‌شده در درس دیگر شمارش نمی‌شود."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "ویرایشگر ویکی مشارکتی"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "در حال اتصال به Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "ذخیره نسخه‌ای جدید از ویکی شامیلو از محتوای فعلی Etherpad ایجاد می‌کند."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "ویرایشگر مشارکتی بارگذاری نشد."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "فعال‌سازی Etherpad برای ویرایش ویکی"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "استفاده از Etherpad به‌عنوان ویرایشگر مشارکتی برای صفحات ویکی موجود. Etherpad باید روی همان مبدأ شامیلو برای نشست‌های جاسازی‌شده امن در دسترس باشد."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "نشانی Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "نشانی پایه نمونه Etherpad، شامل مسیر اختیاری پروکسی معکوس. مثال: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "کلید API اترپد"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "کلید API که شامیلو برای ایجاد پدها، نشست‌ها و همگام‌سازی محتوای ویکی استفاده می‌کند. اترپد را برای پذیرش احراز هویت با کلید API پیکربندی کنید."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "نمایانی پیش‌فرض اسناد جدید می‌تواند توسط درس تغییر کند"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "نمایانی داده‌شده به سند، پوشه یا پرونده بارگذاری‌شده جدید وقتی مدرس آن را در درس ایجاد می‌کند. مدرسان همچنان می‌توانند نمایانی هر یک را بعداً تغییر دهند."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "وقتی فعال باشد، مدرسان می‌توانند در تنظیمات درس نمایانی اسناد جدید درس خود را به‌جای پیش‌فرض پلتفرم انتخاب کنند."
+
+msgid "Default visibility of new learning paths"
+msgstr "نمایانی پیش‌فرض مسیرهای یادگیری جدید"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "نمایانی پیش‌فرض مسیرهای یادگیری جدید می‌تواند توسط درس تغییر کند"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "نمایانی داده‌شده به مسیر یادگیری جدید وقتی مدرس آن را در درس ایجاد می‌کند. مدرسان همچنان می‌توانند نمایانی هر یک را بعداً تغییر دهند."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "وقتی فعال باشد، مدرسان می‌توانند در تنظیمات درس نمایانی مسیرهای یادگیری جدید درس خود را به‌جای پیش‌فرض پلتفرم انتخاب کنند."
+
+msgid "Default visibility of new tests"
+msgstr "نمایانی پیش‌فرض آزمون‌های جدید"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "دید پیش‌فرض آزمون‌های جدید می‌تواند توسط دوره تغییر کند"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "دید اختصاص‌یافته به آزمون جدید هنگام ایجاد آن توسط مدرس در یک دوره. مدرسان همچنان می‌توانند بعداً دید هر آزمون را تغییر دهند."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "در صورت فعال بودن، مدرسان می‌توانند در تنظیمات دوره، دید اختصاص‌یافته به آزمون‌های جدید دوره خود را به‌جای پیش‌فرض پلتفرم انتخاب کنند."
+
+msgid "Default visibility for new learning paths"
+msgstr "دید پیش‌فرض برای مسیرهای یادگیری جدید"
+
+msgid "Default visibility for new tests"
+msgstr "دید پیش‌فرض برای آزمون‌های جدید"
+
+msgid "Following"
+msgstr "دنبال‌کردن"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "دریافت ایمیل هنگام نظر گذاشتن فراگیر روی ارسال این تکلیف"
+
+msgid "Payment history"
+msgstr "تاریخچه پرداخت"
+
+msgid "No payments yet"
+msgstr "هنوز پرداختی وجود ندارد"
+
+msgid "Cancel service"
+msgstr "لغو سرویس"
+
+msgid "Official transcript"
+msgstr "ریز نمرات رسمی"
+
+msgid "Unofficial transcript"
+msgstr "ریز نمرات غیررسمی"
+
+msgid "Student name"
+msgstr "نام دانشجو"
+
+msgid "Student number"
+msgstr "شماره دانشجویی"
+
+msgid "Program title"
+msgstr "عنوان برنامه"
+
+msgid "Required hours"
+msgstr "ساعات الزامی"
+
+msgid "Completion date"
+msgstr "تاریخ اتمام"
+
+msgid "Hours completed"
+msgstr "ساعات تکمیل‌شده"
+
+msgid "Final grade"
+msgstr "نمره نهایی"
+
+msgid "Grade"
+msgstr "نمره"
+
+msgid "No completed course yet."
+msgstr "هنوز دوره تکمیل‌شده‌ای وجود ندارد."
+
+msgid "Grading scale"
+msgstr "مقیاس نمره‌دهی"
+
+msgid "Signature of school official"
+msgstr "امضای مسئول مدرسه"
+
+msgid "School official"
+msgstr "مسئول مدرسه"
+
+msgid "Official's title"
+msgstr "عنوان مسئول"
+
+msgid "Verify this transcript at"
+msgstr "این ریز نمرات را در اینجا تأیید کنید"
+
+msgid "Verification code"
+msgstr "کد تأیید"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "این ریز نمرات غیررسمی امضا نشده است. برای دریافت ریز نمرات رسمی از مدیر درخواست کنید."
+
+msgid "Transcript verification"
+msgstr "تأیید ریز نمرات"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "بررسی کنید که این ریز نمرات رسمی توسط مؤسسه صادر و امضا شده، تغییر نکرده و باطل نشده باشد."
+
+msgid "Valid"
+msgstr "معتبر"
+
+msgid "Invalid signature"
+msgstr "امضای نامعتبر"
+
+msgid "Transcript not found"
+msgstr "ریز نمرات یافت نشد"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "امضای مؤسسه معتبر است و این ریز نمرات باطل نشده است."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "این ریز نمرات به‌عنوان معتبر قابل تأیید نیست. جزئیات آن نمایش داده نمی‌شود."
+
+msgid "Transcript details"
+msgstr "جزئیات ریز نمرات"
+
+msgid "Institution"
+msgstr "مؤسسه"
+
+msgid "Issued on"
+msgstr "صادر شده در"
+
+msgid "Download verification JSON"
+msgstr "دانلود JSON تأیید"
+
+msgid "Transcript"
+msgstr "ریز نمرات"
+
+msgid "My confidential reports"
+msgstr "گزارش‌های محرمانه من"
+
+msgid "My transcript"
+msgstr "ریز نمرات من"
+
+msgid "Confidential investigations"
+msgstr "بررسی‌های محرمانه"
+
+msgid "Floor plan"
+msgstr "نقشه طبقه"
+
+msgid "Click a highlighted room to select it"
+msgstr "برای انتخاب، روی اتاق برجسته‌شده کلیک کنید"
+
+msgid "Select room"
+msgstr "انتخاب اتاق"
+
+msgid "Room on floor plan"
+msgstr "اتاق روی نقشه طبقه"
+
+msgid "Select a branch first"
+msgstr "ابتدا یک شعبه انتخاب کنید"
+
+msgid "The branch has no attached floor plan"
+msgstr "شعبه نقشه طبقه پیوست‌شده ندارد"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "از ابزار چندضلعی برای مشخص کردن محدوده اتاق استفاده کنید؛ برای جابه‌جایی گوشه‌ها از ویرایش استفاده کنید"
+
+msgid "Save room area"
+msgstr "ذخیره محدوده اتاق"
+
+msgid "Clear room area"
+msgstr "پاک کردن محدوده اتاق"
+
+msgid "Save the room form to persist the area"
+msgstr "فرم اتاق را ذخیره کنید تا محدوده حفظ شود"
+
+msgid "Floor plan unavailable"
+msgstr "نقشه طبقه در دسترس نیست"
+
+msgid "Room map points must be within the floor plan"
+msgstr "نقاط نقشه اتاق باید داخل نقشه طبقه باشند"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "آیا مطمئن هستید که می‌خواهید محدوده اتاق را پاک کنید؟"
+
+msgid "View room on floor plan"
+msgstr "مشاهده اتاق روی نقشه طبقه"
+
+msgid "No floor plan available"
+msgstr "نقشه طبقه‌ای در دسترس نیست"
+
+msgid "This is an assignment by groups"
+msgstr "این یک تکلیف گروهی است"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "یک نقشه طبقه PNG، JPEG یا SVG ایستای امن بارگذاری کنید، یا تصویری موجود را از اسناد انتخاب کنید."
+
+msgid "Upload floor plan"
+msgstr "بارگذاری نقشه طبقه"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG، JPEG یا SVG ایستا، حداکثر ۱۰ مگابایت"
+
+msgid "Search images by name"
+msgstr "جستجوی تصاویر بر اساس نام"
+
+msgid "Image name"
+msgstr "نام تصویر"
+
+msgid "Select an image"
+msgstr "انتخاب تصویر"
+
+msgid "Change floor plan"
+msgstr "تغییر نقشه طبقه"
+
+msgid "Attach floor plan"
+msgstr "پیوست نقشه طبقه"
+
+msgid "No matching images found in Documents."
+msgstr "هیچ تصویر منطبقی در اسناد یافت نشد."
+
+msgid "Current floor plan"
+msgstr "نقشه طبقه فعلی"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "تغییرات نقشه طبقه به‌صورت خودکار ذخیره می‌شوند."
+
+msgid "Remove floor plan"
+msgstr "حذف نقشه طبقه"
+
+msgid "Cannot load images"
+msgstr "بارگذاری تصاویر ممکن نیست"
+
+msgid "Floor plan saved"
+msgstr "نقشه طبقه ذخیره شد"
+
+msgid "Cannot attach floor plan"
+msgstr "پیوست نقشه طبقه ممکن نیست"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "فقط تصاویر PNG/JPEG و SVG ایستای امن تا ۱۰ مگابایت پشتیبانی می‌شوند."
+
+msgid "Cannot upload floor plan"
+msgstr "بارگذاری نقشه طبقه ممکن نیست"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "آیا مطمئن هستید که می‌خواهید نقشه طبقه را حذف کنید؟"
+
+msgid "Floor plan removed"
+msgstr "نقشه طبقه حذف شد"
+
+msgid "Cannot remove floor plan"
+msgstr "حذف نقشه طبقه ممکن نیست"
+
+msgid "Support bot"
+msgstr "ربات پشتیبانی"
+
+msgid "Connected"
+msgstr "متصل"
+
+msgid "Not connected"
+msgstr "متصل نیست"
+
+msgid "View ticket"
+msgstr "مشاهده تیکت"
+
+msgid "Start a new conversation"
+msgstr "شروع گفتگوی جدید"
+
+msgid "Video call"
+msgstr "تماس ویدیویی"
+
+msgid "Incoming video call"
+msgstr "تماس ویدیویی ورودی"
+
+msgid "Decline"
+msgstr "رد کردن"
+
+msgid "Mute microphone"
+msgstr "بی‌صدا کردن میکروفون"
+
+msgid "Unmute microphone"
+msgstr "فعال کردن میکروفون"
+
+msgid "Turn camera off"
+msgstr "خاموش کردن دوربین"
+
+msgid "Turn camera on"
+msgstr "روشن کردن دوربین"
+
+msgid "Hang up"
+msgstr "قطع تماس"
+
+msgid "Calling..."
+msgstr "در حال تماس..."
+
+msgid "Connecting..."
+msgstr "در حال اتصال..."
+
+msgid "Your contact is busy."
+msgstr "مخاطب شما مشغول است."
+
+msgid "Your contact did not answer the call."
+msgstr "مخاطب شما به تماس پاسخ نداد."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "مخاطب شما نتوانست به دوربین یا میکروفون دسترسی پیدا کند."
+
+msgid "Your contact could not prepare the video call."
+msgstr "مخاطب شما نتوانست تماس ویدیویی را آماده کند."
+
+msgid "Your contact refused the call."
+msgstr "مخاطب شما تماس را رد کرد."
+
+msgid "The call timed out."
+msgstr "زمان تماس به پایان رسید."
+
+msgid "Your contact cancelled the call."
+msgstr "مخاطب شما تماس را لغو کرد."
+
+msgid "The video connection was lost."
+msgstr "اتصال ویدیو قطع شد."
+
+msgid "Your contact could not establish the video connection."
+msgstr "مخاطب شما نتوانست اتصال ویدیو را برقرار کند."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "مخاطب شما نتوانست راه‌اندازی تماس ویدیویی را کامل کند."
+
+msgid "Your contact hung up."
+msgstr "مخاطب شما قطع کرد."
+
+msgid "Video call could not be started"
+msgstr "تماس ویدیویی شروع نشد"
+
+msgid "Camera or microphone permission was denied."
+msgstr "مجوز دوربین یا میکروفون رد شد."
+
+msgid "No camera or microphone was found."
+msgstr "دوربین یا میکروفونی یافت نشد."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "دوربین یا میکروفون در حال استفاده است یا در دسترس نیست."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "دوربین یا میکروفون از تنظیمات مورد نیاز پشتیبانی نمی‌کند."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "دسترسی به دوربین یا میکروفون ممکن نشد."
+
+msgid "The video call could not be prepared."
+msgstr "تماس ویدیویی آماده نشد."
+
+msgid "The video call request could not be sent."
+msgstr "درخواست تماس ویدیویی ارسال نشد."
+
+msgid "The incoming video call could not be processed."
+msgstr "تماس ویدیویی ورودی پردازش نشد."
+
+msgid "The video call answer could not be prepared."
+msgstr "پاسخ تماس ویدیویی آماده نشد."
+
+msgid "The video call answer could not be sent."
+msgstr "پاسخ تماس ویدیویی ارسال نشد."
+
+msgid "The video call answer could not be processed."
+msgstr "پاسخ تماس ویدیویی پردازش نشد."
+
+msgid "The video connection failed"
+msgstr "اتصال ویدیو ناموفق بود"
+
+msgid "The video connection could not be established."
+msgstr "اتصال ویدیو برقرار نشد."
+
+msgid "No answer was received."
+msgstr "پاسخی دریافت نشد."
+
+msgid "You refused the call."
+msgstr "شما تماس را رد کردید."
+
+msgid "You cancelled the call."
+msgstr "شما تماس را لغو کردید."
+
+msgid "You hung up."
+msgstr "شما قطع کردید."
+
+msgid "You missed the call."
+msgstr "شما تماس را از دست دادید."
+
+msgid "Support bot is currently unavailable."
+msgstr "ربات پشتیبانی در حال حاضر در دسترس نیست."
+
+msgid "A support ticket has been created."
+msgstr "یک تیکت پشتیبانی ایجاد شد."
+
+msgid "Conversation ended."
+msgstr "گفتگو پایان یافت."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "ربات پشتیبانی نتوانست این گفتگو را ادامه دهد. لطفاً دوباره تلاش کنید."
+
+msgid "Add your first term glossary to this course"
+msgstr "اولین اصطلاح واژه‌نامه را به این درس اضافه کنید"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "آیا مطمئن هستید که می‌خواهید این الگوی نظرسنجی را حذف کنید؟"
+
+msgid "The survey template has been deleted."
+msgstr "الگوی نظرسنجی حذف شد."
+
+msgid "Please select a course."
+msgstr "لطفاً یک درس انتخاب کنید."
+
+msgid "Please select a session for this course."
+msgstr "لطفاً برای این درس یک جلسه انتخاب کنید."
+
+msgid "The survey has been created from the template."
+msgstr "نظرسنجی از روی الگو ایجاد شد."
+
+msgid "Survey templates"
+msgstr "الگوهای نظرسنجی"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "الگوهای نظرسنجی قابل استفاده مجدد برای مدرسان بسازید و آن‌ها را مستقیماً به یک درس یا جلسه اختصاص دهید."
+
+msgid "Subtitle"
+msgstr "زیرنویس"
+
+msgid "Assign to course"
+msgstr "اختصاص به درس"
+
+msgid "Assign template to course"
+msgstr "اختصاص الگو به درس"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "جلسه را خالی بگذارید تا نظرسنجی مستقیماً در درس ایجاد شود."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "این درس از طریق یک جلسه در این پورتال در دسترس است، بنابراین جلسه الزامی است."
+
+msgid "Survey template questions"
+msgstr "سؤالات الگوی نظرسنجی"
+
+msgid "Back to survey templates"
+msgstr "بازگشت به الگوهای نظرسنجی"
+
+msgid "Could not load survey template"
+msgstr "بارگذاری الگوی نظرسنجی ممکن نشد"
+
+msgid "Could not load survey template questions"
+msgstr "بارگذاری سؤالات الگوی نظرسنجی ممکن نشد"
+
+msgid "Could not save survey template question"
+msgstr "ذخیره سؤال الگوی نظرسنجی ممکن نشد"
+
+msgid "Could not delete survey template question"
+msgstr "حذف سؤال الگوی نظرسنجی ممکن نشد"
+
+msgid "Could not move survey template question"
+msgstr "جابه‌جایی سؤال الگوی نظرسنجی ممکن نشد"
+
+msgid "Could not copy survey template question"
+msgstr "کپی سؤال الگوی نظرسنجی ممکن نشد"
+
+msgid "The survey template has been saved."
+msgstr "الگوی نظرسنجی ذخیره شد."
+
+msgid "Edit survey template"
+msgstr "ویرایش الگوی نظرسنجی"
+
+msgid "Create survey template"
+msgstr "ایجاد الگوی نظرسنجی"
+
+msgid "The survey template title is required."
+msgstr "عنوان الگوی نظرسنجی الزامی است."
+
+msgid "Visible as template"
+msgstr "قابل مشاهده به‌عنوان الگو"
+
+msgid "Create satisfaction survey"
+msgstr "ایجاد نظرسنجی رضایت"
+
+msgid "Training satisfaction survey"
+msgstr "نظرسنجی رضایت از آموزش"
+
+msgid "Could not create satisfaction survey"
+msgstr "ایجاد نظرسنجی رضایت ممکن نشد"
+
+msgid "Use template"
+msgstr "استفاده از الگو"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "این نظرسنجی را از یک الگوی قابل استفاده مجدد که توسط مدیر تهیه شده است ایجاد کنید."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "نتایج از دید معلم/مربی پنهان است"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "معلمان و مربیان همچنان می‌توانند تعداد پاسخ‌ها را ببینند و یادآوری بفرستند، اما نمی‌توانند نتایج نظرسنجی را باز کنند یا صادر کنند."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "الگو اعمال شد. تنظیمات نظرسنجی را بررسی کنید و برای ایجاد آن ذخیره کنید."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "نتایج نظرسنجی از دید معلمان و مربیان پنهان است."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "همچنان می‌توانید از صفحه دعوت‌ها برای دیدن تعداد پاسخ‌ها و ارسال یادآوری استفاده کنید."
+
+msgid "Payment method"
+msgstr "روش پرداخت"
+
+msgid "Preview mode"
+msgstr "حالت پیش‌نمایش"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "پیشرفت و نمره در حالت پیش‌نمایش ذخیره نمی‌شود."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "این پیوند را نمی‌توان داخل مسیر یادگیری نمایش داد."
+
+msgid "Open it in a new tab to view the page."
+msgstr "برای مشاهده صفحه آن را در زبانه جدید باز کنید."
+
+msgid "Report a problem with this question"
+msgstr "گزارش مشکل در این سؤال"
+
+msgid "Your report was sent to the teacher."
+msgstr "گزارش شما برای معلم ارسال شد."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "خطا یا مشکلی را که پیدا کردید شرح دهید. گزارش شما برای معلم ارسال خواهد شد."
+
+msgid "A comment is required."
+msgstr "نظر الزامی است."
+
+msgid "Could not send the report."
+msgstr "ارسال گزارش ممکن نشد."
+
+msgid "Learner reports"
+msgstr "گزارش‌های فراگیر"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "هیچ گزارش فراگیری برای این سؤال ارسال نشده است."
+
+msgid "View attempt"
+msgstr "مشاهده تلاش"
+
+msgid "Could not load learner reports."
+msgstr "بارگذاری گزارش‌های فراگیر ممکن نشد."
+
+msgid "Allow learners to report issues in questions"
+msgstr "اجازه به فراگیران برای گزارش مشکل در سؤال‌ها"
+
+msgid "Skill acquired"
+msgstr "مهارت کسب‌شده"
+
+msgid "AI Toolbox"
+msgstr "جعبه ابزار هوش مصنوعی"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "برنامه‌های آموزشی تعاملی را با هوش مصنوعی تولید کنید و پیشرفت فراگیر را با SCORM پیگیری کنید."
+
+msgid "No published applications are available yet."
+msgstr "هنوز هیچ برنامه منتشرشده‌ای در دسترس نیست."
+
+msgid "Interactive applications"
+msgstr "برنامه‌های تعاملی"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "تولید، بهبود، انتشار و بازبینی نسخه‌ها را از یک جا انجام دهید."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "یک برنامه را باز کنید تا از آخرین پیشرفت خود ادامه دهید."
+
+msgid "Interactive learning application"
+msgstr "برنامه یادگیری تعاملی"
+
+msgid "Create an interactive learning app"
+msgstr "ایجاد یک برنامه یادگیری تعاملی"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "فعالیت را شرح دهید. چامیلو یک برنامه SCORM نسخه‌بندی‌شده با پیگیری پیشرفت و نمره تولید خواهد کرد."
+
+msgid "Idea"
+msgstr "ایده"
+
+msgid "Application"
+msgstr "برنامه"
+
+msgid "What should the application do?"
+msgstr "برنامه باید چه کاری انجام دهد؟"
+
+msgid "How it works"
+msgstr "نحوه کار"
+
+msgid "AI generation"
+msgstr "تولید با هوش مصنوعی"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "برنامه از دستورهای شما تولید می‌شود و به‌عنوان نسخه ۱ ذخیره می‌گردد."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "پیشرفت، نمره و داده‌های ازسرگیری فراگیر به چامیلو گزارش می‌شود."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "بهبودهای بعدی نسخه‌های جدید ایجاد می‌کنند بدون حذف نسخه‌های قبلی."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "هدف یادگیری، قوانین، سطوح، نمره‌دهی و آنچه باید هنگام پایان کار فراگیر رخ دهد را بگنجانید."
+
+msgid "You are not allowed to create content in this context."
+msgstr "شما مجاز به ایجاد محتوا در این زمینه نیستید."
+
+msgid "The application was generated successfully."
+msgstr "برنامه با موفقیت تولید شد."
+
+msgid "Open in student view"
+msgstr "باز کردن در نمای دانشجو"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "برای فعال‌سازی پیش‌نمایش و انتشار، برنامه را تولید کنید."
+
+msgid "Improve with AI"
+msgstr "بهبود با هوش مصنوعی"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "تغییر را توصیف کنید. نسخه جدیدی ایجاد می‌شود و نسخه‌های قبلی در دسترس باقی می‌مانند."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "فعالیت تعاملی کاملی را که می‌خواهید تولید شود توصیف کنید."
+
+msgid "What should be improved?"
+msgstr "چه چیزی باید بهبود یابد؟"
+
+msgid "Generate new version"
+msgstr "تولید نسخه جدید"
+
+msgid "Version history"
+msgstr "تاریخچه نسخه‌ها"
+
+msgid "Preview, download or restore any generated version."
+msgstr "هر نسخه تولیدشده را پیش‌نمایش، دانلود یا بازیابی کنید."
+
+msgid "A new version was generated."
+msgstr "نسخه جدیدی تولید شد."
+
+msgid "Version restored"
+msgstr "نسخه بازیابی شد"
+
+msgid "The support bot tree has been published."
+msgstr "درخت ربات پشتیبانی منتشر شد."
+
+msgid "The support bot tree has been archived."
+msgstr "درخت ربات پشتیبانی بایگانی شد."
+
+msgid "The support bot tree has been duplicated."
+msgstr "درخت ربات پشتیبانی تکثیر شد."
+
+msgid "The support bot tree has been deleted."
+msgstr "درخت ربات پشتیبانی حذف شد."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "آیا مطمئن هستید که می‌خواهید این درخت ربات پشتیبانی را حذف کنید؟"
+
+msgid "The support bot tree has been imported."
+msgstr "درخت ربات پشتیبانی وارد شد."
+
+msgid "Create support bot tree"
+msgstr "ایجاد درخت ربات پشتیبانی"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "یک درخت تصمیم ثابت بسازید که کاربران را از طریق پرسش‌های پشتیبانی راهنمایی کند و بتواند به تیکت‌ها ارجاع دهد."
+
+msgid "Portal scope"
+msgstr "محدوده پورتال"
+
+msgid "Duplicate"
+msgstr "تکثیر"
+
+msgid "Archive"
+msgstr "بایگانی"
+
+msgid "View conversations"
+msgstr "مشاهده گفتگوها"
+
+msgid "Import support bot tree"
+msgstr "وارد کردن درخت ربات پشتیبانی"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "یک خروجی JSON یا درخت تصمیم CSV وارد کنید. درخت واردشده همیشه به‌صورت پیش‌نویس جدید ایجاد می‌شود."
+
+msgid "Resolved"
+msgstr "حل‌شده"
+
+msgid "Escalated"
+msgstr "ارجاع‌شده"
+
+msgid "Abandoned"
+msgstr "رهاشده"
+
+msgid "Support bot conversations"
+msgstr "گفتگوهای ربات پشتیبانی"
+
+msgid "Outcome"
+msgstr "نتیجه"
+
+msgid "Started at"
+msgstr "شروع در"
+
+msgid "Ended at"
+msgstr "پایان در"
+
+msgid "View conversation"
+msgstr "مشاهده گفتگو"
+
+msgid "Go to node"
+msgstr "رفتن به گره"
+
+msgid "Create support ticket"
+msgstr "ایجاد تیکت پشتیبانی"
+
+msgid "End conversation"
+msgstr "پایان گفتگو"
+
+msgid "Node"
+msgstr "گره"
+
+msgid "A support bot tree requires at least one node."
+msgstr "درخت ربات پشتیبانی حداقل به یک گره نیاز دارد."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "آیا مطمئن هستید که می‌خواهید این گره را حذف کنید؟ پیوندهای به آن پاک می‌شوند."
+
+msgid "Every support bot node requires at least one option."
+msgstr "هر گره ربات پشتیبانی حداقل به یک گزینه نیاز دارد."
+
+msgid "The support bot tree title is required."
+msgstr "عنوان درخت ربات پشتیبانی الزامی است."
+
+msgid "A support bot entry node is required."
+msgstr "گره ورودی ربات پشتیبانی الزامی است."
+
+msgid "Every support bot node requires content."
+msgstr "هر گره ربات پشتیبانی به محتوا نیاز دارد."
+
+msgid "Every support bot option requires a label."
+msgstr "هر گزینه ربات پشتیبانی به برچسب نیاز دارد."
+
+msgid "Select a target node for every go-to option."
+msgstr "برای هر گزینه «رفتن به» یک گره مقصد انتخاب کنید."
+
+msgid "Enter a relative URL for every link option."
+msgstr "برای هر گزینه پیوند یک نشانی نسبی وارد کنید."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "برای هر گزینه ارجاع یک دسته تیکت انتخاب کنید."
+
+msgid "The support bot tree has been saved."
+msgstr "درخت ربات پشتیبانی ذخیره شد."
+
+msgid "Edit support bot tree"
+msgstr "ویرایش درخت ربات پشتیبانی"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "نسخه‌های منتشرشده و بایگانی‌شده ربات پشتیبانی فقط‌خواندنی هستند. برای ویرایش نسخه پیش‌نویس جدید، این درخت را از فهرست تکثیر کنید."
+
+msgid "Default ticket project"
+msgstr "پروژه تیکت پیش‌فرض"
+
+msgid "Decision tree rules"
+msgstr "قوانین درخت تصمیم"
+
+msgid "Every node must contain at least one option."
+msgstr "هر گره باید حداقل یک گزینه داشته باشد."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "گره پایانی باید گفتگو را پایان دهد یا یک تیکت پشتیبانی ایجاد کند."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "پیوندهای رفتن به نباید در نسخه ۱ حلقه ایجاد کنند."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "نشانی‌های خارجی در نسخه ۱ مجاز نیستند؛ اقدامات پیوند باید از مسیر نسبی چامیلو استفاده کنند."
+
+msgid "Nodes"
+msgstr "گره‌ها"
+
+msgid "Add node"
+msgstr "افزودن گره"
+
+msgid "Entry node"
+msgstr "گره ورودی"
+
+msgid "Set as entry node"
+msgstr "تنظیم به‌عنوان گره ورودی"
+
+msgid "Target node"
+msgstr "گره مقصد"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "از مسیر نسبی چامیلو استفاده کنید، برای مثال /tickets."
+
+msgid "Ticket category"
+msgstr "دسته تیکت"
+
+msgid "Select a default ticket project first."
+msgstr "ابتدا یک پروژه تیکت پیش‌فرض انتخاب کنید."
+
+msgid "Closing message"
+msgstr "پیام پایانی"
+
+msgid "Select a node to edit it."
+msgstr "یک گره را برای ویرایش انتخاب کنید."
+
+msgid "Support bot conversation"
+msgstr "گفتگوی ربات پشتیبانی"
+
+msgid "Transcript of %s"
+msgstr "ریزنمرات %s"
+
+msgid "Download unofficial transcript"
+msgstr "دانلود ریزنمرات غیررسمی"
+
+msgid "Issue official transcript"
+msgstr "صدور ریزنمرات رسمی"
+
+msgid "Official transcripts"
+msgstr "ریزنمرات رسمی"
+
+msgid "No official transcript has been issued yet."
+msgstr "هنوز ریزنمرات رسمی صادر نشده است."
+
+msgid "Issued by"
+msgstr "صادرکننده"
+
+msgid "Verify"
+msgstr "تأیید"
+
+msgid "Signature of official transcripts"
+msgstr "امضای ریزنمرات رسمی"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "این تصویر روی ریزنمرات رسمی این پورتال، بالای نام و عنوان امضاکننده که در تنظیمات گواهی تنظیم شده، چاپ می‌شود."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "آیا یک ریزنمرات رسمی امضاشده با درس‌ها و نمرات فهرست‌شده در این صفحه صادر شود؟ تا زمان ابطال، به‌صورت آنلاین قابل تأیید است."
+
+msgid "Official transcript issued"
+msgstr "ریزنمرات رسمی صادر شد"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "این ریزنمرات رسمی ابطال شود؟ صفحه تأیید آن سپس آن را به‌عنوان ابطال‌شده نشان خواهد داد."
+
+msgid "Official transcript revoked"
+msgstr "ریزنمرات رسمی ابطال شد"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "ابتدا یک تصویر PNG یا JPEG انتخاب کنید."
+
+msgid "Signed credential"
+msgstr "مدرک امضاشده"
+
+msgid "Issue signed credential"
+msgstr "صدور مدرک امضاشده"
+
+msgid "Verify credential"
+msgstr "تأیید مدرک"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "لنگرگذاری در شبکه آزمایشی سپولیا"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "تأیید تراکنش موجود سپولیا"
+
+msgid "Revoke signed credential"
+msgstr "ابطال مدرک امضاشده"
+
+msgid "Delete certificate"
+msgstr "حذف گواهی"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "تأیید یک تراکنش موجود سپولیا"
+
+msgid "Sepolia transaction hash"
+msgstr "هش تراکنش سپولیا"
+
+msgid "Verify transaction"
+msgstr "تأیید تراکنش"
+
+msgid "Anchored"
+msgstr "لنگرگذاری‌شده"
+
+msgid "Issued"
+msgstr "صادرشده"
+
+msgid "Not issued"
+msgstr "صادرنشده"
+
+msgid "Consent required"
+msgstr "رضایت لازم است"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "تراکنش سپولیا تأیید و راستی‌آزمایی شد"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "کیف پول شبکه آزمایشی سپولیا از شما می‌خواهد تراکنشی را امضا کنید. فقط اثرانگشت گواهی لنگرگذاری می‌شود. ادامه می‌دهید؟"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "این مدرک امضاشده ابطال شود؟ هر تراکنش بلاک‌چین دائمی می‌ماند، اما صفحه تأیید ابطال را گزارش خواهد کرد."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "یک مدرک گواهی امضاشده برای این فراگیر صادر شود؟ این کار جزئیات شخصی تأییدشده را با یک پیوند خصوصی قابل راستی‌آزمایی می‌کند."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "برای سپولیا یک کیف پول مرورگر سازگار با EVM لازم است."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "شبکه آزمایشی سپولیا (شناسه زنجیره 11155111) را در کیف پول خود انتخاب کنید."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "آدرس کیف پول یا اثرانگشت گواهی نامعتبر است."
+
+msgid "Transaction pending"
+msgstr "تراکنش در انتظار"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "بعداً از تأیید تراکنش موجود سپولیا استفاده کنید."
+
+msgid "Signed credential issued"
+msgstr "اعتبارنامه امضاشده صادر شد"
+
+msgid "Credential revoked"
+msgstr "اعتبارنامه لغو شد"
+
+msgid "Transaction hash"
+msgstr "هش تراکنش"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "رضایت انتشار به مدیر اجازه می‌دهد یک اعتبارنامه گواهی امضاشده صادر کند و در صورت تمایل اثرانگشت SHA-256 آن را روی شبکه آزمایشی سپولیا ثبت کند. هیچ نام یا داده شخصی روی زنجیره ارسال نمی‌شود. می‌توانید رضایت را در هر زمان پس بگیرید."
+
+msgid "Publication consent"
+msgstr "رضایت انتشار"
+
+msgid "Not approved"
+msgstr "تأیید نشده"
+
+msgid "Withdraw consent"
+msgstr "پس گرفتن رضایت"
+
+msgid "Approve publication"
+msgstr "تأیید انتشار"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "اجازه می‌دهم یک اعتبارنامه امضاشده و قابل راستی‌آزمایی عمومی شامل نام، دوره، نمره و تاریخ صدور من صادر شود. مدیر همچنین می‌تواند فقط اثرانگشت SHA-256 آن را روی شبکه آزمایشی سپولیا منتشر کند. اثرانگشت دائمی است، حتی اگر بعداً رضایت را پس بگیرم. ادامه می‌دهید؟"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "تأیید انتشار این گواهی پس گرفته شود؟"
+
+msgid "Publication approval recorded"
+msgstr "تأیید انتشار ثبت شد"
+
+msgid "Publication approval withdrawn"
+msgstr "تأیید انتشار پس گرفته شد"
+
+msgid "Read more"
+msgstr "بیشتر بخوانید"
+
+msgid "Participation: %s of %s posts"
+msgstr "مشارکت: %s از %s پست"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "برای دیدن پاسخ‌های سایر شرکت‌کنندگان، مشارکت خود را ارسال کنید."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "فقط بازپرس‌های مجاز می‌توانند گزارش‌های واجد شرایط را بررسی کنند. هویت گزارش‌دهندگان به‌طور پیش‌فرض محرمانه می‌ماند."
+
+msgid "New confidential report"
+msgstr "گزارش محرمانه جدید"
+
+msgid "Reported user"
+msgstr "کاربر گزارش‌شده"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "گزارش‌های محرمانه واجد شرایط در انتظار بررسی هستند."
+
+msgid "Eligible investigations"
+msgstr "تحقیقات واجد شرایط"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "یک پرونده تنها پس از گزارش حداقل %s کاربر متفاوت درباره همان فرد در اینجا ظاهر می‌شود."
+
+msgid "Distinct reporters"
+msgstr "گزارش‌دهندگان متمایز"
+
+msgid "Reports for selected user"
+msgstr "گزارش‌های کاربر انتخاب‌شده"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "گزارش‌دهی محرمانه در حال حاضر در دسترس نیست."
+
+msgid "The investigation could not be loaded."
+msgstr "بارگذاری تحقیق ممکن نشد."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "هویت شما به‌طور پیش‌فرض از بازپرس‌ها محافظت می‌شود، اما از درج جزئیات شناسایی در متن گزارش یا پیوست‌ها خودداری کنید. این یک خدمت اضطراری نیست."
+
+msgid "Find the user involved"
+msgstr "کاربر مربوط را پیدا کنید"
+
+msgid "Name or username"
+msgstr "نام یا نام کاربری"
+
+msgid "Describe the situation"
+msgstr "وضعیت را شرح دهید"
+
+msgid "Evidence (optional)"
+msgstr "مدارک (اختیاری)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "حداکثر سه پرونده، هر کدام حداکثر ۸ مبی‌بایت. تصویر، صدا یا ویدیوهای کوتاه."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "موافقم که بازپرس‌های مجاز برای همین گزارش نام و رایانامه مرا ببینند. می‌توانم این اجازه را بعداً پس بگیرم."
+
+msgid "Send confidential report"
+msgstr "ارسال گزارش محرمانه"
+
+msgid "Could not search users"
+msgstr "جستجوی کاربران ممکن نشد"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "حداکثر سه پرونده، هر کدام حداکثر ۸ مبی‌بایت."
+
+msgid "The confidential report could not be saved."
+msgstr "ذخیره گزارش محرمانه ممکن نشد."
+
+msgid "Confidential report"
+msgstr "گزارش محرمانه"
+
+msgid "Confidential conversation"
+msgstr "گفتگوی محرمانه"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "بازپرس‌ها می‌توانند از طریق این گفتگو ارتباط برقرار کنند بدون آنکه هویت گزارش‌دهنده را ببینند، مگر اینکه اشتراک تماس فعال باشد."
+
+msgid "Reporter"
+msgstr "گزارش‌دهنده"
+
+msgid "Investigator"
+msgstr "بازپرس"
+
+msgid "Additional evidence (optional)"
+msgstr "مدارک تکمیلی (اختیاری)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "حداکثر سه پرونده، هر کدام حداکثر ۸ مبی‌بایت؛ ده پرونده در هر گزارش."
+
+msgid "Contact shared voluntarily"
+msgstr "تماس به‌صورت داوطلبانه به اشتراک گذاشته شد"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "اجازه دیدن نام و رایانامه من توسط بازپرس‌ها برای این گزارش"
+
+msgid "This confidential report is not available."
+msgstr "این گزارش محرمانه در دسترس نیست."
+
+msgid "Your message could not be saved."
+msgstr "پیام شما ذخیره نشد."
+
+msgid "Contact sharing could not be updated."
+msgstr "اشتراک‌گذاری مخاطب به‌روزرسانی نشد."
+
+msgid "Evidence could not be downloaded."
+msgstr "شواهد دانلود نشد."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>نمونه فعالیت تکمیل فرم: محاسبه شاخص توده بدنی</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>سن</strong></td>            <td width=\"75%\" style=\"\">[25] سال</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>جنس</strong></td>            <td style=\"\" text-align:=\"\">[M] (M یا F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>وزن</strong></td>            <td style=\"\" text-align:=\"\">95 کیلوگرم</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>قد</strong></td>            <td style=\"vertical-align: top;\">1.81 متر</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>شاخص توده بدنی</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =وزن/قد<sup>2</sup> (ر.ک. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> مقاله ویکی‌پدیا</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>نمونه فعالیت تکمیل فرم: محاسبه شاخص توده بدنی</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>سن</strong></td>            <td width=\"75%\" style=\"\">[25] سال</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>جنس</strong></td>            <td style=\"\" text-align:=\"\">[M] (M یا F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>وزن</strong></td>            <td style=\"\" text-align:=\"\">95 کیلوگرم</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>قد</strong></td>            <td style=\"vertical-align: top;\">1.81 متر</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>شاخص توده بدنی</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =وزن/قد<sup>2</sup> (ر.ک. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> مقاله ویکی‌پدیا</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "پنهان کردن آدرس IP از گزارش‌ها"
+
+msgid "Course settings policies"
+msgstr "سیاست‌های تنظیمات درس"
+
+msgid "Academic transcripts"
+msgstr "ریز نمرات تحصیلی"
+
+msgid "Transcript program title"
+msgstr "عنوان برنامه در ریز نمرات"
+
+msgid "Transcript course code"
+msgstr "کد درس در ریز نمرات"
+
+msgid "Transcript course hours field"
+msgstr "فیلد ساعات درس در ریز نمرات"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "ساعات تکمیل‌شده در ریز نمرات همان ساعات الزامی است"
+
+msgid "Transcript student number field"
+msgstr "فیلد شماره دانشجویی در ریز نمرات"
+
+msgid "Transcript address fields"
+msgstr "فیلدهای نشانی در ریز نمرات"
+
+msgid "Transcript grading scale"
+msgstr "مقیاس نمره‌دهی ریز نمرات"
+
+msgid "Transcript GPA note"
+msgstr "یادداشت معدل در ریز نمرات"
+
+msgid "Transcript signatory name"
+msgstr "نام امضاکننده ریز نمرات"
+
+msgid "Transcript signatory title"
+msgstr "عنوان امضاکننده ریز نمرات"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "فعال‌سازی گواهی‌های امضاشده و لنگرگذاری اختیاری در شبکه آزمایشی Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "نمایش پاسخ‌های موضوع فقط پس از مشارکت"
+
+msgid "Show the forum category description in threads"
+msgstr "نمایش شرح دسته انجمن در موضوعات"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "تنظیمات مشارکت در انجمن را می‌توان برای هر درس تغییر داد"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "حداکثر پست‌های نمایش‌داده‌شده در یک موضوع انجمن"
+
+msgid "Posts required to complete a forum thread"
+msgstr "پست‌های لازم برای تکمیل یک موضوع انجمن"
+
+msgid "Track e-mail openings"
+msgstr "ردیابی باز شدن رایانامه"
+
+msgid "Allow e-mail replies to messages"
+msgstr "اجازه پاسخ رایانامه‌ای به پیام‌ها"
+
+msgid "Inbound e-mail address"
+msgstr "نشانی رایانامه ورودی"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN صندوق ورودی"
+
+msgid "Remember me duration (days)"
+msgstr "مدت «مرا به خاطر بسپار» (روز)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "فعال‌سازی ثبت پویای کلاینت OAuth فراتر از MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "فعال‌سازی گزارش محرمانه رفاه"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "حداقل گزارش‌دهندگان متمایز برای یک بررسی"
+
+msgid "Allow confidential evidence attachments"
+msgstr "اجازه پیوست شواهد محرمانه"
+
+msgid "Show confidential investigation notifications"
+msgstr "نمایش اعلان‌های بررسی محرمانه"
+
+msgid "Enable support chatbot"
+msgstr "فعال‌سازی چت‌بات پشتیبانی"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "انتخاب محل برجسته‌سازی خودکار اصطلاحات واژه‌نامه: اسناد، تمرین‌ها و مسیرهای یادگیری."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "پنهان کردن آدرس‌های IP در گزارش‌های تصویری و خروجی‌های گزارش. آدرس‌های IP همچنان ذخیره می‌شوند و از طریق رویه‌های مجاز داده‌های شخصی قابل دسترسی هستند."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "پیش‌فرض‌های پلتفرم و مجوزهای ویرایش درس؛ در تنظیمات درس مدیریت می‌شود."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "به کاربران اجازه دهید ریز نمرات غیررسمی درس‌های تکمیل‌شده را دانلود کنند و به مدیران، مدیران نشست و مدیران منابع انسانی اجازه دهید ریز نمرات رسمی امضاشده برای کاربران تحت مدیریت خود صادر کنند. تصویر امضا از صفحه ریز نمرات کاربر بارگذاری می‌شود."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "عنوان برنامه چاپ‌شده روی هر ریز نمرات، مثلاً نام مدرک تهیه‌شده در این پلتفرم."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "کدام فیلد درس ستون کد درس ریز نمرات را پر می‌کند: کد درس یا نام دپارتمان."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "متغیر فیلد اضافی درس که تعداد ساعات درس را نگه می‌دارد. برای استفاده از مدت درس خالی بگذارید."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "ساعات الزامی درس را به‌عنوان ساعات تکمیل‌شده توسط فراگیر چاپ کنید. در صورت غیرفعال بودن، ساعات تکمیل‌شده زمان صرف‌شده فراگیر در درس است."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "متغیر فیلد اضافی کاربر که شماره دانشجویی چاپ‌شده روی ریز نمرات را نگه می‌دارد. برای چاپ نکردن خالی بگذارید."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "متغیرهای جداشده با ویرگول از فیلدهای اضافی کاربر که پس از نشانی کاربر روی ریز نمرات چاپ می‌شوند، مثلاً شهر، استان و کد پستی."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "فهرست JSON حروف نمره، از بالاترین حداقل نمره به پایین: هر مورد حداقل نمره به درصد (min)، حرف و امتیاز نمره مورد استفاده برای محاسبه معدل را دارد."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "توضیح نحوه محاسبه معدل، چاپ‌شده زیر معدل در ریز نمرات."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "نام مقام رسمی مدرسه که ریز نمرات رسمی را امضا می‌کند."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "عنوان مقام رسمی مدرسه که ریز نمرات رسمی را امضا می‌کند."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "نیاز به رضایت صریح مالک و اقدامات دستی مدیر دارد. فقط اثرانگشت‌های SHA-256 روی زنجیره ارسال می‌شوند."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "یادگیرندگان تا زمانی که خود در یک موضوع انجمن پیام نگذارند، فقط نخستین پیام آن موضوع را می‌بینند. مدیران، مدرسان، مربیان و استادان گروه همیشه همه پیام‌ها را می‌بینند."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "نمایش عنوان و شرح کوتاه دسته انجمن در بالای هر موضوع، همراه با پیوند برای خواندن شرح کامل."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "در صورت فعال بودن، مدرسان می‌توانند در بخش انجمن تنظیمات درس انتخاب کنند که آیا درس پاسخ‌های موضوع را تا زمان ارسال پیام توسط یادگیرنده پنهان کند، شرح دسته را در موضوعات نشان دهد و نوار پیشرفت مشارکت چند پیام انتظار دارد، به‌جای پیروی از تنظیمات سکو."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "فقط این تعداد پیام از هر موضوع انجمن را به هر کاربری که مدیر سکو نیست، از جمله مدرسان، و به همه در یک مسیر یادگیری نشان بده. در نماهای موضوعی و تو در تو، محدودیت روی پاسخ‌های هر پیام اعمال می‌شود. پیام‌ها به ترتیب نما حفظ می‌شوند: نخستین‌ها، یا تازه‌ترین‌ها در مسیر یادگیری که تازه‌ترین پیام‌ها اول می‌آیند. برای نمایش همه پیام‌ها روی ۰ تنظیم کنید."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "نوار پیشرفت را در هر موضوع انجمن به یادگیرندگان نشان بده که پس از ارسال این تعداد پیام در آن به ۱۰۰٪ می‌رسد. پیام‌های در انتظار نظارت شمرده می‌شوند. برای پنهان کردن نوار پیشرفت روی ۰ تنظیم کنید."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "یک تصویر ردیابی کوچک به رایانامه‌های اطلاع‌رسانی پیام می‌افزاید و زمان درخواست آن را ثبت می‌کند. این فقط نشان می‌دهد که رایانامه ممکن است باز شده باشد؛ ثابت نمی‌کند که خوانده شده است."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "به گیرندگان اطلاع‌رسانی پیام مستقیم اجازه پاسخ از طریق رایانامه بده. پیام‌های ورودی باید توسط زیرساخت نامه به فرمان نامه ورودی چامیلو هدایت شوند."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "نشانی پایه برای مسیریابی پاسخ، برای مثال replies@example.com. چامیلو با آدرس‌دهی به‌علاوه یک نشانه گیرنده یکتا می‌افزاید."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "اتصال صندوق نامه برای جمع‌آوری پاسخ‌های ورودی، برای مثال imaps://user:password@imap.example.com:993/INBOX. نویسه‌های رزروشده در اعتبارنامه‌ها را URL-encode کنید."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "تعداد روزهایی که کاربر با انتخاب «مرا به خاطر بسپار» وارد می‌ماند. برای غیرفعال کردن روی ۰ تنظیم کنید. نیازمند HTTPS است. محدوده مجاز: ۰ تا ۹۰. مهلت نشست عادی جداگانه در PHP/Symfony پیکربندی می‌شود."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "به ثبت پویای کلاینت اجازه می‌دهد هر محدوده‌ای را که سرور منبع OAuth چامیلو ثبت کرده درخواست کند. در صورت غیرفعال بودن، خودثبت‌نامی محدود به MCP می‌ماند. دسترسی به منابع همیشه جداگانه با فهرست منابع مجاز هر کلاینت محدود می‌شود."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "گزارش‌های محرمانه حادثه را فعال کنید. این ماژول به کلید رمزنگاری محافظت‌شده و مجوز بازپرس نیاز دارد."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "بین ۲ تا ۱۰ گزارش‌دهنده متفاوت باید همان کاربر را گزارش کنند تا پرونده برای بازپرس‌ها قابل مشاهده شود."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "اجازه شواهد تصویری، صوتی و ویدئوی کوتاه. پیوست‌های موجود در صورت غیرفعال بودن همچنان خوانا می‌مانند."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "نمایش نشانه داخلی تحقیقات واجد شرایط. رایانامه یا اطلاع‌رسانی خارجی ارسال نمی‌کند."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "نمایش یک ربات گفتگوی درخت تصمیم در پنل گفتگو که می‌تواند کاربران را راهنمایی کند به "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "به مدرسان اجازه می‌دهد برنامه‌های آموزشی با کمک هوش مصنوعی را در درس‌ها ایجاد و نسخه‌بندی کنند."
+
+msgid "Department name"
+msgstr "نام دپارتمان"
+
+msgid "Documents and exercise"
+msgstr "اسناد و تمرین"
+
+msgid "Documents and learning path"
+msgstr "اسناد و مسیر یادگیری"
+
+msgid "Documents, exercise and learning path"
+msgstr "اسناد، تمرین و مسیر یادگیری"
+
+msgid "session"
+msgstr "نشست"
+
+msgid "course"
+msgstr "درس"
+
+msgid "You have been enrolled in %s"
+msgstr "شما در %s ثبت‌نام شده‌اید"
 

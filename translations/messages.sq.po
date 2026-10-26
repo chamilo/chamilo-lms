@@ -28768,6 +28768,9 @@ msgstr "Përdoruesi aktual nuk u gjet."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Tungjatjeta %s,<br><br>Ju jeni regjistruar në %s.<br>Mund të aksesoni llogarinë tuaj nga <a href=\"%s\">këtu</a>.<br><br>Kredencialet tuaja të hyrjes janë:<br>Emri i përdoruesit: <strong>%s</strong><br>Fjalëkalimi: <strong>%s</strong><br><br>Të përzemërt,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Përshëndetje %s,<br><br>Jeni regjistruar në %s.<br>Emri i përdoruesit: <strong>%s</strong><br><br>Ju lutemi klikoni lidhjen më poshtë për të caktuar fjalëkalimin dhe për të hyrë në llogarinë tuaj:<br><a href=\"%s\">Caktoni fjalëkalimin</a><br><br>Me respekt,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Ju jeni regjistruar në %s"
 
@@ -41571,4 +41574,1616 @@ msgstr "Historiku i migrimeve është regjistruar"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s është i pranishëm në rrënjën e projektit: fshijeni për të mbyllur endpointet e përditësimit"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Keni fituar një certifikatë për këtë ushtrim"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Duhet të përfundoni shtegun e të nxënit \"%s\" përpara se të mund të hyni në këtë."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Jeni i sigurt që doni ta fshini përfundimisht këtë skedar?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Jeni i sigurt që doni ta shkëputni këtë skedar nga kursi i zgjedhur?"
+
+msgid "Attach this file to another course"
+msgstr "Bashkangjit këtë skedar te një kurs tjetër"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Bashkangjit te kursi(et) e zgjedhur (i fshehur)"
+
+msgid "Course(s):"
+msgstr "Kursi(et):"
+
+msgid "Delete definitively"
+msgstr "Fshi përfundimisht"
+
+msgid "Detach from this course"
+msgstr "Shkëput nga ky kurs"
+
+msgid "File actions"
+msgstr "Veprimet e skedarit"
+
+msgid "File Information"
+msgstr "Informacioni i skedarit"
+
+msgid "File Link:"
+msgstr "Lidhja e skedarit:"
+
+msgid "File Path:"
+msgstr "Shtegu i skedarit:"
+
+msgid "Filter courses..."
+msgstr "Filtro kurset..."
+
+msgid "MIME Type:"
+msgstr "Lloji MIME:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Nuk u gjetën rezultate."
+
+msgid "Original Name"
+msgstr "Emri origjinal"
+
+msgid "Original Name:"
+msgstr "Emri origjinal:"
+
+msgid "Orphan"
+msgstr "Jetim"
+
+msgid "Resource File ID:"
+msgstr "ID e skedarit të burimit:"
+
+msgid "Resource Node ID:"
+msgstr "ID e nyjes së burimit:"
+
+msgid "Search..."
+msgstr "Kërko..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Për ta shkëputur këtë skedar nga një kurs i caktuar, klikoni ikonën \"×\" te etiketa përkatëse e kursit më sipër."
+
+msgid "User:"
+msgstr "Përdoruesi:"
+
+msgid "View file information"
+msgstr "Shiko informacionin e skedarit"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Mund ta bashkangjitni këtë skedar te një ose më shumë kurse (i fshehur në rrënjën e dokumenteve). Nëse skedari nuk përdoret më dhe bëhet jetim, mund ta fshini edhe përfundimisht."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Mund të zgjidhni një ose më shumë kurse (përdorni Ctrl/Cmd + klik)."
+
+msgid "bytes"
+msgstr "bajte"
+
+msgid "Failed to copy:"
+msgstr "Kopjimi dështoi:"
+
+msgid "Missing resource file identifier."
+msgstr "Mungon identifikuesi i skedarit të burimit."
+
+msgid "Please select at least one course."
+msgstr "Ju lutemi zgjidhni të paktën një kurs."
+
+msgid "Resource file not found."
+msgstr "Skedari i burimit nuk u gjet."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Skedari \"%s\" është bashkangjitur te %d kurs(e): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Disa kurse u anashkaluan: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Mungon identifikuesi i skedarit ose i kursit."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Ky skedar burimi nuk ka nyje burimi dhe nuk mund të shkëputet."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Skedari është shkëputur nga %d lidhje kursi."
+
+msgid "This file is not attached to the selected course."
+msgstr "Ky skedar nuk është bashkangjitur te kursi i zgjedhur."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Ky skedar përdoret ende nga të paktën një burim dhe nuk mund të fshihet."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Skedari jetim dhe përmbajtja e tij fizike janë fshirë përfundimisht."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Sondazhi u publikua. Krijuar: %d. Përditësuar: %d. Mesazhe të dërguara: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "I përftueshëm"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Kjo aftësi nuk mund të përfohet"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Fillestar"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Përputhje e ngurtë me rregullat dhe udhëzimet pa kontekst; gjykim i kufizuar situativ."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Fillestar i avancuar"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Fillon të njohë aspekte situative dhe modele, por ende ka nevojë për udhëzime."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kompetent"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Zhvillon planifikimin dhe modelet mendore; merr përgjegjësi për rezultatet, por mund të ndihet i mbingarkuar nga kompleksiteti."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "I zoti"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Shikon \"pamjen e gjerë\", priorizon intuitivisht dhe mëson nga përvoja."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Ekspert"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Performancë intuitive dhe e rrjedhshme; mbështetet në njohuri të thella të heshtura; mund të inovojë ose të përballojë situata të reja pa përpjekje."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Të kujtuarit"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Tërheq, kujton ose njeh njohuritë përkatëse nga memoria afatgjatë."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Të kuptuarit"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Ndërton kuptimin nga mesazhet mësimore, përfshirë komunikimin gojor, të shkruar dhe grafik. Demonstron kuptimin duke interpretuar, shembullizuar, klasifikuar, përmbledhur, nxjerrë përfundime, krahasuar ose shpjeguar."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Të zbatuarit"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Kryen ose përdor një procedurë duke e ekzekutuar ose zbatuar në një situatë të caktuar. Përdor njohuritë ose aftësitë në situata të reja ose konkrete."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Të analizuarit"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Ndajë materialin në pjesët përbërëse dhe përcakton se si pjesët lidhen me njëra-tjetrën dhe me strukturën ose qëllimin e përgjithshëm. Identifikon motivet, shkaqet ose marrëdhëniet."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Të vlerësuarit"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Bën gjykime bazuar në kritere dhe standarde. Kontrollon, kritikon ose justifikon vendimet ose veprimet."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Të krijuarit"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Bashkon elementet për të formuar një tërësi koherente ose funksionale; riorganizon elementet në një model ose strukturë të re. Prodhon punë origjinale ose gjeneron ide të reja."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Ndiq"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Punon nën mbikëqyrje dhe drejtim të ngushtë. Kryen detyra rutinë me diskrecion të kufizuar. Përqendrohet në ndjekjen e udhëzimeve dhe ekzekutimin bazë."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Ndihmo"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Punon nën mbikëqyrje rutinë. Ofron ndihmë të tjerëve, kontribuon në detyrat e ekipit dhe fillon të marrë nisma brenda kufijve të përcaktuar."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Punon nën mbikëqyrje të përgjithshme. Zbaton njohuritë dhe aftësitë në një gamë aktivitetesh rutinë dhe jo-rutinë. Ushtron disa diskrecion dhe gjykim."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Punon nën drejtim të gjerë. Mundëson të tjerët duke ofruar udhëzim, mbështetje ose shërbime specialiste. Merr përgjegjësi për punën e vet dhe mund të mbikëqyrë ekipe ose detyra të vogla."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Siguro dhe këshillo"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Punon nën drejtim të gjerë, por me autonomi të konsiderueshme. Siguron që puna të përmbushë objektivat dhe këshillon për çështje komplekse. Shpesh udhëheq ekipe ose projekte dhe ndikon në vendime."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Inico dhe ndiko"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Ka autoritet dhe përgjegjësi të përcaktuar për një fushë të rëndësishme pune. Inicon veprime, ndikon në strategji dhe politika në fushën e tij dhe udhëheq projekte ose ekipe të rëndësishme."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Vendos strategjinë, frymëzo, mobilizo"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Ka autoritet në nivelin më të lartë organizativ për një fushë të rëndësishme pune. Vendos strategjinë afatgjatë, frymëzon dhe mobilizon të tjerët dhe merr vendime kritike për suksesin organizativ. Ndikon në nivele industrie ose të jashtme."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Koha maksimale e pasivitetit për t'u marrë parasysh (minuta)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Një faqe kursi e lënë e hapur vazhdon të dërgojë kërkesa automatike. Pas këtij numri minutash pa një veprim të vërtetë nga përdoruesi (hapja e një faqeje ose elementi, përgjigje, etj.), koha e kaluar në kurs nuk numërohet më."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Redaktuesi bashkëpunues i Wiki-t"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Po lidhet me Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Ruajtja krijon një version të ri të Wiki-t të Chamilo nga përmbajtja aktuale e Etherpad."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Redaktuesi bashkëpunues nuk mund të ngarkohej."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Aktivizo Etherpad për redaktimin e Wiki-t"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Përdor Etherpad si redaktues bashkëpunues për faqet ekzistuese të Wiki-t. Etherpad duhet të jetë i ekspozuar në të njëjtin origjinë si Chamilo për seanca të sigurta të ngulitura."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL e Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "URL bazë e instancës Etherpad, përfshirë një shteg opsional të reverse-proxy. Shembull: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Çelësi API i Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Çelësi API i përdorur nga Chamilo për të krijuar pad-e, seanca dhe për të sinkronizuar përmbajtjen e Wiki-t. Konfiguro Etherpad që të pranojë autentifikimin me çelës API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Dukshmëria e parazgjedhur e dokumenteve të reja mund të ndryshohet sipas kursit"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Dukshmëria që i jepet një dokumenti, dosjeje ose skedari të ngarkuar të ri kur një mësues e krijon në një kurs. Mësuesit mund ta ndryshojnë më pas dukshmërinë e secilit."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Kur aktivizohet, mësuesit mund të zgjedhin në cilësimet e kursit dukshmërinë që u jepet dokumenteve të reja të kursit të tyre, në vend të parazgjedhjes së platformës."
+
+msgid "Default visibility of new learning paths"
+msgstr "Dukshmëria e parazgjedhur e shtigjeve të reja të të nxënit"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Dukshmëria e parazgjedhur e shtigjeve të reja të të nxënit mund të ndryshohet sipas kursit"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Dukshmëria që i jepet një shtegu të ri të të nxënit kur një mësues e krijon në një kurs. Mësuesit mund ta ndryshojnë më pas dukshmërinë e secilit."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Kur aktivizohet, mësuesit mund të zgjedhin në cilësimet e kursit dukshmërinë që u jepet shtigjeve të reja të të nxënit të kursit të tyre, në vend të parazgjedhjes së platformës."
+
+msgid "Default visibility of new tests"
+msgstr "Dukshmëria e parazgjedhur e testeve të reja"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Dukshmëria e paracaktuar e testeve të reja mund të ndryshohet sipas kursit"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Dukshmëria që i jepet një testi të ri kur një mësues e krijon atë në një kurs. Mësuesit mund ta ndryshojnë ende dukshmërinë e secilit më pas."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Kur aktivizohet, mësuesit mund të zgjedhin në cilësimet e kursit dukshmërinë që u jepet testeve të reja të kursit të tyre, në vend të paracaktimit të platformës."
+
+msgid "Default visibility for new learning paths"
+msgstr "Dukshmëria e paracaktuar për shtigjet e reja të të nxënit"
+
+msgid "Default visibility for new tests"
+msgstr "Dukshmëria e paracaktuar për testet e reja"
+
+msgid "Following"
+msgstr "Në vijim"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Merrni një e-mail kur një nxënës komenton një dorëzim të këtij detyrimi"
+
+msgid "Payment history"
+msgstr "Historia e pagesave"
+
+msgid "No payments yet"
+msgstr "Nuk ka pagesa ende"
+
+msgid "Cancel service"
+msgstr "Anulo shërbimin"
+
+msgid "Official transcript"
+msgstr "Transkripta zyrtare"
+
+msgid "Unofficial transcript"
+msgstr "Transkripta jozyrtare"
+
+msgid "Student name"
+msgstr "Emri i studentit"
+
+msgid "Student number"
+msgstr "Numri i studentit"
+
+msgid "Program title"
+msgstr "Titulli i programit"
+
+msgid "Required hours"
+msgstr "Orët e kërkuara"
+
+msgid "Completion date"
+msgstr "Data e përfundimit"
+
+msgid "Hours completed"
+msgstr "Orët e përfunduara"
+
+msgid "Final grade"
+msgstr "Nota përfundimtare"
+
+msgid "Grade"
+msgstr "Nota"
+
+msgid "No completed course yet."
+msgstr "Nuk ka kurs të përfunduar ende."
+
+msgid "Grading scale"
+msgstr "Shkalla e vlerësimit"
+
+msgid "Signature of school official"
+msgstr "Nënshkrimi i zyrtarit të shkollës"
+
+msgid "School official"
+msgstr "Zyrtari i shkollës"
+
+msgid "Official's title"
+msgstr "Titulli i zyrtarit"
+
+msgid "Verify this transcript at"
+msgstr "Verifikoni këtë transkriptë në"
+
+msgid "Verification code"
+msgstr "Kodi i verifikimit"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Kjo transkriptë jozyrtare nuk është e nënshkruar. Kërkoni një transkriptë zyrtare nga një administrator."
+
+msgid "Transcript verification"
+msgstr "Verifikimi i transkriptës"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Kontrolloni që kjo transkriptë zyrtare është lëshuar dhe nënshkruar nga institucioni, nuk është ndryshuar dhe nuk është revokuar."
+
+msgid "Valid"
+msgstr "E vlefshme"
+
+msgid "Invalid signature"
+msgstr "Nënshkrim i pavlefshëm"
+
+msgid "Transcript not found"
+msgstr "Transkripta nuk u gjet"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Nënshkrimi i institucionit është i vlefshëm dhe kjo transkriptë nuk është revokuar."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Kjo transkriptë nuk mund të verifikohet si e vlefshme. Detajet e saj nuk shfaqen."
+
+msgid "Transcript details"
+msgstr "Detajet e transkriptës"
+
+msgid "Institution"
+msgstr "Institucioni"
+
+msgid "Issued on"
+msgstr "Lëshuar më"
+
+msgid "Download verification JSON"
+msgstr "Shkarkoni JSON-in e verifikimit"
+
+msgid "Transcript"
+msgstr "Transkripta"
+
+msgid "My confidential reports"
+msgstr "Raportet e mia konfidenciale"
+
+msgid "My transcript"
+msgstr "Transkripta ime"
+
+msgid "Confidential investigations"
+msgstr "Hetimet konfidenciale"
+
+msgid "Floor plan"
+msgstr "Plani i katit"
+
+msgid "Click a highlighted room to select it"
+msgstr "Klikoni një dhomë të theksuar për ta zgjedhur"
+
+msgid "Select room"
+msgstr "Zgjidhni dhomën"
+
+msgid "Room on floor plan"
+msgstr "Dhoma në planin e katit"
+
+msgid "Select a branch first"
+msgstr "Zgjidhni fillimisht një degë"
+
+msgid "The branch has no attached floor plan"
+msgstr "Dega nuk ka plan kati të bashkëngjitur"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Përdorni mjetin e poligonit për të përshkruar dhomën; përdorni Redakto për të lëvizur qoshet"
+
+msgid "Save room area"
+msgstr "Ruaj zonën e dhomës"
+
+msgid "Clear room area"
+msgstr "Pastro zonën e dhomës"
+
+msgid "Save the room form to persist the area"
+msgstr "Ruani formularin e dhomës për të ruajtur zonën"
+
+msgid "Floor plan unavailable"
+msgstr "Plani i katit i padisponueshëm"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Pikat e hartës së dhomës duhet të jenë brenda planit të katit"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Jeni i sigurt që dëshironi të pastroni zonën e dhomës?"
+
+msgid "View room on floor plan"
+msgstr "Shiko dhomën në planin e katit"
+
+msgid "No floor plan available"
+msgstr "Nuk ka plan kati të disponueshëm"
+
+msgid "This is an assignment by groups"
+msgstr "Kjo është një detyrë sipas grupeve"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Ngarkoni një plan kati PNG, JPEG ose SVG statik të sigurt, ose zgjidhni një imazh ekzistues nga Dokumentet."
+
+msgid "Upload floor plan"
+msgstr "Ngarko planin e katit"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG ose SVG statik, maksimumi 10 MB"
+
+msgid "Search images by name"
+msgstr "Kërko imazhe sipas emrit"
+
+msgid "Image name"
+msgstr "Emri i imazhit"
+
+msgid "Select an image"
+msgstr "Zgjidhni një imazh"
+
+msgid "Change floor plan"
+msgstr "Ndrysho planin e katit"
+
+msgid "Attach floor plan"
+msgstr "Bashkëngjit planin e katit"
+
+msgid "No matching images found in Documents."
+msgstr "Nuk u gjetën imazhe përputhëse në Dokumente."
+
+msgid "Current floor plan"
+msgstr "Plani aktual i katit"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Ndryshimet e planit të katit ruhen automatikisht."
+
+msgid "Remove floor plan"
+msgstr "Hiq planin e katit"
+
+msgid "Cannot load images"
+msgstr "Nuk mund të ngarkohen imazhet"
+
+msgid "Floor plan saved"
+msgstr "Plani i katit u ruajt"
+
+msgid "Cannot attach floor plan"
+msgstr "Nuk mund të bashkëngjitet plani i katit"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Mbështeten vetëm imazhe PNG/JPEG dhe SVG statik të sigurt deri në 10MB."
+
+msgid "Cannot upload floor plan"
+msgstr "Nuk mund të ngarkohet plani i katit"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Jeni i sigurt që dëshironi të hiqni planin e katit?"
+
+msgid "Floor plan removed"
+msgstr "Plani i katit u hoq"
+
+msgid "Cannot remove floor plan"
+msgstr "Nuk mund të hiqet plani i katit"
+
+msgid "Support bot"
+msgstr "Bot i mbështetjes"
+
+msgid "Connected"
+msgstr "I lidhur"
+
+msgid "Not connected"
+msgstr "I palidhur"
+
+msgid "View ticket"
+msgstr "Shiko biletën"
+
+msgid "Start a new conversation"
+msgstr "Fillo një bisedë të re"
+
+msgid "Video call"
+msgstr "Thirrje video"
+
+msgid "Incoming video call"
+msgstr "Thirrje video hyrëse"
+
+msgid "Decline"
+msgstr "Refuzo"
+
+msgid "Mute microphone"
+msgstr "Heshto mikrofonin"
+
+msgid "Unmute microphone"
+msgstr "Aktivizo mikrofonin"
+
+msgid "Turn camera off"
+msgstr "Fik kamerën"
+
+msgid "Turn camera on"
+msgstr "Ndiz kamerën"
+
+msgid "Hang up"
+msgstr "Mbyll thirrjen"
+
+msgid "Calling..."
+msgstr "Duke telefonuar..."
+
+msgid "Connecting..."
+msgstr "Duke u lidhur..."
+
+msgid "Your contact is busy."
+msgstr "Kontakti juaj është i zënë."
+
+msgid "Your contact did not answer the call."
+msgstr "Kontakti juaj nuk iu përgjigj thirrjes."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Kontakti juaj nuk mundi të aksesojë kamerën ose mikrofonin."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Kontakti juaj nuk mundi të përgatisë thirrjen video."
+
+msgid "Your contact refused the call."
+msgstr "Kontakti juaj e refuzoi thirrjen."
+
+msgid "The call timed out."
+msgstr "Thirrja skadoi."
+
+msgid "Your contact cancelled the call."
+msgstr "Kontakti juaj e anuloi thirrjen."
+
+msgid "The video connection was lost."
+msgstr "Lidhja video u humb."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Kontakti juaj nuk mundi të vendoste lidhjen video."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Kontakti juaj nuk mundi të përfundonte konfigurimin e thirrjes video."
+
+msgid "Your contact hung up."
+msgstr "Kontakti juaj e mbylli."
+
+msgid "Video call could not be started"
+msgstr "Thirrja video nuk mundi të niste"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Leja për kamerën ose mikrofonin u refuzua."
+
+msgid "No camera or microphone was found."
+msgstr "Nuk u gjet kamerë ose mikrofon."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Kamera ose mikrofoni është tashmë në përdorim ose i padisponueshëm."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Kamera ose mikrofoni nuk i mbështet cilësimet e kërkuara."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Nuk mund të merrej qasja te kamera ose mikrofoni."
+
+msgid "The video call could not be prepared."
+msgstr "Thirrja video nuk mundi të përgatitej."
+
+msgid "The video call request could not be sent."
+msgstr "Kërkesa për thirrje video nuk mundi të dërgohej."
+
+msgid "The incoming video call could not be processed."
+msgstr "Thirrja video hyrëse nuk mundi të përpunohej."
+
+msgid "The video call answer could not be prepared."
+msgstr "Përgjigja e thirrjes video nuk mundi të përgatitej."
+
+msgid "The video call answer could not be sent."
+msgstr "Përgjigja e thirrjes video nuk mundi të dërgohej."
+
+msgid "The video call answer could not be processed."
+msgstr "Përgjigja e thirrjes video nuk mundi të përpunohej."
+
+msgid "The video connection failed"
+msgstr "Lidhja video dështoi"
+
+msgid "The video connection could not be established."
+msgstr "Lidhja video nuk mundi të vendosej."
+
+msgid "No answer was received."
+msgstr "Nuk u mor asnjë përgjigje."
+
+msgid "You refused the call."
+msgstr "Ju e refuzuët thirrjen."
+
+msgid "You cancelled the call."
+msgstr "Ju e anuluat thirrjen."
+
+msgid "You hung up."
+msgstr "Ju e mbyllët."
+
+msgid "You missed the call."
+msgstr "Ju e humbët thirrjen."
+
+msgid "Support bot is currently unavailable."
+msgstr "Boti i mbështetjes aktualisht nuk është i disponueshëm."
+
+msgid "A support ticket has been created."
+msgstr "Është krijuar një biletë mbështetjeje."
+
+msgid "Conversation ended."
+msgstr "Biseda përfundoi."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Boti i mbështetjes nuk mundi ta vazhdonte këtë bisedë. Ju lutemi provoni përsëri."
+
+msgid "Add your first term glossary to this course"
+msgstr "Shtoni fjalorin e parë të termave në këtë kurs"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Jeni i sigurt që dëshironi ta fshini këtë shabllon ankete?"
+
+msgid "The survey template has been deleted."
+msgstr "Shablloni i anketës është fshirë."
+
+msgid "Please select a course."
+msgstr "Ju lutemi zgjidhni një kurs."
+
+msgid "Please select a session for this course."
+msgstr "Ju lutemi zgjidhni një sesion për këtë kurs."
+
+msgid "The survey has been created from the template."
+msgstr "Anketa është krijuar nga shablloni."
+
+msgid "Survey templates"
+msgstr "Shabllonet e anketave"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Krijoni shabllone anketash të ripërdorshme për mësuesit dhe caktojini ato drejtpërdrejt në një kurs ose sesion."
+
+msgid "Subtitle"
+msgstr "Nëntitull"
+
+msgid "Assign to course"
+msgstr "Cakto në kurs"
+
+msgid "Assign template to course"
+msgstr "Cakto shabllonin në kurs"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Lëreni sesionin bosh për ta krijuar anketën drejtpërdrejt në kurs."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Ky kurs është i disponueshëm përmes një sesioni në këtë portal, prandaj kërkohet një sesion."
+
+msgid "Survey template questions"
+msgstr "Pyetjet e shabllonit të anketës"
+
+msgid "Back to survey templates"
+msgstr "Kthehu te shabllonet e anketave"
+
+msgid "Could not load survey template"
+msgstr "Nuk mund të ngarkohej shablloni i anketës"
+
+msgid "Could not load survey template questions"
+msgstr "Nuk mund të ngarkoheshin pyetjet e shabllonit të anketës"
+
+msgid "Could not save survey template question"
+msgstr "Nuk mund të ruhej pyetja e shabllonit të anketës"
+
+msgid "Could not delete survey template question"
+msgstr "Nuk mund të fshihej pyetja e shabllonit të anketës"
+
+msgid "Could not move survey template question"
+msgstr "Nuk mund të zhvendosej pyetja e shabllonit të anketës"
+
+msgid "Could not copy survey template question"
+msgstr "Nuk mund të kopjohej pyetja e shabllonit të anketës"
+
+msgid "The survey template has been saved."
+msgstr "Shablloni i anketës është ruajtur."
+
+msgid "Edit survey template"
+msgstr "Ndrysho shabllonin e anketës"
+
+msgid "Create survey template"
+msgstr "Krijo shabllon ankete"
+
+msgid "The survey template title is required."
+msgstr "Titulli i shabllonit të anketës është i detyrueshëm."
+
+msgid "Visible as template"
+msgstr "I dukshëm si shabllon"
+
+msgid "Create satisfaction survey"
+msgstr "Krijo anketë kënaqësie"
+
+msgid "Training satisfaction survey"
+msgstr "Anketë kënaqësie e trajnimit"
+
+msgid "Could not create satisfaction survey"
+msgstr "Nuk u krijua anketa e kënaqësisë"
+
+msgid "Use template"
+msgstr "Përdor shabllonin"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Krijo këtë anketë nga një shabllon i ripërdorshëm i përgatitur nga një administrator."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Rezultatet të fshehura nga mësuesi/tutor"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Mësuesit dhe tutorët mund të shohin ende numrin e përgjigjeve dhe të dërgojnë kujtesa, por nuk mund t’i hapin ose t’i eksportojnë rezultatet e anketës."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Shablloni u aplikua. Rishikoni cilësimet e anketës dhe ruajeni për ta krijuar."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Rezultatet e anketës janë të fshehura nga mësuesit dhe tutorët."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Mund të përdorni ende faqen e ftesave për të parë numrin e përgjigjeve dhe për të dërguar kujtesa."
+
+msgid "Payment method"
+msgstr "Metoda e pagesës"
+
+msgid "Preview mode"
+msgstr "Modaliteti i paraparjes"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Progresi dhe rezultati nuk ruhen në modalitetin e paraparjes."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Ky lidhje nuk mund të shfaqet brenda shtegut të të nxënit."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Hapeni në një skedë të re për të parë faqen."
+
+msgid "Report a problem with this question"
+msgstr "Raporto një problem me këtë pyetje"
+
+msgid "Your report was sent to the teacher."
+msgstr "Raporti juaj u dërgua te mësuesi."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Përshkruani gabimin ose problemin që gjetët. Raporti juaj do t’i dërgohet mësuesit."
+
+msgid "A comment is required."
+msgstr "Komenti është i detyrueshëm."
+
+msgid "Could not send the report."
+msgstr "Raporti nuk u dërgua."
+
+msgid "Learner reports"
+msgstr "Raportet e nxënësve"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Nuk ka raporte nxënësish të dërguara për këtë pyetje."
+
+msgid "View attempt"
+msgstr "Shiko tentativën"
+
+msgid "Could not load learner reports."
+msgstr "Raportet e nxënësve nuk u ngarkuan."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Lejo nxënësit të raportojnë probleme në pyetje"
+
+msgid "Skill acquired"
+msgstr "Aftësi e fituar"
+
+msgid "AI Toolbox"
+msgstr "Kutia e veglave AI"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Gjeneroni aplikacione arsimore interaktive me AI dhe ndiqni progresin e nxënësve me SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Nuk ka ende aplikacione të publikuara."
+
+msgid "Interactive applications"
+msgstr "Aplikacione interaktive"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Gjeneroni, përmirësoni, publikoni dhe rishikoni versione nga një vend i vetëm."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Hapni një aplikacion për të vazhduar nga progresi juaj i fundit."
+
+msgid "Interactive learning application"
+msgstr "Aplikacion interaktiv i të nxënit"
+
+msgid "Create an interactive learning app"
+msgstr "Krijo një aplikacion interaktiv të të nxënit"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Përshkruani aktivitetin. Chamilo do të gjenerojë një aplikacion SCORM me versione, me ndjekje të progresit dhe rezultatit."
+
+msgid "Idea"
+msgstr "Ide"
+
+msgid "Application"
+msgstr "Aplikacion"
+
+msgid "What should the application do?"
+msgstr "Çfarë duhet të bëjë aplikacioni?"
+
+msgid "How it works"
+msgstr "Si funksionon"
+
+msgid "AI generation"
+msgstr "Gjenerim me AI"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Aplikacioni gjenerohet nga udhëzimet tuaja dhe ruhet si versioni 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Progresi i nxënësit, rezultati dhe të dhënat e vazhdimit raportohen te Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Përmirësimet e ardhshme krijojnë versione të reja pa fshirë ato të mëparshme."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Përfshini objektivin e të nxënit, rregullat, nivelet, vlerësimin dhe çfarë duhet të ndodhë kur nxënësi përfundon."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Nuk keni leje të krijoni përmbajtje në këtë kontekst."
+
+msgid "The application was generated successfully."
+msgstr "Aplikacioni u gjenerua me sukses."
+
+msgid "Open in student view"
+msgstr "Hap në pamjen e studentit"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Gjenero aplikacionin për të aktivizuar paraparjen dhe publikimin."
+
+msgid "Improve with AI"
+msgstr "Përmirëso me AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Përshkruani ndryshimin. Do të krijohet një version i ri dhe versionet e mëparshme do të mbeten të disponueshme."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Përshkruani aktivitetin interaktiv të plotë që dëshironi të gjeneroni."
+
+msgid "What should be improved?"
+msgstr "Çfarë duhet përmirësuar?"
+
+msgid "Generate new version"
+msgstr "Gjenero version të ri"
+
+msgid "Version history"
+msgstr "Historia e versioneve"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Parapamje, shkarkim ose rikthim i çdo versioni të gjeneruar."
+
+msgid "A new version was generated."
+msgstr "U gjenerua një version i ri."
+
+msgid "Version restored"
+msgstr "Versioni u rikthye"
+
+msgid "The support bot tree has been published."
+msgstr "Pema e botit të mbështetjes është publikuar."
+
+msgid "The support bot tree has been archived."
+msgstr "Pema e botit të mbështetjes është arkivuar."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Pema e botit të mbështetjes është kopjuar."
+
+msgid "The support bot tree has been deleted."
+msgstr "Pema e botit të mbështetjes është fshirë."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Jeni i sigurt që dëshironi të fshini këtë pemë të botit të mbështetjes?"
+
+msgid "The support bot tree has been imported."
+msgstr "Pema e botit të mbështetjes është importuar."
+
+msgid "Create support bot tree"
+msgstr "Krijo pemën e botit të mbështetjes"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Ndërtoni një pemë vendimesh fikse që udhëzon përdoruesit përmes pyetjeve të mbështetjes dhe mund të eskalojë te Tikat."
+
+msgid "Portal scope"
+msgstr "Fushëveprimi i portalit"
+
+msgid "Duplicate"
+msgstr "Kopjo"
+
+msgid "Archive"
+msgstr "Arkivo"
+
+msgid "View conversations"
+msgstr "Shiko bisedat"
+
+msgid "Import support bot tree"
+msgstr "Importo pemën e botit të mbështetjes"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importoni një eksport JSON ose një pemë vendimesh CSV. Pema e importuar krijohet gjithmonë si draft i ri."
+
+msgid "Resolved"
+msgstr "Zgjidhur"
+
+msgid "Escalated"
+msgstr "Eskaluar"
+
+msgid "Abandoned"
+msgstr "Braktisur"
+
+msgid "Support bot conversations"
+msgstr "Bisedat e botit të mbështetjes"
+
+msgid "Outcome"
+msgstr "Rezultati"
+
+msgid "Started at"
+msgstr "Filloi më"
+
+msgid "Ended at"
+msgstr "Përfundoi më"
+
+msgid "View conversation"
+msgstr "Shiko bisedën"
+
+msgid "Go to node"
+msgstr "Shko te nyja"
+
+msgid "Create support ticket"
+msgstr "Krijo tiketë mbështetjeje"
+
+msgid "End conversation"
+msgstr "Përfundo bisedën"
+
+msgid "Node"
+msgstr "Nyja"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Një pemë e botit të mbështetjes kërkon të paktën një nyje."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Jeni i sigurt që dëshironi të fshini këtë nyje? Lidhjet drejt saj do të pastrohen."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Çdo nyje e botit të mbështetjes kërkon të paktën një opsion."
+
+msgid "The support bot tree title is required."
+msgstr "Titulli i pemës së botit të mbështetjes është i detyrueshëm."
+
+msgid "A support bot entry node is required."
+msgstr "Kërkohet një nyje hyrëse e botit të mbështetjes."
+
+msgid "Every support bot node requires content."
+msgstr "Çdo nyje e botit të mbështetjes kërkon përmbajtje."
+
+msgid "Every support bot option requires a label."
+msgstr "Çdo opsion i botit të mbështetjes kërkon një etiketë."
+
+msgid "Select a target node for every go-to option."
+msgstr "Zgjidhni një nyje destinacioni për çdo opsion shko-te."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Vendosni një URL relative për çdo opsion lidhjeje."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Zgjidhni një kategori tikete për çdo opsion eskalimi."
+
+msgid "The support bot tree has been saved."
+msgstr "Pema e botit të mbështetjes është ruajtur."
+
+msgid "Edit support bot tree"
+msgstr "Ndrysho pemën e botit të mbështetjes"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Versionet e publikuara dhe të arkivuara të botit të mbështetjes janë vetëm për lexim. Kopjoni këtë pemë nga lista për të redaktuar një version të ri draft."
+
+msgid "Default ticket project"
+msgstr "Projekti i parazgjedhur i biletave"
+
+msgid "Decision tree rules"
+msgstr "Rregullat e pemës së vendimeve"
+
+msgid "Every node must contain at least one option."
+msgstr "Çdo nyje duhet të përmbajë të paktën një opsion."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Një nyje përfundimtare duhet të mbyllë bisedën ose të krijojë një biletë mbështetjeje."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Lidhjet «shko te» nuk duhet të krijojnë cikle në v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "URL-të e jashtme nuk lejohen në v1; veprimet e lidhjeve duhet të përdorin një shteg relativ të Chamilo."
+
+msgid "Nodes"
+msgstr "Nyjet"
+
+msgid "Add node"
+msgstr "Shto nyje"
+
+msgid "Entry node"
+msgstr "Nyja hyrëse"
+
+msgid "Set as entry node"
+msgstr "Cakto si nyje hyrëse"
+
+msgid "Target node"
+msgstr "Nyja e synuar"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Përdorni një shteg relativ të Chamilo, për shembull /tickets."
+
+msgid "Ticket category"
+msgstr "Kategoria e biletës"
+
+msgid "Select a default ticket project first."
+msgstr "Zgjidhni së pari një projekt të parazgjedhur biletash."
+
+msgid "Closing message"
+msgstr "Mesazhi i mbylljes"
+
+msgid "Select a node to edit it."
+msgstr "Zgjidhni një nyje për ta redaktuar."
+
+msgid "Support bot conversation"
+msgstr "Biseda e botit të mbështetjes"
+
+msgid "Transcript of %s"
+msgstr "Transkripti i %s"
+
+msgid "Download unofficial transcript"
+msgstr "Shkarko transkriptin jozyrtar"
+
+msgid "Issue official transcript"
+msgstr "Lësho transkript zyrtar"
+
+msgid "Official transcripts"
+msgstr "Transkriptet zyrtare"
+
+msgid "No official transcript has been issued yet."
+msgstr "Nuk është lëshuar ende asnjë transkript zyrtar."
+
+msgid "Issued by"
+msgstr "Lëshuar nga"
+
+msgid "Verify"
+msgstr "Verifiko"
+
+msgid "Signature of official transcripts"
+msgstr "Nënshkrimi i transkripteve zyrtare"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Kjo imazh printohet në transkriptet zyrtare të këtij portali, mbi emrin dhe titullin e nënshkruesit të caktuar në cilësimet e certifikatës."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Të lëshohet një transkript zyrtar i nënshkruar me kurset dhe notat e listuara në këtë faqe? Mund të verifikohet online derisa të revokohet."
+
+msgid "Official transcript issued"
+msgstr "Transkripti zyrtar u lëshua"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Të revokohet ky transkript zyrtar? Faqja e verifikimit do ta tregojë pastaj si të revokuar."
+
+msgid "Official transcript revoked"
+msgstr "Transkripti zyrtar u revokua"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Zgjidhni së pari një imazh PNG ose JPEG."
+
+msgid "Signed credential"
+msgstr "Kredencial i nënshkruar"
+
+msgid "Issue signed credential"
+msgstr "Lësho kredencial të nënshkruar"
+
+msgid "Verify credential"
+msgstr "Verifiko kredencialin"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Ankoro në rrjetin e testimit Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Konfirmo transaksionin ekzistues të Sepolia"
+
+msgid "Revoke signed credential"
+msgstr "Revoko kredencialin e nënshkruar"
+
+msgid "Delete certificate"
+msgstr "Fshi certifikatën"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Konfirmo një transaksion ekzistues të Sepolia"
+
+msgid "Sepolia transaction hash"
+msgstr "Hash-i i transaksionit Sepolia"
+
+msgid "Verify transaction"
+msgstr "Verifiko transaksionin"
+
+msgid "Anchored"
+msgstr "Ankoruar"
+
+msgid "Issued"
+msgstr "Lëshuar"
+
+msgid "Not issued"
+msgstr "Nuk është lëshuar"
+
+msgid "Consent required"
+msgstr "Kërkohet pëlqimi"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Transaksioni Sepolia u konfirmua dhe u verifikua"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Portofoli i rrjetit të testimit Sepolia do t’ju kërkojë të nënshkruani një transaksion. Vetëm gjurma e gishtit e certifikatës do të ankorohet. Të vazhdohet?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Të revokohet ky kredencial i nënshkruar? Çdo transaksion blockchain mbetet i përhershëm, por faqja e verifikimit do të raportojë revokimin."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Të lëshohet një kredencial certifikate i nënshkruar për këtë nxënës? Kjo i bën të dhënat personale të miratuara të verifikueshme me një lidhje private."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Për Sepolia kërkohet një portofol shfletuesi i përputhshëm me EVM."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Zgjidhni rrjetin e testimit Sepolia (ID e zinxhirit 11155111) në portofolin tuaj."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Adresë portofoli ose gjurmë certifikate e pavlefshme."
+
+msgid "Transaction pending"
+msgstr "Transaksioni në pritje"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Përdorni Konfirmo transaksionin ekzistues Sepolia më vonë."
+
+msgid "Signed credential issued"
+msgstr "Kredenciali i nënshkruar u lëshua"
+
+msgid "Credential revoked"
+msgstr "Kredenciali u revokua"
+
+msgid "Transaction hash"
+msgstr "Hash i transaksionit"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Pëlqimi i publikimit i lejon një administratori të lëshojë një kredencial certifikate të nënshkruar dhe, në mënyrë opsionale, të ankorojë gjurmën e tij SHA-256 në rrjetin e testimit Sepolia. Asnjë emër ose të dhëna personale nuk dërgohen në zinxhir. Mund ta tërhiqni pëlqimin në çdo kohë."
+
+msgid "Publication consent"
+msgstr "Pëlqimi i publikimit"
+
+msgid "Not approved"
+msgstr "Nuk është miratuar"
+
+msgid "Withdraw consent"
+msgstr "Tërhiq pëlqimin"
+
+msgid "Approve publication"
+msgstr "Mirato publikimin"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Autorizoj një kredencial të nënshkruar, të verifikueshëm publikisht, që tregon emrin, kursin, rezultatin dhe datën e lëshimit. Një administrator mund të publikojë gjithashtu vetëm gjurmën SHA-256 në rrjetin e testimit Sepolia. Gjurma është e përhershme, edhe nëse tërhiqem më vonë. Të vazhdohet?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Të tërhiqet miratimi i publikimit për këtë certifikatë?"
+
+msgid "Publication approval recorded"
+msgstr "Miratimi i publikimit u regjistrua"
+
+msgid "Publication approval withdrawn"
+msgstr "Miratimi i publikimit u tërhoq"
+
+msgid "Read more"
+msgstr "Lexo më shumë"
+
+msgid "Participation: %s of %s posts"
+msgstr "Pjesëmarrja: %s nga %s postime"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Postoni kontributin tuaj për të parë përgjigjet e pjesëmarrësve të tjerë."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Vetëm hetuesit e autorizuar mund të shqyrtojnë raportet e kualifikuara. Identitetet e raportuesve mbeten konfidenciale si parazgjedhje."
+
+msgid "New confidential report"
+msgstr "Raport i ri konfidencial"
+
+msgid "Reported user"
+msgstr "Përdoruesi i raportuar"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Ka raporte konfidenciale të kualifikuara që presin shqyrtim."
+
+msgid "Eligible investigations"
+msgstr "Hetime të kualifikuara"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Një rast shfaqet këtu vetëm pasi të paktën %s përdorues të ndryshëm raportojnë të njëjtën person."
+
+msgid "Distinct reporters"
+msgstr "Raportues të ndryshëm"
+
+msgid "Reports for selected user"
+msgstr "Raporte për përdoruesin e zgjedhur"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Raportimi konfidencial nuk është i disponueshëm për momentin."
+
+msgid "The investigation could not be loaded."
+msgstr "Hetimi nuk mund të ngarkohej."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Identiteti juaj mbrohet nga hetuesit si parazgjedhje, por shmangni përfshirjen e detajeve identifikuese në tekstin e raportit ose në bashkëngjitje. Ky nuk është shërbim emergjence."
+
+msgid "Find the user involved"
+msgstr "Gjeni përdoruesin e përfshirë"
+
+msgid "Name or username"
+msgstr "Emri ose emri i përdoruesit"
+
+msgid "Describe the situation"
+msgstr "Përshkruani situatën"
+
+msgid "Evidence (optional)"
+msgstr "Prova (opsionale)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Deri në tre skedarë, maksimumi 8 MiB secili. Imazhe, audio ose video të shkurtra."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Pranoj që hetuesit e autorizuar mund të shohin emrin dhe emailin tim për këtë raport specifik. Mund ta tërhiq këtë leje më vonë."
+
+msgid "Send confidential report"
+msgstr "Dërgo raportin konfidencial"
+
+msgid "Could not search users"
+msgstr "Nuk mund të kërkoheshin përdoruesit"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Deri në tre skedarë, maksimumi 8 MiB secili."
+
+msgid "The confidential report could not be saved."
+msgstr "Raporti konfidencial nuk mund të ruhej."
+
+msgid "Confidential report"
+msgstr "Raport konfidencial"
+
+msgid "Confidential conversation"
+msgstr "Bisedë konfidenciale"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Hetuesit mund të komunikojnë përmes kësaj bisede pa parë identitetin e raportuesit, përveç nëse është aktivizuar ndarja e kontaktit."
+
+msgid "Reporter"
+msgstr "Raportuesi"
+
+msgid "Investigator"
+msgstr "Hetuesi"
+
+msgid "Additional evidence (optional)"
+msgstr "Prova shtesë (opsionale)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Deri në tre skedarë, maksimumi 8 MiB secili; dhjetë skedarë për raport."
+
+msgid "Contact shared voluntarily"
+msgstr "Kontakti u nda vullnetarisht"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Lejo hetuesit të shohin emrin dhe emailin tim për këtë raport"
+
+msgid "This confidential report is not available."
+msgstr "Ky raport konfidencial nuk është i disponueshëm."
+
+msgid "Your message could not be saved."
+msgstr "Mesazhi juaj nuk mund të ruhej."
+
+msgid "Contact sharing could not be updated."
+msgstr "Ndarja e kontakteve nuk mund të përditësohej."
+
+msgid "Evidence could not be downloaded."
+msgstr "Prova nuk mund të shkarkohej."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Shembull i aktivitetit të plotësimit të formularit: llogaritni Indeksin e Masës Trupore</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Mosha</strong></td>            <td width=\"75%\" style=\"\">[25] vjeç</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Gjinia</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ose F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Pesha</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Gjatësia</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Indeksi i Masës Trupore</strong></td>            <td style=\"vertical-align: top;\">[29] IMT =Pesha/Gjatësia<sup>2</sup> (Kr.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikulli i Wikipedias</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Shembull i aktivitetit të plotësimit të formularit: llogaritni Indeksin e Masës Trupore</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Mosha</strong></td>            <td width=\"75%\" style=\"\">[25] vjeç</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Gjinia</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ose F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Pesha</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Gjatësia</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Indeksi i Masës Trupore</strong></td>            <td style=\"vertical-align: top;\">[29] IMT =Pesha/Gjatësia<sup>2</sup> (Kr.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikulli i Wikipedias</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Fshih adresën IP nga raportet"
+
+msgid "Course settings policies"
+msgstr "Politikat e cilësimeve të kursit"
+
+msgid "Academic transcripts"
+msgstr "Transkriptet akademike"
+
+msgid "Transcript program title"
+msgstr "Titulli i programit në transkript"
+
+msgid "Transcript course code"
+msgstr "Kodi i kursit në transkript"
+
+msgid "Transcript course hours field"
+msgstr "Fusha e orëve të kursit në transkript"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Orët e përfunduara në transkript janë orët e kërkuara"
+
+msgid "Transcript student number field"
+msgstr "Fusha e numrit të studentit në transkript"
+
+msgid "Transcript address fields"
+msgstr "Fushat e adresës në transkript"
+
+msgid "Transcript grading scale"
+msgstr "Shkalla e notimit në transkript"
+
+msgid "Transcript GPA note"
+msgstr "Shënimi i GPA-së në transkript"
+
+msgid "Transcript signatory name"
+msgstr "Emri i nënshkruesit të transkriptit"
+
+msgid "Transcript signatory title"
+msgstr "Titulli i nënshkruesit të transkriptit"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Aktivizo certifikatat e nënshkruara dhe ankorimin opsional në testnet-in Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Shfaq përgjigjet e temës vetëm pas pjesëmarrjes"
+
+msgid "Show the forum category description in threads"
+msgstr "Shfaq përshkrimin e kategorisë së forumit në temat"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Cilësimet e pjesëmarrjes në forum mund të ndryshohen sipas kursit"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Numri maksimal i postimeve të shfaqura në një temë forumi"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Postime të kërkuara për të përfunduar një temë forumi"
+
+msgid "Track e-mail openings"
+msgstr "Gjurmo hapjet e e-mail-it"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Lejo përgjigjet me e-mail ndaj mesazheve"
+
+msgid "Inbound e-mail address"
+msgstr "Adresa e e-mail-it hyrës"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN e kutisë postare hyrëse"
+
+msgid "Remember me duration (days)"
+msgstr "Kohëzgjatja e «Më kujto» (ditë)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Aktivizo regjistrimin dinamik të klientit OAuth përtej MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Aktivizo raportimin konfidencial të mirëqenies"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Numri minimal i raportuesve të ndryshëm për një hetim"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Lejo bashkëngjitjet konfidenciale të provave"
+
+msgid "Show confidential investigation notifications"
+msgstr "Shfaq njoftimet e hetimeve konfidenciale"
+
+msgid "Enable support chatbot"
+msgstr "Aktivizo chatbot-in e mbështetjes"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Zgjidhni ku termat e fjalorit theksohen automatikisht: dokumente, ushtrime dhe shtigje mësimi."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Fshih adresat IP në raportimin vizual dhe eksportet e raporteve. Adresat IP mbeten të ruajtura dhe të aksesueshme përmes procedurave të autorizuara të të dhënave personale."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Vlerat e paracaktuara të platformës dhe lejet e redaktimit të kursit; menaxhohen te Cilësimet e kursit."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Lejoni përdoruesit të shkarkojnë një transkript jozyrtar të kurseve që kanë përfunduar dhe lejoni administratorët, administratorët e sesioneve dhe menaxherët e burimeve njerëzore të lëshojnë transkripte zyrtare të nënshkruara për përdoruesit që menaxhojnë. Imazhi i nënshkrimit ngarkohet nga faqja e transkriptit të një përdoruesi."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Titulli i programit i printuar në çdo transkript, për shembull emri i diplomës që përgatitet në këtë platformë."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Cila fushë e kursit mbush kolonën e kodit të kursit në transkripte: kodi i kursit ose emri i departamentit."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Variabla e fushës shtesë të kursit që mban numrin e orëve të një kursi. Lëreni bosh për të përdorur kohëzgjatjen e kursit."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Printoni orët e kërkuara të një kursi si orët e përfunduara nga nxënësi. Kur është çaktivizuar, orët e përfunduara janë koha që nxënësi ka kaluar në kurs."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Variabla e fushës shtesë të përdoruesit që mban numrin e studentit të printuar në transkripte. Lëreni bosh për të mos printuar asgjë."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Variabla të ndara me presje të fushave shtesë të përdoruesit të printuara pas adresës së përdoruesit në transkripte, për shembull qyteti, shteti dhe kodi postar."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Listë JSON e shkronjave të notave, nga rezultati minimal më i lartë poshtë: çdo element ka rezultatin minimal në përqindje (min), shkronjën dhe pikët e notës që përdoren për të llogaritur GPA-në."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Shpjegimi se si llogaritet GPA-ja, i printuar nën GPA në transkripte."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Emri i zyrtarit të shkollës që nënshkruan transkriptet zyrtare."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Titulli i zyrtarit të shkollës që nënshkruan transkriptet zyrtare."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Kërkon pëlqim të qartë të pronarit dhe veprime manuale të administratorit. Në zinxhir dërgohen vetëm gjurmët SHA-256."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Nxënësit shohin vetëm postimin e parë të një teme forumi derisa të postojnë vetë në të. Administratorët, mësuesit, trajnerët dhe tutorët e grupeve i shohin gjithmonë të gjitha postimet."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Shfaq titullin dhe një përshkrim të shkurtuar të kategorisë së forumit në krye të çdo teme, me një lidhje për të lexuar përshkrimin e plotë."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Kur aktivizohet, mësuesit mund të zgjedhin në seksionin Forum të cilësimeve të kursit nëse kursi i tyre fsheh përgjigjet e temës derisa nxënësi të postojë, tregon përshkrimin e kategorisë në tema dhe sa postime pret shiriti i progresit të pjesëmarrjes, në vend që të ndjekë cilësimet e platformës."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Shfaq vetëm këtë numër postimesh të çdo teme forumi për çdo përdorues që nuk është administrator i platformës, përfshirë mësuesit, dhe për të gjithë brenda një shtegu mësimi. Në pamjet me tema dhe të ndërthurura, kufiri zbatohet për përgjigjet e çdo postimi. Postimet mbahen në rendin e pamjes: të parat, ose të fundit brenda një shtegu mësimi, ku postimet më të reja vijnë të parat. Vendosni 0 për të shfaqur çdo postim."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Tregoju nxënësve një shirit progresi në çdo temë forumi, i cili arrin 100% pasi të kenë postuar këtë numër mesazhesh në të. Postimet që presin moderim numërohen. Vendosni 0 për të fshehur shiritin e progresit."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Shton një imazh të vogël gjurmimi te e-mailet e njoftimit të mesazheve dhe regjistron kur kërkohet. Kjo tregon vetëm se e-maili mund të jetë hapur; nuk vërteton se është lexuar."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Lejo marrësit e njoftimeve të mesazheve direkte të përgjigjen me e-mail. Mesazhet hyrëse duhet të drejtohen te komanda e postës hyrëse të Chamilo nga infrastruktura e postës."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Adresa bazë e përdorur për drejtimin e përgjigjeve, për shembull replies@example.com. Chamilo shton një token unik marrësi duke përdorur adresimin plus."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Lidhja e kutisë postare e përdorur për të mbledhur përgjigjet hyrëse, për shembull imaps://user:password@imap.example.com:993/INBOX. Kodoni me URL karakteret e rezervuara në kredencialet."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Numri i ditëve për ta mbajtur përdoruesin të identifikuar kur zgjidhet Më kujto. Vendosni 0 për ta çaktivizuar. Kërkon HTTPS. Diapazoni i lejuar: 0 deri në 90. Koha e skadimit të sesionit normal konfigurohet veçmas në PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Lejon Regjistrimin Dinamik të Klientit të kërkojë çdo fushëveprim të regjistruar nga një server burimesh OAuth i Chamilo. Kur çaktivizohet, vetëregjistrimi mbetet i kufizuar te MCP. Qasja te burimet kufizohet gjithmonë veçmas nga lista e burimeve të lejuara të çdo klienti."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Aktivizo raportet konfidenciale të incidenteve. Moduli kërkon një çelës të mbrojtur enkriptimi dhe leje hetuesi."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Ndërmjet 2 dhe 10 raportuesish të ndryshëm duhet të raportojnë të njëjtin përdorues para se rasti t’u bëhet i dukshëm hetuesve."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Lejo prova me imazhe, audio dhe video të shkurtra. Bashkëngjitjet ekzistuese mbeten të lexueshme kur çaktivizohet."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Shfaq një tregues të brendshëm të hetimeve të përshtatshme. Nuk dërgon e-maile as njoftime të jashtme."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Shfaq një chatbot me pemë vendimesh në panelin e bisedës që mund t’i udhëheqë përdoruesit te "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Lejon mësuesit të krijojnë dhe versionojnë aplikacione arsimore të ndihmuara nga IA brenda kurseve."
+
+msgid "Department name"
+msgstr "Emri i departamentit"
+
+msgid "Documents and exercise"
+msgstr "Dokumente dhe ushtrim"
+
+msgid "Documents and learning path"
+msgstr "Dokumente dhe shteg mësimi"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokumente, ushtrim dhe shteg mësimi"
+
+msgid "session"
+msgstr "sesion"
+
+msgid "course"
+msgstr "kurs"
+
+msgid "You have been enrolled in %s"
+msgstr "Jeni regjistruar në %s"
 

@@ -792,7 +792,8 @@ if (isset($_POST['step2'])) {
                     $mailerDsn,
                     $mailerFromEmail,
                     $mailerFromName,
-                    $kernel
+                    $kernel,
+                    (string) $urlForm
                 );
 
                 error_log('Finish installation');

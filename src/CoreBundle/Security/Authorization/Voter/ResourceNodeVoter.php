@@ -324,7 +324,9 @@ class ResourceNodeVoter extends Voter
             if (0 === $groupId && $firstLink->getGroup() instanceof CGroup) {
                 $groupId = (int) $firstLink->getGroup()->getIid();
             }
-            if ($firstLink->getCourse() instanceof Course
+            // A course open to the world opens its files for reading only.
+            if (self::VIEW === $attribute
+                && $firstLink->getCourse() instanceof Course
                 && $firstLink->getCourse()->isPublic()
             ) {
                 return true;

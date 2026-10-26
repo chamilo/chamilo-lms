@@ -85,6 +85,24 @@ readonly class AccessUrlHelper
         return $accessUrl;
     }
 
+    /**
+     * Base URL, with a trailing slash, for absolute links read outside the request (e-mails).
+     * It comes from the access URL, because the client chooses the Host header. The request is
+     * only used while the main URL still holds the placeholder written at installation.
+     */
+    public function getCurrentBaseUrl(): string
+    {
+        $url = (string) $this->getCurrent()?->getUrl();
+
+        if ('' !== $url && AccessUrl::DEFAULT_ACCESS_URL !== $url) {
+            return rtrim($url, '/').'/';
+        }
+
+        $request = $this->requestStack->getMainRequest();
+
+        return null !== $request ? $request->getSchemeAndHttpHost().$request->getBasePath().'/' : '/';
+    }
+
     public function isSameBaseDomain(array $urls): bool
     {
         if (empty($urls)) {

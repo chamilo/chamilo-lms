@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -20,9 +21,20 @@ final class UpdateDocumentFileAction extends BaseResourceFileAction
         private readonly AiDisclosureHelper $aiDisclosureHelper,
     ) {}
 
-    public function __invoke(CDocument $document, Request $request, CDocumentRepository $repo, EntityManager $em): CDocument
-    {
-        $this->handleUpdateRequest($document, $repo, $request, $em);
+    public function __invoke(
+        CDocument $document,
+        Request $request,
+        CDocumentRepository $repo,
+        EntityManager $em,
+        CidReqHelper $cidReqHelper,
+    ): CDocument {
+        $this->handleUpdateRequest(
+            $document,
+            $repo,
+            $request,
+            $em,
+            fn (array $links) => $this->assertResourceLinksInCurrentContext($links, $cidReqHelper),
+        );
 
         $raw = $request->request->get('ai_assisted_raw', null);
         if (null !== $raw) {

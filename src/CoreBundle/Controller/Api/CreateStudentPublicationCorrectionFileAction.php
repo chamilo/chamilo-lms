@@ -63,7 +63,9 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
             $em,
             $cidReqHelper,
             $fileExistsOption,
-            $translator
+            $translator,
+            // The correction is reached through its submission; the body must not bind it elsewhere.
+            resourceLinkListOverride: []
         );
 
         $correction->setTitle($result['title']);

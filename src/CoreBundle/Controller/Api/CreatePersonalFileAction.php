@@ -27,7 +27,8 @@ class CreatePersonalFileAction extends BaseResourceFileAction
         }
 
         $resource = new PersonalFile();
-        $result = $this->handleCreateFileRequest($resource, $repo, $request, $em, $cidReqHelper, 'overwrite');
+        // A personal file is created unlinked; sharing it with users goes through the update.
+        $result = $this->handleCreateFileRequest($resource, $repo, $request, $em, $cidReqHelper, 'overwrite', resourceLinkListOverride: []);
 
         $resource->setTitle($result['title']);
 

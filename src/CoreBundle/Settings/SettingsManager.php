@@ -1930,6 +1930,21 @@ class SettingsManager implements SettingsManagerInterface
 
         $vars = self::COURSE_SETTINGS_PROPAGATION[$category];
 
+        // Do not silently alter historical course choices while a global policy locks them.
+        $mainUrl = $this->manager->getRepository(AccessUrl::class)->find(1);
+        if ($mainUrl instanceof AccessUrl) {
+            $policyRow = $this->manager->getRepository(SettingsCurrent::class)->findOneBy([
+                'url' => $mainUrl,
+                'category' => 'course',
+                'variable' => CourseSettingPolicy::SETTING,
+            ]);
+            $policies = CourseSettingPolicy::parse($policyRow?->getSelectedValue());
+            $vars = array_values(array_filter(
+                $vars,
+                static fn (string $variable): bool => CourseSettingPolicy::isEditable($policies, $variable),
+            ));
+        }
+
         // Build list of course settings to enable based on platform values.
         // Strategy: enable only those set to true at platform-level.
         $varToValue = [];

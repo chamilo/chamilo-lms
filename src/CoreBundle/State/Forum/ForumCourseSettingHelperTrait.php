@@ -21,16 +21,18 @@ trait ForumCourseSettingHelperTrait
 
     private function getCourseSettingValue(EntityManagerInterface $entityManager, Course $course, string $variable): mixed
     {
-        $setting = $entityManager->getRepository(CCourseSetting::class)->findOneBy([
+        $repository = $entityManager->getRepository(CCourseSetting::class);
+        $criteria = [
             'cId' => (int) $course->getId(),
             'variable' => $variable,
-        ]);
+        ];
+        $setting = $repository->findOneBy($criteria + ['category' => 'forum'])
+            ?? $repository->findOneBy($criteria + ['category' => null])
+            ?? $repository->findOneBy($criteria + ['category' => '']);
 
-        if (!$setting instanceof CCourseSetting) {
-            return null;
-        }
+        $value = $setting instanceof CCourseSetting ? $setting->getValue() : null;
 
-        return $setting->getValue();
+        return $this->courseSettingPolicyManager->effectiveValue($variable, $value, null, 'forum');
     }
 
     private function isTruthyForumCourseSettingValue(mixed $value): bool

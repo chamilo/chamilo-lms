@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Settings;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
@@ -17,6 +18,13 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 class SettingsCourseManager extends SettingsManager
 {
     protected Course $course;
+
+    private ?CourseSettingPolicyManager $courseSettingPolicyManager = null;
+
+    public function setCourseSettingPolicyManager(CourseSettingPolicyManager $policyManager): void
+    {
+        $this->courseSettingPolicyManager = $policyManager;
+    }
 
     /**
      * @return Course
@@ -64,7 +72,22 @@ class SettingsCourseManager extends SettingsManager
             }
         }
 
+        $storedParameters = $parameters;
         $parameters = $settingsBuilder->resolve($parameters);
+        if (null !== $this->courseSettingPolicyManager) {
+            foreach ($parameters as $name => $defaultValue) {
+                $effective = $this->courseSettingPolicyManager->effectiveValue(
+                    $name,
+                    $storedParameters[$name] ?? null,
+                    $defaultValue,
+                    $schemaAliasNoPrefix,
+                );
+                if (\is_int($defaultValue) && is_numeric((string) $effective)) {
+                    $effective = (int) $effective;
+                }
+                $parameters[$name] = $effective;
+            }
+        }
         $settings->setParameters($parameters);
 
         return $settings;
@@ -107,6 +130,11 @@ class SettingsCourseManager extends SettingsManager
         }
 
         foreach ($parameters as $name => $value) {
+            if (null !== $this->courseSettingPolicyManager
+                && !$this->courseSettingPolicyManager->isEditable($name, $simpleCategoryName)) {
+                continue;
+            }
+
             $value = match (true) {
                 \is_bool($value) => $value ? 'true' : 'false',
                 null === $value => '',
@@ -166,14 +194,26 @@ class SettingsCourseManager extends SettingsManager
      *
      * @return string|null the value of the setting if found, or null if not
      */
-    public function getCourseSettingValue(string $variableName): ?string
+    public function getCourseSettingValue(string $variableName, ?string $category = null): ?string
     {
         $repo = $this->manager->getRepository(CCourseSetting::class);
-        $courseSetting = $repo->findOneBy([
+        $criteria = [
             'cId' => $this->course->getId(),
             'variable' => $variableName,
-        ]);
+        ];
+        if (null !== $category && '' !== $category) {
+            $criteria['category'] = $category;
+        }
+        $courseSetting = $repo->findOneBy($criteria);
 
-        return $courseSetting ? $courseSetting->getValue() : null;
+        $value = $courseSetting?->getValue();
+        if (null === $this->courseSettingPolicyManager) {
+            return $value;
+        }
+
+        $resolvedCategory = $category ?? $courseSetting?->getCategory();
+        $effective = $this->courseSettingPolicyManager->effectiveValue($variableName, $value, null, $resolvedCategory);
+
+        return null === $effective ? null : (string) $effective;
     }
 }

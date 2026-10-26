@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\ORM\EntityManagerInterface;
@@ -45,6 +46,7 @@ class CertificateController extends AbstractController
     public function __construct(
         private readonly GradebookCertificateRepository $certificateRepository,
         private readonly SettingsManager $settingsManager,
+        private readonly CourseSettingPolicyManager $courseSettingPolicyManager,
         private readonly UserHelper $userHelper,
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly EntityManagerInterface $entityManager,
@@ -414,21 +416,24 @@ SQL,
             ['iid' => 'ASC'],
         );
 
+        $courseValue = null;
         foreach ($settings as $setting) {
-            if (!$setting instanceof CCourseSetting || null === $setting->getValue()) {
-                continue;
-            }
+            if ($setting instanceof CCourseSetting && null !== $setting->getValue()
+                && '-1' !== $setting->getValue()) {
+                $courseValue = $setting->getValue();
 
-            $value = strtolower(trim((string) $setting->getValue()));
-            if ('-1' === $value) {
-                continue;
+                break;
             }
-
-            return !\in_array($value, ['', '0', 'false', 'no', 'off'], true);
         }
 
-        // Legacy api_get_course_setting() returns -1 when no course override exists.
-        return true;
+        // Historically, a missing course override leaves public certificates enabled.
+        $value = strtolower(trim((string) $this->courseSettingPolicyManager->effectiveValue(
+            'allow_public_certificates',
+            $courseValue,
+            '1',
+        )));
+
+        return !\in_array($value, ['', '0', 'false', 'no', 'off'], true);
     }
 
     private function isSettingEnabled(string $name): bool

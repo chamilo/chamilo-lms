@@ -27,6 +27,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\DBAL\Connection;
@@ -300,6 +301,7 @@ final readonly class CourseSettingsManager
         private Connection $connection,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CourseSettingPolicyManager $courseSettingPolicyManager,
         private AccessUrlHelper $accessUrlHelper,
         private PluginHelper $pluginHelper,
         private CourseRepository $courseRepository,
@@ -319,6 +321,53 @@ final readonly class CourseSettingsManager
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
         private FilesystemOperator $themesFilesystem,
     ) {}
+
+    /**
+     * Central catalog for global course-setting policies. Dynamic settings
+     * already stored in c_course_setting are added by the admin page.
+     *
+     * @return array<string, string>
+     */
+    public static function getPolicyDefaults(): array
+    {
+        $defaults = [];
+        foreach (self::COURSE_SETTING_CATEGORIES as $variable => $category) {
+            if (isset(self::DEFAULT_VISIBILITY_SETTINGS[$variable])) {
+                $tool = self::DEFAULT_VISIBILITY_SETTINGS[$variable];
+                $defaults[$variable] = ResourceDefaultVisibilityHelper::getDefaults()[$tool];
+            } elseif (isset(self::AI_FEATURES[$variable])) {
+                $defaults[$variable] = 'false';
+            } else {
+                $defaults[$variable] = (string) (self::DEFAULT_VALUES[$variable] ?? '');
+            }
+        }
+
+        return $defaults;
+    }
+
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public static function getPolicyAllowedValues(): array
+    {
+        $values = [];
+        foreach (self::ALLOWED_INTEGER_VALUES as $variable => $options) {
+            $values[$variable] = array_map('strval', $options);
+        }
+        foreach (array_keys(self::AI_FEATURES) as $variable) {
+            $values[$variable] = ['true', 'false'];
+        }
+        foreach (array_keys(self::DEFAULT_VISIBILITY_SETTINGS) as $variable) {
+            $values[$variable] = [ResourceDefaultVisibilityHelper::VISIBLE, ResourceDefaultVisibilityHelper::INVISIBLE];
+        }
+        foreach (ForumParticipationSettingsHelper::SETTINGS as $variable) {
+            if (ForumParticipationSettingsHelper::PROGRESS_POSTS !== $variable) {
+                $values[$variable] = ['true', 'false', ''];
+            }
+        }
+
+        return $values;
+    }
 
     public function isWatermarkEnabled(): bool
     {
@@ -905,6 +954,30 @@ final readonly class CourseSettingsManager
             ], collapsed: true);
         }
 
+        foreach ($sections as &$section) {
+            $section['fields'] = array_values(array_filter(
+                $section['fields'],
+                function (array $field): bool {
+                    if (!$this->courseSettingPolicyManager->isEditable(
+                        (string) $field['key'],
+                        self::COURSE_SETTING_CATEGORIES[$field['key']] ?? null,
+                    )) {
+                        return false;
+                    }
+                    if ('auto_launch_option' === $field['key']) {
+                        foreach (['enable_document_auto_launch', 'enable_lp_auto_launch', 'enable_exercise_auto_launch', 'enable_forum_auto_launch'] as $variable) {
+                            if (!$this->courseSettingPolicyManager->isEditable($variable, self::COURSE_SETTING_CATEGORIES[$variable] ?? null)) {
+                                return false;
+                            }
+                        }
+                    }
+
+                    return true;
+                },
+            ));
+        }
+        unset($section);
+
         return $sections;
     }
 
@@ -1222,7 +1295,8 @@ final readonly class CourseSettingsManager
             if (!\array_key_exists($variable, $values)) {
                 continue;
             }
-            if (!$this->canSaveCourseSetting($variable, (int) $course->getId())) {
+            if (!$this->courseSettingPolicyManager->isEditable($variable, $category)
+                || !$this->canSaveCourseSetting($variable, (int) $course->getId())) {
                 continue;
             }
             $this->saveCourseSettingValue($course, $variable, $values[$variable], $category);
@@ -1451,17 +1525,25 @@ final readonly class CourseSettingsManager
             'cId' => (int) $course->getId(),
             'variable' => $variable,
         ], ['iid' => 'ASC']);
+        $courseValue = null;
         foreach ($items as $item) {
             if (!$item instanceof CCourseSetting || null === $item->getValue()) {
                 continue;
             }
             $value = $item->getValue();
             if ('-1' !== $value) {
-                return $value;
+                $courseValue = $value;
+
+                break;
             }
         }
 
-        return $defaultValue;
+        return $this->courseSettingPolicyManager->effectiveValue(
+            $variable,
+            $courseValue,
+            $defaultValue,
+            self::COURSE_SETTING_CATEGORIES[$variable] ?? null,
+        );
     }
 
     private function saveCourseSettingValue(Course $course, string $variable, mixed $value, string $category): void

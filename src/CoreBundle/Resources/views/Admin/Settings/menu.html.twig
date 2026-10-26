@@ -49,6 +49,14 @@
         ? ordered_namespaces
         : (schemas|keys|map(k => k|replace({'chamilo_core.settings.':''}))) %}
 
+    <a class="admin-settings__item {% if app.request.attributes.get('_route') == 'chamilo_course_settings_policies' %}admin-settings__item--active{% endif %}"
+       href="{{ path('chamilo_course_settings_policies') }}">
+        <i class="mdi mdi-cog-outline ch-tool-icon-gradient"
+           style="font-size:32px;width:32px;height:32px;line-height:32px"
+           aria-hidden="true"></i>
+        {{ 'Course settings'|trans }}
+    </a>
+
     {% for namespace in namespaces %}
         {% set label = namespace_labels[namespace] ?? (
             namespace == 'cas' ? 'CAS' :

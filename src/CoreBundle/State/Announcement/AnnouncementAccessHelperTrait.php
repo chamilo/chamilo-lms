@@ -12,8 +12,10 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -522,6 +524,7 @@ trait AnnouncementAccessHelperTrait
             ['iid' => 'ASC'],
         );
 
+        $policyManager = Container::$container->get(CourseSettingPolicyManager::class);
         $legacyValue = null;
         foreach ($settings as $setting) {
             if (!$setting instanceof CCourseSetting) {
@@ -532,7 +535,7 @@ trait AnnouncementAccessHelperTrait
             $value = $setting->getValue();
 
             if ('announcement' === $category) {
-                return $this->isSettingEnabled($value);
+                return $this->isSettingEnabled($policyManager->effectiveValue($variable, $value, $default ? '1' : '0', 'announcement'));
             }
 
             if ('' === $category && null === $legacyValue) {
@@ -541,10 +544,10 @@ trait AnnouncementAccessHelperTrait
         }
 
         if (null === $legacyValue || '' === trim((string) $legacyValue)) {
-            return $default;
+            return $this->isSettingEnabled($policyManager->effectiveValue($variable, null, $default ? '1' : '0', 'announcement'));
         }
 
-        return $this->isSettingEnabled($legacyValue);
+        return $this->isSettingEnabled($policyManager->effectiveValue($variable, $legacyValue, $default ? '1' : '0', 'announcement'));
     }
 
     private function isSettingEnabled(mixed $value): bool

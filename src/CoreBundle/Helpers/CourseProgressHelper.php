@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CThematic;
@@ -28,6 +29,7 @@ readonly class CourseProgressHelper
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CourseSettingPolicyManager $courseSettingPolicyManager,
         private UserHelper $userHelper,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
@@ -146,7 +148,7 @@ readonly class CourseProgressHelper
             $value = $setting->getValue();
 
             if ('course_progress' === $category) {
-                return $this->resolveEnabledValue($value);
+                return $this->resolveEnabledValue($this->courseSettingPolicyManager->effectiveValue('enabled', $value, '1', 'course_progress'));
             }
 
             if ('' === $category && null === $legacyValue) {
@@ -155,10 +157,10 @@ readonly class CourseProgressHelper
         }
 
         if (null === $legacyValue || '' === trim((string) $legacyValue)) {
-            return true;
+            return $this->resolveEnabledValue($this->courseSettingPolicyManager->effectiveValue('enabled', null, '1', 'course_progress'));
         }
 
-        return $this->resolveEnabledValue($legacyValue);
+        return $this->resolveEnabledValue($this->courseSettingPolicyManager->effectiveValue('enabled', $legacyValue, '1', 'course_progress'));
     }
 
     private function isSettingEnabled(string $name): bool

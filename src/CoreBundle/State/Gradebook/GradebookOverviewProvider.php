@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -48,6 +49,7 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CourseSettingPolicyManager $courseSettingPolicyManager,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private GradebookLinkResourceResolver $linkResourceResolver,
         private GradebookScoreCalculator $scoreCalculator,
@@ -711,6 +713,12 @@ final readonly class GradebookOverviewProvider implements ProviderInterface
 
             break;
         }
+
+        $modelId = (int) $this->courseSettingPolicyManager->effectiveValue(
+            'score_model_id',
+            -1 === $modelId ? null : (string) $modelId,
+            '-1',
+        );
 
         $selectedModel = $setting['models'][0];
         if (-1 !== $modelId) {

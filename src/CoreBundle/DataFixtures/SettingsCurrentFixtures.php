@@ -1639,6 +1639,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'course' => [
                 [
+                    'name' => 'course_settings_policies',
+                    'title' => 'Course settings policies',
+                    'comment' => 'Platform defaults and course edit permissions; managed in Course settings.',
+                ],
+                [
                     'name' => 'active_tools_on_create',
                     'title' => 'Active tools on course creation',
                     'comment' => 'Select the tools that will be *active* after the creation of a course.',

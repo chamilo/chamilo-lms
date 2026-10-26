@@ -95,6 +95,9 @@ services:
                 db_username: '%env(DATABASE_USER)%'
                 db_password: '%env(DATABASE_PASSWORD)%'
 
+    # This Settings service is excluded from CoreBundle's automatic service scan.
+    Chamilo\CoreBundle\Settings\CourseSettingPolicyManager: ~
+
     Chamilo\CoreBundle\Session\ConfigurableSessionHandler:
         arguments:
             $nativeHandler: '@session.handler.native'

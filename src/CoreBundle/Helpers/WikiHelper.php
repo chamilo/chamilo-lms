@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -34,6 +35,7 @@ readonly class WikiHelper
         private EntityManagerInterface $entityManager,
         private Security $security,
         private SettingsManager $settingsManager,
+        private CourseSettingPolicyManager $courseSettingPolicyManager,
         private UserHelper $userHelper,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
         private StudentViewHelper $studentViewHelper,
@@ -309,7 +311,7 @@ readonly class WikiHelper
             $value = $setting->getValue();
 
             if ('wiki' === $category) {
-                return $this->resolveBoolean($value, $default);
+                return $this->resolveBoolean($this->courseSettingPolicyManager->effectiveValue($variable, $value, $default ? '1' : '0', 'wiki'), $default);
             }
 
             if ('' === $category && null === $legacyValue) {
@@ -318,10 +320,10 @@ readonly class WikiHelper
         }
 
         if (null === $legacyValue || '' === trim((string) $legacyValue)) {
-            return $default;
+            return $this->resolveBoolean($this->courseSettingPolicyManager->effectiveValue($variable, null, $default ? '1' : '0', 'wiki'), $default);
         }
 
-        return $this->resolveBoolean($legacyValue, $default);
+        return $this->resolveBoolean($this->courseSettingPolicyManager->effectiveValue($variable, $legacyValue, $default ? '1' : '0', 'wiki'), $default);
     }
 
     public function isCourseLockedInsideSessions(Course $course): bool

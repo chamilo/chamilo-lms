@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumNotification;
@@ -61,6 +62,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
         private readonly CidReqHelper $cidReqHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
         private readonly ForumParticipationSettingsHelper $participationSettings,
+        private readonly CourseSettingPolicyManager $courseSettingPolicyManager,
     ) {}
 
     /**

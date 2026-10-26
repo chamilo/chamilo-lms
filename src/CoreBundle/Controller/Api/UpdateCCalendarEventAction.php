@@ -30,18 +30,20 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
         SettingsManager $settingsManager,
         AgendaHelper $agendaHelper,
     ): CCalendarEvent {
-        // handleUpdateRequest() adds the links without an id as they come, so they need the right to add an event there.
-        $payload = json_decode($request->getContent(), true);
-        $newLinks = array_filter(
-            \is_array($payload) ? (array) ($payload['resourceLinkListFromEntity'] ?? []) : [],
-            static fn ($link): bool => \is_array($link) && empty($link['id'])
+        // The new links need the right to add an event where they point.
+        $this->handleUpdateRequest(
+            $calendarEvent,
+            $repo,
+            $request,
+            $em,
+            static function (array $links) use ($agendaHelper): void {
+                if (!$agendaHelper->canAddLinks($links)) {
+                    throw new AccessDeniedHttpException();
+                }
+            },
+            // The agenda form sends the creator's user id as parent; events are scoped by their links.
+            false,
         );
-
-        if (!$agendaHelper->canAddLinks($newLinks)) {
-            throw new AccessDeniedHttpException();
-        }
-
-        $this->handleUpdateRequest($calendarEvent, $repo, $request, $em);
 
         $result = json_decode($request->getContent(), true);
         if (!\is_array($result)) {

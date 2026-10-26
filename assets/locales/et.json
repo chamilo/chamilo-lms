@@ -4255,5 +4255,8 @@
     "Contacts count": "Kontaktide arv",
     "Sessions by date": "Sessioonid kuup\u00e4eva j\u00e4rgi",
     "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "See salvestab migratsioonid, mis teie andmebaasis juba olemas on, ja j\u00e4tab uuemad ootele, et uuendus saaks need t\u00e4ita. Teie andmeid ei muudeta.",
-    "You have earned a certificate for this exercise": "You have earned a certificate for this exercise"
+    "You have earned a certificate for this exercise": "You have earned a certificate for this exercise",
+    "Delete message": "Delete message",
+    "Message Sent": "Message Sent",
+    "Are you sure you want to delete the selected message?": "Are you sure you want to delete the selected message?"
 }

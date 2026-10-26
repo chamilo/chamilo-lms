@@ -44,6 +44,14 @@ export default {
     return await baseService.post(`/global-reporting/student-bosses/${bossId}/learners`, { learnerId })
   },
 
+  async sendLearnerMessage(userId, subject, content) {
+    return await baseService.post(`/global-reporting/learners/${userId}/messages`, { subject, content })
+  },
+
+  async deleteLearnerMessage(userId, messageId) {
+    return await baseService.delete(`/global-reporting/learners/${userId}/messages/${messageId}`)
+  },
+
   async downloadSection(section, format, params = {}) {
     return await baseService.getRaw(`/api/global-reporting/export/${section}.${format}`, {
       params: cleanParams(params),

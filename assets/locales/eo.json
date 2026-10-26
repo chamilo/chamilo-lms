@@ -4259,5 +4259,8 @@
     "Learner details in course": "Detaloj de lernanto en kurso",
     "Start test": "Komenci teston",
     "Proceed with the test": "Da\u016drigi kun la testo",
-    "This email is already in use on the platform.": "\u0108i tiu retpo\u015dtadreso jam estas uzata en la platformo."
+    "This email is already in use on the platform.": "\u0108i tiu retpo\u015dtadreso jam estas uzata en la platformo.",
+    "Delete message": "Forigi mesa\u011don",
+    "Message Sent": "Mesa\u011do sendita",
+    "Are you sure you want to delete the selected message?": "\u0108u vi certas ke vi volas forigi la elektitan mesa\u011don?"
 }

@@ -4255,5 +4255,8 @@
     "Contacts count": "\u018flaq\u0259l\u0259rin say\u0131",
     "Sessions by date": "Tarix\u0259 g\u00f6r\u0259 sessiyalar",
     "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Bu \u0259m\u0259liyyat veril\u0259nl\u0259r bazan\u0131zda art\u0131q m\u00f6vcud olan miqrasiyalar\u0131 qeyd\u0259 al\u0131r v\u0259 yenil\u0259m\u0259nin icra ed\u0259 bilm\u0259si \u00fc\u00e7\u00fcn daha yeni miqrasiyalar\u0131 g\u00f6zl\u0259m\u0259d\u0259 saxlay\u0131r. M\u0259lumatlar\u0131n\u0131z d\u0259yi\u015fdirilmir.",
-    "You have earned a certificate for this exercise": "Bu tap\u015f\u0131r\u0131q/test \u00fc\u00e7\u00fcn sertifikat qazanm\u0131s\u0131n\u0131z"
+    "You have earned a certificate for this exercise": "Bu tap\u015f\u0131r\u0131q/test \u00fc\u00e7\u00fcn sertifikat qazanm\u0131s\u0131n\u0131z",
+    "Delete message": "Delete message",
+    "Message Sent": "Message Sent",
+    "Are you sure you want to delete the selected message?": "Are you sure you want to delete the selected message?"
 }

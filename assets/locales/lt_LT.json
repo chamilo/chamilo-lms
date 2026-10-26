@@ -4259,5 +4259,8 @@
     "Learner details in course": "Studento detal\u0117s kurse",
     "Start test": "Prad\u0117ti test\u0105",
     "Proceed with the test": "T\u0119sti test\u0105",
-    "This email is already in use on the platform.": "\u0160is el. pa\u0161tas jau naudojamas platformoje."
+    "This email is already in use on the platform.": "\u0160is el. pa\u0161tas jau naudojamas platformoje.",
+    "Delete message": "I\u0161trinti prane\u0161im\u0105",
+    "Message Sent": "Prane\u0161imas i\u0161si\u0173stas",
+    "Are you sure you want to delete the selected message?": "Ar tikrai norite i\u0161trinti pa\u017eym\u0117t\u0105 prane\u0161im\u0105?"
 }

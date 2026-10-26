@@ -4259,5 +4259,8 @@
     "Learner details in course": "Mga detalye ng mag-aaral sa kurso",
     "Start test": "Simulan ang pagsusulit",
     "Proceed with the test": "Ituloy ang pagsusulit",
-    "This email is already in use on the platform.": "Ang email na ito ay ginagamit na sa platform."
+    "This email is already in use on the platform.": "Ang email na ito ay ginagamit na sa platform.",
+    "Delete message": "Burahin ang mensahe",
+    "Message Sent": "Naipadala na ang mensahe",
+    "Are you sure you want to delete the selected message?": "Sigurado ka bang gusto mong burahin ang napiling mensahe?"
 }

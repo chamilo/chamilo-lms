@@ -4259,5 +4259,8 @@
     "Learner details in course": "Detaljer om brugeren i relation til kursussiden",
     "Start test": "Start test",
     "Proceed with the test": "Forts\u00e6t med testen",
-    "This email is already in use on the platform.": "Denne e-mail er allerede i brug p\u00e5 platformen."
+    "This email is already in use on the platform.": "Denne e-mail er allerede i brug p\u00e5 platformen.",
+    "Delete message": "Slet besked",
+    "Message Sent": "Besked sendt",
+    "Are you sure you want to delete the selected message?": "Er du sikker p\u00e5, at du vil slette den valgte besked?"
 }

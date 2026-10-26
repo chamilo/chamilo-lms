@@ -4259,5 +4259,8 @@
     "Learner details in course": "Detalles del estudiante en el curso",
     "Start test": "Iniciar la prueba",
     "Proceed with the test": "Continuar el ejercicio",
-    "This email is already in use on the platform.": "Este correo electr\u00f3nico ya est\u00e1 registrado en el sistema."
+    "This email is already in use on the platform.": "Este correo electr\u00f3nico ya est\u00e1 registrado en el sistema.",
+    "Delete message": " Borrar mensaje",
+    "Message Sent": "Mensaje enviado",
+    "Are you sure you want to delete the selected message?": "\u00bfEsta seguro de que desea borrar este mensaje?"
 }

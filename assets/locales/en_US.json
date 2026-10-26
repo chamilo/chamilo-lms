@@ -4314,5 +4314,8 @@
     "Show the forum category description in threads": "Show the forum category description in threads",
     "Posts required to complete a forum thread": "Posts required to complete a forum thread",
     "Use the platform setting": "Use the platform setting",
-    "Leave empty to use the platform setting, or set 0 to hide the participation progress bar.": "Leave empty to use the platform setting, or set 0 to hide the participation progress bar."
+    "Leave empty to use the platform setting, or set 0 to hide the participation progress bar.": "Leave empty to use the platform setting, or set 0 to hide the participation progress bar.",
+    "Delete message": "Delete message",
+    "Message Sent": "Message Sent",
+    "Are you sure you want to delete the selected message?": "Are you sure you want to delete the selected message?"
 }

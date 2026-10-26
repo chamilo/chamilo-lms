@@ -4259,5 +4259,8 @@
     "Learner details in course": "\u8bfe\u7a0b\u4e2d\u7684\u5b66\u4e60\u8005\u8be6\u60c5",
     "Start test": "\u5f00\u59cb\u6d4b\u8bd5",
     "Proceed with the test": "\u7ee7\u7eed\u6d4b\u8bd5",
-    "This email is already in use on the platform.": "\u6b64\u7535\u5b50\u90ae\u4ef6\u5df2\u5728\u5e73\u53f0\u4e0a\u4f7f\u7528\u3002"
+    "This email is already in use on the platform.": "\u6b64\u7535\u5b50\u90ae\u4ef6\u5df2\u5728\u5e73\u53f0\u4e0a\u4f7f\u7528\u3002",
+    "Delete message": "\u5220\u9664\u6d88\u606f",
+    "Message Sent": "\u6d88\u606f\u5df2\u53d1\u9001",
+    "Are you sure you want to delete the selected message?": "\u60a8\u786e\u5b9a\u8981\u5220\u9664\u9009\u5b9a\u6d88\u606f\u5417\uff1f"
 }

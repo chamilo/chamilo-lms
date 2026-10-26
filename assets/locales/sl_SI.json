@@ -4259,5 +4259,8 @@
     "Learner details in course": "Podrobnosti o te\u010dajniku znotraj te\u010daja",
     "Start test": "Pri\u010dni test",
     "Proceed with the test": "Nadaljuj s testom",
-    "This email is already in use on the platform.": "Ta po\u0161tni naslov ni na voljo"
+    "This email is already in use on the platform.": "Ta po\u0161tni naslov ni na voljo",
+    "Delete message": "Odstrani sporo\u010dilo",
+    "Message Sent": "Sporo\u010dilo je bilo poslano",
+    "Are you sure you want to delete the selected message?": "Ste prepri\u010dani, da \u017eelite odstraniti izbrana sporo\u010dila?"
 }

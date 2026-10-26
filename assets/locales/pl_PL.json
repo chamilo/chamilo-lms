@@ -4259,5 +4259,8 @@
     "Learner details in course": "Szczeg\u00f3\u0142y studenta w kursie",
     "Start test": "Rozpocznij test",
     "Proceed with the test": "Przyst\u0105p do testu",
-    "This email is already in use on the platform.": "Ten e-mail jest ju\u017c u\u017cywany na platformie."
+    "This email is already in use on the platform.": "Ten e-mail jest ju\u017c u\u017cywany na platformie.",
+    "Delete message": "Usu\u0144 wiadomo\u015b\u0107",
+    "Message Sent": "Wiadomo\u015b\u0107 wys\u0142ana",
+    "Are you sure you want to delete the selected message?": "Czy na pewno chcesz usun\u0105\u0107 zaznaczon\u0105 wiadomo\u015b\u0107?"
 }

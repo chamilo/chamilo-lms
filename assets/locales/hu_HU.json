@@ -4259,5 +4259,8 @@
     "Learner details in course": "A kurzus tanul\u00f3inak adatai",
     "Start test": "Teszt ind\u00edt\u00e1sa",
     "Proceed with the test": "Teszt folytat\u00e1sa",
-    "This email is already in use on the platform.": "Ez az e-mail c\u00edm m\u00e1r haszn\u00e1latban van a platformon."
+    "This email is already in use on the platform.": "Ez az e-mail c\u00edm m\u00e1r haszn\u00e1latban van a platformon.",
+    "Delete message": "\u00dczenet t\u00f6rl\u00e9se",
+    "Message Sent": "Az \u00fczenet elk\u00fcldve",
+    "Are you sure you want to delete the selected message?": "Biztosan t\u00f6r\u00f6lni akarja a kiv\u00e1lasztott \u00fczenetet?"
 }

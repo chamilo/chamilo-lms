@@ -4255,5 +4255,8 @@
     "Contacts count": "Antall kontakter",
     "Sessions by date": "\u00d8kter etter dato",
     "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Dette registrerer migreringene databasen din allerede har, og lar de nyere st\u00e5 som ventende slik at oppdateringen kan kj\u00f8re dem. Dataene dine blir ikke endret.",
-    "You have earned a certificate for this exercise": "You have earned a certificate for this exercise"
+    "You have earned a certificate for this exercise": "You have earned a certificate for this exercise",
+    "Delete message": "Delete message",
+    "Message Sent": "Message Sent",
+    "Are you sure you want to delete the selected message?": "Are you sure you want to delete the selected message?"
 }

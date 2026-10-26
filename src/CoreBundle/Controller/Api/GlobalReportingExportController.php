@@ -57,6 +57,8 @@ final readonly class GlobalReportingExportController
             $exportData = $this->createAdminUserExportData($data);
         } elseif ('learner-detail' === $section && (int) $request->query->get('courseId', '0') > 0) {
             $exportData = $this->createLearnerCourseExportData($data);
+        } elseif ('learner-detail' === $section) {
+            $exportData = $this->createLearnerExportData($data);
         } else {
             $columns = array_values(array_filter(
                 $data['columns'],
@@ -179,6 +181,35 @@ final readonly class GlobalReportingExportController
         }
 
         return ['columns' => $columns, 'items' => $items];
+    }
+
+    /**
+     * Each subscription's courses followed by its total row, as the legacy learner page exported them.
+     *
+     * @param array<string, mixed> $data
+     *
+     * @return array{columns: array<int, array<string, mixed>>, items: array<int, array<string, mixed>>}
+     */
+    private function createLearnerExportData(array $data): array
+    {
+        $items = \is_array($data['items'] ?? null) ? $data['items'] : [];
+        $rows = [];
+        foreach ($data['meta']['subscriptions'] ?? [] as $subscription) {
+            foreach ($items as $item) {
+                if ((int) $item['sessionId'] === (int) $subscription['sessionId']) {
+                    $rows[] = $item;
+                }
+            }
+            $rows[] = ['sessionTitle' => 'Total'] + $subscription['totals'];
+        }
+
+        return [
+            'columns' => array_values(array_filter(
+                $data['columns'],
+                static fn (array $column): bool => 'course-reporting-detail' !== ($column['type'] ?? ''),
+            )),
+            'items' => $rows,
+        ];
     }
 
     /**

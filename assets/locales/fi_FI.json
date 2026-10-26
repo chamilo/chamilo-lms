@@ -4259,5 +4259,8 @@
     "Learner details in course": "Oppijan tiedot kurssilla",
     "Start test": "Aloita testi",
     "Proceed with the test": "Jatka testi\u00e4",
-    "This email is already in use on the platform.": "S\u00e4hk\u00f6posti ei ole saatavilla"
+    "This email is already in use on the platform.": "S\u00e4hk\u00f6posti ei ole saatavilla",
+    "Delete message": "Poista viesti",
+    "Message Sent": "Viesti l\u00e4hetetty",
+    "Are you sure you want to delete the selected message?": "Haluatko varmasti poistaa valitun viestin?"
 }

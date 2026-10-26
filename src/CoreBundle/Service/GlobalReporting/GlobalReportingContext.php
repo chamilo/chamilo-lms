@@ -28,6 +28,7 @@ final readonly class GlobalReportingContext
         public bool $allowTeacherAccessStudentSkills,
         public bool $learningCalendarEnabled,
         public bool $studentFollowUpEnabled,
+        public bool $isSessionAdministrator = false,
     ) {}
 
     public function currentUserId(): int

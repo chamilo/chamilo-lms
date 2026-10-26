@@ -4259,5 +4259,8 @@
     "Learner details in course": "Kursta \u00f6\u011frenci detaylar\u0131",
     "Start test": "S\u0131nav\u0131 ba\u015flat",
     "Proceed with the test": "Teste devam et",
-    "This email is already in use on the platform.": "Bu e-posta platformda zaten kullan\u0131l\u0131yor."
+    "This email is already in use on the platform.": "Bu e-posta platformda zaten kullan\u0131l\u0131yor.",
+    "Delete message": "Mesaj\u0131 sil",
+    "Message Sent": "Mesaj g\u00f6nderildi",
+    "Are you sure you want to delete the selected message?": "Se\u00e7ili mesaj\u0131 silmek istedi\u011finizden emin misiniz?"
 }

@@ -4259,5 +4259,8 @@
     "Learner details in course": "Iinkcukacha zomfundi kwizifundo",
     "Start test": "Qala uvavanyo",
     "Proceed with the test": "Qhubeka novavanyo",
-    "This email is already in use on the platform.": "Le imeyile isele isetyenzisiwe eqongeni."
+    "This email is already in use on the platform.": "Le imeyile isele isetyenzisiwe eqongeni.",
+    "Delete message": "Cima umyalezo",
+    "Message Sent": "Umeyalezo uthunyelwe",
+    "Are you sure you want to delete the selected message?": "Uqinisekile ukuba ufuna ukucima umyalezo okhethiweyo?"
 }

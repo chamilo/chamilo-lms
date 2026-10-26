@@ -4300,5 +4300,8 @@
     "Show the forum category description in threads": "Afficher la description de la cat\u00e9gorie de forum dans les fils",
     "Posts required to complete a forum thread": "Messages requis pour compl\u00e9ter un fil de forum",
     "Use the platform setting": "Utiliser le param\u00e8tre de la plateforme",
-    "Leave empty to use the platform setting, or set 0 to hide the participation progress bar.": "Laissez vide pour utiliser le param\u00e8tre de la plateforme, ou indiquez 0 pour masquer la barre de progression de participation."
+    "Leave empty to use the platform setting, or set 0 to hide the participation progress bar.": "Laissez vide pour utiliser le param\u00e8tre de la plateforme, ou indiquez 0 pour masquer la barre de progression de participation.",
+    "Delete message": "Supprimer le message",
+    "Message Sent": "Message envoy\u00e9",
+    "Are you sure you want to delete the selected message?": "\u00cates-vous certain de vouloir supprimer le message s\u00e9lectionn\u00e9\u202f?"
 }

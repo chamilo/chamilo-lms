@@ -4259,5 +4259,8 @@
     "Learner details in course": "\ucf54\uc2a4 \ub0b4 \ud559\uc2b5\uc790 \uc0c1\uc138 \uc815\ubcf4",
     "Start test": "\uc2dc\ud5d8 \uc2dc\uc791",
     "Proceed with the test": "\uc2dc\ud5d8 \uc9c4\ud589",
-    "This email is already in use on the platform.": "\uc774 \uc774\uba54\uc77c\uc740 \ud50c\ub7ab\ud3fc\uc5d0\uc11c \uc774\ubbf8 \uc0ac\uc6a9 \uc911\uc785\ub2c8\ub2e4."
+    "This email is already in use on the platform.": "\uc774 \uc774\uba54\uc77c\uc740 \ud50c\ub7ab\ud3fc\uc5d0\uc11c \uc774\ubbf8 \uc0ac\uc6a9 \uc911\uc785\ub2c8\ub2e4.",
+    "Delete message": "\uba54\uc2dc\uc9c0 \uc0ad\uc81c",
+    "Message Sent": "\ubcf4\ub0b8 \uba54\uc2dc\uc9c0",
+    "Are you sure you want to delete the selected message?": "\uc120\ud0dd\ub41c \uba54\uc2dc\uc9c0\ub97c \uc0ad\uc81c\ud558\uc2dc\uaca0\uc2b5\ub2c8\uae4c?"
 }

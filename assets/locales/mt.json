@@ -4241,5 +4241,8 @@
     "Contacts count": "Numru ta' kuntatti",
     "Sessions by date": "Sessjonijiet skont id-data",
     "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "Dan jirre\u0121istra l-migrazzjonijiet li d-database tieg\u0127ek di\u0121\u00e0 \u0121\u0121orr, u j\u0127alli dawk aktar \u0121odda pendenti biex l-a\u0121\u0121ornament ikun jista' je\u017cegwihom. Id-data tieg\u0127ek ma ti\u0121ix modifikata.",
-    "You have earned a certificate for this exercise": "You have earned a certificate for this exercise"
+    "You have earned a certificate for this exercise": "You have earned a certificate for this exercise",
+    "Delete message": "Delete message",
+    "Message Sent": "Message Sent",
+    "Are you sure you want to delete the selected message?": "Are you sure you want to delete the selected message?"
 }

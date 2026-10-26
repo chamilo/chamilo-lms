@@ -6,14 +6,23 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\GlobalReporting;
 
+use Attendance;
+use Category;
 use Chamilo\CoreBundle\Controller\LegalAgreementController;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageRelUser;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Security\Authorization\LoginAsAuthorizationChecker;
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
@@ -39,6 +48,7 @@ final readonly class GlobalReportingSectionQueryService
     private const int USER_STATUS_STUDENT_BOSS = 17;
 
     private const int SESSION_RELATION_TYPE_HUMAN_RESOURCES = 1;
+    private const int COURSE_RELATION_TYPE_HUMAN_RESOURCES = 1;
     private const int SESSION_STATUS_COURSE_COACH = 2;
     private const int SESSION_RELATION_TYPE_GENERAL_COACH = 3;
     private const int SESSION_RELATION_TYPE_ADMINISTRATOR = 4;
@@ -113,6 +123,7 @@ final readonly class GlobalReportingSectionQueryService
         private SkillRepository $skillRepository,
         private AssetRepository $assetRepository,
         private ReportIpVisibility $reportIpVisibility,
+        private SessionRepository $sessionRepository,
     ) {}
 
     /**
@@ -1077,23 +1088,84 @@ final readonly class GlobalReportingSectionQueryService
             throw new BadRequestHttpException('The requested learner does not exist.');
         }
 
-        $detailWhere = ['(base_subscription.id IS NOT NULL OR session_subscription.id IS NOT NULL)'];
-        $detailParameters = ['userId' => $userId];
-        $detailTypes = ['userId' => Types::INTEGER];
-        $sessionMetricFilter = '';
-        $resourceSessionFilter = '';
+        // One row per subscription, as the legacy page listed the direct courses, then each session's.
+        $detailWhere = ['1 = 1'];
+        $detailParameters = [
+            'userId' => $userId,
+            'humanResourcesRelation' => self::COURSE_RELATION_TYPE_HUMAN_RESOURCES,
+        ];
+        $detailTypes = [
+            'userId' => Types::INTEGER,
+            'humanResourcesRelation' => Types::INTEGER,
+        ];
 
         if ($filters['courseId'] > 0) {
             $detailWhere[] = 'course.id = :courseId';
             $detailParameters['courseId'] = $filters['courseId'];
             $detailTypes['courseId'] = Types::INTEGER;
         }
-        if ($filters['sessionId'] > 0) {
-            $detailWhere[] = 'session_subscription.session_id = :sessionId';
-            $detailParameters['sessionId'] = $filters['sessionId'];
+        // A course detail is one subscription, where session 0 is the direct one; a session block
+        // export asks for one subscription list, including the direct courses (0).
+        $sessionFilter = $filters['subscriptionSessionId'];
+        if ($filters['courseId'] > 0 || $filters['sessionId'] > 0) {
+            $sessionFilter = $filters['sessionId'];
+        }
+        // As in the legacy page, only administrators, human resources managers, student bosses and
+        // session administrators see every subscription; a teacher, tutor or coach sees the courses
+        // and sessions they follow. A course teacher also follows that course inside sessions.
+        if (
+            !$context->isAdministrator
+            && !$context->isHumanResourcesManager
+            && !$context->isStudentBoss
+            && !$context->isSessionAdministrator
+            && $context->currentUserId() !== $userId
+        ) {
+            $detailWhere[] = '(
+                EXISTS (
+                    SELECT 1
+                      FROM course_rel_user viewer_course
+                     WHERE viewer_course.c_id = course.id
+                       AND viewer_course.user_id = :viewerId
+                       AND (viewer_course.status = :teacherStatus OR viewer_course.is_tutor = 1)
+                )
+                OR (
+                    subscription.session_id > 0
+                    AND (
+                        EXISTS (
+                            SELECT 1
+                              FROM session_rel_user viewer_session
+                             WHERE viewer_session.session_id = subscription.session_id
+                               AND viewer_session.user_id = :viewerId
+                               AND viewer_session.relation_type = :generalCoach
+                        )
+                        OR EXISTS (
+                            SELECT 1
+                              FROM session_rel_course_rel_user viewer_session_course
+                             WHERE viewer_session_course.session_id = subscription.session_id
+                               AND viewer_session_course.c_id = course.id
+                               AND viewer_session_course.user_id = :viewerId
+                               AND viewer_session_course.status = :courseCoach
+                        )
+                    )
+                )
+            )';
+            $detailParameters += [
+                'viewerId' => $context->currentUserId(),
+                'teacherStatus' => CourseRelUser::TEACHER,
+                'generalCoach' => Session::GENERAL_COACH,
+                'courseCoach' => Session::COURSE_COACH,
+            ];
+            $detailTypes += [
+                'viewerId' => Types::INTEGER,
+                'teacherStatus' => Types::INTEGER,
+                'generalCoach' => Types::INTEGER,
+                'courseCoach' => Types::INTEGER,
+            ];
+        }
+        if (null !== $sessionFilter) {
+            $detailWhere[] = 'subscription.session_id = :sessionId';
+            $detailParameters['sessionId'] = $sessionFilter;
             $detailTypes['sessionId'] = Types::INTEGER;
-            $sessionMetricFilter = ' AND session_id = :sessionId';
-            $resourceSessionFilter = ' AND resource_link.session_id = :sessionId';
         }
 
         $rows = $this->connection->fetchAllAssociative(
@@ -1101,8 +1173,11 @@ final readonly class GlobalReportingSectionQueryService
                     course.resource_node_id AS resourceNodeId,
                     course.code,
                     course.title,
-                    COALESCE(session_subscription.session_id, 0) AS sessionId,
-                    COALESCE(base_subscription.progress, session_subscription.progress, 0) AS subscriptionProgress,
+                    subscription.session_id AS sessionId,
+                    session.title AS sessionTitle,
+                    session.access_start_date AS sessionAccessStartDate,
+                    session.access_end_date AS sessionAccessEndDate,
+                    COALESCE(subscription.progress, 0) AS subscriptionProgress,
                     COALESCE(access_metrics.timeSeconds, 0) AS timeSeconds,
                     access_metrics.firstAccess,
                     access_metrics.lastAccess,
@@ -1111,15 +1186,23 @@ final readonly class GlobalReportingSectionQueryService
                     COALESCE(exercise_metrics.attempts, 0) AS attempts,
                     COALESCE(work_metrics.assignments, 0) AS assignments,
                     COALESCE(forum_metrics.forumPosts, 0) AS forumPosts
-               FROM course
-               LEFT JOIN course_rel_user base_subscription
-                   ON base_subscription.c_id = course.id
-                  AND base_subscription.user_id = :userId
-               LEFT JOIN session_rel_course_rel_user session_subscription
-                   ON session_subscription.c_id = course.id
-                  AND session_subscription.user_id = :userId
+               FROM (
+                    SELECT c_id, 0 AS session_id, MAX(progress) AS progress
+                      FROM course_rel_user
+                     WHERE user_id = :userId
+                       AND relation_type <> :humanResourcesRelation
+                  GROUP BY c_id
+                    UNION ALL
+                    SELECT c_id, session_id, MAX(progress) AS progress
+                      FROM session_rel_course_rel_user
+                     WHERE user_id = :userId
+                  GROUP BY c_id, session_id
+               ) subscription
+               INNER JOIN course ON course.id = subscription.c_id
+               LEFT JOIN session ON session.id = subscription.session_id
                LEFT JOIN (
                     SELECT c_id,
+                           COALESCE(session_id, 0) AS session_id,
                            SUM(
                                CASE
                                    WHEN logout_course_date IS NOT NULL
@@ -1131,58 +1214,53 @@ final readonly class GlobalReportingSectionQueryService
                            MIN(login_course_date) AS firstAccess,
                            MAX(COALESCE(logout_course_date, login_course_date)) AS lastAccess
                       FROM track_e_course_access
-                     WHERE user_id = :userId'.$sessionMetricFilter.'
-                  GROUP BY c_id
+                     WHERE user_id = :userId
+                  GROUP BY c_id, COALESCE(session_id, 0)
                ) access_metrics ON access_metrics.c_id = course.id
+                               AND access_metrics.session_id = subscription.session_id
                LEFT JOIN (
-                    SELECT c_id, AVG(progress) AS learningPathProgress
+                    SELECT c_id, COALESCE(session_id, 0) AS session_id, AVG(progress) AS learningPathProgress
                       FROM c_lp_view
-                     WHERE user_id = :userId'.$sessionMetricFilter.'
-                  GROUP BY c_id
+                     WHERE user_id = :userId
+                  GROUP BY c_id, COALESCE(session_id, 0)
                ) lp_metrics ON lp_metrics.c_id = course.id
+                           AND lp_metrics.session_id = subscription.session_id
                LEFT JOIN (
                     SELECT c_id,
+                           COALESCE(session_id, 0) AS session_id,
                            COUNT(*) AS attempts,
                            AVG(CASE WHEN max_score > 0 THEN score * 100 / max_score ELSE 0 END) AS exerciseAverage
                       FROM track_e_exercises
-                     WHERE exe_user_id = :userId'.$sessionMetricFilter.'
-                  GROUP BY c_id
+                     WHERE exe_user_id = :userId
+                  GROUP BY c_id, COALESCE(session_id, 0)
                ) exercise_metrics ON exercise_metrics.c_id = course.id
+                                 AND exercise_metrics.session_id = subscription.session_id
                LEFT JOIN (
-                    SELECT resource_link.c_id, COUNT(publication.iid) AS assignments
+                    SELECT resource_link.c_id,
+                           COALESCE(resource_link.session_id, 0) AS session_id,
+                           COUNT(publication.iid) AS assignments
                       FROM c_student_publication publication
                       INNER JOIN resource_link ON resource_link.resource_node_id = publication.resource_node_id
                      WHERE publication.user_id = :userId
                        AND publication.parent_id IS NOT NULL
-                       AND resource_link.deleted_at IS NULL'.$resourceSessionFilter.'
-                  GROUP BY resource_link.c_id
+                       AND resource_link.deleted_at IS NULL
+                  GROUP BY resource_link.c_id, COALESCE(resource_link.session_id, 0)
                ) work_metrics ON work_metrics.c_id = course.id
+                             AND work_metrics.session_id = subscription.session_id
                LEFT JOIN (
-                    SELECT resource_link.c_id, COUNT(post.iid) AS forumPosts
+                    SELECT resource_link.c_id,
+                           COALESCE(resource_link.session_id, 0) AS session_id,
+                           COUNT(post.iid) AS forumPosts
                       FROM c_forum_post post
                       INNER JOIN resource_link ON resource_link.resource_node_id = post.resource_node_id
                      WHERE post.poster_id = :userId
                        AND post.visible = 1
-                       AND resource_link.deleted_at IS NULL'.$resourceSessionFilter.'
-                  GROUP BY resource_link.c_id
+                       AND resource_link.deleted_at IS NULL
+                  GROUP BY resource_link.c_id, COALESCE(resource_link.session_id, 0)
                ) forum_metrics ON forum_metrics.c_id = course.id
+                              AND forum_metrics.session_id = subscription.session_id
               WHERE '.implode(' AND ', $detailWhere).'
-           GROUP BY course.id,
-                    course.resource_node_id,
-                    course.code,
-                    course.title,
-                    session_subscription.session_id,
-                    base_subscription.progress,
-                    session_subscription.progress,
-                    access_metrics.timeSeconds,
-                    access_metrics.firstAccess,
-                    access_metrics.lastAccess,
-                    lp_metrics.learningPathProgress,
-                    exercise_metrics.exerciseAverage,
-                    exercise_metrics.attempts,
-                    work_metrics.assignments,
-                    forum_metrics.forumPosts
-           ORDER BY course.title ASC',
+           ORDER BY subscription.session_id ASC, course.title ASC',
             $detailParameters,
             $detailTypes,
         );
@@ -1200,8 +1278,10 @@ final readonly class GlobalReportingSectionQueryService
             $row['attempts'] = (int) $row['attempts'];
             $row['assignments'] = (int) $row['assignments'];
             $row['forumPosts'] = (int) $row['forumPosts'];
-            $row['absences'] = null;
-            $row['gradebook'] = null;
+            $row['sessionTitle'] = null === $row['sessionTitle'] ? null : (string) $row['sessionTitle'];
+            $row += $this->getLearnerAttendanceAndGradebook($userId, $row['id'], $row['sessionId']);
+            $row['absences'] = $this->formatFraction($row['attendanceFaults'], $row['attendanceTotal']);
+            $row['gradebook'] = $this->formatFraction($row['gradebookScore'], $row['gradebookMax']);
             $totalTime += $row['timeSeconds'];
             $progressSum += $row['learningPathProgress'];
         }
@@ -1262,6 +1342,7 @@ final readonly class GlobalReportingSectionQueryService
             $courseCount,
             [],
             [
+                ['key' => 'sessionTitle', 'label' => 'Session', 'type' => 'text'],
                 ['key' => 'title', 'label' => 'Course', 'type' => 'text'],
                 ['key' => 'timeSeconds', 'label' => 'Time', 'type' => 'duration'],
                 ['key' => 'learningPathProgress', 'label' => 'Progress', 'type' => 'percent'],
@@ -1291,6 +1372,12 @@ final readonly class GlobalReportingSectionQueryService
                     ...($context->showEmailAddresses ? ['email' => (string) $user['email']] : []),
                 ],
                 'course' => $courseDetail,
+                'subscriptions' => $this->getLearnerSubscriptionBlocks($rows),
+                'classes' => $this->getLearnerClasses($userId, $context->accessUrlId),
+                'messages' => $this->getBooleanSetting($context, 'private_messages_about_user')
+                    && $context->currentUserId() !== $userId
+                    ? $this->getMessagesAboutLearner($context, $userId)
+                    : null,
                 'bosses' => $this->getLearnerBosses($userId),
                 'skills' => $this->getLearnerSkills($context, $userId),
                 'legal' => $legal,
@@ -1329,6 +1416,171 @@ final readonly class GlobalReportingSectionQueryService
                 'canExportXlsx' => true,
             ],
         );
+    }
+
+    /**
+     * Same figures as the legacy learner page: the faults in the attendance sheets and the score of the
+     * gradebook root category, which only the legacy classes know how to compute.
+     *
+     * @return array{attendanceFaults: float, attendanceTotal: float, gradebookScore: float, gradebookMax: float}
+     */
+    private function getLearnerAttendanceAndGradebook(int $userId, int $courseId, int $sessionId): array
+    {
+        $result = ['attendanceFaults' => 0.0, 'attendanceTotal' => 0.0, 'gradebookScore' => 0.0, 'gradebookMax' => 0.0];
+        $course = $this->courseRepository->find($courseId);
+        if (!$course instanceof Course) {
+            return $result;
+        }
+        $session = $sessionId > 0 ? $this->sessionRepository->find($sessionId) : null;
+
+        $faults = (new Attendance())->get_faults_average_by_course($userId, $course, $session);
+        if (!empty($faults['total'])) {
+            $result['attendanceFaults'] = (float) $faults['faults'];
+            $result['attendanceTotal'] = (float) $faults['total'];
+        }
+
+        $category = Category::load(null, null, $courseId, null, null, $sessionId)[0] ?? null;
+        $score = $category instanceof Category ? $category->calc_score($userId, null, $courseId, $sessionId) : null;
+        if (!empty($score[1])) {
+            $result['gradebookScore'] = round((float) $score[0], 1);
+            $result['gradebookMax'] = round((float) $score[1], 1);
+        }
+
+        return $result;
+    }
+
+    private function formatFraction(float $value, float $total): string
+    {
+        $percent = $total > 0 ? round($value * 100 / $total, 2) : 0;
+
+        return \sprintf('%s/%s (%s%%)', $value, $total, $percent);
+    }
+
+    /**
+     * The direct courses (session 0) then each session, with the totals the legacy page showed under each table.
+     *
+     * @param array<int, array<string, mixed>> $rows
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function getLearnerSubscriptionBlocks(array $rows): array
+    {
+        $blocks = [];
+        foreach ($rows as $row) {
+            $sessionId = (int) $row['sessionId'];
+            if (!isset($blocks[$sessionId])) {
+                $blocks[$sessionId] = [
+                    'sessionId' => $sessionId,
+                    'title' => $row['sessionTitle'],
+                    'accessStartDate' => $row['sessionAccessStartDate'],
+                    'accessEndDate' => $row['sessionAccessEndDate'],
+                    'totals' => [
+                        'courses' => 0,
+                        'timeSeconds' => 0,
+                        'learningPathProgress' => 0.0,
+                        'score' => 0.0,
+                        'attendanceFaults' => 0.0,
+                        'attendanceTotal' => 0.0,
+                        'gradebookScore' => 0.0,
+                        'gradebookMax' => 0.0,
+                    ],
+                ];
+            }
+
+            $totals = &$blocks[$sessionId]['totals'];
+            $totals['courses']++;
+            foreach (['timeSeconds', 'learningPathProgress', 'score', 'attendanceFaults', 'attendanceTotal', 'gradebookScore', 'gradebookMax'] as $key) {
+                $totals[$key] += $row[$key];
+            }
+            unset($totals);
+        }
+
+        foreach ($blocks as &$block) {
+            $totals = &$block['totals'];
+            $totals['learningPathProgress'] = round($totals['learningPathProgress'] / $totals['courses'], 2);
+            $totals['score'] = round($totals['score'] / $totals['courses'], 2);
+            $totals['absences'] = $this->formatFraction($totals['attendanceFaults'], $totals['attendanceTotal']);
+            $totals['gradebook'] = $this->formatFraction($totals['gradebookScore'], $totals['gradebookMax']);
+            unset($totals);
+        }
+        unset($block);
+
+        return array_values($blocks);
+    }
+
+    /**
+     * The follow-up messages written about the learner (MESSAGE_TYPE_CONVERSATION, addressed to them).
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function getMessagesAboutLearner(GlobalReportingContext $context, int $userId): array
+    {
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT message.id,
+                    message.title,
+                    message.content,
+                    message.send_date AS sendDate,
+                    sender.id AS senderId,
+                    sender.firstname AS senderFirstname,
+                    sender.lastname AS senderLastname,
+                    sender.username AS senderUsername
+               FROM message
+               INNER JOIN message_rel_user receiver
+                   ON receiver.message_id = message.id
+                  AND receiver.user_id = :userId
+                  AND receiver.receiver_type = :receiverType
+               LEFT JOIN user sender ON sender.id = message.user_sender_id
+              WHERE message.msg_type = :messageType
+                AND message.status <> :deletedStatus
+           ORDER BY message.send_date ASC, message.id ASC',
+            [
+                'userId' => $userId,
+                'receiverType' => MessageRelUser::TYPE_TO,
+                'messageType' => Message::MESSAGE_TYPE_CONVERSATION,
+                'deletedStatus' => Message::MESSAGE_STATUS_DELETED,
+            ],
+        );
+
+        return array_map(
+            static fn (array $row): array => [
+                'id' => (int) $row['id'],
+                'title' => (string) $row['title'],
+                'content' => (string) $row['content'],
+                'sendDate' => (string) $row['sendDate'],
+                'sender' => [
+                    'fullName' => trim((string) $row['senderFirstname'].' '.(string) $row['senderLastname']),
+                    'username' => (string) $row['senderUsername'],
+                ],
+                'canDelete' => (int) $row['senderId'] === $context->currentUserId(),
+            ],
+            $rows,
+        );
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getLearnerClasses(int $userId, int $accessUrlId): array
+    {
+        if (!$this->hasTables(['usergroup', 'usergroup_rel_user', 'access_url_rel_usergroup'])) {
+            return [];
+        }
+
+        return array_map('strval', $this->connection->fetchFirstColumn(
+            'SELECT DISTINCT usergroup.title
+               FROM usergroup_rel_user relation
+               INNER JOIN usergroup ON usergroup.id = relation.usergroup_id
+               INNER JOIN access_url_rel_usergroup url_relation ON url_relation.usergroup_id = usergroup.id
+              WHERE relation.user_id = :userId
+                AND url_relation.access_url_id = :accessUrlId
+                AND usergroup.group_type = :classType
+           ORDER BY usergroup.title',
+            [
+                'userId' => $userId,
+                'accessUrlId' => $accessUrlId,
+                'classType' => Usergroup::NORMAL_CLASS,
+            ],
+        ));
     }
 
     /**
@@ -1526,6 +1778,10 @@ final readonly class GlobalReportingSectionQueryService
         if ('' !== $value) {
             $parts = explode(':', $value, 3);
             $acceptedAt = $parts[2] ?? null;
+            // Stored as a Unix timestamp; sent in UTC like the other dates of the report.
+            if (null !== $acceptedAt && ctype_digit($acceptedAt)) {
+                $acceptedAt = gmdate('Y-m-d H:i:s', (int) $acceptedAt);
+            }
         }
         $accepted = '' !== $value;
 
@@ -6089,6 +6345,10 @@ final readonly class GlobalReportingSectionQueryService
             'userId' => max(0, (int) ($filters['userId'] ?? 0)),
             'courseId' => max(0, (int) ($filters['courseId'] ?? 0)),
             'sessionId' => max(0, (int) ($filters['sessionId'] ?? 0)),
+            'subscriptionSessionId' => isset($filters['subscriptionSessionId'])
+                && '' !== (string) $filters['subscriptionSessionId']
+                ? max(0, (int) $filters['subscriptionSessionId'])
+                : null,
             'month' => min(12, max(0, (int) ($filters['month'] ?? 0))),
             'year' => trim((string) ($filters['year'] ?? '')),
             'exerciseId' => max(0, (int) ($filters['exerciseId'] ?? 0)),

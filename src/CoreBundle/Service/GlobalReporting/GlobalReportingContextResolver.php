@@ -65,6 +65,7 @@ final readonly class GlobalReportingContextResolver
             ),
             $this->pluginHelper->isPluginEnabled('LearningCalendar'),
             $this->pluginHelper->isPluginEnabled('StudentFollowUp'),
+            $isSessionAdministrator,
         );
     }
 

@@ -31,6 +31,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'userId' => new QueryParameter(schema: ['type' => 'integer']),
                 'courseId' => new QueryParameter(schema: ['type' => 'integer']),
                 'sessionId' => new QueryParameter(schema: ['type' => 'integer']),
+                'subscriptionSessionId' => new QueryParameter(schema: ['type' => 'integer']),
                 'month' => new QueryParameter(schema: ['type' => 'integer', 'minimum' => 0, 'maximum' => 12]),
                 'year' => new QueryParameter(schema: ['type' => 'string']),
                 'exerciseId' => new QueryParameter(schema: ['type' => 'integer']),

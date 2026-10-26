@@ -4255,5 +4255,8 @@
     "Contacts count": "Fj\u00f6ldi tengili\u00f0a",
     "Sessions by date": "Setur eftir dagsetningu",
     "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.": "\u00deetta skr\u00e1ir flutningana sem gagnagrunnurinn \u00feinn ber \u00feegar, og skilur \u00fe\u00e1 n\u00fdrri eftir \u00ed bi\u00f0 svo uppf\u00e6rslan geti framkv\u00e6mt \u00fe\u00e1. G\u00f6gnunum \u00fe\u00ednum er ekki breytt.",
-    "You have earned a certificate for this exercise": "You have earned a certificate for this exercise"
+    "You have earned a certificate for this exercise": "You have earned a certificate for this exercise",
+    "Delete message": "Delete message",
+    "Message Sent": "Message Sent",
+    "Are you sure you want to delete the selected message?": "Are you sure you want to delete the selected message?"
 }

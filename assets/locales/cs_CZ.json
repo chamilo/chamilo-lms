@@ -4259,5 +4259,8 @@
     "Learner details in course": "Podrobnosti o studentovi v kurzu",
     "Start test": "Spustit test",
     "Proceed with the test": "Pokra\u010dovat v testu",
-    "This email is already in use on the platform.": "Tento e-mail je ji\u017e na platform\u011b pou\u017eit."
+    "This email is already in use on the platform.": "Tento e-mail je ji\u017e na platform\u011b pou\u017eit.",
+    "Delete message": "Smazat zpr\u00e1vu",
+    "Message Sent": "Zpr\u00e1va odesl\u00e1na",
+    "Are you sure you want to delete the selected message?": "Jste si jisti, \u017ee chcete smazat vybranou zpr\u00e1vu?"
 }

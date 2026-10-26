@@ -292,58 +292,139 @@
               </div>
             </article>
           </div>
+
+          <template v-if="classes.length">
+            <h3 class="mb-2 mt-5 text-base font-semibold text-gray-90">{{ t("Classes") }}</h3>
+            <ul
+              class="divide-y divide-gray-25 rounded-lg border border-gray-25 text-sm text-gray-90"
+              data-testid="learner-classes"
+            >
+              <li
+                v-for="className in classes"
+                :key="className"
+                class="px-3 py-2"
+              >
+                {{ className }}
+              </li>
+            </ul>
+          </template>
         </div>
       </section>
 
-      <section class="overflow-hidden rounded-xl border border-gray-25 bg-white shadow-sm">
+      <section
+        v-for="subscription in subscriptions"
+        :key="subscription.sessionId"
+        class="overflow-hidden rounded-xl border border-gray-25 bg-white shadow-sm"
+        :data-testid="`learner-subscription-${subscription.sessionId}`"
+      >
         <header class="flex flex-wrap items-center gap-3 border-b border-gray-25 p-4">
-          <h2 class="text-lg font-semibold text-gray-90">{{ t("Courses") }}</h2>
-          <span class="ms-auto text-sm text-gray-50"> {{ report.total }} {{ t("Results") }} </span>
+          <BaseIcon
+            :icon="subscription.sessionId ? 'sessions' : 'courses'"
+            class="ch-tool-icon"
+          />
+          <h2 class="text-lg font-semibold text-gray-90">
+            {{ subscription.sessionId ? subscription.title : t("Courses") }}
+            <span
+              v-if="subscription.accessStartDate && subscription.accessEndDate"
+              class="text-sm font-normal text-gray-50"
+            >
+              ({{ t("From") }} {{ formatDate(subscription.accessStartDate) }} {{ t("Until") }}
+              {{ formatDate(subscription.accessEndDate) }})
+            </span>
+          </h2>
+          <div class="no-print ms-auto flex flex-wrap gap-2">
+            <BaseButton
+              :label="t('Export to CSV')"
+              icon="file-delimited-outline"
+              only-icon
+              size="small"
+              type="primary-alternative"
+              :is-loading="exportFormat === `csv-${subscription.sessionId}`"
+              @click="downloadExport('csv', subscription.sessionId)"
+            />
+            <BaseButton
+              :label="t('Export to XLS')"
+              icon="file-excel"
+              only-icon
+              size="small"
+              type="primary-alternative"
+              :is-loading="exportFormat === `xlsx-${subscription.sessionId}`"
+              @click="downloadExport('xlsx', subscription.sessionId)"
+            />
+            <template v-if="subscription.sessionId">
+              <BaseButton
+                :label="t('Export to PDF')"
+                icon="file-pdf"
+                only-icon
+                size="small"
+                type="primary-alternative"
+                :to-url="sessionPdfUrl(subscription.sessionId, 'attendance')"
+              />
+              <BaseButton
+                :label="t('Certificate of achievement')"
+                icon="certificate-selected"
+                only-icon
+                size="small"
+                type="primary-alternative"
+                :to-url="sessionPdfUrl(subscription.sessionId, 'achievement')"
+              />
+            </template>
+          </div>
         </header>
 
         <div class="overflow-x-auto p-4">
           <BaseTable
             v-model:rows="rowsPerPage"
-            :values="report.items"
-            :total-items="report.items.length"
-            :is-loading="loading"
+            :values="coursesOf(subscription)"
+            :total-items="coursesOf(subscription).length"
             data-key="id"
             :text-for-empty="t('No results found')"
           >
             <Column
               field="title"
               :header="t('Course')"
-            />
+              :footer="t('Total')"
+            >
+              <template #body="{ data }">
+                <router-link
+                  :to="{ name: 'CourseHome', params: { id: data.id }, query: { sid: data.sessionId || undefined } }"
+                  class="hover:text-primary hover:underline"
+                >
+                  {{ data.title }}
+                </router-link>
+              </template>
+            </Column>
             <Column
               field="timeSeconds"
               :header="t('Time')"
+              :footer="formatDuration(subscription.totals.timeSeconds)"
             >
               <template #body="{ data }">{{ formatDuration(data.timeSeconds) }}</template>
             </Column>
             <Column
               field="learningPathProgress"
               :header="t('Progress')"
+              :footer="formatPercent(subscription.totals.learningPathProgress)"
             >
               <template #body="{ data }">{{ formatPercent(data.learningPathProgress) }}</template>
             </Column>
             <Column
               field="score"
               :header="t('Score')"
+              :footer="formatPercent(subscription.totals.score)"
             >
               <template #body="{ data }">{{ formatPercent(data.score) }}</template>
             </Column>
             <Column
               field="absences"
               :header="t('Absences')"
-            >
-              <template #body="{ data }">{{ data.absences || "-" }}</template>
-            </Column>
+              :footer="subscription.totals.absences"
+            />
             <Column
               field="gradebook"
               :header="t('Gradebooks')"
-            >
-              <template #body="{ data }">{{ data.gradebook || "-" }}</template>
-            </Column>
+              :footer="subscription.totals.gradebook"
+            />
             <Column :header="t('Details')">
               <template #body="{ data }">
                 <BaseButton
@@ -359,6 +440,96 @@
           </BaseTable>
         </div>
       </section>
+
+      <section
+        v-if="messages"
+        class="overflow-hidden rounded-xl border border-gray-25 bg-white shadow-sm"
+        data-testid="learner-messages"
+      >
+        <header class="border-b border-gray-25 p-4">
+          <h2 class="text-lg font-semibold text-gray-90">{{ t("Messages") }}</h2>
+        </header>
+        <div class="space-y-3 p-4">
+          <Panel
+            v-for="message in messages"
+            :key="message.id"
+            toggleable
+            collapsed
+          >
+            <template #header>
+              <span class="font-semibold text-gray-90">
+                {{ formatDateTime(message.sendDate) }} {{ message.sender.fullName }} {{ message.title }}
+              </span>
+            </template>
+            <template #icons>
+              <BaseButton
+                v-if="message.canDelete"
+                :label="t('Delete message')"
+                icon="delete"
+                only-icon
+                size="small"
+                type="danger-text"
+                @click="confirmDeleteMessage(message)"
+              />
+            </template>
+            <div
+              class="text-sm text-gray-90"
+              v-html="sanitizeHtml(message.content)"
+            />
+            <p class="mt-3 text-xs text-gray-50">{{ t("Author") }}: {{ message.sender.username }}</p>
+          </Panel>
+
+          <BaseButton
+            v-if="!composing"
+            :label="t('New message')"
+            icon="plus"
+            type="success"
+            @click="composing = true"
+          />
+          <form
+            v-else
+            class="space-y-4"
+            @submit.prevent="sendMessage"
+          >
+            <BaseInputText
+              id="learner_message_subject"
+              v-model="newMessage.subject"
+              name="subject"
+              :label="t('Subject')"
+              :is-invalid="messageSubmitted && !newMessage.subject.trim()"
+              :error-text="t('Required field')"
+            />
+            <BaseTinyEditor
+              v-model="newMessage.content"
+              editor-id="learner_message_content"
+              :title="t('Message')"
+              :full-page="false"
+              show-required-marker
+            />
+            <small
+              v-if="messageSubmitted && !newMessage.content.trim()"
+              class="block text-error"
+            >
+              {{ t("Required field") }}
+            </small>
+            <div class="flex gap-2">
+              <BaseButton
+                :label="t('Send message')"
+                icon="send"
+                type="success"
+                is-submit
+                :is-loading="sendingMessage"
+              />
+              <BaseButton
+                :label="t('Cancel')"
+                icon="close"
+                type="plain"
+                @click="composing = false"
+              />
+            </div>
+          </form>
+        </div>
+      </section>
     </template>
   </div>
 </template>
@@ -366,20 +537,25 @@
 <script setup>
 import Column from "primevue/column"
 import Message from "primevue/message"
+import Panel from "primevue/panel"
 import ProgressSpinner from "primevue/progressspinner"
 import { computed, defineComponent, h, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import globalReportingService from "../../services/globalReportingService"
 import legalAgreementService from "../../services/legalAgreementService"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const InfoCard = defineComponent({
   name: "GlobalReportingLearnerInfoCard",
@@ -403,7 +579,8 @@ const InfoCard = defineComponent({
 })
 
 const route = useRoute()
-const { locale, t } = useI18n()
+const { t } = useI18n()
+const { abbreviatedDatetime, abbreviatedDate } = useFormatDate()
 const loading = ref(true)
 const exportFormat = ref("")
 const errorMessage = ref("")
@@ -426,6 +603,23 @@ const canOpenTranscript = computed(
 const user = computed(() => report.meta.user || {})
 const bosses = computed(() => report.meta.bosses || [])
 const skills = computed(() => report.meta.skills || [])
+const classes = computed(() => report.meta.classes || [])
+const subscriptions = computed(() => report.meta.subscriptions || [])
+// Null when message.private_messages_about_user is off.
+const messages = computed(() => report.meta.messages || null)
+
+function coursesOf(subscription) {
+  return report.items.filter((course) => (course.sessionId || 0) === subscription.sessionId)
+}
+
+function sessionPdfUrl(sessionId, type) {
+  return `/main/my_space/session.php?${new URLSearchParams({
+    student: String(userId.value),
+    action: "export_to_pdf",
+    type,
+    session_to_export: String(Number(sessionId)),
+  })}`
+}
 
 function skillDetailUrl(skill) {
   const origin = `/reporting/learners/${userId.value}`
@@ -468,29 +662,18 @@ const backRoute = computed(() => {
   }
 })
 
-function formatLocale() {
-  // Only the first segment is a real BCP-47 primary language subtag (e.g.
-  // "fr" out of "fr_61"). Some accounts carry a Chamilo sub-language isocode
-  // (e.g. "fr_61" instead of "fr_FR"), and passing that whole string to
-  // Intl.DateTimeFormat throws a RangeError that would otherwise crash this
-  // component's render with no visible error.
-  return String(locale.value || "en-US").split(/[_-]/)[0] || "en"
+// The API sends UTC dates as "Y-m-d H:i:s"; useFormatDate shows them in the user's or the platform's
+// time zone, as configured.
+function toIsoUtc(value) {
+  return String(value).replace(" ", "T")
 }
 
 function formatDateTime(value, fallback = "-") {
-  if (!value) {
-    return fallback
-  }
+  return value ? abbreviatedDatetime(toIsoUtc(value)) || String(value) : fallback
+}
 
-  const parsed = new Date(String(value).replace(" ", "T"))
-  if (Number.isNaN(parsed.getTime())) {
-    return String(value)
-  }
-
-  return new Intl.DateTimeFormat(formatLocale(), {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(parsed)
+function formatDate(value) {
+  return abbreviatedDate(toIsoUtc(value)) || String(value)
 }
 
 function formatDuration(value) {
@@ -531,13 +714,14 @@ function printReport() {
   window.print()
 }
 
-async function downloadExport(format) {
-  exportFormat.value = format
+async function downloadExport(format, subscriptionSessionId = null) {
+  exportFormat.value = null === subscriptionSessionId ? format : `${format}-${subscriptionSessionId}`
   errorMessage.value = ""
 
   try {
     const response = await globalReportingService.downloadSection("learner-detail", format, {
       userId: userId.value,
+      subscriptionSessionId,
     })
     const disposition = String(response.headers?.["content-disposition"] || "")
     const match = disposition.match(/filename\*?=(?:UTF-8''|")?([^";]+)/iu)
@@ -559,8 +743,9 @@ async function downloadExport(format) {
   }
 }
 
-async function loadReport() {
-  loading.value = true
+// Without the spinner, which would replace the whole page, when only a block changed.
+async function loadReport(showSpinner = true) {
+  loading.value = showSpinner
   errorMessage.value = ""
 
   try {
@@ -607,5 +792,47 @@ function runLegalAction() {
   performLegalAction()
 }
 
-onMounted(loadReport)
+const composing = ref(false)
+const sendingMessage = ref(false)
+const messageSubmitted = ref(false)
+const newMessage = reactive({ subject: "", content: "" })
+
+async function sendMessage() {
+  messageSubmitted.value = true
+  if (!newMessage.subject.trim() || !newMessage.content.trim()) {
+    return
+  }
+
+  sendingMessage.value = true
+
+  try {
+    await globalReportingService.sendLearnerMessage(userId.value, newMessage.subject, newMessage.content)
+    showSuccessNotification(t("Message Sent"))
+    Object.assign(newMessage, { subject: "", content: "" })
+    messageSubmitted.value = false
+    composing.value = false
+    await loadReport(false)
+  } catch (error) {
+    showErrorNotification(error)
+  } finally {
+    sendingMessage.value = false
+  }
+}
+
+function confirmDeleteMessage(message) {
+  requireConfirmation({
+    message: t("Are you sure you want to delete the selected message?"),
+    accept: async () => {
+      try {
+        await globalReportingService.deleteLearnerMessage(userId.value, message.id)
+        showSuccessNotification(t("Message deleted"))
+        await loadReport(false)
+      } catch (error) {
+        showErrorNotification(error)
+      }
+    },
+  })
+}
+
+onMounted(() => loadReport())
 </script>

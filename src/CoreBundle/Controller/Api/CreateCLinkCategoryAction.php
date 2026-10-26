@@ -20,7 +20,10 @@ class CreateCLinkCategoryAction extends BaseResourceFileAction
         $title = $data['category_title'];
         $description = $data['description'];
         $parentResourceNodeId = $data['parentResourceNodeId'];
-        $resourceLinkList = json_decode($data['resourceLinkList'], true);
+        $resourceLinkList = $this->buildResourceLinkListFromContext(
+            $cidReqHelper,
+            (array) json_decode((string) ($data['resourceLinkList'] ?? '[]'), true),
+        );
 
         $linkCategory = (new CLinkCategory())
             ->setTitle($title)

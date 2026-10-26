@@ -1430,13 +1430,13 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'meta_twitter_creator',
-                    'title' => 'Twitter Creator account',
-                    'comment' => 'The Twitter Creator is a Twitter account (e.g. @ywarnier) that represents the *person* that created the site. This field is optional.',
+                    'title' => 'X Creator account',
+                    'comment' => 'The X Creator account (e.g. @ywarnier) represents the person who created the site. This field is optional.',
                 ],
                 [
                     'name' => 'meta_twitter_site',
-                    'title' => 'Twitter Site account',
-                    'comment' => 'The Twitter site is a Twitter account (e.g. @chamilo_news) that is related to your site. It is usually a more temporary account than the Twitter creator account, or represents an entity (instead of a person). This field is required if you want the Twitter card meta fields to show.',
+                    'title' => 'X Site account',
+                    'comment' => 'The X Site account (e.g. @chamilo_news) represents your site or organization. Set it to include the site account in X card metadata.',
                 ],
                 [
                     'name' => 'meta_description',
@@ -1446,7 +1446,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'meta_image_path',
                     'title' => 'Meta image path',
-                    'comment' => 'This Meta Image path is the path to a file inside your Chamilo directory (e.g. home/image.png) that should show in a Twitter card or a OpenGraph card when showing a link to your LMS. Twitter recommends an image of 120 x 120 pixels, which might sometimes be cropped to 120x90.',
+                    'comment' => 'This image path points to a file inside your Chamilo directory (e.g. home/image.png) that can be displayed in an X card or an Open Graph card when sharing a link to your LMS. The receiving service may crop the image.',
                 ],
                 [
                     'name' => 'meta_title',

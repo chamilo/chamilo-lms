@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
@@ -67,6 +68,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         private readonly GradebookLinkManager $gradebookLinkManager,
         private readonly MessageHelper $messageHelper,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly CourseSettingPolicyManager $courseSettingPolicyManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse

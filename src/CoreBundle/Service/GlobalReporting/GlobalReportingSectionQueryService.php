@@ -1487,23 +1487,22 @@ final readonly class GlobalReportingSectionQueryService
                 ];
             }
 
-            $totals = &$blocks[$sessionId]['totals'];
+            $totals = $blocks[$sessionId]['totals'];
             $totals['courses']++;
             foreach (['timeSeconds', 'learningPathProgress', 'score', 'attendanceFaults', 'attendanceTotal', 'gradebookScore', 'gradebookMax'] as $key) {
                 $totals[$key] += $row[$key];
             }
-            unset($totals);
+            $blocks[$sessionId]['totals'] = $totals;
         }
 
-        foreach ($blocks as &$block) {
-            $totals = &$block['totals'];
+        foreach ($blocks as $sessionId => $block) {
+            $totals = $block['totals'];
             $totals['learningPathProgress'] = round($totals['learningPathProgress'] / $totals['courses'], 2);
             $totals['score'] = round($totals['score'] / $totals['courses'], 2);
             $totals['absences'] = $this->formatFraction($totals['attendanceFaults'], $totals['attendanceTotal']);
             $totals['gradebook'] = $this->formatFraction($totals['gradebookScore'], $totals['gradebookMax']);
-            unset($totals);
+            $blocks[$sessionId]['totals'] = $totals;
         }
-        unset($block);
 
         return array_values($blocks);
     }

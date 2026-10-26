@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -55,6 +56,7 @@ final class ForumProcessor implements ProcessorInterface
         private readonly SettingsManager $settingsManager,
         private readonly UploadFilenamePolicy $uploadFilenamePolicy,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly CourseSettingPolicyManager $courseSettingPolicyManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CForum|JsonResponse

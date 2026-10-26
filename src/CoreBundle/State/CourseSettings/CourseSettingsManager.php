@@ -332,7 +332,7 @@ final readonly class CourseSettingsManager
     {
         $defaults = [];
         foreach (self::COURSE_SETTING_CATEGORIES as $variable => $category) {
-            if (isset(self::DEFAULT_VISIBILITY_SETTINGS[$variable])) {
+            if (\array_key_exists($variable, self::DEFAULT_VISIBILITY_SETTINGS)) {
                 $tool = self::DEFAULT_VISIBILITY_SETTINGS[$variable];
                 $defaults[$variable] = ResourceDefaultVisibilityHelper::getDefaults()[$tool];
             } elseif (isset(self::AI_FEATURES[$variable])) {

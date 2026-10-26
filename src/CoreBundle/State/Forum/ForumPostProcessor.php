@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
@@ -75,6 +76,7 @@ final class ForumPostProcessor implements ProcessorInterface
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         private readonly CidReqHelper $cidReqHelper,
         private readonly GradebookLinkManager $gradebookLinkManager,
+        private readonly CourseSettingPolicyManager $courseSettingPolicyManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse

@@ -295,18 +295,7 @@
 
           <template v-if="classes.length">
             <h3 class="mb-2 mt-5 text-base font-semibold text-gray-90">{{ t("Classes") }}</h3>
-            <ul
-              class="divide-y divide-gray-25 rounded-lg border border-gray-25 text-sm text-gray-90"
-              data-testid="learner-classes"
-            >
-              <li
-                v-for="className in classes"
-                :key="className"
-                class="px-3 py-2"
-              >
-                {{ className }}
-              </li>
-            </ul>
+            <GlobalReportingLearnerClasses :classes="classes" />
           </template>
         </div>
       </section>
@@ -441,95 +430,12 @@
         </div>
       </section>
 
-      <section
+      <GlobalReportingLearnerMessages
         v-if="messages"
-        class="overflow-hidden rounded-xl border border-gray-25 bg-white shadow-sm"
-        data-testid="learner-messages"
-      >
-        <header class="border-b border-gray-25 p-4">
-          <h2 class="text-lg font-semibold text-gray-90">{{ t("Messages") }}</h2>
-        </header>
-        <div class="space-y-3 p-4">
-          <Panel
-            v-for="message in messages"
-            :key="message.id"
-            toggleable
-            collapsed
-          >
-            <template #header>
-              <span class="font-semibold text-gray-90">
-                {{ formatDateTime(message.sendDate) }} {{ message.sender.fullName }} {{ message.title }}
-              </span>
-            </template>
-            <template #icons>
-              <BaseButton
-                v-if="message.canDelete"
-                :label="t('Delete message')"
-                icon="delete"
-                only-icon
-                size="small"
-                type="danger-text"
-                @click="confirmDeleteMessage(message)"
-              />
-            </template>
-            <div
-              class="text-sm text-gray-90"
-              v-html="sanitizeHtml(message.content)"
-            />
-            <p class="mt-3 text-xs text-gray-50">{{ t("Author") }}: {{ message.sender.username }}</p>
-          </Panel>
-
-          <BaseButton
-            v-if="!composing"
-            :label="t('New message')"
-            icon="plus"
-            type="success"
-            @click="composing = true"
-          />
-          <form
-            v-else
-            class="space-y-4"
-            @submit.prevent="sendMessage"
-          >
-            <BaseInputText
-              id="learner_message_subject"
-              v-model="newMessage.subject"
-              name="subject"
-              :label="t('Subject')"
-              :is-invalid="messageSubmitted && !newMessage.subject.trim()"
-              :error-text="t('Required field')"
-            />
-            <BaseTinyEditor
-              v-model="newMessage.content"
-              editor-id="learner_message_content"
-              :title="t('Message')"
-              :full-page="false"
-              show-required-marker
-            />
-            <small
-              v-if="messageSubmitted && !newMessage.content.trim()"
-              class="block text-error"
-            >
-              {{ t("Required field") }}
-            </small>
-            <div class="flex gap-2">
-              <BaseButton
-                :label="t('Send message')"
-                icon="send"
-                type="success"
-                is-submit
-                :is-loading="sendingMessage"
-              />
-              <BaseButton
-                :label="t('Cancel')"
-                icon="close"
-                type="plain"
-                @click="composing = false"
-              />
-            </div>
-          </form>
-        </div>
-      </section>
+        :user-id="userId"
+        :messages="messages"
+        @changed="loadReport(false)"
+      />
     </template>
   </div>
 </template>
@@ -537,25 +443,23 @@
 <script setup>
 import Column from "primevue/column"
 import Message from "primevue/message"
-import Panel from "primevue/panel"
 import ProgressSpinner from "primevue/progressspinner"
 import { computed, defineComponent, h, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
-import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
-import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import globalReportingService from "../../services/globalReportingService"
+import GlobalReportingLearnerClasses from "./GlobalReportingLearnerClasses.vue"
+import GlobalReportingLearnerMessages from "./GlobalReportingLearnerMessages.vue"
 import legalAgreementService from "../../services/legalAgreementService"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
-import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const InfoCard = defineComponent({
   name: "GlobalReportingLearnerInfoCard",
@@ -790,48 +694,6 @@ function runLegalAction() {
   }
 
   performLegalAction()
-}
-
-const composing = ref(false)
-const sendingMessage = ref(false)
-const messageSubmitted = ref(false)
-const newMessage = reactive({ subject: "", content: "" })
-
-async function sendMessage() {
-  messageSubmitted.value = true
-  if (!newMessage.subject.trim() || !newMessage.content.trim()) {
-    return
-  }
-
-  sendingMessage.value = true
-
-  try {
-    await globalReportingService.sendLearnerMessage(userId.value, newMessage.subject, newMessage.content)
-    showSuccessNotification(t("Message Sent"))
-    Object.assign(newMessage, { subject: "", content: "" })
-    messageSubmitted.value = false
-    composing.value = false
-    await loadReport(false)
-  } catch (error) {
-    showErrorNotification(error)
-  } finally {
-    sendingMessage.value = false
-  }
-}
-
-function confirmDeleteMessage(message) {
-  requireConfirmation({
-    message: t("Are you sure you want to delete the selected message?"),
-    accept: async () => {
-      try {
-        await globalReportingService.deleteLearnerMessage(userId.value, message.id)
-        showSuccessNotification(t("Message deleted"))
-        await loadReport(false)
-      } catch (error) {
-        showErrorNotification(error)
-      }
-    },
-  })
 }
 
 onMounted(() => loadReport())

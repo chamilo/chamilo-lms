@@ -8,6 +8,8 @@ namespace Chamilo\Tests\CoreBundle\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -91,6 +93,19 @@ final class GlobalReportingLearnerDetailTest extends AbstractApiTest
         $this->assertSame(['Evening class'], $this->getLearnerReport($learner)['meta']['classes']);
     }
 
+    public function testSkillsWithoutAPortalAreListedButNotThoseOfAnotherPortal(): void
+    {
+        $learner = $this->createUser('report_learner');
+        // Skills migrated from 1.11 may carry no portal (0): the legacy report showed them, so must this one.
+        $this->acquireSkill($learner, 'Skill without portal', 0);
+        $this->acquireSkill($learner, 'Skill of this portal', $this->getAccessUrl()->getId());
+        $this->acquireSkill($learner, 'Skill of another portal', $this->getAccessUrl()->getId() + 1);
+
+        $titles = array_column($this->getLearnerReport($learner)['meta']['skills'], 'title');
+
+        $this->assertSame(['Skill of this portal', 'Skill without portal'], $titles);
+    }
+
     public function testMessagesAboutTheLearnerAreHiddenWhenTheSettingIsOff(): void
     {
         $this->setMessagesAboutUsers('false');
@@ -146,6 +161,25 @@ final class GlobalReportingLearnerDetailTest extends AbstractApiTest
         self::getContainer()->get(SessionRepository::class)->update($session);
 
         return $session;
+    }
+
+    private function acquireSkill(User $learner, string $title, int $accessUrlId): void
+    {
+        $em = $this->getEntityManager();
+        $skill = (new Skill())
+            ->setTitle($title)
+            ->setShortCode($title)
+            ->setAccessUrlId($accessUrlId)
+        ;
+        $em->persist($skill);
+        $em->persist(
+            (new SkillRelUser())
+                ->setSkill($skill)
+                ->setUser($learner)
+                ->setArgumentation('')
+                ->setArgumentationAuthorId((int) $learner->getId())
+        );
+        $em->flush();
     }
 
     private function setMessagesAboutUsers(string $value): void

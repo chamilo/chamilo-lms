@@ -2,8 +2,8 @@ import { defineStore } from "pinia"
 import { ref } from "vue"
 import adminService from "../services/adminService"
 
-// The legacy admin.ajax.php actions behind these three loaders (version/support/news) each make an
-// external HTTP call to version.chamilo.org, so avoid re-hitting them every time AdminIndex.vue remounts.
+// The admin dashboard loaders contact Chamilo services; avoid repeated requests
+// each time AdminIndex.vue remounts.
 const CACHE_TTL_MS = 60000
 
 function createCachedLoader(fetcher, targetRef) {

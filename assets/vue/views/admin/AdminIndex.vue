@@ -195,7 +195,7 @@
                 class="mdi mdi-checkbox-multiple-marked"
               />
             </span>
-            {{ t("Version check") }}
+            {{ t("Portal registration") }}
           </div>
         </div>
 
@@ -209,21 +209,19 @@
           v-else
           class="block-admin-version__form"
         >
-          <i18n-t
-            keypath="In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:"
-            tag="p"
-          >
+          <p class="mb-3">
+            {{
+              t(
+                "Register your portal with Chamilo to share installation information and aggregated statistics. Registration is independent of update checks.",
+              )
+            }}
             <a
               href="https://stats.chamilo.org/"
               target="_blank"
-              v-text="'https://stats.chamilo.org/'"
-            />
-            <a
-              href="https://version.chamilo.org/community.php"
-              target="_blank"
-              v-text="'https://version.chamilo.org/community.php'"
-            />
-          </i18n-t>
+              rel="noopener noreferrer"
+              >https://stats.chamilo.org/</a
+            >
+          </p>
 
           <form
             id="VersionCheck"
@@ -242,13 +240,28 @@
 
             <BaseButton
               id="register"
-              :label="t('Enable version check')"
+              :label="t('Register portal')"
               icon="check"
               isSubmit
               name="Register"
               type="secondary"
             />
           </form>
+        </div>
+        <p class="mt-3 text-body-2">
+          {{ t("Automatic update notices can be enabled independently under Administration settings.") }}
+        </p>
+        <div class="flex flex-wrap gap-2 mt-2">
+          <BaseButton
+            :label="t('Administration settings')"
+            to-url="/admin/settings/admin"
+            type="secondary"
+          />
+          <BaseButton
+            :label="t('System update')"
+            to-url="/admin/system-update"
+            type="secondary"
+          />
         </div>
       </div>
     </div>

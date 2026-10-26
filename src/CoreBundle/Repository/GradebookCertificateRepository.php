@@ -397,12 +397,17 @@ class GradebookCertificateRepository extends ResourceRepository
         int $offset = 0,
         int $limit = 50
     ): array {
+        // A course can be shared between access URLs: only list the certificates of the users
+        // registered on this URL, not those of the other URLs' users.
         return $this->createQueryBuilder('gc')
             ->join('gc.category', 'cat')
             ->join('cat.course', 'course')
             ->join('course.urls', 'curl')
             ->join('curl.url', 'url')
+            ->join('gc.user', 'certificateUser')
+            ->join('certificateUser.portals', 'userUrl')
             ->where('url.id = :urlId')
+            ->andWhere('userUrl.url = :urlId')
             ->setParameter('urlId', $urlId)
             ->orderBy('gc.createdAt', 'DESC')
             ->setFirstResult($offset)
@@ -449,12 +454,15 @@ class GradebookCertificateRepository extends ResourceRepository
         $qb->select('sru', 'u', 's', 'src', 'c')
             ->from(SessionRelUser::class, 'sru')
             ->join('sru.user', 'u')
+            // Like the completed list, only the users registered on this URL.
+            ->join('u.portals', 'userUrl')
             ->join('sru.session', 's')
             ->join('s.courses', 'src')
             ->join('src.course', 'c')
             ->join('c.urls', 'curl')
             ->join('curl.url', 'url')
             ->where('url.id = :urlId')
+            ->andWhere('userUrl.url = :urlId')
             ->andWhere('s.accessStartDate <= :today')
             ->andWhere('s.accessEndDate   IS NULL OR s.accessEndDate > :today')
             ->andWhere(
@@ -494,7 +502,11 @@ class GradebookCertificateRepository extends ResourceRepository
             ->join('srcu.course', 'c')
             ->join('c.urls', 'curl')
             ->join('curl.url', 'url')
+            // Like the completed list, only the users registered on this URL.
+            ->join('srcu.user', 'u')
+            ->join('u.portals', 'userUrl')
             ->where('url.id = :urlId')
+            ->andWhere('userUrl.url = :urlId')
             ->andWhere('s.accessEndDate IS NOT NULL')
             ->andWhere('s.accessEndDate < :today')
             ->andWhere(

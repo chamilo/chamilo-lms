@@ -59,6 +59,46 @@ async function deletePage(iri) {
 }
 
 /**
+ * Load CMS pages in the same category, across languages, for explicit selection.
+ * The collection is already scoped to the current access URL by PageExtension.
+ */
+async function getPagesForLanguageDeletion(category) {
+  const pages = []
+  let page = 1
+  const limit = 500
+
+  while (true) {
+    const result = await baseService.getCollection("/api/pages", { category, page, itemsPerPage: 100 })
+    pages.push(...(result.items || []))
+
+    if (pages.length > limit) {
+      throw new Error("Too many pages in this category to review safely. Narrow the category first.")
+    }
+    if (!result.nextPageParams) {
+      if (Number(result.totalItems || 0) > pages.length) {
+        throw new Error("Not all pages could be loaded. No pages were deleted.")
+      }
+      return pages
+    }
+    const nextPage = Number(result.nextPageParams.page)
+    if (!Number.isInteger(nextPage) || nextPage <= page) {
+      throw new Error("Page pagination failed. No pages were deleted.")
+    }
+    page = nextPage
+  }
+}
+
+/** Delete exactly the page IDs selected by the administrator, atomically. */
+async function deleteLanguagePages(sourcePageId, pageIds) {
+  return await baseService.post(`/api/pages/${sourcePageId}/delete-languages`, { pageIds })
+}
+
+/** Delete explicitly selected CMS pages, including across categories. */
+async function deleteBulkPages(pageIds) {
+  return await baseService.post("/api/pages/actions/bulk-delete", { pageIds })
+}
+
+/**
  * ---------------------------
  * Page Layouts Service
  * ---------------------------
@@ -171,6 +211,9 @@ export default {
   getTopbarVisibility,
   // Pages
   getPublicPageBySlug,
+  getPagesForLanguageDeletion,
+  deleteLanguagePages,
+  deleteBulkPages,
   postPage,
   updatePage,
   deletePage,

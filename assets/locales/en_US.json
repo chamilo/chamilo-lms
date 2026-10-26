@@ -4612,5 +4612,15 @@
     "Evidence could not be downloaded.": "Evidence could not be downloaded.",
     "Delete message": "Delete message",
     "Message Sent": "Message Sent",
-    "Are you sure you want to delete the selected message?": "Are you sure you want to delete the selected message?"
+    "Are you sure you want to delete the selected message?": "Are you sure you want to delete the selected message?",
+    "Delete CMS pages": "Delete CMS pages",
+    "The following page will be deleted:": "The following page will be deleted:",
+    "Pages in different languages are not automatically linked. Select only related pages.": "Pages in different languages are not automatically linked. Select only related pages.",
+    "Select additional pages from other languages": "Select additional pages from other languages",
+    "No other language pages were found in this category.": "No other language pages were found in this category.",
+    "Other language pages could not be loaded. You can still delete only the current page.": "Other language pages could not be loaded. You can still delete only the current page.",
+    "Selected pages to delete:": "Selected pages to delete:",
+    "Delete selected pages": "Delete selected pages",
+    "The following pages will be deleted:": "The following pages will be deleted:",
+    "A maximum of 100 pages can be deleted at once.": "A maximum of 100 pages can be deleted at once."
 }

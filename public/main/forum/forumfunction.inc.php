@@ -4315,7 +4315,11 @@ function delete_attachment($postId, $attachmentId)
     if ($post) {
         $repoAttachment = Container::getForumAttachmentRepository();
         $attachment = $repoAttachment->find($attachmentId);
-        if ($attachment) {
+        // Only an attachment of this post, in a forum of the current course.
+        if ($attachment
+            && $attachment->getPost()->getIid() === $post->getIid()
+            && forumBelongsToCurrentContext($post->getForum())
+        ) {
             $post->removeAttachment($attachment);
             $em->remove($attachment);
         }

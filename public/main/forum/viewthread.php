@@ -165,7 +165,19 @@ $currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId
 // Actions
 switch ($my_action) {
     case 'delete_attach':
-        delete_attachment($_GET['post'], $_GET['id_attach']);
+        /** @var CForumPost|null $attachPost */
+        $attachPost = $repoPost->find((int) ($_GET['post'] ?? 0));
+        // Same rule as the delete link: the author when the forum allows editing, or the course staff.
+        if (null !== $attachPost
+            && $attachPost->getThread()?->getIid() === $threadEntity->getIid()
+            && Security::check_token('get')
+            && (
+                (1 == $threadEntity->getForum()->getAllowEdit() && $attachPost->getUser()->getId() === api_get_user_id())
+                || (api_is_allowed_to_edit(false, true) && !api_is_session_general_coach())
+            )
+        ) {
+            delete_attachment($attachPost->getIid(), (int) ($_GET['id_attach'] ?? 0));
+        }
         header('Location: '.$currentUrl);
         exit;
 
@@ -722,7 +734,7 @@ foreach ($posts as $post) {
             if ((1 == $forumEntity->getAllowEdit() && $post['user_id'] == $userId)
                 || (api_is_allowed_to_edit(false, true) && !api_is_session_general_coach())
             ) {
-                $post['post_attachments'] .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='.$attachment->getIid().'&forum='.$forumId.'&thread='.$threadId.'&post='.$post['post_id'].'" onclick="if(!confirm(\''.addslashes(api_htmlentities(get_lang('Please confirm your choice'), \ENT_QUOTES)).'\')) return false;">'.Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a><br />';
+                $post['post_attachments'] .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&sec_token='.Security::get_existing_token().'&id_attach='.$attachment->getIid().'&forum='.$forumId.'&thread='.$threadId.'&post='.$post['post_id'].'" onclick="if(!confirm(\''.addslashes(api_htmlentities(get_lang('Please confirm your choice'), \ENT_QUOTES)).'\')) return false;">'.Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a><br />';
             }
         }
     }

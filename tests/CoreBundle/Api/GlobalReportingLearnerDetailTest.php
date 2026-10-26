@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Api;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillRelSkill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\SessionRepository;
@@ -106,6 +107,42 @@ final class GlobalReportingLearnerDetailTest extends AbstractApiTest
         $this->assertSame(['Skill of this portal', 'Skill without portal'], $titles);
     }
 
+    public function testWithoutSkillLevelNamesTheSkillsAreListedWithoutTheirTree(): void
+    {
+        $learner = $this->createUser('report_learner');
+        $this->acquire($learner, $this->createSkill('Listening', $this->createSkill('Communication')));
+        $this->setSetting('skill_levels_names', '');
+
+        $report = $this->getLearnerReport($learner);
+
+        // The legacy page then lists the acquired skills only, as the flat list already does
+        $this->assertSame(['Listening'], array_column($report['meta']['skills'], 'title'));
+        $this->assertNull($report['meta']['skillTree']);
+    }
+
+    public function testTheSkillTreeShowsTheNotAcquiredAncestorsOfTheAcquiredSkills(): void
+    {
+        $learner = $this->createUser('report_learner');
+        $communication = $this->createSkill('Communication');
+        $this->acquire($learner, $this->createSkill('Listening', $this->createSkill('Oral', $communication)));
+        // A branch without any acquired skill has nothing to place, so the legacy page does not draw it
+        $this->createSkill('Unrelated', $this->createSkill('Leadership'));
+        $this->setSetting('skill_levels_names', '{"1":"Basic"}');
+        $this->setSetting('skills_hierarchical_view_in_user_tracking', 'false');
+
+        $tree = $this->getLearnerReport($learner)['meta']['skillTree'];
+
+        $this->assertSame('categories', $tree['mode']);
+        $this->assertSame(
+            [['Communication', false, [['Oral', false, [['Listening', true, []]]]]]],
+            $this->summarizeSkillNodes($tree['nodes'])
+        );
+
+        $this->setSetting('skills_hierarchical_view_in_user_tracking', 'true');
+
+        $this->assertSame('hierarchical', $this->getLearnerReport($learner)['meta']['skillTree']['mode']);
+    }
+
     public function testMessagesAboutTheLearnerAreHiddenWhenTheSettingIsOff(): void
     {
         $this->setMessagesAboutUsers('false');
@@ -172,6 +209,36 @@ final class GlobalReportingLearnerDetailTest extends AbstractApiTest
             ->setAccessUrlId($accessUrlId)
         ;
         $em->persist($skill);
+        $this->acquire($learner, $skill);
+    }
+
+    /**
+     * A skill placed in the skill tree. Without a parent, its relation has none, which hangs it from the root.
+     */
+    private function createSkill(string $title, ?Skill $parent = null): Skill
+    {
+        $em = $this->getEntityManager();
+        $skill = (new Skill())
+            ->setTitle($title)
+            ->setShortCode($title)
+            ->setAccessUrlId($this->getAccessUrl()->getId())
+        ;
+        $em->persist($skill);
+        $em->persist(
+            (new SkillRelSkill())
+                ->setSkill($skill)
+                ->setParent($parent)
+                ->setRelationType(0)
+                ->setLevel(0)
+        );
+        $em->flush();
+
+        return $skill;
+    }
+
+    private function acquire(User $learner, Skill $skill): void
+    {
+        $em = $this->getEntityManager();
         $em->persist(
             (new SkillRelUser())
                 ->setSkill($skill)
@@ -180,6 +247,25 @@ final class GlobalReportingLearnerDetailTest extends AbstractApiTest
                 ->setArgumentationAuthorId((int) $learner->getId())
         );
         $em->flush();
+    }
+
+    /**
+     * @return list<array{0: string, 1: bool, 2: array}> [title, acquired, children] of every node
+     */
+    private function summarizeSkillNodes(array $nodes): array
+    {
+        return array_map(
+            fn (array $node): array => [$node['title'], $node['acquired'], $this->summarizeSkillNodes($node['children'])],
+            $nodes
+        );
+    }
+
+    private function setSetting(string $variable, string $value): void
+    {
+        $this->getEntityManager()->getConnection()->executeStatement(
+            'UPDATE settings SET selected_value = :value WHERE variable = :variable',
+            ['value' => $value, 'variable' => $variable]
+        );
     }
 
     private function setMessagesAboutUsers(string $value): void

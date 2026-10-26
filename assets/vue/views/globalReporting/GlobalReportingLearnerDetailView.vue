@@ -255,6 +255,12 @@
           >
             {{ t("No acquired skill") }}
           </p>
+          <GlobalReportingLearnerSkillTree
+            v-else-if="skillTree"
+            :mode="skillTree.mode"
+            :nodes="skillTree.nodes"
+            :skill-url="skillDetailUrl"
+          />
           <div
             v-else
             class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3"
@@ -454,6 +460,7 @@ import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import globalReportingService from "../../services/globalReportingService"
 import GlobalReportingLearnerClasses from "./GlobalReportingLearnerClasses.vue"
 import GlobalReportingLearnerMessages from "./GlobalReportingLearnerMessages.vue"
+import GlobalReportingLearnerSkillTree from "./GlobalReportingLearnerSkillTree.vue"
 import legalAgreementService from "../../services/legalAgreementService"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useFormatDate } from "../../composables/formatDate"
@@ -507,6 +514,7 @@ const canOpenTranscript = computed(
 const user = computed(() => report.meta.user || {})
 const bosses = computed(() => report.meta.bosses || [])
 const skills = computed(() => report.meta.skills || [])
+const skillTree = computed(() => report.meta.skillTree || null)
 const classes = computed(() => report.meta.classes || [])
 const subscriptions = computed(() => report.meta.subscriptions || [])
 // Null when message.private_messages_about_user is off.

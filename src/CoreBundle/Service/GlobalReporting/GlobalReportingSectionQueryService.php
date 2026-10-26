@@ -46,6 +46,8 @@ final readonly class GlobalReportingSectionQueryService
     private const int USER_STATUS_HUMAN_RESOURCES = 4;
     private const int USER_STATUS_STUDENT = 5;
     private const int USER_STATUS_STUDENT_BOSS = 17;
+    private const int SKILL_ROOT_ID = 1;
+    private const string SKILL_DEFAULT_BADGE = '/img/icons/32/badges-default.png';
 
     private const int SESSION_RELATION_TYPE_HUMAN_RESOURCES = 1;
     private const int COURSE_RELATION_TYPE_HUMAN_RESOURCES = 1;
@@ -1336,6 +1338,8 @@ final readonly class GlobalReportingSectionQueryService
             );
         }
 
+        $skills = $this->getLearnerSkills($context, $userId);
+
         return $this->result(
             $filters,
             $selfProgress ? 'View my progress' : 'Learner details',
@@ -1379,7 +1383,8 @@ final readonly class GlobalReportingSectionQueryService
                     ? $this->getMessagesAboutLearner($context, $userId)
                     : null,
                 'bosses' => $this->getLearnerBosses($userId),
-                'skills' => $this->getLearnerSkills($context, $userId),
+                'skills' => $skills,
+                'skillTree' => $this->getLearnerSkillTree($context, $skills),
                 'legal' => $legal,
                 'certificate' => [
                     'canGenerate' => $canManageLearner,
@@ -1705,12 +1710,118 @@ final readonly class GlobalReportingSectionQueryService
             return [];
         }
 
-        $skillIds = array_values(array_unique(array_map(static fn (array $row): int => (int) $row['id'], $rows)));
+        $badgeUrls = $this->getSkillBadgeUrls(array_map(static fn (array $row): int => (int) $row['id'], $rows));
+        foreach ($rows as &$row) {
+            $row['image'] = $badgeUrls[(int) $row['id']] ?? self::SKILL_DEFAULT_BADGE;
+        }
+        unset($row);
+
+        return $rows;
+    }
+
+    /**
+     * The acquired skills inside the skill tree, as SkillModel::getUserSkillsTable() draws them on
+     * main/my_space/myStudents.php: every ancestor up to the root is shown, faded when not acquired.
+     * Null when skill.skill_levels_names is empty, where the legacy page lists the acquired skills only.
+     *
+     * @param array<int, array<string, mixed>> $acquiredSkills
+     *
+     * @return array{mode: string, nodes: list<array<string, mixed>>}|null
+     */
+    private function getLearnerSkillTree(GlobalReportingContext $context, array $acquiredSkills): ?array
+    {
+        if ([] === $acquiredSkills || !$this->hasSkillLevelsNames($context) || !$this->hasTables(['skill_rel_skill'])) {
+            return null;
+        }
+
+        // As SkillRelSkillModel::getSkillParents(), the first relation of a skill names its parent.
+        $parentBySkill = [];
+        $relations = $this->connection->fetchAllAssociative(
+            'SELECT skill_id, parent_id FROM skill_rel_skill ORDER BY id'
+        );
+        foreach ($relations as $relation) {
+            $parentBySkill[(int) $relation['skill_id']] ??= (int) $relation['parent_id'];
+        }
+
+        $acquiredIds = array_flip(array_map(static fn (array $skill): int => (int) $skill['id'], $acquiredSkills));
+        $childrenByParent = [];
+        $nodeIds = [];
+        foreach (array_keys($acquiredIds) as $skillId) {
+            $currentId = $skillId;
+            while (self::SKILL_ROOT_ID !== $currentId && !isset($nodeIds[$currentId])) {
+                $nodeIds[$currentId] = true;
+                $parentId = $parentBySkill[$currentId] ?? 0;
+                // A skill outside the tree hangs from the root, so that an acquired skill is never hidden.
+                $parentId = $parentId > 0 ? $parentId : self::SKILL_ROOT_ID;
+                $childrenByParent[$parentId][$currentId] = true;
+                $currentId = $parentId;
+            }
+        }
+
+        $skillRows = $this->connection->fetchAllAssociative(
+            'SELECT id, title, short_code AS shortCode FROM skill WHERE id IN (:ids)',
+            ['ids' => array_keys($nodeIds)],
+            ['ids' => ArrayParameterType::INTEGER],
+        );
+        $skillsById = array_column($skillRows, null, 'id');
+        $badgeUrls = $this->getSkillBadgeUrls(array_keys($nodeIds));
+
+        $buildNodes = function (int $parentId) use (&$buildNodes, $childrenByParent, $skillsById, $acquiredIds, $badgeUrls): array {
+            $nodes = [];
+            foreach (array_keys($childrenByParent[$parentId] ?? []) as $skillId) {
+                $nodes[] = [
+                    'id' => $skillId,
+                    'title' => (string) ($skillsById[$skillId]['title'] ?? ''),
+                    'shortCode' => (string) ($skillsById[$skillId]['shortCode'] ?? ''),
+                    'image' => $badgeUrls[$skillId] ?? self::SKILL_DEFAULT_BADGE,
+                    'acquired' => isset($acquiredIds[$skillId]),
+                    'children' => $buildNodes($skillId),
+                ];
+            }
+            usort($nodes, static fn (array $a, array $b): int => [$a['title'], $a['id']] <=> [$b['title'], $b['id']]);
+
+            return $nodes;
+        };
+
+        return [
+            'mode' => $this->getBooleanSetting($context, 'skills_hierarchical_view_in_user_tracking')
+                ? 'hierarchical'
+                : 'categories',
+            'nodes' => $buildNodes(self::SKILL_ROOT_ID),
+        ];
+    }
+
+    /**
+     * Mirrors api_get_setting('skill.skill_levels_names', true) being empty in SkillModel::getUserSkillsTable().
+     */
+    private function hasSkillLevelsNames(GlobalReportingContext $context): bool
+    {
+        $value = trim((string) $this->getSettingValue($context, 'skill_levels_names'));
+        if ('' === $value) {
+            return false;
+        }
+
+        $decoded = json_decode($value, true);
+
+        return !\is_array($decoded) || [] !== $decoded;
+    }
+
+    /**
+     * @param int[] $skillIds
+     *
+     * @return array<int, string> badge URL by skill id, for the skills that have one
+     */
+    private function getSkillBadgeUrls(array $skillIds): array
+    {
+        if ([] === $skillIds) {
+            return [];
+        }
+
         $skills = $this->skillRepository->createQueryBuilder('skill')
             ->leftJoin('skill.asset', 'asset')
             ->addSelect('asset')
             ->where('skill.id IN (:ids)')
-            ->setParameter('ids', $skillIds)
+            ->setParameter('ids', array_values(array_unique($skillIds)))
             ->getQuery()
             ->getResult()
         ;
@@ -1727,12 +1838,7 @@ final readonly class GlobalReportingSectionQueryService
             }
         }
 
-        foreach ($rows as &$row) {
-            $row['image'] = $badgeUrls[(int) $row['id']] ?? '/img/icons/32/badges-default.png';
-        }
-        unset($row);
-
-        return $rows;
+        return $badgeUrls;
     }
 
     /**
@@ -1828,8 +1934,18 @@ final readonly class GlobalReportingSectionQueryService
 
     private function getBooleanSetting(GlobalReportingContext $context, string $variable): bool
     {
-        if (!$this->hasTables(['settings'])) {
+        $value = $this->getSettingValue($context, $variable);
+        if (null === $value) {
             return false;
+        }
+
+        return \in_array(strtolower(trim($value)), ['1', 'true', 'yes', 'on'], true);
+    }
+
+    private function getSettingValue(GlobalReportingContext $context, string $variable): ?string
+    {
+        if (!$this->hasTables(['settings'])) {
+            return null;
         }
 
         $value = $this->connection->fetchOne(
@@ -1842,11 +1958,8 @@ final readonly class GlobalReportingSectionQueryService
             ['variable' => $variable, 'accessUrlId' => $context->accessUrlId],
             ['accessUrlId' => Types::INTEGER],
         );
-        if (false === $value || null === $value) {
-            return false;
-        }
 
-        return \in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
+        return false === $value || null === $value ? null : (string) $value;
     }
 
     /**

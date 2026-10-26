@@ -30,6 +30,7 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                     'max_anonymous_users' => '0',
                     'send_inscription_notification_to_general_admin_only' => 'false',
                     'chamilo_latest_news' => 'true',
+                    'automatic_update_checks' => 'false',
                     'chamilo_support' => 'true',
                     'user_status_option_only_for_admin_enabled' => 'false',
                     'user_status_option_show_only_for_admin' => '',
@@ -50,6 +51,10 @@ class AdminSettingsSchema extends AbstractSettingsSchema
             ->add('max_anonymous_users', TextType::class)
             ->add('send_inscription_notification_to_general_admin_only', YesNoType::class)
             ->add('chamilo_latest_news', YesNoType::class)
+            ->add('automatic_update_checks', YesNoType::class, [
+                'label' => 'Automatic update checks',
+                'help' => 'Check the official updater manifest in the Chamilo News block. Independent of portal registration.',
+            ])
             ->add('chamilo_support', YesNoType::class)
             ->add('user_status_option_only_for_admin_enabled', YesNoType::class)
             ->add(

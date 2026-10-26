@@ -47,7 +47,7 @@ export function useIndexBlocks() {
         .loadVersion({ force: true, onFetchStart: () => (blockVersionStatusEl.value = t("Loading")) })
         .then(() => {})
 
-      showSuccessNotification(t("Version check enabled"))
+      showSuccessNotification(t("Portal registration enabled"))
     })
   }
 

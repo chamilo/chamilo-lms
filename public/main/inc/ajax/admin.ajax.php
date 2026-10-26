@@ -83,6 +83,10 @@ switch ($action) {
     case 'get_latest_news':
         session_write_close();
 
+        if ('true' !== (string) api_get_setting('admin.chamilo_latest_news')) {
+            break;
+        }
+
         try {
             $json = getLatestNews();
             $items = json_decode($json, true);
@@ -130,192 +134,70 @@ switch ($action) {
 }
 
 /**
- * Displays either the text for the registration or the message that the installation is (not) up to date.
- *
- * @return string html code
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version august 2006
- *
- * @todo have a 6 monthly re-registration
+ * Notify the opted-in Chamilo registration server without checking versions.
  */
-function version_check()
+function version_check(): string
 {
-    $tbl_settings = Database::get_main_table(TABLE_MAIN_SETTINGS);
-    $sql = 'SELECT selected_value FROM '.$tbl_settings.' WHERE variable = "registered" ';
-    $result = Database::query($sql);
-    $row = Database::fetch_assoc($result);
-
-    // The site has not been registered yet.
-    $return = '';
-
-    if ('false' == $row['selected_value']) {
-        check_system_version();
-    } else {
-        // site not registered. Call anyway
-        $return .= check_system_version();
+    // Portal registration is a separate opt-in from automatic update checks.
+    // An unregistered portal must never send installation statistics.
+    if ('true' !== (string) api_get_setting('platform.registered')) {
+        return '';
     }
 
-    return $return;
+    return sendPortalRegistration();
 }
 
 /**
- * Check if the current installation is up to date
- * The code is borrowed from phpBB and slighlty modified.
- *
- * @throws \Exception
- * @throws \InvalidArgumentException
- *
- * @return string language string with some layout (color)
+ * Report an explicitly registered portal to Chamilo. This is not a version
+ * comparison: available updates are handled only by the modern updater.
  */
-function check_system_version()
+function sendPortalRegistration(): string
 {
-    // Check if curl is available.
-    if (!in_array('curl', get_loaded_extensions())) {
-        return '<span style="color:red">'.
-            get_lang('Impossible to contact the version server right now. Please try again later.').'</span>';
-    }
-
-    $url = 'https://version.chamilo.org';
-    $options = [
-        'verify' => false,
-    ];
-
-    $urlValidated = false;
-
     try {
-        $client = new GuzzleHttp\Client();
-        $res = $client->request('GET', $url, $options);
-
-        if ('200' == $res->getStatusCode() || '301' == $res->getStatusCode()) {
-            $urlValidated = true;
-        }
-    } catch (Exception $e) {
-    }
-
-    // The installed version must remain available after the install directory is removed.
-    /** @var InstalledChamiloVersionProvider $installedVersionProvider */
-    $installedVersionProvider = Container::$container->get(InstalledChamiloVersionProvider::class);
-    $system_version = $installedVersionProvider->getInstalledVersion();
-    $versionDetails = $installedVersionProvider->getVersionDetails();
-    $versionStatus = '';
-
-    if (!empty($versionDetails['new_version_status']) && $versionDetails['new_version_status'] != 'stable') {
-        $versionLastId = '';
-
-        if (!empty($versionDetails['new_version_last_id'])) {
-            $versionLastId = ' '.$versionDetails['new_version_last_id'];
-        }
-
-        $versionStatus = ' ('.$versionDetails['new_version_status'].$versionLastId.')';
-    }
-
-    if ($urlValidated) {
-        // The number of courses
-        $number_of_courses = Statistics::countCourses();
-
-        // The number of users
-        $number_of_users = Statistics::countUsers();
-
-        $number_of_active_users = Statistics::countUsers(
-            null,
-            null,
-            true,
-            true
-        );
-
-        // The number of sessions
-        $number_of_sessions = SessionManager::count_sessions(api_get_current_access_url_id());
-
-        $packager = api_get_env_variable('PACKAGER', 'chamilo');
+        /** @var InstalledChamiloVersionProvider $versionProvider */
+        $versionProvider = Container::$container->get(InstalledChamiloVersionProvider::class);
 
         $uniqueId = '';
-        $entityManager = Database::getManager();
-
         /** @var BranchRepository $repository */
-        $repository = $entityManager->getRepository(Branch::class);
-
-        /** @var Branch $branch */
+        $repository = Database::getManager()->getRepository(Branch::class);
         $branch = $repository->getTopBranch();
-
-        if (is_a($branch, Branch::class)) {
+        if ($branch instanceof Branch) {
             $uniqueId = $branch->getUniqueId();
         }
 
         $data = [
             'url' => api_get_path(WEB_PATH),
             'campus' => api_get_setting('siteName'),
-            // the admin's e-mail, with the only purpose of being able to contact admins to inform about critical security issues
             'contact' => api_get_setting('emailAdministrator'),
-            'version' => $system_version,
-            // to sum up into non-personal statistics - see https://version.chamilo.org/stats/
-            'numberofcourses' => $number_of_courses,
-            // to sum up into non-personal statistics
-            'numberofusers' => $number_of_users,
-            // to sum up into non-personal statistics
-            'numberofactiveusers' => $number_of_active_users,
-            'numberofsessions' => $number_of_sessions,
-            // The donotlistcampus setting recovery should be improved to make
-            // it true by default - this does not affect numbers counting
+            'version' => $versionProvider->getInstalledVersion(),
+            'numberofcourses' => Statistics::countCourses(),
+            'numberofusers' => Statistics::countUsers(),
+            'numberofactiveusers' => Statistics::countUsers(null, null, true, true),
+            'numberofsessions' => SessionManager::count_sessions(api_get_current_access_url_id()),
             'donotlistcampus' => api_get_setting('donotlistcampus'),
             'organisation' => api_get_setting('Institution'),
-            // helps us know the spread of language usage for campuses, by main language
             'language' => api_get_setting('platformLanguage'),
-            // not sure this is necessary...
             'adminname' => api_get_setting('administratorName').' '.api_get_setting('administratorSurname'),
-            // the admin's IP address, with the only purpose of trying to geolocate portals around the globe to draw a map
-            'ip' => $_SERVER['REMOTE_ADDR'],
-            // Reference to the packager system or provider through which
-            // Chamilo is installed/downloaded. Packagers can change this in
-            // the default config file (main/install/configuration.dist.php)
-            // or in the installed config file. The default value is 'chamilo'
-            'packager' => $packager,
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? '',
+            'packager' => api_get_env_variable('PACKAGER', 'chamilo'),
             'unique_id' => $uniqueId,
         ];
 
-        $version = null;
-        $client = new GuzzleHttp\Client();
-        $url .= '?';
+        $response = (new Client(['timeout' => 6]))->request('GET', 'https://version.chamilo.org', [
+            'query' => $data,
+            'allow_redirects' => false,
+        ]);
 
-        foreach ($data as $k => $v) {
-            $url .= urlencode($k).'='.urlencode($v).'&';
+        if (200 !== $response->getStatusCode()) {
+            throw new RuntimeException('Unexpected portal registration response.');
         }
 
-        $res = $client->request('GET', $url, $options);
-
-        if ('200' == $res->getStatusCode()) {
-            $versionData = $res->getHeader('X-Chamilo-Version');
-
-            if (isset($versionData[0])) {
-                $version = trim($versionData[0]);
-            }
-        }
-
-        if (version_compare($system_version, $version, '<')) {
-            $output = '<span style="color:red">'.
-                get_lang('Your version is not up-to-date').'<br />'.
-                get_lang('The latest version is').' <b>Chamilo '.$version.'</b>. <br />'.
-                get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>. <br />'.
-                str_replace(
-                    'https://chamilo.org/download',
-                    '<a href="https://chamilo.org/download">https://chamilo.org/download</a>',
-                    get_lang('Please visit our website: https://chamilo.org/download')
-                ).
-                '</span>';
-        } else {
-            $output = '<span style="color:green">'.
-                get_lang('Your version is up-to-date').'<br />'.
-                get_lang('The latest version is').' <b>Chamilo '.$version.'</b>. <br />'.
-                get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>. <br />'.
-                '</span>';
-        }
-
-        return $output;
+        // The remote X-Chamilo-Version header is deliberately ignored. The
+        // updater manifest is the only source used to announce new versions.
+        return htmlspecialchars(get_lang('Registered'), ENT_QUOTES, 'UTF-8');
+    } catch (\Throwable) {
+        return htmlspecialchars(get_lang('Could not contact the Chamilo registration server.'), ENT_QUOTES, 'UTF-8');
     }
-
-    return '<span style="color:red">'.
-        get_lang('Impossible to contact the version server right now. Please try again later.').'</span>';
 }
 
 /**
@@ -361,6 +243,12 @@ function getLatestNews(): string
  */
 function appendSystemUpdateNotice(string $html): string
 {
+    // News and automatic update checks are independent, and this gate must live
+    // on the server so a direct request cannot trigger an unwanted lookup.
+    if ('true' !== (string) api_get_setting('admin.automatic_update_checks')) {
+        return $html;
+    }
+
     try {
         /** @var UpdateConfiguration $configuration */
         $configuration = Container::$container->get(UpdateConfiguration::class);

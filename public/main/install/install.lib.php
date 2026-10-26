@@ -1572,7 +1572,8 @@ function finishInstallationWithContainer(
     $mailerDsn,
     $mailerFromEmail,
     $mailerFromName,
-    \Chamilo\Kernel $kernel
+    \Chamilo\Kernel $kernel,
+    string $urlForm = ''
 ) {
     Container::setContainer($container);
     Container::setLegacyServices($container);
@@ -1591,6 +1592,17 @@ function finishInstallationWithContainer(
     if (!$accessUrl) {
         $accessUrl = Container::getAccessUrlUtil()->getCurrent();
         $em->persist($accessUrl);
+        $em->flush();
+    }
+
+    // Links sent by e-mail take their host from the main URL, so keep the address confirmed here
+    // instead of the placeholder written by the fixtures.
+    $urlScheme = strtolower((string) parse_url($urlForm, PHP_URL_SCHEME));
+    if (AccessUrl::DEFAULT_ACCESS_URL === $accessUrl->getUrl()
+        && false !== filter_var($urlForm, FILTER_VALIDATE_URL)
+        && in_array($urlScheme, ['http', 'https'], true)
+    ) {
+        $accessUrl->setUrl(rtrim($urlForm, '/').'/');
         $em->flush();
     }
 

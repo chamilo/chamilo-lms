@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Cordialmente"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Exemplo de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Exemplo de fórmula: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Rangos de las variables"
@@ -28776,6 +28776,9 @@ msgstr "Usuário atual não encontrado."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Olá %s,<br><br>Você está registrado em %s.<br>Você pode acessar sua conta <a href=\"%s\">aqui</a>.<br><br>Suas credenciais de login são:<br>Nome de usuário: <strong>%s</strong><br>Senha: <strong>%s</strong><br><br>Atenciosamente,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Olá %s,<br><br>Está registado em %s.<br>Nome de utilizador: <strong>%s</strong><br><br>Clique na ligação abaixo para definir a sua palavra-passe e aceder à sua conta:<br><a href=\"%s\">Definir a sua palavra-passe</a><br><br>Com os melhores cumprimentos,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Você está registrado em %s"
 
@@ -41579,4 +41582,1616 @@ msgstr "O histórico de migrações está registado"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s está presente na raiz do projeto: elimine-o para fechar os endpoints de atualização"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Obteve um certificado por este exercício"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Tem de concluir o percurso de aprendizagem \"%s\" antes de poder aceder a este."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Tem a certeza de que pretende eliminar este ficheiro definitivamente?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Tem a certeza de que pretende desassociar este ficheiro do curso selecionado?"
+
+msgid "Attach this file to another course"
+msgstr "Associar este ficheiro a outro curso"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Associar ao(s) curso(s) selecionado(s) (oculto)"
+
+msgid "Course(s):"
+msgstr "Curso(s):"
+
+msgid "Delete definitively"
+msgstr "Eliminar definitivamente"
+
+msgid "Detach from this course"
+msgstr "Desassociar deste curso"
+
+msgid "File actions"
+msgstr "Ações do ficheiro"
+
+msgid "File Information"
+msgstr "Informação do ficheiro"
+
+msgid "File Link:"
+msgstr "Ligação do ficheiro:"
+
+msgid "File Path:"
+msgstr "Caminho do ficheiro:"
+
+msgid "Filter courses..."
+msgstr "Filtrar cursos..."
+
+msgid "MIME Type:"
+msgstr "Tipo MIME:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Nenhum resultado encontrado."
+
+msgid "Original Name"
+msgstr "Nome original"
+
+msgid "Original Name:"
+msgstr "Nome original:"
+
+msgid "Orphan"
+msgstr "Órfão"
+
+msgid "Resource File ID:"
+msgstr "ID do ficheiro de recurso:"
+
+msgid "Resource Node ID:"
+msgstr "ID do nó de recurso:"
+
+msgid "Search..."
+msgstr "Pesquisar..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Para desassociar este ficheiro de um curso específico, clique no ícone \"×\" na etiqueta do curso correspondente acima."
+
+msgid "User:"
+msgstr "Utilizador:"
+
+msgid "View file information"
+msgstr "Ver informação do ficheiro"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Pode associar este ficheiro a um ou mais cursos (oculto na raiz dos documentos). Se o ficheiro já não for utilizado e se tornar órfão, também o pode eliminar definitivamente."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Pode selecionar um ou mais cursos (utilize Ctrl/Cmd + clique)."
+
+msgid "bytes"
+msgstr "bytes"
+
+msgid "Failed to copy:"
+msgstr "Falha ao copiar:"
+
+msgid "Missing resource file identifier."
+msgstr "Identificador do ficheiro de recurso em falta."
+
+msgid "Please select at least one course."
+msgstr "Selecione pelo menos um curso."
+
+msgid "Resource file not found."
+msgstr "Ficheiro de recurso não encontrado."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "O ficheiro \"%s\" foi associado a %d curso(s): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Alguns cursos foram ignorados: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Identificador de ficheiro ou de curso em falta."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Este ficheiro de recurso não tem nó de recurso e não pode ser desassociado."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "O ficheiro foi desassociado de %d ligação(ões) de curso."
+
+msgid "This file is not attached to the selected course."
+msgstr "Este ficheiro não está associado ao curso selecionado."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Este ficheiro ainda é utilizado por pelo menos um recurso e não pode ser eliminado."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "O ficheiro órfão e o seu conteúdo físico foram eliminados definitivamente."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Inquérito publicado. Criados: %d. Atualizados: %d. Mensagens enviadas: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Adquirível"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Esta competência não pode ser adquirida"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Novato"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Adesão rígida a regras e instruções independentes do contexto; pouco juízo situacional."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Principiante avançado"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Começa a reconhecer aspetos situacionais e padrões, mas ainda precisa de orientações."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Competente"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Desenvolve planeamento e modelos mentais; assume responsabilidade pelos resultados, mas pode sentir-se sobrecarregado pela complexidade."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Proficiente"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Vê o \"quadro geral\", prioriza intuitivamente e aprende com a experiência."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Perito"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Desempenho intuitivo e fluido; baseia-se em conhecimento tácito profundo; consegue inovar ou lidar com situações novas sem esforço."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Recordar"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Recuperar, recordar ou reconhecer conhecimentos relevantes da memória de longo prazo."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Compreender"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Construir significado a partir de mensagens instrucionais, incluindo comunicação oral, escrita e gráfica. Demonstrar compreensão interpretando, exemplificando, classificando, resumindo, inferindo, comparando ou explicando."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Aplicar"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Executar ou utilizar um procedimento através da sua execução ou implementação numa situação dada. Utilizar conhecimentos ou competências em situações novas ou concretas."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Analisar"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Decompor o material nas suas partes constituintes e determinar como as partes se relacionam entre si e com uma estrutura ou finalidade global. Identificar motivos, causas ou relações."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Avaliar"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Formular juízos com base em critérios e normas. Verificar, criticar ou justificar decisões ou cursos de ação."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Criar"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Reunir elementos para formar um todo coerente ou funcional; reorganizar elementos num novo padrão ou estrutura. Produzir trabalho original ou gerar novas ideias."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Seguir"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Trabalha sob supervisão e direção estreitas. Executa tarefas rotineiras com discricionariedade limitada. Centra-se em seguir instruções e na execução básica."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Assistir"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Trabalha sob supervisão de rotina. Presta assistência a outros, contribui para tarefas de equipa e começa a tomar alguma iniciativa dentro de limites definidos."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Trabalha sob supervisão geral. Aplica conhecimentos e competências a um conjunto de atividades rotineiras e não rotineiras. Exerce alguma discricionariedade e julgamento."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Trabalha sob orientação ampla. Capacita outros prestando orientação especializada, apoio ou serviços. Assume responsabilidade pelo próprio trabalho e pode supervisionar pequenas equipas ou tarefas."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Assegurar e aconselhar"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Trabalha sob orientação ampla, mas com autonomia significativa. Assegura que o trabalho cumpre os objetivos e aconselha sobre assuntos complexos. Frequentemente lidera equipas ou projetos e influencia decisões."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Iniciar e influenciar"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Tem autoridade e responsabilidade definidas para uma área de trabalho significativa. Inicia ações, influencia a estratégia e a política no seu domínio e lidera projetos ou equipas substanciais."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Definir estratégia, inspirar, mobilizar"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Detém autoridade ao mais alto nível organizacional para uma área de trabalho importante. Define a estratégia a longo prazo, inspira e mobiliza outros e toma decisões críticas para o sucesso organizacional. Influencia a nível setorial ou externo."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Tempo máximo de inatividade a considerar (minutos)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Uma página de curso deixada aberta continua a enviar pedidos automáticos. Após este número de minutos sem uma ação real do utilizador (abrir uma página ou um item, responder, etc.), o tempo passado no curso deixa de ser contabilizado."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Editor Wiki colaborativo"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "A ligar ao Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Guardar cria uma nova versão Wiki do Chamilo a partir do conteúdo atual do Etherpad."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Não foi possível carregar o editor colaborativo."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Ativar Etherpad para edição Wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Utilizar o Etherpad como editor colaborativo para páginas Wiki existentes. O Etherpad deve estar exposto na mesma origem que o Chamilo para sessões incorporadas seguras."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL do Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "URL de base da instância Etherpad, incluindo um caminho opcional de proxy reverso. Exemplo: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Chave API do Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Chave API utilizada pelo Chamilo para criar pads, sessões e sincronizar conteúdo Wiki. Configure o Etherpad para aceitar autenticação por chave API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "A visibilidade predefinida de novos documentos pode ser alterada por curso"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilidade atribuída a um novo documento, pasta ou ficheiro carregado quando um professor o cria num curso. Os professores podem ainda alterar a visibilidade de cada um posteriormente."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Quando ativado, os professores podem escolher nas definições do curso a visibilidade atribuída a novos documentos do seu curso, em vez da predefinição da plataforma."
+
+msgid "Default visibility of new learning paths"
+msgstr "Visibilidade predefinida de novos percursos de aprendizagem"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "A visibilidade predefinida de novos percursos de aprendizagem pode ser alterada por curso"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilidade atribuída a um novo percurso de aprendizagem quando um professor o cria num curso. Os professores podem ainda alterar a visibilidade de cada um posteriormente."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Quando ativado, os professores podem escolher nas definições do curso a visibilidade atribuída a novos percursos de aprendizagem do seu curso, em vez da predefinição da plataforma."
+
+msgid "Default visibility of new tests"
+msgstr "Visibilidade predefinida de novos testes"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "A visibilidade predefinida dos novos testes pode ser alterada por curso"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilidade atribuída a um novo teste quando um professor o cria num curso. Os professores podem ainda alterar a visibilidade de cada um posteriormente."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Quando ativado, os professores podem escolher nas definições do curso a visibilidade atribuída aos novos testes do seu curso, em vez da predefinição da plataforma."
+
+msgid "Default visibility for new learning paths"
+msgstr "Visibilidade predefinida para novos percursos de aprendizagem"
+
+msgid "Default visibility for new tests"
+msgstr "Visibilidade predefinida para novos testes"
+
+msgid "Following"
+msgstr "A seguir"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Receber um e-mail quando um aluno comentar uma submissão deste trabalho"
+
+msgid "Payment history"
+msgstr "Histórico de pagamentos"
+
+msgid "No payments yet"
+msgstr "Ainda não há pagamentos"
+
+msgid "Cancel service"
+msgstr "Cancelar serviço"
+
+msgid "Official transcript"
+msgstr "Histórico oficial"
+
+msgid "Unofficial transcript"
+msgstr "Histórico não oficial"
+
+msgid "Student name"
+msgstr "Nome do aluno"
+
+msgid "Student number"
+msgstr "Número de aluno"
+
+msgid "Program title"
+msgstr "Título do programa"
+
+msgid "Required hours"
+msgstr "Horas exigidas"
+
+msgid "Completion date"
+msgstr "Data de conclusão"
+
+msgid "Hours completed"
+msgstr "Horas concluídas"
+
+msgid "Final grade"
+msgstr "Nota final"
+
+msgid "Grade"
+msgstr "Nota"
+
+msgid "No completed course yet."
+msgstr "Ainda nenhum curso concluído."
+
+msgid "Grading scale"
+msgstr "Escala de classificação"
+
+msgid "Signature of school official"
+msgstr "Assinatura do responsável da escola"
+
+msgid "School official"
+msgstr "Responsável da escola"
+
+msgid "Official's title"
+msgstr "Cargo do responsável"
+
+msgid "Verify this transcript at"
+msgstr "Verifique este histórico em"
+
+msgid "Verification code"
+msgstr "Código de verificação"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Este histórico não oficial não está assinado. Peça a um administrador um histórico oficial."
+
+msgid "Transcript verification"
+msgstr "Verificação do histórico"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Verifique que este histórico oficial foi emitido e assinado pela instituição, não foi alterado e não foi revogado."
+
+msgid "Valid"
+msgstr "Válido"
+
+msgid "Invalid signature"
+msgstr "Assinatura inválida"
+
+msgid "Transcript not found"
+msgstr "Histórico não encontrado"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "A assinatura da instituição é válida e este histórico não foi revogado."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Este histórico não pode ser verificado como válido. Os seus detalhes não são apresentados."
+
+msgid "Transcript details"
+msgstr "Detalhes do histórico"
+
+msgid "Institution"
+msgstr "Instituição"
+
+msgid "Issued on"
+msgstr "Emitido em"
+
+msgid "Download verification JSON"
+msgstr "Descarregar JSON de verificação"
+
+msgid "Transcript"
+msgstr "Histórico"
+
+msgid "My confidential reports"
+msgstr "Os meus relatórios confidenciais"
+
+msgid "My transcript"
+msgstr "O meu histórico"
+
+msgid "Confidential investigations"
+msgstr "Investigações confidenciais"
+
+msgid "Floor plan"
+msgstr "Planta"
+
+msgid "Click a highlighted room to select it"
+msgstr "Clique numa sala destacada para a selecionar"
+
+msgid "Select room"
+msgstr "Selecionar sala"
+
+msgid "Room on floor plan"
+msgstr "Sala na planta"
+
+msgid "Select a branch first"
+msgstr "Selecione primeiro uma filial"
+
+msgid "The branch has no attached floor plan"
+msgstr "A filial não tem planta associada"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Utilize a ferramenta de polígono para delinear a sala; utilize Editar para mover os cantos"
+
+msgid "Save room area"
+msgstr "Guardar área da sala"
+
+msgid "Clear room area"
+msgstr "Limpar área da sala"
+
+msgid "Save the room form to persist the area"
+msgstr "Guarde o formulário da sala para persistir a área"
+
+msgid "Floor plan unavailable"
+msgstr "Planta indisponível"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Os pontos do mapa da sala devem estar dentro da planta"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Tem a certeza de que pretende limpar a área da sala?"
+
+msgid "View room on floor plan"
+msgstr "Ver sala na planta"
+
+msgid "No floor plan available"
+msgstr "Nenhuma planta disponível"
+
+msgid "This is an assignment by groups"
+msgstr "Esta é uma tarefa por grupos"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Carregue uma planta em PNG, JPEG ou SVG estático seguro, ou selecione uma imagem existente em Documentos."
+
+msgid "Upload floor plan"
+msgstr "Carregar planta"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG ou SVG estático, máximo 10 MB"
+
+msgid "Search images by name"
+msgstr "Pesquisar imagens por nome"
+
+msgid "Image name"
+msgstr "Nome da imagem"
+
+msgid "Select an image"
+msgstr "Selecionar uma imagem"
+
+msgid "Change floor plan"
+msgstr "Alterar planta"
+
+msgid "Attach floor plan"
+msgstr "Anexar planta"
+
+msgid "No matching images found in Documents."
+msgstr "Não foram encontradas imagens correspondentes em Documentos."
+
+msgid "Current floor plan"
+msgstr "Planta atual"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "As alterações da planta são guardadas automaticamente."
+
+msgid "Remove floor plan"
+msgstr "Remover planta"
+
+msgid "Cannot load images"
+msgstr "Não é possível carregar as imagens"
+
+msgid "Floor plan saved"
+msgstr "Planta guardada"
+
+msgid "Cannot attach floor plan"
+msgstr "Não é possível anexar a planta"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Apenas imagens PNG/JPEG e SVG estático seguro até 10 MB são suportadas."
+
+msgid "Cannot upload floor plan"
+msgstr "Não é possível carregar a planta"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Tem a certeza de que pretende remover a planta?"
+
+msgid "Floor plan removed"
+msgstr "Planta removida"
+
+msgid "Cannot remove floor plan"
+msgstr "Não é possível remover a planta"
+
+msgid "Support bot"
+msgstr "Bot de suporte"
+
+msgid "Connected"
+msgstr "Ligado"
+
+msgid "Not connected"
+msgstr "Não ligado"
+
+msgid "View ticket"
+msgstr "Ver ticket"
+
+msgid "Start a new conversation"
+msgstr "Iniciar uma nova conversa"
+
+msgid "Video call"
+msgstr "Videochamada"
+
+msgid "Incoming video call"
+msgstr "Videochamada recebida"
+
+msgid "Decline"
+msgstr "Recusar"
+
+msgid "Mute microphone"
+msgstr "Silenciar microfone"
+
+msgid "Unmute microphone"
+msgstr "Ativar microfone"
+
+msgid "Turn camera off"
+msgstr "Desligar câmara"
+
+msgid "Turn camera on"
+msgstr "Ligar câmara"
+
+msgid "Hang up"
+msgstr "Desligar"
+
+msgid "Calling..."
+msgstr "A chamar..."
+
+msgid "Connecting..."
+msgstr "A ligar..."
+
+msgid "Your contact is busy."
+msgstr "O seu contacto está ocupado."
+
+msgid "Your contact did not answer the call."
+msgstr "O seu contacto não atendeu a chamada."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "O seu contacto não conseguiu aceder à câmara ou ao microfone."
+
+msgid "Your contact could not prepare the video call."
+msgstr "O seu contacto não conseguiu preparar a videochamada."
+
+msgid "Your contact refused the call."
+msgstr "O seu contacto recusou a chamada."
+
+msgid "The call timed out."
+msgstr "A chamada expirou."
+
+msgid "Your contact cancelled the call."
+msgstr "O seu contacto cancelou a chamada."
+
+msgid "The video connection was lost."
+msgstr "A ligação de vídeo foi perdida."
+
+msgid "Your contact could not establish the video connection."
+msgstr "O seu contacto não conseguiu estabelecer a ligação de vídeo."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "O seu contacto não conseguiu concluir a configuração da videochamada."
+
+msgid "Your contact hung up."
+msgstr "O seu contacto desligou."
+
+msgid "Video call could not be started"
+msgstr "Não foi possível iniciar a videochamada"
+
+msgid "Camera or microphone permission was denied."
+msgstr "A permissão da câmara ou do microfone foi recusada."
+
+msgid "No camera or microphone was found."
+msgstr "Não foi encontrada nenhuma câmara ou microfone."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "A câmara ou o microfone já está em utilização ou indisponível."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "A câmara ou o microfone não suporta as definições necessárias."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Não foi possível obter acesso à câmara ou ao microfone."
+
+msgid "The video call could not be prepared."
+msgstr "Não foi possível preparar a videochamada."
+
+msgid "The video call request could not be sent."
+msgstr "Não foi possível enviar o pedido de videochamada."
+
+msgid "The incoming video call could not be processed."
+msgstr "Não foi possível processar a videochamada recebida."
+
+msgid "The video call answer could not be prepared."
+msgstr "Não foi possível preparar a resposta à videochamada."
+
+msgid "The video call answer could not be sent."
+msgstr "Não foi possível enviar a resposta à videochamada."
+
+msgid "The video call answer could not be processed."
+msgstr "Não foi possível processar a resposta à videochamada."
+
+msgid "The video connection failed"
+msgstr "A ligação de vídeo falhou"
+
+msgid "The video connection could not be established."
+msgstr "Não foi possível estabelecer a ligação de vídeo."
+
+msgid "No answer was received."
+msgstr "Não foi recebida nenhuma resposta."
+
+msgid "You refused the call."
+msgstr "Recusou a chamada."
+
+msgid "You cancelled the call."
+msgstr "Cancelou a chamada."
+
+msgid "You hung up."
+msgstr "Desligou."
+
+msgid "You missed the call."
+msgstr "Perdeu a chamada."
+
+msgid "Support bot is currently unavailable."
+msgstr "O bot de suporte está atualmente indisponível."
+
+msgid "A support ticket has been created."
+msgstr "Foi criado um ticket de suporte."
+
+msgid "Conversation ended."
+msgstr "A conversa terminou."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "O bot de suporte não conseguiu continuar esta conversa. Tente novamente."
+
+msgid "Add your first term glossary to this course"
+msgstr "Adicione o primeiro termo do glossário a este curso"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Tem a certeza de que pretende eliminar este modelo de inquérito?"
+
+msgid "The survey template has been deleted."
+msgstr "O modelo de inquérito foi eliminado."
+
+msgid "Please select a course."
+msgstr "Selecione um curso."
+
+msgid "Please select a session for this course."
+msgstr "Selecione uma sessão para este curso."
+
+msgid "The survey has been created from the template."
+msgstr "O inquérito foi criado a partir do modelo."
+
+msgid "Survey templates"
+msgstr "Modelos de inquérito"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Crie modelos de inquérito reutilizáveis para professores e atribua-os diretamente a um curso ou sessão."
+
+msgid "Subtitle"
+msgstr "Subtítulo"
+
+msgid "Assign to course"
+msgstr "Atribuir ao curso"
+
+msgid "Assign template to course"
+msgstr "Atribuir modelo ao curso"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Deixe a sessão vazia para criar o inquérito diretamente no curso."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Este curso está disponível através de uma sessão neste portal, pelo que é necessária uma sessão."
+
+msgid "Survey template questions"
+msgstr "Perguntas do modelo de inquérito"
+
+msgid "Back to survey templates"
+msgstr "Voltar aos modelos de inquérito"
+
+msgid "Could not load survey template"
+msgstr "Não foi possível carregar o modelo de inquérito"
+
+msgid "Could not load survey template questions"
+msgstr "Não foi possível carregar as perguntas do modelo de inquérito"
+
+msgid "Could not save survey template question"
+msgstr "Não foi possível guardar a pergunta do modelo de inquérito"
+
+msgid "Could not delete survey template question"
+msgstr "Não foi possível eliminar a pergunta do modelo de inquérito"
+
+msgid "Could not move survey template question"
+msgstr "Não foi possível mover a pergunta do modelo de inquérito"
+
+msgid "Could not copy survey template question"
+msgstr "Não foi possível copiar a pergunta do modelo de inquérito"
+
+msgid "The survey template has been saved."
+msgstr "O modelo de inquérito foi guardado."
+
+msgid "Edit survey template"
+msgstr "Editar modelo de inquérito"
+
+msgid "Create survey template"
+msgstr "Criar modelo de inquérito"
+
+msgid "The survey template title is required."
+msgstr "O título do modelo de inquérito é obrigatório."
+
+msgid "Visible as template"
+msgstr "Visível como modelo"
+
+msgid "Create satisfaction survey"
+msgstr "Criar inquérito de satisfação"
+
+msgid "Training satisfaction survey"
+msgstr "Inquérito de satisfação da formação"
+
+msgid "Could not create satisfaction survey"
+msgstr "Não foi possível criar o inquérito de satisfação"
+
+msgid "Use template"
+msgstr "Utilizar modelo"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Criar este inquérito a partir de um modelo reutilizável preparado por um administrador."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Resultados ocultos do professor/tutor"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Os professores e tutores ainda podem ver o número de respostas e enviar lembretes, mas não podem abrir nem exportar os resultados do inquérito."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Modelo aplicado. Reveja as definições do inquérito e grave para o criar."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Os resultados do inquérito estão ocultos dos professores e tutores."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Ainda pode utilizar a página de convites para ver o número de respostas e enviar lembretes."
+
+msgid "Payment method"
+msgstr "Método de pagamento"
+
+msgid "Preview mode"
+msgstr "Modo de pré-visualização"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "O progresso e a pontuação não são gravados no modo de pré-visualização."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Esta hiperligação não pode ser apresentada dentro do percurso de aprendizagem."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Abra-a num novo separador para ver a página."
+
+msgid "Report a problem with this question"
+msgstr "Comunicar um problema com esta pergunta"
+
+msgid "Your report was sent to the teacher."
+msgstr "O seu relatório foi enviado ao professor."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Descreva o erro ou problema que encontrou. O seu relatório será enviado ao professor."
+
+msgid "A comment is required."
+msgstr "É necessário um comentário."
+
+msgid "Could not send the report."
+msgstr "Não foi possível enviar o relatório."
+
+msgid "Learner reports"
+msgstr "Relatórios dos formandos"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Não foram submetidos relatórios de formandos para esta pergunta."
+
+msgid "View attempt"
+msgstr "Ver tentativa"
+
+msgid "Could not load learner reports."
+msgstr "Não foi possível carregar os relatórios dos formandos."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Permitir que os formandos comuniquem problemas nas perguntas"
+
+msgid "Skill acquired"
+msgstr "Competência adquirida"
+
+msgid "AI Toolbox"
+msgstr "Caixa de ferramentas de IA"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Gerar aplicações educativas interativas com IA e acompanhar o progresso dos formandos com SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Ainda não existem aplicações publicadas disponíveis."
+
+msgid "Interactive applications"
+msgstr "Aplicações interativas"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Gerar, melhorar, publicar e rever versões a partir de um único local."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Abra uma aplicação para continuar a partir do seu progresso mais recente."
+
+msgid "Interactive learning application"
+msgstr "Aplicação de aprendizagem interativa"
+
+msgid "Create an interactive learning app"
+msgstr "Criar uma aplicação de aprendizagem interativa"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Descreva a atividade. O Chamilo irá gerar uma aplicação SCORM versionada com acompanhamento de progresso e pontuação."
+
+msgid "Idea"
+msgstr "Ideia"
+
+msgid "Application"
+msgstr "Aplicação"
+
+msgid "What should the application do?"
+msgstr "O que deve a aplicação fazer?"
+
+msgid "How it works"
+msgstr "Como funciona"
+
+msgid "AI generation"
+msgstr "Geração por IA"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "A aplicação é gerada a partir das suas instruções e armazenada como versão 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "O progresso, a pontuação e os dados de retoma do formando são reportados ao Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Melhorias futuras criam novas versões sem eliminar as anteriores."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Inclua o objetivo de aprendizagem, as regras, os níveis, a pontuação e o que deve acontecer quando o formando terminar."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Não tem permissão para criar conteúdo neste contexto."
+
+msgid "The application was generated successfully."
+msgstr "A aplicação foi gerada com êxito."
+
+msgid "Open in student view"
+msgstr "Abrir na vista de aluno"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Gere a aplicação para ativar a pré-visualização e a publicação."
+
+msgid "Improve with AI"
+msgstr "Melhorar com IA"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Descreva a alteração. Será criada uma nova versão e as versões anteriores permanecerão disponíveis."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Descreva a atividade interativa completa que pretende gerar."
+
+msgid "What should be improved?"
+msgstr "O que deve ser melhorado?"
+
+msgid "Generate new version"
+msgstr "Gerar nova versão"
+
+msgid "Version history"
+msgstr "Histórico de versões"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Pré-visualize, descarregue ou restaure qualquer versão gerada."
+
+msgid "A new version was generated."
+msgstr "Foi gerada uma nova versão."
+
+msgid "Version restored"
+msgstr "Versão restaurada"
+
+msgid "The support bot tree has been published."
+msgstr "A árvore do bot de suporte foi publicada."
+
+msgid "The support bot tree has been archived."
+msgstr "A árvore do bot de suporte foi arquivada."
+
+msgid "The support bot tree has been duplicated."
+msgstr "A árvore do bot de suporte foi duplicada."
+
+msgid "The support bot tree has been deleted."
+msgstr "A árvore do bot de suporte foi eliminada."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Tem a certeza de que pretende eliminar esta árvore do bot de suporte?"
+
+msgid "The support bot tree has been imported."
+msgstr "A árvore do bot de suporte foi importada."
+
+msgid "Create support bot tree"
+msgstr "Criar árvore do bot de suporte"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Crie uma árvore de decisão fixa que oriente os utilizadores através de perguntas de suporte e possa escalar para Tickets."
+
+msgid "Portal scope"
+msgstr "Âmbito do portal"
+
+msgid "Duplicate"
+msgstr "Duplicar"
+
+msgid "Archive"
+msgstr "Arquivar"
+
+msgid "View conversations"
+msgstr "Ver conversas"
+
+msgid "Import support bot tree"
+msgstr "Importar árvore do bot de suporte"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importe uma exportação JSON ou uma árvore de decisão CSV. A árvore importada é sempre criada como um novo rascunho."
+
+msgid "Resolved"
+msgstr "Resolvido"
+
+msgid "Escalated"
+msgstr "Escalado"
+
+msgid "Abandoned"
+msgstr "Abandonado"
+
+msgid "Support bot conversations"
+msgstr "Conversas do bot de suporte"
+
+msgid "Outcome"
+msgstr "Resultado"
+
+msgid "Started at"
+msgstr "Iniciado em"
+
+msgid "Ended at"
+msgstr "Terminado em"
+
+msgid "View conversation"
+msgstr "Ver conversa"
+
+msgid "Go to node"
+msgstr "Ir para o nó"
+
+msgid "Create support ticket"
+msgstr "Criar ticket de suporte"
+
+msgid "End conversation"
+msgstr "Terminar conversa"
+
+msgid "Node"
+msgstr "Nó"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Uma árvore do bot de suporte requer pelo menos um nó."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Tem a certeza de que pretende eliminar este nó? As ligações para ele serão removidas."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Cada nó do bot de suporte requer pelo menos uma opção."
+
+msgid "The support bot tree title is required."
+msgstr "O título da árvore do bot de suporte é obrigatório."
+
+msgid "A support bot entry node is required."
+msgstr "É necessário um nó de entrada do bot de suporte."
+
+msgid "Every support bot node requires content."
+msgstr "Cada nó do bot de suporte requer conteúdo."
+
+msgid "Every support bot option requires a label."
+msgstr "Cada opção do bot de suporte requer uma etiqueta."
+
+msgid "Select a target node for every go-to option."
+msgstr "Selecione um nó de destino para cada opção de ir para."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Introduza um URL relativo para cada opção de ligação."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Selecione uma categoria de ticket para cada opção de escalamento."
+
+msgid "The support bot tree has been saved."
+msgstr "A árvore do bot de suporte foi guardada."
+
+msgid "Edit support bot tree"
+msgstr "Editar árvore do bot de suporte"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "As versões publicadas e arquivadas do bot de suporte são apenas de leitura. Duplique esta árvore a partir da lista para editar uma nova versão de rascunho."
+
+msgid "Default ticket project"
+msgstr "Projeto de tickets predefinido"
+
+msgid "Decision tree rules"
+msgstr "Regras da árvore de decisão"
+
+msgid "Every node must contain at least one option."
+msgstr "Cada nó deve conter pelo menos uma opção."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Um nó final deve terminar a conversa ou criar um ticket de suporte."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "As ligações «ir para» não devem criar ciclos na v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Os URL externos não são permitidos na v1; as ações de ligação devem utilizar um caminho relativo do Chamilo."
+
+msgid "Nodes"
+msgstr "Nós"
+
+msgid "Add node"
+msgstr "Adicionar nó"
+
+msgid "Entry node"
+msgstr "Nó de entrada"
+
+msgid "Set as entry node"
+msgstr "Definir como nó de entrada"
+
+msgid "Target node"
+msgstr "Nó de destino"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Utilize um caminho relativo do Chamilo, por exemplo /tickets."
+
+msgid "Ticket category"
+msgstr "Categoria de ticket"
+
+msgid "Select a default ticket project first."
+msgstr "Selecione primeiro um projeto de tickets predefinido."
+
+msgid "Closing message"
+msgstr "Mensagem de encerramento"
+
+msgid "Select a node to edit it."
+msgstr "Selecione um nó para o editar."
+
+msgid "Support bot conversation"
+msgstr "Conversa do bot de suporte"
+
+msgid "Transcript of %s"
+msgstr "Transcrição de %s"
+
+msgid "Download unofficial transcript"
+msgstr "Descarregar transcrição não oficial"
+
+msgid "Issue official transcript"
+msgstr "Emitir transcrição oficial"
+
+msgid "Official transcripts"
+msgstr "Transcrições oficiais"
+
+msgid "No official transcript has been issued yet."
+msgstr "Ainda não foi emitida nenhuma transcrição oficial."
+
+msgid "Issued by"
+msgstr "Emitido por"
+
+msgid "Verify"
+msgstr "Verificar"
+
+msgid "Signature of official transcripts"
+msgstr "Assinatura das transcrições oficiais"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Esta imagem é impressa nas transcrições oficiais deste portal, acima do nome e cargo do signatário definidos nas definições do certificado."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Emitir uma transcrição oficial assinada com os cursos e as notas listados nesta página? Pode ser verificada em linha até ser revogada."
+
+msgid "Official transcript issued"
+msgstr "Transcrição oficial emitida"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Revogar esta transcrição oficial? A respetiva página de verificação passará a mostrá-la como revogada."
+
+msgid "Official transcript revoked"
+msgstr "Transcrição oficial revogada"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Selecione primeiro uma imagem PNG ou JPEG."
+
+msgid "Signed credential"
+msgstr "Credencial assinada"
+
+msgid "Issue signed credential"
+msgstr "Emitir credencial assinada"
+
+msgid "Verify credential"
+msgstr "Verificar credencial"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Ancorar na testnet Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Confirmar transação Sepolia existente"
+
+msgid "Revoke signed credential"
+msgstr "Revogar credencial assinada"
+
+msgid "Delete certificate"
+msgstr "Eliminar certificado"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Confirmar uma transação Sepolia existente"
+
+msgid "Sepolia transaction hash"
+msgstr "Hash da transação Sepolia"
+
+msgid "Verify transaction"
+msgstr "Verificar transação"
+
+msgid "Anchored"
+msgstr "Ancorado"
+
+msgid "Issued"
+msgstr "Emitido"
+
+msgid "Not issued"
+msgstr "Não emitido"
+
+msgid "Consent required"
+msgstr "Consentimento necessário"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Transação Sepolia confirmada e verificada"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "A carteira da testnet Sepolia pedir-lhe-á que assine uma transação. Apenas a impressão digital do certificado será ancorada. Continuar?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Revogar esta credencial assinada? Qualquer transação na cadeia de blocos permanece permanente, mas a página de verificação indicará a revogação."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Emitir uma credencial de certificado assinada para este aluno? Isto torna os dados pessoais aprovados verificáveis através de uma ligação privada."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "É necessária uma carteira de navegador compatível com EVM para a Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Selecione a testnet Sepolia (ID da cadeia 11155111) na sua carteira."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Endereço de carteira ou impressão digital do certificado inválidos."
+
+msgid "Transaction pending"
+msgstr "Transação pendente"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Utilize Confirmar transação Sepolia existente mais tarde."
+
+msgid "Signed credential issued"
+msgstr "Credencial assinada emitida"
+
+msgid "Credential revoked"
+msgstr "Credencial revogada"
+
+msgid "Transaction hash"
+msgstr "Hash da transação"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "O consentimento de publicação permite que um administrador emita uma credencial de certificado assinada e, opcionalmente, ancore a sua impressão digital SHA-256 na testnet Sepolia. Nenhum nome nem dados pessoais são enviados para a cadeia. Pode retirar o consentimento a qualquer momento."
+
+msgid "Publication consent"
+msgstr "Consentimento de publicação"
+
+msgid "Not approved"
+msgstr "Não aprovado"
+
+msgid "Withdraw consent"
+msgstr "Retirar consentimento"
+
+msgid "Approve publication"
+msgstr "Aprovar publicação"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Autorizo uma credencial assinada e publicamente verificável com o meu nome, curso, classificação e data de emissão. Um administrador também pode publicar apenas a sua impressão digital SHA-256 na testnet Sepolia. A impressão digital é permanente, mesmo que eu retire o consentimento mais tarde. Continuar?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Retirar a aprovação de publicação deste certificado?"
+
+msgid "Publication approval recorded"
+msgstr "Aprovação de publicação registada"
+
+msgid "Publication approval withdrawn"
+msgstr "Aprovação de publicação retirada"
+
+msgid "Read more"
+msgstr "Ler mais"
+
+msgid "Participation: %s of %s posts"
+msgstr "Participação: %s de %s publicações"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Publique a sua contribuição para ver as respostas dos outros participantes."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Apenas investigadores autorizados podem analisar denúncias elegíveis. As identidades dos denunciantes permanecem confidenciais por predefinição."
+
+msgid "New confidential report"
+msgstr "Nova denúncia confidencial"
+
+msgid "Reported user"
+msgstr "Utilizador denunciado"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Existem denúncias confidenciais elegíveis a aguardar análise."
+
+msgid "Eligible investigations"
+msgstr "Investigações elegíveis"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Um caso aparece aqui apenas depois de pelo menos %s utilizadores diferentes denunciarem a mesma pessoa."
+
+msgid "Distinct reporters"
+msgstr "Denunciantes distintos"
+
+msgid "Reports for selected user"
+msgstr "Denúncias do utilizador selecionado"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "A denúncia confidencial não está disponível de momento."
+
+msgid "The investigation could not be loaded."
+msgstr "Não foi possível carregar a investigação."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "A sua identidade está protegida dos investigadores por predefinição, mas evite incluir dados identificativos no texto da denúncia ou nos anexos. Este não é um serviço de emergência."
+
+msgid "Find the user involved"
+msgstr "Encontrar o utilizador envolvido"
+
+msgid "Name or username"
+msgstr "Nome ou nome de utilizador"
+
+msgid "Describe the situation"
+msgstr "Descreva a situação"
+
+msgid "Evidence (optional)"
+msgstr "Provas (opcional)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Até três ficheiros, máximo de 8 MiB cada. Imagens, áudio ou vídeos curtos."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Concordo que investigadores autorizados possam ver o meu nome e e-mail nesta denúncia específica. Posso retirar esta autorização mais tarde."
+
+msgid "Send confidential report"
+msgstr "Enviar denúncia confidencial"
+
+msgid "Could not search users"
+msgstr "Não foi possível pesquisar utilizadores"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Até três ficheiros, máximo de 8 MiB cada."
+
+msgid "The confidential report could not be saved."
+msgstr "Não foi possível guardar a denúncia confidencial."
+
+msgid "Confidential report"
+msgstr "Denúncia confidencial"
+
+msgid "Confidential conversation"
+msgstr "Conversa confidencial"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Os investigadores podem comunicar através desta conversa sem ver a identidade do denunciante, a menos que a partilha de contactos esteja ativada."
+
+msgid "Reporter"
+msgstr "Denunciante"
+
+msgid "Investigator"
+msgstr "Investigador"
+
+msgid "Additional evidence (optional)"
+msgstr "Provas adicionais (opcional)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Até três ficheiros, máximo de 8 MiB cada; dez ficheiros por denúncia."
+
+msgid "Contact shared voluntarily"
+msgstr "Contacto partilhado voluntariamente"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Permitir que os investigadores vejam o meu nome e e-mail nesta denúncia"
+
+msgid "This confidential report is not available."
+msgstr "Esta denúncia confidencial não está disponível."
+
+msgid "Your message could not be saved."
+msgstr "A sua mensagem não pôde ser guardada."
+
+msgid "Contact sharing could not be updated."
+msgstr "A partilha de contactos não pôde ser atualizada."
+
+msgid "Evidence could not be downloaded."
+msgstr "A evidência não pôde ser descarregada."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemplo de atividade de preenchimento de formulário: calcular o Índice de Massa Corporal</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Idade</strong></td>            <td width=\"75%\" style=\"\">[25] anos</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sexo</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ou F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Peso</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Altura</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Índice de Massa Corporal</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Peso/Altura<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artigo da Wikipédia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemplo de atividade de preenchimento de formulário: calcular o Índice de Massa Corporal</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Idade</strong></td>            <td width=\"75%\" style=\"\">[25] anos</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sexo</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ou F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Peso</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Altura</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Índice de Massa Corporal</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Peso/Altura<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artigo da Wikipédia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Ocultar endereço IP dos relatórios"
+
+msgid "Course settings policies"
+msgstr "Políticas das definições do curso"
+
+msgid "Academic transcripts"
+msgstr "Certificados académicos"
+
+msgid "Transcript program title"
+msgstr "Título do programa no certificado"
+
+msgid "Transcript course code"
+msgstr "Código do curso no certificado"
+
+msgid "Transcript course hours field"
+msgstr "Campo de horas do curso no certificado"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "As horas concluídas no certificado são as horas exigidas"
+
+msgid "Transcript student number field"
+msgstr "Campo do número de estudante no certificado"
+
+msgid "Transcript address fields"
+msgstr "Campos de morada no certificado"
+
+msgid "Transcript grading scale"
+msgstr "Escala de classificação do certificado"
+
+msgid "Transcript GPA note"
+msgstr "Nota da média (GPA) no certificado"
+
+msgid "Transcript signatory name"
+msgstr "Nome do signatário do certificado"
+
+msgid "Transcript signatory title"
+msgstr "Cargo do signatário do certificado"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Ativar certificados assinados e ancoragem opcional na testnet Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Mostrar respostas do tópico apenas após participar"
+
+msgid "Show the forum category description in threads"
+msgstr "Mostrar a descrição da categoria do fórum nos tópicos"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "As definições de participação no fórum podem ser alteradas por curso"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Máximo de mensagens mostradas num tópico do fórum"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Mensagens necessárias para concluir um tópico do fórum"
+
+msgid "Track e-mail openings"
+msgstr "Registar aberturas de e-mail"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Permitir respostas por e-mail às mensagens"
+
+msgid "Inbound e-mail address"
+msgstr "Endereço de e-mail de entrada"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN da caixa de correio de entrada"
+
+msgid "Remember me duration (days)"
+msgstr "Duração de «Lembrar-me» (dias)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Ativar o registo dinâmico de clientes OAuth para além do MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Ativar denúncias confidenciais de bem-estar"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Mínimo de denunciantes distintos para uma investigação"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Permitir anexos de evidência confidencial"
+
+msgid "Show confidential investigation notifications"
+msgstr "Mostrar notificações de investigações confidenciais"
+
+msgid "Enable support chatbot"
+msgstr "Ativar chatbot de apoio"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Selecione onde os termos do glossário são destacados automaticamente: documentos, exercícios e percursos de aprendizagem."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Ocultar endereços IP nos relatórios visuais e nas exportações. Os endereços IP continuam armazenados e acessíveis através de procedimentos autorizados de dados pessoais."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Predefinições da plataforma e permissões de edição do curso; geridas em Definições do curso."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Permitir que os utilizadores descarreguem um certificado extraoficial dos cursos que concluíram e que administradores, administradores de sessão e gestores de RH emitam certificados oficiais assinados para os utilizadores que gerem. A imagem da assinatura é carregada a partir da página de certificado de um utilizador."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Título do programa impresso em todos os certificados, por exemplo o nome do diploma preparado nesta plataforma."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Qual o campo do curso que preenche a coluna do código do curso nos certificados: o código do curso ou o nome do departamento."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Variável do campo extra do curso que contém o número de horas de um curso. Deixe vazio para usar a duração do curso."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Imprimir as horas exigidas de um curso como as horas concluídas pelo formando. Quando desativado, as horas concluídas são o tempo que o formando passou no curso."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Variável do campo extra do utilizador que contém o número de estudante impresso nos certificados. Deixe vazio para não imprimir nenhum."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Variáveis, separadas por vírgulas, de campos extra do utilizador impressas após a morada do utilizador nos certificados, por exemplo a cidade, o distrito e o código postal."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Lista JSON das letras de classificação, da pontuação mínima mais alta para a mais baixa: cada item tem a pontuação mínima em percentagem (min), a letra e os pontos de classificação usados para calcular a média (GPA)."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Explicação de como a média (GPA) é calculada, impressa por baixo da média nos certificados."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Nome do responsável da escola que assina os certificados oficiais."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Cargo do responsável da escola que assina os certificados oficiais."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Requer consentimento explícito do titular e ações manuais do administrador. Apenas impressões digitais SHA-256 são enviadas para a cadeia."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Os formandos só veem a primeira publicação de um tópico do fórum até publicarem nele. Administradores, professores, tutores e tutores de grupo veem sempre todas as publicações."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Mostrar o título e uma descrição abreviada da categoria do fórum no topo de cada tópico, com uma ligação para ler a descrição completa."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Quando ativado, os professores podem escolher, na secção Fórum das definições do curso, se o curso oculta as respostas do tópico até o formando publicar, se mostra a descrição da categoria nos tópicos e quantas publicações a barra de progresso de participação espera, em vez de seguir as definições da plataforma."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Mostrar apenas este número de publicações de cada tópico do fórum a todos os utilizadores que não sejam administradores da plataforma, incluindo professores, e a todos dentro de um percurso de aprendizagem. Nas vistas em tópicos e aninhadas, o limite aplica-se às respostas de cada publicação. As publicações são mantidas na ordem da vista: as primeiras, ou as mais recentes dentro de um percurso de aprendizagem, onde as publicações mais recentes aparecem primeiro. Defina como 0 para mostrar todas as publicações."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Mostrar aos formandos uma barra de progresso em cada tópico do fórum, que atinge 100% quando publicarem este número de mensagens. As publicações à espera de moderação são contabilizadas. Defina como 0 para ocultar a barra de progresso."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Adiciona uma pequena imagem de rastreio aos e-mails de notificação de mensagens e regista quando é pedida. Isto apenas indica que o e-mail pode ter sido aberto; não prova que foi lido."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Permitir que os destinatários de notificações de mensagens diretas respondam por e-mail. As mensagens recebidas devem ser encaminhadas para o comando de correio de entrada do Chamilo pela infraestrutura de correio."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Endereço base usado para o encaminhamento de respostas, por exemplo replies@example.com. O Chamilo adiciona um token único de destinatário usando plus addressing."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Ligação à caixa de correio usada para recolher respostas de entrada, por exemplo imaps://user:password@imap.example.com:993/INBOX. Codifique em URL os caracteres reservados nas credenciais."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Número de dias para manter um utilizador autenticado quando «Lembrar-me» está selecionado. Defina como 0 para desativar. Requer HTTPS. Intervalo permitido: 0 a 90. O tempo limite normal da sessão é configurado separadamente em PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Permite que o Dynamic Client Registration peça qualquer âmbito registado por um servidor de recursos OAuth do Chamilo. Quando desativado, o auto-registo permanece limitado ao MCP. O acesso a recursos é sempre restringido separadamente pela lista de recursos permitidos de cada cliente."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Ativar relatórios confidenciais de incidentes. O módulo requer uma chave de encriptação protegida e permissão de investigador."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Entre 2 e 10 denunciantes diferentes devem denunciar o mesmo utilizador antes de o caso se tornar visível para os investigadores."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Permitir imagens, áudio e vídeos curtos como prova. Os anexos existentes continuam legíveis quando desativado."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Mostrar uma indicação interna de investigações elegíveis. Não envia e-mails nem notificações externas."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Mostrar um chatbot de árvore de decisão no painel de conversação que pode orientar os utilizadores para "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Permite que os professores criem e versionem aplicações educativas assistidas por IA dentro dos cursos."
+
+msgid "Department name"
+msgstr "Nome do departamento"
+
+msgid "Documents and exercise"
+msgstr "Documentos e exercício"
+
+msgid "Documents and learning path"
+msgstr "Documentos e percurso de aprendizagem"
+
+msgid "Documents, exercise and learning path"
+msgstr "Documentos, exercício e percurso de aprendizagem"
+
+msgid "session"
+msgstr "sessão"
+
+msgid "course"
+msgstr "curso"
+
+msgid "You have been enrolled in %s"
+msgstr "Foi inscrito em %s"
 

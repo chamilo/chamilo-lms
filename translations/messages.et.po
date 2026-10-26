@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Lugupidamisega"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Valemi näide: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Valemi näide: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Muutujate vahemikud"
@@ -28769,6 +28769,9 @@ msgstr "Praegust kasutajat ei leitud."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Tere %s,<br><br>Olete registreeritud platvormil %s.<br>Teie kontole pääsete ligi <a href=\"%s\">siit</a>.<br><br>Teie sisselogimisandmed on:<br>Kasutajanimi: <strong>%s</strong><br>Parool: <strong>%s</strong><br><br>Parimate soovidega,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Tere %s,<br><br>Olete registreeritud saidil %s.<br>Kasutajanimi: <strong>%s</strong><br><br>Palun klõpsake alloleval lingil, et määrata parool ja pääseda kontole:<br><a href=\"%s\">Määra parool</a><br><br>Parimate soovidega,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Olete registreeritud platvormil %s"
 
@@ -41572,4 +41575,1616 @@ msgstr "Migratsiooniajalugu on salvestatud"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s on projekti juurkaustas: kustutage see, et sulgeda uuendamise otspunktid"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Olete selle harjutuse eest teeninud tunnistuse"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Enne sellele juurdepääsu peate lõpetama õpitee \"%s\"."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Kas olete kindel, et soovite selle faili lõplikult kustutada?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Kas olete kindel, et soovite selle faili valitud kursusest eemaldada?"
+
+msgid "Attach this file to another course"
+msgstr "Lisa see fail teisele kursusele"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Lisa valitud kursus(t)ele (peidetud)"
+
+msgid "Course(s):"
+msgstr "Kursus(ed):"
+
+msgid "Delete definitively"
+msgstr "Kustuta lõplikult"
+
+msgid "Detach from this course"
+msgstr "Eemalda sellelt kursuselt"
+
+msgid "File actions"
+msgstr "Failitoimingud"
+
+msgid "File Information"
+msgstr "Faili teave"
+
+msgid "File Link:"
+msgstr "Faili link:"
+
+msgid "File Path:"
+msgstr "Faili asukoht:"
+
+msgid "Filter courses..."
+msgstr "Filtreeri kursusi..."
+
+msgid "MIME Type:"
+msgstr "MIME tüüp:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Tulemusi ei leitud."
+
+msgid "Original Name"
+msgstr "Algne nimi"
+
+msgid "Original Name:"
+msgstr "Algne nimi:"
+
+msgid "Orphan"
+msgstr "Orb"
+
+msgid "Resource File ID:"
+msgstr "Ressursifaili ID:"
+
+msgid "Resource Node ID:"
+msgstr "Ressursisõlme ID:"
+
+msgid "Search..."
+msgstr "Otsi..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Faili eemaldamiseks konkreetselt kursuselt klõpsake ülal vastava kursuse sildil ikooni \"×\"."
+
+msgid "User:"
+msgstr "Kasutaja:"
+
+msgid "View file information"
+msgstr "Vaata faili teavet"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Saate selle faili lisada ühele või mitmele kursusele (peidetud dokumentide juurkaustas). Kui faili enam ei kasutata ja see muutub orvuks, saate selle ka lõplikult kustutada."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Saate valida ühe või mitu kursust (kasutage Ctrl/Cmd + klõps)."
+
+msgid "bytes"
+msgstr "baiti"
+
+msgid "Failed to copy:"
+msgstr "Kopeerimine ebaõnnestus:"
+
+msgid "Missing resource file identifier."
+msgstr "Ressursifaili identifikaator puudub."
+
+msgid "Please select at least one course."
+msgstr "Palun valige vähemalt üks kursus."
+
+msgid "Resource file not found."
+msgstr "Ressursifaili ei leitud."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Fail \"%s\" on lisatud %d kursus(t)ele: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Mõned kursused jäeti vahele: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Faili või kursuse identifikaator puudub."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Sellel ressursifailil ei ole ressursisõlme ja seda ei saa eemaldada."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Fail on eemaldatud %d kursuse lingilt."
+
+msgid "This file is not attached to the selected course."
+msgstr "See fail ei ole valitud kursusega seotud."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Seda faili kasutab endiselt vähemalt üks ressurss ja seda ei saa kustutada."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Orb-fail ja selle füüsiline sisu on lõplikult kustutatud."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Küsitlus avaldatud. Loodud: %d. Uuendatud: %d. Saadetud sõnumeid: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Omandatav"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Seda oskust ei saa omandada"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Algaja"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Jäik reeglite ja kontekstivabade juhiste järgimine; vähe situatsioonilist otsustusvõimet."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Edasijõudnud algaja"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Hakkab ära tundma situatsioonilisi aspekte ja mustreid, kuid vajab endiselt juhiseid."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Pädev"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Arendab planeerimist ja vaimseid mudeleid; võtab vastutuse tulemuste eest, kuid võib tunda end keerukuse tõttu ülekoormatuna."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Vilunud"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Näeb „suurt pilti“, prioriseerib intuitiivselt ja õpib kogemusest."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Ekspert"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Intuitiivne, sujuv sooritus; toetub sügavale vaikivale teadmisele; suudab uuendada või tulla toime uudsete olukordadega vaevata."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Meeldejätmine"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Asjakohaste teadmiste kättesaamine, meenutamine või äratundmine pikaajalisest mälust."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Mõistmine"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Tähenduse loomine õpetussõnumitest, sh suulisest, kirjalikust ja graafilisest suhtlusest. Näita arusaamist tõlgendamise, näitlikustamise, klassifitseerimise, kokkuvõtte tegemise, järeldamise, võrdlemise või selgitamise kaudu."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Rakendamine"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Protseduuri läbiviimine või kasutamine selle täitmise või rakendamise kaudu antud olukorras. Teadmiste või oskuste kasutamine uutes või konkreetsetes olukordades."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Analüüsimine"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Materjali jagamine koostisosadeks ja osade omavaheliste ning üldise struktuuri või eesmärgiga seoste määramine. Motiivide, põhjuste või seoste tuvastamine."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Hindamine"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Hinnangute andmine kriteeriumide ja standardite alusel. Otsuste või tegevussuundade kontrollimine, kritiseerimine või põhjendamine."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Loomine"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Elementide kokkupanemine sidusaks või toimivaks tervikuks; elementide ümberkorraldamine uueks mustriks või struktuuriks. Originaalse töö loomine või uute ideede genereerimine."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Järgi"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Töötab range järelevalve ja juhendamise all. Täidab rutiinseid ülesandeid piiratud otsustusõigusega. Keskendub juhiste järgimisele ja põhitäitmisele."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Abista"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Töötab rutiinse järelevalve all. Abistab teisi, panustab meeskonnaülesannetesse ja hakkab võtma initsiatiivi määratud piirides."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Töötab üldise järelevalve all. Rakendab teadmisi ja oskusi rutiinsetes ja mitterutiinsetes tegevustes. Kasutab teatud otsustusõigust ja hinnangut."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Töötab laia suunamise all. Võimaldab teistel tegutseda, pakkudes spetsialisti juhendamist, tuge või teenuseid. Võtab vastutuse oma töö eest ja võib juhendada väikeseid meeskondi või ülesandeid."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Tagada ja nõustada"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Töötab laia suunamise all, kuid märkimisväärse autonoomiaga. Tagab, et töö vastab eesmärkidele, ja nõustab keerulistes küsimustes. Juhib sageli meeskondi või projekte ja mõjutab otsuseid."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Algata ja mõjuta"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Omab määratletud volitusi ja vastutust olulise töövaldkonna eest. Algata tegevusi, mõjutab strateegiat ja poliitikat oma valdkonnas ning juhib mahukaid projekte või meeskondi."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Määra strateegia, inspireeri, mobiliseeri"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Omab volitusi kõrgeimal organisatsioonilisel tasemel suure töövaldkonna eest. Määrab pikaajalise strateegia, inspireerib ja mobiliseerib teisi ning teeb otsuseid, mis on kriitilised organisatsiooni edule. Mõjutab tööstuse või välisel tasandil."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Maksimaalne arvestatav passiivne aeg (minutites)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Avatuks jäetud kursuse leht saadab automaatseid päringuid. Pärast seda arvu minuteid ilma kasutaja tegeliku tegevuseta (lehe või üksuse avamine, vastamine jne) lõpetatakse kursuses veedetud aja arvestamine."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Koostööl põhinev viki redaktor"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Ühendamine Etherpadiga..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Salvestamine loob praegusest Etherpadi sisust uue Chamilo viki versiooni."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Koostööl põhinevat redaktorit ei õnnestunud laadida."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Luba Etherpad viki redigeerimiseks"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Kasuta Etherpadi olemasolevate viki lehtede koostööl põhineva redaktorina. Etherpad peab olema kättesaadav samal päritolul kui Chamilo, et tagada turvalised manustatud seansid."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpadi URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpadi instantsi baas-URL, sh valikuline pöördproksi tee. Näide: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpadi API võti"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API võti, mida Chamilo kasutab padide, seansside loomiseks ja viki sisu sünkroonimiseks. Seadista Etherpad aktsepteerima API-võtmega autentimist."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Uute dokumentide vaikimisi nähtavust saab muuta kursuse kaupa"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Nähtavus, mis antakse uuele dokumendile, kaustale või üleslaaditud failile, kui õpetaja selle kursusel loob. Õpetajad saavad igaühe nähtavust hiljem siiski muuta."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Kui see on lubatud, saavad õpetajad kursuse seadetes valida oma kursuse uute dokumentide nähtavuse platvormi vaikimisi asemel."
+
+msgid "Default visibility of new learning paths"
+msgstr "Uute õpiteede vaikimisi nähtavus"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Uute õpiteede vaikimisi nähtavust saab muuta kursuse kaupa"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Nähtavus, mis antakse uuele õpiteele, kui õpetaja selle kursusel loob. Õpetajad saavad igaühe nähtavust hiljem siiski muuta."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Kui see on lubatud, saavad õpetajad kursuse seadetes valida oma kursuse uute õpiteede nähtavuse platvormi vaikimisi asemel."
+
+msgid "Default visibility of new tests"
+msgstr "Uute testide vaikimisi nähtavus"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Uute testide vaikimisi nähtavust saab kursuse kaupa muuta"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Nähtavus, mis antakse uuele testile, kui õpetaja selle kursusel loob. Õpetajad saavad iga testi nähtavust hiljem siiski muuta."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Kui see on lubatud, saavad õpetajad kursuse seadetes valida oma kursuse uutele testidele antava nähtavuse platvormi vaikeväärtuse asemel."
+
+msgid "Default visibility for new learning paths"
+msgstr "Uute õpiteede vaikimisi nähtavus"
+
+msgid "Default visibility for new tests"
+msgstr "Uute testide vaikimisi nähtavus"
+
+msgid "Following"
+msgstr "Jälgin"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Saada e-kiri, kui õppija kommenteerib selle ülesande esitust"
+
+msgid "Payment history"
+msgstr "Maksete ajalugu"
+
+msgid "No payments yet"
+msgstr "Makseid veel pole"
+
+msgid "Cancel service"
+msgstr "Tühista teenus"
+
+msgid "Official transcript"
+msgstr "Ametlik transkript"
+
+msgid "Unofficial transcript"
+msgstr "Mitteametlik transkript"
+
+msgid "Student name"
+msgstr "Õppija nimi"
+
+msgid "Student number"
+msgstr "Õppija number"
+
+msgid "Program title"
+msgstr "Programmi pealkiri"
+
+msgid "Required hours"
+msgstr "Nõutavad tunnid"
+
+msgid "Completion date"
+msgstr "Lõpetamise kuupäev"
+
+msgid "Hours completed"
+msgstr "Läbitud tunnid"
+
+msgid "Final grade"
+msgstr "Lõpphinne"
+
+msgid "Grade"
+msgstr "Hinne"
+
+msgid "No completed course yet."
+msgstr "Lõpetatud kursust veel pole."
+
+msgid "Grading scale"
+msgstr "Hindamisskaala"
+
+msgid "Signature of school official"
+msgstr "Kooli ametiisiku allkiri"
+
+msgid "School official"
+msgstr "Kooli ametiisik"
+
+msgid "Official's title"
+msgstr "Ametinimetus"
+
+msgid "Verify this transcript at"
+msgstr "Kontrolli seda transkripti aadressil"
+
+msgid "Verification code"
+msgstr "Kinnituskood"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "See mitteametlik transkript ei ole allkirjastatud. Paluge administraatorilt ametlikku transkripti."
+
+msgid "Transcript verification"
+msgstr "Transkripti kinnitamine"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Kontrollige, et see ametlik transkript on asutuse poolt väljastatud ja allkirjastatud, seda ei ole muudetud ning see ei ole tühistatud."
+
+msgid "Valid"
+msgstr "Kehtiv"
+
+msgid "Invalid signature"
+msgstr "Kehtetu allkiri"
+
+msgid "Transcript not found"
+msgstr "Transkripti ei leitud"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Asutuse allkiri on kehtiv ja seda transkripti ei ole tühistatud."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Seda transkripti ei saa kehtivaks kinnitada. Selle üksikasju ei kuvata."
+
+msgid "Transcript details"
+msgstr "Transkripti üksikasjad"
+
+msgid "Institution"
+msgstr "Asutus"
+
+msgid "Issued on"
+msgstr "Väljastatud"
+
+msgid "Download verification JSON"
+msgstr "Laadi alla kinnituse JSON"
+
+msgid "Transcript"
+msgstr "Transkript"
+
+msgid "My confidential reports"
+msgstr "Minu konfidentsiaalsed aruanded"
+
+msgid "My transcript"
+msgstr "Minu transkript"
+
+msgid "Confidential investigations"
+msgstr "Konfidentsiaalsed uurimised"
+
+msgid "Floor plan"
+msgstr "Põhiplaan"
+
+msgid "Click a highlighted room to select it"
+msgstr "Klõpsake esiletõstetud ruumil, et see valida"
+
+msgid "Select room"
+msgstr "Vali ruum"
+
+msgid "Room on floor plan"
+msgstr "Ruum põhiplaanil"
+
+msgid "Select a branch first"
+msgstr "Valige esmalt filiaal"
+
+msgid "The branch has no attached floor plan"
+msgstr "Filiaalil ei ole seotud põhiplaani"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Kasutage hulknurga tööriista ruumi piiritlemiseks; nurkade liigutamiseks kasutage käsku Redigeeri"
+
+msgid "Save room area"
+msgstr "Salvesta ruumi ala"
+
+msgid "Clear room area"
+msgstr "Tühjenda ruumi ala"
+
+msgid "Save the room form to persist the area"
+msgstr "Salvesta ruumi vorm, et ala püsiks"
+
+msgid "Floor plan unavailable"
+msgstr "Korruseplaan pole saadaval"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Ruumikaardi punktid peavad jääma korruseplaani sisse"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Kas olete kindel, et soovite ruumi ala tühjendada?"
+
+msgid "View room on floor plan"
+msgstr "Vaata ruumi korruseplaanil"
+
+msgid "No floor plan available"
+msgstr "Korruseplaani pole saadaval"
+
+msgid "This is an assignment by groups"
+msgstr "See on rühmade ülesanne"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Laadige üles PNG, JPEG või ohutu staatiline SVG korruseplaan või valige olemasolev pilt dokumentidest."
+
+msgid "Upload floor plan"
+msgstr "Laadi korruseplaan üles"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG või staatiline SVG, maksimaalselt 10 MB"
+
+msgid "Search images by name"
+msgstr "Otsi pilte nime järgi"
+
+msgid "Image name"
+msgstr "Pildi nimi"
+
+msgid "Select an image"
+msgstr "Vali pilt"
+
+msgid "Change floor plan"
+msgstr "Muuda korruseplaani"
+
+msgid "Attach floor plan"
+msgstr "Lisa korruseplaan"
+
+msgid "No matching images found in Documents."
+msgstr "Dokumentidest ei leitud vastavaid pilte."
+
+msgid "Current floor plan"
+msgstr "Praegune korruseplaan"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Korruseplaani muudatused salvestatakse automaatselt."
+
+msgid "Remove floor plan"
+msgstr "Eemalda korruseplaan"
+
+msgid "Cannot load images"
+msgstr "Pilte ei saa laadida"
+
+msgid "Floor plan saved"
+msgstr "Korruseplaan salvestatud"
+
+msgid "Cannot attach floor plan"
+msgstr "Korruseplaani ei saa lisada"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Toetatud on ainult PNG/JPEG ja ohutud staatilised SVG-pildid kuni 10 MB."
+
+msgid "Cannot upload floor plan"
+msgstr "Korruseplaani ei saa üles laadida"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Kas olete kindel, et soovite korruseplaani eemaldada?"
+
+msgid "Floor plan removed"
+msgstr "Korruseplaan eemaldatud"
+
+msgid "Cannot remove floor plan"
+msgstr "Korruseplaani ei saa eemaldada"
+
+msgid "Support bot"
+msgstr "Tugibot"
+
+msgid "Connected"
+msgstr "Ühendatud"
+
+msgid "Not connected"
+msgstr "Pole ühendatud"
+
+msgid "View ticket"
+msgstr "Vaata piletit"
+
+msgid "Start a new conversation"
+msgstr "Alusta uut vestlust"
+
+msgid "Video call"
+msgstr "Videokõne"
+
+msgid "Incoming video call"
+msgstr "Sissetulev videokõne"
+
+msgid "Decline"
+msgstr "Keeldu"
+
+msgid "Mute microphone"
+msgstr "Vaigista mikrofon"
+
+msgid "Unmute microphone"
+msgstr "Lülita mikrofon sisse"
+
+msgid "Turn camera off"
+msgstr "Lülita kaamera välja"
+
+msgid "Turn camera on"
+msgstr "Lülita kaamera sisse"
+
+msgid "Hang up"
+msgstr "Lõpeta kõne"
+
+msgid "Calling..."
+msgstr "Helistamine..."
+
+msgid "Connecting..."
+msgstr "Ühendamine..."
+
+msgid "Your contact is busy."
+msgstr "Teie kontakt on hõivatud."
+
+msgid "Your contact did not answer the call."
+msgstr "Teie kontakt ei vastanud kõnele."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Teie kontakt ei saanud kaamerat ega mikrofoni kasutada."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Teie kontakt ei saanud videokõnet ette valmistada."
+
+msgid "Your contact refused the call."
+msgstr "Teie kontakt keeldus kõnest."
+
+msgid "The call timed out."
+msgstr "Kõne aegus."
+
+msgid "Your contact cancelled the call."
+msgstr "Teie kontakt tühistas kõne."
+
+msgid "The video connection was lost."
+msgstr "Videoühendus katkes."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Teie kontakt ei saanud videoühendust luua."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Teie kontakt ei saanud videokõne seadistamist lõpule viia."
+
+msgid "Your contact hung up."
+msgstr "Teie kontakt lõpetas kõne."
+
+msgid "Video call could not be started"
+msgstr "Videokõnet ei saanud alustada"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Kaamera või mikrofoni luba lükati tagasi."
+
+msgid "No camera or microphone was found."
+msgstr "Kaamerat ega mikrofoni ei leitud."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Kaamera või mikrofon on juba kasutusel või pole saadaval."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Kaamera või mikrofon ei toeta nõutud seadeid."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Kaamera või mikrofoni juurdepääsu ei õnnestunud saada."
+
+msgid "The video call could not be prepared."
+msgstr "Videokõnet ei saanud ette valmistada."
+
+msgid "The video call request could not be sent."
+msgstr "Videokõne taotlust ei saanud saata."
+
+msgid "The incoming video call could not be processed."
+msgstr "Sissetulevat videokõnet ei saanud töödelda."
+
+msgid "The video call answer could not be prepared."
+msgstr "Videokõne vastust ei saanud ette valmistada."
+
+msgid "The video call answer could not be sent."
+msgstr "Videokõne vastust ei saanud saata."
+
+msgid "The video call answer could not be processed."
+msgstr "Videokõne vastust ei saanud töödelda."
+
+msgid "The video connection failed"
+msgstr "Videoühendus ebaõnnestus"
+
+msgid "The video connection could not be established."
+msgstr "Videoühendust ei saanud luua."
+
+msgid "No answer was received."
+msgstr "Vastust ei saadud."
+
+msgid "You refused the call."
+msgstr "Keeldusite kõnest."
+
+msgid "You cancelled the call."
+msgstr "Tühistasite kõne."
+
+msgid "You hung up."
+msgstr "Lõpetasite kõne."
+
+msgid "You missed the call."
+msgstr "Jätsite kõne vastamata."
+
+msgid "Support bot is currently unavailable."
+msgstr "Tugibot ei ole praegu saadaval."
+
+msgid "A support ticket has been created."
+msgstr "Tugipilet on loodud."
+
+msgid "Conversation ended."
+msgstr "Vestlus lõppes."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Tugibot ei saanud seda vestlust jätkata. Palun proovige uuesti."
+
+msgid "Add your first term glossary to this course"
+msgstr "Lisage sellele kursusele esimene sõnastiku termin"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Kas olete kindel, et soovite selle küsitluse malli kustutada?"
+
+msgid "The survey template has been deleted."
+msgstr "Küsitluse mall on kustutatud."
+
+msgid "Please select a course."
+msgstr "Palun valige kursus."
+
+msgid "Please select a session for this course."
+msgstr "Palun valige selle kursuse seanss."
+
+msgid "The survey has been created from the template."
+msgstr "Küsitlus on mallist loodud."
+
+msgid "Survey templates"
+msgstr "Küsitluste mallid"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Looge õpetajatele korduvkasutatavaid küsitluste malle ja määrake need otse kursusele või seansile."
+
+msgid "Subtitle"
+msgstr "Alapealkiri"
+
+msgid "Assign to course"
+msgstr "Määra kursusele"
+
+msgid "Assign template to course"
+msgstr "Määra mall kursusele"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Jätke seanss tühjaks, et luua küsitlus otse kursusel."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "See kursus on selles portaalis saadaval seansi kaudu, seega on seanss nõutav."
+
+msgid "Survey template questions"
+msgstr "Küsitluse malli küsimused"
+
+msgid "Back to survey templates"
+msgstr "Tagasi küsitluste mallide juurde"
+
+msgid "Could not load survey template"
+msgstr "Küsitluse malli ei õnnestunud laadida"
+
+msgid "Could not load survey template questions"
+msgstr "Küsitluse malli küsimusi ei õnnestunud laadida"
+
+msgid "Could not save survey template question"
+msgstr "Küsitluse malli küsimust ei õnnestunud salvestada"
+
+msgid "Could not delete survey template question"
+msgstr "Küsitluse malli küsimust ei õnnestunud kustutada"
+
+msgid "Could not move survey template question"
+msgstr "Küsitluse malli küsimust ei õnnestunud liigutada"
+
+msgid "Could not copy survey template question"
+msgstr "Küsitluse malli küsimust ei õnnestunud kopeerida"
+
+msgid "The survey template has been saved."
+msgstr "Küsitluse mall on salvestatud."
+
+msgid "Edit survey template"
+msgstr "Muuda küsitluse malli"
+
+msgid "Create survey template"
+msgstr "Loo küsitluse mall"
+
+msgid "The survey template title is required."
+msgstr "Küsitluse malli pealkiri on kohustuslik."
+
+msgid "Visible as template"
+msgstr "Nähtav mallina"
+
+msgid "Create satisfaction survey"
+msgstr "Loo rahuloluküsitlus"
+
+msgid "Training satisfaction survey"
+msgstr "Koolituse rahuloluküsitlus"
+
+msgid "Could not create satisfaction survey"
+msgstr "Rahuloluküsitlust ei õnnestunud luua"
+
+msgid "Use template"
+msgstr "Kasuta malli"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Loo see küsitlus administraatori ettevalmistatud korduvkasutatavast mallist."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Tulemused peidetud õpetaja/juhendaja eest"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Õpetajad ja juhendajad näevad endiselt vastuste arvu ja saavad saata meeldetuletusi, kuid ei saa küsitluse tulemusi avada ega eksportida."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Mall rakendatud. Vaadake küsitluse seaded üle ja salvestage, et see luua."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Küsitluse tulemused on õpetajate ja juhendajate eest peidetud."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Kutsete lehel saate endiselt näha vastuste arvu ja saata meeldetuletusi."
+
+msgid "Payment method"
+msgstr "Makseviis"
+
+msgid "Preview mode"
+msgstr "Eelvaaterežiim"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Edenemist ja tulemust eelvaaterežiimis ei salvestata."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Seda linki ei saa õpitee sees kuvada."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Lehe vaatamiseks avage see uues vahekaardis."
+
+msgid "Report a problem with this question"
+msgstr "Teata probleemist selle küsimusega"
+
+msgid "Your report was sent to the teacher."
+msgstr "Teie teade saadeti õpetajale."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Kirjeldage leitud viga või probleemi. Teie teade saadetakse õpetajale."
+
+msgid "A comment is required."
+msgstr "Kommentaar on kohustuslik."
+
+msgid "Could not send the report."
+msgstr "Teadet ei õnnestunud saata."
+
+msgid "Learner reports"
+msgstr "Õppijate teated"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Selle küsimuse kohta ei ole õppijate teateid esitatud."
+
+msgid "View attempt"
+msgstr "Vaata katset"
+
+msgid "Could not load learner reports."
+msgstr "Õppijate teateid ei õnnestunud laadida."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Luba õppijatel küsimustes probleeme teatada"
+
+msgid "Skill acquired"
+msgstr "Oskus omandatud"
+
+msgid "AI Toolbox"
+msgstr "AI tööriistakast"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Looge tehisintellektiga interaktiivseid hariduslikke rakendusi ja jälgige õppijate edenemist SCORMiga."
+
+msgid "No published applications are available yet."
+msgstr "Avaldatud rakendusi pole veel saadaval."
+
+msgid "Interactive applications"
+msgstr "Interaktiivsed rakendused"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Looge, täiustage, avaldage ja vaadake versioone ühest kohast."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Avage rakendus, et jätkata viimasest edenemisest."
+
+msgid "Interactive learning application"
+msgstr "Interaktiivne õpirakendus"
+
+msgid "Create an interactive learning app"
+msgstr "Loo interaktiivne õpirakendus"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Kirjeldage tegevust. Chamilo loob versioonitud SCORM-rakenduse edenemise ja tulemuse jälgimisega."
+
+msgid "Idea"
+msgstr "Idee"
+
+msgid "Application"
+msgstr "Rakendus"
+
+msgid "What should the application do?"
+msgstr "Mida peaks rakendus tegema?"
+
+msgid "How it works"
+msgstr "Kuidas see töötab"
+
+msgid "AI generation"
+msgstr "AI genereerimine"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Rakendus luuakse teie juhiste põhjal ja salvestatakse versioonina 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Õppija edenemine, tulemus ja jätkamise andmed edastatakse Chamilole."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Edasised täiustused loovad uued versioonid, ilma eelnevaid kustutamata."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Lisage õpieesmärk, reeglid, tasemed, hindamine ja see, mis peaks juhtuma, kui õppija lõpetab."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Teil ei ole selles kontekstis sisu loomise õigust."
+
+msgid "The application was generated successfully."
+msgstr "Rakendus genereeriti edukalt."
+
+msgid "Open in student view"
+msgstr "Ava õpilase vaates"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Genereeri rakendus, et lubada eelvaade ja avaldamine."
+
+msgid "Improve with AI"
+msgstr "Paranda tehisintellektiga"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Kirjelda muudatust. Luuakse uus versioon ja varasemad versioonid jäävad kättesaadavaks."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Kirjelda täielik interaktiivne tegevus, mida soovid genereerida."
+
+msgid "What should be improved?"
+msgstr "Mida tuleks parandada?"
+
+msgid "Generate new version"
+msgstr "Genereeri uus versioon"
+
+msgid "Version history"
+msgstr "Versiooniajalugu"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Vaata eelvaadet, laadi alla või taasta mis tahes genereeritud versioon."
+
+msgid "A new version was generated."
+msgstr "Uus versioon genereeriti."
+
+msgid "Version restored"
+msgstr "Versioon taastatud"
+
+msgid "The support bot tree has been published."
+msgstr "Tugiboti puu on avaldatud."
+
+msgid "The support bot tree has been archived."
+msgstr "Tugiboti puu on arhiveeritud."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Tugiboti puu on dubleeritud."
+
+msgid "The support bot tree has been deleted."
+msgstr "Tugiboti puu on kustutatud."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Kas oled kindel, et soovid selle tugiboti puu kustutada?"
+
+msgid "The support bot tree has been imported."
+msgstr "Tugiboti puu on imporditud."
+
+msgid "Create support bot tree"
+msgstr "Loo tugiboti puu"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Loo fikseeritud otsustuspuu, mis juhendab kasutajaid tugiküsimuste kaudu ja saab eskaleerida piletitena."
+
+msgid "Portal scope"
+msgstr "Portaali ulatus"
+
+msgid "Duplicate"
+msgstr "Dubleeri"
+
+msgid "Archive"
+msgstr "Arhiveeri"
+
+msgid "View conversations"
+msgstr "Vaata vestlusi"
+
+msgid "Import support bot tree"
+msgstr "Impordi tugiboti puu"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Impordi JSON-eksport või CSV otsustuspuu. Imporditud puu luuakse alati uue mustandina."
+
+msgid "Resolved"
+msgstr "Lahendatud"
+
+msgid "Escalated"
+msgstr "Eskaleeritud"
+
+msgid "Abandoned"
+msgstr "Katkestatud"
+
+msgid "Support bot conversations"
+msgstr "Tugiboti vestlused"
+
+msgid "Outcome"
+msgstr "Tulemus"
+
+msgid "Started at"
+msgstr "Alustatud"
+
+msgid "Ended at"
+msgstr "Lõpetatud"
+
+msgid "View conversation"
+msgstr "Vaata vestlust"
+
+msgid "Go to node"
+msgstr "Mine sõlme juurde"
+
+msgid "Create support ticket"
+msgstr "Loo tugipilet"
+
+msgid "End conversation"
+msgstr "Lõpeta vestlus"
+
+msgid "Node"
+msgstr "Sõlm"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Tugiboti puu vajab vähemalt ühte sõlme."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Kas oled kindel, et soovid selle sõlme kustutada? Lingid sellele tühistatakse."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Iga tugiboti sõlm vajab vähemalt ühte valikut."
+
+msgid "The support bot tree title is required."
+msgstr "Tugiboti puu pealkiri on kohustuslik."
+
+msgid "A support bot entry node is required."
+msgstr "Tugiboti sisenemissõlm on kohustuslik."
+
+msgid "Every support bot node requires content."
+msgstr "Iga tugiboti sõlm vajab sisu."
+
+msgid "Every support bot option requires a label."
+msgstr "Iga tugiboti valik vajab silti."
+
+msgid "Select a target node for every go-to option."
+msgstr "Vali sihtsõlm iga mine-sõlme valiku jaoks."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Sisesta suhteline URL iga lingivaliku jaoks."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Vali pileti kategooria iga eskaleerimisvaliku jaoks."
+
+msgid "The support bot tree has been saved."
+msgstr "Tugiboti puu on salvestatud."
+
+msgid "Edit support bot tree"
+msgstr "Muuda tugiboti puud"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Avaldatud ja arhiveeritud tugiboti versioonid on kirjutuskaitstud. Dubleeri see puu loendist, et muuta uut mustandiversiooni."
+
+msgid "Default ticket project"
+msgstr "Vaikimisi piletiprojekt"
+
+msgid "Decision tree rules"
+msgstr "Otsustuspuu reeglid"
+
+msgid "Every node must contain at least one option."
+msgstr "Iga sõlm peab sisaldama vähemalt ühte valikut."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Lõppsõlm peab vestluse lõpetama või looma tugipileti."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Go-to lingid ei tohi v1-s tsükleid luua."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Välised URL-id ei ole v1-s lubatud; lingitoimingud peavad kasutama Chamilo suhtelist teed."
+
+msgid "Nodes"
+msgstr "Sõlmed"
+
+msgid "Add node"
+msgstr "Lisa sõlm"
+
+msgid "Entry node"
+msgstr "Sisenemissõlm"
+
+msgid "Set as entry node"
+msgstr "Määra sisenemissõlmeks"
+
+msgid "Target node"
+msgstr "Sihtsõlm"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Kasutage Chamilo suhtelist teed, näiteks /tickets."
+
+msgid "Ticket category"
+msgstr "Pileti kategooria"
+
+msgid "Select a default ticket project first."
+msgstr "Valige esmalt vaikimisi piletiprojekt."
+
+msgid "Closing message"
+msgstr "Lõppsõnum"
+
+msgid "Select a node to edit it."
+msgstr "Valige sõlm, et seda muuta."
+
+msgid "Support bot conversation"
+msgstr "Tugiboti vestlus"
+
+msgid "Transcript of %s"
+msgstr "%s transkript"
+
+msgid "Download unofficial transcript"
+msgstr "Laadi alla mitteametlik transkript"
+
+msgid "Issue official transcript"
+msgstr "Väljasta ametlik transkript"
+
+msgid "Official transcripts"
+msgstr "Ametlikud transkriptid"
+
+msgid "No official transcript has been issued yet."
+msgstr "Ametlikku transkripti ei ole veel väljastatud."
+
+msgid "Issued by"
+msgstr "Väljastaja"
+
+msgid "Verify"
+msgstr "Kinnita"
+
+msgid "Signature of official transcripts"
+msgstr "Ametlike transkriptide allkiri"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "See pilt trükitakse selle portaali ametlikele transkriptidele, tunnistuse seadetes määratud allkirjastaja nime ja ametinimetuse kohale."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Väljastada allkirjastatud ametlik transkript sellel lehel loetletud kursuste ja hinnetega? Seda saab veebis kinnitada kuni tühistamiseni."
+
+msgid "Official transcript issued"
+msgstr "Ametlik transkript väljastatud"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Tühistada see ametlik transkript? Kinnitusleht näitab seda seejärel tühistatuna."
+
+msgid "Official transcript revoked"
+msgstr "Ametlik transkript tühistatud"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Valige esmalt PNG- või JPEG-pilt."
+
+msgid "Signed credential"
+msgstr "Allkirjastatud tunnistus"
+
+msgid "Issue signed credential"
+msgstr "Väljasta allkirjastatud tunnistus"
+
+msgid "Verify credential"
+msgstr "Kinnita tunnistus"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Ankurda Sepolia testvõrgus"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Kinnita olemasolev Sepolia tehing"
+
+msgid "Revoke signed credential"
+msgstr "Tühista allkirjastatud tunnistus"
+
+msgid "Delete certificate"
+msgstr "Kustuta tunnistus"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Kinnita olemasolev Sepolia tehing"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia tehingu räsi"
+
+msgid "Verify transaction"
+msgstr "Kinnita tehing"
+
+msgid "Anchored"
+msgstr "Ankurdatud"
+
+msgid "Issued"
+msgstr "Väljastatud"
+
+msgid "Not issued"
+msgstr "Pole väljastatud"
+
+msgid "Consent required"
+msgstr "Nõusolek on nõutav"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia tehing kinnitatud ja kontrollitud"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia testvõrgu rahakott palub teil tehingut allkirjastada. Ankurdatakse ainult tunnistuse sõrmejälg. Jätkata?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Tühistada see allkirjastatud tunnistus? Plokiahela tehing jääb püsivaks, kuid kinnitusleht teatab tühistamisest."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Väljastada sellele õppijale allkirjastatud tunnistuse volikiri? See muudab kinnitatud isikuandmed privaatse lingiga kontrollitavaks."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia jaoks on vaja EVM-ühilduvat brauseri rahakotti."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Valige oma rahakotis Sepolia testvõrk (ahela ID 11155111)."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Vigane rahakoti aadress või sertifikaadi sõrmejälg."
+
+msgid "Transaction pending"
+msgstr "Tehing ootel"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Kasutage hiljem olemasoleva Sepolia tehingu kinnitamist."
+
+msgid "Signed credential issued"
+msgstr "Allkirjastatud tunnistus väljastatud"
+
+msgid "Credential revoked"
+msgstr "Tunnistus tühistatud"
+
+msgid "Transaction hash"
+msgstr "Tehingu räsi"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Avaldamise nõusolek võimaldab administraatoril väljastada allkirjastatud sertifikaadi tunnistuse ja valikuliselt kinnitada selle SHA-256 sõrmejälje Sepolia testvõrgus. Ahelasse ei saadeta nime ega isikuandmeid. Nõusoleku saate igal ajal tagasi võtta."
+
+msgid "Publication consent"
+msgstr "Avaldamise nõusolek"
+
+msgid "Not approved"
+msgstr "Pole heaks kiidetud"
+
+msgid "Withdraw consent"
+msgstr "Võta nõusolek tagasi"
+
+msgid "Approve publication"
+msgstr "Kiida avaldamine heaks"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Volitan allkirjastatud, avalikult kontrollitava tunnistuse, millel on minu nimi, kursus, tulemus ja väljastamise kuupäev. Administraator võib avaldada ka ainult selle SHA-256 sõrmejälje Sepolia testvõrgus. Sõrmejälg on püsiv, isegi kui võtan nõusoleku hiljem tagasi. Jätkata?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Võtta selle sertifikaadi avaldamise heakskiit tagasi?"
+
+msgid "Publication approval recorded"
+msgstr "Avaldamise heakskiit salvestatud"
+
+msgid "Publication approval withdrawn"
+msgstr "Avaldamise heakskiit tagasi võetud"
+
+msgid "Read more"
+msgstr "Loe edasi"
+
+msgid "Participation: %s of %s posts"
+msgstr "Osalemine: %s / %s postitust"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Postitage oma panus, et näha teiste osalejate vastuseid."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Ainult volitatud uurijad saavad vaadata sobivaid teateid. Teatajate isikud jäävad vaikimisi konfidentsiaalseks."
+
+msgid "New confidential report"
+msgstr "Uus konfidentsiaalne teade"
+
+msgid "Reported user"
+msgstr "Teatatud kasutaja"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Ülevaatamist ootavad sobivad konfidentsiaalsed teated."
+
+msgid "Eligible investigations"
+msgstr "Sobivad uurimised"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Juhtum ilmub siia alles pärast seda, kui vähemalt %s erinevat kasutajat on samast isikust teatanud."
+
+msgid "Distinct reporters"
+msgstr "Erinevad teatajad"
+
+msgid "Reports for selected user"
+msgstr "Valitud kasutaja teated"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Konfidentsiaalne teavitamine pole praegu saadaval."
+
+msgid "The investigation could not be loaded."
+msgstr "Uurimist ei õnnestunud laadida."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Teie isik on uurijate eest vaikimisi kaitstud, kuid vältige tuvastavate andmete lisamist teate teksti või manustesse. See ei ole hädaabiteenus."
+
+msgid "Find the user involved"
+msgstr "Leidke asjaomane kasutaja"
+
+msgid "Name or username"
+msgstr "Nimi või kasutajanimi"
+
+msgid "Describe the situation"
+msgstr "Kirjeldage olukorda"
+
+msgid "Evidence (optional)"
+msgstr "Tõendid (valikuline)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Kuni kolm faili, igaüks kuni 8 MiB. Pildid, heli või lühikesed videod."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Nõustun, et volitatud uurijad võivad selle konkreetse teate puhul näha minu nime ja e-posti. Selle loa saan hiljem tagasi võtta."
+
+msgid "Send confidential report"
+msgstr "Saada konfidentsiaalne teade"
+
+msgid "Could not search users"
+msgstr "Kasutajaid ei õnnestunud otsida"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Kuni kolm faili, igaüks kuni 8 MiB."
+
+msgid "The confidential report could not be saved."
+msgstr "Konfidentsiaalset teadet ei õnnestunud salvestada."
+
+msgid "Confidential report"
+msgstr "Konfidentsiaalne teade"
+
+msgid "Confidential conversation"
+msgstr "Konfidentsiaalne vestlus"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Uurijad saavad selles vestluses suhelda ilma teataja isikut nägemata, kui kontaktide jagamine pole lubatud."
+
+msgid "Reporter"
+msgstr "Teataja"
+
+msgid "Investigator"
+msgstr "Uurija"
+
+msgid "Additional evidence (optional)"
+msgstr "Lisatõendid (valikuline)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Kuni kolm faili, igaüks kuni 8 MiB; kümme faili teate kohta."
+
+msgid "Contact shared voluntarily"
+msgstr "Kontakt jagatud vabatahtlikult"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Luba uurijatel näha selle teate puhul minu nime ja e-posti"
+
+msgid "This confidential report is not available."
+msgstr "See konfidentsiaalne teade pole saadaval."
+
+msgid "Your message could not be saved."
+msgstr "Teie sõnumit ei õnnestunud salvestada."
+
+msgid "Contact sharing could not be updated."
+msgstr "Kontaktide jagamist ei õnnestunud uuendada."
+
+msgid "Evidence could not be downloaded."
+msgstr "Tõendeid ei õnnestunud alla laadida."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Näide vormi täitmise tegevusest: kehamassiindeksi arvutamine</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Vanus</strong></td>            <td width=\"75%\" style=\"\">[25] aastat</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sugu</strong></td>            <td style=\"\" text-align:=\"\">[M] (M või F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Kaal</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Pikkus</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Kehamassiindeks</strong></td>            <td style=\"vertical-align: top;\">[29] KMI = kaal/pikkus<sup>2</sup> (vt <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia artiklit</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Näide vormi täitmise tegevusest: kehamassiindeksi arvutamine</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Vanus</strong></td>            <td width=\"75%\" style=\"\">[25] aastat</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sugu</strong></td>            <td style=\"\" text-align:=\"\">[M] (M või F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Kaal</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Pikkus</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Kehamassiindeks</strong></td>            <td style=\"vertical-align: top;\">[29] KMI = kaal/pikkus<sup>2</sup> (vt <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia artiklit</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Peida IP-aadress aruannetes"
+
+msgid "Course settings policies"
+msgstr "Kursuse seadete poliitikad"
+
+msgid "Academic transcripts"
+msgstr "Akadeemilised transkriptid"
+
+msgid "Transcript program title"
+msgstr "Transkripti programmi pealkiri"
+
+msgid "Transcript course code"
+msgstr "Transkripti kursuse kood"
+
+msgid "Transcript course hours field"
+msgstr "Transkripti kursuse tundide väli"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Transkriptis on läbitud tunnid nõutavad tunnid"
+
+msgid "Transcript student number field"
+msgstr "Transkripti üliõpilasnumbri väli"
+
+msgid "Transcript address fields"
+msgstr "Transkripti aadressiväljad"
+
+msgid "Transcript grading scale"
+msgstr "Transkripti hindamisskaala"
+
+msgid "Transcript GPA note"
+msgstr "Transkripti GPA märkus"
+
+msgid "Transcript signatory name"
+msgstr "Transkripti allkirjastaja nimi"
+
+msgid "Transcript signatory title"
+msgstr "Transkripti allkirjastaja ametinimetus"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Luba allkirjastatud tunnistused ja valikuline Sepolia testvõrgu ankurdamine"
+
+msgid "Show thread replies only after participating"
+msgstr "Näita teema vastuseid alles pärast osalemist"
+
+msgid "Show the forum category description in threads"
+msgstr "Näita foorumi kategooria kirjeldust teemades"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Foorumi osalemise seadeid saab kursuse kaupa muuta"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Maksimaalne postituste arv foorumi teemas"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Foorumi teema lõpetamiseks nõutavad postitused"
+
+msgid "Track e-mail openings"
+msgstr "Jälgi e-kirjade avamisi"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Luba e-posti vastused sõnumitele"
+
+msgid "Inbound e-mail address"
+msgstr "Sissetuleva e-posti aadress"
+
+msgid "Inbound mailbox DSN"
+msgstr "Sissetuleva postkasti DSN"
+
+msgid "Remember me duration (days)"
+msgstr "„Jäta mind meelde“ kestus (päevades)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Luba OAuth dünaamiline kliendiregistreerimine MCP-st kaugemale"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Luba konfidentsiaalne heaolu raporteerimine"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Minimaalne erinevate teatajate arv uurimiseks"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Luba konfidentsiaalsed tõendite manused"
+
+msgid "Show confidential investigation notifications"
+msgstr "Näita konfidentsiaalsete uurimiste teavitusi"
+
+msgid "Enable support chatbot"
+msgstr "Luba tugivestlusrobot"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Valige, kus sõnastiku termineid automaatselt esile tõstetakse: dokumendid, harjutused ja õpiteed."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Peida IP-aadressid visuaalses aruandluses ja aruannete eksportides. IP-aadressid jäävad salvestatuks ja on kättesaadavad volitatud isikuandmete protseduuride kaudu."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Platvormi vaikeseaded ja kursuse muutmise õigused; hallatakse kursuse seadetes."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Lubage kasutajatel alla laadida mitteametlik transkript lõpetatud kursustest ning administraatoritel, sessiooniadministraatoritel ja personalijuhtidel väljastada allkirjastatud ametlikke transkripte nende hallatavatele kasutajatele. Allkirjapilt laaditakse üles kasutaja transkripti lehelt."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Igal transkriptil trükitav programmi pealkiri, näiteks sellel platvormil ettevalmistatava diplomi nimi."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Milline kursuse väli täidab transkripti kursuse koodi veeru: kursuse kood või osakonna nimi."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Kursuse lisavälja muutuja, milles on kursuse tundide arv. Jätke tühjaks, et kasutada kursuse kestust."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Trüki kursuse nõutavad tunnid õppija läbitud tundidena. Kui see on välja lülitatud, on läbitud tunnid õppija kursusel veedetud aeg."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Kasutaja lisavälja muutuja, milles on transkriptile trükitav üliõpilasnumber. Jätke tühjaks, et mitte midagi trükkida."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Komadega eraldatud kasutaja lisaväljade muutujad, mis trükitakse transkriptil kasutaja aadressi järele, näiteks linn, maakond ja sihtnumber."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "JSON-loend hinnetähtedest, alates kõrgeimast miinimumtulemusest: igal kirjel on miinimumtulemus protsentides (min), täht ja GPA arvutamiseks kasutatavad hinded."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Selgitus, kuidas GPA arvutatakse; trükitakse transkriptil GPA alla."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Ametlike transkriptite allkirjastaja kooliametniku nimi."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Ametlike transkriptite allkirjastaja kooliametniku ametinimetus."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Nõuab omaniku selgesõnalist nõusolekut ja administraatori käsitsi toiminguid. Ahelasse saadetakse ainult SHA-256 sõrmejäljed."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Õppijad näevad foorumilõime esimest postitust alles siis, kui nad on ise sellesse postitanud. Administraatorid, õpetajad, treenerid ja rühmatutorid näevad alati kõiki postitusi."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Kuva foorumikategooria pealkiri ja lühendatud kirjeldus iga lõime ülaosas koos lingiga täieliku kirjelduse lugemiseks."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Kui see on lubatud, saavad õpetajad kursuse seadete foorumi osas valida, kas nende kursus peidab lõime vastuseid kuni õppija postitamiseni, kuvab kategooria kirjeldust lõimedes ning mitu postitust osalemise edenemisriba ootab, selle asemel et järgida platvormi seadeid."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Kuva iga foorumilõime puhul ainult see arv postitusi igale kasutajale, kes ei ole platvormi administraator, sh õpetajatele, ning kõigile õpitees. Lõimitud ja pesastatud vaadetes kehtib limiit iga postituse vastustele. Postitused säilitatakse vaate järjekorras: esimesed või õpitees viimased, kus viimased postitused tulevad esimesena. 0 kuvab kõik postitused."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Kuva õppijatele igas foorumilõimes edenemisriba, mis jõuab 100%-ni, kui nad on sinna postitanud selle arvu sõnumeid. Modereerimist ootavad postitused loetakse. 0 peidab edenemisriba."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Lisab sõnumiteavituste e-kirjadele väikese jälgimispildi ja salvestab, millal seda küsitakse. See näitab ainult, et e-kiri võis olla avatud; see ei tõesta, et seda loeti."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Luba otsesõnumite teavituste saajatel vastata e-postiga. Saabuvad sõnumid peab meiliinfrastruktuur suunama Chamilo sissetuleva meili käsule."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Vastuste suunamise baasaadress, näiteks replies@example.com. Chamilo lisab unikaalse saaja tokeni plus-aadressimisega."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Postkasti ühendus sissetulevate vastuste kogumiseks, näiteks imaps://user:password@imap.example.com:993/INBOX. Kodeeri mandaatides reserveeritud märgid URL-koodiga."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Päevade arv, mil kasutaja jääb sisse logitud, kui on valitud „Jäta mind meelde“. 0 keelab. Nõuab HTTPS-i. Lubatud vahemik: 0 kuni 90. Tavaline seansi aegumine seadistatakse eraldi PHP/Symfony-s."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Lubab dünaamilisel kliendiregistreerimisel küsida mis tahes ulatust, mille on registreerinud Chamilo OAuth ressursiserver. Kui see on keelatud, jääb iseregistreerimine piiratud MCP-ga. Ressursile juurdepääs on alati eraldi piiratud iga kliendi lubatud ressursside loendiga."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Luba konfidentsiaalsed intsidentide aruanded. Moodul nõuab kaitstud krüpteerimisvõtit ja uurija õigust."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "2 kuni 10 erinevat teatajat peavad teatama samast kasutajast, enne kui juhtum muutub uurijatele nähtavaks."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Luba pildi-, heli- ja lühivideotõendid. Olemasolevad manused jäävad loetavaks ka siis, kui see on keelatud."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Kuva sisemine märge abikõlblike uurimiste kohta. Ei saada e-kirju ega väliseid teavitusi."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Kuva vestluspaneelis otsustuspuu vestlusrobot, mis saab juhendada kasutajaid "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Lubab õpetajatel luua ja versioneerida tehisintellektiga abistatud hariduslikke rakendusi kursuste sees."
+
+msgid "Department name"
+msgstr "Osakonna nimi"
+
+msgid "Documents and exercise"
+msgstr "Dokumendid ja harjutus"
+
+msgid "Documents and learning path"
+msgstr "Dokumendid ja õpitee"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokumendid, harjutus ja õpitee"
+
+msgid "session"
+msgstr "sessioon"
+
+msgid "course"
+msgstr "kursus"
+
+msgid "You have been enrolled in %s"
+msgstr "Teid on registreeritud: %s"
 

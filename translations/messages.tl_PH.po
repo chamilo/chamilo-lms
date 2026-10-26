@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "Taos-puso"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Halimbawa ng formula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Halimbawa ng pormula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mga saklaw ng variable"
@@ -7669,7 +7669,7 @@ msgid "Please type your text below"
 msgstr "Mangyaring i-type ang iyong text sa ibaba"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad sa pagpuno ng form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad sa pagpuno ng form : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Isulat ang address"
@@ -25777,7 +25777,7 @@ msgid "Video player renderers"
 msgstr "Mga renderer ng video player"
 
 msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
-msgstr "I-enable ang mga player renderer para sa media ng YouTube, Vimeo, Facebook, DailyMotion, Twitch"
+msgstr "Paganahin ang mga player renderer para sa YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
 
 msgid "Allow teachers to edit tests in learning paths"
 msgstr "Payagan ang mga guro na mag-edit ng mga pagsusulit sa learning paths"
@@ -28763,6 +28763,9 @@ msgstr "Hindi natagpuan ang current user."
 
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Kumusta %s,<br><br>Ikaw ay narehistro sa %s.<br>Maaari mong ma-access ang iyong account mula <a href=\"%s\">dito</a>.<br><br>Ang iyong mga kredensyal sa pag-login ay:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Magandang araw,<br>%s"
+
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Kumusta %s,<br><br>Nakarehistro ka sa %s.<br>Username: <strong>%s</strong><br><br>Paki-click ang link sa ibaba upang itakda ang iyong password at ma-access ang iyong account:<br><a href=\"%s\">Itakda ang iyong password</a><br><br>Pagbati,<br>%s"
 
 msgid "You are registered on %s"
 msgstr "Ikaw ay narehistro sa %s"
@@ -35605,7 +35608,7 @@ msgid "%s results"
 msgstr "%s resulta"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad sa pagpuno ng form: kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng aktibidad sa pagpuno ng form : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Removed"
 msgstr "Natanggal"
@@ -41023,7 +41026,7 @@ msgid "Update package removal path contains a null byte."
 msgstr "May null byte ang path ng pagtanggal sa update package."
 
 msgid "Update package removal path must be relative: %s"
-msgstr "Ang path ng pag-aalis sa update package ay dapat na relative: %s"
+msgstr "Ang path ng pag-alis ng update package ay dapat na relative: %s"
 
 msgid "Update package removal path contains an unsafe segment: %s"
 msgstr "May hindi ligtas na segment ang path ng pagtanggal sa update package: %s"
@@ -41567,4 +41570,1616 @@ msgstr "Naitala ang kasaysayan ng migration"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "Naroon ang %s sa ugat ng proyekto: tanggalin ito upang isara ang mga upgrade endpoint"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Nakakuha ka ng sertipiko para sa ehersisyong ito"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Dapat mong tapusin ang learning path na \"%s\" bago mo ma-access ito."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Sigurado ka bang nais mong tanggalin nang tuluyan ang file na ito?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Sigurado ka bang nais mong ihiwalay ang file na ito sa napiling kurso?"
+
+msgid "Attach this file to another course"
+msgstr "Ikabit ang file na ito sa ibang kurso"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Ikabit sa napiling (mga) kurso (nakatago)"
+
+msgid "Course(s):"
+msgstr "(Mga) kurso:"
+
+msgid "Delete definitively"
+msgstr "Tanggalin nang tuluyan"
+
+msgid "Detach from this course"
+msgstr "Ihiwalay sa kursong ito"
+
+msgid "File actions"
+msgstr "Mga aksyon sa file"
+
+msgid "File Information"
+msgstr "Impormasyon ng file"
+
+msgid "File Link:"
+msgstr "Link ng file:"
+
+msgid "File Path:"
+msgstr "Path ng file:"
+
+msgid "Filter courses..."
+msgstr "Salain ang mga kurso..."
+
+msgid "MIME Type:"
+msgstr "Uri ng MIME:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Walang nahanap na resulta."
+
+msgid "Original Name"
+msgstr "Orihinal na pangalan"
+
+msgid "Original Name:"
+msgstr "Orihinal na pangalan:"
+
+msgid "Orphan"
+msgstr "Ulila"
+
+msgid "Resource File ID:"
+msgstr "ID ng resource file:"
+
+msgid "Resource Node ID:"
+msgstr "ID ng resource node:"
+
+msgid "Search..."
+msgstr "Maghanap..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Upang ihiwalay ang file na ito sa isang partikular na kurso, i-click ang icon na \"×\" sa kaukulang tag ng kurso sa itaas."
+
+msgid "User:"
+msgstr "Gumagamit:"
+
+msgid "View file information"
+msgstr "Tingnan ang impormasyon ng file"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Maaari mong ikabit ang file na ito sa isa o higit pang mga kurso (nakatago sa ugat ng mga dokumento). Kung hindi na ginagamit ang file at naging ulila, maaari mo rin itong tanggalin nang tuluyan."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Maaari kang pumili ng isa o higit pang mga kurso (gamitin ang Ctrl/Cmd + click)."
+
+msgid "bytes"
+msgstr "bytes"
+
+msgid "Failed to copy:"
+msgstr "Nabigong kopyahin:"
+
+msgid "Missing resource file identifier."
+msgstr "Nawawala ang identifier ng resource file."
+
+msgid "Please select at least one course."
+msgstr "Pumili ng kahit isang kurso."
+
+msgid "Resource file not found."
+msgstr "Hindi nahanap ang resource file."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Ang file na \"%s\" ay naikabit sa %d (mga) kurso: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "May mga kursong nilaktawan: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Nawawala ang identifier ng file o kurso."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Ang resource file na ito ay walang resource node at hindi maaaring ihiwalay."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Naihiwalay ang file sa %d (mga) link ng kurso."
+
+msgid "This file is not attached to the selected course."
+msgstr "Ang file na ito ay hindi nakakabit sa napiling kurso."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Ginagamit pa ang file na ito ng kahit isang resource at hindi maaaring tanggalin."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Ang orphan file at ang pisikal na nilalaman nito ay tuluyang nabura."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Nailathala ang survey. Nilikha: %d. Na-update: %d. Mga mensaheng naipadala: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Maaaring makuha"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Hindi maaaring makuha ang kasanayang ito"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Baguhan"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Mahigpit na pagsunod sa mga patakaran at mga tagubiling walang konteksto; kaunting paghuhusga ayon sa sitwasyon."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Advanced na baguhan"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Nagsisimulang makilala ang mga aspeto at pattern ng sitwasyon ngunit kailangan pa ng mga gabay."
+
+#: issue-8179
+msgid "Competent"
+msgstr "May kakayahan"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Nagkakaroon ng pagpaplano at mga mental na modelo; tumatanggap ng responsibilidad sa mga resulta ngunit maaaring mabigla sa pagiging kumplikado."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Mahusay"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Nakikita ang \"malaking larawan,\" inuuna nang intuitively, at natututo mula sa karanasan."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Eksperto"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Intuitive at maayos na pagganap; umaasa sa malalim na tacit na kaalaman; kayang mag-innovate o hawakan ang mga bagong sitwasyon nang walang hirap."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Pag-alala"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Kunin, alalahanin, o kilalanin ang kaugnay na kaalaman mula sa pangmatagalang memorya."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Pag-unawa"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Bumuo ng kahulugan mula sa mga mensaheng pampagtuturo, kabilang ang pasalita, pasulat, at grapikong komunikasyon. Ipakita ang pag-unawa sa pamamagitan ng pagbibigay-kahulugan, pagbibigay-halimbawa, pag-uuri, pagbubuod, paghihinuha, paghahambing, o pagpapaliwanag."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Paglalapat"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Isagawa o gamitin ang isang pamamaraan sa pamamagitan ng pagpapatupad nito sa isang sitwasyon. Gamitin ang kaalaman o kasanayan sa mga bago o konkretong sitwasyon."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Pagsusuri"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Hatiin ang materyal sa mga bahagi nito at tukuyin kung paano nauugnay ang mga bahagi sa isa't isa at sa pangkalahatang istruktura o layunin. Tukuyin ang mga motibo, sanhi, o ugnayan."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Pagtatasa"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Gumawa ng mga paghuhusga batay sa mga pamantayan. Suriin, punahin, o bigyang-katwiran ang mga desisyon o mga hakbang."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Paglikha"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Pagsamahin ang mga elemento upang bumuo ng magkakaugnay o gumaganang kabuuan; muling ayusin ang mga elemento sa bagong pattern o istruktura. Gumawa ng orihinal na gawa o magbunga ng mga bagong ideya."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Sundin"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Nagtatrabaho sa ilalim ng malapit na pangangasiwa at direksyon. Nagsasagawa ng mga rutinang gawain na may limitadong paghuhusga. Nakatuon sa pagsunod sa mga tagubilin at pangunahing pagpapatupad."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Tumulong"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Nagtatrabaho sa ilalim ng rutinang pangangasiwa. Nagbibigay ng tulong sa iba, nag-aambag sa mga gawain ng koponan, at nagsisimulang magpakita ng inisyatiba sa loob ng tinukoy na hangganan."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Nagtatrabaho sa ilalim ng pangkalahatang pangangasiwa. Inilalapat ang kaalaman at kasanayan sa iba't ibang rutinang at hindi rutinang gawain. Gumagamit ng ilang paghuhusga."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Nagtatrabaho sa ilalim ng malawak na direksyon. Nagbibigay-kakayahan sa iba sa pamamagitan ng espesyalistang gabay, suporta, o serbisyo. Tumatanggap ng responsibilidad sa sariling gawain at maaaring mangasiwa ng maliliit na koponan o gawain."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Tiyakin at magpayo"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Nagtatrabaho sa ilalim ng malawak na direksyon ngunit may malaking awtonomiya. Tinitiyak na natutugunan ng gawain ang mga layunin at nagpapayo sa mga kumplikadong usapin. Madalas na namumuno sa mga koponan o proyekto at nakakaimpluwensya sa mga desisyon."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Magsimula at mag-impluwensya"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "May tinukoy na awtoridad at responsibilidad para sa isang mahalagang larangan ng gawain. Nagsisimula ng mga aksyon, nakakaimpluwensya sa estratehiya at patakaran sa kanilang domain, at namumuno sa malalaking proyekto o koponan."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Magtakda ng estratehiya, magbigay-inspirasyon, magpakilos"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "May awtoridad sa pinakamataas na antas ng organisasyon para sa isang pangunahing larangan ng gawain. Nagtatakda ng pangmatagalang estratehiya, nagbibigay-inspirasyon at nagpapakilos sa iba, at gumagawa ng mga desisyong mahalaga sa tagumpay ng organisasyon. Nakakaimpluwensya sa antas ng industriya o panlabas."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Pinakamahabang oras ng kawalan ng aktibidad na isasaalang-alang (minuto)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Ang pahina ng kurso na naiwanang bukas ay patuloy na nagpapadala ng awtomatikong mga kahilingan. Pagkatapos ng bilang na ito ng mga minuto nang walang tunay na aksyon mula sa gumagamit (pagbukas ng pahina o item, pagsagot, atbp.), humihinto ang pagbilang ng oras na ginugol sa kurso."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Pang-edit ng Wiki na kolaboratibo"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Kumokonekta sa Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Ang pag-save ay lumilikha ng bagong bersyon ng Chamilo Wiki mula sa kasalukuyang nilalaman ng Etherpad."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Hindi ma-load ang pang-edit na kolaboratibo."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Paganahin ang Etherpad para sa pag-edit ng Wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Gamitin ang Etherpad bilang pang-edit na kolaboratibo para sa mga umiiral na pahina ng Wiki. Dapat nakalantad ang Etherpad sa parehong origin ng Chamilo para sa ligtas na naka-embed na session."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL ng Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Base URL ng instance ng Etherpad, kasama ang opsyonal na reverse-proxy path. Halimbawa: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "API key ng Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API key na ginagamit ng Chamilo upang lumikha ng mga pad, session at i-synchronize ang nilalaman ng Wiki. I-configure ang Etherpad upang tumanggap ng API-key authentication."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Maaaring baguhin ayon sa kurso ang default na visibility ng mga bagong dokumento"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibility na ibinibigay sa bagong dokumento, folder o na-upload na file kapag ginawa ito ng guro sa isang kurso. Maaari pa ring baguhin ng mga guto ang visibility ng bawat isa pagkatapos."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Kapag naka-enable, maaaring piliin ng mga guro sa mga setting ng kurso ang visibility na ibinibigay sa mga bagong dokumento ng kanilang kurso, sa halip na ang default ng platform."
+
+msgid "Default visibility of new learning paths"
+msgstr "Default na visibilidad ng mga bagong learning path"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Maaaring baguhin ayon sa kurso ang default na visibility ng mga bagong learning path"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibility na ibinibigay sa bagong learning path kapag ginawa ito ng guro sa isang kurso. Maaari pa ring baguhin ng mga guro ang visibility ng bawat isa pagkatapos."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Kapag naka-enable, maaaring piliin ng mga guro sa mga setting ng kurso ang visibility na ibinibigay sa mga bagong learning path ng kanilang kurso, sa halip na ang default ng platform."
+
+msgid "Default visibility of new tests"
+msgstr "Default na visibility ng mga bagong pagsusulit"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Maaaring baguhin ayon sa kurso ang default na visibility ng mga bagong pagsusulit"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibility na ibinibigay sa bagong pagsusulit kapag ginawa ito ng guro sa isang kurso. Maaari pa ring baguhin ng mga guro ang visibility ng bawat isa pagkatapos."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Kapag naka-enable, maaaring piliin ng mga guro sa mga setting ng kurso ang visibility na ibinibigay sa mga bagong pagsusulit ng kanilang kurso, sa halip na ang default ng platform."
+
+msgid "Default visibility for new learning paths"
+msgstr "Default na visibility para sa mga bagong learning path"
+
+msgid "Default visibility for new tests"
+msgstr "Default na visibility para sa mga bagong pagsusulit"
+
+msgid "Following"
+msgstr "Sinusundan"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Tumanggap ng e-mail kapag nagkomento ang mag-aaral sa isang submission ng assignment na ito"
+
+msgid "Payment history"
+msgstr "Kasaysayan ng pagbabayad"
+
+msgid "No payments yet"
+msgstr "Wala pang mga pagbabayad"
+
+msgid "Cancel service"
+msgstr "Kanselahin ang serbisyo"
+
+msgid "Official transcript"
+msgstr "Opisyal na transkrip"
+
+msgid "Unofficial transcript"
+msgstr "Hindi opisyal na transkrip"
+
+msgid "Student name"
+msgstr "Pangalan ng mag-aaral"
+
+msgid "Student number"
+msgstr "Numero ng mag-aaral"
+
+msgid "Program title"
+msgstr "Pamagat ng programa"
+
+msgid "Required hours"
+msgstr "Kinakailangang oras"
+
+msgid "Completion date"
+msgstr "Petsa ng pagtatapos"
+
+msgid "Hours completed"
+msgstr "Natapos na oras"
+
+msgid "Final grade"
+msgstr "Panghuling grado"
+
+msgid "Grade"
+msgstr "Grado"
+
+msgid "No completed course yet."
+msgstr "Wala pang natapos na kurso."
+
+msgid "Grading scale"
+msgstr "Iskala ng pagmamarka"
+
+msgid "Signature of school official"
+msgstr "Lagda ng opisyal ng paaralan"
+
+msgid "School official"
+msgstr "Opisyal ng paaralan"
+
+msgid "Official's title"
+msgstr "Titulo ng opisyal"
+
+msgid "Verify this transcript at"
+msgstr "I-verify ang transkrip na ito sa"
+
+msgid "Verification code"
+msgstr "Kodigo ng beripikasyon"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Hindi nilagdaan ang hindi opisyal na transkrip na ito. Humingi sa administrador ng opisyal na transkrip."
+
+msgid "Transcript verification"
+msgstr "Beripikasyon ng transkrip"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Suriin na ang opisyal na transkrip na ito ay inilabas at nilagdaan ng institusyon, hindi nabago at hindi binawi."
+
+msgid "Valid"
+msgstr "Wasto"
+
+msgid "Invalid signature"
+msgstr "Hindi wastong lagda"
+
+msgid "Transcript not found"
+msgstr "Hindi nahanap ang transkrip"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Wasto ang lagda ng institusyon at hindi binawi ang transkrip na ito."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Hindi ma-verify na wasto ang transkrip na ito. Hindi ipinapakita ang mga detalye nito."
+
+msgid "Transcript details"
+msgstr "Mga detalye ng transkrip"
+
+msgid "Institution"
+msgstr "Institusyon"
+
+msgid "Issued on"
+msgstr "Inilabas noong"
+
+msgid "Download verification JSON"
+msgstr "I-download ang JSON ng beripikasyon"
+
+msgid "Transcript"
+msgstr "Transkrip"
+
+msgid "My confidential reports"
+msgstr "Aking mga kumpidensyal na ulat"
+
+msgid "My transcript"
+msgstr "Aking transkrip"
+
+msgid "Confidential investigations"
+msgstr "Mga kumpidensyal na imbestigasyon"
+
+msgid "Floor plan"
+msgstr "Plano ng palapag"
+
+msgid "Click a highlighted room to select it"
+msgstr "I-click ang naka-highlight na silid upang piliin ito"
+
+msgid "Select room"
+msgstr "Pumili ng silid"
+
+msgid "Room on floor plan"
+msgstr "Silid sa plano ng palapag"
+
+msgid "Select a branch first"
+msgstr "Pumili muna ng sangay"
+
+msgid "The branch has no attached floor plan"
+msgstr "Walang nakakabit na plano ng palapag ang sangay"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Gamitin ang polygon tool upang i-outline ang silid; gamitin ang Edit upang ilipat ang mga sulok"
+
+msgid "Save room area"
+msgstr "I-save ang lugar ng silid"
+
+msgid "Clear room area"
+msgstr "I-clear ang lugar ng silid"
+
+msgid "Save the room form to persist the area"
+msgstr "I-save ang form ng silid upang mapanatili ang lugar"
+
+msgid "Floor plan unavailable"
+msgstr "Hindi available ang plano ng palapag"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Dapat nasa loob ng plano ng palapag ang mga punto ng mapa ng silid"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Sigurado ka bang gusto mong i-clear ang lugar ng silid?"
+
+msgid "View room on floor plan"
+msgstr "Tingnan ang silid sa plano ng palapag"
+
+msgid "No floor plan available"
+msgstr "Walang available na plano ng palapag"
+
+msgid "This is an assignment by groups"
+msgstr "Ito ay isang takdang-aralin ayon sa mga grupo"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Mag-upload ng PNG, JPEG o ligtas na static SVG na plano ng palapag, o pumili ng umiiral na imahe mula sa Documents."
+
+msgid "Upload floor plan"
+msgstr "Mag-upload ng plano ng palapag"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG o static SVG, maximum 10 MB"
+
+msgid "Search images by name"
+msgstr "Maghanap ng mga imahe ayon sa pangalan"
+
+msgid "Image name"
+msgstr "Pangalan ng imahe"
+
+msgid "Select an image"
+msgstr "Pumili ng imahe"
+
+msgid "Change floor plan"
+msgstr "Palitan ang plano ng palapag"
+
+msgid "Attach floor plan"
+msgstr "Ikabit ang plano ng palapag"
+
+msgid "No matching images found in Documents."
+msgstr "Walang nahanap na tumutugmang mga imahe sa Documents."
+
+msgid "Current floor plan"
+msgstr "Kasalukuyang plano ng palapag"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Awtomatikong nase-save ang mga pagbabago sa plano ng palapag."
+
+msgid "Remove floor plan"
+msgstr "Alisin ang plano ng palapag"
+
+msgid "Cannot load images"
+msgstr "Hindi ma-load ang mga imahe"
+
+msgid "Floor plan saved"
+msgstr "Na-save ang plano ng palapag"
+
+msgid "Cannot attach floor plan"
+msgstr "Hindi maikabit ang plano ng palapag"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Tanging PNG/JPEG at ligtas na static SVG na mga imahe hanggang 10MB ang sinusuportahan."
+
+msgid "Cannot upload floor plan"
+msgstr "Hindi ma-upload ang plano ng palapag"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Sigurado ka bang gusto mong alisin ang plano ng palapag?"
+
+msgid "Floor plan removed"
+msgstr "Naalis ang plano ng palapag"
+
+msgid "Cannot remove floor plan"
+msgstr "Hindi maalis ang plano ng palapag"
+
+msgid "Support bot"
+msgstr "Support bot"
+
+msgid "Connected"
+msgstr "Nakakonekta"
+
+msgid "Not connected"
+msgstr "Hindi nakakonekta"
+
+msgid "View ticket"
+msgstr "Tingnan ang ticket"
+
+msgid "Start a new conversation"
+msgstr "Magsimula ng bagong pag-uusap"
+
+msgid "Video call"
+msgstr "Video call"
+
+msgid "Incoming video call"
+msgstr "Papasok na video call"
+
+msgid "Decline"
+msgstr "Tanggihan"
+
+msgid "Mute microphone"
+msgstr "I-mute ang mikropono"
+
+msgid "Unmute microphone"
+msgstr "I-unmute ang mikropono"
+
+msgid "Turn camera off"
+msgstr "Patayin ang kamera"
+
+msgid "Turn camera on"
+msgstr "Buksan ang kamera"
+
+msgid "Hang up"
+msgstr "I-hang up"
+
+msgid "Calling..."
+msgstr "Tumatawag..."
+
+msgid "Connecting..."
+msgstr "Kumokonekta..."
+
+msgid "Your contact is busy."
+msgstr "Abala ang iyong contact."
+
+msgid "Your contact did not answer the call."
+msgstr "Hindi sinagot ng iyong contact ang tawag."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Hindi ma-access ng iyong contact ang camera o mikropono."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Hindi maihanda ng iyong contact ang video call."
+
+msgid "Your contact refused the call."
+msgstr "Tinanggihan ng iyong contact ang tawag."
+
+msgid "The call timed out."
+msgstr "Nag-timeout ang tawag."
+
+msgid "Your contact cancelled the call."
+msgstr "Kinansela ng iyong contact ang tawag."
+
+msgid "The video connection was lost."
+msgstr "Nawala ang koneksyon ng video."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Hindi ma-establish ng iyong contact ang koneksyon ng video."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Hindi makumpleto ng iyong contact ang setup ng video call."
+
+msgid "Your contact hung up."
+msgstr "Ibinitin ng iyong contact."
+
+msgid "Video call could not be started"
+msgstr "Hindi masimulan ang video call"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Tinanggihan ang pahintulot sa camera o mikropono."
+
+msgid "No camera or microphone was found."
+msgstr "Walang nakitang camera o mikropono."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Ginagamit na o hindi available ang camera o mikropono."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Hindi sinusuportahan ng camera o mikropono ang kinakailangang settings."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Hindi makuha ang access sa camera o mikropono."
+
+msgid "The video call could not be prepared."
+msgstr "Hindi maihanda ang video call."
+
+msgid "The video call request could not be sent."
+msgstr "Hindi maipadala ang kahilingan sa video call."
+
+msgid "The incoming video call could not be processed."
+msgstr "Hindi maproseso ang papasok na video call."
+
+msgid "The video call answer could not be prepared."
+msgstr "Hindi maihanda ang sagot sa video call."
+
+msgid "The video call answer could not be sent."
+msgstr "Hindi maipadala ang sagot sa video call."
+
+msgid "The video call answer could not be processed."
+msgstr "Hindi maproseso ang sagot sa video call."
+
+msgid "The video connection failed"
+msgstr "Nabigo ang koneksyon ng video"
+
+msgid "The video connection could not be established."
+msgstr "Hindi ma-establish ang koneksyon ng video."
+
+msgid "No answer was received."
+msgstr "Walang natanggap na sagot."
+
+msgid "You refused the call."
+msgstr "Tinanggihan mo ang tawag."
+
+msgid "You cancelled the call."
+msgstr "Kinansela mo ang tawag."
+
+msgid "You hung up."
+msgstr "Ibinitin mo."
+
+msgid "You missed the call."
+msgstr "Hindi mo nasagot ang tawag."
+
+msgid "Support bot is currently unavailable."
+msgstr "Hindi available sa ngayon ang support bot."
+
+msgid "A support ticket has been created."
+msgstr "Nakagawa na ng support ticket."
+
+msgid "Conversation ended."
+msgstr "Natapos ang usapan."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Hindi maipagpatuloy ng support bot ang usapang ito. Pakisubukan muli."
+
+msgid "Add your first term glossary to this course"
+msgstr "Idagdag ang iyong unang glossary ng termino sa kursong ito"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Sigurado ka bang gusto mong tanggalin ang survey template na ito?"
+
+msgid "The survey template has been deleted."
+msgstr "Natanggal na ang survey template."
+
+msgid "Please select a course."
+msgstr "Pumili ng kurso."
+
+msgid "Please select a session for this course."
+msgstr "Pumili ng session para sa kursong ito."
+
+msgid "The survey has been created from the template."
+msgstr "Nagawa na ang survey mula sa template."
+
+msgid "Survey templates"
+msgstr "Mga survey template"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Gumawa ng magagamit muli na survey template para sa mga guro at italaga ang mga ito nang direkta sa isang kurso o session."
+
+msgid "Subtitle"
+msgstr "Subtitle"
+
+msgid "Assign to course"
+msgstr "Italaga sa kurso"
+
+msgid "Assign template to course"
+msgstr "Italaga ang template sa kurso"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Iwanang walang laman ang session upang gawin ang survey nang direkta sa kurso."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Available ang kursong ito sa pamamagitan ng session sa portal na ito, kaya kailangan ng session."
+
+msgid "Survey template questions"
+msgstr "Mga tanong ng survey template"
+
+msgid "Back to survey templates"
+msgstr "Bumalik sa mga template ng survey"
+
+msgid "Could not load survey template"
+msgstr "Hindi ma-load ang template ng survey"
+
+msgid "Could not load survey template questions"
+msgstr "Hindi ma-load ang mga tanong ng template ng survey"
+
+msgid "Could not save survey template question"
+msgstr "Hindi ma-save ang tanong ng template ng survey"
+
+msgid "Could not delete survey template question"
+msgstr "Hindi ma-delete ang tanong ng template ng survey"
+
+msgid "Could not move survey template question"
+msgstr "Hindi mailipat ang tanong ng template ng survey"
+
+msgid "Could not copy survey template question"
+msgstr "Hindi makopya ang tanong ng template ng survey"
+
+msgid "The survey template has been saved."
+msgstr "Na-save na ang template ng survey."
+
+msgid "Edit survey template"
+msgstr "I-edit ang template ng survey"
+
+msgid "Create survey template"
+msgstr "Gumawa ng template ng survey"
+
+msgid "The survey template title is required."
+msgstr "Kailangan ang pamagat ng template ng survey."
+
+msgid "Visible as template"
+msgstr "Nakikita bilang template"
+
+msgid "Create satisfaction survey"
+msgstr "Gumawa ng survey ng kasiyahan"
+
+msgid "Training satisfaction survey"
+msgstr "Survey ng kasiyahan sa pagsasanay"
+
+msgid "Could not create satisfaction survey"
+msgstr "Hindi magawa ang survey ng kasiyahan"
+
+msgid "Use template"
+msgstr "Gamitin ang template"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Gawin ang survey na ito mula sa muling magagamit na template na inihanda ng administrador."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Nakatago ang mga resulta mula sa guro/tutor"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Makikita pa rin ng mga gurong at tutor ang bilang ng mga sagot at makakapagpadala ng paalala, ngunit hindi nila mabubuksan o mae-export ang mga resulta ng survey."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Nailapat ang template. Suriin ang mga setting ng survey at i-save upang gawin ito."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Nakatago ang mga resulta ng survey mula sa mga guro at tutor."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Magagamit mo pa rin ang pahina ng mga imbitasyon upang makita ang bilang ng mga sagot at magpadala ng paalala."
+
+msgid "Payment method"
+msgstr "Paraan ng pagbabayad"
+
+msgid "Preview mode"
+msgstr "Mode ng preview"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Hindi nase-save ang progreso at iskor sa mode ng preview."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Hindi maipapakita ang link na ito sa loob ng learning path."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Buksan ito sa bagong tab upang makita ang pahina."
+
+msgid "Report a problem with this question"
+msgstr "I-ulat ang problema sa tanong na ito"
+
+msgid "Your report was sent to the teacher."
+msgstr "Naipadala ang iyong ulat sa guro."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Ilarawan ang error o problemang nahanap mo. Ipapadala ang iyong ulat sa guro."
+
+msgid "A comment is required."
+msgstr "Kailangan ang komento."
+
+msgid "Could not send the report."
+msgstr "Hindi maipadala ang ulat."
+
+msgid "Learner reports"
+msgstr "Mga ulat ng mag-aaral"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Walang naisumiteng ulat ng mag-aaral para sa tanong na ito."
+
+msgid "View attempt"
+msgstr "Tingnan ang pagtatangka"
+
+msgid "Could not load learner reports."
+msgstr "Hindi ma-load ang mga ulat ng mag-aaral."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Payagan ang mga mag-aaral na mag-ulat ng isyu sa mga tanong"
+
+msgid "Skill acquired"
+msgstr "Nakuha ang kasanayan"
+
+msgid "AI Toolbox"
+msgstr "AI Toolbox"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Gumawa ng interaktibong pang-edukasyong aplikasyon gamit ang AI at subaybayan ang progreso ng mag-aaral gamit ang SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Wala pang available na nai-publish na aplikasyon."
+
+msgid "Interactive applications"
+msgstr "Mga interaktibong aplikasyon"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Gumawa, pagbutihin, i-publish at suriin ang mga bersyon mula sa iisang lugar."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Magbukas ng aplikasyon upang magpatuloy mula sa iyong pinakabagong progreso."
+
+msgid "Interactive learning application"
+msgstr "Interaktibong aplikasyon sa pag-aaral"
+
+msgid "Create an interactive learning app"
+msgstr "Gumawa ng interaktibong app sa pag-aaral"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Ilarawan ang aktibidad. Gagawa ang Chamilo ng bersyong SCORM na aplikasyon na may pagsubaybay sa progreso at iskor."
+
+msgid "Idea"
+msgstr "Ideya"
+
+msgid "Application"
+msgstr "Aplikasyon"
+
+msgid "What should the application do?"
+msgstr "Ano ang dapat gawin ng aplikasyon?"
+
+msgid "How it works"
+msgstr "Paano ito gumagana"
+
+msgid "AI generation"
+msgstr "Pagbuo ng AI"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Binubuo ang app mula sa iyong mga tagubilin at sine-save bilang bersyon 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Iniuulat sa Chamilo ang progreso, iskor at datos ng pagpapatuloy ng mag-aaral."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Ang mga susunod na pagpapabuti ay gumagawa ng mga bagong bersyon nang hindi binubura ang mga nauna."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Isama ang layunin sa pagkatuto, mga patakaran, antas, pagiskor at kung ano ang dapat mangyari kapag natapos na ang mag-aaral."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Hindi ka pinapayagang gumawa ng nilalaman sa kontekstong ito."
+
+msgid "The application was generated successfully."
+msgstr "Matagumpay na nabuo ang aplikasyon."
+
+msgid "Open in student view"
+msgstr "Buksan sa view ng mag-aaral"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Buoín ang aplikasyon upang paganahin ang preview at paglalathala."
+
+msgid "Improve with AI"
+msgstr "Pagbutihin gamit ang AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Ilarawan ang pagbabago. Gagawa ng bagong bersyon at mananatiling available ang mga nakaraang bersyon."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Ilarawan ang kumpletong interaktibong gawain na nais mong buuin."
+
+msgid "What should be improved?"
+msgstr "Ano ang dapat pagbutihin?"
+
+msgid "Generate new version"
+msgstr "Bumuo ng bagong bersyon"
+
+msgid "Version history"
+msgstr "Kasaysayan ng bersyon"
+
+msgid "Preview, download or restore any generated version."
+msgstr "I-preview, i-download o ibalik ang anumang nabuo na bersyon."
+
+msgid "A new version was generated."
+msgstr "Nabuo ang isang bagong bersyon."
+
+msgid "Version restored"
+msgstr "Naibalik ang bersyon"
+
+msgid "The support bot tree has been published."
+msgstr "Nailathala na ang puno ng support bot."
+
+msgid "The support bot tree has been archived."
+msgstr "Na-archive na ang puno ng support bot."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Nadoble na ang puno ng support bot."
+
+msgid "The support bot tree has been deleted."
+msgstr "Nabura na ang puno ng support bot."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Sigurado ka bang gusto mong burahin ang punong ito ng support bot?"
+
+msgid "The support bot tree has been imported."
+msgstr "Na-import na ang puno ng support bot."
+
+msgid "Create support bot tree"
+msgstr "Gumawa ng puno ng support bot"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Bumuo ng nakapirming puno ng desisyon na gumagabay sa mga user sa mga tanong sa suporta at maaaring i-escalate sa Mga Ticket."
+
+msgid "Portal scope"
+msgstr "Saklaw ng portal"
+
+msgid "Duplicate"
+msgstr "Kopyahin"
+
+msgid "Archive"
+msgstr "I-archive"
+
+msgid "View conversations"
+msgstr "Tingnan ang mga usapan"
+
+msgid "Import support bot tree"
+msgstr "Mag-import ng puno ng support bot"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Mag-import ng JSON export o CSV na puno ng desisyon. Palaging ginagawa ang na-import na puno bilang bagong draft."
+
+msgid "Resolved"
+msgstr "Nalutas"
+
+msgid "Escalated"
+msgstr "Na-escalate"
+
+msgid "Abandoned"
+msgstr "Inabandona"
+
+msgid "Support bot conversations"
+msgstr "Mga usapan ng support bot"
+
+msgid "Outcome"
+msgstr "Kinalabasan"
+
+msgid "Started at"
+msgstr "Nagsimula noong"
+
+msgid "Ended at"
+msgstr "Natapos noong"
+
+msgid "View conversation"
+msgstr "Tingnan ang usapan"
+
+msgid "Go to node"
+msgstr "Pumunta sa node"
+
+msgid "Create support ticket"
+msgstr "Gumawa ng support ticket"
+
+msgid "End conversation"
+msgstr "Tapusin ang usapan"
+
+msgid "Node"
+msgstr "Node"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Kailangan ng hindi bababa sa isang node ang puno ng support bot."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Sigurado ka bang gusto mong burahin ang node na ito? Mababawi ang mga link dito."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Kailangan ng hindi bababa sa isang opsyon ang bawat node ng support bot."
+
+msgid "The support bot tree title is required."
+msgstr "Kinakailangan ang pamagat ng puno ng support bot."
+
+msgid "A support bot entry node is required."
+msgstr "Kinakailangan ang entry node ng support bot."
+
+msgid "Every support bot node requires content."
+msgstr "Kailangan ng nilalaman ang bawat node ng support bot."
+
+msgid "Every support bot option requires a label."
+msgstr "Kailangan ng label ang bawat opsyon ng support bot."
+
+msgid "Select a target node for every go-to option."
+msgstr "Pumili ng target node para sa bawat go-to na opsyon."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Maglagay ng relative URL para sa bawat link na opsyon."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Pumili ng kategorya ng ticket para sa bawat escalation na opsyon."
+
+msgid "The support bot tree has been saved."
+msgstr "Na-save na ang puno ng support bot."
+
+msgid "Edit support bot tree"
+msgstr "I-edit ang puno ng support bot"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Ang nai-publish at naka-archive na bersyon ng support bot ay read-only. I-duplicate ang punong ito mula sa listahan upang i-edit ang bagong draft na bersyon."
+
+msgid "Default ticket project"
+msgstr "Default na proyekto ng ticket"
+
+msgid "Decision tree rules"
+msgstr "Mga patakaran ng decision tree"
+
+msgid "Every node must contain at least one option."
+msgstr "Dapat maglaman ang bawat node ng kahit isang opsyon."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Dapat tapusin ng huling node ang usapan o gumawa ng support ticket."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Hindi dapat gumawa ng cycle ang mga go-to link sa v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Hindi pinapayagan ang mga panlabas na URL sa v1; dapat gumamit ang mga link action ng relative na Chamilo path."
+
+msgid "Nodes"
+msgstr "Mga node"
+
+msgid "Add node"
+msgstr "Magdagdag ng node"
+
+msgid "Entry node"
+msgstr "Entry node"
+
+msgid "Set as entry node"
+msgstr "Itakda bilang entry node"
+
+msgid "Target node"
+msgstr "Target node"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Gumamit ng relative na Chamilo path, halimbawa /tickets."
+
+msgid "Ticket category"
+msgstr "Kategorya ng ticket"
+
+msgid "Select a default ticket project first."
+msgstr "Pumili muna ng default na proyekto ng ticket."
+
+msgid "Closing message"
+msgstr "Pangwakas na mensahe"
+
+msgid "Select a node to edit it."
+msgstr "Pumili ng node upang i-edit ito."
+
+msgid "Support bot conversation"
+msgstr "Usapan ng support bot"
+
+msgid "Transcript of %s"
+msgstr "Transcript ng %s"
+
+msgid "Download unofficial transcript"
+msgstr "I-download ang hindi opisyal na transcript"
+
+msgid "Issue official transcript"
+msgstr "Mag-isyu ng opisyal na transcript"
+
+msgid "Official transcripts"
+msgstr "Mga opisyal na transcript"
+
+msgid "No official transcript has been issued yet."
+msgstr "Wala pang naiisyung opisyal na transcript."
+
+msgid "Issued by"
+msgstr "Inisyu ni"
+
+msgid "Verify"
+msgstr "I-verify"
+
+msgid "Signature of official transcripts"
+msgstr "Lagda ng mga opisyal na transcript"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Ang larawang ito ay naka-print sa mga opisyal na transcript ng portal na ito, sa itaas ng pangalan at titulo ng lagda na nakatakda sa mga setting ng sertipiko."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Mag-isyu ng nilagdaang opisyal na transcript na may mga kurso at grado na nakalista sa pahinang ito? Maaari itong i-verify online hanggang sa ito ay bawiin."
+
+msgid "Official transcript issued"
+msgstr "Nai-isyu ang opisyal na transcript"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Bawiin ang opisyal na transcript na ito? Ipapakita ng verification page nito na ito ay nabawi."
+
+msgid "Official transcript revoked"
+msgstr "Nabawi ang opisyal na transcript"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Pumili muna ng PNG o JPEG na larawan."
+
+msgid "Signed credential"
+msgstr "Nilagdaang kredensyal"
+
+msgid "Issue signed credential"
+msgstr "Mag-isyu ng nilagdaang kredensyal"
+
+msgid "Verify credential"
+msgstr "I-verify ang kredensyal"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "I-anchor sa Sepolia testnet"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Kumpirmahin ang umiiral na transaksyon sa Sepolia"
+
+msgid "Revoke signed credential"
+msgstr "Bawiin ang nilagdaang kredensyal"
+
+msgid "Delete certificate"
+msgstr "Tanggalin ang sertipiko"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Kumpirmahin ang umiiral na transaksyon sa Sepolia"
+
+msgid "Sepolia transaction hash"
+msgstr "Hash ng transaksyon sa Sepolia"
+
+msgid "Verify transaction"
+msgstr "I-verify ang transaksyon"
+
+msgid "Anchored"
+msgstr "Naka-anchor"
+
+msgid "Issued"
+msgstr "Inilabas"
+
+msgid "Not issued"
+msgstr "Hindi inilabas"
+
+msgid "Consent required"
+msgstr "Kailangan ng pahintulot"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Nakumpirma at napatunayan ang transaksyon sa Sepolia"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Hihilingin ng Sepolia testnet wallet na pirmahan mo ang transaksyon. Ang fingerprint lang ng sertipiko ang iaangkla. Magpatuloy?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Bawiin ang lagdaang kredensyal na ito? Mananatiling permanente ang anumang transaksyon sa blockchain, ngunit iuulat ng pahina ng beripikasyon ang pagbawi."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Mag-isyu ng lagdaang kredensyal ng sertipiko para sa mag-aaral na ito? Ginagawa nitong maberipika ang naaprubahang personal na detalye sa pamamagitan ng pribadong link."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Kailangan ng EVM-compatible na wallet sa browser para sa Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Piliin ang Sepolia testnet (chain ID 11155111) sa iyong wallet."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Hindi wastong address ng wallet o fingerprint ng sertipiko."
+
+msgid "Transaction pending"
+msgstr "Nakabinbin ang transaksyon"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Gamitin ang Kumpirmahin ang umiiral na transaksyon sa Sepolia sa ibang pagkakataon."
+
+msgid "Signed credential issued"
+msgstr "Nailabas ang lagdaang kredensyal"
+
+msgid "Credential revoked"
+msgstr "Binawi ang kredensyal"
+
+msgid "Transaction hash"
+msgstr "Hash ng transaksyon"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Pinapahintulutan ng pahintulot sa paglalathala ang administrador na mag-isyu ng lagdaang kredensyal ng sertipiko at opsyonal na iangkla ang SHA-256 fingerprint nito sa Sepolia testnet. Walang pangalan o personal na datos na ipinapadala on-chain. Maaari mong bawiin ang pahintulot anumang oras."
+
+msgid "Publication consent"
+msgstr "Pahintulot sa paglalathala"
+
+msgid "Not approved"
+msgstr "Hindi naaprubahan"
+
+msgid "Withdraw consent"
+msgstr "Bawiin ang pahintulot"
+
+msgid "Approve publication"
+msgstr "Aprubahan ang paglalathala"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Pinapahintulutan ko ang lagdaang, pampublikong maberipikang kredensyal na nagpapakita ng aking pangalan, kurso, iskor at petsa ng pag-isyu. Maaari ring ilathala ng administrador ang SHA-256 fingerprint lamang nito sa Sepolia testnet. Permanente ang fingerprint, kahit bawiin ko sa ibang pagkakataon. Magpatuloy?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Bawiin ang pag-apruba sa paglalathala para sa sertipikong ito?"
+
+msgid "Publication approval recorded"
+msgstr "Naitala ang pag-apruba sa paglalathala"
+
+msgid "Publication approval withdrawn"
+msgstr "Binawi ang pag-apruba sa paglalathala"
+
+msgid "Read more"
+msgstr "Magbasa pa"
+
+msgid "Participation: %s of %s posts"
+msgstr "Pakikilahok: %s sa %s na post"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "I-post ang iyong kontribusyon upang makita ang mga sagot ng ibang kalahok."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Tanging awtorisadong imbestigador lamang ang makakapagsuri ng karapat-dapat na ulat. Kumpidensyal ang pagkakakilanlan ng tagapag-ulat bilang default."
+
+msgid "New confidential report"
+msgstr "Bagong kumpidensyal na ulat"
+
+msgid "Reported user"
+msgstr "Naiulat na user"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "May mga karapat-dapat na kumpidensyal na ulat na naghihintay ng pagsusuri."
+
+msgid "Eligible investigations"
+msgstr "Karapat-dapat na imbestigasyon"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Lilitaw ang kaso rito pagkatapos mag-ulat ng hindi bababa sa %s magkakaibang user sa parehong tao."
+
+msgid "Distinct reporters"
+msgstr "Magkakaibang tagapag-ulat"
+
+msgid "Reports for selected user"
+msgstr "Mga ulat para sa napiling user"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Hindi available sa ngayon ang kumpidensyal na pag-uulat."
+
+msgid "The investigation could not be loaded."
+msgstr "Hindi ma-load ang imbestigasyon."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Protektado ang iyong pagkakakilanlan mula sa mga imbestigador bilang default, ngunit iwasang maglagay ng mga detalye ng pagkakakilanlan sa teksto ng ulat o mga attachment. Hindi ito serbisyong pang-emergency."
+
+msgid "Find the user involved"
+msgstr "Hanapin ang kasangkot na user"
+
+msgid "Name or username"
+msgstr "Pangalan o username"
+
+msgid "Describe the situation"
+msgstr "Ilarawan ang sitwasyon"
+
+msgid "Evidence (optional)"
+msgstr "Ebidensya (opsyonal)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Hanggang tatlong file, maximum na 8 MiB bawat isa. Mga imahe, audio o maikling video."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Sumasang-ayon ako na makita ng awtorisadong imbestigador ang aking pangalan at email para sa ulat na ito. Maaari kong bawiin ang pahintulot na ito sa ibang pagkakataon."
+
+msgid "Send confidential report"
+msgstr "Ipadala ang kumpidensyal na ulat"
+
+msgid "Could not search users"
+msgstr "Hindi mahanap ang mga user"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Hanggang tatlong file, maximum na 8 MiB bawat isa."
+
+msgid "The confidential report could not be saved."
+msgstr "Hindi ma-save ang kumpidensyal na ulat."
+
+msgid "Confidential report"
+msgstr "Kumpidensyal na ulat"
+
+msgid "Confidential conversation"
+msgstr "Kumpidensyal na usapan"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Maaaring mag-usap ang mga imbestigador sa pag-uusap na ito nang hindi nakikita ang pagkakakilanlan ng tagapag-ulat maliban kung pinagana ang pagbabahagi ng contact."
+
+msgid "Reporter"
+msgstr "Tagapag-ulat"
+
+msgid "Investigator"
+msgstr "Imbestigador"
+
+msgid "Additional evidence (optional)"
+msgstr "Karagdagang ebidensya (opsyonal)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Hanggang tatlong file, maximum na 8 MiB bawat isa; sampung file bawat ulat."
+
+msgid "Contact shared voluntarily"
+msgstr "Kusang ibinahagi ang contact"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Payagan ang mga imbestigador na makita ang aking pangalan at email para sa ulat na ito"
+
+msgid "This confidential report is not available."
+msgstr "Hindi available ang kumpidensyal na ulat na ito."
+
+msgid "Your message could not be saved."
+msgstr "Hindi ma-save ang iyong mensahe."
+
+msgid "Contact sharing could not be updated."
+msgstr "Hindi ma-update ang pagbabahagi ng contact."
+
+msgid "Evidence could not be downloaded."
+msgstr "Hindi ma-download ang ebidensya."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng fill the form activity : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Halimbawa ng fill the form activity : kalkulahin ang Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Edad</strong></td>            <td width=\"75%\" style=\"\">[25] taong gulang</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Kasarian</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Timbang</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Taas</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Timbang/Sukat<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Artikulo sa Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Itago ang IP address sa mga ulat"
+
+msgid "Course settings policies"
+msgstr "Mga polisiya sa setting ng kurso"
+
+msgid "Academic transcripts"
+msgstr "Mga transkrip akademiko"
+
+msgid "Transcript program title"
+msgstr "Pamagat ng programa sa transkrip"
+
+msgid "Transcript course code"
+msgstr "Kodigo ng kurso sa transkrip"
+
+msgid "Transcript course hours field"
+msgstr "Field ng oras ng kurso sa transkrip"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Ang natapos na oras sa transkrip ay ang kinakailangang oras"
+
+msgid "Transcript student number field"
+msgstr "Field ng numero ng mag-aaral sa transkrip"
+
+msgid "Transcript address fields"
+msgstr "Mga field ng address sa transkrip"
+
+msgid "Transcript grading scale"
+msgstr "Iskala ng grado sa transkrip"
+
+msgid "Transcript GPA note"
+msgstr "Tala ng GPA sa transkrip"
+
+msgid "Transcript signatory name"
+msgstr "Pangalan ng pumirma sa transkrip"
+
+msgid "Transcript signatory title"
+msgstr "Titulo ng pumirma sa transkrip"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Paganahin ang mga nilagdaang sertipiko at opsyonal na pag-angkla sa Sepolia testnet"
+
+msgid "Show thread replies only after participating"
+msgstr "Ipakita ang mga sagot sa thread pagkatapos lamang makilahok"
+
+msgid "Show the forum category description in threads"
+msgstr "Ipakita ang paglalarawan ng kategorya ng forum sa mga thread"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Maaaring baguhin ang mga setting ng partisipasyon sa forum ayon sa kurso"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Pinakamaraming post na ipinapakita sa isang thread ng forum"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Mga post na kailangan upang tapusin ang isang thread ng forum"
+
+msgid "Track e-mail openings"
+msgstr "Subaybayan ang pagbubukas ng e-mail"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Payagan ang mga sagot sa e-mail sa mga mensahe"
+
+msgid "Inbound e-mail address"
+msgstr "Papasok na e-mail address"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN ng papasok na mailbox"
+
+msgid "Remember me duration (days)"
+msgstr "Tagal ng Remember me (araw)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Paganahin ang OAuth Dynamic Client Registration lampas sa MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Paganahin ang kumpidensyal na pag-uulat ng kapakanan"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Pinakamababang magkakaibang tagapag-ulat para sa isang imbestigasyon"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Payagan ang mga kumpidensyal na attachment ng ebidensya"
+
+msgid "Show confidential investigation notifications"
+msgstr "Ipakita ang mga abiso ng kumpidensyal na imbestigasyon"
+
+msgid "Enable support chatbot"
+msgstr "Paganahin ang chatbot ng suporta"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Piliin kung saan awtomatikong hina-highlight ang mga termino sa glossary: mga dokumento, ehersisyo at learning path."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Itago ang mga IP address sa visual na pag-uulat at mga export ng ulat. Nanatiling naka-imbak ang mga IP address at maa-access sa pamamagitan ng awtorisadong mga prosedura sa personal na data."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Mga default ng plataporma at mga permiso sa pag-edit ng kurso; pinamamahalaan sa Mga setting ng kurso."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Payagan ang mga user na mag-download ng hindi opisyal na transkrip ng mga kursong natapos nila, at payagan ang mga administrador, administrador ng session at HR manager na mag-isyu ng nilagdaang opisyal na transkrip para sa mga user na kanilang pinamamahalaan. Ina-upload ang imahe ng lagda mula sa pahina ng transkrip ng isang user."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Pamagat ng programang inililimbag sa bawat transkrip, halimbawa ang pangalan ng diploma na inihahanda sa platapormang ito."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Aling field ng kurso ang pupuno sa column ng kodigo ng kurso sa transkrip: ang kodigo ng kurso o ang pangalan ng departamento."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Variable ng extra field ng kurso na may bilang ng oras ng isang kurso. Iwanang walang laman upang gamitin ang tagal ng kurso."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "I-print ang kinakailangang oras ng isang kurso bilang mga oras na natapos ng mag-aaral. Kapag naka-disable, ang mga natapos na oras ay ang oras na ginugol ng mag-aaral sa kurso."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Variable ng extra field ng user na may hawak ng student number na ipiniprint sa mga transcript. Iwanang walang laman para walang i-print."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Mga variable ng extra field ng user na pinaghihiwalay ng kuwit na ipiniprint pagkatapos ng address ng user sa mga transcript, halimbawa ang lungsod, estado at zip code."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "JSON list ng mga letra ng grado, mula sa pinakamataas na minimum score pababa: bawat item ay may minimum score sa porsyento (min), ang letra at ang grade points na ginagamit sa pagkuwenta ng GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Paliwanag kung paano kinukuwenta ang GPA, na ipiniprint sa ilalim ng GPA sa mga transcript."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Pangalan ng opisyal ng paaralan na pumipirma sa mga opisyal na transcript."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Titulo ng opisyal ng paaralan na pumipirma sa mga opisyal na transcript."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Nangangailangan ng tahasang pahintulot ng may-ari at manu-manong aksyon ng administrator. Tanging SHA-256 fingerprints ang ipinapadala on-chain."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Nakikita lamang ng mga mag-aaral ang unang post ng isang forum thread hanggang sila mismo ay mag-post dito. Palaging nakikita ng mga administrator, guro, coach at group tutor ang bawat post."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Ipakita ang titulo at pinaikling paglalarawan ng kategorya ng forum sa itaas ng bawat thread, na may link para basahin ang buong paglalarawan."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Kapag naka-enable, maaaring piliin ng mga guro sa seksyong Forum ng mga setting ng kurso kung itatago ng kanilang kurso ang mga sagot sa thread hanggang mag-post ang mag-aaral, ipakita ang paglalarawan ng kategorya sa mga thread at ilang post ang inaasahan ng participation progress bar, sa halip na sundin ang mga setting ng platform."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Ipakita lamang ang bilang na ito ng mga post ng bawat forum thread sa bawat user na hindi platform administrator, kasama ang mga guro, at sa lahat sa loob ng learning path. Sa threaded at nested views, nalalapat ang limitasyon sa mga sagot ng bawat post. Pinapanatili ang mga post ayon sa pagkakasunod-sunod ng view: ang mga una, o ang pinakabago sa loob ng learning path, kung saan nauuna ang pinakabagong mga post. Itakda sa 0 para ipakita ang bawat post."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Magpakita sa mga mag-aaral ng progress bar sa bawat forum thread, na umaabot sa 100% kapag na-post na nila ang bilang na ito ng mga mensahe dito. Binibilang ang mga post na naghihintay ng moderation. Itakda sa 0 para itago ang progress bar."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Nagdaragdag ng maliit na tracking image sa mga e-mail ng notification ng mensahe at nagtatala kapag ito ay hiniling. Ipinapahiwatig lamang nito na maaaring nabuksan ang e-mail; hindi nito pinapatunayan na nabasa ito."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Payagan ang mga tatanggap ng notification ng direktang mensahe na sumagot sa pamamagitan ng e-mail. Dapat i-route ng mail infrastructure ang mga papasok na mensahe sa Chamilo inbound-mail command."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Batayang address na ginagamit para sa pag-route ng sagot, halimbawa replies@example.com. Nagdaragdag ang Chamilo ng natatanging recipient token gamit ang plus addressing."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Koneksyon sa mailbox na ginagamit para kolektahin ang mga papasok na sagot, halimbawa imaps://user:password@imap.example.com:993/INBOX. I-URL-encode ang mga reserved character sa mga kredensyal."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Bilang ng araw na mananatiling naka-sign in ang user kapag pinili ang Remember me. Itakda sa 0 para i-disable. Nangangailangan ng HTTPS. Pinapayagang saklaw: 0 hanggang 90. Ang normal na session timeout ay naka-configure nang hiwalay sa PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Pinapayagan ang Dynamic Client Registration na humiling ng anumang scope na naka-register ng isang Chamilo OAuth resource server. Kapag naka-disable, nananatiling limitado sa MCP ang self-registration. Palaging pinaghihigpitan nang hiwalay ang access sa resource ayon sa allowed resource list ng bawat client."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "I-enable ang mga kumpidensyal na ulat ng insidente. Nangangailangan ang module ng protektadong encryption key at pahintulot ng investigator."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Sa pagitan ng 2 at 10 magkakaibang reporter ang dapat mag-ulat ng parehong user bago maging nakikita ng mga investigator ang kaso."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Payagan ang mga ebidensyang imahe, audio at maikling video. Nananatiling nababasa ang mga umiiral na attachment kapag naka-disable."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Magpakita ng panloob na indikasyon ng mga karapat-dapat na imbestigasyon. Hindi nagpapadala ng mga email o panlabas na notification."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Magpakita ng decision-tree chatbot sa chat panel na makakagabay sa mga user sa "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Pinapayagan ang mga guro na gumawa at mag-bersyon ng mga educational application na tinutulungan ng AI sa loob ng mga kurso."
+
+msgid "Department name"
+msgstr "Pangalan ng departamento"
+
+msgid "Documents and exercise"
+msgstr "Mga dokumento at ehersisyo"
+
+msgid "Documents and learning path"
+msgstr "Mga dokumento at learning path"
+
+msgid "Documents, exercise and learning path"
+msgstr "Mga dokumento, ehersisyo at learning path"
+
+msgid "session"
+msgstr "session"
+
+msgid "course"
+msgstr "kurso"
+
+msgid "You have been enrolled in %s"
+msgstr "Na-enroll ka sa %s"
 

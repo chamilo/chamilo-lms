@@ -340,7 +340,7 @@ msgid "Sincerely"
 msgstr "सादर"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "सूत्र नमूना: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "सूत्र नमूना: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "चर सीमाएं"
@@ -28764,6 +28764,9 @@ msgstr "वर्तमान उपयोगकर्ता नहीं मि
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "नमस्ते %s,<br><br>आप %s पर पंजीकृत हैं।<br>आप अपना खाता <a href=\"%s\">यहाँ</a> से पहुँच सकते हैं।<br><br>आपके लॉगिन प्रमाण-पत्र हैं:<br>उपयोगकर्ता नाम: <strong>%s</strong><br>पासवर्ड: <strong>%s</strong><br><br>शुभकामनाएँ,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "नमस्ते %s,<br><br>आप %s पर पंजीकृत हैं।<br>उपयोगकर्ता नाम: <strong>%s</strong><br><br>अपना पासवर्ड सेट करने और अपने खाते तक पहुँचने के लिए कृपया नीचे दिए गए लिंक पर क्लिक करें:<br><a href=\"%s\">अपना पासवर्ड सेट करें</a><br><br>सादर,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "आप %s पर पंजीकृत हैं"
 
@@ -41567,4 +41570,1616 @@ msgstr "माइग्रेशन इतिहास दर्ज है"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "प्रोजेक्ट रूट में %s मौजूद है: अपग्रेड एंडपॉइंट बंद करने के लिए इसे हटा दें"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "आपने इस अभ्यास के लिए प्रमाणपत्र अर्जित किया है"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "इस लर्निंग पाथ तक पहुँचने से पहले आपको लर्निंग पाथ \"%s\" पूरा करना होगा।"
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "क्या आप वाकई इस फ़ाइल को स्थायी रूप से हटाना चाहते हैं?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "क्या आप वाकई इस फ़ाइल को चयनित पाठ्यक्रम से अलग करना चाहते हैं?"
+
+msgid "Attach this file to another course"
+msgstr "इस फ़ाइल को किसी अन्य पाठ्यक्रम से जोड़ें"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "चयनित पाठ्यक्रम(ों) से जोड़ें (छिपा हुआ)"
+
+msgid "Course(s):"
+msgstr "पाठ्यक्रम:"
+
+msgid "Delete definitively"
+msgstr "स्थायी रूप से हटाएँ"
+
+msgid "Detach from this course"
+msgstr "इस पाठ्यक्रम से अलग करें"
+
+msgid "File actions"
+msgstr "फ़ाइल क्रियाएँ"
+
+msgid "File Information"
+msgstr "फ़ाइल जानकारी"
+
+msgid "File Link:"
+msgstr "फ़ाइल लिंक:"
+
+msgid "File Path:"
+msgstr "फ़ाइल पथ:"
+
+msgid "Filter courses..."
+msgstr "पाठ्यक्रम फ़िल्टर करें..."
+
+msgid "MIME Type:"
+msgstr "MIME प्रकार:"
+
+msgid "N/A"
+msgstr "लागू नहीं"
+
+msgid "No results found."
+msgstr "कोई परिणाम नहीं मिला।"
+
+msgid "Original Name"
+msgstr "मूल नाम"
+
+msgid "Original Name:"
+msgstr "मूल नाम:"
+
+msgid "Orphan"
+msgstr "अनाथ"
+
+msgid "Resource File ID:"
+msgstr "संसाधन फ़ाइल आईडी:"
+
+msgid "Resource Node ID:"
+msgstr "संसाधन नोड आईडी:"
+
+msgid "Search..."
+msgstr "खोजें..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "किसी विशिष्ट पाठ्यक्रम से इस फ़ाइल को अलग करने के लिए, ऊपर संबंधित पाठ्यक्रम टैग पर \"×\" आइकन पर क्लिक करें।"
+
+msgid "User:"
+msgstr "उपयोगकर्ता:"
+
+msgid "View file information"
+msgstr "फ़ाइल जानकारी देखें"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "आप इस फ़ाइल को एक या अधिक पाठ्यक्रमों से जोड़ सकते हैं (दस्तावेज़ रूट में छिपा हुआ)। यदि फ़ाइल अब उपयोग में नहीं है और अनाथ हो जाती है, तो आप इसे स्थायी रूप से भी हटा सकते हैं।"
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "आप एक या अधिक पाठ्यक्रम चुन सकते हैं (Ctrl/Cmd + क्लिक का उपयोग करें)।"
+
+msgid "bytes"
+msgstr "बाइट्स"
+
+msgid "Failed to copy:"
+msgstr "कॉपी करने में विफल:"
+
+msgid "Missing resource file identifier."
+msgstr "संसाधन फ़ाइल पहचानकर्ता अनुपस्थित है।"
+
+msgid "Please select at least one course."
+msgstr "कृपया कम से कम एक पाठ्यक्रम चुनें।"
+
+msgid "Resource file not found."
+msgstr "संसाधन फ़ाइल नहीं मिली।"
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "फ़ाइल \"%s\" को %d पाठ्यक्रम(ों) से जोड़ा गया है: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "कुछ पाठ्यक्रम छोड़ दिए गए: %s."
+
+msgid "Missing file or course identifier."
+msgstr "फ़ाइल या पाठ्यक्रम पहचानकर्ता अनुपस्थित है।"
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "इस संसाधन फ़ाइल का कोई संसाधन नोड नहीं है और इसे अलग नहीं किया जा सकता।"
+
+msgid "File has been detached from %d course link(s)."
+msgstr "फ़ाइल को %d पाठ्यक्रम लिंक(ों) से अलग कर दिया गया है।"
+
+msgid "This file is not attached to the selected course."
+msgstr "यह फ़ाइल चयनित पाठ्यक्रम से जुड़ी नहीं है।"
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "यह फ़ाइल अभी भी कम से कम एक संसाधन द्वारा उपयोग की जा रही है और इसे हटाया नहीं जा सकता।"
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "अनाथ फ़ाइल और उसकी भौतिक सामग्री स्थायी रूप से हटा दी गई है।"
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "सर्वेक्षण प्रकाशित। बनाए गए: %d. अपडेट किए गए: %d. संदेश भेजे गए: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "अर्जन योग्य"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "यह कौशल अर्जित नहीं किया जा सकता"
+
+#: issue-8179
+msgid "Novice"
+msgstr "नौसिखिया"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "नियमों और संदर्भ-मुक्त निर्देशों का कठोर पालन; बहुत कम स्थितिजन्य निर्णय।"
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "उन्नत शुरुआती"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "स्थितिजन्य पहलुओं और पैटर्न को पहचानना शुरू करता है, लेकिन अभी भी दिशानिर्देशों की आवश्यकता होती है।"
+
+#: issue-8179
+msgid "Competent"
+msgstr "सक्षम"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "योजना और मानसिक मॉडल विकसित करता है; परिणामों की जिम्मेदारी लेता है लेकिन जटिलता से अभिभूत महसूस कर सकता है।"
+
+#: issue-8179
+msgid "Proficient"
+msgstr "निपुण"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "\"बड़ी तस्वीर\" देखता है, सहज रूप से प्राथमिकता देता है, और अनुभव से सीखता है।"
+
+#: issue-8179
+msgid "Expert"
+msgstr "विशेषज्ञ"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "सहज, प्रवाहपूर्ण प्रदर्शन; गहन निहित ज्ञान पर निर्भर; आसानी से नवाचार कर सकता है या नई स्थितियों को संभाल सकता है।"
+
+#: issue-8179
+msgid "Remembering"
+msgstr "स्मरण"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "दीर्घकालिक स्मृति से प्रासंगिक ज्ञान प्राप्त करना, याद करना या पहचानना।"
+
+#: issue-8179
+msgid "Understanding"
+msgstr "समझना"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "मौखिक, लिखित और ग्राफिक संचार सहित निर्देशात्मक संदेशों से अर्थ निर्मित करना। व्याख्या, उदाहरण, वर्गीकरण, सारांश, अनुमान, तुलना या व्याख्या द्वारा समझ प्रदर्शित करना।"
+
+#: issue-8179
+msgid "Applying"
+msgstr "लागू करना"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "किसी दी गई स्थिति में प्रक्रिया को निष्पादित या लागू करके उसे पूरा करना या उपयोग करना। नई या ठोस स्थितियों में ज्ञान या कौशल का उपयोग करना।"
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "विश्लेषण करना"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "सामग्री को उसके घटक भागों में तोड़ना और यह निर्धारित करना कि भाग एक-दूसरे से तथा समग्र संरचना या उद्देश्य से कैसे संबंधित हैं। उद्देश्य, कारण या संबंध पहचानना।"
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "मूल्यांकन करना"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "मानदंडों और मानकों के आधार पर निर्णय लेना। निर्णयों या कार्रवाई के तरीकों की जाँच, आलोचना या औचित्य सिद्ध करना।"
+
+#: issue-8179
+msgid "Creating"
+msgstr "सृजन करना"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "तत्वों को एक सुसंगत या कार्यात्मक पूर्ण रूप में जोड़ना; तत्वों को नए पैटर्न या संरचना में पुनर्गठित करना। मूल कार्य उत्पन्न करना या नए विचार पैदा करना।"
+
+#: issue-8179
+msgid "Follow"
+msgstr "अनुसरण करना"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "निकट पर्यवेक्षण और निर्देशन में कार्य करता है। सीमित विवेक के साथ नियमित कार्य करता है। निर्देशों का पालन और मूल निष्पादन पर केंद्रित रहता है।"
+
+#: issue-8179
+msgid "Assist"
+msgstr "सहायता करना"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "नियमित पर्यवेक्षण में कार्य करता है। दूसरों को सहायता प्रदान करता है, टीम कार्यों में योगदान देता है, और निर्धारित सीमाओं के भीतर कुछ पहल करना शुरू करता है।"
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "सामान्य पर्यवेक्षण में कार्य करता है। नियमित और गैर-नियमित गतिविधियों की श्रृंखला में ज्ञान और कौशल लागू करता है। कुछ विवेक और निर्णय का प्रयोग करता है।"
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "व्यापक निर्देशन में कार्य करता है। विशेषज्ञ मार्गदर्शन, समर्थन या सेवाएँ प्रदान करके दूसरों को सक्षम बनाता है। अपने कार्य की जिम्मेदारी लेता है और छोटी टीमों या कार्यों का पर्यवेक्षण कर सकता है।"
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "सुनिश्चित करना और सलाह देना"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "व्यापक निर्देशन में किंतु महत्वपूर्ण स्वायत्तता के साथ कार्य करता है। सुनिश्चित करता है कि कार्य उद्देश्यों को पूरा करे और जटिल मामलों पर सलाह देता है। अक्सर टीमों या परियोजनाओं का नेतृत्व करता है और निर्णयों को प्रभावित करता है।"
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "आरंभ करना और प्रभाव डालना"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "कार्य के महत्वपूर्ण क्षेत्र के लिए परिभाषित प्राधिकार और जिम्मेदारी रखता है। कार्रवाई आरंभ करता है, अपने क्षेत्र में रणनीति और नीति को प्रभावित करता है, और बड़े परियोजनाओं या टीमों का नेतृत्व करता है।"
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "रणनीति निर्धारित करना, प्रेरित करना, संगठित करना"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "कार्य के प्रमुख क्षेत्र के लिए उच्चतम संगठनात्मक स्तर पर प्राधिकार रखता है। दीर्घकालिक रणनीति निर्धारित करता है, दूसरों को प्रेरित और संगठित करता है, और संगठनात्मक सफलता के लिए महत्वपूर्ण निर्णय लेता है। उद्योग या बाहरी स्तरों पर प्रभाव डालता है।"
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "विचार करने के लिए अधिकतम निष्क्रिय समय (मिनट)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "खुला छोड़ा गया पाठ्यक्रम पृष्ठ स्वचालित अनुरोध भेजता रहता है। उपयोगकर्ता की वास्तविक कार्रवाई (पृष्ठ या आइटम खोलना, उत्तर देना आदि) के बिना इतने मिनट बाद, पाठ्यक्रम में बिताया गया समय गिना जाना बंद हो जाता है।"
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "सहयोगी विकि संपादक"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Etherpad से कनेक्ट हो रहा है..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "सहेजने से वर्तमान Etherpad सामग्री से एक नया Chamilo विकि संस्करण बनता है।"
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "सहयोगी संपादक लोड नहीं हो सका।"
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "विकि संपादन के लिए Etherpad सक्षम करें"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "मौजूदा विकि पृष्ठों के लिए सहयोगी संपादक के रूप में Etherpad का उपयोग करें। सुरक्षित एम्बेडेड सत्रों के लिए Etherpad को Chamilo के समान मूल पर उपलब्ध होना चाहिए।"
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpad इंस्टेंस का आधार URL, वैकल्पिक रिवर्स-प्रॉक्सी पथ सहित। उदाहरण: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API कुंजी"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "पैड, सत्र बनाने और विकि सामग्री सिंक्रनाइज़ करने के लिए Chamilo द्वारा उपयोग की जाने वाली API कुंजी। API-कुंजी प्रमाणीकरण स्वीकार करने के लिए Etherpad कॉन्फ़िगर करें।"
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "नए दस्तावेज़ों की डिफ़ॉल्ट दृश्यता पाठ्यक्रम द्वारा बदली जा सकती है"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "जब शिक्षक पाठ्यक्रम में नया दस्तावेज़, फ़ोल्डर या अपलोड की गई फ़ाइल बनाता है तो दी गई दृश्यता। शिक्षक बाद में प्रत्येक की दृश्यता बदल सकते हैं।"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "सक्षम होने पर, शिक्षक प्लेटफ़ॉर्म डिफ़ॉल्ट के बजाय अपने पाठ्यक्रम के नए दस्तावेज़ों को दी जाने वाली दृश्यता पाठ्यक्रम सेटिंग्स में चुन सकते हैं।"
+
+msgid "Default visibility of new learning paths"
+msgstr "नए अधिगम पथों की डिफ़ॉल्ट दृश्यता"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "नए अधिगम पथों की डिफ़ॉल्ट दृश्यता पाठ्यक्रम द्वारा बदली जा सकती है"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "जब शिक्षक पाठ्यक्रम में नया अधिगम पथ बनाता है तो दी गई दृश्यता। शिक्षक बाद में प्रत्येक की दृश्यता बदल सकते हैं।"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "सक्षम होने पर, शिक्षक प्लेटफ़ॉर्म डिफ़ॉल्ट के बजाय अपने पाठ्यक्रम के नए अधिगम पथों को दी जाने वाली दृश्यता पाठ्यक्रम सेटिंग्स में चुन सकते हैं।"
+
+msgid "Default visibility of new tests"
+msgstr "नए परीक्षणों की डिफ़ॉल्ट दृश्यता"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "नए परीक्षणों की डिफ़ॉल्ट दृश्यता पाठ्यक्रम द्वारा बदली जा सकती है"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "जब शिक्षक किसी पाठ्यक्रम में नया परीक्षण बनाता है तो उसे दी गई दृश्यता। शिक्षक बाद में प्रत्येक की दृश्यता बदल सकते हैं।"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "सक्षम होने पर, शिक्षक प्लेटफ़ॉर्म डिफ़ॉल्ट के बजाय अपने पाठ्यक्रम की सेटिंग में नए परीक्षणों की दृश्यता चुन सकते हैं।"
+
+msgid "Default visibility for new learning paths"
+msgstr "नए अधिगम पथों के लिए डिफ़ॉल्ट दृश्यता"
+
+msgid "Default visibility for new tests"
+msgstr "नए परीक्षणों के लिए डिफ़ॉल्ट दृश्यता"
+
+msgid "Following"
+msgstr "अनुसरण कर रहे"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "जब कोई शिक्षार्थी इस असाइनमेंट की प्रस्तुति पर टिप्पणी करे तो ई-मेल प्राप्त करें"
+
+msgid "Payment history"
+msgstr "भुगतान इतिहास"
+
+msgid "No payments yet"
+msgstr "अभी तक कोई भुगतान नहीं"
+
+msgid "Cancel service"
+msgstr "सेवा रद्द करें"
+
+msgid "Official transcript"
+msgstr "आधिकारिक प्रतिलेख"
+
+msgid "Unofficial transcript"
+msgstr "अनौपचारिक प्रतिलेख"
+
+msgid "Student name"
+msgstr "छात्र का नाम"
+
+msgid "Student number"
+msgstr "छात्र संख्या"
+
+msgid "Program title"
+msgstr "कार्यक्रम का शीर्षक"
+
+msgid "Required hours"
+msgstr "आवश्यक घंटे"
+
+msgid "Completion date"
+msgstr "पूर्णता तिथि"
+
+msgid "Hours completed"
+msgstr "पूर्ण किए गए घंटे"
+
+msgid "Final grade"
+msgstr "अंतिम ग्रेड"
+
+msgid "Grade"
+msgstr "ग्रेड"
+
+msgid "No completed course yet."
+msgstr "अभी तक कोई पूर्ण पाठ्यक्रम नहीं।"
+
+msgid "Grading scale"
+msgstr "ग्रेडिंग पैमाना"
+
+msgid "Signature of school official"
+msgstr "विद्यालय अधिकारी के हस्ताक्षर"
+
+msgid "School official"
+msgstr "विद्यालय अधिकारी"
+
+msgid "Official's title"
+msgstr "अधिकारी का पदनाम"
+
+msgid "Verify this transcript at"
+msgstr "इस प्रतिलेख को यहाँ सत्यापित करें"
+
+msgid "Verification code"
+msgstr "सत्यापन कोड"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "यह अनौपचारिक प्रतिलेख हस्ताक्षरित नहीं है। आधिकारिक प्रतिलेख के लिए व्यवस्थापक से पूछें।"
+
+msgid "Transcript verification"
+msgstr "प्रतिलेख सत्यापन"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "जाँचें कि यह आधिकारिक प्रतिलेख संस्थान द्वारा जारी और हस्ताक्षरित है, बदला नहीं गया है और रद्द नहीं किया गया है।"
+
+msgid "Valid"
+msgstr "मान्य"
+
+msgid "Invalid signature"
+msgstr "अमान्य हस्ताक्षर"
+
+msgid "Transcript not found"
+msgstr "प्रतिलेख नहीं मिला"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "संस्थान के हस्ताक्षर मान्य हैं और यह प्रतिलेख रद्द नहीं किया गया है।"
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "इस प्रतिलेख को मान्य के रूप में सत्यापित नहीं किया जा सकता। इसके विवरण प्रदर्शित नहीं किए जाते।"
+
+msgid "Transcript details"
+msgstr "प्रतिलेख विवरण"
+
+msgid "Institution"
+msgstr "संस्थान"
+
+msgid "Issued on"
+msgstr "जारी तिथि"
+
+msgid "Download verification JSON"
+msgstr "सत्यापन JSON डाउनलोड करें"
+
+msgid "Transcript"
+msgstr "प्रतिलेख"
+
+msgid "My confidential reports"
+msgstr "मेरी गोपनीय रिपोर्टें"
+
+msgid "My transcript"
+msgstr "मेरा प्रतिलेख"
+
+msgid "Confidential investigations"
+msgstr "गोपनीय जाँचें"
+
+msgid "Floor plan"
+msgstr "तल योजना"
+
+msgid "Click a highlighted room to select it"
+msgstr "चयन करने के लिए हाइलाइट किए गए कक्ष पर क्लिक करें"
+
+msgid "Select room"
+msgstr "कक्ष चुनें"
+
+msgid "Room on floor plan"
+msgstr "तल योजना पर कक्ष"
+
+msgid "Select a branch first"
+msgstr "पहले एक शाखा चुनें"
+
+msgid "The branch has no attached floor plan"
+msgstr "शाखा से कोई तल योजना जुड़ी नहीं है"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "कक्ष की रूपरेखा बनाने के लिए बहुभुज उपकरण का उपयोग करें; कोनों को स्थानांतरित करने के लिए संपादित करें का उपयोग करें"
+
+msgid "Save room area"
+msgstr "कक्ष क्षेत्र सहेजें"
+
+msgid "Clear room area"
+msgstr "कक्ष क्षेत्र साफ़ करें"
+
+msgid "Save the room form to persist the area"
+msgstr "क्षेत्र को स्थायी करने के लिए कक्ष फ़ॉर्म सहेजें"
+
+msgid "Floor plan unavailable"
+msgstr "फ़्लोर प्लान उपलब्ध नहीं है"
+
+msgid "Room map points must be within the floor plan"
+msgstr "कक्ष मानचित्र बिंदु फ़्लोर प्लान के भीतर होने चाहिए"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "क्या आप वाकई कक्ष क्षेत्र साफ़ करना चाहते हैं?"
+
+msgid "View room on floor plan"
+msgstr "फ़्लोर प्लान पर कक्ष देखें"
+
+msgid "No floor plan available"
+msgstr "कोई फ़्लोर प्लान उपलब्ध नहीं है"
+
+msgid "This is an assignment by groups"
+msgstr "यह समूहों द्वारा दिया गया असाइनमेंट है"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "PNG, JPEG या सुरक्षित स्थैतिक SVG फ़्लोर प्लान अपलोड करें, या दस्तावेज़ों से कोई मौजूदा छवि चुनें।"
+
+msgid "Upload floor plan"
+msgstr "फ़्लोर प्लान अपलोड करें"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG या स्थैतिक SVG, अधिकतम 10 MB"
+
+msgid "Search images by name"
+msgstr "नाम से छवियाँ खोजें"
+
+msgid "Image name"
+msgstr "छवि का नाम"
+
+msgid "Select an image"
+msgstr "एक छवि चुनें"
+
+msgid "Change floor plan"
+msgstr "फ़्लोर प्लान बदलें"
+
+msgid "Attach floor plan"
+msgstr "फ़्लोर प्लान संलग्न करें"
+
+msgid "No matching images found in Documents."
+msgstr "दस्तावेज़ों में कोई मेल खाती छवि नहीं मिली।"
+
+msgid "Current floor plan"
+msgstr "वर्तमान फ़्लोर प्लान"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "फ़्लोर प्लान परिवर्तन स्वचालित रूप से सहेजे जाते हैं।"
+
+msgid "Remove floor plan"
+msgstr "फ़्लोर प्लान हटाएँ"
+
+msgid "Cannot load images"
+msgstr "छवियाँ लोड नहीं हो सकतीं"
+
+msgid "Floor plan saved"
+msgstr "फ़्लोर प्लान सहेजा गया"
+
+msgid "Cannot attach floor plan"
+msgstr "फ़्लोर प्लान संलग्न नहीं किया जा सकता"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "केवल PNG/JPEG और सुरक्षित स्थैतिक SVG छवियाँ, अधिकतम 10MB, समर्थित हैं।"
+
+msgid "Cannot upload floor plan"
+msgstr "फ़्लोर प्लान अपलोड नहीं किया जा सकता"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "क्या आप वाकई फ़्लोर प्लान हटाना चाहते हैं?"
+
+msgid "Floor plan removed"
+msgstr "फ़्लोर प्लान हटाया गया"
+
+msgid "Cannot remove floor plan"
+msgstr "फ़्लोर प्लान हटाया नहीं जा सकता"
+
+msgid "Support bot"
+msgstr "सहायता बॉट"
+
+msgid "Connected"
+msgstr "कनेक्टेड"
+
+msgid "Not connected"
+msgstr "कनेक्ट नहीं है"
+
+msgid "View ticket"
+msgstr "टिकट देखें"
+
+msgid "Start a new conversation"
+msgstr "नई बातचीत शुरू करें"
+
+msgid "Video call"
+msgstr "वीडियो कॉल"
+
+msgid "Incoming video call"
+msgstr "आने वाली वीडियो कॉल"
+
+msgid "Decline"
+msgstr "अस्वीकार करें"
+
+msgid "Mute microphone"
+msgstr "माइक्रोफ़ोन म्यूट करें"
+
+msgid "Unmute microphone"
+msgstr "माइक्रोफ़ोन अनम्यूट करें"
+
+msgid "Turn camera off"
+msgstr "कैमरा बंद करें"
+
+msgid "Turn camera on"
+msgstr "कैमरा चालू करें"
+
+msgid "Hang up"
+msgstr "कॉल काटें"
+
+msgid "Calling..."
+msgstr "कॉल हो रही है..."
+
+msgid "Connecting..."
+msgstr "कनेक्ट हो रहा है..."
+
+msgid "Your contact is busy."
+msgstr "आपका संपर्क व्यस्त है।"
+
+msgid "Your contact did not answer the call."
+msgstr "आपके संपर्क ने कॉल का उत्तर नहीं दिया।"
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "आपका संपर्क कैमरा या माइक्रोफ़ोन तक पहुँच नहीं सका।"
+
+msgid "Your contact could not prepare the video call."
+msgstr "आपका संपर्क वीडियो कॉल तैयार नहीं कर सका।"
+
+msgid "Your contact refused the call."
+msgstr "आपके संपर्क ने कॉल अस्वीकार कर दी।"
+
+msgid "The call timed out."
+msgstr "कॉल का समय समाप्त हो गया।"
+
+msgid "Your contact cancelled the call."
+msgstr "आपके संपर्क ने कॉल रद्द कर दी।"
+
+msgid "The video connection was lost."
+msgstr "वीडियो कनेक्शन खो गया।"
+
+msgid "Your contact could not establish the video connection."
+msgstr "आपका संपर्क वीडियो कनेक्शन स्थापित नहीं कर सका।"
+
+msgid "Your contact could not complete the video call setup."
+msgstr "आपका संपर्क वीडियो कॉल सेटअप पूरा नहीं कर सका।"
+
+msgid "Your contact hung up."
+msgstr "आपके संपर्क ने कॉल काट दी।"
+
+msgid "Video call could not be started"
+msgstr "वीडियो कॉल शुरू नहीं की जा सकी"
+
+msgid "Camera or microphone permission was denied."
+msgstr "कैमरा या माइक्रोफ़ोन की अनुमति अस्वीकृत कर दी गई।"
+
+msgid "No camera or microphone was found."
+msgstr "कोई कैमरा या माइक्रोफ़ोन नहीं मिला।"
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "कैमरा या माइक्रोफ़ोन पहले से उपयोग में है या उपलब्ध नहीं है।"
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "कैमरा या माइक्रोफ़ोन आवश्यक सेटिंग्स का समर्थन नहीं करता।"
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "कैमरा या माइक्रोफ़ोन तक पहुँच प्राप्त नहीं की जा सकी।"
+
+msgid "The video call could not be prepared."
+msgstr "वीडियो कॉल तैयार नहीं की जा सकी।"
+
+msgid "The video call request could not be sent."
+msgstr "वीडियो कॉल अनुरोध भेजा नहीं जा सका।"
+
+msgid "The incoming video call could not be processed."
+msgstr "आने वाली वीडियो कॉल संसाधित नहीं की जा सकी।"
+
+msgid "The video call answer could not be prepared."
+msgstr "वीडियो कॉल का उत्तर तैयार नहीं किया जा सका।"
+
+msgid "The video call answer could not be sent."
+msgstr "वीडियो कॉल का उत्तर भेजा नहीं जा सका।"
+
+msgid "The video call answer could not be processed."
+msgstr "वीडियो कॉल का उत्तर संसाधित नहीं किया जा सका।"
+
+msgid "The video connection failed"
+msgstr "वीडियो कनेक्शन विफल रहा"
+
+msgid "The video connection could not be established."
+msgstr "वीडियो कनेक्शन स्थापित नहीं किया जा सका।"
+
+msgid "No answer was received."
+msgstr "कोई उत्तर प्राप्त नहीं हुआ।"
+
+msgid "You refused the call."
+msgstr "आपने कॉल अस्वीकार कर दी।"
+
+msgid "You cancelled the call."
+msgstr "आपने कॉल रद्द कर दी।"
+
+msgid "You hung up."
+msgstr "आपने कॉल काट दी।"
+
+msgid "You missed the call."
+msgstr "आपकी कॉल छूट गई।"
+
+msgid "Support bot is currently unavailable."
+msgstr "सहायता बॉट इस समय उपलब्ध नहीं है।"
+
+msgid "A support ticket has been created."
+msgstr "एक सहायता टिकट बना दिया गया है।"
+
+msgid "Conversation ended."
+msgstr "बातचीत समाप्त हो गई।"
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "सहायता बॉट इस बातचीत को जारी नहीं रख सका। कृपया पुनः प्रयास करें।"
+
+msgid "Add your first term glossary to this course"
+msgstr "इस पाठ्यक्रम में अपना पहला शब्दावली पद जोड़ें"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "क्या आप वाकई इस सर्वेक्षण टेम्पलेट को हटाना चाहते हैं?"
+
+msgid "The survey template has been deleted."
+msgstr "सर्वेक्षण टेम्पलेट हटा दिया गया है।"
+
+msgid "Please select a course."
+msgstr "कृपया एक पाठ्यक्रम चुनें।"
+
+msgid "Please select a session for this course."
+msgstr "कृपया इस पाठ्यक्रम के लिए एक सत्र चुनें।"
+
+msgid "The survey has been created from the template."
+msgstr "टेम्पलेट से सर्वेक्षण बना दिया गया है।"
+
+msgid "Survey templates"
+msgstr "सर्वेक्षण टेम्पलेट"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "शिक्षकों के लिए पुन: उपयोग योग्य सर्वेक्षण टेम्पलेट बनाएँ और उन्हें सीधे किसी पाठ्यक्रम या सत्र को सौंपें।"
+
+msgid "Subtitle"
+msgstr "उपशीर्षक"
+
+msgid "Assign to course"
+msgstr "पाठ्यक्रम को सौंपें"
+
+msgid "Assign template to course"
+msgstr "टेम्पलेट पाठ्यक्रम को सौंपें"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "सर्वेक्षण सीधे पाठ्यक्रम में बनाने के लिए सत्र खाली छोड़ें।"
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "यह पाठ्यक्रम इस पोर्टल पर एक सत्र के माध्यम से उपलब्ध है, इसलिए सत्र आवश्यक है।"
+
+msgid "Survey template questions"
+msgstr "सर्वेक्षण टेम्पलेट प्रश्न"
+
+msgid "Back to survey templates"
+msgstr "सर्वेक्षण टेम्पलेट पर वापस जाएँ"
+
+msgid "Could not load survey template"
+msgstr "सर्वेक्षण टेम्पलेट लोड नहीं किया जा सका"
+
+msgid "Could not load survey template questions"
+msgstr "सर्वेक्षण टेम्पलेट प्रश्न लोड नहीं किए जा सके"
+
+msgid "Could not save survey template question"
+msgstr "सर्वेक्षण टेम्पलेट प्रश्न सहेजा नहीं जा सका"
+
+msgid "Could not delete survey template question"
+msgstr "सर्वेक्षण टेम्पलेट प्रश्न हटाया नहीं जा सका"
+
+msgid "Could not move survey template question"
+msgstr "सर्वेक्षण टेम्पलेट प्रश्न स्थानांतरित नहीं किया जा सका"
+
+msgid "Could not copy survey template question"
+msgstr "सर्वेक्षण टेम्पलेट प्रश्न कॉपी नहीं किया जा सका"
+
+msgid "The survey template has been saved."
+msgstr "सर्वेक्षण टेम्पलेट सहेज दिया गया है।"
+
+msgid "Edit survey template"
+msgstr "सर्वेक्षण टेम्पलेट संपादित करें"
+
+msgid "Create survey template"
+msgstr "सर्वेक्षण टेम्पलेट बनाएँ"
+
+msgid "The survey template title is required."
+msgstr "सर्वेक्षण टेम्पलेट का शीर्षक आवश्यक है।"
+
+msgid "Visible as template"
+msgstr "टेम्पलेट के रूप में दृश्यमान"
+
+msgid "Create satisfaction survey"
+msgstr "संतुष्टि सर्वेक्षण बनाएँ"
+
+msgid "Training satisfaction survey"
+msgstr "प्रशिक्षण संतुष्टि सर्वेक्षण"
+
+msgid "Could not create satisfaction survey"
+msgstr "संतुष्टि सर्वेक्षण नहीं बनाया जा सका"
+
+msgid "Use template"
+msgstr "टेम्पलेट का उपयोग करें"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "प्रशासक द्वारा तैयार पुन: प्रयोज्य टेम्पलेट से यह सर्वेक्षण बनाएँ।"
+
+msgid "Results hidden from teacher/tutor"
+msgstr "शिक्षक/ट्यूटर से परिणाम छिपे हुए"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "शिक्षक और ट्यूटर अभी भी प्रतिक्रियाओं की संख्या देख सकते हैं और अनुस्मारक भेज सकते हैं, लेकिन सर्वेक्षण परिणाम खोल या निर्यात नहीं कर सकते।"
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "टेम्पलेट लागू किया गया। सर्वेक्षण सेटिंग्स की समीक्षा करें और बनाने के लिए सहेजें।"
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "सर्वेक्षण परिणाम शिक्षकों और ट्यूटरों से छिपे हुए हैं।"
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "आप अभी भी आमंत्रण पृष्ठ का उपयोग करके प्रतिक्रियाओं की संख्या देख सकते हैं और अनुस्मारक भेज सकते हैं।"
+
+msgid "Payment method"
+msgstr "भुगतान विधि"
+
+msgid "Preview mode"
+msgstr "पूर्वावलोकन मोड"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "पूर्वावलोकन मोड में प्रगति और अंक सहेजे नहीं जाते।"
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "यह लिंक सीखने के पथ के अंदर प्रदर्शित नहीं किया जा सकता।"
+
+msgid "Open it in a new tab to view the page."
+msgstr "पृष्ठ देखने के लिए इसे नए टैब में खोलें।"
+
+msgid "Report a problem with this question"
+msgstr "इस प्रश्न में समस्या की रिपोर्ट करें"
+
+msgid "Your report was sent to the teacher."
+msgstr "आपकी रिपोर्ट शिक्षक को भेज दी गई।"
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "आपको मिली त्रुटि या समस्या का वर्णन करें। आपकी रिपोर्ट शिक्षक को भेजी जाएगी।"
+
+msgid "A comment is required."
+msgstr "टिप्पणी आवश्यक है।"
+
+msgid "Could not send the report."
+msgstr "रिपोर्ट नहीं भेजी जा सकी।"
+
+msgid "Learner reports"
+msgstr "शिक्षार्थी रिपोर्टें"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "इस प्रश्न के लिए कोई शिक्षार्थी रिपोर्ट जमा नहीं की गई है।"
+
+msgid "View attempt"
+msgstr "प्रयास देखें"
+
+msgid "Could not load learner reports."
+msgstr "शिक्षार्थी रिपोर्टें लोड नहीं की जा सकीं।"
+
+msgid "Allow learners to report issues in questions"
+msgstr "शिक्षार्थियों को प्रश्नों में समस्याएँ रिपोर्ट करने की अनुमति दें"
+
+msgid "Skill acquired"
+msgstr "कौशल अर्जित"
+
+msgid "AI Toolbox"
+msgstr "एआई टूलबॉक्स"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "एआई से इंटरैक्टिव शैक्षिक अनुप्रयोग बनाएँ और SCORM से शिक्षार्थी प्रगति ट्रैक करें।"
+
+msgid "No published applications are available yet."
+msgstr "अभी तक कोई प्रकाशित अनुप्रयोग उपलब्ध नहीं है।"
+
+msgid "Interactive applications"
+msgstr "इंटरैक्टिव अनुप्रयोग"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "एक ही स्थान से संस्करण बनाएँ, सुधारें, प्रकाशित करें और समीक्षा करें।"
+
+msgid "Open an application to continue from your latest progress."
+msgstr "अपनी नवीनतम प्रगति से जारी रखने के लिए कोई अनुप्रयोग खोलें।"
+
+msgid "Interactive learning application"
+msgstr "इंटरैक्टिव अधिगम अनुप्रयोग"
+
+msgid "Create an interactive learning app"
+msgstr "इंटरैक्टिव अधिगम ऐप बनाएँ"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "गतिविधि का वर्णन करें। चामिलो प्रगति और अंक ट्रैकिंग वाला संस्करणित SCORM अनुप्रयोग उत्पन्न करेगा।"
+
+msgid "Idea"
+msgstr "विचार"
+
+msgid "Application"
+msgstr "अनुप्रयोग"
+
+msgid "What should the application do?"
+msgstr "अनुप्रयोग को क्या करना चाहिए?"
+
+msgid "How it works"
+msgstr "यह कैसे काम करता है"
+
+msgid "AI generation"
+msgstr "एआई जनरेशन"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "ऐप आपके निर्देशों से उत्पन्न होता है और संस्करण 1 के रूप में संग्रहीत होता है।"
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "शिक्षार्थी की प्रगति, अंक और पुनः आरंभ डेटा चामिलो को रिपोर्ट किया जाता है।"
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "भविष्य के सुधार पिछले संस्करणों को हटाए बिना नए संस्करण बनाते हैं।"
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "अधिगम उद्देश्य, नियम, स्तर, अंक और शिक्षार्थी के समाप्त होने पर क्या होना चाहिए, शामिल करें।"
+
+msgid "You are not allowed to create content in this context."
+msgstr "आपको इस संदर्भ में सामग्री बनाने की अनुमति नहीं है।"
+
+msgid "The application was generated successfully."
+msgstr "अनुप्रयोग सफलतापूर्वक उत्पन्न किया गया।"
+
+msgid "Open in student view"
+msgstr "छात्र दृश्य में खोलें"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "पूर्वावलोकन और प्रकाशन सक्षम करने के लिए अनुप्रयोग जनरेट करें।"
+
+msgid "Improve with AI"
+msgstr "एआई से सुधारें"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "परिवर्तन का वर्णन करें। एक नया संस्करण बनाया जाएगा और पिछले संस्करण उपलब्ध रहेंगे।"
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "उस संपूर्ण इंटरैक्टिव गतिविधि का वर्णन करें जिसे आप जनरेट करना चाहते हैं।"
+
+msgid "What should be improved?"
+msgstr "क्या सुधारा जाना चाहिए?"
+
+msgid "Generate new version"
+msgstr "नया संस्करण जनरेट करें"
+
+msgid "Version history"
+msgstr "संस्करण इतिहास"
+
+msgid "Preview, download or restore any generated version."
+msgstr "किसी भी जनरेट किए गए संस्करण का पूर्वावलोकन, डाउनलोड या पुनर्स्थापन करें।"
+
+msgid "A new version was generated."
+msgstr "एक नया संस्करण जनरेट किया गया।"
+
+msgid "Version restored"
+msgstr "संस्करण पुनर्स्थापित"
+
+msgid "The support bot tree has been published."
+msgstr "सहायता बॉट ट्री प्रकाशित कर दिया गया है।"
+
+msgid "The support bot tree has been archived."
+msgstr "सहायता बॉट ट्री संग्रहीत कर दिया गया है।"
+
+msgid "The support bot tree has been duplicated."
+msgstr "सहायता बॉट ट्री की प्रतिलिपि बना दी गई है।"
+
+msgid "The support bot tree has been deleted."
+msgstr "सहायता बॉट ट्री हटा दिया गया है।"
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "क्या आप वाकई इस सहायता बॉट ट्री को हटाना चाहते हैं?"
+
+msgid "The support bot tree has been imported."
+msgstr "सहायता बॉट ट्री आयात कर दिया गया है।"
+
+msgid "Create support bot tree"
+msgstr "सहायता बॉट ट्री बनाएँ"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "एक निश्चित निर्णय वृक्ष बनाएँ जो उपयोगकर्ताओं को सहायता प्रश्नों के माध्यम से मार्गदर्शन करे और टिकट तक बढ़ा सके।"
+
+msgid "Portal scope"
+msgstr "पोर्टल दायरा"
+
+msgid "Duplicate"
+msgstr "प्रतिलिपि बनाएँ"
+
+msgid "Archive"
+msgstr "संग्रहित करें"
+
+msgid "View conversations"
+msgstr "वार्तालाप देखें"
+
+msgid "Import support bot tree"
+msgstr "सहायता बॉट ट्री आयात करें"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "JSON निर्यात या CSV निर्णय वृक्ष आयात करें। आयातित ट्री हमेशा नए ड्राफ्ट के रूप में बनाया जाता है।"
+
+msgid "Resolved"
+msgstr "समाधान हुआ"
+
+msgid "Escalated"
+msgstr "एस्केलेट किया गया"
+
+msgid "Abandoned"
+msgstr "छोड़ दिया गया"
+
+msgid "Support bot conversations"
+msgstr "सहायता बॉट वार्तालाप"
+
+msgid "Outcome"
+msgstr "परिणाम"
+
+msgid "Started at"
+msgstr "प्रारंभ समय"
+
+msgid "Ended at"
+msgstr "समाप्ति समय"
+
+msgid "View conversation"
+msgstr "वार्तालाप देखें"
+
+msgid "Go to node"
+msgstr "नोड पर जाएँ"
+
+msgid "Create support ticket"
+msgstr "सहायता टिकट बनाएँ"
+
+msgid "End conversation"
+msgstr "वार्तालाप समाप्त करें"
+
+msgid "Node"
+msgstr "नोड"
+
+msgid "A support bot tree requires at least one node."
+msgstr "सहायता बॉट ट्री के लिए कम से कम एक नोड आवश्यक है।"
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "क्या आप वाकई इस नोड को हटाना चाहते हैं? इससे जुड़े लिंक साफ़ कर दिए जाएँगे।"
+
+msgid "Every support bot node requires at least one option."
+msgstr "प्रत्येक सहायता बॉट नोड के लिए कम से कम एक विकल्प आवश्यक है।"
+
+msgid "The support bot tree title is required."
+msgstr "सहायता बॉट ट्री का शीर्षक आवश्यक है।"
+
+msgid "A support bot entry node is required."
+msgstr "सहायता बॉट प्रवेश नोड आवश्यक है।"
+
+msgid "Every support bot node requires content."
+msgstr "प्रत्येक सहायता बॉट नोड में सामग्री आवश्यक है।"
+
+msgid "Every support bot option requires a label."
+msgstr "प्रत्येक सहायता बॉट विकल्प के लिए लेबल आवश्यक है।"
+
+msgid "Select a target node for every go-to option."
+msgstr "प्रत्येक गो-टू विकल्प के लिए लक्ष्य नोड चुनें।"
+
+msgid "Enter a relative URL for every link option."
+msgstr "प्रत्येक लिंक विकल्प के लिए सापेक्ष URL दर्ज करें।"
+
+msgid "Select a ticket category for every escalation option."
+msgstr "प्रत्येक एस्केलेशन विकल्प के लिए टिकट श्रेणी चुनें।"
+
+msgid "The support bot tree has been saved."
+msgstr "सहायता बॉट ट्री सहेज दिया गया है।"
+
+msgid "Edit support bot tree"
+msgstr "सहायता बॉट ट्री संपादित करें"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "प्रकाशित और संग्रहीत सहायता बॉट संस्करण केवल पढ़ने योग्य हैं। नया ड्राफ्ट संस्करण संपादित करने के लिए सूची से इस ट्री की प्रतिलिपि बनाएँ।"
+
+msgid "Default ticket project"
+msgstr "डिफ़ॉल्ट टिकट प्रोजेक्ट"
+
+msgid "Decision tree rules"
+msgstr "निर्णय वृक्ष नियम"
+
+msgid "Every node must contain at least one option."
+msgstr "प्रत्येक नोड में कम से कम एक विकल्प होना चाहिए।"
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "अंतिम नोड को बातचीत समाप्त करनी चाहिए या सपोर्ट टिकट बनाना चाहिए।"
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "v1 में गो-टू लिंक चक्र नहीं बना सकते।"
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "v1 में बाहरी URL की अनुमति नहीं है; लिंक क्रियाओं में सापेक्ष Chamilo पथ का उपयोग होना चाहिए।"
+
+msgid "Nodes"
+msgstr "नोड्स"
+
+msgid "Add node"
+msgstr "नोड जोड़ें"
+
+msgid "Entry node"
+msgstr "प्रवेश नोड"
+
+msgid "Set as entry node"
+msgstr "प्रवेश नोड के रूप में सेट करें"
+
+msgid "Target node"
+msgstr "लक्ष्य नोड"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "सापेक्ष Chamilo पथ का उपयोग करें, उदाहरण के लिए /tickets।"
+
+msgid "Ticket category"
+msgstr "टिकट श्रेणी"
+
+msgid "Select a default ticket project first."
+msgstr "पहले एक डिफ़ॉल्ट टिकट प्रोजेक्ट चुनें।"
+
+msgid "Closing message"
+msgstr "समापन संदेश"
+
+msgid "Select a node to edit it."
+msgstr "संपादित करने के लिए एक नोड चुनें।"
+
+msgid "Support bot conversation"
+msgstr "सपोर्ट बॉट बातचीत"
+
+msgid "Transcript of %s"
+msgstr "%s का ट्रांसक्रिप्ट"
+
+msgid "Download unofficial transcript"
+msgstr "अनौपचारिक ट्रांसक्रिप्ट डाउनलोड करें"
+
+msgid "Issue official transcript"
+msgstr "आधिकारिक ट्रांसक्रिप्ट जारी करें"
+
+msgid "Official transcripts"
+msgstr "आधिकारिक ट्रांसक्रिप्ट"
+
+msgid "No official transcript has been issued yet."
+msgstr "अभी तक कोई आधिकारिक ट्रांसक्रिप्ट जारी नहीं किया गया है।"
+
+msgid "Issued by"
+msgstr "जारीकर्ता"
+
+msgid "Verify"
+msgstr "सत्यापित करें"
+
+msgid "Signature of official transcripts"
+msgstr "आधिकारिक ट्रांसक्रिप्ट का हस्ताक्षर"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "यह छवि इस पोर्टल के आधिकारिक ट्रांसक्रिप्ट पर, प्रमाणपत्र सेटिंग्स में निर्धारित हस्ताक्षरकर्ता नाम और पद के ऊपर मुद्रित होती है।"
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "इस पृष्ठ पर सूचीबद्ध पाठ्यक्रमों और ग्रेड के साथ हस्ताक्षरित आधिकारिक ट्रांसक्रिप्ट जारी करें? इसे रद्द होने तक ऑनलाइन सत्यापित किया जा सकता है।"
+
+msgid "Official transcript issued"
+msgstr "आधिकारिक ट्रांसक्रिप्ट जारी किया गया"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "इस आधिकारिक ट्रांसक्रिप्ट को रद्द करें? तब इसकी सत्यापन पृष्ठ इसे रद्द के रूप में दिखाएगा।"
+
+msgid "Official transcript revoked"
+msgstr "आधिकारिक ट्रांसक्रिप्ट रद्द किया गया"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "पहले एक PNG या JPEG छवि चुनें।"
+
+msgid "Signed credential"
+msgstr "हस्ताक्षरित क्रेडेंशियल"
+
+msgid "Issue signed credential"
+msgstr "हस्ताक्षरित क्रेडेंशियल जारी करें"
+
+msgid "Verify credential"
+msgstr "क्रेडेंशियल सत्यापित करें"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Sepolia टेस्टनेट पर एंकर करें"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "मौजूदा Sepolia लेनदेन की पुष्टि करें"
+
+msgid "Revoke signed credential"
+msgstr "हस्ताक्षरित क्रेडेंशियल रद्द करें"
+
+msgid "Delete certificate"
+msgstr "प्रमाणपत्र हटाएँ"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "मौजूदा Sepolia लेनदेन की पुष्टि करें"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia लेनदेन हैश"
+
+msgid "Verify transaction"
+msgstr "लेनदेन सत्यापित करें"
+
+msgid "Anchored"
+msgstr "एंकर किया गया"
+
+msgid "Issued"
+msgstr "जारी किया गया"
+
+msgid "Not issued"
+msgstr "जारी नहीं किया गया"
+
+msgid "Consent required"
+msgstr "सहमति आवश्यक"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia लेनदेन पुष्टि और सत्यापित"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia टेस्टनेट वॉलेट आपसे लेनदेन पर हस्ताक्षर करने को कहेगा। केवल प्रमाणपत्र फिंगरप्रिंट एंकर किया जाएगा। आगे बढ़ें?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "इस हस्ताक्षरित क्रेडेंशियल को रद्द करें? कोई भी ब्लॉकचेन लेनदेन स्थायी रहता है, लेकिन सत्यापन पृष्ठ रद्दीकरण रिपोर्ट करेगा।"
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "इस शिक्षार्थी के लिए हस्ताक्षरित प्रमाणपत्र क्रेडेंशियल जारी करें? इससे स्वीकृत व्यक्तिगत विवरण निजी लिंक से सत्यापित हो जाते हैं।"
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia के लिए EVM-संगत ब्राउज़र वॉलेट आवश्यक है।"
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "अपने वॉलेट में सेपोलिया टेस्टनेट (चेन आईडी 11155111) चुनें।"
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "अमान्य वॉलेट पता या प्रमाणपत्र फिंगरप्रिंट।"
+
+msgid "Transaction pending"
+msgstr "लेनदेन लंबित"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "बाद में मौजूदा सेपोलिया लेनदेन की पुष्टि का उपयोग करें।"
+
+msgid "Signed credential issued"
+msgstr "हस्ताक्षरित क्रेडेंशियल जारी किया गया"
+
+msgid "Credential revoked"
+msgstr "क्रेडेंशियल निरस्त किया गया"
+
+msgid "Transaction hash"
+msgstr "लेनदेन हैश"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "प्रकाशन सहमति व्यवस्थापक को हस्ताक्षरित प्रमाणपत्र क्रेडेंशियल जारी करने और वैकल्पिक रूप से उसके SHA-256 फिंगरप्रिंट को सेपोलिया टेस्टनेट पर एंकर करने की अनुमति देती है। ऑन-चेन कोई नाम या व्यक्तिगत डेटा नहीं भेजा जाता। आप किसी भी समय सहमति वापस ले सकते हैं।"
+
+msgid "Publication consent"
+msgstr "प्रकाशन सहमति"
+
+msgid "Not approved"
+msgstr "स्वीकृत नहीं"
+
+msgid "Withdraw consent"
+msgstr "सहमति वापस लें"
+
+msgid "Approve publication"
+msgstr "प्रकाशन स्वीकृत करें"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "मैं अपने नाम, पाठ्यक्रम, अंक और जारी करने की तिथि दिखाने वाला हस्ताक्षरित, सार्वजनिक रूप से सत्यापन योग्य क्रेडेंशियल अधिकृत करता हूँ। व्यवस्थापक सेपोलिया टेस्टनेट पर केवल उसका SHA-256 फिंगरप्रिंट भी प्रकाशित कर सकता है। फिंगरप्रिंट स्थायी है, भले ही मैं बाद में सहमति वापस ले लूँ। जारी रखें?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "इस प्रमाणपत्र के लिए प्रकाशन स्वीकृति वापस लें?"
+
+msgid "Publication approval recorded"
+msgstr "प्रकाशन स्वीकृति दर्ज की गई"
+
+msgid "Publication approval withdrawn"
+msgstr "प्रकाशन स्वीकृति वापस ली गई"
+
+msgid "Read more"
+msgstr "और पढ़ें"
+
+msgid "Participation: %s of %s posts"
+msgstr "सहभागिता: %s में से %s पोस्ट"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "अन्य प्रतिभागियों के उत्तर देखने के लिए अपना योगदान पोस्ट करें।"
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "केवल अधिकृत अन्वेषक पात्र रिपोर्टों की समीक्षा कर सकते हैं। रिपोर्ट करने वाले की पहचान डिफ़ॉल्ट रूप से गोपनीय रहती है।"
+
+msgid "New confidential report"
+msgstr "नई गोपनीय रिपोर्ट"
+
+msgid "Reported user"
+msgstr "रिपोर्ट किया गया उपयोगकर्ता"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "समीक्षा की प्रतीक्षा में पात्र गोपनीय रिपोर्टें हैं।"
+
+msgid "Eligible investigations"
+msgstr "पात्र जाँचें"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "कोई मामला यहाँ तभी दिखाई देता है जब कम से कम %s अलग-अलग उपयोगकर्ता उसी व्यक्ति की रिपोर्ट करें।"
+
+msgid "Distinct reporters"
+msgstr "अलग-अलग रिपोर्ट करने वाले"
+
+msgid "Reports for selected user"
+msgstr "चयनित उपयोगकर्ता की रिपोर्टें"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "गोपनीय रिपोर्टिंग वर्तमान में उपलब्ध नहीं है।"
+
+msgid "The investigation could not be loaded."
+msgstr "जाँच लोड नहीं की जा सकी।"
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "आपकी पहचान डिफ़ॉल्ट रूप से अन्वेषकों से सुरक्षित है, लेकिन रिपोर्ट पाठ या संलग्नकों में पहचान संबंधी विवरण शामिल करने से बचें। यह आपातकालीन सेवा नहीं है।"
+
+msgid "Find the user involved"
+msgstr "संबंधित उपयोगकर्ता खोजें"
+
+msgid "Name or username"
+msgstr "नाम या उपयोगकर्ता नाम"
+
+msgid "Describe the situation"
+msgstr "स्थिति का वर्णन करें"
+
+msgid "Evidence (optional)"
+msgstr "साक्ष्य (वैकल्पिक)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "अधिकतम तीन फ़ाइलें, प्रत्येक अधिकतम 8 MiB। चित्र, ऑडियो या छोटे वीडियो।"
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "मैं सहमत हूँ कि अधिकृत अन्वेषक इस विशिष्ट रिपोर्ट के लिए मेरा नाम और ईमेल देख सकते हैं। मैं बाद में यह अनुमति वापस ले सकता/सकती हूँ।"
+
+msgid "Send confidential report"
+msgstr "गोपनीय रिपोर्ट भेजें"
+
+msgid "Could not search users"
+msgstr "उपयोगकर्ता खोज नहीं सके"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "अधिकतम तीन फ़ाइलें, प्रत्येक अधिकतम 8 MiB।"
+
+msgid "The confidential report could not be saved."
+msgstr "गोपनीय रिपोर्ट सहेजी नहीं जा सकी।"
+
+msgid "Confidential report"
+msgstr "गोपनीय रिपोर्ट"
+
+msgid "Confidential conversation"
+msgstr "गोपनीय बातचीत"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "अन्वेषक इस बातचीत के माध्यम से संवाद कर सकते हैं बिना रिपोर्ट करने वाले की पहचान देखे, जब तक संपर्क साझा करना सक्षम न हो।"
+
+msgid "Reporter"
+msgstr "रिपोर्ट करने वाला"
+
+msgid "Investigator"
+msgstr "अन्वेषक"
+
+msgid "Additional evidence (optional)"
+msgstr "अतिरिक्त साक्ष्य (वैकल्पिक)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "अधिकतम तीन फ़ाइलें, प्रत्येक अधिकतम 8 MiB; प्रति रिपोर्ट दस फ़ाइलें।"
+
+msgid "Contact shared voluntarily"
+msgstr "संपर्क स्वेच्छा से साझा किया गया"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "अन्वेषकों को इस रिपोर्ट के लिए मेरा नाम और ईमेल देखने की अनुमति दें"
+
+msgid "This confidential report is not available."
+msgstr "यह गोपनीय रिपोर्ट उपलब्ध नहीं है।"
+
+msgid "Your message could not be saved."
+msgstr "आपका संदेश सहेजा नहीं जा सका।"
+
+msgid "Contact sharing could not be updated."
+msgstr "संपर्क साझाकरण अपडेट नहीं किया जा सका।"
+
+msgid "Evidence could not be downloaded."
+msgstr "साक्ष्य डाउनलोड नहीं किया जा सका।"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>उदाहरण फ़ॉर्म भरने की गतिविधि : बॉडी मास इंडेक्स की गणना करें</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>आयु</strong></td>            <td width=\"75%\" style=\"\">[25] वर्ष</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>लिंग</strong></td>            <td style=\"\" text-align:=\"\">[M] (M या F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>वजन</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>ऊँचाई</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>बॉडी मास इंडेक्स</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> विकिपीडिया लेख</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>उदाहरण फ़ॉर्म भरने की गतिविधि : बॉडी मास इंडेक्स की गणना करें</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>आयु</strong></td>            <td width=\"75%\" style=\"\">[25] वर्ष</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>लिंग</strong></td>            <td style=\"\" text-align:=\"\">[M] (M या F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>वजन</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>ऊँचाई</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>बॉडी मास इंडेक्स</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> विकिपीडिया लेख</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "रिपोर्ट से आईपी पता छिपाएँ"
+
+msgid "Course settings policies"
+msgstr "पाठ्यक्रम सेटिंग नीतियाँ"
+
+msgid "Academic transcripts"
+msgstr "शैक्षणिक प्रतिलेख"
+
+msgid "Transcript program title"
+msgstr "प्रतिलेख कार्यक्रम शीर्षक"
+
+msgid "Transcript course code"
+msgstr "प्रतिलेख पाठ्यक्रम कोड"
+
+msgid "Transcript course hours field"
+msgstr "प्रतिलेख पाठ्यक्रम घंटे फ़ील्ड"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "प्रतिलेख पूर्ण घंटे आवश्यक घंटे हैं"
+
+msgid "Transcript student number field"
+msgstr "प्रतिलेख छात्र संख्या फ़ील्ड"
+
+msgid "Transcript address fields"
+msgstr "प्रतिलेख पता फ़ील्ड"
+
+msgid "Transcript grading scale"
+msgstr "प्रतिलेख ग्रेडिंग स्केल"
+
+msgid "Transcript GPA note"
+msgstr "प्रतिलेख GPA टिप्पणी"
+
+msgid "Transcript signatory name"
+msgstr "प्रतिलेख हस्ताक्षरकर्ता का नाम"
+
+msgid "Transcript signatory title"
+msgstr "प्रतिलेख हस्ताक्षरकर्ता का पद"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "हस्ताक्षरित प्रमाणपत्र और वैकल्पिक सेपोलिया टेस्टनेट एंकरिंग सक्षम करें"
+
+msgid "Show thread replies only after participating"
+msgstr "भाग लेने के बाद ही थ्रेड उत्तर दिखाएँ"
+
+msgid "Show the forum category description in threads"
+msgstr "थ्रेड में फ़ोरम श्रेणी विवरण दिखाएँ"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "फ़ोरम भागीदारी सेटिंग पाठ्यक्रम द्वारा बदली जा सकती हैं"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "फ़ोरम थ्रेड में दिखाए जाने वाले अधिकतम पोस्ट"
+
+msgid "Posts required to complete a forum thread"
+msgstr "फ़ोरम थ्रेड पूर्ण करने के लिए आवश्यक पोस्ट"
+
+msgid "Track e-mail openings"
+msgstr "ई-मेल खुलने को ट्रैक करें"
+
+msgid "Allow e-mail replies to messages"
+msgstr "संदेशों के ई-मेल उत्तर की अनुमति दें"
+
+msgid "Inbound e-mail address"
+msgstr "इनबाउंड ई-मेल पता"
+
+msgid "Inbound mailbox DSN"
+msgstr "इनबाउंड मेलबॉक्स DSN"
+
+msgid "Remember me duration (days)"
+msgstr "मुझे याद रखें अवधि (दिन)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "MCP से परे OAuth डायनामिक क्लाइंट पंजीकरण सक्षम करें"
+
+msgid "Enable confidential welfare reporting"
+msgstr "गोपनीय कल्याण रिपोर्टिंग सक्षम करें"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "जाँच के लिए न्यूनतम अलग-अलग रिपोर्ट करने वाले"
+
+msgid "Allow confidential evidence attachments"
+msgstr "गोपनीय साक्ष्य अनुलग्नक की अनुमति दें"
+
+msgid "Show confidential investigation notifications"
+msgstr "गोपनीय जाँच सूचनाएँ दिखाएँ"
+
+msgid "Enable support chatbot"
+msgstr "सहायता चैटबॉट सक्षम करें"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "चुनें कि शब्दावली शब्द कहाँ स्वचालित रूप से हाइलाइट हों: दस्तावेज़, अभ्यास और लर्निंग पाथ।"
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "दृश्य रिपोर्टिंग और रिपोर्ट निर्यात में आईपी पते छिपाएँ। आईपी पते संग्रहीत रहते हैं और अधिकृत व्यक्तिगत-डेटा प्रक्रियाओं के माध्यम से उपलब्ध रहते हैं।"
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "प्लेटफ़ॉर्म डिफ़ॉल्ट और पाठ्यक्रम संपादन अनुमतियाँ; पाठ्यक्रम सेटिंग में प्रबंधित।"
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "उपयोगकर्ताओं को उनके पूर्ण किए गए पाठ्यक्रमों का अनौपचारिक प्रतिलेख डाउनलोड करने दें, और प्रशासकों, सत्र प्रशासकों तथा एचआर प्रबंधकों को उनके द्वारा प्रबंधित उपयोगकर्ताओं के लिए हस्ताक्षरित आधिकारिक प्रतिलेख जारी करने दें। हस्ताक्षर छवि उपयोगकर्ता के प्रतिलेख पृष्ठ से अपलोड की जाती है।"
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "प्रत्येक प्रतिलेख पर मुद्रित कार्यक्रम शीर्षक, उदाहरण के लिए इस प्लेटफ़ॉर्म पर तैयार डिप्लोमा का नाम।"
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "प्रतिलेख के पाठ्यक्रम कोड स्तंभ को कौन-सा पाठ्यक्रम फ़ील्ड भरता है: पाठ्यक्रम कोड या विभाग का नाम।"
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "पाठ्यक्रम अतिरिक्त फ़ील्ड का चर जिसमें पाठ्यक्रम के घंटों की संख्या है। पाठ्यक्रम की अवधि उपयोग करने के लिए खाली छोड़ें।"
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "पाठ्यक्रम के आवश्यक घंटे शिक्षार्थी द्वारा पूर्ण घंटों के रूप में मुद्रित करें। अक्षम होने पर, पूर्ण घंटे शिक्षार्थी द्वारा पाठ्यक्रम में बिताया गया समय होते हैं।"
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "उपयोगकर्ता अतिरिक्त फ़ील्ड का चर जिसमें प्रतिलेख पर मुद्रित छात्र संख्या है। कुछ न मुद्रित करने के लिए खाली छोड़ें।"
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "प्रतिलेख पर उपयोगकर्ता के पते के बाद मुद्रित उपयोगकर्ता अतिरिक्त फ़ील्ड के अल्पविराम-पृथक चर, उदाहरण के लिए शहर, राज्य और पिन कोड।"
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "ग्रेड अक्षरों की JSON सूची, उच्चतम न्यूनतम अंक से नीचे: प्रत्येक आइटम में प्रतिशत में न्यूनतम अंक (min), अक्षर और GPA गणना के लिए ग्रेड पॉइंट होते हैं।"
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "GPA की गणना कैसे होती है, इसका स्पष्टीकरण, प्रतिलेख पर GPA के नीचे मुद्रित।"
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "आधिकारिक प्रतिलेखों पर हस्ताक्षर करने वाले स्कूल अधिकारी का नाम।"
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "आधिकारिक प्रतिलेखों पर हस्ताक्षर करने वाले स्कूल अधिकारी का पद।"
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "स्पष्ट स्वामी सहमति और मैन्युअल प्रशासक कार्रवाइयाँ आवश्यक हैं। ऑन-चेन केवल SHA-256 फ़िंगरप्रिंट भेजे जाते हैं।"
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "शिक्षार्थी किसी फोरम थ्रेड की पहली पोस्ट ही तब तक देखते हैं जब तक वे स्वयं उसमें पोस्ट न करें। प्रशासक, शिक्षक, कोच और समूह ट्यूटर हमेशा सभी पोस्ट देखते हैं।"
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "प्रत्येक थ्रेड के शीर्ष पर फोरम श्रेणी का शीर्षक और संक्षिप्त विवरण दिखाएँ, पूर्ण विवरण पढ़ने के लिंक के साथ।"
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "सक्षम होने पर शिक्षक पाठ्यक्रम सेटिंग्स के फोरम अनुभाग में चुन सकते हैं कि उनका पाठ्यक्रम शिक्षार्थी के पोस्ट करने तक थ्रेड उत्तर छिपाए, थ्रेड में श्रेणी विवरण दिखाए और भागीदारी प्रगति पट्टी कितनी पोस्ट की अपेक्षा करे, प्लेटफ़ॉर्म सेटिंग्स का पालन करने के बजाय।"
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "प्रत्येक फोरम थ्रेड की केवल इतनी पोस्ट उन सभी उपयोगकर्ताओं को दिखाएँ जो प्लेटफ़ॉर्म प्रशासक नहीं हैं, शिक्षकों सहित, तथा लर्निंग पाथ के अंदर सभी को। थ्रेडेड और नेस्टेड दृश्यों में सीमा प्रत्येक पोस्ट के उत्तरों पर लागू होती है। पोस्ट दृश्य के क्रम में रखी जाती हैं: पहली वाली, या लर्निंग पाथ के अंदर नवीनतम वाली, जहाँ नवीनतम पोस्ट पहले आती हैं। सभी पोस्ट दिखाने के लिए 0 सेट करें।"
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "प्रत्येक फोरम थ्रेड में शिक्षार्थियों को प्रगति पट्टी दिखाएँ, जो 100% तब पहुँचती है जब उन्होंने उसमें इतनी संख्या में संदेश पोस्ट कर दिए हों। मॉडरेशन की प्रतीक्षा कर रही पोस्ट गिनी जाती हैं। प्रगति पट्टी छिपाने के लिए 0 सेट करें।"
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "संदेश सूचना ई-मेल में एक छोटी ट्रैकिंग छवि जोड़ता है और जब उसका अनुरोध होता है तो रिकॉर्ड करता है। यह केवल यह संकेत देता है कि ई-मेल खोला गया हो सकता है; यह सिद्ध नहीं करता कि उसे पढ़ा गया।"
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "प्रत्यक्ष संदेश सूचनाओं के प्राप्तकर्ताओं को ई-मेल से उत्तर देने की अनुमति दें। आने वाले संदेश मेल अवसंरचना द्वारा चामिलो इनबाउंड-मेल कमांड तक पहुँचाने होंगे।"
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "उत्तर रूटिंग के लिए आधार पता, उदाहरण के लिए replies@example.com। चामिलो प्लस एड्रेसिंग का उपयोग कर एक अद्वितीय प्राप्तकर्ता टोकन जोड़ता है।"
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "आने वाले उत्तर एकत्र करने के लिए मेलबॉक्स कनेक्शन, उदाहरण के लिए imaps://user:password@imap.example.com:993/INBOX। क्रेडेंशियल में आरक्षित वर्णों को URL-एन्कोड करें।"
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "जब Remember me चुना जाता है तो उपयोगकर्ता को साइन इन रखने के दिनों की संख्या। अक्षम करने के लिए 0 सेट करें। HTTPS आवश्यक है। अनुमत सीमा: 0 से 90। सामान्य सत्र समय समाप्ति PHP/Symfony में अलग से कॉन्फ़िगर होती है।"
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "डायनामिक क्लाइंट रजिस्ट्रेशन को चामिलो OAuth संसाधन सर्वर द्वारा पंजीकृत किसी भी स्कोप का अनुरोध करने देता है। अक्षम होने पर स्व-पंजीकरण MCP तक सीमित रहता है। संसाधन पहुँच हमेशा प्रत्येक क्लाइंट की अनुमत संसाधन सूची द्वारा अलग से सीमित रहती है।"
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "गोपनीय घटना रिपोर्ट सक्षम करें। मॉड्यूल के लिए सुरक्षित एन्क्रिप्शन कुंजी और अन्वेषक अनुमति आवश्यक है।"
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "मामला अन्वेषकों को दिखाई देने से पहले 2 से 10 अलग-अलग रिपोर्ट करने वालों को उसी उपयोगकर्ता की रिपोर्ट करनी होगी।"
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "छवियाँ, ऑडियो और संक्षिप्त वीडियो साक्ष्य की अनुमति दें। अक्षम होने पर मौजूदा अनुलग्नक पढ़े जा सकते रहेंगे।"
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "पात्र जाँचों का आंतरिक संकेत दिखाएँ। ईमेल या बाहरी सूचनाएँ नहीं भेजता।"
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "चैट पैनल में एक निर्णय-वृक्ष चैटबॉट दिखाएँ जो उपयोगकर्ताओं को मार्गदर्शन दे सकता है "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "शिक्षकों को पाठ्यक्रमों के अंदर AI-सहायता प्राप्त शैक्षिक अनुप्रयोग बनाने और संस्करण करने देता है।"
+
+msgid "Department name"
+msgstr "विभाग का नाम"
+
+msgid "Documents and exercise"
+msgstr "दस्तावेज़ और अभ्यास"
+
+msgid "Documents and learning path"
+msgstr "दस्तावेज़ और लर्निंग पाथ"
+
+msgid "Documents, exercise and learning path"
+msgstr "दस्तावेज़, अभ्यास और लर्निंग पाथ"
+
+msgid "session"
+msgstr "सत्र"
+
+msgid "course"
+msgstr "पाठ्यक्रम"
+
+msgid "You have been enrolled in %s"
+msgstr "आपको %s में नामांकित किया गया है"
 

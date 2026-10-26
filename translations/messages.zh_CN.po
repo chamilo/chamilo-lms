@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "此致敬礼"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式示例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式示例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "变量范围"
@@ -28770,6 +28770,9 @@ msgstr "当前用户未找到。"
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "您好 %s，<br><br>您已在 %s 注册。<br>您可以从 <a href=\"%s\">这里</a> 访问您的账户。<br><br>您的登录凭据为：<br>用户名：<strong>%s</strong><br>密码：<strong>%s</strong><br><br>此致敬礼，<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "您好 %s，<br><br>您已在 %s 注册。<br>用户名：<strong>%s</strong><br><br>请点击下方链接设置密码并访问您的账户：<br><a href=\"%s\">设置密码</a><br><br>此致，<br>%s"
+
 msgid "You are registered on %s"
 msgstr "您已在 %s 注册"
 
@@ -41573,4 +41576,1616 @@ msgstr "已记录迁移历史"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "项目根目录中存在 %s：删除该文件以关闭升级端点"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "您已获得此练习的证书"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "您必须先完成学习路径“%s”，才能访问此路径。"
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "确定要永久删除此文件吗？"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "确定要从所选课程中分离此文件吗？"
+
+msgid "Attach this file to another course"
+msgstr "将此文件附加到另一门课程"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "附加到所选课程（隐藏）"
+
+msgid "Course(s):"
+msgstr "课程："
+
+msgid "Delete definitively"
+msgstr "永久删除"
+
+msgid "Detach from this course"
+msgstr "从此课程分离"
+
+msgid "File actions"
+msgstr "文件操作"
+
+msgid "File Information"
+msgstr "文件信息"
+
+msgid "File Link:"
+msgstr "文件链接："
+
+msgid "File Path:"
+msgstr "文件路径："
+
+msgid "Filter courses..."
+msgstr "筛选课程..."
+
+msgid "MIME Type:"
+msgstr "MIME 类型："
+
+msgid "N/A"
+msgstr "不适用"
+
+msgid "No results found."
+msgstr "未找到结果。"
+
+msgid "Original Name"
+msgstr "原始名称"
+
+msgid "Original Name:"
+msgstr "原始名称："
+
+msgid "Orphan"
+msgstr "孤立"
+
+msgid "Resource File ID:"
+msgstr "资源文件 ID："
+
+msgid "Resource Node ID:"
+msgstr "资源节点 ID："
+
+msgid "Search..."
+msgstr "搜索..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "要从特定课程分离此文件，请点击上方对应课程标签上的“×”图标。"
+
+msgid "User:"
+msgstr "用户："
+
+msgid "View file information"
+msgstr "查看文件信息"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "您可以将此文件附加到一门或多门课程（在文档根目录中隐藏）。如果文件不再使用并成为孤立文件，也可以将其永久删除。"
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "您可以选择一门或多门课程（使用 Ctrl/Cmd + 点击）。"
+
+msgid "bytes"
+msgstr "字节"
+
+msgid "Failed to copy:"
+msgstr "复制失败："
+
+msgid "Missing resource file identifier."
+msgstr "缺少资源文件标识符。"
+
+msgid "Please select at least one course."
+msgstr "请至少选择一门课程。"
+
+msgid "Resource file not found."
+msgstr "未找到资源文件。"
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "文件“%s”已附加到 %d 门课程：%s。"
+
+msgid "Some courses were skipped: %s."
+msgstr "部分课程已跳过：%s。"
+
+msgid "Missing file or course identifier."
+msgstr "缺少文件或课程标识符。"
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "此资源文件没有资源节点，无法分离。"
+
+msgid "File has been detached from %d course link(s)."
+msgstr "文件已从 %d 个课程链接中分离。"
+
+msgid "This file is not attached to the selected course."
+msgstr "此文件未附加到所选课程。"
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "此文件仍被至少一个资源使用，无法删除。"
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "孤立文件及其物理内容已永久删除。"
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "问卷已发布。已创建：%d。已更新：%d。已发送消息：%d。"
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "可获得"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "此技能无法获得"
+
+#: issue-8179
+msgid "Novice"
+msgstr "新手"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "刻板遵守规则和脱离情境的指令；几乎没有情境判断。"
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "高级初学者"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "开始识别情境方面和模式，但仍需要指导。"
+
+#: issue-8179
+msgid "Competent"
+msgstr "胜任"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "制定规划与心智模型；对结果负责，但可能因复杂性而感到不堪重负。"
+
+#: issue-8179
+msgid "Proficient"
+msgstr "精通"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "能够看到“全局”，凭直觉确定优先级，并从经验中学习。"
+
+#: issue-8179
+msgid "Expert"
+msgstr "专家"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "表现直觉、流畅；依赖深厚的隐性知识；能轻松创新或应对新情况。"
+
+#: issue-8179
+msgid "Remembering"
+msgstr "记忆"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "从长期记忆中检索、回忆或识别相关知识。"
+
+#: issue-8179
+msgid "Understanding"
+msgstr "理解"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "从教学信息中建构意义，包括口头、书面和图形交流。通过解释、举例、分类、概括、推断、比较或说明来展示理解。"
+
+#: issue-8179
+msgid "Applying"
+msgstr "应用"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "通过执行或实施，在给定情境中运用程序。在新的或具体情境中运用知识或技能。"
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "分析"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "将材料分解为组成部分，并确定各部分之间以及与整体结构或目的的关系。识别动机、原因或关系。"
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "评价"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "依据标准和准则作出判断。检查、批评或证明决策或行动方案。"
+
+#: issue-8179
+msgid "Creating"
+msgstr "创造"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "将要素组合成连贯或功能性的整体；将要素重组为新的模式或结构。产出原创作品或产生新想法。"
+
+#: issue-8179
+msgid "Follow"
+msgstr "跟随"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "在密切监督和指导下工作。执行常规任务，自主权有限。侧重于遵循指示和基本执行。"
+
+#: issue-8179
+msgid "Assist"
+msgstr "协助"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "在常规监督下工作。为他人提供协助，参与团队任务，并开始在既定范围内采取一定主动。"
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "在一般监督下工作。将知识和技能应用于一系列常规和非常规活动。行使一定的自主判断。"
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "在广泛指导下工作。通过提供专业指导、支持或服务赋能他人。对自己的工作负责，并可能监督小型团队或任务。"
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "确保与建议"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "在广泛指导下工作，但具有显著自主权。确保工作达成目标，并就复杂事项提供建议。经常领导团队或项目并影响决策。"
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "发起与影响"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "对重要工作领域拥有明确的权限和责任。发起行动，影响其领域的战略与政策，并领导重大项目或团队。"
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "制定战略、激励、动员"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "在组织最高层对主要工作领域拥有权限。制定长期战略，激励并动员他人，作出对组织成功至关重要的决策。在行业或外部层面施加影响。"
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "计入的最长无活动时间（分钟）"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "保持打开的课程页面会持续发送自动请求。在用户没有真实操作（打开页面或项目、作答等）的该分钟数之后，停止计入课程学习时间。"
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "协作 Wiki 编辑器"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "正在连接 Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "保存会根据当前 Etherpad 内容创建新的 Chamilo Wiki 版本。"
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "无法加载协作编辑器。"
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "启用 Etherpad 进行 Wiki 编辑"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "将 Etherpad 用作现有 Wiki 页面的协作编辑器。Etherpad 必须与 Chamilo 同源暴露，以便安全嵌入会话。"
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpad 实例的基础 URL，可包含可选的反向代理路径。示例：https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API 密钥"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Chamilo 用于创建 pad、会话并同步 Wiki 内容的 API 密钥。请将 Etherpad 配置为接受 API 密钥认证。"
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "新文档的默认可见性可由课程更改"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "教师在课程中创建新文档、文件夹或上传文件时赋予的可见性。教师之后仍可更改每一项的可见性。"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "启用后，教师可在课程设置中选择其课程新文档的可见性，而不使用平台默认值。"
+
+msgid "Default visibility of new learning paths"
+msgstr "新学习路径的默认可见性"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "新学习路径的默认可见性可由课程更改"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "教师在课程中创建新学习路径时赋予的可见性。教师之后仍可更改每一项的可见性。"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "启用后，教师可在课程设置中选择其课程新学习路径的可见性，而不使用平台默认值。"
+
+msgid "Default visibility of new tests"
+msgstr "新测验的默认可见性"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "新测验的默认可见性可由课程更改"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "教师在课程中创建新测验时赋予的可见性。教师之后仍可更改每个测验的可见性。"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "启用后，教师可在课程设置中选择其课程新测验的可见性，而不使用平台默认值。"
+
+msgid "Default visibility for new learning paths"
+msgstr "新学习路径的默认可见性"
+
+msgid "Default visibility for new tests"
+msgstr "新测验的默认可见性"
+
+msgid "Following"
+msgstr "关注中"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "当学员对此作业的提交发表评论时发送电子邮件"
+
+msgid "Payment history"
+msgstr "付款记录"
+
+msgid "No payments yet"
+msgstr "尚无付款"
+
+msgid "Cancel service"
+msgstr "取消服务"
+
+msgid "Official transcript"
+msgstr "正式成绩单"
+
+msgid "Unofficial transcript"
+msgstr "非正式成绩单"
+
+msgid "Student name"
+msgstr "学生姓名"
+
+msgid "Student number"
+msgstr "学号"
+
+msgid "Program title"
+msgstr "项目名称"
+
+msgid "Required hours"
+msgstr "所需学时"
+
+msgid "Completion date"
+msgstr "完成日期"
+
+msgid "Hours completed"
+msgstr "已完成学时"
+
+msgid "Final grade"
+msgstr "最终成绩"
+
+msgid "Grade"
+msgstr "成绩"
+
+msgid "No completed course yet."
+msgstr "尚无已完成的课程。"
+
+msgid "Grading scale"
+msgstr "评分标准"
+
+msgid "Signature of school official"
+msgstr "学校负责人签名"
+
+msgid "School official"
+msgstr "学校负责人"
+
+msgid "Official's title"
+msgstr "负责人职务"
+
+msgid "Verify this transcript at"
+msgstr "在此验证本成绩单"
+
+msgid "Verification code"
+msgstr "验证码"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "此非正式成绩单未经签名。请向管理员申请正式成绩单。"
+
+msgid "Transcript verification"
+msgstr "成绩单验证"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "请确认此正式成绩单由本校签发并签名，未被篡改且未被撤销。"
+
+msgid "Valid"
+msgstr "有效"
+
+msgid "Invalid signature"
+msgstr "签名无效"
+
+msgid "Transcript not found"
+msgstr "未找到成绩单"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "本校签名有效，且此成绩单未被撤销。"
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "无法验证此成绩单有效。其详细信息不显示。"
+
+msgid "Transcript details"
+msgstr "成绩单详情"
+
+msgid "Institution"
+msgstr "机构"
+
+msgid "Issued on"
+msgstr "签发日期"
+
+msgid "Download verification JSON"
+msgstr "下载验证 JSON"
+
+msgid "Transcript"
+msgstr "成绩单"
+
+msgid "My confidential reports"
+msgstr "我的机密报告"
+
+msgid "My transcript"
+msgstr "我的成绩单"
+
+msgid "Confidential investigations"
+msgstr "机密调查"
+
+msgid "Floor plan"
+msgstr "平面图"
+
+msgid "Click a highlighted room to select it"
+msgstr "点击高亮房间以选择"
+
+msgid "Select room"
+msgstr "选择房间"
+
+msgid "Room on floor plan"
+msgstr "平面图上的房间"
+
+msgid "Select a branch first"
+msgstr "请先选择分校"
+
+msgid "The branch has no attached floor plan"
+msgstr "该分校未附加平面图"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "使用多边形工具勾勒房间轮廓；使用编辑移动角点"
+
+msgid "Save room area"
+msgstr "保存房间区域"
+
+msgid "Clear room area"
+msgstr "清除房间区域"
+
+msgid "Save the room form to persist the area"
+msgstr "保存房间表单以保留该区域"
+
+msgid "Floor plan unavailable"
+msgstr "平面图不可用"
+
+msgid "Room map points must be within the floor plan"
+msgstr "房间地图点必须位于平面图范围内"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "确定要清除房间区域吗？"
+
+msgid "View room on floor plan"
+msgstr "在平面图上查看房间"
+
+msgid "No floor plan available"
+msgstr "没有可用的平面图"
+
+msgid "This is an assignment by groups"
+msgstr "这是按小组布置的作业"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "上传 PNG、JPEG 或安全的静态 SVG 平面图，或从文档中选择现有图片。"
+
+msgid "Upload floor plan"
+msgstr "上传平面图"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG、JPEG 或静态 SVG，最大 10 MB"
+
+msgid "Search images by name"
+msgstr "按名称搜索图片"
+
+msgid "Image name"
+msgstr "图片名称"
+
+msgid "Select an image"
+msgstr "选择图片"
+
+msgid "Change floor plan"
+msgstr "更换平面图"
+
+msgid "Attach floor plan"
+msgstr "附加平面图"
+
+msgid "No matching images found in Documents."
+msgstr "在文档中未找到匹配的图片。"
+
+msgid "Current floor plan"
+msgstr "当前平面图"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "平面图更改会自动保存。"
+
+msgid "Remove floor plan"
+msgstr "移除平面图"
+
+msgid "Cannot load images"
+msgstr "无法加载图片"
+
+msgid "Floor plan saved"
+msgstr "平面图已保存"
+
+msgid "Cannot attach floor plan"
+msgstr "无法附加平面图"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "仅支持最大 10MB 的 PNG/JPEG 以及安全的静态 SVG 图片。"
+
+msgid "Cannot upload floor plan"
+msgstr "无法上传平面图"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "确定要移除平面图吗？"
+
+msgid "Floor plan removed"
+msgstr "平面图已移除"
+
+msgid "Cannot remove floor plan"
+msgstr "无法移除平面图"
+
+msgid "Support bot"
+msgstr "支持机器人"
+
+msgid "Connected"
+msgstr "已连接"
+
+msgid "Not connected"
+msgstr "未连接"
+
+msgid "View ticket"
+msgstr "查看工单"
+
+msgid "Start a new conversation"
+msgstr "开始新对话"
+
+msgid "Video call"
+msgstr "视频通话"
+
+msgid "Incoming video call"
+msgstr "来电视频通话"
+
+msgid "Decline"
+msgstr "拒绝"
+
+msgid "Mute microphone"
+msgstr "静音麦克风"
+
+msgid "Unmute microphone"
+msgstr "取消麦克风静音"
+
+msgid "Turn camera off"
+msgstr "关闭摄像头"
+
+msgid "Turn camera on"
+msgstr "打开摄像头"
+
+msgid "Hang up"
+msgstr "挂断"
+
+msgid "Calling..."
+msgstr "正在呼叫..."
+
+msgid "Connecting..."
+msgstr "正在连接..."
+
+msgid "Your contact is busy."
+msgstr "对方正忙。"
+
+msgid "Your contact did not answer the call."
+msgstr "对方未接听通话。"
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "对方无法访问摄像头或麦克风。"
+
+msgid "Your contact could not prepare the video call."
+msgstr "对方无法准备视频通话。"
+
+msgid "Your contact refused the call."
+msgstr "对方拒绝了通话。"
+
+msgid "The call timed out."
+msgstr "通话超时。"
+
+msgid "Your contact cancelled the call."
+msgstr "对方已取消通话。"
+
+msgid "The video connection was lost."
+msgstr "视频连接已断开。"
+
+msgid "Your contact could not establish the video connection."
+msgstr "对方无法建立视频连接。"
+
+msgid "Your contact could not complete the video call setup."
+msgstr "对方无法完成视频通话设置。"
+
+msgid "Your contact hung up."
+msgstr "对方已挂断。"
+
+msgid "Video call could not be started"
+msgstr "无法开始视频通话"
+
+msgid "Camera or microphone permission was denied."
+msgstr "摄像头或麦克风权限被拒绝。"
+
+msgid "No camera or microphone was found."
+msgstr "未找到摄像头或麦克风。"
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "摄像头或麦克风已被占用或不可用。"
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "摄像头或麦克风不支持所需设置。"
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "无法获取摄像头或麦克风访问权限。"
+
+msgid "The video call could not be prepared."
+msgstr "无法准备视频通话。"
+
+msgid "The video call request could not be sent."
+msgstr "无法发送视频通话请求。"
+
+msgid "The incoming video call could not be processed."
+msgstr "无法处理来电视频通话。"
+
+msgid "The video call answer could not be prepared."
+msgstr "无法准备视频通话应答。"
+
+msgid "The video call answer could not be sent."
+msgstr "无法发送视频通话应答。"
+
+msgid "The video call answer could not be processed."
+msgstr "无法处理视频通话应答。"
+
+msgid "The video connection failed"
+msgstr "视频连接失败"
+
+msgid "The video connection could not be established."
+msgstr "无法建立视频连接。"
+
+msgid "No answer was received."
+msgstr "未收到应答。"
+
+msgid "You refused the call."
+msgstr "您拒绝了通话。"
+
+msgid "You cancelled the call."
+msgstr "您取消了通话。"
+
+msgid "You hung up."
+msgstr "您已挂断。"
+
+msgid "You missed the call."
+msgstr "您错过了通话。"
+
+msgid "Support bot is currently unavailable."
+msgstr "支持机器人当前不可用。"
+
+msgid "A support ticket has been created."
+msgstr "已创建支持工单。"
+
+msgid "Conversation ended."
+msgstr "会话已结束。"
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "支持机器人无法继续此会话。请重试。"
+
+msgid "Add your first term glossary to this course"
+msgstr "为本课程添加第一个术语表条目"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "确定要删除此调查问卷模板吗？"
+
+msgid "The survey template has been deleted."
+msgstr "调查问卷模板已删除。"
+
+msgid "Please select a course."
+msgstr "请选择一门课程。"
+
+msgid "Please select a session for this course."
+msgstr "请为此课程选择一个学期。"
+
+msgid "The survey has been created from the template."
+msgstr "已根据模板创建调查问卷。"
+
+msgid "Survey templates"
+msgstr "调查问卷模板"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "为教师创建可复用的调查问卷模板，并直接分配到课程或学期。"
+
+msgid "Subtitle"
+msgstr "副标题"
+
+msgid "Assign to course"
+msgstr "分配到课程"
+
+msgid "Assign template to course"
+msgstr "将模板分配到课程"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "将学期留空即可直接在课程中创建调查问卷。"
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "本课程通过本门户的学期提供，因此必须选择学期。"
+
+msgid "Survey template questions"
+msgstr "调查问卷模板题目"
+
+msgid "Back to survey templates"
+msgstr "返回调查问卷模板"
+
+msgid "Could not load survey template"
+msgstr "无法加载调查问卷模板"
+
+msgid "Could not load survey template questions"
+msgstr "无法加载调查问卷模板题目"
+
+msgid "Could not save survey template question"
+msgstr "无法保存调查问卷模板题目"
+
+msgid "Could not delete survey template question"
+msgstr "无法删除调查问卷模板题目"
+
+msgid "Could not move survey template question"
+msgstr "无法移动调查问卷模板题目"
+
+msgid "Could not copy survey template question"
+msgstr "无法复制调查问卷模板题目"
+
+msgid "The survey template has been saved."
+msgstr "调查问卷模板已保存。"
+
+msgid "Edit survey template"
+msgstr "编辑调查问卷模板"
+
+msgid "Create survey template"
+msgstr "创建调查问卷模板"
+
+msgid "The survey template title is required."
+msgstr "调查问卷模板标题为必填项。"
+
+msgid "Visible as template"
+msgstr "作为模板可见"
+
+msgid "Create satisfaction survey"
+msgstr "创建满意度调查问卷"
+
+msgid "Training satisfaction survey"
+msgstr "培训满意度调查问卷"
+
+msgid "Could not create satisfaction survey"
+msgstr "无法创建满意度调查问卷"
+
+msgid "Use template"
+msgstr "使用模板"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "使用管理员准备的可复用模板创建此调查问卷。"
+
+msgid "Results hidden from teacher/tutor"
+msgstr "对教师/辅导教师隐藏结果"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "教师和辅导教师仍可查看作答数量并发送提醒，但不能打开或导出调查问卷结果。"
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "已应用模板。请检查调查问卷设置并保存以创建。"
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "调查问卷结果对教师和辅导教师隐藏。"
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "您仍可使用邀请页面查看作答数量并发送提醒。"
+
+msgid "Payment method"
+msgstr "支付方式"
+
+msgid "Preview mode"
+msgstr "预览模式"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "预览模式下不会保存进度和分数。"
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "此链接无法在学习路径中显示。"
+
+msgid "Open it in a new tab to view the page."
+msgstr "请在新标签页中打开以查看该页面。"
+
+msgid "Report a problem with this question"
+msgstr "报告此题目的问题"
+
+msgid "Your report was sent to the teacher."
+msgstr "您的报告已发送给教师。"
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "请描述您发现的错误或问题。您的报告将发送给教师。"
+
+msgid "A comment is required."
+msgstr "必须填写评论。"
+
+msgid "Could not send the report."
+msgstr "无法发送报告。"
+
+msgid "Learner reports"
+msgstr "学员报告"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "此题目尚无学员提交的报告。"
+
+msgid "View attempt"
+msgstr "查看尝试"
+
+msgid "Could not load learner reports."
+msgstr "无法加载学员报告。"
+
+msgid "Allow learners to report issues in questions"
+msgstr "允许学员报告题目中的问题"
+
+msgid "Skill acquired"
+msgstr "已获得技能"
+
+msgid "AI Toolbox"
+msgstr "AI 工具箱"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "使用 AI 生成交互式教育应用，并通过 SCORM 跟踪学员进度。"
+
+msgid "No published applications are available yet."
+msgstr "尚无已发布的应用。"
+
+msgid "Interactive applications"
+msgstr "交互式应用"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "在同一处生成、改进、发布并审阅各版本。"
+
+msgid "Open an application to continue from your latest progress."
+msgstr "打开应用以从最近进度继续。"
+
+msgid "Interactive learning application"
+msgstr "交互式学习应用"
+
+msgid "Create an interactive learning app"
+msgstr "创建交互式学习应用"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "描述该活动。Chamilo 将生成带版本管理的 SCORM 应用，并跟踪进度和分数。"
+
+msgid "Idea"
+msgstr "想法"
+
+msgid "Application"
+msgstr "应用"
+
+msgid "What should the application do?"
+msgstr "该应用应实现什么功能？"
+
+msgid "How it works"
+msgstr "工作原理"
+
+msgid "AI generation"
+msgstr "AI 生成"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "应用将根据您的说明生成，并保存为第 1 版。"
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "学员进度、分数和续学数据将报告给 Chamilo。"
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "后续改进会创建新版本，而不会删除先前版本。"
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "请包含学习目标、规则、关卡、计分方式以及学员完成时应发生的情况。"
+
+msgid "You are not allowed to create content in this context."
+msgstr "您无权在此上下文中创建内容。"
+
+msgid "The application was generated successfully."
+msgstr "应用已成功生成。"
+
+msgid "Open in student view"
+msgstr "以学生视图打开"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "生成应用以启用预览和发布。"
+
+msgid "Improve with AI"
+msgstr "使用 AI 改进"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "描述更改。将创建新版本，先前版本仍可使用。"
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "描述您想要生成的完整互动活动。"
+
+msgid "What should be improved?"
+msgstr "应改进哪些方面？"
+
+msgid "Generate new version"
+msgstr "生成新版本"
+
+msgid "Version history"
+msgstr "版本历史"
+
+msgid "Preview, download or restore any generated version."
+msgstr "预览、下载或还原任何已生成的版本。"
+
+msgid "A new version was generated."
+msgstr "已生成新版本。"
+
+msgid "Version restored"
+msgstr "版本已还原"
+
+msgid "The support bot tree has been published."
+msgstr "支持机器人决策树已发布。"
+
+msgid "The support bot tree has been archived."
+msgstr "支持机器人决策树已归档。"
+
+msgid "The support bot tree has been duplicated."
+msgstr "支持机器人决策树已复制。"
+
+msgid "The support bot tree has been deleted."
+msgstr "支持机器人决策树已删除。"
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "确定要删除此支持机器人决策树吗？"
+
+msgid "The support bot tree has been imported."
+msgstr "支持机器人决策树已导入。"
+
+msgid "Create support bot tree"
+msgstr "创建支持机器人决策树"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "构建固定决策树，引导用户完成支持问题，并可升级到工单。"
+
+msgid "Portal scope"
+msgstr "门户范围"
+
+msgid "Duplicate"
+msgstr "复制"
+
+msgid "Archive"
+msgstr "归档"
+
+msgid "View conversations"
+msgstr "查看对话"
+
+msgid "Import support bot tree"
+msgstr "导入支持机器人决策树"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "导入 JSON 导出文件或 CSV 决策树。导入的决策树始终创建为新草稿。"
+
+msgid "Resolved"
+msgstr "已解决"
+
+msgid "Escalated"
+msgstr "已升级"
+
+msgid "Abandoned"
+msgstr "已放弃"
+
+msgid "Support bot conversations"
+msgstr "支持机器人对话"
+
+msgid "Outcome"
+msgstr "结果"
+
+msgid "Started at"
+msgstr "开始时间"
+
+msgid "Ended at"
+msgstr "结束时间"
+
+msgid "View conversation"
+msgstr "查看对话"
+
+msgid "Go to node"
+msgstr "转到节点"
+
+msgid "Create support ticket"
+msgstr "创建支持工单"
+
+msgid "End conversation"
+msgstr "结束对话"
+
+msgid "Node"
+msgstr "节点"
+
+msgid "A support bot tree requires at least one node."
+msgstr "支持机器人决策树至少需要一个节点。"
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "确定要删除此节点吗？指向它的链接将被清除。"
+
+msgid "Every support bot node requires at least one option."
+msgstr "每个支持机器人节点至少需要一个选项。"
+
+msgid "The support bot tree title is required."
+msgstr "必须填写支持机器人决策树标题。"
+
+msgid "A support bot entry node is required."
+msgstr "必须指定支持机器人入口节点。"
+
+msgid "Every support bot node requires content."
+msgstr "每个支持机器人节点都需要内容。"
+
+msgid "Every support bot option requires a label."
+msgstr "每个支持机器人选项都需要标签。"
+
+msgid "Select a target node for every go-to option."
+msgstr "为每个“转到”选项选择目标节点。"
+
+msgid "Enter a relative URL for every link option."
+msgstr "为每个链接选项输入相对 URL。"
+
+msgid "Select a ticket category for every escalation option."
+msgstr "为每个升级选项选择工单类别。"
+
+msgid "The support bot tree has been saved."
+msgstr "支持机器人决策树已保存。"
+
+msgid "Edit support bot tree"
+msgstr "编辑支持机器人决策树"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "已发布和已归档的支持机器人版本为只读。请从列表中复制此决策树以编辑新的草稿版本。"
+
+msgid "Default ticket project"
+msgstr "默认工单项目"
+
+msgid "Decision tree rules"
+msgstr "决策树规则"
+
+msgid "Every node must contain at least one option."
+msgstr "每个节点必须至少包含一个选项。"
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "最终节点必须结束对话或创建支持工单。"
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "跳转链接在 v1 中不得形成循环。"
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "v1 中不允许外部 URL；链接操作必须使用相对的 Chamilo 路径。"
+
+msgid "Nodes"
+msgstr "节点"
+
+msgid "Add node"
+msgstr "添加节点"
+
+msgid "Entry node"
+msgstr "入口节点"
+
+msgid "Set as entry node"
+msgstr "设为入口节点"
+
+msgid "Target node"
+msgstr "目标节点"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "请使用相对的 Chamilo 路径，例如 /tickets。"
+
+msgid "Ticket category"
+msgstr "工单类别"
+
+msgid "Select a default ticket project first."
+msgstr "请先选择默认工单项目。"
+
+msgid "Closing message"
+msgstr "结束消息"
+
+msgid "Select a node to edit it."
+msgstr "请选择要编辑的节点。"
+
+msgid "Support bot conversation"
+msgstr "支持机器人对话"
+
+msgid "Transcript of %s"
+msgstr "%s 的成绩单"
+
+msgid "Download unofficial transcript"
+msgstr "下载非正式成绩单"
+
+msgid "Issue official transcript"
+msgstr "签发正式成绩单"
+
+msgid "Official transcripts"
+msgstr "正式成绩单"
+
+msgid "No official transcript has been issued yet."
+msgstr "尚未签发正式成绩单。"
+
+msgid "Issued by"
+msgstr "签发人"
+
+msgid "Verify"
+msgstr "验证"
+
+msgid "Signature of official transcripts"
+msgstr "正式成绩单签名"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "此图像将打印在本门户的正式成绩单上，位于证书设置中指定的签署人姓名和职务上方。"
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "是否签发带签名的正式成绩单，包含本页所列课程与成绩？在撤销前可在线验证。"
+
+msgid "Official transcript issued"
+msgstr "正式成绩单已签发"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "撤销此正式成绩单？其验证页面将显示为已撤销。"
+
+msgid "Official transcript revoked"
+msgstr "正式成绩单已撤销"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "请先选择 PNG 或 JPEG 图像。"
+
+msgid "Signed credential"
+msgstr "已签名凭证"
+
+msgid "Issue signed credential"
+msgstr "签发已签名凭证"
+
+msgid "Verify credential"
+msgstr "验证凭证"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "锚定到 Sepolia 测试网"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "确认现有 Sepolia 交易"
+
+msgid "Revoke signed credential"
+msgstr "撤销已签名凭证"
+
+msgid "Delete certificate"
+msgstr "删除证书"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "确认现有 Sepolia 交易"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia 交易哈希"
+
+msgid "Verify transaction"
+msgstr "验证交易"
+
+msgid "Anchored"
+msgstr "已锚定"
+
+msgid "Issued"
+msgstr "已签发"
+
+msgid "Not issued"
+msgstr "未签发"
+
+msgid "Consent required"
+msgstr "需要同意"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia 交易已确认并验证"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia 测试网钱包将要求您签署交易。仅会锚定证书指纹。是否继续？"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "撤销此已签名凭证？任何区块链交易仍将永久存在，但验证页面将报告已撤销。"
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "是否为此学员签发已签名证书凭证？这将使已批准的个人详情可通过私密链接验证。"
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia 需要兼容 EVM 的浏览器钱包。"
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "在钱包中选择 Sepolia 测试网（链 ID 11155111）。"
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "钱包地址或证书指纹无效。"
+
+msgid "Transaction pending"
+msgstr "交易待处理"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "稍后使用“确认已有 Sepolia 交易”。"
+
+msgid "Signed credential issued"
+msgstr "已签发签名凭证"
+
+msgid "Credential revoked"
+msgstr "凭证已撤销"
+
+msgid "Transaction hash"
+msgstr "交易哈希"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "发布同意允许管理员签发已签名的证书凭证，并可选择将其 SHA-256 指纹锚定到 Sepolia 测试网。链上不会发送姓名或个人数据。您可随时撤回同意。"
+
+msgid "Publication consent"
+msgstr "发布同意"
+
+msgid "Not approved"
+msgstr "未批准"
+
+msgid "Withdraw consent"
+msgstr "撤回同意"
+
+msgid "Approve publication"
+msgstr "批准发布"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "我授权签发一份可公开验证的签名凭证，其中包含我的姓名、课程、成绩和签发日期。管理员也可仅在 Sepolia 测试网上发布其 SHA-256 指纹。即使我稍后撤回，该指纹仍将永久存在。是否继续？"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "撤回此证书的发布批准？"
+
+msgid "Publication approval recorded"
+msgstr "已记录发布批准"
+
+msgid "Publication approval withdrawn"
+msgstr "已撤回发布批准"
+
+msgid "Read more"
+msgstr "了解更多"
+
+msgid "Participation: %s of %s posts"
+msgstr "参与：%s / %s 篇帖子"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "请先发表您的内容，才能查看其他参与者的回复。"
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "仅授权调查人员可审阅符合条件的报告。举报人身份默认保密。"
+
+msgid "New confidential report"
+msgstr "新建保密报告"
+
+msgid "Reported user"
+msgstr "被举报用户"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "有符合条件的保密报告待审阅。"
+
+msgid "Eligible investigations"
+msgstr "符合条件的调查"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "仅当至少有 %s 名不同用户举报同一人时，案件才会显示在此。"
+
+msgid "Distinct reporters"
+msgstr "不同举报人"
+
+msgid "Reports for selected user"
+msgstr "所选用户的报告"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "保密举报功能当前不可用。"
+
+msgid "The investigation could not be loaded."
+msgstr "无法加载该调查。"
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "您的身份默认对调查人员保密，但请避免在报告正文或附件中包含可识别信息。这不是紧急服务。"
+
+msgid "Find the user involved"
+msgstr "查找相关用户"
+
+msgid "Name or username"
+msgstr "姓名或用户名"
+
+msgid "Describe the situation"
+msgstr "描述情况"
+
+msgid "Evidence (optional)"
+msgstr "证据（可选）"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "最多三个文件，每个最大 8 MiB。图片、音频或短视频。"
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "我同意授权调查人员可查看我的姓名和电子邮件以处理此特定报告。我稍后可撤回此许可。"
+
+msgid "Send confidential report"
+msgstr "发送保密报告"
+
+msgid "Could not search users"
+msgstr "无法搜索用户"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "最多三个文件，每个最大 8 MiB。"
+
+msgid "The confidential report could not be saved."
+msgstr "无法保存保密报告。"
+
+msgid "Confidential report"
+msgstr "保密报告"
+
+msgid "Confidential conversation"
+msgstr "保密对话"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "调查人员可通过此对话沟通，除非启用联系方式共享，否则看不到举报人身份。"
+
+msgid "Reporter"
+msgstr "举报人"
+
+msgid "Investigator"
+msgstr "调查人员"
+
+msgid "Additional evidence (optional)"
+msgstr "补充证据（可选）"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "最多三个文件，每个最大 8 MiB；每份报告最多十个文件。"
+
+msgid "Contact shared voluntarily"
+msgstr "已自愿共享联系方式"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "允许调查人员查看我的姓名和电子邮件以处理此报告"
+
+msgid "This confidential report is not available."
+msgstr "此保密报告不可用。"
+
+msgid "Your message could not be saved."
+msgstr "您的消息无法保存。"
+
+msgid "Contact sharing could not be updated."
+msgstr "无法更新联系人共享。"
+
+msgid "Evidence could not be downloaded."
+msgstr "无法下载证据。"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>填写表单活动示例：计算体重指数</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>年龄</strong></td>            <td width=\"75%\" style=\"\">[25] 岁</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>性别</strong></td>            <td style=\"\" text-align:=\"\">[M]（M 或 F）</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>体重</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>身高</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>体重指数</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =体重/身高<sup>2</sup>（参见<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> 维基百科文章</a>）</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>填写表单活动示例：计算体重指数</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>年龄</strong></td>            <td width=\"75%\" style=\"\">[25] 岁</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>性别</strong></td>            <td style=\"\" text-align:=\"\">[M]（M 或 F）</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>体重</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>身高</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>体重指数</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =体重/身高<sup>2</sup>（参见<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> 维基百科文章</a>）</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "在报告中隐藏 IP 地址"
+
+msgid "Course settings policies"
+msgstr "课程设置策略"
+
+msgid "Academic transcripts"
+msgstr "学业成绩单"
+
+msgid "Transcript program title"
+msgstr "成绩单项目名称"
+
+msgid "Transcript course code"
+msgstr "成绩单课程代码"
+
+msgid "Transcript course hours field"
+msgstr "成绩单课程学时字段"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "成绩单已完成学时即为要求学时"
+
+msgid "Transcript student number field"
+msgstr "成绩单学号字段"
+
+msgid "Transcript address fields"
+msgstr "成绩单地址字段"
+
+msgid "Transcript grading scale"
+msgstr "成绩单评分等级"
+
+msgid "Transcript GPA note"
+msgstr "成绩单 GPA 说明"
+
+msgid "Transcript signatory name"
+msgstr "成绩单签署人姓名"
+
+msgid "Transcript signatory title"
+msgstr "成绩单签署人职务"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "启用已签署证书及可选的 Sepolia 测试网锚定"
+
+msgid "Show thread replies only after participating"
+msgstr "仅在参与后显示主题回复"
+
+msgid "Show the forum category description in threads"
+msgstr "在主题中显示论坛分类说明"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "论坛参与设置可按课程更改"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "论坛主题中显示的最大帖子数"
+
+msgid "Posts required to complete a forum thread"
+msgstr "完成论坛主题所需的帖子数"
+
+msgid "Track e-mail openings"
+msgstr "跟踪电子邮件打开情况"
+
+msgid "Allow e-mail replies to messages"
+msgstr "允许通过电子邮件回复消息"
+
+msgid "Inbound e-mail address"
+msgstr "入站电子邮件地址"
+
+msgid "Inbound mailbox DSN"
+msgstr "入站邮箱 DSN"
+
+msgid "Remember me duration (days)"
+msgstr "“记住我”持续时间（天）"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "在 MCP 之外启用 OAuth 动态客户端注册"
+
+msgid "Enable confidential welfare reporting"
+msgstr "启用保密福利报告"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "启动调查所需的最少不同报告人数"
+
+msgid "Allow confidential evidence attachments"
+msgstr "允许保密证据附件"
+
+msgid "Show confidential investigation notifications"
+msgstr "显示保密调查通知"
+
+msgid "Enable support chatbot"
+msgstr "启用支持聊天机器人"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "选择自动高亮术语表词条的位置：文档、练习和学习路径。"
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "在可视化报告和报告导出中隐藏 IP 地址。IP 地址仍会存储，并可通过授权的个人数据程序访问。"
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "平台默认值与课程编辑权限；在“课程设置”中管理。"
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "允许用户下载其所完成课程的非正式成绩单，并允许管理员、学期管理员和人力资源经理为其管理的用户签发已签署的正式成绩单。签名图像从用户的成绩单页面上传。"
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "打印在每份成绩单上的项目名称，例如本平台所准备的文凭名称。"
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "成绩单课程代码列所使用的课程字段：课程代码或部门名称。"
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "保存课程学时数的课程附加字段变量。留空则使用课程时长。"
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "将课程要求学时打印为学习者已完成学时。禁用时，已完成学时为学习者在课程中花费的时间。"
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "保存打印在成绩单上的学号的用户附加字段变量。留空则不打印。"
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "以逗号分隔的用户附加字段变量，打印在成绩单用户地址之后，例如城市、州和邮政编码。"
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "成绩字母的 JSON 列表，从最高最低分向下：每项包含最低百分制分数（min）、字母以及用于计算 GPA 的绩点。"
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "GPA 计算方法说明，打印在成绩单 GPA 下方。"
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "签署正式成绩单的学校官员姓名。"
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "签署正式成绩单的学校官员职务。"
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "需要所有者明确同意和管理员手动操作。链上仅发送 SHA-256 指纹。"
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "学习者在自己发帖之前只能看到论坛主题的第一条帖子。管理员、教师、教练和小组辅导始终可以看到所有帖子。"
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "在每个主题顶部显示论坛分类的标题和简短描述，并提供阅读完整描述的链接。"
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "启用后，教师可在课程设置的论坛部分自行选择：是否在学习者发帖前隐藏主题回复、是否在主题中显示分类描述，以及参与进度条期望的发帖数量，而不再沿用平台设置。"
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "对非平台管理员的每位用户（包括教师）以及学习路径中的所有人，每个论坛主题仅显示此数量的帖子。在线程视图和嵌套视图中，该限制适用于每条帖子的回复。帖子按当前视图顺序保留：显示最先的帖子，或在学习路径中显示最新的帖子（最新帖子排在前面）。设为 0 可显示全部帖子。"
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "在每个论坛主题中向学习者显示进度条，当其在该主题中发帖达到此数量时进度为 100%。等待审核的帖子计入。设为 0 可隐藏进度条。"
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "在消息通知邮件中加入小型跟踪图片，并记录其被请求的时间。这仅表示邮件可能已被打开，并不能证明已被阅读。"
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "允许直接消息通知的收件人通过电子邮件回复。传入邮件必须由邮件基础设施路由到 Chamilo 的入站邮件命令。"
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "用于回复路由的基础地址，例如 replies@example.com。Chamilo 使用加号寻址添加唯一收件人令牌。"
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "用于收集入站回复的邮箱连接，例如 imaps://user:password@imap.example.com:993/INBOX。凭据中的保留字符须进行 URL 编码。"
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "选择“记住我”时保持用户登录的天数。设为 0 可禁用。需要 HTTPS。允许范围：0 到 90。普通会话超时在 PHP/Symfony 中单独配置。"
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "允许动态客户端注册请求 Chamilo OAuth 资源服务器已注册的任意范围。禁用时，自助注册仍仅限于 MCP。资源访问始终由各客户端允许的资源列表单独限制。"
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "启用保密事件报告。该模块需要受保护的加密密钥和调查员权限。"
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "须有 2 至 10 名不同举报人对同一用户进行举报后，案件才对调查员可见。"
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "允许图片、音频和短视频证据。禁用后现有附件仍可阅读。"
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "显示符合条件调查的内部提示。不会发送电子邮件或外部通知。"
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "在聊天面板中显示可引导用户的决策树聊天机器人"
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "允许教师在课程中创建并版本化 AI 辅助的教学应用。"
+
+msgid "Department name"
+msgstr "部门名称"
+
+msgid "Documents and exercise"
+msgstr "文档与测验"
+
+msgid "Documents and learning path"
+msgstr "文档与学习路径"
+
+msgid "Documents, exercise and learning path"
+msgstr "文档、测验与学习路径"
+
+msgid "session"
+msgstr "学期"
+
+msgid "course"
+msgstr "课程"
+
+msgid "You have been enrolled in %s"
+msgstr "您已加入 %s"
 

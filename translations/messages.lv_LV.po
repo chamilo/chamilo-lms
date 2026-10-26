@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Ar cieņu"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Formulas paraugs: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formulas paraugs: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Mainīgo diapazoni"
@@ -28769,6 +28769,9 @@ msgstr "Pašreizējais lietotājs nav atrasts."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Sveiks %s,<br><br>Jūs esat reģistrējies %s.<br>Jūs varat piekļūt savam kontam <a href=\"%s\">šeit</a>.<br><br>Jūsu pieteikšanās dati ir:<br>Lietotājvārds: <strong>%s</strong><br>Parole: <strong>%s</strong><br><br>Labākie sveicieni,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Sveiki, %s,<br><br>Jūs esat reģistrēts sistēmā %s.<br>Lietotājvārds: <strong>%s</strong><br><br>Lūdzu, noklikšķiniet uz tālāk esošās saites, lai iestatītu paroli un piekļūtu savam kontam:<br><a href=\"%s\">Iestatīt paroli</a><br><br>Ar cieņu,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Jūs esat reģistrējies %s"
 
@@ -41572,4 +41575,1616 @@ msgstr "Migrācijas vēsture ir reģistrēta"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s atrodas projekta saknē: dzēsiet to, lai aizvērtu jaunināšanas galapunktus"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Jūs esat ieguvis sertifikātu par šo vingrinājumu"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Pirms piekļuves šim mācību ceļam jums jāpabeidz mācību ceļš \"%s\"."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Vai tiešām vēlaties neatgriezeniski dzēst šo failu?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Vai tiešām vēlaties atvienot šo failu no izvēlētā kursa?"
+
+msgid "Attach this file to another course"
+msgstr "Pievienot šo failu citam kursam"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Pievienot izvēlētajam(-iem) kursam(-iem) (slēpts)"
+
+msgid "Course(s):"
+msgstr "Kurss(-i):"
+
+msgid "Delete definitively"
+msgstr "Dzēst neatgriezeniski"
+
+msgid "Detach from this course"
+msgstr "Atvienot no šī kursa"
+
+msgid "File actions"
+msgstr "Faila darbības"
+
+msgid "File Information"
+msgstr "Faila informācija"
+
+msgid "File Link:"
+msgstr "Faila saite:"
+
+msgid "File Path:"
+msgstr "Faila ceļš:"
+
+msgid "Filter courses..."
+msgstr "Filtrēt kursus..."
+
+msgid "MIME Type:"
+msgstr "MIME tips:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Rezultāti nav atrasti."
+
+msgid "Original Name"
+msgstr "Sākotnējais nosaukums"
+
+msgid "Original Name:"
+msgstr "Sākotnējais nosaukums:"
+
+msgid "Orphan"
+msgstr "Bāreņfails"
+
+msgid "Resource File ID:"
+msgstr "Resursa faila ID:"
+
+msgid "Resource Node ID:"
+msgstr "Resursa mezgla ID:"
+
+msgid "Search..."
+msgstr "Meklēt..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Lai atvienotu šo failu no konkrēta kursa, noklikšķiniet uz ikonas \"×\" pie attiecīgā kursa birkas augstāk."
+
+msgid "User:"
+msgstr "Lietotājs:"
+
+msgid "View file information"
+msgstr "Skatīt faila informāciju"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Šo failu var pievienot vienam vai vairākiem kursiem (slēpts dokumentu saknē). Ja fails vairs netiek izmantots un kļūst par bāreņfailu, to var arī neatgriezeniski dzēst."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Varat izvēlēties vienu vai vairākus kursus (izmantojiet Ctrl/Cmd + klikšķi)."
+
+msgid "bytes"
+msgstr "baiti"
+
+msgid "Failed to copy:"
+msgstr "Neizdevās kopēt:"
+
+msgid "Missing resource file identifier."
+msgstr "Trūkst resursa faila identifikatora."
+
+msgid "Please select at least one course."
+msgstr "Lūdzu, izvēlieties vismaz vienu kursu."
+
+msgid "Resource file not found."
+msgstr "Resursa fails nav atrasts."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Fails \"%s\" ir pievienots %d kursam(-iem): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Daži kursi tika izlaisti: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Trūkst faila vai kursa identifikatora."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Šim resursa failam nav resursa mezgla, un to nevar atvienot."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Fails ir atvienots no %d kursa saites(-ēm)."
+
+msgid "This file is not attached to the selected course."
+msgstr "Šis fails nav pievienots izvēlētajam kursam."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Šo failu joprojām izmanto vismaz viens resurss, un to nevar dzēst."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Bāreņfails un tā fiziskais saturs ir neatgriezeniski dzēsti."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Aptauja publicēta. Izveidoti: %d. Atjaunināti: %d. Nosūtītas ziņas: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Iegūstama"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Šo prasmi nevar iegūt"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Iesācējs"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Stingra noteikumu un no konteksta neatkarīgu instrukciju ievērošana; maz situatīvā sprieduma."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Pieredzējis iesācējs"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Sāk atpazīt situatīvus aspektus un modeļus, bet joprojām vajadzīgas vadlīnijas."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kompetents"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Izstrādā plānošanu un mentālos modeļus; uzņemas atbildību par rezultātiem, bet var justies pārņemts ar sarežģītību."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Prasmīgs"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Redz \"kopainu\", intuitīvi nosaka prioritātes un mācās no pieredzes."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Eksperts"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Intuitīva, plūstoša izpilde; paļaujas uz dziļām klusajām zināšanām; spēj inovēt vai bez piepūles tikt galā ar jaunām situācijām."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Atcerēšanās"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Iegūt, atsaukt atmiņā vai atpazīt atbilstošas zināšanas no ilgtermiņa atmiņas."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Izpratne"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Veidot nozīmi no mācību vēstījumiem, tostarp mutiskas, rakstiskas un grafiskas komunikācijas. Demonstrēt izpratni, interpretējot, piemērojot, klasificējot, kopsavelkot, secinot, salīdzinot vai skaidrojot."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Piemērošana"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Veikt vai izmantot procedūru, to izpildot vai ieviešot konkrētā situācijā. Izmantot zināšanas vai prasmes jaunās vai konkrētās situācijās."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Analizēšana"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Sadalīt materiālu sastāvdaļās un noteikt, kā daļas saistās savā starpā un ar kopējo struktūru vai mērķi. Identificēt motīvus, cēloņus vai attiecības."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Vērtēšana"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Pieņemt spriedumus, pamatojoties uz kritērijiem un standartiem. Pārbaudīt, kritizēt vai pamatot lēmumus vai rīcības virzienus."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Radīšana"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Apvienot elementus saskaņotā vai funkcionālā veselumā; pārkārtot elementus jaunā shēmā vai struktūrā. Radīt oriģinālu darbu vai ģenerēt jaunas idejas."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Sekot"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Strādā ciešā uzraudzībā un vadībā. Veic rutīnas uzdevumus ar ierobežotu rīcības brīvību. Koncentrējas uz instrukciju ievērošanu un pamata izpildi."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Palīdzēt"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Strādā rutīnas uzraudzībā. Palīdz citiem, iegulda komandas uzdevumos un sāk uzņemties iniciatīvu noteiktās robežās."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Strādā vispārējā uzraudzībā. Piemēro zināšanas un prasmes dažādām rutīnas un nerutīnas darbībām. Izmanto zināmu rīcības brīvību un spriedumu."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Strādā plašā vadībā. Palīdz citiem, sniedzot speciālista vadību, atbalstu vai pakalpojumus. Uzņemas atbildību par savu darbu un var vadīt nelielas komandas vai uzdevumus."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Nodrošināt un konsultēt"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Strādā plašā vadībā, bet ar ievērojamu autonomiju. Nodrošina, ka darbs atbilst mērķiem, un konsultē par sarežģītiem jautājumiem. Bieži vada komandas vai projektus un ietekmē lēmumus."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Iniciēt un ietekmēt"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Ir noteikts pilnvarojums un atbildība par nozīmīgu darba jomu. Iniciē darbības, ietekmē stratēģiju un politiku savā jomā un vada būtiskus projektus vai komandas."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Noteikt stratēģiju, iedvesmot, mobilizēt"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Ir pilnvaras augstākajā organizācijas līmenī par galveno darba jomu. Nosaka ilgtermiņa stratēģiju, iedvesmo un mobilizē citus un pieņem lēmumus, kas ir kritiski organizācijas panākumiem. Ietekmē nozares vai ārējā līmenī."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Maksimālais neaktīvais laiks, ko ņemt vērā (minūtes)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Kursu lapa, kas palikusi atvērta, turpina sūtīt automātiskus pieprasījumus. Pēc šī minūšu skaita bez reālas lietotāja darbības (lapas vai vienuma atvēršana, atbildēšana u. c.) kursā pavadītais laiks vairs netiek skaitīts."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Kopīgs viki redaktors"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Savienojas ar Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Saglabāšana izveido jaunu Chamilo viki versiju no pašreizējā Etherpad satura."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Kopīgo redaktoru neizdevās ielādēt."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Iespējot Etherpad viki rediģēšanai"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Izmantot Etherpad kā kopīgo redaktoru esošām viki lapām. Etherpad jābūt pieejamam tajā pašā izcelsmē kā Chamilo drošām iegultām sesijām."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpad instances bāzes URL, ieskaitot neobligātu reversā starpnieka ceļu. Piemērs: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API atslēga"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API atslēga, ko Chamilo izmanto, lai izveidotu paliktņus, sesijas un sinhronizētu viki saturu. Konfigurējiet Etherpad, lai tas pieņemtu autentifikāciju ar API atslēgu."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Jaunu dokumentu noklusējuma redzamību var mainīt kursos"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Redzamība, kas piešķirta jaunam dokumentam, mapei vai augšupielādētam failam, kad skolotājs to izveido kursā. Skolotāji pēc tam joprojām var mainīt katra redzamību."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Ja iespējots, skolotāji kursa iestatījumos var izvēlēties redzamību, kas piešķirta kursa jaunajiem dokumentiem, nevis platformas noklusējumu."
+
+msgid "Default visibility of new learning paths"
+msgstr "Jaunu mācību ceļu noklusējuma redzamība"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Jaunu mācību ceļu noklusējuma redzamību var mainīt kursos"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Redzamība, kas piešķirta jaunam mācību ceļam, kad skolotājs to izveido kursā. Skolotāji pēc tam joprojām var mainīt katra redzamību."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Ja iespējots, skolotāji kursa iestatījumos var izvēlēties redzamību, kas piešķirta kursa jaunajiem mācību ceļiem, nevis platformas noklusējumu."
+
+msgid "Default visibility of new tests"
+msgstr "Jaunu testu noklusējuma redzamība"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Jaunu testu noklusējuma redzamību var mainīt kursos"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Redzamība, kas tiek piešķirta jaunam testam, kad skolotājs to izveido kursā. Skolotāji pēc tam joprojām var mainīt katra testa redzamību."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Ja iespējots, skolotāji kursa iestatījumos var izvēlēties redzamību jaunajiem kursa testiem, nevis platformas noklusējumu."
+
+msgid "Default visibility for new learning paths"
+msgstr "Jaunu mācību ceļu noklusējuma redzamība"
+
+msgid "Default visibility for new tests"
+msgstr "Jaunu testu noklusējuma redzamība"
+
+msgid "Following"
+msgstr "Sekojošie"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Saņemt e-pastu, kad izglītojamais komentē šī uzdevuma iesniegumu"
+
+msgid "Payment history"
+msgstr "Maksājumu vēsture"
+
+msgid "No payments yet"
+msgstr "Vēl nav maksājumu"
+
+msgid "Cancel service"
+msgstr "Atcelt pakalpojumu"
+
+msgid "Official transcript"
+msgstr "Oficiālais sekmju izraksts"
+
+msgid "Unofficial transcript"
+msgstr "Neoficiālais sekmju izraksts"
+
+msgid "Student name"
+msgstr "Studenta vārds"
+
+msgid "Student number"
+msgstr "Studenta numurs"
+
+msgid "Program title"
+msgstr "Programmas nosaukums"
+
+msgid "Required hours"
+msgstr "Nepieciešamās stundas"
+
+msgid "Completion date"
+msgstr "Pabeigšanas datums"
+
+msgid "Hours completed"
+msgstr "Pabeigtās stundas"
+
+msgid "Final grade"
+msgstr "Gala atzīme"
+
+msgid "Grade"
+msgstr "Atzīme"
+
+msgid "No completed course yet."
+msgstr "Vēl nav pabeigta kursa."
+
+msgid "Grading scale"
+msgstr "Vērtēšanas skala"
+
+msgid "Signature of school official"
+msgstr "Izglītības iestādes amatpersonas paraksts"
+
+msgid "School official"
+msgstr "Izglītības iestādes amatpersona"
+
+msgid "Official's title"
+msgstr "Amatpersonas amats"
+
+msgid "Verify this transcript at"
+msgstr "Pārbaudīt šo sekmju izrakstu šeit"
+
+msgid "Verification code"
+msgstr "Verifikācijas kods"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Šis neoficiālais sekmju izraksts nav parakstīts. Lūdziet administratoram oficiālo sekmju izrakstu."
+
+msgid "Transcript verification"
+msgstr "Sekmju izraksta pārbaude"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Pārbaudiet, ka šo oficiālo sekmju izrakstu ir izdevusi un parakstījusi iestāde, tas nav mainīts un nav atsaukts."
+
+msgid "Valid"
+msgstr "Derīgs"
+
+msgid "Invalid signature"
+msgstr "Nederīgs paraksts"
+
+msgid "Transcript not found"
+msgstr "Sekmju izraksts nav atrasts"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Iestādes paraksts ir derīgs, un šis sekmju izraksts nav atsaukts."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Šo sekmju izrakstu nevar pārbaudīt kā derīgu. Tā dati netiek rādīti."
+
+msgid "Transcript details"
+msgstr "Sekmju izraksta dati"
+
+msgid "Institution"
+msgstr "Iestāde"
+
+msgid "Issued on"
+msgstr "Izdots"
+
+msgid "Download verification JSON"
+msgstr "Lejupielādēt verifikācijas JSON"
+
+msgid "Transcript"
+msgstr "Sekmju izraksts"
+
+msgid "My confidential reports"
+msgstr "Mani konfidenciālie ziņojumi"
+
+msgid "My transcript"
+msgstr "Mans sekmju izraksts"
+
+msgid "Confidential investigations"
+msgstr "Konfidenciālas izmeklēšanas"
+
+msgid "Floor plan"
+msgstr "Stāva plāns"
+
+msgid "Click a highlighted room to select it"
+msgstr "Noklikšķiniet uz izceltās telpas, lai to atlasītu"
+
+msgid "Select room"
+msgstr "Atlasīt telpu"
+
+msgid "Room on floor plan"
+msgstr "Telpa stāva plānā"
+
+msgid "Select a branch first"
+msgstr "Vispirms atlasiet filiāli"
+
+msgid "The branch has no attached floor plan"
+msgstr "Filiālei nav pievienota stāva plāna"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Izmantojiet daudzstūra rīku, lai iezīmētu telpu; izmantojiet Rediģēt, lai pārvietotu stūrus"
+
+msgid "Save room area"
+msgstr "Saglabāt telpas zonu"
+
+msgid "Clear room area"
+msgstr "Notīrīt telpas zonu"
+
+msgid "Save the room form to persist the area"
+msgstr "Saglabājiet telpas veidlapu, lai saglabātu zonu"
+
+msgid "Floor plan unavailable"
+msgstr "Stāva plāns nav pieejams"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Telpas kartes punktiem jābūt stāva plāna robežās"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Vai tiešām vēlaties notīrīt telpas zonu?"
+
+msgid "View room on floor plan"
+msgstr "Skatīt telpu stāva plānā"
+
+msgid "No floor plan available"
+msgstr "Stāva plāns nav pieejams"
+
+msgid "This is an assignment by groups"
+msgstr "Šis ir uzdevums grupām"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Augšupielādējiet PNG, JPEG vai drošu statisku SVG stāva plānu vai atlasiet esošu attēlu no Dokumentiem."
+
+msgid "Upload floor plan"
+msgstr "Augšupielādēt stāva plānu"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG vai statisks SVG, maksimums 10 MB"
+
+msgid "Search images by name"
+msgstr "Meklēt attēlus pēc nosaukuma"
+
+msgid "Image name"
+msgstr "Attēla nosaukums"
+
+msgid "Select an image"
+msgstr "Atlasīt attēlu"
+
+msgid "Change floor plan"
+msgstr "Mainīt stāva plānu"
+
+msgid "Attach floor plan"
+msgstr "Pievienot stāva plānu"
+
+msgid "No matching images found in Documents."
+msgstr "Dokumentos nav atrasti atbilstoši attēli."
+
+msgid "Current floor plan"
+msgstr "Pašreizējais stāva plāns"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Stāva plāna izmaiņas tiek saglabātas automātiski."
+
+msgid "Remove floor plan"
+msgstr "Noņemt stāva plānu"
+
+msgid "Cannot load images"
+msgstr "Nevar ielādēt attēlus"
+
+msgid "Floor plan saved"
+msgstr "Stāva plāns saglabāts"
+
+msgid "Cannot attach floor plan"
+msgstr "Nevar pievienot stāva plānu"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Tiek atbalstīti tikai PNG/JPEG un droši statiski SVG attēli līdz 10 MB."
+
+msgid "Cannot upload floor plan"
+msgstr "Nevar augšupielādēt stāva plānu"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Vai tiešām vēlaties noņemt stāva plānu?"
+
+msgid "Floor plan removed"
+msgstr "Stāva plāns noņemts"
+
+msgid "Cannot remove floor plan"
+msgstr "Nevar noņemt stāva plānu"
+
+msgid "Support bot"
+msgstr "Atbalsta robots"
+
+msgid "Connected"
+msgstr "Savienots"
+
+msgid "Not connected"
+msgstr "Nav savienots"
+
+msgid "View ticket"
+msgstr "Skatīt biļeti"
+
+msgid "Start a new conversation"
+msgstr "Sākt jaunu sarunu"
+
+msgid "Video call"
+msgstr "Videozvans"
+
+msgid "Incoming video call"
+msgstr "Ienākošs videozvans"
+
+msgid "Decline"
+msgstr "Noraidīt"
+
+msgid "Mute microphone"
+msgstr "Izslēgt mikrofonu"
+
+msgid "Unmute microphone"
+msgstr "Ieslēgt mikrofonu"
+
+msgid "Turn camera off"
+msgstr "Izslēgt kameru"
+
+msgid "Turn camera on"
+msgstr "Ieslēgt kameru"
+
+msgid "Hang up"
+msgstr "Pārtraukt zvanu"
+
+msgid "Calling..."
+msgstr "Zvana..."
+
+msgid "Connecting..."
+msgstr "Savienojas..."
+
+msgid "Your contact is busy."
+msgstr "Jūsu kontakts ir aizņemts."
+
+msgid "Your contact did not answer the call."
+msgstr "Jūsu kontakts neatbildēja uz zvanu."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Jūsu kontakts nevarēja piekļūt kamerai vai mikrofonam."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Jūsu kontakts nevarēja sagatavot videozvanu."
+
+msgid "Your contact refused the call."
+msgstr "Jūsu kontakts noraidīja zvanu."
+
+msgid "The call timed out."
+msgstr "Zvana laiks beidzās."
+
+msgid "Your contact cancelled the call."
+msgstr "Jūsu kontakts atcēla zvanu."
+
+msgid "The video connection was lost."
+msgstr "Video savienojums tika zaudēts."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Jūsu kontakts nevarēja izveidot video savienojumu."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Jūsu kontakts nevarēja pabeigt videozvana iestatīšanu."
+
+msgid "Your contact hung up."
+msgstr "Jūsu kontakts nolicis klausuli."
+
+msgid "Video call could not be started"
+msgstr "Videozvanu nevarēja sākt"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Kameras vai mikrofona atļauja tika liegta."
+
+msgid "No camera or microphone was found."
+msgstr "Kamera vai mikrofons netika atrasts."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Kamera vai mikrofons jau tiek izmantots vai nav pieejams."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Kamera vai mikrofons neatbalsta nepieciešamos iestatījumus."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Neizdevās iegūt piekļuvi kamerai vai mikrofonam."
+
+msgid "The video call could not be prepared."
+msgstr "Videozvanu nevarēja sagatavot."
+
+msgid "The video call request could not be sent."
+msgstr "Videozvana pieprasījumu nevarēja nosūtīt."
+
+msgid "The incoming video call could not be processed."
+msgstr "Ienākošo videozvanu nevarēja apstrādāt."
+
+msgid "The video call answer could not be prepared."
+msgstr "Videozvana atbildi nevarēja sagatavot."
+
+msgid "The video call answer could not be sent."
+msgstr "Videozvana atbildi nevarēja nosūtīt."
+
+msgid "The video call answer could not be processed."
+msgstr "Videozvana atbildi nevarēja apstrādāt."
+
+msgid "The video connection failed"
+msgstr "Video savienojums neizdevās"
+
+msgid "The video connection could not be established."
+msgstr "Video savienojumu nevarēja izveidot."
+
+msgid "No answer was received."
+msgstr "Atbilde netika saņemta."
+
+msgid "You refused the call."
+msgstr "Jūs noraidījāt zvanu."
+
+msgid "You cancelled the call."
+msgstr "Jūs atcēlāt zvanu."
+
+msgid "You hung up."
+msgstr "Jūs nolicāt klausuli."
+
+msgid "You missed the call."
+msgstr "Jūs palaidāt garām zvanu."
+
+msgid "Support bot is currently unavailable."
+msgstr "Atbalsta robots pašlaik nav pieejams."
+
+msgid "A support ticket has been created."
+msgstr "Atbalsta pieteikums ir izveidots."
+
+msgid "Conversation ended."
+msgstr "Saruna beigusies."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Atbalsta robots nevarēja turpināt šo sarunu. Lūdzu, mēģiniet vēlreiz."
+
+msgid "Add your first term glossary to this course"
+msgstr "Pievienojiet šim kursam pirmo glosārija terminu"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Vai tiešām vēlaties dzēst šo aptaujas veidni?"
+
+msgid "The survey template has been deleted."
+msgstr "Aptaujas veidne ir dzēsta."
+
+msgid "Please select a course."
+msgstr "Lūdzu, izvēlieties kursu."
+
+msgid "Please select a session for this course."
+msgstr "Lūdzu, izvēlieties sesiju šim kursam."
+
+msgid "The survey has been created from the template."
+msgstr "Aptauja ir izveidota no veidnes."
+
+msgid "Survey templates"
+msgstr "Aptauju veidnes"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Izveidojiet atkārtoti lietojamas aptauju veidnes skolotājiem un piešķiriet tās tieši kursam vai sesijai."
+
+msgid "Subtitle"
+msgstr "Apakšvirsraksts"
+
+msgid "Assign to course"
+msgstr "Piešķirt kursam"
+
+msgid "Assign template to course"
+msgstr "Piešķirt veidni kursam"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Atstājiet sesiju tukšu, lai izveidotu aptauju tieši kursā."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Šis kurss ir pieejams caur sesiju šajā portālā, tāpēc sesija ir nepieciešama."
+
+msgid "Survey template questions"
+msgstr "Aptaujas veidnes jautājumi"
+
+msgid "Back to survey templates"
+msgstr "Atpakaļ pie aptauju veidnēm"
+
+msgid "Could not load survey template"
+msgstr "Neizdevās ielādēt aptaujas veidni"
+
+msgid "Could not load survey template questions"
+msgstr "Neizdevās ielādēt aptaujas veidnes jautājumus"
+
+msgid "Could not save survey template question"
+msgstr "Neizdevās saglabāt aptaujas veidnes jautājumu"
+
+msgid "Could not delete survey template question"
+msgstr "Neizdevās dzēst aptaujas veidnes jautājumu"
+
+msgid "Could not move survey template question"
+msgstr "Neizdevās pārvietot aptaujas veidnes jautājumu"
+
+msgid "Could not copy survey template question"
+msgstr "Neizdevās kopēt aptaujas veidnes jautājumu"
+
+msgid "The survey template has been saved."
+msgstr "Aptaujas veidne ir saglabāta."
+
+msgid "Edit survey template"
+msgstr "Rediģēt aptaujas veidni"
+
+msgid "Create survey template"
+msgstr "Izveidot aptaujas veidni"
+
+msgid "The survey template title is required."
+msgstr "Aptaujas veidnes nosaukums ir obligāts."
+
+msgid "Visible as template"
+msgstr "Redzams kā veidne"
+
+msgid "Create satisfaction survey"
+msgstr "Izveidot apmierinātības aptauju"
+
+msgid "Training satisfaction survey"
+msgstr "Apmācības apmierinātības aptauja"
+
+msgid "Could not create satisfaction survey"
+msgstr "Neizdevās izveidot apmierinātības aptauju"
+
+msgid "Use template"
+msgstr "Izmantot veidni"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Izveidot šo aptauju no administratora sagatavotas atkārtoti lietojamas veidnes."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Rezultāti slēpti no skolotāja/tutora"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Skolotāji un tutori joprojām var redzēt atbilžu skaitu un sūtīt atgādinājumus, bet nevar atvērt vai eksportēt aptaujas rezultātus."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Veidne piemērota. Pārskatiet aptaujas iestatījumus un saglabājiet, lai to izveidotu."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Aptaujas rezultāti ir slēpti no skolotājiem un tutoriem."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Joprojām varat izmantot ielūgumu lapu, lai redzētu atbilžu skaitu un sūtītu atgādinājumus."
+
+msgid "Payment method"
+msgstr "Maksājuma veids"
+
+msgid "Preview mode"
+msgstr "Priekšskatījuma režīms"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Progress un vērtējums priekšskatījuma režīmā netiek saglabāti."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Šo saiti nevar parādīt mācību ceļā."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Atveriet to jaunā cilnē, lai skatītu lapu."
+
+msgid "Report a problem with this question"
+msgstr "Ziņot par problēmu ar šo jautājumu"
+
+msgid "Your report was sent to the teacher."
+msgstr "Jūsu ziņojums tika nosūtīts skolotājam."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Aprakstiet atrasto kļūdu vai problēmu. Jūsu ziņojums tiks nosūtīts skolotājam."
+
+msgid "A comment is required."
+msgstr "Komentārs ir obligāts."
+
+msgid "Could not send the report."
+msgstr "Neizdevās nosūtīt ziņojumu."
+
+msgid "Learner reports"
+msgstr "Izglītojamo ziņojumi"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Šim jautājumam nav iesniegti izglītojamo ziņojumi."
+
+msgid "View attempt"
+msgstr "Skatīt mēģinājumu"
+
+msgid "Could not load learner reports."
+msgstr "Neizdevās ielādēt izglītojamo ziņojumus."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Ļaut izglītojamiem ziņot par problēmām jautājumos"
+
+msgid "Skill acquired"
+msgstr "Prasme iegūta"
+
+msgid "AI Toolbox"
+msgstr "MI rīkkopa"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Ģenerējiet interaktīvas izglītojošas lietotnes ar MI un izsekojiet izglītojamo progresu ar SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Vēl nav pieejamas publicētas lietotnes."
+
+msgid "Interactive applications"
+msgstr "Interaktīvas lietotnes"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Ģenerējiet, uzlabojiet, publicējiet un pārskatiet versijas vienuviet."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Atveriet lietotni, lai turpinātu no pēdējā progresa."
+
+msgid "Interactive learning application"
+msgstr "Interaktīva mācību lietotne"
+
+msgid "Create an interactive learning app"
+msgstr "Izveidot interaktīvu mācību lietotni"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Aprakstiet aktivitāti. Chamilo ģenerēs versijotu SCORM lietotni ar progresa un vērtējuma izsekošanu."
+
+msgid "Idea"
+msgstr "Ideja"
+
+msgid "Application"
+msgstr "Lietotne"
+
+msgid "What should the application do?"
+msgstr "Ko lietotnei vajadzētu darīt?"
+
+msgid "How it works"
+msgstr "Kā tas darbojas"
+
+msgid "AI generation"
+msgstr "MI ģenerēšana"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Lietotne tiek ģenerēta no jūsu norādījumiem un saglabāta kā 1. versija."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Izglītojamā progress, vērtējums un atsākšanas dati tiek ziņoti Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Turpmākie uzlabojumi izveido jaunas versijas, nedzēšot iepriekšējās."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Iekļaujiet mācību mērķi, noteikumus, līmeņus, vērtēšanu un to, kas jānotiek, kad izglītojamais pabeidz."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Jums nav atļauts veidot saturu šajā kontekstā."
+
+msgid "The application was generated successfully."
+msgstr "Lietotne tika veiksmīgi ģenerēta."
+
+msgid "Open in student view"
+msgstr "Atvērt studentu skatā"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Ģenerējiet lietotni, lai iespējotu priekšskatījumu un publicēšanu."
+
+msgid "Improve with AI"
+msgstr "Uzlabot ar AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Aprakstiet izmaiņas. Tiks izveidota jauna versija, un iepriekšējās versijas paliks pieejamas."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Aprakstiet pilnīgo interaktīvo aktivitāti, ko vēlaties ģenerēt."
+
+msgid "What should be improved?"
+msgstr "Kas būtu jāuzlabo?"
+
+msgid "Generate new version"
+msgstr "Ģenerēt jaunu versiju"
+
+msgid "Version history"
+msgstr "Versiju vēsture"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Priekšskatīt, lejupielādēt vai atjaunot jebkuru ģenerēto versiju."
+
+msgid "A new version was generated."
+msgstr "Tika ģenerēta jauna versija."
+
+msgid "Version restored"
+msgstr "Versija atjaunota"
+
+msgid "The support bot tree has been published."
+msgstr "Atbalsta bota koks ir publicēts."
+
+msgid "The support bot tree has been archived."
+msgstr "Atbalsta bota koks ir arhivēts."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Atbalsta bota koks ir dublēts."
+
+msgid "The support bot tree has been deleted."
+msgstr "Atbalsta bota koks ir dzēsts."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Vai tiešām vēlaties dzēst šo atbalsta bota koku?"
+
+msgid "The support bot tree has been imported."
+msgstr "Atbalsta bota koks ir importēts."
+
+msgid "Create support bot tree"
+msgstr "Izveidot atbalsta bota koku"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Izveidojiet fiksētu lēmumu koku, kas vada lietotājus caur atbalsta jautājumiem un var eskalēt uz biļetēm."
+
+msgid "Portal scope"
+msgstr "Portāla tvērums"
+
+msgid "Duplicate"
+msgstr "Dublēt"
+
+msgid "Archive"
+msgstr "Arhivēt"
+
+msgid "View conversations"
+msgstr "Skatīt sarunas"
+
+msgid "Import support bot tree"
+msgstr "Importēt atbalsta bota koku"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importējiet JSON eksportu vai CSV lēmumu koku. Importētais koks vienmēr tiek izveidots kā jauns melnraksts."
+
+msgid "Resolved"
+msgstr "Atrisināts"
+
+msgid "Escalated"
+msgstr "Eskalēts"
+
+msgid "Abandoned"
+msgstr "Pamests"
+
+msgid "Support bot conversations"
+msgstr "Atbalsta bota sarunas"
+
+msgid "Outcome"
+msgstr "Rezultāts"
+
+msgid "Started at"
+msgstr "Sākts"
+
+msgid "Ended at"
+msgstr "Beigts"
+
+msgid "View conversation"
+msgstr "Skatīt sarunu"
+
+msgid "Go to node"
+msgstr "Iet uz mezglu"
+
+msgid "Create support ticket"
+msgstr "Izveidot atbalsta biļeti"
+
+msgid "End conversation"
+msgstr "Beigt sarunu"
+
+msgid "Node"
+msgstr "Mezgls"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Atbalsta bota kokam ir nepieciešams vismaz viens mezgls."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Vai tiešām vēlaties dzēst šo mezglu? Saites uz to tiks notīrītas."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Katram atbalsta bota mezglam ir nepieciešama vismaz viena opcija."
+
+msgid "The support bot tree title is required."
+msgstr "Atbalsta bota koka nosaukums ir obligāts."
+
+msgid "A support bot entry node is required."
+msgstr "Ir nepieciešams atbalsta bota ieejas mezgls."
+
+msgid "Every support bot node requires content."
+msgstr "Katram atbalsta bota mezglam ir nepieciešams saturs."
+
+msgid "Every support bot option requires a label."
+msgstr "Katrai atbalsta bota opcijai ir nepieciešama etiķete."
+
+msgid "Select a target node for every go-to option."
+msgstr "Atlasiet mērķa mezglu katrai pārejas opcijai."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Ievadiet relatīvo URL katrai saites opcijai."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Atlasiet biļetes kategoriju katrai eskalācijas opcijai."
+
+msgid "The support bot tree has been saved."
+msgstr "Atbalsta bota koks ir saglabāts."
+
+msgid "Edit support bot tree"
+msgstr "Rediģēt atbalsta bota koku"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Publicētās un arhivētās atbalsta bota versijas ir tikai lasāmas. Dublējiet šo koku no saraksta, lai rediģētu jaunu melnraksta versiju."
+
+msgid "Default ticket project"
+msgstr "Noklusējuma biļešu projekts"
+
+msgid "Decision tree rules"
+msgstr "Lēmumu koka noteikumi"
+
+msgid "Every node must contain at least one option."
+msgstr "Katrā mezglā jābūt vismaz vienai opcijai."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Gala mezglam jābeidz saruna vai jāizveido atbalsta biļete."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Pārejas saites v1 versijā nedrīkst veidot ciklus."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Ārējie URL v1 versijā nav atļauti; saišu darbībām jāizmanto relatīvs Chamilo ceļš."
+
+msgid "Nodes"
+msgstr "Mezgli"
+
+msgid "Add node"
+msgstr "Pievienot mezglu"
+
+msgid "Entry node"
+msgstr "Ieejas mezgls"
+
+msgid "Set as entry node"
+msgstr "Iestatīt kā ieejas mezglu"
+
+msgid "Target node"
+msgstr "Mērķa mezgls"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Izmantojiet relatīvu Chamilo ceļu, piemēram, /tickets."
+
+msgid "Ticket category"
+msgstr "Biļetes kategorija"
+
+msgid "Select a default ticket project first."
+msgstr "Vispirms atlasiet noklusējuma biļešu projektu."
+
+msgid "Closing message"
+msgstr "Noslēguma ziņojums"
+
+msgid "Select a node to edit it."
+msgstr "Atlasiet mezglu, lai to rediģētu."
+
+msgid "Support bot conversation"
+msgstr "Atbalsta bota saruna"
+
+msgid "Transcript of %s"
+msgstr "%s transkripts"
+
+msgid "Download unofficial transcript"
+msgstr "Lejupielādēt neoficiālo transkriptu"
+
+msgid "Issue official transcript"
+msgstr "Izdot oficiālo transkriptu"
+
+msgid "Official transcripts"
+msgstr "Oficiālie transkripti"
+
+msgid "No official transcript has been issued yet."
+msgstr "Oficiālais transkripts vēl nav izdots."
+
+msgid "Issued by"
+msgstr "Izdevis"
+
+msgid "Verify"
+msgstr "Pārbaudīt"
+
+msgid "Signature of official transcripts"
+msgstr "Oficiālo transkriptu paraksts"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Šis attēls tiek drukāts šī portāla oficiālajos transkriptos virs parakstītāja vārda un amata, kas iestatīti sertifikāta iestatījumos."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Izdot parakstītu oficiālo transkriptu ar šajā lapā uzskaitītajiem kursiem un vērtējumiem? To var pārbaudīt tiešsaistē, līdz tas tiek atcelts."
+
+msgid "Official transcript issued"
+msgstr "Oficiālais transkripts izdots"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Atcelt šo oficiālo transkriptu? Tā pārbaudes lapa pēc tam rādīs, ka tas ir atcelts."
+
+msgid "Official transcript revoked"
+msgstr "Oficiālais transkripts atcelts"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Vispirms atlasiet PNG vai JPEG attēlu."
+
+msgid "Signed credential"
+msgstr "Parakstīta akreditācija"
+
+msgid "Issue signed credential"
+msgstr "Izdot parakstītu akreditāciju"
+
+msgid "Verify credential"
+msgstr "Pārbaudīt akreditāciju"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Piesaistīt Sepolia testa tīklā"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Apstiprināt esošo Sepolia darījumu"
+
+msgid "Revoke signed credential"
+msgstr "Atcelt parakstīto akreditāciju"
+
+msgid "Delete certificate"
+msgstr "Dzēst sertifikātu"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Apstiprināt esošu Sepolia darījumu"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia darījuma jaucējkods"
+
+msgid "Verify transaction"
+msgstr "Pārbaudīt darījumu"
+
+msgid "Anchored"
+msgstr "Piesaistīts"
+
+msgid "Issued"
+msgstr "Izdots"
+
+msgid "Not issued"
+msgstr "Nav izdots"
+
+msgid "Consent required"
+msgstr "Nepieciešama piekrišana"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia darījums apstiprināts un pārbaudīts"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia testa tīkla maks jums lūgs parakstīt darījumu. Tiks piesaistīts tikai sertifikāta pirkstu nospiedums. Turpināt?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Atcelt šo parakstīto akreditāciju? Jebkurš blokķēdes darījums paliek pastāvīgs, bet pārbaudes lapa ziņos par atcelšanu."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Izdot parakstītu sertifikāta akreditāciju šim izglītojamajam? Tas ļauj apstiprinātos personas datus pārbaudīt ar privātu saiti."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia ir nepieciešams ar EVM saderīgs pārlūkprogrammas maks."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Maciņā atlasiet Sepolia testa tīklu (ķēdes ID 11155111)."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Nederīga maciņa adrese vai sertifikāta pirkstu nospiedums."
+
+msgid "Transaction pending"
+msgstr "Darījums gaida"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Vēlāk izmantojiet Apstiprināt esošo Sepolia darījumu."
+
+msgid "Signed credential issued"
+msgstr "Parakstītais akreditācijas dokuments izsniegts"
+
+msgid "Credential revoked"
+msgstr "Akreditācijas dokuments atsaukts"
+
+msgid "Transaction hash"
+msgstr "Darījuma jaucējkods"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Publicēšanas piekrišana ļauj administratoram izsniegt parakstītu sertifikāta akreditācijas dokumentu un pēc izvēles piesaistīt tā SHA-256 pirkstu nospiedumu Sepolia testa tīklā. Ķēdē netiek nosūtīts vārds vai personas dati. Piekrišanu varat atsaukt jebkurā laikā."
+
+msgid "Publication consent"
+msgstr "Publicēšanas piekrišana"
+
+msgid "Not approved"
+msgstr "Nav apstiprināts"
+
+msgid "Withdraw consent"
+msgstr "Atsaukt piekrišanu"
+
+msgid "Approve publication"
+msgstr "Apstiprināt publicēšanu"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Es atļauju parakstītu, publiski pārbaudāmu akreditācijas dokumentu, kurā redzams mans vārds, kurss, vērtējums un izsniegšanas datums. Administrators var arī publicēt tikai tā SHA-256 pirkstu nospiedumu Sepolia testa tīklā. Pirkstu nospiedums ir pastāvīgs, pat ja vēlāk atsaucu piekrišanu. Turpināt?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Atsaukt šī sertifikāta publicēšanas apstiprinājumu?"
+
+msgid "Publication approval recorded"
+msgstr "Publicēšanas apstiprinājums reģistrēts"
+
+msgid "Publication approval withdrawn"
+msgstr "Publicēšanas apstiprinājums atsaukts"
+
+msgid "Read more"
+msgstr "Lasīt vairāk"
+
+msgid "Participation: %s of %s posts"
+msgstr "Dalība: %s no %s ziņām"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Ievietojiet savu ieguldījumu, lai redzētu citu dalībnieku atbildes."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Tikai pilnvaroti izmeklētāji var pārskatīt atbilstošos ziņojumus. Ziņotāju identitāte pēc noklusējuma paliek konfidenciāla."
+
+msgid "New confidential report"
+msgstr "Jauns konfidenciāls ziņojums"
+
+msgid "Reported user"
+msgstr "Ziņotais lietotājs"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Ir atbilstoši konfidenciāli ziņojumi, kas gaida pārskatīšanu."
+
+msgid "Eligible investigations"
+msgstr "Atbilstošās izmeklēšanas"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Lieta šeit parādās tikai pēc tam, kad vismaz %s dažādi lietotāji ziņo par to pašu personu."
+
+msgid "Distinct reporters"
+msgstr "Atšķirīgi ziņotāji"
+
+msgid "Reports for selected user"
+msgstr "Ziņojumi par atlasīto lietotāju"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Konfidenciāla ziņošana pašlaik nav pieejama."
+
+msgid "The investigation could not be loaded."
+msgstr "Izmeklēšanu neizdevās ielādēt."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Jūsu identitāte pēc noklusējuma ir aizsargāta no izmeklētājiem, taču ziņojuma tekstā vai pielikumos neiekļaujiet identificējošu informāciju. Šis nav ārkārtas dienests."
+
+msgid "Find the user involved"
+msgstr "Atrodiet iesaistīto lietotāju"
+
+msgid "Name or username"
+msgstr "Vārds vai lietotājvārds"
+
+msgid "Describe the situation"
+msgstr "Aprakstiet situāciju"
+
+msgid "Evidence (optional)"
+msgstr "Pierādījumi (pēc izvēles)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Līdz trim failiem, katrs ne vairāk kā 8 MiB. Attēli, audio vai īsi video."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Es piekrītu, ka pilnvaroti izmeklētāji šim konkrētajam ziņojumam var redzēt manu vārdu un e-pastu. Šo atļauju varu atsaukt vēlāk."
+
+msgid "Send confidential report"
+msgstr "Nosūtīt konfidenciālu ziņojumu"
+
+msgid "Could not search users"
+msgstr "Neizdevās meklēt lietotājus"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Līdz trim failiem, katrs ne vairāk kā 8 MiB."
+
+msgid "The confidential report could not be saved."
+msgstr "Konfidenciālo ziņojumu neizdevās saglabāt."
+
+msgid "Confidential report"
+msgstr "Konfidenciāls ziņojums"
+
+msgid "Confidential conversation"
+msgstr "Konfidenciāla saruna"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Izmeklētāji var sazināties šajā sarunā, neredzot ziņotāja identitāti, ja vien nav iespējota kontaktinformācijas kopīgošana."
+
+msgid "Reporter"
+msgstr "Ziņotājs"
+
+msgid "Investigator"
+msgstr "Izmeklētājs"
+
+msgid "Additional evidence (optional)"
+msgstr "Papildu pierādījumi (pēc izvēles)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Līdz trim failiem, katrs ne vairāk kā 8 MiB; desmit faili uz ziņojumu."
+
+msgid "Contact shared voluntarily"
+msgstr "Kontakts kopīgots brīvprātīgi"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Atļaut izmeklētājiem redzēt manu vārdu un e-pastu šim ziņojumam"
+
+msgid "This confidential report is not available."
+msgstr "Šis konfidenciālais ziņojums nav pieejams."
+
+msgid "Your message could not be saved."
+msgstr "Jūsu ziņojumu neizdevās saglabāt."
+
+msgid "Contact sharing could not be updated."
+msgstr "Kontaktpersonu koplietošanu neizdevās atjaunināt."
+
+msgid "Evidence could not be downloaded."
+msgstr "Pierādījumus neizdevās lejupielādēt."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Piemērs: aizpildiet veidlapas aktivitāti — aprēķiniet ķermeņa masas indeksu</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Vecums</strong></td>            <td width=\"75%\" style=\"\">[25] gadi</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Dzimums</strong></td>            <td style=\"\" text-align:=\"\">[M] (M vai F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Svars</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Augums</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Ķermeņa masas indekss</strong></td>            <td style=\"vertical-align: top;\">[29] ĶMI = svars/augums<sup>2</sup> (sk. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia rakstu</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Piemērs: aizpildiet veidlapas aktivitāti — aprēķiniet ķermeņa masas indeksu</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Vecums</strong></td>            <td width=\"75%\" style=\"\">[25] gadi</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Dzimums</strong></td>            <td style=\"\" text-align:=\"\">[M] (M vai F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Svars</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Augums</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Ķermeņa masas indekss</strong></td>            <td style=\"vertical-align: top;\">[29] ĶMI = svars/augums<sup>2</sup> (sk. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia rakstu</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Slēpt IP adresi pārskatos"
+
+msgid "Course settings policies"
+msgstr "Kursa iestatījumu politikas"
+
+msgid "Academic transcripts"
+msgstr "Akadēmiskie izraksti"
+
+msgid "Transcript program title"
+msgstr "Izraksta programmas nosaukums"
+
+msgid "Transcript course code"
+msgstr "Izraksta kursa kods"
+
+msgid "Transcript course hours field"
+msgstr "Izraksta kursa stundu lauks"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Izrakstā pabeigtās stundas ir nepieciešamās stundas"
+
+msgid "Transcript student number field"
+msgstr "Izraksta studenta numura lauks"
+
+msgid "Transcript address fields"
+msgstr "Izraksta adreses lauki"
+
+msgid "Transcript grading scale"
+msgstr "Izraksta vērtēšanas skala"
+
+msgid "Transcript GPA note"
+msgstr "Izraksta GPA piezīme"
+
+msgid "Transcript signatory name"
+msgstr "Izraksta parakstītāja vārds"
+
+msgid "Transcript signatory title"
+msgstr "Izraksta parakstītāja amats"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Iespējot parakstītus sertifikātus un izvēles Sepolia testnet enkurošanu"
+
+msgid "Show thread replies only after participating"
+msgstr "Rādīt pavediena atbildes tikai pēc dalības"
+
+msgid "Show the forum category description in threads"
+msgstr "Rādīt foruma kategorijas aprakstu pavedienos"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Foruma dalības iestatījumus var mainīt kursos"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Maksimālais ziņu skaits foruma pavedienā"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Ziņas, kas nepieciešamas foruma pavediena pabeigšanai"
+
+msgid "Track e-mail openings"
+msgstr "Izsekot e-pasta atvēršanu"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Atļaut atbildes uz ziņojumiem pa e-pastu"
+
+msgid "Inbound e-mail address"
+msgstr "Ienākošā e-pasta adrese"
+
+msgid "Inbound mailbox DSN"
+msgstr "Ienākošās pastkastes DSN"
+
+msgid "Remember me duration (days)"
+msgstr "Atcerēties mani ilgums (dienas)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Iespējot OAuth dinamisko klientu reģistrāciju ārpus MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Iespējot konfidenciālu labklājības ziņošanu"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Minimālais atšķirīgo ziņotāju skaits izmeklēšanai"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Atļaut konfidenciālus pierādījumu pielikumus"
+
+msgid "Show confidential investigation notifications"
+msgstr "Rādīt konfidenciālu izmeklējumu paziņojumus"
+
+msgid "Enable support chatbot"
+msgstr "Iespējot atbalsta tērzēšanas robotu"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Izvēlieties, kur vārdnīcas termini tiek izcelti automātiski: dokumentos, vingrinājumos un mācību ceļos."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Slēpt IP adreses vizuālajos pārskatos un pārskatu eksportos. IP adreses paliek saglabātas un pieejamas ar autorizētām personas datu procedūrām."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Platformas noklusējumi un kursa rediģēšanas atļaujas; pārvaldītas sadaļā Kursa iestatījumi."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Ļauj lietotājiem lejupielādēt neoficiālu izrakstu par pabeigtajiem kursiem un ļauj administratoriem, sesiju administratoriem un personāla vadītājiem izsniegt parakstītus oficiālus izrakstus viņu pārvaldītajiem lietotājiem. Paraksta attēls tiek augšupielādēts no lietotāja izraksta lapas."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Programmas nosaukums, kas drukāts uz katra izraksta, piemēram, šajā platformā sagatavotā diploma nosaukums."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Kurš kursa lauks aizpilda izrakstu kursa koda kolonnu: kursa kods vai nodaļas nosaukums."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Kursa papildlauka mainīgais, kurā ir kursa stundu skaits. Atstājiet tukšu, lai izmantotu kursa ilgumu."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Drukāt kursa nepieciešamās stundas kā izglītojamā pabeigtās stundas. Ja izslēgts, pabeigtās stundas ir laiks, ko izglītojamais pavadījis kursā."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Lietotāja papildlauka mainīgais, kurā ir izrakstos drukātais studenta numurs. Atstājiet tukšu, lai nedrukātu neko."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Ar komatu atdalīti lietotāja papildlauku mainīgie, kas izrakstos drukāti pēc lietotāja adreses, piemēram, pilsēta, novads un pasta indekss."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "JSON saraksts ar atzīmju burtiem no augstākā minimālā rezultāta uz leju: katram elementam ir minimālais rezultāts procentos (min), burts un atzīmes punkti, kas izmantoti GPA aprēķinam."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Skaidrojums, kā tiek aprēķināts GPA, drukāts izrakstos zem GPA."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Skolas amatpersonas vārds, kas paraksta oficiālos izrakstus."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Skolas amatpersonas amats, kas paraksta oficiālos izrakstus."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Nepieciešama skaidra īpašnieka piekrišana un manuālas administratora darbības. Ķēdē tiek sūtīti tikai SHA-256 pirkstu nospiedumi."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Izglītojamie redz tikai pirmā foruma pavediena ziņu, līdz paši ir publicējuši ziņu tajā. Administratori, skolotāji, treneri un grupu tutori vienmēr redz visas ziņas."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Rādīt foruma kategorijas nosaukumu un saīsinātu aprakstu katra pavediena augšpusē ar saiti uz pilnu aprakstu."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Ja iespējots, skolotāji kursa iestatījumu sadaļā Forums var izvēlēties, vai kurss slēpj pavediena atbildes, līdz izglītojamais publicē ziņu, rāda kategorijas aprakstu pavedienos un cik ziņu dalības progresa josla sagaida, nevis ievērot platformas iestatījumus."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Rādīt tikai šo ziņu skaitu katrā foruma pavedienā katram lietotājam, kas nav platformas administrators, tostarp skolotājiem, un visiem mācību ceļā. Pavedienu un ligzdotajos skatos ierobežojums attiecas uz katras ziņas atbildēm. Ziņas tiek saglabātas skata secībā: pirmās vai jaunākās mācību ceļā, kur jaunākās ziņas ir pirmās. Iestatiet 0, lai rādītu visas ziņas."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Rādīt izglītojamajiem progresa joslu katrā foruma pavedienā, kas sasniedz 100%, kad viņi tajā ir publicējuši šo ziņu skaitu. Ziņas, kas gaida moderāciju, tiek skaitītas. Iestatiet 0, lai paslēptu progresa joslu."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Pievieno mazu izsekošanas attēlu ziņojumu paziņojumu e-pastiem un reģistrē, kad tas tiek pieprasīts. Tas norāda tikai to, ka e-pasts, iespējams, ir atvērts; tas nepierāda, ka tas ir izlasīts."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Atļaut tiešo ziņojumu paziņojumu saņēmējiem atbildēt pa e-pastu. Ienākošajiem ziņojumiem jābūt novirzītiem uz Chamilo ienākošā pasta komandu, izmantojot pasta infrastruktūru."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Pamata adrese atbilžu maršrutēšanai, piemēram, replies@example.com. Chamilo pievieno unikālu saņēmēja marķieri, izmantojot plus adresēšanu."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Pastkastes savienojums ienākošo atbilžu savākšanai, piemēram, imaps:\/\/user:password@imap.example.com:993\/INBOX. URL kodējiet rezervētās rakstzīmes akreditācijas datos."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Dienu skaits, cik ilgi lietotājs paliek pieteicies, ja ir atlasīts Atcerēties mani. Iestatiet 0, lai atspējotu. Nepieciešams HTTPS. Atļautais diapazons: 0 līdz 90. Parastais sesijas taimauts tiek konfigurēts atsevišķi PHP\/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Ļauj dinamiskajai klienta reģistrācijai pieprasīt jebkuru tvērumu, ko reģistrējis Chamilo OAuth resursu serveris. Ja atspējots, pašreģistrācija paliek ierobežota ar MCP. Resursu piekļuve vienmēr tiek atsevišķi ierobežota ar katra klienta atļauto resursu sarakstu."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Iespējot konfidenciālus incidentu ziņojumus. Modulis prasa aizsargātu šifrēšanas atslēgu un izmeklētāja atļauju."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "No 2 līdz 10 dažādiem ziņotājiem jāziņo par to pašu lietotāju, pirms lieta kļūst redzama izmeklētājiem."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Atļaut attēlu, audio un īsu video pierādījumus. Esošie pielikumi paliek lasāmi, ja atspējots."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Rādīt iekšēju norādi par atbilstošām izmeklēšanām. Nesūta e-pastus vai ārējus paziņojumus."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Rādīt lēmumu koka tērzēšanas robotu tērzēšanas panelī, kas var vadīt lietotājus uz "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Ļauj skolotājiem veidot un versot mākslīgā intelekta atbalstītas izglītības lietotnes kursos."
+
+msgid "Department name"
+msgstr "Nodaļas nosaukums"
+
+msgid "Documents and exercise"
+msgstr "Dokumenti un vingrinājums"
+
+msgid "Documents and learning path"
+msgstr "Dokumenti un mācību ceļš"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokumenti, vingrinājums un mācību ceļš"
+
+msgid "session"
+msgstr "sesija"
+
+msgid "course"
+msgstr "kurss"
+
+msgid "You have been enrolled in %s"
+msgstr "Jūs esat reģistrēts %s"
 

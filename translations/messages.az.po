@@ -269,7 +269,7 @@ msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
 msgstr "Hiperbolik arksinus:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
-msgstr "Dilinizi siyahıda tapa bilmirsiniz? Tərcüməçi kimi töhfə vermək üçün info@chamilo.org ünvanı ilə əlaqə saxlayın."
+msgstr "Dilinizi siyahıda tapa bilmirsiniz? Tərcüməçi kimi töhfə vermək üçün info@chamilo.org ünvanında bizimlə əlaqə saxlayın."
 
 msgid "Arcsine:\t\t\tarcsin(x)"
 msgstr "Arksinus:\t\t\tarcsin(x)"
@@ -344,7 +344,7 @@ msgid "Sincerely"
 msgstr "Hörmətlə"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Düstur nümunəsi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Formula nümunəsi: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Dəyişənlərin aralıqları"
@@ -6845,7 +6845,7 @@ msgid "Private access (access authorized to group members only)"
 msgstr "Məhdud giriş (yalnız qrup üzvlərinə icazə verilir)"
 
 msgid "Public access (access authorized to any member of the course)"
-msgstr "Açıq giriş (kursun istənilən üzvünə icazə verilir)"
+msgstr "Ümumi giriş (kursun istənilən üzvünə giriş icazəsi verilir)"
 
 msgid "Edit settings"
 msgstr "Parametrləri redaktə et"
@@ -7520,7 +7520,7 @@ msgid "Urgent: %s course expiration reminder"
 msgstr "Təcili: %s kursunun müddətinin bitməsi haqqında xatırlatma"
 
 msgid "Exercise and learning path"
-msgstr "Tapşırıq/test və təlim yolu"
+msgstr "Tapşırıq və təlim yolu"
 
 msgid "Warning: It is possible to use, in the gradebook, tests that are part of learning paths. If the learning path itself is already included, this test might be part of the gradebook already. The learning paths evaluation is made on the basis of a progress percentage, while the evaluation on tests is made on the basis of a score. Survey evaluation is based on whether the user has answered (1) or not (0). Make sure you test your combinations of gradebook evaluations to avoid mind-boggling situations."
 msgstr "Xəbərdarlıq: Qiymət cədvəlində təlim yollarına daxil olan testlərdən istifadə etmək mümkündür. Təlim yolunun özü artıq daxil edilibsə, bu test də qiymət cədvəlində ola bilər. Təlim yollarının qiymətləndirilməsi irəliləyiş faizi, testlərin qiymətləndirilməsi isə bal əsasında aparılır. Sorğular istifadəçinin cavab verib-verməməsinə görə qiymətləndirilir: cavab veribsə 1, verməyibsə 0. Qarışıqlığın qarşısını almaq üçün qiymət cədvəlindəki qiymətləndirmə birləşmələrini yoxladığınızdan əmin olun."
@@ -7673,7 +7673,7 @@ msgid "Please type your text below"
 msgstr "Mətninizi aşağıda yazın"
 
 msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
-msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Forma doldurma fəaliyyəti nümunəsi : bədən kütləsi indeksini hesablayın</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Yaş</strong></td>            <td width=\"75%\" style=\"\">[25] yaş</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Cins</strong></td>            <td style=\"\" text-align:=\"\">[M] (M və ya F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Çəki</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Boy</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Bədən kütləsi indeksi</strong></td>            <td style=\"vertical-align: top;\">[29] BKİ =Çəki/Boy<sup>2</sup> (Bax:<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia məqaləsi</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Formu doldurma fəaliyyəti nümunəsi: Bədən Kütlə İndeksini hesablayın</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Yaş</strong></td>            <td width=\"75%\" style=\"\">[25] yaş</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Cins</strong></td>            <td style=\"\" text-align:=\"\">[M] (M və ya F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Çəki</strong></td>            <td style=\"\" text-align:=\"\">95 kq</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Boy</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Bədən Kütlə İndeksi</strong></td>            <td style=\"vertical-align: top;\">[29] BKİ =Çəki/Boy<sup>2</sup> (Bax: <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Vikipediya məqaləsi</a>)</td>        </tr>    </tbody></table>"
 
 msgid "Note down the address"
 msgstr "Ünvanı qeyd et"
@@ -9389,7 +9389,7 @@ msgid "Could not open"
 msgstr "Açmaq mümkün olmadı"
 
 msgid "Time in course"
-msgstr "Kursda keçirilən vaxt"
+msgstr "Kursda keçirilmiş vaxt"
 
 msgid "This course could not be found"
 msgstr "Bu kurs tapılmadı"
@@ -16109,7 +16109,7 @@ msgid "Manage skills"
 msgstr "Bacarıqları idarə et"
 
 msgid "The attempted oral questions are %s"
-msgstr "Cavablandırılmasına cəhd edilmiş şifahi suallar: %s"
+msgstr "Cavablandırılmağa cəhd edilmiş şifahi suallar: %s"
 
 msgid "A learner has attempted one or more oral question"
 msgstr "Təhsilalan bir və ya daha çox şifahi sualı cavablandırmağa cəhd etdi"
@@ -17009,7 +17009,7 @@ msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThis folder contains the variou
 msgstr "Yalnız müəllimə görünən məlumat:\nBu qovluqda qiymətləndirmə aləti üçün yaradılmış müxtəlif sertifikat şablonları var. Bu qovluğu hamıya görünən etmək tövsiyə olunmur."
 
 msgid "Destination folder"
-msgstr "Təyinat qovluğu"
+msgstr "Hədəf qovluq"
 
 msgid "Chat conversations history"
 msgstr "Çat söhbətlərinin tarixçəsi"
@@ -24572,7 +24572,7 @@ msgid "Add notification"
 msgstr "Bildiriş əlavə et"
 
 msgid "Notification to remind the event"
-msgstr "Tədbiri xatırlatmaq üçün bildiriş"
+msgstr "Tədbiri xatırladan bildiriş"
 
 msgid "Add tags"
 msgstr "Etiketlər əlavə et"
@@ -28640,10 +28640,10 @@ msgid "Client"
 msgstr "Müştəri"
 
 msgid "Hide advanced settings"
-msgstr "Qabaqcıl parametrləri gizlət"
+msgstr "Əlavə parametrləri gizlət"
 
 msgid "Show advanced settings"
-msgstr "Qabaqcıl parametrləri göstər"
+msgstr "Əlavə parametrləri göstər"
 
 msgid "Are you sure you want to delete this item?"
 msgstr "Bu elementi silmək istədiyinizə əminsiniz?"
@@ -28709,7 +28709,7 @@ msgid "Resource file not found for the given resource node"
 msgstr "Verilmiş resurs qovşağı üçün resurs faylı tapılmadı"
 
 msgid "You have been enrolled in a new course"
-msgstr "Yeni kursa qeydiyyatdan keçmisiniz"
+msgstr "Yeni kursa yazılmısınız"
 
 msgid "Remove users from URLs with a CSV file"
 msgstr "CSV faylı ilə istifadəçiləri URL-lərdən çıxar"
@@ -28766,10 +28766,13 @@ msgid "Current user not found."
 msgstr "Cari istifadəçi tapılmadı."
 
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
-msgstr "Salam %s,<br><br>Siz %s platformasında qeydiyyatdan keçmisiniz.<br>Hesabınıza <a href=\"%s\">buradan</a> daxil ola bilərsiniz.<br><br>Giriş məlumatlarınız:<br>İstifadəçi adı: <strong>%s</strong><br>Parol: <strong>%s</strong><br><br>Hörmətlə,<br>%s"
+msgstr "Salam %s,<br><br>Siz %s üzərində qeydiyyatdan keçmisiniz.<br>Hesabınıza <a href=\"%s\">buradan</a> daxil ola bilərsiniz.<br><br>Giriş məlumatlarınız:<br>İstifadəçi adı: <strong>%s</strong><br>Parol: <strong>%s</strong><br><br>Hörmətlə,<br>%s"
+
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Salam %s,<br><br>Siz %s sistemində qeydiyyatdan keçmisiniz.<br>İstifadəçi adı: <strong>%s</strong><br><br>Şifrənizi təyin etmək və hesabınıza daxil olmaq üçün aşağıdakı keçidə klikləyin:<br><a href=\"%s\">Şifrənizi təyin edin</a><br><br>Hörmətlə,<br>%s"
 
 msgid "You are registered on %s"
-msgstr "Siz %s platformasında qeydiyyatdan keçmisiniz"
+msgstr "Siz %s üzərində qeydiyyatdan keçmisiniz"
 
 msgid "Learning path categories"
 msgstr "Təlim yolu kateqoriyaları"
@@ -41574,4 +41577,1613 @@ msgstr "Layihənin kök qovluğunda %s mövcuddur: versiya yeniləməsinin son n
 
 msgid "You have earned a certificate for this exercise"
 msgstr "Bu tapşırıq/test üçün sertifikat qazanmısınız"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Bu təlim yoluna daxil olmaq üçün əvvəlcə \"%s\" təlim yolunu tamamlamalısınız."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Bu faylı həmişəlik silmək istədiyinizə əminsiniz?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Bu faylı seçilmiş kursdan ayırmaq istədiyinizə əminsiniz?"
+
+msgid "Attach this file to another course"
+msgstr "Bu faylı başqa kursa əlavə et"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Seçilmiş kurs(lar)a əlavə et (gizli)"
+
+msgid "Course(s):"
+msgstr "Kurs(lar):"
+
+msgid "Delete definitively"
+msgstr "Həmişəlik sil"
+
+msgid "Detach from this course"
+msgstr "Bu kursdan ayır"
+
+msgid "File actions"
+msgstr "Fayl əməliyyatları"
+
+msgid "File Information"
+msgstr "Fayl məlumatı"
+
+msgid "File Link:"
+msgstr "Fayl keçidi:"
+
+msgid "File Path:"
+msgstr "Fayl yolu:"
+
+msgid "Filter courses..."
+msgstr "Kursları süz..."
+
+msgid "MIME Type:"
+msgstr "MIME növü:"
+
+msgid "N/A"
+msgstr "Yoxdur"
+
+msgid "No results found."
+msgstr "Nəticə tapılmadı."
+
+msgid "Original Name"
+msgstr "Orijinal ad"
+
+msgid "Original Name:"
+msgstr "Orijinal ad:"
+
+msgid "Orphan"
+msgstr "Yetim"
+
+msgid "Resource File ID:"
+msgstr "Resurs fayl ID:"
+
+msgid "Resource Node ID:"
+msgstr "Resurs düyünü ID:"
+
+msgid "Search..."
+msgstr "Axtar..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Bu faylı müəyyən kursdan ayırmaq üçün yuxarıdakı müvafiq kurs teqindəki \"×\" ikonuna klikləyin."
+
+msgid "User:"
+msgstr "İstifadəçi:"
+
+msgid "View file information"
+msgstr "Fayl məlumatına bax"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Bu faylı bir və ya bir neçə kursa əlavə edə bilərsiniz (sənədlərin kökündə gizli). Fayl artıq istifadə olunmursa və yetim qalırsa, onu həm də qəti silə bilərsiniz."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Bir və ya bir neçə kurs seçə bilərsiniz (Ctrl/Cmd + klik istifadə edin)."
+
+msgid "bytes"
+msgstr "bayt"
+
+msgid "Failed to copy:"
+msgstr "Kopyalamaq alınmadı:"
+
+msgid "Missing resource file identifier."
+msgstr "Resurs fayl identifikatoru yoxdur."
+
+msgid "Please select at least one course."
+msgstr "Zəhmət olmasa, ən azı bir kurs seçin."
+
+msgid "Resource file not found."
+msgstr "Resurs faylı tapılmadı."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "\"%s\" faylı %d kurs(lar)a əlavə edildi: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Bəzi kurslar buraxıldı: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Fayl və ya kurs identifikatoru yoxdur."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Bu resurs faylının resurs düyünü yoxdur və ayrıla bilməz."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Fayl %d kurs keçidindən ayrıldı."
+
+msgid "This file is not attached to the selected course."
+msgstr "Bu fayl seçilmiş kursa əlavə edilməyib."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Bu fayl hələ də ən azı bir resurs tərəfindən istifadə olunur və silinə bilməz."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Yetim fayl və onun fiziki məzmunu qəti silindi."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Sorğu dərc edildi. Yaradıldı: %d. Yeniləndi: %d. Göndərilən mesajlar: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Əldə edilə bilən"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Bu bacarıq əldə edilə bilməz"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Yeni başlayan"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Qaydalara və kontekstdən asılı olmayan təlimatlara sərt riayət; situasiya mühakiməsi azdır."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "İrəliləmiş yeni başlayan"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Situasiya aspektlərini və nümunələri tanımağa başlayır, lakin hələ də təlimatlara ehtiyacı var."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Bacarıqlı"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Planlaşdırma və zehni modellər inkişaf etdirir; nəticələrə görə məsuliyyət götürür, lakin mürəkkəblikdən sıxıla bilər."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Peşəkar"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "\"Böyük mənzərəni\" görür, intuitiv prioritetləşdirir və təcrübədən öyrənir."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Ekspert"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "İntuitiv, axıcı icra; dərin örtülü biliyə əsaslanır; yenilik edə və ya yeni situasiyaları asanlıqla idarə edə bilər."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Yadda saxlama"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Uzunmüddətli yaddaşdan müvafiq biliyi əldə etmək, xatırlamaq və ya tanımaq."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Anlama"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Şifahi, yazılı və qrafik kommunikasiya daxil olmaqla təlimat mesajlarından məna qurmaq. Şərh etmə, nümunə gətirmə, təsnif etmə, xülasə etmə, nəticə çıxarma, müqayisə və ya izah etmə ilə anlamanı nümayiş etdirmək."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Tətbiq etmə"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Verilmiş situasiyada prosedurun icrası və ya tətbiqi ilə onu yerinə yetirmək. Bilik və ya bacarıqları yeni və ya konkret situasiyalarda istifadə etmək."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Təhlil etmə"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Materialı tərkib hissələrinə ayırmaq və hissələrin bir-biri ilə, eləcə də ümumi struktur və ya məqsədlə necə əlaqəli olduğunu müəyyən etmək. Motivləri, səbəbləri və ya əlaqələri müəyyənləşdirmək."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Qiymətləndirmə"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Meyar və standartlara əsasən mühakimə yürütmək. Qərarları və ya hərəkət istiqamətlərini yoxlamaq, tənqid etmək və ya əsaslandırmaq."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Yaratma"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Elementləri vahid və ya funksional bütövə birləşdirmək; elementləri yeni naxış və ya struktura yenidən təşkil etmək. Orijinal iş yaratmaq və ya yeni ideyalar irəli sürmək."
+
+#: issue-8179
+msgid "Follow"
+msgstr "İzləmək"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Sıx nəzarət və rəhbərlik altında işləyir. Məhdud səlahiyyətlə rutin tapşırıqları yerinə yetirir. Təlimatlara riayət və əsas icraya fokuslanır."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Kömək etmək"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Rutin nəzarət altında işləyir. Başqalarına yardım göstərir, komanda tapşırıqlarına töhfə verir və müəyyən sərhədlər daxilində təşəbbüs göstərməyə başlayır."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Ümumi nəzarət altında işləyir. Bilik və bacarıqları rutin və qeyri-rutin fəaliyyətlər spektrinə tətbiq edir. Müəyyən səlahiyyət və mühakimə göstərir."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Geniş istiqamət altında işləyir. Mütəxəssis rəhbərliyi, dəstək və ya xidmətlər təqdim etməklə başqalarına imkan yaradır. Öz işinə görə məsuliyyət daşıyır və kiçik komandaları və ya tapşırıqları nəzarət edə bilər."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Təmin etmək və məsləhət vermək"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Geniş istiqamət altında, lakin əhəmiyyətli muxtariyyətlə işləyir. İşin məqsədlərə uyğun olmasını təmin edir və mürəkkəb məsələlərdə məsləhət verir. Tez-tez komandalara və ya layihələrə rəhbərlik edir və qərarlara təsir göstərir."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Təşəbbüs göstərmək və təsir etmək"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Əhəmiyyətli iş sahəsi üzrə müəyyən səlahiyyət və məsuliyyətə malikdir. Fəaliyyətlərə təşəbbüs göstərir, öz sahəsində strategiya və siyasətə təsir edir və iri layihələrə və ya komandalara rəhbərlik edir."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Strategiya müəyyənləşdirmək, ilham vermək, səfərbər etmək"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Əsas iş sahəsi üzrə ən yüksək təşkilati səviyyədə səlahiyyətə malikdir. Uzunmüddətli strategiya müəyyənləşdirir, başqalarını ilhamlandırır və səfərbər edir, təşkilatın uğuru üçün kritik qərarlar qəbul edir. Sənaye və ya xarici səviyyədə təsir göstərir."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Nəzərə alınacaq maksimum qeyri-aktiv vaxt (dəqiqə)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Açıq qalan kurs səhifəsi avtomatik sorğular göndərməyə davam edir. İstifadəçidən real hərəkət (səhifə və ya element açmaq, cavab vermək və s.) olmadan bu dəqiqə sayından sonra kursda keçirilən vaxt hesablanmır."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Əməkdaşlıq Wiki redaktoru"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Etherpad-ə qoşulur..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Saxlama cari Etherpad məzmunundan yeni Chamilo Wiki versiyası yaradır."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Əməkdaşlıq redaktoru yüklənə bilmədi."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Wiki redaktəsi üçün Etherpad-i aktivləşdir"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Mövcud Wiki səhifələri üçün əməkdaşlıq redaktoru kimi Etherpad-dən istifadə edin. Təhlükəsiz daxil edilmiş sessiyalar üçün Etherpad Chamilo ilə eyni mənşədə təqdim olunmalıdır."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpad instansiyasının əsas URL-i, istəyə bağlı əks-proksi yolu daxil olmaqla. Nümunə: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API açarı"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Chamilo-nun padlar, sessiyalar yaratmaq və Wiki məzmununu sinxronlaşdırmaq üçün istifadə etdiyi API açarı. Etherpad-i API açarı autentifikasiyasını qəbul etmək üçün konfiqurasiya edin."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Yeni sənədlərin defolt görünürlüyü kurs tərəfindən dəyişdirilə bilər"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Müəllim kursda yeni sənəd, qovluq və ya yüklənmiş fayl yaratdıqda ona verilən görünürlük. Müəllimlər sonradan hər birinin görünürlüyünü dəyişə bilər."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Aktiv olduqda, müəllimlər platformanın defoltu əvəzinə kurs parametrlərində öz kurslarının yeni sənədlərinə verilən görünürlüyü seçə bilər."
+
+msgid "Default visibility of new learning paths"
+msgstr "Yeni təlim yollarının defolt görünürlüyü"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Yeni təlim yollarının defolt görünürlüyü kurs tərəfindən dəyişdirilə bilər"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Müəllim kursda yeni təlim yolu yaratdıqda ona verilən görünürlük. Müəllimlər sonradan hər birinin görünürlüyünü dəyişə bilər."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Aktiv olduqda, müəllimlər platformanın defoltu əvəzinə kurs parametrlərində öz kurslarının yeni təlim yollarına verilən görünürlüyü seçə bilər."
+
+msgid "Default visibility of new tests"
+msgstr "Yeni testlərin defolt görünürlüyü"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Yeni testlərin defolt görünürlüyü kurs tərəfindən dəyişdirilə bilər"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Müəllim kursda yeni test yaratdıqda ona verilən görünürlük. Müəllimlər sonradan hər birinin görünürlüyünü dəyişə bilər."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Aktiv olduqda, müəllimlər platformanın defoltu əvəzinə kurs parametrlərində öz kurslarının yeni testlərinə verilən görünürlüyü seçə bilər."
+
+msgid "Default visibility for new learning paths"
+msgstr "Yeni təlim yolları üçün defolt görünürlük"
+
+msgid "Default visibility for new tests"
+msgstr "Yeni testlər üçün defolt görünürlük"
+
+msgid "Following"
+msgstr "İzlənilir"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Tələbə bu tapşırığın təqdimatına şərh yazdıqda e-poçt alın"
+
+msgid "Payment history"
+msgstr "Ödəniş tarixçəsi"
+
+msgid "No payments yet"
+msgstr "Hələ ödəniş yoxdur"
+
+msgid "Cancel service"
+msgstr "Xidməti ləğv et"
+
+msgid "Official transcript"
+msgstr "Rəsmi transkript"
+
+msgid "Unofficial transcript"
+msgstr "Qeyri-rəsmi transkript"
+
+msgid "Student name"
+msgstr "Tələbənin adı"
+
+msgid "Student number"
+msgstr "Tələbə nömrəsi"
+
+msgid "Program title"
+msgstr "Proqramın adı"
+
+msgid "Required hours"
+msgstr "Tələb olunan saatlar"
+
+msgid "Completion date"
+msgstr "Tamamlanma tarixi"
+
+msgid "Hours completed"
+msgstr "Tamamlanmış saatlar"
+
+msgid "Final grade"
+msgstr "Yekun qiymət"
+
+msgid "Grade"
+msgstr "Qiymət"
+
+msgid "No completed course yet."
+msgstr "Hələ tamamlanmış kurs yoxdur."
+
+msgid "Grading scale"
+msgstr "Qiymətləndirmə şkalası"
+
+msgid "Signature of school official"
+msgstr "Məktəb rəsmisinin imzası"
+
+msgid "School official"
+msgstr "Məktəb rəsmisi"
+
+msgid "Official's title"
+msgstr "Rəsminin vəzifəsi"
+
+msgid "Verify this transcript at"
+msgstr "Bu transkripti yoxlayın:"
+
+msgid "Verification code"
+msgstr "Təsdiq kodu"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Bu qeyri-rəsmi transkript imzalanmayıb. Rəsmi transkript üçün administratora müraciət edin."
+
+msgid "Transcript verification"
+msgstr "Transkriptin yoxlanması"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Bu rəsmi transkriptin müəssisə tərəfindən verilməsini və imzalanmasını, dəyişdirilməməsini və ləğv edilməməsini yoxlayın."
+
+msgid "Valid"
+msgstr "Etibarlı"
+
+msgid "Invalid signature"
+msgstr "Etibarsız imza"
+
+msgid "Transcript not found"
+msgstr "Transkript tapılmadı"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Müəssisənin imzası etibarlıdır və bu transkript ləğv edilməyib."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Bu transkript etibarlı kimi təsdiqlənə bilməz. Təfərrüatları göstərilmir."
+
+msgid "Transcript details"
+msgstr "Transkript təfərrüatları"
+
+msgid "Institution"
+msgstr "Müəssisə"
+
+msgid "Issued on"
+msgstr "Verilmə tarixi"
+
+msgid "Download verification JSON"
+msgstr "Təsdiq JSON-unu yüklə"
+
+msgid "Transcript"
+msgstr "Transkript"
+
+msgid "My confidential reports"
+msgstr "Mənim məxfi hesabatlarım"
+
+msgid "My transcript"
+msgstr "Mənim transkriptim"
+
+msgid "Confidential investigations"
+msgstr "Məxfi araşdırmalar"
+
+msgid "Floor plan"
+msgstr "Mərtəbə planı"
+
+msgid "Click a highlighted room to select it"
+msgstr "Seçmək üçün vurğulanmış otağa klikləyin"
+
+msgid "Select room"
+msgstr "Otaq seçin"
+
+msgid "Room on floor plan"
+msgstr "Mərtəbə planındakı otaq"
+
+msgid "Select a branch first"
+msgstr "Əvvəlcə filial seçin"
+
+msgid "The branch has no attached floor plan"
+msgstr "Filialın əlavə edilmiş mərtəbə planı yoxdur"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Otağı çəkmək üçün çoxbucaqlı alətindən istifadə edin; küncləri köçürmək üçün Redaktə edin"
+
+msgid "Save room area"
+msgstr "Otaq sahəsini yadda saxla"
+
+msgid "Clear room area"
+msgstr "Otaq sahəsini təmizlə"
+
+msgid "Save the room form to persist the area"
+msgstr "Sahəni saxlamaq üçün otaq formasını yadda saxlayın"
+
+msgid "Floor plan unavailable"
+msgstr "Mərtəbə planı əlçatan deyil"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Otaq xəritəsinin nöqtələri mərtəbə planının daxilində olmalıdır"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Otaq sahəsini təmizləmək istədiyinizə əminsiniz?"
+
+msgid "View room on floor plan"
+msgstr "Otağı mərtəbə planında göstər"
+
+msgid "No floor plan available"
+msgstr "Mərtəbə planı yoxdur"
+
+msgid "This is an assignment by groups"
+msgstr "Bu qrup tapşırığıdır"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "PNG, JPEG və ya təhlükəsiz statik SVG mərtəbə planı yükləyin və ya Sənədlərdən mövcud şəkil seçin."
+
+msgid "Upload floor plan"
+msgstr "Mərtəbə planını yüklə"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG və ya statik SVG, maksimum 10 MB"
+
+msgid "Search images by name"
+msgstr "Şəkilləri ada görə axtar"
+
+msgid "Image name"
+msgstr "Şəkil adı"
+
+msgid "Select an image"
+msgstr "Şəkil seçin"
+
+msgid "Change floor plan"
+msgstr "Mərtəbə planını dəyiş"
+
+msgid "Attach floor plan"
+msgstr "Mərtəbə planını əlavə et"
+
+msgid "No matching images found in Documents."
+msgstr "Sənədlərdə uyğun şəkil tapılmadı."
+
+msgid "Current floor plan"
+msgstr "Cari mərtəbə planı"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Mərtəbə planı dəyişiklikləri avtomatik yadda saxlanır."
+
+msgid "Remove floor plan"
+msgstr "Mərtəbə planını sil"
+
+msgid "Cannot load images"
+msgstr "Şəkillər yüklənə bilməz"
+
+msgid "Floor plan saved"
+msgstr "Mərtəbə planı yadda saxlandı"
+
+msgid "Cannot attach floor plan"
+msgstr "Mərtəbə planını əlavə etmək mümkün deyil"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Yalnız 10MB-ə qədər PNG/JPEG və təhlükəsiz statik SVG şəkilləri dəstəklənir."
+
+msgid "Cannot upload floor plan"
+msgstr "Mərtəbə planını yükləmək mümkün deyil"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Mərtəbə planını silmək istədiyinizə əminsiniz?"
+
+msgid "Floor plan removed"
+msgstr "Mərtəbə planı silindi"
+
+msgid "Cannot remove floor plan"
+msgstr "Mərtəbə planını silmək mümkün deyil"
+
+msgid "Support bot"
+msgstr "Dəstək botu"
+
+msgid "Connected"
+msgstr "Qoşulub"
+
+msgid "Not connected"
+msgstr "Qoşulmayıb"
+
+msgid "View ticket"
+msgstr "Bileti görüntülə"
+
+msgid "Start a new conversation"
+msgstr "Yeni söhbətə başla"
+
+msgid "Video call"
+msgstr "Video zəng"
+
+msgid "Incoming video call"
+msgstr "Gələn video zəng"
+
+msgid "Decline"
+msgstr "Rədd et"
+
+msgid "Mute microphone"
+msgstr "Mikrafonu səssiz et"
+
+msgid "Unmute microphone"
+msgstr "Mikrafonun səsini aç"
+
+msgid "Turn camera off"
+msgstr "Kameranı söndür"
+
+msgid "Turn camera on"
+msgstr "Kameranı yandır"
+
+msgid "Hang up"
+msgstr "Zəngi kəs"
+
+msgid "Calling..."
+msgstr "Zəng edilir..."
+
+msgid "Connecting..."
+msgstr "Qoşulur..."
+
+msgid "Your contact is busy."
+msgstr "Kontaktınız məşğuldur."
+
+msgid "Your contact did not answer the call."
+msgstr "Kontaktınız zəngə cavab vermədi."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Kontaktınız kameraya və ya mikrafona daxil ola bilmədi."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Kontaktınız video zəngi hazırlaya bilmədi."
+
+msgid "Your contact refused the call."
+msgstr "Kontaktınız zəngi rədd etdi."
+
+msgid "The call timed out."
+msgstr "Zəng vaxtı bitdi."
+
+msgid "Your contact cancelled the call."
+msgstr "Kontaktınız zəngi ləğv etdi."
+
+msgid "The video connection was lost."
+msgstr "Video əlaqə kəsildi."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Kontaktınız video əlaqəni qura bilmədi."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Kontaktınız video zəng quraşdırmasını tamamlaya bilmədi."
+
+msgid "Your contact hung up."
+msgstr "Kontaktınız zəngi kəsdi."
+
+msgid "Video call could not be started"
+msgstr "Video zəngə başlamaq mümkün olmadı"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Kamera və ya mikrafon icazəsi rədd edildi."
+
+msgid "No camera or microphone was found."
+msgstr "Kamera və ya mikrafon tapılmadı."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Kamera və ya mikrafon artıq istifadədədir və ya əlçatan deyil."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Kamera və ya mikrafon tələb olunan parametrləri dəstəkləmir."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Kamera və ya mikrafona giriş əldə edilə bilmədi."
+
+msgid "The video call could not be prepared."
+msgstr "Video zəng hazırlana bilmədi."
+
+msgid "The video call request could not be sent."
+msgstr "Video zəng sorğusu göndərilə bilmədi."
+
+msgid "The incoming video call could not be processed."
+msgstr "Gələn video zəng emal edilə bilmədi."
+
+msgid "The video call answer could not be prepared."
+msgstr "Video zəng cavabı hazırlana bilmədi."
+
+msgid "The video call answer could not be sent."
+msgstr "Video zəng cavabı göndərilə bilmədi."
+
+msgid "The video call answer could not be processed."
+msgstr "Video zəng cavabı emal edilə bilmədi."
+
+msgid "The video connection failed"
+msgstr "Video əlaqə uğursuz oldu"
+
+msgid "The video connection could not be established."
+msgstr "Video əlaqə qurula bilmədi."
+
+msgid "No answer was received."
+msgstr "Cavab alınmadı."
+
+msgid "You refused the call."
+msgstr "Zəngi rədd etdiniz."
+
+msgid "You cancelled the call."
+msgstr "Zəngi ləğv etdiniz."
+
+msgid "You hung up."
+msgstr "Zəngi kəsdiniz."
+
+msgid "You missed the call."
+msgstr "Zəngi buraxdınız."
+
+msgid "Support bot is currently unavailable."
+msgstr "Dəstək botu hazırda əlçatan deyil."
+
+msgid "A support ticket has been created."
+msgstr "Dəstək bileti yaradıldı."
+
+msgid "Conversation ended."
+msgstr "Söhbət başa çatdı."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Dəstək botu bu söhbəti davam etdirə bilmədi. Zəhmət olmasa yenidən cəhd edin."
+
+msgid "Add your first term glossary to this course"
+msgstr "Bu kursa ilk termin lüğətinizi əlavə edin"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Bu sorğu şablonunu silmək istədiyinizə əminsiniz?"
+
+msgid "The survey template has been deleted."
+msgstr "Sorğu şablonu silindi."
+
+msgid "Please select a course."
+msgstr "Zəhmət olmasa kurs seçin."
+
+msgid "Please select a session for this course."
+msgstr "Zəhmət olmasa bu kurs üçün sessiya seçin."
+
+msgid "The survey has been created from the template."
+msgstr "Sorğu şablondan yaradıldı."
+
+msgid "Survey templates"
+msgstr "Sorğu şablonları"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Müəllimlər üçün təkrar istifadə oluna bilən sorğu şablonları yaradın və onları birbaşa kursa və ya sessiyaya təyin edin."
+
+msgid "Subtitle"
+msgstr "Alt başlıq"
+
+msgid "Assign to course"
+msgstr "Kursa təyin et"
+
+msgid "Assign template to course"
+msgstr "Şablonu kursa təyin et"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Sorğunu birbaşa kursda yaratmaq üçün sessiyanı boş buraxın."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Bu kurs bu portalda sessiya vasitəsilə əlçatandır, ona görə sessiya tələb olunur."
+
+msgid "Survey template questions"
+msgstr "Sorğu şablonu sualları"
+
+msgid "Back to survey templates"
+msgstr "Sorğu şablonlarına qayıt"
+
+msgid "Could not load survey template"
+msgstr "Sorğu şablonu yüklənə bilmədi"
+
+msgid "Could not load survey template questions"
+msgstr "Sorğu şablonu sualları yüklənə bilmədi"
+
+msgid "Could not save survey template question"
+msgstr "Sorğu şablonu sualı saxlanıla bilmədi"
+
+msgid "Could not delete survey template question"
+msgstr "Sorğu şablonu sualı silinə bilmədi"
+
+msgid "Could not move survey template question"
+msgstr "Sorğu şablonu sualı köçürülə bilmədi"
+
+msgid "Could not copy survey template question"
+msgstr "Sorğu şablonu sualı kopyalana bilmədi"
+
+msgid "The survey template has been saved."
+msgstr "Sorğu şablonu saxlanıldı."
+
+msgid "Edit survey template"
+msgstr "Sorğu şablonunu redaktə et"
+
+msgid "Create survey template"
+msgstr "Sorğu şablonu yarat"
+
+msgid "The survey template title is required."
+msgstr "Sorğu şablonunun başlığı tələb olunur."
+
+msgid "Visible as template"
+msgstr "Şablon kimi görünür"
+
+msgid "Create satisfaction survey"
+msgstr "Məmnuniyyət sorğusu yarat"
+
+msgid "Training satisfaction survey"
+msgstr "Təlim məmnuniyyəti sorğusu"
+
+msgid "Could not create satisfaction survey"
+msgstr "Məmnuniyyət sorğusu yaradıla bilmədi"
+
+msgid "Use template"
+msgstr "Şablondan istifadə et"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Bu sorğunu administrator tərəfindən hazırlanmış təkrar istifadə oluna bilən şablondan yaradın."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Nəticələr müəllim/tutordan gizlədilib"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Müəllimlər və tutorlar hələ də cavab saylarını görə və xatırlatmalar göndərə bilər, lakin sorğu nəticələrini aça və ya ixrac edə bilməz."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Şablon tətbiq edildi. Sorğu parametrlərini nəzərdən keçirin və yaratmaq üçün saxlayın."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Sorğu nəticələri müəllimlərdən və tutorlardan gizlədilib."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Cavab saylarını görmək və xatırlatmalar göndərmək üçün hələ də dəvətlər səhifəsindən istifadə edə bilərsiniz."
+
+msgid "Payment method"
+msgstr "Ödəniş üsulu"
+
+msgid "Preview mode"
+msgstr "Önizləmə rejimi"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Tərəqqi və bal önizləmə rejimində saxlanılmır."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Bu keçid öyrənmə yolu daxilində göstərilə bilməz."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Səhifəyə baxmaq üçün onu yeni tabda açın."
+
+msgid "Report a problem with this question"
+msgstr "Bu sual ilə bağlı problem bildirin"
+
+msgid "Your report was sent to the teacher."
+msgstr "Hesabatınız müəllimə göndərildi."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Tapdığınız xəta və ya problemi təsvir edin. Hesabatınız müəllimə göndəriləcək."
+
+msgid "A comment is required."
+msgstr "Şərh tələb olunur."
+
+msgid "Could not send the report."
+msgstr "Hesabat göndərilə bilmədi."
+
+msgid "Learner reports"
+msgstr "Tələbə hesabatları"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Bu sual üçün heç bir tələbə hesabatı təqdim edilməyib."
+
+msgid "View attempt"
+msgstr "Cəhdə bax"
+
+msgid "Could not load learner reports."
+msgstr "Tələbə hesabatları yüklənə bilmədi."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Tələbələrə suallarda problemləri bildirməyə icazə ver"
+
+msgid "Skill acquired"
+msgstr "Bacarıq əldə edildi"
+
+msgid "AI Toolbox"
+msgstr "Süni intellekt alətlər qutusu"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Süni intellekt ilə interaktiv təhsil tətbiqləri yaradın və SCORM ilə tələbə irəliləyişini izləyin."
+
+msgid "No published applications are available yet."
+msgstr "Hələ dərc edilmiş tətbiq yoxdur."
+
+msgid "Interactive applications"
+msgstr "Interaktiv tətbiqlər"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Versiyaları bir yerdən yaradın, təkmilləşdirin, dərc edin və nəzərdən keçirin."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Son irəliləyişinizdən davam etmək üçün tətbiqi açın."
+
+msgid "Interactive learning application"
+msgstr "Interaktiv öyrənmə tətbiqi"
+
+msgid "Create an interactive learning app"
+msgstr "Interaktiv öyrənmə tətbiqi yaradın"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Fəaliyyəti təsvir edin. Chamilo irəliləyiş və bal izləməsi ilə versiyalı SCORM tətbiqi yaradacaq."
+
+msgid "Idea"
+msgstr "İdeya"
+
+msgid "Application"
+msgstr "Tətbiq"
+
+msgid "What should the application do?"
+msgstr "Tətbiq nə etməlidir?"
+
+msgid "How it works"
+msgstr "Necə işləyir"
+
+msgid "AI generation"
+msgstr "Süni intellekt generasiyası"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Tətbiq təlimatlarınıza əsasən yaradılır və 1-ci versiya kimi saxlanılır."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Tələbə irəliləyişi, bal və davam məlumatları Chamilo-ya bildirilir."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Gələcək təkmilləşdirmələr əvvəlkiləri silmədən yeni versiyalar yaradır."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Öyrənmə məqsədini, qaydaları, səviyyələri, qiymətləndirməni və tələbə bitirdikdə nə baş verəcəyini daxil edin."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Bu kontekstdə məzmun yaratmağa icazəniz yoxdur."
+
+msgid "The application was generated successfully."
+msgstr "Tətbiq uğurla yaradıldı."
+
+msgid "Open in student view"
+msgstr "Tələbə görünüşündə aç"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Önizləmə və dərc etməyi aktivləşdirmək üçün tətbiqi yaradın."
+
+msgid "Improve with AI"
+msgstr "Süni intellekt ilə təkmilləşdir"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Dəyişikliyi təsvir edin. Yeni versiya yaradılacaq və əvvəlki versiyalar əlçatan qalacaq."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Yaratmaq istədiyiniz tam interaktiv fəaliyyəti təsvir edin."
+
+msgid "What should be improved?"
+msgstr "Nə təkmilləşdirilməlidir?"
+
+msgid "Generate new version"
+msgstr "Yeni versiya yarat"
+
+msgid "Version history"
+msgstr "Versiya tarixçəsi"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Yaradılmış istənilən versiyanı önizləyin, endirin və ya bərpa edin."
+
+msgid "A new version was generated."
+msgstr "Yeni versiya yaradıldı."
+
+msgid "Version restored"
+msgstr "Versiya bərpa edildi"
+
+msgid "The support bot tree has been published."
+msgstr "Dəstək bot ağacı dərc edildi."
+
+msgid "The support bot tree has been archived."
+msgstr "Dəstək bot ağacı arxivləşdirildi."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Dəstək bot ağacı təkrarlandı."
+
+msgid "The support bot tree has been deleted."
+msgstr "Dəstək bot ağacı silindi."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Bu dəstək bot ağacını silmək istədiyinizə əminsiniz?"
+
+msgid "The support bot tree has been imported."
+msgstr "Dəstək bot ağacı idxal edildi."
+
+msgid "Create support bot tree"
+msgstr "Dəstək bot ağacı yarat"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "İstifadəçiləri dəstək sualları ilə yönləndirən və Biletlərə yüksəldə bilən sabit qərar ağacı qurun."
+
+msgid "Portal scope"
+msgstr "Portal əhatəsi"
+
+msgid "Duplicate"
+msgstr "Təkrarla"
+
+msgid "Archive"
+msgstr "Arxivləşdir"
+
+msgid "View conversations"
+msgstr "Söhbətlərə bax"
+
+msgid "Import support bot tree"
+msgstr "Dəstək botu ağacını idxal et"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "JSON ixracını və ya CSV qərar ağacını idxal edin. İdxal edilən ağac həmişə yeni qaralama kimi yaradılır."
+
+msgid "Resolved"
+msgstr "Həll edildi"
+
+msgid "Escalated"
+msgstr "Eskalasiya edildi"
+
+msgid "Abandoned"
+msgstr "Tərk edildi"
+
+msgid "Support bot conversations"
+msgstr "Dəstək botu söhbətləri"
+
+msgid "Outcome"
+msgstr "Nəticə"
+
+msgid "Started at"
+msgstr "Başlama vaxtı"
+
+msgid "Ended at"
+msgstr "Bitmə vaxtı"
+
+msgid "View conversation"
+msgstr "Söhbətə bax"
+
+msgid "Go to node"
+msgstr "Düyünə keç"
+
+msgid "Create support ticket"
+msgstr "Dəstək bileti yarat"
+
+msgid "End conversation"
+msgstr "Söhbəti bitir"
+
+msgid "Node"
+msgstr "Düyün"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Dəstək botu ağacı ən azı bir düyün tələb edir."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Bu düyünü silmək istədiyinizə əminsiniz? Ona olan keçidlər silinəcək."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Hər dəstək botu düyünü ən azı bir seçim tələb edir."
+
+msgid "The support bot tree title is required."
+msgstr "Dəstək botu ağacının başlığı tələb olunur."
+
+msgid "A support bot entry node is required."
+msgstr "Dəstək botu giriş düyünü tələb olunur."
+
+msgid "Every support bot node requires content."
+msgstr "Hər dəstək botu düyünü məzmun tələb edir."
+
+msgid "Every support bot option requires a label."
+msgstr "Hər dəstək botu seçimi etiket tələb edir."
+
+msgid "Select a target node for every go-to option."
+msgstr "Hər keçid seçimi üçün hədəf düyün seçin."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Hər keçid seçimi üçün nisbi URL daxil edin."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Hər eskalasiya seçimi üçün bilet kateqoriyası seçin."
+
+msgid "The support bot tree has been saved."
+msgstr "Dəstək botu ağacı yadda saxlanıldı."
+
+msgid "Edit support bot tree"
+msgstr "Dəstək botu ağacını redaktə et"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Dərc edilmiş və arxivlənmiş dəstək botu versiyaları yalnız oxuna bilər. Yeni qaralama versiyanı redaktə etmək üçün bu ağacı siyahıdan təkrarlayın."
+
+msgid "Default ticket project"
+msgstr "Standart bilet layihəsi"
+
+msgid "Decision tree rules"
+msgstr "Qərar ağacı qaydaları"
+
+msgid "Every node must contain at least one option."
+msgstr "Hər düyün ən azı bir seçim ehtiva etməlidir."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Son düyün söhbəti bitirməli və ya dəstək bileti yaratmalıdır."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Keçid keçidləri v1-də döngə yaratmamalıdır."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Xarici URL-lər v1-də icazə verilmir; keçid əməliyyatları nisbi Chamilo yolundan istifadə etməlidir."
+
+msgid "Nodes"
+msgstr "Düyünlər"
+
+msgid "Add node"
+msgstr "Düyün əlavə et"
+
+msgid "Entry node"
+msgstr "Giriş düyünü"
+
+msgid "Set as entry node"
+msgstr "Giriş düyünü kimi təyin et"
+
+msgid "Target node"
+msgstr "Hədəf düyün"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Nisbi Chamilo yolu istifadə edin, məsələn /tickets."
+
+msgid "Ticket category"
+msgstr "Bilet kateqoriyası"
+
+msgid "Select a default ticket project first."
+msgstr "Əvvəlcə standart bilet layihəsini seçin."
+
+msgid "Closing message"
+msgstr "Bağlanış mesajı"
+
+msgid "Select a node to edit it."
+msgstr "Redaktə etmək üçün düyün seçin."
+
+msgid "Support bot conversation"
+msgstr "Dəstək botu söhbəti"
+
+msgid "Transcript of %s"
+msgstr "%s transkripti"
+
+msgid "Download unofficial transcript"
+msgstr "Qeyri-rəsmi transkripti yüklə"
+
+msgid "Issue official transcript"
+msgstr "Rəsmi transkript ver"
+
+msgid "Official transcripts"
+msgstr "Rəsmi transkriptlər"
+
+msgid "No official transcript has been issued yet."
+msgstr "Hələ rəsmi transkript verilməyib."
+
+msgid "Issued by"
+msgstr "Verən"
+
+msgid "Verify"
+msgstr "Yoxla"
+
+msgid "Signature of official transcripts"
+msgstr "Rəsmi transkriptlərin imzası"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Bu şəkil bu portalın rəsmi transkriptlərində, sertifikat parametrlərində təyin olunmuş imza sahibinin adı və vəzifəsinin üstündə çap olunur."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Bu səhifədəki kurslar və qiymətlərlə imzalanmış rəsmi transkript verilsin? Ləğv edilənə qədər onlayn yoxlana bilər."
+
+msgid "Official transcript issued"
+msgstr "Rəsmi transkript verildi"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Bu rəsmi transkript ləğv edilsin? Yoxlama səhifəsi onu ləğv edilmiş kimi göstərəcək."
+
+msgid "Official transcript revoked"
+msgstr "Rəsmi transkript ləğv edildi"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Əvvəlcə PNG və ya JPEG şəkil seçin."
+
+msgid "Signed credential"
+msgstr "İmzalanmış etimadnamə"
+
+msgid "Issue signed credential"
+msgstr "İmzalanmış etimadnamə ver"
+
+msgid "Verify credential"
+msgstr "Etimadnaməni yoxla"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Sepolia test şəbəkəsində lövbərlə"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Mövcud Sepolia əməliyyatını təsdiqlə"
+
+msgid "Revoke signed credential"
+msgstr "İmzalanmış etimadnaməni ləğv et"
+
+msgid "Delete certificate"
+msgstr "Sertifikatı sil"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Mövcud Sepolia əməliyyatını təsdiqlə"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia əməliyyat heşi"
+
+msgid "Verify transaction"
+msgstr "Əməliyyatı yoxla"
+
+msgid "Anchored"
+msgstr "Lövbərlənib"
+
+msgid "Issued"
+msgstr "Verilib"
+
+msgid "Not issued"
+msgstr "Verilməyib"
+
+msgid "Consent required"
+msgstr "Razılıq tələb olunur"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia əməliyyatı təsdiqləndi və yoxlandı"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia test şəbəkəsi cüzdanı əməliyyatı imzalamağı xahiş edəcək. Yalnız sertifikat barmaq izi lövbərlənəcək. Davam edilsin?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Bu imzalanmış etimadnamə ləğv edilsin? Blokçeyn əməliyyatı daimi qalır, lakin yoxlama səhifəsi ləğvi göstərəcək."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Bu öyrənən üçün imzalanmış sertifikat etimadnaməsi verilsin? Bu, təsdiqlənmiş şəxsi məlumatları şəxsi keçidlə yoxlana bilən edir."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia üçün EVM uyğun brauzer cüzdanı tələb olunur."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Cüzdanınızda Sepolia test şəbəkəsini (zəncir ID 11155111) seçin."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Yanlış cüzdan ünvanı və ya sertifikat barmaq izi."
+
+msgid "Transaction pending"
+msgstr "Əməliyyat gözləyir"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Sonra Mövcud Sepolia əməliyyatını təsdiqlə-dən istifadə edin."
+
+msgid "Signed credential issued"
+msgstr "İmzalanmış etimadnamə verildi"
+
+msgid "Credential revoked"
+msgstr "Etimadnamə ləğv edildi"
+
+msgid "Transaction hash"
+msgstr "Əməliyyat heşi"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Dərc razılığı administratora imzalanmış sertifikat etimadnaməsi verməyə və istəyə görə onun SHA-256 barmaq izini Sepolia test şəbəkəsində lövbərləməyə imkan verir. Zəncirə ad və ya şəxsi məlumat göndərilmir. Razılığı istənilən vaxt geri götürə bilərsiniz."
+
+msgid "Publication consent"
+msgstr "Dərc razılığı"
+
+msgid "Not approved"
+msgstr "Təsdiqlənməyib"
+
+msgid "Withdraw consent"
+msgstr "Razılığı geri götür"
+
+msgid "Approve publication"
+msgstr "Dərcə razılıq ver"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Adımı, kursu, balı və verilmə tarixini göstərən imzalanmış, ictimai yoxlana bilən etimadnaməyə icazə verirəm. Administrator yalnız onun SHA-256 barmaq izini Sepolia test şəbəkəsində dərc edə bilər. Barmaq izi daimidir, sonra geri götürsəm belə. Davam edilsin?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Bu sertifikat üçün dərc təsdiqi geri götürülsün?"
+
+msgid "Publication approval recorded"
+msgstr "Dərc təsdiqi qeydə alındı"
+
+msgid "Publication approval withdrawn"
+msgstr "Dərc təsdiqi geri götürüldü"
+
+msgid "Read more"
+msgstr "Ətraflı oxu"
+
+msgid "Participation: %s of %s posts"
+msgstr "İştirak: %s / %s yazı"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Digər iştirakçıların cavablarını görmək üçün öz töhfənizi yazın."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Yalnız səlahiyyətli müstəntiqlər uyğun hesabatları nəzərdən keçirə bilər. Məlumat verənlərin kimliyi defolt olaraq məxfi qalır."
+
+msgid "New confidential report"
+msgstr "Yeni məxfi hesabat"
+
+msgid "Reported user"
+msgstr "Haqqında məlumat verilən istifadəçi"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Nəzərdən keçirilməyi gözləyən uyğun məxfi hesabatlar var."
+
+msgid "Eligible investigations"
+msgstr "Uyğun araşdırmalar"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Hadisə yalnız eyni şəxsi ən azı %s fərqli istifadəçi şikayət etdikdən sonra burada görünür."
+
+msgid "Distinct reporters"
+msgstr "Fərqli şikayətçilər"
+
+msgid "Reports for selected user"
+msgstr "Seçilmiş istifadəçi üçün şikayətlər"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Məxfi şikayət hazırda əlçatan deyil."
+
+msgid "The investigation could not be loaded."
+msgstr "Araşdırma yüklənə bilmədi."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Şəxsiyyətiniz defolt olaraq araşdırmaçılardan qorunur, lakin şikayət mətnində və ya əlavələrdə identifikasiyaedici məlumatlar daxil etməyin. Bu fövqəladə xidmət deyil."
+
+msgid "Find the user involved"
+msgstr "Əlaqəli istifadəçini tapın"
+
+msgid "Name or username"
+msgstr "Ad və ya istifadəçi adı"
+
+msgid "Describe the situation"
+msgstr "Vəziyyəti təsvir edin"
+
+msgid "Evidence (optional)"
+msgstr "Sübut (istəyə bağlı)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Ən çox üç fayl, hər biri maksimum 8 MiB. Şəkillər, audio və ya qısa videolar."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Razıyam ki, səlahiyyətli araşdırmaçılar bu konkret şikayət üçün adımı və e-poçtumu görə bilər. Bu icazəni sonra geri götürə bilərəm."
+
+msgid "Send confidential report"
+msgstr "Məxfi şikayəti göndər"
+
+msgid "Could not search users"
+msgstr "İstifadəçilər axtarıla bilmədi"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Ən çox üç fayl, hər biri maksimum 8 MiB."
+
+msgid "The confidential report could not be saved."
+msgstr "Məxfi şikayət saxlanıla bilmədi."
+
+msgid "Confidential report"
+msgstr "Məxfi şikayət"
+
+msgid "Confidential conversation"
+msgstr "Məxfi söhbət"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Araşdırmaçılar əlaqə paylaşımı aktiv edilmədikcə şikayətçinin şəxsiyyətini görmədən bu söhbət vasitəsilə ünsiyyət qura bilər."
+
+msgid "Reporter"
+msgstr "Şikayətçi"
+
+msgid "Investigator"
+msgstr "Araşdırmaçı"
+
+msgid "Additional evidence (optional)"
+msgstr "Əlavə sübut (istəyə bağlı)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Ən çox üç fayl, hər biri maksimum 8 MiB; şikayət başına on fayl."
+
+msgid "Contact shared voluntarily"
+msgstr "Əlaqə könüllü paylaşılıb"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Araşdırmaçılara bu şikayət üçün adımı və e-poçtumu görməyə icazə ver"
+
+msgid "This confidential report is not available."
+msgstr "Bu məxfi şikayət əlçatan deyil."
+
+msgid "Your message could not be saved."
+msgstr "Mesajınız saxlanıla bilmədi."
+
+msgid "Contact sharing could not be updated."
+msgstr "Əlaqə paylaşımı yenilənə bilmədi."
+
+msgid "Evidence could not be downloaded."
+msgstr "Sübut endirilə bilmədi."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Nümunə forma doldurma fəaliyyəti: Bədən Kütlə İndeksini hesablayın</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Yaş</strong></td>            <td width=\"75%\" style=\"\">[25] yaş</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Cins</strong></td>            <td style=\"\" text-align:=\"\">[M] (K və ya Q)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Çəki</strong></td>            <td style=\"\" text-align:=\"\">95 Kq</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Boy</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Bədən Kütlə İndeksi</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Çəki/Boy<sup>2</sup> (Bax: <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Vikipediya məqaləsi</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Nümunə forma doldurma fəaliyyəti: Bədən Kütlə İndeksini hesablayın</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Yaş</strong></td>            <td width=\"75%\" style=\"\">[25] yaş</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Cins</strong></td>            <td style=\"\" text-align:=\"\">[M] (K və ya Q)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Çəki</strong></td>            <td style=\"\" text-align:=\"\">95 Kq</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Boy</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Bədən Kütlə İndeksi</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Çəki/Boy<sup>2</sup> (Bax: <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Vikipediya məqaləsi</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Şikayətlərdə IP ünvanını gizlət"
+
+msgid "Course settings policies"
+msgstr "Kurs parametrləri siyasətləri"
+
+msgid "Academic transcripts"
+msgstr "Akademik transkriptlər"
+
+msgid "Transcript program title"
+msgstr "Transkript proqram adı"
+
+msgid "Transcript course code"
+msgstr "Transkript kurs kodu"
+
+msgid "Transcript course hours field"
+msgstr "Transkript kurs saatları sahəsi"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Transkriptdə tamamlanmış saatlar tələb olunan saatlardır"
+
+msgid "Transcript student number field"
+msgstr "Transkript tələbə nömrəsi sahəsi"
+
+msgid "Transcript address fields"
+msgstr "Transkript ünvan sahələri"
+
+msgid "Transcript grading scale"
+msgstr "Transkript qiymətləndirmə şkalası"
+
+msgid "Transcript GPA note"
+msgstr "Transkript GPA qeydi"
+
+msgid "Transcript signatory name"
+msgstr "Transkript imzalayanın adı"
+
+msgid "Transcript signatory title"
+msgstr "Transkript imzalayanın vəzifəsi"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "İmzalı sertifikatları və istəyə bağlı Sepolia testnet lövbərləməsini aktivləşdir"
+
+msgid "Show thread replies only after participating"
+msgstr "Mövzu cavablarını yalnız iştirak etdikdən sonra göstər"
+
+msgid "Show the forum category description in threads"
+msgstr "Forum kateqoriyasının təsvirini mövzularda göstər"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Forum iştirak parametrləri kurs üzrə dəyişdirilə bilər"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Forum mövzusunda göstərilən maksimum yazı sayı"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Forum mövzusunu tamamlamaq üçün tələb olunan yazılar"
+
+msgid "Track e-mail openings"
+msgstr "E-poçt açılışlarını izlə"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Mesajlara e-poçt cavablarına icazə ver"
+
+msgid "Inbound e-mail address"
+msgstr "Gələn e-poçt ünvanı"
+
+msgid "Inbound mailbox DSN"
+msgstr "Gələn poçt qutusunun DSN-i"
+
+msgid "Remember me duration (days)"
+msgstr "Məni xatırla müddəti (gün)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "MCP-dən kənarda OAuth Dinamik Müştəri Qeydiyyatını aktivləşdir"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Məxfi rifah hesabatını aktivləşdir"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Araşdırma üçün minimum fərqli məlumat verənlər"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Məxfi sübut əlavələrinə icazə ver"
+
+msgid "Show confidential investigation notifications"
+msgstr "Məxfi araşdırma bildirişlərini göstər"
+
+msgid "Enable support chatbot"
+msgstr "Dəstək çatbotunu aktivləşdir"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Lüğət terminlərinin avtomatik vurğulandığı yeri seçin: sənədlər, tapşırıqlar və öyrənmə yolları."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Vizual hesabatlarda və hesabat ixraclarında IP ünvanlarını gizlət. IP ünvanları saxlanılır və səlahiyyətli şəxsi məlumat prosedurları ilə əlçatan qalır."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Platforma standartları və kurs redaktə icazələri; Kurs parametrlərində idarə olunur."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "İstifadəçilərə tamamladıqları kursların qeyri-rəsmi transkriptini yükləməyə icazə verin və administratorlara, sessiya administratorlarına və HR menecerlərinə idarə etdikləri istifadəçilər üçün imzalı rəsmi transkriptlər verməyə icazə verin. İmza şəkli istifadəçinin transkript səhifəsindən yüklənir."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Hər transkriptdə çap olunan proqram adı, məsələn, bu platformada hazırlanan diplomun adı."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Transkriptlərin kurs kodu sütununu hansı kurs sahəsi doldurur: kurs kodu və ya şöbə adı."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Kursun saat sayını saxlayan kurs əlavə sahəsinin dəyişəni. Kursun müddətindən istifadə etmək üçün boş buraxın."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Kursun tələb olunan saatlarını öyrənənin tamamladığı saatlar kimi çap et. Deaktiv olduqda, tamamlanan saatlar öyrənənin kursda keçirdiyi vaxtdır."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Transkriptlərdə çap olunan tələbə nömrəsini saxlayan istifadəçi əlavə sahəsinin dəyişəni. Heç nə çap etməmək üçün boş buraxın."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Transkriptlərdə istifadəçinin ünvanından sonra çap olunan istifadəçi əlavə sahələrinin vergüllə ayrılmış dəyişənləri, məsələn, şəhər, vilayət və poçt indeksi."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Qiymət hərflərinin JSON siyahısı, ən yüksək minimum baldan aşağıya: hər elementdə faizlə minimum bal (min), hərf və GPA hesablamaq üçün istifadə olunan qiymət xalları var."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "GPA-nın necə hesablandığının izahı, transkriptlərdə GPA-nın altında çap olunur."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Rəsmi transkriptləri imzalayan məktəb rəsmisinin adı."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Rəsmi transkriptləri imzalayan məktəb rəsmisinin vəzifəsi."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Açıq sahibi razılığı və əl ilə administrator əməliyyatları tələb edir. Zəncirə yalnız SHA-256 barmaq izləri göndərilir."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Öyrənənlər forum mövzusunda özləri yazana qədər yalnız birinci yazını görürlər. Administratorlar, müəllimlər, məşqçilər və qrup repetitorları həmişə bütün yazıları görürlər."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Hər mövzunun yuxarısında forum kateqoriyasının başlığını və qısaldılmış təsvirini, tam təsviri oxumaq üçün keçidlə göstər."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Aktiv olduqda, müəllimlər kurs parametrlərinin Forum bölməsində kursun öyrənən yazana qədər mövzu cavablarını gizlədib-gizlətməyəcəyini, mövzularda kateqoriya təsvirini göstərib-göstərməyəcəyini və iştirak irəliləyiş zolağının neçə yazı gözlədiyini platforma parametrlərindən asılı olmayaraq seçə bilərlər."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Hər forum mövzusunun yalnız bu sayda yazısını platforma administratoru olmayan hər istifadəçiyə, müəllimlər daxil, və öyrənmə yolu daxilində hər kəsə göstər. Mövzulu və iç-içə görünüşlərdə limit hər yazının cavablarına tətbiq olunur. Yazılar görünüşün sırası ilə saxlanılır: birincilər və ya öyrənmə yolunda ən sonuncular, burada ən son yazılar birinci gəlir. Bütün yazıları göstərmək üçün 0 təyin edin."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Hər forum mövzusunda öyrənənlərə irəliləyiş zolağı göstər; mövzuda bu sayda mesaj yazdıqda 100%-ə çatır. Moderasiya gözləyən yazılar sayılır. İrəliləyiş zolağını gizlətmək üçün 0 təyin edin."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Mesaj bildiriş e-poçtlarına kiçik izləmə şəkli əlavə edir və tələb olunduqda qeyd edir. Bu, e-poçtun açılmış ola biləcəyini göstərir; oxunduğunu sübut etmir."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Birbaşa mesaj bildirişlərinin alıcılarına e-poçtla cavab verməyə icazə ver. Gələn mesajlar poçt infrastrukturu tərəfindən Chamilo gələn-poçt əmrinə yönləndirilməlidir."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Cavab yönləndirməsi üçün əsas ünvan, məsələn replies@example.com. Chamilo plus ünvanlaması ilə unikal alıcı tokeni əlavə edir."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Gələn cavabları toplamaq üçün poçt qutusu bağlantısı, məsələn imaps://user:password@imap.example.com:993/INBOX. Ehtiyatlı simvolları etimadnamələrdə URL-kodlaşdırın."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Məni xatırla seçildikdə istifadəçinin daxil qalacağı gün sayı. Deaktiv etmək üçün 0 təyin edin. HTTPS tələb olunur. İcazə verilən aralıq: 0–90. Normal sessiya vaxtı PHP/Symfony-də ayrıca konfiqurasiya olunur."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Dinamik Müştəri Qeydiyyatına Chamilo OAuth resurs serverinin qeydiyyatdan keçirdiyi istənilən əhatəni tələb etməyə imkan verir. Deaktiv olduqda, özünüqeydiyyat MCP ilə məhdudlaşır. Resurs girişi həmişə hər müştərinin icazə verilən resurs siyahısı ilə ayrıca məhdudlaşdırılır."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Məxfi insident hesabatlarını aktivləşdir. Modul qorunan şifrələmə açarı və araşdırıcı icazəsi tələb edir."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Eyni istifadəçi haqqında 2–10 fərqli məlumat verən hesabat verməlidir ki, iş araşdırıcılara görünsün."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Şəkil, audio və qısa video sübutlara icazə ver. Deaktiv olduqda mövcud əlavələr oxunaqlı qalır."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Uyğun araşdırmaların daxili göstəricisini göstər. E-poçt və ya xarici bildiriş göndərmir."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Çat panelində istifadəçiləri yönləndirə bilən qərar ağacı çatbotunu göstər "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Müəllimlərə kurslarda süni intellekt dəstəkli təhsil tətbiqləri yaratmağa və versiyalamağa imkan verir."
+
+msgid "Department name"
+msgstr "Şöbə adı"
+
+msgid "Documents and exercise"
+msgstr "Sənədlər və tapşırıq"
+
+msgid "Documents and learning path"
+msgstr "Sənədlər və öyrənmə yolu"
+
+msgid "Documents, exercise and learning path"
+msgstr "Sənədlər, tapşırıq və öyrənmə yolu"
+
+msgid "session"
+msgstr "sessiya"
+
+msgid "course"
+msgstr "kurs"
+
+msgid "You have been enrolled in %s"
+msgstr "Siz %s-də qeydiyyatdan keçmisiniz"
 

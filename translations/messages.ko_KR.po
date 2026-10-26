@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "감사합니다"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "수식 예제: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "수식 예시: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "변수 범위"
@@ -28768,6 +28768,9 @@ msgstr "현재 사용자를 찾을 수 없습니다."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "안녕하세요 %s 님,<br><br>%s에 등록되었습니다.<br><a href=\"%s\">여기</a>에서 계정에 접근할 수 있습니다.<br><br>로그인 정보는 다음과 같습니다:<br>사용자 이름: <strong>%s</strong><br>비밀번호: <strong>%s</strong><br><br>감사합니다,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "안녕하세요 %s님,<br><br>%s에 등록되었습니다.<br>사용자 이름: <strong>%s</strong><br><br>아래 링크를 클릭하여 비밀번호를 설정하고 계정에 접속하세요:<br><a href=\"%s\">비밀번호 설정</a><br><br>감사합니다.<br>%s"
+
 msgid "You are registered on %s"
 msgstr "%s에 등록되었습니다"
 
@@ -41571,4 +41574,1616 @@ msgstr "마이그레이션 이력이 기록되어 있습니다"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "프로젝트 루트에 %s가 있습니다. 업그레이드 엔드포인트를 닫으려면 삭제하세요."
+
+msgid "You have earned a certificate for this exercise"
+msgstr "이 연습에 대한 수료증을 획득했습니다"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "이 학습 경로에 접근하려면 먼저 학습 경로 \"%s\"를 완료해야 합니다."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "이 파일을 영구적으로 삭제하시겠습니까?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "선택한 과정에서 이 파일의 연결을 해제하시겠습니까?"
+
+msgid "Attach this file to another course"
+msgstr "이 파일을 다른 과정에 연결"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "선택한 과정에 연결 (숨김)"
+
+msgid "Course(s):"
+msgstr "과정:"
+
+msgid "Delete definitively"
+msgstr "영구 삭제"
+
+msgid "Detach from this course"
+msgstr "이 과정에서 연결 해제"
+
+msgid "File actions"
+msgstr "파일 작업"
+
+msgid "File Information"
+msgstr "파일 정보"
+
+msgid "File Link:"
+msgstr "파일 링크:"
+
+msgid "File Path:"
+msgstr "파일 경로:"
+
+msgid "Filter courses..."
+msgstr "과정 필터..."
+
+msgid "MIME Type:"
+msgstr "MIME 유형:"
+
+msgid "N/A"
+msgstr "해당 없음"
+
+msgid "No results found."
+msgstr "결과를 찾을 수 없습니다."
+
+msgid "Original Name"
+msgstr "원본 이름"
+
+msgid "Original Name:"
+msgstr "원본 이름:"
+
+msgid "Orphan"
+msgstr "고아 파일"
+
+msgid "Resource File ID:"
+msgstr "리소스 파일 ID:"
+
+msgid "Resource Node ID:"
+msgstr "리소스 노드 ID:"
+
+msgid "Search..."
+msgstr "검색..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "특정 과정에서 이 파일의 연결을 해제하려면 위의 해당 과정 태그에 있는 \"×\" 아이콘을 클릭하세요."
+
+msgid "User:"
+msgstr "사용자:"
+
+msgid "View file information"
+msgstr "파일 정보 보기"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "이 파일을 하나 이상의 과정에 연결할 수 있습니다(문서 루트에 숨김). 파일이 더 이상 사용되지 않아 고아 파일이 되면 영구적으로 삭제할 수도 있습니다."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "하나 이상의 과정을 선택할 수 있습니다(Ctrl/Cmd + 클릭)."
+
+msgid "bytes"
+msgstr "바이트"
+
+msgid "Failed to copy:"
+msgstr "복사 실패:"
+
+msgid "Missing resource file identifier."
+msgstr "리소스 파일 식별자가 없습니다."
+
+msgid "Please select at least one course."
+msgstr "과정을 하나 이상 선택하세요."
+
+msgid "Resource file not found."
+msgstr "리소스 파일을 찾을 수 없습니다."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "파일 \"%s\"이(가) %d개 과정에 연결되었습니다: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "일부 과정이 건너뛰어졌습니다: %s."
+
+msgid "Missing file or course identifier."
+msgstr "파일 또는 과정 식별자가 없습니다."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "이 리소스 파일에는 리소스 노드가 없어 연결을 해제할 수 없습니다."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "파일이 %d개 과정 링크에서 연결 해제되었습니다."
+
+msgid "This file is not attached to the selected course."
+msgstr "이 파일은 선택한 과정에 연결되어 있지 않습니다."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "이 파일은 하나 이상의 리소스에서 사용 중이므로 삭제할 수 없습니다."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "고아 파일과 실제 콘텐츠가 영구적으로 삭제되었습니다."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "설문이 게시되었습니다. 생성: %d. 업데이트: %d. 보낸 메시지: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "획득 가능"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "이 역량은 획득할 수 없습니다"
+
+#: issue-8179
+msgid "Novice"
+msgstr "초심자"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "규칙과 맥락 없는 지침을 경직되게 따르며, 상황 판단이 거의 없습니다."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "고급 초심자"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "상황적 측면과 패턴을 인식하기 시작하지만 여전히 지침이 필요합니다."
+
+#: issue-8179
+msgid "Competent"
+msgstr "유능"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "계획과 심적 모델을 개발하고 결과에 책임을 지지만, 복잡함에 압도될 수 있음."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "숙련"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "\"큰 그림\"을 보고, 직관적으로 우선순위를 정하며, 경험으로부터 배움."
+
+#: issue-8179
+msgid "Expert"
+msgstr "전문가"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "직관적이고 유연한 수행; 깊은 암묵지에 의존하며, 혁신하거나 새로운 상황을 수월하게 처리함."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "기억하기"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "장기 기억에서 관련 지식을 인출, 회상 또는 인식함."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "이해하기"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "구술, 서면, 그래픽 의사소통을 포함한 교수 메시지에서 의미를 구성함. 해석, 예시, 분류, 요약, 추론, 비교 또는 설명으로 이해를 보여 줌."
+
+#: issue-8179
+msgid "Applying"
+msgstr "적용하기"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "주어진 상황에서 절차를 실행하거나 구현하여 수행하거나 사용함. 새롭거나 구체적인 상황에서 지식이나 기술을 사용함."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "분석하기"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "자료를 구성 요소로 나누고 부분들이 서로 및 전체 구조나 목적과 어떻게 관련되는지 파악함. 동기, 원인 또는 관계를 식별함."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "평가하기"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "기준과 표준에 따라 판단함. 결정이나 행동 과정을 점검, 비평 또는 정당화함."
+
+#: issue-8179
+msgid "Creating"
+msgstr "창안하기"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "요소를 모아 일관되거나 기능적인 전체를 만들고, 요소를 새로운 패턴이나 구조로 재구성함. 독창적인 작업을 산출하거나 새로운 아이디어를 생성함."
+
+#: issue-8179
+msgid "Follow"
+msgstr "따르기"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "밀접한 감독과 지시 아래 작업함. 재량이 제한된 일상 업무를 수행함. 지시 준수와 기본 실행에 집중함."
+
+#: issue-8179
+msgid "Assist"
+msgstr "지원하기"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "일상적인 감독 아래 작업함. 다른 사람을 돕고, 팀 업무에 기여하며, 정해진 범위 안에서 어느 정도 주도하기 시작함."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "일반적인 감독 아래 작업함. 일상 및 비일상 활동에 지식과 기술을 적용함. 어느 정도의 재량과 판단을 행사함."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "폭넓은 지시 아래 작업함. 전문 안내, 지원 또는 서비스를 제공하여 다른 사람을 가능하게 함. 자신의 업무에 책임을 지며 소규모 팀이나 과제를 감독할 수 있음."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "보장 및 조언"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "폭넓은 지시 아래 상당한 자율성을 가지고 작업함. 업무가 목표를 충족하도록 보장하고 복잡한 사안에 조언함. 종종 팀이나 프로젝트를 이끌고 결정에 영향을 줌."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "개시 및 영향"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "중요한 업무 영역에 대해 정해진 권한과 책임을 가짐. 행동을 개시하고, 해당 영역의 전략과 정책에 영향을 주며, 상당한 프로젝트나 팀을 이끔."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "전략 수립, 영감, 동원"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "주요 업무 영역에 대해 최고 조직 수준의 권한을 가짐. 장기 전략을 수립하고, 다른 사람에게 영감을 주고 동원하며, 조직 성공에 중요한 결정을 내림. 산업 또는 외부 수준에서 영향을 줌."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "고려할 최대 비활성 시간(분)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "열린 채로 둔 강좌 페이지는 자동 요청을 계속 보냅니다. 사용자로부터 실제 동작(페이지나 항목 열기, 응답 등)이 없는 이 시간(분)이 지나면 강좌에서 보낸 시간은 더 이상 집계되지 않습니다."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "협업 위키 편집기"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Etherpad에 연결하는 중..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "저장하면 현재 Etherpad 내용으로 새 Chamilo 위키 버전이 만들어집니다."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "협업 편집기를 불러올 수 없습니다."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "위키 편집에 Etherpad 사용"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "기존 위키 페이지의 협업 편집기로 Etherpad를 사용합니다. 보안 임베디드 세션을 위해 Etherpad는 Chamilo와 동일한 출처에서 제공되어야 합니다."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "선택적 리버스 프록시 경로를 포함한 Etherpad 인스턴스의 기본 URL입니다. 예: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API 키"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Chamilo가 패드와 세션을 만들고 위키 내용을 동기화하는 데 사용하는 API 키입니다. Etherpad가 API 키 인증을 수락하도록 구성하십시오."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "새 문서의 기본 공개 설정을 강좌별로 변경할 수 있음"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "교사가 강좌에서 새 문서, 폴더 또는 업로드 파일을 만들 때 부여되는 공개 설정입니다. 이후에도 교사는 각각 공개 설정을 변경할 수 있습니다."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "사용하면 교사가 플랫폼 기본값 대신 강좌 설정에서 해당 강좌의 새 문서에 부여할 공개 설정을 선택할 수 있습니다."
+
+msgid "Default visibility of new learning paths"
+msgstr "새 학습 경로의 기본 공개 설정"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "새 학습 경로의 기본 공개 설정을 강좌별로 변경할 수 있음"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "교사가 강좌에서 새 학습 경로를 만들 때 부여되는 공개 설정입니다. 이후에도 교사는 각각 공개 설정을 변경할 수 있습니다."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "사용하면 교사가 플랫폼 기본값 대신 강좌 설정에서 해당 강좌의 새 학습 경로에 부여할 공개 설정을 선택할 수 있습니다."
+
+msgid "Default visibility of new tests"
+msgstr "새 시험의 기본 공개 설정"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "새 시험의 기본 공개 설정을 강좌별로 변경할 수 있음"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "교사가 강좌에서 새 시험을 만들 때 부여되는 공개 설정입니다. 이후에도 각 시험의 공개 설정을 변경할 수 있습니다."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "활성화하면 교사가 플랫폼 기본값 대신 강좌 설정에서 해당 강좌의 새 시험에 부여할 공개 설정을 선택할 수 있습니다."
+
+msgid "Default visibility for new learning paths"
+msgstr "새 학습 경로의 기본 공개 설정"
+
+msgid "Default visibility for new tests"
+msgstr "새 시험의 기본 공개 설정"
+
+msgid "Following"
+msgstr "팔로잉"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "학습자가 이 과제의 제출물에 댓글을 달면 이메일을 받습니다"
+
+msgid "Payment history"
+msgstr "결제 내역"
+
+msgid "No payments yet"
+msgstr "아직 결제가 없습니다"
+
+msgid "Cancel service"
+msgstr "서비스 취소"
+
+msgid "Official transcript"
+msgstr "공식 성적증명서"
+
+msgid "Unofficial transcript"
+msgstr "비공식 성적증명서"
+
+msgid "Student name"
+msgstr "학생 이름"
+
+msgid "Student number"
+msgstr "학번"
+
+msgid "Program title"
+msgstr "프로그램 제목"
+
+msgid "Required hours"
+msgstr "필수 시간"
+
+msgid "Completion date"
+msgstr "이수일"
+
+msgid "Hours completed"
+msgstr "이수 시간"
+
+msgid "Final grade"
+msgstr "최종 성적"
+
+msgid "Grade"
+msgstr "성적"
+
+msgid "No completed course yet."
+msgstr "아직 이수한 강좌가 없습니다."
+
+msgid "Grading scale"
+msgstr "성적 척도"
+
+msgid "Signature of school official"
+msgstr "학교 담당자 서명"
+
+msgid "School official"
+msgstr "학교 담당자"
+
+msgid "Official's title"
+msgstr "담당자 직함"
+
+msgid "Verify this transcript at"
+msgstr "이 성적증명서 확인 위치"
+
+msgid "Verification code"
+msgstr "확인 코드"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "이 비공식 성적증명서는 서명되지 않았습니다. 관리자에게 공식 성적증명서를 요청하세요."
+
+msgid "Transcript verification"
+msgstr "성적증명서 확인"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "이 공식 성적증명서가 기관에서 발급·서명되었으며, 변조되지 않았고 취소되지 않았는지 확인합니다."
+
+msgid "Valid"
+msgstr "유효"
+
+msgid "Invalid signature"
+msgstr "잘못된 서명"
+
+msgid "Transcript not found"
+msgstr "성적증명서를 찾을 수 없음"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "기관 서명이 유효하며 이 성적증명서는 취소되지 않았습니다."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "이 성적증명서의 유효성을 확인할 수 없습니다. 세부 정보는 표시되지 않습니다."
+
+msgid "Transcript details"
+msgstr "성적증명서 세부 정보"
+
+msgid "Institution"
+msgstr "기관"
+
+msgid "Issued on"
+msgstr "발급일"
+
+msgid "Download verification JSON"
+msgstr "확인 JSON 다운로드"
+
+msgid "Transcript"
+msgstr "성적증명서"
+
+msgid "My confidential reports"
+msgstr "내 기밀 보고서"
+
+msgid "My transcript"
+msgstr "내 성적증명서"
+
+msgid "Confidential investigations"
+msgstr "기밀 조사"
+
+msgid "Floor plan"
+msgstr "평면도"
+
+msgid "Click a highlighted room to select it"
+msgstr "강조된 방을 클릭하여 선택하세요"
+
+msgid "Select room"
+msgstr "방 선택"
+
+msgid "Room on floor plan"
+msgstr "평면도의 방"
+
+msgid "Select a branch first"
+msgstr "먼저 지점을 선택하세요"
+
+msgid "The branch has no attached floor plan"
+msgstr "해당 지점에 연결된 평면도가 없습니다"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "다각형 도구로 방의 윤곽을 그리고, 편집으로 모서리를 이동하세요"
+
+msgid "Save room area"
+msgstr "강의실 영역 저장"
+
+msgid "Clear room area"
+msgstr "강의실 영역 지우기"
+
+msgid "Save the room form to persist the area"
+msgstr "영역을 유지하려면 강의실 양식을 저장하세요"
+
+msgid "Floor plan unavailable"
+msgstr "평면도 없음"
+
+msgid "Room map points must be within the floor plan"
+msgstr "강의실 지도 점은 평면도 안에 있어야 합니다"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "강의실 영역을 지우시겠습니까?"
+
+msgid "View room on floor plan"
+msgstr "평면도에서 강의실 보기"
+
+msgid "No floor plan available"
+msgstr "사용 가능한 평면도가 없습니다"
+
+msgid "This is an assignment by groups"
+msgstr "그룹별 과제입니다"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "PNG, JPEG 또는 안전한 정적 SVG 평면도를 업로드하거나 문서에서 기존 이미지를 선택하세요."
+
+msgid "Upload floor plan"
+msgstr "평면도 업로드"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG 또는 정적 SVG, 최대 10MB"
+
+msgid "Search images by name"
+msgstr "이름으로 이미지 검색"
+
+msgid "Image name"
+msgstr "이미지 이름"
+
+msgid "Select an image"
+msgstr "이미지 선택"
+
+msgid "Change floor plan"
+msgstr "평면도 변경"
+
+msgid "Attach floor plan"
+msgstr "평면도 첨부"
+
+msgid "No matching images found in Documents."
+msgstr "문서에서 일치하는 이미지를 찾을 수 없습니다."
+
+msgid "Current floor plan"
+msgstr "현재 평면도"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "평면도 변경 사항은 자동으로 저장됩니다."
+
+msgid "Remove floor plan"
+msgstr "평면도 제거"
+
+msgid "Cannot load images"
+msgstr "이미지를 불러올 수 없습니다"
+
+msgid "Floor plan saved"
+msgstr "평면도가 저장되었습니다"
+
+msgid "Cannot attach floor plan"
+msgstr "평면도를 첨부할 수 없습니다"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "최대 10MB의 PNG/JPEG 및 안전한 정적 SVG 이미지만 지원됩니다."
+
+msgid "Cannot upload floor plan"
+msgstr "평면도를 업로드할 수 없습니다"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "평면도를 제거하시겠습니까?"
+
+msgid "Floor plan removed"
+msgstr "평면도가 제거되었습니다"
+
+msgid "Cannot remove floor plan"
+msgstr "평면도를 제거할 수 없습니다"
+
+msgid "Support bot"
+msgstr "지원 봇"
+
+msgid "Connected"
+msgstr "연결됨"
+
+msgid "Not connected"
+msgstr "연결되지 않음"
+
+msgid "View ticket"
+msgstr "티켓 보기"
+
+msgid "Start a new conversation"
+msgstr "새 대화 시작"
+
+msgid "Video call"
+msgstr "화상 통화"
+
+msgid "Incoming video call"
+msgstr "수신 화상 통화"
+
+msgid "Decline"
+msgstr "거절"
+
+msgid "Mute microphone"
+msgstr "마이크 음소거"
+
+msgid "Unmute microphone"
+msgstr "마이크 음소거 해제"
+
+msgid "Turn camera off"
+msgstr "카메라 끄기"
+
+msgid "Turn camera on"
+msgstr "카메라 켜기"
+
+msgid "Hang up"
+msgstr "통화 종료"
+
+msgid "Calling..."
+msgstr "통화 중..."
+
+msgid "Connecting..."
+msgstr "연결 중..."
+
+msgid "Your contact is busy."
+msgstr "상대방이 통화 중입니다."
+
+msgid "Your contact did not answer the call."
+msgstr "상대방이 통화에 응답하지 않았습니다."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "상대방이 카메라 또는 마이크에 접근할 수 없습니다."
+
+msgid "Your contact could not prepare the video call."
+msgstr "상대방이 화상 통화를 준비할 수 없습니다."
+
+msgid "Your contact refused the call."
+msgstr "상대방이 통화를 거절했습니다."
+
+msgid "The call timed out."
+msgstr "통화 시간이 초과되었습니다."
+
+msgid "Your contact cancelled the call."
+msgstr "상대방이 통화를 취소했습니다."
+
+msgid "The video connection was lost."
+msgstr "영상 연결이 끊어졌습니다."
+
+msgid "Your contact could not establish the video connection."
+msgstr "상대방이 영상 연결을 설정하지 못했습니다."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "상대방이 영상 통화 설정을 완료하지 못했습니다."
+
+msgid "Your contact hung up."
+msgstr "상대방이 전화를 끊었습니다."
+
+msgid "Video call could not be started"
+msgstr "영상 통화를 시작할 수 없습니다"
+
+msgid "Camera or microphone permission was denied."
+msgstr "카메라 또는 마이크 권한이 거부되었습니다."
+
+msgid "No camera or microphone was found."
+msgstr "카메라 또는 마이크를 찾을 수 없습니다."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "카메라 또는 마이크가 이미 사용 중이거나 사용할 수 없습니다."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "카메라 또는 마이크가 필요한 설정을 지원하지 않습니다."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "카메라 또는 마이크에 접근할 수 없습니다."
+
+msgid "The video call could not be prepared."
+msgstr "영상 통화를 준비할 수 없습니다."
+
+msgid "The video call request could not be sent."
+msgstr "영상 통화 요청을 보낼 수 없습니다."
+
+msgid "The incoming video call could not be processed."
+msgstr "수신 영상 통화를 처리할 수 없습니다."
+
+msgid "The video call answer could not be prepared."
+msgstr "영상 통화 응답을 준비할 수 없습니다."
+
+msgid "The video call answer could not be sent."
+msgstr "영상 통화 응답을 보낼 수 없습니다."
+
+msgid "The video call answer could not be processed."
+msgstr "영상 통화 응답을 처리할 수 없습니다."
+
+msgid "The video connection failed"
+msgstr "영상 연결에 실패했습니다"
+
+msgid "The video connection could not be established."
+msgstr "영상 연결을 설정할 수 없습니다."
+
+msgid "No answer was received."
+msgstr "응답이 없습니다."
+
+msgid "You refused the call."
+msgstr "통화를 거절했습니다."
+
+msgid "You cancelled the call."
+msgstr "통화를 취소했습니다."
+
+msgid "You hung up."
+msgstr "전화를 끊었습니다."
+
+msgid "You missed the call."
+msgstr "부재중 전화입니다."
+
+msgid "Support bot is currently unavailable."
+msgstr "지원 봇을 현재 사용할 수 없습니다."
+
+msgid "A support ticket has been created."
+msgstr "지원 티켓이 생성되었습니다."
+
+msgid "Conversation ended."
+msgstr "대화가 종료되었습니다."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "지원 봇이 이 대화를 계속할 수 없습니다. 다시 시도해 주세요."
+
+msgid "Add your first term glossary to this course"
+msgstr "이 과정에 첫 용어집을 추가하세요"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "이 설문 템플릿을 삭제하시겠습니까?"
+
+msgid "The survey template has been deleted."
+msgstr "설문 템플릿이 삭제되었습니다."
+
+msgid "Please select a course."
+msgstr "과정을 선택해 주세요."
+
+msgid "Please select a session for this course."
+msgstr "이 과정의 세션을 선택해 주세요."
+
+msgid "The survey has been created from the template."
+msgstr "템플릿에서 설문이 생성되었습니다."
+
+msgid "Survey templates"
+msgstr "설문 템플릿"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "교사용 재사용 가능한 설문 템플릿을 만들고 과정 또는 세션에 바로 할당합니다."
+
+msgid "Subtitle"
+msgstr "부제"
+
+msgid "Assign to course"
+msgstr "과정에 할당"
+
+msgid "Assign template to course"
+msgstr "과정에 템플릿 할당"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "과정에 설문을 바로 만들려면 세션을 비워 두세요."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "이 과정은 이 포털의 세션을 통해 제공되므로 세션이 필요합니다."
+
+msgid "Survey template questions"
+msgstr "설문 템플릿 문항"
+
+msgid "Back to survey templates"
+msgstr "설문 템플릿으로 돌아가기"
+
+msgid "Could not load survey template"
+msgstr "설문 템플릿을 불러올 수 없습니다"
+
+msgid "Could not load survey template questions"
+msgstr "설문 템플릿 문항을 불러올 수 없습니다"
+
+msgid "Could not save survey template question"
+msgstr "설문 템플릿 문항을 저장할 수 없습니다"
+
+msgid "Could not delete survey template question"
+msgstr "설문 템플릿 문항을 삭제할 수 없습니다"
+
+msgid "Could not move survey template question"
+msgstr "설문 템플릿 문항을 이동할 수 없습니다"
+
+msgid "Could not copy survey template question"
+msgstr "설문 템플릿 문항을 복사할 수 없습니다"
+
+msgid "The survey template has been saved."
+msgstr "설문 템플릿이 저장되었습니다."
+
+msgid "Edit survey template"
+msgstr "설문 템플릿 편집"
+
+msgid "Create survey template"
+msgstr "설문 템플릿 만들기"
+
+msgid "The survey template title is required."
+msgstr "설문 템플릿 제목은 필수입니다."
+
+msgid "Visible as template"
+msgstr "템플릿으로 표시"
+
+msgid "Create satisfaction survey"
+msgstr "만족도 설문 만들기"
+
+msgid "Training satisfaction survey"
+msgstr "교육 만족도 설문"
+
+msgid "Could not create satisfaction survey"
+msgstr "만족도 설문을 만들 수 없습니다"
+
+msgid "Use template"
+msgstr "템플릿 사용"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "관리자가 준비한 재사용 가능한 템플릿으로 이 설문을 만듭니다."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "교사/튜터에게 결과 숨김"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "교사와 튜터는 응답 수 확인 및 알림 발송은 가능하지만, 설문 결과를 열거나 내보낼 수는 없습니다."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "템플릿이 적용되었습니다. 설문 설정을 검토한 후 저장하여 만드세요."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "설문 결과는 교사와 튜터에게 숨겨집니다."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "초대 페이지에서 응답 수를 확인하고 알림을 보낼 수 있습니다."
+
+msgid "Payment method"
+msgstr "결제 방법"
+
+msgid "Preview mode"
+msgstr "미리보기 모드"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "미리보기 모드에서는 진행 상황과 점수가 저장되지 않습니다."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "이 링크는 학습 경로 안에 표시할 수 없습니다."
+
+msgid "Open it in a new tab to view the page."
+msgstr "새 탭에서 열어 페이지를 확인하세요."
+
+msgid "Report a problem with this question"
+msgstr "이 문항의 문제 신고"
+
+msgid "Your report was sent to the teacher."
+msgstr "신고가 교사에게 전송되었습니다."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "발견한 오류나 문제를 설명하세요. 신고는 교사에게 전송됩니다."
+
+msgid "A comment is required."
+msgstr "의견은 필수입니다."
+
+msgid "Could not send the report."
+msgstr "신고를 보낼 수 없습니다."
+
+msgid "Learner reports"
+msgstr "학습자 신고"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "이 문항에 제출된 학습자 신고가 없습니다."
+
+msgid "View attempt"
+msgstr "시도 보기"
+
+msgid "Could not load learner reports."
+msgstr "학습자 신고를 불러올 수 없습니다."
+
+msgid "Allow learners to report issues in questions"
+msgstr "학습자가 문항 문제를 신고하도록 허용"
+
+msgid "Skill acquired"
+msgstr "습득한 역량"
+
+msgid "AI Toolbox"
+msgstr "AI 도구상자"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "AI로 대화형 교육 애플리케이션을 생성하고 SCORM으로 학습자 진행 상황을 추적합니다."
+
+msgid "No published applications are available yet."
+msgstr "아직 게시된 애플리케이션이 없습니다."
+
+msgid "Interactive applications"
+msgstr "대화형 애플리케이션"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "한곳에서 버전을 생성, 개선, 게시 및 검토합니다."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "애플리케이션을 열어 최근 진행 상황부터 이어서 하세요."
+
+msgid "Interactive learning application"
+msgstr "대화형 학습 애플리케이션"
+
+msgid "Create an interactive learning app"
+msgstr "대화형 학습 앱 만들기"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "활동을 설명하세요. Chamilo가 진행 상황과 점수 추적이 포함된 버전 관리 SCORM 애플리케이션을 생성합니다."
+
+msgid "Idea"
+msgstr "아이디어"
+
+msgid "Application"
+msgstr "애플리케이션"
+
+msgid "What should the application do?"
+msgstr "애플리케이션은 무엇을 해야 합니까?"
+
+msgid "How it works"
+msgstr "작동 방식"
+
+msgid "AI generation"
+msgstr "AI 생성"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "앱은 지침에 따라 생성되어 버전 1로 저장됩니다."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "학습자 진행 상황, 점수 및 이어하기 데이터가 Chamilo에 보고됩니다."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "이후 개선은 이전 버전을 삭제하지 않고 새 버전을 만듭니다."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "학습 목표, 규칙, 수준, 채점 및 학습자가 완료했을 때 일어날 일을 포함하세요."
+
+msgid "You are not allowed to create content in this context."
+msgstr "이 컨텍스트에서 콘텐츠를 만들 권한이 없습니다."
+
+msgid "The application was generated successfully."
+msgstr "애플리케이션이 성공적으로 생성되었습니다."
+
+msgid "Open in student view"
+msgstr "학생 보기로 열기"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "미리보기 및 게시를 사용하려면 애플리케이션을 생성하세요."
+
+msgid "Improve with AI"
+msgstr "AI로 개선"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "변경 내용을 설명하세요. 새 버전이 생성되며 이전 버전은 계속 사용할 수 있습니다."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "생성하려는 전체 인터랙티브 활동을 설명하세요."
+
+msgid "What should be improved?"
+msgstr "무엇을 개선해야 하나요?"
+
+msgid "Generate new version"
+msgstr "새 버전 생성"
+
+msgid "Version history"
+msgstr "버전 기록"
+
+msgid "Preview, download or restore any generated version."
+msgstr "생성된 버전을 미리 보거나 다운로드하거나 복원할 수 있습니다."
+
+msgid "A new version was generated."
+msgstr "새 버전이 생성되었습니다."
+
+msgid "Version restored"
+msgstr "버전이 복원됨"
+
+msgid "The support bot tree has been published."
+msgstr "지원 봇 트리가 게시되었습니다."
+
+msgid "The support bot tree has been archived."
+msgstr "지원 봇 트리가 보관되었습니다."
+
+msgid "The support bot tree has been duplicated."
+msgstr "지원 봇 트리가 복제되었습니다."
+
+msgid "The support bot tree has been deleted."
+msgstr "지원 봇 트리가 삭제되었습니다."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "이 지원 봇 트리를 삭제하시겠습니까?"
+
+msgid "The support bot tree has been imported."
+msgstr "지원 봇 트리를 가져왔습니다."
+
+msgid "Create support bot tree"
+msgstr "지원 봇 트리 만들기"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "사용자를 지원 질문으로 안내하고 티켓으로 에스컬레이션할 수 있는 고정 의사결정 트리를 구축합니다."
+
+msgid "Portal scope"
+msgstr "포털 범위"
+
+msgid "Duplicate"
+msgstr "복제"
+
+msgid "Archive"
+msgstr "보관"
+
+msgid "View conversations"
+msgstr "대화 보기"
+
+msgid "Import support bot tree"
+msgstr "지원 봇 트리 가져오기"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "JSON 내보내기 또는 CSV 의사결정 트리를 가져옵니다. 가져온 트리는 항상 새 초안으로 생성됩니다."
+
+msgid "Resolved"
+msgstr "해결됨"
+
+msgid "Escalated"
+msgstr "에스컬레이션됨"
+
+msgid "Abandoned"
+msgstr "중단됨"
+
+msgid "Support bot conversations"
+msgstr "지원 봇 대화"
+
+msgid "Outcome"
+msgstr "결과"
+
+msgid "Started at"
+msgstr "시작 시각"
+
+msgid "Ended at"
+msgstr "종료 시각"
+
+msgid "View conversation"
+msgstr "대화 보기"
+
+msgid "Go to node"
+msgstr "노드로 이동"
+
+msgid "Create support ticket"
+msgstr "지원 티켓 만들기"
+
+msgid "End conversation"
+msgstr "대화 종료"
+
+msgid "Node"
+msgstr "노드"
+
+msgid "A support bot tree requires at least one node."
+msgstr "지원 봇 트리에는 노드가 하나 이상 필요합니다."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "이 노드를 삭제하시겠습니까? 해당 노드로의 링크가 해제됩니다."
+
+msgid "Every support bot node requires at least one option."
+msgstr "모든 지원 봇 노드에는 옵션이 하나 이상 필요합니다."
+
+msgid "The support bot tree title is required."
+msgstr "지원 봇 트리 제목이 필요합니다."
+
+msgid "A support bot entry node is required."
+msgstr "지원 봇 시작 노드가 필요합니다."
+
+msgid "Every support bot node requires content."
+msgstr "모든 지원 봇 노드에는 내용이 필요합니다."
+
+msgid "Every support bot option requires a label."
+msgstr "모든 지원 봇 옵션에는 레이블이 필요합니다."
+
+msgid "Select a target node for every go-to option."
+msgstr "모든 이동 옵션에 대상 노드를 선택하세요."
+
+msgid "Enter a relative URL for every link option."
+msgstr "모든 링크 옵션에 상대 URL을 입력하세요."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "모든 에스컬레이션 옵션에 티켓 범주를 선택하세요."
+
+msgid "The support bot tree has been saved."
+msgstr "지원 봇 트리가 저장되었습니다."
+
+msgid "Edit support bot tree"
+msgstr "지원 봇 트리 편집"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "게시 및 보관된 지원 봇 버전은 읽기 전용입니다. 목록에서 이 트리를 복제하여 새 초안 버전을 편집하세요."
+
+msgid "Default ticket project"
+msgstr "기본 티켓 프로젝트"
+
+msgid "Decision tree rules"
+msgstr "의사결정 트리 규칙"
+
+msgid "Every node must contain at least one option."
+msgstr "모든 노드에는 옵션이 하나 이상 있어야 합니다."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "최종 노드는 대화를 종료하거나 지원 티켓을 생성해야 합니다."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "이동 링크는 v1에서 순환을 만들 수 없습니다."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "v1에서는 외부 URL이 허용되지 않습니다. 링크 작업은 상대 Chamilo 경로를 사용해야 합니다."
+
+msgid "Nodes"
+msgstr "노드"
+
+msgid "Add node"
+msgstr "노드 추가"
+
+msgid "Entry node"
+msgstr "시작 노드"
+
+msgid "Set as entry node"
+msgstr "시작 노드로 설정"
+
+msgid "Target node"
+msgstr "대상 노드"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "상대 Chamilo 경로를 사용하세요. 예: /tickets."
+
+msgid "Ticket category"
+msgstr "티켓 범주"
+
+msgid "Select a default ticket project first."
+msgstr "먼저 기본 티켓 프로젝트를 선택하세요."
+
+msgid "Closing message"
+msgstr "종료 메시지"
+
+msgid "Select a node to edit it."
+msgstr "편집할 노드를 선택하세요."
+
+msgid "Support bot conversation"
+msgstr "지원 봇 대화"
+
+msgid "Transcript of %s"
+msgstr "%s의 성적 증명서"
+
+msgid "Download unofficial transcript"
+msgstr "비공식 성적 증명서 다운로드"
+
+msgid "Issue official transcript"
+msgstr "공식 성적 증명서 발급"
+
+msgid "Official transcripts"
+msgstr "공식 성적 증명서"
+
+msgid "No official transcript has been issued yet."
+msgstr "아직 발급된 공식 성적 증명서가 없습니다."
+
+msgid "Issued by"
+msgstr "발급자"
+
+msgid "Verify"
+msgstr "확인"
+
+msgid "Signature of official transcripts"
+msgstr "공식 성적 증명서 서명"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "이 이미지는 이 포털의 공식 성적 증명서에, 수료증 설정에 지정된 서명자 이름과 직함 위에 인쇄됩니다."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "이 페이지에 나열된 과정과 성적으로 서명된 공식 성적 증명서를 발급하시겠습니까? 철회될 때까지 온라인으로 확인할 수 있습니다."
+
+msgid "Official transcript issued"
+msgstr "공식 성적 증명서가 발급되었습니다"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "이 공식 성적 증명서를 철회하시겠습니까? 확인 페이지에 철회된 것으로 표시됩니다."
+
+msgid "Official transcript revoked"
+msgstr "공식 성적 증명서가 철회되었습니다"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "먼저 PNG 또는 JPEG 이미지를 선택하세요."
+
+msgid "Signed credential"
+msgstr "서명된 자격 증명"
+
+msgid "Issue signed credential"
+msgstr "서명된 자격 증명 발급"
+
+msgid "Verify credential"
+msgstr "자격 증명 확인"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Sepolia 테스트넷에 앵커"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "기존 Sepolia 트랜잭션 확인"
+
+msgid "Revoke signed credential"
+msgstr "서명된 자격 증명 철회"
+
+msgid "Delete certificate"
+msgstr "수료증 삭제"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "기존 Sepolia 트랜잭션 확인"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia 트랜잭션 해시"
+
+msgid "Verify transaction"
+msgstr "트랜잭션 확인"
+
+msgid "Anchored"
+msgstr "앵커됨"
+
+msgid "Issued"
+msgstr "발급됨"
+
+msgid "Not issued"
+msgstr "미발급"
+
+msgid "Consent required"
+msgstr "동의 필요"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia 트랜잭션이 확인되고 검증되었습니다"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia 테스트넷 지갑에서 트랜잭션 서명을 요청합니다. 수료증 지문만 앵커됩니다. 계속하시겠습니까?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "이 서명된 자격 증명을 철회하시겠습니까? 블록체인 트랜잭션은 영구적으로 남지만, 확인 페이지에는 철회로 표시됩니다."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "이 학습자에 대해 서명된 수료증 자격 증명을 발급하시겠습니까? 승인된 개인 정보를 비공개 링크로 확인할 수 있게 됩니다."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia에는 EVM 호환 브라우저 지갑이 필요합니다."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "지갑에서 Sepolia 테스트넷(체인 ID 11155111)을 선택하세요."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "잘못된 지갑 주소 또는 인증서 지문입니다."
+
+msgid "Transaction pending"
+msgstr "트랜잭션 대기 중"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "나중에 기존 Sepolia 트랜잭션 확인을 사용하세요."
+
+msgid "Signed credential issued"
+msgstr "서명된 자격 증명이 발급됨"
+
+msgid "Credential revoked"
+msgstr "자격 증명이 취소됨"
+
+msgid "Transaction hash"
+msgstr "트랜잭션 해시"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "게시 동의는 관리자가 서명된 인증서 자격 증명을 발급하고, 선택적으로 해당 SHA-256 지문을 Sepolia 테스트넷에 앵커링할 수 있게 합니다. 이름이나 개인 데이터는 온체인으로 전송되지 않습니다. 언제든지 동의를 철회할 수 있습니다."
+
+msgid "Publication consent"
+msgstr "게시 동의"
+
+msgid "Not approved"
+msgstr "승인되지 않음"
+
+msgid "Withdraw consent"
+msgstr "동의 철회"
+
+msgid "Approve publication"
+msgstr "게시 승인"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "이름, 과정, 점수 및 발급일을 표시하는 서명되고 공개적으로 검증 가능한 자격 증명을 승인합니다. 관리자는 SHA-256 지문만 Sepolia 테스트넷에 게시할 수도 있습니다. 나중에 철회하더라도 지문은 영구적입니다. 계속하시겠습니까?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "이 인증서의 게시 승인을 철회하시겠습니까?"
+
+msgid "Publication approval recorded"
+msgstr "게시 승인이 기록됨"
+
+msgid "Publication approval withdrawn"
+msgstr "게시 승인이 철회됨"
+
+msgid "Read more"
+msgstr "더 보기"
+
+msgid "Participation: %s of %s posts"
+msgstr "참여: %s / %s개 게시물"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "다른 참가자의 답글을 보려면 기여 글을 게시하세요."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "승인된 조사관만 적격 신고를 검토할 수 있습니다. 신고자 신원은 기본적으로 기밀로 유지됩니다."
+
+msgid "New confidential report"
+msgstr "새 기밀 신고"
+
+msgid "Reported user"
+msgstr "신고된 사용자"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "검토를 기다리는 적격 기밀 신고가 있습니다."
+
+msgid "Eligible investigations"
+msgstr "적격 조사"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "동일인에 대해 서로 다른 사용자 %s명 이상이 신고한 경우에만 사건이 여기에 표시됩니다."
+
+msgid "Distinct reporters"
+msgstr "서로 다른 신고자"
+
+msgid "Reports for selected user"
+msgstr "선택한 사용자에 대한 신고"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "현재 기밀 신고를 사용할 수 없습니다."
+
+msgid "The investigation could not be loaded."
+msgstr "조사를 불러올 수 없습니다."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "신원은 기본적으로 조사관에게 보호되지만, 신고 본문이나 첨부 파일에 식별 가능한 세부 정보를 포함하지 마세요. 이는 긴급 서비스가 아닙니다."
+
+msgid "Find the user involved"
+msgstr "관련 사용자 찾기"
+
+msgid "Name or username"
+msgstr "이름 또는 사용자 이름"
+
+msgid "Describe the situation"
+msgstr "상황 설명"
+
+msgid "Evidence (optional)"
+msgstr "증거(선택 사항)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "파일 최대 3개, 각 최대 8MiB. 이미지, 오디오 또는 짧은 동영상."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "이 특정 신고에 대해 승인된 조사관이 내 이름과 이메일을 볼 수 있음에 동의합니다. 나중에 이 권한을 철회할 수 있습니다."
+
+msgid "Send confidential report"
+msgstr "기밀 신고 보내기"
+
+msgid "Could not search users"
+msgstr "사용자를 검색할 수 없습니다"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "파일 최대 3개, 각 최대 8MiB."
+
+msgid "The confidential report could not be saved."
+msgstr "기밀 신고를 저장할 수 없습니다."
+
+msgid "Confidential report"
+msgstr "기밀 신고"
+
+msgid "Confidential conversation"
+msgstr "기밀 대화"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "연락처 공유가 활성화되지 않으면 조사관은 신고자 신원을 보지 않고 이 대화를 통해 소통할 수 있습니다."
+
+msgid "Reporter"
+msgstr "신고자"
+
+msgid "Investigator"
+msgstr "조사관"
+
+msgid "Additional evidence (optional)"
+msgstr "추가 증거(선택 사항)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "파일 최대 3개, 각 최대 8MiB, 신고당 파일 10개."
+
+msgid "Contact shared voluntarily"
+msgstr "자발적으로 연락처 공유됨"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "이 신고에 대해 조사관이 내 이름과 이메일을 볼 수 있도록 허용"
+
+msgid "This confidential report is not available."
+msgstr "이 기밀 신고를 사용할 수 없습니다."
+
+msgid "Your message could not be saved."
+msgstr "메시지를 저장할 수 없습니다."
+
+msgid "Contact sharing could not be updated."
+msgstr "연락처 공유를 업데이트할 수 없습니다."
+
+msgid "Evidence could not be downloaded."
+msgstr "증거를 다운로드할 수 없습니다."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>양식 작성 활동 예시 : 체질량지수 계산</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>나이</strong></td>            <td width=\"75%\" style=\"\">[25]세</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>성별</strong></td>            <td style=\"\" text-align:=\"\">[M] (M 또는 F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>체중</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>신장</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>체질량지수</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =체중/신장<sup>2</sup> (참조:<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> 위키백과 문서</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>양식 작성 활동 예시 : 체질량지수 계산</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>나이</strong></td>            <td width=\"75%\" style=\"\">[25]세</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>성별</strong></td>            <td style=\"\" text-align:=\"\">[M] (M 또는 F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>체중</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>신장</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>체질량지수</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =체중/신장<sup>2</sup> (참조:<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> 위키백과 문서</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "보고서에서 IP 주소 숨기기"
+
+msgid "Course settings policies"
+msgstr "강좌 설정 정책"
+
+msgid "Academic transcripts"
+msgstr "성적증명서"
+
+msgid "Transcript program title"
+msgstr "성적증명서 프로그램 제목"
+
+msgid "Transcript course code"
+msgstr "성적증명서 강좌 코드"
+
+msgid "Transcript course hours field"
+msgstr "성적증명서 강좌 시간 필드"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "성적증명서의 이수 시간은 필수 시간입니다"
+
+msgid "Transcript student number field"
+msgstr "성적증명서 학번 필드"
+
+msgid "Transcript address fields"
+msgstr "성적증명서 주소 필드"
+
+msgid "Transcript grading scale"
+msgstr "성적증명서 등급 척도"
+
+msgid "Transcript GPA note"
+msgstr "성적증명서 GPA 안내"
+
+msgid "Transcript signatory name"
+msgstr "성적증명서 서명자 이름"
+
+msgid "Transcript signatory title"
+msgstr "성적증명서 서명자 직함"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "서명된 수료증 및 선택적 Sepolia 테스트넷 앵커링 사용"
+
+msgid "Show thread replies only after participating"
+msgstr "참여한 후에만 스레드 답글 표시"
+
+msgid "Show the forum category description in threads"
+msgstr "스레드에 포럼 카테고리 설명 표시"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "포럼 참여 설정을 강좌별로 변경할 수 있음"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "포럼 스레드에 표시되는 최대 게시물 수"
+
+msgid "Posts required to complete a forum thread"
+msgstr "포럼 스레드 완료에 필요한 게시물 수"
+
+msgid "Track e-mail openings"
+msgstr "이메일 열람 추적"
+
+msgid "Allow e-mail replies to messages"
+msgstr "메시지에 대한 이메일 회신 허용"
+
+msgid "Inbound e-mail address"
+msgstr "수신 이메일 주소"
+
+msgid "Inbound mailbox DSN"
+msgstr "수신 메일함 DSN"
+
+msgid "Remember me duration (days)"
+msgstr "로그인 유지 기간(일)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "MCP를 넘어 OAuth 동적 클라이언트 등록 사용"
+
+msgid "Enable confidential welfare reporting"
+msgstr "기밀 복지 보고 사용"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "조사를 위한 최소 고유 신고자 수"
+
+msgid "Allow confidential evidence attachments"
+msgstr "기밀 증거 첨부 허용"
+
+msgid "Show confidential investigation notifications"
+msgstr "기밀 조사 알림 표시"
+
+msgid "Enable support chatbot"
+msgstr "지원 챗봇 사용"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "용어집 용어를 자동으로 강조할 위치를 선택합니다: 문서, 연습문제 및 학습 경로."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "시각적 보고 및 보고 내보내기에서 IP 주소를 숨깁니다. IP 주소는 저장되며 승인된 개인정보 절차를 통해 접근할 수 있습니다."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "플랫폼 기본값 및 강좌 편집 권한이며, 강좌 설정에서 관리합니다."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "사용자가 이수한 강좌의 비공식 성적증명서를 다운로드할 수 있게 하고, 관리자, 세션 관리자 및 HR 관리자가 자신이 관리하는 사용자에게 서명된 공식 성적증명서를 발급할 수 있게 합니다. 서명 이미지는 해당 사용자의 성적증명서 페이지에서 업로드합니다."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "모든 성적증명서에 인쇄되는 프로그램 제목입니다. 예: 이 플랫폼에서 준비하는 학위 명칭."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "성적증명서의 강좌 코드 열을 채울 강좌 필드: 강좌 코드 또는 학과명."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "강좌 시수를 담는 강좌 추가 필드의 변수입니다. 비워 두면 강좌 기간을 사용합니다."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "학습자가 이수한 시간으로 강좌의 필수 시간을 인쇄합니다. 비활성화하면 이수한 시간은 학습자가 강좌에서 보낸 시간입니다."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "성적증명서에 인쇄되는 학번을 담는 사용자 추가 필드의 변수입니다. 비워 두면 인쇄하지 않습니다."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "성적증명서에서 사용자 주소 다음에 인쇄되는 사용자 추가 필드 변수를 쉼표로 구분합니다. 예: 시, 도, 우편번호."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "최고 최소 점수부터 내림차순인 등급 문자의 JSON 목록입니다. 각 항목은 백분율 최소 점수(min), 문자, GPA 계산에 사용되는 평점을 가집니다."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "GPA 계산 방법에 대한 설명으로, 성적증명서의 GPA 아래에 인쇄됩니다."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "공식 성적증명서에 서명하는 학교 담당자의 이름입니다."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "공식 성적증명서에 서명하는 학교 담당자의 직함입니다."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "명시적인 소유자 동의와 관리자의 수동 작업이 필요합니다. 온체인에는 SHA-256 지문만 전송됩니다."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "학습자는 포럼 스레드에 직접 게시하기 전까지 첫 게시물만 볼 수 있습니다. 관리자, 교사, 코치 및 그룹 튜터는 항상 모든 게시물을 볼 수 있습니다."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "각 스레드 상단에 포럼 카테고리의 제목과 짧은 설명을 표시하고, 전체 설명을 읽을 수 있는 링크를 제공합니다."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "활성화하면 교사가 강좌 설정의 포럼 섹션에서 학습자가 게시하기 전까지 스레드 답글을 숨길지, 스레드에 카테고리 설명을 표시할지, 참여 진행 막대가 기대하는 게시물 수를 플랫폼 설정 대신 직접 선택할 수 있습니다."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "플랫폼 관리자가 아닌 모든 사용자(교사 포함)와 학습 경로 안의 모든 사용자에게 각 포럼 스레드의 게시물을 이 개수만 표시합니다. 스레드형 및 중첩 보기에서는 제한이 각 게시물의 답글에 적용됩니다. 게시물은 보기 순서를 유지합니다. 학습 경로에서는 최신 게시물이 앞에 오며 최신 게시물부터 표시됩니다. 모든 게시물을 표시하려면 0으로 설정하십시오."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "각 포럼 스레드에서 학습자에게 진행 막대를 표시하며, 해당 스레드에 이 수의 메시지를 게시하면 100%가 됩니다. 검토 대기 중인 게시물도 포함됩니다. 진행 막대를 숨기려면 0으로 설정하십시오."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "메시지 알림 이메일에 작은 추적 이미지를 추가하고 요청된 시점을 기록합니다. 이메일이 열렸을 수 있음을 나타낼 뿐이며, 읽었음을 증명하지는 않습니다."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "직접 메시지 알림 수신자가 이메일로 회신할 수 있게 합니다. 수신 메일은 메일 인프라에서 Chamilo 인바운드 메일 명령으로 라우팅되어야 합니다."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "회신 라우팅에 사용하는 기본 주소입니다. 예: replies@example.com. Chamilo는 플러스 주소 지정으로 고유한 수신자 토큰을 추가합니다."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "인바운드 회신을 수집하는 메일함 연결입니다. 예: imaps://user:password@imap.example.com:993/INBOX. 자격 증명의 예약 문자는 URL 인코딩하십시오."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "로그인 유지를 선택한 경우 사용자를 로그인 상태로 유지할 일수입니다. 비활성화하려면 0으로 설정하십시오. HTTPS가 필요합니다. 허용 범위: 0~90. 일반 세션 제한 시간은 PHP/Symfony에서 별도로 구성됩니다."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "동적 클라이언트 등록이 Chamilo OAuth 리소스 서버에 등록된 모든 범위를 요청할 수 있게 합니다. 비활성화하면 자체 등록은 MCP로 제한됩니다. 리소스 접근은 항상 각 클라이언트의 허용 리소스 목록으로 별도 제한됩니다."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "기밀 사고 보고를 활성화합니다. 이 모듈에는 보호된 암호화 키와 조사자 권한이 필요합니다."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "조사자에게 사례가 표시되기 전에 2명에서 10명 사이의 서로 다른 신고자가 동일 사용자를 신고해야 합니다."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "이미지, 오디오 및 짧은 동영상 증거를 허용합니다. 비활성화해도 기존 첨부 파일은 읽을 수 있습니다."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "적격 조사에 대한 내부 표시를 보여 줍니다. 이메일이나 외부 알림은 보내지 않습니다."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "채팅 패널에 사용자를 안내할 수 있는 의사결정 트리 챗봇을 표시합니다. "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "교사가 강좌 내에서 AI 지원 교육 애플리케이션을 만들고 버전 관리할 수 있게 합니다."
+
+msgid "Department name"
+msgstr "부서명"
+
+msgid "Documents and exercise"
+msgstr "문서 및 연습문제"
+
+msgid "Documents and learning path"
+msgstr "문서 및 학습 경로"
+
+msgid "Documents, exercise and learning path"
+msgstr "문서, 연습문제 및 학습 경로"
+
+msgid "session"
+msgstr "세션"
+
+msgid "course"
+msgstr "강좌"
+
+msgid "You have been enrolled in %s"
+msgstr "%s에 등록되었습니다"
 

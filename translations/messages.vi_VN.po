@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "Trân trọng"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Mẫu công thức: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Ví dụ công thức: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Phạm vi biến"
@@ -28770,6 +28770,9 @@ msgstr "Không tìm thấy người dùng hiện tại."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Xin chào %s,<br><br>Bạn đã đăng ký trên %s.<br>Bạn có thể truy cập tài khoản của mình từ <a href=\"%s\">đây</a>.<br><br>Thông tin đăng nhập của bạn là:<br>Tên người dùng: <strong>%s</strong><br>Mật khẩu: <strong>%s</strong><br><br>Trân trọng,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Xin chào %s,<br><br>Bạn đã được đăng ký trên %s.<br>Tên người dùng: <strong>%s</strong><br><br>Vui lòng nhấp vào liên kết bên dưới để đặt mật khẩu và truy cập tài khoản của bạn:<br><a href=\"%s\">Đặt mật khẩu</a><br><br>Trân trọng,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Bạn đã đăng ký trên %s"
 
@@ -41573,4 +41576,1616 @@ msgstr "Lịch sử migration đã được ghi nhận"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s đang có trong thư mục gốc dự án: xóa nó để đóng các điểm cuối nâng cấp"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Bạn đã nhận được chứng chỉ cho bài tập này"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Bạn phải hoàn thành lộ trình học \"%s\" trước khi có thể truy cập lộ trình này."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Bạn có chắc chắn muốn xóa vĩnh viễn tệp này không?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Bạn có chắc chắn muốn gỡ tệp này khỏi khóa học đã chọn không?"
+
+msgid "Attach this file to another course"
+msgstr "Đính kèm tệp này vào khóa học khác"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Đính kèm vào (các) khóa học đã chọn (ẩn)"
+
+msgid "Course(s):"
+msgstr "Khóa học:"
+
+msgid "Delete definitively"
+msgstr "Xóa vĩnh viễn"
+
+msgid "Detach from this course"
+msgstr "Gỡ khỏi khóa học này"
+
+msgid "File actions"
+msgstr "Thao tác tệp"
+
+msgid "File Information"
+msgstr "Thông tin tệp"
+
+msgid "File Link:"
+msgstr "Liên kết tệp:"
+
+msgid "File Path:"
+msgstr "Đường dẫn tệp:"
+
+msgid "Filter courses..."
+msgstr "Lọc khóa học..."
+
+msgid "MIME Type:"
+msgstr "Loại MIME:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Không tìm thấy kết quả."
+
+msgid "Original Name"
+msgstr "Tên gốc"
+
+msgid "Original Name:"
+msgstr "Tên gốc:"
+
+msgid "Orphan"
+msgstr "Mồ côi"
+
+msgid "Resource File ID:"
+msgstr "ID tệp tài nguyên:"
+
+msgid "Resource Node ID:"
+msgstr "ID nút tài nguyên:"
+
+msgid "Search..."
+msgstr "Tìm kiếm..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Để gỡ tệp này khỏi một khóa học cụ thể, nhấp biểu tượng \"×\" trên thẻ khóa học tương ứng ở trên."
+
+msgid "User:"
+msgstr "Người dùng:"
+
+msgid "View file information"
+msgstr "Xem thông tin tệp"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Bạn có thể đính kèm tệp này vào một hoặc nhiều khóa học (ẩn trong thư mục gốc tài liệu). Nếu tệp không còn được sử dụng và trở thành mồ côi, bạn cũng có thể xóa nó vĩnh viễn."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Bạn có thể chọn một hoặc nhiều khóa học (dùng Ctrl/Cmd + nhấp)."
+
+msgid "bytes"
+msgstr "byte"
+
+msgid "Failed to copy:"
+msgstr "Sao chép thất bại:"
+
+msgid "Missing resource file identifier."
+msgstr "Thiếu định danh tệp tài nguyên."
+
+msgid "Please select at least one course."
+msgstr "Vui lòng chọn ít nhất một khóa học."
+
+msgid "Resource file not found."
+msgstr "Không tìm thấy tệp tài nguyên."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Tệp \"%s\" đã được đính kèm vào %d khóa học: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Một số khóa học đã bị bỏ qua: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Thiếu định danh tệp hoặc khóa học."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Tệp tài nguyên này không có nút tài nguyên và không thể gỡ."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Tệp đã được gỡ khỏi %d liên kết khóa học."
+
+msgid "This file is not attached to the selected course."
+msgstr "Tệp này không được đính kèm vào khóa học đã chọn."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Tệp này vẫn đang được ít nhất một tài nguyên sử dụng và không thể xóa."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Tệp mồ côi và nội dung vật lý của nó đã được xóa vĩnh viễn."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Khảo sát đã được xuất bản. Đã tạo: %d. Đã cập nhật: %d. Tin nhắn đã gửi: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Có thể đạt được"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Kỹ năng này không thể đạt được"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Người mới"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Tuân thủ cứng nhắc các quy tắc và hướng dẫn không phụ thuộc ngữ cảnh; ít phán đoán tình huống."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Người mới nâng cao"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Bắt đầu nhận ra các khía cạnh tình huống và mẫu hình nhưng vẫn cần hướng dẫn."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Có năng lực"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Phát triển kế hoạch và mô hình tư duy; chịu trách nhiệm về kết quả nhưng có thể cảm thấy choáng ngợp trước sự phức tạp."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Thành thạo"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Nhìn thấy \"bức tranh tổng thể\", ưu tiên theo trực giác và học hỏi từ kinh nghiệm."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Chuyên gia"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Hiệu suất trực giác, trôi chảy; dựa vào tri thức tiềm ẩn sâu sắc; có thể đổi mới hoặc xử lý tình huống mới một cách dễ dàng."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Ghi nhớ"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Truy xuất, hồi tưởng hoặc nhận ra kiến thức liên quan từ trí nhớ dài hạn."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Hiểu"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Xây dựng ý nghĩa từ thông điệp giảng dạy, bao gồm giao tiếp miệng, viết và đồ họa. Thể hiện sự hiểu biết bằng cách diễn giải, nêu ví dụ, phân loại, tóm tắt, suy luận, so sánh hoặc giải thích."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Áp dụng"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Thực hiện hoặc sử dụng một quy trình bằng cách thực thi hoặc triển khai trong một tình huống cho trước. Sử dụng kiến thức hoặc kỹ năng trong tình huống mới hoặc cụ thể."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Phân tích"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Chia tài liệu thành các phần cấu thành và xác định cách các phần liên hệ với nhau và với cấu trúc hoặc mục đích tổng thể. Xác định động cơ, nguyên nhân hoặc mối quan hệ."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Đánh giá"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Đưa ra phán đoán dựa trên tiêu chí và chuẩn mực. Kiểm tra, phê bình hoặc biện minh cho quyết định hoặc hướng hành động."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Sáng tạo"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Ghép các yếu tố lại thành một tổng thể mạch lạc hoặc chức năng; tổ chức lại các yếu tố thành mẫu hoặc cấu trúc mới. Tạo ra công trình gốc hoặc ý tưởng mới."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Tuân theo"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Làm việc dưới sự giám sát và chỉ đạo chặt chẽ. Thực hiện nhiệm vụ thường xuyên với quyền tự quyết hạn chế. Tập trung vào việc tuân theo hướng dẫn và thực hiện cơ bản."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Hỗ trợ"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Làm việc dưới sự giám sát thường xuyên. Hỗ trợ người khác, đóng góp vào nhiệm vụ nhóm và bắt đầu chủ động trong phạm vi xác định."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Làm việc dưới sự giám sát chung. Áp dụng kiến thức và kỹ năng cho nhiều hoạt động thường xuyên và không thường xuyên. Thực hiện một số quyền tự quyết và phán đoán."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Làm việc dưới sự chỉ đạo rộng. Giúp người khác bằng cách cung cấp hướng dẫn chuyên môn, hỗ trợ hoặc dịch vụ. Chịu trách nhiệm về công việc của mình và có thể giám sát nhóm nhỏ hoặc nhiệm vụ."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Đảm bảo và tư vấn"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Làm việc dưới sự chỉ đạo rộng nhưng với quyền tự chủ đáng kể. Đảm bảo công việc đạt mục tiêu và tư vấn về các vấn đề phức tạp. Thường dẫn dắt nhóm hoặc dự án và ảnh hưởng đến quyết định."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Khởi xướng và ảnh hưởng"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Có thẩm quyền và trách nhiệm xác định đối với một lĩnh vực công việc quan trọng. Khởi xướng hành động, ảnh hưởng chiến lược và chính sách trong lĩnh vực của mình, và dẫn dắt các dự án hoặc nhóm lớn."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Đặt chiến lược, truyền cảm hứng, huy động"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Có thẩm quyền ở cấp tổ chức cao nhất đối với một lĩnh vực công việc lớn. Đặt chiến lược dài hạn, truyền cảm hứng và huy động người khác, đưa ra quyết định then chốt cho thành công của tổ chức. Ảnh hưởng ở cấp ngành hoặc bên ngoài."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Thời gian không hoạt động tối đa để xem xét (phút)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Trang khóa học để mở vẫn gửi yêu cầu tự động. Sau số phút này mà không có hành động thực sự từ người dùng (mở trang hoặc mục, trả lời, v.v.), thời gian học trong khóa học sẽ ngừng được tính."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Trình soạn thảo Wiki cộng tác"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Đang kết nối tới Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Lưu tạo phiên bản Wiki Chamilo mới từ nội dung Etherpad hiện tại."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Không thể tải trình soạn thảo cộng tác."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Bật Etherpad để chỉnh sửa Wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Sử dụng Etherpad làm trình soạn thảo cộng tác cho các trang Wiki hiện có. Etherpad phải được hiển thị trên cùng origin với Chamilo để có phiên nhúng an toàn."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "URL cơ sở của phiên bản Etherpad, bao gồm đường dẫn reverse-proxy tùy chọn. Ví dụ: https://campus.example.org/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Khóa API Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Khóa API mà Chamilo dùng để tạo pad, phiên và đồng bộ nội dung Wiki. Cấu hình Etherpad để chấp nhận xác thực bằng khóa API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Có thể thay đổi theo khóa học khả năng hiển thị mặc định của tài liệu mới"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Khả năng hiển thị được gán cho tài liệu, thư mục hoặc tệp tải lên mới khi giáo viên tạo trong khóa học. Giáo viên vẫn có thể thay đổi khả năng hiển thị của từng mục sau đó."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Khi bật, giáo viên có thể chọn trong cài đặt khóa học khả năng hiển thị cho tài liệu mới của khóa học, thay vì mặc định của nền tảng."
+
+msgid "Default visibility of new learning paths"
+msgstr "Khả năng hiển thị mặc định của lộ trình học mới"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Có thể thay đổi theo khóa học khả năng hiển thị mặc định của lộ trình học mới"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Khả năng hiển thị được gán cho lộ trình học mới khi giáo viên tạo trong khóa học. Giáo viên vẫn có thể thay đổi khả năng hiển thị của từng mục sau đó."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Khi bật, giáo viên có thể chọn trong cài đặt khóa học khả năng hiển thị cho lộ trình học mới của khóa học, thay vì mặc định của nền tảng."
+
+msgid "Default visibility of new tests"
+msgstr "Khả năng hiển thị mặc định của bài kiểm tra mới"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Khả năng hiển thị mặc định của bài kiểm tra mới có thể được thay đổi theo khóa học"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Khả năng hiển thị được gán cho bài kiểm tra mới khi giáo viên tạo trong khóa học. Giáo viên vẫn có thể thay đổi khả năng hiển thị của từng bài sau đó."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Khi được bật, giáo viên có thể chọn trong cài đặt khóa học khả năng hiển thị cho các bài kiểm tra mới của khóa học, thay vì mặc định của nền tảng."
+
+msgid "Default visibility for new learning paths"
+msgstr "Khả năng hiển thị mặc định cho lộ trình học mới"
+
+msgid "Default visibility for new tests"
+msgstr "Khả năng hiển thị mặc định cho bài kiểm tra mới"
+
+msgid "Following"
+msgstr "Đang theo dõi"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Nhận email khi người học bình luận về bài nộp của bài tập này"
+
+msgid "Payment history"
+msgstr "Lịch sử thanh toán"
+
+msgid "No payments yet"
+msgstr "Chưa có thanh toán nào"
+
+msgid "Cancel service"
+msgstr "Hủy dịch vụ"
+
+msgid "Official transcript"
+msgstr "Bảng điểm chính thức"
+
+msgid "Unofficial transcript"
+msgstr "Bảng điểm không chính thức"
+
+msgid "Student name"
+msgstr "Tên học viên"
+
+msgid "Student number"
+msgstr "Mã số học viên"
+
+msgid "Program title"
+msgstr "Tên chương trình"
+
+msgid "Required hours"
+msgstr "Số giờ yêu cầu"
+
+msgid "Completion date"
+msgstr "Ngày hoàn thành"
+
+msgid "Hours completed"
+msgstr "Số giờ đã hoàn thành"
+
+msgid "Final grade"
+msgstr "Điểm cuối cùng"
+
+msgid "Grade"
+msgstr "Điểm"
+
+msgid "No completed course yet."
+msgstr "Chưa có khóa học nào hoàn thành."
+
+msgid "Grading scale"
+msgstr "Thang điểm"
+
+msgid "Signature of school official"
+msgstr "Chữ ký của cán bộ nhà trường"
+
+msgid "School official"
+msgstr "Cán bộ nhà trường"
+
+msgid "Official's title"
+msgstr "Chức danh cán bộ"
+
+msgid "Verify this transcript at"
+msgstr "Xác minh bảng điểm này tại"
+
+msgid "Verification code"
+msgstr "Mã xác minh"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Bảng điểm không chính thức này chưa được ký. Hãy yêu cầu quản trị viên cấp bảng điểm chính thức."
+
+msgid "Transcript verification"
+msgstr "Xác minh bảng điểm"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Kiểm tra rằng bảng điểm chính thức này được cấp và ký bởi cơ sở đào tạo, chưa bị sửa đổi và chưa bị thu hồi."
+
+msgid "Valid"
+msgstr "Hợp lệ"
+
+msgid "Invalid signature"
+msgstr "Chữ ký không hợp lệ"
+
+msgid "Transcript not found"
+msgstr "Không tìm thấy bảng điểm"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Chữ ký của cơ sở đào tạo hợp lệ và bảng điểm này chưa bị thu hồi."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Không thể xác minh bảng điểm này là hợp lệ. Chi tiết không được hiển thị."
+
+msgid "Transcript details"
+msgstr "Chi tiết bảng điểm"
+
+msgid "Institution"
+msgstr "Cơ sở đào tạo"
+
+msgid "Issued on"
+msgstr "Ngày cấp"
+
+msgid "Download verification JSON"
+msgstr "Tải JSON xác minh"
+
+msgid "Transcript"
+msgstr "Bảng điểm"
+
+msgid "My confidential reports"
+msgstr "Báo cáo bảo mật của tôi"
+
+msgid "My transcript"
+msgstr "Bảng điểm của tôi"
+
+msgid "Confidential investigations"
+msgstr "Điều tra bảo mật"
+
+msgid "Floor plan"
+msgstr "Sơ đồ tầng"
+
+msgid "Click a highlighted room to select it"
+msgstr "Nhấp vào phòng được đánh dấu để chọn"
+
+msgid "Select room"
+msgstr "Chọn phòng"
+
+msgid "Room on floor plan"
+msgstr "Phòng trên sơ đồ tầng"
+
+msgid "Select a branch first"
+msgstr "Hãy chọn chi nhánh trước"
+
+msgid "The branch has no attached floor plan"
+msgstr "Chi nhánh chưa có sơ đồ tầng đính kèm"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Dùng công cụ đa giác để vẽ viền phòng; dùng Sửa để di chuyển các góc"
+
+msgid "Save room area"
+msgstr "Lưu khu vực phòng"
+
+msgid "Clear room area"
+msgstr "Xóa khu vực phòng"
+
+msgid "Save the room form to persist the area"
+msgstr "Lưu biểu mẫu phòng để lưu khu vực"
+
+msgid "Floor plan unavailable"
+msgstr "Không có sơ đồ tầng"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Các điểm trên bản đồ phòng phải nằm trong sơ đồ tầng"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Bạn có chắc muốn xóa khu vực phòng?"
+
+msgid "View room on floor plan"
+msgstr "Xem phòng trên sơ đồ tầng"
+
+msgid "No floor plan available"
+msgstr "Không có sơ đồ tầng"
+
+msgid "This is an assignment by groups"
+msgstr "Đây là bài tập theo nhóm"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Tải lên sơ đồ tầng PNG, JPEG hoặc SVG tĩnh an toàn, hoặc chọn ảnh có sẵn từ Tài liệu."
+
+msgid "Upload floor plan"
+msgstr "Tải lên sơ đồ tầng"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG hoặc SVG tĩnh, tối đa 10 MB"
+
+msgid "Search images by name"
+msgstr "Tìm ảnh theo tên"
+
+msgid "Image name"
+msgstr "Tên ảnh"
+
+msgid "Select an image"
+msgstr "Chọn một ảnh"
+
+msgid "Change floor plan"
+msgstr "Đổi sơ đồ tầng"
+
+msgid "Attach floor plan"
+msgstr "Đính kèm sơ đồ tầng"
+
+msgid "No matching images found in Documents."
+msgstr "Không tìm thấy ảnh phù hợp trong Tài liệu."
+
+msgid "Current floor plan"
+msgstr "Sơ đồ tầng hiện tại"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Thay đổi sơ đồ tầng được lưu tự động."
+
+msgid "Remove floor plan"
+msgstr "Gỡ sơ đồ tầng"
+
+msgid "Cannot load images"
+msgstr "Không thể tải ảnh"
+
+msgid "Floor plan saved"
+msgstr "Đã lưu sơ đồ tầng"
+
+msgid "Cannot attach floor plan"
+msgstr "Không thể đính kèm sơ đồ tầng"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Chỉ hỗ trợ ảnh PNG/JPEG và SVG tĩnh an toàn tối đa 10MB."
+
+msgid "Cannot upload floor plan"
+msgstr "Không thể tải lên sơ đồ tầng"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Bạn có chắc muốn gỡ sơ đồ tầng?"
+
+msgid "Floor plan removed"
+msgstr "Đã gỡ sơ đồ tầng"
+
+msgid "Cannot remove floor plan"
+msgstr "Không thể gỡ sơ đồ tầng"
+
+msgid "Support bot"
+msgstr "Bot hỗ trợ"
+
+msgid "Connected"
+msgstr "Đã kết nối"
+
+msgid "Not connected"
+msgstr "Chưa kết nối"
+
+msgid "View ticket"
+msgstr "Xem phiếu hỗ trợ"
+
+msgid "Start a new conversation"
+msgstr "Bắt đầu cuộc trò chuyện mới"
+
+msgid "Video call"
+msgstr "Cuộc gọi video"
+
+msgid "Incoming video call"
+msgstr "Cuộc gọi video đến"
+
+msgid "Decline"
+msgstr "Từ chối"
+
+msgid "Mute microphone"
+msgstr "Tắt micrô"
+
+msgid "Unmute microphone"
+msgstr "Bật micrô"
+
+msgid "Turn camera off"
+msgstr "Tắt camera"
+
+msgid "Turn camera on"
+msgstr "Bật camera"
+
+msgid "Hang up"
+msgstr "Kết thúc cuộc gọi"
+
+msgid "Calling..."
+msgstr "Đang gọi..."
+
+msgid "Connecting..."
+msgstr "Đang kết nối..."
+
+msgid "Your contact is busy."
+msgstr "Người liên hệ của bạn đang bận."
+
+msgid "Your contact did not answer the call."
+msgstr "Người liên hệ của bạn không trả lời cuộc gọi."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Người liên hệ của bạn không thể truy cập camera hoặc micrô."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Người liên hệ của bạn không thể chuẩn bị cuộc gọi video."
+
+msgid "Your contact refused the call."
+msgstr "Người liên hệ của bạn đã từ chối cuộc gọi."
+
+msgid "The call timed out."
+msgstr "Cuộc gọi đã hết thời gian."
+
+msgid "Your contact cancelled the call."
+msgstr "Người liên hệ của bạn đã hủy cuộc gọi."
+
+msgid "The video connection was lost."
+msgstr "Kết nối video đã bị mất."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Người liên hệ của bạn không thể thiết lập kết nối video."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Người liên hệ của bạn không thể hoàn tất thiết lập cuộc gọi video."
+
+msgid "Your contact hung up."
+msgstr "Người liên hệ của bạn đã cúp máy."
+
+msgid "Video call could not be started"
+msgstr "Không thể bắt đầu cuộc gọi video"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Quyền truy cập camera hoặc microphone đã bị từ chối."
+
+msgid "No camera or microphone was found."
+msgstr "Không tìm thấy camera hoặc microphone."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Camera hoặc microphone đang được sử dụng hoặc không khả dụng."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Camera hoặc microphone không hỗ trợ các thiết lập yêu cầu."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Không thể lấy quyền truy cập camera hoặc microphone."
+
+msgid "The video call could not be prepared."
+msgstr "Không thể chuẩn bị cuộc gọi video."
+
+msgid "The video call request could not be sent."
+msgstr "Không thể gửi yêu cầu cuộc gọi video."
+
+msgid "The incoming video call could not be processed."
+msgstr "Không thể xử lý cuộc gọi video đến."
+
+msgid "The video call answer could not be prepared."
+msgstr "Không thể chuẩn bị câu trả lời cuộc gọi video."
+
+msgid "The video call answer could not be sent."
+msgstr "Không thể gửi câu trả lời cuộc gọi video."
+
+msgid "The video call answer could not be processed."
+msgstr "Không thể xử lý câu trả lời cuộc gọi video."
+
+msgid "The video connection failed"
+msgstr "Kết nối video thất bại"
+
+msgid "The video connection could not be established."
+msgstr "Không thể thiết lập kết nối video."
+
+msgid "No answer was received."
+msgstr "Không nhận được câu trả lời."
+
+msgid "You refused the call."
+msgstr "Bạn đã từ chối cuộc gọi."
+
+msgid "You cancelled the call."
+msgstr "Bạn đã hủy cuộc gọi."
+
+msgid "You hung up."
+msgstr "Bạn đã cúp máy."
+
+msgid "You missed the call."
+msgstr "Bạn đã bỏ lỡ cuộc gọi."
+
+msgid "Support bot is currently unavailable."
+msgstr "Bot hỗ trợ hiện không khả dụng."
+
+msgid "A support ticket has been created."
+msgstr "Đã tạo phiếu hỗ trợ."
+
+msgid "Conversation ended."
+msgstr "Cuộc hội thoại đã kết thúc."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Bot hỗ trợ không thể tiếp tục cuộc hội thoại này. Vui lòng thử lại."
+
+msgid "Add your first term glossary to this course"
+msgstr "Thêm thuật ngữ đầu tiên vào bảng thuật ngữ của khóa học này"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Bạn có chắc muốn xóa mẫu khảo sát này không?"
+
+msgid "The survey template has been deleted."
+msgstr "Mẫu khảo sát đã được xóa."
+
+msgid "Please select a course."
+msgstr "Vui lòng chọn một khóa học."
+
+msgid "Please select a session for this course."
+msgstr "Vui lòng chọn một phiên cho khóa học này."
+
+msgid "The survey has been created from the template."
+msgstr "Khảo sát đã được tạo từ mẫu."
+
+msgid "Survey templates"
+msgstr "Mẫu khảo sát"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Tạo mẫu khảo sát dùng lại cho giáo viên và gán trực tiếp vào khóa học hoặc phiên."
+
+msgid "Subtitle"
+msgstr "Phụ đề"
+
+msgid "Assign to course"
+msgstr "Gán vào khóa học"
+
+msgid "Assign template to course"
+msgstr "Gán mẫu vào khóa học"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Để trống phiên để tạo khảo sát trực tiếp trong khóa học."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Khóa học này khả dụng qua một phiên trên cổng này, nên cần có phiên."
+
+msgid "Survey template questions"
+msgstr "Câu hỏi mẫu khảo sát"
+
+msgid "Back to survey templates"
+msgstr "Quay lại mẫu khảo sát"
+
+msgid "Could not load survey template"
+msgstr "Không thể tải mẫu khảo sát"
+
+msgid "Could not load survey template questions"
+msgstr "Không thể tải câu hỏi mẫu khảo sát"
+
+msgid "Could not save survey template question"
+msgstr "Không thể lưu câu hỏi mẫu khảo sát"
+
+msgid "Could not delete survey template question"
+msgstr "Không thể xóa câu hỏi mẫu khảo sát"
+
+msgid "Could not move survey template question"
+msgstr "Không thể di chuyển câu hỏi mẫu khảo sát"
+
+msgid "Could not copy survey template question"
+msgstr "Không thể sao chép câu hỏi mẫu khảo sát"
+
+msgid "The survey template has been saved."
+msgstr "Mẫu khảo sát đã được lưu."
+
+msgid "Edit survey template"
+msgstr "Chỉnh sửa mẫu khảo sát"
+
+msgid "Create survey template"
+msgstr "Tạo mẫu khảo sát"
+
+msgid "The survey template title is required."
+msgstr "Tiêu đề mẫu khảo sát là bắt buộc."
+
+msgid "Visible as template"
+msgstr "Hiển thị như mẫu"
+
+msgid "Create satisfaction survey"
+msgstr "Tạo khảo sát mức độ hài lòng"
+
+msgid "Training satisfaction survey"
+msgstr "Khảo sát mức độ hài lòng về khóa đào tạo"
+
+msgid "Could not create satisfaction survey"
+msgstr "Không thể tạo khảo sát mức độ hài lòng"
+
+msgid "Use template"
+msgstr "Sử dụng mẫu"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Tạo khảo sát này từ mẫu dùng lại do quản trị viên chuẩn bị."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Ẩn kết quả đối với giáo viên/gia sư"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Giáo viên và gia sư vẫn có thể xem số lượng phản hồi và gửi nhắc nhở, nhưng không thể mở hoặc xuất kết quả khảo sát."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Đã áp dụng mẫu. Xem lại cài đặt khảo sát và lưu để tạo."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Kết quả khảo sát bị ẩn đối với giáo viên và gia sư."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Bạn vẫn có thể dùng trang lời mời để xem số lượng phản hồi và gửi nhắc nhở."
+
+msgid "Payment method"
+msgstr "Phương thức thanh toán"
+
+msgid "Preview mode"
+msgstr "Chế độ xem trước"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Tiến độ và điểm số không được lưu ở chế độ xem trước."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Liên kết này không thể hiển thị trong lộ trình học."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Mở trong tab mới để xem trang."
+
+msgid "Report a problem with this question"
+msgstr "Báo cáo vấn đề với câu hỏi này"
+
+msgid "Your report was sent to the teacher."
+msgstr "Báo cáo của bạn đã được gửi đến giáo viên."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Mô tả lỗi hoặc vấn đề bạn phát hiện. Báo cáo sẽ được gửi đến giáo viên."
+
+msgid "A comment is required."
+msgstr "Bình luận là bắt buộc."
+
+msgid "Could not send the report."
+msgstr "Không thể gửi báo cáo."
+
+msgid "Learner reports"
+msgstr "Báo cáo của người học"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Chưa có báo cáo nào của người học cho câu hỏi này."
+
+msgid "View attempt"
+msgstr "Xem lần làm"
+
+msgid "Could not load learner reports."
+msgstr "Không thể tải báo cáo của người học."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Cho phép người học báo cáo vấn đề trong câu hỏi"
+
+msgid "Skill acquired"
+msgstr "Kỹ năng đã đạt được"
+
+msgid "AI Toolbox"
+msgstr "Hộp công cụ AI"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Tạo ứng dụng giáo dục tương tác bằng AI và theo dõi tiến độ người học với SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Chưa có ứng dụng nào được xuất bản."
+
+msgid "Interactive applications"
+msgstr "Ứng dụng tương tác"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Tạo, cải thiện, xuất bản và xem lại các phiên bản từ một nơi."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Mở ứng dụng để tiếp tục từ tiến độ gần nhất."
+
+msgid "Interactive learning application"
+msgstr "Ứng dụng học tập tương tác"
+
+msgid "Create an interactive learning app"
+msgstr "Tạo ứng dụng học tập tương tác"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Mô tả hoạt động. Chamilo sẽ tạo ứng dụng SCORM có phiên bản với theo dõi tiến độ và điểm số."
+
+msgid "Idea"
+msgstr "Ý tưởng"
+
+msgid "Application"
+msgstr "Ứng dụng"
+
+msgid "What should the application do?"
+msgstr "Ứng dụng nên làm gì?"
+
+msgid "How it works"
+msgstr "Cách hoạt động"
+
+msgid "AI generation"
+msgstr "Tạo bằng AI"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Ứng dụng được tạo từ hướng dẫn của bạn và lưu thành phiên bản 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Tiến độ, điểm số và dữ liệu tiếp tục của người học được báo cáo về Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Các cải tiến sau này tạo phiên bản mới mà không xóa các phiên bản trước."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Bao gồm mục tiêu học tập, quy tắc, cấp độ, cách tính điểm và điều gì xảy ra khi người học hoàn thành."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Bạn không được phép tạo nội dung trong ngữ cảnh này."
+
+msgid "The application was generated successfully."
+msgstr "Ứng dụng đã được tạo thành công."
+
+msgid "Open in student view"
+msgstr "Mở ở chế độ học viên"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Tạo ứng dụng để bật xem trước và xuất bản."
+
+msgid "Improve with AI"
+msgstr "Cải thiện bằng AI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Mô tả thay đổi. Một phiên bản mới sẽ được tạo và các phiên bản trước vẫn khả dụng."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Mô tả hoạt động tương tác hoàn chỉnh bạn muốn tạo."
+
+msgid "What should be improved?"
+msgstr "Cần cải thiện điều gì?"
+
+msgid "Generate new version"
+msgstr "Tạo phiên bản mới"
+
+msgid "Version history"
+msgstr "Lịch sử phiên bản"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Xem trước, tải xuống hoặc khôi phục bất kỳ phiên bản đã tạo nào."
+
+msgid "A new version was generated."
+msgstr "Đã tạo phiên bản mới."
+
+msgid "Version restored"
+msgstr "Đã khôi phục phiên bản"
+
+msgid "The support bot tree has been published."
+msgstr "Cây bot hỗ trợ đã được xuất bản."
+
+msgid "The support bot tree has been archived."
+msgstr "Cây bot hỗ trợ đã được lưu trữ."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Cây bot hỗ trợ đã được nhân bản."
+
+msgid "The support bot tree has been deleted."
+msgstr "Cây bot hỗ trợ đã được xóa."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Bạn có chắc muốn xóa cây bot hỗ trợ này không?"
+
+msgid "The support bot tree has been imported."
+msgstr "Cây bot hỗ trợ đã được nhập."
+
+msgid "Create support bot tree"
+msgstr "Tạo cây bot hỗ trợ"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Xây dựng cây quyết định cố định hướng dẫn người dùng qua các câu hỏi hỗ trợ và có thể chuyển lên Phiếu hỗ trợ."
+
+msgid "Portal scope"
+msgstr "Phạm vi cổng thông tin"
+
+msgid "Duplicate"
+msgstr "Nhân bản"
+
+msgid "Archive"
+msgstr "Lưu trữ"
+
+msgid "View conversations"
+msgstr "Xem hội thoại"
+
+msgid "Import support bot tree"
+msgstr "Nhập cây bot hỗ trợ"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Nhập tệp xuất JSON hoặc cây quyết định CSV. Cây được nhập luôn được tạo dưới dạng bản nháp mới."
+
+msgid "Resolved"
+msgstr "Đã giải quyết"
+
+msgid "Escalated"
+msgstr "Đã chuyển cấp"
+
+msgid "Abandoned"
+msgstr "Đã bỏ dở"
+
+msgid "Support bot conversations"
+msgstr "Hội thoại bot hỗ trợ"
+
+msgid "Outcome"
+msgstr "Kết quả"
+
+msgid "Started at"
+msgstr "Bắt đầu lúc"
+
+msgid "Ended at"
+msgstr "Kết thúc lúc"
+
+msgid "View conversation"
+msgstr "Xem hội thoại"
+
+msgid "Go to node"
+msgstr "Đến nút"
+
+msgid "Create support ticket"
+msgstr "Tạo phiếu hỗ trợ"
+
+msgid "End conversation"
+msgstr "Kết thúc hội thoại"
+
+msgid "Node"
+msgstr "Nút"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Cây bot hỗ trợ cần ít nhất một nút."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Bạn có chắc muốn xóa nút này không? Các liên kết tới nút sẽ bị xóa."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Mỗi nút bot hỗ trợ cần ít nhất một tùy chọn."
+
+msgid "The support bot tree title is required."
+msgstr "Tiêu đề cây bot hỗ trợ là bắt buộc."
+
+msgid "A support bot entry node is required."
+msgstr "Cần có nút bắt đầu của bot hỗ trợ."
+
+msgid "Every support bot node requires content."
+msgstr "Mỗi nút bot hỗ trợ cần có nội dung."
+
+msgid "Every support bot option requires a label."
+msgstr "Mỗi tùy chọn bot hỗ trợ cần có nhãn."
+
+msgid "Select a target node for every go-to option."
+msgstr "Chọn nút đích cho mọi tùy chọn chuyển đến."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Nhập URL tương đối cho mọi tùy chọn liên kết."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Chọn danh mục phiếu cho mọi tùy chọn chuyển cấp."
+
+msgid "The support bot tree has been saved."
+msgstr "Cây bot hỗ trợ đã được lưu."
+
+msgid "Edit support bot tree"
+msgstr "Chỉnh sửa cây bot hỗ trợ"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Các phiên bản bot hỗ trợ đã xuất bản và đã lưu trữ chỉ đọc. Nhân bản cây này từ danh sách để chỉnh sửa bản nháp mới."
+
+msgid "Default ticket project"
+msgstr "Dự án phiếu hỗ trợ mặc định"
+
+msgid "Decision tree rules"
+msgstr "Quy tắc cây quyết định"
+
+msgid "Every node must contain at least one option."
+msgstr "Mỗi nút phải chứa ít nhất một tùy chọn."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Nút cuối phải kết thúc cuộc hội thoại hoặc tạo phiếu hỗ trợ."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Liên kết chuyển đến không được tạo vòng lặp trong phiên bản v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "URL bên ngoài không được phép trong v1; hành động liên kết phải dùng đường dẫn tương đối của Chamilo."
+
+msgid "Nodes"
+msgstr "Các nút"
+
+msgid "Add node"
+msgstr "Thêm nút"
+
+msgid "Entry node"
+msgstr "Nút bắt đầu"
+
+msgid "Set as entry node"
+msgstr "Đặt làm nút bắt đầu"
+
+msgid "Target node"
+msgstr "Nút đích"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Sử dụng đường dẫn tương đối của Chamilo, ví dụ /tickets."
+
+msgid "Ticket category"
+msgstr "Danh mục phiếu hỗ trợ"
+
+msgid "Select a default ticket project first."
+msgstr "Trước tiên hãy chọn dự án phiếu hỗ trợ mặc định."
+
+msgid "Closing message"
+msgstr "Thông điệp kết thúc"
+
+msgid "Select a node to edit it."
+msgstr "Chọn một nút để chỉnh sửa."
+
+msgid "Support bot conversation"
+msgstr "Hội thoại bot hỗ trợ"
+
+msgid "Transcript of %s"
+msgstr "Bảng điểm của %s"
+
+msgid "Download unofficial transcript"
+msgstr "Tải bảng điểm không chính thức"
+
+msgid "Issue official transcript"
+msgstr "Cấp bảng điểm chính thức"
+
+msgid "Official transcripts"
+msgstr "Bảng điểm chính thức"
+
+msgid "No official transcript has been issued yet."
+msgstr "Chưa có bảng điểm chính thức nào được cấp."
+
+msgid "Issued by"
+msgstr "Cấp bởi"
+
+msgid "Verify"
+msgstr "Xác minh"
+
+msgid "Signature of official transcripts"
+msgstr "Chữ ký bảng điểm chính thức"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Hình ảnh này được in trên bảng điểm chính thức của cổng này, phía trên tên và chức danh người ký được thiết lập trong cài đặt chứng chỉ."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Cấp bảng điểm chính thức đã ký với các khóa học và điểm được liệt kê trên trang này? Có thể xác minh trực tuyến cho đến khi bị thu hồi."
+
+msgid "Official transcript issued"
+msgstr "Đã cấp bảng điểm chính thức"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Thu hồi bảng điểm chính thức này? Trang xác minh sẽ hiển thị là đã thu hồi."
+
+msgid "Official transcript revoked"
+msgstr "Đã thu hồi bảng điểm chính thức"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Trước tiên hãy chọn hình ảnh PNG hoặc JPEG."
+
+msgid "Signed credential"
+msgstr "Chứng chỉ đã ký"
+
+msgid "Issue signed credential"
+msgstr "Cấp chứng chỉ đã ký"
+
+msgid "Verify credential"
+msgstr "Xác minh chứng chỉ"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Neo trên mạng thử nghiệm Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Xác nhận giao dịch Sepolia hiện có"
+
+msgid "Revoke signed credential"
+msgstr "Thu hồi chứng chỉ đã ký"
+
+msgid "Delete certificate"
+msgstr "Xóa chứng chỉ"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Xác nhận một giao dịch Sepolia hiện có"
+
+msgid "Sepolia transaction hash"
+msgstr "Mã băm giao dịch Sepolia"
+
+msgid "Verify transaction"
+msgstr "Xác minh giao dịch"
+
+msgid "Anchored"
+msgstr "Đã neo"
+
+msgid "Issued"
+msgstr "Đã cấp"
+
+msgid "Not issued"
+msgstr "Chưa cấp"
+
+msgid "Consent required"
+msgstr "Cần sự đồng ý"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Giao dịch Sepolia đã được xác nhận và xác minh"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Ví mạng thử nghiệm Sepolia sẽ yêu cầu bạn ký một giao dịch. Chỉ dấu vân tay chứng chỉ sẽ được neo. Tiếp tục?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Thu hồi chứng chỉ đã ký này? Mọi giao dịch blockchain vẫn vĩnh viễn, nhưng trang xác minh sẽ báo đã thu hồi."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Cấp chứng chỉ đã ký cho người học này? Việc này giúp chi tiết cá nhân đã được phê duyệt có thể xác minh bằng liên kết riêng."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Cần ví trình duyệt tương thích EVM cho Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Chọn mạng thử nghiệm Sepolia (chain ID 11155111) trong ví của bạn."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Địa chỉ ví hoặc dấu vân tay chứng chỉ không hợp lệ."
+
+msgid "Transaction pending"
+msgstr "Giao dịch đang chờ"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Dùng Xác nhận giao dịch Sepolia hiện có sau."
+
+msgid "Signed credential issued"
+msgstr "Đã cấp thông tin xác thực đã ký"
+
+msgid "Credential revoked"
+msgstr "Thông tin xác thực đã bị thu hồi"
+
+msgid "Transaction hash"
+msgstr "Mã băm giao dịch"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Sự đồng ý công bố cho phép quản trị viên cấp thông tin xác thực chứng chỉ đã ký và tùy chọn neo dấu vân tay SHA-256 của nó trên mạng thử nghiệm Sepolia. Không có tên hay dữ liệu cá nhân nào được gửi lên chuỗi. Bạn có thể rút lại sự đồng ý bất cứ lúc nào."
+
+msgid "Publication consent"
+msgstr "Sự đồng ý công bố"
+
+msgid "Not approved"
+msgstr "Chưa được phê duyệt"
+
+msgid "Withdraw consent"
+msgstr "Rút lại sự đồng ý"
+
+msgid "Approve publication"
+msgstr "Phê duyệt công bố"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Tôi ủy quyền một thông tin xác thực đã ký, có thể xác minh công khai, hiển thị tên, khóa học, điểm số và ngày cấp của tôi. Quản trị viên cũng có thể chỉ công bố dấu vân tay SHA-256 của nó trên mạng thử nghiệm Sepolia. Dấu vân tay là vĩnh viễn, ngay cả khi tôi rút lại sau này. Tiếp tục?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Rút lại phê duyệt công bố cho chứng chỉ này?"
+
+msgid "Publication approval recorded"
+msgstr "Đã ghi nhận phê duyệt công bố"
+
+msgid "Publication approval withdrawn"
+msgstr "Đã rút lại phê duyệt công bố"
+
+msgid "Read more"
+msgstr "Đọc thêm"
+
+msgid "Participation: %s of %s posts"
+msgstr "Tham gia: %s trên %s bài viết"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Đăng đóng góp của bạn để xem phản hồi của những người tham gia khác."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Chỉ điều tra viên được ủy quyền mới có thể xem xét các báo cáo đủ điều kiện. Danh tính người báo cáo được giữ bí mật theo mặc định."
+
+msgid "New confidential report"
+msgstr "Báo cáo bảo mật mới"
+
+msgid "Reported user"
+msgstr "Người dùng bị báo cáo"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Có các báo cáo bảo mật đủ điều kiện đang chờ xem xét."
+
+msgid "Eligible investigations"
+msgstr "Các cuộc điều tra đủ điều kiện"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Một vụ việc chỉ xuất hiện ở đây sau khi ít nhất %s người dùng khác nhau báo cáo cùng một người."
+
+msgid "Distinct reporters"
+msgstr "Người báo cáo khác nhau"
+
+msgid "Reports for selected user"
+msgstr "Báo cáo về người dùng đã chọn"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Báo cáo bảo mật hiện không khả dụng."
+
+msgid "The investigation could not be loaded."
+msgstr "Không thể tải cuộc điều tra."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Danh tính của bạn được bảo vệ khỏi điều tra viên theo mặc định, nhưng hãy tránh đưa chi tiết nhận dạng vào nội dung báo cáo hoặc tệp đính kèm. Đây không phải dịch vụ khẩn cấp."
+
+msgid "Find the user involved"
+msgstr "Tìm người dùng liên quan"
+
+msgid "Name or username"
+msgstr "Tên hoặc tên người dùng"
+
+msgid "Describe the situation"
+msgstr "Mô tả tình huống"
+
+msgid "Evidence (optional)"
+msgstr "Bằng chứng (tùy chọn)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Tối đa ba tệp, mỗi tệp tối đa 8 MiB. Hình ảnh, âm thanh hoặc video ngắn."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Tôi đồng ý rằng điều tra viên được ủy quyền có thể xem tên và email của tôi cho báo cáo cụ thể này. Tôi có thể rút lại quyền này sau."
+
+msgid "Send confidential report"
+msgstr "Gửi báo cáo bảo mật"
+
+msgid "Could not search users"
+msgstr "Không thể tìm kiếm người dùng"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Tối đa ba tệp, mỗi tệp tối đa 8 MiB."
+
+msgid "The confidential report could not be saved."
+msgstr "Không thể lưu báo cáo bảo mật."
+
+msgid "Confidential report"
+msgstr "Báo cáo bảo mật"
+
+msgid "Confidential conversation"
+msgstr "Cuộc trò chuyện bảo mật"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Điều tra viên có thể trao đổi qua cuộc trò chuyện này mà không thấy danh tính người báo cáo trừ khi chia sẻ liên hệ được bật."
+
+msgid "Reporter"
+msgstr "Người báo cáo"
+
+msgid "Investigator"
+msgstr "Điều tra viên"
+
+msgid "Additional evidence (optional)"
+msgstr "Bằng chứng bổ sung (tùy chọn)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Tối đa ba tệp, mỗi tệp tối đa 8 MiB; mười tệp mỗi báo cáo."
+
+msgid "Contact shared voluntarily"
+msgstr "Đã chia sẻ liên hệ tự nguyện"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Cho phép điều tra viên xem tên và email của tôi cho báo cáo này"
+
+msgid "This confidential report is not available."
+msgstr "Báo cáo bảo mật này không khả dụng."
+
+msgid "Your message could not be saved."
+msgstr "Không thể lưu tin nhắn của bạn."
+
+msgid "Contact sharing could not be updated."
+msgstr "Không thể cập nhật chia sẻ liên hệ."
+
+msgid "Evidence could not be downloaded."
+msgstr "Không thể tải bằng chứng xuống."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Ví dụ hoạt động điền biểu mẫu: tính chỉ số khối cơ thể</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Tuổi</strong></td>            <td width=\"75%\" style=\"\">[25] tuổi</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Giới tính</strong></td>            <td style=\"\" text-align:=\"\">[M] (M hoặc F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Cân nặng</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Chiều cao</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Chỉ số khối cơ thể</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Cân nặng/Chiều cao<sup>2</sup> (Xem <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> bài Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Ví dụ hoạt động điền biểu mẫu: tính chỉ số khối cơ thể</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Tuổi</strong></td>            <td width=\"75%\" style=\"\">[25] tuổi</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Giới tính</strong></td>            <td style=\"\" text-align:=\"\">[M] (M hoặc F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Cân nặng</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Chiều cao</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Chỉ số khối cơ thể</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Cân nặng/Chiều cao<sup>2</sup> (Xem <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> bài Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Ẩn địa chỉ IP khỏi báo cáo"
+
+msgid "Course settings policies"
+msgstr "Chính sách cài đặt khóa học"
+
+msgid "Academic transcripts"
+msgstr "Bảng điểm học tập"
+
+msgid "Transcript program title"
+msgstr "Tiêu đề chương trình trên bảng điểm"
+
+msgid "Transcript course code"
+msgstr "Mã khóa học trên bảng điểm"
+
+msgid "Transcript course hours field"
+msgstr "Trường số giờ khóa học trên bảng điểm"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Số giờ hoàn thành trên bảng điểm là số giờ yêu cầu"
+
+msgid "Transcript student number field"
+msgstr "Trường mã số sinh viên trên bảng điểm"
+
+msgid "Transcript address fields"
+msgstr "Các trường địa chỉ trên bảng điểm"
+
+msgid "Transcript grading scale"
+msgstr "Thang điểm trên bảng điểm"
+
+msgid "Transcript GPA note"
+msgstr "Ghi chú GPA trên bảng điểm"
+
+msgid "Transcript signatory name"
+msgstr "Tên người ký bảng điểm"
+
+msgid "Transcript signatory title"
+msgstr "Chức danh người ký bảng điểm"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Bật chứng chỉ đã ký và neo tùy chọn trên mạng thử nghiệm Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Chỉ hiện trả lời chủ đề sau khi tham gia"
+
+msgid "Show the forum category description in threads"
+msgstr "Hiện mô tả danh mục diễn đàn trong các chủ đề"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Cài đặt tham gia diễn đàn có thể thay đổi theo khóa học"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Số bài viết tối đa hiện trong một chủ đề diễn đàn"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Số bài viết cần để hoàn thành một chủ đề diễn đàn"
+
+msgid "Track e-mail openings"
+msgstr "Theo dõi việc mở e-mail"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Cho phép trả lời tin nhắn bằng e-mail"
+
+msgid "Inbound e-mail address"
+msgstr "Địa chỉ e-mail đến"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN hộp thư đến"
+
+msgid "Remember me duration (days)"
+msgstr "Thời gian ghi nhớ đăng nhập (ngày)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Bật đăng ký máy khách OAuth động ngoài MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Bật báo cáo phúc lợi bảo mật"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Số người báo cáo khác nhau tối thiểu để điều tra"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Cho phép đính kèm bằng chứng bảo mật"
+
+msgid "Show confidential investigation notifications"
+msgstr "Hiện thông báo điều tra bảo mật"
+
+msgid "Enable support chatbot"
+msgstr "Bật chatbot hỗ trợ"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Chọn nơi tự động tô sáng thuật ngữ chú giải: tài liệu, bài tập và lộ trình học."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Ẩn địa chỉ IP trong báo cáo trực quan và xuất báo cáo. Địa chỉ IP vẫn được lưu trữ và có thể truy cập qua các thủ tục dữ liệu cá nhân được ủy quyền."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Mặc định nền tảng và quyền chỉnh sửa khóa học; quản lý trong Cài đặt khóa học."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Cho phép người dùng tải bảng điểm không chính thức của các khóa học đã hoàn thành, và cho phép quản trị viên, quản trị phiên và quản lý nhân sự cấp bảng điểm chính thức đã ký cho người dùng họ quản lý. Hình ảnh chữ ký được tải lên từ trang bảng điểm của người dùng."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Tiêu đề chương trình in trên mọi bảng điểm, ví dụ tên văn bằng chuẩn bị trên nền tảng này."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Trường khóa học nào điền cột mã khóa học trên bảng điểm: mã khóa học hoặc tên bộ môn."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Biến của trường bổ sung khóa học chứa số giờ của khóa học. Để trống để dùng thời lượng khóa học."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "In số giờ yêu cầu của khóa học như số giờ người học đã hoàn thành. Khi tắt, số giờ hoàn thành là thời gian người học đã dành trong khóa học."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Biến của trường bổ sung người dùng chứa mã số sinh viên in trên bảng điểm. Để trống để không in."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Các biến trường bổ sung người dùng, cách nhau bằng dấu phẩy, in sau địa chỉ người dùng trên bảng điểm, ví dụ thành phố, bang và mã bưu điện."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Danh sách JSON các chữ cái điểm, từ điểm tối thiểu cao nhất xuống: mỗi mục có điểm tối thiểu theo phần trăm (min), chữ cái và điểm dùng để tính GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Giải thích cách tính GPA, in dưới GPA trên bảng điểm."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Tên cán bộ nhà trường ký bảng điểm chính thức."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Chức danh cán bộ nhà trường ký bảng điểm chính thức."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Yêu cầu sự đồng ý rõ ràng của chủ sở hữu và thao tác thủ công của quản trị viên. Chỉ gửi dấu vân tay SHA-256 lên chuỗi khối."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Người học chỉ thấy bài viết đầu tiên của một chủ đề diễn đàn cho đến khi họ tự đăng bài trong chủ đề đó. Quản trị viên, giáo viên, huấn luyện viên và gia sư nhóm luôn thấy mọi bài viết."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Hiển thị tiêu đề và mô tả rút gọn của danh mục diễn đàn ở đầu mỗi chủ đề, kèm liên kết để đọc mô tả đầy đủ."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Khi bật, giáo viên có thể chọn trong phần Diễn đàn của cài đặt khóa học liệu khóa học ẩn trả lời chủ đề cho đến khi người học đăng bài, hiển thị mô tả danh mục trong các chủ đề và số bài viết thanh tiến độ tham gia mong đợi, thay vì theo cài đặt nền tảng."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Chỉ hiển thị số bài viết này của mỗi chủ đề diễn đàn cho mọi người dùng không phải quản trị viên nền tảng, kể cả giáo viên, và cho mọi người trong lộ trình học. Trong chế độ xem theo luồng và lồng nhau, giới hạn áp dụng cho các trả lời của mỗi bài. Các bài được giữ theo thứ tự của chế độ xem: những bài đầu tiên, hoặc những bài mới nhất trong lộ trình học, nơi bài mới nhất đứng trước. Đặt 0 để hiện mọi bài viết."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Hiển thị cho người học thanh tiến độ trong mỗi chủ đề diễn đàn, đạt 100% khi họ đã đăng số tin nhắn này trong chủ đề. Bài chờ kiểm duyệt được tính. Đặt 0 để ẩn thanh tiến độ."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Thêm hình ảnh theo dõi nhỏ vào email thông báo tin nhắn và ghi nhận khi nó được yêu cầu. Điều này chỉ cho biết email có thể đã được mở; không chứng minh đã được đọc."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Cho phép người nhận thông báo tin nhắn trực tiếp trả lời bằng email. Tin đến phải được định tuyến tới lệnh thư đến của Chamilo bởi hạ tầng thư."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Địa chỉ cơ sở dùng để định tuyến trả lời, ví dụ replies@example.com. Chamilo thêm token người nhận duy nhất bằng plus addressing."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Kết nối hộp thư dùng để thu thập trả lời đến, ví dụ imaps://user:password@imap.example.com:993/INBOX. Mã hóa URL các ký tự dành riêng trong thông tin đăng nhập."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Số ngày giữ người dùng đăng nhập khi chọn Ghi nhớ tôi. Đặt 0 để tắt. Yêu cầu HTTPS. Phạm vi cho phép: 0 đến 90. Thời gian hết phiên thông thường được cấu hình riêng trong PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Cho phép Đăng ký máy khách động yêu cầu bất kỳ phạm vi nào đã đăng ký bởi máy chủ tài nguyên OAuth của Chamilo. Khi tắt, tự đăng ký vẫn giới hạn ở MCP. Quyền truy cập tài nguyên luôn bị hạn chế riêng bởi danh sách tài nguyên được phép của từng máy khách."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Bật báo cáo sự cố bảo mật. Mô-đun yêu cầu khóa mã hóa được bảo vệ và quyền điều tra viên."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Từ 2 đến 10 người báo cáo khác nhau phải báo cáo cùng một người dùng trước khi vụ việc hiện với điều tra viên."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Cho phép bằng chứng hình ảnh, âm thanh và video ngắn. Tệp đính kèm hiện có vẫn đọc được khi tắt."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Hiển thị chỉ báo nội bộ về các cuộc điều tra đủ điều kiện. Không gửi email hay thông báo bên ngoài."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Hiển thị chatbot cây quyết định trong bảng trò chuyện có thể hướng dẫn người dùng tới "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Cho phép giáo viên tạo và phiên bản hóa ứng dụng giáo dục hỗ trợ AI trong khóa học."
+
+msgid "Department name"
+msgstr "Tên phòng ban"
+
+msgid "Documents and exercise"
+msgstr "Tài liệu và bài tập"
+
+msgid "Documents and learning path"
+msgstr "Tài liệu và lộ trình học"
+
+msgid "Documents, exercise and learning path"
+msgstr "Tài liệu, bài tập và lộ trình học"
+
+msgid "session"
+msgstr "phiên"
+
+msgid "course"
+msgstr "khóa học"
+
+msgid "You have been enrolled in %s"
+msgstr "Bạn đã được ghi danh vào %s"
 

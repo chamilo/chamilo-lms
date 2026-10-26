@@ -343,7 +343,7 @@ msgid "Sincerely"
 msgstr "Üdvözlettel"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Képletminta: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Képlet minta: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Változók tartománya"
@@ -28768,6 +28768,9 @@ msgstr "Jelenlegi felhasználó nem található."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Helló %s,<br><br>Regisztrálva van a %s oldalon.<br>Fiókjához innen férhet hozzá: <a href=\"%s\">ide</a>.<br><br>Bejelentkezési adatai:<br>Felhasználónév: <strong>%s</strong><br>Jelszó: <strong>%s</strong><br><br>Üdvözlettel,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Kedves %s,<br><br>Ön regisztrálva van itt: %s.<br>Felhasználónév: <strong>%s</strong><br><br>Kérjük, kattintson az alábbi hivatkozásra a jelszó beállításához és a fiók eléréséhez:<br><a href=\"%s\">Jelszó beállítása</a><br><br>Üdvözlettel,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Regisztrálva van a %s oldalon"
 
@@ -41571,4 +41574,1616 @@ msgstr "A migrációs előzmény rögzítve van"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "A(z) %s jelen van a projekt gyökerében: törölje a frissítési végpontok lezárásához"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Tanúsítványt szerzett ehhez a feladathoz"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Előbb teljesítenie kell a(z) \"%s\" tanulási útvonalat, mielőtt ehhez hozzáférhet."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Biztosan véglegesen törli ezt a fájlt?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Biztosan leválasztja ezt a fájlt a kiválasztott kurzusról?"
+
+msgid "Attach this file to another course"
+msgstr "Fájl csatolása másik kurzushoz"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Csatolás a kiválasztott kurzus(ok)hoz (rejtett)"
+
+msgid "Course(s):"
+msgstr "Kurzus(ok):"
+
+msgid "Delete definitively"
+msgstr "Végleges törlés"
+
+msgid "Detach from this course"
+msgstr "Leválasztás erről a kurzusról"
+
+msgid "File actions"
+msgstr "Fájlműveletek"
+
+msgid "File Information"
+msgstr "Fájlinformáció"
+
+msgid "File Link:"
+msgstr "Fájlhivatkozás:"
+
+msgid "File Path:"
+msgstr "Fájlútvonal:"
+
+msgid "Filter courses..."
+msgstr "Kurzusok szűrése..."
+
+msgid "MIME Type:"
+msgstr "MIME-típus:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Nincs találat."
+
+msgid "Original Name"
+msgstr "Eredeti név"
+
+msgid "Original Name:"
+msgstr "Eredeti név:"
+
+msgid "Orphan"
+msgstr "Árva"
+
+msgid "Resource File ID:"
+msgstr "Erőforrásfájl azonosító:"
+
+msgid "Resource Node ID:"
+msgstr "Erőforrás-csomópont azonosító:"
+
+msgid "Search..."
+msgstr "Keresés..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Ha le szeretné választani ezt a fájlt egy adott kurzusról, kattintson a fenti megfelelő kurzus címkéjén a \"×\" ikonra."
+
+msgid "User:"
+msgstr "Felhasználó:"
+
+msgid "View file information"
+msgstr "Fájlinformáció megtekintése"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Ezt a fájlt egy vagy több kurzushoz csatolhatja (rejtve a dokumentumok gyökerében). Ha a fájl már nincs használatban, és árvává válik, véglegesen is törölheti."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Egy vagy több kurzust választhat ki (Ctrl/Cmd + kattintás)."
+
+msgid "bytes"
+msgstr "bájt"
+
+msgid "Failed to copy:"
+msgstr "Másolás sikertelen:"
+
+msgid "Missing resource file identifier."
+msgstr "Hiányzó erőforrásfájl-azonosító."
+
+msgid "Please select at least one course."
+msgstr "Kérjük, válasszon ki legalább egy kurzust."
+
+msgid "Resource file not found."
+msgstr "Az erőforrásfájl nem található."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "A(z) \"%s\" fájl %d kurzushoz lett csatolva: %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Néhány kurzus kihagyva: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Hiányzó fájl- vagy kurzusazonosító."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Ennek az erőforrásfájlnak nincs erőforrás-csomópontja, ezért nem választható le."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "A fájl %d kurzus-hivatkozásról lett leválasztva."
+
+msgid "This file is not attached to the selected course."
+msgstr "Ez a fájl nincs csatolva a kiválasztott kurzushoz."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Ez a fájl legalább egy erőforrás még használja, ezért nem törölhető."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Az árva fájl és fizikai tartalma véglegesen törölve lett."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Kérdőív közzétéve. Létrehozva: %d. Frissítve: %d. Elküldött üzenetek: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Megszerezhető"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Ez a készség nem szerezhető meg"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Kezdő"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Szabályokhoz és kontextusfüggetlen utasításokhoz való merev ragaszkodás; kevés helyzeti ítélőképesség."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Haladó kezdő"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Kezdi felismerni a helyzeti szempontokat és mintázatokat, de még mindig iránymutatásra van szüksége."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kompetens"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Tervezést és mentális modelleket fejleszt; felelősséget vállal az eredményekért, de a bonyolultság miatt túlterheltnek érezheti magát."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Jártas"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Látja a \"nagy képet,\" intuitívan priorizál, és a tapasztalatból tanul."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Szakértő"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Intuitív, gördülékeny teljesítmény; mély hallgatólagos tudásra támaszkodik; könnyedén tud innoválni vagy új helyzeteket kezelni."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Emlékezés"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Releváns tudás előhívása, felidézése vagy felismerése a hosszú távú memóriából."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Megértés"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Jelentésalkotás az oktatási üzenetekből, beleértve a szóbeli, írásbeli és grafikus kommunikációt. A megértés bemutatása értelmezéssel, példázással, osztályozással, összefoglalással, következtetéssel, összehasonlítással vagy magyarázattal."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Alkalmazás"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Eljárás végrehajtása vagy alkalmazása adott helyzetben. Tudás vagy készségek használata új vagy konkrét helyzetekben."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Elemzés"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Az anyag alkotóelemeire bontása, és annak meghatározása, hogyan kapcsolódnak egymáshoz és az általános szerkezethez vagy célhoz. Motívumok, okok vagy kapcsolatok azonosítása."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Értékelés"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Ítéletek meghozatala kritériumok és szabványok alapján. Döntések vagy cselekvési irányok ellenőrzése, bírálata vagy indoklása."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Alkotás"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Elemek összeillesztése koherens vagy működőképes egésszé; elemek átszervezése új mintába vagy szerkezetbe. Eredeti munka előállítása vagy új ötletek generálása."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Követés"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Szoros felügyelet és irányítás mellett dolgozik. Rutin feladatokat végez korlátozott belátással. Az utasítások követésére és az alapvető végrehajtásra összpontosít."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Segítés"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Rutin felügyelet mellett dolgozik. Segítséget nyújt másoknak, hozzájárul a csapatfeladatokhoz, és meghatározott keretek között kezdeményez."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Általános felügyelet mellett dolgozik. Tudását és készségeit rutin és nem rutin tevékenységek körében alkalmazza. Némi belátást és ítélőképességet gyakorol."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Széles körű irányítás mellett dolgozik. Másokat szakértői útmutatással, támogatással vagy szolgáltatásokkal képesít. Felelősséget vállal saját munkájáért, és kis csapatokat vagy feladatokat felügyelhet."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Biztosítás és tanácsadás"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Széles körű irányítás mellett, de jelentős autonómiával dolgozik. Gondoskodik arról, hogy a munka megfeleljen a céloknak, és összetett ügyekben tanácsot ad. Gyakran csapatokat vagy projekteket vezet, és befolyásolja a döntéseket."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Kezdeményezés és befolyásolás"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Meghatározott hatáskörrel és felelősséggel rendelkezik egy jelentős munkaterületért. Intézkedéseket kezdeményez, befolyásolja a stratégiát és a politikát a saját területén, és jelentős projekteket vagy csapatokat vezet."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Stratégia meghatározása, inspirálás, mozgósítás"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "A szervezet legmagasabb szintjén hatáskörrel rendelkezik egy nagyobb munkaterületért. Hosszú távú stratégiát határoz meg, inspirálja és mozgósítja a többieket, és a szervezeti siker szempontjából kritikus döntéseket hoz. Ipari vagy külső szinten is befolyásol."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Figyelembe veendő maximális inaktív idő (perc)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "A nyitva hagyott kurzusoldal automatikus kéréseket küld. Ennyi perc után, valós felhasználói művelet nélkül (oldal vagy elem megnyitása, válaszadás stb.), a kurzusban eltöltött idő számítása leáll."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Együttműködő wiki-szerkesztő"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Csatlakozás az Etherpadhez..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "A mentés új Chamilo wiki-verziót hoz létre az aktuális Etherpad-tartalomból."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Az együttműködő szerkesztő nem tölthető be."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Etherpad engedélyezése a wiki szerkesztéséhez"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Etherpad használata együttműködő szerkesztőként a meglévő wiki-oldalakhoz. Az Etherpadnek ugyanazon az originon kell elérhetőnek lennie, mint a Chamilónak, a biztonságos beágyazott munkamenetekhez."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad URL"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Az Etherpad-példány alap URL-je, opcionális reverse-proxy útvonallal. Példa: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API-kulcs"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "A Chamilo által padok, munkamenetek létrehozásához és a wiki-tartalom szinkronizálásához használt API-kulcs. Állítsa be az Etherpadet, hogy elfogadja az API-kulcsos hitelesítést."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Az új dokumentumok alapértelmezett láthatósága kurzusról módosítható"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Az a láthatóság, amelyet egy tanár által a kurzusban létrehozott új dokumentum, mappa vagy feltöltött fájl kap. A tanárok utólag továbbra is módosíthatják mindegyik láthatóságát."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Ha engedélyezve van, a tanárok a kurzusbeállításokban választhatják meg az új dokumentumok láthatóságát a platform alapértelmezése helyett."
+
+msgid "Default visibility of new learning paths"
+msgstr "Az új tanulási útvonalak alapértelmezett láthatósága"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Az új tanulási útvonalak alapértelmezett láthatósága kurzusról módosítható"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Az a láthatóság, amelyet egy tanár által a kurzusban létrehozott új tanulási útvonal kap. A tanárok utólag továbbra is módosíthatják mindegyik láthatóságát."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Ha engedélyezve van, a tanárok a kurzusbeállításokban választhatják meg az új tanulási útvonalak láthatóságát a platform alapértelmezése helyett."
+
+msgid "Default visibility of new tests"
+msgstr "Az új tesztek alapértelmezett láthatósága"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Az új tesztek alapértelmezett láthatósága kurzusról módosítható"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Az a láthatóság, amelyet egy új teszt kap, amikor a tanár létrehozza a kurzusban. A tanárok utólag továbbra is módosíthatják mindegyik láthatóságát."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Ha engedélyezve van, a tanárok a kurzusbeállításokban választhatják meg a kurzusuk új tesztjeinek láthatóságát a platform alapértelmezése helyett."
+
+msgid "Default visibility for new learning paths"
+msgstr "Új tanulási útvonalak alapértelmezett láthatósága"
+
+msgid "Default visibility for new tests"
+msgstr "Új tesztek alapértelmezett láthatósága"
+
+msgid "Following"
+msgstr "Követés"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "E-mail küldése, ha egy tanuló megjegyzést fűz ehhez a feladathoz tartozó beadáshoz"
+
+msgid "Payment history"
+msgstr "Fizetési előzmények"
+
+msgid "No payments yet"
+msgstr "Még nincsenek fizetések"
+
+msgid "Cancel service"
+msgstr "Szolgáltatás lemondása"
+
+msgid "Official transcript"
+msgstr "Hivatalos transzkriptum"
+
+msgid "Unofficial transcript"
+msgstr "Nem hivatalos transzkriptum"
+
+msgid "Student name"
+msgstr "Hallgató neve"
+
+msgid "Student number"
+msgstr "Hallgatói azonosító"
+
+msgid "Program title"
+msgstr "Képzés megnevezése"
+
+msgid "Required hours"
+msgstr "Előírt óraszám"
+
+msgid "Completion date"
+msgstr "Befejezés dátuma"
+
+msgid "Hours completed"
+msgstr "Teljesített óraszám"
+
+msgid "Final grade"
+msgstr "Végső jegy"
+
+msgid "Grade"
+msgstr "Jegy"
+
+msgid "No completed course yet."
+msgstr "Még nincs befejezett kurzus."
+
+msgid "Grading scale"
+msgstr "Értékelési skála"
+
+msgid "Signature of school official"
+msgstr "Az intézményi felelős aláírása"
+
+msgid "School official"
+msgstr "Intézményi felelős"
+
+msgid "Official's title"
+msgstr "Felelős beosztása"
+
+msgid "Verify this transcript at"
+msgstr "A transzkriptum ellenőrzése itt:"
+
+msgid "Verification code"
+msgstr "Ellenőrző kód"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Ez a nem hivatalos transzkriptum nincs aláírva. Kérjen hivatalos transzkriptumot egy adminisztrátortól."
+
+msgid "Transcript verification"
+msgstr "Transzkriptum ellenőrzése"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Ellenőrizze, hogy ezt a hivatalos transzkriptumot az intézmény állította ki és írta alá, nem módosították, és nem vonták vissza."
+
+msgid "Valid"
+msgstr "Érvényes"
+
+msgid "Invalid signature"
+msgstr "Érvénytelen aláírás"
+
+msgid "Transcript not found"
+msgstr "A transzkriptum nem található"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Az intézmény aláírása érvényes, és ezt a transzkriptumot nem vonták vissza."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Ez a transzkriptum nem igazolható érvényesként. Az adatai nem jelennek meg."
+
+msgid "Transcript details"
+msgstr "Transzkriptum adatai"
+
+msgid "Institution"
+msgstr "Intézmény"
+
+msgid "Issued on"
+msgstr "Kiállítás dátuma"
+
+msgid "Download verification JSON"
+msgstr "Ellenőrző JSON letöltése"
+
+msgid "Transcript"
+msgstr "Transzkriptum"
+
+msgid "My confidential reports"
+msgstr "Bizalmas jelentéseim"
+
+msgid "My transcript"
+msgstr "Transzkriptumom"
+
+msgid "Confidential investigations"
+msgstr "Bizalmas vizsgálatok"
+
+msgid "Floor plan"
+msgstr "Alaprajz"
+
+msgid "Click a highlighted room to select it"
+msgstr "Kattintson egy kiemelt helyiségre a kiválasztáshoz"
+
+msgid "Select room"
+msgstr "Helyiség kiválasztása"
+
+msgid "Room on floor plan"
+msgstr "Helyiség az alaprajzon"
+
+msgid "Select a branch first"
+msgstr "Először válasszon telephelyet"
+
+msgid "The branch has no attached floor plan"
+msgstr "A telephelyhez nincs csatolva alaprajz"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "A sokszög eszközzel jelölje ki a helyiséget; a sarkok mozgatásához használja a Szerkesztés funkciót"
+
+msgid "Save room area"
+msgstr "Teremterület mentése"
+
+msgid "Clear room area"
+msgstr "Teremterület törlése"
+
+msgid "Save the room form to persist the area"
+msgstr "Mentse a terem űrlapját a terület megőrzéséhez"
+
+msgid "Floor plan unavailable"
+msgstr "Alaprajz nem elérhető"
+
+msgid "Room map points must be within the floor plan"
+msgstr "A terem térképének pontjainak az alaprajzon belül kell lenniük"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Biztosan törli a teremterületet?"
+
+msgid "View room on floor plan"
+msgstr "Terem megtekintése az alaprajzon"
+
+msgid "No floor plan available"
+msgstr "Nincs elérhető alaprajz"
+
+msgid "This is an assignment by groups"
+msgstr "Ez egy csoportos feladat"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Töltsön fel PNG, JPEG vagy biztonságos statikus SVG alaprajzot, vagy válasszon egy meglévő képet a Dokumentumokból."
+
+msgid "Upload floor plan"
+msgstr "Alaprajz feltöltése"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG vagy statikus SVG, maximum 10 MB"
+
+msgid "Search images by name"
+msgstr "Képek keresése név szerint"
+
+msgid "Image name"
+msgstr "Kép neve"
+
+msgid "Select an image"
+msgstr "Kép kiválasztása"
+
+msgid "Change floor plan"
+msgstr "Alaprajz módosítása"
+
+msgid "Attach floor plan"
+msgstr "Alaprajz csatolása"
+
+msgid "No matching images found in Documents."
+msgstr "Nincs egyező kép a Dokumentumokban."
+
+msgid "Current floor plan"
+msgstr "Jelenlegi alaprajz"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Az alaprajz módosításai automatikusan mentésre kerülnek."
+
+msgid "Remove floor plan"
+msgstr "Alaprajz eltávolítása"
+
+msgid "Cannot load images"
+msgstr "A képek nem tölthetők be"
+
+msgid "Floor plan saved"
+msgstr "Alaprajz mentve"
+
+msgid "Cannot attach floor plan"
+msgstr "Az alaprajz nem csatolható"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Csak PNG/JPEG és biztonságos statikus SVG képek támogatottak, maximum 10 MB méretig."
+
+msgid "Cannot upload floor plan"
+msgstr "Az alaprajz nem tölthető fel"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Biztosan eltávolítja az alaprajzot?"
+
+msgid "Floor plan removed"
+msgstr "Alaprajz eltávolítva"
+
+msgid "Cannot remove floor plan"
+msgstr "Az alaprajz nem távolítható el"
+
+msgid "Support bot"
+msgstr "Támogató bot"
+
+msgid "Connected"
+msgstr "Csatlakozva"
+
+msgid "Not connected"
+msgstr "Nincs kapcsolat"
+
+msgid "View ticket"
+msgstr "Jegy megtekintése"
+
+msgid "Start a new conversation"
+msgstr "Új beszélgetés indítása"
+
+msgid "Video call"
+msgstr "Videohívás"
+
+msgid "Incoming video call"
+msgstr "Bejövő videohívás"
+
+msgid "Decline"
+msgstr "Elutasítás"
+
+msgid "Mute microphone"
+msgstr "Mikrofon némítása"
+
+msgid "Unmute microphone"
+msgstr "Mikrofon némításának feloldása"
+
+msgid "Turn camera off"
+msgstr "Kamera kikapcsolása"
+
+msgid "Turn camera on"
+msgstr "Kamera bekapcsolása"
+
+msgid "Hang up"
+msgstr "Hívás befejezése"
+
+msgid "Calling..."
+msgstr "Hívás..."
+
+msgid "Connecting..."
+msgstr "Kapcsolódás..."
+
+msgid "Your contact is busy."
+msgstr "A partner foglalt."
+
+msgid "Your contact did not answer the call."
+msgstr "A partner nem vette fel a hívást."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "A partner nem férhetett hozzá a kamerához vagy a mikrofonhoz."
+
+msgid "Your contact could not prepare the video call."
+msgstr "A partner nem tudta előkészíteni a videohívást."
+
+msgid "Your contact refused the call."
+msgstr "A partner elutasította a hívást."
+
+msgid "The call timed out."
+msgstr "A hívás időtúllépés miatt megszakadt."
+
+msgid "Your contact cancelled the call."
+msgstr "A kapcsolattartója törölte a hívást."
+
+msgid "The video connection was lost."
+msgstr "A videokapcsolat megszakadt."
+
+msgid "Your contact could not establish the video connection."
+msgstr "A kapcsolattartója nem tudta létrehozni a videokapcsolatot."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "A kapcsolattartója nem tudta befejezni a videohívás beállítását."
+
+msgid "Your contact hung up."
+msgstr "A kapcsolattartója bontotta a hívást."
+
+msgid "Video call could not be started"
+msgstr "A videohívást nem sikerült elindítani"
+
+msgid "Camera or microphone permission was denied."
+msgstr "A kamera vagy mikrofon engedélyét elutasították."
+
+msgid "No camera or microphone was found."
+msgstr "Nem található kamera vagy mikrofon."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "A kamera vagy mikrofon már használatban van, vagy nem elérhető."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "A kamera vagy mikrofon nem támogatja a szükséges beállításokat."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Nem sikerült hozzáférést szerezni a kamerához vagy mikrofonhoz."
+
+msgid "The video call could not be prepared."
+msgstr "A videohívást nem sikerült előkészíteni."
+
+msgid "The video call request could not be sent."
+msgstr "A videohívási kérést nem sikerült elküldeni."
+
+msgid "The incoming video call could not be processed."
+msgstr "A bejövő videohívást nem sikerült feldolgozni."
+
+msgid "The video call answer could not be prepared."
+msgstr "A videohívás válaszát nem sikerült előkészíteni."
+
+msgid "The video call answer could not be sent."
+msgstr "A videohívás válaszát nem sikerült elküldeni."
+
+msgid "The video call answer could not be processed."
+msgstr "A videohívás válaszát nem sikerült feldolgozni."
+
+msgid "The video connection failed"
+msgstr "A videokapcsolat sikertelen volt"
+
+msgid "The video connection could not be established."
+msgstr "A videokapcsolatot nem sikerült létrehozni."
+
+msgid "No answer was received."
+msgstr "Nem érkezett válasz."
+
+msgid "You refused the call."
+msgstr "Elutasította a hívást."
+
+msgid "You cancelled the call."
+msgstr "Törölte a hívást."
+
+msgid "You hung up."
+msgstr "Bontotta a hívást."
+
+msgid "You missed the call."
+msgstr "Elmulasztotta a hívást."
+
+msgid "Support bot is currently unavailable."
+msgstr "A támogatási robot jelenleg nem elérhető."
+
+msgid "A support ticket has been created."
+msgstr "Támogatási jegy létrejött."
+
+msgid "Conversation ended."
+msgstr "A beszélgetés véget ért."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "A támogatási robot nem tudta folytatni ezt a beszélgetést. Kérjük, próbálja újra."
+
+msgid "Add your first term glossary to this course"
+msgstr "Adja hozzá az első szójegyzék-kifejezést ehhez a kurzushoz"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Biztosan törölni szeretné ezt a kérdőívsablont?"
+
+msgid "The survey template has been deleted."
+msgstr "A kérdőívsablon törölve lett."
+
+msgid "Please select a course."
+msgstr "Kérjük, válasszon egy kurzust."
+
+msgid "Please select a session for this course."
+msgstr "Kérjük, válasszon egy szekciót ehhez a kurzushoz."
+
+msgid "The survey has been created from the template."
+msgstr "A kérdőív a sablonból létrejött."
+
+msgid "Survey templates"
+msgstr "Kérdőívsablonok"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Hozzon létre újrafelhasználható kérdőívsablonokat a tanárok számára, és rendelje őket közvetlenül egy kurzushoz vagy szekcióhoz."
+
+msgid "Subtitle"
+msgstr "Alcím"
+
+msgid "Assign to course"
+msgstr "Hozzárendelés kurzushoz"
+
+msgid "Assign template to course"
+msgstr "Sablon hozzárendelése kurzushoz"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Hagyja üresen a szekciót, hogy a kérdőív közvetlenül a kurzusban jöjjön létre."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Ez a kurzus ezen a portálon szekción keresztül érhető el, ezért szekció szükséges."
+
+msgid "Survey template questions"
+msgstr "Kérdőívsablon kérdései"
+
+msgid "Back to survey templates"
+msgstr "Vissza a kérdőívsablonokhoz"
+
+msgid "Could not load survey template"
+msgstr "Nem sikerült betölteni a kérdőívsablont"
+
+msgid "Could not load survey template questions"
+msgstr "Nem sikerült betölteni a kérdőívsablon kérdéseit"
+
+msgid "Could not save survey template question"
+msgstr "Nem sikerült menteni a kérdőívsablon kérdését"
+
+msgid "Could not delete survey template question"
+msgstr "Nem sikerült törölni a kérdőívsablon kérdését"
+
+msgid "Could not move survey template question"
+msgstr "Nem sikerült áthelyezni a kérdőívsablon kérdését"
+
+msgid "Could not copy survey template question"
+msgstr "Nem sikerült másolni a kérdőívsablon kérdését"
+
+msgid "The survey template has been saved."
+msgstr "A kérdőívsablon mentésre került."
+
+msgid "Edit survey template"
+msgstr "Kérdőív-sablon szerkesztése"
+
+msgid "Create survey template"
+msgstr "Kérdőív-sablon létrehozása"
+
+msgid "The survey template title is required."
+msgstr "A kérdőív-sablon címe kötelező."
+
+msgid "Visible as template"
+msgstr "Sablonként látható"
+
+msgid "Create satisfaction survey"
+msgstr "Elégedettségi kérdőív létrehozása"
+
+msgid "Training satisfaction survey"
+msgstr "Képzési elégedettségi kérdőív"
+
+msgid "Could not create satisfaction survey"
+msgstr "Nem sikerült létrehozni az elégedettségi kérdőívet"
+
+msgid "Use template"
+msgstr "Sablon használata"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Hozza létre ezt a kérdőívet egy rendszergazda által előkészített, újrafelhasználható sablonból."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Eredmények elrejtve a tanár/tutor elől"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "A tanárok és tutorok továbbra is láthatják a válaszok számát, és emlékeztetőket küldhetnek, de nem nyithatják meg és nem exportálhatják a kérdőív eredményeit."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Sablon alkalmazva. Ellenőrizze a kérdőív beállításait, majd mentse a létrehozáshoz."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "A kérdőív eredményei rejtve vannak a tanárok és tutorok elől."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "A meghívók oldalon továbbra is láthatja a válaszok számát, és emlékeztetőket küldhet."
+
+msgid "Payment method"
+msgstr "Fizetési mód"
+
+msgid "Preview mode"
+msgstr "Előnézeti mód"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Előnézeti módban a haladás és a pontszám nem kerül mentésre."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Ez a hivatkozás nem jeleníthető meg a tanulási útvonalon belül."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Nyissa meg új lapon az oldal megtekintéséhez."
+
+msgid "Report a problem with this question"
+msgstr "Probléma jelentése ezzel a kérdéssel"
+
+msgid "Your report was sent to the teacher."
+msgstr "A jelentését elküldtük a tanárnak."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Írja le a talált hibát vagy problémát. A jelentést elküldjük a tanárnak."
+
+msgid "A comment is required."
+msgstr "A megjegyzés kötelező."
+
+msgid "Could not send the report."
+msgstr "Nem sikerült elküldeni a jelentést."
+
+msgid "Learner reports"
+msgstr "Tanulói jelentések"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Ehhez a kérdéshez még nem érkezett tanulói jelentés."
+
+msgid "View attempt"
+msgstr "Kísérlet megtekintése"
+
+msgid "Could not load learner reports."
+msgstr "Nem sikerült betölteni a tanulói jelentéseket."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Tanulók engedélyezése, hogy problémát jelentsenek a kérdésekben"
+
+msgid "Skill acquired"
+msgstr "Készség elsajátítva"
+
+msgid "AI Toolbox"
+msgstr "MI-eszköztár"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Generáljon interaktív oktatási alkalmazásokat MI-vel, és kövesse a tanulók haladását SCORM-mal."
+
+msgid "No published applications are available yet."
+msgstr "Még nincsenek közzétett alkalmazások."
+
+msgid "Interactive applications"
+msgstr "Interaktív alkalmazások"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Generáljon, javítson, tegyen közzé és tekintse át a verziókat egy helyen."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Nyisson meg egy alkalmazást, hogy a legutóbbi haladástól folytathassa."
+
+msgid "Interactive learning application"
+msgstr "Interaktív tanulási alkalmazás"
+
+msgid "Create an interactive learning app"
+msgstr "Interaktív tanulási alkalmazás létrehozása"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Írja le a tevékenységet. A Chamilo verziózott SCORM-alkalmazást generál haladás- és pontszámkövetéssel."
+
+msgid "Idea"
+msgstr "Ötlet"
+
+msgid "Application"
+msgstr "Alkalmazás"
+
+msgid "What should the application do?"
+msgstr "Mit tegyen az alkalmazás?"
+
+msgid "How it works"
+msgstr "Hogyan működik"
+
+msgid "AI generation"
+msgstr "MI-generálás"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Az alkalmazás az utasításaiból jön létre, és 1. verzióként kerül tárolásra."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "A tanulói haladás, pontszám és folytatási adatok a Chamilóba kerülnek jelentésre."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "A későbbi fejlesztések új verziókat hoznak létre a korábbiak törlése nélkül."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Adja meg a tanulási célt, a szabályokat, a szinteket, a pontozást, és hogy mi történjen, amikor a tanuló befejezi."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Ebben a környezetben nem hozhat létre tartalmat."
+
+msgid "The application was generated successfully."
+msgstr "Az alkalmazás sikeresen létrejött."
+
+msgid "Open in student view"
+msgstr "Megnyitás hallgatói nézetben"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Generálja az alkalmazást az előnézet és a közzététel engedélyezéséhez."
+
+msgid "Improve with AI"
+msgstr "Javítás mesterséges intelligenciával"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Írja le a módosítást. Új verzió jön létre, a korábbi verziók továbbra is elérhetők maradnak."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Írja le a teljes interaktív tevékenységet, amelyet generálni szeretne."
+
+msgid "What should be improved?"
+msgstr "Mit kellene javítani?"
+
+msgid "Generate new version"
+msgstr "Új verzió generálása"
+
+msgid "Version history"
+msgstr "Verzióelőzmények"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Előnézet, letöltés vagy bármely generált verzió visszaállítása."
+
+msgid "A new version was generated."
+msgstr "Új verzió generálva."
+
+msgid "Version restored"
+msgstr "Verzió visszaállítva"
+
+msgid "The support bot tree has been published."
+msgstr "A támogatási bot fa közzétéve."
+
+msgid "The support bot tree has been archived."
+msgstr "A támogatási bot fa archiválva."
+
+msgid "The support bot tree has been duplicated."
+msgstr "A támogatási bot fa duplikálva."
+
+msgid "The support bot tree has been deleted."
+msgstr "A támogatási bot fa törölve."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Biztosan törli ezt a támogatási bot fát?"
+
+msgid "The support bot tree has been imported."
+msgstr "A támogatási bot fa importálva."
+
+msgid "Create support bot tree"
+msgstr "Támogatási bot fa létrehozása"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Hozzon létre egy rögzített döntési fát, amely végigvezeti a felhasználókat a támogatási kérdéseken, és eszkalálhat a jegyekhez."
+
+msgid "Portal scope"
+msgstr "Portál hatókör"
+
+msgid "Duplicate"
+msgstr "Duplikálás"
+
+msgid "Archive"
+msgstr "Archiválás"
+
+msgid "View conversations"
+msgstr "Beszélgetések megtekintése"
+
+msgid "Import support bot tree"
+msgstr "Támogatási bot fa importálása"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importáljon egy JSON-exportot vagy egy CSV döntési fát. Az importált fa mindig új piszkozatként jön létre."
+
+msgid "Resolved"
+msgstr "Megoldva"
+
+msgid "Escalated"
+msgstr "Eszkalálva"
+
+msgid "Abandoned"
+msgstr "Elhagyva"
+
+msgid "Support bot conversations"
+msgstr "Támogatási bot beszélgetések"
+
+msgid "Outcome"
+msgstr "Eredmény"
+
+msgid "Started at"
+msgstr "Kezdés ideje"
+
+msgid "Ended at"
+msgstr "Befejezés ideje"
+
+msgid "View conversation"
+msgstr "Beszélgetés megtekintése"
+
+msgid "Go to node"
+msgstr "Ugrás a csomópontra"
+
+msgid "Create support ticket"
+msgstr "Támogatási jegy létrehozása"
+
+msgid "End conversation"
+msgstr "Beszélgetés befejezése"
+
+msgid "Node"
+msgstr "Csomópont"
+
+msgid "A support bot tree requires at least one node."
+msgstr "A támogatási bot fához legalább egy csomópont szükséges."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Biztosan törli ezt a csomópontot? A rá mutató hivatkozások törlődnek."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Minden támogatási bot csomóponthoz legalább egy opció szükséges."
+
+msgid "The support bot tree title is required."
+msgstr "A támogatási bot fa címe kötelező."
+
+msgid "A support bot entry node is required."
+msgstr "A támogatási bot belépési csomópontja kötelező."
+
+msgid "Every support bot node requires content."
+msgstr "Minden támogatási bot csomóponthoz tartalom szükséges."
+
+msgid "Every support bot option requires a label."
+msgstr "Minden támogatási bot opcióhoz címke szükséges."
+
+msgid "Select a target node for every go-to option."
+msgstr "Válasszon célcsomópontot minden ugrás opcióhoz."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Adjon meg relatív URL-t minden hivatkozás opcióhoz."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Válasszon jegykategóriát minden eszkalációs opcióhoz."
+
+msgid "The support bot tree has been saved."
+msgstr "A támogatási bot fa mentve."
+
+msgid "Edit support bot tree"
+msgstr "Támogatási bot fa szerkesztése"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "A közzétett és archivált támogatási bot verziók csak olvashatók. Duplikálja ezt a fát a listából egy új piszkozatverzió szerkesztéséhez."
+
+msgid "Default ticket project"
+msgstr "Alapértelmezett jegyprojekt"
+
+msgid "Decision tree rules"
+msgstr "Döntési fa szabályai"
+
+msgid "Every node must contain at least one option."
+msgstr "Minden csomópontnak legalább egy opciót kell tartalmaznia."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "A végső csomópontnak be kell fejeznie a beszélgetést, vagy támogatási jegyet kell létrehoznia."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "A továbbító hivatkozások az 1. verzióban nem hozhatnak létre köröket."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Külső URL-ek az 1. verzióban nem engedélyezettek; a hivatkozási műveleteknek relatív Chamilo-útvonalat kell használniuk."
+
+msgid "Nodes"
+msgstr "Csomópontok"
+
+msgid "Add node"
+msgstr "Csomópont hozzáadása"
+
+msgid "Entry node"
+msgstr "Belépési csomópont"
+
+msgid "Set as entry node"
+msgstr "Beállítás belépési csomópontként"
+
+msgid "Target node"
+msgstr "Célcsomópont"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Használjon relatív Chamilo-útvonalat, például /tickets."
+
+msgid "Ticket category"
+msgstr "Jegykategória"
+
+msgid "Select a default ticket project first."
+msgstr "Először válasszon alapértelmezett jegyprojektet."
+
+msgid "Closing message"
+msgstr "Záróüzenet"
+
+msgid "Select a node to edit it."
+msgstr "Válasszon egy csomópontot a szerkesztéshez."
+
+msgid "Support bot conversation"
+msgstr "Támogatóbot-beszélgetés"
+
+msgid "Transcript of %s"
+msgstr "%s átirata"
+
+msgid "Download unofficial transcript"
+msgstr "Nem hivatalos átirat letöltése"
+
+msgid "Issue official transcript"
+msgstr "Hivatalos átirat kiállítása"
+
+msgid "Official transcripts"
+msgstr "Hivatalos átiratok"
+
+msgid "No official transcript has been issued yet."
+msgstr "Még nem állítottak ki hivatalos átiratot."
+
+msgid "Issued by"
+msgstr "Kiállította"
+
+msgid "Verify"
+msgstr "Ellenőrzés"
+
+msgid "Signature of official transcripts"
+msgstr "Hivatalos átiratok aláírása"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Ez a kép a portál hivatalos átiratain jelenik meg, a tanúsítványbeállításokban megadott aláíró neve és beosztása fölött."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Kiállít egy aláírt hivatalos átiratot az ezen az oldalon felsorolt kurzusokkal és jegyekkel? Online ellenőrizhető, amíg vissza nem vonják."
+
+msgid "Official transcript issued"
+msgstr "Hivatalos átirat kiállítva"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Visszavonja ezt a hivatalos átiratot? Az ellenőrző oldal ezután visszavontként jeleníti meg."
+
+msgid "Official transcript revoked"
+msgstr "Hivatalos átirat visszavonva"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Először válasszon PNG vagy JPEG képet."
+
+msgid "Signed credential"
+msgstr "Aláírt hitelesítő adat"
+
+msgid "Issue signed credential"
+msgstr "Aláírt hitelesítő adat kiállítása"
+
+msgid "Verify credential"
+msgstr "Hitelesítő adat ellenőrzése"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Rögzítés a Sepolia tesztneten"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Meglévő Sepolia-tranzakció megerősítése"
+
+msgid "Revoke signed credential"
+msgstr "Aláírt hitelesítő adat visszavonása"
+
+msgid "Delete certificate"
+msgstr "Tanúsítvány törlése"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Meglévő Sepolia-tranzakció megerősítése"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia-tranzakció hash"
+
+msgid "Verify transaction"
+msgstr "Tranzakció ellenőrzése"
+
+msgid "Anchored"
+msgstr "Rögzítve"
+
+msgid "Issued"
+msgstr "Kiállítva"
+
+msgid "Not issued"
+msgstr "Nincs kiállítva"
+
+msgid "Consent required"
+msgstr "Hozzájárulás szükséges"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia-tranzakció megerősítve és ellenőrizve"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "A Sepolia tesztnet tárca aláírást kér egy tranzakcióhoz. Csak a tanúsítvány ujjlenyomata kerül rögzítésre. Folytatja?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Visszavonja ezt az aláírt hitelesítő adatot? A blokklánc-tranzakció végleges marad, de az ellenőrző oldal a visszavonást jelzi."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Kiállít aláírt tanúsítvány-hitelesítőt ennek a tanulónak? Így a jóváhagyott személyes adatok privát hivatkozással ellenőrizhetők."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "A Sepolia használatához EVM-kompatibilis böngészős tárca szükséges."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Válassza a Sepolia tesztnetet (láncazonosító: 11155111) a tárcájában."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Érvénytelen tárcacím vagy tanúsítvány-ujjlenyomat."
+
+msgid "Transaction pending"
+msgstr "Tranzakció függőben"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Használja később a meglévő Sepolia-tranzakció megerősítését."
+
+msgid "Signed credential issued"
+msgstr "Aláírt tanúsítvány kiállítva"
+
+msgid "Credential revoked"
+msgstr "Tanúsítvány visszavonva"
+
+msgid "Transaction hash"
+msgstr "Tranzakcióhash"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "A közzétételi hozzájárulás lehetővé teszi, hogy egy adminisztrátor aláírt tanúsítványt állítson ki, és opcionálisan a SHA-256 ujjlenyomatát a Sepolia tesztneten rögzítse. Név vagy személyes adat nem kerül a láncra. A hozzájárulás bármikor visszavonható."
+
+msgid "Publication consent"
+msgstr "Közzétételi hozzájárulás"
+
+msgid "Not approved"
+msgstr "Nincs jóváhagyva"
+
+msgid "Withdraw consent"
+msgstr "Hozzájárulás visszavonása"
+
+msgid "Approve publication"
+msgstr "Közzététel jóváhagyása"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Feljogosítom egy aláírt, nyilvánosan ellenőrizhető tanúsítvány kiállítását, amely a nevemet, a kurzust, az eredményt és a kiállítás dátumát tartalmazza. Egy adminisztrátor a SHA-256 ujjlenyomatot is közzéteheti a Sepolia tesztneten. Az ujjlenyomat végleges, akkor is, ha később visszavonom a hozzájárulást. Folytatja?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Visszavonja a közzétételi jóváhagyást ehhez a tanúsítványhoz?"
+
+msgid "Publication approval recorded"
+msgstr "Közzétételi jóváhagyás rögzítve"
+
+msgid "Publication approval withdrawn"
+msgstr "Közzétételi jóváhagyás visszavonva"
+
+msgid "Read more"
+msgstr "További információ"
+
+msgid "Participation: %s of %s posts"
+msgstr "Részvétel: %s / %s bejegyzés"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Küldje el a hozzászólását, hogy láthassa a többi résztvevő válaszait."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Csak jogosult vizsgálók tekinthetik át a jogosult jelentéseket. A bejelentők személyazonossága alapértelmezés szerint bizalmas marad."
+
+msgid "New confidential report"
+msgstr "Új bizalmas jelentés"
+
+msgid "Reported user"
+msgstr "Jelentett felhasználó"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Jogosult bizalmas jelentések várnak áttekintésre."
+
+msgid "Eligible investigations"
+msgstr "Jogosult vizsgálatok"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Egy ügy csak akkor jelenik meg itt, ha legalább %s különböző felhasználó jelenti ugyanazt a személyt."
+
+msgid "Distinct reporters"
+msgstr "Különböző bejelentők"
+
+msgid "Reports for selected user"
+msgstr "Jelentések a kiválasztott felhasználóról"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "A bizalmas jelentés jelenleg nem érhető el."
+
+msgid "The investigation could not be loaded."
+msgstr "A vizsgálatot nem sikerült betölteni."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Az Ön személyazonossága alapértelmezés szerint védett a vizsgálók elől, de ne adjon meg azonosító adatokat a jelentés szövegében vagy a mellékletekben. Ez nem vészhelyzeti szolgáltatás."
+
+msgid "Find the user involved"
+msgstr "Keresse meg az érintett felhasználót"
+
+msgid "Name or username"
+msgstr "Név vagy felhasználónév"
+
+msgid "Describe the situation"
+msgstr "Írja le a helyzetet"
+
+msgid "Evidence (optional)"
+msgstr "Bizonyíték (opcionális)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Legfeljebb három fájl, egyenként maximum 8 MiB. Képek, hang vagy rövid videók."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Hozzájárulok, hogy a jogosult vizsgálók láthassák a nevemet és e-mail-címemet ehhez a konkrét jelentéshez. Ezt az engedélyt később visszavonhatom."
+
+msgid "Send confidential report"
+msgstr "Bizalmas jelentés küldése"
+
+msgid "Could not search users"
+msgstr "A felhasználók keresése nem sikerült"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Legfeljebb három fájl, egyenként maximum 8 MiB."
+
+msgid "The confidential report could not be saved."
+msgstr "A bizalmas jelentést nem sikerült menteni."
+
+msgid "Confidential report"
+msgstr "Bizalmas jelentés"
+
+msgid "Confidential conversation"
+msgstr "Bizalmas beszélgetés"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "A vizsgálók ezen a beszélgetésen keresztül kommunikálhatnak anélkül, hogy látnák a bejelentő személyazonosságát, hacsak nincs engedélyezve a kapcsolatmegosztás."
+
+msgid "Reporter"
+msgstr "Bejelentő"
+
+msgid "Investigator"
+msgstr "Vizsgáló"
+
+msgid "Additional evidence (optional)"
+msgstr "További bizonyíték (opcionális)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Legfeljebb három fájl, egyenként maximum 8 MiB; jelentésenként tíz fájl."
+
+msgid "Contact shared voluntarily"
+msgstr "Kapcsolat önként megosztva"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Engedélyezem, hogy a vizsgálók láthassák a nevemet és e-mail-címemet ehhez a jelentéshez"
+
+msgid "This confidential report is not available."
+msgstr "Ez a bizalmas jelentés nem érhető el."
+
+msgid "Your message could not be saved."
+msgstr "Az üzenetét nem sikerült menteni."
+
+msgid "Contact sharing could not be updated."
+msgstr "A kapcsolatmegosztást nem sikerült frissíteni."
+
+msgid "Evidence could not be downloaded."
+msgstr "A bizonyítékot nem sikerült letölteni."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Példa űrlapkitöltő tevékenység: testtömegindex számítása</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Életkor</strong></td>            <td width=\"75%\" style=\"\">[25] éves</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Nem</strong></td>            <td style=\"\" text-align:=\"\">[F] (F vagy N)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Testsúly</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Magasság</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Testtömegindex</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Testsúly/Magasság<sup>2</sup> (vö. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipédia-cikk</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Példa űrlapkitöltő tevékenység: testtömegindex számítása</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Életkor</strong></td>            <td width=\"75%\" style=\"\">[25] éves</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Nem</strong></td>            <td style=\"\" text-align:=\"\">[F] (F vagy N)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Testsúly</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Magasság</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Testtömegindex</strong></td>            <td style=\"vertical-align: top;\">[29] BMI = Testsúly/Magasság<sup>2</sup> (vö. <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipédia-cikk</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "IP-cím elrejtése a jelentésekből"
+
+msgid "Course settings policies"
+msgstr "Kurzusbeállítási irányelvek"
+
+msgid "Academic transcripts"
+msgstr "Tanulmányi kivonatok"
+
+msgid "Transcript program title"
+msgstr "Kivonat programcíme"
+
+msgid "Transcript course code"
+msgstr "Kivonat kurzuskódja"
+
+msgid "Transcript course hours field"
+msgstr "Kivonat kurzusórák mezője"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "A kivonaton a teljesített órák a kötelező órák"
+
+msgid "Transcript student number field"
+msgstr "Kivonat hallgatói azonosító mezője"
+
+msgid "Transcript address fields"
+msgstr "Kivonat címmezői"
+
+msgid "Transcript grading scale"
+msgstr "Kivonat értékelési skálája"
+
+msgid "Transcript GPA note"
+msgstr "Kivonat GPA megjegyzése"
+
+msgid "Transcript signatory name"
+msgstr "Kivonat aláírójának neve"
+
+msgid "Transcript signatory title"
+msgstr "Kivonat aláírójának beosztása"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Aláírt tanúsítványok és opcionális Sepolia tesztnet rögzítés engedélyezése"
+
+msgid "Show thread replies only after participating"
+msgstr "Témaválaszok megjelenítése csak részvétel után"
+
+msgid "Show the forum category description in threads"
+msgstr "Fórumkategória leírásának megjelenítése a témákban"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "A fórumrészvételi beállítások kurzusonként módosíthatók"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Fórumtémában megjelenített hozzászólások maximális száma"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Fórumtéma teljesítéséhez szükséges hozzászólások"
+
+msgid "Track e-mail openings"
+msgstr "E-mail megnyitások követése"
+
+msgid "Allow e-mail replies to messages"
+msgstr "E-mailes válaszok engedélyezése az üzenetekre"
+
+msgid "Inbound e-mail address"
+msgstr "Bejövő e-mail cím"
+
+msgid "Inbound mailbox DSN"
+msgstr "Bejövő postaláda DSN"
+
+msgid "Remember me duration (days)"
+msgstr "Emlékezz rám időtartama (nap)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "OAuth dinamikus kliensregisztráció engedélyezése az MCP-n túl"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Bizalmas jóléti jelentések engedélyezése"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Vizsgálathoz szükséges minimális eltérő bejelentők száma"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Bizalmas bizonyíték-mellékletek engedélyezése"
+
+msgid "Show confidential investigation notifications"
+msgstr "Bizalmas vizsgálati értesítések megjelenítése"
+
+msgid "Enable support chatbot"
+msgstr "Támogató chatbot engedélyezése"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Válassza ki, hol legyenek a szójegyzék kifejezései automatikusan kiemelve: dokumentumok, gyakorlatok és tanulási útvonalak."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "IP-címek elrejtése a vizuális jelentésekben és a jelentés-exportokban. Az IP-címek továbbra is tárolva maradnak, és az engedélyezett személyesadat-eljárásokon keresztül elérhetők."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Platformalapértelmezések és kurzus-szerkesztési jogosultságok; a Kurzusbeállításokban kezelhetők."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Lehetővé teszi, hogy a felhasználók nem hivatalos kivonatot töltsenek le a teljesített kurzusaikról, valamint hogy a rendszergazdák, munkamenet-adminisztrátorok és HR-vezetők aláírt hivatalos kivonatot állítsanak ki a kezelt felhasználóknak. Az aláírás képét a felhasználó kivonatoldaláról lehet feltölteni."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Minden kivonaton megjelenő programcím, például az ezen a platformon készített diploma neve."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Melyik kurzusmező tölti ki a kivonatok kurzuskód oszlopát: a kurzuskód vagy a tanszék neve."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "A kurzus extra mezőjének változója, amely a kurzus óraszámát tartalmazza. Hagyja üresen a kurzus időtartamának használatához."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "A kurzus kötelező óraszámát írja ki a tanuló által teljesített órákként. Kikapcsolva a teljesített órák a tanuló kurzusban töltött ideje."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "A felhasználó extra mezőjének változója, amely a kivonaton megjelenő hallgatói azonosítót tartalmazza. Hagyja üresen, ha semmit sem szeretne kiírni."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Vesszővel elválasztott felhasználói extra mezők, amelyek a felhasználó címe után jelennek meg a kivonaton, például város, megye és irányítószám."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Az osztályzatbetűk JSON-listája, a legmagasabb minimális pontszámtól lefelé: minden elem tartalmazza a minimális pontszámot százalékban (min), a betűt és a GPA számításához használt pontértéket."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "A GPA számításának magyarázata, a kivonaton a GPA alatt jelenik meg."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "A hivatalos kivonatokat aláíró intézményi tisztségviselő neve."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "A hivatalos kivonatokat aláíró intézményi tisztségviselő beosztása."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Kifejezett tulajdonosi hozzájárulást és kézi rendszergazdai műveleteket igényel. A láncra csak SHA-256 ujjlenyomatok kerülnek."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "A tanulók csak a fórumtémák első hozzászólását látják, amíg maguk is nem írnak bele. A rendszergazdák, tanárok, coachok és csoporttutorok mindig minden hozzászólást látnak."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "A fórumkategória címének és rövidített leírásának megjelenítése minden téma tetején, hivatkozással a teljes leírásra."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Ha engedélyezve van, a tanárok a kurzusbeállítások Fórum szakaszában választhatják, hogy a kurzus elrejti-e a téma válaszait, amíg a tanuló nem ír, megjelenítse-e a kategória leírását a témákban, és hány hozzászólást várjon a részvételi folyamatjelző, a platformbeállítások helyett."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Minden fórumtémából csak ennyi hozzászólást mutasson minden felhasználónak, aki nem platformrendszergazda – tanároknak is –, valamint a tanulási útvonalon belül mindenkinek. A szálas és beágyazott nézetekben a korlát minden hozzászólás válaszaira vonatkozik. A hozzászólások a nézet sorrendjét követik: az elsők, illetve a tanulási útvonalon a legutóbbiak, ahol a legújabbak elöl vannak. 0 esetén minden hozzászólás megjelenik."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Folyamatjelző megjelenítése a tanulóknak minden fórumtémában, amely 100%-ot ér el, ha ennyi üzenetet írtak bele. A moderálásra váró hozzászólások is számítanak. 0 esetén a folyamatjelző rejtve marad."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Kis követőkép hozzáadása az üzenetértesítő e-mailekhez, és rögzítés, amikor azt lekérik. Ez csak azt jelzi, hogy az e-mailt esetleg megnyitották; nem bizonyítja, hogy elolvasták."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "A közvetlen üzenetértesítések címzettjei e-mailben válaszolhatnak. A bejövő üzeneteket a levelezési infrastruktúrának a Chamilo bejövő-levél parancsához kell irányítania."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "A válaszok irányításához használt alapcím, például replies@example.com. A Chamilo plusz-címzéssel egyedi címzett tokent ad hozzá."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "A bejövő válaszok gyűjtéséhez használt postaláda-kapcsolat, például imaps://user:password@imap.example.com:993/INBOX. A hitelesítő adatokban a fenntartott karaktereket URL-kódolja."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Hány napig maradjon bejelentkezve a felhasználó, ha az Emlékezzen rám opciót választja. 0 esetén kikapcsolva. HTTPS szükséges. Megengedett tartomány: 0–90. A szokásos munkamenet-időkorlátot külön állítja a PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Lehetővé teszi, hogy a dinamikus kliensregisztráció bármely, a Chamilo OAuth erőforrás-kiszolgáló által regisztrált hatókört kérjen. Kikapcsolva a saját regisztráció MCP-re korlátozódik. Az erőforrás-hozzáférést mindig külön korlátozza az egyes kliensek engedélyezett erőforráslistája."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Bizalmas incidensjelentések engedélyezése. A modul védett titkosítási kulcsot és nyomozói jogosultságot igényel."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "2 és 10 közötti számú különböző bejelentőnek kell ugyanazt a felhasználót jelentenie, mielőtt az ügy láthatóvá válik a nyomozók számára."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Képek, hang és rövid videóbizonyíték engedélyezése. Kikapcsoláskor a meglévő mellékletek továbbra is olvashatók."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Belső jelzés megjelenítése a jogosult vizsgálatokhoz. Nem küld e-mailt vagy külső értesítést."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Döntési fás chatbot megjelenítése a csevegőpanelen, amely a felhasználókat ide irányíthatja: "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Lehetővé teszi a tanároknak, hogy AI-támogatott oktatási alkalmazásokat hozzanak létre és verziózzanak a kurzusokban."
+
+msgid "Department name"
+msgstr "Tanszék neve"
+
+msgid "Documents and exercise"
+msgstr "Dokumentumok és gyakorlat"
+
+msgid "Documents and learning path"
+msgstr "Dokumentumok és tanulási útvonal"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokumentumok, gyakorlat és tanulási útvonal"
+
+msgid "session"
+msgstr "szekció"
+
+msgid "course"
+msgstr "kurzus"
+
+msgid "You have been enrolled in %s"
+msgstr "Beiratkozták ide: %s"
 

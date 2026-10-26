@@ -345,7 +345,7 @@ msgid "Sincerely"
 msgstr "敬上"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "公式範例：sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "公式範例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "變數範圍"
@@ -28770,6 +28770,9 @@ msgstr "找不到目前使用者。"
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "您好 %s，<br><br>您已在 %s 註冊。<br>您可以從 <a href=\"%s\">此處</a> 存取您的帳戶。<br><br>您的登入資訊為：<br>使用者名稱：<strong>%s</strong><br>密碼：<strong>%s</strong><br><br>此致<br>敬禮<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "您好 %s，<br><br>您已在 %s 註冊。<br>使用者名稱：<strong>%s</strong><br><br>請點選下方連結設定密碼並存取您的帳號：<br><a href=\"%s\">設定您的密碼</a><br><br>此致<br>%s"
+
 msgid "You are registered on %s"
 msgstr "您已在 %s 註冊"
 
@@ -41573,4 +41576,1616 @@ msgstr "遷移歷史已記錄"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "專案根目錄中存在 %s：請刪除以關閉升級端點"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "您已獲得此練習的證書"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "您必須先完成學習路徑「%s」，才能存取此路徑。"
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "您確定要永久刪除此檔案嗎？"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "您確定要將此檔案從所選課程中分離嗎？"
+
+msgid "Attach this file to another course"
+msgstr "將此檔案附加到另一門課程"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "附加到所選課程（隱藏）"
+
+msgid "Course(s):"
+msgstr "課程："
+
+msgid "Delete definitively"
+msgstr "永久刪除"
+
+msgid "Detach from this course"
+msgstr "從此課程分離"
+
+msgid "File actions"
+msgstr "檔案動作"
+
+msgid "File Information"
+msgstr "檔案資訊"
+
+msgid "File Link:"
+msgstr "檔案連結："
+
+msgid "File Path:"
+msgstr "檔案路徑："
+
+msgid "Filter courses..."
+msgstr "篩選課程..."
+
+msgid "MIME Type:"
+msgstr "MIME 類型："
+
+msgid "N/A"
+msgstr "不適用"
+
+msgid "No results found."
+msgstr "找不到結果。"
+
+msgid "Original Name"
+msgstr "原始名稱"
+
+msgid "Original Name:"
+msgstr "原始名稱："
+
+msgid "Orphan"
+msgstr "孤立"
+
+msgid "Resource File ID:"
+msgstr "資源檔案 ID："
+
+msgid "Resource Node ID:"
+msgstr "資源節點 ID："
+
+msgid "Search..."
+msgstr "搜尋..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "若要將此檔案從特定課程分離，請點選上方對應課程標籤上的「×」圖示。"
+
+msgid "User:"
+msgstr "使用者："
+
+msgid "View file information"
+msgstr "檢視檔案資訊"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "您可以將此檔案附加到一門或多門課程（隱藏於文件根目錄）。若檔案不再使用而成為孤立檔案，您也可以將其永久刪除。"
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "您可以選取一門或多門課程（使用 Ctrl/Cmd + 點選）。"
+
+msgid "bytes"
+msgstr "位元組"
+
+msgid "Failed to copy:"
+msgstr "複製失敗："
+
+msgid "Missing resource file identifier."
+msgstr "缺少資源檔案識別碼。"
+
+msgid "Please select at least one course."
+msgstr "請至少選取一門課程。"
+
+msgid "Resource file not found."
+msgstr "找不到資源檔案。"
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "檔案「%s」已附加到 %d 門課程：%s。"
+
+msgid "Some courses were skipped: %s."
+msgstr "部分課程已略過：%s。"
+
+msgid "Missing file or course identifier."
+msgstr "缺少檔案或課程識別碼。"
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "此資源檔案沒有資源節點，無法分離。"
+
+msgid "File has been detached from %d course link(s)."
+msgstr "檔案已從 %d 個課程連結分離。"
+
+msgid "This file is not attached to the selected course."
+msgstr "此檔案未附加到所選課程。"
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "此檔案仍被至少一個資源使用，無法刪除。"
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "孤立檔案及其實體內容已永久刪除。"
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "問卷已發佈。已建立：%d。已更新：%d。已傳送訊息：%d。"
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "可獲得"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "此技能無法獲得"
+
+#: issue-8179
+msgid "Novice"
+msgstr "新手"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "僵化地遵循規則與無情境的指示；幾乎沒有情境判斷。"
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "進階初學者"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "開始辨識情境面向與模式，但仍需要指引。"
+
+#: issue-8179
+msgid "Competent"
+msgstr "勝任"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "能擬定規劃與心智模型；對結果負責，但可能因複雜度而感到不堪負荷。"
+
+#: issue-8179
+msgid "Proficient"
+msgstr "精通"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "能看見「全貌」，憑直覺排定優先順序，並從經驗中學習。"
+
+#: issue-8179
+msgid "Expert"
+msgstr "專家"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "直覺流暢的表現；仰賴深厚的內隱知識；能輕鬆創新或處理新情境。"
+
+#: issue-8179
+msgid "Remembering"
+msgstr "記憶"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "從長期記憶中檢索、回憶或辨識相關知識。"
+
+#: issue-8179
+msgid "Understanding"
+msgstr "理解"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "從教學訊息（含口語、書面與圖像溝通）建構意義。透過詮釋、舉例、分類、摘要、推論、比較或解釋來展現理解。"
+
+#: issue-8179
+msgid "Applying"
+msgstr "應用"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "在既定情境中透過執行或實施來完成或使用程序。在新的或具體情境中運用知識或技能。"
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "分析"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "將材料拆解為組成部分，並判斷各部分彼此及與整體結構或目的的關係。辨識動機、原因或關係。"
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "評鑑"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "依據準則與標準做出判斷。檢查、評論或為決策或行動方針提出理由。"
+
+#: issue-8179
+msgid "Creating"
+msgstr "創造"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "將元素組合成連貫或具功能的整體；重組元素成為新模式或結構。產出原創作品或產生新想法。"
+
+#: issue-8179
+msgid "Follow"
+msgstr "遵循"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "在密切督導與指示下工作。執行例行任務，裁量空間有限。著重遵循指示與基本執行。"
+
+#: issue-8179
+msgid "Assist"
+msgstr "協助"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "在例行督導下工作。協助他人、貢獻團隊任務，並開始在既定範圍內主動行動。"
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "在一般督導下工作。將知識與技能應用於例行與非例行活動。行使一定裁量與判斷。"
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "在廣泛指導下工作。透過提供專業指導、支援或服務賦能他人。對自身工作負責，並可能督導小型團隊或任務。"
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "確保與建議"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "在廣泛指導下工作，但具顯著自主性。確保工作達成目標，並就複雜事項提供建議。經常帶領團隊或專案並影響決策。"
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "發起與影響"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "對重要工作領域具明確權責。發起行動、影響該領域的策略與政策，並領導重大專案或團隊。"
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "制定策略、激勵、動員"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "在組織最高層級對重大工作領域擁有權限。制定長期策略、激勵並動員他人，並做出對組織成功至關重要的決策。在產業或外部層級發揮影響力。"
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "視為閒置的最長時間（分鐘）"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "課程頁面保持開啟會持續發送自動請求。在此分鐘數內若使用者沒有真實操作（開啟頁面或項目、作答等），課程停留時間將停止計算。"
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "協作 Wiki 編輯器"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "正在連線至 Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "儲存會依目前 Etherpad 內容建立新的 Chamilo Wiki 版本。"
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "無法載入協作編輯器。"
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "啟用 Etherpad 進行 Wiki 編輯"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "使用 Etherpad 作為既有 Wiki 頁面的協作編輯器。Etherpad 必須與 Chamilo 同源公開，以確保嵌入式工作階段的安全。"
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "Etherpad 網址"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Etherpad 執行個體的基礎網址，可含選用的反向代理路徑。範例：https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Etherpad API 金鑰"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Chamilo 用來建立 pad、工作階段並同步 Wiki 內容的 API 金鑰。請將 Etherpad 設定為接受 API 金鑰驗證。"
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "新文件的預設可見性可由課程變更"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "教師在課程中建立新文件、資料夾或上傳檔案時所給予的可見性。教師之後仍可變更每一項的可見性。"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "啟用後，教師可在課程設定中選擇其課程新文件的可見性，而非使用平台預設值。"
+
+msgid "Default visibility of new learning paths"
+msgstr "新學習路徑的預設可見性"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "新學習路徑的預設可見性可由課程變更"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "教師在課程中建立新學習路徑時所給予的可見性。教師之後仍可變更每一項的可見性。"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "啟用後，教師可在課程設定中選擇其課程新學習路徑的可見性，而非使用平台預設值。"
+
+msgid "Default visibility of new tests"
+msgstr "新測驗的預設可見性"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "新測驗的預設可見性可由課程變更"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "教師在課程中建立新測驗時所給予的可見性。教師之後仍可變更每一項的可見性。"
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "啟用後，教師可在課程設定中選擇其課程新測驗的可見性，而不使用平台預設值。"
+
+msgid "Default visibility for new learning paths"
+msgstr "新學習路徑的預設可見性"
+
+msgid "Default visibility for new tests"
+msgstr "新測驗的預設可見性"
+
+msgid "Following"
+msgstr "追蹤中"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "當學習者對此作業的繳交發表評論時寄送電子郵件"
+
+msgid "Payment history"
+msgstr "付款紀錄"
+
+msgid "No payments yet"
+msgstr "尚無付款"
+
+msgid "Cancel service"
+msgstr "取消服務"
+
+msgid "Official transcript"
+msgstr "正式成績單"
+
+msgid "Unofficial transcript"
+msgstr "非正式成績單"
+
+msgid "Student name"
+msgstr "學生姓名"
+
+msgid "Student number"
+msgstr "學號"
+
+msgid "Program title"
+msgstr "學程名稱"
+
+msgid "Required hours"
+msgstr "應修時數"
+
+msgid "Completion date"
+msgstr "完成日期"
+
+msgid "Hours completed"
+msgstr "已完成時數"
+
+msgid "Final grade"
+msgstr "最終成績"
+
+msgid "Grade"
+msgstr "成績"
+
+msgid "No completed course yet."
+msgstr "尚無已完成的課程。"
+
+msgid "Grading scale"
+msgstr "評分量表"
+
+msgid "Signature of school official"
+msgstr "學校主管簽名"
+
+msgid "School official"
+msgstr "學校主管"
+
+msgid "Official's title"
+msgstr "主管職稱"
+
+msgid "Verify this transcript at"
+msgstr "於此驗證此成績單"
+
+msgid "Verification code"
+msgstr "驗證碼"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "此非正式成績單未經簽署。請向管理員索取正式成績單。"
+
+msgid "Transcript verification"
+msgstr "成績單驗證"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "請確認此正式成績單由機構核發並簽署、未經竄改且未被撤銷。"
+
+msgid "Valid"
+msgstr "有效"
+
+msgid "Invalid signature"
+msgstr "簽名無效"
+
+msgid "Transcript not found"
+msgstr "找不到成績單"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "機構簽名有效，且此成績單未被撤銷。"
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "無法驗證此成績單為有效。其詳細資料不予顯示。"
+
+msgid "Transcript details"
+msgstr "成績單詳細資料"
+
+msgid "Institution"
+msgstr "機構"
+
+msgid "Issued on"
+msgstr "核發日期"
+
+msgid "Download verification JSON"
+msgstr "下載驗證 JSON"
+
+msgid "Transcript"
+msgstr "成績單"
+
+msgid "My confidential reports"
+msgstr "我的機密報告"
+
+msgid "My transcript"
+msgstr "我的成績單"
+
+msgid "Confidential investigations"
+msgstr "機密調查"
+
+msgid "Floor plan"
+msgstr "平面圖"
+
+msgid "Click a highlighted room to select it"
+msgstr "點選醒目顯示的房間以選取"
+
+msgid "Select room"
+msgstr "選取房間"
+
+msgid "Room on floor plan"
+msgstr "平面圖上的房間"
+
+msgid "Select a branch first"
+msgstr "請先選取分校"
+
+msgid "The branch has no attached floor plan"
+msgstr "此分校未附加平面圖"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "使用多邊形工具描繪房間輪廓；使用編輯來移動角落"
+
+msgid "Save room area"
+msgstr "儲存房間區域"
+
+msgid "Clear room area"
+msgstr "清除房間區域"
+
+msgid "Save the room form to persist the area"
+msgstr "儲存房間表單以保留區域"
+
+msgid "Floor plan unavailable"
+msgstr "平面圖無法使用"
+
+msgid "Room map points must be within the floor plan"
+msgstr "房間地圖點必須位於平面圖範圍內"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "確定要清除房間區域嗎？"
+
+msgid "View room on floor plan"
+msgstr "在平面圖上檢視房間"
+
+msgid "No floor plan available"
+msgstr "沒有可用的平面圖"
+
+msgid "This is an assignment by groups"
+msgstr "這是分組作業"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "上傳 PNG、JPEG 或安全靜態 SVG 平面圖，或從文件中選擇現有圖片。"
+
+msgid "Upload floor plan"
+msgstr "上傳平面圖"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG、JPEG 或靜態 SVG，最大 10 MB"
+
+msgid "Search images by name"
+msgstr "依名稱搜尋圖片"
+
+msgid "Image name"
+msgstr "圖片名稱"
+
+msgid "Select an image"
+msgstr "選擇圖片"
+
+msgid "Change floor plan"
+msgstr "變更平面圖"
+
+msgid "Attach floor plan"
+msgstr "附加平面圖"
+
+msgid "No matching images found in Documents."
+msgstr "文件中找不到相符的圖片。"
+
+msgid "Current floor plan"
+msgstr "目前平面圖"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "平面圖變更會自動儲存。"
+
+msgid "Remove floor plan"
+msgstr "移除平面圖"
+
+msgid "Cannot load images"
+msgstr "無法載入圖片"
+
+msgid "Floor plan saved"
+msgstr "平面圖已儲存"
+
+msgid "Cannot attach floor plan"
+msgstr "無法附加平面圖"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "僅支援最大 10MB 的 PNG/JPEG 與安全靜態 SVG 圖片。"
+
+msgid "Cannot upload floor plan"
+msgstr "無法上傳平面圖"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "確定要移除平面圖嗎？"
+
+msgid "Floor plan removed"
+msgstr "平面圖已移除"
+
+msgid "Cannot remove floor plan"
+msgstr "無法移除平面圖"
+
+msgid "Support bot"
+msgstr "支援機器人"
+
+msgid "Connected"
+msgstr "已連線"
+
+msgid "Not connected"
+msgstr "未連線"
+
+msgid "View ticket"
+msgstr "檢視工單"
+
+msgid "Start a new conversation"
+msgstr "開始新對話"
+
+msgid "Video call"
+msgstr "視訊通話"
+
+msgid "Incoming video call"
+msgstr "來電視訊通話"
+
+msgid "Decline"
+msgstr "拒絕"
+
+msgid "Mute microphone"
+msgstr "靜音麥克風"
+
+msgid "Unmute microphone"
+msgstr "取消麥克風靜音"
+
+msgid "Turn camera off"
+msgstr "關閉相機"
+
+msgid "Turn camera on"
+msgstr "開啟相機"
+
+msgid "Hang up"
+msgstr "掛斷"
+
+msgid "Calling..."
+msgstr "撥號中..."
+
+msgid "Connecting..."
+msgstr "連線中..."
+
+msgid "Your contact is busy."
+msgstr "對方忙碌中。"
+
+msgid "Your contact did not answer the call."
+msgstr "對方未接聽通話。"
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "對方無法存取相機或麥克風。"
+
+msgid "Your contact could not prepare the video call."
+msgstr "對方無法準備視訊通話。"
+
+msgid "Your contact refused the call."
+msgstr "對方拒絕了通話。"
+
+msgid "The call timed out."
+msgstr "通話逾時。"
+
+msgid "Your contact cancelled the call."
+msgstr "對方已取消通話。"
+
+msgid "The video connection was lost."
+msgstr "視訊連線已中斷。"
+
+msgid "Your contact could not establish the video connection."
+msgstr "對方無法建立視訊連線。"
+
+msgid "Your contact could not complete the video call setup."
+msgstr "對方無法完成視訊通話設定。"
+
+msgid "Your contact hung up."
+msgstr "對方已掛斷。"
+
+msgid "Video call could not be started"
+msgstr "無法開始視訊通話"
+
+msgid "Camera or microphone permission was denied."
+msgstr "攝影機或麥克風權限已被拒絕。"
+
+msgid "No camera or microphone was found."
+msgstr "找不到攝影機或麥克風。"
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "攝影機或麥克風正在使用中或無法使用。"
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "攝影機或麥克風不支援所需設定。"
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "無法取得攝影機或麥克風存取權限。"
+
+msgid "The video call could not be prepared."
+msgstr "無法準備視訊通話。"
+
+msgid "The video call request could not be sent."
+msgstr "無法傳送視訊通話請求。"
+
+msgid "The incoming video call could not be processed."
+msgstr "無法處理來電視訊通話。"
+
+msgid "The video call answer could not be prepared."
+msgstr "無法準備視訊通話回覆。"
+
+msgid "The video call answer could not be sent."
+msgstr "無法傳送視訊通話回覆。"
+
+msgid "The video call answer could not be processed."
+msgstr "無法處理視訊通話回覆。"
+
+msgid "The video connection failed"
+msgstr "視訊連線失敗"
+
+msgid "The video connection could not be established."
+msgstr "無法建立視訊連線。"
+
+msgid "No answer was received."
+msgstr "未收到回覆。"
+
+msgid "You refused the call."
+msgstr "您已拒絕通話。"
+
+msgid "You cancelled the call."
+msgstr "您已取消通話。"
+
+msgid "You hung up."
+msgstr "您已掛斷。"
+
+msgid "You missed the call."
+msgstr "您錯過了通話。"
+
+msgid "Support bot is currently unavailable."
+msgstr "支援機器人目前無法使用。"
+
+msgid "A support ticket has been created."
+msgstr "已建立支援工單。"
+
+msgid "Conversation ended."
+msgstr "對話已結束。"
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "支援機器人無法繼續此對話。請再試一次。"
+
+msgid "Add your first term glossary to this course"
+msgstr "為此課程新增第一個詞彙表詞條"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "確定要刪除此問卷範本嗎？"
+
+msgid "The survey template has been deleted."
+msgstr "問卷範本已刪除。"
+
+msgid "Please select a course."
+msgstr "請選擇課程。"
+
+msgid "Please select a session for this course."
+msgstr "請為此課程選擇一個時段。"
+
+msgid "The survey has been created from the template."
+msgstr "已依範本建立問卷。"
+
+msgid "Survey templates"
+msgstr "問卷範本"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "為教師建立可重複使用的問卷範本，並直接指派至課程或時段。"
+
+msgid "Subtitle"
+msgstr "副標題"
+
+msgid "Assign to course"
+msgstr "指派至課程"
+
+msgid "Assign template to course"
+msgstr "將範本指派至課程"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "若要直接在課程中建立問卷，請將時段留空。"
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "此課程透過本入口網站的時段提供，因此必須選擇時段。"
+
+msgid "Survey template questions"
+msgstr "問卷範本題目"
+
+msgid "Back to survey templates"
+msgstr "返回問卷範本"
+
+msgid "Could not load survey template"
+msgstr "無法載入問卷範本"
+
+msgid "Could not load survey template questions"
+msgstr "無法載入問卷範本題目"
+
+msgid "Could not save survey template question"
+msgstr "無法儲存問卷範本題目"
+
+msgid "Could not delete survey template question"
+msgstr "無法刪除問卷範本題目"
+
+msgid "Could not move survey template question"
+msgstr "無法移動問卷範本題目"
+
+msgid "Could not copy survey template question"
+msgstr "無法複製問卷範本題目"
+
+msgid "The survey template has been saved."
+msgstr "問卷範本已儲存。"
+
+msgid "Edit survey template"
+msgstr "編輯問卷範本"
+
+msgid "Create survey template"
+msgstr "建立問卷範本"
+
+msgid "The survey template title is required."
+msgstr "問卷範本標題為必填。"
+
+msgid "Visible as template"
+msgstr "顯示為範本"
+
+msgid "Create satisfaction survey"
+msgstr "建立滿意度問卷"
+
+msgid "Training satisfaction survey"
+msgstr "培訓滿意度問卷"
+
+msgid "Could not create satisfaction survey"
+msgstr "無法建立滿意度問卷"
+
+msgid "Use template"
+msgstr "使用範本"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "從管理員準備的可重複使用範本建立此問卷。"
+
+msgid "Results hidden from teacher/tutor"
+msgstr "對教師／導師隱藏結果"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "教師與導師仍可查看作答人數並傳送提醒，但無法開啟或匯出問卷結果。"
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "已套用範本。請檢視問卷設定並儲存以建立。"
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "問卷結果已對教師與導師隱藏。"
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "您仍可使用邀請頁面查看作答人數並傳送提醒。"
+
+msgid "Payment method"
+msgstr "付款方式"
+
+msgid "Preview mode"
+msgstr "預覽模式"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "預覽模式下不會儲存進度與分數。"
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "此連結無法在學習路徑中顯示。"
+
+msgid "Open it in a new tab to view the page."
+msgstr "請在新分頁開啟以檢視該頁面。"
+
+msgid "Report a problem with this question"
+msgstr "回報此題目的問題"
+
+msgid "Your report was sent to the teacher."
+msgstr "您的回報已傳送給教師。"
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "請描述您發現的錯誤或問題。您的回報將傳送給教師。"
+
+msgid "A comment is required."
+msgstr "必須填寫意見。"
+
+msgid "Could not send the report."
+msgstr "無法傳送回報。"
+
+msgid "Learner reports"
+msgstr "學員回報"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "此題目尚未有學員回報。"
+
+msgid "View attempt"
+msgstr "檢視作答"
+
+msgid "Could not load learner reports."
+msgstr "無法載入學員回報。"
+
+msgid "Allow learners to report issues in questions"
+msgstr "允許學員回報題目問題"
+
+msgid "Skill acquired"
+msgstr "已獲得技能"
+
+msgid "AI Toolbox"
+msgstr "AI 工具箱"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "以 AI 產生互動式教育應用，並以 SCORM 追蹤學員進度。"
+
+msgid "No published applications are available yet."
+msgstr "尚無已發布的應用程式。"
+
+msgid "Interactive applications"
+msgstr "互動式應用程式"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "在同一處產生、改進、發布並檢視版本。"
+
+msgid "Open an application to continue from your latest progress."
+msgstr "開啟應用程式以從最新進度繼續。"
+
+msgid "Interactive learning application"
+msgstr "互動式學習應用程式"
+
+msgid "Create an interactive learning app"
+msgstr "建立互動式學習應用程式"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "描述此活動。Chamilo 將產生具版本控制、可追蹤進度與分數的 SCORM 應用程式。"
+
+msgid "Idea"
+msgstr "構想"
+
+msgid "Application"
+msgstr "應用程式"
+
+msgid "What should the application do?"
+msgstr "此應用程式應做什麼？"
+
+msgid "How it works"
+msgstr "運作方式"
+
+msgid "AI generation"
+msgstr "AI 產生"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "應用程式會依您的指示產生，並儲存為第 1 版。"
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "學員進度、分數與續讀資料會回報至 Chamilo。"
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "後續改進會建立新版本，而不刪除先前版本。"
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "請包含學習目標、規則、關卡、計分方式，以及學員完成時應發生的情況。"
+
+msgid "You are not allowed to create content in this context."
+msgstr "您無權在此情境中建立內容。"
+
+msgid "The application was generated successfully."
+msgstr "應用程式已成功產生。"
+
+msgid "Open in student view"
+msgstr "以學生檢視開啟"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "產生應用程式以啟用預覽與發佈。"
+
+msgid "Improve with AI"
+msgstr "以 AI 改進"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "描述變更。將建立新版本，先前版本仍可使用。"
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "描述您要產生的完整互動活動。"
+
+msgid "What should be improved?"
+msgstr "應改進什麼？"
+
+msgid "Generate new version"
+msgstr "產生新版本"
+
+msgid "Version history"
+msgstr "版本歷程"
+
+msgid "Preview, download or restore any generated version."
+msgstr "預覽、下載或還原任何已產生的版本。"
+
+msgid "A new version was generated."
+msgstr "已產生新版本。"
+
+msgid "Version restored"
+msgstr "已還原版本"
+
+msgid "The support bot tree has been published."
+msgstr "支援機器人樹狀結構已發佈。"
+
+msgid "The support bot tree has been archived."
+msgstr "支援機器人樹狀結構已封存。"
+
+msgid "The support bot tree has been duplicated."
+msgstr "支援機器人樹狀結構已複製。"
+
+msgid "The support bot tree has been deleted."
+msgstr "支援機器人樹狀結構已刪除。"
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "確定要刪除此支援機器人樹狀結構嗎？"
+
+msgid "The support bot tree has been imported."
+msgstr "支援機器人樹狀結構已匯入。"
+
+msgid "Create support bot tree"
+msgstr "建立支援機器人樹狀結構"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "建立固定決策樹，引導使用者處理支援問題，並可升級至工單。"
+
+msgid "Portal scope"
+msgstr "入口網站範圍"
+
+msgid "Duplicate"
+msgstr "複製"
+
+msgid "Archive"
+msgstr "封存"
+
+msgid "View conversations"
+msgstr "檢視對話"
+
+msgid "Import support bot tree"
+msgstr "匯入支援機器人樹狀結構"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "匯入 JSON 匯出檔或 CSV 決策樹。匯入的樹狀結構一律建立為新草稿。"
+
+msgid "Resolved"
+msgstr "已解決"
+
+msgid "Escalated"
+msgstr "已升級"
+
+msgid "Abandoned"
+msgstr "已放棄"
+
+msgid "Support bot conversations"
+msgstr "支援機器人對話"
+
+msgid "Outcome"
+msgstr "結果"
+
+msgid "Started at"
+msgstr "開始時間"
+
+msgid "Ended at"
+msgstr "結束時間"
+
+msgid "View conversation"
+msgstr "檢視對話"
+
+msgid "Go to node"
+msgstr "前往節點"
+
+msgid "Create support ticket"
+msgstr "建立支援工單"
+
+msgid "End conversation"
+msgstr "結束對話"
+
+msgid "Node"
+msgstr "節點"
+
+msgid "A support bot tree requires at least one node."
+msgstr "支援機器人樹狀結構至少需要一個節點。"
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "確定要刪除此節點嗎？指向它的連結將被清除。"
+
+msgid "Every support bot node requires at least one option."
+msgstr "每個支援機器人節點至少需要一個選項。"
+
+msgid "The support bot tree title is required."
+msgstr "必須填寫支援機器人樹狀結構標題。"
+
+msgid "A support bot entry node is required."
+msgstr "必須指定支援機器人進入節點。"
+
+msgid "Every support bot node requires content."
+msgstr "每個支援機器人節點都需要內容。"
+
+msgid "Every support bot option requires a label."
+msgstr "每個支援機器人選項都需要標籤。"
+
+msgid "Select a target node for every go-to option."
+msgstr "請為每個「前往」選項選擇目標節點。"
+
+msgid "Enter a relative URL for every link option."
+msgstr "請為每個連結選項輸入相對網址。"
+
+msgid "Select a ticket category for every escalation option."
+msgstr "請為每個升級選項選擇工單類別。"
+
+msgid "The support bot tree has been saved."
+msgstr "支援機器人樹狀結構已儲存。"
+
+msgid "Edit support bot tree"
+msgstr "編輯支援機器人樹狀結構"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "已發佈與已封存的支援機器人版本為唯讀。請從清單複製此樹狀結構，以編輯新的草稿版本。"
+
+msgid "Default ticket project"
+msgstr "預設工單專案"
+
+msgid "Decision tree rules"
+msgstr "決策樹規則"
+
+msgid "Every node must contain at least one option."
+msgstr "每個節點必須至少包含一個選項。"
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "最終節點必須結束對話或建立支援工單。"
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "跳轉連結在 v1 中不得形成循環。"
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "v1 不允許外部網址；連結動作必須使用相對的 Chamilo 路徑。"
+
+msgid "Nodes"
+msgstr "節點"
+
+msgid "Add node"
+msgstr "新增節點"
+
+msgid "Entry node"
+msgstr "進入節點"
+
+msgid "Set as entry node"
+msgstr "設為進入節點"
+
+msgid "Target node"
+msgstr "目標節點"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "請使用相對的 Chamilo 路徑，例如 /tickets。"
+
+msgid "Ticket category"
+msgstr "工單類別"
+
+msgid "Select a default ticket project first."
+msgstr "請先選擇預設工單專案。"
+
+msgid "Closing message"
+msgstr "結束訊息"
+
+msgid "Select a node to edit it."
+msgstr "請選擇要編輯的節點。"
+
+msgid "Support bot conversation"
+msgstr "支援機器人對話"
+
+msgid "Transcript of %s"
+msgstr "%s 的成績單"
+
+msgid "Download unofficial transcript"
+msgstr "下載非正式成績單"
+
+msgid "Issue official transcript"
+msgstr "核發正式成績單"
+
+msgid "Official transcripts"
+msgstr "正式成績單"
+
+msgid "No official transcript has been issued yet."
+msgstr "尚未核發正式成績單。"
+
+msgid "Issued by"
+msgstr "核發者"
+
+msgid "Verify"
+msgstr "驗證"
+
+msgid "Signature of official transcripts"
+msgstr "正式成績單簽名"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "此圖像會列印於本入口網站的正式成績單上，位於證書設定中指定的簽署人姓名與職稱上方。"
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "要核發本頁所列課程與成績的已簽署正式成績單嗎？在撤銷前可於線上驗證。"
+
+msgid "Official transcript issued"
+msgstr "已核發正式成績單"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "要撤銷此正式成績單嗎？其驗證頁面將顯示為已撤銷。"
+
+msgid "Official transcript revoked"
+msgstr "已撤銷正式成績單"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "請先選擇 PNG 或 JPEG 圖像。"
+
+msgid "Signed credential"
+msgstr "已簽署憑證"
+
+msgid "Issue signed credential"
+msgstr "核發已簽署憑證"
+
+msgid "Verify credential"
+msgstr "驗證憑證"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "錨定至 Sepolia 測試網"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "確認既有 Sepolia 交易"
+
+msgid "Revoke signed credential"
+msgstr "撤銷已簽署憑證"
+
+msgid "Delete certificate"
+msgstr "刪除證書"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "確認既有 Sepolia 交易"
+
+msgid "Sepolia transaction hash"
+msgstr "Sepolia 交易雜湊"
+
+msgid "Verify transaction"
+msgstr "驗證交易"
+
+msgid "Anchored"
+msgstr "已錨定"
+
+msgid "Issued"
+msgstr "已核發"
+
+msgid "Not issued"
+msgstr "未核發"
+
+msgid "Consent required"
+msgstr "需要同意"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Sepolia 交易已確認並驗證"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Sepolia 測試網錢包將要求您簽署交易。僅會錨定證書指紋。要繼續嗎？"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "要撤銷此已簽署憑證嗎？區塊鏈交易仍為永久記錄，但驗證頁面將顯示已撤銷。"
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "要為此學習者核發已簽署的證書憑證嗎？這會使已核准的個人資料可透過私人連結驗證。"
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Sepolia 需要相容 EVM 的瀏覽器錢包。"
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "請在錢包中選擇 Sepolia 測試網（鏈 ID 11155111）。"
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "錢包地址或憑證指紋無效。"
+
+msgid "Transaction pending"
+msgstr "交易處理中"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "稍後使用「確認既有 Sepolia 交易」。"
+
+msgid "Signed credential issued"
+msgstr "已核發已簽署憑證"
+
+msgid "Credential revoked"
+msgstr "憑證已撤銷"
+
+msgid "Transaction hash"
+msgstr "交易雜湊"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "公開同意允許管理員核發已簽署的證書憑證，並可選擇將其 SHA-256 指紋錨定於 Sepolia 測試網。鏈上不會傳送姓名或個人資料。您可隨時撤回同意。"
+
+msgid "Publication consent"
+msgstr "公開同意"
+
+msgid "Not approved"
+msgstr "未核准"
+
+msgid "Withdraw consent"
+msgstr "撤回同意"
+
+msgid "Approve publication"
+msgstr "核准公開"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "我授權核發可公開驗證的已簽署憑證，顯示我的姓名、課程、成績與核發日期。管理員亦可僅將其 SHA-256 指紋發布至 Sepolia 測試網。即使我之後撤回，指紋仍為永久。要繼續嗎？"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "要撤回此證書的公開核准嗎？"
+
+msgid "Publication approval recorded"
+msgstr "已記錄公開核准"
+
+msgid "Publication approval withdrawn"
+msgstr "已撤回公開核准"
+
+msgid "Read more"
+msgstr "了解更多"
+
+msgid "Participation: %s of %s posts"
+msgstr "參與：%s / %s 則貼文"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "請先發表您的內容，才能查看其他參與者的回覆。"
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "僅授權調查人員可審閱符合條件的檢舉。檢舉人身分預設保密。"
+
+msgid "New confidential report"
+msgstr "新機密檢舉"
+
+msgid "Reported user"
+msgstr "被檢舉使用者"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "有符合條件的機密檢舉待審閱。"
+
+msgid "Eligible investigations"
+msgstr "符合條件的調查"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "僅當至少 %s 位不同使用者檢舉同一人時，案件才會顯示於此。"
+
+msgid "Distinct reporters"
+msgstr "不同檢舉人"
+
+msgid "Reports for selected user"
+msgstr "所選使用者的檢舉"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "機密檢舉目前無法使用。"
+
+msgid "The investigation could not be loaded."
+msgstr "無法載入調查。"
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "您的身分預設對調查人員保密，但請避免在檢舉文字或附件中包含可識別資訊。這不是緊急服務。"
+
+msgid "Find the user involved"
+msgstr "尋找相關使用者"
+
+msgid "Name or username"
+msgstr "姓名或使用者名稱"
+
+msgid "Describe the situation"
+msgstr "描述情況"
+
+msgid "Evidence (optional)"
+msgstr "證據（選填）"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "最多三個檔案，每個最大 8 MiB。影像、音訊或短影片。"
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "我同意授權調查人員可為此特定檢舉查看我的姓名與電子郵件。我可稍後撤回此權限。"
+
+msgid "Send confidential report"
+msgstr "送出機密檢舉"
+
+msgid "Could not search users"
+msgstr "無法搜尋使用者"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "最多三個檔案，每個最大 8 MiB。"
+
+msgid "The confidential report could not be saved."
+msgstr "無法儲存機密檢舉。"
+
+msgid "Confidential report"
+msgstr "機密檢舉"
+
+msgid "Confidential conversation"
+msgstr "機密對話"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "調查人員可透過此對話溝通，除非啟用聯絡資料分享，否則看不到檢舉人身分。"
+
+msgid "Reporter"
+msgstr "檢舉人"
+
+msgid "Investigator"
+msgstr "調查人員"
+
+msgid "Additional evidence (optional)"
+msgstr "額外證據（選填）"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "最多三個檔案，每個最大 8 MiB；每件檢舉最多十個檔案。"
+
+msgid "Contact shared voluntarily"
+msgstr "已自願分享聯絡資料"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "允許調查人員查看我此檢舉的姓名與電子郵件"
+
+msgid "This confidential report is not available."
+msgstr "此機密檢舉無法使用。"
+
+msgid "Your message could not be saved."
+msgstr "您的訊息無法儲存。"
+
+msgid "Contact sharing could not be updated."
+msgstr "聯絡人分享無法更新。"
+
+msgid "Evidence could not be downloaded."
+msgstr "證據無法下載。"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>填寫表單活動範例：計算身體質量指數</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>年齡</strong></td>            <td width=\"75%\" style=\"\">[25] 歲</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>性別</strong></td>            <td style=\"\" text-align:=\"\">[M]（M 或 F）</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>體重</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>身高</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>身體質量指數</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =體重／身高<sup>2</sup>（參見<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> 維基百科文章</a>）</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>填寫表單活動範例：計算身體質量指數</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>年齡</strong></td>            <td width=\"75%\" style=\"\">[25] 歲</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>性別</strong></td>            <td style=\"\" text-align:=\"\">[M]（M 或 F）</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>體重</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>身高</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>身體質量指數</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =體重／身高<sup>2</sup>（參見<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> 維基百科文章</a>）</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "在報表中隱藏 IP 位址"
+
+msgid "Course settings policies"
+msgstr "課程設定政策"
+
+msgid "Academic transcripts"
+msgstr "學業成績單"
+
+msgid "Transcript program title"
+msgstr "成績單學程名稱"
+
+msgid "Transcript course code"
+msgstr "成績單課程代碼"
+
+msgid "Transcript course hours field"
+msgstr "成績單課程時數欄位"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "成績單已完成時數即為應修時數"
+
+msgid "Transcript student number field"
+msgstr "成績單學號欄位"
+
+msgid "Transcript address fields"
+msgstr "成績單地址欄位"
+
+msgid "Transcript grading scale"
+msgstr "成績單等第量表"
+
+msgid "Transcript GPA note"
+msgstr "成績單 GPA 說明"
+
+msgid "Transcript signatory name"
+msgstr "成績單簽署人姓名"
+
+msgid "Transcript signatory title"
+msgstr "成績單簽署人職稱"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "啟用已簽署證書及可選的 Sepolia 測試網錨定"
+
+msgid "Show thread replies only after participating"
+msgstr "僅在參與後顯示討論串回覆"
+
+msgid "Show the forum category description in threads"
+msgstr "在討論串中顯示論壇類別說明"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "論壇參與設定可由課程變更"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "論壇討論串顯示的最大文章數"
+
+msgid "Posts required to complete a forum thread"
+msgstr "完成論壇討論串所需的文章數"
+
+msgid "Track e-mail openings"
+msgstr "追蹤電子郵件開啟"
+
+msgid "Allow e-mail replies to messages"
+msgstr "允許以電子郵件回覆訊息"
+
+msgid "Inbound e-mail address"
+msgstr "內送電子郵件地址"
+
+msgid "Inbound mailbox DSN"
+msgstr "內送信箱 DSN"
+
+msgid "Remember me duration (days)"
+msgstr "記住我持續時間（天）"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "啟用 MCP 以外的 OAuth 動態用戶端註冊"
+
+msgid "Enable confidential welfare reporting"
+msgstr "啟用機密福祉通報"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "啟動調查所需的最少不同通報人數"
+
+msgid "Allow confidential evidence attachments"
+msgstr "允許機密證據附件"
+
+msgid "Show confidential investigation notifications"
+msgstr "顯示機密調查通知"
+
+msgid "Enable support chatbot"
+msgstr "啟用支援聊天機器人"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "選擇自動標示詞彙表詞條的位置：文件、測驗與學習路徑。"
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "在視覺化報表與報表匯出中隱藏 IP 位址。IP 位址仍會儲存，並可透過授權的個人資料程序存取。"
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "平台預設值與課程編輯權限；於「課程設定」中管理。"
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "讓使用者下載其已完成課程的非正式成績單，並讓管理員、期程管理員與人力資源主管為其所管理的使用者核發已簽署的正式成績單。簽名圖像可從使用者的成績單頁面上傳。"
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "列印於每份成績單上的學程名稱，例如本平台所準備的學位名稱。"
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "成績單課程代碼欄所使用的課程欄位：課程代碼或系所名稱。"
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "存放課程時數的課程額外欄位變數。留空則使用課程時長。"
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "將課程應修時數列印為學習者已完成時數。停用時，已完成時數為學習者在課程中所花費的時間。"
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "存放列印於成績單上學號的使用者額外欄位變數。留空則不列印。"
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "以逗號分隔的使用者額外欄位變數，列印於成績單使用者地址之後，例如城市、州／省與郵遞區號。"
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "等第字母的 JSON 清單，由最高最低分數往下：每項包含最低分數百分比（min）、字母，以及用於計算 GPA 的等第點數。"
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "GPA 計算方式說明，列印於成績單 GPA 下方。"
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "簽署正式成績單的學校主管姓名。"
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "簽署正式成績單的學校主管職稱。"
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "需明確的擁有者同意與管理員手動操作。鏈上僅傳送 SHA-256 指紋。"
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "學習者在自行於討論串發文之前，只能看到該討論串的第一則貼文。管理員、教師、教練與小組導師則一律可看到所有貼文。"
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "在每個討論串頂端顯示論壇類別的標題與簡短說明，並提供連結以閱讀完整說明。"
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "啟用後，教師可在課程設定的論壇區段自行選擇：是否在學習者發文前隱藏討論串回覆、是否在討論串中顯示類別說明，以及參與進度條預期的貼文數量，而不跟隨平台設定。"
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "對非平台管理員的所有使用者（含教師）以及學習路徑中的所有人，每個論壇討論串僅顯示此數量的貼文。在討論串與巢狀檢視中，此限制套用於每則貼文的回覆。貼文依檢視順序保留：最前面的貼文，或在學習路徑中最新的貼文（最新貼文優先）。設為 0 則顯示所有貼文。"
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "在每個論壇討論串向學習者顯示進度條，當其在該討論串發文達此數量時即達 100%。待審核的貼文亦計入。設為 0 則隱藏進度條。"
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "在訊息通知電子郵件中加入小型追蹤圖片，並記錄其被請求的時間。這僅表示郵件可能已被開啟，並不能證明已被閱讀。"
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "允許直接訊息通知的收件者以電子郵件回覆。傳入郵件必須由郵件基礎設施轉送至 Chamilo 的 inbound-mail 指令。"
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "用於回覆路由的基底位址，例如 replies@example.com。Chamilo 會以 plus addressing 加入唯一收件人權杖。"
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "用於收取傳入回覆的信箱連線，例如 imaps://user:password@imap.example.com:993/INBOX。憑證中的保留字元請以 URL 編碼。"
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "選取「記住我」時，使用者保持登入的天數。設為 0 則停用。需使用 HTTPS。允許範圍：0 至 90。一般工作階段逾時另於 PHP/Symfony 設定。"
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "允許動態用戶端註冊請求 Chamilo OAuth 資源伺服器已註冊的任何範圍。停用時，自行註冊仍僅限於 MCP。資源存取一律另由各用戶端允許的資源清單限制。"
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "啟用機密事件通報。此模組需要受保護的加密金鑰與調查人員權限。"
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "須有 2 至 10 位不同通報者通報同一使用者後，案件才會對調查人員可見。"
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "允許圖片、音訊與短影片證據。停用後既有附件仍可讀取。"
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "顯示符合資格調查的內部提示。不會發送電子郵件或外部通知。"
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "在聊天面板顯示決策樹聊天機器人，可引導使用者前往 "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "允許教師在課程中建立並版本管理 AI 輔助的教育應用程式。"
+
+msgid "Department name"
+msgstr "部門名稱"
+
+msgid "Documents and exercise"
+msgstr "文件與測驗"
+
+msgid "Documents and learning path"
+msgstr "文件與學習路徑"
+
+msgid "Documents, exercise and learning path"
+msgstr "文件、測驗與學習路徑"
+
+msgid "session"
+msgstr "期別"
+
+msgid "course"
+msgstr "課程"
+
+msgid "You have been enrolled in %s"
+msgstr "您已註冊加入 %s"
 

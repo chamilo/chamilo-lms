@@ -346,7 +346,7 @@ msgid "Sincerely"
 msgstr "S spoštovanjem"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr "Primer formule: sqrt( [x] \/ [y] ) * ( e ^ ( ln(pi) ) )"
+msgstr "Primer formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
 msgstr "Obseg spremenljivk območja"
@@ -28784,6 +28784,9 @@ msgstr "Trenutni uporabnik ni najden."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Pozdravljeni %s,<br><br>registrirani ste na %s.<br>Svojo račun lahko dostopate <a href=\"%s\">tukaj</a>.<br><br>Vaši prijavni podatki so:<br>Uporabniško ime: <strong>%s</strong><br>Geslo: <strong>%s</strong><br><br>Lep pozdrav,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Pozdravljeni %s,<br><br>Registrirani ste na %s.<br>Uporabniško ime: <strong>%s</strong><br><br>Kliknite spodnjo povezavo, da nastavite geslo in dostopate do svojega računa:<br><a href=\"%s\">Nastavite geslo</a><br><br>Lep pozdrav,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Registrirani ste na %s"
 
@@ -41587,4 +41590,1616 @@ msgstr "Zgodovina migracij je zabeležena"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s je prisoten v korenu projekta: izbrišite ga, da zaprete končne točke nadgradnje"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Za to vajo ste pridobili potrdilo"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Pred dostopom do te učne poti morate zaključiti učno pot \"%s\"."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "Ali ste prepričani, da želite to datoteko dokončno izbrisati?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "Ali ste prepričani, da želite to datoteko odklopiti od izbranega predmeta?"
+
+msgid "Attach this file to another course"
+msgstr "Pripni to datoteko k drugemu predmetu"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Pripni k izbranim predmetom (skrito)"
+
+msgid "Course(s):"
+msgstr "Predmet(i):"
+
+msgid "Delete definitively"
+msgstr "Dokončno izbriši"
+
+msgid "Detach from this course"
+msgstr "Odklopi od tega predmeta"
+
+msgid "File actions"
+msgstr "Dejanja datoteke"
+
+msgid "File Information"
+msgstr "Podatki o datoteki"
+
+msgid "File Link:"
+msgstr "Povezava do datoteke:"
+
+msgid "File Path:"
+msgstr "Pot datoteke:"
+
+msgid "Filter courses..."
+msgstr "Filtriraj predmete..."
+
+msgid "MIME Type:"
+msgstr "Vrsta MIME:"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "No results found."
+msgstr "Ni rezultatov."
+
+msgid "Original Name"
+msgstr "Izvirno ime"
+
+msgid "Original Name:"
+msgstr "Izvirno ime:"
+
+msgid "Orphan"
+msgstr "Osirotela"
+
+msgid "Resource File ID:"
+msgstr "ID datoteke vira:"
+
+msgid "Resource Node ID:"
+msgstr "ID vozlišča vira:"
+
+msgid "Search..."
+msgstr "Iskanje..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Če želite to datoteko odklopiti od določenega predmeta, kliknite ikono \"×\" na ustrezni oznaki predmeta zgoraj."
+
+msgid "User:"
+msgstr "Uporabnik:"
+
+msgid "View file information"
+msgstr "Prikaži podatke o datoteki"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "To datoteko lahko pripnete k enemu ali več predmetom (skrito v korenu dokumentov). Če datoteka ni več v uporabi in postane osirotela, jo lahko tudi dokončno izbrišete."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Izberete lahko enega ali več predmetov (uporabite Ctrl/Cmd + klik)."
+
+msgid "bytes"
+msgstr "bajtov"
+
+msgid "Failed to copy:"
+msgstr "Kopiranje ni uspelo:"
+
+msgid "Missing resource file identifier."
+msgstr "Manjka identifikator datoteke vira."
+
+msgid "Please select at least one course."
+msgstr "Izberite vsaj en predmet."
+
+msgid "Resource file not found."
+msgstr "Datoteka vira ni bila najdena."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "Datoteka \"%s\" je bila pripeto k %d predmetu(-om): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Nekateri predmeti so bili preskočeni: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Manjka identifikator datoteke ali predmeta."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Ta datoteka vira nima vozlišča vira in je ni mogoče odklopiti."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "Datoteka je bila odklopljena od %d povezave(-z) predmeta."
+
+msgid "This file is not attached to the selected course."
+msgstr "Ta datoteka ni pripeto k izbranemu predmetu."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Ta datoteka je še vedno v uporabi pri vsaj enem viru in je ni mogoče izbrisati."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "Osirotela datoteka in njena fizična vsebina sta bili dokončno izbrisani."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Anketa objavljena. Ustvarjeno: %d. Posodobljeno: %d. Poslanih sporočil: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Pridobljivo"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Te spretnosti ni mogoče pridobiti"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Začetnik"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Togo spoštovanje pravil in navodil brez konteksta; malo situacijske presoje."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Napredni začetnik"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Začne prepoznavati situacijske vidike in vzorce, a še vedno potrebuje smernice."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Kompetenten"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Razvija načrtovanje in miselne modele; prevzema odgovornost za izide, vendar se lahko počuti preobremenjen zaradi kompleksnosti."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Vešč"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Vidi \"celotno sliko\", intuitivno določa prednostne naloge in se uči iz izkušenj."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Strokovnjak"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Intuitivna, tekoča izvedba; opira se na globoko tiho znanje; lahko inovira ali brez napora obvlada nove situacije."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Pomnjenje"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Pridobivanje, priklic ali prepoznavanje relevantnega znanja iz dolgoročnega spomina."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Razumevanje"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Gradnja pomena iz učnih sporočil, vključno z ustnim, pisnim in grafičnim sporazumevanjem. Pokaže razumevanje z interpretacijo, ponazarjanjem, razvrščanjem, povzemanjem, sklepanjem, primerjanjem ali razlaganjem."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Uporaba"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Izvajanje ali uporaba postopka z izvedbo ali implementacijo v dani situaciji. Uporaba znanja ali spretnosti v novih ali konkretnih situacijah."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Analiziranje"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Razčlenitev gradiva na sestavne dele in določitev, kako se deli nanašajo drug na drugega ter na celotno strukturo ali namen. Prepoznavanje motivov, vzrokov ali odnosov."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Vrednotenje"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Oblikovanje sodb na podlagi meril in standardov. Preverjanje, kritika ali utemeljevanje odločitev ali potekov dejanj."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Ustvarjanje"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Združevanje elementov v skladno ali funkcionalno celoto; preureditev elementov v nov vzorec ali strukturo. Izdelava izvirnega dela ali ustvarjanje novih idej."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Sledi"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Dela pod tesnim nadzorom in usmeritvijo. Opravlja rutinske naloge z omejeno presojo. Osredotoča se na sledenje navodilom in osnovno izvedbo."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Pomoč"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Dela pod rutinskim nadzorom. Nudi pomoč drugim, prispeva k skupinskim nalogam in začne prevzemati nekaj pobude znotraj določenih meja."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Dela pod splošnim nadzorom. Uporablja znanje in spretnosti pri nizu rutinskih in nerutinskih dejavnosti. Izvaja nekaj presoje in odločanja."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Dela pod široko usmeritvijo. Omogoča drugim s specialističnim vodenjem, podporo ali storitvami. Prevzema odgovornost za lastno delo in lahko nadzira majhne ekipe ali naloge."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Zagotavljanje in svetovanje"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Dela pod široko usmeritvijo, a z znatno avtonomijo. Zagotavlja, da delo izpolnjuje cilje, in svetuje o kompleksnih zadevah. Pogosto vodi ekipe ali projekte in vpliva na odločitve."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Pobuda in vpliv"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Ima določeno pooblastilo in odgovornost za pomembno področje dela. Sproža dejanja, vpliva na strategijo in politiko na svojem področju ter vodi obsežne projekte ali ekipe."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Določanje strategije, navdihovanje, mobilizacija"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Ima pooblastilo na najvišji organizacijski ravni za glavno področje dela. Določa dolgoročno strategijo, navdihuje in mobilizira druge ter sprejema odločitve, ključne za uspeh organizacije. Vpliva na ravni panoge ali zunaj nje."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Najdaljši čas nedejavnosti za upoštevanje (minute)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Stran tečaja, ki ostane odprta, še naprej pošilja samodejne zahteve. Po tem številu minut brez pravega dejanja uporabnika (odpiranje strani ali elementa, odgovarjanje itd.) se čas, preživet v tečaju, preneha šteti."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Sodelovalni urejevalnik Wiki"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Povezovanje z Etherpadom..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Shranjevanje ustvari novo različico Chamilo Wiki iz trenutne vsebine Etherpada."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Sodelovalnega urejevalnika ni bilo mogoče naložiti."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Omogoči Etherpad za urejanje Wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Uporabi Etherpad kot sodelovalni urejevalnik za obstoječe strani Wiki. Etherpad mora biti izpostavljen na istem izvoru kot Chamilo za varne vdelane seje."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL Etherpada"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "Osnovni URL instance Etherpada, vključno z morebitno potjo povratnega posrednika. Primer: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "API ključ Etherpada"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "API ključ, ki ga Chamilo uporablja za ustvarjanje padov, sej in sinhronizacijo vsebine Wiki. Konfigurirajte Etherpad, da sprejema preverjanje pristnosti z API ključem."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "Privzeto vidnost novih dokumentov lahko spremeni tečaj"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Vidnost, dodeljena novemu dokumentu, mapi ali naloženi datoteki, ko jo učitelj ustvari v tečaju. Učitelji lahko pozneje še vedno spremenijo vidnost vsakega."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Ko je omogočeno, lahko učitelji v nastavitvah tečaja izberejo vidnost, dodeljeno novim dokumentom njihovega tečaja, namesto privzete platforme."
+
+msgid "Default visibility of new learning paths"
+msgstr "Privzeta vidnost novih učnih poti"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "Privzeto vidnost novih učnih poti lahko spremeni tečaj"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Vidnost, dodeljena novi učni poti, ko jo učitelj ustvari v tečaju. Učitelji lahko pozneje še vedno spremenijo vidnost vsake."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Ko je omogočeno, lahko učitelji v nastavitvah tečaja izberejo vidnost, dodeljeno novim učnim potem njihovega tečaja, namesto privzete platforme."
+
+msgid "Default visibility of new tests"
+msgstr "Privzeta vidnost novih testov"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "Privzeto vidnost novih testov lahko spremenite po tečaju"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Vidnost, dodeljena novemu testu, ko ga učitelj ustvari v tečaju. Učitelji lahko vidnost vsakega testa pozneje še vedno spremenijo."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Ko je omogočeno, lahko učitelji v nastavitvah tečaja izberejo vidnost, dodeljeno novim testom njihovega tečaja, namesto privzete nastavitve platforme."
+
+msgid "Default visibility for new learning paths"
+msgstr "Privzeta vidnost za nove učne poti"
+
+msgid "Default visibility for new tests"
+msgstr "Privzeta vidnost za nove teste"
+
+msgid "Following"
+msgstr "Sledenje"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Prejmi e-pošto, ko učenec komentira oddajo te naloge"
+
+msgid "Payment history"
+msgstr "Zgodovina plačil"
+
+msgid "No payments yet"
+msgstr "Še ni plačil"
+
+msgid "Cancel service"
+msgstr "Prekliči storitev"
+
+msgid "Official transcript"
+msgstr "Uradni izpis ocen"
+
+msgid "Unofficial transcript"
+msgstr "Neuradni izpis ocen"
+
+msgid "Student name"
+msgstr "Ime študenta"
+
+msgid "Student number"
+msgstr "Številka študenta"
+
+msgid "Program title"
+msgstr "Naziv programa"
+
+msgid "Required hours"
+msgstr "Zahtevane ure"
+
+msgid "Completion date"
+msgstr "Datum zaključka"
+
+msgid "Hours completed"
+msgstr "Opravljene ure"
+
+msgid "Final grade"
+msgstr "Končna ocena"
+
+msgid "Grade"
+msgstr "Ocena"
+
+msgid "No completed course yet."
+msgstr "Še ni zaključenega tečaja."
+
+msgid "Grading scale"
+msgstr "Ocenjevalna lestvica"
+
+msgid "Signature of school official"
+msgstr "Podpis uradne osebe šole"
+
+msgid "School official"
+msgstr "Uradna oseba šole"
+
+msgid "Official's title"
+msgstr "Naziv uradne osebe"
+
+msgid "Verify this transcript at"
+msgstr "Preverite ta izpis ocen na"
+
+msgid "Verification code"
+msgstr "Koda za preverjanje"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Ta neuradni izpis ocen ni podpisan. Za uradni izpis ocen se obrnite na skrbnika."
+
+msgid "Transcript verification"
+msgstr "Preverjanje izpisa ocen"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Preverite, da je ta uradni izpis ocen izdala in podpisala institucija, da ni bil spremenjen in da ni preklican."
+
+msgid "Valid"
+msgstr "Veljavno"
+
+msgid "Invalid signature"
+msgstr "Neveljaven podpis"
+
+msgid "Transcript not found"
+msgstr "Izpis ocen ni najden"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "Podpis institucije je veljaven in ta izpis ocen ni preklican."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Tega izpisa ocen ni mogoče preveriti kot veljavnega. Podrobnosti niso prikazane."
+
+msgid "Transcript details"
+msgstr "Podrobnosti izpisa ocen"
+
+msgid "Institution"
+msgstr "Institucija"
+
+msgid "Issued on"
+msgstr "Izdano dne"
+
+msgid "Download verification JSON"
+msgstr "Prenesi JSON za preverjanje"
+
+msgid "Transcript"
+msgstr "Izpis ocen"
+
+msgid "My confidential reports"
+msgstr "Moja zaupna poročila"
+
+msgid "My transcript"
+msgstr "Moj izpis ocen"
+
+msgid "Confidential investigations"
+msgstr "Zaupne preiskave"
+
+msgid "Floor plan"
+msgstr "Tloris"
+
+msgid "Click a highlighted room to select it"
+msgstr "Kliknite osvetljen prostor, da ga izberete"
+
+msgid "Select room"
+msgstr "Izberite prostor"
+
+msgid "Room on floor plan"
+msgstr "Prostor na tlorisu"
+
+msgid "Select a branch first"
+msgstr "Najprej izberite podružnico"
+
+msgid "The branch has no attached floor plan"
+msgstr "Podružnica nima priloženega tlorisa"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Uporabite orodje za poligon, da orisete prostor; z Uredi premaknite vogale"
+
+msgid "Save room area"
+msgstr "Shrani območje prostora"
+
+msgid "Clear room area"
+msgstr "Počisti območje prostora"
+
+msgid "Save the room form to persist the area"
+msgstr "Shranite obrazec prostora, da ohranite območje"
+
+msgid "Floor plan unavailable"
+msgstr "Tloris ni na voljo"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Točke zemljevida prostora morajo biti znotraj tlorisa"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "Ali ste prepričani, da želite počistiti območje prostora?"
+
+msgid "View room on floor plan"
+msgstr "Prikaži prostor na tlorisu"
+
+msgid "No floor plan available"
+msgstr "Tloris ni na voljo"
+
+msgid "This is an assignment by groups"
+msgstr "To je naloga po skupinah"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Naložite tloris v formatu PNG, JPEG ali varen statični SVG ali izberite obstoječo sliko iz Dokumentov."
+
+msgid "Upload floor plan"
+msgstr "Naloži tloris"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG ali statični SVG, največ 10 MB"
+
+msgid "Search images by name"
+msgstr "Iskanje slik po imenu"
+
+msgid "Image name"
+msgstr "Ime slike"
+
+msgid "Select an image"
+msgstr "Izberite sliko"
+
+msgid "Change floor plan"
+msgstr "Spremeni tloris"
+
+msgid "Attach floor plan"
+msgstr "Pripni tloris"
+
+msgid "No matching images found in Documents."
+msgstr "V Dokumentih ni bilo najdenih ujemajočih se slik."
+
+msgid "Current floor plan"
+msgstr "Trenutni tloris"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Spremembe tlorisa se shranjujejo samodejno."
+
+msgid "Remove floor plan"
+msgstr "Odstrani tloris"
+
+msgid "Cannot load images"
+msgstr "Slik ni mogoče naložiti"
+
+msgid "Floor plan saved"
+msgstr "Tloris shranjen"
+
+msgid "Cannot attach floor plan"
+msgstr "Tlorisa ni mogoče pripeti"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Podprte so samo slike PNG/JPEG in varni statični SVG do 10 MB."
+
+msgid "Cannot upload floor plan"
+msgstr "Tlorisa ni mogoče naložiti"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "Ali ste prepričani, da želite odstraniti tloris?"
+
+msgid "Floor plan removed"
+msgstr "Tloris odstranjen"
+
+msgid "Cannot remove floor plan"
+msgstr "Tlorisa ni mogoče odstraniti"
+
+msgid "Support bot"
+msgstr "Podporni bot"
+
+msgid "Connected"
+msgstr "Povezano"
+
+msgid "Not connected"
+msgstr "Ni povezano"
+
+msgid "View ticket"
+msgstr "Prikaži zahtevek"
+
+msgid "Start a new conversation"
+msgstr "Začni nov pogovor"
+
+msgid "Video call"
+msgstr "Videoklic"
+
+msgid "Incoming video call"
+msgstr "Dohodni videoklic"
+
+msgid "Decline"
+msgstr "Zavrni"
+
+msgid "Mute microphone"
+msgstr "Izklopi mikrofon"
+
+msgid "Unmute microphone"
+msgstr "Vklopi mikrofon"
+
+msgid "Turn camera off"
+msgstr "Izklopi kamero"
+
+msgid "Turn camera on"
+msgstr "Vklopi kamero"
+
+msgid "Hang up"
+msgstr "Prekini klic"
+
+msgid "Calling..."
+msgstr "Klicanje..."
+
+msgid "Connecting..."
+msgstr "Povezovanje..."
+
+msgid "Your contact is busy."
+msgstr "Vaš stik je zaseden."
+
+msgid "Your contact did not answer the call."
+msgstr "Vaš stik ni odgovoril na klic."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "Vaš stik ni mogel dostopati do kamere ali mikrofona."
+
+msgid "Your contact could not prepare the video call."
+msgstr "Vaš stik ni mogel pripraviti videoklica."
+
+msgid "Your contact refused the call."
+msgstr "Vaš stik je zavrnil klic."
+
+msgid "The call timed out."
+msgstr "Klic je potekel."
+
+msgid "Your contact cancelled the call."
+msgstr "Vaš stik je preklical klic."
+
+msgid "The video connection was lost."
+msgstr "Videopovezava je bila prekinjena."
+
+msgid "Your contact could not establish the video connection."
+msgstr "Vaš stik ni mogel vzpostaviti videopovezave."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "Vaš stik ni mogel dokončati nastavitve videoklica."
+
+msgid "Your contact hung up."
+msgstr "Vaš stik je odložil."
+
+msgid "Video call could not be started"
+msgstr "Videoklica ni bilo mogoče začeti"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Dovoljenje za kamero ali mikrofon je bilo zavrnjeno."
+
+msgid "No camera or microphone was found."
+msgstr "Kamera ali mikrofon ni bil najden."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "Kamera ali mikrofon je že v uporabi ali ni na voljo."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "Kamera ali mikrofon ne podpira zahtevanih nastavitev."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Dostopa do kamere ali mikrofona ni bilo mogoče pridobiti."
+
+msgid "The video call could not be prepared."
+msgstr "Videoklica ni bilo mogoče pripraviti."
+
+msgid "The video call request could not be sent."
+msgstr "Zahteve za videoklic ni bilo mogoče poslati."
+
+msgid "The incoming video call could not be processed."
+msgstr "Dohodnega videoklica ni bilo mogoče obdelati."
+
+msgid "The video call answer could not be prepared."
+msgstr "Odgovora na videoklic ni bilo mogoče pripraviti."
+
+msgid "The video call answer could not be sent."
+msgstr "Odgovora na videoklic ni bilo mogoče poslati."
+
+msgid "The video call answer could not be processed."
+msgstr "Odgovora na videoklic ni bilo mogoče obdelati."
+
+msgid "The video connection failed"
+msgstr "Videopovezava ni uspela"
+
+msgid "The video connection could not be established."
+msgstr "Videopovezave ni bilo mogoče vzpostaviti."
+
+msgid "No answer was received."
+msgstr "Odgovor ni bil prejet."
+
+msgid "You refused the call."
+msgstr "Klic ste zavrnili."
+
+msgid "You cancelled the call."
+msgstr "Klic ste preklicali."
+
+msgid "You hung up."
+msgstr "Odložili ste."
+
+msgid "You missed the call."
+msgstr "Klic ste zamudili."
+
+msgid "Support bot is currently unavailable."
+msgstr "Podporni bot trenutno ni na voljo."
+
+msgid "A support ticket has been created."
+msgstr "Ustvarjena je bila podporna vstopnica."
+
+msgid "Conversation ended."
+msgstr "Pogovor je končan."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "Podporni bot tega pogovora ni mogel nadaljevati. Poskusite znova."
+
+msgid "Add your first term glossary to this course"
+msgstr "Dodajte prvi izraz v slovar tega predmeta"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "Ali ste prepričani, da želite izbrisati to predlogo ankete?"
+
+msgid "The survey template has been deleted."
+msgstr "Predloga ankete je bila izbrisana."
+
+msgid "Please select a course."
+msgstr "Izberite predmet."
+
+msgid "Please select a session for this course."
+msgstr "Izberite sejo za ta predmet."
+
+msgid "The survey has been created from the template."
+msgstr "Anketa je bila ustvarjena iz predloge."
+
+msgid "Survey templates"
+msgstr "Predloge anket"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Ustvarite predloge anket za ponovno uporabo za učitelje in jih dodelite neposredno predmetu ali seji."
+
+msgid "Subtitle"
+msgstr "Podnaslov"
+
+msgid "Assign to course"
+msgstr "Dodeli predmetu"
+
+msgid "Assign template to course"
+msgstr "Dodeli predlogo predmetu"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Pustite sejo prazno, da anketo ustvarite neposredno v predmetu."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Ta predmet je na tem portalu na voljo prek seje, zato je seja obvezna."
+
+msgid "Survey template questions"
+msgstr "Vprašanja predloge ankete"
+
+msgid "Back to survey templates"
+msgstr "Nazaj na predloge anket"
+
+msgid "Could not load survey template"
+msgstr "Predloge ankete ni bilo mogoče naložiti"
+
+msgid "Could not load survey template questions"
+msgstr "Vprašanj predloge ankete ni bilo mogoče naložiti"
+
+msgid "Could not save survey template question"
+msgstr "Vprašanja predloge ankete ni bilo mogoče shraniti"
+
+msgid "Could not delete survey template question"
+msgstr "Vprašanja predloge ankete ni bilo mogoče izbrisati"
+
+msgid "Could not move survey template question"
+msgstr "Vprašanja predloge ankete ni bilo mogoče premakniti"
+
+msgid "Could not copy survey template question"
+msgstr "Vprašanja predloge ankete ni bilo mogoče kopirati"
+
+msgid "The survey template has been saved."
+msgstr "Predloga ankete je bila shranjena."
+
+msgid "Edit survey template"
+msgstr "Uredi predlogo ankete"
+
+msgid "Create survey template"
+msgstr "Ustvari predlogo ankete"
+
+msgid "The survey template title is required."
+msgstr "Naslov predloge ankete je obvezen."
+
+msgid "Visible as template"
+msgstr "Vidno kot predloga"
+
+msgid "Create satisfaction survey"
+msgstr "Ustvari anketo o zadovoljstvu"
+
+msgid "Training satisfaction survey"
+msgstr "Anketa o zadovoljstvu z usposabljanjem"
+
+msgid "Could not create satisfaction survey"
+msgstr "Ankete o zadovoljstvu ni bilo mogoče ustvariti"
+
+msgid "Use template"
+msgstr "Uporabi predlogo"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Ustvari to anketo iz predloge za večkratno uporabo, ki jo je pripravil skrbnik."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Rezultati skriti pred učiteljem/tutorjem"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Učitelji in tutorji lahko še vedno vidijo število odgovorov in pošiljajo opomnike, vendar ne morejo odpreti ali izvoziti rezultatov ankete."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Predloga je uporabljena. Preglejte nastavitve ankete in shranite, da jo ustvarite."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Rezultati ankete so skriti pred učitelji in tutorji."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Na strani z vabili lahko še vedno vidite število odgovorov in pošiljate opomnike."
+
+msgid "Payment method"
+msgstr "Način plačila"
+
+msgid "Preview mode"
+msgstr "Način predogleda"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "Napredek in ocena se v načinu predogleda ne shranjujeta."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Te povezave ni mogoče prikazati znotraj učne poti."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Odprite jo v novem zavihku, da si ogledate stran."
+
+msgid "Report a problem with this question"
+msgstr "Prijavi težavo s tem vprašanjem"
+
+msgid "Your report was sent to the teacher."
+msgstr "Vaše poročilo je bilo poslano učitelju."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Opišite napako ali težavo, ki ste jo našli. Vaše poročilo bo poslano učitelju."
+
+msgid "A comment is required."
+msgstr "Komentar je obvezen."
+
+msgid "Could not send the report."
+msgstr "Poročila ni bilo mogoče poslati."
+
+msgid "Learner reports"
+msgstr "Poročila udeležencev"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Za to vprašanje ni bilo predloženih poročil udeležencev."
+
+msgid "View attempt"
+msgstr "Ogled poskusa"
+
+msgid "Could not load learner reports."
+msgstr "Poročil udeležencev ni bilo mogoče naložiti."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Dovoli udeležencem prijavo težav pri vprašanjih"
+
+msgid "Skill acquired"
+msgstr "Pridobljena spretnost"
+
+msgid "AI Toolbox"
+msgstr "Orodjarna UI"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Ustvarjajte interaktivne izobraževalne aplikacije z UI in spremljajte napredek udeležencev s SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Objavljenih aplikacij še ni na voljo."
+
+msgid "Interactive applications"
+msgstr "Interaktivne aplikacije"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Ustvarjajte, izboljšujte, objavljajte in pregledujte različice na enem mestu."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Odprite aplikacijo, da nadaljujete od zadnjega napredka."
+
+msgid "Interactive learning application"
+msgstr "Interaktivna učna aplikacija"
+
+msgid "Create an interactive learning app"
+msgstr "Ustvari interaktivno učno aplikacijo"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Opišite dejavnost. Chamilo bo ustvaril različicirano SCORM aplikacijo s sledenjem napredka in ocene."
+
+msgid "Idea"
+msgstr "Ideja"
+
+msgid "Application"
+msgstr "Aplikacija"
+
+msgid "What should the application do?"
+msgstr "Kaj naj aplikacija počne?"
+
+msgid "How it works"
+msgstr "Kako deluje"
+
+msgid "AI generation"
+msgstr "Ustvarjanje z UI"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "Aplikacija se ustvari iz vaših navodil in shrani kot različica 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "Napredek udeleženca, ocena in podatki za nadaljevanje se sporočajo v Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Prihodnje izboljšave ustvarijo nove različice, ne da bi izbrisale prejšnje."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Vključite učni cilj, pravila, ravni, točkovanje in kaj naj se zgodi, ko udeleženec konča."
+
+msgid "You are not allowed to create content in this context."
+msgstr "V tem kontekstu nimate dovoljenja za ustvarjanje vsebine."
+
+msgid "The application was generated successfully."
+msgstr "Aplikacija je bila uspešno ustvarjena."
+
+msgid "Open in student view"
+msgstr "Odpri v pogledu študenta"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Ustvarite aplikacijo za omogočanje predogleda in objave."
+
+msgid "Improve with AI"
+msgstr "Izboljšaj z UI"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Opišite spremembo. Ustvarjena bo nova različica, prejšnje pa bodo ostale na voljo."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Opišite celotno interaktivno dejavnost, ki jo želite ustvariti."
+
+msgid "What should be improved?"
+msgstr "Kaj naj se izboljša?"
+
+msgid "Generate new version"
+msgstr "Ustvari novo različico"
+
+msgid "Version history"
+msgstr "Zgodovina različic"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Predogled, prenos ali obnovitev katere koli ustvarjene različice."
+
+msgid "A new version was generated."
+msgstr "Ustvarjena je bila nova različica."
+
+msgid "Version restored"
+msgstr "Različica obnovljena"
+
+msgid "The support bot tree has been published."
+msgstr "Drevo podpornega bota je bilo objavljeno."
+
+msgid "The support bot tree has been archived."
+msgstr "Drevo podpornega bota je bilo arhivirano."
+
+msgid "The support bot tree has been duplicated."
+msgstr "Drevo podpornega bota je bilo podvojeno."
+
+msgid "The support bot tree has been deleted."
+msgstr "Drevo podpornega bota je bilo izbrisano."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "Ali ste prepričani, da želite izbrisati to drevo podpornega bota?"
+
+msgid "The support bot tree has been imported."
+msgstr "Drevo podpornega bota je bilo uvoženo."
+
+msgid "Create support bot tree"
+msgstr "Ustvari drevo podpornega bota"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Zgradite fiksno odločitveno drevo, ki uporabnike vodi skozi podporna vprašanja in se lahko eskalira v zahtevke."
+
+msgid "Portal scope"
+msgstr "Obseg portala"
+
+msgid "Duplicate"
+msgstr "Podvoji"
+
+msgid "Archive"
+msgstr "Arhiviraj"
+
+msgid "View conversations"
+msgstr "Prikaži pogovore"
+
+msgid "Import support bot tree"
+msgstr "Uvozi drevo podpornega bota"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Uvozite izvoz JSON ali odločitveno drevo CSV. Uvoženo drevo se vedno ustvari kot nov osnutek."
+
+msgid "Resolved"
+msgstr "Rešeno"
+
+msgid "Escalated"
+msgstr "Eskalirano"
+
+msgid "Abandoned"
+msgstr "Opusceno"
+
+msgid "Support bot conversations"
+msgstr "Pogovori podpornega bota"
+
+msgid "Outcome"
+msgstr "Izid"
+
+msgid "Started at"
+msgstr "Začeto ob"
+
+msgid "Ended at"
+msgstr "Končano ob"
+
+msgid "View conversation"
+msgstr "Prikaži pogovor"
+
+msgid "Go to node"
+msgstr "Pojdi na vozlišče"
+
+msgid "Create support ticket"
+msgstr "Ustvari podporni zahtevek"
+
+msgid "End conversation"
+msgstr "Končaj pogovor"
+
+msgid "Node"
+msgstr "Vozlišče"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Drevo podpornega bota zahteva vsaj eno vozlišče."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "Ali ste prepričani, da želite izbrisati to vozlišče? Povezave nanj bodo počiščene."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Vsako vozlišče podpornega bota zahteva vsaj eno možnost."
+
+msgid "The support bot tree title is required."
+msgstr "Naslov drevesa podpornega bota je obvezen."
+
+msgid "A support bot entry node is required."
+msgstr "Zahtevano je vstopno vozlišče podpornega bota."
+
+msgid "Every support bot node requires content."
+msgstr "Vsako vozlišče podpornega bota zahteva vsebino."
+
+msgid "Every support bot option requires a label."
+msgstr "Vsaka možnost podpornega bota zahteva oznako."
+
+msgid "Select a target node for every go-to option."
+msgstr "Za vsako možnost »pojdi na« izberite ciljno vozlišče."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Za vsako možnost povezave vnesite relativni URL."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Za vsako možnost eskalacije izberite kategorijo zahtevka."
+
+msgid "The support bot tree has been saved."
+msgstr "Drevo podpornega bota je bilo shranjeno."
+
+msgid "Edit support bot tree"
+msgstr "Uredi drevo podpornega bota"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Objavljene in arhivirane različice podpornega bota so samo za branje. Podvojite to drevo s seznama, da uredite novo osnutkovno različico."
+
+msgid "Default ticket project"
+msgstr "Privzeti projekt zahtevkov"
+
+msgid "Decision tree rules"
+msgstr "Pravila odločitvenega drevesa"
+
+msgid "Every node must contain at least one option."
+msgstr "Vsako vozlišče mora vsebovati vsaj eno možnost."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Končno vozlišče mora zaključiti pogovor ali ustvariti podporni zahtevek."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Povezave »pojdi na« v različici v1 ne smejo ustvarjati ciklov."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Zunanji URL-ji v različici v1 niso dovoljeni; dejanja povezav morajo uporabljati relativno pot Chamilo."
+
+msgid "Nodes"
+msgstr "Vozlišča"
+
+msgid "Add node"
+msgstr "Dodaj vozlišče"
+
+msgid "Entry node"
+msgstr "Vstopno vozlišče"
+
+msgid "Set as entry node"
+msgstr "Nastavi kot vstopno vozlišče"
+
+msgid "Target node"
+msgstr "Ciljno vozlišče"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Uporabite relativno pot Chamilo, na primer /tickets."
+
+msgid "Ticket category"
+msgstr "Kategorija zahtevka"
+
+msgid "Select a default ticket project first."
+msgstr "Najprej izberite privzeti projekt zahtevkov."
+
+msgid "Closing message"
+msgstr "Zaključno sporočilo"
+
+msgid "Select a node to edit it."
+msgstr "Izberite vozlišče za urejanje."
+
+msgid "Support bot conversation"
+msgstr "Pogovor podpornega bota"
+
+msgid "Transcript of %s"
+msgstr "Prepis %s"
+
+msgid "Download unofficial transcript"
+msgstr "Prenesi neuradni prepis"
+
+msgid "Issue official transcript"
+msgstr "Izdaj uradni prepis"
+
+msgid "Official transcripts"
+msgstr "Uradni prepisi"
+
+msgid "No official transcript has been issued yet."
+msgstr "Uradni prepis še ni bil izdan."
+
+msgid "Issued by"
+msgstr "Izdal"
+
+msgid "Verify"
+msgstr "Preveri"
+
+msgid "Signature of official transcripts"
+msgstr "Podpis uradnih prepisov"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Ta slika je natisnjena na uradnih prepisih tega portala, nad imenom in nazivom podpisnika, nastavljenima v nastavitvah potrdila."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "Izdati podpisani uradni prepis s tečaji in ocenami, navedenimi na tej strani? Preverljiv bo spletno, dokler ni preklican."
+
+msgid "Official transcript issued"
+msgstr "Uradni prepis izdan"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "Preklicati ta uradni prepis? Stran za preverjanje ga bo nato prikazala kot preklicanega."
+
+msgid "Official transcript revoked"
+msgstr "Uradni prepis preklican"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Najprej izberite sliko PNG ali JPEG."
+
+msgid "Signed credential"
+msgstr "Podpisana poverilnica"
+
+msgid "Issue signed credential"
+msgstr "Izdaj podpisano poverilnico"
+
+msgid "Verify credential"
+msgstr "Preveri poverilnico"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Zasidraj na testnem omrežju Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Potrdi obstoječo transakcijo Sepolia"
+
+msgid "Revoke signed credential"
+msgstr "Prekliči podpisano poverilnico"
+
+msgid "Delete certificate"
+msgstr "Izbriši potrdilo"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Potrdi obstoječo transakcijo Sepolia"
+
+msgid "Sepolia transaction hash"
+msgstr "Zgoščena vrednost transakcije Sepolia"
+
+msgid "Verify transaction"
+msgstr "Preveri transakcijo"
+
+msgid "Anchored"
+msgstr "Zasidrano"
+
+msgid "Issued"
+msgstr "Izdano"
+
+msgid "Not issued"
+msgstr "Ni izdano"
+
+msgid "Consent required"
+msgstr "Potrebno je soglasje"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Transakcija Sepolia potrjena in preverjena"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "Denarnica testnega omrežja Sepolia vas bo pozvala k podpisu transakcije. Zasidran bo samo prstni odtis potrdila. Nadaljujem?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "Preklicati to podpisano poverilnico? Vsaka transakcija v verigi blokov ostane trajna, vendar bo stran za preverjanje sporočila preklic."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "Izdati podpisano poverilnico potrdila za tega udeleženca? S tem postanejo odobreni osebni podatki preverljivi z zasebno povezavo."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Za Sepolio je potrebna brskalniška denarnica, združljiva z EVM."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "V denarnici izberite testno omrežje Sepolia (ID verige 11155111)."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Neveljaven naslov denarnice ali prstni odtis potrdila."
+
+msgid "Transaction pending"
+msgstr "Transakcija v teku"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Pozneje uporabite Potrdi obstoječo transakcijo Sepolia."
+
+msgid "Signed credential issued"
+msgstr "Podpisano poverilnico izdano"
+
+msgid "Credential revoked"
+msgstr "Poverilnica preklicana"
+
+msgid "Transaction hash"
+msgstr "Zgoščena vrednost transakcije"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "Soglasje za objavo omogoča skrbniku izdajo podpisane poverilnice potrdila in po želji zasidranje njenega prstnega odtisa SHA-256 v testnem omrežju Sepolia. Na verigo se ne pošlje ime ali osebni podatki. Soglasje lahko kadar koli umaknete."
+
+msgid "Publication consent"
+msgstr "Soglasje za objavo"
+
+msgid "Not approved"
+msgstr "Ni odobreno"
+
+msgid "Withdraw consent"
+msgstr "Umik soglasja"
+
+msgid "Approve publication"
+msgstr "Odobri objavo"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Pooblaščam podpisano, javno preverljivo poverilnico z mojim imenom, tečajem, oceno in datumom izdaje. Skrbnik lahko na testnem omrežju Sepolia objavi tudi samo njen prstni odtis SHA-256. Prstni odtis je trajen, tudi če ga pozneje umaknem. Nadaljujem?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "Umik odobritve objave za to potrdilo?"
+
+msgid "Publication approval recorded"
+msgstr "Odobritev objave zabeležena"
+
+msgid "Publication approval withdrawn"
+msgstr "Odobritev objave umaknjena"
+
+msgid "Read more"
+msgstr "Preberi več"
+
+msgid "Participation: %s of %s posts"
+msgstr "Sodelovanje: %s od %s objav"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Objavite svoj prispevek, da boste videli odgovore drugih udeležencev."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Upravičena poročila lahko pregledajo samo pooblaščeni preiskovalci. Identitete prijaviteljev so privzeto zaupne."
+
+msgid "New confidential report"
+msgstr "Novo zaupno poročilo"
+
+msgid "Reported user"
+msgstr "Prijavljeni uporabnik"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Na pregled čakajo upravičena zaupna poročila."
+
+msgid "Eligible investigations"
+msgstr "Upravičene preiskave"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Primer se prikaže tukaj šele, ko isto osebo prijavi vsaj %s različnih uporabnikov."
+
+msgid "Distinct reporters"
+msgstr "Različni prijavitelji"
+
+msgid "Reports for selected user"
+msgstr "Poročila za izbranega uporabnika"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "Zaupno poročanje trenutno ni na voljo."
+
+msgid "The investigation could not be loaded."
+msgstr "Preiskave ni bilo mogoče naložiti."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "Vaša identiteta je pred preiskovalci privzeto zaščitena, vendar v besedilu poročila ali prilogah ne navajajte prepoznavnih podatkov. To ni nujna služba."
+
+msgid "Find the user involved"
+msgstr "Poiščite vpletenega uporabnika"
+
+msgid "Name or username"
+msgstr "Ime ali uporabniško ime"
+
+msgid "Describe the situation"
+msgstr "Opišite situacijo"
+
+msgid "Evidence (optional)"
+msgstr "Dokazi (neobvezno)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Do tri datoteke, največ 8 MiB vsaka. Slike, zvok ali kratki videoposnetki."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Strinjam se, da pooblaščeni preiskovalci za to konkretno poročilo vidijo moje ime in e-pošto. To dovoljenje lahko pozneje umaknem."
+
+msgid "Send confidential report"
+msgstr "Pošlji zaupno poročilo"
+
+msgid "Could not search users"
+msgstr "Uporabnikov ni bilo mogoče poiskati"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Do tri datoteke, največ 8 MiB vsaka."
+
+msgid "The confidential report could not be saved."
+msgstr "Zaupnega poročila ni bilo mogoče shraniti."
+
+msgid "Confidential report"
+msgstr "Zaupno poročilo"
+
+msgid "Confidential conversation"
+msgstr "Zaupni pogovor"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Preiskovalci lahko komunicirajo prek tega pogovora, ne da bi videli identiteto prijavitelja, razen če je omogočeno deljenje stika."
+
+msgid "Reporter"
+msgstr "Prijavitelj"
+
+msgid "Investigator"
+msgstr "Preiskovalec"
+
+msgid "Additional evidence (optional)"
+msgstr "Dodatni dokazi (neobvezno)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Do tri datoteke, največ 8 MiB vsaka; deset datotek na poročilo."
+
+msgid "Contact shared voluntarily"
+msgstr "Stik prostovoljno deljen"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Dovoli preiskovalcem, da za to poročilo vidijo moje ime in e-pošto"
+
+msgid "This confidential report is not available."
+msgstr "To zaupno poročilo ni na voljo."
+
+msgid "Your message could not be saved."
+msgstr "Vašega sporočila ni bilo mogoče shraniti."
+
+msgid "Contact sharing could not be updated."
+msgstr "Deljenja stikov ni bilo mogoče posodobiti."
+
+msgid "Evidence could not be downloaded."
+msgstr "Dokazila ni bilo mogoče prenesti."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Primer dejavnosti izpolnjevanja obrazca: izračun indeksa telesne mase</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Starost</strong></td>            <td width=\"75%\" style=\"\">[25] let</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Spol</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ali Ž)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Teža</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Višina</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Indeks telesne mase</strong></td>            <td style=\"vertical-align: top;\">[29] ITM = Teža/Višina<sup>2</sup> (glej <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> članek na Wikipediji</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Primer dejavnosti izpolnjevanja obrazca: izračun indeksa telesne mase</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Starost</strong></td>            <td width=\"75%\" style=\"\">[25] let</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Spol</strong></td>            <td style=\"\" text-align:=\"\">[M] (M ali Ž)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Teža</strong></td>            <td style=\"\" text-align:=\"\">95 kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Višina</strong></td>            <td style=\"vertical-align: top;\">1,81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Indeks telesne mase</strong></td>            <td style=\"vertical-align: top;\">[29] ITM = Teža/Višina<sup>2</sup> (glej <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> članek na Wikipediji</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Skrij IP-naslov v poročilih"
+
+msgid "Course settings policies"
+msgstr "Politike nastavitev predmeta"
+
+msgid "Academic transcripts"
+msgstr "Akademski izpiski"
+
+msgid "Transcript program title"
+msgstr "Naslov programa na izpisku"
+
+msgid "Transcript course code"
+msgstr "Koda predmeta na izpisku"
+
+msgid "Transcript course hours field"
+msgstr "Polje ur predmeta na izpisku"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Zaključene ure na izpisku so zahtevane ure"
+
+msgid "Transcript student number field"
+msgstr "Polje študentske številke na izpisku"
+
+msgid "Transcript address fields"
+msgstr "Polja naslova na izpisku"
+
+msgid "Transcript grading scale"
+msgstr "Ocenjevalna lestvica na izpisku"
+
+msgid "Transcript GPA note"
+msgstr "Opomba o GPA na izpisku"
+
+msgid "Transcript signatory name"
+msgstr "Ime podpisnika izpiska"
+
+msgid "Transcript signatory title"
+msgstr "Naziv podpisnika izpiska"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Omogoči podpisana spričevala in izbirno sidranje na testnem omrežju Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Pokaži odgovore v niti šele po sodelovanju"
+
+msgid "Show the forum category description in threads"
+msgstr "Pokaži opis kategorije foruma v nitih"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "Nastavitve sodelovanja na forumu lahko spreminja predmet"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Največje število objav v niti foruma"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Zahtevane objave za zaključek niti foruma"
+
+msgid "Track e-mail openings"
+msgstr "Sledi odpiranju e-pošte"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Dovoli e-poštne odgovore na sporočila"
+
+msgid "Inbound e-mail address"
+msgstr "Naslov dohodne e-pošte"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN dohodnega poštnega predala"
+
+msgid "Remember me duration (days)"
+msgstr "Trajanje »Zapomni si me« (dni)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Omogoči dinamično registracijo odjemalcev OAuth zunaj MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Omogoči zaupno poročanje o blaginji"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Najmanjše število različnih prijaviteljev za preiskavo"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Dovoli priloge zaupnih dokazil"
+
+msgid "Show confidential investigation notifications"
+msgstr "Pokaži obvestila o zaupnih preiskavah"
+
+msgid "Enable support chatbot"
+msgstr "Omogoči klepetalni robot za podporo"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Izberite, kje se izrazi slovarja samodejno označujejo: dokumenti, vaje in učne poti."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Skrij IP-naslove v vizualnem poročanju in izvozih poročil. IP-naslovi ostanejo shranjeni in dostopni prek pooblaščenih postopkov za osebne podatke."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Privzete nastavitve platforme in dovoljenja za urejanje predmeta; upravlja se v Nastavitvah predmeta."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Uporabnikom omogoča prenos neuradnega izpiska zaključenih predmetov, administratorjem, administratorjem sej in kadrovskim vodjem pa izdajo podpisanih uradnih izpiskov za uporabnike, ki jih upravljajo. Slika podpisa se naloži s strani izpiska uporabnika."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Naslov programa, natisnjen na vsakem izpisku, na primer ime diplome, ki se pripravlja na tej platformi."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Katero polje predmeta zapolni stolpec kode predmeta na izpiskih: koda predmeta ali ime oddelka."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Spremenljivka dodatnega polja predmeta, ki vsebuje število ur predmeta. Pustite prazno za uporabo trajanja predmeta."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Natisni zahtevane ure predmeta kot ure, ki jih je učenec zaključil. Če je onemogočeno, so zaključene ure čas, ki ga je učenec preživel v predmetu."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Spremenljivka dodatnega polja uporabnika, ki vsebuje študentsko številko na izpiskih. Pustite prazno, da se ne natisne."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Spremenljivke dodatnih polj uporabnika, ločene z vejico, natisnjene za naslovom uporabnika na izpiskih, na primer mesto, zvezna država in poštna številka."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "JSON-seznam črk ocen, od najvišjega minimalnega rezultata navzdol: vsak element ima minimalni rezultat v odstotkih (min), črko in točke ocene za izračun GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Pojasnilo, kako se izračuna GPA, natisnjeno pod GPA na izpiskih."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Ime šolskega uradnika, ki podpiše uradne izpiske."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Naziv šolskega uradnika, ki podpiše uradne izpiske."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Zahteva izrecno soglasje lastnika in ročna dejanja administratorja. Na verigo se pošljejo samo prstni odtisi SHA-256."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Učenci vidijo samo prvo objavo niti foruma, dokler sami ne objavijo v njej. Skrbniki, učitelji, trenerji in tutorji skupin vedno vidijo vse objave."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Prikaži naslov in skrajšan opis kategorije foruma na vrhu vsake niti, s povezavo za branje celotnega opisa."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Ko je omogočeno, lahko učitelji v razdelku Forum nastavitev predmeta izberejo, ali njihov predmet skrije odgovore v niti, dokler učenec ne objavi, prikaže opis kategorije v nitih in koliko objav pričakuje vrstica napredka sodelovanja, namesto da bi sledili nastavitvam platforme."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Prikaži samo to število objav vsake niti foruma vsakemu uporabniku, ki ni skrbnik platforme, vključno z učitelji, in vsem znotraj učne poti. V pogledih z nitmi in vgnezdenimi pogledi se omejitev nanaša na odgovore vsake objave. Objave so ohranjene v vrstnem redu pogleda: prve ali najnovejše znotraj učne poti, kjer so najnovejše objave prve. Nastavite na 0, da prikažete vse objave."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Prikaži učencem vrstico napredka v vsaki niti foruma, ki doseže 100 %, ko v njej objavijo to število sporočil. Objave, ki čakajo na moderacijo, se štejejo. Nastavite na 0, da skrijete vrstico napredka."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Doda majhno sliko za sledenje v e-poštna obvestila o sporočilih in zabeleži, kdaj je zahtevana. To samo nakazuje, da je bilo e-poštno sporočilo morda odprto; ne dokazuje, da je bilo prebrano."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Dovoli prejemnikom obvestil o neposrednih sporočilih, da odgovorijo po e-pošti. Dohodna sporočila mora poštna infrastruktura usmeriti v ukaz Chamilo za dohodno pošto."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Osnovni naslov, uporabljen za usmerjanje odgovorov, na primer replies@example.com. Chamilo doda edinstven žeton prejemnika z uporabo plus naslavljanja."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Povezava z nabiralnikom za zbiranje dohodnih odgovorov, na primer imaps://user:password@imap.example.com:993/INBOX. URL-kodirajte rezervirane znake v poverilnicah."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Število dni, ko ostane uporabnik prijavljen, ko je izbrano Zapomni si me. Nastavite na 0 za onemogočanje. Zahteva HTTPS. Dovoljeno območje: 0 do 90. Običajna časovna omejitev seje je nastavljena ločeno v PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Omogoča dinamični registraciji odjemalca, da zahteva kateri koli obseg, ki ga registrira Chamilo OAuth strežnik virov. Ko je onemogočeno, ostane samoregistracija omejena na MCP. Dostop do virov je vedno ločeno omejen s seznamom dovoljenih virov vsakega odjemalca."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Omogoči zaupna poročila o incidentih. Modul zahteva zaščiten šifrirni ključ in dovoljenje preiskovalca."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Med 2 in 10 različnih prijaviteljev mora prijaviti istega uporabnika, preden primer postane viden preiskovalcem."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Dovoli slike, zvok in kratke video dokaze. Obstoječe priloge ostanejo berljive, ko je onemogočeno."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Prikaži notranjo navedbo upravičenih preiskav. Ne pošilja e-pošte ali zunanjih obvestil."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Prikaži klepetalnega bota z odločitvenim drevesom v plošči za klepet, ki lahko vodi uporabnike k "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Omogoča učiteljem ustvarjanje in različiciranje izobraževalnih aplikacij s pomočjo UI znotraj predmetov."
+
+msgid "Department name"
+msgstr "Ime oddelka"
+
+msgid "Documents and exercise"
+msgstr "Dokumenti in vaja"
+
+msgid "Documents and learning path"
+msgstr "Dokumenti in učna pot"
+
+msgid "Documents, exercise and learning path"
+msgstr "Dokumenti, vaja in učna pot"
+
+msgid "session"
+msgstr "seja"
+
+msgid "course"
+msgstr "predmet"
+
+msgid "You have been enrolled in %s"
+msgstr "Vpisani ste v %s"
 

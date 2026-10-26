@@ -28770,6 +28770,9 @@ msgstr "Usuariu actual nun atopáu."
 msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
 msgstr "Hola %s,<br><br>Tas rexistráu en %s.<br>Pues acceder a la to cuenta dende <a href=\"%s\">equí</a>.<br><br>Tes credenciales de accesu son:<br>Nome d'usuariu: <strong>%s</strong><br>Contraseña: <strong>%s</strong><br><br>Un saludo,<br>%s"
 
+msgid "Hello %s,<br><br>You are registered on %s.<br>Username: <strong>%s</strong><br><br>Please click the link below to set your password and access your account:<br><a href=\"%s\">Set your password</a><br><br>Best regards,<br>%s"
+msgstr "Hola %s,<br><br>Tas rexistráu en %s.<br>Nome d'usuariu: <strong>%s</strong><br><br>Calca nel enllaz d'abaxo pa definir la to contraseña y entrar na to cuenta:<br><a href=\"%s\">Definir la to contraseña</a><br><br>Un saludu,<br>%s"
+
 msgid "You are registered on %s"
 msgstr "Tas rexistráu en %s"
 
@@ -41573,4 +41576,1616 @@ msgstr "L'historial de migraciones ta rexistráu"
 
 msgid "%s is present in the project root: delete it to close the upgrade endpoints"
 msgstr "%s ta presente na raigañu del proyeutu: desanícialu pa zarrar los puntos d'anovación"
+
+msgid "You have earned a certificate for this exercise"
+msgstr "Ganasti un certificáu por esti exerciciu"
+
+msgid "You must complete the learning path \"%s\" before you can access this one."
+msgstr "Tienes de completar el itinerariu d'aprendizaxe \"%s\" enantes de poder entrar nesti."
+
+msgid "Are you sure you want to delete this file definitively?"
+msgstr "¿Tas seguru de que quies desaniciar esti ficheru de forma definitiva?"
+
+msgid "Are you sure you want to detach this file from the selected course?"
+msgstr "¿Tas seguru de que quies desanexar esti ficheru del cursu escoyíu?"
+
+msgid "Attach this file to another course"
+msgstr "Anexar esti ficheru a otru cursu"
+
+msgid "Attach to selected course(s) (hidden)"
+msgstr "Anexar al(os) cursu(s) escoyíu(s) (ocultu)"
+
+msgid "Course(s):"
+msgstr "Cursu(s):"
+
+msgid "Delete definitively"
+msgstr "Desaniciar definitivamente"
+
+msgid "Detach from this course"
+msgstr "Desanexar d'esti cursu"
+
+msgid "File actions"
+msgstr "Aiciones del ficheru"
+
+msgid "File Information"
+msgstr "Información del ficheru"
+
+msgid "File Link:"
+msgstr "Enllaz del ficheru:"
+
+msgid "File Path:"
+msgstr "Ruta del ficheru:"
+
+msgid "Filter courses..."
+msgstr "Filtrar cursos..."
+
+msgid "MIME Type:"
+msgstr "Tipu MIME:"
+
+msgid "N/A"
+msgstr "N/D"
+
+msgid "No results found."
+msgstr "Nun s'atoparon resultaos."
+
+msgid "Original Name"
+msgstr "Nome orixinal"
+
+msgid "Original Name:"
+msgstr "Nome orixinal:"
+
+msgid "Orphan"
+msgstr "Güérfanu"
+
+msgid "Resource File ID:"
+msgstr "ID del ficheru de recursu:"
+
+msgid "Resource Node ID:"
+msgstr "ID del nuedu de recursu:"
+
+msgid "Search..."
+msgstr "Buscar..."
+
+msgid "To detach this file from a specific course, click the \"×\" icon on the corresponding course tag above."
+msgstr "Pa desanexar esti ficheru d'un cursu específicu, calca nel iconu \"×\" de la etiqueta del cursu correspondiente d'arriba."
+
+msgid "User:"
+msgstr "Usuariu:"
+
+msgid "View file information"
+msgstr "Ver información del ficheru"
+
+msgid "You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively."
+msgstr "Pues anexar esti ficheru a unu o más cursos (ocultu na raigaña de documentos). Si'l ficheru yá nun s'usa y queda güérfanu, tamién pues desanicialu definitivamente."
+
+msgid "You can select one or more courses (use Ctrl/Cmd + click)."
+msgstr "Pues escoyer unu o más cursos (usa Ctrl/Cmd + clic)."
+
+msgid "bytes"
+msgstr "bytes"
+
+msgid "Failed to copy:"
+msgstr "Falló la copia:"
+
+msgid "Missing resource file identifier."
+msgstr "Falta l'identificador del ficheru de recursu."
+
+msgid "Please select at least one course."
+msgstr "Escueyi polo menos un cursu."
+
+msgid "Resource file not found."
+msgstr "Nun s'atopó'l ficheru de recursu."
+
+msgid "File \"%s\" has been attached to %d course(s): %s."
+msgstr "El ficheru \"%s\" anexóse a %d cursu(s): %s."
+
+msgid "Some courses were skipped: %s."
+msgstr "Saltáronse dalgunos cursos: %s."
+
+msgid "Missing file or course identifier."
+msgstr "Falta l'identificador del ficheru o del cursu."
+
+msgid "This resource file has no resource node and cannot be detached."
+msgstr "Esti ficheru de recursu nun tien nuedu de recursu y nun se pue desanexar."
+
+msgid "File has been detached from %d course link(s)."
+msgstr "El ficheru desanexóse de %d enllaz(es) de cursu."
+
+msgid "This file is not attached to the selected course."
+msgstr "Esti ficheru nun ta anexáu al cursu escoyíu."
+
+msgid "This file is still used by at least one resource and cannot be deleted."
+msgstr "Esti ficheru entá lu usa polo menos un recursu y nun se pue desaniciar."
+
+msgid "Orphan file and its physical content have been deleted definitively."
+msgstr "El ficheru güérfanu y el so conteníu físicu desaniciáronse definitivamente."
+
+msgid "Survey published. Created: %d. Updated: %d. Messages sent: %d."
+msgstr "Encuesta publicada. Creaos: %d. Anovaos: %d. Mensaxes unviaos: %d."
+
+#: issue-8179
+msgid "Acquirable"
+msgstr "Adquirible"
+
+#: issue-8179
+msgid "This skill cannot be acquired"
+msgstr "Esta competencia nun se pue adquirir"
+
+#: issue-8179
+msgid "Novice"
+msgstr "Noviciu"
+
+#: issue-8179
+msgid "Rigid adherence to rules and context-free instructions; little situational judgment."
+msgstr "Adherencia ríxida a regles ya instrucciones ensin contestu; poco xuiciu situacional."
+
+#: issue-8179
+msgid "Advanced Beginner"
+msgstr "Entamador avanzáu"
+
+#: issue-8179
+msgid "Starts recognizing situational aspects and patterns but still needs guidelines."
+msgstr "Entama a reconocer aspeutos situacionales y patrones, pero entá precisa directrices."
+
+#: issue-8179
+msgid "Competent"
+msgstr "Competente"
+
+#: issue-8179
+msgid "Develops planning and mental models; takes responsibility for outcomes but may feel overwhelmed by complexity."
+msgstr "Desenvuelve planificación y modelos mentales; asume la responsabilidá de los resultaos, pero pue sentise abrumáu pola complexidá."
+
+#: issue-8179
+msgid "Proficient"
+msgstr "Proficiente"
+
+#: issue-8179
+msgid "Sees the \"big picture,\" prioritizes intuitively, and learns from experience."
+msgstr "Ve la \"visión global\", prioriza de forma intuitiva y deprendende de la esperiencia."
+
+#: issue-8179
+msgid "Expert"
+msgstr "Espertu"
+
+#: issue-8179
+msgid "Intuitive, fluid performance; relies on deep tacit knowledge; can innovate or handle novel situations effortlessly."
+msgstr "Rendimientu intuitivu y fluyíu; basase en conocimientu tácitu fondu; pue innovar o xestionar situaciones novedoses ensin esfuerciu."
+
+#: issue-8179
+msgid "Remembering"
+msgstr "Recordar"
+
+#: issue-8179
+msgid "Retrieve, recall, or recognize relevant knowledge from long-term memory."
+msgstr "Recuperar, recordar o reconocer conocimientu relevante de la memoria a llargu plazu."
+
+#: issue-8179
+msgid "Understanding"
+msgstr "Comprender"
+
+#: issue-8179
+msgid "Construct meaning from instructional messages, including oral, written, and graphic communication. Demonstrate comprehension by interpreting, exemplifying, classifying, summarizing, inferring, comparing, or explaining."
+msgstr "Construyir significáu a partir de mensaxes d'instrucción, incluyendo comunicación oral, escrita y gráfica. Demostrar comprensión interpretando, exemplificando, clasificando, resumiendo, infiriendo, comparando o esplicando."
+
+#: issue-8179
+msgid "Applying"
+msgstr "Aplicar"
+
+#: issue-8179
+msgid "Carry out or use a procedure through executing or implementing it in a given situation. Use knowledge or skills in new or concrete situations."
+msgstr "Llevar a cabu o usar un procedimientu executándolo o implementándolo nuna situación dada. Usar conocimientu o habilidaes en situaciones nueves o concretes."
+
+#: issue-8179
+msgid "Analyzing"
+msgstr "Analizar"
+
+#: issue-8179
+msgid "Break material into its constituent parts and determine how the parts relate to one another and to an overall structure or purpose. Identify motives, causes, or relationships."
+msgstr "Descomponer el material nes sos partes constituyentes y determinar cómo se rellacionen ente elles y con una estructura o propósitu global. Identificar motivos, causes o rellaciones."
+
+#: issue-8179
+msgid "Evaluating"
+msgstr "Evaluar"
+
+#: issue-8179
+msgid "Make judgments based on criteria and standards. Check, critique, or justify decisions or courses of action."
+msgstr "Facer xuicios basaos en criterios y estándares. Comprobar, criticar o xustificar decisiones o cursos d'aición."
+
+#: issue-8179
+msgid "Creating"
+msgstr "Crear"
+
+#: issue-8179
+msgid "Put elements together to form a coherent or functional whole; reorganize elements into a new pattern or structure. Produce original work or generate new ideas."
+msgstr "Xuntar elementos pa formar un tou coherente o funcional; reorganizar elementos nun patrón o estructura nueva. Producir trabayu orixinal o xenerar idees nueves."
+
+#: issue-8179
+msgid "Follow"
+msgstr "Siguir"
+
+#: issue-8179
+msgid "Works under close supervision and direction. Performs routine tasks with limited discretion. Focuses on following instructions and basic execution."
+msgstr "Trabaya so supervisión y direición estrecha. Realiza xeres rutinaries con discreción limitada. Céntrase en siguir instrucciones y n'execución básica."
+
+#: issue-8179
+msgid "Assist"
+msgstr "Asistir"
+
+#: issue-8179
+msgid "Works under routine supervision. Provides assistance to others, contributes to team tasks, and begins to take some initiative within defined boundaries."
+msgstr "Trabaya so supervisión rutinaria. Presta asistencia a otros, contribúi a xeres d'equipu y entama a tomar dalguna iniciativa dientro de llendes definíes."
+
+#: issue-8179
+msgid "Works under general supervision. Applies knowledge and skills to a range of routine and non-routine activities. Exercises some discretion and judgment."
+msgstr "Trabaya so supervisión xeneral. Aplica conocimientu y habilidaes a un rangu d'actividaes rutinaries y non rutinaries. Exerz dalguna discreción y xuiciu."
+
+#: issue-8179
+msgid "Works under broad direction. Enables others by providing specialist guidance, support, or services. Takes responsibility for own work and may supervise small teams or tasks."
+msgstr "Trabaya so direición amplia. Permite a otros apurriendo orientación, sofitu o servicios especializaos. Asume responsabilidá del so propiu trabayu y pue supervisar equipos pequeños o xeres."
+
+#: issue-8179
+msgid "Ensure and advise"
+msgstr "Asegurar y aconseyar"
+
+#: issue-8179
+msgid "Works under broad direction but with significant autonomy. Ensures that work meets objectives and advises on complex matters. Often leads teams or projects and influences decisions."
+msgstr "Trabaya so direición amplia pero con autonomía significativa. Asegura que'l trabayu cumpla oxetivos y aconseya en asuntos complexos. De cutiu lidera equipos o proyeutos ya inflúi nes decisiones."
+
+#: issue-8179
+msgid "Initiate and influence"
+msgstr "Iniciar ya influyir"
+
+#: issue-8179
+msgid "Has defined authority and responsibility for a significant area of work. Initiates actions, influences strategy and policy in their domain, and leads substantial projects or teams."
+msgstr "Tien autoridá y responsabilidá definíes nuna área significativa de trabayu. Inicia aiciones, inflúi na estratexa y política del so dominiu, y lidera proyeutos o equipos sustanciales."
+
+#: issue-8179
+msgid "Set strategy, inspire, mobilise"
+msgstr "Definir estratexa, inspirar, movilizar"
+
+#: issue-8179
+msgid "Holds authority at the highest organisational level for a major area of work. Sets long-term strategy, inspires and mobilises others, and makes decisions critical to organisational success. Influences at industry or external levels."
+msgstr "Tien autoridá nel nivel organizativu más altu d'una área mayor de trabayu. Define estratexa a llargu plazu, inspira y moviliza a otros, y toma decisiones crítiques pal ésitu organizativu. Inflúi a nivel d'industria o esternu."
+
+msgid "Maximum inactive time to consider (minutes)"
+msgstr "Tiempu máximu d'inactividá a considerar (minutos)"
+
+msgid "A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted."
+msgstr "Una páxina de cursu dexada abierta sigue unviando solicitúes automátiques. Tres esti númberu de minutos ensin una aición real del usuariu (abrir una páxina o un elementu, responder, etc.), el tiempu pasáu nel cursu dexa de cuntase."
+
+#: issue-2520
+msgid "Collaborative Wiki editor"
+msgstr "Editor Wiki colaborativu"
+
+#: issue-2520
+msgid "Connecting to Etherpad..."
+msgstr "Conectando a Etherpad..."
+
+#: issue-2520
+msgid "Save creates a new Chamilo Wiki version from the current Etherpad content."
+msgstr "Guardar crea una versión nueva de la Wiki de Chamilo a partir del conteníu actual d'Etherpad."
+
+#: issue-2520
+msgid "The collaborative editor could not be loaded."
+msgstr "Nun pudo cargase l'editor colaborativu."
+
+#: issue-2520
+msgid "Enable Etherpad for Wiki editing"
+msgstr "Activar Etherpad pa la edición de Wiki"
+
+#: issue-2520
+msgid "Use Etherpad as the collaborative editor for existing Wiki pages. Etherpad must be exposed on the same origin as Chamilo for secure embedded sessions."
+msgstr "Usar Etherpad como editor colaborativu pa les páxines Wiki esistentes. Etherpad tien de tar espuestu nel mesmu orixe que Chamilo pa sesiones incrustaes segures."
+
+#: issue-2520
+msgid "Etherpad URL"
+msgstr "URL d'Etherpad"
+
+#: issue-2520
+msgid "Base URL of the Etherpad instance, including an optional reverse-proxy path. Example: https://campus.example.org/etherpad"
+msgstr "URL base de la instancia d'Etherpad, incluyendo un camín opcional de proxy inversu. Exemplu: https:\/\/campus.example.org\/etherpad"
+
+#: issue-2520
+msgid "Etherpad API key"
+msgstr "Clave API d'Etherpad"
+
+#: issue-2520
+msgid "API key used by Chamilo to create pads, sessions and synchronize Wiki content. Configure Etherpad to accept API-key authentication."
+msgstr "Clave API usada por Chamilo pa crear pads, sesiones y sincronizar el conteníu de la Wiki. Configura Etherpad pa aceptar autenticación por clave API."
+
+msgid "Default visibility of new documents can be changed by course"
+msgstr "La visibilidá predeterminada de documentos nuevos pue camudase por cursu"
+
+msgid "Visibility given to a new document, folder or uploaded file when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilidá dada a un documentu, carpeta o ficheru xubíu nuevu cuando un profesor lu crea nun cursu. Los profesores entá pueden camudar la visibilidá de cada unu darréu."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new documents of their course, instead of the platform default."
+msgstr "Cuando ta activáu, los profesores pueden escoyer nes opciones del cursu la visibilidá dada a los documentos nuevos del so cursu, en cuenta de la predeterminada de la plataforma."
+
+msgid "Default visibility of new learning paths"
+msgstr "Visibilidá predeterminada de les rutes d'aprendizaxe nueves"
+
+msgid "Default visibility of new learning paths can be changed by course"
+msgstr "La visibilidá predeterminada de les rutes d'aprendizaxe nueves pue camudase por cursu"
+
+msgid "Visibility given to a new learning path when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilidá dada a una ruta d'aprendizaxe nueva cuando un profesor la crea nun cursu. Los profesores entá pueden camudar la visibilidá de cada una darréu."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new learning paths of their course, instead of the platform default."
+msgstr "Cuando ta activáu, los profesores pueden escoyer nes opciones del cursu la visibilidá dada a les rutes d'aprendizaxe nueves del so cursu, en cuenta de la predeterminada de la plataforma."
+
+msgid "Default visibility of new tests"
+msgstr "Visibilidá predeterminada de les pruebes nueves"
+
+msgid "Default visibility of new tests can be changed by course"
+msgstr "La visibilidá predeterminada de les pruebes nueves pue camudase por cursu"
+
+msgid "Visibility given to a new test when a teacher creates it in a course. Teachers can still change the visibility of each one afterwards."
+msgstr "Visibilidá dada a una prueba nueva cuando un profesor la crea nun cursu. Los profesores entá pueden camudar la visibilidá de caúna darréu."
+
+msgid "When enabled, teachers can choose in the course settings the visibility given to new tests of their course, instead of the platform default."
+msgstr "Cuando ta activáu, los profesores pueden escoyer nes opciones del cursu la visibilidá dada a les pruebes nueves del so cursu, en cuenta de la predeterminada de la plataforma."
+
+msgid "Default visibility for new learning paths"
+msgstr "Visibilidá predeterminada pa les rutes d'aprendizaxe nueves"
+
+msgid "Default visibility for new tests"
+msgstr "Visibilidá predeterminada pa les pruebes nueves"
+
+msgid "Following"
+msgstr "Siguiente"
+
+msgid "Get an e-mail when a learner comments on a submission of this assignment"
+msgstr "Recibir un corréu electrónicu cuando un alumnu comente un unvíu d'esta xera"
+
+msgid "Payment history"
+msgstr "Historial de pagos"
+
+msgid "No payments yet"
+msgstr "Entá nun hai pagos"
+
+msgid "Cancel service"
+msgstr "Cancelar serviciu"
+
+msgid "Official transcript"
+msgstr "Expediente oficial"
+
+msgid "Unofficial transcript"
+msgstr "Expediente non oficial"
+
+msgid "Student name"
+msgstr "Nome del alumnu"
+
+msgid "Student number"
+msgstr "Númberu d'alumnu"
+
+msgid "Program title"
+msgstr "Títulu del programa"
+
+msgid "Required hours"
+msgstr "Hores riquíes"
+
+msgid "Completion date"
+msgstr "Data de finalización"
+
+msgid "Hours completed"
+msgstr "Hores completaes"
+
+msgid "Final grade"
+msgstr "Nota final"
+
+msgid "Grade"
+msgstr "Nota"
+
+msgid "No completed course yet."
+msgstr "Entá nun hai nengún cursu completáu."
+
+msgid "Grading scale"
+msgstr "Escala de calificación"
+
+msgid "Signature of school official"
+msgstr "Firma del responsable de la escuela"
+
+msgid "School official"
+msgstr "Responsable de la escuela"
+
+msgid "Official's title"
+msgstr "Cargu del responsable"
+
+msgid "Verify this transcript at"
+msgstr "Verificar esti expediente en"
+
+msgid "Verification code"
+msgstr "Códigu de verificación"
+
+msgid "This unofficial transcript is not signed. Ask an administrator for an official transcript."
+msgstr "Esti expediente non oficial nun ta firmáu. Pida a un alministrador un expediente oficial."
+
+msgid "Transcript verification"
+msgstr "Verificación d'expediente"
+
+msgid "Check that this official transcript was issued and signed by the institution, has not been altered and is not revoked."
+msgstr "Compruebe que esti expediente oficial foi emitíu y firmáu pola institución, nun foi alteriáu y nun ta revocáu."
+
+msgid "Valid"
+msgstr "Válidu"
+
+msgid "Invalid signature"
+msgstr "Firma inválida"
+
+msgid "Transcript not found"
+msgstr "Expediente non atopáu"
+
+msgid "The signature of the institution is valid and this transcript has not been revoked."
+msgstr "La firma de la institución ye válida y esti expediente nun foi revocáu."
+
+msgid "This transcript cannot be verified as valid. Its details are not displayed."
+msgstr "Esti expediente nun pue verificase como válidu. Los sos detalles nun se amuesen."
+
+msgid "Transcript details"
+msgstr "Detalles del expediente"
+
+msgid "Institution"
+msgstr "Institución"
+
+msgid "Issued on"
+msgstr "Emitíu el"
+
+msgid "Download verification JSON"
+msgstr "Descargar JSON de verificación"
+
+msgid "Transcript"
+msgstr "Expediente"
+
+msgid "My confidential reports"
+msgstr "Los mios informes confidenciales"
+
+msgid "My transcript"
+msgstr "El mio expediente"
+
+msgid "Confidential investigations"
+msgstr "Investigaciones confidenciales"
+
+msgid "Floor plan"
+msgstr "Planu de planta"
+
+msgid "Click a highlighted room to select it"
+msgstr "Calque nuna sala resaltada pa seleicionala"
+
+msgid "Select room"
+msgstr "Seleicionar sala"
+
+msgid "Room on floor plan"
+msgstr "Sala nel planu de planta"
+
+msgid "Select a branch first"
+msgstr "Seleicione primero una sucursal"
+
+msgid "The branch has no attached floor plan"
+msgstr "La sucursal nun tien nengún planu de planta axuntu"
+
+msgid "Use the polygon tool to outline the room; use Edit to move corners"
+msgstr "Use la ferramienta de polígonu pa delimitar la sala; use Editar pa mover les esquines"
+
+msgid "Save room area"
+msgstr "Guardar área de la sala"
+
+msgid "Clear room area"
+msgstr "Llimpiar área de la sala"
+
+msgid "Save the room form to persist the area"
+msgstr "Guarda'l formulariu de la sala pa persistir l'área"
+
+msgid "Floor plan unavailable"
+msgstr "Planu de planta non disponible"
+
+msgid "Room map points must be within the floor plan"
+msgstr "Los puntos del mapa de la sala tienen de tar dientro del planu de planta"
+
+msgid "Are you sure you want to clear the room area?"
+msgstr "¿Tas seguru de que quies llimpiar l'área de la sala?"
+
+msgid "View room on floor plan"
+msgstr "Ver sala nel planu de planta"
+
+msgid "No floor plan available"
+msgstr "Nun hai planu de planta disponible"
+
+msgid "This is an assignment by groups"
+msgstr "Esto ye un trabayu por grupos"
+
+msgid "Upload a PNG, JPEG or safe static SVG floor plan, or select an existing image from Documents."
+msgstr "Xubi un planu de planta PNG, JPEG o SVG estáticu seguru, o esbilla una imaxe esistente de Documentos."
+
+msgid "Upload floor plan"
+msgstr "Xubir planu de planta"
+
+msgid "PNG, JPEG or static SVG, maximum 10 MB"
+msgstr "PNG, JPEG o SVG estáticu, máximu 10 MB"
+
+msgid "Search images by name"
+msgstr "Buscar imáxenes por nome"
+
+msgid "Image name"
+msgstr "Nome de la imaxe"
+
+msgid "Select an image"
+msgstr "Esbillar una imaxe"
+
+msgid "Change floor plan"
+msgstr "Camudar planu de planta"
+
+msgid "Attach floor plan"
+msgstr "Axuntar planu de planta"
+
+msgid "No matching images found in Documents."
+msgstr "Nun s'atoparon imáxenes coincidentes en Documentos."
+
+msgid "Current floor plan"
+msgstr "Planu de planta actual"
+
+msgid "Floor plan changes are saved automatically."
+msgstr "Los cambeos del planu de planta guárdense automáticamente."
+
+msgid "Remove floor plan"
+msgstr "Quitar planu de planta"
+
+msgid "Cannot load images"
+msgstr "Nun se puen cargar les imáxenes"
+
+msgid "Floor plan saved"
+msgstr "Planu de planta guardáu"
+
+msgid "Cannot attach floor plan"
+msgstr "Nun se pue axuntar el planu de planta"
+
+msgid "Only PNG/JPEG and safe static SVG images up to 10MB are supported."
+msgstr "Namái se sofiten imáxenes PNG/JPEG y SVG estáticu seguru d'hasta 10MB."
+
+msgid "Cannot upload floor plan"
+msgstr "Nun se pue xubir el planu de planta"
+
+msgid "Are you sure you want to remove the floor plan?"
+msgstr "¿Tas seguru de que quies quitar el planu de planta?"
+
+msgid "Floor plan removed"
+msgstr "Planu de planta quitáu"
+
+msgid "Cannot remove floor plan"
+msgstr "Nun se pue quitar el planu de planta"
+
+msgid "Support bot"
+msgstr "Bot de sofitu"
+
+msgid "Connected"
+msgstr "Conectáu"
+
+msgid "Not connected"
+msgstr "Non conectáu"
+
+msgid "View ticket"
+msgstr "Ver tique"
+
+msgid "Start a new conversation"
+msgstr "Entamar una conversación nueva"
+
+msgid "Video call"
+msgstr "Videollamada"
+
+msgid "Incoming video call"
+msgstr "Videollamada entrante"
+
+msgid "Decline"
+msgstr "Refugar"
+
+msgid "Mute microphone"
+msgstr "Silenciar micrófonu"
+
+msgid "Unmute microphone"
+msgstr "Activar micrófonu"
+
+msgid "Turn camera off"
+msgstr "Apagar cámara"
+
+msgid "Turn camera on"
+msgstr "Encender cámara"
+
+msgid "Hang up"
+msgstr "Colgar"
+
+msgid "Calling..."
+msgstr "Llamando..."
+
+msgid "Connecting..."
+msgstr "Conectando..."
+
+msgid "Your contact is busy."
+msgstr "El to contautu ta ocupáu."
+
+msgid "Your contact did not answer the call."
+msgstr "El to contautu nun contestó la llamada."
+
+msgid "Your contact could not access the camera or microphone."
+msgstr "El to contautu nun pudo acceder a la cámara o al micrófonu."
+
+msgid "Your contact could not prepare the video call."
+msgstr "El to contautu nun pudo preparar la videollamada."
+
+msgid "Your contact refused the call."
+msgstr "El to contautu refugó la llamada."
+
+msgid "The call timed out."
+msgstr "La llamada caducó."
+
+msgid "Your contact cancelled the call."
+msgstr "El to contactu canceló la llamada."
+
+msgid "The video connection was lost."
+msgstr "Perdióse la conexón de videu."
+
+msgid "Your contact could not establish the video connection."
+msgstr "El to contactu nun pudo establecer la conexón de videu."
+
+msgid "Your contact could not complete the video call setup."
+msgstr "El to contactu nun pudo completar la configuración de la videollamada."
+
+msgid "Your contact hung up."
+msgstr "El to contactu colgó."
+
+msgid "Video call could not be started"
+msgstr "Nun se pudo aniciar la videollamada"
+
+msgid "Camera or microphone permission was denied."
+msgstr "Negóse'l permisu de cámara o micrófonu."
+
+msgid "No camera or microphone was found."
+msgstr "Nun s'atopó nenguna cámara nin micrófonu."
+
+msgid "Camera or microphone is already in use or unavailable."
+msgstr "La cámara o'l micrófonu yá ta n'usu o nun ta disponible."
+
+msgid "The camera or microphone does not support the required settings."
+msgstr "La cámara o'l micrófonu nun admite la configuración riquida."
+
+msgid "Camera or microphone access could not be obtained."
+msgstr "Nun se pudo obtener l'accesu a la cámara o al micrófonu."
+
+msgid "The video call could not be prepared."
+msgstr "Nun se pudo preparar la videollamada."
+
+msgid "The video call request could not be sent."
+msgstr "Nun se pudo unviar la solicitú de videollamada."
+
+msgid "The incoming video call could not be processed."
+msgstr "Nun se pudo procesar la videollamada entrante."
+
+msgid "The video call answer could not be prepared."
+msgstr "Nun se pudo preparar la respuesta de la videollamada."
+
+msgid "The video call answer could not be sent."
+msgstr "Nun se pudo unviar la respuesta de la videollamada."
+
+msgid "The video call answer could not be processed."
+msgstr "Nun se pudo procesar la respuesta de la videollamada."
+
+msgid "The video connection failed"
+msgstr "Falló la conexón de videu"
+
+msgid "The video connection could not be established."
+msgstr "Nun se pudo establecer la conexón de videu."
+
+msgid "No answer was received."
+msgstr "Nun se recibió nenguna respuesta."
+
+msgid "You refused the call."
+msgstr "Refugasti la llamada."
+
+msgid "You cancelled the call."
+msgstr "Cancelasti la llamada."
+
+msgid "You hung up."
+msgstr "Colgasti."
+
+msgid "You missed the call."
+msgstr "Perdisti la llamada."
+
+msgid "Support bot is currently unavailable."
+msgstr "El bot de sofitu nun ta disponible nestos momentos."
+
+msgid "A support ticket has been created."
+msgstr "Creóse un tique de sofitu."
+
+msgid "Conversation ended."
+msgstr "Conversación finada."
+
+msgid "The support bot could not continue this conversation. Please try again."
+msgstr "El bot de sofitu nun pudo siguir esta conversación. Volvi tentalo."
+
+msgid "Add your first term glossary to this course"
+msgstr "Amiesta'l to primer términu de glosariu a esti cursu"
+
+msgid "Are you sure you want to delete this survey template?"
+msgstr "¿Tas seguru de que quies desaniciar esta plantía d'encuesta?"
+
+msgid "The survey template has been deleted."
+msgstr "Desanicióse la plantía d'encuesta."
+
+msgid "Please select a course."
+msgstr "Seleiciona un cursu."
+
+msgid "Please select a session for this course."
+msgstr "Seleiciona una sesión pa esti cursu."
+
+msgid "The survey has been created from the template."
+msgstr "Creóse la encuesta a partir de la plantía."
+
+msgid "Survey templates"
+msgstr "Plantíes d'encuesta"
+
+msgid "Create reusable survey templates for teachers and assign them directly to a course or session."
+msgstr "Crea plantíes d'encuesta reutilizables pa profesores y asígnales direutamente a un cursu o sesión."
+
+msgid "Subtitle"
+msgstr "Subtítulu"
+
+msgid "Assign to course"
+msgstr "Asignar al cursu"
+
+msgid "Assign template to course"
+msgstr "Asignar plantía al cursu"
+
+msgid "Leave the session empty to create the survey directly in the course."
+msgstr "Deixa la sesión balera pa crear la encuesta direutamente nel cursu."
+
+msgid "This course is available through a session on this portal, so a session is required."
+msgstr "Esti cursu ta disponible al traviés d'una sesión nesti portal, polo que se riquier una sesión."
+
+msgid "Survey template questions"
+msgstr "Preguntes de la plantía d'encuesta"
+
+msgid "Back to survey templates"
+msgstr "Volver a les plantíes d'encuesta"
+
+msgid "Could not load survey template"
+msgstr "Nun se pudo cargar la plantía d'encuesta"
+
+msgid "Could not load survey template questions"
+msgstr "Nun se pudieron cargar les preguntes de la plantía d'encuesta"
+
+msgid "Could not save survey template question"
+msgstr "Nun se pudo guardar la pregunta de la plantía d'encuesta"
+
+msgid "Could not delete survey template question"
+msgstr "Nun se pudo desaniciar la pregunta de la plantía d'encuesta"
+
+msgid "Could not move survey template question"
+msgstr "Nun se pudo mover la pregunta de la plantía d'encuesta"
+
+msgid "Could not copy survey template question"
+msgstr "Nun se pudo copiar la pregunta de la plantía d'encuesta"
+
+msgid "The survey template has been saved."
+msgstr "Guardóse la plantía d'encuesta."
+
+msgid "Edit survey template"
+msgstr "Editar plantía d'encuesta"
+
+msgid "Create survey template"
+msgstr "Crear plantía d'encuesta"
+
+msgid "The survey template title is required."
+msgstr "El títulu de la plantía d'encuesta ye obligatoriu."
+
+msgid "Visible as template"
+msgstr "Visible como plantía"
+
+msgid "Create satisfaction survey"
+msgstr "Crear encuesta de satisfaición"
+
+msgid "Training satisfaction survey"
+msgstr "Encuesta de satisfaición de la formación"
+
+msgid "Could not create satisfaction survey"
+msgstr "Nun se pudo crear l'encuesta de satisfaición"
+
+msgid "Use template"
+msgstr "Usar plantía"
+
+msgid "Create this survey from a reusable template prepared by an administrator."
+msgstr "Crear esta encuesta a partir d'una plantía reutilizable preparada por un alministrador."
+
+msgid "Results hidden from teacher/tutor"
+msgstr "Resultaos anubríos pal profesor/tutor"
+
+msgid "Teachers and tutors can still see response counts and send reminders, but cannot open or export the survey results."
+msgstr "Los profesores y tutores entá pueden ver el númberu de respuestes y unviar recordatorios, pero nun pueden abrir nin esportar los resultaos de l'encuesta."
+
+msgid "Template applied. Review the survey settings and save to create it."
+msgstr "Plantía aplicada. Revisa la configuración de l'encuesta y guarda pa creala."
+
+msgid "Survey results are hidden from teachers and tutors."
+msgstr "Los resultaos de l'encuesta tán anubríos pa profesores y tutores."
+
+msgid "You can still use the invitations page to see response counts and send reminders."
+msgstr "Entá puedes usar la páxina d'invitaciones pa ver el númberu de respuestes y unviar recordatorios."
+
+msgid "Payment method"
+msgstr "Métodu de pagu"
+
+msgid "Preview mode"
+msgstr "Mou de previsualización"
+
+msgid "Progress and score are not saved in preview mode."
+msgstr "El progresu y la puntuación nun se guarden nel mou de previsualización."
+
+msgid "This link cannot be displayed inside the learning path."
+msgstr "Esti enllaz nun se puede amosar dientro del itinerariu d'aprendizaxe."
+
+msgid "Open it in a new tab to view the page."
+msgstr "Ábrelo nuna llingüeta nueva pa ver la páxina."
+
+msgid "Report a problem with this question"
+msgstr "Informar d'un problema con esta entruga"
+
+msgid "Your report was sent to the teacher."
+msgstr "El to informe unvióse al profesor."
+
+msgid "Describe the error or problem you found. Your report will be sent to the teacher."
+msgstr "Describe l'error o'l problema que atopasti. El to informe unviaráse al profesor."
+
+msgid "A comment is required."
+msgstr "Ríquese un comentariu."
+
+msgid "Could not send the report."
+msgstr "Nun se pudo unviar l'informe."
+
+msgid "Learner reports"
+msgstr "Informes d'alumnos"
+
+msgid "No learner reports have been submitted for this question."
+msgstr "Nun s'unviaron informes d'alumnos pa esta entruga."
+
+msgid "View attempt"
+msgstr "Ver intentu"
+
+msgid "Could not load learner reports."
+msgstr "Nun se pudieron cargar los informes d'alumnos."
+
+msgid "Allow learners to report issues in questions"
+msgstr "Permitir a los alumnos informar de problemes nes entrugues"
+
+msgid "Skill acquired"
+msgstr "Competencia adquirida"
+
+msgid "AI Toolbox"
+msgstr "Caxa de ferramientes d'IA"
+
+msgid "Generate interactive educational applications with AI and track learner progress with SCORM."
+msgstr "Xenera aplicaciones educatives interactivas con IA y fai siguimientu del progresu de los alumnos con SCORM."
+
+msgid "No published applications are available yet."
+msgstr "Entá nun hai aplicaciones publicaes disponibles."
+
+msgid "Interactive applications"
+msgstr "Aplicaciones interactivas"
+
+msgid "Generate, improve, publish and review versions from one place."
+msgstr "Xenera, ameyora, publica y revisa versiones dende un solu llugar."
+
+msgid "Open an application to continue from your latest progress."
+msgstr "Abre una aplicación pa siguir dende'l to últimu progresu."
+
+msgid "Interactive learning application"
+msgstr "Aplicación d'aprendizaxe interactiva"
+
+msgid "Create an interactive learning app"
+msgstr "Crear una aplicación d'aprendizaxe interactiva"
+
+msgid "Describe the activity. Chamilo will generate a versioned SCORM application with progress and score tracking."
+msgstr "Describe l'actividá. Chamilo xenerará una aplicación SCORM versionada con siguimientu de progresu y puntuación."
+
+msgid "Idea"
+msgstr "Idea"
+
+msgid "Application"
+msgstr "Aplicación"
+
+msgid "What should the application do?"
+msgstr "¿Qué tien de facer l'aplicación?"
+
+msgid "How it works"
+msgstr "Cómo funciona"
+
+msgid "AI generation"
+msgstr "Xeneración con IA"
+
+msgid "The app is generated from your instructions and stored as version 1."
+msgstr "L'aplicación xenerase a partir de les tos instrucciones y almacénase como versión 1."
+
+msgid "Learner progress, score and resume data are reported to Chamilo."
+msgstr "El progresu, la puntuación y los datos de reanudación de l'alumnu infórmense a Chamilo."
+
+msgid "Future improvements create new versions without deleting previous ones."
+msgstr "Les meyores futures crean versiones nueves ensin desaniciar les anteriores."
+
+msgid "Include the learning objective, rules, levels, scoring and what should happen when the learner finishes."
+msgstr "Inclúi l'oxetivu d'aprendizaxe, les regles, los niveles, la puntuación y lo que tien de pasar cuando l'alumnu termine."
+
+msgid "You are not allowed to create content in this context."
+msgstr "Nun tienes permisu pa crear conteníu nesti contestu."
+
+msgid "The application was generated successfully."
+msgstr "L'aplicación xeneróse correutamente."
+
+msgid "Open in student view"
+msgstr "Abrir na vista d'estudiante"
+
+msgid "Generate the application to enable preview and publishing."
+msgstr "Xenera l'aplicación pa habilitar la previsualización y la publicación."
+
+msgid "Improve with AI"
+msgstr "Meyorar con IA"
+
+msgid "Describe the change. A new version will be created and previous versions will remain available."
+msgstr "Describi'l cambéu. Crearáse una versión nueva y les versiones anteriores seguirán disponibles."
+
+msgid "Describe the complete interactive activity you want to generate."
+msgstr "Describi l'actividá interactiva completa que quies xenerar."
+
+msgid "What should be improved?"
+msgstr "¿Qué habría de meyorase?"
+
+msgid "Generate new version"
+msgstr "Xenerar versión nueva"
+
+msgid "Version history"
+msgstr "Historial de versiones"
+
+msgid "Preview, download or restore any generated version."
+msgstr "Previsualiza, descarga o restaura cualquier versión xenerada."
+
+msgid "A new version was generated."
+msgstr "Xeneróse una versión nueva."
+
+msgid "Version restored"
+msgstr "Versión restaurada"
+
+msgid "The support bot tree has been published."
+msgstr "L'árbol del bot de sofitu publicose."
+
+msgid "The support bot tree has been archived."
+msgstr "L'árbol del bot de sofitu archivose."
+
+msgid "The support bot tree has been duplicated."
+msgstr "L'árbol del bot de sofitu duplicose."
+
+msgid "The support bot tree has been deleted."
+msgstr "L'árbol del bot de sofitu desaniciose."
+
+msgid "Are you sure you want to delete this support bot tree?"
+msgstr "¿Tas seguru de que quies desaniciar esti árbol del bot de sofitu?"
+
+msgid "The support bot tree has been imported."
+msgstr "L'árbol del bot de sofitu importose."
+
+msgid "Create support bot tree"
+msgstr "Crear árbol del bot de sofitu"
+
+msgid "Build a fixed decision tree that guides users through support questions and can escalate to Tickets."
+msgstr "Constrúi un árbol de decisión fixu que guía a los usuarios per entrugues de sofitu y pue esguilar a Tickets."
+
+msgid "Portal scope"
+msgstr "Ámbitu del portal"
+
+msgid "Duplicate"
+msgstr "Duplicar"
+
+msgid "Archive"
+msgstr "Archivar"
+
+msgid "View conversations"
+msgstr "Ver conversaciones"
+
+msgid "Import support bot tree"
+msgstr "Importar árbol del bot de sofitu"
+
+msgid "Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft."
+msgstr "Importa una esportación JSON o un árbol de decisión CSV. L'árbol importáu créase siempres como un borrador nuevu."
+
+msgid "Resolved"
+msgstr "Resolvíu"
+
+msgid "Escalated"
+msgstr "Esguiláu"
+
+msgid "Abandoned"
+msgstr "Abandonáu"
+
+msgid "Support bot conversations"
+msgstr "Conversaciones del bot de sofitu"
+
+msgid "Outcome"
+msgstr "Resultáu"
+
+msgid "Started at"
+msgstr "Entamó en"
+
+msgid "Ended at"
+msgstr "Finó en"
+
+msgid "View conversation"
+msgstr "Ver conversación"
+
+msgid "Go to node"
+msgstr "Dir al nuedu"
+
+msgid "Create support ticket"
+msgstr "Crear tiquet de sofitu"
+
+msgid "End conversation"
+msgstr "Finar conversación"
+
+msgid "Node"
+msgstr "Nuedu"
+
+msgid "A support bot tree requires at least one node."
+msgstr "Un árbol del bot de sofitu precisa polo menos un nuedu."
+
+msgid "Are you sure you want to delete this node? Links to it will be cleared."
+msgstr "¿Tas seguru de que quies desaniciar esti nuedu? Les enllaces a él van llimpiase."
+
+msgid "Every support bot node requires at least one option."
+msgstr "Cada nuedu del bot de sofitu precisa polo menos una opción."
+
+msgid "The support bot tree title is required."
+msgstr "El títulu del árbol del bot de sofitu ye obligatoriu."
+
+msgid "A support bot entry node is required."
+msgstr "Precísase un nuedu d'entrada del bot de sofitu."
+
+msgid "Every support bot node requires content."
+msgstr "Cada nuedu del bot de sofitu precisa conteníu."
+
+msgid "Every support bot option requires a label."
+msgstr "Cada opción del bot de sofitu precisa una etiqueta."
+
+msgid "Select a target node for every go-to option."
+msgstr "Seleiciona un nuedu de destín pa cada opción de dir a."
+
+msgid "Enter a relative URL for every link option."
+msgstr "Introduz una URL relativa pa cada opción d'enllaz."
+
+msgid "Select a ticket category for every escalation option."
+msgstr "Seleiciona una categoría de tiquet pa cada opción d'esguilada."
+
+msgid "The support bot tree has been saved."
+msgstr "L'árbol del bot de sofitu guardose."
+
+msgid "Edit support bot tree"
+msgstr "Editar árbol del bot de sofitu"
+
+msgid "Published and archived support bot versions are read-only. Duplicate this tree from the list to edit a new draft version."
+msgstr "Les versiones publicaes y archivaes del bot de sofitu son de namái llectura. Duplica esti árbol dende la llista pa editar una versión de borrador nueva."
+
+msgid "Default ticket project"
+msgstr "Proyeutu de tiques predetermináu"
+
+msgid "Decision tree rules"
+msgstr "Regles del árbol de decisión"
+
+msgid "Every node must contain at least one option."
+msgstr "Cada nuedu tien de contener polo menos una opción."
+
+msgid "A final node must end the conversation or create a support ticket."
+msgstr "Un nuedu final tien de terminar la conversación o crear un tique de soporte."
+
+msgid "Go-to links must not create cycles in v1."
+msgstr "Los enllaces de saltu nun tienen de crear ciclos na v1."
+
+msgid "External URLs are not allowed in v1; link actions must use a relative Chamilo path."
+msgstr "Les URL esternes nun tán permitíes na v1; les aiciones d'enllaz tienen d'usar un camín relativu de Chamilo."
+
+msgid "Nodes"
+msgstr "Nuedos"
+
+msgid "Add node"
+msgstr "Amestar nuedu"
+
+msgid "Entry node"
+msgstr "Nuedu d'entrada"
+
+msgid "Set as entry node"
+msgstr "Definir como nuedu d'entrada"
+
+msgid "Target node"
+msgstr "Nuedu de destín"
+
+msgid "Use a relative Chamilo path, for example /tickets."
+msgstr "Usa un camín relativu de Chamilo, por exemplu /tickets."
+
+msgid "Ticket category"
+msgstr "Categoría de tique"
+
+msgid "Select a default ticket project first."
+msgstr "Seleiciona primero un proyeutu de tiques predetermináu."
+
+msgid "Closing message"
+msgstr "Mensaxe de zarru"
+
+msgid "Select a node to edit it."
+msgstr "Seleiciona un nuedu pa editalu."
+
+msgid "Support bot conversation"
+msgstr "Conversación del bot de soporte"
+
+msgid "Transcript of %s"
+msgstr "Trescripción de %s"
+
+msgid "Download unofficial transcript"
+msgstr "Baxar trescripción non oficial"
+
+msgid "Issue official transcript"
+msgstr "Emitir trescripción oficial"
+
+msgid "Official transcripts"
+msgstr "Trescripciones oficiales"
+
+msgid "No official transcript has been issued yet."
+msgstr "Entá nun s'emitió nenguna trescripción oficial."
+
+msgid "Issued by"
+msgstr "Emitíu por"
+
+msgid "Verify"
+msgstr "Verificar"
+
+msgid "Signature of official transcripts"
+msgstr "Firma de les trescripciones oficiales"
+
+msgid "This image is printed on the official transcripts of this portal, above the signatory name and title set in the certificate settings."
+msgstr "Esta imaxe imprímese nes trescripciones oficiales d'esti portal, enriba del nome y títulu del firmante definíos nos axustes del certificáu."
+
+msgid "Issue a signed official transcript with the courses and grades listed on this page? It can be verified online until it is revoked."
+msgstr "¿Emitir una trescripción oficial firmada colos cursos y notes llistaos nesta páxina? Pue verificase en llinia hasta que se revoque."
+
+msgid "Official transcript issued"
+msgstr "Trescripción oficial emitida"
+
+msgid "Revoke this official transcript? Its verification page will then show it as revoked."
+msgstr "¿Revocar esta trescripción oficial? La so páxina de verificación amosarála entós como revocada."
+
+msgid "Official transcript revoked"
+msgstr "Trescripción oficial revocada"
+
+msgid "Select a PNG or JPEG image first."
+msgstr "Seleiciona primero una imaxe PNG o JPEG."
+
+msgid "Signed credential"
+msgstr "Credencial firmada"
+
+msgid "Issue signed credential"
+msgstr "Emitir credencial firmada"
+
+msgid "Verify credential"
+msgstr "Verificar credencial"
+
+msgid "Anchor on Sepolia testnet"
+msgstr "Anclar na rede de pruebes Sepolia"
+
+msgid "Confirm existing Sepolia transaction"
+msgstr "Confirmar transaición esistente de Sepolia"
+
+msgid "Revoke signed credential"
+msgstr "Revocar credencial firmada"
+
+msgid "Delete certificate"
+msgstr "Desaniciar certificáu"
+
+msgid "Confirm an existing Sepolia transaction"
+msgstr "Confirmar una transaición esistente de Sepolia"
+
+msgid "Sepolia transaction hash"
+msgstr "Hash de transaición de Sepolia"
+
+msgid "Verify transaction"
+msgstr "Verificar transaición"
+
+msgid "Anchored"
+msgstr "Ancláu"
+
+msgid "Issued"
+msgstr "Emitíu"
+
+msgid "Not issued"
+msgstr "Non emitíu"
+
+msgid "Consent required"
+msgstr "Precísase consentimientu"
+
+msgid "Sepolia transaction confirmed and verified"
+msgstr "Transaición de Sepolia confirmada y verificada"
+
+msgid "The Sepolia testnet wallet will ask you to sign a transaction. Only the certificate fingerprint will be anchored. Proceed?"
+msgstr "La cartera de la rede de pruebes Sepolia pidiráte que firmes una transaición. Namái s'anclará la buelga dixital del certificáu. ¿Siguir?"
+
+msgid "Revoke this signed credential? Any blockchain transaction remains permanent, but the verification page will report revocation."
+msgstr "¿Revocar esta credencial firmada? Cualquier transaición de cadena de bloques permanece permanente, pero la páxina de verificación informará de la revocación."
+
+msgid "Issue a signed certificate credential for this learner? This makes the approved personal details verifiable with a private link."
+msgstr "¿Emitir una credencial de certificáu firmada pa esti aprendiz? Esto fai que los datos personales aprobaos seyan verificables con un enllaz priváu."
+
+msgid "An EVM-compatible browser wallet is required for Sepolia."
+msgstr "Precísase una cartera de restolador compatible con EVM pa Sepolia."
+
+msgid "Select Sepolia testnet (chain ID 11155111) in your wallet."
+msgstr "Seleiciona la rede de pruebes Sepolia (ID de cadena 11155111) na to cartera."
+
+msgid "Invalid wallet address or certificate fingerprint."
+msgstr "Direición de cartera o buelga de certificáu non válida."
+
+msgid "Transaction pending"
+msgstr "Transaición pendiente"
+
+msgid "Use Confirm existing Sepolia transaction later."
+msgstr "Usa Confirmar transaición esistente de Sepolia más sero."
+
+msgid "Signed credential issued"
+msgstr "Credencial firmada emitida"
+
+msgid "Credential revoked"
+msgstr "Credencial revocada"
+
+msgid "Transaction hash"
+msgstr "Hash de transaición"
+
+msgid "Publication consent allows an administrator to issue a signed certificate credential and optionally anchor its SHA-256 fingerprint on the Sepolia testnet. No name or personal data is sent on-chain. You can withdraw consent at any time."
+msgstr "El consentimientu de publicación permite a un alministrador emitir una credencial de certificáu firmada y, opcionalmente, anclar la so buelga SHA-256 na rede de pruebes Sepolia. Nun s'unvia nengún nome nin datu personal a la cadena. Pues retirar el consentimientu en cualquier momentu."
+
+msgid "Publication consent"
+msgstr "Consentimientu de publicación"
+
+msgid "Not approved"
+msgstr "Non aprobáu"
+
+msgid "Withdraw consent"
+msgstr "Retirar consentimientu"
+
+msgid "Approve publication"
+msgstr "Aprobar publicación"
+
+msgid "I authorize a signed, publicly verifiable credential showing my name, course, score and issue date. An administrator may also publish only its SHA-256 fingerprint on the Sepolia testnet. The fingerprint is permanent, even if I withdraw later. Continue?"
+msgstr "Autorizo una credencial firmada y verificable públicamente que amuesa'l mio nome, cursu, puntuación y fecha d'emisión. Un alministrador tamién pue publicar namái la so buelga SHA-256 na rede de pruebes Sepolia. La buelga ye permanente, inclusive si retrayo más sero. ¿Siguir?"
+
+msgid "Withdraw the publication approval for this certificate?"
+msgstr "¿Retirar l'aprobación de publicación d'esti certificáu?"
+
+msgid "Publication approval recorded"
+msgstr "Aprobación de publicación rexistrada"
+
+msgid "Publication approval withdrawn"
+msgstr "Aprobación de publicación retirada"
+
+msgid "Read more"
+msgstr "Lleer más"
+
+msgid "Participation: %s of %s posts"
+msgstr "Participación: %s de %s mensaxes"
+
+msgid "Post your contribution to see the replies of the other participants."
+msgstr "Unvia la to contribución pa ver les rempuestes de los demás participantes."
+
+msgid "Only authorized investigators can review eligible reports. Reporter identities stay confidential by default."
+msgstr "Namái los investigadores autorizaos puen revisar los informes elegibles. Les identidaes de quien informa permanecen confidenciales de forma predeterminada."
+
+msgid "New confidential report"
+msgstr "Nuevu informe confidencial"
+
+msgid "Reported user"
+msgstr "Usuariu denunciáu"
+
+msgid "There are eligible confidential reports awaiting review."
+msgstr "Hai informes confidenciales elegibles esperando revisión."
+
+msgid "Eligible investigations"
+msgstr "Investigaciones elegibles"
+
+msgid "A case appears here only after at least %s different users report the same person."
+msgstr "Un casu apaez equí namái dempués de que polo menos %s usuarios distintos denuncien a la mesma persona."
+
+msgid "Distinct reporters"
+msgstr "Denunciantes distintos"
+
+msgid "Reports for selected user"
+msgstr "Informes del usuariu seleicionáu"
+
+msgid "Confidential reporting is currently unavailable."
+msgstr "La denuncia confidencial nun ta disponible nesti momentu."
+
+msgid "The investigation could not be loaded."
+msgstr "Nun se pudo cargar la investigación."
+
+msgid "Your identity is protected from investigators by default, but avoid including identifying details in the report text or attachments. This is not an emergency service."
+msgstr "La to identidá ta protexida de los investigadores de forma predeterminada, pero evita incluir detalles identificadores nel testu del informe o nos axuntos. Esto nun ye un serviciu d'emerxencia."
+
+msgid "Find the user involved"
+msgstr "Atopa l'usuariu implicáu"
+
+msgid "Name or username"
+msgstr "Nome o nome d'usuariu"
+
+msgid "Describe the situation"
+msgstr "Describe la situación"
+
+msgid "Evidence (optional)"
+msgstr "Pruebes (opcional)"
+
+msgid "Up to three files, maximum 8 MiB each. Images, audio or short videos."
+msgstr "Hasta tres ficheros, máximu 8 MiB caún. Imaxes, audiu o vídeos curtios."
+
+msgid "I agree that authorized investigators may see my name and email for this specific report. I can withdraw this permission later."
+msgstr "Aceuto que los investigadores autorizaos puedan ver el mio nome y corréu pa esti informe específicu. Pueo retirar esti permisu más sero."
+
+msgid "Send confidential report"
+msgstr "Unviar informe confidencial"
+
+msgid "Could not search users"
+msgstr "Nun se pudo buscar usuarios"
+
+msgid "Up to three files, maximum 8 MiB each."
+msgstr "Hasta tres ficheros, máximu 8 MiB caún."
+
+msgid "The confidential report could not be saved."
+msgstr "Nun se pudo guardar l'informe confidencial."
+
+msgid "Confidential report"
+msgstr "Informe confidencial"
+
+msgid "Confidential conversation"
+msgstr "Conversación confidencial"
+
+msgid "Investigators can communicate through this conversation without seeing the reporter's identity unless contact sharing is enabled."
+msgstr "Los investigadores puen comunicase per esta conversación ensin ver la identidá de quien denuncia, sacante que s'active'l compartimientu de contautu."
+
+msgid "Reporter"
+msgstr "Denunciante"
+
+msgid "Investigator"
+msgstr "Investigador"
+
+msgid "Additional evidence (optional)"
+msgstr "Pruebes adicionales (opcional)"
+
+msgid "Up to three files, maximum 8 MiB each; ten files per report."
+msgstr "Hasta tres ficheros, máximu 8 MiB caún; diez ficheros per informe."
+
+msgid "Contact shared voluntarily"
+msgstr "Contautu compartíu de forma voluntaria"
+
+msgid "Allow investigators to see my name and email for this report"
+msgstr "Permitir que los investigadores vean el mio nome y corréu pa esti informe"
+
+msgid "This confidential report is not available."
+msgstr "Esti informe confidencial nun ta disponible."
+
+msgid "Your message could not be saved."
+msgstr "Nun se pudo guardar el to mensaxe."
+
+msgid "Contact sharing could not be updated."
+msgstr "Nun se pudo anovar el compartimientu de contactos."
+
+msgid "Evidence could not be downloaded."
+msgstr "Nun se pudo descargar la evidencia."
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemplu d'actividá de rellenar formulariu: calcular l'índiz de masa corporal</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Edá</strong></td>            <td width=\"75%\" style=\"\">[25] años</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sexu</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Pesu</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Altor</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Índiz de masa corporal</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Pesu/Altor<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artículu de Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Exemplu d'actividá de rellenar formulariu: calcular l'índiz de masa corporal</h3>            </td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Edá</strong></td>            <td width=\"75%\" style=\"\">[25] años</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Sexu</strong></td>            <td style=\"\" text-align:=\"\">[M] (M o F)</td>        </tr>        <tr>            <td style=\"text-align: end;\"><strong>Pesu</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Altor</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: end;\"><strong>Índiz de masa corporal</strong></td>            <td style=\"vertical-align: top;\">[29] IMC =Pesu/Altor<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> artículu de Wikipedia</a>)</td>        </tr>    </tbody></table>"
+
+msgid "Hide IP address from reports"
+msgstr "Anubrir la direición IP nos informes"
+
+msgid "Course settings policies"
+msgstr "Polítiques de configuración del cursu"
+
+msgid "Academic transcripts"
+msgstr "Expedientes académicos"
+
+msgid "Transcript program title"
+msgstr "Títulu del programa nel expediente"
+
+msgid "Transcript course code"
+msgstr "Códigu del cursu nel expediente"
+
+msgid "Transcript course hours field"
+msgstr "Campu d'hores del cursu nel expediente"
+
+msgid "Transcript completed hours are the required hours"
+msgstr "Les hores completáes del expediente son les hores riquíes"
+
+msgid "Transcript student number field"
+msgstr "Campu de númberu d'estudiante nel expediente"
+
+msgid "Transcript address fields"
+msgstr "Campos de direición nel expediente"
+
+msgid "Transcript grading scale"
+msgstr "Escala de calificación del expediente"
+
+msgid "Transcript GPA note"
+msgstr "Nota del GPA nel expediente"
+
+msgid "Transcript signatory name"
+msgstr "Nome del firmante del expediente"
+
+msgid "Transcript signatory title"
+msgstr "Cargu del firmante del expediente"
+
+msgid "Enable signed certificates and optional Sepolia testnet anchoring"
+msgstr "Activar certificados firmaos y anclaxe opcional na rede de pruebes Sepolia"
+
+msgid "Show thread replies only after participating"
+msgstr "Amosar les respuestes del filu namái dempués de participar"
+
+msgid "Show the forum category description in threads"
+msgstr "Amosar la descripción de la categoría del foru nos filos"
+
+msgid "Forum participation settings can be changed by course"
+msgstr "La configuración de participación nel foru pue camudase por cursu"
+
+msgid "Maximum posts shown in a forum thread"
+msgstr "Máximu de mensaxes amosaos nun filu del foru"
+
+msgid "Posts required to complete a forum thread"
+msgstr "Mensaxes riquíos pa completar un filu del foru"
+
+msgid "Track e-mail openings"
+msgstr "Rexistrar les apertures de corréu"
+
+msgid "Allow e-mail replies to messages"
+msgstr "Permitir respuestes per corréu a los mensaxes"
+
+msgid "Inbound e-mail address"
+msgstr "Direición de corréu d'entrada"
+
+msgid "Inbound mailbox DSN"
+msgstr "DSN del buzón d'entrada"
+
+msgid "Remember me duration (days)"
+msgstr "Duración de «Recordame» (díes)"
+
+msgid "Enable OAuth Dynamic Client Registration beyond MCP"
+msgstr "Activar el rexistru dinámicu de clientes OAuth más allá de MCP"
+
+msgid "Enable confidential welfare reporting"
+msgstr "Activar informes confidenciales de bienestar"
+
+msgid "Minimum distinct reporters for an investigation"
+msgstr "Mínimu de denunciantes distintos pa una investigación"
+
+msgid "Allow confidential evidence attachments"
+msgstr "Permitir axuntos d'evidencia confidenciales"
+
+msgid "Show confidential investigation notifications"
+msgstr "Amosar avisos d'investigaciones confidenciales"
+
+msgid "Enable support chatbot"
+msgstr "Activar el chatbot d'asistencia"
+
+msgid "Select where glossary terms are highlighted automatically: documents, exercises and learning paths."
+msgstr "Seleiciona onde se resalten automáticamente los términos del glosariu: documentos, exercicios y itinerarios d'aprendizaxe."
+
+msgid "Hide IP addresses in visual reporting and reporting exports. IP addresses remain stored and accessible through authorized personal-data procedures."
+msgstr "Anubrir les direiciones IP nos informes visuales y nes esportaciones. Les direiciones IP siguen almacenándose y son accesibles per procedimientos autorizaos de datos personales."
+
+msgid "Platform defaults and course edit permissions; managed in Course settings."
+msgstr "Valores predeterminaos de la plataforma y permisos d'edición del cursu; xestiónase en Configuración del cursu."
+
+msgid "Let users download an unofficial transcript of the courses they completed, and let administrators, session administrators and HR managers issue signed official transcripts for the users they manage. The signature image is uploaded from the transcript page of a user."
+msgstr "Permitir a los usuarios descargar un expediente extraoficial de los cursos que completaron, y permitir a los alministradores, alministradores de sesión y responsables de RR. HH. emitir espedientes oficiales firmaos pa los usuarios que xestionen. La imaxe de la firma xúbese dende la páxina d'espediente d'un usuariu."
+
+msgid "Program title printed on every transcript, for example the name of the diploma prepared on this platform."
+msgstr "Títulu del programa impresu en cada espediente, por exemplu el nome del diploma que se prepara nesta plataforma."
+
+msgid "Which course field fills the course code column of transcripts: the course code or the department name."
+msgstr "Qué campu del cursu rellena la columna de códigu de cursu nos espedientes: el códigu del cursu o'l nome del departamentu."
+
+msgid "Variable of the course extra field holding the number of hours of a course. Leave empty to use the duration of the course."
+msgstr "Variable del campu extra del cursu que contién el númberu d'hores d'un cursu. Déxalo vacíu pa usar la duración del cursu."
+
+msgid "Print the required hours of a course as the hours completed by the learner. When disabled, the hours completed are the time the learner spent in the course."
+msgstr "Imprimir les hores riquíes d'un cursu como les hores completáes pol aprendiz. Si ta desactivao, les hores completáes son el tiempu que l'aprendiz pasó nel cursu."
+
+msgid "Variable of the user extra field holding the student number printed on transcripts. Leave empty to print none."
+msgstr "Variable del campu extra d'usuariu que contién el númberu d'estudiante impresu nos espedientes. Déxalo vacíu pa nun imprimir nengún."
+
+msgid "Comma-separated variables of user extra fields printed after the address of the user on transcripts, for example the city, state and zip code."
+msgstr "Variables separtaes por comes de campos extra d'usuariu impreses dempués de la direición del usuariu nos espedientes, por exemplu ciudá, provincía y códigu postal."
+
+msgid "JSON list of the grade letters, from the highest minimum score down: each item has the minimum score in percent (min), the letter and the grade points used to compute the GPA."
+msgstr "Llista JSON de les lletres de calificación, dende la puntuación mínima más alta escontra baxo: cada elementu tien la puntuación mínima en porcentaxe (min), la lletra y los puntos de calificación usaos pa calcular el GPA."
+
+msgid "Explanation of how the GPA is computed, printed under the GPA on transcripts."
+msgstr "Esplicación de cómo se calcula'l GPA, impresa debaxo del GPA nos espedientes."
+
+msgid "Name of the school official who signs the official transcripts."
+msgstr "Nome del responsable del centru que firma los espedientes oficiales."
+
+msgid "Title of the school official who signs the official transcripts."
+msgstr "Cargu del responsable del centru que firma los espedientes oficiales."
+
+msgid "Requires explicit owner consent and manual administrator actions. Only SHA-256 fingerprints are sent on-chain."
+msgstr "Rique'l consentimientu esplícitu del propietariu y aiciones manuales del alministrador. Namái s'unvien na cadena les buelgues SHA-256."
+
+msgid "Learners only see the first post of a forum thread until they have posted in it themselves. Administrators, teachers, coaches and group tutors always see every post."
+msgstr "Los aprendices namái ven el primer mensaxe d'un filu de foru hasta que publiquen nelli ellos mesmos. Los alministradores, profesores, entrenadores y tutores de grupu siempres ven tolos mensaxes."
+
+msgid "Display the title and a shortened description of the forum category at the top of each thread, with a link to read the full description."
+msgstr "Amosar el títulu y una descripción acurtada de la categoría del foru na parte cimera de cada filu, con un enllaz pa lleer la descripción completa."
+
+msgid "When enabled, teachers can choose in the Forum section of the course settings whether their course hides thread replies until the learner posts, shows the category description in threads and how many posts the participation progress bar expects, instead of following the platform settings."
+msgstr "Cuando ta activáu, los profesores puen escoyer na seición Foru de la configuración del cursu si'l so cursu anubre les respuestes del filu hasta que l'aprendiz publique, amuesa la descripción de la categoría nos filos y cuántos mensaxes espera la barra de progresu de participación, en cuenta de siguir la configuración de la plataforma."
+
+msgid "Show only this number of posts of each forum thread to every user who is not a platform administrator, teachers included, and to everyone inside a learning path. In the threaded and nested views, the limit applies to the replies of each post. The posts are kept in the order of the view: the first ones, or the latest ones inside a learning path, where the latest posts come first. Set to 0 to show every post."
+msgstr "Amosar namái esti númberu de mensaxes de cada filu de foru a cada usuariu que nun seya alministrador de la plataforma, profesores incluyíos, y a tol mundu dientro d'un itinerariu d'aprendizaxe. Nes vistes enfilaes y añeraes, el llímite aplícase a les respuestes de cada mensaxe. Los mensaxes cónservense nel orde de la vista: los primeros, o los más recién dientro d'un itinerariu d'aprendizaxe, onde los mensaxes más recién van primero. Pon 0 pa amosar tolos mensaxes."
+
+msgid "Show learners a progress bar in each forum thread, which reaches 100% once they have posted this number of messages in it. Posts waiting for moderation are counted. Set to 0 to hide the progress bar."
+msgstr "Amosar a los aprendices una barra de progresu en cada filu de foru, que llega al 100% cuando publiquen esti númberu de mensaxes nelli. Cúntense los mensaxes que esperen moderación. Pon 0 pa anubrir la barra de progresu."
+
+msgid "Adds a small tracking image to message notification e-mails and records when it is requested. This only indicates that the e-mail may have been opened; it does not prove it was read."
+msgstr "Amiesta una imaxe pequeña de siguimientu a los correos de notificación de mensaxes y rexistra cuando se solicita. Esto namái indica que'l corréu pudo abrise; nun demuestra que se lleyera."
+
+msgid "Allow recipients of direct message notifications to reply by e-mail. Incoming messages must be routed to the Chamilo inbound-mail command by the mail infrastructure."
+msgstr "Permitir a los destinatarios de les notificaciones de mensaxes direutos responder per corréu. Los mensaxes entrantes tienen de dirixise al comandu de corréu d'entrada de Chamilo pola infraestructura de corréu."
+
+msgid "Base address used for reply routing, for example replies@example.com. Chamilo adds a unique recipient token using plus addressing."
+msgstr "Direición base usada pal enrutáu de respuestes, por exemplu replies@example.com. Chamilo amiesta un token únicu de destinatariu usando direiciones plus."
+
+msgid "Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials."
+msgstr "Conexón del buzón usada pa recoyer les respuestes d'entrada, por exemplu imaps://user:password@imap.example.com:993/INBOX. Codifica n'URL los caráuteres reservaos nes credenciales."
+
+msgid "Number of days to keep a user signed in when Remember me is selected. Set to 0 to disable. Requires HTTPS. Allowed range: 0 to 90. The normal session timeout is configured separately in PHP/Symfony."
+msgstr "Númberu de díes pa caltener a un usuariu con sesión aniciada cuando se seleiciona Recuérdame. Pon 0 pa desactivar. Requier HTTPS. Rangu permitíu: 0 a 90. El tiempu d'espera normal de la sesión configúrase por separtao en PHP/Symfony."
+
+msgid "Allows Dynamic Client Registration to request any scope registered by a Chamilo OAuth resource server. When disabled, self-registration remains limited to MCP. Resource access is always restricted separately by each client's allowed resource list."
+msgstr "Permite que'l rexistru dinámicu de clientes solicite cualesquier ámbito rexistráu por un sirvidor de recursos OAuth de Chamilo. Cuando ta desactiváu, l'autorrexistru sigue llendáu a MCP. L'accesu a recursos siempres ta acutáu por separtao pola llista de recursos permitíos de cada cliente."
+
+msgid "Enable confidential incident reports. The module requires a protected encryption key and investigator permission."
+msgstr "Activar informes confidenciales d'incidentes. El módulu requiere una clave de cifráu protexida y permisu d'investigador."
+
+msgid "Between 2 and 10 different reporters must report the same user before the case becomes visible to investigators."
+msgstr "Ente 2 y 10 denunciantes distintos tienen de denunciar al mesmu usuariu enantes de que'l casu seya visible pa los investigadores."
+
+msgid "Allow images, audio and short video evidence. Existing attachments remain readable when disabled."
+msgstr "Permitir pruebes d'imáxenes, audiu y videu curtiu. Los axuntos esistentes siguen siendo lleíbles cuando ta desactiváu."
+
+msgid "Display an internal indication of eligible investigations. Does not send emails or external notifications."
+msgstr "Amosar una indicación interna d'investigaciones elegibles. Nun unvia correos nin notificaciones esternes."
+
+msgid "Show a decision-tree chatbot in the chat panel that can guide users to "
+msgstr "Amosar nel panel de chat un chatbot d'árbol de decisiones que pue guiar a los usuarios a "
+
+msgid "Allows teachers to create and version AI-assisted educational applications inside courses."
+msgstr "Permite a los profesores crear y versionar aplicaciones educatives asistíes por IA dientro de los cursos."
+
+msgid "Department name"
+msgstr "Nome del departamentu"
+
+msgid "Documents and exercise"
+msgstr "Documentos y exerciciu"
+
+msgid "Documents and learning path"
+msgstr "Documentos ya itinerariu d'aprendizaxe"
+
+msgid "Documents, exercise and learning path"
+msgstr "Documentos, exerciciu ya itinerariu d'aprendizaxe"
+
+msgid "session"
+msgstr "sesión"
+
+msgid "course"
+msgstr "cursu"
+
+msgid "You have been enrolled in %s"
+msgstr "Matriculáronte en %s"
 

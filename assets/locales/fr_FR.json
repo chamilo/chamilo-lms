@@ -4612,5 +4612,15 @@
     "Evidence could not be downloaded.": "Les preuves n\u2019ont pas pu \u00eatre t\u00e9l\u00e9charg\u00e9es.",
     "Delete message": "Supprimer le message",
     "Message Sent": "Message envoy\u00e9",
-    "Are you sure you want to delete the selected message?": "\u00cates-vous certain de vouloir supprimer le message s\u00e9lectionn\u00e9\u202f?"
+    "Are you sure you want to delete the selected message?": "\u00cates-vous certain de vouloir supprimer le message s\u00e9lectionn\u00e9\u202f?",
+    "Delete CMS pages": "Supprimer des pages CMS",
+    "The following page will be deleted:": "La page suivante sera supprimée :",
+    "Pages in different languages are not automatically linked. Select only related pages.": "Les pages dans différentes langues ne sont pas liées automatiquement. Sélectionnez uniquement les pages correspondantes.",
+    "Select additional pages from other languages": "Sélectionner d’autres pages dans d’autres langues",
+    "No other language pages were found in this category.": "Aucune autre page dans une langue différente n’a été trouvée dans cette catégorie.",
+    "Other language pages could not be loaded. You can still delete only the current page.": "Impossible de charger les pages des autres langues. Vous pouvez tout de même supprimer uniquement la page actuelle.",
+    "Selected pages to delete:": "Pages sélectionnées pour suppression :",
+    "Delete selected pages": "Supprimer les pages sélectionnées",
+    "The following pages will be deleted:": "Les pages suivantes seront supprimées :",
+    "A maximum of 100 pages can be deleted at once.": "Vous pouvez supprimer au maximum 100 pages à la fois."
 }

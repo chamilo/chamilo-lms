@@ -4610,5 +4610,15 @@
     "Evidence could not be downloaded.": "No se pudo descargar la evidencia.",
     "Delete message": " Borrar mensaje",
     "Message Sent": "Mensaje enviado",
-    "Are you sure you want to delete the selected message?": "\u00bfEsta seguro de que desea borrar este mensaje?"
+    "Are you sure you want to delete the selected message?": "\u00bfEsta seguro de que desea borrar este mensaje?",
+    "Delete CMS pages": "Eliminar páginas del CMS",
+    "The following page will be deleted:": "Se eliminará la siguiente página:",
+    "Pages in different languages are not automatically linked. Select only related pages.": "Las páginas en distintos idiomas no se vinculan automáticamente. Seleccione solo las páginas relacionadas.",
+    "Select additional pages from other languages": "Seleccionar páginas adicionales en otros idiomas",
+    "No other language pages were found in this category.": "No se encontraron otras páginas en distintos idiomas dentro de esta categoría.",
+    "Other language pages could not be loaded. You can still delete only the current page.": "No se pudieron cargar las páginas de otros idiomas. Aun así, puede eliminar únicamente la página actual.",
+    "Selected pages to delete:": "Páginas seleccionadas para eliminar:",
+    "Delete selected pages": "Eliminar páginas seleccionadas",
+    "The following pages will be deleted:": "Se eliminarán las siguientes páginas:",
+    "A maximum of 100 pages can be deleted at once.": "Puede eliminar un máximo de 100 páginas a la vez."
 }

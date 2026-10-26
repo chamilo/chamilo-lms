@@ -43192,3 +43192,33 @@ msgstr "course"
 
 msgid "You have been enrolled in %s"
 msgstr "You have been enrolled in %s"
+
+msgid "Delete CMS pages"
+msgstr "Delete CMS pages"
+
+msgid "The following page will be deleted:"
+msgstr "The following page will be deleted:"
+
+msgid "Pages in different languages are not automatically linked. Select only related pages."
+msgstr "Pages in different languages are not automatically linked. Select only related pages."
+
+msgid "Select additional pages from other languages"
+msgstr "Select additional pages from other languages"
+
+msgid "No other language pages were found in this category."
+msgstr "No other language pages were found in this category."
+
+msgid "Other language pages could not be loaded. You can still delete only the current page."
+msgstr "Other language pages could not be loaded. You can still delete only the current page."
+
+msgid "Selected pages to delete:"
+msgstr "Selected pages to delete:"
+
+msgid "Delete selected pages"
+msgstr "Delete selected pages"
+
+msgid "The following pages will be deleted:"
+msgstr "The following pages will be deleted:"
+
+msgid "A maximum of 100 pages can be deleted at once."
+msgstr "A maximum of 100 pages can be deleted at once."

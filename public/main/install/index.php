@@ -885,7 +885,8 @@ if (isset($_POST['step2'])) {
                     $mailerDsn,
                     $mailerFromEmail,
                     $mailerFromName,
-                    $kernel
+                    $kernel,
+                    (string) $urlForm
                 );
 
                 // Upload the themes bundled in var/themes to the configured themes

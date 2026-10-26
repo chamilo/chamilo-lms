@@ -62,6 +62,11 @@ function handleForum($url)
             $resource = $repo->find($id);
         }
 
+        // The id comes from the request: only act on a category, forum or thread of the current course.
+        if (null !== $resource && !resourceBelongsToCurrentContext($resource)) {
+            api_not_allowed(true);
+        }
+
         switch ($action) {
             case 'add_forum':
                 $formContent = forumForm(null, $lp_id);
@@ -71,6 +76,9 @@ function handleForum($url)
             case 'edit_forum':
                 $repo = Container::getForumRepository();
                 $resource = $repo->find($id);
+                if (null !== $resource && !resourceBelongsToCurrentContext($resource)) {
+                    api_not_allowed(true);
+                }
                 $formContent = forumForm($resource, $lp_id);
 
                 return $formContent;
@@ -83,6 +91,9 @@ function handleForum($url)
             case 'edit_category':
                 $repo = Container::getForumCategoryRepository();
                 $category = $repo->find($id);
+                if (null !== $category && !resourceBelongsToCurrentContext($category)) {
+                    api_not_allowed(true);
+                }
                 $formContent = editForumCategoryForm($category);
 
                 return $formContent;
@@ -506,6 +517,17 @@ function forumForm(CForum $forum = null, int $lp_id = null): string
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->getSubmitValues();
+            // Never trust the submitted ids: edit only the forum already authorized by the caller,
+            // and file it only under a category of the current course.
+            unset($values['forum_id']);
+            if (null !== $forum) {
+                $values['forum_id'] = $forum->getIid();
+            }
+            if (!empty($values['forum_category'])
+                && !resourceBelongsToCurrentContext(Container::getForumCategoryRepository()->find($values['forum_category']))
+            ) {
+                api_not_allowed(true);
+            }
             $forumId = store_forum($values, [], true);
             if ($forumId) {
                 // SkillModel::saveSkills($form, ITEM_TYPE_FORUM, $forumId);
@@ -601,6 +623,8 @@ function editForumCategoryForm(CForumCategory $category): string
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->exportValues();
+            // Never trust the hidden field: edit only the category already authorized by the caller.
+            $values['forum_category_id'] = $categoryId;
             saveForumCategory($values);
         }
         Security::clear_token();
@@ -5725,7 +5749,16 @@ function getCountPostsWithStatusBatch(int $status, array $forumIds): array
  */
 function forumBelongsToCurrentContext(?CForum $forum): bool
 {
-    $resourceNode = $forum?->getResourceNode();
+    return resourceBelongsToCurrentContext($forum);
+}
+
+/**
+ * Whether the forum category, forum or thread is linked to the current course, either in the
+ * current session or in the base course.
+ */
+function resourceBelongsToCurrentContext(?AbstractResource $resource): bool
+{
+    $resourceNode = $resource?->getResourceNode();
     if (null === $resourceNode) {
         return false;
     }

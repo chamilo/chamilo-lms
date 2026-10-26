@@ -294,7 +294,16 @@
         :is-empty="!skillsSection.items.length"
         :empty-text="t(skillsSection.emptyText)"
       >
-        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <GlobalReportingLearnerSkillTree
+          v-if="skillsSection.tree"
+          :mode="skillsSection.tree.mode"
+          :nodes="skillsSection.tree.nodes"
+          :skill-url="skillDetailUrl"
+        />
+        <div
+          v-else
+          class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3"
+        >
           <article
             v-for="skill in skillsSection.items"
             :key="skill.id"
@@ -550,6 +559,7 @@ import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import globalReportingService from "../../services/globalReportingService"
 import GlobalReportingLearnerClasses from "./GlobalReportingLearnerClasses.vue"
 import GlobalReportingLearnerMessages from "./GlobalReportingLearnerMessages.vue"
+import GlobalReportingLearnerSkillTree from "./GlobalReportingLearnerSkillTree.vue"
 import legalAgreementService from "../../services/legalAgreementService"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useFormatDate } from "../../composables/formatDate"
@@ -727,6 +737,12 @@ const globalBackRoute = computed(() => ({
 
 // The API sends UTC dates as "Y-m-d H:i:s"; useFormatDate shows them in the user's or the platform's
 // time zone, as configured.
+// BadgeController only accepts the learner report as the origin to come back to
+function skillDetailUrl(skill) {
+  const origin = `/reporting/learners/${userId.value}`
+  return `/badge/${Number(skill.id)}/user/${userId.value}?origin=${encodeURIComponent(origin)}`
+}
+
 function formatDateTime(value, fallback = "-") {
   return value ? abbreviatedDatetime(String(value).replace(" ", "T")) || String(value) : fallback
 }

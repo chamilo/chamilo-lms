@@ -143,6 +143,34 @@ final class GlobalReportingLearnerDetailTest extends AbstractApiTest
         $this->assertSame('hierarchical', $this->getLearnerReport($learner)['meta']['skillTree']['mode']);
     }
 
+    public function testTheCourseReportPlacesOnlyTheSkillsOfThatCourseInTheSkillTree(): void
+    {
+        $learner = $this->createUser('report_learner');
+        $course = $this->createCourse('Skills course');
+        $course->addUserAsStudent($learner);
+        $communication = $this->createSkill('Communication');
+        $this->acquire($learner, $this->createSkill('Listening', $communication), $course);
+        // Acquired outside the course: the legacy course report leaves it out, so must its tree
+        $this->acquire($learner, $this->createSkill('Writing', $communication));
+        $this->setSetting('skill_levels_names', '{"1":"Basic"}');
+
+        $sections = $this->client()->request('GET', '/api/global-reporting/report', [
+            'query' => [
+                'section' => 'learner-detail',
+                'userId' => $learner->getId(),
+                'courseId' => $course->getId(),
+                'sessionId' => 0,
+            ],
+            'headers' => ['Accept' => 'application/json'],
+        ])->toArray()['sections'];
+        $skillsSection = array_values(array_filter($sections, static fn (array $section): bool => 'course-skills' === $section['key']))[0];
+
+        $this->assertSame(
+            [['Communication', false, [['Listening', true, []]]]],
+            $this->summarizeSkillNodes($skillsSection['tree']['nodes'])
+        );
+    }
+
     public function testMessagesAboutTheLearnerAreHiddenWhenTheSettingIsOff(): void
     {
         $this->setMessagesAboutUsers('false');
@@ -236,16 +264,19 @@ final class GlobalReportingLearnerDetailTest extends AbstractApiTest
         return $skill;
     }
 
-    private function acquire(User $learner, Skill $skill): void
+    private function acquire(User $learner, Skill $skill, ?Course $course = null): void
     {
         $em = $this->getEntityManager();
-        $em->persist(
-            (new SkillRelUser())
-                ->setSkill($skill)
-                ->setUser($learner)
-                ->setArgumentation('')
-                ->setArgumentationAuthorId((int) $learner->getId())
-        );
+        $acquisition = (new SkillRelUser())
+            ->setSkill($skill)
+            ->setUser($learner)
+            ->setArgumentation('')
+            ->setArgumentationAuthorId((int) $learner->getId())
+        ;
+        if (null !== $course) {
+            $acquisition->setCourse($course);
+        }
+        $em->persist($acquisition);
         $em->flush();
     }
 

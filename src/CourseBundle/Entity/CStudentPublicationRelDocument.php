@@ -78,22 +78,31 @@ class CStudentPublicationRelDocument
     }
 
     /**
-     * Whether the document belongs to a course the assignment is published in.
-     * Base-course documents are shared with every session of the course, so only
-     * the course is compared.
+     * Whether the document belongs to the course and session the assignment is published in.
+     * A base-course document is shared with every session of the course; a session document
+     * only with its own session.
      */
     public function isDocumentInPublicationCourse(): bool
     {
-        $courseIds = [];
+        $contexts = [];
         foreach ($this->publication->getResourceNode()?->getResourceLinks() ?? [] as $link) {
             if (null !== $link->getCourse()) {
-                $courseIds[] = (int) $link->getCourse()->getId();
+                $contexts[] = [(int) $link->getCourse()->getId(), (int) $link->getSession()?->getId()];
             }
         }
 
         foreach ($this->document->getResourceNode()?->getResourceLinks() ?? [] as $link) {
-            if (null !== $link->getCourse() && \in_array((int) $link->getCourse()->getId(), $courseIds, true)) {
-                return true;
+            if (null === $link->getCourse()) {
+                continue;
+            }
+
+            $courseId = (int) $link->getCourse()->getId();
+            $sessionId = (int) $link->getSession()?->getId();
+
+            foreach ($contexts as [$publicationCourseId, $publicationSessionId]) {
+                if ($courseId === $publicationCourseId && (0 === $sessionId || $sessionId === $publicationSessionId)) {
+                    return true;
+                }
             }
         }
 

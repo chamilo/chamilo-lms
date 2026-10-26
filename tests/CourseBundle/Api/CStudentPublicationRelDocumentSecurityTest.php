@@ -231,6 +231,24 @@ final class CStudentPublicationRelDocumentSecurityTest extends AbstractApiTest
         $this->assertSame(0, $this->countRelations($ctx['foreignDocument']));
     }
 
+    public function testSessionCoachCannotAttachDocumentOfAnotherSession(): void
+    {
+        $ctx = $this->bootstrapSessionScenario('session_other');
+
+        // The assignment would open the document to the learners of a session it does not belong to.
+        $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['coach']))->request(
+            'POST',
+            '/api/c_student_publication_rel_documents?cid='.$ctx['course']->getId().'&sid='.$ctx['session']->getId(),
+            ['json' => [
+                'publication' => '/api/c_student_publications/'.$ctx['sessionAssignment']->getIid(),
+                'document' => '/api/documents/'.$ctx['otherSessionDocument'],
+            ]]
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame(0, $this->countRelations($ctx['otherSessionDocument']));
+    }
+
     /**
      * Two private courses, each with an assignment of its teacher and a draft document.
      *
@@ -283,7 +301,8 @@ final class CStudentPublicationRelDocumentSecurityTest extends AbstractApiTest
 
     /**
      * A course run in a session: its base course and the session each hold their own assignment
-     * and draft document, plus a draft document of an unrelated course.
+     * and draft document, plus a draft document of another session of the same course and one of
+     * an unrelated course.
      *
      * @return array{
      *     course: Course,
@@ -295,6 +314,7 @@ final class CStudentPublicationRelDocumentSecurityTest extends AbstractApiTest
      *     sessionAssignment: CStudentPublication,
      *     baseDocument: int,
      *     sessionDocument: int,
+     *     otherSessionDocument: int,
      *     foreignDocument: int
      * }
      */
@@ -328,6 +348,10 @@ final class CStudentPublicationRelDocumentSecurityTest extends AbstractApiTest
         $sessionRepo->update($session);
         $sessionRepo->addUserInCourse(Session::STUDENT, $sessionLearner, $course, $session);
 
+        $otherSession = $this->createSession('RDS other session '.$suffix);
+        $otherSession->addCourse($course);
+        $sessionRepo->update($otherSession);
+
         return [
             'course' => $course,
             'session' => $session,
@@ -338,6 +362,7 @@ final class CStudentPublicationRelDocumentSecurityTest extends AbstractApiTest
             'sessionAssignment' => $this->createAssignment($course, $teacher, 'Session assignment '.$suffix, $session),
             'baseDocument' => $this->createDraftDocument($course),
             'sessionDocument' => $this->createDraftDocument($course, $session),
+            'otherSessionDocument' => $this->createDraftDocument($course, $otherSession),
             'foreignDocument' => $this->createDraftDocument($foreignCourse),
         ];
     }

@@ -2673,7 +2673,7 @@ final readonly class GlobalReportingSectionQueryService
                     MAX(
                         CASE
                             WHEN item_view.start_time > 0
-                            THEN FROM_UNIXTIME(item_view.start_time)
+                            THEN item_view.start_time
                             ELSE NULL
                         END
                     ) AS lastAccess
@@ -2716,6 +2716,9 @@ final readonly class GlobalReportingSectionQueryService
             $row['timeSeconds'] = (int) $row['timeSeconds'];
             $row['score'] = $score;
             $row['bestScore'] = $score;
+            // A Unix timestamp, sent in UTC like the other dates (FROM_UNIXTIME would use the
+            // database server's time zone).
+            $row['lastAccess'] = null === $row['lastAccess'] ? null : gmdate('Y-m-d H:i:s', (int) $row['lastAccess']);
         }
         unset($row);
 

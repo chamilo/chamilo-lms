@@ -312,6 +312,13 @@
       </ReportSection>
 
       <ReportSection
+        v-if="classes.length"
+        :title="t('Classes')"
+      >
+        <GlobalReportingLearnerClasses :classes="classes" />
+      </ReportSection>
+
+      <ReportSection
         v-if="learningPathsSection"
         :title="t(learningPathsSection.title)"
         :is-empty="!learningPathsSection.items.length"
@@ -518,6 +525,13 @@
           </Column>
         </BaseTable>
       </ReportSection>
+
+      <GlobalReportingLearnerMessages
+        v-if="messages"
+        :user-id="userId"
+        :messages="messages"
+        @changed="loadReport(false)"
+      />
     </template>
   </div>
 </template>
@@ -534,8 +548,11 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import globalReportingService from "../../services/globalReportingService"
+import GlobalReportingLearnerClasses from "./GlobalReportingLearnerClasses.vue"
+import GlobalReportingLearnerMessages from "./GlobalReportingLearnerMessages.vue"
 import legalAgreementService from "../../services/legalAgreementService"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 
 const ProgressRing = defineComponent({
@@ -650,7 +667,8 @@ const ReportSection = defineComponent({
 })
 
 const route = useRoute()
-const { locale, t } = useI18n()
+const { t } = useI18n()
+const { abbreviatedDatetime } = useFormatDate()
 const loading = ref(true)
 const exportFormat = ref("")
 const errorMessage = ref("")
@@ -668,6 +686,9 @@ const courseId = computed(() => Number((isCourseContext.value ? route.query.cid 
 const sessionId = computed(() => Number(route.query.sid || 0))
 const user = computed(() => report.meta.user || {})
 const course = computed(() => report.meta.course || {})
+const classes = computed(() => report.meta.classes || [])
+// Null when message.private_messages_about_user is off.
+const messages = computed(() => report.meta.messages || null)
 const skillsSection = computed(() => report.sections.find((section) => section.key === "course-skills") || null)
 const learningPathsSection = computed(
   () => report.sections.find((section) => section.key === "course-learning-paths") || null,
@@ -704,29 +725,10 @@ const globalBackRoute = computed(() => ({
   },
 }))
 
-function formatLocale() {
-  // Only the first segment is a real BCP-47 primary language subtag (e.g.
-  // "fr" out of "fr_61"). Some accounts carry a Chamilo sub-language isocode
-  // (e.g. "fr_61" instead of "fr_FR"), and passing that whole string to
-  // Intl.DateTimeFormat throws a RangeError that would otherwise crash this
-  // component's render with no visible error.
-  return String(locale.value || "en-US").split(/[_-]/)[0] || "en"
-}
-
+// The API sends UTC dates as "Y-m-d H:i:s"; useFormatDate shows them in the user's or the platform's
+// time zone, as configured.
 function formatDateTime(value, fallback = "-") {
-  if (!value) {
-    return fallback
-  }
-
-  const parsed = new Date(String(value).replace(" ", "T"))
-  if (Number.isNaN(parsed.getTime())) {
-    return String(value)
-  }
-
-  return new Intl.DateTimeFormat(formatLocale(), {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(parsed)
+  return value ? abbreviatedDatetime(String(value).replace(" ", "T")) || String(value) : fallback
 }
 
 function formatDuration(value) {
@@ -809,8 +811,9 @@ async function downloadExport(format) {
   }
 }
 
-async function loadReport() {
-  loading.value = true
+// Without the spinner, which would replace the whole page, when only a block changed.
+async function loadReport(showSpinner = true) {
+  loading.value = showSpinner
   errorMessage.value = ""
 
   try {
@@ -859,5 +862,5 @@ function runLegalAction() {
   performLegalAction()
 }
 
-onMounted(loadReport)
+onMounted(() => loadReport())
 </script>

@@ -84,3 +84,15 @@ Feature: Legacy agenda redirects
     And I wait for the URL to contain "/resources/ccalendarevent"
     Then the URL should contain "cid="
     And the URL should not contain "type=global"
+
+  Scenario Outline: The legacy students schedule opens the personal Vue agenda as <role>
+    Given <login>
+    When I am on "/main/my_space/calendar_plan.php?year=2025"
+    And I wait for the URL to contain "/resources/ccalendarevent"
+    Then the URL should not contain "calendar_plan"
+    And I should see "Agenda"
+
+    Examples:
+      | role          | login                          |
+      | administrator | I am a platform administrator  |
+      | student boss  | I am a student boss            |

@@ -24,6 +24,12 @@
           type="black"
         />
 
+        <RoomFloorPlanViewer
+          v-if="course?.id"
+          :course-id="course.id"
+          dialog-mode
+        />
+
         <template v-if="hasCourseTMenuItems">
           <BaseButton
             :label="t('More actions')"
@@ -192,8 +198,6 @@
           :shortcut="shortcut"
         />
       </div>
-
-      <RoomFloorPlanViewer v-if="course?.id" :course-id="course.id" />
 
       <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div class="min-w-0">

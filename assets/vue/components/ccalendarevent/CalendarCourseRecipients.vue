@@ -3,17 +3,16 @@ import { onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { storeToRefs } from "pinia"
 import BaseMultiSelect from "../basecomponents/BaseMultiSelect.vue"
-import baseService from "../../services/baseService"
 import { useCidReqStore } from "../../store/cidReq"
+import { useCalendarCourseRecipients } from "../../composables/calendar/calendarCourseRecipients"
 
 const model = defineModel({ type: Object })
 
 const { t } = useI18n()
 const { course, session } = storeToRefs(useCidReqStore())
 
-const options = ref([])
+const { options, isLoading, loadOptions } = useCalendarCourseRecipients()
 const selected = ref([])
-const isLoading = ref(false)
 
 /**
  * Reads the numeric id of an entity serialized as an object or as an IRI.
@@ -48,31 +47,6 @@ function selectFromLinks() {
       idOf(link.user) ? `USER:${idOf(link.user)}` : idOf(link.group) ? `GROUP:${idOf(link.group)}` : null,
     )
     .filter(Boolean)
-}
-
-/**
- * Loads the users and groups of the current course the event can be sent to.
- */
-async function loadOptions() {
-  isLoading.value = true
-
-  try {
-    const params = { cid: course.value?.id }
-    if (session.value?.id) {
-      params.sid = session.value.id
-    }
-
-    const { users = [], groups = [] } = await baseService.get("/api/calendar/course-recipients", params)
-
-    options.value = [
-      ...groups.map((group) => ({ value: `GROUP:${group.id}`, label: `${t("Group")}: ${group.label}` })),
-      ...users.map((user) => ({ value: `USER:${user.id}`, label: user.label })),
-    ]
-  } catch (error) {
-    console.error("[Calendar] Failed to load the course recipients.", error)
-  } finally {
-    isLoading.value = false
-  }
 }
 
 watch(selected, (values) => {

@@ -8,6 +8,8 @@
       @myStudentsScheduleClick="goToMyStudentsSchedule"
     />
 
+    <CalendarRecipientFilter />
+
     <FullCalendar
       ref="cal"
       :options="calendarOptions"
@@ -150,6 +152,7 @@ import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useLocale, useParentLocale } from "../../composables/locale"
 import { storeToRefs } from "pinia"
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
+import CalendarRecipientFilter from "../../components/ccalendarevent/CalendarRecipientFilter.vue"
 import { useCalendarActionButtons } from "../../composables/calendar/calendarActionButtons"
 import { useCalendarEvent } from "../../composables/calendar/calendarEvent"
 import resourceLinkService from "../../services/resourceLinkService"
@@ -783,6 +786,10 @@ const calendarOptions = ref({
       commonParams.gid = effectiveGid
     }
 
+    if (route.query.recipient) {
+      commonParams.recipient = route.query.recipient
+    }
+
     getCalendarEvents(info.start, info.end, commonParams).then((events) => successCallback(events))
   },
 
@@ -954,6 +961,11 @@ async function onCreateEventForm() {
 }
 
 const { showSuccessNotification } = useNotification()
+
+watch(
+  () => route.query.recipient,
+  () => reFetch(),
+)
 
 watch(
   () => route.query.type,

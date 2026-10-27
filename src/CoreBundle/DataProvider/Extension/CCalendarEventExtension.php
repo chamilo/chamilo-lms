@@ -84,14 +84,40 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
             return;
         }
 
-        if ($inCourseBase && $user && !$this->canSeeAllCourseEvents(!empty($groupId))) {
+        if (!$inCourseBase || null === $user) {
+            return;
+        }
+
+        if (!$this->canSeeAllCourseEvents(!empty($groupId))) {
             // Inside a group, GroupContextQueryExtension already requires a link to that group.
             $recipients = empty($groupId)
                 ? $this->getRecipientCondition($qb, $user, $this->getGroupIdList($user, (int) $courseId), true)
                 : $this->getRecipientCondition($qb, $user, [(int) $groupId], false);
 
             $qb->andWhere($recipients);
+
+            return;
         }
+
+        $this->addRecipientFilter($qb, $context['filters']['recipient'] ?? null);
+    }
+
+    /**
+     * Course editors can list only the events sent to one user ("USER:<id>") or to one group
+     * ("GROUP:<id>"), as the user filter of the legacy agenda did.
+     */
+    private function addRecipientFilter(QueryBuilder $qb, mixed $recipient): void
+    {
+        if (!\is_string($recipient) || !preg_match('/^(USER|GROUP):(\d+)$/', $recipient, $matches)) {
+            return;
+        }
+
+        $field = 'USER' === $matches[1] ? 'resource_links.user' : 'resource_links.group';
+
+        $qb
+            ->andWhere("$field = :recipient_filter")
+            ->setParameter('recipient_filter', (int) $matches[2])
+        ;
     }
 
     /**

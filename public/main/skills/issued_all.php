@@ -290,9 +290,7 @@ foreach ($userSkills as $index => $skillRelUser) {
     }
 
     $allUserBadges[$index]['issue_info'] = $skillRelUserInfo;
-    $allUserBadges[$index]['assignment_url'] = $showAssignmentAction && $skillRelUser->isManualAssignment()
-        ? '/skill/assign/'.$userId.'?'.http_build_query(['skillId' => $skillId])
-        : null;
+    $allUserBadges[$index]['can_remove'] = $showAssignmentAction && $skillRelUser->isManualAssignment();
     $allUserBadges[$index]['allow_comment'] = $allowComment;
     $allUserBadges[$index]['allow_download_export'] = $allowDownloadExport;
     $allUserBadges[$index]['comment_form'] = $form->returnForm();
@@ -304,6 +302,10 @@ $template = new Template(get_lang('Issued badge information'));
 $template->assign('user_badges', $allUserBadges);
 $template->assign('show_level', ('false' === api_get_setting('skill.hide_skill_levels')));
 $template->assign('origin_url', $originUrl);
+$template->assign('remove_url', '/api/skill-assignment/'.$userId);
+$template->assign('remove_skill_id', $skillId);
+// After a removal the skill is no longer shown here, so go back to where the user came from.
+$template->assign('after_remove_url', $originUrl ?: '/reporting/learners/'.$userId);
 
 $content = $template->fetch($template->get_template('skill/issued_all.html.twig'));
 $template->assign('header', get_lang('Issued badge information'));

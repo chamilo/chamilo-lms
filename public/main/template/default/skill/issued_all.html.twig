@@ -75,14 +75,14 @@
             </div>
         </div>
         <div class="w-full md:w-4/5 px-4">
-            {% if badge.assignment_url %}
-                <a
-                        href="{{ badge.assignment_url }}"
-                        class="btn btn--danger inline-flex items-center gap-2"
+            {% if badge.can_remove %}
+                <button
+                        type="button"
+                        class="btn btn--danger inline-flex items-center gap-2 skill-assignment-remove"
                 >
                     <i class="mdi mdi-delete" aria-hidden="true"></i>
                     {{ 'Remove'|trans }}
-                </a>
+                </button>
             {% endif %}
             <h3 class="text-xl font-bold mt-4">{{ 'Recipient details'|trans }}</h3>
             <p class="text-lg font-semibold">{{ badge.issue_info.user_complete_name }}</p>
@@ -230,3 +230,45 @@
         </script>
     {% endif %}
 {% endfor %}
+
+<script>
+  $(function () {
+    $('.skill-assignment-remove').on('click', function () {
+      var $button = $(this)
+
+      Swal.fire({
+        title: {{ 'Remove'|trans|json_encode|raw }},
+        text: {{ 'Are you sure?'|trans|json_encode|raw }},
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: {{ 'Yes'|trans|json_encode|raw }},
+        cancelButtonText: {{ 'No'|trans|json_encode|raw }},
+        reverseButtons: true,
+      }).then(function (result) {
+        if (!result.isConfirmed) {
+          return
+        }
+
+        $button.prop('disabled', true)
+        fetch({{ remove_url|json_encode|raw }}, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ action: 'remove', skillId: {{ remove_skill_id }} }),
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              return response.json().catch(function () { return {} }).then(function (error) {
+                throw new Error(error.detail || error.message || response.statusText)
+              })
+            }
+
+            window.location.href = {{ after_remove_url|json_encode|raw }}
+          })
+          .catch(function (error) {
+            $button.prop('disabled', false)
+            Swal.fire({ icon: 'error', title: {{ 'Error'|trans|json_encode|raw }}, text: error.message })
+          })
+      })
+    })
+  })
+</script>

@@ -214,3 +214,14 @@ Feature: Skills
     And I wait for the page to be loaded
     Then I should see "Skill acquired"
     And I should see "John Doe"
+
+  # The Remove button of the issued badge page confirms and removes in place, then goes back to the
+  # learner report it was opened from, instead of sending the user to the assignment page.
+  Scenario: Remove skill11 from user 1 on the issued badge page
+    Given I am a platform administrator
+    And I am on "/main/skills/issued_all.php?skill=3&user=1&origin=%2Freporting%2Flearners%2F1"
+    And I wait for the page to be loaded
+    When I press "Remove"
+    And I press "Yes"
+    Then the URL should contain "/reporting/learners/1"
+    And I should not see an error

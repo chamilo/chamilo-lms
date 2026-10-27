@@ -61,6 +61,30 @@ final class CCalendarEventRecipientApiTest extends AbstractApiTest
         $this->assertSame(['CrToGroup'], $this->visibleTitles($ctx['member'], $query, 'Cr'));
     }
 
+    public function testTeacherCanFilterTheCourseAgendaByUserOrGroup(): void
+    {
+        $ctx = $this->bootstrapScenario('filter');
+        $query = '?cid='.$ctx['course']->getId().'&recipient=';
+
+        $this->assertSame(
+            ['CrToUser'],
+            $this->visibleTitles($ctx['teacher'], $query.'USER:'.$ctx['member']->getId(), 'Cr')
+        );
+        $this->assertSame(
+            ['CrToGroup'],
+            $this->visibleTitles($ctx['teacher'], $query.'GROUP:'.$ctx['group']->getIid(), 'Cr')
+        );
+    }
+
+    public function testFilterDoesNotWidenTheAgendaOfAStudent(): void
+    {
+        $ctx = $this->bootstrapScenario('filter_student');
+        $query = '?cid='.$ctx['course']->getId().'&recipient=USER:'.$ctx['member']->getId();
+
+        // The event sent to the member stays hidden from another student.
+        $this->assertSame(['CrEveryone'], $this->visibleTitles($ctx['other'], $query, 'Cr'));
+    }
+
     public function testCannotSendAnEventToAUserOutsideTheCourse(): void
     {
         $ctx = $this->bootstrapScenario('outsider');

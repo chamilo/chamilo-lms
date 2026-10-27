@@ -32,7 +32,7 @@ final class PaletteFile
                 throw new InvalidArgumentException('Each palette line must contain R,G,B,Alpha integer values.');
             }
 
-            $values = array_map('intval', \array_slice($parts, 1));
+            $values = [(int) $parts[1], (int) $parts[2], (int) $parts[3], (int) $parts[4]];
             if ($values[0] > 255 || $values[1] > 255 || $values[2] > 255 || $values[3] > 100) {
                 throw new InvalidArgumentException('Palette color components are outside their allowed ranges.');
             }

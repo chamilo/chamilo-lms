@@ -370,10 +370,10 @@ final class ThemeHelper
             return false;
         }
 
-        $series = array_keys($data->getData()['Series'] ?? []);
+        $series = array_keys((array) ($data->getData()['Series'] ?? []));
         foreach ($series as $index => $name) {
             [$r, $g, $b, $alpha] = $colors[$index % \count($colors)];
-            $data->setPalette($name, [
+            $data->setPalette((string) $name, [
                 'R' => $r,
                 'G' => $g,
                 'B' => $b,

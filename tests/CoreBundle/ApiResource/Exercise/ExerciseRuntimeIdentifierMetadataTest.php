@@ -44,6 +44,7 @@ final class ExerciseRuntimeIdentifierMetadataTest extends TestCase
         foreach ($resource->getOperations() ?? [] as $candidate) {
             if ($candidate->getName() === $operationName) {
                 $operation = $candidate;
+
                 break;
             }
         }
@@ -84,14 +85,23 @@ final class ExerciseRuntimeIdentifierMetadataTest extends TestCase
         $pair = ['exerciseId', 'attemptId'];
 
         yield 'Save draft answer' => [ExerciseRuntimeAnswer::class, 'post_exercise_runtime_answer', $pair, false];
+
         yield 'Finish attempt' => [ExerciseRuntimeFinish::class, 'post_exercise_runtime_finish', $pair, false];
+
         yield 'Upload answer' => [ExerciseRuntimeUploadAnswer::class, 'post_exercise_runtime_upload_answer', $pair, false];
+
         yield 'View result' => [ExerciseRuntimeResult::class, 'get_exercise_runtime_result', $pair, null];
+
         yield 'Correct attempt' => [ExerciseRuntimeCorrection::class, 'post_exercise_runtime_correction', $pair, false];
+
         yield 'Close attempt' => [ExerciseRuntimeAttemptClose::class, 'post_exercise_runtime_attempt_close', $pair, false];
+
         yield 'Delete attempt' => [ExerciseRuntimeAttemptDelete::class, 'post_exercise_runtime_attempt_delete', $pair, false];
+
         yield 'Email attempt' => [ExerciseRuntimeAttemptEmail::class, 'post_exercise_runtime_attempt_email', $pair, false];
+
         yield 'Recalculate attempt' => [ExerciseRuntimeAttemptRecalculate::class, 'post_exercise_runtime_attempt_recalculate', $pair, false];
+
         yield 'Report question issue' => [
             ExerciseQuestionFeedbackReport::class,
             'post_exercise_question_feedback_report',

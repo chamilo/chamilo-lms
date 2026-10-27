@@ -98,6 +98,56 @@ final class CCalendarEventRecipientApiTest extends AbstractApiTest
         );
     }
 
+    public function testEditingReplacesTheRecipients(): void
+    {
+        $ctx = $this->bootstrapScenario('edit');
+        $groupId = (int) $ctx['group']->getIid();
+
+        $this->updateRecipients($ctx, 'CrToUser', [['gid' => $groupId]]);
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame([['user' => 0, 'group' => $groupId]], $this->eventLinks('CrToUser'));
+
+        // No recipient means the whole course again.
+        $this->updateRecipients($ctx, 'CrToUser', []);
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame([['user' => 0, 'group' => 0]], $this->eventLinks('CrToUser'));
+        $this->assertContains('CrToUser', $this->visibleTitles($ctx['other'], '?cid='.$ctx['course']->getId(), 'Cr'));
+    }
+
+    public function testEditingCannotSendAnEventToAUserOutsideTheCourse(): void
+    {
+        $ctx = $this->bootstrapScenario('edit_outsider');
+        $outsider = $this->createUser('cer_outsider_edit_outsider');
+
+        $this->updateRecipients($ctx, 'CrToGroup', [['uid' => (int) $outsider->getId()]]);
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->assertSame(
+            [['user' => 0, 'group' => (int) $ctx['group']->getIid()]],
+            $this->eventLinks('CrToGroup')
+        );
+    }
+
+    public function testOnlyTeachersGetTheRecipientList(): void
+    {
+        $ctx = $this->bootstrapScenario('list');
+        $url = '/api/calendar/course-recipients?cid='.$ctx['course']->getId();
+
+        $response = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']))
+            ->request('GET', $url, ['headers' => ['Accept' => 'application/json']])
+        ;
+        $this->assertResponseIsSuccessful();
+        $data = $response->toArray();
+
+        $this->assertContains((int) $ctx['member']->getId(), array_column($data['users'], 'id'));
+        $this->assertSame([(int) $ctx['group']->getIid()], array_column($data['groups'], 'id'));
+
+        $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['member']))
+            ->request('GET', $url, ['headers' => ['Accept' => 'application/json']])
+        ;
+        $this->assertResponseStatusCodeSame(403);
+    }
+
     /**
      * A course with a teacher, a group member and another student, and three events created by
      * the teacher: for everyone, for the group and for the member.
@@ -193,6 +243,32 @@ final class CCalendarEventRecipientApiTest extends AbstractApiTest
                     'collective' => false,
                     'parentResourceNode' => (int) $teacher->getResourceNode()?->getId(),
                     'resourceLinkList' => [$link],
+                ],
+            ],
+        );
+    }
+
+    /**
+     * @param array{course: Course, teacher: User} $ctx
+     * @param list<array<string, int>>             $recipients
+     */
+    private function updateRecipients(array $ctx, string $title, array $recipients): void
+    {
+        $em = $this->getEntityManager();
+        $em->clear();
+        $event = $em->getRepository(CCalendarEvent::class)->findOneBy(['title' => $title]);
+
+        $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']))->request(
+            'PUT',
+            '/api/c_calendar_events/'.$event?->getIid().'?cid='.$ctx['course']->getId(),
+            [
+                'json' => [
+                    'title' => $title,
+                    'content' => '<p>'.$title.'</p>',
+                    'startDate' => '2040-06-30 11:00:00',
+                    'endDate' => '2040-06-30 15:00:00',
+                    'collective' => false,
+                    'courseRecipients' => $recipients,
                 ],
             ],
         );

@@ -269,7 +269,7 @@ if ($hasBrowseAccess) {
 
     if (GroupManager::TOOL_PUBLIC == $groupEntity->getCalendarState()) {
         $actions_array[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq(),
+            'url' => Container::getRouter()->generate('chamilo_core_course_redirect_tool', ['toolName' => 'agenda', 'cid' => $courseId]).'?'.api_get_cidreq(),
             'content' => Display::getMdiIcon(ToolIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Agenda')),
         ];
     }

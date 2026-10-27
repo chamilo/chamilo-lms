@@ -2318,7 +2318,7 @@ class Agenda
 
         $groupMemberships = [];
         if (!empty($groupId)) {
-            $groupMemberships = [$groupId];
+            $groupMemberships = [(int) $groupId];
         } else {
             if ($isAllowToEdit) {
                 if (!empty($groupList)) {
@@ -4022,9 +4022,9 @@ class Agenda
             $everyone = true;
         } else {
             if (substr($filter, 0, 1) == 'G') {
-                $groupId = str_replace('GROUP:', '', $filter);
+                $groupId = (int) str_replace('GROUP:', '', $filter);
             } else {
-                $userId = str_replace('USER:', '', $filter);
+                $userId = (int) str_replace('USER:', '', $filter);
             }
         }
         if (empty($userId) && empty($groupId)) {

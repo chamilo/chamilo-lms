@@ -9,8 +9,10 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Career;
 use Chamilo\CoreBundle\Entity\Promotion;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Helpers\AgendaHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
@@ -29,6 +31,7 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
         EntityManager $em,
         SettingsManager $settingsManager,
         AgendaHelper $agendaHelper,
+        CidReqHelper $cidReqHelper,
     ): CCalendarEvent {
         // The new links need the right to add an event where they point.
         $this->handleUpdateRequest(
@@ -75,6 +78,10 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
             }
         }
 
+        if (\array_key_exists('courseRecipients', $result)) {
+            $this->replaceCourseRecipients($calendarEvent, $result['courseRecipients'], $agendaHelper, $cidReqHelper, $em);
+        }
+
         $this->applyCareerAndPromotionUpdate($calendarEvent, $result, $em, $settingsManager);
         $this->applyResourceLanguageFromRequest($calendarEvent, $request, $em);
 
@@ -91,6 +98,76 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
         }
 
         return $calendarEvent;
+    }
+
+    /**
+     * Replaces the links of the event in the current course with one link per recipient, or with
+     * one link for the whole course when there is no recipient.
+     */
+    private function replaceCourseRecipients(
+        CCalendarEvent $calendarEvent,
+        mixed $recipients,
+        AgendaHelper $agendaHelper,
+        CidReqHelper $cidReqHelper,
+        EntityManager $em,
+    ): void {
+        $course = $cidReqHelper->getDoctrineCourseEntity();
+        $resourceNode = $calendarEvent->getResourceNode();
+        if (null === $course || null === $resourceNode || !\is_array($recipients)) {
+            throw new BadRequestHttpException('Invalid course recipients.');
+        }
+
+        $session = $cidReqHelper->getDoctrineSessionEntity();
+
+        $currentLinks = [];
+        $visibility = ResourceLink::VISIBILITY_PUBLISHED;
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            if ($link->getCourse()?->getId() === $course->getId()
+                && $link->getSession()?->getId() === $session?->getId()
+            ) {
+                $currentLinks[$this->getRecipientKey($link->getUser()?->getId(), $link->getGroup()?->getIid())] = $link;
+                $visibility = $link->getVisibility();
+            }
+        }
+
+        $wantedLinks = [];
+        foreach ($recipients as $recipient) {
+            $userId = (int) ($recipient['uid'] ?? 0);
+            $groupId = (int) ($recipient['gid'] ?? 0);
+            if (($userId > 0) === ($groupId > 0)) {
+                throw new BadRequestHttpException('A recipient is either a user or a group.');
+            }
+
+            $wantedLinks[$this->getRecipientKey($userId, $groupId)] = array_filter(['uid' => $userId, 'gid' => $groupId]);
+        }
+
+        if ([] === $wantedLinks) {
+            $wantedLinks[$this->getRecipientKey(null, null)] = [];
+        }
+
+        $newLinks = [];
+        foreach (array_diff_key($wantedLinks, $currentLinks) as $recipient) {
+            $newLinks[] = ['cid' => $course->getId(), 'sid' => $session?->getId(), 'visibility' => $visibility] + $recipient;
+        }
+
+        if ($newLinks && !$agendaHelper->canAddLinks($newLinks)) {
+            throw new AccessDeniedHttpException();
+        }
+
+        foreach (array_diff_key($currentLinks, $wantedLinks) as $link) {
+            $resourceNode->getResourceLinks()->removeElement($link);
+            $em->remove($link);
+        }
+
+        if ($newLinks) {
+            $calendarEvent->setResourceLinkArray($newLinks);
+            self::setLinks($calendarEvent, $em);
+        }
+    }
+
+    private function getRecipientKey(?int $userId, ?int $groupId): string
+    {
+        return (int) $userId.':'.(int) $groupId;
     }
 
     private function applyCareerAndPromotionUpdate(

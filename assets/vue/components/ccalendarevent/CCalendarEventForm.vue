@@ -92,6 +92,11 @@
       name="promotion"
     />
 
+    <CalendarCourseRecipients
+      v-if="showCourseRecipients"
+      v-model="item"
+    />
+
     <CalendarInvitations v-model="item" />
 
     <CalendarRemindersEditor
@@ -114,6 +119,7 @@ import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
+import CalendarCourseRecipients from "./CalendarCourseRecipients.vue"
 import CalendarInvitations from "./CalendarInvitations.vue"
 import CalendarRemindersEditor from "./CalendarRemindersEditor.vue"
 import ResourceLanguageSelector from "../resources/ResourceLanguageSelector.vue"
@@ -121,6 +127,7 @@ import { useResourceLanguageVisibility } from "../../composables/useResourceLang
 import roomService from "../../services/roomService"
 import RoomFloorPlanPicker from "../room/RoomFloorPlanPicker.vue"
 import baseService from "../../services/baseService"
+import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -185,6 +192,15 @@ const showRoomField = computed(() => {
   const contextType = getContextTypeFromRoute()
 
   return contextType !== "personal"
+})
+
+const securityStore = useSecurityStore()
+
+// Teachers send a course event to selected users and groups; inside a group it belongs to that group.
+const showCourseRecipients = computed(() => {
+  const contextType = getContextTypeFromRoute()
+
+  return ["course", "session"].includes(contextType) && !Number(route.query.gid ?? 0) && securityStore.isCurrentTeacher
 })
 
 const showCareerPromotionFields = computed(() => {

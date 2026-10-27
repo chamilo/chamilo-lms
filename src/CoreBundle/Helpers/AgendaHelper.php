@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -76,6 +77,10 @@ readonly class AgendaHelper
                 }
             }
 
+            if (!$this->isCourseRecipient($link, $course, $session)) {
+                return false;
+            }
+
             if ($this->isAllowedToEditHelper->check(coach: true, course: $course, session: $session)) {
                 continue;
             }
@@ -87,6 +92,47 @@ readonly class AgendaHelper
             ) {
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * A course event sent to a user or a group can only be sent to a user subscribed to the course
+     * (or to the course in the session) and to a group of the course.
+     */
+    private function isCourseRecipient(array $link, Course $course, ?Session $session): bool
+    {
+        if (!empty($link['uid'])) {
+            $recipient = $this->entityManager->find(User::class, (int) $link['uid']);
+
+            if (!$recipient instanceof User) {
+                return false;
+            }
+
+            $isSubscribed = $session instanceof Session
+                ? $session->hasUserInCourse($recipient, $course)
+                : $course->hasSubscriptionByUser($recipient);
+
+            if (!$isSubscribed) {
+                return false;
+            }
+        }
+
+        if (!empty($link['gid'])) {
+            $group = $this->entityManager->find(CGroup::class, (int) $link['gid']);
+
+            if (!$group instanceof CGroup) {
+                return false;
+            }
+
+            foreach ($group->getResourceNode()?->getResourceLinks() ?? [] as $groupLink) {
+                if ($groupLink->getCourse()?->getId() === $course->getId()) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         return true;
@@ -142,9 +188,13 @@ readonly class AgendaHelper
             return $links;
         }
 
+        // Without a group context, the listener keeps the group the event is sent to.
+        $groupId = $this->cidReqHelper->getGroupId() ?: ($links[0]['gid'] ?? null);
+
         return [[
             'cid' => $course->getId(),
             'sid' => $this->cidReqHelper->getDoctrineSessionEntity()?->getId(),
+            'gid' => $groupId,
         ]];
     }
 

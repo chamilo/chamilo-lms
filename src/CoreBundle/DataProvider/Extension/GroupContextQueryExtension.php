@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceRestrictToGroupContextInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Doctrine\ORM\QueryBuilder;
@@ -117,6 +118,12 @@ final readonly class GroupContextQueryExtension implements QueryCollectionExtens
                 ->setParameter('gid', $gid)
             ;
 
+            return;
+        }
+
+        // Outside a group, the agenda shows the events of the user's groups too:
+        // CCalendarEventExtension applies that rule.
+        if (is_a($effectiveClass, CCalendarEvent::class, true)) {
             return;
         }
 

@@ -432,6 +432,10 @@ class ResourceListener
         $group = $session->get('group');
         if ($group instanceof CGroup) {
             $context['gid'] = (int) $group->getIid();
+        } elseif ($resource instanceof CCalendarEvent && !empty($entry['gid'])) {
+            // A course event sent to one group: CCalendarEventVoter (CREATE) already checked
+            // that the group belongs to the course, see AgendaHelper::getNewEventLinks().
+            $context['gid'] = (int) $entry['gid'];
         }
 
         $context['visibility'] = isset($entry['visibility'])

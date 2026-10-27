@@ -4622,5 +4622,22 @@
     "Selected pages to delete:": "Selected pages to delete:",
     "Delete selected pages": "Delete selected pages",
     "The following pages will be deleted:": "The following pages will be deleted:",
-    "A maximum of 100 pages can be deleted at once.": "A maximum of 100 pages can be deleted at once."
+    "A maximum of 100 pages can be deleted at once.": "A maximum of 100 pages can be deleted at once.",
+    "Chart color palette": "Chart color palette",
+    "Upload a .color file to customize chart colors in the current visual theme.": "Upload a .color file to customize chart colors in the current visual theme.",
+    "One color per line: R,G,B,Alpha (RGB 0-255, Alpha 0-100; maximum 256 colors).": "One color per line: R,G,B,Alpha (RGB 0-255, Alpha 0-100; maximum 256 colors).",
+    "Custom chart palette": "Custom chart palette",
+    "Default chart palette": "Default chart palette",
+    "Upload chart palette": "Upload chart palette",
+    "Restore default palette": "Restore default palette",
+    "Remove chart palette": "Remove chart palette",
+    "Restore the default chart palette for this theme?": "Restore the default chart palette for this theme?",
+    "Chart palette uploaded": "Chart palette uploaded",
+    "Default chart palette restored": "Default chart palette restored",
+    "Select a .color file smaller than 16 KB.": "Select a .color file smaller than 16 KB.",
+    "The active visual theme has no assets directory. Install its theme files or select another theme to upload a chart palette.": "The active visual theme has no assets directory. Install its theme files or select another theme to upload a chart palette.",
+    "Selecting a color theme only previews its colors. Click 'Select as current theme' to activate it.": "Selecting a color theme only previews its colors. Click 'Select as current theme' to activate it.",
+    "Chart palettes and logos belong to the active visual theme, not the previewed color theme.": "Chart palettes and logos belong to the active visual theme, not the previewed color theme.",
+    "Color theme (preview)": "Color theme (preview)",
+    "The themes storage is not writable. Check its file permissions before saving.": "The themes storage is not writable. Check its file permissions before saving."
 }

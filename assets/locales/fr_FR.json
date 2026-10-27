@@ -4622,5 +4622,22 @@
     "Selected pages to delete:": "Pages sélectionnées pour suppression :",
     "Delete selected pages": "Supprimer les pages sélectionnées",
     "The following pages will be deleted:": "Les pages suivantes seront supprimées :",
-    "A maximum of 100 pages can be deleted at once.": "Vous pouvez supprimer au maximum 100 pages à la fois."
+    "A maximum of 100 pages can be deleted at once.": "Vous pouvez supprimer au maximum 100 pages à la fois.",
+    "Chart color palette": "Palette de couleurs des graphiques",
+    "Upload a .color file to customize chart colors in the current visual theme.": "T\u00e9l\u00e9versez un fichier .color pour personnaliser les couleurs des graphiques du th\u00e8me visuel actuel.",
+    "One color per line: R,G,B,Alpha (RGB 0-255, Alpha 0-100; maximum 256 colors).": "Une couleur par ligne : R,G,B,Alpha (RVB 0-255, Alpha 0-100 ; 256 couleurs maximum).",
+    "Custom chart palette": "Palette de graphiques personnalis\u00e9e",
+    "Default chart palette": "Palette de graphiques par d\u00e9faut",
+    "Upload chart palette": "T\u00e9l\u00e9verser la palette de graphiques",
+    "Restore default palette": "Restaurer la palette par d\u00e9faut",
+    "Remove chart palette": "Supprimer la palette de graphiques",
+    "Restore the default chart palette for this theme?": "Restaurer la palette de graphiques par d\u00e9faut de ce th\u00e8me ?",
+    "Chart palette uploaded": "Palette de graphiques t\u00e9l\u00e9vers\u00e9e",
+    "Default chart palette restored": "Palette de graphiques par d\u00e9faut restaur\u00e9e",
+    "Select a .color file smaller than 16 KB.": "S\u00e9lectionnez un fichier .color de moins de 16 Ko.",
+    "The active visual theme has no assets directory. Install its theme files or select another theme to upload a chart palette.": "Le th\u00e8me visuel actif ne poss\u00e8de pas de dossier de ressources. Installez les fichiers du th\u00e8me ou s\u00e9lectionnez un autre th\u00e8me pour t\u00e9l\u00e9verser une palette de graphiques.",
+    "Selecting a color theme only previews its colors. Click 'Select as current theme' to activate it.": "La s\u00e9lection d'un th\u00e8me de couleurs ne fait que l'afficher en aper\u00e7u. Cliquez sur \u00ab S\u00e9lectionner comme th\u00e8me actuel \u00bb pour l'activer.",
+    "Chart palettes and logos belong to the active visual theme, not the previewed color theme.": "Les palettes des graphiques et les logos appartiennent au th\u00e8me visuel actif, et non au th\u00e8me de couleurs affich\u00e9 en aper\u00e7u.",
+    "Color theme (preview)": "Th\u00e8me de couleurs (aper\u00e7u)",
+    "The themes storage is not writable. Check its file permissions before saving.": "Le stockage des th\u00e8mes n'est pas accessible en \u00e9criture. V\u00e9rifiez les permissions des fichiers avant d'enregistrer."
 }

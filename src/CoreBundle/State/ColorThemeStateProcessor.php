@@ -12,8 +12,11 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
@@ -35,38 +38,42 @@ final readonly class ColorThemeStateProcessor implements ProcessorInterface
     {
         \assert($data instanceof ColorTheme);
 
-        /** @var ColorTheme $colorTheme */
-        $colorTheme = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
-
-        if ($colorTheme) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
-
-            $accessUrlRelColorTheme = $accessUrl->getColorThemeByTheme($colorTheme);
-
-            if (!$accessUrlRelColorTheme) {
-                $accessUrlRelColorTheme = (new AccessUrlRelColorTheme())->setColorTheme($colorTheme);
-
-                $accessUrl->addColorTheme($accessUrlRelColorTheme);
+        // Keep the database update uncommitted until theme assets are written successfully.
+        return $this->entityManager->wrapInTransaction(function () use ($data, $operation, $uriVariables, $context): ?ColorTheme {
+            /** @var ColorTheme|null $colorTheme */
+            $colorTheme = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
+            if (null === $colorTheme) {
+                return null;
             }
 
+            $accessUrl = $this->accessUrlHelper->getCurrent();
+            $accessUrlRelColorTheme = $accessUrl->getColorThemeByTheme($colorTheme);
+            if (!$accessUrlRelColorTheme) {
+                $accessUrlRelColorTheme = (new AccessUrlRelColorTheme())->setColorTheme($colorTheme);
+                $accessUrl->addColorTheme($accessUrlRelColorTheme);
+            }
             $this->entityManager->flush();
 
-            $contentParts = [];
-            $contentParts[] = ':root {';
-
+            $contentParts = [':root {'];
             foreach ($colorTheme->getVariables() as $variable => $value) {
                 $contentParts[] = "  $variable: $value;";
             }
-
             $contentParts[] = '}';
 
-            $this->filesystem->createDirectory($colorTheme->getSlug());
-            $this->filesystem->write(
-                $colorTheme->getSlug().DIRECTORY_SEPARATOR.'colors.css',
-                implode(PHP_EOL, $contentParts)
-            );
-        }
+            try {
+                $slug = $colorTheme->getSlug();
+                if (!$this->filesystem->directoryExists($slug)) {
+                    $this->filesystem->createDirectory($slug);
+                }
+                $this->filesystem->write(
+                    $slug.DIRECTORY_SEPARATOR.'colors.css',
+                    implode(PHP_EOL, $contentParts)
+                );
+            } catch (FilesystemException $exception) {
+                throw new HttpException(Response::HTTP_SERVICE_UNAVAILABLE, 'The themes storage is not writable. Check its file permissions before saving.', $exception);
+            }
 
-        return $colorTheme;
+            return $colorTheme;
+        });
     }
 }

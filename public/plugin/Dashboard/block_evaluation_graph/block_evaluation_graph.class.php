@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
@@ -166,7 +167,9 @@ class BlockEvaluationGraph extends Block
 
                         $dataSet->normalize(100, '%');
 
-                        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+                        if (!Container::getThemeHelper()->applyPchartPalette($dataSet)) {
+                            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+                        }
 
                         // Cache definition
                         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
@@ -351,7 +354,9 @@ class BlockEvaluationGraph extends Block
                             $dataSet->setAbscissa('Labels');
                             $dataSet->setAbscissaName(get_lang('Assessment'));
                             $dataSet->normalize(100, '%');
-                            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+                            if (!Container::getThemeHelper()->applyPchartPalette($dataSet)) {
+                                $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+                            }
 
                             // Cache definition
                             $cachePath = api_get_path(SYS_ARCHIVE_PATH);

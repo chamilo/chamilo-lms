@@ -43222,3 +43222,54 @@ msgstr "The following pages will be deleted:"
 
 msgid "A maximum of 100 pages can be deleted at once."
 msgstr "A maximum of 100 pages can be deleted at once."
+
+msgid "Chart color palette"
+msgstr "Chart color palette"
+
+msgid "Upload a .color file to customize chart colors in the current visual theme."
+msgstr "Upload a .color file to customize chart colors in the current visual theme."
+
+msgid "One color per line: R,G,B,Alpha (RGB 0-255, Alpha 0-100; maximum 256 colors)."
+msgstr "One color per line: R,G,B,Alpha (RGB 0-255, Alpha 0-100; maximum 256 colors)."
+
+msgid "Custom chart palette"
+msgstr "Custom chart palette"
+
+msgid "Default chart palette"
+msgstr "Default chart palette"
+
+msgid "Upload chart palette"
+msgstr "Upload chart palette"
+
+msgid "Restore default palette"
+msgstr "Restore default palette"
+
+msgid "Remove chart palette"
+msgstr "Remove chart palette"
+
+msgid "Restore the default chart palette for this theme?"
+msgstr "Restore the default chart palette for this theme?"
+
+msgid "Chart palette uploaded"
+msgstr "Chart palette uploaded"
+
+msgid "Default chart palette restored"
+msgstr "Default chart palette restored"
+
+msgid "Select a .color file smaller than 16 KB."
+msgstr "Select a .color file smaller than 16 KB."
+
+msgid "The active visual theme has no assets directory. Install its theme files or select another theme to upload a chart palette."
+msgstr "The active visual theme has no assets directory. Install its theme files or select another theme to upload a chart palette."
+
+msgid "Selecting a color theme only previews its colors. Click 'Select as current theme' to activate it."
+msgstr "Selecting a color theme only previews its colors. Click 'Select as current theme' to activate it."
+
+msgid "Chart palettes and logos belong to the active visual theme, not the previewed color theme."
+msgstr "Chart palettes and logos belong to the active visual theme, not the previewed color theme."
+
+msgid "Color theme (preview)"
+msgstr "Color theme (preview)"
+
+msgid "The themes storage is not writable. Check its file permissions before saving."
+msgstr "The themes storage is not writable. Check its file permissions before saving."

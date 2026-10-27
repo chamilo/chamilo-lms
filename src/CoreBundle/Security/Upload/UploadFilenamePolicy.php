@@ -72,6 +72,12 @@ final class UploadFilenamePolicy
 
         $ext = $this->getExtension($filename);
 
+        // Apache can interpret multiple filename extensions. Only admit a simple
+        // .color filename, never names such as payload.html.color.
+        if ('color' === $ext && 1 !== preg_match('/\A[a-zA-Z0-9_-]{1,128}\.color\z/iD', $filename)) {
+            return ['allowed' => false, 'filename' => $filename, 'reason' => 'Unsafe palette filename'];
+        }
+
         // Allow empty extension in both modes
         if ('' === $ext) {
             return ['allowed' => true, 'filename' => $filename];
@@ -179,6 +185,7 @@ final class UploadFilenamePolicy
             'h5p',
             'zip',
             'mbz',
+            'color',
         ];
 
         return array_values(array_unique(array_merge($extensions, $builtInSafeExtensions)));

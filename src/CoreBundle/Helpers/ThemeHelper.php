@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\Helpers;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
+use CpChart\Data;
+use InvalidArgumentException;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
@@ -329,58 +331,57 @@ final class ThemeHelper
             return $this->fillUpPalette(self::FALLBACK_RGBA, $fillUpTo);
         }
 
-        $lines = preg_split("/\r\n|\n|\r/", $raw) ?: [];
-        $palette = [];
-
-        foreach ($lines as $line) {
-            $line = trim((string) $line);
-            if ('' === $line) {
-                continue;
-            }
-
-            $components = preg_split('/\s*,\s*/', $line);
-            if (!\is_array($components) || \count($components) < 3) {
-                continue;
-            }
-
-            $r = (int) ($components[0] ?? 0);
-            $g = (int) ($components[1] ?? 0);
-            $b = (int) ($components[2] ?? 0);
-
-            // Alpha is optional in some palettes; default to 1.0
-            $aRaw = $components[3] ?? '1';
-            $a = is_numeric($aRaw) ? (float) $aRaw : 1.0;
-
-            // optional conversion: 0..100 -> 0..1 (1 decimal)
-            if ($decimalOpacity && $a > 1.0) {
-                $a = round($a / 100.0, 1);
-            }
-
-            // When wrapping as rgba(), enforce CSS alpha normalization
-            if ($wrapInRGBA) {
-                if ($a > 1.0) {
-                    // C1 alpha is frequently 0..100
-                    $a = round($a / 100.0, 2);
-                }
-                $a = max(0.0, min(1.0, $a));
-
-                $palette[] = \sprintf(
-                    'rgba(%d,%d,%d,%s)',
-                    $r,
-                    $g,
-                    $b,
-                    rtrim(rtrim((string) $a, '0'), '.')
-                );
-            } else {
-                $palette[] = \sprintf('%d,%d,%d,%s', $r, $g, $b, (string) $a);
-            }
-        }
-
-        if (empty($palette)) {
+        try {
+            $colors = PaletteFile::parse($raw);
+        } catch (InvalidArgumentException) {
             return $this->fillUpPalette(self::FALLBACK_RGBA, $fillUpTo);
         }
 
+        $palette = [];
+        foreach ($colors as [$r, $g, $b, $alpha]) {
+            if ($wrapInRGBA) {
+                // CSS rgba expects alpha between 0 and 1, unlike pChart's 0..100.
+                $opacity = $decimalOpacity ? round($alpha / 100, 1) : round($alpha / 100, 2);
+                $palette[] = \sprintf('rgba(%d,%d,%d,%s)', $r, $g, $b, (string) $opacity);
+            } else {
+                $opacity = $decimalOpacity ? (string) round($alpha / 100, 1) : (string) $alpha;
+                $palette[] = \sprintf('%d,%d,%d,%s', $r, $g, $b, $opacity);
+            }
+        }
+
         return $this->fillUpPalette($palette, $fillUpTo);
+    }
+
+    /**
+     * Use a themed palette with pChart even when themes live in remote storage.
+     * Returns false if there is no valid override, allowing existing charts
+     * to retain their bundled pChart palette as before.
+     */
+    public function applyPchartPalette(Data $data): bool
+    {
+        $raw = $this->getAssetContents('palettes/pchart/default.color');
+        if ('' === trim($raw)) {
+            return false;
+        }
+
+        try {
+            $colors = PaletteFile::parse($raw);
+        } catch (InvalidArgumentException) {
+            return false;
+        }
+
+        $series = array_keys($data->getData()['Series'] ?? []);
+        foreach ($series as $index => $name) {
+            [$r, $g, $b, $alpha] = $colors[$index % \count($colors)];
+            $data->setPalette($name, [
+                'R' => $r,
+                'G' => $g,
+                'B' => $b,
+                'Alpha' => $alpha,
+            ]);
+        }
+
+        return true;
     }
 
     /**

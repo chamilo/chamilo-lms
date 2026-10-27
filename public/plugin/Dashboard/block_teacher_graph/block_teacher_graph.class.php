@@ -1,5 +1,6 @@
 <?php
 
+use Chamilo\CoreBundle\Framework\Container;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
@@ -124,7 +125,9 @@ class BlockTeacherGraph extends Block
             $dataSet->setAbscissaName($last_week);
             $dataSet->setAxisName(0, get_lang('Minutes'));
             $dataSet->setAbscissa('Days');
-            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+            if (!Container::getThemeHelper()->applyPchartPalette($dataSet)) {
+                $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+            }
 
             // Cache definition
             $cachePath = api_get_path(SYS_ARCHIVE_PATH);

@@ -45096,3 +45096,54 @@ msgstr "Les pages suivantes seront supprimées :"
 
 msgid "A maximum of 100 pages can be deleted at once."
 msgstr "Vous pouvez supprimer au maximum 100 pages à la fois."
+
+msgid "Chart color palette"
+msgstr "Palette de couleurs des graphiques"
+
+msgid "Upload a .color file to customize chart colors in the current visual theme."
+msgstr "Téléversez un fichier .color pour personnaliser les couleurs des graphiques du thème visuel actuel."
+
+msgid "One color per line: R,G,B,Alpha (RGB 0-255, Alpha 0-100; maximum 256 colors)."
+msgstr "Une couleur par ligne : R,G,B,Alpha (RVB 0-255, Alpha 0-100 ; 256 couleurs maximum)."
+
+msgid "Custom chart palette"
+msgstr "Palette de graphiques personnalisée"
+
+msgid "Default chart palette"
+msgstr "Palette de graphiques par défaut"
+
+msgid "Upload chart palette"
+msgstr "Téléverser la palette de graphiques"
+
+msgid "Restore default palette"
+msgstr "Restaurer la palette par défaut"
+
+msgid "Remove chart palette"
+msgstr "Supprimer la palette de graphiques"
+
+msgid "Restore the default chart palette for this theme?"
+msgstr "Restaurer la palette de graphiques par défaut de ce thème ?"
+
+msgid "Chart palette uploaded"
+msgstr "Palette de graphiques téléversée"
+
+msgid "Default chart palette restored"
+msgstr "Palette de graphiques par défaut restaurée"
+
+msgid "Select a .color file smaller than 16 KB."
+msgstr "Sélectionnez un fichier .color de moins de 16 Ko."
+
+msgid "The active visual theme has no assets directory. Install its theme files or select another theme to upload a chart palette."
+msgstr "Le thème visuel actif ne possède pas de dossier de ressources. Installez les fichiers du thème ou sélectionnez un autre thème pour téléverser une palette de graphiques."
+
+msgid "Selecting a color theme only previews its colors. Click 'Select as current theme' to activate it."
+msgstr "La sélection d'un thème de couleurs ne fait que l'afficher en aperçu. Cliquez sur « Sélectionner comme thème actuel » pour l'activer."
+
+msgid "Chart palettes and logos belong to the active visual theme, not the previewed color theme."
+msgstr "Les palettes des graphiques et les logos appartiennent au thème visuel actif, et non au thème de couleurs affiché en aperçu."
+
+msgid "Color theme (preview)"
+msgstr "Thème de couleurs (aperçu)"
+
+msgid "The themes storage is not writable. Check its file permissions before saving."
+msgstr "Le stockage des thèmes n'est pas accessible en écriture. Vérifiez les permissions des fichiers avant d'enregistrer."

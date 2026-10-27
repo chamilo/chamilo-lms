@@ -6195,7 +6195,9 @@ class Tracking
         $dataSet->addPoints($final_array, 'Serie1');
         $dataSet->addPoints($my_final_array, 'Serie2');
         $dataSet->normalize(100, "%");
-        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+        if (!Container::getThemeHelper()->applyPchartPalette($dataSet)) {
+            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+        }
 
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
@@ -6389,7 +6391,9 @@ class Tracking
         $dataSet->setXAxisName(get_lang('Score'));
         $dataSet->normalize(100, "%");
 
-        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+        if (!Container::getThemeHelper()->applyPchartPalette($dataSet)) {
+            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+        }
 
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);

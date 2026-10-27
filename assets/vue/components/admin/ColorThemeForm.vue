@@ -11,10 +11,21 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import colorThemeService from "../../services/colorThemeService"
 import { useNotification } from "../../composables/notification"
 import { useTheme } from "../../composables/theme"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { showSuccessNotification, showErrorNotification } = useNotification()
 const { getColorTheme, getColors, makeGradient, makeTextWithContrast, checkColorContrast } = useTheme()
 const { t } = useI18n()
+const platformConfigStore = usePlatformConfig()
+const isSavingTheme = ref(false)
+
+function notifyWriteError(error) {
+  if (error?.response?.status === 503) {
+    showErrorNotification(t("The themes storage is not writable. Check its file permissions before saving."))
+  } else {
+    showErrorNotification(error)
+  }
+}
 
 const emit = defineEmits(["selected"])
 
@@ -59,6 +70,7 @@ let formColor = getColorTheme("--color-form-base")
 
 const dialogCreateVisible = ref(false)
 const themeTitle = ref("")
+const newThemeTitle = ref("")
 
 // ------- Safe helpers (local, no setColors usage) -------
 const ROOT = typeof document !== "undefined" ? document.documentElement : null
@@ -174,47 +186,61 @@ onMounted(() => {
 })
 
 async function onClickSelectColorTheme() {
+  if (!selectedThemeIri.value || isSavingTheme.value) return
+  const selectedIri = selectedThemeIri.value
+  isSavingTheme.value = true
   try {
-    if (!selectedThemeIri.value) return
-    await colorThemeService.changePlatformColorTheme(selectedThemeIri.value)
+    await colorThemeService.changePlatformColorTheme(selectedIri)
+    // Updating platform config may remount this component and clear its child ref.
+    await themeSelectorEl.value?.loadThemes(selectedIri)
+    await platformConfigStore.initialize()
     showSuccessNotification(t("Theme selected as current"))
-    await themeSelectorEl.value.loadThemes()
   } catch (error) {
-    showErrorNotification(error)
+    notifyWriteError(error)
+  } finally {
+    isSavingTheme.value = false
   }
 }
 
 async function onClickUpdate() {
+  if (!selectedThemeIri.value || isSavingTheme.value) return
+  isSavingTheme.value = true
   try {
     const updatedTheme = await colorThemeService.update({
       iri: selectedThemeIri.value,
       title: themeTitle.value,
       colors: getColors(),
     })
+    await themeSelectorEl.value?.loadThemes(updatedTheme["@id"])
     showSuccessNotification(t("Color updated"))
-    await themeSelectorEl.value.loadThemes()
-    selectedThemeIri.value = updatedTheme["@id"]
-    emit("selected", updatedTheme)
   } catch (error) {
-    showErrorNotification(error)
+    notifyWriteError(error)
+  } finally {
+    isSavingTheme.value = false
   }
 }
 
+function openCreateDialog() {
+  newThemeTitle.value = ""
+  dialogCreateVisible.value = true
+}
+
 async function onClickCreate() {
+  if (!newThemeTitle.value?.trim() || isSavingTheme.value) return
+  isSavingTheme.value = true
   try {
-    if (!themeTitle.value?.trim()) return
     const created = await colorThemeService.create({
-      title: themeTitle.value,
+      title: newThemeTitle.value.trim(),
       colors: getColors(),
     })
+    await themeSelectorEl.value?.loadThemes(created["@id"])
     showSuccessNotification(t("Color theme created"))
-    await themeSelectorEl.value.loadThemes()
-    selectedThemeIri.value = created["@id"]
-    emit("selected", created)
-  } catch (error) {
-    showErrorNotification(error)
-  } finally {
     dialogCreateVisible.value = false
+    newThemeTitle.value = ""
+  } catch (error) {
+    notifyWriteError(error)
+  } finally {
+    isSavingTheme.value = false
   }
 }
 
@@ -299,6 +325,10 @@ watch(colorDanger, (nv) => {
       @click="isAdvancedMode = !isAdvancedMode"
     />
   </SectionHeader>
+
+  <p class="text-sm text-gray-600 mb-3">
+    {{ t("Selecting a color theme only previews its colors. Click 'Select as current theme' to activate it.") }}
+  </p>
 
   <form class="admin-colors__form-fields">
     <!-- Advanced mode -->
@@ -464,24 +494,25 @@ watch(colorDanger, (nv) => {
 
     <div class="field-group justify-end mt-2">
       <BaseButton
-        :disabled="!selectedThemeIri"
+        :disabled="!selectedThemeIri || isSavingTheme"
         :label="t('Select as current theme')"
         icon="check"
         type="success"
         @click="onClickSelectColorTheme"
       />
       <BaseButton
-        :disabled="!selectedThemeIri"
+        :disabled="!selectedThemeIri || isSavingTheme"
         :label="t('Save')"
         icon="save"
         type="success"
         @click="onClickUpdate"
       />
       <BaseButton
+        :disabled="isSavingTheme"
         :label="t('Save as new theme')"
         icon="save"
         type="success"
-        @click="dialogCreateVisible = true"
+        @click="openCreateDialog"
       />
     </div>
   </form>
@@ -496,7 +527,7 @@ watch(colorDanger, (nv) => {
   >
     <BaseInputText
       id="sample-title"
-      v-model="themeTitle"
+      v-model="newThemeTitle"
       :label="t('Title')"
     />
   </BaseDialogConfirmCancel>

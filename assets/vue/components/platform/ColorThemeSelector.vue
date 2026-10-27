@@ -17,7 +17,8 @@ const isServerThemesLoading = ref(true)
 
 const options = ref([])
 
-async function loadThemes() {
+async function loadThemes(preferredIri = null) {
+  serverThemes = []
   // IRI of the active theme (if provided by relation)
   let currentColorThemeIri = null
 
@@ -58,11 +59,15 @@ async function loadThemes() {
 
   options.value = serverThemes.map((colorTheme) => ({
     "@id": colorTheme["@id"],
-    displayTitle: colorTheme["@id"] === currentColorThemeIri ? t("{0} (current)", [colorTheme.title]) : colorTheme.title,
+    displayTitle:
+      colorTheme["@id"] === currentColorThemeIri ? t("{0} (current)", [colorTheme.title]) : colorTheme.title,
   }))
 
-  if (currentColorThemeIri) {
-    onChange({ value: currentColorThemeIri })
+  const nextIri =
+    preferredIri && serverThemes.some((theme) => theme["@id"] === preferredIri) ? preferredIri : currentColorThemeIri
+
+  if (nextIri) {
+    onChange({ value: nextIri })
   }
 }
 

@@ -7,6 +7,7 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import ColorThemePreview from "../../components/admin/ColorThemePreview.vue"
 import ColorThemeForm from "../../components/admin/ColorThemeForm.vue"
 import BrandingSection from "../../components/admin/BrandingSection.vue"
+import ChartPaletteSection from "../../components/admin/ChartPaletteSection.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -47,7 +48,7 @@ function goBranding() {
         <span
           class="inline-flex items-center rounded-full bg-gray-50 border border-gray-200 text-gray-700 px-2.5 py-1 text-xs"
         >
-          {{ t("Color theme") }}:
+          {{ t("Color theme (preview)") }}:
           <strong class="ms-1">{{ selectedColorThemeTitle || "—" }}</strong>
         </span>
         <span
@@ -70,6 +71,10 @@ function goBranding() {
       </div>
     </div>
 
+    <p class="text-sm opacity-70 mb-3">
+      {{ t("Chart palettes and logos belong to the active visual theme, not the previewed color theme.") }}
+    </p>
+
     <div
       id="colors"
       class="admin-colors__container"
@@ -82,6 +87,14 @@ function goBranding() {
         <BaseDivider layout="vertical" />
         <ColorThemePreview />
       </div>
+    </div>
+
+    <div class="mt-10">
+      <SectionHeader
+        :title="t('Chart color palette')"
+        size="6"
+      />
+      <ChartPaletteSection :slug="effectiveSlug" />
     </div>
 
     <div

@@ -43151,3 +43151,54 @@ msgstr ""
 
 msgid "A maximum of 100 pages can be deleted at once."
 msgstr ""
+
+msgid "Chart color palette"
+msgstr ""
+
+msgid "Upload a .color file to customize chart colors in the current visual theme."
+msgstr ""
+
+msgid "One color per line: R,G,B,Alpha (RGB 0-255, Alpha 0-100; maximum 256 colors)."
+msgstr ""
+
+msgid "Custom chart palette"
+msgstr ""
+
+msgid "Default chart palette"
+msgstr ""
+
+msgid "Upload chart palette"
+msgstr ""
+
+msgid "Restore default palette"
+msgstr ""
+
+msgid "Remove chart palette"
+msgstr ""
+
+msgid "Restore the default chart palette for this theme?"
+msgstr ""
+
+msgid "Chart palette uploaded"
+msgstr ""
+
+msgid "Default chart palette restored"
+msgstr ""
+
+msgid "Select a .color file smaller than 16 KB."
+msgstr ""
+
+msgid "The active visual theme has no assets directory. Install its theme files or select another theme to upload a chart palette."
+msgstr ""
+
+msgid "Selecting a color theme only previews its colors. Click 'Select as current theme' to activate it."
+msgstr ""
+
+msgid "Chart palettes and logos belong to the active visual theme, not the previewed color theme."
+msgstr ""
+
+msgid "Color theme (preview)"
+msgstr ""
+
+msgid "The themes storage is not writable. Check its file permissions before saving."
+msgstr ""

@@ -6,11 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Helpers\PaletteFile;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use DateTimeImmutable;
+use InvalidArgumentException;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +30,93 @@ class ThemeController extends AbstractController
     public function __construct(
         private readonly ThemeHelper $themeHelper
     ) {}
+
+    /**
+     * Admin-managed pChart palette for the active visual theme.
+     * Files stay in the themes Flysystem, including remote-storage deployments.
+     */
+    #[Route('/{slug}/palette', name: 'theme_palette_status', methods: ['GET'], priority: 10)]
+    #[IsGranted('ROLE_ADMIN')]
+    public function paletteStatus(
+        string $slug,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        FilesystemOperator $fs
+    ): JsonResponse {
+        $this->assertActiveTheme($slug);
+        $path = $slug.'/palettes/pchart/default.color';
+        $exists = $fs->fileExists($path);
+
+        return $this->json([
+            'uploaded' => $exists,
+            'themeDirectoryExists' => $fs->directoryExists($slug),
+        ]);
+    }
+
+    #[Route('/{slug}/palette', name: 'theme_palette_upload', methods: ['POST'], priority: 10)]
+    #[IsGranted('ROLE_ADMIN')]
+    public function uploadPalette(
+        string $slug,
+        Request $request,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        FilesystemOperator $fs
+    ): JsonResponse {
+        $this->assertActiveTheme($slug);
+        $file = $request->files->get('palette');
+        if (!$file instanceof UploadedFile || !$file->isValid() || 'color' !== strtolower($file->getClientOriginalExtension())) {
+            return $this->json(['error' => 'Select a valid .color palette file.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (($file->getSize() ?? 0) > 16384) {
+            return $this->json(['error' => 'The palette file cannot exceed 16 KB.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $contents = file_get_contents($file->getPathname());
+        if (false === $contents) {
+            return $this->json(['error' => 'Cannot read the palette file.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            $colors = PaletteFile::parse($contents);
+        } catch (InvalidArgumentException $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!$fs->directoryExists($slug)) {
+            return $this->json(
+                ['error' => 'The active visual theme has no assets directory. Install its theme files or select another theme to upload a chart palette.'],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+        $this->ensureDir($fs, $slug.'/palettes');
+        $this->ensureDir($fs, $slug.'/palettes/pchart');
+        $fs->write($slug.'/palettes/pchart/default.color', $contents);
+
+        return $this->json(['uploaded' => true, 'colors' => \count($colors)], Response::HTTP_CREATED);
+    }
+
+    #[Route('/{slug}/palette', name: 'theme_palette_delete', methods: ['DELETE'], priority: 10)]
+    #[IsGranted('ROLE_ADMIN')]
+    public function deletePalette(
+        string $slug,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        FilesystemOperator $fs
+    ): JsonResponse {
+        $this->assertActiveTheme($slug);
+        $path = $slug.'/palettes/pchart/default.color';
+        if ($fs->fileExists($path)) {
+            $fs->delete($path);
+        }
+
+        return $this->json(['uploaded' => false]);
+    }
+
+    private function assertActiveTheme(string $slug): void
+    {
+        // Prevent path traversal and cross-theme writes, including on shared storage.
+        if (!preg_match('/^[a-zA-Z0-9_-]{1,255}$/D', $slug) || $slug !== $this->themeHelper->getVisualTheme()) {
+            throw $this->createAccessDeniedException('Only the active visual theme can be modified.');
+        }
+    }
 
     /**
      * Upload logos (SVG/PNG) for theme header/email.

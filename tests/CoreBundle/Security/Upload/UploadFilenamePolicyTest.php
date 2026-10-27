@@ -46,6 +46,37 @@ final class UploadFilenamePolicyTest extends TestCase
         self::assertTrue($policy->filter('answer.doc')['allowed']);
     }
 
+    public function testSimplePaletteFilenameIsSafeUnderWhitelistWithoutCustomSetting(): void
+    {
+        $policy = new UploadFilenamePolicy($this->settingsManager([
+            'document.upload_extensions_list_type' => 'whitelist',
+            'document.upload_extensions_skip' => 'true',
+            'document.upload_extensions_whitelist' => '',
+            'document.upload_extensions_replace_by' => 'txt',
+            'editor.enabled_support_svg' => 'false',
+        ]));
+
+        self::assertTrue($policy->filter('chamilo-chart-palette.color')['allowed']);
+        self::assertTrue($policy->filter('CHAMILO_COLOR.COLOR')['allowed']);
+        self::assertFalse($policy->filter('malicious.html.color')['allowed']);
+        self::assertFalse($policy->filter('malicious.php.color')['allowed']);
+        self::assertFalse($policy->filter('unsafe name.color')['allowed']);
+        self::assertFalse($policy->filter('malicious.php')['allowed']);
+    }
+
+    public function testExplicitBlacklistRejectsPaletteFile(): void
+    {
+        $policy = new UploadFilenamePolicy($this->settingsManager([
+            'document.upload_extensions_list_type' => 'blacklist',
+            'document.upload_extensions_skip' => 'true',
+            'document.upload_extensions_blacklist' => 'color',
+            'editor.enabled_support_svg' => 'false',
+        ]));
+
+        self::assertFalse($policy->filter('chamilo-chart-palette.color')['allowed']);
+        self::assertTrue($policy->filter('ordinary.png')['allowed']);
+    }
+
     /**
      * @param array<string, mixed> $values
      */

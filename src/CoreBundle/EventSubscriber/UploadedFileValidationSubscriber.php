@@ -86,6 +86,7 @@ final class UploadedFileValidationSubscriber implements EventSubscriberInterface
         }
 
         $originalName = (string) $file->getClientOriginalName();
+
         $decision = $this->policy->filter($originalName);
 
         if (!($decision['allowed'] ?? false)) {

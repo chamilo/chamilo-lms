@@ -354,6 +354,12 @@ class ChamiloHelper
         bool $wrapInRGBA = false,
         ?int $fillUpTo = null
     ): array {
+        $themeHelper = Container::getThemeHelper();
+        if ('' !== trim($themeHelper->getAssetContents('palettes/pchart/default.color'))) {
+            return $themeHelper->getColorPalette($decimalOpacity, $wrapInRGBA, $fillUpTo ?? 0);
+        }
+
+        // Preserve the existing default palette for installations without an override.
         // Get the common colors from the palette used for pchart
         $paletteFile = api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color';
         $palette = file($paletteFile);

@@ -1122,7 +1122,9 @@ class MySpace
         $myData->setSerieWeight('Serie1', 1);
         $myData->setSerieDescription('Serie1', get_lang('My results'));
         $myData->setAxisName(0, get_lang('Minutes'));
-        $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+        if (!Container::getThemeHelper()->applyPchartPalette($myData)) {
+            $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+        }
 
         $cachePath = rtrim(api_get_path(SYS_ARCHIVE_PATH), '/');
         $myCache = new pCache([

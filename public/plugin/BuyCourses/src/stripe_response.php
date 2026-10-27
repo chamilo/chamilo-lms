@@ -228,6 +228,29 @@ $getInvoicePeriodEnd = static function (mixed $invoice) use ($timestampToDateTim
     return null;
 };
 
+$getSubscriptionPeriodEnd = static function (mixed $subscription) use ($timestampToDateTime, $getStripeObjectValue): ?string {
+    if (!$subscription) {
+        return null;
+    }
+
+    $date = $timestampToDateTime($getStripeObjectValue($subscription, 'current_period_end'));
+    if (null !== $date) {
+        return $date;
+    }
+
+    $items = $subscription->items->data ?? [];
+    if (is_iterable($items)) {
+        foreach ($items as $item) {
+            $date = $timestampToDateTime($getStripeObjectValue($item, 'current_period_end'));
+            if (null !== $date) {
+                return $date;
+            }
+        }
+    }
+
+    return null;
+};
+
 $completeCourseOrSessionSale = static function (mixed $checkoutSession) use ($plugin, $log): bool {
     $checkoutSessionId = (string) ($checkoutSession->id ?? '');
     if ('' === $checkoutSessionId) {
@@ -563,6 +586,136 @@ switch ($eventType) {
                 'subscription_id' => $subscriptionId,
             ]);
         }
+        break;
+
+    case 'customer.subscription.updated':
+        $subscriptionId = trim((string) ($object->id ?? ''));
+        if ('' === $subscriptionId) {
+            break;
+        }
+
+        $serviceSaleIdFromMetadata = (int) ($getStripeMetadataValue($object, 'service_sale_id') ?? 0);
+        $serviceSale = $plugin->getServiceSaleFromGatewaySubscriptionId($subscriptionId);
+        if (empty($serviceSale) && $serviceSaleIdFromMetadata > 0) {
+            $serviceSale = $plugin->getServiceSale($serviceSaleIdFromMetadata);
+        }
+
+        if (empty($serviceSale)) {
+            $log('customer.subscription.updated ignored because no service sale matches subscription.', [
+                'event_id' => $eventId,
+                'subscription_id' => $subscriptionId,
+                'service_sale_id' => $serviceSaleIdFromMetadata,
+            ]);
+            break;
+        }
+
+        $serviceSaleId = (int) ($serviceSale['id'] ?? 0);
+        if ($serviceSaleId <= 0) {
+            break;
+        }
+
+        if ($plugin->wasGatewayEventProcessed($serviceSaleId, $eventId)) {
+            $log('Duplicate Stripe customer.subscription.updated ignored.', [
+                'service_sale_id' => $serviceSaleId,
+                'event_id' => $eventId,
+            ]);
+            break;
+        }
+
+        $subscriptionStatus = strtolower(trim((string) ($object->status ?? '')));
+        $cancelAtPeriodEnd = !empty($object->cancel_at_period_end);
+        $periodEnd = $getSubscriptionPeriodEnd($object);
+        $customerId = trim((string) ($object->customer ?? ''));
+        $previousRecurringPayment = (int) (
+            $serviceSale['recurring_payment']
+            ?? BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_DISABLED
+        );
+        $previousCancelledAt = trim((string) ($serviceSale['cancelled_at'] ?? ''));
+
+        $gatewayData = [
+            'recurring_gateway' => 'stripe',
+            'gateway_subscription_id' => $subscriptionId,
+            'recurring_profile_id' => $subscriptionId,
+        ];
+
+        if ('' !== $customerId) {
+            $gatewayData['gateway_customer_id'] = $customerId;
+        }
+
+        if (null !== $periodEnd) {
+            $gatewayData['date_end'] = $periodEnd;
+            $gatewayData['next_charge_date'] = $periodEnd;
+        }
+
+        $auditAction = null;
+        $auditData = [
+            'gateway' => 'stripe',
+            'event_id' => $eventId,
+            'event_type' => $eventType,
+            'subscription_id' => $subscriptionId,
+            'subscription_status' => $subscriptionStatus,
+            'cancel_at_period_end' => $cancelAtPeriodEnd,
+            'planned_renewal_date' => $periodEnd,
+        ];
+
+        if ($cancelAtPeriodEnd || in_array($subscriptionStatus, ['canceled', 'cancelled'], true)) {
+            $gatewayData['recurring_payment'] = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED;
+
+            $cancelledAt = $timestampToDateTime($object->canceled_at ?? $event->created ?? null);
+            if (null === $cancelledAt) {
+                $cancelledAt = api_get_utc_datetime();
+            }
+            $gatewayData['cancelled_at'] = $cancelledAt;
+            $auditData['cancelled_at'] = $cancelledAt;
+
+            if (BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED !== $previousRecurringPayment
+                || '' === $previousCancelledAt
+            ) {
+                $auditAction = BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_CANCELLED;
+            }
+        } elseif (in_array($subscriptionStatus, ['past_due', 'unpaid', 'incomplete'], true)) {
+            $gatewayData['recurring_payment'] = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_SUSPENDED;
+            $gatewayData['cancelled_at'] = null;
+        } elseif (in_array($subscriptionStatus, ['active', 'trialing'], true)) {
+            $gatewayData['recurring_payment'] = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED;
+            $gatewayData['cancelled_at'] = null;
+
+            if (BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED === $previousRecurringPayment
+                || '' !== $previousCancelledAt
+            ) {
+                $auditAction = BuyCoursesPlugin::AUDIT_ACTION_RENEWAL_RESTORED;
+            }
+        }
+
+        if (!$plugin->updateServiceSaleGatewayData($serviceSaleId, $gatewayData)) {
+            $log('Stripe customer.subscription.updated could not update service sale.', [
+                'service_sale_id' => $serviceSaleId,
+                'subscription_id' => $subscriptionId,
+                'event_id' => $eventId,
+            ]);
+            $respond('SERVICE_UPDATE_FAILED', 500);
+        }
+
+        if (null !== $auditAction) {
+            $plugin->recordAudit(
+                $auditAction,
+                BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE,
+                $serviceSaleId,
+                $auditData,
+                null,
+                BuyCoursesPlugin::AUDIT_SOURCE_GATEWAY
+            );
+        }
+
+        $plugin->markGatewayEventProcessed($serviceSaleId, $eventId);
+
+        $log('Stripe subscription state synchronized.', [
+            'service_sale_id' => $serviceSaleId,
+            'subscription_id' => $subscriptionId,
+            'subscription_status' => $subscriptionStatus,
+            'cancel_at_period_end' => $cancelAtPeriodEnd,
+            'period_end' => $periodEnd,
+        ]);
         break;
 
     case 'customer.subscription.deleted':

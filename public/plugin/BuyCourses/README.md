@@ -53,12 +53,46 @@ The webhook must receive at least these events for service subscriptions:
 - `checkout.session.completed`
 - `invoice.paid`
 - `invoice.payment_failed`
+- `customer.subscription.updated`
 - `customer.subscription.deleted`
 
 When Stripe sends `invoice.paid`, Chamilo extends the service validity, updates
-service benefits and records the recurring payment audit entry. When Stripe sends
-`invoice.payment_failed` or `customer.subscription.deleted`, Chamilo updates the
-local recurring subscription status accordingly.
+service benefits and records the recurring payment audit entry.
+`customer.subscription.updated` keeps cancellation-at-period-end, restoration,
+subscription status and the current paid period synchronized even when the change
+was initiated directly in Stripe. `invoice.payment_failed` and
+`customer.subscription.deleted` update the local recurring subscription status
+accordingly.
+
+Stripe restricted API key permissions
+-------------------------------------
+
+If BuyCourses is configured with a Stripe restricted API key (`rk_live_...` or
+`rk_test_...`), the recurring-payment reconciliation needs **Invoices: Read**
+(`invoice_read`) permission. Without it, Stripe can still charge the customer but
+Chamilo cannot list the paid invoices needed to rebuild historical payment
+history, calculate **Total collected**, or refresh stale recurring-service dates.
+
+In the Stripe Dashboard:
+
+1. Open **Developers → API keys**.
+2. Edit the restricted key used by BuyCourses.
+3. Search for **Invoices**.
+4. Set **Invoices** to **Read**.
+5. Click **Apply changes**.
+
+![Open Stripe API keys](doc/stripe-api-keys.png)
+
+![Enable Invoices Read on the restricted key](doc/stripe-invoices-read.png)
+
+Changing the permission does not require replacing the key in Chamilo. The same
+restricted key can continue to be used after its permissions are updated.
+
+A typical missing-permission error contains:
+
+```text
+Permission denied. Enabling Invoices Read ('invoice_read') permissions on this key would allow this request to continue.
+```
 
 PayPal recurring payments are updated through the PayPal IPN endpoint configured
 for the plugin.

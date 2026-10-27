@@ -33,6 +33,7 @@ class BuyCoursesPlugin extends Plugin
 {
     private string $lastServiceSaleError = '';
     private bool $lastServiceSaleWasReused = false;
+    private bool $stripeInvoiceReadPermissionDenied = false;
 
     public const TABLE_PAYPAL = 'plugin_buycourses_paypal_account';
     public const TABLE_CURRENCY = 'plugin_buycourses_currency';
@@ -2123,11 +2124,40 @@ class BuyCoursesPlugin extends Plugin
             return '';
         }
 
-        return trim((string) (
+        $subscriptionId = trim((string) (
             $serviceSale['gateway_subscription_id']
             ?? $serviceSale['recurring_profile_id']
             ?? ''
         ));
+        if ('' !== $subscriptionId) {
+            return $subscriptionId;
+        }
+
+        $serviceSaleId = (int) ($serviceSale['id'] ?? 0);
+        if ($serviceSaleId <= 0) {
+            return '';
+        }
+
+        foreach ($this->getServiceSaleAuditPaymentRows($serviceSaleId) as $auditEntry) {
+            $auditData = $this->decodeAuditData($auditEntry);
+            $subscriptionId = trim((string) ($auditData['subscription_id'] ?? ''));
+            if ('' === $subscriptionId) {
+                continue;
+            }
+
+            // Older Stripe service sales could have the subscription only in the
+            // audit payload. Persist it once so future webhooks and reconciliation
+            // can use the indexed service-sale columns directly.
+            $this->updateServiceSaleGatewayData($serviceSaleId, [
+                'recurring_gateway' => 'stripe',
+                'gateway_subscription_id' => $subscriptionId,
+                'recurring_profile_id' => $subscriptionId,
+            ]);
+
+            return $subscriptionId;
+        }
+
+        return '';
     }
 
     private function getStripeObjectId(mixed $value): string
@@ -2372,6 +2402,16 @@ class BuyCoursesPlugin extends Plugin
             return ['success' => true, 'imported' => 0, 'skipped' => true];
         }
 
+        if ($this->stripeInvoiceReadPermissionDenied) {
+            return [
+                'success' => false,
+                'imported' => 0,
+                'skipped' => true,
+                'error_code' => 'stripe_invoice_read_permission_missing',
+                'error' => 'Stripe restricted API key requires Invoices: Read permission.',
+            ];
+        }
+
         if (!$force && !$this->shouldReconcileStripeRecurringServiceSale($serviceSale)) {
             return ['success' => true, 'imported' => 0, 'skipped' => true];
         }
@@ -2558,19 +2598,44 @@ class BuyCoursesPlugin extends Plugin
                 'last_payment_date' => $latestPaymentDate,
             ];
         } catch (Throwable $exception) {
+            $errorMessage = $exception->getMessage();
+            $normalizedError = strtolower($errorMessage);
+            $invoiceReadPermissionDenied = str_contains($normalizedError, 'invoice_read')
+                || (str_contains($normalizedError, 'permission denied')
+                    && str_contains($normalizedError, 'invoice'));
+
+            if ($invoiceReadPermissionDenied) {
+                if (!$this->stripeInvoiceReadPermissionDenied) {
+                    error_log(
+                        '[BuyCourses][Stripe] Recurring service payment reconciliation stopped for this request: '.
+                        'the configured Stripe restricted API key requires Invoices: Read (invoice_read) permission. '.
+                        'See public/plugin/BuyCourses/README.md for setup instructions.'
+                    );
+                }
+
+                $this->stripeInvoiceReadPermissionDenied = true;
+
+                return [
+                    'success' => false,
+                    'imported' => 0,
+                    'error_code' => 'stripe_invoice_read_permission_missing',
+                    'error' => $errorMessage,
+                ];
+            }
+
             error_log(
                 '[BuyCourses][Stripe] Could not reconcile recurring service payment history. service_sale_id='.
                 $serviceSaleId.
                 ' subscription_id='.
                 $subscriptionId.
                 ' error='.
-                $exception->getMessage()
+                $errorMessage
             );
 
             return [
                 'success' => false,
                 'imported' => 0,
-                'error' => $exception->getMessage(),
+                'error' => $errorMessage,
             ];
         }
     }
@@ -7099,9 +7164,10 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
         $result = Database::select(
             '*',
-            Database::get_main_table(self::TABLE_SERVICES_SALE),
+            $serviceSaleTable,
             [
                 'where' => [
                     'gateway_subscription_id = ?' => $subscriptionId,
@@ -7110,7 +7176,61 @@ class BuyCoursesPlugin extends Plugin
             'first'
         );
 
-        return is_array($result) ? $result : [];
+        if (is_array($result) && !empty($result)) {
+            return $result;
+        }
+
+        $result = Database::select(
+            '*',
+            $serviceSaleTable,
+            [
+                'where' => [
+                    'recurring_profile_id = ?' => $subscriptionId,
+                ],
+            ],
+            'first'
+        );
+
+        if (is_array($result) && !empty($result)) {
+            return $result;
+        }
+
+        if (!$this->hasPluginTable(self::TABLE_AUDIT)) {
+            return [];
+        }
+
+        $auditEntry = Database::select(
+            'object_id',
+            Database::get_main_table(self::TABLE_AUDIT),
+            [
+                'where' => [
+                    'object_type = ? AND data_json LIKE ?' => [
+                        self::AUDIT_OBJECT_SERVICE_SALE,
+                        '%"subscription_id":"'.$subscriptionId.'"%',
+                    ],
+                ],
+                'order' => 'id DESC',
+            ],
+            'first'
+        );
+
+        $serviceSaleId = (int) ($auditEntry['object_id'] ?? 0);
+        if ($serviceSaleId <= 0) {
+            return [];
+        }
+
+        $serviceSale = $this->getServiceSale($serviceSaleId);
+        if (empty($serviceSale)) {
+            return [];
+        }
+
+        $this->updateServiceSaleGatewayData($serviceSaleId, [
+            'recurring_gateway' => 'stripe',
+            'gateway_subscription_id' => $subscriptionId,
+            'recurring_profile_id' => $subscriptionId,
+        ]);
+
+        return $this->getServiceSale($serviceSaleId);
     }
 
     public function wasGatewayEventProcessed(int $serviceSaleId, string $eventId): bool
@@ -13028,6 +13148,198 @@ class BuyCoursesPlugin extends Plugin
         $row = Database::fetch_array($result, 'ASSOC');
 
         return (int) ($row['total'] ?? 0);
+    }
+
+    /**
+     * Move courses from an expired service sale to another currently active sale
+     * of the same service, while respecting the per-sale course allowance.
+     *
+     * This prevents a course from being closed only because one duplicate/older
+     * subscription expired while another paid sale of the same service can still
+     * cover it. Courses that exceed the replacement sales' capacity stay linked
+     * to the expired sale and are handled by the normal expiry process.
+     */
+    public function reassignExpiredSubscriptionCoursesToActiveServiceSales(
+        int $expiredServiceSaleId,
+        bool $dryRun = false
+    ): array {
+        $expiredServiceSaleId = (int) $expiredServiceSaleId;
+        if ($expiredServiceSaleId <= 0 || !$this->hasSubscriptionCourseInfrastructure()) {
+            return ['found' => 0, 'reassigned' => 0, 'remaining' => 0, 'errors' => 0, 'reassigned_subscription_course_ids' => []];
+        }
+
+        $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
+        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+        $serviceRelExtraFieldTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $now = Database::escape_string(api_get_utc_datetime());
+
+        // Keep the recurring cron independent from UI/session language. getServiceSale()
+        // enriches the sale with translated benefit labels, which can fail in CLI when
+        // no user language is present. Only buyer/service IDs are needed here.
+        $sourceResult = Database::query(
+            "SELECT buyer_id, service_id
+             FROM $serviceSaleTable
+             WHERE id = $expiredServiceSaleId
+             LIMIT 1"
+        );
+        $sourceSale = Database::fetch_array($sourceResult, 'ASSOC') ?: [];
+        $buyerId = (int) ($sourceSale['buyer_id'] ?? 0);
+        $serviceId = (int) ($sourceSale['service_id'] ?? 0);
+        if ($buyerId <= 0 || $serviceId <= 0) {
+            return ['found' => 0, 'reassigned' => 0, 'remaining' => 0, 'errors' => 1, 'reassigned_subscription_course_ids' => []];
+        }
+
+        $courseRows = Database::select(
+            'id, course_id, context_json',
+            $subscriptionCourseTable,
+            [
+                'where' => [
+                    "service_sale_id = ? AND status = 'active' AND deleted_at IS NULL" => $expiredServiceSaleId,
+                ],
+                'order' => 'id ASC',
+            ]
+        );
+        $found = count($courseRows);
+        if (0 === $found) {
+            return ['found' => 0, 'reassigned' => 0, 'remaining' => 0, 'errors' => 0, 'reassigned_subscription_course_ids' => []];
+        }
+
+        $replacementSales = [];
+        $result = Database::query(
+            "SELECT id, date_start, date_end, recurring_profile_id, gateway_subscription_id
+             FROM $serviceSaleTable
+             WHERE buyer_id = $buyerId
+               AND service_id = $serviceId
+               AND status = ".self::SERVICE_STATUS_COMPLETED."
+               AND id <> $expiredServiceSaleId
+               AND (date_start IS NULL OR date_start <= '$now')
+               AND date_end IS NOT NULL
+               AND date_end >= '$now'
+             ORDER BY date_end DESC, id DESC"
+        );
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $replacementSaleId = (int) ($row['id'] ?? 0);
+            if ($replacementSaleId <= 0) {
+                continue;
+            }
+
+            $row['used_courses'] = $this->countCoursesLinkedToServiceSale($replacementSaleId);
+            $replacementSales[] = $row;
+        }
+
+        if (empty($replacementSales)) {
+            return ['found' => $found, 'reassigned' => 0, 'remaining' => $found, 'errors' => 0, 'reassigned_subscription_course_ids' => []];
+        }
+
+        // Read only the numeric course allowance required by this cron. Avoid
+        // getServiceCourseCreationBenefitValues(), which also resolves translated
+        // labels and other UI-facing service data. Zero means unlimited.
+        $maxCourses = 0;
+        $maxCoursesVariable = Database::escape_string(self::EXTRA_FIELD_MAX_COURSES);
+        $benefitResult = Database::query(
+            "SELECT rel.granted_value
+             FROM $serviceRelExtraFieldTable rel
+             INNER JOIN $extraFieldTable ef ON ef.id = rel.extra_field_id
+             WHERE rel.service_id = $serviceId
+               AND ef.variable = '$maxCoursesVariable'
+               AND ef.item_type = ".ExtraField::USER_FIELD_TYPE."
+             LIMIT 1"
+        );
+        if (false !== $benefitResult && Database::num_rows($benefitResult) > 0) {
+            $benefitRow = Database::fetch_array($benefitResult, 'ASSOC') ?: [];
+            $maxCourses = max(0, (int) ($benefitRow['granted_value'] ?? 0));
+        }
+
+        $reassigned = 0;
+        $errors = 0;
+        $reassignedSubscriptionCourseIds = [];
+        $reassignedAt = api_get_utc_datetime();
+
+        foreach ($courseRows as $courseRow) {
+            $selectedIndex = null;
+            $bestRemaining = -1;
+
+            foreach ($replacementSales as $index => $replacementSale) {
+                $usedCourses = max(0, (int) ($replacementSale['used_courses'] ?? 0));
+                $remainingSlots = $maxCourses <= 0 ? PHP_INT_MAX : max(0, $maxCourses - $usedCourses);
+                if ($remainingSlots <= 0) {
+                    continue;
+                }
+
+                if ($remainingSlots > $bestRemaining) {
+                    $bestRemaining = $remainingSlots;
+                    $selectedIndex = $index;
+                }
+            }
+
+            if (null === $selectedIndex) {
+                break;
+            }
+
+            $replacementSale = $replacementSales[$selectedIndex];
+            $replacementSaleId = (int) ($replacementSale['id'] ?? 0);
+            $rowId = (int) ($courseRow['id'] ?? 0);
+            if ($replacementSaleId <= 0 || $rowId <= 0) {
+                ++$errors;
+                continue;
+            }
+
+            if (!$dryRun) {
+                $context = json_decode((string) ($courseRow['context_json'] ?? ''), true);
+                if (!is_array($context)) {
+                    $context = [];
+                }
+
+                $context = array_merge($context, [
+                    'service_sale_id' => $replacementSaleId,
+                    'service_id' => $serviceId,
+                    'date_start' => (string) ($replacementSale['date_start'] ?? ''),
+                    'date_end' => (string) ($replacementSale['date_end'] ?? ''),
+                    'recurring_profile_id' => (string) (
+                        $replacementSale['gateway_subscription_id']
+                        ?? $replacementSale['recurring_profile_id']
+                        ?? ''
+                    ),
+                    'status' => 'active',
+                    'reassigned_from_service_sale_id' => $expiredServiceSaleId,
+                    'reassigned_at' => $reassignedAt,
+                    'last_action' => 'reassigned',
+                ]);
+
+                if (false === Database::update(
+                    $subscriptionCourseTable,
+                    [
+                        'service_sale_id' => $replacementSaleId,
+                        'service_id' => $serviceId,
+                        'status' => 'active',
+                        'context_json' => json_encode($context, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                        'updated_at' => $reassignedAt,
+                        'last_action' => 'reassigned',
+                    ],
+                    ['id = ?' => $rowId]
+                )) {
+                    ++$errors;
+                    continue;
+                }
+            }
+
+            $replacementSales[$selectedIndex]['used_courses'] = max(
+                0,
+                (int) ($replacementSales[$selectedIndex]['used_courses'] ?? 0)
+            ) + 1;
+            $reassignedSubscriptionCourseIds[] = $rowId;
+            ++$reassigned;
+        }
+
+        return [
+            'found' => $found,
+            'reassigned' => $reassigned,
+            'remaining' => max(0, $found - $reassigned),
+            'errors' => $errors,
+            'reassigned_subscription_course_ids' => $reassignedSubscriptionCourseIds,
+        ];
     }
 
     public function applyAiCourseFeatureSettingsToCourse(int $courseId, array $enabledFeatures): void

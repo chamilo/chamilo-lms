@@ -56,3 +56,31 @@ Feature: Legacy agenda redirects
     Then the URL should contain "cid="
     And the URL should not contain "type=global"
     And I should see "Events list"
+
+  Scenario Outline: The legacy personal agenda opens the Vue agenda as <role>
+    Given <login>
+    When I am on "/main/calendar/agenda_js.php?type=personal"
+    And I wait for the URL to contain "/resources/ccalendarevent"
+    Then the URL should not contain "cid="
+    And the URL should not contain "/list"
+    And I should see "Agenda"
+
+    Examples:
+      | role          | login                          |
+      | administrator | I am a platform administrator  |
+      | teacher       | I am a teacher                 |
+      | student       | I am a student                 |
+
+  Scenario: The legacy platform agenda opens the global Vue agenda
+    Given I am a platform administrator
+    When I am on "/main/calendar/agenda_js.php?type=admin"
+    And I wait for the URL to contain "/resources/ccalendarevent"
+    Then the URL should contain "type=global"
+
+  Scenario: The legacy course agenda keeps the course context
+    Given I am a platform administrator
+    And I resolve the numeric id of course "TEMP"
+    When I am on "/main/calendar/agenda_js.php?type=course&cid=COURSE_ID&sid=0&gid=0" with the resolved id of course "TEMP"
+    And I wait for the URL to contain "/resources/ccalendarevent"
+    Then the URL should contain "cid="
+    And the URL should not contain "type=global"

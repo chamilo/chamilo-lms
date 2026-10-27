@@ -215,7 +215,7 @@ $tpl->assign('can_add_events', $can_add_events);
 
 // Setting AJAX caller
 if (!empty($userId)) {
-    $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?user_id='.$userId.'&type='.$type;
+    $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?user_id='.urlencode($userId).'&type='.$type;
 } else {
     $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
 }

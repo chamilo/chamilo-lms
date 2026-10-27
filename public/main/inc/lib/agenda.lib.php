@@ -1394,6 +1394,11 @@ class Agenda
 
         $groupMemberships = [];
         if (!empty($groupId)) {
+            if (!$isAllowToEdit
+                && !GroupManager::userHasAccess($userId, api_get_group_entity((int) $groupId), GroupManager::GROUP_TOOL_CALENDAR)
+            ) {
+                return [];
+            }
             $groupMemberships = [(int) $groupId];
         } else {
             if ($isAllowToEdit) {

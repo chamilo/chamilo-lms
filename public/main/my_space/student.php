@@ -310,17 +310,6 @@ if (api_is_student_boss()) {
 
     $actionsLeft .= Display::url(
         Display::getMdiIcon(
-            'calendar-clock',
-            'ch-tool-icon',
-            null,
-            32,
-            get_lang('My students schedule')
-        ),
-        $webCodePath.'my_space/calendar_plan.php'
-    );
-
-    $actionsLeft .= Display::url(
-        Display::getMdiIcon(
             'certificate',
             'ch-tool-icon',
             null,

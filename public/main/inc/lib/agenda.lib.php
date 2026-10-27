@@ -2528,13 +2528,6 @@ class Agenda
                 Display::getMdiIcon(ObjectIcon::AGENDA_PLAN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sessions plan calendar')),
                 $codePath."calendar/planification.php"
             );
-
-            if (api_is_student_boss() || api_is_platform_admin()) {
-                $actionsLeft .= Display::url(
-                    Display::getMdiIcon(ObjectIcon::AGENDA_USER_EVENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('My students schedule')),
-                    $codePath.'my_space/calendar_plan.php'
-                );
-            }
         }
 
         if (api_is_platform_admin() ||

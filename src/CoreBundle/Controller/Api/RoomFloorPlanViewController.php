@@ -101,6 +101,7 @@ final class RoomFloorPlanViewController extends AbstractController
 
         return $this->json([
             'available' => $available,
+            'roomId' => $available ? $room?->getId() : null,
             'roomTitle' => $room?->getTitle(),
             'branchTitle' => $branch?->getTitle(),
             'roomMap' => $available ? $room?->getRoomMap() : null,

@@ -59,6 +59,7 @@
         "public/main/portfolio/list.php",
         "public/main/session/session_list.php",
         "public/main/social/skills_ranking.php",
+        "public/main/template/default/agenda/planification.html.twig",
         "public/main/template/default/auth/confirm_session_subscription.html.twig",
         "public/main/upload/upload.php",
         "public/main/upload/upload.scorm.php",

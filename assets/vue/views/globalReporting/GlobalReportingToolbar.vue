@@ -23,11 +23,12 @@
 
     <BaseButton
       v-for="action in externalActions"
-      :key="action.url"
+      :key="action.url ?? action.route.name"
       :label="t(action.label)"
       :icon="action.icon"
       only-icon
       type="primary-alternative"
+      :route="action.route"
       :to-url="action.url"
     />
 
@@ -301,7 +302,7 @@ const externalActions = computed(() => {
       actions.push({
         label: "Sessions plan calendar",
         icon: "agenda-plan",
-        url: "/main/calendar/planification.php",
+        route: { name: "CalendarSessionsPlan" },
       })
     }
 

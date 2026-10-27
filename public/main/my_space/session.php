@@ -343,7 +343,7 @@ if (api_is_platform_admin(true, true)) {
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
             Display::getMdiIcon(ObjectIcon::SURVEY_DOODLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sessions plan calendar')),
-            api_get_path(WEB_CODE_PATH)."calendar/planification.php"
+            api_get_path(WEB_PATH).'resources/ccalendarevent/sessions-plan'
         );
     }
 

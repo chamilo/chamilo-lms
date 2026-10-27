@@ -69,6 +69,62 @@ if ($action === 'md_to_html') {
         $html = preg_replace('/\son[a-z]+\s*=\s*(["\']).*?\1/ims', '', (string) $html);
         $html = preg_replace('/\s(href|src)\s*=\s*(["\'])\s*javascript:[^"\']*\2/ims', ' $1="#"', (string) $html);
 
+        $pluginWebPath = rtrim(api_get_path(WEB_PLUGIN_PATH).$plugin, '/').'/';
+        $html = preg_replace_callback(
+            '/(<img\b[^>]*\bsrc\s*=\s*)(["\'])([^"\']+)\2/i',
+            static function (array $matches) use ($pluginWebPath): string {
+                $src = trim(html_entity_decode($matches[3], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+
+                if (
+                    '' === $src ||
+                    str_starts_with($src, '/') ||
+                    str_starts_with($src, '//') ||
+                    preg_match('#^[a-z][a-z0-9+.-]*:#i', $src)
+                ) {
+                    return $matches[0];
+                }
+
+                $path = parse_url($src, PHP_URL_PATH);
+                if (!is_string($path) || '' === $path) {
+                    return $matches[0];
+                }
+
+                $segments = [];
+                foreach (explode('/', str_replace('\\', '/', $path)) as $segment) {
+                    if ('' === $segment || '.' === $segment) {
+                        continue;
+                    }
+
+                    if ('..' === $segment) {
+                        return $matches[0];
+                    }
+
+                    $segments[] = rawurlencode(rawurldecode($segment));
+                }
+
+                if (empty($segments)) {
+                    return $matches[0];
+                }
+
+                $resolvedSrc = $pluginWebPath.implode('/', $segments);
+                $query = parse_url($src, PHP_URL_QUERY);
+                $fragment = parse_url($src, PHP_URL_FRAGMENT);
+
+                if (is_string($query) && '' !== $query) {
+                    $resolvedSrc .= '?'.$query;
+                }
+
+                if (is_string($fragment) && '' !== $fragment) {
+                    $resolvedSrc .= '#'.$fragment;
+                }
+
+                return $matches[1].$matches[2]
+                    .htmlspecialchars($resolvedSrc, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+                    .$matches[2];
+            },
+            (string) $html
+        );
+
         if ('' === trim((string) $html)) {
             $html = Display::return_message('README file is empty.', 'warning', false);
         }

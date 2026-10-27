@@ -120,7 +120,8 @@ $closeCoursesForSubscriptionSale = static function (
     string $now,
     bool $isDryRun,
     callable $decodeContext,
-    callable $encodeContextForSql
+    callable $encodeContextForSql,
+    array $excludedSubscriptionCourseIds = []
 ): array {
     $serviceSaleId = (int) $serviceSaleId;
 
@@ -128,11 +129,20 @@ $closeCoursesForSubscriptionSale = static function (
         return ['found' => 0, 'closed' => 0, 'errors' => 0];
     }
 
+    $excludedSubscriptionCourseIds = array_values(array_unique(array_filter(
+        array_map('intval', $excludedSubscriptionCourseIds),
+        static fn (int $id): bool => $id > 0
+    )));
+    $excludedSql = empty($excludedSubscriptionCourseIds)
+        ? ''
+        : ' AND sc.id NOT IN ('.implode(',', $excludedSubscriptionCourseIds).')';
+
     $sql = "SELECT sc.id, sc.course_id, sc.status, sc.context_json, c.visibility AS current_visibility
         FROM $subscriptionCourseTable sc
         INNER JOIN $courseTable c ON c.id = sc.course_id
         WHERE sc.service_sale_id = $serviceSaleId
           AND sc.status = 'active'
+          $excludedSql
         ORDER BY sc.id ASC";
 
     $result = Database::query($sql);
@@ -536,6 +546,7 @@ $processed = 0;
 $suspended = 0;
 $coursesFound = 0;
 $coursesClosed = 0;
+$coursesReassigned = 0;
 $coursesHideFound = 0;
 $coursesHidden = 0;
 $reactivationProcessed = 0;
@@ -591,6 +602,28 @@ while ($sale = Database::fetch_assoc($expiredResult)) {
         error_log('[BuyCourses][Recurring Cron] Expired recurring sale already inactive. Processing linked courses. '.$logContext);
     }
 
+    $reassignResult = $plugin->reassignExpiredSubscriptionCoursesToActiveServiceSales(
+        $saleId,
+        $isDryRun
+    );
+
+    $coursesReassigned += (int) ($reassignResult['reassigned'] ?? 0);
+    $errors += (int) ($reassignResult['errors'] ?? 0);
+
+    if ((int) ($reassignResult['reassigned'] ?? 0) > 0) {
+        error_log(
+            '[BuyCourses][Recurring Cron] Reassigned courses from expired sale to another active sale '.
+            'of the same service. service_sale_id='.
+            $saleId.
+            ' reassigned='.
+            (int) $reassignResult['reassigned'].
+            ' remaining='.
+            (int) ($reassignResult['remaining'] ?? 0).
+            ' dry_run='.
+            ($isDryRun ? 'true' : 'false')
+        );
+    }
+
     $closeResult = $closeCoursesForSubscriptionSale(
         $saleId,
         $subscriptionCourseTable,
@@ -599,7 +632,10 @@ while ($sale = Database::fetch_assoc($expiredResult)) {
         $now,
         $isDryRun,
         $decodeContext,
-        $encodeContextForSql
+        $encodeContextForSql,
+        is_array($reassignResult['reassigned_subscription_course_ids'] ?? null)
+            ? $reassignResult['reassigned_subscription_course_ids']
+            : []
     );
 
     $coursesFound += (int) $closeResult['found'];
@@ -686,11 +722,12 @@ while ($sale = Database::fetch_assoc($activeResult)) {
 }
 
 $summary = sprintf(
-    '[BuyCourses][Recurring Cron] Finished. processed=%d suspended=%d courses_found=%d courses_closed=%d courses_hide_found=%d courses_hidden=%d reactivation_processed=%d courses_reactivation_found=%d courses_reactivated=%d errors=%d dry_run=%s',
+    '[BuyCourses][Recurring Cron] Finished. processed=%d suspended=%d courses_found=%d courses_closed=%d courses_reassigned=%d courses_hide_found=%d courses_hidden=%d reactivation_processed=%d courses_reactivation_found=%d courses_reactivated=%d errors=%d dry_run=%s',
     $processed,
     $suspended,
     $coursesFound,
     $coursesClosed,
+    $coursesReassigned,
     $coursesHideFound,
     $coursesHidden,
     $reactivationProcessed,

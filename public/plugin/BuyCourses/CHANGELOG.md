@@ -1,3 +1,13 @@
+v7.15 - 2026-10-27
+
+### Stripe subscription synchronization and recurring access hardening
+
+- Handle Stripe `customer.subscription.updated` webhooks so cancel-at-period-end, restoration, subscription status and current-period dates remain synchronized even when changes originate in Stripe.
+- Recover legacy Stripe subscription IDs from `recurring_profile_id` or BuyCourses audit data and backfill the indexed gateway fields for future webhooks/reconciliation.
+- Stop repeating Stripe invoice-reconciliation requests during the same PHP request after Stripe reports that the restricted API key lacks `invoice_read`; the log now points administrators to the required **Invoices: Read** permission.
+- Before closing courses linked to an expired service sale, reassign as many as possible to another active sale of the same service, respecting the replacement sale's configured course capacity.
+- Document the required Stripe **Invoices: Read** permission with screenshots and add `customer.subscription.updated` to the recurring-service webhook list.
+
 v7.14 - 2026-10-21
 
 ### Recurring service payment history reconciliation

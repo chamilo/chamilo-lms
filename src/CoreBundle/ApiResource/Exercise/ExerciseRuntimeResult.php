@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Exercise;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
@@ -20,6 +21,18 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/exercise/runtime/{exerciseId}/attempt/{attemptId}/result',
+            uriVariables: [
+                'exerciseId' => new Link(
+                    identifiers: ['exerciseId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+                'attemptId' => new Link(
+                    identifiers: ['attemptId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+            ],
             requirements: [
                 'exerciseId' => '\d+',
                 'attemptId' => '\d+',

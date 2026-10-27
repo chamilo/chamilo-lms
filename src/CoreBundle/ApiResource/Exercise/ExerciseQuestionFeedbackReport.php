@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Exercise;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -55,6 +56,24 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             uriTemplate: '/exercise/runtime/{exerciseId}/attempt/{attemptId}/question/{questionId}/feedback-report',
+            uriVariables: [
+                'exerciseId' => new Link(
+                    identifiers: ['exerciseId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+                'attemptId' => new Link(
+                    identifiers: ['attemptId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+                'questionId' => new Link(
+                    identifiers: ['questionId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+            ],
+            read: false,
             requirements: [
                 'exerciseId' => '\d+',
                 'attemptId' => '\d+',

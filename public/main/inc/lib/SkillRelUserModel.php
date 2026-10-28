@@ -1,12 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Badge\OpenBadge2;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 
 class SkillRelUserModel extends Model
 {
+    /**
+     * @var string[]
+     */
     public $columns = [
         'id',
         'user_id',
@@ -81,7 +87,7 @@ class SkillRelUserModel extends Model
                 $sql .= " AND session_id = $sessionId";
             } else {
                 // Course-level skill, no session → match NULL
-                $sql .= " AND session_id IS NULL";
+                $sql .= ' AND session_id IS NULL';
             }
         }
 
@@ -108,7 +114,7 @@ class SkillRelUserModel extends Model
                 AND status = ".SkillRelUser::STATUS_ACQUIRED.' ';
 
         if ($courseId > 0) {
-            $sql .= "AND course_id = %d ".api_get_session_condition($sessionId, true);
+            $sql .= 'AND course_id = %d '.api_get_session_condition($sessionId, true);
         }
 
         $sql = sprintf(
@@ -156,15 +162,6 @@ class SkillRelUserModel extends Model
      */
     public static function getAssertionUrl(SkillRelUser $skillIssue)
     {
-        $url = api_get_path(WEB_CODE_PATH).'skills/assertion.php?';
-
-        $url .= http_build_query([
-            'user' => $skillIssue->getUser()->getId(),
-            'skill' => $skillIssue->getSkill()->getId(),
-            'course' => $skillIssue->getCourse() ? $skillIssue->getCourse()->getId() : 0,
-            'session' => $skillIssue->getSession() ? $skillIssue->getSession()->getId() : 0,
-        ]);
-
-        return $url;
+        return OpenBadge2::assertionUrl($skillIssue);
     }
 }

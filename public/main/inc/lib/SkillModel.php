@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Badge\OpenBadge2;
+use Chamilo\CoreBundle\Component\Badge\OpenBadgePng;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Level;
 use Chamilo\CoreBundle\Entity\Skill;
@@ -22,11 +26,16 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
 class SkillModel extends Model
 {
+    /**
+     * @var string[]
+     */
     public $columns = [
         'id',
         'title',
@@ -48,7 +57,9 @@ class SkillModel extends Model
     public string $table_gradebook;
     public string $sessionTable;
 
-    /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
+    /**
+     * Array of colours by depth, for the coffee wheel. Each depth has 4 col.
+     */
     /*var $colours = array(
       0 => array('#f9f0ab', '#ecc099', '#e098b0', '#ebe378'),
       1 => array('#d5dda1', '#4a5072', '#8dae43', '#72659d'),
@@ -91,35 +102,32 @@ class SkillModel extends Model
         $skill = Database::getManager()->find(Skill::class, $id);
 
         // @todo fix badges icons
-        //$path = api_get_path(WEB_UPLOAD_PATH).'badges/';
+        // $path = api_get_path(WEB_UPLOAD_PATH).'badges/';
         $path = '';
         /*if (!empty($result['icon'])) {
-            $iconSmall = sprintf(
-                '%s-small.png',
-                sha1($result['name'])
-            );
-
-            $iconBig = sprintf(
-                '%s.png',
-                sha1($result['name'])
-            );
-
-            $iconMini = $path.$iconSmall;
-            $iconSmall = $path.$iconSmall;
-            $iconBig = $path.$iconBig;
-        } else {
-            $iconMini = Display::returnIconPath('badges-default.png', ICON_SIZE_MEDIUM);
-            $iconSmall = Display::returnIconPath('badges-default.png', ICON_SIZE_BIG);
-            $iconBig = Display::returnIconPath('badges-default.png', ICON_SIZE_HUGE);
-        }*/
+         * $iconSmall = sprintf(
+         * '%s-small.png',
+         * sha1($result['name'])
+         * );
+         * $iconBig = sprintf(
+         * '%s.png',
+         * sha1($result['name'])
+         * );
+         * $iconMini = $path.$iconSmall;
+         * $iconSmall = $path.$iconSmall;
+         * $iconBig = $path.$iconBig;
+         * } else {
+         * $iconMini = Display::returnIconPath('badges-default.png', ICON_SIZE_MEDIUM);
+         * $iconSmall = Display::returnIconPath('badges-default.png', ICON_SIZE_BIG);
+         * $iconBig = Display::returnIconPath('badges-default.png', ICON_SIZE_HUGE);
+         * }*/
 
         /*$result['icon_mini'] = $iconMini;
-        $result['icon_small'] = $iconSmall;
-        $result['icon_big'] = $iconBig;
-
-        $result['img_mini'] = Display::img($iconBig, $result['title'], ['width' => ICON_SIZE_MEDIUM]);
-        $result['img_big'] = Display::img($iconBig, $result['name']);
-        $result['img_small'] = Display::img($iconSmall, $result['name']);*/
+         * $result['icon_small'] = $iconSmall;
+         * $result['icon_big'] = $iconBig;
+         * $result['img_mini'] = Display::img($iconBig, $result['title'], ['width' => ICON_SIZE_MEDIUM]);
+         * $result['img_big'] = Display::img($iconBig, $result['name']);
+         * $result['img_small'] = Display::img($iconSmall, $result['name']);*/
         $result['title'] = $skill->getTitle();
         $result['short_code'] = $skill->getShortCode();
 
@@ -182,13 +190,8 @@ class SkillModel extends Model
     }
 
     /**
-     * @param $skills
+     * @param mixed  $skills
      * @param string $imageSize mini|small|big
-     * @param string $style
-     * @param bool $showBadge
-     * @param bool $showTitle
-     *
-     * @return string
      */
     public function processSkillListSimple(
         $skills,
@@ -203,15 +206,21 @@ class SkillModel extends Model
         }
 
         $imageParams = '';
+
         switch ($imageSize) {
             case 'mini':
                 $imageParams = '?w='.ICON_SIZE_MEDIUM;
+
                 break;
+
             case 'small':
                 $imageParams = '?w='.ICON_SIZE_BIG;
+
                 break;
+
             case 'big':
                 $imageParams = '?w='.ICON_SIZE_HUGE;
+
                 break;
         }
 
@@ -283,8 +292,6 @@ class SkillModel extends Model
         return $html;
     }
 
-
-
     /**
      * Append a query param string like "w=64" to a URL, preserving existing query strings.
      */
@@ -294,7 +301,7 @@ class SkillModel extends Model
             return $url;
         }
 
-        $separator = (false !== strpos($url, '?')) ? '&' : '?';
+        $separator = (str_contains($url, '?')) ? '&' : '?';
 
         return $url.$separator.$param;
     }
@@ -332,7 +339,7 @@ class SkillModel extends Model
         /** @var Skill $skill */
         foreach ($skills as $skill) {
             if (!$skill->getIcon()) {
-               //continue;
+                // continue;
             }
 
             $skillsInfo[] = [
@@ -434,8 +441,8 @@ class SkillModel extends Model
             foreach ($skills as $skill) {
                 $children = self::get_all($load_user_data, $user_id, $id, $skill['id']);
                 if (!empty($children)) {
-                    //$skills = array_merge($skills, $children);
-                    $skills = $skills + $children;
+                    // $skills = array_merge($skills, $children);
+                    $skills += $children;
                 }
             }
         }
@@ -456,9 +463,8 @@ class SkillModel extends Model
                 ON g.id = sg.gradebook_id
                 WHERE sg.skill_id = $skill_id";
         $result = Database::query($sql);
-        $result = Database::store_result($result, 'ASSOC');
 
-        return $result;
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**
@@ -506,6 +512,8 @@ class SkillModel extends Model
 
     /**
      * Gets all parents from from the wanted skill.
+     *
+     * @param mixed $skillId
      */
     public function get_parents($skillId)
     {
@@ -537,7 +545,7 @@ class SkillModel extends Model
                 }
                 $skill['data'] = $skillData;
                 $skill_info2 = $skillRelSkill->getSkillInfo($skill['skill_id']);
-                $parentId = isset($skill_info2['parent_id']) ? isset($skill_info2['parent_id']) : 0;
+                $parentId = isset($skill_info2['parent_id']) ?: 0;
                 $skill['data']['parent_id'] = $parentId;
             }
 
@@ -549,8 +557,6 @@ class SkillModel extends Model
 
     /**
      * Adds a new skill.
-     *
-     * @param array $params
      *
      * @return bool|null
      */
@@ -661,7 +667,7 @@ class SkillModel extends Model
                         'session_id' => $sessionId ? (int) $sessionId : null,
                         'validation_status' => 1,
                         'argumentation' => '',
-                        'argumentation_author_id' => $userId
+                        'argumentation_author_id' => $userId,
                     ];
                     $skill_rel_user->save($params);
 
@@ -678,20 +684,16 @@ class SkillModel extends Model
     }
 
     /* Deletes a skill */
-    public function delete($id)
+    public function delete($id): void
     {
         /*$params = array('skill_id' => $skill_id);
-
-        $skillRelSkill     = new SkillRelSkill();
-        $skills = $skillRelSkill->get_all(array('where'=>array('skill_id = ?' =>$skill_id)));
-
-        $skill_rel_profile     = new SkillRelProfile();
-        $skillRelGradebook = new SkillRelGradebook();
-        $skill_rel_user     = new SkillRelUser();
-
-        $this->delete($skill_id);
-
-        $skillRelGradebook->delete($params);*/
+         * $skillRelSkill     = new SkillRelSkill();
+         * $skills = $skillRelSkill->get_all(array('where'=>array('skill_id = ?' =>$skill_id)));
+         * $skill_rel_profile     = new SkillRelProfile();
+         * $skillRelGradebook = new SkillRelGradebook();
+         * $skill_rel_user     = new SkillRelUser();
+         * $this->delete($skill_id);
+         * $skillRelGradebook->delete($params);*/
     }
 
     public function edit(array $params)
@@ -728,7 +730,7 @@ class SkillModel extends Model
                         'skill_id' => $skillId,
                         'parent_id' => $parent_id,
                         'relation_type' => $params['relation_type'] ?? 0,
-                        //'level'         => $params['level'],
+                        // 'level'         => $params['level'],
                     ];
                     $skillRelSkill->updateBySkill($attributes);
                 }
@@ -749,12 +751,6 @@ class SkillModel extends Model
     /**
      * Get user's skills.
      *
-     * @param int   $userId
-     * @param ?bool $getSkillData
-     * @param ?int  $courseId
-     * @param ?int  $sessionId
-     *
-     * @return array
      * @throws Exception
      */
     public function getUserSkills(int $userId, ?bool $getSkillData = false, ?int $courseId = 0, ?int $sessionId = 0): array
@@ -873,14 +869,6 @@ class SkillModel extends Model
         return $subTable;
     }
 
-    /**
-     * @param int $userId
-     * @param int $courseId
-     * @param int $sessionId
-     * @param bool $addTitle
-     *
-     * @return array
-     */
     public function getUserSkillsTable(int $userId, int $courseId = 0, int $sessionId = 0, bool $addTitle = true): array
     {
         $skills = $this->getUserSkills($userId, true, $courseId, $sessionId);
@@ -1008,6 +996,7 @@ class SkillModel extends Model
                     // Getting "root" vertex
                     $root = $graph->getVertex(1);
                     $table .= '<tr>';
+
                     /** @var Vertex $vertex */
                     foreach ($root->getVerticesEdgeTo() as $vertex) {
                         $data = $vertex->getAttribute('graphviz.data');
@@ -1032,11 +1021,12 @@ class SkillModel extends Model
                     // Getting "root" vertex
                     $root = $graph->getVertex(1);
                     $table = '';
+
                     /** @var Vertex $vertex */
                     foreach ($root->getVerticesEdgeTo() as $vertex) {
                         $data = $vertex->getAttribute('graphviz.data');
 
-                        $label = htmlspecialchars((string) ($data['title'] ?? ''), ENT_QUOTES, 'UTF-8');
+                        $label = htmlspecialchars((string) ($data['title'] ?? ''), \ENT_QUOTES, 'UTF-8');
                         $skillTable = $this->processVertex($vertex, $skills, 2);
 
                         $table .= '<div class="skill-user-tracking-category" style="clear:both; margin-bottom:8px;">';
@@ -1132,8 +1122,8 @@ class SkillModel extends Model
 
                 // If a short code was defined, send the short code to replace
                 // skill title (to shorten the text in the wheel)
-                if (!empty($skill['short_code']) &&
-                    'false' === api_get_setting('show_full_skill_name_on_skill_wheel')
+                if (!empty($skill['short_code'])
+                    && 'false' === api_get_setting('show_full_skill_name_on_skill_wheel')
                 ) {
                     $skill['data']['short_code'] = $skill['short_code'];
                 }
@@ -1230,6 +1220,10 @@ class SkillModel extends Model
      * @param int skill id
      * @param bool return a flat array or not
      * @param int depth of the skills
+     * @param null|mixed $user_id
+     * @param null|mixed $skill_id
+     * @param mixed      $return_flat_array
+     * @param mixed      $main_depth
      *
      * @return string json
      */
@@ -1342,11 +1336,11 @@ class SkillModel extends Model
     }
 
     /**
-     * @param $start
-     * @param $limit
-     * @param $sidx
-     * @param $sord
-     * @param $where_condition
+     * @param mixed $start
+     * @param mixed $limit
+     * @param mixed $sidx
+     * @param mixed $sord
+     * @param mixed $where_condition
      *
      * @return array
      */
@@ -1368,8 +1362,8 @@ class SkillModel extends Model
                     INNER JOIN {$this->table_user} u
                     ON u.id = su.user_id, (SELECT @rownum:=0) r
                     WHERE 1=1
-                    AND su.status = ".SkillRelUser::STATUS_ACQUIRED."
-                    AND u.active <> ".USER_SOFT_DELETED." $where_condition
+                    AND su.status = ".SkillRelUser::STATUS_ACQUIRED.'
+                    AND u.active <> '.USER_SOFT_DELETED." $where_condition
                     GROUP BY username
                     ORDER BY skills_acquired desc
                     LIMIT $start , $limit)  AS T1, (SELECT @rownum:=0) r";
@@ -1393,9 +1387,9 @@ class SkillModel extends Model
                     ON (s.id = su.skill_id)
                     INNER JOIN {$this->table_user} u
                     ON u.id = su.user_id
-                    WHERE su.status = ".SkillRelUser::STATUS_ACQUIRED."
+                    WHERE su.status = ".SkillRelUser::STATUS_ACQUIRED.'
                     GROUP BY username
-                 ) as T1";
+                 ) as T1';
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_row($result);
@@ -1475,7 +1469,7 @@ class SkillModel extends Model
         if ($courseId > 0) {
             $whereConditions['AND course_id = ? '] = $courseId;
             if ($sessionId > 0) {
-                $whereConditions['AND session_id = ? '] = $sessionId ? $sessionId : null;
+                $whereConditions['AND session_id = ? '] = $sessionId ?: null;
             } else {
                 $whereConditions['AND session_id IS NULL'] = null;
             }
@@ -1694,10 +1688,12 @@ class SkillModel extends Model
 
                     return true;
                 }
+
                 break;
+
             case STUDENT_BOSS:
                 $studentBosses = $toUser->getFriendsByRelationType(UserRelUser::USER_RELATION_TYPE_BOSS);
-                //$studentBosses = $userRepo->getStudentBosses($toUser);
+                // $studentBosses = $userRepo->getStudentBosses($toUser);
                 foreach ($studentBosses as $studentBoss) {
                     if ($studentBoss->getFriend()->getId() !== $fromUser->getId()) {
                         continue;
@@ -1705,7 +1701,9 @@ class SkillModel extends Model
 
                     return true;
                 }
+
                 break;
+
             case DRH:
                 return UserManager::is_user_followed_by_hrm(
                     $toUser->getId(),
@@ -1825,6 +1823,7 @@ class SkillModel extends Model
      *
      * @param int $userId
      * @param int level
+     * @param mixed $level
      *
      * @return array
      */
@@ -2015,9 +2014,11 @@ class SkillModel extends Model
     /**
      * Assign a user with a SkilRelItem object.
      *
-     * @param int $typeId see ITEM_TYPE_* constants
-     * @param int $itemId
-     * @param int $userId
+     * @param int   $typeId    see ITEM_TYPE_* constants
+     * @param int   $itemId
+     * @param int   $userId
+     * @param mixed $resultId
+     * @param mixed $addHeader
      */
     public static function addSkillsToUserForm(
         FormValidator $form,
@@ -2026,7 +2027,7 @@ class SkillModel extends Model
         $userId,
         $resultId = 0,
         $addHeader = false
-    ) {
+    ): void {
         $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if ($allowSkillInTools && !empty($typeId) && !empty($itemId) && !empty($userId)) {
             $em = Database::getManager();
@@ -2041,6 +2042,7 @@ class SkillModel extends Model
             }
 
             $skills = '';
+
             /** @var SkillRelItem $skillRelItem */
             foreach ($items as $skillRelItem) {
                 $criteria = [
@@ -2099,9 +2101,9 @@ class SkillModel extends Model
      * @param int $typeId see ITEM_TYPE_* constants
      * @param int $itemId
      *
-     * @throws Exception
-     *
      * @return array
+     *
+     * @throws Exception
      */
     public static function addSkillsToForm(FormValidator $form, $typeId, $itemId = 0)
     {
@@ -2116,6 +2118,7 @@ class SkillModel extends Model
             $items = $em->getRepository(SkillRelItem::class)->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
+
             /** @var SkillRelItem $skillRelItem */
             foreach ($items as $skillRelItem) {
                 $skillList[$skillRelItem->getSkill()->getId()] = $skillRelItem->getSkill()->getTitle();
@@ -2185,53 +2188,68 @@ class SkillModel extends Model
                 if ($item) {
                     $itemInfo['name'] = $item->getTitle();
                 }
+
                 break;
+
             case ITEM_TYPE_HOTPOTATOES:
                 break;
+
             case ITEM_TYPE_LINK:
                 /** @var CLink $item */
                 $item = $em->getRepository(CLink::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getTitle();
                 }
+
                 break;
+
             case ITEM_TYPE_LEARNPATH:
                 /** @var CLp $item */
                 $item = $em->getRepository(CLp::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getTitle();
                 }
+
                 break;
+
             case ITEM_TYPE_GRADEBOOK:
                 break;
+
             case ITEM_TYPE_STUDENT_PUBLICATION:
                 /** @var CStudentPublication $item */
                 $item = $em->getRepository(CStudentPublication::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getTitle();
                 }
+
                 break;
-            //ITEM_TYPE_FORUM', 7);
+
+                // ITEM_TYPE_FORUM', 7);
             case ITEM_TYPE_ATTENDANCE:
                 /** @var CAttendance $item */
                 $item = $em->getRepository(CAttendance::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getTitle();
                 }
+
                 break;
+
             case ITEM_TYPE_SURVEY:
                 /** @var CSurvey $item */
                 $item = $em->getRepository(CSurvey::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = strip_tags($item->getTitle());
                 }
+
                 break;
+
             case ITEM_TYPE_FORUM_THREAD:
                 /** @var CForumThread $item */
                 $item = $em->getRepository(CForumThread::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getTitle();
                 }
+
                 break;
         }
 
@@ -2284,7 +2302,7 @@ class SkillModel extends Model
      * @param int $itemId
      * @param int $typeId
      */
-    public static function deleteSkillsFromItem($itemId, $typeId)
+    public static function deleteSkillsFromItem($itemId, $typeId): void
     {
         $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if ($allowSkillInTools) {
@@ -2312,9 +2330,9 @@ class SkillModel extends Model
      * @param int           $typeId
      * @param int           $itemId
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws OptimisticLockException
      */
-    public static function saveSkills($form, $typeId, $itemId)
+    public static function saveSkills($form, $typeId, $itemId): void
     {
         $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if ($allowSkillInTools) {
@@ -2390,9 +2408,9 @@ class SkillModel extends Model
      * @param int   $courseId
      * @param int   $sessionId
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
      * @return bool
+     *
+     * @throws OptimisticLockException
      */
     public static function saveSkillsToCourse($skills, $courseId, $sessionId)
     {
@@ -2490,8 +2508,8 @@ class SkillModel extends Model
     }
 
     /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function addSkillToUserBadge(
         User $user,
@@ -2626,7 +2644,7 @@ class SkillModel extends Model
         return 'true' === $normalized || '1' === $normalized;
     }
 
-    public static function setBackPackJs(&$htmlHeadXtra)
+    public static function setBackPackJs(&$htmlHeadXtra): void
     {
         $backpack = 'https://backpack.openbadges.org/';
         $configBackpack = api_get_setting('skill.openbadges_backpack');
@@ -2640,44 +2658,32 @@ class SkillModel extends Model
         $htmlHeadXtra[] = '<script src="'.$backpack.'issuer.js"></script>';
     }
 
-    public static function exportBadge(Skill $skill, SkillRelUser $skillRelUser, string $urlToRedirect)
+    public static function exportBadge(Skill $skill, SkillRelUser $skillRelUser, string $urlToRedirect): void
     {
-        $imageContent = '';
-        if ($skill->hasAsset()) {
-            $assetRepo = Container::getAssetRepository();
-            $imageContent = $assetRepo->getAssetContent($skill->getAsset());
-        } else {
-            $defaultBadge = api_get_path(SYS_PUBLIC_PATH).'img/icons/128/badges-default.png';
-            $imageContent = @file_get_contents($defaultBadge) ?: '';
+        $currentUser = api_get_user_entity();
+        if (null === $currentUser
+            || ($currentUser->getId() !== $skillRelUser->getUser()->getId() && !api_is_platform_admin())
+            || $skill->getId() !== $skillRelUser->getSkill()?->getId()
+            || !$skillRelUser->isAcquired()
+        ) {
+            api_not_allowed(true);
+
+            return;
         }
 
-        if (empty($imageContent)) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang("Unable to load the badge's image."),
-                    'error'
-                )
-            );
-            api_location($urlToRedirect);
-        }
-
-        $output = $imageContent;
-
-        // Try to embed OpenBadges assertion. If it fails, still download a valid PNG.
         try {
-            $png = new PNGImageBaker($imageContent);
+            $assertion = OpenBadge2::assertion($skillRelUser);
+            $image = OpenBadge2::image($skill);
+            $output = OpenBadgePng::bake($image, $assertion);
+        } catch (Throwable $exception) {
+            error_log('[OpenBadges] Export failed: '.$exception->getMessage());
+            http_response_code(503);
+            header('Content-Type: text/plain; charset=utf-8');
+            header('X-Content-Type-Options: nosniff');
+            header('Cache-Control: no-store');
+            echo 'Unable to export this badge. Check its metadata and PNG image configuration.';
 
-            // Always attempt to add/replace the OpenBadges chunk
-            $candidate = $png->addChunk('tEXt', 'openbadges', SkillRelUserModel::getAssertionUrl($skillRelUser));
-
-            // Verify the resulting PNG contains readable badge info
-            $verify = $png->extractBadgeInfo($candidate);
-            if (is_array($verify)) {
-                $output = $candidate;
-            }
-        } catch (\Throwable $e) {
-            // Keep original PNG on any error
-            $output = $imageContent;
+            exit;
         }
 
         // Build a friendly filename
@@ -2692,6 +2698,7 @@ class SkillModel extends Model
         header('Pragma: public');
 
         echo $output;
+
         exit;
     }
 
@@ -2717,7 +2724,7 @@ class SkillModel extends Model
         }
 
         // Force it to be a path
-        if ($url[0] !== '/') {
+        if ('/' !== $url[0]) {
             $url = '/'.$url;
         }
 

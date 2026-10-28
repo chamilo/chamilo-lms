@@ -4289,6 +4289,45 @@ When("I select the dropdown option {string} in {string}", async ({ page }, optio
   await overlay.getByText(optionText, { exact: true }).click()
 })
 
+// Not ported — new, for calendarCourseRecipients.feature. Variants of the two steps above
+// for options whose full label depends on the install (a user's "Firstname Lastname
+// (username)"), so they match a fragment such as "(admin)". The multiselect one closes the
+// overlay by clicking the dialog title instead of pressing Escape: the calendar form is a
+// PrimeVue Dialog, and Escape closes the whole dialog (confirmed live), not only the overlay.
+When(
+  "I press the multiselect option containing {string} in {string} inside the dialog",
+  async ({ page }, optionText: string, fieldId: string) => {
+    const trigger = page
+      .locator(`#${fieldId}`)
+      .locator("xpath=ancestor-or-self::*[contains(concat(' ', normalize-space(@class), ' '), ' p-multiselect ')][1]")
+    // PrimeVue does not open the overlay while the options are loading.
+    await expect(trigger.locator("[data-pc-section='loadingicon']")).toHaveCount(0, { timeout: 30_000 })
+    await trigger.scrollIntoViewIfNeeded()
+    await trigger.click()
+    const overlay = page.locator(".p-multiselect-overlay")
+    await overlay.waitFor({ state: "visible" })
+    await overlay.getByRole("option").filter({ hasText: optionText }).first().click()
+    await page.locator(".p-dialog-title:visible").first().click()
+    await overlay.waitFor({ state: "hidden" })
+  },
+)
+
+When(
+  "I select the dropdown option containing {string} in {string}",
+  async ({ page }, optionText: string, fieldId: string) => {
+    const field = page.locator(`#${fieldId}`)
+    const trigger = field.locator(
+      "xpath=ancestor-or-self::*[contains(concat(' ', normalize-space(@class), ' '), ' p-select ')][1]",
+    )
+    await expect(trigger.locator("[data-pc-section='loadingicon']")).toHaveCount(0, { timeout: 30_000 })
+    await trigger.scrollIntoViewIfNeeded()
+    await trigger.click()
+    const overlay = page.locator(".p-select-overlay")
+    await overlay.waitFor({ state: "visible" })
+    await overlay.getByRole("option").filter({ hasText: optionText }).first().click()
+  },
+)
+
 // Not ported — new, for toolExerciseAdmin.feature. ExerciseQuestionSelectorView.vue's
 // question-type picker (the icon grid on the "Add a question" page) renders each type as
 // an icon-only <a> with NO visible text at all — a visually-hidden `sr-only` span carries

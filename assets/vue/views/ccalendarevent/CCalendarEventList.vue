@@ -8,6 +8,8 @@
       @myStudentsScheduleClick="goToMyStudentsSchedule"
     />
 
+    <CalendarRecipientFilter />
+
     <FullCalendar
       ref="cal"
       :options="calendarOptions"
@@ -150,6 +152,7 @@ import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useLocale, useParentLocale } from "../../composables/locale"
 import { storeToRefs } from "pinia"
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
+import CalendarRecipientFilter from "../../components/ccalendarevent/CalendarRecipientFilter.vue"
 import { useCalendarActionButtons } from "../../composables/calendar/calendarActionButtons"
 import { useCalendarEvent } from "../../composables/calendar/calendarEvent"
 import resourceLinkService from "../../services/resourceLinkService"
@@ -783,6 +786,10 @@ const calendarOptions = ref({
       commonParams.gid = effectiveGid
     }
 
+    if (route.query.recipient) {
+      commonParams.recipient = route.query.recipient
+    }
+
     getCalendarEvents(info.start, info.end, commonParams).then((events) => successCallback(events))
   },
 
@@ -889,6 +896,25 @@ function goToMyStudentsSchedule() {
   })
 }
 
+/**
+ * One link per selected user or group of the current course, or one link for the whole course.
+ *
+ * @param {Array<{uid?: number, gid?: number}>|undefined} recipients
+ * @returns {Array<Object>}
+ */
+function buildCourseRecipientLinks(recipients) {
+  if (!Array.isArray(recipients) || !recipients.length) {
+    return [{ visibility: RESOURCE_LINK_PUBLISHED }]
+  }
+
+  return recipients.map((recipient) => ({
+    cid: course.value.id,
+    sid: session.value?.id ?? 0,
+    ...recipient,
+    visibility: RESOURCE_LINK_PUBLISHED,
+  }))
+}
+
 async function onCreateEventForm() {
   try {
     if (createForm.value.v$.$invalid) {
@@ -919,7 +945,8 @@ async function onCreateEventForm() {
       // Course event: bind only the visibility; the course context
       // (cid/sid/gid) is derived server-side from the gated session course.
       if (course.value) {
-        itemModel.resourceLinkList = [{ visibility: RESOURCE_LINK_PUBLISHED }]
+        itemModel.resourceLinkList = buildCourseRecipientLinks(itemModel.courseRecipients)
+        delete itemModel.courseRecipients
       }
 
       await store.dispatch("ccalendarevent/create", itemModel)
@@ -934,6 +961,11 @@ async function onCreateEventForm() {
 }
 
 const { showSuccessNotification } = useNotification()
+
+watch(
+  () => route.query.recipient,
+  () => reFetch(),
+)
 
 watch(
   () => route.query.type,

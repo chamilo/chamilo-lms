@@ -8,6 +8,8 @@
       @myStudentsScheduleClick="goToMyStudentsSchedule"
     />
 
+    <CalendarRecipientFilter />
+
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
       <div class="flex flex-wrap items-center gap-2">
         <span class="px-2 py-1 rounded border bg-white text-sm text-gray-90">
@@ -205,6 +207,7 @@ import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { DateTime } from "luxon"
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
+import CalendarRecipientFilter from "../../components/ccalendarevent/CalendarRecipientFilter.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useFormatDate } from "../../composables/formatDate"
 import { useLocale } from "../../composables/locale"
@@ -385,6 +388,7 @@ function computeCommonParams() {
   if (sid > 0) params.sid = sid
   if (gid > 0) params.gid = gid
   if (type === "global") params.type = "global"
+  if (q.recipient) params.recipient = String(q.recipient)
 
   return params
 }
@@ -721,6 +725,7 @@ const fetchKey = computed(() => {
     params.sid ?? "",
     params.gid ?? "",
     params.type ?? "",
+    params.recipient ?? "",
   ].join("|")
 })
 

@@ -6,6 +6,45 @@ use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
+// Deep Linking returns from the external tool with a cross-site POST.
+// With SameSite cookie restrictions, the first POST may arrive without the
+// existing Chamilo session cookie. Re-post the exact LTI response once from
+// a Chamilo page so that the browser sends the first-party session cookie.
+if (!api_get_user_id() && empty($_POST['repost'])) {
+    header_remove('Set-Cookie');
+    $repostAction = htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8');
+    ?>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>LTI Deep Linking</title>
+    </head>
+    <body>
+        <form id="ltiRepostForm" method="post" action="<?php echo $repostAction; ?>">
+            <?php foreach ($_POST as $name => $value) { ?>
+                <?php if (is_scalar($value)) { ?>
+                    <input type="hidden"
+                           name="<?php echo htmlspecialchars((string) $name, ENT_QUOTES, 'UTF-8'); ?>"
+                           value="<?php echo htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8'); ?>">
+                <?php } ?>
+            <?php } ?>
+            <input type="hidden" name="repost" value="1">
+            <noscript><button type="submit">Continue</button></noscript>
+        </form>
+        <script>document.getElementById('ltiRepostForm').submit();</script>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
+// The helper flag is not part of the signed LTI response.
+if (!empty($_POST['repost'])) {
+    unset($_POST['repost'], $_REQUEST['repost']);
+}
+
 api_protect_course_script(false);
 api_block_anonymous_users(false);
 
@@ -32,11 +71,23 @@ $consumer = new OAuthConsumer(
 );
 $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
 
-$request = OAuthRequest::from_request('POST', api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return.php');
+// Build the OAuth request from the original signed LTI parameters only.
+// The local `repost` helper must never become part of the OAuth signature.
+// Query parameters in the Deep Linking return URL (for example cidReq)
+// are part of the OAuth parameter set and therefore must be included.
+$oauthParameters = array_merge($_GET, $_POST);
+unset($oauthParameters['repost']);
+
+$request = OAuthRequest::from_request(
+    'POST',
+    api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return.php',
+    $oauthParameters
+);
 $request->sign_request($hmacMethod, $consumer, '');
 $signature = $request->get_parameter('oauth_signature');
+$receivedSignature = isset($_POST['oauth_signature']) ? (string) $_POST['oauth_signature'] : '';
 
-if ($signature !== $_POST['oauth_signature']) {
+if (empty($receivedSignature) || !hash_equals((string) $signature, $receivedSignature)) {
     api_not_allowed();
 }
 
@@ -55,7 +106,7 @@ foreach ($contentItems as $contentItem) {
     }
 }
 
-$currentUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/start.php?id='.$ltiTool->getId();
+$courseUrl = api_get_course_url();
 ?>
 <!DOCTYPE html>
 <html>
@@ -68,7 +119,36 @@ $currentUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/start.php?id='.$ltiTool->ge
 </head>
 <body>
     <script>
-        window.parent.location.href = '<?php echo $currentUrl; ?>';
+        (function () {
+            var courseUrl = <?php echo json_encode($courseUrl); ?>;
+
+            // Deep Linking opened in a new window: refresh the original
+            // Chamilo course and close the selection window.
+            if (window.opener && !window.opener.closed) {
+                try {
+                    window.opener.location.href = courseUrl;
+                } catch (e) {
+                    // Fall through to a redirect in this window.
+                }
+
+                window.close();
+
+                if (!window.closed) {
+                    window.location.href = courseUrl;
+                }
+
+                return;
+            }
+
+            // Deep Linking opened in an iframe.
+            if (window.parent && window.parent !== window) {
+                window.parent.location.href = courseUrl;
+                return;
+            }
+
+            // Fallback for a normal top-level window.
+            window.location.href = courseUrl;
+        }());
     </script>
 </body>
 </html>

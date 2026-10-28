@@ -33,13 +33,23 @@ $params['lti_version'] = 'LTI-1p0';
 
 if ($tool->isActiveDeepLinking()) {
     $params['lti_message_type'] = 'ContentItemSelectionRequest';
-    $params['content_item_return_url'] = $pluginPath.'item_return.php';
-    $params['accept_media_types'] = '*/*';
-    $params['accept_presentation_document_targets'] = 'iframe,window';
-    //$params['accept_unsigned'];
-    //$params['accept_multiple'];
-    //$params['accept_copy_advice'];
-    //$params['auto_create']';
+
+    // Keep the Chamilo course/session context in the Deep Linking return URL.
+    // This is important when the tool returns with a cross-site POST and the
+    // browser does not attach the Chamilo session cookie to that first POST.
+    $returnUrl = $pluginPath.'item_return.php';
+    $cidReq = api_get_cidreq();
+
+    if (!empty($cidReq)) {
+        $returnUrl .= '?'.$cidReq;
+    }
+
+    $params['content_item_return_url'] = $returnUrl;
+    $params['accept_media_types'] = 'application/vnd.ims.lti.v1.ltilink';
+    $params['accept_presentation_document_targets'] = 'frame,iframe,window';
+    $params['accept_unsigned'] = 'false';
+    $params['accept_multiple'] = 'true';
+    $params['auto_create'] = 'false';
     $params['title'] = $tool->getName();
     $params['text'] = $tool->getDescription();
     $params['data'] = 'tool:'.$tool->getId();

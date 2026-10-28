@@ -108,7 +108,11 @@ if ($form->validate()) {
                 $child
             );
 
-            $plugin->updateCourseTool($courseTool, $child);
+            if ($courseTool) {
+                $plugin->updateCourseTool($courseTool, $child);
+            } else {
+                $plugin->addCourseTool($child->getCourse(), $child);
+            }
         }
     } else {
         $courseTool = $plugin->findCourseToolByLink(
@@ -116,7 +120,11 @@ if ($form->validate()) {
             $tool
         );
 
-        $plugin->updateCourseTool($courseTool, $tool);
+        if ($courseTool) {
+            $plugin->updateCourseTool($courseTool, $tool);
+        } else {
+            $plugin->addCourseTool($tool->getCourse(), $tool);
+        }
     }
 
     $em->persist($tool);

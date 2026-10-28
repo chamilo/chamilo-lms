@@ -375,27 +375,24 @@ class ImsLtiPlugin extends Plugin
     public function saveItemAsLtiLink(array $contentItem, ImsLtiTool $baseLtiTool, Course $course)
     {
         $em = Database::getManager();
-        $ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 
         $url = empty($contentItem['url']) ? $baseLtiTool->getLaunchUrl() : $contentItem['url'];
 
+        // A Deep Linking selection represents a new LTI resource instance.
+        // Do not reuse an existing child tool solely because the launch URL is identical.
         /** @var ImsLtiTool $newLtiTool */
-        $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'parent' => $baseLtiTool, 'course' => $course]);
-
-        if (null === $newLtiTool) {
-            $newLtiTool = new ImsLtiTool();
-            $newLtiTool
-                ->setLaunchUrl($url)
-                ->setParent(
-                    $baseLtiTool
-                )
-                ->setPrivacy(
-                    $baseLtiTool->isSharingName(),
-                    $baseLtiTool->isSharingEmail(),
-                    $baseLtiTool->isSharingPicture()
-                )
-                ->setCourse($course);
-        }
+        $newLtiTool = new ImsLtiTool();
+        $newLtiTool
+            ->setLaunchUrl($url)
+            ->setParent(
+                $baseLtiTool
+            )
+            ->setPrivacy(
+                $baseLtiTool->isSharingName(),
+                $baseLtiTool->isSharingEmail(),
+                $baseLtiTool->isSharingPicture()
+            )
+            ->setCourse($course);
 
         $newLtiTool
             ->setName(

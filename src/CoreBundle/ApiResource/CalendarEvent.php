@@ -62,6 +62,11 @@ class CalendarEvent extends AbstractResource
         public ?string $comment = null,
         #[Groups(['calendar_event:read'])]
         public ?int $seriesId = null,
+        /**
+         * @var list<array{id: int, filename: string, comment: string}>
+         */
+        #[Groups(['calendar_event:read'])]
+        public array $attachments = [],
     ) {}
 
     public function getType(): ?string

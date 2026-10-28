@@ -19,6 +19,7 @@
     <input
       ref="inputFile"
       :accept="acceptFileType"
+      :name="name"
       class="hidden"
       multiple
       type="file"
@@ -41,6 +42,10 @@ const props = defineProps({
   size: {
     type: String,
     default: "normal",
+  },
+  name: {
+    type: String,
+    default: undefined,
   },
 })
 

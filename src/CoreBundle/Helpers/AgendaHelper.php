@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -95,6 +96,83 @@ readonly class AgendaHelper
         }
 
         return true;
+    }
+
+    /**
+     * Whether the current user sees the event in their agenda, as Agenda::getCourseEvents() decided:
+     * the teachers of a course see all its events, a member sees the events of the whole course,
+     * of their groups and the events sent to them.
+     */
+    public function canViewEvent(CCalendarEvent $event): bool
+    {
+        $user = $this->userHelper->getCurrent();
+        $resourceNode = $event->getResourceNode();
+
+        if (null === $user || null === $resourceNode) {
+            return false;
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN') || $resourceNode->getCreator()?->getId() === $user->getId()) {
+            return true;
+        }
+
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            $linkUser = $link->getUser();
+            if (null !== $linkUser) {
+                if ($linkUser->getId() === $user->getId()) {
+                    return true;
+                }
+
+                continue;
+            }
+
+            $course = $link->getCourse();
+            if (null === $course) {
+                continue;
+            }
+
+            $session = $link->getSession();
+            $isTeacher = $session instanceof Session
+                ? $session->hasUserAsGeneralCoach($user) || $session->hasCourseCoachInCourse($user, $course)
+                : $course->hasUserAsTeacher($user);
+
+            if ($isTeacher) {
+                return true;
+            }
+
+            $isMember = $session instanceof Session
+                ? $session->hasUserInCourse($user, $course)
+                : $course->hasSubscriptionByUser($user);
+            $group = $link->getGroup();
+
+            if ($isMember
+                && (null === $group || \in_array((int) $group->getIid(), $this->getGroupIdList($user, (int) $course->getId()), true))
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * The course groups the user is a member or a tutor of, in one course or in all of them.
+     *
+     * @return list<int>
+     */
+    public function getGroupIdList(User $user, ?int $courseId = null): array
+    {
+        $groupIdList = [];
+
+        foreach ([$user->getCourseGroupsAsMember(), $user->getCourseGroupsAsTutor()] as $subscriptions) {
+            foreach ($subscriptions as $subscription) {
+                if (null === $courseId || $courseId === (int) $subscription->getCId()) {
+                    $groupIdList[] = (int) $subscription->getGroup()->getIid();
+                }
+            }
+        }
+
+        return array_values(array_unique($groupIdList));
     }
 
     /**

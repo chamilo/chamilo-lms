@@ -40,6 +40,52 @@
       name="comment"
     />
 
+    <div
+      v-if="showAttachments"
+      class="flex flex-col gap-2"
+    >
+      <p class="text-sm font-semibold">{{ t("Attachments") }}</p>
+
+      <ul
+        v-if="item.attachments?.length"
+        class="space-y-1 text-sm"
+      >
+        <li
+          v-for="attachment in item.attachments"
+          :key="attachment.id"
+          class="flex items-center gap-2"
+        >
+          <BaseIcon
+            icon="attachment"
+            size="small"
+          />
+          <span class="break-all">{{ attachment.filename }}</span>
+          <BaseButton
+            :label="t('Delete attachment')"
+            icon="delete"
+            only-icon
+            size="small"
+            type="danger-text"
+            @click="confirmDeleteAttachment(attachment)"
+          />
+        </li>
+      </ul>
+
+      <BaseFileUploadMultiple
+        v-model="item.attachmentFiles"
+        :label="t('Add attachment')"
+        name="attachments"
+      />
+
+      <BaseTextArea
+        v-if="item.attachmentFiles?.length"
+        id="calendar-event-file-comment"
+        v-model="item.fileComment"
+        :label="t('File comment')"
+        name="file_comment"
+      />
+    </div>
+
     <BaseAdvancedSettingsButton v-if="showResourceLanguageAdvancedSettings" v-model="showAdvancedSettings">
       <ResourceLanguageSelector
         id="calendar-event-language"
@@ -166,8 +212,12 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseFileUploadMultiple from "../basecomponents/BaseFileUploadMultiple.vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import { useConfirmation } from "../../composables/useConfirmation"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import CalendarCourseRecipients from "./CalendarCourseRecipients.vue"
 import CalendarInvitations from "./CalendarInvitations.vue"
@@ -270,6 +320,29 @@ const repeatTypeOptions = computed(() => [
 const showAddAnnouncement = computed(
   () => !item.value?.["@id"] && Number(route.query.cid ?? 0) > 0 && securityStore.isCurrentTeacher,
 )
+
+// As in the legacy agenda, only course events have attachments.
+const showAttachments = computed(() => Number(route.query.cid ?? 0) > 0)
+
+const { requireConfirmation } = useConfirmation()
+
+/**
+ * Deletes a file attached to the event being edited.
+ *
+ * @param {{id: number, filename: string}} attachment
+ */
+function confirmDeleteAttachment(attachment) {
+  const eventId = String(item.value["@id"] ?? "").match(/\d+$/)?.[0]
+
+  requireConfirmation({
+    message: t("Are you sure you want to delete this item?"),
+    async accept() {
+      await baseService.delete(`/api/calendar-events/${eventId}/attachments/${attachment.id}`)
+
+      item.value.attachments = item.value.attachments.filter(({ id }) => id !== attachment.id)
+    },
+  })
+}
 
 const showCareerPromotionFields = computed(() => {
   return props.isGlobal && props.allowCareerPromotionFields
@@ -548,6 +621,10 @@ watch(
 
     if (showRepeat.value && undefined === item.value.repeat) {
       item.value.repeat = false
+    }
+
+    if (showAttachments.value && !Array.isArray(item.value.attachmentFiles)) {
+      item.value.attachmentFiles = []
     }
   },
   { immediate: true },

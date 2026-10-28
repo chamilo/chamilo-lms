@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AgendaHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -34,6 +35,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         private readonly CourseRepository $courseRepository,
         private readonly SessionRepository $sessionRepository,
         private readonly Security $security,
+        private readonly AgendaHelper $agendaHelper,
     ) {}
 
     public function applyToCollection(
@@ -91,7 +93,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         if (!$this->canSeeAllCourseEvents(!empty($groupId))) {
             // Inside a group, GroupContextQueryExtension already requires a link to that group.
             $recipients = empty($groupId)
-                ? $this->getRecipientCondition($qb, $user, $this->getGroupIdList($user, (int) $courseId), true)
+                ? $this->getRecipientCondition($qb, $user, $this->agendaHelper->getGroupIdList($user, (int) $courseId), true)
                 : $this->getRecipientCondition($qb, $user, [(int) $groupId], false);
 
             $qb->andWhere($recipients);
@@ -164,26 +166,6 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         );
     }
 
-    /**
-     * The course groups the user is a member or a tutor of, in one course or in all of them.
-     *
-     * @return list<int>
-     */
-    private function getGroupIdList(User $user, ?int $courseId = null): array
-    {
-        $groupIdList = [];
-
-        foreach ([$user->getCourseGroupsAsMember(), $user->getCourseGroupsAsTutor()] as $subscriptions) {
-            foreach ($subscriptions as $subscription) {
-                if (null === $courseId || $courseId === (int) $subscription->getCId()) {
-                    $groupIdList[] = (int) $subscription->getGroup()->getIid();
-                }
-            }
-        }
-
-        return array_values(array_unique($groupIdList));
-    }
-
     private function addPersonalCalendarConditions(QueryBuilder $qb, User $user): void
     {
         $qb
@@ -244,7 +226,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
                     $qb->expr()->andX(
                         $qb->expr()->in('resource_links.course', ':course_id_list'),
                         $qb->expr()->isNull('resource_links.session'),
-                        $this->getRecipientCondition($qb, $user, $this->getGroupIdList($user), true)
+                        $this->getRecipientCondition($qb, $user, $this->agendaHelper->getGroupIdList($user), true)
                     )
                 )
                 ->setParameter('course_id_list', $courseIdList)
@@ -291,7 +273,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
                     $qb->expr()->andX(
                         $qb->expr()->in('resource_links.session', ':session_id_list'),
                         $qb->expr()->in('resource_links.course', ':session_course_id_list'),
-                        $this->getRecipientCondition($qb, $user, $this->getGroupIdList($user), true)
+                        $this->getRecipientCondition($qb, $user, $this->agendaHelper->getGroupIdList($user), true)
                     )
                 )
                 ->setParameter('session_id_list', array_unique($sessionIdList))

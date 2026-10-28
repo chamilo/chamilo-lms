@@ -24,6 +24,35 @@
       {{ event.comment }}
     </p>
 
+    <div
+      v-if="event.attachments?.length"
+      class="mt-2"
+    >
+      <strong>{{ t("Attachments") }}:</strong>
+      <ul class="space-y-1">
+        <li
+          v-for="attachment in event.attachments"
+          :key="attachment.id"
+          class="flex items-center gap-2"
+        >
+          <BaseIcon
+            icon="attachment"
+            size="small"
+          />
+          <a
+            :href="`/api/calendar-events/${eventId}/attachments/${attachment.id}/download`"
+            class="break-all hover:underline"
+            >{{ attachment.filename }}</a
+          >
+          <span
+            v-if="attachment.comment"
+            class="text-gray-50"
+            >{{ attachment.comment }}</span
+          >
+        </li>
+      </ul>
+    </div>
+
     <CalendarEventSubscriptionsInfo
       v-if="type.subscription === event.invitationType"
       :event="event"
@@ -71,14 +100,18 @@ import CalendarEventSubscriptionsInfo from "./CalendarEventSubscriptionsInfo.vue
 import CalendarEventInvitationsInfo from "./CalendarEventInvitationsInfo.vue"
 import CalendarRemindersInfo from "./CalendarRemindersInfo.vue"
 import { sanitizeHtml } from "../../utils/sanitizeHtml"
+import { computed } from "vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 
 const { abbreviatedDatetime } = useFormatDate()
 const { t } = useI18n()
 
-defineProps({
+const props = defineProps({
   event: {
     type: Object,
     required: true,
   },
 })
+
+const eventId = computed(() => Number(String(props.event["@id"] ?? props.event.id ?? "").match(/\d+$/)?.[0] ?? 0))
 </script>

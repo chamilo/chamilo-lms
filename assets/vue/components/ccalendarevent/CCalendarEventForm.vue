@@ -105,6 +105,38 @@
       v-model="item"
     />
 
+    <template v-if="showRepeat">
+      <BaseCheckbox
+        id="calendar-event-repeat"
+        v-model="item.repeat"
+        :label="t('Repeat event')"
+        name="repeat"
+      />
+
+      <div
+        v-if="item.repeat"
+        class="grid gap-4 md:grid-cols-2"
+      >
+        <BaseSelect
+          id="calendar-event-repeat-type"
+          v-model="item.repeatType"
+          :is-invalid="v$.item.repeatType.$invalid"
+          :label="t('Repeat type')"
+          :options="repeatTypeOptions"
+          name="repeat_type"
+          option-label="label"
+          option-value="value"
+        />
+
+        <BaseCalendar
+          id="calendar-event-repeat-end-date"
+          v-model="item.repeatEndDate"
+          :is-invalid="v$.item.repeatEndDate.$invalid"
+          :label="t('Repeat end date')"
+        />
+      </div>
+    </template>
+
     <CalendarInvitations v-model="item" />
 
     <CalendarRemindersEditor
@@ -120,13 +152,14 @@
 import { computed, ref, watch, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
+import { required, requiredIf } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import CalendarCourseRecipients from "./CalendarCourseRecipients.vue"
 import CalendarInvitations from "./CalendarInvitations.vue"
@@ -215,6 +248,16 @@ const showCourseRecipients = computed(() => {
 // As in the legacy agenda, only course events have a comment.
 const showComment = computed(() => Number(route.query.cid ?? 0) > 0)
 
+// As in the legacy agenda, a new course event can be repeated until a given day.
+const showRepeat = computed(() => !item.value?.["@id"] && Number(route.query.cid ?? 0) > 0)
+
+const repeatTypeOptions = computed(() => [
+  { label: t("Daily"), value: "daily" },
+  { label: t("Weekly"), value: "weekly" },
+  { label: t("Monthly, by date"), value: "monthlyByDate" },
+  { label: t("Yearly"), value: "yearly" },
+])
+
 const showCareerPromotionFields = computed(() => {
   return props.isGlobal && props.allowCareerPromotionFields
 })
@@ -259,6 +302,12 @@ const rules = computed(() => ({
     },
     color: {
       required,
+    },
+    repeatType: {
+      required: requiredIf(() => showRepeat.value && item.value?.repeat),
+    },
+    repeatEndDate: {
+      required: requiredIf(() => showRepeat.value && item.value?.repeat),
     },
   },
 }))
@@ -483,6 +532,10 @@ watch(
   () => item.value,
   () => {
     ensureValidColor()
+
+    if (showRepeat.value && undefined === item.value.repeat) {
+      item.value.repeat = false
+    }
   },
   { immediate: true },
 )

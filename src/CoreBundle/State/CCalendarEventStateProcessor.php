@@ -12,8 +12,15 @@ use Chamilo\CoreBundle\Entity\Career;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\DateTimeHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Entity\CCalendarEventRepeat;
+use DateInterval;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -27,12 +34,25 @@ use Throwable;
  */
 final class CCalendarEventStateProcessor implements ProcessorInterface
 {
+    /**
+     * The repeat types of the legacy agenda, and the time between two events of the series.
+     */
+    private const array REPEAT_INTERVALS = [
+        'daily' => 'P1D',
+        'weekly' => 'P1W',
+        'monthlyByDate' => 'P1M',
+        'yearly' => 'P1Y',
+    ];
+
+    private const int MAX_REPEATED_EVENTS = 365;
+
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
         private readonly RequestStack $requestStack,
         private readonly EntityManagerInterface $entityManager,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -61,13 +81,102 @@ final class CCalendarEventStateProcessor implements ProcessorInterface
             $reminder->decodeDateInterval();
         }
 
+        $repeat = $this->getRepeatRequest($data);
+
         /** @var CCalendarEvent $result */
         $result = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
         $this->applyLanguageFromPayload($result, $this->getRequestPayload());
+
+        if (null !== $repeat) {
+            $this->addRepeatedEvents($result, $currentUser, ...$repeat);
+        }
+
         $this->entityManager->flush();
 
         return $result;
+    }
+
+    /**
+     * The repeat type and the last day of the series, when the course event is repeated.
+     *
+     * @return array{string, DateTimeImmutable}|null
+     */
+    private function getRepeatRequest(CCalendarEvent $event): ?array
+    {
+        $payload = $this->getRequestPayload();
+        $type = $payload['repeatType'] ?? null;
+        if (null === $type || '' === $type) {
+            return null;
+        }
+
+        if (!\is_string($type) || !isset(self::REPEAT_INTERVALS[$type])) {
+            throw new BadRequestHttpException('Invalid repeat type.');
+        }
+
+        // As in the legacy agenda, only course events are repeated.
+        if (null === $this->cidReqHelper->getDoctrineCourseEntity()) {
+            throw new BadRequestHttpException('Only course events can be repeated.');
+        }
+
+        $timezone = new DateTimeZone(DateTimeHelper::resolveTimezone());
+        $lastDay = DateTimeImmutable::createFromFormat('!Y-m-d', (string) ($payload['repeatEndDate'] ?? ''), $timezone);
+        if (false === $lastDay || null === $event->getStartDate() || null === $event->getEndDate()) {
+            throw new BadRequestHttpException('A valid repeat end date is required.');
+        }
+
+        // The last event of the series starts on that day at the latest.
+        $lastDay = $lastDay->setTime(23, 59, 59);
+        if ($lastDay < $event->getStartDate()) {
+            throw new BadRequestHttpException('The repeat end date must be after the event.');
+        }
+
+        return [$type, $lastDay];
+    }
+
+    /**
+     * Creates a copy of the event at each repetition until the last day, as Agenda::addRepeatedItem() did.
+     */
+    private function addRepeatedEvents(CCalendarEvent $event, User $creator, string $type, DateTimeImmutable $lastDay): void
+    {
+        $interval = new DateInterval(self::REPEAT_INTERVALS[$type]);
+        $utc = new DateTimeZone('UTC');
+
+        // The dates move in the user's timezone, so the events keep their local time across a DST change.
+        $start = DateTimeImmutable::createFromMutable($event->getStartDate())->setTimezone($lastDay->getTimezone());
+        $end = DateTimeImmutable::createFromMutable($event->getEndDate())->setTimezone($lastDay->getTimezone());
+
+        for ($i = 0; $i < self::MAX_REPEATED_EVENTS; $i++) {
+            $start = $start->add($interval);
+            $end = $end->add($interval);
+            if ($start > $lastDay) {
+                break;
+            }
+
+            $repeatedEvent = (new CCalendarEvent())
+                ->setTitle($event->getTitle())
+                ->setContent((string) $event->getContent())
+                ->setComment((string) $event->getComment())
+                ->setColor((string) $event->getColor())
+                ->setAllDay($event->isAllDay())
+                ->setRoom($event->getRoom())
+                ->setStartDate(DateTime::createFromImmutable($start->setTimezone($utc)))
+                ->setEndDate(DateTime::createFromImmutable($end->setTimezone($utc)))
+                ->setParentEvent($event)
+                ->setCreator($creator)
+                ->setParentResourceNode($event->getParentResourceNode())
+                ->setResourceLinkArray($event->getResourceLinkArray())
+            ;
+            $event->addChild($repeatedEvent);
+            $this->entityManager->persist($repeatedEvent);
+        }
+
+        $event->getRepeatEvents()->add(
+            (new CCalendarEventRepeat())
+                ->setEvent($event)
+                ->setCalType($type)
+                ->setCalEnd($lastDay->getTimestamp())
+        );
     }
 
     private function applyLanguageFromPayload(CCalendarEvent $event, array $payload): void

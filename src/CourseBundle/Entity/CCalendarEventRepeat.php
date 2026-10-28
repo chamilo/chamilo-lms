@@ -110,4 +110,11 @@ class CCalendarEventRepeat
     {
         return $this->event;
     }
+
+    public function setEvent(CCalendarEvent $event): self
+    {
+        $this->event = $event;
+
+        return $this;
+    }
 }

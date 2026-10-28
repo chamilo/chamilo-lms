@@ -68,6 +68,10 @@ readonly class CalendarEventTransformer
         $calendarEvent->setType($eventType);
         $calendarEvent->comment = $object->getComment();
 
+        // The first event of a series of repeated events, which the other events point to.
+        $firstEventOfSeries = $object->getParentEvent() ?? ($object->getChildren()->isEmpty() ? null : $object);
+        $calendarEvent->seriesId = $firstEventOfSeries?->getIid();
+
         if ($object->getRoom()) {
             $room = $object->getRoom();
             $branch = $room->getBranch();

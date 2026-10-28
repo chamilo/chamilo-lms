@@ -266,6 +266,8 @@ foreach ($userList as $userInfo) {
         $dateExpediction,
         $myContentHtml
     );
+    
+    $myContentHtml = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $myContentHtml);
 
     $myContentHtml = strip_tags(
         $myContentHtml,

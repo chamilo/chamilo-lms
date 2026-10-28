@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Component\Badge\OpenBadge2;
 use Chamilo\CoreBundle\Entity\Listener\SkillRelUserListener;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
@@ -279,14 +280,7 @@ class SkillRelUser
      */
     public function getAssertionUrl(): string
     {
-        $url = api_get_path(WEB_CODE_PATH).'skills/assertion.php?';
-
-        return $url.http_build_query([
-            'user' => $this->user->getId(),
-            'skill' => $this->skill->getId(),
-            'course' => null !== $this->course ? $this->course->getId() : 0,
-            'session' => null !== $this->session ? $this->session->getId() : 0,
-        ]);
+        return OpenBadge2::assertionUrl($this);
     }
 
     public function getComments(bool $sortDescByDateTime = false): Collection

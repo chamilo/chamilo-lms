@@ -36,6 +36,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 /**
@@ -53,6 +54,7 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
         private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
         private SurveyHelper $surveyHelper,
+        private TranslatorInterface $translator,
     ) {}
 
     /**
@@ -1001,9 +1003,9 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
             return false;
         }
 
-        $subject = \sprintf('Group survey for %s', $group->getTitle());
+        $subject = \sprintf($this->translator->trans('Group survey for %s'), $group->getTitle());
         $content = \sprintf(
-            'Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey:',
+            $this->translator->trans('Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :'),
             $user->getFullName(),
             $group->getTitle(),
         );
@@ -1022,7 +1024,8 @@ final readonly class SurveyActionProcessor implements ProcessorInterface
 
     private function buildMessageBody(string $content, string $link): string
     {
-        $linkHtml = '<a href="'.$link.'">Click here to answer the survey</a><br><br>'.$link;
+        $linkHtml = '<a href="'.$link.'">'.$this->translator->trans('Click here to answer the survey').'</a><br><br>'
+            .$this->translator->trans('or copy paste the following url :').'<br><br>'.$link;
         $replaceCount = 0;
         $body = str_ireplace('**link**', $linkHtml, $content, $replaceCount);
 

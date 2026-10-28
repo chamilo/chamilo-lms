@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 /**
@@ -47,6 +48,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         private SurveyInvitationProvider $surveyInvitationProvider,
         private SettingsManager $settingsManager,
         private SurveyHelper $surveyHelper,
+        private TranslatorInterface $translator,
     ) {}
 
     /**
@@ -455,7 +457,8 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             return str_replace('**link**', '', $content);
         }
 
-        $linkHtml = '<a href="'.$link.'">Click here to answer the survey</a><br><br>'.$link;
+        $linkHtml = '<a href="'.$link.'">'.$this->translator->trans('Click here to answer the survey').'</a><br><br>'
+            .$this->translator->trans('or copy paste the following url :').'<br><br>'.$link;
         $replaceCount = 0;
         $body = str_ireplace('**link**', $linkHtml, $content, $replaceCount);
 

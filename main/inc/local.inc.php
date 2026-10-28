@@ -458,8 +458,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     } elseif (isset($_POST['login']) && isset($_POST['password'])) {
         // $login && $password are given to log in
         if (empty($login) || !empty($_POST['login'])) {
-            $login = trim(preg_replace('/[\x{00A0}\x{200B}\x{200C}\x{200D}\x{FEFF}\x{2060}]/u', '', $_POST['login']));
-            $password = trim(preg_replace('/[\x{00A0}\x{200B}\x{200C}\x{200D}\x{FEFF}\x{2060}]/u', '', $_POST['password']));
+            $login = \Chamilo\UserBundle\Entity\User::normalizeCredential($_POST['login']);
+            $password = \Chamilo\UserBundle\Entity\User::normalizeCredential($_POST['password']);
         }
         // unset the "login_as" flag if we just connected with a username and password.
         Session::erase('login_as');

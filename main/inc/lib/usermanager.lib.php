@@ -173,6 +173,8 @@ class UserManager
     public static function checkPassword(string $encoded, string $raw, string $salt, int $userId): bool
     {
         $result = false;
+        // Passwords are stored without invisible characters nor surrounding spaces.
+        $raw = User::normalizeCredential($raw);
 
         if (true === api_get_configuration_value('password_conversion')) {
             $detectedEncryption = self::detectPasswordEncryption($encoded, $salt);

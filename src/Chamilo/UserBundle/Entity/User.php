@@ -2260,9 +2260,31 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         return $this;
     }
 
+    /**
+     * Remove invisible characters (no-break space, zero-width spaces and
+     * joiners, BOM, word joiner) and leading/trailing whitespace from a
+     * login or a plain password, so that what is stored is what can be typed.
+     * Anything that is not a string is returned untouched.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public static function normalizeCredential($value)
+    {
+        if (!is_string($value)) {
+            return $value;
+        }
+
+        $cleaned = preg_replace('/[\x{00A0}\x{200B}\x{200C}\x{200D}\x{FEFF}\x{2060}]/u', '', $value);
+
+        // preg_replace() returns null on invalid UTF-8: keep the value as is.
+        return trim(null === $cleaned ? $value : $cleaned);
+    }
+
     public function setUsername($username)
     {
-        $this->username = $username;
+        $this->username = self::normalizeCredential($username);
 
         return $this;
     }
@@ -2342,7 +2364,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     public function setPlainPassword($password)
     {
-        $this->plainPassword = $password;
+        $this->plainPassword = self::normalizeCredential($password);
 
         return $this;
     }

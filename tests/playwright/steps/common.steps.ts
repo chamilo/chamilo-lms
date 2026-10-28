@@ -665,7 +665,9 @@ async function loginAs(page: Page, username: string, password: string = username
 }
 
 Given("I am a platform administrator", async ({ page }) => {
-  await loginAs(page, "admin")
+  const username = process.env.PLAYWRIGHT_ADMIN_USERNAME || "admin"
+  const password = process.env.PLAYWRIGHT_ADMIN_PASSWORD || username
+  await loginAs(page, username, password)
 })
 
 Given("I am a teacher", async ({ page }) => {

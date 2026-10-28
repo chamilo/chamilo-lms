@@ -1,6 +1,5 @@
 import makeService, { asResponse, toServiceError } from "./api"
 import baseService from "./baseService"
-import prettyBytes from "pretty-bytes"
 
 const oldService = makeService("documents")
 
@@ -118,7 +117,9 @@ function formatBytesAsMb(bytes) {
     return `${rounded} MB`
   }
 
-  return `${String(rounded).replace(/\.0+$/, "").replace(/(\.\d*?)0+$/, "$1")} MB`
+  return `${String(rounded)
+    .replace(/\.0+$/, "")
+    .replace(/(\.\d*?)0+$/, "$1")} MB`
 }
 
 /**
@@ -385,6 +386,17 @@ export default {
    */
   async moveDocument(iid, parentResourceNodeId, params = {}) {
     return baseService.patch(`/api/documents/${iid}/move`, { parentResourceNodeId }, { params })
+  },
+
+  /**
+   * Moves selected documents together in a single transaction.
+   * @param {Array<number|string>} ids
+   * @param {number|string} parentResourceNodeId
+   * @param {Object} [params={}]
+   * @returns {Promise<Object>}
+   */
+  async moveSelectedDocuments(ids, parentResourceNodeId, params = {}) {
+    return baseService.post("/api/documents/move-selected", { ids, parentResourceNodeId }, {}, { params })
   },
 
   /**

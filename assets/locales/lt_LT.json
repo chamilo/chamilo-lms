@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "\u012erodym\u0173 nepavyko atsisi\u0173sti.",
     "Delete message": "I\u0161trinti prane\u0161im\u0105",
     "Message Sent": "Prane\u0161imas i\u0161si\u0173stas",
-    "Are you sure you want to delete the selected message?": "Ar tikrai norite i\u0161trinti pa\u017eym\u0117t\u0105 prane\u0161im\u0105?"
+    "Are you sure you want to delete the selected message?": "Ar tikrai norite i\u0161trinti pa\u017eym\u0117t\u0105 prane\u0161im\u0105?",
+    "Audio comment": "Garso komentaras",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

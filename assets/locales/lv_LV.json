@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "Pier\u0101d\u012bjumus neizdev\u0101s lejupiel\u0101d\u0113t.",
     "Delete message": "Dz\u0113st v\u0113stuli",
     "Message Sent": "Nos\u016bt\u012bt\u0101s v\u0113stules",
-    "Are you sure you want to delete the selected message?": "J\u016bs esat p\u0101rliecin\u0101ts par v\u0113lmi dz\u0113st iez\u012bm\u0113t\u0101s v\u0113stules?"
+    "Are you sure you want to delete the selected message?": "J\u016bs esat p\u0101rliecin\u0101ts par v\u0113lmi dz\u0113st iez\u012bm\u0113t\u0101s v\u0113stules?",
+    "Audio comment": "Audio koment\u0101rs",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

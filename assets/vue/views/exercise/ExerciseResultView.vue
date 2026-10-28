@@ -963,13 +963,19 @@
                 </div>
 
                 <div
-                  v-if="question.answer.teacherComment"
+                  v-if="question.answer.teacherComment || question.answer.teacherAudioUrl"
                   class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
                 >
                   <div class="mb-1 text-xs font-semibold uppercase tracking-wide">
                     {{ t("Teacher comment") }}
                   </div>
                   {{ question.answer.teacherComment }}
+                  <audio
+                    v-if="question.answer.teacherAudioUrl"
+                    class="mt-2 block max-w-full"
+                    controls
+                    :src="question.answer.teacherAudioUrl"
+                  />
                 </div>
 
                 <div
@@ -1090,6 +1096,11 @@
                       :label="t('Teacher comment')"
                       name="teacher_comment"
                       rows="3"
+                    />
+                    <ExerciseTeacherAudioRecorder
+                      v-if="question.canRecordTeacherAudio"
+                      v-model="correctionForms[question.id].audioFile"
+                      :disabled="correctionSavingQuestionId === question.id"
                     />
                     <div class="flex flex-col gap-2">
                       <BaseButton
@@ -1190,13 +1201,19 @@
                 </div>
 
                 <div
-                  v-if="question.answer.teacherComment"
+                  v-if="question.answer.teacherComment || question.answer.teacherAudioUrl"
                   class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
                 >
                   <div class="mb-1 text-xs font-semibold uppercase tracking-wide">
                     {{ t("Teacher comment") }}
                   </div>
                   {{ question.answer.teacherComment }}
+                  <audio
+                    v-if="question.answer.teacherAudioUrl"
+                    class="mt-2 block max-w-full"
+                    controls
+                    :src="question.answer.teacherAudioUrl"
+                  />
                 </div>
 
                 <div
@@ -1317,6 +1334,11 @@
                       :label="t('Teacher comment')"
                       name="teacher_comment"
                       rows="3"
+                    />
+                    <ExerciseTeacherAudioRecorder
+                      v-if="question.canRecordTeacherAudio"
+                      v-model="correctionForms[question.id].audioFile"
+                      :disabled="correctionSavingQuestionId === question.id"
                     />
                     <div class="flex flex-col gap-2">
                       <BaseButton
@@ -1422,13 +1444,19 @@
                 </div>
 
                 <div
-                  v-if="question.answer.teacherComment"
+                  v-if="question.answer.teacherComment || question.answer.teacherAudioUrl"
                   class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
                 >
                   <div class="mb-1 text-xs font-semibold uppercase tracking-wide">
                     {{ t("Teacher comment") }}
                   </div>
                   {{ question.answer.teacherComment }}
+                  <audio
+                    v-if="question.answer.teacherAudioUrl"
+                    class="mt-2 block max-w-full"
+                    controls
+                    :src="question.answer.teacherAudioUrl"
+                  />
                 </div>
 
                 <div
@@ -1549,6 +1577,11 @@
                       :label="t('Teacher comment')"
                       name="teacher_comment"
                       rows="3"
+                    />
+                    <ExerciseTeacherAudioRecorder
+                      v-if="question.canRecordTeacherAudio"
+                      v-model="correctionForms[question.id].audioFile"
+                      :disabled="correctionSavingQuestionId === question.id"
                     />
                     <div class="flex flex-col gap-2">
                       <BaseButton
@@ -1633,13 +1666,19 @@
                 </div>
 
                 <div
-                  v-if="question.answer.teacherComment"
+                  v-if="question.answer.teacherComment || question.answer.teacherAudioUrl"
                   class="rounded-lg border border-info/30 bg-support-1 p-3 text-sm text-support-4"
                 >
                   <div class="mb-1 text-xs font-semibold uppercase tracking-wide">
                     {{ t("Teacher comment") }}
                   </div>
                   {{ question.answer.teacherComment }}
+                  <audio
+                    v-if="question.answer.teacherAudioUrl"
+                    class="mt-2 block max-w-full"
+                    controls
+                    :src="question.answer.teacherAudioUrl"
+                  />
                 </div>
 
                 <div
@@ -1760,6 +1799,11 @@
                       :label="t('Teacher comment')"
                       name="teacher_comment"
                       rows="3"
+                    />
+                    <ExerciseTeacherAudioRecorder
+                      v-if="question.canRecordTeacherAudio"
+                      v-model="correctionForms[question.id].audioFile"
+                      :disabled="correctionSavingQuestionId === question.id"
                     />
                     <div class="flex flex-col gap-2">
                       <BaseButton
@@ -1873,6 +1917,7 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputNumber from "../../components/basecomponents/BaseInputNumber.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import exerciseService from "../../services/exerciseService"
+import ExerciseTeacherAudioRecorder from "./components/ExerciseTeacherAudioRecorder.vue"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 
 const { t } = useI18n()
@@ -2477,6 +2522,7 @@ function initializeCorrectionForms() {
     forms[question.id] = {
       marks: Number(question.score ?? question.answer?.marks ?? 0),
       teacherComment: question.answer?.teacherComment || "",
+      audioFile: null,
       sendNotification: false,
       notificationContent: "",
     }
@@ -2710,6 +2756,13 @@ async function saveManualCorrection(question, final = true) {
   correctionMessage.value = ""
 
   try {
+    if (form.audioFile) {
+      const audioData = new FormData()
+      audioData.append("questionId", String(questionId))
+      audioData.append("audio", form.audioFile)
+      await exerciseService.saveExerciseRuntimeCorrectionAudio(audioData, getContextParams(), exerciseId, attemptId)
+    }
+
     const response = await exerciseService.saveExerciseRuntimeCorrection(
       {
         exerciseId,

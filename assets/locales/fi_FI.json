@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "Todisteita ei voitu ladata.",
     "Delete message": "Poista viesti",
     "Message Sent": "Viesti l\u00e4hetetty",
-    "Are you sure you want to delete the selected message?": "Haluatko varmasti poistaa valitun viestin?"
+    "Are you sure you want to delete the selected message?": "Haluatko varmasti poistaa valitun viestin?",
+    "Audio comment": "\u00c4\u00e4niraidalla",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

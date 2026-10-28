@@ -43202,3 +43202,6 @@ msgstr ""
 
 msgid "The themes storage is not writable. Check its file permissions before saving."
 msgstr ""
+
+msgid "The recording will be saved with the correction."
+msgstr ""

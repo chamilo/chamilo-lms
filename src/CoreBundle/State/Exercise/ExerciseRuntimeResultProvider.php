@@ -983,6 +983,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'requiresManualCorrection' => $requiresManualCorrection,
             'pendingCorrection' => $pendingCorrection,
             'canCorrect' => $isReviewMode && $canManage && $requiresManualCorrection,
+            'canRecordTeacherAudio' => $isReviewMode && $canManage && $requiresManualCorrection
+                && 'true' === $this->settingsManager->getSetting('exercise.allow_teacher_comment_audio', true),
             'feedback' => $feedback,
             'answer' => $this->normalizeQuestionAnswer($operation, $question, $rows, $visibility, $showQuestionCorrection),
         ];
@@ -1681,6 +1683,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'kind' => 'free_answer',
             'studentAnswer' => $showStudentAnswers ? $row->getAnswer() : '',
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
+            'teacherAudioUrl' => $this->getTeacherAudioUrl($row, $visibility),
             'marks' => (float) $row->getMarks(),
             'showStudentAnswers' => $showStudentAnswers,
         ];
@@ -1708,6 +1711,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'paths' => $annotationAnswer['paths'],
             'texts' => $annotationAnswer['texts'],
             'teacherComment' => $row instanceof TrackEAttempt && true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
+            'teacherAudioUrl' => $row instanceof TrackEAttempt ? $this->getTeacherAudioUrl($row, $visibility) : null,
             'marks' => $row instanceof TrackEAttempt ? (float) $row->getMarks() : 0.0,
             'showStudentAnswers' => $showStudentAnswers,
         ];
@@ -1803,6 +1807,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'kind' => 'upload_answer',
             'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row) : [],
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
+            'teacherAudioUrl' => $this->getTeacherAudioUrl($row, $visibility),
             'marks' => (float) $row->getMarks(),
             'showStudentAnswers' => $showStudentAnswers,
         ];
@@ -1833,6 +1838,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row) : [],
             'editorUrl' => $showStudentAnswers ? $this->getOnlyofficeReviewEditorUrl($operation, $row) : '',
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
+            'teacherAudioUrl' => $this->getTeacherAudioUrl($row, $visibility),
             'marks' => (float) $row->getMarks(),
             'showStudentAnswers' => $showStudentAnswers,
         ];
@@ -1906,6 +1912,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'kind' => 'oral_expression',
             'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row, true) : [],
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
+            'teacherAudioUrl' => $this->getTeacherAudioUrl($row, $visibility),
             'marks' => (float) $row->getMarks(),
             'showStudentAnswers' => $showStudentAnswers,
         ];
@@ -1941,6 +1948,29 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         }
 
         return $files;
+    }
+
+    /**
+     * The teacher's recorded comment on the question (formerly ExerciseLib::getOralFeedbackAudio()), shown
+     * wherever the written comment is.
+     *
+     * @param array<string, mixed> $visibility
+     */
+    private function getTeacherAudioUrl(TrackEAttempt $row, array $visibility): ?string
+    {
+        if (true !== ($visibility['showFeedback'] ?? false)) {
+            return null;
+        }
+
+        $url = null;
+        foreach ($row->getAttemptFeedbacks() as $feedback) {
+            $resourceNode = $feedback->getResourceNode();
+            if ($resourceNode instanceof ResourceNode) {
+                $url = $this->getAttemptFileDownloadUrl($row, $resourceNode, true);
+            }
+        }
+
+        return '' !== $url ? $url : null;
     }
 
     private function getAttemptFileDownloadUrl(TrackEAttempt $attemptRow, ResourceNode $resourceNode, bool $inline = false): string

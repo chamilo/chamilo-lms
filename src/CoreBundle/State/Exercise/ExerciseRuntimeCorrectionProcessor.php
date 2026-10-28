@@ -9,7 +9,11 @@ namespace Chamilo\CoreBundle\State\Exercise;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeCorrection;
+use Chamilo\CoreBundle\Entity\AttemptFeedback;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
@@ -17,6 +21,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -32,6 +37,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use MessageManager;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -55,6 +61,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
     private const LP_STATUS_FAILED = 'failed';
     private const LP_STATUS_PASSED = 'passed';
     private const FEEDBACK_TYPE_DIRECT = 1;
+    private const AUDIO_OPERATION = 'post_exercise_runtime_correction_audio';
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
@@ -63,6 +70,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         private CQuizRepository $quizRepository,
         private Security $security,
         private GradebookLinkManager $gradebookLinkManager,
+        private SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -71,47 +79,19 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ExerciseRuntimeCorrection
     {
+        if (self::AUDIO_OPERATION === $operation->getName()) {
+            return $this->processTeacherAudio($uriVariables);
+        }
+
         if (!$data instanceof ExerciseRuntimeCorrection) {
             throw new BadRequestHttpException('Invalid exercise runtime correction payload.');
         }
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('The current request is required.');
-        }
-
-        if (!$this->canCorrectAttempts()) {
-            throw new AccessDeniedHttpException('You are not allowed to correct this exercise attempt.');
-        }
-
-        if (!$this->security->getUser() instanceof User) {
-            throw new AccessDeniedHttpException('A valid authenticated user is required.');
-        }
-
-        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
-        $attemptId = isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : (int) ($data->attemptId ?? 0);
-        $questionId = (int) ($data->questionId ?? 0);
-
-        if ($exerciseId <= 0 || $attemptId <= 0 || $questionId <= 0) {
-            throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
-        }
-
-        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
-        if ($this->gradebookLinkManager->isResourceLocked($course, $session, GradebookLinkResourceResolver::LINK_EXERCISE, (int) $quiz->getIid())) {
-            throw new BadRequestHttpException('This exercise is locked by gradebook.');
-        }
-
-        $attempt = $this->getCompletedAttempt($attemptId, $quiz, $course, $session);
-        $question = $this->getQuestionFromExercise($questionId, $quiz);
-        if (!$question instanceof CQuizQuestion) {
-            throw new NotFoundHttpException('The requested question was not found in this exercise.');
-        }
-
-        if (!$this->isManualCorrectionQuestion($question)) {
-            throw new BadRequestHttpException('This question type is not supported by the Vue manual correction flow yet.');
-        }
+        [$course, $session, $exerciseId, $attemptId, $questionId, $quiz, $attempt, $question] = $this->resolveCorrectionTarget(
+            isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0),
+            isset($uriVariables['attemptId']) ? (int) $uriVariables['attemptId'] : (int) ($data->attemptId ?? 0),
+            (int) ($data->questionId ?? 0),
+        );
 
         $maxScore = (float) $question->getPonderation();
         $marks = (float) $data->marks;
@@ -169,6 +149,131 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         $response->score = (float) $attempt->getScore();
         $response->maxScore = (float) $attempt->getMaxScore();
         $response->questionsToCheck = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
+
+        return $response;
+    }
+
+    /**
+     * The checks shared by the text and the audio correction: the teacher corrects a completed attempt of an
+     * exercise of the current course, on a question that needs a manual correction.
+     *
+     * @return array{0: Course, 1: ?Session, 2: int, 3: int, 4: int, 5: CQuiz, 6: TrackEExercise, 7: CQuizQuestion}
+     */
+    private function resolveCorrectionTarget(int $exerciseId, int $attemptId, int $questionId): array
+    {
+        if (null === $this->requestStack->getCurrentRequest()) {
+            throw new BadRequestHttpException('The current request is required.');
+        }
+
+        if (!$this->canCorrectAttempts()) {
+            throw new AccessDeniedHttpException('You are not allowed to correct this exercise attempt.');
+        }
+
+        if (!$this->security->getUser() instanceof User) {
+            throw new AccessDeniedHttpException('A valid authenticated user is required.');
+        }
+
+        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+
+        if ($exerciseId <= 0 || $attemptId <= 0 || $questionId <= 0) {
+            throw new BadRequestHttpException('A valid exercise, attempt and question are required.');
+        }
+
+        $quiz = $this->getExerciseFromCurrentContext($exerciseId, $course, $session);
+        if ($this->gradebookLinkManager->isResourceLocked($course, $session, GradebookLinkResourceResolver::LINK_EXERCISE, (int) $quiz->getIid())) {
+            throw new BadRequestHttpException('This exercise is locked by gradebook.');
+        }
+
+        $attempt = $this->getCompletedAttempt($attemptId, $quiz, $course, $session);
+        $question = $this->getQuestionFromExercise($questionId, $quiz);
+        if (!$question instanceof CQuizQuestion) {
+            throw new NotFoundHttpException('The requested question was not found in this exercise.');
+        }
+
+        if (!$this->isManualCorrectionQuestion($question)) {
+            throw new BadRequestHttpException('This question type is not supported by the Vue manual correction flow yet.');
+        }
+
+        return [$course, $session, $exerciseId, $attemptId, $questionId, $quiz, $attempt, $question];
+    }
+
+    /**
+     * Stores the teacher's recorded comment on the question (formerly the recorder of exercise_show.php). A new
+     * recording replaces the previous one, which the legacy page hid anyway by only playing the last one.
+     *
+     * @param array<string, mixed> $uriVariables
+     */
+    private function processTeacherAudio(array $uriVariables): ExerciseRuntimeCorrection
+    {
+        if ('true' !== $this->settingsManager->getSetting('exercise.allow_teacher_comment_audio', true)) {
+            throw new AccessDeniedHttpException('Audio comments from teachers are disabled.');
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        [, , $exerciseId, $attemptId, $questionId, , $attempt] = $this->resolveCorrectionTarget(
+            (int) ($uriVariables['exerciseId'] ?? 0),
+            (int) ($uriVariables['attemptId'] ?? 0),
+            (int) $request?->request->get('questionId', 0),
+        );
+
+        $file = $request?->files->get('audio');
+        if (!$file instanceof UploadedFile || !$file->isValid()) {
+            throw new BadRequestHttpException('A valid audio file is required.');
+        }
+
+        if (!str_starts_with((string) $file->getMimeType(), 'audio/')) {
+            throw new BadRequestHttpException('Only audio files are accepted.');
+        }
+
+        $resourceType = $this->entityManager->getRepository(ResourceType::class)->findOneBy(['title' => 'attempt_feedback']);
+        if (!$resourceType instanceof ResourceType) {
+            throw new BadRequestHttpException('Missing resource type "attempt_feedback" for audio comments.');
+        }
+
+        /** @var User $teacher */
+        $teacher = $this->security->getUser();
+
+        $rows = $this->getAttemptRows($attemptId, $questionId);
+        $row = $rows[0] ?? $this->createEmptyAttemptRow($attempt, $questionId);
+
+        foreach ($row->getAttemptFeedbacks()->toArray() as $previousFeedback) {
+            $previousNode = $previousFeedback->getResourceNode();
+            if (null === $previousNode) {
+                continue;
+            }
+
+            $row->getAttemptFeedbacks()->removeElement($previousFeedback);
+            $this->entityManager->remove($previousNode);
+        }
+
+        $node = (new ResourceNode())
+            ->setTitle('oral_feedback_q'.$questionId.'_u'.$teacher->getId())
+            ->setResourceType($resourceType)
+            ->setCreator($teacher)
+        ;
+        $this->entityManager->persist($node);
+
+        $resourceFile = (new ResourceFile())
+            ->setResourceNode($node)
+            ->setFile($file)
+        ;
+        $this->entityManager->persist($resourceFile);
+
+        $feedback = (new AttemptFeedback())
+            ->setResourceNode($node)
+            ->setUser($teacher)
+        ;
+        $row->addAttemptFeedback($feedback);
+        $this->entityManager->persist($feedback);
+        $this->entityManager->flush();
+
+        $response = new ExerciseRuntimeCorrection();
+        $response->exerciseId = $exerciseId;
+        $response->attemptId = $attemptId;
+        $response->questionId = $questionId;
+        $response->success = true;
+        $response->message = 'Audio comment saved';
 
         return $response;
     }

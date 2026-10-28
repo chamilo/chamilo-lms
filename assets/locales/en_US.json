@@ -4639,5 +4639,7 @@
     "Selecting a color theme only previews its colors. Click 'Select as current theme' to activate it.": "Selecting a color theme only previews its colors. Click 'Select as current theme' to activate it.",
     "Chart palettes and logos belong to the active visual theme, not the previewed color theme.": "Chart palettes and logos belong to the active visual theme, not the previewed color theme.",
     "Color theme (preview)": "Color theme (preview)",
-    "The themes storage is not writable. Check its file permissions before saving.": "The themes storage is not writable. Check its file permissions before saving."
+    "The themes storage is not writable. Check its file permissions before saving.": "The themes storage is not writable. Check its file permissions before saving.",
+    "Audio comment": "Audio commentary",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

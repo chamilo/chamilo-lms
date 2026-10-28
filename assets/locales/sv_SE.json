@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "Beviset kunde inte laddas ner.",
     "Delete message": "Ta bort meddelande",
     "Message Sent": "Meddelande skickat",
-    "Are you sure you want to delete the selected message?": "\u00c4r du s\u00e4ker p\u00e5 att du vill radera markerat meddelande?"
+    "Are you sure you want to delete the selected message?": "\u00c4r du s\u00e4ker p\u00e5 att du vill radera markerat meddelande?",
+    "Audio comment": "Ljudkommentar",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

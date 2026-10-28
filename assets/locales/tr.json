@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "Kan\u0131t indirilemedi.",
     "Delete message": "Mesaj\u0131 sil",
     "Message Sent": "Mesaj g\u00f6nderildi",
-    "Are you sure you want to delete the selected message?": "Se\u00e7ili mesaj\u0131 silmek istedi\u011finizden emin misiniz?"
+    "Are you sure you want to delete the selected message?": "Se\u00e7ili mesaj\u0131 silmek istedi\u011finizden emin misiniz?",
+    "Audio comment": "Sesli yorum",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

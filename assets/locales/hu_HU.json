@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "A bizony\u00edt\u00e9kot nem siker\u00fclt let\u00f6lteni.",
     "Delete message": "\u00dczenet t\u00f6rl\u00e9se",
     "Message Sent": "Az \u00fczenet elk\u00fcldve",
-    "Are you sure you want to delete the selected message?": "Biztosan t\u00f6r\u00f6lni akarja a kiv\u00e1lasztott \u00fczenetet?"
+    "Are you sure you want to delete the selected message?": "Biztosan t\u00f6r\u00f6lni akarja a kiv\u00e1lasztott \u00fczenetet?",
+    "Audio comment": "Hang komment\u00e1r",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

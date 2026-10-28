@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "Nie uda\u0142o si\u0119 pobra\u0107 dowodu.",
     "Delete message": "Usu\u0144 wiadomo\u015b\u0107",
     "Message Sent": "Wiadomo\u015b\u0107 wys\u0142ana",
-    "Are you sure you want to delete the selected message?": "Czy na pewno chcesz usun\u0105\u0107 zaznaczon\u0105 wiadomo\u015b\u0107?"
+    "Are you sure you want to delete the selected message?": "Czy na pewno chcesz usun\u0105\u0107 zaznaczon\u0105 wiadomo\u015b\u0107?",
+    "Audio comment": "Komentarz audio",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

@@ -141,16 +141,16 @@ final class ExerciseRuntimeAttemptFileDownloadAction extends AbstractController
     ): TrackEAttempt {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('attemptRow')
-            ->addSelect('attempt', 'attemptFile', 'resourceNode', 'resourceFile')
+            ->addSelect('attempt')
             ->from(TrackEAttempt::class, 'attemptRow')
             ->innerJoin('attemptRow.trackExercise', 'attempt')
-            ->innerJoin('attemptRow.attemptFiles', 'attemptFile')
-            ->innerJoin('attemptFile.resourceNode', 'resourceNode')
-            ->leftJoin('resourceNode.resourceFiles', 'resourceFile')
+            // The learner's answer files, and the teacher's recorded comments on them.
+            ->leftJoin('attemptRow.attemptFiles', 'attemptFile')
+            ->leftJoin('attemptRow.attemptFeedbacks', 'attemptFeedback')
             ->andWhere('attempt.exeId = :attemptId')
             ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
             ->andWhere('IDENTITY(attempt.course) = :courseId')
-            ->andWhere('resourceNode.id = :resourceNodeId')
+            ->andWhere('IDENTITY(attemptFile.resourceNode) = :resourceNodeId OR IDENTITY(attemptFeedback.resourceNode) = :resourceNodeId')
             ->setParameter('attemptId', $attemptId, Types::INTEGER)
             ->setParameter('exerciseId', $exerciseId, Types::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
@@ -188,8 +188,8 @@ final class ExerciseRuntimeAttemptFileDownloadAction extends AbstractController
 
     private function getAttachedResourceNode(TrackEAttempt $attemptRow, int $resourceNodeId): ?ResourceNode
     {
-        foreach ($attemptRow->getAttemptFiles() as $attemptFile) {
-            $resourceNode = $attemptFile->getResourceNode();
+        foreach ([...$attemptRow->getAttemptFiles(), ...$attemptRow->getAttemptFeedbacks()] as $attachment) {
+            $resourceNode = $attachment->getResourceNode();
             if ($resourceNode instanceof ResourceNode && (int) $resourceNode->getId() === $resourceNodeId) {
                 return $resourceNode;
             }

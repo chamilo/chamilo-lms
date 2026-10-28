@@ -338,6 +338,16 @@ export default {
     )
   },
 
+  async saveExerciseRuntimeCorrectionAudio(formData, params = {}, exerciseId, attemptId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.postForm(
+      `/api/exercise/runtime/${exerciseId}/attempt/${attemptId}/correction-audio${queryString}`,
+      formData,
+      exerciseRequestConfig(),
+    )
+  },
+
   async getExerciseGlobalQuestionEditor(params = {}, questionType = null) {
     const queryParams = { ...params }
 

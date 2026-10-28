@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "A evid\u00eancia n\u00e3o p\u00f4de ser descarregada.",
     "Delete message": "Eliminar mensagem",
     "Message Sent": "Mensagem enviada",
-    "Are you sure you want to delete the selected message?": "Tem a certeza que deseja eliminar a mensagem seleccionada?"
+    "Are you sure you want to delete the selected message?": "Tem a certeza que deseja eliminar a mensagem seleccionada?",
+    "Audio comment": "Coment\u00e1rio \u00e1udio",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

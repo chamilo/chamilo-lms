@@ -13,6 +13,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use ArrayObject;
 use Chamilo\CoreBundle\State\Exercise\ExerciseRuntimeCorrectionProcessor;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -47,6 +49,62 @@ use Symfony\Component\Serializer\Attribute\Groups;
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             name: 'post_exercise_runtime_correction',
+            processor: ExerciseRuntimeCorrectionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
+        ),
+        new Post(
+            uriTemplate: '/exercise/runtime/{exerciseId}/attempt/{attemptId}/correction-audio',
+            uriVariables: [
+                'exerciseId' => new Link(
+                    identifiers: ['exerciseId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+                'attemptId' => new Link(
+                    identifiers: ['attemptId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+            ],
+            read: false,
+            requirements: [
+                'exerciseId' => '\d+',
+                'attemptId' => '\d+',
+            ],
+            openapi: new Operation(
+                summary: 'Record the teacher audio comment of a manual Vue exercise runtime answer',
+                parameters: [
+                    new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'attemptId', in: 'path', required: true, schema: ['type' => 'integer']),
+                ],
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'required' => ['questionId', 'audio'],
+                                'properties' => [
+                                    'questionId' => ['type' => 'integer'],
+                                    'audio' => ['type' => 'string', 'format' => 'binary'],
+                                ],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            deserialize: false,
+            name: 'post_exercise_runtime_correction_audio',
             processor: ExerciseRuntimeCorrectionProcessor::class,
             parameters: [
                 'cid' => new QueryParameter(

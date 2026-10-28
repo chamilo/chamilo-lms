@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "\u8b49\u64da\u7121\u6cd5\u4e0b\u8f09\u3002",
     "Delete message": "\u522a\u9664\u8a0a\u606f",
     "Message Sent": "\u8a0a\u606f\u5df2\u50b3\u9001",
-    "Are you sure you want to delete the selected message?": "\u60a8\u78ba\u5b9a\u8981\u522a\u9664\u9078\u53d6\u7684\u8a0a\u606f\u55ce\uff1f"
+    "Are you sure you want to delete the selected message?": "\u60a8\u78ba\u5b9a\u8981\u522a\u9664\u9078\u53d6\u7684\u8a0a\u606f\u55ce\uff1f",
+    "Audio comment": "\u97f3\u8a0a\u8a3b\u89e3",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

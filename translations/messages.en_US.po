@@ -43273,3 +43273,6 @@ msgstr "Color theme (preview)"
 
 msgid "The themes storage is not writable. Check its file permissions before saving."
 msgstr "The themes storage is not writable. Check its file permissions before saving."
+
+msgid "The recording will be saved with the correction."
+msgstr "The recording will be saved with the correction."

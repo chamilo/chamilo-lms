@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "Dovezile nu au putut fi desc\u0103rcate.",
     "Delete message": "\u0218terge\u021bi mesajul",
     "Message Sent": "Mesaj trimis",
-    "Are you sure you want to delete the selected message?": "Sunte\u021bi sigur c\u0103 dori\u021bi s\u0103 \u0219terge\u021bi acest mesaj?"
+    "Are you sure you want to delete the selected message?": "Sunte\u021bi sigur c\u0103 dori\u021bi s\u0103 \u0219terge\u021bi acest mesaj?",
+    "Audio comment": "Comentariu audio",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

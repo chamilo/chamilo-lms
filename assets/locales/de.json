@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "Der Nachweis konnte nicht heruntergeladen werden.",
     "Delete message": "Nachricht l\u00f6schen",
     "Message Sent": "Nachricht versendet",
-    "Are you sure you want to delete the selected message?": "Ausgew\u00e4hlte Nachricht wirklich l\u00f6schen?"
+    "Are you sure you want to delete the selected message?": "Ausgew\u00e4hlte Nachricht wirklich l\u00f6schen?",
+    "Audio comment": "Audio Seite",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

@@ -4610,5 +4610,7 @@
     "Evidence could not be downloaded.": "Bukti tidak dapat diunduh.",
     "Delete message": "Hapus pesan",
     "Message Sent": "Pesan Terkirim",
-    "Are you sure you want to delete the selected message?": "Apakah Anda yakin ingin menghapus pesan terpilih?"
+    "Are you sure you want to delete the selected message?": "Apakah Anda yakin ingin menghapus pesan terpilih?",
+    "Audio comment": "Komentar audio",
+    "The recording will be saved with the correction.": "The recording will be saved with the correction."
 }

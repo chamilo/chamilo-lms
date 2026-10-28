@@ -302,6 +302,8 @@ $searchForm->addHidden('relation', $relation);
 foreach ($filters as $param) {
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
 }
+$searchForm->addDatePicker('registration_date_start', get_lang('RegistrationDate').' - '.get_lang('DateStart'));
+$searchForm->addDatePicker('registration_date_end', get_lang('RegistrationDate').' - '.get_lang('DateEnd'));
 $searchForm->addButtonSearch();
 
 $data = $usergroup->get($id);
@@ -330,6 +332,8 @@ if (1 === $activeUser) {
 }
 
 $filterData = [];
+$dateStart = '';
+$dateEnd = '';
 if ($searchForm->validate()) {
     $showAllStudentByDefault = true;
     $filterData = $searchForm->getSubmitValues();
@@ -341,6 +345,12 @@ if ($searchForm->validate()) {
                 $conditions[$filter['name']] = $value;
             }
         }
+    }
+    if (!empty($filterData['registration_date_start'])) {
+        $dateStart = $filterData['registration_date_start'].' 00:00:00';
+    }
+    if (!empty($filterData['registration_date_end'])) {
+        $dateEnd = $filterData['registration_date_end'].' 23:59:59';
     }
 }
 
@@ -373,7 +383,21 @@ if ($user_with_any_group) {
     }
     $user_list = $new_user_list;
 }
-
+if (!empty($dateStart) || !empty($dateEnd)) {
+    $user_list = array_values(array_filter($user_list, function ($item) use ($dateStart, $dateEnd) {
+        $regDate = isset($item['registration_date']) ? $item['registration_date'] : '';
+        if (empty($regDate)) {
+            return false;
+        }
+        if (!empty($dateStart) && $regDate < $dateStart) {
+            return false;
+        }
+        if (!empty($dateEnd) && $regDate > $dateEnd) {
+            return false;
+        }
+        return true;
+    }));
+}
 if (!empty($user_list)) {
     foreach ($user_list as $item) {
         if ($use_extra_fields) {
@@ -399,6 +423,8 @@ if (!$showAllStudentByDefault && !isset($_POST['firstLetterUser']) && !isset($_R
 if ($showAllStudentByDefault
     && empty($elements_not_in)
     && empty($first_letter_user)
+    && empty($dateStart)
+    && empty($dateEnd)
 ) {
     $initialUserList = UserManager::getUserListLike([], $order, true, 'OR');
     $elements_not_in = [];

@@ -4668,6 +4668,32 @@ Given(
   },
 )
 
+// New, for calendarEventRepeat.feature: types a date relative to today into a
+// BaseCalendar date field (mm/dd/yyyy, the format of the English interface),
+// then closes its overlay by clicking the dialog title, as Escape would close
+// the dialog itself.
+When(
+  "I fill in the date field {string} with the date {int} days from today",
+  async ({ page }, id: string, days: number) => {
+    const date = new Date()
+    date.setDate(date.getDate() + days)
+    const pad = (value: number) => String(value).padStart(2, "0")
+    await page.locator(`#${id}`).fill(`${pad(date.getMonth() + 1)}/${pad(date.getDate())}/${date.getFullYear()}`)
+    await page.locator(".p-dialog-title").first().click()
+  },
+)
+
+// New, for calendarEventRepeat.feature.
+Then("I should see {int} elements {string}", async ({ page }, count: number, selector: string) => {
+  await expect(page.locator(selector)).toHaveCount(count, { timeout: 60000 })
+})
+
+// New, for calendarEventRepeat.feature: the browser and the platform can be
+// on different days near midnight, so the exact number of events can vary.
+Then("I should see at least {int} elements {string}", async ({ page }, count: number, selector: string) => {
+  await expect.poll(() => page.locator(selector).count(), { timeout: 60000 }).toBeGreaterThanOrEqual(count)
+})
+
 // New, for gradebookExcelExport.feature: export buttons are BaseButton links
 // whose label is only exposed as their title (icon-only), and the browser
 // downloads the file instead of navigating to it.

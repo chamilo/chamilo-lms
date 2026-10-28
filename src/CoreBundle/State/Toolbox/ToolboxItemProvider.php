@@ -38,7 +38,7 @@ final readonly class ToolboxItemProvider implements ProviderInterface
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): ToolboxItem
     {
-        if (!$this->isToolboxEnabled($this->settingsManager)) {
+        if (!$this->isToolboxEnabled($this->settingsManager, (int) $this->cidReqHelper->requireDoctrineCourseEntity()->getId())) {
             throw new AccessDeniedHttpException('Toolbox is disabled.');
         }
 

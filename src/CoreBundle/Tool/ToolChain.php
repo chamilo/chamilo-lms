@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -194,15 +195,7 @@ class ToolChain
 
             $visibility = isset($activeToolsOnCreate[$courseToolName]);
             if ('toolbox' === $courseToolName) {
-                $aiHelpersEnabled = strtolower(trim(
-                    (string) $this->settingsManager->getSetting('ai_helpers.enable_ai_helpers', true)
-                ));
-                $toolboxEnabled = strtolower(trim(
-                    (string) $this->settingsManager->getSetting('ai_helpers.toolbox', true)
-                ));
-                $visibility = $visibility
-                    && \in_array($aiHelpersEnabled, ['1', 'true', 'yes', 'on'], true)
-                    && \in_array($toolboxEnabled, ['1', 'true', 'yes', 'on'], true);
+                $visibility = $visibility && (new AiFeatureAccessHelper($this->settingsManager))->isToolboxEnabledForCourse((int) $course->getId());
             }
             $linkVisibility = $visibility ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
 

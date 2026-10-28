@@ -110,8 +110,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             || (CLp::SCORM_TYPE === $lp->getLpType()
                 && !str_starts_with(strtolower($lp->getPath()), 'teachcs-'));
         $result->titleAsHtml = $this->settingEnabled('editor.save_titles_as_html');
-        $result->toolboxEnabled = $this->settingEnabled('ai_helpers.enable_ai_helpers')
-            && $this->settingEnabled('ai_helpers.toolbox');
+        $result->toolboxEnabled = $this->aiFeatureAccessHelper->isToolboxEnabledForCourse((int) $course->getId());
 
         if ($catalogOnly) {
             $documents = $this->findContextDocuments($course, $session, $group);
@@ -853,7 +852,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         }
 
         $toolboxItems = [];
-        if ($this->settingEnabled('ai_helpers.enable_ai_helpers') && $this->settingEnabled('ai_helpers.toolbox')) {
+        if ($this->aiFeatureAccessHelper->isToolboxEnabledForCourse((int) $course->getId())) {
             foreach ($this->findContextResources(CToolbox::class, $course, $session, $group) as $resource) {
                 if (!$resource instanceof CToolbox) {
                     continue;

@@ -49,7 +49,6 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
                 ],
             ])
             ->add('wysiwyg_translation_all_languages', YesNoType::class)
-            ->add('toolbox', YesNoType::class)
         ;
 
         $featureChoices = [
@@ -69,6 +68,7 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
             'glossary_terms_generator',
             'video_generator',
             'course_analyser',
+            'toolbox',
         ] as $feature) {
             $builder->add($feature, ChoiceType::class, [
                 'choices' => $featureChoices,

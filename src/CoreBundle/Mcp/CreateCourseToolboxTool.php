@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Mcp;
 
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Service\Mcp\McpTeacherCourseContext;
 use Chamilo\CoreBundle\Service\Toolbox\ToolboxApplicationService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -40,7 +41,7 @@ final readonly class CreateCourseToolboxTool
         bool $publish = false,
     ): array {
         try {
-            $this->assertEnabled();
+            $this->assertEnabled($courseId);
             $resolved = $this->courseContext->resolve($courseId);
             $item = $this->applicationService->create(
                 $resolved['course'],
@@ -80,13 +81,9 @@ final readonly class CreateCourseToolboxTool
         }
     }
 
-    private function assertEnabled(): void
+    private function assertEnabled(int $courseId): void
     {
-        $master = strtolower(trim((string) $this->settingsManager->getSetting('ai_helpers.enable_ai_helpers', true)));
-        $toolbox = strtolower(trim((string) $this->settingsManager->getSetting('ai_helpers.toolbox', true)));
-        if (!\in_array($master, ['1', 'true', 'yes', 'on'], true)
-            || !\in_array($toolbox, ['1', 'true', 'yes', 'on'], true)
-        ) {
+        if (!(new AiFeatureAccessHelper($this->settingsManager))->isToolboxEnabledForCourse($courseId)) {
             throw new AccessDeniedException('AI Toolbox is disabled.');
         }
     }

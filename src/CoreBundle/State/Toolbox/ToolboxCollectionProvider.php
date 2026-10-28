@@ -51,7 +51,7 @@ final readonly class ToolboxCollectionProvider implements ProviderInterface
         }
 
         $result = new ToolboxCollection();
-        $result->enabled = $this->isToolboxEnabled($this->settingsManager);
+        $result->enabled = $this->isToolboxEnabled($this->settingsManager, (int) $this->cidReqHelper->requireDoctrineCourseEntity()->getId());
         $result->canManage = $this->canManageToolbox($this->security, $this->studentViewHelper);
         $result->canCreate = $result->enabled
             && $result->canManage

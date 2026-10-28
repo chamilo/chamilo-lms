@@ -37,7 +37,7 @@ final readonly class ToolboxRestoreVersionProcessor implements ProcessorInterfac
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): null
     {
         $this->assertToolboxTeacher($this->security);
-        if (!$this->isToolboxEnabled($this->settingsManager)) {
+        if (!$this->isToolboxEnabled($this->settingsManager, (int) $this->cidReqHelper->requireDoctrineCourseEntity()->getId())) {
             throw new AccessDeniedHttpException('Toolbox is disabled.');
         }
 

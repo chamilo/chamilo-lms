@@ -4642,6 +4642,30 @@ Given(
   },
 )
 
+// New, for calendarEventLink.feature: opens the course agenda the way a
+// learning path item of type calendar_event does (learnpath.class.php,
+// buildVueCalendarEventLearningPathUrl): on the day of the event, in the day
+// view, with the event shown. The event id is only known through the API.
+Given(
+  "I open the event {string} from a link to the agenda of course {string}",
+  async ({ page }, title: string, courseCode: string) => {
+    const courseId = getResolvedCourseId(courseCode)
+    const response = await page.request.get(`/api/c_calendar_events?cid=${courseId}&sid=0&gid=0`, {
+      headers: { Accept: "application/json" },
+    })
+    const event = (await response.json()).find((item: { title: string }) => title === item.title)
+    if (!event) {
+      throw new Error(`The agenda of course ${courseCode} has no event "${title}".`)
+    }
+    const eventId = String(event.id).replace(/^calendar_event_/, "")
+    const date = String(event.startDate).slice(0, 10)
+    await gotoReliably(
+      page,
+      `/resources/ccalendarevent?cid=${courseId}&sid=0&gid=0&date=${date}&view=timeGridDay&event=${eventId}`,
+    )
+  },
+)
+
 // New, for gradebookExcelExport.feature: export buttons are BaseButton links
 // whose label is only exposed as their title (icon-only), and the browser
 // downloads the file instead of navigating to it.

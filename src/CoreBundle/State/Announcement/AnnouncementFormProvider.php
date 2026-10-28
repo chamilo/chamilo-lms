@@ -108,7 +108,6 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         $result->scheduleMinimumDate = (new DateTimeImmutable('today'))->format('Y-m-d');
         $result->scheduleDate = (new DateTimeImmutable('tomorrow'))->format('Y-m-d');
         $result->calendarAvailable = true;
-        $result->remindersAvailable = $this->areAgendaRemindersEnabled();
         $result->eventStartDate = new DateTime();
         $result->eventEndDate = (new DateTime())->modify('+1 hour');
         $result->attachmentsEnabled = !$this->isSettingEnabled(
@@ -359,15 +358,6 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
             $siteName,
             $since,
         );
-    }
-
-    private function areAgendaRemindersEnabled(): bool
-    {
-        if (!\function_exists('api_get_configuration_value')) {
-            return false;
-        }
-
-        return true === api_get_configuration_value('agenda_reminders');
     }
 
     private function translate(string $message): string

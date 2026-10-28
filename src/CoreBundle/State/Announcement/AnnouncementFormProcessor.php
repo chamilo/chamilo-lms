@@ -203,7 +203,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
                 $course,
                 $session,
                 $group,
-                $this->areAgendaRemindersEnabled() ? $this->normalizeReminders($data->reminders) : [],
+                $this->normalizeReminders($data->reminders),
             );
         }
 
@@ -226,7 +226,6 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         $response->scheduleDate = $data->scheduleDate;
         $response->scheduleMinimumDate = (new DateTimeImmutable('today'))->format('Y-m-d');
         $response->calendarAvailable = true;
-        $response->remindersAvailable = $this->areAgendaRemindersEnabled();
         $response->addToCalendar = false;
         $response->eventStartDate = $data->eventStartDate;
         $response->eventEndDate = $data->eventEndDate;
@@ -324,10 +323,6 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The calendar event end date must be after its start date.');
         }
 
-        if (!$this->areAgendaRemindersEnabled() && [] !== $form->reminders) {
-            throw new AccessDeniedHttpException('Calendar reminders are disabled.');
-        }
-
         $this->normalizeReminders($form->reminders);
     }
 
@@ -398,15 +393,6 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         }
 
         return $announcement;
-    }
-
-    private function areAgendaRemindersEnabled(): bool
-    {
-        if (!\function_exists('api_get_configuration_value')) {
-            return false;
-        }
-
-        return true === api_get_configuration_value('agenda_reminders');
     }
 
     private function sanitizeTitle(string $title): string

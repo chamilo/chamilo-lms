@@ -274,10 +274,7 @@
                     />
                   </div>
 
-                  <CalendarRemindersEditor
-                    v-if="form.remindersAvailable"
-                    v-model="form"
-                  />
+                  <CalendarRemindersEditor v-model="form" />
                 </div>
               </div>
 
@@ -491,7 +488,6 @@ const form = ref({
   scheduleDate: "",
   scheduleMinimumDate: "",
   calendarAvailable: false,
-  remindersAvailable: false,
   addToCalendar: false,
   eventStartDate: null,
   eventEndDate: null,
@@ -640,7 +636,6 @@ async function loadForm() {
       scheduleDate: response.scheduleDate || "",
       scheduleMinimumDate: response.scheduleMinimumDate || "",
       calendarAvailable: Boolean(response.calendarAvailable),
-      remindersAvailable: Boolean(response.remindersAvailable),
       addToCalendar: Boolean(response.addToCalendar),
       eventStartDate: response.eventStartDate ? new Date(response.eventStartDate) : null,
       eventEndDate: response.eventEndDate ? new Date(response.eventEndDate) : null,
@@ -725,13 +720,12 @@ function buildPayload() {
     addToCalendar: form.value.calendarAvailable && form.value.addToCalendar,
     eventStartDate: form.value.addToCalendar ? serializeDateTime(form.value.eventStartDate) : null,
     eventEndDate: form.value.addToCalendar ? serializeDateTime(form.value.eventEndDate) : null,
-    reminders:
-      form.value.addToCalendar && form.value.remindersAvailable
-        ? form.value.reminders.map((reminder) => ({
-            count: Number(reminder.count || 0),
-            period: reminder.period || "i",
-          }))
-        : [],
+    reminders: form.value.addToCalendar
+      ? form.value.reminders.map((reminder) => ({
+          count: Number(reminder.count || 0),
+          period: reminder.period || "i",
+        }))
+      : [],
   }
 }
 
@@ -890,7 +884,6 @@ async function saveAnnouncement() {
 
     if (form.value.addToCalendar) {
       form.value.calendarAvailable = Boolean(response?.calendarAvailable ?? true)
-      form.value.remindersAvailable = Boolean(response?.remindersAvailable)
       form.value.addToCalendar = false
       form.value.eventStartDate = null
       form.value.eventEndDate = null

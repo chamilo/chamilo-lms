@@ -7502,11 +7502,15 @@ class Tracking
             $lastConnection = $value['max'];
         }
 
-        // Only the columns actually read below are selected: user_agent, url,
+        // Only the columns actually read below are selected: user_agent,
         // ip_user, info, ch_sid, user_id, c_id and session_id are not used here
         // and can be sizeable per row, which matters given how many rows a
         // single user/course/session triple can accumulate over time.
-        $sql = "SELECT id, date_reg, current_id, tool, tool_id, tool_id_detail, action, action_details
+        // LearnpathQuizTimeCalculator only needs the script name of the url
+        // (to recognize the introduction page of a standalone quiz), not the
+        // whole url with its query string, so only that part is selected.
+        $sql = "SELECT id, date_reg, current_id, tool, tool_id, tool_id_detail, action, action_details,
+                    SUBSTRING_INDEX(SUBSTRING_INDEX(url, '?', 1), '/', -1) AS url
                 FROM track_e_access_complete
                 WHERE
                     user_id = $userId AND

@@ -112,6 +112,22 @@ final class LearnpathQuizTimeCalculatorTest extends TestCase
         );
     }
 
+    public function testStandaloneIntroductionIsRecognizedFromTheScriptNameOnly(): void
+    {
+        // Tracking::getCalculateTime() only selects the script name of the url.
+        $events = [
+            $this->event(0, 55, '', '', 'overview.php'),
+            $this->event(60, 55, '', '', 'exercise_submit.php'),
+            $this->event(5000, 55, '', '', 'overview.php'),
+            $this->event(5030, 55, '', '', 'exercise_submit.php'),
+        ];
+
+        $this->assertSame(
+            ['quiz_time' => 90, 'learnpath_time' => []],
+            LearnpathQuizTimeCalculator::calculate($events)
+        );
+    }
+
     /**
      * @param int|string $action
      * @param int|string $learnpathId

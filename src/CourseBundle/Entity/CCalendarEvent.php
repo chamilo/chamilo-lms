@@ -141,6 +141,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Reso
     #[ORM\Column(name: 'all_day', type: 'boolean', nullable: false)]
     protected bool $allDay;
 
+    #[Groups(['calendar_event:write', 'calendar_event:read'])]
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 

@@ -489,6 +489,7 @@ function buildDefaultEventItem() {
   return {
     title: "",
     content: "",
+    comment: "",
     allDay: false,
     startDate: now,
     endDate: end,
@@ -600,6 +601,7 @@ async function hydrateEventForEdition() {
       ...fullEvent,
       title: fullEvent.title ?? item.value.title ?? "",
       content: fullEvent.content ?? item.value.content ?? "",
+      comment: fullEvent.comment ?? "",
       color: normalizeHex(fullEvent.color ?? item.value.color) || defaultColorByContext(currentContext.value),
       room: normalizeRelationValueForSelect(fullEvent.room ?? item.value.room),
       career: normalizeRelationValueForSelect(fullEvent.career ?? item.value.career),

@@ -58,6 +58,8 @@ class CalendarEvent extends AbstractResource
         public ?string $type = null,
         #[Groups(['calendar_event:read'])]
         public ?array $room = null,
+        #[Groups(['calendar_event:read'])]
+        public ?string $comment = null,
     ) {}
 
     public function getType(): ?string

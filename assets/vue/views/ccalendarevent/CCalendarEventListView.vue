@@ -162,6 +162,14 @@
                   {{ ev.content }}
                 </div>
 
+                <div
+                  v-if="ev.comment"
+                  class="mt-2 text-sm text-gray-90 whitespace-pre-line"
+                >
+                  <strong>{{ t("Comment") }}:</strong>
+                  {{ ev.comment }}
+                </div>
+
                 <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-gray-50">
                   <span
                     v-if="ev.scope"
@@ -612,6 +620,7 @@ function mapToBaseItem(e) {
     keyBase: e?.id || payload?.["@id"] || payload?.id || `${title}-${start?.toISO() || ""}`,
     title,
     content,
+    comment: payload?.comment || "",
     color,
     url: e?.url || payload?.url || null,
     scope: scopeLabel(scopeRawLower),

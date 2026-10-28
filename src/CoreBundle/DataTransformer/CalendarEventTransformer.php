@@ -66,6 +66,7 @@ readonly class CalendarEventTransformer
         );
 
         $calendarEvent->setType($eventType);
+        $calendarEvent->comment = $object->getComment();
 
         if ($object->getRoom()) {
             $room = $object->getRoom();

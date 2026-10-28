@@ -15,15 +15,6 @@
           @click="courseIntroEl.goToCreateOrUpdate()"
         />
 
-        <BaseButton
-          v-if="isAllowedToEdit"
-          :label="t('Reporting')"
-          :route="reportingRoute"
-          icon="tracking"
-          only-icon
-          type="black"
-        />
-
         <RoomFloorPlanViewer
           v-if="course?.id"
           :course-id="course.id"
@@ -46,6 +37,15 @@
             :model="courseItems"
           />
         </template>
+
+        <BaseButton
+          v-if="isAllowedToEdit"
+          :label="t('Reporting')"
+          :route="reportingRoute"
+          icon="tracking"
+          only-icon
+          type="black"
+        />
       </SectionHeader>
 
       <p

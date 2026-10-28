@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -8803,6 +8804,28 @@ document.addEventListener("DOMContentLoaded", function () {
         return api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/view/'.$announcementId.'?'.http_build_query($query);
     }
 
+    /**
+     * The course agenda opened on the day of the event, with the event shown.
+     */
+    private static function buildVueCalendarEventLearningPathUrl(int $courseId, int $sessionId, int $eventId): string
+    {
+        $event = $eventId > 0 ? Container::getCalendarEventRepository()->find($eventId) : null;
+        if ($courseId <= 0 || !$event instanceof CCalendarEvent || null === $event->getStartDate()) {
+            return '';
+        }
+
+        $query = [
+            'cid' => $courseId,
+            'sid' => $sessionId,
+            'gid' => api_get_group_id(),
+            'date' => api_get_local_time($event->getStartDate(), null, null, false, false, false, 'Y-m-d'),
+            'view' => 'timeGridDay',
+            'event' => $eventId,
+        ];
+
+        return api_get_path(WEB_PATH).'resources/ccalendarevent?'.http_build_query($query);
+    }
+
     private static function buildVueSurveyLearningPathUrl(
         int $courseId,
         int $sessionId,
@@ -8872,7 +8895,7 @@ document.addEventListener("DOMContentLoaded", function () {
             case 'dir':
                 return $main_dir_path.'lp/blank.php';
             case TOOL_CALENDAR_EVENT:
-                return $main_dir_path.'calendar/agenda.php?agenda_id='.$id.'&'.$extraParams;
+                return self::buildVueCalendarEventLearningPathUrl((int) $course_id, (int) $session_id, (int) $id);
             case TOOL_ANNOUNCEMENT:
                 $announcementUrl = self::buildVueAnnouncementLearningPathUrl(
                     (int) $course_id,

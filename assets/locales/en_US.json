@@ -4643,5 +4643,8 @@
     "Color theme (preview)": "Color theme (preview)",
     "The themes storage is not writable. Check its file permissions before saving.": "The themes storage is not writable. Check its file permissions before saving.",
     "Audio comment": "Audio commentary",
-    "The recording will be saved with the correction.": "The recording will be saved with the correction."
+    "The recording will be saved with the correction.": "The recording will be saved with the correction.",
+    "Create linked exercise": "Create linked exercise",
+    "Questions will be shared between both exercises. Editing a shared question affects both exercises. Continue?": "Questions will be shared between both exercises. Editing a shared question affects both exercises. Continue?",
+    "Linked exercise created": "Linked exercise created"
 }

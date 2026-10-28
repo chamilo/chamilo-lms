@@ -43205,3 +43205,12 @@ msgstr ""
 
 msgid "The recording will be saved with the correction."
 msgstr ""
+
+msgid "Create linked exercise"
+msgstr ""
+
+msgid "Questions will be shared between both exercises. Editing a shared question affects both exercises. Continue?"
+msgstr ""
+
+msgid "Linked exercise created"
+msgstr ""

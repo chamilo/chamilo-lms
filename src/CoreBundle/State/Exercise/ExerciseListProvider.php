@@ -492,6 +492,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
             'canReport' => $canManage && (!$isLimitTeacherAccess || $this->security->isGranted('ROLE_ADMIN')),
             'canExport' => $canManage && $canRunRestrictedActions,
             'canCopy' => $canManage,
+            'canLinkQuestions' => $canManage && 1 !== (int) $quiz->getFeedbackType(),
             'canDelete' => $canManage && $canRunRestrictedActions && !$isGradebookLocked,
             'canDeleteDisabled' => $canManage && $canRunRestrictedActions && $isGradebookLocked,
             'canCleanResults' => $canManage && $canCleanResults && !$isGradebookLocked,

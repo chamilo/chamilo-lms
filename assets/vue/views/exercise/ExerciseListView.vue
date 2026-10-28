@@ -392,6 +392,15 @@
                 @click="confirmCopyExercise(data)"
               />
               <BaseButton
+                v-if="data.canLinkQuestions"
+                :label="t('Create linked exercise')"
+                icon="link"
+                only-icon
+                size="small"
+                type="secondary-text"
+                @click="confirmCreateLinkedExercise(data)"
+              />
+              <BaseButton
                 v-if="data.canCleanResults"
                 :label="t('Clear all learners results for this exercise')"
                 :icon="safeIcon('clean-all', 'broom')"
@@ -870,6 +879,16 @@ function confirmCopyExercise(exercise) {
     title: t("Copy exercise"),
     message: `${t("Are you sure to copy")} ${displayText(exercise.title, t("Untitled"))}?`,
     accept: () => runExerciseAction(exercise, "copy"),
+  })
+}
+
+function confirmCreateLinkedExercise(exercise) {
+  requireConfirmation({
+    title: t("Create linked exercise"),
+    message: t(
+      "Questions will be shared between both exercises. Editing a shared question affects both exercises. Continue?",
+    ),
+    accept: () => runExerciseAction(exercise, "copy_linked"),
   })
 }
 

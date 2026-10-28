@@ -42,6 +42,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final readonly class ExerciseListActionProcessor implements ProcessorInterface
 {
     private const ACTION_COPY = 'copy';
+    private const ACTION_COPY_LINKED = 'copy_linked';
     private const ACTION_DELETE = 'delete';
     private const ACTION_TOGGLE_VISIBILITY = 'toggle_visibility';
     private const ACTION_TOGGLE_AUTO_LAUNCH = 'toggle_auto_launch';
@@ -122,6 +123,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
 
         $message = match ($action) {
             self::ACTION_COPY => $this->copyExercise($quiz, $course, $session),
+            self::ACTION_COPY_LINKED => $this->createLinkedExercise($quiz, $course, $session),
             self::ACTION_DELETE => $this->deleteExercise($quiz, $course, $session),
             self::ACTION_TOGGLE_VISIBILITY => $this->toggleVisibility($quiz, $course, $session),
             self::ACTION_TOGGLE_AUTO_LAUNCH => $this->toggleAutoLaunch($quiz, $course, $session),
@@ -293,6 +295,39 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
         }
 
         return 'Exercise copied';
+    }
+
+    private function createLinkedExercise(CQuiz $sourceQuiz, Course $course, ?Session $session): string
+    {
+        // Reuse is intentionally unavailable for direct feedback exercises, as in the question bank.
+        if (1 === (int) $sourceQuiz->getFeedbackType()) {
+            throw new BadRequestHttpException('Question reuse is not available for direct feedback exercises.');
+        }
+
+        $this->entityManager->wrapInTransaction(function () use ($sourceQuiz, $course, $session): void {
+            $newQuiz = new CQuiz();
+            $this->copyExerciseFields($sourceQuiz, $newQuiz);
+            $newQuiz
+                ->setTitle(trim($sourceQuiz->getTitle()).' - Linked')
+                ->setParent($course)
+                ->addCourseLink($course, $session)
+            ;
+
+            $this->quizRepository->create($newQuiz);
+
+            foreach ($this->getQuestionRelations($sourceQuiz) as $relation) {
+                $newRelation = new CQuizRelQuestion();
+                $newRelation
+                    ->setQuiz($newQuiz)
+                    ->setQuestion($relation->getQuestion())
+                    ->setQuestionOrder((int) $relation->getQuestionOrder())
+                    ->setDestination($relation->getDestination())
+                ;
+                $this->entityManager->persist($newRelation);
+            }
+        });
+
+        return 'Linked exercise created';
     }
 
     private function copyExerciseFields(CQuiz $sourceQuiz, CQuiz $newQuiz): void

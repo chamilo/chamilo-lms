@@ -841,3 +841,6 @@ $strings['BtcPayApiKeySaved'] = 'API key saved';
 $strings['BtcPayApiKeyNotSaved'] = 'API key not saved';
 $strings['BtcPayWebhookSecretSaved'] = 'Webhook secret saved';
 $strings['BtcPayWebhookSecretNotSaved'] = 'Webhook secret not saved';
+
+$strings['AiCourseFeatureToolboxTitle'] = 'AI Toolbox';
+$strings['AiCourseFeatureToolboxDescription'] = 'Allow teachers to generate interactive educational applications with AI.';

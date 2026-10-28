@@ -27,6 +27,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
@@ -1070,7 +1071,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         }
 
         if ($resource instanceof CToolbox) {
-            if (!$this->settingEnabled('ai_helpers.enable_ai_helpers') || !$this->settingEnabled('ai_helpers.toolbox')) {
+            if (!(new AiFeatureAccessHelper($this->settingsManager))->isToolboxEnabledForCourse((int) $course->getId())) {
                 throw new AccessDeniedHttpException('Toolbox is disabled.');
             }
 

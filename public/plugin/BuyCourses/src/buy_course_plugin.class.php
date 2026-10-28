@@ -148,6 +148,7 @@ class BuyCoursesPlugin extends Plugin
     public const AI_COURSE_FEATURE_IMAGE_GENERATOR = 'image_generator';
     public const AI_COURSE_FEATURE_GLOSSARY_TERMS_GENERATOR = 'glossary_terms_generator';
     public const AI_COURSE_FEATURE_COURSE_ANALYSER = 'course_analyser';
+    public const AI_COURSE_FEATURE_TOOLBOX = 'toolbox';
     public const AI_COURSE_FEATURE_VIDEO_GENERATOR = 'video_generator';
 
     /**
@@ -1646,6 +1647,11 @@ class BuyCoursesPlugin extends Plugin
                 'variable' => self::AI_COURSE_FEATURE_COURSE_ANALYSER,
                 'title' => $this->get_lang('AiCourseFeatureCourseAnalyserTitle'),
                 'description' => $this->get_lang('AiCourseFeatureCourseAnalyserDescription'),
+            ],
+            self::AI_COURSE_FEATURE_TOOLBOX => [
+                'variable' => self::AI_COURSE_FEATURE_TOOLBOX,
+                'title' => $this->get_lang('AiCourseFeatureToolboxTitle'),
+                'description' => $this->get_lang('AiCourseFeatureToolboxDescription'),
             ],
             self::AI_COURSE_FEATURE_VIDEO_GENERATOR => [
                 'variable' => self::AI_COURSE_FEATURE_VIDEO_GENERATOR,

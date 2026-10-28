@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Toolbox;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -18,13 +19,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 trait ToolboxAccessHelperTrait
 {
-    private function isToolboxEnabled(SettingsManager $settingsManager): bool
+    private function isToolboxEnabled(SettingsManager $settingsManager, int $courseId): bool
     {
-        $master = strtolower(trim((string) $settingsManager->getSetting('ai_helpers.enable_ai_helpers', true)));
-        $feature = strtolower(trim((string) $settingsManager->getSetting('ai_helpers.toolbox', true)));
-
-        return \in_array($master, ['1', 'true', 'yes', 'on'], true)
-            && \in_array($feature, ['1', 'true', 'yes', 'on'], true);
+        return (new AiFeatureAccessHelper($settingsManager))->isToolboxEnabledForCourse($courseId);
     }
 
     private function canManageToolbox(Security $security, StudentViewHelper $studentViewHelper): bool

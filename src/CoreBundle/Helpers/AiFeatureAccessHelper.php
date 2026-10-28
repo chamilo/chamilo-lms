@@ -27,11 +27,25 @@ final readonly class AiFeatureAccessHelper
         'glossary_terms_generator',
         'video_generator',
         'course_analyser',
+        'toolbox',
     ];
 
     public function __construct(
         private SettingsManager $settingsManager,
     ) {}
+
+    public function isToolboxEnabledForCourse(int $courseId): bool
+    {
+        if (!$this->isMasterEnabled()) {
+            return false;
+        }
+
+        return match ($this->getFeatureMode('toolbox')) {
+            self::MODE_ENABLED => true,
+            self::MODE_PLUGIN_DEFINED => $courseId > 0 && $this->hasActiveBuyCoursesFeature($courseId, 'toolbox'),
+            default => false,
+        };
+    }
 
     public function isFeatureConfigurableForCourse(string $feature, int $courseId): bool
     {

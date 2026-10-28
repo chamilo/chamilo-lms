@@ -29,6 +29,7 @@ use Chamilo\CoreBundle\Controller\Api\DocumentUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadAllDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\MoveDocumentAction;
+use Chamilo\CoreBundle\Controller\Api\MoveSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
@@ -77,6 +78,49 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(summary: 'Move document (context-aware using ResourceLink.parent)'),
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
+        ),
+        new Post(
+            uriTemplate: '/documents/move-selected',
+            controller: MoveSelectedDocumentsAction::class,
+            openapi: new Operation(
+                summary: 'Move selected documents to a folder within the same course context.',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'required' => ['ids', 'parentResourceNodeId'],
+                                'properties' => [
+                                    'ids' => [
+                                        'type' => 'array',
+                                        'items' => ['type' => 'integer'],
+                                    ],
+                                    'parentResourceNodeId' => ['type' => 'integer'],
+                                ],
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Group identifier',
+                ),
+            ],
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            read: false,
+            deserialize: false,
+            output: false,
         ),
         new Post(
             uriTemplate: '/documents/{iid}/replace',

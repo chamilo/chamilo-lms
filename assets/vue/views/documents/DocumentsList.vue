@@ -373,6 +373,13 @@
     />
     <BaseButton
       :disabled="!selectedItems || !selectedItems.length"
+      :label="t('Move')"
+      icon="folder-move"
+      type="secondary"
+      @click="openMoveSelectedDialog"
+    />
+    <BaseButton
+      :disabled="!selectedItems || !selectedItems.length"
       :label="t('Delete selected')"
       icon="delete"
       type="danger"
@@ -390,7 +397,7 @@
 
   <BaseDialogConfirmCancel
     v-model:is-visible="isMoveDialogVisible"
-    :title="t('Move document')"
+    :title="isBulkMove ? t('Move') : t('Move document')"
     @confirm-clicked="moveDocument"
     @cancel-clicked="isMoveDialogVisible = false"
   >
@@ -825,6 +832,8 @@ const { relativeDatetime } = useFormatDate()
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 const folders = ref([])
 const selectedFolder = ref(null)
+const isBulkMove = ref(false)
+const isMoving = ref(false)
 const isDownloading = ref(false)
 const isDeleteWarningLpDialogVisible = ref(false)
 const lpListWarning = ref([])
@@ -1780,62 +1789,45 @@ function getDocumentsRootNodeId() {
   return normalizeResourceNodeId(node?.id) || fallback
 }
 
-async function fetchFolders(nodeId = null, parentPath = "") {
+async function fetchFolders(nodeId = null) {
   const rootId = normalizeResourceNodeId(nodeId) ?? getDocumentsRootNodeId()
+  const foldersList = [{ label: t("Documents"), value: rootId }]
 
-  const foldersList = [
-    {
-      label: t("Documents"),
-      value: rootId,
-    },
-  ]
+  if (!rootId) return foldersList
 
   try {
-    const nodesToFetch = [{ id: rootId, path: parentPath }]
-    let depth = 0
-    const maxDepth = 10
+    const seenNodeIds = new Set([rootId])
+    const maxPages = 10
+    let page = 1
 
-    while (nodesToFetch.length > 0 && depth < maxDepth) {
-      const currentNode = nodesToFetch.shift()
-      const currentNodeId = normalizeResourceNodeId(currentNode?.id)
-
-      if (!currentNodeId) {
-        depth++
-        continue
-      }
-
-      const { items } = await documentsService.listDocuments({
-        loadNode: 1,
+    while (page <= maxPages) {
+      // Query the course folder collection once per page instead of once per folder.
+      const { items, nextPageParams } = await documentsService.listDocuments({
         filetype: ["folder"],
-        "resourceNode.parent": currentNodeId,
         cid: unref(cid),
         sid: unref(sid),
         gid: unref(gid),
-        page: 1,
+        page,
         itemsPerPage: 200,
       })
 
-      const members = items || []
+      for (const folder of items || []) {
+        if (folder.filetype !== "folder") continue
 
-      members.forEach((folder) => {
         const folderNodeId =
           normalizeResourceNodeId(folder?.resourceNode?.id) ?? normalizeResourceNodeId(folder?.resourceNodeId)
+        if (!folderNodeId || seenNodeIds.has(folderNodeId)) continue
 
-        if (!folderNodeId) {
-          return
-        }
-
-        const fullPath = `${currentNode.path}/${folder.title}`.replace(/^\/+/, "")
-
+        seenNodeIds.add(folderNodeId)
         foldersList.push({
-          label: fullPath,
+          label: String(folder.fullPath || folder.title || ""),
           value: folderNodeId,
         })
+      }
 
-        nodesToFetch.push({ id: folderNodeId, path: fullPath })
-      })
-
-      depth++
+      const nextPage = Number(nextPageParams?.page)
+      if (!Number.isSafeInteger(nextPage) || nextPage <= page) break
+      page = nextPage
     }
 
     return foldersList
@@ -1851,7 +1843,18 @@ async function loadAllFolders() {
 }
 
 async function openMoveDialog(document) {
+  if (isMoving.value) return
+  isBulkMove.value = false
   item.value = document
+  selectedFolder.value = null
+  await loadAllFolders()
+  isMoveDialogVisible.value = true
+}
+
+async function openMoveSelectedDialog() {
+  if (isMoving.value || !selectedItems.value.length) return
+  isBulkMove.value = true
+  item.value = {}
   selectedFolder.value = null
   await loadAllFolders()
   isMoveDialogVisible.value = true
@@ -1866,27 +1869,45 @@ async function moveDocument() {
       return
     }
 
-    const currentParentId =
-      normalizeResourceNodeId(item.value?.resourceNode?.parent?.id) ??
-      normalizeResourceNodeId(item.value?.resourceNode?.parent)
+    if (isMoving.value) return
+    isMoving.value = true
 
-    if (currentParentId && String(currentParentId) === String(parentId)) {
-      notification.showErrorNotification(t("The document is already in this folder"))
-      return
+    const context = { cid: unref(cid), sid: unref(sid), gid: unref(gid) }
+
+    if (isBulkMove.value) {
+      const documents = selectedItems.value.filter((document) => canEdit(document))
+      if (documents.length !== selectedItems.value.length) {
+        notification.showErrorNotification(t("Error moving the document"))
+        return
+      }
+
+      await documentsService.moveSelectedDocuments(
+        documents.map((document) => document.iid),
+        parentId,
+        context,
+      )
+      unselectAll()
+    } else {
+      const currentParentId =
+        normalizeResourceNodeId(item.value?.resourceNode?.parent?.id) ??
+        normalizeResourceNodeId(item.value?.resourceNode?.parent)
+
+      if (currentParentId && String(currentParentId) === String(parentId)) {
+        notification.showErrorNotification(t("The document is already in this folder"))
+        return
+      }
+
+      await documentsService.moveDocument(item.value.iid, parentId, context)
     }
 
-    await documentsService.moveDocument(item.value.iid, parentId, {
-      cid: unref(cid),
-      sid: unref(sid),
-      gid: unref(gid),
-    })
-
-    notification.showSuccessNotification(t("Document moved successfully"))
+    notification.showSuccessNotification(isBulkMove.value ? t("Saved") : t("Document moved successfully"))
     isMoveDialogVisible.value = false
     triggerTableLoad()
   } catch (error) {
     console.error("[Documents] Error moving document:", error.response || error)
-    notification.showErrorNotification(t("Error moving the document"))
+    notification.showErrorNotification(error?.response?.data?.detail || t("Error moving the document"))
+  } finally {
+    isMoving.value = false
   }
 }
 

@@ -29,7 +29,8 @@ class CCalendarEventRepeat
     #[ORM\Column(name: 'cal_type', type: 'string', length: 20, nullable: true)]
     protected ?string $calType = null;
 
-    #[ORM\Column(name: 'cal_end', type: 'integer', nullable: true)]
+    // A timestamp; a 32-bit integer stops in January 2038.
+    #[ORM\Column(name: 'cal_end', type: 'bigint', nullable: true)]
     protected ?int $calEnd = null;
 
     #[ORM\Column(name: 'cal_frequency', type: 'integer', nullable: true)]

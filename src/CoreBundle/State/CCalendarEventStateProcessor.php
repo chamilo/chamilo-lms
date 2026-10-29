@@ -175,7 +175,7 @@ final class CCalendarEventStateProcessor implements ProcessorInterface
             (new CCalendarEventRepeat())
                 ->setEvent($event)
                 ->setCalType($type)
-                ->setCalEnd($lastDay->getTimestamp())
+                ->setCalEnd(DateTime::createFromImmutable($lastDay->setTimezone($utc)))
         );
     }
 

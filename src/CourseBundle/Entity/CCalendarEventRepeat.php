@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -29,9 +30,9 @@ class CCalendarEventRepeat
     #[ORM\Column(name: 'cal_type', type: 'string', length: 20, nullable: true)]
     protected ?string $calType = null;
 
-    // A timestamp; a 32-bit integer stops in January 2038.
-    #[ORM\Column(name: 'cal_end', type: 'bigint', nullable: true)]
-    protected ?int $calEnd = null;
+    // The last moment at which a repetition can start, in UTC.
+    #[ORM\Column(name: 'cal_end', type: 'datetime', nullable: true)]
+    protected ?DateTime $calEnd = null;
 
     #[ORM\Column(name: 'cal_frequency', type: 'integer', nullable: true)]
     protected ?int $calFrequency = null;
@@ -56,19 +57,14 @@ class CCalendarEventRepeat
         return $this->calType;
     }
 
-    public function setCalEnd(int $calEnd): self
+    public function setCalEnd(DateTime $calEnd): self
     {
         $this->calEnd = $calEnd;
 
         return $this;
     }
 
-    /**
-     * Get calEnd.
-     *
-     * @return int
-     */
-    public function getCalEnd()
+    public function getCalEnd(): ?DateTime
     {
         return $this->calEnd;
     }

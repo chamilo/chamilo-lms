@@ -117,8 +117,8 @@ final class CCalendarEventAttachmentApiTest extends AbstractApiTest
     }
 
     /**
-     * @param array{course: Course, teacher: User} $ctx
-     * @param array<string, int>                   $link
+     * @param array{course: Course, teacher: User, ...} $ctx
+     * @param array<string, int>                        $link
      */
     private function createEvent(array $ctx, string $title, array $link = []): int
     {

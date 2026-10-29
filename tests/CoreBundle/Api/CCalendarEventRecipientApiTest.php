@@ -241,8 +241,8 @@ final class CCalendarEventRecipientApiTest extends AbstractApiTest
     }
 
     /**
-     * @param array{course: Course, teacher: User} $ctx
-     * @param array<string, int>                   $recipient the uid or gid of the link
+     * @param array{course: Course, teacher: User, ...} $ctx
+     * @param array<string, int>                        $recipient the uid or gid of the link
      */
     private function createEvent(array $ctx, string $title, array $recipient = []): void
     {
@@ -273,8 +273,8 @@ final class CCalendarEventRecipientApiTest extends AbstractApiTest
     }
 
     /**
-     * @param array{course: Course, teacher: User} $ctx
-     * @param list<array<string, int>>             $recipients
+     * @param array{course: Course, teacher: User, ...} $ctx
+     * @param list<array<string, int>>                  $recipients
      */
     private function updateRecipients(array $ctx, string $title, array $recipients): void
     {

@@ -81,7 +81,7 @@ final class CCalendarEventCommentApiTest extends AbstractApiTest
     }
 
     /**
-     * @param array{course: Course, teacher: User} $ctx
+     * @param array{course: Course, teacher: User, ...} $ctx
      */
     private function createEvent(array $ctx, string $title, string $comment): void
     {

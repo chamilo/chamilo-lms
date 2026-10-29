@@ -25,6 +25,9 @@ class CreatePersonalFileAction extends BaseResourceFileAction
         private readonly UserHelper $userHelper,
     ) {}
 
+    /**
+     * @psalm-suppress InvalidArgument Psalm cannot bind the interface template T of wrapInTransaction() on the concrete EntityManager
+     */
     public function __invoke(Request $request, PersonalFileRepository $repo, EntityManager $em, CidReqHelper $cidReqHelper): PersonalFile
     {
         if ('false' === $this->settingsManager->getSetting('platform.allow_my_files', true)) {

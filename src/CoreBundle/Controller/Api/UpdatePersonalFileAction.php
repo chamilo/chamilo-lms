@@ -21,6 +21,9 @@ class UpdatePersonalFileAction extends BaseResourceFileAction
         private readonly StorageQuotaService $storageQuotaService,
     ) {}
 
+    /**
+     * @psalm-suppress InvalidArgument Psalm cannot bind the interface template T of wrapInTransaction() on the concrete EntityManager
+     */
     public function __invoke(PersonalFile $resource, Request $request, PersonalFileRepository $repo, EntityManager $em): PersonalFile
     {
         if ('false' === $this->settingsManager->getSetting('platform.allow_my_files', true)) {

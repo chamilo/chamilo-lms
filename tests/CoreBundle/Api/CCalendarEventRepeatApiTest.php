@@ -119,9 +119,9 @@ final class CCalendarEventRepeatApiTest extends AbstractApiTest
     }
 
     /**
-     * @param array{course: Course, teacher: User} $ctx
-     * @param array<string, string>                $repeat
-     * @param array<string, int>                   $link
+     * @param array{course: Course, teacher: User, ...} $ctx
+     * @param array<string, string>                     $repeat
+     * @param array<string, int>                        $link
      */
     private function createEvent(array $ctx, string $title, array $repeat, array $link = []): void
     {
@@ -144,7 +144,7 @@ final class CCalendarEventRepeatApiTest extends AbstractApiTest
     }
 
     /**
-     * @param array{course: Course, teacher: User} $ctx
+     * @param array{course: Course, teacher: User, ...} $ctx
      */
     private function deleteEvent(array $ctx, string $title, string $startDate, bool $wholeSeries): void
     {

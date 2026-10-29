@@ -203,9 +203,10 @@ class UsergroupAddUsersController extends AbstractController
             ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
             ExtraField::FIELD_TYPE_TAG,
         ];
+        $isChoiceField = \in_array($fieldType, $choiceTypes, true);
 
         // Do not accept arbitrary values for choice fields, even when the caller skips the UI.
-        if (\in_array($fieldType, $choiceTypes, true)) {
+        if ($isChoiceField) {
             $allowed = array_column($this->getExtraFieldOptions($field), 'value');
             if (!\in_array($value, $allowed, true)) {
                 return $this->json(['error' => 'Invalid extra field option'], Response::HTTP_BAD_REQUEST);
@@ -220,7 +221,7 @@ class UsergroupAddUsersController extends AbstractController
             ->innerJoin(ExtraFieldValues::class, 'efv', Join::WITH, 'efv.itemId = u.id AND efv.field = :field')
             ->where('u.status != :anonymous')
             ->andWhere('u.active != :softDeleted')
-            ->setParameter('field', $field)
+            ->setParameter('field', (int) $field->getId())
             ->setParameter('anonymous', User::ANONYMOUS, Types::INTEGER)
             ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
         ;
@@ -231,7 +232,7 @@ class UsergroupAddUsersController extends AbstractController
             $qb->andWhere("LOCATE(:optionToken, CONCAT(';', CONCAT(efv.fieldValue, ';'))) > 0")
                 ->setParameter('optionToken', ';'.$value.';')
             ;
-        } elseif (\in_array($fieldType, $choiceTypes, true) || ExtraField::FIELD_TYPE_CHECKBOX === $fieldType) {
+        } elseif ($isChoiceField || ExtraField::FIELD_TYPE_CHECKBOX === $fieldType) {
             $qb->andWhere('efv.fieldValue = :value')
                 ->setParameter('value', $value)
             ;

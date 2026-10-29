@@ -128,6 +128,7 @@ final class StorageQuotaServiceTest extends AbstractApiTest
         $course = $this->newCourse();
         $quota = $this->quotaService([]);
 
+        /** @psalm-suppress InvalidArgument Psalm cannot bind the interface template T of wrapInTransaction() on the concrete EntityManager */
         $result = $this->getEntityManager()->wrapInTransaction(
             static function () use ($quota, $course, $user): bool {
                 $quota->lockCourse($course);

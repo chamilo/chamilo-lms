@@ -137,6 +137,14 @@
       </div>
     </template>
 
+    <BaseCheckbox
+      v-if="showAddAnnouncement"
+      id="calendar-event-add-announcement"
+      v-model="item.addAnnouncement"
+      :label="`${t('Add an announcement')} (${t('Send mail')})`"
+      name="add_announcement"
+    />
+
     <CalendarInvitations v-model="item" />
 
     <CalendarRemindersEditor
@@ -257,6 +265,11 @@ const repeatTypeOptions = computed(() => [
   { label: t("Monthly, by date"), value: "monthlyByDate" },
   { label: t("Yearly"), value: "yearly" },
 ])
+
+// As in the legacy agenda, teachers can also publish a new course event as an announcement.
+const showAddAnnouncement = computed(
+  () => !item.value?.["@id"] && Number(route.query.cid ?? 0) > 0 && securityStore.isCurrentTeacher,
+)
 
 const showCareerPromotionFields = computed(() => {
   return props.isGlobal && props.allowCareerPromotionFields

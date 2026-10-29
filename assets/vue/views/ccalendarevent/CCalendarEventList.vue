@@ -167,6 +167,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import baseService from "../../services/baseService"
+import announcementService from "../../services/announcementService"
 
 const store = useStore()
 const securityStore = useSecurityStore()
@@ -504,6 +505,7 @@ function buildDefaultEventItem() {
     color: defaultColorByContext(currentContext?.value ?? "personal"),
     career: null,
     promotion: null,
+    addAnnouncement: false,
   }
 }
 
@@ -964,6 +966,41 @@ function buildCourseRecipientLinks(recipients) {
   }))
 }
 
+/**
+ * Creates a course announcement for the recipients of a new event and sends it by email, as the
+ * "Add an announcement" option of the legacy agenda did.
+ *
+ * @param {Object} event
+ * @param {Array<{uid?: number, gid?: number}>|undefined} recipients
+ * @returns {Promise<void>}
+ */
+async function publishEventAsAnnouncement(event, recipients) {
+  const params = { cid: course.value.id, sid: session.value?.id ?? 0, gid: Number(route.query.gid ?? 0) }
+  const announcementRecipients =
+    Array.isArray(recipients) && recipients.length
+      ? recipients.map((recipient) => (recipient.gid ? `GROUP:${recipient.gid}` : `USER:${recipient.uid}`))
+      : ["everyone"]
+
+  try {
+    const announcement = await announcementService.create(
+      {
+        title: event.title,
+        // The announcement requires a description; the event may have none.
+        content: event.content || event.title,
+        recipients: announcementRecipients,
+        sendByEmail: true,
+      },
+      params,
+    )
+
+    await announcementService.sendEmail(announcement.id, { sendByEmail: true }, params)
+
+    showSuccessNotification(t("Additionally, a new announcement has been created and sent to selected users"))
+  } catch (error) {
+    showErrorNotification(error)
+  }
+}
+
 async function onCreateEventForm() {
   try {
     if (createForm.value.v$.$invalid) {
@@ -993,8 +1030,11 @@ async function onCreateEventForm() {
     } else {
       // Course event: bind only the visibility; the course context
       // (cid/sid/gid) is derived server-side from the gated session course.
+      const { addAnnouncement, courseRecipients } = itemModel
+      delete itemModel.addAnnouncement
+
       if (course.value) {
-        itemModel.resourceLinkList = buildCourseRecipientLinks(itemModel.courseRecipients)
+        itemModel.resourceLinkList = buildCourseRecipientLinks(courseRecipients)
         delete itemModel.courseRecipients
       }
 
@@ -1009,6 +1049,10 @@ async function onCreateEventForm() {
       }
 
       await store.dispatch("ccalendarevent/create", itemModel)
+
+      if (addAnnouncement && course.value && !store.state.ccalendarevent.error) {
+        await publishEventAsAnnouncement(itemModel, courseRecipients)
+      }
     }
 
     dialog.value = false
@@ -1019,7 +1063,7 @@ async function onCreateEventForm() {
   }
 }
 
-const { showSuccessNotification } = useNotification()
+const { showSuccessNotification, showErrorNotification } = useNotification()
 
 watch(
   () => route.query.recipient,

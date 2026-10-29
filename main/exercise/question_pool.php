@@ -23,6 +23,19 @@ $this_section = SECTION_COURSES;
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
+$extended = api_get_plugin_setting('extendedquestionpool', 'enable_plugin');
+
+if ($extended == 'true') {
+    $query = $_SERVER['QUERY_STRING'] ?? '';
+    $urlDest = 'question_pool_extended.php';
+
+    if (!empty($query)) {
+        $urlDest .= '?' . $query;
+    }
+    header('Location: ' . $urlDest);
+    exit;
+}
+
 $delete = isset($_GET['delete']) ? (int) $_GET['delete'] : null;
 $recup = isset($_GET['recup']) ? (int) $_GET['recup'] : null;
 $fromExercise = isset($_REQUEST['fromExercise']) ? (int) $_REQUEST['fromExercise'] : null;
@@ -510,7 +523,15 @@ $form->addHidden('course_id_changed', '0');
 $form->addHidden('exercise_id_changed', '0');
 
 $extraField = new ExtraField('question');
-$jsForExtraFields = $extraField->addElements($form, 0, [], true);
+$extendedExtraFields = array(
+            "additional_question_category",
+            "question_data1",
+            "question_data2",
+            "question_data3",
+            "question_extra_info"
+        );
+$jsForExtraFields = $extraField->addElements($form, 0, $extendedExtraFields, true);
+
 
 $form->addButtonFilter(get_lang('Filter'), 'name');
 

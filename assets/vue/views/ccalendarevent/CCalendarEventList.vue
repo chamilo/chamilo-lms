@@ -630,6 +630,82 @@ async function openEditDialog() {
   dialog.value = true
 }
 
+/**
+ * Shows the dialog of a calendar event, as when the user clicks it.
+ *
+ * @param {Object} fcEvent the FullCalendar event
+ */
+function showEventDialog(fcEvent) {
+  currentEvent = fcEvent
+
+  const event = fcEvent.toPlainObject()
+
+  if (event.extendedProps["objectType"] && event.extendedProps["objectType"] === "session") {
+    allowToEdit.value =
+      allowUserEditAgenda.value && event.extendedProps.resourceNode.creator.id === securityStore.user.id
+    sessionState.sessionAsEvent = event
+    sessionState.showSessionDialog = true
+    return
+  }
+
+  if (event.extendedProps["objectType"] && event.extendedProps["objectType"] === "learning_calendar") {
+    item.value = {
+      ...event.extendedProps,
+      id: event.id,
+      title: event.title,
+      startDate: event.start ? new Date(event.start) : null,
+      endDate: event.end ? new Date(event.end) : null,
+      type: "personal",
+      resourceLinkListFromEntity: [],
+    }
+
+    allowToEdit.value = false
+    allowToSubscribe.value = false
+    allowToUnsubscribe.value = false
+    dialogShow.value = true
+
+    return
+  }
+
+  item.value = { ...event.extendedProps }
+
+  item.value["@id"] = "/api/c_calendar_events/" + event.id.match(/\d+$/)[0]
+  item.value.title = event.title
+  item.value.startDate = event.start ? new Date(event.start) : null
+  item.value.endDate = event.end ? new Date(event.end) : null
+  item.value.parentResourceNodeId = event.extendedProps?.resourceNode?.creator?.id
+  item.value.language = extractResourceLanguage(event.extendedProps)
+
+  const rawColor = event.extendedProps?.color ?? event.backgroundColor ?? event.borderColor ?? event.color ?? null
+  item.value.color = normalizeHex(rawColor) || defaultColorByContext(currentContext.value)
+
+  if (
+    !(route.query.sid === "0" && item.value.type === "session") &&
+    !(route.query.sid !== "0" && item.value.type === "course") &&
+    !(route.query.type === "global" && item.value.type !== "global") &&
+    !(!route.query.cid && !route.query.sid && !route.query.type && item.value.type !== "personal")
+  ) {
+    currentContext.value = item.value.type
+  }
+
+  allowToEdit.value =
+    (isEditableByUser(item.value, securityStore.user.id) ||
+      allowUserEditAgenda.value ||
+      securityStore.isCourseAdmin ||
+      securityStore.isSessionAdmin) &&
+    (event.extendedProps?.resourceNode?.creator?.id === securityStore.user.id || securityStore.isCourseAdmin)
+
+  allowToSubscribe.value = !allowToEdit.value && allowSubscribeToEvent(item.value)
+  allowToUnsubscribe.value = !allowToEdit.value && allowUnsubscribeToEvent(item.value, securityStore.user.id)
+
+  dialogShow.value = true
+}
+
+const calendarViews = ["dayGridMonth", "timeGridWeek", "timeGridDay"]
+// A link can open the agenda on a day, in a view, with one event shown (e.g. from a learning path).
+const requestedEventId = `calendar_event_${Number(route.query.event ?? 0)}`
+let requestedEventShown = !Number(route.query.event ?? 0)
+
 const calendarOptions = ref({
   timeZone: timezone,
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -641,7 +717,8 @@ const calendarOptions = ref({
     right: "dayGridMonth,timeGridWeek,timeGridDay",
   },
   nowIndicator: true,
-  initialView: "dayGridMonth",
+  initialView: calendarViews.includes(route.query.view) ? route.query.view : "dayGridMonth",
+  initialDate: DateTime.fromISO(String(route.query.date ?? "")).isValid ? route.query.date : undefined,
   startParam: "startDate[after]",
   endParam: "endDate[before]",
   selectable: true,
@@ -666,69 +743,16 @@ const calendarOptions = ref({
 
   eventClick(eventClickInfo) {
     eventClickInfo.jsEvent.preventDefault()
-    currentEvent = eventClickInfo.event
+    showEventDialog(eventClickInfo.event)
+  },
 
-    const event = eventClickInfo.event.toPlainObject()
+  eventsSet(events) {
+    const requestedEvent = requestedEventShown ? null : events.find((event) => requestedEventId === event.id)
 
-    if (event.extendedProps["objectType"] && event.extendedProps["objectType"] === "session") {
-      allowToEdit.value =
-        allowUserEditAgenda.value && event.extendedProps.resourceNode.creator.id === securityStore.user.id
-      sessionState.sessionAsEvent = event
-      sessionState.showSessionDialog = true
-      return
+    if (requestedEvent) {
+      requestedEventShown = true
+      showEventDialog(requestedEvent)
     }
-
-    if (event.extendedProps["objectType"] && event.extendedProps["objectType"] === "learning_calendar") {
-      item.value = {
-        ...event.extendedProps,
-        id: event.id,
-        title: event.title,
-        startDate: event.start ? new Date(event.start) : null,
-        endDate: event.end ? new Date(event.end) : null,
-        type: "personal",
-        resourceLinkListFromEntity: [],
-      }
-
-      allowToEdit.value = false
-      allowToSubscribe.value = false
-      allowToUnsubscribe.value = false
-      dialogShow.value = true
-
-      return
-    }
-
-    item.value = { ...event.extendedProps }
-
-    item.value["@id"] = "/api/c_calendar_events/" + event.id.match(/\d+$/)[0]
-    item.value.title = event.title
-    item.value.startDate = event.start ? new Date(event.start) : null
-    item.value.endDate = event.end ? new Date(event.end) : null
-    item.value.parentResourceNodeId = event.extendedProps?.resourceNode?.creator?.id
-    item.value.language = extractResourceLanguage(event.extendedProps)
-
-    const rawColor = event.extendedProps?.color ?? event.backgroundColor ?? event.borderColor ?? event.color ?? null
-    item.value.color = normalizeHex(rawColor) || defaultColorByContext(currentContext.value)
-
-    if (
-      !(route.query.sid === "0" && item.value.type === "session") &&
-      !(route.query.sid !== "0" && item.value.type === "course") &&
-      !(route.query.type === "global" && item.value.type !== "global") &&
-      !(!route.query.cid && !route.query.sid && !route.query.type && item.value.type !== "personal")
-    ) {
-      currentContext.value = item.value.type
-    }
-
-    allowToEdit.value =
-      (isEditableByUser(item.value, securityStore.user.id) ||
-        allowUserEditAgenda.value ||
-        securityStore.isCourseAdmin ||
-        securityStore.isSessionAdmin) &&
-      (event.extendedProps?.resourceNode?.creator?.id === securityStore.user.id || securityStore.isCourseAdmin)
-
-    allowToSubscribe.value = !allowToEdit.value && allowSubscribeToEvent(item.value)
-    allowToUnsubscribe.value = !allowToEdit.value && allowUnsubscribeToEvent(item.value, securityStore.user.id)
-
-    dialogShow.value = true
   },
 
   select(info) {

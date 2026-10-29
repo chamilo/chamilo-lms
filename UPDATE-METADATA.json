@@ -16,6 +16,7 @@
         "public/main/admin/user_add.php",
         "public/main/admin/user_edit.php",
         "public/main/admin/user_list.php",
+        "public/main/calendar/ical_export.php",
         "public/main/course_copy/copy_course.php",
         "public/main/course_copy/create_backup.php",
         "public/main/course_copy/import_backup.php",

@@ -96,3 +96,24 @@ Feature: Legacy agenda redirects
       | role          | login                          |
       | administrator | I am a platform administrator  |
       | student boss  | I am a student boss            |
+
+  Scenario: The legacy course event form keeps the course context
+    Given I am a platform administrator
+    And I resolve the numeric id of course "TEMP"
+    When I am on "/main/calendar/agenda.php?action=add&type=course&cid=COURSE_ID&sid=0&gid=0" with the resolved id of course "TEMP"
+    And I wait for the URL to contain "/resources/ccalendarevent"
+    Then the URL should contain "cid="
+    And the URL should not contain "action="
+    And I should see "Agenda"
+
+  Scenario Outline: The legacy personal event form opens the personal Vue agenda as <role>
+    Given <login>
+    When I am on "/main/calendar/agenda.php?action=add&type=personal"
+    And I wait for the URL to contain "/resources/ccalendarevent"
+    Then the URL should not contain "cid="
+    And I should see "Agenda"
+
+    Examples:
+      | role          | login                          |
+      | administrator | I am a platform administrator  |
+      | student       | I am a student                 |

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "239858c36d32e7f336139ca463f62937",
+    "content-hash": "0f2951f9208ec5572019838a297b1b55",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -5456,113 +5456,6 @@
                 "source": "https://github.com/schmittjoh/metadata/tree/2.9.0"
             },
             "time": "2025-11-30T20:12:26+00:00"
-        },
-        {
-            "name": "kigkonsult/icalcreator",
-            "version": "v2.41.92",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/iCalcreator/iCalcreator.git",
-                "reference": "a4d35d7a58c08b816dc8a7778db19f461c1429bd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/iCalcreator/iCalcreator/zipball/a4d35d7a58c08b816dc8a7778db19f461c1429bd",
-                "reference": "a4d35d7a58c08b816dc8a7778db19f461c1429bd",
-                "shasum": ""
-            },
-            "require": {
-                "ext-intl": "*",
-                "ext-mbstring": "*",
-                "ext-openssl": "*",
-                "ext-simplexml": "*",
-                "ext-zlib": "*",
-                "php": ">=8.0"
-            },
-            "require-dev": {
-                "degraciamathieu/php-arguments-detector": ">=0.5.0",
-                "ext-xdebug": "*",
-                "phpcompatibility/php-compatibility": ">=9.3.5",
-                "phpmd/phpmd": ">=2.13.0",
-                "phpstan/phpstan": ">=0.9.3",
-                "phpunit/phpunit": ">=6.5.13",
-                "squizlabs/php_codesniffer": ">=3.5.5",
-                "vimeo/psalm": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "autoload.php"
-                ],
-                "psr-4": {
-                    "Kigkonsult\\Icalcreator\\": [
-                        "src/"
-                    ]
-                },
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Kjell-Inge Gustafsson",
-                    "email": "ical@kigkonsult.se"
-                }
-            ],
-            "description": "iCalcreator is the PHP implementation of rfc2445/rfc5545 and rfc updates, management of calendar information",
-            "keywords": [
-                "alarm",
-                "availability",
-                "calendar",
-                "daylight",
-                "event",
-                "ical",
-                "json",
-                "location",
-                "management",
-                "participant",
-                "resource",
-                "rfc2445",
-                "rfc5545",
-                "rfc5870",
-                "rfc6321",
-                "rfc6868",
-                "rfc7529",
-                "rfc7808",
-                "rfc7953",
-                "rfc7986",
-                "rfc9073",
-                "rfc9074",
-                "standard",
-                "todo",
-                "vCalendar",
-                "valarm",
-                "vevent",
-                "vfreebusy",
-                "vjournal",
-                "vtimezone",
-                "vtodo",
-                "xml"
-            ],
-            "support": {
-                "issues": "https://github.com/iCalcreator/iCalcreator/issues",
-                "source": "https://github.com/iCalcreator/iCalcreator/tree/v2.41.92"
-            },
-            "funding": [
-                {
-                    "url": "https://paypal.me/kigkonsult",
-                    "type": "other"
-                },
-                {
-                    "url": "https://www.buymeacoffee.com/kigkonsult",
-                    "type": "other"
-                }
-            ],
-            "time": "2025-01-17T10:06:29+00:00"
         },
         {
             "name": "knplabs/knp-components",

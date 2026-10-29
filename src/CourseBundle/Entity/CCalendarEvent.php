@@ -29,6 +29,7 @@ use Chamilo\CoreBundle\Filter\GlobalEventFilter;
 use Chamilo\CoreBundle\Filter\OptionalCourseLinkFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CalendarEventStateProvider;
+use Chamilo\CoreBundle\State\CCalendarEventDeleteProcessor;
 use Chamilo\CoreBundle\State\CCalendarEventStateProcessor;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use DateTime;
@@ -56,7 +57,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('EDIT', object)",
             deserialize: false
         ),
-        new Delete(security: "is_granted('DELETE', object)"),
+        new Delete(
+            security: "is_granted('DELETE', object)",
+            processor: CCalendarEventDeleteProcessor::class
+        ),
         new GetCollection(
             paginationEnabled: false,
             security: "is_granted('ROLE_USER')",
@@ -268,7 +272,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Reso
         return $this->parentEvent;
     }
 
-    public function setParentEvent(self $parent): self
+    public function setParentEvent(?self $parent): self
     {
         $this->parentEvent = $parent;
 

@@ -88,6 +88,13 @@
           @click="confirmDelete"
         />
         <BaseButton
+          v-if="allowToEdit && showDeleteButton && item.seriesId"
+          :label="t('Delete all items')"
+          icon="delete"
+          type="danger"
+          @click="confirmDeleteSeries"
+        />
+        <BaseButton
           v-if="allowToEdit && showEditButton"
           :label="t('Edit')"
           icon="edit"
@@ -889,6 +896,22 @@ function confirmDelete() {
   })
 }
 
+/**
+ * Deletes every event of the series of repeated events of the current event.
+ */
+function confirmDeleteSeries() {
+  requireConfirmation({
+    title: t("Delete all items"),
+    message: t("Are you sure you want to delete"),
+    async accept() {
+      await baseService.delete(item.value["@id"], { params: { deleteSeries: 1 } })
+
+      dialogShow.value = false
+      reFetch()
+    },
+  })
+}
+
 async function subscribeToEvent() {
   try {
     await resourceLinkService.create({
@@ -973,6 +996,16 @@ async function onCreateEventForm() {
       if (course.value) {
         itemModel.resourceLinkList = buildCourseRecipientLinks(itemModel.courseRecipients)
         delete itemModel.courseRecipients
+      }
+
+      const { repeat, repeatType, repeatEndDate } = itemModel
+      delete itemModel.repeat
+      delete itemModel.repeatType
+      delete itemModel.repeatEndDate
+
+      if (repeat && course.value) {
+        itemModel.repeatType = repeatType
+        itemModel.repeatEndDate = DateTime.fromJSDate(repeatEndDate).toISODate()
       }
 
       await store.dispatch("ccalendarevent/create", itemModel)

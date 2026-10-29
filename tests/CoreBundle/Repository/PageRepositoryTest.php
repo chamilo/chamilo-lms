@@ -319,14 +319,45 @@ class PageRepositoryTest extends AbstractApiTest
         $result = $createDefaultPages->createDefaultPages($admin, $this->getAccessUrl(), 'en_US');
         $this->assertTrue($result);
         $this->assertSame(2, $pageRepo->count([]));
-        // home, index, faq, demo, footer_public, footer_private, menu_links, public
-        // and introduction, plus one category per admin block.
+        // home, index, faq, demo, footer_public, footer_private, menu_links,
+        // menu_public_links, public and introduction, plus each admin block category.
         $this->assertSame(
-            9 + \count(PageCategory::ADMIN_BLOCKS_CATEGORIES),
+            10 + \count(PageCategory::ADMIN_BLOCKS_CATEGORIES),
             $pageCategoryRepo->count([])
         );
+        $this->assertSame(1, $pageCategoryRepo->count(['title' => 'menu_public_links']));
 
         $result = $createDefaultPages->createDefaultPages($admin, $this->getAccessUrl(), 'en_US');
         $this->assertFalse($result);
+    }
+
+    public function testCreateDefaultPagesWithPreexistingPublicMenuCategory(): void
+    {
+        $this->testDeleteAll();
+
+        $entityManager = $this->getEntityManager();
+        $pageCategoryRepo = self::getContainer()->get(PageCategoryRepository::class);
+        $pageRepo = self::getContainer()->get(PageRepository::class);
+        $pageHelper = self::getContainer()->get(PageHelper::class);
+        $admin = $this->getAdmin();
+
+        // Simulate an upgrade that inserts this category before page fixtures run.
+        $publicMenuCategory = (new PageCategory())
+            ->setCreator($admin)
+            ->setTitle('menu_public_links')
+            ->setType('grid')
+        ;
+        $entityManager->persist($publicMenuCategory);
+        $entityManager->flush();
+
+        $this->assertTrue($pageHelper->createDefaultPages($admin, $this->getAccessUrl(), 'en_US'));
+        $this->assertSame(2, $pageRepo->count([]));
+        $this->assertSame(
+            10 + \count(PageCategory::ADMIN_BLOCKS_CATEGORIES),
+            $pageCategoryRepo->count([])
+        );
+        $this->assertSame(1, $pageCategoryRepo->count(['title' => 'menu_public_links']));
+        $this->assertSame(1, $pageCategoryRepo->count(['title' => 'menu_links']));
+        $this->assertFalse($pageHelper->createDefaultPages($admin, $this->getAccessUrl(), 'en_US'));
     }
 }

@@ -6107,7 +6107,7 @@ class BuyCoursesPlugin extends Plugin
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $conditions = ['WHERE' => ['s.id = ?' => $id]];
         $showData = 'first';
-        $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";
+        $innerJoins = "LEFT JOIN $userTable u ON s.owner_id = u.id";
         $currency = $this->getSelectedCurrency();
         $isoCode = $currency['iso_code'];
         $service = Database::select(
@@ -6117,6 +6117,10 @@ class BuyCoursesPlugin extends Plugin
             $showData
         );
 
+        if (empty($service)) {
+            return [];
+        }
+
         $service['iso_code'] = $isoCode;
         $globalParameters = $this->getGlobalParameters();
 
@@ -6124,7 +6128,7 @@ class BuyCoursesPlugin extends Plugin
 
         $service['tax_name'] = $globalParameters['tax_name'];
         $service['tax_enable'] = $this->checkTaxEnabledInProduct(self::TAX_APPLIES_TO_ONLY_SERVICES);
-        $service['owner_name'] = api_get_person_name($service['firstname'], $service['lastname']);
+        $service['owner_name'] = api_get_person_name($service['firstname'] ?? '', $service['lastname'] ?? '');
         $service['image'] = $this->getServiceImageUrl($service['image'] ?? null);
         $service['benefit_configurations'] = $this->getServiceBenefitConfigurations($id);
 

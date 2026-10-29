@@ -89,6 +89,13 @@ export default {
   },
 
   /**
+   * Match users by an extra field explicitly enabled for searching.
+   */
+  matchUsersByExtraField(groupId, fieldId, value) {
+    return baseService.get(`/admin/usergroups/${groupId}/add-users-data/extra-field-matches`, { fieldId, value })
+  },
+
+  /**
    * @param {number|string} groupId
    * @param {FormData} formData
    * @returns {Promise<Object>}

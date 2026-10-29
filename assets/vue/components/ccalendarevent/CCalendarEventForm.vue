@@ -32,6 +32,14 @@
       editor-id="calendar-event-content"
     />
 
+    <BaseTextArea
+      v-if="showComment"
+      id="calendar-event-comment"
+      v-model="item.comment"
+      :label="t('Comment')"
+      name="comment"
+    />
+
     <BaseAdvancedSettingsButton v-if="showResourceLanguageAdvancedSettings" v-model="showAdvancedSettings">
       <ResourceLanguageSelector
         id="calendar-event-language"
@@ -118,6 +126,7 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
+import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import CalendarCourseRecipients from "./CalendarCourseRecipients.vue"
 import CalendarInvitations from "./CalendarInvitations.vue"
@@ -202,6 +211,9 @@ const showCourseRecipients = computed(() => {
 
   return ["course", "session"].includes(contextType) && !Number(route.query.gid ?? 0) && securityStore.isCurrentTeacher
 })
+
+// As in the legacy agenda, only course events have a comment.
+const showComment = computed(() => Number(route.query.cid ?? 0) > 0)
 
 const showCareerPromotionFields = computed(() => {
   return props.isGlobal && props.allowCareerPromotionFields

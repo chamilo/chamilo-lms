@@ -16,6 +16,14 @@
       v-html="sanitizeHtml(event.content)"
     />
 
+    <p
+      v-if="event.comment"
+      class="mt-2 whitespace-pre-line"
+    >
+      <strong>{{ t("Comment") }}:</strong>
+      {{ event.comment }}
+    </p>
+
     <CalendarEventSubscriptionsInfo
       v-if="type.subscription === event.invitationType"
       :event="event"

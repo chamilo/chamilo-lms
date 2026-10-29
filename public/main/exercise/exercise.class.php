@@ -80,6 +80,7 @@ class Exercise
     public $modelType = 1;
     public $questionSelectionType = EX_Q_SELECTION_ORDERED;
     public $hideQuestionTitle = 0;
+    public bool $showQuestionMaxScore = true;
     public $scoreTypeModel = 0;
     public $categoryMinusOne = true; // Shows the category -1: See BT#6540
     public $globalCategoryId = null;
@@ -213,6 +214,7 @@ class Exercise
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
             $this->questionSelectionType = isset($object->question_selection_type) ? (int) $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
+            $this->showQuestionMaxScore = !isset($object->show_question_max_score) || (bool) $object->show_question_max_score;
             $this->autolaunch = isset($object->autolaunch) ? (int) $object->autolaunch : 0;
             $this->quizCategoryId = isset($object->quiz_category_id) ? (int) $object->quiz_category_id : null;
             $this->preventBackwards = isset($object->prevent_backwards) ? (int) $object->prevent_backwards : 0;
@@ -1593,6 +1595,7 @@ class Exercise
             ->setSaveCorrectAnswers($saveCorrectAnswers)
             ->setPropagateNeg($propagate_neg)
             ->setHideQuestionTitle(1 === (int) $this->getHideQuestionTitle())
+            ->setShowQuestionMaxScore($this->showQuestionMaxScore)
             ->setQuestionSelectionType($this->getQuestionSelectionType())
             ->setHideQuestionNumber((int) $this->hideQuestionNumber)
         ;

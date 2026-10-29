@@ -43315,3 +43315,6 @@ msgstr "The Dropbox storage quota for this course has been reached. Delete some 
 
 msgid "This file exceeds the maximum size allowed for Dropbox. Choose a smaller file."
 msgstr "This file exceeds the maximum size allowed for Dropbox. Choose a smaller file."
+
+msgid "Show maximum score per question during the test"
+msgstr "Show maximum score per question during the test"

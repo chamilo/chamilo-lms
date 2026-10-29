@@ -247,6 +247,9 @@ final class ExerciseConfiguration
     public bool $hideQuestionTitle = false;
 
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public bool $showQuestionMaxScore = true;
+
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
     public bool $hideQuestionNumber = false;
 
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]

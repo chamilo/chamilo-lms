@@ -175,6 +175,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->questionSelectionType = (int) ($quiz->getQuestionSelectionType() ?? 1);
         $configuration->displayCategoryName = 1 === $quiz->getDisplayCategoryName();
         $configuration->hideQuestionTitle = $quiz->isHideQuestionTitle();
+        $configuration->showQuestionMaxScore = $quiz->isShowQuestionMaxScore();
         $configuration->hideQuestionNumber = 1 === (int) $quiz->getHideQuestionNumber();
         $configuration->propagateNeg = 1 === $quiz->getPropagateNeg();
         $configuration->saveCorrectAnswers = (int) ($quiz->getSaveCorrectAnswers() ?? 0);

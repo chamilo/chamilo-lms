@@ -279,6 +279,31 @@ Feature: Exercise tool
     Then I should see "0 questions"
     And I should not see an error
 
+  Scenario: Configure maximum question score visibility for learners
+    Given I am a teacher
+    And I wait for the page to be loaded
+    And I am on course "EXTEACH" homepage
+    And I wait for the page to be loaded
+    And I follow "Tests"
+    And I wait for the page content to settle
+    And I click the "[title='Configure']" icon in the row for "Exercise 1"
+    And I wait for the page content to settle
+    Then the checkbox "showQuestionMaxScore" should be checked
+    When I uncheck "Show maximum score per question during the test"
+    And I press "Proceed to questions"
+    And I wait for the page content to settle
+    And I am on course "EXTEACH" homepage
+    And I wait for the page to be loaded
+    And I follow "Tests"
+    And I wait for the page content to settle
+    And I click the "[title='Configure']" icon in the row for "Exercise 1"
+    And I wait for the page content to settle
+    Then the checkbox "showQuestionMaxScore" should not be checked
+    When I check "Show maximum score per question during the test"
+    And I press "Proceed to questions"
+    And I wait for the page content to settle
+    And I should not see an error
+
   Scenario: Add question "Multiple choice" to exercise created "Exercise 1"
     Given I am a teacher
     And I wait for the page to be loaded
@@ -608,6 +633,7 @@ Feature: Exercise tool
     And I wait for the page content to settle
     # Question 1 - Multiple choice
     Then I should see "Multiple choice"
+    And I should see "Maximum score: 10"
     And I start monitoring exercise answer history
     And I check the "Answer true" radio button
     And I press "Next question" until "Multiple answers" appears

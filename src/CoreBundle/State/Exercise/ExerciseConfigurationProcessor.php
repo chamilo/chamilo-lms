@@ -263,6 +263,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             ->setQuestionSelectionType($questionSelectionType)
             ->setDisplayCategoryName($data->displayCategoryName ? 1 : 0)
             ->setHideQuestionTitle($data->hideQuestionTitle)
+            ->setShowQuestionMaxScore($data->showQuestionMaxScore)
             ->setHideQuestionNumber($data->hideQuestionNumber ? 1 : 0)
             ->setPropagateNeg($propagateNeg)
             ->setSaveCorrectAnswers(max(0, $data->saveCorrectAnswers))
@@ -516,6 +517,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $configuration->questionSelectionType = (int) ($quiz->getQuestionSelectionType() ?? 1);
         $configuration->displayCategoryName = 1 === $quiz->getDisplayCategoryName();
         $configuration->hideQuestionTitle = $quiz->isHideQuestionTitle();
+        $configuration->showQuestionMaxScore = $quiz->isShowQuestionMaxScore();
         $configuration->hideQuestionNumber = 1 === (int) $quiz->getHideQuestionNumber();
         $configuration->propagateNeg = 1 === $quiz->getPropagateNeg();
         $configuration->saveCorrectAnswers = (int) ($quiz->getSaveCorrectAnswers() ?? 0);

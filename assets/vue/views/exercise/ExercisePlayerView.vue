@@ -435,8 +435,11 @@
                 type="primary-text"
                 @click="openQuestionFeedbackReport(question)"
               />
-              <span class="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700">
-                {{ t("Score") }}: {{ question.score }}
+              <span
+                v-if="settings.showQuestionMaxScore !== false"
+                class="rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700"
+              >
+                {{ t("Maximum score") }}: {{ question.score }}
               </span>
               <span
                 v-if="savedQuestionIds.has(Number(question.id))"

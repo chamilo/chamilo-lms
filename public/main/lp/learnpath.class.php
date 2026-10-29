@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -9137,93 +9138,41 @@ document.addEventListener("DOMContentLoaded", function () {
         if (empty($_course)) {
             return '';
         }
-        $course_id = $_course['real_id'];
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $learningPathId = (int) $learningPathId;
-        $id_in_path = (int) $id_in_path;
 
-        $sql = "SELECT item_type, title, ref
-                FROM $tbl_lp_item
-                WHERE c_id = $course_id AND lp_id = $learningPathId AND iid = $id_in_path";
-        $res_item = Database::query($sql);
+        $em = Database::getManager();
+        $item = $em->getRepository(CLpItem::class)->findOneBy([
+            'lp' => (int) $learningPathId,
+            'iid' => (int) $id_in_path,
+        ]);
 
-        if (Database::num_rows($res_item) < 1) {
+        if (!$item instanceof CLpItem) {
             return '';
         }
-        $row_item = Database::fetch_array($res_item);
-        $type = strtolower($row_item['item_type']);
-        $id = $row_item['ref'];
-        $output = '';
 
-        switch ($type) {
-            case TOOL_CALENDAR_EVENT:
-                $TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
-                $result = Database::query("SELECT * FROM $TABLEAGENDA WHERE c_id = $course_id AND id=$id");
-                $myrow = Database::fetch_array($result);
-                $output = $myrow['title'];
-                break;
-            case TOOL_ANNOUNCEMENT:
-                $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-                $result = Database::query("SELECT * FROM $tbl_announcement WHERE c_id = $course_id AND id=$id");
-                $myrow = Database::fetch_array($result);
-                $output = $myrow['title'];
-                break;
-            case TOOL_LINK:
-                // Doesn't take $target into account.
-                $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
-                $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
-                $myrow = Database::fetch_array($result);
-                $output = $myrow['title'];
-                break;
-            case TOOL_QUIZ:
-                $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $id");
-                $myrow = Database::fetch_array($result);
-                $output = $myrow['title'];
-                break;
-            case TOOL_FORUM:
-                $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
-                $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id = $id");
-                $myrow = Database::fetch_array($result);
-                $output = $myrow['title'];
-                break;
-            case TOOL_THREAD:
-                $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
-                // Grabbing the title of the post.
-                $sql_title = "SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=".$id;
-                $result_title = Database::query($sql_title);
-                $myrow_title = Database::fetch_array($result_title);
-                $output = $myrow_title['title'];
-                break;
-            case TOOL_POST:
-                $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
-                $sql = "SELECT * FROM $tbl_post p WHERE c_id = $course_id AND p.post_id = $id";
-                $result = Database::query($sql);
-                $post = Database::fetch_array($result);
-                $output = $post['title'];
-                break;
-            case 'dir':
-            case TOOL_DOCUMENT:
-            case 'video':
-                $title = $row_item['title'];
-                $output = '-';
-                if (!empty($title)) {
-                    $output = $title;
-                }
-                break;
-            case 'hotpotatoes':
-                $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-                $result = Database::query("SELECT * FROM $tbl_doc WHERE c_id = $course_id AND iid = $id");
-                $myrow = Database::fetch_array($result);
-                $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
-                $last = count($pathname) - 1; // Making a correct name for the link.
-                $filename = $pathname[$last]; // Making a correct name for the link.
-                $myrow['path'] = rawurlencode($myrow['path']);
-                $output = $filename;
-                break;
+        // As in rl_get_resource_link_for_learnpath(), the path holds the id of the resource.
+        $resourceClasses = [
+            TOOL_CALENDAR_EVENT => CCalendarEvent::class,
+            TOOL_ANNOUNCEMENT => CAnnouncement::class,
+            TOOL_LINK => CLink::class,
+            TOOL_QUIZ => CQuiz::class,
+            TOOL_FORUM => CForum::class,
+            TOOL_THREAD => CForumThread::class,
+            TOOL_POST => CForumPost::class,
+            'hotpotatoes' => CDocument::class,
+        ];
+        $type = strtolower((string) $item->getItemType());
+
+        if (\in_array($type, ['dir', TOOL_DOCUMENT, 'video'], true)) {
+            return $item->getTitle() ?: '-';
         }
 
-        return stripslashes($output);
+        if (!isset($resourceClasses[$type]) || empty($item->getPath())) {
+            return '';
+        }
+
+        $resource = $em->getRepository($resourceClasses[$type])->find((int) $item->getPath());
+
+        return null !== $resource ? (string) $resource->getTitle() : '';
     }
 
     /**

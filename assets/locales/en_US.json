@@ -4646,5 +4646,8 @@
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
     "Create linked exercise": "Create linked exercise",
     "Questions will be shared between both exercises. Editing a shared question affects both exercises. Continue?": "Questions will be shared between both exercises. Editing a shared question affects both exercises. Continue?",
-    "Linked exercise created": "Linked exercise created"
+    "Linked exercise created": "Linked exercise created",
+    "Your Dropbox storage quota has been reached. Delete some sent files or contact an administrator to increase the limit.": "Your Dropbox storage quota has been reached. Delete some sent files or contact an administrator to increase the limit.",
+    "The Dropbox storage quota for this course has been reached. Delete some sent files or contact a teacher or administrator.": "The Dropbox storage quota for this course has been reached. Delete some sent files or contact a teacher or administrator.",
+    "This file exceeds the maximum size allowed for Dropbox. Choose a smaller file.": "This file exceeds the maximum size allowed for Dropbox. Choose a smaller file."
 }

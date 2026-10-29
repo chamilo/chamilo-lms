@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Service\Storage\StorageQuotaService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDropboxFile;
 use Chamilo\CourseBundle\Entity\CDropboxPerson;
@@ -39,7 +40,8 @@ final class CreateDropboxFileAction
         UserHelper $userHelper,
         Security $security,
         SettingsManager $settingsManager,
-        CidReqHelper $cidReqHelper
+        CidReqHelper $cidReqHelper,
+        StorageQuotaService $storageQuotaService
     ): JsonResponse {
         // cid/sid/gid travel in the query, so CidReqListener has already resolved the
         // course into the session and enforced CourseVoter::VIEW; the operation security
@@ -74,6 +76,14 @@ final class CreateDropboxFileAction
         }
         if (!$file) {
             throw new BadRequestHttpException('"uploadFile" is required');
+        }
+
+        // This existing setting is expressed in bytes in the legacy upload handler.
+        // Keep its current unit: it is a per-file limit, not the new total quota.
+        $maxFileSizeRaw = $settingsManager->getSetting('dropbox.dropbox_max_filesize', true);
+        if (null !== $maxFileSizeRaw && ctype_digit((string) $maxFileSizeRaw)
+            && (int) ($file->getSize() ?: 0) > (int) $maxFileSizeRaw) {
+            throw new BadRequestHttpException('Dropbox maximum file size exceeded.');
         }
 
         $parentId = (int) $request->request->get('parentResourceNodeId', 0);
@@ -114,75 +124,97 @@ final class CreateDropboxFileAction
             }
         }
 
-        // Ensure filename uniqueness
-        $original = $file->getClientOriginalName() ?: 'upload.bin';
-        $candidate = $original;
-        $i = 1;
-        while ($repo->findOneBy(['filename' => $candidate])) {
-            $pi = pathinfo($original);
-            $name = $pi['filename'] ?? 'file';
-            $ext = isset($pi['extension']) ? '.'.$pi['extension'] : '';
-            $candidate = $name.'_'.$i.$ext;
-            $i++;
-        }
+        return $em->wrapInTransaction(function () use (
+            $user,
+            $course,
+            $file,
+            $repo,
+            $em,
+            $storageQuotaService,
+            $cid,
+            $sid,
+            $gid,
+            $parentId,
+            $description,
+            $categoryId,
+            $tokens,
+        ): JsonResponse {
+            // Always acquire locks in course -> user order, to serialize all
+            // uploads into a course and prevent concurrent quota overrun.
+            $storageQuotaService->lockCourse($course);
+            $storageQuotaService->lockUser($user);
+            $storageQuotaService->assertDropboxQuotas($user, $course, (int) ($file->getSize() ?: 0));
 
-        $now = new DateTime();
-        $e = new CDropboxFile();
-        $e->setFiletype('file');
-        $e->setParentResourceNode($parentId);
-        $e->setUploadFile($file);
+            // Ensure filename uniqueness
+            $original = $file->getClientOriginalName() ?: 'upload.bin';
+            $candidate = $original;
+            $i = 1;
+            while ($repo->findOneBy(['filename' => $candidate])) {
+                $pi = pathinfo($original);
+                $name = $pi['filename'] ?? 'file';
+                $ext = isset($pi['extension']) ? '.'.$pi['extension'] : '';
+                $candidate = $name.'_'.$i.$ext;
+                $i++;
+            }
 
-        $e->setCId($cid);
-        $e->setSessionId($sid);
-        $e->setUploaderId($user->getId());
-        $e->setTitle($candidate);
-        $e->setFilename($candidate);
-        $e->setFilesize((int) ($file->getSize() ?: 0));
-        $e->setDescription($description);
-        $e->setAuthor((string) $user->getFullName());
-        $e->setUploadDate($now);
-        $e->setLastUploadDate($now);
-        $e->setCatId($categoryId);
+            $now = new DateTime();
+            $e = new CDropboxFile();
+            $e->setFiletype('file');
+            $e->setParentResourceNode($parentId);
+            $e->setUploadFile($file);
 
-        // Link visibility (course/session/user/group)
-        $e->setResourceLinkArray($this->buildLinks($tokens, $cid, $sid, $gid));
+            $e->setCId($cid);
+            $e->setSessionId($sid);
+            $e->setUploaderId($user->getId());
+            $e->setTitle($candidate);
+            $e->setFilename($candidate);
+            $e->setFilesize((int) ($file->getSize() ?: 0));
+            $e->setDescription($description);
+            $e->setAuthor((string) $user->getFullName());
+            $e->setUploadDate($now);
+            $e->setLastUploadDate($now);
+            $e->setCatId($categoryId);
 
-        $em->persist($e);
-        $em->flush();
+            // Link visibility (course/session/user/group)
+            $e->setResourceLinkArray($this->buildLinks($tokens, $cid, $sid, $gid));
 
-        // Extract real recipients; if none, leave it as a "Sent only" file (no recipients).
-        $destUserIds = $this->extractUserIdsFromTokens($tokens);
+            $em->persist($e);
+            $em->flush();
 
-        foreach ($destUserIds as $destUid) {
-            // Create post (feedback/thread seed)
-            $post = new CDropboxPost();
-            $post->setCId($cid);
-            $post->setSessionId($sid);
-            $post->setFileId($e->getIid());
-            $post->setDestUserId($destUid);
-            $post->setCatId($categoryId);
-            $post->setFeedbackDate(new DateTime());
-            $em->persist($post);
+            // Extract real recipients; if none, leave it as a "Sent only" file (no recipients).
+            $destUserIds = $this->extractUserIdsFromTokens($tokens);
 
-            // Create visibility for the recipient
-            $p = new CDropboxPerson();
-            $p->setCId($cid);
-            $p->setUserId($destUid);
-            $p->setFileId($e->getIid());
-            $em->persist($p);
-        }
+            foreach ($destUserIds as $destUid) {
+                // Create post (feedback/thread seed)
+                $post = new CDropboxPost();
+                $post->setCId($cid);
+                $post->setSessionId($sid);
+                $post->setFileId($e->getIid());
+                $post->setDestUserId($destUid);
+                $post->setCatId($categoryId);
+                $post->setFeedbackDate(new DateTime());
+                $em->persist($post);
 
-        $em->flush();
+                // Create visibility for the recipient
+                $p = new CDropboxPerson();
+                $p->setCId($cid);
+                $p->setUserId($destUid);
+                $p->setFileId($e->getIid());
+                $em->persist($p);
+            }
 
-        return new JsonResponse([
-            'ok' => true,
-            'iid' => (int) $e->getIid(),
-            'title' => $e->getTitle(),
-            'filename' => $e->getFilename(),
-            'filesize' => $e->getFilesize(),
-            'categoryId' => $e->getCatId(),
-            'message' => 'File uploaded successfully',
-        ], 201);
+            $em->flush();
+
+            return new JsonResponse([
+                'ok' => true,
+                'iid' => (int) $e->getIid(),
+                'title' => $e->getTitle(),
+                'filename' => $e->getFilename(),
+                'filesize' => $e->getFilesize(),
+                'categoryId' => $e->getCatId(),
+                'message' => 'File uploaded successfully',
+            ], 201);
+        });
     }
 
     private function buildLinks(array $tokens, int $cid, int $sid, int $gid): array

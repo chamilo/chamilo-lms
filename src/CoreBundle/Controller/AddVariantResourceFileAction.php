@@ -8,9 +8,11 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Service\Storage\StorageQuotaService;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,6 +26,7 @@ class AddVariantResourceFileAction
 {
     public function __construct(
         private readonly Security $security,
+        private readonly StorageQuotaService $storageQuotaService,
     ) {}
 
     public function __invoke(Request $request, EntityManagerInterface $em): ResourceFile
@@ -90,10 +93,20 @@ class AddVariantResourceFileAction
             }
         }
 
-        $em->persist($resourceFile);
-        $em->flush();
+        $personalFile = $em->getRepository(PersonalFile::class)->findOneBy(['resourceNode' => $resourceNode]);
 
-        return $resourceFile;
+        return $em->wrapInTransaction(function () use ($em, $resourceFile, $personalFile, $resourceNode, $uploadedFile, $existingResourceFile): ResourceFile {
+            $owner = $resourceNode->getCreator();
+            if ($personalFile instanceof PersonalFile && null !== $owner) {
+                $this->storageQuotaService->lockUser($owner);
+                $oldSize = $existingResourceFile instanceof ResourceFile ? (int) ($existingResourceFile->getSize() ?? 0) : 0;
+                $this->storageQuotaService->assertPersonalQuota($owner, (int) ($uploadedFile->getSize() ?: 0), $oldSize);
+            }
+
+            $em->persist($resourceFile);
+
+            return $resourceFile;
+        });
     }
 
     private function findLanguageFromRequest(Request $request, EntityManagerInterface $em): ?Language

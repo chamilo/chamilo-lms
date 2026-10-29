@@ -126,12 +126,14 @@ final class DropboxFileRecipientAuthorizationTest extends WebTestCase
     {
         $ctx = $this->bootstrap('download');
 
-        // The fixture has no stored file, so whoever may download reaches "Resource file not found".
-        // Match the page title only: the debug error page also prints the controller source around the throw.
+        // An authorized recipient reaches the storage lookup; a classmate is denied before it.
+        // The test client exposes the exception dump instead of an HTML error page.
+        // Compare the exception's message field, not incidental source-code excerpts.
+        $missingFileMessage = '#message: "Resource file not found"';
         $this->assertSame(Response::HTTP_NOT_FOUND, $this->get($ctx['client'], $ctx['recipient'], $ctx['file'], $ctx['course'], '/download'));
-        $this->assertStringContainsString('<title>Resource file not found', (string) $ctx['client']->getResponse()->getContent());
+        $this->assertStringContainsString($missingFileMessage, (string) $ctx['client']->getResponse()->getContent());
 
         $this->assertSame(Response::HTTP_NOT_FOUND, $this->get($ctx['client'], $ctx['classmate'], $ctx['file'], $ctx['course'], '/download'));
-        $this->assertStringNotContainsString('<title>Resource file not found', (string) $ctx['client']->getResponse()->getContent());
+        $this->assertStringNotContainsString($missingFileMessage, (string) $ctx['client']->getResponse()->getContent());
     }
 }

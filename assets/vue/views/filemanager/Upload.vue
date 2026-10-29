@@ -419,13 +419,29 @@ export default {
     }
 
     uppy.value.on("complete", (result) => {
+      const failedFiles = result?.failed || []
+      if (failedFiles.length > 0) {
+        const firstError = failedFiles[0]?.error
+        const message =
+          firstError?.response?.body?.detail ||
+          firstError?.response?.body?.["hydra:description"] ||
+          firstError?.message ||
+          t("Upload failed")
+
+        uppy.value.info(String(message), "error", 10000)
+        return
+      }
+
+      const successfulFiles = result?.successful || []
+      if (successfulFiles.length === 0) return
+
       persistCurrentPickerContext()
 
       if (props.embedded) {
         emit("done", {
           parentNodeId: parentResourceNodeId.value,
-          successful: result?.successful || [],
-          failed: result?.failed || [],
+          successful: successfulFiles,
+          failed: [],
         })
         return
       }
@@ -455,7 +471,6 @@ export default {
       uploadTitle,
       uploadHelpText,
       goBack,
-      embedded: props.embedded,
       t,
     }
   },
@@ -468,7 +483,6 @@ export default {
   },
 }
 </script>
-
 
 <style scoped>
 .ch-uppy-dashboard :deep(.uppy-StatusBar-actions) {

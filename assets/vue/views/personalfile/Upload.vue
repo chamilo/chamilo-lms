@@ -214,7 +214,8 @@ export default {
       })
     }
 
-    uppy.value.on("complete", () => {
+    uppy.value.on("complete", (result) => {
+      if (result?.failed?.length) return
       goBack()
     })
 
@@ -252,7 +253,6 @@ export default {
   },
 }
 </script>
-
 
 <style scoped>
 .ch-uppy-dashboard :deep(.uppy-StatusBar-actions) {

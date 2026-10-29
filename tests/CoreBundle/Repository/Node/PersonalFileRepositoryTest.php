@@ -57,6 +57,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             'POST',
             '/api/personal_files',
             [
+                'headers' => ['Accept' => 'application/ld+json'],
                 'json' => [
                     'filetype' => 'folder',
                     'title' => $folderName,
@@ -67,7 +68,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/PersonalFile',
@@ -108,6 +109,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             '/api/personal_files',
             [
                 'headers' => [
+                    'Accept' => 'application/ld+json',
                     'Content-Type' => 'multipart/form-data',
                 ],
                 'extra' => [
@@ -125,7 +127,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/PersonalFile',
@@ -151,6 +153,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             'PUT',
             '/api/personal_files/'.$personalFileId,
             [
+                'headers' => ['Accept' => 'application/ld+json'],
                 'json' => [
                     'resourceLinkListFromEntity' => $resourceLinkList,
                 ],
@@ -159,7 +162,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(200);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/PersonalFile',
@@ -277,6 +280,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             '/api/personal_files',
             [
                 'headers' => [
+                    'Accept' => 'application/ld+json',
                     'Content-Type' => 'multipart/form-data',
                 ],
                 'extra' => [
@@ -291,7 +295,9 @@ class PersonalFileRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(500);
+        // Writing to another user's personal folder is an authorization failure, not a server error.
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertJsonContains(['error' => 'Personal files folder does not belong to the current user.']);
 
         // Bad user tries to get files from other user, this should return an empty array
         $this->createClientWithCredentials($badUserToken)->request(

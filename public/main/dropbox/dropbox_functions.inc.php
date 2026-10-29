@@ -974,6 +974,19 @@ function store_add_dropbox($file = [], $work = null)
         return false;
     }
 
+    // The legacy upload path cannot safely serialize My Files/Dropbox quota writes.
+    // When aggregate quotas are enabled, use the transactional Symfony uploader.
+    // With both settings at 0, preserve the original legacy behavior.
+    if ((int) api_get_setting('dropbox.dropbox_user_quota_mb') > 0
+        || (int) api_get_setting('dropbox.dropbox_course_quota_mb') > 0) {
+        Display::addFlash(Display::return_message(
+            get_lang('Dropbox storage quotas are enabled. Please upload files from the new Dropbox interface.'),
+            'warning'
+        ));
+
+        return false;
+    }
+
     // check if the file is actually uploaded
     if (!is_uploaded_file($dropbox_filetmpname)) { // check user fraud : no clean error msg.
         Display::addFlash(Display::return_message(get_lang('The file is not uploaded.'), 'warning'));

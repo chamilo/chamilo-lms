@@ -355,6 +355,7 @@ final readonly class ExerciseListActionProcessor implements ProcessorInterface
             ->setQuestionSelectionType((int) ($sourceQuiz->getQuestionSelectionType() ?? 0))
             ->setHideQuestionNumber((int) ($sourceQuiz->getHideQuestionNumber() ?? 0))
             ->setHideQuestionTitle($sourceQuiz->isHideQuestionTitle())
+            ->setShowQuestionMaxScore($sourceQuiz->isShowQuestionMaxScore())
             ->setShowPreviousButton($sourceQuiz->isShowPreviousButton())
             ->setNotifications($sourceQuiz->getNotifications())
             ->setAutoLaunch($sourceQuiz->isAutoLaunch())

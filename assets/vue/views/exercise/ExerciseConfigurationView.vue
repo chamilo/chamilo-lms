@@ -206,7 +206,9 @@
                 id="exercise-random"
                 v-model="form.random"
                 :disabled="isFieldLocked('random')"
-                :help-text="t('Use 0 to keep all available questions. Use -1 where all available questions are allowed.')"
+                :help-text="
+                  t('Use 0 to keep all available questions. Use -1 where all available questions are allowed.')
+                "
                 :label="t('Random questions')"
                 name="random"
                 :min="-1"
@@ -322,7 +324,11 @@
                         />
 
                         <p class="text-xs text-gray-50">
-                          {{ t("Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test.") }}
+                          {{
+                            t(
+                              "Rules are evaluated by score percentage in ascending order. Select Finish exercise to end the test.",
+                            )
+                          }}
                         </p>
                       </div>
                     </td>
@@ -388,6 +394,12 @@
               v-model="form.hideQuestionNumber"
               :label="t('Hide question number')"
               name="hideQuestionNumber"
+            />
+            <BaseCheckbox
+              id="exercise-show-question-max-score"
+              v-model="form.showQuestionMaxScore"
+              :label="t('Show maximum score per question during the test')"
+              name="showQuestionMaxScore"
             />
             <BaseCheckbox
               id="exercise-auto-launch"
@@ -565,7 +577,9 @@
             v-model="form.textWhenFinished"
             :editor-config="messageEditorConfig"
             :full-page="false"
-            :title="t('Text appearing at the end of the test when the user has succeeded or if no pass percentage was set.')"
+            :title="
+              t('Text appearing at the end of the test when the user has succeeded or if no pass percentage was set.')
+            "
           />
 
           <BaseTinyEditor
@@ -618,7 +632,11 @@
                   :hide-when-single-language="false"
                 />
                 <p class="text-xs text-gray-600">
-                  {{ t("Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself.") }}
+                  {{
+                    t(
+                      "Identifies the language of this exercise as resource metadata. It does not enable search indexing by itself.",
+                    )
+                  }}
                 </p>
               </div>
             </div>
@@ -663,7 +681,11 @@
               @click="showMetadata = !showMetadata"
             />
             <p class="text-xs text-gray-600">
-              {{ t("Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened.") }}
+              {{
+                t(
+                  "Metadata contains skills and additional fields configured for exercises. It is optional and remains hidden until opened.",
+                )
+              }}
             </p>
           </div>
 
@@ -943,6 +965,7 @@ const form = reactive({
   questionSelectionType: 1,
   displayCategoryName: true,
   hideQuestionTitle: false,
+  showQuestionMaxScore: true,
   hideQuestionNumber: false,
   propagateNeg: false,
   saveCorrectAnswers: 0,
@@ -974,7 +997,9 @@ const questionsRoute = computed(() => ({
 }))
 const learningPathContext = computed(() => isLearningPathContext())
 const learningPathBackRoute = computed(() => buildLearningPathBackRoute())
-const backButtonLabel = computed(() => (learningPathContext.value ? t("Back to learning path") : t("Return to exercises list")))
+const backButtonLabel = computed(() =>
+  learningPathContext.value ? t("Back to learning path") : t("Return to exercises list"),
+)
 const typeOptions = computed(() => {
   const items = (options.value.typeOptions || []).map((option) => ({
     value: Number(option.value),
@@ -1013,14 +1038,6 @@ const skillOptions = computed(() =>
   })),
 )
 const extraFieldDefinitions = computed(() => normalizeExtraFieldDefinitions(options.value.extraFieldDefinitions || []))
-const extraNotificationOptions = computed(() => {
-  const items = (options.value.extraNotificationOptions || []).map((option) => ({
-    value: String(option.value || ""),
-    label: option.label,
-  }))
-
-  return items.length ? [{ value: "", label: t("Please select an option") }, ...items] : []
-})
 const feedbackOptions = computed(() => mapTranslatedOptions(options.value.feedbackOptions || []))
 const resultOptions = computed(() => {
   const items = mapTranslatedOptions(options.value.resultOptions || [])
@@ -1031,19 +1048,18 @@ const resultOptions = computed(() => {
 
   return items
 })
-const questionSelectionTypeOptions = computed(() => mapTranslatedOptions(options.value.questionSelectionTypeOptions || []))
+const questionSelectionTypeOptions = computed(() =>
+  mapTranslatedOptions(options.value.questionSelectionTypeOptions || []),
+)
 const randomByCategoryOptions = computed(() => mapTranslatedOptions(options.value.randomByCategoryOptions || []))
 const notificationOptions = computed(() => mapTranslatedOptions(options.value.notificationOptions || []))
 const saveCorrectAnswerOptions = computed(() => mapTranslatedOptions(options.value.saveCorrectAnswerOptions || []))
 const showRandomQuestionCount = computed(() => 2 === Number(form.questionSelectionType))
-const showRandomByCategoryOptions = computed(
-  () => showRandomQuestionCount.value && 0 !== Number(form.random),
-)
+const showRandomByCategoryOptions = computed(() => showRandomQuestionCount.value && 0 !== Number(form.random))
 const showCategorySelectionOptions = computed(() => 3 <= Number(form.questionSelectionType))
 const showCategoryDestinations = computed(
   () => Number(form.feedbackType || 0) === 4 && true === settings.value.quizQuestionCategoryDestinations,
 )
-const showCategoryMatrix = computed(() => showCategorySelectionOptions.value || showCategoryDestinations.value)
 const hasCategoryMatrixWarning = computed(() =>
   form.categoryMatrix.some((row) => {
     const count = Number(row.countQuestions || 0)
@@ -1205,6 +1221,7 @@ function fillForm(data) {
   form.questionSelectionType = Number(data.questionSelectionType || 1)
   form.displayCategoryName = true === data.displayCategoryName
   form.hideQuestionTitle = true === data.hideQuestionTitle
+  form.showQuestionMaxScore = true === data.showQuestionMaxScore
   form.hideQuestionNumber = true === data.hideQuestionNumber
   form.propagateNeg = true === data.propagateNeg
   form.saveCorrectAnswers = Number(data.saveCorrectAnswers || 0)
@@ -1240,13 +1257,7 @@ function parseDateTimeValue(value) {
     return null
   }
 
-  const date = new Date(
-    Number(match[1]),
-    Number(match[2]) - 1,
-    Number(match[3]),
-    Number(match[4]),
-    Number(match[5]),
-  )
+  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), Number(match[4]), Number(match[5]))
 
   return Number.isNaN(date.getTime()) ? null : date
 }
@@ -1293,7 +1304,10 @@ function normalizeExtraFieldDefinitions(definitions) {
       type: Number(field.type || 1),
       defaultValue: field.defaultValue ?? "",
       options: Array.isArray(field.options)
-        ? field.options.map((option) => ({ value: String(option.value ?? ""), label: option.label || String(option.value ?? "") }))
+        ? field.options.map((option) => ({
+            value: String(option.value ?? ""),
+            label: option.label || String(option.value ?? ""),
+          }))
         : [],
     }))
 }
@@ -1350,7 +1364,10 @@ function isExtraChoiceField(field) {
 }
 
 function isExtraMultiChoiceField(field) {
-  return EXTRA_FIELD_SELECT_MULTIPLE === Number(field.type) || (EXTRA_FIELD_CHECKBOX === Number(field.type) && field.options.length > 0)
+  return (
+    EXTRA_FIELD_SELECT_MULTIPLE === Number(field.type) ||
+    (EXTRA_FIELD_CHECKBOX === Number(field.type) && field.options.length > 0)
+  )
 }
 
 function isExtraCheckboxField(field) {
@@ -1508,6 +1525,7 @@ function buildPayload() {
     questionSelectionType: Number(form.questionSelectionType || 1),
     displayCategoryName: form.displayCategoryName,
     hideQuestionTitle: form.hideQuestionTitle,
+    showQuestionMaxScore: form.showQuestionMaxScore,
     hideQuestionNumber: form.hideQuestionNumber,
     propagateNeg: form.propagateNeg,
     saveCorrectAnswers: Number(form.saveCorrectAnswers || 0),
@@ -1529,7 +1547,10 @@ async function loadConfiguration() {
   errorMessage.value = ""
 
   try {
-    const response = await exerciseService.getExerciseConfiguration(getContextParams(), isEditMode.value ? exerciseId.value : null)
+    const response = await exerciseService.getExerciseConfiguration(
+      getContextParams(),
+      isEditMode.value ? exerciseId.value : null,
+    )
     fillForm(response)
   } catch (error) {
     console.error("Error loading exercise configuration", error)
@@ -1570,7 +1591,8 @@ async function saveConfiguration() {
     }
   } catch (error) {
     console.error("Error saving exercise configuration", error)
-    errorMessage.value = error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not save exercise")
+    errorMessage.value =
+      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not save exercise")
   } finally {
     isSaving.value = false
   }

@@ -112,6 +112,9 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'hide_question_title', type: 'boolean', nullable: false)]
     protected bool $hideQuestionTitle;
 
+    #[ORM\Column(name: 'show_question_max_score', type: 'boolean', nullable: false, options: ['default' => 1])]
+    protected bool $showQuestionMaxScore = true;
+
     #[ORM\ManyToOne(targetEntity: CQuizCategory::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'quiz_category_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?CQuizCategory $quizCategory = null;
@@ -541,6 +544,18 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     public function setHideQuestionTitle(bool $hideQuestionTitle): self
     {
         $this->hideQuestionTitle = $hideQuestionTitle;
+
+        return $this;
+    }
+
+    public function isShowQuestionMaxScore(): bool
+    {
+        return $this->showQuestionMaxScore;
+    }
+
+    public function setShowQuestionMaxScore(bool $showQuestionMaxScore): self
+    {
+        $this->showQuestionMaxScore = $showQuestionMaxScore;
 
         return $this;
     }

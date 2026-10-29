@@ -2225,6 +2225,12 @@ foreach ($questionList as $questionId) {
             false,
             true
         );
+        if ($objExercise->showQuestionMaxScore && $q && !in_array((int) $q->type, [MEDIA_QUESTION, PAGE_BREAK], true)) {
+            echo Display::div(
+                get_lang('Maximum score').': '.(float) $q->selectWeighting(),
+                ['class' => 'question-max-score']
+            );
+        }
     } else {
         echo Display::return_message(get_lang('You already answered the question'));
     }

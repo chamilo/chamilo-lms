@@ -598,6 +598,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'preventBackwards' => 1 === (int) $quiz->getPreventBackwards(),
             'hideQuestionNumber' => 1 === (int) $quiz->getHideQuestionNumber(),
             'hideQuestionTitle' => true === $quiz->isHideQuestionTitle(),
+            'showQuestionMaxScore' => $quiz->isShowQuestionMaxScore(),
             'showPreviousButton' => true === $quiz->isShowPreviousButton(),
             'hideAttemptsTable' => true === $quiz->isHideAttemptsTable(),
             'allowQuestionFeedbackReports' => $quiz->isQuestionFeedbackReportsAllowed(),

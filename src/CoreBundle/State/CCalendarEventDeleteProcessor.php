@@ -11,7 +11,6 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -24,8 +23,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 final readonly class CCalendarEventDeleteProcessor implements ProcessorInterface
 {
     public function __construct(
-        #[Autowire(service: 'api_platform.doctrine.orm.state.remove_processor')]
-        private ProcessorInterface $removeProcessor,
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private Security $security,
@@ -46,7 +43,10 @@ final readonly class CCalendarEventDeleteProcessor implements ProcessorInterface
             $child->setParentEvent(null);
         }
 
-        return $this->removeProcessor->process($data, $operation, $uriVariables, $context);
+        $this->removeEvent($data);
+        $this->entityManager->flush();
+
+        return null;
     }
 
     private function deleteSeries(CCalendarEvent $firstEvent): void
@@ -60,9 +60,28 @@ final readonly class CCalendarEventDeleteProcessor implements ProcessorInterface
         }
 
         foreach ($events as $event) {
-            $this->entityManager->remove($event);
+            $this->removeEvent($event);
         }
 
         $this->entityManager->flush();
+    }
+
+    /**
+     * Removing the event alone leaves its resource node and its published links readable, and the
+     * files of its attachments on disk.
+     */
+    private function removeEvent(CCalendarEvent $event): void
+    {
+        foreach ($event->getAttachments() as $attachment) {
+            if (null !== $attachment->getResourceNode()) {
+                $this->entityManager->remove($attachment->getResourceNode());
+            }
+        }
+
+        $this->entityManager->remove($event);
+
+        if (null !== $event->getResourceNode()) {
+            $this->entityManager->remove($event->getResourceNode());
+        }
     }
 }

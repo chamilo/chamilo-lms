@@ -72,6 +72,14 @@ readonly class CalendarEventTransformer
         $firstEventOfSeries = $object->getParentEvent() ?? ($object->getChildren()->isEmpty() ? null : $object);
         $calendarEvent->seriesId = $firstEventOfSeries?->getIid();
 
+        foreach ($object->getAttachments() as $attachment) {
+            $calendarEvent->attachments[] = [
+                'id' => (int) $attachment->getIid(),
+                'filename' => $attachment->getFilename(),
+                'comment' => (string) $attachment->getComment(),
+            ];
+        }
+
         if ($object->getRoom()) {
             $room = $object->getRoom();
             $branch = $room->getBranch();

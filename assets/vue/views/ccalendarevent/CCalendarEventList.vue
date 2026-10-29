@@ -1001,6 +1001,32 @@ async function publishEventAsAnnouncement(event, recipients) {
   }
 }
 
+/**
+ * Attaches the selected files to a course event, once the event is saved.
+ *
+ * @param {string|undefined} eventIri
+ * @param {Array<File>|undefined} files
+ * @param {string|undefined} comment
+ * @returns {Promise<void>}
+ */
+async function uploadAttachments(eventIri, files, comment) {
+  const eventId = String(eventIri ?? "").match(/\d+$/)?.[0]
+
+  if (!eventId || !Array.isArray(files) || !files.length) {
+    return
+  }
+
+  const formData = new FormData()
+  files.forEach((file) => formData.append("files[]", file))
+  formData.append("comment", comment || "")
+
+  try {
+    await baseService.postForm(`/api/calendar-events/${eventId}/attachments`, formData)
+  } catch (error) {
+    showErrorNotification(error)
+  }
+}
+
 async function onCreateEventForm() {
   try {
     if (createForm.value.v$.$invalid) {
@@ -1025,8 +1051,14 @@ async function onCreateEventForm() {
       itemModel.promotion = null
     }
 
+    const { attachmentFiles, fileComment } = itemModel
+    delete itemModel.attachmentFiles
+    delete itemModel.fileComment
+    delete itemModel.attachments
+
     if (itemModel["@id"]) {
       await store.dispatch("ccalendarevent/update", itemModel)
+      await uploadAttachments(itemModel["@id"], attachmentFiles, fileComment)
     } else {
       // Course event: bind only the visibility; the course context
       // (cid/sid/gid) is derived server-side from the gated session course.
@@ -1049,6 +1081,10 @@ async function onCreateEventForm() {
       }
 
       await store.dispatch("ccalendarevent/create", itemModel)
+
+      if (!store.state.ccalendarevent.error) {
+        await uploadAttachments(store.state.ccalendarevent.created?.["@id"], attachmentFiles, fileComment)
+      }
 
       if (addAnnouncement && course.value && !store.state.ccalendarevent.error) {
         await publishEventAsAnnouncement(itemModel, courseRecipients)

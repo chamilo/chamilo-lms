@@ -43214,3 +43214,33 @@ msgstr ""
 
 msgid "Linked exercise created"
 msgstr ""
+
+msgid "My Files: total storage quota per user (MB)"
+msgstr ""
+
+msgid "Maximum total size in MB of personal files owned by each user. 0 means unlimited. This does not affect course quotas or BuyCourses benefits."
+msgstr ""
+
+msgid "Dropbox: total storage quota per user (MB)"
+msgstr ""
+
+msgid "Maximum combined size of files uploaded by one user across courses. 0 means unlimited. Recipients do not incur a second charge."
+msgstr ""
+
+msgid "Dropbox: total storage quota per course (MB)"
+msgstr ""
+
+msgid "Maximum combined size of Dropbox files for one course, including sessions. 0 means unlimited. Separate from the Documents course quota."
+msgstr ""
+
+msgid "Dropbox storage quotas are enabled. Please upload files from the new Dropbox interface."
+msgstr ""
+
+msgid "Your Dropbox storage quota has been reached. Delete some sent files or contact an administrator to increase the limit."
+msgstr ""
+
+msgid "The Dropbox storage quota for this course has been reached. Delete some sent files or contact a teacher or administrator."
+msgstr ""
+
+msgid "This file exceeds the maximum size allowed for Dropbox. Choose a smaller file."
+msgstr ""

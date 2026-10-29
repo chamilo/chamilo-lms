@@ -192,9 +192,11 @@ import ResourceLanguageSelector from "../../components/resources/ResourceLanguag
 
 import service from "../../services/dropbox"
 import { useUppyLocale } from "../../composables/uppyLocale"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 const { uppyLocale } = useUppyLocale()
+const { showSuccessNotification, showErrorNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
 const returnRouteName = computed(() => (route.query?.from === "received" ? "DropboxListReceived" : "DropboxListSent"))
@@ -240,18 +242,26 @@ onBeforeUnmount(() => {
       uppy.value?.off?.("file-added", syncPicked)
       uppy.value?.off?.("file-removed", syncPicked)
     }
-  } catch {}
+  } catch {
+    // Ignore Uppy cleanup errors.
+  }
 
   try {
     uppy.value.cancelAll()
-  } catch {}
+  } catch {
+    // Ignore Uppy cleanup errors.
+  }
   try {
     uppy.value.reset()
-  } catch {}
+  } catch {
+    // Ignore Uppy cleanup errors.
+  }
 
   try {
     uppy.value.close?.()
-  } catch {}
+  } catch {
+    // Ignore Uppy cleanup errors.
+  }
 
   uppy.value = null
 })
@@ -295,6 +305,37 @@ const hasMixedMailingRecipients = computed(() => hasMailingSelected.value && nor
 const hasValidRecipientSelection = computed(() => hasSelectedRecipient.value && !hasMixedMailingRecipients.value)
 const canSubmit = computed(() => pickedFiles.value.length > 0 && hasValidRecipientSelection.value)
 
+// Show actionable explanations for known quota failures instead of an HTTP status.
+function getUploadFailureMessage(error) {
+  const data = error?.response?.data
+  const detail = [data?.detail, data?.["hydra:description"], data?.error, data?.message].find(
+    (value) => typeof value === "string" && value.trim(),
+  )
+
+  if (error?.response?.status === 400) {
+    if (detail?.includes("Dropbox user storage quota exceeded.")) {
+      return t(
+        "Your Dropbox storage quota has been reached. Delete some sent files or contact an administrator to increase the limit.",
+      )
+    }
+    if (detail?.includes("Dropbox course storage quota exceeded.")) {
+      return t(
+        "The Dropbox storage quota for this course has been reached. Delete some sent files or contact a teacher or administrator.",
+      )
+    }
+    if (detail?.includes("Dropbox maximum file size exceeded.")) {
+      return t("This file exceeds the maximum size allowed for Dropbox. Choose a smaller file.")
+    }
+  }
+
+  // Preserve other useful client-error explanations, but never show a raw
+  // server exception (5xx) or an unhelpful Axios status as the message.
+  if (error?.response?.status >= 400 && error?.response?.status < 500 && detail) {
+    return detail
+  }
+  return null
+}
+
 // submit
 async function submit() {
   submitted.value = true
@@ -323,7 +364,7 @@ async function submit() {
       })
     }
 
-    alert(t("File upload succeeded!"))
+    showSuccessNotification(t("File upload succeeded!"))
     // Reset minimal state
     description.value = ""
     overwrite.value = false
@@ -331,14 +372,16 @@ async function submit() {
     recipients.value = []
     try {
       uppy.value?.reset?.()
-    } catch {}
+    } catch {
+      // Ignore a reset failure after the upload succeeds.
+    }
     pickedFiles.value = []
 
     // Navigate back to list (sent)
     router.push(returnRoute.value)
   } catch (e) {
     console.error(e)
-    alert(t("Upload failed"))
+    showErrorNotification(getUploadFailureMessage(e) || e)
   } finally {
     isUploading.value = false
   }

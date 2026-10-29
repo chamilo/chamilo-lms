@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\Storage\StorageQuotaService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,6 +29,7 @@ final readonly class CopyDocumentToPersonalFileProcessor implements ProcessorInt
         private UserHelper $userHelper,
         private ResourceNodeRepository $resourceNodeRepository,
         private EntityManagerInterface $entityManager,
+        private StorageQuotaService $storageQuotaService,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): PersonalFile
@@ -108,10 +110,13 @@ final readonly class CopyDocumentToPersonalFileProcessor implements ProcessorInt
             $personalFile->setComment('');
             $personalFile->setUploadFile($uploadedFile);
 
-            $this->entityManager->persist($personalFile);
-            $this->entityManager->flush();
+            return $this->entityManager->wrapInTransaction(function () use ($user, $personalFile, $uploadedFile): PersonalFile {
+                $this->storageQuotaService->lockUser($user);
+                $this->storageQuotaService->assertPersonalQuota($user, (int) ($uploadedFile->getSize() ?: 0));
+                $this->entityManager->persist($personalFile);
 
-            return $personalFile;
+                return $personalFile;
+            });
         } finally {
             if (file_exists($tmpPath)) {
                 @unlink($tmpPath);

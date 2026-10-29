@@ -4641,5 +4641,8 @@
     "Color theme (preview)": "Th\u00e8me de couleurs (aper\u00e7u)",
     "The themes storage is not writable. Check its file permissions before saving.": "Le stockage des th\u00e8mes n'est pas accessible en \u00e9criture. V\u00e9rifiez les permissions des fichiers avant d'enregistrer.",
     "Audio comment": "Commentaire audio",
-    "The recording will be saved with the correction.": "The recording will be saved with the correction."
+    "The recording will be saved with the correction.": "The recording will be saved with the correction.",
+    "Your Dropbox storage quota has been reached. Delete some sent files or contact an administrator to increase the limit.": "Vous avez atteint votre quota de stockage Dropbox. Supprimez des fichiers envoy\u00e9s ou contactez un administrateur pour augmenter la limite.",
+    "The Dropbox storage quota for this course has been reached. Delete some sent files or contact a teacher or administrator.": "Le quota de stockage Dropbox de ce cours est atteint. Supprimez des fichiers envoy\u00e9s ou contactez un enseignant ou un administrateur.",
+    "This file exceeds the maximum size allowed for Dropbox. Choose a smaller file.": "Ce fichier d\u00e9passe la taille maximale autoris\u00e9e dans Dropbox. Choisissez un fichier plus petit."
 }

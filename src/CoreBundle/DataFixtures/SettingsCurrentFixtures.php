@@ -966,6 +966,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'How big (in MB) can a dropbox document be?',
                 ],
                 [
+                    'name' => 'dropbox_user_quota_mb',
+                    'title' => 'Dropbox: total storage quota per user (MB)',
+                    'comment' => 'Maximum combined size of files uploaded by one user across courses. 0 means unlimited. Recipients do not incur a second charge.',
+                ],
+                [
+                    'name' => 'dropbox_course_quota_mb',
+                    'title' => 'Dropbox: total storage quota per course (MB)',
+                    'comment' => 'Maximum combined size of Dropbox files for one course, including sessions. 0 means unlimited. Separate from the Documents course quota.',
+                ],
+                [
                     'name' => 'dropbox_hide_course_coach',
                     'title' => 'Dropbox: hide course tutor',
                     'comment' => 'Hide the session course tutor in Dropbox when a document is sent by the tutor to students',
@@ -1056,6 +1066,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'platform' => [
+                [
+                    'name' => 'personal_files_quota_mb',
+                    'title' => 'My Files: total storage quota per user (MB)',
+                    'comment' => 'Maximum total size in MB of personal files owned by each user. 0 means unlimited. This does not affect course quotas or BuyCourses benefits.',
+                ],
                 [
                     'name' => 'disable_copy_paste',
                     'title' => 'Disable copy-pasting',

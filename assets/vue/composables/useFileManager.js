@@ -197,7 +197,11 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     }, {})
   }
 
+  let latestListRequest = 0
+
   const onUpdateOptions = async () => {
+    const requestId = ++latestListRequest
+
     if (!filters.value) {
       filters.value = { shared: 0, loadNode: 1 }
     }
@@ -221,6 +225,8 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
 
     try {
       const { items, totalItems } = await baseService.getCollection(apiEndpoint, params)
+      if (requestId !== latestListRequest) return
+
       if (items) {
         files.value = items
         totalFiles.value = totalItems
@@ -228,9 +234,13 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
         console.error("[FILEMANAGER] Unexpected API response format", items)
       }
     } catch (error) {
-      console.error("[FILEMANAGER] Error fetching files:", error)
+      if (requestId === latestListRequest) {
+        console.error("[FILEMANAGER] Error fetching files:", error)
+      }
     } finally {
-      isLoading.value = false
+      if (requestId === latestListRequest) {
+        isLoading.value = false
+      }
     }
   }
 
@@ -534,7 +544,13 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
 
       let resolvedParent = rootParentId
 
-      if (isUploaded === "true" && isValidParentForMode(uploadParentNodeId)) {
+      // The personal-file route explicitly selects a folder. Never let a folder
+      // cached from another account or an earlier visit override this URL.
+      if (!isCourseDocument && route.name === "PersonalFileList" && isValidParentForMode(routeNodeId)) {
+        resolvedParent = routeNodeId
+        localStorage.removeItem(LS_KEY_IS_UPLOADED)
+        localStorage.removeItem(LS_KEY_UPLOAD_PARENT)
+      } else if (isUploaded === "true" && isValidParentForMode(uploadParentNodeId)) {
         resolvedParent = uploadParentNodeId
         localStorage.removeItem(LS_KEY_IS_UPLOADED)
         localStorage.removeItem(LS_KEY_UPLOAD_PARENT)

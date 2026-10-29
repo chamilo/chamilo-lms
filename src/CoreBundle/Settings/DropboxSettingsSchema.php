@@ -19,6 +19,8 @@ class DropboxSettingsSchema extends AbstractSettingsSchema
                 [
                     'dropbox_allow_overwrite' => 'true',
                     'dropbox_max_filesize' => '100000000',
+                    'dropbox_user_quota_mb' => '0',
+                    'dropbox_course_quota_mb' => '0',
                     'dropbox_allow_just_upload' => 'true',
                     'dropbox_allow_student_to_student' => 'true',
                     'dropbox_allow_group' => 'true',
@@ -40,6 +42,8 @@ class DropboxSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('dropbox_allow_overwrite', YesNoType::class)
             ->add('dropbox_max_filesize')
+            ->add('dropbox_user_quota_mb')
+            ->add('dropbox_course_quota_mb')
             ->add('dropbox_allow_just_upload', YesNoType::class)
             ->add('dropbox_allow_student_to_student', YesNoType::class)
             ->add('dropbox_allow_group', YesNoType::class)

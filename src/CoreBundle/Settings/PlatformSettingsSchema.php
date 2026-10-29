@@ -47,6 +47,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'donotlistcampus' => 'false',
                     'use_custom_pages' => 'false',
                     'allow_my_files' => 'true',
+                    'personal_files_quota_mb' => '0',
                     'registered' => 'false',
                     'server_type' => 'prod',
                     'unoconv_binaries' => '/usr/bin/unoconv',
@@ -93,6 +94,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('donotlistcampus', YesNoType::class)
             ->add('use_custom_pages', YesNoType::class)
             ->add('allow_my_files', YesNoType::class)
+            ->add('personal_files_quota_mb')
             ->add(
                 'server_type',
                 ChoiceType::class,

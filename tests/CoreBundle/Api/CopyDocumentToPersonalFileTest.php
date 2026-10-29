@@ -190,12 +190,13 @@ class CopyDocumentToPersonalFileTest extends AbstractApiTest
         $copyResponse = $this->createClientWithCredentials($teacherToken)
             ->request(
                 'POST',
-                "/api/documents/{$documentId}/personal_files"
+                "/api/documents/{$documentId}/personal_files",
+                ['headers' => ['Accept' => 'application/ld+json']]
             )
         ;
 
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains([
             '@context' => '/api/contexts/DocumentPersonalFile',
             '@type' => 'PersonalFile',
@@ -222,12 +223,13 @@ class CopyDocumentToPersonalFileTest extends AbstractApiTest
         $this->createClientWithCredentials($studentToken)
             ->request(
                 'POST',
-                "/api/documents/{$documentId}/personal_files"
+                "/api/documents/{$documentId}/personal_files",
+                ['headers' => ['Accept' => 'application/ld+json']]
             )
         ;
 
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains([
             '@context' => '/api/contexts/DocumentPersonalFile',
             '@type' => 'PersonalFile',

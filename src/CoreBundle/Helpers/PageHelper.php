@@ -77,8 +77,11 @@ class PageHelper
     public function createDefaultPages(User $user, AccessUrl $url, string $locale): bool
     {
         $categories = $this->pageCategoryRepository->findAll();
+        // A migration may create this category before the initial page fixtures run.
+        $onlyPublicMenuCategory = 1 === \count($categories)
+            && 'menu_public_links' === $categories[0]->getTitle();
 
-        if (!empty($categories)) {
+        if (!empty($categories) && !$onlyPublicMenuCategory) {
             return false;
         }
 
@@ -152,6 +155,15 @@ class PageHelper
             ->setCreator($user)
         ;
         $this->pageCategoryRepository->update($menuLinksCategory);
+
+        if (!$onlyPublicMenuCategory) {
+            $menuPublicLinksCategory = (new PageCategory())
+                ->setTitle('menu_public_links')
+                ->setType('grid')
+                ->setCreator($user)
+            ;
+            $this->pageCategoryRepository->update($menuPublicLinksCategory);
+        }
 
         // Categories for extra content in admin blocks.
         foreach (PageCategory::ADMIN_BLOCKS_CATEGORIES as $nameBlock) {

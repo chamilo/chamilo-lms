@@ -7,10 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -88,6 +91,40 @@ final class CCalendarEventAttachmentApiTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(201);
 
         $this->assertSame(['shell.phps'], array_column($this->eventInAgenda($ctx['teacher'], $ctx['course'], 'CatPhp')['attachments'], 'filename'));
+    }
+
+    public function testDeletingTheEventLeavesNothingOfItOrOfItsFiles(): void
+    {
+        $ctx = $this->bootstrapScenario('delete');
+        $eventId = $this->createEvent($ctx, 'CatDeleted');
+        $attachmentId = $this->upload($ctx['teacher'], $ctx['course'], $eventId, 'notes.txt');
+        $this->assertResponseStatusCodeSame(201);
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $event = $em->getRepository(CCalendarEvent::class)->find($eventId);
+        $nodeIds = [
+            (int) $event?->getResourceNode()?->getId(),
+            (int) $em->getRepository(CCalendarEventAttachment::class)->find($attachmentId)?->getResourceNode()?->getId(),
+        ];
+
+        $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']))->request(
+            'DELETE',
+            '/api/c_calendar_events/'.$eventId.'?cid='.$ctx['course']->getId(),
+        );
+        $this->assertResponseStatusCodeSame(204);
+
+        // A node left behind keeps its published link, so the learners could still read it.
+        $em->clear();
+        $this->assertSame([], $em->getRepository(ResourceNode::class)->findBy(['id' => $nodeIds]));
+        $this->assertSame([], $em->getRepository(ResourceFile::class)->findBy(['resourceNode' => $nodeIds]));
+
+        $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['student']))->request(
+            'GET',
+            '/api/resource_nodes/'.$nodeIds[0].'?cid='.$ctx['course']->getId(),
+            ['headers' => ['Accept' => 'application/json']],
+        );
+        $this->assertResponseStatusCodeSame(404);
     }
 
     /**

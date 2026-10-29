@@ -1148,6 +1148,33 @@ try {
             Event::addEvent(LOG_WS.$action, 'success', 'true');
             $restResponse->setData($data);
             break;
+        case Rest::GET_USER_CERTIFICATES:
+            $userId = (int) ($_REQUEST['user_id'] ?? 0);
+
+            if (empty($userId)) {
+                throw new Exception('user_id is required');
+            }
+
+            $sessionId = !empty($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null;
+            $courseCode = !empty($_REQUEST['course_code']) ? (string) $_REQUEST['course_code'] : null;
+
+            if (!empty($_REQUEST['course_id'])) {
+                $courseInfo = api_get_course_info_by_id((int) $_REQUEST['course_id']);
+
+                if (empty($courseInfo)) {
+                    throw new Exception('Course not found');
+                }
+
+                $courseCode = $courseInfo['code'];
+            }
+
+            $afterDate = !empty($_REQUEST['after_date']) ? (string) $_REQUEST['after_date'] : null;
+            $beforeDate = !empty($_REQUEST['before_date']) ? (string) $_REQUEST['before_date'] : null;
+
+            $data = $restApi->getUserCertificates($userId, $sessionId, $courseCode, $afterDate, $beforeDate);
+            Event::addEvent(LOG_WS.$action, 'user_id', $userId);
+            $restResponse->setData($data);
+            break;
         /**
          * Subscribe a course to a session using extra field values for identification.
          *

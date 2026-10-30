@@ -20,6 +20,7 @@
       v-model:visible="dialog"
       :header="item['@id'] ? t('Edit event') : t('Add event')"
       :modal="true"
+      :style="{ width: '50rem' }"
     >
       <CCalendarEventForm
         v-if="dialog"
@@ -38,9 +39,9 @@
           @click="dialog = false"
         />
         <BaseButton
+          :icon="item['@id'] ? 'edit' : 'calendar-plus'"
           :label="item['@id'] ? t('Edit') : t('Add')"
-          icon="calendar-plus"
-          type="secondary"
+          :type="item['@id'] ? 'secondary' : 'success'"
           @click="onCreateEventForm"
         />
       </template>

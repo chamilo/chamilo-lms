@@ -2,7 +2,6 @@
 import { computed, ref, watch, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
 import Fieldset from "primevue/fieldset"
-import SelectButton from "primevue/selectbutton"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
@@ -105,19 +104,21 @@ const findUsergroup = async (query) => {
 <template>
   <div
     v-if="allowCollectiveInvitations && allowSubscriptions"
-    class="mb-3"
+    class="calendar-tabs mb-4"
+    role="tablist"
   >
-    <div class="inline-flex items-center rounded-full border border-gray-300 bg-gray-100/90 p-1">
-      <SelectButton
-        v-model="invitationTypeSelected"
-        :options="invitationTypeList"
-        option-label="name"
-        option-value="value"
-        class="calendar-mode-toggle"
-        aria-label="Invitation mode selector"
-        size="small"
-      />
-    </div>
+    <button
+      v-for="invitationType in invitationTypeList"
+      :key="invitationType.value"
+      :aria-selected="invitationTypeSelected === invitationType.value"
+      :class="{ 'calendar-tabs__tab--active': invitationTypeSelected === invitationType.value }"
+      class="calendar-tabs__tab"
+      role="tab"
+      type="button"
+      @click="invitationTypeSelected = invitationType.value"
+    >
+      {{ invitationType.name }}
+    </button>
   </div>
 
   <Fieldset

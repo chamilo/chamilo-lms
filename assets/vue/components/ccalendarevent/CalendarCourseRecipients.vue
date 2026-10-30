@@ -69,14 +69,10 @@ onMounted(() => {
     :is-loading="isLoading"
     :label="t('Send to')"
     :options="options"
+    :placeholder="t('Everyone')"
     filter
     input-id="course_recipients"
     option-label="label"
     option-value="value"
-  />
-  <small
-    v-if="!selected.length"
-    class="block -mt-2 mb-4 text-gray-50"
-    v-text="t('Everyone')"
   />
 </template>

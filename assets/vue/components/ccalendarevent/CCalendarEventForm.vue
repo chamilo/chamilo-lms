@@ -1,18 +1,25 @@
 <template>
   <form>
-    <BaseInputText
-      id="event-title"
-      v-model="item.title"
-      :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
-      :is-invalid="v$.item.title.$invalid"
-      :label="t('Title')"
-    />
+    <div class="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">
+      <BaseInputText
+        id="event-title"
+        v-model="item.title"
+        :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
+        :is-invalid="v$.item.title.$error"
+        :label="t('Title')"
+      />
+
+      <BaseColorPicker
+        v-model="eventColor"
+        :label="t('Color')"
+      />
+    </div>
 
     <div class="grid gap-4 md:grid-cols-2">
       <BaseCalendar
         id="calendar-start-date"
         v-model="item.startDate"
-        :is-invalid="v$.item.startDate.$invalid"
+        :is-invalid="v$.item.startDate.$error"
         :label="t('Start date')"
         show-time
       />
@@ -20,7 +27,7 @@
       <BaseCalendar
         id="calendar-end-date"
         v-model="item.endDate"
-        :is-invalid="v$.item.endDate.$invalid"
+        :is-invalid="v$.item.endDate.$error"
         :label="t('End date')"
         show-time
       />
@@ -29,6 +36,7 @@
     <BaseTinyEditor
       v-model="item.content"
       :required="false"
+      :title="t('Description')"
       editor-id="calendar-event-content"
     />
 
@@ -40,15 +48,14 @@
       name="comment"
     />
 
-    <div
+    <Fieldset
       v-if="showAttachments"
-      class="flex flex-col gap-2"
+      :legend="t('Attachments')"
+      class="mb-6"
     >
-      <p class="text-sm font-semibold">{{ t("Attachments") }}</p>
-
       <ul
         v-if="item.attachments?.length"
-        class="space-y-1 text-sm"
+        class="mb-3 space-y-1 text-body-2"
       >
         <li
           v-for="attachment in item.attachments"
@@ -75,16 +82,22 @@
         v-model="item.attachmentFiles"
         :label="t('Add attachment')"
         name="attachments"
+        type="success"
       />
 
-      <BaseTextArea
+      <!-- BaseTextArea gives its classes to the textarea, which would move it away from its label. -->
+      <div
         v-if="item.attachmentFiles?.length"
-        id="calendar-event-file-comment"
-        v-model="item.fileComment"
-        :label="t('File comment')"
-        name="file_comment"
-      />
-    </div>
+        class="mt-4"
+      >
+        <BaseTextArea
+          id="calendar-event-file-comment"
+          v-model="item.fileComment"
+          :label="t('File comment')"
+          name="file_comment"
+        />
+      </div>
+    </Fieldset>
 
     <BaseAdvancedSettingsButton v-if="showResourceLanguageAdvancedSettings" v-model="showAdvancedSettings">
       <ResourceLanguageSelector
@@ -92,21 +105,6 @@
         v-model="item.language"
       />
     </BaseAdvancedSettingsButton>
-
-    <div class="m-4 flex flex-col gap-2">
-      <label
-        for="color-picker"
-        class="font-semibold text-sm"
-      >
-        {{ t("Color") }}
-      </label>
-      <input
-        id="color-picker"
-        v-model="item.color"
-        class="w-14 h-10 cursor-pointer border rounded"
-        type="color"
-      />
-    </div>
 
     <BaseSelect
       v-if="showRoomField && roomOptions.length > 0"
@@ -166,7 +164,7 @@
         <BaseSelect
           id="calendar-event-repeat-type"
           v-model="item.repeatType"
-          :is-invalid="v$.item.repeatType.$invalid"
+          :is-invalid="v$.item.repeatType.$error"
           :label="t('Repeat type')"
           :options="repeatTypeOptions"
           name="repeat_type"
@@ -177,7 +175,7 @@
         <BaseCalendar
           id="calendar-event-repeat-end-date"
           v-model="item.repeatEndDate"
-          :is-invalid="v$.item.repeatEndDate.$invalid"
+          :is-invalid="v$.item.repeatEndDate.$error"
           :label="t('Repeat end date')"
         />
       </div>
@@ -217,6 +215,9 @@ import BaseFileUploadMultiple from "../basecomponents/BaseFileUploadMultiple.vue
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import BaseColorPicker from "../basecomponents/BaseColorPicker.vue"
+import Fieldset from "primevue/fieldset"
+import Color from "colorjs.io"
 import { useConfirmation } from "../../composables/useConfirmation"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import CalendarCourseRecipients from "./CalendarCourseRecipients.vue"
@@ -399,6 +400,20 @@ const rules = computed(() => ({
 }))
 
 const v$ = useVuelidate(rules, { item })
+
+// The event keeps its color as a hex string; BaseColorPicker works with a Color object.
+const eventColor = computed({
+  get: () => {
+    try {
+      return new Color(item.value?.color || "#4682B4")
+    } catch {
+      return new Color("#4682B4")
+    }
+  },
+  set: (color) => {
+    item.value.color = color.to("srgb").toString({ format: "hex", collapse: false })
+  },
+})
 
 defineExpose({
   v$,

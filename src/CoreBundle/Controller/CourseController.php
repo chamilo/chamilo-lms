@@ -1319,7 +1319,13 @@ class CourseController extends ToolBaseController
             $buyCoursesServiceSaleId = $candidateServiceSaleId > 0 ? $candidateServiceSaleId : null;
         }
 
-        if (!$capabilityStatus['canCreate'] && null === $buyCoursesServiceSaleId) {
+        // Purchased services can extend capacity, but never grant permission to create courses.
+        $cannotBypassPolicy = \in_array(
+            (string) ($capabilityStatus['limitSource'] ?? ''),
+            ['role', 'setting', 'error'],
+            true
+        );
+        if (!$capabilityStatus['canCreate'] && (null === $buyCoursesServiceSaleId || $cannotBypassPolicy)) {
             return new JsonResponse(
                 [
                     'success' => false,
@@ -1622,7 +1628,7 @@ class CourseController extends ToolBaseController
             error_log('[Course] Failed to resolve course creation capability: '.$exception->getMessage());
 
             return [
-                'canCreate' => true,
+                'canCreate' => false,
                 'currentCount' => 0,
                 'effectiveLimit' => 0,
                 'serviceLimit' => null,

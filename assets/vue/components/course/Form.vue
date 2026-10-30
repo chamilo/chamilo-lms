@@ -362,6 +362,10 @@ const selectedCourseOptionIsAvailable = computed(() => {
 })
 
 const shouldBlockSubmitByCourseOption = computed(() => {
+  if (standardCourseOption.value && !shouldShowCourseCreationOptions.value) {
+    return !standardCourseOption.value.available
+  }
+
   return shouldShowCourseCreationOptions.value && !selectedCourseOptionIsAvailable.value
 })
 

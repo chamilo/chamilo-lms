@@ -43321,3 +43321,15 @@ msgstr "Show maximum score per question during the test"
 
 msgid "Expired certificates"
 msgstr "Expired certificates"
+
+msgid "Disable account"
+msgstr "Disable account"
+
+msgid "Disable selected accounts"
+msgstr "Disable selected accounts"
+
+msgid "Are you sure you want to disable the selected accounts?"
+msgstr "Are you sure you want to disable the selected accounts?"
+
+msgid "Disabled users cannot sign in until an administrator reactivates their account."
+msgstr "Disabled users cannot sign in until an administrator reactivates their account."

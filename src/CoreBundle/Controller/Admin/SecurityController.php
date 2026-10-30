@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Helpers\IntrusionDetectionLogHelper;
 use Chamilo\CoreBundle\Helpers\WeakPasswordCheckerHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
+use Chamilo\CoreBundle\Service\Security\WeakPasswordAccountDisabler;
 use DateTimeImmutable;
 use RuntimeException;
 use Security;
@@ -47,6 +48,7 @@ final class SecurityController extends BaseController
         private readonly TrackELoginRecordRepository $repo,
         private readonly IntrusionDetectionLogHelper $idsLog,
         private readonly WeakPasswordCheckerHelper $weakPasswordChecker,
+        private readonly WeakPasswordAccountDisabler $accountDisabler,
         private readonly UserRepository $userRepository,
         private readonly CsrfTokenManagerInterface $csrfTokenManager,
         private readonly TranslatorInterface $translator,
@@ -147,7 +149,7 @@ final class SecurityController extends BaseController
                 return new RedirectResponse($this->generateUrl('admin_security_password_strength'));
             }
 
-            if (!\in_array($action, ['request_change', 'force_reset'], true)) {
+            if (!\in_array($action, ['request_change', 'force_reset', 'disable_accounts'], true)) {
                 $this->addFlash('warning', $this->translator->trans('Invalid action.'));
 
                 return new RedirectResponse($this->generateUrl('admin_security_password_strength'));
@@ -164,8 +166,15 @@ final class SecurityController extends BaseController
             }
 
             // Re-check selected users before any action. Never trust the submitted list alone.
-            $weakUsers = $this->weakPasswordChecker->findWeakPasswordUsers($userIds);
+            $admin = $this->getUser();
+            if (!$admin instanceof User) {
+                throw $this->createAccessDeniedException();
+            }
+
+            // Refresh password weakness and URL scope; posted IDs and prior scan results are untrusted.
+            $weakUsers = $this->weakPasswordChecker->findWeakPasswordUsers($admin, $userIds);
             $processed = 0;
+            $disabledIds = [];
 
             foreach ($weakUsers as $weakUser) {
                 if ('request_change' === $action && $this->sendPasswordChangeRequest($weakUser)) {
@@ -177,6 +186,19 @@ final class SecurityController extends BaseController
                 if ('force_reset' === $action && $this->forcePasswordReset($weakUser)) {
                     $processed++;
                 }
+
+                if ('disable_accounts' === $action && $this->accountDisabler->disable($admin, $weakUser)) {
+                    $processed++;
+                    $disabledIds[] = (int) $weakUser->getId();
+                }
+            }
+
+            if ([] !== $disabledIds) {
+                $foundIds = (array) $session->get(self::PASSWORD_STRENGTH_SCAN_FOUND_KEY, []);
+                $session->set(
+                    self::PASSWORD_STRENGTH_SCAN_FOUND_KEY,
+                    array_values(array_diff($foundIds, $disabledIds))
+                );
             }
 
             $this->addFlash(
@@ -191,13 +213,26 @@ final class SecurityController extends BaseController
         $offset = (int) $session->get(self::PASSWORD_STRENGTH_SCAN_OFFSET_KEY, 0);
         $foundUserIds = $session->get(self::PASSWORD_STRENGTH_SCAN_FOUND_KEY, []);
         $hasFinishedScan = $total > 0 && $offset >= $total;
+        $admin = $this->getUser();
+        if (!$admin instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $visibleUsers = $hasFinishedScan
+            ? $this->weakPasswordChecker->findUsersByIds($foundUserIds, $admin)
+            : [];
+        $disableAllowed = [];
+        foreach ($visibleUsers as $user) {
+            $disableAllowed[(int) $user->getId()] = $this->accountDisabler->canDisable($admin, $user);
+        }
 
         return $this->render('@ChamiloCore/Admin/Security/password_strength.html.twig', [
-            'users' => $hasFinishedScan ? $this->weakPasswordChecker->findUsersByIds($foundUserIds) : [],
+            'users' => $visibleUsers,
+            'disable_allowed' => $disableAllowed,
             'has_scanned' => $hasFinishedScan,
             'scanned_count' => $hasFinishedScan ? $total : 0,
             'scan_total' => $hasFinishedScan ? $total : 0,
-            'weak_count' => $hasFinishedScan ? \count($foundUserIds) : 0,
+            'weak_count' => $hasFinishedScan ? \count($visibleUsers) : 0,
             'csrf_token' => $csrfToken,
             'scan_endpoint' => $this->generateUrl('admin_security_password_strength_scan_batch'),
             'scan_filter_user_ids' => implode(',', $this->getPasswordStrengthScanFilterUserIds($request)),
@@ -214,6 +249,11 @@ final class SecurityController extends BaseController
             return new JsonResponse([
                 'error' => $this->translator->trans('Invalid CSRF token.'),
             ], Response::HTTP_FORBIDDEN);
+        }
+
+        $admin = $this->getUser();
+        if (!$admin instanceof User) {
+            throw $this->createAccessDeniedException();
         }
 
         $session = $request->getSession();
@@ -233,8 +273,8 @@ final class SecurityController extends BaseController
 
         if (0 === $total) {
             $total = [] === $filterUserIds
-                ? $this->weakPasswordChecker->countScannableUsers()
-                : $this->weakPasswordChecker->countScannableUsersByIds($filterUserIds);
+                ? $this->weakPasswordChecker->countScannableUsers($admin)
+                : $this->weakPasswordChecker->countScannableUsersByIds($filterUserIds, $admin);
 
             $session->set(self::PASSWORD_STRENGTH_SCAN_TOTAL_KEY, $total);
         }
@@ -270,12 +310,14 @@ final class SecurityController extends BaseController
         $result = [] === $filterUserIds
             ? $this->weakPasswordChecker->scanUsersBatch(
                 $offset,
-                self::PASSWORD_STRENGTH_SCAN_BATCH_SIZE
+                self::PASSWORD_STRENGTH_SCAN_BATCH_SIZE,
+                $admin,
             )
             : $this->weakPasswordChecker->scanUsersByIdsBatch(
                 $filterUserIds,
                 $offset,
-                self::PASSWORD_STRENGTH_SCAN_BATCH_SIZE
+                self::PASSWORD_STRENGTH_SCAN_BATCH_SIZE,
+                $admin,
             );
 
         $scannedUsers = $result['scanned_users'];

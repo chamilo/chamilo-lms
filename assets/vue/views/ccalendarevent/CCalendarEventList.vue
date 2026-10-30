@@ -1034,10 +1034,11 @@ async function onCreateEventForm() {
       return
     }
 
-    let itemModel = createForm.value.v$.item.$model
+    // A copy: the form stays on screen until the request ends, and the deletes below must not reach it.
+    const itemModel = { ...createForm.value.v$.item.$model }
 
     if (!itemModel.content) {
-      itemModel = { ...itemModel, content: "" }
+      itemModel.content = ""
     }
 
     itemModel.isGlobal = effectiveIsGlobal.value

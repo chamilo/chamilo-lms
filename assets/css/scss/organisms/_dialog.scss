@@ -1,5 +1,6 @@
 .p-dialog {
-  @apply max-h-[90%] scale-100 shadow-xl rounded-lg border-0 border-none;
+  // A dialog with a fixed width stays inside a narrow screen.
+  @apply max-h-[90%] max-w-[calc(100vw-2rem)] scale-100 shadow-xl rounded-lg border-0 border-none;
 
   &-mask {
     @apply bg-gray-30;
@@ -48,8 +49,14 @@
     @apply flex items-center justify-between flex-shrink-0;
   }
 
+  // A button that does not fit goes to a new line at the end (right in LTR, left in RTL) instead of shrinking,
+  // so its label stays on one line; only a button wider than the whole line breaks its label.
   &-footer {
-    @apply flex-shrink-0 bg-gray-15 flex gap-4 justify-end rounded-b-lg p-4;
+    @apply flex-shrink-0 bg-gray-15 flex flex-wrap gap-4 justify-end rounded-b-lg p-4;
+
+    .p-button {
+      @apply max-w-full flex-shrink-0;
+    }
   }
 
   &-enter-active {

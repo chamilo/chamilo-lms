@@ -40,40 +40,12 @@ use const PREG_SET_ORDER;
 final class SystemStatusController extends AbstractController
 {
     /**
-     * @var array<string, array{label: string, info: string, icon: string}>
+     * Section keys the page accepts. Their labels, descriptions and icons live in
+     * SystemStatus.vue, so the tabs render before this endpoint answers.
+     *
+     * @var list<string>
      */
-    private const array SECTIONS = [
-        'chamilo' => [
-            'label' => 'Chamilo',
-            'info' => 'State of Chamilo requirements',
-            'icon' => 'mdi-cog-outline',
-        ],
-        'php' => [
-            'label' => 'PHP',
-            'info' => 'State of PHP settings on the server',
-            'icon' => 'mdi-language-php',
-        ],
-        'database' => [
-            'label' => 'Database',
-            'info' => 'Database server configuration and metadata',
-            'icon' => 'mdi-database',
-        ],
-        'webserver' => [
-            'label' => 'Web server',
-            'info' => 'Information about your webserver configuration',
-            'icon' => 'mdi-server',
-        ],
-        'paths' => [
-            'label' => 'Paths',
-            'info' => 'api_get_path() constants resolved on this portal',
-            'icon' => 'mdi-folder-outline',
-        ],
-        'courses_space' => [
-            'label' => 'Courses space',
-            'info' => 'Disk usage per course vs disk quota',
-            'icon' => 'mdi-folder-cog-outline',
-        ],
-    ];
+    private const array SECTIONS = ['chamilo', 'php', 'database', 'webserver', 'paths', 'courses_space'];
 
     /**
      * Status keys exposed to the admin UI (hardcoded allowlist).
@@ -206,18 +178,8 @@ final class SystemStatusController extends AbstractController
         }
 
         $section = trim((string) $request->query->get('section', 'chamilo'));
-        if (!isset(self::SECTIONS[$section])) {
+        if (!\in_array($section, self::SECTIONS, true)) {
             $section = 'chamilo';
-        }
-
-        $sections = [];
-        foreach (self::SECTIONS as $key => $meta) {
-            $sections[] = [
-                'key' => $key,
-                'label' => $this->translator->trans($meta['label']),
-                'info' => $this->translator->trans($meta['info']),
-                'icon' => $meta['icon'],
-            ];
         }
 
         if ('courses_space' === $section) {
@@ -232,7 +194,6 @@ final class SystemStatusController extends AbstractController
         }
 
         return $this->json([
-            'sections' => $sections,
             'currentSection' => $section,
             'rowType' => $rowType,
             'rows' => $rows,

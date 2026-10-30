@@ -6,23 +6,51 @@
     />
 
     <BaseRouteTabs
-      v-if="sectionTabs.length"
       :selected-tab="selectedTabIndex"
       :tabs="sectionTabs"
     />
 
-    <p
-      v-if="activeSectionInfo"
-      class="text-body-2 text-gray-50"
-    >
+    <p class="text-body-2 text-gray-50">
       {{ activeSectionInfo }}
     </p>
 
     <div
       v-if="isLoading"
-      class="rounded-lg border border-gray-25 bg-white p-8 text-center text-gray-50 shadow-sm"
+      aria-busy="true"
+      class="space-y-6"
     >
-      {{ t("Loading") }}...
+      <Skeleton
+        v-if="sectionSkeleton.panel"
+        border-radius="0.5rem"
+        height="5rem"
+      />
+      <div>
+        <Skeleton height="2.5625rem" />
+        <div
+          v-for="row in sectionSkeleton.rows"
+          :key="`row-skeleton-${row}`"
+          :style="{ height: `${sectionSkeleton.rowHeight}px` }"
+          class="flex items-center border-b border-gray-25"
+        >
+          <div
+            v-for="(width, col) in sectionSkeleton.columns"
+            :key="`cell-skeleton-${row}-${col}`"
+            :style="{ width: `${width}%` }"
+            class="px-2"
+          >
+            <Skeleton
+              height="1rem"
+              width="70%"
+            />
+          </div>
+        </div>
+        <div class="flex h-16 items-center justify-center">
+          <Skeleton
+            height="2.5rem"
+            width="18.375rem"
+          />
+        </div>
+      </div>
     </div>
 
     <template v-else>
@@ -95,7 +123,16 @@
                     </span>
                     <div>
                       <h3 class="text-body-1 font-semibold text-gray-90">OPcache</h3>
-                      <p class="text-caption text-gray-50">
+                      <Skeleton
+                        v-if="cacheLoading && !cacheData"
+                        class="mt-1"
+                        height="0.75rem"
+                        width="5rem"
+                      />
+                      <p
+                        v-else
+                        class="text-caption text-gray-50"
+                      >
                         {{ cacheStatusLabel(cacheData?.opcache) }}
                       </p>
                     </div>
@@ -112,9 +149,32 @@
                 </div>
                 <div
                   v-if="cacheLoading && !cacheData"
-                  class="text-caption text-gray-50"
+                  aria-busy="true"
                 >
-                  {{ t("Loading") }}...
+                  <div class="mb-4">
+                    <div class="mb-1 flex items-center justify-between">
+                      <Skeleton
+                        height="1rem"
+                        width="9rem"
+                      />
+                      <Skeleton
+                        height="1rem"
+                        width="8rem"
+                      />
+                    </div>
+                    <Skeleton
+                      border-radius="9999px"
+                      height="0.75rem"
+                    />
+                  </div>
+                  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <Skeleton
+                      v-for="i in 16"
+                      :key="`opcache-skeleton-${i}`"
+                      border-radius="0.5rem"
+                      height="3.875rem"
+                    />
+                  </div>
                 </div>
                 <template v-else-if="cacheData?.opcache?.enabled">
                   <div
@@ -193,7 +253,16 @@
                     </span>
                     <div>
                       <h3 class="text-body-1 font-semibold text-gray-90">APCu</h3>
-                      <p class="text-caption text-gray-50">
+                      <Skeleton
+                        v-if="cacheLoading && !cacheData"
+                        class="mt-1"
+                        height="0.75rem"
+                        width="5rem"
+                      />
+                      <p
+                        v-else
+                        class="text-caption text-gray-50"
+                      >
                         {{ cacheStatusLabel(cacheData?.apcu) }}
                       </p>
                     </div>
@@ -210,9 +279,32 @@
                 </div>
                 <div
                   v-if="cacheLoading && !cacheData"
-                  class="text-caption text-gray-50"
+                  aria-busy="true"
                 >
-                  {{ t("Loading") }}...
+                  <div class="mb-4">
+                    <div class="mb-1 flex items-center justify-between">
+                      <Skeleton
+                        height="1rem"
+                        width="9rem"
+                      />
+                      <Skeleton
+                        height="1rem"
+                        width="8rem"
+                      />
+                    </div>
+                    <Skeleton
+                      border-radius="9999px"
+                      height="0.75rem"
+                    />
+                  </div>
+                  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <Skeleton
+                      v-for="i in 12"
+                      :key="`apcu-skeleton-${i}`"
+                      border-radius="0.5rem"
+                      height="3.875rem"
+                    />
+                  </div>
                 </div>
                 <template v-else-if="cacheData?.apcu?.enabled">
                   <div
@@ -355,9 +447,53 @@
 
             <div
               v-if="dbLoading && !dbData"
-              class="text-caption text-gray-50"
+              aria-busy="true"
+              class="space-y-4"
             >
-              {{ t("Loading") }}...
+              <div class="mb-2">
+                <div class="mb-1 flex items-center justify-between">
+                  <Skeleton
+                    height="1rem"
+                    width="9rem"
+                  />
+                  <Skeleton
+                    height="1rem"
+                    width="8rem"
+                  />
+                </div>
+                <Skeleton
+                  border-radius="9999px"
+                  height="0.75rem"
+                />
+              </div>
+              <div class="mb-2">
+                <div class="mb-1 flex items-center justify-between">
+                  <Skeleton
+                    height="1rem"
+                    width="9rem"
+                  />
+                  <Skeleton
+                    height="1rem"
+                    width="8rem"
+                  />
+                </div>
+                <Skeleton
+                  border-radius="9999px"
+                  height="0.75rem"
+                />
+              </div>
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <Skeleton
+                  v-for="i in 17"
+                  :key="`db-skeleton-${i}`"
+                  border-radius="0.5rem"
+                  height="3.875rem"
+                />
+              </div>
+              <Skeleton
+                border-radius="0.5rem"
+                height="3.75rem"
+              />
             </div>
             <template v-else-if="dbData?.server?.available">
               <div
@@ -607,9 +743,37 @@
 
             <div
               v-if="wsLoading && !wsData"
-              class="text-caption text-gray-50"
+              aria-busy="true"
+              class="space-y-4"
             >
-              {{ t("Loading") }}...
+              <div class="mb-2">
+                <div class="mb-1 flex items-center justify-between">
+                  <Skeleton
+                    height="1rem"
+                    width="9rem"
+                  />
+                  <Skeleton
+                    height="1rem"
+                    width="8rem"
+                  />
+                </div>
+                <Skeleton
+                  border-radius="9999px"
+                  height="0.75rem"
+                />
+              </div>
+              <Skeleton
+                height="1rem"
+                width="16rem"
+              />
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <Skeleton
+                  v-for="i in 21"
+                  :key="`ws-skeleton-${i}`"
+                  border-radius="0.5rem"
+                  height="3.875rem"
+                />
+              </div>
             </div>
             <template v-else-if="wsData?.status?.available">
               <div
@@ -814,6 +978,7 @@ import { computed, onBeforeUnmount, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import Message from "primevue/message"
+import Skeleton from "primevue/skeleton"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -827,8 +992,42 @@ const { t } = useI18n()
 const route = useRoute()
 const { showErrorNotification } = useNotification()
 
-const sections = ref([])
-const currentSection = ref("chamilo")
+/**
+ * Loading layout of each section, measured on the loaded page at 1440px: column widths (% of the table),
+ * rows on the first page and their average height (px). Keeps the skeleton in the shape of what replaces it.
+ */
+const SECTION_SKELETONS = {
+  chamilo: { panel: false, columns: [7, 7, 25, 7, 9, 45], rows: 7, rowHeight: 48 },
+  php: { panel: true, columns: [7, 9, 16, 7, 9, 52], rows: 20, rowHeight: 52.4 },
+  database: { panel: true, columns: [12, 14, 20, 16, 15, 23], rows: 4, rowHeight: 45 },
+  webserver: { panel: true, columns: [7, 7, 26, 27, 9, 24], rows: 9, rowHeight: 60.4 },
+  paths: { panel: false, columns: [65, 35], rows: 20, rowHeight: 34 },
+  courses_space: { panel: false, columns: [4, 14, 27, 29, 6, 20], rows: 2, rowHeight: 49 },
+}
+
+/**
+ * The fixed sections of the page, so the tabs and the description render before the data does. The server accepts
+ * the same keys (SystemStatusController::SECTIONS) and falls back to "chamilo" for any other.
+ */
+const SECTIONS = [
+  { key: "chamilo", label: "Chamilo", info: "State of Chamilo requirements", icon: "mdi-cog-outline" },
+  { key: "php", label: "PHP", info: "State of PHP settings on the server", icon: "mdi-language-php" },
+  { key: "database", label: "Database", info: "Database server configuration and metadata", icon: "mdi-database" },
+  { key: "webserver", label: "Web server", info: "Information about your webserver configuration", icon: "mdi-server" },
+  {
+    key: "paths",
+    label: "Paths",
+    info: "api_get_path() constants resolved on this portal",
+    icon: "mdi-folder-outline",
+  },
+  {
+    key: "courses_space",
+    label: "Courses space",
+    info: "Disk usage per course vs disk quota",
+    icon: "mdi-folder-cog-outline",
+  },
+]
+
 const rowType = ref("generic")
 const rows = ref([])
 const isLoading = ref(true)
@@ -859,23 +1058,27 @@ const wsAutoRefresh = ref(false)
 const wsExpanded = ref(false)
 let wsRefreshTimer = null
 
+/** Section in the URL, with the same "chamilo" fallback the server applies to an unknown key. */
+const currentSection = computed(() => {
+  const key = route.query.section
+
+  return SECTIONS.some((s) => s.key === key) ? key : "chamilo"
+})
+
 /** One route tab per section; the section lives in the query, so tabs keep the URL shareable. */
 const sectionTabs = computed(() =>
-  sections.value.map((section) => ({
+  SECTIONS.map((section) => ({
     title: t(section.label),
     icon: section.icon,
     to: { name: "AdminSystemStatus", query: { section: section.key } },
   })),
 )
 
-/** Index of the current section in the tab list, -1 until the sections load. */
-const selectedTabIndex = computed(() => sections.value.findIndex((s) => s.key === currentSection.value))
+const selectedTabIndex = computed(() => SECTIONS.findIndex((s) => s.key === currentSection.value))
 
-const activeSectionInfo = computed(() => {
-  const match = sections.value.find((s) => s.key === currentSection.value)
+const sectionSkeleton = computed(() => SECTION_SKELETONS[currentSection.value])
 
-  return match?.info ? t(match.info) : ""
-})
+const activeSectionInfo = computed(() => t(SECTIONS[selectedTabIndex.value].info))
 
 const opcacheMemoryBar = computed(() => {
   const o = cacheData.value?.opcache
@@ -1387,10 +1590,7 @@ function statusIconClass(status) {
 }
 
 function cacheStatusLabel(block) {
-  if (!block) {
-    return t("Loading") + "..."
-  }
-  if (!block.available) {
+  if (!block?.available) {
     return t("Not available")
   }
 
@@ -1768,8 +1968,6 @@ async function loadSection(sectionKey) {
       section: sectionKey || "chamilo",
     })
 
-    sections.value = data.sections || []
-    currentSection.value = data.currentSection || "chamilo"
     rowType.value = data.rowType || "generic"
     rows.value = data.rows || []
 

@@ -25,6 +25,7 @@
 
       <BaseTinyEditor
         v-model="messagePayload.content"
+        :enable-translate-html="false"
         :full-page="false"
         editor-id="message"
         required

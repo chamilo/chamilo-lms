@@ -254,12 +254,10 @@ function findMyReceiver(message, receiverType) {
   })
 }
 
-async function deleteMessage(message) {
+async function deleteMessage() {
   try {
-    const myReceiver = findMyReceiver(message)
-
-    if (myReceiver) {
-      await store.dispatch("messagereluser/del", myReceiver)
+    if (myReceiver.value) {
+      await store.dispatch("messagereluser/del", myReceiver.value)
 
       notification.showSuccessNotification(t("Message deleted"))
     }
@@ -275,7 +273,7 @@ function confirmDelete() {
   requireConfirmation({
     message: t(`Are you sure you want to delete {0}?`, [item.value.title]),
     accept: async () => {
-      await deleteMessage(item.value)
+      await deleteMessage()
     },
   })
 }

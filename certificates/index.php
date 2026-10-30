@@ -54,10 +54,32 @@ if (api_is_anonymous()) {
     }
 } elseif ((int) $currentUserId !== (int) $certificateData['user_id']) {
     $isCourseTeacher = false;
+    $isSessionStaff = false;
     if (!empty($category) && !empty($category->get_course_code())) {
         $isCourseTeacher = CourseManager::is_course_teacher($currentUserId, $category->get_course_code());
+
+        // Certificates of a session: its tutors are session coaches (not teachers of the base
+        // course) and session admins are not course teachers either, so is_course_teacher()
+        // alone locks them out of the certificates of their own sessions. Grant access only for
+        // the session the certificate belongs to.
+        $certificateSessionId = (int) $category->get_session_id();
+        if ($certificateSessionId > 0) {
+            $certificateCourseInfo = api_get_course_info($category->get_course_code());
+            $isSessionStaff = api_is_course_session_coach(
+                $currentUserId,
+                $certificateCourseInfo['real_id'],
+                $certificateSessionId
+            ) || SessionManager::user_is_general_coach($currentUserId, $certificateSessionId);
+
+            if (!$isSessionStaff && api_is_session_admin()) {
+                $certificateSessionInfo = api_get_session_info($certificateSessionId);
+                $isSessionStaff = 'true' === api_get_setting('allow_session_admins_to_manage_all_sessions')
+                    || (!empty($certificateSessionInfo)
+                        && (int) $certificateSessionInfo['session_admin_id'] === (int) $currentUserId);
+            }
+        }
     }
-    if (!api_is_platform_admin() && !$isCourseTeacher) {
+    if (!api_is_platform_admin() && !$isCourseTeacher && !$isSessionStaff) {
         api_not_allowed(true);
     }
 }

@@ -15,6 +15,14 @@
 
   &__title {
     @apply sm:me-auto;
+
+    &--with-icon {
+      @apply flex items-center gap-3;
+    }
+  }
+
+  &__icon {
+    @apply inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-support-1 text-primary;
   }
 
   &__actions {

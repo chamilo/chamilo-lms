@@ -186,6 +186,7 @@ export const chamiloIconToClass = {
   "trash": "mdi mdi-delete",
   "xmark": "mdi mdi-close",
   "health-check": "mdi mdi-clipboard-pulse-outline",
+  "heart-pulse": "mdi mdi-heart-pulse",
   "promotion": "mdi mdi-school-outline",
   "progress-star": "mdi mdi-progress-star",
   "help": "mdi mdi-face-agent",

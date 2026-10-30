@@ -4,6 +4,7 @@ import { useRoute } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import StudentViewButton from "../StudentViewButton.vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 
 defineProps({
   title: {
@@ -14,6 +15,12 @@ defineProps({
     type: String,
     required: false,
     default: "2",
+  },
+  // Optional ChamiloIcons key shown before the title.
+  icon: {
+    type: String,
+    required: false,
+    default: "",
   },
   showStudentViewButton: {
     type: Boolean,
@@ -44,8 +51,18 @@ const isEmbeddedStudentView = computed(
   >
     <component
       :is="`h${size}`"
+      :class="{ 'section-header__title--with-icon': icon }"
       class="section-header__title"
     >
+      <span
+        v-if="icon"
+        class="section-header__icon"
+      >
+        <BaseIcon
+          :icon="icon"
+          size="big"
+        />
+      </span>
       {{ title }}
     </component>
 

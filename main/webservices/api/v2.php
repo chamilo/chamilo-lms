@@ -1175,6 +1175,18 @@ try {
             Event::addEvent(LOG_WS.$action, 'user_id', $userId);
             $restResponse->setData($data);
             break;
+        case Rest::GET_SESSION_USER_FIRST_CONNEXION:
+            $userId = (int) ($_REQUEST['user_id'] ?? 0);
+            $sessionId = (int) ($_REQUEST['session_id'] ?? 0);
+
+            if (empty($userId) || empty($sessionId)) {
+                throw new Exception('user_id and session_id are required');
+            }
+
+            $data = $restApi->getSessionUserFirstConnexion($userId, $sessionId);
+            Event::addEvent(LOG_WS.$action, 'user_id', $userId);
+            $restResponse->setData($data);
+            break;
         /**
          * Subscribe a course to a session using extra field values for identification.
          *

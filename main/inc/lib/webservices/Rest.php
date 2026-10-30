@@ -162,6 +162,7 @@ class Rest extends WebService
     public const DELETE_GROUP_SUB_SESSION = 'delete_group_sub_session';
     public const GET_AUDIT_ITEMS = 'get_audit_items';
     public const GET_USER_CERTIFICATES = 'get_user_certificates';
+    public const GET_SESSION_USER_FIRST_CONNEXION = 'get_session_user_first_connexion';
     public const SUBSCRIBE_COURSE_TO_SESSION_FROM_EXTRA_FIELD = 'subscribe_course_to_session_from_extra_field';
     public const SUBSCRIBE_USER_TO_SESSION_FROM_EXTRA_FIELD = 'subscribe_user_to_session_from_extra_field';
     public const UPDATE_SESSION_FROM_EXTRA_FIELD = 'update_session_from_extra_field';
@@ -4805,28 +4806,7 @@ class Rest extends WebService
         ?string $afterDate = null,
         ?string $beforeDate = null
     ): array {
-        $currentUserId = $this->user->getId();
-
-        if (!api_is_platform_admin()) {
-            $allowed = false;
-
-            if (api_is_drh()) {
-                if (UserManager::is_user_followed_by_drh($userId, $currentUserId)) {
-                    $allowed = true;
-                } elseif (!empty($sessionId) && SessionManager::isSessionFollowedByDrh($sessionId, $currentUserId)) {
-                    $allowed = true;
-                }
-            }
-
-            if (!$allowed && !empty($sessionId)) {
-                $allowed = SessionManager::user_is_general_coach($currentUserId, $sessionId)
-                    || in_array($currentUserId, SessionManager::getCoachesBySession($sessionId));
-            }
-
-            if (!$allowed) {
-                self::throwNotAllowedException();
-            }
-        }
+        $this->protectUserDataEndpoint($userId, $sessionId);
 
         $certificates = GradebookUtils::get_list_gradebook_certificates_by_user_id($userId);
         $result = [];
@@ -4890,6 +4870,67 @@ class Rest extends WebService
         }
 
         return $result;
+    }
+
+    /**
+     * Get the date of the first access of a user to any course of the given session.
+     * Restricted to platform admins, DRHs following the user or the session and coaches of the session.
+     *
+     * @throws Exception
+     */
+    public function getSessionUserFirstConnexion(int $userId, int $sessionId): array
+    {
+        if (empty(api_get_session_info($sessionId))) {
+            throw new Exception(get_lang('SessionNotFound'));
+        }
+
+        $this->protectUserDataEndpoint($userId, $sessionId);
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = "SELECT MIN(login_course_date) AS first_connexion
+            FROM $table
+            WHERE user_id = $userId AND session_id = $sessionId";
+        $row = Database::fetch_assoc(Database::query($sql));
+
+        return [
+            'user_id' => $userId,
+            'session_id' => $sessionId,
+            'first_connexion' => $row['first_connexion'] ?? null,
+        ];
+    }
+
+    /**
+     * Check the current user can read tracking data of another user.
+     * Platform admins are always allowed. DRHs are allowed if they follow the user (or the given session).
+     * Coaches (general or course coaches) of the given session are allowed.
+     *
+     * @throws Exception
+     */
+    private function protectUserDataEndpoint(int $userId, ?int $sessionId = null)
+    {
+        if (api_is_platform_admin()) {
+            return;
+        }
+
+        $currentUserId = $this->user->getId();
+        $allowed = false;
+
+        if (api_is_drh()) {
+            if (UserManager::is_user_followed_by_drh($userId, $currentUserId)) {
+                $allowed = true;
+            } elseif (!empty($sessionId) && SessionManager::isSessionFollowedByDrh($sessionId, $currentUserId)) {
+                $allowed = true;
+            }
+        }
+
+        if (!$allowed && !empty($sessionId)) {
+            $allowed = SessionManager::user_is_general_coach($currentUserId, $sessionId)
+                || in_array($currentUserId, SessionManager::getCoachesBySession($sessionId));
+        }
+
+        if (!$allowed) {
+            self::throwNotAllowedException();
+        }
     }
 
     /**

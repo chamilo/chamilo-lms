@@ -336,25 +336,40 @@ const rangeLabel = computed(() => {
   return `${a} — ${b}`
 })
 
-function pushClean(name, extraQuery = {}) {
-  router.push({ name, query: { ...extraQuery } }).catch(() => {})
+/**
+ * Goes to another agenda view with only the context of this one: the course, session, group or global agenda,
+ * and the recipient filter. The other parameters of the list would be stale there.
+ *
+ * @param {string} name
+ * @param {Object} extraQuery
+ */
+function pushWithContext(name, extraQuery = {}) {
+  const query = {}
+
+  for (const key of ["cid", "sid", "gid", "type", "recipient"]) {
+    if (route.query[key] !== undefined && route.query[key] !== "") {
+      query[key] = route.query[key]
+    }
+  }
+
+  router.push({ name, query: { ...query, ...extraQuery } }).catch(() => {})
 }
 
 function goToSessionsPlan() {
-  pushClean("CalendarSessionsPlan")
+  pushWithContext("CalendarSessionsPlan")
 }
 
 function goToMyStudentsSchedule() {
-  pushClean("CalendarMyStudentsSchedule")
+  pushWithContext("CalendarMyStudentsSchedule")
 }
 
 function goToCalendar() {
-  pushClean("CCalendarEventList")
+  // The calendar opens on the day and in the view of the list.
+  pushWithContext("CCalendarEventList", { date: anchor.value.toISODate(), view: viewType.value })
 }
 
 function goToAddEvent() {
-  // Open add dialog without carrying stale query params
-  pushClean("CCalendarEventList", { openAdd: "1" })
+  pushWithContext("CCalendarEventList", { openAdd: "1" })
 }
 
 const isLoading = ref(false)

@@ -1,7 +1,19 @@
 {% autoescape false %}
 <div class="w-full px-4 py-8 sm:px-6 lg:px-8 2xl:px-8">
+    {% if public_plans_preview|default(false) %}
+        <nav class="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-primary/20 bg-support-1 px-5 py-4" aria-label="{{ 'PublicPlansPreview'|get_plugin_lang('BuyCoursesPlugin') }}">
+            <div class="flex items-center gap-2 text-sm font-semibold text-primary">
+                <em class="mdi mdi-eye-outline text-lg" aria-hidden="true"></em>
+                <span>{{ 'PublicPlansPreviewMode'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="src/public_plan_cards.php" class="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90">{{ 'PublicPlansManageTitle'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                <a href="index.php" class="rounded-xl border border-gray-25 bg-white px-4 py-2 text-sm font-semibold text-primary transition hover:bg-support-2">{{ 'PublicPlansBack'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+            </div>
+        </nav>
+    {% endif %}
     <section class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-xl">
-        {% if is_granted('ROLE_ADMIN') %}
+        {% if is_granted('ROLE_ADMIN') and not (public_plans_preview|default(false)) %}
             <div class="grid gap-8 p-6 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:p-8">
                 <div class="space-y-6">
                     <div class="flex items-start gap-4">
@@ -23,6 +35,18 @@
                     </div>
 
                     <div class="flex flex-wrap gap-3">
+                        <a
+                            href="src/public_plan_cards.php"
+                            class="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+                        >
+                            {{ 'PublicPlansManageTitle'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </a>
+                        <a
+                            href="index.php?preview_public=1"
+                            class="inline-flex items-center justify-center rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-primary transition hover:bg-support-2"
+                        >
+                            {{ 'PublicPlansPreview'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </a>
                         <a
                             href="src/paymentsetup.php"
                             class="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
@@ -97,12 +121,12 @@
         {% endif %}
     </section>
 
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_ADMIN') and not (public_plans_preview|default(false)) %}
     <section class="mt-8">
         <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {% if services_are_included %}
                 <a
-                    href="{% if is_granted('ROLE_ADMIN') %}src/list_service.php{% else %}src/service_catalog.php{% endif %}"
+                    href="{% if is_granted('ROLE_ADMIN') and not (public_plans_preview|default(false)) %}src/list_service.php{% else %}src/service_catalog.php{% endif %}"
                     class="group flex h-full flex-col rounded-2xl border border-gray-25 bg-white p-6 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                 >
                     <div class="flex items-center justify-between gap-4">
@@ -121,7 +145,7 @@
                             {{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}
                         </h2>
                         <p class="text-sm leading-6 text-gray-50">
-                            {% if is_granted('ROLE_ADMIN') %}
+                            {% if is_granted('ROLE_ADMIN') and not (public_plans_preview|default(false)) %}
                                 {{ 'ManagePremiumServicesAdmin'|get_plugin_lang('BuyCoursesPlugin') }}
                             {% else %}
                                 {{ 'BrowsePremiumServicesUser'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -181,7 +205,7 @@
                 </div>
             </a>
 
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_ADMIN') and not (public_plans_preview|default(false)) %}
                 <a
                     href="src/list.php"
                     class="group flex h-full flex-col rounded-2xl border border-gray-25 bg-white p-6 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"

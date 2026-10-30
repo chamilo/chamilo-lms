@@ -25,6 +25,70 @@
       </div>
     </Message>
 
+    <section
+      v-if="!isLoading && !isCreationRestrictedByPolicy && !hasBuyCoursesCourseTypeOptions && showStandardCourseSummary"
+      class="mb-5 rounded-2xl border border-gray-25 bg-white p-4 shadow-sm"
+      :aria-label="t('Standard course')"
+    >
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-semibold text-gray-90">
+            {{ standardPlanOverview.label || t("Standard course") }}
+          </h2>
+          <p class="mt-1 text-sm text-gray-50">
+            {{ standardPlanOverview.description || t("Use the standard platform limits.") }}
+          </p>
+        </div>
+        <span
+          v-if="standardPlanOverview.maxCourses > 0"
+          class="rounded-xl bg-support-2 px-3 py-2 text-sm font-semibold text-gray-90 tabular-nums"
+        >
+          {{ standardPlanOverview.currentCourses }} / {{ standardPlanOverview.maxCourses }}
+        </span>
+      </div>
+
+      <div
+        v-if="standardPlanOverview.maxCourses > 0"
+        class="mt-4 h-2 overflow-hidden rounded-full bg-gray-15"
+        role="progressbar"
+        :aria-valuemin="0"
+        :aria-valuemax="standardPlanOverview.maxCourses"
+        :aria-valuenow="Math.min(standardPlanOverview.currentCourses, standardPlanOverview.maxCourses)"
+        :aria-label="t('Courses')"
+      >
+        <div
+          class="h-full rounded-full bg-primary transition-all"
+          :style="{ width: `${standardPlanPercentage}%` }"
+        />
+      </div>
+
+      <div
+        v-if="standardPlanOverview.hasDetailedLimits && (standardPlanOverview.hostingLimit > 0 || standardPlanOverview.documentQuotaMb > 0)"
+        class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-50"
+      >
+        <span v-if="standardPlanOverview.hostingLimit > 0">
+          {{ t("Hosting limit") }}: {{ formatStandardLimit(standardPlanOverview.hostingLimit, t("users")) }}
+        </span>
+        <span v-if="standardPlanOverview.documentQuotaMb > 0">
+          {{ t("Document quota") }}: {{ formatStandardLimit(standardPlanOverview.documentQuotaMb, "MB") }}
+        </span>
+      </div>
+      <p
+        v-if="!standardPlanOverview.available && standardPlanOverview.maxCourses > 0"
+        class="mt-3 text-sm font-medium text-danger"
+      >
+        {{ t("The standard course limit has been reached.") }}
+      </p>
+    </section>
+
+    <Message
+      v-if="!isLoading && showCourseForm && !standardPlanOverview && !hasBuyCoursesCourseTypeOptions && buyCoursesOptionsError"
+      severity="warn"
+      class="mb-4"
+    >
+      {{ t("Unable to load the course allowance. Course creation remains subject to server validation.") }}
+    </Message>
+
     <CourseForm
       v-if="showCourseForm"
       ref="createForm"
@@ -64,19 +128,93 @@ const item = ref({
 const violations = ref(null)
 const isLoading = ref(true)
 const capabilityStatus = ref("allowed")
+const capabilityLimitSource = ref("unlimited")
 const createCapabilityMessage = ref("")
 const buyCoursesOptions = ref(null)
+const buyCoursesOptionsError = ref(false)
+const createCapabilityDetails = ref(null)
+
+// Keep the standard allowance visible even when BuyCourses options are unavailable.
+// The fallback only uses platform-based capability data; service limits are never
+// presented as standard limits.
+const standardPlanOverview = computed(() => {
+  const standard = buyCoursesOptions.value?.standard
+  if (standard && typeof standard === "object") {
+    return {
+      ...standard,
+      currentCourses: Math.max(0, Number(standard.currentCourses) || 0),
+      maxCourses: Math.max(0, Number(standard.maxCourses) || 0),
+      hasDetailedLimits: true,
+    }
+  }
+
+  const capability = createCapabilityDetails.value
+  const limitSource = String(capability?.limitSource || "")
+  if (!capability || ["role", "setting", "error", "admin"].includes(limitSource)) {
+    return null
+  }
+
+  // Without BuyCourses details, a service allowance must not be labeled standard.
+  const isStandardLimit = ["global", "unlimited"].includes(limitSource)
+  return {
+    label: isStandardLimit ? t("Standard course") : t("Course creation allowance"),
+    description: isStandardLimit
+      ? t("Use the standard platform limits.")
+      : t("Your current course creation allowance."),
+    currentCourses: Math.max(0, Number(capability.currentCount) || 0),
+    maxCourses: Math.max(0, Number(capability.effectiveLimit) || 0),
+    available: capability.canCreate === true,
+    hasDetailedLimits: false,
+  }
+})
+
+// Do not advertise an unlimited plan as a consumed quota. Keep meaningful
+// per-course restrictions visible even if course creation is unlimited.
+const showStandardCourseSummary = computed(() => {
+  const standard = standardPlanOverview.value
+  if (!standard) {
+    return false
+  }
+
+  return standard.maxCourses > 0 || (
+    standard.hasDetailedLimits &&
+    (standard.hostingLimit > 0 || standard.documentQuotaMb > 0)
+  )
+})
+
+const standardPlanPercentage = computed(() => {
+  const standard = standardPlanOverview.value
+  if (!standard || standard.maxCourses <= 0) {
+    return 0
+  }
+
+  return Math.min(100, Math.max(0, (standard.currentCourses / standard.maxCourses) * 100))
+})
+
+function formatStandardLimit(value, unit) {
+  const limit = Math.max(0, Number(value) || 0)
+  return limit <= 0 ? t("Unlimited") : `${limit} ${unit}`
+}
+
 
 const hasBuyCoursesCourseTypeOptions = computed(() => {
   return !!buyCoursesOptions.value?.enabled && !!buyCoursesOptions.value?.hasServiceOptions
 })
 
+const isCreationRestrictedByPolicy = computed(() => {
+  return capabilityStatus.value === "blocked" && ["role", "setting", "error"].includes(capabilityLimitSource.value)
+})
+
 const showGlobalBlockedMessage = computed(() => {
-  return capabilityStatus.value === "blocked" && !hasBuyCoursesCourseTypeOptions.value
+  return capabilityStatus.value === "blocked" && (isCreationRestrictedByPolicy.value || !hasBuyCoursesCourseTypeOptions.value)
 })
 
 const showCourseForm = computed(() => {
   if (isLoading.value) {
+    return false
+  }
+
+  if (isCreationRestrictedByPolicy.value) {
     return false
   }
 
@@ -115,10 +253,14 @@ function normalizeCapabilityResponse(response) {
 
 async function loadCreateCapability() {
   createCapabilityMessage.value = ""
+  createCapabilityDetails.value = null
+  capabilityLimitSource.value = "unlimited"
 
   try {
     const response = await courseService.getCreateCourseCapability()
     const capability = normalizeCapabilityResponse(response)
+    createCapabilityDetails.value = capability
+    capabilityLimitSource.value = String(capability.limitSource || "unlimited")
 
     if (false === capability.canCreate) {
       capabilityStatus.value = "blocked"
@@ -133,24 +275,47 @@ async function loadCreateCapability() {
 
     // Do not block the form because this is only a pre-check.
     // The backend validates the real limit when submitting the course.
-    capabilityStatus.value = "allowed"
+    capabilityStatus.value = "blocked"
+    capabilityLimitSource.value = "error"
+    createCapabilityMessage.value = t("Unable to verify whether you can create a new course right now.")
   }
 }
 
 async function loadBuyCoursesOptions() {
   buyCoursesOptions.value = null
+  buyCoursesOptionsError.value = false
 
   try {
     const response = await courseService.getBuyCoursesCourseCreationOptions()
-
-    if (response?.success && response?.enabled && response?.hasServiceOptions) {
-      buyCoursesOptions.value = response
+    const payload = response?.data ?? response
+    if (payload?.success && payload?.enabled && payload?.standard) {
+      buyCoursesOptions.value = payload
+      return
     }
   } catch (error) {
-    console.error("[course.buycourses-options] request failed", error)
+    console.warn("[course.buycourses-options] Service request failed", error)
+  }
 
-    // BuyCourses options are optional. Standard course creation must keep working.
-    buyCoursesOptions.value = null
+  // Fallback for plugin pages when the API client cannot read the plain PHP response.
+  // No store avoids showing stale limits after a platform settings change.
+  try {
+    const response = await fetch("/plugin/BuyCourses/src/course_creation_options.php", {
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    })
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`)
+    }
+    const payload = await response.json()
+    if (payload?.success && payload?.enabled && payload?.standard) {
+      buyCoursesOptions.value = payload
+      return
+    }
+    // Disabled plugin or missing standard options: use capability fallback, if valid.
+  } catch (error) {
+    console.warn("[course.buycourses-options] Direct request failed", error)
+    buyCoursesOptionsError.value = true
   }
 }
 

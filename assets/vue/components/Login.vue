@@ -138,6 +138,7 @@
     <LoginOAuth2Buttons />
     <div class="mt-3">
       <CategoryLinks category="menu_links" />
+      <CategoryLinks category="menu_public_links" />
     </div>
   </div>
 </template>

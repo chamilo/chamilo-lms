@@ -100,8 +100,8 @@ if (isInstallerLocked()) {
         echo '<h1>Chamilo is already installed</h1>';
         echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';
         echo '<p>If an upgrade is pending, run <code>php bin/console doctrine:migrations:status</code> to check it.';
-        echo ' An installation that predates the migration metadata seeding needs';
-        echo ' <code>php bin/console doctrine:migrations:version --add --all</code> once.</p>';
+        echo ' An installation that predates the migration metadata seeding needs its migration';
+        echo ' history recorded once, from the Health check block of the administration page.</p>';
         echo '<p>If you need a fresh install, set <code>APP_INSTALLED=0</code> or remove <code>.env</code> first.</p>';
     }
 

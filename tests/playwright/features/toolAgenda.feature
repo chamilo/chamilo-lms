@@ -1,82 +1,74 @@
-# Ported from tests/behat/features/toolAgenda.feature. All three legacy/Vue
-# pages targeted are still live, confirmed via source reading:
-# - agenda.php's add-event form fields (title, date_range, content) are
-#   unchanged (public/main/inc/lib/agenda.lib.php).
-# - "date_range" is a jQuery daterangepicker bound to a plain text input
-#   (formvalidator/Element/DateRangePicker.php) — filling it with the exact
-#   "YYYY-MM-DD HH:mm / YYYY-MM-DD HH:mm" string via the existing "I fill in
-#   ... with ..." step is enough: .fill() dispatches a change event, and the
-#   widget's own change handler is what actually populates the two hidden
-#   date_range_start/date_range_end fields the form submits. Added a new
-#   "I focus" step (matches the original's own pre-fill focus) but it isn't
-#   strictly required for correctness, just parity with the original intent.
-# - /resources/ccalendarevent (general/personal agenda) is a Vue page
-#   (CCalendarEventList.vue/CCalendarEventCreate.vue/CCalendarEventForm.vue).
-#   "Add event" itself is a real drift from the original assumption — it's
-#   now a plain icon-only <button> (accessible name "Add event" via its
-#   title attribute), not an <a> link — confirmed via a real local run
-#   against a fresh install ("I follow" only matches links, so it hung
-#   retrying for the full test timeout); fixed to "I press" instead.
-#   "Title"/editor "Content" are resolvable as before, but Start/End date
-#   (BaseCalendar.vue, PrimeVue's DatePicker) are NOT — same "I don't know
-#   how to set the start/end date" limitation the ORIGINAL Behat scenario's
-#   own comment already admitted (it just guessed field names "startDate"/
-#   "endDate" that were never actually verified to work). Confirmed why:
-#   the input is genuinely readonly (no manual typing possible, by design —
-#   PrimeVue's own keyboard-input path never engages), and the popup's time
-#   picker only exposes hour/minute increment/decrement buttons, no direct
-#   entry — setting an arbitrary exact time would mean clicking those up to
-#   dozens of times. Since the field already defaults to a sensible current
-#   date/time when the dialog opens, this port just doesn't touch it at
-#   all and relies on that default, matching the spirit of a smoke test
-#   (event gets created; the exact scheduled time isn't what's under test).
-#   "Add" itself needed a further pressButton() fix (see common.steps.ts) —
-#   the same icon-left PrimeVue Button pattern responsible for "Save"'s
-#   fix elsewhere in this file's sibling features also broke an exact
-#   getByRole match here, and the page separately has an unrelated "Add
-#   reminder" button, so the fallback substring match needed disambiguating
-#   too, not just the exact one.
-# - The two fully-commented-out scenarios in the original (inviting another
-#   user to a personal event, with/without edit rights) are dropped, not
-#   ported — same as every other already-ported feature's convention for
-#   scenarios that were already inert in the original Behat suite.
+# Ported from tests/behat/features/toolAgenda.feature, which filled the legacy
+# add-event form (/main/calendar/agenda.php?action=add). That page now
+# redirects to the Vue agenda (/resources/ccalendarevent), so both scenarios
+# create the event there, and they also edit and delete it, leaving the
+# database as they found it. The redirect itself is covered by
+# agendaLegacyRedirects.feature.
+#
+# Start/End date are not filled: the PrimeVue DatePicker input is readonly,
+# and the dialog defaults them to the current day, which the month view shows.
+# A save waits up to 60 seconds for the event, as calendarEventComment.feature.
 Feature: Agenda tool
   In order to use the Agenda tool
-  The admin should be able to add an event
+  As any user with an agenda
+  I need to add, edit and delete events
 
-  Background:
-    Given I am a platform administrator
-
-  Scenario: Create a personal event
-    Given I am on "/main/calendar/agenda.php?action=add&type=personal"
-    And I wait for the page to be loaded
-    When I fill in the following:
-      | title | Event 1 |
-    And I focus "date_range"
-    And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
-    Then I fill in editor field "content" with "Description event"
-    And I press "Add event"
-    And wait very long for the page to be loaded
-    Then I should not see an error
-
-  Scenario: Create an event inside course TEMP
-    Given I am on "/main/calendar/agenda.php?action=add&type=course&cid=3"
-    And I wait for the page to be loaded
-    When I fill in the following:
-      | title | Event in course |
-    Then I fill in editor field "content" with "Description event"
-    Then I wait for the page to be loaded
-    And I focus "date_range"
-    And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
-    And I press "Add event"
-    And wait very long for the page to be loaded
-    Then I should not see an error
-
-  Scenario: Create a personal event from the general agenda
-    Given I am on "/resources/ccalendarevent"
+  @long-scenario
+  Scenario Outline: Create, edit and delete a personal event as <role>
+    Given <login>
+    And I am on "/resources/ccalendarevent"
+    And I wait up to 60 seconds for the element ".fc-toolbar" to appear
     When I press "Add event"
-    Then I fill in the following:
-      | Title | Personal event from general agenda |
-    And I fill in tinymce field "calendar-event-content" with "Content for personal event from general agenda"
+    And I fill in the following:
+      | Title | ZZ Personal event <role> |
+    And I fill in tinymce field "calendar-event-content" with "Content of the personal event"
     And I press "Add"
-    Then I should see "Personal event from general agenda"
+    Then I wait up to 60 seconds for the element ".fc-event:has-text('ZZ Personal event <role>')" to appear
+
+    When I click the ".fc-event:has-text('ZZ Personal event <role>')" element
+    Then I should see "Content of the personal event"
+
+    When I press "Edit"
+    And the field "Title" should have value "ZZ Personal event <role>"
+    And I fill in "Title" with "ZZ Edited personal event <role>"
+    And I press "Edit"
+    Then I wait up to 60 seconds for the element ".fc-event:has-text('ZZ Edited personal event <role>')" to appear
+
+    When I click the ".fc-event:has-text('ZZ Edited personal event <role>')" element
+    And I press "Delete"
+    And I press "Yes"
+    Then I should not see "ZZ Edited personal event <role>"
+
+    Examples:
+      | role          | login                         |
+      | administrator | I am a platform administrator |
+      | teacher       | I am a teacher                |
+      | student       | I am a student                |
+
+  @long-scenario
+  Scenario: Create, edit and delete an event inside course TEMP
+    Given I am a platform administrator
+    And I resolve the numeric id of course "TEMP"
+    And I am on "/resources/ccalendarevent?cid=COURSE_ID&sid=0&gid=0" with the resolved id of course "TEMP"
+    And I wait up to 60 seconds for the element ".fc-toolbar" to appear
+    When I press "Add event"
+    And I fill in the following:
+      | Title | ZZ Course agenda event |
+    And I fill in tinymce field "calendar-event-content" with "Content of the course event"
+    And I press "Add"
+    Then I wait up to 60 seconds for the element ".fc-event:has-text('ZZ Course agenda event')" to appear
+
+    When I click the ".fc-event:has-text('ZZ Course agenda event')" element
+    Then I should see "Content of the course event"
+    And I should see "TEMP"
+
+    When I press "Edit"
+    And the field "Title" should have value "ZZ Course agenda event"
+    And I fill in "Title" with "ZZ Edited course agenda event"
+    And I press "Edit"
+    Then I wait up to 60 seconds for the element ".fc-event:has-text('ZZ Edited course agenda event')" to appear
+
+    When I click the ".fc-event:has-text('ZZ Edited course agenda event')" element
+    And I press "Delete"
+    And I press "Yes"
+    Then I should not see "ZZ Edited course agenda event"

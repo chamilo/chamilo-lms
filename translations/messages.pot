@@ -43247,3 +43247,6 @@ msgstr ""
 
 msgid "Show maximum score per question during the test"
 msgstr ""
+
+msgid "Expired certificates"
+msgstr ""

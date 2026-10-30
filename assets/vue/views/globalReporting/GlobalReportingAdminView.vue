@@ -809,6 +809,7 @@ const routeNameBySection = {
   "admin-users": "GlobalReportingAdminUsers",
   "admin-sessions": "GlobalReportingAdminSessions",
   "admin-courses": "GlobalReportingAdminCourses",
+  "expired-certificates": "GlobalReportingExpiredCertificates",
   "learning-results": "GlobalReportingLearningResults",
   "session-results": "GlobalReportingSessionResults",
   "access-overview": "GlobalReportingAccessOverview",

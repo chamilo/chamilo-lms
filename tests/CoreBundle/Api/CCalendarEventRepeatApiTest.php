@@ -11,8 +11,11 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Entity\CCalendarEventRepeat;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
+use DateTimeZone;
 
 /**
  * A course event can be repeated until a given day, as in the legacy agenda form: each repetition
@@ -39,6 +42,28 @@ final class CCalendarEventRepeatApiTest extends AbstractApiTest
         // Every event names the same series, which the "Delete all items" button needs.
         $this->assertCount(1, array_unique(array_column($events, 'seriesId')));
         $this->assertNotNull($events[0]['seriesId'] ?? null);
+    }
+
+    public function testASeriesCanEndAfterJanuary2038(): void
+    {
+        $ctx = $this->bootstrapScenario('2038');
+
+        // The end of the series is stored as a timestamp, which a 32-bit column cannot hold here.
+        $this->createEvent($ctx, 'CrpAfter2038', ['repeatType' => 'yearly', 'repeatEndDate' => '2039-06-10']);
+        $this->assertResponseStatusCodeSame(201);
+
+        $this->assertSame(
+            ['2037-06-04 11:00', '2038-06-04 11:00', '2039-06-04 11:00'],
+            $this->startDates('CrpAfter2038')
+        );
+
+        // The series keeps its last day, after January 2038.
+        $calEnd = $this->getEntityManager()->getRepository(CCalendarEventRepeat::class)->findOneBy([
+            'event' => $this->getEntityManager()->getRepository(CCalendarEvent::class)->findOneBy(['title' => 'CrpAfter2038', 'parentEvent' => null]),
+        ])?->getCalEnd();
+        $this->assertNotNull($calEnd);
+        $this->assertGreaterThan(new DateTime('2039-06-10 00:00:00', new DateTimeZone('UTC')), $calEnd);
+        $this->assertLessThan(new DateTime('2039-06-11 12:00:00', new DateTimeZone('UTC')), $calEnd);
     }
 
     public function testTheRepeatedEventsAreSentToTheSameRecipients(): void

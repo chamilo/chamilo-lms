@@ -200,7 +200,11 @@
             role="img"
             tabindex="0"
             :aria-label="t('Information about indexing document content')"
-            :title="t('When enabled, the document text is indexed by the search engine so users can find it from platform search.')"
+            :title="
+              t(
+                'When enabled, the document text is indexed by the search engine so users can find it from platform search.',
+              )
+            "
           />
         </div>
       </div>
@@ -319,7 +323,7 @@ function getAllowedFileTypes(pickerType) {
   }
 
   if (pickerType === "certificate") {
-    return [".html"]
+    return [".html", ".zip"]
   }
 
   return null
@@ -333,7 +337,9 @@ function buildReturnQuery(overrides = {}) {
   }
 }
 
-const requestedType = String(route.query.type || route.query.filetype || "file")
+const requestedType = String(
+  route.query.filetype === "certificate" ? "certificate" : route.query.type || route.query.filetype || "file",
+)
 const pickerType = normalizePickerType(requestedType)
 const filetype = resolveUploadFiletype(requestedType, pickerType)
 

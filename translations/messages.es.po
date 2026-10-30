@@ -42706,8 +42706,8 @@ msgstr "%s migraciones registradas. Su plataforma ahora puede actualizarse con n
 msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
 msgstr "%s migraciones registradas y %s aún pendientes. Ejecute la actualización para aplicarlas."
 
-msgid "No migration history: click to fix (or updates might break)"
-msgstr "Sin historial de migración: haga clic para corregir (o las actualizaciones podrían romperse)"
+msgid "Migration history not recorded yet: click to record it"
+msgstr "Historial de migraciones aún no registrado: haga clic para registrarlo"
 
 msgid "Migration history is recorded"
 msgstr "El historial de migraciones está registrado"

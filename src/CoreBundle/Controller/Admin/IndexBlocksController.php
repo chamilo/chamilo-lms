@@ -1170,13 +1170,15 @@ class IndexBlocksController extends BaseController
         // An empty migration history blocks every future update. While it is empty the
         // item carries an action and records the history in place; once recorded there is
         // nothing left to do, so it stays as plain text with no destination.
+        // A warning, not an error: installs made with 3.0.0 have an empty history and a
+        // correct schema, so only the bookkeeping is missing.
         $historyIsEmpty = $this->migrationHistoryRecorder->isEmpty();
 
         $migrationHistoryItem = [
-            'class' => 'item-health-check-migration-history '.($historyIsEmpty ? 'text-error' : 'text-success'),
+            'class' => 'item-health-check-migration-history '.($historyIsEmpty ? 'text-warning' : 'text-success'),
             'label' => $this->translator->trans(
                 $historyIsEmpty
-                    ? 'No migration history: click to fix (or updates might break)'
+                    ? 'Migration history not recorded yet: click to record it'
                     : 'Migration history is recorded'
             ),
         ];

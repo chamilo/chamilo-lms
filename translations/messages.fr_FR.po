@@ -43446,8 +43446,8 @@ msgstr "%s migrations enregistrées. Votre plateforme peut maintenant être mise
 msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
 msgstr "%s migrations enregistrées, et %s sont encore en attente. Lancez la mise à jour pour les exécuter."
 
-msgid "No migration history: click to fix (or updates might break)"
-msgstr "Aucun historique de migration : cliquez pour corriger (sinon les mises à jour pourraient échouer)"
+msgid "Migration history not recorded yet: click to record it"
+msgstr "Historique des migrations pas encore enregistré : cliquez pour l'enregistrer"
 
 msgid "Migration history is recorded"
 msgstr "L'historique des migrations est enregistré"

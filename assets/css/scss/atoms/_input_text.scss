@@ -10,6 +10,11 @@
   &.p-invalid {
     @apply border-danger;
 
+    // The error border wins over the hover and focus border.
+    &:enabled {
+      @apply hover:border-danger focus:border-danger;
+    }
+
     &::placeholder {
         @apply text-danger;
     }

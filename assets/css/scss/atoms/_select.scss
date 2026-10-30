@@ -19,6 +19,15 @@
 
   &.p-invalid {
     @apply border-danger;
+
+    // The error border wins over the hover and focus border.
+    &:not(.p-disabled) {
+      @apply hover:border-danger;
+
+      &.p-focus {
+        @apply border-danger;
+      }
+    }
   }
 
   &.p-disabled {

@@ -21,6 +21,18 @@ Feature: Database load metrics on system status
     And I should see "Database load"
     And I should see "driver"
 
+  # The section tabs are router links: the section must land in the URL so a
+  # reload or a shared link reopens the same section.
+  Scenario: Administrator reaches the database section through its tab
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+    And I am on "/admin/system-status"
+    And I wait for the page to be loaded
+    When I follow "Database"
+    And I wait up to 60 seconds for the element "#database-load-toggle" to appear
+    Then the URL should contain "section=database"
+    And I should see "driver"
+
   Scenario: Database load panel is collapsed by default
     Given I am a platform administrator
     And I wait for the page to be loaded

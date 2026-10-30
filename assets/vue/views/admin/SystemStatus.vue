@@ -1,91 +1,28 @@
 <template>
   <section class="space-y-6">
-    <div class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm">
-      <div class="flex items-center gap-3">
-        <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-support-1 text-primary">
-          <i class="mdi mdi-heart-pulse text-2xl" />
-        </span>
-        <div>
-          <h1 class="text-2xl font-semibold tracking-tight text-gray-90">
-            {{ t("System status") }}
-          </h1>
-          <p class="mt-1 max-w-3xl text-body-2 text-gray-50">
-            {{ activeSectionInfo }}
-          </p>
-        </div>
-      </div>
-    </div>
+    <SectionHeader
+      :title="t('System status')"
+      icon="heart-pulse"
+    />
 
-    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-      <button
-        v-for="section in sections"
-        :key="section.key"
-        type="button"
-        class="group block rounded-2xl bg-white p-4 text-start shadow-sm transition hover:shadow-md"
-        :class="
-          section.key === currentSection
-            ? 'ring-2 ring-primary/80 bg-primary/5'
-            : 'ring-1 ring-gray-200 hover:ring-gray-300'
-        "
-        @click="selectSection(section.key)"
-      >
-        <div class="flex items-center gap-3">
-          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-10 group-hover:bg-gray-30">
-            <i
-              class="mdi text-2xl"
-              :class="[section.icon, section.key === currentSection ? 'text-primary' : 'text-gray-70']"
-            />
-          </div>
-          <div class="min-w-0">
-            <div class="flex items-center gap-2">
-              <h3
-                class="truncate text-sm font-semibold"
-                :class="section.key === currentSection ? 'text-primary' : 'text-gray-90'"
-              >
-                {{ t(section.label) }}
-              </h3>
-              <span
-                v-if="section.key === currentSection"
-                class="ms-auto rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary"
-              >
-                {{ t("Active") }}
-              </span>
-            </div>
-            <p class="mt-0.5 line-clamp-2 text-xs text-gray-50">
-              {{ t(section.info) }}
-            </p>
-          </div>
-        </div>
-      </button>
-    </div>
+    <BaseRouteTabs
+      v-if="sectionTabs.length"
+      :selected-tab="selectedTabIndex"
+      :tabs="sectionTabs"
+    />
 
-    <div
+    <p
       v-if="activeSectionInfo"
-      class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-blue-800"
+      class="text-body-2 text-gray-50"
     >
-      <div class="flex items-start gap-3">
-        <BaseIcon
-          icon="information"
-          size="small"
-        />
-        <p class="text-sm">
-          {{ activeSectionInfo }}
-        </p>
-      </div>
-    </div>
+      {{ activeSectionInfo }}
+    </p>
 
     <div
       v-if="isLoading"
-      class="rounded-2xl border border-gray-20 bg-white p-8 text-center text-gray-50 shadow-sm"
+      class="rounded-lg border border-gray-25 bg-white p-8 text-center text-gray-50 shadow-sm"
     >
       {{ t("Loading") }}...
-    </div>
-
-    <div
-      v-else-if="errorMessage"
-      class="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800"
-    >
-      {{ errorMessage }}
     </div>
 
     <template v-else>
@@ -93,18 +30,18 @@
         v-if="currentSection === 'php'"
         class="space-y-4"
       >
-        <div class="rounded-2xl border border-gray-20 bg-white shadow-sm">
+        <div class="rounded-lg border border-gray-25 bg-white shadow-sm">
           <button
             type="button"
             name="php-cache-toggle"
-            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-start transition hover:bg-support-2"
+            class="flex w-full items-center justify-between gap-3 rounded-lg px-5 py-4 text-start transition hover:bg-support-2"
             :aria-expanded="phpCacheExpanded ? 'true' : 'false'"
             aria-controls="php-cache-panel"
             @click="togglePhpCache"
           >
             <div class="flex min-w-0 items-center gap-3">
               <span
-                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-support-1 text-primary"
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-support-1 text-primary"
               >
                 <i class="mdi mdi-memory text-xl" />
               </span>
@@ -130,7 +67,7 @@
           <div
             v-if="phpCacheExpanded"
             id="php-cache-panel"
-            class="space-y-4 border-t border-gray-20 px-5 pb-5 pt-4"
+            class="space-y-4 border-t border-gray-25 px-5 pb-5 pt-4"
           >
             <div class="flex flex-wrap items-center justify-end gap-3">
               <BaseCheckbox
@@ -148,11 +85,11 @@
             </div>
 
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              <div class="rounded-2xl border border-gray-20 bg-white p-5 shadow-sm">
+              <div class="rounded-lg border border-gray-25 bg-white p-5 shadow-sm">
                 <div class="mb-4 flex items-start justify-between gap-3">
                   <div class="flex items-center gap-3">
                     <span
-                      class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-support-1 text-primary"
+                      class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-support-1 text-primary"
                     >
                       <i class="mdi mdi-memory text-xl" />
                     </span>
@@ -185,7 +122,7 @@
                     class="mb-4"
                   >
                     <div class="mb-1 flex items-center justify-between gap-2 text-caption">
-                      <span class="font-semibold text-gray-70">
+                      <span class="font-semibold text-gray-90">
                         {{ t("Memory used") }}
                       </span>
                       <span class="font-mono text-gray-90">
@@ -196,7 +133,7 @@
                       </span>
                     </div>
                     <div
-                      class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
+                      class="h-3 w-full overflow-hidden rounded-full bg-gray-25"
                       role="progressbar"
                       :aria-valuenow="opcacheMemoryBar.percent"
                       aria-valuemin="0"
@@ -223,7 +160,7 @@
                     <div
                       v-for="metric in opcacheMetrics"
                       :key="metric.label"
-                      class="rounded-xl border border-gray-20 bg-support-2 p-3"
+                      class="rounded-lg border border-gray-25 bg-support-2 p-3"
                     >
                       <dt class="text-caption font-semibold uppercase tracking-wide text-gray-50">
                         {{ metric.label }}
@@ -246,11 +183,11 @@
                 </p>
               </div>
 
-              <div class="rounded-2xl border border-gray-20 bg-white p-5 shadow-sm">
+              <div class="rounded-lg border border-gray-25 bg-white p-5 shadow-sm">
                 <div class="mb-4 flex items-start justify-between gap-3">
                   <div class="flex items-center gap-3">
                     <span
-                      class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-support-1 text-primary"
+                      class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-support-1 text-primary"
                     >
                       <i class="mdi mdi-database-outline text-xl" />
                     </span>
@@ -283,7 +220,7 @@
                     class="mb-4"
                   >
                     <div class="mb-1 flex items-center justify-between gap-2 text-caption">
-                      <span class="font-semibold text-gray-70">
+                      <span class="font-semibold text-gray-90">
                         {{ t("Memory used") }}
                       </span>
                       <span class="font-mono text-gray-90">
@@ -294,7 +231,7 @@
                       </span>
                     </div>
                     <div
-                      class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
+                      class="h-3 w-full overflow-hidden rounded-full bg-gray-25"
                       role="progressbar"
                       :aria-valuenow="apcuMemoryBar.percent"
                       aria-valuemin="0"
@@ -321,7 +258,7 @@
                     <div
                       v-for="metric in apcuMetrics"
                       :key="metric.label"
-                      class="rounded-xl border border-gray-20 bg-support-2 p-3"
+                      class="rounded-lg border border-gray-25 bg-support-2 p-3"
                     >
                       <dt class="text-caption font-semibold uppercase tracking-wide text-gray-50">
                         {{ metric.label }}
@@ -352,19 +289,19 @@
         v-if="currentSection === 'database'"
         class="space-y-4"
       >
-        <div class="rounded-2xl border border-gray-20 bg-white shadow-sm">
+        <div class="rounded-lg border border-gray-25 bg-white shadow-sm">
           <button
             id="database-load-toggle"
             type="button"
             name="database-load-toggle"
-            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-start transition hover:bg-support-2"
+            class="flex w-full items-center justify-between gap-3 rounded-lg px-5 py-4 text-start transition hover:bg-support-2"
             :aria-expanded="dbExpanded ? 'true' : 'false'"
             aria-controls="database-load-panel"
             @click="toggleDbLoad"
           >
             <div class="flex min-w-0 items-center gap-3">
               <span
-                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-support-1 text-primary"
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-support-1 text-primary"
               >
                 <i class="mdi mdi-chart-line text-xl" />
               </span>
@@ -390,7 +327,7 @@
           <div
             v-if="dbExpanded"
             id="database-load-panel"
-            class="space-y-4 border-t border-gray-20 px-5 pb-5 pt-4"
+            class="space-y-4 border-t border-gray-25 px-5 pb-5 pt-4"
           >
             <div class="flex flex-wrap items-center justify-end gap-3">
               <BaseCheckbox
@@ -428,7 +365,7 @@
                 class="mb-2"
               >
                 <div class="mb-1 flex items-center justify-between gap-2 text-caption">
-                  <span class="font-semibold text-gray-70">
+                  <span class="font-semibold text-gray-90">
                     {{ t("Threads connected") }}
                   </span>
                   <span class="font-mono text-gray-90">
@@ -439,7 +376,7 @@
                   </span>
                 </div>
                 <div
-                  class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
+                  class="h-3 w-full overflow-hidden rounded-full bg-gray-25"
                   role="progressbar"
                   :aria-valuenow="dbConnectionBar.percent"
                   aria-valuemin="0"
@@ -458,7 +395,7 @@
                 class="mb-2"
               >
                 <div class="mb-1 flex items-center justify-between gap-2 text-caption">
-                  <span class="font-semibold text-gray-70">
+                  <span class="font-semibold text-gray-90">
                     {{ t("Temporary tables on disk") }}
                   </span>
                   <span class="font-mono text-gray-90">
@@ -469,7 +406,7 @@
                   </span>
                 </div>
                 <div
-                  class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
+                  class="h-3 w-full overflow-hidden rounded-full bg-gray-25"
                   role="progressbar"
                   :aria-valuenow="dbTmpDiskBar.percent"
                   aria-valuemin="0"
@@ -490,7 +427,7 @@
                 <div
                   v-for="metric in dbMetrics"
                   :key="metric.label"
-                  class="rounded-xl border border-gray-20 bg-support-2 p-3"
+                  class="rounded-lg border border-gray-25 bg-support-2 p-3"
                 >
                   <dt class="text-caption font-semibold uppercase tracking-wide text-gray-50">
                     {{ metric.label }}
@@ -509,7 +446,7 @@
 
               <div
                 v-if="dbData.server.queryCache?.available && dbQueryCacheMetrics.length"
-                class="rounded-2xl border border-gray-20 bg-white p-4 shadow-sm"
+                class="rounded-lg border border-gray-25 bg-white p-4 shadow-sm"
               >
                 <h3 class="mb-3 text-body-1 font-semibold text-gray-90">
                   {{ t("Query cache") }}
@@ -518,7 +455,7 @@
                   <div
                     v-for="metric in dbQueryCacheMetrics"
                     :key="metric.label"
-                    class="rounded-xl border border-gray-20 bg-support-2 p-3"
+                    class="rounded-lg border border-gray-25 bg-support-2 p-3"
                   >
                     <dt class="text-caption font-semibold uppercase tracking-wide text-gray-50">
                       {{ metric.label }}
@@ -530,9 +467,11 @@
                 </dl>
               </div>
 
-              <div
+              <Message
                 v-if="dbPrivilegeNote"
-                class="rounded-xl border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800"
+                :closable="false"
+                icon="mdi mdi-information"
+                severity="info"
               >
                 <p class="font-semibold">{{ t("Privilege scope") }}: {{ dbPrivilegeNote.scopeLabel }}</p>
                 <p
@@ -542,7 +481,7 @@
                   {{ t("Not measurable with the current database user") }}:
                   {{ dbPrivilegeNote.unavailableList }}
                 </p>
-              </div>
+              </Message>
             </template>
             <p
               v-else
@@ -558,19 +497,19 @@
         v-if="currentSection === 'webserver'"
         class="space-y-4"
       >
-        <div class="rounded-2xl border border-gray-20 bg-white shadow-sm">
+        <div class="rounded-lg border border-gray-25 bg-white shadow-sm">
           <button
             id="webserver-load-toggle"
             type="button"
             name="webserver-load-toggle"
-            class="flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-start transition hover:bg-support-2"
+            class="flex w-full items-center justify-between gap-3 rounded-lg px-5 py-4 text-start transition hover:bg-support-2"
             :aria-expanded="wsExpanded ? 'true' : 'false'"
             aria-controls="webserver-load-panel"
             @click="toggleWsLoad"
           >
             <div class="flex min-w-0 items-center gap-3">
               <span
-                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-support-1 text-primary"
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-support-1 text-primary"
               >
                 <i class="mdi mdi-chart-timeline-variant text-xl" />
               </span>
@@ -596,7 +535,7 @@
           <div
             v-if="wsExpanded"
             id="webserver-load-panel"
-            class="space-y-4 border-t border-gray-20 px-5 pb-5 pt-4"
+            class="space-y-4 border-t border-gray-25 px-5 pb-5 pt-4"
           >
             <div class="flex flex-wrap items-center justify-end gap-3">
               <BaseCheckbox
@@ -628,7 +567,11 @@
               />
             </div>
 
-            <div class="rounded-xl border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800">
+            <Message
+              :closable="false"
+              icon="mdi mdi-information"
+              severity="info"
+            >
               <p class="font-semibold">
                 {{ t("Requires a local web server status module") }}
               </p>
@@ -660,7 +603,7 @@
                 <span class="font-semibold">{{ t("Detected") }}:</span>
                 {{ wsData?.software || wsDetectedLabel }}
               </p>
-            </div>
+            </Message>
 
             <div
               v-if="wsLoading && !wsData"
@@ -674,7 +617,7 @@
                 class="mb-2"
               >
                 <div class="mb-1 flex items-center justify-between gap-2 text-caption">
-                  <span class="font-semibold text-gray-70">
+                  <span class="font-semibold text-gray-90">
                     {{ wsBusyBar.label }}
                   </span>
                   <span class="font-mono text-gray-90">
@@ -685,7 +628,7 @@
                   </span>
                 </div>
                 <div
-                  class="h-3 w-full overflow-hidden rounded-full bg-gray-20"
+                  class="h-3 w-full overflow-hidden rounded-full bg-gray-25"
                   role="progressbar"
                   :aria-valuenow="wsBusyBar.percent"
                   aria-valuemin="0"
@@ -714,7 +657,7 @@
                 <div
                   v-for="metric in wsMetrics"
                   :key="metric.label"
-                  class="rounded-xl border border-gray-20 bg-support-2 p-3"
+                  class="rounded-lg border border-gray-25 bg-support-2 p-3"
                 >
                   <dt class="text-caption font-semibold uppercase tracking-wide text-gray-50">
                     {{ metric.label }}
@@ -869,17 +812,19 @@
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute, useRouter } from "vue-router"
+import { useRoute } from "vue-router"
+import Message from "primevue/message"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseRouteTabs from "../../components/basecomponents/BaseRouteTabs.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 import baseService from "../../services/baseService"
 import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 const route = useRoute()
-const router = useRouter()
 const { showErrorNotification } = useNotification()
 
 const sections = ref([])
@@ -887,7 +832,6 @@ const currentSection = ref("chamilo")
 const rowType = ref("generic")
 const rows = ref([])
 const isLoading = ref(true)
-const errorMessage = ref("")
 
 const cacheData = ref(null)
 const cacheFetchedAt = ref(null)
@@ -914,6 +858,18 @@ const wsAutoRefresh = ref(false)
 /** Folded by default — live web server load stats load only when expanded. */
 const wsExpanded = ref(false)
 let wsRefreshTimer = null
+
+/** One route tab per section; the section lives in the query, so tabs keep the URL shareable. */
+const sectionTabs = computed(() =>
+  sections.value.map((section) => ({
+    title: t(section.label),
+    icon: section.icon,
+    to: { name: "AdminSystemStatus", query: { section: section.key } },
+  })),
+)
+
+/** Index of the current section in the tab list, -1 until the sections load. */
+const selectedTabIndex = computed(() => sections.value.findIndex((s) => s.key === currentSection.value))
 
 const activeSectionInfo = computed(() => {
   const match = sections.value.find((s) => s.key === currentSection.value)
@@ -1604,14 +1560,6 @@ function formatMillis(seconds) {
   return `${(Number(seconds) * 1000).toFixed(1)} ms`
 }
 
-function selectSection(key) {
-  if (key === currentSection.value) {
-    return
-  }
-
-  router.push({ name: "AdminSystemStatus", query: { section: key } })
-}
-
 function stopCacheAutoRefresh() {
   if (cacheRefreshTimer !== null) {
     clearInterval(cacheRefreshTimer)
@@ -1801,7 +1749,6 @@ async function toggleWsLoad() {
 
 async function loadSection(sectionKey) {
   isLoading.value = true
-  errorMessage.value = ""
   stopCacheAutoRefresh()
   stopDbAutoRefresh()
   stopWsAutoRefresh()
@@ -1841,7 +1788,6 @@ async function loadSection(sectionKey) {
       wsPrevSample.value = null
     }
   } catch (e) {
-    errorMessage.value = t("An unexpected error occurred.")
     showErrorNotification(e)
   } finally {
     isLoading.value = false

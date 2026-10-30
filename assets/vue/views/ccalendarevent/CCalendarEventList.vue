@@ -51,7 +51,7 @@
       v-model:visible="dialogShow"
       :header="t('Event')"
       :modal="true"
-      :style="{ width: '30rem' }"
+      :style="{ width: '40rem' }"
     >
       <CCalendarEventInfo :event="item" />
 

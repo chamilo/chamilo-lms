@@ -43250,3 +43250,15 @@ msgstr ""
 
 msgid "Expired certificates"
 msgstr ""
+
+msgid "Disable account"
+msgstr ""
+
+msgid "Disable selected accounts"
+msgstr ""
+
+msgid "Are you sure you want to disable the selected accounts?"
+msgstr ""
+
+msgid "Disabled users cannot sign in until an administrator reactivates their account."
+msgstr ""

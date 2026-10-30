@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,17 +48,18 @@ final class WeakPasswordCheckerHelper
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly UserRepository $userRepository,
+        private readonly AccessUrlScopeHelper $accessUrlScope,
     ) {}
 
-    public function countScannableUsers(): int
+    public function countScannableUsers(User $actor): int
     {
         $qb = $this->entityManager
             ->getRepository(User::class)
             ->createQueryBuilder('u')
-            ->select('COUNT(u.id)')
+            ->select('COUNT(DISTINCT u.id)')
         ;
 
-        $this->applyScannableUserFilters($qb);
+        $this->applyScannableUserFilters($qb, $actor);
 
         return (int) $qb
             ->getQuery()
@@ -65,7 +67,7 @@ final class WeakPasswordCheckerHelper
         ;
     }
 
-    public function countScannableUsersByIds(array $userIds): int
+    public function countScannableUsersByIds(array $userIds, User $actor): int
     {
         $ids = $this->normalizeUserIds($userIds);
 
@@ -76,12 +78,12 @@ final class WeakPasswordCheckerHelper
         $qb = $this->entityManager
             ->getRepository(User::class)
             ->createQueryBuilder('u')
-            ->select('COUNT(u.id)')
+            ->select('COUNT(DISTINCT u.id)')
             ->andWhere('u.id IN (:ids)')
             ->setParameter('ids', $ids)
         ;
 
-        $this->applyScannableUserFilters($qb);
+        $this->applyScannableUserFilters($qb, $actor);
 
         return (int) $qb
             ->getQuery()
@@ -92,17 +94,18 @@ final class WeakPasswordCheckerHelper
     /**
      * @return array{scanned_users: User[], weak_users: User[]}
      */
-    public function scanUsersBatch(int $offset, int $limit): array
+    public function scanUsersBatch(int $offset, int $limit, User $actor): array
     {
         $qb = $this->entityManager
             ->getRepository(User::class)
             ->createQueryBuilder('u')
+            ->distinct()
             ->orderBy('u.id', 'ASC')
             ->setFirstResult(max(0, $offset))
             ->setMaxResults(max(1, $limit))
         ;
 
-        $this->applyScannableUserFilters($qb);
+        $this->applyScannableUserFilters($qb, $actor);
 
         /** @var User[] $users */
         $users = $qb->getQuery()->getResult();
@@ -116,7 +119,7 @@ final class WeakPasswordCheckerHelper
     /**
      * @return array{scanned_users: User[], weak_users: User[]}
      */
-    public function scanUsersByIdsBatch(array $userIds, int $offset, int $limit): array
+    public function scanUsersByIdsBatch(array $userIds, int $offset, int $limit, User $actor): array
     {
         $ids = $this->normalizeUserIds($userIds);
 
@@ -132,12 +135,13 @@ final class WeakPasswordCheckerHelper
             ->createQueryBuilder('u')
             ->andWhere('u.id IN (:ids)')
             ->setParameter('ids', $ids)
+            ->distinct()
             ->orderBy('u.id', 'ASC')
             ->setFirstResult(max(0, $offset))
             ->setMaxResults(max(1, $limit))
         ;
 
-        $this->applyScannableUserFilters($qb);
+        $this->applyScannableUserFilters($qb, $actor);
 
         /** @var User[] $users */
         $users = $qb->getQuery()->getResult();
@@ -151,16 +155,17 @@ final class WeakPasswordCheckerHelper
     /**
      * @return User[]
      */
-    public function findWeakPasswordUsers(?array $onlyUserIds = null): array
+    public function findWeakPasswordUsers(User $actor, ?array $onlyUserIds = null): array
     {
         $qb = $this->entityManager
             ->getRepository(User::class)
             ->createQueryBuilder('u')
+            ->distinct()
             ->orderBy('u.lastname', 'ASC')
             ->addOrderBy('u.firstname', 'ASC')
         ;
 
-        $this->applyScannableUserFilters($qb);
+        $this->applyScannableUserFilters($qb, $actor);
 
         if (null !== $onlyUserIds) {
             $ids = $this->normalizeUserIds($onlyUserIds);
@@ -184,7 +189,7 @@ final class WeakPasswordCheckerHelper
     /**
      * @return User[]
      */
-    public function findUsersByIds(array $userIds): array
+    public function findUsersByIds(array $userIds, User $actor): array
     {
         $ids = $this->normalizeUserIds($userIds);
 
@@ -197,17 +202,17 @@ final class WeakPasswordCheckerHelper
             ->createQueryBuilder('u')
             ->andWhere('u.id IN (:ids)')
             ->setParameter('ids', $ids)
+            ->distinct()
             ->orderBy('u.lastname', 'ASC')
             ->addOrderBy('u.firstname', 'ASC')
         ;
 
-        $this->applyScannableUserFilters($qb);
+        $this->applyScannableUserFilters($qb, $actor);
 
-        /** @var User[] $users */
         return $qb->getQuery()->getResult();
     }
 
-    private function applyScannableUserFilters(QueryBuilder $qb): void
+    private function applyScannableUserFilters(QueryBuilder $qb, User $actor): void
     {
         $qb
             ->andWhere('u.active = :active')
@@ -221,6 +226,46 @@ final class WeakPasswordCheckerHelper
             ])
             ->setParameter('emptyEmail', '')
         ;
+
+        $urlIds = $this->getVisibleAccessUrlIds($actor);
+        if (null === $urlIds) {
+            return;
+        }
+
+        if ([] === $urlIds) {
+            $qb->andWhere('1 = 0');
+
+            return;
+        }
+
+        $qb
+            ->innerJoin('u.portals', 'passwordScopeRel')
+            ->innerJoin('passwordScopeRel.url', 'passwordScopeUrl')
+            ->andWhere('passwordScopeUrl.id IN (:passwordScopeUrlIds)')
+            ->setParameter('passwordScopeUrlIds', $urlIds)
+        ;
+    }
+
+    /**
+     * @return list<int>|null null means an unrestricted global administrator
+     */
+    private function getVisibleAccessUrlIds(User $actor): ?array
+    {
+        if ($actor->hasRole('ROLE_GLOBAL_ADMIN')) {
+            return $this->accessUrlScope->getManagedUrlIds($actor);
+        }
+
+        // Plain admins may scan their directly registered URLs, not descendants.
+        $urlIds = [];
+        foreach ($actor->getPortals() as $relation) {
+            /** @var AccessUrlRelUser $relation */
+            $urlId = (int) ($relation->getUrl()?->getId() ?? 0);
+            if ($urlId > 0) {
+                $urlIds[] = $urlId;
+            }
+        }
+
+        return array_values(array_unique($urlIds));
     }
 
     /**

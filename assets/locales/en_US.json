@@ -4655,5 +4655,9 @@
     "Yearly": "Yearly",
     "Delete all items": "Delete all items",
     "Additionally, a new announcement has been created and sent to selected users": "Additionally, a new announcement has been created and sent to selected users",
-    "Expired certificates": "Expired certificates"
+    "Expired certificates": "Expired certificates",
+    "Disable account": "Disable account",
+    "Disable selected accounts": "Disable selected accounts",
+    "Are you sure you want to disable the selected accounts?": "Are you sure you want to disable the selected accounts?",
+    "Disabled users cannot sign in until an administrator reactivates their account.": "Disabled users cannot sign in until an administrator reactivates their account."
 }

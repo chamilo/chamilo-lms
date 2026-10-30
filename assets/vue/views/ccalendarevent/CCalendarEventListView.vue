@@ -3,9 +3,6 @@
     <CalendarSectionHeader
       active-view="list"
       @addClick="goToAddEvent"
-      @agendaListClick="goToCalendar"
-      @sessionPlanningClick="goToSessionsPlan"
-      @myStudentsScheduleClick="goToMyStudentsSchedule"
     />
 
     <CalendarRecipientFilter />
@@ -353,19 +350,6 @@ function pushWithContext(name, extraQuery = {}) {
   }
 
   router.push({ name, query: { ...query, ...extraQuery } }).catch(() => {})
-}
-
-function goToSessionsPlan() {
-  pushWithContext("CalendarSessionsPlan")
-}
-
-function goToMyStudentsSchedule() {
-  pushWithContext("CalendarMyStudentsSchedule")
-}
-
-function goToCalendar() {
-  // The calendar opens on the day and in the view of the list.
-  pushWithContext("CCalendarEventList", { date: anchor.value.toISODate(), view: viewType.value })
 }
 
 function goToAddEvent() {

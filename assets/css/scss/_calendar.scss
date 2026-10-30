@@ -357,14 +357,9 @@
   }
 }
 
-// Calendar, list and the other views of the agenda header
-.calendar-view-switch {
-  @apply flex items-center gap-1 rounded-lg border border-gray-25 bg-white p-1;
-
-  // The view on screen is disabled, but keeps its full color.
-  .p-button:disabled {
-    @apply bg-support-1 opacity-100;
-  }
+// The view on screen, in the agenda header: disabled, but with its full color.
+.calendar-view-button--active.p-button:disabled {
+  @apply bg-support-1 opacity-100;
 }
 
 .calendar-mode-toggle {

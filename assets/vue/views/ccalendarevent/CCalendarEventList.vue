@@ -3,9 +3,6 @@
     <CalendarSectionHeader
       active-view="calendar"
       @addClick="showAddEventDialog"
-      @agendaListClick="goToAgendaList"
-      @sessionPlanningClick="goToSessionsPlan"
-      @myStudentsScheduleClick="goToMyStudentsSchedule"
     />
 
     <CalendarRecipientFilter />
@@ -374,44 +371,6 @@ watch(
     }
   },
 )
-
-function getCalendarQueryState() {
-  const api = cal.value?.getApi?.()
-  if (!api) {
-    return {
-      date: route.query.date ?? null,
-      view: route.query.view ?? null,
-    }
-  }
-
-  const date = DateTime.fromJSDate(api.getDate()).setZone(timezone).toISODate()
-  const view = api.view?.type ?? null
-  return { date, view }
-}
-
-function buildAgendaNavigationQuery() {
-  const { date, view } = getCalendarQueryState()
-  const nextQuery = { ...route.query }
-
-  if (date) {
-    nextQuery.date = date
-  }
-
-  if (view) {
-    nextQuery.view = view
-  }
-
-  return nextQuery
-}
-
-function goToAgendaList(mode = "list") {
-  const nextQuery = buildAgendaNavigationQuery()
-  const targetRoute = mode === "calendar" ? "CCalendarEventList" : "CCalendarEventListView"
-
-  router.push({ name: targetRoute, query: nextQuery }).catch((e) => {
-    console.error("[Calendar] Navigation error", e)
-  })
-}
 
 watch(
   [course, session],
@@ -935,18 +894,6 @@ async function unsubscribeToEvent() {}
 const isLoading = computed(() => store.getters["ccalendarevent/isLoading"])
 
 const createForm = ref(null)
-
-function goToSessionsPlan() {
-  router.push({ name: "CalendarSessionsPlan", query: { ...buildAgendaNavigationQuery() } }).catch((e) => {
-    console.error("[Calendar] Navigation error", e)
-  })
-}
-
-function goToMyStudentsSchedule() {
-  router.push({ name: "CalendarMyStudentsSchedule", query: { ...buildAgendaNavigationQuery() } }).catch((e) => {
-    console.error("[Calendar] Navigation error", e)
-  })
-}
 
 /**
  * One link per selected user or group of the current course, or one link for the whole course.

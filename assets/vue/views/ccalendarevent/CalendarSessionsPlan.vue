@@ -1,11 +1,9 @@
 <template>
   <div class="flex flex-col gap-4">
     <CalendarSectionHeader
+      :navigation-query="navigationQuery"
       active-view="session-planning"
       @addClick="goToAddEvent"
-      @agendaListClick="goToAgendaList"
-      @sessionPlanningClick="goToSessionsPlan"
-      @myStudentsScheduleClick="goToMyStudentsSchedule"
     />
 
     <div class="calendar-toolbar">
@@ -134,7 +132,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { DateTime } from "luxon"
 import calendarService from "../../services/calendarService"
@@ -187,6 +185,9 @@ function setYear(nextYear) {
   syncYearToQuery(nextYear)
 }
 
+// The other views open on the first day of the year of the plan.
+const navigationQuery = computed(() => (route.query.date || !year.value ? {} : { date: `${year.value}-01-01` }))
+
 function buildAgendaNavigationQuery() {
   const nextQuery = { ...route.query }
 
@@ -195,19 +196,6 @@ function buildAgendaNavigationQuery() {
   }
 
   return nextQuery
-}
-
-function goToSessionsPlan() {
-  router.push({ name: "CalendarSessionsPlan", query: { ...route.query, year: String(year.value) } }).catch(() => {})
-}
-
-function goToMyStudentsSchedule() {
-  router.push({ name: "CalendarMyStudentsSchedule", query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
-}
-
-function goToAgendaList(mode = "list") {
-  const targetRoute = mode === "calendar" ? "CCalendarEventList" : "CCalendarEventListView"
-  router.push({ name: targetRoute, query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
 }
 
 function goToAddEvent() {

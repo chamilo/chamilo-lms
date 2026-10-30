@@ -1,44 +1,79 @@
 <script setup>
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
+import { useRoute } from "vue-router"
 import SectionHeader from "../layout/SectionHeader.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useCalendarActionButtons } from "../../composables/calendar/calendarActionButtons"
 
 const { t } = useI18n()
-const emit = defineEmits(["addClick", "agendaListClick", "myStudentsScheduleClick", "sessionPlanningClick"])
+const route = useRoute()
+const emit = defineEmits(["addClick"])
 
 const props = defineProps({
   activeView: {
     type: String,
     default: "", // "calendar" | "list" | "session-planning" | "my-students-schedule"
   },
+  // The state of the view that is not in its URL, e.g. the day shown by a calendar that does not sync it.
+  navigationQuery: {
+    type: Object,
+    default: () => ({}),
+  },
 })
 
 const { showAddButton, showAgendaListButton, showSessionPlanningButton, showMyStudentsScheduleButton } =
   useCalendarActionButtons()
 
-const isCalendarActive = computed(() => props.activeView === "calendar")
-const isListActive = computed(() => props.activeView === "list")
-const isSessionPlanningActive = computed(() => props.activeView === "session-planning")
-const isMyStudentsScheduleActive = computed(() => props.activeView === "my-students-schedule")
+// The context of the agenda, its filter and the day and view on screen; any other parameter is stale in another view.
+const navigationKeys = ["cid", "sid", "gid", "type", "recipient", "date", "view"]
 
-/**
- * The button of the view on screen stands out from the others, as in the "tabs / view" of the component library.
- *
- * @param {boolean} isActive
- * @returns {string}
- */
-function viewButtonType(isActive) {
-  return isActive ? "primary-text" : "black-text"
-}
+const linkQuery = computed(() => {
+  const query = {}
 
-function goCalendar() {
-  emit("agendaListClick", "calendar")
-}
-function goList() {
-  emit("agendaListClick", "list")
-}
+  for (const key of navigationKeys) {
+    const value = key in props.navigationQuery ? props.navigationQuery[key] : route.query[key]
+
+    if (value !== undefined && value !== null && value !== "") {
+      query[key] = value
+    }
+  }
+
+  return query
+})
+
+const views = computed(() =>
+  [
+    {
+      key: "calendar",
+      label: t("Calendar"),
+      icon: "agenda-event",
+      routeName: "CCalendarEventList",
+      visible: showAgendaListButton.value,
+    },
+    {
+      key: "list",
+      label: t("Events list"),
+      icon: "agenda-list",
+      routeName: "CCalendarEventListView",
+      visible: showAgendaListButton.value,
+    },
+    {
+      key: "session-planning",
+      label: t("Sessions plan calendar"),
+      icon: "agenda-plan",
+      routeName: "CalendarSessionsPlan",
+      visible: showSessionPlanningButton.value,
+    },
+    {
+      key: "my-students-schedule",
+      label: t("My students schedule"),
+      icon: "agenda-user-event",
+      routeName: "CalendarMyStudentsSchedule",
+      visible: showMyStudentsScheduleButton.value,
+    },
+  ].filter((view) => view.visible),
+)
 </script>
 
 <template>
@@ -52,52 +87,28 @@ function goList() {
       @click="emit('addClick')"
     />
 
-    <div
-      v-if="showAgendaListButton || showSessionPlanningButton || showMyStudentsScheduleButton"
-      class="calendar-view-switch"
+    <template
+      v-for="view in views"
+      :key="view.key"
     >
-      <template v-if="showAgendaListButton">
-        <BaseButton
-          :label="t('Calendar')"
-          :type="viewButtonType(isCalendarActive)"
-          :disabled="isCalendarActive"
-          icon="agenda-event"
-          only-icon
-          size="small"
-          @click="goCalendar"
-        />
-        <BaseButton
-          :label="t('Events list')"
-          :type="viewButtonType(isListActive)"
-          :disabled="isListActive"
-          icon="agenda-list"
-          only-icon
-          size="small"
-          @click="goList"
-        />
-      </template>
-
       <BaseButton
-        v-if="showSessionPlanningButton"
-        :label="t('Sessions plan calendar')"
-        :type="viewButtonType(isSessionPlanningActive)"
-        :disabled="isSessionPlanningActive"
-        icon="agenda-plan"
+        v-if="activeView === view.key"
+        :icon="view.icon"
+        :label="view.label"
+        aria-current="page"
+        class="calendar-view-button--active"
+        disabled
         only-icon
-        size="small"
-        @click="emit('sessionPlanningClick')"
+        type="primary-text"
       />
-
       <BaseButton
-        v-if="showMyStudentsScheduleButton"
-        :label="t('My students schedule')"
-        :type="viewButtonType(isMyStudentsScheduleActive)"
-        :disabled="isMyStudentsScheduleActive"
-        icon="agenda-user-event"
+        v-else
+        :icon="view.icon"
+        :label="view.label"
+        :route="{ name: view.routeName, query: linkQuery }"
         only-icon
-        size="small"
-        @click="emit('myStudentsScheduleClick')"
+        type="primary-text"
       />
-    </div>
+    </template>
   </SectionHeader>
 </template>

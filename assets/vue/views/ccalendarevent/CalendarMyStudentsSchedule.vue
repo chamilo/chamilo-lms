@@ -1,11 +1,9 @@
 <template>
   <div class="flex flex-col gap-4">
     <CalendarSectionHeader
+      :navigation-query="navigationQuery"
       active-view="my-students-schedule"
       @addClick="goToAddEvent"
-      @agendaListClick="goToAgendaList"
-      @sessionPlanningClick="goToSessionsPlan"
-      @myStudentsScheduleClick="goToMyStudentsSchedule"
     />
 
     <div class="calendar-toolbar">
@@ -158,6 +156,13 @@ function getCalendarQueryState() {
     view: api.view?.type ?? initialView.value ?? route.query.view ?? null,
   }
 }
+
+// The other views open on the session, day and view on screen; without a session, they open without one.
+const navigationQuery = computed(() => ({
+  sid: selectedSid.value || undefined,
+  date: initialDate.value ?? route.query.date,
+  view: initialView.value ?? route.query.view,
+}))
 
 function buildAgendaNavigationQuery() {
   const { date, view } = getCalendarQueryState()
@@ -409,16 +414,6 @@ const calendarOptions = computed(() => ({
   },
 }))
 
-function goToSessionsPlan() {
-  router.push({ name: "CalendarSessionsPlan", query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
-}
-function goToMyStudentsSchedule() {
-  router.push({ name: "CalendarMyStudentsSchedule", query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
-}
-function goToAgendaList(mode = "list") {
-  const targetRoute = mode === "calendar" ? "CCalendarEventList" : "CCalendarEventListView"
-  router.push({ name: targetRoute, query: { ...buildAgendaNavigationQuery() } }).catch(() => {})
-}
 function goToAddEvent() {
   router.push({ name: "CCalendarEventList", query: { ...buildAgendaNavigationQuery(), openAdd: "1" } }).catch(() => {})
 }

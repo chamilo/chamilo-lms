@@ -1,15 +1,28 @@
 <template>
   <div class="calendar-event-info">
-    <h5 v-text="event.title" />
-
-    <p v-text="abbreviatedDatetime(event.startDate)" />
-
-    <p
-      v-if="event.endDate"
-      v-text="abbreviatedDatetime(event.endDate)"
-    />
-
-    <hr />
+    <div class="calendar-event-info__header">
+      <span
+        :style="event.color ? { background: event.color } : null"
+        class="calendar-event-info__color"
+      />
+      <div class="flex flex-col gap-1">
+        <h5
+          class="calendar-event-info__title"
+          v-text="event.title"
+        />
+        <p class="calendar-event-info__date">
+          <BaseIcon
+            icon="calendar-clock"
+            size="small"
+          />
+          <span v-text="abbreviatedDatetime(event.startDate)" />
+          <template v-if="event.endDate">
+            <span aria-hidden="true">–</span>
+            <span v-text="abbreviatedDatetime(event.endDate)" />
+          </template>
+        </p>
+      </div>
+    </div>
 
     <div
       dir="auto"

@@ -10,200 +10,180 @@
 
     <CalendarRecipientFilter />
 
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-      <div class="flex flex-wrap items-center gap-2">
-        <span class="px-2 py-1 rounded border bg-white text-sm text-gray-90">
-          {{ t("Events list") }}
-        </span>
-        <span class="px-2 py-1 rounded border bg-white text-sm text-gray-90">
-          {{ rangeLabel }}
-        </span>
-        <span class="px-2 py-1 rounded border bg-white text-sm text-gray-50">
-          {{ t("Events") }}: {{ filteredEvents.length }}
-        </span>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-2">
-        <BaseButton
-          :label="t('Previous')"
-          icon="chevron-left"
-          type="black"
-          @click="shiftRange(-1)"
-        />
+    <div class="calendar-toolbar">
+      <div class="calendar-toolbar__group">
         <BaseButton
           :label="t('Today')"
-          icon="calendar"
           type="black"
           @click="goToday"
         />
-        <BaseButton
-          :label="t('Next')"
-          icon="chevron-right"
-          type="black"
-          @click="shiftRange(1)"
+        <div class="calendar-toolbar__nav">
+          <BaseButton
+            :label="t('Previous')"
+            icon="chevron-left"
+            only-icon
+            type="primary"
+            @click="shiftRange(-1)"
+          />
+          <BaseButton
+            :label="t('Next')"
+            icon="chevron-right"
+            only-icon
+            type="primary"
+            @click="shiftRange(1)"
+          />
+        </div>
+      </div>
+
+      <div class="calendar-toolbar__title">
+        <div class="flex flex-col">
+          <span
+            class="calendar-toolbar__view"
+            v-text="t('Events list')"
+          />
+          <h2 v-text="rangeLabel" />
+        </div>
+        <span
+          class="calendar-toolbar__count"
+          v-text="`${t('Events')}: ${filteredEvents.length}`"
         />
       </div>
     </div>
+
     <div
       v-if="showScopeFilters"
-      class="flex flex-wrap items-center gap-2"
+      class="calendar-tabs"
+      role="tablist"
     >
       <button
         v-for="f in filters"
         :key="f.key"
-        class="px-3 py-1 rounded border text-sm"
-        :class="activeFilter === f.key ? 'bg-black text-white border-black' : 'bg-white text-gray-90'"
+        :aria-selected="activeFilter === f.key"
+        :class="{ 'calendar-tabs__tab--active': activeFilter === f.key }"
+        class="calendar-tabs__tab"
+        role="tab"
+        type="button"
         @click="activeFilter = f.key"
       >
         {{ f.label }}
       </button>
     </div>
+
     <!-- Results -->
-    <div class="border rounded overflow-hidden bg-white relative">
+    <div class="calendar-list">
       <div
-        v-if="isLoading"
-        class="absolute inset-0 z-10 bg-white/70 flex items-center justify-center"
+        v-if="isLoading && !showSkeleton"
+        class="calendar-list__loading"
       >
-        <div class="flex items-center gap-3 text-gray-90">
-          <i class="mdi mdi-loading mdi-spin text-2xl" />
-          <span class="text-sm">{{ t("Loading") }}</span>
-        </div>
+        <i class="mdi mdi-loading mdi-spin text-2xl" />
+        <span class="text-body-2">{{ t("Loading") }}</span>
       </div>
-      <div
-        v-if="showSkeleton"
-        class="p-4"
-      >
+
+      <template v-if="showSkeleton">
         <div
           v-for="d in skeletonDaysCount"
           :key="`sk-day-${d}`"
-          class="border-b last:border-b-0"
+          class="calendar-list__day"
         >
-          <div class="px-4 py-3 bg-gray-20 font-semibold flex items-center gap-3">
-            <div class="h-4 w-40 bg-gray-30 rounded animate-pulse" />
-          </div>
+          <div class="h-4 w-40 rounded bg-gray-20 animate-pulse" />
 
-          <div class="p-4 flex flex-col gap-3">
-            <div
-              v-for="i in skeletonItemsPerDay"
-              :key="`sk-item-${d}-${i}`"
-              class="rounded border overflow-hidden"
-            >
-              <div class="flex">
-                <div class="w-2 bg-gray-30 animate-pulse" />
-                <div class="flex-1 p-4">
-                  <div class="flex items-start justify-between gap-3">
-                    <div class="h-4 w-64 bg-gray-30 rounded animate-pulse" />
-                    <div class="h-3 w-24 bg-gray-30 rounded animate-pulse" />
-                  </div>
-
-                  <div class="mt-3 h-3 w-5/6 bg-gray-30 rounded animate-pulse" />
-                  <div class="mt-2 h-3 w-2/3 bg-gray-30 rounded animate-pulse" />
-
-                  <div class="mt-3 flex flex-wrap items-center gap-2">
-                    <div class="h-6 w-20 bg-gray-30 rounded animate-pulse" />
-                    <div class="h-6 w-28 bg-gray-30 rounded animate-pulse" />
-                    <div class="h-6 w-24 bg-gray-30 rounded animate-pulse" />
-                    <div class="h-6 w-16 bg-gray-30 rounded animate-pulse" />
-                  </div>
-                </div>
+          <div
+            v-for="i in skeletonItemsPerDay"
+            :key="`sk-item-${d}-${i}`"
+            class="calendar-list__card"
+          >
+            <div class="calendar-list__card-color bg-gray-20" />
+            <div class="calendar-list__card-body">
+              <div class="flex items-start justify-between gap-3">
+                <div class="h-4 w-64 rounded bg-gray-20 animate-pulse" />
+                <div class="h-3 w-24 rounded bg-gray-20 animate-pulse" />
+              </div>
+              <div class="h-3 w-5/6 rounded bg-gray-20 animate-pulse" />
+              <div class="flex gap-2">
+                <div class="h-6 w-20 rounded-full bg-gray-20 animate-pulse" />
+                <div class="h-6 w-28 rounded-full bg-gray-20 animate-pulse" />
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </template>
+
       <div
         v-if="groupedDays.length === 0 && !isLoading && !showSkeleton"
-        class="p-4 text-sm text-gray-50"
+        class="calendar-list__empty"
       >
-        {{ t("No events found") }}
+        <span class="calendar-list__empty-icon">
+          <BaseIcon icon="agenda-event" />
+        </span>
+        <p v-text="t('No events found')" />
       </div>
 
-      <div
+      <section
         v-for="day in groupedDays"
         :key="day.key"
-        class="border-b last:border-b-0"
+        class="calendar-list__day"
       >
-        <div class="px-4 py-3 bg-gray-20 font-semibold">
-          {{ day.label }}
-        </div>
+        <h3
+          class="calendar-list__day-title"
+          v-text="day.label"
+        />
 
-        <div class="p-4 flex flex-col gap-3">
+        <article
+          v-for="ev in day.items"
+          :key="ev.key"
+          class="calendar-list__card"
+        >
           <div
-            v-for="ev in day.items"
-            :key="ev.key"
-            class="rounded border overflow-hidden"
-          >
-            <div class="flex">
-              <div
-                class="w-2"
-                :style="{ background: ev.color }"
-              />
-              <div class="flex-1 p-4">
-                <div class="flex items-start justify-between gap-3">
-                  <div class="font-semibold">
-                    <a
-                      v-if="ev.url"
-                      :href="ev.url"
-                      class="hover:underline"
-                    >
-                      {{ ev.title }}
-                    </a>
-                    <span v-else>{{ ev.title }}</span>
-                  </div>
-                  <div class="text-sm text-gray-50 whitespace-nowrap">
-                    {{ ev.range }}
-                  </div>
-                </div>
-
-                <div
-                  v-if="ev.content"
-                  class="mt-2 text-sm text-gray-90"
+            class="calendar-list__card-color"
+            :style="{ background: ev.color }"
+          />
+          <div class="calendar-list__card-body">
+            <div class="flex flex-col gap-1 md:flex-row md:items-start md:justify-between md:gap-3">
+              <h4 class="calendar-list__card-title">
+                <a
+                  v-if="ev.url"
+                  :href="ev.url"
                 >
-                  {{ ev.content }}
-                </div>
+                  {{ ev.title }}
+                </a>
+                <span v-else>{{ ev.title }}</span>
+              </h4>
+              <span class="calendar-list__card-time">
+                <BaseIcon
+                  icon="calendar-clock"
+                  size="small"
+                />
+                {{ ev.range }}
+              </span>
+            </div>
 
-                <div
-                  v-if="ev.comment"
-                  class="mt-2 text-sm text-gray-90 whitespace-pre-line"
-                >
-                  <strong>{{ t("Comment") }}:</strong>
-                  {{ ev.comment }}
-                </div>
+            <p
+              v-if="ev.content"
+              class="calendar-list__card-text"
+            >
+              {{ ev.content }}
+            </p>
 
-                <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-gray-50">
-                  <span
-                    v-if="ev.scope"
-                    class="px-2 py-1 border rounded bg-white"
-                  >
-                    {{ ev.scope }}
-                  </span>
+            <p
+              v-if="ev.comment"
+              class="calendar-list__card-text whitespace-pre-line"
+            >
+              <strong>{{ t("Comment") }}:</strong>
+              {{ ev.comment }}
+            </p>
 
-                  <span
-                    v-if="ev.course"
-                    class="px-2 py-1 border rounded bg-white"
-                  >
-                    {{ t("Course") }}: {{ ev.course }}
-                  </span>
-
-                  <span
-                    v-if="ev.session"
-                    class="px-2 py-1 border rounded bg-white"
-                  >
-                    {{ t("Session") }}: {{ ev.session }}
-                  </span>
-
-                  <span
-                    v-if="ev.type"
-                    class="px-2 py-1 border rounded bg-white"
-                  >
-                    {{ t("Type") }}: {{ ev.type }}
-                  </span>
-                </div>
-              </div>
+            <div
+              v-if="ev.scope || ev.course || ev.session || ev.type"
+              class="calendar-list__tags"
+            >
+              <span v-if="ev.scope">{{ ev.scope }}</span>
+              <span v-if="ev.course">{{ t("Course") }}: {{ ev.course }}</span>
+              <span v-if="ev.session">{{ t("Session") }}: {{ ev.session }}</span>
+              <span v-if="ev.type">{{ t("Type") }}: {{ ev.type }}</span>
             </div>
           </div>
-        </div>
-      </div>
+        </article>
+      </section>
     </div>
     <!-- /Results -->
   </div>
@@ -217,6 +197,7 @@ import { DateTime } from "luxon"
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
 import CalendarRecipientFilter from "../../components/ccalendarevent/CalendarRecipientFilter.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import { useFormatDate } from "../../composables/formatDate"
 import { useLocale } from "../../composables/locale"
 import { useCalendarEvent } from "../../composables/calendar/calendarEvent"

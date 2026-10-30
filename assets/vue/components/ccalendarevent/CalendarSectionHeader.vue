@@ -23,6 +23,16 @@ const isListActive = computed(() => props.activeView === "list")
 const isSessionPlanningActive = computed(() => props.activeView === "session-planning")
 const isMyStudentsScheduleActive = computed(() => props.activeView === "my-students-schedule")
 
+/**
+ * The button of the view on screen stands out from the others, as in the "tabs / view" of the component library.
+ *
+ * @param {boolean} isActive
+ * @returns {string}
+ */
+function viewButtonType(isActive) {
+  return isActive ? "primary-text" : "black-text"
+}
+
 function goCalendar() {
   emit("agendaListClick", "calendar")
 }
@@ -43,49 +53,51 @@ function goList() {
     />
 
     <div
-      v-if="showAgendaListButton"
-      class="flex items-center gap-1"
+      v-if="showAgendaListButton || showSessionPlanningButton || showMyStudentsScheduleButton"
+      class="calendar-view-switch"
     >
+      <template v-if="showAgendaListButton">
+        <BaseButton
+          :label="t('Calendar')"
+          :type="viewButtonType(isCalendarActive)"
+          :disabled="isCalendarActive"
+          icon="agenda-event"
+          only-icon
+          size="small"
+          @click="goCalendar"
+        />
+        <BaseButton
+          :label="t('Events list')"
+          :type="viewButtonType(isListActive)"
+          :disabled="isListActive"
+          icon="agenda-list"
+          only-icon
+          size="small"
+          @click="goList"
+        />
+      </template>
+
       <BaseButton
-        :label="t('Calendar')"
-        icon="agenda-event"
+        v-if="showSessionPlanningButton"
+        :label="t('Sessions plan calendar')"
+        :type="viewButtonType(isSessionPlanningActive)"
+        :disabled="isSessionPlanningActive"
+        icon="agenda-plan"
         only-icon
-        type="black"
-        :disabled="isCalendarActive"
-        :class="isCalendarActive ? '' : 'opacity-60 hover:opacity-100'"
-        @click="goCalendar"
+        size="small"
+        @click="emit('sessionPlanningClick')"
       />
+
       <BaseButton
-        :label="t('Events list')"
-        icon="agenda-list"
+        v-if="showMyStudentsScheduleButton"
+        :label="t('My students schedule')"
+        :type="viewButtonType(isMyStudentsScheduleActive)"
+        :disabled="isMyStudentsScheduleActive"
+        icon="agenda-user-event"
         only-icon
-        type="black"
-        :disabled="isListActive"
-        :class="isListActive ? '' : 'opacity-60 hover:opacity-100'"
-        @click="goList"
+        size="small"
+        @click="emit('myStudentsScheduleClick')"
       />
     </div>
-
-    <BaseButton
-      v-if="showSessionPlanningButton"
-      :label="t('Sessions plan calendar')"
-      icon="agenda-plan"
-      only-icon
-      type="black"
-      :disabled="isSessionPlanningActive"
-      :class="isSessionPlanningActive ? '' : 'opacity-60 hover:opacity-100'"
-      @click="emit('sessionPlanningClick')"
-    />
-
-    <BaseButton
-      v-if="showMyStudentsScheduleButton"
-      :label="t('My students schedule')"
-      icon="agenda-user-event"
-      only-icon
-      type="black"
-      :disabled="isMyStudentsScheduleActive"
-      :class="isMyStudentsScheduleActive ? '' : 'opacity-60 hover:opacity-100'"
-      @click="emit('myStudentsScheduleClick')"
-    />
   </SectionHeader>
 </template>

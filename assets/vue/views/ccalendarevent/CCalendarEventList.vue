@@ -12,6 +12,7 @@
 
     <FullCalendar
       ref="cal"
+      class="calendar-agenda"
       :options="calendarOptions"
     />
 

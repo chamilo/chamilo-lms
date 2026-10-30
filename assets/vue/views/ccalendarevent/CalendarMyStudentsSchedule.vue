@@ -8,64 +8,56 @@
       @myStudentsScheduleClick="goToMyStudentsSchedule"
     />
 
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-      <div class="flex items-center gap-2">
-        <div class="text-sm text-gray-700 font-semibold">
-          {{ t("My students schedule") }}
-        </div>
-
-        <select
+    <div class="calendar-toolbar">
+      <div class="w-full md:w-96">
+        <BaseSelect
+          id="students_schedule_session"
           v-model="selectedSid"
-          class="border rounded px-2 py-1 text-sm bg-white"
-        >
-          <option value="">{{ t("Select a session") }}</option>
-          <option
-            v-for="s in sessions"
-            :key="`sid-${s.id}`"
-            :value="String(s.id)"
-          >
-            {{ s.name }}
-          </option>
-        </select>
+          :label="t('Select a session')"
+          :options="sessionOptions"
+          name="students_schedule_session"
+          option-label="label"
+          option-value="value"
+        />
       </div>
 
-      <div class="text-xs text-gray-600">
+      <span class="calendar-toolbar__count self-start md:self-center">
         {{ t("Read-only view") }}
-      </div>
+      </span>
     </div>
 
     <div
       v-if="errorMessage"
-      class="p-3 border rounded bg-white text-sm text-red-700"
+      class="rounded-lg border border-danger bg-white p-3 text-body-2 text-danger"
     >
       {{ errorMessage }}
     </div>
 
     <div
       v-if="!isLoadingSessions && sessions.length === 0 && !errorMessage"
-      class="p-4 border rounded bg-white text-sm text-gray-700"
+      class="calendar-list__empty"
     >
-      {{ t("No tutored sessions found") }}
+      <span class="calendar-list__empty-icon">
+        <BaseIcon icon="agenda-user-event" />
+      </span>
+      <p v-text="t('No tutored sessions found')" />
     </div>
 
-    <div class="border rounded bg-white overflow-hidden relative">
+    <div class="relative">
       <div
         v-if="isLoadingSessions"
-        class="absolute inset-0 z-10 bg-white/70 flex items-center justify-center"
+        class="calendar-plan__loading"
       >
-        <div class="flex items-center gap-3 text-gray-700">
-          <i class="mdi mdi-loading mdi-spin text-2xl" />
-          <span class="text-sm">{{ t("Loading") }}</span>
-        </div>
+        <i class="mdi mdi-loading mdi-spin text-2xl" />
+        <span class="text-body-2">{{ t("Loading") }}</span>
       </div>
 
-      <div class="p-2">
-        <FullCalendar
-          :key="calendarKey"
-          ref="cal"
-          :options="calendarOptions"
-        />
-      </div>
+      <FullCalendar
+        :key="calendarKey"
+        ref="cal"
+        class="calendar-agenda"
+        :options="calendarOptions"
+      />
     </div>
 
     <Dialog
@@ -120,6 +112,8 @@ import { DateTime } from "luxon"
 import calendarService from "../../services/calendarService"
 
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -136,6 +130,7 @@ const isLoadingSessions = ref(false)
 const errorMessage = ref("")
 const sessions = ref([])
 const selectedSid = ref(String(route.query.sid || ""))
+const sessionOptions = computed(() => sessions.value.map((s) => ({ label: s.name, value: String(s.id) })))
 const initialView = ref(String(route.query.view || "dayGridMonth"))
 const initialDate = ref(String(route.query.date || DateTime.now().toISODate()))
 const calendarKey = ref(0)

@@ -1,6 +1,22 @@
 .calendar-event-info {
   @apply flex flex-col space-y-4;
 
+  &__header {
+    @apply flex gap-3 border-b border-gray-25 pb-4;
+  }
+
+  &__color {
+    @apply w-1 shrink-0 rounded-full bg-primary;
+  }
+
+  &__title {
+    @apply text-h5 font-semibold text-gray-90;
+  }
+
+  &__date {
+    @apply flex flex-wrap items-center gap-1 text-body-2 text-gray-50;
+  }
+
   .invitations-info {
     @apply space-y-2;
 
@@ -33,6 +49,324 @@
     }
   }
 }
+// Agenda calendars, with the buttons, tabs and grays of the component library.
+.calendar-agenda.fc {
+  .fc-header-toolbar {
+    @apply flex-wrap gap-4 mb-6;
+  }
+
+  .fc-toolbar-chunk {
+    @apply flex items-center gap-2;
+  }
+
+  .fc-toolbar-title {
+    @apply text-h4 font-semibold text-gray-90 capitalize;
+  }
+
+  .fc-button {
+    @apply h-10 rounded-lg text-body-2 font-semibold capitalize shadow-none;
+  }
+
+  .fc-button:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary;
+  }
+
+  // "Today": outlined button
+  .fc-today-button {
+    @apply bg-white border-gray-25 text-gray-90;
+
+    &:not(:disabled):hover {
+      @apply bg-support-1 border-gray-25 text-primary;
+    }
+
+    &:disabled {
+      @apply bg-white border-gray-25 text-gray-50 opacity-100;
+    }
+  }
+
+  // Previous and next: filled double button
+  .fc-button-group:has(.fc-prev-button) {
+    .fc-button {
+      @apply w-10 px-0 bg-primary border-primary text-white;
+
+      &:hover {
+        @apply bg-primary-gradient border-primary-gradient;
+      }
+    }
+
+    .fc-prev-button {
+      @apply border-e-white/30;
+    }
+  }
+
+  // Month, week and day: tabs
+  .fc-button-group:has(.fc-dayGridMonth-button) {
+    @apply gap-1;
+
+    .fc-button {
+      @apply rounded-none border-0 border-b-2 border-transparent bg-transparent px-4 text-gray-50;
+
+      &:hover {
+        @apply bg-transparent text-primary;
+      }
+
+      &.fc-button-active {
+        @apply bg-transparent border-primary text-primary;
+      }
+    }
+  }
+
+  // Grid
+  .fc-scrollgrid,
+  td,
+  th {
+    @apply border-gray-25;
+  }
+
+  .fc-scrollgrid {
+    @apply rounded-lg overflow-hidden;
+  }
+
+  .fc-col-header-cell {
+    @apply bg-gray-15 py-2;
+
+    .fc-col-header-cell-cushion {
+      @apply text-caption font-semibold uppercase text-gray-50;
+    }
+  }
+
+  .fc-daygrid-day-number {
+    @apply m-1 flex h-7 min-w-7 items-center justify-center rounded-full px-1 text-body-2 text-gray-90;
+  }
+
+  .fc-day-other .fc-daygrid-day-top {
+    @apply opacity-100;
+  }
+
+  .fc-day-other .fc-daygrid-day-number {
+    @apply text-gray-50;
+  }
+
+  .fc-day-today {
+    @apply bg-support-1;
+
+    .fc-daygrid-day-number {
+      @apply bg-primary font-semibold text-white;
+    }
+  }
+
+  .fc-timegrid-slot-label-cushion,
+  .fc-timegrid-axis-cushion {
+    @apply text-caption text-gray-50;
+  }
+
+  // Events
+  .fc-daygrid-block-event,
+  .fc-timegrid-event {
+    @apply rounded-md;
+  }
+
+  .fc-event-main,
+  .fc-daygrid-dot-event {
+    @apply text-caption;
+  }
+
+  .fc-event-title {
+    @apply font-semibold;
+  }
+
+  .fc-daygrid-dot-event .fc-event-time {
+    @apply font-normal text-gray-50;
+  }
+
+  .fc-daygrid-dot-event:hover {
+    @apply bg-support-1;
+  }
+
+  .fc-daygrid-more-link {
+    @apply text-caption font-semibold text-primary;
+  }
+
+  .fc-popover {
+    @apply rounded-lg border-gray-25 shadow-xl;
+  }
+
+  .fc-popover-header {
+    @apply rounded-t-lg bg-gray-15 px-3 py-2 text-body-2 font-semibold text-gray-90;
+  }
+
+  @media (max-width: 767px) {
+    .fc-header-toolbar {
+      @apply gap-3;
+    }
+
+    .fc-toolbar-chunk:nth-child(2) {
+      @apply order-first w-full justify-center;
+    }
+
+    .fc-toolbar-title {
+      @apply text-h5;
+    }
+
+    .fc-toolbar-chunk:last-child .fc-button {
+      @apply px-2;
+    }
+  }
+}
+
+// Toolbar of the agenda views that are not a FullCalendar: same buttons as the calendar toolbar
+.calendar-toolbar {
+  @apply flex flex-col-reverse gap-4 md:flex-row md:items-center md:justify-between;
+
+  &__group {
+    @apply flex items-center gap-2;
+
+    // "Today": outlined button, as in the calendar toolbar
+    > .p-button-outlined {
+      @apply h-10 border-gray-25 text-body-2;
+    }
+  }
+
+  // Previous and next: filled double button
+  &__nav {
+    @apply inline-flex;
+
+    .p-button {
+      @apply h-10 w-10;
+    }
+
+    .p-button:first-child {
+      @apply rounded-e-none border-e-white/30;
+    }
+
+    .p-button:last-child {
+      @apply rounded-s-none;
+    }
+  }
+
+  &__title {
+    @apply flex flex-wrap items-center gap-3;
+
+    h2 {
+      @apply text-h4 font-semibold text-gray-90 capitalize;
+    }
+  }
+
+  // Name of the view, above its title
+  &__view {
+    @apply text-caption font-semibold uppercase text-gray-50;
+  }
+
+  &__count {
+    @apply rounded-full bg-support-1 px-3 py-1 text-caption font-semibold text-primary;
+  }
+}
+
+// Tabs: version 4 of the component library
+.calendar-tabs {
+  @apply flex flex-wrap gap-1 border-b border-gray-25;
+
+  &__tab {
+    @apply -mb-px border-b-2 border-transparent px-4 py-2 text-body-2 font-semibold text-gray-50 transition-colors hover:text-primary;
+
+    &--active {
+      @apply border-primary text-primary;
+    }
+  }
+}
+
+.calendar-list {
+  @apply relative flex flex-col gap-6;
+
+  &__loading {
+    @apply flex items-center justify-center gap-3 py-4 text-gray-50;
+  }
+
+  &__day {
+    @apply flex flex-col gap-3;
+  }
+
+  &__day-title {
+    @apply text-caption font-semibold uppercase text-gray-50;
+  }
+
+  &__card {
+    @apply flex overflow-hidden rounded-lg border border-gray-25 bg-white transition-shadow hover:shadow-md;
+  }
+
+  &__card-color {
+    @apply w-1 shrink-0;
+  }
+
+  &__card-body {
+    @apply flex flex-1 flex-col gap-2 p-4;
+  }
+
+  &__card-title {
+    @apply text-body-1 font-semibold text-gray-90;
+
+    a {
+      @apply text-primary hover:underline;
+    }
+  }
+
+  &__card-time {
+    @apply inline-flex items-center gap-1 whitespace-nowrap text-body-2 text-gray-50;
+  }
+
+  &__card-text {
+    @apply text-body-2 text-gray-90;
+  }
+
+  &__tags {
+    @apply flex flex-wrap gap-2;
+
+    span {
+      @apply rounded-full bg-gray-15 px-3 py-1 text-tiny font-semibold text-gray-90;
+    }
+  }
+
+  // Empty state of the component library: the icon on a soft background
+  &__empty {
+    @apply flex flex-col items-center gap-4 rounded-lg border border-dashed border-gray-25 px-4 py-12 text-center text-body-2 text-gray-50;
+  }
+
+  &__empty-icon {
+    @apply flex h-20 w-20 items-center justify-center rounded-full bg-support-1 text-primary;
+
+    .mdi {
+      @apply text-4xl;
+    }
+  }
+}
+
+// Sessions plan: a year of weeks, with the grays of the calendar grid
+.calendar-plan {
+  @apply relative overflow-hidden rounded-lg border border-gray-25 bg-white;
+
+  &__loading {
+    @apply absolute inset-0 z-20 flex items-center justify-center gap-3 bg-white/70 text-gray-50;
+  }
+
+  &__header {
+    @apply sticky top-0 z-10 border-b border-gray-25 bg-gray-15 text-caption font-semibold uppercase text-gray-50;
+  }
+
+  &__row {
+    @apply border-b border-gray-25 last:border-b-0 hover:bg-support-2;
+  }
+}
+
+// Calendar, list and the other views of the agenda header
+.calendar-view-switch {
+  @apply flex items-center gap-1 rounded-lg border border-gray-25 bg-white p-1;
+
+  // The view on screen is disabled, but keeps its full color.
+  .p-button:disabled {
+    @apply bg-support-1 opacity-100;
+  }
+}
+
 .calendar-mode-toggle {
   @apply inline-flex gap-2;
 }

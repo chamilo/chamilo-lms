@@ -8,102 +8,117 @@
       @myStudentsScheduleClick="goToMyStudentsSchedule"
     />
 
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-      <div class="flex items-center gap-2">
-        <BaseButton
-          :label="t('Previous')"
-          icon="chevron-left"
-          type="black"
-          @click="setYear(year - 1)"
-        />
-        <div class="text-lg font-semibold">
-          {{ year }}
+    <div class="calendar-toolbar">
+      <div class="calendar-toolbar__group">
+        <div class="calendar-toolbar__nav">
+          <BaseButton
+            :label="t('Previous')"
+            icon="chevron-left"
+            only-icon
+            type="primary"
+            @click="setYear(year - 1)"
+          />
+          <BaseButton
+            :label="t('Next')"
+            icon="chevron-right"
+            only-icon
+            type="primary"
+            @click="setYear(year + 1)"
+          />
         </div>
-        <BaseButton
-          :label="t('Next')"
-          icon="chevron-right"
-          type="black"
-          @click="setYear(year + 1)"
-        />
+        <div class="flex flex-col">
+          <span
+            class="calendar-toolbar__view"
+            v-text="t('Sessions plan calendar')"
+          />
+          <div class="calendar-toolbar__title">
+            <h2 v-text="year" />
+          </div>
+        </div>
       </div>
 
-      <div class="flex flex-wrap items-center gap-2 text-sm text-gray-600">
-        <span class="px-2 py-1 rounded border bg-white">
-          {{ t("Sessions plan calendar") }}
-        </span>
-        <span class="px-2 py-1 rounded border bg-white">
-          {{ t("Weeks are displayed from 1 to 52") }}
-        </span>
-        <span class="px-2 py-1 rounded border bg-white"> {{ t("Sessions") }}: {{ sessions.length }} </span>
+      <div class="calendar-toolbar__title">
+        <span
+          class="text-body-2 text-gray-50"
+          v-text="t('Weeks are displayed from 1 to 52')"
+        />
+        <span
+          class="calendar-toolbar__count"
+          v-text="`${t('Sessions')}: ${sessions.length}`"
+        />
       </div>
     </div>
 
     <div
       v-if="errorMessage"
-      class="p-3 border rounded bg-white text-sm text-red-700"
+      class="rounded-lg border border-danger bg-white p-3 text-body-2 text-danger"
     >
       {{ errorMessage }}
     </div>
 
-    <div class="border rounded overflow-hidden bg-white relative">
+    <div
+      v-if="!isLoading && sessions.length === 0 && !errorMessage"
+      class="calendar-list__empty"
+    >
+      <span class="calendar-list__empty-icon">
+        <BaseIcon icon="agenda-plan" />
+      </span>
+      <p v-text="t('No session available')" />
+    </div>
+
+    <div
+      v-if="isLoading || sessions.length"
+      class="calendar-plan"
+    >
       <div
         v-if="isLoading"
-        class="absolute inset-0 z-10 bg-white/70 flex items-center justify-center"
+        class="calendar-plan__loading"
       >
-        <div class="flex items-center gap-3 text-gray-700">
-          <i class="mdi mdi-loading mdi-spin text-2xl" />
-          <span class="text-sm">{{ t("Loading") }}</span>
-        </div>
+        <i class="mdi mdi-loading mdi-spin text-2xl" />
+        <span class="text-body-2">{{ t("Loading") }}</span>
       </div>
 
       <div class="overflow-x-auto">
         <div class="min-w-[1400px]">
           <!-- Header -->
-          <div class="plan-grid plan-header border-b bg-white sticky top-0 z-10">
-            <div class="px-3 py-2 font-semibold">
+          <div class="plan-grid calendar-plan__header">
+            <div class="px-3 py-2">
               {{ t("Session") }}
             </div>
             <div
               v-for="w in 52"
               :key="`w-${w}`"
-              class="text-xs text-center px-1 py-2 border-s"
+              class="border-s border-gray-25 px-1 py-2 text-center"
             >
               {{ w }}
             </div>
-          </div>
-
-          <div
-            v-if="!isLoading && sessions.length === 0 && !errorMessage"
-            class="p-4 text-sm text-gray-600"
-          >
-            {{ t("No session available") }}
           </div>
 
           <!-- Rows -->
           <div
             v-for="s in sessions"
             :key="`s-${s.id}`"
-            class="plan-grid plan-row border-b"
+            class="plan-grid calendar-plan__row"
           >
             <div class="px-3 py-2">
               <div
-                class="font-semibold truncate"
+                class="truncate text-body-2 font-semibold text-gray-90"
                 :title="s.title"
               >
                 {{ s.title }}
               </div>
-              <div class="text-xs text-gray-600">
+              <div class="text-tiny text-gray-50">
                 {{ t("From {0} to {1}", [s.startDate || "—", s.endDate || "—"]) }}
               </div>
               <div
                 v-if="s.humanDate"
-                class="text-xs text-gray-500 mt-0.5"
+                class="mt-0.5 text-tiny text-gray-50"
               >
                 {{ s.humanDate }}
               </div>
             </div>
 
-            <div class="weeks-cell border-s">
+            <div class="weeks-cell border-s border-gray-25">
               <div
                 v-if="showBar(s)"
                 class="bar"
@@ -125,6 +140,7 @@ import { DateTime } from "luxon"
 import calendarService from "../../services/calendarService"
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import { useRoute, useRouter } from "vue-router"
 
 const { t } = useI18n()
@@ -266,12 +282,9 @@ function barStyle(s) {
   display: grid;
   grid-template-columns: 320px repeat(52, minmax(10px, 1fr));
 }
-.plan-header > div,
-.plan-row > div {
+.calendar-plan__header > div,
+.calendar-plan__row > div {
   min-height: 44px;
-}
-.plan-row:hover {
-  background: rgba(0, 0, 0, 0.02);
 }
 .weeks-cell {
   grid-column: 2 / -1;

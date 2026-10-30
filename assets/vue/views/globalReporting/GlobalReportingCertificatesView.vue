@@ -14,10 +14,16 @@
     />
 
     <section class="border-b border-gray-25 pb-3">
-      <h1 class="text-2xl font-semibold text-gray-90">{{ t("Certificate report") }}</h1>
+      <h1 class="text-2xl font-semibold text-gray-90">
+        {{ t(isExpiredReport ? "Expired certificates" : "Certificate report") }}
+      </h1>
       <p class="mt-1 text-sm text-gray-50">
         {{
-          t("Filter and list learner certificates by session, course, date or learner, then export them when needed.")
+          t(
+            isExpiredReport
+              ? "Choose a session, course and optional date to list the generated certificates."
+              : "Filter and list learner certificates by session, course, date or learner, then export them when needed.",
+          )
         }}
       </p>
     </section>
@@ -33,6 +39,17 @@
         </p>
 
         <div class="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-12 lg:items-end">
+          <div
+            v-if="isExpiredReport"
+            class="lg:col-span-4"
+          >
+            <BaseInputText
+              id="expired-certificate-keyword"
+              v-model="filters.keyword"
+              :label="t('Keyword')"
+              name="keyword"
+            />
+          </div>
           <div class="lg:col-span-3">
             <BaseSelect
               id="certificate-session"
@@ -129,14 +146,16 @@
     >
       <header class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-25 p-4">
         <div>
-          <h2 class="text-lg font-semibold text-gray-90">{{ t("List of learner certificates") }}</h2>
+          <h2 class="text-lg font-semibold text-gray-90">
+            {{ t(isExpiredReport ? "Expired certificates" : "List of learner certificates") }}
+          </h2>
           <p class="mt-1 text-sm text-gray-50">
             {{ t("Certificates found") }}: <strong>{{ report.total }}</strong>
           </p>
         </div>
 
         <BaseButton
-          v-if="report.meta.exportAllUrl"
+          v-if="!isExpiredReport && report.meta.exportAllUrl"
           :label="t('Export all certificates to PDF')"
           icon="file-pdf-box"
           type="primary"
@@ -179,6 +198,15 @@
               <span class="rounded-full bg-gray-10 px-3 py-1 text-sm text-gray-50">
                 {{ formatDate(data.createdAt) }}
               </span>
+            </template>
+          </Column>
+          <Column
+            v-if="isExpiredReport"
+            field="expiryDate"
+            :header="t('Expiry date')"
+          >
+            <template #body="{ data }">
+              {{ formatDateOnly(data.expiryDate) }}
             </template>
           </Column>
           <Column
@@ -226,10 +254,18 @@ import Column from "primevue/column"
 import Message from "primevue/message"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import globalReportingService from "../../services/globalReportingService"
 import GlobalReportingToolbar from "./GlobalReportingToolbar.vue"
+
+const props = defineProps({
+  section: {
+    type: String,
+    default: "certificates",
+  },
+})
 
 const route = useRoute()
 const router = useRouter()
@@ -237,6 +273,7 @@ const { locale, t } = useI18n()
 const loading = ref(false)
 const errorMessage = ref("")
 const routeSyncInProgress = ref(false)
+const isExpiredReport = computed(() => props.section === "expired-certificates")
 
 const filters = reactive({
   page: 1,
@@ -246,6 +283,7 @@ const filters = reactive({
   month: 0,
   year: "",
   userId: 0,
+  keyword: "",
 })
 
 const report = reactive({
@@ -295,6 +333,7 @@ function hydrateFromRoute() {
   filters.month = Math.min(12, Math.max(0, Number(route.query.month || 0)))
   filters.year = String(route.query.year || "")
   filters.userId = Math.max(0, Number(route.query.userId || 0))
+  filters.keyword = String(route.query.keyword || "")
 }
 
 function requestParams() {
@@ -306,6 +345,7 @@ function requestParams() {
     month: filters.month || undefined,
     year: filters.year.trim() || undefined,
     userId: filters.userId || undefined,
+    keyword: isExpiredReport.value ? filters.keyword.trim() || undefined : undefined,
   }
 }
 
@@ -314,7 +354,7 @@ async function loadReport() {
   errorMessage.value = ""
 
   try {
-    const response = await globalReportingService.getSection("certificates", requestParams())
+    const response = await globalReportingService.getSection(props.section, requestParams())
     report.total = Number(response.total || 0)
     report.items = response.items || []
     report.meta = response.meta || {}
@@ -353,6 +393,7 @@ async function resetCourseFilters() {
   filters.month = 0
   filters.year = ""
   filters.userId = 0
+  filters.keyword = ""
   await syncRouteAndLoad()
 }
 
@@ -392,10 +433,24 @@ function formatDate(value) {
     return String(value)
   }
 
-  return new Intl.DateTimeFormat(locale.value, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(date)
+  // Chamilo language codes may contain underscores or numeric sub-language IDs.
+  const intlLocale = String(locale.value || "en-US").split(/[_-]/)[0] || "en"
+
+  try {
+    return new Intl.DateTimeFormat(intlLocale, {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(date)
+  } catch {
+    return new Intl.DateTimeFormat("en", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(date)
+  }
+}
+
+function formatDateOnly(value) {
+  return value ? String(value).slice(0, 10) : "-"
 }
 
 function printReport() {

@@ -127,6 +127,17 @@ export default {
       component: () => import("../views/globalReporting/GlobalReportingCertificatesView.vue"),
     },
     {
+      path: "admin/expired-certificates",
+      name: "GlobalReportingExpiredCertificates",
+      meta: {
+        requiresAdmin: true,
+        breadcrumb: "Expired certificates",
+        breadcrumbParents: [{ label: "Administration", route: { name: "AdminIndex" } }],
+      },
+      component: () => import("../views/globalReporting/GlobalReportingCertificatesView.vue"),
+      props: { section: "expired-certificates" },
+    },
+    {
       path: "company",
       name: "GlobalReportingCompany",
       meta: { breadcrumb: "Corporate report" },

@@ -64,6 +64,7 @@ final readonly class GlobalReportingSectionQueryService
         'admin-users',
         'admin-sessions',
         'admin-courses',
+        'expired-certificates',
         'learning-results',
         'session-results',
         'access-overview',
@@ -98,6 +99,7 @@ final readonly class GlobalReportingSectionQueryService
         'exams',
         'current-courses',
         'certificates',
+        'expired-certificates',
         'company',
         'company-summary',
         'learning-results',
@@ -176,6 +178,7 @@ final readonly class GlobalReportingSectionQueryService
             'exams' => $this->getExams($context, $filters),
             'current-courses' => $this->getCurrentCourses($context, $filters),
             'certificates' => $this->getCertificates($context, $filters),
+            'expired-certificates' => $this->getCertificates($context, $filters, true),
             'company' => $this->getCompanyReport($context, $filters),
             'company-summary' => $this->getCompanySummary($context, $filters),
             'learning-results' => $this->getLearningResults($context, $filters, false),
@@ -237,6 +240,7 @@ final readonly class GlobalReportingSectionQueryService
             ['section' => 'admin-users', 'label' => 'User overview', 'icon' => 'account'],
             ['section' => 'admin-sessions', 'label' => 'Sessions overview', 'icon' => 'sessions'],
             ['section' => 'admin-courses', 'label' => 'Courses overview', 'icon' => 'courses'],
+            ['section' => 'expired-certificates', 'label' => 'Expired certificates', 'icon' => 'gradebook'],
             [
                 'section' => 'learning-results',
                 'label' => 'Learning paths exercises results list',
@@ -4664,11 +4668,11 @@ final readonly class GlobalReportingSectionQueryService
      *
      * @return array<string, mixed>
      */
-    private function getCertificates(GlobalReportingContext $context, array $filters): array
+    private function getCertificates(GlobalReportingContext $context, array $filters, bool $expiredOnly = false): array
     {
         $this->assertCertificateReportAccess($context);
 
-        $title = 'See list of learner certificates';
+        $title = $expiredOnly ? 'Expired certificates' : 'See list of learner certificates';
         $columns = $this->certificateColumns();
         $studentIds = $context->isAdministrator
             ? $this->allAccessUrlUserIds($context)
@@ -4822,6 +4826,27 @@ final readonly class GlobalReportingSectionQueryService
             'scopedCourseIds' => ArrayParameterType::INTEGER,
         ];
 
+        if ($expiredOnly) {
+            // Only certificates whose UTC calendar expiry date is before today are expired.
+            // A NULL expiry date means the certificate does not expire.
+            $where[] = 'certificate.expiry_date < :expiryCutoff';
+            $parameters['expiryCutoff'] = new DateTimeImmutable('today', new DateTimeZone('UTC'));
+            $types['expiryCutoff'] = Types::DATE_IMMUTABLE;
+
+            $keyword = trim((string) $filters['keyword']);
+            if ('' !== $keyword) {
+                $where[] = "(CONCAT(usr.firstname, ' ', usr.lastname) LIKE :fullNameKeyword"
+                    .' OR usr.username LIKE :usernameKeyword'
+                    .' OR course.title LIKE :courseKeyword)';
+                $parameters['fullNameKeyword'] = '%'.$keyword.'%';
+                $parameters['usernameKeyword'] = '%'.$keyword.'%';
+                $parameters['courseKeyword'] = '%'.$keyword.'%';
+                $types['fullNameKeyword'] = Types::STRING;
+                $types['usernameKeyword'] = Types::STRING;
+                $types['courseKeyword'] = Types::STRING;
+            }
+        }
+
         if ([] === $sessionIds) {
             $where[] = 'COALESCE(category.session_id, 0) = 0';
         } else {
@@ -4864,7 +4889,7 @@ final readonly class GlobalReportingSectionQueryService
             $types['selectedYear'] = Types::INTEGER;
         }
 
-        if ($courseId > 0) {
+        if ($courseId > 0 && !$expiredOnly) {
             $category = $this->connection->fetchAssociative(
                 'SELECT category.id, course.code
                    FROM gradebook_category category
@@ -4939,10 +4964,13 @@ final readonly class GlobalReportingSectionQueryService
                     COALESCE(session.title, \'\') AS session,
                     course.title AS course,
                     certificate.created_at AS createdAt,
+                    certificate.expiry_date AS expiryDate,
                     certificate.path_certificate AS certificatePath'
             .$from.
-            ' ORDER BY certificate.created_at DESC, certificate.id DESC
-               LIMIT :limit OFFSET :offset',
+            ($expiredOnly
+                ? ' ORDER BY certificate.expiry_date DESC, certificate.id DESC'
+                : ' ORDER BY certificate.created_at DESC, certificate.id DESC').
+            ' LIMIT :limit OFFSET :offset',
             [
                 ...$parameters,
                 'limit' => $filters['itemsPerPage'],

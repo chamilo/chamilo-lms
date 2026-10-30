@@ -43318,3 +43318,6 @@ msgstr "This file exceeds the maximum size allowed for Dropbox. Choose a smaller
 
 msgid "Show maximum score per question during the test"
 msgstr "Show maximum score per question during the test"
+
+msgid "Expired certificates"
+msgstr "Expired certificates"

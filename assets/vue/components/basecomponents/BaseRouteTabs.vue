@@ -13,9 +13,15 @@
           selectedTab !== index,
       }"
       :to="tab.to"
-      class="px-4 py-2 font-semibold me-2 sm:me-3 last:me-0"
+      class="inline-flex items-center gap-2 px-4 py-2 font-semibold me-2 sm:me-3 last:me-0"
       role="tab"
     >
+      <i
+        v-if="tab.icon"
+        :class="tab.icon"
+        aria-hidden="true"
+        class="mdi"
+      />
       {{ tab.title }}
     </BaseAppLink>
   </div>
@@ -24,7 +30,7 @@
 <script setup>
 /**
  * Component that will render a tab interface WITHOUT content. Every tab should be a router link. So, when user
- * change tab the route of the url will change
+ * change tab the route of the url will change. A tab may carry an optional `icon` (MDI class, e.g. "mdi-database")
  */
 defineProps({
   tabs: {

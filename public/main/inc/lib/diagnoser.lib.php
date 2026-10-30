@@ -387,7 +387,7 @@ class Diagnoser
             null,
             $executedMigrations > 0
                 ? $executedMigrations.' migrations executed'
-                : 'No migration history. Record it once with doctrine:migrations:sync-metadata-storage, then doctrine:migrations:version --add --all, or no future update will run.'
+                : 'Migration history not recorded yet. Record it once from the Health check block of the administration page, or no future update will run.'
         );
 
         $access_url_id = api_get_current_access_url_id();

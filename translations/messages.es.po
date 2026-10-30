@@ -7091,7 +7091,7 @@ msgid "Edit learnpath"
 msgstr "Editar la lección"
 
 msgid "Delete"
-msgstr "Eliminar la lección"
+msgstr "Eliminar"
 
 msgid "do not publish"
 msgstr "No publicar"

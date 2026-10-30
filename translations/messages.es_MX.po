@@ -7080,7 +7080,7 @@ msgid "Edit learnpath"
 msgstr "Editar itinerario"
 
 msgid "Delete"
-msgstr "Eliminar itinerario"
+msgstr "Eliminar"
 
 msgid "do not publish"
 msgstr "no publicar"

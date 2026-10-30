@@ -3,15 +3,15 @@
     <BaseButton
       :label="label"
       :size="size"
+      :type="type"
       icon="attachment"
-      type="primary"
       @click="showFileDialog"
     />
-    <div v-if="files.length > 0">
+    <div v-if="files?.length > 0">
       <p
         v-for="file in files"
         :key="file.name"
-        class="text-gray-500"
+        class="text-body-2 text-gray-90"
       >
         {{ file.name }}
       </p>
@@ -31,6 +31,7 @@
 <script setup>
 import BaseButton from "./BaseButton.vue"
 import { computed, ref } from "vue"
+import { buttonTypeValidator } from "./validators"
 
 const props = defineProps({
   modelValue: Array,
@@ -46,6 +47,11 @@ const props = defineProps({
   name: {
     type: String,
     default: undefined,
+  },
+  type: {
+    type: String,
+    default: "primary",
+    validator: buttonTypeValidator,
   },
 })
 

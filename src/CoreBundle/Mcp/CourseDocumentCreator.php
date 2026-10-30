@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Mcp;
 use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
@@ -16,9 +17,11 @@ use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Mcp\Dto\CourseDocumentInput;
 use Chamilo\CoreBundle\Mcp\Dto\ResourceFileInput;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Service\Gradebook\CertificateZipImporter;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -78,6 +81,7 @@ class CourseDocumentCreator extends BaseResourceFileAction
         private readonly CidReqHelper $cidReqHelper,
         private readonly AiDisclosureHelper $aiDisclosureHelper,
         private readonly ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
+        private readonly CertificateZipImporter $certificateZipImporter,
     ) {}
 
     /**
@@ -143,6 +147,32 @@ class CourseDocumentCreator extends BaseResourceFileAction
             ),
             $course
         );
+
+        $uploadedFile = $request->files->get('uploadFile');
+        if ('certificate' === $request->request->get('filetype')
+            && $uploadedFile instanceof UploadedFile
+            && 'zip' === strtolower((string) $uploadedFile->getClientOriginalExtension())
+        ) {
+            $currentCourse = $course ?? $this->cidReqHelper->getDoctrineCourseEntity();
+            if (!$currentCourse instanceof Course || $this->cidReqHelper->getGroupEntity()) {
+                throw new BadRequestHttpException('Certificate ZIP import requires a course context without a group.');
+            }
+
+            $parentNodeId = (int) $request->request->get('parentResourceNodeId', 0);
+            $this->assertParentNodeIsInCurrentCourse($this->cidReqHelper, $parentNodeId, $this->entityManager, $course);
+            $parentNode = $this->entityManager->getRepository(ResourceNode::class)->find($parentNodeId);
+            if (!$parentNode instanceof ResourceNode) {
+                throw new BadRequestHttpException('Invalid certificate ZIP destination.');
+            }
+
+            return $this->certificateZipImporter->import(
+                $uploadedFile,
+                $currentCourse,
+                $this->cidReqHelper->getSessionEntity(),
+                $parentNode,
+                ResourceLink::VISIBILITY_PENDING,
+            );
+        }
 
         $isUncompressZipEnabled = 'true' === (string) $request->request->get('isUncompressZipEnabled', 'false');
         $fileExistsOption = (string) $request->request->get('fileExistsOption', 'rename');

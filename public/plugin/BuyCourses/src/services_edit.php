@@ -7,7 +7,6 @@ declare(strict_types=1);
  * Edit services for the Buy Courses plugin.
  */
 
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
@@ -31,20 +30,14 @@ $globalSettingsParams = $plugin->getGlobalParameters();
 $defaultGlobalTax = (int) ($globalSettingsParams['global_tax_perc'] ?? 0);
 $upsaleOptions = $plugin->getServiceUpsaleOptions($serviceId);
 
-/** @var array<int, User> $users */
-$users = Container::getUserRepository()->findByRoleList(
-    ['ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_GLOBAL_ADMIN'],
-    ''
-);
-$userOptions = [];
-
-if (!empty($users)) {
-    foreach ($users as $user) {
-        $userOptions[$user->getId()] = $user->getFullNameWithUsername();
-    }
-}
+$userOptions = [0 => get_lang('Select')];
 
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+$htmlHeadXtra[] = '<script src="'.htmlspecialchars(
+    api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_owner_search.js',
+    ENT_QUOTES,
+    'UTF-8'
+).'" defer></script>';
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 // View
@@ -64,10 +57,18 @@ if (empty($service)) {
 }
 
 $currentOwnerId = (int) ($service['owner_id'] ?? 0);
-if ($currentOwnerId > 0 && !isset($userOptions[$currentOwnerId])) {
-    $currentOwner = Container::getUserRepository()->find($currentOwnerId);
-    if (null !== $currentOwner) {
-        $userOptions[$currentOwnerId] = $currentOwner->getFullNameWithUsername();
+$selectedOwnerId = 'POST' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && isset($_POST['owner_id'])
+    ? (int) $_POST['owner_id']
+    : $currentOwnerId;
+
+foreach (array_unique([$currentOwnerId, $selectedOwnerId]) as $ownerId) {
+    if ($ownerId <= 0 || isset($userOptions[$ownerId])) {
+        continue;
+    }
+
+    $owner = Container::getUserRepository()->find($ownerId);
+    if (null !== $owner) {
+        $userOptions[$ownerId] = $owner->getFullNameWithUsername();
     }
 }
 
@@ -228,7 +229,12 @@ $form->addHtml(
 $form->addSelect(
     'owner_id',
     get_lang('Owner'),
-    $userOptions
+    $userOptions,
+    [
+        'data-buycourses-owner-search-url' => 'service_owner_search.php',
+        'data-buycourses-owner-search-placeholder' => get_lang('Search').' '.get_lang('Owner'),
+        'data-buycourses-owner-search-error' => get_lang('Error'),
+    ]
 );
 $form->addCheckBox(
     'active',

@@ -7,7 +7,6 @@ declare(strict_types=1);
  * Create new Services for the Buy Courses plugin.
  */
 
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
@@ -22,20 +21,24 @@ $globalSettingsParams = $plugin->getGlobalParameters();
 $defaultGlobalTax = (int) ($globalSettingsParams['global_tax_perc'] ?? 0);
 $upsaleOptions = $plugin->getServiceUpsaleOptions();
 
-/** @var array<int, User> $users */
-$users = Container::getUserRepository()->findByRoleList(
-    ['ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SESSION_MANAGER', 'ROLE_GLOBAL_ADMIN'],
-    ''
-);
-$userOptions = [];
+$userOptions = [0 => get_lang('Select')];
+$selectedOwnerId = 'POST' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && isset($_POST['owner_id'])
+    ? (int) $_POST['owner_id']
+    : (int) api_get_user_id();
 
-if (!empty($users)) {
-    foreach ($users as $user) {
-        $userOptions[$user->getId()] = $user->getFullNameWithUsername();
+if ($selectedOwnerId > 0) {
+    $selectedOwner = Container::getUserRepository()->find($selectedOwnerId);
+    if (null !== $selectedOwner) {
+        $userOptions[$selectedOwnerId] = $selectedOwner->getFullNameWithUsername();
     }
 }
 
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+$htmlHeadXtra[] = '<script src="'.htmlspecialchars(
+    api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_owner_search.js',
+    ENT_QUOTES,
+    'UTF-8'
+).'" defer></script>';
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 // View
@@ -188,7 +191,12 @@ $form->addHtml(
 $form->addSelect(
     'owner_id',
     get_lang('Owner'),
-    $userOptions
+    $userOptions,
+    [
+        'data-buycourses-owner-search-url' => 'service_owner_search.php',
+        'data-buycourses-owner-search-placeholder' => get_lang('Search').' '.get_lang('Owner'),
+        'data-buycourses-owner-search-error' => get_lang('Error'),
+    ]
 );
 $form->addCheckBox(
     'active',

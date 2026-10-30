@@ -43442,8 +43442,8 @@ msgstr "Ceci marque toutes les migrations livrées par cette version comme déj�
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrations enregistrées. Votre plateforme peut maintenant être mise à jour normalement."
 
-msgid "No migration history: click to fix (or updates might break)"
-msgstr "Aucun historique de migration : cliquez pour corriger (sinon les mises à jour pourraient échouer)"
+msgid "Migration history not recorded yet: click to record it"
+msgstr "Historique des migrations pas encore enregistré : cliquez pour l'enregistrer"
 
 msgid "Migration history is recorded"
 msgstr "L'historique des migrations est enregistré"

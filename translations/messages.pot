@@ -41498,7 +41498,7 @@ msgstr ""
 msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
 msgstr ""
 
-msgid "No migration history: click to fix (or updates might break)"
+msgid "Migration history not recorded yet: click to record it"
 msgstr ""
 
 msgid "Migration history is recorded"

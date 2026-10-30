@@ -42700,8 +42700,8 @@ msgstr "Esto marca todas las migraciones incluidas en esta versión como ya ejec
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migraciones registradas. Su plataforma ahora puede actualizarse con normalidad."
 
-msgid "No migration history: click to fix (or updates might break)"
-msgstr "Sin historial de migración: haga clic para corregir (o las actualizaciones podrían romperse)"
+msgid "Migration history not recorded yet: click to record it"
+msgstr "Historial de migraciones aún no registrado: haga clic para registrarlo"
 
 msgid "Migration history is recorded"
 msgstr "El historial de migraciones está registrado"

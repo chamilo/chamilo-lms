@@ -12734,7 +12734,11 @@ class BuyCoursesPlugin extends Plugin
         $globalMaxCourses = max(0, (int) api_get_setting('platform.max_courses_per_user'));
         $hostingLimit = max(0, (int) api_get_setting('platform.hosting_limit_users_per_course'));
         $documentQuotaMb = max(0, (int) api_get_setting('document.default_document_quotum'));
-        $available = $globalMaxCourses <= 0 || $currentCount < $globalMaxCourses;
+        $activeServiceLimit = $this->getActiveMaxCoursesLimit($userId);
+        $effectiveMaxCourses = null !== $activeServiceLimit && $activeServiceLimit > 0
+            ? $activeServiceLimit
+            : $globalMaxCourses;
+        $available = $effectiveMaxCourses <= 0 || $currentCount < $effectiveMaxCourses;
 
         return [
             'type' => 'standard',
@@ -12744,7 +12748,7 @@ class BuyCoursesPlugin extends Plugin
             'available' => $available,
             'disabledReason' => $available ? null : 'platform_limit_reached',
             'currentCourses' => $currentCount,
-            'maxCourses' => $globalMaxCourses,
+            'maxCourses' => $effectiveMaxCourses,
             'hostingLimit' => $hostingLimit,
             'documentQuotaMb' => $documentQuotaMb,
             'buyUrl' => null,

@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 use ChamiloSession as Session;
 
+require_once __DIR__.'/public_plan_cards.lib.php';
+
 /**
  * Entry point of the Buy Courses plugin landing page.
  */
@@ -15,6 +17,9 @@ $allowAnonymousUsers = 'true' === $plugin->get('unregistered_users_enable');
 $includeServices = 'true' === $plugin->get('include_services');
 $includeSessions = 'true' === $plugin->get('include_sessions');
 $userIsAnonymous = api_is_anonymous();
+$publicPlansPreview = api_is_platform_admin() && '1' === (string) ($_GET['preview_public'] ?? '');
+$publicPlanCards = buycoursesBuildPublicPlanCards($plugin);
+$hasPublicPlanCards = null !== $publicPlanCards['free'] || !empty($publicPlanCards['promos']);
 
 $registrationUrl = api_get_path(WEB_CODE_PATH).'auth/registration.php';
 
@@ -40,6 +45,8 @@ if ($userIsAnonymous && !$allowAnonymousUsers) {
 
 $tpl = new Template();
 $tpl->assign('services_are_included', $includeServices);
+$tpl->assign('public_plans_preview', $publicPlansPreview);
+$tpl->assign('public_plan_cards', $publicPlanCards);
 
 /*
  * For non-admin users, build the product sections rendered directly on the
@@ -52,7 +59,7 @@ $sections = [];
 $canBuyServices = false;
 $buyerRoleNotice = null;
 
-if (!api_is_platform_admin()) {
+if (!api_is_platform_admin() || $publicPlansPreview) {
     $previewSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
     $withBuyMetadata = static function (array $items, string $buyScript, int $buyType): array {
         foreach ($items as &$item) {
@@ -216,6 +223,15 @@ if (!api_is_platform_admin()) {
                 'billing_cycle_tabs' => $billingCycleTabs,
             ];
         }
+    }
+
+    if ($hasPublicPlanCards && !array_filter($sections, static fn (array $section): bool => 'service' === $section['card'])) {
+        $sections[] = [
+            'card' => 'service',
+            'title' => $plugin->get_lang('Services'),
+            'items' => [],
+            'total' => 0,
+        ];
     }
 
     $courseItems = $withBuyMetadata(

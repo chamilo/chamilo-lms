@@ -6,6 +6,8 @@
     .bc-translated-html ul {margin-block: 0.5rem; margin-inline: 1.25rem 0; padding-inline-start: 1.25rem; list-style: disc;}
     .bc-translated-html ol {margin-block: 0.5rem; margin-inline: 1.25rem 0; padding-inline-start: 1.25rem; list-style: decimal;}
     .bc-translated-html li {margin: 0.2rem 0;}
+    .bc-free-hero {background: linear-gradient(135deg, #e2f4e9 0%, #eef8ff 62%, #dcecf9 100%);}
+    .bc-free-hero-disc {background: #ffffffcc; box-shadow: 0 16px 45px #256b9a26;}
 </style>
 
 {#
@@ -186,6 +188,87 @@
     </article>
 {% endmacro %}
 
+{% macro free_plan_card(plan) %}
+    <article class="flex h-full flex-col overflow-hidden rounded-3xl border border-primary/30 bg-white shadow-sm transition hover:shadow-md">
+        <div class="bc-free-hero relative flex aspect-[16/9] items-center justify-center overflow-hidden">
+            <div class="absolute -left-10 -top-12 h-44 w-44 rounded-full border border-white/70" aria-hidden="true"></div>
+            <div class="absolute -bottom-24 -right-8 h-56 w-56 rounded-full border border-white/70" aria-hidden="true"></div>
+            <div class="bc-free-hero-disc relative flex h-28 w-28 items-center justify-center rounded-3xl border border-white" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 84 84" fill="none" aria-hidden="true" focusable="false">
+                    <path d="M16 28c11-4 19-3 26 3v32c-8-7-17-9-26-5V28Z" fill="#d6efe0" stroke="#237e5a" stroke-width="2.5" stroke-linejoin="round"/>
+                    <path d="M68 28c-11-4-19-3-26 3v32c8-7 17-9 26-5V28Z" fill="#d6eafb" stroke="#256b9a" stroke-width="2.5" stroke-linejoin="round"/>
+                    <path d="M42 31v32M23 36c4-1 8 0 12 2M49 38c4-2 8-3 12-2" stroke="#237e5a" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="m42 12 2.8 7.3L52 22l-7.2 2.7L42 32l-2.7-7.3L32 22l7.3-2.7L42 12Z" fill="#e4ad3e"/>
+                </svg>
+            </div>
+            <span class="absolute bottom-4 left-5 rounded-full bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-primary">{{ 'PublicFreePlanPrice'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+        </div>
+        <div class="flex flex-1 flex-col gap-4 p-5">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-90">{{ plan.title|e }}</h3>
+                <p class="mt-2 whitespace-pre-line text-sm text-gray-50">{{ plan.description|e }}</p>
+            </div>
+            <div class="rounded-2xl border border-primary/10 bg-support-1 px-4 py-3">
+                <p class="text-base font-semibold text-primary">{{ 'PublicFreePlanPrice'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+                <dl class="mt-3 space-y-2 text-sm text-gray-90">
+                    <div class="flex justify-between gap-2"><dt>{{ 'Courses'|get_lang }}</dt><dd class="font-semibold">{{ plan.max_courses > 0 ? plan.max_courses : 'Unlimited'|get_lang }}</dd></div>
+                    <div class="flex justify-between gap-2"><dt>{{ 'PublicPlansHostingLimit'|get_plugin_lang('BuyCoursesPlugin') }}</dt><dd class="font-semibold">{{ plan.hosting_limit > 0 ? plan.hosting_limit : 'Unlimited'|get_lang }}</dd></div>
+                    <div class="flex justify-between gap-2"><dt>{{ 'PublicPlansDocumentQuota'|get_plugin_lang('BuyCoursesPlugin') }}</dt><dd class="font-semibold">{{ plan.document_quota_mb > 0 ? plan.document_quota_mb ~ ' MB' : 'Unlimited'|get_lang }}</dd></div>
+                </dl>
+            </div>
+            {% if plan.features %}
+                <div class="whitespace-pre-line text-sm leading-6 text-gray-50">{{ plan.features|e }}</div>
+            {% endif %}
+            <div class="mt-auto pt-2">
+                {% if plan.action_enabled %}
+                    <a class="inline-flex w-full items-center justify-center rounded-xl bg-success px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90" href="{{ plan.url|e('html_attr') }}">
+                        {{ plan.button|e }}
+                    </a>
+                {% else %}
+                    <span class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-xl bg-gray-20 px-4 py-2.5 text-sm font-semibold text-gray-50" aria-disabled="true">
+                        <em class="mdi mdi-lock-outline mr-2" aria-hidden="true"></em>
+                        {{ plan.button|e }}
+                    </span>
+                {% endif %}
+                {% if plan.action_notice %}
+                    <p class="mt-2 text-center text-xs font-medium leading-5 text-gray-70">{{ plan.action_notice|e }}</p>
+                {% endif %}
+                <p class="mt-2 text-center text-xs leading-5 text-gray-50">{{ 'PublicFreePlanEligibility'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+            </div>
+        </div>
+    </article>
+{% endmacro %}
+
+{% macro promotional_plan_card(plan) %}
+    <article class="flex h-full flex-col overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm transition hover:shadow-md">
+        <div class="flex aspect-[16/9] items-center justify-center bg-support-2">
+            {% if plan.image_url %}
+                <img alt="{{ plan.title|e('html_attr') }}" src="{{ plan.image_url|e('html_attr') }}" loading="lazy" class="h-full w-full object-cover">
+            {% else %}
+                <em class="mdi mdi-open-in-new text-6xl text-primary" aria-hidden="true"></em>
+            {% endif %}
+        </div>
+        <div class="flex flex-1 flex-col gap-4 p-5">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-90">{{ plan.title|e }}</h3>
+                <p class="mt-2 whitespace-pre-line text-sm leading-6 text-gray-50">{{ plan.description|e }}</p>
+            </div>
+            <div class="rounded-2xl border border-primary/10 bg-support-1 px-4 py-3 text-sm font-semibold text-primary">
+                {{ 'PublicExternalPlanPrice'|get_plugin_lang('BuyCoursesPlugin') }}
+            </div>
+            {% if plan.features %}
+                <div class="whitespace-pre-line rounded-xl bg-support-2 p-4 text-sm leading-6 text-gray-90">{{ plan.features|e }}</div>
+            {% endif %}
+            <div class="mt-auto pt-2">
+                <a class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90" href="{{ plan.url|e('html_attr') }}" target="_blank" rel="noopener noreferrer">
+                    <em class="mdi mdi-open-in-new" aria-hidden="true"></em>
+                    {{ plan.button|e }}
+                </a>
+            </div>
+        </div>
+    </article>
+{% endmacro %}
+
 {% macro service_card(service, can_buy) %}
     <article class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm transition hover:shadow-md">
         <div class="aspect-[16/9] overflow-hidden bg-support-2">
@@ -353,7 +436,7 @@
                 </div>
             {% endif %}
 
-            {% if section.card == 'service' and section.items is empty %}
+            {% if section.card == 'service' and section.items is empty and not public_plan_cards.free and public_plan_cards.promos is empty %}
                 <div class="rounded-3xl border border-gray-25 bg-white p-10 text-center shadow-sm">
                     <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-support-2 text-primary">
                         <em class="mdi mdi-magnify text-xl"></em>
@@ -367,6 +450,9 @@
                 </div>
             {% else %}
                 <div class="grid gap-6 sm:grid-cols-2 2xl:grid-cols-3">
+                    {% if section.card == 'service' and public_plan_cards.free %}
+                        {{ cards.free_plan_card(public_plan_cards.free) }}
+                    {% endif %}
                     {% for item in section.items %}
                         {% if section.card == 'course' %}
                             {{ cards.course_card(item, section.buy_script, section.buy_type) }}
@@ -376,6 +462,11 @@
                             {{ cards.service_card(item, can_buy_services) }}
                         {% endif %}
                     {% endfor %}
+                    {% if section.card == 'service' %}
+                        {% for plan in public_plan_cards.promos %}
+                            {{ cards.promotional_plan_card(plan) }}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             {% endif %}
         </section>

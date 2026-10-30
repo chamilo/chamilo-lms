@@ -1883,6 +1883,24 @@ class CourseHelper
             return;
         }
 
+        // An active service extends benefits, not the right to create a course.
+        $currentActor = $this->security->getUser();
+        if ($currentActor instanceof User
+            && !$this->isCourseCreationAdmin($currentActor)
+            && !$this->isCourseCreationTeacher($currentActor)
+        ) {
+            throw new RuntimeException($this->translator->trans('Only trainers and administrators can create courses.'));
+        }
+
+        if (!$this->isCourseCreationAdmin($ownerUser)) {
+            if (!$this->isCourseCreationTeacher($ownerUser)) {
+                throw new RuntimeException($this->translator->trans('Only trainers and administrators can create courses.'));
+            }
+            if ('true' !== $this->settingsManager->getSetting('workflows.allow_users_to_create_courses', true)) {
+                throw new RuntimeException($this->translator->trans('Course creation by trainers is disabled on this platform.'));
+            }
+        }
+
         $buyCoursesServiceSaleId = isset($params['buycourses_service_sale_id']) ? (int) $params['buycourses_service_sale_id'] : 0;
         if ($buyCoursesServiceSaleId > 0) {
             $selectionStatus = $this->resolveBuyCoursesServiceSaleCourseCreationSelection(
@@ -1945,7 +1963,19 @@ class CourseHelper
         }
 
         $effectiveLimit = $serviceLimit ?? $globalLimit;
+        // Service-linked courses use their purchased plan slots, not standard ones.
         $currentCount = $this->countTeacherCoursesForUser($user);
+        if ($this->isBuyCoursesPluginEnabled()) {
+            try {
+                $plugin = BuyCoursesPlugin::create();
+                $currentCount = $plugin->countStandardManagedCoursesByUser((int) $user->getId());
+            } catch (Throwable $exception) {
+                $this->debugLog('createCourse:standardCourseCountFallback', [
+                    'userId' => $user->getId(),
+                    'message' => $exception->getMessage(),
+                ]);
+            }
+        }
 
         $limitSource = 'unlimited';
         if (null !== $serviceLimit) {

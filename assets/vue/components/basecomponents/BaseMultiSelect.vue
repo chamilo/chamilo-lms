@@ -10,6 +10,7 @@
         :input-id="inputId"
         :option-label="optionLabel"
         :option-value="optionValue"
+        :placeholder="placeholder"
         :required="required"
         :show-toggle-all="showToggleAll"
         @blur="isFocused = false"

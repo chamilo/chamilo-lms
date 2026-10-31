@@ -19,6 +19,12 @@ class CourseTool extends AbstractResource
     public string $title;
 
     #[Groups(['ctool:read'])]
+    public ?string $customTitle = null;
+
+    #[Groups(['ctool:read'])]
+    public ?string $customIconUrl = null;
+
+    #[Groups(['ctool:read'])]
     public ?bool $visibility = null;
 
     #[Groups(['ctool:read'])]

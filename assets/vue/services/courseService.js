@@ -69,8 +69,25 @@ export default {
     return data
   },
 
+  customizeTool: async (courseId, toolId, title, icon = null) => {
+    const formData = new FormData()
+    formData.append("title", title)
+    if (icon) {
+      formData.append("icon", icon)
+    }
+
+    const { data } = await api.post(`/course/${courseId}/tools/${toolId}/customize`, formData, {
+      params: { cid: courseId, sid: 0, gid: 0 },
+    })
+
+    return data
+  },
+
   loadCTools: async (courseId, sessionId = 0) => {
     const { data } = await api.get("/api/c_tools", {
+      // A stalled request must surface the existing Try again state instead of
+      // leaving the course tools skeleton on screen indefinitely.
+      timeout: 30000,
       params: {
         cid: courseId,
         sid: sessionId,
@@ -80,7 +97,14 @@ export default {
       },
     })
 
-    return data["hydra:member"]
+    // API Platform can return either Hydra or the newer JSON-LD collection shape.
+    const tools = data?.["hydra:member"] ?? data?.member
+
+    if (!Array.isArray(tools)) {
+      throw new TypeError("[courseService] Invalid course tools collection response")
+    }
+
+    return tools
   },
 
   /**

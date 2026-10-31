@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Service\CourseToolCustomizationService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\AbstractPlugin;
 use Chamilo\CoreBundle\Tool\AbstractTool;
@@ -49,11 +50,13 @@ final class CToolStateProvider implements ProviderInterface
         private readonly ToolChain $toolChain,
         protected RequestStack $requestStack,
         private readonly PluginHelper $pluginHelper,
+        private readonly CourseToolCustomizationService $customization,
     ) {
         $this->transformer = new CourseToolDataTranformer(
             $this->requestStack,
             $this->entityManager,
-            $this->toolChain
+            $this->toolChain,
+            $this->customization,
         );
     }
 

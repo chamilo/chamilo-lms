@@ -106,7 +106,7 @@
 
         <div class="ms-auto">
           <BaseToggleButton
-            :disabled="isCourseLoading || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
+            :disabled="isCourseLoading || courseToolsLoadError || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Show all')"
             :on-label="t('Show all')"
@@ -118,7 +118,7 @@
             @click="onClickShowAll"
           />
           <BaseToggleButton
-            :disabled="isCourseLoading || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
+            :disabled="isCourseLoading || courseToolsLoadError || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
             :model-value="false"
             :off-label="t('Hide all')"
             :on-label="t('Hide all')"
@@ -130,7 +130,7 @@
           />
           <BaseToggleButton
             v-model="isSorting"
-            :disabled="isCourseLoading || isCustomizing"
+            :disabled="isCourseLoading || courseToolsLoadError || isCustomizing"
             :off-label="t('Sort')"
             :on-label="t('Sort')"
             off-icon="swap-vertical"
@@ -138,17 +138,30 @@
             size="small"
             without-borders
           />
-          <!-- BaseToggleButton
+          <BaseToggleButton
             v-model="isCustomizing"
-            :disabled="isSorting"
+            :disabled="isCourseLoading || courseToolsLoadError || isSorting || !!session?.id"
             :off-label="t('Customize')"
             :on-label="t('Customize')"
             off-icon="customize"
             on-icon="customize"
             size="small"
             without-borders
-          / -->
+          />
         </div>
+      </div>
+
+      <div
+        v-if="courseToolsLoadError && !isCourseLoading"
+        role="alert"
+        class="flex items-center gap-3 py-3"
+      >
+        <span>{{ t("An error occurred") }}</span>
+        <BaseButton
+          :label="t('Try again')"
+          type="secondary"
+          @click="loadCourseTools(true, true)"
+        />
       </div>
 
       <div
@@ -189,6 +202,7 @@
           :go-to-setting-course-tool="goToSettingCourseTool"
           :is-allowed-to-edit="isAllowedToEdit"
           :tool="tool"
+          @customize="openCustomizeDialog"
         />
 
         <ShortCutList
@@ -198,6 +212,57 @@
           :shortcut="shortcut"
         />
       </div>
+
+      <BaseDialog
+        v-model:is-visible="showCustomizeDialog"
+        :title="t('Customize')"
+      >
+        <form
+          id="course-tool-customization-form"
+          class="flex flex-col gap-4 min-w-[18rem]"
+          @submit.prevent="saveToolCustomization"
+        >
+          <BaseInputText
+            id="course-tool-custom-title"
+            v-model="customToolTitle"
+            name="title"
+            :label="t('Name')"
+            :disabled="isSavingCustomization"
+            :required="true"
+            maxlength="120"
+          />
+          <div>
+            <label
+              for="course-tool-custom-icon"
+              class="mb-1 block text-sm font-medium"
+            >{{ t('Icon') }}</label>
+            <input
+              id="course-tool-custom-icon"
+              name="icon"
+              type="file"
+              accept=".svg,image/svg+xml"
+              :disabled="isSavingCustomization"
+              class="block w-full"
+              @change="onCustomizeIconChange"
+            />
+            <p class="mt-1 text-xs text-gray-600">{{ t('SVG only (maximum 256 KB)') }}</p>
+          </div>
+          <p
+            v-if="customizeError"
+            role="alert"
+            class="text-red-600 text-sm"
+          >{{ customizeError }}</p>
+        </form>
+        <template #footer>
+          <BaseButton
+            :label="t('Save')"
+            icon="save"
+            :is-loading="isSavingCustomization"
+            :disabled="isSavingCustomization || !customToolTitle.trim()"
+            @click="saveToolCustomization"
+          />
+        </template>
+      </BaseDialog>
 
       <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div class="min-w-0">
@@ -222,6 +287,8 @@ import CourseTool from "../../components/course/CourseTool"
 import ShortCutList from "../../components/course/ShortCutList.vue"
 import Skeleton from "primevue/skeleton"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -257,9 +324,79 @@ const shortcuts = ref([])
 const courseIntroEl = ref(null)
 
 const isCourseLoading = ref(true)
+const courseToolsLoadError = ref(false)
+
+let latestToolsRequestId = 0
+let displayedToolsContext = null
 
 const isSorting = ref(false)
 const isCustomizing = ref(false)
+const showCustomizeDialog = ref(false)
+const selectedTool = ref(null)
+const customToolTitle = ref("")
+const customToolIcon = ref(null)
+const customizeError = ref("")
+const isSavingCustomization = ref(false)
+
+function openCustomizeDialog(tool) {
+  if (!isAllowedToEdit.value || session.value?.id || isSorting.value) return
+
+  selectedTool.value = tool
+  customToolTitle.value = tool.customTitle || t(tool.tool.titleToShow)
+  customToolIcon.value = null
+  customizeError.value = ""
+  showCustomizeDialog.value = true
+}
+
+function onCustomizeIconChange(event) {
+  customToolIcon.value = event.target.files?.[0] || null
+}
+
+async function saveToolCustomization() {
+  if (!selectedTool.value || isSavingCustomization.value) return
+
+  customizeError.value = ""
+  isSavingCustomization.value = true
+
+  try {
+    const tool = selectedTool.value
+    const displayTitle = tool.customTitle || t(tool.tool.titleToShow)
+    const titleToSave = !tool.customTitle && customToolTitle.value.trim() === displayTitle
+      ? tool.tool.title
+      : customToolTitle.value
+    const result = await courseService.customizeTool(
+      course.value.id,
+      tool.iid,
+      titleToSave,
+      customToolIcon.value,
+    )
+
+    // Update only the edited tool, then refresh the role-scoped cache.
+    tools.value = tools.value.map((item) =>
+      item.iid === tool.iid
+        ? { ...item, customTitle: result.customTitle, customIconUrl: result.customIconUrl }
+        : item,
+    )
+    courseHomeToolsStore.setEntry(course.value.id, 0, cacheRole.value, {
+      tools: tools.value,
+      courseItems: courseItems.value,
+    })
+    courseHomeToolsStore.invalidate(course.value.id, 0, "view")
+    showCustomizeDialog.value = false
+  } catch (error) {
+    customizeError.value = error?.response?.data?.detail || t('An error occurred')
+  } finally {
+    isSavingCustomization.value = false
+  }
+}
+
+watch(
+  () => session.value?.id,
+  () => {
+    isCustomizing.value = false
+    showCustomizeDialog.value = false
+  },
+)
 
 provide("isSorting", isSorting)
 provide("isCustomizing", isCustomizing)
@@ -438,23 +575,41 @@ const isAiCourseAnalyzerEnabled = computed(() => {
 async function loadCourseTools(showSkeleton = true, force = false) {
   const courseId = course.value.id
   const sessionId = session.value?.id || 0
+  const role = cacheRole.value
+  const context = `${courseId}:${sessionId}:${role}`
+  const requestId = ++latestToolsRequestId
+
+  courseToolsLoadError.value = false
 
   if (!force) {
-    const cached = courseHomeToolsStore.getFresh(courseId, sessionId, cacheRole.value)
+    const cached = courseHomeToolsStore.getFresh(courseId, sessionId, role)
     if (cached) {
       tools.value = cached.tools
       courseItems.value = cached.courseItems
+      displayedToolsContext = context
       isCourseLoading.value = false
       return
     }
   }
 
-  if (showSkeleton) {
+  // Never keep teacher tools visible after switching to the learner context.
+  if (displayedToolsContext !== context) {
+    tools.value = []
+    courseItems.value = []
+    isCourseLoading.value = true
+  } else if (showSkeleton) {
     isCourseLoading.value = true
   }
 
+  const isCurrentRequest = () =>
+    requestId === latestToolsRequestId &&
+    course.value?.id === courseId &&
+    (session.value?.id || 0) === sessionId &&
+    cacheRole.value === role
+
   try {
     const cTools = await courseService.loadCTools(courseId, sessionId)
+    if (!isCurrentRequest()) return
 
     const normalizedTools = cTools.map((rawTool) => {
       const tool = normalizeToolNavigation({ ...rawTool })
@@ -500,22 +655,35 @@ async function loadCourseTools(showSkeleton = true, force = false) {
 
     tools.value = regularTools
     courseItems.value = adminMenuItems
-    courseHomeToolsStore.setEntry(courseId, sessionId, cacheRole.value, {
+    displayedToolsContext = context
+    courseHomeToolsStore.setEntry(courseId, sessionId, role, {
       tools: regularTools,
       courseItems: adminMenuItems,
     })
   } catch (error) {
+    if (!isCurrentRequest()) return
+
     console.error("[CourseHome] Failed to load course tools", error)
-    tools.value = []
-    courseItems.value = []
+    courseToolsLoadError.value = true
   } finally {
-    if (showSkeleton) {
+    if (isCurrentRequest()) {
       isCourseLoading.value = false
     }
   }
 }
 
-loadCourseTools(true)
+// Course edit permissions resolve asynchronously. If they change while a tools
+// request is running, the previous response belongs to the wrong role and is
+// discarded. Always load again for the new role, course or session context.
+watch(
+  [() => course.value?.id, () => session.value?.id || 0, cacheRole],
+  ([courseId]) => {
+    if (courseId) {
+      void loadCourseTools(true)
+    }
+  },
+  { immediate: true },
+)
 
 courseService
   .loadTools(course.value.id, session.value?.id)

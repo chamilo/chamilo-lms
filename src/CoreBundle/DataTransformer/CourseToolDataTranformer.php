@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\DataTransformer;
 
 use Chamilo\CoreBundle\ApiResource\CourseTool;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Service\CourseToolCustomizationService;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
@@ -23,6 +24,7 @@ class CourseToolDataTranformer
         protected RequestStack $requestStack,
         protected EntityManagerInterface $entityManager,
         protected readonly ToolChain $toolChain,
+        private readonly CourseToolCustomizationService $customization,
     ) {}
 
     public function transform(CTool $object, ?AbstractTool $resolvedTool = null): CourseTool
@@ -43,6 +45,8 @@ class CourseToolDataTranformer
         $cTool = new CourseTool();
         $cTool->iid = $object->getIid();
         $cTool->title = $titleToShow;
+        $cTool->customTitle = CourseToolCustomizationService::getCustomTitle($object);
+        $cTool->customIconUrl = $this->customization->getCustomIconUrl($object);
         $cTool->visibility = $object->getVisibility();
         $cTool->resourceNode = $object->resourceNode;
         $cTool->illustrationUrl = $object->illustrationUrl;

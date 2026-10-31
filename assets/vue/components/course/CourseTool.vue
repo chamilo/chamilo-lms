@@ -20,6 +20,23 @@
       </svg>
 
       <span
+        v-if="tool.customIconUrl && !customIconLoadFailed"
+        aria-hidden="true"
+        class="course-tool__icon relative inline-block h-12 w-12"
+      >
+        <img
+          :src="tool.customIconUrl"
+          alt=""
+          class="absolute inset-0 h-full w-full object-contain"
+          @error="customIconLoadFailed = true"
+        />
+        <span
+          :style="customIconStyle"
+          class="absolute inset-0 block h-full w-full text-primary"
+        />
+      </span>
+      <span
+        v-else
         :class="tool.tool.icon + ' ' + iconCustomClass"
         aria-hidden="true"
         class="course-tool__icon mdi"
@@ -33,7 +50,7 @@
       :url="resolvedToolUrl"
       class="course-tool__title"
     >
-      {{ $t(tool.tool.titleToShow) }}
+      {{ tool.customTitle || $t(tool.tool.titleToShow) }}
     </BaseAppLink>
 
     <div class="course-tool__options">
@@ -58,25 +75,29 @@
         />
       </button>
 
-      <!-- a
-        v-if="securityStore.isCurrentTeacher && isCustomizing"
-        href="#"
+      <button
+        v-if="isAllowedToEdit && isCustomizing"
+        type="button"
+        :aria-label="$t('Edit') + ': ' + (tool.customTitle || $t(tool.tool.titleToShow))"
+        @click="$emit('customize', tool)"
       >
         <BaseIcon
-          icon="edit"
+          icon="pencil"
           size="small"
         />
-      </a -->
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, inject } from "vue"
+import { computed, inject, ref, watch } from "vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
+
+defineEmits(["customize"])
 
 const platformConfigStore = usePlatformConfig()
 const cidReqStore = useCidReqStore()
@@ -86,6 +107,8 @@ const { getSetting } = storeToRefs(platformConfigStore)
 
 const isSorting = inject("isSorting")
 const isCustomizing = inject("isCustomizing")
+
+const customIconLoadFailed = ref(false)
 
 const props = defineProps({
   isAllowedToEdit: {
@@ -185,6 +208,30 @@ const resolvedToolTo = computed(() => {
 const resolvedToolUrl = computed(() => {
   return resolvedToolTo.value ? null : props.tool.url || null
 })
+
+const customIconStyle = computed(() => {
+  if (!props.tool.customIconUrl) return {}
+  const url = props.tool.customIconUrl
+  return {
+    backgroundColor: "currentColor",
+    maskImage: `url("${url}")`,
+    WebkitMaskImage: `url("${url}")`,
+    maskMode: "alpha",
+    maskRepeat: "no-repeat",
+    WebkitMaskRepeat: "no-repeat",
+    maskPosition: "center",
+    WebkitMaskPosition: "center",
+    maskSize: "contain",
+    WebkitMaskSize: "contain",
+  }
+})
+
+watch(
+  () => props.tool.customIconUrl,
+  () => {
+    customIconLoadFailed.value = false
+  },
+)
 
 const isVisible = computed(() => {
   if (typeof props.tool.visibility === "boolean") {

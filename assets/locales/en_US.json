@@ -4659,5 +4659,6 @@
     "Disable account": "Disable account",
     "Disable selected accounts": "Disable selected accounts",
     "Are you sure you want to disable the selected accounts?": "Are you sure you want to disable the selected accounts?",
-    "Disabled users cannot sign in until an administrator reactivates their account.": "Disabled users cannot sign in until an administrator reactivates their account."
+    "Disabled users cannot sign in until an administrator reactivates their account.": "Disabled users cannot sign in until an administrator reactivates their account.",
+    "SVG only (maximum 256 KB)": "SVG only (maximum 256 KB)"
 }

@@ -17,6 +17,18 @@ export default {
       component: () => import("../views/exercise/ExerciseListView.vue"),
     },
     {
+      name: "HotPotatoesList",
+      path: "hotpotatoes",
+      meta: { breadcrumb: "Hot Potatoes" },
+      component: () => import("../views/hotpotatoes/HotPotatoesList.vue"),
+    },
+    {
+      name: "HotPotatoesPlayer",
+      path: "hotpotatoes/:documentId",
+      meta: { breadcrumb: "Hot Potatoes" },
+      component: () => import("../views/hotpotatoes/HotPotatoesPlayer.vue"),
+    },
+    {
       name: "ExerciseCreate",
       path: "create",
       meta: { breadcrumb: "Create exercise" },

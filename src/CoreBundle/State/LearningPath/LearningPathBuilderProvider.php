@@ -22,6 +22,8 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\Service\HotPotatoes\HotPotatoesArchiveService;
+use Chamilo\CoreBundle\Service\HotPotatoes\HotPotatoesEntrypoints;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -639,7 +641,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
     private function normalizeResourceType(string $itemType): string
     {
         return match ($itemType) {
-            'document', 'video', 'quiz', 'link', 'student_publication', 'forum', 'thread', 'survey', 'toolbox' => $itemType,
+            'document', 'video', 'quiz', 'hotpotatoes', 'link', 'student_publication', 'forum', 'thread', 'survey', 'toolbox' => $itemType,
             default => '',
         };
     }
@@ -714,6 +716,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         $audioRows = [];
         $documentRows = [];
         $videoRows = [];
+        $hotPotatoesRows = [];
         $folderRows = [];
         foreach ($documents as $resource) {
             if (!$resource instanceof CDocument) {
@@ -721,6 +724,26 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             }
 
             $fileType = strtolower(trim($resource->getFiletype()));
+            if (HotPotatoesArchiveService::isHotPotatoesDocument($resource)) {
+                foreach (HotPotatoesEntrypoints::forDocument($resource) as $entrypoint) {
+                    $row = $this->resourceRow(
+                        $resource,
+                        'hotpotatoes',
+                        $course,
+                        $session,
+                        $group,
+                        $includeLaunchUrls,
+                    );
+                    $row['entrypoint'] = $entrypoint;
+                    $row['title'] .= ' — '.$entrypoint;
+                    if ($includeLaunchUrls && '' !== ($row['launchUrl'] ?? '')) {
+                        $row['launchUrl'] .= '&entrypoint='.rawurlencode($entrypoint);
+                    }
+                    $hotPotatoesRows[] = $row;
+                }
+
+                continue;
+            }
             $row = $this->resourceRow($resource, 'document', $course, $session, $group, $includeLaunchUrls);
             $resourceNode = $resource->getResourceNode();
             $row['fileType'] = $fileType;
@@ -881,6 +904,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
             ],
             'audio' => ['items' => $audioRows],
             'tests' => ['items' => $tests],
+            'hotpotatoes' => ['items' => $hotPotatoesRows],
             'links' => ['items' => array_values($linkGroups)],
             'assignments' => ['items' => $assignments],
             'forums' => ['items' => $forumRows],
@@ -1058,6 +1082,18 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
         ?Session $session,
         ?CGroup $group,
     ): string {
+        if ($resource instanceof CDocument && 'hotpotatoes' === $resourceType) {
+            $nodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
+            if ($nodeId <= 0) {
+                return '';
+            }
+
+            return $this->appendQuery(
+                '/resources/exercise/'.$nodeId.'/hotpotatoes/'.$resource->getIid(),
+                ['cid' => $course->getId(), 'sid' => $session?->getId() ?? 0, 'gid' => $group?->getIid() ?? 0],
+            );
+        }
+
         if ($resource instanceof CDocument && \in_array($resourceType, ['document', 'video'], true)) {
             return $this->buildDocumentResourceUrl($resource, $course, $session, $group, true);
         }

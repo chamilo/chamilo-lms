@@ -68,7 +68,7 @@ function addItem(item) {
   >
     <template
       v-for="item in items"
-      :key="`${item.resourceType}-${item.id}`"
+      :key="`${item.resourceType}-${item.id}-${item.entrypoint || ''}`"
     >
       <div
         :draggable="canManage && item.canAdd"

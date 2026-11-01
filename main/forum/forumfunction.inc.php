@@ -2515,36 +2515,36 @@ function get_thread_users_qualify($thread_id)
         $session_info = api_get_session_info($sessionId);
         $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
         //not showing coaches
-        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,qualify.qualify
-                FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify qualify
+        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,forum_qualify.`qualify`
+                FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify forum_qualify
                 WHERE poster_id = user.id
-                    AND post.poster_id = qualify.user_id
+                    AND post.poster_id = forum_qualify.user_id
                     AND user.id = scu.user_id
                     AND scu.status<>'2'
                     AND scu.user_id NOT IN ($user_to_avoid)
-                    AND qualify.thread_id = ".intval($thread_id)."
+                    AND forum_qualify.thread_id = ".intval($thread_id)."
                     AND post.thread_id = ".intval($thread_id)."
                     AND scu.session_id = $sessionId
                     AND scu.c_id = ".$course_id." AND
-                    qualify.c_id = $course_id AND
+                    forum_qualify.c_id = $course_id AND
                     post.c_id = $course_id
                 $orderby ";
     } else {
-        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,qualify.qualify
+        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,forum_qualify.`qualify`
                 FROM $t_posts post,
-                     $t_qualify qualify,
+                     $t_qualify forum_qualify,
                      $t_users user,
                      $t_course_user course_user
                 WHERE
                      post.poster_id = user.id
-                     AND post.poster_id = qualify.user_id
+                     AND post.poster_id = forum_qualify.user_id
                      AND user.id = course_user.user_id
                      AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                     AND qualify.thread_id = ".intval($thread_id)."
+                     AND forum_qualify.thread_id = ".intval($thread_id)."
                      AND post.thread_id = ".intval($thread_id)."
                      AND course_user.status not in('1')
                      AND course_user.c_id = $course_id
-                     AND qualify.c_id = $course_id
+                     AND forum_qualify.c_id = $course_id
                      AND post.c_id = $course_id
                  $orderby ";
     }
@@ -3593,7 +3593,7 @@ function saveThreadScore(
             $row = Database::fetch_array($result);
 
             if ($row[0] == 0) {
-                $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
+                $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id, `qualify`, qualify_user_id, qualify_time, session_id)
                         VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float) $thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
                 Database::query($sql);
                 $insertId = Database::insert_id();
@@ -3615,7 +3615,7 @@ function saveThreadScore(
                 // Update
                 $sql = "UPDATE $table_threads_qualify
                         SET
-                            qualify = '".$thread_qualify."',
+                            `qualify` = '".$thread_qualify."',
                             qualify_time = '".$qualify_time."'
                         WHERE
                             c_id = $course_id AND
@@ -3663,7 +3663,7 @@ function showQualify($option, $user_id, $thread_id)
     $sql = '';
     switch ($option) {
         case 1:
-            $sql = "SELECT qualify FROM $table_threads_qualify
+            $sql = "SELECT `qualify` FROM $table_threads_qualify
                     WHERE
                         c_id = $course_id AND
                         user_id=".$user_id." AND
@@ -3767,7 +3767,7 @@ function saveThreadScoreHistory(
         $thread_id == strval(intval($thread_id)) && $option == 1
     ) {
         // Extract information of thread_qualify.
-        $sql = "SELECT qualify, qualify_time
+        $sql = "SELECT `qualify`, qualify_time
                 FROM $table_threads_qualify
                 WHERE
                     c_id = $course_id AND
@@ -3779,7 +3779,7 @@ function saveThreadScoreHistory(
         $row = Database::fetch_array($rs);
 
         // Insert thread_historical.
-        $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, qualify, qualify_user_id,qualify_time,session_id)
+        $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, `qualify`, qualify_user_id, qualify_time, session_id)
                 VALUES(".$course_id.", '".$user_id."','".$thread_id."',".(float) $row[0].", '".$qualify_user_id."','".$row[1]."','')";
         Database::query($sql);
 
@@ -3814,7 +3814,7 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
     $sessionId = intval($sessionId);
     $threadId = intval($threadId);
 
-    $sql = "SELECT qualify FROM $table_threads_qualify
+    $sql = "SELECT `qualify` FROM $table_threads_qualify
             WHERE
                 c_id = $course_id AND
                 thread_id = $threadId AND

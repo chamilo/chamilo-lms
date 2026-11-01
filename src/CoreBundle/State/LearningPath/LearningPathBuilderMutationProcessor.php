@@ -32,6 +32,8 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
+use Chamilo\CoreBundle\Service\HotPotatoes\HotPotatoesArchiveService;
+use Chamilo\CoreBundle\Service\HotPotatoes\HotPotatoesEntrypoints;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -466,6 +468,23 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         $parent = $this->resolveParent($lp, $root, $data->parentId);
         $itemType = $this->resolveItemType($data->resourceType, $resource);
         $title = $this->resourceTitle($resource);
+        $entrypoint = '';
+        if ('hotpotatoes' === $itemType && $resource instanceof CDocument) {
+            $entrypoints = HotPotatoesEntrypoints::forDocument($resource);
+            if ([] === $entrypoints) {
+                throw new BadRequestHttpException('The Hot Potatoes archive has no HTML activities.');
+            }
+
+            // Older clients did not send an entrypoint and created an archive-level LP item.
+            $requestedEntry = trim((string) $data->entrypoint);
+            $entrypoint = '' !== $requestedEntry
+                ? $requestedEntry
+                : (\in_array('index.htm', $entrypoints, true) ? 'index.htm' : $entrypoints[0]);
+            if (!\in_array($entrypoint, $entrypoints, true)) {
+                throw new BadRequestHttpException('The selected Hot Potatoes HTML activity is invalid.');
+            }
+            $title = mb_substr($title, 0, 180).' — '.mb_substr($entrypoint, 0, 250);
+        }
 
         if ($resource instanceof CSurvey && $resource->getQuestions()->isEmpty()) {
             throw new BadRequestHttpException('A survey must contain at least one question.');
@@ -479,7 +498,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             ->setTitle($title)
             ->setDescription('')
             ->setPath((string) $data->resourceId)
-            ->setRef('')
+            ->setRef($entrypoint)
             ->setPrerequisite('')
             ->setMaxTimeAllowed('0')
             ->setDisplayOrder($this->nextDisplayOrder($lp))
@@ -515,6 +534,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         $data->lpId = (int) $lp->getIid();
         $data->id = $item->getIid();
         $data->title = $title;
+        $data->entrypoint = '' !== $entrypoint ? $entrypoint : null;
         $data->itemType = $itemType;
         $data->exportAllowed = $item->isExportAllowed();
 
@@ -1049,7 +1069,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         ?CGroup $group,
     ): AbstractResource {
         $class = match ($resourceType) {
-            'document', 'video' => CDocument::class,
+            'document', 'video', 'hotpotatoes' => CDocument::class,
             'quiz' => CQuiz::class,
             'link' => CLink::class,
             'student_publication' => CStudentPublication::class,
@@ -1065,8 +1085,22 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             throw new NotFoundHttpException('Learning path resource not found.');
         }
 
+        if ('hotpotatoes' === $resourceType
+            && (!$resource instanceof CDocument || !HotPotatoesArchiveService::isHotPotatoesDocument($resource))
+        ) {
+            throw new BadRequestHttpException('The selected resource is not a Hot Potatoes activity.');
+        }
+        if ('document' === $resourceType
+            && $resource instanceof CDocument
+            && HotPotatoesArchiveService::isHotPotatoesDocument($resource)
+        ) {
+            throw new BadRequestHttpException('Select this activity from Hot Potatoes resources.');
+        }
+
         $resourceLink = $this->getContextResourceLink($resource, $course, $session, $group);
-        if (!$resourceLink instanceof ResourceLink) {
+        if (!$resourceLink instanceof ResourceLink
+            || ('hotpotatoes' === $resourceType && null !== $resourceLink->getDeletedAt())
+        ) {
             throw new AccessDeniedHttpException('The resource is not linked to the current context.');
         }
 
@@ -1095,7 +1129,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         }
 
         return match ($resourceType) {
-            'document', 'video', 'quiz', 'link', 'student_publication', 'forum', 'thread', 'survey', 'toolbox' => $resourceType,
+            'document', 'video', 'quiz', 'hotpotatoes', 'link', 'student_publication', 'forum', 'thread', 'survey', 'toolbox' => $resourceType,
             default => throw new BadRequestHttpException('Unsupported learning path item type.'),
         };
     }

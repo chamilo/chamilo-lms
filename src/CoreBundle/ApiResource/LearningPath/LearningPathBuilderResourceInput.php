@@ -54,6 +54,9 @@ final class LearningPathBuilderResourceInput
     #[Groups(['learning_path_builder_resource:write'])]
     public int $resourceId = 0;
 
+    #[Groups(['learning_path_builder_resource:read', 'learning_path_builder_resource:write'])]
+    public ?string $entrypoint = null;
+
     #[Groups(['learning_path_builder_resource:write'])]
     public ?int $parentId = null;
 

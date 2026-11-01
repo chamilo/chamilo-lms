@@ -45,6 +45,7 @@ const floatingDropTargetStyle = ref({})
 const supportedToolKeys = new Set([
   "documents",
   "tests",
+  "hotpotatoes",
   "links",
   "assignments",
   "forums",
@@ -124,6 +125,7 @@ const titleEditorConfig = {
 const tools = computed(() => [
   { key: "documents", label: t("Documents"), icon: "folder-open" },
   { key: "tests", label: t("Tests"), icon: "multiple-marked" },
+  { key: "hotpotatoes", label: t("Hot Potatoes"), icon: "import" },
   { key: "links", label: t("Links"), icon: "link" },
   { key: "assignments", label: t("Assignments"), icon: "inbox" },
   { key: "forums", label: t("Forums"), icon: "comment" },
@@ -511,6 +513,7 @@ async function addResource(resource, parentId = selectedSectionId.value, exportA
     const created = await lpService.addBuilderResource(lpId.value, context.value, {
       resourceType: resource.resourceType,
       resourceId: Number(resource.id),
+      ...(resource.resourceType === "hotpotatoes" ? { entrypoint: resource.entrypoint } : {}),
       parentId: parentId || null,
       exportAllowed: Boolean(exportAllowed),
     })
@@ -540,6 +543,7 @@ async function addResources(resourceItems, parentId = selectedSectionId.value, e
       const created = await lpService.addBuilderResource(lpId.value, context.value, {
         resourceType: resource.resourceType,
         resourceId: Number(resource.id),
+        ...(resource.resourceType === "hotpotatoes" ? { entrypoint: resource.entrypoint } : {}),
         parentId: parentId || null,
         exportAllowed: Boolean(exportAllowed),
       })
@@ -1038,6 +1042,22 @@ function goBack() {
               <LpBuilderResourceList
                 :can-manage="canManage"
                 :items="resources.tests?.items || []"
+                @add="addResource"
+              />
+            </template>
+
+            <template v-else-if="activeTool === 'hotpotatoes'">
+              <div class="flex justify-end">
+                <BaseButton
+                  :label="t('Import Hot Potatoes')"
+                  icon="import"
+                  type="success"
+                  @click="openRoute('HotPotatoesList', {}, { lpTool: 'hotpotatoes' })"
+                />
+              </div>
+              <LpBuilderResourceList
+                :can-manage="canManage"
+                :items="resources.hotpotatoes?.items || []"
                 @add="addResource"
               />
             </template>

@@ -20,6 +20,8 @@ use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Service\HotPotatoes\HotPotatoesArchiveService;
+use Chamilo\CoreBundle\Service\HotPotatoes\HotPotatoesEntrypoints;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathAccessChecker;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathFinalItemManager;
 use Chamilo\CoreBundle\Service\LearningPath\ScormRuntimeManager;
@@ -843,6 +845,30 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         $courseNodeId = (int) ($course->getResourceNode()?->getId() ?? 0);
         if ($courseNodeId <= 0) {
             return '';
+        }
+
+        if ('hotpotatoes' === $type) {
+            $document = $this->findContextResource(CDocument::class, $resourceId, $course, $session, $group);
+            if (!$document instanceof CDocument
+                || !HotPotatoesArchiveService::isHotPotatoesDocument($document)
+            ) {
+                return '';
+            }
+            $entrypoint = trim($item->getRef());
+            if ('' !== $entrypoint) {
+                if (!\in_array($entrypoint, HotPotatoesEntrypoints::forDocument($document), true)) {
+                    return '';
+                }
+                $params['entrypoint'] = $entrypoint;
+            }
+            $params['origin'] = 'learnpath';
+            $params['lp_node'] = $request->query->getInt('node');
+            unset($params['type']);
+
+            return $this->appendQuery(
+                '/resources/exercise/'.$courseNodeId.'/hotpotatoes/'.$resourceId,
+                $params,
+            );
         }
 
         if (\in_array($type, ['document', 'video', 'readout_text'], true)) {

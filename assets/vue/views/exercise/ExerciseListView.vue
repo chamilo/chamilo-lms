@@ -1,12 +1,9 @@
 <template>
   <section class="space-y-6">
     <SectionHeader :title="t('Tests')">
-      <div
-        v-if="canManage"
-        class="exercise-list-toolbar"
-      >
+      <div class="exercise-list-toolbar">
         <BaseButton
-          v-if="canCreate"
+          v-if="canManage && canCreate"
           :label="t('Create exercise')"
           :route="{ name: 'ExerciseCreate', params: route.params, query: getContextParams() }"
           icon="plus"
@@ -54,6 +51,13 @@
           type="primary-text"
         />
         <BaseButton
+          :label="t('Hot Potatoes')"
+          :route="{ name: 'HotPotatoesList', params: route.params, query: getContextParams() }"
+          icon="file-upload"
+          only-icon
+          type="primary-text"
+        />
+        <BaseButton
           v-if="canManage"
           :label="t('Import Aiken quiz')"
           :route="{ name: 'ExerciseImportAiken', params: route.params, query: getContextParams() }"
@@ -86,6 +90,7 @@
           @click="confirmCleanAllResults"
         />
         <BaseButton
+          v-if="canManage"
           :label="isSearchVisible ? t('Hide search') : t('Search')"
           :icon="isSearchVisible ? 'close' : 'search'"
           only-icon

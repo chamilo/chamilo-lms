@@ -289,6 +289,17 @@ if (!isset($_GET['running'])) {
 }
 $dbPortForm = (int) $dbPortForm;
 
+// UserManager::create_user() silently refuses an invalid e-mail address, which
+// would leave the portal without any administrator account. Validate it with
+// the same function when the settings form is submitted and, if it is not
+// valid, show the settings form again with an error message.
+$adminEmailError = false;
+if (!empty($_POST['step5']) && 'update' !== $installType && !api_valid_email($emailForm)) {
+    $adminEmailError = true;
+    $_POST['step4'] = 1;
+    unset($_POST['step5']);
+}
+
 /* NEXT STEPS IMPLEMENTATION */
 
 $total_steps = 7;
@@ -578,6 +589,10 @@ if (@$_POST['step2']) {
         if (!empty($tmp)) {
             $allowSelfRegProf = $tmp;
         }
+    }
+
+    if ($adminEmailError) {
+        echo Display::return_message(get_lang('PleaseEnterValidEmail'), 'error');
     }
 
     display_configuration_settings_form(

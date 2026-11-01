@@ -112,7 +112,7 @@
 
     <div class="version" aria-label="1.11.42">
         <a id="1.11.42"></a>
-        <h1>Chamilo 1.11.42 - La Flotte, 28/10/2026</h1>
+        <h1>Chamilo 1.11.42 - La Flotte, 01/11/2026</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.42 is a security and bugfix release on top of 1.11.40. For any significant change, please check the 1.11.30 release notes. <b>Please read the "Possibly breaking changes" section before upgrading</b>: users whose login or password contains leading/trailing spaces or invisible characters will no longer be able to log in until an administrator updates their account.</p>
         <h3>Release name</h3>
@@ -184,10 +184,10 @@ WHERE auth_source = 'platform'
 <pre><code>SELECT a.username, COUNT(*) AS failed_attempts, MAX(a.login_date) AS last_failed
 FROM track_e_login_attempt a
 WHERE a.success = 0
-  AND a.login_date &gt;= '2026-10-28 00:00:00'
+  AND a.login_date &gt;= '2026-11-01 00:00:00'
   AND NOT EXISTS (
     SELECT 1 FROM track_e_login_attempt s
-    WHERE s.username = a.username AND s.success = 1 AND s.login_date &gt;= '2026-10-28 00:00:00'
+    WHERE s.username = a.username AND s.success = 1 AND s.login_date &gt;= '2026-11-01 00:00:00'
   )
 GROUP BY a.username
 ORDER BY failed_attempts DESC;</code></pre>
@@ -207,6 +207,9 @@ ORDER BY failed_attempts DESC;</code></pre>
         <h4>For developers and sysadmins</h4>
         Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
         <ul aria-live="off">
+            <li>[2026-10-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/fadb845b58b22ce51080fb62f261bbb6d0e16546">fadb845b</a> - <a href="https://task.beeznest.com/issues/23796">BT#23796</a>) Webservice: Add <code>get_session_user_first_connexion</code> REST web service (first access of a user to a session)</li>
+            <li>[2026-10-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/47c5689c03aeecc32b79dc350feaba1f0747c98d">47c5689c</a> - <a href="https://task.beeznest.com/issues/23794">BT#23794</a>) Webservice: Add <code>get_user_certificates</code> REST web service (certificates of a user, filterable by session, course and date)</li>
+            <li>[2026-11-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/ccf981bcc7124d37de6f674cb89281b0f71d8679">ccf981bc</a>) Install: Quote the <code>qualify</code> column of the forum thread grading tables and queries, a reserved word since MySQL 8.4, so that Chamilo can be installed and used on MySQL 8.4 and later</li>
             <li>[2026-09-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/980e70e2dba26b77cddc2b126e4b07a8ace9c6cc">980e70e2</a> - <a href="https://task.beeznest.com/issues/22637">BT#22637</a>) User: Plugin: SSO: add redirect to specific URL if requested</li>
             <li>[2026-08-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/5d112f42b93ecfff5dbd239d84b5cfbf080233b7">5d112f42</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/7533">GH#7533</a>) Plugin: OnlyOffice: Add info about the Authorization header in Apache+PHP-FPM cases - requires additional SetEnvIf statement</li>
             <li>[2026-07-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/f8e84d6c206b20a857eeced5aa6e91612d7a473a">f8e84d6c</a> - <a href="https://task.beeznest.com/issues/22637">BT#22637</a>) Session: API: add duration in return of get_sessions</li>
@@ -215,6 +218,8 @@ ORDER BY failed_attempts DESC;</code></pre>
         <h3>Improvements (minor features) and debug</h3>
         In reverse chronological order...
         <ul aria-live="off">
+            <li>[2026-11-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/1d5a01cfbe3aa096b2d708187ca356de5a5a2531">1d5a01cf</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9370">GH#9370</a>) Gradebook: Allow session coaches and session admins to view the certificates of their own session (regression of the certificate access restriction added in 1.11.40)</li>
+            <li>[2026-11-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/484b9586855843b685928157584092ce4ce161ae">484b9586</a>) Install: Validate the administrator e-mail address in the settings step (an invalid address silently prevented the creation of the administrator account)</li>
             <li>[2026-10-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/2a2f7b464c9a8df3f388986a348400a367bd9866">2a2f7b46</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8853">GH#8853</a>) Tracking: Select the url script name in getCalculateTime() for the quiz time calculator (changes c69e6d6c, which removed the url column from the same query)</li>
             <li>[2026-10-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/cf9663b18bda9d95966402f614453eb3bf280c6f">cf9663b1</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5580">GH#5580</a>) Tracking: Fix learning path quiz time reporting (see "Possibly breaking changes")</li>
             <li>[2026-10-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/4980076a529099318417797ba2173c34a0c67e74">4980076a</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1678">GH#1678</a>) CI: Fix Behat scenario 'Enter to public password-protected course'</li>
@@ -257,6 +262,7 @@ ORDER BY failed_attempts DESC;</code></pre>
         </ul>
         <h3>Web services</h3>
         <ul aria-live="off">
+            <li>New methods <code>get_user_certificates</code> and <code>get_session_user_first_connexion</code> (see notable new features above): they are restricted to platform admins, to HR managers following the user or the session, and to the coaches of the given session (<code>session_id</code> is mandatory for coaches).</li>
             <li>The <code>get_sessions</code> method now returns the session duration. Several REST endpoints (course access, course write actions, self-enrolment, class management) now enforce stricter permission checks (see security fixes above).</li>
         </ul>
         <h3>Removals</h3>

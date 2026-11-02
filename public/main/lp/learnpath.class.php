@@ -4765,9 +4765,9 @@ class learnpath
             var title = $(event).attr('data-title');
             var params = '&a=delete_item&id=' + id;
             if (confirmation(title)) {
-                $.get(
+                $.post(
                     '".$ajax_url."',
-                    params,
+                    params + '&protect_token=' + encodeURIComponent(".json_encode(self::getItemSecurityToken())."),
                     function(result) {
                         refreshTree();
                     }
@@ -5693,6 +5693,7 @@ class learnpath
             'POST',
             $this->getCurrentBuildingModeURL()
         );
+        $form->protect();
 
         LearnPathItemForm::setForm($form, $action, $this, $lpItem);
 
@@ -5724,6 +5725,7 @@ class learnpath
             'POST',
             $this->getCurrentBuildingModeURL()
         );
+        $form->protect();
 
         LearnPathItemForm::setForm($form, $action, $this, $lpItem);
         $form->addButtonSave(get_lang('Save'), 'submit_button');
@@ -5747,6 +5749,7 @@ class learnpath
             'POST',
             $this->getCurrentBuildingModeURL()
         );
+        $form->protect();
         LearnPathItemForm::setForm($form, $action, $this, $lpItem);
 
         if ('add' === $action) {
@@ -5776,6 +5779,7 @@ class learnpath
             'POST',
             $this->getCurrentBuildingModeURL()
         );
+        $form->protect();
 
         LearnPathItemForm::setForm($form, 'edit', $this, $lpItem);
 
@@ -5804,6 +5808,7 @@ class learnpath
         $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
 
         $form = new FormValidator('form_'.$item_type, 'POST', $url);
+        $form->protect();
         LearnPathItemForm::setForm($form, 'edit', $this, $lpItem);
 
         $form->addButtonSave(get_lang('Save section'), 'submit_button');
@@ -5824,6 +5829,7 @@ class learnpath
     public function display_student_publication_form($action, CLpItem $lpItem, $resource)
     {
         $form = new FormValidator('frm_student_publication', 'post', '#');
+        $form->protect();
         LearnPathItemForm::setForm($form, 'edit', $this, $lpItem);
 
         $form->addButtonSave(get_lang('Save'), 'submit_button');
@@ -5848,6 +5854,7 @@ class learnpath
         $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
 
         $form = new FormValidator('form_'.$item_type, 'POST', $url);
+        $form->protect();
         LearnPathItemForm::setForm($form, 'add', $this, $lpItem);
 
         $form->addButtonSave(get_lang('Save section'), 'submit_button');
@@ -5878,6 +5885,7 @@ class learnpath
             '',
             ['enctype' => 'multipart/form-data']
         );
+        $form->protect();
 
         $data = $this->generate_lp_folder($courseInfo);
 
@@ -6101,9 +6109,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 $url.'&action=edit_item_prereq'
             );
         }
-        $return .= Display::url(
+        $return .= $this->getDeleteItemButton(
+            $url.'&action=delete_item',
             Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('Delete')),
-            $url.'&action=delete_item'
+            ''
         );
 
         /*if (in_array($itemType, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_HOTPOTATOES])) {
@@ -6286,6 +6295,54 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /**
+     * Token that protects the actions that change or delete an item of the learning path.
+     * It is the same token that FormValidator puts in its forms (protect_token).
+     */
+    public static function getItemSecurityToken(): string
+    {
+        $token = Security::get_existing_token();
+        if (empty($token)) {
+            $token = Security::get_token();
+        }
+
+        return (string) $token;
+    }
+
+    /**
+     * Checks the token sent with a POST request that changes or deletes an item.
+     */
+    public static function isItemSecurityTokenValid(): bool
+    {
+        return 'POST' === ($_SERVER['REQUEST_METHOD'] ?? '')
+            && Security::check_token((string) ($_POST['protect_token'] ?? ''));
+    }
+
+    /**
+     * Builds a delete button that sends a POST request carrying the token, so that
+     * an item cannot be deleted by simply following a link.
+     */
+    private function getDeleteItemButton(string $url, string $icon, string $class, ?string $title = null): string
+    {
+        $script = '';
+        if (null !== $title) {
+            $script .= 'if (!confirmation('.json_encode($title).')) { return false; }';
+        }
+        $script .= 'var form = document.createElement("form");'.
+            'form.method = "post";'.
+            'form.action = '.json_encode($url).';'.
+            'var token = document.createElement("input");'.
+            'token.type = "hidden";'.
+            'token.name = "protect_token";'.
+            'token.value = '.json_encode(self::getItemSecurityToken()).';'.
+            'form.appendChild(token);'.
+            'document.body.appendChild(form);'.
+            'form.submit(); return false;';
+
+        return '<button type="button" class="'.htmlspecialchars($class, ENT_QUOTES, 'UTF-8').
+            '" onclick="'.htmlspecialchars($script, ENT_QUOTES, 'UTF-8').'">'.$icon.'</button>';
+    }
+
+    /**
      * Return HTML form to allow prerequisites selection.
      *
      * @todo use FormValidator
@@ -6328,6 +6385,8 @@ document.addEventListener("DOMContentLoaded", function () {
         $return .= Display::page_header($title);
 
         $return .= '<form method="POST" class="space-y-6">';
+        $return .= '<input type="hidden" name="protect_token" value="'.
+            htmlspecialchars(self::getItemSecurityToken(), ENT_QUOTES, 'UTF-8').'">';
         $return .= '  <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">';
         $return .= '    <div class="overflow-x-auto">';
         $return .= '      <table class="min-w-full divide-y divide-gray-200">';
@@ -8359,6 +8418,7 @@ document.addEventListener("DOMContentLoaded", function () {
         $actionUrl = 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query($qs);
 
         $form = new FormValidator('final_item', 'POST', $actionUrl);
+        $form->protect();
 
         // ---------- Form fields (order matters for UX) ----------
         $form->addText('title', get_lang('Title'));

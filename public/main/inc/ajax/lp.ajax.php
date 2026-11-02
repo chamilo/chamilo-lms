@@ -205,7 +205,7 @@ switch ($action) {
         exit;
         break;
     case 'delete_item':
-        if (api_is_allowed_to_edit(null, true)) {
+        if (api_is_allowed_to_edit(null, true) && learnpath::isItemSecurityTokenValid()) {
             $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
             $learningPath->delete_item($_REQUEST['id']);
         }

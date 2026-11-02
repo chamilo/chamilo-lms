@@ -668,6 +668,10 @@ switch ($action) {
         if (null !== $lpItem && (int) $lpItem->getLp()->getIid() !== (int) $oLP->get_id()) {
             api_not_allowed(true);
         }
+        // Changing an item needs the token of the form it comes from.
+        if ('POST' === $_SERVER['REQUEST_METHOD'] && !learnpath::isItemSecurityTokenValid()) {
+            api_not_allowed(true);
+        }
 
         Session::write('refresh', 1);
         if (isset($_POST['submit_button']) && !empty($post_title)) {
@@ -738,6 +742,9 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($lp_found && null !== $lpItem && (int) $lpItem->getLp()->getIid() !== (int) $oLP->get_id()) {
+            api_not_allowed(true);
+        }
+        if ('POST' === $_SERVER['REQUEST_METHOD'] && !learnpath::isItemSecurityTokenValid()) {
             api_not_allowed(true);
         }
         if (!$lp_found) {
@@ -1030,6 +1037,10 @@ switch ($action) {
     case 'deleteitem':
     case 'delete_item':
         if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        // Deleting an item changes data: only a POST request carrying the token does it.
+        if (!learnpath::isItemSecurityTokenValid()) {
             api_not_allowed(true);
         }
         if (!$lp_found) {

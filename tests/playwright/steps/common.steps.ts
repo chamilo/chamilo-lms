@@ -2066,6 +2066,12 @@ registerSettingsGuard("@settings-translateHtml", [
   { path: "/admin/settings/language", field: "form_platform_language" },
 ])
 
+// toolExerciseResultsPageConfiguration.feature turns this off then on, to check that the
+// test form only shows the results page options when they can be saved.
+registerSettingsGuard("@settings-exerciseResultsPage", [
+  { path: "/admin/settings/exercise", field: "form_allow_quiz_results_page_config" },
+])
+
 // Same snapshot-before/restore-after intent as registerSettingsGuard() above,
 // but for a single free-text <textarea> setting instead of a <select> —
 // courseCatalogue.feature's "course_catalog_settings" field (CatalogSettingsSchema,

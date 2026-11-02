@@ -140,7 +140,10 @@
             </FieldGroup>
           </div>
 
-          <FieldGroup :title="t('Results page configuration')">
+          <FieldGroup
+            v-if="settings.allowQuizResultsPageConfig"
+            :title="t('Results page configuration')"
+          >
             <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               <BaseCheckbox
                 id="exercise-hide-expected-answers"

@@ -52,15 +52,9 @@ if ($session) {
     foreach ($sessionCourses as $sessionCourse) {
         $course = $sessionCourse->getCourse();
         $coursesInfo[$course->getId()] = $course->getCode();
-        $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('status', Session::COURSE_COACH)
-        );
-        $userCourseSubscriptions = $session
-            ->getUserCourseSubscriptions()
-            ->matching($criteria);
+        $userCourseSubscriptions = $session->getCourseCoaches();
 
-        foreach ($userCourseSubscriptions as $userCourseSubscription) {
-            $user = $userCourseSubscription->getUser();
+        foreach ($userCourseSubscriptions as $user) {
 
             if (!array_key_exists($user->getId(), $usersInfo)) {
                 $usersInfo[$user->getId()] = [
@@ -174,9 +168,10 @@ $view = new Template($toolName);
 $view->assign('form', $form->returnForm());
 
 if ($session) {
-    $view->assign('session', ['id' => $session->getId(), 'name' => $session->getTitle()]);
+    $view->assign('session', ['id' => $session->getId(), 'title' => $session->getTitle()]);
     $view->assign('courses', $coursesInfo);
     $view->assign('users', $usersInfo);
+    $view->assign('data', $data);
 
     $actions = Display::url(
         Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),

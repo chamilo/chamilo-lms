@@ -1522,6 +1522,22 @@ Then("I fill in the active tinymce editor with {string}", async ({ page }, value
   }, value)
 })
 
+// Reads back what a page pre-filled in its only open editor (e.g. the exercise correction
+// page's notification message), as text so the assertion does not depend on the markup.
+Then("the active tinymce editor should contain {string}", async ({ page }, value: string) => {
+  await expect
+    .poll(
+      () =>
+        page.evaluate(() => {
+          const editor = (window as any).tinymce?.activeEditor
+
+          return editor ? String(editor.getContent({ format: "text" })) : ""
+        }),
+      { timeout: TINYMCE_MOUNT_TIMEOUT },
+    )
+    .toContain(value)
+})
+
 // Mink's "I check ..." checks a checkbox, same id -> name -> label resolution.
 Then("I check {string}", async ({ page }, field: string) => {
   await (await resolveField(page, field)).check()

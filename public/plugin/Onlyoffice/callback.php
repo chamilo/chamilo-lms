@@ -66,10 +66,10 @@ $docId = (int) getHashValue($hashData, 'docId', 0);
 $groupId = (int) getHashValue($hashData, 'groupId', 0);
 $sessionId = (int) getHashValue($hashData, 'sessionId', 0);
 
-$docPathFromQuery = isset($_GET['docPath']) ? urldecode((string) $_GET['docPath']) : '';
-$docPath = '' !== $docPathFromQuery
-    ? $docPathFromQuery
-    : (string) getHashValue($hashData, 'docPath', '');
+// The path is part of the signature: a request parameter must never be able to
+// change the file the hash was issued for.
+$docPath = (string) getHashValue($hashData, 'docPath', '');
+$canEdit = (bool) getHashValue($hashData, 'canEdit', false);
 
 $courseInfo = [];
 $courseCode = '';
@@ -77,6 +77,13 @@ $courseCode = '';
 if ($courseId > 0) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $courseCode = is_array($courseInfo) ? ($courseInfo['code'] ?? '') : '';
+}
+
+if ('' !== $docPath) {
+    $docPath = (string) OnlyofficeTools::getSafeExercisePath($docPath, $courseInfo);
+    if ('' === $docPath) {
+        onlyofficeCallbackDeny('Document path not allowed');
+    }
 }
 
 onlyofficeLog('DEBUG', 'Callback entry', [
@@ -113,6 +120,14 @@ if (empty($userInfo)) {
 }
 
 if (api_is_anonymous()) {
+    // The document server calls back without any session: the rights of the
+    // user the hash was issued to are restored for this request only, and the
+    // session is dropped afterwards so that the caller never walks away with a
+    // logged in session.
+    register_shutdown_function(static function (): void {
+        Session::destroy();
+    });
+
     $loggedUser = [
         'user_id' => $userInfo['id'],
         'status' => $userInfo['status'],
@@ -121,10 +136,14 @@ if (api_is_anonymous()) {
 
     Session::write('_user', $loggedUser);
     Login::init_user($loggedUser['user_id'], true);
+} elseif ($userId !== (int) api_get_user_id()) {
+    // A hash is bound to the user it was issued to: it cannot be replayed from
+    // another account.
+    onlyofficeCallbackDeny('403 Access denied');
 }
 
-if (PHP_SESSION_ACTIVE === session_status()) {
-    session_write_close();
+if ('' !== $docPath && !OnlyofficeTools::isAllowedToUseExercisePath($docPath, $userId)) {
+    onlyofficeCallbackDeny('403 Access denied');
 }
 
 switch ($type) {
@@ -152,6 +171,21 @@ switch ($type) {
 }
 
 /**
+ * Answer with an error and stop.
+ */
+function onlyofficeCallbackDeny(string $error): void
+{
+    sendNoCacheHeaders();
+    @header('Content-Type: application/json');
+    onlyofficeLog('ERROR', $error);
+
+    exit(json_encode([
+        'status' => 'error',
+        'error' => $error,
+    ]));
+}
+
+/**
  * Handle request from the document server with the document status information.
  */
 function track(): array
@@ -159,9 +193,17 @@ function track(): array
     global $appSettings;
     global $jwtManager;
     global $courseCode;
+    global $courseId;
     global $docId;
     global $docPath;
     global $sessionId;
+    global $canEdit;
+
+    if (!$canEdit) {
+        onlyofficeLog('ERROR', 'Hash was not issued for editing');
+
+        return ['error' => 1];
+    }
 
     $bodyStream = file_get_contents('php://input');
     if (false === $bodyStream || '' === $bodyStream) {
@@ -204,7 +246,13 @@ function track(): array
         return ['error' => 0];
     }
 
-    $resolved = resolveDocumentSource($docId, $courseCode, $sessionId, $docPath);
+    $resolved = resolveDocumentSource($docId, $courseCode, $sessionId, $docPath, $courseId);
+    if (null !== $resolved && !empty($resolved['filePath']) && !OnlyofficeTools::isSupportedFormat((string) $resolved['filePath'])) {
+        onlyofficeLog('ERROR', 'Unsupported format for save', ['docPath' => $docPath]);
+
+        return ['error' => 1];
+    }
+
     if (null === $resolved) {
         onlyofficeLog('ERROR', 'File not found for save', [
             'docId' => $docId,
@@ -219,6 +267,13 @@ function track(): array
     $downloadUrl = extractCallbackDownloadUrl($data, $payload);
     if ('' === $downloadUrl) {
         onlyofficeLog('ERROR', 'Missing callback download URL');
+
+        return ['error' => 1];
+    }
+
+    // The document server is the only legitimate source of a new revision.
+    if (!OnlyofficeTools::isAllowedDocumentServerUrl($downloadUrl, $appSettings)) {
+        onlyofficeLog('ERROR', 'Callback download URL not allowed', ['downloadUrl' => $downloadUrl]);
 
         return ['error' => 1];
     }
@@ -264,11 +319,12 @@ function track(): array
 function download(): void
 {
     global $courseCode;
+    global $courseId;
     global $docId;
     global $docPath;
     global $sessionId;
 
-    $resolved = resolveDocumentSource($docId, $courseCode, $sessionId, $docPath);
+    $resolved = resolveDocumentSource($docId, $courseCode, $sessionId, $docPath, $courseId);
 
     if (null === $resolved) {
         sendNoCacheHeaders();
@@ -365,7 +421,7 @@ function emptyFile(): void
 /**
  * Resolve a document source in C2 first, then legacy.
  */
-function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, string $docPath): ?array
+function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, string $docPath, int $courseId = 0): ?array
 {
     if ('' !== $docPath) {
         $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
@@ -398,7 +454,7 @@ function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, s
     }
 
     if ($docId > 0) {
-        $resolved = resolveDocumentSourceFromC2($docId);
+        $resolved = resolveDocumentSourceFromC2($docId, $courseId);
         if (null !== $resolved) {
             return $resolved;
         }
@@ -446,7 +502,7 @@ function resolveDocumentSource(int $docId, string $courseCode, int $sessionId, s
 /**
  * Resolve C2 document using CDocument -> ResourceNode -> ResourceFile.
  */
-function resolveDocumentSourceFromC2(int $docId): ?array
+function resolveDocumentSourceFromC2(int $docId, int $courseId = 0): ?array
 {
     $entityManager = getEntityManager();
     if (null === $entityManager) {
@@ -469,6 +525,26 @@ function resolveDocumentSourceFromC2(int $docId): ?array
     if (null === $resourceNode) {
         onlyofficeLog('ERROR', 'ResourceNode missing for document', [
             'docId' => $docId,
+        ]);
+
+        return null;
+    }
+
+    // The hash was issued for a course: the document has to be published in it.
+    $inCourse = false;
+    foreach ($resourceNode->getResourceLinks() as $link) {
+        $linkCourse = $link->getCourse();
+        if (null !== $linkCourse && (int) $linkCourse->getId() === $courseId) {
+            $inCourse = true;
+
+            break;
+        }
+    }
+
+    if (!$inCourse) {
+        onlyofficeLog('ERROR', 'Document does not belong to the course of the hash', [
+            'docId' => $docId,
+            'courseId' => $courseId,
         ]);
 
         return null;
@@ -690,7 +766,9 @@ function validateDocumentServerToken(array $data, $jwtManager, $appSettings): ob
     }
 
     if ('' === $token) {
-        return null;
+        // With JWT enabled the document server signs every callback: an unsigned
+        // one cannot be trusted.
+        return ['__error' => '403 Access denied'];
     }
 
     try {
@@ -715,12 +793,13 @@ function validateDocumentServerToken(array $data, $jwtManager, $appSettings): ob
  */
 function extractCallbackDownloadUrl(array $data, mixed $payload): string
 {
-    if (!empty($data['url']) && is_string($data['url'])) {
-        return $data['url'];
-    }
-
+    // When the callback is signed, only the signed copy of the URL is trusted.
     if (is_object($payload) && property_exists($payload, 'url') && is_string($payload->url)) {
         return $payload->url;
+    }
+
+    if (!is_object($payload) && !empty($data['url']) && is_string($data['url'])) {
+        return $data['url'];
     }
 
     return '';
@@ -758,6 +837,11 @@ function fetchRemoteBinary(string $url): ?string
                 'error' => $error,
             ]);
         }
+    }
+
+    $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
+    if (!in_array($scheme, ['http', 'https'], true)) {
+        return null;
     }
 
     $content = @file_get_contents($url);

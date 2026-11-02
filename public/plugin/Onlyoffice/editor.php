@@ -18,6 +18,7 @@
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -62,6 +63,10 @@ $courseInfo = api_get_course_info();
 if (empty($courseInfo)) {
     api_not_allowed(true);
 }
+
+// The editor hands out signed links that read and overwrite documents: only the
+// users who may access the current course get them.
+api_protect_course_script(true);
 
 $courseCode = $courseInfo['code'];
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : null;
@@ -116,8 +121,29 @@ if (!empty($docPath)) {
         exit('Error: Document not found.');
     }
 
-    $docPath = $resolvedDocPath['relativePath'];
-    $filePath = $resolvedDocPath['absolutePath'];
+    // The path comes from the request: it may only address a document of the
+    // ONLYOFFICE directory of the current course, in a format handled by the
+    // editor, and an answer only belongs to the user who submitted it.
+    $safeDocPath = OnlyofficeTools::getSafeExercisePath($resolvedDocPath['relativePath'], $courseInfo);
+    if (null === $safeDocPath
+        || !OnlyofficeTools::isSupportedFormat($safeDocPath)
+        || !OnlyofficeTools::isAllowedToUseExercisePath($safeDocPath)
+    ) {
+        onlyofficeEditorLog('ERROR', 'Document path not allowed', [
+            'docPath' => $docPath,
+        ]);
+        api_not_allowed(true);
+    }
+
+    $docPath = $safeDocPath;
+    $filePath = realpath(api_get_path(SYS_COURSE_PATH).$safeDocPath);
+
+    // Without an attempt the editor opens the document attached to the question:
+    // only the course managers may overwrite it.
+    $canEdit = !empty($exeId) || api_is_allowed_to_edit(true, true);
+    if (!$canEdit) {
+        $isReadOnly = 1;
+    }
 
     $extension = strtolower((string) pathinfo($filePath, PATHINFO_EXTENSION));
     $newDocPath = $docPath;
@@ -149,6 +175,7 @@ if (!empty($docPath)) {
         'userId' => $userId,
         'docId' => $fileId,
         'sessionId' => $sessionId,
+        'canEdit' => $canEdit,
     ];
 
     $trackPayload = [
@@ -159,6 +186,7 @@ if (!empty($docPath)) {
         'userId' => $userId,
         'docId' => $fileId,
         'sessionId' => $sessionId,
+        'canEdit' => $canEdit,
     ];
 
     if (!empty($groupId)) {
@@ -223,6 +251,19 @@ if (!empty($docPath)) {
     $resolvedC2 = resolveDocumentSourceFromC2ForEditor($docId);
 
     if (null !== $resolvedC2) {
+        // The document id comes from the request: it must belong to the current
+        // course and the user must be allowed to see it (and to edit it to save).
+        $c2Access = getOnlyofficeEditorDocumentAccess((int) $resolvedC2['resourceNodeId'], $courseId);
+        if (!$c2Access['view']) {
+            onlyofficeEditorLog('ERROR', 'Document not accessible', ['docId' => $docId]);
+            api_not_allowed(true);
+        }
+
+        $canEdit = $c2Access['edit'];
+        if (!$canEdit) {
+            $isReadOnly = 1;
+        }
+
         $fileId = $docId;
         $versionToken = $resolvedC2['versionToken'];
 
@@ -232,6 +273,7 @@ if (!empty($docPath)) {
             'userId' => $userId,
             'docId' => $docId,
             'sessionId' => $sessionId,
+            'canEdit' => $canEdit,
         ];
 
         $trackPayload = [
@@ -240,6 +282,7 @@ if (!empty($docPath)) {
             'userId' => $userId,
             'docId' => $docId,
             'sessionId' => $sessionId,
+            'canEdit' => $canEdit,
         ];
 
         if (!empty($groupId)) {
@@ -306,6 +349,11 @@ if (!empty($docPath)) {
         $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
 
         if ($docInfo) {
+            $canEdit = api_is_allowed_to_edit(true, true);
+            if (!$canEdit) {
+                $isReadOnly = 1;
+            }
+
             $fileId = $docId;
 
             if (!isset($docInfo['forceEdit'])) {
@@ -320,6 +368,7 @@ if (!empty($docPath)) {
                 'userId' => $userId,
                 'docId' => $docId,
                 'sessionId' => $sessionId,
+                'canEdit' => $canEdit,
             ];
 
             $trackPayload = [
@@ -328,6 +377,7 @@ if (!empty($docPath)) {
                 'userId' => $userId,
                 'docId' => $docId,
                 'sessionId' => $sessionId,
+                'canEdit' => $canEdit,
             ];
 
             if (!empty($groupId)) {
@@ -807,6 +857,51 @@ sendOnlyofficeEditorNoCacheHeaders();
 /**
  * Resolve a C2 document for editor usage.
  */
+/**
+ * Tell whether the current user may see, and edit, the document that has the
+ * given resource node id in the given course.
+ *
+ * @return array{view: bool, edit: bool}
+ */
+function getOnlyofficeEditorDocumentAccess(int $resourceNodeId, int $courseId): array
+{
+    $denied = ['view' => false, 'edit' => false];
+
+    $resourceNode = Container::getResourceNodeRepository()->find($resourceNodeId);
+    if (!$resourceNode instanceof ResourceNode) {
+        return $denied;
+    }
+
+    // The document has to be published in the course of the request, otherwise a
+    // member of any course could reach the documents of the other ones.
+    $inCourse = false;
+    foreach ($resourceNode->getResourceLinks() as $link) {
+        $linkCourse = $link->getCourse();
+        if (null !== $linkCourse && (int) $linkCourse->getId() === $courseId) {
+            $inCourse = true;
+
+            break;
+        }
+    }
+
+    if (!$inCourse) {
+        return $denied;
+    }
+
+    // Teachers (and admins) of the course may open and save any of its documents,
+    // hidden ones included. The roles of the course reach the security token too
+    // late for the resource voter to see them from a legacy script, which is why
+    // the legacy check is used for them, and the voter for everybody else.
+    $canEdit = api_is_allowed_to_edit(true, true);
+    if ($canEdit) {
+        return ['view' => true, 'edit' => true];
+    }
+
+    $canView = Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::VIEW, $resourceNode);
+
+    return ['view' => $canView, 'edit' => false];
+}
+
 function resolveDocumentSourceFromC2ForEditor(int $docId): ?array
 {
     $entityManager = getEntityManagerForOnlyofficeEditor();

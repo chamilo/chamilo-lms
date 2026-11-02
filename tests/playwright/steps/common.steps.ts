@@ -4595,8 +4595,22 @@ When("I add LP item {string} from the resource panel", async ({ page }, itemName
 // type name — confirmed live both in English ("Tests") and French ("Exercices") courses.
 // Needed before "I add LP item ... from the resource panel" for any item that isn't a
 // plain document (the panel defaults to the Documents type on first load).
+// Scoped to the builder's own tool buttons (LpBuilder.vue, `.lp-builder-tool-button`): the
+// course tool bar above it holds a "Tests" icon with the same title, which a page-wide
+// `[title="Tests"]` clicked instead, leaving the builder for the course's test list.
 When("I switch the LP resource panel to {string}", async ({ page }, resourceType: string) => {
-  await page.locator(`[title="${resourceType}"]`).click()
+  await page.locator(`.lp-builder-tool-button[title="${resourceType}"]`).click()
+})
+
+// Not ported — new, for lpQuizAttemptHistory.feature. The learning path runtime shows the
+// current item in an iframe (LpRuntime.vue, `iframe.lp-runtime-iframe`). Loading that
+// iframe's URL as the page itself keeps every learning path parameter it carries
+// (learnpath_id, learnpath_item_id, ...), so the item behaves exactly as inside the
+// runtime, while every existing page-level step works on it.
+When("I open the current learning path item in the page", async ({ page }) => {
+  const frame = page.locator("iframe.lp-runtime-iframe")
+  await expect(frame).toHaveAttribute("src", /.+/, { timeout: 30_000 })
+  await gotoReliably(page, String(await frame.getAttribute("src")))
 })
 
 // Not ported — new, for specialCase1Sessions.feature's "final" document prerequisite

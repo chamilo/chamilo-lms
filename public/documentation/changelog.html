@@ -21,9 +21,21 @@
 </nav>
 <div class="version" aria-label="2.0">
 
+    <h1>Chamilo 2.0 changelog</h1>
+    <p>
+        This changelog only covers the Chamilo 2.0 branch (2.0.x releases and the
+        pre-releases leading to 2.0). Other major branches of Chamilo, such as 1.11.x,
+        are maintained separately and a fix released there is not necessarily
+        listed here, nor the other way around. To know what a release of another major
+        branch contains, check the changelog (<code>documentation/changelog.html</code>)
+        in that branch of the
+        <a href="https://github.com/chamilo/chamilo-lms">Chamilo LMS repository</a>.
+    </p>
+
     <div class="toc">
         <h2>Releases</h2>
         <ul>
+            <li><a href="#2.0.4">2.0.4 - [TBD]</a></li>
             <li><a href="#2.0.3">2.0.3 - Axbridge</a></li>
             <li><a href="#2.0.2">2.0.2 - Little Weston</a></li>
             <li><a href="#2.0.1">2.0.1 - Blackford</a></li>
@@ -36,6 +48,127 @@
             <li><a href="#2.0-beta.1">2.0 beta 1 - Aquarium</a></li>
         </ul>
     </div>
+
+    <a id="2.0.4"></a>
+    <h1>Chamilo 2.0.4 - [TBD], 2026-10-31</h1>
+    <h3>Release notes - summary</h3>
+    <p>
+        Fourth patch release of Chamilo 2.0. Like 2.0.3, this is mostly a security-focused
+        release, with about sixty fixes: stricter course and session scoping of resources
+        (forums, assignments, learning paths, glossary, announcements, links, calendar),
+        CSRF tokens and edit-rights checks on destructive actions, ownership checks on
+        exercise attempts and tracking data, hardening of the link checker (DNS rebinding,
+        private ranges), xAPI LRS and LTI login, output escaping against XSS, neutralized
+        formulas in CSV exports, random passwords for SSO/SCIM-provisioned accounts, and
+        updated dependencies with security advisories. It also fixes a few calendar and
+        export bugs and brings the automated test suite back in line with Chamilo 2.0.
+    </p>
+
+    <h3>Security fixes</h3>
+    <ul aria-live="off">
+        <li>[2026-10-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/1c30f4126af3">1c30f412</a>) Security: Cast the agenda event group filter to an integer</li>
+        <li>[2026-10-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/61f33336d869">61f33336</a>) Security: Forum: Require edit rights and a token to delete a post attachment, and only within its post</li>
+        <li>[2026-10-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/67f8415fdc09">67f8415f</a>) Security: Forum: Only manage the forum categories, forums and threads of the current course</li>
+        <li>[2026-10-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/fdffdaaa8a8f">fdffdaaa</a>) Security: Work: Keep a session document attached to an assignment inside its session</li>
+        <li>[2026-10-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/b4c032733511">b4c03273</a>) Security: Require course membership to read a student publication resource</li>
+        <li>[2026-10-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/d24bc0ac9105">d24bc0ac</a>) Security: Build password reset links from the configured access URL</li>
+        <li>[2026-10-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/72375c25714d">72375c25</a>) Security: Limit the open course access to its files to reading</li>
+        <li>[2026-10-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/39daaa2bb46c">39daaa2b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9325">GH#9325</a>) Security: Restrict where resource create and update requests can link resources</li>
+        <li>[2026-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/39474ce80468">39474ce8</a>) Security: Document: Only replace an existing document of the current course when uploading</li>
+        <li>[2026-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/f30d160e3d09">f30d160e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9318">GH#9318</a>) Security: Assignment: Restrict the sorting of the teacher submission list to known columns</li>
+        <li>[2026-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/37ea1c26317e">37ea1c26</a>) Security: Use only the base name of attachment files when importing a course backup</li>
+        <li>[2026-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/0593be0c89dc">0593be0c</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9316">GH#9316</a>) Security: Learnpath: Bind learning path requests to the current course</li>
+        <li>[2026-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/de2486c7f56d">de2486c7</a>) Security: Exercise: Show an attempt's result only within the course it belongs to</li>
+        <li>[2026-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/b70ae4b1495a">b70ae4b1</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9314">GH#9314</a>) Security: Assignments: Only let course and session teachers update assignment publications</li>
+        <li>[2026-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/6016225e7d0c">6016225e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9313">GH#9313</a>) Security: Attendance: Remove an unused attendance listing endpoint</li>
+        <li>[2026-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/9942fbf6c9da">9942fbf6</a>) Security: Tracking: Restrict the sorting values of the user overview report</li>
+        <li>[2026-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/2c3ca641231f">2c3ca641</a>) Security: Restrict the accounts that non-administrators can create or grant</li>
+        <li>[2026-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/b150cd77eb1c">b150cd77</a>) Security: Tighten access to several course resource lists</li>
+        <li>[2026-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/1ba1379be4c2">1ba1379b</a>) Security: Restrict who may edit a global administrator account</li>
+        <li>[2026-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/01cc8c5b027b">01cc8c5b</a>) Security: Restrict learning path item edits to the current course</li>
+        <li>[2026-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/0b9db58eae83">0b9db58e</a>) Security: Exercise attempt ownership check in AJAX save</li>
+        <li>[2026-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/c87f0ecad3a7">c87f0eca</a>) Security: SCORM max time allowed encoding in player JavaScript</li>
+        <li>[2026-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/9ffbfd23dfd5">9ffbfd23</a>) Security: Agenda: Use a server-generated name to store the imported iCal file</li>
+        <li>[2026-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/6345a12a6310">6345a12a</a>) Security: Learning path: Require edit rights to upload packages in lp_upload.php</li>
+        <li>[2026-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/95ffa2d4cd8d">95ffa2d4</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9284">GH#9284</a>) Security: LTI provider: Never log a launch in as an existing account found by its email</li>
+        <li>[2026-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/e96da54fd63d">e96da54f</a>) Security: Agenda: Only allow inviting contacts to a personal event unless messaging all users is allowed</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/5e85aaa63454">5e85aaa6</a>) Security: Update spomky-labs/otphp to 11.4 to fix its security advisories</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/97a065fb2499">97a065fb</a>) Security: Link: Reject IPv4-mapped IPv6 addresses of private ranges in the link checker on PHP 8.2</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/e5c7da50d681">e5c7da50</a>) Security: Update the dependencies that have a fixed release for their security advisories</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/bd3ec7dd12b6">bd3ec7dd</a>) Security: Glossary: Create, import and export terms in the authorized course</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/d2385888be09">d2385888</a>) Security: Announcements: Require a token to reorder announcements and to delete them from the grid</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/a946ec864571">a946ec86</a>) Security: Announcements: Require edit rights, a token and the current course to delete, hide or remove attachments</li>
+        <li>[2026-10-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/ac7b9bb13915">ac7b9bb1</a>) Security: Prevent DNS rebinding in link checker</li>
+        <li>[2026-10-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/345427654f9f">34542765</a>) Security: Neutralize formulas in CSV exports</li>
+        <li>[2026-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/dc3867a05d81">dc3867a0</a>) Security: Harden social profile URL checks</li>
+        <li>[2026-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/24f3277b1bc5">24f3277b</a>) Security: Escape the course title in the user information, course subscription and course edit pages</li>
+        <li>[2026-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/771530b82f9f">771530b8</a>) Security: Protect annotation attempt answers</li>
+        <li>[2026-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/2cc876e7fc90">2cc876e7</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9255">GH#9255</a>) Security: Missing authorization lets any authenticated user create events in any course agenda and in the global agenda</li>
+        <li>[2026-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/114d133e1c2c">114d133e</a>) Security: Agenda: Sanitize the event content with the student profile before it reaches the browser</li>
+        <li>[2026-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/f12a6ae4b683">f12a6ae4</a>) Security: Harden HTML event attribute filtering</li>
+        <li>[2026-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/a5b54fc0fb2e">a5b54fc0</a>) Security: Fix SQL injection in LP progress save</li>
+        <li>[2026-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/58847a099ffb">58847a09</a>) Security: Set a random password only for new users in the SSO authenticators</li>
+        <li>[2026-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/54766e0c627e">54766e0c</a>) Security: Use a random password for SCIM-provisioned users</li>
+        <li>[2026-10-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/71c62f519b32">71c62f51</a>) Security: Skills: Escape the skill name, code and description where they are printed</li>
+        <li>[2026-10-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/dd3e4d32971e">dd3e4d32</a>) Security: Ticket: Sanitize the project title and description on output</li>
+        <li>[2026-10-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/61a749143a3f">61a74914</a>) Security: Forum: Reject threads and posts that do not belong to the forum of the current course</li>
+        <li>[2026-10-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/24d0b4257b2f">24d0b425</a>) Security: Paid or restricted session enrollment bypass through catalog subscription action</li>
+        <li>[2026-10-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/3e09b176c07f">3e09b176</a>) Security: Work: Keep the documents attached to an assignment inside its course</li>
+        <li>[2026-10-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/4e37882b43f7">4e37882b</a>) Security: XApi: Block private-network LRS URLs set by teachers and hide upstream responses</li>
+        <li>[2026-10-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/695f72f39d84">695f72f3</a>) Security: Link: Keep the links API inside the current course</li>
+        <li>[2026-10-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/a8b1d29192be">a8b1d291</a>) Security: HR or Student Boss can enroll arbitrary users into arbitrary sessions</li>
+        <li>[2026-10-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/2dbf06bca993">2dbf06bc</a> - <a href="https://task.beeznest.com/issues/23728">BT#23728</a>) Security: Let session-only students read base-course files without context</li>
+        <li>[2026-09-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/c6bf35f16345">c6bf35f1</a>) Security: Bind the resource read fallback to real course access</li>
+        <li>[2026-09-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/3827ccb496b0">3827ccb4</a>) Security: Reject a parent resource node outside the current course</li>
+        <li>[2026-08-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/24acdca47bf9">24acdca4</a>) Security: Keep peer students from editing or deleting a submission</li>
+        <li>[2026-08-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/5ab96f535a72">5ab96f53</a>) Security: Restrict session subscription creation to self-service student enrolment</li>
+        <li>[2026-08-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/dd8e2ad9307d">dd8e2ad9</a> - <a href="https://task.beeznest.com/issues/23638">BT#23638</a>) Security: Fix unwanted registration when terms enabled</li>
+        <li>[2026-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/42f2acc7e85d">42f2acc7</a>) Security: Restrict SessionRelCourseRelUser API operations and scope its collection</li>
+        <li>[2026-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/c89c730d40eb">c89c730d</a>) Security: Scope exercise results, tracking rows and user skills to their owner</li>
+        <li>[2026-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/f6730b186289">f6730b18</a>) Security: Scope the UserRelUser collection to the caller's own relations</li>
+    </ul>
+
+    <h3>Changed</h3>
+    <ul aria-live="off">
+        <li>[2026-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/c13e67850839">c13e6785</a>) Forum: Quote the qualify column, a reserved word since MySQL 8.4, in the forum grading queries</li>
+        <li>[2026-10-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/df3d88a78f52">df3d88a7</a>) Vendor: Bump symfony/mime from 6.4.46 to 6.4.49</li>
+        <li>[2026-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/1d42e1221f78">1d42e122</a>) Learnpath: Remove the unused forum thread loader of the learning path view</li>
+        <li>[2026-10-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/b22b533b9034">b22b533b</a>) Learnpath: Only add or reorder items whose parent and resource belong to the current learning path and course</li>
+        <li>[2026-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/34cf9ca1b04a">34cf9ca1</a>) Vendor: Bump enshrined/svg-sanitize from 0.22.0 to 1.1.1</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/1a48cf9d9119">1a48cf9d</a>) QA: Use the Yarn version pinned by the project in the PHPUnit workflow</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/2327f05bcee6">2327f05b</a>) Glossary: Delete the export file after sending it and escape the terms in the PDF export</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/97090b4a0271">97090b4a</a>) QA: Remove the imports the ported tests left unused</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/53258aeae779">53258aea</a>) QA: Match the quiz and course tool assertions to what 2.0 does</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/1664e2df3548">1664e2df</a>) QA: Create the course event inside the course context, as the 2.0 frontend does</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/402ee9fe42cf">402ee9fe</a>) QA: Adapt the document and tool introduction API tests to the cid that 2.0 requires</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/29d0ef299875">29d0ef29</a>) QA: Update users and sessions with PUT, the only update operation they have in 2.0</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/30de64ab29c7">30de64ab</a>) QA: Expect the 201 that the glossary export to documents answers</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/455908c71e44">455908c7</a>) QA: Map the API Platform 3 parameter validation exceptions to a 400 response</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/b178e46760a9">b178e467</a>) QA: Fix Psalm parameter name mismatch in the calendar event normalizer</li>
+        <li>[2026-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/a5cb09387d67">a5cb0938</a>) QA: Let the workflows boot the kernel without a database</li>
+        <li>[2026-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/dece0178526b">dece0178</a>) QA: Create the course event as a course teacher and cover the denial to a non-member</li>
+        <li>[2026-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/51ab365468a6">51ab3654</a>) QA: Fix Psalm errors in template and student publication controllers</li>
+        <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/aa939619625b">aa939619</a>) Mail: Give up instead of dying when no sender address is configured</li>
+        <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/228ba76af693">228ba76a</a>) QA: Ask for the receiver relation by type, not by row order</li>
+        <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/9d6eae938e52">9d6eae93</a>) QA: Retire the last batch of CoreBundle assertions the code outgrew</li>
+        <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/897140d9e2f6">897140d9</a>) Tests: Stop two tests from asserting things that cannot hold</li>
+        <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/4c46cdf7bf50">4c46cdf7</a>) QA: Drop the PHPUnit tests that only re-check Doctrine</li>
+        <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/543599cf37e1">543599cf</a>) QA: Fix three more assertions the code no longer satisfies</li>
+        <li>[2026-09-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/75bca69cd53f">75bca69c</a>) Tests: Retire assertions the current behaviour no longer matches</li>
+        <li>[2026-09-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/4dd71d877007">4dd71d87</a>) QA: Assert count deltas instead of absolute totals</li>
+        <li>[2026-08-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/599246ed8b55">599246ed</a> - <a href="https://task.beeznest.com/issues/23605">BT#23605</a>) Internal: Quiz: Forum: fix double origin=&amp;origin= in URL that breaks AJAX URL creation</li>
+        <li>[2026-08-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/fdf9abcfe54c">fdf9abcf</a>) Internal: Write resource tracking events inside the flush transaction</li>
+        <li>[2026-08-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/e5d319eff6d6">e5d319ef</a>) Internal: avoid nested flush() re-entrancy on resource deletion</li>
+        <li>[2026-04-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/7853823cfe45">7853823c</a>) QA: Fix tests to check UI language</li>
+    </ul>
+
+    <h3>Fixed</h3>
+    <ul aria-live="off">
+        <li>[2026-10-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/c41cb95c01b3">c41cb95c</a>) Calendar: Fix the encoding of the user filter in the agenda AJAX URL</li>
+        <li>[2026-10-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/0f6a578bb32d">0f6a578b</a>) Calendar: Fix group calendar events being listed to users without access to that group calendar</li>
+        <li>[2026-09-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/0b16d1b36ccf">0b16d1b3</a>) Maintenance: Fix fatal errors that broke the IMS Common Cartridge export</li>
+        <li>[2026-07-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/91b03c87c974">91b03c87</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/8661">GH#8661</a>) Internal: Fix 'login as' admin/hrm</li>
+    </ul>
 
     <a id="2.0.3"></a>
     <h1>Chamilo 2.0.3 - Axbridge, 2026-06-29</h1>

@@ -544,10 +544,6 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             default => false,
         };
 
-        if (true === $pageResultConfiguration['hideExpectedAnswers']) {
-            $showExpectedAnswers = false;
-        }
-
         $showOnlyCorrectAnswers = self::RESULT_SHOW_ONLY_IN_CORRECT_ANSWER === $resultsDisabled;
         $showFeedback = self::FEEDBACK_TYPE_EXAM !== $feedbackType && match ($resultsDisabled) {
             self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS,
@@ -558,6 +554,12 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK => true,
             default => false,
         };
+
+        // Applied after the feedback: in 1.11 this option only hides the expected answers
+        // column, the teacher's comments stay visible.
+        if (true === $pageResultConfiguration['hideExpectedAnswers']) {
+            $showExpectedAnswers = false;
+        }
 
         $showQuestionScore = $showScore
             && $showQuestionDetails

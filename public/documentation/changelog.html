@@ -50,7 +50,7 @@
     </div>
 
     <a id="2.0.4"></a>
-    <h1>Chamilo 2.0.4 - Portchester, 2026-11-02</h1>
+    <h1>Chamilo 2.0.4 - Portchester, 2026-11-03</h1>
     <h3>Release notes - summary</h3>
     <p>
         Fourth patch release of Chamilo 2.0. Like 2.0.3, this is mostly a security-focused
@@ -66,8 +66,10 @@
         neutralized formulas in CSV exports, random passwords for SSO/SCIM-provisioned
         accounts, and updated dependencies with security advisories. It also fixes forum
         grading on MySQL 8.4+ and when a thread is graded again, brings back the company
-        reports for student bosses, fixes a few calendar and export bugs, and brings the
-        automated test suite back in line with Chamilo 2.0.
+        reports for student bosses, fixes the saving of learning path progress and the
+        editor's template list, fixes a few calendar and export bugs, makes the installer
+        explain how to solve a server that forbids PCRE JIT (a frequent cause of an HTTP 500
+        error on start), and brings the automated test suite back in line with Chamilo 2.0.
     </p>
 
     <h3>Security fixes</h3>
@@ -146,6 +148,7 @@
 
     <h3>Changed</h3>
     <ul aria-live="off">
+        <li>[2026-11-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/baa4aa1fb9fc">baa4aa1f</a>) Template: Add the language filter helpers that the templates endpoint calls</li>
         <li>[2026-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/bdaf29c6ec56">bdaf29c6</a>) Tracking: Let student bosses use the company reports again</li>
         <li>[2026-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/c13e67850839">c13e6785</a>) Forum: Quote the qualify column, a reserved word since MySQL 8.4, in the forum grading queries</li>
         <li>[2026-10-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/df3d88a78f52">df3d88a7</a>) Vendor: Bump symfony/mime from 6.4.46 to 6.4.49</li>
@@ -181,6 +184,9 @@
 
     <h3>Fixed</h3>
     <ul aria-live="off">
+        <li>[2026-11-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/34e59cd2f96a">34e59cd2</a>) Learnpath: Fix the learning path progress save that used a c_id column c_lp_item_view does not have</li>
+        <li>[2026-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/9db044d3f7fe">9db044d3</a>) Install: Explain how to solve a PCRE JIT allocation failure instead of ending in a 500 error</li>
+        <li>[2026-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/63181d4e1dde">63181d4e</a>) Install: Disable PCRE JIT in the Apache template and in the installation guide</li>
         <li>[2026-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/38f0cd80d93d">38f0cd80</a>) Forum: Fix the score history INSERT that had one value less than columns</li>
         <li>[2026-11-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/3af76ec8fccd">3af76ec8</a>) Fix: Use the session title column in CourseManager::get_courses_list_by_user_id()</li>
         <li>[2026-10-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/c41cb95c01b3">c41cb95c</a>) Calendar: Fix the encoding of the user filter in the agenda AJAX URL</li>

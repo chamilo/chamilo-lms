@@ -512,6 +512,12 @@ switch ($action) {
                 null
             );
             $supervisorStudents = array_column($supervisorStudents, 'user_id');
+            // A student boss who follows no student must get nothing: an empty filter
+            // would make the query below return every user of the platform.
+            if (empty($supervisorStudents)) {
+                $count = 0;
+                break;
+            }
 
             //get students with course or session
             $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(

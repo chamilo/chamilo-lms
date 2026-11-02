@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Er du sikker p\u00e5, at du vil slette den valgte besked?",
     "Audio comment": "Lydkommentar",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Gemt."
+    "Saved.": "Gemt.",
+    "You have tried to resolve this exercise earlier": "Du har tidligere fors\u00f8gt at l\u00f8se denne opgave",
+    "Disable new test attempts": "Deaktiv\u00e9r nye testfors\u00f8g"
 }

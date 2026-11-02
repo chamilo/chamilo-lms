@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Jste si jisti, \u017ee chcete smazat vybranou zpr\u00e1vu?",
     "Audio comment": "Audio koment\u00e1\u0159",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Ulo\u017eeno."
+    "Saved.": "Ulo\u017eeno.",
+    "You have tried to resolve this exercise earlier": "Toto cvi\u010den\u00ed jste ji\u017e d\u0159\u00edve \u0159e\u0161ili",
+    "Disable new test attempts": "Vypnout nov\u00e9 pokusy test\u016f"
 }

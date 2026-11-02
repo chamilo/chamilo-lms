@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Est\u00e0 segur que desitja esborrar aquest missatge?",
     "Audio comment": "\u00c0udio amb comentari",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Desat."
+    "Saved.": "Desat.",
+    "You have tried to resolve this exercise earlier": "Ja heu intentat resoldre aquesta pregunta anteriorment",
+    "Disable new test attempts": "Desactiva nous intents de test"
 }

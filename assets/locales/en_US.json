@@ -4661,5 +4661,7 @@
     "Are you sure you want to disable the selected accounts?": "Are you sure you want to disable the selected accounts?",
     "Disabled users cannot sign in until an administrator reactivates their account.": "Disabled users cannot sign in until an administrator reactivates their account.",
     "SVG only (maximum 256 KB)": "SVG only (maximum 256 KB)",
-    "Saved.": "Saved."
+    "Saved.": "Saved.",
+    "You have tried to resolve this exercise earlier": "You have tried to resolve this exercise earlier",
+    "Disable new test attempts": "Disable new test attempts"
 }

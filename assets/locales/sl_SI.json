@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Ste prepri\u010dani, da \u017eelite odstraniti izbrana sporo\u010dila?",
     "Audio comment": "Govore\u010da stran",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Shranjeno."
+    "Saved.": "Shranjeno.",
+    "You have tried to resolve this exercise earlier": "Ta test ste predhodno \u017ee poskusili re\u0161iti",
+    "Disable new test attempts": "Onemogo\u010di nove poskuse testov"
 }

@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Sunte\u021bi sigur c\u0103 dori\u021bi s\u0103 \u0219terge\u021bi acest mesaj?",
     "Audio comment": "Comentariu audio",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Pastrat."
+    "Saved.": "Pastrat.",
+    "You have tried to resolve this exercise earlier": "A incercat sa rezolve aceasta intrebare inainte",
+    "Disable new test attempts": "Dezactiva\u021bi noile \u00eencerc\u0103ri de test"
 }

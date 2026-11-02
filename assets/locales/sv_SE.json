@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "\u00c4r du s\u00e4ker p\u00e5 att du vill radera markerat meddelande?",
     "Audio comment": "Ljudkommentar",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Sparad."
+    "Saved.": "Sparad.",
+    "You have tried to resolve this exercise earlier": "Du har tidigare f\u00f6rs\u00f6kt l\u00f6sa denna \u00f6vning",
+    "Disable new test attempts": "Inaktivera nya testf\u00f6rs\u00f6k"
 }

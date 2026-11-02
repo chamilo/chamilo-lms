@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Sei sicuro di voler eliminare il messaggio?",
     "Audio comment": "Pagina audio",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Salvato"
+    "Saved.": "Salvato",
+    "You have tried to resolve this exercise earlier": "Hai da poco tentato di risolvere questo esercizio",
+    "Disable new test attempts": "Disabilita nuovi tentativi test"
 }

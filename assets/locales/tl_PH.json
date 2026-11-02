@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Sigurado ka bang gusto mong burahin ang napiling mensahe?",
     "Audio comment": "Komento sa audio",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Nai-save."
+    "Saved.": "Nai-save.",
+    "You have tried to resolve this exercise earlier": "Sinubukan mo nang lutasin ang ehersisyong ito kanina",
+    "Disable new test attempts": "Hindi i-enable ang mga bagong attempt ng pagsusulit"
 }

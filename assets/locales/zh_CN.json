@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "\u60a8\u786e\u5b9a\u8981\u5220\u9664\u9009\u5b9a\u6d88\u606f\u5417\uff1f",
     "Audio comment": "\u97f3\u9891\u6ce8\u91ca",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "\u5df2\u4fdd\u5b58\u3002"
+    "Saved.": "\u5df2\u4fdd\u5b58\u3002",
+    "You have tried to resolve this exercise earlier": "\u60a8\u4e4b\u524d\u5df2\u5c1d\u8bd5\u5b8c\u6210\u6b64\u7ec3\u4e60",
+    "Disable new test attempts": "\u7981\u7528\u65b0\u6d4b\u8bd5\u5c1d\u8bd5"
 }

@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Je, una uhakika unataka kufuta ujumbe uliochaguliwa?",
     "Audio comment": "Maoni ya sauti",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Imehifadhiwa."
+    "Saved.": "Imehifadhiwa.",
+    "You have tried to resolve this exercise earlier": "Umejaribu kutatua zoezi hili mapema",
+    "Disable new test attempts": "Zima majaribio mapya ya jaribio"
 }

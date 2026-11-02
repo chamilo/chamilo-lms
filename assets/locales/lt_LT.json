@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Ar tikrai norite i\u0161trinti pa\u017eym\u0117t\u0105 prane\u0161im\u0105?",
     "Audio comment": "Garso komentaras",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "\u012era\u0161yta."
+    "Saved.": "\u012era\u0161yta.",
+    "You have tried to resolve this exercise earlier": "J\u016bs jau band\u0117te i\u0161spr\u0119sti \u0161i\u0105 u\u017eduot\u012f anks\u010diau",
+    "Disable new test attempts": "I\u0161jungti naujus testo bandymus"
 }

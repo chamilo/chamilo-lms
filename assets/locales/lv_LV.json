@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "J\u016bs esat p\u0101rliecin\u0101ts par v\u0113lmi dz\u0113st iez\u012bm\u0113t\u0101s v\u0113stules?",
     "Audio comment": "Audio koment\u0101rs",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Saglab\u0101ts"
+    "Saved.": "Saglab\u0101ts",
+    "You have tried to resolve this exercise earlier": "J\u016bs jau m\u0113\u0123in\u0101j\u0101t atbild\u0113t uz \u0161o jaut\u0101jumu agr\u0101k",
+    "Disable new test attempts": "Atsp\u0113jot jaunus testa m\u0113\u0123in\u0101jumus"
 }

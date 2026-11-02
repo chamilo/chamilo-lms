@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Biztosan t\u00f6r\u00f6lni akarja a kiv\u00e1lasztott \u00fczenetet?",
     "Audio comment": "Hang komment\u00e1r",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Mentve."
+    "Saved.": "Mentve.",
+    "You have tried to resolve this exercise earlier": "Ezt a feladatot kor\u00e1bban m\u00e1r megpr\u00f3b\u00e1lta megoldani",
+    "Disable new test attempts": "\u00daj tesztk\u00eds\u00e9rletek letilt\u00e1sa"
 }

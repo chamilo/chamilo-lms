@@ -4613,5 +4613,7 @@
     "Are you sure you want to delete the selected message?": "Ben je zeker dat je het geselecteerde bericht wil verwijderen?",
     "Audio comment": "Audio commentaar",
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
-    "Saved.": "Opgeslagen"
+    "Saved.": "Opgeslagen",
+    "You have tried to resolve this exercise earlier": "U hebt vroeger al geprobeerd om deze oefening op te doen",
+    "Disable new test attempts": "Nieuwe oefenpogingen uitschakelen"
 }

@@ -55,7 +55,9 @@
 
     <div
       v-if="successMessage || meeting.message"
+      ref="successMessageBox"
       class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
+      tabindex="-1"
     >
       {{ successMessage || t(meeting.message) }}
     </div>
@@ -360,7 +362,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref, watch } from "vue"
+import { computed, nextTick, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -408,6 +410,7 @@ const isSaving = ref(false)
 const formSubmitted = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
+const successMessageBox = ref(null)
 // Survives the reload triggered by the redirect after saving, which otherwise clears successMessage.
 let successMessageAfterLoad = ""
 
@@ -716,4 +719,14 @@ watch(
   () => [route.params.surveyId, route.name, route.query],
   () => loadMeeting(),
 )
+
+// Move the focus to the confirmation so the user sees it, even when the save button is far below.
+watch(successMessage, async (message) => {
+  if (!message) {
+    return
+  }
+
+  await nextTick()
+  successMessageBox.value?.focus()
+})
 </script>

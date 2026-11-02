@@ -4639,5 +4639,6 @@
     "Color theme (preview)": "Tema de colores (vista previa)",
     "The themes storage is not writable. Check its file permissions before saving.": "No se puede escribir en el almacenamiento de temas. Comprueba los permisos de sus archivos antes de guardar.",
     "Audio comment": "Audio con comentario",
-    "The recording will be saved with the correction.": "The recording will be saved with the correction."
+    "The recording will be saved with the correction.": "The recording will be saved with the correction.",
+    "Saved.": "Guardado."
 }

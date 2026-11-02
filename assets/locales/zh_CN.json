@@ -4612,5 +4612,6 @@
     "Message Sent": "\u6d88\u606f\u5df2\u53d1\u9001",
     "Are you sure you want to delete the selected message?": "\u60a8\u786e\u5b9a\u8981\u5220\u9664\u9009\u5b9a\u6d88\u606f\u5417\uff1f",
     "Audio comment": "\u97f3\u9891\u6ce8\u91ca",
-    "The recording will be saved with the correction.": "The recording will be saved with the correction."
+    "The recording will be saved with the correction.": "The recording will be saved with the correction.",
+    "Saved.": "\u5df2\u4fdd\u5b58\u3002"
 }

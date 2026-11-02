@@ -1267,7 +1267,7 @@ class SurveyUtil
                 true
             );
             foreach ($user_fields_values as &$value) {
-                $content .= '<td align="center">'.$value.'</td>';
+                $content .= '<td align="center">'.Security::remove_XSS($value).'</td>';
             }
         }
 
@@ -1276,7 +1276,7 @@ class SurveyUtil
                 if ('open' === $questions[$question_id]['type'] || 'comment' === $questions[$question_id]['type']) {
                     $content .= '<td align="center">';
                     if (isset($answers_of_user[$question_id]) && isset($answers_of_user[$question_id]['0'])) {
-                        $content .= $answers_of_user[$question_id]['0']['option_id'];
+                        $content .= Security::remove_XSS($answers_of_user[$question_id]['0']['option_id']);
                     }
                     $content .= '</td>';
                 } else {

@@ -73,7 +73,7 @@ if (!empty($userInfo)) {
 // -----------------------------------------------------------------------------
 // Required params
 // -----------------------------------------------------------------------------
-if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET['user_id'])) {
+if (!isset($_GET['course']) || !isset($_GET['invitationcode'])) {
     api_not_allowed(true, get_lang('There is a parameter missing in the link. Please use copy and past'));
 }
 
@@ -116,7 +116,7 @@ if ('auto' === $invitationCode) {
     $surveyCode = $survey->getCode();
 
     if ($isAnonymous) {
-        $autoInvitationCode = 'auto-ANONY_'.md5(time())."-$surveyCode";
+        $autoInvitationCode = 'auto-ANONY_'.api_generate_secure_token(16)."-$surveyCode";
     } else {
         $invitations = SurveyManager::getUserInvitationsForSurveyInCourse(
             $userid,
@@ -176,6 +176,22 @@ if (Database::num_rows($result) < 1) {
 $survey_invitation = Database::fetch_assoc($result);
 $surveyUserFromSession = Session::read('surveyuser');
 
+$invitedUser = (string) ($survey_invitation['user_id'] ?? '');
+$currentUserId = (int) api_get_user_id();
+// Whether the request really comes from the person the invitation was issued to.
+$isInvitedUser = $currentUserId > 0 && (string) $currentUserId === $invitedUser;
+// The "auto" invitation codes are derived from public data (the user id and the survey code),
+// so, unlike the random codes sent by mail, they cannot act as a shared secret. When such a
+// code belongs to a platform user, only that very user is allowed to use it. Codes issued to
+// non-authenticated visitors (user 0) carry no identity to check against.
+if (0 === strpos((string) $survey_invitation['invitation_code'], 'auto-')
+    && ctype_digit($invitedUser)
+    && (int) $invitedUser > 0
+    && !$isInvitedUser
+) {
+    api_not_allowed(true, get_lang('Wrong invitation code'));
+}
+
 // Determine the correct key used to store/load answers.
 // - Non-anonymous surveys use the numeric user_id from the invitation.
 // - Anonymous surveys store answers under a per-session identifier ("surveyuser").
@@ -199,7 +215,7 @@ if (
     && 3 !== $survey->getSurveyType()
     && (
         ($isAnonymous && !empty($surveyUserFromSession) && SurveyUtil::isSurveyAnsweredFlagged($survey->getCode(), $survey_invitation['c_id']))
-        || (1 == $survey_invitation['answered'] && !isset($_GET['user_id']))
+        || (1 == $survey_invitation['answered'] && !($isInvitedUser && isset($_GET['user_id'])))
     )
 ) {
     api_not_allowed(true, Display::return_message(get_lang('You already filled this survey')));

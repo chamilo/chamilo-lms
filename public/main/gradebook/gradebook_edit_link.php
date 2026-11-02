@@ -16,15 +16,23 @@ $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $em = Database::getManager();
 
-$linkarray = LinkFactory :: load($_GET['editlink']);
+// The link to edit is always a database id: never trust the value coming from the URL as-is.
+$linkId = isset($_GET['editlink']) ? (int) $_GET['editlink'] : 0;
+$linkarray = LinkFactory :: load($linkId);
+if (empty($linkarray)) {
+    api_not_allowed(true);
+}
 /** @var AbstractLink $link */
 $link = $linkarray[0];
+// The link has to belong to the course of the request.
+if (!api_is_platform_admin() && (int) $link->getCourseId() !== (int) $course_id) {
+    api_not_allowed(true);
+}
 if ($link->is_locked() && !api_is_platform_admin()) {
     api_not_allowed();
 }
 
 $linkcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
-$linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']) : '';
 $course_code = api_get_course_id();
 $session_id = api_get_session_id();
 
@@ -48,7 +56,7 @@ $form = new LinkAddEditForm(
     null,
     $link,
     'edit_link_form',
-    api_get_self().'?selectcat='.$linkcat.'&editlink='.$linkedit.'&'.api_get_cidreq()
+    api_get_self().'?selectcat='.$linkcat.'&editlink='.$linkId.'&'.api_get_cidreq()
 );
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -67,7 +75,7 @@ if ($form->validate()) {
 
     //Update weight for attendance
     $sql = 'SELECT ref_id FROM '.$tbl_grade_links.'
-            WHERE id = '.intval($_GET['editlink']).' AND type='.LINK_ATTENDANCE;
+            WHERE id = '.$linkId.' AND type='.LINK_ATTENDANCE;
     $rs_attendance = Database::query($sql);
     if (Database::num_rows($rs_attendance) > 0) {
         $row_attendance = Database::fetch_array($rs_attendance);
@@ -84,7 +92,7 @@ if ($form->validate()) {
             WHERE
 			    iid = (
                     SELECT ref_id FROM '.$tbl_grade_links.'
-			        WHERE id='.intval($_GET['editlink']).' AND type = 5
+			        WHERE id='.$linkId.' AND type = 5
             )';
     Database::query($sql);
 
@@ -100,7 +108,7 @@ if ($form->validate()) {
         ')
         ->execute([
             'final_weight' => $final_weight,
-            'link' => intval($_GET['editlink']),
+            'link' => $linkId,
             'type' => LINK_STUDENTPUBLICATION,
         ]);
 

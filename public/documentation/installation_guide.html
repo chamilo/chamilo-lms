@@ -212,6 +212,7 @@ vim [my.chamilo.local].conf
     php_value upload_max_filesize 100M
     php_value post_max_size 100M
     php_value memory_limit 128M
+    php_value pcre.jit 0
     #php_value session.save_handler "redis"
     #php_value session.save_path "tcp://127.0.0.1:6379"
 &lt;/VirtualHost&gt;</pre>
@@ -326,6 +327,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
     opcache.enable = 1
     opcache.memory_consumption = 128
     opcache.max_accelerated_files = 10000
+    pcre.jit = 0
     #...
     extension=sodium
 </pre>

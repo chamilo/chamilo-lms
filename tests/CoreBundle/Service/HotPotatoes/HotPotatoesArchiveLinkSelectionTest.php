@@ -29,7 +29,7 @@ final class HotPotatoesArchiveLinkSelectionTest extends TestCase
         $current = (new ResourceLink())->setCourse($course);
         $foreign = (new ResourceLink())->setCourse($otherCourse);
         $deleted = (new ResourceLink())->setCourse($course)->setDeletedAt(new DateTime());
-        $node->setResourceLinks(new ArrayCollection([$foreign, $deleted, $current]));
+        $node->setResourceLinks($this->links($foreign, $deleted, $current));
 
         $service = (new ReflectionClass(HotPotatoesArchiveService::class))->newInstanceWithoutConstructor();
         self::assertSame($current, $service->findExactActiveLink($document, $course, null, null));
@@ -42,10 +42,10 @@ final class HotPotatoesArchiveLinkSelectionTest extends TestCase
     public function testDuplicateActiveLinksAreNotEditable(): void
     {
         $course = $this->course(13);
-        $document = (new CDocument())->setResourceNode((new ResourceNode())->setResourceLinks(new ArrayCollection([
+        $document = (new CDocument())->setResourceNode((new ResourceNode())->setResourceLinks($this->links(
             (new ResourceLink())->setCourse($course),
             (new ResourceLink())->setCourse($course),
-        ])));
+        )));
 
         $service = (new ReflectionClass(HotPotatoesArchiveService::class))->newInstanceWithoutConstructor();
         self::assertNull($service->findExactActiveLink($document, $course, null, null));
@@ -57,5 +57,13 @@ final class HotPotatoesArchiveLinkSelectionTest extends TestCase
         (new ReflectionProperty(Course::class, 'id'))->setValue($course, $id);
 
         return $course;
+    }
+
+    /**
+     * @return ArrayCollection<int, ResourceLink>
+     */
+    private function links(ResourceLink ...$links): ArrayCollection
+    {
+        return new ArrayCollection($links);
     }
 }

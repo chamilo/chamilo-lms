@@ -3966,6 +3966,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'tracking' => [
                 [
+                    'name' => 'recycle_bin_retention_hours',
+                    'title' => 'Recycle bin retention (hours)',
+                    'comment' => 'Minimum age in hours before deleted exercise attempts and learning path progress can be permanently purged. The cleanup command runs in preview mode unless --execute is provided.',
+                ],
+                [
                     'name' => 'maximum_inactive_time_to_consider',
                     'title' => 'Maximum inactive time to consider (minutes)',
                     'comment' => 'A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted.',

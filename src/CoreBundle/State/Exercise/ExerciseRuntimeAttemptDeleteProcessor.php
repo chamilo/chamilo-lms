@@ -12,8 +12,10 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeAttemptDelete;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptRecycleBin;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -43,6 +45,7 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
         private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private ExerciseAttemptRecycleBin $recycleBin,
     ) {}
 
     /**
@@ -82,14 +85,17 @@ final readonly class ExerciseRuntimeAttemptDeleteProcessor implements ProcessorI
 
         $attempt = $this->getAttempt($attemptId, $quiz, $course, $session);
 
-        $this->entityManager->remove($attempt);
-        $this->entityManager->flush();
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            throw new AccessDeniedHttpException('An authenticated teacher is required.');
+        }
+        $this->recycleBin->archiveAndDelete([$attempt], (int) $user->getId());
 
         $response = new ExerciseRuntimeAttemptDelete();
         $response->exerciseId = $exerciseId;
         $response->attemptId = $attemptId;
         $response->success = true;
-        $response->message = 'Attempt deleted';
+        $response->message = 'Attempt moved to recycle bin';
 
         return $response;
     }

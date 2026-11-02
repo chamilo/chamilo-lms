@@ -12,8 +12,10 @@ use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseRuntimeReportBulkAction;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptRecycleBin;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptScoringService;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -52,6 +54,7 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
         private SettingsManager $settingsManager,
         private ExerciseAttemptScoringService $scoringService,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private ExerciseAttemptRecycleBin $recycleBin,
     ) {}
 
     /**
@@ -122,15 +125,16 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
         }
 
         $attempts = $this->getAttempts($quiz, $course, $session, $attemptIds);
-        foreach ($attempts as $attempt) {
-            $this->entityManager->remove($attempt);
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            throw new AccessDeniedHttpException('An authenticated teacher is required.');
         }
-        $this->entityManager->flush();
+        $this->recycleBin->archiveAndDelete($attempts, (int) $user->getId());
 
         $processedCount = \count($attempts);
         $failedCount = \count($attemptIds) - $processedCount;
 
-        return $this->buildResponse($data, true, 'Attempts deleted', $processedCount, max(0, $failedCount));
+        return $this->buildResponse($data, true, 'Attempts moved to recycle bin', $processedCount, max(0, $failedCount));
     }
 
     private function cleanBeforeDate(ExerciseRuntimeReportBulkAction $data, CQuiz $quiz, Course $course, ?Session $session): ExerciseRuntimeReportBulkAction
@@ -141,12 +145,13 @@ final readonly class ExerciseRuntimeReportBulkActionProcessor implements Process
 
         $beforeDate = $this->getValidBeforeDate($data->beforeDate);
         $attempts = $this->getAttemptsBeforeDate($quiz, $course, $session, $beforeDate);
-        foreach ($attempts as $attempt) {
-            $this->entityManager->remove($attempt);
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            throw new AccessDeniedHttpException('An authenticated teacher is required.');
         }
-        $this->entityManager->flush();
+        $this->recycleBin->archiveAndDelete($attempts, (int) $user->getId());
 
-        return $this->buildResponse($data, true, 'Results cleaned', \count($attempts), 0);
+        return $this->buildResponse($data, true, 'Results moved to recycle bin', \count($attempts), 0);
     }
 
     private function recalculateAll(ExerciseRuntimeReportBulkAction $data, CQuiz $quiz, Course $course, ?Session $session): ExerciseRuntimeReportBulkAction

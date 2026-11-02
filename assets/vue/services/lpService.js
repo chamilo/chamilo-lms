@@ -382,6 +382,19 @@ const resetReporting = async (lpId, params, payload) =>
     },
   )
 
+/** Loads recoverable learning path reporting resets for the current course context. */
+const getTrackingRecycleBin = async (lpId, params = {}) =>
+  await baseService.get(`/api/learning_paths/${lpId}/reporting/recycle-bin`, cleanParams(params))
+
+/** Restores an archived learner's learning path progress. */
+const restoreTrackingRecycleBin = async (lpId, archiveId, params = {}) =>
+  await baseService.post(
+    `/api/learning_paths/${lpId}/reporting/recycle-bin/${archiveId}/restore`,
+    {},
+    {},
+    { params: cleanParams(params) },
+  )
+
 /** Recalculates quiz attempts linked to one learner in the learning path. */
 const recalculateReporting = async (lpId, params, payload) =>
   await baseService.post(
@@ -552,6 +565,8 @@ export default {
   saveCategorySubscriptions,
   getReporting,
   resetReporting,
+  getTrackingRecycleBin,
+  restoreTrackingRecycleBin,
   recalculateReporting,
   buildReportingPdfUrl,
   getContentPdfItems,

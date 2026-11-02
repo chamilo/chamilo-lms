@@ -2847,9 +2847,16 @@ class CourseRestorer
         EntityManagerInterface $em
     ): void {
         // Helper to actually persist + move file
-        $persistAttachmentFromFile = function (string $src, string $filename, ?string $comment) use ($entity, $attachRepo, $em): void {
+        $persistAttachmentFromFile = function (string $src, string $filename, ?string $comment) use ($entity, $attachRepo, $em, $originPath): void {
             if (!is_file($src) || !is_readable($src)) {
                 $this->dlog('restore_events: attachment source not readable', ['src' => $src]);
+
+                return;
+            }
+
+            // The path comes from the (possibly tampered) backup: it has to stay inside it.
+            if (!$this->isInsideBackupRoots($src, [$originPath])) {
+                $this->dlog('restore_events: attachment source outside the backup, skipped', ['src' => $src]);
 
                 return;
             }
@@ -2894,7 +2901,7 @@ class CourseRestorer
         };
 
         // modern backup fields on object
-        if (!empty($raw->attachment_path)) {
+        if (!empty($raw->attachment_path) && $this->isSafeBackupPath((string) $raw->attachment_path)) {
             $src = rtrim($originPath, '/').'/'.$raw->attachment_path;
             $filename = (string) ($raw->attachment_filename ?? basename($src));
             $comment = (string) ($raw->attachment_comment ?? '');
@@ -2912,6 +2919,9 @@ class CourseRestorer
                   AND agenda_id = '.(int) ($raw->source_id ?? 0);
             $res = Database::query($sql);
             while ($row = Database::fetch_object($res)) {
+                if (!$this->isSafeBackupPath((string) $row->path)) {
+                    continue;
+                }
                 $src = rtrim($originPath, '/').'/'.$row->path;
                 $persistAttachmentFromFile($src, (string) $row->filename, (string) $row->comment);
             }
@@ -7494,6 +7504,35 @@ class CourseRestorer
         return true;
     }
 
+    /**
+     * Tells whether a file read from a backup really is inside one of the given
+     * directories once symbolic links and ".." have been resolved, so that a
+     * tampered backup cannot make the restorer read (and attach to a resource)
+     * any other file of the server.
+     *
+     * @param string[] $roots
+     */
+    private function isInsideBackupRoots(string $file, array $roots): bool
+    {
+        $real = realpath($file);
+        if (false === $real) {
+            return false;
+        }
+
+        foreach ($roots as $root) {
+            if ('' === $root) {
+                continue;
+            }
+
+            $realRoot = realpath($root);
+            if (false !== $realRoot && str_starts_with($real, rtrim($realRoot, '/').'/')) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function extractSingleDocumentEntryFromBackupZip(
         string $rel,
         string $srcRoot,
@@ -9098,7 +9137,15 @@ class CourseRestorer
         $filename = trim((string) ($row['filename'] ?? ''));
         $assetRelPath = trim((string) ($row['asset_relpath'] ?? ''));
 
+        // These values come from the (possibly tampered) backup: no way out of it.
+        foreach ([$path, $filename, $assetRelPath] as $part) {
+            if ('' !== $part && !$this->isSafeBackupPath($part)) {
+                return null;
+            }
+        }
+
         $candidates = [];
+        $uploadBase = '';
 
         if ('' !== $originPath) {
             $originPath = rtrim($originPath, '/');
@@ -9144,7 +9191,9 @@ class CourseRestorer
                 $candidate = rtrim($candidate, '/').'/'.$filename;
             }
 
-            if (is_file($candidate) && is_readable($candidate)) {
+            if (is_file($candidate) && is_readable($candidate)
+                && $this->isInsideBackupRoots($candidate, [$originPath, $uploadBase, $backupRoot])
+            ) {
                 return $candidate;
             }
         }

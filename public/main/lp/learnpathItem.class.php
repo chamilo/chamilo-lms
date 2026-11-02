@@ -3753,8 +3753,7 @@ class learnpathItem
                 'lesson_location' => $this->lesson_location,
             ];
             $where = [
-                'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
-                    $courseId,
+                'lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
                     $this->db_id,
                     $this->view_id,
                     $this->get_attempt_id(),
@@ -3770,7 +3769,6 @@ class learnpathItem
                 'max_score' => (float) $this->get_max(),
                 'suspend_data' => $this->current_data,
                 'lesson_location' => $this->lesson_location,
-                'course_id' => (int) $courseId,
                 'lp_item_id' => (int) $this->db_id,
                 'lp_view_id' => (int) $this->view_id,
                 'view_count' => (int) $this->get_attempt_id(),
@@ -3789,7 +3787,6 @@ class learnpathItem
                             suspend_data = :suspend_data,
                             lesson_location = :lesson_location
                         WHERE
-                            c_id = :course_id AND
                             lp_item_id = :lp_item_id AND
                             lp_view_id = :lp_view_id AND
                             view_count = :view_count";
@@ -3804,7 +3801,6 @@ class learnpathItem
                             suspend_data = :suspend_data,
                             lesson_location = :lesson_location
                         WHERE
-                            c_id = :course_id AND
                             lp_item_id = :lp_item_id AND
                             lp_view_id = :lp_view_id AND
                             view_count = :view_count";

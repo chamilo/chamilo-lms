@@ -18,7 +18,7 @@ $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get
 $id_session = '';
 if (isset($_GET['id_session']) && '' != $_GET['id_session']) {
     $id_session = intval($_GET['id_session']);
-    $interbreadcrumb[] = ['url' => 'session.php', 'name' => get_lang('Course sessions')];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting/sessions', 'name' => get_lang('Course sessions')];
     $interbreadcrumb[] = ['url' => 'course.php?id_session='.$id_session.'', 'name' => get_lang('Course')];
 }
 

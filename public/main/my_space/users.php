@@ -229,7 +229,7 @@ if (api_is_hrm()) {
         ),
         Display::url(
             Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course sessions')),
-            'session.php'
+            api_get_path(WEB_PATH).'reporting/sessions'
         ),
         Display::url(
             Display::getMdiIcon(ObjectIcon::BADGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Skills')),

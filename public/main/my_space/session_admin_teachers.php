@@ -196,7 +196,7 @@ if (api_is_drh()) {
         Display::url(Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Courses')), 'course.php'),
         Display::url(
             Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sessions')),
-            'session.php'
+            api_get_path(WEB_PATH).'reporting/sessions'
         ),
     ];
 

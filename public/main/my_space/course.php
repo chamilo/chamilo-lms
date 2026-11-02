@@ -31,7 +31,7 @@ $session = api_get_session_entity($sessionId);
 $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
 
 if (isset($_GET['id_session']) && '' != $_GET['id_session']) {
-    $interbreadcrumb[] = ['url' => 'session.php', 'name' => get_lang('Course sessions')];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting/sessions', 'name' => get_lang('Course sessions')];
 }
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' == $_GET['type']) {
@@ -161,7 +161,7 @@ if (api_is_platform_admin(true, true)) {
                 ICON_SIZE_MEDIUM,
                 get_lang('Sessions')
             ),
-            api_get_path(WEB_CODE_PATH).'my_space/session.php'
+            api_get_path(WEB_PATH).'reporting/sessions'
         );
 
         // Question stats tabs (pill-style buttons)

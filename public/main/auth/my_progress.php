@@ -253,7 +253,7 @@ if (api_is_hrm()) {
                 ICON_SIZE_MEDIUM,
                 get_lang('Sessions')
             ),
-            $webCodePath.'my_space/session.php'
+            api_get_path(WEB_PATH).'reporting/sessions'
         ),
     ];
 
@@ -283,7 +283,7 @@ if (api_is_hrm()) {
                 ICON_SIZE_MEDIUM,
                 get_lang('Sessions')
             ),
-            $webCodePath.'my_space/session.php'
+            api_get_path(WEB_PATH).'reporting/sessions'
         );
     }
 }

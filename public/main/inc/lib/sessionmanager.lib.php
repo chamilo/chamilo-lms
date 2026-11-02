@@ -9243,38 +9243,6 @@ class SessionManager
         $date_operators = ['gt', 'ge', 'lt', 'le'];
 
         switch ($listType) {
-            case 'my_space':
-                $columns = [
-                    get_lang('Title'),
-                    get_lang('Date'),
-                    get_lang('Number of courses per session'),
-                    get_lang('Number of learners by session'),
-                    get_lang('Details'),
-                ];
-
-                $columnModel = [
-                    ['name' => 'title', 'index' => 'title', 'align' => 'left'],
-                    ['name' => 'date', 'index' => 'access_start_date', 'align' => 'left'],
-                    [
-                        'name' => 'course_per_session',
-                        'index' => 'course_per_session',
-                        'sortable' => 'false',
-                        'search' => 'false',
-                    ],
-                    [
-                        'name' => 'student_per_session',
-                        'index' => 'student_per_session',
-                        'sortable' => 'false',
-                        'search' => 'false',
-                    ],
-                    [
-                        'name' => 'actions',
-                        'index' => 'actions',
-                        'sortable' => 'false',
-                        'search' => 'false',
-                    ],
-                ];
-                break;
             case 'all':
             case 'active':
             case 'close':

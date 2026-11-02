@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
-use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -70,7 +69,6 @@ $adminActions = [
     'get_usergroups',
     'get_user_course_report_resumed',
     'get_user_course_report',
-    'get_sessions_tracking',
     'get_sessions',
     'get_exercise_results_report',
 ];
@@ -144,7 +142,6 @@ if ($isDiagnosisLoadSearch) {
     // (DRH) actually follows. Only these may be opened to DRH; the rest (e.g. get_sessions,
     // which lists every session on the platform) stay admin / session-admin only.
     $drhScopedActions = [
-        'get_sessions_tracking',
         'get_user_course_report',
         'get_user_course_report_resumed',
     ];
@@ -254,7 +251,6 @@ if (($search || $forceSearch) && ('false' !== $search)) {
                 'get_user_course_report',
                 'get_questions',
                 'get_sessions',
-                'get_sessions_tracking',
             ]
         )) {
             switch ($action) {
@@ -266,7 +262,6 @@ if (($search || $forceSearch) && ('false' !== $search)) {
                     $type = 'question';
                     break;
                 case 'get_sessions':
-                case 'get_sessions_tracking':
                     $type = 'session';
                     break;
             }
@@ -873,57 +868,6 @@ switch ($action) {
             $courseInfo['real_id'],
             true
         );
-        break;
-    case 'get_sessions_tracking':
-        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
-
-        $description = '';
-        $setting = api_get_setting('show_session_description');
-        if ('true' === $setting) {
-            $description = $keyword;
-        }
-
-        if (api_is_hrm() || api_is_session_admin()) {
-            $count = SessionManager::get_sessions_followed_by_hrm(
-                api_get_user_id(),
-                null,
-                null,
-                true,
-                false,
-                false,
-                null,
-                $keyword,
-                $description,
-                ['where' => $whereCondition, 'extra' => $extra_fields]
-            );
-        } elseif (api_is_session_admin()) {
-            $count = SessionManager::getSessionsFollowedByUser(
-                api_get_user_id(),
-                SESSIONADMIN,
-                null,
-                null,
-                true,
-                false,
-                false,
-                null,
-                $keyword,
-                $description,
-                ['where' => $whereCondition, 'extra' => $extra_fields]
-            );
-        } else {
-            // Sessions for the coach
-            $count = Tracking::get_sessions_coached_by_user(
-                api_get_user_id(),
-                null,
-                null,
-                true,
-                $keyword,
-                $description,
-                null,
-                null,
-                ['where' => $whereCondition, 'extra' => $extra_fields]
-            );
-        }
         break;
     case 'get_sessions':
         $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
@@ -2006,138 +1950,6 @@ switch ($action) {
             $sord
         );
         break;
-    case 'get_sessions_tracking':
-        $sessionColumns = SessionManager::getGridColumns('my_space');
-        $columns = $sessionColumns['simple_column_name'];
-
-        if (api_is_hrm()) {
-            $orderByName = Database::escape_string($sidx);
-            $orderByName = in_array($orderByName, ['title', 'access_start_date']) ? $orderByName : 'title';
-            $orderBy = " ORDER BY $orderByName $sord";
-            $sessions = SessionManager::get_sessions_followed_by_hrm(
-                api_get_user_id(),
-                $start,
-                $limit,
-                false,
-                false,
-                false,
-                $orderBy,
-                $keyword,
-                $description,
-                ['where' => $whereCondition, 'extra' => $extra_fields]
-            );
-        } elseif (api_is_session_admin()) {
-            $orderByName = Database::escape_string($sidx);
-            $orderByName = in_array($orderByName, ['title', 'access_start_date']) ? $orderByName : 'title';
-            $orderBy = " ORDER BY $orderByName $sord";
-            $sessions = SessionManager::getSessionsFollowedByUser(
-                api_get_user_id(),
-                SESSIONADMIN,
-                $start,
-                $limit,
-                false,
-                false,
-                false,
-                $orderBy,
-                $keyword,
-                $description,
-                ['where' => $whereCondition, 'extra' => $extra_fields]
-            );
-        } else {
-            $sidx = in_array($sidx, $columns) ? $sidx : 'title';
-            // Sessions for the coach
-            $sessions = Tracking::get_sessions_coached_by_user(
-                api_get_user_id(),
-                $start,
-                $limit,
-                false,
-                $keyword,
-                $description,
-                $sidx,
-                $sord,
-                ['where' => $whereCondition, 'extra' => $extra_fields]
-            );
-        }
-
-        $result = [];
-        if (!empty($sessions)) {
-            $pdfIcon = Display::getMdiIcon(
-                ActionIcon::EXPORT_PDF,
-                'ch-tool-icon',
-                null,
-                ICON_SIZE_SMALL,
-                get_lang('Certificate of achievement')
-            );
-            foreach ($sessions as $session) {
-                $sessionEntity = api_get_session_entity($session['id']);
-                if (api_hrm_can_access_all_session_content()) {
-                    $count_courses_in_session = SessionManager::get_course_list_by_session_id(
-                        $session['id'],
-                        '',
-                        null,
-                        true
-                    );
-                } else {
-                    $count_courses_in_session = count(
-                        Tracking::get_courses_followed_by_coach(
-                            api_get_user_id(),
-                            $session['id']
-                        )
-                    );
-                }
-
-                $count_users_in_session = SessionManager::get_users_by_session(
-                    $session['id'],
-                    0,
-                    true
-                );
-
-                $dateData = SessionManager::parseSessionDates($sessionEntity, true);
-                $dateToString = $dateData['access'];
-
-                $detailButtons = [];
-                $detailButtons[] = Display::url(
-                    $pdfIcon,
-                    api_get_path(WEB_CODE_PATH).'my_space/session.php?'
-                    .http_build_query(
-                        [
-                            'action' => 'export_to_pdf',
-                            'type' => 'achievement',
-                            'session_to_export' => $session['id'],
-                            'all_students' => 1,
-                        ]
-                    ),
-                    ['target' => '_blank']
-                );
-                $detailButtons[] = Display::url(
-                    Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignments report')),
-                    api_get_path(WEB_CODE_PATH).'my_space/works_in_session_report.php?session='.$session['id']
-                );
-                $detailButtons[] = Display::url(
-                    Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL,),
-                    api_get_path(WEB_CODE_PATH).'my_space/course.php?sid='.$session['id']
-                );
-
-                $item = [
-                    'title' => Display::url(
-                        $session['title'],
-                        api_get_path(WEB_CODE_PATH).'my_space/course.php?sid='.$session['id']
-                    ),
-                    'date' => $dateToString,
-                    'course_per_session' => $count_courses_in_session,
-                    'student_per_session' => $count_users_in_session,
-                    'actions' => implode(' ', $detailButtons),
-                ];
-
-                if (!empty($extra_fields)) {
-                    foreach ($extra_fields as $extraField) {
-                        $item[$extraField['field']] = $extraField['data'];
-                    }
-                }
-                $result[] = $item;
-            }
-        }
-        break;
     case 'get_sessions':
         $sessionColumns = SessionManager::getGridColumns($listType);
         $columns = $sessionColumns['simple_column_name'];
@@ -2869,7 +2681,6 @@ $allowed_actions = [
     'get_gradebooks',
     'get_sessions',
     'get_session_access_overview',
-    'get_sessions_tracking',
     'get_session_lp_progress',
     'get_survey_overview',
     'get_session_progress',

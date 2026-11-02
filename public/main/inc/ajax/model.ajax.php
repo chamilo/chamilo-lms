@@ -135,6 +135,11 @@ if ($isDiagnosisLoadSearch) {
     if (!api_is_allowed_to_edit(null, true)) {
         api_not_allowed(true);
     }
+} elseif (api_is_student_boss() && in_array($action, ['get_user_course_report', 'get_user_course_report_resumed'], true)) {
+    // The company reports are meant for student bosses (see my_space/company_reports.php). They only
+    // get these two actions, and the action itself restricts the data to the students they follow.
+    api_block_anonymous_users();
+    api_block_inactive_user();
 } elseif (in_array($action, $adminActions, true)) {
     api_protect_admin_script(true);
 } else {

@@ -3788,6 +3788,39 @@ final readonly class GlobalReportingSectionQueryService
             $rowTypes['courseCoachStatus'] = Types::INTEGER;
         }
 
+        $learnerCountExpression = '(SELECT COUNT(DISTINCT relation.user_id)
+                                      FROM session_rel_course_rel_user relation
+                                     WHERE relation.session_id = session.id AND relation.status = 0)';
+
+        if (!$adminMode) {
+            // Same rule as legacy SessionManager::get_users_by_session(): session-level learners of this URL.
+            $learnerCountExpression = '(SELECT COUNT(DISTINCT learner.user_id)
+                                          FROM session_rel_user learner
+                                          INNER JOIN user learner_user ON learner_user.id = learner.user_id
+                                         WHERE learner.session_id = session.id
+                                           AND learner.relation_type = :learnerRelationType
+                                           AND learner_user.active <> :softDeleted
+                                           AND (
+                                               EXISTS (
+                                                   SELECT 1
+                                                     FROM access_url_rel_user learner_url
+                                                    WHERE learner_url.user_id = learner.user_id
+                                                      AND learner_url.access_url_id = :accessUrlId
+                                               )
+                                               OR NOT EXISTS (
+                                                   SELECT 1
+                                                     FROM access_url_rel_user learner_url
+                                                    WHERE learner_url.user_id = learner.user_id
+                                               )
+                                           ))';
+            $rowParameters['learnerRelationType'] = Session::STUDENT;
+            $rowParameters['softDeleted'] = User::SOFT_DELETED;
+            $rowParameters['accessUrlId'] = $context->accessUrlId;
+            $rowTypes['learnerRelationType'] = Types::INTEGER;
+            $rowTypes['softDeleted'] = Types::INTEGER;
+            $rowTypes['accessUrlId'] = Types::INTEGER;
+        }
+
         $rows = $this->connection->fetchAllAssociative(
             'SELECT session.id,
                     session.title,
@@ -3797,9 +3830,7 @@ final readonly class GlobalReportingSectionQueryService
                     session.display_start_date AS displayStartDate,
                     session.display_end_date AS displayEndDate,
                     '.$courseCountExpression.' AS courses,
-                    (SELECT COUNT(DISTINCT relation.user_id)
-                       FROM session_rel_course_rel_user relation
-                      WHERE relation.session_id = session.id AND relation.status = 0) AS learners,
+                    '.$learnerCountExpression.' AS learners,
                     (SELECT COUNT(DISTINCT relation.user_id)
                        FROM session_rel_user relation
                       WHERE relation.session_id = session.id AND relation.relation_type = 3) AS coaches,

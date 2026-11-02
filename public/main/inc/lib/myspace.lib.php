@@ -1484,6 +1484,7 @@ class MySpace
         $column,
         $direction
     ) {
+        $direction = 'DESC' === strtoupper((string) $direction) ? 'DESC' : 'ASC';
         switch ($column) {
             default:
             case 1:
@@ -1951,7 +1952,8 @@ class MySpace
     ) {
         $from = (int) $from;
         $numberItems = (int) $numberItems;
-        $direction = Database::escape_string($direction);
+        // Concatenated into the ORDER BY clause: only the two directions are valid.
+        $direction = 'DESC' === strtoupper((string) $direction) ? 'DESC' : 'ASC';
         $columnName = 'name';
         if (1 === $column) {
             $columnName = 'id';

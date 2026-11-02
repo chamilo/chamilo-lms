@@ -40,15 +40,15 @@ $courseSessionId = 0;
 $sessionInfo = [];
 
 if (!empty($export['session'])) {
-    $sessionInfo = api_get_session_info($export['session']);
-    $sessionId = isset($sessionInfo['id']) ? $sessionInfo['id'] : 0;
+    $sessionInfo = api_get_session_info((int) $export['session']);
+    $sessionId = isset($sessionInfo['id']) ? (int) $sessionInfo['id'] : 0;
 }
 
 if (is_array($courseSessionValue) && isset($courseSessionValue[1])) {
     $courseSessionCode = $courseSessionValue[0];
-    $sessionId = $courseSessionValue[1];
+    $sessionId = (int) $courseSessionValue[1];
     $courseSessionInfo = api_get_course_info($courseSessionCode);
-    $courseSessionId = $courseSessionInfo['real_id'];
+    $courseSessionId = (int) ($courseSessionInfo['real_id'] ?? 0);
     $sessionInfo = api_get_session_info($sessionId);
 }
 

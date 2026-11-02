@@ -951,8 +951,9 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
             $params['learnpath_item_view_id'] = (int) ($itemView?->getIid() ?? 0);
             unset($params['type']);
 
+            // The overview, like the legacy start page, lists the learner's attempts and links to their results.
             return $this->appendQuery(
-                '/resources/exercise/'.$courseNodeId.'/'.$resourceId.'/player',
+                '/resources/exercise/'.$courseNodeId.'/'.$resourceId.'/overview',
                 $params,
             );
         }

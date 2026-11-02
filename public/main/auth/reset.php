@@ -7,7 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $token = $_GET['token'] ?? '';
 
-if (!ctype_alnum($token)) {
+if (!is_string($token) || !ctype_alnum($token)) {
     $token = '';
 }
 
@@ -43,9 +43,14 @@ if ($form->validate()) {
     $values = $form->exportValues();
     $password = $values['pass1'];
     $token = $values['token'];
+    if (!is_string($token) || !ctype_alnum($token)) {
+        $token = '';
+    }
 
-    /** @var \Chamilo\CoreBundle\Entity\User $user */
-    $user = Container::getUserRepository()->findUserByConfirmationToken($token);
+    // Never look up an empty token: it would match any row left with an empty
+    // confirmation token instead of failing.
+    /** @var \Chamilo\CoreBundle\Entity\User|null $user */
+    $user = '' !== $token ? Container::getUserRepository()->findUserByConfirmationToken($token) : null;
     if ($user) {
         if (!$user->isPasswordRequestNonExpired($ttl)) {
             Display::addFlash(Display::return_message(get_lang('Link expired, please try again.')), 'warning');

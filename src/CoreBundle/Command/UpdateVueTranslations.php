@@ -140,7 +140,8 @@ class UpdateVueTranslations extends Command
         $gettextKey = VueTranslationsBuilder::toGettextKey($vueKey);
         $translated = $this->builder->translateWithFallback($gettextKey, $language);
 
-        if (empty($translated)) {
+        // The translator answers a missing key with the key itself, never an empty string.
+        if (empty($translated) || $translated === $gettextKey) {
             $gettextKey = VueTranslationsBuilder::toGettextKey($vueKey, true);
             $translated = $this->builder->translateWithFallback($gettextKey, $language);
         }

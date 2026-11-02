@@ -268,6 +268,25 @@ export default {
     )
   },
 
+  async getExerciseAttemptRecycleBin(params = {}, exerciseId) {
+    return await baseService.get(
+      `/api/exercise/runtime/${exerciseId}/recycle-bin`,
+      cleanParams(params),
+      exerciseRequestConfig(),
+    )
+  },
+
+  async restoreExerciseAttempt(params = {}, exerciseId, archiveId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/runtime/${exerciseId}/recycle-bin/${archiveId}/restore${queryString}`,
+      {},
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
   async deleteExerciseRuntimeAttempt(payload = {}, params = {}, exerciseId, attemptId) {
     const queryString = buildQueryString(params)
 

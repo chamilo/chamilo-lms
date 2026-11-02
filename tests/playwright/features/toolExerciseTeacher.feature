@@ -682,6 +682,19 @@ Feature: Exercise tool
     Then I should see "Exercise completed"
     And I should see "85 / 105"
 
+  # GH2872 - the course teacher must be allowed to inspect archived attempts.
+  Scenario: GH2872 course teacher can open the exercise recycle bin
+    Given I am a teacher
+    And I am on course "EXTEACH" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "Tests"
+    And I wait for the page content to settle
+    And I click the "[title='Results']" icon in the row for "Exercise 1"
+    And I wait up to 30 seconds for the element "button[title='Recycle bin']" to appear
+    When I open the "exercise" recycle bin and verify its successful API response
+    Then I should see "Deleted exercise attempts can be restored with their saved answers."
+    And I should not see an error
+
   Scenario: Teacher checks exercise results
     Given I am a teacher
     And I wait for the page to be loaded

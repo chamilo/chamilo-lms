@@ -14,8 +14,10 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
-use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathTrackingRecycleBin;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -46,7 +48,8 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         private SettingsManager $settingsManager,
         private LearningPathReportingProvider $reportingProvider,
         private ExtraFieldValuesRepository $extraFieldValuesRepository,
-        private CidReqHelper $cidReqHelper,
+        private CourseFromRequestHelper $courseFromRequestHelper,
+        private LearningPathTrackingRecycleBin $recycleBin,
     ) {}
 
     /**
@@ -69,9 +72,30 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
         }
 
         $this->assertLearningPathTeacher($this->security);
-        $course = $this->cidReqHelper->requireDoctrineCourseEntity();
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course);
+
+        // Resolve the request's own context rather than trusting mutable session state.
+        // Multiple background requests can clear or replace that state before a reset.
+        if (null === $this->courseFromRequestHelper->getCourseReference($request)) {
+            throw new BadRequestHttpException('A valid course id is required.');
+        }
+
+        $course = $this->courseFromRequestHelper->resolveCourse($request);
+        if (!$course instanceof Course) {
+            throw new NotFoundHttpException('Course not found.');
+        }
+
+        $session = null;
+        $sessionId = $this->courseFromRequestHelper->getSessionId($request);
+        if (null !== $sessionId) {
+            $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
+            if (!$session instanceof Session) {
+                throw new NotFoundHttpException('Session not found.');
+            }
+            $this->assertSessionBelongsToCourse($session, $course);
+        }
+
+        $groupId = $this->courseFromRequestHelper->getGroupId($request);
+        $group = null === $groupId ? null : $this->findValidatedGroup($this->entityManager, $groupId, $course);
         $lp = $this->getLearningPath($uriVariables);
         $this->getEditableResourceLink($lp, $course, $session, $group, $this->security);
 
@@ -85,17 +109,30 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
             throw new AccessDeniedHttpException('A selected learner is outside the current learning path report.');
         }
 
+        $actor = $this->security->getUser();
+        if (!$actor instanceof User) {
+            throw new AccessDeniedHttpException('Authentication is required.');
+        }
+
         $connection = $this->entityManager->getConnection();
         $connection->beginTransaction();
 
         try {
-            if ($data->deleteExerciseAttempts) {
-                $this->deleteExerciseAttempts($lp, $course, $session, $userIds);
-            } else {
+            $removeAccessCompletion = $this->minimumTimeAvailable((int) $course->getId(), $session?->getId());
+            $this->recycleBin->captureBeforeReset(
+                (int) $lp->getIid(),
+                $course,
+                $session,
+                $userIds,
+                $data->deleteExerciseAttempts,
+                $removeAccessCompletion,
+                (int) $actor->getId(),
+            );
+            if (!$data->deleteExerciseAttempts) {
                 $this->detachExerciseAttempts($lp, $course, $session, $userIds);
             }
 
-            if ($this->minimumTimeAvailable((int) $course->getId(), $session?->getId())) {
+            if ($removeAccessCompletion) {
                 $this->deleteAccessCompletion($lp, $course, $session, $userIds);
             }
 
@@ -103,6 +140,7 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
             if ([] !== $viewIds) {
                 $itemViewIds = $this->getItemViewIds($viewIds);
                 if ([] !== $itemViewIds) {
+                    $this->recycleBin->deleteComments($itemViewIds);
                     $this->deleteInteractions($itemViewIds);
                     $this->deleteObjectives($itemViewIds);
                     $this->deleteItemViews($viewIds);
@@ -292,24 +330,6 @@ final readonly class LearningPathReportingResetProcessor implements ProcessorInt
                 'userIds' => ArrayParameterType::INTEGER,
             ],
         );
-    }
-
-    /**
-     * @param array<int, int> $userIds
-     */
-    private function deleteExerciseAttempts(CLp $lp, Course $course, ?Session $session, array $userIds): void
-    {
-        $qb = $this->entityManager->createQueryBuilder()
-            ->delete(TrackEExercise::class, 'exercise')
-            ->andWhere('exercise.origLpId = :lpId')
-            ->andWhere('IDENTITY(exercise.course) = :courseId')
-            ->andWhere('IDENTITY(exercise.user) IN (:userIds)')
-            ->setParameter('lpId', (int) $lp->getIid(), Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('userIds', $userIds, ArrayParameterType::INTEGER)
-        ;
-        $this->applySessionCondition($qb, 'exercise.session', $session);
-        $qb->getQuery()->execute();
     }
 
     private function minimumTimeAvailable(int $courseId, ?int $sessionId): bool

@@ -8,8 +8,10 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Range;
 
 class TrackingSettingsSchema extends AbstractSettingsSchema
 {
@@ -30,6 +32,7 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
                     'block_my_progress_page' => 'false',
                     'my_progress_course_tools_order' => '',
                     'maximum_inactive_time_to_consider' => '15',
+                    'recycle_bin_retention_hours' => '720',
                 ]
             )
         ;
@@ -50,6 +53,9 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
             ->add('block_my_progress_page', YesNoType::class)
             ->add('my_progress_course_tools_order', TextareaType::class)
             ->add('maximum_inactive_time_to_consider')
+            ->add('recycle_bin_retention_hours', IntegerType::class, [
+                'constraints' => [new Range(min: 1, max: 87600)],
+            ])
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

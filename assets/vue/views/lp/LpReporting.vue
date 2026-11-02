@@ -30,6 +30,10 @@ const { showErrorNotification, showSuccessNotification } = useNotification()
 const report = ref(null)
 const isLoading = ref(false)
 const isResetting = ref(false)
+const recycleOpen = ref(false)
+const recycleItems = ref([])
+const recycleLoading = ref(false)
+const restoringArchiveId = ref(0)
 const recalculatingUserId = ref(0)
 const errorMessage = ref("")
 const groupFilter = ref(String(route.query.groupFilter || ""))
@@ -141,6 +145,52 @@ function closeLearnerDetail() {
   syncRouteQuery(0)
 }
 
+async function loadRecycleBin() {
+  recycleLoading.value = true
+  try {
+    const response = await lpService.getTrackingRecycleBin(lpId.value, reportingParams(0))
+    recycleItems.value = response?.items || []
+  } catch (error) {
+    showErrorNotification(error)
+  } finally {
+    recycleLoading.value = false
+  }
+}
+
+async function toggleRecycleBin() {
+  recycleOpen.value = !recycleOpen.value
+  if (recycleOpen.value) {
+    await loadRecycleBin()
+  }
+}
+
+function confirmRecycleRestore(archive) {
+  requireConfirmation({
+    message: t("Are you sure you want to restore the learner's progress?"),
+    accept: () => restoreRecycleArchive(Number(archive.id)),
+  })
+}
+
+async function restoreRecycleArchive(archiveId) {
+  restoringArchiveId.value = archiveId
+  try {
+    await lpService.restoreTrackingRecycleBin(lpId.value, archiveId, reportingParams(0))
+  } catch (error) {
+    showErrorNotification(error)
+    return
+  } finally {
+    restoringArchiveId.value = 0
+  }
+
+  // Restore has succeeded; a later refresh failure must not leave this row visible.
+  recycleItems.value = recycleItems.value.filter((item) => Number(item.id) !== archiveId)
+  showSuccessNotification(t("Learning path tracking restored"))
+
+  // The restored archive is already removed from the visible list.
+  // Avoid a redundant recycle-bin request immediately after the successful write.
+  await loadReporting(selectedStudentId.value)
+}
+
 function confirmReset(userIds) {
   if (!userIds.length) {
     return
@@ -168,6 +218,9 @@ async function resetUsers(userIds) {
 
     showSuccessNotification(t("Learning path was reset for the learner"))
     await loadReporting(selectedStudentId.value)
+    if (recycleOpen.value) {
+      await loadRecycleBin()
+    }
   } catch (error) {
     showErrorNotification(error)
   } finally {
@@ -449,6 +502,15 @@ onMounted(() => loadReporting(selectedStudentId.value))
           type="primary-text"
         />
         <BaseButton
+          v-if="!selfMode"
+          :label="t('Recycle bin')"
+          icon="delete"
+          only-icon
+          size="small"
+          type="secondary-text"
+          @click="toggleRecycleBin"
+        />
+        <BaseButton
           v-if="hasLearners && !selfMode"
           :disabled="isResetting"
           :is-loading="isResetting"
@@ -475,6 +537,53 @@ onMounted(() => loadReporting(selectedStudentId.value))
     >
       {{ errorMessage }}
     </div>
+
+    <section
+      v-if="recycleOpen && !selfMode"
+      class="lp-report-no-print flex flex-col gap-3 rounded-xl border border-gray-25 bg-white p-4 shadow-sm"
+    >
+      <div class="flex items-center justify-between gap-3">
+        <h3 class="font-semibold">{{ t("Recycle bin") }}</h3>
+        <BaseButton
+          :label="t('Refresh')"
+          icon="refresh"
+          only-icon
+          size="small"
+          type="secondary-text"
+          :disabled="recycleLoading"
+          @click="loadRecycleBin"
+        />
+      </div>
+      <BaseTable
+        :is-loading="recycleLoading"
+        :total-items="recycleItems.length"
+        :values="recycleItems"
+        :text-for-empty="t('No deleted results')"
+      >
+        <Column :header="t('Learner')">
+          <template #body="{ data }">
+            {{ (report?.learners || []).find((student) => Number(student.id) === Number(data.user_id))?.name || `${t('User')} #${data.user_id}` }}
+          </template>
+        </Column>
+        <Column :header="t('Deleted at')">
+          <template #body="{ data }">{{ data.deleted_at }}</template>
+        </Column>
+        <Column :header="t('Actions')">
+          <template #body="{ data }">
+            <BaseButton
+              :label="t('Restore')"
+              icon="refresh"
+              only-icon
+              size="small"
+              type="primary-text"
+              :disabled="restoringArchiveId > 0"
+              :is-loading="restoringArchiveId === Number(data.id)"
+              @click="confirmRecycleRestore(data)"
+            />
+          </template>
+        </Column>
+      </BaseTable>
+    </section>
 
     <div
       v-if="!selfMode"

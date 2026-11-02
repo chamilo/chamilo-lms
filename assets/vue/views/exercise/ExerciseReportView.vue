@@ -69,6 +69,15 @@
         @click="toggleExportForm"
       />
       <BaseButton
+        class="exercise-report-toolbar__button"
+        :label="t('Recycle bin')"
+        :icon="safeIcon('delete', 'information')"
+        only-icon
+        size="small"
+        type="secondary-text"
+        @click="toggleRecycleBin"
+      />
+      <BaseButton
         v-if="canBulkDelete"
         class="exercise-report-toolbar__button"
         :class="{ 'opacity-50': !hasSelectedAttempts }"
@@ -337,6 +346,49 @@
       {{ t("This exercise is locked by gradebook. Attempt cleanup actions are disabled.") }}
     </div>
 
+    <section
+      v-if="recycleBinVisible"
+      class="space-y-3 rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
+    >
+      <header class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="text-lg font-semibold">{{ t("Recycle bin") }}</h2>
+        <BaseButton
+          :label="t('Refresh')"
+          :icon="safeIcon('refresh', 'information')"
+          only-icon
+          size="small"
+          type="secondary-text"
+          :is-loading="recycleBinLoading"
+          @click="loadRecycleBin"
+        />
+      </header>
+      <p class="text-sm text-gray-60">
+        {{ t("Deleted exercise attempts can be restored with their saved answers.") }}
+      </p>
+      <BaseTable
+        :values="recycledAttempts"
+        data-key="id"
+        :is-loading="recycleBinLoading"
+      >
+        <Column :header="t('Attempt ID')" field="attempt_id" />
+        <Column :header="t('User ID')" field="user_id" />
+        <Column :header="t('Deleted at')" field="deleted_at" />
+        <Column :header="t('Actions')">
+          <template #body="{ data }">
+            <BaseButton
+              :label="t('Restore')"
+              :icon="safeIcon('refresh', 'information')"
+              only-icon
+              size="small"
+              type="secondary-text"
+              :is-loading="recycleBinLoading"
+              @click="confirmRestoreAttempt(data)"
+            />
+          </template>
+        </Column>
+      </BaseTable>
+    </section>
+
     <BaseTable
       :is-loading="isLoading"
       :text-for-empty="t('No attempts found')"
@@ -557,6 +609,9 @@ const { displayTranslatedHtml } = useTranslatedHtml()
 const isLoading = ref(false)
 const isBulkActionLoading = ref(false)
 const isEmailActionLoading = ref(false)
+const recycleBinVisible = ref(false)
+const recycleBinLoading = ref(false)
+const recycledAttempts = ref([])
 const errorMessage = ref("")
 const successMessage = ref("")
 const title = ref("")
@@ -936,6 +991,9 @@ async function runBulkAction(action, extraPayload = {}) {
     cleanBeforeDateValue.value = ""
     selectedAttempts.value = []
     await loadReport()
+    if (recycleBinVisible.value) {
+      await loadRecycleBin()
+    }
   } catch (error) {
     console.error("Error running exercise report bulk action", error)
     errorMessage.value = t("Could not load data")
@@ -1053,6 +1111,49 @@ async function emailAttempt(attempt) {
   }
 }
 
+async function toggleRecycleBin() {
+  recycleBinVisible.value = !recycleBinVisible.value
+  if (recycleBinVisible.value) {
+    await loadRecycleBin()
+  }
+}
+
+async function loadRecycleBin() {
+  recycleBinLoading.value = true
+  try {
+    const response = await exerciseService.getExerciseAttemptRecycleBin(getContextParams(), getExerciseId())
+    recycledAttempts.value = Array.isArray(response?.items) ? response.items : []
+  } catch (error) {
+    console.error("Error loading exercise recycle bin", error)
+    errorMessage.value = t("Could not load recycle bin")
+  } finally {
+    recycleBinLoading.value = false
+  }
+}
+
+function confirmRestoreAttempt(archive) {
+  requireConfirmation({
+    message: t("Restore this exercise attempt?"),
+    accept: () => restoreAttempt(archive),
+  })
+}
+
+async function restoreAttempt(archive) {
+  recycleBinLoading.value = true
+  errorMessage.value = ""
+  try {
+    await exerciseService.restoreExerciseAttempt(getContextParams(), getExerciseId(), Number(archive.id))
+    successMessage.value = t("Attempt restored")
+    await loadReport()
+    await loadRecycleBin()
+  } catch (error) {
+    console.error("Error restoring exercise attempt", error)
+    errorMessage.value = error?.response?.data?.detail || t("Could not restore attempt")
+  } finally {
+    recycleBinLoading.value = false
+  }
+}
+
 function confirmDeleteAttempt(attempt) {
   requireConfirmation({
     message: t("Delete attempt?"),
@@ -1075,8 +1176,11 @@ async function deleteAttempt(attempt) {
       throw new Error(response?.message || "Could not delete attempt")
     }
 
-    successMessage.value = t("Attempt deleted")
+    successMessage.value = t("Attempt moved to recycle bin")
     await loadReport()
+    if (recycleBinVisible.value) {
+      await loadRecycleBin()
+    }
   } catch (error) {
     console.error("Error deleting exercise attempt", error)
     errorMessage.value = t("Could not delete attempt")

@@ -25,8 +25,13 @@ $tool_name = get_lang('Edit groups for one URL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
-$add_type = $_REQUEST['add_type'] ?? 'multiple';
-$access_url_id = $_REQUEST['access_url_id'] ?? 1;
+// Both values are echoed into HTML attributes and into a JS string literal below.
+// Security::remove_XSS() sanitizes for HTML *content*, not for those contexts (it leaves
+// a bare double-quote untouched, so it does not prevent an attribute breakout). Normalize
+// each value to its legitimate domain instead: add_type is a fixed allowlist and
+// access_url_id is an integer URL id, which makes a breakout impossible in every context.
+$add_type = 'unique' === ($_REQUEST['add_type'] ?? '') ? 'unique' : 'multiple';
+$access_url_id = (int) ($_REQUEST['access_url_id'] ?? 1);
 
 $userGroup = new UserGroupModel();
 

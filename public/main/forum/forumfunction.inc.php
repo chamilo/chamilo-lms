@@ -2850,9 +2850,15 @@ function saveThreadScoreHistory(
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
+        // Nothing to archive when this grader has not graded the thread before.
+        if (empty($row)) {
+            return;
+        }
+
         // Insert thread_historical.
+        $qualifyTime = empty($row[1]) ? 'NULL' : "'".Database::escape_string($row[1])."'";
         $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, `qualify`, qualify_user_id, qualify_time)
-                VALUES(".$course_id.", '".$user_id."','".$thread_id."',".(float) $row[0].", '".$qualify_user_id."')";
+                VALUES(".$course_id.", ".$user_id.", ".$thread_id.", ".(float) $row[0].", ".(int) $qualify_user_id.", ".$qualifyTime.")";
         Database::query($sql);
     }
 }

@@ -446,6 +446,9 @@ class ResourceNode implements Stringable
         return $this->resourceLinks;
     }
 
+    /**
+     * @param Collection<int, ResourceLink> $resourceLinks
+     */
     public function setResourceLinks(Collection $resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;

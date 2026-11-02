@@ -87,11 +87,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use DocumentManager;
 use FilesystemIterator;
-use learnpath;
 use PhpZip\ZipFile;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionMethod;
+use RuntimeException;
 use SplFileInfo;
 use stdClass;
 use SurveyManager;
@@ -130,15 +130,25 @@ class CourseRestorer
 
     /**
      * The course-object.
+     *
+     * @var object
      */
     public $course;
+
+    /** @var array<string, mixed>|null */
     public $destination_course_info;
 
     /**
      * What to do with files with same name (FILE_SKIP, FILE_RENAME, FILE_OVERWRITE).
+     *
+     * @var int
      */
     public $file_option;
+
+    /** @var bool */
     public $set_tools_invisible_by_default;
+
+    /** @var array */
     public $skip_content;
 
     // Track if documents were already restored during this restore run.
@@ -151,6 +161,8 @@ class CourseRestorer
 
     /**
      * Restore order (keep existing order; docs first).
+     *
+     * @var string[]
      */
     public $tools_to_restore = [
         'documents',
@@ -180,24 +192,33 @@ class CourseRestorer
 
     /**
      * Setting per tool.
+     *
+     * @var array<string, mixed>
      */
     public $tool_copy_settings = [];
 
     /**
      * If true adds the text "copy" in the title of an item (only for LPs right now).
+     *
+     * @var bool
      */
     public $add_text_in_items = false;
 
+    /** @var int|null */
     public $destination_course_id;
     public bool $copySessionContent = false;
 
     /**
      * Optional course origin id (legacy).
+     *
+     * @var int|string|null
      */
     private $course_origin_id;
 
     /**
      * First teacher (owner) used for forums/posts.
+     *
+     * @var int
      */
     private $first_teacher_id = 0;
 
@@ -394,6 +415,9 @@ class CourseRestorer
                     'error' => $e->getMessage(),
                 ]);
                 $this->resetDoctrineIfClosed();
+                if ('learnpath_category' === $tool && $this->course->has_resources(RESOURCE_LEARNPATH_CATEGORY)) {
+                    throw $e;
+                }
             }
 
             $this->dlog('Finished tool restore', ['tool' => $tool, 'method' => $fn]);
@@ -5437,59 +5461,65 @@ class CourseRestorer
 
     public function restore_learnpath_category(int $sessionId = 0, bool $baseContent = false): void
     {
-        $reuseExisting = false;
-        if (isset($this->tool_copy_settings['learnpath_category']['reuse_existing'])
-            && true === $this->tool_copy_settings['learnpath_category']['reuse_existing']) {
-            $reuseExisting = true;
-        }
-
         if (!$this->course->has_resources(RESOURCE_LEARNPATH_CATEGORY)) {
             return;
         }
 
-        $tblLpCategory = Database::get_course_table(TABLE_LP_CATEGORY);
-        $resources = $this->course->resources;
+        $course = api_get_course_entity((int) $this->destination_course_id);
+        if (!$course instanceof CourseEntity) {
+            throw new RuntimeException('Destination course not found while restoring learning path categories.');
+        }
 
-        foreach ($resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $item) {
-            // Support both: $item->object (entity) or plain exported payload fields.
-            $title = '';
+        $session = $sessionId > 0 ? api_get_session_entity($sessionId) : null;
+        $repository = Container::getLpCategoryRepository();
+        $reuseExisting = true === ($this->tool_copy_settings['learnpath_category']['reuse_existing'] ?? false);
 
-            if (isset($item->object) && $item->object instanceof CLpCategory) {
-                $title = trim((string) $item->object->getTitle());
-            } else {
-                $title = trim((string) ($item->title ?? $item->name ?? ''));
+        foreach ($this->course->resources[RESOURCE_LEARNPATH_CATEGORY] as $id => $item) {
+            if (!\is_object($item)) {
+                continue;
             }
 
+            $title = isset($item->object) && $item->object instanceof CLpCategory
+                ? $item->object->getTitle()
+                : ($item->title ?? $item->name ?? $item->obj->title ?? $item->obj->name ?? '');
+            $title = trim((string) $title);
             if ('' === $title) {
                 continue;
             }
 
-            $categoryId = 0;
+            $category = null;
+            if ($reuseExisting) {
+                $courseNodeId = $course->getResourceNode()?->getId();
+                foreach ($repository->findBy(['title' => $title]) as $candidate) {
+                    if (!$candidate instanceof CLpCategory) {
+                        continue;
+                    }
 
-            $existing = Database::select(
-                'iid',
-                $tblLpCategory,
-                [
-                    'WHERE' => [
-                        'c_id = ? AND name = ?' => [$this->destination_course_id, $title],
-                    ],
-                ],
-                'first'
-            );
+                    $node = $candidate->getResourceNode();
+                    if (null === $node || $node->getParent()?->getId() !== $courseNodeId) {
+                        continue;
+                    }
 
-            if ($reuseExisting && !empty($existing) && !empty($existing['iid'])) {
-                $categoryId = (int) $existing['iid'];
-            } else {
-                $values = [
-                    'c_id' => $this->destination_course_id,
-                    'name' => $title,
-                ];
-                $categoryId = (int) learnpath::createCategory($values);
+                    foreach ($node->getResourceLinks() as $link) {
+                        if ($link->getCourse() === $course
+                            && $link->getSession() === $session
+                            && null === $link->getGroup()) {
+                            $category = $candidate;
+
+                            break 2;
+                        }
+                    }
+                }
             }
 
-            if ($categoryId > 0) {
-                $this->course->resources[RESOURCE_LEARNPATH_CATEGORY][$id]->destination_id = $categoryId;
+            if (null === $category) {
+                $category = (new CLpCategory())->setTitle($title);
+                $category->setParent($course);
+                $category->addCourseLink($course, $session);
+                $repository->create($category);
             }
+
+            $item->destination_id = (int) $category->getIid();
         }
     }
 
@@ -6378,7 +6408,8 @@ class CourseRestorer
 
             // Optional: set category if categories were restored and repo exists
             if ($lpCatRepo && method_exists($lp, 'setCategory')) {
-                $srcCatId = (int) ($lpWrap->category_id ?? 0);
+                $srcCatId = (int) ($lpWrap->category_id ?? $lpWrap->categoryId
+                    ?? $lpWrap->obj->category_id ?? $lpWrap->obj->categoryId ?? 0);
                 if ($srcCatId > 0) {
                     $dstCatId = $getDst(RESOURCE_LEARNPATH_CATEGORY, $srcCatId);
                     if ($dstCatId > 0) {
@@ -6673,7 +6704,7 @@ class CourseRestorer
      * prevents one restore path from persisting stale prerequisite references.
      *
      * @param array<int, array<string, mixed>> $sourceItemsById
-     * @param array<int, CLpItem>               $createdMap
+     * @param array<int, CLpItem>              $createdMap
      */
     private function remapLearningPathPrerequisites(array $sourceItemsById, array $createdMap): void
     {

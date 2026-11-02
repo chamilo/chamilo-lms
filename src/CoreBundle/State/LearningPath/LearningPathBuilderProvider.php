@@ -1090,7 +1090,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
 
             return $this->appendQuery(
                 '/resources/exercise/'.$nodeId.'/hotpotatoes/'.$resource->getIid(),
-                ['cid' => $course->getId(), 'sid' => $session?->getId() ?? 0, 'gid' => $group?->getIid() ?? 0],
+                ['cid' => (int) $course->getId(), 'sid' => $session?->getId() ?? 0, 'gid' => $group?->getIid() ?? 0],
             );
         }
 

@@ -291,7 +291,9 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             if ('select_items' === $importOption) {
                 $selectedResources = $this->ensureSelectionMap($course, $selectedResources, $selectedTypes);
 
+                $originalResources = $course->resources;
                 $course = $this->filterLegacyCourseBySelection($course, $selectedResources);
+                self::includeSelectedLearningPathCategories($course, $originalResources);
                 if (empty($course->resources) || 0 === \count((array) $course->resources)) {
                     return $this->jsonError('Selection produced no resources to restore', 400);
                 }
@@ -426,7 +428,9 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $legacyCourse = $cb->build(0, $sourceCourseId);
 
             if ('select_items' === $copyOption) {
+                $originalResources = $legacyCourse->resources;
                 $legacyCourse = $this->filterLegacyCourseBySelection($legacyCourse, $selectedResourcesMap);
+                self::includeSelectedLearningPathCategories($legacyCourse, $originalResources);
 
                 if (empty($legacyCourse->resources) || !\is_array($legacyCourse->resources)) {
                     return $this->jsonError('Selection produced no resources to copy', 400);
@@ -455,6 +459,43 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 'error' => 'Copy failed: '.$e->getMessage(),
                 'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,
             ], 500);
+        }
+    }
+
+    /**
+     * Include the source categories referenced by selected learning paths.
+     * Other explicitly selected categories remain untouched.
+     *
+     * @param array<string, mixed> $originalResources
+     */
+    private static function includeSelectedLearningPathCategories(object $course, array $originalResources): void
+    {
+        $learningPaths = $course->resources[RESOURCE_LEARNPATH] ?? [];
+        $categories = $originalResources[RESOURCE_LEARNPATH_CATEGORY] ?? [];
+        if (!\is_array($learningPaths) || !\is_array($categories) || [] === $learningPaths || [] === $categories) {
+            return;
+        }
+
+        $requiredIds = [];
+        foreach ($learningPaths as $learningPath) {
+            if (!\is_object($learningPath)) {
+                continue;
+            }
+            $categoryId = (int) ($learningPath->category_id ?? $learningPath->categoryId
+                ?? $learningPath->obj->category_id ?? $learningPath->obj->categoryId ?? 0);
+            if ($categoryId > 0) {
+                $requiredIds[$categoryId] = true;
+            }
+        }
+
+        foreach ($categories as $key => $category) {
+            if (!\is_object($category)) {
+                continue;
+            }
+            $sourceId = (int) ($category->source_id ?? $category->id ?? $key);
+            if (isset($requiredIds[$sourceId])) {
+                $course->resources[RESOURCE_LEARNPATH_CATEGORY][$key] = $category;
+            }
         }
     }
 

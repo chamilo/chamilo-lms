@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
@@ -14,10 +15,15 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\BuyCoursesExpiryHelper;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Stripe\Invoice;
+use Stripe\Price;
+use Stripe\Product;
+use Stripe\Stripe;
+use Stripe\Subscription;
 use Symfony\Component\Intl\Currencies;
-use Chamilo\CoreBundle\Entity\ExtraField;
 
 /**
  * Plugin class for the BuyCourses plugin.
@@ -199,7 +205,6 @@ class BuyCoursesPlugin extends Plugin
         return $result ? $result : $result = new self();
     }
 
-
     private function getCurrentLanguageIsoCode(): string
     {
         $language = '';
@@ -238,15 +243,15 @@ class BuyCoursesPlugin extends Plugin
             return Security::remove_XSS($html);
         }
 
-        if (!class_exists(\DOMDocument::class) || !class_exists(\DOMXPath::class)) {
+        if (!class_exists(DOMDocument::class) || !class_exists(DOMXPath::class)) {
             return $this->filterServiceMultilingualHtmlWithRegex($html);
         }
 
-        $document = new \DOMDocument('1.0', 'UTF-8');
+        $document = new DOMDocument('1.0', 'UTF-8');
         $previousUseInternalErrors = libxml_use_internal_errors(true);
         $loaded = $document->loadHTML(
             '<?xml encoding="UTF-8"><div id="buycourses-translation-root">'.$html.'</div>',
-            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+            \LIBXML_HTML_NOIMPLIED | \LIBXML_HTML_NODEFDTD
         );
         libxml_clear_errors();
         libxml_use_internal_errors($previousUseInternalErrors);
@@ -255,7 +260,7 @@ class BuyCoursesPlugin extends Plugin
             return $this->filterServiceMultilingualHtmlWithRegex($html);
         }
 
-        $xpath = new \DOMXPath($document);
+        $xpath = new DOMXPath($document);
         $nodes = $xpath->query('//*[@lang and contains(concat(" ", normalize-space(@class), " "), " mce-translatehtml ")]');
 
         if (false === $nodes || 0 === $nodes->length) {
@@ -265,7 +270,7 @@ class BuyCoursesPlugin extends Plugin
         $availableLanguages = [];
 
         foreach ($nodes as $node) {
-            if (!$node instanceof \DOMElement) {
+            if (!$node instanceof DOMElement) {
                 continue;
             }
 
@@ -280,7 +285,7 @@ class BuyCoursesPlugin extends Plugin
         for ($i = $nodes->length - 1; $i >= 0; $i--) {
             $node = $nodes->item($i);
 
-            if (!$node instanceof \DOMElement || null === $node->parentNode) {
+            if (!$node instanceof DOMElement || null === $node->parentNode) {
                 continue;
             }
 
@@ -288,6 +293,7 @@ class BuyCoursesPlugin extends Plugin
 
             if ($nodeLanguage !== $targetLanguage) {
                 $node->parentNode->removeChild($node);
+
                 continue;
             }
 
@@ -301,7 +307,7 @@ class BuyCoursesPlugin extends Plugin
         $this->removeEmptyServiceTranslationNodes($xpath);
 
         $root = $xpath->query('//*[@id="buycourses-translation-root"]')->item(0);
-        if (!$root instanceof \DOMElement) {
+        if (!$root instanceof DOMElement) {
             return $this->filterServiceMultilingualHtmlWithRegex($html);
         }
 
@@ -363,7 +369,7 @@ class BuyCoursesPlugin extends Plugin
         return strtolower(strtok(str_replace('-', '_', $language), '_') ?: $language);
     }
 
-    private function removeEmptyServiceTranslationNodes(\DOMXPath $xpath): void
+    private function removeEmptyServiceTranslationNodes(DOMXPath $xpath): void
     {
         $emptyNodes = $xpath->query(
             '//*[self::p or self::div][not(@id="buycourses-translation-root") and not(.//img) and not(.//video) and not(.//audio) and not(.//iframe) and not(.//table) and not(.//ul) and not(.//ol) and normalize-space(.) = ""]'
@@ -385,7 +391,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $pattern = '/<(?P<tag>div|section|article|p|span)\b(?=[^>]*\blang\s*=\s*(["\'])([a-z]{2}(?:[-_][a-z]{2})?)\2)(?=[^>]*\bclass\s*=\s*(["\'])[^"\']*\bmce-translatehtml\b[^"\']*\4)[^>]*>(?P<content>.*?)<\/\k<tag>>/is';
 
-        if (!preg_match_all($pattern, $html, $matches, PREG_SET_ORDER)) {
+        if (!preg_match_all($pattern, $html, $matches, \PREG_SET_ORDER)) {
             return Security::remove_XSS($html);
         }
 
@@ -439,7 +445,7 @@ class BuyCoursesPlugin extends Plugin
         if (function_exists('api_html_entity_decode')) {
             $text = api_html_entity_decode($text);
         } else {
-            $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $text = html_entity_decode($text, \ENT_QUOTES | \ENT_HTML5, 'UTF-8');
         }
 
         return trim((string) preg_replace('/\s+/u', ' ', $text));
@@ -543,7 +549,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * This method creates the tables required to this plugin.
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Doctrine\DBAL\Exception
      */
     public function install(): void
     {
@@ -1081,7 +1087,6 @@ class BuyCoursesPlugin extends Plugin
 
         $table = Database::get_main_table(self::TABLE_CURRENCY);
         Database::query("ALTER TABLE $table CHANGE iso_code iso_code VARCHAR(4) NOT NULL");
-
     }
 
     private function ensureAuditTable(): void
@@ -1160,7 +1165,7 @@ class BuyCoursesPlugin extends Plugin
             try {
                 $dataJson = json_encode(
                     $data,
-                    JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                    \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES
                 );
             } catch (JsonException $exception) {
                 error_log('[BuyCourses][Audit] Could not encode audit data: '.$exception->getMessage());
@@ -1724,7 +1729,7 @@ class BuyCoursesPlugin extends Plugin
             return null;
         }
 
-        return json_encode($features, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return json_encode($features, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
     }
 
     public function getAiCourseFeatureSummary(array|string|null $rawFeatures): string
@@ -1796,14 +1801,12 @@ class BuyCoursesPlugin extends Plugin
             }
 
             $configurations[$variable] = $availableFields[$variable] + [
-                    'granted_value' => (int) ($row['granted_value'] ?? 0),
-                ];
+                'granted_value' => (int) ($row['granted_value'] ?? 0),
+            ];
         }
 
         return $configurations;
     }
-
-
 
     public function buildBenefitFormDefaults(int $serviceId = 0): array
     {
@@ -1873,7 +1876,7 @@ class BuyCoursesPlugin extends Plugin
             UserManager::update_extra_field_value(
                 $buyerId,
                 $configuration['variable'],
-                json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+                json_encode($payload, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES)
             );
 
             if (self::EXTRA_FIELD_HOSTING_LIMIT === $configuration['variable']) {
@@ -1979,7 +1982,7 @@ class BuyCoursesPlugin extends Plugin
         UserManager::update_extra_field_value(
             $userId,
             $variable,
-            null === $benefitPayload ? '' : json_encode($benefitPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+            null === $benefitPayload ? '' : json_encode($benefitPayload, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES)
         );
 
         return $benefitPayload;
@@ -2429,10 +2432,10 @@ class BuyCoursesPlugin extends Plugin
                 return ['success' => false, 'imported' => 0, 'error' => 'Stripe secret key is not configured.'];
             }
 
-            \Stripe\Stripe::setApiKey($secretKey);
-            \Stripe\Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+            Stripe::setApiKey($secretKey);
+            Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
 
-            $subscription = \Stripe\Subscription::retrieve($subscriptionId);
+            $subscription = Subscription::retrieve($subscriptionId);
             $subscriptionPeriodEnd = $this->getStripeSubscriptionPeriodEnd($subscription);
             $fingerprints = $this->getExistingStripePaymentAuditFingerprints($serviceSaleId);
             $existingIdentifiers = $fingerprints['identifiers'] ?? [];
@@ -2448,7 +2451,7 @@ class BuyCoursesPlugin extends Plugin
             $pageCount = 0;
 
             do {
-                $invoiceCollection = \Stripe\Invoice::all($params);
+                $invoiceCollection = Invoice::all($params);
                 $invoices = $invoiceCollection->data ?? [];
 
                 foreach (is_iterable($invoices) ? $invoices : [] as $invoice) {
@@ -2703,7 +2706,7 @@ class BuyCoursesPlugin extends Plugin
         $services = [];
 
         foreach ($this->getServiceSales($userId, self::SERVICE_STATUS_COMPLETED) as $serviceSale) {
-            if ((int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING) !== self::SERVICE_STATUS_COMPLETED) {
+            if (self::SERVICE_STATUS_COMPLETED !== (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING)) {
                 continue;
             }
 
@@ -2763,7 +2766,7 @@ class BuyCoursesPlugin extends Plugin
         foreach ($sales as $sale) {
             $history[] = [
                 'date' => (string) ($sale['date'] ?? ''),
-                'type' => (int) $sale['product_type'] === self::PRODUCT_TYPE_SESSION ? get_lang('Session') : get_lang('Course'),
+                'type' => self::PRODUCT_TYPE_SESSION === (int) $sale['product_type'] ? get_lang('Session') : get_lang('Course'),
                 'product_name' => (string) ($sale['product_name'] ?? ''),
                 'reference' => (string) ($sale['reference'] ?? ''),
                 'amount' => $this->getPriceWithCurrencyFromIsoCode((float) ($sale['price'] ?? 0), $this->getCurrency((int) $sale['currency_id'])['iso_code'] ?? ''),
@@ -2994,7 +2997,7 @@ class BuyCoursesPlugin extends Plugin
             $isoCode = (string) ($currency['iso_code'] ?? '');
             $history[] = [
                 'date' => (string) ($sale['date'] ?? ''),
-                'type' => (int) ($sale['product_type'] ?? 0) === self::PRODUCT_TYPE_SESSION ? get_lang('Session') : get_lang('Course'),
+                'type' => self::PRODUCT_TYPE_SESSION === (int) ($sale['product_type'] ?? 0) ? get_lang('Session') : get_lang('Course'),
                 'product_name' => (string) ($sale['product_name'] ?? ''),
                 'reference' => (string) ($sale['reference'] ?? ''),
                 'amount' => $this->getPriceWithCurrencyFromIsoCode((float) ($sale['price'] ?? 0), $isoCode),
@@ -3392,7 +3395,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return int Rows affected. Otherwise, return false
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Doctrine\DBAL\Exception
      */
     public function saveTransferAccount(array $params): int
     {
@@ -3442,8 +3445,6 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get a list of transfer accounts.
      *
-     * @return array
-     *
      * @throws Exception
      */
     public function getTransferAccounts(): array
@@ -3457,7 +3458,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Remove a transfer account.
      *
-     * @param  int  $id  The transfer account ID
+     * @param int $id The transfer account ID
      *
      * @return int Rows affected. Otherwise, return false
      *
@@ -3495,8 +3496,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the item data.
      *
-     * @param  int  $productId  The item ID
-     * @param  int  $itemType  The item type
+     * @param int $productId The item ID
+     * @param int $itemType  The item type
      *
      * @throws Exception
      */
@@ -3564,9 +3565,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the item data.
      *
-     * @param  int  $productId  The item ID
-     * @param  int  $itemType  The item type
-     * @param  array  $coupon  Array with at least 'discount_type' and 'discount_amount' elements
+     * @param int   $productId The item ID
+     * @param int   $itemType  The item type
+     * @param array $coupon    Array with at least 'discount_type' and 'discount_amount' elements
      *
      * @throws Exception
      */
@@ -3944,7 +3945,7 @@ class BuyCoursesPlugin extends Plugin
         return $courseCatalog;
     }
 
-    public function getPriceWithCurrencyFromIsoCode(int|float|string $price, string $isoCode): string
+    public function getPriceWithCurrencyFromIsoCode(float|int|string $price, string $isoCode): string
     {
         $useSymbol = 'true' === $this->get('use_currency_symbol');
         $priceValue = (float) $price;
@@ -3964,7 +3965,8 @@ class BuyCoursesPlugin extends Plugin
      * Get course info.
      *
      * @return array
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @throws NonUniqueResultException
      */
     public function getCourseInfo(int $courseId, ?array $coupon = null)
     {
@@ -4117,7 +4119,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get course info.
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getSubscriptionCourseInfo(int $courseId, ?array $coupon = null): array
     {
@@ -5850,7 +5852,7 @@ class BuyCoursesPlugin extends Plugin
 
             $content = $pluginsFilesystem->read($this->getServiceImageStoragePath($sourceImageName));
             $pluginsFilesystem->write($this->getServiceImageStoragePath($targetImageName), $content);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
 
@@ -6324,6 +6326,7 @@ class BuyCoursesPlugin extends Plugin
 
                 if ($this->isServiceUpsaleAncestorOf($activeServiceId, $otherActiveServiceId)) {
                     $hasHigherActiveDescendant = true;
+
                     break;
                 }
             }
@@ -7697,10 +7700,10 @@ class BuyCoursesPlugin extends Plugin
             return false;
         }
 
-        \Stripe\Stripe::setApiKey($secretKey);
-        \Stripe\Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
+        Stripe::setApiKey($secretKey);
+        Stripe::setAppInfo('ChamiloBuyCoursesPlugin');
 
-        $subscription = \Stripe\Subscription::retrieve($subscriptionId);
+        $subscription = Subscription::retrieve($subscriptionId);
         $subscriptionItem = $subscription->items->data[0] ?? null;
         if (null === $subscriptionItem || empty($subscriptionItem->id)) {
             return false;
@@ -7708,7 +7711,7 @@ class BuyCoursesPlugin extends Plugin
 
         $priceId = trim((string) ($targetService['stripe_price_id'] ?? ''));
         if ('' === $priceId) {
-            $product = \Stripe\Product::create([
+            $product = Product::create([
                 'name' => (string) ($targetService['name'] ?? 'BuyCourses service'),
                 'metadata' => [
                     'source' => 'BuyCourses',
@@ -7716,7 +7719,7 @@ class BuyCoursesPlugin extends Plugin
                 ],
             ]);
             $interval = $this->getStripeRecurringInterval((int) ($targetService['duration_days'] ?? 0));
-            $price = \Stripe\Price::create([
+            $price = Price::create([
                 'unit_amount' => (int) round($recurringAmount * 100),
                 'currency' => $currencyCode,
                 'product' => (string) $product->id,
@@ -7729,7 +7732,7 @@ class BuyCoursesPlugin extends Plugin
             $priceId = (string) $price->id;
         }
 
-        $subscription = \Stripe\Subscription::update($subscriptionId, [
+        $subscription = Subscription::update($subscriptionId, [
             'items' => [[
                 'id' => (string) $subscriptionItem->id,
                 'price' => $priceId,
@@ -7925,7 +7928,7 @@ class BuyCoursesPlugin extends Plugin
                     'status' => 'active',
                     'context_json' => json_encode(
                         $context,
-                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                        \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES
                     ),
                     'updated_at' => $upgradedAt,
                     'last_action' => 'upgraded',
@@ -8090,7 +8093,6 @@ class BuyCoursesPlugin extends Plugin
         );
     }
 
-
     /**
      * Return country options used in the VAT buyer declaration form.
      * The first phase keeps the list static and avoids external dependencies.
@@ -8241,7 +8243,7 @@ class BuyCoursesPlugin extends Plugin
         $country = $this->normalizeVatCountryCode($buyerCountry);
         $vatNumber = strtoupper(preg_replace('/[^A-Z0-9]/', '', $vatNumber));
 
-        if (2 <= strlen($vatNumber)) {
+        if (strlen($vatNumber) >= 2) {
             $prefix = $this->normalizeVatCountryCode(substr($vatNumber, 0, 2));
             if ($prefix === $country) {
                 $vatNumber = substr($vatNumber, 2);
@@ -8266,11 +8268,11 @@ class BuyCoursesPlugin extends Plugin
 
             if (false !== $ch) {
                 curl_setopt_array($ch, [
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_FOLLOWLOCATION => false,
-                    CURLOPT_CONNECTTIMEOUT => 5,
-                    CURLOPT_TIMEOUT => 15,
-                    CURLOPT_HTTPHEADER => [
+                    \CURLOPT_RETURNTRANSFER => true,
+                    \CURLOPT_FOLLOWLOCATION => false,
+                    \CURLOPT_CONNECTTIMEOUT => 5,
+                    \CURLOPT_TIMEOUT => 15,
+                    \CURLOPT_HTTPHEADER => [
                         'Accept: application/json',
                         'User-Agent: Chamilo-BuyCourses/1.0',
                     ],
@@ -8278,7 +8280,7 @@ class BuyCoursesPlugin extends Plugin
 
                 $response = curl_exec($ch);
                 $curlError = curl_error($ch);
-                $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $httpCode = (int) curl_getinfo($ch, \CURLINFO_HTTP_CODE);
                 curl_close($ch);
 
                 if (is_string($response) && '' !== trim($response) && $httpCode >= 200 && $httpCode < 300) {
@@ -8322,8 +8324,6 @@ class BuyCoursesPlugin extends Plugin
 
         return ['', implode(' | ', array_filter($errors))];
     }
-
-
 
     /**
      * Some VIES userError values mean temporary unavailability, not an invalid VAT number.
@@ -8409,7 +8409,8 @@ class BuyCoursesPlugin extends Plugin
         $valid = null;
         foreach (['isValid', 'valid'] as $key) {
             if (array_key_exists($key, $decoded)) {
-                $valid = filter_var($decoded[$key], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                $valid = filter_var($decoded[$key], \FILTER_VALIDATE_BOOLEAN, \FILTER_NULL_ON_FAILURE);
+
                 break;
             }
         }
@@ -8666,7 +8667,7 @@ class BuyCoursesPlugin extends Plugin
         }
 
         foreach ($candidates as $candidate) {
-            if (filter_var($candidate, FILTER_VALIDATE_IP)) {
+            if (filter_var($candidate, \FILTER_VALIDATE_IP)) {
                 return $candidate;
             }
         }
@@ -8679,14 +8680,14 @@ class BuyCoursesPlugin extends Plugin
      */
     private function isPrivateOrLocalIpAddress(string $ipAddress): bool
     {
-        if ('' === trim($ipAddress) || !filter_var($ipAddress, FILTER_VALIDATE_IP)) {
+        if ('' === trim($ipAddress) || !filter_var($ipAddress, \FILTER_VALIDATE_IP)) {
             return true;
         }
 
         return false === filter_var(
             $ipAddress,
-            FILTER_VALIDATE_IP,
-            FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+            \FILTER_VALIDATE_IP,
+            \FILTER_FLAG_NO_PRIV_RANGE | \FILTER_FLAG_NO_RES_RANGE
         );
     }
 
@@ -8712,7 +8713,7 @@ class BuyCoursesPlugin extends Plugin
             'error' => '',
         ];
 
-        if ('' === $ipAddress || !filter_var($ipAddress, FILTER_VALIDATE_IP)) {
+        if ('' === $ipAddress || !filter_var($ipAddress, \FILTER_VALIDATE_IP)) {
             return array_merge($result, [
                 'status' => 'missing_ip',
                 'error' => 'Buyer IP address is missing or invalid.',
@@ -8755,13 +8756,13 @@ class BuyCoursesPlugin extends Plugin
             $ch = curl_init($url);
             if (false !== $ch) {
                 curl_setopt_array($ch, [
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_TIMEOUT => 10,
-                    CURLOPT_USERPWD => $accountId.':'.$licenseKey,
-                    CURLOPT_HTTPHEADER => ['Accept: application/json'],
+                    \CURLOPT_RETURNTRANSFER => true,
+                    \CURLOPT_TIMEOUT => 10,
+                    \CURLOPT_USERPWD => $accountId.':'.$licenseKey,
+                    \CURLOPT_HTTPHEADER => ['Accept: application/json'],
                 ]);
                 $response = curl_exec($ch);
-                $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $httpCode = (int) curl_getinfo($ch, \CURLINFO_HTTP_CODE);
                 $curlError = curl_error($ch);
                 curl_close($ch);
 
@@ -8962,14 +8963,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register a Service sale.
      *
-     * @param int $serviceId   The service ID
-     * @param int $paymentType The payment type
-     * @param int $infoSelect  The ID for Service Type
-     * @param int|null  $couponId
-     *
      * @return int|bool
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Doctrine\DBAL\Exception
      */
     /**
      * Resolve the tax/VAT to apply to a sale.
@@ -8982,11 +8978,11 @@ class BuyCoursesPlugin extends Plugin
      * $normalizedBuyer is passed by reference because the VIES lookup enriches it with the
      * validation result and any business name/address returned by VIES.
      *
-     * @param float      $netPrice        Price after discount, before tax
-     * @param int|null   $productTaxPerc  Product-level tax rate (null means "use global")
-     * @param int        $taxCategory     One of the TAX_APPLIES_TO_* constants for this product
-     * @param array      $normalizedBuyer Buyer data already passed through normalizeVatBuyerData()
-     * @param array      $globalParameters Plugin global parameters (seller/tax configuration)
+     * @param float    $netPrice         Price after discount, before tax
+     * @param int|null $productTaxPerc   Product-level tax rate (null means "use global")
+     * @param int      $taxCategory      One of the TAX_APPLIES_TO_* constants for this product
+     * @param array    $normalizedBuyer  Buyer data already passed through normalizeVatBuyerData()
+     * @param array    $globalParameters Plugin global parameters (seller/tax configuration)
      *
      * @return array{price: float, price_without_tax: float|null, tax_perc: float|null, tax_amount: float, vat_treatment: array, vat_evidence: array, buyer_ip: string, buyer_ip_country: string}
      */
@@ -9079,11 +9075,11 @@ class BuyCoursesPlugin extends Plugin
             'buyer_business_address' => $normalizedBuyer['buyer_business_address'] ?: null,
             'vat_treatment' => $vat['vat_treatment']['treatment'] ?? 'pending_vat_calculation',
             'vat_rate' => $vat['vat_treatment']['vat_rate'] ?? null,
-            'vat_evidence_json' => json_encode($vat['vat_evidence'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            'vat_evidence_json' => json_encode($vat['vat_evidence'], \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES),
         ];
     }
 
-    public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null, array $vatBuyerData = []): int|bool
+    public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null, array $vatBuyerData = []): bool|int
     {
         $this->lastServiceSaleError = '';
         $this->lastServiceSaleWasReused = false;
@@ -9392,7 +9388,7 @@ class BuyCoursesPlugin extends Plugin
             'seller_annual_eu_tbe_turnover' => isset($params['seller_annual_eu_tbe_turnover'])
                 ? (float) $params['seller_annual_eu_tbe_turnover']
                 : (float) $defaultParams['seller_annual_eu_tbe_turnover'],
-            'vat_geoip_provider' => in_array(($params['vat_geoip_provider'] ?? $defaultParams['vat_geoip_provider']), ['none', 'maxmind_web_service'], true)
+            'vat_geoip_provider' => in_array($params['vat_geoip_provider'] ?? $defaultParams['vat_geoip_provider'], ['none', 'maxmind_web_service'], true)
                 ? ($params['vat_geoip_provider'] ?? $defaultParams['vat_geoip_provider'])
                 : 'none',
             'vat_maxmind_account_id' => trim((string) ($params['vat_maxmind_account_id'] ?? $defaultParams['vat_maxmind_account_id'])),
@@ -10095,8 +10091,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Add a new subscription.
-     *
-     * @return bool
      */
     public function addNewSubscription(array $subscription): bool
     {
@@ -10869,8 +10863,8 @@ class BuyCoursesPlugin extends Plugin
         unset($queryParams['page']);
 
         $url = $baseUrl.'?'.http_build_query(
-                array_merge($queryParams, $extraQueryParams)
-            );
+            array_merge($queryParams, $extraQueryParams)
+        );
 
         return Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
     }
@@ -10893,24 +10887,24 @@ class BuyCoursesPlugin extends Plugin
     '".preg_replace("/'/", "\\'", get_lang('UserName'))."',
     '".preg_replace("/'/", "\\'", get_lang('Email'))."',";
         $model = "
-        {name:'reference', index:'reference', height:'auto', width:70, sorttype:'string', align:'center'},
-        {name:'status', index:'status', height:'auto', width:70, sorttype:'string', align:'center'},
-        {name:'date', index:'date', height:'auto', width:70, sorttype:'date', align:'center'},
-        {name:'payment_type', index:'payment_type', height:'auto', width:70, sorttype:'string', align:'center'},
-        {name:'total_price', index:'total_price', height:'auto', width:70, sorttype:'string', align:'center'},
-        {name:'coupon_discount', index:'coupon_discount', height:'auto', width:40, sorttype:'string', align: 'center'},
-        {name:'coupon', index:'coupon', height:'auto', width:60, sorttype:'string', align:'center'},
-        {name:'product_type', index:'product_type', height:'auto', width:40, sorttype:'string'},
-        {name:'product_name', index:'product_name', height:'auto', /*width:60,*/ sorttype:'string'},
-        {name:'complete_user_name', index:'complete_user_name', height:'auto', width:70, sorttype:'string'},
-        {name:'email', index:'email', height:'auto', /*width:60,*/ sorttype:'string'}, ";
+        {name:'reference', index:'reference', width:155, sorttype:'string'},
+        {name:'status', index:'status', width:135, sorttype:'string'},
+        {name:'date', index:'date', width:145, sorttype:'date'},
+        {name:'payment_type', index:'payment_type', width:145, sorttype:'string'},
+        {name:'total_price', index:'total_price', width:120, sorttype:'string'},
+        {name:'coupon_discount', index:'coupon_discount', width:100, sorttype:'string'},
+        {name:'coupon', index:'coupon', width:95, sorttype:'string'},
+        {name:'product_type', index:'product_type', width:105, sorttype:'string'},
+        {name:'product_name', index:'product_name', width:220, sorttype:'string'},
+        {name:'complete_user_name', index:'complete_user_name', width:170, sorttype:'string'},
+        {name:'email', index:'email', width:225, sorttype:'string'}, ";
         if ($invoicingEnable) {
-            $model .= "{name:'invoice', index:'invoice', height:'auto', width:70, sorttype:'string'},";
+            $model .= "{name:'invoice', index:'invoice', width:110, sorttype:'string', formatter: function(value) { return value || ''; }},";
             $cols .= "'".get_plugin_lang('Invoice', 'BuyCoursesPlugin')."',";
         }
         $cols .= "'".get_lang('Options')."',";
         $model .= "
-        {name:'options', index:'options', height:'auto', width:60, sortable:false},";
+        {name:'options', index:'options', width:125, sortable:false, formatter: function(value) { return value || ''; }},";
         $data = '';
         foreach ($sales as $item) {
             $option = '';
@@ -10921,7 +10915,7 @@ class BuyCoursesPlugin extends Plugin
                 if ($invoicingEnable) {
                     $item['invoice'] = "<a href='".api_get_path(WEB_PLUGIN_PATH).'buycourses/src/invoice.php?invoice='.$item['id'].'&is_service=0'
                         ."' title='".get_plugin_lang('InvoiceView', 'BuyCoursesPlugin')."'>".
-                        Display::return_icon('default.png', get_plugin_lang('InvoiceView', 'BuyCoursesPlugin'), '', ICON_SIZE_MEDIUM).
+                        Display::return_icon('default.png', get_plugin_lang('InvoiceView', 'BuyCoursesPlugin'), [], ICON_SIZE_MEDIUM).
                         '<br/>'.$item['num_invoice'].
                         '</a>';
                 }
@@ -10936,12 +10930,12 @@ class BuyCoursesPlugin extends Plugin
                     "<a title='".get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin')."'".
                     " href='".api_get_self().'?order='.$item['id']."&action=confirm'".
                     " class='btn btn-default'>".
-                    Display::return_icon('user_subscribe_session.png', get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin'), '', ICON_SIZE_SMALL)
+                    Display::return_icon('user_subscribe_session.png', get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin'), [], ICON_SIZE_SMALL)
                     .'</a>'.
                     "<a title='".get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin')."'".
                     " href='".api_get_self().'?order='.$item['id']."&action=cancel'".
                     " class='btn btn-default'>".
-                    Display::return_icon('delete.png', get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin'), '', ICON_SIZE_SMALL)
+                    Display::return_icon('delete.png', get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin'), [], ICON_SIZE_SMALL)
                     .'</a>'.
                     '</div>';
             } elseif (self::SALE_STATUS_COMPLETED == $item['status']) {
@@ -10949,16 +10943,19 @@ class BuyCoursesPlugin extends Plugin
             }
             $item['options'] = $option;
             $item['date'] = api_get_local_time($item['date']);
-            $data .= json_encode($item).',';
+            $data .= json_encode($item, \JSON_HEX_TAG | \JSON_HEX_AMP | \JSON_HEX_APOS | \JSON_HEX_QUOT).',';
         }
 
         return "
 <script>
-    $(window).load( function () {
+    $(function () {
         $('#table_report').jqGrid({
-            height: '100%',
+            height: 'auto',
             autowidth: true,
-            LoadOnce: true,
+            shrinkToFit: false,
+            guiStyle: 'bootstrap4',
+            autoencode: true,
+            loadonce: true,
             rowNum:10,
             rowList: [10, 25, 50, 100],
             pager: 'tblGridPager',
@@ -10970,12 +10967,20 @@ class BuyCoursesPlugin extends Plugin
             caption: '".get_plugin_lang('SalesReport', 'BuyCoursesPlugin')."'
         });
         var mydata = [ $data ];
-        for(var i=0;i<=mydata.length;i++){
-            $('#table_report').jqGrid('addRowData',i+1,mydata[i]);
-            if(i==mydata.length){
-                $('#table_report').trigger('reloadGrid',[{page:1}])
+        for (var i = 0; i < mydata.length; i++) {
+            $('#table_report').jqGrid('addRowData', i + 1, mydata[i]);
+        }
+        $('#table_report').trigger('reloadGrid', [{page: 1}]);
+
+        function resizeSalesGrid() {
+            var width = $('#gh2626-sales-grid').innerWidth();
+            if (width > 0) {
+                $('#table_report').jqGrid('setGridWidth', width, false);
             }
         }
+
+        resizeSalesGrid();
+        $(window).on('resize.gh2626SalesGrid', resizeSalesGrid);
     });
 </script>";
     }
@@ -11027,7 +11032,7 @@ class BuyCoursesPlugin extends Plugin
             )
             ->setFirstResult($first)
             ->setMaxResults($maxResults)
-            ;
+        ;
     }
 
     /**
@@ -11970,13 +11975,13 @@ class BuyCoursesPlugin extends Plugin
         ];
 
         return Database::update(
-                self::TABLE_SUBSCRIPTION,
-                $values,
-                [
-                    'product_type = ? AND ' => $productType,
-                    'product_id = ?' => $productId,
-                ]
-            ) > 0;
+            self::TABLE_SUBSCRIPTION,
+            $values,
+            [
+                'product_type = ? AND ' => $productType,
+                'product_id = ?' => $productId,
+            ]
+        ) > 0;
     }
 
     /**
@@ -12224,7 +12229,7 @@ class BuyCoursesPlugin extends Plugin
 
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $valueColumn = $this->getExtraFieldValueColumn();
-        $jsonValue = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $jsonValue = json_encode($payload, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
 
         $checkSql = "SELECT id
                  FROM $table
@@ -12321,6 +12326,7 @@ class BuyCoursesPlugin extends Plugin
 
         if (empty($sale)) {
             error_log('BuyCourses activateServiceBenefitsForSale: sale not found for ID '.$serviceSaleId);
+
             return;
         }
 
@@ -12329,6 +12335,7 @@ class BuyCoursesPlugin extends Plugin
 
         if ($serviceId <= 0 || $buyerId <= 0) {
             error_log('BuyCourses activateServiceBenefitsForSale: invalid sale data for ID '.$serviceSaleId);
+
             return;
         }
 
@@ -12336,6 +12343,7 @@ class BuyCoursesPlugin extends Plugin
 
         if (empty($service)) {
             error_log('BuyCourses activateServiceBenefitsForSale: service not found for service ID '.$serviceId);
+
             return;
         }
 
@@ -12482,8 +12490,8 @@ class BuyCoursesPlugin extends Plugin
         $sql = "SELECT COUNT(DISTINCT c_id) AS total
             FROM $table
             WHERE user_id = $userId
-              AND status = ".COURSEMANAGER."
-              AND (relation_type IS NULL OR relation_type <> ".COURSE_RELATION_TYPE_HRM.")";
+              AND status = ".COURSEMANAGER.'
+              AND (relation_type IS NULL OR relation_type <> '.COURSE_RELATION_TYPE_HRM.')';
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
@@ -12515,9 +12523,9 @@ class BuyCoursesPlugin extends Plugin
                 AND sc.status <> 'deleted'
                 AND sc.deleted_at IS NULL
             WHERE cru.user_id = $userId
-              AND cru.status = ".COURSEMANAGER."
-              AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_HRM.")
-              AND sc.id IS NULL";
+              AND cru.status = ".COURSEMANAGER.'
+              AND (cru.relation_type IS NULL OR cru.relation_type <> '.COURSE_RELATION_TYPE_HRM.')
+              AND sc.id IS NULL';
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
@@ -12558,8 +12566,8 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $courseUserTable cru
                 ON cru.c_id = sc.course_id
                 AND cru.user_id = $userId
-                AND cru.status = ".COURSEMANAGER."
-                AND (cru.relation_type IS NULL OR cru.relation_type <> ".COURSE_RELATION_TYPE_HRM.")
+                AND cru.status = ".COURSEMANAGER.'
+                AND (cru.relation_type IS NULL OR cru.relation_type <> '.COURSE_RELATION_TYPE_HRM.")
             WHERE sc.course_id IN ($courseIdsSql)
               AND sc.status <> 'deleted'
               AND sc.deleted_at IS NULL
@@ -12698,7 +12706,6 @@ class BuyCoursesPlugin extends Plugin
         return (string) ($this->getCourseCreationCapabilityStatus($userId)['message'] ?? '');
     }
 
-
     /**
      * Build course creation options exposed to the modern course creation page.
      */
@@ -12712,6 +12719,7 @@ class BuyCoursesPlugin extends Plugin
         foreach ($serviceOptions as $serviceOption) {
             if (!empty($serviceOption['available'])) {
                 $hasAvailableService = true;
+
                 break;
             }
         }
@@ -12919,10 +12927,10 @@ class BuyCoursesPlugin extends Plugin
         $sql = "SELECT ai_course_features_json
             FROM $servicesTable
             WHERE display_on_course_creation_page = 1
-              AND applies_to = ".self::SERVICE_TYPE_USER."
+              AND applies_to = ".self::SERVICE_TYPE_USER.'
               AND visibility = 1
               AND active = 1
-            ORDER BY id ASC";
+            ORDER BY id ASC';
         $result = Database::query($sql);
         if (false === $result) {
             return false;
@@ -13044,9 +13052,9 @@ class BuyCoursesPlugin extends Plugin
                 AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
                 AND ss.date_end >= '$now'
                 AND s.display_on_course_creation_page = 1
-                AND s.applies_to = ".self::SERVICE_TYPE_USER."
+                AND s.applies_to = ".self::SERVICE_TYPE_USER.'
                 AND s.visibility = 1
-            LIMIT 1";
+            LIMIT 1';
 
         $result = Database::query($sql);
         if (false === $result || 0 === Database::num_rows($result)) {
@@ -13129,7 +13137,7 @@ class BuyCoursesPlugin extends Plugin
         $bestRemaining = -1;
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $usedCourses = $this->countCoursesLinkedToServiceSale((int) $row['id']);
-            $remaining = $maxCourses <= 0 ? PHP_INT_MAX : max(0, $maxCourses - $usedCourses);
+            $remaining = $maxCourses <= 0 ? \PHP_INT_MAX : max(0, $maxCourses - $usedCourses);
 
             if ($remaining > $bestRemaining) {
                 $bestRemaining = $remaining;
@@ -13258,8 +13266,8 @@ class BuyCoursesPlugin extends Plugin
              INNER JOIN $extraFieldTable ef ON ef.id = rel.extra_field_id
              WHERE rel.service_id = $serviceId
                AND ef.variable = '$maxCoursesVariable'
-               AND ef.item_type = ".ExtraField::USER_FIELD_TYPE."
-             LIMIT 1"
+               AND ef.item_type = ".ExtraField::USER_FIELD_TYPE.'
+             LIMIT 1'
         );
         if (false !== $benefitResult && Database::num_rows($benefitResult) > 0) {
             $benefitRow = Database::fetch_array($benefitResult, 'ASSOC') ?: [];
@@ -13277,7 +13285,7 @@ class BuyCoursesPlugin extends Plugin
 
             foreach ($replacementSales as $index => $replacementSale) {
                 $usedCourses = max(0, (int) ($replacementSale['used_courses'] ?? 0));
-                $remainingSlots = $maxCourses <= 0 ? PHP_INT_MAX : max(0, $maxCourses - $usedCourses);
+                $remainingSlots = $maxCourses <= 0 ? \PHP_INT_MAX : max(0, $maxCourses - $usedCourses);
                 if ($remainingSlots <= 0) {
                     continue;
                 }
@@ -13297,6 +13305,7 @@ class BuyCoursesPlugin extends Plugin
             $rowId = (int) ($courseRow['id'] ?? 0);
             if ($replacementSaleId <= 0 || $rowId <= 0) {
                 ++$errors;
+
                 continue;
             }
 
@@ -13328,13 +13337,14 @@ class BuyCoursesPlugin extends Plugin
                         'service_sale_id' => $replacementSaleId,
                         'service_id' => $serviceId,
                         'status' => 'active',
-                        'context_json' => json_encode($context, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                        'context_json' => json_encode($context, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES),
                         'updated_at' => $reassignedAt,
                         'last_action' => 'reassigned',
                     ],
                     ['id = ?' => $rowId]
                 )) {
                     ++$errors;
+
                     continue;
                 }
             }
@@ -13392,7 +13402,7 @@ class BuyCoursesPlugin extends Plugin
             }
 
             Database::query(
-                "INSERT INTO $table (c_id, title, variable, value, category) " .
+                "INSERT INTO $table (c_id, title, variable, value, category) ".
                 "VALUES ($courseId, '', '$featureEsc', '$valueEsc', '$categoryEsc')"
             );
         }
@@ -13414,9 +13424,9 @@ class BuyCoursesPlugin extends Plugin
         $sql = "SELECT DISTINCT c_id
             FROM $table
             WHERE user_id = $userId
-              AND status = ".COURSEMANAGER."
-              AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
-            ORDER BY c_id ASC";
+              AND status = ".COURSEMANAGER.'
+              AND relation_type <> '.COURSE_RELATION_TYPE_HRM.'
+            ORDER BY c_id ASC';
         $result = Database::query($sql);
 
         $ids = [];
@@ -13443,9 +13453,9 @@ class BuyCoursesPlugin extends Plugin
         $sql = "SELECT DISTINCT user_id
             FROM $table
             WHERE c_id = $courseId
-              AND status = ".COURSEMANAGER."
-              AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
-            ORDER BY user_id ASC";
+              AND status = ".COURSEMANAGER.'
+              AND relation_type <> '.COURSE_RELATION_TYPE_HRM.'
+            ORDER BY user_id ASC';
         $result = Database::query($sql);
 
         $ids = [];
@@ -13602,14 +13612,14 @@ class BuyCoursesPlugin extends Plugin
                 SELECT user_id
                 FROM $courseUserTable
                 WHERE c_id = $courseId
-                  AND status = ".STUDENT."
-                  AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
+                  AND status = ".STUDENT.'
+                  AND relation_type <> '.COURSE_RELATION_TYPE_HRM."
                 UNION
                 SELECT user_id
                 FROM $sessionCourseUserTable
                 WHERE c_id = $courseId
-                  AND status = ".STUDENT."
-            ) subscribed_users";
+                  AND status = ".STUDENT.'
+            ) subscribed_users';
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC') ?: [];
@@ -13799,9 +13809,9 @@ class BuyCoursesPlugin extends Plugin
         $sql = "SELECT user_id
             FROM $courseUserTable
             WHERE c_id = $courseId
-              AND status = ".STUDENT."
-              AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
-            ORDER BY user_id ASC";
+              AND status = ".STUDENT.'
+              AND relation_type <> '.COURSE_RELATION_TYPE_HRM.'
+            ORDER BY user_id ASC';
         $result = Database::query($sql);
 
         $studentIds = [];

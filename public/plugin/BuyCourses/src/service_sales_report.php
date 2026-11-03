@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For license terms, see /license.txt */
 
-/**
+/*
  * List of service sales of the Buy Courses plugin.
  */
 
@@ -60,7 +60,7 @@ function styleBuyCoursesFormHtml(string $html): string
     $document = new DOMDocument('1.0', 'UTF-8');
     $wrappedHtml = '<?xml encoding="utf-8" ?><div id="buycourses-form-root">'.$html.'</div>';
 
-    $loaded = $document->loadHTML($wrappedHtml, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    $loaded = $document->loadHTML($wrappedHtml, \LIBXML_HTML_NOIMPLIED | \LIBXML_HTML_NODEFDTD);
 
     if (!$loaded) {
         libxml_clear_errors();
@@ -304,8 +304,11 @@ $includeServices = 'true' === $plugin->get('include_services');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 $saleStatuses = $plugin->getServiceSaleStatuses();
+// FormValidator can treat the numeric value 0 as an empty default. Keep pending first.
+$saleStatuses = [BuyCoursesPlugin::SERVICE_STATUS_PENDING => $saleStatuses[BuyCoursesPlugin::SERVICE_STATUS_PENDING]] + $saleStatuses;
 $selectedStatus = $httpRequest->query->getInt('status', BuyCoursesPlugin::SERVICE_STATUS_PENDING);
 $searchUser = trim((string) $httpRequest->query->get('user', ''));
+$searchServiceName = trim((string) $httpRequest->query->get('service_name', ''));
 
 if (!isset($saleStatuses[$selectedStatus])) {
     $selectedStatus = BuyCoursesPlugin::SERVICE_STATUS_PENDING;
@@ -316,6 +319,7 @@ $form = new FormValidator('search', 'get');
 if ($form->validate()) {
     $selectedStatus = (int) $form->getSubmitValue('status');
     $searchUser = trim((string) $form->getSubmitValue('user'));
+    $searchServiceName = trim((string) $form->getSubmitValue('service_name'));
 
     if (!isset($saleStatuses[$selectedStatus])) {
         $selectedStatus = BuyCoursesPlugin::SERVICE_STATUS_PENDING;
@@ -326,18 +330,20 @@ $searchLabel = get_lang('Search').' ('.get_lang('User').', '.get_lang('Email').'
 
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
 $form->addText('user', $searchLabel, false);
+$form->addText('service_name', $plugin->get_lang('ServiceName'), false);
 $form->addButtonSearch(get_lang('Search'), 'search');
 $form->setDefaults([
     'status' => $selectedStatus,
     'user' => $searchUser,
+    'service_name' => $searchServiceName,
 ]);
 
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
 $currentPage = max(1, $httpRequest->query->getInt('page', 1));
-$hasSearch = '' !== $searchUser;
+$hasSearch = '' !== $searchUser || '' !== $searchServiceName;
 
 if ($hasSearch) {
-    // The search term is matched in PHP against fields derived after hydration below,
+    // Search terms are matched in PHP against fields derived after hydration below,
     // so the full status-filtered set is needed before it can be paginated.
     $servicesSales = $plugin->getServiceSales(0, $selectedStatus);
 } else {
@@ -376,10 +382,22 @@ unset($sale);
 
 if ($hasSearch) {
     $normalizedSearch = api_strtolower($searchUser);
+    $normalizedServiceName = api_strtolower($searchServiceName);
 
     $servicesSales = array_values(array_filter(
         $servicesSales,
-        static function (array $sale) use ($normalizedSearch): bool {
+        static function (array $sale) use ($normalizedSearch, $normalizedServiceName): bool {
+            if ('' !== $normalizedServiceName && !str_contains(
+                api_strtolower((string) ($sale['service_name'] ?? '')),
+                $normalizedServiceName
+            )) {
+                return false;
+            }
+
+            if ('' === $normalizedSearch) {
+                return true;
+            }
+
             $haystacks = [
                 (string) ($sale['complete_user_name'] ?? ''),
                 (string) ($sale['username'] ?? ''),
@@ -389,7 +407,7 @@ if ($hasSearch) {
             ];
 
             foreach ($haystacks as $haystack) {
-                if (false !== strpos(api_strtolower($haystack), $normalizedSearch)) {
+                if (str_contains(api_strtolower($haystack), $normalizedSearch)) {
                     return true;
                 }
             }

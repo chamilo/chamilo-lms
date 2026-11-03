@@ -30,6 +30,8 @@ const argumentation = ref("")
 const selectedAssignment = computed(() => context.value?.assignment || null)
 const canRemove = computed(() => selectedAssignment.value?.canRemove === true)
 const alreadyAcquired = computed(() => selectedAssignment.value?.acquired === true)
+// A structural skill is still selectable in the cascading selects, to reach its children.
+const notAcquirable = computed(() => Boolean(skillId.value) && context.value?.selectedSkill?.acquirable === false)
 const argumentationLength = computed(() => argumentation.value.trim().length)
 const argumentationInvalid = computed(
   () => Boolean(skillId.value) && !loading.value && !alreadyAcquired.value && argumentationLength.value < 10,
@@ -58,6 +60,12 @@ async function loadContext(selectedSkillId = null) {
   } finally {
     loading.value = false
   }
+}
+
+// Choosing a skill at one level replaces the selects below it with the children of that skill.
+// Clearing it falls back to the skill selected at the level above.
+function selectSkillLevel(index, value) {
+  skillId.value = value || context.value?.skillLevels?.[index - 1]?.value || null
 }
 
 async function save() {
@@ -127,7 +135,6 @@ watch(
   },
   { immediate: true },
 )
-
 </script>
 
 <template>
@@ -149,7 +156,24 @@ watch(
       </template>
 
       <div class="flex flex-col gap-5">
+        <template v-if="context.subskillAutoload">
+          <BaseSelect
+            v-for="(level, index) in context.skillLevels"
+            :id="`skill-assignment-${level.name}`"
+            :key="`${level.name}-${level.value}`"
+            :disabled="loading || saving"
+            :label="level.label"
+            :model-value="level.value"
+            :name="level.name"
+            :options="level.options"
+            :required="0 === index"
+            :show-required-marker="0 === index"
+            allow-clear
+            @update:model-value="selectSkillLevel(index, $event)"
+          />
+        </template>
         <BaseSelect
+          v-else
           id="skill-assignment-skill"
           v-model="skillId"
           :disabled="loading || saving"
@@ -173,8 +197,15 @@ watch(
           </div>
         </div>
 
+        <div
+          v-if="notAcquirable"
+          class="rounded-lg border border-gray-25 bg-gray-10 p-4"
+        >
+          {{ t("This skill cannot be acquired") }}
+        </div>
+
         <BaseSelect
-          v-if="skillId && context.showLevels"
+          v-if="skillId && !notAcquirable && context.showLevels"
           id="skill-assignment-level"
           v-model="acquiredLevelId"
           :disabled="loading || saving || alreadyAcquired"
@@ -185,7 +216,7 @@ watch(
         />
 
         <BaseTextArea
-          v-if="skillId"
+          v-if="skillId && !notAcquirable"
           id="skill-assignment-argumentation"
           v-model="argumentation"
           :disabled="loading || saving || alreadyAcquired"
@@ -197,7 +228,7 @@ watch(
         />
 
         <div
-          v-if="skillId"
+          v-if="skillId && !notAcquirable"
           class="flex flex-wrap gap-3"
         >
           <BaseButton

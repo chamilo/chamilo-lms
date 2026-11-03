@@ -63,6 +63,16 @@ final class SkillAssignment
     public array $skillOptions = [];
 
     #[Groups(['skill_assignment:read'])]
+    public bool $subskillAutoload = false;
+
+    /**
+     * One select per level of the skills tree when skill.manual_assignment_subskill_autoload is on,
+     * from the first level down to the children of the selected skill.
+     */
+    #[Groups(['skill_assignment:read'])]
+    public array $skillLevels = [];
+
+    #[Groups(['skill_assignment:read'])]
     public array $levelOptions = [];
 
     #[Groups(['skill_assignment:read'])]

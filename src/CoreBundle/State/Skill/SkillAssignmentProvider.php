@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Skill\SkillAssignment;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillRelSkill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const DATE_ATOM;
 
@@ -27,12 +29,16 @@ use const DATE_ATOM;
  */
 final readonly class SkillAssignmentProvider implements ProviderInterface
 {
+    // The root of the skills tree, which the legacy page never offered.
+    private const int ROOT_SKILL_ID = 1;
+
     public function __construct(
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
         private SettingsManager $settingsManager,
         private SkillAssignmentAccessChecker $accessChecker,
         private SkillAssignmentLevelResolver $levelResolver,
+        private TranslatorInterface $translator,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): SkillAssignment
@@ -63,10 +69,17 @@ final readonly class SkillAssignmentProvider implements ProviderInterface
             'username' => $user->getUsername(),
         ];
         $skillId = $request->query->getInt('skillId');
-        $result->skillOptions = $this->getSkillOptions($skillId);
+        $result->subskillAutoload = 'true' === $this->settingsManager->getSetting('skill.manual_assignment_subskill_autoload', true);
+        if (!$result->subskillAutoload) {
+            $result->skillOptions = $this->getSkillOptions($skillId);
+        }
         $result->showLevels = 'false' === $this->settingsManager->getSetting('skill.hide_skill_levels', true);
 
         if ($skillId <= 0) {
+            if ($result->subskillAutoload) {
+                $result->skillLevels = $this->getSkillLevels(null);
+            }
+
             return $result;
         }
 
@@ -78,7 +91,11 @@ final readonly class SkillAssignmentProvider implements ProviderInterface
         $result->selectedSkill = [
             'id' => (int) $skill->getId(),
             'title' => $skill->getTitle(),
+            'acquirable' => $skill->isAcquirable(),
         ];
+        if ($result->subskillAutoload) {
+            $result->skillLevels = $this->getSkillLevels($skill);
+        }
         $result->levelOptions = $result->showLevels ? $this->levelResolver->getOptions($skill) : [];
 
         $repository = $this->entityManager->getRepository(SkillRelUser::class);
@@ -156,6 +173,83 @@ final readonly class SkillAssignmentProvider implements ProviderInterface
         );
 
         return array_values($byId);
+    }
+
+    /**
+     * Port of the cascading selects of main/skills/assign.php: the first select lists the skills of
+     * the first level, and each selected skill adds a select with its own children, so the assigned
+     * skill can be picked at any depth. Structural skills that cannot be acquired are listed too,
+     * since they lead to their children.
+     *
+     * @return array<int, array{label: string, name: string, value: ?int, options: array<int, array{label: string, value: int}>}>
+     */
+    private function getSkillLevels(?Skill $selected): array
+    {
+        $path = [];
+        $current = $selected;
+        while ($current instanceof Skill
+            && self::ROOT_SKILL_ID !== $current->getId()
+            && !isset($path[(int) $current->getId()])
+        ) {
+            $path[(int) $current->getId()] = $current;
+            $relation = $this->entityManager->getRepository(SkillRelSkill::class)->findOneBy(['skill' => $current]);
+            $current = $relation instanceof SkillRelSkill ? $relation->getParent() : null;
+        }
+        $path = array_reverse(array_values($path));
+
+        $levelNames = json_decode((string) $this->settingsManager->getSetting('skill.skill_levels_names', true), true);
+        $levelNames = \is_array($levelNames) && \is_array($levelNames['levels'] ?? null) ? $levelNames['levels'] : [];
+
+        $levels = [];
+        $parentId = self::ROOT_SKILL_ID;
+        foreach ([...$path, null] as $index => $skill) {
+            $options = $this->getChildOptions($parentId);
+            if (null === $skill && [] === $options) {
+                break;
+            }
+
+            if ($skill instanceof Skill && !\in_array((int) $skill->getId(), array_column($options, 'value'), true)) {
+                array_unshift($options, ['label' => $skill->getTitle(), 'value' => (int) $skill->getId()]);
+            }
+
+            $levelName = $levelNames[$index + 1] ?? (0 === $index ? 'Skill' : 'Sub-skill');
+            $levels[] = [
+                'label' => $this->translator->trans((string) $levelName),
+                'name' => 0 === $index ? 'skillId' : 'subSkillId'.$index,
+                'value' => $skill?->getId(),
+                'options' => $options,
+            ];
+
+            if (null !== $skill) {
+                $parentId = (int) $skill->getId();
+            }
+        }
+
+        return $levels;
+    }
+
+    /**
+     * @return array<int, array{label: string, value: int}>
+     */
+    private function getChildOptions(int $parentId): array
+    {
+        $children = $this->entityManager->createQueryBuilder()
+            ->select('s.id AS value', 's.title AS label')
+            ->from(SkillRelSkill::class, 'r')
+            ->innerJoin('r.skill', 's')
+            ->where('IDENTITY(r.parent) = :parent')
+            ->andWhere('s.status = :status')
+            ->setParameter('parent', $parentId)
+            ->setParameter('status', Skill::STATUS_ENABLED)
+            ->orderBy('s.title', 'ASC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return array_map(
+            static fn (array $child): array => ['label' => (string) $child['label'], 'value' => (int) $child['value']],
+            $children,
+        );
     }
 
     private function normalizeAssignment(SkillRelUser $assignment): array

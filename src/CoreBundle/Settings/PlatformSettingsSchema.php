@@ -50,7 +50,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'personal_files_quota_mb' => '0',
                     'registered' => 'false',
                     'server_type' => 'prod',
-                    'unoconv_binaries' => '/usr/bin/unoconv',
                     'pdf_img_dpi' => '96',
                     'hosting_limit_users_per_course' => '0',
                     'max_courses_per_user' => '0',
@@ -107,7 +106,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
-            ->add('unoconv_binaries', TextType::class)
             ->add('pdf_img_dpi', TextType::class)
             ->add('hosting_limit_users_per_course', TextType::class)
             ->add(

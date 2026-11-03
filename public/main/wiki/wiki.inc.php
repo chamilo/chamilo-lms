@@ -1868,11 +1868,6 @@ final class WikiManager
             $actionsRight .= '<a href="'.$ctx['baseUrl'].'&action=export_to_pdf&wiki_id='.$last->getIid().'">'
                 .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export'))
                 .'</a>';
-            if (api_get_configuration_value('unoconv.binaries')) {
-                $actionsRight .= '<a href="'.$ctx['baseUrl'].'&'.http_build_query(['action' => 'export_to_doc_file', 'id' => $last->getIid()]).'">'
-                    .Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export'))
-                    .'</a>';
-            }
 
             // Print
             $actionsRight .= '<a href="#" onclick="javascript:(function(){var a=window.open(\'\',\'\',\'width=800,height=600\');a.document.open(\'text/html\');a.document.write($(\'#wikititle\').prop(\'outerHTML\'));a.document.write($(\'#wikicontent\').prop(\'outerHTML\'));a.document.close();a.print();})(); return false;">'
@@ -3214,11 +3209,6 @@ final class WikiManager
 
             case 'discuss':
                 self::getDiscuss($page);
-                break;
-
-            case 'export_to_doc_file':
-                self::exportTo($_GET['id'], 'odt');
-                exit;
                 break;
 
             case 'category':
@@ -5295,30 +5285,6 @@ final class WikiManager
         $table->set_header(2, get_lang('Author'), true);
         $table->set_header(3, get_lang('Date'),   true);
         $table->display();
-    }
-
-    public function exportTo(int $id, string $format = 'doc'): bool
-    {
-        $page = self::repo()->findOneBy(['iid' => $id]);
-        if ($page instanceof CWiki) {
-            $content = (string)$page->getContent();
-            $name    = (string)$page->getReflink();
-            if ($content !== '') {
-                Export::htmlToOdt($content, $name, $format);
-                return true;
-            }
-            return false;
-        }
-
-        if (method_exists($this, 'getWikiDataFromDb')) {
-            $data = self::getWikiDataFromDb($id);
-            if (!empty($data['content'])) {
-                Export::htmlToOdt($data['content'], (string)$data['reflink'], $format);
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public function export_to_pdf(int $id, string $course_code): bool

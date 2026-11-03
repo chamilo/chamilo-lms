@@ -481,6 +481,37 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
       "Executed" must be 347, "Available" 393 and "New" 46. Then run the upgrade as in section 4.5,
       without UPDATE_PATH.
 
+    <h3>4.8. Pending migrations on an up-to-date platform</h3>
+    <a id="cli-upgrade-pending-migrations" class="anchor"></a>
+      This section is for a platform whose migration history is recorded but misses some migrations
+      the deployed code carries. The <em>Health check</em> block of the administration page then
+      reports "migrations pending". It is rare: an update that stopped before it finished, or rows
+      removed from the history by hand.<br>
+      Only the migrations execute what they carry. Some of them change the schema, others move data
+      or files, so a schema that looks correct does not prove that a pending migration has nothing
+      left to do. Do not mark them as executed: run them.<br>
+      Make a backup of your database and of the <em>var/</em> directory first. Then list the pending
+      migrations, which are the ones shown as "not migrated":
+    <pre>
+        cd [/var/www/chamilo]
+        php bin/console doctrine:migrations:list
+    </pre>
+      Execute them all, in order:
+    <pre>
+        php bin/console doctrine:migrations:migrate --no-interaction
+        php bin/console cache:clear --env=prod
+        php bin/console cache:warmup --env=prod
+        sudo chown -R www-data: var/
+    </pre>
+      To execute one migration only, give its full class name as the list prints it, as in the
+      example below. Prefer doctrine:migrations:migrate when more than one is pending, because it
+      keeps their order:
+    <pre>
+        php bin/console doctrine:migrations:execute 'Chamilo\CoreBundle\Migrations\Schema\V200\Version20170523110000' --up
+    </pre>
+      Afterwards, doctrine:migrations:status must report "New" 0, and the <em>Health check</em> block
+      reports the migration history as recorded.
+
   <h2>5. Web panel upgrade from 1.11.*</h2>
   <a id="web-upgrade" class="anchor"></a>
 

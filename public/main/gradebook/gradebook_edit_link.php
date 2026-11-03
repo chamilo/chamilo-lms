@@ -28,6 +28,15 @@ $link = $linkarray[0];
 if (!api_is_platform_admin() && (int) $link->getCourseId() !== (int) $course_id) {
     api_not_allowed(true);
 }
+// A link created for another session of the course cannot be edited from this one. The session of a
+// link is the one of its category (the value the link object carries comes from the request).
+if (!api_is_platform_admin()) {
+    $linkCategory = Category::load((int) $link->get_category_id());
+    $linkSessionId = !empty($linkCategory[0]) ? (int) $linkCategory[0]->get_session_id() : 0;
+    if ($linkSessionId > 0 && $linkSessionId !== (int) api_get_session_id()) {
+        api_not_allowed(true);
+    }
+}
 if ($link->is_locked() && !api_is_platform_admin()) {
     api_not_allowed();
 }

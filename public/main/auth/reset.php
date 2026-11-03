@@ -7,7 +7,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $token = $_GET['token'] ?? '';
 
-if (!ctype_alnum($token)) {
+// Tokens are hexadecimal strings: anything else (arrays, empty values, symbols) is discarded.
+if (!is_string($token) || !ctype_alnum($token)) {
     $token = '';
 }
 
@@ -42,7 +43,11 @@ if (empty($ttl)) {
 if ($form->validate()) {
     $values = $form->exportValues();
     $password = $values['pass1'];
-    $token = $values['token'];
+    $token = $values['token'] ?? '';
+    if (!is_string($token) || !ctype_alnum($token)) {
+        // Never look up an empty or malformed token: it could match users without a pending request.
+        api_not_allowed(true);
+    }
 
     /** @var \Chamilo\CoreBundle\Entity\User $user */
     $user = Container::getUserRepository()->findOneBy(['confirmationToken' => $token]);

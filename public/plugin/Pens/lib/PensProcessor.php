@@ -13,6 +13,8 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 require_once __DIR__.'/pens.php';
 
+require_once __DIR__.'/PENSPlugin.php';
+
 /**
  * Processes PENS collect requests inside the plugin.
  */
@@ -35,6 +37,10 @@ class PensProcessor
      */
     public function handle(array $payload): string
     {
+        if (!PENSPlugin::create()->isEnabled()) {
+            return (string) new PENSResponse(1421, 'PENS is not enabled');
+        }
+
         try {
             $request = $this->createCollectRequest($payload);
         } catch (PENSException $exception) {

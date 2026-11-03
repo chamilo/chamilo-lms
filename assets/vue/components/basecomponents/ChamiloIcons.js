@@ -86,6 +86,7 @@ export const chamiloIconToClass = {
   "glossary": "mdi mdi-alphabetical",
   "gradebook": "mdi mdi-certificate",
   "graph": "mdi mdi-graph",
+  "chart-bar": "mdi mdi-chart-bar",
   "hammer-wrench": "mdi mdi-hammer-wrench",
   "home": "mdi mdi-home",
   "inbox": "mdi mdi-inbox",

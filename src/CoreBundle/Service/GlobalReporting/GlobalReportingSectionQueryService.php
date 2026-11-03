@@ -3701,6 +3701,8 @@ final readonly class GlobalReportingSectionQueryService
         $sessionIds = $adminMode
             ? $this->allAccessUrlSessionIds($context)
             : $this->getTrackedSessionIds($context);
+        // The Vue route and GlobalReportingSectionView's INITIAL_META repeat the title and
+        // supportsReset of the non-admin list, to paint them before this response arrives.
         $title = $adminMode ? 'Sessions overview' : 'Your sessions';
         $columns = $this->sessionColumns(!$adminMode);
         $meta = $adminMode

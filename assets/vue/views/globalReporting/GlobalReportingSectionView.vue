@@ -1,13 +1,5 @@
 <template>
   <div class="space-y-5 pb-8">
-    <Message
-      v-if="errorMessage"
-      severity="error"
-      :closable="false"
-    >
-      {{ errorMessage }}
-    </Message>
-
     <GlobalReportingToolbar
       :show-print="!isMyProgress && (!isSessionList || report.total > 0)"
       :show-csv="isSessionList && report.total > 0 && report.meta.canExportCsv"
@@ -197,7 +189,41 @@
       </header>
 
       <div class="overflow-x-auto p-4">
+        <div
+          v-if="showTableSkeleton"
+          aria-busy="true"
+        >
+          <Skeleton height="2.5625rem" />
+          <div
+            v-for="row in SESSION_LIST_SKELETON.rows"
+            :key="`row-skeleton-${row}`"
+            :style="{ height: `${SESSION_LIST_SKELETON.rowHeight}px` }"
+            class="flex items-center border-b border-gray-25"
+          >
+            <div
+              v-for="(width, col) in SESSION_LIST_SKELETON.columns"
+              :key="`cell-skeleton-${row}-${col}`"
+              :style="{ width: `${width}%` }"
+              class="px-2"
+            >
+              <Skeleton
+                height="1rem"
+                width="70%"
+              />
+            </div>
+          </div>
+          <div
+            :style="{ height: `${SESSION_LIST_SKELETON.paginatorHeight}px` }"
+            class="flex items-center justify-center"
+          >
+            <Skeleton
+              height="2.5rem"
+              width="18.375rem"
+            />
+          </div>
+        </div>
         <BaseTable
+          v-else
           v-model:rows="filters.itemsPerPage"
           v-model:sort-field="filters.sort"
           v-model:sort-order="sortOrder"
@@ -456,13 +482,14 @@ import { computed, nextTick, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import Column from "primevue/column"
-import Message from "primevue/message"
+import Skeleton from "primevue/skeleton"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import { useNotification } from "../../composables/notification"
 import globalReportingService from "../../services/globalReportingService"
 import GlobalReportingToolbar from "./GlobalReportingToolbar.vue"
 
@@ -481,12 +508,28 @@ const props = defineProps({
   },
 })
 
+// Meta the server always sends for a section (GlobalReportingSectionQueryService), known before
+// the first response so the filters do not change once it arrives.
+const INITIAL_META = {
+  sessions: { supportsReset: false },
+}
+
+// Loaded /reporting/sessions at 1440 px, local portal with 1 session: header 41 px, columns
+// 113/124/361/357/147 px of 1102 px, rows of 49 px, paginator 65 px.
+const SESSION_LIST_SKELETON = {
+  columns: [10.3, 11.3, 32.8, 32.4, 13.2],
+  rows: 1,
+  rowHeight: 49,
+  paginatorHeight: 65,
+}
+
 const route = useRoute()
 const router = useRouter()
 const { locale, t } = useI18n()
+const { showErrorNotification } = useNotification()
 const loading = ref(false)
+const loaded = ref(false)
 const exportFormat = ref("")
-const errorMessage = ref("")
 const startDateValue = ref(null)
 const endDateValue = ref(null)
 const sortOrder = ref(1)
@@ -500,7 +543,7 @@ const report = reactive({
   columns: [],
   items: [],
   sections: [],
-  meta: {},
+  meta: { ...(INITIAL_META[props.section] || {}) },
 })
 const filters = reactive({
   page: 1,
@@ -545,6 +588,7 @@ const isUserList = computed(() => props.section === "users")
 const isCourseList = computed(() => props.section === "courses")
 const isSessionList = computed(() => props.section === "sessions")
 const isListPage = computed(() => isUserList.value || isCourseList.value || isSessionList.value)
+const showTableSkeleton = computed(() => isSessionList.value && loading.value && !loaded.value)
 const showFilterCsv = computed(() => report.meta.canExportCsv && !isSessionList.value)
 const showFilterXlsx = computed(() => report.meta.canExportXlsx && !isSessionList.value)
 const compactFilters = computed(
@@ -665,7 +709,6 @@ function requestParams() {
 
 async function loadReport() {
   loading.value = true
-  errorMessage.value = ""
 
   try {
     const response = await globalReportingService.getSection(props.section, requestParams())
@@ -681,9 +724,10 @@ async function loadReport() {
       meta: response.meta || {},
     })
   } catch (error) {
-    errorMessage.value = error?.response?.data?.detail || error?.message || t("An error occurred")
+    showErrorNotification(error)
   } finally {
     loading.value = false
+    loaded.value = true
   }
 }
 
@@ -901,7 +945,6 @@ function printReport() {
 
 async function downloadExport(format) {
   exportFormat.value = format
-  errorMessage.value = ""
   try {
     const response = await globalReportingService.downloadSection(props.section, format, requestParams())
     const disposition = String(response.headers?.["content-disposition"] || "")
@@ -918,7 +961,7 @@ async function downloadExport(format) {
     anchor.remove()
     window.URL.revokeObjectURL(url)
   } catch (error) {
-    errorMessage.value = error?.response?.data?.detail || error?.message || t("Could not export the report")
+    showErrorNotification(error)
   } finally {
     exportFormat.value = ""
   }

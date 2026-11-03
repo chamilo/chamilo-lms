@@ -70,7 +70,8 @@ export default {
       path: "sessions",
       name: "GlobalReportingSessions",
       meta: { breadcrumb: "Course sessions" },
-      ...sectionView("sessions", "Course sessions"),
+      // Same title as the server sends (GlobalReportingSectionQueryService::getSessions()).
+      ...sectionView("sessions", "Your sessions"),
     },
     {
       path: "admin",

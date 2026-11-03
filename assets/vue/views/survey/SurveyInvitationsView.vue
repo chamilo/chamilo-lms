@@ -30,16 +30,6 @@
       {{ errorMessage }}
     </div>
 
-    <div
-      v-if="successMessage"
-      ref="successMessageElement"
-      class="rounded border border-green-200 bg-green-50 p-3 text-sm text-green-700"
-      role="status"
-      tabindex="-1"
-    >
-      {{ successMessage }}
-    </div>
-
     <div class="grid gap-4 md:grid-cols-3">
       <div class="rounded-lg border border-gray-25 bg-white p-4 shadow-sm">
         <p class="text-sm text-gray-500">{{ t("Invited") }}</p>
@@ -377,7 +367,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -385,8 +375,10 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
+const { showSuccessNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
 const { displayTranslatedHtml } = useTranslatedHtml()
@@ -409,8 +401,6 @@ const hideLink = ref(false)
 const isLoading = ref(false)
 const isSaving = ref(false)
 const errorMessage = ref("")
-const successMessage = ref("")
-const successMessageElement = ref(null)
 const activeTab = ref("invited")
 
 const surveyId = computed(() => Number(route.params.surveyId || 0))
@@ -577,7 +567,7 @@ async function loadInvitationData() {
     mailText.value = response.mailText || defaultMailText()
 
     if (response.message) {
-      successMessage.value = t(response.message)
+      showSuccessNotification(t(response.message))
     }
   } catch (error) {
     console.error("Error loading survey invitations", error)
@@ -590,7 +580,6 @@ async function loadInvitationData() {
 
 async function publishSurvey() {
   errorMessage.value = ""
-  successMessage.value = ""
 
   if (sendMail.value && (!mailSubject.value.trim() || !mailText.value.trim())) {
     errorMessage.value = t("Mail subject and message are required when sending mail.")
@@ -630,10 +619,7 @@ async function publishSurvey() {
     if (!canRemindUnanswered.value) {
       remindUnanswered.value = false
     }
-    successMessage.value = t(response.message || "Survey published", response.messageParameters || [])
-    // The message sits at the top of the page, out of view on small screens after clicking Publish.
-    await nextTick()
-    successMessageElement.value?.focus()
+    showSuccessNotification(t(response.message || "Survey published", response.messageParameters || []))
   } catch (error) {
     console.error("Error publishing survey", error)
     errorMessage.value = error?.response?.data?.detail || t("Could not publish survey")
@@ -649,7 +635,7 @@ function selectAllUsers() {
 async function copyText(text) {
   try {
     await navigator.clipboard.writeText(text)
-    successMessage.value = t("Copied")
+    showSuccessNotification(t("Copied"))
   } catch (error) {
     console.error("Error copying survey link", error)
     errorMessage.value = t("Could not copy the link")

@@ -41,13 +41,6 @@
     </div>
 
     <div
-      v-if="successMessage"
-      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
-    >
-      {{ successMessage }}
-    </div>
-
-    <div
       v-if="previewMode"
       class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700"
     >
@@ -394,8 +387,10 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
+const { showSuccessNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
 const { displayTranslatedHtml } = useTranslatedHtml()
@@ -415,7 +410,6 @@ const message = ref("")
 const isLoading = ref(false)
 const isSaving = ref(false)
 const errorMessage = ref("")
-const successMessage = ref("")
 const currentPageIndex = ref(0)
 
 const surveyId = computed(() => Number(route.params.surveyId || 0))
@@ -783,7 +777,6 @@ function goToPreviousPage() {
 
 async function submitSurvey() {
   errorMessage.value = ""
-  successMessage.value = ""
 
   if (previewMode.value || !canSubmit.value) {
     return
@@ -806,7 +799,7 @@ async function submitSurvey() {
       surveyId.value,
     )
     normalizeResponse(data)
-    successMessage.value = t("Survey completed")
+    showSuccessNotification(t("Survey completed"))
     if (isLearningPathContext.value && window.parent !== window) {
       window.parent.postMessage({ type: "chamilo:learning-path:refresh" }, window.location.origin)
     }

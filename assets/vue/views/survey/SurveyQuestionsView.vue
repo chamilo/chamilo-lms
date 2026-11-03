@@ -47,13 +47,6 @@
     </div>
 
     <div
-      v-if="successMessage"
-      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
-    >
-      {{ successMessage }}
-    </div>
-
-    <div
       v-if="isLearningPathContext && questions.length === 0 && !isLoading"
       class="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700"
     >
@@ -452,8 +445,10 @@ import { useConfirmation } from "../../composables/useConfirmation"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import lpService from "../../services/lpService"
 import surveyService from "../../services/surveyService"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
+const { showSuccessNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
 const { displayTranslatedHtml } = useTranslatedHtml()
@@ -471,7 +466,6 @@ const isFinishingLearningPath = ref(false)
 const isFormVisible = ref(false)
 const isEditing = ref(false)
 const errorMessage = ref("")
-const successMessage = ref("")
 const form = ref(createEmptyForm())
 const formSection = ref(null)
 
@@ -729,7 +723,6 @@ function startCreate(type = "open") {
   if (settings.value.markQuestionAsRequired) {
     form.value.isRequired = true
   }
-  successMessage.value = ""
   errorMessage.value = ""
   showForm()
 }
@@ -749,7 +742,6 @@ function startEdit(question) {
     sort: Number(question.sort || Number.MAX_SAFE_INTEGER),
     options: normalizeOptionsForForm(question.options || []),
   }
-  successMessage.value = ""
   errorMessage.value = ""
   showForm()
 }
@@ -934,7 +926,6 @@ function buildPayload() {
 
 async function submitQuestion() {
   errorMessage.value = ""
-  successMessage.value = ""
 
   if (!validateForm()) {
     return
@@ -952,7 +943,7 @@ async function submitQuestion() {
     normalizeResponse(data)
     await loadQuestions()
     cancelForm()
-    successMessage.value = isEditing.value ? t("QuestionUpdated") : t("The question has been added.")
+    showSuccessNotification(isEditing.value ? t("QuestionUpdated") : t("The question has been added."))
   } catch (error) {
     console.error("Error saving survey question", error)
     errorMessage.value = error?.response?.data?.detail || t("Could not save survey question")
@@ -972,7 +963,7 @@ async function deleteQuestion(question) {
   try {
     await surveyService.deleteSurveyQuestion(getContextParams(), surveyId.value, question.iid)
     await loadQuestions()
-    successMessage.value = t("Deleted")
+    showSuccessNotification(t("Deleted"))
   } catch (error) {
     console.error("Error deleting survey question", error)
     errorMessage.value = error?.response?.data?.detail || t("Could not delete survey question")
@@ -983,7 +974,7 @@ async function moveQuestion(question, direction) {
   try {
     const data = await surveyService.moveSurveyQuestion(getContextParams(), surveyId.value, question.iid, direction)
     normalizeResponse(data)
-    successMessage.value = t("The question has been moved")
+    showSuccessNotification(t("The question has been moved"))
   } catch (error) {
     console.error("Error moving survey question", error)
     errorMessage.value = error?.response?.data?.detail || t("Could not move survey question")
@@ -994,7 +985,7 @@ async function copyQuestion(question) {
   try {
     const data = await surveyService.copySurveyQuestion(getContextParams(), surveyId.value, question.iid)
     normalizeResponse(data)
-    successMessage.value = t("The question has been added.")
+    showSuccessNotification(t("The question has been added."))
   } catch (error) {
     console.error("Error copying survey question", error)
     errorMessage.value = error?.response?.data?.detail || t("Could not copy survey question")

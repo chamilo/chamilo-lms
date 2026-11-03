@@ -25,13 +25,6 @@
       {{ errorMessage }}
     </div>
 
-    <div
-      v-if="successMessage"
-      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
-    >
-      {{ successMessage }}
-    </div>
-
     <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)]">
       <form
         class="space-y-5 rounded-xl border border-gray-25 bg-white p-5 shadow-sm"
@@ -139,8 +132,10 @@ import BaseSearchSelect from "../../components/basecomponents/BaseSearchSelect.v
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
+const { showSuccessNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
 const { displayTranslatedHtml } = useTranslatedHtml()
@@ -151,7 +146,6 @@ const targets = ref([])
 const selectedTargetKey = ref("")
 const searchQuery = ref("")
 const errorMessage = ref("")
-const successMessage = ref("")
 const isLoading = ref(false)
 const isSaving = ref(false)
 let searchTimer = null
@@ -236,7 +230,6 @@ async function copySurvey() {
 
   isSaving.value = true
   errorMessage.value = ""
-  successMessage.value = ""
 
   try {
     const response = await surveyService.copySurveyToTarget(
@@ -248,7 +241,7 @@ async function copySurvey() {
       surveyId.value,
     )
 
-    successMessage.value = response.message ? t(response.message) : t("Survey copied.")
+    showSuccessNotification(response.message ? t(response.message) : t("Survey copied."))
     selectedTargetKey.value = ""
     await loadCopyForm()
   } catch (error) {

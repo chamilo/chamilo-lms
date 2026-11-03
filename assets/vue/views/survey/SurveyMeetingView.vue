@@ -54,15 +54,6 @@
     </div>
 
     <div
-      v-if="successMessage || meeting.message"
-      ref="successMessageBox"
-      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-700"
-      tabindex="-1"
-    >
-      {{ successMessage || t(meeting.message) }}
-    </div>
-
-    <div
       v-if="isLoading"
       class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm"
     >
@@ -362,7 +353,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, reactive, ref, watch } from "vue"
+import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -371,8 +362,10 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
+const { showSuccessNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
 const { displayTranslatedHtml } = useTranslatedHtml()
@@ -409,10 +402,6 @@ const isLoading = ref(false)
 const isSaving = ref(false)
 const formSubmitted = ref(false)
 const errorMessage = ref("")
-const successMessage = ref("")
-const successMessageBox = ref(null)
-// Survives the reload triggered by the redirect after saving, which otherwise clears successMessage.
-let successMessageAfterLoad = ""
 
 const isCreateMode = computed(() => route.name === "SurveyMeetingCreate")
 const isEditorMode = computed(() => isCreateMode.value || route.name === "SurveyMeetingEdit")
@@ -493,8 +482,6 @@ function hydrateForm(data) {
 async function loadMeeting() {
   isLoading.value = true
   errorMessage.value = ""
-  successMessage.value = successMessageAfterLoad
-  successMessageAfterLoad = ""
 
   try {
     const surveyId = route.params.surveyId ? Number(route.params.surveyId) : null
@@ -571,7 +558,6 @@ function validateForm() {
 async function saveMeeting() {
   formSubmitted.value = true
   errorMessage.value = ""
-  successMessage.value = ""
 
   if (!validateForm()) {
     errorMessage.value = t("Please complete the required fields")
@@ -597,10 +583,9 @@ async function saveMeeting() {
     const surveyId = isCreateMode.value ? null : Number(route.params.surveyId)
     const response = await surveyService.saveSurveyMeeting(payload, getContextParams(), surveyId)
     meeting.value = response
-    successMessage.value = response.message ? t(response.message) : t("Saved")
+    showSuccessNotification(response.message ? t(response.message) : t("Saved"))
 
     if (response.surveyId) {
-      successMessageAfterLoad = successMessage.value
       const meetingRoute = {
         name: "SurveyMeeting",
         params: {
@@ -625,7 +610,6 @@ async function saveMeeting() {
 
 async function submitAvailability() {
   errorMessage.value = ""
-  successMessage.value = ""
   isSaving.value = true
 
   try {
@@ -638,7 +622,7 @@ async function submitAvailability() {
     )
     meeting.value = response
     selectedSlots.value = Array.isArray(response.selectedSlots) ? [...response.selectedSlots] : []
-    successMessage.value = response.message ? t(response.message) : t("Saved")
+    showSuccessNotification(response.message ? t(response.message) : t("Saved"))
     if (isLearningPathContext.value && window.parent !== window) {
       window.parent.postMessage({ type: "chamilo:learning-path:refresh" }, window.location.origin)
     }
@@ -719,14 +703,4 @@ watch(
   () => [route.params.surveyId, route.name, route.query],
   () => loadMeeting(),
 )
-
-// Move the focus to the confirmation so the user sees it, even when the save button is far below.
-watch(successMessage, async (message) => {
-  if (!message) {
-    return
-  }
-
-  await nextTick()
-  successMessageBox.value?.focus()
-})
 </script>

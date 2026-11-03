@@ -50,16 +50,6 @@
     </div>
 
     <div
-      v-if="successMessage"
-      ref="successAlertRef"
-      class="rounded-xl border border-green-200 bg-green-50 p-4 text-sm font-semibold text-green-700"
-      role="status"
-      tabindex="-1"
-    >
-      {{ successMessage }}
-    </div>
-
-    <div
       v-if="isLoading"
       class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm"
     >
@@ -456,8 +446,10 @@ import ResourceLanguageSelector from "../../components/resources/ResourceLanguag
 import { useResourceLanguageVisibility } from "../../composables/useResourceLanguageVisibility"
 import surveyService from "../../services/surveyService"
 import surveyTemplateService from "../../services/surveyTemplateService"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
+const { showSuccessNotification } = useNotification()
 const route = useRoute()
 const router = useRouter()
 const { resourceLanguageEnabled } = useResourceLanguageVisibility()
@@ -466,9 +458,7 @@ const isLoading = ref(false)
 const isSaving = ref(false)
 const formSubmitted = ref(false)
 const errorMessage = ref("")
-const successMessage = ref("")
 const errorAlertRef = ref(null)
-const successAlertRef = ref(null)
 const firstInvalidFieldId = ref("")
 const questionUrl = ref("")
 const settings = ref({})
@@ -796,7 +786,6 @@ async function applySelectedTemplate() {
   }
 
   errorMessage.value = ""
-  successMessage.value = ""
   isApplyingTemplate.value = true
 
   try {
@@ -813,8 +802,7 @@ async function applySelectedTemplate() {
       displayQuestionNumber: false !== template.displayQuestionNumber,
       duration: Number(template.duration || 0) > 0 ? Number(template.duration) : null,
     }
-    successMessage.value = t("Template applied. Review the survey settings and save to create it.")
-    await scrollToFeedback("success")
+    showSuccessNotification(t("Template applied. Review the survey settings and save to create it."))
   } catch (error) {
     console.error("Error loading survey template", error)
     errorMessage.value = getApiErrorMessage(error, t("Could not load survey template"))
@@ -897,10 +885,10 @@ function buildPayload() {
   return payload
 }
 
-async function scrollToFeedback(target = "error") {
+async function scrollToFeedback() {
   await nextTick()
 
-  const alert = "success" === target ? successAlertRef.value : errorAlertRef.value
+  const alert = errorAlertRef.value
   if (alert?.scrollIntoView) {
     alert.scrollIntoView({ behavior: "smooth", block: "center" })
     alert.focus?.({ preventScroll: true })
@@ -920,7 +908,6 @@ async function focusFirstInvalidField() {
 async function submitForm() {
   formSubmitted.value = true
   errorMessage.value = ""
-  successMessage.value = ""
 
   if (!validateForm()) {
     await scrollToFeedback()
@@ -965,8 +952,7 @@ async function submitForm() {
       return
     }
 
-    successMessage.value = t("The survey has been saved successfully")
-    await scrollToFeedback("success")
+    showSuccessNotification(t("The survey has been saved successfully"))
   } catch (error) {
     console.error("Error saving survey configuration", error)
     errorMessage.value = getApiErrorMessage(error, t("Could not save survey configuration"))

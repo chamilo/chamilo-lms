@@ -19,6 +19,15 @@ if (empty($evaluation)) {
 if (!api_is_platform_admin() && (int) $evaluation[0]->getCourseId() !== (int) api_get_course_int_id()) {
     api_not_allowed(true);
 }
+// An evaluation created for another session of the course cannot be edited from this one. The session of
+// an evaluation is the one of its category (the value the object carries comes from the request).
+if (!api_is_platform_admin()) {
+    $evaluationCategory = Category::load((int) $evaluation[0]->get_category_id());
+    $evaluationSessionId = !empty($evaluationCategory[0]) ? (int) $evaluationCategory[0]->get_session_id() : 0;
+    if ($evaluationSessionId > 0 && $evaluationSessionId !== (int) api_get_session_id()) {
+        api_not_allowed(true);
+    }
+}
 $evaluation[0]->check_lock_permissions();
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();

@@ -91,6 +91,32 @@ final class PasswordResetLinkHostTest extends WebTestCase
         );
     }
 
+    /**
+     * main/auth/lostPassword.php is run by the web server, not by the front controller, so the
+     * request's base path is the script's directory. The link must still point to the platform
+     * root, not to /main/auth/main/auth/lostPassword.php.
+     */
+    public function testPlaceholderUrlFallbackIgnoresTheLegacyScriptDirectory(): void
+    {
+        self::bootKernel();
+        $this->setMainUrl(AccessUrl::DEFAULT_ACCESS_URL);
+        $scriptName = '/main/auth/lostPassword.php';
+        self::getContainer()->get('request_stack')->push(Request::create(
+            'https://campus.example.org'.$scriptName,
+            'POST',
+            server: [
+                'SCRIPT_NAME' => $scriptName,
+                'SCRIPT_FILENAME' => '/var/www/chamilo/public'.$scriptName,
+                'PHP_SELF' => $scriptName,
+            ],
+        ));
+
+        $this->assertSame(
+            'https://campus.example.org/',
+            self::getContainer()->get(AccessUrlHelper::class)->getCurrentBaseUrl()
+        );
+    }
+
     private function setMainUrl(string $url): void
     {
         $accessUrl = self::getContainer()->get(AccessUrlHelper::class)->getFirstAccessUrl();

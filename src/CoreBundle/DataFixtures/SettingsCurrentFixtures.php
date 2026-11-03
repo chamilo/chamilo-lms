@@ -30,7 +30,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
         'cron_remind_course_expiration_activate',
         'donotlistcampus',
         'server_type',
-        'unoconv_binaries',
         'session_admin_access_to_all_users_on_all_urls',
         'split_users_upload_directory',
         'multiple_url_hide_disabled_settings',
@@ -2266,11 +2265,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'timepicker_increment',
                     'title' => 'Timepicker increment',
                     'comment' => 'Minimal time increment (in minutes) when selecting a date and time with the timepicker widget. For example, it might not be useful to have less than 5 or 15 minutes increments when talking about assignment submission, availability of a test, start time of a session, etc.',
-                ],
-                [
-                    'name' => 'unoconv_binaries',
-                    'title' => 'UNO converter binaries',
-                    'comment' => 'Give the system path to the UNO converter library to enable some extra exporting features.',
                 ],
                 [
                     'name' => 'use_career_external_id_as_identifier_in_diagrams',

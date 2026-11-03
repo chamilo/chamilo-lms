@@ -1619,14 +1619,14 @@ class SurveyUtil
                         if ($questions[$question_id]['type'] === 'percentage') {
                             if (!empty($answers_of_user[$question_id][$option_id])) {
                                 $content .= "<td align='center'>";
-                                $content .= $answers_of_user[$question_id][$option_id]['value'];
+                                $content .= Security::remove_XSS($answers_of_user[$question_id][$option_id]['value']);
                                 $content .= "</td>";
                             }
                         } else {
                             $content .= '<td align="center">';
                             if (!empty($answers_of_user[$question_id][$option_id])) {
                                 if (0 != $answers_of_user[$question_id][$option_id]['value']) {
-                                    $content .= $answers_of_user[$question_id][$option_id]['value'];
+                                    $content .= Security::remove_XSS($answers_of_user[$question_id][$option_id]['value']);
                                 } else {
                                     $content .= 'v';
                                 }

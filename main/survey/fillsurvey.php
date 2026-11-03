@@ -293,7 +293,7 @@ if (count($_POST) > 0) {
         $sql = "SELECT * FROM $table_survey_question
                 WHERE
                     c_id = $course_id AND
-                    survey_id = '".intval($survey_invitation['survey_id'])."'";
+                    survey_id = '".(int) $survey_invitation['survey_id']."'";
         $result = Database::query($sql);
 
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -308,11 +308,11 @@ if (count($_POST) > 0) {
                 strpos($key, 'question') !== false && $key !== '_qf__question'
             ) {
                 // Finding the question id by removing 'question'
-                $survey_question_id = str_replace('question', '', $key);
+                $survey_question_id = (int) str_replace('question', '', $key);
                 // If not question ID was defined, we're on the start
                 // screen or something else that doesn't require
                 // saving an answer
-                if (empty($survey_question_id)) {
+                if (empty($survey_question_id) || !isset($types[$survey_question_id])) {
                     continue;
                 }
 
@@ -334,8 +334,8 @@ if (count($_POST) > 0) {
 
                     foreach ($value as $answer_key => &$answer_value) {
                         if ('score' == $types[$survey_question_id]) {
-                            $option_id = $answer_key;
-                            $option_value = $answer_value;
+                            $option_id = (int) $answer_key;
+                            $option_value = (int) $answer_value;
                         } else {
                             $option_id = $answer_value;
                             $option_value = '';
@@ -360,7 +360,7 @@ if (count($_POST) > 0) {
                         $sql = "SELECT * FROM $table_survey_question_option
                                 WHERE
                                     c_id = $course_id AND
-                                    question_option_id='".intval($value)."'";
+                                    question_option_id='".(int) $value."'";
                         $result = Database::query($sql);
                         $row = Database::fetch_array($result, 'ASSOC');
                         $option_value = $row['option_text'];
@@ -404,11 +404,11 @@ if (count($_POST) > 0) {
         if ($survey_data['shuffle'] == '1') {
             $shuffle = ' ORDER BY RAND() ';
         }
+        $types = [];
         $sql = "SELECT * FROM $table_survey_question
                 WHERE
                     c_id = $course_id AND
-                    survey_id = '".intval($survey_invitation['survey_id'])."' AND
-                    survey_group_pri = '0' $shuffle";
+                    survey_id = '".(int) $survey_invitation['survey_id']."' $shuffle";
         $result = Database::query($sql);
         // There is only one question type for conditional surveys
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -420,16 +420,16 @@ if (count($_POST) > 0) {
             // If the post value key contains the string 'question' then it is an answer to a question
             if (false !== strpos($key, 'question')) {
                 // Finding the question id by removing 'question'
-                $survey_question_id = str_replace('question', '', $key);
+                $survey_question_id = (int) str_replace('question', '', $key);
                 // If not question ID was defined, we're on the start
                 // screen or something else that doesn't require
                 // saving an answer
-                if (empty($survey_question_id)) {
+                if (empty($survey_question_id) || !isset($types[$survey_question_id])) {
                     continue;
                 }
                 // We select the correct answer and the puntuacion
                 $sql = "SELECT value FROM $table_survey_question_option
-                        WHERE c_id = $course_id AND question_option_id='".intval($value)."'";
+                        WHERE c_id = $course_id AND question_option_id='".(int) $value."'";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result, 'ASSOC');
                 $option_value = $row['value'];

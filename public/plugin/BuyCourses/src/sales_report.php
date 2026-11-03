@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For license terms, see /license.txt */
 
-/**
+/*
  * List of pending payments of the Buy Courses plugin.
  */
 
@@ -68,6 +68,7 @@ if ($orderId = $httpRequest->query->getInt('order')) {
     }
 
     header("Location: $urlToRedirect");
+
     exit;
 }
 
@@ -97,6 +98,12 @@ $dateEnd = (string) $httpRequest->query->get(
 );
 $searchTerm = trim((string) $httpRequest->query->get('user', ''));
 $email = trim((string) $httpRequest->query->get('email', ''));
+$selectedProductType = $httpRequest->query->getInt('product_type', 0);
+$selectedProductName = trim((string) $httpRequest->query->get('product_name', ''));
+
+if (0 !== $selectedProductType && !isset($productTypes[$selectedProductType])) {
+    $selectedProductType = 0;
+}
 
 $form = new FormValidator('search', 'get');
 
@@ -113,6 +120,12 @@ if ($form->validate()) {
     $dateStart = (string) $form->getSubmitValue('date_start');
     $dateEnd = (string) $form->getSubmitValue('date_end');
     $email = trim((string) $form->getSubmitValue('email'));
+    $selectedProductType = (int) $form->getSubmitValue('product_type');
+    $selectedProductName = trim((string) $form->getSubmitValue('product_name'));
+
+    if (0 !== $selectedProductType && !isset($productTypes[$selectedProductType])) {
+        $selectedProductType = 0;
+    }
 
     if (!isset($saleStatuses[$selectedStatus])) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
@@ -141,6 +154,8 @@ $form->addHtml('</div>');
 $form->addHtml('<div id="report-by-email" '.('3' !== $selectedFilterType ? 'style="display:none"' : '').'>');
 $form->addText('email', get_lang('Email'), false);
 $form->addHtml('</div>');
+$form->addSelect('product_type', $plugin->get_lang('ProductType'), [0 => get_lang('All')] + $productTypes);
+$form->addText('product_name', $plugin->get_lang('ProductName'), false);
 $form->addButtonFilter(get_lang('Search'));
 $form->setDefaults([
     'filter_type' => $selectedFilterType,
@@ -149,6 +164,8 @@ $form->setDefaults([
     'date_end' => $dateEnd,
     'user' => $searchTerm,
     'email' => $email,
+    'product_type' => $selectedProductType,
+    'product_name' => $selectedProductName,
 ]);
 
 $sales = [];
@@ -156,19 +173,39 @@ $sales = [];
 switch ($selectedFilterType) {
     case '0':
         $sales = $plugin->getSaleListByStatus($selectedStatus);
+
         break;
 
     case '1':
         $sales = $plugin->getSaleListByUser($searchTerm);
+
         break;
 
     case '2':
         $sales = $plugin->getSaleListByDate($dateStart, $dateEnd);
+
         break;
 
     case '3':
         $sales = $plugin->getSaleListByEmail($email);
+
         break;
+}
+
+// Apply the optional product filters to the rows returned by the existing report mode.
+if (0 !== $selectedProductType || '' !== $selectedProductName) {
+    $normalizedName = api_strtolower($selectedProductName);
+    $sales = array_values(array_filter(
+        $sales,
+        static function (array $sale) use ($selectedProductType, $normalizedName): bool {
+            if (0 !== $selectedProductType && (int) ($sale['product_type'] ?? 0) !== $selectedProductType) {
+                return false;
+            }
+
+            return '' === $normalizedName
+                || str_contains(api_strtolower((string) ($sale['product_name'] ?? '')), $normalizedName);
+        }
+    ));
 }
 
 foreach ($sales as &$sale) {

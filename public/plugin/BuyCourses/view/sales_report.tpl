@@ -1,4 +1,83 @@
 {% autoescape false %}
+<style>
+  /* Local jqGrid styling for the BuyCourses course/session sales report. */
+  #gh2626-sales-grid .ui-jqgrid {
+    width: 100% !important;
+    border: 0;
+    font-size: 0.875rem;
+  }
+
+  #gh2626-sales-grid .ui-jqgrid-view,
+  #gh2626-sales-grid .ui-jqgrid-hdiv,
+  #gh2626-sales-grid .ui-jqgrid-bdiv,
+  #gh2626-sales-grid .ui-jqgrid-pager {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  #gh2626-sales-grid .ui-jqgrid-hbox {
+    float: none;
+    padding-right: 0;
+  }
+
+  #gh2626-sales-grid .ui-jqgrid-hdiv,
+  #gh2626-sales-grid .ui-jqgrid-bdiv {
+    overflow-x: auto !important;
+  }
+
+  #gh2626-sales-grid .ui-jqgrid-htable th {
+    background: #f8fafc;
+    border-color: #e5e7eb;
+    color: #374151;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: start;
+  }
+
+  #gh2626-sales-grid .ui-jqgrid-htable th div {
+    height: auto;
+    min-height: 44px;
+    padding: 0.625rem;
+    line-height: 1.25;
+    white-space: normal;
+  }
+
+  #gh2626-sales-grid .ui-jqgrid-btable td {
+    padding: 0.75rem 0.625rem;
+    border-color: #e5e7eb;
+    color: #374151;
+    line-height: 1.4;
+    vertical-align: middle;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  #gh2626-sales-grid .ui-jqgrid-btable tr:hover td {
+    background: #f8fafc;
+  }
+
+  #gh2626-sales-grid .ui-jqgrid-pager {
+    min-height: 52px;
+    border-color: #e5e7eb;
+    background: #fff;
+  }
+
+  #gh2626-sales-grid .ui-jqgrid-btable .btn-group {
+    display: inline-flex;
+    gap: 0.5rem;
+  }
+
+  #gh2626-sales-grid .ui-jqgrid-btable .btn-group a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: #fff;
+  }
+</style>
+
 {% set formShell = 'rounded-3xl border border-gray-25 bg-white p-5 shadow-sm [&_form]:space-y-6 [&_.form-group]:mb-0 [&_.form-group]:rounded-2xl [&_.form-group]:border [&_.form-group]:border-gray-25 [&_.form-group]:bg-white [&_.form-group]:p-5 [&_.form-group]:shadow-sm [&_label]:mb-2 [&_label]:block [&_label]:text-sm [&_label]:font-semibold [&_label]:text-gray-90 [&_input:not([type=radio]):not([type=checkbox])]:block [&_input:not([type=radio]):not([type=checkbox])]:w-full [&_input:not([type=radio]):not([type=checkbox])]:rounded-xl [&_input:not([type=radio]):not([type=checkbox])]:border-gray-25 [&_input:not([type=radio]):not([type=checkbox])]:bg-white [&_input:not([type=radio]):not([type=checkbox])]:text-sm [&_input:not([type=radio]):not([type=checkbox])]:text-gray-90 [&_input:not([type=radio]):not([type=checkbox])]:shadow-sm [&_input:not([type=radio]):not([type=checkbox])]:placeholder:text-gray-50 [&_input:not([type=radio]):not([type=checkbox])]:focus:border-primary [&_input:not([type=radio]):not([type=checkbox])]:focus:ring-primary [&_select]:block [&_select]:w-full [&_select]:rounded-xl [&_select]:border-gray-25 [&_select]:bg-white [&_select]:text-sm [&_select]:text-gray-90 [&_select]:shadow-sm [&_select]:focus:border-primary [&_select]:focus:ring-primary [&_.radio]:space-y-2 [&_.radio]:rounded-2xl [&_.radio]:border [&_.radio]:border-gray-25 [&_.radio]:bg-support-2 [&_.radio]:p-4 [&_.radio]:text-sm [&_.radio]:text-gray-90 [&_.radio_label]:text-sm [&_.radio_label]:font-semibold [&_.btn]:inline-flex [&_.btn]:items-center [&_.btn]:justify-center [&_.btn]:gap-2 [&_.btn]:rounded-xl [&_.btn]:px-4 [&_.btn]:py-2.5 [&_.btn]:text-sm [&_.btn]:font-semibold [&_.btn]:shadow-sm [&_.btn]:transition [&_.btn]:hover:opacity-90 [&_.btn]:focus:outline-none [&_.btn]:focus:ring-2 [&_.btn]:focus:ring-offset-2 [&_.btn-primary]:bg-primary [&_.btn-primary]:text-white [&_.btn-primary]:focus:ring-primary/30 [&_.btn-success]:bg-success [&_.btn-success]:text-white [&_.btn-success]:focus:ring-success/30 [&_.btn-default]:border [&_.btn-default]:border-gray-25 [&_.btn-default]:bg-white [&_.btn-default]:text-gray-90 [&_.help-block]:mt-2 [&_.help-block]:block [&_.help-block]:text-sm [&_.help-block]:text-gray-50 [&_.input-group]:flex [&_.input-group]:items-center [&_.input-group]:gap-3 [&_.col-sm-2]:w-full [&_.col-sm-3]:w-full [&_.col-sm-7]:w-full [&_.col-sm-8]:w-full [&_.col-sm-10]:w-full [&_.col-sm-11]:w-full' %}
 
 <div class="mx-auto w-full space-y-6 px-4 py-6 sm:px-6 lg:px-8">
@@ -161,8 +240,8 @@
         </div>
 
         <div class="p-6">
-            <div class="overflow-x-auto rounded-2xl border border-gray-25 bg-white">
-                <table class="min-w-full" id="table_report"></table>
+            <div id="gh2626-sales-grid" class="w-full overflow-x-auto rounded-2xl border border-gray-25 bg-white">
+                <table id="table_report"></table>
             </div>
 
             <div id="tblGridPager" class="mt-4 text-center"></div>

@@ -529,23 +529,30 @@ switch ($action) {
             );
             $supervisorStudents = array_column($supervisorStudents, 'user_id');
 
-            //get students with course or session
-            $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'admin',
-                null,
-                false,
-                null,
-                null,
-                null,
-                'asc',
-                null,
-                null,
-                null,
-                [],
-                $supervisorStudents,
-                5
-            );
-            $userIdList = array_column($userIdList, 'user_id');
+            // An empty list means "no restriction" for the call below: a boss who follows nobody must see nothing.
+            $userIdList = [];
+            if (!empty($supervisorStudents)) {
+                //get students with course or session
+                $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'admin',
+                    null,
+                    false,
+                    null,
+                    null,
+                    null,
+                    'asc',
+                    null,
+                    null,
+                    null,
+                    [],
+                    $supervisorStudents,
+                    5
+                );
+                // Never show a user the boss does not follow.
+                $userIdList = array_values(
+                    array_intersect(array_column($userIdList, 'user_id'), array_map('intval', $supervisorStudents))
+                );
+            }
 
             //get students session courses
             if (-1 == $sessionId) {

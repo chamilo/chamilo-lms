@@ -38,6 +38,81 @@ ini_set('memory_limit', -1);
 ini_set('max_execution_time', 0);
 error_reporting(-1);
 
+/*
+ * PCRE JIT probe. PHP compiles regular expressions to machine code (pcre.jit=1, the default), which needs memory that
+ * is both writable and executable. Some servers forbid it (SELinux, systemd's MemoryDenyWriteExecute, hardened kernels,
+ * containers), and PHP then emits "Allocation of JIT memory failed" the first time a regular expression is used.
+ * Symfony's error handler turns that warning into an exception and the installer ends in an HTTP 500 error, so it is
+ * detected here, before anything else uses a regular expression, to explain how to solve it.
+ */
+$pcreJitError = null;
+set_error_handler(static function (int $errno, string $errstr) use (&$pcreJitError): bool {
+    if (false !== stripos($errstr, 'JIT')) {
+        $pcreJitError = $errstr;
+
+        return true;
+    }
+
+    return false;
+});
+preg_match('/^(?:ab|cd)+\d{2}$/u', 'abcd12');
+restore_error_handler();
+
+if (null !== $pcreJitError) {
+    $docUrl = 'https://www.php.net/manual/en/pcre.configuration.php#ini.pcre.jit';
+    $steps = [
+        'Disable PCRE JIT (simplest, regular expressions are just a bit slower)' => [
+            'In php.ini, for both the web server and the command line: pcre.jit = 0',
+            'or in an Apache virtual host: php_admin_value pcre.jit 0',
+            'or in a PHP-FPM pool file: php_admin_value[pcre.jit] = 0',
+            'Then restart the web server (or PHP-FPM).',
+        ],
+        'Allow PHP to allocate executable memory (keeps PCRE JIT, which is faster)' => [
+            'systemd: remove MemoryDenyWriteExecute=yes from the service, or set MemoryDenyWriteExecute=no in a drop-in file '
+                .'(systemctl show apache2 -p MemoryDenyWriteExecute tells you), then reload systemd and restart the service.',
+            'SELinux: setsebool -P httpd_execmem 1',
+            'Containers and other sandboxes: use a security profile that does not forbid executable memory mappings.',
+        ],
+    ];
+
+    if ('cli' === PHP_SAPI) {
+        fwrite(STDERR, "PCRE JIT is not allowed on this server: $pcreJitError\n");
+        foreach ($steps as $title => $lines) {
+            fwrite(STDERR, "\n$title\n  - ".implode("\n  - ", $lines)."\n");
+        }
+        fwrite(STDERR, "\nSee $docUrl\n");
+
+        exit(1);
+    }
+
+    $e = static fn (string $text): string => htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    http_response_code(500);
+    header('Content-Type: text/html; charset=utf-8');
+    echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+        .'<title>Chamilo installation - PCRE JIT is not allowed</title>'
+        .'<style>body{font-family:Arial,sans-serif;background:#f4f6f8;color:#222;margin:0;padding:2rem}'
+        .'main{max-width:46rem;margin:0 auto;background:#fff;border-radius:8px;padding:1.5rem 2rem;box-shadow:0 1px 4px rgba(0,0,0,.15)}'
+        .'h1{font-size:1.4rem;margin-top:0}code,pre{background:#eef1f4;border-radius:4px;padding:.1rem .35rem}'
+        .'pre{padding:.6rem;white-space:pre-wrap}li{margin:.3rem 0}.err{border-left:4px solid #c0392b;padding:.4rem .8rem;background:#fdf1f0}</style></head><body><main>'
+        .'<h1>The installation cannot start: PCRE JIT is not allowed on this server</h1>'
+        .'<p>PHP speeds up regular expressions by compiling them to machine code (PCRE JIT). That needs the permission to '
+        .'allocate executable memory, and this server does not give it to PHP. PHP reported:</p>'
+        .'<p class="err">'.$e($pcreJitError).'</p>'
+        .'<p>Chamilo cannot work around this by itself. Solve it in one of the two following ways, then reload this page:</p>';
+    $n = 1;
+    foreach ($steps as $title => $lines) {
+        echo '<h2 style="font-size:1.1rem">'.$n++.'. '.$e($title).'</h2><ul>';
+        foreach ($lines as $line) {
+            echo '<li>'.$e($line).'</li>';
+        }
+        echo '</ul>';
+    }
+    echo '<p>See the <a href="'.$e($docUrl).'" target="_blank" rel="noopener">PHP documentation about pcre.jit</a>.</p>'
+        .'</main></body></html>';
+
+    exit;
+}
+
 require_once __DIR__.'/../../../vendor/autoload.php';
 
 define('SYSTEM_INSTALLATION', 1);

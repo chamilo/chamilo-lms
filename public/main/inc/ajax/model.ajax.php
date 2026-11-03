@@ -137,6 +137,10 @@ if ($isDiagnosisLoadSearch) {
     if (!api_is_allowed_to_edit(null, true)) {
         api_not_allowed(true);
     }
+} elseif (api_is_student_boss() && in_array($action, ['get_user_course_report', 'get_user_course_report_resumed'], true)) {
+    // Student bosses only see the students they follow (the result set is scoped below).
+    api_block_anonymous_users();
+    api_block_inactive_user();
 } elseif (in_array($action, $adminActions, true)) {
     // Admin actions whose result sets are already scoped to the entities the HR manager
     // (DRH) actually follows. Only these may be opened to DRH; the rest (e.g. get_sessions,

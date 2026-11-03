@@ -1187,6 +1187,22 @@ class IndexBlocksController extends BaseController
             $migrationHistoryItem['action'] = 'record-migration-history';
         }
 
+        // A recorded history can still lack migrations the code ships: files replaced
+        // without running the update, or rows removed by hand. Only the update executes
+        // them, so the item points there and carries no action of its own.
+        $pendingMigrations = $historyIsEmpty ? 0 : $this->migrationHistoryRecorder->countPending();
+
+        if ($pendingMigrations > 0) {
+            $migrationHistoryItem = [
+                'class' => 'item-health-check-migration-history text-warning',
+                'url' => '/documentation/installation_guide.html#cli-upgrade-pending-migrations',
+                'label' => \sprintf(
+                    $this->translator->trans('%s migrations pending: execute them from the command line'),
+                    $pendingMigrations
+                ),
+            ];
+        }
+
         $items[] = $migrationHistoryItem;
 
         return $items;

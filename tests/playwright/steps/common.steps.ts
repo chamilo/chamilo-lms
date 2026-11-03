@@ -1,6 +1,6 @@
 import fs from "node:fs"
 import path from "node:path"
-import { expect, Page, Response, test } from "@playwright/test"
+import { expect, Page, Response, Route, test } from "@playwright/test"
 import { createBdd, DataTable } from "playwright-bdd"
 
 const { Given, When, Then, BeforeAll, AfterAll, Before } = createBdd()
@@ -4755,7 +4755,6 @@ When("I go to the legacy results page of the current test", async ({ page }) => 
   await gotoReliably(page, `/main/exercise/exercise_report.php?cid=${cid}&sid=${sid}&exerciseId=${match[1]}`)
 })
 
-
 // Use the configured administrator for issue #8954 only. Do not replace the
 // shared `I am a platform administrator` step: other suites depend on admin/admin.
 // Never store local credentials in source or in a .feature file.
@@ -4796,10 +4795,15 @@ async function floorPlanTestBranchId(page: Page): Promise<number> {
     return { status: response.status, data: response.ok ? await response.json() : null }
   })
   expect(status, "The current user must be able to list branches, or ISSUE8954_BRANCH_ID must be set").toBe(200)
-  const items = Array.isArray(data) ? data : data?.member ?? data?.["hydra:member"] ?? []
+  const items = Array.isArray(data) ? data : (data?.member ?? data?.["hydra:member"] ?? [])
   expect(items.length, "The Playwright installer must seed one branch").toBeGreaterThan(0)
   const entry = items[0]
-  const id = Number(entry.id ?? String(entry["@id"] ?? "").split("/").pop())
+  const id = Number(
+    entry.id ??
+      String(entry["@id"] ?? "")
+        .split("/")
+        .pop(),
+  )
   expect(Number.isSafeInteger(id) && id > 0, "Invalid seeded branch ID").toBeTruthy()
   return id
 }
@@ -4845,26 +4849,61 @@ When("I exercise temporary branch and room polygon CRUD", async ({ page }) => {
       const response = await fetch(path, {
         method,
         credentials: "same-origin",
-        headers: body ? { "Content-Type": "application/ld+json", Accept: "application/ld+json" } : { Accept: "application/ld+json" },
+        headers: body
+          ? { "Content-Type": "application/ld+json", Accept: "application/ld+json" }
+          : { Accept: "application/ld+json" },
         body: body ? JSON.stringify(body) : undefined,
       })
       const raw = await response.text()
       let data: Payload = {}
-      try { data = JSON.parse(raw) as Payload } catch { /* a 204 has no body */ }
+      try {
+        data = JSON.parse(raw) as Payload
+      } catch {
+        /* a 204 has no body */
+      }
       return { status: response.status, data, detail: raw.slice(0, 400) }
     }
-    const entityId = (obj: Payload): number => Number(obj.id ?? String(obj["@id"] ?? "").split("/").pop())
-    const check = (ok: boolean, message: string): void => { if (!ok) throw new Error(message) }
-    const original = { type: "polygon", points: [[0.12, 0.18], [0.78, 0.2], [0.66, 0.72]] }
-    const updated = { type: "polygon", points: [[0.14, 0.19], [0.8, 0.22], [0.65, 0.7]] }
+    const entityId = (obj: Payload): number =>
+      Number(
+        obj.id ??
+          String(obj["@id"] ?? "")
+            .split("/")
+            .pop(),
+      )
+    const check = (ok: boolean, message: string): void => {
+      if (!ok) throw new Error(message)
+    }
+    const original = {
+      type: "polygon",
+      points: [
+        [0.12, 0.18],
+        [0.78, 0.2],
+        [0.66, 0.72],
+      ],
+    }
+    const updated = {
+      type: "polygon",
+      points: [
+        [0.14, 0.19],
+        [0.8, 0.22],
+        [0.65, 0.7],
+      ],
+    }
     const title = `Issue8954 PW ${Date.now()}`
     try {
-      const branch = await request("/api/branches", "POST", { title, description: "Temporary floor plan regression branch" })
+      const branch = await request("/api/branches", "POST", {
+        title,
+        description: "Temporary floor plan regression branch",
+      })
       check(branch.status === 201, `Branch POST: ${branch.status} ${branch.detail}`)
       branchId = entityId(branch.data)
       check(Number.isInteger(branchId) && branchId > 0, "Branch response had no ID")
       const room = await request("/api/rooms", "POST", {
-        title: `${title} room`, branch: `/api/branches/${branchId}`, floorNumber: 1, capacity: 8, roomMap: original,
+        title: `${title} room`,
+        branch: `/api/branches/${branchId}`,
+        floorNumber: 1,
+        capacity: 8,
+        roomMap: original,
       })
       check(room.status === 201, `Room POST: ${room.status} ${room.detail}`)
       roomId = entityId(room.data)
@@ -4873,21 +4912,41 @@ When("I exercise temporary branch and room polygon CRUD", async ({ page }) => {
       check(read.status === 200, `Room GET: ${read.status} ${read.detail}`)
       check(JSON.stringify(read.data.roomMap) === JSON.stringify(original), "Created polygon was not saved")
       const edit = await request(`/api/rooms/${roomId}`, "PUT", {
-        title: `${title} room edited`, description: "", branch: `/api/branches/${branchId}`,
-        floorNumber: 1, capacity: 8, roomMap: updated,
+        title: `${title} room edited`,
+        description: "",
+        branch: `/api/branches/${branchId}`,
+        floorNumber: 1,
+        capacity: 8,
+        roomMap: updated,
       })
       check(edit.status === 200, `Room PUT: ${edit.status} ${edit.detail}`)
       const reread = await request(`/api/rooms/${roomId}`, "GET")
-      check(reread.status === 200 && JSON.stringify(reread.data.roomMap) === JSON.stringify(updated), "Updated polygon was not persisted")
+      check(
+        reread.status === 200 && JSON.stringify(reread.data.roomMap) === JSON.stringify(updated),
+        "Updated polygon was not persisted",
+      )
       const invalid = await request(`/api/rooms/${roomId}`, "PUT", {
-        title: `${title} invalid`, branch: `/api/branches/${branchId}`,
-        roomMap: { type: "polygon", points: [[0, 0], [5, 0], [0, 1]] },
+        title: `${title} invalid`,
+        branch: `/api/branches/${branchId}`,
+        roomMap: {
+          type: "polygon",
+          points: [
+            [0, 0],
+            [5, 0],
+            [0, 1],
+          ],
+        },
       })
       check(invalid.status === 422, `Out-of-bounds polygon should be rejected with 422; got ${invalid.status}`)
       const unchanged = await request(`/api/rooms/${roomId}`, "GET")
-      check(unchanged.status === 200 && JSON.stringify(unchanged.data.roomMap) === JSON.stringify(updated), "Invalid update changed the stored polygon")
+      check(
+        unchanged.status === 200 && JSON.stringify(unchanged.data.roomMap) === JSON.stringify(updated),
+        "Invalid update changed the stored polygon",
+      )
       const clear = await request(`/api/rooms/${roomId}`, "PUT", {
-        title: `${title} room edited`, description: "", branch: `/api/branches/${branchId}`,
+        title: `${title} room edited`,
+        description: "",
+        branch: `/api/branches/${branchId}`,
         roomMap: null,
       })
       check(clear.status === 200, `Clear polygon PUT: ${clear.status} ${clear.detail}`)
@@ -4912,4 +4971,108 @@ When("I exercise temporary branch and room polygon CRUD", async ({ page }) => {
     return { problems }
   })
   expect(result.problems, result.problems.join("\n")).toEqual([])
+})
+
+// GH #8083: exercise the actual Vue selection and POST payload without sending
+// real messages or changing course data. The pre-seeded TEMP course is used only
+// to resolve the existing Assignments tool shell route.
+const gh8083Reminders = new WeakMap<Page, unknown[]>()
+
+Given("I open the GH8083 assignment reminder page with mock recipients", async ({ page }) => {
+  const assignmentId = 9988083
+  const recipients = [
+    { id: 80831, firstname: "One", lastname: "Student", email: "one@example.invalid" },
+    { id: 80832, firstname: "Two", lastname: "Student", email: "two@example.invalid" },
+    { id: 80833, firstname: "Three", lastname: "Student", email: "three@example.invalid" },
+  ]
+
+  gh8083Reminders.set(page, [])
+  const unsubmittedPath = `/assignments/${assignmentId}/unsubmitted-users`
+  const reminderPath = `${unsubmittedPath}/email`
+
+  const recordReminder = async (route: Route) => {
+    if (route.request().method() !== "POST" || new URL(route.request().url()).pathname !== reminderPath) {
+      await route.fallback()
+      return
+    }
+    gh8083Reminders.get(page)?.push(route.request().postDataJSON())
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ success: true, sent: 2 }),
+    })
+  }
+
+  // Intercept GET through the browser context because Chamilo's service
+  // worker may own the list request. Keep POST protected here as a fallback.
+  await page.context().route(`**${unsubmittedPath}*`, async (route) => {
+    const path = new URL(route.request().url()).pathname
+    if (route.request().method() === "POST" && path === reminderPath) {
+      await recordReminder(route)
+      return
+    }
+    if (route.request().method() !== "GET" || path !== unsubmittedPath) {
+      await route.fallback()
+      return
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ "hydra:member": recipients, "hydra:totalItems": recipients.length }),
+    })
+  })
+
+  // Axios sends reminders from the page. Page routing takes precedence over
+  // context routing; either interception path fulfills without real mail.
+  await page.route(`**${reminderPath}*`, recordReminder)
+  await page.route(`**/api/c_student_publications/${assignmentId}*`, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ id: assignmentId, title: "Reminder test assignment" }),
+    }),
+  )
+
+  await page
+    .locator("a.course-tool__title")
+    .filter({ hasText: /^\s*Assignments\s*$/ })
+    .first()
+    .click()
+  await expect(page).toHaveURL(/\/resources\/assignment\/\d+/)
+  const url = new URL(page.url())
+  url.pathname = `${url.pathname.replace(/\/$/, "")}/${assignmentId}/missing`
+  await gotoReliably(page, url.pathname + url.search)
+  await expect(page.getByText("Reminder test assignment")).toBeVisible({ timeout: 8_000 })
+})
+
+Then("the GH8083 selected-reminder button is disabled", async ({ page }) => {
+  await expect(page.getByRole("button", { name: "Remind all selected users" })).toBeDisabled()
+})
+
+When("I select GH8083 reminder recipients {string} and {string}", async ({ page }, first: string, second: string) => {
+  for (const name of [first, second]) {
+    const email = `${name.split(" ").pop()?.toLowerCase()}@example.invalid`
+    await page.getByRole("row").filter({ hasText: email }).locator('input[type="checkbox"]').check({ force: true })
+  }
+})
+
+When("I confirm the GH8083 selected reminder", async ({ page }) => {
+  await page.getByRole("button", { name: "Remind all selected users" }).click()
+  await page.locator(".p-confirmdialog").getByRole("button", { name: "Yes" }).click()
+})
+
+When("I send the GH8083 reminder to all", async ({ page }) => {
+  await page.getByRole("button", { name: "Send email to all" }).click()
+})
+
+Then("the GH8083 reminder request contains only student IDs {string}", async ({ page }, ids: string) => {
+  await expect.poll(() => gh8083Reminders.get(page)?.length).toBe(1)
+  const requests = gh8083Reminders.get(page) as Array<{ userIds?: number[] }>
+  expect(requests[0].userIds).toEqual(ids.split(",").map(Number))
+})
+
+Then("the GH8083 reminder request contains no user IDs", async ({ page }) => {
+  await expect.poll(() => gh8083Reminders.get(page)?.length).toBe(1)
+  const requests = gh8083Reminders.get(page) as Array<{ userIds?: number[] }>
+  expect(requests[0]).toEqual({})
 })

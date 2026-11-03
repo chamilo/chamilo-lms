@@ -27,11 +27,11 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
+use Chamilo\CourseBundle\Entity\CStudentPublicationRelUser;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationFollowRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
@@ -47,6 +47,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -497,89 +498,189 @@ class StudentPublicationController extends AbstractController
     #[Route('/{assignmentId}/unsubmitted-users', name: 'chamilo_core_assignment_unsubmitted_users', methods: ['GET'])]
     public function getUnsubmittedUsers(
         int $assignmentId,
-        SerializerInterface $serializer,
         CStudentPublicationRepository $repo,
-        CourseRelUserRepository $courseRelUserRepo
+        CourseRelUserRepository $courseRelUserRepo,
+        EntityManagerInterface $em
     ): JsonResponse {
         $assignment = $repo->find($assignmentId);
-        if (!$assignment) {
+        if (!$assignment instanceof CStudentPublication || null !== $assignment->getPublicationParent()) {
             return new JsonResponse(['error' => 'Assignment not found.'], 404);
         }
-        // Teacher-only: must be allowed to edit the assignment's course resource.
+
         $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
-
-        $course = $this->cidReqHelper->getCourseEntity();
-        $session = $this->cidReqHelper->getSessionEntity();
-
-        $students = $session
-            ? $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT)
-            : $courseRelUserRepo->findBy([
-                'course' => $course,
-                'status' => CourseRelUser::STUDENT,
-            ]);
-
-        $studentsArray = $students instanceof Collection
-            ? $students->toArray()
-            : $students;
-
-        $submittedUserIds = $repo->findUserIdsWithSubmissions($assignmentId);
-
-        $unsubmitted = array_filter(
-            $studentsArray,
-            fn ($rel) => !\in_array($rel->getUser()->getId(), $submittedUserIds, true)
-        );
-
-        $data = array_values(array_map(fn ($rel) => $rel->getUser(), $unsubmitted));
+        $users = $this->findUnsubmittedReminderRecipients($assignment, $repo, $courseRelUserRepo, $em);
 
         return $this->json([
-            'hydra:member' => $data,
-            'hydra:totalItems' => \count($data),
+            'hydra:member' => array_values($users),
+            'hydra:totalItems' => \count($users),
         ], 200, [], ['groups' => ['user:read']]);
     }
 
     #[Route('/{assignmentId}/unsubmitted-users/email', name: 'chamilo_core_assignment_unsubmitted_users_email', methods: ['POST'])]
     public function emailUnsubmittedUsers(
         int $assignmentId,
+        Request $request,
         CStudentPublicationRepository $repo,
+        CourseRelUserRepository $courseRelUserRepo,
+        EntityManagerInterface $em,
         MessageHelper $messageHelper,
         Security $security
     ): JsonResponse {
         $assignment = $repo->find($assignmentId);
-        if (!$assignment) {
+        if (!$assignment instanceof CStudentPublication || null !== $assignment->getPublicationParent()) {
             return new JsonResponse(['error' => 'Assignment not found.'], 404);
         }
-        // Teacher-only: only a teacher of the assignment's course may message students.
+
         $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
 
-        $course = $this->cidReqHelper->getCourseEntity();
-        $session = $this->cidReqHelper->getSessionEntity();
+        // A missing userIds property retains the existing "send to all" behavior.
+        // An explicitly empty or invalid selection must never fall back to everyone.
+        $payload = '' === trim($request->getContent()) ? [] : $request->toArray();
+        $selectedIds = null;
+        if (\array_key_exists('userIds', $payload)) {
+            $rawIds = $payload['userIds'];
+            if (!\is_array($rawIds) || [] === $rawIds || !array_is_list($rawIds)) {
+                throw new BadRequestHttpException('Select at least one valid student.');
+            }
 
-        /** @var User $user */
-        $user = $security->getUser();
-        $senderId = $user?->getId();
+            foreach ($rawIds as $id) {
+                if (!\is_int($id) || $id <= 0) {
+                    throw new BadRequestHttpException('Student IDs must be positive integers.');
+                }
+            }
+            $selectedIds = array_values(array_unique($rawIds));
+        }
 
-        $students = $session
-            ? $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT)
-            : $course->getStudentSubscriptions();
+        $users = $this->findUnsubmittedReminderRecipients($assignment, $repo, $courseRelUserRepo, $em);
+        if (null !== $selectedIds) {
+            // Resolve IDs against current eligible recipients; never trust the Vue selection.
+            if (array_diff($selectedIds, array_keys($users))) {
+                throw new BadRequestHttpException('Some selected students are no longer eligible for this reminder.');
+            }
+            $users = array_intersect_key($users, array_fill_keys($selectedIds, true));
+        }
 
-        $submittedUserIds = $repo->findUserIdsWithSubmissions($assignmentId);
-
-        $unsubmitted = array_filter(
-            $students->toArray(),
-            fn ($rel) => !\in_array($rel->getUser()->getId(), $submittedUserIds, true)
-        );
-
-        foreach ($unsubmitted as $rel) {
-            $user = $rel->getUser();
-            $messageHelper->sendMessageSimple(
+        /** @var User $sender */
+        $sender = $security->getUser();
+        $sent = 0;
+        foreach ($users as $user) {
+            if (null !== $messageHelper->sendMessageSimple(
                 $user->getId(),
                 'You have not submitted your assignment',
                 'Please submit your assignment as soon as possible.',
-                $senderId
-            );
+                (int) $sender->getId()
+            )) {
+                ++$sent;
+            }
         }
 
-        return new JsonResponse(['success' => true, 'sent' => \count($unsubmitted)]);
+        return new JsonResponse(['success' => true, 'sent' => $sent]);
+    }
+
+    /**
+     * Recalculate eligible recipients on every request to exclude new submissions,
+     * unsubscribed learners, students outside a group, and users not assigned the task.
+     *
+     * @return array<int, User> Indexed by user ID
+     */
+    private function findUnsubmittedReminderRecipients(
+        CStudentPublication $assignment,
+        CStudentPublicationRepository $repo,
+        CourseRelUserRepository $courseRelUserRepo,
+        EntityManagerInterface $em
+    ): array {
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+        $groupId = (int) ($this->cidReqHelper->getGroupId() ?? 0);
+        $group = $groupId > 0 ? $this->cidReqHelper->getGroupEntity() : null;
+
+        if (null === $course || ($session && !$session->hasCourse($course))) {
+            throw new NotFoundHttpException('Assignment not found in this course context.');
+        }
+        if ($groupId > 0 && (!$group instanceof CGroup || (int) $group->getIid() !== $groupId)) {
+            throw new NotFoundHttpException('Group not found in this course context.');
+        }
+
+        $linked = false;
+        foreach ($assignment->getResourceNode()?->getResourceLinks() ?? [] as $link) {
+            if ((int) ($link->getCourse()?->getId() ?? 0) !== (int) $course->getId()) {
+                continue;
+            }
+            if ($link->getSession() && (!$session || $link->getSession()->getId() !== $session->getId())) {
+                continue;
+            }
+            if ($link->getGroup() && (!$group || $link->getGroup()->getIid() !== $groupId)) {
+                continue;
+            }
+            if (0 !== $assignment->getGroupCategoryWorkId() && $group && !$this->assignmentGroupCategoryResolver->assignmentAppliesToGroup(
+                $assignment->getGroupCategoryWorkId(),
+                $group,
+                $course,
+                $session,
+            )) {
+                continue;
+            }
+            $linked = true;
+
+            break;
+        }
+        if (!$linked) {
+            throw new NotFoundHttpException('Assignment not found in this course context.');
+        }
+
+        $students = $session
+            ? $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT)
+            : $courseRelUserRepo->findBy(['course' => $course, 'status' => CourseRelUser::STUDENT]);
+
+        $assigned = $em->getRepository(CStudentPublicationRelUser::class)->findBy(['publication' => $assignment]);
+        $assignedIds = [];
+        foreach ($assigned as $relation) {
+            $assignedIds[$relation->getUser()->getId()] = true;
+        }
+        $submittedIds = array_fill_keys(array_map('intval', $repo->findUserIdsWithSubmissions((int) $assignment->getIid())), true);
+
+        // Shared group assignments must only remind members of matching groups,
+        // including when the teacher opens the assignment without a gid parameter.
+        $groupMemberIds = null;
+        if (0 !== $assignment->getGroupCategoryWorkId()) {
+            $groupMemberIds = [];
+            $courseGroups = $em->getRepository(CGroup::class)
+                ->getResourcesByCourse($course, $session, displayOnlyPublished: false)
+                ->getQuery()
+                ->getResult()
+            ;
+            foreach ($courseGroups as $courseGroup) {
+                if (!$courseGroup instanceof CGroup || ($group && $group->getIid() !== $courseGroup->getIid())) {
+                    continue;
+                }
+                if (!$this->assignmentGroupCategoryResolver->assignmentAppliesToGroup(
+                    $assignment->getGroupCategoryWorkId(),
+                    $courseGroup,
+                    $course,
+                    $session,
+                )) {
+                    continue;
+                }
+                foreach ($courseGroup->getMembers() as $membership) {
+                    $groupMemberIds[$membership->getUser()->getId()] = true;
+                }
+            }
+        }
+
+        $eligible = [];
+        foreach ($students as $subscription) {
+            $user = $subscription->getUser();
+            $id = $user->getId();
+            if (isset($submittedIds[$id]) || ([] !== $assignedIds && !isset($assignedIds[$id]))) {
+                continue;
+            }
+            if (($group && !$group->hasMember($user)) || (null !== $groupMemberIds && !isset($groupMemberIds[$id]))) {
+                continue;
+            }
+            $eligible[$id] = $user;
+        }
+
+        return $eligible;
     }
 
     #[Route('/{id}/export/pdf', name: 'chamilo_core_assignment_export_pdf', methods: ['GET'])]

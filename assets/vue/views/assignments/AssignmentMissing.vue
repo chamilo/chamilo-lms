@@ -15,8 +15,26 @@
         only-icon
         size="small"
         type="black"
+        :disabled="loading || sending || !users.length"
+        :is-loading="sending"
         @click="sendEmailToAll"
       />
+      <BaseButton
+        :label="t('Remind all selected users')"
+        icon="email-unread"
+        only-icon
+        size="small"
+        type="primary"
+        :disabled="loading || sending || !selectedUsers.length"
+        :is-loading="sending"
+        @click="confirmSelectedReminder"
+      />
+      <span
+        v-if="selectedUsers.length"
+        class="text-sm text-gray-600"
+      >
+        {{ t("{0} users selected", [selectedUsers.length]) }}
+      </span>
     </div>
     <hr />
     <h1 class="text-xl font-bold">
@@ -32,9 +50,12 @@
 
     <BaseTable
       v-else-if="users.length"
+      v-model:selected-items="selectedUsers"
       :values="users"
       data-key="id"
     >
+      <Column selection-mode="multiple" />
+
       <Column :header="t('Last name')">
         <template #body="slotProps">
           {{ slotProps.data.lastname }}
@@ -77,6 +98,7 @@ import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import Column from "primevue/column"
 import ProgressSpinner from "primevue/progressspinner"
 import { getCourseContext } from "../../utils/courseContext"
+import { useConfirmation } from "../../composables/useConfirmation"
 import { useNotification } from "../../composables/notification"
 
 const props = defineProps({
@@ -86,12 +108,15 @@ const props = defineProps({
 const users = ref([])
 const assignment = ref(null)
 const loading = ref(true)
+const sending = ref(false)
+const selectedUsers = ref([])
 
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
 const { cid, sid, gid } = getCourseContext()
 const notification = useNotification()
+const { requireConfirmation } = useConfirmation()
 
 onMounted(async () => {
   loading.value = true
@@ -113,16 +138,42 @@ function goBack() {
   })
 }
 
-async function sendEmailToAll() {
+function confirmSelectedReminder() {
+  if (!selectedUsers.value.length || sending.value) return
+
+  const selectedIds = selectedUsers.value.map((user) => user.id)
+  requireConfirmation({
+    title: t("Remind all selected users"),
+    message: `${t("Please confirm your choice")} (${t("{0} users selected", [selectedUsers.value.length])})`,
+    accept: () => sendReminders(selectedIds),
+  })
+}
+
+async function sendReminders(userIds = null) {
+  if (sending.value || (userIds !== null && !userIds.length)) return
+
+  sending.value = true
   try {
-    await cstudentpublication.sendEmailToUnsubmitted(props.id, {
-      cid,
-      ...(sid && { sid }),
-      ...(gid && { gid }),
-    })
-    notification.showSuccessNotification(t("Email sent to all unsubmitted users"))
-  } catch (error) {
+    await cstudentpublication.sendEmailToUnsubmitted(
+      props.id,
+      { cid, ...(sid && { sid }), ...(gid && { gid }) },
+      userIds,
+    )
+    notification.showSuccessNotification(t(userIds === null ? "Email sent to all unsubmitted users" : "Email sent"))
+  } catch {
     notification.showErrorNotification(t("Failed to send email"))
+  } finally {
+    selectedUsers.value = []
+    try {
+      users.value = await cstudentpublication.getUnsubmittedUsers(props.id)
+    } catch (error) {
+      console.error("Failed to refresh unsubmitted users", error)
+    }
+    sending.value = false
   }
+}
+
+function sendEmailToAll() {
+  return sendReminders()
 }
 </script>

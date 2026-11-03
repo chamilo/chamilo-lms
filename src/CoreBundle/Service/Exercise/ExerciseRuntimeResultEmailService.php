@@ -103,6 +103,54 @@ final readonly class ExerciseRuntimeResultEmailService
     }
 
     /**
+     * Default content of the "Send email" field of the correction page, as exercise_show.php
+     * pre-filled it: the link leads to the learning path item when the attempt was made in one.
+     */
+    public function getCorrectionNotificationContent(
+        TrackEExercise $attempt,
+        CQuiz $quiz,
+        Course $course,
+        ?Session $session,
+        User $sender,
+        Request $request,
+    ): string {
+        $node = (string) $course->getResourceNode()?->getId();
+        $lpId = $attempt->getOrigLpId();
+        $lpItemId = $attempt->getOrigLpItemId();
+
+        if ($lpId > 0 && $lpItemId > 0) {
+            $query = [
+                'cid' => (int) $course->getId(),
+                'sid' => (int) $session?->getId(),
+                'gid' => $request->query->getInt('gid'),
+                'item_id' => $lpItemId,
+            ];
+            $url = \sprintf(
+                '%s/resources/lp/%s/%d/runtime?%s',
+                rtrim($request->getSchemeAndHttpHost().$request->getBaseUrl(), '/'),
+                rawurlencode($node),
+                $lpId,
+                http_build_query($query),
+            );
+        } else {
+            $url = $this->buildResultUrl($request, $node, $course, $session, (int) $quiz->getIid(), (int) $attempt->getExeId());
+        }
+
+        // Same content as Mailer/Exercise/result_alert_body.html.twig, built without Twig: this
+        // runs from an API Platform provider, before TwigListener has added its globals, and
+        // rendering a template that early makes TwigListener fail for the whole request.
+        $escape = static fn (string $value): string => htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        return '<p><strong>'.$escape($this->translator->trans('Dear learner,')).'</strong> '
+            .$escape($this->translator->trans('Your following attempt has been viewed/commented/corrected by the trainer')).'</p>'
+            .'<p><strong>'.$escape($this->translator->trans('Course name')).': </strong>'.$escape($this->getCourseTitle($course))
+            .'<br><strong>'.$escape($this->translator->trans('Test')).': </strong>'.$escape($quiz->getTitle()).'</p>'
+            .'<p>'.$escape($this->translator->trans('Click the link below to access  your account and view your commented Examsheet.')).'</p>'
+            .'<p><a href="'.$escape($url).'">'.$escape($url).'</a></p>'
+            .'<p><strong>'.$escape($this->translator->trans('Regards')).'</strong><br>'.$escape($sender->getFullName()).'</p>';
+    }
+
+    /**
      * @param array<int, TrackEExercise> $attempts
      *
      * @return array{success: bool, message: string, totalCount: int, sentCount: int, skippedCount: int, failedCount: int, failures: array<int, array<string, mixed>>}

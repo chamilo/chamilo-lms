@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseCertificateManager;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseRuntimeResultEmailService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -87,6 +88,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         private IsAllowedToEditHelper $isAllowedToEditHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
         private ExerciseCertificateManager $exerciseCertificateManager,
+        private ExerciseRuntimeResultEmailService $resultEmailService,
     ) {}
 
     /**
@@ -170,6 +172,17 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $response->progressiveAdaptiveResult = $this->getProgressiveAdaptiveResult($attempt);
         $response->correctionHistory = $canManage ? $this->getCorrectionHistory($attempt, $questions) : [];
         $response->canManage = $canManage;
+        $currentUser = $this->security->getUser();
+        if ($canManage && $isReviewMode && $currentUser instanceof User) {
+            $response->correctionNotificationContent = $this->resultEmailService->getCorrectionNotificationContent(
+                $attempt,
+                $quiz,
+                $course,
+                $session,
+                $currentUser,
+                $request,
+            );
+        }
         // The attempt's owner, not the viewer: a teacher reviewing (canManage) must see the
         // learner's own certificate, never one issued to themselves.
         $response->certificate = $this->exerciseCertificateManager->getExistingCertificate(
@@ -544,10 +557,6 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             default => false,
         };
 
-        if (true === $pageResultConfiguration['hideExpectedAnswers']) {
-            $showExpectedAnswers = false;
-        }
-
         $showOnlyCorrectAnswers = self::RESULT_SHOW_ONLY_IN_CORRECT_ANSWER === $resultsDisabled;
         $showFeedback = self::FEEDBACK_TYPE_EXAM !== $feedbackType && match ($resultsDisabled) {
             self::RESULT_SHOW_SCORE_AND_EXPECTED_ANSWERS,
@@ -558,6 +567,12 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             self::RESULT_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK => true,
             default => false,
         };
+
+        // Applied after the feedback: in 1.11 this option only hides the expected answers
+        // column, the teacher's comments stay visible.
+        if (true === $pageResultConfiguration['hideExpectedAnswers']) {
+            $showExpectedAnswers = false;
+        }
 
         $showQuestionScore = $showScore
             && $showQuestionDetails

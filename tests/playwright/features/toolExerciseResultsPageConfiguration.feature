@@ -78,7 +78,7 @@ Feature: Results page configuration of a test
     And I wait for the page to be loaded when ready
     Then the field "form_allow_quiz_results_page_config" should have value "true"
 
-  Scenario: The teacher's results page options are kept after saving
+  Scenario: The teacher ticks results page options
     Given I am a teacher
     And I wait for the page to be loaded
     And I am on course "EXRESPAGE" homepage
@@ -95,7 +95,11 @@ Feature: Results page configuration of a test
     And I press "Proceed to questions"
     And I wait for the page content to settle
     Then I should see "0 questions"
-    When I am on course "EXRESPAGE" homepage
+
+  Scenario: The teacher finds the results page options ticked when coming back
+    Given I am a teacher
+    And I wait for the page to be loaded
+    And I am on course "EXRESPAGE" homepage
     And I wait for the page to be loaded
     And I follow "Tests"
     And I wait for the page content to settle
@@ -124,7 +128,11 @@ Feature: Results page configuration of a test
     And I press "Proceed to questions"
     And I wait for the page content to settle
     Then I should see "0 questions"
-    When I am on course "EXRESPAGE" homepage
+
+  Scenario: The administrator finds the option unticked when coming back
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+    And I am on course "EXRESPAGE" homepage
     And I wait for the page to be loaded
     And I follow "Tests"
     And I wait for the page content to settle
@@ -135,6 +143,106 @@ Feature: Results page configuration of a test
     And the checkbox "hideExpectedAnswers" should be checked
     And the checkbox "hideTotalScore" should not be checked
     And the checkbox "hideQuestionScore" should be checked
+
+  # "Hide expected answers column" (still ticked here) hides the expected answers only. It used
+  # to hide the teacher's comment and audio correction too, so the learner never got them.
+  Scenario: Subscribe the learner to the results page test course
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+    And I am on course "EXRESPAGE" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "Users"
+    And I wait for the page to be loaded
+    And I click the "[title='Add']" element
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | search | acostea |
+    And I press "Search"
+    And I wait for the page to be loaded
+    Then I should see "Costea"
+    And I click the "[title='Register']" element
+    And I wait for the page to be loaded
+    Then I should see "subscribed to the course"
+
+  Scenario: Add an open question to the test
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+    And I am on course "EXRESPAGE" homepage
+    And I wait for the page to be loaded
+    And I follow "Tests"
+    And I wait for the page content to settle
+    And I click the "[title='Configure']" icon in the row for "Results page test"
+    And I wait for the page content to settle
+    And the field "title" should have value "Results page test"
+    And I press "Proceed to questions"
+    And I wait for the page content to settle
+    And I follow the question type "Open question"
+    And I wait for the page content to settle
+    And I fill in "question" with "Explain the results page"
+    And I fill in "exercise-manual-question-score" with "10"
+    And I press "Save the question"
+    And I wait for the page content to settle
+    Then I should see "Explain the results page"
+
+  # A new test is hidden from learners until it is activated.
+  Scenario: Make the test visible
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+    And I am on course "EXRESPAGE" homepage
+    And I wait for the page to be loaded
+    And I follow "Tests"
+    And I wait for the page content to settle
+    And I click the "[title='Activate']" icon in the row for "Results page test"
+    Then I wait for the element "tr:has-text('Results page test') [title='Deactivate']" to appear
+
+  Scenario: The learner answers the test
+    Given I am a student
+    And I wait for the page to be loaded
+    And I am on course "EXRESPAGE" homepage
+    And I wait for the page to be loaded
+    And I follow "Tests"
+    And I wait for the page content to settle
+    And I follow "Results page test"
+    And I wait for the page content to settle
+    And I start the exercise
+    And I wait for the page content to settle
+    Then I should see "Explain the results page"
+    And I fill in the open answer with "Answer waiting for a comment"
+    And I press "Finish test"
+    And I wait for the page content to settle
+    Then I should see "This answer is pending teacher correction."
+
+  Scenario: The teacher corrects the answer with a comment
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+    And I am on course "EXRESPAGE" homepage
+    And I wait for the page to be loaded
+    And I follow "Tests"
+    And I wait for the page content to settle
+    And I click the "[title='Results']" icon in the row for "Results page test"
+    And I wait for the page content to settle
+    And I click the "[title='Correct']" icon in the row for "Costea"
+    And I wait for the page content to settle
+    Then I should see "Answer waiting for a comment"
+    When I fill in "teacher_comment" with "Comment kept visible for the learner"
+    And I press "Save correction"
+    And I wait for the page content to settle
+    Then I should not see an error
+
+  Scenario: The learner sees the teacher's comment although the expected answers are hidden
+    Given I am a student
+    And I wait for the page to be loaded
+    And I am on course "EXRESPAGE" homepage
+    And I wait for the page to be loaded
+    And I follow "Tests"
+    And I wait for the page content to settle
+    And I follow "Results page test"
+    And I wait for the page content to settle
+    When I click the "a[href*='/result/']" element
+    And I wait for the page content to settle
+    Then I should see "Answer waiting for a comment"
+    And I should see "Teacher comment"
+    And I should see "Comment kept visible for the learner"
 
   Scenario: Delete the results page test course
     Given I am a platform administrator

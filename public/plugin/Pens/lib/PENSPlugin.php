@@ -4,7 +4,6 @@
 
 class PENSPlugin extends Plugin
 {
-    protected $strings = [];
     private array $errorMessages = [];
 
     public const TABLE_PENS = 'plugin_pens';
@@ -21,8 +20,6 @@ class PENSPlugin extends Plugin
                 self::SETTING_SYSTEM_PASSWORD => 'text',
             ]
         );
-
-        $this->loadPluginStrings();
     }
 
     public function get_name(): string
@@ -103,38 +100,5 @@ class PENSPlugin extends Plugin
         $result['is_mail_plugin'] = false;
 
         return $result;
-    }
-
-    private function loadPluginStrings(): void
-    {
-        $basePath = dirname(__DIR__).'/lang/';
-        $englishFile = $basePath.'english.php';
-
-        $this->strings = [];
-
-        if (is_readable($englishFile)) {
-            $strings = [];
-            require $englishFile;
-            if (isset($strings) && is_array($strings)) {
-                $this->strings = $strings;
-            }
-        }
-
-        $interfaceLanguage = api_get_language_isocode();
-        if (empty($interfaceLanguage) || 'english' === $interfaceLanguage) {
-            return;
-        }
-
-        $languageFile = $basePath.$interfaceLanguage.'.php';
-        if (!is_readable($languageFile)) {
-            return;
-        }
-
-        $strings = [];
-        require $languageFile;
-
-        if (isset($strings) && is_array($strings)) {
-            $this->strings = array_merge($this->strings, $strings);
-        }
     }
 }

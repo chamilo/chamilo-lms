@@ -8,7 +8,11 @@
       {{ errorMessage }}
     </Message>
 
-    <GlobalReportingToolbar @print="printReport" />
+    <GlobalReportingToolbar
+      :title="t('Overview')"
+      icon="usage"
+      @print="printReport"
+    />
 
     <section class="no-print rounded-xl border border-gray-25 bg-white p-4 shadow-sm">
       <form
@@ -57,8 +61,6 @@
     </section>
 
     <section>
-      <h1 class="mb-4 text-2xl font-semibold">{{ t("Overview") }}</h1>
-
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <article
           v-for="card in followedPeopleCards"

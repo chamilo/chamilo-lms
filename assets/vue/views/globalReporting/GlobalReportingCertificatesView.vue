@@ -9,24 +9,21 @@
     </Message>
 
     <GlobalReportingToolbar
+      :title="t(isExpiredReport ? 'Expired certificates' : 'Certificate report')"
+      icon="gradebook"
       :show-print="true"
       @print="printReport"
     />
 
-    <section class="border-b border-gray-25 pb-3">
-      <h1 class="text-2xl font-semibold text-gray-90">
-        {{ t(isExpiredReport ? "Expired certificates" : "Certificate report") }}
-      </h1>
-      <p class="mt-1 text-sm text-gray-50">
-        {{
-          t(
-            isExpiredReport
-              ? "Choose a session, course and optional date to list the generated certificates."
-              : "Filter and list learner certificates by session, course, date or learner, then export them when needed.",
-          )
-        }}
-      </p>
-    </section>
+    <p class="text-body-2 text-gray-50">
+      {{
+        t(
+          isExpiredReport
+            ? "Choose a session, course and optional date to list the generated certificates."
+            : "Filter and list learner certificates by session, course, date or learner, then export them when needed.",
+        )
+      }}
+    </p>
 
     <div class="grid gap-4 lg:grid-cols-12">
       <section

@@ -1,14 +1,22 @@
 <template>
-  <section class="no-print flex flex-wrap items-center gap-2 rounded-xl border border-gray-25 bg-white p-3 shadow-sm">
+  <!-- Page header of every reporting page: title, then plain icon buttons with a vertical divider before each separate group. -->
+  <SectionHeader
+    :title="title"
+    :icon="icon"
+    :show-student-view-button="false"
+  >
     <template v-if="returnAction">
       <BaseButton
         :label="t(returnAction.label)"
         icon="arrow-left"
         only-icon
-        type="primary-alternative"
+        type="primary-text"
         :route="returnAction.route"
       />
-      <span class="h-8 w-px bg-gray-25" />
+      <BaseDivider
+        v-if="hasNavigation"
+        layout="vertical"
+      />
     </template>
 
     <BaseButton
@@ -17,7 +25,8 @@
       :label="t(action.label)"
       :icon="action.icon"
       only-icon
-      :type="isActive(action) ? 'primary' : 'primary-alternative'"
+      type="primary-text"
+      :disabled="isCurrentPage(action)"
       :route="action.route"
     />
 
@@ -27,39 +36,40 @@
       :label="t(action.label)"
       :icon="action.icon"
       only-icon
-      type="primary-alternative"
+      type="primary-text"
       :route="action.route"
       :to-url="action.url"
     />
 
-    <div
-      v-if="showCourseQuestionTabs"
-      class="ms-2 inline-flex items-center rounded-full border border-gray-25 bg-gray-10 p-1"
-    >
-      <router-link
-        :to="{ name: 'GlobalReportingQuestionStats' }"
-        class="rounded-full px-3 py-1 text-sm text-gray-50 transition hover:bg-white hover:text-gray-90"
-      >
-        {{ t("Question stats") }}
-      </router-link>
-      <router-link
-        :to="{ name: 'GlobalReportingQuestionStatsDetail' }"
-        class="rounded-full px-3 py-1 text-sm text-gray-50 transition hover:bg-white hover:text-gray-90"
-      >
-        {{ t("Detailed questions stats") }}
-      </router-link>
-    </div>
+    <template v-if="showCourseQuestionTabs">
+      <BaseDivider layout="vertical" />
+      <BaseButton
+        :label="t('Question stats')"
+        icon="chart-bar"
+        only-icon
+        type="primary-text"
+        :route="{ name: 'GlobalReportingQuestionStats' }"
+      />
+      <BaseButton
+        :label="t('Detailed questions stats')"
+        icon="format-list-bulleted"
+        only-icon
+        type="primary-text"
+        :route="{ name: 'GlobalReportingQuestionStatsDetail' }"
+      />
+    </template>
 
-    <div
-      v-if="showPrint || showCsv"
-      class="ms-auto flex items-center gap-2"
-    >
+    <template v-if="showPrint || showCsv">
+      <BaseDivider
+        v-if="hasNavigation || showCourseQuestionTabs"
+        layout="vertical"
+      />
       <BaseButton
         v-if="showPrint"
         :label="t('Print')"
         icon="file-text"
         only-icon
-        type="primary-alternative"
+        type="primary-text"
         @click="$emit('print')"
       />
       <BaseButton
@@ -67,12 +77,12 @@
         :label="t('Export as CSV')"
         icon="file-delimited-outline"
         only-icon
-        type="primary-alternative"
+        type="primary-text"
         :is-loading="csvLoading"
         @click="$emit('exportCsv')"
       />
-    </div>
-  </section>
+    </template>
+  </SectionHeader>
 </template>
 
 <script setup>
@@ -80,9 +90,20 @@ import { computed, onMounted, reactive } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseDivider from "../../components/basecomponents/BaseDivider.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 import globalReportingService from "../../services/globalReportingService"
 
-const props = defineProps({
+defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+  // ChamiloIcons key shown before the title.
+  icon: {
+    type: String,
+    default: "",
+  },
   showPrint: {
     type: Boolean,
     default: true,
@@ -94,10 +115,6 @@ const props = defineProps({
   csvLoading: {
     type: Boolean,
     default: false,
-  },
-  activeRouteName: {
-    type: String,
-    default: "",
   },
 })
 
@@ -119,6 +136,7 @@ const dashboard = reactive({
 const isCourseList = computed(() => route.name === "GlobalReportingCourses")
 const isSessionList = computed(() => route.name === "GlobalReportingSessions")
 const showCourseQuestionTabs = computed(() => isCourseList.value && dashboard.isAdministrator)
+const hasNavigation = computed(() => internalActions.value.length > 0 || externalActions.value.length > 0)
 
 const returnAction = computed(() => {
   if (route.query.returnTo === "global-reporting-overview" && route.name !== "GlobalReportingOverview") {
@@ -334,14 +352,13 @@ const externalActions = computed(() => {
   return actions
 })
 
-function isActive(action) {
-  const activeRouteName = props.activeRouteName || route.name
-
-  if (action.route.name === "GlobalReportingAdmin" && !props.activeRouteName) {
-    return route.path === "/reporting/admin" || route.path.startsWith("/reporting/admin/")
-  }
-
-  return activeRouteName === action.route.name
+/**
+ * Whether the action leads to the page already shown. Its button is disabled instead.
+ * @param {{route: {name: string}}} action
+ * @returns {boolean}
+ */
+function isCurrentPage(action) {
+  return route.name === action.route.name
 }
 
 async function loadDashboard() {

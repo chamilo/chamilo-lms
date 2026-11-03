@@ -5,8 +5,9 @@
   >
     <GlobalReportingToolbar
       v-if="isGlobalTrackingContext"
+      :title="t('Exam tracking')"
+      icon="gradebook"
       :show-print="false"
-      active-route-name="GlobalReportingExams"
     />
 
     <section
@@ -19,7 +20,6 @@
           class="ch-tool-icon"
         />
         <div>
-          <div class="text-sm text-gray-50">{{ t("Exam tracking") }}</div>
           <div class="font-semibold text-gray-90">{{ t("Course") }}: {{ configuration.courseTitle }}</div>
           <div
             v-if="configuration.sessionTitle"

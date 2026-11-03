@@ -9,16 +9,14 @@
     </Message>
 
     <GlobalReportingToolbar
+      :title="t('Admin view')"
+      icon="admin-settings"
       :show-print="true"
       :show-csv="hasCurrentReport && report.total > 0 && report.meta.canExportCsv"
       :csv-loading="exportFormat === 'csv'"
       @print="printReport"
       @export-csv="downloadExport('csv')"
     />
-
-    <header class="border-b border-gray-25 pb-3">
-      <h1 class="text-2xl font-semibold text-gray-90">{{ t("Admin view") }}</h1>
-    </header>
 
     <section class="rounded-xl border border-gray-25 bg-white p-4 shadow-sm md:p-5">
       <h2 class="mb-4 text-lg font-semibold text-gray-90">{{ t("Available reports") }}</h2>

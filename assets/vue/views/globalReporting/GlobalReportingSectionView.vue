@@ -1,19 +1,14 @@
 <template>
   <div class="space-y-5 pb-8">
     <GlobalReportingToolbar
-      :show-print="!isMyProgress && (!isSessionList || report.total > 0)"
+      :title="t(report.title || title)"
+      :icon="SECTION_ICONS[section]"
+      :show-print="isSessionList ? report.total > 0 : !isMyProgress"
       :show-csv="isSessionList && report.total > 0 && report.meta.canExportCsv"
       :csv-loading="exportFormat === 'csv'"
       @print="printReport"
       @export-csv="downloadExport('csv')"
     />
-
-    <header
-      v-if="isListPage"
-      class="border-b border-gray-25 pb-3"
-    >
-      <h1 class="text-2xl font-semibold text-gray-90">{{ t(report.title || title) }}</h1>
-    </header>
 
     <section
       v-if="showAdminReports"
@@ -168,24 +163,16 @@
 
     <section class="rounded-xl border border-gray-25 bg-white shadow-sm">
       <header
-        v-if="!isListPage"
+        v-if="!isListPage && !isMyProgress"
         class="flex flex-wrap items-center gap-3 border-b border-gray-25 p-4"
       >
-        <div>
-          <h1 class="text-xl font-semibold">{{ t(report.title || title) }}</h1>
-          <p
-            v-if="!isMyProgress && report.meta.user"
-            class="mt-1 text-sm text-gray-50"
-          >
-            {{ report.meta.user.firstname }} {{ report.meta.user.lastname }} · {{ report.meta.user.username }}
-          </p>
-        </div>
-        <span
-          v-if="!isMyProgress && !isListPage"
-          class="ms-auto text-sm text-gray-50"
+        <p
+          v-if="report.meta.user"
+          class="text-sm text-gray-50"
         >
-          {{ report.total }} {{ t("Results") }}
-        </span>
+          {{ report.meta.user.firstname }} {{ report.meta.user.lastname }} · {{ report.meta.user.username }}
+        </p>
+        <span class="ms-auto text-sm text-gray-50"> {{ report.total }} {{ t("Results") }} </span>
       </header>
 
       <div class="overflow-x-auto p-4">
@@ -507,6 +494,16 @@ const props = defineProps({
     default: false,
   },
 })
+
+// Title icon (ChamiloIcons key) of each section.
+const SECTION_ICONS = {
+  "my-progress": "progress-star",
+  learners: "account",
+  teachers: "human-male-board",
+  users: "account-group",
+  courses: "courses",
+  sessions: "sessions",
+}
 
 // Meta the server always sends for a section (GlobalReportingSectionQueryService), known before
 // the first response so the filters do not change once it arrives.

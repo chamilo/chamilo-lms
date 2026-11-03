@@ -8,7 +8,11 @@
       {{ errorMessage }}
     </Message>
 
-    <GlobalReportingToolbar :show-print="false" />
+    <GlobalReportingToolbar
+      :title="t(activeTab.label)"
+      :icon="activeTab.icon"
+      :show-print="false"
+    />
 
     <nav
       class="no-print flex flex-nowrap items-center gap-1 overflow-x-auto rounded-3xl border border-gray-25 bg-white p-1"
@@ -75,10 +79,6 @@
       </section>
 
       <section class="rounded-xl border border-gray-25 bg-white shadow-sm">
-        <header class="border-b border-gray-25 p-4">
-          <h1 class="text-xl font-semibold">{{ t("Exam tracking") }}</h1>
-        </header>
-
         <div class="overflow-x-auto p-4">
           <BaseTable
             v-model:rows="filters.itemsPerPage"
@@ -126,10 +126,6 @@
 
     <template v-else>
       <section class="no-print rounded-xl border border-gray-25 bg-white p-4 shadow-sm">
-        <header class="mb-4 border-b border-gray-25 pb-3">
-          <h1 class="text-xl font-semibold">{{ t(activeTab.label) }}</h1>
-        </header>
-
         <div class="grid gap-4 lg:grid-cols-12 lg:items-end">
           <div class="lg:col-span-5">
             <BaseSelect

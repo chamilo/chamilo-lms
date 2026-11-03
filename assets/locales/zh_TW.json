@@ -4615,5 +4615,6 @@
     "The recording will be saved with the correction.": "The recording will be saved with the correction.",
     "Saved.": "\u5df2\u5132\u5b58\u3002",
     "You have tried to resolve this exercise earlier": "\u60a8\u5148\u524d\u5df2\u5617\u8a66\u89e3\u7b54\u6b64\u7df4\u7fd2",
-    "Disable new test attempts": "\u505c\u7528\u65b0\u6e2c\u9a57\u5617\u8a66"
+    "Disable new test attempts": "\u505c\u7528\u65b0\u6e2c\u9a57\u5617\u8a66",
+    "This skill cannot be acquired": "\u6b64\u6280\u80fd\u7121\u6cd5\u7372\u5f97"
 }

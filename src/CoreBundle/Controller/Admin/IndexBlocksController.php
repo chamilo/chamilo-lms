@@ -1147,7 +1147,7 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-health-check-install-folder '.($installExists ? 'text-warning' : 'text-success'),
-            'url' => $securityGuideUrl,
+            'url' => $securityGuideUrl.'#install-folder',
             'label' => $this->translator->trans($installExists ? 'Install folder is still present' : 'Install folder is not present'),
         ];
 

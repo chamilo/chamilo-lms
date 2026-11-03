@@ -119,6 +119,19 @@ final class MigrationHistoryRecorder
     }
 
     /**
+     * Number of shipped migrations the history does not list as executed.
+     */
+    public function countPending(): int
+    {
+        try {
+            return \count($this->dependencyFactory->getMigrationStatusCalculator()->getNewMigrations()->getItems());
+        } catch (Throwable) {
+            // The metadata table does not exist yet.
+            return 0;
+        }
+    }
+
+    /**
      * Number of migrations recording would mark, without recording anything.
      *
      * Zero means the schema proves nothing, which happens on a 1.11.x database: every

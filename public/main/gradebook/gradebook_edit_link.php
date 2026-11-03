@@ -24,6 +24,10 @@ if (empty($linkarray)) {
 }
 /** @var AbstractLink $link */
 $link = $linkarray[0];
+// The link has to belong to the course of the request.
+if (!api_is_platform_admin() && (int) $link->getCourseId() !== (int) $course_id) {
+    api_not_allowed(true);
+}
 if ($link->is_locked() && !api_is_platform_admin()) {
     api_not_allowed();
 }

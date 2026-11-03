@@ -15,6 +15,10 @@ $evaluation = Evaluation::load($select_eval);
 if (empty($evaluation)) {
     api_not_allowed(true);
 }
+// The evaluation has to belong to the course of the request.
+if (!api_is_platform_admin() && (int) $evaluation[0]->getCourseId() !== (int) api_get_course_int_id()) {
+    api_not_allowed(true);
+}
 $evaluation[0]->check_lock_permissions();
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();

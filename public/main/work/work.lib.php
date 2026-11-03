@@ -2109,7 +2109,6 @@ function get_work_user_list(
         }*/
 
         $url = api_get_path(WEB_CODE_PATH).'work/';
-        $unoconv = api_get_setting('platform.unoconv_binaries');
         $loadingText = addslashes(get_lang('Loading'));
         $uploadedText = addslashes(get_lang('Uploaded.'));
         $failsUploadText = addslashes(get_lang('No file was uploaded.'));
@@ -2278,13 +2277,6 @@ function get_work_user_list(
                             $rateIcon.'</a> ';
                     }
                     $action .= $rateLink;
-
-                    if ($unoconv && empty($assignment->getContainsFile())) {
-                        $action .= '<a
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_to_doc&item_id='.$item_id.'"
-                            title="'.get_lang('Export to .doc').'" >'.
-                            Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export to .doc')).'</a> ';
-                    }
 
                     $alreadyUploaded = '';
                     if ($correctionEntity) {
@@ -2610,7 +2602,6 @@ function getAllWork(
     }
 
     $url = api_get_path(WEB_CODE_PATH).'work/';
-    $unoconv = api_get_setting('platform.unoconv_binaries');
     $loadingText = addslashes(get_lang('Loading'));
     $uploadedText = addslashes(get_lang('Uploaded.'));
     $failsUploadText = addslashes(get_lang('No file was uploaded.'));
@@ -2783,13 +2774,6 @@ function getAllWork(
                         $rateIcon.'</a> ';
                 }
                 $action .= $rateLink;
-
-                if ($unoconv && empty($work['contains_file'])) {
-                    $action .= '<a
-                        href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=export_to_doc&item_id='.$item_id.'"
-                        title="'.get_lang('Export to .doc').'" >'.
-                        Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export to .doc')).'</a> ';
-                }
 
                 $alreadyUploaded = '';
                 if (!empty($work['url_correction'])) {

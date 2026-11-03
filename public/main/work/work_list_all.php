@@ -84,17 +84,6 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $itemId = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 
 switch ($action) {
-    case 'export_to_doc':
-        if ($is_allowed_to_edit) {
-            if (!empty($itemId)) {
-                $work = get_work_data_by_id($itemId);
-                if (!empty($work)) {
-                    Export::htmlToOdt($work['description'], $work['title']);
-                }
-            }
-        }
-
-        break;
     case 'delete':
         /*	Delete document */
         if ($itemId) {

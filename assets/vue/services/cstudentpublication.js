@@ -124,10 +124,11 @@ async function getUnsubmittedUsers(assignmentId) {
   return items
 }
 
-async function sendEmailToUnsubmitted(assignmentId, queryParams = {}) {
+async function sendEmailToUnsubmitted(assignmentId, queryParams = {}, userIds = null) {
   const params = { ...buildCidParams(), ...queryParams }
+  const payload = userIds === null ? {} : { userIds }
 
-  return baseService.post(`/assignments/${assignmentId}/unsubmitted-users/email`, {}, {}, { params })
+  return baseService.post(`/assignments/${assignmentId}/unsubmitted-users/email`, payload, {}, { params })
 }
 
 async function deleteAllCorrections(assignmentId, cid, sid = 0) {

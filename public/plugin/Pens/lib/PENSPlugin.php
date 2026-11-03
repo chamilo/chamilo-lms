@@ -8,10 +8,19 @@ class PENSPlugin extends Plugin
     private array $errorMessages = [];
 
     public const TABLE_PENS = 'plugin_pens';
+    public const SETTING_SYSTEM_USER_ID = 'system_user_id';
+    public const SETTING_SYSTEM_PASSWORD = 'system_password';
 
     public function __construct()
     {
-        parent::__construct('1.1', 'Guillaume Viguier-Just, Yannick Warnier');
+        parent::__construct(
+            '1.1',
+            'Guillaume Viguier-Just, Yannick Warnier',
+            [
+                self::SETTING_SYSTEM_USER_ID => 'text',
+                self::SETTING_SYSTEM_PASSWORD => 'text',
+            ]
+        );
 
         $this->loadPluginStrings();
     }

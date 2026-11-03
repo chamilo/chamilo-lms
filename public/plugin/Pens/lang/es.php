@@ -5,6 +5,11 @@
 $strings['plugin_title'] = 'PENS';
 $strings['plugin_comment'] = 'Proporciona soporte para el estándar de intercambio de paquetes PENS. Endpoint preferido: /plugin/pens/collect.';
 
+$strings['system_user_id'] = 'ID de usuario del sistema PENS';
+$strings['system_user_id_help'] = 'El system-user-id que debe enviar la herramienta de autor. Las peticiones collect se rechazan hasta que se configuren las dos credenciales.';
+$strings['system_password'] = 'Contraseña del sistema PENS';
+$strings['system_password_help'] = 'El system-password que debe enviar la herramienta de autor.';
+
 $strings['PensAdminTitle'] = 'PENS';
 $strings['PensAdminIntro'] = 'Esta página muestra los paquetes recibidos por el endpoint PENS en Chamilo 2.';
 $strings['PensBackToPlugins'] = 'Volver a plugins';

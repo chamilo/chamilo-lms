@@ -17,7 +17,7 @@ $userId = api_get_user_id();
 $courseInfo = api_get_course_info();
 
 $surveyId = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : 0;
-$invitationcode = isset($_REQUEST['invitationcode']) ? Database::escape_string($_REQUEST['invitationcode']) : 0;
+$invitationcode = isset($_REQUEST['invitationcode']) && is_string($_REQUEST['invitationcode']) ? $_REQUEST['invitationcode'] : 0;
 $action = $_REQUEST['action'] ?? '';
 $survey = null;
 $repo = Container::getSurveyRepository();
@@ -39,6 +39,18 @@ if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
     $survey_invitation = Database::fetch_assoc($result);
     if ($survey_invitation) {
         $surveyId = (int) $survey_invitation['survey_id'];
+        $invitedUser = (string) $survey_invitation['user_id'];
+
+        // The "auto" invitation codes are derived from public data (the user id and the survey code),
+        // so, unlike the random codes sent by mail, they cannot act as a shared secret. When such a
+        // code belongs to a platform user, only that very user is allowed to use it.
+        if (0 === strpos((string) $survey_invitation['invitation_code'], 'auto-')
+            && ctype_digit($invitedUser)
+            && (int) $invitedUser > 0
+            && (int) $invitedUser !== (int) api_get_user_id()
+        ) {
+            api_not_allowed(true, get_lang('Wrong invitation code'));
+        }
     }
 }
 
@@ -60,7 +72,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Survey list'),
 ];
 
-$url = api_get_self().'?survey_id='.$surveyId.'&invitationcode='.$invitationcode.'&'.api_get_cidreq();
+$url = api_get_self().'?survey_id='.$surveyId.'&invitationcode='.urlencode((string) $invitationcode).'&'.api_get_cidreq();
 $urlEdit = $url.'&action=edit';
 
 if (!api_is_allowed_to_edit()) {

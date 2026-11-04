@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CourseBundle\Component\CourseCopy\BackupArchive;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Export;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Import\Imscc13Import;
@@ -34,7 +35,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 use UnserializeApi;
-use ZipArchive;
 
 use const DIRECTORY_SEPARATOR;
 use const FILTER_VALIDATE_BOOL;
@@ -159,7 +159,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             'ext' => $ext,
         ]);
 
-        $backupId = CourseArchiver::importUploadedFile($file->getRealPath());
+        $backupId = CourseArchiver::importUploadedFile($file->getRealPath(), $ext);
         if (false === $backupId) {
             $this->logDebug('[importUpload] archive dir not writable');
 
@@ -1332,7 +1332,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     /**
      * Load a legacy Course object from any backup:
      * - Chamilo: course_info.dat (strict -> fallback)
-     * - Moodle: moodle_backup.xml or extensions (.mbz/.tgz/.gz) -> MoodleImport
+     * - Moodle: moodle_backup.xml, recognised from the bytes (gzip tar or zip) -> MoodleImport
      */
     private function loadLegacyCourseForAnyBackup(string $backupId, string $force = 'auto'): object
     {
@@ -1346,8 +1346,11 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $looksMoodle = true;
             $preferChamilo = false;
         } else {
-            $looksMoodle = $this->isMoodleByExt($path) || $this->zipHasMoodleBackupXml($path);
-            $preferChamilo = $this->zipHasCourseInfoDat($path);
+            // Extension alone is not enough: a gzip .mbz used to be stored as .zip,
+            // and a .mbz may itself be either gzip tar or a legacy zip.
+            $markers = BackupArchive::contains($path, ['moodle_backup.xml', 'course_info.dat']);
+            $looksMoodle = $this->isMoodleByExt($path) || $markers['moodle_backup.xml'];
+            $preferChamilo = $markers['course_info.dat'];
         }
 
         if ($preferChamilo || !$looksMoodle) {
@@ -1646,50 +1649,6 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
         return \in_array($ext, ['mbz', 'tgz', 'gz'], true);
-    }
-
-    private function zipHasMoodleBackupXml(string $path): bool
-    {
-        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-        if (!\in_array($ext, ['zip', 'mbz'], true)) {
-            return false;
-        }
-
-        $zip = new ZipArchive();
-        if (true !== $zip->open($path)) {
-            return false;
-        }
-
-        $idx = $zip->locateName('moodle_backup.xml', ZipArchive::FL_NOCASE);
-        $zip->close();
-
-        return false !== $idx;
-    }
-
-    private function zipHasCourseInfoDat(string $path): bool
-    {
-        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-        if (!\in_array($ext, ['zip', 'mbz'], true)) {
-            return false;
-        }
-
-        $zip = new ZipArchive();
-        if (true !== $zip->open($path)) {
-            return false;
-        }
-
-        foreach (['course_info.dat', 'course/course_info.dat', 'backup/course_info.dat'] as $cand) {
-            $idx = $zip->locateName($cand, ZipArchive::FL_NOCASE);
-            if (false !== $idx) {
-                $zip->close();
-
-                return true;
-            }
-        }
-
-        $zip->close();
-
-        return false;
     }
 
     private function loadMoodleCourseOrFail(string $absPath): object

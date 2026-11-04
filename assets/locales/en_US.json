@@ -4665,5 +4665,14 @@
     "You have tried to resolve this exercise earlier": "You have tried to resolve this exercise earlier",
     "Disable new test attempts": "Disable new test attempts",
     "Your sessions": "Your sessions",
-    "This skill cannot be acquired": "This skill cannot be acquired"
+    "This skill cannot be acquired": "This skill cannot be acquired",
+    "Temporary update permissions": "Temporary update permissions",
+    "The web server must temporarily write to the Chamilo code to apply this update. Review the actual installation path and account before running commands. Never use chmod 777.": "The web server must temporarily write to the Chamilo code to apply this update. Review the actual installation path and account before running commands. Never use chmod 777.",
+    "Restore permissions after the update": "Restore permissions after the update",
+    "These commands use the original root and var directory owners captured at the first apply-plan check. They are examples only: do not run recursive ownership changes on installations with mixed file ownership. Restore ACLs and file modes separately if necessary.": "These commands use the original root and var directory owners captured at the first apply-plan check. They are examples only: do not run recursive ownership changes on installations with mixed file ownership. Restore ACLs and file modes separately if necessary.",
+    "The original ownership snapshot could not be saved. Record ownership manually before changing permissions.": "The original ownership snapshot could not be saved. Record ownership manually before changing permissions.",
+    "Only use these example commands if the installation originally had uniform ownership. Restore any mixed ownership or ACLs from your own backup.": "Only use these example commands if the installation originally had uniform ownership. Restore any mixed ownership or ACLs from your own backup.",
+    "Database migrations can modify the database. Select them only after confirming backups and permissions.": "Database migrations can modify the database. Select them only after confirming backups and permissions.",
+    "These commands can modify the cache or the database. Confirm backups before continuing.": "These commands can modify the cache or the database. Confirm backups before continuing.",
+    "I understand that database migrations can modify the database.": "I understand that database migrations can modify the database."
 }

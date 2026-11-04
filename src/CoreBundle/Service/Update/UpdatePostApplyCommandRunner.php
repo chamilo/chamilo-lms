@@ -25,9 +25,6 @@ final readonly class UpdatePostApplyCommandRunner
     private const string METADATA_FILE_NAME = 'POST-APPLY-RUN-RESULT.json';
 
     private const array ADVANCED_ACTION_KEYS = [
-        'composer_install',
-        'yarn_install',
-        'yarn_build',
         'doctrine_migrations',
     ];
 
@@ -88,8 +85,13 @@ final readonly class UpdatePostApplyCommandRunner
             $this->logOperation($operationId, 'success', 'staging_path', $this->translator->trans('Staging directory was validated.'));
 
             $postApplyChecks = $this->readJsonFile($stagingPath.'/POST-APPLY-CHECKS.json', 'post-apply checks');
+            if (false === ($postApplyChecks['success'] ?? true)) {
+                throw new RuntimeException($this->translator->trans('Post-apply actions are blocked because the release package readiness checks failed. Resolve those errors and review post-apply checks again.'));
+            }
+
             $recommendedActionKeys = $this->extractRecommendedActionKeys($postApplyChecks);
             $details['recommended_action_keys'] = $recommendedActionKeys;
+            $details['permission_restore'] = $postApplyChecks['details']['permission_restore'] ?? null;
             $this->addCheck($checks, 'post_apply_metadata', 'passed', $this->translator->trans('Post-apply recommendation metadata was read successfully.'), [
                 'recommended_action_keys' => $recommendedActionKeys,
             ]);
@@ -454,39 +456,7 @@ final readonly class UpdatePostApplyCommandRunner
      */
     private function getActionDefinitions(): array
     {
-        $composerCommand = ['composer', 'install', '--no-interaction', '--prefer-dist'];
-        $composerDisplayCommand = 'composer install --no-interaction --prefer-dist';
-
-        if ($this->updateConfiguration->isProduction()) {
-            $composerCommand = ['composer', 'install', '--no-dev', '--no-interaction', '--prefer-dist', '--optimize-autoloader'];
-            $composerDisplayCommand = 'composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader';
-        }
-
         return [
-            'composer_install' => [
-                'title' => 'Composer dependencies',
-                'command' => $composerCommand,
-                'display_command' => $composerDisplayCommand,
-                'source_action' => 'composer_install',
-                'advanced' => true,
-            ],
-            'yarn_install' => [
-                'title' => 'Frontend dependencies',
-                'command' => ['yarn', 'install', '--frozen-lockfile'],
-                'display_command' => 'yarn install --frozen-lockfile',
-                'source_action' => 'frontend_build',
-                'advanced' => true,
-            ],
-            'yarn_build' => [
-                'title' => 'Frontend assets',
-                'command' => ['yarn', 'build'],
-                'display_command' => 'NODE_OPTIONS="--experimental-global-webcrypto --max-old-space-size=8192" yarn build',
-                'source_action' => 'frontend_build',
-                'environment' => [
-                    'NODE_OPTIONS' => '--experimental-global-webcrypto --max-old-space-size=8192',
-                ],
-                'advanced' => true,
-            ],
             'doctrine_migrations' => [
                 'title' => 'Database migrations',
                 'command' => ['php', 'bin/console', 'doctrine:migrations:execute', '--help'],
@@ -671,6 +641,26 @@ final readonly class UpdatePostApplyCommandRunner
     }
 
     /**
+     * @param array<string, mixed> $details
+     */
+    private function assertPhpCliRequirements(array &$details): void
+    {
+        // Check the actual CLI executable selected from PATH, not the PHP-FPM runtime.
+        $process = new Process([
+            'php',
+            '-r',
+            'if (!extension_loaded("mbstring") || !function_exists("mb_ord") || !function_exists("mb_strlen") || !function_exists("mb_detect_encoding")) { exit(31); } echo PHP_BINARY." ".PHP_VERSION;',
+        ], $this->projectDir);
+        $process->setTimeout(20);
+
+        if (0 !== $process->run()) {
+            throw new RuntimeException($this->translator->trans('The PHP CLI used by the web updater is missing the mbstring extension (mb_ord, mb_strlen or mb_detect_encoding). Install or enable mbstring for the CLI PHP version, check php --ini and php -m, then retry cache:clear.'));
+        }
+
+        $details['php_cli'] = trim($process->getOutput());
+    }
+
+    /**
      * @param array<string, array<string, mixed>>                                                             $selectedActions
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
      * @param string[]                                                                                        $warnings
@@ -686,6 +676,10 @@ final readonly class UpdatePostApplyCommandRunner
             $this->addCheck($checks, 'post_apply_executable_permissions', 'passed', $this->translator->trans('Required post-apply executable permissions were normalized.'), [
                 'paths' => $permissionFixes,
             ]);
+        }
+
+        if (isset($selectedActions['cache_clear']) || isset($selectedActions['doctrine_migrations'])) {
+            $this->assertPhpCliRequirements($details);
         }
 
         if (isset($selectedActions['cache_clear'])) {

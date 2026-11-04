@@ -74,6 +74,7 @@ final readonly class UpdatePostApplyChecker
 
             $applyPlan = $this->readJsonFile($stagingPath.'/APPLY-PLAN.json', 'apply plan metadata');
             $details['apply_plan'] = $this->summarizeApplyPlan($applyPlan);
+            $details['permission_restore'] = $applyPlan['permission_restore'] ?? null;
             $this->addCheck($checks, 'apply_plan_metadata', 'passed', $this->translator->trans('Apply plan metadata was read successfully.'));
 
             $applyResult = $this->readJsonFile($stagingPath.'/APPLY-RESULT.json', 'apply result metadata');
@@ -105,8 +106,23 @@ final readonly class UpdatePostApplyChecker
                 'action_keys' => array_map(static fn (array $action): string => $action['key'], $actions),
             ]);
 
+            if ($packageSignals['composer_install_required']) {
+                $warnings[] = $this->translator->trans('Composer dependencies have changed or vendor/autoload.php is missing. The web updater deliberately preserves vendor/ and cannot finish this update without matching PHP dependencies. Deploy them separately as the deployment owner; do not run Composer as the web server user.');
+            }
+
+            if ($packageSignals['frontend_build_missing']) {
+                $warnings[] = $this->translator->trans('The staged update does not contain compiled frontend entrypoints. Use a release package with public/build assets; Yarn is not required on a correctly packaged production server.');
+            }
+
             if ($packageSignals['migrations_detected']) {
                 $warnings[] = $this->translator->trans('Database migrations were detected in the staged package. Run them only after confirming that the file update is correct and a database backup exists.');
+            }
+
+            if ($packageSignals['composer_install_required'] || $packageSignals['frontend_build_missing']) {
+                $this->addCheck($checks, 'release_package_readiness', 'failed', $this->translator->trans('The update package requires additional deployment steps before the installation can be considered complete. Review the warnings and install a complete release package.'));
+                $this->writePostApplyMetadata($stagingPath, $checks, $warnings, $details, [], false);
+
+                return UpdatePostApplyCheckResult::failure($this->collectFailedCheckMessages($checks), $checks, $warnings, $details);
             }
 
             $metadataPath = $this->writePostApplyMetadata($stagingPath, $checks, $warnings, $details, $actions);
@@ -207,6 +223,8 @@ final readonly class UpdatePostApplyChecker
      * @return array{
      *     composer_files_detected: bool,
      *     frontend_files_detected: bool,
+     *     composer_install_required: bool,
+     *     frontend_build_missing: bool,
      *     migrations_detected: bool,
      *     cache_clear_recommended: bool,
      *     detected_paths: array<string, string[]>
@@ -249,9 +267,29 @@ final readonly class UpdatePostApplyChecker
             $this->appendDetectedPath($detectedPaths['migrations'], $migrationPath);
         }
 
+        $backupPath = $applyPlan['backup_path'] ?? null;
+        $backupBase = realpath($this->projectDir.'/var/update/backups');
+        $realBackupPath = \is_string($backupPath) ? realpath($backupPath) : false;
+        $trustedBackup = false !== $backupBase && false !== $realBackupPath
+            && str_starts_with($realBackupPath.'/', $backupBase.'/');
+        $composerChanged = !is_file($this->projectDir.'/vendor/autoload.php');
+
+        if (\in_array('composer.lock', $detectedPaths['composer'], true)) {
+            $previousLock = $trustedBackup ? $realBackupPath.'/files/composer.lock' : null;
+            $currentLock = $this->projectDir.'/composer.lock';
+            $composerChanged = $composerChanged || null === $previousLock
+                || !is_file($previousLock) || !is_file($currentLock)
+                || hash_file('sha256', $previousLock) !== hash_file('sha256', $currentLock);
+        }
+
+        $frontendChanged = [] !== $detectedPaths['frontend'];
+        $compiledEntrypoints = $applicationPath.'/public/build/entrypoints.json';
+
         return [
             'composer_files_detected' => [] !== $detectedPaths['composer'],
-            'frontend_files_detected' => [] !== $detectedPaths['frontend'],
+            'frontend_files_detected' => $frontendChanged,
+            'composer_install_required' => $composerChanged,
+            'frontend_build_missing' => $frontendChanged && !is_file($compiledEntrypoints),
             'migrations_detected' => [] !== $detectedPaths['migrations'],
             'cache_clear_recommended' => true,
             'detected_paths' => $detectedPaths,
@@ -294,6 +332,8 @@ final readonly class UpdatePostApplyChecker
      * @param array{
      *     composer_files_detected: bool,
      *     frontend_files_detected: bool,
+     *     composer_install_required: bool,
+     *     frontend_build_missing: bool,
      *     migrations_detected: bool,
      *     cache_clear_recommended: bool,
      *     detected_paths: array<string, string[]>
@@ -304,33 +344,6 @@ final readonly class UpdatePostApplyChecker
     private function buildRecommendedActions(array $signals): array
     {
         $actions = [];
-
-        if ($signals['composer_files_detected']) {
-            $actions[] = [
-                'key' => 'composer_install',
-                'title' => $this->translator->trans('Composer dependencies'),
-                'description' => $this->translator->trans('Composer metadata was included in the staged package. Run Composer install from the application root before considering the update complete.'),
-                'commands' => [
-                    $this->getComposerInstallDisplayCommand(),
-                ],
-                'required' => true,
-                'severity' => 'warning',
-            ];
-        }
-
-        if ($signals['frontend_files_detected']) {
-            $actions[] = [
-                'key' => 'frontend_build',
-                'title' => $this->translator->trans('Frontend assets'),
-                'description' => $this->translator->trans('Frontend-related files were included in the staged package. Rebuild production assets after installing dependencies.'),
-                'commands' => [
-                    'yarn install --frozen-lockfile',
-                    'NODE_OPTIONS="--experimental-global-webcrypto --max-old-space-size=8192" yarn build',
-                ],
-                'required' => true,
-                'severity' => 'warning',
-            ];
-        }
 
         if ($signals['migrations_detected']) {
             $actions[] = [
@@ -359,15 +372,6 @@ final readonly class UpdatePostApplyChecker
         }
 
         return $actions;
-    }
-
-    private function getComposerInstallDisplayCommand(): string
-    {
-        if ($this->updateConfiguration->isProduction()) {
-            return 'composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader';
-        }
-
-        return 'composer install --no-interaction --prefer-dist';
     }
 
     private function isComposerPath(string $relativePath): bool
@@ -439,16 +443,17 @@ final readonly class UpdatePostApplyChecker
      * @param string[]                                                                                                                 $warnings
      * @param array<string, mixed>                                                                                                     $details
      */
-    private function writePostApplyMetadata(string $stagingPath, array $checks, array $warnings, array $details, array $actions): string
+    private function writePostApplyMetadata(string $stagingPath, array $checks, array $warnings, array $details, array $actions, bool $success = true): string
     {
         $metadataPath = $stagingPath.'/'.self::METADATA_FILE_NAME;
         $metadata = [
             'created_at' => gmdate('c'),
+            'success' => $success,
             'actions' => $actions,
             'checks' => $checks,
             'warnings' => $warnings,
             'details' => $details,
-            'note' => 'This file only reports recommended post-apply actions. It does not execute Composer, Yarn, migrations or cache commands.',
+            'note' => 'This file reports post-apply checks and recommendations only. It does not execute commands.',
         ];
 
         $encoded = json_encode($metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);

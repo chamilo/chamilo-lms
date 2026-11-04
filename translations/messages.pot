@@ -43268,3 +43268,51 @@ msgstr ""
 
 msgid "SVG only (maximum 256 KB)"
 msgstr ""
+
+msgid "The web updater must temporarily write to the whole Chamilo installation at %s to replace application code. Grant the web server write access only for the update, then restore restricted ownership and permissions. Do not use chmod 777."
+msgstr ""
+
+msgid "Example Linux command (review before running): %s"
+msgstr ""
+
+msgid "Composer dependencies have changed or vendor/autoload.php is missing. The web updater deliberately preserves vendor/ and cannot finish this update without matching PHP dependencies. Deploy them separately as the deployment owner; do not run Composer as the web server user."
+msgstr ""
+
+msgid "The staged update does not contain compiled frontend entrypoints. Use a release package with public/build assets; Yarn is not required on a correctly packaged production server."
+msgstr ""
+
+msgid "The update package requires additional deployment steps before the installation can be considered complete. Review the warnings and install a complete release package."
+msgstr ""
+
+msgid "The PHP CLI used by the web updater is missing the mbstring extension (mb_ord, mb_strlen or mb_detect_encoding). Install or enable mbstring for the CLI PHP version, check php --ini and php -m, then retry cache:clear."
+msgstr ""
+
+msgid "Temporary update permissions"
+msgstr ""
+
+msgid "The web server must temporarily write to the Chamilo code to apply this update. Review the actual installation path and account before running commands. Never use chmod 777."
+msgstr ""
+
+msgid "Restore permissions after the update"
+msgstr ""
+
+msgid "These commands use the original root and var directory owners captured at the first apply-plan check. They are examples only: do not run recursive ownership changes on installations with mixed file ownership. Restore ACLs and file modes separately if necessary."
+msgstr ""
+
+msgid "The original ownership snapshot could not be saved. Record ownership manually before changing permissions."
+msgstr ""
+
+msgid "Only use these example commands if the installation originally had uniform ownership. Restore any mixed ownership or ACLs from your own backup."
+msgstr ""
+
+msgid "Database migrations can modify the database. Select them only after confirming backups and permissions."
+msgstr ""
+
+msgid "These commands can modify the cache or the database. Confirm backups before continuing."
+msgstr ""
+
+msgid "I understand that database migrations can modify the database."
+msgstr ""
+
+msgid "Post-apply actions are blocked because the release package readiness checks failed. Resolve those errors and review post-apply checks again."
+msgstr ""

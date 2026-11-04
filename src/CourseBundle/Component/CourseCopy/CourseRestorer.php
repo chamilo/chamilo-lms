@@ -6463,9 +6463,28 @@ class CourseRestorer
                 }
             }
 
+            // The level-based logic hangs each item under the last one created a level above, so it
+            // only rebuilds the tree when items come depth-first. The Chamilo sidecar of a Moodle
+            // export lists them by display_order, which is not depth-first: items landed under the
+            // wrong chapter, in the wrong order. Whenever parent_item_id links the items, use it.
+            $sourceItemIds = [];
+            foreach ($items as $it) {
+                if ((int) ($it['id'] ?? 0) > 0) {
+                    $sourceItemIds[(int) $it['id']] = true;
+                }
+            }
+            $hasParentLinks = false;
+            foreach ($items as $it) {
+                if (isset($sourceItemIds[(int) ($it['parent_item_id'] ?? 0)])) {
+                    $hasParentLinks = true;
+
+                    break;
+                }
+            }
+
             $createdCount = 0;
 
-            if ($hasLevel) {
+            if ($hasLevel && !$hasParentLinks) {
                 // ---- Old logic (level-based), kept for backward compatibility ----
                 $parents = [0 => $root];
                 $order = 0;
@@ -6615,7 +6634,9 @@ class CourseRestorer
                             $em
                         );
 
-                        $order = isset($it['display_order']) ? (int) $it['display_order'] : (++$fallbackOrder);
+                        // Numbered in reading order: the source display_order only orders siblings, its
+                        // values can be global and in any order across the tree.
+                        $order = ++$fallbackOrder;
 
                         $item = (new CLpItem())
                             ->setLp($lp)

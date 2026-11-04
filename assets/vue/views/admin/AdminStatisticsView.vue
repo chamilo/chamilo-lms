@@ -1223,6 +1223,7 @@ const modernReports = new Set([
   "coursebylanguage",
   "courses_usage",
   "users",
+  "usersbylanguage",
   "recentlogins",
   "logins",
   "pictures",
@@ -1260,6 +1261,7 @@ const legacyCourseReports = new Set([
 ])
 const legacyCoreUserReports = new Set([
   "users",
+  "usersbylanguage",
   "recentlogins",
   "logins",
   "pictures",

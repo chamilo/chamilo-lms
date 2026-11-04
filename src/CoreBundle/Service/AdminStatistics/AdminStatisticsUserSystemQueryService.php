@@ -42,6 +42,7 @@ final readonly class AdminStatisticsUserSystemQueryService
 {
     private const SUPPORTED_REPORTS = [
         'users',
+        'usersbylanguage',
         'recentlogins',
         'logins',
         'pictures',
@@ -96,6 +97,7 @@ final readonly class AdminStatisticsUserSystemQueryService
 
         return match ($report) {
             'users' => $this->getUsersReport(),
+            'usersbylanguage' => $this->getUsersByLanguageReport(),
             'recentlogins' => $this->getRecentLoginsReport($parameters),
             'logins' => $this->getLoginsReport($parameters),
             'pictures' => $this->getPicturesReport(),
@@ -183,6 +185,47 @@ final readonly class AdminStatisticsUserSystemQueryService
                 'legacyStatsGroups' => true,
                 'legacyFlatCharts' => true,
                 'legacyChartsColumns' => 3,
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getUsersByLanguageReport(): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('user.locale AS locale', 'COUNT(DISTINCT user.id) AS total')
+            ->from(User::class, 'user')
+            ->groupBy('user.locale')
+            ->orderBy('COUNT(DISTINCT user.id)', 'DESC')
+        ;
+        $this->applyUserAccessUrlScope($queryBuilder, 'user', 'userLanguagePortal');
+
+        $totals = [];
+        foreach ($queryBuilder->getQuery()->getArrayResult() as $row) {
+            $locale = trim((string) ($row['locale'] ?? ''));
+            $totals[$locale] = (int) $row['total'];
+        }
+
+        $namesByIsocode = $this->languageRepository->findNamesByIsocodes(array_keys($totals));
+        $values = [];
+        foreach ($totals as $locale => $total) {
+            $name = $namesByIsocode[$locale] ?? null;
+            $label = '' === $locale
+                ? $this->trans('Unknown')
+                : (null !== $name && '' !== $name ? \sprintf('%s (%s)', $name, $locale) : $locale);
+            $values[$label] = $total;
+        }
+
+        return [
+            'title' => $this->trans('Number of users by language'),
+            'description' => '',
+            'chart' => $this->buildChart('pie', $values, $this->trans('Users per language')),
+            'stats' => $this->buildStats($values),
+            'meta' => [
+                'statsTitle' => $this->trans('Number of users by language'),
+                'showStatsPercentage' => false,
             ],
         ];
     }

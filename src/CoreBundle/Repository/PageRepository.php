@@ -22,7 +22,7 @@ final class PageRepository extends ServiceEntityRepository
     }
 
     /**
-     * Count enabled pages for a given category title, exact locale, and URL.
+     * Count enabled pages for a given category title, exact locale or all languages, and URL.
      */
     public function countByCategoryAndLocale(AccessUrl $url, string $categoryTitle, string $locale): int
     {
@@ -32,11 +32,12 @@ final class PageRepository extends ServiceEntityRepository
             ->andWhere('p.enabled = :enabled')
             ->andWhere('p.url = :url')
             ->andWhere('c.title = :category')
-            ->andWhere('p.locale = :locale')
+            ->andWhere('(p.locale = :locale OR p.locale = :allLocale)')
             ->setParameter('enabled', true)
             ->setParameter('url', $url)
             ->setParameter('category', $categoryTitle)
             ->setParameter('locale', $locale)
+            ->setParameter('allLocale', 'all')
         ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
@@ -113,10 +114,11 @@ final class PageRepository extends ServiceEntityRepository
                 ->andWhere('p.enabled = true')
                 ->andWhere('p.url = :url')
                 ->andWhere('c.title = :cat')
-                ->andWhere('p.locale = :loc')
+                ->andWhere('(p.locale = :loc OR p.locale = :allLocale)')
                 ->setParameter('url', $accessUrl)
                 ->setParameter('cat', $categoryTitle)
                 ->setParameter('loc', $locale)
+                ->setParameter('allLocale', 'all')
                 ->orderBy('p.title', 'ASC')
                 ->getQuery()
                 ->getArrayResult()
@@ -135,10 +137,11 @@ final class PageRepository extends ServiceEntityRepository
                 ->andWhere('p.enabled = true')
                 ->andWhere('p.url = :url')
                 ->andWhere('c.title = :cat')
-                ->andWhere('p.locale LIKE :prefix')
+                ->andWhere('(p.locale LIKE :prefix OR p.locale = :allLocale)')
                 ->setParameter('url', $accessUrl)
                 ->setParameter('cat', $categoryTitle)
                 ->setParameter('prefix', $prefix.'%')
+                ->setParameter('allLocale', 'all')
                 ->orderBy('p.title', 'ASC')
                 ->getQuery()
                 ->getArrayResult()
@@ -336,6 +339,11 @@ final class PageRepository extends ServiceEntityRepository
                 'value' => $value,
             ];
         }
+
+        $candidates[] = [
+            'operator' => 'exact',
+            'value' => 'all',
+        ];
 
         $candidates[] = [
             'operator' => 'empty',

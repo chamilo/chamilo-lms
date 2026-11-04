@@ -43393,3 +43393,6 @@ msgstr "The import finished, but some content could not be restored: %s"
 
 msgid "Number of users by language"
 msgstr "Number of users by language"
+
+msgid "All languages"
+msgstr "All languages"

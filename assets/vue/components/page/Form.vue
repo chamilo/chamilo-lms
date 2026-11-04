@@ -156,12 +156,13 @@ const emit = defineEmits(["update:modelValue", "submit"])
 
 const { t } = useI18n()
 
-const locales = ref(
-  (window.languages || []).map((l) => ({
+const locales = ref([
+  { originalName: t("All languages"), isocode: "all" },
+  ...(window.languages || []).map((l) => ({
     originalName: l.originalName || l.original_name || l.english_name,
     isocode: l.isocode,
   })),
-)
+])
 const categories = ref([])
 const findAllPageCategories = async () => (categories.value = await pageCategoryService.findAll())
 

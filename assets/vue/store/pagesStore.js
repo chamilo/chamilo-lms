@@ -32,7 +32,7 @@ export const usePagesStore = defineStore("pages", () => {
         params: {
           "category.title": categoryTitle,
           enabled: "1",
-          locale,
+          locale: [locale, "all"],
         },
         skipCourseContext: true,
       })

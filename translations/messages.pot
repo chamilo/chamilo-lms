@@ -43322,3 +43322,6 @@ msgstr ""
 
 msgid "Number of users by language"
 msgstr ""
+
+msgid "All languages"
+msgstr ""

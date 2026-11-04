@@ -4676,5 +4676,6 @@
     "These commands can modify the cache or the database. Confirm backups before continuing.": "These commands can modify the cache or the database. Confirm backups before continuing.",
     "I understand that database migrations can modify the database.": "I understand that database migrations can modify the database.",
     "The import finished, but some content could not be restored: {0}": "The import finished, but some content could not be restored: {0}",
-    "Number of users by language": "Number of users by language"
+    "Number of users by language": "Number of users by language",
+    "All languages": "All languages"
 }

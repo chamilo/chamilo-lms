@@ -325,6 +325,7 @@ const langMap = reactive({})
 
 function ensureLanguageName(iso) {
   if (!iso) return "-"
+  if (iso === "all") return t("All languages")
   if (!langMap[iso]) {
     langMap[iso] = getLanguageName(iso)
     fetchLanguageNameFromApi(iso)

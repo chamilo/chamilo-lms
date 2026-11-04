@@ -19,11 +19,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
+use const LOCK_EX;
 use const PHP_EOL;
 
 final readonly class UpdateApplyPlanner
 {
     private const int FILE_LIST_LIMIT = 200;
+    private const string PERMISSION_SNAPSHOT_FILE = 'PERMISSION-RESTORE-INFO.json';
     private const array SKIPPED_EXACT_PATHS = [
         '.env',
         '.env.local',
@@ -63,6 +65,8 @@ final readonly class UpdateApplyPlanner
         try {
             $stagingPath = $this->resolveSafeStagingPath($stagingPath);
             $details['staging_path'] = $stagingPath;
+            $permissionRestore = $this->loadOrCapturePermissionSnapshot($stagingPath);
+            $details['permission_restore'] = $permissionRestore;
             $this->addCheck($checks, 'staging_path', 'passed', $this->translator->trans('Staging directory is inside the Chamilo update staging directory.'), [
                 'staging_path' => $stagingPath,
             ]);
@@ -93,7 +97,7 @@ final readonly class UpdateApplyPlanner
 
             $filePlan = $this->buildFilePlan($applicationPath, $removalPaths);
             $details['file_plan'] = $filePlan;
-            $this->addFilePlanChecks($filePlan, $checks, $warnings);
+            $this->addFilePlanChecks($filePlan, $checks, $warnings, $permissionRestore);
 
             $errors = $this->collectFailedCheckMessages($checks);
 
@@ -101,7 +105,7 @@ final readonly class UpdateApplyPlanner
                 return UpdateApplyPlanResult::failure($errors, $checks, $warnings, $details);
             }
 
-            $this->writeApplyPlanMetadata($stagingPath, $metadata, $applicationPath, $backupPath, $lockPath, $filePlan);
+            $this->writeApplyPlanMetadata($stagingPath, $metadata, $applicationPath, $backupPath, $lockPath, $filePlan, $permissionRestore);
             $this->addCheck($checks, 'apply_plan_metadata', 'passed', $this->translator->trans('Apply plan metadata was written to the staging directory.'), [
                 'metadata_file' => $stagingPath.'/APPLY-PLAN.json',
             ]);
@@ -500,7 +504,7 @@ final readonly class UpdateApplyPlanner
                     $this->appendLimited($migrationFilesToReplace, $relativePath, $truncatedLists);
                 }
 
-                if (!is_writable($targetPath)) {
+                if (!is_writable($targetPath) || !$this->canCreatePath($targetPath)) {
                     $this->appendLimited($unwritableTargets, $relativePath, $truncatedLists);
                 }
 
@@ -594,7 +598,7 @@ final readonly class UpdateApplyPlanner
      * @param array<int, array{key: string, status: string, message: string, details?: array<string, mixed>}> $checks
      * @param string[]                                                                                        $warnings
      */
-    private function addFilePlanChecks(array $filePlan, array &$checks, array &$warnings): void
+    private function addFilePlanChecks(array $filePlan, array &$checks, array &$warnings, array $permissionRestore): void
     {
         $this->addCheck($checks, 'file_plan', 'passed', $this->translator->trans('Update apply file plan was generated.'), [
             'files_total' => $filePlan['files_total'] ?? 0,
@@ -620,7 +624,7 @@ final readonly class UpdateApplyPlanner
 
         $unwritableTargets = $filePlan['unwritable_targets_sample'] ?? [];
         if (\is_array($unwritableTargets) && [] !== $unwritableTargets) {
-            $this->addCheck($checks, 'write_permissions', 'failed', $this->buildUnwritableTargetsMessage(), [
+            $this->addCheck($checks, 'write_permissions', 'failed', $this->buildUnwritableTargetsMessage($permissionRestore), [
                 'unwritable_targets_sample' => $unwritableTargets,
             ]);
         } else {
@@ -784,7 +788,8 @@ final readonly class UpdateApplyPlanner
         string $applicationPath,
         string $backupPath,
         string $lockPath,
-        array $filePlan
+        array $filePlan,
+        array $permissionRestore
     ): void {
         $applyPlan = [
             'created_at' => gmdate('c'),
@@ -794,6 +799,7 @@ final readonly class UpdateApplyPlanner
             'manifest' => $metadata['manifest'] ?? [],
             'package_metadata' => $metadata['package_metadata'] ?? [],
             'file_plan' => $filePlan,
+            'permission_restore' => $permissionRestore,
             'note' => 'This file is an apply plan only. No update files have been copied to the Chamilo installation.',
         ];
 
@@ -822,25 +828,119 @@ final readonly class UpdateApplyPlanner
         return $errors;
     }
 
-    private function buildUnwritableTargetsMessage(): string
+    /**
+     * @return array<string, mixed>
+     */
+    private function loadOrCapturePermissionSnapshot(string $stagingPath): array
     {
-        $message = $this->translator->trans('Some target files or directories cannot be written or removed.');
+        $snapshotPath = $stagingPath.'/'.self::PERMISSION_SNAPSHOT_FILE;
+        $snapshot = null;
 
-        $webServerUser = $this->detectRuntimeUserName();
-        $currentOwner = $this->detectPathOwnerName($this->projectDir);
-
-        if (null === $webServerUser || null === $currentOwner || $webServerUser === $currentOwner) {
-            return $message;
+        if (is_file($snapshotPath) && !is_link($snapshotPath)) {
+            $stored = json_decode((string) file_get_contents($snapshotPath), true);
+            if (\is_array($stored)
+                && ($stored['project_dir'] ?? null) === $this->projectDir
+                && \is_array($stored['root'] ?? null)
+            ) {
+                $snapshot = $stored;
+            }
         }
 
-        return $message.' '.\sprintf(
-            $this->translator->trans(
-                'To fix this, temporarily change the owner of the whole Chamilo directory to %s (the web server user), apply the update, change the owner back to %s afterward, then set the owner of var/ (and its contents) back to %s so the application can keep writing to it.'
-            ),
-            $webServerUser,
-            $currentOwner,
-            $webServerUser,
+        if (null === $snapshot) {
+            $snapshot = [
+                'project_dir' => $this->projectDir,
+                'captured_at' => gmdate('c'),
+                'root' => $this->getPathOwnership($this->projectDir),
+                'var' => $this->getPathOwnership($this->projectDir.'/var'),
+            ];
+
+            // Preserve the first snapshot; a later plan may run after permissions changed.
+            if (!file_exists($snapshotPath) && !is_link($snapshotPath)) {
+                $encoded = json_encode($snapshot, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+                $snapshot['saved'] = false !== @file_put_contents($snapshotPath, $encoded.PHP_EOL, LOCK_EX);
+            } else {
+                $snapshot['saved'] = false;
+            }
+        } else {
+            $snapshot['saved'] = true;
+        }
+
+        $webServerUser = $this->detectRuntimeUserName();
+        $webServerGroup = $this->getGroupName(\function_exists('posix_getegid') ? posix_getegid() : false);
+        $snapshot['web_server_user'] = $webServerUser;
+        $snapshot['web_server_group'] = $webServerGroup;
+        $snapshot['grant_command'] = null;
+        $snapshot['restore_commands'] = [];
+
+        if (null !== $webServerUser) {
+            $account = $webServerUser.(null !== $webServerGroup ? ':'.$webServerGroup : '');
+            $snapshot['grant_command'] = 'sudo chown -R '.escapeshellarg($account).' '.escapeshellarg($this->projectDir);
+        }
+
+        foreach (['root' => $this->projectDir, 'var' => $this->projectDir.'/var'] as $key => $path) {
+            $owner = $snapshot[$key] ?? null;
+            if (!\is_array($owner) || !isset($owner['uid'], $owner['gid'])) {
+                continue;
+            }
+            $account = (string) $owner['uid'].':'.(string) $owner['gid'];
+            $snapshot['restore_commands'][] = 'sudo chown -R '.escapeshellarg($account).' '.escapeshellarg($path);
+        }
+
+        return $snapshot;
+    }
+
+    /**
+     * @return array{uid: int, gid: int, owner: string|null, group: string|null}|null
+     */
+    private function getPathOwnership(string $path): ?array
+    {
+        if (!is_dir($path) || is_link($path)) {
+            return null;
+        }
+
+        $uid = @fileowner($path);
+        $gid = @filegroup($path);
+
+        if (false === $uid || false === $gid) {
+            return null;
+        }
+
+        return [
+            'uid' => $uid,
+            'gid' => $gid,
+            'owner' => $this->detectPathOwnerName($path),
+            'group' => $this->getGroupName($gid),
+        ];
+    }
+
+    private function getGroupName(false|int $gid): ?string
+    {
+        if (false === $gid || !\function_exists('posix_getgrgid')) {
+            return null;
+        }
+
+        $info = posix_getgrgid($gid);
+        $name = \is_array($info) ? ($info['name'] ?? null) : null;
+
+        return \is_string($name) && '' !== $name ? $name : null;
+    }
+
+    /**
+     * @param array<string, mixed> $permissionRestore
+     */
+    private function buildUnwritableTargetsMessage(array $permissionRestore): string
+    {
+        $message = \sprintf(
+            $this->translator->trans('The web updater must temporarily write to the whole Chamilo installation at %s to replace application code. Grant the web server write access only for the update, then restore restricted ownership and permissions. Do not use chmod 777.'),
+            $this->projectDir,
         );
+
+        $command = $permissionRestore['grant_command'] ?? null;
+        if (\is_string($command) && '' !== $command) {
+            $message .= ' '.\sprintf($this->translator->trans('Example Linux command (review before running): %s'), $command);
+        }
+
+        return $message;
     }
 
     private function detectRuntimeUserName(): ?string
@@ -850,7 +950,7 @@ final readonly class UpdateApplyPlanner
         }
 
         $info = posix_getpwuid(posix_geteuid());
-        $name = \is_array($info) ? $info['name'] : null;
+        $name = \is_array($info) ? ($info['name'] ?? null) : null;
 
         return \is_string($name) && '' !== $name ? $name : null;
     }
@@ -862,13 +962,12 @@ final readonly class UpdateApplyPlanner
         }
 
         $ownerUid = @fileowner($path);
-
         if (false === $ownerUid) {
             return null;
         }
 
         $info = posix_getpwuid($ownerUid);
-        $name = \is_array($info) ? $info['name'] : null;
+        $name = \is_array($info) ? ($info['name'] ?? null) : null;
 
         return \is_string($name) && '' !== $name ? $name : null;
     }

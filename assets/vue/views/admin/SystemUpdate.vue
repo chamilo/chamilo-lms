@@ -12,13 +12,19 @@
                 {{ t("System update") }}
               </h1>
               <p class="mt-1 max-w-3xl text-body-2 text-gray-50">
-                {{ t("Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps.") }}
+                {{
+                  t(
+                    "Check for available Chamilo updates, verify packages, stage files and run controlled post-update steps.",
+                  )
+                }}
               </p>
             </div>
           </div>
         </div>
 
-        <span class="inline-flex items-center gap-2 rounded-full border border-primary bg-support-1 px-3 py-1 text-caption font-semibold text-primary">
+        <span
+          class="inline-flex items-center gap-2 rounded-full border border-primary bg-support-1 px-3 py-1 text-caption font-semibold text-primary"
+        >
           <i class="mdi mdi-lock-check-outline" />
           {{ t("File apply available") }}
         </span>
@@ -133,7 +139,9 @@
           <p class="mt-1 text-body-2 text-gray-50">
             {{ t("Use this link to simulate the future Chamilo.org update notice during development tests.") }}
           </p>
-          <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-white px-3 py-2 font-mono text-caption text-gray-90">
+          <code
+            class="mt-2 block break-all rounded-xl border border-gray-20 bg-white px-3 py-2 font-mono text-caption text-gray-90"
+          >
             {{ localTestUpdateEntryPath }}
           </code>
         </div>
@@ -191,7 +199,9 @@
             v-if="lockManifestOrigin"
             class="mt-2 flex overflow-hidden rounded-xl border border-gray-25 bg-white shadow-sm focus-within:border-primary focus-within:ring-1 focus-within:ring-primary"
           >
-            <span class="flex shrink-0 items-center border-e border-gray-20 bg-support-2 px-3 font-mono text-caption text-gray-70">
+            <span
+              class="flex shrink-0 items-center border-e border-gray-20 bg-support-2 px-3 font-mono text-caption text-gray-70"
+            >
               {{ manifestSourceOrigin }}/
             </span>
             <input
@@ -259,7 +269,10 @@
         :class="availabilityClass"
       >
         <div class="flex items-start gap-3">
-          <span class="mdi mt-0.5 text-xl" :class="availabilityIconClass" />
+          <span
+            class="mdi mt-0.5 text-xl"
+            :class="availabilityIconClass"
+          />
           <div>
             <h3 class="text-body-1 font-semibold">
               {{ t("Update availability") }}
@@ -296,7 +309,11 @@
             {{ t("Package verification") }}
           </h2>
           <p class="mt-1 text-body-2 text-gray-50">
-            {{ t("Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests.") }}
+            {{
+              t(
+                "Leave package and signature paths empty to download them from the verified manifest URLs. Local paths are only available for development tests.",
+              )
+            }}
           </p>
         </div>
       </div>
@@ -347,7 +364,11 @@
         class="mt-5 rounded-2xl border border-gray-20 bg-support-2 p-4 text-body-2 text-gray-50"
       >
         <span class="mdi mdi-download-lock-outline me-2 text-primary" />
-        {{ t("Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment.") }}
+        {{
+          t(
+            "Package and signature files will be downloaded from the manifest. Local paths are disabled in this environment.",
+          )
+        }}
       </div>
 
       <label
@@ -407,7 +428,11 @@
             {{ t("Preflight checks") }}
           </h2>
           <p class="mt-1 text-body-2 text-gray-50">
-            {{ t("Run environment checks before any future update application step. This does not modify files or the database.") }}
+            {{
+              t(
+                "Run environment checks before any future update application step. This does not modify files or the database.",
+              )
+            }}
           </p>
         </div>
       </div>
@@ -455,7 +480,11 @@
             {{ t("Staging extraction") }}
           </h2>
           <p class="mt-1 text-body-2 text-gray-50">
-            {{ t("Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database.") }}
+            {{
+              t(
+                "Extract the verified update package into a staging directory for inspection. This does not replace files, run migrations, or modify the database.",
+              )
+            }}
           </p>
         </div>
       </div>
@@ -509,7 +538,6 @@
       </ResultPanel>
     </div>
 
-
     <div class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm">
       <div class="flex items-center gap-3">
         <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-support-1 text-primary">
@@ -520,7 +548,11 @@
             {{ t("Apply preparation") }}
           </h2>
           <p class="mt-1 text-body-2 text-gray-50">
-            {{ t("Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation.") }}
+            {{
+              t(
+                "Build a safe apply plan from the staged package. This checks files to replace, add or remove, permissions, backup path and lock status. It does not modify the installation.",
+              )
+            }}
           </p>
         </div>
       </div>
@@ -539,13 +571,21 @@
           type="text"
         />
         <p class="text-caption text-gray-50">
-          {{ t("Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging.") }}
+          {{
+            t(
+              "Use the staging directory generated by the previous step. The backend only accepts directories inside var/update/staging.",
+            )
+          }}
         </p>
       </div>
 
       <div class="mt-4 rounded-2xl border border-warning bg-support-2 p-3 text-caption text-warning">
         <span class="mdi mdi-alert-outline me-1" />
-        {{ t("This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection.") }}
+        {{
+          t(
+            "This step prepares a review only. File replacement and package-declared cleanup happen later in the Apply staged files step, with lock, backup and rollback protection.",
+          )
+        }}
       </div>
 
       <div class="mt-4">
@@ -603,6 +643,49 @@
           </div>
         </dl>
 
+        <div
+          v-if="applyPlanPermissionRestore"
+          class="mb-4 rounded-2xl border border-warning bg-support-2 p-4 text-body-2 text-gray-90"
+        >
+          <p class="font-semibold">{{ t("Temporary update permissions") }}</p>
+          <p class="mt-2">
+            {{
+              t(
+                "The web server must temporarily write to the Chamilo code to apply this update. Review the actual installation path and account before running commands. Never use chmod 777.",
+              )
+            }}
+          </p>
+          <code
+            v-if="applyPlanPermissionRestore.grant_command && !applyPlan.applyPlan.valid"
+            class="mt-3 block break-all rounded-xl bg-white p-3 font-mono text-caption"
+            >{{ applyPlanPermissionRestore.grant_command }}</code
+          >
+          <p class="mt-3 font-semibold">{{ t("Restore permissions after the update") }}</p>
+          <p class="mt-1">
+            {{
+              t(
+                "These commands use the original root and var directory owners captured at the first apply-plan check. They are examples only: do not run recursive ownership changes on installations with mixed file ownership. Restore ACLs and file modes separately if necessary.",
+              )
+            }}
+          </p>
+          <code
+            v-for="command in applyPlanPermissionRestore.restore_commands || []"
+            :key="command"
+            class="mt-2 block break-all rounded-xl bg-white p-3 font-mono text-caption"
+            >{{ command }}</code
+          >
+          <p
+            v-if="!applyPlanPermissionRestore.saved"
+            class="mt-2 font-semibold text-danger"
+          >
+            {{
+              t(
+                "The original ownership snapshot could not be saved. Record ownership manually before changing permissions.",
+              )
+            }}
+          </p>
+        </div>
+
         <CheckTable
           v-if="applyPlan.applyPlan.checks.length"
           :checks="applyPlan.applyPlan.checks"
@@ -622,14 +705,22 @@
             {{ t("Apply staged files") }}
           </h2>
           <p class="mt-1 text-body-2 text-gray-50">
-            {{ t("Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands.") }}
+            {{
+              t(
+                "Replace Chamilo files from the staged package and remove obsolete files explicitly declared by the signed package metadata. This does not run database migrations, Composer, Yarn or cache commands.",
+              )
+            }}
           </p>
         </div>
       </div>
 
       <div class="mt-4 rounded-2xl border border-danger bg-white p-4 text-body-2 text-danger">
         <span class="mdi mdi-alert-outline me-1" />
-        {{ t("This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing.") }}
+        {{
+          t(
+            "This action replaces and can remove files in the Chamilo installation. Make sure the apply plan was reviewed and backups are enabled before continuing.",
+          )
+        }}
       </div>
 
       <div class="mt-5 space-y-4">
@@ -640,7 +731,11 @@
             type="checkbox"
           />
           <span>
-            {{ t("I understand this will replace files and remove package-declared obsolete files in the Chamilo installation.") }}
+            {{
+              t(
+                "I understand this will replace files and remove package-declared obsolete files in the Chamilo installation.",
+              )
+            }}
           </span>
         </label>
 
@@ -648,7 +743,9 @@
           <span class="text-body-2 font-semibold text-gray-90">
             {{ t("Type the exact text below to confirm") }}
           </span>
-          <code class="mt-2 block w-fit rounded-lg border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+          <code
+            class="mt-2 block w-fit rounded-lg border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90"
+          >
             {{ APPLY_FILES_CONFIRMATION_TEXT }}
           </code>
           <input
@@ -719,7 +816,11 @@
         :details-label="t('Apply files details')"
         :details-text="formattedApplyFilesDetails"
         :errors="applyFilesResult.applyFiles.errors"
-        :title="applyFilesResult.applyFiles.valid ? t('Staged files applied successfully') : t('Staged file application failed')"
+        :title="
+          applyFilesResult.applyFiles.valid
+            ? t('Staged files applied successfully')
+            : t('Staged file application failed')
+        "
         :valid="applyFilesResult.applyFiles.valid"
         :warnings="applyFilesResult.applyFiles.warnings"
       >
@@ -729,12 +830,16 @@
         >
           <div class="rounded-2xl border border-gray-20 bg-support-2 p-4">
             <dt class="font-semibold text-gray-50">{{ t("Backup directory") }}</dt>
-            <dd class="mt-1 break-all font-mono text-caption text-gray-90">{{ applyFilesResult.applyFiles.backupPath }}</dd>
+            <dd class="mt-1 break-all font-mono text-caption text-gray-90">
+              {{ applyFilesResult.applyFiles.backupPath }}
+            </dd>
           </div>
 
           <div class="rounded-2xl border border-gray-20 bg-support-2 p-4">
             <dt class="font-semibold text-gray-50">{{ t("Audit file") }}</dt>
-            <dd class="mt-1 break-all font-mono text-caption text-gray-90">{{ applyFilesResult.applyFiles.auditPath }}</dd>
+            <dd class="mt-1 break-all font-mono text-caption text-gray-90">
+              {{ applyFilesResult.applyFiles.auditPath }}
+            </dd>
           </div>
         </dl>
 
@@ -757,7 +862,11 @@
             {{ t("Post-apply checks") }}
           </h2>
           <p class="mt-1 text-body-2 text-gray-50">
-            {{ t("Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands.") }}
+            {{
+              t(
+                "Review recommended manual commands after applying update files. This step does not run Composer, Yarn, migrations or cache commands.",
+              )
+            }}
           </p>
         </div>
       </div>
@@ -830,6 +939,26 @@
           </div>
         </div>
 
+        <div
+          v-if="postApplyPermissionRestore?.restore_commands?.length"
+          class="mb-4 rounded-2xl border border-warning bg-support-2 p-4 text-body-2 text-gray-90"
+        >
+          <p class="font-semibold">{{ t("Restore permissions after the update") }}</p>
+          <p class="mt-2">
+            {{
+              t(
+                "Only use these example commands if the installation originally had uniform ownership. Restore any mixed ownership or ACLs from your own backup.",
+              )
+            }}
+          </p>
+          <code
+            v-for="command in postApplyPermissionRestore.restore_commands"
+            :key="command"
+            class="mt-2 block break-all rounded-xl bg-white p-3 font-mono text-caption"
+            >{{ command }}</code
+          >
+        </div>
+
         <CheckTable
           v-if="postApplyChecks.postApply.checks.length"
           :checks="postApplyChecks.postApply.checks"
@@ -858,7 +987,9 @@
 
         <div class="mt-4 rounded-2xl border border-danger bg-white p-3 text-caption font-semibold text-danger">
           <span class="mdi mdi-alert-outline me-1" />
-          {{ t("This updater does not create a database backup. Create and verify a backup before running migrations.") }}
+          {{
+            t("This updater does not create a database backup. Create and verify a backup before running migrations.")
+          }}
         </div>
 
         <div class="mt-4">
@@ -882,7 +1013,11 @@
           :details-label="t('Migration safety details')"
           :details-text="formattedMigrationSafetyDetails"
           :errors="migrationSafety.migrationSafety.errors"
-          :title="migrationSafety.migrationSafety.valid ? t('Migration safety review ready') : t('Migration safety review failed')"
+          :title="
+            migrationSafety.migrationSafety.valid
+              ? t('Migration safety review ready')
+              : t('Migration safety review failed')
+          "
           :valid="migrationSafety.migrationSafety.valid"
           :warnings="migrationSafety.migrationSafety.warnings"
         >
@@ -907,7 +1042,6 @@
             </div>
           </div>
 
-
           <div
             v-if="migrationSafetyTarget"
             class="mb-4 rounded-2xl border border-info bg-white p-4"
@@ -916,9 +1050,13 @@
               {{ t("Migration target") }}
             </h4>
             <p class="mt-1 text-caption text-gray-90">
-              {{ t("Doctrine will execute only the staged V300 migrations explicitly after the safety review passes.") }}
+              {{
+                t("Doctrine will execute only the staged V300 migrations explicitly after the safety review passes.")
+              }}
             </p>
-            <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+            <code
+              class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90"
+            >
               {{ migrationSafetyTarget }}
             </code>
           </div>
@@ -936,7 +1074,9 @@
                   {{
                     migrationSafetyBaseline.clean
                       ? t("The database migration baseline is clean.")
-                      : t("Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation.")
+                      : t(
+                          "Doctrine reported historical baseline warnings. The updater will still execute only staged V300 migrations after explicit confirmation.",
+                        )
                   }}
                 </p>
               </div>
@@ -1039,7 +1179,9 @@
             <h4 class="text-body-2 font-semibold text-gray-90">
               {{ t("Doctrine dry-run command") }}
             </h4>
-            <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+            <code
+              class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90"
+            >
               {{ migrationSafety.migrationSafety.dryRunCommand }}
             </code>
             <p class="mt-2 text-caption font-semibold text-gray-90">
@@ -1048,7 +1190,7 @@
             <pre
               v-if="migrationSafety.migrationSafety.dryRunOutput"
               class="mt-3 max-h-96 overflow-auto rounded-xl border border-gray-20 bg-gray-90 p-3 text-caption text-white"
-            >{{ migrationSafety.migrationSafety.dryRunOutput }}</pre>
+              >{{ migrationSafety.migrationSafety.dryRunOutput }}</pre>
           </div>
 
           <CheckTable
@@ -1073,7 +1215,11 @@
               {{ t("Run post-apply actions") }}
             </h3>
             <p class="mt-1 text-body-2 text-gray-50">
-              {{ t("Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted.") }}
+              {{
+                t(
+                  "Run selected post-apply commands from the server using a controlled allowlist. No custom shell commands are accepted.",
+                )
+              }}
             </p>
           </div>
         </div>
@@ -1092,7 +1238,7 @@
         >
           <div class="rounded-2xl border border-danger bg-white p-3 text-caption text-danger">
             <span class="mdi mdi-alert-outline me-1" />
-            {{ t("These commands can modify dependencies, generated assets, cache or the database. Confirm backups before continuing.") }}
+            {{ t("These commands can modify the cache or the database. Confirm backups before continuing.") }}
           </div>
 
           <div class="space-y-4">
@@ -1119,7 +1265,9 @@
                   <span class="min-w-0">
                     <span class="block font-semibold">{{ action.title }}</span>
                     <span class="mt-1 block text-caption text-gray-50">{{ action.description }}</span>
-                    <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+                    <code
+                      class="mt-2 block break-all rounded-xl border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90"
+                    >
                       {{ action.command }}
                     </code>
                   </span>
@@ -1135,7 +1283,11 @@
                 {{ t("Advanced actions") }}
               </p>
               <p class="mt-1 text-caption font-semibold text-gray-90">
-                {{ t("Composer, Yarn and database migration actions can modify dependencies, generated assets or the database. Select them only after confirming backups and permissions.") }}
+                {{
+                  t(
+                    "Database migrations can modify the database. Select them only after confirming backups and permissions.",
+                  )
+                }}
               </p>
 
               <div class="mt-3 space-y-2">
@@ -1153,7 +1305,9 @@
                   <span class="min-w-0">
                     <span class="block font-semibold">{{ action.title }}</span>
                     <span class="mt-1 block text-caption text-gray-90">{{ action.description }}</span>
-                    <code class="mt-2 block break-all rounded-xl border border-gray-20 bg-white px-3 py-2 font-mono text-caption text-gray-90">
+                    <code
+                      class="mt-2 block break-all rounded-xl border border-gray-20 bg-white px-3 py-2 font-mono text-caption text-gray-90"
+                    >
                       {{ action.command }}
                     </code>
                   </span>
@@ -1173,7 +1327,7 @@
             />
             <span>
               <span class="block font-semibold">
-                {{ t("I understand that advanced actions can modify dependencies, generated assets or the database.") }}
+                {{ t("I understand that database migrations can modify the database.") }}
               </span>
               <span class="mt-1 block text-caption text-gray-90">
                 {{ t("Do not enable this unless the update backup and server permissions were reviewed.") }}
@@ -1205,7 +1359,9 @@
               <span class="text-body-2 font-semibold text-gray-90">
                 {{ t("Type the exact text below to confirm") }}
               </span>
-              <code class="mt-2 block w-fit rounded-lg border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+              <code
+                class="mt-2 block w-fit rounded-lg border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90"
+              >
                 {{ DATABASE_MIGRATIONS_CONFIRMATION_TEXT }}
               </code>
               <input
@@ -1240,7 +1396,9 @@
             <span class="text-body-2 font-semibold text-gray-90">
               {{ t("Type the exact text below to confirm") }}
             </span>
-            <code class="mt-2 block w-fit rounded-lg border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90">
+            <code
+              class="mt-2 block w-fit rounded-lg border border-gray-20 bg-support-2 px-3 py-2 font-mono text-caption text-gray-90"
+            >
               {{ POST_APPLY_CONFIRMATION_TEXT }}
             </code>
             <input
@@ -1254,7 +1412,9 @@
           <BaseButton
             :disabled="isRunningPostApplyActions || !canRunPostApplyActions"
             :is-loading="isRunningPostApplyActions"
-            :label="isRunningPostApplyActions ? t('Running post-apply actions...') : t('Run selected post-apply actions')"
+            :label="
+              isRunningPostApplyActions ? t('Running post-apply actions...') : t('Run selected post-apply actions')
+            "
             icon="play-circle-outline"
             type="primary"
             @click="runPostApplyActions"
@@ -1311,7 +1471,9 @@
           :details-label="t('Post-apply run details')"
           :details-text="formattedPostApplyRunDetails"
           :errors="postApplyRunResult.postApplyRun.errors"
-          :title="postApplyRunResult.postApplyRun.valid ? t('Post-apply actions completed') : t('Post-apply actions failed')"
+          :title="
+            postApplyRunResult.postApplyRun.valid ? t('Post-apply actions completed') : t('Post-apply actions failed')
+          "
           :valid="postApplyRunResult.postApplyRun.valid"
           :warnings="postApplyRunResult.postApplyRun.warnings"
         >
@@ -1324,7 +1486,6 @@
         </ResultPanel>
       </div>
     </div>
-
   </section>
 </template>
 
@@ -1417,7 +1578,9 @@ const updateEntryNotice = computed(() => {
       title: t("Official Chamilo update channel"),
       description: status.officialManifestSource
         ? t("This screen was opened from an update notice. Only the manifest check is started automatically.")
-        : t("This screen was opened from an official update notice, but no official manifest source is configured yet."),
+        : t(
+            "This screen was opened from an official update notice, but no official manifest source is configured yet.",
+          ),
       severity: status.officialManifestSource ? "info" : "warning",
     }
   }
@@ -1425,7 +1588,9 @@ const updateEntryNotice = computed(() => {
   if ("local-test" === updateEntrySource.value) {
     return {
       title: t("Local update notice simulation"),
-      description: t("This development entry simulates the future Chamilo.org update notice using local test package paths."),
+      description: t(
+        "This development entry simulates the future Chamilo.org update notice using local test package paths.",
+      ),
       severity: "warning",
     }
   }
@@ -1440,7 +1605,6 @@ const localTestUpdateEntryPath = computed(() => {
 
   return "/admin/system-update?source=local-test&check=1"
 })
-
 
 const workflowResumeNotice = computed(() => {
   if (!lastCompletedWorkflowStep.value) {
@@ -1498,7 +1662,9 @@ const manifestSourcePath = computed({
     }
   },
   set(value) {
-    const path = String(value || "").trim().replace(/^\/+/, "")
+    const path = String(value || "")
+      .trim()
+      .replace(/^\/+/, "")
 
     if (!manifestSourceOrigin.value) {
       form.manifestSource = path
@@ -1676,6 +1842,9 @@ const formattedPostApplyRunDetails = computed(() => {
   return JSON.stringify(postApplyRunResult.value.postApplyRun.details || {}, null, 2)
 })
 
+const applyPlanPermissionRestore = computed(() => applyPlan.value?.applyPlan?.details?.permission_restore || null)
+const postApplyPermissionRestore = computed(() => postApplyChecks.value?.postApply?.details?.permission_restore || null)
+
 const postApplyActions = computed(() => {
   return postApplyChecks.value?.postApply?.actions || []
 })
@@ -1713,15 +1882,15 @@ const canReviewMigrationSafety = computed(() => {
 const canRunPostApplyActions = computed(() => {
   return Boolean(
     status.allowUiPostApplyCommands &&
-      postApplyChecks.value?.postApply?.valid &&
-      form.selectedPostApplyActionKeys.length > 0 &&
-      form.confirmPostApplyRun &&
-      (!hasSelectedAdvancedPostApplyActions.value || form.confirmAdvancedPostApplyRun) &&
-      (!hasSelectedDatabaseMigrationAction.value ||
-        (migrationSafety.value?.migrationSafety?.valid &&
-          form.confirmDatabaseBackup &&
-          DATABASE_MIGRATIONS_CONFIRMATION_TEXT === form.databaseMigrationConfirmationText)) &&
-      POST_APPLY_CONFIRMATION_TEXT === form.postApplyRunConfirmationText,
+    postApplyChecks.value?.postApply?.valid &&
+    form.selectedPostApplyActionKeys.length > 0 &&
+    form.confirmPostApplyRun &&
+    (!hasSelectedAdvancedPostApplyActions.value || form.confirmAdvancedPostApplyRun) &&
+    (!hasSelectedDatabaseMigrationAction.value ||
+      (migrationSafety.value?.migrationSafety?.valid &&
+        form.confirmDatabaseBackup &&
+        DATABASE_MIGRATIONS_CONFIRMATION_TEXT === form.databaseMigrationConfirmationText)) &&
+    POST_APPLY_CONFIRMATION_TEXT === form.postApplyRunConfirmationText,
   )
 })
 
@@ -1731,9 +1900,7 @@ const applyPlanFilePlan = computed(() => {
 
 const canApplyFiles = computed(() => {
   return Boolean(
-    applyPlan.value?.applyPlan?.valid &&
-      form.confirmApply &&
-      APPLY_FILES_CONFIRMATION_TEXT === form.confirmationText,
+    applyPlan.value?.applyPlan?.valid && form.confirmApply && APPLY_FILES_CONFIRMATION_TEXT === form.confirmationText,
   )
 })
 
@@ -1753,10 +1920,7 @@ const InlineError = defineComponent({
           class: "mt-4 rounded-2xl border border-danger bg-white p-3 text-body-2 text-danger",
           role: "alert",
         },
-        [
-          h("span", { class: "mdi mdi-alert-circle-outline me-1", "aria-hidden": "true" }),
-          props.message,
-        ],
+        [h("span", { class: "mdi mdi-alert-circle-outline me-1", "aria-hidden": "true" }), props.message],
       )
   },
 })
@@ -1802,10 +1966,7 @@ const ResultPanel = defineComponent({
         [
           h("div", { class: "flex items-center gap-2 font-semibold" }, [
             h("span", {
-              class: [
-                "mdi text-xl",
-                props.valid ? "mdi-check-circle text-success" : "mdi-alert-circle text-danger",
-              ],
+              class: ["mdi text-xl", props.valid ? "mdi-check-circle text-success" : "mdi-alert-circle text-danger"],
             }),
             h("span", { class: props.valid ? "text-success" : "text-danger" }, props.title),
           ]),
@@ -1828,7 +1989,10 @@ const ResultPanel = defineComponent({
             h("summary", { class: "cursor-pointer text-body-2 font-semibold text-primary" }, props.detailsLabel),
             h(
               "pre",
-              { class: "mt-3 overflow-auto rounded-2xl border border-gray-20 bg-white p-3 font-mono text-caption text-gray-90" },
+              {
+                class:
+                  "mt-3 overflow-auto rounded-2xl border border-gray-20 bg-white p-3 font-mono text-caption text-gray-90",
+              },
               props.detailsText,
             ),
           ]),
@@ -1878,10 +2042,7 @@ const CheckTable = defineComponent({
                         props.statusClass(check.status),
                       ],
                     },
-                    [
-                      h("span", { class: ["mdi", props.statusIconClass(check.status)] }),
-                      check.status,
-                    ],
+                    [h("span", { class: ["mdi", props.statusIconClass(check.status)] }), check.status],
                   ),
                 ]),
                 h("td", { class: "px-4 py-3 font-mono text-caption text-gray-50" }, check.key),
@@ -2209,7 +2370,6 @@ async function stagePackage() {
   }
 }
 
-
 async function buildApplyPlan() {
   clearActionError()
   isPlanningApply.value = true
@@ -2246,7 +2406,6 @@ async function buildApplyPlan() {
     isPlanningApply.value = false
   }
 }
-
 
 async function applyUpdateFiles() {
   clearActionError()
@@ -2295,7 +2454,6 @@ async function applyUpdateFiles() {
   }
 }
 
-
 async function runPostApplyChecks() {
   clearActionError()
   isCheckingPostApply.value = true
@@ -2332,8 +2490,6 @@ async function runPostApplyChecks() {
   }
 }
 
-
-
 async function runMigrationSafetyChecks() {
   clearActionError()
   isCheckingMigrationSafety.value = true
@@ -2361,7 +2517,6 @@ async function runMigrationSafetyChecks() {
     isCheckingMigrationSafety.value = false
   }
 }
-
 
 async function runPostApplyActions() {
   clearActionError()
@@ -2461,7 +2616,9 @@ function buildRecoveredPostApplyRunResult(error, responseData) {
         {
           key: "post_apply_http_response",
           status: "warning",
-          message: t("The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request."),
+          message: t(
+            "The final HTTP response failed after the operation completed. This is usually caused by runtime cache permissions or a web server restart during the request.",
+          ),
           details: {
             http_error: httpError,
           },
@@ -2490,7 +2647,9 @@ function postApplyProgressCompletedSuccessfully() {
     }
 
     if ("post_apply_commands" === event.step) {
-      return String(event.message || "").toLowerCase().includes("completed successfully")
+      return String(event.message || "")
+        .toLowerCase()
+        .includes("completed successfully")
     }
 
     return false
@@ -2501,41 +2660,6 @@ function buildExecutablePostApplyActions(actions) {
   const executableActions = []
 
   for (const action of actions || []) {
-    if ("composer_install" === action.key) {
-      executableActions.push({
-        key: "composer_install",
-        title: t("Composer install"),
-        description: action.description,
-        command: status.productionMode
-          ? "composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader"
-          : "composer install --no-interaction --prefer-dist",
-        severity: action.severity,
-        advanced: true,
-        category: "advanced",
-      })
-    }
-
-    if ("frontend_build" === action.key) {
-      executableActions.push({
-        key: "yarn_install",
-        title: t("Yarn install"),
-        description: t("Install frontend dependencies before rebuilding assets."),
-        command: "yarn install --frozen-lockfile",
-        severity: action.severity,
-        advanced: true,
-        category: "advanced",
-      })
-      executableActions.push({
-        key: "yarn_build",
-        title: t("Yarn build"),
-        description: t("Build production frontend assets."),
-        command: 'NODE_OPTIONS="--experimental-global-webcrypto --max-old-space-size=8192" yarn build',
-        severity: action.severity,
-        advanced: true,
-        category: "advanced",
-      })
-    }
-
     if ("database_migrations" === action.key) {
       executableActions.push({
         key: "doctrine_migrations",
@@ -2694,7 +2818,6 @@ function buildUpdatePayload() {
     skipSignature: status.allowSkipSignature && form.skipSignature,
   }
 }
-
 
 function getActionSeverityClass(severity) {
   if ("danger" === severity) {

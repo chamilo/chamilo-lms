@@ -38,7 +38,8 @@
   }
 
   &__title {
-    @apply font-bold leading-tight mb-6 text-[4rem];
+    @apply font-bold leading-tight text-[4rem];
+    margin-bottom: calc(1.5rem + 1px);
   }
 
   &__form {

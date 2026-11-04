@@ -99,7 +99,7 @@ final readonly class TicketDetailProvider implements ProviderInterface
 
         $result = new TicketDetail();
         $result->id = $ticketId;
-        $result->ticket = $this->normalizeTicket($row);
+        $result->ticket = $this->normalizeTicket($row, $isAdmin);
         $result->messages = $this->getMessages($ticketEntity);
         $result->isAdmin = $isAdmin;
         $result->canReply = $isAdmin
@@ -155,6 +155,8 @@ final readonly class TicketDetailProvider implements ProviderInterface
                 'creator.username AS creatorUsername',
                 'creator.firstname AS creatorFirstname',
                 'creator.lastname AS creatorLastname',
+                'creator.roles AS creatorRoles',
+                'creator.status AS creatorStatus',
                 'assigned.id AS assignedUserId',
                 'assigned.username AS assignedUsername',
                 'assigned.firstname AS assignedFirstname',
@@ -190,7 +192,7 @@ final readonly class TicketDetailProvider implements ProviderInterface
      *
      * @return array<string, mixed>
      */
-    private function normalizeTicket(array $row): array
+    private function normalizeTicket(array $row, bool $isAdmin): array
     {
         $courseId = null !== $row['courseId'] ? (int) $row['courseId'] : null;
         $sessionId = null !== $row['sessionId'] ? (int) $row['sessionId'] : null;
@@ -233,6 +235,10 @@ final readonly class TicketDetailProvider implements ProviderInterface
                     'lastname' => $row['creatorLastname'] ?? '',
                     'username' => $row['creatorUsername'] ?? '',
                 ]),
+                'roles' => self::getCreatorRoles($row),
+                'profileUrl' => $isAdmin && null !== $row['creatorUsername']
+                    ? '/main/admin/user_information.php?user_id='.(int) $row['creatorId']
+                    : null,
             ],
             'assignee' => null !== $row['assignedUserId'] ? [
                 'id' => (int) $row['assignedUserId'],
@@ -271,6 +277,39 @@ final readonly class TicketDetailProvider implements ProviderInterface
                 ]),
             ] : null,
         ];
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     *
+     * @return list<string>
+     */
+    private static function getCreatorRoles(array $row): array
+    {
+        if (null === ($row['creatorUsername'] ?? null)) {
+            return [];
+        }
+
+        $roles = [];
+        $storedRoles = $row['creatorRoles'] ?? [];
+        foreach (\is_array($storedRoles) ? $storedRoles : [] as $role) {
+            if (!\is_string($role)) {
+                continue;
+            }
+
+            $role = strtoupper(trim($role));
+            if ('' === $role || 'ROLE_USER' === $role || \in_array($role, User::CONTEXT_ROLES, true)) {
+                continue;
+            }
+
+            $roles[$role] = true;
+        }
+
+        if ([] === $roles) {
+            $roles[User::getRoleFromStatus((int) ($row['creatorStatus'] ?? 0))] = true;
+        }
+
+        return array_keys($roles);
     }
 
     /**

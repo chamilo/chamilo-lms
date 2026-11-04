@@ -4,16 +4,22 @@
 
 class PENSPlugin extends Plugin
 {
-    protected $strings = [];
     private array $errorMessages = [];
 
     public const TABLE_PENS = 'plugin_pens';
+    public const SETTING_SYSTEM_USER_ID = 'system_user_id';
+    public const SETTING_SYSTEM_PASSWORD = 'system_password';
 
     public function __construct()
     {
-        parent::__construct('1.1', 'Guillaume Viguier-Just, Yannick Warnier');
-
-        $this->loadPluginStrings();
+        parent::__construct(
+            '1.1',
+            'Guillaume Viguier-Just, Yannick Warnier',
+            [
+                self::SETTING_SYSTEM_USER_ID => 'text',
+                self::SETTING_SYSTEM_PASSWORD => 'text',
+            ]
+        );
     }
 
     public function get_name(): string
@@ -94,38 +100,5 @@ class PENSPlugin extends Plugin
         $result['is_mail_plugin'] = false;
 
         return $result;
-    }
-
-    private function loadPluginStrings(): void
-    {
-        $basePath = dirname(__DIR__).'/lang/';
-        $englishFile = $basePath.'english.php';
-
-        $this->strings = [];
-
-        if (is_readable($englishFile)) {
-            $strings = [];
-            require $englishFile;
-            if (isset($strings) && is_array($strings)) {
-                $this->strings = $strings;
-            }
-        }
-
-        $interfaceLanguage = api_get_language_isocode();
-        if (empty($interfaceLanguage) || 'english' === $interfaceLanguage) {
-            return;
-        }
-
-        $languageFile = $basePath.$interfaceLanguage.'.php';
-        if (!is_readable($languageFile)) {
-            return;
-        }
-
-        $strings = [];
-        require $languageFile;
-
-        if (isset($strings) && is_array($strings)) {
-            $this->strings = array_merge($this->strings, $strings);
-        }
     }
 }

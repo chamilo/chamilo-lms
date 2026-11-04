@@ -90,6 +90,65 @@ final class UpdateApplyPlannerTest extends TestCase
         );
     }
 
+    public function testPermissionOwnershipSnapshotIsPreservedAcrossRechecks(): void
+    {
+        $this->writePackageMetadata([]);
+        $this->writeStagingMetadata();
+
+        $planner = $this->createPlanner();
+        $first = $planner->buildPlan($this->stagingPath);
+        self::assertTrue($first->isValid(), implode("\n", $first->getErrors()));
+
+        $snapshotPath = $this->stagingPath.'/PERMISSION-RESTORE-INFO.json';
+        self::assertFileExists($snapshotPath);
+        $firstSnapshot = (string) file_get_contents($snapshotPath);
+        $permissionInfo = $first->getDetails()['permission_restore'];
+        self::assertSame($this->projectDir, $permissionInfo['project_dir']);
+        self::assertSame(fileowner($this->projectDir), $permissionInfo['root']['uid']);
+        self::assertSame(filegroup($this->projectDir), $permissionInfo['root']['gid']);
+        self::assertTrue($permissionInfo['saved']);
+        self::assertNotEmpty($permissionInfo['restore_commands']);
+
+        $second = $planner->buildPlan($this->stagingPath);
+        self::assertTrue($second->isValid(), implode("\n", $second->getErrors()));
+        self::assertSame($firstSnapshot, file_get_contents($snapshotPath));
+        self::assertSame($permissionInfo['restore_commands'], $second->getDetails()['permission_restore']['restore_commands']);
+    }
+
+    public function testPlanRejectsWritableFileWhenItsParentDirectoryIsReadOnly(): void
+    {
+        $this->writePackageMetadata([]);
+        $this->writeStagingMetadata();
+
+        $originalMode = fileperms($this->projectDir) & 0777;
+        chmod($this->projectDir, 0555);
+        clearstatcache(true, $this->projectDir);
+
+        try {
+            if (is_writable($this->projectDir)) {
+                self::markTestSkipped('The test process can write to read-only directories.');
+            }
+
+            self::assertTrue(is_writable($this->projectDir.'/composer.json'));
+
+            $result = $this->createPlanner()->buildPlan($this->stagingPath);
+
+            self::assertFalse($result->isValid());
+            self::assertFileDoesNotExist($this->stagingPath.'/APPLY-PLAN.json');
+
+            $permissionChecks = array_values(array_filter(
+                $result->getChecks(),
+                static fn (array $check): bool => 'write_permissions' === $check['key'],
+            ));
+            self::assertCount(1, $permissionChecks);
+            self::assertSame('failed', $permissionChecks[0]['status']);
+            self::assertContains('composer.json', $permissionChecks[0]['details']['unwritable_targets_sample']);
+        } finally {
+            chmod($this->projectDir, $originalMode);
+            clearstatcache(true, $this->projectDir);
+        }
+    }
+
     private function createPlanner(): UpdateApplyPlanner
     {
         return new UpdateApplyPlanner(

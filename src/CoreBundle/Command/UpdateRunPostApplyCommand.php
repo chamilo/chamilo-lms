@@ -38,7 +38,7 @@ final class UpdateRunPostApplyCommand extends Command
             ->addOption('action', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Action key to run. Can be repeated.')
             ->addOption('all', null, InputOption::VALUE_NONE, 'Run all actions recommended by POST-APPLY-CHECKS.json.')
             ->addOption('confirm', null, InputOption::VALUE_NONE, 'Required confirmation to execute post-apply commands.')
-            ->addOption('confirm-advanced', null, InputOption::VALUE_NONE, 'Required when running Composer, Yarn or database migration actions.')
+            ->addOption('confirm-advanced', null, InputOption::VALUE_NONE, 'Required when running database migrations.')
             ->addOption('confirm-database-backup', null, InputOption::VALUE_NONE, 'Required when running database migrations. Confirms that a database backup exists.')
             ->addOption('confirm-database-migrations', null, InputOption::VALUE_NONE, 'Required when running database migrations after reviewing MIGRATION-SAFETY-CHECKS.json.')
             ->addOption('operation-id', null, InputOption::VALUE_REQUIRED, 'Optional operation id used to write live progress logs.')
@@ -47,14 +47,11 @@ final class UpdateRunPostApplyCommand extends Command
 Runs controlled post-apply update commands from a fixed allowlist.
 
 Allowed action keys:
-  - composer_install
-  - yarn_install
-  - yarn_build
   - doctrine_migrations
   - cache_clear
 
 This command does not accept arbitrary shell commands.
-Composer, Yarn and database migration actions require --confirm-advanced.
+Database migration actions require --confirm-advanced.
 Database migration actions also require --confirm-database-backup and --confirm-database-migrations.
 
 Examples:

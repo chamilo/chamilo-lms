@@ -4915,7 +4915,6 @@ __metadata:
     cropper: "npm:^4.1.0"
     d3: "npm:^7.9.0"
     datepair.js: "npm:^0.4.17"
-    deepmerge: "npm:^4.3.1"
     dotenv: "npm:^17.4.2"
     dropzone: "npm:^5.9.3"
     easy-pie-chart: "npm:^2.1.7"
@@ -5972,13 +5971,6 @@ __metadata:
   version: 0.1.4
   resolution: "deep-is@npm:0.1.4"
   checksum: 10c0/7f0ee496e0dff14a573dc6127f14c95061b448b87b995fc96c017ce0a1e66af1675e73f1d6064407975bc4ea6ab679497a29fff7b5b9c4e99cb10797c1ad0b4c
-  languageName: node
-  linkType: hard
-
-"deepmerge@npm:^4.3.1":
-  version: 4.3.1
-  resolution: "deepmerge@npm:4.3.1"
-  checksum: 10c0/e53481aaf1aa2c4082b5342be6b6d8ad9dfe387bc92ce197a66dea08bd4265904a087e75e464f14d1347cf2ac8afe1e4c16b266e0561cc5df29382d3c5f80044
   languageName: node
   linkType: hard
 

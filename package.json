@@ -131,7 +131,6 @@
     "autoprefixer": "^10.6.2",
     "baseline-browser-mapping": "^2.11.33",
     "core-js": "3.51.0",
-    "deepmerge": "^4.3.1",
     "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.7",

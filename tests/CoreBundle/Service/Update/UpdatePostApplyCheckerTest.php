@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\Service\Update\UpdatePostApplyChecker;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\IdentityTranslator;
 
+use const JSON_THROW_ON_ERROR;
+
 final class UpdatePostApplyCheckerTest extends TestCase
 {
     private string $projectDir;

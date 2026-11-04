@@ -4674,5 +4674,6 @@
     "Only use these example commands if the installation originally had uniform ownership. Restore any mixed ownership or ACLs from your own backup.": "Only use these example commands if the installation originally had uniform ownership. Restore any mixed ownership or ACLs from your own backup.",
     "Database migrations can modify the database. Select them only after confirming backups and permissions.": "Database migrations can modify the database. Select them only after confirming backups and permissions.",
     "These commands can modify the cache or the database. Confirm backups before continuing.": "These commands can modify the cache or the database. Confirm backups before continuing.",
-    "I understand that database migrations can modify the database.": "I understand that database migrations can modify the database."
+    "I understand that database migrations can modify the database.": "I understand that database migrations can modify the database.",
+    "The import finished, but some content could not be restored: {0}": "The import finished, but some content could not be restored: {0}"
 }

@@ -43316,3 +43316,6 @@ msgstr ""
 
 msgid "Post-apply actions are blocked because the release package readiness checks failed. Resolve those errors and review post-apply checks again."
 msgstr ""
+
+msgid "The import finished, but some content could not be restored: %s"
+msgstr ""

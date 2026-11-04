@@ -334,6 +334,8 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 'ok' => true,
                 'message' => 'Import finished',
                 'redirectUrl' => $redirectUrl,
+                // The errors themselves are in the PHP error log (COURSE_RESTORE), not sent to the browser.
+                'failedTools' => $restorer->getFailedTools(),
             ]);
         } catch (Throwable $e) {
             $this->logDebug('[importRestore] exception', [

@@ -230,6 +230,14 @@ class CourseRestorer
     private array $resources_all_snapshot = [];
 
     /**
+     * Tools whose restore threw: restore() carries on with the next tool, so the caller must tell
+     * the user that this content is missing.
+     *
+     * @var string[]
+     */
+    private array $failedTools = [];
+
+    /**
      * @param Course $course
      */
     public function __construct($course)
@@ -409,11 +417,15 @@ class CourseRestorer
 
                 $this->{$fn}(...$callArgs);
             } catch (Throwable $e) {
-                $this->dlog('Tool restore failed with exception', [
+                // Logged even without debug: the restore carries on with the next tool and the import
+                // still reports success, so this line is the only trace of the content that was lost.
+                error_log('COURSE_RESTORE: Tool restore failed with exception '.json_encode([
                     'tool' => $tool,
                     'method' => $fn,
                     'error' => $e->getMessage(),
-                ]);
+                    'at' => $e->getFile().':'.$e->getLine(),
+                ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+                $this->failedTools[] = $tool;
                 $this->resetDoctrineIfClosed();
                 if ('learnpath_category' === $tool && $this->course->has_resources(RESOURCE_LEARNPATH_CATEGORY)) {
                     throw $e;
@@ -9660,6 +9672,14 @@ class CourseRestorer
     public function setDebug(?bool $on = true): void
     {
         $this->debug = (bool) $on;
+    }
+
+    /**
+     * @return string[] the tools (as in $tools_to_restore) whose restore failed during restore()
+     */
+    public function getFailedTools(): array
+    {
+        return $this->failedTools;
     }
 
     /**

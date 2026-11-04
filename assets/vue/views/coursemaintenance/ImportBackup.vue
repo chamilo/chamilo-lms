@@ -258,8 +258,42 @@ import svc from "../../services/courseMaintenance"
 import ResourceSelector from "../../components/coursemaintenance/ResourceSelector.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
+const { showWarningNotification } = useNotification()
+
+// CourseRestorer tool names, shown by the tool the user knows; unknown names are shown as is
+const TOOL_LABELS = {
+  documents: "Documents",
+  announcements: "Announcements",
+  attendance: "Attendances",
+  course_descriptions: "Course description",
+  events: "Agenda",
+  forum_category: "Forums",
+  forums: "Forums",
+  glossary: "Glossary",
+  quizzes: "Tests",
+  test_category: "Tests",
+  links: "Links",
+  works: "Assignments",
+  surveys: "Surveys",
+  learnpath_category: "Learning paths",
+  learnpaths: "Learning paths",
+  scorm_documents: "Learning paths",
+  thematic: "Course progress",
+  wiki: "Wiki",
+  gradebook: "Assessments",
+  course_tools: "Course settings",
+  course_illustration: "Course settings",
+}
+
+function failedToolLabels(tools) {
+  const labels = tools.map((tool) => (TOOL_LABELS[tool] ? t(TOOL_LABELS[tool]) : tool))
+
+  return [...new Set(labels)].join(", ")
+}
+
 const route = useRoute()
 const router = useRouter()
 
@@ -401,7 +435,18 @@ async function doRestore() {
       resources: selections.value,
     }
     const res = await svc.restoreBackup(node.value, backupId.value, payload)
-    notice.value = res.message || t("Import finished")
+    const failedTools = Array.isArray(res.failedTools) ? res.failedTools : []
+    if (failedTools.length) {
+      // The page redirects right away: a persistent toast is the only message the user will see.
+      showWarningNotification(
+        t("The import finished, but some content could not be restored: {0}", [failedToolLabels(failedTools)]),
+        {
+          persistent: true,
+        },
+      )
+    } else {
+      notice.value = res.message || t("Import finished")
+    }
     step.value = 4
     if (res.redirectUrl) pushWithQuery(res.redirectUrl)
   } catch (e) {

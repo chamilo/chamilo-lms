@@ -340,13 +340,16 @@ class CourseArchiver
     }
 
     /**
-     * @param array|string $file path or $_FILES['tmp_name']
+     * @param array|string $file      path or $_FILES['tmp_name']
+     * @param string       $extension client extension; gzip payloads are not stored as .zip
      *
      * @return bool|string
      */
-    public static function importUploadedFile($file)
+    public static function importUploadedFile($file, string $extension = 'zip')
     {
-        $new_filename = uniqid('import_file', true).'.zip';
+        $src = \is_array($file) ? (string) ($file['tmp_name'] ?? '') : (string) $file;
+        $extension = BackupArchive::storageExtension($src, $extension);
+        $new_filename = uniqid('import_file', true).'.'.$extension;
         $new_dir = self::getBackupDir();
         if (!is_dir($new_dir)) {
             $fs = new Filesystem();
@@ -354,7 +357,6 @@ class CourseArchiver
         }
         if (is_dir($new_dir) && is_writable($new_dir)) {
             // move_uploaded_file() may fail in CLI/tests; try rename() as fallback
-            $src = \is_array($file) ? ($file['tmp_name'] ?? '') : (string) $file;
             $dst = $new_dir.$new_filename;
 
             $moved = @move_uploaded_file($src, $dst);

@@ -77,6 +77,31 @@ final class BackupArchiveTest extends TestCase
         self::assertSame([], glob(sys_get_temp_dir().'/chamilo_mbz_*.tar.gz') ?: []);
     }
 
+    public function testStagedGzipIsPrivateEvenWithPermissiveUmask(): void
+    {
+        $source = $this->work.'/backup.zip';
+        $contents = $this->gzipTar(['moodle_backup.xml' => '<moodle_backup></moodle_backup>']);
+        file_put_contents($source, $contents);
+
+        $method = new ReflectionMethod(BackupArchive::class, 'stageGzip');
+        $previousUmask = umask(0);
+        $staged = null;
+
+        try {
+            $staged = $method->invoke(null, $source);
+            self::assertIsString($staged);
+            self::assertStringEndsWith('.tar.gz', $staged);
+            self::assertSame($contents, file_get_contents($staged));
+            clearstatcache(true, $staged);
+            self::assertSame(0o600, fileperms($staged) & 0o777);
+        } finally {
+            umask($previousUmask);
+            if (null !== $staged && is_file($staged)) {
+                unlink($staged);
+            }
+        }
+    }
+
     public function testLegacyZipMoodleBackupIsRecognisedWhenTheStoredNameIsMbz(): void
     {
         $path = $this->work.'/backup.mbz';

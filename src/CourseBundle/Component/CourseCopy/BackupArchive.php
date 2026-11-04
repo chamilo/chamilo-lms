@@ -323,9 +323,27 @@ final class BackupArchive
 
     private static function stageGzip(string $path): string
     {
-        $staged = rtrim(sys_get_temp_dir(), '/').'/chamilo_mbz_'.bin2hex(random_bytes(8)).'.tar.gz';
-        if (!copy($path, $staged)) {
-            throw new RuntimeException('Cannot read gzip archive');
+        // tempnam creates a private (0600) file before any backup data is written.
+        $temporary = tempnam(sys_get_temp_dir(), 'chamilo_mbz_');
+        if (false === $temporary) {
+            throw new RuntimeException('Cannot create temporary gzip archive');
+        }
+
+        $staged = $temporary.'.tar.gz';
+        if (!rename($temporary, $staged)) {
+            unlink($temporary);
+
+            throw new RuntimeException('Cannot create temporary gzip archive');
+        }
+
+        try {
+            if (!copy($path, $staged)) {
+                throw new RuntimeException('Cannot read gzip archive');
+            }
+        } catch (Throwable $e) {
+            self::deleteStaged($staged);
+
+            throw $e;
         }
 
         return $staged;

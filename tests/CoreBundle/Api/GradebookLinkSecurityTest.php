@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
@@ -153,21 +155,97 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
         $this->assertSame($countBefore, $this->getEntityManager()->getRepository(GradebookLink::class)->count([]));
     }
 
+    private function createQuizIn(Course $course, User $creator, string $title): CQuiz
+    {
+        /** @var CQuizRepository $repo */
+        $repo = self::getContainer()->get(CQuizRepository::class);
+
+        $quiz = (new CQuiz())
+            ->setTitle($title)
+            ->setParent($course)
+            ->setCreator($creator)
+            ->addCourseLink($course)
+        ;
+        $repo->create($quiz);
+
+        return $quiz;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function linkPayload(array $ctx, CQuiz $quiz): array
+    {
+        return [
+            'type' => 1,
+            'weight' => 5,
+            'course' => '/api/courses/'.$ctx['courseB']->getId(),
+            'category' => '/api/gradebook_categories/'.$ctx['category']->getId(),
+            'resourceNode' => '/api/resource_nodes/'.$quiz->getResourceNode()->getId(),
+        ];
+    }
+
+    /**
+     * The teacher of course B also teaches course A, so the resource node of A is viewable by them:
+     * only the link's own course can tell that the resource does not belong in the link.
+     */
+    private function makeTeacherBTeachCourseA(array $ctx): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $ctx['courseA']->addUserAsTeacher($ctx['teacherB']);
+        $courseRepo->update($ctx['courseA']);
+    }
+
+    public function testTeacherCannotLinkAResourceOfAnotherCourseToTheirOwnCourse(): void
+    {
+        $ctx = $this->bootstrap('post_foreign_resource');
+        $this->makeTeacherBTeachCourseA($ctx);
+        $foreignQuiz = $this->createQuizIn($ctx['courseA'], $ctx['teacherA'], 'Foreign quiz');
+        $countBefore = $this->getEntityManager()->getRepository(GradebookLink::class)->count([]);
+
+        $this->request($ctx['teacherB'], 'POST', '/api/gradebook_links?cid='.$ctx['courseB']->getId(), $this->linkPayload($ctx, $foreignQuiz));
+
+        $this->assertContains(self::getClient()->getResponse()->getStatusCode(), [400, 403]);
+        $this->assertSame($countBefore, $this->getEntityManager()->getRepository(GradebookLink::class)->count([]));
+    }
+
+    public function testTeacherCanLinkAResourceOfTheLinkCourse(): void
+    {
+        $ctx = $this->bootstrap('post_own_resource');
+        $ownQuiz = $this->createQuizIn($ctx['courseB'], $ctx['teacherB'], 'Own quiz');
+
+        $this->request($ctx['teacherB'], 'POST', '/api/gradebook_links?cid='.$ctx['courseB']->getId(), $this->linkPayload($ctx, $ownQuiz));
+
+        $this->assertNotContains(self::getClient()->getResponse()->getStatusCode(), [400, 403]);
+    }
+
     public function testTeacherOfTheLinkCourseIsNotDeniedWhenChangingIt(): void
     {
         $ctx = $this->bootstrap('put_own');
+        $ownQuiz = $this->createQuizIn($ctx['courseB'], $ctx['teacherB'], 'Own quiz for update');
 
-        $this->request($ctx['teacherB'], 'PUT', '/api/gradebook_links/'.$ctx['link']->getId().'?cid='.$ctx['courseB']->getId(), [
-            'type' => 1,
-            'weight' => 25,
-            'course' => '/api/courses/'.$ctx['courseB']->getId(),
-            'category' => '/api/gradebook_categories/'.$ctx['category']->getId(),
-            'resourceNode' => '/api/resource_nodes/'.$ctx['courseB']->getResourceNode()->getId(),
-        ]);
+        $payload = $this->linkPayload($ctx, $ownQuiz);
+        $payload['weight'] = 25;
+        $this->request($ctx['teacherB'], 'PUT', '/api/gradebook_links/'.$ctx['link']->getId().'?cid='.$ctx['courseB']->getId(), $payload);
 
         // Only the security check is asserted: a PUT on this resource fails later, on an
         // uninitialized createdAt, with or without this authorization.
         $this->assertNotSame(403, self::getClient()->getResponse()->getStatusCode());
+    }
+
+    public function testTeacherCannotRepointTheirLinkToAResourceOfAnotherCourse(): void
+    {
+        $ctx = $this->bootstrap('put_foreign_resource');
+        $this->makeTeacherBTeachCourseA($ctx);
+        $foreignQuiz = $this->createQuizIn($ctx['courseA'], $ctx['teacherA'], 'Foreign quiz for update');
+
+        $payload = $this->linkPayload($ctx, $foreignQuiz);
+        $payload['weight'] = 25;
+        $this->request($ctx['teacherB'], 'PUT', '/api/gradebook_links/'.$ctx['link']->getId().'?cid='.$ctx['courseB']->getId(), $payload);
+
+        $this->assertContains(self::getClient()->getResponse()->getStatusCode(), [400, 403]);
+        $this->assertSame(10.0, $this->freshWeight($ctx['link']));
     }
 
     public function testTeacherCannotMoveTheirOwnLinkIntoTheCategoryOfAnotherCourse(): void

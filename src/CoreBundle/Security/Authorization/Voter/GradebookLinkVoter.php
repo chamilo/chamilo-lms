@@ -7,8 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use Error;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -30,6 +34,7 @@ final class GradebookLinkVoter extends Voter
 
     public function __construct(
         private readonly AccessDecisionManagerInterface $accessDecisionManager,
+        private readonly GradebookLinkResourceResolver $resourceResolver,
     ) {}
 
     protected function supports(string $attribute, mixed $subject): bool
@@ -69,17 +74,63 @@ final class GradebookLinkVoter extends Voter
                 return false;
             }
 
-            return self::CREATE !== $attribute
-                || $this->accessDecisionManager->decide($token, [ResourceNodeVoter::VIEW], $subject->getResourceNode());
-        } catch (Error) {
-            // A link being created may not have its category, course or resource yet.
+            // The link's own course decides: a gradebook may later gather items of several courses.
+            if (!$this->canEditInLinkCourse($user, $subject)) {
+                return false;
+            }
+
+            if (self::CREATE !== $attribute) {
+                return true;
+            }
+
+            // The linked resource must belong to the link's own course (and to the category's session
+            // only when the link sits in the category's course, as a link has no session of its own).
+            $this->resourceResolver->requireResourceByNodeId(
+                $subject->getType(),
+                (int) $subject->getResourceNode()->getId(),
+                $subject->getCourse(),
+                $this->getLinkSession($subject),
+            );
+
+            return true;
+        } catch (AccessDeniedHttpException|BadRequestHttpException|Error) {
+            // A link being created may not have its category, course or resource yet, and its
+            // resource may not be available in the link's course.
             return false;
         }
     }
 
     /**
-     * A link is readable by the teachers of its course and by the members of the course, or of
-     * the session when its category belongs to one. Keep in sync with GradebookLinkExtension.
+     * Write access on the course the link belongs to: its teachers or, when the link sits in the
+     * category's own course, the coaches of the category's session.
+     */
+    private function canEditInLinkCourse(User $user, GradebookLink $link): bool
+    {
+        $course = $link->getCourse();
+
+        if ($course->hasUserAsTeacher($user)) {
+            return true;
+        }
+
+        $session = $this->getLinkSession($link);
+
+        return null !== $session
+            && ($session->hasUserAsGeneralCoach($user) || $session->hasCourseCoachInCourse($user, $course));
+    }
+
+    private function getLinkSession(GradebookLink $link): ?Session
+    {
+        $category = $link->getCategory();
+
+        return $link->getCourse()->getId() === $category->getCourse()->getId() ? $category->getSession() : null;
+    }
+
+    /**
+     * A link is readable by the teachers and the members of its gradebook category's course, or of
+     * the session when the category belongs to one. Reading is deliberately tied to the gradebook,
+     * not to the link's own course: once a teacher has put an item in a gradebook, every learner of
+     * that gradebook may read its score, so two learners never see different gradebooks. Keep in
+     * sync with GradebookLinkExtension.
      */
     private function isMemberOfLinkContext(User $user, GradebookLink $link): bool
     {

@@ -206,4 +206,132 @@ class UserRelUserTest extends AbstractApiTest
 
         $this->assertResponseStatusCodeSame(403);
     }
+
+    public function testOwnerCannotCreatePrivilegedRelationType(): void
+    {
+        $user = $this->createUser('user');
+        $friend = $this->createUser('friend');
+
+        $token = $this->getUserToken(['username' => 'user', 'password' => 'user']);
+
+        // A user owns the relation, yet HR-manager/boss links are assigned by
+        // administrators only, so this must not grant the attacker that power.
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/user_rel_users',
+            [
+                'headers' => ['content-type' => ['application/ld+json']],
+                'json' => [
+                    'user' => $user->getIri(),
+                    'friend' => $friend->getIri(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_HRM,
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testOwnerCannotCreateFriendshipWithoutRequest(): void
+    {
+        $user = $this->createUser('user');
+        $friend = $this->createUser('friend');
+
+        $token = $this->getUserToken(['username' => 'user', 'password' => 'user']);
+
+        // A friendship must come from an accepted request, never be created
+        // directly, which would bypass the friend's consent.
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/user_rel_users',
+            [
+                'headers' => ['content-type' => ['application/ld+json']],
+                'json' => [
+                    'user' => $user->getIri(),
+                    'friend' => $friend->getIri(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_FRIEND,
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testOwnerCannotRepointRelationParties(): void
+    {
+        $user = $this->createUser('user');
+        $friend = $this->createUser('friend');
+
+        $token = $this->getUserToken(['username' => 'user', 'password' => 'user']);
+
+        $response = $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/user_rel_users',
+            [
+                'headers' => ['content-type' => ['application/ld+json']],
+                'json' => [
+                    'user' => $user->getIri(),
+                    'friend' => $friend->getIri(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST,
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(201);
+        $relationIri = $response->toArray()['@id'];
+
+        // Re-pointing an owned row at other users would fabricate a relationship
+        // (and a friends-list entry) without their consent.
+        $this->createClientWithCredentials($token)->request(
+            'PATCH',
+            $relationIri,
+            [
+                'headers' => ['content-type' => ['application/merge-patch+json']],
+                'json' => [
+                    'user' => $friend->getIri(),
+                    'friend' => $user->getIri(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_FRIEND,
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testOwnerCannotEscalateRelationTypeOnUpdate(): void
+    {
+        $user = $this->createUser('user');
+        $friend = $this->createUser('friend');
+
+        $token = $this->getUserToken(['username' => 'user', 'password' => 'user']);
+
+        $response = $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/user_rel_users',
+            [
+                'headers' => ['content-type' => ['application/ld+json']],
+                'json' => [
+                    'user' => $user->getIri(),
+                    'friend' => $friend->getIri(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST,
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(201);
+        $relationIri = $response->toArray()['@id'];
+
+        // Turning an owned request into an HR-manager link would make the user
+        // the friend's HR manager, which only an administrator may assign.
+        $this->createClientWithCredentials($token)->request(
+            'PATCH',
+            $relationIri,
+            [
+                'headers' => ['content-type' => ['application/merge-patch+json']],
+                'json' => [
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_HRM,
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+    }
 }

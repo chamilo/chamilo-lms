@@ -113,8 +113,6 @@ final class MessageStateProvider implements ProviderInterface
      * pagination from PaginationExtension, so no client-supplied value reaches the DQL
      * by hand. FilterExtension is intentionally skipped: the filters are already applied
      * in createQueryWithFilters(), together with the custom sender/receiver scoping.
-     *
-     * @return iterable<Message>
      */
     private function applyCustomQuery(Operation $operation, array $context, array $filters): iterable
     {

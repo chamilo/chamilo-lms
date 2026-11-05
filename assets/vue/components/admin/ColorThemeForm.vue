@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import Color from "colorjs.io"
 import SectionHeader from "../layout/SectionHeader.vue"
@@ -12,10 +12,12 @@ import colorThemeService from "../../services/colorThemeService"
 import { useNotification } from "../../composables/notification"
 import { useTheme } from "../../composables/theme"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useConfirmation } from "../../composables/useConfirmation"
 
 const { showSuccessNotification, showErrorNotification } = useNotification()
 const { getColorTheme, getColors, makeGradient, makeTextWithContrast, checkColorContrast } = useTheme()
 const { t } = useI18n()
+const { requireConfirmation } = useConfirmation()
 const platformConfigStore = usePlatformConfig()
 const isSavingTheme = ref(false)
 
@@ -71,6 +73,13 @@ let formColor = getColorTheme("--color-form-base")
 const dialogCreateVisible = ref(false)
 const themeTitle = ref("")
 const newThemeTitle = ref("")
+const importThemeName = ref("")
+const importThemeFile = ref(null)
+const importFileInput = ref(null)
+const selectedThemeId = computed(() => {
+  const match = selectedThemeIri.value.match(/\/(\d+)$/)
+  return match ? Number(match[1]) : 0
+})
 
 // ------- Safe helpers (local, no setColors usage) -------
 const ROOT = typeof document !== "undefined" ? document.documentElement : null
@@ -208,7 +217,7 @@ async function onClickUpdate() {
   try {
     const updatedTheme = await colorThemeService.update({
       iri: selectedThemeIri.value,
-      title: themeTitle.value,
+      title: newThemeSelected.value?.title || themeTitle.value,
       colors: getColors(),
     })
     await themeSelectorEl.value?.loadThemes(updatedTheme["@id"])
@@ -242,6 +251,66 @@ async function onClickCreate() {
   } finally {
     isSavingTheme.value = false
   }
+}
+
+function onImportFileChange(event) {
+  importThemeFile.value = event.target.files?.[0] || null
+}
+
+async function onImportTheme() {
+  if (!importThemeFile.value || !importThemeName.value.trim() || isSavingTheme.value) return
+  if (!importThemeFile.value.name.toLowerCase().endsWith(".zip") || importThemeFile.value.size > 10 * 1024 * 1024) {
+    showErrorNotification(t("Select a ZIP file smaller than 10 MB."))
+    return
+  }
+  isSavingTheme.value = true
+  try {
+    const created = await colorThemeService.importPackage(importThemeFile.value, importThemeName.value.trim())
+    await themeSelectorEl.value?.loadThemes(created.iri)
+    importThemeFile.value = null
+    importThemeName.value = ""
+    if (importFileInput.value) importFileInput.value.value = ""
+    showSuccessNotification(t("Color theme imported"))
+  } catch (error) {
+    notifyWriteError(error)
+  } finally {
+    isSavingTheme.value = false
+  }
+}
+
+async function onRenameTheme() {
+  if (!selectedThemeId.value || !themeTitle.value.trim() || isSavingTheme.value) return
+  isSavingTheme.value = true
+  try {
+    await colorThemeService.renamePackage(selectedThemeId.value, themeTitle.value.trim())
+    await themeSelectorEl.value?.loadThemes(selectedThemeIri.value)
+    showSuccessNotification(t("Theme renamed"))
+  } catch (error) {
+    notifyWriteError(error)
+  } finally {
+    isSavingTheme.value = false
+  }
+}
+
+function onDeleteTheme() {
+  if (!selectedThemeId.value || isSavingTheme.value) return
+  const id = selectedThemeId.value
+  requireConfirmation({
+    title: t("Delete color theme"),
+    message: t("Delete this theme permanently? This is only possible when it is not in use."),
+    accept: async () => {
+      isSavingTheme.value = true
+      try {
+        await colorThemeService.deletePackage(id)
+        await themeSelectorEl.value?.loadThemes()
+        showSuccessNotification(t("Theme deleted"))
+      } catch (error) {
+        notifyWriteError(error)
+      } finally {
+        isSavingTheme.value = false
+      }
+    },
+  })
 }
 
 // ---- contrast watchers ----
@@ -490,6 +559,66 @@ watch(colorDanger, (nv) => {
           :label="t('Form outline color')"
         />
       </div>
+    </div>
+
+    <div class="field-group mt-4">
+      <BaseInputText
+        id="color-theme-rename"
+        v-model="themeTitle"
+        name="themeName"
+        :label="t('Theme title')"
+      />
+      <div class="flex flex-wrap items-center gap-2 mt-2">
+        <BaseButton
+          :disabled="!selectedThemeId || !themeTitle.trim() || isSavingTheme"
+          :label="t('Rename theme')"
+          name="gh3793-rename"
+          icon="pencil"
+          @click="onRenameTheme"
+        />
+        <a
+          v-if="selectedThemeId"
+          :href="colorThemeService.exportUrl(selectedThemeId)"
+          data-testid="gh3793-export"
+          title="Export theme ZIP"
+          class="inline-flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm text-primary hover:underline"
+        >
+          {{ t("Export theme ZIP") }}
+        </a>
+        <BaseButton
+          :disabled="!selectedThemeId || isSavingTheme"
+          :label="t('Delete theme')"
+          name="gh3793-delete"
+          icon="delete"
+          type="danger"
+          @click="onDeleteTheme"
+        />
+      </div>
+    </div>
+
+    <div class="field-group mt-4 rounded-md border border-gray-200 p-4 space-y-3">
+      <p class="font-medium">{{ t("Import color theme ZIP") }}</p>
+      <BaseInputText
+        id="color-theme-import-name"
+        v-model="importThemeName"
+        name="importThemeName"
+        :label="t('New theme name')"
+      />
+      <input
+        ref="importFileInput"
+        type="file"
+        name="themeArchive"
+        accept=".zip,application/zip"
+        class="block w-full text-sm"
+        @change="onImportFileChange"
+      />
+      <BaseButton
+        :disabled="!importThemeName.trim() || !importThemeFile || isSavingTheme"
+        :label="t('Import theme ZIP')"
+        name="gh3793-import"
+        icon="import"
+        @click="onImportTheme"
+      />
     </div>
 
     <div class="field-group justify-end mt-2">

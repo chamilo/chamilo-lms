@@ -7379,7 +7379,8 @@ function api_mail_html(
     $data_file = [],
     $embeddedImage = false,
     $additionalParameters = [],
-    ?string $sendErrorTo = null
+    ?string $sendErrorTo = null,
+    bool $massMailing = false
 ) {
     /* @var MailHelper $mailHelper */
     $mailHelper = Container::$container->get(MailHelper::class);
@@ -7395,7 +7396,8 @@ function api_mail_html(
         $data_file,
         $embeddedImage,
         $additionalParameters,
-        $sendErrorTo
+        $sendErrorTo,
+        $massMailing
     );
 }
 

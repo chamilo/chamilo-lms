@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -110,24 +111,43 @@ abstract class AbstractTrackingStateProvider
         $this->denyUnlessCanViewCourse($course);
 
         $currentUser = $this->security->getUser();
-
-        $isSameUser = $currentUser instanceof User
-            && $currentUser->getId() === $targetUser->getId();
-
-        $isCourseTeacher = $currentUser instanceof User && (
-            $course->hasUserAsTeacher($currentUser)
-                || ($session && $session->hasCoachInCourseList($currentUser))
-        );
-
-        $isPrivileged = api_is_platform_admin()
-            || $this->security->isGranted('ROLE_ADMIN')
-            || $this->security->isGranted('ROLE_SESSION_MANAGER')
-            || $this->security->isGranted('ROLE_HR')
-            || $this->security->isGranted('ROLE_STUDENT_BOSS')
-            || $isCourseTeacher;
-
-        if (!$isSameUser && !$isPrivileged) {
+        if (!$currentUser instanceof User) {
             throw new AccessDeniedHttpException('Not allowed.');
         }
+
+        if ($currentUser->getId() === $targetUser->getId()
+            || api_is_platform_admin()
+            || $this->security->isGranted('ROLE_ADMIN')
+        ) {
+            return;
+        }
+
+        $currentId = (int) $currentUser->getId();
+        $targetId = (int) $targetUser->getId();
+
+        $isCourseTeacher = $course->hasUserAsTeacher($currentUser)
+            || (null !== $session && $session->hasCoachInCourseList($currentUser));
+
+        $userRepository = $this->entityManager->getRepository(User::class);
+        \assert($userRepository instanceof UserRepository);
+
+        // A manager role grants access only to the target users that role actually
+        // covers: the HR manager must follow the target, the boss must boss them,
+        // and the session admin must administer the session in scope.
+        $isHrmOfTarget = $this->security->isGranted('ROLE_HR')
+            && $userRepository->isUserFollowedByHrm($targetId, $currentId);
+
+        $isBossOfTarget = $this->security->isGranted('ROLE_STUDENT_BOSS')
+            && $userRepository->isUserBossOfStudent($targetId, $currentId);
+
+        $isSessionAdminOfSession = null !== $session
+            && $this->security->isGranted('ROLE_SESSION_MANAGER')
+            && $session->hasUserAsSessionAdmin($currentUser);
+
+        if ($isCourseTeacher || $isHrmOfTarget || $isBossOfTarget || $isSessionAdminOfSession) {
+            return;
+        }
+
+        throw new AccessDeniedHttpException('Not allowed.');
     }
 }

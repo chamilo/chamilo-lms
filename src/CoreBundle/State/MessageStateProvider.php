@@ -6,7 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State;
 
-use ApiPlatform\Doctrine\Orm\Paginator;
+use ApiPlatform\Doctrine\Orm\Extension\OrderExtension;
+use ApiPlatform\Doctrine\Orm\Extension\PaginationExtension;
+use ApiPlatform\Doctrine\Orm\Extension\QueryResultCollectionExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
@@ -30,7 +33,9 @@ final class MessageStateProvider implements ProviderInterface
         private readonly ProviderInterface $itemProvider,
         private readonly EntityManagerInterface $entityManager,
         private readonly UserHelper $userHelper,
-        private readonly RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly OrderExtension $orderExtension,
+        private readonly PaginationExtension $paginationExtension
     ) {}
 
     /**
@@ -102,36 +107,32 @@ final class MessageStateProvider implements ProviderInterface
     }
 
     /**
-     * Builds and applies a custom query with filtering, sorting, and pagination.
+     * Builds the custom query and delegates sorting and pagination to API Platform.
+     *
+     * Ordering comes from OrderExtension (the operation's declared default order) and
+     * pagination from PaginationExtension, so no client-supplied value reaches the DQL
+     * by hand. FilterExtension is intentionally skipped: the filters are already applied
+     * in createQueryWithFilters(), together with the custom sender/receiver scoping.
+     *
+     * @return iterable<Message>
      */
-    private function applyCustomQuery(Operation $operation, array $context, array $filters): Paginator
+    private function applyCustomQuery(Operation $operation, array $context, array $filters): iterable
     {
-        // Main query
         $queryBuilder = $this->createQueryWithFilters($filters);
+        $queryNameGenerator = new QueryNameGenerator();
 
-        // Apply pagination and sorting
-        $order = $context['filters']['order']['sendDate'] ?? 'ASC';
-        $queryBuilder->orderBy('m.sendDate', $order);
+        foreach ([$this->orderExtension, $this->paginationExtension] as $extension) {
+            $extension->applyToCollection($queryBuilder, $queryNameGenerator, Message::class, $operation, $context);
 
-        $itemsPerPage = (int) ($context['filters']['itemsPerPage'] ?? 10);
-        $currentPage = (int) ($context['filters']['page'] ?? 1);
+            if (
+                $extension instanceof QueryResultCollectionExtensionInterface
+                && $extension->supportsResult(Message::class, $operation, $context)
+            ) {
+                return $extension->getResult($queryBuilder, Message::class, $operation, $context);
+            }
+        }
 
-        $queryBuilder->setFirstResult(($currentPage - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage)
-        ;
-
-        // Count query for total items
-        // $countQueryBuilder = $this->createQueryWithFilters($filters, true);
-        // $totalItems = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
-
-        // Doctrine Paginator
-        $doctrinePaginator = new \Doctrine\ORM\Tools\Pagination\Paginator($queryBuilder, true);
-
-        // Adjust OutputWalkers as needed
-        $needsOutputWalkers = \count($queryBuilder->getDQLPart('join')) > 0;
-        $doctrinePaginator->setUseOutputWalkers($needsOutputWalkers);
-
-        return new Paginator($doctrinePaginator);
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

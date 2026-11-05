@@ -49,6 +49,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/messages',
             security: "is_granted('ROLE_USER')",
             name: 'get_all_messages',
+            order: ['sendDate' => 'DESC'],
             provider: MessageStateProvider::class
         ),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),

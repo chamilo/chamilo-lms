@@ -71,6 +71,7 @@ final readonly class AnnouncementEmailSender
         $replyTo = $this->buildReplyTo($sender);
         $successfulPrimaryIds = [];
         $intendedPrimaryIds = [];
+        $intendedHrmIds = [];
         $failedRecipients = [];
         $internalMessageKeys = [];
         $internalMessageCreatedCount = 0;
@@ -83,6 +84,9 @@ final readonly class AnnouncementEmailSender
                 }
 
                 $recipientId = (int) $recipient->getId();
+                if (isset($intendedPrimaryIds[$recipientId])) {
+                    continue;
+                }
                 $intendedPrimaryIds[$recipientId] = true;
                 $message = $this->buildMessage($announcement, $course, $session, $group, $sender, $recipient);
                 $delivery = $this->deliverMessage(
@@ -118,11 +122,17 @@ final readonly class AnnouncementEmailSender
                 $failedRecipients[] = $this->formatRecipient($recipient);
             }
 
-            foreach ($hrmCopies as $hrmId => $copy) {
+            foreach ($hrmCopies as $copy) {
                 $hrmUser = $copy['user'];
-                if (isset($intendedPrimaryIds[$hrmId])) {
+                if (!$hrmUser instanceof User || null === $hrmUser->getId()) {
                     continue;
                 }
+
+                $hrmId = (int) $hrmUser->getId();
+                if (isset($intendedPrimaryIds[$hrmId]) || isset($intendedHrmIds[$hrmId])) {
+                    continue;
+                }
+                $intendedHrmIds[$hrmId] = true;
 
                 $message = $this->buildHrmMessage(
                     $announcement,
@@ -171,7 +181,7 @@ final readonly class AnnouncementEmailSender
         $senderId = null !== $sender->getId() ? (int) $sender->getId() : 0;
 
         if ($sendCopyToSelf && $senderId > 0) {
-            if (isset($intendedPrimaryIds[$senderId])) {
+            if (isset($intendedPrimaryIds[$senderId]) || isset($intendedHrmIds[$senderId])) {
                 $copySent = isset($successfulPrimaryIds[$senderId]);
             } else {
                 $message = $this->buildMessage($announcement, $course, $session, $group, $sender, $sender);

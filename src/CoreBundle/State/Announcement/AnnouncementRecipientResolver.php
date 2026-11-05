@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
@@ -78,6 +79,14 @@ final readonly class AnnouncementRecipientResolver
             'options' => $options,
             'classes' => $this->getClassOptions($course, $session, $group, $users),
         ];
+    }
+
+    /**
+     * Check whether the base course is associated with at least one session.
+     */
+    public function hasCourseSessions(Course $course): bool
+    {
+        return $this->entityManager->getRepository(SessionRelCourse::class)->count(['course' => $course]) > 0;
     }
 
     /**

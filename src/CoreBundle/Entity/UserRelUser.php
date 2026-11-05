@@ -87,6 +87,16 @@ class UserRelUser
     public const int USER_RELATION_TYPE_HRM_REQUEST = 9;
     public const int USER_RELATION_TYPE_FRIEND_REQUEST = 10;
 
+    /**
+     * Relation types a non-admin may set through the social friend API.
+     */
+    public const array EDITABLE_SOCIAL_TYPES = [
+        self::USER_RELATION_TYPE_FRIEND,
+        self::USER_RELATION_TYPE_GOODFRIEND,
+        self::USER_RELATION_TYPE_DELETED,
+        self::USER_RELATION_TYPE_FRIEND_REQUEST,
+    ];
+
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -148,6 +158,16 @@ class UserRelUser
         $this->relationType = $relationType;
 
         return $this;
+    }
+
+    public function isFriendRequest(): bool
+    {
+        return self::USER_RELATION_TYPE_FRIEND_REQUEST === $this->relationType;
+    }
+
+    public function isEditableSocialType(): bool
+    {
+        return \in_array($this->relationType, self::EDITABLE_SOCIAL_TYPES, true);
     }
 
     public function getId(): ?int

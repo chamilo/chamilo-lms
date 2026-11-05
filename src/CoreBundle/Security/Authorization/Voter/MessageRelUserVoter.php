@@ -48,11 +48,14 @@ class MessageRelUserVoter extends Voter
         \assert($user instanceof User);
         \assert($subject instanceof MessageRelUser);
 
-        $message = $subject->getMessage();
-        $isReceiver = $message->hasUserReceiver($user);
+        // Each row carries one participant's own mailbox state, so only that
+        // participant may read, change or delete it — the rule the collection
+        // extension already enforces. Checking message membership instead would
+        // let any co-recipient (and the sender) act on another participant's row.
+        $isOwnRow = $subject->getReceiver()->getId() === $user->getId();
 
         return match ($attribute) {
-            self::VIEW, self::EDIT, self::DELETE => $isReceiver,
+            self::VIEW, self::EDIT, self::DELETE => $isOwnRow,
             default => false,
         };
     }

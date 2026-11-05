@@ -135,7 +135,8 @@ class MessageManager
         $forceTitleWhenSendingEmail = false,
         $msgType = null,
         $baseUrl = null,
-        $sendEmailNotification = true
+        $sendEmailNotification = true,
+        bool $massMailing = false
     ) {
         $group_id = (int) $group_id;
         $receiverUserId = (int) $receiverUserId;
@@ -401,7 +402,8 @@ class MessageManager
                             $sender_info,
                             $attachmentAddedByMail,
                             $forceTitleWhenSendingEmail,
-                            $baseUrl
+                            $baseUrl,
+                            $massMailing ? ['massMailing' => true] : []
                         );
                     } finally {
                         $trackingService?->clearPreparedPixel();
@@ -441,7 +443,8 @@ class MessageManager
                         $groupPayload,
                         $attachmentAddedByMail,
                         $forceTitleWhenSendingEmail,
-                        $baseUrl
+                        $baseUrl,
+                        $massMailing ? ['massMailing' => true] : []
                     );
                 }
             }
@@ -487,7 +490,8 @@ class MessageManager
         $directMessage = false,
         $uploadFiles = true,
         $attachmentList = [],
-        $sendEmailNotification = true
+        $sendEmailNotification = true,
+        bool $massMailing = false
     ) {
         $files = $_FILES ? $_FILES : [];
         if (false === $uploadFiles) {
@@ -514,7 +518,8 @@ class MessageManager
             false,
             null,
             null,
-            $sendEmailNotification
+            $sendEmailNotification,
+            $massMailing
         );
 
         if ($sendCopyToDrhUsers) {
@@ -533,7 +538,8 @@ class MessageManager
                         $message,
                         $sender_id,
                         false,
-                        $directMessage
+                        $directMessage,
+                        massMailing: $massMailing
                     );
                 }
             }

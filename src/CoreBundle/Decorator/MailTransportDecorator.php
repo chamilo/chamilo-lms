@@ -6,7 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Decorator;
 
-use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Service\Mailer\MassMailingTransportSelector;
+use Exception;
 use SensitiveParameter;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Symfony\Component\DependencyInjection\Attribute\AutowireDecorated;
@@ -19,20 +20,26 @@ class MailTransportDecorator
     public function __construct(
         #[AutowireDecorated]
         private readonly Transport $inner,
-        private readonly SettingsManager $settingsManager,
+        private readonly MassMailingTransportSelector $massMailingTransportSelector,
     ) {}
 
     public function fromStrings(#[SensitiveParameter] array $dsns): Transports
     {
-        $dsn = $this->settingsManager->getSetting('mail.mailer_dsn');
+        $transports = [
+            'main' => $this->inner->fromString($this->massMailingTransportSelector->getMainDsn()),
+        ];
 
-        if (empty($dsn)) {
-            $dsn = 'null://null';
+        $massMailingDsn = $this->massMailingTransportSelector->getMassMailingDsn();
+        if (null !== $massMailingDsn) {
+            try {
+                $transports['massmailing'] = $this->inner->fromString($massMailingDsn);
+            } catch (Exception) {
+                // An invalid optional DSN must not interrupt transactional mail.
+                // Bulk messages still fail on their explicit missing transport; never fall back to main.
+                error_log('MailTransportDecorator: the optional mass mailing transport could not be configured.');
+            }
         }
 
-        // Transports is keyed by name; 'main' is Symfony's own name for a single-DSN mailer.
-        return new Transports([
-            'main' => $this->inner->fromString($dsn),
-        ]);
+        return new Transports($transports);
     }
 }

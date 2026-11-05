@@ -283,6 +283,7 @@ final readonly class AnnouncementEmailSender
                 null,
                 $replyTo,
                 $attachments,
+                massMailing: true,
             );
         } catch (Throwable $throwable) {
             $emailSent = false;

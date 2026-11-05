@@ -159,7 +159,7 @@ class SystemAnnouncementManager
         $content = str_replace(['\r\n', '\n', '\r'], '', $content);
 
         if ($sendEmailTest) {
-            MessageManager::send_message_simple(api_get_user_id(), $title, $content);
+            MessageManager::send_message_simple(api_get_user_id(), $title, $content, massMailing: true);
 
             return true;
         }
@@ -241,7 +241,7 @@ class SystemAnnouncementManager
         $message_sent = false;
         /** @var User $user */
         foreach ($users as $user) {
-            MessageManager::send_message_simple($user->getId(), $title, $content);
+            MessageManager::send_message_simple($user->getId(), $title, $content, massMailing: true);
             $message_sent = true;
         }
 

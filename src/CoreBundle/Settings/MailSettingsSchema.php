@@ -35,6 +35,7 @@ class MailSettingsSchema extends AbstractSettingsSchema
             'mailer_from_name' => '',
             'mailer_from_email' => '',
             'mailer_dsn' => 'null://null',
+            'mailer_dsn_massmailing' => '',
             'mailer_mails_charset' => 'UTF-8',
             'mailer_debug_enable' => 'false',
             'mailer_exclude_json' => 'false',
@@ -64,6 +65,7 @@ class MailSettingsSchema extends AbstractSettingsSchema
             ->add('mailer_from_name', EmailType::class)
             ->add('mailer_from_email', TextType::class)
             ->add('mailer_dsn', TextType::class)
+            ->add('mailer_dsn_massmailing', TextType::class, ['required' => false])
             ->add('mailer_mails_charset', TextType::class)
             ->add('mailer_debug_enable', YesNoType::class)
             ->add('mailer_exclude_json', YesNoType::class)

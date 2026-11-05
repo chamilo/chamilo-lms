@@ -68,7 +68,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/PersonalFile',
@@ -127,7 +127,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/PersonalFile',
@@ -162,7 +162,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(200);
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json');
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/PersonalFile',

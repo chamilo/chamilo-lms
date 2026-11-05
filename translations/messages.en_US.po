@@ -43396,3 +43396,39 @@ msgstr "Number of users by language"
 
 msgid "All languages"
 msgstr "All languages"
+
+msgid "Select a ZIP file smaller than 10 MB."
+msgstr "Select a ZIP file smaller than 10 MB."
+
+msgid "Color theme imported"
+msgstr "Color theme imported"
+
+msgid "Theme renamed"
+msgstr "Theme renamed"
+
+msgid "Delete color theme"
+msgstr "Delete color theme"
+
+msgid "Delete this theme permanently? This is only possible when it is not in use."
+msgstr "Delete this theme permanently? This is only possible when it is not in use."
+
+msgid "Theme deleted"
+msgstr "Theme deleted"
+
+msgid "Import color theme ZIP"
+msgstr "Import color theme ZIP"
+
+msgid "New theme name"
+msgstr "New theme name"
+
+msgid "Import theme ZIP"
+msgstr "Import theme ZIP"
+
+msgid "Export theme ZIP"
+msgstr "Export theme ZIP"
+
+msgid "Rename theme"
+msgstr "Rename theme"
+
+msgid "Delete theme"
+msgstr "Delete theme"

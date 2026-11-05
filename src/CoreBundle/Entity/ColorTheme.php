@@ -52,7 +52,7 @@ class ColorTheme
     #[ORM\Column]
     private array $variables = [];
 
-    #[Gedmo\Slug(fields: ['title'])]
+    #[Gedmo\Slug(fields: ['title'], updatable: false)]
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 

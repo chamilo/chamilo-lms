@@ -12,9 +12,11 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -29,6 +31,8 @@ final class UserRelUserStateProcessor implements ProcessorInterface
         private readonly EntityManagerInterface $entityManager,
         private readonly SettingsManager $settingsManager,
         private readonly MessageRepository $messageRepository,
+        private readonly Security $security,
+        private readonly UserHelper $userHelper,
     ) {}
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?UserRelUser
@@ -37,8 +41,10 @@ final class UserRelUserStateProcessor implements ProcessorInterface
             return $this->removeProcessor->process($data, $operation, $uriVariables, $context);
         }
 
+        \assert($data instanceof UserRelUser);
+        $this->assertMutationAllowed($data, $operation, $context);
+
         if ($operation instanceof Post
-            && $data instanceof UserRelUser
             && UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST === $data->getRelationType()
         ) {
             $this->assertFriendRequestAllowed($data);
@@ -56,6 +62,63 @@ final class UserRelUserStateProcessor implements ProcessorInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Restricts what a non-admin caller may write through the social friend API.
+     *
+     * The voter only decides who may touch a row; it runs before the request body
+     * is applied, so without this check a user could create a privileged relation
+     * or re-point an owned row at another user to fabricate a relationship.
+     */
+    private function assertMutationAllowed(UserRelUser $data, Operation $operation, array $context): void
+    {
+        // Admins manage every relation type (HR links, bosses, etc.) through their own tools.
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+
+        $current = $this->userHelper->getCurrent();
+        if (!$current instanceof User) {
+            throw new AccessDeniedHttpException('A current user is required.');
+        }
+
+        // HR-manager, boss and their request variants are assigned by administrators only.
+        $socialTypes = [
+            UserRelUser::USER_RELATION_TYPE_FRIEND,
+            UserRelUser::USER_RELATION_TYPE_GOODFRIEND,
+            UserRelUser::USER_RELATION_TYPE_DELETED,
+            UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST,
+        ];
+        if (!\in_array($data->getRelationType(), $socialTypes, true)) {
+            throw new AccessDeniedHttpException('This relation type cannot be managed here.');
+        }
+
+        if ($operation instanceof Post) {
+            // A user may only start a friend request they own.
+            if (UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST !== $data->getRelationType()) {
+                throw new AccessDeniedHttpException('Only friend requests can be created.');
+            }
+
+            if ($data->getUser()->getId() !== $current->getId()) {
+                throw new AccessDeniedHttpException('You can only create relations you own.');
+            }
+
+            return;
+        }
+
+        // On update the two parties are immutable, so an owned row cannot be
+        // re-pointed at another user to fabricate a relationship.
+        $previous = $context['previous_data'] ?? null;
+        if (!$previous instanceof UserRelUser) {
+            throw new AccessDeniedHttpException('The relation to update could not be verified.');
+        }
+
+        if ($data->getUser()->getId() !== $previous->getUser()->getId()
+            || $data->getFriend()->getId() !== $previous->getFriend()->getId()
+        ) {
+            throw new AccessDeniedHttpException('The users of a relation cannot be changed.');
+        }
     }
 
     private function assertFriendRequestAllowed(UserRelUser $request): void

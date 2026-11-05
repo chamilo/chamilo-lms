@@ -43432,3 +43432,6 @@ msgstr "Rename theme"
 
 msgid "Delete theme"
 msgstr "Delete theme"
+
+msgid "Certificates whose validity period has ended."
+msgstr "Certificates whose validity period has ended."

@@ -43435,3 +43435,12 @@ msgstr "Delete theme"
 
 msgid "Certificates whose validity period has ended."
 msgstr "Certificates whose validity period has ended."
+
+msgid "External ID"
+msgstr "External ID"
+
+msgid "Generate TXT"
+msgstr "Generate TXT"
+
+msgid "Generate XLSX"
+msgstr "Generate XLSX"

@@ -100,11 +100,11 @@
               <BaseButton
                 v-if="overview.controlledFallbacks?.gradingElectronic"
                 :label="t('Export')"
-                :to-url="overview.controlledFallbacks.gradingElectronic"
                 icon="export"
                 only-icon
                 size="normal"
                 type="primary-text"
+                @click="isGradingElectronicVisible = !isGradingElectronicVisible"
               />
             </div>
           </template>
@@ -237,6 +237,10 @@
             type="primary-text"
           />
         </div>
+
+        <GradingElectronicExport
+          v-if="canManage && overview.controlledFallbacks?.gradingElectronic && isGradingElectronicVisible"
+        />
 
         <div
           v-if="canViewAll"
@@ -1207,6 +1211,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import gradebookService from "../../services/gradebookService"
+import GradingElectronicExport from "../../components/gradebook/GradingElectronicExport.vue"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 
@@ -1217,6 +1222,7 @@ const { requireConfirmation } = useConfirmation()
 
 const overview = ref(null)
 const isLoading = ref(false)
+const isGradingElectronicVisible = ref(false)
 const isInitializing = ref(false)
 const isSavingCategory = ref(false)
 const isLoadingAdvancedSettings = ref(false)

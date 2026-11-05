@@ -95,6 +95,10 @@ final readonly class AnnouncementEmailProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Users from all sessions can only be selected from the base course.');
         }
 
+        if ($data->sendToUsersInSessions && !$this->recipientResolver->hasCourseSessions($course)) {
+            throw new BadRequestHttpException('This course has no sessions for announcement recipients.');
+        }
+
         if ($data->sendToHrmUsers && $this->isSettingEnabled(
             $this->settingsManager->getSetting('announcement.announcements_hide_send_to_hrm_users', true),
         )) {

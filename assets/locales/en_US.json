@@ -4689,5 +4689,10 @@
     "Import theme ZIP": "Import theme ZIP",
     "Export theme ZIP": "Export theme ZIP",
     "Rename theme": "Rename theme",
-    "Delete theme": "Delete theme"
+    "Delete theme": "Delete theme",
+    "Date range": "Date range",
+    "User ID": "User ID",
+    "External ID": "External ID",
+    "Generate TXT": "Generate TXT",
+    "Generate XLSX": "Generate XLSX"
 }

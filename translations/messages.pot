@@ -43365,3 +43365,12 @@ msgstr ""
 msgid "Certificates whose validity period has ended."
 msgstr ""
 
+msgid "External ID"
+msgstr ""
+
+msgid "Generate TXT"
+msgstr ""
+
+msgid "Generate XLSX"
+msgstr ""
+

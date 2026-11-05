@@ -366,4 +366,54 @@ export default {
       category: `/api/gradebook_categories/${categoryId}`,
     })
   },
+
+  /**
+   * Fetches the GradingElectronic plugin defaults: the stored external course ID and the plugin's labels.
+   * @param {Object} params Course context (cid, sid, gid).
+   * @returns {Promise<Object>} { course, labels }.
+   */
+  async getGradingElectronicDefaults(params) {
+    return await baseService.get("/plugin/grading-electronic/defaults", params)
+  },
+
+  /**
+   * Runs the GradingElectronic export: returns the preview data, or downloads the TXT/XLSX file.
+   * @param {Object} payload format (preview | txt | xlsx), rangeStart, rangeEnd (YYYY-MM-DD) and course.
+   * @param {Object} params Course context (cid, sid, gid).
+   * @returns {Promise<Object|null>} The preview data, or null once a file download started.
+   */
+  async generateGradingElectronic(payload, params) {
+    const resp = await baseService.postRaw("/plugin/grading-electronic/generate", payload, {
+      params,
+      responseType: "blob",
+      validateStatus: () => true,
+    })
+
+    if (String(resp.headers["content-type"] || "").includes("application/json")) {
+      const json = await new Response(resp.data).json().catch(() => ({}))
+      if (resp.status >= 400) {
+        throw new Error(json?.error || "Request failed")
+      }
+
+      return json
+    }
+
+    if (resp.status >= 400) {
+      throw new Error("Request failed")
+    }
+
+    const cd = String(resp.headers["content-disposition"] || "")
+    const encoded = cd.match(/filename\*=UTF-8''([^;]+)/i)
+    const plain = cd.match(/filename="?([^";]+)"?/i)
+    const url = URL.createObjectURL(resp.data)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = encoded ? decodeURIComponent(encoded[1]) : plain?.[1] || `GradingElectronic.${payload.format}`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+
+    return null
+  },
 }

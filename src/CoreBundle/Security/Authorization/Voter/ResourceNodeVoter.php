@@ -324,10 +324,16 @@ class ResourceNodeVoter extends Voter
             if (0 === $groupId && $firstLink->getGroup() instanceof CGroup) {
                 $groupId = (int) $firstLink->getGroup()->getIid();
             }
-            // A course open to the world opens its files for reading only.
+            // A course open to the world opens its published base-course files for
+            // reading only. A draft or pending link, or one scoped to a session,
+            // group or single user, stays private even in a public course.
             if (self::VIEW === $attribute
                 && $firstLink->getCourse() instanceof Course
                 && $firstLink->getCourse()->isPublic()
+                && ResourceLink::VISIBILITY_PUBLISHED === $firstLink->getVisibility()
+                && !$firstLink->getSession() instanceof Session
+                && !$firstLink->getGroup() instanceof CGroup
+                && null === $firstLink->getUser()
             ) {
                 return true;
             }

@@ -841,6 +841,10 @@ const editorConfig = computed(() => {
 
   const built = builder ? builder(local) : local
 
+  // The global TinyMCE init wrapper runs buildTinyMceConfig() a second time.
+  // Preserve the editor feature flags so that iframe permissions remain consistent.
+  built.chamiloEditorFeatures = editorFeatureFlags.value
+
   if (translateHtmlEnabled.value) {
     built.plugins = mergeTinyPlugins(built.plugins, ["translatehtml"])
     built.toolbar = appendToolbarItem(built.toolbar, "translatehtml")

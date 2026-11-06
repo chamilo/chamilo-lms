@@ -28,6 +28,20 @@
   @apply list-decimal ps-6;
 }
 
+// Keep video embeds inside the editor viewport, including pasted fixed-width media.
+.tiny-content iframe[src*="youtube.com/embed/"],
+.tiny-content iframe[src*="youtube-nocookie.com/embed/"],
+.tiny-content iframe[src*="player.vimeo.com/video/"] {
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+.tiny-content video {
+  max-width: 100%;
+  height: auto;
+}
+
 // Specific styles for TinyMCE content
 .tiny-content img {
   @apply block mx-auto;

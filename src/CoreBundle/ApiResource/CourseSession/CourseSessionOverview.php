@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\CourseSession;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\State\CourseSession\CourseSessionOverviewProvider;
@@ -19,6 +20,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/course-sessions/{sessionId}/overview',
+            // Without it, the operation expects an "id" variable that the URL does not have, and answers 404
+            uriVariables: [
+                'sessionId' => new Link(
+                    identifiers: ['sessionId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+            ],
             openapi: new Operation(
                 summary: 'Overview of a manageable session',
                 parameters: [

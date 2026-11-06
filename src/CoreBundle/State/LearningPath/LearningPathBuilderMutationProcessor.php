@@ -34,6 +34,7 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Service\HotPotatoes\HotPotatoesArchiveService;
 use Chamilo\CoreBundle\Service\HotPotatoes\HotPotatoesEntrypoints;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathItemPrerequisiteService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -52,6 +53,7 @@ use DateTime;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,6 +94,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         private GradebookLinkManager $gradebookLinkManager,
         private ExtraFieldRepository $extraFieldRepository,
         private CidReqHelper $cidReqHelper,
+        private LearningPathItemPrerequisiteService $prerequisiteService,
     ) {}
 
     /**
@@ -382,56 +385,19 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
         int $itemId,
     ): LearningPathBuilderItemPrerequisiteInput {
         $item = $this->findValidatedItem($lp, $itemId);
-        if ('dir' === $item->getItemType() || 'root' === $item->getItemType()) {
-            throw new BadRequestHttpException('Prerequisites cannot be assigned to this learning path item.');
-        }
-
         $prerequisiteId = max(0, $data->prerequisiteId);
-        $minScore = $data->minScore;
-        $maxScore = $data->maxScore;
-
-        if (0 === $prerequisiteId) {
-            $item
-                ->setPrerequisite('')
-                ->setPrerequisiteMinScore(0.0)
-                ->setPrerequisiteMaxScore(100.0)
-            ;
-        } else {
-            $prerequisite = $this->findValidatedItem($lp, $prerequisiteId);
-            if ('dir' === $prerequisite->getItemType() || 'root' === $prerequisite->getItemType()) {
-                throw new BadRequestHttpException('The selected prerequisite is invalid.');
-            }
-            if ($prerequisite->getIid() === $item->getIid()
-                || $prerequisite->getDisplayOrder() > $item->getDisplayOrder()
-            ) {
-                throw new BadRequestHttpException('The selected prerequisite is not available for this item.');
-            }
-
-            if (\in_array($prerequisite->getItemType(), ['quiz', 'hotpotatoes'], true)) {
-                $availableMaxScore = $this->getCurrentItemMaxScore($prerequisite);
-                $prerequisite->setMaxScore($availableMaxScore);
-                $this->entityManager->persist($prerequisite);
-                if ($availableMaxScore > 0.0) {
-                    $minScore = max(0.0, min($minScore, $availableMaxScore));
-                    $maxScore = max(0.0, min($maxScore, $availableMaxScore));
-                } else {
-                    $minScore = max(0.0, $minScore);
-                    $maxScore = max(0.0, $maxScore);
-                }
-                if ($maxScore < $minScore) {
-                    throw new BadRequestHttpException('The maximum prerequisite score must be greater than or equal to the minimum score.');
-                }
-            } else {
-                $minScore = 0.0;
-                $maxScore = 100.0;
-            }
-
-            $item
-                ->setPrerequisite((string) $prerequisiteId)
-                ->setPrerequisiteMinScore($minScore)
-                ->setPrerequisiteMaxScore($maxScore)
-            ;
+        if ($prerequisiteId > 0) {
+            // Keeps the 404 for a prerequisite that is missing or belongs to another learning path.
+            $this->findValidatedItem($lp, $prerequisiteId);
         }
+
+        try {
+            $saved = $this->prerequisiteService->set($lp, $item, $prerequisiteId, $data->minScore, $data->maxScore);
+        } catch (InvalidArgumentException $exception) {
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
+        }
+        $minScore = $saved['minScore'];
+        $maxScore = $saved['maxScore'];
 
         $this->entityManager->persist($item);
         $this->touchLearningPath($lp);
@@ -1018,15 +984,7 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
 
     private function getCurrentItemMaxScore(CLpItem $item): float
     {
-        if ('quiz' !== $item->getItemType()) {
-            return (float) ($item->getMaxScore() ?? 0.0);
-        }
-
-        $path = trim((string) $item->getPath());
-        $quizId = ctype_digit($path) ? (int) $path : 0;
-        $quiz = $quizId > 0 ? $this->entityManager->getRepository(CQuiz::class)->find($quizId) : null;
-
-        return $quiz instanceof CQuiz ? (float) $quiz->getMaxScore() : (float) ($item->getMaxScore() ?? 0.0);
+        return $this->prerequisiteService->getCurrentItemMaxScore($item);
     }
 
     private function isAudioResourceFile(ResourceFile $resourceFile): bool

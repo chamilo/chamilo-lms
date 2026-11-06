@@ -39,7 +39,12 @@ mcp:
         document. The survey must already have at least one question. After each change, use
         get_learning_path_structure and only report success when the persisted structure
         contains the expected items. Use move_learning_path_item, remove_learning_path_item,
-        update_learning_path_item and update_learning_path for later corrections.
+        update_learning_path_item and update_learning_path for later corrections. Use
+        set_learning_path_item_prerequisite to make an item available only after an earlier item
+        of the same learning path is completed (with a score range when that earlier item is a
+        test); check prerequisite_item_id in the returned items to verify it. Pass sessionId when
+        the learning path is attached to a session of the course (or a base-course one is used in
+        a session): the items, and so the prerequisites, are the same in every context.
 
         create_course_assignment is idempotent by exact title inside a course and supports a real
         dueAt or dueInDays deadline. A returned created=false value means the existing assignment
@@ -62,6 +67,12 @@ mcp:
         time (server wraps mce-translatehtml blocks and merges/replaces by lang — do not resend
         other languages). There is no delete tool for course descriptions yet. Write HTML with the
         same style conventions as create_course_document.
+
+        The introduction section on the course homepage is separate from the Course Description
+        tool: use set_course_introduction to replace it with HTML (an empty string clears it). It
+        does not merge, so read the current content first if part of it must be kept. Pass
+        sessionId to set the introduction for one session of the course: it then supersedes the
+        base-course introduction inside that session and leaves the base one untouched.
 
         get_course_tests, get_course_test_questions and get_course_test_question_answers support
         modes full/inventory/source on HTML fields (test description, question description,

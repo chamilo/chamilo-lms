@@ -43374,6 +43374,15 @@ msgstr ""
 msgid "Generate XLSX"
 msgstr ""
 
+msgid "Your first message in this thread must contain at least %d words (currently %d)."
+msgstr ""
+
+msgid "Your next messages in this thread must contain at least %d words (currently %d)."
+msgstr ""
+
+msgid "Share of the thread's posts"
+msgstr ""
+
 msgid "AI course analyzer is disabled for this course."
 msgstr ""
 

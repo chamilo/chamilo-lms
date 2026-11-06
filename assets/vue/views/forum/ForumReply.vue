@@ -598,7 +598,9 @@ async function submitReply() {
     })
   } catch (error) {
     console.error("Error replying to forum thread:", error)
-    notifications.showErrorNotification(t("Could not add reply"))
+    // A refused reply comes with its reason, e.g. the minimum number of words not reached
+    const reason = 400 === error?.response?.status ? error.response.data?.error : ""
+    notifications.showErrorNotification(reason || t("Could not add reply"))
     await loadInitialData()
   } finally {
     isSubmitting.value = false

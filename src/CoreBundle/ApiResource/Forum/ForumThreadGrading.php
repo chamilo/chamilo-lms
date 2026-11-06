@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Forum;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -46,6 +47,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 'sid' => new QueryParameter(
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
+                ),
+                'userId' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Learner whose participation in the thread is detailed in "participant"',
                 ),
             ],
         ),
@@ -134,6 +139,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
             processor: ForumThreadGradingProcessor::class,
         ),
     ],
+    // Without it, every operation expects an "id" variable that the URLs do not have, and answers 404
+    uriVariables: [
+        'threadId' => new Link(
+            identifiers: ['threadId'],
+            compositeIdentifier: false,
+            schema: ['type' => 'integer'],
+        ),
+    ],
     normalizationContext: [
         'groups' => ['forum_thread_grading:read'],
     ],
@@ -180,6 +193,15 @@ final class ForumThreadGrading
     #[Groups(['forum_thread_grading:read'])]
     public array $students = [];
 
+    /**
+     * The participation of the learner asked with userId: their posts and how they compare to the
+     * thread, as the 1.11 grading page of one learner showed them.
+     *
+     * @var array<string, mixed>|null
+     */
+    #[Groups(['forum_thread_grading:read'])]
+    public ?array $participant = null;
+
     public function getId(): int
     {
         return $this->threadId;
@@ -206,6 +228,9 @@ final class ForumThreadGrading
 
         $students = $data['students'] ?? [];
         $grading->students = \is_array($students) ? $students : [];
+
+        $participant = $data['participant'] ?? null;
+        $grading->participant = \is_array($participant) ? $participant : null;
 
         return $grading;
     }

@@ -45147,3 +45147,12 @@ msgstr "Thème de couleurs (aperçu)"
 
 msgid "The themes storage is not writable. Check its file permissions before saving."
 msgstr "Le stockage des thèmes n'est pas accessible en écriture. Vérifiez les permissions des fichiers avant d'enregistrer."
+
+msgid "Your first message in this thread must contain at least %d words (currently %d)."
+msgstr "Votre premier message dans ce fil de discussion doit contenir au moins %d mots (actuellement %d)."
+
+msgid "Your next messages in this thread must contain at least %d words (currently %d)."
+msgstr "Vos messages suivants dans ce fil de discussion doivent contenir au moins %d mots (actuellement %d)."
+
+msgid "Share of the thread's posts"
+msgstr "Part des messages du fil"

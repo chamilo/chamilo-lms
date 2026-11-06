@@ -98,7 +98,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
             $session,
             $group,
         );
-        $this->validateEmailOptions($data, $session);
+        $this->validateEmailOptions($data, $course, $session);
         $this->validateScheduleOptions($data, $session);
         $this->validateCalendarOptions($data);
 
@@ -250,7 +250,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         return $response;
     }
 
-    private function validateEmailOptions(AnnouncementForm $form, ?Session $session): void
+    private function validateEmailOptions(AnnouncementForm $form, Course $course, ?Session $session): void
     {
         if (!$form->sendByEmail && ($form->sendToUsersInSessions || $form->sendToHrmUsers)) {
             throw new BadRequestHttpException('Additional recipients require email delivery to be enabled.');
@@ -258,6 +258,10 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
 
         if ($form->sendToUsersInSessions && $session instanceof Session) {
             throw new BadRequestHttpException('Users from all sessions can only be selected from the base course.');
+        }
+
+        if ($form->sendToUsersInSessions && !$this->recipientResolver->hasCourseSessions($course)) {
+            throw new BadRequestHttpException('This course has no sessions for announcement recipients.');
         }
 
         if ($form->sendToHrmUsers && $this->isSettingEnabled(

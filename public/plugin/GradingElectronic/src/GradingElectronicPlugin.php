@@ -9,6 +9,11 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
+use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 /**
  * Class GradingElectronicPlugin.
@@ -373,207 +378,26 @@ class GradingElectronicPlugin extends Plugin
                 throw new Exception(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'));
             }
 
-            $rangeStart = trim((string) ($_REQUEST['range_start'] ?? ''));
-            $rangeEnd = trim((string) ($_REQUEST['range_end'] ?? ''));
-            $externalCourseId = trim((string) ($_REQUEST['course'] ?? ''));
             $previewOnly = !empty($_REQUEST['preview_only']);
-
-            if ('' === $rangeStart || '' === $rangeEnd || '' === $externalCourseId) {
-                throw new Exception(get_lang('Required field'));
-            }
-
-            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $rangeStart) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $rangeEnd)) {
-                throw new Exception(get_lang('Invalid date'));
-            }
-
-            $dateStart = new DateTime($rangeStart.' 00:00:00', new DateTimeZone('UTC'));
-            $dateEnd = new DateTime($rangeEnd.' 23:59:59', new DateTimeZone('UTC'));
-
-            if ($dateStart > $dateEnd) {
-                throw new Exception(get_lang('Invalid date'));
-            }
-
-            $em = Database::getManager();
-            $courseId = api_get_course_int_id();
-
-            if (0 >= $courseId) {
-                throw new Exception(get_lang('Missing course information'));
-            }
-
-            /** @var Course|null $course */
-            $course = $em->find(Course::class, $courseId);
-
-            if (!$course) {
-                throw new Exception(get_lang('Course not found'));
-            }
-
-            /** @var Session|null $session */
-            $session = null;
-            $sessionId = api_get_session_id();
-
-            if (!empty($sessionId)) {
-                $session = $em->find(Session::class, $sessionId);
-            }
-
-            if (!$previewOnly) {
-                $this->saveExtraFieldStoredValue(
-                    'course',
-                    $course->getId(),
-                    self::EXTRAFIELD_COURSE_ID,
-                    $externalCourseId
-                );
-            }
-
-            $providerId = $this->getExtraFieldStoredValue(
-                'course',
-                $course->getId(),
-                self::EXTRAFIELD_COURSE_PROVIDER_ID
+            $export = $this->buildExport(
+                (string) ($_REQUEST['range_start'] ?? ''),
+                (string) ($_REQUEST['range_end'] ?? ''),
+                (string) ($_REQUEST['course'] ?? ''),
+                $previewOnly
             );
-            $courseHours = $this->getExtraFieldStoredValue(
-                'course',
-                $course->getId(),
-                self::EXTRAFIELD_COURSE_HOURS
-            );
-
-            $students = [];
-
-            if ($session) {
-                $criteria = Criteria::create()->where(
-                    Criteria::expr()->eq('relationType', Session::STUDENT)
-                );
-
-                $subscriptions = $session->getUsers()->matching($criteria);
-
-                /** @var SessionRelUser $subscription */
-                foreach ($subscriptions as $subscription) {
-                    $students[] = $subscription->getUser();
-                }
-            } else {
-                $subscriptions = $course->getStudentSubscriptions();
-
-                /** @var CourseRelUser $subscription */
-                foreach ($subscriptions as $subscription) {
-                    $students[] = $subscription->getUser();
-                }
-            }
-
-            $cats = Category::load(
-                null,
-                null,
-                $course->getId(),
-                null,
-                null,
-                $session ? $session->getId() : 0,
-                'ORDER BY id'
-            );
-
-            if (empty($cats[0])) {
-                throw new Exception(get_lang('No gradebook found'));
-            }
-
-            /** @var Category $gradebook */
-            $gradebook = $cats[0];
-
-            /** @var GradebookCategory|null $gradebookCategory */
-            $gradebookCategory = $em->find(GradebookCategory::class, $gradebook->get_id());
-
-            if (!$gradebookCategory) {
-                throw new Exception(get_lang('No gradebook found'));
-            }
-
-            $fileData = [];
-            $fileData[] = sprintf(
-                '1 %s %s%s',
-                (string) $providerId,
-                $externalCourseId,
-                $dateStart->format('m/d/Y')
-            );
-
-            $previewRows = [];
-            $processedCount = 0;
-            $passedCount = 0;
-            $scoredisplay = ScoreDisplay::instance();
-
-            /** @var User $student */
-            foreach ($students as $student) {
-                ++$processedCount;
-
-                $userFinishedCourse = Category::userFinishedCourse(
-                    $student->getId(),
-                    $gradebookCategory,
-                    true,
-                    $course->getId(),
-                    $session ? $session->getId() : 0
-                );
-                $scoretotal = $gradebook->calc_score($student->getId());
-                $score = $scoredisplay->display_score(
-                    $scoretotal,
-                    SCORE_SIMPLE
-                );
-                $studentId = $this->getExtraFieldStoredValue(
-                    'user',
-                    $student->getId(),
-                    self::EXTRAFIELD_STUDENT_ID
-                );
-
-                if ($previewOnly) {
-                    $previewRows[] = [
-                        'user_id' => $student->getId(),
-                        'username' => (string) $student->getUsername(),
-                        'external_id' => (string) $studentId,
-                        'score' => $score,
-                        'status' => $userFinishedCourse ? 'PASS' : 'SKIP',
-                    ];
-                }
-
-                if (!$userFinishedCourse) {
-                    continue;
-                }
-
-                ++$passedCount;
-                $fileData[] = sprintf(
-                    '2 %sPASS%s %s %s',
-                    (string) $studentId,
-                    (string) $courseHours,
-                    $score,
-                    $dateEnd->format('m/d/Y')
-                );
-
-                if ($previewOnly || !$gradebook->getGenerateCertificates()) {
-                    continue;
-                }
-
-                Category::generateUserCertificate(
-                    $gradebookCategory,
-                    $student->getId(),
-                    false,
-                    true
-                );
-            }
 
             if ($previewOnly) {
                 return $this->renderPreviewResult(
-                    $processedCount,
-                    $passedCount,
-                    $previewRows,
-                    $fileData
+                    $export['processedCount'],
+                    $export['passedCount'],
+                    $export['previewRows'],
+                    $export['txtLines']
                 );
             }
 
-            $fileName = implode('_', [
-                'GradingElectronic',
-                $externalCourseId,
-                $rangeStart,
-                $rangeEnd,
-            ]);
-            $fileName = api_replace_dangerous_char($fileName).'.txt';
-            $fileData[] = null;
-
+            $fileName = $export['fileName'].'.txt';
             $filePath = api_get_path(SYS_ARCHIVE_PATH).$fileName;
-            $saved = file_put_contents(
-                $filePath,
-                implode("\r\n", $fileData)
-            );
+            $saved = file_put_contents($filePath, $this->getTxtContent($export));
 
             if (false === $saved) {
                 throw new Exception(get_lang('The file could not be created'));
@@ -585,6 +409,287 @@ class GradingElectronicPlugin extends Plugin
 
             return $this->getAlertHtml($exception->getMessage(), 'error');
         }
+    }
+
+    /**
+     * Collect the students of the current course (or session) who finished it in the gradebook.
+     * Unless $previewOnly, this also stores the external course ID and generates the certificates.
+     *
+     * @throws Exception when the input is invalid or the course has no gradebook
+     */
+    public function buildExport(string $rangeStart, string $rangeEnd, string $externalCourseId, bool $previewOnly): array
+    {
+        $rangeStart = trim($rangeStart);
+        $rangeEnd = trim($rangeEnd);
+        $externalCourseId = trim($externalCourseId);
+
+        if ('' === $rangeStart || '' === $rangeEnd || '' === $externalCourseId) {
+            throw new Exception(get_lang('Required field'));
+        }
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $rangeStart) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $rangeEnd)) {
+            throw new Exception(get_lang('Invalid date'));
+        }
+
+        $dateStart = new DateTime($rangeStart.' 00:00:00', new DateTimeZone('UTC'));
+        $dateEnd = new DateTime($rangeEnd.' 23:59:59', new DateTimeZone('UTC'));
+
+        if ($dateStart > $dateEnd) {
+            throw new Exception(get_lang('Invalid date'));
+        }
+
+        $em = Database::getManager();
+        $courseId = api_get_course_int_id();
+
+        if (0 >= $courseId) {
+            throw new Exception(get_lang('Missing course information'));
+        }
+
+        /** @var Course|null $course */
+        $course = $em->find(Course::class, $courseId);
+
+        if (!$course) {
+            throw new Exception(get_lang('Course not found'));
+        }
+
+        /** @var Session|null $session */
+        $session = null;
+        $sessionId = api_get_session_id();
+
+        if (!empty($sessionId)) {
+            $session = $em->find(Session::class, $sessionId);
+        }
+
+        if (!$previewOnly) {
+            $this->saveExtraFieldStoredValue(
+                'course',
+                $course->getId(),
+                self::EXTRAFIELD_COURSE_ID,
+                $externalCourseId
+            );
+        }
+
+        $providerId = $this->getExtraFieldStoredValue(
+            'course',
+            $course->getId(),
+            self::EXTRAFIELD_COURSE_PROVIDER_ID
+        );
+        $courseHours = $this->getExtraFieldStoredValue(
+            'course',
+            $course->getId(),
+            self::EXTRAFIELD_COURSE_HOURS
+        );
+
+        $students = [];
+
+        if ($session) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq('relationType', Session::STUDENT)
+            );
+
+            $subscriptions = $session->getUsers()->matching($criteria);
+
+            /** @var SessionRelUser $subscription */
+            foreach ($subscriptions as $subscription) {
+                $students[] = $subscription->getUser();
+            }
+        } else {
+            $subscriptions = $course->getStudentSubscriptions();
+
+            /** @var CourseRelUser $subscription */
+            foreach ($subscriptions as $subscription) {
+                $students[] = $subscription->getUser();
+            }
+        }
+
+        $cats = Category::load(
+            null,
+            null,
+            $course->getId(),
+            null,
+            null,
+            $session ? $session->getId() : 0,
+            'ORDER BY id'
+        );
+
+        if (empty($cats[0])) {
+            throw new Exception(get_lang('No gradebook found'));
+        }
+
+        /** @var Category $gradebook */
+        $gradebook = $cats[0];
+
+        /** @var GradebookCategory|null $gradebookCategory */
+        $gradebookCategory = $em->find(GradebookCategory::class, $gradebook->get_id());
+
+        if (!$gradebookCategory) {
+            throw new Exception(get_lang('No gradebook found'));
+        }
+
+        $txtLines = [];
+        $txtLines[] = sprintf(
+            '1 %s %s%s',
+            (string) $providerId,
+            $externalCourseId,
+            $dateStart->format('m/d/Y')
+        );
+
+        $previewRows = [];
+        $passedRows = [];
+        $processedCount = 0;
+        $scoredisplay = ScoreDisplay::instance();
+
+        /** @var User $student */
+        foreach ($students as $student) {
+            ++$processedCount;
+
+            $userFinishedCourse = Category::userFinishedCourse(
+                $student->getId(),
+                $gradebookCategory,
+                true,
+                $course->getId(),
+                $session ? $session->getId() : 0
+            );
+            $scoretotal = $gradebook->calc_score($student->getId());
+            $score = $scoredisplay->display_score(
+                $scoretotal,
+                SCORE_SIMPLE
+            );
+            $studentId = $this->getExtraFieldStoredValue(
+                'user',
+                $student->getId(),
+                self::EXTRAFIELD_STUDENT_ID
+            );
+
+            $previewRows[] = [
+                'user_id' => $student->getId(),
+                'username' => (string) $student->getUsername(),
+                'external_id' => (string) $studentId,
+                'score' => $score,
+                'status' => $userFinishedCourse ? 'PASS' : 'SKIP',
+            ];
+
+            if (!$userFinishedCourse) {
+                continue;
+            }
+
+            $txtLines[] = sprintf(
+                '2 %sPASS%s %s %s',
+                (string) $studentId,
+                (string) $courseHours,
+                $score,
+                $dateEnd->format('m/d/Y')
+            );
+            $passedRows[] = [
+                'external_id' => (string) $studentId,
+                'firstname' => (string) $student->getFirstname(),
+                'lastname' => (string) $student->getLastname(),
+                // The roster only accepts a whole percentage, whatever the gradebook's total weight
+                'score_percent' => !empty($scoretotal[1]) ? (int) round($scoretotal[0] / $scoretotal[1] * 100) : 0,
+            ];
+
+            if ($previewOnly || !$gradebook->getGenerateCertificates()) {
+                continue;
+            }
+
+            Category::generateUserCertificate(
+                $gradebookCategory,
+                $student->getId(),
+                false,
+                true
+            );
+        }
+
+        return [
+            'processedCount' => $processedCount,
+            'passedCount' => count($passedRows),
+            'previewRows' => $previewRows,
+            'passedRows' => $passedRows,
+            'txtLines' => $txtLines,
+            'dateEnd' => $dateEnd,
+            'fileName' => api_replace_dangerous_char(implode('_', [
+                'GradingElectronic',
+                $externalCourseId,
+                $rangeStart,
+                $rangeEnd,
+            ])),
+        ];
+    }
+
+    public function getTxtContent(array $export): string
+    {
+        return implode("\r\n", array_merge($export['txtLines'], [null]));
+    }
+
+    /**
+     * The roster spreadsheet the institution imports: one row per student who passed.
+     */
+    public function getXlsxContent(array $export): string
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Sheet1');
+        $sheet->fromArray(['FireTRAQ ID', 'First Name', 'Last Name', 'Score', 'Grade', 'Date Earned', 'Comment']);
+        $sheet->getStyle('A1:G1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:G1')->getBorders()->getBottom()->setBorderStyle(Border::BORDER_MEDIUM);
+
+        $dateEarned = ExcelDate::PHPToExcel($export['dateEnd']->format('Y-m-d'));
+        $row = 1;
+
+        foreach ($export['passedRows'] as $passedRow) {
+            ++$row;
+            $externalId = $passedRow['external_id'];
+            $sheet->fromArray([
+                ctype_digit($externalId) ? (int) $externalId : $externalId,
+                $passedRow['firstname'],
+                $passedRow['lastname'],
+                $passedRow['score_percent'],
+                'Pass',
+                $dateEarned,
+                '',
+            ], null, 'A'.$row, true);
+        }
+
+        $sheet->getStyle('F2:F'.max(2, $row))->getNumberFormat()->setFormatCode('m/d/yyyy');
+
+        foreach (['A' => 12, 'B' => 16, 'C' => 16, 'D' => 8, 'E' => 10, 'F' => 12, 'G' => 60] as $column => $width) {
+            $sheet->getColumnDimension($column)->setWidth($width);
+        }
+
+        // Same input rules as the institution's roster template
+        $grade = new DataValidation();
+        $grade->setType(DataValidation::TYPE_LIST)
+            ->setAllowBlank(true)
+            ->setShowDropDown(true)
+            ->setShowErrorMessage(true)
+            ->setFormula1('"Pass,Fail,Incomplete"')
+        ;
+        $sheet->setDataValidation('E2:E'.max(70, $row), $grade);
+
+        $score = new DataValidation();
+        $score->setType(DataValidation::TYPE_WHOLE)
+            ->setAllowBlank(true)
+            ->setShowErrorMessage(true)
+            ->setFormula1('0')
+            ->setFormula2('100')
+        ;
+        $sheet->setDataValidation('D2:D'.max(70, $row), $score);
+
+        $firetraqId = new DataValidation();
+        $firetraqId->setType(DataValidation::TYPE_WHOLE)
+            ->setAllowBlank(true)
+            ->setShowErrorMessage(true)
+            ->setFormula1('100')
+            ->setFormula2('9999999')
+        ;
+        $sheet->setDataValidation('A2:A'.max(70, $row), $firetraqId);
+
+        $tempFile = api_get_path(SYS_ARCHIVE_PATH).uniqid('GradingElectronic_', true).'.xlsx';
+        (new Xlsx($spreadsheet))->save($tempFile);
+        $content = (string) file_get_contents($tempFile);
+        @unlink($tempFile);
+
+        return $content;
     }
 
     private function renderPreviewResult(
@@ -918,7 +1023,7 @@ class GradingElectronicPlugin extends Plugin
             || false !== strpos((string) $route, 'gradebook/index.php');
     }
 
-    private function getPluginText(string $key, string $fallback): string
+    public function getPluginText(string $key, string $fallback): string
     {
         try {
             $translated = $this->get_lang($key);

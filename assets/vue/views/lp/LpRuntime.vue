@@ -596,6 +596,8 @@ const tocCollapsed = ref(false)
 const initialized = ref(false)
 const impressActiveIsSection = ref(false)
 const collapsedSections = ref(new Set())
+// Item whose chapters the TOC last unfolded; 0 until the first load
+let tocCurrentItemId = 0
 const runtimeLoadedAt = ref(Date.now())
 const clockTick = ref(Date.now())
 let clockTimer = null
@@ -1678,6 +1680,12 @@ function applyRuntime(data, { contentChanged = false } = {}) {
   if (!initialized.value) {
     menuOpen.value = Boolean(data.showToolbarByDefault)
     tocCollapsed.value = String(data.displayMode || "") === "embedframe"
+    // lp.lp_view_accordion: every chapter starts folded, the learner unfolds the ones they need
+    if (data.accordionToc) {
+      collapsedSections.value = new Set(
+        (data.items || []).filter((item) => item.isSection && item.hasChildren).map((item) => Number(item.id)),
+      )
+    }
     initialized.value = true
   }
 
@@ -1688,7 +1696,16 @@ function applyRuntime(data, { contentChanged = false } = {}) {
     iframeLoading.value = Boolean(data.contentUrl) && !data.externalLinkRequiresNewTab
   }
 
-  nextTick(expandCurrentAncestors)
+  // Unfold the chapters of the item only when the learner moves to another one: not on the first
+  // load, which keeps every chapter folded, nor on a state refresh, which would reopen a chapter the
+  // learner just folded.
+  const currentItemId = Number(data.currentItemId || 0)
+  if (currentItemId !== tocCurrentItemId) {
+    if (tocCurrentItemId > 0) {
+      nextTick(expandCurrentAncestors)
+    }
+    tocCurrentItemId = currentItemId
+  }
 
   return true
 }

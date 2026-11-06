@@ -102,6 +102,42 @@ class PageRepositoryTest extends AbstractApiTest
         return $page;
     }
 
+    public function testAllLanguagesPageIsAvailableWithoutReplacingLocalizedPages(): void
+    {
+        $localizedPage = $this->testCreate();
+        $repository = self::getContainer()->get(PageRepository::class);
+        $em = $this->getEntityManager();
+        $url = $this->getAccessUrl();
+
+        $globalPage = (new Page())
+            ->setTitle('Global page')
+            ->setContent('Global content')
+            ->setCreator($this->getAdmin())
+            ->setUrl($url)
+            ->setCategory($localizedPage->getCategory())
+            ->setLocale('all')
+            ->setEnabled(true)
+            ->setCreatedAt(new DateTime())
+            ->setUpdatedAt(new DateTime())
+        ;
+        $this->assertHasNoEntityViolations($globalPage);
+        $em->persist($globalPage);
+        $em->flush();
+
+        self::assertSame(
+            $localizedPage->getId(),
+            $repository->findEnabledPageByCategoryWithLocaleFallback($url, 'category1', 'en', null)?->getId()
+        );
+        self::assertSame(
+            $globalPage->getId(),
+            $repository->findEnabledPageByCategoryWithLocaleFallback($url, 'category1', 'pt_BR', null)?->getId()
+        );
+
+        $links = $repository->findPublicLinksByCategoryWithLocaleFallback($url, 'category1', 'en');
+        self::assertCount(2, $links);
+        self::assertSame(2, $repository->countByCategoryAndLocale($url, 'category1', 'en'));
+    }
+
     public function testAddAnotherPage(): void
     {
         $page = $this->testCreate();

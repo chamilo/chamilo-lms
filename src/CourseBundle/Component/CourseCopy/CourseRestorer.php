@@ -230,6 +230,14 @@ class CourseRestorer
     private array $resources_all_snapshot = [];
 
     /**
+     * Tools whose restore threw: restore() carries on with the next tool, so the caller must tell
+     * the user that this content is missing.
+     *
+     * @var string[]
+     */
+    private array $failedTools = [];
+
+    /**
      * @param Course $course
      */
     public function __construct($course)
@@ -409,11 +417,15 @@ class CourseRestorer
 
                 $this->{$fn}(...$callArgs);
             } catch (Throwable $e) {
-                $this->dlog('Tool restore failed with exception', [
+                // Logged even without debug: the restore carries on with the next tool and the import
+                // still reports success, so this line is the only trace of the content that was lost.
+                error_log('COURSE_RESTORE: Tool restore failed with exception '.json_encode([
                     'tool' => $tool,
                     'method' => $fn,
                     'error' => $e->getMessage(),
-                ]);
+                    'at' => $e->getFile().':'.$e->getLine(),
+                ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+                $this->failedTools[] = $tool;
                 $this->resetDoctrineIfClosed();
                 if ('learnpath_category' === $tool && $this->course->has_resources(RESOURCE_LEARNPATH_CATEGORY)) {
                     throw $e;
@@ -6451,9 +6463,28 @@ class CourseRestorer
                 }
             }
 
+            // The level-based logic hangs each item under the last one created a level above, so it
+            // only rebuilds the tree when items come depth-first. The Chamilo sidecar of a Moodle
+            // export lists them by display_order, which is not depth-first: items landed under the
+            // wrong chapter, in the wrong order. Whenever parent_item_id links the items, use it.
+            $sourceItemIds = [];
+            foreach ($items as $it) {
+                if ((int) ($it['id'] ?? 0) > 0) {
+                    $sourceItemIds[(int) $it['id']] = true;
+                }
+            }
+            $hasParentLinks = false;
+            foreach ($items as $it) {
+                if (isset($sourceItemIds[(int) ($it['parent_item_id'] ?? 0)])) {
+                    $hasParentLinks = true;
+
+                    break;
+                }
+            }
+
             $createdCount = 0;
 
-            if ($hasLevel) {
+            if ($hasLevel && !$hasParentLinks) {
                 // ---- Old logic (level-based), kept for backward compatibility ----
                 $parents = [0 => $root];
                 $order = 0;
@@ -6603,7 +6634,9 @@ class CourseRestorer
                             $em
                         );
 
-                        $order = isset($it['display_order']) ? (int) $it['display_order'] : (++$fallbackOrder);
+                        // Numbered in reading order: the source display_order only orders siblings, its
+                        // values can be global and in any order across the tree.
+                        $order = ++$fallbackOrder;
 
                         $item = (new CLpItem())
                             ->setLp($lp)
@@ -9660,6 +9693,14 @@ class CourseRestorer
     public function setDebug(?bool $on = true): void
     {
         $this->debug = (bool) $on;
+    }
+
+    /**
+     * @return string[] the tools (as in $tools_to_restore) whose restore failed during restore()
+     */
+    public function getFailedTools(): array
+    {
+        return $this->failedTools;
     }
 
     /**

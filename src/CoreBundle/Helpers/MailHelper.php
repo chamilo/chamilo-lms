@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Chamilo\CoreBundle\Service\Mailer\MassMailingTransportSelector;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Exception;
 use Notification;
@@ -30,6 +31,7 @@ final class MailHelper
         private readonly ThemeHelper $themeHelper,
         private readonly ValidatorInterface $validator,
         private readonly SettingsManager $settingsManager,
+        private readonly MassMailingTransportSelector $massMailingTransportSelector,
     ) {}
 
     /**
@@ -122,6 +124,7 @@ final class MailHelper
         bool $embeddedImage = false,
         array $additionalParameters = [],
         ?string $sendErrorTo = null,
+        bool $massMailing = false,
     ): bool {
         if (!api_valid_email($recipientEmail)) {
             return false;
@@ -287,6 +290,9 @@ final class MailHelper
 
             $this->bodyRenderer->render($templatedEmail);
             $this->applyMailerCharset($templatedEmail, $charset);
+            if ($massMailing) {
+                $this->massMailingTransportSelector->routeMassMailing($templatedEmail);
+            }
 
             $this->logMailerDebug('Mail message is being sent.', [
                 'subject' => $subject,

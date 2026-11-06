@@ -24,6 +24,14 @@ Use the Symfony controller endpoint:
 
 This is the preferred public entry point for new integrations.
 
+Client credentials
+------------------
+
+The endpoint only processes `collect` requests when the plugin is enabled and
+the request carries the `system-user-id` and `system-password` set in the
+plugin settings. Until both settings are filled in, every request is refused.
+Configure the same values in the authoring tool that sends the packages.
+
 Administrative page
 -------------------
 
@@ -126,8 +134,8 @@ curl -i -X POST http://<CHAMILO-URL>/plugin/pens/collect \
   -d 'package-url=http://<CHAMILO-URL>/tests/pens/sample.zip' \
   -d 'package-url-expiry=2099-12-31T23:59:59Z' \
   -d 'client=local-pens-test' \
-  -d 'system-user-id=' \
-  -d 'system-password=' \
+  -d 'system-user-id=<PLUGIN-SYSTEM-USER-ID>' \
+  -d 'system-password=<PLUGIN-SYSTEM-PASSWORD>' \
   -d 'vendor-data=manual test from curl'
 ```
 

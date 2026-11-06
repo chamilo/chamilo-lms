@@ -94,11 +94,22 @@
           />
 
           <BaseMultiSelect
+            v-if="groupRecipientOptions.length"
+            input-id="announcement_groups"
+            :label="t('Groups')"
+            :model-value="selectedGroupRecipients"
+            option-label="label"
+            option-value="value"
+            :options="groupRecipientOptions"
+            @update:model-value="updateGroupRecipients"
+          />
+
+          <BaseMultiSelect
             input-id="announcement_recipients"
             :error-text="t('Required field')"
             :is-invalid="formSubmitted && form.recipients.length === 0"
             :label="t('Recipients')"
-            :model-value="form.recipients"
+            :model-value="selectedIndividualRecipients"
             option-label="label"
             option-value="value"
             :options="recipientOptions"
@@ -508,15 +519,22 @@ const listRoute = computed(() => ({
   query: getContextParams(),
 }))
 
+const groupRecipientOptions = computed(() => form.value.recipientOptions.filter((option) => option.type === "group"))
+const selectedGroupRecipients = computed(() => form.value.recipients.filter((value) => value.startsWith("GROUP:")))
+const selectedIndividualRecipients = computed(() =>
+  form.value.recipients.filter((value) => !value.startsWith("GROUP:")),
+)
+
 const recipientOptions = computed(() => {
+  const options = form.value.recipientOptions.filter((option) => option.type !== "group")
   const selectedClass = form.value.classes.find((item) => Number(item.id) === Number(selectedClassId.value || 0))
   if (!selectedClass) {
-    return form.value.recipientOptions
+    return options
   }
 
   const allowedValues = new Set(Array.isArray(selectedClass.recipientValues) ? selectedClass.recipientValues : [])
 
-  return form.value.recipientOptions.filter((option) => allowedValues.has(option.value))
+  return options.filter((option) => allowedValues.has(option.value))
 })
 
 function getQueryValue(value) {
@@ -538,15 +556,7 @@ function getContextParams() {
     params.gid = gid
   }
 
-  for (const key of [
-    "origin",
-    "page",
-    "lp_id",
-    "lp_item_id",
-    "lp_view_id",
-    "returnToLp",
-    "embedded",
-  ]) {
+  for (const key of ["origin", "page", "lp_id", "lp_item_id", "lp_view_id", "returnToLp", "embedded"]) {
     if (Object.prototype.hasOwnProperty.call(route.query, key)) {
       params[key] = getQueryValue(route.query[key])
     }
@@ -573,26 +583,41 @@ function getFormParams() {
 }
 
 function updateRecipients(values) {
-  let nextValues = Array.isArray(values) ? [...values] : []
+  let selectedUsers = Array.isArray(values) ? [...values] : []
 
-  if (nextValues.includes("everyone") && nextValues.length > 1) {
-    nextValues = form.value.recipients.includes("everyone")
-      ? nextValues.filter((value) => value !== "everyone")
+  if (selectedUsers.includes("everyone") && selectedUsers.length > 1) {
+    selectedUsers = selectedIndividualRecipients.value.includes("everyone")
+      ? selectedUsers.filter((value) => value !== "everyone")
       : ["everyone"]
   }
 
-  form.value.recipients = nextValues
-}
-
-function applyClassRecipients() {
-  const selectedClass = form.value.classes.find((item) => Number(item.id) === Number(selectedClassId.value || 0))
-  if (!selectedClass) {
+  if (selectedUsers.includes("everyone")) {
     form.value.recipients = ["everyone"]
 
     return
   }
 
-  form.value.recipients = Array.isArray(selectedClass.recipientValues) ? [...selectedClass.recipientValues] : []
+  const recipients = [...selectedGroupRecipients.value, ...selectedUsers]
+  form.value.recipients = recipients.length ? recipients : ["everyone"]
+}
+
+function updateGroupRecipients(values) {
+  const groups = Array.isArray(values) ? values.filter((value) => value.startsWith("GROUP:")) : []
+  const users = selectedIndividualRecipients.value.filter((value) => value !== "everyone")
+  const recipients = [...groups, ...users]
+  form.value.recipients = recipients.length ? recipients : ["everyone"]
+}
+
+function applyClassRecipients() {
+  const selectedClass = form.value.classes.find((item) => Number(item.id) === Number(selectedClassId.value || 0))
+  if (!selectedClass) {
+    form.value.recipients = selectedGroupRecipients.value.length ? [...selectedGroupRecipients.value] : ["everyone"]
+
+    return
+  }
+
+  const users = Array.isArray(selectedClass.recipientValues) ? selectedClass.recipientValues : []
+  form.value.recipients = [...new Set([...selectedGroupRecipients.value, ...users])]
 }
 
 function handleAttachmentFiles(event) {

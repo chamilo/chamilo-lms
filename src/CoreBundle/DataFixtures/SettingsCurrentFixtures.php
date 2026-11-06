@@ -50,6 +50,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
         'max_anonymous_users',
         'enable_x_sendfile_headers',
         'mailer_dsn',
+        'mailer_dsn_massmailing',
         'allow_send_message_to_all_platform_users',
         'message_max_upload_filesize',
         'use_custom_pages',
@@ -3182,6 +3183,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'inbound_mail_dsn',
                     'title' => 'Inbound mailbox DSN',
                     'comment' => 'Mailbox connection used to collect inbound replies, for example imaps://user:password@imap.example.com:993/INBOX. URL-encode reserved characters in credentials.',
+                ],
+                [
+                    'name' => 'mailer_dsn_massmailing',
+                    'title' => 'Mass mailing DSN',
+                    'comment' => 'Optional Symfony Mailer DSN for course and platform announcement broadcasts. Leave empty to use the main mail transport. Individual notifications continue using the main transport.',
                 ],
                 [
                     'name' => 'notifications_extended_footer_message',

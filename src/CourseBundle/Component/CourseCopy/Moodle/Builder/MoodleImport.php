@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CourseBundle\Component\CourseCopy\BackupArchive;
 use Chamilo\CourseBundle\Component\CourseCopy\Course;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -24,11 +25,9 @@ use DocumentManager;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
-use PharData;
 use RuntimeException;
 use stdClass;
 use Throwable;
-use ZipArchive;
 
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
@@ -944,41 +943,9 @@ class MoodleImport
             throw new RuntimeException('Cannot create temp dir');
         }
 
-        $ext = strtolower(pathinfo($archivePath, PATHINFO_EXTENSION));
-        if (\in_array($ext, ['zip', 'mbz'], true)) {
-            $zip = new ZipArchive();
-            if (true !== $zip->open($archivePath)) {
-                throw new RuntimeException('Cannot open zip');
-            }
-            // Guard against ZIP Slip: reject entries with path traversal
-            for ($zi = 0; $zi < $zip->numFiles; $zi++) {
-                $entryName = str_replace('\\', '/', $zip->getNameIndex($zi));
-                if (str_contains($entryName, '../') || str_starts_with($entryName, '/')) {
-                    $zip->close();
-                    throw new RuntimeException('Malicious ZIP entry detected');
-                }
-            }
-            if (!$zip->extractTo($base)) {
-                $zip->close();
-
-                throw new RuntimeException('Cannot extract zip');
-            }
-            $zip->close();
-        } elseif (\in_array($ext, ['gz', 'tgz'], true)) {
-            $phar = new PharData($archivePath);
-            // Guard against ZIP Slip in PHAR/tar
-            foreach (new \RecursiveIteratorIterator($phar) as $pharEntry) {
-                $entryPath = str_replace('\\', '/', $pharEntry->getPathname());
-                $pharBase = str_replace('\\', '/', $archivePath);
-                $relative = ltrim(substr($entryPath, strlen($pharBase)), '/');
-                if (str_contains($relative, '../') || str_starts_with($relative, '/')) {
-                    throw new RuntimeException('Malicious archive entry detected');
-                }
-            }
-            $phar->extractTo($base, null, true);
-        } else {
-            throw new RuntimeException('Unsupported archive type');
-        }
+        // Format comes from the magic bytes. A .mbz may be gzip tar or a legacy
+        // zip, and an upload may have been stored under a .zip name either way.
+        BackupArchive::extract($archivePath, $base);
 
         if (!is_file($base.'/moodle_backup.xml')) {
             throw new RuntimeException('Not a Moodle backup (moodle_backup.xml missing)');

@@ -208,7 +208,8 @@ class AnnouncementEmail
             $message,
             api_get_user_id(),
             false,
-            true
+            true,
+            massMailing: true
         );
     }
 
@@ -255,7 +256,8 @@ class AnnouncementEmail
                     $message,
                     $senderId,
                     $sendToDrhUsers,
-                    true
+                    true,
+                    massMailing: true
                 );
             } else {
                 if (!empty($this->logger)) {
@@ -292,7 +294,8 @@ class AnnouncementEmail
                                 $message,
                                 $senderId,
                                 false,
-                                true
+                                true,
+                                massMailing: true
                             );
                         }
                     }

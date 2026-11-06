@@ -23,7 +23,10 @@
           />
           <dl v-text="item.creator.username" />
 
-          <dt v-text="t('Language')" class="font-semibold" />
+          <dt
+            v-text="t('Language')"
+            class="font-semibold"
+          />
           <dl>{{ languageLabel }}</dl>
 
           <dt
@@ -92,9 +95,15 @@ const languageLabel = ref("-")
 watch(item, (val) => {
   if (!val) return
   const iso = val.locale
+  if (iso === "all") {
+    languageLabel.value = t("All languages")
+    return
+  }
   languageLabel.value = getLanguageName(iso)
   fetchLanguageNameFromApi(iso)
-    .then((name) => { if (name) languageLabel.value = name })
+    .then((name) => {
+      if (name) languageLabel.value = name
+    })
     .catch(() => {})
 })
 

@@ -3,7 +3,7 @@
   <div class="container mx-auto mt-4 flex flex-col md:flex-row gap-8">
     <div
       v-if="!isAuthenticated"
-      class="md:w-4/12 lg:order-1 flex flex-col gap-4"
+      class="public-home-login md:w-4/12 lg:order-1 flex flex-col gap-4"
     >
       <PluginRegion region="login_top" />
       <Login />
@@ -53,3 +53,17 @@ const findAllPages = () => {
 
 findAllPages()
 </script>
+
+<style scoped>
+.public-home-login :deep(.login-section) {
+  min-height: 0;
+  justify-content: flex-start;
+  padding-top: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .public-home-login :deep(.login-section) {
+    padding-top: 2rem;
+  }
+}
+</style>

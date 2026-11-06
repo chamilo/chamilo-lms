@@ -35,10 +35,10 @@ final class CourseMaintenanceLearningPathCategorySelectionTest extends TestCase
             RESOURCE_LEARNPATH_CATEGORY => [15 => $first, 25 => $second, 35 => $third, 45 => $explicit],
         ]);
 
-        self::assertSame($explicit, $course->resources[RESOURCE_LEARNPATH_CATEGORY][45]);
-        self::assertSame($first, $course->resources[RESOURCE_LEARNPATH_CATEGORY][15]);
-        self::assertSame($second, $course->resources[RESOURCE_LEARNPATH_CATEGORY][25]);
-        self::assertArrayNotHasKey(35, $course->resources[RESOURCE_LEARNPATH_CATEGORY]);
+        self::assertSame($explicit, self::categoriesOf($course)[45]);
+        self::assertSame($first, self::categoriesOf($course)[15]);
+        self::assertSame($second, self::categoriesOf($course)[25]);
+        self::assertArrayNotHasKey(35, self::categoriesOf($course));
     }
 
     public function testSourceIdsAreResolvedWhenCategoryBucketKeysDiffer(): void
@@ -52,7 +52,7 @@ final class CourseMaintenanceLearningPathCategorySelectionTest extends TestCase
 
         $this->includeCategories($course, [RESOURCE_LEARNPATH_CATEGORY => [1 => $category]]);
 
-        self::assertSame($category, $course->resources[RESOURCE_LEARNPATH_CATEGORY][1]);
+        self::assertSame($category, self::categoriesOf($course)[1]);
     }
 
     public function testNoUnrequestedCategoriesAreCopiedWithoutLearningPaths(): void
@@ -70,5 +70,15 @@ final class CourseMaintenanceLearningPathCategorySelectionTest extends TestCase
     {
         $method = new ReflectionMethod(CourseMaintenanceController::class, 'includeSelectedLearningPathCategories');
         $method->invoke(null, $course, $sourceResources);
+    }
+
+    /**
+     * Reads the category bucket after includeCategories() mutated it, so Psalm does not keep the literal shape.
+     *
+     * @return array<int, object>
+     */
+    private static function categoriesOf(object $course): array
+    {
+        return $course->resources[RESOURCE_LEARNPATH_CATEGORY];
     }
 }

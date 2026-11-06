@@ -5092,3 +5092,23 @@ Then("the GH8083 reminder request contains no user IDs", async ({ page }) => {
   const requests = gh8083Reminders.get(page) as Array<{ userIds?: number[] }>
   expect(requests[0]).toEqual({})
 })
+
+// GH1712: Check the Vue controls against the authorised form data without changing the course.
+Then("the GH1712 announcement controls should match the available recipients", async ({ page }) => {
+  const cid = new URL(page.url()).searchParams.get("cid")
+  if (!cid) {
+    throw new Error("The announcement form has no course context")
+  }
+
+  const response = await page.request.get(`/api/announcement/form?cid=${encodeURIComponent(cid)}`)
+  expect(response.ok(), "Announcement form data must be available to the course editor").toBe(true)
+  const form = await response.json()
+  const hasGroups = Array.isArray(form.recipientOptions) && form.recipientOptions.some((item) => item.type === "group")
+
+  await expect(page.locator("#announcement_recipients")).toHaveCount(1)
+  await expect(page.locator("#announcement_groups")).toHaveCount(hasGroups ? 1 : 0)
+  await expect(page.locator("#announcement_class")).toHaveCount(form.classes?.length ? 1 : 0)
+  await expect(page.locator("#announcement_send_to_users_in_sessions")).toHaveCount(
+    form.sendToSessionsAvailable ? 1 : 0,
+  )
+})

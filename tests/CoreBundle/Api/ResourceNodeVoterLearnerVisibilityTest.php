@@ -275,4 +275,29 @@ final class ResourceNodeVoterLearnerVisibilityTest extends AbstractApiTest
         );
         $this->assertResponseStatusCodeSame($expected);
     }
+
+    public function testAnonymousReadsPublishedWorldOpenFilesOnly(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $course = $this->createCourse('RNV world-open');
+        $course->setVisibility(Course::OPEN_WORLD);
+        $courseRepo->update($course);
+
+        $publishedDoc = $this->document($course, ResourceLink::VISIBILITY_PUBLISHED);
+        $draftDoc = $this->document($course, ResourceLink::VISIBILITY_DRAFT);
+
+        // No account and no course context: the public read branch of ResourceNodeVoter
+        // serves the published base-course file but must keep the draft one private.
+        self::createClient()->request('GET', '/api/documents/'.$publishedDoc);
+        $this->assertResponseStatusCodeSame(200);
+
+        $response = self::createClient()->request('GET', '/api/documents/'.$draftDoc);
+        $this->assertContains(
+            $response->getStatusCode(),
+            [401, 403],
+            'A draft file of a world-open course must be denied to anonymous users.'
+        );
+    }
 }

@@ -101,7 +101,20 @@
           <div>
             <dt class="text-sm font-medium text-gray-600">{{ t("Created by") }}</dt>
             <dd class="mt-1 text-sm text-gray-90">
-              {{ detail.ticket.creator?.fullName || detail.ticket.creator?.username || "-" }}
+              <a
+                v-if="detail.ticket.creator?.profileUrl"
+                class="text-primary hover:underline"
+                :href="detail.ticket.creator.profileUrl"
+              >
+                {{ creatorLabel }}
+              </a>
+              <span v-else>{{ creatorLabel }}</span>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-600">{{ t("Roles") }}</dt>
+            <dd class="mt-1 text-sm text-gray-90">
+              {{ detail.ticket.creator?.roles?.map(formatCreatorRole).join(", ") || "-" }}
             </dd>
           </div>
           <div>
@@ -459,6 +472,39 @@ const { requireConfirmation } = useConfirmation()
 const { showSuccessNotification, showErrorNotification } = useNotification()
 
 const detail = ref(null)
+const creatorLabel = computed(() => {
+  const creator = detail.value?.ticket?.creator
+  if (!creator) return "-"
+
+  const fullName = creator.fullName || creator.username || "-"
+  return creator.username && fullName !== creator.username ? `${fullName} (${creator.username})` : fullName
+})
+
+const creatorRoleLabels = {
+  ROLE_USER: "User",
+  ROLE_STUDENT: "Learner",
+  ROLE_TEACHER: "Teacher",
+  ROLE_HR: "Human Resources Manager",
+  ROLE_SESSION_MANAGER: "Session administrator",
+  ROLE_STUDENT_BOSS: "Superior (n+1)",
+  ROLE_INVITEE: "Invitee",
+  ROLE_QUESTION_MANAGER: "Question manager",
+  ROLE_PLATFORM_ADMIN: "Administrator",
+  ROLE_ADMIN: "Administrator",
+  ROLE_GLOBAL_ADMIN: "Administrator",
+}
+
+function formatCreatorRole(role) {
+  const label = creatorRoleLabels[role]
+  if (label) return t(label)
+
+  return role
+    .replace(/^ROLE_/, "")
+    .replace(/_/g, " ")
+    .toLowerCase()
+    .replace(/\b\w/g, (character) => character.toUpperCase())
+}
+
 const isLoading = ref(false)
 const isSubmitting = ref(false)
 const isActionLoading = ref(false)

@@ -104,6 +104,8 @@ class ExtraFieldFilter extends AbstractFilter
                 }
 
                 $efvAlias = $queryNameGenerator->generateJoinAlias('efv');
+                // Cast the client-supplied key to an int so it never reaches the DQL verbatim.
+                $safeIdx = (int) $idx;
 
                 $queryBuilder
                     ->innerJoin(
@@ -115,7 +117,7 @@ class ExtraFieldFilter extends AbstractFilter
                             $queryBuilder->expr()->eq("$alias.id", "$efvAlias.itemId")
                         )
                     )
-                    ->andWhere($queryBuilder->expr()->eq("$efvAlias.fieldValue", ":valueName_$idx"))
+                    ->andWhere($queryBuilder->expr()->eq("$efvAlias.fieldValue", ":valueName_$safeIdx"))
                 ;
             }
 
@@ -124,7 +126,7 @@ class ExtraFieldFilter extends AbstractFilter
 
         if ($property === $this->fieldValueProperty) {
             foreach ($value as $idx => $fieldValue) {
-                $queryBuilder->setParameter("valueName_$idx", $fieldValue);
+                $queryBuilder->setParameter('valueName_'.(int) $idx, $fieldValue);
             }
         }
     }

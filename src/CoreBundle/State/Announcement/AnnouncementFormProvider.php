@@ -99,7 +99,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
         $result->tags = $this->getTags();
         $result->recipients = ['everyone'];
         $result->sendByEmail = true;
-        $result->sendToSessionsAvailable = !$session instanceof Session;
+        $result->sendToSessionsAvailable = null === $session && $this->recipientResolver->hasCourseSessions($course);
         $result->sendToHrmAvailable = !$this->isSettingEnabled(
             $this->settingsManager->getSetting('announcement.announcements_hide_send_to_hrm_users', true),
         );
@@ -135,7 +135,7 @@ final readonly class AnnouncementFormProvider implements ProviderInterface
                 $result->scheduleDate = '' !== $schedule['scheduleDate']
                     ? $schedule['scheduleDate']
                     : $result->scheduleDate;
-                $result->sendToUsersInSessions = $schedule['sendToUsersInSessions'];
+                $result->sendToUsersInSessions = $result->sendToSessionsAvailable && $schedule['sendToUsersInSessions'];
             }
 
             $this->registerAnnouncementEventLog('modify', $course, $session, $announcementId, details: 'form');

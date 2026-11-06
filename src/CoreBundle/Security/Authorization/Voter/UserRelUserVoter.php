@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Helpers\UserRelUserHelper;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -25,7 +26,8 @@ class UserRelUserVoter extends Voter
     public const string DELETE = 'DELETE';
 
     public function __construct(
-        private readonly AccessDecisionManagerInterface $accessDecisionManager
+        private readonly AccessDecisionManagerInterface $accessDecisionManager,
+        private readonly UserRelUserHelper $helper,
     ) {}
 
     protected function supports(string $attribute, $subject): bool
@@ -63,46 +65,12 @@ class UserRelUserVoter extends Voter
         /** @var UserRelUser $userRelUser */
         $userRelUser = $subject;
 
-        switch ($attribute) {
-            case self::CREATE:
-                if ($userRelUser->getUser() === $user) {
-                    return true;
-                }
-
-                break;
-
-            case self::EDIT:
-                if ($userRelUser->getUser() === $user) {
-                    return true;
-                }
-
-                if ($userRelUser->getFriend() === $user
-                    && UserRelUser::USER_RELATION_TYPE_FRIEND_REQUEST === $userRelUser->getRelationType()
-                ) {
-                    return true;
-                }
-
-                break;
-
-            case self::VIEW:
-                if ($userRelUser->getUser() === $user || $userRelUser->getFriend() === $user) {
-                    return true;
-                }
-
-                break;
-
-            case self::DELETE:
-                if ($userRelUser->getUser() === $user) {
-                    return true;
-                }
-
-                if ($userRelUser->getFriend() === $user) {
-                    return true;
-                }
-
-                break;
-        }
-
-        return false;
+        return match ($attribute) {
+            self::CREATE => $this->helper->canCreate($userRelUser, $user),
+            self::VIEW => $this->helper->canView($userRelUser, $user),
+            self::EDIT => $this->helper->canEdit($userRelUser, $user),
+            self::DELETE => $this->helper->canDelete($userRelUser, $user),
+            default => false,
+        };
     }
 }

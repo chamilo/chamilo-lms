@@ -17,6 +17,7 @@ use DateTime;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Regression tests for the Dropbox file download advisory.
@@ -127,13 +128,30 @@ final class DropboxFileRecipientAuthorizationTest extends WebTestCase
         $ctx = $this->bootstrap('download');
 
         // An authorized recipient reaches the storage lookup; a classmate is denied before it.
-        // The test client exposes the exception dump instead of an HTML error page.
-        // Compare the exception's message field, not incidental source-code excerpts.
-        $missingFileMessage = '#message: "Resource file not found"';
-        $this->assertSame(Response::HTTP_NOT_FOUND, $this->get($ctx['client'], $ctx['recipient'], $ctx['file'], $ctx['course'], '/download'));
-        $this->assertStringContainsString($missingFileMessage, (string) $ctx['client']->getResponse()->getContent());
+        // Compare the exception itself: the error page format depends on the environment,
+        // and the debug page prints this test's source, which contains the expected message.
+        $this->assertSame(
+            'Resource file not found',
+            $this->downloadNotFoundMessage($ctx['client'], $ctx['recipient'], $ctx['file'], $ctx['course'])
+        );
+        $this->assertSame(
+            'File not found',
+            $this->downloadNotFoundMessage($ctx['client'], $ctx['classmate'], $ctx['file'], $ctx['course'])
+        );
+    }
 
-        $this->assertSame(Response::HTTP_NOT_FOUND, $this->get($ctx['client'], $ctx['classmate'], $ctx['file'], $ctx['course'], '/download'));
-        $this->assertStringNotContainsString($missingFileMessage, (string) $ctx['client']->getResponse()->getContent());
+    private function downloadNotFoundMessage(KernelBrowser $client, User $user, CDropboxFile $file, Course $course): string
+    {
+        $client->catchExceptions(false);
+
+        try {
+            $this->get($client, $user, $file, $course, '/download');
+        } catch (NotFoundHttpException $exception) {
+            return $exception->getMessage();
+        } finally {
+            $client->catchExceptions(true);
+        }
+
+        $this->fail('The download did not answer 404.');
     }
 }

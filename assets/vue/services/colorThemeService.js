@@ -49,10 +49,35 @@ async function changePlatformColorTheme(iri) {
   })
 }
 
+const packageUrl = (id) => `/api/color-theme-packages/${Number(id)}`
+
+function exportUrl(id) {
+  return `${packageUrl(id)}/export`
+}
+
+async function importPackage(archive, name) {
+  const data = new FormData()
+  data.append("archive", archive)
+  data.append("name", name)
+  return await baseService.post("/api/color-theme-packages/import", data)
+}
+
+async function renamePackage(id, name) {
+  return await baseService.patch(`${packageUrl(id)}/rename`, { name })
+}
+
+async function deletePackage(id) {
+  return await baseService.delete(packageUrl(id))
+}
+
 export default {
   list,
   create,
   update,
   findAllByCurrentUrl,
   changePlatformColorTheme,
+  exportUrl,
+  importPackage,
+  renamePackage,
+  deletePackage,
 }

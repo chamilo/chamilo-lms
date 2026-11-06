@@ -332,7 +332,9 @@ class Notification extends Model
                                 $extraHeaders,
                                 $attachments,
                                 false,
-                                ['locale' => $recipientLanguage]
+                                ['locale' => $recipientLanguage],
+                                null,
+                                true === ($extraHeaders['massMailing'] ?? false)
                             );
                         }
                         $sendDate = api_get_utc_datetime();

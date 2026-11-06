@@ -17,6 +17,7 @@ export const reportGroups = [
     items: [
       { report: "users_online", label: "Users online" },
       { report: "users", label: "Number of users" },
+      { report: "usersbylanguage", label: "Number of users by language" },
       { report: "recentlogins", label: "Logins" },
       { report: "logins", type: "month", label: "Logins (Month)" },
       { report: "logins", type: "day", label: "Logins (Day)" },

@@ -7,19 +7,17 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Service\RecycleBin;
 
 use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptRecycleSnapshotCodec;
-use Chamilo\CoreBundle\Service\RecycleBin\RecycleBinRetentionPolicy;
 use Chamilo\CoreBundle\Service\RecycleBin\RecycleBinRetentionService;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Real MySQL retention smoke tests against a disposable, isolated database.
- * Never point this suite to a Chamilo installation database.
+ * Retention runs against the real recycle bin tables of the test database, whose schema comes
+ * from the entities. DAMA rolls every test back, so the rows written here never persist.
  */
-final class RecycleBinRetentionSandboxIntegrationTest extends TestCase
+final class RecycleBinRetentionIntegrationTest extends KernelTestCase
 {
     private Connection $connection;
     private RecycleBinRetentionService $service;
@@ -27,71 +25,16 @@ final class RecycleBinRetentionSandboxIntegrationTest extends TestCase
 
     protected function setUp(): void
     {
-        $database = getenv('GH2872_SANDBOX_DB');
-        $host = getenv('GH2872_SANDBOX_HOST');
-        if (!\is_string($database) || !preg_match('/^gh2872_recycle_sandbox_[0-9]+_[0-9]+$/D', $database)
-            || !\in_array($host, ['localhost', '127.0.0.1'], true)
-        ) {
-            throw new RuntimeException('A local, uniquely named GH2872 sandbox database is mandatory.');
-        }
-        $this->connection = DriverManager::getConnection([
-            'driver' => 'pdo_mysql',
-            'host' => $host,
-            'port' => 3306,
-            'user' => getenv('GH2872_SANDBOX_USER') ?: 'root',
-            'password' => getenv('GH2872_SANDBOX_PASS') ?: '',
-            'dbname' => $database,
-            'charset' => 'utf8mb4',
-        ]);
-        if ($this->connection->createSchemaManager()->tablesExist([
-            'exercise_attempt_recycle_bin', 'learning_path_tracking_recycle_bin',
-        ])) {
-            throw new RuntimeException('The sandbox must not contain pre-existing recycle tables.');
-        }
-        $this->connection->executeStatement(<<<'SQL'
-            CREATE TABLE exercise_attempt_recycle_bin (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                attempt_id INT NOT NULL,
-                exercise_id INT NOT NULL,
-                user_id INT NOT NULL,
-                course_id INT NOT NULL,
-                session_id INT DEFAULT NULL,
-                deleted_by INT NOT NULL,
-                deleted_at DATETIME NOT NULL,
-                snapshot_sha256 CHAR(64) NOT NULL,
-                snapshot LONGTEXT NOT NULL,
-                restored_by INT DEFAULT NULL,
-                restored_at DATETIME DEFAULT NULL
-            ) ENGINE=InnoDB
-            SQL);
-        $this->connection->executeStatement(<<<'SQL'
-            CREATE TABLE learning_path_tracking_recycle_bin (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                lp_id INT NOT NULL,
-                course_id INT NOT NULL,
-                session_id INT DEFAULT NULL,
-                user_id INT NOT NULL,
-                deleted_by INT NOT NULL,
-                deleted_at DATETIME NOT NULL,
-                snapshot_sha256 CHAR(64) NOT NULL,
-                snapshot LONGTEXT NOT NULL,
-                restored_by INT DEFAULT NULL,
-                restored_at DATETIME DEFAULT NULL
-            ) ENGINE=InnoDB
-            SQL);
-        $this->codec = new ExerciseAttemptRecycleSnapshotCodec();
-        $manager = $this->createMock(EntityManagerInterface::class);
-        $manager->method('getConnection')->willReturn($this->connection);
-        $this->service = new RecycleBinRetentionService($manager, new RecycleBinRetentionPolicy($this->codec));
-    }
+        self::bootKernel();
+        $container = self::getContainer();
 
-    protected function tearDown(): void
-    {
-        if (isset($this->connection)) {
-            $this->connection->executeStatement('DROP TABLE IF EXISTS learning_path_tracking_recycle_bin');
-            $this->connection->executeStatement('DROP TABLE IF EXISTS exercise_attempt_recycle_bin');
-            $this->connection->close();
-        }
+        $this->connection = $container->get(EntityManagerInterface::class)->getConnection();
+        $this->service = $container->get(RecycleBinRetentionService::class);
+        $this->codec = $container->get(ExerciseAttemptRecycleSnapshotCodec::class);
+
+        // The counts below assume the tests start from empty tables.
+        $this->connection->executeStatement('DELETE FROM learning_path_tracking_recycle_bin');
+        $this->connection->executeStatement('DELETE FROM exercise_attempt_recycle_bin');
     }
 
     public function testExpiredStandaloneArchiveIsPurgedButLinkedArchiveRemainsProtected(): void

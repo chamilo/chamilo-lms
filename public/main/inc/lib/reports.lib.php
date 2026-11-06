@@ -669,6 +669,15 @@ class ReportRegistry
                 'permission' => 'reports.gradebook',
             ],
             [
+                'id' => 'gradebook_expired_certificates',
+                'title' => get_lang('Expired certificates'),
+                'description' => get_lang('Certificates whose validity period has ended.'),
+                'category' => self::CATEGORY_GRADEBOOK,
+                'url' => '/reporting/admin/expired-certificates',
+                'roles' => $admin,
+                'permission' => 'reports.gradebook',
+            ],
+            [
                 'id' => 'gradebook_user_stats',
                 'title' => get_lang('User statistics'),
                 'description' => get_lang('Course gradebook statistics for a user.'),

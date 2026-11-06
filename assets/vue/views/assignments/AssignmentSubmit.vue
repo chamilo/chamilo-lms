@@ -30,12 +30,11 @@
         :label="t('Submission title')"
         :placeholder="t('Enter a title for your submission')"
       />
-      <label class="font-semibold">{{ t("Your answer") }}</label>
-      <textarea
+      <BaseTinyEditor
         v-model="text"
-        class="w-full border rounded p-2"
-        rows="10"
-        :placeholder="t('Write your answer here')"
+        editor-id="assignment-submission-text-editor"
+        :title="t('Your answer')"
+        :full-page="false"
       />
       <BaseButton
         :label="t('Submit')"
@@ -79,11 +78,11 @@
           :label="t('Submission title')"
           :placeholder="t('Enter a title for your submission')"
         />
-        <textarea
+        <BaseTinyEditor
           v-model="text"
-          class="w-full border rounded p-2"
-          rows="8"
-          :placeholder="t('Write your answer here')"
+          editor-id="assignment-submission-mixed-editor"
+          :title="t('Your answer')"
+          :full-page="false"
         />
       </div>
       <div
@@ -119,6 +118,7 @@ import XHRUpload from "@uppy/xhr-upload"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
+import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useUppyLocale } from "../../composables/uppyLocale"
 const { t } = useI18n()
 const { uppyLocale } = useUppyLocale()
@@ -244,12 +244,11 @@ async function submitText() {
   if (!submissionTitle.value.trim() || !text.value.trim()) {
     return showErrorNotification(t("Please provide a title and some text"))
   }
-  const blob = new Blob([text.value], { type: "text/plain" })
   const formData = new FormData()
-  formData.append("title", submissionTitle.value)
-  formData.append("description", text.value)
-  formData.append("uploadFile", blob, `${submissionTitle.value}.txt`)
-  formData.append("filetype", "file") // Keep file-based publication mode for text submissions.
+  formData.append("submissionFormat", "html")
+  formData.append("title", submissionTitle.value.trim())
+  formData.append("comment", text.value)
+  formData.append("filetype", "file")
   formData.append("parentId", publicationId)
   formData.append("parentResourceNodeId", parentResourceNodeId)
   formData.append("resourceLinkList", JSON.stringify([{ visibility: 2 }]))

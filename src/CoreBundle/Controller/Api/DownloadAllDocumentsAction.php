@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
+use Chamilo\CoreBundle\Helpers\RuntimeLimitsHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
@@ -52,8 +53,7 @@ class DownloadAllDocumentsAction
      */
     public function __invoke(Request $request): Response
     {
-        ini_set('max_execution_time', '300');
-        ini_set('memory_limit', '512M');
+        RuntimeLimitsHelper::raiseFor(300, '512M');
 
         $data = json_decode($request->getContent(), true) ?: [];
 

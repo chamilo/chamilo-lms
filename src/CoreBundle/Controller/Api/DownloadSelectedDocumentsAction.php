@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
+use Chamilo\CoreBundle\Helpers\RuntimeLimitsHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
@@ -49,8 +50,7 @@ class DownloadSelectedDocumentsAction
      */
     public function __invoke(Request $request): Response
     {
-        ini_set('max_execution_time', '300');
-        ini_set('memory_limit', '512M');
+        RuntimeLimitsHelper::raiseFor(300, '512M');
 
         $this->validateApiKeyDocumentDownloadSetting($request);
 

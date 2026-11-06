@@ -62,29 +62,33 @@ final class RuntimeLimitsHelperTest extends TestCase
 
     public function testALargerMemoryLimitSurvives(): void
     {
-        ini_set('memory_limit', '4096M');
+        $start = self::safeMegabytes(1024);
+        ini_set('memory_limit', $start.'M');
 
         RuntimeLimitsHelper::raiseMemoryLimit('512M');
 
-        self::assertSame('4096M', \ini_get('memory_limit'));
+        self::assertSame($start.'M', \ini_get('memory_limit'));
     }
 
     public function testASmallerMemoryLimitIsRaised(): void
     {
-        ini_set('memory_limit', '128M');
+        $start = self::safeMegabytes(256);
+        ini_set('memory_limit', $start.'M');
 
-        RuntimeLimitsHelper::raiseMemoryLimit('512M');
+        RuntimeLimitsHelper::raiseMemoryLimit(($start + 128).'M');
 
-        self::assertSame('512M', \ini_get('memory_limit'));
+        self::assertSame(($start + 128).'M', \ini_get('memory_limit'));
     }
 
     public function testAMemoryLimitIsComparedInBytesAcrossUnits(): void
     {
-        ini_set('memory_limit', '1G');
+        // Over one gigabyte, so a request written in G loses to a value in M.
+        $start = self::safeMegabytes(2048);
+        ini_set('memory_limit', $start.'M');
 
-        RuntimeLimitsHelper::raiseMemoryLimit('512M');
+        RuntimeLimitsHelper::raiseMemoryLimit('1G');
 
-        self::assertSame('1G', \ini_get('memory_limit'));
+        self::assertSame($start.'M', \ini_get('memory_limit'));
     }
 
     public function testAnUnlimitedMemoryLimitSurvives(): void
@@ -94,5 +98,15 @@ final class RuntimeLimitsHelperTest extends TestCase
         RuntimeLimitsHelper::raiseMemoryLimit('512M');
 
         self::assertSame('-1', \ini_get('memory_limit'));
+    }
+
+    /**
+     * PHP rejects a memory_limit under what the process already holds, and the
+     * suite holds hundreds of megabytes by the time this file runs. So every
+     * starting value is measured from the current usage, never hardcoded.
+     */
+    private static function safeMegabytes(int $headroom): int
+    {
+        return (int) ceil(memory_get_usage(true) / 1024 / 1024) + $headroom;
     }
 }

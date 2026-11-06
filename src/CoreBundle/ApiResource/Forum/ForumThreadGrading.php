@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Forum;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -132,6 +133,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 ),
             ],
             processor: ForumThreadGradingProcessor::class,
+        ),
+    ],
+    // Without it, every operation expects an "id" variable that the URLs do not have, and answers 404
+    uriVariables: [
+        'threadId' => new Link(
+            identifiers: ['threadId'],
+            compositeIdentifier: false,
+            schema: ['type' => 'integer'],
         ),
     ],
     normalizationContext: [

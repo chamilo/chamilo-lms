@@ -27,6 +27,7 @@ use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -172,8 +173,8 @@ final class ForumThreadGradingProvider implements ProviderInterface
     ): array {
         $users = $this->entityManager->createQueryBuilder()
             ->select('DISTINCT u')
-            ->from(CForumPost::class, 'p')
-            ->innerJoin('p.user', 'u')
+            ->from(User::class, 'u')
+            ->innerJoin(CForumPost::class, 'p', Join::ON, 'p.user = u')
             ->andWhere('IDENTITY(p.thread) = :threadId')
             ->setParameter('threadId', $thread->getIid(), Types::INTEGER)
             ->orderBy('u.lastname', 'ASC')

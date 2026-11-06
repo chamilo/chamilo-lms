@@ -98,7 +98,7 @@ final class ForumThreadGradingProvider implements ProviderInterface
         $students = $this->getThreadStudents($thread, $course, $session, $canManage, $currentUser);
 
         $participant = null;
-        $participantId = (int) $request->query->get('userId', 0);
+        $participantId = $request->query->getInt('userId');
         if ($participantId > 0) {
             // Only a learner of the list above, which already leaves out who the current user may not grade
             if (!\in_array($participantId, array_column($students, 'userId'), true)) {

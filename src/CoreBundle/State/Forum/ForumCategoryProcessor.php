@@ -55,7 +55,7 @@ final class ForumCategoryProcessor implements ProcessorInterface
         if ('create_forum_category' === $operation->getName()) {
             $course = $this->getCourse($this->cidReqHelper);
             $session = $this->cidReqHelper->getDoctrineSessionEntity();
-            $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+            $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
             $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
             $this->assertParentResourceNodeIsWritableInForumContext(
                 $this->entityManager,
@@ -174,7 +174,7 @@ final class ForumCategoryProcessor implements ProcessorInterface
 
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $position = $this->moveForumResource($category, $course, $session, $group, (string) ($payload['direction'] ?? ''));
         $this->entityManager->flush();
 

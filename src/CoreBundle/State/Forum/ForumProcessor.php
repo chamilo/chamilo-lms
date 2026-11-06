@@ -68,6 +68,7 @@ final class ForumProcessor implements ProcessorInterface
 
         $payload = $this->getJsonData($request);
         $operationName = (string) $operation->getName();
+        $this->assertGroupForumAccess($this->security, $this->cidReqHelper->getDoctrineGroupEntity());
         if ('toggle_forum_subscription' !== $operationName) {
             $this->assertTeacher($this->security);
         }
@@ -75,7 +76,7 @@ final class ForumProcessor implements ProcessorInterface
         if ('create_forum' === $operationName) {
             $course = $this->getCourse($this->cidReqHelper);
             $session = $this->cidReqHelper->getDoctrineSessionEntity();
-            $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+            $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
             $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
             $this->assertParentResourceNodeIsWritableInForumContext(
                 $this->entityManager,
@@ -142,7 +143,7 @@ final class ForumProcessor implements ProcessorInterface
 
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
 
         $this->applyPayloadToForum($forum, $payload, false, $course, $session, $group);
         $this->entityManager->persist($forum);
@@ -212,7 +213,7 @@ final class ForumProcessor implements ProcessorInterface
 
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $position = $this->moveForumResource($forum, $course, $session, $group, (string) ($payload['direction'] ?? ''));
         $this->entityManager->flush();
 

@@ -45,7 +45,7 @@ final class ForumDeleteProcessor implements ProcessorInterface
 
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $resourceNode = $data->getResourceNode();
 
         if (null === $resourceNode) {

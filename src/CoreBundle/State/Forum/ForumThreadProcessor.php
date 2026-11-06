@@ -75,6 +75,7 @@ final class ForumThreadProcessor implements ProcessorInterface
     {
         $request = $this->getCurrentRequest();
         $operationName = (string) $operation->getName();
+        $this->assertGroupForumAccess($this->security, $this->cidReqHelper->getDoctrineGroupEntity());
 
         return match ($operationName) {
             'create_forum_thread' => $this->createThread($request),
@@ -114,7 +115,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertResourceNodeInForumContext(
             $forum->getResourceNode(),
             $course,
@@ -433,7 +434,7 @@ final class ForumThreadProcessor implements ProcessorInterface
 
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertForumBelongsToCurrentContext($targetForum, $course, $session, $group);
         $this->assertSessionBelongsToCourse($session, $course);
         $this->assertForumThreadNotLockedByGradebook($this->gradebookLinkManager, $course, $session, $data);

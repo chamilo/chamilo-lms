@@ -142,7 +142,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
         $course = $this->resolveCourseForRequest($request);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $canManage = $this->isAllowedToEditHelper->check(coach: true);
         $user = $this->getCurrentUser();
         $canSubscribe = !$this->areForumPostNotificationsHidden($course);

@@ -85,6 +85,10 @@ final class ForumSearchStateProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to search forums.');
         }
 
+        // Search is the one forum endpoint that never resolves the group, yet a gid in the
+        // request is what makes the group forum readable here too.
+        $this->assertGroupForumAccess($this->security, $this->cidReqHelper->getDoctrineGroupEntity());
+
         $query = trim((string) $request->query->get('q', $request->query->get('search', '')));
         if (mb_strlen($query) < self::MIN_SEARCH_LENGTH) {
             return [

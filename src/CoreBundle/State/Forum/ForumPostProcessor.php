@@ -87,6 +87,7 @@ final class ForumPostProcessor implements ProcessorInterface
     {
         $request = $this->getCurrentRequest();
         $operationName = (string) $operation->getName();
+        $this->assertGroupForumAccess($this->security, $this->cidReqHelper->getDoctrineGroupEntity());
 
         return match ($operationName) {
             'create_forum_reply' => $this->createReply($request),
@@ -137,7 +138,7 @@ final class ForumPostProcessor implements ProcessorInterface
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertResourceNodeInForumContext(
             $forum->getResourceNode(),
             $course,
@@ -616,7 +617,7 @@ final class ForumPostProcessor implements ProcessorInterface
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
         $this->assertSessionBelongsToCourse($session, $course);
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertResourceNodeInForumContext(
             $sourceForum->getResourceNode(),
             $course,

@@ -104,7 +104,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
 
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $forum = $this->forumRepository->find($forumId);
         if (!$forum instanceof CForum) {
             throw new NotFoundHttpException('Forum not found.');

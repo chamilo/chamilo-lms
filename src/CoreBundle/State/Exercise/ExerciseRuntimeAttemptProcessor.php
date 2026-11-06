@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseNotificationManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -88,6 +89,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
         private ExerciseNotificationManager $exerciseNotificationManager,
+        private TrackEExerciseRepository $trackEExerciseRepository,
     ) {}
 
     /**
@@ -421,33 +423,13 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             return true;
         }
 
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('COUNT(attempt.exeId)')
-            ->from(TrackEExercise::class, 'attempt')
-            ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
-            ->andWhere('IDENTITY(attempt.course) = :courseId')
-            ->andWhere('IDENTITY(attempt.user) = :userId')
-            ->andWhere('attempt.origLpId = :lpId')
-            ->andWhere('attempt.origLpItemId = :lpItemId')
-            ->andWhere('attempt.origLpItemViewId = :lpItemViewId')
-            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
-            ->setParameter('lpId', $lpContext['lpId'], Types::INTEGER)
-            ->setParameter('lpItemId', $lpContext['lpItemId'], Types::INTEGER)
-            ->setParameter('lpItemViewId', $lpContext['lpItemViewId'], Types::INTEGER)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('IDENTITY(attempt.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('attempt.session IS NULL');
-        }
-
-        return (int) $queryBuilder->getQuery()->getSingleScalarResult() < $maxAttempt;
+        return $this->trackEExerciseRepository->countUserAttemptsInContext(
+            (int) $quiz->getIid(),
+            (int) $course->getId(),
+            null !== $session ? (int) $session->getId() : null,
+            (int) $user->getId(),
+            $lpContext,
+        ) < $maxAttempt;
     }
 
     /**

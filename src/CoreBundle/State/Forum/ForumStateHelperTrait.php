@@ -24,6 +24,7 @@ use Doctrine\ORM\QueryBuilder;
 use Event;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -72,6 +73,27 @@ trait ForumStateHelperTrait
         }
 
         throw new AccessDeniedHttpException('The requested session is not linked to this course.');
+    }
+
+    private function getCurrentRequest(RequestStack $requestStack): Request
+    {
+        return $requestStack->getCurrentRequest()
+            ?? throw new BadRequestHttpException('Request is missing.');
+    }
+
+    /**
+     * The course, the session and the group of the current request, resolved together because
+     * every forum endpoint works with the three of them.
+     *
+     * @return array{Course, ?Session, ?CGroup}
+     */
+    private function getForumContext(EntityManagerInterface $entityManager, CidReqHelper $cidReqHelper, Security $security): array
+    {
+        return [
+            $this->getCourse($cidReqHelper),
+            $cidReqHelper->getDoctrineSessionEntity(),
+            $this->getGroup($entityManager, $cidReqHelper, $security),
+        ];
     }
 
     /**

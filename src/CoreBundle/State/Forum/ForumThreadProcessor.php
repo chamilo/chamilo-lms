@@ -73,7 +73,7 @@ final class ForumThreadProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
     {
-        $request = $this->getCurrentRequest();
+        $request = $this->getCurrentRequest($this->requestStack);
         $operationName = (string) $operation->getName();
         $this->assertGroupForumAccess($this->security, $this->cidReqHelper->getDoctrineGroupEntity());
 
@@ -112,10 +112,8 @@ final class ForumThreadProcessor implements ProcessorInterface
 
         $title = $this->getRequiredText($data, 'title', 250);
         $text = $this->getRequiredHtmlText($data, 'text');
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertSessionBelongsToCourse($session, $course);
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertResourceNodeInForumContext(
             $forum->getResourceNode(),
             $course,
@@ -432,9 +430,7 @@ final class ForumThreadProcessor implements ProcessorInterface
         $this->assertEditableForumResource($sourceForum->getResourceNode(), $this->security);
         $this->assertEditableForumResource($targetForum->getResourceNode(), $this->security);
 
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertForumBelongsToCurrentContext($targetForum, $course, $session, $group);
         $this->assertSessionBelongsToCourse($session, $course);
         $this->assertForumThreadNotLockedByGradebook($this->gradebookLinkManager, $course, $session, $data);
@@ -839,15 +835,5 @@ final class ForumThreadProcessor implements ProcessorInterface
         if (null === $resourceNode || !$this->security->isGranted('EDIT', $resourceNode)) {
             throw new AccessDeniedHttpException(\sprintf('You are not allowed to %s this forum resource.', $action));
         }
-    }
-
-    private function getCurrentRequest(): Request
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
-
-        return $request;
     }
 }

@@ -43,9 +43,7 @@ final class ForumDeleteProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Forum resource is required.');
         }
 
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
         $resourceNode = $data->getResourceNode();
 
         if (null === $resourceNode) {

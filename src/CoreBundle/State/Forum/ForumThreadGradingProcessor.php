@@ -57,7 +57,7 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
     {
-        $request = $this->getCurrentRequest();
+        $request = $this->getCurrentRequest($this->requestStack);
         $operationName = (string) $operation->getName();
 
         return match ($operationName) {
@@ -387,15 +387,5 @@ final class ForumThreadGradingProcessor implements ProcessorInterface
         }
 
         return $score;
-    }
-
-    private function getCurrentRequest(): Request
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
-
-        return $request;
     }
 }

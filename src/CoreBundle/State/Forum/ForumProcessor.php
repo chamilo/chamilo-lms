@@ -61,10 +61,7 @@ final class ForumProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CForum|JsonResponse
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
+        $request = $this->getCurrentRequest($this->requestStack);
 
         $payload = $this->getJsonData($request);
         $operationName = (string) $operation->getName();
@@ -130,14 +127,9 @@ final class ForumProcessor implements ProcessorInterface
     {
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
+        $request = $this->getCurrentRequest($this->requestStack);
 
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
 
         $this->applyPayloadToForum($forum, $payload, false, $course, $session, $group);
         $this->entityManager->persist($forum);
@@ -173,10 +165,7 @@ final class ForumProcessor implements ProcessorInterface
     {
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
+        $request = $this->getCurrentRequest($this->requestStack);
 
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
@@ -200,14 +189,9 @@ final class ForumProcessor implements ProcessorInterface
     {
         $this->assertEditableForumResource($forum->getResourceNode(), $this->security);
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
+        $request = $this->getCurrentRequest($this->requestStack);
 
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
         $position = $this->moveForumResource($forum, $course, $session, $group, (string) ($payload['direction'] ?? ''));
         $this->entityManager->flush();
 
@@ -225,10 +209,7 @@ final class ForumProcessor implements ProcessorInterface
      */
     private function toggleForumSubscription(CForum $forum, array $payload): JsonResponse
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
+        $request = $this->getCurrentRequest($this->requestStack);
 
         $course = $this->getCourse($this->cidReqHelper);
         if ($this->areForumPostNotificationsHidden($this->entityManager, $course)) {

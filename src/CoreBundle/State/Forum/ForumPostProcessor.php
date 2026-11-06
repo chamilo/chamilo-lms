@@ -85,7 +85,7 @@ final class ForumPostProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
     {
-        $request = $this->getCurrentRequest();
+        $request = $this->getCurrentRequest($this->requestStack);
         $operationName = (string) $operation->getName();
         $this->assertGroupForumAccess($this->security, $this->cidReqHelper->getDoctrineGroupEntity());
 
@@ -135,10 +135,8 @@ final class ForumPostProcessor implements ProcessorInterface
 
         $title = $this->getRequiredText($data, 'title', 250);
         $text = $this->getRequiredHtmlText($data, 'text');
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertSessionBelongsToCourse($session, $course);
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertResourceNodeInForumContext(
             $forum->getResourceNode(),
             $course,
@@ -614,10 +612,9 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->assertEditableForumResource($sourceThread->getResourceNode(), $this->security);
         $this->assertEditableForumResource($sourceForum->getResourceNode(), $this->security);
 
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
+
         $this->assertSessionBelongsToCourse($session, $course);
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertResourceNodeInForumContext(
             $sourceForum->getResourceNode(),
             $course,
@@ -1250,15 +1247,5 @@ final class ForumPostProcessor implements ProcessorInterface
             array_map('intval', $userIds),
             static fn (int $userId): bool => $userId > 0,
         )));
-    }
-
-    private function getCurrentRequest(): Request
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
-
-        return $request;
     }
 }

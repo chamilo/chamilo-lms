@@ -102,9 +102,7 @@ final class ForumThreadCollectionStateProvider implements ProviderInterface
     {
         $this->assertForumMemberAccess($this->security, 'You are not allowed to access this forum.');
 
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
         $forum = $this->forumRepository->find($forumId);
         if (!$forum instanceof CForum) {
             throw new NotFoundHttpException('Forum not found.');

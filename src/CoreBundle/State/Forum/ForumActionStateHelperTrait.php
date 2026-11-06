@@ -70,7 +70,7 @@ trait ForumActionStateHelperTrait
      * Context a forum resource is created in: the course, session and group of the request, plus
      * the parent resource node the payload names, already proven writable there.
      *
-     * Requires ForumStateHelperTrait (getCourse(), getGroup()) and ForumWriteHelperTrait
+     * Requires ForumStateHelperTrait (getForumContext()) and ForumWriteHelperTrait
      * (getRequiredInt()) in the using class.
      *
      * @param array<string, mixed> $payload
@@ -83,9 +83,7 @@ trait ForumActionStateHelperTrait
         Security $security,
         array $payload,
     ): array {
-        $course = $this->getCourse($cidReqHelper);
-        $session = $cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($entityManager, $cidReqHelper, $security);
+        [$course, $session, $group] = $this->getForumContext($entityManager, $cidReqHelper, $security);
         $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
         $this->assertParentResourceNodeIsWritableInForumContext(
             $entityManager,

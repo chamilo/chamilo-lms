@@ -59,7 +59,17 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                operating-system: [ ubuntu-latest ]
+                # Pinned, where the other workflows still say ubuntu-latest: this
+                # job is the only one installing PHP with apt, from the
+                # ondrej/php PPA, because it needs a real Apache and
+                # libapache2-mod-php. That PPA publishes nothing for Ubuntu
+                # 26.04 ("resolute"), which ubuntu-latest became on 2026-11-06,
+                # so `apt-get update` answers 404 and the whole step dies before
+                # anything is installed. Moving to packages.sury.org/php, which
+                # the PPA itself now names as the canonical channel, is what
+                # lifts this pin — the other workflows need none of it, since
+                # shivammathur/setup-php works on 26.04.
+                operating-system: [ ubuntu-24.04 ]
                 # 8.4/8.5 temporarily disabled: focusing on getting the full suite green on
                 # 8.3 first, then re-enabling the rest — that split also makes any future
                 # failure easier to read as "version-specific" instead of muddying it with
@@ -156,7 +166,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                operating-system: [ ubuntu-latest ]
+                # Pinned for the same reason as the "build" job above.
+                operating-system: [ ubuntu-24.04 ]
                 php-versions: [ '8.3' ] # , '8.4', '8.5'
 
         # Same service container as the "build" job above, for the same reason —

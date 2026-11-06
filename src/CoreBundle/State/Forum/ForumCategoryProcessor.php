@@ -53,17 +53,11 @@ final class ForumCategoryProcessor implements ProcessorInterface
         $this->assertTeacher($this->security);
 
         if ('create_forum_category' === $operation->getName()) {
-            $course = $this->getCourse($this->cidReqHelper);
-            $session = $this->cidReqHelper->getDoctrineSessionEntity();
-            $group = $this->getGroup($this->entityManager, $this->cidReqHelper, $this->security);
-            $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
-            $this->assertParentResourceNodeIsWritableInForumContext(
+            [$course, $session, $group, $parentResourceNodeId] = $this->getForumCreationContext(
                 $this->entityManager,
+                $this->cidReqHelper,
                 $this->security,
-                $parentResourceNodeId,
-                $course,
-                $session,
-                $group,
+                $payload,
             );
 
             $category = (new CForumCategory())

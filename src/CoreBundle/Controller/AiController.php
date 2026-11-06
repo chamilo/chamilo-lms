@@ -43,6 +43,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use InvalidArgumentException;
 use Question;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -926,6 +927,7 @@ class AiController extends AbstractController
                 $error = 'AI course analyzer is disabled for this course.';
             } else {
                 $action = (string) $request->request->get('action', '');
+
                 try {
                     if ('suggest' === $action) {
                         if (!\in_array($provider, $providers, true)) {
@@ -965,7 +967,7 @@ class AiController extends AbstractController
                         $request->getSession()->remove($cacheKey);
                         $suggestions = [];
                         $nonce = '';
-                        $success = sprintf(
+                        $success = \sprintf(
                             'Saved: %d new skills, %d Gradebook links, %d course links (%d already linked).',
                             $stats['created'],
                             $stats['gradebookLinked'],
@@ -975,7 +977,7 @@ class AiController extends AbstractController
                     } else {
                         throw new RuntimeException('Unsupported skills mapping action.');
                     }
-                } catch (\InvalidArgumentException|RuntimeException $exception) {
+                } catch (InvalidArgumentException|RuntimeException $exception) {
                     $error = $exception->getMessage();
                 } catch (Throwable $exception) {
                     error_log('[AI][course_skills] '.$exception->getMessage());

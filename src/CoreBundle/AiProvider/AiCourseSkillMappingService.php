@@ -17,12 +17,12 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookRootCategoryFactory;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_UNICODE;
@@ -127,6 +127,7 @@ final readonly class AiCourseSkillMappingService
         if ([] === $suggestions) {
             // Log counts only, never course text or the raw provider response.
             error_log('[AI][course_skills] Suggestions rejected by catalogue validation; count='.\count($rawSuggestions));
+
             throw new RuntimeException('The AI suggestions did not match enabled skills or valid hierarchy parents. No changes were made.');
         }
 
@@ -153,6 +154,7 @@ final readonly class AiCourseSkillMappingService
     public function catalogue(Course $course): array
     {
         $accessUrlId = $this->resolveCourseAccessUrlId($course);
+
         /** @var list<Skill> $skills */
         $skills = $this->entityManager->getRepository(Skill::class)->findBy(
             ['accessUrlId' => $accessUrlId],
@@ -205,7 +207,7 @@ final readonly class AiCourseSkillMappingService
     }
 
     /**
-     * @param array<string, mixed> $response
+     * @param array<string, mixed>       $response
      * @param list<array<string, mixed>> $catalogue
      *
      * @return list<array<string, mixed>>
@@ -294,7 +296,7 @@ final readonly class AiCourseSkillMappingService
 
     /**
      * @param list<array<string, mixed>> $suggestions
-     * @param list<int> $selectedIndices
+     * @param list<int>                  $selectedIndices
      *
      * @return array{created:int,gradebookLinked:int,courseLinked:int,alreadyLinked:int}
      */

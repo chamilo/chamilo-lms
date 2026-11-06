@@ -43374,3 +43374,54 @@ msgstr ""
 msgid "Generate XLSX"
 msgstr ""
 
+msgid "AI course analyzer is disabled for this course."
+msgstr ""
+
+msgid "AI-assisted skills mapping"
+msgstr ""
+
+msgid "Add selected skills to referential and Gradebook"
+msgstr ""
+
+msgid "Analyzing course, please wait…"
+msgstr ""
+
+msgid "Back to AI course analyzer"
+msgstr ""
+
+msgid "Course content and existing skills may be sent to an external AI provider. Only continue if sharing is authorized."
+msgstr ""
+
+msgid "Criteria"
+msgstr ""
+
+msgid "Existing skill"
+msgstr ""
+
+msgid "Match course content with existing skills or propose new skills for administrator approval."
+msgstr ""
+
+msgid "New skill"
+msgstr ""
+
+msgid "Only a platform administrator can create new skills."
+msgstr ""
+
+msgid "Parent skill"
+msgstr ""
+
+msgid "Review all suggestions before adding skills. AI suggestions never change the referential automatically."
+msgstr ""
+
+msgid "Review suggested skills"
+msgstr ""
+
+msgid "Suggest skills for this course"
+msgstr ""
+
+msgid "The selected session is used for analysis. Approved skills are attached to the main course Gradebook."
+msgstr ""
+
+msgid "You can review suggestions, but you do not have permission to assign skills to Gradebook."
+msgstr ""
+

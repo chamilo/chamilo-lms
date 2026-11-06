@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\AiProvider\AiCourseAnalyzerService;
+use Chamilo\CoreBundle\AiProvider\AiCourseSkillMappingService;
 use Chamilo\CoreBundle\AiProvider\AiDocumentProcessProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiImageProviderInterface;
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
@@ -722,6 +723,7 @@ class AiController extends AbstractController
         int $courseId,
         CourseRepository $courseRepository,
         AiCourseAnalyzerService $courseAnalyzerService,
+        AiCourseSkillMappingService $skillMapping,
         StudentSuccessAnalysisStorage $studentSuccessAnalysisStorage,
         CsrfTokenManagerInterface $csrfTokenManager,
     ): Response {
@@ -847,6 +849,7 @@ class AiController extends AbstractController
             'course' => $course,
             'session' => $session,
             'enabled' => $enabled,
+            'skill_mapping_available' => $skillMapping->canAttachSkills(),
             'providers' => $providers,
             'selected_provider' => $selectedProvider,
             'prompt' => $prompt,
@@ -862,6 +865,138 @@ class AiController extends AbstractController
                     'send_date' => $previousAnalysisMessage->getSendDate(),
                 ]
                 : null,
+        ]);
+    }
+
+    /**
+     * Review AI skill suggestions before adding anything to the referential or Gradebook.
+     */
+    #[Route('/course/{courseId}/skills', name: 'chamilo_core_ai_course_skill_mapping', methods: ['GET', 'POST'])]
+    public function courseSkillMapping(
+        Request $request,
+        int $courseId,
+        CourseRepository $courseRepository,
+        AiCourseSkillMappingService $skillMapping,
+        CsrfTokenManagerInterface $csrfTokenManager,
+    ): Response {
+        $course = $courseRepository->find($courseId);
+        if (!$course instanceof Course) {
+            throw $this->createNotFoundException('Course not found.');
+        }
+        $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
+        if (!$skillMapping->canAttachSkills()) {
+            throw new AccessDeniedException('You are not allowed to access the skills referential.');
+        }
+
+        $session = $this->getAiCourseAnalyzerSessionFromRequest($request);
+        $requestedSessionId = (int) $request->query->get('sid', '0');
+        if ($requestedSessionId > 0 && (!$session instanceof Session || !$session->hasCourse($course))) {
+            throw $this->createNotFoundException('The session does not belong to this course.');
+        }
+
+        $enabled = $this->isAiFeatureEnabledForCourse('course_analyser', (int) $course->getId());
+        $providers = $this->aiProviderFactory->getProvidersForType('text');
+        $provider = trim((string) $request->request->get('provider', $providers[0] ?? ''));
+        $csrfTokenId = 'ai_course_skill_mapping_'.$courseId;
+        $userId = $this->getCurrentUserId();
+        $sessionId = (int) ($session?->getId() ?? 0);
+        $cacheKey = 'ai_course_skill_mapping_'.$userId.'_'.$courseId.'_'.$sessionId;
+        $cache = $request->getSession()->get($cacheKey);
+        $validCache = \is_array($cache)
+            && ($cache['createdAt'] ?? 0) >= time() - 900
+            && ($cache['userId'] ?? 0) === $userId
+            && ($cache['courseId'] ?? 0) === $courseId
+            && ($cache['sessionId'] ?? 0) === $sessionId;
+        if (!$validCache) {
+            $request->getSession()->remove($cacheKey);
+            $cache = null;
+        }
+
+        $suggestions = \is_array($cache['suggestions'] ?? null) ? $cache['suggestions'] : [];
+        $nonce = \is_string($cache['nonce'] ?? null) ? $cache['nonce'] : '';
+        $error = null;
+        $success = null;
+        $canAttach = $skillMapping->canAttachSkills();
+
+        if ($request->isMethod('POST')) {
+            $submittedToken = (string) $request->request->get('_token', '');
+            if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $submittedToken))) {
+                $error = 'Invalid security token. Reload the page and try again.';
+            } elseif (!$enabled) {
+                $error = 'AI course analyzer is disabled for this course.';
+            } else {
+                $action = (string) $request->request->get('action', '');
+                try {
+                    if ('suggest' === $action) {
+                        if (!\in_array($provider, $providers, true)) {
+                            throw new RuntimeException('Select a configured AI provider.');
+                        }
+                        $quotaMessage = $this->getAiTokenQuotaExceededMessage($provider, 'text');
+                        if (null !== $quotaMessage) {
+                            throw new RuntimeException($quotaMessage);
+                        }
+                        // Release the session lock during the potentially slow external AI request.
+                        $request->getSession()->save();
+                        $suggestions = $skillMapping->suggest($course, $session, $provider);
+                        $request->getSession()->start();
+                        $nonce = bin2hex(random_bytes(16));
+                        $request->getSession()->set($cacheKey, [
+                            'userId' => $userId,
+                            'courseId' => $courseId,
+                            'sessionId' => $sessionId,
+                            'createdAt' => time(),
+                            'nonce' => $nonce,
+                            'suggestions' => $suggestions,
+                        ]);
+                    } elseif ('approve' === $action) {
+                        $submittedNonce = (string) $request->request->get('nonce', '');
+                        if ('' === $nonce || !hash_equals($nonce, $submittedNonce) || [] === $suggestions) {
+                            throw new RuntimeException('Suggestions expired. Generate a new skills mapping.');
+                        }
+                        if (!$canAttach) {
+                            throw new RuntimeException('You are not allowed to manage Gradebook skills.');
+                        }
+                        $selected = $request->request->all('selected');
+                        if (\count($selected) > 12 || array_filter($selected, fn ($value): bool => !\is_scalar($value) || !ctype_digit((string) $value))) {
+                            throw new RuntimeException('Invalid skill selection.');
+                        }
+                        $indices = array_values(array_unique(array_map('intval', $selected)));
+                        $stats = $skillMapping->apply($course, $suggestions, $indices);
+                        $request->getSession()->remove($cacheKey);
+                        $suggestions = [];
+                        $nonce = '';
+                        $success = sprintf(
+                            'Saved: %d new skills, %d Gradebook links, %d course links (%d already linked).',
+                            $stats['created'],
+                            $stats['gradebookLinked'],
+                            $stats['courseLinked'],
+                            $stats['alreadyLinked'],
+                        );
+                    } else {
+                        throw new RuntimeException('Unsupported skills mapping action.');
+                    }
+                } catch (\InvalidArgumentException|RuntimeException $exception) {
+                    $error = $exception->getMessage();
+                } catch (Throwable $exception) {
+                    error_log('[AI][course_skills] '.$exception->getMessage());
+                    $error = 'Unable to process skills mapping. Check the server logs.';
+                }
+            }
+        }
+
+        return $this->render('@ChamiloCore/Course/ai_skills.html.twig', [
+            'course' => $course,
+            'session' => $session,
+            'enabled' => $enabled,
+            'providers' => $providers,
+            'selected_provider' => $provider,
+            'suggestions' => $suggestions,
+            'nonce' => $nonce,
+            'can_attach' => $canAttach,
+            'can_create' => $this->isGranted('ROLE_ADMIN'),
+            'csrf_token_id' => $csrfTokenId,
+            'error' => $error,
+            'success' => $success,
         ]);
     }
 

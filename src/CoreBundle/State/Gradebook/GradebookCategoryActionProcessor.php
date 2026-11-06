@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\EventLoggerHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookRootCategoryFactory;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -60,6 +61,7 @@ final readonly class GradebookCategoryActionProcessor implements ProcessorInterf
         private CsrfTokenManagerInterface $csrfTokenManager,
         private EventLoggerHelper $eventLoggerHelper,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private GradebookRootCategoryFactory $gradebookRootCategoryFactory,
     ) {}
 
     /**
@@ -127,29 +129,7 @@ final readonly class GradebookCategoryActionProcessor implements ProcessorInterf
             return $rootCategory;
         }
 
-        $title = $course->getCode();
-        if ($session instanceof Session) {
-            $title .= ' - Session '.$session->getTitle();
-        }
-
-        $rootCategory = new GradebookCategory();
-        $rootCategory
-            ->setTitle($title)
-            ->setDescription(null)
-            ->setUser($user)
-            ->setCourse($course)
-            ->setSession($session)
-            ->setParent(null)
-            ->setWeight(100.0)
-            ->setCalculationMode(GradebookCalculationMode::WEIGHTED_AVERAGE)
-            ->setVisible(false)
-            ->setCertifMinScore(75)
-            ->setLocked(0)
-            ->setGenerateCertificates(false)
-            ->setIsRequirement(null === $session)
-            ->setAllowSkillsBySubcategory(1)
-        ;
-
+        $rootCategory = $this->gradebookRootCategoryFactory->create($course, $session, $user);
         $this->entityManager->persist($rootCategory);
 
         return $rootCategory;

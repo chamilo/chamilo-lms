@@ -160,7 +160,9 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         $response->canManage = $canManage;
         $response->attempt = $attempt instanceof TrackEExercise ? $this->normalizeAttempt($operation, $attempt, $questions, $quiz) : null;
-        $response->canStartAttempt = $runsAsLearner && $hasRuntimeQuestions;
+        $response->canStartAttempt = $runsAsLearner
+            && $hasRuntimeQuestions
+            && $this->canStartOrResumeAttempt($quiz, $course, $session);
         $response->canSubmit = $canSubmit;
         $response->usesLegacySubmit = $requiresLegacyRuntime;
 
@@ -248,6 +250,74 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         $attempt = $queryBuilder->getQuery()->getOneOrNullResult();
 
         return $attempt instanceof TrackEExercise ? $attempt : null;
+    }
+
+    /**
+     * Whether the learner may still open the player, so the "Start test" button stays hidden once
+     * the limit is spent. It mirrors the attempt processor: an incomplete attempt for the validated
+     * learning-path context always reopens, otherwise a new one is allowed only while the counter
+     * for that same context is below the maximum.
+     */
+    private function canStartOrResumeAttempt(CQuiz $quiz, Course $course, ?Session $session): bool
+    {
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        $lpContext = $this->exerciseLearnpathVisibilityHelper->resolveValidatedAttemptTriple($quiz, $course, $session, $user);
+
+        if ($this->countAttempts($quiz, $course, $session, $user, $lpContext, self::STATUS_INCOMPLETE) > 0) {
+            return true;
+        }
+
+        $maxAttempt = (int) $quiz->getMaxAttempt();
+        if ($maxAttempt <= 0) {
+            return true;
+        }
+
+        return $this->countAttempts($quiz, $course, $session, $user, $lpContext, null) < $maxAttempt;
+    }
+
+    /**
+     * @param array{lpId: int, lpItemId: int, lpItemViewId: int} $lpContext
+     */
+    private function countAttempts(CQuiz $quiz, Course $course, ?Session $session, User $user, array $lpContext, ?string $status): int
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(attempt.exeId)')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
+            ->andWhere('IDENTITY(attempt.course) = :courseId')
+            ->andWhere('IDENTITY(attempt.user) = :userId')
+            ->andWhere('attempt.origLpId = :lpId')
+            ->andWhere('attempt.origLpItemId = :lpItemId')
+            ->andWhere('attempt.origLpItemViewId = :lpItemViewId')
+            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+            ->setParameter('lpId', $lpContext['lpId'], Types::INTEGER)
+            ->setParameter('lpItemId', $lpContext['lpItemId'], Types::INTEGER)
+            ->setParameter('lpItemViewId', $lpContext['lpItemViewId'], Types::INTEGER)
+        ;
+
+        if (null !== $status) {
+            $queryBuilder
+                ->andWhere('attempt.status = :status')
+                ->setParameter('status', $status)
+            ;
+        }
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(attempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('attempt.session IS NULL');
+        }
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**

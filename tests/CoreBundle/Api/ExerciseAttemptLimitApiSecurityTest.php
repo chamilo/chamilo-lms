@@ -121,6 +121,54 @@ final class ExerciseAttemptLimitApiSecurityTest extends AbstractApiTest
         $this->assertSame($lpItemViewId, (int) $created->getOrigLpItemViewId(), 'The row is sealed with the validated view id.');
     }
 
+    public function testRuntimeShowsStartButtonWhileAttemptsRemain(): void
+    {
+        $context = $this->createExerciseWithOneAttemptLimit('runtime_open');
+
+        $payload = $this->getRuntime($context, '');
+
+        $this->assertTrue($payload['canStartAttempt'], 'The Start button shows while an attempt is still available.');
+    }
+
+    public function testRuntimeHidesStartButtonWhenLimitReached(): void
+    {
+        $context = $this->createExerciseWithOneAttemptLimit('runtime_spent');
+        $this->consumeAllowedAttempt($context);
+
+        $payload = $this->getRuntime($context, '');
+
+        $this->assertFalse($payload['canStartAttempt'], 'The Start button hides once the limit is spent.');
+    }
+
+    public function testRuntimeStartButtonStaysHiddenWithForgedViewId(): void
+    {
+        $context = $this->createExerciseWithOneAttemptLimit('runtime_forged');
+        $this->consumeAllowedAttempt($context);
+
+        $payload = $this->getRuntime($context, '&learnpath_item_view_id=7');
+
+        $this->assertFalse($payload['canStartAttempt'], 'A forged view id must not bring the Start button back.');
+    }
+
+    /**
+     * @param array{course: Course, quiz: CQuiz, student: User} $context
+     *
+     * @return array<string, mixed>
+     */
+    private function getRuntime(array $context, string $extraQuery): array
+    {
+        $url = '/api/exercise/runtime/'.$context['quiz']->getIid().'?cid='.$context['course']->getId().'&sid=0'.$extraQuery;
+
+        $response = $this
+            ->createClientWithCredentials($this->getUserTokenFromUser($context['student']))
+            ->request('GET', $url)
+        ;
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        return $response->toArray();
+    }
+
     /**
      * @param array{course: Course, quiz: CQuiz, student: User} $context
      *

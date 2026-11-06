@@ -511,7 +511,18 @@
           >
             <div class="flex flex-wrap items-baseline justify-between gap-2">
               <strong class="text-sm text-gray-800">{{ post.title }}</strong>
-              <span class="text-xs text-gray-500">{{ formatHistoryDate(post.date) }}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-500">{{ formatHistoryDate(post.date) }}</span>
+                <BaseButton
+                  v-if="post.canDelete"
+                  :label="t('Delete')"
+                  icon="delete"
+                  only-icon
+                  size="small"
+                  type="danger-text"
+                  @click="confirmDeleteParticipantPost(post)"
+                />
+              </div>
             </div>
             <div
               class="mt-2 text-sm text-gray-700"
@@ -1181,6 +1192,43 @@ async function openParticipant(student) {
     participantDialogVisible.value = false
   } finally {
     isLoadingParticipant.value = false
+  }
+}
+
+function confirmDeleteParticipantPost(post) {
+  requireConfirmation({
+    message: t("Are you sure you want to delete this post?"),
+    accept: () => deleteParticipantPost(post),
+  })
+}
+
+// The post changes the counts of the thread and the learners who posted, so both are read again
+async function deleteParticipantPost(post) {
+  try {
+    const response = await forumService.deletePost(post.iid, baseQuery.value, {})
+
+    notifications.showSuccessNotification(response.threadDeleted ? t("Thread deleted") : t("Post deleted"))
+
+    if (response.threadDeleted) {
+      participantDialogVisible.value = false
+      gradingDialogVisible.value = false
+      await loadThreads()
+      return
+    }
+
+    const userId = Number(participantStudent.value.userId)
+    await Promise.all([loadThreadGrading(gradingThread.value), loadThreads()])
+
+    // A learner without any post left is no longer listed for grading
+    const student = gradingData.value.students.find((item) => Number(item.userId) === userId)
+    if (student) {
+      await openParticipant(student)
+    } else {
+      participantDialogVisible.value = false
+    }
+  } catch (error) {
+    console.error("Error deleting forum post:", error)
+    notifications.showErrorNotification(t("Could not delete post"))
   }
 }
 

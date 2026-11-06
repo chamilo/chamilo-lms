@@ -83,6 +83,8 @@ final class ForumThreadGradingTest extends AbstractApiTest
         $this->assertSame(1, $participant['userPostCount']);
         $this->assertSame(50, $participant['postShare']);
         $this->assertSame(['Learner answer detail'], array_column($participant['posts'], 'title'));
+        // The teacher can remove an off-topic post before grading, from the same window
+        $this->assertTrue($participant['posts'][0]['canDelete']);
 
         $this->assertArrayNotHasKey('participant', $teacher->request('GET', $gradingUrl)->toArray());
 

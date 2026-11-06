@@ -40,6 +40,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final class ForumThreadGradingProvider implements ProviderInterface
 {
+    use ForumGradebookGuardTrait;
     use ForumStateHelperTrait;
 
     public function __construct(
@@ -241,6 +242,8 @@ final class ForumThreadGradingProvider implements ProviderInterface
             $postsQuery->andWhere('p.visible = true');
         }
 
+        // The teacher removes a post from here as from the thread, unless the gradebook locked it
+        $canDelete = $canManage && !$this->isForumThreadLockedByGradebook($this->gradebookLinkManager, $course, $session, $thread);
         $threadPostCount = 0;
         $posts = [];
         foreach ($postsQuery->getQuery()->getResult() as $post) {
@@ -268,6 +271,7 @@ final class ForumThreadGradingProvider implements ProviderInterface
                 'text' => $post->getPostText(),
                 'date' => $post->getPostDate()?->format(DateTimeInterface::ATOM),
                 'visible' => (bool) $post->getVisible(),
+                'canDelete' => $canDelete,
                 'attachments' => $attachments,
             ];
         }

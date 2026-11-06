@@ -966,7 +966,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'trueFalseOptions' => $this->getQuestionOptions($question),
             'fillBlanks' => $this->getFillBlanksRuntime($question),
             'matching' => $this->getMatchingRuntime($question, $shuffleAnswers, $answerShuffleSeed),
-            'draggable' => $this->getDraggableRuntime($question, $shuffleAnswers, $answerShuffleSeed),
+            'draggable' => $this->getDraggableRuntime($question, $shuffleAnswers, $answerShuffleSeed, $canManage),
             'dropdown' => $this->getDropdownRuntime($question, $shuffleAnswers, $answerShuffleSeed),
             'calculated' => $this->getCalculatedRuntime($question, $attempt),
             'annotation' => $this->getImageRuntime($operation, $question, $course, $session, [20]),
@@ -1522,7 +1522,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     /**
      * @return array<string, mixed>|null
      */
-    private function getDraggableRuntime(CQuizQuestion $question, bool $shuffleAnswers = false, string $shuffleSeed = ''): ?array
+    private function getDraggableRuntime(CQuizQuestion $question, bool $shuffleAnswers, string $shuffleSeed, bool $canManage): ?array
     {
         if (18 !== (int) $question->getType()) {
             return null;
@@ -1535,13 +1535,18 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
                 continue;
             }
 
-            $items[] = [
+            $item = [
                 'id' => (int) $answer->getIid(),
                 'answer' => $answer->getAnswer(),
                 'position' => (int) $answer->getPosition(),
-                'targetPosition' => $targetPosition,
-                'score' => (float) $answer->getPonderation(),
             ];
+
+            if ($canManage) {
+                $item['targetPosition'] = $targetPosition;
+                $item['score'] = (float) $answer->getPonderation();
+            }
+
+            $items[] = $item;
         }
 
         return [

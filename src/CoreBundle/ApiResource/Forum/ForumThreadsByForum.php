@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Forum;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
@@ -19,6 +20,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             uriTemplate: '/forums/{forumId}/threads',
+            // Without it, the operation expects an "id" variable that the URL does not have, and answers 404
+            uriVariables: [
+                'forumId' => new Link(
+                    identifiers: ['forumId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+            ],
             openapi: new Operation(
                 parameters: [
                     new Parameter(

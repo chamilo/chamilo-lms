@@ -18,6 +18,20 @@
                 </div>
             </section>
 
+            {% if enabled and skill_mapping_available %}
+                {% set skill_mapping_url = path('chamilo_core_ai_course_skill_mapping', {courseId: course.id}) %}
+                {% if session %}
+                    {% set skill_mapping_url = skill_mapping_url ~ '?sid=' ~ session.id %}
+                {% endif %}
+                <section class="mb-6 rounded-2xl border border-gray-25 bg-white p-6 shadow-xl shadow-gray-90/5">
+                    <h2 class="mb-2 text-xl font-bold">{{ 'AI-assisted skills mapping'|trans }}</h2>
+                    <p class="mb-3 text-gray-60">{{ 'Match course content with existing skills or propose new skills for administrator approval.'|trans }}</p>
+                    <a href="{{ skill_mapping_url }}" class="inline-flex rounded-xl bg-primary px-5 py-3 font-bold text-white">
+                        {{ 'Suggest skills for this course'|trans }}
+                    </a>
+                </section>
+            {% endif %}
+
             {% if error %}
                 <div class="mb-6 rounded-xl border-s-4 border-danger bg-danger/10 p-4 text-danger-dark">
                     {{ error|trans }}

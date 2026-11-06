@@ -43453,3 +43453,55 @@ msgstr "Your next messages in this thread must contain at least %d words (curren
 
 msgid "Share of the thread's posts"
 msgstr "Share of the thread's posts"
+
+msgid "AI course analyzer is disabled for this course."
+msgstr "AI course analyzer is disabled for this course."
+
+msgid "AI-assisted skills mapping"
+msgstr "AI-assisted skills mapping"
+
+msgid "Add selected skills to referential and Gradebook"
+msgstr "Add selected skills to referential and Gradebook"
+
+msgid "Analyzing course, please wait…"
+msgstr "Analyzing course, please wait…"
+
+msgid "Back to AI course analyzer"
+msgstr "Back to AI course analyzer"
+
+msgid "Course content and existing skills may be sent to an external AI provider. Only continue if sharing is authorized."
+msgstr "Course content and existing skills may be sent to an external AI provider. Only continue if sharing is authorized."
+
+msgid "Criteria"
+msgstr "Criteria"
+
+msgid "Existing skill"
+msgstr "Existing skill"
+
+msgid "Match course content with existing skills or propose new skills for administrator approval."
+msgstr "Match course content with existing skills or propose new skills for administrator approval."
+
+msgid "New skill"
+msgstr "New skill"
+
+msgid "Only a platform administrator can create new skills."
+msgstr "Only a platform administrator can create new skills."
+
+msgid "Parent skill"
+msgstr "Parent skill"
+
+msgid "Review all suggestions before adding skills. AI suggestions never change the referential automatically."
+msgstr "Review all suggestions before adding skills. AI suggestions never change the referential automatically."
+
+msgid "Review suggested skills"
+msgstr "Review suggested skills"
+
+msgid "Suggest skills for this course"
+msgstr "Suggest skills for this course"
+
+msgid "The selected session is used for analysis. Approved skills are attached to the main course Gradebook."
+msgstr "The selected session is used for analysis. Approved skills are attached to the main course Gradebook."
+
+msgid "You can review suggestions, but you do not have permission to assign skills to Gradebook."
+msgstr "You can review suggestions, but you do not have permission to assign skills to Gradebook."
+

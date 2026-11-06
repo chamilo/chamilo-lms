@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Chamilo\CourseBundle\Repository\CLpItemViewRepository;
@@ -100,5 +101,68 @@ readonly class ExerciseLearnpathVisibilityHelper
             $sessionId,
             (int) $user->getId()
         );
+    }
+
+    /**
+     * Resolve the learning-path triple an attempt must be grouped by, validated against this
+     * exercise and this user.
+     *
+     * Attempts are counted per (origLpId, origLpItemId, origLpItemViewId). Reading those ids
+     * straight from the request lets a learner forge a private, empty counter (e.g.
+     * ?learnpath_item_view_id=7) and defeat the attempt limit. This returns (0, 0, 0) — the plain
+     * exercise-tool context — whenever the request carries no complete learning-path context, or
+     * when the triple does not belong to a published quiz item of this exercise opened by this
+     * user. A legitimate in-lesson attempt always sends the three real ids, so it keeps its own
+     * counter.
+     *
+     * @return array{lpId: int, lpItemId: int, lpItemViewId: int}
+     */
+    public function resolveValidatedAttemptTriple(CQuiz $quiz, Course $course, ?Session $session, User $user): array
+    {
+        $emptyContext = ['lpId' => 0, 'lpItemId' => 0, 'lpItemViewId' => 0];
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return $emptyContext;
+        }
+
+        $learnpathId = (int) ($request->query->get('learnpath_id') ?: $request->query->get('lp_id'));
+        $learnpathItemId = (int) ($request->query->get('learnpath_item_id') ?: $request->query->get('lp_item_id'));
+        $learnpathItemViewId = (int) $request->query->get('learnpath_item_view_id');
+
+        // The full triple has to be present: a counter is grouped by all three, so a missing view
+        // id has no group to join and falls back to the exercise-tool context.
+        if ($learnpathId <= 0 || $learnpathItemId <= 0 || $learnpathItemViewId <= 0) {
+            return $emptyContext;
+        }
+
+        $exerciseId = (int) ($quiz->getIid() ?? 0);
+        if ($exerciseId <= 0) {
+            return $emptyContext;
+        }
+
+        $courseId = (int) $course->getId();
+        $sessionId = null !== $session ? (int) $session->getId() : null;
+
+        if (!$this->lpItemRepository->hasPublishedQuizItem($learnpathItemId, $learnpathId, $exerciseId, $courseId, $sessionId)) {
+            return $emptyContext;
+        }
+
+        if (!$this->lpItemViewRepository->belongsToUserLearnpathView(
+            $learnpathItemViewId,
+            $learnpathItemId,
+            $learnpathId,
+            $courseId,
+            $sessionId,
+            (int) $user->getId()
+        )) {
+            return $emptyContext;
+        }
+
+        return [
+            'lpId' => $learnpathId,
+            'lpItemId' => $learnpathItemId,
+            'lpItemViewId' => $learnpathItemViewId,
+        ];
     }
 }

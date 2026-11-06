@@ -48,6 +48,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
+                'userId' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Learner whose participation in the thread is detailed in "participant"',
+                ),
             ],
         ),
         new Patch(
@@ -189,6 +193,15 @@ final class ForumThreadGrading
     #[Groups(['forum_thread_grading:read'])]
     public array $students = [];
 
+    /**
+     * The participation of the learner asked with userId: their posts and how they compare to the
+     * thread, as the 1.11 grading page of one learner showed them.
+     *
+     * @var array<string, mixed>|null
+     */
+    #[Groups(['forum_thread_grading:read'])]
+    public ?array $participant = null;
+
     public function getId(): int
     {
         return $this->threadId;
@@ -215,6 +228,9 @@ final class ForumThreadGrading
 
         $students = $data['students'] ?? [];
         $grading->students = \is_array($students) ? $students : [];
+
+        $participant = $data['participant'] ?? null;
+        $grading->participant = \is_array($participant) ? $participant : null;
 
         return $grading;
     }

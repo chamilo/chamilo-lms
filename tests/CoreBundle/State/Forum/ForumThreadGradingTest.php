@@ -66,6 +66,31 @@ final class ForumThreadGradingTest extends AbstractApiTest
         $this->assertEquals(7, $grading['students'][0]['score']);
     }
 
+    /**
+     * Before giving a score, the teacher reads what the learner wrote and how much of the thread it
+     * is, as on the 1.11 grading page of one learner.
+     */
+    public function testTeacherReadsTheParticipationOfOneLearner(): void
+    {
+        $ctx = $this->bootstrapScenario('detail');
+        $teacher = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']));
+        $gradingUrl = '/api/forum_threads/'.$ctx['thread']->getIid().'/grading?cid='.$ctx['course']->getId();
+
+        $participant = $teacher->request('GET', $gradingUrl.'&userId='.$ctx['learner']->getId())->toArray()['participant'];
+        $this->assertSame('Thread detail', $participant['threadTitle']);
+        $this->assertSame(2, $participant['courseUserCount']);
+        $this->assertSame(2, $participant['threadPostCount']);
+        $this->assertSame(1, $participant['userPostCount']);
+        $this->assertSame(50, $participant['postShare']);
+        $this->assertSame(['Learner answer detail'], array_column($participant['posts'], 'title'));
+
+        $this->assertArrayNotHasKey('participant', $teacher->request('GET', $gradingUrl)->toArray());
+
+        // Only the learners of the list can be detailed, not the teacher who opened the thread
+        $teacher->request('GET', $gradingUrl.'&userId='.$ctx['teacher']->getId());
+        $this->assertResponseStatusCodeSame(404);
+    }
+
     public function testLearnerCannotGradeWithoutPeerGrading(): void
     {
         $ctx = $this->bootstrapScenario('learner');

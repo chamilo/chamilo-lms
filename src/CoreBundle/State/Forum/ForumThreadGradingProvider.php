@@ -23,6 +23,7 @@ use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CForumThreadQualify;
 use Chamilo\CourseBundle\Entity\CForumThreadQualifyLog;
+use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
@@ -49,6 +50,7 @@ final class ForumThreadGradingProvider implements ProviderInterface
         private readonly Security $security,
         private readonly CidReqHelper $cidReqHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
+        private readonly CForumAttachmentRepository $attachmentRepository,
     ) {}
 
     /**
@@ -92,6 +94,17 @@ final class ForumThreadGradingProvider implements ProviderInterface
         }
 
         $link = $this->gradebookLinkManager->findLink($course, $session, GradebookLinkResourceResolver::LINK_FORUM_THREAD, (int) $thread->getIid());
+        $students = $this->getThreadStudents($thread, $course, $session, $canManage, $currentUser);
+
+        $participant = null;
+        $participantId = (int) $request->query->get('userId', 0);
+        if ($participantId > 0) {
+            // Only a learner of the list above, which already leaves out who the current user may not grade
+            if (!\in_array($participantId, array_column($students, 'userId'), true)) {
+                throw new NotFoundHttpException('This user did not post in this forum thread.');
+            }
+            $participant = $this->getParticipant($thread, $course, $session, $participantId, $canManage);
+        }
 
         return ForumThreadGrading::fromArray($threadId, [
             'enabled' => null !== $link || $thread->getThreadQualifyMax() > 0,
@@ -103,7 +116,8 @@ final class ForumThreadGradingProvider implements ProviderInterface
             'canManage' => $canManage,
             'canPeerGrade' => $canPeerGrade,
             'categories' => $canManage ? $this->getGradebookCategories($course, $session) : [],
-            'students' => $this->getThreadStudents($thread, $course, $session, $canManage, $currentUser),
+            'students' => $students,
+            'participant' => $participant,
         ]);
     }
 
@@ -206,6 +220,79 @@ final class ForumThreadGradingProvider implements ProviderInterface
         }
 
         return $students;
+    }
+
+    /**
+     * The posts of one learner in the thread, with the counts the 1.11 grading page compared them
+     * to. Only the people who moderate the forum see the posts still waiting for approval.
+     *
+     * @return array<string, mixed>
+     */
+    private function getParticipant(CForumThread $thread, Course $course, ?Session $session, int $userId, bool $canManage): array
+    {
+        $postsQuery = $this->entityManager->createQueryBuilder()
+            ->select('p')
+            ->from(CForumPost::class, 'p')
+            ->andWhere('IDENTITY(p.thread) = :threadId')
+            ->setParameter('threadId', (int) $thread->getIid())
+            ->orderBy('p.postDate', 'ASC')
+        ;
+        if (!$canManage) {
+            $postsQuery->andWhere('p.visible = true');
+        }
+
+        $threadPostCount = 0;
+        $posts = [];
+        foreach ($postsQuery->getQuery()->getResult() as $post) {
+            if (!$post instanceof CForumPost) {
+                continue;
+            }
+
+            $threadPostCount++;
+            if ($post->getUser()->getId() !== $userId) {
+                continue;
+            }
+
+            $attachments = [];
+            foreach ($post->getAttachments() as $attachment) {
+                $attachments[] = [
+                    'iid' => $attachment->getIid(),
+                    'filename' => $attachment->getFilename(),
+                    'downloadUrl' => $this->attachmentRepository->getResourceFileDownloadUrl($attachment),
+                ];
+            }
+
+            $posts[] = [
+                'iid' => $post->getIid(),
+                'title' => $post->getTitle(),
+                'text' => $post->getPostText(),
+                'date' => $post->getPostDate()?->format(DateTimeInterface::ATOM),
+                'visible' => (bool) $post->getVisible(),
+                'attachments' => $attachments,
+            ];
+        }
+
+        return [
+            'userId' => $userId,
+            'threadTitle' => $thread->getTitle(),
+            'courseUserCount' => $this->countCourseUsers($course, $session),
+            'threadPostCount' => $threadPostCount,
+            'userPostCount' => \count($posts),
+            'postShare' => $threadPostCount > 0 ? (int) round(\count($posts) / $threadPostCount * 100) : 0,
+            'posts' => $posts,
+        ];
+    }
+
+    private function countCourseUsers(Course $course, ?Session $session): int
+    {
+        if ($session instanceof Session) {
+            return $this->entityManager->getRepository(SessionRelCourseRelUser::class)->count([
+                'course' => $course,
+                'session' => $session,
+            ]);
+        }
+
+        return $this->entityManager->getRepository(CourseRelUser::class)->count(['course' => $course]);
     }
 
     private function findLatestQualification(

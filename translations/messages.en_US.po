@@ -43450,3 +43450,6 @@ msgstr "Your first message in this thread must contain at least %d words (curren
 
 msgid "Your next messages in this thread must contain at least %d words (currently %d)."
 msgstr "Your next messages in this thread must contain at least %d words (currently %d)."
+
+msgid "Share of the thread's posts"
+msgstr "Share of the thread's posts"

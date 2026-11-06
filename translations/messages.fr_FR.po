@@ -45153,3 +45153,6 @@ msgstr "Votre premier message dans ce fil de discussion doit contenir au moins %
 
 msgid "Your next messages in this thread must contain at least %d words (currently %d)."
 msgstr "Vos messages suivants dans ce fil de discussion doivent contenir au moins %d mots (actuellement %d)."
+
+msgid "Share of the thread's posts"
+msgstr "Part des messages du fil"

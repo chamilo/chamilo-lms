@@ -8,8 +8,12 @@ namespace Chamilo\CoreBundle\Mcp;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Document\CourseDocumentContentService;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseLearningPathItemFactory;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathItemPrerequisiteService;
 use Chamilo\CoreBundle\Service\Mcp\McpTeacherCourseContext;
 use Chamilo\CoreBundle\Service\Survey\CourseSurveyContentService;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -45,6 +49,8 @@ final readonly class ManageCourseLearningPathTool
         private CourseSurveyContentService $surveyContentService,
         private ExerciseLearningPathItemFactory $exerciseLearningPathItemFactory,
         private EntityManagerInterface $entityManager,
+        private LearningPathItemPrerequisiteService $prerequisiteService,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -501,6 +507,55 @@ final readonly class ManageCourseLearningPathTool
      * @return array{updated: true, learning_path: array<string, mixed>, items: list<array<string, mixed>>}
      */
     #[McpTool(
+        name: 'set_learning_path_item_prerequisite',
+        description: 'Set, or clear, the prerequisite of a learning path item: the learner can open the item only once the prerequisite item is completed. Use get_learning_path_structure first to obtain the item IDs; the prerequisite must be an earlier item of the same learning path and cannot be a section. Pass prerequisiteItemId 0 (or omit it) to remove the prerequisite. For a test (quiz) prerequisite, minScore and maxScore set the score range the learner must reach; they are ignored for other item types. Pass sessionId when the learning path is used in a session of the course (a learning path attached to that session, or a base-course one shown in it): the learning path is then looked up in that session. Prerequisites belong to the learning path items, so the same items are used in every context. Verify the result in the returned items (prerequisite_item_id, prerequisite_min_score, prerequisite_max_score).',
+    )]
+    public function setLearningPathItemPrerequisite(
+        int $courseId,
+        int $learningPathId,
+        int $itemId,
+        ?int $prerequisiteItemId = null,
+        float $minScore = 0.0,
+        float $maxScore = 100.0,
+        int $sessionId = 0,
+    ): array {
+        try {
+            $context = $this->courseContext->resolve($courseId);
+            $session = $this->resolveSession($context['course'], $sessionId);
+            if ($session instanceof Session
+                && !$this->isAllowedToEditHelper->check(checkStudentView: false, course: $context['course'], session: $session)
+            ) {
+                throw new AccessDeniedException('You are not allowed to edit this course inside this session.');
+            }
+            $learningPath = $this->resolveLearningPath($courseId, $learningPathId, $session);
+            $item = $this->lpItemRepository->find($itemId);
+            if (!$item instanceof CLpItem || (int) $item->getLp()->getIid() !== $learningPathId || 'root' === $item->getItemType()) {
+                throw new InvalidArgumentException('The learning path item was not found or cannot be edited.');
+            }
+
+            $this->prerequisiteService->set($learningPath, $item, (int) $prerequisiteItemId, $minScore, $maxScore);
+            $learningPath->setModifiedOn(new DateTime());
+            $this->entityManager->persist($learningPath);
+            $this->entityManager->flush();
+
+            return [
+                'updated' => true,
+                'learning_path' => $this->normalizeLearningPath($courseId, $learningPath, $session),
+                'items' => $this->normalizeItems($learningPath),
+            ];
+        } catch (ToolCallException $exception) {
+            throw $exception;
+        } catch (AccessDeniedException|InvalidArgumentException|RuntimeException $exception) {
+            throw new ToolCallException($exception->getMessage());
+        } catch (Throwable $throwable) {
+            throw new ToolCallException('The learning path item prerequisite could not be set because of an unexpected server error. Check the Chamilo log for technical details.', 0, $throwable);
+        }
+    }
+
+    /**
+     * @return array{updated: true, learning_path: array<string, mixed>, items: list<array<string, mixed>>}
+     */
+    #[McpTool(
         name: 'update_learning_path',
         description: 'Edit the title, description and/or draft/published visibility of an existing learning path managed by the authenticated teacher.',
     )]
@@ -565,59 +620,97 @@ final readonly class ManageCourseLearningPathTool
         }
     }
 
-    private function resolveBaseCourseLink(CLp $learningPath, int $courseId): ResourceLink
+    private function resolveBaseCourseLink(CLp $learningPath, int $courseId, ?Session $session = null): ResourceLink
     {
         $resourceNode = $learningPath->getResourceNode();
         if (null === $resourceNode) {
             throw new RuntimeException('The learning path resource node could not be resolved.');
         }
 
+        $baseLink = null;
         foreach ($resourceNode->getResourceLinks() as $resourceLink) {
             if (!$resourceLink instanceof ResourceLink) {
                 continue;
             }
-            if ((int) $resourceLink->getCourse()?->getId() === $courseId
-                && null === $resourceLink->getSession()
-                && null === $resourceLink->getGroup()
-                && null === $resourceLink->getUserGroup()
-                && null === $resourceLink->getUser()
+            if ((int) $resourceLink->getCourse()?->getId() !== $courseId
+                || null !== $resourceLink->getGroup()
+                || null !== $resourceLink->getUserGroup()
+                || null !== $resourceLink->getUser()
             ) {
+                continue;
+            }
+            if (null === $resourceLink->getSession()) {
+                $baseLink = $resourceLink;
+
+                continue;
+            }
+            // The session's own link is the one that applies inside that session.
+            if ($session instanceof Session && $resourceLink->getSession()->getId() === $session->getId()) {
                 return $resourceLink;
             }
         }
 
-        throw new RuntimeException('The learning path is not linked to the selected base course.');
+        if (null !== $baseLink) {
+            return $baseLink;
+        }
+
+        throw new RuntimeException('The learning path is not linked to the selected course.');
     }
 
-    private function resolveLearningPath(int $courseId, int $learningPathId): CLp
+    private function resolveLearningPath(int $courseId, int $learningPathId, ?Session $session = null): CLp
     {
         if ($learningPathId <= 0) {
             throw new InvalidArgumentException('The learning path ID must be a positive integer.');
         }
 
-        $learningPath = $this->entityManager->createQueryBuilder()
+        $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('learningPath')
             ->from(CLp::class, 'learningPath')
             ->innerJoin('learningPath.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'resourceLink')
             ->andWhere('learningPath.iid = :learningPathId')
             ->andWhere('IDENTITY(resourceLink.course) = :courseId')
-            ->andWhere('resourceLink.session IS NULL')
             ->andWhere('resourceLink.group IS NULL')
             ->andWhere('resourceLink.userGroup IS NULL')
             ->andWhere('resourceLink.user IS NULL')
             ->setParameter('learningPathId', $learningPathId, Types::INTEGER)
             ->setParameter('courseId', $courseId, Types::INTEGER)
             ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
         ;
+        if ($session instanceof Session) {
+            // Attached to the session itself, or a base-course learning path the session shows.
+            $queryBuilder
+                ->andWhere('resourceLink.session IS NULL OR IDENTITY(resourceLink.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('resourceLink.session IS NULL');
+        }
+
+        $learningPath = $queryBuilder->getQuery()->getOneOrNullResult();
 
         if (!$learningPath instanceof CLp) {
             throw new InvalidArgumentException('The learning path was not found in this course.');
         }
 
         return $learningPath;
+    }
+
+    private function resolveSession(Course $course, int $sessionId): ?Session
+    {
+        if ($sessionId < 0) {
+            throw new InvalidArgumentException('The session ID cannot be negative.');
+        }
+        if (0 === $sessionId) {
+            return null;
+        }
+
+        $session = $this->entityManager->getRepository(Session::class)->find($sessionId);
+        if (!$session instanceof Session || !$session->getCourseSubscription($course) instanceof SessionRelCourse) {
+            throw new InvalidArgumentException('Invalid course-session context: the session was not found or is not linked to this course.');
+        }
+
+        return $session;
     }
 
     private function resolveQuiz(int $courseId, ?int $testId, ?string $testTitle): CQuiz
@@ -905,9 +998,9 @@ final readonly class ManageCourseLearningPathTool
     /**
      * @return array<string, mixed>
      */
-    private function normalizeLearningPath(int $courseId, CLp $learningPath): array
+    private function normalizeLearningPath(int $courseId, CLp $learningPath, ?Session $session = null): array
     {
-        $resourceLink = $this->resolveBaseCourseLink($learningPath, $courseId);
+        $resourceLink = $this->resolveBaseCourseLink($learningPath, $courseId, $session);
 
         return [
             'learning_path_id' => (int) $learningPath->getIid(),
@@ -958,6 +1051,9 @@ final readonly class ManageCourseLearningPathTool
                 'display_order' => (int) $item->getDisplayOrder(),
                 'previous_item_id' => $item->getPreviousItemId(),
                 'next_item_id' => $item->getNextItemId(),
+                'prerequisite_item_id' => (int) $item->getPrerequisite() ?: null,
+                'prerequisite_min_score' => (int) $item->getPrerequisite() ? $item->getPrerequisiteMinScore() : null,
+                'prerequisite_max_score' => (int) $item->getPrerequisite() ? $item->getPrerequisiteMaxScore() : null,
             ],
             $items,
         ));

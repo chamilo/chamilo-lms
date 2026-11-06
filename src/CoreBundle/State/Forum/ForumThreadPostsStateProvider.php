@@ -174,13 +174,15 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
 
         $isLearningPathContext = 'learnpath' === strtolower((string) $request->query->get('origin', ''));
         // Inside a learning path, the latest posts come first, so that a learner sees their reply.
-        $sortDirection = $isLearningPathContext ? 'DESC' : 'ASC';
+        // Elsewhere, a teacher can ask for them to follow the latest activity of a long thread.
+        $latestFirst = $isLearningPathContext
+            || ($canManage && 'desc' === strtolower((string) $request->query->get('order', '')));
 
         $ordering = $this->orderThreadPosts(
             $thread,
             $forum,
             $canManage,
-            'DESC' === $sortDirection,
+            $latestFirst,
             'flat' !== $this->getViewType($request, $forum),
             $this->getMaxShownPosts($isLearningPathContext),
         );

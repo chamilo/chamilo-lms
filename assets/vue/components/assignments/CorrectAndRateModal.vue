@@ -21,7 +21,7 @@
 
       <!-- Student submission (text) -->
       <div
-        v-if="flags.allowText && props.item.description"
+        v-if="(flags.allowText || isHtmlSubmissionFile) && submissionRaw"
         class="rounded-lg border bg-white p-4"
       >
         <div class="flex items-center justify-between gap-2 mb-2">
@@ -437,8 +437,6 @@ import DOMPurify from "dompurify"
 // Settings gating
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
-import { useCidReqStore } from "../../store/cidReq"
-import { storeToRefs } from "pinia"
 
 const props = defineProps({
   modelValue: Boolean,
@@ -522,7 +520,8 @@ const safeParentDescription = computed(() => {
 // ----------------------------
 // Submission rendering helpers
 // ----------------------------
-const submissionRaw = computed(() => String(props.item?.description || ""))
+const htmlFilePreview = ref("")
+const submissionRaw = computed(() => htmlFilePreview.value || String(props.item?.description || ""))
 
 const isFullHtmlDocument = computed(() => {
   const s = submissionRaw.value.trim().toLowerCase()
@@ -569,6 +568,7 @@ const submissionExt = computed(() => {
 })
 
 const submissionHasFile = computed(() => submissionFilename.value.length > 0 && submissionExt.value.length > 0)
+const isHtmlSubmissionFile = computed(() => ["html", "htm"].includes(submissionExt.value))
 
 const submissionHasText = computed(() => {
   const txt = submissionRaw.value
@@ -611,8 +611,6 @@ const maxHelpText = computed(() => {
 // AI Task Grader state
 // ----------------------------
 const courseSettingsStore = useCourseSettings()
-const cidReqStore = useCidReqStore()
-const { course, session } = storeToRefs(cidReqStore)
 
 const providers = ref([])
 const aiProvider = ref("") // provider key
@@ -702,7 +700,6 @@ const aiCanGenerate = computed(() => {
   if (aiBlockingReason.value) return false
   return true
 })
-
 
 async function loadAiProviders() {
   try {
@@ -823,6 +820,29 @@ function clearAiFeedback() {
   aiLastError.value = ""
 }
 
+// The file is read through a teacher-authorized JSON endpoint; never render
+// a student's raw HTML file from the course origin in an unsandboxed frame.
+let htmlPreviewRequest = 0
+watch(
+  () => [props.modelValue, props.item?.iid],
+  async ([isOpen, id]) => {
+    const requestId = ++htmlPreviewRequest
+    htmlFilePreview.value = ""
+    if (!isOpen || !id || !isHtmlSubmissionFile.value) return
+
+    try {
+      const preview = await cStudentPublicationService.getSubmissionHtmlPreview(id)
+      if (requestId === htmlPreviewRequest && props.modelValue && props.item?.iid === id) {
+        htmlFilePreview.value = String(preview?.html || "")
+      }
+    } catch (error) {
+      if (requestId === htmlPreviewRequest) {
+        notification.showErrorNotification(error)
+      }
+    }
+  },
+)
+
 // ----------------------------
 // Modal lifecycle
 // ----------------------------
@@ -860,7 +880,6 @@ watch(
     }
   },
 )
-
 
 function onHide() {
   emit("update:modelValue", false)

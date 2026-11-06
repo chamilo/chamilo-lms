@@ -43444,3 +43444,9 @@ msgstr "Generate TXT"
 
 msgid "Generate XLSX"
 msgstr "Generate XLSX"
+
+msgid "Your first message in this thread must contain at least %d words (currently %d)."
+msgstr "Your first message in this thread must contain at least %d words (currently %d)."
+
+msgid "Your next messages in this thread must contain at least %d words (currently %d)."
+msgstr "Your next messages in this thread must contain at least %d words (currently %d)."

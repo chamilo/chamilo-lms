@@ -14,7 +14,11 @@ Feature: Install portal
     Then I press "license-next"
     Then I should see "Step 4 - Database settings"
     Then wait for the page to be loaded
+    # The host is filled in on purpose, over the installer's own "localhost"
+    # default: CI serves MySQL from a service container, which publishes a TCP
+    # port and no Unix socket. PDO reads "localhost" as a socket.
     Then I fill in the following:
+      | dbHostForm | 127.0.0.1 |
       | dbUsernameForm | root |
       | dbPassForm | root |
       | dbNameForm | chamilo |

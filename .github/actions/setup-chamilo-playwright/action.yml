@@ -11,6 +11,12 @@ description: >
   afterwards — this action only gets the platform to the point where
   `yarn test:playwright*` can run.
 
+  The MySQL server is NOT provisioned here: a composite action cannot declare
+  `services:`, which only exists at job level. Every job using this action must
+  declare the mysql service container itself (see playwright.yml), because the
+  runner image stopped shipping MySQL with ubuntu-26.04 and the former
+  `sudo /etc/init.d/mysql start` step fails with "command not found".
+
 inputs:
   php-version:
     description: PHP version to install (passed straight to shivammathur/setup-php).
@@ -122,10 +128,6 @@ runs:
       -   name: Yarn run encore
           shell: bash
           run: yarn run encore production
-
-      -   name: Start mysql service
-          shell: bash
-          run: sudo /etc/init.d/mysql start
 
       # The browser binary is the single largest download of this job. The key
       # follows yarn.lock, so it changes whenever the Playwright version does.

@@ -68,6 +68,12 @@ mcp:
         other languages). There is no delete tool for course descriptions yet. Write HTML with the
         same style conventions as create_course_document.
 
+        The introduction section on the course homepage is separate from the Course Description
+        tool: use set_course_introduction to replace it with HTML (an empty string clears it). It
+        does not merge, so read the current content first if part of it must be kept. Pass
+        sessionId to set the introduction for one session of the course: it then supersedes the
+        base-course introduction inside that session and leaves the base one untouched.
+
         get_course_tests, get_course_test_questions and get_course_test_question_answers support
         modes full/inventory/source on HTML fields (test description, question description,
         answer text, and the answer's feedback comment shown after answering — a separate field

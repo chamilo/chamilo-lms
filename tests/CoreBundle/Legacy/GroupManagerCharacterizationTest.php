@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
@@ -57,6 +58,11 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         ChamiloSession::write('_cid', 'AIACT');
         ChamiloSession::write('_course', api_get_course_info('AIACT'));
         ChamiloSession::write('sid', 0);
+    }
+
+    private function setSetting(string $name, string $value): void
+    {
+        self::getContainer()->get(SettingsManager::class)->updateSetting($name, $value);
     }
 
     private function conn(): Connection
@@ -276,7 +282,8 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         ChamiloSession::erase('_cid');
         ChamiloSession::erase('_course');
 
-        // PINNED QUIRK: with no current course the method returns false (not []), before running any SQL.
+        // By design, not a bug: no course context means nothing to look in, so false (not []) comes back before any
+        // SQL. Every caller (group pages, CourseGroupManager, exercise.lib) runs in a course or passes its code.
         $this->assertFalse(GroupManager::get_category_from_group($g));
     }
 
@@ -314,6 +321,8 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         ChamiloSession::erase('_cid');
         ChamiloSession::erase('_course');
 
+        // By design, not a bug: no course context means nothing may be deleted. Every caller (group.php,
+        // course deletion, CourseGroupManager) has a course or passes its code, so the guard only fails closed.
         $this->assertFalse(GroupManager::delete_category($cat));
         $this->assertNotFalse($this->conn()->fetchOne('SELECT iid FROM c_group_category WHERE iid = ?', [$cat]));
     }
@@ -443,21 +452,37 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         $this->assertFalse(GroupManager::set_group_properties(0, 'x', 'x', 1, 1, 1, 1, 1, 1, 1, 1, 0, 0));
     }
 
-    public function testSetGroupPropertiesCategoryHandlingFollowsAllowGroupCategoriesSetting(): void
+    public function testSetGroupPropertiesAppliesTheCategoryWhenCategoriesAreAllowed(): void
     {
+        $this->setSetting('group.allow_group_categories', 'true');
+        $this->assertSame('true', api_get_setting('allow_group_categories'), 'precondition: setting really on');
         $catA = $this->makeCategory('sp_a');
         $catB = $this->makeCategory('sp_b');
         $g = $this->makeGroup('setp_cat', $catA);
 
         GroupManager::set_group_properties($g, 'gm_c', 'd', 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, $catB);
-        $actual = $this->conn()->fetchOne('SELECT category_id FROM c_group_info WHERE iid = ?', [$g]);
+        $this->assertSame((string) $catB, (string) $this->conn()->fetchOne('SELECT category_id FROM c_group_info WHERE iid = ?', [$g]));
 
-        if ('true' === api_get_setting('allow_group_categories')) {
-            $this->assertSame((string) $catB, (string) $actual, 'setting on: the new category is applied');
-        } else {
-            // PINNED QUIRK: with the setting off the category is silently reset to NULL, whatever was passed.
-            $this->assertNull($actual);
-        }
+        GroupManager::set_group_properties($g, 'gm_c', 'd', 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, null);
+        $this->assertSame((string) $catB, (string) $this->conn()->fetchOne('SELECT category_id FROM c_group_info WHERE iid = ?', [$g]), 'no category passed: the current one is kept');
+
+        GroupManager::set_group_properties($g, 'gm_c', 'd', 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 999999999);
+        $this->assertSame((string) $catB, (string) $this->conn()->fetchOne('SELECT category_id FROM c_group_info WHERE iid = ?', [$g]), 'unknown category ignored: the current one is kept');
+    }
+
+    public function testSetGroupPropertiesResetsTheCategoryWhenCategoriesAreDisabled(): void
+    {
+        // By design, not a bug: with "allow_group_categories" off the UI has no category concept (groups live in
+        // the default one), so any category is dropped instead of leaving a group attached to a hidden category.
+        $this->setSetting('group.allow_group_categories', 'false');
+        $this->assertSame('false', api_get_setting('allow_group_categories'), 'precondition: setting really off');
+        $catA = $this->makeCategory('sp_a_off');
+        $catB = $this->makeCategory('sp_b_off');
+        $g = $this->makeGroup('setp_cat_off', $catA);
+
+        GroupManager::set_group_properties($g, 'gm_c', 'd', 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, $catB);
+
+        $this->assertNull($this->conn()->fetchOne('SELECT category_id FROM c_group_info WHERE iid = ?', [$g]) ?: null);
     }
 
     public function testGetGroupByNameFindsTheGroupOfTheCourseAndSession(): void

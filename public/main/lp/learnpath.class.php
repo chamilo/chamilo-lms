@@ -3175,6 +3175,7 @@ class learnpath
                 $userId = $this->get_user_id();
             }
         }
+        $userId = (int) $userId;
         $sessionCondition = api_get_session_condition($sessionId);
 
         // When missing $attempt_num, search for a unique lp_view record for this lp and user.
@@ -3195,7 +3196,7 @@ class learnpath
             $params = [
                 'c_id' => $course_id,
                 'lp_id' => $this->get_id(),
-                'user_id' => $this->get_user_id(),
+                'user_id' => $userId,
                 'view_count' => 1,
                 'last_item' => 0,
             ];

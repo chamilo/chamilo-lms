@@ -271,11 +271,13 @@ final class LearnpathCharacterizationTest extends KernelTestCase
         $row = $this->conn()->fetchAssociative('SELECT user_id, view_count, last_item FROM c_lp_view WHERE iid = ?', [$other]);
         $this->assertSame(1, (int) $row['view_count']);
         $this->assertSame(0, (int) $row['last_item']);
-        // PINNED QUIRK: the lookup is done for the $userId argument but the INSERT uses the learnpath's own user
-        // (admin, 1), so no view is ever found for the other user and every call inserts yet another row.
-        $this->assertSame(self::USER_ID, (int) $row['user_id']);
-        $this->assertSame(0, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_view WHERE lp_id = ? AND user_id = 3', [$lpId]));
-        $this->assertNotSame($other, $lp->get_view(0, 3));
+        // Fixed: the lookup used the $userId argument but the INSERT used the learnpath's own user, so no view was
+        // ever found for the other user and every call inserted yet another row (for the wrong user).
+        $this->assertSame(3, (int) $row['user_id']);
+        $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_view WHERE lp_id = ? AND user_id = 3', [$lpId]));
+        $this->assertSame($other, $lp->get_view(0, 3), 'the second call finds the view of that user');
+        $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_view WHERE lp_id = ? AND user_id = 3', [$lpId]));
+        $this->assertSame(2, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_view WHERE lp_id = ? AND user_id = ?', [$lpId, self::USER_ID]), 'the learnpath user got no extra row');
     }
 
     public function testRestartInsertsANewViewWithoutSession(): void

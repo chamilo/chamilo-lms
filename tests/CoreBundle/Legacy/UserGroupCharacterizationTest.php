@@ -405,16 +405,19 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertCount(2, $this->model->get_groups_by_user($alice->getId()));
     }
 
-    public function testGetGroupsByUserCountIgnoresGroupType(): void
+    public function testGetGroupsByUserCountCountsSocialGroupsOnlyLikeGetGroupsByUser(): void
     {
         $alice = $this->createUser('ug_alice');
         $this->addUser($this->group('ug_social', Usergroup::SOCIAL_CLASS), $alice, 1);
+        $this->addUser($this->group('ug_social2', Usergroup::SOCIAL_CLASS), $alice, 5);
         $this->addUser($this->group('ug_class', Usergroup::NORMAL_CLASS), $alice, 1);
         $this->addUser($this->group('ug_class2', Usergroup::NORMAL_CLASS), $alice, 5);
 
-        // CURRENT BEHAVIOUR: unlike get_groups_by_user(), the count does not filter on social groups.
-        $this->assertEquals(3, $this->model->get_groups_by_user_count($alice->getId(), 0));
-        $this->assertEquals(2, $this->model->get_groups_by_user_count($alice->getId(), 1));
+        // Fixed: the count used to include classes, so it disagreed with the (social-only) list.
+        $this->assertEquals(2, $this->model->get_groups_by_user_count($alice->getId(), 0));
+        $this->assertCount(2, $this->model->get_groups_by_user($alice->getId(), 0));
+        $this->assertEquals(1, $this->model->get_groups_by_user_count($alice->getId(), 1));
+        $this->assertCount(1, $this->model->get_groups_by_user($alice->getId(), 1));
         $this->assertEquals(1, $this->model->get_groups_by_user_count($alice->getId(), 5));
         $this->assertEquals(0, $this->model->get_groups_by_user_count($this->createUser('ug_nobody')->getId(), 0));
     }

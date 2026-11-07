@@ -3025,7 +3025,7 @@ class UserGroupModel extends Model
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
 				ON gu.usergroup_id = g.id
-				WHERE gu.user_id = $user_id $where_relation_condition ";
+				WHERE g.group_type = ".Usergroup::SOCIAL_CLASS." AND gu.user_id = $user_id $where_relation_condition ";
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {

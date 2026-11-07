@@ -1005,7 +1005,7 @@ class UserGroupModel extends Model
             $urlId = api_get_current_access_url_id();
             $from = $this->usergroup_rel_user_table." u
                 INNER JOIN {$this->access_url_rel_usergroup} a
-                ON (a.usergroup_id AND u.usergroup_id)
+                ON (a.usergroup_id = u.usergroup_id)
                 INNER JOIN {$this->table} g
                 ON (u.usergroup_id = g.id)
                 ";

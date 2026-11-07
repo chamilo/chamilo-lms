@@ -288,6 +288,30 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertNotNull($other->getId());
     }
 
+    public function testGetUserGroupListByUserInMultiUrlModeJoinsOnTheSameGroup(): void
+    {
+        $alice = $this->createUser('ug_alice');
+        $mine = $this->group('ug_mu_mine');
+        $this->group('ug_mu_other1');
+        $this->group('ug_mu_other2');
+        $elsewhere = $this->group('ug_mu_elsewhere');
+        $this->addUser($mine, $alice);
+        $this->addUser($elsewhere, $alice);
+        // Only the groups of the current URL (id 1 here) may be listed.
+        $this->conn()->executeStatement(
+            'DELETE FROM access_url_rel_usergroup WHERE usergroup_id = ?',
+            [$elsewhere->getId()]
+        );
+
+        // useMultipleUrl is a public flag of the model, and api_get_current_access_url_id() answers 1.
+        $this->model->useMultipleUrl = true;
+        $list = $this->model->getUserGroupListByUser($alice->getId());
+
+        // Fixed: `ON (a.usergroup_id AND u.usergroup_id)` (no '=') joined the user's groups to every
+        // group of the URL, repeating each one as many times, and kept groups of other URLs.
+        $this->assertSame(['ug_mu_mine'], array_column($list, 'title'));
+    }
+
     public function testGetUsergroupByUserReturnsGroupIds(): void
     {
         $alice = $this->createUser('ug_alice');

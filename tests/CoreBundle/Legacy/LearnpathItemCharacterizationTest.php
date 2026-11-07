@@ -930,6 +930,32 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertSame(100 + 3723 + 10, (int) $this->ivRow($s['view'], $s['item'])['total_time'], 'unparsable values are ignored');
     }
 
+    public function testSetTimeOnlyTouchesTheRowOfTheCurrentAttempt(): void
+    {
+        $s = $this->scene('sco', 2, ['total_time' => 100]);
+        $this->newItemView($s['view'], $s['item'], 2, ['total_time' => 7]);
+        $item = $this->item($s['item'], $s['view']);
+
+        $item->set_time('00:00:10');
+
+        $this->assertSame(17, (int) $this->ivRow($s['view'], $s['item'], 2)['total_time']);
+        $this->assertSame(100, (int) $this->ivRow($s['view'], $s['item'], 1)['total_time']);
+    }
+
+    public function testSaveOfAScoKeepsAFinishedStatusAgainstAnUnfinishedOneButAcceptsAnotherFinishedOne(): void
+    {
+        $s = $this->scene('sco', 2, ['status' => 'completed']);
+        $item = $this->item($s['item'], $s['view']);
+
+        $_GET = ['lesson_status' => 'incomplete'];
+        $item->save(true);
+        $this->assertSame('completed', $item->get_status(false), 'completed is not reset to incomplete');
+
+        $_GET = ['lesson_status' => 'passed'];
+        $item->save(true);
+        $this->assertSame('passed', $item->get_status(false), 'but a finished status may replace another');
+    }
+
     public function testSetTimeOfAScoItemReplacesTheTotalWhenTheLpDoesNotAccumulateScormTime(): void
     {
         $s = $this->scene('sco', 2, ['total_time' => 100]);
@@ -1366,6 +1392,12 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->newExe($p['lp'], $q, $quiz, 5, '2030-01-02 10:00:00');
         $this->assertFalse($this->check($p, (string) $q), '5 is above the maximum');
         $this->assertStringContainsString('li_p0', $this->alert($p));
+
+        // Both bounds are inclusive.
+        $this->newExe($p['lp'], $q, $quiz, 2, '2030-01-03 10:00:00');
+        $this->assertTrue($this->check($p, (string) $q), 'score = minimum');
+        $this->newExe($p['lp'], $q, $quiz, 4, '2030-01-04 10:00:00');
+        $this->assertTrue($this->check($p, (string) $q), 'score = maximum');
     }
 
     public function testParsePrereqOfAQuizWithSeveralAttemptsAcceptsAnyAttemptInRangeEvenIfTheStatusIsNotFinished(): void
@@ -1380,6 +1412,8 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertFalse($this->check($p, (string) $q), 'no result yet');
         $this->newExe($p['lp'], $q, $quiz, 1, '2030-01-01 10:00:00');
         $this->assertFalse($this->check($p, (string) $q), 'only an attempt below the minimum');
+        $this->newExe($p['lp'], $q, $quiz, 12, '2030-01-01 11:00:00');
+        $this->assertFalse($this->check($p, (string) $q), 'an attempt above the maximum does not count either');
         $this->newExe($p['lp'], $q, $quiz, 8, '2030-01-02 10:00:00');
         $this->newExe($p['lp'], $q, $quiz, 2, '2030-01-03 10:00:00');
         $this->assertTrue($this->check($p, (string) $q), 'one attempt in range is enough, whatever the later ones and the item status');

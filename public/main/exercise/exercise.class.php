@@ -7779,7 +7779,9 @@ class Exercise
      */
     public function saveCategoriesInExercise($categories)
     {
-        if (!empty($categories) && !empty($this->getId())) {
+        // null means "no categories provided" (save() passes the unset $this->categories): leave them alone.
+        // An empty array is an explicit "no categories" and clears the existing ones.
+        if (is_array($categories) && !empty($this->getId())) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table
                     WHERE exercise_id = {$this->getId()}";

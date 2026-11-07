@@ -673,9 +673,13 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $this->assertSame([$catB], array_keys($e->getCategoriesInExercise()));
         $this->assertSame(5, $e->getNumberQuestionExerciseCategory());
 
-        // PINNED QUIRK: an empty set is a no-op, it does NOT clear the existing categories.
-        $e->saveCategoriesInExercise([]);
+        // Fixed: an empty set now clears the existing categories. null (what save() passes when the form gave
+        // no categories) is "nothing provided" and still leaves them untouched.
+        $e->saveCategoriesInExercise(null);
         $this->assertSame([$catB], array_keys($e->getCategoriesInExercise()));
+        $e->saveCategoriesInExercise([]);
+        $this->assertSame([], $e->getCategoriesInExercise());
+        $this->assertSame(0, $e->getNumberQuestionExerciseCategory());
     }
 
     public function testCategoriesOfUnsavedOrEmptyExerciseAreEmpty(): void

@@ -121,14 +121,18 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->model->get_count();
     }
 
-    public function testFilterByFirstLetterIsBrokenInSingleUrlMode(): void
+    public function testFilterByFirstLetterListsGroupsStartingWithTheLetterInSingleUrlMode(): void
     {
-        $this->group('ug_group_a');
+        $this->group('ug_fl_b');
+        $this->group('ug_fl_a');
+        $this->group('ug_other');
 
-        // CURRENT BEHAVIOUR (suspected bug): in the non-multi-URL branch the code does
-        // `$sql = " FROM ..."` instead of `.=`, discarding "SELECT g.id, title" -> invalid SQL.
-        $this->expectException(\Throwable::class);
-        $this->model->filterByFirstLetter('ug_');
+        // Fixed: the single-URL branch used `$sql = " FROM ..."` and lost its SELECT, so it always threw.
+        $rows = $this->model->filterByFirstLetter('ug_fl');
+
+        $this->assertSame(['ug_fl_b', 'ug_fl_a'], array_column($rows, 'title'));
+        $this->assertSame(['id', 'title'], array_keys($rows[0]));
+        $this->assertCount(1, $this->model->filterByFirstLetter('ug_fl', 1));
     }
 
     public function testGetUserGroupNotInListExcludesTheListedIdsAndOrdersByTitle(): void

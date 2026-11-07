@@ -1739,12 +1739,12 @@ class UserGroupModel extends Model
                     ON (g.id = a.usergroup_id) ";
             $urlCondition = " AND access_url_id = $urlId ";
         } else {
-            $sql = " FROM $this->table g ";
+            $sql .= " FROM $this->table g ";
         }
         $sql .= "
 		        WHERE
-		            title LIKE '".$firstLetter."%' OR
-		            title LIKE '".api_strtolower($firstLetter)."%'
+		            (title LIKE '".$firstLetter."%' OR
+		            title LIKE '".api_strtolower($firstLetter)."%')
 		            $urlCondition
 		        ORDER BY title DESC ";
 

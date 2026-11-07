@@ -26,6 +26,12 @@ $my_folder_data = get_work_data_by_id($work_id);
 $repo = Container::getStudentPublicationRepository();
 $studentPublication = empty($work_id) ? null : $repo->find($work_id);
 
+// Every id taken from the request below (work, item, move target) is only usable if it is in this course.
+$requestCourseId = api_get_course_int_id();
+if (!empty($work_id) && !workBelongsToCourse($work_id, $requestCourseId, $sessionId)) {
+    api_not_allowed(true);
+}
+
 $curdirpath = '';
 $htmlHeadXtra[] = to_javascript_work();
 $tool_name = get_lang('Assignments');
@@ -188,8 +194,12 @@ switch ($action) {
         break;
     case 'delete_dir':
         if ($is_allowed_to_edit) {
-            $work_to_delete = get_work_data_by_id($_REQUEST['id']);
-            $result = deleteDirWork($_REQUEST['id']);
+            $deleteId = (int) ($_REQUEST['id'] ?? 0);
+            if (!workBelongsToCourse($deleteId, $requestCourseId, $sessionId)) {
+                api_not_allowed(true);
+            }
+            $work_to_delete = get_work_data_by_id($deleteId);
+            $result = deleteDirWork($deleteId, $requestCourseId);
             if ($result) {
                 $message = Display::return_message(
                     get_lang('Folder deleted').': '.$work_to_delete['title'],
@@ -205,6 +215,9 @@ switch ($action) {
     case 'move':
         // Move file form request
         if ($is_allowed_to_edit && !empty($item_id)) {
+            if (!workBelongsToCourse($item_id, $requestCourseId, $sessionId)) {
+                api_not_allowed(true);
+            }
             $content = generateMoveForm(
                 $item_id,
                 $curdirpath,
@@ -262,6 +275,9 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed();
         }
+        if (null === $studentPublication) {
+            api_not_allowed(true);
+        }
 
         $repo->setVisibilityPublished($studentPublication, $course, $session);
 
@@ -292,6 +308,9 @@ switch ($action) {
     case 'invisible':
         if (!$is_allowed_to_edit) {
             api_not_allowed();
+        }
+        if (null === $studentPublication) {
+            api_not_allowed(true);
         }
 
         $repo->setVisibilityDraft($studentPublication, $course, $session);

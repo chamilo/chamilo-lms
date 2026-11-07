@@ -25,6 +25,10 @@ $my_folder_data = get_work_data_by_id($workId);
 if (empty($my_folder_data)) {
     api_not_allowed(true);
 }
+// The folder id comes from the request: it must be one of the current course (or its session).
+if (!workBelongsToCourse($workId, api_get_course_int_id(), api_get_session_id())) {
+    api_not_allowed(true);
+}
 $course = api_get_course_entity();
 $work_data = get_work_assignment_by_id($workId);
 
@@ -83,6 +87,14 @@ $interbreadcrumb[] = [
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $itemId = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 
+// The submission acted on must be one of the folder this page was opened on.
+if (in_array($action, ['delete', 'make_visible', 'make_invisible'], true)
+    && !empty($itemId)
+    && !workItemIsInFolder($itemId, $workId)
+) {
+    api_not_allowed(true);
+}
+
 switch ($action) {
     case 'delete':
         /*	Delete document */
@@ -102,6 +114,9 @@ switch ($action) {
         exit;
         break;
     case 'delete_correction':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
         $result = get_work_user_list(null, null, null, null, $workId);
         if ($result) {
             foreach ($result as $item) {
@@ -134,6 +149,9 @@ switch ($action) {
 
         break;
     case 'make_invisible':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
         if (!empty($itemId)) {
             if (isset($itemId) && 'all' == $itemId) {
             } else {

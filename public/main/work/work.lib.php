@@ -753,8 +753,14 @@ function create_unexisting_work_directory($workDir, $desiredDirName)
  *
  * @return int -1 on error
  */
-function deleteDirWork($id)
+function deleteDirWork($id, $courseId = 0)
 {
+    // The id comes from the request: it must be a folder of the course it is deleted from.
+    $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+    if (!workIsInCourse((int) $id, (int) $courseId)) {
+        return false;
+    }
+
     $locked = api_resource_is_locked_by_gradebook($id, LINK_STUDENTPUBLICATION);
     if ($locked) {
         echo Display::return_message(
@@ -4322,13 +4328,12 @@ function deleteCommentFile($id, $courseInfo = [])
 {
     $repo = Container::getStudentPublicationCommentRepository();
     $em = Database::getManager();
-    $criteria = [
-        'iid' => $id,
-        'cId' => $courseInfo['real_id'],
-    ];
 
-    /** @var CStudentPublicationComment $commentEntity */
-    $commentEntity = $repo->findOneBy($criteria);
+    /** @var CStudentPublicationComment|null $commentEntity */
+    $commentEntity = $repo->find((int) $id);
+    if (null === $commentEntity) {
+        return;
+    }
 
     foreach ($commentEntity->getResourceNode()->getResourceFiles() as $file) {
         $em->remove($file);
@@ -4906,6 +4911,11 @@ function processWorkForm(
     $groupId = (int) $groupId;
     $sessionId = (int) $sessionId;
     $userId = (int) $userId;
+
+    // The assignment comes from the request: a submission can only be added to an assignment of this course.
+    if (!workIsInCourse((int) ($workInfo['iid'] ?? 0), (int) $courseId)) {
+        return null;
+    }
 
     $extension = '';
     if (isset($values['extension'])) {
@@ -5498,6 +5508,10 @@ function deleteAllWorkPerUser(User $user, Course $course)
         /** @var CStudentPublication[] $results */
         $results = $workData['results'];
         foreach ($results as $userResult) {
+            // getStudentPublicationByUser() lists the whole course: only this user's own submissions go.
+            if ($userResult->getUser()->getId() !== $user->getId()) {
+                continue;
+            }
             $result = deleteWorkItem($userResult->getIid(), $course);
             if ($result) {
                 $deletedItems[] = $userResult;
@@ -5519,6 +5533,11 @@ function deleteWorkItem($item_id, Course $course)
     $item_id = (int) $item_id;
 
     if (empty($item_id) || null === $course) {
+        return false;
+    }
+
+    // The id comes from the request: it must be a submission of the course it is deleted from.
+    if (!workIsInCourse($item_id, (int) $course->getId())) {
         return false;
     }
 
@@ -5823,6 +5842,11 @@ function makeVisible($itemId, $course_info)
         return false;
     }
 
+    // The id comes from the request: it must be a submission of the course it is changed from.
+    if (!workIsInCourse($itemId, (int) ($course_info['real_id'] ?? 0))) {
+        return false;
+    }
+
     $repo = Container::getStudentPublicationRepository();
     /** @var CStudentPublication $studentPublication */
     $studentPublication = $repo->find($itemId);
@@ -5853,6 +5877,11 @@ function makeInvisible($itemId, $course_info)
 {
     $itemId = (int) $itemId;
     if (empty($course_info) || empty($itemId)) {
+        return false;
+    }
+
+    // The id comes from the request: it must be a submission of the course it is changed from.
+    if (!workIsInCourse($itemId, (int) ($course_info['real_id'] ?? 0))) {
         return false;
     }
 
@@ -6155,8 +6184,6 @@ function downloadFile($id, $course_info, $isCorrection)
 function getFile($id, $course_info, $download = true, $isCorrection = false, $forceAccessForCourseAdmins = false)
 {
     $file = getFileContents($id, $course_info, 0, $isCorrection, $forceAccessForCourseAdmins);
-    var_dump($file);
-    exit;
     if (!empty($file) && isset($file['entity'])) {
         /** @var CStudentPublication $studentPublication */
         $studentPublication = $file['entity'];
@@ -6183,6 +6210,12 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
     if (empty($courseInfo) || empty($id)) {
         return false;
     }
+
+    // The id comes from the request: it must be a submission of the course the file is requested from.
+    if (!workIsInCourse($id, (int) $courseInfo['real_id'])) {
+        return false;
+    }
+
     if (empty($sessionId)) {
         $sessionId = api_get_session_id();
     }
@@ -6605,6 +6638,11 @@ function protectWork($courseInfo, $workId)
         api_not_allowed(true);
     }
 
+    // The role checks below are about the current course: the work must be one of its (or its session's).
+    if (!workBelongsToCourse((int) $workId, (int) $courseInfo['real_id'], $sessionId)) {
+        api_not_allowed(true);
+    }
+
     if (api_is_platform_admin() || api_is_allowed_to_edit()) {
         return true;
     }
@@ -6749,6 +6787,94 @@ function workDocumentBelongsToCourse(int $documentId, int $courseId, ?int $sessi
          LIMIT 1',
         $params
     );
+
+    return false !== $found;
+}
+
+/**
+ * Course-level variant of workBelongsToCourse(): the work is published in the course, whatever the session.
+ * Used inside the shared helpers (delete, visibility, upload) that can be called with any session context
+ * and must nevertheless never cross the course boundary.
+ */
+function workIsInCourse(int $workId, int $courseId): bool
+{
+    if ($workId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $found = Database::getManager()->getConnection()->fetchOne(
+        'SELECT w.iid
+         FROM c_student_publication w
+         INNER JOIN resource_link link ON link.resource_node_id = w.resource_node_id
+         WHERE w.iid = :wid AND link.c_id = :cid
+         LIMIT 1',
+        ['wid' => $workId, 'cid' => $courseId]
+    );
+
+    return false !== $found;
+}
+
+/**
+ * Tells whether the submission $itemId is a direct child of the folder $folderId (the folder an edit/view page
+ * says it was opened from).
+ */
+function workItemIsInFolder(int $itemId, int $folderId): bool
+{
+    if ($itemId <= 0 || $folderId <= 0) {
+        return false;
+    }
+
+    $parent = Database::getManager()->getConnection()->fetchOne(
+        'SELECT parent_id FROM c_student_publication WHERE iid = ?',
+        [$itemId]
+    );
+
+    return false !== $parent && null !== $parent && (int) $parent === $folderId;
+}
+
+/**
+ * Tells whether the attachment of the comment $commentId may be removed by $userId: the comment must belong to
+ * the work $workId the page was opened on, and the user must be its author or a manager of the course.
+ */
+function workCommentFileIsDeletable(int $commentId, int $workId, int $userId, bool $isManager): bool
+{
+    if ($commentId <= 0 || $workId <= 0) {
+        return false;
+    }
+
+    $row = Database::getManager()->getConnection()->fetchAssociative(
+        'SELECT work_id, user_id FROM c_student_publication_comment WHERE iid = ?',
+        [$commentId]
+    );
+    if (false === $row || (int) $row['work_id'] !== $workId) {
+        return false;
+    }
+
+    return $isManager || (int) $row['user_id'] === $userId;
+}
+
+/**
+ * Tells whether $userId is one of the learners the "Add a user" page of an assignment offers in the course (or in
+ * the course of the session): only those may be assigned to an assignment.
+ */
+function workUserIsStudentOfCourse(int $userId, int $courseId, int $sessionId = 0): bool
+{
+    if ($userId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $connection = Database::getManager()->getConnection();
+    if ($sessionId > 0) {
+        $found = $connection->fetchOne(
+            'SELECT id FROM session_rel_course_rel_user WHERE user_id = ? AND c_id = ? AND session_id = ? LIMIT 1',
+            [$userId, $courseId, $sessionId]
+        );
+    } else {
+        $found = $connection->fetchOne(
+            'SELECT id FROM course_rel_user WHERE user_id = ? AND c_id = ? AND status = ? AND relation_type <> ? LIMIT 1',
+            [$userId, $courseId, STUDENT, COURSE_RELATION_TYPE_RRHH]
+        );
+    }
 
     return false !== $found;
 }

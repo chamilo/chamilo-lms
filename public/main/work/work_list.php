@@ -135,6 +135,10 @@ $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 
 switch ($action) {
     case 'delete':
+        // The submission must be one of the folder this page was opened on.
+        if (!workItemIsInFolder((int) $item_id, (int) $workId)) {
+            api_not_allowed(true);
+        }
         $fileDeleted = deleteWorkItem($item_id, $course);
 
         if (!$fileDeleted) {

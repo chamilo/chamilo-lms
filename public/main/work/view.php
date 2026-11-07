@@ -264,6 +264,16 @@ switch ($action) {
         exit;
 
     case 'delete_attachment':
+        // Only the author of the comment or a manager, and only for a comment of this submission.
+        if (!workCommentFileIsDeletable(
+            (int) ($_REQUEST['comment_id'] ?? 0),
+            (int) $workId,
+            (int) api_get_user_id(),
+            $isCourseManager
+        )) {
+            api_not_allowed(true);
+        }
+
         deleteCommentFile(
             (int) ($_REQUEST['comment_id'] ?? 0),
             api_get_course_info()

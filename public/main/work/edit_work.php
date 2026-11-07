@@ -25,6 +25,10 @@ $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $workId = isset($_GET['id']) ? (int) ($_GET['id']) : null;
+// The assignment id comes from the request: it must be one of the current course (or its session).
+if (!workBelongsToCourse((int) $workId, api_get_course_int_id(), $sessionId)) {
+    api_not_allowed(true);
+}
 $workData = get_work_data_by_id($workId);
 $homework = get_work_assignment_by_id($workId);
 $locked = api_resource_is_locked_by_gradebook($workId, LINK_STUDENTPUBLICATION);
@@ -112,7 +116,8 @@ if ($form->validate()) {
         }
     }
 
-    $workId = $params['work_id'];
+    // The posted id is only a copy of the validated one in the URL: never edit anything else.
+    $workId = (int) $workId;
     $editCheck = false;
     $workData = get_work_data_by_id($workId);
 

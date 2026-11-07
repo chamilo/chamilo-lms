@@ -46,6 +46,10 @@ switch ($action) {
         if (empty($userId)) {
             api_not_allowed(true);
         }
+        // Only a learner of this course (or session) can be assigned to the assignment.
+        if (!workUserIsStudentOfCourse($userId, api_get_course_int_id(), $sessionId)) {
+            api_not_allowed(true);
+        }
         $data = getUserToWork($userId, $workId, api_get_course_int_id());
         if (empty($data)) {
             addUserToWork($userId, $workId, api_get_course_int_id());

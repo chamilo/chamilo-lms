@@ -622,8 +622,8 @@ final class WorkCharacterizationTest extends KernelTestCase
         $now = '2020-01-01 00:00:00';
         $this->conn->executeStatement(
             'INSERT INTO resource_node (resource_type_id, creator_id, title, slug, level, path, created_at, updated_at, public, uuid)
-             VALUES (?, ?, ?, ?, 1, ?, ?, ?, 0, UNHEX(REPLACE(UUID(), \'-\', \'\')))',
-            [$typeId, $this->admin()->getId(), 'wk_node_'.$workId, 'wk-node-'.$workId, 'wk-node-'.$workId.'/', $now, $now]
+             VALUES (?, ?, ?, ?, 1, ?, ?, ?, 0, ?)',
+            [$typeId, $this->admin()->getId(), 'wk_node_'.$workId, 'wk-node-'.$workId, 'wk-node-'.$workId.'/', $now, $now, \Symfony\Component\Uid\Uuid::v4()->toBinary()]
         );
         $nodeId = (int) $this->conn->lastInsertId();
         $this->conn->update('c_student_publication', ['resource_node_id' => $nodeId], ['iid' => $workId]);
@@ -855,6 +855,7 @@ final class WorkCharacterizationTest extends KernelTestCase
     {
         $this->setContext($this->admin(), $this->course(1));
         $folder = $this->folder();
+        $this->publish($folder, 1); // deleteDirWork() refuses a folder that is not published in the course
         $child = $this->work(['parent_id' => $folder]);
         $unrelated = $this->work(['parent_id' => $this->folder()]);
         $this->conn->insert('c_student_publication_assignment', [
@@ -880,6 +881,7 @@ final class WorkCharacterizationTest extends KernelTestCase
     {
         $this->setContext($this->admin(), $this->course(1));
         $folder = $this->folder();
+        $this->publish($folder, 1); // deleteDirWork() refuses a folder that is not published in the course
         $this->conn->insert('c_calendar_event', ['title' => 'wk_event', 'content' => '', 'all_day' => 0, 'collective' => 0, 'subscription_visibility' => 0, 'max_attendees' => 0]);
         $eventId = (int) $this->conn->lastInsertId();
         $this->conn->insert('c_student_publication_assignment', [

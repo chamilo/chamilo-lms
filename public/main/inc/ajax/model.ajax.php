@@ -154,6 +154,13 @@ if ($isDiagnosisLoadSearch) {
     api_protect_admin_script(true);
 }
 
+// The work grids take the work id from the request: it must be a work of the current course (or its session).
+if (in_array($action, ['get_work_user_list_all', 'get_work_user_list_others', 'get_work_user_list'], true)
+    && !workBelongsToCourse((int) ($_REQUEST['work_id'] ?? 0), api_get_course_int_id(), api_get_session_id())
+) {
+    api_not_allowed(true);
+}
+
 $toRemove = ['extra_access_start_date', 'extra_access_end_date'];
 
 // Search features

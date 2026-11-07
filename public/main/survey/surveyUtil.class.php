@@ -3784,7 +3784,6 @@ class SurveyUtil
         echo '      </table>';
         echo '    </div>';
         echo '  </div>';
-        echo '</section>';        echo '  </div>';
         echo '</section>';
     }
 

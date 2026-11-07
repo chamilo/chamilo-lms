@@ -1367,6 +1367,8 @@ final class SurveyCharacterizationTest extends KernelTestCase
         \SurveyUtil::getSurveyList(2);
         $html = (string) ob_get_clean();
 
+        $this->assertSame(substr_count($html, '<section'), substr_count($html, '</section>'), 'balanced markup');
+        $this->assertSame(substr_count($html, '<div'), substr_count($html, '</div>'), 'balanced markup');
         $this->assertStringContainsString('sv open survey', $html);
         $this->assertStringNotContainsString('sv closed survey', $html);
         $this->assertStringNotContainsString('sv future survey', $html);

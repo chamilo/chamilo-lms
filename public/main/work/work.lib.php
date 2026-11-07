@@ -781,7 +781,7 @@ function deleteDirWork($id)
         if (!empty($consideredWorkingTime)) {
             $fieldValue = new ExtraFieldValue('work');
             $resultExtra = $fieldValue->getAllValuesForAnItem(
-                $work_data['id'],
+                $work_data['iid'],
                 true
             );
 
@@ -853,7 +853,7 @@ function deleteDirWork($id)
         // delete from agenda if it exists
         if (!empty($calendar_id[0])) {
             $sql = "DELETE FROM $t_agenda
-                    WHERE id = '".$calendar_id[0]."'";
+                    WHERE iid = ".(int) $calendar_id[0];
             Database::query($sql);
         }
         $sql = "DELETE FROM $TSTDPUBASG
@@ -883,7 +883,8 @@ function deleteDirWork($id)
             $sessionId
         );
 
-        if (false !== $linkInfo) {
+        // isResourceInCourseGradebook() returns an empty array (never false) when there is no link.
+        if (!empty($linkInfo)) {
             $link_id = $linkInfo['id'];
             GradebookUtils::remove_resource_from_course_gradebook($link_id);
         }

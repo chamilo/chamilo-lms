@@ -606,23 +606,50 @@ final class WorkCharacterizationTest extends KernelTestCase
         $this->assertFalse(deleteDirWork(2147483000));
     }
 
-    public function testDeleteDirWorkFailsBeforeTouchingAnythingWhenWorkingTimeSettingIsOn(): void
+    public function testDeleteDirWorkSoftDeletesFolderAndChildrenAndDropsAssignment(): void
     {
         $this->setContext($this->admin(), $this->course(1));
         $folder = $this->folder();
         $child = $this->work(['parent_id' => $folder]);
+        $unrelated = $this->work(['parent_id' => $this->folder()]);
+        $this->conn->insert('c_student_publication_assignment', [
+            'publication_id' => $folder,
+            'add_to_calendar' => 0,
+            'enable_qualification' => 0,
+        ]);
 
-        // PINNED QUIRK: with work.considered_working_time set (as in the test fixtures), the function reads
-        // $work_data['id'], a key get_work_data_by_id() no longer returns ("iid"), and aborts before the
-        // soft-delete UPDATEs run. Whoever repairs it changes this on purpose.
-        try {
-            deleteDirWork($folder);
-            $this->fail('Expected an undefined array key error');
-        } catch (Throwable $e) {
-            $this->assertStringContainsString('Undefined array key "id"', $e->getMessage());
-        }
-        $this->assertSame(1, (int) $this->field($folder, 'active'));
-        $this->assertSame(1, (int) $this->field($child, 'active'));
+        // Fixed: the work.considered_working_time branch read $work_data['id'] (the key is now "iid") and aborted
+        // before any of the soft-delete SQL ran.
+        $this->assertTrue(deleteDirWork($folder));
+
+        $this->assertSame(2, (int) $this->field($folder, 'active'), 'the folder is soft-deleted');
+        $this->assertSame(2, (int) $this->field($child, 'active'), 'its children are soft-deleted');
+        $this->assertSame(1, (int) $this->field($unrelated, 'active'), 'works of other folders are untouched');
+        $this->assertSame(
+            0,
+            (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_student_publication_assignment WHERE publication_id = ?', [$folder])
+        );
+    }
+
+    public function testDeleteDirWorkAlsoRemovesTheCalendarEventOfTheAssignment(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folder = $this->folder();
+        $this->conn->insert('c_calendar_event', ['title' => 'wk_event', 'content' => '', 'all_day' => 0, 'collective' => 0, 'subscription_visibility' => 0, 'max_attendees' => 0]);
+        $eventId = (int) $this->conn->lastInsertId();
+        $this->conn->insert('c_student_publication_assignment', [
+            'publication_id' => $folder,
+            'add_to_calendar' => $eventId,
+            'enable_qualification' => 0,
+        ]);
+
+        $this->assertTrue(deleteDirWork($folder));
+
+        $this->assertSame(
+            0,
+            (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_calendar_event WHERE iid = ?', [$eventId]),
+            'the agenda entry linked by add_to_calendar is deleted (c_calendar_event has no "id" column)'
+        );
     }
 
     public function testUpdateWorkUrlReturnsMinusOneForEmptyOrUnknownId(): void

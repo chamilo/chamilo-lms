@@ -486,7 +486,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->assertNowish($log[0]['assigned_date']);
     }
 
-    public function testAssignTicketToUserRefusesUnknownOrCategorylessTickets(): void
+    public function testAssignTicketToUserRefusesUnknownTicketsButAcceptsCategorylessOnes(): void
     {
         $p = $this->project('tm_proj_asg2');
         $cat = $this->category($p, 'tm_cat_asg2');
@@ -495,10 +495,11 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
 
         $this->assertFalse(TicketManager::assignTicketToUser(0, 2));
         $this->assertFalse(TicketManager::assignTicketToUser(987654321, 2));
-        // PINNED QUIRK: the existence check is get_ticket_detail_by_id(), whose INNER JOINs hide a ticket without category.
-        $this->assertFalse(TicketManager::assignTicketToUser($orphan, 2));
-        $this->assertNull($this->row($orphan)['assigned_last_user']);
-        $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM ticket_assigned_log WHERE ticket_id = ?', [$orphan]));
+        // Fixed: the existence check is get_ticket_detail_by_id(), which no longer hides a ticket without category
+        // (deleteCategory() sets category_id to NULL on its tickets, which made them unassignable).
+        $this->assertTrue(TicketManager::assignTicketToUser($orphan, 2));
+        $this->assertSame('2', (string) $this->row($orphan)['assigned_last_user']);
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM ticket_assigned_log WHERE ticket_id = ?', [$orphan]));
     }
 
     public function testGetAssignLogIsNewestFirstAndLabelsUnassignRows(): void
@@ -552,6 +553,19 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->assertSame([], TicketManager::get_ticket_detail_by_id(987654321));
     }
 
+    public function testGetTicketDetailKeepsATicketWhoseCategoryWasDeleted(): void
+    {
+        $p = $this->project('tm_proj_det_nocat');
+        $t = $this->ticket($p, $this->category($p, 'tm_cat_det_nocat'));
+        $this->conn->executeStatement('UPDATE ticket_ticket SET category_id = NULL WHERE id = ?', [$t]);
+
+        $d = TicketManager::get_ticket_detail_by_id($t);
+
+        $this->assertSame($t, (int) $d['ticket']['id']);
+        $this->assertNull($d['ticket']['title'], 'no category: cat.title is NULL, the ticket is still returned');
+        $this->assertSame('New', $d['ticket']['status']);
+    }
+
     public function testGetTicketDetailListsMessagesOfActiveUsersOnly(): void
     {
         $p = $this->project('tm_proj_det2');
@@ -568,8 +582,11 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->assertSame([$mAdmin, $mThird], array_map('intval', $this->col($d['messages'], 'message_id')));
         $this->assertEquals([true, false], $this->col($d['messages'], 'admin'));
         $this->assertSame('anon', $d['messages'][1]['user_info']['username']);
-        // PINNED QUIRK: "SELECT *, ..." joins message and user, so the duplicate `id` column holds the USER id.
-        $this->assertSame([1, 2], array_map('intval', $this->col($d['messages'], 'id')));
+        // Fixed: "SELECT *" over message and user made the duplicate `id` (and `status`) columns the USER's.
+        $this->assertSame([$mAdmin, $mThird], array_map('intval', $this->col($d['messages'], 'id')), 'id is the message id');
+        $this->assertSame(['NOL', 'NOL'], $this->col($d['messages'], 'status'), 'status is the message status, not the user status');
+        $this->assertSame([1, 2], array_map('intval', $this->col($d['messages'], 'user_id')));
+        $this->assertArrayNotHasKey('password', $d['messages'][0], 'raw user columns (password hash...) are not copied into the message');
         $this->assertArrayNotHasKey('attachments', $d['messages'][0]);
     }
 

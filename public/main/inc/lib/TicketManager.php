@@ -1171,9 +1171,13 @@ class TicketManager
     }
 
     /**
+     * Ticket row ('ticket', whose 'title' is the category title, NULL for a ticket without category), its author
+     * ('user') and its visible messages ('messages': message columns, with 'id' and 'message_id' being the message
+     * id, plus 'user_id', 'admin', 'user_info' and 'attachments').
+     *
      * @param int $ticketId
      *
-     * @return array
+     * @return array empty when the ticket does not exist
      */
     public static function get_ticket_detail_by_id($ticketId)
     {
@@ -1193,7 +1197,7 @@ class TicketManager
                     status.title as status,
                     priority.title priority
                 FROM $table_support_tickets ticket
-                INNER JOIN $table_support_category cat
+                LEFT JOIN $table_support_category cat
                 ON (cat.id = ticket.category_id)
                 INNER JOIN $table_support_priority priority
                 ON (priority.id = ticket.priority_id)
@@ -1277,7 +1281,7 @@ class TicketManager
                 $ticket['ticket'] = $row;
             }
 
-            $sql = "SELECT *, message.id as message_id, user.id AS user_id
+            $sql = "SELECT message.*, message.id AS message_id, user.id AS user_id
                     FROM $table_support_messages message
                     INNER JOIN $table_main_user user
                     ON (message.sys_insert_user_id = user.id)

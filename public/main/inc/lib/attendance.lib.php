@@ -1692,7 +1692,6 @@ class Attendance
 
             $result = $this->getAttendanceCalendarGroup(
                 $calendarId,
-                $courseId,
                 $groupId
             );
 

@@ -711,8 +711,8 @@ final class AttendanceCharacterizationTest extends KernelTestCase
         $this->assertSame('2032-06-01 10:00:00', $cal['date_time']);
         $this->assertSame([0, 0], [(int) $cal['done_attendance'], (int) $cal['blocked']]);
         $groups = array_map('intval', $this->conn->fetchFirstColumn('SELECT group_id FROM c_attendance_calendar_rel_group WHERE calendar_id = ? ORDER BY group_id', [$cal['iid']]));
-        // PINNED QUIRK: duplicates are NOT ignored (see testAddAttendanceCalendarToGroupReturnsFalseForAnEmptyList).
-        $this->assertSame([$g1, $g1, $g2], $groups, 'empty ids skipped, repeated id linked twice');
+        // Fixed: the duplicate check now looks up the right group, so a repeated id is linked once.
+        $this->assertSame([$g1, $g2], $groups, 'empty ids skipped, repeated id linked once');
         $this->assertSame(0, (int) $this->row('SELECT locked FROM c_attendance WHERE iid = ?', [$att])['locked'], 'a not-done date keeps the attendance unlocked');
         $this->assertSame([Attendance::LOCKED_ATTENDANCE_LOG_TYPE], $this->logTypes($att), 'lock() logs even when it unlocks');
     }
@@ -725,11 +725,10 @@ final class AttendanceCharacterizationTest extends KernelTestCase
 
         $this->assertFalse($lib->addAttendanceCalendarToGroup($cal, self::COURSE, []));
         $this->assertTrue($lib->addAttendanceCalendarToGroup($cal, self::COURSE, [0, $g]));
-        // PINNED QUIRK: the duplicate check calls getAttendanceCalendarGroup($calendarId, $courseId, $groupId) but that
-        // method takes ($calendarId, $groupId), so it looks for group_id = $courseId and never finds the link:
-        // the same group is linked twice.
+        // Fixed: the duplicate check passed ($calendarId, $courseId, $groupId) to a ($calendarId, $groupId) method, so it
+        // looked for group_id = $courseId and linked the same group twice.
         $this->assertTrue($lib->addAttendanceCalendarToGroup($cal, self::COURSE, [$g]));
-        $this->assertSame(2, (int) $this->row('SELECT COUNT(*) c FROM c_attendance_calendar_rel_group WHERE calendar_id = ?', [$cal])['c']);
+        $this->assertSame(1, (int) $this->row('SELECT COUNT(*) c FROM c_attendance_calendar_rel_group WHERE calendar_id = ?', [$cal])['c']);
     }
 
     public function testGroupLinkReadersAndDelete(): void
